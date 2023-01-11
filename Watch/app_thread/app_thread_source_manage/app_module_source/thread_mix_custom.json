@@ -1,0 +1,27 @@
+{
+    "type"  : "thread_mix_custom",
+    "brief" : "thread_mix_custom: suggest：user_data and chunk user_size",
+    "data_group" :
+    [
+        {
+            "data_brief" : "system clock + crc32 + checksum32",
+            "data_name"  : "system clock",
+            "data_size"  : "20 + 4 + 4"
+        },
+        {
+            "data_brief" : "system stopwatch + crc32 + checksum32",
+            "data_name"  : "system stopwatch",
+            "data_size"  : "30 + 4 + 4"
+        },
+        {
+            "data_brief" : "system countdown + crc32 + checksum32",
+            "data_name"  : "system countdown",
+            "data_size"  : "30 + 4 + 4"
+        },
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "20 * 10"
+        }
+    ]
+}

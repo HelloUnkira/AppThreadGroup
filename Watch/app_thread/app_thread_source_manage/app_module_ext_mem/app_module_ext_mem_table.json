@@ -1,0 +1,29 @@
+
+{
+    "type"  : "app_module_ext_mem_table",
+    "brief" : "app_module_ext_mem_table: suggest：chunk name and chunk size",
+    "chunk_base" : "0x00000000",
+    "app_module_ext_mem_table" :
+    [
+        {
+            "chunk_brief" : "chunk0",
+            "chunk_name"  : "thread_master",
+            "chunk_size"  : "4096 * 10"
+        },
+        {
+            "chunk_brief" : "chunk1",
+            "chunk_name"  : "thread_mix_irq",
+            "chunk_size"  : "4096 * 20"
+        },
+        {
+            "chunk_brief" : "chunk2",
+            "chunk_name"  : "thread_mix_custom",
+            "chunk_size"  : "4096 * 30"
+        },
+        {
+            "chunk_brief" : "chunk2",
+            "chunk_name"  : "thread_source_manage",
+            "chunk_size"  : "4096 * 30"
+        }
+    ]
+}

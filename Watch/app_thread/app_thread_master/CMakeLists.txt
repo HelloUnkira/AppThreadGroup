@@ -1,0 +1,3 @@
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread_adaptor)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_system)
+target_sources(app_thread PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_master.c)

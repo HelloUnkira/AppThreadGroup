@@ -1,0 +1,28 @@
+
+{
+    "type"      : "app_sys_event",
+    "brief"     : "app_sys_event: response suggest：event_set_callback_...",
+    "app_sys_event" :
+    [
+        {
+            "name"     : "APP_EVENT1",
+            "brief"    : "this is response set:",
+            "response" : 
+            [
+                         "event1_function_callback1",
+                         "event1_function_callback2",
+                         "event1_function_callback3"
+            ]
+        },
+        {
+            "name"     : "APP_EVENT2",
+            "brief"    : "this is response set:",
+            "response" : 
+            [
+                         "event2_function_callback1",
+                         "event2_function_callback2"
+            ]
+        }
+    ]
+}
+

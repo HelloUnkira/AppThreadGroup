@@ -1,0 +1,1 @@
+target_sources(app_arch PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app_arch_adaptor_pc.c)

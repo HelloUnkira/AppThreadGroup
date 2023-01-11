@@ -1,0 +1,39 @@
+
+{
+    "typedef"       : "app_sys_test",
+    "type_width"    : 15,
+    "name_width"    : 25,
+    "member"        :
+    [
+        {
+            "type"      : "uint8_t",
+            "name"      : "argument1",
+            "comment"   : "comment1"
+        },
+        {
+            "type"      : "uint16_t",
+            "name"      : "argument2",
+            "comment"   : "comment2"
+        },
+        {
+            "type"      : "uint32_t",
+            "name"      : "argument3",
+            "comment"   : "comment3"
+        },
+        {
+            "type"      : "uint64_t",
+            "name"      : "argument4",
+            "comment"   : "comment4"
+        },
+        {
+            "type"      : "float",
+            "name"      : "argument5",
+            "comment"   : "comment5"
+        },
+        {
+            "type"      : "double",
+            "name"      : "argument6",
+            "comment"   : "comment6"
+        }
+    ]
+}

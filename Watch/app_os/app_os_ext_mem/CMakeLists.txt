@@ -1,0 +1,1 @@
+target_sources(app_os PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app_os_ext_mem_linux.c)

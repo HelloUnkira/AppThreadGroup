@@ -1,0 +1,17 @@
+{
+    "type"  : "thread_master",
+    "brief" : "thread_master: suggest：user_data and chunk user_size",
+    "data_group" :
+    [
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "20 * 10"
+        },
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "20 * 10"
+        }
+    ]
+}
