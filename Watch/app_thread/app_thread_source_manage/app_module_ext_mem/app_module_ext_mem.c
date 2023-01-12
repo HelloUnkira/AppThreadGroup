@@ -3,7 +3,11 @@
  *    将各种数据以chunk的形式组织起来
  */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_arch_ext_mem.h"
+#include "app_os_ext_mem.h"
+#include "app_module_ext_mem.h"
 
 static app_mutex_t app_module_ext_mem_mutex = {0};
 

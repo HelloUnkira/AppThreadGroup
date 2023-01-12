@@ -4,7 +4,8 @@
  *     对所有平台做一个全通配的最低配置
  */
 
-#include "app_arch_interface.h"
+#include "app_std_lib.h"
+#include "app_arch_adaptor.h"
 
 #if APP_ARCH_IS_PC
 /* 继续补充 */

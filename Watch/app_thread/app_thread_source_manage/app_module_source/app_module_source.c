@@ -3,7 +3,11 @@
  *    将对外存的读写接口进一步封装成一体化资源
  */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_module_ext_mem.h"
+#include "app_module_ext_mem_table.h"
+#include "app_module_source.h"
+#include "app_module_source_table.h"
 
 /*@brief     读取资源从指定chunk的指定data段
  *@param[in] chunk_name chunk名字

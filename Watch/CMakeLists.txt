@@ -47,6 +47,7 @@ set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_!linux
 )
 # 编译器添加文件搜索路径
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 include_directories(${app_arch_path})
 include_directories(${app_os_path})
 include_directories(${app_sys_path})

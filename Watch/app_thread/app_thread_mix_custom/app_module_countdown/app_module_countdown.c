@@ -8,7 +8,13 @@
 #define APP_OS_LOG_LOCAL_STATUS     1
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_os_log.h"
+#include "app_sys_pipe.h"
+#include "app_thread_master.h"
+#include "app_thread_mix_custom.h"
+#include "app_module_countdown.h"
 
 static app_mutex_t app_module_countdown_mutex = {0};
 static app_module_countdown_t app_module_countdown = {0};
@@ -87,8 +93,8 @@ void app_module_countdown_msec_update(void)
                        countdown.minute * 60 +
                        countdown.second;
     /*  */
-    if (countdown.msec >= APP_MODULE_STOPWATCH_MSEC) {
-        countdown.msec -= APP_MODULE_STOPWATCH_MSEC;
+    if (countdown.msec >= APP_MODULE_COUNTDOWN_MSEC) {
+        countdown.msec -= APP_MODULE_COUNTDOWN_MSEC;
     } else {
         if (seconds == 0) {
             /* 发送倒计时事件 */
@@ -108,7 +114,7 @@ void app_module_countdown_msec_update(void)
         }
         if (seconds != 0) {
             seconds--;
-            countdown.msec += 1000 - APP_MODULE_STOPWATCH_MSEC;
+            countdown.msec += 1000 - APP_MODULE_COUNTDOWN_MSEC;
         }
     }
     /*  */

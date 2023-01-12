@@ -1,9 +1,6 @@
 #ifndef APP_THREAD_MASTER_H
 #define APP_THREAD_MASTER_H
 
-/* 主线程下辖的系统功能模组 */
-#include "app_module_system.h"
-
 /*@brief        通过从线程ID获得与主线程的同步资源或交互管道
  *@param[in]    thread_id 线程ID
  *@param[out]   pipe 管道

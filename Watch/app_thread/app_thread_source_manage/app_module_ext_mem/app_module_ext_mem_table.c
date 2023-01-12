@@ -3,7 +3,8 @@
  *参考app_module_ext_mem_table.json中的模式生成源
  */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_module_ext_mem.h"
 
 static const app_module_ext_mem_t app_module_ext_mem_table[] = {
 	{

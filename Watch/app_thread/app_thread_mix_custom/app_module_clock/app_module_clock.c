@@ -5,7 +5,12 @@
 #define APP_OS_LOG_LOCAL_STATUS     1
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_os_log.h"
+#include "app_sys_pipe.h"
+#include "app_thread_master.h"
+#include "app_thread_mix_custom.h"
 #include "app_module_clock.h"
 #define   APP_MODULE_CLOCK_CB_H
 #include "app_module_clock_cb.h"

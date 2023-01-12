@@ -5,7 +5,14 @@
 #define APP_OS_LOG_LOCAL_STATUS     1
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_log.h"
+#include "app_sys_crc32.h"
+#include "app_sys_checksum32.h"
+#include "app_module_source.h"
+#include "app_module_clock.h"
+#include "app_module_stopwatch.h"
+#include "app_module_countdown.h"
 
 /*@brief 系统时钟转储到外存
  */

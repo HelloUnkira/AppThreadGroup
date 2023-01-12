@@ -1,6 +1,21 @@
 
 #include <stdio.h>
-#include "app_thread_interface.h"
+
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_sys_pipe.h"
+#include "app_thread_master.h"
+#include "app_thread_mix_irq.h"
+#include "app_thread_mix_custom.h"
+#include "app_thread_source_manage.h"
+#include "app_thread_lvgl.h"
+#include "app_module_clock.h"
+#include "app_module_alarm.h"
+#include "app_module_stopwatch.h"
+#include "app_module_countdown.h"
+#include "app_module_ext_mem.h"
+#include "app_module_ext_mem_table.h"
+#include "app_module_system.h"
 #include "app_function_test.h"
 
 #if 0

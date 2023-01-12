@@ -6,12 +6,22 @@
 #define APP_OS_LOG_LOCAL_STATUS     1
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_os_log.h"
+#include "app_sys_pipe.h"
+#include "app_thread_master.h"
+#include "app_thread_source_manage.h"
+#include "app_module_ext_mem.h"
+#include "app_module_dump.h"
+#include "app_module_load.h"
 
 /*@brief 数据管理线程模组初始化
  */
 void app_thread_source_manage_ready(void)
 {
+    /* 模组初始化 */
+    app_module_ext_mem_ready();
 }
 
 /*@brief 数据管理线程服务例程

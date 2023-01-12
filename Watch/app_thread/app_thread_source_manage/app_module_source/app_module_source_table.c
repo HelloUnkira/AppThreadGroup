@@ -3,7 +3,8 @@
  *参考本目录下的.json中的模式生成源
  */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_module_source.h"
 
 static const app_module_source_t app_module_source_thread_master_table[] = {
 	{

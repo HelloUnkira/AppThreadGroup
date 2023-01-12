@@ -1,5 +1,5 @@
-#ifndef APP_ARCH_INTERFACE_H
-#define APP_ARCH_INTERFACE_H
+#ifndef APP_STD_LIB_H
+#define APP_STD_LIB_H
 
 /* C std lib */
 #include <stdarg.h>
@@ -11,8 +11,5 @@
 /* C std lib need hook perhaps */
 #include <stdlib.h>
 #include <stdio.h>
-/* 导出外部接口补充...... */
-#include "app_arch_adaptor.h"
-#include "app_arch_ext_mem.h"
 
 #endif

@@ -16,8 +16,14 @@
 #define APP_OS_LOG_LOCAL_STATUS     1
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_thread_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_os_log.h"
+#include "app_os_build_time.h"
+#include "app_sys_pipe.h"
 #include "app_thread_adaptor.h"
+#include "app_thread_master.h"
+#include "app_module_system.h"
 
 /* 管道集合,为每一个线程分发一套传输管道 */
 /* 信号量,控制线程组的进动 */
@@ -58,7 +64,6 @@ void app_thread_master_ready(void)
     app_os_build_time();
     /* 模组初始化 */
     app_module_system();
-    app_module_ext_mem_ready();
 }
 
 /*@brief 主线程服务例程

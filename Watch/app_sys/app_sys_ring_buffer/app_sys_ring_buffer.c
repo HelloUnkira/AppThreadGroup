@@ -3,7 +3,9 @@
  *该实现参考于zephyr\lib\os
  */
 
-#include "app_sys_interface.h"
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_sys_ring_buffer.h"
 
 /*@brief        索引回退运算
  *@param[in]    ring_buffer 实例
