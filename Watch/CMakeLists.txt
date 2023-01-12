@@ -2,7 +2,7 @@ cmake_minimum_required (VERSION 3.10.1)
 project(app_main C)
 # 生成文件路径
 set(app_arch_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_arch/
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_arch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_arch/app_arch_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_arch/app_arch_ext_mem
 )
@@ -35,6 +35,13 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_dump
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_load
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_source_mix
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl/lvgl
+)
+set(app_lvgl_path
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl/lvgl
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_!linux
@@ -44,6 +51,7 @@ include_directories(${app_arch_path})
 include_directories(${app_os_path})
 include_directories(${app_sys_path})
 include_directories(${app_thread_path})
+include_directories(${app_lvgl_path})
 include_directories(${app_main_path})
 # 生成库以及指定目标
 set(app_empty ${CMAKE_CURRENT_SOURCE_DIR}/app_empty.c)
@@ -57,6 +65,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_arch    ${CMAKE_CURRENT_SOURCE_
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_os      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_os)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_lvgl)
 # 添加链接库    /usr/lib  /usr/local/lib
 find_library(linux_lib pthread)
 # 设置实时路径

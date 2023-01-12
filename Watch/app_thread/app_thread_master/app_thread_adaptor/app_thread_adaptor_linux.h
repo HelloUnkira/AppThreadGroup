@@ -25,6 +25,11 @@ void * app_thread_source_manage_routine_adaptor(void *args)
     app_thread_source_manage_routine();
 }
 
+void * app_thread_lvgl_routine_adaptor(void *args)
+{
+    app_thread_lvgl_routine();
+}
+
 /* @服务例程适配<End> */
 
 /* @线程体<Start> */
@@ -50,6 +55,12 @@ app_thread_t app_thread_mix_custom = {
 app_thread_t app_thread_source_manage = {
    .priority = 3,
    .routine  = app_thread_source_manage_routine_adaptor,
+   .args     = NULL,
+};
+
+app_thread_t app_thread_lvgl = {
+   .priority = 3,
+   .routine  = app_thread_lvgl_routine_adaptor,
    .args     = NULL,
 };
 

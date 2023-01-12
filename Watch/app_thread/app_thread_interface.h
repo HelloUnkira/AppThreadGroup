@@ -9,6 +9,7 @@
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_source_manage.h"
+#include "app_thread_lvgl.h"
 
 /* 线程检查与线程子模组检查 */
 #define APP_THREAD_CHECK    1

@@ -32,12 +32,10 @@ cmake:
     make  
     cd    cmake_exe(附带拷贝资源app_!linux/source到本地)  
   
-make:  
-    mkdir app_!make  
-    mkdir app_!make/make_bin  
-    mkdir app_!make/make_exe  
-    cd    app_!make  
-    make  
-    cd    make_exe(附带拷贝资源app_!linux/source到本地)  
   
   
+问题点:  
+    在对头文件引用问题上  
+    大层级划分的全局化分层设计  
+    对重编译的编译时长照成了不小的困扰  
+    这也是设计过程中意外造成丢弃的一些部分  
