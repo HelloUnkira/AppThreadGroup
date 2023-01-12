@@ -1,6 +1,9 @@
 #ifndef APP_OS_LOG_H
 #define APP_OS_LOG_H
 
+/* 全局宏打印开关 */
+#define APP_OS_LOG_GLOBAL_STATUS    1   /* Enable:1,Disable:0 */
+
 /* 全局打印宏控检测,局部打印宏控检测 */
 #if (APP_OS_LOG_GLOBAL_STATUS && APP_OS_LOG_LOCAL_STATUS)
 /* DEBUG */

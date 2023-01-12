@@ -6,6 +6,7 @@
 #define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
+#include "app_os_adaptor.h"
 #include "app_os_log.h"
 #include "app_sys_crc32.h"
 #include "app_sys_checksum32.h"

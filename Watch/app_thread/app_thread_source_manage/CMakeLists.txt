@@ -1,6 +1,0 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_ext_mem)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_source)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_dump)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_load)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_source_mix)
-target_sources(app_thread PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_source_manage.c)

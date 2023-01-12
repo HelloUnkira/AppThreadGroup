@@ -1,2 +1,2 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_arch_adaptor)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_arch_ext_mem)
+file(GLOB_RECURSE SOURCES *.c)
+target_sources(app_arch PUBLIC ${SOURCES})

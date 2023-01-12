@@ -89,6 +89,7 @@ target_link_libraries(app_sys    PUBLIC app_os)
 target_link_libraries(app_thread PUBLIC app_arch)
 target_link_libraries(app_thread PUBLIC app_os)
 target_link_libraries(app_thread PUBLIC app_sys)
+target_link_libraries(app_thread PUBLIC lvgl)
 # 重命名
 set_target_properties(app_main
                       PROPERTIES OUTPUT_NAME main

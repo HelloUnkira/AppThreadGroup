@@ -10,25 +10,25 @@
 
 /* APP_EVENT1 */
 /* this is response set: */
-extern void event1_function_callback1(app_sys_event *event);
-extern void event1_function_callback2(app_sys_event *event);
-extern void event1_function_callback3(app_sys_event *event);
+extern void app_sys_event_empty(app_sys_event *event);
+extern void app_sys_event_empty(app_sys_event *event);
 /* APP_EVENT2 */
 /* this is response set: */
-extern void event2_function_callback1(app_sys_event *event);
-extern void event2_function_callback2(app_sys_event *event);
+extern void app_sys_event_empty(app_sys_event *event);
 
 extern void app_sys_event_respond(app_sys_event *event)
 {
 	switch (event->command) {
 	case APP_EVENT1:
-		event1_function_callback1(event);
-		event1_function_callback2(event);
-		event1_function_callback3(event);
+		app_sys_event_empty(event);
+		app_sys_event_empty(event);
 		break;
 	case APP_EVENT2:
-		event2_function_callback1(event);
-		event2_function_callback2(event);
+		app_sys_event_empty(event);
 		break;
 	}
 }
+void app_sys_event_empty(app_sys_event *event)
+{
+}
+

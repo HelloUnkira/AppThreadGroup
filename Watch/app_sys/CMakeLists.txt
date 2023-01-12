@@ -1,3 +1,2 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys_pipe)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ring_buffer)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys_util)
+file(GLOB_RECURSE SOURCES *.c)
+target_sources(app_sys PUBLIC ${SOURCES})

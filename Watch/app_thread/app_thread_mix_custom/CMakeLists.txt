@@ -1,6 +1,0 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_clock)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_alarm)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_stopwatch)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_countdown)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_module_world_time)
-target_sources(app_thread PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_mix_custom.c)

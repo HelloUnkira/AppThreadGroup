@@ -48,7 +48,9 @@ def encode_app_sys_event_c(file, dir_list):
             string = '\t\tbreak;\n'
             file.write(string)
     file.write('\t}\n}\n')
-
+    # 本地挂载一个空函数
+    file.write('void app_sys_event_empty(app_sys_event *event)\n')
+    file.write('{\n}\n\n')
 
 # 编写集成化头文件
 def encode_app_sys_event_h(file, dir_list):
