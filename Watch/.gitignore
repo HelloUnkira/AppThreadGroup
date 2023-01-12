@@ -1,3 +1,2 @@
-app_!make/make_bin
-app_!make/make_exe
+app_!!si
 app_!cmake

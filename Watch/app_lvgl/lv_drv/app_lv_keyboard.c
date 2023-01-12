@@ -2,6 +2,12 @@
  *    lv适配SDL模拟器
  */
 
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include <SDL2/SDL.h>
+#include "lv_drv_conf.h"
+#include "lvgl.h"
+
 static uint32_t app_lv_keyboard_sdl_key;
 static lv_indev_state_t app_lv_keyboard_state;
 static app_mutex_t app_lv_keyboard_mutex;

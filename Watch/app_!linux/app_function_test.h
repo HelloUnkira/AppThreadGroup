@@ -1,9 +1,9 @@
 #ifndef APP_FUNCTION_TEST
 #define APP_FUNCTION_TEST
 
-/*@brief 时钟模组测试
+/*@brief 时钟模组更新
  */
-static inline void app_module_clock_test(void)
+static inline void app_module_clock_1s_update(void)
 {
     app_package_t package = {
         .send_tid = app_thread_id_unknown,
@@ -16,6 +16,39 @@ static inline void app_module_clock_test(void)
     };
     app_thread_package_notify(&package);
 }
+
+/*@brief lvgl tick更新
+ */
+static inline void app_lv_tick_reduce_update(void)
+{
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_sched,
+        .event    = app_thread_lvgl_sched_reduce,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = NULL,
+    };
+    app_thread_package_notify(&package);
+}
+
+/*@brief lvgl sdl更新
+ */
+static inline void app_lv_sdl_update(void)
+{
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_sched,
+        .event    = app_thread_lvgl_sched_sdl,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = NULL,
+    };
+    app_thread_package_notify(&package);
+}
+
 
 /*@brief 闹钟模组测试
  */

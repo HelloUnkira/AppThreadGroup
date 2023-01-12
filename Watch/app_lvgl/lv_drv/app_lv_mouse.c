@@ -2,6 +2,12 @@
  *    lv适配SDL模拟器
  */
 
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include <SDL2/SDL.h>
+#include "lv_drv_conf.h"
+#include "lvgl.h"
+
 static app_mutex_t app_lv_mouse_mutex;
 static bool app_lv_mouse_left_status  = false;
 static bool app_lv_mouse_right_status = false;

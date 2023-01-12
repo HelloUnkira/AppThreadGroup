@@ -36,11 +36,16 @@ static void software_timer_handler(int signal)
             printf("linux singal SIGALRM 1 second\n");
     #endif
     if (signal == SIGALRM) {
-        /* test clock */
+        /* clock source */
         if (count % 1000 == 0)
-            app_module_clock_test();
+            app_module_clock_1s_update();
+        /* lvgl tick source */
+        if (count % LV_SCHED_TICK_REDUCE == 0)
+            app_lv_tick_reduce_update();
+        if (count % LV_SCHED_SDL_EVNET == 0)
+            app_lv_sdl_update();
         /* test reset load and dump */
-        #if 1
+        #if 0
         if (count % 5000 == 0) {
             app_module_system_delay_set(2);
             app_module_system_status_set(app_module_system_reset);
