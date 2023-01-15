@@ -64,9 +64,9 @@ static inline void app_module_alarm_test(void)
  */
 static inline void app_module_trace_test(void)
 {
-    uint8_t tin[APP_MODULE_TRACE_LOG_MAX * 2] =
-        {'0', '1', '2', '3', '4', '5', '6',
-         '0', '1', '2', '3', '4', '5', '6',};
+    uint8_t tin[APP_MODULE_TRACE_LOG_MAX * 2] ={0};
+    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_LOG_MAX; idx++)
+        tin[idx] = tin[idx + APP_MODULE_TRACE_LOG_MAX] = '0' + idx % 10;
     while (1) {
         static uint32_t offset = 0;
         offset %= APP_MODULE_TRACE_LOG_MAX;

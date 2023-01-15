@@ -22,6 +22,9 @@
 static    bool app_module_system_dump = false;
 static uint8_t app_module_system_delay = 0;
 static uint8_t app_module_system_status = 0;
+static uint8_t app_module_system_tid = 0;
+static uint8_t app_module_system_mid = 0;
+static uint8_t app_module_system_eid = 0;
 static app_mutex_t app_module_system_mutex = {0};
 
 /*@brief 设置系统转储成功标记

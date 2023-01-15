@@ -11,7 +11,7 @@
 void app_module_trace_func(void *func);
 
 /* 单次存储日志文本最大长度(包括字符串结尾'\0') */
-#define APP_MODULE_TRACE_LOG_MAX    7/*1*/
+#define APP_MODULE_TRACE_LOG_MAX    128/*1*/
  
 /*@brief 日志追踪队列初始化
  */

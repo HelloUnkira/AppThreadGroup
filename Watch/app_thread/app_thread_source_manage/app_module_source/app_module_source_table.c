@@ -43,7 +43,7 @@ static const app_module_source_t app_module_source_mix_chunk_small_table[] = {
 	{
 		/* trace log text */
 		.data_name = "trace log text",
-		.data_size = 128 * 1,
+		.data_size = 4096 * 2,
 		.data_base = 0x68,
 	},
 };

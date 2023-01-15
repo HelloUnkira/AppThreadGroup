@@ -16,6 +16,7 @@
 #include "app_module_dump.h"
 #include "app_module_load.h"
 #include "app_module_trace.h"
+#include "app_module_shutdown.h"
 
 /*@brief 数据管理线程模组初始化
  */
@@ -59,6 +60,7 @@ void app_thread_source_manage_routine(void)
             case app_thread_source_manage_dump: {
                 /* 将系统敏感的资源转储到外存 */
                 app_module_dump();
+                app_module_shutdown_dump();
                 break;
             }
             case app_thread_source_manage_load: {

@@ -21,7 +21,7 @@
         {
             "data_brief" : "trace log text",
             "data_name"  : "trace log text",
-            "data_size"  : "128 * 1"
+            "data_size"  : "4096 * 2"
         }
     ]
 }
