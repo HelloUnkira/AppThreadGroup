@@ -18,22 +18,7 @@
       系统应用层提供的各项事件的定向处理流程  
       部分系统应用子模块不能归属于某一具体的线程的具体子模块时  
       在该线程单提一个子模块处理该类事件集合  
+    3.(3)LVGL专用业务线程
     3.(3~...)其余处理线程  
       定向的封装模组,例如:传感器线程,GUI线程,传输协议线程等  
-  
-  
-  
-工程编译:  
-  
-cmake:  
-    cd    文件夹一级目录  
-    mkdir app_!cmake  
-    mkdir app_!cmake/cmake_exe  
-    cp    app_main/source/*  
-          app_!cmake/cmake_exe  
-    cd    app_!cmake  
-    cmake ..  
-    make  
-    cd    app_!cmake/cmake_exe   
-    ./main  
   

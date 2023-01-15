@@ -1,15 +1,18 @@
 cmake_minimum_required (VERSION 3.10.1)
 project(app_main C)
 # 生成文件路径
+set(app_std_path
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port
+)
 set(app_arch_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_arch
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_arch/app_arch_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_arch/app_arch_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_arch
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_arch/app_arch_adaptor
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_arch/app_arch_ext_mem
 )
 set(app_os_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_os
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_os/app_os_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_os/app_os_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_os
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_os/app_os_adaptor
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_os/app_os_ext_mem
 )
 set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys
@@ -49,7 +52,7 @@ set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main
 )
 # 编译器添加文件搜索路径
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${app_std_path})
 include_directories(${app_arch_path})
 include_directories(${app_os_path})
 include_directories(${app_sys_path})
@@ -57,7 +60,7 @@ include_directories(${app_thread_path})
 include_directories(${app_lvgl_path})
 include_directories(${app_main_path})
 # 生成库以及指定目标
-set(app_empty ${CMAKE_CURRENT_SOURCE_DIR}/app_empty.c)
+set(app_empty ${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_empty.c)
 add_library(app_arch    STATIC ${app_empty})
 add_library(app_os      STATIC ${app_empty})
 add_library(app_sys     STATIC ${app_empty})
@@ -65,11 +68,11 @@ add_library(app_lvgl    STATIC ${app_empty})
 add_library(app_thread  STATIC ${app_empty})
 add_executable(app_main ${CMAKE_CURRENT_SOURCE_DIR}/app_main/main.c)
 # 添加子目录
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_arch    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_arch)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_os      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_os)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_lvgl)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_arch      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_arch)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_port/app_os        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_os)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys                ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl               ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_lvgl)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread             ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
 # 添加链接库    /usr/lib  /usr/local/lib
 find_library(linux_lib pthread)
 find_library(sdl2_lib  SDL2)
@@ -93,9 +96,7 @@ target_link_libraries(app_thread PUBLIC app_sys)
 target_link_libraries(app_thread PUBLIC app_lvgl)
 target_link_libraries(app_main   PUBLIC app_thread)
 # 重命名
-set_target_properties(app_main
-                      PROPERTIES OUTPUT_NAME main
-                      PREFIX "")
+set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
 # 指定exe输出到cmake_exe
 set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/cmake_exe)
 # 指定so输出到cmake_lib

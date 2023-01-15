@@ -105,6 +105,25 @@ void app_module_trace_text_ready(void)
     }
 }
 
+/*@brief 日志追踪队列重置
+ */
+void app_module_trace_text_reset(void)
+{
+    app_module_trace_text_t trace_text = {};
+    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
+    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
+    app_mutex_take(&app_module_trace_text_mutex);
+    app_module_trace_text.offset_head = 0;
+    app_module_trace_text.offset_tail = 0;
+    app_module_trace_text.trace_zone  = source->data_size - sizeof(trace_text);
+    uint32_t checksum32 = app_sys_checksum32(trace_text.buffer, app_module_trace_info_size);
+    uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
+    app_module_trace_text.checksum32 = checksum32;
+    app_module_trace_text.crc32 = crc32;
+    app_module_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
+    app_mutex_give(&app_module_trace_text_mutex);
+}
+
 /*@brief 加载一条日志
  */
 static void app_module_trace_text_load_one(app_module_trace_item_t *item)

@@ -17,6 +17,10 @@ void app_module_trace_func(void *func);
  */
 void app_module_trace_text_ready(void);
 
+/*@brief 日志追踪队列重置
+ */
+void app_module_trace_text_reset(void);
+
 /*@brief      日志追踪队列尾加入一段日志
  *@param[in]  text 日志文本
  */
