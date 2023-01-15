@@ -35,6 +35,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_dump
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_load
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_source_mix
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_trace
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl/lvgl
@@ -45,7 +46,7 @@ set(app_lvgl_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl/lv_drv
 )
 set(app_main_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_!linux
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_main
 )
 # 编译器添加文件搜索路径
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
@@ -62,7 +63,7 @@ add_library(app_os      STATIC ${app_empty})
 add_library(app_sys     STATIC ${app_empty})
 add_library(app_lvgl    STATIC ${app_empty})
 add_library(app_thread  STATIC ${app_empty})
-add_executable(app_main ${CMAKE_CURRENT_SOURCE_DIR}/app_!linux/main.c)
+add_executable(app_main ${CMAKE_CURRENT_SOURCE_DIR}/app_main/main.c)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_arch    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_arch)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_os      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_os)

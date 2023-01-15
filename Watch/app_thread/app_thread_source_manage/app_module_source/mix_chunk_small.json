@@ -1,6 +1,6 @@
 {
-    "type"  : "thread_mix_custom",
-    "brief" : "thread_mix_custom: suggest：user_data and chunk user_size",
+    "type"  : "mix_chunk_small",
+    "brief" : "mix_chunk_small: suggest：user_data and chunk user_size",
     "data_group" :
     [
         {
@@ -19,9 +19,9 @@
             "data_size"  : "30 + 4 + 4"
         },
         {
-            "data_brief" : "unknown",
-            "data_name"  : "unknown",
-            "data_size"  : "20 * 10"
+            "data_brief" : "trace log text",
+            "data_name"  : "trace log text",
+            "data_size"  : "128 * 1"
         }
     ]
 }

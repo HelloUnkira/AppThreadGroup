@@ -2,12 +2,12 @@
  *    一些小混合资源加载与存储相关的功能组件
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
+#include "app_sys_log.h"
 #include "app_sys_crc32.h"
 #include "app_sys_checksum32.h"
 #include "app_module_source.h"
@@ -31,7 +31,7 @@ void app_module_clock_dump(void)
     app_module_clock_get_system_clock(&clock_data.clock);
     clock_data.crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
     clock_data.checksum32 = app_sys_checksum32(clock_data.buffer, sizeof(app_module_clock_t));
-    app_module_source_write("thread_mix_custom", "system clock", clock_data.buffer, sizeof(clock_data));
+    app_module_source_write("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
 }
 
 /*@brief 系统时钟加载到内存
@@ -47,7 +47,7 @@ void app_module_clock_load(void)
         };
     } clock_data = {};
     
-    app_module_source_read("thread_mix_custom", "system clock", clock_data.buffer, sizeof(clock_data));
+    app_module_source_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
     uint32_t checksum32 = app_sys_checksum32(clock_data.buffer, sizeof(app_module_clock_t));
     uint32_t crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
     if (checksum32 == clock_data.checksum32 && crc32 == clock_data.crc32)
@@ -57,7 +57,7 @@ void app_module_clock_load(void)
         app_module_clock_to_week(&clock);
         app_module_clock_to_utc(&clock);
         app_module_clock_set_system_clock(&clock);
-        APP_OS_LOG_WARN("app_module_clock_load: load system clock fail\n");
+        APP_SYS_LOG_WARN("app_module_clock_load: load system clock fail\n");
     }
 }
 
@@ -77,7 +77,7 @@ void app_module_stopwatch_dump(void)
     app_module_stopwatch_get(&stopwatch_data.stopwatch);
     stopwatch_data.crc32 = app_sys_crc32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
     stopwatch_data.checksum32 = app_sys_checksum32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
-    app_module_source_write("thread_mix_custom", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
+    app_module_source_write("mix_chunk_small", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
 }
 
 /*@brief 秒表加载到内存
@@ -93,13 +93,13 @@ void app_module_stopwatch_load(void)
         };
     } stopwatch_data = {};
     
-    app_module_source_read("thread_mix_custom", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
+    app_module_source_read("mix_chunk_small", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
     uint32_t checksum32 = app_sys_checksum32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
     uint32_t crc32 = app_sys_crc32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
     if (checksum32 == stopwatch_data.checksum32 && crc32 == stopwatch_data.crc32)
         app_module_stopwatch_set(&stopwatch_data.stopwatch);
     if (checksum32 != stopwatch_data.checksum32 || crc32 != stopwatch_data.crc32)
-        APP_OS_LOG_WARN("app_module_stopwatch_load: load stopwatch fail\n");
+        APP_SYS_LOG_WARN("app_module_stopwatch_load: load stopwatch fail\n");
 }
 
 /*@brief 倒计时转储到外存
@@ -118,7 +118,7 @@ void app_module_countdown_dump(void)
     app_module_countdown_get(&countdown_data.countdown);
     countdown_data.crc32 = app_sys_crc32(countdown_data.buffer, sizeof(app_module_countdown_t));
     countdown_data.checksum32 = app_sys_checksum32(countdown_data.buffer, sizeof(app_module_countdown_t));
-    app_module_source_write("thread_mix_custom", "system countdown", countdown_data.buffer, sizeof(countdown_data));
+    app_module_source_write("mix_chunk_small", "system countdown", countdown_data.buffer, sizeof(countdown_data));
 }
 
 /*@brief 倒计时加载到内存
@@ -134,11 +134,11 @@ void app_module_countdown_load(void)
         };
     } countdown_data = {};
     
-    app_module_source_read("thread_mix_custom", "system countdown", countdown_data.buffer, sizeof(countdown_data));
+    app_module_source_read("mix_chunk_small", "system countdown", countdown_data.buffer, sizeof(countdown_data));
     uint32_t checksum32 = app_sys_checksum32(countdown_data.buffer, sizeof(app_module_countdown_t));
     uint32_t crc32 = app_sys_crc32(countdown_data.buffer, sizeof(app_module_countdown_t));
     if (checksum32 == countdown_data.checksum32 && crc32 == countdown_data.crc32)
         app_module_countdown_set(&countdown_data.countdown);
     if (checksum32 != countdown_data.checksum32 || crc32 != countdown_data.crc32)
-        APP_OS_LOG_WARN("app_module_countdown_load: load countdown fail\n");
+        APP_SYS_LOG_WARN("app_module_countdown_load: load countdown fail\n");
 }

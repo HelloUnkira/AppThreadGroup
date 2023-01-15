@@ -22,4 +22,12 @@ typedef enum {  /* GUI事件调度模组事件 */
 /* lvgl:sdl check */
 #define LV_SCHED_SDL_EVNET      10
 
+/*@brief lvgl tick更新
+ */
+void app_lv_tick_reduce_update(void);
+
+/*@brief lvgl sdl更新
+ */
+void app_lv_sdl_update(void);
+
 #endif

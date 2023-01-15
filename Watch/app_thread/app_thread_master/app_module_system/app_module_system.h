@@ -42,4 +42,10 @@ void app_module_assert(char *file, uint32_t line, bool cond);
 #define APP_MODULE_ASSERT(cond)    \
         app_module_assert(__FILE__, __LINE__, cond)
 
+/*@brief     系统1毫秒更新事件
+ *           硬件时钟中断或软件定时器中执行
+ *@param[in] count 毫秒计数器,每毫秒+1
+ */
+void app_module_system_1msec_update(uint32_t count);
+
 #endif

@@ -2,12 +2,12 @@
  *    一些和闹钟运算相关的功能组件
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
+#include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
@@ -94,35 +94,35 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
             break;
         #if APP_MODULE_CHECK
         app_module_clock_t *clock_now = NULL;
-        APP_OS_LOG_INFO("event:%u\n", event);
-        APP_OS_LOG_INFO("clock:\n");
+        APP_SYS_LOG_INFO("event:%u\n", event);
+        APP_SYS_LOG_INFO("clock:\n");
         clock_now = clock;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("clock_base:\n");
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("clock_base:\n");
         clock_now = &alarm->clock_base;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("clock_month:\n");
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("clock_month:\n");
         clock_now = &clock_month;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("clock_week:\n");
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("clock_week:\n");
         clock_now = &clock_week;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("field_month:%x\n", alarm->field_month);
-        APP_OS_LOG_INFO("field_week:%x\n",  alarm->field_week);
-        APP_OS_LOG_INFO("valid:%u\n",       alarm->valid);
-        APP_OS_LOG_INFO("onoff:%u\n",       alarm->onoff);
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("field_month:%x\n", alarm->field_month);
+        APP_SYS_LOG_INFO("field_week:%x\n",  alarm->field_week);
+        APP_SYS_LOG_INFO("valid:%u\n",       alarm->valid);
+        APP_SYS_LOG_INFO("onoff:%u\n",       alarm->onoff);
         #endif
         break;
     }
@@ -157,28 +157,28 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
             break;
         #if APP_MODULE_CHECK
         app_module_clock_t *clock_now = NULL;
-        APP_OS_LOG_INFO("event:%u\n", event);
-        APP_OS_LOG_INFO("clock:\n");
+        APP_SYS_LOG_INFO("event:%u\n", event);
+        APP_SYS_LOG_INFO("clock:\n");
         clock_now = clock;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("clock_base:\n");
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("clock_base:\n");
         clock_now = &alarm->clock_base;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("clock_repeat:\n");
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("clock_repeat:\n");
         clock_now = &clock_repeat;
-        APP_OS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
-                        clock_now->utc,clock_now->week,
-                        clock_now->year,clock_now->month,clock_now->day,
-                        clock_now->hour,clock_now->minute,clock_now->second);
-        APP_OS_LOG_INFO("repeat:%u\n",  alarm->repeat);
-        APP_OS_LOG_INFO("valid:%u\n",   alarm->valid);
-        APP_OS_LOG_INFO("onoff:%u\n",   alarm->onoff);
+        APP_SYS_LOG_INFO("utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+                         clock_now->utc,clock_now->week,
+                         clock_now->year,clock_now->month,clock_now->day,
+                         clock_now->hour,clock_now->minute,clock_now->second);
+        APP_SYS_LOG_INFO("repeat:%u\n",  alarm->repeat);
+        APP_SYS_LOG_INFO("valid:%u\n",   alarm->valid);
+        APP_SYS_LOG_INFO("onoff:%u\n",   alarm->onoff);
         #endif
         break;
     }

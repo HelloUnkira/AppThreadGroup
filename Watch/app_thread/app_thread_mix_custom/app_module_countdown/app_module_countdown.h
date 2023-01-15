@@ -37,6 +37,10 @@ void app_module_countdown_stop(void);
  */
 void app_module_countdown_ready(void);
 
+/*@brief 倒计时模组更新
+ */
+void app_module_countdown_xmsec_update(void);
+
 /*@brief 更新倒计时
  *       内部使用: 被mix custom线程使用
  */

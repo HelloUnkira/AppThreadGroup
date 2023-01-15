@@ -8,28 +8,16 @@
 
 static const app_module_ext_mem_t app_module_ext_mem_table[] = {
 	{
-		/* chunk0 */
-		.chunk_name = "thread_master",
-		.chunk_size = 4096 * 10,
+		/* large mix data chunk, Suitable RAW management */
+		.chunk_name = "mix_chunk_large",
+		.chunk_size = 4096 * 50,
 		.chunk_base = 0x0,
 	},
 	{
-		/* chunk1 */
-		.chunk_name = "thread_mix_irq",
-		.chunk_size = 4096 * 20,
-		.chunk_base = 0xa000,
-	},
-	{
-		/* chunk2 */
-		.chunk_name = "thread_mix_custom",
-		.chunk_size = 4096 * 30,
-		.chunk_base = 0x1e000,
-	},
-	{
-		/* chunk2 */
-		.chunk_name = "thread_source_manage",
-		.chunk_size = 4096 * 30,
-		.chunk_base = 0x3c000,
+		/* small mix data chunk, Suitable FS management */
+		.chunk_name = "mix_chunk_small",
+		.chunk_size = 4096 * 10,
+		.chunk_base = 0x32000,
 	},
 };
 

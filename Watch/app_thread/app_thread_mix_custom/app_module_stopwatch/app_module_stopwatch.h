@@ -37,6 +37,10 @@ void app_module_stopwatch_stop(void);
  */
 void app_module_stopwatch_ready(void);
 
+/*@brief 秒表模组更新
+ */
+void app_module_stopwatch_xmsec_update(void);
+
 /*@brief 更新秒表
  *       内部使用: 被mix custom线程使用
  */

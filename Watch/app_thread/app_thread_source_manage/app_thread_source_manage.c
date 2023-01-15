@@ -3,18 +3,19 @@
  *    有一个统一管理数据加载与转储的入口是极为必要的
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
+#include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_source_manage.h"
 #include "app_module_ext_mem.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
+#include "app_module_trace.h"
 
 /*@brief 数据管理线程模组初始化
  */
@@ -22,6 +23,7 @@ void app_thread_source_manage_ready(void)
 {
     /* 模组初始化 */
     app_module_ext_mem_ready();
+    app_module_trace_text_ready();
 }
 
 /*@brief 数据管理线程服务例程
@@ -38,8 +40,8 @@ void app_thread_source_manage_routine(void)
         app_sem_take(sem);
         #if APP_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_OS_LOG_WARN("thread mix irq recv too much package:%u\n",
-                            app_sys_pipe_package_num(pipe));
+            APP_SYS_LOG_WARN("thread mix irq recv too much package:%u\n",
+                              app_sys_pipe_package_num(pipe));
         #endif
         while (app_sys_pipe_package_num(pipe)) {
             app_sys_pipe_take(pipe, &package);
@@ -66,15 +68,15 @@ void app_thread_source_manage_routine(void)
             }
             default: {
                 #if APP_THREAD_CHECK
-                APP_OS_LOG_ERROR("\n");
-                APP_OS_LOG_ERROR("thread data manage pipe recv a unknown package\n");
-                APP_OS_LOG_ERROR("package send_tid:%u\n", package.send_tid);
-                APP_OS_LOG_ERROR("package recv_tid:%u\n", package.recv_tid);
-                APP_OS_LOG_ERROR("package module:%u\n",   package.module);
-                APP_OS_LOG_ERROR("package event:%u\n",    package.event);
-                APP_OS_LOG_ERROR("package data:%p\n",     package.data);
-                APP_OS_LOG_ERROR("package size:%u\n",     package.size);
-                APP_OS_LOG_ERROR("\n");
+                APP_SYS_LOG_ERROR("\n");
+                APP_SYS_LOG_ERROR("thread data manage pipe recv a unknown package\n");
+                APP_SYS_LOG_ERROR("package send_tid:%u\n", package.send_tid);
+                APP_SYS_LOG_ERROR("package recv_tid:%u\n", package.recv_tid);
+                APP_SYS_LOG_ERROR("package module:%u\n",   package.module);
+                APP_SYS_LOG_ERROR("package event:%u\n",    package.event);
+                APP_SYS_LOG_ERROR("package data:%p\n",     package.data);
+                APP_SYS_LOG_ERROR("package size:%u\n",     package.size);
+                APP_SYS_LOG_ERROR("\n");
                 #endif
                 break;
             }

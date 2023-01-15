@@ -2,17 +2,20 @@
  *    断言相关的功能组件
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
+#include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_source_manage.h"
+#include "app_thread_lvgl.h"
 #include "app_module_system.h"
 #include "app_module_clock.h"
+#include "app_module_stopwatch.h"
+#include "app_module_countdown.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
 
@@ -137,7 +140,31 @@ void app_module_assert(char *file, uint32_t line, bool cond)
     if (cond)
         return;
     /* 输出错误信息 */
-    APP_OS_LOG_ERROR("app_module_assert:[%s][%d]", file, line);
+    APP_SYS_LOG_ERROR("app_module_assert:[%s][%d]", file, line);
     /* 异常导致的错误直接重启系统(不转储信息) */
     app_os_reset();
+}
+
+/*@brief     系统1毫秒更新事件
+ *           硬件时钟中断或软件定时器中执行
+ *@param[in] count 毫秒计数器,每毫秒+1
+ */
+void app_module_system_1msec_update(uint32_t count)
+{
+    /* clock source */
+    if (count % 1000 == 0) {
+        uint64_t utc_new = 0; /* 在此处获取RTC的UTC */
+        app_module_clock_1s_update(utc_new);
+    }
+    /* lvgl tick source */
+    if (count % LV_SCHED_TICK_REDUCE == 0)
+        app_lv_tick_reduce_update();
+    if (count % LV_SCHED_SDL_EVNET == 0)
+        app_lv_sdl_update();
+    /* stopwatch msec update */
+    if (count % APP_MODULE_STOPWATCH_MSEC == 0)
+        app_module_stopwatch_xmsec_update();
+    /* countdown msec update */
+    if (count % APP_MODULE_COUNTDOWN_MSEC == 0)
+        app_module_countdown_xmsec_update();
 }

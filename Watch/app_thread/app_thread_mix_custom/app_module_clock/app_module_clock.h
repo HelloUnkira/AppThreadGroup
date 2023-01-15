@@ -99,4 +99,8 @@ void app_module_clock_timestamp_update(uint64_t utc_new);
  */
 void app_module_clock_ready(void);
 
+/*@brief 时钟模组更新
+ */
+void app_module_clock_1s_update(uint64_t utc_new);
+
 #endif

@@ -13,13 +13,13 @@
  *    最基本的容器居然更能高效的完成指定的工作
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
 #include "app_os_build_time.h"
+#include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_adaptor.h"
 #include "app_thread_master.h"
@@ -80,8 +80,8 @@ void app_thread_master_routine(void)
         app_sem_take(send_sem);
         #if APP_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_OS_LOG_WARN("thread masther recv too much package:%u\n",
-                            app_sys_pipe_package_num(send_pipe));
+            APP_SYS_LOG_WARN("thread masther recv too much package:%u\n",
+                              app_sys_pipe_package_num(send_pipe));
         #endif
         /* 线程组不再派发事件包(如果系统中止) */
         app_mutex_take(&app_thread_mutex);

@@ -16,6 +16,7 @@
 #include "app_module_ext_mem.h"
 #include "app_module_ext_mem_table.h"
 #include "app_module_system.h"
+#include "app_module_trace.h"
 #include "app_function_test.h"
 
 #if 0
@@ -30,20 +31,11 @@ static void software_timer_handler(int signal)
     //SIGVTALRM:    以该进程在用户态下花费的时间来计算
     //SIGPROF:      以该进程在用户态下和内核态下所费的时间来计算
     static uint32_t count = 0;count++;
-    #if 1
+    /* 1msec system update: */
     if (signal == SIGALRM)
-        if (count % 1000 == 0)
-            printf("linux singal SIGALRM 1 second\n");
-    #endif
+        app_module_system_1msec_update(count);
+    /* test:... */
     if (signal == SIGALRM) {
-        /* clock source */
-        if (count % 1000 == 0)
-            app_module_clock_1s_update();
-        /* lvgl tick source */
-        if (count % LV_SCHED_TICK_REDUCE == 0)
-            app_lv_tick_reduce_update();
-        if (count % LV_SCHED_SDL_EVNET == 0)
-            app_lv_sdl_update();
         /* test reset load and dump */
         #if 0
         if (count % 5000 == 0) {
@@ -58,23 +50,13 @@ static void software_timer_handler(int signal)
         #endif
         /* test stopwatch */
         #if 0
-        if (count % APP_MODULE_STOPWATCH_MSEC == 0)
+        if (count == 1000)
             app_module_stopwatch_test();
-        if (count == 1000) {
-            app_module_stopwatch_reset();
-            app_module_stopwatch_start();
-        }
         #endif
         /* test countdown */
         #if 0
-        if (count % APP_MODULE_COUNTDOWN_MSEC == 0)
-            app_module_countdown_test;
-        if (count == 1000) {
-            app_module_countdown_reset();
-            app_module_countdown_t countdown = {.hour = 0, .minute = 0, .second = 17};
-            app_module_countdown_set(&countdown);
-            app_module_countdown_start();
-        }
+        if (count == 1000)
+            app_module_countdown_test();
         #endif
         /* test package... */
         #if 0
@@ -131,19 +113,24 @@ void software_timer_ready(void)
 
 int main(int argc, char *argv[])
 {
-    #if 1
     /* 启动APP调度策略 */
     app_thread_set_work_now();
-    /* 测试中我们在主线程使用软件定时器信号量发送包裹,以达到模拟事件源的生成 */
-    #if 1
+    /* 测试中我们在主线程 */
+    /* 使用软件定时器信号量发送包裹 */
+    /* 以达到模拟事件源的生成 */
     software_timer_ready();
-    #endif
     /* 主线程滚动阻塞 */
+    #if 0
+    #elif 0
     while (true)
         sleep(1);
-    #else
+    #elif 1
+    /* 测试日志追踪 */
+    app_module_trace_test();
+    #elif 0
     /* chunk刷新,将其都刷为0 */
     app_module_ext_mem_chunk_reflush();
+    #else
     #endif
     return 0;
 }

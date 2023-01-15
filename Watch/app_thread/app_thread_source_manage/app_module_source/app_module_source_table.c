@@ -6,7 +6,7 @@
 #include "app_std_lib.h"
 #include "app_module_source.h"
 
-static const app_module_source_t app_module_source_thread_master_table[] = {
+static const app_module_source_t app_module_source_mix_chunk_large_table[] = {
 	{
 		/* unknown */
 		.data_name = "unknown",
@@ -21,7 +21,7 @@ static const app_module_source_t app_module_source_thread_master_table[] = {
 	},
 };
 
-static const app_module_source_t app_module_source_thread_mix_custom_table[] = {
+static const app_module_source_t app_module_source_mix_chunk_small_table[] = {
 	{
 		/* system clock + crc32 + checksum32 */
 		.data_name = "system clock",
@@ -41,44 +41,31 @@ static const app_module_source_t app_module_source_thread_mix_custom_table[] = {
 		.data_base = 0x42,
 	},
 	{
-		/* unknown */
-		.data_name = "unknown",
-		.data_size = 20 * 10,
+		/* trace log text */
+		.data_name = "trace log text",
+		.data_size = 128 * 1,
 		.data_base = 0x68,
 	},
 };
 
-static const app_module_source_t app_module_source_thread_mix_irq_table[] = {
-	{
-		/* unknown */
-		.data_name = "unknown",
-		.data_size = 20 * 10,
-		.data_base = 0x0,
-	},
-};
-
 static const app_module_source_t * app_module_source_set_table[] = {
-	app_module_source_thread_master_table,
-	app_module_source_thread_mix_custom_table,
-	app_module_source_thread_mix_irq_table,
+	app_module_source_mix_chunk_large_table,
+	app_module_source_mix_chunk_small_table,
 };
 
 static const uint32_t app_module_source_set_size_table[] = {
-	sizeof(app_module_source_thread_master_table) /
-	sizeof(app_module_source_thread_master_table[0]),
-	sizeof(app_module_source_thread_mix_custom_table) /
-	sizeof(app_module_source_thread_mix_custom_table[0]),
-	sizeof(app_module_source_thread_mix_irq_table) /
-	sizeof(app_module_source_thread_mix_irq_table[0]),
+	sizeof(app_module_source_mix_chunk_large_table) /
+	sizeof(app_module_source_mix_chunk_large_table[0]),
+	sizeof(app_module_source_mix_chunk_small_table) /
+	sizeof(app_module_source_mix_chunk_small_table[0]),
 };
 
 static const char * app_module_source_string_table[] = {
-	"thread_master",
-	"thread_mix_custom",
-	"thread_mix_irq",
+	"mix_chunk_large",
+	"mix_chunk_small",
 };
 
-static const uint32_t app_module_source_table_size = 3;
+static const uint32_t app_module_source_table_size = 2;
 
 /*@通过chunk名字以及data名字索引data静态实例
  *@param[in] chunk_name名字

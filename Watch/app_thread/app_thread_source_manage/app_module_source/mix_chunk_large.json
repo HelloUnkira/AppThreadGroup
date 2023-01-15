@@ -1,6 +1,6 @@
 {
-    "type"  : "thread_master",
-    "brief" : "thread_master: suggest：user_data and chunk user_size",
+    "type"  : "mix_chunk_large",
+    "brief" : "mix_chunk_large: suggest：user_data and chunk user_size",
     "data_group" :
     [
         {

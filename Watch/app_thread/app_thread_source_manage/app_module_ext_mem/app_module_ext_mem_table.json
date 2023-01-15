@@ -6,24 +6,14 @@
     "app_module_ext_mem_table" :
     [
         {
-            "chunk_brief" : "chunk0",
-            "chunk_name"  : "thread_master",
+            "chunk_brief" : "large mix data chunk, Suitable RAW management",
+            "chunk_name"  : "mix_chunk_large",
+            "chunk_size"  : "4096 * 50"
+        },
+        {
+            "chunk_brief" : "small mix data chunk, Suitable FS management",
+            "chunk_name"  : "mix_chunk_small",
             "chunk_size"  : "4096 * 10"
-        },
-        {
-            "chunk_brief" : "chunk1",
-            "chunk_name"  : "thread_mix_irq",
-            "chunk_size"  : "4096 * 20"
-        },
-        {
-            "chunk_brief" : "chunk2",
-            "chunk_name"  : "thread_mix_custom",
-            "chunk_size"  : "4096 * 30"
-        },
-        {
-            "chunk_brief" : "chunk2",
-            "chunk_name"  : "thread_source_manage",
-            "chunk_size"  : "4096 * 30"
         }
     ]
 }

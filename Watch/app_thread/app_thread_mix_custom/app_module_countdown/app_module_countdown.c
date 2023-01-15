@@ -5,12 +5,12 @@
  *    因为不需要设定多个倒计时策略
  */
 
-#define APP_OS_LOG_LOCAL_STATUS     1
-#define APP_OS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_log.h"
+#include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
@@ -78,6 +78,22 @@ void app_module_countdown_ready(void)
     app_mutex_process(&app_module_countdown_mutex);
 }
 
+/*@brief 倒计时模组更新
+ */
+void app_module_countdown_xmsec_update(void)
+{
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_mix_custom,
+        .module   = app_thread_mix_custom_countdown,
+        .event    = app_thread_mix_custom_countdown_msec_update,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = NULL,
+    };
+    app_thread_package_notify(&package);
+}
+
 /*@brief 更新倒计时
  *       内部使用: 被mix custom线程使用
  */
@@ -126,8 +142,8 @@ void app_module_countdown_msec_update(void)
     app_mutex_give(&app_module_countdown_mutex);
     
     #if APP_MODULE_CHECK
-    APP_OS_LOG_INFO("countdown:%u:%u:%u:%u - %u\n",
-                    countdown.hour,countdown.minute,countdown.second,
-                    countdown.msec,countdown.onoff);
+    APP_SYS_LOG_INFO("countdown:%u:%u:%u:%u - %u\n",
+                      countdown.hour,countdown.minute,countdown.second,
+                      countdown.msec,countdown.onoff);
     #endif
 }
