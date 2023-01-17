@@ -138,12 +138,14 @@ void app_thread_set_work_now(void)
     app_thread_mix_irq_ready();
     app_thread_mix_custom_ready();
     app_thread_source_manage_ready();
+    app_thread_protocol_ready();
     app_thread_lvgl_ready();
     /* 就绪和启用线程组 */
     app_thread_process(&app_thread_master);
     app_thread_process(&app_thread_mix_irq);
     app_thread_process(&app_thread_mix_custom);
     app_thread_process(&app_thread_source_manage);
+    app_thread_process(&app_thread_protocol);
     app_thread_process(&app_thread_lvgl);
 }
 

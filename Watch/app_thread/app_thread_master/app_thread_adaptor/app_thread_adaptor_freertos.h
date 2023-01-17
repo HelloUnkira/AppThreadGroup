@@ -17,6 +17,9 @@ static  StackType_t app_thread_mix_custom_stack[APP_THREAD_MIX_CUSTOM_STACK_SIZE
 #define APP_THREAD_SOURCE_MANAGE_STACK_SIZE  (1024)
 static  StackType_t app_thread_source_manage_stack[APP_THREAD_SOURCE_MANAGE_STACK_SIZE];
 
+#define APP_THREAD_PROTOCOL_STACK_SIZE  (1024)
+static  StackType_t app_thread_protocol_stack[APP_THREAD_PROTOCOL_STACK_SIZE];
+
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  StackType_t app_thread_lvgl_stack[APP_THREAD_LVGL_STACK_SIZE];
 
@@ -42,6 +45,11 @@ void * app_thread_mix_custom_routine_adaptor(void *pvParameters)
 void * app_thread_source_manage_routine_adaptor(void *pvParameters)
 {
     app_thread_source_manage_routine();
+}
+
+void * app_thread_protocol_routine_adaptor(void *pvParameters)
+{
+    app_thread_protocol_routine();
 }
 
 void * app_thread_lvgl_routine_adaptor(void *pvParameters)
@@ -83,6 +91,14 @@ app_thread_t app_thread_source_manage = {
     .priority   = 3,
     .task       = app_thread_source_manage_routine_adaptor,
     .name       = "app_thread_source_manage",
+};
+
+app_thread_t app_thread_protocol = {
+    .stack      = app_thread_protocol_stack,
+    .stack_size = APP_THREAD_PROTOCOL_STACK_SIZE,
+    .priority   = 3,
+    .task       = app_thread_protocol_routine_adaptor,
+    .name       = "app_thread_protocol",
 };
 
 app_thread_t app_thread_lvgl = {

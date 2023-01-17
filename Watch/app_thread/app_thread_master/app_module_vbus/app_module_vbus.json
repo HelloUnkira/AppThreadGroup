@@ -1,16 +1,16 @@
 
 {
-    "type"      : "app_sys_event",
-    "brief"     : "app_sys_event: response suggest：event_set_callback_...",
-    "app_sys_event" :
+    "type"      : "app_module_vbus",
+    "brief"     : "app_module_vbus: response suggest：event_set_callback_...",
+    "app_module_vbus" :
     [
         {
             "name"     : "APP_EVENT1",
             "brief"    : "this is response set:",
             "response" : 
             [
-                         "app_sys_event_empty",
-                         "app_sys_event_empty"
+                         "app_module_vbus_empty",
+                         "app_module_vbus_empty"
             ]
         },
         {
@@ -18,7 +18,7 @@
             "brief"    : "this is response set:",
             "response" : 
             [
-                         "app_sys_event_empty"
+                         "app_module_vbus_empty"
             ]
         }
     ]

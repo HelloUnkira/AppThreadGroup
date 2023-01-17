@@ -24,6 +24,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_thread_adaptor
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_vbus
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_system
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom
@@ -39,6 +40,8 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_load
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_source_mix
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_source_manage/app_module_trace
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_protocol
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_protocol/app_module_protocol
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lvgl/lvgl

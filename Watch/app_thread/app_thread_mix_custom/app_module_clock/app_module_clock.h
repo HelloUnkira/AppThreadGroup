@@ -73,6 +73,11 @@ typedef void (*app_module_clock_cb1)(app_module_clock_t clock[1]);
 /* 本地时钟更新回调 */
 typedef void (*app_module_clock_cb2)(app_module_clock_t clock[2], uint32_t event);
 
+/*@brief     获得系统开机时间(中断环境下不可调用)
+ *@param[in] clock 时钟实例
+ */
+uint64_t app_module_clock_get_sec_tick(void);
+
 /*@brief     获得系统时间(中断环境下不可调用)
  *@param[in] clock 时钟实例
  */

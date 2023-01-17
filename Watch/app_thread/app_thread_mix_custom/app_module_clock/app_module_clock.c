@@ -225,8 +225,20 @@ void app_module_clock_cb2_respond(uint32_t flag, app_module_clock_t clock[2], ui
     }
 }
 
+static uint64_t app_module_clock_sec_tick = {0};
 static app_mutex_t app_module_clock_mutex = {0};
 static app_module_clock_t app_module_clock[2] = {0};
+
+/*@brief     获得系统开机时间(中断环境下不可调用)
+ *@param[in] clock 时钟实例
+ */
+uint64_t app_module_clock_get_sec_tick(void)
+{
+    app_mutex_take(&app_module_clock_mutex);
+    uint64_t retval = app_module_clock_sec_tick;
+    app_mutex_give(&app_module_clock_mutex);
+    return retval;
+}
 
 /*@brief     获得系统时间(中断环境下不可调用)
  *@param[in] clock 时钟实例
@@ -300,6 +312,7 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     app_module_clock_to_dtime(&app_module_clock[1]);
     app_module_clock_to_week(&app_module_clock[1]);
     app_module_clock_t clock_new = app_module_clock[1];
+    app_module_clock_sec_tick++;
     /* 出界 */
     app_mutex_give(&app_module_clock_mutex);
     /* 回调更新 */

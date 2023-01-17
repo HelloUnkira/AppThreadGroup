@@ -20,6 +20,11 @@ void app_module_shutdown_dump(void)
              "shutdown condition:%d\r\n",
              app_module_system_status_get());
     app_module_trace_text_dump(text);
+    /* 线程组工作时间: */
+    snprintf(text, APP_MODULE_TRACE_LOG_MAX,
+             "app thread group work time:%lu\n\n",
+              app_module_clock_get_sec_tick());
+    app_module_trace_text_dump(text);
     /* 关机的时间信息: */
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
