@@ -53,16 +53,16 @@ void app_thread_protocol_routine(void)
             }
             case app_thread_protocol_transfer: {
                 if (package.event == app_thread_protocol_transfer_tx) {
-                    app_module_protocol_package_t *pkg = package.data;
+                    app_module_protocol_package_t *ptl_pkg = package.data;
                     /* 实际传输的包大小为前n个字节: */
                     /* sizeof(app_module_protocol_package_t) + package.size */
                     /* 发送该包... */
                     if (package.dynamic)
-                        app_mem_free(pkg);
+                        app_mem_free(ptl_pkg);
                 }
                 if (package.event == app_thread_protocol_transfer_rx) {
-                    app_module_protocol_package_t *pkg = package.data;
-                    app_module_protocol_respond(pkg);
+                    app_module_protocol_package_t *ptl_pkg = package.data;
+                    app_module_protocol_respond(ptl_pkg);
                 }
                 break;
             }

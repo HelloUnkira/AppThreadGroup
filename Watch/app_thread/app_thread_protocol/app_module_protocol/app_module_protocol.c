@@ -38,27 +38,27 @@ uint32_t app_module_protocol_package_size(void)
 }
 
 /*@brief     填充准备发送的协议包
- *@param[in] package 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-static void app_module_protocol_tx(app_module_protocol_package_t *package)
+static void app_module_protocol_tx(app_module_protocol_package_t *ptl_pkg)
 {
     for (uint32_t idx = 0; idx < app_module_protocol_cb_size; idx++)
-        app_module_protocol_cb[idx].tx_pkg_make(package);
+        app_module_protocol_cb[idx].tx_pkg_make(ptl_pkg);
 }
 
 /*@brief     解析已经接收的协议包
- *@param[in] package 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-static void app_module_protocol_rx(app_module_protocol_package_t *package)
+static void app_module_protocol_rx(app_module_protocol_package_t *ptl_pkg)
 {
     for (uint32_t idx = 0; idx < app_module_protocol_cb_size; idx++)
-        app_module_protocol_cb[idx].rx_pkg_parse(package);
+        app_module_protocol_cb[idx].rx_pkg_parse(ptl_pkg);
 }
 
 /*@brief     通知协议包
- *@param[in] pkg 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_notify(app_module_protocol_package_t *pkg)
+void app_module_protocol_notify(app_module_protocol_package_t *ptl_pkg)
 {
     app_package_t package = {
         .send_tid = app_thread_id_protocol,
@@ -67,20 +67,20 @@ void app_module_protocol_notify(app_module_protocol_package_t *pkg)
         .event    = app_thread_protocol_transfer_rx,
         .dynamic  = true,
         .size     = app_module_protocol_package_size(),
-        .data     = pkg,
+        .data     = ptl_pkg,
     };
     app_thread_package_notify(&package);
 }
 
 /*@brief     响应协议包
- *@param[in] pkg 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_respond(app_module_protocol_package_t *pkg)
+void app_module_protocol_respond(app_module_protocol_package_t *ptl_pkg)
 {
     /* tx的处理 */
-    if (pkg->fake) {
-        pkg->fake = false;
-        app_module_protocol_tx(pkg);
+    if (ptl_pkg->fake) {
+        ptl_pkg->fake = false;
+        app_module_protocol_tx(ptl_pkg);
         app_package_t package = {
             .send_tid = app_thread_id_protocol,
             .recv_tid = app_thread_id_protocol,
@@ -88,15 +88,15 @@ void app_module_protocol_respond(app_module_protocol_package_t *pkg)
             .event    = app_thread_protocol_transfer_rx,
             .dynamic  = true,
             .size     = app_module_protocol_package_size(),
-            .data     = pkg,
+            .data     = ptl_pkg,
         };
         app_thread_package_notify(&package);
         return;
     }
     /* rx的处理 */
-    if (pkg->size != 0) {
-        app_module_protocol_rx(pkg);
-        pkg->size = 0;
+    if (ptl_pkg->size != 0) {
+        app_module_protocol_rx(ptl_pkg);
+        ptl_pkg->size = 0;
         app_package_t package = {
             .send_tid = app_thread_id_protocol,
             .recv_tid = app_thread_id_protocol,
@@ -104,28 +104,28 @@ void app_module_protocol_respond(app_module_protocol_package_t *pkg)
             .event    = app_thread_protocol_transfer_rx,
             .dynamic  = true,
             .size     = app_module_protocol_package_size(),
-            .data     = pkg,
+            .data     = ptl_pkg,
         };
         app_thread_package_notify(&package);
         return;
     }
     /* tx的应答,通过data和size判断 */
-    if (pkg->size == 0) {
-        app_mem_free(pkg);
+    if (ptl_pkg->size == 0) {
+        app_mem_free(ptl_pkg);
         return;
     }
 }
 
 /*@brief     协议传输空回调
- *@param[in] package 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_tx_empty(app_module_protocol_package_t *package)
+void app_module_protocol_tx_empty(app_module_protocol_package_t *ptl_pkg)
 {
 }
 
 /*@brief     协议传输空回调
- *@param[in] package 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_rx_empty(app_module_protocol_package_t *package)
+void app_module_protocol_rx_empty(app_module_protocol_package_t *ptl_pkg)
 {
 }

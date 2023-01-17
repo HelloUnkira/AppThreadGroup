@@ -25,8 +25,8 @@ typedef union {
 
 typedef struct {
     /* 填充tx协议包 or 解析rx协议包 */
-    void (*tx_pkg_make)( app_module_protocol_package_t *package);
-    void (*rx_pkg_parse)(app_module_protocol_package_t *package);
+    void (*tx_pkg_make)( app_module_protocol_package_t *ptl_pkg);
+    void (*rx_pkg_parse)(app_module_protocol_package_t *ptl_pkg);
 } app_module_protocol_callback;
 
 /*@brief  获得动态协议包可携带数据最大载荷
@@ -40,13 +40,13 @@ uint32_t app_module_protocol_data_size(void);
 uint32_t app_module_protocol_package_size(void);
 
 /*@brief     通知协议包
- *@param[in] pkg 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_notify(app_module_protocol_package_t *pkg);
+void app_module_protocol_notify(app_module_protocol_package_t *ptl_pkg);
 
 /*@brief     响应协议包
- *@param[in] pkg 动态协议包
+ *@param[in] ptl_pkg 动态协议包
  */
-void app_module_protocol_respond(app_module_protocol_package_t *pkg);
+void app_module_protocol_respond(app_module_protocol_package_t *ptl_pkg);
 
 #endif
