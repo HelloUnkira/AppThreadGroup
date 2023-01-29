@@ -14,14 +14,15 @@
 #include "app_thread_master.h"
 #include "app_thread_protocol.h"
 #include "app_module_protocol.h"
+#include "app_adaptor_transfer.h"
 
-/*@brief 混合中断线程模组初始化
+/*@brief 协议线程模组初始化
  */
 void app_thread_protocol_ready(void)
 {
 }
 
-/*@brief 混合中断线程服务例程
+/*@brief 协议线程服务例程
  */
 void app_thread_protocol_routine(void)
 {
@@ -53,16 +54,18 @@ void app_thread_protocol_routine(void)
             }
             case app_thread_protocol_transfer: {
                 if (package.event == app_thread_protocol_transfer_tx) {
-                    app_module_protocol_package_t *ptl_pkg = package.data;
-                    /* 实际传输的包大小为前n个字节: */
-                    /* sizeof(app_module_protocol_package_t) + package.size */
-                    /* 发送该包... */
-                    if (package.dynamic)
-                        app_mem_free(ptl_pkg);
+                    app_module_protocol_package_t ptl_pkg = {0};
+                    memcpy(&ptl_pkg, package.data, package.size);
+                    app_module_protocol_tx(&ptl_pkg);
+                    app_adaptor_transfer_tx(&ptl_pkg);
+                    app_mem_free(package.data);
                 }
                 if (package.event == app_thread_protocol_transfer_rx) {
-                    app_module_protocol_package_t *ptl_pkg = package.data;
-                    app_module_protocol_respond(ptl_pkg);
+                    app_module_protocol_package_t ptl_pkg = {0};
+                    memcpy(&ptl_pkg, package.data, package.size);
+                    app_module_protocol_rx(&ptl_pkg);
+                    app_adaptor_transfer_rx(&ptl_pkg);
+                    app_mem_free(package.data);
                 }
                 break;
             }

@@ -155,7 +155,7 @@ void app_module_clock_to_dtime(app_module_clock_t *clock)
     clock->day = days + 1;
 }
 
-/* 分界线:<上面模组通用接口, 下面是模组功能定制接口> */
+/* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
 
 static const uint32_t app_module_clock_second_cb_size = 
                sizeof(app_module_clock_second_cb) /
@@ -301,7 +301,6 @@ void app_module_clock_event_update(void)
  */
 void app_module_clock_timestamp_update(uint64_t utc_new)
 {
-    /* 入界 */
     app_mutex_take(&app_module_clock_mutex);
     /* 获得时钟更新 */
     app_module_clock_t clock_old = app_module_clock[1];
@@ -313,7 +312,6 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     app_module_clock_to_week(&app_module_clock[1]);
     app_module_clock_t clock_new = app_module_clock[1];
     app_module_clock_sec_tick++;
-    /* 出界 */
     app_mutex_give(&app_module_clock_mutex);
     /* 回调更新 */
     if (clock_old.second != clock_new.second)

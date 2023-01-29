@@ -40,20 +40,16 @@ static void app_lv_display_sdl_create(app_lv_display_t *disp)
                                     0);   //SDL_WINDOW_BORDERLESS);
                                     /* 隐藏边界 */  
     /* 设置屏幕渲染规则 */
-    disp->renderer = SDL_CreateRenderer(disp->window, -1,
-                                        SDL_RENDERER_SOFTWARE);
+    disp->renderer = SDL_CreateRenderer(disp->window, -1, SDL_RENDERER_SOFTWARE);
     /* 设置屏幕文本渲染规则 */
-    disp->texture  = SDL_CreateTexture(disp->renderer,
-                                       SDL_PIXELFORMAT_ARGB8888,
-                                       SDL_TEXTUREACCESS_STATIC,
-                                       LV_DRV_HOR_RES,
+    disp->texture  = SDL_CreateTexture(disp->renderer, SDL_PIXELFORMAT_ARGB8888,
+                                       SDL_TEXTUREACCESS_STATIC, LV_DRV_HOR_RES,
                                        LV_DRV_VER_RES);
     /* 设置屏幕文本混合规则 */
     SDL_SetTextureBlendMode(disp->texture, SDL_BLENDMODE_BLEND);
     /* 初始化帧缓冲区为灰色(77是一个经验值) */
 #if LV_DRV_DBUFFER
-    SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act,
-                      LV_DRV_HOR_RES * 4);
+    SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act, LV_DRV_HOR_RES * 4);
 #else
     disp->tft_fb = malloc(LV_DRV_HOR_RES * LV_DRV_VER_RES * 4);
     memset(disp->tft_fb, 0x44, LV_DRV_HOR_RES * LV_DRV_VER_RES * 4);
@@ -158,10 +154,7 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
     lv_coord_t vres = disp_drv->ver_res;
 
     /* 如果该区域在屏幕外则返回 */
-    if (area->x2 < 0 ||
-        area->y2 < 0 ||
-        area->x1 > hres - 1 ||
-        area->y1 > vres - 1) {
+    if (area->x2 < 0 || area->y2 < 0 || area->x1 > hres - 1 || area->y1 > vres - 1) {
         lv_disp_flush_ready(disp_drv);
         return;
     }
@@ -169,9 +162,10 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
     app_mutex_take(&app_lv_display_mutex);
     
     #if LV_DRV_DBUFFER
-    app_lv_display_screen.tft_fb_act = (uint32_t *)color_p;
+    app_lv_display_screen.tft_fb_act   = (uint32_t *)color_p;
+    app_lv_display_screen.sdl_refr_qry = true;
+    lv_disp_flush_ready(disp_drv);
     #else
-    int32_t y;
     /* 32有效但也支持24向后兼容 */
     #if LV_COLOR_DEPTH != 24 && LV_COLOR_DEPTH != 32
     for(int32_t y = area->y1; y <= area->y2 && y < disp_drv->ver_res; y++)
@@ -186,8 +180,6 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
         color_p += w;
     }
     #endif
-    #endif
-    
     app_lv_display_screen.sdl_refr_qry = true;
 
     /* 如果是最后刷新的部分则更新窗口的纹理 */
@@ -196,11 +188,11 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
         app_lv_display_screen.sdl_refr_qry  = false;
         app_lv_display_sdl_update(&app_lv_display_screen);
     }
-    
-    app_mutex_give(&app_lv_display_mutex);
-    
     /* 必须调用它来告诉系统刷新准备好了 */
     lv_disp_flush_ready(disp_drv);
+    #endif
+
+    app_mutex_give(&app_lv_display_mutex);
 }
 
 /*@brief SDL输出设备回调接口
@@ -210,14 +202,14 @@ void app_lv_display_handler(SDL_Event *event)
     if (event->type == SDL_WINDOWEVENT)
     switch (event->window.event) {
     #if SDL_VERSION_ATLEAST(2, 0, 5)
-        case SDL_WINDOWEVENT_TAKE_FOCUS:
+    case SDL_WINDOWEVENT_TAKE_FOCUS:
     #endif
-        case SDL_WINDOWEVENT_EXPOSED:
-            app_mutex_take(&app_lv_display_mutex);
-            app_lv_display_sdl_update(&app_lv_display_screen);
-            app_mutex_give(&app_lv_display_mutex);
-            break;
-        default:
-            break;
+    case SDL_WINDOWEVENT_EXPOSED:
+        app_mutex_take(&app_lv_display_mutex);
+        app_lv_display_sdl_update(&app_lv_display_screen);
+        app_mutex_give(&app_lv_display_mutex);
+        break;
+    default:
+        break;
     }
 }

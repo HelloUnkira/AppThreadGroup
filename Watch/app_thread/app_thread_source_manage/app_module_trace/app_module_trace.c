@@ -36,7 +36,6 @@ typedef union {
         uintptr_t offset_head;
         uintptr_t offset_tail;
         uintptr_t trace_zone;
-        uint32_t checksum32;
         uint32_t crc32;
     };
 } app_module_trace_text_t;
@@ -89,18 +88,15 @@ void app_module_trace_text_ready(void)
     APP_MODULE_ASSERT(source->data_size > sizeof(trace_text));
     /* 读取外存的函数追踪队列结构 */
     app_module_ext_mem_read(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
-    uint32_t checksum32 = app_sys_checksum32(trace_text.buffer, app_module_trace_info_size);
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
     /* 通过外存的函数追踪队列结构初始化本地函数追踪队列结构 */
     app_module_trace_text = trace_text;
-    if (trace_text.checksum32 != checksum32 || trace_text.crc32 != crc32 ||
+    if (trace_text.crc32 != crc32 ||
         trace_text.trace_zone != source->data_size - sizeof(trace_text)) {
         app_module_trace_text.offset_head = 0;
         app_module_trace_text.offset_tail = 0;
         app_module_trace_text.trace_zone  = source->data_size - sizeof(trace_text);
-        uint32_t checksum32 = app_sys_checksum32(trace_text.buffer, app_module_trace_info_size);
         uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
-        app_module_trace_text.checksum32 = checksum32;
         app_module_trace_text.crc32 = crc32;
     }
 }
@@ -116,9 +112,7 @@ void app_module_trace_text_reset(void)
     app_module_trace_text.offset_head = 0;
     app_module_trace_text.offset_tail = 0;
     app_module_trace_text.trace_zone  = source->data_size - sizeof(trace_text);
-    uint32_t checksum32 = app_sys_checksum32(trace_text.buffer, app_module_trace_info_size);
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
-    app_module_trace_text.checksum32 = checksum32;
     app_module_trace_text.crc32 = crc32;
     app_module_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     app_mutex_give(&app_module_trace_text_mutex);
@@ -240,9 +234,7 @@ static void app_module_trace_text_update(void)
 {
     app_mutex_take(&app_module_trace_text_mutex);
     app_module_trace_text_t trace_text = app_module_trace_text;
-    uint32_t checksum32 = app_sys_checksum32(trace_text.buffer, app_module_trace_info_size);
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
-    app_module_trace_text.checksum32 = checksum32;
     app_module_trace_text.crc32 = crc32;
     app_module_trace_text = trace_text;
     app_mutex_give(&app_module_trace_text_mutex);

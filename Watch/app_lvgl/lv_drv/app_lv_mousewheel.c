@@ -38,27 +38,27 @@ void app_lv_mousewheel_handler(SDL_Event *event)
 {
     app_mutex_take(&app_lv_mousewheel_mutex);
     switch(event->type) {
-        /* 滚轮滑动事件 */
-        case SDL_MOUSEWHEEL:
-        #ifdef __EMSCRIPTEN__
-            if(event->wheel.y < 0) app_lv_mousewheel_enc_diff++;
-            if(event->wheel.y > 0) app_lv_mousewheel_enc_diff--;
-        #else
-            app_lv_mousewheel_enc_diff -= event->wheel.y;
-        #endif
-            break;
-        /* 滚轮按下事件 */
-        case SDL_MOUSEBUTTONDOWN:
-            if(event->button.button == SDL_BUTTON_MIDDLE)
-                app_lv_mousewheel_state = LV_INDEV_STATE_PRESSED;
-            break;
-        /* 滚轮抬起事件 */
-        case SDL_MOUSEBUTTONUP:
-            if(event->button.button == SDL_BUTTON_MIDDLE)
-                app_lv_mousewheel_state = LV_INDEV_STATE_RELEASED;
-            break;
-        default:
-            break;
+    /* 滚轮滑动事件 */
+    case SDL_MOUSEWHEEL:
+    #ifdef __EMSCRIPTEN__
+        if(event->wheel.y < 0) app_lv_mousewheel_enc_diff++;
+        if(event->wheel.y > 0) app_lv_mousewheel_enc_diff--;
+    #else
+        app_lv_mousewheel_enc_diff -= event->wheel.y;
+    #endif
+        break;
+    /* 滚轮按下事件 */
+    case SDL_MOUSEBUTTONDOWN:
+        if(event->button.button == SDL_BUTTON_MIDDLE)
+            app_lv_mousewheel_state = LV_INDEV_STATE_PRESSED;
+        break;
+    /* 滚轮抬起事件 */
+    case SDL_MOUSEBUTTONUP:
+        if(event->button.button == SDL_BUTTON_MIDDLE)
+            app_lv_mousewheel_state = LV_INDEV_STATE_RELEASED;
+        break;
+    default:
+        break;
     }
     app_mutex_give(&app_lv_mousewheel_mutex);
 }

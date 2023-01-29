@@ -61,7 +61,7 @@ void app_module_clock_to_utc(app_module_clock_t *clock);
  */
 void app_module_clock_to_dtime(app_module_clock_t *clock);
 
-/* 分界线:<上面模组通用接口, 下面是模组功能定制接口> */
+/* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
 
 typedef enum {
     app_module_clock_update_default,

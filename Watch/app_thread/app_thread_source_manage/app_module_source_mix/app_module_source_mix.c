@@ -23,14 +23,12 @@ void app_module_clock_dump(void)
         uint8_t buffer[0];
         struct {
             app_module_clock_t clock;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } clock_data = {};
     
     app_module_clock_get_system_clock(&clock_data.clock);
     clock_data.crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
-    clock_data.checksum32 = app_sys_checksum32(clock_data.buffer, sizeof(app_module_clock_t));
     app_module_source_write("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
 }
 
@@ -42,17 +40,15 @@ void app_module_clock_load(void)
         uint8_t buffer[0];
         struct {
             app_module_clock_t clock;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } clock_data = {};
     
     app_module_source_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
-    uint32_t checksum32 = app_sys_checksum32(clock_data.buffer, sizeof(app_module_clock_t));
     uint32_t crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
-    if (checksum32 == clock_data.checksum32 && crc32 == clock_data.crc32)
+    if (crc32 == clock_data.crc32)
         app_module_clock_set_system_clock(&clock_data.clock);
-    if (checksum32 != clock_data.checksum32 || crc32 != clock_data.crc32) {
+    if (crc32 != clock_data.crc32) {
         app_module_clock_t clock = {.year = 2020, .month = 1, .day = 1,};
         app_module_clock_to_week(&clock);
         app_module_clock_to_utc(&clock);
@@ -69,14 +65,12 @@ void app_module_stopwatch_dump(void)
         uint8_t buffer[0];
         struct {
             app_module_stopwatch_t stopwatch;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } stopwatch_data = {};
     
     app_module_stopwatch_get(&stopwatch_data.stopwatch);
     stopwatch_data.crc32 = app_sys_crc32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
-    stopwatch_data.checksum32 = app_sys_checksum32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
     app_module_source_write("mix_chunk_small", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
 }
 
@@ -88,17 +82,15 @@ void app_module_stopwatch_load(void)
         uint8_t buffer[0];
         struct {
             app_module_stopwatch_t stopwatch;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } stopwatch_data = {};
     
     app_module_source_read("mix_chunk_small", "system stopwatch", stopwatch_data.buffer, sizeof(stopwatch_data));
-    uint32_t checksum32 = app_sys_checksum32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
     uint32_t crc32 = app_sys_crc32(stopwatch_data.buffer, sizeof(app_module_stopwatch_t));
-    if (checksum32 == stopwatch_data.checksum32 && crc32 == stopwatch_data.crc32)
+    if (crc32 == stopwatch_data.crc32)
         app_module_stopwatch_set(&stopwatch_data.stopwatch);
-    if (checksum32 != stopwatch_data.checksum32 || crc32 != stopwatch_data.crc32)
+    if (crc32 != stopwatch_data.crc32)
         APP_SYS_LOG_WARN("app_module_stopwatch_load: load stopwatch fail\n");
 }
 
@@ -110,14 +102,12 @@ void app_module_countdown_dump(void)
         uint8_t buffer[0];
         struct {
             app_module_countdown_t countdown;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } countdown_data = {};
     
     app_module_countdown_get(&countdown_data.countdown);
     countdown_data.crc32 = app_sys_crc32(countdown_data.buffer, sizeof(app_module_countdown_t));
-    countdown_data.checksum32 = app_sys_checksum32(countdown_data.buffer, sizeof(app_module_countdown_t));
     app_module_source_write("mix_chunk_small", "system countdown", countdown_data.buffer, sizeof(countdown_data));
 }
 
@@ -129,16 +119,14 @@ void app_module_countdown_load(void)
         uint8_t buffer[0];
         struct {
             app_module_countdown_t countdown;
-            uint32_t checksum32;
             uint32_t crc32;
         };
     } countdown_data = {};
     
     app_module_source_read("mix_chunk_small", "system countdown", countdown_data.buffer, sizeof(countdown_data));
-    uint32_t checksum32 = app_sys_checksum32(countdown_data.buffer, sizeof(app_module_countdown_t));
     uint32_t crc32 = app_sys_crc32(countdown_data.buffer, sizeof(app_module_countdown_t));
-    if (checksum32 == countdown_data.checksum32 && crc32 == countdown_data.crc32)
+    if (crc32 == countdown_data.crc32)
         app_module_countdown_set(&countdown_data.countdown);
-    if (checksum32 != countdown_data.checksum32 || crc32 != countdown_data.crc32)
+    if (crc32 != countdown_data.crc32)
         APP_SYS_LOG_WARN("app_module_countdown_load: load countdown fail\n");
 }
