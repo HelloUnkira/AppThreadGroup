@@ -51,7 +51,6 @@ void app_lv_sdl_update(void)
     app_thread_package_notify(&package);
 }
 
-
 /*@brief lvgl线程模组初始化
  */
 void app_thread_lvgl_ready(void)
@@ -101,6 +100,9 @@ void app_thread_lvgl_routine(void)
                 }
                 /* sdl检查事件 */
                 if (package.event == app_thread_lvgl_sched_sdl) {
+                    /* 如果lvgl驱动未就绪,中止事件调度 */
+                    if (!app_lv_driver_status_get())
+                        break;
                     app_lv_driver_handler();
                     static bool app_lv_shutdown = false;
                     if (app_lv_shutdown)
@@ -108,12 +110,36 @@ void app_thread_lvgl_routine(void)
                     if (!app_lv_driver_shutdown())
                         break;
                     app_lv_shutdown = true;
-                    APP_SYS_LOG_WARN("app_lv_shutdown\n");
-                    /*  */
-                    app_lv_driver_over();
                     /* 重启系统 */
+                    APP_SYS_LOG_WARN("app_lv_shutdown\n");
                     app_module_system_delay_set(2);
                     app_module_system_status_set(app_module_system_reset);
+                }
+                break;
+            }
+            case app_thread_lvgl_ui_scene: {
+                if (package.event == app_thread_lvgl_ui_scene_start) {
+                    /* 启动UI场景 */
+                    /* .......... */
+                }
+                if (package.event == app_thread_lvgl_ui_scene_sched) {
+                    /* 如果lvgl驱动未就绪,中止事件调度 */
+                    if (!app_lv_driver_status_get())
+                        break;
+                    /* 调度UI */
+                    /* ...... */
+                }
+                if (package.event == app_thread_lvgl_ui_scene_wake) {
+                    /* 与lvgl绑定的驱动设备退出DLPS */
+                    app_lv_driver_dlps_exit();
+                }
+                if (package.event == app_thread_lvgl_ui_scene_sleep) {
+                    /* 与lvgl绑定的驱动设备进入DLPS */
+                    app_lv_driver_dlps_enter();
+                }
+                if (package.event == app_thread_lvgl_ui_scene_stop) {
+                    /* 终止UI场景 */
+                    /* .......... */
                 }
                 break;
             }

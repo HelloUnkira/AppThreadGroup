@@ -12,13 +12,13 @@
  */
 
 /* 函数声明及其引用(注意:不要导入头文件,直接提供函数名即可): */
-extern void app_module_protocol_tx_empty(app_module_protocol_package_t *ptl_pkg);
-extern void app_module_protocol_rx_empty(app_module_protocol_package_t *ptl_pkg);
+extern void app_module_protocol_rx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat);
+extern void app_module_protocol_tx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat);
 
 /* 协议传输回调 */
 static const app_module_protocol_callback app_module_protocol_cb[] = {
-    {app_module_protocol_tx_empty,
-     app_module_protocol_rx_empty,},
+    {app_module_protocol_rx_empty,
+     app_module_protocol_tx_empty,},
 };
 
 #endif

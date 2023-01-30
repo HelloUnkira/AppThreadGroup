@@ -3,7 +3,12 @@
  *    lvgl驱动绑定
  */
 
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+
 #include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_sys_log.h"
 
 #include "lvgl.h"
 #include <SDL2/SDL.h>
@@ -14,7 +19,18 @@
 #include "app_lv_display.h"
 #include "app_lv_mouse_icon.h"
 
+static bool app_lv_driver_status = false;
+
+/*@brief lvgl驱动设备状态
+ *       内部使用: 被lvgl线程使用
+ */
+bool app_lv_driver_status_get(void)
+{
+    return app_lv_driver_status;
+}
+
 /*@brief lvgl驱动设备开启
+ *       内部使用: 被lvgl线程使用
  */
 void app_lv_driver_ready(void)
 {
@@ -23,6 +39,7 @@ void app_lv_driver_ready(void)
     app_lv_mousewheel_ready();
     app_lv_keyboard_ready();
     app_lv_display_ready();
+    app_lv_driver_status = true;
     /* 创建显示缓冲区 */
     static lv_disp_draw_buf_t disp_buf;
     static lv_color_t buffer1[LV_DRV_HOR_RES * LV_DRV_VER_RES] = {0};
@@ -75,6 +92,7 @@ void app_lv_driver_ready(void)
 }
 
 /*@brief lvgl的驱动设备SDL回调接口
+ *       内部使用: 被lvgl线程使用
  */
 void app_lv_driver_handler(void)
 {
@@ -93,15 +111,29 @@ void app_lv_driver_handler(void)
 }
 
 /*@brief lvgl的驱动设备需要关机
+ *       内部使用: 被lvgl线程使用
  */
 bool app_lv_driver_shutdown(void)
 {
     return app_lv_display_shutdown();
 }
 
-/*@brief lvgl驱动设备关闭
+/*@brief lvgl驱动设备进入DLPS
+ *       内部使用: 被lvgl线程使用
  */
-void app_lv_driver_over(void)
+void app_lv_driver_dlps_enter(void)
 {
+    APP_SYS_LOG_WARN("app_lv_driver_dlps_enter");
+    app_lv_driver_status = false;
     app_lv_display_over();
+}
+
+/*@brief lvgl驱动设备退出DLPS
+ *       内部使用: 被lvgl线程使用
+ */
+void app_lv_driver_dlps_exit(void)
+{
+    app_lv_display_ready();
+    app_lv_driver_status = true;
+    APP_SYS_LOG_WARN("app_lv_driver_dlps_exit");
 }

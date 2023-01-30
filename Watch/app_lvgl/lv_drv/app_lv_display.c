@@ -2,8 +2,6 @@
  *    lv适配SDL模拟器
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
 #include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
 #include "lvgl.h"
@@ -23,8 +21,8 @@ typedef struct {
 #endif
 } app_lv_display_t;
 
+static bool app_lv_display_status = false;
 static bool app_lv_display_sdl_quit = false;
-static app_mutex_t app_lv_display_mutex = {0};
 static app_lv_display_t app_lv_display_screen = {0};
 
 /*@brief 创建SDL屏幕
@@ -104,16 +102,12 @@ static int app_lv_display_sdl_quit_filter(void * userdata, SDL_Event * event)
 {
     (void)userdata;
     
-    app_mutex_take(&app_lv_display_mutex);
-    
     if(event->type == SDL_QUIT)
         app_lv_display_sdl_quit = true;
     
     if(event->type == SDL_WINDOWEVENT)
     if(event->window.event == SDL_WINDOWEVENT_CLOSE)
         app_lv_display_sdl_quit = true;
-    
-    app_mutex_give(&app_lv_display_mutex);
     
     return 1;
 }
@@ -122,27 +116,27 @@ static int app_lv_display_sdl_quit_filter(void * userdata, SDL_Event * event)
  */
 bool app_lv_display_shutdown(void)
 {
-    app_mutex_take(&app_lv_display_mutex);
-    bool retval = app_lv_display_sdl_quit;
-    app_mutex_give(&app_lv_display_mutex);
-    return retval;
+    return app_lv_display_sdl_quit;
 }
 
 /*@brief lvgl初始化SDL屏幕
  */
 void app_lv_display_ready(void)
 {
-    app_mutex_process(&app_lv_display_mutex);
+    if (app_lv_display_status)
+        return;
     /* 初始化SDL */
     SDL_Init(SDL_INIT_VIDEO);
     SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
     app_lv_display_sdl_create(&app_lv_display_screen);
+    app_lv_display_status = true;
 }
 
 /*@brief lvgl反初始化SDL屏幕
  */
 void app_lv_display_over(void)
 {
+    app_lv_display_status = false;
     app_lv_display_sdl_clean_up();
 }
 
@@ -159,7 +153,11 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
         return;
     }
     
-    app_mutex_take(&app_lv_display_mutex);
+    /* 如果屏幕休眠则不输出 */
+    if (!app_lv_display_status) {
+        lv_disp_flush_ready(disp_drv);
+        return;
+    }
     
     #if LV_DRV_DBUFFER
     app_lv_display_screen.tft_fb_act   = (uint32_t *)color_p;
@@ -191,8 +189,6 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
     /* 必须调用它来告诉系统刷新准备好了 */
     lv_disp_flush_ready(disp_drv);
     #endif
-
-    app_mutex_give(&app_lv_display_mutex);
 }
 
 /*@brief SDL输出设备回调接口
@@ -205,9 +201,7 @@ void app_lv_display_handler(SDL_Event *event)
     case SDL_WINDOWEVENT_TAKE_FOCUS:
     #endif
     case SDL_WINDOWEVENT_EXPOSED:
-        app_mutex_take(&app_lv_display_mutex);
         app_lv_display_sdl_update(&app_lv_display_screen);
-        app_mutex_give(&app_lv_display_mutex);
         break;
     default:
         break;

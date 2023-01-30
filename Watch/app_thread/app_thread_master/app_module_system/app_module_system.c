@@ -3,14 +3,14 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
-#include "app_thread_source_manage.h"
+#include "app_thread_data_manage.h"
 #include "app_thread_lvgl.h"
 #include "app_module_system.h"
 #include "app_module_clock.h"
@@ -20,6 +20,8 @@
 #include "app_module_load.h"
 
 static    bool app_module_system_dump = false;
+static    bool app_module_system_dlps_exec = false;
+static    bool app_module_system_dlps_status = false;
 static uint8_t app_module_system_delay = 0;
 static uint8_t app_module_system_status = 0;
 static uint8_t app_module_system_tid = 0;
@@ -34,6 +36,33 @@ void app_module_system_dump_set(bool over)
     app_mutex_take(&app_module_system_mutex);
     app_module_system_dump = over;
     app_mutex_give(&app_module_system_mutex);
+}
+
+/*@brief     系统进出DLPS
+ *@param[in] status true:进入dlps;false:退出dlps
+ */
+void app_module_system_dlps_set(bool status)
+{
+    app_mutex_take(&app_module_system_mutex);
+    app_module_system_dlps_exec = true;
+    app_module_system_dlps_status = status;
+    app_mutex_give(&app_module_system_mutex);
+    /* 向线程发送场景休眠唤醒事件 */
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_ui_scene,
+        .event    = 0,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = NULL,
+    };
+    if (status)
+        package.event = app_thread_lvgl_ui_scene_sleep;
+    else
+        package.event = app_thread_lvgl_ui_scene_wake;
+    app_thread_package_notify(&package);
+    APP_SYS_LOG_WARN("\napp_module_system_dlps_set: ui scene\n");
 }
 
 /*@brief     设置系统延时
@@ -75,42 +104,85 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     static bool not_dump_yet = true;
     static bool not_load_yet = true;
     app_mutex_take(&app_module_system_mutex);
-    bool      dump = app_module_system_dump;
+    bool        dump = app_module_system_dump;
+    bool   dlps_exec = app_module_system_dlps_exec;
+    bool dlps_status = app_module_system_dlps_status;
     uint8_t  delay = app_module_system_delay;
     uint8_t status = app_module_system_status;
     bool  is_valid = app_module_system_status == app_module_system_valid;
     app_mutex_give(&app_module_system_mutex);
+    /* 执行DLPS检测 */
+    if (dlps_exec) {
+        /* 进入dlps */
+        if (dlps_status) {
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: dlps enter\n");
+        }
+        /* 退出dlps */
+        if (!dlps_status) {
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: dlps exit\n");
+        }
+    }
     /* 执行加载 */
     if (not_load_yet) {
         not_load_yet = false;
-        /* 向线程发送加载事件 */
-        app_package_t package = {
-            .send_tid = app_thread_id_unknown,
-            .recv_tid = app_thread_id_source_manage,
-            .module   = app_thread_source_manage_load,
-            .event    = 0,
-            .dynamic  = false,
-            .size     = 0,
-            .data     = NULL,
-        };
-        app_thread_package_notify(&package);
+        /* 向线程发送场景启动事件 */ {
+            app_package_t package = {
+                .send_tid = app_thread_id_unknown,
+                .recv_tid = app_thread_id_lvgl,
+                .module   = app_thread_lvgl_ui_scene,
+                .event    = app_thread_lvgl_ui_scene_start,
+                .dynamic  = false,
+                .size     = 0,
+                .data     = NULL,
+            };
+            app_thread_package_notify(&package);
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene start\n");
+        }
+        /* 向线程发送加载事件 */ {
+            app_package_t package = {
+                .send_tid = app_thread_id_unknown,
+                .recv_tid = app_thread_id_data_manage,
+                .module   = app_thread_data_manage_load,
+                .event    = 0,
+                .dynamic  = false,
+                .size     = 0,
+                .data     = NULL,
+            };
+            app_thread_package_notify(&package);
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data load\n");
+        }
     }
     if (is_valid)
         return;
     /* 执行转储 */
     if (not_dump_yet) {
         not_dump_yet = false;
-        /* 向线程发送转储事件 */
-        app_package_t package = {
-            .send_tid = app_thread_id_unknown,
-            .recv_tid = app_thread_id_source_manage,
-            .module   = app_thread_source_manage_dump,
-            .event    = 0,
-            .dynamic  = false,
-            .size     = 0,
-            .data     = NULL,
-        };
-        app_thread_package_notify(&package);
+        /* 向线程发送场景停止事件 */ {
+            app_package_t package = {
+                .send_tid = app_thread_id_unknown,
+                .recv_tid = app_thread_id_lvgl,
+                .module   = app_thread_lvgl_ui_scene,
+                .event    = app_thread_lvgl_ui_scene_stop,
+                .dynamic  = false,
+                .size     = 0,
+                .data     = NULL,
+            };
+            app_thread_package_notify(&package);
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene stop\n");
+        }
+        /* 向线程发送转储事件 */ {
+            app_package_t package = {
+                .send_tid = app_thread_id_unknown,
+                .recv_tid = app_thread_id_data_manage,
+                .module   = app_thread_data_manage_dump,
+                .event    = 0,
+                .dynamic  = false,
+                .size     = 0,
+                .data     = NULL,
+            };
+            app_thread_package_notify(&package);
+            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data dump\n");
+        }
     }
     /* 延时到期,数据转储结束,重启系统 */
     if (!delay && dump) {

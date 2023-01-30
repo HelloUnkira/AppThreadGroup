@@ -23,12 +23,11 @@ bool app_thread_package_notify(app_package_t *package);
 typedef enum {
     app_thread_id_mix_irq,          /* 混合中断线程(priority:2) */
     app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
-    app_thread_id_source_manage,    /* 数据管理线程(priority:3) */
-    app_thread_id_protocol,         /* 协议解析线程(priority:3) */
+    app_thread_id_data_manage,      /* 数据管理线程(priority:3) */
     app_thread_id_lvgl,             /* lvgl线程(priority:3) */
     /* 继续添加其他线程 */
-    app_thread_id_unknown,      /* 占位符:未知来源者或未知去处 */
-    app_thread_id_num,          /* 占位符:子线程组数量 */
+    app_thread_id_unknown,          /* 占位符:未知来源,不可是未知去处 */
+    app_thread_id_num,              /* 占位符:子线程组数量 */
 } app_thread_id_set;
 
 /*@brief 初始化所有线程及其附属资源

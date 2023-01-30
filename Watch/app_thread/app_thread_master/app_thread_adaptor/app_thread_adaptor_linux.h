@@ -20,14 +20,9 @@ void * app_thread_mix_custom_routine_adaptor(void *args)
     app_thread_mix_custom_routine();
 }
 
-void * app_thread_source_manage_routine_adaptor(void *args)
+void * app_thread_data_manage_routine_adaptor(void *args)
 {
-    app_thread_source_manage_routine();
-}
-
-void * app_thread_protocol_routine_adaptor(void *args)
-{
-    app_thread_protocol_routine();
+    app_thread_data_manage_routine();
 }
 
 void * app_thread_lvgl_routine_adaptor(void *args)
@@ -57,15 +52,9 @@ app_thread_t app_thread_mix_custom = {
    .args     = NULL,
 };
 
-app_thread_t app_thread_source_manage = {
+app_thread_t app_thread_data_manage = {
    .priority = 3,
-   .routine  = app_thread_source_manage_routine_adaptor,
-   .args     = NULL,
-};
-
-app_thread_t app_thread_protocol = {
-   .priority = 3,
-   .routine  = app_thread_protocol_routine_adaptor,
+   .routine  = app_thread_data_manage_routine_adaptor,
    .args     = NULL,
 };
 

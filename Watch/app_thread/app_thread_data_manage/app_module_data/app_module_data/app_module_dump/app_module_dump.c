@@ -10,6 +10,7 @@
 #include "app_sys_log.h"
 #include "app_module_system.h"
 #include "app_module_source_mix.h"
+#include "app_module_shutdown.h"
 
 /*@brief 资源数据从内存转储到外存
  */
@@ -21,7 +22,7 @@ void app_module_dump(void)
     app_module_stopwatch_dump();
     app_module_countdown_dump();
     /* ... */
-    
+    app_module_shutdown_dump();
     /* 如果是系统要求的资源转储 */
     if (app_module_system_status_get() != app_module_system_valid)
         app_module_system_dump_set(true);

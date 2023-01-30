@@ -14,11 +14,8 @@ static  K_THREAD_STACK_DEFINE(app_thread_mix_irq_stack, APP_THREAD_MIX_IRQ_STACK
 #define APP_THREAD_MIX_CUSTOM_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_mix_custom_stack, APP_THREAD_MIX_CUSTOM_STACK_SIZE);
 
-#define APP_THREAD_SOURCE_MANAGE_STACK_SIZE  (1024)
-static  K_THREAD_STACK_DEFINE(app_thread_source_manage_stack, APP_THREAD_SOURCE_MANAGE_STACK_SIZE);
-
-#define APP_THREAD_PROTOCOL_STACK_SIZE  (1024)
-static  K_THREAD_STACK_DEFINE(app_thread_protocol_stack, APP_THREAD_PROTOCOL_STACK_SIZE);
+#define APP_THREAD_DATA_MANAGE_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_data_manage_stack, APP_THREAD_DATA_MANAGE_STACK_SIZE);
 
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_lvgl_stack, APP_THREAD_LVGL_STACK_SIZE);
@@ -42,14 +39,9 @@ void * app_thread_mix_custom_routine_adaptor(void *args1, void *args2, void *arg
     app_thread_mix_custom_routine();
 }
 
-void * app_thread_source_manage_routine_adaptor(void *args1, void *args2, void *args3)
+void * app_thread_data_manage_routine_adaptor(void *args1, void *args2, void *args3)
 {
-    app_thread_source_manage_routine();
-}
-
-void * app_thread_source_protocol_adaptor(void *args1, void *args2, void *args3)
-{
-    app_thread_protocol_routine();
+    app_thread_data_manage_routine();
 }
 
 void * app_thread_lvgl_routine_adaptor(void *args1, void *args2, void *args3)
@@ -82,18 +74,11 @@ app_thread_t app_thread_mix_custom = {
     .entry      = app_thread_mix_custom_routine_adaptor,
 };
 
-app_thread_t app_thread_source_manage = {
-    .stack      = app_thread_source_manage_stack,
-    .stack_size = APP_THREAD_SOURCE_MANAGE_STACK_SIZE,
+app_thread_t app_thread_data_manage = {
+    .stack      = app_thread_data_manage_stack,
+    .stack_size = APP_THREAD_DATA_MANAGE_STACK_SIZE,
     .priority   = 3,
-    .entry      = app_thread_source_manage_routine_adaptor,
-};
-
-app_thread_t app_thread_protocol = {
-    .stack      = app_thread_protocol_stack,
-    .stack_size = APP_THREAD_PROTOCOL_STACK_SIZE,
-    .priority   = 3,
-    .entry      = app_thread_protocol_routine_adaptor,
+    .entry      = app_thread_data_manage_routine_adaptor,
 };
 
 app_thread_t app_thread_lvgl = {
