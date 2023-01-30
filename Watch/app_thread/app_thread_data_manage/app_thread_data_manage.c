@@ -72,14 +72,11 @@ void app_thread_data_manage_routine(void)
             }
             case app_thread_data_manage_protocol: {
                 if (package.event == app_thread_data_manage_protocol_tx) {
-                    app_module_protocol_rx(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat)
                 }
                 if (package.event == app_thread_data_manage_protocol_rx) {
-                    
                 }
                 break;
             }
-            
             case app_thread_data_manage_transfer: {
                 if (package.event == app_thread_data_manage_transfer_tx) {
                     app_module_transfer_tx((void *)package.data, package.size);
