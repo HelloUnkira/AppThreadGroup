@@ -39,11 +39,12 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv
 )
-set(app_lvgl_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl/lvgl
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl/lv_drv
+set(app_third_lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl/lvgl
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main
@@ -51,20 +52,19 @@ set(app_main_path
 # 编译器添加文件搜索路径
 include_directories(${app_adaptor_path})
 include_directories(${app_sys_path})
+include_directories(${app_third_lib})
 include_directories(${app_thread_path})
-include_directories(${app_lvgl_path})
 include_directories(${app_main_path})
 # 生成库以及指定目标
 set(app_empty ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_empty.c)
 add_library(app_adaptor STATIC ${app_empty})
 add_library(app_sys     STATIC ${app_empty})
-add_library(app_lvgl    STATIC ${app_empty})
 add_library(app_thread  STATIC ${app_empty})
 add_executable(app_main ${CMAKE_CURRENT_SOURCE_DIR}/app_main/main.c)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_adaptor)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_lvgl       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_lvgl)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_third_lib)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
 # 添加链接库    /usr/lib  /usr/local/lib
 find_library(linux_lib pthread)
@@ -72,17 +72,15 @@ find_library(sdl2_lib  SDL2)
 # 指定库的链接语言
 set_target_properties(app_adaptor   PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_sys       PROPERTIES LINKER_LANGUAGE C)
-set_target_properties(app_lvgl      PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_thread    PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_main      PROPERTIES LINKER_LANGUAGE C)
 # 添加库依赖
 target_link_libraries(app_adaptor   PUBLIC ${linux_lib})
 target_link_libraries(app_sys       PUBLIC app_adaptor)
-target_link_libraries(app_lvgl      PUBLIC ${sdl2_lib})
-target_link_libraries(app_lvgl      PUBLIC lvgl)
+target_link_libraries(app_thread    PUBLIC lvgl)
+target_link_libraries(app_thread    PUBLIC ${sdl2_lib})
 target_link_libraries(app_thread    PUBLIC app_adaptor)
 target_link_libraries(app_thread    PUBLIC app_sys)
-target_link_libraries(app_thread    PUBLIC app_lvgl)
 target_link_libraries(app_main      PUBLIC app_thread)
 # 重命名
 set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
