@@ -6,7 +6,6 @@
 #define APP_MODULE_PROTOCOL_PKG_DATA_SIZE   12  /* k = log2(协议包最大大小) + 1 */
 
 #pragma pack(1)
-
 typedef struct {
     uint64_t head:1;    /* 起始协议包(多协议包传输开始标记) */
     uint64_t tail:1;    /* 终止协议包(多协议包传输结束标记) */
@@ -16,13 +15,12 @@ typedef struct {
     uint64_t size:      APP_MODULE_PROTOCOL_PKG_DATA_SIZE;  /* 协议包数据总长度 */
     uint64_t crc8:8;    /* 校验协议包数据,传输乱序检查 */
 } app_module_protocol_pkg_t;
-
 #pragma pack()
 
 typedef struct {
     /* 填充tx协议包 or 解析rx协议包 */
-    void (*rx_pkg_cb)(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat);
-    void (*tx_pkg_cb)(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat);
+    bool (*rx_pkg_cb)(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat);
+    bool (*tx_pkg_cb)(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat);
 } app_module_protocol_callback;
 
 /*@brief     解析已经接收的协议包
@@ -32,7 +30,7 @@ typedef struct {
 void app_module_protocol_rx(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat);
 
 /*@brief      填充准备发送的协议包
- *@param[in]  ptl_pkg 协议包
+ *@param[out] ptl_pkg 协议包
  *@param[out] ptl_dat 协议包数据
  */
 void app_module_protocol_tx(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat);

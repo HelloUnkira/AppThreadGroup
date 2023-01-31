@@ -72,26 +72,34 @@ void app_thread_data_manage_routine(void)
             }
             case app_thread_data_manage_protocol: {
                 if (package.event == app_thread_data_manage_protocol_tx) {
-                }
-                if (package.event == app_thread_data_manage_protocol_rx) {
+                    if (package.size != sizeof(app_module_protocol_pkg_t)) {
+                        APP_SYS_LOG_ERROR("protocol recv a error package");
+                        break;
+                    }
+                    uint8_t *ptl_dat = NULL;
+                    app_module_protocol_pkg_t ptl_pkg = {0};
+                    memcpy(&ptl_pkg, package.data, package.size);
+                    if (package.dynamic)
+                        app_mem_free(package.data);
+                    app_module_protocol_tx((void *)&ptl_pkg, &ptl_dat);
+                    app_module_transfer_notify(&ptl_pkg, ptl_dat);
                 }
                 break;
             }
             case app_thread_data_manage_transfer: {
-                if (package.event == app_thread_data_manage_transfer_tx) {
-                    app_module_transfer_tx((void *)package.data, package.size);
-                    if (package.dynamic)
-                        app_mem_free(package.data);
-                }
                 if (package.event == app_thread_data_manage_transfer_rx) {
-                    app_module_transfer_rx((void *)package.data, package.size);
+                    bool finish = app_module_transfer_respond((void *)package.data, package.size);
                     if (package.dynamic)
                         app_mem_free(package.data);
+                    if (finish) {
+                        uint8_t *ptl_dat = NULL;
+                        app_module_protocol_pkg_t ptl_pkg = {0};
+                        app_module_transfer_respond_finish(&ptl_pkg, &ptl_dat);
+                        app_module_protocol_rx(&ptl_pkg, ptl_dat);
+                    }
                 }
                 break;
             }
-            
-            
             default: {
                 #if APP_THREAD_CHECK
                 APP_SYS_LOG_ERROR("\n");

@@ -25,8 +25,15 @@ static const uint32_t app_module_protocol_cb_size =
  */
 void app_module_protocol_rx(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat)
 {
+    bool retval = false;
     for (uint32_t idx = 0; idx < app_module_protocol_cb_size; idx++)
-        app_module_protocol_cb[idx].rx_pkg_cb(ptl_pkg, ptl_dat);
+        if (retval = app_module_protocol_cb[idx].rx_pkg_cb(ptl_pkg, ptl_dat))
+            break;
+    if (!retval) {
+        APP_SYS_LOG_ERROR("app_module_protocol_rx:\n");
+        APP_SYS_LOG_ERROR("\tcommand:%u\n", ptl_pkg->command);
+        APP_SYS_LOG_ERROR("\tevent:%u\n", ptl_pkg->event);
+    }
 }
 
 /*@brief      填充准备发送的协议包
@@ -35,26 +42,37 @@ void app_module_protocol_rx(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat
  */
 void app_module_protocol_tx(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat)
 {
+    bool retval = false;
     for (uint32_t idx = 0; idx < app_module_protocol_cb_size; idx++)
-        app_module_protocol_cb[idx].tx_pkg_cb(ptl_pkg, ptl_dat);
+        if (retval = app_module_protocol_cb[idx].tx_pkg_cb(ptl_pkg, ptl_dat))
+            break;
+    if (!retval) {
+        APP_SYS_LOG_ERROR("app_module_protocol_rx:\n");
+        APP_SYS_LOG_ERROR("\tcommand:%u\n", ptl_pkg->command);
+        APP_SYS_LOG_ERROR("\tevent:%u\n", ptl_pkg->event);
+    }
 }
 
-/*@brief     协议传输空回调
+/*@brief     协议传输空回调样例
  *@param[in] ptl_pkg 动态协议包
  *@param[in] ptl_dat 协议包数据
  */
-void app_module_protocol_rx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat)
+bool app_module_protocol_rx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat)
 {
     /* 根据ptl_pkg解析ptl_dat字段 */
     /* 注意ptl_dat由外部app_mem_alloc出来,本地进行app_mem_free销毁 */
+    /* 如果处理协议包成功,返回true,否则false */
+    return false;
 }
 
-/*@brief      协议传输空回调
+/*@brief      协议传输空回调样例
  *@param[in]  ptl_pkg 动态协议包
  *@param[out] ptl_dat 协议包数据
  */
-void app_module_protocol_tx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat)
+bool app_module_protocol_tx_empty(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_dat)
 {
     /* 根据ptl_pkg填充ptl_dat字段 */
     /* 注意ptl_dat由本地app_mem_alloc出来,外部进行app_mem_free销毁 */
+    /* 如果处理协议包成功,返回true,否则false */
+    return false;
 }

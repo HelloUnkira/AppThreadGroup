@@ -8,7 +8,13 @@
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
+#include "app_sys_pipe.h"
 #include "app_sys_log.h"
+#include "app_thread_master.h"
+#include "app_thread_data_manage.h"
+#include "app_module_protocol.h"
+#include "app_module_transfer.h"
+#include "app_module_transfer_adaptor.h"
 
 /*@brief     协议适配层,接收协议数据
  *@param[in] data 数据流
@@ -16,8 +22,21 @@
  */
 void app_module_transfer_adaptor_rx(uint8_t *data, uint32_t size)
 {
-    /* 如果协议包一次接收不完全,第一次接收为协议包本体 */
-    /* 后面是协议包携带的数据,本地需要动态生成空间存储它 */
+    /* 默认接收的数据包为动态 */
+    uint8_t *tsf_pkg = app_mem_alloc(size);
+    uint32_t tsf_pkg_size = size;
+    memcpy(tsf_pkg, data, size);
+    /* 发送给线程协议处理模组 */
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_data_manage,
+        .module   = app_thread_data_manage_transfer,
+        .event    = app_thread_data_manage_transfer_rx,
+        .dynamic  = true,
+        .size     = tsf_pkg_size,
+        .data     = tsf_pkg,
+    };
+    app_thread_package_notify(&package);
 }
 
 /*@brief     协议适配层,发送协议数据
@@ -26,13 +45,13 @@ void app_module_transfer_adaptor_rx(uint8_t *data, uint32_t size)
  */
 void app_module_transfer_adaptor_tx(uint8_t *data, uint32_t size)
 {
-    /* 第一次发送为协议包本体 */
-    /* 后面是协议包携带的数据,本地需要使用结束后销毁它 */
+    /* 本地阻塞发送(data, size) */
 }
 
 /*@brief      协议适配层,发送协议数据最大大小
  *@retval[in] 数据流最大大小
  */
-uint32_t app_module_transfer_adaptor_tx_size_max(void)
+uint32_t app_module_transfer_adaptor_tx_max(void)
 {
+    return 0;
 }

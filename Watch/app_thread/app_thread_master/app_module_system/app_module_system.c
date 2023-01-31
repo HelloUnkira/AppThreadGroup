@@ -1,5 +1,5 @@
 /*实现目标:
- *    断言相关的功能组件
+ *    系统相关的功能组件
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1

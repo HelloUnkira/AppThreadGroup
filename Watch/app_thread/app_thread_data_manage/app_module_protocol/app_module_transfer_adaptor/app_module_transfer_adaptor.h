@@ -16,6 +16,6 @@ void app_module_transfer_adaptor_tx(uint8_t *data, uint32_t size);
 /*@brief      协议适配层,发送协议数据最大大小
  *@retval[in] 数据流最大大小
  */
-uint32_t app_module_transfer_adaptor_tx_size_max(void);
+uint32_t app_module_transfer_adaptor_tx_max(void);
 
 #endif

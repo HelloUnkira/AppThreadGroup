@@ -15,13 +15,13 @@ typedef struct {    /* 工作队列模组数据项 */
 } app_thread_data_manage_work_t;
 
 typedef enum {  /* 协议传输模组事件 */
-    app_thread_data_manage_protocol_tx,
     app_thread_data_manage_protocol_rx,
+    app_thread_data_manage_protocol_tx,
 } app_thread_data_manage_protocol_event;
 
 typedef enum {  /* 数据流传输模组事件 */
-    app_thread_data_manage_transfer_tx,
     app_thread_data_manage_transfer_rx,
+    app_thread_data_manage_transfer_tx,
 } app_thread_data_manage_transfer_event;
 
 #endif
