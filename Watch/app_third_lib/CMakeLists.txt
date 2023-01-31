@@ -1,1 +1,1 @@
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lvgl)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lvgl_lib)

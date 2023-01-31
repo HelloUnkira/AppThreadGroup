@@ -19,6 +19,8 @@
 #include "lv_drv_conf.h"
 #include "app_lv_driver.h"
 
+#include "app_lv_ui_!test.h"
+
 /*@brief lvgl tick更新
  */
 void app_lv_tick_reduce_update(void)
@@ -121,6 +123,11 @@ void app_thread_lvgl_routine(void)
                 if (package.event == app_thread_lvgl_ui_scene_start) {
                     /* 启动UI场景 */
                     /* .......... */
+                    
+                    #if 1
+                    /* 测试时使用 */
+                    app_lv_ui_test();
+                    #endif
                 }
                 if (package.event == app_thread_lvgl_ui_scene_sched) {
                     /* 如果lvgl驱动未就绪,中止事件调度 */

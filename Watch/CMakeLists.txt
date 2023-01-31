@@ -40,11 +40,13 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene
 )
 set(app_third_lib
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl/lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl_lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl_lib/lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third_lib/lvgl_lib/lv_examples
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main
@@ -77,10 +79,11 @@ set_target_properties(app_main      PROPERTIES LINKER_LANGUAGE C)
 # 添加库依赖
 target_link_libraries(app_adaptor   PUBLIC ${linux_lib})
 target_link_libraries(app_sys       PUBLIC app_adaptor)
-target_link_libraries(app_thread    PUBLIC lvgl)
-target_link_libraries(app_thread    PUBLIC ${sdl2_lib})
 target_link_libraries(app_thread    PUBLIC app_adaptor)
 target_link_libraries(app_thread    PUBLIC app_sys)
+target_link_libraries(app_thread    PUBLIC lvgl)
+target_link_libraries(app_thread    PUBLIC lv_examples)
+target_link_libraries(app_thread    PUBLIC ${sdl2_lib})
 target_link_libraries(app_main      PUBLIC app_thread)
 # 重命名
 set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
