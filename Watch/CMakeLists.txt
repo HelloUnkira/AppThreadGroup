@@ -40,6 +40,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene
 )
 set(app_third_lib

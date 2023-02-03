@@ -22,51 +22,24 @@
 #if 0
 #elif APP_OS_IS_LINUX
 
+#include <unistd.h> 
 #include <signal.h>
 #include <sys/time.h>
+#include <time.h> 
+
+/* 问题点:使用SIGALRM,主线程有时候无法接收到该信号 */
+/*        并且信号会一直丢弃,以至于线程组无法工作 */
 
 static void software_timer_handler(int signal)
 {
     //SIGALRM:      以系统真实的时间来计算
     //SIGVTALRM:    以该进程在用户态下花费的时间来计算
     //SIGPROF:      以该进程在用户态下和内核态下所费的时间来计算
-    static uint32_t count = 0;count++;
-    /* 1msec system update: */
     if (signal == SIGALRM)
-        app_module_system_1msec_update(count);
-    /* test:... */
-    if (signal == SIGALRM) {
-        /* test reset load and dump */
-        #if 0
-        if (count % 5000 == 0) {
-            app_module_system_delay_set(2);
-            app_module_system_status_set(app_module_system_reset);
-        }
-        #endif
-        /* test alarm group */
-        #if 0
-        if (count == 1000)
-            app_module_alarm_test();
-        #endif
-        /* test stopwatch */
-        #if 0
-        if (count == 1000)
-            app_module_stopwatch_test();
-        #endif
-        /* test countdown */
-        #if 0
-        if (count == 1000)
-            app_module_countdown_test();
-        #endif
-        /* test package... */
-        #if 0
-        if (count % 1000 == 0)
-            app_thread_workqueue_test();
-        #endif
-    }
+        app_main_fake_hard_clock_irq();
 }
 
-void software_timer_ready(void)
+static void software_timer_ready(void)
 {
     /* 指定系统:Linux */
     // note:
@@ -93,7 +66,7 @@ void software_timer_ready(void)
     struct itimerval old_value = {0};
     struct itimerval new_value = {0};
     //将信号关联指定的回调
-    signal(SIGALRM,   software_timer_handler);
+    signal(SIGALRM, software_timer_handler);
     //设置间隔触发时间
     new_value.it_interval.tv_sec = 0;
     new_value.it_interval.tv_usec = 1000;//1ms
@@ -101,6 +74,25 @@ void software_timer_ready(void)
     new_value.it_value.tv_usec = 1;//不能为0
     //启用定时器
     setitimer(ITIMER_REAL, &new_value, &old_value);
+}
+
+static void app_main_usleep(uint64_t ns)
+{
+	struct timeval begin;
+	struct timeval now;
+	uint64_t past_us = 0;
+	gettimeofday(&begin,NULL);
+	now.tv_sec = begin.tv_sec;
+	now.tv_usec = begin.tv_usec;
+	while(past_us < ns)
+	{
+		gettimeofday(&now,NULL);
+        past_us  = now.tv_sec;
+        past_us -= begin.tv_sec;
+        past_us *= 1000000;
+        past_us += now.tv_usec;
+        past_us -= begin.tv_usec;
+	}
 }
 
 #elif APP_OS_IS_ZEPHYR
@@ -115,18 +107,22 @@ int main(int argc, char *argv[])
 {
     /* 启动APP调度策略 */
     app_thread_set_work_now();
-    /* 测试中我们在主线程 */
-    /* 使用软件定时器信号量发送包裹 */
-    /* 以达到模拟事件源的生成 */
-    software_timer_ready();
+    // software_timer_ready();
     /* 主线程滚动阻塞 */
     #if 0
-    #elif 0
-    while (true)
-        sleep(1);
     #elif 1
-    /* 测试日志追踪 */
-    app_module_trace_test();
+    while (true) {
+        #if 0
+        /* 测试日志追踪 */
+        app_module_trace_test();
+        #endif
+        /* 测试中我们在主线程 */
+        /* 模拟发送1ms定时器中断事件 */
+        /* 我是实在没想到这种方式 */
+        /* 居然是最简单的做法...... */
+        app_main_fake_hard_clock_irq();
+        app_main_usleep(1000);
+    }
     #elif 0
     /* chunk刷新,将其都刷为0 */
     app_module_ext_mem_chunk_reflush();

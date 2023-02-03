@@ -13,8 +13,9 @@ typedef struct {    /* 工作队列模组数据项 */
 } app_thread_lvgl_work_t;
 
 typedef enum {  /* GUI事件调度模组事件 */
-    app_thread_lvgl_sched_reduce,
-    app_thread_lvgl_sched_sdl,
+    app_thread_lvgl_sched_inc,
+    app_thread_lvgl_sched_exec,
+    app_thread_lvgl_sched_drv,
 } app_thread_lvgl_sched_event;
 
 typedef enum {  /* GUI场景事件 */
@@ -26,17 +27,24 @@ typedef enum {  /* GUI场景事件 */
 } app_thread_lvgl_ui_scene_event;
 
 /* lvgl:tick */
-#define LV_SCHED_TICK_REDUCE    5
+#define LV_SCHED_TICK_INC       1
+
+/* lvgl:exec */
+#define LV_SCHED_TICK_EXEC      5
 
 /* lvgl:sdl check */
-#define LV_SCHED_SDL_EVNET      10
+#define LV_SCHED_SDL_EVNET      5
 
 /*@brief lvgl tick更新
  */
-void app_lv_tick_reduce_update(void);
+void app_lv_tick_inc_update(void);
 
-/*@brief lvgl sdl更新
+/*@brief lvgl tick执行
  */
-void app_lv_sdl_update(void);
+void app_lv_tick_exec_update(void);
+
+/*@brief lvgl drv更新
+ */
+void app_lv_drv_update(void);
 
 #endif

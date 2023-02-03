@@ -125,7 +125,8 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     /* 执行加载 */
     if (not_load_yet) {
         not_load_yet = false;
-        /* 向线程发送场景启动事件 */ {
+        /* 向线程发送场景启动事件 */
+        {
             app_package_t package = {
                 .send_tid = app_thread_id_unknown,
                 .recv_tid = app_thread_id_lvgl,
@@ -138,7 +139,8 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
             app_thread_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene start\n");
         }
-        /* 向线程发送加载事件 */ {
+        /* 向线程发送加载事件 */
+        {
             app_package_t package = {
                 .send_tid = app_thread_id_unknown,
                 .recv_tid = app_thread_id_data_manage,
@@ -157,7 +159,8 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     /* 执行转储 */
     if (not_dump_yet) {
         not_dump_yet = false;
-        /* 向线程发送场景停止事件 */ {
+        /* 向线程发送场景停止事件 */
+        {
             app_package_t package = {
                 .send_tid = app_thread_id_unknown,
                 .recv_tid = app_thread_id_lvgl,
@@ -170,7 +173,8 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
             app_thread_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene stop\n");
         }
-        /* 向线程发送转储事件 */ {
+        /* 向线程发送转储事件 */
+        {
             app_package_t package = {
                 .send_tid = app_thread_id_unknown,
                 .recv_tid = app_thread_id_data_manage,
@@ -232,10 +236,12 @@ void app_module_system_1msec_update(uint32_t count)
         app_module_clock_1s_update(utc_new);
     }
     /* lvgl tick source */
-    if (count % LV_SCHED_TICK_REDUCE == 0)
-        app_lv_tick_reduce_update();
+    if (count % LV_SCHED_TICK_INC == 0)
+        app_lv_tick_inc_update();
+    if (count % LV_SCHED_TICK_EXEC == 0)
+        app_lv_tick_exec_update();
     if (count % LV_SCHED_SDL_EVNET == 0)
-        app_lv_sdl_update();
+        app_lv_drv_update();
     /* stopwatch msec update */
     if (count % APP_MODULE_STOPWATCH_MSEC == 0)
         app_module_stopwatch_xmsec_update();

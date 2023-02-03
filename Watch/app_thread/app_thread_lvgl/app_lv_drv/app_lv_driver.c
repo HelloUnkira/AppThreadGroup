@@ -41,11 +41,19 @@ void app_lv_driver_ready(void)
     app_lv_display_ready();
     app_lv_driver_status = true;
     /* 创建显示缓冲区 */
+    #if LV_DRV_DBUFFER
     static lv_disp_draw_buf_t disp_buf;
     static lv_color_t buffer1[LV_DRV_HOR_RES * LV_DRV_VER_RES] = {0};
     static lv_color_t buffer2[LV_DRV_HOR_RES * LV_DRV_VER_RES] = {0};
     lv_disp_draw_buf_init(&disp_buf, buffer1, buffer2,
                           LV_DRV_HOR_RES * LV_DRV_VER_RES);
+    #else
+    static lv_disp_draw_buf_t disp_buf;
+    static lv_color_t buffer1[LV_DRV_HOR_RES * LV_DRV_VER_RES] = {0};
+    static lv_color_t buffer2[LV_DRV_HOR_RES * LV_DRV_VER_RES] = {0};
+    lv_disp_draw_buf_init(&disp_buf, buffer1, NULL,
+                          LV_DRV_HOR_RES * LV_DRV_VER_RES);
+    #endif
     /* 创建显示设备 */
     static lv_disp_drv_t disp_drv;
     lv_disp_drv_init(&disp_drv);
@@ -82,7 +90,7 @@ void app_lv_driver_ready(void)
     lv_indev_t *mo_indev = lv_indev_drv_register(&mo_dev);
     lv_indev_t *mw_indev = lv_indev_drv_register(&mw_dev);
     lv_indev_t *kb_indev = lv_indev_drv_register(&kb_dev);
-    lv_indev_set_group(mo_indev, group);
+    // lv_indev_set_group(mo_indev, group);
     lv_indev_set_group(mw_indev, group);
     lv_indev_set_group(kb_indev, group);
     /* 鼠标贴图:cursor */

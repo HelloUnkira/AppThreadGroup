@@ -67,17 +67,15 @@ static inline void app_module_trace_test(void)
     uint8_t tin[APP_MODULE_TRACE_LOG_MAX * 2] ={0};
     for (uint32_t idx = 0; idx < APP_MODULE_TRACE_LOG_MAX; idx++)
         tin[idx] = tin[idx + APP_MODULE_TRACE_LOG_MAX] = '0' + idx % 10;
-    while (1) {
-        static uint32_t offset = 0;
-        offset %= APP_MODULE_TRACE_LOG_MAX;
-        app_module_trace_text_dump(tin + offset);
-        uint8_t tout[APP_MODULE_TRACE_LOG_MAX] = {};
-        app_module_trace_text_load(tout);
-        if (memcmp(tout, tin + offset, APP_MODULE_TRACE_LOG_MAX) != 0)
-            printf("track log error\n");
-        offset++;
-        sleep(1);
-    }
+
+    static uint32_t offset = 0;
+    offset %= APP_MODULE_TRACE_LOG_MAX;
+    app_module_trace_text_dump(tin + offset);
+    uint8_t tout[APP_MODULE_TRACE_LOG_MAX] = {};
+    app_module_trace_text_load(tout);
+    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_LOG_MAX) != 0)
+        printf("track log error\n");
+    offset++;
 }
 
 /*@brief 外存chunk刷新测试
@@ -99,6 +97,49 @@ static inline void app_module_ext_mem_chunk_reflush(void)
     for (uint32_t idx = 0; idx < ext_mem2->chunk_size; idx += sizeof(block))
         app_module_ext_mem_write(ext_mem2, idx, block, sizeof(block));
     printf("reflush end...\n");
+}
+
+static void app_main_fake_hard_clock_irq(void)
+{
+    //SIGALRM:      以系统真实的时间来计算
+    //SIGVTALRM:    以该进程在用户态下花费的时间来计算
+    //SIGPROF:      以该进程在用户态下和内核态下所费的时间来计算
+    static uint32_t count = 0;count++;
+    /* linux system 1 ms tick */
+    if (count % 1000 == 0)
+        printf("signal 1 second handler\n");
+    /* 1msec system update: */
+    app_module_system_1msec_update(count);
+    /* ........ */
+    /* test:... */
+    /* ........ */
+    /* test reset load and dump */
+    #if 0
+    if (count % 5000 == 0) {
+        app_module_system_delay_set(2);
+        app_module_system_status_set(app_module_system_reset);
+    }
+    #endif
+    /* test alarm group */
+    #if 0
+    if (count == 1000)
+        app_module_alarm_test();
+    #endif
+    /* test stopwatch */
+    #if 0
+    if (count == 1000)
+        app_module_stopwatch_test();
+    #endif
+    /* test countdown */
+    #if 0
+    if (count == 1000)
+        app_module_countdown_test();
+    #endif
+    /* test package... */
+    #if 0
+    if (count % 1000 == 0)
+        app_thread_workqueue_test();
+    #endif
 }
 
 #endif

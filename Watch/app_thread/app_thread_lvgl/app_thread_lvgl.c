@@ -18,40 +18,8 @@
 #include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
 #include "app_lv_driver.h"
-
+#include "app_lv_ui_event.h"
 #include "app_lv_ui_!test.h"
-
-/*@brief lvgl tick更新
- */
-void app_lv_tick_reduce_update(void)
-{
-    app_package_t package = {
-        .send_tid = app_thread_id_lvgl,
-        .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_sched,
-        .event    = app_thread_lvgl_sched_reduce,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_thread_package_notify(&package);
-}
-
-/*@brief lvgl sdl更新
- */
-void app_lv_sdl_update(void)
-{
-    app_package_t package = {
-        .send_tid = app_thread_id_lvgl,
-        .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_sched,
-        .event    = app_thread_lvgl_sched_sdl,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_thread_package_notify(&package);
-}
 
 /*@brief lvgl线程模组初始化
  */
@@ -94,28 +62,29 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_sched: {
-                /* lvgl内部时钟约减事件 */
-                if (package.event == app_thread_lvgl_sched_reduce) {
-                    lv_tick_inc(LV_SCHED_TICK_REDUCE);
-                    /* lvgl时钟事件调度 */
+                /* lvgl时钟约减事件 */
+                if (package.event == app_thread_lvgl_sched_inc) {
+                    lv_tick_inc(LV_SCHED_TICK_INC);
+                }
+                /* lvgl时钟调度事件 */
+                if (package.event == app_thread_lvgl_sched_exec) {
                     lv_timer_handler();
                 }
-                /* sdl检查事件 */
-                if (package.event == app_thread_lvgl_sched_sdl) {
+                /* lvgl驱动检查事件 */
+                if (package.event == app_thread_lvgl_sched_drv) {
+                    static bool app_lv_drv_shutdown = false;
                     /* 如果lvgl驱动未就绪,中止事件调度 */
-                    if (!app_lv_driver_status_get())
+                    if (app_lv_driver_status_get())
+                        app_lv_driver_handler();
+                    if (app_lv_drv_shutdown)
                         break;
-                    app_lv_driver_handler();
-                    static bool app_lv_shutdown = false;
-                    if (app_lv_shutdown)
-                        break;
-                    if (!app_lv_driver_shutdown())
-                        break;
-                    app_lv_shutdown = true;
-                    /* 重启系统 */
-                    APP_SYS_LOG_WARN("app_lv_shutdown\n");
-                    app_module_system_delay_set(2);
-                    app_module_system_status_set(app_module_system_reset);
+                    if (app_lv_driver_shutdown()) {
+                        app_lv_drv_shutdown = true;
+                        /* 重启系统 */
+                        APP_SYS_LOG_WARN("app_lv_shutdown\n");
+                        app_module_system_delay_set(2);
+                        app_module_system_status_set(app_module_system_reset);
+                    }
                 }
                 break;
             }
