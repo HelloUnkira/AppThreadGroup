@@ -25,7 +25,8 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
-    lv_bar_set_value(app_lv_ui_res_local->bar, value, LV_ANIM_OFF);
+    if (value <= 100)
+        lv_bar_set_value(app_lv_ui_res_local->bar, value, LV_ANIM_OFF);
     if (value == 100) {
         app_lv_ui_scene_t scene = {0};
         app_lv_ui_scene_del(&scene);
@@ -56,6 +57,8 @@ static void app_lv_ui_start_show(void *scene)
         lv_style_init(&app_lv_ui_res_local->style_bar_i);
         lv_style_set_bg_opa(&app_lv_ui_res_local->style_bar_i, LV_OPA_COVER);
         lv_style_set_bg_color(&app_lv_ui_res_local->style_bar_i, lv_palette_main(LV_PALETTE_BLUE));
+        lv_style_set_bg_grad_color(&app_lv_ui_res_local->style_bar_i, lv_palette_main(LV_PALETTE_GREEN));
+        lv_style_set_bg_grad_dir(&app_lv_ui_res_local->style_bar_i, LV_GRAD_DIR_HOR);
         lv_style_set_radius(&app_lv_ui_res_local->style_bar_i, 30);
         /* 初始化场景 */
         app_lv_ui_res_local->scene = lv_obj_create(lv_scr_act());
