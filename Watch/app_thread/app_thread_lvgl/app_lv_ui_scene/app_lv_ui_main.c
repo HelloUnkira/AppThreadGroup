@@ -1,7 +1,7 @@
 
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
@@ -19,7 +19,7 @@ typedef struct {
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
-static void app_lv_ui_stop_show(void *scene)
+static void app_lv_ui_main_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL)
         app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
@@ -39,12 +39,12 @@ static void app_lv_ui_stop_show(void *scene)
         lv_obj_add_style(app_lv_ui_res_local->scene, &app_lv_ui_res_local->style_scene, 0);
         app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
         lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-        lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Exit");
+        lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Main");
         lv_obj_center(app_lv_ui_res_local->label);
     }
 }
 
-static void app_lv_ui_stop_hide(void *scene)
+static void app_lv_ui_main_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化场景 */
@@ -56,10 +56,11 @@ static void app_lv_ui_stop_hide(void *scene)
     }
 }
 
-app_lv_ui_scene_t app_lv_ui_scene_stop = {
+app_lv_ui_scene_t app_lv_ui_scene_main = {
     /* 场景资源节点 */
     .presenter = NULL,
-    .show = app_lv_ui_stop_show,
-    .hide = app_lv_ui_stop_hide,
+    .show = app_lv_ui_main_show,
+    .hide = app_lv_ui_main_hide,
 };
+
 

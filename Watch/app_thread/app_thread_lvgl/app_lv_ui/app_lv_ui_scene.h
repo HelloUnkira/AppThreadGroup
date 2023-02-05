@@ -10,7 +10,6 @@ typedef enum {
 
 typedef struct {
     /* 场景资源节点 */
-    uint16_t     self_idx;          /* 场景编号 */
     const void  *presenter;         /* 场景交互回调集 */
     /* 临近场景(adjacent scene) */
     uint8_t      cross_lock:1;      /* 临近场景锁 */
@@ -24,16 +23,16 @@ typedef struct {
     /* 场景触发回调 */
     void (*show)(void *scene);      /* 载入场景 */
     void (*hide)(void *scene);      /* 移除场景 */
-    void (*refr)(void *scene);      /* 刷新场景 */
     /* ... */
 } app_lv_ui_scene_t;
 
 /* 场景最大嵌套数量 */
 #define APP_LV_UI_SCENE_NEST        10
 
-/*@brief 场景复位
+/*@brief     场景复位
+ *@param[in] 场景
  */
-void app_lv_ui_scene_reset(void);
+void app_lv_ui_scene_reset(app_lv_ui_scene_t *scene);
 
 /*@brief     场景覆盖显示场景
  *@param[in] 场景(不可为空)

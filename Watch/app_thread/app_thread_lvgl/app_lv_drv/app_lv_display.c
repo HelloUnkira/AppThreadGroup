@@ -63,11 +63,6 @@ static void app_lv_display_create(app_lv_display_t *disp)
  */
 static void app_lv_display_update(app_lv_display_t *disp)
 {
-    static uint32_t count = 0;
-    if (count % 2 != 0)
-        printf("app_lv_display_update dump\n");
-    count++;
-    
     if (disp->sdl_refr_qry == true)
         disp->sdl_refr_qry  = false;
     else
@@ -94,8 +89,6 @@ static void app_lv_display_update(app_lv_display_t *disp)
     /* 用包含渲染图像的纹理更新渲染器 */
     SDL_RenderCopy(disp->renderer, disp->texture, NULL, NULL);
     SDL_RenderPresent(disp->renderer);
-    
-    count++;
 }
 
 /*@brief 销毁屏幕

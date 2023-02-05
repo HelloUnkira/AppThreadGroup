@@ -17,11 +17,40 @@
 static uint8_t app_lv_ui_scene_num = 0;
 static app_lv_ui_scene_t app_lv_ui_scene[APP_LV_UI_SCENE_NEST] = {0};
 
-/*@brief 场景复位
+/*@brief 场景调度
+ *       内部使用: 被lvgl线程使用
  */
-void app_lv_ui_scene_reset(void)
+void app_lv_ui_scene_sched(app_lv_ui_scene_event_t event)
 {
-    app_lv_ui_scene_num = 0;
+    APP_MODULE_ASSERT(app_lv_ui_scene_num != 0);
+    app_lv_ui_scene_t *scene = &app_lv_ui_scene[app_lv_ui_scene_num - 1];
+    APP_MODULE_ASSERT(scene != NULL);
+    
+    switch (event) {
+    case app_lv_ui_scene_need_show:
+        scene->show(scene);
+        break;
+    case app_lv_ui_scene_need_hide:
+        scene->hide(scene);
+        break;
+    default:
+        APP_SYS_LOG_WARN("app_lv_ui_scene_sched:\n");
+        APP_SYS_LOG_WARN("catch error event%u:\n", event);
+        break;
+    }
+}
+
+/*@brief     场景复位
+ *@param[in] 场景
+ */
+void app_lv_ui_scene_reset(app_lv_ui_scene_t *scene)
+{
+    while (app_lv_ui_scene_num != 0) {
+        app_lv_ui_scene_sched(app_lv_ui_scene_need_hide);
+        app_lv_ui_scene_num--;
+    }
+    app_lv_ui_scene[app_lv_ui_scene_num++] = *scene;
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_show);
 }
 
 /*@brief     场景覆盖显示场景
@@ -30,7 +59,10 @@ void app_lv_ui_scene_reset(void)
 void app_lv_ui_scene_cover(app_lv_ui_scene_t *scene)
 {
     APP_MODULE_ASSERT(scene != NULL);
+    APP_MODULE_ASSERT(app_lv_ui_scene_num != 0);
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_hide);
     app_lv_ui_scene[app_lv_ui_scene_num] = *scene;
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_show);
 }
 
 /*@brief     场景添加新显示场景
@@ -39,7 +71,9 @@ void app_lv_ui_scene_cover(app_lv_ui_scene_t *scene)
 void app_lv_ui_scene_add(app_lv_ui_scene_t *scene)
 {
     APP_MODULE_ASSERT(scene != NULL);
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_hide);
     app_lv_ui_scene[app_lv_ui_scene_num++] = *scene;
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_show);
 }
 
 /*@brief      场景移除当前显示场景
@@ -48,7 +82,9 @@ void app_lv_ui_scene_add(app_lv_ui_scene_t *scene)
 void app_lv_ui_scene_del(app_lv_ui_scene_t *scene)
 {
     APP_MODULE_ASSERT(scene != NULL);
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_hide);
    *scene = app_lv_ui_scene[--app_lv_ui_scene_num];
+    app_lv_ui_scene_sched(app_lv_ui_scene_need_show);
 }
 
 /*@brief      获取最上层显示场景
@@ -70,27 +106,3 @@ uint8_t app_lv_ui_scene_get_nest(void)
     return app_lv_ui_scene_num;
 }
 
-/*@brief 场景调度
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_ui_scene_sched(app_lv_ui_scene_event_t event)
-{
-    app_lv_ui_scene_t *scene = NULL;
-    app_lv_ui_scene_get_top(&scene);
-    
-    switch (event) {
-    case app_lv_ui_scene_need_show:
-        scene->show(scene);
-        break;
-    case app_lv_ui_scene_need_hide:
-        scene->hide(scene);
-        break;
-    case app_lv_ui_scene_need_refr:
-        scene->refr(scene);
-        break;
-    default:
-        APP_SYS_LOG_WARN("app_lv_ui_scene_sched:\n");
-        APP_SYS_LOG_WARN("catch error event%u:\n", event);
-        break;
-    }
-}

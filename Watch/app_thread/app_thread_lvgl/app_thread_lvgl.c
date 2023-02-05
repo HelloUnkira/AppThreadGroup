@@ -19,6 +19,8 @@
 #include "lv_drv_conf.h"
 #include "app_lv_driver.h"
 #include "app_lv_ui_event.h"
+#include "app_lv_ui_scene.h"
+#include "app_lv_ui_scene_set.h"
 #include "app_lv_ui_!test.h"
 
 /*@brief lvgl线程模组初始化
@@ -91,11 +93,12 @@ void app_thread_lvgl_routine(void)
             case app_thread_lvgl_ui_scene: {
                 if (package.event == app_thread_lvgl_ui_scene_start) {
                     /* 启动UI场景 */
-                    /* .......... */
-                    
-                    #if 1
+                    #if 0
                     /* 测试时使用 */
                     app_lv_ui_test();
+                    #else
+                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
+                    app_lv_ui_scene_add(&app_lv_ui_scene_start);
                     #endif
                 }
                 if (package.event == app_thread_lvgl_ui_scene_sched) {
@@ -115,7 +118,11 @@ void app_thread_lvgl_routine(void)
                 }
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
                     /* 终止UI场景 */
-                    /* .......... */
+                    #if 0
+                    #else
+                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
+                    app_lv_ui_scene_add(&app_lv_ui_scene_stop);
+                    #endif
                 }
                 break;
             }
