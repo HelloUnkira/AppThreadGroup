@@ -88,41 +88,37 @@ void app_thread_lvgl_routine(void)
                         app_module_system_status_set(app_module_system_reset);
                     }
                 }
+                /* lvgl场景处理事件 */
+                if (package.event == app_thread_lvgl_sched_scene) {
+                    app_lv_ui_scene_sched(package.data);
+                }
+                /* 与lvgl绑定的驱动设备进入DLPS */
+                if (package.event == app_thread_lvgl_sched_dlps_enter) {
+                    app_lv_driver_dlps_enter();
+                    app_lv_ui_scene_reset(&app_lv_ui_scene_null);
+                }
+                /* 与lvgl绑定的驱动设备退出DLPS */
+                if (package.event == app_thread_lvgl_sched_dlps_exit) {
+                    app_lv_driver_dlps_exit();
+                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
+                }
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                if (package.event == app_thread_lvgl_ui_scene_start) {
-                    /* 启动UI场景 */
-                    #if 0
-                    /* 测试时使用 */
+                /* 测试时使用 */
+                if (0) {
                     app_lv_ui_test();
-                    #else
+                    break;
+                }
+                /* 启动UI场景 */
+                if (package.event == app_thread_lvgl_ui_scene_start) {
                     app_lv_ui_scene_reset(&app_lv_ui_scene_main);
                     app_lv_ui_scene_add(&app_lv_ui_scene_start);
-                    #endif
                 }
-                if (package.event == app_thread_lvgl_ui_scene_sched) {
-                    /* 如果lvgl驱动未就绪,中止事件调度 */
-                    if (!app_lv_driver_status_get())
-                        break;
-                    /* 调度UI */
-                    /* ...... */
-                }
-                if (package.event == app_thread_lvgl_ui_scene_wake) {
-                    /* 与lvgl绑定的驱动设备退出DLPS */
-                    app_lv_driver_dlps_exit();
-                }
-                if (package.event == app_thread_lvgl_ui_scene_sleep) {
-                    /* 与lvgl绑定的驱动设备进入DLPS */
-                    app_lv_driver_dlps_enter();
-                }
+                /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
-                    /* 终止UI场景 */
-                    #if 0
-                    #else
                     app_lv_ui_scene_reset(&app_lv_ui_scene_main);
                     app_lv_ui_scene_add(&app_lv_ui_scene_stop);
-                    #endif
                 }
                 break;
             }

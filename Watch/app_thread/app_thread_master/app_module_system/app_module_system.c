@@ -51,16 +51,16 @@ void app_module_system_dlps_set(bool status)
     app_package_t package = {
         .send_tid = app_thread_id_unknown,
         .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_ui_scene,
+        .module   = app_thread_lvgl_sched,
         .event    = 0,
         .dynamic  = false,
         .size     = 0,
         .data     = NULL,
     };
     if (status)
-        package.event = app_thread_lvgl_ui_scene_sleep;
+        package.event = app_thread_lvgl_sched_dlps_enter;
     else
-        package.event = app_thread_lvgl_ui_scene_wake;
+        package.event = app_thread_lvgl_sched_dlps_exit;
     app_thread_package_notify(&package);
     APP_SYS_LOG_WARN("\napp_module_system_dlps_set: ui scene\n");
 }

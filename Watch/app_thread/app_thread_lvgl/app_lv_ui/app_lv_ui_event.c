@@ -60,3 +60,20 @@ void app_lv_drv_update(void)
     };
     app_thread_package_notify(&package);
 }
+
+/*@brief lvgl 场景更新
+ */
+void app_lv_scene_update(void *scene)
+{
+    app_package_t package = {
+        .send_tid = app_thread_id_lvgl,
+        .recv_tid = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_sched,
+        .event    = app_thread_lvgl_sched_scene,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = scene,
+    };
+    app_thread_package_notify(&package);
+}
+

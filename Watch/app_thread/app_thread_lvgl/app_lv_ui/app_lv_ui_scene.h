@@ -5,7 +5,6 @@ typedef enum {
     app_lv_ui_scene_default = 0,
     app_lv_ui_scene_need_show,
     app_lv_ui_scene_need_hide,
-    app_lv_ui_scene_need_refr,
 } app_lv_ui_scene_event_t;
 
 typedef struct {
@@ -20,14 +19,25 @@ typedef struct {
     uint8_t      set_num;           /* 场景集合数 */
     uint16_t    *set_vlist;         /* 场景集合 */
     const void **set_plist;         /* 场景集合交互资源 */
-    /* 场景触发回调 */
-    void (*show)(void *scene);      /* 载入场景 */
-    void (*hide)(void *scene);      /* 移除场景 */
+    /* 场景触发事件及回调 */
+    uint8_t event;                  /* 触发事件 */
+    void  (*show)(void *scene);     /* 载入场景 */
+    void  (*hide)(void *scene);     /* 移除场景 */
     /* ... */
 } app_lv_ui_scene_t;
 
 /* 场景最大嵌套数量 */
 #define APP_LV_UI_SCENE_NEST        10
+
+/*@brief 场景调度
+ *       内部使用: 被lvgl线程使用
+ */
+void app_lv_ui_scene_sched(app_lv_ui_scene_t *scene);
+
+/*@brief      获取最上层显示场景
+ *@param[out] 场景(不可为空)
+ */
+void app_lv_ui_scene_get_top(app_lv_ui_scene_t **scene);
 
 /*@brief     场景复位
  *@param[in] 场景
@@ -49,19 +59,9 @@ void app_lv_ui_scene_add(app_lv_ui_scene_t *scene);
  */
 void app_lv_ui_scene_del(app_lv_ui_scene_t *scene);
 
-/*@brief      获取最上层显示场景
- *@param[out] 场景(不可为空)
- */
-void app_lv_ui_scene_get_top(app_lv_ui_scene_t **scene);
-
 /*@brief  当前场景嵌套层级
  *@retval 场景数量
  */
 uint8_t app_lv_ui_scene_get_nest(void);
-
-/*@brief 场景调度
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_ui_scene_sched(app_lv_ui_scene_event_t event);
 
 #endif

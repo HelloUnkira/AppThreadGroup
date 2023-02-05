@@ -13,16 +13,16 @@ typedef struct {    /* 工作队列模组数据项 */
 } app_thread_lvgl_work_t;
 
 typedef enum {  /* GUI事件调度模组事件 */
-    app_thread_lvgl_sched_inc,
-    app_thread_lvgl_sched_exec,
-    app_thread_lvgl_sched_drv,
+    app_thread_lvgl_sched_inc,          /* lvgl时钟约减事件 */
+    app_thread_lvgl_sched_exec,         /* lvgl时钟调度事件 */
+    app_thread_lvgl_sched_drv,          /* lvgl驱动检查事件 */
+    app_thread_lvgl_sched_scene,        /* lvgl场景处理事件 */
+    app_thread_lvgl_sched_dlps_enter,   /* lvgl进入dlps事件 */
+    app_thread_lvgl_sched_dlps_exit,    /* lvgl退出dlps事件 */
 } app_thread_lvgl_sched_event;
 
 typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_start,     /* UI场景进入 */
-    app_thread_lvgl_ui_scene_sched,     /* UI场景调度 */
-    app_thread_lvgl_ui_scene_wake,      /* UI场景唤醒 */
-    app_thread_lvgl_ui_scene_sleep,     /* UI场景休眠 */
     app_thread_lvgl_ui_scene_stop,      /* UI场景退出 */
 } app_thread_lvgl_ui_scene_event;
 

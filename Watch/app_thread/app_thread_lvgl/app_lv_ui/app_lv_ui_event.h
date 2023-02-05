@@ -13,4 +13,9 @@ void app_lv_tick_exec_update(void);
  */
 void app_lv_drv_update(void);
 
+/*@brief lvgl 场景更新
+ */
+void app_lv_scene_update(void *scene);
+
 #endif
+

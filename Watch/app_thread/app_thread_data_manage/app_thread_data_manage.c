@@ -88,7 +88,7 @@ void app_thread_data_manage_routine(void)
             }
             case app_thread_data_manage_transfer: {
                 if (package.event == app_thread_data_manage_transfer_rx) {
-                    bool finish = app_module_transfer_respond((void *)package.data, package.size);
+                    bool finish = app_module_transfer_respond(package.data, package.size);
                     if (package.dynamic)
                         app_mem_free(package.data);
                     if (finish) {

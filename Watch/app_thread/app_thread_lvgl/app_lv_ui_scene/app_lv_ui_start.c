@@ -1,5 +1,4 @@
 
-
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
@@ -25,8 +24,12 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
-    if (value <= 100)
-        lv_bar_set_value(app_lv_ui_res_local->bar, value, LV_ANIM_OFF);
+    if (value <= 100) {
+        uint8_t bar_value = (value);
+        uint8_t label_opa = (uint32_t)((float)value * 2.55);
+        lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
+        lv_bar_set_value(app_lv_ui_res_local->bar, bar_value, LV_ANIM_OFF);
+    }
     if (value == 100) {
         app_lv_ui_scene_t scene = {0};
         app_lv_ui_scene_del(&scene);
@@ -45,8 +48,8 @@ static void app_lv_ui_start_show(void *scene)
         lv_style_set_align(&app_lv_ui_res_local->style_scene, LV_DIR_ALL);
         lv_style_set_bg_opa(&app_lv_ui_res_local->style_scene, LV_OPA_COVER);
         lv_style_set_bg_color(&app_lv_ui_res_local->style_scene, lv_palette_main(LV_PALETTE_GREY));
-        lv_style_set_text_color(&app_lv_ui_res_local->style_scene, lv_palette_main(LV_PALETTE_BLUE));
         lv_style_set_border_color(&app_lv_ui_res_local->style_scene, lv_palette_main(LV_PALETTE_GREY));
+        lv_style_set_text_color(&app_lv_ui_res_local->style_scene, lv_palette_main(LV_PALETTE_BLUE));
         lv_style_init(&app_lv_ui_res_local->style_bar_e);
         lv_style_set_pad_all(&app_lv_ui_res_local->style_bar_e, 4);
         lv_style_set_border_width(&app_lv_ui_res_local->style_bar_e, 1);
@@ -67,6 +70,7 @@ static void app_lv_ui_start_show(void *scene)
         app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
         lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
         lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Enter");
+        lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
         lv_obj_center(app_lv_ui_res_local->label);
         app_lv_ui_res_local->bar = lv_bar_create(app_lv_ui_res_local->scene);
         lv_obj_remove_style_all(app_lv_ui_res_local->bar);
@@ -81,7 +85,7 @@ static void app_lv_ui_start_show(void *scene)
         lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
         lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, 0);
         lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 100);
-        lv_anim_set_time(&app_lv_ui_res_local->anim, 5000);
+        lv_anim_set_time(&app_lv_ui_res_local->anim, 3000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
 }
@@ -90,7 +94,8 @@ static void app_lv_ui_start_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化场景 */
-        lv_obj_del(app_lv_ui_res_local->label);
+        lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
+        lv_obj_del(app_lv_ui_res_local->scene);
     }
     if (app_lv_ui_res_local != NULL) {
         app_mem_free(app_lv_ui_res_local);
