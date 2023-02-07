@@ -1,10 +1,10 @@
-#ifndef APP_LV_UI_SCENE_SET_H
-#define APP_LV_UI_SCENE_SET_H
+#ifndef app_lv_scene_SET_H
+#define app_lv_scene_SET_H
 
-extern app_lv_ui_scene_t app_lv_ui_scene_null;
-extern app_lv_ui_scene_t app_lv_ui_scene_main;
-extern app_lv_ui_scene_t app_lv_ui_scene_start;
-extern app_lv_ui_scene_t app_lv_ui_scene_stop;
+extern app_lv_scene_t app_lv_scene_null;
+extern app_lv_scene_t app_lv_scene_main;
+extern app_lv_scene_t app_lv_scene_start;
+extern app_lv_scene_t app_lv_scene_stop;
 
 #endif
 

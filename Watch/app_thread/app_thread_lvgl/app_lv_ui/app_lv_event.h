@@ -1,5 +1,5 @@
-#ifndef APP_LV_UI_EVENT_H
-#define APP_LV_UI_EVENT_H
+#ifndef APP_LV_EVENT_H
+#define APP_LV_EVENT_H
 
 /*@brief lvgl tick更新
  */

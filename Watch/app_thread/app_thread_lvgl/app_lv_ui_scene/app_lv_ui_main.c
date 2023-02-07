@@ -7,7 +7,8 @@
 #include "app_sys_log.h"
 
 #include "lvgl.h"
-#include "app_lv_ui_scene.h"
+#include "app_lv_scene.h"
+#include "app_lv_scene_float.h"
 #include "app_lv_ui_scene_set.h"
 
 typedef struct {
@@ -29,9 +30,8 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 
 static void app_lv_ui_main_show(void *scene)
 {
-    if (app_lv_ui_res_local == NULL)
+    if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
-    if (app_lv_ui_res_local != NULL) {
         /* 初始化风格 */
         lv_style_init(&app_lv_ui_res_local->style_scene);
         lv_style_set_pad_all(&app_lv_ui_res_local->style_scene, 10);
@@ -50,6 +50,12 @@ static void app_lv_ui_main_show(void *scene)
         lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Main");
         lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
         lv_obj_center(app_lv_ui_res_local->label);
+        /* 初始化浮动窗口 */
+        app_lv_scene_set_t *scene_set = (void *)(((app_lv_scene_t *)scene)->scene_near);
+        // app_lv_scene_new_float_ver(scene_set, app_lv_ui_res_local->scene, LV_OPA_50);
+        app_lv_scene_float_show(scene_set->cross_vlist[0],
+                                scene_set->cross_vlist[1],
+                                NULL, NULL);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
@@ -59,24 +65,36 @@ static void app_lv_ui_main_show(void *scene)
         lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
+    app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
+                             app_lv_ui_res_local->scene;
 }
 
 static void app_lv_ui_main_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
+        /* 反初始化浮动窗口 */
+        //app_lv_scene_set_t *scene_set = (void *)(((app_lv_scene_t *)scene)->scene_near);
+        //app_lv_scene_del_float_ver(scene_set, app_lv_ui_res_local->scene);
+        app_lv_scene_float_hide();
         /* 反初始化场景 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         lv_obj_del(app_lv_ui_res_local->scene);
-    }
-    if (app_lv_ui_res_local != NULL) {
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
+    app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
+                             app_lv_ui_res_local->scene;
 }
 
-app_lv_ui_scene_t app_lv_ui_scene_main = {
+app_lv_scene_set_t app_lv_scene_main_set = {
+    .cross_vlist[0] = &app_lv_scene_null,
+    .cross_vlist[1] = &app_lv_scene_null,
+};
+
+app_lv_scene_t app_lv_scene_main = {
     /* 场景资源节点 */
-    .presenter = NULL,
+    .presenter  = NULL,
+    .scene_near = &app_lv_scene_main_set,
     .show = app_lv_ui_main_show,
     .hide = app_lv_ui_main_hide,
 };

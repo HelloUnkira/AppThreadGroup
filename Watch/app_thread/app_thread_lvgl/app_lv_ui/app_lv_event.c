@@ -9,7 +9,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_pipe.h"
-#include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
 

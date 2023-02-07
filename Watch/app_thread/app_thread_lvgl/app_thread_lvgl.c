@@ -18,8 +18,8 @@
 #include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
 #include "app_lv_driver.h"
-#include "app_lv_ui_event.h"
-#include "app_lv_ui_scene.h"
+#include "app_lv_event.h"
+#include "app_lv_scene.h"
 #include "app_lv_ui_scene_set.h"
 #include "app_lv_ui_!test.h"
 
@@ -90,17 +90,17 @@ void app_thread_lvgl_routine(void)
                 }
                 /* lvgl场景处理事件 */
                 if (package.event == app_thread_lvgl_sched_scene) {
-                    app_lv_ui_scene_sched(package.data);
+                    app_lv_scene_sched(package.data);
                 }
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {
                     app_lv_driver_dlps_enter();
-                    app_lv_ui_scene_reset(&app_lv_ui_scene_null);
+                    app_lv_scene_reset(&app_lv_scene_null);
                 }
                 /* 与lvgl绑定的驱动设备退出DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_exit) {
                     app_lv_driver_dlps_exit();
-                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
+                    app_lv_scene_reset(&app_lv_scene_main);
                 }
                 break;
             }
@@ -112,13 +112,13 @@ void app_thread_lvgl_routine(void)
                 }
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
-                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
-                    app_lv_ui_scene_add(&app_lv_ui_scene_start);
+                    app_lv_scene_reset(&app_lv_scene_main);
+                    app_lv_scene_add(&app_lv_scene_start);
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
-                    app_lv_ui_scene_reset(&app_lv_ui_scene_main);
-                    app_lv_ui_scene_add(&app_lv_ui_scene_stop);
+                    app_lv_scene_reset(&app_lv_scene_main);
+                    app_lv_scene_add(&app_lv_scene_stop);
                 }
                 break;
             }
