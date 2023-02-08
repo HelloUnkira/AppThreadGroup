@@ -12,6 +12,7 @@
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
+#include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
@@ -22,6 +23,7 @@
 void app_thread_mix_custom_ready(void)
 {
     /* 模组初始化 */
+    app_module_timer_ready();
     app_module_clock_ready();
     app_module_alarm_group_ready();
     app_module_stopwatch_ready();
@@ -56,6 +58,11 @@ void app_thread_mix_custom_routine(void)
                     void  *parameter                 = ((void **)package.data)[1];
                     routine(parameter);
                 }
+                break;
+            }
+            case app_thread_mix_custom_timer: {
+                if (package.event == app_thread_mix_custom_timer_reduce_update)
+                    app_module_timer_reduce();
                 break;
             }
             case app_thread_mix_custom_clock: {

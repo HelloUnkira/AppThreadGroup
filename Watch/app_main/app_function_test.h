@@ -1,6 +1,63 @@
 #ifndef APP_FUNCTION_TEST
 #define APP_FUNCTION_TEST
 
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_sys_pipe.h"
+#include "app_thread_master.h"
+#include "app_thread_mix_irq.h"
+#include "app_thread_mix_custom.h"
+#include "app_thread_data_manage.h"
+#include "app_thread_lvgl.h"
+#include "app_module_timer.h"
+#include "app_module_clock.h"
+#include "app_module_alarm.h"
+#include "app_module_stopwatch.h"
+#include "app_module_countdown.h"
+#include "app_module_ext_mem.h"
+#include "app_module_ext_mem_table.h"
+#include "app_module_system.h"
+#include "app_module_trace.h"
+
+void app_module_timer_test_callback(void *timer)
+{
+    app_module_timer_t *local = timer;
+    uint32_t *data = local->user_data;
+    
+    printf("timer %d callback %d\n", data[0], data[1]++);
+    
+    if (data[1] == 3)
+        app_module_timer_stop(timer);
+}
+
+/*@brief 软件定时器模组测试
+ */
+static inline void app_module_timer_test(void)
+{
+    static uint32_t label_1[2] = {1, 0};
+    static uint32_t label_2[2] = {2, 0};
+    static uint32_t label_3[2] = {3, 0};
+    static app_module_timer_t timer1 = {
+        .expired   = app_module_timer_test_callback,
+        .user_data = &label_1,
+        .peroid    = 1000,
+        .reload    = true};
+    static app_module_timer_t timer2 = {
+        .expired   = app_module_timer_test_callback,
+        .user_data = &label_2,
+        .peroid    = 2000,
+        .reload    = true};
+    static app_module_timer_t timer3 = {
+        .expired   = app_module_timer_test_callback,
+        .user_data = &label_3,
+        .peroid    = 3000,
+        .reload    = true};
+    
+    app_module_timer_start(&timer1);
+    app_module_timer_start(&timer2);
+    app_module_timer_start(&timer3);
+}
+
 /*@brief 秒表模组测试
  */
 static inline void app_module_stopwatch_test(void)
@@ -119,6 +176,11 @@ static void app_main_fake_hard_clock_irq(void)
         app_module_system_delay_set(2);
         app_module_system_status_set(app_module_system_reset);
     }
+    #endif
+    /* test timer */
+    #if 0
+    if (count == 1000)
+        app_module_timer_test();
     #endif
     /* test alarm group */
     #if 0

@@ -1,6 +1,11 @@
 #ifndef APP_MODULE_ALARM_H
 #define APP_MODULE_ALARM_H
 
+typedef enum {
+    app_module_alarm_custom,
+    app_module_alarm_repeat,
+} app_module_alarm_type_t;
+
 typedef struct {
     app_module_clock_t clock_base;  /* 设置时的时钟 */
     union {
@@ -34,18 +39,6 @@ typedef struct {
  *    因为这些功能的策略变动性随外界影响过大
  *    故它不应该加入到基础闹钟结构中
  */
-
-typedef enum {
-    app_module_alarm_custom,
-    app_module_alarm_repeat,
-} app_module_alarm_type_t;
-
-typedef struct {
-    app_module_alarm_t *array;      /* 闹钟数组 */
-    uint32_t            number;     /* 闹钟总数量 */
-    uint32_t            used;       /* 闹钟使用数量 */
-    app_mutex_t         mutex;      /* 闹钟组资源保护 */
-} app_module_alarm_group_t;
 
 /* 本地闹钟组限制 */
 #define APP_MODULE_ALARM_GROUP_MAX  5

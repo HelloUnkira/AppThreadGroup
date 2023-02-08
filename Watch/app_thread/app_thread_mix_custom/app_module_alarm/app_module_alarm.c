@@ -14,6 +14,13 @@
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
 
+typedef struct {
+    app_module_alarm_t *array;      /* 闹钟数组 */
+    uint32_t            number;     /* 闹钟总数量 */
+    uint32_t            used;       /* 闹钟使用数量 */
+    app_mutex_t         mutex;      /* 闹钟组资源保护 */
+} app_module_alarm_group_t;
+
 static app_module_alarm_group_t app_module_alarm_group[APP_MODULE_ALARM_GROUP_MAX] = {0};
 
 /*@brief        更新闹钟

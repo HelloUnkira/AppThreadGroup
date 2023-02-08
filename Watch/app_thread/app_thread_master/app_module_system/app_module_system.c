@@ -13,6 +13,7 @@
 #include "app_thread_data_manage.h"
 #include "app_thread_lvgl.h"
 #include "app_module_system.h"
+#include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
@@ -242,6 +243,8 @@ void app_module_system_1msec_update(uint32_t count)
         app_lv_tick_exec_update();
     if (count % LV_SCHED_SDL_EVNET == 0)
         app_lv_drv_update();
+    /* timer msec update */
+    app_module_timer_1ms_update();
     /* stopwatch msec update */
     if (count % APP_MODULE_STOPWATCH_MSEC == 0)
         app_module_stopwatch_xmsec_update();
