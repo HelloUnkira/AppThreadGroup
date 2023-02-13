@@ -1,5 +1,5 @@
-#ifndef APP_LV_UI_EVENT_H
-#define APP_LV_UI_EVENT_H
+#ifndef APP_LV_UI_UTIL_H
+#define APP_LV_UI_UTIL_H
 
 /*@brief    场景默认事件响应回调设置
  *param[in] scene 场景
