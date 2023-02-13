@@ -78,6 +78,34 @@ static void app_main_usleep(uint64_t ns)
 	}
 }
 
+static void app_main_update_sys_time(void)
+{
+    time_t timep;
+    struct tm *p;
+    time (&timep);
+    p=gmtime(&timep);
+    
+    printf("年:%d\n",1900+p->tm_year);/*获取当前年份,从1900开始，所以要加1900*/
+    printf("月:%d\n",1+p->tm_mon);/*获取当前月份,范围是0-11,所以要加1*/
+    printf("日:%d\n",p->tm_mday);/*获取当前月份日数,范围是1-31*/
+    printf("时::%d\n",8+p->tm_hour);/*获取当前时,这里获取西方的时间,刚好相差八个小时*/
+    printf("分:%d\n",p->tm_min); /*获取当前分*/
+    printf("秒:%d\n",p->tm_sec); /*获取当前秒*/
+    printf("天:%d\n",p->tm_yday); /*从今年1月1日算起至今的天数，范围为0-365*/
+    
+    app_module_clock_t clock = {
+        .year   = 1900+p->tm_year,      /*获取当前年份,从1900开始，所以要加1900*/
+        .month  = 1+p->tm_mon,          /*获取当前月份,范围是0-11,所以要加1*/
+        .day    = p->tm_mday,           /*获取当前月份日数,范围是1-31*/
+        .hour   = 8+p->tm_hour,         /*获取当前时,这里获取西方的时间,刚好相差八个小时*/
+        .minute = p->tm_min,
+        .second = p->tm_sec,
+    };
+    app_module_clock_to_utc(&clock);
+    app_module_clock_to_week(&clock);
+    app_module_clock_set_system_clock(&clock);
+}
+
 #elif APP_OS_IS_ZEPHYR
 #error "arch os not adaptor yet"
 #elif APP_OS_IS_FREERTOS
@@ -90,7 +118,6 @@ int main(int argc, char *argv[])
 {
     /* 启动APP调度策略 */
     app_thread_set_work_now();
-    // software_timer_ready();
     /* 主线程滚动阻塞 */
     #if 0
     #elif 1
@@ -105,6 +132,12 @@ int main(int argc, char *argv[])
         /* 居然是最简单的做法...... */
         app_main_fake_hard_clock_irq();
         app_main_usleep(1000);
+        /* 更新系统时钟(5s later) */
+        {
+            static uint64_t count = 0;
+            if (count++ == 5 * 1000)
+                app_main_update_sys_time();
+        }
     }
     #elif 0
     /* chunk刷新,将其都刷为0 */

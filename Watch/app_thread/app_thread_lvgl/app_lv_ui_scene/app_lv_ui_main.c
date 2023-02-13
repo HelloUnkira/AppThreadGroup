@@ -75,10 +75,11 @@ static void app_lv_ui_main_show(void *scene)
 static void app_lv_ui_main_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-        /* 反初始化场景 */
+        /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 场景去除默认事件 */
         app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
+        /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
@@ -94,7 +95,6 @@ app_lv_scene_set_t app_lv_scene_main_set = {
 
 app_lv_scene_t app_lv_scene_main = {
     /* 场景资源节点 */
-    .presenter  = NULL,
     .scene_near = &app_lv_scene_main_set,
     .show = app_lv_ui_main_show,
     .hide = app_lv_ui_main_hide,

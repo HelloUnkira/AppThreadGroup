@@ -13,9 +13,6 @@
 
 typedef struct {
     lv_obj_t *scene;
-    lv_obj_t *title;
-    lv_obj_t *label;
-    lv_obj_t *list;
 } app_lv_ui_res_local_t;
 
 typedef struct {
@@ -24,7 +21,7 @@ typedef struct {
 } app_lv_ui_res_list_t;
 
 static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    // {"sys clock",   &app_lv_scene_test_sys_clock,},
+    {"sys clock",   &app_lv_scene_test_clock,},
     {"null",        &app_lv_scene_watch,},
     {"null",        &app_lv_scene_watch,},
     {"null",        &app_lv_scene_watch,},
@@ -33,6 +30,8 @@ static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
+/*@brief 界面自定义事件回调
+ */
 static void app_lv_ui_test_sys_list_btn_cb(lv_event_t *e)
 {
     switch (lv_event_get_code(e)) {
@@ -47,6 +46,9 @@ static void app_lv_ui_test_sys_list_btn_cb(lv_event_t *e)
     }
 }
 
+/*@brief 界面显示
+ *@brief scene 场景
+ */
 static void app_lv_ui_test_sys_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
@@ -64,29 +66,30 @@ static void app_lv_ui_test_sys_show(void *scene)
         /* 场景添加默认事件 */
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化标签,上中部 */
-        app_lv_ui_res_local->title = lv_obj_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->title, LV_HOR_RES - 20, 40);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->title, 0, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->title,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->title, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->title, 0, 0);
-        lv_obj_align(app_lv_ui_res_local->title, LV_ALIGN_TOP_MID, 0, 0);
-        app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->title);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->label,  lv_color_black(), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_label_set_text_static(app_lv_ui_res_local->label, "internal test");
-        lv_obj_align(app_lv_ui_res_local->label, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_t *label = lv_label_create(app_lv_ui_res_local->scene);
+        lv_obj_set_size(label, LV_HOR_RES - 20, 40);
+        lv_obj_set_style_pad_all(label, 0, 0);
+        lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
+        lv_obj_set_style_border_side(label, 0, 0);
+        lv_obj_set_style_border_width(label, 0, 0);
+        lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
+        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
+        lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_set_style_text_line_space(label, 5, 0);
+        lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
+        lv_label_set_text_static(label, "internal test");
+        lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 初始化列表,中部 */
-        app_lv_ui_res_local->list = lv_list_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->list, LV_HOR_RES, LV_VER_RES - 40);
-        lv_obj_set_style_pad_row(app_lv_ui_res_local->list, 10, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->list, lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->list, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->list, 0, 0);
-        lv_obj_align_to(app_lv_ui_res_local->list, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);
+        lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES - 40);
+        lv_obj_set_style_pad_row(list, 10, 0);
+        lv_obj_set_style_bg_color(list, lv_color_black(), 0);
+        lv_obj_set_style_border_side(list, 0, 0);
+        lv_obj_set_style_border_width(list, 0, 0);
+        lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 为列表批量追加按钮 */
         for (uint32_t idx = 0; idx < sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]); idx++) {
-            lv_obj_t *btn = lv_btn_create(app_lv_ui_res_local->list);
+            lv_obj_t *btn = lv_btn_create(list);
             lv_obj_add_event_cb(btn, app_lv_ui_test_sys_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_list[idx].scene);
             lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
             lv_obj_set_style_bg_color(btn,  lv_palette_main(LV_PALETTE_GREY), 0);
@@ -99,6 +102,9 @@ static void app_lv_ui_test_sys_show(void *scene)
                                  app_lv_ui_res_local->scene;
 }
 
+/*@brief 界面隐藏
+ *@brief scene 场景
+ */
 static void app_lv_ui_test_sys_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
@@ -115,7 +121,6 @@ static void app_lv_ui_test_sys_hide(void *scene)
 
 app_lv_scene_t app_lv_scene_test_sys = {
     /* 场景资源节点 */
-    .presenter = NULL,
     .show = app_lv_ui_test_sys_show,
     .hide = app_lv_ui_test_sys_hide,
 };

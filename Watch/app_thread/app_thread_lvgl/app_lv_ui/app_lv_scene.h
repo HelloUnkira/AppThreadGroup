@@ -21,7 +21,6 @@ typedef struct {
 typedef struct {
     /* 场景资源节点 */
     void *self;
-    const void *presenter;          /* 场景交互回调集 */
     const void *scene_near;         /* 临近场景 */
     /* 场景触发事件及回调 */
     uint8_t event;                  /* 触发事件 */

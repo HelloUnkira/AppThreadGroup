@@ -176,7 +176,6 @@ static void app_lv_ui_watch_hide(void *scene)
 
 app_lv_scene_t app_lv_scene_watch = {
     /* 场景资源节点 */
-    .presenter = NULL,
     .show = app_lv_ui_watch_show,
     .hide = app_lv_ui_watch_hide,
 };
