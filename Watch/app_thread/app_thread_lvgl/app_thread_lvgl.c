@@ -21,7 +21,7 @@
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_scene_set.h"
-#include "app_lv_ui_!test.h"
+#include "app_lv_ui_watch.h"
 
 /*@brief lvgl线程模组初始化
  */
@@ -95,7 +95,7 @@ void app_thread_lvgl_routine(void)
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {
                     app_lv_driver_dlps_enter();
-                    app_lv_scene_reset(&app_lv_scene_null);
+                    app_lv_scene_reset(&app_lv_scene_main);
                 }
                 /* 与lvgl绑定的驱动设备退出DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_exit) {
@@ -105,21 +105,23 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                /* 测试时使用 */
-                if (0) {
-                    app_lv_ui_test();
-                    break;
-                }
+                /* 测试时使用,在此处添加自定义窗口 */
+                #if 0
+                    /* to do something */
+                #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
                     app_lv_scene_reset(&app_lv_scene_main);
-                    app_lv_scene_add(&app_lv_scene_start);
+                    app_lv_ui_watch_status_update(app_lv_ui_watch_start);
+                    app_lv_scene_add(&app_lv_scene_watch);
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
                     app_lv_scene_reset(&app_lv_scene_main);
-                    app_lv_scene_add(&app_lv_scene_stop);
+                    app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
+                    app_lv_scene_add(&app_lv_scene_watch);
                 }
+                #endif
                 break;
             }
             default: {

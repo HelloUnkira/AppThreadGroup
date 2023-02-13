@@ -1,10 +1,11 @@
 #ifndef app_lv_scene_SET_H
 #define app_lv_scene_SET_H
 
-extern app_lv_scene_t app_lv_scene_null;
+/* test sys scene */
+extern app_lv_scene_t app_lv_scene_test_sys;
+/* main scene */
+extern app_lv_scene_t app_lv_scene_watch;
 extern app_lv_scene_t app_lv_scene_main;
-extern app_lv_scene_t app_lv_scene_start;
-extern app_lv_scene_t app_lv_scene_stop;
+/* base scene */
 
 #endif
-

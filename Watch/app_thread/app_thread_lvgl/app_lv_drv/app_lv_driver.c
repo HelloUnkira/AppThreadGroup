@@ -76,23 +76,23 @@ void app_lv_driver_ready(void)
     lv_group_set_default(group);
     /* 注册输入设备:鼠标,键盘,鼠标滑轮 */
     static lv_indev_drv_t mo_dev;
-    static lv_indev_drv_t mw_dev;
     static lv_indev_drv_t kb_dev;
+    static lv_indev_drv_t mw_dev;
     lv_indev_drv_init(&mo_dev);
-    lv_indev_drv_init(&mw_dev);
     lv_indev_drv_init(&kb_dev);
+    lv_indev_drv_init(&mw_dev);
     mo_dev.type = LV_INDEV_TYPE_POINTER;
-    mw_dev.type = LV_INDEV_TYPE_ENCODER;
     kb_dev.type = LV_INDEV_TYPE_KEYPAD;
+    mw_dev.type = LV_INDEV_TYPE_ENCODER;
     mo_dev.read_cb = app_lv_mouse_read;
-    mw_dev.read_cb = app_lv_mousewheel_read;
     kb_dev.read_cb = app_lv_keyboard_read;
+    mw_dev.read_cb = app_lv_mousewheel_read;
     lv_indev_t *mo_indev = lv_indev_drv_register(&mo_dev);
-    lv_indev_t *mw_indev = lv_indev_drv_register(&mw_dev);
+    lv_indev_set_group(mo_indev, group);
     lv_indev_t *kb_indev = lv_indev_drv_register(&kb_dev);
-    // lv_indev_set_group(mo_indev, group);
-    lv_indev_set_group(mw_indev, group);
     lv_indev_set_group(kb_indev, group);
+    lv_indev_t *mw_indev = lv_indev_drv_register(&mw_dev);
+    lv_indev_set_group(mw_indev, group);
     /* 鼠标贴图:cursor */
     lv_obj_t *mo_cur = lv_img_create(lv_scr_act());
     lv_img_set_src(mo_cur, &app_lv_mouse_icon);

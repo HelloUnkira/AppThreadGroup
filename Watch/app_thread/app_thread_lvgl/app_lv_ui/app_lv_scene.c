@@ -55,16 +55,18 @@ void app_lv_scene_get_top(app_lv_scene_t **scene)
 void app_lv_scene_reset(app_lv_scene_t *scene)
 {
     app_lv_scene_t *current = NULL;
-    while (app_lv_scene_num != 0) {
+    if (app_lv_scene_num >= 1) {
         app_lv_scene_get_top(&current);
         current->event = app_lv_scene_need_hide;
         app_lv_scene_update(current);
-        app_lv_scene_num--;
+        app_lv_scene_num = 0;
     }
-    app_lv_ui_scene[app_lv_scene_num++] = *scene;
-    app_lv_scene_get_top(&current);
-    current->event = app_lv_scene_need_show;
-    app_lv_scene_update(current);
+    if (app_lv_scene_num == 0) {
+        app_lv_ui_scene[app_lv_scene_num++] = *scene;
+        app_lv_scene_get_top(&current);
+        current->event = app_lv_scene_need_show;
+        app_lv_scene_update(current);
+    }
 }
 
 /*@brief     场景覆盖显示场景

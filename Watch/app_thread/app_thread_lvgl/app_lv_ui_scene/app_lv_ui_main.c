@@ -8,6 +8,7 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_!event.h"
 #include "app_lv_ui_scene_set.h"
 
 typedef struct {
@@ -18,6 +19,8 @@ typedef struct {
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
+/*@brief 界面动画定时器回调
+ */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     if (value <= 100) {
@@ -26,6 +29,9 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     }
 }
 
+/*@brief 界面显示
+ *@brief scene 场景
+ */
 static void app_lv_ui_main_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
@@ -41,6 +47,8 @@ static void app_lv_ui_main_show(void *scene)
         lv_obj_set_style_border_side(app_lv_ui_res_local->scene, 0, 0);
         lv_obj_set_style_border_width(app_lv_ui_res_local->scene, 0, 0);
         lv_obj_set_style_border_color(app_lv_ui_res_local->scene, lv_color_black(), 0);
+        /* 场景添加默认事件 */
+        app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化居中标签 */
         app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
         lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
@@ -48,12 +56,6 @@ static void app_lv_ui_main_show(void *scene)
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
         lv_obj_center(app_lv_ui_res_local->label);
-//        /* 初始化浮动窗口 */
-//        app_lv_scene_set_t *scene_set = (void *)(((app_lv_scene_t *)scene)->scene_near);
-//        // app_lv_scene_new_float_ver(scene_set, app_lv_ui_res_local->scene, LV_OPA_50);
-//        app_lv_scene_float_show(scene_set->cross_vlist[0],//NULL,//
-//                                scene_set->cross_vlist[1],//NULL,//
-//                                NULL, NULL);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
@@ -67,15 +69,16 @@ static void app_lv_ui_main_show(void *scene)
                              app_lv_ui_res_local->scene;
 }
 
+/*@brief 界面隐藏
+ *@brief scene 场景
+ */
 static void app_lv_ui_main_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-//        /* 反初始化浮动窗口 */
-//        //app_lv_scene_set_t *scene_set = (void *)(((app_lv_scene_t *)scene)->scene_near);
-//        //app_lv_scene_del_float_ver(scene_set, app_lv_ui_res_local->scene);
-//        app_lv_scene_float_hide();
         /* 反初始化场景 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
+        /* 场景去除默认事件 */
+        app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         lv_obj_del(app_lv_ui_res_local->scene);
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
@@ -85,8 +88,8 @@ static void app_lv_ui_main_hide(void *scene)
 }
 
 app_lv_scene_set_t app_lv_scene_main_set = {
-    .cross_vlist[0] = &app_lv_scene_null,
-    .cross_vlist[1] = &app_lv_scene_null,
+    .cross_vlist[0] = &app_lv_scene_watch,
+    .cross_vlist[1] = &app_lv_scene_watch,
 };
 
 app_lv_scene_t app_lv_scene_main = {
