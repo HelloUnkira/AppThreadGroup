@@ -21,11 +21,11 @@ typedef struct {
 } app_lv_ui_res_list_t;
 
 static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    {"sys clock",   &app_lv_scene_test_clock,},
-    {"null",        &app_lv_scene_watch,},
-    {"null",        &app_lv_scene_watch,},
-    {"null",        &app_lv_scene_watch,},
-    {"null",        &app_lv_scene_watch,},
+    {"System Clock",        &app_lv_scene_test_clock,},
+    {"Null",                &app_lv_scene_watch,},
+    {"Null",                &app_lv_scene_watch,},
+    {"Null",                &app_lv_scene_watch,},
+    {"Null",                &app_lv_scene_watch,},
 };
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -77,7 +77,7 @@ static void app_lv_ui_test_sys_show(void *scene)
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_line_space(label, 5, 0);
         lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-        lv_label_set_text_static(label, "internal test");
+        lv_label_set_text_static(label, "Internal Test");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 初始化列表,中部 */
         lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);

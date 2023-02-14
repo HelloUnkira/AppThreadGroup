@@ -23,9 +23,10 @@ typedef struct {
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
-static const char app_lv_ui_res_hour[]   = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23";
-static const char app_lv_ui_res_minute[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59";
-static const char app_lv_ui_res_second[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59"; 
+static const char  app_lv_ui_res_hour[]   = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23";
+static const char  app_lv_ui_res_minute[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59";
+static const char  app_lv_ui_res_second[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59"; 
+static const char *app_lv_ui_res_week[]   = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
 
 #define app_lv_ui_res_roller_select_font    &lv_font_montserrat_22
 
@@ -34,14 +35,14 @@ static const char app_lv_ui_res_second[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     lv_label_set_text_fmt(app_lv_ui_res_local->label_dtime,
-                          "%u-%u-%u %u:%u:%u %u",
+                          "%u-%u-%u %u:%u:%u %s",
                           app_lv_ui_test_clock_presenter.get_year(),
                           app_lv_ui_test_clock_presenter.get_month(),
                           app_lv_ui_test_clock_presenter.get_day(),
                           app_lv_ui_test_clock_presenter.get_hour(),
                           app_lv_ui_test_clock_presenter.get_minute(),
                           app_lv_ui_test_clock_presenter.get_second(),
-                          app_lv_ui_test_clock_presenter.get_week());
+                          app_lv_ui_res_week[app_lv_ui_test_clock_presenter.get_week()]);
     
     lv_roller_set_selected(app_lv_ui_res_local->roller_hour,   app_lv_ui_test_clock_presenter.get_hour(),   LV_ANIM_OFF);
     lv_roller_set_selected(app_lv_ui_res_local->roller_minute, app_lv_ui_test_clock_presenter.get_minute(), LV_ANIM_OFF);
@@ -76,7 +77,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_line_space(label, 5, 0);
         lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-        lv_label_set_text_static(label, "internal test clock");
+        lv_label_set_text_static(label, "System Clock");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制日期 */
         app_lv_ui_res_local->label_dtime = lv_label_create(app_lv_ui_res_local->scene);
@@ -104,6 +105,8 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->roller_minute, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_minute, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_minute, LV_OPA_0, LV_PART_SELECTED);
+        lv_obj_set_style_border_side(app_lv_ui_res_local->roller_minute, 0, 0);
+        lv_obj_set_style_border_width(app_lv_ui_res_local->roller_minute, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_minute, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_minute, lv_palette_main(LV_PALETTE_GREEN), 0);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_minute, LV_TEXT_ALIGN_CENTER, 0);
@@ -116,6 +119,8 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->roller_hour, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_hour, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_hour, LV_OPA_0, LV_PART_SELECTED);
+        lv_obj_set_style_border_side(app_lv_ui_res_local->roller_hour, 0, 0);
+        lv_obj_set_style_border_width(app_lv_ui_res_local->roller_hour, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_hour, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_hour, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_hour, LV_TEXT_ALIGN_CENTER, 0);
@@ -128,6 +133,8 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->roller_second, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_second, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_second, LV_OPA_0, LV_PART_SELECTED);
+        lv_obj_set_style_border_side(app_lv_ui_res_local->roller_second, 0, 0);
+        lv_obj_set_style_border_width(app_lv_ui_res_local->roller_second, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_second, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_second, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_second, LV_TEXT_ALIGN_CENTER, 0);
