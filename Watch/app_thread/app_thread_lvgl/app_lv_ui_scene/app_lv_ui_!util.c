@@ -12,10 +12,12 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
+#include "app_module_system.h"
 
 #include "lvgl.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
+#include "app_lv_time_check.h"
 #include "app_lv_ui_!util.h"
 #include "app_lv_ui_scene_set.h"
 
@@ -40,21 +42,28 @@ static void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_KEY:%u\n", key);
-        /* 回到主界面 */
-        if (key == LV_KEY_ESC) {
-            app_lv_scene_reset(&app_lv_scene_main);
-        }
-        /* 返回上一层 */
-        if (key == LV_KEY_BACKSPACE) {
-            if (app_lv_scene_get_nest() > 1) {
-                app_lv_scene_t scene = {0};
-                app_lv_scene_del(&scene);
+        /* DLPS界面退出 */
+        if (app_module_system_dlps_get()) {
+            if (key == LV_KEY_ENTER) {
+                app_module_system_dlps_set(false);
             }
-        }
-        /* 主界面进入下一层 */
-        if (key == LV_KEY_ENTER) {
-            if (app_lv_scene_get_nest() == 1) {
-                app_lv_scene_add(&app_lv_scene_test_sys);
+        } else {
+            /* 回到主界面 */
+            if (key == LV_KEY_ESC) {
+                app_lv_scene_reset(&app_lv_scene_main);
+            }
+            /* 返回上一层 */
+            if (key == LV_KEY_BACKSPACE) {
+                if (app_lv_scene_get_nest() > 1) {
+                    app_lv_scene_t scene = {0};
+                    app_lv_scene_del(&scene);
+                }
+            }
+            /* 主界面进入下一层 */
+            if (key == LV_KEY_ENTER) {
+                if (app_lv_scene_get_nest() == 1) {
+                    app_lv_scene_add(&app_lv_scene_test_sys);
+                }
             }
         }
         /* 添加其他事件 */
@@ -120,6 +129,24 @@ static void app_lv_ui_event_default(lv_event_t *e)
         APP_SYS_LOG_INFO("LV_EVENT_HIT_TEST\n");
         break;
     }
+    default:
+        break;
+    }
+    /* 产生我们认为不能忽略的事件动作时,重置界面时间状态检查 */
+    switch (code)
+    {
+    case LV_EVENT_FOCUSED:
+    case LV_EVENT_DEFOCUSED:
+    case LV_EVENT_GESTURE:
+    case LV_EVENT_KEY:
+    case LV_EVENT_PRESSED:
+    case LV_EVENT_CLICKED:
+    case LV_EVENT_RELEASED:
+    case LV_EVENT_SCROLL_BEGIN:
+    case LV_EVENT_SCROLL_END:
+    case LV_EVENT_SCROLL:
+        app_lv_scene_time_check_reset();
+        break;
     default:
         break;
     }

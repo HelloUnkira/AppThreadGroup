@@ -44,9 +44,15 @@ static uint32_t app_lv_keyboard_lvgl_key(void)
     }
 }
 
-/*@brief lvgl SDL键盘初始化
+/*@brief lvgl 键盘初始化
  */
 void app_lv_keyboard_ready(void)
+{
+}
+
+/*@brief lvgl 键盘初始化
+ */
+void app_lv_keyboard_over(void)
 {
 }
 

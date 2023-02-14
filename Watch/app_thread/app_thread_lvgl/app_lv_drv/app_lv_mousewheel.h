@@ -1,9 +1,13 @@
 #ifndef APP_LV_MOUSEWHEEL_H
 #define APP_LV_MOUSEWHEEL_H
 
-/*@brief lvgl SDL鼠标初始化
+/*@brief lvgl 鼠标滑轮初始化
  */
 void app_lv_mousewheel_ready(void);
+
+/*@brief lvgl 鼠标滑轮反初始化
+ */
+void app_lv_mousewheel_over(void);
 
 /*@brief lvgl输入设备回调接口
  */

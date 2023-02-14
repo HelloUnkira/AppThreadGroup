@@ -75,9 +75,18 @@ static void app_lv_ui_watch_show(void *scene)
     }
     app_lv_scene_watch.self = app_lv_ui_res_local == NULL ? NULL :
                               app_lv_ui_res_local->scene;
+    /* DLPS界面 */
+    if (app_lv_ui_watch_status == app_lv_ui_watch_dlps) {
+        if (app_lv_ui_res_local != NULL) {
+            /* 场景添加默认事件 */
+            app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
+        }
+    }
     /* 空界面 */
     if (app_lv_ui_watch_status == app_lv_ui_watch_null) {
         if (app_lv_ui_res_local != NULL) {
+            /* 场景添加默认事件 */
+            app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
             /* 初始化居中标签 */
             app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
             lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
@@ -85,8 +94,6 @@ static void app_lv_ui_watch_show(void *scene)
             lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_text_opa(app_lv_ui_res_local->label, LV_OPA_COVER, 0);
             lv_obj_center(app_lv_ui_res_local->label);
-            /* 场景添加默认事件 */
-            app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         }
     }
     /* 启动界面 */
@@ -157,12 +164,13 @@ static void app_lv_ui_watch_show(void *scene)
 static void app_lv_ui_watch_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-        if (app_lv_ui_watch_status == app_lv_ui_watch_null)
-            /* 场景去除默认事件 */
+        /* 场景去除默认事件 */
+        if (app_lv_ui_watch_status == app_lv_ui_watch_dlps ||
+            app_lv_ui_watch_status == app_lv_ui_watch_null)
             app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
+        /* 反初始化显示动画 */
         if (app_lv_ui_watch_status == app_lv_ui_watch_start ||
             app_lv_ui_watch_status == app_lv_ui_watch_stop)
-            /* 反初始化显示动画 */
             lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */
         app_lv_ui_watch_status = app_lv_ui_watch_null;

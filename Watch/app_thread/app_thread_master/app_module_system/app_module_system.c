@@ -18,15 +18,13 @@
 #include "app_module_countdown.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
+#include "app_lv_event.h"
 
 static    bool app_module_system_dump = false;
 static    bool app_module_system_dlps_exec = false;
 static    bool app_module_system_dlps_status = false;
 static uint8_t app_module_system_delay = 0;
 static uint8_t app_module_system_status = 0;
-static uint8_t app_module_system_tid = 0;
-static uint8_t app_module_system_mid = 0;
-static uint8_t app_module_system_eid = 0;
 static app_mutex_t app_module_system_mutex = {0};
 
 /*@brief 设置系统转储成功标记
@@ -36,6 +34,17 @@ void app_module_system_dump_set(bool over)
     app_mutex_take(&app_module_system_mutex);
     app_module_system_dump = over;
     app_mutex_give(&app_module_system_mutex);
+}
+
+/*@brief  系统进出DLPS
+ *@retval status true:进入dlps;false:退出dlps
+ */
+bool app_module_system_dlps_get(void)
+{
+    app_mutex_take(&app_module_system_mutex);
+    bool status = app_module_system_dlps_status;
+    app_mutex_give(&app_module_system_mutex);
+    return status;
 }
 
 /*@brief     系统进出DLPS
@@ -107,6 +116,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     bool        dump = app_module_system_dump;
     bool   dlps_exec = app_module_system_dlps_exec;
     bool dlps_status = app_module_system_dlps_status;
+    app_module_system_dlps_exec = false;
     uint8_t  delay = app_module_system_delay;
     uint8_t status = app_module_system_status;
     bool  is_valid = app_module_system_status == app_module_system_valid;
@@ -242,6 +252,8 @@ void app_module_system_1msec_update(uint32_t count)
         app_lv_tick_exec_update();
     if (count % LV_SCHED_SDL_EVNET == 0)
         app_lv_drv_update();
+    if (count % 1000 == 0)
+        app_lv_scene_1s_update();
     /* timer msec update */
     app_module_timer_1ms_update();
     /* stopwatch msec update */

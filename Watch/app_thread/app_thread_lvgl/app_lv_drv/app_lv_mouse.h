@@ -1,9 +1,13 @@
 #ifndef APP_LV_MOUSE_H
 #define APP_LV_MOUSE_H
 
-/*@brief lvgl SDL鼠标初始化
+/*@brief lvgl 鼠标初始化
  */
 void app_lv_mouse_ready(void);
+
+/*@brief lvgl 鼠标初始化
+ */
+void app_lv_mouse_over(void);
 
 /*@brief lvgl输入设备回调接口
  */

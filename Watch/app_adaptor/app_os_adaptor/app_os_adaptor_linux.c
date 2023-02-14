@@ -50,8 +50,7 @@ void app_sem_process(app_sem_t *sem)
  */
 void app_sem_take(app_sem_t *sem)
 {
-    if (app_os_not_in_irq())
-        sem_post(&sem->sem);
+    sem_post(&sem->sem);
 }
 
 /*@brief        发布一个信号量
@@ -59,8 +58,7 @@ void app_sem_take(app_sem_t *sem)
  */
 void app_sem_give(app_sem_t *sem)
 {
-    if (app_os_not_in_irq())
-        sem_wait(&sem->sem);
+    sem_wait(&sem->sem);
 }
 
 /*@brief        创建一个互斥锁并准备好使用
@@ -76,7 +74,8 @@ void app_mutex_process(app_mutex_t *mutex)
  */
 void app_mutex_take(app_mutex_t *mutex)
 {
-    pthread_mutex_lock(&mutex->mutex);
+    if (app_os_not_in_irq())
+        pthread_mutex_lock(&mutex->mutex);
 }
 
 /*@brief        释放一个互斥锁(中断环境不可调用)
@@ -84,7 +83,8 @@ void app_mutex_take(app_mutex_t *mutex)
  */
 void app_mutex_give(app_mutex_t *mutex)
 {
-    pthread_mutex_unlock(&mutex->mutex);
+    if (app_os_not_in_irq())
+        pthread_mutex_unlock(&mutex->mutex);
 }
 
 /*@brief        内存分配

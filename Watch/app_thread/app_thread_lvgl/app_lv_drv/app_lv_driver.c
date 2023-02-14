@@ -131,9 +131,12 @@ bool app_lv_driver_shutdown(void)
  */
 void app_lv_driver_dlps_enter(void)
 {
-    APP_SYS_LOG_WARN("app_lv_driver_dlps_enter");
+    APP_SYS_LOG_WARN("app_lv_driver_dlps_enter\n");
     app_lv_driver_status = false;
     app_lv_display_over();
+    app_lv_keyboard_over();
+    app_lv_mousewheel_over();
+    app_lv_mouse_over();
 }
 
 /*@brief lvgl驱动设备退出DLPS
@@ -141,7 +144,10 @@ void app_lv_driver_dlps_enter(void)
  */
 void app_lv_driver_dlps_exit(void)
 {
+    app_lv_mouse_ready();
+    app_lv_mousewheel_ready();
+    app_lv_keyboard_ready();
     app_lv_display_ready();
     app_lv_driver_status = true;
-    APP_SYS_LOG_WARN("app_lv_driver_dlps_exit");
+    APP_SYS_LOG_WARN("app_lv_driver_dlps_exit\n");
 }

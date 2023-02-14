@@ -19,6 +19,7 @@ typedef enum {  /* GUI事件调度模组事件 */
     app_thread_lvgl_sched_scene,        /* lvgl场景处理事件 */
     app_thread_lvgl_sched_dlps_enter,   /* lvgl进入dlps事件 */
     app_thread_lvgl_sched_dlps_exit,    /* lvgl退出dlps事件 */
+    app_thread_lvgl_sched_1s,           /* lvgl过期1秒事件       */
 } app_thread_lvgl_sched_event;
 
 typedef enum {  /* GUI场景事件 */

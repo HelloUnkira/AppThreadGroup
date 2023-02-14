@@ -5,6 +5,7 @@ typedef enum {
     app_lv_ui_watch_null = 0,
     app_lv_ui_watch_stop,
     app_lv_ui_watch_start,
+    app_lv_ui_watch_dlps,
 } app_lv_ui_watch_status_t;
 
 /*@brief     设置显示界面

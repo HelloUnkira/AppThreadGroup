@@ -20,6 +20,7 @@
 #include "app_lv_driver.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
+#include "app_lv_time_check.h"
 #include "app_lv_ui_scene_set.h"
 #include "app_lv_ui_watch.h"
 
@@ -37,7 +38,7 @@ void app_thread_lvgl_ready(void)
  */
 void app_thread_lvgl_routine(void)
 {
-    app_sem_t  *sem  = NULL;
+    app_sem_t *sem = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
     app_thread_get_sync_by_id(app_thread_id_lvgl, &sem);
@@ -75,9 +76,7 @@ void app_thread_lvgl_routine(void)
                 /* lvgl驱动检查事件 */
                 if (package.event == app_thread_lvgl_sched_drv) {
                     static bool app_lv_drv_shutdown = false;
-                    /* 如果lvgl驱动未就绪,中止事件调度 */
-                    if (app_lv_driver_status_get())
-                        app_lv_driver_handler();
+                    app_lv_driver_handler();
                     if (app_lv_drv_shutdown)
                         break;
                     if (app_lv_driver_shutdown()) {
@@ -94,13 +93,19 @@ void app_thread_lvgl_routine(void)
                 }
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {
-                    app_lv_driver_dlps_enter();
                     app_lv_scene_reset(&app_lv_scene_main);
+                    app_lv_ui_watch_status_update(app_lv_ui_watch_dlps);
+                    app_lv_scene_add(&app_lv_scene_watch);
+                    app_lv_driver_dlps_enter();
                 }
                 /* 与lvgl绑定的驱动设备退出DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_exit) {
                     app_lv_driver_dlps_exit();
                     app_lv_scene_reset(&app_lv_scene_main);
+                }
+                /* lvgl过期1秒事件       */
+                if (package.event == app_thread_lvgl_sched_1s) {
+                    app_lv_scene_time_check_update();
                 }
                 break;
             }

@@ -12,6 +12,11 @@ typedef enum {
  */
 void app_module_system_dump_set(bool over);
 
+/*@brief  系统进出DLPS
+ *@retval status true:进入dlps;false:退出dlps
+ */
+bool app_module_system_dlps_get(void);
+
 /*@brief     系统进出DLPS
  *@param[in] status true:进入dlps;false:退出dlps
  */

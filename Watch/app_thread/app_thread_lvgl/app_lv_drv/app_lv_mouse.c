@@ -6,21 +6,33 @@
 #include "lv_drv_conf.h"
 #include <SDL2/SDL.h>
 
+static bool app_lv_mouse_status = false;
 static bool app_lv_mouse_left_status  = false;
 static bool app_lv_mouse_right_status = false;
 static int16_t app_lv_mouse_pos_x = 0;
 static int16_t app_lv_mouse_pos_y = 0;
 
-/*@brief lvgl SDL鼠标初始化
+/*@brief lvgl 鼠标初始化
  */
 void app_lv_mouse_ready(void)
 {
+    app_lv_mouse_status = true;
+}
+
+/*@brief lvgl 鼠标反初始化
+ */
+void app_lv_mouse_over(void)
+{
+    app_lv_mouse_status = false;
 }
 
 /*@brief lvgl输入设备回调接口
  */
 void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 {
+    if (!app_lv_mouse_status)
+        return;
+
     (void)indev_drv;
     /* 传递给lvgl的touch事件 */
     data->point.x = app_lv_mouse_pos_x;
@@ -35,6 +47,9 @@ void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
  */
 void app_lv_mouse_handler(SDL_Event *event)
 {
+    if (!app_lv_mouse_status)
+        return;
+    
     switch (event->type) {
     /* 鼠标抬起事件 */
     case SDL_MOUSEBUTTONUP:

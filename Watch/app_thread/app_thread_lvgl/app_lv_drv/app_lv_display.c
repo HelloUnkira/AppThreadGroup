@@ -22,7 +22,6 @@ typedef struct {
 } app_lv_display_t;
 
 static bool app_lv_display_quit = false;
-static bool app_lv_display_status = false;
 static app_lv_display_t app_lv_display_screen = {0};
 
 /*@brief 创建屏幕
@@ -127,21 +126,25 @@ static int app_lv_display_sdl_quit_filter(void * userdata, SDL_Event * event)
  */
 void app_lv_display_ready(void)
 {
-    if (app_lv_display_status)
-        return;
-    /* 初始化SDL */
-    SDL_Init(SDL_INIT_VIDEO);
-    SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
-    app_lv_display_create(&app_lv_display_screen);
-    app_lv_display_status = true;
+    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
+    static bool sdl_not_ready_yet = true;
+    if (sdl_not_ready_yet) {
+        sdl_not_ready_yet = false;
+        /* 初始化SDL */
+        SDL_Init(SDL_INIT_VIDEO);
+        SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
+        app_lv_display_create(&app_lv_display_screen);
+    }
 }
 
 /*@brief lvgl 屏幕反初始化
  */
 void app_lv_display_over(void)
 {
-    app_lv_display_status = false;
-    app_lv_display_destroy(&app_lv_display_screen);
+    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
+    if (0) {
+        app_lv_display_destroy(&app_lv_display_screen);
+    }
 }
 
 /*@brief lvgl 屏幕刷新回调接口
@@ -151,12 +154,6 @@ void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_c
     lv_coord_t hres = disp_drv->hor_res;
     lv_coord_t vres = disp_drv->ver_res;
     
-    /* 如果屏幕休眠则不输出 */
-    if (!app_lv_display_status) {
-        lv_disp_flush_ready(disp_drv);
-        return;
-    }
-
     /* 如果该区域在屏幕外则返回 */
     if (area->x2 < 0 || area->y2 < 0 || area->x1 > hres - 1 || area->y1 > vres - 1) {
         lv_disp_flush_ready(disp_drv);
