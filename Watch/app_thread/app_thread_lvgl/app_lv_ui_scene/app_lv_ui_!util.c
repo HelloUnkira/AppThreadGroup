@@ -143,3 +143,64 @@ void app_lv_ui_event_default_clr(lv_obj_t *scene)
     lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
 }
 
+/*@brief 滚轮事件自定义回调
+ */
+void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
+{
+    lv_obj_t *obj = lv_event_get_target(e);
+    /* 静态蒙层索引号 */
+    static lv_coord_t roller_mask_id_t = -1;   /* 顶部蒙层索引号 */
+    static lv_coord_t roller_mask_id_b = -1;   /* 底部蒙层索引号 */
+    /* 处理交互事件 */
+    switch (lv_event_get_code(e)) {
+    /* 覆盖检查事件 */
+    case LV_EVENT_COVER_CHECK: {
+        lv_event_set_cover_res(e, LV_COVER_RES_MASKED);
+        break;
+    }
+    /* 控件绘制开始事件 */
+    case LV_EVENT_DRAW_MAIN_BEGIN: {
+        /* 提取绘制域信息 */
+        const lv_font_t * font = lv_obj_get_style_text_font(obj, LV_PART_MAIN);
+        lv_coord_t line_space  = lv_obj_get_style_text_line_space(obj, LV_PART_MAIN);
+        lv_coord_t line_height = lv_font_get_line_height(font);
+        /* 定位滚轮坐标 */
+        lv_area_t roller_coords;
+        lv_obj_get_coords(obj, &roller_coords);
+        /* 重定位上部蒙层绘制域 */
+        lv_area_t rect_area;
+        rect_area.x1 = roller_coords.x1;
+        rect_area.x2 = roller_coords.x2;
+        rect_area.y1 = roller_coords.y1;
+        rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - line_height - line_space) / 2;
+        /* 创建上部渐变蒙层 */
+        lv_draw_mask_fade_param_t * fade_mask_t = app_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
+        lv_draw_mask_fade_init(fade_mask_t, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
+        roller_mask_id_t = lv_draw_mask_add(fade_mask_t, NULL);
+        /* 重定位下部蒙层绘制域 */
+        rect_area.x1 = roller_coords.x1;
+        rect_area.x2 = roller_coords.x2;
+        rect_area.y1 = rect_area.y2 + line_height + line_space - 1;
+        rect_area.y2 = roller_coords.y2;
+        /* 创建下部渐变蒙层 */
+        lv_draw_mask_fade_param_t * fade_mask_b = app_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
+        lv_draw_mask_fade_init(fade_mask_b, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
+        roller_mask_id_b = lv_draw_mask_add(fade_mask_b, NULL);
+        break;
+    }
+    /* 控件绘制结束推送事件 */
+    case LV_EVENT_DRAW_POST_END: {
+        lv_draw_mask_fade_param_t * fade_mask_t = lv_draw_mask_remove_id(roller_mask_id_t);
+        lv_draw_mask_fade_param_t * fade_mask_b = lv_draw_mask_remove_id(roller_mask_id_b);
+//        lv_draw_mask_free_param(fade_mask_t);
+//        lv_draw_mask_free_param(fade_mask_b);
+        app_mem_free(fade_mask_t);
+        app_mem_free(fade_mask_b);
+        roller_mask_id_t = -1;
+        roller_mask_id_b = -1;
+    }
+    default:
+        break;
+    }
+}
+
