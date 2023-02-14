@@ -80,8 +80,7 @@ void app_lv_scene_time_check_update(void)
     /* 空闲等待结束回到主界面 */
     if (app_lv_scene_idle_time == 0) {
         app_lv_scene_idle_time  = app_lv_scene_idle_time_bak;
-        if (app_lv_scene_get_nest() > 1)
-            app_lv_scene_reset(&app_lv_scene_main);
+        app_lv_scene_reset(&app_lv_scene_main);
     }
     /* 主界面超时等待结束发送休眠请求 */
     if (app_lv_scene_over_time == 0) {

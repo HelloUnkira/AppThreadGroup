@@ -62,7 +62,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
             /* 主界面进入下一层 */
             if (key == LV_KEY_ENTER) {
                 if (app_lv_scene_get_nest() == 1) {
-                    app_lv_scene_add(&app_lv_scene_test_sys);
+                    app_lv_scene_add(&app_lv_scene_list);
                 }
             }
         }
@@ -164,7 +164,7 @@ void app_lv_ui_event_default_set(lv_obj_t *scene)
 /*@brief    场景默认事件响应回调清除
  *param[in] scene 场景
  */
-void app_lv_ui_event_default_clr(lv_obj_t *scene)
+void app_lv_ui_event_default_clr(lv_obj_t *scene)
 {
     lv_group_remove_obj(scene);
     lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
@@ -230,4 +230,3 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         break;
     }
 }
-

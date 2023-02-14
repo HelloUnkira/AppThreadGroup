@@ -95,4 +95,3 @@ app_lv_ui_test_clock_presenter_t app_lv_ui_test_clock_presenter = {
     .get_second     = app_lv_ui_get_second,
     .get_week       = app_lv_ui_get_week,
 };
-

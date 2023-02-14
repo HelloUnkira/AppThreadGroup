@@ -110,7 +110,7 @@ static void app_lv_ui_watch_show(void *scene)
             app_lv_ui_res_local->bar = lv_bar_create(app_lv_ui_res_local->scene);
             lv_obj_set_size(app_lv_ui_res_local->bar, 200, 20);
             lv_bar_set_range(app_lv_ui_res_local->bar, 0, 100);
-            lv_obj_align(app_lv_ui_res_local->bar, LV_ALIGN_BOTTOM_MID, 0, -50);
+            lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
             /* >滚动条主样式 */
             lv_obj_set_style_pad_all(app_lv_ui_res_local->bar, 4, 0);
             lv_obj_set_style_opa(app_lv_ui_res_local->bar, LV_OPA_COVER, 0);

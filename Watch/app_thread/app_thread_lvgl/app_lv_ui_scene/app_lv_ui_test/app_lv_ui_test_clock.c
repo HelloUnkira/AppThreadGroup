@@ -109,6 +109,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_style_border_width(app_lv_ui_res_local->roller_minute, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_minute, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_minute, lv_palette_main(LV_PALETTE_GREEN), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_minute, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_minute, LV_TEXT_ALIGN_CENTER, 0);
         lv_roller_set_options(app_lv_ui_res_local->roller_minute, app_lv_ui_res_minute, LV_ROLLER_MODE_INFINITE);
         lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_minute, 3);
@@ -123,6 +124,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_style_border_width(app_lv_ui_res_local->roller_hour, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_hour, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_hour, lv_palette_main(LV_PALETTE_BLUE), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_hour, lv_palette_main(LV_PALETTE_BLUE), LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_hour, LV_TEXT_ALIGN_CENTER, 0);
         lv_roller_set_options(app_lv_ui_res_local->roller_hour, app_lv_ui_res_hour, LV_ROLLER_MODE_INFINITE);
         lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_hour, 3);
@@ -137,6 +139,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_style_border_width(app_lv_ui_res_local->roller_second, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->roller_second, app_lv_ui_res_roller_select_font, LV_PART_SELECTED);
         lv_obj_set_style_text_color(app_lv_ui_res_local->roller_second, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_second, lv_palette_main(LV_PALETTE_RED), LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->roller_second, LV_TEXT_ALIGN_CENTER, 0);
         lv_roller_set_options(app_lv_ui_res_local->roller_second, app_lv_ui_res_second, LV_ROLLER_MODE_INFINITE);
         lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_second, 3);
@@ -151,8 +154,8 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
-    app_lv_scene_test_sys.self = app_lv_ui_res_local == NULL ? NULL :
-                                 app_lv_ui_res_local->scene;
+    app_lv_scene_test_clock.self = app_lv_ui_res_local == NULL ? NULL :
+                                   app_lv_ui_res_local->scene;
 }
 
 static void app_lv_ui_test_clock_hide(void *scene)
@@ -170,8 +173,8 @@ static void app_lv_ui_test_clock_hide(void *scene)
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_scene_test_sys.self = app_lv_ui_res_local == NULL ? NULL :
-                                 app_lv_ui_res_local->scene;
+    app_lv_scene_test_clock.self = app_lv_ui_res_local == NULL ? NULL :
+                                   app_lv_ui_res_local->scene;
 }
 
 app_lv_scene_t app_lv_scene_test_clock = {
