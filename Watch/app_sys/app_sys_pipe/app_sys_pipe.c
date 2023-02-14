@@ -18,7 +18,7 @@
 /*@brief        初始化管道
  *@param[in]    pipe 管道实例
  */
-void app_sys_pipe_ready(app_pipe_t *pipe)
+void app_sys_pipe_ready(app_sys_pipe_t *pipe)
 {
     pipe->head = NULL;
     pipe->tail = NULL;
@@ -30,7 +30,7 @@ void app_sys_pipe_ready(app_pipe_t *pipe)
  *@param[in]    pipe 管道实例
  *@retval       管道资源包数量
  */
-uint32_t app_sys_pipe_package_num(app_pipe_t *pipe)
+uint32_t app_sys_pipe_package_num(app_sys_pipe_t *pipe)
 {
     uint32_t number = 0;
     /* 入界 */
@@ -49,11 +49,11 @@ uint32_t app_sys_pipe_package_num(app_pipe_t *pipe)
  *@param[in]    pipe     管道实例
  *@param[in]    package  事件资源包(栈资源,非堆资源或静态资源)
  */
-void app_sys_pipe_give(app_pipe_t *pipe, app_package_t *package)
+void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
 {
-    app_package_t *package_new = NULL;
+    app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
-    package_new = app_mem_alloc(sizeof(app_package_t));
+    package_new = app_mem_alloc(sizeof(app_sys_pipe_pkg_t));
     package_new->near     = NULL;
     package_new->send_tid = package->send_tid;
     package_new->recv_tid = package->recv_tid;
@@ -83,9 +83,9 @@ void app_sys_pipe_give(app_pipe_t *pipe, app_package_t *package)
  *@param[in]    pipe     管道实例
  *@param[out]   package  事件资源包(栈资源,非堆资源或静态资源)
  */
-void app_sys_pipe_take(app_pipe_t *pipe, app_package_t *package)
+void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
 {
-    app_package_t *package_new = NULL;
+    app_sys_pipe_pkg_t *package_new = NULL;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
     app_critical_enter();

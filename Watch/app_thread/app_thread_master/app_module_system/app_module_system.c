@@ -8,7 +8,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
 #include "app_thread_lvgl.h"
@@ -62,7 +61,7 @@ void app_module_system_dlps_set(bool status)
         package.event = app_thread_lvgl_sched_dlps_enter;
     else
         package.event = app_thread_lvgl_sched_dlps_exit;
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
     APP_SYS_LOG_WARN("\napp_module_system_dlps_set: ui scene\n");
 }
 
@@ -137,7 +136,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .size     = 0,
                 .data     = NULL,
             };
-            app_thread_package_notify(&package);
+            app_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene start\n");
         }
         /* 向线程发送加载事件 */
@@ -151,7 +150,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .size     = 0,
                 .data     = NULL,
             };
-            app_thread_package_notify(&package);
+            app_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data load\n");
         }
     }
@@ -171,7 +170,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .size     = 0,
                 .data     = NULL,
             };
-            app_thread_package_notify(&package);
+            app_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene stop\n");
         }
         /* 向线程发送转储事件 */
@@ -185,7 +184,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .size     = 0,
                 .data     = NULL,
             };
-            app_thread_package_notify(&package);
+            app_package_notify(&package);
             APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data dump\n");
         }
     }

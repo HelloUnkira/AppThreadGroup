@@ -8,7 +8,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_module_clock.h"
@@ -203,7 +202,7 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
             .size     = sizeof(app_module_alarm_t),
             .data     = alarm,
         };
-        app_thread_package_notify(&package);
+        app_package_notify(&package);
     }
 }
 

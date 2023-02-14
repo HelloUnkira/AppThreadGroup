@@ -8,7 +8,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_module_clock.h"
@@ -269,7 +268,7 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
         .size     = 0,
         .data     = NULL,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief 系统时钟更新事件
@@ -359,7 +358,7 @@ void app_module_clock_1s_update(uint64_t utc_new)
         .size     = sizeof(uint64_t),
         .data     = &utc,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief     一类时钟空回调

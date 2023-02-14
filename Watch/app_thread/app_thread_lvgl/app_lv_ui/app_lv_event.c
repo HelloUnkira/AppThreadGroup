@@ -3,12 +3,7 @@
  *    lvgl事件
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
-
 #include "app_std_lib.h"
-#include "app_os_adaptor.h"
-#include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
 
@@ -25,7 +20,7 @@ void app_lv_tick_inc_update(void)
         .size     = 0,
         .data     = NULL,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief lvgl tick执行
@@ -41,7 +36,7 @@ void app_lv_tick_exec_update(void)
         .size     = 0,
         .data     = NULL,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief lvgl drv更新
@@ -57,7 +52,7 @@ void app_lv_drv_update(void)
         .size     = 0,
         .data     = NULL,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief lvgl 场景更新
@@ -73,6 +68,6 @@ void app_lv_scene_update(void *scene)
         .size     = 0,
         .data     = scene,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 

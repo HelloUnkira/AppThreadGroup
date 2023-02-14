@@ -35,8 +35,8 @@ void app_thread_data_manage_ready(void)
 void app_thread_data_manage_routine(void)
 {
     app_sem_t  *sem  = NULL;
-    app_pipe_t *pipe = NULL;
-    app_package_t package = {0};
+    app_sys_pipe_t *pipe = NULL;
+    app_sys_pipe_pkg_t package = {0};
     app_thread_get_sync_by_id(app_thread_id_data_manage, &sem);
     app_thread_get_pipe_by_id(app_thread_id_data_manage, &pipe);
     /* 主流程 */

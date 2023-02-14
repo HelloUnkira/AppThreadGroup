@@ -11,7 +11,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_module_countdown.h"
@@ -91,7 +90,7 @@ void app_module_countdown_xmsec_update(void)
         .size     = 0,
         .data     = NULL,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief 更新倒计时
@@ -123,7 +122,7 @@ void app_module_countdown_msec_update(void)
                 .size     = 0,
                 .data     = NULL,
             };
-            app_thread_package_notify(&package);
+            app_package_notify(&package);
             /* 本地归零 */
             app_module_countdown_t countdown_0 = {0};
             countdown = countdown_0;

@@ -8,7 +8,6 @@
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_sys_pipe.h"
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
@@ -36,7 +35,7 @@ void app_module_transfer_adaptor_rx(uint8_t *data, uint32_t size)
         .size     = tsf_pkg_size,
         .data     = tsf_pkg,
     };
-    app_thread_package_notify(&package);
+    app_package_notify(&package);
 }
 
 /*@brief     协议适配层,发送协议数据

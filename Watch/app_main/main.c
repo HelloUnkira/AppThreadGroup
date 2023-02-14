@@ -117,7 +117,7 @@ static void app_main_update_sys_time(void)
 int main(int argc, char *argv[])
 {
     /* 启动APP调度策略 */
-    app_thread_set_work_now();
+    app_thread_group_run();
     /* 主线程滚动阻塞 */
     #if 0
     #elif 1
