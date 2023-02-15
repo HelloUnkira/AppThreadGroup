@@ -32,33 +32,35 @@ typedef struct {
 /* 场景最大嵌套数量 */
 #define APP_LV_SCENE_NEST        10
 
-/*@brief 场景调度
- *       内部使用: 被lvgl线程使用
+/*@brief     场景调度
+ *           内部使用: 被lvgl线程使用,或者扩展使用
+ *@param[in] scene 场景
  */
 void app_lv_scene_sched(app_lv_scene_t *scene);
 
 /*@brief      获取最上层显示场景
- *@param[out] 场景(不可为空)
+ *@param[out] scene 场景(不可为空)
  */
 void app_lv_scene_get_top(app_lv_scene_t **scene);
 
 /*@brief     场景复位
- *@param[in] 场景
+ *@param[in] scene 场景
+ *@param[in] reserve 保留当前场景
  */
-void app_lv_scene_reset(app_lv_scene_t *scene);
+void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve);
 
 /*@brief     场景覆盖显示场景
- *@param[in] 场景(不可为空)
+ *@param[in] scene 场景(不可为空)
  */
 void app_lv_scene_cover(app_lv_scene_t *scene);
 
 /*@brief     场景添加新显示场景
- *@param[in] 场景(不可为空)
+ *@param[in] scene 场景(不可为空)
  */
 void app_lv_scene_add(app_lv_scene_t *scene);
 
 /*@brief      场景移除当前显示场景
- *@param[out] 场景(不可为空)
+ *@param[out] scene 场景(不可为空)
  */
 void app_lv_scene_del(app_lv_scene_t *scene);
 

@@ -27,18 +27,6 @@ static void app_lv_ui_event_default(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
-    case LV_EVENT_GESTURE: {
-        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x\n", dir);
-        /* 左右滑动回到上一层 */
-        if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
-            if (app_lv_scene_get_nest() > 1) {
-                app_lv_scene_t scene = {0};
-                app_lv_scene_del(&scene);
-            }
-        }
-        break;
-    }
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_KEY:%u\n", key);
@@ -50,7 +38,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
         } else {
             /* 回到主界面 */
             if (key == LV_KEY_ESC) {
-                app_lv_scene_reset(&app_lv_scene_main);
+                app_lv_scene_reset(&app_lv_scene_main, false);
             }
             /* 返回上一层 */
             if (key == LV_KEY_BACKSPACE) {
@@ -67,6 +55,18 @@ static void app_lv_ui_event_default(lv_event_t *e)
             }
         }
         /* 添加其他事件 */
+        break;
+    }
+    case LV_EVENT_GESTURE: {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
+        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x\n", dir);
+        /* 左右滑动回到上一层 */
+        if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
+            if (app_lv_scene_get_nest() > 1) {
+                app_lv_scene_t scene = {0};
+                app_lv_scene_del(&scene);
+            }
+        }
         break;
     }
     case LV_EVENT_PRESSED: {
@@ -135,10 +135,8 @@ static void app_lv_ui_event_default(lv_event_t *e)
     /* 产生我们认为不能忽略的事件动作时,重置界面时间状态检查 */
     switch (code)
     {
-    case LV_EVENT_FOCUSED:
-    case LV_EVENT_DEFOCUSED:
-    case LV_EVENT_GESTURE:
     case LV_EVENT_KEY:
+    case LV_EVENT_GESTURE:
     case LV_EVENT_PRESSED:
     case LV_EVENT_CLICKED:
     case LV_EVENT_RELEASED:

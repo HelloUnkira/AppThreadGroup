@@ -36,17 +36,23 @@ void app_lv_ui_watch_status_update(app_lv_ui_watch_status_t status)
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     if (value <= 100) {
-        if (app_lv_ui_watch_status == app_lv_ui_watch_start) {
-            uint8_t bar_value = (value);
-            uint8_t label_opa = (uint32_t)((float)value * 2.55);
-            lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
-            lv_bar_set_value(app_lv_ui_res_local->bar, bar_value, LV_ANIM_OFF);
-        }
-        if (app_lv_ui_watch_status == app_lv_ui_watch_stop) {
-            uint8_t bar_value = (100 - value);
-            uint8_t label_opa = (uint32_t)((float)(100 - value) * 2.55);
-            lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
-            lv_bar_set_value(app_lv_ui_res_local->bar, bar_value, LV_ANIM_OFF);
+        if (app_lv_ui_watch_status == app_lv_ui_watch_start ||
+            app_lv_ui_watch_status == app_lv_ui_watch_stop) {
+            uint8_t val = 0;
+            uint8_t opa = 0;
+            if (app_lv_ui_watch_status == app_lv_ui_watch_start) {
+                val = (value);
+                opa = (uint32_t)((float)value * 2.55);
+            }
+            if (app_lv_ui_watch_status == app_lv_ui_watch_stop) {
+                val = (100 - value);
+                opa = (uint32_t)((float)(100 - value) * 2.55);
+            }
+            lv_obj_set_style_opa(app_lv_ui_res_local->spinner, opa, 0);
+            lv_obj_set_style_text_opa(app_lv_ui_res_local->label, opa, 0);
+            lv_obj_set_style_opa(app_lv_ui_res_local->bar, opa, 0);
+            lv_obj_set_style_opa(app_lv_ui_res_local->bar, opa, LV_PART_INDICATOR);
+            lv_bar_set_value(app_lv_ui_res_local->bar, val, LV_ANIM_OFF);
         }
     }
     if (value == 100) {
@@ -104,46 +110,36 @@ static void app_lv_ui_watch_show(void *scene)
         app_lv_ui_watch_status == app_lv_ui_watch_stop) {
         if (app_lv_ui_res_local != NULL) {
             /* 初始化特效圆环 */
-            app_lv_ui_res_local->spinner = lv_spinner_create(app_lv_ui_res_local->scene, 300, 45);
+            app_lv_ui_res_local->spinner = lv_spinner_create(app_lv_ui_res_local->scene, 300, 90);
             lv_obj_set_size(app_lv_ui_res_local->spinner, 30, 30);
             lv_obj_remove_style(app_lv_ui_res_local->spinner, NULL, LV_PART_KNOB);
             lv_obj_set_style_arc_width(app_lv_ui_res_local->spinner, 5, 0);
             lv_obj_set_style_arc_width(app_lv_ui_res_local->spinner, 5, LV_PART_INDICATOR);
             lv_obj_set_style_arc_color(app_lv_ui_res_local->spinner, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_arc_color(app_lv_ui_res_local->spinner, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
-            lv_arc_set_mode(app_lv_ui_res_local->spinner, LV_ARC_MODE_NORMAL);
             lv_arc_set_bg_angles(app_lv_ui_res_local->spinner, 0, 360);
+            lv_arc_set_mode(app_lv_ui_res_local->spinner, LV_ARC_MODE_NORMAL);
             lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, 20, 20);
             /* 初始化居中标签 */
             app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
             lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-            if (app_lv_ui_watch_status == app_lv_ui_watch_start)
-                lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Enter");
-            if (app_lv_ui_watch_status == app_lv_ui_watch_stop)
-                lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Exit");
+            lv_label_set_text_static(app_lv_ui_res_local->label, "App Thread Group LVGL Watch");
             lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
-            lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
             lv_obj_center(app_lv_ui_res_local->label);
             /* 初始化加载滚动条 */
             app_lv_ui_res_local->bar = lv_bar_create(app_lv_ui_res_local->scene);
             lv_obj_set_size(app_lv_ui_res_local->bar, 200, 20);
             lv_bar_set_range(app_lv_ui_res_local->bar, 0, 100);
-            lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-            /* >滚动条主样式 */
             lv_obj_set_style_pad_all(app_lv_ui_res_local->bar, 4, 0);
-            lv_obj_set_style_opa(app_lv_ui_res_local->bar, LV_OPA_COVER, 0);
-            lv_obj_set_style_bg_opa(app_lv_ui_res_local->bar, LV_OPA_COVER, 0);
             lv_obj_set_style_bg_color(app_lv_ui_res_local->bar, lv_color_black(), 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->bar, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
             lv_obj_set_style_border_width(app_lv_ui_res_local->bar, 1, 0);
             lv_obj_set_style_border_color(app_lv_ui_res_local->bar, lv_palette_main(LV_PALETTE_BLUE), 0);
-            lv_obj_set_style_radius(app_lv_ui_res_local->bar, 30, 0);
-            /* >滚动条指针样式 */
-            lv_obj_set_style_opa(app_lv_ui_res_local->bar, LV_OPA_COVER, LV_PART_INDICATOR);
-            lv_obj_set_style_bg_opa(app_lv_ui_res_local->bar, LV_OPA_COVER, LV_PART_INDICATOR);
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->bar, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
             lv_obj_set_style_bg_grad_color(app_lv_ui_res_local->bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
             lv_obj_set_style_bg_grad_dir(app_lv_ui_res_local->bar, LV_GRAD_DIR_HOR, LV_PART_INDICATOR);
+            lv_obj_set_style_radius(app_lv_ui_res_local->bar, 30, 0);
             lv_obj_set_style_radius(app_lv_ui_res_local->bar, 30, LV_PART_INDICATOR);
+            lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
             /* 初始化显示动画 */
             lv_anim_init(&app_lv_ui_res_local->anim);
             lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
@@ -171,10 +167,10 @@ static void app_lv_ui_watch_hide(void *scene)
             app_lv_ui_watch_status == app_lv_ui_watch_stop)
             lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */
-        app_lv_ui_watch_status = app_lv_ui_watch_null;
         lv_obj_del(app_lv_ui_res_local->scene);
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
+        app_lv_ui_watch_status = app_lv_ui_watch_null;
     }
     app_lv_scene_watch.self = app_lv_ui_res_local == NULL ? NULL :
                               app_lv_ui_res_local->scene;

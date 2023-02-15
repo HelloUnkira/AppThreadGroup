@@ -18,8 +18,9 @@
 static uint8_t app_lv_scene_num = 0;
 static app_lv_scene_t app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};
 
-/*@brief 场景调度
- *       内部使用: 被lvgl线程使用,或者扩展使用
+/*@brief     场景调度
+ *           内部使用: 被lvgl线程使用,或者扩展使用
+ *@param[in] scene 场景
  */
 void app_lv_scene_sched(app_lv_scene_t *scene)
 {
@@ -40,7 +41,7 @@ void app_lv_scene_sched(app_lv_scene_t *scene)
 }
 
 /*@brief      获取最上层显示场景
- *@param[out] 场景
+ *@param[out] scene 场景
  */
 void app_lv_scene_get_top(app_lv_scene_t **scene)
 {
@@ -50,27 +51,35 @@ void app_lv_scene_get_top(app_lv_scene_t **scene)
 }
 
 /*@brief     场景复位
- *@param[in] 场景
+ *@param[in] scene 场景
+ *@param[in] reserve 保留当前场景
  */
-void app_lv_scene_reset(app_lv_scene_t *scene)
+void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve)
 {
     app_lv_scene_t *current = NULL;
-    if (app_lv_scene_num >= 1) {
+    if (reserve) {
         app_lv_scene_get_top(&current);
-        current->event = app_lv_scene_need_hide;
-        app_lv_scene_update(current);
         app_lv_scene_num = 0;
-    }
-    if (app_lv_scene_num == 0) {
         app_lv_ui_scene[app_lv_scene_num++] = *scene;
-        app_lv_scene_get_top(&current);
-        current->event = app_lv_scene_need_show;
-        app_lv_scene_update(current);
+        app_lv_ui_scene[app_lv_scene_num++] = *current;
+    } else {
+        if (app_lv_scene_num >= 1) {
+            app_lv_scene_get_top(&current);
+            current->event = app_lv_scene_need_hide;
+            app_lv_scene_update(current);
+            app_lv_scene_num = 0;
+        }
+        if (app_lv_scene_num == 0) {
+            app_lv_ui_scene[app_lv_scene_num++] = *scene;
+            app_lv_scene_get_top(&current);
+            current->event = app_lv_scene_need_show;
+            app_lv_scene_update(current);
+        }
     }
 }
 
 /*@brief     场景覆盖显示场景
- *@param[in] 场景
+ *@param[in] scene 场景
  */
 void app_lv_scene_cover(app_lv_scene_t *scene)
 {
@@ -87,7 +96,7 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
 }
 
 /*@brief     场景添加新显示场景
- *@param[in] 场景
+ *@param[in] scene 场景
  */
 void app_lv_scene_add(app_lv_scene_t *scene)
 {
@@ -103,7 +112,7 @@ void app_lv_scene_add(app_lv_scene_t *scene)
 }
 
 /*@brief      场景移除当前显示场景
- *@param[out] 场景
+ *@param[out] scene 场景
  */
 void app_lv_scene_del(app_lv_scene_t *scene)
 {
