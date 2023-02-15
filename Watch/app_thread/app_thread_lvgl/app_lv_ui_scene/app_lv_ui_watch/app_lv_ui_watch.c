@@ -15,6 +15,7 @@
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
+    lv_obj_t *spinner;
     lv_obj_t *label;
     lv_obj_t *bar;
 } app_lv_ui_res_local_t;
@@ -42,8 +43,10 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
             lv_bar_set_value(app_lv_ui_res_local->bar, bar_value, LV_ANIM_OFF);
         }
         if (app_lv_ui_watch_status == app_lv_ui_watch_stop) {
+            uint8_t bar_value = (100 - value);
             uint8_t label_opa = (uint32_t)((float)(100 - value) * 2.55);
             lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
+            lv_bar_set_value(app_lv_ui_res_local->bar, bar_value, LV_ANIM_OFF);
         }
     }
     if (value == 100) {
@@ -96,13 +99,28 @@ static void app_lv_ui_watch_show(void *scene)
             lv_obj_center(app_lv_ui_res_local->label);
         }
     }
-    /* 启动界面 */
-    if (app_lv_ui_watch_status == app_lv_ui_watch_start) {
+    /* 启动界面,关闭界面 */
+    if (app_lv_ui_watch_status == app_lv_ui_watch_start ||
+        app_lv_ui_watch_status == app_lv_ui_watch_stop) {
         if (app_lv_ui_res_local != NULL) {
+            /* 初始化特效圆环 */
+            app_lv_ui_res_local->spinner = lv_spinner_create(app_lv_ui_res_local->scene, 300, 45);
+            lv_obj_set_size(app_lv_ui_res_local->spinner, 30, 30);
+            lv_obj_remove_style(app_lv_ui_res_local->spinner, NULL, LV_PART_KNOB);
+            lv_obj_set_style_arc_width(app_lv_ui_res_local->spinner, 5, 0);
+            lv_obj_set_style_arc_width(app_lv_ui_res_local->spinner, 5, LV_PART_INDICATOR);
+            lv_obj_set_style_arc_color(app_lv_ui_res_local->spinner, lv_palette_main(LV_PALETTE_BLUE), 0);
+            lv_obj_set_style_arc_color(app_lv_ui_res_local->spinner, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
+            lv_arc_set_mode(app_lv_ui_res_local->spinner, LV_ARC_MODE_NORMAL);
+            lv_arc_set_bg_angles(app_lv_ui_res_local->spinner, 0, 360);
+            lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, 20, 20);
             /* 初始化居中标签 */
             app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
             lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-            lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Enter");
+            if (app_lv_ui_watch_status == app_lv_ui_watch_start)
+                lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Enter");
+            if (app_lv_ui_watch_status == app_lv_ui_watch_stop)
+                lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Exit");
             lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
             lv_obj_center(app_lv_ui_res_local->label);
@@ -132,27 +150,7 @@ static void app_lv_ui_watch_show(void *scene)
             lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
             lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, 0);
             lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 100);
-            lv_anim_set_time(&app_lv_ui_res_local->anim, 3000);
-            lv_anim_start(&app_lv_ui_res_local->anim);
-        }
-    }
-    /* 关闭界面 */
-    if (app_lv_ui_watch_status == app_lv_ui_watch_stop) {
-        if (app_lv_ui_res_local != NULL) {
-            /* 初始化居中标签 */
-            app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
-            lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-            lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Exit");
-            lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
-            lv_obj_set_style_text_opa(app_lv_ui_res_local->label, LV_OPA_COVER, 0);
-            lv_obj_center(app_lv_ui_res_local->label);
-            /* 初始化显示动画 */
-            lv_anim_init(&app_lv_ui_res_local->anim);
-            lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
-            lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
-            lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, 0);
-            lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 100);
-            lv_anim_set_time(&app_lv_ui_res_local->anim, 3000);
+            lv_anim_set_time(&app_lv_ui_res_local->anim, 2000);
             lv_anim_start(&app_lv_ui_res_local->anim);
         }
     }
