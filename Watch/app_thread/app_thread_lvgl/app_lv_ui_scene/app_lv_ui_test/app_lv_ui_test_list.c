@@ -68,7 +68,7 @@ static void app_lv_ui_test_list_show(void *scene)
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化标签,上中部 */
         lv_obj_t *label = lv_label_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(label, LV_HOR_RES - 20, 40);
+        lv_obj_set_size(label, LV_HOR_RES - 20, 30);
         lv_obj_set_style_pad_all(label, 0, 0);
         lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
         lv_obj_set_style_border_side(label, 0, 0);
@@ -87,15 +87,22 @@ static void app_lv_ui_test_list_show(void *scene)
         lv_obj_set_style_bg_color(list, lv_color_black(), 0);
         lv_obj_set_style_border_side(list, 0, 0);
         lv_obj_set_style_border_width(list, 0, 0);
-        lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+        /* 加一个空控件生成首项空隙 */
+//        lv_obj_t *span = lv_btn_create(list);
+//        lv_obj_set_size(span, LV_HOR_RES - 40, 0);
+//        lv_obj_set_style_pad_all(span, 0, 0);
+//        lv_obj_set_style_border_side(span, 0, 0);
+//        lv_obj_set_style_border_width(span, 0, 0);
         /* 为列表批量追加按钮 */
         for (uint32_t idx = 0; idx < sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]); idx++) {
             lv_obj_t *btn = lv_btn_create(list);
-            lv_obj_set_width(btn, LV_HOR_RES - 40);
-            // lv_obj_set_style_pad_all(btn, 0, 0);
-            // lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);
-            // lv_obj_set_style_border_side(btn, 0, 0);
-            // lv_obj_set_style_border_width(btn, 0, 0);
+            lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
+            lv_obj_set_style_pad_all(btn, 0, 0);
+            lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);
+            lv_obj_set_style_border_side(btn, 0, 0);
+            lv_obj_set_style_border_width(btn, 0, 0);
+            lv_obj_set_style_shadow_width(btn, 0, 0);
             lv_obj_add_event_cb(btn, app_lv_ui_test_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_list[idx].scene);
             lv_obj_t *lab = lv_label_create(btn);
             lv_obj_set_style_text_color(lab, lv_palette_main(LV_PALETTE_YELLOW), 0);
