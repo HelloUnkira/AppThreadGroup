@@ -123,7 +123,7 @@ static void app_lv_ui_watch_show(void *scene)
             /* 初始化居中标签 */
             app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
             lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-            lv_label_set_text_static(app_lv_ui_res_local->label, "App Thread Group LVGL Watch");
+            lv_label_set_text_static(app_lv_ui_res_local->label, "App Thread Group & LVGL");
             lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_center(app_lv_ui_res_local->label);
             /* 初始化加载滚动条 */

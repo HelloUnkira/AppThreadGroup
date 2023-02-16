@@ -73,7 +73,6 @@ static void app_lv_ui_test_list_show(void *scene)
         lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
         lv_obj_set_style_border_side(label, 0, 0);
         lv_obj_set_style_border_width(label, 0, 0);
-        lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
         lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_line_space(label, 5, 0);
@@ -83,17 +82,12 @@ static void app_lv_ui_test_list_show(void *scene)
         /* 初始化列表,中部 */
         lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);
         lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES - 40);
+        lv_obj_set_style_pad_all(list, 10, 0);
         lv_obj_set_style_pad_row(list, 10, 0);
         lv_obj_set_style_bg_color(list, lv_color_black(), 0);
         lv_obj_set_style_border_side(list, 0, 0);
         lv_obj_set_style_border_width(list, 0, 0);
         lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-        /* 加一个空控件生成首项空隙 */
-//        lv_obj_t *span = lv_btn_create(list);
-//        lv_obj_set_size(span, LV_HOR_RES - 40, 0);
-//        lv_obj_set_style_pad_all(span, 0, 0);
-//        lv_obj_set_style_border_side(span, 0, 0);
-//        lv_obj_set_style_border_width(span, 0, 0);
         /* 为列表批量追加按钮 */
         for (uint32_t idx = 0; idx < sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]); idx++) {
             lv_obj_t *btn = lv_btn_create(list);

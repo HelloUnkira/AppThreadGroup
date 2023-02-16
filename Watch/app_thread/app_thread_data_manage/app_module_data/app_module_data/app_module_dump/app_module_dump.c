@@ -19,8 +19,6 @@ void app_module_dump(void)
     APP_SYS_LOG_WARN("\napp_module_dump...\n");
     /* 转储系统时钟 */
     app_module_clock_dump();
-    app_module_stopwatch_dump();
-    app_module_countdown_dump();
     /* ... */
     app_module_shutdown_dump();
     /* 如果是系统要求的资源转储 */

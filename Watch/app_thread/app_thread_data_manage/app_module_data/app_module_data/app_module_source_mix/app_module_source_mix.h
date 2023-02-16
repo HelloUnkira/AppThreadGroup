@@ -9,20 +9,4 @@ void app_module_clock_dump(void);
  */
 void app_module_clock_load(void);
 
-/*@brief 秒表转储到外存
- */
-void app_module_stopwatch_dump(void);
-
-/*@brief 秒表加载到内存
- */
-void app_module_stopwatch_load(void);
-
-/*@brief 倒计时转储到外存
- */
-void app_module_countdown_dump(void);
-
-/*@brief 倒计时加载到内存
- */
-void app_module_countdown_load(void);
-
 #endif

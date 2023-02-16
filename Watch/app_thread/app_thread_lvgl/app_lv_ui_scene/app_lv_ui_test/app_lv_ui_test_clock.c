@@ -49,6 +49,9 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     lv_roller_set_selected(app_lv_ui_res_local->roller_second, app_lv_ui_test_clock_presenter.get_second(), LV_ANIM_OFF);
 }
 
+/*@brief 界面显示
+ *@brief scene 场景
+ */
 static void app_lv_ui_test_clock_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
@@ -72,7 +75,6 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
         lv_obj_set_style_border_side(label, 0, 0);
         lv_obj_set_style_border_width(label, 0, 0);
-        lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
         lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_line_space(label, 5, 0);
@@ -158,6 +160,9 @@ static void app_lv_ui_test_clock_show(void *scene)
                                    app_lv_ui_res_local->scene;
 }
 
+/*@brief 界面隐藏
+ *@brief scene 场景
+ */
 static void app_lv_ui_test_clock_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
