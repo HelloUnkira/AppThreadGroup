@@ -35,4 +35,8 @@ void app_lv_ui_scene_time_check_idle_time_update(uint8_t time);
  */
 void app_lv_ui_scene_time_check_update(void);
 
+/*@brief 时间检查1s更新事件
+ */
+void app_lv_ui_scene_time_check_1s_update(void);
+
 #endif

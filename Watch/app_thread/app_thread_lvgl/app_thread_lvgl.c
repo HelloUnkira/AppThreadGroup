@@ -104,10 +104,6 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_del(&scene);
                     app_lv_ui_scene_time_check_reset();
                 }
-                /* lvgl过期1秒事件       */
-                if (package.event == app_thread_lvgl_sched_1s) {
-                    app_lv_ui_scene_time_check_update();
-                }
                 break;
             }
             case app_thread_lvgl_ui_scene: {
@@ -126,6 +122,10 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch);
+                }
+                /* 时间检查1s更新事件         */
+                if (package.event == app_thread_lvgl_ui_time_check_1s) {
+                    app_lv_ui_scene_time_check_update();
                 }
                 #endif
                 break;

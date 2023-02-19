@@ -71,19 +71,3 @@ void app_lv_scene_update(void *scene)
     app_package_notify(&package);
 }
 
-/*@brief lvgl 场景状态更新
- */
-void app_lv_scene_1s_update(void)
-{
-    app_package_t package = {
-        .send_tid = app_thread_id_lvgl,
-        .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_sched,
-        .event    = app_thread_lvgl_sched_1s,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_package_notify(&package);
-}
-

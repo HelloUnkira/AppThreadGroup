@@ -1,5 +1,7 @@
 /*实现目标:
- *    系统相关的功能组件
+ *    系统相关的功能组件
+ *    注意,这是一个事件调度的缝合层
+ *    它与常规的子模组不一样,见文件布局
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
@@ -18,7 +20,7 @@
 #include "app_module_countdown.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
-#include "app_lv_event.h"
+#include "app_lv_ui_time_check.h"
 
 static    bool app_module_system_dump = false;
 static    bool app_module_system_dlps_exec = false;
@@ -253,7 +255,7 @@ void app_module_system_1msec_update(uint32_t count)
     if (count % LV_SCHED_SDL_EVNET == 0)
         app_lv_drv_update();
     if (count % 1000 == 0)
-        app_lv_scene_1s_update();
+        app_lv_ui_scene_time_check_1s_update();
     /* timer msec update */
     app_module_timer_1ms_update();
     /* stopwatch msec update */

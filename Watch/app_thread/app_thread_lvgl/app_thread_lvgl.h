@@ -4,7 +4,7 @@
 typedef enum {  /* 线程模组 */
     app_thread_lvgl_work,           /* 工作队列模组 */
     app_thread_lvgl_sched,          /* GUI事件调度模组 */
-    app_thread_lvgl_ui_scene,       /* UI场景 */
+    app_thread_lvgl_ui_scene,       /* UI场景基础模组 */
 } app_thread_lvgl_module;
 
 typedef struct {    /* 工作队列模组数据项 */
@@ -19,12 +19,12 @@ typedef enum {  /* GUI事件调度模组事件 */
     app_thread_lvgl_sched_scene,        /* lvgl场景处理事件 */
     app_thread_lvgl_sched_dlps_enter,   /* lvgl进入dlps事件 */
     app_thread_lvgl_sched_dlps_exit,    /* lvgl退出dlps事件 */
-    app_thread_lvgl_sched_1s,           /* lvgl过期1秒事件       */
 } app_thread_lvgl_sched_event;
 
 typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_start,     /* UI场景进入 */
     app_thread_lvgl_ui_scene_stop,      /* UI场景退出 */
+    app_thread_lvgl_ui_time_check_1s,   /* 时间检查1s更新事件         */
 } app_thread_lvgl_ui_scene_event;
 
 /* lvgl:tick */

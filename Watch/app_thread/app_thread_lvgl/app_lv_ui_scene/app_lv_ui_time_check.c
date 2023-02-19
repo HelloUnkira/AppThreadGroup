@@ -105,3 +105,20 @@ void app_lv_ui_scene_time_check_update(void)
         }
     }
 }
+
+/*@brief 时间检查1s更新事件
+ */
+void app_lv_ui_scene_time_check_1s_update(void)
+{
+    app_package_t package = {
+        .send_tid = app_thread_id_lvgl,
+        .recv_tid = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_ui_scene,
+        .event    = app_thread_lvgl_ui_time_check_1s,
+        .dynamic  = false,
+        .size     = 0,
+        .data     = NULL,
+    };
+    app_package_notify(&package);
+}
+

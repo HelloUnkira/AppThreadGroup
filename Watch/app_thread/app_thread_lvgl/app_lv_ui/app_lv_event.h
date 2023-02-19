@@ -17,9 +17,5 @@ void app_lv_drv_update(void);
  */
 void app_lv_scene_update(void *scene);
 
-/*@brief lvgl 场景状态更新
- */
-void app_lv_scene_1s_update(void);
-
 #endif
 
