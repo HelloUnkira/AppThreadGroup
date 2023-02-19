@@ -96,6 +96,11 @@ static void app_lv_ui_btn_r_cb(lv_event_t *e)
             app_lv_ui_countdown_t countdown_0 = {0};
             app_lv_ui_countdown_presenter.stop();
             app_lv_ui_countdown_presenter.set(&countdown_0);
+            app_lv_ui_countdown_t countdown;
+            app_lv_ui_countdown_presenter.get(&countdown);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_h, countdown.hour,   LV_ANIM_OFF);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_m, countdown.minute, LV_ANIM_OFF);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_s, countdown.second, LV_ANIM_OFF);
         } else {
             app_lv_ui_countdown_t countdown = {0};
             countdown.hour   = lv_roller_get_selected(app_lv_ui_res_local->rol_h);
@@ -124,7 +129,7 @@ static void app_lv_ui_rol_sel_cb(lv_event_t *e)
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 此界面禁用超时息屏及主界面回退 */
-    app_lv_scene_time_check_reset();
+    app_lv_ui_scene_time_check_reset();
     /* 左上角系统时钟更新 */
     lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
                           app_lv_ui_countdown_presenter.is_24_mode() ? "" :
@@ -223,8 +228,6 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->rol_m, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_m, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_m, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->rol_m, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->rol_m, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_m, app_lv_ui_res_rolcus_font, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_m, app_lv_ui_res_rolsel_font, LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->rol_m, LV_TEXT_ALIGN_CENTER, 0);
@@ -237,8 +240,6 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->rol_h, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_h, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_h, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->rol_h, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->rol_h, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_h, app_lv_ui_res_rolcus_font, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_h, app_lv_ui_res_rolsel_font, LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->rol_h, LV_TEXT_ALIGN_CENTER, 0);
@@ -251,8 +252,6 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_set_width(app_lv_ui_res_local->rol_s, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_s, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->rol_s, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->rol_s, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->rol_s, 0, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_s, app_lv_ui_res_rolcus_font, 0);
         lv_obj_set_style_text_font(app_lv_ui_res_local->rol_s, app_lv_ui_res_rolsel_font, LV_PART_SELECTED);
         lv_obj_set_style_text_align(app_lv_ui_res_local->rol_s, LV_TEXT_ALIGN_CENTER, 0);

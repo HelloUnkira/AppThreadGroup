@@ -102,11 +102,11 @@ void app_thread_lvgl_routine(void)
                     app_lv_driver_dlps_exit();
                     app_lv_scene_t scene = {0};
                     app_lv_scene_del(&scene);
-                    app_lv_scene_time_check_reset();
+                    app_lv_ui_scene_time_check_reset();
                 }
                 /* lvgl过期1秒事件       */
                 if (package.event == app_thread_lvgl_sched_1s) {
-                    app_lv_scene_time_check_update();
+                    app_lv_ui_scene_time_check_update();
                 }
                 break;
             }
