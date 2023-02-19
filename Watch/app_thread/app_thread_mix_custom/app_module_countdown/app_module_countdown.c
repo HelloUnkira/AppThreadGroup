@@ -132,5 +132,5 @@ void app_module_countdown_ready(void)
     app_mutex_process(&app_module_countdown_mutex);
     app_module_countdown_timer.expired = app_module_countdown_xmsec_update;
     app_module_countdown_timer.peroid  = APP_MODULE_COUNTDOWN_MSEC;
-    app_module_countdown_timer.reload  = false;
+    app_module_countdown_timer.reload  = true;
 }

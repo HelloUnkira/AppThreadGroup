@@ -305,9 +305,9 @@ static void app_lv_ui_stopwatch_show(void *scene)
  */
 static void app_lv_ui_stopwatch_hide(void *scene)
 {
-    app_lv_ui_stopwatch_presenter.stop();
-    
     if (app_lv_ui_res_local != NULL) {
+        /* 回收列表资源 */
+        app_lv_ui_local_tick_list_clr();
         /* 场景去除默认事件 */
         app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化按键事件 */

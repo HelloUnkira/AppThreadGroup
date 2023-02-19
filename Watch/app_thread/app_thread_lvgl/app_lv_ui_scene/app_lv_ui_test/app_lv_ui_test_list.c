@@ -29,6 +29,8 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_scene_watch,},
 };
 
+static const uint32_t app_lv_ui_res_list_len = sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]);
+
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 /*@brief 界面自定义事件回调
@@ -89,7 +91,7 @@ static void app_lv_ui_test_list_show(void *scene)
         lv_obj_set_style_border_width(list, 0, 0);
         lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
         /* 为列表批量追加按钮 */
-        for (uint32_t idx = 0; idx < sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]); idx++) {
+        for (uint32_t idx = 0; idx < app_lv_ui_res_list_len; idx++) {
             lv_obj_t *btn = lv_btn_create(list);
             lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
             lv_obj_set_style_pad_all(btn, 0, 0);
@@ -115,10 +117,6 @@ static void app_lv_ui_test_list_show(void *scene)
 static void app_lv_ui_test_list_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-        for (uint32_t idx = 0; idx < sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]); idx++) {
-            lv_obj_remove_event_cb(app_lv_ui_res_list[idx].btn, app_lv_ui_test_list_btn_cb);
-            app_lv_ui_res_list[idx].btn = NULL;
-        }
         /* 场景去除默认事件 */
         app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化场景 */

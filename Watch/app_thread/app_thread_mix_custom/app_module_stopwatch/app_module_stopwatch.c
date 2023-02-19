@@ -110,5 +110,5 @@ void app_module_stopwatch_ready(void)
     app_mutex_process(&app_module_stopwatch_mutex);
     app_module_stopwatch_timer.expired = app_module_stopwatch_xmsec_update;
     app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
-    app_module_stopwatch_timer.reload  = false;
+    app_module_stopwatch_timer.reload  = true;
 }
