@@ -11,5 +11,7 @@ extern app_lv_scene_t app_lv_scene_main;
 extern app_lv_scene_t app_lv_scene_list;
 /* base scene */
 extern app_lv_scene_t app_lv_scene_stopwatch;
+extern app_lv_scene_t app_lv_scene_countdown;
+extern app_lv_scene_t app_lv_scene_countdown_remind;
 
 #endif

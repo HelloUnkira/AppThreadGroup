@@ -25,7 +25,7 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_scene_watch,},
     {"Null",                &app_lv_scene_watch,},
     {"Stopwatch",           &app_lv_scene_stopwatch,},
-    {"Null",                &app_lv_scene_watch,},
+    {"Countdown",           &app_lv_scene_countdown,},
     {"Internal Test",       &app_lv_scene_test_list,},
 };
 

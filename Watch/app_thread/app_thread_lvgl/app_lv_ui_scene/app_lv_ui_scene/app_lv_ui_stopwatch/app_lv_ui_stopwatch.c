@@ -113,14 +113,14 @@ static void app_lv_ui_btn_l_cb(lv_event_t *e)
         /* 按键响应 */
         if (app_lv_ui_stopwatch_presenter.get_onoff()) {
             app_lv_ui_stopwatch_presenter.stop();
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l,  lv_palette_main(LV_PALETTE_BLUE), 0);
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r,  lv_palette_main(LV_PALETTE_YELLOW), 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l, lv_palette_main(LV_PALETTE_BLUE), 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r, lv_palette_main(LV_PALETTE_YELLOW), 0);
             lv_label_set_text(app_lv_ui_res_local->lbl_l, "Run");
             lv_label_set_text(app_lv_ui_res_local->lbl_r, "Reset");
         } else {
             app_lv_ui_stopwatch_presenter.start();
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l,  lv_palette_main(LV_PALETTE_YELLOW), 0);
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r,  lv_palette_main(LV_PALETTE_BLUE), 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l, lv_palette_main(LV_PALETTE_YELLOW), 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_label_set_text(app_lv_ui_res_local->lbl_l, "Pause");
             lv_label_set_text(app_lv_ui_res_local->lbl_r, "Tick");
         }
@@ -176,13 +176,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
                           stopwatch.hour, stopwatch.minute, stopwatch.second, stopwatch.msec);
     /* 按键文本更新 */
     if (app_lv_ui_stopwatch_presenter.get_onoff()) {
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l,  lv_palette_main(LV_PALETTE_YELLOW), 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r,  lv_palette_main(LV_PALETTE_BLUE), 0);
+        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l, lv_palette_main(LV_PALETTE_YELLOW), 0);
+        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text(app_lv_ui_res_local->lbl_l, "Pause");
         lv_label_set_text(app_lv_ui_res_local->lbl_r, "Tick");
     } else {
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l,  lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r,  lv_palette_main(LV_PALETTE_YELLOW), 0);
+        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_l, lv_palette_main(LV_PALETTE_BLUE), 0);
+        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r, lv_palette_main(LV_PALETTE_YELLOW), 0);
         lv_label_set_text(app_lv_ui_res_local->lbl_l, "Run");
         lv_label_set_text(app_lv_ui_res_local->lbl_r, "Reset");
     }
