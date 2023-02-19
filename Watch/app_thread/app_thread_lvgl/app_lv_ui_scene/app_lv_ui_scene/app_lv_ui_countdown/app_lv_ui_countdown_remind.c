@@ -115,7 +115,7 @@ static void app_lv_ui_countdown_remind_show(void *scene)
         lv_obj_t *lbl_name = lv_label_create(app_lv_ui_res_local->name);
         lv_obj_set_style_text_color(lbl_name, lv_color_white(), 0);
         lv_obj_set_style_text_align(lbl_name, LV_TEXT_ALIGN_LEFT, 0);
-        lv_label_set_text(lbl_name, "< Stopwatch");
+        lv_label_set_text(lbl_name, "< Countdown");
         lv_obj_align(lbl_name, LV_ALIGN_TOP_LEFT, 0, 0);
         /* 右上角时间 */
         app_lv_ui_res_local->time = lv_label_create(app_lv_ui_res_local->title);
@@ -155,7 +155,7 @@ static void app_lv_ui_countdown_remind_show(void *scene)
         app_lv_ui_res_local->lbl_c = lv_label_create(app_lv_ui_res_local->btn_c);
         lv_obj_set_style_text_font(app_lv_ui_res_local->lbl_c, app_lv_ui_res_btn_text_font, 0);
         lv_obj_set_style_text_color(app_lv_ui_res_local->lbl_c, lv_color_white(), 0);
-        lv_label_set_text(app_lv_ui_res_local->lbl_c, "C_Btn");
+        lv_label_set_text(app_lv_ui_res_local->lbl_c, "Confirm");
         lv_obj_align(app_lv_ui_res_local->lbl_c, LV_ALIGN_CENTER, 0, 0);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);

@@ -12,6 +12,7 @@
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
+#include "app_thread_lvgl.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
@@ -97,8 +98,19 @@ void app_thread_mix_custom_routine(void)
             case app_thread_mix_custom_countdown: {
                 if (package.event == app_thread_mix_custom_countdown_msec_update)
                     app_module_countdown_msec_update();
-                /* 根据实际的情况处理或者转发事件包到特定的线程特定的模组 */
-                if (package.event == app_thread_mix_custom_countdown_expired);
+                /* 倒计时模组到期事件 */
+                if (package.event == app_thread_mix_custom_countdown_expired) {
+                    app_package_t package = {
+                        .send_tid = app_thread_id_mix_custom,
+                        .recv_tid = app_thread_id_lvgl,
+                        .module   = app_thread_lvgl_ui_scene,
+                        .event    = app_thread_lvgl_ui_countdown_remind,
+                        .dynamic  = false,
+                        .size     = 0,
+                        .data     = NULL,
+                    };
+                    app_package_notify(&package);
+                }
                 break;
             }
             default: {

@@ -195,7 +195,7 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_t *lbl_name = lv_label_create(app_lv_ui_res_local->name);
         lv_obj_set_style_text_color(lbl_name, lv_color_white(), 0);
         lv_obj_set_style_text_align(lbl_name, LV_TEXT_ALIGN_LEFT, 0);
-        lv_label_set_text(lbl_name, "< countdown");
+        lv_label_set_text(lbl_name, "< Countdown");
         lv_obj_align(lbl_name, LV_ALIGN_TOP_LEFT, 0, 0);
         /* 右上角时间 */
         app_lv_ui_res_local->time = lv_label_create(app_lv_ui_res_local->title);

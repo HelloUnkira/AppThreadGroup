@@ -127,6 +127,10 @@ void app_thread_lvgl_routine(void)
                 if (package.event == app_thread_lvgl_ui_time_check_1s) {
                     app_lv_ui_scene_time_check_update();
                 }
+                /* 产生到特定场景内的事件...... */
+                app_lv_ui_scene_set_event(package.event, package.data, package.size);
+                if (package.dynamic)
+                    app_mem_free(package.data);
                 #endif
                 break;
             }

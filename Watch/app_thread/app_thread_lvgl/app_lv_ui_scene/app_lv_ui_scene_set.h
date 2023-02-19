@@ -14,4 +14,8 @@ extern app_lv_scene_t app_lv_scene_stopwatch;
 extern app_lv_scene_t app_lv_scene_countdown;
 extern app_lv_scene_t app_lv_scene_countdown_remind;
 
+/*@brief 场景内事件处理集合
+ */
+void app_lv_ui_scene_set_event(uint32_t event, uint8_t *data, uint32_t size);
+
 #endif
