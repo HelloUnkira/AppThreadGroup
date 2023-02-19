@@ -39,8 +39,8 @@ typedef enum {  /* 秒表模组事件 */
 } app_thread_mix_custom_stopwatch_event;
 
 typedef enum {  /* 倒计时模组事件 */
-    app_thread_mix_custom_countdown_expired,
     app_thread_mix_custom_countdown_msec_update,
+    app_thread_mix_custom_countdown_expired,
 } app_thread_mix_custom_countdown_event;
 
 #endif

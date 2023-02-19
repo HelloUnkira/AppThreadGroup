@@ -32,6 +32,8 @@ void app_thread_lvgl_ready(void)
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
     app_lv_driver_ready();
+    /* 内部调用 */
+    app_lv_ui_scene_time_check_ready();
 }
 
 /*@brief lvgl线程服务例程
@@ -102,7 +104,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_driver_dlps_exit();
                     app_lv_scene_t scene = {0};
                     app_lv_scene_del(&scene);
-                    app_lv_ui_scene_time_check_reset();
+                    app_lv_ui_scene_time_check_reset(0, 0);
                 }
                 break;
             }
@@ -116,16 +118,14 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_start);
                     app_lv_scene_add(&app_lv_scene_watch);
+                    app_lv_ui_scene_time_check_exec(true);
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch);
-                }
-                /* 时间检查1s更新事件         */
-                if (package.event == app_thread_lvgl_ui_time_check_1s) {
-                    app_lv_ui_scene_time_check_update();
+                    app_lv_ui_scene_time_check_exec(false);
                 }
                 /* 产生到特定场景内的事件...... */
                 app_lv_ui_scene_set_event(package.event, package.data, package.size);

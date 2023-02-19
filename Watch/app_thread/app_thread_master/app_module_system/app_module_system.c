@@ -20,7 +20,6 @@
 #include "app_module_countdown.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
-#include "app_lv_ui_time_check.h"
 
 static    bool app_module_system_dump = false;
 static    bool app_module_system_dlps_exec = false;
@@ -242,6 +241,8 @@ void app_module_assert(char *file, uint32_t line, bool cond)
  */
 void app_module_system_1msec_update(uint32_t count)
 {
+    /* timer msec update */
+    app_module_timer_1ms_update();
     /* clock source */
     if (count % 1000 == 0) {
         uint64_t utc_new = 0; /* 在此处获取RTC的UTC */
@@ -254,14 +255,4 @@ void app_module_system_1msec_update(uint32_t count)
         app_lv_tick_exec_update();
     if (count % LV_SCHED_SDL_EVNET == 0)
         app_lv_drv_update();
-    if (count % 1000 == 0)
-        app_lv_ui_scene_time_check_1s_update();
-    /* timer msec update */
-    app_module_timer_1ms_update();
-    /* stopwatch msec update */
-    if (count % APP_MODULE_STOPWATCH_MSEC == 0)
-        app_module_stopwatch_xmsec_update();
-    /* countdown msec update */
-    if (count % APP_MODULE_COUNTDOWN_MSEC == 0)
-        app_module_countdown_xmsec_update();
 }

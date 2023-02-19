@@ -8,11 +8,8 @@
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-
-#include "app_sys_pipe.h"
 #include "app_sys_log.h"
-#include "app_thread_master.h"
-#include "app_thread_lvgl.h"
+#include "app_module_timer.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -22,7 +19,8 @@
 #include "app_lv_ui_scene_set.h"
 #include "app_lv_ui_watch.h"
 
-static bool    app_lv_ui_scene_time = true;    /* 启停该检查功能 */
+static app_mutex_t app_lv_ui_scene_time_check_mutex = {0};
+static app_module_timer_t app_lv_ui_scene_time_check_timer = {0};
 static bool    app_lv_ui_scene_dlps = true;    /* 需要进入dlps */
 static bool    app_lv_ui_scene_back = true;    /* 需要回退界面 */
 static uint8_t app_lv_ui_scene_over_time = APP_LV_UI_SCENE_OVER_TIME;
@@ -30,56 +28,32 @@ static uint8_t app_lv_ui_scene_idle_time = APP_LV_UI_SCENE_IDLE_TIME;
 static uint8_t app_lv_ui_scene_over_time_bak = APP_LV_UI_SCENE_OVER_TIME;
 static uint8_t app_lv_ui_scene_idle_time_bak = APP_LV_UI_SCENE_IDLE_TIME;
 
-/*@brief     界面状态检查功能启停
- *@param[in] status(true:启动界面状态检查,false:关闭界面状态检查)
- */
-void app_lv_ui_scene_time_check_exec(bool status)
-{
-    app_lv_ui_scene_time = status;
-}
-
 /*@brief 重置界面状态
  */
-void app_lv_ui_scene_time_check_reset(void)
+void app_lv_ui_scene_time_check_reset(uint8_t over_time, uint8_t idle_time)
 {
     APP_SYS_LOG_INFO("app_lv_ui_scene_time_check_reset\n");
-    app_lv_ui_scene_idle_time = app_lv_ui_scene_idle_time_bak;
+    app_mutex_take(&app_lv_ui_scene_time_check_mutex);
+    app_lv_ui_scene_over_time_bak = over_time != 0 ? over_time : app_lv_ui_scene_over_time_bak;
+    app_lv_ui_scene_idle_time_bak = idle_time != 0 ? idle_time : app_lv_ui_scene_idle_time_bak;
+    if (over_time == APP_LV_UI_SCENE_OVER_TIME_MAX ||
+        idle_time == APP_LV_UI_SCENE_IDLE_TIME_MAX) {
+        app_lv_ui_scene_over_time_bak = APP_LV_UI_SCENE_OVER_TIME_MAX;
+        app_lv_ui_scene_idle_time_bak = APP_LV_UI_SCENE_IDLE_TIME_MAX;
+    }
     app_lv_ui_scene_over_time = app_lv_ui_scene_over_time_bak;
+    app_lv_ui_scene_idle_time = app_lv_ui_scene_idle_time_bak;
     app_lv_ui_scene_dlps = true;
     app_lv_ui_scene_back = true;
-}
-
-/*@brief 重置界面状态
- */
-void app_lv_ui_scene_time_check_over_time_update(uint8_t time)
-{
-    app_lv_ui_scene_over_time_bak = time;
-    if (time == APP_LV_UI_SCENE_OVER_TIME_MAX) {
-        app_lv_ui_scene_over_time_bak = APP_LV_UI_SCENE_OVER_TIME_MAX;
-        app_lv_ui_scene_idle_time_bak = APP_LV_UI_SCENE_IDLE_TIME_MAX;
-    }
-    app_lv_ui_scene_time_check_reset();
-}
-
-/*@brief 重置界面状态
- */
-void app_lv_ui_scene_time_check_idle_time_update(uint8_t time)
-{
-    app_lv_ui_scene_idle_time_bak = time;
-    if (time == APP_LV_UI_SCENE_IDLE_TIME_MAX) {
-        app_lv_ui_scene_over_time_bak = APP_LV_UI_SCENE_OVER_TIME_MAX;
-        app_lv_ui_scene_idle_time_bak = APP_LV_UI_SCENE_IDLE_TIME_MAX;
-    }
-    app_lv_ui_scene_time_check_reset();
+    app_mutex_give(&app_lv_ui_scene_time_check_mutex);
 }
 
 /*@brief 界面状态控制更新
  *       内部使用: 被lvgl线程使用
  */
-void app_lv_ui_scene_time_check_update(void)
+static void app_lv_ui_scene_time_check_update(void *timer)
 {
-    if (!app_lv_ui_scene_time)
-        return;
+    app_mutex_take(&app_lv_ui_scene_time_check_mutex);
     /* 约减超时等待 */
     if (app_lv_ui_scene_over_time != 0 &&
         app_lv_ui_scene_over_time != APP_LV_UI_SCENE_OVER_TIME_MAX)
@@ -104,21 +78,26 @@ void app_lv_ui_scene_time_check_update(void)
             }
         }
     }
+    app_mutex_give(&app_lv_ui_scene_time_check_mutex);
 }
 
-/*@brief 时间检查1s更新事件
+/*@brief lvgl 时间检查更新初始化
  */
-void app_lv_ui_scene_time_check_1s_update(void)
+void app_lv_ui_scene_time_check_ready(void)
 {
-    app_package_t package = {
-        .send_tid = app_thread_id_lvgl,
-        .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_ui_scene,
-        .event    = app_thread_lvgl_ui_time_check_1s,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_package_notify(&package);
+    app_mutex_process(&app_lv_ui_scene_time_check_mutex);
+    app_lv_ui_scene_time_check_timer.expired = app_lv_ui_scene_time_check_update;
+    app_lv_ui_scene_time_check_timer.peroid  = 1000;
+    app_lv_ui_scene_time_check_timer.reload  = true;
 }
 
+/*@brief     界面状态检查功能启停
+ *@param[in] status(true:启动界面状态检查,false:关闭界面状态检查)
+ */
+void app_lv_ui_scene_time_check_exec(bool status)
+{
+    if (status)
+        app_module_timer_start(&app_lv_ui_scene_time_check_timer);
+    else
+        app_module_timer_stop(&app_lv_ui_scene_time_check_timer);
+}

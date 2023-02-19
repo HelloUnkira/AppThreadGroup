@@ -13,10 +13,12 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
+#include "app_module_timer.h"
 #include "app_module_stopwatch.h"
 
 static app_mutex_t app_module_stopwatch_mutex = {0};
 static app_module_stopwatch_t app_module_stopwatch = {0};
+static app_module_timer_t app_module_stopwatch_timer = {0};
 
 /*@brief        设置秒表
  *@param[out]   stopwatch 秒表实例
@@ -52,51 +54,25 @@ void app_module_stopwatch_reset(void)
  */
 void app_module_stopwatch_start(void)
 {
-    /* 在这里调用一个接口,启动时钟源发送秒表事件功能,如果有必要 */
-    /* ...... */
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch.onoff = true;
     app_mutex_give(&app_module_stopwatch_mutex);
+    app_module_timer_start(&app_module_stopwatch_timer);
 }
 
 /*@brief 停止秒表
  */
 void app_module_stopwatch_stop(void)
 {
-    /* 在这里调用一个接口,关闭时钟源发送秒表事件功能,如果有必要 */
-    /* ...... */
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch.onoff = false;
     app_mutex_give(&app_module_stopwatch_mutex);
+    app_module_timer_stop(&app_module_stopwatch_timer);
 }
 
-/*@brief 秒表模组初始化
+/*@brief 倒计时软件定时器模组回调
  */
-void app_module_stopwatch_ready(void)
-{
-    app_mutex_process(&app_module_stopwatch_mutex);
-}
-
-/*@brief 秒表模组更新
- */
-void app_module_stopwatch_xmsec_update(void)
-{
-    app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_stopwatch,
-        .event    = app_thread_mix_custom_stopwatch_msec_update,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_package_notify(&package);
-}
-
-/*@brief 更新秒表
- *       内部使用: 被mix custom线程使用
- */
-void app_module_stopwatch_msec_update(void)
+static void app_module_stopwatch_xmsec_update(void *timer)
 {
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch_t stopwatch = app_module_stopwatch;
@@ -125,4 +101,14 @@ void app_module_stopwatch_msec_update(void)
                       stopwatch.hour,stopwatch.minute,stopwatch.second,
                       stopwatch.msec);
     #endif
+}
+
+/*@brief 秒表模组初始化
+ */
+void app_module_stopwatch_ready(void)
+{
+    app_mutex_process(&app_module_stopwatch_mutex);
+    app_module_stopwatch_timer.expired = app_module_stopwatch_xmsec_update;
+    app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
+    app_module_stopwatch_timer.reload  = false;
 }

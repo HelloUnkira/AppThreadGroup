@@ -91,13 +91,9 @@ void app_thread_mix_custom_routine(void)
                 break;
             }
             case app_thread_mix_custom_stopwatch: {
-                if (package.event == app_thread_mix_custom_stopwatch_msec_update)
-                    app_module_stopwatch_msec_update();
                 break;
             }
             case app_thread_mix_custom_countdown: {
-                if (package.event == app_thread_mix_custom_countdown_msec_update)
-                    app_module_countdown_msec_update();
                 /* 倒计时模组到期事件 */
                 if (package.event == app_thread_mix_custom_countdown_expired) {
                     app_package_t package = {

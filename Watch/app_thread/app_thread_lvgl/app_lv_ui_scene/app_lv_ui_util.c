@@ -143,7 +143,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_SCROLL_BEGIN:
     case LV_EVENT_SCROLL_END:
     case LV_EVENT_SCROLL:
-        app_lv_ui_scene_time_check_reset();
+        app_lv_ui_scene_time_check_reset(0, 0);
         break;
     default:
         break;

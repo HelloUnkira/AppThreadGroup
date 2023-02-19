@@ -13,10 +13,12 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
+#include "app_module_timer.h"
 #include "app_module_countdown.h"
 
 static app_mutex_t app_module_countdown_mutex = {0};
 static app_module_countdown_t app_module_countdown = {0};
+static app_module_timer_t app_module_countdown_timer = {0};
 
 /*@brief        设置倒计时
  *@param[in]    countdown 倒计时实例
@@ -52,51 +54,25 @@ void app_module_countdown_reset(void)
  */
 void app_module_countdown_start(void)
 {
-    /* 在这里调用一个接口,启动时钟源发送秒表事件功能,如果有必要 */
-    /* ...... */
     app_mutex_take(&app_module_countdown_mutex);
     app_module_countdown.onoff = true;
     app_mutex_give(&app_module_countdown_mutex);
+    app_module_timer_start(&app_module_countdown_timer);
 }
 
 /*@brief 停止倒计时
  */
 void app_module_countdown_stop(void)
 {
-    /* 在这里调用一个接口,关闭时钟源发送秒表事件功能,如果有必要 */
-    /* ...... */
     app_mutex_take(&app_module_countdown_mutex);
     app_module_countdown.onoff = false;
     app_mutex_give(&app_module_countdown_mutex);
+    app_module_timer_stop(&app_module_countdown_timer);
 }
 
-/*@brief 倒计时模组初始化
+/*@brief 倒计时软件定时器模组回调
  */
-void app_module_countdown_ready(void)
-{
-    app_mutex_process(&app_module_countdown_mutex);
-}
-
-/*@brief 倒计时模组更新
- */
-void app_module_countdown_xmsec_update(void)
-{
-    app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_countdown,
-        .event    = app_thread_mix_custom_countdown_msec_update,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
-    };
-    app_package_notify(&package);
-}
-
-/*@brief 更新倒计时
- *       内部使用: 被mix custom线程使用
- */
-void app_module_countdown_msec_update(void)
+static void app_module_countdown_xmsec_update(void *timer)
 {
     app_mutex_take(&app_module_countdown_mutex);
     app_module_countdown_t countdown = app_module_countdown;
@@ -123,6 +99,8 @@ void app_module_countdown_msec_update(void)
                 .data     = NULL,
             };
             app_package_notify(&package);
+            /* 中止倒计时 */
+            app_module_countdown_stop();
             /* 本地归零 */
             app_module_countdown_t countdown_0 = {0};
             countdown = countdown_0;
@@ -145,4 +123,14 @@ void app_module_countdown_msec_update(void)
                       countdown.hour,countdown.minute,countdown.second,
                       countdown.msec,countdown.onoff);
     #endif
+}
+
+/*@brief 倒计时模组初始化
+ */
+void app_module_countdown_ready(void)
+{
+    app_mutex_process(&app_module_countdown_mutex);
+    app_module_countdown_timer.expired = app_module_countdown_xmsec_update;
+    app_module_countdown_timer.peroid  = APP_MODULE_COUNTDOWN_MSEC;
+    app_module_countdown_timer.reload  = false;
 }
