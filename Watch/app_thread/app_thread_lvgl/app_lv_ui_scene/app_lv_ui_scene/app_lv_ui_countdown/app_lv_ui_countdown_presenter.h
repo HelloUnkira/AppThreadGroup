@@ -19,4 +19,3 @@ typedef struct {
 extern app_lv_ui_countdown_presenter_t app_lv_ui_countdown_presenter;
 
 #endif
-

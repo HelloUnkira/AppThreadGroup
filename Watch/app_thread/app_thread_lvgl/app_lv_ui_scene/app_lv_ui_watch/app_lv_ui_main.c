@@ -99,4 +99,3 @@ app_lv_scene_t app_lv_scene_main = {
     .show = app_lv_ui_main_show,
     .hide = app_lv_ui_main_hide,
 };
-

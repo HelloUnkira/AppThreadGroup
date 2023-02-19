@@ -329,4 +329,3 @@ app_lv_scene_t app_lv_scene_stopwatch = {
     .show = app_lv_ui_stopwatch_show,
     .hide = app_lv_ui_stopwatch_hide,
 };
-

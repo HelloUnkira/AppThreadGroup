@@ -135,4 +135,3 @@ uint8_t app_lv_scene_get_nest(void)
     APP_MODULE_ASSERT(app_lv_scene_num != 0);
     return app_lv_scene_num;
 }
-

@@ -196,9 +196,3 @@ app_lv_scene_t app_lv_scene_countdown_remind = {
     .show = app_lv_ui_countdown_remind_show,
     .hide = app_lv_ui_countdown_remind_hide,
 };
-
-
-
-
-
-

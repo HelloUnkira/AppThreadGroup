@@ -15,4 +15,3 @@ typedef struct {
 extern app_lv_ui_test_clock_presenter_t app_lv_ui_test_clock_presenter;
 
 #endif
-

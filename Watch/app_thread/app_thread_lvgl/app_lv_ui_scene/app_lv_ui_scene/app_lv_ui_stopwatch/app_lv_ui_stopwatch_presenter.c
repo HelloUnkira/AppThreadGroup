@@ -153,4 +153,3 @@ app_lv_ui_stopwatch_presenter_t app_lv_ui_stopwatch_presenter = {
     .start              = app_lv_ui_start,
     .stop               = app_lv_ui_stop,
 };
-

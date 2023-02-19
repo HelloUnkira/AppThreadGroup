@@ -129,5 +129,3 @@ app_lv_ui_countdown_presenter_t app_lv_ui_countdown_presenter = {
     .start              = app_lv_ui_start,
     .stop               = app_lv_ui_stop,
 };
-
-

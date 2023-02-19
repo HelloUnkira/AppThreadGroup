@@ -21,4 +21,3 @@ typedef struct {
 extern app_lv_ui_stopwatch_presenter_t app_lv_ui_stopwatch_presenter;
 
 #endif
-

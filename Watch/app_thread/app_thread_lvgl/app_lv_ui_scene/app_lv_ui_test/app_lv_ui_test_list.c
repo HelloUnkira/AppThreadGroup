@@ -135,4 +135,3 @@ app_lv_scene_t app_lv_scene_test_list = {
     .show = app_lv_ui_test_list_show,
     .hide = app_lv_ui_test_list_hide,
 };
-

@@ -9,4 +9,3 @@ typedef struct {
 } app_lv_ui_stopwatch_t;
 
 #endif
-
