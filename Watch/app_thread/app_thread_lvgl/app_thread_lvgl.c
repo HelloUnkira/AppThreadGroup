@@ -20,7 +20,7 @@
 #include "app_lv_driver.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
-#include "app_lv_time_check.h"
+#include "app_lv_ui_time_check.h"
 #include "app_lv_ui_scene_set.h"
 #include "app_lv_ui_watch.h"
 
