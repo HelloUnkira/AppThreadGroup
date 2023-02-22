@@ -114,7 +114,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
         break;
     }
     case LV_EVENT_FOCUSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED\n");
         break;
     }
     case LV_EVENT_DEFOCUSED: {
@@ -155,8 +155,10 @@ static void app_lv_ui_event_default(lv_event_t *e)
  */
 void app_lv_ui_event_default_set(lv_obj_t *scene)
 {
+    lv_group_t *group = lv_group_get_default();
     lv_obj_add_event_cb(scene, app_lv_ui_event_default, LV_EVENT_ALL, scene);
-    lv_group_add_obj(lv_group_get_default(), scene);
+    lv_group_add_obj(group, scene);
+    lv_group_focus_freeze(group, true);
 }
 
 /*@brief    场景默认事件响应回调清除
@@ -164,6 +166,8 @@ void app_lv_ui_event_default_set(lv_obj_t *scene)
  */
 void app_lv_ui_event_default_clr(lv_obj_t *scene)
 {
+    lv_group_t *group = lv_group_get_default();
+    lv_group_focus_freeze(group, false);
     lv_group_remove_obj(scene);
     lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
 }
