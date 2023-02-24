@@ -13,6 +13,7 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
+#include "app_module_system.h"
 
 #include "lvgl.h"
 #include "app_lv_event.h"
@@ -25,8 +26,14 @@ void app_lv_ui_scene_set_event(uint32_t event, uint8_t *data, uint32_t size)
 {
     switch (event) {
     case app_thread_lvgl_ui_countdown_remind: {
-        /* 倒计时提醒事件 */
-        app_lv_scene_add(&app_lv_scene_countdown_remind);
+        /* 如果进入到低功耗模式先唤醒场景 */
+        if (app_module_system_dlps_get()) {
+            app_lv_scene_add(&app_lv_scene_countdown_remind, true);
+            app_module_system_dlps_set(false);
+        } else {
+            /* 倒计时提醒事件 */
+            app_lv_scene_add(&app_lv_scene_countdown_remind, false);
+        }
         break;
     }
     default:

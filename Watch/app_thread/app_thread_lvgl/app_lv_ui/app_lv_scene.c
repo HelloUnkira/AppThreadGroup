@@ -95,20 +95,28 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
     app_lv_scene_update(current);
 }
 
-/*@brief     场景添加新显示场景
+/*@brief     场景添加新场景
  *@param[in] scene 场景
+ *@param[in] reserve 保留当前场景
  */
-void app_lv_scene_add(app_lv_scene_t *scene)
+void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
 {
     app_lv_scene_t *current = NULL;
     APP_MODULE_ASSERT(scene != NULL);
-    app_lv_scene_get_top(&current);
-    current->event = app_lv_scene_need_hide;
-    app_lv_scene_update(current);
-    app_lv_ui_scene[app_lv_scene_num++] = *scene;
-    app_lv_scene_get_top(&current);
-    current->event = app_lv_scene_need_show;
-    app_lv_scene_update(current);
+    if (reserve) {
+        app_lv_scene_get_top(&current);
+        app_lv_scene_num++;
+        app_lv_ui_scene[app_lv_scene_num - 2] = *scene;
+        app_lv_ui_scene[app_lv_scene_num - 1] = *current;
+    } else {
+        app_lv_scene_get_top(&current);
+        current->event = app_lv_scene_need_hide;
+        app_lv_scene_update(current);
+        app_lv_ui_scene[app_lv_scene_num++] = *scene;
+        app_lv_scene_get_top(&current);
+        current->event = app_lv_scene_need_show;
+        app_lv_scene_update(current);
+    }
 }
 
 /*@brief      场景移除当前显示场景

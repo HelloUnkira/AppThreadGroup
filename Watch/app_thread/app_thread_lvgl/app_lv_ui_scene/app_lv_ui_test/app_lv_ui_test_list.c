@@ -40,7 +40,7 @@ static void app_lv_ui_test_list_btn_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_CLICKED: {
         app_lv_scene_t *scene = lv_event_get_user_data(e);
-        app_lv_scene_add(scene);
+        app_lv_scene_add(scene, false);
         break;
     }
     default:

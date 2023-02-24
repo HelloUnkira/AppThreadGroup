@@ -50,7 +50,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
             /* 主界面进入下一层 */
             if (key == LV_KEY_ENTER) {
                 if (app_lv_scene_get_nest() == 1) {
-                    app_lv_scene_add(&app_lv_scene_list);
+                    app_lv_scene_add(&app_lv_scene_list, false);
                 }
             }
         }

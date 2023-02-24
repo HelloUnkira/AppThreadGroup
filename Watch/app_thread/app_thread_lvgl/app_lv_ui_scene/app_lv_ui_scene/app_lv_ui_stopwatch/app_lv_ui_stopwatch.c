@@ -160,8 +160,6 @@ static void app_lv_ui_btn_r_cb(lv_event_t *e)
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
-    /* 此界面禁用超时息屏及主界面回退 */
-    app_lv_ui_scene_time_check_reset(0, 0);
     /* 左上角系统时钟更新 */
     lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
                           app_lv_ui_stopwatch_presenter.is_24_mode() ? "" :
