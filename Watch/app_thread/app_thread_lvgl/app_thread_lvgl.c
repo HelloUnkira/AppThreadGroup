@@ -89,6 +89,7 @@ void app_thread_lvgl_routine(void)
                 /* lvgl场景处理事件 */
                 if (package.event == app_thread_lvgl_sched_scene) {
                     app_lv_scene_sched(package.data);
+                    app_lv_ui_scene_time_check_reset(0, 0);
                 }
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {

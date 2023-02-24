@@ -83,6 +83,7 @@ static void app_lv_ui_test_list_show(void *scene)
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 初始化列表,中部 */
         lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);
+        lv_obj_add_flag(list, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES - 40);
         lv_obj_set_style_pad_all(list, 10, 0);
         lv_obj_set_style_pad_row(list, 10, 0);

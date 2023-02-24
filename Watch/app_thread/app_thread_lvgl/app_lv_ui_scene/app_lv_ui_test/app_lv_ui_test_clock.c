@@ -95,6 +95,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_align_to(app_lv_ui_res_local->label_dtime, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */
         lv_obj_t *roller_set = lv_obj_create(app_lv_ui_res_local->scene);
+        lv_obj_add_flag(roller_set, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_width(roller_set, LV_HOR_RES);
         lv_obj_set_style_pad_all(roller_set, 0, 0);
         lv_obj_set_style_bg_color(roller_set,  lv_color_black(), 0);
@@ -103,6 +104,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_align(roller_set, LV_ALIGN_CENTER, 0, 0);
         /* 绘制分滚轮,中心对齐 */
         app_lv_ui_res_local->roller_m = lv_roller_create(roller_set);
+        lv_obj_add_flag(app_lv_ui_res_local->roller_m, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_width(app_lv_ui_res_local->roller_m, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_m, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_m, LV_OPA_0, LV_PART_SELECTED);
@@ -116,6 +118,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->roller_m, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
         /* 绘制时滚轮,分滚轮左外对齐 */
         app_lv_ui_res_local->roller_h = lv_roller_create(roller_set);
+        lv_obj_add_flag(app_lv_ui_res_local->roller_h, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_width(app_lv_ui_res_local->roller_h, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_h, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_h, LV_OPA_0, LV_PART_SELECTED);
@@ -129,6 +132,7 @@ static void app_lv_ui_test_clock_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->roller_h, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
         /* 绘制秒滚轮,分滚轮右外对齐 */
         app_lv_ui_res_local->roller_s = lv_roller_create(roller_set);
+        lv_obj_add_flag(app_lv_ui_res_local->roller_s, LV_OBJ_FLAG_EVENT_BUBBLE);
         lv_obj_set_width(app_lv_ui_res_local->roller_s, 50);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_s, LV_OPA_0, 0);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_s, LV_OPA_0, LV_PART_SELECTED);
