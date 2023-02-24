@@ -2,6 +2,7 @@
 #define APP_THREAD_MIX_CUSTOM_H
 
 typedef enum {  /* 线程模组 */
+    app_thread_mix_custom_system = 0,   /* 系统模组 */
     app_thread_mix_custom_work,         /* 工作队列模组 */
     app_thread_mix_custom_timer,        /* 定时器模组 */
     app_thread_mix_custom_clock,        /* 时钟模组 */
@@ -9,6 +10,10 @@ typedef enum {  /* 线程模组 */
     app_thread_mix_custom_stopwatch,    /* 秒表模组 */
     app_thread_mix_custom_countdown,    /* 倒计时模组 */
 } app_thread_mix_custom_module;
+
+typedef enum {  /* 系统模组事件 */
+    app_thread_mix_custom_system_watchdog_feed,
+} app_thread_mix_custom_system_event;
 
 typedef struct {    /* 工作队列模组数据项 */
     void (*routine)(void *parameter);   /* 数据处理例程 */

@@ -2,10 +2,15 @@
 #define APP_THREAD_LVGL_H
 
 typedef enum {  /* 线程模组 */
+    app_thread_lvgl_system = 0,     /* 系统模组 */
     app_thread_lvgl_work,           /* 工作队列模组 */
     app_thread_lvgl_sched,          /* GUI事件调度模组 */
     app_thread_lvgl_ui_scene,       /* UI场景基础模组 */
 } app_thread_lvgl_module;
+
+typedef enum {  /* 系统模组事件 */
+    app_thread_lvgl_system_watchdog_feed,
+} app_thread_lvgl_system_event;
 
 typedef struct {    /* 工作队列模组数据项 */
     void (*routine)(void *parameter);   /* 数据处理例程 */

@@ -136,7 +136,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     /* 执行加载 */
     if (not_load_yet) {
         not_load_yet = false;
-        /* 向线程发送场景启动事件 */
+        /* 向线程发送场景启动事件 */
         {
             app_package_t package = {
                 .send_tid = app_thread_id_unknown,
@@ -215,7 +215,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
 
 /*@brief 初始化系统模组
  */
-void app_module_system(void)
+void app_module_system_ready(void)
 {
     app_mutex_process(&app_module_system_mutex);
 }

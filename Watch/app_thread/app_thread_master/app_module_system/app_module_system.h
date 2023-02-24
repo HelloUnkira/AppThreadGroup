@@ -39,7 +39,7 @@ uint8_t app_module_system_status_get(void);
 
 /*@brief 初始化系统模组
  */
-void app_module_system(void);
+void app_module_system_ready(void);
 
 /*@brief     断言
  *@param[in] file 文件名

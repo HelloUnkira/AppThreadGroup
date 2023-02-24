@@ -23,6 +23,7 @@
 #include "app_sys_pipe.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
+#include "app_module_watchdog.h"
 
 /*@brief 混合中断线程模组初始化
  */
@@ -51,6 +52,12 @@ void app_thread_mix_irq_routine(void)
             app_sys_pipe_take(pipe, &package);
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
+            case app_thread_mix_irq_system: {
+                if (package.event == app_thread_mix_irq_system_watchdog_feed) {
+                    app_module_watchdog_feed(app_thread_id_mix_irq);
+                }
+                break;
+            }
             case app_thread_mix_irq_work: {
                 /* 我们利用data和size传递内部特殊信息 */
                 if (package.data != NULL && package.size == (sizeof(void **) * 2)) {

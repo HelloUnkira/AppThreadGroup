@@ -13,6 +13,7 @@
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_lvgl.h"
+#include "app_module_watchdog.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
@@ -52,6 +53,12 @@ void app_thread_mix_custom_routine(void)
             app_sys_pipe_take(pipe, &package);
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
+            case app_thread_mix_custom_system: {
+                if (package.event == app_thread_mix_custom_system_watchdog_feed) {
+                    app_module_watchdog_feed(app_thread_id_mix_custom);
+                }
+                break;
+            }
             case app_thread_mix_custom_work: {
                 /* 我们利用data和size传递内部特殊信息 */
                 if (package.data != NULL && package.size == (sizeof(void **) * 2)) {

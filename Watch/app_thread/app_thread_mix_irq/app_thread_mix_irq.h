@@ -2,8 +2,13 @@
 #define APP_THREAD_MIX_IRQ_H
 
 typedef enum {  /* 线程模组 */
+    app_thread_mix_irq_system = 0,      /* 系统模组 */
     app_thread_mix_irq_work,            /* 工作队列模组 */
 } app_thread_mix_irq_module;
+
+typedef enum {  /* 系统模组事件 */
+    app_thread_mix_irq_system_watchdog_feed,
+} app_thread_mix_irq_system_event;
 
 typedef struct {    /* 工作队列模组数据项 */
     void (*routine)(void *parameter);   /* 数据处理例程 */

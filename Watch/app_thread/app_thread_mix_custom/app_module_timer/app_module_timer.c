@@ -17,7 +17,7 @@
 static app_mutex_t app_module_timer_mutex = {0};
 static app_module_timer_t *app_module_timer_list = NULL;
 
-/*@brief     停止,中止,终止软件定时器
+/*@brief     停止,中止,终止软件定时器(中断环境下不可调用)
  *@param[in] timer 定时器实例
  *@retval    执行是否有效
  */
@@ -57,7 +57,7 @@ bool app_module_timer_stop(app_module_timer_t *timer)
     return retval;
 }
 
-/*@brief     启动软件定时器
+/*@brief     启动软件定时器(中断环境下不可调用)
  *@param[in] timer 定时器实例
  *@retval    执行是否有效
  */
