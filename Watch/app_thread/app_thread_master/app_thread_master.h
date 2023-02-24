@@ -50,6 +50,13 @@ typedef enum {
     app_thread_id_unknown,          /* 占位符:未知来源,不可为未知去处 */
 } app_thread_id_set;
 
+/* 线程组事件 */
+/* 备注:每一个子线程都必须可以处理的系统公共事件 */
+/* 备注:占用每一个子线程的默认0号模组 */
+typedef enum {  /* 线程组模组 */
+    app_thread_group_work,
+} app_thread_group_module;
+
 /*@brief 初始化所有线程及其附属资源
  *       启动所有线程
  */

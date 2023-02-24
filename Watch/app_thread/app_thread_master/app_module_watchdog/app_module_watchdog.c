@@ -10,6 +10,7 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_module_system.h"
+#include "app_module_work.h"
 #include "app_module_watchdog.h"
 #include "app_module_clock.h"
 
@@ -19,8 +20,9 @@ static uint8_t app_module_watchdog_count[app_thread_id_num] = {0};
 /*@brief     线程软件看门狗喂狗
  *@param[in] thread_id 线程编号
  */
-void app_module_watchdog_feed(uint8_t thread_id)
+static void app_module_watchdog_feed_work(void *argument)
 {
+    uint8_t thread_id = (uint8_t)(uintptr_t)argument;
     if (thread_id < app_thread_id_num) {
         app_mutex_take(&app_module_watchdog_mutex);
         app_module_watchdog_count[thread_id] = 0;
@@ -38,11 +40,11 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         app_package_t package = {
             .send_tid = app_thread_id_unknown,
             .recv_tid = idx,
-            .module   = 0,  /* 固定为第0号模组 */
-            .event    = 0,  /* 固定为第0号事件 */
-            .dynamic  = false,
-            .size     = 0,
-            .data     = NULL,
+            .module   = app_thread_group_work,  /* 线程组工作模组 */
+            .event    = 0,
+            .dynamic  = true,
+            .size     = sizeof(app_module_work_t),
+            .data     = app_module_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
         };
         app_package_notify(&package);
         /* 如果超出最大时限,出错断言 */
