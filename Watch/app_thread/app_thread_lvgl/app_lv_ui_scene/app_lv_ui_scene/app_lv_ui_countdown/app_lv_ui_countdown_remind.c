@@ -8,9 +8,9 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_time_check.h"
-#include "app_lv_ui_util.h"
-#include "app_lv_ui_scene_set.h"
+#include "app_lv_ui_event.h"
+#include "app_lv_ui_scene.h"
+#include "app_lv_ui_check_time.h"
 #include "app_lv_ui_countdown.h"
 #include "app_lv_ui_countdown_remind.h"
 #include "app_lv_ui_countdown_presenter.h"

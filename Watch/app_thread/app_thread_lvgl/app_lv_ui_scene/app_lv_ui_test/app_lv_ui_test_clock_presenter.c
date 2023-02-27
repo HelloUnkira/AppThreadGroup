@@ -8,7 +8,6 @@
 #include "app_module_clock.h"
 
 #include "lvgl.h"
-#include "app_lv_ui_test_clock.h"
 #include "app_lv_ui_test_clock_presenter.h"
 
 /*@brief lvgl ui数据交互回调

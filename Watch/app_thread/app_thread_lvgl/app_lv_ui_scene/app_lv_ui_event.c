@@ -17,9 +17,9 @@
 #include "lvgl.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_time_check.h"
-#include "app_lv_ui_util.h"
-#include "app_lv_ui_scene_set.h"
+#include "app_lv_ui_event.h"
+#include "app_lv_ui_scene.h"
+#include "app_lv_ui_check_time.h"
 
 /*@brief 界面默认事件响应回调
  */
@@ -143,7 +143,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_SCROLL_BEGIN:
     case LV_EVENT_SCROLL_END:
     case LV_EVENT_SCROLL:
-        app_lv_ui_scene_time_check_reset(0, 0);
+        app_lv_ui_check_time_reset(0, 0);
         break;
     default:
         break;
@@ -227,6 +227,27 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         app_mem_free(fade_mask_b);
         roller_mask_id_t = -1;
         roller_mask_id_b = -1;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 场景内事件处理集合
+ */
+void app_lv_ui_scene_event(uint32_t event, uint8_t *data, uint32_t size)
+{
+    switch (event) {
+    case app_thread_lvgl_ui_countdown_remind: {
+        /* 如果进入到低功耗模式先唤醒场景 */
+        if (app_module_system_dlps_get()) {
+            app_lv_scene_add(&app_lv_scene_countdown_remind, true);
+            app_module_system_dlps_set(false);
+        } else {
+            /* 倒计时提醒事件 */
+            app_lv_scene_add(&app_lv_scene_countdown_remind, false);
+        }
+        break;
     }
     default:
         break;
