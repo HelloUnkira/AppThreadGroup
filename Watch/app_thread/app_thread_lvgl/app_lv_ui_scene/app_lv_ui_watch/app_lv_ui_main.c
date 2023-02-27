@@ -9,6 +9,7 @@
 #include "lvgl.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
+#include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
 typedef struct {
@@ -37,16 +38,7 @@ static void app_lv_ui_main_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = lv_obj_create(lv_scr_act());
-        lv_obj_remove_style_all(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->scene, LV_HOR_RES, LV_VER_RES);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->scene, lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_border_color(app_lv_ui_res_local->scene, lv_color_black(), 0);
+        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 场景添加默认事件 */
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化居中标签 */

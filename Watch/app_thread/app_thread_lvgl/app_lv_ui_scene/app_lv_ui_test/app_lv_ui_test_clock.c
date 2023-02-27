@@ -9,6 +9,7 @@
 #include "lvgl.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
+#include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_test_clock_presenter.h"
 
@@ -33,19 +34,44 @@ static const char *app_lv_ui_res_week[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "F
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
-    lv_label_set_text_fmt(app_lv_ui_res_local->label_dtime,
-                          "%u-%u-%u %u:%u:%u %s",
-                          app_lv_ui_test_clock_presenter.get_year(),
-                          app_lv_ui_test_clock_presenter.get_month(),
-                          app_lv_ui_test_clock_presenter.get_day(),
-                          app_lv_ui_test_clock_presenter.get_hour(),
-                          app_lv_ui_test_clock_presenter.get_minute(),
-                          app_lv_ui_test_clock_presenter.get_second(),
-                          app_lv_ui_res_week[app_lv_ui_test_clock_presenter.get_week()]);
+    lv_color_t time_color[7] = {
+        lv_palette_main(LV_PALETTE_RED),
+        lv_palette_main(LV_PALETTE_BLUE),
+        lv_palette_main(LV_PALETTE_GREEN),
+        lv_palette_main(LV_PALETTE_YELLOW),
+        lv_palette_main(LV_PALETTE_PINK),
+        lv_palette_main(LV_PALETTE_BROWN),
+        lv_palette_main(LV_PALETTE_ORANGE),
+    };
     
-    lv_roller_set_selected(app_lv_ui_res_local->roller_h,   app_lv_ui_test_clock_presenter.get_hour(),   LV_ANIM_OFF);
+    char time_color_0x[7][20] = {0};
+    
+    for (uint8_t idx = 0; idx < 7; idx++)
+        sprintf(time_color_0x[idx], "%06x", (*(uint32_t *)(lv_color_t *)&time_color[idx]) % 0xFF000000);
+    
+    lv_label_set_text_fmt(app_lv_ui_res_local->label_dtime,
+                          "#%s %u#-#%s %u#-#%s %u# #%s %u#:#%s %u#:#%s %u# #%s %s#",
+                          time_color_0x[0], app_lv_ui_test_clock_presenter.get_year(),
+                          time_color_0x[1], app_lv_ui_test_clock_presenter.get_month(),
+                          time_color_0x[2], app_lv_ui_test_clock_presenter.get_day(),
+                          time_color_0x[3], app_lv_ui_test_clock_presenter.get_hour(),
+                          time_color_0x[4], app_lv_ui_test_clock_presenter.get_minute(),
+                          time_color_0x[5], app_lv_ui_test_clock_presenter.get_second(),
+                          time_color_0x[6], app_lv_ui_res_week[app_lv_ui_test_clock_presenter.get_week()]);
+    
+    lv_roller_set_selected(app_lv_ui_res_local->roller_h, app_lv_ui_test_clock_presenter.get_hour(),   LV_ANIM_OFF);
     lv_roller_set_selected(app_lv_ui_res_local->roller_m, app_lv_ui_test_clock_presenter.get_minute(), LV_ANIM_OFF);
     lv_roller_set_selected(app_lv_ui_res_local->roller_s, app_lv_ui_test_clock_presenter.get_second(), LV_ANIM_OFF);
+    
+    const lv_color_t roller_color[3] = {lv_palette_main(LV_PALETTE_BLUE),
+                                        lv_palette_main(LV_PALETTE_GREEN),
+                                        lv_palette_main(LV_PALETTE_RED)};
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_h, roller_color[(value + 0) % 3], 0);
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_h, roller_color[(value + 0) % 3], LV_PART_SELECTED);
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_m, roller_color[(value + 1) % 3], 0);
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_m, roller_color[(value + 1) % 3], LV_PART_SELECTED);
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_s, roller_color[(value + 2) % 3], 0);
+    lv_obj_set_style_text_color(app_lv_ui_res_local->roller_s, roller_color[(value + 2) % 3], LV_PART_SELECTED);
 }
 
 /*@brief 界面显示
@@ -56,100 +82,38 @@ static void app_lv_ui_test_clock_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = lv_obj_create(lv_scr_act());
-        lv_obj_remove_style_all(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->scene, LV_HOR_RES, LV_VER_RES);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->scene, lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->scene, 0, 0);
+        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 场景添加默认事件 */
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化标签,上中部 */
-        lv_obj_t *label = lv_label_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(label, LV_HOR_RES - 20, 40);
-        lv_obj_set_style_pad_all(label, 0, 0);
-        lv_obj_set_style_bg_color(label,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(label, 0, 0);
-        lv_obj_set_style_border_width(label, 0, 0);
-        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
+        lv_obj_t *label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_text_line_space(label, 5, 0);
-        lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
         lv_label_set_text_static(label, "System Clock");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制日期 */
-        app_lv_ui_res_local->label_dtime = lv_label_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->label_dtime, LV_HOR_RES - 20, 40);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->label_dtime, 0, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->label_dtime,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->label_dtime, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->label_dtime, 0, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->label_dtime,  lv_color_black(), 0);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->label_dtime, LV_TEXT_ALIGN_CENTER, 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->label_dtime, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_text_line_space(app_lv_ui_res_local->label_dtime, 5, 0);
-        lv_label_set_long_mode(app_lv_ui_res_local->label_dtime, LV_LABEL_LONG_WRAP);
+        app_lv_ui_res_local->label_dtime = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        lv_label_set_recolor(app_lv_ui_res_local->label_dtime, true);
         lv_obj_align_to(app_lv_ui_res_local->label_dtime, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */
         lv_obj_t *roller_set = lv_obj_create(app_lv_ui_res_local->scene);
-        lv_obj_add_flag(roller_set, LV_OBJ_FLAG_EVENT_BUBBLE);
+        app_lv_ui_style_object(roller_set);
         lv_obj_set_width(roller_set, LV_HOR_RES);
-        lv_obj_set_style_pad_all(roller_set, 0, 0);
-        lv_obj_set_style_bg_color(roller_set,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(roller_set, 0, 0);
-        lv_obj_set_style_border_width(roller_set, 0, 0);
         lv_obj_align(roller_set, LV_ALIGN_CENTER, 0, 0);
         /* 绘制分滚轮,中心对齐 */
-        app_lv_ui_res_local->roller_m = lv_roller_create(roller_set);
-        lv_obj_add_flag(app_lv_ui_res_local->roller_m, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_set_width(app_lv_ui_res_local->roller_m, 50);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_m, LV_OPA_0, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_m, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->roller_m, app_lv_ui_res_roller_sel_font, LV_PART_SELECTED);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_m, lv_palette_main(LV_PALETTE_GREEN), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_m, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->roller_m, LV_TEXT_ALIGN_CENTER, 0);
-        lv_roller_set_options(app_lv_ui_res_local->roller_m, app_lv_ui_res_0_59, LV_ROLLER_MODE_INFINITE);
-        lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_m, 3);
+        app_lv_ui_res_local->roller_m = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_59, 3);
         lv_obj_align(app_lv_ui_res_local->roller_m, LV_ALIGN_CENTER, 0, 0);
-        lv_obj_add_event_cb(app_lv_ui_res_local->roller_m, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
         /* 绘制时滚轮,分滚轮左外对齐 */
-        app_lv_ui_res_local->roller_h = lv_roller_create(roller_set);
-        lv_obj_add_flag(app_lv_ui_res_local->roller_h, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_set_width(app_lv_ui_res_local->roller_h, 50);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_h, LV_OPA_0, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_h, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->roller_h, app_lv_ui_res_roller_sel_font, LV_PART_SELECTED);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_h, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_h, lv_palette_main(LV_PALETTE_BLUE), LV_PART_SELECTED);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->roller_h, LV_TEXT_ALIGN_CENTER, 0);
-        lv_roller_set_options(app_lv_ui_res_local->roller_h, app_lv_ui_res_0_23, LV_ROLLER_MODE_INFINITE);
-        lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_h, 3);
+        app_lv_ui_res_local->roller_h = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_23, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_h, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_LEFT_MID, 0, 0);
-        lv_obj_add_event_cb(app_lv_ui_res_local->roller_h, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
         /* 绘制秒滚轮,分滚轮右外对齐 */
-        app_lv_ui_res_local->roller_s = lv_roller_create(roller_set);
-        lv_obj_add_flag(app_lv_ui_res_local->roller_s, LV_OBJ_FLAG_EVENT_BUBBLE);
-        lv_obj_set_width(app_lv_ui_res_local->roller_s, 50);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_s, LV_OPA_0, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->roller_s, LV_OPA_0, LV_PART_SELECTED);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->roller_s, app_lv_ui_res_roller_sel_font, LV_PART_SELECTED);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_s, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->roller_s, lv_palette_main(LV_PALETTE_RED), LV_PART_SELECTED);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->roller_s, LV_TEXT_ALIGN_CENTER, 0);
-        lv_roller_set_options(app_lv_ui_res_local->roller_s, app_lv_ui_res_0_59, LV_ROLLER_MODE_INFINITE);
-        lv_roller_set_visible_row_count(app_lv_ui_res_local->roller_s, 3);
+        app_lv_ui_res_local->roller_s = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_s, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
-        lv_obj_add_event_cb(app_lv_ui_res_local->roller_s, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
         lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
         lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, LV_ANIM_REPEAT_INFINITE);
-        lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 10);
+        lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 3);
         lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
@@ -168,9 +132,6 @@ static void app_lv_ui_test_clock_hide(void *scene)
         /* 场景去除默认事件 */
         app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化场景 */
-        lv_obj_remove_event_cb(app_lv_ui_res_local->roller_s, app_lv_ui_roller_mask_event_cb);
-        lv_obj_remove_event_cb(app_lv_ui_res_local->roller_h,   app_lv_ui_roller_mask_event_cb);
-        lv_obj_remove_event_cb(app_lv_ui_res_local->roller_m, app_lv_ui_roller_mask_event_cb);
         lv_obj_del(app_lv_ui_res_local->scene);
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;

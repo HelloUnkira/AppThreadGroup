@@ -9,6 +9,7 @@
 #include "lvgl.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
+#include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_check_time.h"
 #include "app_lv_ui_stopwatch.h"
@@ -29,9 +30,6 @@ typedef struct {
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
-
-#define app_lv_ui_res_tick_main_font    &lv_font_montserrat_28
-#define app_lv_ui_res_btn_text_font     &lv_font_montserrat_22
 
 /*@brief 清除计数列表
 */
@@ -194,97 +192,31 @@ static void app_lv_ui_stopwatch_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = lv_obj_create(lv_scr_act());
-        lv_obj_remove_style_all(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->scene, LV_HOR_RES, LV_VER_RES);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->scene, LV_OPA_COVER, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->scene, lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->scene, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->scene, 0, 0);
+        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 场景添加默认事件 */
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
-        /* 上部文本 */
-        app_lv_ui_res_local->title = lv_obj_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->title, LV_HOR_RES, 40);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->title, 10, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->title,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->title, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->title, 0, 0);
-        /* 左上角标题 */
-        app_lv_ui_res_local->name = lv_btn_create(app_lv_ui_res_local->title);
-        lv_obj_set_size(app_lv_ui_res_local->name, LV_HOR_RES / 2 - 20, 20);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->name, 0, 0);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->name, lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->name, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->name, 0, 0);
-        lv_obj_set_style_shadow_width(app_lv_ui_res_local->name, 0, 0);
+        /* 默认顶部风格 */
+        lv_obj_t *title = NULL;
+        app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
+                                                          &app_lv_ui_res_local->name,
+                                                          &app_lv_ui_res_local->time, &title);
         lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_name_btn_cb, LV_EVENT_CLICKED, NULL);
-        lv_obj_align(app_lv_ui_res_local->name, LV_ALIGN_LEFT_MID, 10, 0);
-        lv_obj_t *lbl_name = lv_label_create(app_lv_ui_res_local->name);
-        lv_obj_set_style_text_color(lbl_name, lv_color_white(), 0);
-        lv_obj_set_style_text_align(lbl_name, LV_TEXT_ALIGN_LEFT, 0);
-        lv_label_set_text(lbl_name, "< Stopwatch");
-        lv_obj_align(lbl_name, LV_ALIGN_TOP_LEFT, 0, 0);
-        /* 右上角时间 */
-        app_lv_ui_res_local->time = lv_label_create(app_lv_ui_res_local->title);
-        lv_obj_set_size(app_lv_ui_res_local->time, LV_HOR_RES / 2 - 20, 20);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->time, lv_color_white(), 0);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->time, LV_TEXT_ALIGN_RIGHT, 0);
-        lv_label_set_text(app_lv_ui_res_local->time, "00:00");
-        lv_obj_align(app_lv_ui_res_local->time, LV_ALIGN_RIGHT_MID, -10, 0);
+        lv_label_set_text(title, "< Stopwatch");
         /* 主体时间 */
-        app_lv_ui_res_local->tick_main = lv_label_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(app_lv_ui_res_local->tick_main, LV_HOR_RES, 30);
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->tick_main,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->tick_main, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->tick_main, 0, 0);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->tick_main, app_lv_ui_res_tick_main_font, 0);
+        app_lv_ui_res_local->tick_main = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tick_main, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_obj_set_style_text_align(app_lv_ui_res_local->tick_main, LV_TEXT_ALIGN_CENTER, 0);
-        lv_label_set_text(app_lv_ui_res_local->tick_main, "00:00:00.000");
         lv_obj_align_to(app_lv_ui_res_local->tick_main, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 计数列表(点击时更新) */
         app_lv_ui_res_local->tick_list = NULL;
         app_lv_ui_local_tick_list_set(false);
-        /* 下部按键 */
-        lv_obj_t *btn = lv_obj_create(app_lv_ui_res_local->scene);
-        lv_obj_set_size(btn, LV_HOR_RES, 60);
-        lv_obj_set_style_pad_all(btn, 10, 0);
-        lv_obj_set_style_bg_color(btn,  lv_color_black(), 0);
-        lv_obj_set_style_border_side(btn, 0, 0);
-        lv_obj_set_style_border_width(btn, 0, 0);
-        lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
-        /* 左下角按键 */
-        app_lv_ui_res_local->btn_l = lv_btn_create(btn);
-        lv_obj_set_size(app_lv_ui_res_local->btn_l, LV_HOR_RES / 2 - 20, 40);
-        lv_obj_set_style_radius(app_lv_ui_res_local->btn_l, 45, 0);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->btn_l, 0, 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->btn_l, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->btn_l, 0, 0);
-        lv_obj_set_style_shadow_width(app_lv_ui_res_local->btn_l, 0, 0);
+        /* 底部双按钮组 */
+        lv_obj_t *btn = app_lv_ui_style_two_btns(app_lv_ui_res_local->scene,
+                                                &app_lv_ui_res_local->btn_l,
+                                                &app_lv_ui_res_local->lbl_l,
+                                                &app_lv_ui_res_local->btn_r,
+                                                &app_lv_ui_res_local->lbl_r);
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_l, app_lv_ui_btn_l_cb, LV_EVENT_CLICKED, NULL);
-        lv_obj_align(app_lv_ui_res_local->btn_l, LV_ALIGN_LEFT_MID, 5, 0);
-        app_lv_ui_res_local->lbl_l = lv_label_create(app_lv_ui_res_local->btn_l);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->lbl_l, app_lv_ui_res_btn_text_font, 0);
-        lv_label_set_text(app_lv_ui_res_local->lbl_l, "L_Btn");
-        lv_obj_align(app_lv_ui_res_local->lbl_l, LV_ALIGN_CENTER, 0, 0);
-        /* 右下角按键 */
-        app_lv_ui_res_local->btn_r = lv_btn_create(btn);
-        lv_obj_set_size(app_lv_ui_res_local->btn_r, LV_HOR_RES / 2 - 20, 40);
-        lv_obj_set_style_radius(app_lv_ui_res_local->btn_r, 45, 0);
-        lv_obj_set_style_pad_all(app_lv_ui_res_local->btn_r, 0, 0);
-        lv_obj_set_style_border_side(app_lv_ui_res_local->btn_r, 0, 0);
-        lv_obj_set_style_border_width(app_lv_ui_res_local->btn_r, 0, 0);
-        lv_obj_set_style_shadow_width(app_lv_ui_res_local->btn_r, 0, 0);
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_r, app_lv_ui_btn_r_cb, LV_EVENT_CLICKED, NULL);
-        lv_obj_align(app_lv_ui_res_local->btn_r, LV_ALIGN_RIGHT_MID, -5, 0);
-        app_lv_ui_res_local->lbl_r = lv_label_create(app_lv_ui_res_local->btn_r);
-        lv_obj_set_style_text_font(app_lv_ui_res_local->lbl_r, app_lv_ui_res_btn_text_font, 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->lbl_r, lv_color_white(), 0);
-        lv_label_set_text(app_lv_ui_res_local->lbl_r, "R_Btn");
-        lv_obj_align(app_lv_ui_res_local->lbl_r, LV_ALIGN_CENTER, 0, 0);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
