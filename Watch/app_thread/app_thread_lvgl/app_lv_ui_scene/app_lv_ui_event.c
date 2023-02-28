@@ -227,6 +227,7 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         app_mem_free(fade_mask_b);
         roller_mask_id_t = -1;
         roller_mask_id_b = -1;
+        break;
     }
     default:
         break;

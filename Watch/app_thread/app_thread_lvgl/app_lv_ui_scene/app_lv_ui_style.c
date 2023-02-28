@@ -41,8 +41,6 @@ lv_obj_t * app_lv_ui_style_scene(void)
     lv_obj_remove_style_all(scene);
     app_lv_ui_style_object(scene);
     lv_obj_set_size(scene, LV_HOR_RES, LV_VER_RES);
-    lv_obj_set_style_opa(scene, LV_OPA_COVER, 0);
-    lv_obj_set_style_bg_opa(scene, LV_OPA_COVER, 0);
     return scene;
 }
 
@@ -125,7 +123,7 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
  */
 lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t **lbl_l, lv_obj_t **btn_r, lv_obj_t **lbl_r)
 {
-    #define app_lv_ui_res_btn_text_font     &lv_font_montserrat_22
+    #define app_lv_ui_style_two_btns_btn_text_font  &lv_font_montserrat_22
 
     APP_MODULE_ASSERT(btn_l != NULL);
     APP_MODULE_ASSERT(lbl_l != NULL);
@@ -147,7 +145,7 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_obj_align(*btn_l, LV_ALIGN_LEFT_MID, 5, 0);
     *lbl_l = lv_label_create(*btn_l);
     lv_obj_set_style_text_color(*lbl_l, lv_color_white(), 0);
-    lv_obj_set_style_text_font(*lbl_l, app_lv_ui_res_btn_text_font, 0);
+    lv_obj_set_style_text_font(*lbl_l, app_lv_ui_style_two_btns_btn_text_font, 0);
     lv_obj_align(*lbl_l, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(*lbl_l, "L_Btn");
     /* 右下角按钮 */
@@ -159,7 +157,7 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_obj_align(*btn_r, LV_ALIGN_RIGHT_MID, -5, 0);
     *lbl_r = lv_label_create(*btn_r);
     lv_obj_set_style_text_color(*lbl_r, lv_color_white(), 0);
-    lv_obj_set_style_text_font(*lbl_r, app_lv_ui_res_btn_text_font, 0);
+    lv_obj_set_style_text_font(*lbl_r, app_lv_ui_style_two_btns_btn_text_font, 0);
     lv_obj_align(*lbl_r, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(*lbl_r, "R_Btn");
     /* 下部按钮 */
@@ -175,8 +173,8 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
  */
 lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row)
 {
-    #define app_lv_ui_res_rolsel_font       &lv_font_montserrat_28
-    #define app_lv_ui_res_rolcus_font       &lv_font_montserrat_22
+    #define app_lv_ui_style_roller_rolcus_font      &lv_font_montserrat_22
+    #define app_lv_ui_style_roller_rolsel_font      &lv_font_montserrat_28
     
     lv_obj_t *roller = lv_roller_create(parent);
     app_lv_ui_style_object(roller);
@@ -184,16 +182,11 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
     lv_obj_set_width(roller, width);
     lv_obj_set_style_bg_opa(roller, LV_OPA_0, 0);
     lv_obj_set_style_bg_opa(roller, LV_OPA_0, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(roller, app_lv_ui_res_rolcus_font, 0);
-    lv_obj_set_style_text_font(roller, app_lv_ui_res_rolsel_font, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolcus_font, 0);
+    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolsel_font, LV_PART_SELECTED);
     lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);
-    lv_roller_set_options(roller, options, LV_ROLLER_MODE_INFINITE);
+    lv_roller_set_options(roller, options, LV_ROLLER_MODE_NORMAL);///* 滚动模式显示异常 */LV_ROLLER_MODE_INFINITE);//
     lv_roller_set_visible_row_count(roller, vis_row);
     lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
     return roller;
 }
-
-
-
-
-
