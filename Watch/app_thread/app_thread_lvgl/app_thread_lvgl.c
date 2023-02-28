@@ -52,7 +52,7 @@ void app_thread_lvgl_routine(void)
         app_sem_take(sem);
         #if APP_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread lvgl recv too much package:%u\n",
+            APP_SYS_LOG_WARN("thread lvgl recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
         #endif
         while (app_sys_pipe_package_num(pipe)) {
@@ -82,7 +82,7 @@ void app_thread_lvgl_routine(void)
                     if (app_lv_driver_shutdown()) {
                         app_lv_drv_shutdown = true;
                         /* 重启系统 */
-                        APP_SYS_LOG_WARN("app_lv_shutdown\n");
+                        APP_SYS_LOG_WARN("app_lv_drv_shutdown");
                         app_module_system_delay_set(2);
                         app_module_system_status_set(app_module_system_reset);
                     }
@@ -135,15 +135,13 @@ void app_thread_lvgl_routine(void)
             }
             default: {
                 #if APP_THREAD_CHECK
-                APP_SYS_LOG_ERROR("\n");
-                APP_SYS_LOG_ERROR("thread lvgl pipe recv a unknown package\n");
-                APP_SYS_LOG_ERROR("package send_tid:%u\n", package.send_tid);
-                APP_SYS_LOG_ERROR("package recv_tid:%u\n", package.recv_tid);
-                APP_SYS_LOG_ERROR("package module:%u\n",   package.module);
-                APP_SYS_LOG_ERROR("package event:%u\n",    package.event);
-                APP_SYS_LOG_ERROR("package data:%p\n",     package.data);
-                APP_SYS_LOG_ERROR("package size:%u\n",     package.size);
-                APP_SYS_LOG_ERROR("\n");
+                APP_SYS_LOG_ERROR("thread lvgl pipe recv a unknown package");
+                APP_SYS_LOG_ERROR("package send_tid:%u", package.send_tid);
+                APP_SYS_LOG_ERROR("package recv_tid:%u", package.recv_tid);
+                APP_SYS_LOG_ERROR("package module:%u",   package.module);
+                APP_SYS_LOG_ERROR("package event:%u",    package.event);
+                APP_SYS_LOG_ERROR("package data:%p",     package.data);
+                APP_SYS_LOG_ERROR("package size:%u",     package.size);
                 #endif
                 break;
             }

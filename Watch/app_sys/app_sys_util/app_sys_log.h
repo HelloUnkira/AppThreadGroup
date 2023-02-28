@@ -26,36 +26,36 @@
  *@param[in] format 日志信息格式化信息
  *@param[in] ...    日志信息信息变参
  */
-void app_sys_log_msg(bool status, char flag, const char *file, uint32_t line, const char *func, const char *format, ...);
+void app_sys_log_msg(unsigned char status, char flag, const char *file, const char *func, uint32_t line, const char *format, ...);
 
 /* DEBUG */
 #if APP_SYS_LOG_LOCAL_LEVEL <= 0
-#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(true,  'D', __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(false, 'D', __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #else
 #define APP_SYS_LOG_DEBUG(...)
 #define APP_SYS_LOG_DEBUG_RAW(...)
 #endif
 /* INFO */
 #if APP_SYS_LOG_LOCAL_LEVEL <= 1
-#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(true,  'I', __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(false, 'I', __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(0, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #else
 #define APP_SYS_LOG_INFO(...)
 #define APP_SYS_LOG_INFO_RAW(...)
 #endif
 /* WARN */
 #if APP_SYS_LOG_LOCAL_LEVEL <= 2
-#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(true,  'W', __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(false, 'W', __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(1, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(0, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #else
 #define APP_SYS_LOG_WARN(...)
 #define APP_SYS_LOG_WARN_RAW(...)
 #endif
 /* ERROR */
 #if APP_SYS_LOG_LOCAL_LEVEL <= 3
-#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(true,  'E', __FILE__, __LINE__, __func__, __VA_ARGS__)
-#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(false, 'E', __FILE__, __LINE__, __func__, __VA_ARGS__)
+#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(1, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #else
 #define APP_SYS_LOG_ERROR(...)
 #define APP_SYS_LOG_ERROR_RAW(...)

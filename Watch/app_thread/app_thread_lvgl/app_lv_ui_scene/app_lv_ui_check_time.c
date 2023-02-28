@@ -32,7 +32,7 @@ static uint8_t app_lv_ui_idle_time_bak = APP_LV_UI_IDLE_TIME;
  */
 void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time)
 {
-    APP_SYS_LOG_INFO("app_lv_ui_check_time_reset\n");
+    APP_SYS_LOG_INFO("");
     app_mutex_take(&app_lv_ui_check_time_mutex);
     app_lv_ui_over_time_bak = over_time != 0 ? over_time : app_lv_ui_over_time_bak;
     app_lv_ui_idle_time_bak = idle_time != 0 ? idle_time : app_lv_ui_idle_time_bak;

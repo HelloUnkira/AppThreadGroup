@@ -53,7 +53,7 @@ void app_module_clock_load(void)
         app_module_clock_to_week(&clock);
         app_module_clock_to_utc(&clock);
         app_module_clock_set_system_clock(&clock);
-        APP_SYS_LOG_WARN("app_module_clock_load: load system clock fail\n");
+        APP_SYS_LOG_WARN("load system clock fail");
     }
 }
 

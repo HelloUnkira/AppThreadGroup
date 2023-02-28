@@ -29,7 +29,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
     switch (code) {
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u\n", key);
+        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
         /* DLPS界面退出 */
         if (app_module_system_dlps_get()) {
             if (key == LV_KEY_ENTER) {
@@ -59,7 +59,7 @@ static void app_lv_ui_event_default(lv_event_t *e)
     }
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x\n", dir);
+        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             if (app_lv_scene_get_nest() > 1) {
@@ -70,63 +70,63 @@ static void app_lv_ui_event_default(lv_event_t *e)
         break;
     }
     case LV_EVENT_PRESSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_PRESSED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_PRESSED");
         break;
     }
     case LV_EVENT_PRESSING: {
-        APP_SYS_LOG_INFO("LV_EVENT_PRESSING\n");
+        APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
         break;
     }
     case LV_EVENT_PRESS_LOST: {
-        APP_SYS_LOG_INFO("LV_EVENT_PRESS_LOST\n");
+        APP_SYS_LOG_INFO("LV_EVENT_PRESS_LOST");
         break;
     }
     case LV_EVENT_SHORT_CLICKED: {
-        APP_SYS_LOG_INFO("LV_EVENT_SHORT_CLICKED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_SHORT_CLICKED");
         break;
     }
     case LV_EVENT_LONG_PRESSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED");
         break;
     }
     case LV_EVENT_LONG_PRESSED_REPEAT: {
-        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT\n");
+        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT");
         break;
     }
     case LV_EVENT_CLICKED: {
-        APP_SYS_LOG_INFO("LV_EVENT_CLICKED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_CLICKED");
         break;
     }
     case LV_EVENT_RELEASED: {
-        APP_SYS_LOG_INFO("LV_EVENT_RELEASED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_RELEASED");
         break;
     }
     case LV_EVENT_SCROLL_BEGIN: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN\n");
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
         break;
     }
     case LV_EVENT_SCROLL_END: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END\n");
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
         break;
     }
     case LV_EVENT_SCROLL: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL\n");
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
         break;
     }
     case LV_EVENT_FOCUSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
         break;
     }
     case LV_EVENT_DEFOCUSED: {
-        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED\n");
+        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
         break;
     }
     case LV_EVENT_LEAVE: {
-        APP_SYS_LOG_INFO("LV_EVENT_LEAVE\n");
+        APP_SYS_LOG_INFO("LV_EVENT_LEAVE");
         break;
     }
     case LV_EVENT_HIT_TEST: {
-        APP_SYS_LOG_INFO("LV_EVENT_HIT_TEST\n");
+        APP_SYS_LOG_INFO("LV_EVENT_HIT_TEST");
         break;
     }
     default:

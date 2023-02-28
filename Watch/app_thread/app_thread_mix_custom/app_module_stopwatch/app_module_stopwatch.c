@@ -97,7 +97,7 @@ static void app_module_stopwatch_xmsec_update(void *timer)
     app_mutex_give(&app_module_stopwatch_mutex);
     
     #if APP_MODULE_CHECK
-    APP_SYS_LOG_INFO("stopwatch:%u:%u:%u:%u\n",
+    APP_SYS_LOG_INFO("stopwatch:%u:%u:%u:%u",
                       stopwatch.hour,stopwatch.minute,stopwatch.second,
                       stopwatch.msec);
     #endif

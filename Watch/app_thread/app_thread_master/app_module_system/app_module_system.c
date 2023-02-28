@@ -72,7 +72,7 @@ void app_module_system_dlps_set(bool status)
     else
         package.event = app_thread_lvgl_sched_dlps_exit;
     app_package_notify(&package);
-    APP_SYS_LOG_WARN("\napp_module_system_dlps_set: ui scene\n");
+    APP_SYS_LOG_WARN("ui scene");
 }
 
 /*@brief     设置系统延时
@@ -126,11 +126,11 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     if (dlps_exec) {
         /* 进入dlps */
         if (dlps_status) {
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: dlps enter\n");
+            APP_SYS_LOG_WARN("dlps enter");
         }
         /* 退出dlps */
         if (!dlps_status) {
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: dlps exit\n");
+            APP_SYS_LOG_WARN("dlps exit");
         }
     }
     /* 执行加载 */
@@ -148,7 +148,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .data     = NULL,
             };
             app_package_notify(&package);
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene start\n");
+            APP_SYS_LOG_WARN("ui scene start");
         }
         /* 向线程发送加载事件 */
         {
@@ -162,7 +162,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .data     = NULL,
             };
             app_package_notify(&package);
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data load\n");
+            APP_SYS_LOG_WARN("data load");
         }
     }
     if (is_valid)
@@ -182,7 +182,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .data     = NULL,
             };
             app_package_notify(&package);
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: ui scene stop\n");
+            APP_SYS_LOG_WARN("ui scene stop");
         }
         /* 向线程发送转储事件 */
         {
@@ -196,7 +196,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .data     = NULL,
             };
             app_package_notify(&package);
-            APP_SYS_LOG_WARN("\napp_module_system_ctrl_check: data dump\n");
+            APP_SYS_LOG_WARN("data dump");
         }
     }
     /* 延时到期,数据转储结束,重启系统 */
@@ -230,7 +230,7 @@ void app_module_assert(char *file, uint32_t line, bool cond)
     if (cond)
         return;
     /* 输出错误信息 */
-    APP_SYS_LOG_ERROR("app_module_assert:[%s][%d]", file, line);
+    APP_SYS_LOG_ERROR("[%s][%d]", file, line);
     /* 异常导致的错误直接重启系统(不转储信息) */
     app_os_reset();
 }

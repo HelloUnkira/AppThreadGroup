@@ -9,3 +9,9 @@ set_target_properties(app_main PROPERTIES LINKER_LANGUAGE C)
 # 添加库依赖
 target_link_libraries(app_main PUBLIC ${linux_lib})
 target_link_libraries(app_main PUBLIC app_thread)
+# 重命名
+set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
+# 指定exe输出到cmake_exe
+set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/cmake_exe)
+# 指定so输出到cmake_lib
+set(LIBRARY_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/cmake_lib)

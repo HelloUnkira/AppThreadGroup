@@ -16,7 +16,7 @@
  */
 void app_module_dump(void)
 {
-    APP_SYS_LOG_WARN("\napp_module_dump...\n");
+    APP_SYS_LOG_WARN("...");
     /* 转储系统时钟 */
     app_module_clock_dump();
     /* ... */

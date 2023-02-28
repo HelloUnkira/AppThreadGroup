@@ -119,7 +119,7 @@ static void app_module_countdown_xmsec_update(void *timer)
     app_mutex_give(&app_module_countdown_mutex);
     
     #if APP_MODULE_CHECK
-    APP_SYS_LOG_INFO("countdown:%u:%u:%u:%u - %u\n",
+    APP_SYS_LOG_INFO("countdown:%u:%u:%u:%u - %u",
                       countdown.hour,countdown.minute,countdown.second,
                       countdown.msec,countdown.onoff);
     #endif

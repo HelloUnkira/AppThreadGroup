@@ -37,19 +37,19 @@ bool app_module_transfer_respond(app_module_transfer_pkg_t *tsf_pkg, uint32_t ts
     if (tsf_pkg->package) {
         /* 上次协议包接收未结束,丢弃,开始新协议包接收 */
         if (app_module_protocol_pkg_off_rx >= sizeof(app_module_protocol_pkg_t)) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_pkg is not rx finish yet, discard");
+            APP_SYS_LOG_ERROR("ptl_pkg is not rx finish yet, discard");
             discard = true;
         }
         else
         /* 当次协议包接收过长,丢弃 */
         if (app_module_protocol_pkg_off_rx + tsf_pkg_size - 1 > sizeof(app_module_protocol_pkg_t)) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_pkg is too long, discard");
+            APP_SYS_LOG_ERROR("ptl_pkg is too long, discard");
             discard = true;
         }
         else
         /* 当次协议包接收过长,丢弃 */
         if (tsf_pkg_size - 1 > sizeof(app_module_protocol_pkg_t)) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_pkg is too long now, discard");
+            APP_SYS_LOG_ERROR("ptl_pkg is too long now, discard");
             discard = true;
         }
         /* 接收协议包 */
@@ -68,31 +68,31 @@ bool app_module_transfer_respond(app_module_transfer_pkg_t *tsf_pkg, uint32_t ts
     if (!tsf_pkg->package) {
         /* 协议包接收错误,数据无法接收,丢弃 */
         if (app_module_protocol_pkg_off_rx != sizeof(app_module_protocol_pkg_t)) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_pkg is not rx finish yet, discard");
+            APP_SYS_LOG_ERROR("ptl_pkg is not rx finish yet, discard");
             discard = true;
         }
         else
         /* 协议包接收错误,多余的数据无法接收,丢弃 */
         if (app_module_protocol_pkg_rx.size == 0 || app_module_protocol_dat_rx == NULL) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_dat cannot not rx, discard");
+            APP_SYS_LOG_ERROR("ptl_dat cannot not rx, discard");
             discard = true;
         }
         else
         /* 出现多余的数据,协议包失效,丢弃 */
         if (app_module_protocol_dat_off_rx >= app_module_protocol_pkg_rx.size) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_dat too long last, discard");
+            APP_SYS_LOG_ERROR("ptl_dat too long last, discard");
             discard = true;
         }
         else
         /* 出现多余的数据,协议包失效,丢弃 */
         if (app_module_protocol_dat_off_rx + tsf_pkg_size - 1 > app_module_protocol_pkg_rx.size) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_dat too long sum, discard");
+            APP_SYS_LOG_ERROR("ptl_dat too long sum, discard");
             discard = true;
         }
         else
         /* 出现多余的数据,协议包失效,丢弃 */
         if (tsf_pkg_size - 1 > app_module_protocol_pkg_rx.size) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_dat too long now, discard");
+            APP_SYS_LOG_ERROR("ptl_dat too long now, discard");
             discard = true;
         }
         /* 协议包接收正确,接收数据包 */
@@ -107,7 +107,7 @@ bool app_module_transfer_respond(app_module_transfer_pkg_t *tsf_pkg, uint32_t ts
         app_module_protocol_dat_off_rx == app_module_protocol_pkg_rx.size) {
         uint8_t crc8 = app_sys_crc8(app_module_protocol_dat_rx, app_module_protocol_pkg_rx.size);
         if (app_module_protocol_pkg_rx.crc8 != crc8) {
-            APP_SYS_LOG_ERROR("app_module_transfer_rx : ptl_dat crc8 fail, discard");
+            APP_SYS_LOG_ERROR("ptl_dat crc8 fail, discard");
             discard = true;
         }
     }

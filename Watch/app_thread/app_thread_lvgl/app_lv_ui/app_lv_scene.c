@@ -34,8 +34,7 @@ void app_lv_scene_sched(app_lv_scene_t *scene)
         scene->hide(scene);
         break;
     default:
-        APP_SYS_LOG_WARN("app_lv_scene_sched:\n");
-        APP_SYS_LOG_WARN("catch error event%u:\n", scene->event);
+        APP_SYS_LOG_WARN("catch error event%u:", scene->event);
         break;
     }
 }

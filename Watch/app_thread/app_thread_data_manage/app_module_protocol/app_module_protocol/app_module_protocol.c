@@ -30,9 +30,8 @@ void app_module_protocol_rx(app_module_protocol_pkg_t *ptl_pkg, uint8_t *ptl_dat
         if (retval = app_module_protocol_cb[idx].rx_pkg_cb(ptl_pkg, ptl_dat))
             break;
     if (!retval) {
-        APP_SYS_LOG_ERROR("app_module_protocol_rx:\n");
-        APP_SYS_LOG_ERROR("\tcommand:%u\n", ptl_pkg->command);
-        APP_SYS_LOG_ERROR("\tevent:%u\n", ptl_pkg->event);
+        APP_SYS_LOG_ERROR("command:%u", ptl_pkg->command);
+        APP_SYS_LOG_ERROR("event:%u", ptl_pkg->event);
     }
 }
 
@@ -47,9 +46,8 @@ void app_module_protocol_tx(app_module_protocol_pkg_t *ptl_pkg, uint8_t **ptl_da
         if (retval = app_module_protocol_cb[idx].tx_pkg_cb(ptl_pkg, ptl_dat))
             break;
     if (!retval) {
-        APP_SYS_LOG_ERROR("app_module_protocol_rx:\n");
-        APP_SYS_LOG_ERROR("\tcommand:%u\n", ptl_pkg->command);
-        APP_SYS_LOG_ERROR("\tevent:%u\n", ptl_pkg->event);
+        APP_SYS_LOG_ERROR("command:%u", ptl_pkg->command);
+        APP_SYS_LOG_ERROR("event:%u", ptl_pkg->event);
     }
 }
 

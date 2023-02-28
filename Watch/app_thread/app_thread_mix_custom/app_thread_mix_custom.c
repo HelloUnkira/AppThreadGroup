@@ -46,7 +46,7 @@ void app_thread_mix_custom_routine(void)
         app_sem_take(sem);
         #if APP_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread mix custom recv too much package:%u\n",
+            APP_SYS_LOG_WARN("thread mix custom recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
         #endif
         while (app_sys_pipe_package_num(pipe)) {
@@ -108,15 +108,13 @@ void app_thread_mix_custom_routine(void)
             }
             default: {
                 #if APP_THREAD_CHECK
-                APP_SYS_LOG_ERROR("\n");
-                APP_SYS_LOG_ERROR("thread mix custom pipe recv a unknown package\n");
-                APP_SYS_LOG_ERROR("package send_tid:%u\n", package.send_tid);
-                APP_SYS_LOG_ERROR("package recv_tid:%u\n", package.recv_tid);
-                APP_SYS_LOG_ERROR("package module:%u\n",   package.module);
-                APP_SYS_LOG_ERROR("package event:%u\n",    package.event);
-                APP_SYS_LOG_ERROR("package data:%p\n",     package.data);
-                APP_SYS_LOG_ERROR("package size:%u\n",     package.size);
-                APP_SYS_LOG_ERROR("\n");
+                APP_SYS_LOG_ERROR("thread mix custom pipe recv a unknown package");
+                APP_SYS_LOG_ERROR("package send_tid:%u", package.send_tid);
+                APP_SYS_LOG_ERROR("package recv_tid:%u", package.recv_tid);
+                APP_SYS_LOG_ERROR("package module:%u",   package.module);
+                APP_SYS_LOG_ERROR("package event:%u",    package.event);
+                APP_SYS_LOG_ERROR("package data:%p",     package.data);
+                APP_SYS_LOG_ERROR("package size:%u",     package.size);
                 #endif
                 break;
             }

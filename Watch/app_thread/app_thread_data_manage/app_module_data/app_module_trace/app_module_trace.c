@@ -167,9 +167,8 @@ static void app_module_trace_text_load_one(app_module_trace_item_t *item)
     app_module_trace_text.offset_head = head;
     app_mutex_give(&app_module_trace_text_mutex);
     #if APP_MODULE_CHECK
-    APP_SYS_LOG_INFO("app_module_trace_text_load:\n");
-    APP_SYS_LOG_INFO("item.length:%u\n", item->length);
-    APP_SYS_LOG_INFO("item.text:%s\n",   item->text);
+    APP_SYS_LOG_INFO("item.length:%u", item->length);
+    APP_SYS_LOG_INFO("item.text:%s",   item->text);
     #endif
 }
 
@@ -178,9 +177,8 @@ static void app_module_trace_text_load_one(app_module_trace_item_t *item)
 static void app_module_trace_text_dump_one(app_module_trace_item_t *item)
 {
     #if APP_MODULE_CHECK
-    APP_SYS_LOG_INFO("app_module_trace_text_dump:\n");
-    APP_SYS_LOG_INFO("item.length:%u\n", item->length);
-    APP_SYS_LOG_INFO("item.text:%s\n",   item->text);
+    APP_SYS_LOG_INFO("item.length:%u", item->length);
+    APP_SYS_LOG_INFO("item.text:%s",   item->text);
     #endif
     const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
     const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
@@ -243,10 +241,9 @@ static void app_module_trace_text_update(void)
     app_module_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     #if APP_MODULE_CHECK
     trace_text = app_module_trace_text;
-    APP_SYS_LOG_INFO("app_module_trace_text_update:\n");
-    APP_SYS_LOG_INFO("trace_text.trace_zone:%lu\n",   trace_text.trace_zone);
-    APP_SYS_LOG_INFO("trace_text.offset_head:%lu\n",  trace_text.offset_head);
-    APP_SYS_LOG_INFO("trace_text.offset_tail:%lu\n",  trace_text.offset_tail);
+    APP_SYS_LOG_INFO("trace_text.trace_zone:%lu",   trace_text.trace_zone);
+    APP_SYS_LOG_INFO("trace_text.offset_head:%lu",  trace_text.offset_head);
+    APP_SYS_LOG_INFO("trace_text.offset_tail:%lu",  trace_text.offset_tail);
     #endif
 }
 

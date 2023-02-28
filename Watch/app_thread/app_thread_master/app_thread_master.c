@@ -81,7 +81,7 @@ void app_thread_master_routine(void)
         app_sem_take(send_sem);
         #if APP_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread masther recv too much package:%u\n",
+            APP_SYS_LOG_WARN("thread masther recv too much package:%u",
                               app_sys_pipe_package_num(send_pipe));
         #endif
         /* 线程组不再派发事件包(如果系统中止) */

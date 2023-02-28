@@ -32,20 +32,29 @@ static void app_sys_log_msg2(const char *format, va_list list)
  *@param[in] format 日志信息格式化信息
  *@param[in] ...    日志信息信息变参
  */
-void app_sys_log_msg(bool status, char flag, const char *file, uint32_t line, const char *func, const char *format, ...)
+void app_sys_log_msg(unsigned char status, char flag, const char *file, const char *func, uint32_t line, const char *format, ...)
 {
     va_list  list;
     va_start(list, format);
     
-    if (status == true)
-    {
-        app_sys_log_msg1("[%s][%u][%s][%s]", file, line, func, flag);
+    if (status == 0) {
+        app_sys_log_msg1(format, list);
+    } else {
+        /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
+        #if 0
+        #elif 1
+        app_sys_log_msg1("[%s][%u][%c]", func, line, flag);
         app_sys_log_msg2(format, list);
         app_sys_log_msg1("\r\n");
-    }
-    else
-    {
-        app_sys_log_msg1(format, list);
+        #elif 0
+        app_sys_log_msg1("[%s][%u][%c]", file, line, flag);
+        app_sys_log_msg2(format, list);
+        app_sys_log_msg1("\r\n");
+        #else
+        app_sys_log_msg1("[%s][%s][%u][%c]", file, func, line, flag);
+        app_sys_log_msg2(format, list);
+        app_sys_log_msg1("\r\n");
+        #endif
     }
     
     va_end(list);

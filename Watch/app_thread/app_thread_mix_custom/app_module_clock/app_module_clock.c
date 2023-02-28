@@ -322,11 +322,11 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     if (clock_old.day    != clock_new.day)
         app_module_clock_cb1_respond(app_module_clock_flag_day,    &clock_new);
     #if APP_MODULE_CHECK
-    APP_SYS_LOG_INFO("clock_old: utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+    APP_SYS_LOG_INFO("clock_old: utc=%lu,%u, %u-%u-%u, %u:%u:%u",
                       clock_old.utc,clock_old.week,
                       clock_old.year,clock_old.month,clock_old.day,
                       clock_old.hour,clock_old.minute,clock_old.second);
-    APP_SYS_LOG_INFO("clock_new: utc=%lu,%u, %u-%u-%u, %u:%u:%u\n",
+    APP_SYS_LOG_INFO("clock_new: utc=%lu,%u, %u-%u-%u, %u:%u:%u",
                       clock_new.utc,clock_new.week,
                       clock_new.year,clock_new.month,clock_new.day,
                       clock_new.hour,clock_new.minute,clock_new.second);

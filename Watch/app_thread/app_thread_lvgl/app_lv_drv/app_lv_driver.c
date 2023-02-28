@@ -131,7 +131,7 @@ bool app_lv_driver_shutdown(void)
  */
 void app_lv_driver_dlps_enter(void)
 {
-    APP_SYS_LOG_WARN("app_lv_driver_dlps_enter\n");
+    APP_SYS_LOG_WARN("");
     app_lv_driver_status = false;
     app_lv_display_over();
     app_lv_keyboard_over();
@@ -149,5 +149,5 @@ void app_lv_driver_dlps_exit(void)
     app_lv_keyboard_ready();
     app_lv_display_ready();
     app_lv_driver_status = true;
-    APP_SYS_LOG_WARN("app_lv_driver_dlps_exit\n");
+    APP_SYS_LOG_WARN("");
 }
