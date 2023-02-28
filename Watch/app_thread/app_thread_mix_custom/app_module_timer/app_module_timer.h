@@ -1,5 +1,5 @@
-#ifndef APP_MODULE_SOFTWARE_TIMER_H
-#define APP_MODULE_SOFTWARE_TIMER_H
+#ifndef APP_MODULE_TIMER_H
+#define APP_MODULE_TIMER_H
 
 typedef struct {
     void    *near;                      /* 内部使用:下一节点 */

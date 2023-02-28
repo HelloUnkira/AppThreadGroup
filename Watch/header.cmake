@@ -11,6 +11,7 @@ set(app_adaptor_path
 )
 set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_log
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_pipe
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ring_buffer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_util
