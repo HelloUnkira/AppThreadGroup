@@ -1,0 +1,52 @@
+/*实现目标:
+ *    泛用的格式输出流模组
+ */
+
+#include "app_std_lib.h"
+
+/*@brief 待适配接口
+ */
+static void app_sys_log_msg1(const char *format, ...)
+{
+    va_list  list;
+    va_start(list, format);
+    vprintf(format, list);
+    va_end(list);
+}
+
+/*@brief 待适配接口
+ */
+static void app_sys_log_msg2(const char *format, va_list list)
+{
+    vprintf(format, list);
+}
+
+/*@brief     格式日志输出接口
+ *           无格式打印:{内容}
+ *           带格式打印:[文件名][行数][级别]{内容}[换行]
+ *@param[in] status 日志信息是否带格式
+ *@param[in] file   日志信息输出文件名
+ *@param[in] line   日志信息输出文件内行数
+ *@param[in] func   日志信息输出文件内函数名
+ *@param[in] flag   日志信息重要性级别
+ *@param[in] format 日志信息格式化信息
+ *@param[in] ...    日志信息信息变参
+ */
+void app_sys_log_msg(bool status, char flag, const char *file, uint32_t line, const char *func, const char *format, ...)
+{
+    va_list  list;
+    va_start(list, format);
+    
+    if (status == true)
+    {
+        app_sys_log_msg1("[%s][%u][%s][%s]", file, line, func, flag);
+        app_sys_log_msg2(format, list);
+        app_sys_log_msg1("\r\n");
+    }
+    else
+    {
+        app_sys_log_msg1(format, list);
+    }
+    
+    va_end(list);
+}

@@ -110,6 +110,17 @@ void * app_mem_alloc(uint32_t size)
     return pvPortMalloc(size);
 }
 
+/*@brief        内存分配
+ *@param[in]    pointer 分配空间回收
+ *@param[in]    size    分配空间字节大小
+ #@retval       分配空间,失败为NULL
+ */
+void * app_mem_realloc(void *pointer, uint32_t size)
+{
+    /* 等待适配 */
+    return NULL;
+}
+
 /*@brief        内存释放
  *@param[in]    pointer 分配空间
  */
