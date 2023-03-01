@@ -8,7 +8,8 @@
 #include "app_module_clock.h"
 
 #include "lvgl.h"
-#include "app_lv_ui_test_clock_presenter.h"
+#include "app_lv_ui_clock.h"
+#include "app_lv_ui_clock_presenter.h"
 
 /*@brief lvgl ui数据交互回调
  */
@@ -82,7 +83,7 @@ static uint8_t app_lv_ui_get_week(void)
     return clock.week;
 }
 
-app_lv_ui_test_clock_presenter_t app_lv_ui_test_clock_presenter = {
+app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {
     .get_utc        = app_lv_ui_get_utc,
     .get_year       = app_lv_ui_get_year,
     .get_month      = app_lv_ui_get_month,

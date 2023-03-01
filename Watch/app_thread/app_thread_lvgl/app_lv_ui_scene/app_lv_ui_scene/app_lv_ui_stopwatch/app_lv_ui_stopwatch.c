@@ -226,8 +226,8 @@ static void app_lv_ui_stopwatch_show(void *scene)
         lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
-    app_lv_scene_test_clock.self = app_lv_ui_res_local == NULL ? NULL :
-                                   app_lv_ui_res_local->scene;
+    app_lv_scene_stopwatch.self = app_lv_ui_res_local == NULL ? NULL :
+                                  app_lv_ui_res_local->scene;
 }
 
 /*@brief 界面隐藏
@@ -250,8 +250,8 @@ static void app_lv_ui_stopwatch_hide(void *scene)
         app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_scene_test_clock.self = app_lv_ui_res_local == NULL ? NULL :
-                                   app_lv_ui_res_local->scene;
+    app_lv_scene_stopwatch.self = app_lv_ui_res_local == NULL ? NULL :
+                                  app_lv_ui_res_local->scene;
 }
 
 app_lv_scene_t app_lv_scene_stopwatch = {

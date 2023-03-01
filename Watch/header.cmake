@@ -14,6 +14,7 @@ set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_log
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_pipe
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ring_buffer
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_util
 )
 set(app_third_path
@@ -52,8 +53,8 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_watch
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_test
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_group
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_stopwatch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_countdown
 )
