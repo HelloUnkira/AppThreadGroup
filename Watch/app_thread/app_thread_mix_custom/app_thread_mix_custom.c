@@ -98,9 +98,6 @@ void app_thread_mix_custom_routine(void)
                         .recv_tid = app_thread_id_lvgl,
                         .module   = app_thread_lvgl_ui_scene,
                         .event    = app_thread_lvgl_ui_countdown_remind,
-                        .dynamic  = false,
-                        .size     = 0,
-                        .data     = NULL,
                     };
                     app_package_notify(&package);
                 }

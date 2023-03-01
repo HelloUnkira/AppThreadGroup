@@ -89,75 +89,6 @@ void app_module_clock_to_dtime(app_module_clock_t *clock)
 }
 
 /* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
-
-static const uint32_t app_module_clock_second_cb_size = 
-               sizeof(app_module_clock_second_cb) /
-               sizeof(app_module_clock_second_cb[0]);
-static const uint32_t app_module_clock_minute_cb_size = 
-               sizeof(app_module_clock_minute_cb) /
-               sizeof(app_module_clock_minute_cb[0]);
-static const uint32_t app_module_clock_hour_cb_size = 
-               sizeof(app_module_clock_hour_cb) /
-               sizeof(app_module_clock_hour_cb[0]);
-static const uint32_t app_module_clock_day_cb_size = 
-               sizeof(app_module_clock_day_cb) /
-               sizeof(app_module_clock_day_cb[0]);
-static const uint32_t app_module_clock_update_cb_size = 
-               sizeof(app_module_clock_update_cb) /
-               sizeof(app_module_clock_update_cb[0]);
-
-typedef enum {
-    app_module_clock_flag_second,   /* 秒回调事件标记 */
-    app_module_clock_flag_minute,   /* 分回调事件标记 */
-    app_module_clock_flag_hour,     /* 时回调事件标记 */
-    app_module_clock_flag_day,      /* 天回调事件标记 */
-    app_module_clock_flag_update,   /* 更新回调事件标记 */
-} app_module_clock_cb_flag;
-
-/*@brief        一类时钟回调集响应
- *@param[in]    flag 一类时钟回调事件
- *@param[out]   clock 时钟实例
- */
-void app_module_clock_cb1_respond(uint32_t flag, app_module_clock_t clock[1])
-{
-    switch (flag) {
-    case app_module_clock_flag_second:
-        for (uint32_t idx = 0; idx < app_module_clock_second_cb_size; idx++)
-            app_module_clock_second_cb[idx](clock);
-        break;
-    case app_module_clock_flag_minute:
-        for (uint32_t idx = 0; idx < app_module_clock_minute_cb_size; idx++)
-            app_module_clock_minute_cb[idx](clock);
-        break;
-    case app_module_clock_flag_hour:
-        for (uint32_t idx = 0; idx < app_module_clock_hour_cb_size; idx++)
-            app_module_clock_hour_cb[idx](clock);
-        break;
-    case app_module_clock_flag_day:
-        for (uint32_t idx = 0; idx < app_module_clock_day_cb_size; idx++)
-            app_module_clock_day_cb[idx](clock);
-        break;
-    default:
-        break;
-    }
-}
-
-/*@brief        二类时钟回调集响应
- *@param[in]    flag 二类时钟回调事件
- *@param[out]   clock 时钟实例
- */
-void app_module_clock_cb2_respond(uint32_t flag, app_module_clock_t clock[2], uint32_t event)
-{
-    switch (flag) {
-    case app_module_clock_flag_update:
-        for (uint32_t idx = 0; idx < app_module_clock_update_cb_size; idx++)
-            app_module_clock_update_cb[idx](clock, event);
-        break;
-    default:
-        break;
-    }
-}
-
 static uint64_t app_module_clock_sec_tick = {0};
 static app_mutex_t app_module_clock_mutex = {0};
 static app_module_clock_t app_module_clock[2] = {0};
@@ -198,9 +129,6 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
         .recv_tid = app_thread_id_mix_custom,
         .module   = app_thread_mix_custom_clock,
         .event    = app_thread_mix_custom_clock_event_update,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
     };
     app_package_notify(&package);
 }
@@ -225,7 +153,8 @@ void app_module_clock_event_update(void)
     if (!clock_is_sync)
          clock_is_sync = true;
     /* 执行更新事件 */
-    app_module_clock_cb2_respond(app_module_clock_flag_update, clock, update_event);
+    for (uint32_t idx = 0; idx < app_module_clock_update_cb_size; idx++)
+        app_module_clock_update_cb[idx](clock, update_event);
 }
 
 /*@brief     系统时间戳更新回调
@@ -246,15 +175,23 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     app_module_clock_t clock_new = app_module_clock[1];
     app_module_clock_sec_tick++;
     app_mutex_give(&app_module_clock_mutex);
-    /* 回调更新 */
+    /* 秒回调集更新 */
     if (clock_old.second != clock_new.second)
-        app_module_clock_cb1_respond(app_module_clock_flag_second, &clock_new);
+        for (uint32_t idx = 0; idx < app_module_clock_second_cb_size; idx++)
+            app_module_clock_second_cb[idx](&clock_new);
+    /* 分回调集更新 */
     if (clock_old.minute != clock_new.minute)
-        app_module_clock_cb1_respond(app_module_clock_flag_minute, &clock_new);
-    if (clock_old.hour   != clock_new.hour)
-        app_module_clock_cb1_respond(app_module_clock_flag_hour,   &clock_new);
-    if (clock_old.day    != clock_new.day)
-        app_module_clock_cb1_respond(app_module_clock_flag_day,    &clock_new);
+        for (uint32_t idx = 0; idx < app_module_clock_minute_cb_size; idx++)
+            app_module_clock_minute_cb[idx](&clock_new);
+    /* 时回调集更新 */
+    if (clock_old.hour != clock_new.hour)
+        for (uint32_t idx = 0; idx < app_module_clock_hour_cb_size; idx++)
+            app_module_clock_hour_cb[idx](&clock_new);
+    /* 天回调集更新 */
+    if (clock_old.day != clock_new.day)
+        for (uint32_t idx = 0; idx < app_module_clock_day_cb_size; idx++)
+            app_module_clock_day_cb[idx](&clock_new);
+    /*  */
     #if APP_MODULE_CHECK
     APP_SYS_LOG_INFO("clock_old: utc=%lu,%u, %u-%u-%u, %u:%u:%u",
                       clock_old.utc,clock_old.week,
@@ -293,20 +230,4 @@ void app_module_clock_1s_update(uint64_t utc_new)
         .data     = &utc,
     };
     app_package_notify(&package);
-}
-
-/*@brief     一类时钟空回调
- *@param[in] clock 时钟实例
- */
-void app_module_clock_cb1_empty(app_module_clock_t clock[1])
-{
-}
-
-/*@brief     一类时钟空回调
- *@param[in] last_clock 时钟实例
- *@param[in] last_clock 时钟实例
- *@param[in] event      时钟事件
- */
-void app_module_clock_cb2_empty(app_module_clock_t clock[2], uint32_t event)
-{
 }

@@ -56,5 +56,41 @@ static const app_module_clock_cb2 app_module_clock_update_cb[] = {
     /* 补充中...... */
 };
 
+/* 其他类型有待补充... */
+
+static const uint32_t app_module_clock_second_cb_size = 
+               sizeof(app_module_clock_second_cb) /
+               sizeof(app_module_clock_second_cb[0]);
+static const uint32_t app_module_clock_minute_cb_size = 
+               sizeof(app_module_clock_minute_cb) /
+               sizeof(app_module_clock_minute_cb[0]);
+static const uint32_t app_module_clock_hour_cb_size = 
+               sizeof(app_module_clock_hour_cb) /
+               sizeof(app_module_clock_hour_cb[0]);
+static const uint32_t app_module_clock_day_cb_size = 
+               sizeof(app_module_clock_day_cb) /
+               sizeof(app_module_clock_day_cb[0]);
+static const uint32_t app_module_clock_update_cb_size = 
+               sizeof(app_module_clock_update_cb) /
+               sizeof(app_module_clock_update_cb[0]);
+
+/*  */
+
+/*@brief     一类时钟空回调(占位回调,防止优化禁用)
+ *@param[in] clock 时钟实例
+ */
+void app_module_clock_cb1_empty(app_module_clock_t clock[1])
+{
+}
+
+/*@brief     一类时钟空回调(占位回调,防止优化禁用)
+ *@param[in] last_clock 时钟实例
+ *@param[in] last_clock 时钟实例
+ *@param[in] event      时钟事件
+ */
+void app_module_clock_cb2_empty(app_module_clock_t clock[2], uint32_t event)
+{
+}
+
 #endif
 #endif

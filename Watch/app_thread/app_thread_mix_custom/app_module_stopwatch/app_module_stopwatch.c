@@ -11,14 +11,14 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
+#include "app_sys_timer.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
-#include "app_module_timer.h"
 #include "app_module_stopwatch.h"
 
 static app_mutex_t app_module_stopwatch_mutex = {0};
+static app_sys_timer_t app_module_stopwatch_timer = {0};
 static app_module_stopwatch_t app_module_stopwatch = {0};
-static app_module_timer_t app_module_stopwatch_timer = {0};
 
 /*@brief        设置秒表
  *@param[out]   stopwatch 秒表实例
@@ -57,7 +57,7 @@ void app_module_stopwatch_start(void)
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch.onoff = true;
     app_mutex_give(&app_module_stopwatch_mutex);
-    app_module_timer_start(&app_module_stopwatch_timer);
+    app_sys_timer_start(&app_module_stopwatch_timer);
 }
 
 /*@brief 停止秒表
@@ -67,7 +67,7 @@ void app_module_stopwatch_stop(void)
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch.onoff = false;
     app_mutex_give(&app_module_stopwatch_mutex);
-    app_module_timer_stop(&app_module_stopwatch_timer);
+    app_sys_timer_stop(&app_module_stopwatch_timer);
 }
 
 /*@brief 倒计时软件定时器模组回调

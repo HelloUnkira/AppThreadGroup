@@ -62,10 +62,6 @@ void app_module_system_dlps_set(bool status)
         .send_tid = app_thread_id_unknown,
         .recv_tid = app_thread_id_lvgl,
         .module   = app_thread_lvgl_sched,
-        .event    = 0,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
     };
     if (status)
         package.event = app_thread_lvgl_sched_dlps_enter;
@@ -143,9 +139,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .recv_tid = app_thread_id_lvgl,
                 .module   = app_thread_lvgl_ui_scene,
                 .event    = app_thread_lvgl_ui_scene_start,
-                .dynamic  = false,
-                .size     = 0,
-                .data     = NULL,
             };
             app_package_notify(&package);
             APP_SYS_LOG_WARN("ui scene start");
@@ -157,9 +150,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .recv_tid = app_thread_id_data_manage,
                 .module   = app_thread_data_manage_load,
                 .event    = 0,
-                .dynamic  = false,
-                .size     = 0,
-                .data     = NULL,
             };
             app_package_notify(&package);
             APP_SYS_LOG_WARN("data load");
@@ -177,9 +167,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .recv_tid = app_thread_id_lvgl,
                 .module   = app_thread_lvgl_ui_scene,
                 .event    = app_thread_lvgl_ui_scene_stop,
-                .dynamic  = false,
-                .size     = 0,
-                .data     = NULL,
             };
             app_package_notify(&package);
             APP_SYS_LOG_WARN("ui scene stop");
@@ -191,9 +178,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
                 .recv_tid = app_thread_id_data_manage,
                 .module   = app_thread_data_manage_dump,
                 .event    = 0,
-                .dynamic  = false,
-                .size     = 0,
-                .data     = NULL,
             };
             app_package_notify(&package);
             APP_SYS_LOG_WARN("data dump");

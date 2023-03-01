@@ -16,9 +16,6 @@ void app_lv_tick_inc_update(void)
         .recv_tid = app_thread_id_lvgl,
         .module   = app_thread_lvgl_sched,
         .event    = app_thread_lvgl_sched_inc,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
     };
     app_package_notify(&package);
 }
@@ -32,9 +29,6 @@ void app_lv_tick_exec_update(void)
         .recv_tid = app_thread_id_lvgl,
         .module   = app_thread_lvgl_sched,
         .event    = app_thread_lvgl_sched_exec,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
     };
     app_package_notify(&package);
 }
@@ -48,9 +42,6 @@ void app_lv_drv_update(void)
         .recv_tid = app_thread_id_lvgl,
         .module   = app_thread_lvgl_sched,
         .event    = app_thread_lvgl_sched_drv,
-        .dynamic  = false,
-        .size     = 0,
-        .data     = NULL,
     };
     app_package_notify(&package);
 }
@@ -65,7 +56,7 @@ void app_lv_scene_update(void *scene)
         .module   = app_thread_lvgl_sched,
         .event    = app_thread_lvgl_sched_scene,
         .dynamic  = false,
-        .size     = 0,
+        .size     = sizeof(void *),
         .data     = scene,
     };
     app_package_notify(&package);

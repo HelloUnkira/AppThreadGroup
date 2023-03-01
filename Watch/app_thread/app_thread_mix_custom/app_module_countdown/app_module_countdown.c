@@ -11,14 +11,14 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
+#include "app_sys_timer.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
-#include "app_module_timer.h"
 #include "app_module_countdown.h"
 
 static app_mutex_t app_module_countdown_mutex = {0};
+static app_sys_timer_t app_module_countdown_timer = {0};
 static app_module_countdown_t app_module_countdown = {0};
-static app_module_timer_t app_module_countdown_timer = {0};
 
 /*@brief        设置倒计时
  *@param[in]    countdown 倒计时实例
@@ -57,7 +57,7 @@ void app_module_countdown_start(void)
     app_mutex_take(&app_module_countdown_mutex);
     app_module_countdown.onoff = true;
     app_mutex_give(&app_module_countdown_mutex);
-    app_module_timer_start(&app_module_countdown_timer);
+    app_sys_timer_start(&app_module_countdown_timer);
 }
 
 /*@brief 停止倒计时
@@ -67,7 +67,7 @@ void app_module_countdown_stop(void)
     app_mutex_take(&app_module_countdown_mutex);
     app_module_countdown.onoff = false;
     app_mutex_give(&app_module_countdown_mutex);
-    app_module_timer_stop(&app_module_countdown_timer);
+    app_sys_timer_stop(&app_module_countdown_timer);
 }
 
 /*@brief 倒计时软件定时器模组回调
@@ -94,9 +94,6 @@ static void app_module_countdown_xmsec_update(void *timer)
                 .recv_tid = app_thread_id_mix_custom,
                 .module   = app_thread_mix_custom_countdown,
                 .event    = app_thread_mix_custom_countdown_expired,
-                .dynamic  = false,
-                .size     = 0,
-                .data     = NULL,
             };
             app_package_notify(&package);
             /* 中止倒计时 */

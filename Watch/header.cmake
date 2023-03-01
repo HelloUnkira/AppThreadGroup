@@ -15,6 +15,7 @@ set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_pipe
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ring_buffer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_clock
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_timer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_util
 )
 set(app_third_path

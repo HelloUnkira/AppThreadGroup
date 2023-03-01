@@ -9,7 +9,7 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_module_timer.h"
+#include "app_sys_timer.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -20,7 +20,7 @@
 #include "app_lv_ui_watch.h"
 
 static app_mutex_t app_lv_ui_check_time_mutex = {0};
-static app_module_timer_t app_lv_ui_check_time_timer = {0};
+static app_sys_timer_t app_lv_ui_check_time_timer = {0};
 static bool    app_lv_ui_dlps = true;    /* 需要进入dlps */
 static bool    app_lv_ui_back = true;    /* 需要回退界面 */
 static uint8_t app_lv_ui_over_time = APP_LV_UI_OVER_TIME;
@@ -97,7 +97,7 @@ void app_lv_ui_check_time_ready(void)
 void app_lv_ui_check_time_exec(bool status)
 {
     if (status)
-        app_module_timer_start(&app_lv_ui_check_time_timer);
+        app_sys_timer_start(&app_lv_ui_check_time_timer);
     else
-        app_module_timer_stop(&app_lv_ui_check_time_timer);
+        app_sys_timer_stop(&app_lv_ui_check_time_timer);
 }
