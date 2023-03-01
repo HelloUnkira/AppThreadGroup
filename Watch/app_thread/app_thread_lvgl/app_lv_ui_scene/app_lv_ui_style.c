@@ -8,7 +8,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_module_system.h"
 
 #include "lvgl.h"
 #include "app_lv_event.h"
@@ -87,9 +86,9 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
  */
 lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **time, lv_obj_t **title)
 {
-    APP_MODULE_ASSERT(btn   != NULL);
-    APP_MODULE_ASSERT(time  != NULL);
-    APP_MODULE_ASSERT(title != NULL);
+    APP_SYS_ASSERT(btn   != NULL);
+    APP_SYS_ASSERT(time  != NULL);
+    APP_SYS_ASSERT(title != NULL);
     /* 组合控件 */
     lv_obj_t *obj_box = lv_obj_create(parent);
     app_lv_ui_style_object(obj_box);
@@ -125,10 +124,10 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
 {
     #define app_lv_ui_style_two_btns_btn_text_font  &lv_font_montserrat_22
 
-    APP_MODULE_ASSERT(btn_l != NULL);
-    APP_MODULE_ASSERT(lbl_l != NULL);
-    APP_MODULE_ASSERT(btn_r != NULL);
-    APP_MODULE_ASSERT(lbl_r != NULL);
+    APP_SYS_ASSERT(btn_l != NULL);
+    APP_SYS_ASSERT(lbl_l != NULL);
+    APP_SYS_ASSERT(btn_r != NULL);
+    APP_SYS_ASSERT(lbl_r != NULL);
     /* 下部按钮 */
     lv_obj_t *btn = lv_obj_create(parent);
     app_lv_ui_style_object(btn);

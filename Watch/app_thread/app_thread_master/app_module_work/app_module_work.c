@@ -9,7 +9,6 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_thread_master.h"
-#include "app_module_system.h"
 #include "app_module_work.h"
 
 /*@brief 处理一份工作
@@ -17,7 +16,7 @@
  */
 void app_module_work_execute(app_module_work_t *work)
 {
-    APP_MODULE_ASSERT(work != NULL);
+    APP_SYS_ASSERT(work != NULL);
     work->routine(work->argument);
     app_mem_free(work);
 }

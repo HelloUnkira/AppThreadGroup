@@ -74,4 +74,17 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
 
 #endif
 
+/* 扩展补充...... */
+
+/*@brief     断言
+ *@param[in] file 文件名
+ *@param[in] line 文件行数
+ *@param[in] cond 断言条件
+ */
+void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond);
+
+/* 断言:条件为真继续执行,为假时中断系统 */
+#define APP_SYS_ASSERT(cond)    \
+        app_sys_assert(__FILE__, __func__, __LINE__, cond)
+
 #endif

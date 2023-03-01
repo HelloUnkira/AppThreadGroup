@@ -9,7 +9,6 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_module_system.h"
 
 #include "lvgl.h"
 #include "app_lv_event.h"
@@ -24,7 +23,7 @@ static app_lv_scene_t app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};
  */
 void app_lv_scene_sched(app_lv_scene_t *scene)
 {
-    APP_MODULE_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene != NULL);
     
     switch (scene->event) {
     case app_lv_scene_need_show:
@@ -44,8 +43,8 @@ void app_lv_scene_sched(app_lv_scene_t *scene)
  */
 void app_lv_scene_get_top(app_lv_scene_t **scene)
 {
-    APP_MODULE_ASSERT(scene != NULL);
-    APP_MODULE_ASSERT(app_lv_scene_num != 0);
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(app_lv_scene_num != 0);
     *scene = &app_lv_ui_scene[app_lv_scene_num - 1];
 }
 
@@ -83,8 +82,8 @@ void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve)
 void app_lv_scene_cover(app_lv_scene_t *scene)
 {
     app_lv_scene_t *current = NULL;
-    APP_MODULE_ASSERT(scene != NULL);
-    APP_MODULE_ASSERT(app_lv_scene_num != 0);
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(app_lv_scene_num != 0);
     app_lv_scene_get_top(&current);
     current->event = app_lv_scene_need_hide;
     app_lv_scene_update(current);
@@ -101,7 +100,7 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
 void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
 {
     app_lv_scene_t *current = NULL;
-    APP_MODULE_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene != NULL);
     if (reserve) {
         app_lv_scene_get_top(&current);
         app_lv_scene_num++;
@@ -124,7 +123,7 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
 void app_lv_scene_del(app_lv_scene_t *scene)
 {
     app_lv_scene_t *current = NULL;
-    APP_MODULE_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene != NULL);
     app_lv_scene_get_top(&current);
     current->event = app_lv_scene_need_hide;
     app_lv_scene_update(current);
@@ -139,6 +138,6 @@ void app_lv_scene_del(app_lv_scene_t *scene)
  */
 uint8_t app_lv_scene_get_nest(void)
 {
-    APP_MODULE_ASSERT(app_lv_scene_num != 0);
+    APP_SYS_ASSERT(app_lv_scene_num != 0);
     return app_lv_scene_num;
 }

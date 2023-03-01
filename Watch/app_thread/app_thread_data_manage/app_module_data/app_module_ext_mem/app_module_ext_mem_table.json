@@ -1,18 +1,25 @@
 
 {
     "type"  : "app_module_ext_mem_table",
-    "brief" : "app_module_ext_mem_table: suggest：chunk name and chunk size",
-    "chunk_base" : "0x00000000",
+    "brief" : "app_module_ext_mem_table: chunk_offset field will be adjusted automatically",
     "app_module_ext_mem_table" :
     [
         {
-            "chunk_brief" : "large mix data chunk, Suitable RAW management",
-            "chunk_name"  : "mix_chunk_large",
+            "chunk_brief" : "static memory, suitable thermal data",
+            "chunk_name"  : "static_memory",
+            "chunk_base"  : "0x20000000",
             "chunk_size"  : "4096 * 50"
         },
         {
-            "chunk_brief" : "small mix data chunk, Suitable FS management",
+            "chunk_brief" : "flash memory: large mix data chunk, suitable RAW management",
+            "chunk_name"  : "mix_chunk_large",
+            "chunk_base"  : "0x80000000",
+            "chunk_size"  : "4096 * 50"
+        },
+        {
+            "chunk_brief" : "flash memory: small mix data chunk, suitable FS management",
             "chunk_name"  : "mix_chunk_small",
+            "chunk_base"  : "0x80000000",
             "chunk_size"  : "4096 * 10"
         }
     ]

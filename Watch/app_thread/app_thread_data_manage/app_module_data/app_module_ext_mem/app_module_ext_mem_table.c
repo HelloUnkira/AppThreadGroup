@@ -8,16 +8,25 @@
 
 static const app_module_ext_mem_t app_module_ext_mem_table[] = {
 	{
-		/* large mix data chunk, Suitable RAW management */
-		.chunk_name = "mix_chunk_large",
-		.chunk_size = 4096 * 50,
-		.chunk_base = 0x0,
+		/* static memory, suitable thermal data */
+		.chunk_name 	= "static_memory",
+		.chunk_base 	=  0x20000000,
+		.chunk_size 	=  4096 * 50,
+		.chunk_offset 	=  0x0,
 	},
 	{
-		/* small mix data chunk, Suitable FS management */
-		.chunk_name = "mix_chunk_small",
-		.chunk_size = 4096 * 10,
-		.chunk_base = 0x32000,
+		/* flash memory: large mix data chunk, suitable RAW management */
+		.chunk_name 	= "mix_chunk_large",
+		.chunk_base 	=  0x80000000,
+		.chunk_size 	=  4096 * 50,
+		.chunk_offset 	=  0x0,
+	},
+	{
+		/* flash memory: small mix data chunk, suitable FS management */
+		.chunk_name 	= "mix_chunk_small",
+		.chunk_base 	=  0x80000000,
+		.chunk_size 	=  4096 * 10,
+		.chunk_offset 	=  0x32000,
 	},
 };
 

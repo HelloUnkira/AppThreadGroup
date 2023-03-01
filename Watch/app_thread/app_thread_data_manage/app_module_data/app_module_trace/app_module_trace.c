@@ -14,7 +14,6 @@
 #include "app_module_ext_mem_table.h"
 #include "app_module_source.h"
 #include "app_module_source_table.h"
-#include "app_module_system.h"
 #include "app_module_trace.h"
 
 /*@brief 函数追踪队列
@@ -85,7 +84,7 @@ void app_module_trace_text_ready(void)
     const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
     const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
     /* 外存空间不能小于结构本身 */
-    APP_MODULE_ASSERT(source->data_size > sizeof(trace_text));
+    APP_SYS_ASSERT(source->data_size > sizeof(trace_text));
     /* 读取外存的函数追踪队列结构 */
     app_module_ext_mem_read(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
@@ -150,7 +149,7 @@ static void app_module_trace_text_load_one(app_module_trace_item_t *item)
     app_mutex_give(&app_module_trace_text_mutex);
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     head %= zone;
-    APP_MODULE_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
+    APP_SYS_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
     if (head + item->length < zone) {
         roff = base + head;
         app_module_ext_mem_read(ext_mem, roff, item->text, item->length);
@@ -208,7 +207,7 @@ static void app_module_trace_text_dump_one(app_module_trace_item_t *item)
     app_mutex_give(&app_module_trace_text_mutex);
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     tail %= zone;
-    APP_MODULE_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
+    APP_SYS_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
     if (tail + item->length < zone) {
         woff = base + tail;
         app_module_ext_mem_write(ext_mem, woff, item->text, item->length);

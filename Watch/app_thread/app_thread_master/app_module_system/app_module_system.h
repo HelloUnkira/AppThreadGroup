@@ -41,17 +41,6 @@ uint8_t app_module_system_status_get(void);
  */
 void app_module_system_ready(void);
 
-/*@brief     断言
- *@param[in] file 文件名
- *@param[in] line 文件行数
- *@param[in] cond 断言条件
- */
-void app_module_assert(char *file, uint32_t line, bool cond);
-
-/* 断言:条件为真继续执行,为假时中断系统 */
-#define APP_MODULE_ASSERT(cond)    \
-        app_module_assert(__FILE__, __LINE__, cond)
-
 /*@brief     系统1毫秒更新事件
  *           硬件时钟中断或软件定时器中执行
  *@param[in] count 毫秒计数器,每毫秒+1

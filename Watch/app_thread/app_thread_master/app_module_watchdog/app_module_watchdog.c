@@ -9,7 +9,6 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_thread_master.h"
-#include "app_module_system.h"
 #include "app_module_work.h"
 #include "app_module_watchdog.h"
 #include "app_module_clock.h"
@@ -51,7 +50,7 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         app_mutex_take(&app_module_watchdog_mutex);
         if (app_module_watchdog_count[idx]++ > APP_MODULE_WATCHDOG_XS) {
             APP_SYS_LOG_ERROR("catch thread %u block", idx);
-            APP_MODULE_ASSERT(true == false);
+            APP_SYS_ASSERT(true == false);
         }
         app_mutex_give(&app_module_watchdog_mutex);
     }

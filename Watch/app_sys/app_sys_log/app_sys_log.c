@@ -2,7 +2,12 @@
  *    泛用的格式输出流模组
  */
 
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+
 #include "app_std_lib.h"
+#include "app_os_adaptor.h"
+#include "app_sys_log.h"
 
 /*@brief 待适配接口
  */
@@ -58,4 +63,19 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
     }
     
     va_end(list);
+}
+
+/*@brief     断言
+ *@param[in] file 文件名
+ *@param[in] line 文件行数
+ *@param[in] cond 断言条件
+ */
+void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond)
+{
+    if (cond)
+        return;
+    /* 输出错误信息 */
+    APP_SYS_LOG_ERROR_RAW("APP_SYS_ASSERT:[%s][%d]", func, line);
+    /* 异常导致的错误直接重启系统 */
+    app_os_reset();
 }

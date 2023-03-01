@@ -7,28 +7,39 @@ import json
 
 
 # 编写集成化源文件
-def encode_app_module_ext_mem_table_c(file, dir_list, chunk_base):
+def encode_app_module_ext_mem_table_c(file, dir_list):
     # 写点简要的说明
     file.write('/*一个代替注册的,脚本自动生成的,本地静态的外存chunk表\n')
     file.write(' *通过app_module_ext_mem_table.py生成\n')
     file.write(' *参考app_module_ext_mem_table.json中的模式生成源\n */\n\n')
     file.write('#include "app_std_lib.h"\n')
     file.write('#include "app_module_ext_mem.h"\n\n')
+    # 先提取所有的chunk_base,然后为此生成chunk_offset
+    chunk_base = []
+    chunk_offset = []
+    for items in dir_list:      # 列表中是字典
+        for item in items:      # 从字典提取关键字和值
+            if item == 'chunk_base':
+                if int(items[item], 16) not in chunk_base:
+                    chunk_base.append(int(items[item], 16))
+                    chunk_offset.append(int(0))
     # 提取所有外源依赖
     file.write('static const app_module_ext_mem_t app_module_ext_mem_table[] = {\n')
-    chunk_offset = chunk_base
     for items in dir_list:      # 列表中是字典
         file.write('\t{\n')
-        chunk_offset = chunk_base
         for item in items:      # 从字典提取关键字和值
             if item == 'chunk_brief':
                 file.write('\t\t/* %s */\n' % items[item])
             if item == 'chunk_name':
-                file.write('\t\t.chunk_name = \"%s\",\n' % items[item])
+                file.write('\t\t.chunk_name \t= \"%s\",\n' % items[item])
+            if item == 'chunk_base':
+                file.write('\t\t.chunk_base \t=  %s,\n' % items[item])
+                index = chunk_base.index(int(items[item], 16))
+                local_offset = chunk_offset[index]
             if item == 'chunk_size':
-                file.write('\t\t.chunk_size = %s,\n' % items[item])
-                chunk_base = chunk_base + eval(items[item])
-        file.write('\t\t.chunk_base = %s,\n' % hex(chunk_offset))
+                file.write('\t\t.chunk_size \t=  %s,\n' % items[item])
+                chunk_offset[index] = chunk_offset[index] + eval(items[item])
+        file.write('\t\t.chunk_offset \t=  %s,\n' % hex(local_offset))
         file.write('\t},\n')
     file.write('};\n\n')
     # 编写固化长度标签
@@ -75,14 +86,13 @@ def encode_app_module_ext_mem_table():
     if json_dict['type'] != 'app_module_ext_mem_table':
         return
     # 从标准字典获取标准列表
-    chunk_base = json_dict['chunk_base']
     dir_list = json_dict['app_module_ext_mem_table']
     # 开启三个文件
     app_module_ext_mem_table_h = open('app_module_ext_mem_table.h', mode='w', encoding='utf-8')
     app_module_ext_mem_table_c = open('app_module_ext_mem_table.c', mode='w', encoding='utf-8')
     # 解析
     encode_app_module_ext_mem_table_h(app_module_ext_mem_table_h)
-    encode_app_module_ext_mem_table_c(app_module_ext_mem_table_c, dir_list, int(chunk_base, 16))
+    encode_app_module_ext_mem_table_c(app_module_ext_mem_table_c, dir_list)
     # 关闭三个文件
     app_module_ext_mem_table_h.close()
     app_module_ext_mem_table_c.close()
