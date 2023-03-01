@@ -10,10 +10,10 @@
 #include "app_sys_log.h"
 #include "app_sys_crc.h"
 #include "app_sys_checksum.h"
-#include "app_module_ext_mem.h"
-#include "app_module_ext_mem_table.h"
-#include "app_module_source.h"
-#include "app_module_source_table.h"
+#include "app_sys_ext_mem.h"
+#include "app_sys_ext_mem_table.h"
+#include "app_sys_ext_src.h"
+#include "app_sys_ext_src_table.h"
 #include "app_module_trace.h"
 
 /*@brief 函数追踪队列
@@ -81,12 +81,12 @@ void app_module_trace_text_ready(void)
 {
     app_module_trace_text_t trace_text = {};
     app_mutex_process(&app_module_trace_text_mutex);
-    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     /* 外存空间不能小于结构本身 */
     APP_SYS_ASSERT(source->data_size > sizeof(trace_text));
     /* 读取外存的函数追踪队列结构 */
-    app_module_ext_mem_read(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
+    app_sys_ext_mem_read(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
     /* 通过外存的函数追踪队列结构初始化本地函数追踪队列结构 */
     app_module_trace_text = trace_text;
@@ -105,15 +105,15 @@ void app_module_trace_text_ready(void)
 void app_module_trace_text_reset(void)
 {
     app_module_trace_text_t trace_text = {};
-    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     app_mutex_take(&app_module_trace_text_mutex);
     app_module_trace_text.offset_head = 0;
     app_module_trace_text.offset_tail = 0;
     app_module_trace_text.trace_zone  = source->data_size - sizeof(trace_text);
     uint32_t crc32 = app_sys_crc32(trace_text.buffer, app_module_trace_info_size);
     app_module_trace_text.crc32 = crc32;
-    app_module_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
+    app_sys_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     app_mutex_give(&app_module_trace_text_mutex);
 }
 
@@ -121,8 +121,8 @@ void app_module_trace_text_reset(void)
  */
 static void app_module_trace_text_load_one(app_module_trace_item_t *item)
 {
-    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     /*  */
     app_mutex_take(&app_module_trace_text_mutex);
     uint32_t head = app_module_trace_text.offset_head;
@@ -134,13 +134,13 @@ static void app_module_trace_text_load_one(app_module_trace_item_t *item)
     head %= zone;
     if (head + sizeof(uint32_t) < zone) {
         roff = base + head;
-        app_module_ext_mem_read(ext_mem, roff, item->buffer, sizeof(uint32_t));
+        app_sys_ext_mem_read(ext_mem, roff, item->buffer, sizeof(uint32_t));
     } else {
         size = zone - head;
         roff = base + head;
-        app_module_ext_mem_read(ext_mem, roff, item->buffer, size);
+        app_sys_ext_mem_read(ext_mem, roff, item->buffer, size);
         roff = base;
-        app_module_ext_mem_read(ext_mem, roff, item->buffer + size, sizeof(uint32_t) - size);
+        app_sys_ext_mem_read(ext_mem, roff, item->buffer + size, sizeof(uint32_t) - size);
     }
     head += sizeof(uint32_t);
     head %= zone;
@@ -152,13 +152,13 @@ static void app_module_trace_text_load_one(app_module_trace_item_t *item)
     APP_SYS_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
     if (head + item->length < zone) {
         roff = base + head;
-        app_module_ext_mem_read(ext_mem, roff, item->text, item->length);
+        app_sys_ext_mem_read(ext_mem, roff, item->text, item->length);
     } else {
         size = zone - head;
         roff = base + head;
-        app_module_ext_mem_read(ext_mem, roff, item->text, size);
+        app_sys_ext_mem_read(ext_mem, roff, item->text, size);
         roff = base;
-        app_module_ext_mem_read(ext_mem, roff, item->text + size, item->length - size);
+        app_sys_ext_mem_read(ext_mem, roff, item->text + size, item->length - size);
     }
     head += item->length;
     head %= zone;
@@ -179,8 +179,8 @@ static void app_module_trace_text_dump_one(app_module_trace_item_t *item)
     APP_SYS_LOG_INFO("item.length:%u", item->length);
     APP_SYS_LOG_INFO("item.text:%s",   item->text);
     #endif
-    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     /*  */
     app_mutex_take(&app_module_trace_text_mutex);
     uint32_t tail = app_module_trace_text.offset_tail;
@@ -192,13 +192,13 @@ static void app_module_trace_text_dump_one(app_module_trace_item_t *item)
     tail %= zone;
     if (tail + sizeof(uint32_t) < zone) {
         woff = base + tail;
-        app_module_ext_mem_write(ext_mem, woff, item->buffer, sizeof(uint32_t));
+        app_sys_ext_mem_write(ext_mem, woff, item->buffer, sizeof(uint32_t));
     } else {
         size = zone - tail;
         woff = base + tail;
-        app_module_ext_mem_write(ext_mem, woff, item->buffer, size);
+        app_sys_ext_mem_write(ext_mem, woff, item->buffer, size);
         woff = base;
-        app_module_ext_mem_write(ext_mem, woff, item->buffer + size, sizeof(uint32_t) - size);
+        app_sys_ext_mem_write(ext_mem, woff, item->buffer + size, sizeof(uint32_t) - size);
     }
     tail += sizeof(uint32_t);
     tail %= zone;
@@ -210,13 +210,13 @@ static void app_module_trace_text_dump_one(app_module_trace_item_t *item)
     APP_SYS_ASSERT(item->length <= APP_MODULE_TRACE_LOG_MAX + 1);
     if (tail + item->length < zone) {
         woff = base + tail;
-        app_module_ext_mem_write(ext_mem, woff, item->text, item->length);
+        app_sys_ext_mem_write(ext_mem, woff, item->text, item->length);
     } else {
         size = zone - tail;
         woff = base + tail;
-        app_module_ext_mem_write(ext_mem, woff, item->text, size);
+        app_sys_ext_mem_write(ext_mem, woff, item->text, size);
         woff = base;
-        app_module_ext_mem_write(ext_mem, woff, item->text + size, item->length - size);
+        app_sys_ext_mem_write(ext_mem, woff, item->text + size, item->length - size);
     }
     tail += item->length;
     tail %= zone;
@@ -235,9 +235,9 @@ static void app_module_trace_text_update(void)
     app_module_trace_text.crc32 = crc32;
     app_module_trace_text = trace_text;
     app_mutex_give(&app_module_trace_text_mutex);
-    const app_module_ext_mem_t *ext_mem = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_source_t  *source  = app_module_source_find_by_name("mix_chunk_small", "trace log text");
-    app_module_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    app_sys_ext_mem_write(ext_mem, source->data_base, trace_text.buffer, sizeof(trace_text));
     #if APP_MODULE_CHECK
     trace_text = app_module_trace_text;
     APP_SYS_LOG_INFO("trace_text.trace_zone:%lu",   trace_text.trace_zone);

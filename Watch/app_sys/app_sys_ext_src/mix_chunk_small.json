@@ -9,14 +9,14 @@
             "data_size"  : "20 + 4 + 4"
         },
         {
-            "data_brief" : "system stopwatch + crc32 + checksum32",
-            "data_name"  : "system stopwatch",
-            "data_size"  : "30 + 4 + 4"
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "20 * 10"
         },
         {
-            "data_brief" : "system countdown + crc32 + checksum32",
-            "data_name"  : "system countdown",
-            "data_size"  : "30 + 4 + 4"
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "20 * 10"
         },
         {
             "data_brief" : "trace log text",

@@ -141,7 +141,7 @@ int main(int argc, char *argv[])
     }
     #elif 0
     /* chunk刷新,将其都刷为0 */
-    app_module_ext_mem_chunk_reflush();
+    app_sys_ext_mem_chunk_reflush();
     #else
     #endif
     return 0;

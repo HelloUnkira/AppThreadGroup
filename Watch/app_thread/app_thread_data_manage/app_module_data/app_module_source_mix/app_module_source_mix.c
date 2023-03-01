@@ -10,7 +10,7 @@
 #include "app_sys_log.h"
 #include "app_sys_crc.h"
 #include "app_sys_checksum.h"
-#include "app_module_source.h"
+#include "app_sys_ext_src.h"
 #include "app_module_clock.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
@@ -29,7 +29,7 @@ void app_module_clock_dump(void)
     
     app_module_clock_get_system_clock(&clock_data.clock);
     clock_data.crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
-    app_module_source_write("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
+    app_sys_ext_src_write("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
 }
 
 /*@brief 系统时钟加载到内存
@@ -44,7 +44,7 @@ void app_module_clock_load(void)
         };
     } clock_data = {};
     
-    app_module_source_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
+    app_sys_ext_src_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
     uint32_t crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
     if (crc32 == clock_data.crc32)
         app_module_clock_set_system_clock(&clock_data.clock);

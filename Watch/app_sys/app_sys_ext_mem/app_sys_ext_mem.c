@@ -8,9 +8,9 @@
 #include "app_arch_ext_mem.h"
 #include "app_os_ext_mem.h"
 #include "app_sys_log.h"
-#include "app_module_ext_mem.h"
+#include "app_sys_ext_mem.h"
 
-static app_mutex_t app_module_ext_mem_mutex = {0};
+static app_mutex_t app_sys_ext_mem_mutex = {0};
 
 /*@brief             读取数据从指定的文件中
  *@param[in] ext_mem chunk静态实例
@@ -19,10 +19,10 @@ static app_mutex_t app_module_ext_mem_mutex = {0};
  *@param[in] size    数据缓存大小
  *@retval            读取数据实际大小(失败返回负数)
  */
-ssize_t app_module_ext_mem_read(const app_module_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+ssize_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
     ssize_t retval = 0;
-    app_mutex_take(&app_module_ext_mem_mutex);
+    app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     
     /* chunk_base == 0x20000000, 保留内存 */
@@ -49,7 +49,7 @@ ssize_t app_module_ext_mem_read(const app_module_ext_mem_t *ext_mem, uintptr_t o
     }
     /* 继续添加其他类型外存介质的映射空间 */
     
-    app_mutex_give(&app_module_ext_mem_mutex);
+    app_mutex_give(&app_sys_ext_mem_mutex);
     return retval;
 }
 
@@ -60,10 +60,10 @@ ssize_t app_module_ext_mem_read(const app_module_ext_mem_t *ext_mem, uintptr_t o
  *@param[in] size    数据缓存大小
  *@retval            写入数据实际大小(失败返回负数)
  */
-ssize_t app_module_ext_mem_write(const app_module_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+ssize_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
     ssize_t retval = 0;
-    app_mutex_take(&app_module_ext_mem_mutex);
+    app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     
     /* chunk_base == 0x20000000, 保留内存 */
@@ -90,15 +90,15 @@ ssize_t app_module_ext_mem_write(const app_module_ext_mem_t *ext_mem, uintptr_t 
     }
     /* 继续添加其他类型外存介质的映射空间 */
     
-    app_mutex_give(&app_module_ext_mem_mutex);
+    app_mutex_give(&app_sys_ext_mem_mutex);
     return retval;
 }
 
 /*@brief 初始化原生外存
  */
-void app_module_ext_mem_ready(void)
+void app_sys_ext_mem_ready(void)
 {
-    app_mutex_process(&app_module_ext_mem_mutex);
+    app_mutex_process(&app_sys_ext_mem_mutex);
     
     #if APP_OS_EXT_MEM
     int32_t retval_1 = app_os_ext_mem_ready();

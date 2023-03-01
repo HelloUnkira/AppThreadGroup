@@ -1,8 +1,8 @@
 
 {
-    "type"  : "app_module_ext_mem_table",
-    "brief" : "app_module_ext_mem_table: chunk_offset field will be adjusted automatically",
-    "app_module_ext_mem_table" :
+    "type"  : "app_sys_ext_mem_table",
+    "brief" : "app_sys_ext_mem_table: chunk_offset field will be adjusted automatically",
+    "app_sys_ext_mem_table" :
     [
         {
             "chunk_brief" : "static memory, suitable thermal data",

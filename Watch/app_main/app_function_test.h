@@ -13,8 +13,8 @@
 #include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
-#include "app_module_ext_mem.h"
-#include "app_module_ext_mem_table.h"
+#include "app_sys_ext_mem.h"
+#include "app_sys_ext_mem_table.h"
 #include "app_module_system.h"
 #include "app_module_trace.h"
 
@@ -136,7 +136,7 @@ static inline void app_module_trace_test(void)
 
 /*@brief 外存chunk刷新测试
  */
-static inline void app_module_ext_mem_chunk_reflush(void)
+static inline void app_sys_ext_mem_chunk_reflush(void)
 {
     uint8_t block[4096] = {0};
     for (uint32_t idx = 0; idx < sizeof(block); block[idx] = ~0, idx++);
@@ -144,14 +144,14 @@ static inline void app_module_ext_mem_chunk_reflush(void)
     fclose(fopen("mix_chunk_small", "wb"));
     fclose(fopen("mix_chunk_large", "wb"));
     /*  */
-    const app_module_ext_mem_t *ext_mem1 = app_module_ext_mem_find_by_name("mix_chunk_small");
-    const app_module_ext_mem_t *ext_mem2 = app_module_ext_mem_find_by_name("mix_chunk_large");
+    const app_sys_ext_mem_t *ext_mem1 = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_t *ext_mem2 = app_sys_ext_mem_find_by_name("mix_chunk_large");
     /*  */
     printf("reflush start...\n");
     for (uint32_t idx = 0; idx < ext_mem1->chunk_size; idx += sizeof(block))
-        app_module_ext_mem_write(ext_mem1, idx, block, sizeof(block));
+        app_sys_ext_mem_write(ext_mem1, idx, block, sizeof(block));
     for (uint32_t idx = 0; idx < ext_mem2->chunk_size; idx += sizeof(block))
-        app_module_ext_mem_write(ext_mem2, idx, block, sizeof(block));
+        app_sys_ext_mem_write(ext_mem2, idx, block, sizeof(block));
     printf("reflush end...\n");
 }
 

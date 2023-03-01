@@ -17,6 +17,8 @@ set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_timer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_util
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ext_src
 )
 set(app_third_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third
@@ -39,13 +41,11 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_stopwatch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_world_time
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_ext_mem
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_source
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_trace
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_data/app_module_dump
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_data/app_module_load
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_data/app_module_shutdown
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_data/app_module_source_mix
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_dump
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_load
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_shutdown
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_source_mix
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_protocol
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer_adaptor
