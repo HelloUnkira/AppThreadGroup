@@ -11,9 +11,11 @@
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_check_time.h"
 #include "app_lv_ui_countdown.h"
 #include "app_lv_ui_countdown_remind.h"
+
+#include "app_lv_ui_custom_presenter.h"
+#include "app_lv_ui_clock_presenter.h"
 #include "app_lv_ui_countdown_presenter.h"
 
 typedef struct {
@@ -66,11 +68,11 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 左上角系统时钟更新 */
     lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
-                          app_lv_ui_countdown_presenter.is_24_mode() ? "" :
-                          app_lv_ui_countdown_presenter.is_am() ? "AM" :
-                          app_lv_ui_countdown_presenter.is_pm() ? "PM" : "",
-                          app_lv_ui_countdown_presenter.get_user_hour(),
-                          app_lv_ui_countdown_presenter.get_user_minute());
+                          app_lv_ui_custom_presenter.is_24_mode() ? "" :
+                          app_lv_ui_custom_presenter.is_am() ? "AM" :
+                          app_lv_ui_custom_presenter.is_pm() ? "PM" : "",
+                          app_lv_ui_clock_presenter.get_hour(),
+                          app_lv_ui_clock_presenter.get_minute());
 }
 
 /*@brief     界面显示

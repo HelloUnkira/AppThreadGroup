@@ -5,55 +5,14 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_module_clock.h"
 #include "app_module_stopwatch.h"
 
-#include "lvgl.h"
 #include "app_lv_ui_stopwatch.h"
 #include "app_lv_ui_stopwatch_presenter.h"
 
 #define app_lv_ui_stopwatch_list_len    20
 static uint8_t app_lv_ui_stopwatch_list_num = 0;
 static app_lv_ui_stopwatch_t app_lv_ui_stopwatch_list[app_lv_ui_stopwatch_list_len] = {0};
-
-/*@brief lvgl ui数据交互回调
- */
-static bool app_lv_ui_is_am(void)
-{
-    return false;
-}
-
-/*@brief lvgl ui数据交互回调
- */
-static bool app_lv_ui_is_pm(void)
-{
-    return false;
-}
-
-/*@brief lvgl ui数据交互回调
- */
-static bool app_lv_ui_is_24_mode(void)
-{
-    return true;
-}
-
-/*@brief lvgl ui数据交互回调
- */
-static uint8_t app_lv_ui_get_user_hour(void)
-{
-    app_module_clock_t clock = {0};
-    app_module_clock_get_system_clock(&clock);
-    return clock.hour;
-}
-
-/*@brief lvgl ui数据交互回调
- */
-static uint8_t app_lv_ui_get_user_minute(void)
-{
-    app_module_clock_t clock = {0};
-    app_module_clock_get_system_clock(&clock);
-    return clock.minute;
-}
 
 /*@brief lvgl ui数据交互回调
  */
@@ -138,11 +97,6 @@ static void app_lv_ui_stop(void)
 }
 
 app_lv_ui_stopwatch_presenter_t app_lv_ui_stopwatch_presenter = {
-    .is_am              = app_lv_ui_is_am,
-    .is_pm              = app_lv_ui_is_pm,
-    .is_24_mode         = app_lv_ui_is_24_mode,
-    .get_user_hour      = app_lv_ui_get_user_hour,
-    .get_user_minute    = app_lv_ui_get_user_minute,
     .get_tick_main      = app_lv_ui_get_tick_main,
     .get_tick_list      = app_lv_ui_get_tick_list,
     .get_tick_num       = app_lv_ui_get_tick_num,

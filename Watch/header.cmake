@@ -56,9 +56,10 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_watch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_group
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_clock
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_stopwatch
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_scene/app_lv_ui_countdown
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_clock
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_stopwatch
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_countdown
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main

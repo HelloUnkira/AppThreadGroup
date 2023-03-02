@@ -7,7 +7,6 @@
 #include "app_sys_log.h"
 #include "app_module_clock.h"
 
-#include "lvgl.h"
 #include "app_lv_ui_clock.h"
 #include "app_lv_ui_clock_presenter.h"
 
