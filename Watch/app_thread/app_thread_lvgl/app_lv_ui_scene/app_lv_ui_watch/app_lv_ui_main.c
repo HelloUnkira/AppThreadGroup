@@ -42,11 +42,9 @@ static void app_lv_ui_main_show(void *scene)
         /* 场景添加默认事件 */
         app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化居中标签 */
-        app_lv_ui_res_local->label = lv_label_create(app_lv_ui_res_local->scene);
-        lv_label_set_long_mode(app_lv_ui_res_local->label, LV_LABEL_LONG_WRAP);
-        lv_label_set_text_static(app_lv_ui_res_local->label, "LVGL Watch Main");
+        app_lv_ui_res_local->label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_obj_set_style_text_opa(app_lv_ui_res_local->label, 0, 0);
+        lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Main");
         lv_obj_center(app_lv_ui_res_local->label);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);

@@ -60,7 +60,7 @@
     #endif
 
 #else       /*LV_MEM_CUSTOM*/
-    #define LV_MEM_CUSTOM_INCLUDE "app_os_adaptor.h"   /*Header for the dynamic memory function*/
+    #define LV_MEM_CUSTOM_INCLUDE "lv_api_hook.h"   /*Header for the dynamic memory function*/
     #define LV_MEM_CUSTOM_ALLOC    app_mem_alloc
     #define LV_MEM_CUSTOM_FREE     app_mem_free
     #define LV_MEM_CUSTOM_REALLOC  app_mem_realloc
@@ -235,22 +235,22 @@
 #define LV_USE_ASSERT_OBJ           1   /*Check the object's type and existence (e.g. not deleted). (Slow)*/
 
 /*Add a custom handler when assert happens e.g. to restart the MCU*/
-#define LV_ASSERT_HANDLER_INCLUDE <stdint.h>
-#define LV_ASSERT_HANDLER while(1);   /*Halt by default*/
+#define LV_ASSERT_HANDLER_INCLUDE   "lv_api_hook.h"
+#define LV_ASSERT_HANDLER            app_os_reset();   /*Halt by default*/
 
 /*-------------
  * Others
  *-----------*/
 
 /*1: Show CPU usage and FPS count*/
-#define LV_USE_PERF_MONITOR 1
+#define LV_USE_PERF_MONITOR 0
 #if LV_USE_PERF_MONITOR
     #define LV_USE_PERF_MONITOR_POS LV_ALIGN_BOTTOM_RIGHT
 #endif
 
 /*1: Show the used memory and the memory fragmentation
  * Requires LV_MEM_CUSTOM = 0*/
-#define LV_USE_MEM_MONITOR 1
+#define LV_USE_MEM_MONITOR 0
 #if LV_USE_MEM_MONITOR
     #define LV_USE_MEM_MONITOR_POS LV_ALIGN_BOTTOM_LEFT
 #endif
@@ -363,7 +363,7 @@
 #define LV_FONT_CUSTOM_DECLARE
 
 /*Always set a default font*/
-#define LV_FONT_DEFAULT &lv_font_montserrat_14
+#define LV_FONT_DEFAULT     &lv_font_montserrat_14
 
 /*Enable handling large font and/or fonts with a lot of characters.
  *The limit depends on the font size, font face and bpp.
@@ -570,11 +570,23 @@
 /*File system interfaces for common APIs */
 
 /*API for fopen, fread, etc*/
-#define LV_USE_FS_STDIO 0
+#define LV_USE_FS_STDIO 1
 #if LV_USE_FS_STDIO
     #define LV_FS_STDIO_LETTER '\0'     /*Set an upper cased letter on which the drive will accessible (e.g. 'A')*/
     #define LV_FS_STDIO_PATH ""         /*Set the working directory. File/directory paths will be appended to it.*/
     #define LV_FS_STDIO_CACHE_SIZE  0   /*>0 to cache this number of bytes in lv_fs_read()*/
+#endif
+
+/* relocation stdio fs configure */
+#if LV_USE_FS_STDIO
+    /* cancel stdio fs configure */
+    #undef  LV_FS_STDIO_LETTER
+    #undef  LV_FS_STDIO_PATH
+    #undef  LV_FS_STDIO_CACHE_SIZE
+    /* redefine stdio fs configure */
+    #define LV_FS_STDIO_LETTER      '\0'
+    #define LV_FS_STDIO_PATH        "/mnt/hgfs/Watch/app_main/app_exe/lvgl_ext_src"
+    #define LV_FS_STDIO_CACHE_SIZE  0xFFFF
 #endif
 
 /*API for open, read, etc*/
@@ -601,20 +613,20 @@
 #endif
 
 /*PNG decoder library*/
-#define LV_USE_PNG 0
+#define LV_USE_PNG 1
 
 /*BMP decoder library*/
-#define LV_USE_BMP 0
+#define LV_USE_BMP 1
 
 /* JPG + split JPG decoder library.
  * Split JPG is a custom format optimized for embedded systems. */
-#define LV_USE_SJPG 0
+#define LV_USE_SJPG 1
 
 /*GIF decoder library*/
-#define LV_USE_GIF 0
+#define LV_USE_GIF 1
 
 /*QR code library*/
-#define LV_USE_QRCODE 0
+#define LV_USE_QRCODE 1
 
 /*FreeType library*/
 #define LV_USE_FREETYPE 0
@@ -652,7 +664,7 @@
 #define LV_USE_SNAPSHOT 0
 
 /*1: Enable Monkey test*/
-#define LV_USE_MONKEY   0
+#define LV_USE_MONKEY   1
 
 /*1: Enable grid navigation*/
 #define LV_USE_GRIDNAV  0

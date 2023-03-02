@@ -5,4 +5,4 @@
 # 下载后本目录下修改名字为lvgl_lib(内部文件无需调整)
 
 # 载入lvgl第三方库
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lvgl_lib)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lvgl_lib/lvgl_lib)

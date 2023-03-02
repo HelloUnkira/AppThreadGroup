@@ -48,5 +48,22 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
  */
 lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row);
 
+/*@brief     特效加载圆环
+ *           速度300ms,加载条覆盖1/4,匀速,底色绿色,加载色蓝色
+ *param[in]  parent  父控件
+ *param[in]  size    圆环直径
+ *param[in]  side    圆环宽度
+ */
+lv_obj_t * app_lv_ui_style_loading_spinner(lv_obj_t *parent, lv_coord_t size, lv_coord_t side);
+
+
+/*@brief     特效加载进度条
+ *           默认加载范围0~100,边界色蓝色,指针渐变(蓝色,绿色),内部间隙4,边界间隙1,弧度45
+ *param[in]  parent  父控件
+ *param[in]  width   进度条宽度
+ *param[in]  height  进度条高度
+ *param[in]  grad    加载方向
+ */
+lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_coord_t height, lv_grad_dir_t grad);
 
 #endif

@@ -105,6 +105,7 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_obj_set_style_text_color(*title, lv_color_white(), 0);
     lv_obj_set_style_text_align(*title, LV_TEXT_ALIGN_LEFT, 0);
     lv_obj_align(*title, LV_ALIGN_TOP_LEFT, 0, 0);
+    lv_label_set_long_mode(*title, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*title, "< Null");
     /* 右上角时间 */
     *time = lv_label_create(obj_box);
@@ -112,6 +113,7 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_obj_set_style_text_color(*time, lv_color_white(), 0);
     lv_obj_set_style_text_align(*time, LV_TEXT_ALIGN_RIGHT, 0);
     lv_obj_align(*time, LV_ALIGN_RIGHT_MID, -10, 0);
+    lv_label_set_long_mode(*time, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*time, "00:00");
     /* 组合控件 */
     return obj_box;
@@ -146,6 +148,7 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_obj_set_style_text_color(*lbl_l, lv_color_white(), 0);
     lv_obj_set_style_text_font(*lbl_l, app_lv_ui_style_two_btns_btn_text_font, 0);
     lv_obj_align(*lbl_l, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_long_mode(*lbl_l, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*lbl_l, "L_Btn");
     /* 右下角按钮 */
     *btn_r = lv_btn_create(btn);
@@ -158,6 +161,7 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_obj_set_style_text_color(*lbl_r, lv_color_white(), 0);
     lv_obj_set_style_text_font(*lbl_r, app_lv_ui_style_two_btns_btn_text_font, 0);
     lv_obj_align(*lbl_r, LV_ALIGN_CENTER, 0, 0);
+    lv_label_set_long_mode(*lbl_r, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*lbl_r, "R_Btn");
     /* 下部按钮 */
     return btn;
@@ -189,3 +193,52 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
     lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
     return roller;
 }
+
+/*@brief     特效加载圆环
+ *           速度300ms,加载条覆盖1/4,匀速,底色绿色,加载色蓝色
+ *param[in]  parent  父控件
+ *param[in]  size    圆环直径
+ *param[in]  side    圆环宽度
+ */
+lv_obj_t * app_lv_ui_style_loading_spinner(lv_obj_t *parent, lv_coord_t size, lv_coord_t side)
+{
+    lv_obj_t *spinner = lv_spinner_create(parent, 300, 90);
+    app_lv_ui_style_object(spinner);
+    lv_obj_remove_style(spinner, NULL, LV_PART_KNOB);
+    lv_obj_set_size(spinner, size, size);
+    lv_arc_set_bg_angles(spinner, 0, 360);
+    lv_obj_set_style_arc_width(spinner, side, 0);
+    lv_obj_set_style_arc_width(spinner, side, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(spinner, lv_palette_main(LV_PALETTE_BLUE), 0);
+    lv_obj_set_style_arc_color(spinner, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
+    lv_arc_set_mode(spinner, LV_ARC_MODE_NORMAL);
+}
+
+/*@brief     特效加载进度条
+ *           默认加载范围0~100,边界色蓝色,指针渐变(蓝色,绿色),内部间隙4,边界间隙1,弧度45
+ *param[in]  parent  父控件
+ *param[in]  width   进度条宽度
+ *param[in]  height  进度条高度
+ *param[in]  grad    加载方向
+ */
+lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_coord_t height, lv_grad_dir_t grad)
+{
+    lv_obj_t *bar = lv_bar_create(parent);
+    app_lv_ui_style_object(bar);
+    lv_obj_set_size(bar, width, height);
+    lv_obj_set_style_pad_all(bar, 4, 0);
+    lv_obj_set_style_radius(bar, 45, 0);
+    lv_obj_set_style_radius(bar, 45, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_opa(bar, LV_OPA_0, 0);
+    lv_obj_set_style_bg_opa(bar, LV_OPA_COVER, LV_PART_INDICATOR);
+    lv_obj_set_style_bg_color(bar, lv_color_black(), 0);
+    lv_obj_set_style_bg_color(bar, lv_palette_main(LV_PALETTE_BLUE), LV_PART_INDICATOR);
+    lv_obj_set_style_bg_grad_color(bar, lv_palette_main(LV_PALETTE_GREEN), LV_PART_INDICATOR);
+    lv_obj_set_style_bg_grad_dir(bar, grad, LV_PART_INDICATOR);
+    lv_obj_set_style_border_side(bar, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(bar, 1, 0);
+    lv_obj_set_style_border_color(bar, lv_palette_main(LV_PALETTE_BLUE), 0);
+    lv_bar_set_range(bar, 0, 100);
+    return bar;
+}
+

@@ -23,6 +23,7 @@ set(app_sys_path
 set(app_third_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lvgl_lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lvgl_lib/lvgl_lib
 )
 set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread

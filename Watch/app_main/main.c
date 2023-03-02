@@ -1,6 +1,5 @@
 
-#include <stdio.h>
-#include "app_function_test.h"
+#include "app_func_test.h"
 
 #if 0
 #elif APP_OS_IS_LINUX

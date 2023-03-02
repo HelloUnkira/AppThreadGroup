@@ -82,6 +82,7 @@ static void app_lv_ui_list_show(void *scene)
             lv_obj_t *lab = lv_label_create(btn);
             lv_obj_set_style_text_color(lab, lv_color_white(), 0);
             lv_label_set_text(lab, app_lv_ui_res_list[idx].name);
+            lv_label_set_long_mode(lab, LV_LABEL_LONG_SCROLL_CIRCULAR);
             lv_obj_align(lab, LV_ALIGN_LEFT_MID, 10, 0);
         }
     }
