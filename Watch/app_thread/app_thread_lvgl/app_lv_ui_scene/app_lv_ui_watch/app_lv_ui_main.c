@@ -71,7 +71,7 @@ static void app_lv_ui_main_hide(void *scene)
         app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
-        app_mem_free(app_lv_ui_res_local);
+        app_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
     app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
