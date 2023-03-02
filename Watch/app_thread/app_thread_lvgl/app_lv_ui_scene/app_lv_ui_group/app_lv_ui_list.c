@@ -51,8 +51,8 @@ static void app_lv_ui_list_btn_cb(lv_event_t *e)
     }
 }
 
-/*@brief 界面显示
- *@brief scene 场景
+/*@brief     界面显示
+ *@param[in] scene 场景
  */
 static void app_lv_ui_list_show(void *scene)
 {
@@ -90,8 +90,8 @@ static void app_lv_ui_list_show(void *scene)
                              app_lv_ui_res_local->scene;
 }
 
-/*@brief 界面隐藏
- *@brief scene 场景
+/*@brief     界面隐藏
+ *@param[in] scene 场景
  */
 static void app_lv_ui_list_hide(void *scene)
 {
