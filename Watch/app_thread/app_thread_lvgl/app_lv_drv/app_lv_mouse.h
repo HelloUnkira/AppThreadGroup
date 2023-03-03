@@ -5,16 +5,12 @@
  */
 void app_lv_mouse_ready(void);
 
-/*@brief lvgl 鼠标初始化
+/*@brief lvgl 鼠标进入低功耗
  */
-void app_lv_mouse_over(void);
+void app_lv_mouse_dlps_enter(void);
 
-/*@brief lvgl输入设备回调接口
+/*@brief lvgl 鼠标退出低功耗
  */
-void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
-
-/*@brief SDL输入设备回调接口
- */
-void app_lv_mouse_handler(SDL_Event *event);
+void app_lv_mouse_dlps_exit(void);
 
 #endif

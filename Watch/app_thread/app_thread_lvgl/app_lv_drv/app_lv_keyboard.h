@@ -1,20 +1,16 @@
 #ifndef APP_LV_KEYBOARD_H
 #define APP_LV_KEYBOARD_H
 
-/*@brief lvgl SDL键盘初始化
+/*@brief lvgl 键盘初始化
  */
 void app_lv_keyboard_ready(void);
 
-/*@brief lvgl 键盘初始化
+/*@brief lvgl 键盘进入低功耗
  */
-void app_lv_keyboard_over(void);
+void app_lv_keyboard_dlps_enter(void);
 
-/*@brief lvgl输入设备回调接口
+/*@brief lvgl 键盘退出低功耗
  */
-void app_lv_keyboard_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
-
-/*@brief SDL输入设备回调接口
- */
-void app_lv_keyboard_handler(SDL_Event *event);
+void app_lv_keyboard_dlps_exit(void);
 
 #endif

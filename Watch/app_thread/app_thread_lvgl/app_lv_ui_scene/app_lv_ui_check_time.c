@@ -13,6 +13,7 @@
 #include "app_module_system.h"
 
 #include "lvgl.h"
+#include "app_lv_mouse.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_check_time.h"
@@ -74,6 +75,8 @@ static void app_lv_ui_check_time_update(void *timer)
                 if (app_lv_ui_back) {
                     app_lv_ui_back = false;
                     app_lv_scene_reset(&app_lv_scene_main, true);
+                    /* 关闭鼠标 */
+                    app_lv_mouse_dlps_enter();
                 }
             }
         }

@@ -18,6 +18,10 @@
 #include "lvgl.h"
 #include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
+#include "app_lv_mouse.h"
+#include "app_lv_mousewheel.h"
+#include "app_lv_keyboard.h"
+#include "app_lv_display.h"
 #include "app_lv_driver.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
@@ -75,35 +79,35 @@ void app_thread_lvgl_routine(void)
                 }
                 /* lvgl驱动检查事件 */
                 if (package.event == app_thread_lvgl_sched_drv) {
-                    static bool app_lv_drv_shutdown = false;
                     app_lv_driver_handler();
-                    if (app_lv_drv_shutdown)
-                        break;
-                    if (app_lv_driver_shutdown()) {
-                        app_lv_drv_shutdown = true;
-                        /* 重启系统 */
-                        APP_SYS_LOG_WARN("app_lv_drv_shutdown");
-                        app_module_system_delay_set(2);
-                        app_module_system_status_set(app_module_system_reset);
-                    }
                 }
                 /* lvgl场景处理事件 */
                 if (package.event == app_thread_lvgl_sched_scene) {
                     app_lv_scene_sched(package.data);
-                    app_lv_ui_check_time_reset(0, 0);
                 }
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {
+                    /* 进入dlps界面 */
                     app_lv_ui_watch_status_update(app_lv_ui_watch_dlps);
                     app_lv_scene_add(&app_lv_scene_watch, false);
-                    app_lv_driver_dlps_enter();
+                    /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
+                    app_lv_display_dlps_enter();
+                    app_lv_keyboard_dlps_enter();
+                    app_lv_mousewheel_dlps_enter();
+                    // app_lv_mouse_dlps_enter();
                 }
                 /* 与lvgl绑定的驱动设备退出DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_exit) {
-                    app_lv_driver_dlps_exit();
+                    /* 计时重置 */
+                    app_lv_ui_check_time_reset(0, 0);
+                    /* 开启设备 */
+                    app_lv_mouse_dlps_exit();
+                    app_lv_mousewheel_dlps_exit();
+                    app_lv_keyboard_dlps_exit();
+                    app_lv_display_dlps_exit();
+                    /* 退出dlps界面 */
                     app_lv_scene_t scene = {0};
                     app_lv_scene_del(&scene);
-                    app_lv_ui_check_time_reset(0, 0);
                 }
                 break;
             }

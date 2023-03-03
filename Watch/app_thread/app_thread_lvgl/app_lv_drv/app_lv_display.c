@@ -103,7 +103,6 @@ static void app_lv_display_destroy(app_lv_display_t *disp)
     SDL_DestroyTexture(disp->texture);
     SDL_DestroyRenderer(disp->renderer);
     SDL_DestroyWindow(disp->window);
-    SDL_Quit();
 }
 
 /*@brief SDL屏幕退出回调事件
@@ -126,25 +125,33 @@ static int app_lv_display_sdl_quit_filter(void * userdata, SDL_Event * event)
  */
 void app_lv_display_ready(void)
 {
-    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
-    static bool sdl_not_ready_yet = true;
-    if (sdl_not_ready_yet) {
-        sdl_not_ready_yet = false;
-        /* 初始化SDL */
+    /* 初始化SDL */
+    if (1) {
         SDL_Init(SDL_INIT_VIDEO);
         SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
-        app_lv_display_create(&app_lv_display_screen);
+        app_lv_display_create(&app_lv_display_screen);
+    }
+    /* 反初始化SDL屏幕(不需要) */
+    if (0) {
+        app_lv_display_destroy(&app_lv_display_screen);
+        SDL_Quit();
     }
 }
 
-/*@brief lvgl 屏幕反初始化
+/*@brief lvgl 屏幕进入低功耗
  */
-void app_lv_display_over(void)
+void app_lv_display_dlps_enter(void)
 {
+    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
     /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
-    if (0) {
-        app_lv_display_destroy(&app_lv_display_screen);
-    }
+}
+
+/*@brief lvgl 屏幕退出低功耗
+ */
+void app_lv_display_dlps_exit(void)
+{
+    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
+    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
 }
 
 /*@brief lvgl 屏幕刷新回调接口

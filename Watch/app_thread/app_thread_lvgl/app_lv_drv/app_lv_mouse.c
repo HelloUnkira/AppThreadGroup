@@ -19,11 +19,18 @@ void app_lv_mouse_ready(void)
     app_lv_mouse_status = true;
 }
 
-/*@brief lvgl 鼠标反初始化
+/*@brief lvgl 鼠标进入低功耗
  */
-void app_lv_mouse_over(void)
+void app_lv_mouse_dlps_enter(void)
 {
     app_lv_mouse_status = false;
+}
+
+/*@brief lvgl 鼠标退出低功耗
+ */
+void app_lv_mouse_dlps_exit(void)
+{
+    app_lv_mouse_status = true;
 }
 
 /*@brief lvgl输入设备回调接口
@@ -43,7 +50,7 @@ void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
                     LV_INDEV_STATE_RELEASED;
 }
 
-/*@brief SDL输入设备回调接口
+/*@brief SDL 输入设备回调接口
  */
 void app_lv_mouse_handler(SDL_Event *event)
 {

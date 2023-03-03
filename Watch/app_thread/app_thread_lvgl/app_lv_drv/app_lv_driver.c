@@ -9,6 +9,7 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
+#include "app_module_system.h"
 
 #include "lvgl.h"
 #include <SDL2/SDL.h>
@@ -19,14 +20,40 @@
 #include "app_lv_display.h"
 #include "app_lv_mouse_icon.h"
 
-static bool app_lv_driver_status = false;
+static bool app_lv_driver_shutdown = false;
+static lv_group_t *app_lv_driver_kb_group = NULL;
+static lv_group_t *app_lv_driver_mw_group = NULL;
 
-/*@brief lvgl驱动设备状态
- *       内部使用: 被lvgl线程使用
+
+/*@brief lvgl 输入设备回调接口
+ *@brief lvgl 屏幕刷新回调接口
  */
-bool app_lv_driver_status_get(void)
+void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
+void app_lv_keyboard_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
+void app_lv_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data);
+void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p);
+
+/*@brief SDL 输入设备回调接口
+ */
+void app_lv_mouse_handler(SDL_Event *event);
+void app_lv_keyboard_handler(SDL_Event *event);
+void app_lv_mousewheel_handler(SDL_Event *event);
+void app_lv_display_handler(SDL_Event *event);
+
+/*@brief lvgl输入设备组
+ *retval 输入设备组
+ */
+lv_group_t *app_lv_driver_get_kb_group(void)
 {
-    return app_lv_driver_status;
+    return app_lv_driver_kb_group;
+}
+
+/*@brief lvgl输入设备组
+ *retval 输入设备组
+ */
+lv_group_t *app_lv_driver_get_mw_group(void)
+{
+    return app_lv_driver_mw_group;
 }
 
 /*@brief lvgl驱动设备开启
@@ -39,7 +66,6 @@ void app_lv_driver_ready(void)
     app_lv_mousewheel_ready();
     app_lv_keyboard_ready();
     app_lv_display_ready();
-    app_lv_driver_status = true;
     /* 创建显示缓冲区 */
     #if LV_DRV_DBUFFER
     static lv_disp_draw_buf_t disp_buf;
@@ -65,15 +91,14 @@ void app_lv_driver_ready(void)
     /* 创建显示 */
     lv_disp_t *disp = lv_disp_drv_register(&disp_drv);
     /* 创建显示的默认主题 */
-    lv_theme_t *theme = lv_theme_default_init(disp,
-                          lv_palette_main(LV_PALETTE_BLUE),
-                          lv_palette_main(LV_PALETTE_RED),
-                          LV_THEME_DEFAULT_DARK,
-                          LV_FONT_DEFAULT);
-    lv_disp_set_theme(disp, theme);
-    /* 创建资源组 */
-    lv_group_t *group = lv_group_create();
-    lv_group_set_default(group);
+    lv_disp_set_theme(disp, lv_theme_default_init(disp,
+                                  lv_palette_main(LV_PALETTE_BLUE),
+                                  lv_palette_main(LV_PALETTE_RED),
+                                  LV_THEME_DEFAULT_DARK,
+                                  LV_FONT_DEFAULT));
+    /* 创建输入设备组 */
+    app_lv_driver_kb_group = lv_group_create();
+    app_lv_driver_mw_group = lv_group_create();
     /* 注册输入设备:鼠标,键盘,鼠标滑轮 */
     static lv_indev_drv_t mo_dev;
     static lv_indev_drv_t kb_dev;
@@ -88,11 +113,11 @@ void app_lv_driver_ready(void)
     kb_dev.read_cb = app_lv_keyboard_read;
     mw_dev.read_cb = app_lv_mousewheel_read;
     lv_indev_t *mo_indev = lv_indev_drv_register(&mo_dev);
-    lv_indev_set_group(mo_indev, group);
     lv_indev_t *kb_indev = lv_indev_drv_register(&kb_dev);
-    lv_indev_set_group(kb_indev, group);
     lv_indev_t *mw_indev = lv_indev_drv_register(&mw_dev);
-    lv_indev_set_group(mw_indev, group);
+    lv_indev_set_group(kb_indev, app_lv_driver_kb_group);
+    lv_indev_set_group(mw_indev, app_lv_driver_mw_group);
+    lv_group_set_default(app_lv_driver_mw_group);
     /* 鼠标贴图:cursor */
     lv_obj_t *mo_cur = lv_img_create(lv_scr_act());
     lv_img_set_src(mo_cur, &app_lv_mouse_icon);
@@ -104,6 +129,16 @@ void app_lv_driver_ready(void)
  */
 void app_lv_driver_handler(void)
 {
+    if (app_lv_driver_shutdown)
+        return;
+    if (app_lv_display_shutdown()) {
+        app_lv_driver_shutdown = true;
+        /* 重启系统 */
+        APP_SYS_LOG_WARN("app_lv_drv_shutdown");
+        app_module_system_delay_set(2);
+        app_module_system_status_set(app_module_system_reset);
+    }
+    
     /* 更新处理 */
     SDL_Event event = {0};
     while(SDL_PollEvent(&event)) {
@@ -118,36 +153,3 @@ void app_lv_driver_handler(void)
     }
 }
 
-/*@brief lvgl的驱动设备需要关机
- *       内部使用: 被lvgl线程使用
- */
-bool app_lv_driver_shutdown(void)
-{
-    return app_lv_display_shutdown();
-}
-
-/*@brief lvgl驱动设备进入DLPS
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_driver_dlps_enter(void)
-{
-    APP_SYS_LOG_WARN("");
-    app_lv_driver_status = false;
-    app_lv_display_over();
-    app_lv_keyboard_over();
-    app_lv_mousewheel_over();
-    app_lv_mouse_over();
-}
-
-/*@brief lvgl驱动设备退出DLPS
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_driver_dlps_exit(void)
-{
-    app_lv_mouse_ready();
-    app_lv_mousewheel_ready();
-    app_lv_keyboard_ready();
-    app_lv_display_ready();
-    app_lv_driver_status = true;
-    APP_SYS_LOG_WARN("");
-}

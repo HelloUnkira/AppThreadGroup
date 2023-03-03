@@ -101,9 +101,9 @@ static void app_lv_ui_btn_r_cb(lv_event_t *e)
             app_lv_ui_countdown_presenter.set(&countdown_0);
             app_lv_ui_countdown_t countdown;
             app_lv_ui_countdown_presenter.get(&countdown);
-            lv_roller_set_selected(app_lv_ui_res_local->rol_h, countdown.hour,   LV_ANIM_OFF);
-            lv_roller_set_selected(app_lv_ui_res_local->rol_m, countdown.minute, LV_ANIM_OFF);
-            lv_roller_set_selected(app_lv_ui_res_local->rol_s, countdown.second, LV_ANIM_OFF);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_h, countdown.hour,   LV_ANIM_ON);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_m, countdown.minute, LV_ANIM_ON);
+            lv_roller_set_selected(app_lv_ui_res_local->rol_s, countdown.second, LV_ANIM_ON);
         } else {
             app_lv_ui_countdown_t countdown = {0};
             countdown.hour   = lv_roller_get_selected(app_lv_ui_res_local->rol_h);
@@ -204,9 +204,9 @@ static void app_lv_ui_countdown_show(void *scene)
         /* 滚轮选中刷新 */
         app_lv_ui_countdown_t countdown;
         app_lv_ui_countdown_presenter.get(&countdown);
-        lv_roller_set_selected(app_lv_ui_res_local->rol_h, countdown.hour,   LV_ANIM_OFF);
-        lv_roller_set_selected(app_lv_ui_res_local->rol_m, countdown.minute, LV_ANIM_OFF);
-        lv_roller_set_selected(app_lv_ui_res_local->rol_s, countdown.second, LV_ANIM_OFF);
+        lv_roller_set_selected(app_lv_ui_res_local->rol_h, countdown.hour,   LV_ANIM_ON);
+        lv_roller_set_selected(app_lv_ui_res_local->rol_m, countdown.minute, LV_ANIM_ON);
+        lv_roller_set_selected(app_lv_ui_res_local->rol_s, countdown.second, LV_ANIM_ON);
     }
     app_lv_scene_countdown.self = app_lv_ui_res_local == NULL ? NULL :
                                   app_lv_ui_res_local->scene;

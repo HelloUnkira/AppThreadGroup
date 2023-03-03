@@ -17,14 +17,21 @@ void app_lv_mousewheel_ready(void)
     app_lv_mousewheel_status = true;
 }
 
-/*@brief lvgl 鼠标滑轮反初始化
+/*@brief lvgl 鼠标滑轮进入低功耗
  */
-void app_lv_mousewheel_over(void)
+void app_lv_mousewheel_dlps_enter(void)
 {
     app_lv_mousewheel_status = false;
 }
 
-/*@brief lvgl输入设备回调接口
+/*@brief lvgl 鼠标滑轮退出低功耗
+ */
+void app_lv_mousewheel_dlps_exit(void)
+{
+    app_lv_mousewheel_status = true;
+}
+
+/*@brief lvgl 输入设备回调接口
  */
 void app_lv_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 {
@@ -38,7 +45,7 @@ void app_lv_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     app_lv_mousewheel_enc_diff = 0;
 }
 
-/*@brief SDL输入设备回调接口
+/*@brief SDL 输入设备回调接口
  */
 void app_lv_mousewheel_handler(SDL_Event *event)
 {

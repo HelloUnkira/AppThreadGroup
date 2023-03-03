@@ -60,9 +60,9 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
                           time_color_0x[5], app_lv_ui_clock_presenter.get_second(),
                           time_color_0x[6], app_lv_ui_res_week[app_lv_ui_clock_presenter.get_week()]);
     
-    lv_roller_set_selected(app_lv_ui_res_local->roller_h, app_lv_ui_clock_presenter.get_hour(),   LV_ANIM_OFF);
-    lv_roller_set_selected(app_lv_ui_res_local->roller_m, app_lv_ui_clock_presenter.get_minute(), LV_ANIM_OFF);
-    lv_roller_set_selected(app_lv_ui_res_local->roller_s, app_lv_ui_clock_presenter.get_second(), LV_ANIM_OFF);
+    lv_roller_set_selected(app_lv_ui_res_local->roller_h, app_lv_ui_clock_presenter.get_hour(),   LV_ANIM_ON);
+    lv_roller_set_selected(app_lv_ui_res_local->roller_m, app_lv_ui_clock_presenter.get_minute(), LV_ANIM_ON);
+    lv_roller_set_selected(app_lv_ui_res_local->roller_s, app_lv_ui_clock_presenter.get_second(), LV_ANIM_ON);
     
     const lv_color_t roller_color[3] = {lv_palette_main(LV_PALETTE_BLUE),
                                         lv_palette_main(LV_PALETTE_GREEN),

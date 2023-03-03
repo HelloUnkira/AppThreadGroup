@@ -5,17 +5,13 @@
  */
 void app_lv_display_ready(void);
 
-/*@brief lvgl 屏幕反初始化
+/*@brief lvgl 屏幕进入低功耗
  */
-void app_lv_display_over(void);
+void app_lv_display_dlps_enter(void);
 
-/*@brief lvgl 屏幕刷新回调接口
+/*@brief lvgl 屏幕退出低功耗
  */
-void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p);
-
-/*@brief lvgl SDL屏幕回调接口
- */
-void app_lv_display_handler(SDL_Event *event);
+void app_lv_display_dlps_exit(void);
 
 /*@brief lvgl 屏幕需要关机
  */

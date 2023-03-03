@@ -1,10 +1,15 @@
 #ifndef APP_LV_DRIVER_H
 #define APP_LV_DRIVER_H
 
-/*@brief lvgl驱动设备状态
- *       内部使用: 被lvgl线程使用
+/*@brief lvgl输入设备组
+ *retval 输入设备组
  */
-bool app_lv_driver_status_get(void);
+lv_group_t *app_lv_driver_get_kb_group(void);
+
+/*@brief lvgl输入设备组
+ *retval 输入设备组
+ */
+lv_group_t *app_lv_driver_get_mw_group(void);
 
 /*@brief lvgl驱动设备开启
  *       内部使用: 被lvgl线程使用
@@ -15,20 +20,5 @@ void app_lv_driver_ready(void);
  *       内部使用: 被lvgl线程使用
  */
 void app_lv_driver_handler(void);
-
-/*@brief lvgl的驱动设备需要关机
- *       内部使用: 被lvgl线程使用
- */
-bool app_lv_driver_shutdown(void);
-
-/*@brief lvgl驱动设备进入DLPS
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_driver_dlps_enter(void);
-
-/*@brief lvgl驱动设备退出DLPS
- *       内部使用: 被lvgl线程使用
- */
-void app_lv_driver_dlps_exit(void);
 
 #endif
