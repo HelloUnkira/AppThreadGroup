@@ -63,6 +63,22 @@ lv_obj_t * app_lv_ui_style_title_label(lv_obj_t *parent)
     return label;
 }
 
+/*@brief     文本标签
+ *           黑色背景,无边框,白色滚动长文
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_text_label(lv_obj_t *parent)
+{
+    lv_obj_t *label = lv_label_create(parent);
+    app_lv_ui_style_object(label);
+    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_style_text_color(label, lv_color_white(), 0);
+    lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
+    lv_label_set_text(label, "Null");
+    return label;
+}
+
+
 /*@brief     默认按钮
  *           蓝色背景,无边框
  *param[in]  parent 父控件
@@ -74,6 +90,61 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
     lv_obj_set_style_radius(btn, 45, 0);
     lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);
     return btn;
+}
+
+/*@brief     特效文本框
+ *           边框蓝色,大小3,光标红色,1秒闪烁,默认文本灰色,文本蓝色,指针选定
+ *param[in]  parent  父控件
+ */
+
+lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent)
+{
+    #define app_lv_ui_style_textarea_font      &lv_font_montserrat_22
+    
+    lv_obj_t *textarea = lv_textarea_create(parent);
+    app_lv_ui_style_object(textarea);
+    lv_obj_set_style_anim_time(textarea, 500, LV_PART_CURSOR);
+    lv_obj_set_style_border_side(textarea,LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(textarea, 3, 0);
+    lv_obj_set_style_border_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
+    lv_obj_set_style_text_font(textarea, app_lv_ui_style_textarea_font, 0);
+    lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
+    lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_GREY), LV_PART_TEXTAREA_PLACEHOLDER);
+    lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_RED), LV_PART_CURSOR);
+    lv_obj_set_style_text_align(textarea, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_scrollbar_mode(textarea, LV_SCROLLBAR_MODE_OFF);
+    lv_textarea_set_one_line(textarea, true);
+    lv_textarea_set_cursor_click_pos(textarea, true);
+    lv_textarea_set_placeholder_text(textarea, "......");
+    lv_textarea_set_text(textarea, "");
+    return textarea;
+}
+
+/*@brief     特效滚轮
+ *           默认遮罩,被选值(白色,内部字体28),非选值(灰色,内部字体22),轮滚
+ *param[in]  parent  父控件
+ *param[in]  width   滚轮宽度
+ *param[in]  options 滚轮显示值
+ *param[in]  vis_row 滚轮默认显示个数
+ */
+lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row)
+{
+    #define app_lv_ui_style_roller_rolcus_font      &lv_font_montserrat_22
+    #define app_lv_ui_style_roller_rolsel_font      &lv_font_montserrat_28
+    
+    lv_obj_t *roller = lv_roller_create(parent);
+    app_lv_ui_style_object(roller);
+    lv_obj_add_event_cb(roller, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_set_width(roller, width);
+    lv_obj_set_style_bg_opa(roller, LV_OPA_0, 0);
+    lv_obj_set_style_bg_opa(roller, LV_OPA_0, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolcus_font, 0);
+    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolsel_font, LV_PART_SELECTED);
+    lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);
+    lv_roller_set_options(roller, options, LV_ROLLER_MODE_NORMAL);//LV_ROLLER_MODE_INFINITE);///* 滚动模式显示异常 */
+    lv_roller_set_visible_row_count(roller, vis_row);
+    lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
+    return roller;
 }
 
 /*@brief     顶部风格
@@ -165,33 +236,6 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_label_set_text(*lbl_r, "R_Btn");
     /* 下部按钮 */
     return btn;
-}
-
-/*@brief     特效滚轮
- *           默认遮罩,被选值(白色,内部字体28),非选值(灰色,内部字体22),轮滚
- *param[in]  parent  父控件
- *param[in]  width   滚轮宽度
- *param[in]  options 滚轮显示值
- *param[in]  vis_row 滚轮默认显示个数
- */
-lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row)
-{
-    #define app_lv_ui_style_roller_rolcus_font      &lv_font_montserrat_22
-    #define app_lv_ui_style_roller_rolsel_font      &lv_font_montserrat_28
-    
-    lv_obj_t *roller = lv_roller_create(parent);
-    app_lv_ui_style_object(roller);
-    lv_obj_add_event_cb(roller, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_set_width(roller, width);
-    lv_obj_set_style_bg_opa(roller, LV_OPA_0, 0);
-    lv_obj_set_style_bg_opa(roller, LV_OPA_0, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolcus_font, 0);
-    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolsel_font, LV_PART_SELECTED);
-    lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);
-    lv_roller_set_options(roller, options, LV_ROLLER_MODE_NORMAL);//LV_ROLLER_MODE_INFINITE);///* 滚动模式显示异常 */
-    lv_roller_set_visible_row_count(roller, vis_row);
-    lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
-    return roller;
 }
 
 /*@brief     特效加载圆环

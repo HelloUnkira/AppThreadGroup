@@ -77,14 +77,14 @@ app_thread_t app_thread_mix_custom = {
 app_thread_t app_thread_data_manage = {
     .stack      = app_thread_data_manage_stack,
     .stack_size = APP_THREAD_DATA_MANAGE_STACK_SIZE,
-    .priority   = 3,
+    .priority   = 5,
     .entry      = app_thread_data_manage_routine_adaptor,
 };
 
 app_thread_t app_thread_lvgl = {
     .stack      = app_thread_lvgl_stack,
     .stack_size = APP_THREAD_LVGL_STACK_SIZE,
-    .priority   = 3,
+    .priority   = 4,
     .entry      = app_thread_lvgl_routine_adaptor,
 };
 

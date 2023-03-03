@@ -53,13 +53,13 @@ app_thread_t app_thread_mix_custom = {
 };
 
 app_thread_t app_thread_data_manage = {
-   .priority = 3,
+   .priority = 5,
    .routine  = app_thread_data_manage_routine_adaptor,
    .args     = NULL,
 };
 
 app_thread_t app_thread_lvgl = {
-   .priority = 3,
+   .priority = 4,
    .routine  = app_thread_lvgl_routine_adaptor,
    .args     = NULL,
 };

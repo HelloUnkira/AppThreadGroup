@@ -2,6 +2,8 @@ cmake_minimum_required (VERSION 3.10.1)
 project(app_main C)
 # 导入文件搜索路径
 include(${CMAKE_CURRENT_SOURCE_DIR}/header.cmake)
+# 链接平台的系统库(数学库,多线程库, SDL2库)
+link_libraries(-lm -lpthread -lSDL2)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_main)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor    ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_adaptor)

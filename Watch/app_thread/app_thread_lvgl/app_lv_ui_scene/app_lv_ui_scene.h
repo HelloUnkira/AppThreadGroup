@@ -12,5 +12,6 @@ extern app_lv_scene_t app_lv_scene_clock;
 extern app_lv_scene_t app_lv_scene_stopwatch;
 extern app_lv_scene_t app_lv_scene_countdown;
 extern app_lv_scene_t app_lv_scene_countdown_remind;
+extern app_lv_scene_t app_lv_scene_calculator;
 
 #endif

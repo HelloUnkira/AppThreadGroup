@@ -22,8 +22,10 @@ set(app_sys_path
 )
 set(app_third_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lvgl_lib
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lvgl_lib/lvgl_lib
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/app_third_calculator
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl/lib_lvgl
 )
 set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread
@@ -60,6 +62,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_stopwatch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_countdown
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_calculator
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main

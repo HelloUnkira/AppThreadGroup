@@ -1,12 +1,10 @@
-# 添加链接库 /usr/lib /usr/local/lib
-find_library(sdl2_lib SDL2)
 # 收集源,生成库,指定库的链接语言,添加库依赖
 file(GLOB_RECURSE SOURCES *.c)
 add_library(app_thread STATIC ${SOURCES})
 set_target_properties(app_thread PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(app_thread PUBLIC ${sdl2_lib})
 target_link_libraries(app_thread PUBLIC lvgl)
 target_link_libraries(app_thread PUBLIC lvgl_examples)
 target_link_libraries(app_thread PUBLIC lvgl_demos)
 target_link_libraries(app_thread PUBLIC app_adaptor)
 target_link_libraries(app_thread PUBLIC app_sys)
+target_link_libraries(app_thread PUBLIC app_self)
