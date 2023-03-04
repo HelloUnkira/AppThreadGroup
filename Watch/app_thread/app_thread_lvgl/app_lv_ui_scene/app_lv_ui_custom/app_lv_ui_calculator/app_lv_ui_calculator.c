@@ -101,6 +101,8 @@ static void app_lv_ui_res_btnlist_str_cb(lv_event_t *e)
     const char *str = lv_event_get_user_data(e);
 #endif
     
+    if (str == NULL)
+        return;
     /* 弹回到最开始 */
     lv_obj_scroll_to_y(app_lv_ui_res_local->list_btn, 0, LV_ANIM_ON);
     
@@ -254,7 +256,6 @@ static void app_lv_ui_calculator_show(void *scene)
         app_lv_ui_res_local->list_btn = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(app_lv_ui_res_local->list_btn);
         lv_obj_set_size(app_lv_ui_res_local->list_btn, LV_HOR_RES, 60 * 3 - 20);
-        lv_obj_add_flag(app_lv_ui_res_local->list_btn, LV_OBJ_FLAG_SCROLLABLE);
         lv_obj_align_to(app_lv_ui_res_local->list_btn, app_lv_ui_res_local->expr, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
         app_lv_ui_res_local->btnmatrix = app_lv_ui_style_btnmatrix(app_lv_ui_res_local->list_btn, app_lv_ui_res_btnmatrix_str);
         lv_obj_set_size(app_lv_ui_res_local->btnmatrix, LV_HOR_RES, 30 * 16);

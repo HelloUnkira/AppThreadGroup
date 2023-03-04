@@ -109,7 +109,6 @@ lv_obj_t * app_lv_ui_style_btnmatrix(lv_obj_t *parent, const char *map[])
     lv_obj_set_style_pad_all(btnmatrix, 20, 0);
     lv_obj_set_style_pad_row(btnmatrix, 10, 0);
     lv_obj_set_style_pad_column(btnmatrix, 10, 0);
-    lv_obj_add_flag(btnmatrix, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_style_height(btnmatrix, 20, LV_PART_ITEMS);
     lv_obj_set_style_radius(btnmatrix, 45, LV_PART_ITEMS);
     lv_obj_set_style_width(btnmatrix, LV_HOR_RES / 3 - 20, LV_PART_ITEMS);

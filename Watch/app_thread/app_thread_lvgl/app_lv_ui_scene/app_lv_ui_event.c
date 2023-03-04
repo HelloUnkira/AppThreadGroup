@@ -7,8 +7,6 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
-#include "app_os_adaptor.h"
-#include "app_sys_pipe.h"
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
@@ -16,11 +14,39 @@
 
 #include "lvgl.h"
 #include "app_lv_driver.h"
-#include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_check_time.h"
+
+/* 手势迟延触发(以降低点击事件产生的影响) */
+static bool app_lv_ui_gesture_busy = false;
+static lv_dir_t app_lv_ui_gesture_dir = LV_DIR_NONE;
+static lv_anim_t app_lv_ui_gesture_anim = {0};
+static lv_indev_t *app_lv_ui_gesture_indev = NULL;
+
+/*@brief 手势迟延动画响应回调
+ */
+static void app_lv_ui_gesture_anim_handler(void *para, int32_t value)
+{
+    if (value == 1) {
+        /* 左右滑动回到上一层 */
+        if ((app_lv_ui_gesture_dir & LV_DIR_LEFT) ||
+            (app_lv_ui_gesture_dir & LV_DIR_RIGHT)) {
+            if (app_lv_scene_get_nest() > 1) {
+                app_lv_scene_t scene = {0};
+                app_lv_scene_del(&scene);
+            }
+        }
+        app_lv_ui_gesture_busy = false;
+        app_lv_ui_gesture_dir = LV_DIR_NONE;
+        /* 恢复手势设备的禁用 */
+        if (app_lv_ui_gesture_indev != NULL) {
+            lv_indev_enable(app_lv_ui_gesture_indev, true);
+            app_lv_ui_gesture_indev = NULL;
+        }
+    }
+}
 
 /*@brief 界面默认事件响应回调
  */
@@ -106,14 +132,25 @@ void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
-        /* 事件过于敏感,暂时屏蔽手势 */
-        break;
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
-            if (app_lv_scene_get_nest() > 1) {
-                app_lv_scene_t scene = {0};
-                app_lv_scene_del(&scene);
-            }
+            /* 事件过于敏感,手势迟延动画降低干扰 */
+            if (app_lv_ui_gesture_busy)
+                return;
+            app_lv_ui_gesture_busy = true;
+            app_lv_ui_gesture_dir = dir;
+            /* 临时禁用手势设备 */
+            app_lv_ui_gesture_indev = lv_event_get_indev(e);
+            lv_indev_enable(app_lv_ui_gesture_indev, false);
+            /* 手势迟延动画 */
+            lv_anim_init(&app_lv_ui_gesture_anim);
+            lv_anim_set_var(&app_lv_ui_gesture_anim, NULL);
+            lv_anim_set_exec_cb(&app_lv_ui_gesture_anim, app_lv_ui_gesture_anim_handler);
+            lv_anim_set_repeat_count(&app_lv_ui_gesture_anim, 0);
+            lv_anim_set_values(&app_lv_ui_gesture_anim, 0, 1);
+            lv_anim_set_time(&app_lv_ui_gesture_anim, 300);
+            lv_anim_start(&app_lv_ui_gesture_anim);
+            break;
         }
         break;
     }

@@ -24,7 +24,6 @@ static bool app_lv_driver_shutdown = false;
 static lv_group_t *app_lv_driver_kb_group = NULL;
 static lv_group_t *app_lv_driver_mw_group = NULL;
 
-
 /*@brief lvgl 输入设备回调接口
  *@brief lvgl 屏幕刷新回调接口
  */
