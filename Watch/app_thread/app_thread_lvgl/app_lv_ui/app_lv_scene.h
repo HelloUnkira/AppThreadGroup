@@ -9,8 +9,10 @@ typedef enum {
 
 typedef struct {
     /* 临近场景(浮动窗口) */
-    void  *cross_hlist[2];    /* 临近场景(left:0,right:1) */
-    void  *cross_vlist[2];    /* 临近场景(top:0,bottom:1) */
+    void *cross_hlist_l;    /* 临近场景(left:0,right:1) */
+    void *cross_hlist_r;    /* 临近场景(left:0,right:1) */
+    void *cross_vlist_t;    /* 临近场景(top:0,bottom:1) */
+    void *cross_vlist_b;    /* 临近场景(top:0,bottom:1) */
     /* 临近场景(平行窗口) */
     void **parral_hlist;
     void **parral_vlist;
@@ -21,7 +23,7 @@ typedef struct {
 typedef struct {
     /* 场景资源节点 */
     void *self;
-    const void *scene_near;         /* 临近场景 */
+    const void *scene_set;          /* 临近场景集 */
     /* 场景触发事件及回调 */
     uint8_t event;                  /* 触发事件 */
     void  (*show)(void *scene);     /* 载入场景 */
@@ -69,5 +71,20 @@ void app_lv_scene_del(app_lv_scene_t *scene);
  *@retval 场景数量
  */
 uint8_t app_lv_scene_get_nest(void);
+
+/*@brief    激活一个游离窗口,该窗口不受场景栈管理
+ *          可被其他窗口重新继承,默认不显示(LV_OBJ_FLAG_HIDDEN)
+ *          注意:它调用了敏感资源,对它的递归调用
+ *               不能到lv_timer_handler
+ *param[in] scene 游离窗口
+ */
+void app_lv_scene_active(app_lv_scene_t *scene);
+
+/*@brief    失活一个游离窗口
+ *          注意:它调用了敏感资源,对它的递归调用
+ *               不能到lv_timer_handler
+ *param[in] scene 游离窗口
+ */
+void app_lv_scene_hidden(app_lv_scene_t *scene);
 
 #endif

@@ -28,6 +28,7 @@
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_check_time.h"
+#include "app_lv_ui_developer_mode.h"
 #include "app_lv_ui_watch.h"
 
 /*@brief lvgl线程模组初始化
@@ -112,12 +113,24 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                /* 测试时使用,在此处添加自定义窗口 */
-                #if 0
-                    /* to do something */
+                #if APP_LV_UI_DEVELOPER_MODE
+                /* 启动UI场景 */
+                if (package.event == app_thread_lvgl_ui_scene_start) {
+                    app_lv_ui_event_default_config(true);
+                    app_lv_scene_reset(&app_lv_scene_main, false);
+                    app_lv_ui_developer_mode();
+                    break;
+                }
+                /* 终止UI场景 */
+                if (package.event == app_thread_lvgl_ui_scene_stop) {
+                    app_lv_ui_event_default_config(false);
+                    app_lv_scene_reset(&app_lv_scene_main, false);
+                    break;
+                }
                 #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
+                    app_lv_ui_event_default_config(true);
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_start);
                     app_lv_scene_add(&app_lv_scene_watch, false);
@@ -126,6 +139,7 @@ void app_thread_lvgl_routine(void)
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
+                    app_lv_ui_event_default_config(false);
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch, false);
@@ -137,11 +151,11 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_check_time_update();
                     break;
                 }
+                #endif
                 /* 产生到特定场景内的事件...... */
                 app_lv_ui_scene_event(package.event, package.data, package.size);
                 if (package.dynamic)
                     app_mem_free(package.data);
-                #endif
                 break;
             }
             default: {

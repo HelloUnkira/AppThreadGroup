@@ -7,7 +7,6 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -59,8 +58,6 @@ static void app_lv_ui_test_list_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
-        /* 场景添加默认事件 */
-        app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 初始化标签,上中部 */
         lv_obj_t *label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
@@ -95,8 +92,6 @@ static void app_lv_ui_test_list_show(void *scene)
 static void app_lv_ui_test_list_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-        /* 场景去除默认事件 */
-        app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         lv_mem_free(app_lv_ui_res_local);

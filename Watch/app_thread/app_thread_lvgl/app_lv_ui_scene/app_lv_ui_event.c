@@ -24,7 +24,7 @@
 
 /*@brief 界面默认事件响应回调
  */
-static void app_lv_ui_event_default(lv_event_t *e)
+void app_lv_ui_event_default(lv_event_t *e)
 {
     #if 0  /* 输入设备的事件表 */
     LV_EVENT_PRESSED,
@@ -106,6 +106,8 @@ static void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
+        /* 事件过于敏感,暂时屏蔽手势 */
+        break;
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             if (app_lv_scene_get_nest() > 1) {
@@ -179,25 +181,28 @@ static void app_lv_ui_event_default(lv_event_t *e)
 }
 
 /*@brief    场景默认事件响应回调设置
- *param[in] scene 场景
+ *param[in] enable 启用或者禁用
  */
-void app_lv_ui_event_default_set(lv_obj_t *scene)
+void app_lv_ui_event_default_config(bool enable)
 {
-    lv_group_t *group = app_lv_driver_get_kb_group();
-    lv_obj_add_event_cb(scene, app_lv_ui_event_default, LV_EVENT_ALL, scene);
-    lv_group_add_obj(group, scene);
-    lv_group_focus_freeze(group, true);
-}
-
-/*@brief    场景默认事件响应回调清除
- *param[in] scene 场景
- */
-void app_lv_ui_event_default_clr(lv_obj_t *scene)
-{
-    lv_group_t *group = app_lv_driver_get_kb_group();
-    lv_group_focus_freeze(group, false);
-    lv_group_remove_obj(scene);
-    lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
+    static bool event_config = false;
+    if (enable) {
+        if (event_config)
+            return;
+        event_config = true;
+        lv_group_t *group = app_lv_driver_get_kb_group();
+        lv_obj_add_event_cb(lv_scr_act(), app_lv_ui_event_default, LV_EVENT_ALL, NULL);
+        lv_group_add_obj(group, lv_scr_act());
+        lv_group_focus_freeze(group, true);
+    } else {
+        if (!event_config)
+            return;
+        event_config = false;
+        lv_group_t *group = app_lv_driver_get_kb_group();
+        lv_group_focus_freeze(group, false);
+        lv_group_remove_obj(lv_scr_act());
+        lv_obj_remove_event_cb(lv_scr_act(), app_lv_ui_event_default);
+    }
 }
 
 /*@brief 滚轮事件自定义回调

@@ -1,10 +1,14 @@
 #ifndef APP_LV_UI_EVENT_H
 #define APP_LV_UI_EVENT_H
 
-/*@brief    场景默认事件响应回调设置
- *param[in] scene 场景
+/*@brief 界面默认事件响应回调
  */
-void app_lv_ui_event_default_set(lv_obj_t *scene);
+void app_lv_ui_event_default(lv_event_t *e);
+
+/*@brief    场景默认事件响应回调设置
+ *param[in] enable 启用或者禁用
+ */
+void app_lv_ui_event_default_config(bool enable);
 
 /*@brief    场景默认事件响应回调清除
  *param[in] scene 场景

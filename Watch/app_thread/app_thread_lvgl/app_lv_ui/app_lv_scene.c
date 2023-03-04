@@ -141,3 +141,30 @@ uint8_t app_lv_scene_get_nest(void)
     APP_SYS_ASSERT(app_lv_scene_num != 0);
     return app_lv_scene_num;
 }
+
+/*@brief    激活一个游离窗口,该窗口不受场景栈管理
+ *          可被其他窗口重新继承,默认不显示(LV_OBJ_FLAG_HIDDEN)
+ *          注意:它调用了敏感资源,对它的递归调用
+ *               不能到lv_timer_handler
+ *param[in] scene 游离窗口
+ */
+void app_lv_scene_active(app_lv_scene_t *scene)
+{
+    APP_SYS_ASSERT(scene != 0);
+    scene->event = app_lv_scene_need_show;
+    app_lv_scene_sched(scene);
+    lv_obj_add_flag(scene->self, LV_OBJ_FLAG_HIDDEN);
+}
+
+/*@brief    失活一个游离窗口
+ *          注意:它调用了敏感资源,对它的递归调用
+ *               不能到lv_timer_handler
+ *param[in] scene 游离窗口
+ */
+void app_lv_scene_hidden(app_lv_scene_t *scene)
+{
+    APP_SYS_ASSERT(scene != 0);
+    lv_obj_set_parent(scene->self, lv_scr_act());
+    scene->event = app_lv_scene_need_hide;
+    app_lv_scene_sched(scene);
+}

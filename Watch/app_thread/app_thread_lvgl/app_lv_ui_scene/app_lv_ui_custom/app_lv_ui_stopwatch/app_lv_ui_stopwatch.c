@@ -7,7 +7,6 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -195,8 +194,6 @@ static void app_lv_ui_stopwatch_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
-        /* 场景添加默认事件 */
-        app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 默认顶部风格 */
         lv_obj_t *title = NULL;
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
@@ -240,11 +237,6 @@ static void app_lv_ui_stopwatch_hide(void *scene)
     if (app_lv_ui_res_local != NULL) {
         /* 回收列表资源 */
         app_lv_ui_local_tick_list_clr();
-        /* 场景去除默认事件 */
-        app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
-        /* 反初始化按键事件 */
-        lv_obj_remove_event_cb(app_lv_ui_res_local->btn_l, app_lv_ui_btn_l_cb);
-        lv_obj_remove_event_cb(app_lv_ui_res_local->btn_r, app_lv_ui_btn_r_cb);
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */

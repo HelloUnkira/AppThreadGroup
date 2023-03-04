@@ -7,7 +7,6 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -220,8 +219,6 @@ static void app_lv_ui_calculator_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
-        /* 场景添加默认事件 */
-        app_lv_ui_event_default_set(app_lv_ui_res_local->scene);
         /* 默认顶部风格 */
         lv_obj_t *title = NULL;
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
@@ -308,8 +305,6 @@ static void app_lv_ui_calculator_hide(void *scene)
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
-        /* 场景去除默认事件 */
-        app_lv_ui_event_default_clr(app_lv_ui_res_local->scene);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         lv_mem_free(app_lv_ui_res_local);
