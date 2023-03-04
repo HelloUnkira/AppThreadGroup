@@ -19,6 +19,7 @@
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_check_time.h"
+
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_watch.h"
 

@@ -3,7 +3,6 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
-#include "app_os_adaptor.h"
 #include "app_sys_log.h"
 
 #include "lvgl.h"
@@ -11,12 +10,13 @@
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
+
 #include "app_lv_ui_countdown.h"
 #include "app_lv_ui_countdown_remind.h"
+#include "app_lv_ui_countdown_presenter.h"
 
 #include "app_lv_ui_custom_presenter.h"
 #include "app_lv_ui_clock_presenter.h"
-#include "app_lv_ui_countdown_presenter.h"
 
 typedef struct {
     lv_anim_t anim;
@@ -155,7 +155,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_countdown_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = app_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 场景添加默认事件 */
@@ -227,7 +227,7 @@ static void app_lv_ui_countdown_hide(void *scene)
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
-        app_mem_free(app_lv_ui_res_local);
+        lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
     app_lv_scene_countdown.self = app_lv_ui_res_local == NULL ? NULL :

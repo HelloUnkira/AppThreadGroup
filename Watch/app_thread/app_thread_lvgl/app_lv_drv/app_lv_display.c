@@ -2,12 +2,9 @@
  *    lv适配SDL模拟器
  */
 
-#include <SDL2/SDL.h>
-#include "lv_drv_conf.h"
 #include "lvgl.h"
-#include "app_lv_mouse.h"
-#include "app_lv_mousewheel.h"
-#include "app_lv_keyboard.h"
+#include "lv_drv_conf.h"
+#include <SDL2/SDL.h>
 
 typedef struct {
     SDL_Window   *window;
