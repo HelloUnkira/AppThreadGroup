@@ -135,6 +135,8 @@ void app_lv_driver_handler(void)
         app_lv_driver_shutdown = true;
         /* 重启系统 */
         APP_SYS_LOG_WARN("");
+        if (app_module_system_dlps_get())
+            app_module_system_dlps_set(false);
         app_module_system_delay_set(2);
         app_module_system_status_set(app_module_system_reset);
     }

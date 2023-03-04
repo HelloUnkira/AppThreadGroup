@@ -97,6 +97,28 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
     return btn;
 }
 
+/*@brief     特效按钮矩阵
+ *           蓝色背景,无边框,默认全响应
+ *param[in]  parent  父控件
+ *param[in]  map     文本矩阵
+ */
+lv_obj_t * app_lv_ui_style_btnmatrix(lv_obj_t *parent, const char *map[])
+{
+    lv_obj_t *btnmatrix = lv_btnmatrix_create(parent);
+    app_lv_ui_style_object(btnmatrix);
+    lv_obj_set_style_pad_all(btnmatrix, 20, 0);
+    lv_obj_set_style_pad_row(btnmatrix, 10, 0);
+    lv_obj_set_style_pad_column(btnmatrix, 10, 0);
+    lv_obj_add_flag(btnmatrix, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_style_height(btnmatrix, 20, LV_PART_ITEMS);
+    lv_obj_set_style_radius(btnmatrix, 45, LV_PART_ITEMS);
+    lv_obj_set_style_width(btnmatrix, LV_HOR_RES / 3 - 20, LV_PART_ITEMS);
+    lv_obj_set_style_bg_color(btnmatrix, lv_palette_main(LV_PALETTE_BLUE), LV_PART_ITEMS);
+    lv_btnmatrix_set_map(btnmatrix, map);
+    lv_btnmatrix_set_btn_ctrl_all(btnmatrix, LV_BTNMATRIX_CTRL_CHECKABLE);
+    return btnmatrix;
+}
+
 /*@brief     特效文本框
  *           边框蓝色,大小3,光标红色,1秒闪烁,默认文本灰色,文本蓝色,指针选定
  *param[in]  parent  父控件

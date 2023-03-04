@@ -17,6 +17,8 @@
 #include "app_lv_ui_custom_presenter.h"
 #include "app_lv_ui_clock_presenter.h"
 
+#define APP_LV_RES_USE_BTNMATRIX   1
+
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
@@ -27,13 +29,39 @@ typedef struct {
     lv_obj_t *retval;
     lv_obj_t *expr;
     lv_obj_t *list_btn;
+#if APP_LV_RES_USE_BTNMATRIX
+    lv_obj_t *btnmatrix;
+#endif
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 #define APP_LV_UI_TEXT_MAX_LEN  127
 
-const char *app_lv_ui_res_list_str[] = {
+#if APP_LV_RES_USE_BTNMATRIX
+const char *app_lv_ui_res_btnmatrix_str[] = {
+    /* 操作数表 */
+    "<", ">", "=", "\n",
+    "C", "0", "X", "\n",
+    "1", "2", "3", "\n",
+    "4", "5", "6", "\n",
+    "7", "8", "9", "\n",
+    "(", ".", ")", "\n",
+    /* 操作符表 */
+    "+", "-", "%",      "\n",
+    "*", "/", ",",      "\n",
+    "e", "**", "pai",   "\n",
+    "!", "!!", "c(,)",  "\n",
+    /* 扩展操作函数表 */
+    "sqrt()",   "log()",    "log10()",  "\n",
+    "cos()",    "sin()",    "tan()",    "\n",
+    "cosh()",   "sinh()",   "tanh()",   "\n",
+    "acos()",   "asin()",   "atan()",   "\n",
+    "atan2(,)", "exp()",    "pow(,)",   "\n",
+    "fmod(,)",  "ceil()",   "floor()",  "",
+};
+#else
+const char *app_lv_ui_res_btnlist_str[] = {
     /* 操作数表 */
     "<", ">", "=",
     "C", "0", "X",
@@ -55,14 +83,25 @@ const char *app_lv_ui_res_list_str[] = {
     "fmod(,)",  "ceil()",   "floor()",
 };
 
-static const uint8_t app_lv_ui_res_list_str_size = sizeof(app_lv_ui_res_list_str) /
-                                                   sizeof(app_lv_ui_res_list_str[0]);
+static const uint8_t app_lv_ui_res_btnlist_str_size = sizeof(app_lv_ui_res_btnlist_str) /
+                                                      sizeof(app_lv_ui_res_btnlist_str[0]);
+#endif
 
 /*@brief 界面自定义事件回调
 */
-static void app_lv_ui_res_list_str_cb(lv_event_t *e)
+#if APP_LV_RES_USE_BTNMATRIX
+static void app_lv_ui_res_btnmatrix_str_cb(lv_event_t *e)
+#else
+static void app_lv_ui_res_btnlist_str_cb(lv_event_t *e)
+#endif
 {
+#if APP_LV_RES_USE_BTNMATRIX
+    uint16_t btn_id = lv_btnmatrix_get_selected_btn(app_lv_ui_res_local->btnmatrix);
+    const char *str = lv_btnmatrix_get_btn_text(app_lv_ui_res_local->btnmatrix, btn_id);
+#else
     const char *str = lv_event_get_user_data(e);
+#endif
+    
     /* 弹回到最开始 */
     lv_obj_scroll_to_y(app_lv_ui_res_local->list_btn, 0, LV_ANIM_ON);
     
@@ -170,8 +209,6 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
                           app_lv_ui_custom_presenter.is_pm() ? "PM" : "",
                           app_lv_ui_clock_presenter.get_hour(),
                           app_lv_ui_clock_presenter.get_minute());
-
-
 }
 
 /*@brief     界面显示
@@ -216,6 +253,19 @@ static void app_lv_ui_calculator_show(void *scene)
         lv_textarea_set_max_length(app_lv_ui_res_local->expr, APP_LV_UI_TEXT_MAX_LEN);
         lv_textarea_set_placeholder_text(app_lv_ui_res_local->expr, "Expr:...");
         lv_obj_align_to(app_lv_ui_res_local->expr, list, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        #if APP_LV_RES_USE_BTNMATRIX
+        app_lv_ui_res_local->list_btn = lv_obj_create(app_lv_ui_res_local->scene);
+        app_lv_ui_style_object(app_lv_ui_res_local->list_btn);
+        lv_obj_set_size(app_lv_ui_res_local->list_btn, LV_HOR_RES, 60 * 3 - 20);
+        lv_obj_add_flag(app_lv_ui_res_local->list_btn, LV_OBJ_FLAG_SCROLLABLE);
+        lv_obj_align_to(app_lv_ui_res_local->list_btn, app_lv_ui_res_local->expr, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+        app_lv_ui_res_local->btnmatrix = app_lv_ui_style_btnmatrix(app_lv_ui_res_local->list_btn, app_lv_ui_res_btnmatrix_str);
+        lv_obj_set_size(app_lv_ui_res_local->btnmatrix, LV_HOR_RES, 30 * 16);
+        lv_obj_add_event_cb(app_lv_ui_res_local->btnmatrix, app_lv_ui_res_btnmatrix_str_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_set_style_width(app_lv_ui_res_local->btnmatrix, LV_HOR_RES / 3 - 20, LV_PART_ITEMS);
+        lv_obj_set_style_height(app_lv_ui_res_local->btnmatrix, 20, LV_PART_ITEMS);
+        lv_obj_align(app_lv_ui_res_local->btnmatrix, LV_ALIGN_TOP_MID, 0, 0);
+        #else
         /* 三列:操作数与操作符 */
         app_lv_ui_res_local->list_btn = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(app_lv_ui_res_local->list_btn);
@@ -226,16 +276,17 @@ static void app_lv_ui_calculator_show(void *scene)
         lv_obj_set_style_anim_time(app_lv_ui_res_local->list_btn, 1000, LV_PART_SCROLLBAR);
         lv_obj_set_size(app_lv_ui_res_local->list_btn, LV_HOR_RES, 60 * 3 - 20);
         lv_obj_align_to(app_lv_ui_res_local->list_btn, app_lv_ui_res_local->expr, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-        for (uint8_t idx = 0; idx < app_lv_ui_res_list_str_size; idx++) {
+        for (uint8_t idx = 0; idx < app_lv_ui_res_btnlist_str_size; idx++) {
             lv_obj_t *btn = app_lv_ui_style_btn(app_lv_ui_res_local->list_btn);
             lv_obj_set_size(btn, LV_HOR_RES / 3 - 20, 30 - 10);
-            lv_obj_add_event_cb(btn, app_lv_ui_res_list_str_cb, LV_EVENT_CLICKED, (void *)app_lv_ui_res_list_str[idx]);
+            lv_obj_add_event_cb(btn, app_lv_ui_res_btnlist_str_cb, LV_EVENT_CLICKED, (void *)app_lv_ui_res_btnlist_str[idx]);
             lv_obj_t *lbl = lv_label_create(btn);
             app_lv_ui_style_object(lbl);
             lv_obj_set_style_bg_opa(lbl, LV_OPA_0, 0);
-            lv_label_set_text(lbl, app_lv_ui_res_list_str[idx]);
+            lv_label_set_text(lbl, app_lv_ui_res_btnlist_str[idx]);
             lv_obj_align(lbl, LV_ALIGN_CENTER, 0, 0);
         }
+        #endif
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);

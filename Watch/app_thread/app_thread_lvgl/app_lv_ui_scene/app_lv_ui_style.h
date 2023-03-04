@@ -31,11 +31,17 @@ lv_obj_t * app_lv_ui_style_text_label(lv_obj_t *parent);
  */
 lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent);
 
+/*@brief     特效按钮矩阵
+ *           蓝色背景,无边框,默认全响应
+ *param[in]  parent  父控件
+ *param[in]  map     文本矩阵
+ */
+lv_obj_t * app_lv_ui_style_btnmatrix(lv_obj_t *parent, const char *map[]);
+
 /*@brief     特效文本框
  *           边框蓝色,大小3,光标红色,1秒闪烁,默认文本灰色,文本蓝色,指针选定
  *param[in]  parent  父控件
  */
-
 lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent);
 
 /*@brief     特效滚轮
