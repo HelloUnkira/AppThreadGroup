@@ -91,18 +91,18 @@ void app_module_clock_get_system_clock(app_module_clock_t *clock);
 void app_module_clock_set_system_clock(app_module_clock_t *clock);
 
 /*@brief 系统时钟更新事件
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
-void app_module_clock_event_update(void);
+void app_module_clock_local_update(void);
 
 /*@brief     系统时间戳更新回调
- *           内部使用: 被mix custom线程使用
- *@param[in] utc_new 硬件定时器派发给mix custom包裹中携带的新utc信息
+ *           内部使用: 被mix irq线程使用
+ *@param[in] utc_new 硬件定时器派发给mix irq包裹中携带的新utc信息
  */
 void app_module_clock_timestamp_update(uint64_t utc_new);
 
 /*@brief 系统时钟模组初始化
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
 void app_module_clock_ready(void);
 

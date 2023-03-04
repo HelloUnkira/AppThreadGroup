@@ -10,12 +10,12 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_mix_irq.h"
 #include "app_module_timer.h"
 
 
 /*@brief 约减软件定时器
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
 void app_module_timer_reduce(void)
 {
@@ -27,16 +27,16 @@ void app_module_timer_reduce(void)
 void app_module_timer_1ms_update(void)
 {
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_timer,
-        .event    = app_thread_mix_custom_timer_reduce_update,
+        .send_tid = app_thread_id_mix_irq,
+        .recv_tid = app_thread_id_mix_irq,
+        .module   = app_thread_mix_irq_timer,
+        .event    = app_thread_mix_irq_timer_reduce_update,
     };
     app_package_notify(&package);
 }
 
 /*@brief 软件定时器模组初始化
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
 void app_module_timer_ready(void)
 {

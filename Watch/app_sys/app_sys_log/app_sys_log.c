@@ -79,3 +79,10 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     /* 异常导致的错误直接重启系统 */
     app_os_reset();
 }
+
+/*@brief 编译时间
+ */
+void app_sys_build_time(void)
+{
+    APP_SYS_LOG_INFO_RAW("FW Build Time:%s,%s", __DATE__, __TIME__);
+}

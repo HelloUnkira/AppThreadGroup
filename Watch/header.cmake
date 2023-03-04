@@ -33,12 +33,11 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_thread_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_vbus
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_system
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_work
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_master/app_module_watchdog
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_timer
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_timer
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_alarm
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_countdown
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_stopwatch

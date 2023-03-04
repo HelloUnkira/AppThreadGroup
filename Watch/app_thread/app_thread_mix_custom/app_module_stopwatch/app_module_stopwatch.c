@@ -70,9 +70,10 @@ void app_module_stopwatch_stop(void)
     app_sys_timer_stop(&app_module_stopwatch_timer);
 }
 
-/*@brief 倒计时软件定时器模组回调
+/*@brief 秒表模组事件处理
+ *       内部使用: 被mix custom线程使用
  */
-static void app_module_stopwatch_xmsec_update(void *timer)
+void app_module_stopwatch_xmsec_update(void)
 {
     app_mutex_take(&app_module_stopwatch_mutex);
     app_module_stopwatch_t stopwatch = app_module_stopwatch;
@@ -103,12 +104,26 @@ static void app_module_stopwatch_xmsec_update(void *timer)
     #endif
 }
 
+/*@brief 倒计时软件定时器模组回调
+ */
+static void app_module_stopwatch_timer_handler(void *timer)
+{
+    /* 发送倒计时事件 */
+    app_package_t package = {
+        .send_tid = app_thread_id_unknown,
+        .recv_tid = app_thread_id_mix_custom,
+        .module   = app_thread_mix_custom_stopwatch,
+        .event    = app_thread_mix_custom_stopwatch_msec_update,
+    };
+    app_package_notify(&package);
+}
+
 /*@brief 秒表模组初始化
  */
 void app_module_stopwatch_ready(void)
 {
     app_mutex_process(&app_module_stopwatch_mutex);
-    app_module_stopwatch_timer.expired = app_module_stopwatch_xmsec_update;
+    app_module_stopwatch_timer.expired = app_module_stopwatch_timer_handler;
     app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
     app_module_stopwatch_timer.reload  = true;
 }

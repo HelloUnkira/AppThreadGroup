@@ -10,7 +10,7 @@
 #include "app_sys_log.h"
 #include "app_sys_clock.h"
 #include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_mix_irq.h"
 #include "app_module_clock.h"
 #define   APP_MODULE_CLOCK_CB_H
 #include "app_module_clock_cb.h"
@@ -125,18 +125,18 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
     app_mutex_give(&app_module_clock_mutex);
     /* 向线程发送时钟更新事件 */
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_clock,
-        .event    = app_thread_mix_custom_clock_event_update,
+        .send_tid = app_thread_id_mix_irq,
+        .recv_tid = app_thread_id_mix_irq,
+        .module   = app_thread_mix_irq_clock,
+        .event    = app_thread_mix_irq_clock_local_update,
     };
     app_package_notify(&package);
 }
 
 /*@brief 系统时钟更新事件
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
-void app_module_clock_event_update(void)
+void app_module_clock_local_update(void)
 {
     /* 获得时钟更新 */
     app_mutex_take(&app_module_clock_mutex);
@@ -158,8 +158,8 @@ void app_module_clock_event_update(void)
 }
 
 /*@brief     系统时间戳更新回调
- *           内部使用: 被mix custom线程使用
- *@param[in] utc_new 硬件定时器派发给mix_custom包裹中携带的新utc信息
+ *           内部使用: 被mix irq线程使用
+ *@param[in] utc_new 硬件定时器派发给mix_irq包裹中携带的新utc信息
  */
 void app_module_clock_timestamp_update(uint64_t utc_new)
 {
@@ -205,7 +205,7 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
 }
 
 /*@brief 系统时钟模组初始化
- *       内部使用: 被mix custom线程使用
+ *       内部使用: 被mix irq线程使用
  */
 void app_module_clock_ready(void)
 {
@@ -221,10 +221,10 @@ void app_module_clock_1s_update(uint64_t utc_new)
     static uint64_t utc = 0;
     utc = utc_new;
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_clock,
-        .event    = app_thread_mix_custom_clock_timestamp_update,
+        .send_tid = app_thread_id_mix_irq,
+        .recv_tid = app_thread_id_mix_irq,
+        .module   = app_thread_mix_irq_clock,
+        .event    = app_thread_mix_irq_clock_timestamp_update,
         .dynamic  = false,
         .size     = sizeof(uint64_t),
         .data     = &utc,

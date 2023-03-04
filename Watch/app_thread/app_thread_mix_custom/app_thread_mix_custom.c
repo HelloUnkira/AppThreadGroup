@@ -14,7 +14,6 @@
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_lvgl.h"
-#include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
@@ -25,8 +24,6 @@
 void app_thread_mix_custom_ready(void)
 {
     /* 模组初始化 */
-    app_module_timer_ready();
-    app_module_clock_ready();
     app_module_alarm_group_ready();
     app_module_stopwatch_ready();
     app_module_countdown_ready();
@@ -58,20 +55,6 @@ void app_thread_mix_custom_routine(void)
                     app_sys_work_execute((void *)package.data);
                 break;
             }
-            case app_thread_mix_custom_timer: {
-                if (package.event == app_thread_mix_custom_timer_reduce_update)
-                    app_module_timer_reduce();
-                break;
-            }
-            case app_thread_mix_custom_clock: {
-                if (package.event == app_thread_mix_custom_clock_event_update)
-                    app_module_clock_event_update();
-                if (package.event == app_thread_mix_custom_clock_timestamp_update) {
-                    uint64_t utc_new = package.data != NULL ? *(uint64_t *)package.data : 0;
-                    app_module_clock_timestamp_update(utc_new);
-                }
-                break;
-            }
             case app_thread_mix_custom_alarm: {
                 if (package.size != sizeof(app_module_alarm_t))
                     break;
@@ -88,9 +71,15 @@ void app_thread_mix_custom_routine(void)
                 break;
             }
             case app_thread_mix_custom_stopwatch: {
+                /* 秒表模组更新事件 */
+                if (package.event == app_thread_mix_custom_stopwatch_msec_update)
+                    app_module_stopwatch_xmsec_update();
                 break;
             }
             case app_thread_mix_custom_countdown: {
+                /* 倒计时模组更新事件 */
+                if (package.event == app_thread_mix_custom_stopwatch_msec_update)
+                    app_module_countdown_xmsec_update();
                 /* 倒计时模组到期事件 */
                 if (package.event == app_thread_mix_custom_countdown_expired) {
                     app_package_t package = {

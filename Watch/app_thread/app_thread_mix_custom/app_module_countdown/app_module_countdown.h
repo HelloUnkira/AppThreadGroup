@@ -33,6 +33,11 @@ void app_module_countdown_start(void);
  */
 void app_module_countdown_stop(void);
 
+/*@brief 倒计时模组事件处理
+ *       内部使用: 被mix custom线程使用
+ */
+void app_module_countdown_xmsec_update(void);
+
 /*@brief 倒计时模组初始化
  */
 void app_module_countdown_ready(void);

@@ -3,21 +3,10 @@
 
 typedef enum {  /* 线程模组 */
     app_thread_mix_custom_system = 0,   /* 系统模组 */
-    app_thread_mix_custom_timer,        /* 定时器模组 */
-    app_thread_mix_custom_clock,        /* 时钟模组 */
     app_thread_mix_custom_alarm,        /* 闹钟模组 */
     app_thread_mix_custom_stopwatch,    /* 秒表模组 */
     app_thread_mix_custom_countdown,    /* 倒计时模组 */
 } app_thread_mix_custom_module;
-
-typedef enum {  /* 定时器模组事件 */
-    app_thread_mix_custom_timer_reduce_update,
-} app_thread_mix_custom_timer_event;
-
-typedef enum {  /* 时钟模组事件 */
-    app_thread_mix_custom_clock_event_update,
-    app_thread_mix_custom_clock_timestamp_update,
-} app_thread_mix_custom_clock_event;
 
 typedef enum {  /* 闹钟模组事件 */
     /* 基础闹钟事件 */

@@ -59,8 +59,8 @@ static void app_lv_ui_refr_tick_list(void)
     stopwatch2.second = stopwatch1.second;
     stopwatch2.msec   = stopwatch1.msec;
     /* 每次调用该函数生成一个新的tick并清除后一个 */
-    for (uint8_t idx = 0; idx + 1 < app_lv_ui_stopwatch_list_len; idx++)
-        app_lv_ui_stopwatch_list[idx + 1] = app_lv_ui_stopwatch_list[idx];
+    for (int16_t idx = app_lv_ui_stopwatch_list_len - 1; idx > 0; idx--)
+        app_lv_ui_stopwatch_list[idx] = app_lv_ui_stopwatch_list[idx - 1];
         app_lv_ui_stopwatch_list[0] = stopwatch2;
     if (app_lv_ui_stopwatch_list_num < app_lv_ui_stopwatch_list_len)
         app_lv_ui_stopwatch_list_num++;

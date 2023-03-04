@@ -122,6 +122,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_watch_status_update(app_lv_ui_watch_start);
                     app_lv_scene_add(&app_lv_scene_watch, false);
                     app_lv_ui_check_time_exec(true);
+                    break;
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
@@ -129,6 +130,12 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch, false);
                     app_lv_ui_check_time_exec(false);
+                    break;
+                }
+                /* UI场景计时检查 */
+                if (package.event == app_thread_lvgl_ui_scene_check_time) {
+                    app_lv_ui_check_time_update();
+                    break;
                 }
                 /* 产生到特定场景内的事件...... */
                 app_lv_ui_scene_event(package.event, package.data, package.size);

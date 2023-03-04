@@ -87,4 +87,8 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
 #define APP_SYS_ASSERT(cond)    \
         app_sys_assert(__FILE__, __func__, __LINE__, cond)
 
+/*@brief 编译时间
+ */
+void app_sys_build_time(void);
+
 #endif

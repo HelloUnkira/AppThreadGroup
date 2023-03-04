@@ -21,6 +21,11 @@ void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time);
  */
 void app_lv_ui_check_time_ready(void);
 
+/*@brief 界面状态控制更新
+ *       内部使用: 被lvgl线程使用
+ */
+void app_lv_ui_check_time_update(void);
+
 /*@brief     界面状态检查功能启停
  *@param[in] status(true:启动界面状态检查,false:关闭界面状态检查)
  */

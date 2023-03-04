@@ -25,11 +25,16 @@
 #include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
+#include "app_module_timer.h"
+#include "app_module_clock.h"
 
 /*@brief 混合中断线程模组初始化
  */
 void app_thread_mix_irq_ready(void)
 {
+    /* 模组初始化 */
+    app_module_timer_ready();
+    app_module_clock_ready();
 }
 
 /*@brief 混合中断线程服务例程
@@ -56,6 +61,20 @@ void app_thread_mix_irq_routine(void)
             case app_thread_mix_irq_system: {
                 if (package.event == app_thread_group_work)
                     app_sys_work_execute((void *)package.data);
+                break;
+            }
+            case app_thread_mix_irq_timer: {
+                if (package.event == app_thread_mix_irq_timer_reduce_update)
+                    app_module_timer_reduce();
+                break;
+            }
+            case app_thread_mix_irq_clock: {
+                if (package.event == app_thread_mix_irq_clock_local_update)
+                    app_module_clock_local_update();
+                if (package.event == app_thread_mix_irq_clock_timestamp_update) {
+                    uint64_t utc_new = package.data != NULL ? *(uint64_t *)package.data : 0;
+                    app_module_clock_timestamp_update(utc_new);
+                }
                 break;
             }
             default: {

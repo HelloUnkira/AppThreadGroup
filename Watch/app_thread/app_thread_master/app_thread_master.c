@@ -18,7 +18,6 @@
 
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
-#include "app_os_build_time.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_thread_adaptor.h"
@@ -61,7 +60,7 @@ void app_thread_get_pipe_by_id(uint32_t thread_id, app_sys_pipe_t **pipe)
 void app_thread_master_ready(void)
 {
     /* 编译时间输出 */
-    app_os_build_time();
+    app_sys_build_time();
     /* 模组初始化 */
     app_module_system_ready();
     app_module_watchdog_ready();
