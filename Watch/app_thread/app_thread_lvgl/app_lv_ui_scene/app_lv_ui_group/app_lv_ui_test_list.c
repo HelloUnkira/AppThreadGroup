@@ -24,7 +24,7 @@ typedef struct {
 
 static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"System Clock",        &app_lv_scene_clock,},
-    {"Null",                &app_lv_scene_watch,},
+    {"Calendar",            &app_lv_scene_calendar,},
     {"Null",                &app_lv_scene_watch,},
     {"Null",                &app_lv_scene_watch,},
     {"Null",                &app_lv_scene_watch,},
