@@ -55,6 +55,7 @@ typedef enum {
 /* 备注:占用每一个子线程的默认0号模组 */
 typedef enum {  /* 线程组模组 */
     app_thread_group_work,
+    app_thread_group_num,
 } app_thread_group_module;
 
 /*@brief 初始化所有线程及其附属资源

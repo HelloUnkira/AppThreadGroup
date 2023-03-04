@@ -10,9 +10,9 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
-#include "app_module_work.h"
 #include "app_sys_ext_mem.h"
 #include "app_module_trace.h"
 #include "app_module_protocol.h"
@@ -54,7 +54,7 @@ void app_thread_data_manage_routine(void)
             switch (package.module) {
             case app_thread_data_manage_system: {
                 if (package.event == app_thread_group_work)
-                    app_module_work_execute((void *)package.data);
+                    app_sys_work_execute((void *)package.data);
                 break;
             }
             case app_thread_data_manage_dump: {

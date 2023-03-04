@@ -10,10 +10,10 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
 #include "app_module_system.h"
-#include "app_module_work.h"
 
 #include "lvgl.h"
 #include <SDL2/SDL.h>
@@ -65,7 +65,7 @@ void app_thread_lvgl_routine(void)
             switch (package.module) {
             case app_thread_lvgl_system: {
                 if (package.event == app_thread_group_work)
-                    app_module_work_execute((void *)package.data);
+                    app_sys_work_execute((void *)package.data);
                 break;
             }
             case app_thread_lvgl_sched: {

@@ -10,10 +10,10 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_lvgl.h"
-#include "app_module_work.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
 #include "app_module_alarm.h"
@@ -55,7 +55,7 @@ void app_thread_mix_custom_routine(void)
             switch (package.module) {
             case app_thread_mix_custom_system: {
                 if (package.event == app_thread_group_work)
-                    app_module_work_execute((void *)package.data);
+                    app_sys_work_execute((void *)package.data);
                 break;
             }
             case app_thread_mix_custom_timer: {

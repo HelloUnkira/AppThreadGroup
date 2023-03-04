@@ -8,8 +8,8 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
-#include "app_module_work.h"
 #include "app_module_watchdog.h"
 #include "app_module_clock.h"
 
@@ -42,8 +42,8 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
             .module   = app_thread_group_work,  /* 线程组工作模组 */
             .event    = 0,
             .dynamic  = true,
-            .size     = sizeof(app_module_work_t),
-            .data     = app_module_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
+            .size     = sizeof(app_sys_work_t),
+            .data     = app_sys_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
         };
         app_package_notify(&package);
         /* 如果超出最大时限,出错断言 */

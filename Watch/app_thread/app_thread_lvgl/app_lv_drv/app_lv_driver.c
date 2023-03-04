@@ -134,7 +134,7 @@ void app_lv_driver_handler(void)
     if (app_lv_display_shutdown()) {
         app_lv_driver_shutdown = true;
         /* 重启系统 */
-        APP_SYS_LOG_WARN("app_lv_drv_shutdown");
+        APP_SYS_LOG_WARN("");
         app_module_system_delay_set(2);
         app_module_system_status_set(app_module_system_reset);
     }

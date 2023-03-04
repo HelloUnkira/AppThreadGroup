@@ -22,9 +22,9 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
-#include "app_module_work.h"
 
 /*@brief 混合中断线程模组初始化
  */
@@ -55,7 +55,7 @@ void app_thread_mix_irq_routine(void)
             switch (package.module) {
             case app_thread_mix_irq_system: {
                 if (package.event == app_thread_group_work)
-                    app_module_work_execute((void *)package.data);
+                    app_sys_work_execute((void *)package.data);
                 break;
             }
             default: {

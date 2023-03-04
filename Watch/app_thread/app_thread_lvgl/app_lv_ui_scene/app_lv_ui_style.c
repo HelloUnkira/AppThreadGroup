@@ -21,13 +21,18 @@
 void app_lv_ui_style_object(lv_obj_t *obj)
 {
     lv_obj_add_flag(obj, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_flag(obj, LV_OBJ_FLAG_GESTURE_BUBBLE);
     lv_obj_set_style_pad_all(obj, 0, 0);
     lv_obj_set_style_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(obj, lv_color_black(), 0);
     lv_obj_set_style_border_side(obj, 0, 0);
+    lv_obj_set_style_border_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(obj, 0, 0);
     lv_obj_set_style_border_color(obj, lv_color_black(), 0);
+    lv_obj_set_style_shadow_opa(obj, LV_OPA_COVER, 0);
+    lv_obj_set_style_shadow_width(obj, 0, 0);
+    lv_obj_set_style_shadow_color(obj, lv_color_black(), 0);
 }
 
 /*@brief 默认界面风格
