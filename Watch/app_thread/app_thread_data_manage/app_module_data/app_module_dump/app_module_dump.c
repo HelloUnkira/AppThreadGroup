@@ -8,8 +8,8 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
+#include "app_module_clock.h"
 #include "app_module_system.h"
-#include "app_module_source_mix.h"
 #include "app_module_shutdown.h"
 
 /*@brief 资源数据从内存转储到外存

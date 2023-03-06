@@ -8,7 +8,7 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
-#include "app_module_source_mix.h"
+#include "app_module_clock.h"
 
 /*@brief 资源数据从外存加载到内存
  */
