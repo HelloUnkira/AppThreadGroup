@@ -106,6 +106,29 @@ uint64_t app_module_clock_get_sec_tick(void)
     return retval;
 }
 
+/*@brief     设置时区偏移(中断环境下不可调用)
+ *@param[in] zone_sec 时区偏移(秒)
+ */
+void app_module_clock_set_system_clock_zone(int32_t zone_sec)
+{
+    app_mutex_take(&app_module_clock_mutex);
+    app_module_clock[0].zone_sec = zone_sec;
+    app_module_clock[1].zone_sec = zone_sec;
+    app_mutex_give(&app_module_clock_mutex);
+}
+
+/*@brief     设置时区偏移(中断环境下不可调用)
+ *@param[in] is_24 时区偏移(秒)
+ */
+void app_module_clock_set_system_clock_mode(bool is_24)
+{
+    app_mutex_take(&app_module_clock_mutex);
+    app_module_clock[0].is_24 = is_24;
+    app_module_clock[1].is_24 = is_24;
+    app_mutex_give(&app_module_clock_mutex);
+
+}
+
 /*@brief     获得系统时间(中断环境下不可调用)
  *@param[in] clock 时钟实例
  */
@@ -114,6 +137,22 @@ void app_module_clock_get_system_clock(app_module_clock_t *clock)
     app_mutex_take(&app_module_clock_mutex);
     *clock = app_module_clock[1];
     app_mutex_give(&app_module_clock_mutex);
+    /* 扩展补充 */
+    if (clock->zone_sec != 0) {
+        clock->utc += clock->zone_sec;
+        app_module_clock_to_dtime(clock);
+        app_module_clock_to_week(clock);
+    }
+    if (!clock->is_24) {
+        if (clock->hour >= 12) {
+            clock->is_am = false;
+            clock->is_pm = true;
+        } else {
+            clock->is_am = true;
+            clock->is_pm = false;
+        }
+        clock->hour = clock->hour == 0 ? 12 : clock->hour > 12 > clock->hour - 12;
+    }
 }
 
 /*@brief     设置系统时间(中断环境下不可调用)

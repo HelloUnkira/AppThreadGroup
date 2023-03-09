@@ -85,13 +85,7 @@ void app_module_system_delay_set(uint8_t delay)
  */
 void app_module_system_ctrl_check(app_module_clock_t clock[1])
 {
-    static bool not_dump_yet = true;
-    static bool not_load_yet = true;
     app_mutex_take(&app_module_system_mutex);
-    bool   dlps_exec = app_module_system_dlps_exec;
-    bool dlps_status = app_module_system_dlps_status;
-    app_module_system_dlps_exec = false;
-    uint8_t  delay = app_module_system_delay;
     uint8_t status = app_module_system_status;
     bool  is_valid = app_module_system_status == app_module_system_valid;
     app_mutex_give(&app_module_system_mutex);
@@ -100,6 +94,11 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
         app_module_load_event();
         return;
     }
+    app_mutex_take(&app_module_system_mutex);
+    bool   dlps_exec = app_module_system_dlps_exec;
+    bool dlps_status = app_module_system_dlps_status;
+    app_module_system_dlps_exec = false;
+    app_mutex_give(&app_module_system_mutex);
     /* 执行DLPS检测 */
     if (dlps_exec) {
         /* 进入dlps */
@@ -117,20 +116,18 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
         return;
     /* 执行场景转储 */
     app_lv_scene_stop();
-    /* 保证数据转储成功后再进行重启 */
-    if (!delay)
-        return;
-    /* 重启系统倒计时 */
-    app_mutex_take(&app_module_system_mutex);
-    app_module_system_delay--;
-    app_mutex_give(&app_module_system_mutex);
     /* 系统关机转储流程 */
     if (app_module_dump_over()) {
         app_module_dump_event();
         return;
     }
-    /* 数据转储结束,重启系统 */
-    app_os_reset();
+    /* 系统倒计时 */
+    app_mutex_take(&app_module_system_mutex);
+    if (app_module_system_delay == 0)
+        /* 数据转储结束,重启系统 */
+        app_os_reset();
+        app_module_system_delay--;
+    app_mutex_give(&app_module_system_mutex);
 }
 
 /*@brief 初始化系统模组

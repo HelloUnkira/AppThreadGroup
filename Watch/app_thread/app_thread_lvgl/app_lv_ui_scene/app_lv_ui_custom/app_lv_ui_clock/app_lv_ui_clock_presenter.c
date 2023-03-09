@@ -12,6 +12,33 @@
 
 /*@brief lvgl ui数据交互回调
  */
+static bool app_lv_ui_is_am(void)
+{
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    return clock.is_am;
+}
+
+/*@brief lvgl ui数据交互回调
+ */
+static bool app_lv_ui_is_pm(void)
+{
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    return clock.is_pm;
+}
+
+/*@brief lvgl ui数据交互回调
+ */
+static bool app_lv_ui_is_24(void)
+{
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    return clock.is_24;
+}
+
+/*@brief lvgl ui数据交互回调
+ */
 static uint64_t app_lv_ui_get_utc(void)
 {
     app_module_clock_t clock = {0};
@@ -83,6 +110,9 @@ static uint8_t app_lv_ui_get_week(void)
 }
 
 app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {
+    .is_am          = app_lv_ui_is_am,
+    .is_pm          = app_lv_ui_is_pm,
+    .is_24          = app_lv_ui_is_24,
     .get_utc        = app_lv_ui_get_utc,
     .get_year       = app_lv_ui_get_year,
     .get_month      = app_lv_ui_get_month,

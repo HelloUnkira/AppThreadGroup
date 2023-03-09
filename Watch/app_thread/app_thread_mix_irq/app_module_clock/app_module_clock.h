@@ -12,6 +12,11 @@ typedef struct {
     uint8_t  minute;    /* 分 */
     uint8_t  second;    /* 秒 */
     uint8_t  week;      /* 日一二三四五六:[0, 6] */
+    /* 扩展字段 */
+    int32_t  zone_sec;  /* 时区偏移(秒) */
+    uint8_t  is_24:1;   /* 时钟模式(0:12小时;1:24小时) */
+    uint8_t  is_am:1;   /* 12小时:上午 */
+    uint8_t  is_pm:1;   /* 12小时:下午 */
 } app_module_clock_t;
 
 /*@brief     闰年判断
@@ -79,6 +84,16 @@ typedef void (*app_module_clock_cb2)(app_module_clock_t clock[2], uint32_t event
  *@param[in] clock 时钟实例
  */
 uint64_t app_module_clock_get_sec_tick(void);
+
+/*@brief     设置时区偏移(中断环境下不可调用)
+ *@param[in] zone_sec 时区偏移(秒)
+ */
+void app_module_clock_set_system_clock_zone(int32_t zone_sec);
+
+/*@brief     设置时区偏移(中断环境下不可调用)
+ *@param[in] is_24 时区偏移(秒)
+ */
+void app_module_clock_set_system_clock_mode(bool is_24);
 
 /*@brief     获得系统时间(中断环境下不可调用)
  *@param[in] clock 时钟实例

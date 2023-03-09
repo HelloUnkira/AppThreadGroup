@@ -2,6 +2,9 @@
 #define APP_LV_UI_CLOCK_PRESENTER_H
 
 typedef struct {
+    bool     (*is_am)(void);
+    bool     (*is_pm)(void);
+    bool     (*is_24)(void);
     uint64_t (*get_utc)(void);
     uint16_t (*get_year)(void);
     uint8_t  (*get_month)(void);
