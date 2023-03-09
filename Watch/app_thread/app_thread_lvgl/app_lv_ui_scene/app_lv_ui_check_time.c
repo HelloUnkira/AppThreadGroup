@@ -80,6 +80,7 @@ void app_lv_ui_check_time_update(void)
                     app_lv_scene_reset(&app_lv_scene_main, true);
                     /* 关闭鼠标 */
                     app_lv_mouse_dlps_enter();
+                    app_lv_ui_check_time_exec(false);
                 }
             }
         }
@@ -95,10 +96,9 @@ static void app_lv_ui_check_time_timer_handler(void *timer)
 {
     /* 发送场景计时检查事件 */
     app_package_t package = {
-        .send_tid = app_thread_id_lvgl,
-        .recv_tid = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_ui_scene,
-        .event    = app_thread_lvgl_ui_scene_check_time,
+        .thread = app_thread_id_lvgl,
+        .module = app_thread_lvgl_ui_scene,
+        .event  = app_thread_lvgl_ui_scene_check_time,
     };
     app_package_notify(&package);
 }

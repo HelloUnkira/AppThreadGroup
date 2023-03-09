@@ -194,13 +194,12 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
     /* 发送闹钟事件 */
     if (event != ~0) {
         app_package_t package = {
-            .send_tid = app_thread_id_mix_custom,
-            .recv_tid = app_thread_id_mix_custom,
-            .module   = app_thread_mix_custom_alarm,
-            .event    = event,
-            .dynamic  = false,
-            .size     = sizeof(app_module_alarm_t),
-            .data     = alarm,
+            .thread  = app_thread_id_mix_custom,
+            .module  = app_thread_mix_custom_alarm,
+            .event   = event,
+            .dynamic = false,
+            .size    = sizeof(app_module_alarm_t),
+            .data    = alarm,
         };
         app_package_notify(&package);
     }

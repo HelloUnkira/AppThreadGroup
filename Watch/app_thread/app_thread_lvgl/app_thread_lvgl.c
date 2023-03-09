@@ -50,8 +50,8 @@ void app_thread_lvgl_routine(void)
     app_sem_t *sem = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync_by_id(app_thread_id_lvgl, &sem);
-    app_thread_get_pipe_by_id(app_thread_id_lvgl, &pipe);
+    app_thread_get_sync(app_thread_id_lvgl, &sem);
+    app_thread_get_pipe(app_thread_id_lvgl, &pipe);
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
@@ -101,6 +101,7 @@ void app_thread_lvgl_routine(void)
                 if (package.event == app_thread_lvgl_sched_dlps_exit) {
                     /* 计时重置 */
                     app_lv_ui_check_time_reset(0, 0);
+                    app_lv_ui_check_time_exec(true);
                     /* 开启设备 */
                     app_lv_mouse_dlps_exit();
                     app_lv_mousewheel_dlps_exit();
@@ -135,6 +136,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_watch_status_update(app_lv_ui_watch_start);
                     app_lv_scene_add(&app_lv_scene_watch, false);
                     app_lv_ui_check_time_exec(true);
+                    APP_SYS_LOG_WARN("ui scene start");
                     break;
                 }
                 /* 终止UI场景 */
@@ -144,6 +146,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch, false);
                     app_lv_ui_check_time_exec(false);
+                    APP_SYS_LOG_WARN("ui scene stop");
                     break;
                 }
                 /* UI场景计时检查 */
@@ -161,12 +164,11 @@ void app_thread_lvgl_routine(void)
             default: {
                 #if APP_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread lvgl pipe recv a unknown package");
-                APP_SYS_LOG_ERROR("package send_tid:%u", package.send_tid);
-                APP_SYS_LOG_ERROR("package recv_tid:%u", package.recv_tid);
-                APP_SYS_LOG_ERROR("package module:%u",   package.module);
-                APP_SYS_LOG_ERROR("package event:%u",    package.event);
-                APP_SYS_LOG_ERROR("package data:%p",     package.data);
-                APP_SYS_LOG_ERROR("package size:%u",     package.size);
+                APP_SYS_LOG_ERROR("package thread:%u", package.thread);
+                APP_SYS_LOG_ERROR("package module:%u", package.module);
+                APP_SYS_LOG_ERROR("package event:%u",  package.event);
+                APP_SYS_LOG_ERROR("package data:%p",   package.data);
+                APP_SYS_LOG_ERROR("package size:%u",   package.size);
                 #endif
                 break;
             }

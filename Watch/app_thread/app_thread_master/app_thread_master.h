@@ -4,8 +4,7 @@
 /* 这是app_sys_pipe_pkg_t的副本重名 */
 typedef struct {
     void    *near;          /* 管道是队列 */
-    uint32_t send_tid;      /* 发送者线程ID */
-    uint32_t recv_tid;      /* 接收者线程ID */
+    uint32_t thread;        /* 接收者线程ID */
     uint32_t module;        /* 接收者线程模组ID */
     uint32_t event;         /* 接收者线程模组事件 */
     uint32_t dynamic;       /* 本次传输包裹状态 */
@@ -14,19 +13,19 @@ typedef struct {
 } app_package_t;
 
 /*@brief        通过从线程ID获得与主线程的同步资源
- *@param[in]    thread_id 线程ID
+ *@param[in]    thread 线程ID
  *@param[out]   sem 信号量
  */
 #ifdef APP_OS_ADAPTOR_H
-void app_thread_get_sync_by_id(uint32_t thread_id, app_sem_t **sem);
+void app_thread_get_sync(uint32_t thread, app_sem_t **sem);
 #endif
 
 /*@brief        通过从线程ID获得与主线程的交互管道
- *@param[in]    thread_id 线程ID
+ *@param[in]    thread 线程ID
  *@param[out]   pipe 管道
  */
 #ifdef APP_SYS_PIPE_H
-void app_thread_get_pipe_by_id(uint32_t thread_id, app_sys_pipe_t **pipe);
+void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe);
 #endif
 
 /* 线程组线程包裹接收最大警告线(警告) */

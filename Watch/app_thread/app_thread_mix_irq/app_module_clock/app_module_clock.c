@@ -127,10 +127,9 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
     app_mutex_give(&app_module_clock_mutex);
     /* 向线程发送时钟更新事件 */
     app_package_t package = {
-        .send_tid = app_thread_id_mix_irq,
-        .recv_tid = app_thread_id_mix_irq,
-        .module   = app_thread_mix_irq_clock,
-        .event    = app_thread_mix_irq_clock_local_update,
+        .thread = app_thread_id_mix_irq,
+        .module = app_thread_mix_irq_clock,
+        .event  = app_thread_mix_irq_clock_local_update,
     };
     app_package_notify(&package);
 }
@@ -265,13 +264,12 @@ void app_module_clock_1s_update(uint64_t utc_new)
     static uint64_t utc = 0;
     utc = utc_new;
     app_package_t package = {
-        .send_tid = app_thread_id_mix_irq,
-        .recv_tid = app_thread_id_mix_irq,
-        .module   = app_thread_mix_irq_clock,
-        .event    = app_thread_mix_irq_clock_timestamp_update,
-        .dynamic  = false,
-        .size     = sizeof(uint64_t),
-        .data     = &utc,
+        .thread  = app_thread_id_mix_irq,
+        .module  = app_thread_mix_irq_clock,
+        .event   = app_thread_mix_irq_clock_timestamp_update,
+        .dynamic = false,
+        .size    = sizeof(uint64_t),
+        .data    = &utc,
     };
     app_package_notify(&package);
 }

@@ -29,6 +29,8 @@ void app_thread_data_manage_ready(void)
     /* 模组初始化 */
     app_sys_ext_mem_ready();
     app_module_trace_text_ready();
+    app_module_load_ready();
+    app_module_dump_ready();
 }
 
 /*@brief 数据管理线程服务例程
@@ -38,8 +40,8 @@ void app_thread_data_manage_routine(void)
     app_sem_t  *sem  = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync_by_id(app_thread_id_data_manage, &sem);
-    app_thread_get_pipe_by_id(app_thread_id_data_manage, &pipe);
+    app_thread_get_sync(app_thread_id_data_manage, &sem);
+    app_thread_get_pipe(app_thread_id_data_manage, &pipe);
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
@@ -59,12 +61,12 @@ void app_thread_data_manage_routine(void)
             }
             case app_thread_data_manage_dump: {
                 /* 将系统敏感的资源转储到外存 */
-                app_module_dump();
+                app_module_dump_process();
                 break;
             }
             case app_thread_data_manage_load: {
                 /* 将系统敏感的资源加载到内存 */
-                app_module_load();
+                app_module_load_process();
                 break;
             }
             case app_thread_data_manage_protocol: {
@@ -100,12 +102,11 @@ void app_thread_data_manage_routine(void)
             default: {
                 #if APP_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread data center pipe recv a unknown package");
-                APP_SYS_LOG_ERROR("package send_tid:%u", package.send_tid);
-                APP_SYS_LOG_ERROR("package recv_tid:%u", package.recv_tid);
-                APP_SYS_LOG_ERROR("package module:%u",   package.module);
-                APP_SYS_LOG_ERROR("package event:%u",    package.event);
-                APP_SYS_LOG_ERROR("package data:%p",     package.data);
-                APP_SYS_LOG_ERROR("package size:%u",     package.size);
+                APP_SYS_LOG_ERROR("package thread:%u", package.thread);
+                APP_SYS_LOG_ERROR("package module:%u", package.module);
+                APP_SYS_LOG_ERROR("package event:%u",  package.event);
+                APP_SYS_LOG_ERROR("package data:%p",   package.data);
+                APP_SYS_LOG_ERROR("package size:%u",   package.size);
                 #endif
                 break;
             }

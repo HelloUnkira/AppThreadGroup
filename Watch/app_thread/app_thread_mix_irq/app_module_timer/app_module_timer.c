@@ -27,10 +27,9 @@ void app_module_timer_reduce(void)
 void app_module_timer_1ms_update(void)
 {
     app_package_t package = {
-        .send_tid = app_thread_id_mix_irq,
-        .recv_tid = app_thread_id_mix_irq,
-        .module   = app_thread_mix_irq_timer,
-        .event    = app_thread_mix_irq_timer_reduce_update,
+        .thread = app_thread_id_mix_irq,
+        .module = app_thread_mix_irq_timer,
+        .event  = app_thread_mix_irq_timer_reduce_update,
     };
     app_package_notify(&package);
 }

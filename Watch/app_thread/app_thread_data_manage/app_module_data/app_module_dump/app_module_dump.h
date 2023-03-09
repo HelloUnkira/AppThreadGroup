@@ -1,8 +1,20 @@
 #ifndef APP_MODULE_DUMP_H
 #define APP_MODULE_DUMP_H
 
+/*@brief 转储流程是否结束
+ */
+bool app_module_dump_over(void);
+
 /*@brief 资源数据从内存转储到外存
  */
-void app_module_dump(void);
+void app_module_dump_process(void);
+
+/*@brief 系统转储模组启动
+ */
+void app_module_dump_event(void);
+
+/*@brief 初始化系统转储模组
+ */
+void app_module_dump_ready(void);
 
 #endif

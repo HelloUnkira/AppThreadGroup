@@ -36,23 +36,23 @@ static bool        app_thread_run = true;
 static app_mutex_t app_thread_mutex = {0};
 
 /*@brief        通过从线程ID获得管道同步资源
- *@param[in]    thread_id 线程ID
+ *@param[in]    thread 线程ID
  *@param[out]   sem 线程信号量
  */
-void app_thread_get_sync_by_id(uint32_t thread_id, app_sem_t **sem)
+void app_thread_get_sync(uint32_t thread, app_sem_t **sem)
 {
-    if (thread_id < app_thread_id_num)
-        *sem = &app_thread_sem_dst[thread_id];
+    if (thread < app_thread_id_num)
+        *sem = &app_thread_sem_dst[thread];
 }
 
 /*@brief        通过从线程ID获得与主线程的交互管道
- *@param[in]    thread_id 线程ID
+ *@param[in]    thread 线程ID
  *@param[out]   pipe 管道
  */
-void app_thread_get_pipe_by_id(uint32_t thread_id, app_sys_pipe_t **pipe)
+void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
 {
-    if (thread_id < app_thread_id_num)
-       *pipe = &app_thread_pipe_dst[thread_id];
+    if (thread < app_thread_id_num)
+       *pipe = &app_thread_pipe_dst[thread];
 }
 
 /*@brief 主线程模组初始化
@@ -92,8 +92,8 @@ void app_thread_master_routine(void)
         /* 主线程派发包到指定子线程 */
         while (app_sys_pipe_package_num(send_pipe)) {
             app_sys_pipe_take(send_pipe, &package);
-            app_thread_get_sync_by_id(package.recv_tid, &recv_sem);
-            app_thread_get_pipe_by_id(package.recv_tid, &recv_pipe);
+            app_thread_get_sync(package.thread, &recv_sem);
+            app_thread_get_pipe(package.thread, &recv_pipe);
             app_sys_pipe_give(recv_pipe, &package);
             app_sem_give(recv_sem);
         }

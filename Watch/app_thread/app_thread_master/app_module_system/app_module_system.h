@@ -7,11 +7,6 @@ typedef enum {
     app_module_system_shutdown,
 } app_module_system_status_t;
 
-/*@brief 设置系统转储成功标记
- *@param[in] over 系统转储结束
- */
-void app_module_system_dump_set(bool over);
-
 /*@brief  系统进出DLPS
  *@retval status true:进入dlps;false:退出dlps
  */
@@ -22,11 +17,6 @@ bool app_module_system_dlps_get(void);
  */
 void app_module_system_dlps_set(bool status);
 
-/*@brief     设置系统延时
- *@param[in] delay 系统延时秒数
- */
-void app_module_system_delay_set(uint8_t delay);
-
 /*@brief     设置系统状态
  *@param[in] status 系统状态枚举量
  */
@@ -36,6 +26,11 @@ void app_module_system_status_set(uint8_t status);
  *@retval 系统状态枚举量
  */
 uint8_t app_module_system_status_get(void);
+
+/*@brief     设置系统延时
+ *@param[in] delay 系统延时秒数
+ */
+void app_module_system_delay_set(uint8_t delay);
 
 /*@brief 初始化系统模组
  */

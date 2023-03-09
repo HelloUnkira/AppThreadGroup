@@ -17,5 +17,17 @@ void app_lv_drv_update(void);
  */
 void app_lv_scene_update(void *scene);
 
+/*@brief lvgl 场景启动
+ */
+void app_lv_scene_start(void);
+
+/*@brief lvgl 场景启动
+ */
+void app_lv_scene_stop(void);
+
+/*@brief lvgl 场景启动
+ */
+void app_lv_scene_dlps(bool status);
+
 #endif
 

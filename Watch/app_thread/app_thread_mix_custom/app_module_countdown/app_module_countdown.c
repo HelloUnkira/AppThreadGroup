@@ -91,10 +91,9 @@ void app_module_countdown_xmsec_update(void)
         if (seconds == 0) {
             /* 发送倒计时事件 */
             app_package_t package = {
-                .send_tid = app_thread_id_unknown,
-                .recv_tid = app_thread_id_mix_custom,
-                .module   = app_thread_mix_custom_countdown,
-                .event    = app_thread_mix_custom_countdown_expired,
+                .thread = app_thread_id_mix_custom,
+                .module = app_thread_mix_custom_countdown,
+                .event  = app_thread_mix_custom_countdown_expired,
             };
             app_package_notify(&package);
             /* 中止倒计时 */
@@ -129,10 +128,9 @@ static void app_module_countdown_timer_handler(void *timer)
 {
     /* 发送倒计时事件 */
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_countdown,
-        .event    = app_thread_mix_custom_countdown_msec_update,
+        .thread = app_thread_id_mix_custom,
+        .module = app_thread_mix_custom_countdown,
+        .event  = app_thread_mix_custom_countdown_msec_update,
     };
     app_package_notify(&package);
 }

@@ -27,13 +27,12 @@ void app_module_transfer_adaptor_rx(uint8_t *data, uint32_t size)
     memcpy(tsf_pkg, data, size);
     /* 发送给线程协议处理模组 */
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_data_manage,
-        .module   = app_thread_data_manage_transfer,
-        .event    = app_thread_data_manage_transfer_rx,
-        .dynamic  = true,
-        .size     = tsf_pkg_size,
-        .data     = tsf_pkg,
+        .thread  = app_thread_id_data_manage,
+        .module  = app_thread_data_manage_transfer,
+        .event   = app_thread_data_manage_transfer_rx,
+        .dynamic = true,
+        .size    = tsf_pkg_size,
+        .data    = tsf_pkg,
     };
     app_package_notify(&package);
 }

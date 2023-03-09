@@ -110,10 +110,9 @@ static void app_module_stopwatch_timer_handler(void *timer)
 {
     /* 发送倒计时事件 */
     app_package_t package = {
-        .send_tid = app_thread_id_unknown,
-        .recv_tid = app_thread_id_mix_custom,
-        .module   = app_thread_mix_custom_stopwatch,
-        .event    = app_thread_mix_custom_stopwatch_msec_update,
+        .thread = app_thread_id_mix_custom,
+        .module = app_thread_mix_custom_stopwatch,
+        .event  = app_thread_mix_custom_stopwatch_msec_update,
     };
     app_package_notify(&package);
 }

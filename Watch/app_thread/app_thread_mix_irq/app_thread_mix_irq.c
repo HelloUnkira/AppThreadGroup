@@ -44,8 +44,8 @@ void app_thread_mix_irq_routine(void)
     app_sem_t *sem = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync_by_id(app_thread_id_mix_irq, &sem);
-    app_thread_get_pipe_by_id(app_thread_id_mix_irq, &pipe);
+    app_thread_get_sync(app_thread_id_mix_irq, &sem);
+    app_thread_get_pipe(app_thread_id_mix_irq, &pipe);
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
@@ -80,12 +80,11 @@ void app_thread_mix_irq_routine(void)
             default: {
                 #if APP_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread mix irq pipe recv a unknown package");
-                APP_SYS_LOG_ERROR("package send_tid:%u", package.send_tid);
-                APP_SYS_LOG_ERROR("package recv_tid:%u", package.recv_tid);
-                APP_SYS_LOG_ERROR("package module:%u",   package.module);
-                APP_SYS_LOG_ERROR("package event:%u",    package.event);
-                APP_SYS_LOG_ERROR("package data:%p",     package.data);
-                APP_SYS_LOG_ERROR("package size:%u",     package.size);
+                APP_SYS_LOG_ERROR("package thread:%u", package.thread);
+                APP_SYS_LOG_ERROR("package module:%u", package.module);
+                APP_SYS_LOG_ERROR("package event:%u",  package.event);
+                APP_SYS_LOG_ERROR("package data:%p",   package.data);
+                APP_SYS_LOG_ERROR("package size:%u",   package.size);
                 #endif
                 break;
             }

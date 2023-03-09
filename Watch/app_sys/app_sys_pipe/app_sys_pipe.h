@@ -3,8 +3,7 @@
 
 typedef struct {
     void    *near;          /* 管道是队列 */
-    uint32_t send_tid;      /* 发送者线程ID */
-    uint32_t recv_tid;      /* 接收者线程ID */
+    uint32_t thread;        /* 接收者线程ID */
     uint32_t module;        /* 接收者线程模组ID */
     uint32_t event;         /* 接收者线程模组事件 */
     uint32_t dynamic;       /* 本次传输包裹状态 */

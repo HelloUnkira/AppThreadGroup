@@ -37,13 +37,12 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
     for (uint8_t idx = 0; idx < app_thread_id_num; idx++) {
         /* 每隔1s发送一次软件看门狗喂狗事件 */
         app_package_t package = {
-            .send_tid = app_thread_id_unknown,
-            .recv_tid = idx,
-            .module   = app_thread_group_work,  /* 线程组工作模组 */
-            .event    = 0,
-            .dynamic  = true,
-            .size     = sizeof(app_sys_work_t),
-            .data     = app_sys_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
+            .thread  = idx,
+            .module  = app_thread_group_work,  /* 线程组工作模组 */
+            .event   = 0,
+            .dynamic = true,
+            .size    = sizeof(app_sys_work_t),
+            .data    = app_sys_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
         };
         app_package_notify(&package);
         /* 如果超出最大时限,出错断言 */

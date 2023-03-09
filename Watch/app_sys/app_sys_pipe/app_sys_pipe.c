@@ -55,8 +55,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     /* 生成资源包, 转储消息资源资源 */
     package_new = app_mem_alloc(sizeof(app_sys_pipe_pkg_t));
     package_new->near     = NULL;
-    package_new->send_tid = package->send_tid;
-    package_new->recv_tid = package->recv_tid;
+    package_new->thread   = package->thread;
     package_new->module   = package->module;
     package_new->event    = package->event;
     package_new->dynamic  = package->dynamic;
@@ -104,8 +103,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     app_mutex_give(&pipe->mutex);
     /* 转储消息资源资源, 销毁资源包 */
     package->near     = NULL;
-    package->send_tid = package_new->send_tid;
-    package->recv_tid = package_new->recv_tid;
+    package->thread   = package_new->thread;
     package->module   = package_new->module;
     package->event    = package_new->event;
     package->dynamic  = package_new->dynamic;
