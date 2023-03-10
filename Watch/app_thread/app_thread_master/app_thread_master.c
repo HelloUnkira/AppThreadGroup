@@ -20,6 +20,8 @@
 #include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_timer.h"
+#include "app_sys_ext_mem.h"
 #include "app_thread_adaptor.h"
 #include "app_thread_master.h"
 #include "app_module_system.h"
@@ -59,8 +61,6 @@ void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
  */
 void app_thread_master_ready(void)
 {
-    /* 编译时间输出 */
-    app_sys_build_time();
     /* 模组初始化 */
     app_module_system_ready();
     app_module_watchdog_ready();
@@ -133,6 +133,10 @@ void app_thread_group_run(void)
     for (uint32_t idx = 0; idx < app_thread_id_num; idx++)
         app_sem_process(&app_thread_sem_dst[idx]);
         app_sem_process(&app_thread_sem_src);
+    /* 就绪系统子模组 */
+    app_sys_build_time();
+    app_sys_timer_ready();
+    app_sys_ext_mem_ready();
     /* 就绪线程子模组 */
     app_thread_master_ready();
     app_thread_mix_irq_ready();

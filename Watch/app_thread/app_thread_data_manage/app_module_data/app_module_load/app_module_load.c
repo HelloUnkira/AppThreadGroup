@@ -20,7 +20,7 @@ static app_mutex_t app_module_load_mutex = {0};
 bool app_module_load_over(void)
 {
     app_mutex_take(&app_module_load_mutex);
-    uint8_t over = app_module_load_status_over;
+    bool over = app_module_load_status_over;
     app_mutex_give(&app_module_load_mutex);
     return over;
 }

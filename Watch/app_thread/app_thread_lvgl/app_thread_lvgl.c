@@ -93,7 +93,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_add(&app_lv_scene_watch, false);
                     /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
                     app_lv_display_dlps_enter();
-                    app_lv_keyboard_dlps_enter();
+                    // app_lv_keyboard_dlps_enter();
                     app_lv_mousewheel_dlps_enter();
                     // app_lv_mouse_dlps_enter();
                 }
@@ -105,7 +105,7 @@ void app_thread_lvgl_routine(void)
                     /* 开启设备 */
                     app_lv_mouse_dlps_exit();
                     app_lv_mousewheel_dlps_exit();
-                    app_lv_keyboard_dlps_exit();
+                    // app_lv_keyboard_dlps_exit();
                     app_lv_display_dlps_exit();
                     /* 退出dlps界面 */
                     app_lv_scene_t scene = {0};
@@ -135,6 +135,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_start);
                     app_lv_scene_add(&app_lv_scene_watch, false);
+                    app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(true);
                     APP_SYS_LOG_WARN("ui scene start");
                     break;
@@ -145,6 +146,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch, false);
+                    app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(false);
                     APP_SYS_LOG_WARN("ui scene stop");
                     break;

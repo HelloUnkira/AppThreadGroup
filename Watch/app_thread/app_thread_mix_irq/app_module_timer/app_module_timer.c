@@ -33,11 +33,3 @@ void app_module_timer_1ms_update(void)
     };
     app_package_notify(&package);
 }
-
-/*@brief 软件定时器模组初始化
- *       内部使用: 被mix irq线程使用
- */
-void app_module_timer_ready(void)
-{
-    app_sys_timer_ready();
-}

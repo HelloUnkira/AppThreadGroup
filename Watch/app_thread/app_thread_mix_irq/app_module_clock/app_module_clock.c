@@ -151,7 +151,7 @@ void app_module_clock_get_system_clock(app_module_clock_t *clock)
             clock->is_am = true;
             clock->is_pm = false;
         }
-        clock->hour = clock->hour == 0 ? 12 : clock->hour > 12 > clock->hour - 12;
+        clock->hour = clock->hour == 0 ? clock->hour > 12 ? clock->hour - 12 : clock->hour : clock->hour;
     }
 }
 

@@ -49,10 +49,11 @@ uint32_t app_sys_clock_year_days(app_sys_clock_t *clock)
 {
     uint32_t days = clock->day;
     for (uint32_t month = 1; month < clock->month; month++) {
-        app_sys_clock_t clock = {.month = month,};
-        days += app_sys_clock_month_days(&clock);
+        app_sys_clock_t clock1 = {.year = clock->year,.month = month,};
+        days += app_sys_clock_month_days(&clock1);
     }
-    return days;
+    /* 已经过去的天数,今天不能算进去 */
+    return days - 1;
 }
 
 /*@brief     俩个日期间的天数

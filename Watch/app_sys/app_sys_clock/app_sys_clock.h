@@ -1,6 +1,8 @@
 #ifndef APP_SYS_CLOCK_H
 #define APP_SYS_CLOCK_H
 
+#pragma pack(push)
+#pragma pack(1)
 typedef struct {
     uint64_t utc;       /* 协调世界时UTC */
     uint16_t year;      /* 年 */
@@ -11,6 +13,7 @@ typedef struct {
     uint8_t  second;    /* 秒 */
     uint8_t  week;      /* 日一二三四五六:[0, 6] */
 } app_sys_clock_t;
+#pragma pack(pop)
 
 /*@brief     闰年判断
  *@param[in] clock 时钟实例{.year,}

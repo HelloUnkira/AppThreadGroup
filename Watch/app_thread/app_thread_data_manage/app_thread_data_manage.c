@@ -13,7 +13,6 @@
 #include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
-#include "app_sys_ext_mem.h"
 #include "app_module_trace.h"
 #include "app_module_protocol.h"
 #include "app_module_transfer.h"
@@ -27,7 +26,6 @@
 void app_thread_data_manage_ready(void)
 {
     /* 模组初始化 */
-    app_sys_ext_mem_ready();
     app_module_trace_text_ready();
     app_module_load_ready();
     app_module_dump_ready();
