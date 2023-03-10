@@ -27,8 +27,6 @@ void app_thread_data_manage_ready(void)
 {
     /* 模组初始化 */
     app_module_trace_text_ready();
-    app_module_load_ready();
-    app_module_dump_ready();
 }
 
 /*@brief 数据管理线程服务例程

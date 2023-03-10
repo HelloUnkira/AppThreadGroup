@@ -23,28 +23,28 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_large_table[] = {
 
 static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 	{
-		/* system clock + crc32 + checksum32 */
+		/* system clock + crc32 */
 		.data_name = "system clock",
-		.data_size = 20 + 4 + 4,
+		.data_size = 30,
 		.data_base = 0x0,
 	},
 	{
-		/* unknown */
-		.data_name = "unknown",
-		.data_size = 20 * 10,
-		.data_base = 0x1c,
+		/* drink remind + crc32 */
+		.data_name = "drink remind",
+		.data_size = 20,
+		.data_base = 0x1e,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
 		.data_size = 20 * 10,
-		.data_base = 0xe4,
+		.data_base = 0x32,
 	},
 	{
 		/* trace log text */
 		.data_name = "trace log text",
 		.data_size = 4096 * 2,
-		.data_base = 0x1ac,
+		.data_base = 0xfa,
 	},
 };
 

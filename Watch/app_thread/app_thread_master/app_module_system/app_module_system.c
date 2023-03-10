@@ -90,10 +90,9 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     bool  is_valid = app_module_system_status == app_module_system_valid;
     app_mutex_give(&app_module_system_mutex);
     /* 系统开机加载流程 */
-    if (app_module_load_over()) {
-        app_module_load_event();
+    app_module_load_event();
+    if (app_module_load_not_over())
         return;
-    }
     app_mutex_take(&app_module_system_mutex);
     bool   dlps_exec = app_module_system_dlps_exec;
     bool dlps_status = app_module_system_dlps_status;
@@ -117,10 +116,9 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     /* 执行场景转储 */
     app_lv_scene_stop();
     /* 系统关机转储流程 */
-    if (app_module_dump_over()) {
-        app_module_dump_event();
+    app_module_dump_event();
+    if (app_module_dump_not_over())
         return;
-    }
     /* 系统倒计时 */
     app_mutex_take(&app_module_system_mutex);
     if (app_module_system_delay == 0)

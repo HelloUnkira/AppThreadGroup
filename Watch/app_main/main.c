@@ -91,8 +91,8 @@ static void app_main_update_sys_time(void)
         .hour   = p->tm_hour,           /*获取当前时,这里获取西方的时间,刚好相差八个小时*/
         .minute = p->tm_min,
         .second = p->tm_sec,
-        .zone_sec = + 8 * 60 * 60,
-        .is_24  = false,
+        //.zone_sec = + 8 * 60 * 60,
+        //.is_24  = false,
     };
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);

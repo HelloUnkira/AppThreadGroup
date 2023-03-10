@@ -6,6 +6,7 @@ typedef enum {  /* 线程模组 */
     app_thread_mix_custom_alarm,        /* 闹钟模组 */
     app_thread_mix_custom_stopwatch,    /* 秒表模组 */
     app_thread_mix_custom_countdown,    /* 倒计时模组 */
+    app_thread_mix_custom_drink_remind, /* 喝水提醒模组 */
 } app_thread_mix_custom_module;
 
 typedef enum {  /* 闹钟模组事件 */
@@ -26,5 +27,10 @@ typedef enum {  /* 倒计时模组事件 */
     app_thread_mix_custom_countdown_msec_update,
     app_thread_mix_custom_countdown_expired,
 } app_thread_mix_custom_countdown_event;
+
+typedef enum {  /* 喝水提醒模组事件 */
+    app_thread_mix_custom_drink_remind_update,
+    app_thread_mix_custom_drink_remind_interval,
+} app_thread_mix_custom_drink_remind_event;
 
 #endif

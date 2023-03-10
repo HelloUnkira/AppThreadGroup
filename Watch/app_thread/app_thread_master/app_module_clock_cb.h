@@ -21,6 +21,7 @@ extern void app_module_clock_cb1_empty(app_module_clock_t clock[1]);
 extern void app_module_system_ctrl_check(app_module_clock_t clock[1]);
 extern void app_module_watchdog_ctrl_check(app_module_clock_t clock[1]);
 extern void app_module_alarm_group_update(app_module_clock_t clock[1]);
+extern void app_module_drink_remind_update(app_module_clock_t clock[1]);
 
 /* 函数声明及其引用(注意:不要导入头文件,直接提供函数名即可): */
 void app_module_clock_cb2_empty(app_module_clock_t clock[2], uint32_t event);
@@ -40,6 +41,7 @@ static const app_module_clock_cb1 app_module_clock_second_cb[] = {
 static const app_module_clock_cb1 app_module_clock_minute_cb[] = {
     app_module_clock_cb1_empty,
     /* 补充中...... */
+    app_module_drink_remind_update,     /* 喝水提醒更新 */
 };
 
 /* 时回调 */

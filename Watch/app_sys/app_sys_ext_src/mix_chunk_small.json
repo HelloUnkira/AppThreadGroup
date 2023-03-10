@@ -4,14 +4,14 @@
     "data_group" :
     [
         {
-            "data_brief" : "system clock + crc32 + checksum32",
+            "data_brief" : "system clock + crc32",
             "data_name"  : "system clock",
-            "data_size"  : "20 + 4 + 4"
+            "data_size"  : "30"
         },
         {
-            "data_brief" : "unknown",
-            "data_name"  : "unknown",
-            "data_size"  : "20 * 10"
+            "data_brief" : "drink remind + crc32",
+            "data_name"  : "drink remind",
+            "data_size"  : "20"
         },
         {
             "data_brief" : "unknown",

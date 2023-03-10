@@ -18,6 +18,7 @@
 #include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
+#include "app_module_drink_remind.h"
 
 /*@brief 混合事件线程模组初始化
  */
@@ -27,6 +28,7 @@ void app_thread_mix_custom_ready(void)
     app_module_alarm_group_ready();
     app_module_stopwatch_ready();
     app_module_countdown_ready();
+    app_module_drink_remind_ready();
 }
 
 /*@brief 混合事件线程服务例程
@@ -86,6 +88,20 @@ void app_thread_mix_custom_routine(void)
                         .thread  = app_thread_id_lvgl,
                         .module  = app_thread_lvgl_ui_scene,
                         .event   = app_thread_lvgl_ui_countdown_remind,
+                    };
+                    app_package_notify(&package);
+                }
+                break;
+            }
+            case app_thread_mix_custom_drink_remind: {
+                if (package.event == app_thread_mix_custom_drink_remind_update)
+                    app_module_drink_remind_xmin_update();
+                /* 喝水提醒模组到期事件 */
+                if (package.event == app_thread_mix_custom_drink_remind_interval) {
+                    app_package_t package = {
+                        .thread  = app_thread_id_lvgl,
+                        .module  = app_thread_lvgl_ui_scene,
+                        .event   = app_thread_lvgl_ui_drink_remind,
                     };
                     app_package_notify(&package);
                 }

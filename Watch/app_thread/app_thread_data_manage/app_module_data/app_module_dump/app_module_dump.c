@@ -11,19 +11,17 @@
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
 #include "app_module_clock.h"
+#include "app_module_drink_remind.h"
 #include "app_module_shutdown.h"
 
-static bool app_module_dump_status_over = false;
-static app_mutex_t app_module_dump_mutex = {0};
+/* 这里不存在并发读写导致的时序不同步,无需保护 */
+static bool app_module_dump_status_not_over = true;
 
 /*@brief 转储流程是否结束
  */
-bool app_module_dump_over(void)
+bool app_module_dump_not_over(void)
 {
-    app_mutex_take(&app_module_dump_mutex);
-    bool over = app_module_dump_status_over;
-    app_mutex_give(&app_module_dump_mutex);
-    return over;
+    return app_module_dump_status_not_over;
 }
 
 /*@brief 资源数据从内存转储到外存
@@ -31,14 +29,12 @@ bool app_module_dump_over(void)
 void app_module_dump_process(void)
 {
     APP_SYS_LOG_WARN("...");
-    /* 转储系统时钟 */
     app_module_clock_dump();
+    app_module_drink_remind_dump();
     /* ... */
     app_module_shutdown_dump();
     /* ... */
-    app_mutex_take(&app_module_dump_mutex);
-    app_module_dump_status_over = true;
-    app_mutex_give(&app_module_dump_mutex);
+    app_module_dump_status_not_over = false;
 }
 
 /*@brief 系统转储模组启动
@@ -58,12 +54,3 @@ void app_module_dump_event(void)
         not_dump_yet = false;
     }
 }
-
-/*@brief 初始化系统转储模组
- */
-void app_module_dump_ready(void)
-{
-    app_mutex_process(&app_module_dump_mutex);
-}
-
-

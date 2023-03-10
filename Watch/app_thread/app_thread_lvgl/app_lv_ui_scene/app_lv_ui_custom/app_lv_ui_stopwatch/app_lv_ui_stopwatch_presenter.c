@@ -3,7 +3,6 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
-#include "app_os_adaptor.h"
 #include "app_sys_log.h"
 #include "app_module_stopwatch.h"
 
@@ -18,7 +17,7 @@ static app_lv_ui_stopwatch_t app_lv_ui_stopwatch_list[app_lv_ui_stopwatch_list_l
  */
 static void app_lv_ui_get_tick_main(app_lv_ui_stopwatch_t *stopwatch)
 {
-   app_module_stopwatch_t stopwatch1 = {0};
+    app_module_stopwatch_t stopwatch1 = {0};
     app_module_stopwatch_get(&stopwatch1);
     stopwatch->hour   = stopwatch1.hour;
     stopwatch->minute = stopwatch1.minute;
@@ -52,7 +51,7 @@ static void app_lv_ui_clean_tick_list(void)
 static void app_lv_ui_refr_tick_list(void)
 {
     app_lv_ui_stopwatch_t stopwatch2 = {0};
-   app_module_stopwatch_t stopwatch1 = {0};
+    app_module_stopwatch_t stopwatch1 = {0};
     app_module_stopwatch_get(&stopwatch1);
     stopwatch2.hour   = stopwatch1.hour;
     stopwatch2.minute = stopwatch1.minute;
@@ -70,7 +69,7 @@ static void app_lv_ui_refr_tick_list(void)
  */
 static bool app_lv_ui_get_onoff(void)
 {
-   app_module_stopwatch_t stopwatch = {0};
+    app_module_stopwatch_t stopwatch = {0};
     app_module_stopwatch_get(&stopwatch);
     return stopwatch.onoff;
 }
