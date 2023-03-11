@@ -226,7 +226,7 @@ void app_module_drink_remind_load(void)
     }
 }
 
-/*@brief 系统时钟模组初始化
+/*@brief 喝水提醒模组初始化
  *       内部使用: 被mix custom线程使用
  */
 void app_module_drink_remind_ready(void)

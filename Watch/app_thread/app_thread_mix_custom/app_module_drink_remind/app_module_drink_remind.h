@@ -1,6 +1,8 @@
 #ifndef APP_MODULE_DRINK_REMIND_H
 #define APP_MODULE_DRINK_REMIND_H
 
+/* 定制化策略(泛用策略见时间表设计) */
+
 typedef struct {
     uint8_t am_time_s[2];   /* 上午提醒起始[时,分] */
     uint8_t am_time_e[2];   /* 上午提醒结束[时,分] */
@@ -65,7 +67,7 @@ void app_module_drink_remind_dump(void);
  */
 void app_module_drink_remind_load(void);
 
-/*@brief 系统时钟模组初始化
+/*@brief 喝水提醒模组初始化
  *       内部使用: 被mix custom线程使用
  */
 void app_module_drink_remind_ready(void);
