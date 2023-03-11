@@ -1,0 +1,6 @@
+{
+    "type"   : "app_third_multi_lang_str",
+    "brief"  : "app_third_multi_lang_str: suggest：xlsx workbook and sheet",
+    "xlsx"   : "translate.xlsx",
+    "sheet"  : "translate"
+}
