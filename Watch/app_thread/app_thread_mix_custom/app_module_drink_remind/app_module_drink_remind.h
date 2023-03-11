@@ -14,45 +14,19 @@ typedef struct {
     uint8_t week:7;         /* 周:日一二三四五六:[0, 6] */
 } app_module_drink_remind_t;
 
-/*@brief     喝水提醒设置启停
- *@param[in] am_onoff 上午启停开关
- *@param[in] pm_onoff 下午启停开关
+/*@brief 喝水提醒默认设置
  */
-void app_module_drink_remind_set_onoff(bool am_onoff, bool pm_onoff);
+void app_module_drink_remind_reset(void);
 
-/*@brief     喝水提醒设置周重复
- *@param[in] week 周位域
+/*@brief     喝水提醒设置
+ *@param[in] drink_remind 喝水提醒参数
  */
-void app_module_drink_remind_set_repeat(uint8_t week);
+void app_module_drink_remind_set(app_module_drink_remind_t *drink_remind);
 
-/*@brief     喝水提醒设置提醒间隔
- *@param[in] interval 提醒间隔(分)
+/*@brief     喝水提醒获取
+ *@param[in] drink_remind 喝水提醒参数
  */
-void app_module_drink_remind_set_interval(uint8_t interval);
-
-/*@brief     喝水提醒设置上午开始时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_am_time_start(uint8_t hour, uint8_t minute);
-
-/*@brief     喝水提醒设置上午结束时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_am_time_end(uint8_t hour, uint8_t minute);
-
-/*@brief     喝水提醒设置下午开始时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_pm_time_start(uint8_t hour, uint8_t minute);
-
-/*@brief     喝水提醒设置下午结束时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_pm_time_end(uint8_t hour, uint8_t minute);
+void app_module_drink_remind_get(app_module_drink_remind_t *drink_remind);
 
 /*@brief 喝水提醒更新事件
  *       内部使用: 被mix custom线程使用

@@ -18,85 +18,44 @@
 static app_mutex_t app_module_drink_remind_mutex = {0};
 static app_module_drink_remind_t app_module_drink_remind = {0};
 
-/*@brief     喝水提醒设置启停
- *@param[in] am_onoff 上午启停开关
- *@param[in] pm_onoff 下午启停开关
+/*@brief 喝水提醒默认设置
  */
-void app_module_drink_remind_set_onoff(bool am_onoff, bool pm_onoff)
+void app_module_drink_remind_reset(void)
 {
+    /* 9:00~11:30;13:00~18:00;1mins,workday */
     app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.am_valid = am_onoff;
-    app_module_drink_remind.pm_valid = pm_onoff;
+    app_module_drink_remind.am_time_s[0] = 9;
+    app_module_drink_remind.am_time_s[1] = 0;
+    app_module_drink_remind.am_time_e[0] = 11;
+    app_module_drink_remind.am_time_e[1] = 30;
+    app_module_drink_remind.pm_time_s[0] = 13;
+    app_module_drink_remind.pm_time_s[1] = 0;
+    app_module_drink_remind.pm_time_e[0] = 18;
+    app_module_drink_remind.pm_time_e[1] = 30;
+    app_module_drink_remind.am_valid = true;
+    app_module_drink_remind.pm_valid = true;
+    app_module_drink_remind.interval = 15;
+    app_module_drink_remind.week = 0b0111110;
     app_mutex_give(&app_module_drink_remind_mutex);
 }
 
-/*@brief     喝水提醒设置周重复
- *@param[in] week 周位域
+/*@brief     喝水提醒设置
+ *@param[in] drink_remind 喝水提醒参数
  */
-void app_module_drink_remind_set_repeat(uint8_t week)
+void app_module_drink_remind_set(app_module_drink_remind_t *drink_remind)
 {
     app_mutex_take(&app_module_drink_remind_mutex);
-    for (uint8_t idx = 0; idx < 7; idx++)
-        if (((1 << idx) & week) != 0)
-            app_module_drink_remind.week |= 1 << idx;
+    app_module_drink_remind = *drink_remind;
     app_mutex_give(&app_module_drink_remind_mutex);
 }
 
-/*@brief     喝水提醒设置提醒间隔
- *@param[in] interval 提醒间隔(分)
+/*@brief     喝水提醒获取
+ *@param[in] drink_remind 喝水提醒参数
  */
-void app_module_drink_remind_set_interval(uint8_t interval)
+void app_module_drink_remind_get(app_module_drink_remind_t *drink_remind)
 {
     app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.interval = interval;
-    app_mutex_give(&app_module_drink_remind_mutex);
-}
-
-/*@brief     喝水提醒设置上午开始时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_am_time_start(uint8_t hour, uint8_t minute)
-{
-    app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.am_time_s[0] = hour;
-    app_module_drink_remind.am_time_s[1] = minute;
-    app_mutex_give(&app_module_drink_remind_mutex);
-}
-
-/*@brief     喝水提醒设置上午结束时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_am_time_end(uint8_t hour, uint8_t minute)
-{
-    app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.am_time_e[0] = hour;
-    app_module_drink_remind.am_time_e[1] = minute;
-    app_mutex_give(&app_module_drink_remind_mutex);
-}
-
-/*@brief     喝水提醒设置下午开始时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_pm_time_start(uint8_t hour, uint8_t minute)
-{
-    app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.pm_time_s[0] = hour;
-    app_module_drink_remind.pm_time_s[1] = minute;
-    app_mutex_give(&app_module_drink_remind_mutex);
-}
-
-/*@brief     喝水提醒设置下午结束时分
- *@param[in] hour   时(24时制)
- *@param[in] minute 分(24时制)
- */
-void app_module_drink_remind_set_pm_time_end(uint8_t hour, uint8_t minute)
-{
-    app_mutex_take(&app_module_drink_remind_mutex);
-    app_module_drink_remind.pm_time_e[0] = hour;
-    app_module_drink_remind.pm_time_e[1] = minute;
+    *drink_remind = app_module_drink_remind;
     app_mutex_give(&app_module_drink_remind_mutex);
 }
 
@@ -108,7 +67,7 @@ void app_module_drink_remind_xmin_update(void)
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     
-    APP_SYS_LOG_WARN("");
+    APP_SYS_LOG_WARN("");
     app_mutex_take(&app_module_drink_remind_mutex);
     /* 今天需要提醒 */
     if ((app_module_drink_remind.week & (1 << clock.week)) != 0) {
@@ -207,21 +166,7 @@ void app_module_drink_remind_load(void)
         app_mutex_give(&app_module_drink_remind_mutex);
     }
     if (crc32 != remind_data.data.crc32) {
-        /* 9:00~11:30;13:00~18:00;1mins,workday */
-        app_mutex_take(&app_module_drink_remind_mutex);
-        app_module_drink_remind.am_time_s[0] = 9;
-        app_module_drink_remind.am_time_s[1] = 0;
-        app_module_drink_remind.am_time_e[0] = 11;
-        app_module_drink_remind.am_time_e[1] = 30;
-        app_module_drink_remind.pm_time_s[0] = 13;
-        app_module_drink_remind.pm_time_s[1] = 0;
-        app_module_drink_remind.pm_time_e[0] = 18;
-        app_module_drink_remind.pm_time_e[1] = 30;
-        app_module_drink_remind.am_valid = true;
-        app_module_drink_remind.pm_valid = true;
-        app_module_drink_remind.interval = 15;
-        app_module_drink_remind.week = 0b0111110;
-        app_mutex_give(&app_module_drink_remind_mutex);
+        app_module_drink_remind_reset();
         APP_SYS_LOG_WARN("load drink remind fail");
     }
 }
