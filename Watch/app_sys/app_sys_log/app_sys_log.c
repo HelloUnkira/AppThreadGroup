@@ -26,6 +26,16 @@ static void app_sys_log_msg2(const char *format, va_list list)
     vprintf(format, list);
 }
 
+static app_mutex_t app_sys_log_mutex = {0};
+
+/*@brief 日志模组初始化
+ *       内部使用: 被线程使用
+ */
+void app_sys_log_ready(void)
+{
+    app_mutex_process(&app_sys_log_mutex);
+}
+
 /*@brief     格式日志输出接口
  *           无格式打印:{内容}
  *           带格式打印:[文件名][行数][级别]{内容}[换行]
@@ -42,6 +52,7 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
     va_list  list;
     va_start(list, format);
     
+    app_mutex_take(&app_sys_log_mutex);
     if (status == 0) {
         app_sys_log_msg1(format, list);
     } else {
@@ -61,6 +72,7 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
         app_sys_log_msg1("\r\n");
         #endif
     }
+    app_mutex_give(&app_sys_log_mutex);
     
     va_end(list);
 }

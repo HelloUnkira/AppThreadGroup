@@ -74,6 +74,11 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
 
 #endif
 
+/*@brief 日志模组初始化
+ *       内部使用: 被线程使用
+ */
+void app_sys_log_ready(void);
+
 /* 扩展补充...... */
 
 /*@brief     断言

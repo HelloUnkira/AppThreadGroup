@@ -10,6 +10,7 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
+#include "app_module_do_not_disturb.h"
 #include "app_module_clock.h"
 #include "app_module_drink_remind.h"
 
@@ -27,10 +28,10 @@ bool app_module_load_not_over(void)
  */
 void app_module_load_process(void)
 {
-    app_module_clock_load();
-    app_module_drink_remind_load();
-    /* 继续添加...... */
     APP_SYS_LOG_WARN("...");
+    app_module_clock_load();
+    app_module_do_not_disturb_load();
+    app_module_drink_remind_load();
     /* ... */
     app_module_load_status_not_over = false;
 }

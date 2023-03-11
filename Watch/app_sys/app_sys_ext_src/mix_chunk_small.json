@@ -9,6 +9,11 @@
             "data_size"  : "30"
         },
         {
+            "data_brief" : "do not disturb + crc32",
+            "data_name"  : "do not disturb",
+            "data_size"  : "30"
+        },
+        {
             "data_brief" : "drink remind + crc32",
             "data_name"  : "drink remind",
             "data_size"  : "20"

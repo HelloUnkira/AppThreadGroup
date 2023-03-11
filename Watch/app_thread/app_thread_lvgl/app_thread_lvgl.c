@@ -146,6 +146,8 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_scene_main, false);
                     app_lv_ui_watch_status_update(app_lv_ui_watch_stop);
                     app_lv_scene_add(&app_lv_scene_watch, false);
+                    app_lv_ui_check_time_reset(0, 0);
+                    app_lv_ui_check_time_exec(true);
                 if (app_module_system_dlps_get())
                     app_module_system_dlps_set(false);
                     APP_SYS_LOG_WARN("ui scene stop");

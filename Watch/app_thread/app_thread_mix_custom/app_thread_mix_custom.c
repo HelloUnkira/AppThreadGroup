@@ -18,6 +18,7 @@
 #include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
+#include "app_module_do_not_disturb.h"
 #include "app_module_drink_remind.h"
 
 /*@brief 混合事件线程模组初始化
@@ -28,6 +29,7 @@ void app_thread_mix_custom_ready(void)
     app_module_alarm_group_ready();
     app_module_stopwatch_ready();
     app_module_countdown_ready();
+    app_module_do_not_disturb_ready();
     app_module_drink_remind_ready();
 }
 
