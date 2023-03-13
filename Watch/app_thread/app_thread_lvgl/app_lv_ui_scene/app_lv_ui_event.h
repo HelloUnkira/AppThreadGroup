@@ -10,10 +10,9 @@ void app_lv_ui_event_default(lv_event_t *e);
  */
 void app_lv_ui_event_default_config(bool enable);
 
-/*@brief    场景默认事件响应回调清除
- *param[in] scene 场景
+/*@brief 点击返回上一层
  */
-void app_lv_ui_event_default_clr(lv_obj_t *scene);
+void app_lv_ui_event_click_turn_back_cb(lv_event_t *e);
 
 /*@brief 滚轮事件自定义回调
  */

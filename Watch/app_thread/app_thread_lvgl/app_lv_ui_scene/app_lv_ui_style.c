@@ -29,6 +29,7 @@ void app_lv_ui_style_object(lv_obj_t *obj)
     lv_obj_set_style_border_side(obj, 0, 0);
     lv_obj_set_style_border_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(obj, 0, 0);
+    lv_obj_set_style_border_side(obj, LV_BORDER_SIDE_FULL, 0);
     lv_obj_set_style_border_color(obj, lv_color_black(), 0);
     lv_obj_set_style_shadow_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_shadow_width(obj, 0, 0);
@@ -44,38 +45,21 @@ lv_obj_t * app_lv_ui_style_scene(void)
     lv_obj_t *scene = lv_obj_create(lv_scr_act());
     lv_obj_remove_style_all(scene);
     app_lv_ui_style_object(scene);
+    lv_obj_clear_flag(scene, LV_OBJ_FLAG_SCROLLABLE);
     lv_obj_set_size(scene, LV_HOR_RES, LV_VER_RES);
     return scene;
-}
-
-/*@brief     顶部居中标题标签
- *           黑色背景,无边框,白色滚动长文
- *param[in]  parent 父控件
- */
-lv_obj_t * app_lv_ui_style_title_label(lv_obj_t *parent)
-{
-    #define app_lv_ui_style_title_label_font  &lv_font_montserrat_22
-    
-    lv_obj_t *label = lv_label_create(parent);
-    app_lv_ui_style_object(label);
-    lv_obj_set_size(label, LV_HOR_RES - 20, 30);
-    lv_obj_set_style_pad_ver(label, 3, 0);
-    lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_set_style_text_color(label, lv_color_white(), 0);
-    lv_obj_set_style_text_font(label, app_lv_ui_style_title_label_font, 0);
-    lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
-    lv_label_set_text(label, "Null");
-    return label;
 }
 
 /*@brief     文本标签
  *           黑色背景,无边框,白色滚动长文
  *param[in]  parent 父控件
  */
-lv_obj_t * app_lv_ui_style_text_label(lv_obj_t *parent)
+lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent)
 {
     lv_obj_t *label = lv_label_create(parent);
     app_lv_ui_style_object(label);
+    lv_obj_set_style_bg_opa(label, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_text_opa(label, LV_OPA_COVER, 0);
     lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_set_style_text_color(label, lv_color_white(), 0);
     lv_label_set_long_mode(label, LV_LABEL_LONG_SCROLL_CIRCULAR);
@@ -83,9 +67,8 @@ lv_obj_t * app_lv_ui_style_text_label(lv_obj_t *parent)
     return label;
 }
 
-
 /*@brief     默认按钮
- *           蓝色背景,无边框
+ *           蓝色背景,无边框,标准弧度45
  *param[in]  parent 父控件
  */
 lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
@@ -173,8 +156,23 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
     return roller;
 }
 
+/*@brief     顶部居中标题标签
+ *           黑色背景,无边框,白色滚动长文
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_label_title(lv_obj_t *parent)
+{
+    #define app_lv_ui_style_label_title_font  &lv_font_montserrat_22
+    
+    lv_obj_t *label = app_lv_ui_style_label(parent);
+    lv_obj_set_size(label, LV_HOR_RES - 20, 30);
+    lv_obj_set_style_pad_ver(label, 3, 0);
+    lv_obj_set_style_text_font(label, app_lv_ui_style_label_title_font, 0);
+    return label;
+}
+
 /*@brief     顶部风格
- *           左部按钮,右部时间,按钮返回上一层
+ *           左部按钮,左中部标题文本,右部时间文本,按钮返回上一层
  *param[in]  parent 父控件
  *param[out] btn   左上部按钮实例
  *param[out] time  右上部时钟实例
@@ -192,25 +190,23 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_obj_set_size(obj_box, LV_HOR_RES, 40);
     lv_obj_set_style_pad_all(obj_box, 10, 0);
     lv_obj_align(obj_box, LV_ALIGN_TOP_MID, 0, 0);
-    /* 左上角标题 */
-    *btn = lv_btn_create(obj_box);
-    app_lv_ui_style_object(*btn);
-    lv_obj_set_size(*btn, LV_HOR_RES / 2 - 20, 20);
-    lv_obj_set_style_shadow_width(*btn, 0, 0);
+    /* 左上角按钮 */
+    *btn = app_lv_ui_style_btn(obj_box);
+    lv_obj_set_size(*btn, 20, 20);
+    lv_obj_set_style_bg_opa(*btn, LV_OPA_TRANSP, 0);
     lv_obj_align(*btn, LV_ALIGN_LEFT_MID, 10, 0);
-    *title = lv_label_create(*btn);
-    lv_obj_set_style_text_color(*title, lv_color_white(), 0);
-    lv_obj_set_style_text_align(*title, LV_TEXT_ALIGN_LEFT, 0);
-    lv_obj_align(*title, LV_ALIGN_TOP_LEFT, 0, 0);
-    lv_label_set_long_mode(*title, LV_LABEL_LONG_SCROLL_CIRCULAR);
-    lv_label_set_text(*title, "< Null");
+    lv_obj_t *label = app_lv_ui_style_label(*btn);
+    lv_label_set_text_static(label, LV_SYMBOL_BACKSPACE);
+    lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
+    /* 中部文本 */
+    *title = app_lv_ui_style_label(obj_box);
+    lv_obj_set_size(*btn, LV_HOR_RES - 80, 20);
+    lv_obj_align(*title, LV_ALIGN_LEFT_MID, 10 + 50, 0);
+    lv_label_set_text(*title, "Null");
     /* 右上角时间 */
-    *time = lv_label_create(obj_box);
-    lv_obj_set_size(*time, LV_HOR_RES / 2 - 20, 20);
-    lv_obj_set_style_text_color(*time, lv_color_white(), 0);
-    lv_obj_set_style_text_align(*time, LV_TEXT_ALIGN_RIGHT, 0);
+    *time = app_lv_ui_style_label(obj_box);
+    lv_obj_set_size(*btn, 40, 20);
     lv_obj_align(*time, LV_ALIGN_RIGHT_MID, -10, 0);
-    lv_label_set_long_mode(*time, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*time, "00:00");
     /* 组合控件 */
     return obj_box;

@@ -28,7 +28,6 @@
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_check_time.h"
-#include "app_lv_ui_developer_mode.h"
 #include "app_lv_ui_watch.h"
 
 /*@brief lvgl线程模组初始化
@@ -114,20 +113,14 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                #if APP_LV_UI_DEVELOPER_MODE
-                /* 启动UI场景 */
-                if (package.event == app_thread_lvgl_ui_scene_start) {
-                    app_lv_ui_event_default_config(true);
-                    app_lv_scene_reset(&app_lv_scene_main, false);
-                    app_lv_ui_developer_mode();
-                    break;
-                }
-                /* 终止UI场景 */
-                if (package.event == app_thread_lvgl_ui_scene_stop) {
-                    app_lv_ui_event_default_config(false);
-                    app_lv_scene_reset(&app_lv_scene_main, false);
-                    break;
-                }
+                #if 0
+                    /* 禁用超时回退 */
+                    app_lv_ui_check_time_reset(0, 0);
+                    app_lv_ui_check_time_exec(false);
+                    /* 做些什么:测试代码 */
+                    lv_obj_t *img = lv_img_create(lv_scr_act());
+                    lv_img_set_src(img, "/:test_find_phone.png");
+                    lv_obj_center(img);
                 #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {

@@ -108,10 +108,22 @@ void app_lv_ui_event_default(lv_event_t *e)
             if (key == LV_KEY_ENTER) {
                 /* 非主界面响应焦点 */
                 if (app_lv_scene_get_nest() != 1) {
-                    lv_obj_t *kb_focus_obj = lv_group_get_focused(app_lv_driver_get_kb_group());
-                    lv_obj_t *mw_focus_obj = lv_group_get_focused(app_lv_driver_get_mw_group());
-                    if (kb_focus_obj != mw_focus_obj)
-                        lv_event_send(mw_focus_obj, LV_EVENT_CLICKED, lv_indev_get_act());
+                    lv_group_t *kb_group = app_lv_driver_get_kb_group();
+                    lv_group_t *mw_group = app_lv_driver_get_mw_group();
+                    lv_obj_t *kb_focus_obj = lv_group_get_focused(kb_group);
+                    lv_obj_t *mw_focus_obj = lv_group_get_focused(mw_group);
+                    if (kb_focus_obj != mw_focus_obj) {
+                        /* 指定类型控件才可以进入编辑模式 */
+                        if (lv_obj_get_class(mw_focus_obj) == &lv_roller_class /* || 继续添加指定类型 */) {
+                            if (lv_group_get_editing(mw_group))
+                                lv_group_set_editing(mw_group, false);
+                            else
+                                lv_group_set_editing(mw_group, true);
+                        } else {
+                            /* 其他类型控件发送点击事件即可 */
+                            lv_event_send(mw_focus_obj, LV_EVENT_CLICKED, lv_indev_get_act());
+                        }
+                    }
                 }
                 /* 主界面进入下一层 */
                 if (app_lv_scene_get_nest() == 1)
@@ -152,6 +164,22 @@ void app_lv_ui_event_default(lv_event_t *e)
             lv_anim_start(&app_lv_ui_gesture_anim);
             break;
         }
+        break;
+    }
+    case LV_EVENT_FOCUSED: {
+        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
+        /* 更新焦点后及时退出编辑模式 */
+        lv_group_t *mw_group = app_lv_driver_get_mw_group();
+        if (lv_group_get_editing(mw_group))
+            lv_group_set_editing(mw_group, false);
+        break;
+    }
+    case LV_EVENT_DEFOCUSED: {
+        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
+        /* 更新焦点后及时退出编辑模式 */
+        lv_group_t *mw_group = app_lv_driver_get_mw_group();
+        if (lv_group_get_editing(mw_group))
+            lv_group_set_editing(mw_group, false);
         break;
     }
     case LV_EVENT_PRESSED: {
@@ -239,6 +267,22 @@ void app_lv_ui_event_default_config(bool enable)
         lv_group_focus_freeze(group, false);
         lv_group_remove_obj(lv_scr_act());
         lv_obj_remove_event_cb(lv_scr_act(), app_lv_ui_event_default);
+    }
+}
+
+/*@brief 点击返回上一层
+ */
+void app_lv_ui_event_click_turn_back_cb(lv_event_t *e)
+{
+    switch (lv_event_get_code(e)) {
+    case LV_EVENT_CLICKED: {
+        app_lv_scene_t scene = {0};
+        app_lv_scene_del(&scene);
+        break;
+    }
+    default:
+        break;
+    break;
     }
 }
 

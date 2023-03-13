@@ -84,12 +84,12 @@ static void app_lv_ui_clock_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text_static(label, "System Clock");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制日期 */
-        app_lv_ui_res_local->label_dtime = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->label_dtime = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_label_set_recolor(app_lv_ui_res_local->label_dtime, true);
         lv_obj_align_to(app_lv_ui_res_local->label_dtime, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */

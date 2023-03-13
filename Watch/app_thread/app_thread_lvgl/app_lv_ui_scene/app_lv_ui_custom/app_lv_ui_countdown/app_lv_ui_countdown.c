@@ -7,6 +7,7 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -41,22 +42,6 @@ static const char app_lv_ui_res_0_59[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n
 #define app_lv_ui_res_rolsel_font       &lv_font_montserrat_28
 #define app_lv_ui_res_rolcus_font       &lv_font_montserrat_22
 #define app_lv_ui_res_btn_text_font     &lv_font_montserrat_22
-
-/*@brief 界面自定义事件回调
- */
-static void app_lv_ui_name_btn_cb(lv_event_t *e)
-{
-    switch (lv_event_get_code(e)) {
-    case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
-        app_lv_scene_del(&scene);
-        break;
-    }
-    default:
-        break;
-    break;
-    }
-}
 
 /*@brief 界面自定义事件回调
  */
@@ -161,10 +146,10 @@ static void app_lv_ui_countdown_show(void *scene)
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
                                                           &app_lv_ui_res_local->name,
                                                           &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_name_btn_cb, LV_EVENT_CLICKED, NULL);
-        lv_label_set_text(title, "< Countdown");
+        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_label_set_text(title, "Countdown");
         /* 主体文本 */
-        app_lv_ui_res_local->tick = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->tick = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tick, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align_to(app_lv_ui_res_local->tick, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */

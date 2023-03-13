@@ -61,7 +61,7 @@ static void app_lv_ui_list_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text_static(label, "Watch List");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
@@ -71,16 +71,14 @@ static void app_lv_ui_list_show(void *scene)
         lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES - 40);
         lv_obj_set_style_pad_all(list, 10, 0);
         lv_obj_set_style_pad_row(list, 10, 0);
-        lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+        lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 为列表批量追加按钮 */
         for (uint32_t idx = 0; idx < app_lv_ui_res_list_len; idx++) {
             lv_obj_t *btn = app_lv_ui_style_btn(list);
             lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
             lv_obj_add_event_cb(btn, app_lv_ui_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_list[idx].scene);
-            lv_obj_t *lab = lv_label_create(btn);
-            lv_obj_set_style_text_color(lab, lv_color_white(), 0);
+            lv_obj_t *lab = app_lv_ui_style_label(btn);
             lv_label_set_text(lab, app_lv_ui_res_list[idx].name);
-            lv_label_set_long_mode(lab, LV_LABEL_LONG_SCROLL_CIRCULAR);
             lv_obj_align(lab, LV_ALIGN_LEFT_MID, 10, 0);
         }
     }

@@ -13,20 +13,14 @@ void app_lv_ui_style_object(lv_obj_t *obj);
  */
 lv_obj_t * app_lv_ui_style_scene(void);
 
-/*@brief     顶部居中标题标签
- *           黑色背景,无边框,白色滚动长文
- *param[in]  parent 父控件
- */
-lv_obj_t * app_lv_ui_style_title_label(lv_obj_t *parent);
-
 /*@brief     文本标签
  *           黑色背景,无边框,白色滚动长文
  *param[in]  parent 父控件
  */
-lv_obj_t * app_lv_ui_style_text_label(lv_obj_t *parent);
+lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent);
 
 /*@brief     默认按钮
- *           蓝色背景,无边框
+ *           蓝色背景,无边框,标准弧度45
  *param[in]  parent 父控件
  */
 lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent);
@@ -52,6 +46,12 @@ lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent);
  *param[in]  vis_row 滚轮默认显示个数
  */
 lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row);
+
+/*@brief     顶部居中标题标签
+ *           黑色背景,无边框,白色滚动长文
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_label_title(lv_obj_t *parent);
 
 /*@brief     顶部风格
  *           左部按钮,右部时间,按钮返回上一层

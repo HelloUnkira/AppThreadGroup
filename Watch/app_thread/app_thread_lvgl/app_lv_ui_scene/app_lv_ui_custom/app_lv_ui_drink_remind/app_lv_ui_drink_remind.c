@@ -7,6 +7,7 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -26,38 +27,6 @@ typedef struct {
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
-
-/*@brief 界面自定义事件回调
- */
-static void app_lv_ui_name_btn_cb(lv_event_t *e)
-{
-    switch (lv_event_get_code(e)) {
-    case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
-        app_lv_scene_del(&scene);
-        break;
-    }
-    default:
-        break;
-    break;
-    }
-}
-
-/*@brief 界面自定义事件回调
- */
-static void app_lv_ui_btn_c_cb(lv_event_t *e)
-{
-    switch (lv_event_get_code(e)) {
-    case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
-        app_lv_scene_del(&scene);
-        break;
-    }
-    default:
-        break;
-    break;
-    }
-}
 
 /*@brief 界面动画定时器回调
  */
@@ -86,9 +55,9 @@ static void app_lv_ui_drink_remind_show(void *scene)
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
                                                           &app_lv_ui_res_local->name,
                                                           &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_name_btn_cb, LV_EVENT_CLICKED, NULL);
-        lv_label_set_text(title, "< Drink Remind");
-        lv_obj_t *times_up = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_label_set_text(title, "Drink Remind");
+        lv_obj_t *times_up = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(times_up, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align(times_up, LV_ALIGN_CENTER, 0, 0);
         lv_label_set_text(times_up, "Drink Remind Times Up");
@@ -102,9 +71,9 @@ static void app_lv_ui_drink_remind_show(void *scene)
         /* 中心按键 */
         app_lv_ui_res_local->btn_c = app_lv_ui_style_btn(btn);
         lv_obj_set_size(app_lv_ui_res_local->btn_c, LV_HOR_RES - 20, 40);
-        lv_obj_add_event_cb(app_lv_ui_res_local->btn_c, app_lv_ui_btn_c_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_add_event_cb(app_lv_ui_res_local->btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_align(app_lv_ui_res_local->btn_c, LV_ALIGN_CENTER, 0, 0);
-        app_lv_ui_res_local->lbl_c = app_lv_ui_style_title_label(app_lv_ui_res_local->btn_c);
+        app_lv_ui_res_local->lbl_c = app_lv_ui_style_label_title(app_lv_ui_res_local->btn_c);
         app_lv_ui_style_object(app_lv_ui_res_local->lbl_c);
         lv_obj_set_style_bg_opa(app_lv_ui_res_local->lbl_c, LV_OPA_0, 0);
         lv_label_set_text(app_lv_ui_res_local->lbl_c, "Confirm");

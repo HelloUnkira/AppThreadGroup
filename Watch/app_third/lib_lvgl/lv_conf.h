@@ -49,7 +49,7 @@
 #define LV_MEM_CUSTOM 0
 #if LV_MEM_CUSTOM == 0
     /*Size of the memory available for `lv_mem_alloc()` in bytes (>= 2kB)*/
-    #define LV_MEM_SIZE (1024U * 1024U)          /*[bytes]*/
+    #define LV_MEM_SIZE (10 * 1024U * 1024U)          /*[bytes]*/
 
     /*Set an address for the memory pool instead of allocating it as a normal array. Can be in external SRAM too.*/
     #define LV_MEM_ADR 0     /*0: unused*/
@@ -584,8 +584,8 @@
     #undef  LV_FS_STDIO_PATH
     #undef  LV_FS_STDIO_CACHE_SIZE
     /* redefine stdio fs configure */
-    #define LV_FS_STDIO_LETTER      '\0'
-    #define LV_FS_STDIO_PATH        "/mnt/hgfs/Watch/app_main/app_exe/lvgl_ext_src"
+    #define LV_FS_STDIO_LETTER      '/'
+    #define LV_FS_STDIO_PATH        "/mnt/hgfs/Watch/app_main/app_exe/lvgl_ext_src/"
     #define LV_FS_STDIO_CACHE_SIZE  0xFFFF
 #endif
 

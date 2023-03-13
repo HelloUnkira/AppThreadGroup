@@ -79,7 +79,7 @@ static void app_lv_ui_watch_show(void *scene)
         if (app_lv_ui_watch_status == app_lv_ui_watch_null) {
             if (app_lv_ui_res_local != NULL) {
                 /* 初始化居中标签 */
-                app_lv_ui_res_local->label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+                app_lv_ui_res_local->label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
                 lv_obj_set_style_text_opa(app_lv_ui_res_local->label, LV_OPA_COVER, 0);
                 lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
                 lv_label_set_text_static(app_lv_ui_res_local->label, "NULL");
@@ -96,7 +96,7 @@ static void app_lv_ui_watch_show(void *scene)
                 app_lv_ui_res_local->spinner = app_lv_ui_style_loading_spinner(app_lv_ui_res_local->scene, 30, 5);
                 lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, 20, 20);
                 /* 初始化居中标签 */
-                app_lv_ui_res_local->label = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+                app_lv_ui_res_local->label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
                 lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
                 lv_label_set_text_static(app_lv_ui_res_local->label, "ATG LVGL Watch");
                 lv_obj_center(app_lv_ui_res_local->label);

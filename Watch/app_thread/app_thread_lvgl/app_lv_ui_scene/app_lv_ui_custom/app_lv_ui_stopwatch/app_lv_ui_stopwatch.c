@@ -7,6 +7,7 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -83,22 +84,6 @@ static void app_lv_ui_local_tick_list_set(bool refr)
                                   tick_list[idx].hour, tick_list[idx].minute, tick_list[idx].second, tick_list[idx].msec);
             lv_obj_align(label2, LV_ALIGN_RIGHT_MID, 0, 0);
         }
-    }
-}
-
-/*@brief 界面自定义事件回调
- */
-static void app_lv_ui_name_btn_cb(lv_event_t *e)
-{
-    switch (lv_event_get_code(e)) {
-    case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
-        app_lv_scene_del(&scene);
-        break;
-    }
-    default:
-        break;
-    break;
     }
 }
 
@@ -198,10 +183,10 @@ static void app_lv_ui_stopwatch_show(void *scene)
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
                                                           &app_lv_ui_res_local->name,
                                                           &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_name_btn_cb, LV_EVENT_CLICKED, NULL);
-        lv_label_set_text(title, "< Stopwatch");
+        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_label_set_text(title, "Stopwatch");
         /* 主体时间 */
-        app_lv_ui_res_local->tick_main = app_lv_ui_style_title_label(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->tick_main = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tick_main, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align_to(app_lv_ui_res_local->tick_main, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 计数列表(点击时更新) */

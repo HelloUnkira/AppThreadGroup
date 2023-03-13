@@ -7,6 +7,7 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_event.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
@@ -182,22 +183,6 @@ static void app_lv_ui_res_btnlist_str_cb(lv_event_t *e)
     }
 }
 
-/*@brief 界面自定义事件回调
- */
-static void app_lv_ui_name_btn_cb(lv_event_t *e)
-{
-    switch (lv_event_get_code(e)) {
-    case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
-        app_lv_scene_del(&scene);
-        break;
-    }
-    default:
-        break;
-    break;
-    }
-}
-
 /*@brief 界面动画定时器回调
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
@@ -225,20 +210,20 @@ static void app_lv_ui_calculator_show(void *scene)
         app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
                                                           &app_lv_ui_res_local->name,
                                                           &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_name_btn_cb, LV_EVENT_CLICKED, NULL);
-        lv_label_set_text(title, "< Calculator");
+        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_label_set_text(title, "Calculator");
         /* 第一列:提示,结果 */
         lv_obj_t *list = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(list);
         lv_obj_set_size(list, LV_HOR_RES, 30);
         lv_obj_align_to(list, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-        app_lv_ui_res_local->tips = app_lv_ui_style_title_label(list);
+        app_lv_ui_res_local->tips = app_lv_ui_style_label_title(list);
         lv_obj_set_size(app_lv_ui_res_local->tips, LV_HOR_RES - 120, 30);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tips, lv_palette_main(LV_PALETTE_RED), 0);
         lv_obj_set_style_text_align(app_lv_ui_res_local->tips, LV_TEXT_ALIGN_LEFT, 0);
         lv_obj_align(app_lv_ui_res_local->tips, LV_ALIGN_LEFT_MID, 20, 0);
         lv_label_set_text(app_lv_ui_res_local->tips, "Tips:...");
-        app_lv_ui_res_local->retval = app_lv_ui_style_title_label(list);
+        app_lv_ui_res_local->retval = app_lv_ui_style_label_title(list);
         lv_obj_set_size(app_lv_ui_res_local->retval, 80, 30);
         lv_obj_set_style_text_color(app_lv_ui_res_local->retval, lv_palette_main(LV_PALETTE_GREEN), 0);
         lv_obj_set_style_text_align(app_lv_ui_res_local->retval, LV_TEXT_ALIGN_RIGHT, 0);
