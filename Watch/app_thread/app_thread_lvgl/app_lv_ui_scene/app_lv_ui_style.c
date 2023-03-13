@@ -200,12 +200,13 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     /* 中部文本 */
     *title = app_lv_ui_style_label(obj_box);
-    lv_obj_set_size(*btn, LV_HOR_RES - 80, 20);
-    lv_obj_align(*title, LV_ALIGN_LEFT_MID, 10 + 50, 0);
+    lv_obj_set_size(*title, LV_HOR_RES - 140, 20);
+    lv_obj_set_style_text_align(*title, LV_TEXT_ALIGN_LEFT, 0);
+    lv_obj_align_to(*title, *btn, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     lv_label_set_text(*title, "Null");
     /* 右上角时间 */
     *time = app_lv_ui_style_label(obj_box);
-    lv_obj_set_size(*btn, 40, 20);
+    lv_obj_set_size(*time, 60, 20);
     lv_obj_align(*time, LV_ALIGN_RIGHT_MID, -10, 0);
     lv_label_set_text(*time, "00:00");
     /* 组合控件 */

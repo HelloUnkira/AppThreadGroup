@@ -57,12 +57,11 @@ static void app_lv_ui_countdown_remind_show(void *scene)
                                                           &app_lv_ui_res_local->name,
                                                           &app_lv_ui_res_local->time, &title);
         lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
-        lv_label_set_text(title, "Countdown");
+        lv_label_set_text(title, "Countdown Remind");
         lv_obj_t *times_up = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(times_up, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align(times_up, LV_ALIGN_CENTER, 0, 0);
         lv_label_set_text(times_up, "Countdown Times Up");
-        
         /* 下部按键 */
         lv_obj_t *btn = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(btn);

@@ -5,9 +5,10 @@
 set(app_adaptor_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor
     ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor/app_arch_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor/app_arch_driver
     ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_os_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_os_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_os_adaptor/app_os_ext_mem
 )
 set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys

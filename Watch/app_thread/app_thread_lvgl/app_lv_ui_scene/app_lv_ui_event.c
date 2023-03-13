@@ -168,18 +168,25 @@ void app_lv_ui_event_default(lv_event_t *e)
     }
     case LV_EVENT_FOCUSED: {
         APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
-        /* 更新焦点后及时退出编辑模式 */
-        lv_group_t *mw_group = app_lv_driver_get_mw_group();
-        if (lv_group_get_editing(mw_group))
-            lv_group_set_editing(mw_group, false);
         break;
     }
     case LV_EVENT_DEFOCUSED: {
         APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
         /* 更新焦点后及时退出编辑模式 */
         lv_group_t *mw_group = app_lv_driver_get_mw_group();
-        if (lv_group_get_editing(mw_group))
-            lv_group_set_editing(mw_group, false);
+        lv_indev_t *defocus_indev = lv_event_get_param(e);
+        lv_obj_t *mw_focus_obj = lv_group_get_focused(mw_group);
+        if (defocus_indev == NULL)
+            break;
+        /* 编码器焦点切换事件到达 */
+        if (lv_indev_get_type(defocus_indev) == LV_INDEV_TYPE_ENCODER) {
+            /* 非指定类型控件则退出编辑模式 */
+            if (mw_focus_obj != NULL &&
+                lv_obj_get_class(mw_focus_obj) != &lv_roller_class /* || 继续添加指定类型 */)
+                /* 只有指定类型控件才可以保持编辑模式 */
+                if (lv_group_get_editing(mw_group))
+                    lv_group_set_editing(mw_group, false);
+        }
         break;
     }
     case LV_EVENT_PRESSED: {
