@@ -1,6 +1,26 @@
 #ifndef APP_LV_UI_STYLE_H
 #define APP_LV_UI_STYLE_H
 
+/*@brief     水平像素转换(未使用)
+ *           将x/100像素点放大到指定显示器像素
+ *@param[in] 水平像素
+ *@retval    转换后的像素
+ */
+static inline lv_coord_t app_lv_ui_zoom_x(lv_coord_t x)
+{
+    return (lv_coord_t)((double)LV_HOR_RES / (double)100 * (double)x);
+}
+
+/*@brief     垂直像素转换(未使用)
+ *           将y/100像素点放大到指定显示器像素
+ *@param[in] 垂直像素
+ *@retval    转换后的像素
+ */
+static inline lv_coord_t app_lv_ui_zoom_y(lv_coord_t y)
+{
+    return (lv_coord_t)((double)LV_VER_RES / (double)100 * (double)y);
+}
+
 /*@brief    默认控件风格
  *          黑色背景,无边框
  *param[in] obj 控件
@@ -64,6 +84,11 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
 
 /*@brief     底部双按钮组
  *           左部按钮,右部按钮,无阴影,默认扩散,蓝色背景(按钮,内部字体22)
+ *param[in]  parent 父控件
+ *param[out] btn_l 左下部按钮实例
+ *param[out] lbl_l 左下部文本实例
+ *param[out] btn_r 右下部按钮实例
+ *param[out] lbl_r 右下部文本实例
  */
 lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t **lbl_l, lv_obj_t **btn_r, lv_obj_t **lbl_r);
 

@@ -215,11 +215,14 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
 
 /*@brief     底部双按钮组
  *           左部按钮,右部按钮,无阴影,默认扩散,蓝色背景(按钮,内部字体22)
+ *param[in]  parent 父控件
+ *param[out] btn_l 左下部按钮实例
+ *param[out] lbl_l 左下部文本实例
+ *param[out] btn_r 右下部按钮实例
+ *param[out] lbl_r 右下部文本实例
  */
 lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t **lbl_l, lv_obj_t **btn_r, lv_obj_t **lbl_r)
 {
-    #define app_lv_ui_style_two_btns_btn_text_font  &lv_font_montserrat_22
-
     APP_SYS_ASSERT(btn_l != NULL);
     APP_SYS_ASSERT(lbl_l != NULL);
     APP_SYS_ASSERT(btn_r != NULL);
@@ -231,31 +234,18 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     lv_obj_set_style_pad_all(btn, 10, 0);
     lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
     /* 左下角按钮 */
-    *btn_l = lv_btn_create(btn);
-    app_lv_ui_style_object(*btn_l);
+    *btn_l = app_lv_ui_style_btn(btn);
     lv_obj_set_size(*btn_l, LV_HOR_RES / 2 - 20, 40);
-    lv_obj_set_style_radius(*btn_l, 45, 0);
-    lv_obj_set_style_bg_color(*btn_l, lv_palette_main(LV_PALETTE_BLUE), 0);
-    lv_obj_set_style_shadow_width(*btn_l, 0, 0);
     lv_obj_align(*btn_l, LV_ALIGN_LEFT_MID, 5, 0);
-    *lbl_l = lv_label_create(*btn_l);
-    lv_obj_set_style_text_color(*lbl_l, lv_color_white(), 0);
-    lv_obj_set_style_text_font(*lbl_l, app_lv_ui_style_two_btns_btn_text_font, 0);
+    *lbl_l = app_lv_ui_style_label_title(*btn_l);
     lv_obj_align(*lbl_l, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_long_mode(*lbl_l, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*lbl_l, "L_Btn");
     /* 右下角按钮 */
-    *btn_r = lv_btn_create(btn);
-    app_lv_ui_style_object(*btn_r);
+    *btn_r = app_lv_ui_style_btn(btn);
     lv_obj_set_size(*btn_r, LV_HOR_RES / 2 - 20, 40);
-    lv_obj_set_style_radius(*btn_r, 45, 0);
-    lv_obj_set_style_shadow_width(*btn_r, 0, 0);
     lv_obj_align(*btn_r, LV_ALIGN_RIGHT_MID, -5, 0);
-    *lbl_r = lv_label_create(*btn_r);
-    lv_obj_set_style_text_color(*lbl_r, lv_color_white(), 0);
-    lv_obj_set_style_text_font(*lbl_r, app_lv_ui_style_two_btns_btn_text_font, 0);
+    *lbl_r = app_lv_ui_style_label_title(*btn_r);
     lv_obj_align(*lbl_r, LV_ALIGN_CENTER, 0, 0);
-    lv_label_set_long_mode(*lbl_r, LV_LABEL_LONG_SCROLL_CIRCULAR);
     lv_label_set_text(*lbl_r, "R_Btn");
     /* 下部按钮 */
     return btn;
