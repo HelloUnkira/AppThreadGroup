@@ -18,6 +18,7 @@ typedef struct {
     lv_obj_t *scene;
     lv_obj_t *label_dtime;
     lv_obj_t *calendar;
+    lv_obj_t *btnmatrix;
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -70,13 +71,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
                           time_color_0x[5], app_lv_ui_clock_presenter.get_second(),
                           time_color_0x[6], app_lv_ui_res_week[app_lv_ui_clock_presenter.get_week()]);
     
-    lv_calendar_date_t date = {
-        .year  = app_lv_ui_clock_presenter.get_year(),
-        .month = app_lv_ui_clock_presenter.get_month(),
-        .day   = app_lv_ui_clock_presenter.get_day(),
-    };
-    lv_calendar_set_showed_date(app_lv_ui_res_local->calendar, date.year, date.month);
-    lv_calendar_set_today_date(app_lv_ui_res_local->calendar, date.year, date.month, date.day);
+//    lv_calendar_date_t date = {
+//        .year  = app_lv_ui_clock_presenter.get_year(),
+//        .month = app_lv_ui_clock_presenter.get_month(),
+//        .day   = app_lv_ui_clock_presenter.get_day(),
+//    };
+//    lv_calendar_set_showed_date(app_lv_ui_res_local->calendar, date.year, date.month);
+//    lv_calendar_set_today_date(app_lv_ui_res_local->calendar, date.year, date.month, date.day);
 }
 
 /*@brief     界面显示
@@ -102,6 +103,7 @@ static void app_lv_ui_calendar_show(void *scene)
         app_lv_ui_style_object(app_lv_ui_res_local->calendar);
         lv_obj_add_event_cb(app_lv_ui_res_local->calendar, app_lv_ui_calendar_cb, LV_EVENT_ALL, NULL);
         lv_obj_align(app_lv_ui_res_local->calendar, LV_ALIGN_BOTTOM_MID, 0, 0);
+        lv_obj_set_style_border_width(app_lv_ui_res_local->calendar, 0, 0);
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);

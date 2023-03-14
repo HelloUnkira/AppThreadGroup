@@ -234,7 +234,7 @@ static void app_lv_ui_calculator_show(void *scene)
         lv_obj_set_size(app_lv_ui_res_local->expr, LV_HOR_RES - 40, 35);
         lv_obj_set_style_text_align(app_lv_ui_res_local->expr, LV_TEXT_ALIGN_RIGHT, 0);
         lv_textarea_set_max_length(app_lv_ui_res_local->expr, APP_LV_UI_TEXT_MAX_LEN);
-        lv_textarea_set_placeholder_text(app_lv_ui_res_local->expr, "Expr:...");
+        lv_textarea_set_placeholder_text(app_lv_ui_res_local->expr, "Expr:...   ");
         lv_obj_align_to(app_lv_ui_res_local->expr, list, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         #if APP_LV_RES_USE_BTNMATRIX
         app_lv_ui_res_local->list_btn = lv_obj_create(app_lv_ui_res_local->scene);
@@ -262,11 +262,9 @@ static void app_lv_ui_calculator_show(void *scene)
             lv_obj_t *btn = app_lv_ui_style_btn(app_lv_ui_res_local->list_btn);
             lv_obj_set_size(btn, LV_HOR_RES / 3 - 20, 30 - 10);
             lv_obj_add_event_cb(btn, app_lv_ui_res_btnlist_str_cb, LV_EVENT_CLICKED, (void *)app_lv_ui_res_btnlist_str[idx]);
-            lv_obj_t *lbl = lv_label_create(btn);
-            app_lv_ui_style_object(lbl);
-            lv_obj_set_style_bg_opa(lbl, LV_OPA_0, 0);
-            lv_label_set_text(lbl, app_lv_ui_res_btnlist_str[idx]);
-            lv_obj_align(lbl, LV_ALIGN_CENTER, 0, 0);
+            lv_obj_t *lab = app_lv_ui_style_label(btn);
+            lv_label_set_text(lab, app_lv_ui_res_btnlist_str[idx]);
+            lv_obj_align(lab, LV_ALIGN_CENTER, 0, 0);
         }
         #endif
         /* 初始化显示动画 */

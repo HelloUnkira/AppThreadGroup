@@ -42,8 +42,8 @@ bool app_package_notify(app_package_t *package);
 typedef enum {
     app_thread_id_mix_irq,          /* 混合中断线程(priority:2) */
     app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
-    app_thread_id_data_manage,      /* 数据管理线程(priority:3) */
-    app_thread_id_lvgl,             /* lvgl线程(priority:3) */
+    app_thread_id_data_manage,      /* 数据管理线程(priority:5) */
+    app_thread_id_lvgl,             /* lvgl线程(priority:4) */
     /* 继续添加其他线程 */
     app_thread_id_num,              /* 占位符:子线程组数量 */
     app_thread_id_unknown,          /* 占位符:未知来源,不可为未知去处 */
@@ -61,13 +61,5 @@ typedef enum {  /* 线程组模组 */
  *       启动所有线程
  */
 void app_thread_group_run(void);
-
-/*@brief 中止线程组工作
- */
-void app_thread_set_abort(void);
-
-/*@brief 恢复线程组工作
- */
-void app_thread_set_resume(void);
 
 #endif

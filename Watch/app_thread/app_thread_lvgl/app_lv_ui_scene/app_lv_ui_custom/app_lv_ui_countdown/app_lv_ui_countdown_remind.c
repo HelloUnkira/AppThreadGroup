@@ -74,8 +74,6 @@ static void app_lv_ui_countdown_remind_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_align(app_lv_ui_res_local->btn_c, LV_ALIGN_CENTER, 0, 0);
         app_lv_ui_res_local->lbl_c = app_lv_ui_style_label_title(app_lv_ui_res_local->btn_c);
-        app_lv_ui_style_object(app_lv_ui_res_local->lbl_c);
-        lv_obj_set_style_bg_opa(app_lv_ui_res_local->lbl_c, LV_OPA_0, 0);
         lv_label_set_text(app_lv_ui_res_local->lbl_c, "Confirm");
         lv_obj_align(app_lv_ui_res_local->lbl_c, LV_ALIGN_CENTER, 0, 0);
         /* 初始化显示动画 */
