@@ -11,12 +11,15 @@
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
-#include "app_lv_ui_main.h"
+#include "app_lv_ui_data_daily.h"
+#include "app_lv_ui_data_daily_presenter.h"
+
+#include "app_lv_ui_clock_presenter.h"
 
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
-    lv_obj_t *label;
+    lv_obj_t *time;
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -25,26 +28,30 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
-    if (value <= 100) {
-        uint8_t label_opa = (uint32_t)((float)value * 2.55);
-        lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
-    }
+    /* 左上角系统时钟更新 */
+    lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
+                          app_lv_ui_clock_presenter.is_24() ? "" :
+                          app_lv_ui_clock_presenter.is_am() ? "AM" :
+                          app_lv_ui_clock_presenter.is_pm() ? "PM" : "",
+                          app_lv_ui_clock_presenter.get_hour(),
+                          app_lv_ui_clock_presenter.get_minute());
+    
 }
 
 /*@brief     界面显示
  *@param[in] scene 场景
  */
-static void app_lv_ui_main_show(void *scene)
+static void app_lv_ui_data_daily_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
-        /* 初始化居中标签 */
-        app_lv_ui_res_local->label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Main");
-        lv_obj_center(app_lv_ui_res_local->label);
+        /* 默认顶部风格 */
+        lv_obj_t *title_box = NULL, *title = NULL;
+        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        lv_label_set_text(title, "Data Daily");
+        
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
@@ -54,14 +61,14 @@ static void app_lv_ui_main_show(void *scene)
         lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
         lv_anim_start(&app_lv_ui_res_local->anim);
     }
-    app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
-                             app_lv_ui_res_local->scene;
+    app_lv_scene_data_daily.self = app_lv_ui_res_local == NULL ? NULL :
+                                   app_lv_ui_res_local->scene;
 }
 
 /*@brief     界面隐藏
  *@param[in] scene 场景
  */
-static void app_lv_ui_main_hide(void *scene)
+static void app_lv_ui_data_daily_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化动画 */
@@ -71,18 +78,12 @@ static void app_lv_ui_main_hide(void *scene)
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
-                             app_lv_ui_res_local->scene;
+    app_lv_scene_data_daily.self = app_lv_ui_res_local == NULL ? NULL :
+                                   app_lv_ui_res_local->scene;
 }
 
-app_lv_scene_set_t app_lv_scene_main_set = {
-    .cross_vlist_t = &app_lv_scene_watch,
-    .cross_vlist_b = &app_lv_scene_watch,
-};
-
-app_lv_scene_t app_lv_scene_main = {
+app_lv_scene_t app_lv_scene_data_daily = {
     /* 场景资源节点 */
-    .scene_set = &app_lv_scene_main_set,
-    .show = app_lv_ui_main_show,
-    .hide = app_lv_ui_main_hide,
+    .show = app_lv_ui_data_daily_show,
+    .hide = app_lv_ui_data_daily_hide,
 };

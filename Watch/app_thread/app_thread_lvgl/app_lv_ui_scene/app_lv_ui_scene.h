@@ -15,5 +15,6 @@ extern app_lv_scene_t app_lv_scene_countdown;
 extern app_lv_scene_t app_lv_scene_countdown_remind;
 extern app_lv_scene_t app_lv_scene_drink_remind;
 extern app_lv_scene_t app_lv_scene_calculator;
+extern app_lv_scene_t app_lv_scene_data_daily;
 
 #endif

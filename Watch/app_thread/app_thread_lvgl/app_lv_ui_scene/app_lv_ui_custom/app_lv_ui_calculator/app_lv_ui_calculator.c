@@ -21,8 +21,6 @@
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
-    lv_obj_t *title;
-    lv_obj_t *name;
     lv_obj_t *time;
     lv_obj_t *tips;
     lv_obj_t *retval;
@@ -206,17 +204,14 @@ static void app_lv_ui_calculator_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 默认顶部风格 */
-        lv_obj_t *title = NULL;
-        app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
-                                                          &app_lv_ui_res_local->name,
-                                                          &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_t *title_box = NULL, *title = NULL;
+        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Calculator");
         /* 第一列:提示,结果 */
         lv_obj_t *list = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(list);
         lv_obj_set_size(list, LV_HOR_RES, 30);
-        lv_obj_align_to(list, app_lv_ui_res_local->title, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        lv_obj_align_to(list, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         app_lv_ui_res_local->tips = app_lv_ui_style_label_title(list);
         lv_obj_set_size(app_lv_ui_res_local->tips, LV_HOR_RES - 120, 30);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tips, lv_palette_main(LV_PALETTE_RED), 0);

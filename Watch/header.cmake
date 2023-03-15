@@ -66,6 +66,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_countdown
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_drink_remind
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_calculator
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui_scene/app_lv_ui_custom/app_lv_ui_data_daily
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main

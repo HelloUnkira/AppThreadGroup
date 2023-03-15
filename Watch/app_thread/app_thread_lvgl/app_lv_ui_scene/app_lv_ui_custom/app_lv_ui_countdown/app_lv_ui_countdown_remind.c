@@ -20,11 +20,7 @@
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
-    lv_obj_t *title;
-    lv_obj_t *name;
     lv_obj_t *time;
-    lv_obj_t *btn_c;
-    lv_obj_t *lbl_c;
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -52,30 +48,19 @@ static void app_lv_ui_countdown_remind_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         /* 默认顶部风格 */
-        lv_obj_t *title = NULL;
-        app_lv_ui_res_local->title = app_lv_ui_style_title(app_lv_ui_res_local->scene,
-                                                          &app_lv_ui_res_local->name,
-                                                          &app_lv_ui_res_local->time, &title);
-        lv_obj_add_event_cb(app_lv_ui_res_local->name, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_obj_t *title_box = NULL, *title = NULL;
+        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Countdown Remind");
+        /* 中心文本 */
         lv_obj_t *times_up = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(times_up, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align(times_up, LV_ALIGN_CENTER, 0, 0);
         lv_label_set_text(times_up, "Countdown Times Up");
         /* 下部按键 */
-        lv_obj_t *btn = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(btn);
-        lv_obj_set_size(btn, LV_HOR_RES, 60);
-        lv_obj_set_style_pad_all(btn, 10, 0);
-        lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
-        /* 中心按键 */
-        app_lv_ui_res_local->btn_c = app_lv_ui_style_btn(btn);
-        lv_obj_set_size(app_lv_ui_res_local->btn_c, LV_HOR_RES - 20, 40);
-        lv_obj_add_event_cb(app_lv_ui_res_local->btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
-        lv_obj_align(app_lv_ui_res_local->btn_c, LV_ALIGN_CENTER, 0, 0);
-        app_lv_ui_res_local->lbl_c = app_lv_ui_style_label_title(app_lv_ui_res_local->btn_c);
-        lv_label_set_text(app_lv_ui_res_local->lbl_c, "Confirm");
-        lv_obj_align(app_lv_ui_res_local->lbl_c, LV_ALIGN_CENTER, 0, 0);
+        lv_obj_t *btn = NULL, *btn_c = NULL, *lbl_c = NULL;
+        btn = app_lv_ui_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
+        lv_obj_add_event_cb(btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        lv_label_set_text(lbl_c, "Confirm");
         /* 初始化显示动画 */
         lv_anim_init(&app_lv_ui_res_local->anim);
         lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);

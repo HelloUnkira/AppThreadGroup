@@ -15,7 +15,7 @@
 #include "app_lv_ui_event.h"
 
 /*@brief    默认控件风格
- *          黑色背景,无边框
+ *          黑色背景,无边框,无阴影,无间隙
  *param[in] obj 控件
  */
 void app_lv_ui_style_object(lv_obj_t *obj)
@@ -174,14 +174,12 @@ lv_obj_t * app_lv_ui_style_label_title(lv_obj_t *parent)
 /*@brief     顶部风格
  *           左部按钮,左中部标题文本,右部时间文本,按钮返回上一层
  *param[in]  parent 父控件
- *param[out] btn   左上部按钮实例
- *param[out] time  右上部时钟实例
- *param[out] title 左上部文本实例
+ *param[out] time  左中部时钟实例
+ *param[out] title 右上部文本实例
  *retval     顶部风格控件
  */
-lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **time, lv_obj_t **title)
+lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **time, lv_obj_t **title)
 {
-    APP_SYS_ASSERT(btn   != NULL);
     APP_SYS_ASSERT(time  != NULL);
     APP_SYS_ASSERT(title != NULL);
     /* 组合控件 */
@@ -191,18 +189,19 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_obj_set_style_pad_all(obj_box, 10, 0);
     lv_obj_align(obj_box, LV_ALIGN_TOP_MID, 0, 0);
     /* 左上角按钮 */
-    *btn = app_lv_ui_style_btn(obj_box);
-    lv_obj_set_size(*btn, 20, 20);
-    lv_obj_set_style_bg_opa(*btn, LV_OPA_TRANSP, 0);
-    lv_obj_align(*btn, LV_ALIGN_LEFT_MID, 10, 0);
-    lv_obj_t *label = app_lv_ui_style_label(*btn);
+    lv_obj_t *btn = app_lv_ui_style_btn(obj_box);
+    lv_obj_set_size(btn, 20, 20);
+    lv_obj_add_event_cb(btn, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+    lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
+    lv_obj_align(btn, LV_ALIGN_LEFT_MID, 10, 0);
+    lv_obj_t *label = app_lv_ui_style_label(btn);
     lv_label_set_text_static(label, LV_SYMBOL_BACKSPACE);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     /* 中部文本 */
     *title = app_lv_ui_style_label(obj_box);
     lv_obj_set_size(*title, LV_HOR_RES - 140, 20);
     lv_obj_set_style_text_align(*title, LV_TEXT_ALIGN_LEFT, 0);
-    lv_obj_align_to(*title, *btn, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+    lv_obj_align_to(*title, btn, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
     lv_label_set_text(*title, "Null");
     /* 右上角时间 */
     *time = app_lv_ui_style_label(obj_box);
@@ -211,6 +210,31 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **ti
     lv_label_set_text(*time, "00:00");
     /* 组合控件 */
     return obj_box;
+}
+
+/*@brief     底部单按钮
+ *           无阴影,默认扩散,蓝色背景(按钮,内部字体22)
+ *param[in]  parent 父控件
+ *param[out] btn 下部按钮实例
+ *param[out] lbl 下部文本实例
+ */
+lv_obj_t * app_lv_ui_style_one_btn(lv_obj_t *parent, lv_obj_t **btn_c, lv_obj_t **lbl_c)
+{
+    APP_SYS_ASSERT(btn_c != NULL);
+    APP_SYS_ASSERT(lbl_c != NULL);
+    /* 下部按钮 */
+    lv_obj_t *btn = lv_obj_create(parent);
+    app_lv_ui_style_object(btn);
+    lv_obj_set_size(btn, LV_HOR_RES, 60);
+    lv_obj_set_style_pad_all(btn, 10, 0);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+    /* 中心按键 */
+    *btn_c = app_lv_ui_style_btn(btn);
+    lv_obj_set_size(*btn_c, LV_HOR_RES - 20, 40);
+    lv_obj_align(*btn_c, LV_ALIGN_CENTER, 0, 0);
+    *lbl_c = app_lv_ui_style_label_title(*btn_c);
+    lv_obj_align(*lbl_c, LV_ALIGN_CENTER, 0, 0);
+    return btn;
 }
 
 /*@brief     底部双按钮组
@@ -299,3 +323,20 @@ lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_co
     return bar;
 }
 
+/*@brief     渐变折现图表
+ *           无点折线图,水平线5等分,0~100百分比数据点,无刻度标签,固定宽高,24条数据
+ *param[in]  parent  父控件
+ */
+lv_obj_t * app_lv_ui_style_fade_chart(lv_obj_t *parent)
+{
+    lv_obj_t *chart = lv_chart_create(parent);
+    app_lv_ui_style_object(chart);
+    lv_obj_set_size(chart, LV_HOR_RES - 20, 120);
+    lv_obj_add_event_cb(chart, app_lv_ui_chart_fade_event_cb, LV_EVENT_ALL, NULL);
+    lv_obj_set_style_size(chart, 1, LV_PART_INDICATOR);
+    lv_chart_set_type(chart, LV_CHART_TYPE_LINE);
+    lv_chart_set_point_count(chart, 24);
+    lv_chart_set_div_line_count(chart, 5, 0);
+    lv_chart_set_update_mode(chart, LV_CHART_UPDATE_MODE_CIRCULAR);
+    return chart;
+}

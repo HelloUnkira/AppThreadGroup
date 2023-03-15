@@ -14,9 +14,13 @@ void app_lv_ui_event_default_config(bool enable);
  */
 void app_lv_ui_event_click_turn_back_cb(lv_event_t *e);
 
-/*@brief 滚轮事件自定义回调
+/*@brief 滚轮渐变蒙层回调
  */
 void app_lv_ui_roller_mask_event_cb(lv_event_t * e);
+
+/*@brief 折线图表下部渐变回调
+ */
+void app_lv_ui_chart_fade_event_cb(lv_event_t * e);
 
 /*@brief 场景内事件处理集合
  */

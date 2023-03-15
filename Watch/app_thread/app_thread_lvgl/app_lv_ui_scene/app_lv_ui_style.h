@@ -22,7 +22,7 @@ static inline lv_coord_t app_lv_ui_zoom_y(lv_coord_t y)
 }
 
 /*@brief    默认控件风格
- *          黑色背景,无边框
+ *          黑色背景,无边框,无阴影,无间隙
  *param[in] obj 控件
  */
 void app_lv_ui_style_object(lv_obj_t *obj);
@@ -74,13 +74,21 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
 lv_obj_t * app_lv_ui_style_label_title(lv_obj_t *parent);
 
 /*@brief     顶部风格
- *           左部按钮,右部时间,按钮返回上一层
+ *           左部按钮,左中部标题文本,右部时间文本,按钮返回上一层
  *param[in]  parent 父控件
- *param[out] btn   左上部按钮实例
- *param[out] title 左上部文本实例
+ *param[out] time  左中部时钟实例
+ *param[out] title 右上部文本实例
  *retval     顶部风格控件
  */
-lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **btn, lv_obj_t **title, lv_obj_t **time);
+lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **time, lv_obj_t **title);
+
+/*@brief     底部单按钮
+ *           无阴影,默认扩散,蓝色背景(按钮,内部字体22)
+ *param[in]  parent 父控件
+ *param[out] btn 下部按钮实例
+ *param[out] lbl 下部文本实例
+ */
+lv_obj_t * app_lv_ui_style_one_btn(lv_obj_t *parent, lv_obj_t **btn_c, lv_obj_t **lbl_c);
 
 /*@brief     底部双按钮组
  *           左部按钮,右部按钮,无阴影,默认扩散,蓝色背景(按钮,内部字体22)
@@ -100,7 +108,6 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
  */
 lv_obj_t * app_lv_ui_style_loading_spinner(lv_obj_t *parent, lv_coord_t size, lv_coord_t side);
 
-
 /*@brief     特效加载进度条
  *           默认加载范围0~100,边界色蓝色,指针渐变(蓝色,绿色),内部间隙4,边界间隙1,弧度45
  *param[in]  parent  父控件
@@ -109,5 +116,11 @@ lv_obj_t * app_lv_ui_style_loading_spinner(lv_obj_t *parent, lv_coord_t size, lv
  *param[in]  grad    加载方向
  */
 lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_coord_t height, lv_grad_dir_t grad);
+
+/*@brief     渐变折现图表
+ *           无点折线图,水平线5等分,0~100百分比数据点,无刻度标签,固定宽高,24条数据
+ *param[in]  parent  父控件
+ */
+lv_obj_t * app_lv_ui_style_fade_chart(lv_obj_t *parent);
 
 #endif

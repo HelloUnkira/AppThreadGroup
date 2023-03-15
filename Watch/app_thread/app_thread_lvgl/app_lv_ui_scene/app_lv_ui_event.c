@@ -257,14 +257,14 @@ void app_lv_ui_event_click_turn_back_cb(lv_event_t *e)
     }
 }
 
-/*@brief 滚轮事件自定义回调
+/*@brief 滚轮渐变蒙层回调
  */
 void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
 {
     lv_obj_t *obj = lv_event_get_target(e);
     /* 静态蒙层索引号 */
-    static lv_coord_t roller_mask_id_t = -1;   /* 顶部蒙层索引号 */
-    static lv_coord_t roller_mask_id_b = -1;   /* 底部蒙层索引号 */
+    static int16_t roller_mask_id_t = -1;   /* 顶部蒙层索引号 */
+    static int16_t roller_mask_id_b = -1;   /* 底部蒙层索引号 */
     /* 处理交互事件 */
     switch (lv_event_get_code(e)) {
     /* 覆盖检查事件 */
@@ -312,6 +312,89 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         app_mem_free(fade_mask_b);
         roller_mask_id_t = -1;
         roller_mask_id_b = -1;
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 折线图表下部渐变回调
+ */
+void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
+{
+    lv_obj_t * obj = lv_event_get_target(e);
+    /* 处理交互事件 */
+    switch (lv_event_get_code(e)) {
+    /* 控件绘制开始事件 */
+    case LV_EVENT_DRAW_PART_BEGIN: {
+        /* 获取事件绘制源 */
+        lv_obj_draw_part_dsc_t * draw_part_dsc = lv_event_get_draw_part_dsc(e);
+        /* 在绘制线条之前添加褪色区域 */
+        if (draw_part_dsc->part == LV_PART_ITEMS) {
+            /*  */
+            if (draw_part_dsc->p1 == 0 || draw_part_dsc->p2 == 0)
+                return;
+            /* 使用绘制蒙版覆盖出渐变效果 */
+            lv_coord_t height = lv_obj_get_height(obj);
+            lv_draw_mask_line_param_t line_mask_param = {0};
+            lv_draw_mask_fade_param_t fade_mask_param = {0};
+            /* 添加一个线条蒙版,保持线条下方的区域 */
+            lv_draw_mask_line_points_init(&line_mask_param,
+                                          draw_part_dsc->p1->x,
+                                          draw_part_dsc->p1->y,
+                                          draw_part_dsc->p2->x,
+                                          draw_part_dsc->p2->y, LV_DRAW_MASK_LINE_SIDE_BOTTOM);
+            /* 添加一个渐隐蒙版,透明底覆盖顶部 */
+            lv_draw_mask_fade_init(&fade_mask_param, &obj->coords,
+                                    LV_OPA_COVER,  obj->coords.y1 + height / 8,
+                                    LV_OPA_TRANSP, obj->coords.y2);
+            /* 添加绘制蒙版 */
+            int16_t line_mask_id = lv_draw_mask_add(&line_mask_param, NULL);
+            int16_t fade_mask_id = lv_draw_mask_add(&fade_mask_param, NULL);
+            /* 绘制一个受蒙版影响的矩形 */
+            lv_draw_rect_dsc_t draw_rect_dsc = {0};
+            lv_draw_rect_dsc_init(&draw_rect_dsc);
+            draw_rect_dsc.bg_color = draw_part_dsc->line_dsc->color;
+            draw_rect_dsc.bg_opa = LV_OPA_COVER;
+            /* 计算绘制域 */
+            lv_area_t area = {
+                .x1 = draw_part_dsc->p1->x,
+                .x2 = draw_part_dsc->p2->x - 1,
+                .y1 = LV_MIN(draw_part_dsc->p1->y, draw_part_dsc->p2->y),
+                .y2 = obj->coords.y2,
+            };
+            /* 绘制区域 */
+            lv_draw_rect(draw_part_dsc->draw_ctx, &draw_rect_dsc, &area);
+            /* 移除绘制蒙版 */
+            lv_draw_mask_free_param(&line_mask_param);
+            lv_draw_mask_free_param(&fade_mask_param);
+            lv_draw_mask_remove_id(line_mask_id);
+            lv_draw_mask_remove_id(fade_mask_id);
+        }
+        /* 刷新背景图的分割线 */
+        if(draw_part_dsc->part == LV_PART_MAIN) {
+            /*  */
+            if (draw_part_dsc->line_dsc == NULL || draw_part_dsc->p1 == NULL || draw_part_dsc->p2 == NULL)
+                return;
+            /* 垂直线 */
+            if (draw_part_dsc->p1->x == draw_part_dsc->p2->x) {
+                /* 虚线分界线,根据draw_part_dsc->id区分是哪一条虚线,这里统一不使用 */
+                draw_part_dsc->line_dsc->width = 1;
+                draw_part_dsc->line_dsc->dash_gap = 1;
+                draw_part_dsc->line_dsc->dash_width = 1;
+                draw_part_dsc->line_dsc->color = lv_color_white();
+                draw_part_dsc->line_dsc->opa = LV_OPA_10;
+            /* 水平线 */
+            } else {
+                /* 虚线分界线,根据draw_part_dsc->id区分是哪一条虚线,这里统一不使用 */
+                draw_part_dsc->line_dsc->width = 1;
+                draw_part_dsc->line_dsc->dash_gap = 1;
+                draw_part_dsc->line_dsc->dash_width = 1;
+                draw_part_dsc->line_dsc->color = lv_color_white();
+                draw_part_dsc->line_dsc->opa = LV_OPA_10;
+            }
+        }
         break;
     }
     default:
