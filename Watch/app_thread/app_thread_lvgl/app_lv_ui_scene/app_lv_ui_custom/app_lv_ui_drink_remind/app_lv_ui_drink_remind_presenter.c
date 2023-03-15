@@ -12,7 +12,6 @@
  */
 static void app_lv_ui_null(void)
 {
-    app_module_countdown_stop();
 }
 
 app_lv_ui_drink_remind_presenter_t app_lv_ui_drink_remind_presenter = {

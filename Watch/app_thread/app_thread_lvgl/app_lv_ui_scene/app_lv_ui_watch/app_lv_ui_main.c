@@ -46,13 +46,9 @@ static void app_lv_ui_main_show(void *scene)
         lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Main");
         lv_obj_center(app_lv_ui_res_local->label);
         /* 初始化显示动画 */
-        lv_anim_init(&app_lv_ui_res_local->anim);
-        lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
-        lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
-        lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, 0);
-        lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 100);
-        lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
-        lv_anim_start(&app_lv_ui_res_local->anim);
+        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+                                   &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                    LV_ANIM_REPEAT_INFINITE, 0, 100, 1000);
     }
     app_lv_scene_main.self = app_lv_ui_res_local == NULL ? NULL :
                              app_lv_ui_res_local->scene;

@@ -50,6 +50,27 @@ lv_obj_t * app_lv_ui_style_scene(void)
     return scene;
 }
 
+/*@brief    默认控件全局刷新动画
+ *param[in] scene  界面
+ *param[in] anim   动画
+ *param[in] exec   动画刷新回调
+ *param[in] repeat 更新次数
+ *param[in] start  起始值
+ *param[in] end    结束值
+ *param[in] period 周期
+ */
+void app_lv_ui_style_object_anim(lv_obj_t *obj, lv_anim_t *anim, lv_anim_exec_xcb_t exec, uint16_t repeat, int32_t start, int32_t end, uint32_t period)
+{
+    /* 初始化显示动画 */
+    lv_anim_init(anim);
+    lv_anim_set_var(anim, obj);
+    lv_anim_set_exec_cb(anim, exec);
+    lv_anim_set_repeat_count(anim, repeat);
+    lv_anim_set_values(anim, start, end);
+    lv_anim_set_time(anim, period);
+    lv_anim_start(anim);
+}
+
 /*@brief     文本标签
  *           黑色背景,无边框,白色滚动长文
  *param[in]  parent 父控件

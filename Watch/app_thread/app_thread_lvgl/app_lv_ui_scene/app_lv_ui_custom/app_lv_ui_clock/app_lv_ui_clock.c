@@ -107,13 +107,9 @@ static void app_lv_ui_clock_show(void *scene)
         app_lv_ui_res_local->roller_s = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_s, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 初始化显示动画 */
-        lv_anim_init(&app_lv_ui_res_local->anim);
-        lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
-        lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
-        lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, LV_ANIM_REPEAT_INFINITE);
-        lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 3);
-        lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
-        lv_anim_start(&app_lv_ui_res_local->anim);
+        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+                                   &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                    LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
     }
     app_lv_scene_clock.self = app_lv_ui_res_local == NULL ? NULL :
                               app_lv_ui_res_local->scene;

@@ -61,13 +61,9 @@ static void app_lv_ui_drink_remind_show(void *scene)
         lv_obj_add_event_cb(btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
         lv_label_set_text(lbl_c, "Confirm");
         /* 初始化显示动画 */
-        lv_anim_init(&app_lv_ui_res_local->anim);
-        lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
-        lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
-        lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, LV_ANIM_REPEAT_INFINITE);
-        lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 10);
-        lv_anim_set_time(&app_lv_ui_res_local->anim, 1000);
-        lv_anim_start(&app_lv_ui_res_local->anim);
+        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+                                   &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                    LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }
     app_lv_scene_drink_remind.self = app_lv_ui_res_local == NULL ? NULL :
                                      app_lv_ui_res_local->scene;

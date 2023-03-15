@@ -104,13 +104,9 @@ static void app_lv_ui_watch_show(void *scene)
                 app_lv_ui_res_local->bar = app_lv_ui_style_loading_bar(app_lv_ui_res_local->scene, 200, 20, LV_GRAD_DIR_HOR);
                 lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
                 /* 初始化显示动画 */
-                lv_anim_init(&app_lv_ui_res_local->anim);
-                lv_anim_set_var(&app_lv_ui_res_local->anim, app_lv_ui_res_local->scene);
-                lv_anim_set_exec_cb(&app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler);
-                lv_anim_set_repeat_count(&app_lv_ui_res_local->anim, 0);
-                lv_anim_set_values(&app_lv_ui_res_local->anim, 0, 100);
-                lv_anim_set_time(&app_lv_ui_res_local->anim, 2000);
-                lv_anim_start(&app_lv_ui_res_local->anim);
+                app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+                                           &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                            0, 0, 100, 2000);
             }
         }
     }

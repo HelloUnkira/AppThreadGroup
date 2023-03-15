@@ -27,6 +27,18 @@ static inline lv_coord_t app_lv_ui_zoom_y(lv_coord_t y)
  */
 void app_lv_ui_style_object(lv_obj_t *obj);
 
+/*@brief    默认全局刷新动画
+ *          立即初始化并启动,用于数据资源常态刷新
+ *param[in] scene  界面
+ *param[in] anim   动画
+ *param[in] exec   动画刷新回调
+ *param[in] repeat 更新次数
+ *param[in] start  起始值
+ *param[in] end    结束值
+ *param[in] period 周期
+ */
+void app_lv_ui_style_object_anim(lv_obj_t *obj, lv_anim_t *anim, lv_anim_exec_xcb_t exec, uint16_t repeat, int32_t start, int32_t end, uint32_t period);
+
 /*@brief 默认界面风格
  *       无主题风格,全屏幕,黑色背景全覆盖,无边界,无内部间隙
  *retval 返回场景(窗口,界面)
