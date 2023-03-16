@@ -51,6 +51,12 @@ lv_obj_t * app_lv_ui_style_scene(void);
  */
 lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent);
 
+/*@brief     大号文本标签
+ *           黑色背景,无边框,白色滚动长文
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent);
+
 /*@brief     默认按钮
  *           蓝色背景,无边框,标准弧度45
  *param[in]  parent 父控件
@@ -78,6 +84,20 @@ lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent);
  *param[in]  vis_row 滚轮默认显示个数
  */
 lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row);
+
+/*@brief     特效圆环
+ *           无指示点,禁用点击,4级暗色,常规旋转
+ *param[in]  parent   父控件
+ *param[in]  size     周长
+ *param[in]  width    环长
+ *param[in]  color    变色
+ *param[in]  min      最小值
+ *param[in]  max      最大值
+ *param[in]  start    起点值
+ *param[in]  end      结束值
+ *param[in]  rotation 旋转点
+ */
+lv_obj_t * app_lv_ui_style_arc(lv_obj_t *parent, lv_coord_t size, lv_coord_t width, lv_palette_t color, int16_t min, int16_t max, uint16_t start, uint16_t end, uint16_t rotation);
 
 /*@brief     顶部居中标题标签
  *           黑色背景,无边框,白色滚动长文

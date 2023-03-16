@@ -22,7 +22,7 @@ static uint32_t app_lv_ui_get_cur_cal(void)
 {
     /* 今日当前卡路里 */
     static uint32_t count = 0;
-    return count++ % 50;
+    return count++ % 51;
 }
 
 /*@brief lvgl ui数据交互回调
@@ -39,7 +39,7 @@ static uint32_t app_lv_ui_get_cur_step(void)
 {
     /* 今日当前步数 */
     static uint32_t count = 0;
-    return count++ % 50;
+    return count++ % 51;
 }
 
 /*@brief lvgl ui数据交互回调
@@ -56,7 +56,7 @@ static uint32_t app_lv_ui_get_cur_walk_cnt(void)
 {
     /* 今日当前走动达标次数 */
     static uint32_t count = 0;
-    return count++ % 12;
+    return count++ % 13;
 }
 
 /*@brief lvgl ui数据交互回调
@@ -123,7 +123,7 @@ static uint16_t app_lv_ui_get_rest(void)
     union {
         uint8_t  data_u8[2];
         uint16_t data_u16;
-    } data = {.data_u8[0] = 114, .data_u8[1] = 514};
+    } data = {.data_u8[0] = 12, .data_u8[1] = 34};
     return 114.514;
 }
 

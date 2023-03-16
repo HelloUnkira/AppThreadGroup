@@ -88,6 +88,19 @@ lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent)
     return label;
 }
 
+/*@brief     大号文本标签
+ *           黑色背景,无边框,白色滚动长文
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent)
+{
+    #define app_lv_ui_style_label_large_font  &lv_font_montserrat_22
+    
+    lv_obj_t *label = app_lv_ui_style_label(parent);
+    lv_obj_set_style_text_font(label, app_lv_ui_style_label_large_font, 0);
+    return label;
+}
+
 /*@brief     默认按钮
  *           蓝色背景,无边框,标准弧度45
  *param[in]  parent 父控件
@@ -175,6 +188,37 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
     lv_roller_set_visible_row_count(roller, vis_row);
     lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
     return roller;
+}
+
+/*@brief     特效圆环
+ *           无指示点,禁用点击,4级暗色,常规旋转
+ *param[in]  parent   父控件
+ *param[in]  size     周长
+ *param[in]  width    环长
+ *param[in]  color    变色
+ *param[in]  min      最小值
+ *param[in]  max      最大值
+ *param[in]  start    起点值
+ *param[in]  end      结束值
+ *param[in]  rotation 旋转点
+ */
+lv_obj_t * app_lv_ui_style_arc(lv_obj_t *parent, lv_coord_t size, lv_coord_t width, lv_palette_t color, int16_t min, int16_t max, uint16_t start, uint16_t end, uint16_t rotation)
+{
+    lv_obj_t *arc = lv_arc_create(parent);
+    app_lv_ui_style_object(arc);
+    lv_obj_remove_style(arc, NULL, LV_PART_KNOB);
+    lv_obj_clear_flag(arc, LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_set_size(arc, size, size);
+    lv_obj_set_style_bg_opa(arc, LV_OPA_0, 0);
+    lv_obj_set_style_arc_width(arc, width, 0);
+    lv_obj_set_style_arc_width(arc, width, LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(arc, lv_palette_darken(color, 1), LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(arc, lv_palette_darken(color, 4), 0);
+    lv_arc_set_mode(arc, LV_ARC_MODE_NORMAL);
+    lv_arc_set_range(arc, min, max);
+    lv_arc_set_bg_angles(arc, start, end);
+    lv_arc_set_rotation(arc, rotation);
+    return arc;
 }
 
 /*@brief     顶部居中标题标签
