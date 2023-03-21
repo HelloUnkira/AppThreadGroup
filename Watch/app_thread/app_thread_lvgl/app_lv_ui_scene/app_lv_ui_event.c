@@ -380,6 +380,7 @@ void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
             /* 垂直线 */
             if (draw_part_dsc->p1->x == draw_part_dsc->p2->x) {
                 /* 虚线分界线,根据draw_part_dsc->id区分是哪一条虚线,这里统一不使用 */
+                // if (draw_part_dsc->id == 0);
                 draw_part_dsc->line_dsc->width = 1;
                 draw_part_dsc->line_dsc->dash_gap = 1;
                 draw_part_dsc->line_dsc->dash_width = 1;
@@ -388,6 +389,7 @@ void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
             /* 水平线 */
             } else {
                 /* 虚线分界线,根据draw_part_dsc->id区分是哪一条虚线,这里统一不使用 */
+                // if (draw_part_dsc->id == 0);
                 draw_part_dsc->line_dsc->width = 1;
                 draw_part_dsc->line_dsc->dash_gap = 1;
                 draw_part_dsc->line_dsc->dash_width = 1;
