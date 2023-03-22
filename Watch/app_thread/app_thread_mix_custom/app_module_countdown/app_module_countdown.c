@@ -75,9 +75,8 @@ void app_module_countdown_stop(void)
  */
 void app_module_countdown_xmsec_update(void)
 {
-    app_mutex_take(&app_module_countdown_mutex);
-    app_module_countdown_t countdown = app_module_countdown;
-    app_mutex_give(&app_module_countdown_mutex);
+    app_module_countdown_t countdown = {0};
+    app_module_countdown_get(&countdown);
     if (!countdown.onoff)
         return;
     /*  */
@@ -111,11 +110,9 @@ void app_module_countdown_xmsec_update(void)
     countdown.second = seconds % 60;
     countdown.minute = seconds / 60 % 60;
     countdown.hour   = seconds / 60 / 60 % 60;
-    app_mutex_take(&app_module_countdown_mutex);
-    app_module_countdown = countdown;
-    app_mutex_give(&app_module_countdown_mutex);
+    app_module_countdown_set(&countdown);
     
-    #if APP_MODULE_CHECK
+    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("countdown:%u:%u:%u:%u - %u",
                       countdown.hour,countdown.minute,countdown.second,
                       countdown.msec,countdown.onoff);

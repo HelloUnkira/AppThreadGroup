@@ -98,7 +98,7 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
         /* 即使它是关闭状态也需要继续更新 */
         if (!alarm->onoff || event == ~0)
             break;
-        #if APP_MODULE_CHECK
+        #if APP_SYS_LOG_MODULE_CHECK
         app_module_clock_t *clock_now = NULL;
         APP_SYS_LOG_INFO("event:%u", event);
         APP_SYS_LOG_INFO("clock:");
@@ -161,7 +161,7 @@ void app_module_alarm_update(app_module_alarm_t *alarm, app_module_clock_t *cloc
         /* 即使它是关闭状态也需要继续更新 */
         if (!alarm->onoff || event == ~0)
             break;
-        #if APP_MODULE_CHECK
+        #if APP_SYS_LOG_MODULE_CHECK
         app_module_clock_t *clock_now = NULL;
         APP_SYS_LOG_INFO("event:%u", event);
         APP_SYS_LOG_INFO("clock:");

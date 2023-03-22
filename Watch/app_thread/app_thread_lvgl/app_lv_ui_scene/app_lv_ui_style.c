@@ -179,7 +179,8 @@ lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char
     app_lv_ui_style_object(roller);
     lv_obj_add_event_cb(roller, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_set_width(roller, width);
-    lv_obj_set_style_bg_color(roller, lv_color_black(), LV_PART_SELECTED);
+    lv_obj_set_style_bg_opa(roller, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_bg_opa(roller, LV_OPA_TRANSP, LV_PART_SELECTED);
     lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolcus_font, 0);
     lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolsel_font, LV_PART_SELECTED);
     lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);

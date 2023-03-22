@@ -2,14 +2,61 @@
 #define APP_SYS_LOG_H
 
 /* 线程检查与线程子模组检查 */
-#define APP_THREAD_CHECK    1
-#define APP_MODULE_CHECK    1
+#define APP_SYS_LOG_THREAD_CHECK    1
+#define APP_SYS_LOG_MODULE_CHECK    1
 
 /* 全局宏控开关及其等级 */
 #define APP_SYS_LOG_GLOBAL_STATUS       1   /* 1:ENABLE,0:DISABLE */
 
 /* 全局打印宏控检测,局部打印宏控检测 */
 #if (APP_SYS_LOG_GLOBAL_STATUS && APP_SYS_LOG_LOCAL_STATUS)
+/* DEBUG */
+#if APP_SYS_LOG_LOCAL_LEVEL <= 0
+#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#endif
+/* INFO */
+#if APP_SYS_LOG_LOCAL_LEVEL <= 1
+#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(0, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#endif
+/* WARN */
+#if APP_SYS_LOG_LOCAL_LEVEL <= 2
+#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(1, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(0, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#endif
+/* ERROR */
+#if APP_SYS_LOG_LOCAL_LEVEL <= 3
+#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(1, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#endif
+/* NONE */
+#endif
+
+#ifndef APP_SYS_LOG_DEBUG
+#define APP_SYS_LOG_DEBUG(...)
+#endif
+#ifndef APP_SYS_LOG_DEBUG_RAW
+#define APP_SYS_LOG_DEBUG_RAW(...)
+#endif
+#ifndef APP_SYS_LOG_INFO
+#define APP_SYS_LOG_INFO(...)
+#endif
+#ifndef APP_SYS_LOG_INFO_RAW
+#define APP_SYS_LOG_INFO_RAW(...)
+#endif
+#ifndef APP_SYS_LOG_WARN
+#define APP_SYS_LOG_WARN(...)
+#endif
+#ifndef APP_SYS_LOG_WARN_RAW
+#define APP_SYS_LOG_WARN_RAW(...)
+#endif
+#ifndef APP_SYS_LOG_ERROR
+#define APP_SYS_LOG_ERROR(...)
+#endif
+#ifndef APP_SYS_LOG_ERROR_RAW
+#define APP_SYS_LOG_ERROR_RAW(...)
+#endif
 
 /* 控制打印集合 */
 /* 无格式打印:{内容} */
@@ -27,52 +74,6 @@
  *@param[in] ...    日志信息信息变参
  */
 void app_sys_log_msg(unsigned char status, char flag, const char *file, const char *func, uint32_t line, const char *format, ...);
-
-/* DEBUG */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 0
-#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#else
-#define APP_SYS_LOG_DEBUG(...)
-#define APP_SYS_LOG_DEBUG_RAW(...)
-#endif
-/* INFO */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 1
-#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(0, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#else
-#define APP_SYS_LOG_INFO(...)
-#define APP_SYS_LOG_INFO_RAW(...)
-#endif
-/* WARN */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 2
-#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(1, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(0, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#else
-#define APP_SYS_LOG_WARN(...)
-#define APP_SYS_LOG_WARN_RAW(...)
-#endif
-/* ERROR */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 3
-#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(1, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#else
-#define APP_SYS_LOG_ERROR(...)
-#define APP_SYS_LOG_ERROR_RAW(...)
-#endif
-
-#else
-
-#define APP_SYS_LOG_DEBUG(...)
-#define APP_SYS_LOG_DEBUG_RAW(...)
-#define APP_SYS_LOG_INFO(...)
-#define APP_SYS_LOG_INFO_RAW(...)
-#define APP_SYS_LOG_WARN(...)
-#define APP_SYS_LOG_WARN_RAW(...)
-#define APP_SYS_LOG_ERROR(...)
-#define APP_SYS_LOG_ERROR_RAW(...)
-
-#endif
 
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用

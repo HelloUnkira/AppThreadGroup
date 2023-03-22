@@ -45,7 +45,7 @@ void app_thread_mix_custom_routine(void)
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
-        #if APP_THREAD_CHECK
+        #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread mix custom recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
@@ -110,7 +110,7 @@ void app_thread_mix_custom_routine(void)
                 break;
             }
             default: {
-                #if APP_THREAD_CHECK
+                #if APP_SYS_LOG_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread mix custom pipe recv a unknown package");
                 APP_SYS_LOG_ERROR("package thread:%u", package.thread);
                 APP_SYS_LOG_ERROR("package module:%u", package.module);

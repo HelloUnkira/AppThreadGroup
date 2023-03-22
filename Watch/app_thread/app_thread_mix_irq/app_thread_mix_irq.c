@@ -27,6 +27,7 @@
 #include "app_thread_mix_irq.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
+#include "app_module_vibrate.h"
 
 /*@brief 混合中断线程模组初始化
  */
@@ -48,7 +49,7 @@ void app_thread_mix_irq_routine(void)
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
-        #if APP_THREAD_CHECK
+        #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread mix irq recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
@@ -76,8 +77,13 @@ void app_thread_mix_irq_routine(void)
                 }
                 break;
             }
+            case app_thread_mix_irq_vibrate: {
+                if (package.event == app_thread_mix_irq_vibrate_msec_update)
+                    app_module_vibrate_msec_update();
+                break;
+            }
             default: {
-                #if APP_THREAD_CHECK
+                #if APP_SYS_LOG_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread mix irq pipe recv a unknown package");
                 APP_SYS_LOG_ERROR("package thread:%u", package.thread);
                 APP_SYS_LOG_ERROR("package module:%u", package.module);

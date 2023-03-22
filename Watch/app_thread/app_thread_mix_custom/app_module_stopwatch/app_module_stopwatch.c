@@ -75,9 +75,8 @@ void app_module_stopwatch_stop(void)
  */
 void app_module_stopwatch_xmsec_update(void)
 {
-    app_mutex_take(&app_module_stopwatch_mutex);
-    app_module_stopwatch_t stopwatch = app_module_stopwatch;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_module_stopwatch_t stopwatch = {0};
+    app_module_stopwatch_get(&stopwatch);
     if (!stopwatch.onoff)
         return;
     /*  */
@@ -93,11 +92,9 @@ void app_module_stopwatch_xmsec_update(void)
     stopwatch.second = seconds % 60;
     stopwatch.minute = seconds / 60 % 60;
     stopwatch.hour   = seconds / 60 / 60 % 60;
-    app_mutex_take(&app_module_stopwatch_mutex);
-    app_module_stopwatch = stopwatch;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_module_stopwatch_set(&stopwatch);
     
-    #if APP_MODULE_CHECK
+    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("stopwatch:%u:%u:%u:%u",
                       stopwatch.hour,stopwatch.minute,stopwatch.second,
                       stopwatch.msec);

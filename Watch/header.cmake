@@ -38,6 +38,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_timer
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_clock
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_vibrate
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_alarm
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_countdown

@@ -55,7 +55,7 @@ void app_thread_lvgl_routine(void)
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
-        #if APP_THREAD_CHECK
+        #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread lvgl recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
@@ -119,9 +119,12 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(false);
                     /* 做些什么:测试代码 */
+                    #if 0
                     lv_obj_t *img = lv_img_create(lv_scr_act());
                     lv_img_set_src(img, "/:test_find_phone.png");
                     lv_obj_center(img);
+                    #else
+                    #endif
                 #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
@@ -160,7 +163,7 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             default: {
-                #if APP_THREAD_CHECK
+                #if APP_SYS_LOG_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread lvgl pipe recv a unknown package");
                 APP_SYS_LOG_ERROR("package thread:%u", package.thread);
                 APP_SYS_LOG_ERROR("package module:%u", package.module);

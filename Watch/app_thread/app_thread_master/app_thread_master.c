@@ -75,7 +75,7 @@ void app_thread_master_routine(void)
     /* 主流程 */
     while (true) {
         app_sem_take(send_sem);
-        #if APP_THREAD_CHECK
+        #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread masther recv too much package:%u",
                               app_sys_pipe_package_num(send_pipe));
