@@ -364,7 +364,7 @@ void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
                 .y1 = LV_MIN(draw_part_dsc->p1->y, draw_part_dsc->p2->y),
                 .y2 = obj->coords.y2,
             };
-            #if 0
+            #if 1
             /* 绘制区域 */
             lv_draw_rect(draw_part_dsc->draw_ctx, &draw_rect_dsc, &area);
             #else

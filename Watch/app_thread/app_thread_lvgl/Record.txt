@@ -1,0 +1,2 @@
+问题记录:
+1.lv_roller在LV_ROLLER_MODE_INFINITE上使用有问题
