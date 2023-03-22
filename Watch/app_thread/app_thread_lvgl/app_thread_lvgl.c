@@ -114,7 +114,7 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                #if 0
+                #if 1
                     /* 禁用超时回退 */
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(false);
