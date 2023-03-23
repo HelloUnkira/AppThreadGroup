@@ -13,7 +13,7 @@
 #include "app_module_system.h"
 
 #include "lvgl.h"
-#include "app_lv_driver.h"
+#include "app_lv_drv.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
 #include "app_lv_ui_scene.h"

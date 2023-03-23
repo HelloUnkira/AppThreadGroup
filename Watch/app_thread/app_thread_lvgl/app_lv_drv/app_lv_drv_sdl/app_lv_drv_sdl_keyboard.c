@@ -4,7 +4,9 @@
 
 #include "lvgl.h"
 #include "lv_drv_conf.h"
-#include <SDL2/SDL.h>
+#include "app_lv_drv.h"
+
+#if APP_LV_DRV_USE_SDL
 
 static uint32_t app_lv_keyboard_key;
 static lv_indev_state_t app_lv_keyboard_state;
@@ -91,3 +93,5 @@ void app_lv_keyboard_handler(SDL_Event *event)
         break;
     }
 }
+
+#endif

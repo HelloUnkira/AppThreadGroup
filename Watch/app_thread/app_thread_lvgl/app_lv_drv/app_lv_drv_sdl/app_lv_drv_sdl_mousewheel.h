@@ -1,5 +1,5 @@
-#ifndef APP_LV_MOUSEWHEEL_H
-#define APP_LV_MOUSEWHEEL_H
+#ifndef APP_LV_DRV_SDL_MOUSEWHEEL_H
+#define APP_LV_DRV_SDL_MOUSEWHEEL_H
 
 /*@brief lvgl 鼠标滑轮初始化
  */

@@ -12,13 +12,10 @@
 #include "app_module_system.h"
 
 #include "lvgl.h"
-#include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
-#include "app_lv_mouse.h"
-#include "app_lv_mousewheel.h"
-#include "app_lv_keyboard.h"
-#include "app_lv_display.h"
-#include "app_lv_mouse_icon.h"
+#include "app_lv_drv.h"
+
+#if APP_LV_DRV_USE_SDL
 
 static bool app_lv_driver_shutdown = false;
 static lv_group_t *app_lv_driver_kb_group = NULL;
@@ -159,3 +156,4 @@ void app_lv_driver_handler(void)
     }
 }
 
+#endif

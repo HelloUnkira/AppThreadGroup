@@ -4,7 +4,9 @@
     
 #include "lvgl.h"
 #include "lv_drv_conf.h"
-#include <SDL2/SDL.h>
+#include "app_lv_drv.h"
+
+#if APP_LV_DRV_USE_SDL
 
 static bool app_lv_mousewheel_status = false;
 static int16_t app_lv_mousewheel_enc_diff = 0;
@@ -76,3 +78,5 @@ void app_lv_mousewheel_handler(SDL_Event *event)
         break;
     }
 }
+
+#endif

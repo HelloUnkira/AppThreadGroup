@@ -15,7 +15,7 @@
 #include "app_module_system.h"
 
 #include "lvgl.h"
-#include "app_lv_mouse.h"
+#include "app_lv_drv.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_check_time.h"

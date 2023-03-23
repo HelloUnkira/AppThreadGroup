@@ -38,8 +38,18 @@ void app_lv_scene_sched(app_lv_scene_t *scene)
     }
 }
 
+/*@brief      获取次上层显示场景
+ *@param[out] scene 场景(不可为空)
+ */
+void app_lv_scene_get_last(app_lv_scene_t **scene)
+{
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(app_lv_scene_num > 1);
+    *scene = &app_lv_ui_scene[app_lv_scene_num - 2];
+}
+
 /*@brief      获取最上层显示场景
- *@param[out] scene 场景
+ *@param[out] scene 场景(不可为空)
  */
 void app_lv_scene_get_top(app_lv_scene_t **scene)
 {

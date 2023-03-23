@@ -16,13 +16,8 @@
 #include "app_module_system.h"
 
 #include "lvgl.h"
-#include <SDL2/SDL.h>
 #include "lv_drv_conf.h"
-#include "app_lv_mouse.h"
-#include "app_lv_mousewheel.h"
-#include "app_lv_keyboard.h"
-#include "app_lv_display.h"
-#include "app_lv_driver.h"
+#include "app_lv_drv.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_event.h"
@@ -35,11 +30,11 @@
  */
 void app_thread_lvgl_ready(void)
 {
-    /* 初始化框架 */
+    /* 框架初始化 */
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
     app_lv_driver_ready();
-    /* 内部调用 */
+    /* 模组初始化 */
     app_lv_ui_check_time_ready();
 }
 

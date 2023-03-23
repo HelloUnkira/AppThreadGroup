@@ -4,7 +4,9 @@
 
 #include "lvgl.h"
 #include "lv_drv_conf.h"
-#include <SDL2/SDL.h>
+#include "app_lv_drv.h"
+
+#if APP_LV_DRV_USE_SDL
 
 typedef struct {
     SDL_Window   *window;
@@ -215,3 +217,5 @@ bool app_lv_display_shutdown(void)
 {
     return app_lv_display_quit;
 }
+
+#endif

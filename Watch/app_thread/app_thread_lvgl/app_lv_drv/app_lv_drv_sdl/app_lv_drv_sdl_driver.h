@@ -1,5 +1,7 @@
-#ifndef APP_LV_DRIVER_H
-#define APP_LV_DRIVER_H
+#ifndef APP_LV_DRV_SDL_DRIVER_H
+#define APP_LV_DRV_SDL_DRIVER_H
+
+#if APP_LV_DRV_USE_SDL
 
 /*@brief lvgl输入设备组
  *retval 输入设备组
@@ -20,5 +22,7 @@ void app_lv_driver_ready(void);
  *       内部使用: 被lvgl线程使用
  */
 void app_lv_driver_handler(void);
+
+#endif
 
 #endif
