@@ -2,6 +2,8 @@
 #include "app_func_test.h"
 
 #if 0
+#elif APP_OS_IS_WINDOWS
+#error "arch os not adaptor yet"
 #elif APP_OS_IS_LINUX
 
 #include <unistd.h> 

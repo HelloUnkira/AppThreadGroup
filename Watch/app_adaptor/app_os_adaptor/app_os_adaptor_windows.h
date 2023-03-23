@@ -1,0 +1,162 @@
+/* 实现目标:
+ *     APP需要对系统进行的封装体
+ *     APP会在一个专门的地点和时刻准备这些资源
+ *     对所有平台做一个全通配的最低配置
+ */
+
+#include "app_std_lib.h"
+#include "app_os_adaptor.h"
+
+#if APP_OS_IS_WINDOWS
+
+/* 屏蔽警告:参数可能为0 */
+#pragma warning(disable: 6387)
+
+ /*@brief        准备与执行线程
+  *              创建一个线程并启动(线程创建时立即启动)
+  *@param[in]    thread 静态实例
+  */
+void app_thread_process(app_thread_t* thread)
+{
+    thread->stacksize = 8 * 1024 * 1024;
+    // thread->handle = _beginthreadex(NULL,
+                                    // thread->stacksize, /* 堆栈大小 */
+                                    // thread->routine,   /* 线程体 */
+                                    // thread->args,      /* 线程参数 */
+                                    // CREATE_SUSPENDED,
+                                    // NULL);
+    DWORD ThreadID = 0;
+    thread->handle = CreateThread(NULL,
+        thread->stacksize, /* 堆栈大小 */
+        (LPTHREAD_START_ROUTINE)
+        thread->routine,   /* 线程体 */
+        thread->args,      /* 线程参数 */
+        CREATE_SUSPENDED,
+        &ThreadID);
+    SetThreadPriority(thread->handle, thread->priority);
+    ResumeThread(thread->handle);
+}
+
+/*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
+ */
+bool app_os_not_in_irq(void)
+{
+    return true;
+}
+
+/*@brief        创建一个信号量并准备好使用
+ *@param[in]    sem 静态实例
+ */
+void app_sem_process(app_sem_t* sem)
+{
+    sem->sem = CreateSemaphore(NULL, 0, 100, NULL);
+}
+
+/*@brief        获取一个信号量
+ *@param[in]    sem 静态实例
+ */
+void app_sem_take(app_sem_t* sem)
+{
+    WaitForSingleObject(sem->sem, INFINITE);
+}
+
+/*@brief        发布一个信号量
+ *@param[in]    sem 静态实例
+ */
+void app_sem_give(app_sem_t* sem)
+{
+    ReleaseSemaphore(sem->sem, 1, NULL);
+}
+
+/*@brief        创建一个互斥锁并准备好使用
+ *@param[in]    mutex 静态实例
+ */
+void app_mutex_process(app_mutex_t* mutex)
+{
+    mutex->mutex = CreateMutex(NULL, FALSE, NULL);
+}
+
+/*@brief        抢占一个互斥锁(中断环境不可调用)
+ *@param[in]    mutex 静态实例
+ */
+void app_mutex_take(app_mutex_t* mutex)
+{
+    if (app_os_not_in_irq())
+        WaitForSingleObject(mutex->mutex, INFINITE);
+}
+
+/*@brief        释放一个互斥锁(中断环境不可调用)
+ *@param[in]    mutex 静态实例
+ */
+void app_mutex_give(app_mutex_t* mutex)
+{
+    if (app_os_not_in_irq())
+        ReleaseMutex(mutex->mutex);
+}
+
+/*@brief        内存分配
+ *@param[in]    size 分配空间字节大小
+ #@retval       分配空间,失败为NULL
+ */
+void* app_mem_alloc(uint32_t size)
+{
+    return malloc(size);
+}
+
+/*@brief        内存分配
+ *@param[in]    pointer 分配空间回收
+ *@param[in]    size    分配空间字节大小
+ #@retval       分配空间,失败为NULL
+ */
+void* app_mem_realloc(void* pointer, uint32_t size)
+{
+    return realloc(pointer, size);
+}
+
+/*@brief        内存释放
+ *@param[in]    pointer 分配空间
+ */
+void app_mem_free(void* pointer)
+{
+    free(pointer);
+}
+
+/*@brief 临界区保护(注意:当且仅当必要的使用)
+ */
+void app_critical_enter(void)
+{
+    /* Windows不需要临界区保护,因为资源不会被中断打断 */
+}
+
+/*@brief 临界区退出(注意:当且仅当必要的使用)
+ */
+void app_critical_exit(void)
+{
+    /* Windows不需要临界区保护,因为资源不会被中断打断 */
+}
+
+/*@brief 毫秒延时
+ */
+void app_delay_ms(uint32_t ms)
+{
+    /* 延时可能会涉及到调度 */
+    /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
+    Sleep(ms);
+}
+
+/*@brief 微秒延时
+ */
+void app_delay_us(uint32_t us)
+{
+    /* 延时可能会涉及到调度 */
+    /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
+}
+
+/*@brief 重启
+ */
+void app_os_reset(void)
+{
+    exit(-1);
+}
+
+#endif
