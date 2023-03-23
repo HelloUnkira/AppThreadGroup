@@ -22,7 +22,7 @@ typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_check_time,            /* UI场景计时检查 */
     /* 下述事件对应于特定场景内需要的事件 */
     app_thread_lvgl_ui_countdown_remind,            /* 倒计时提醒事件 */
-    app_thread_lvgl_ui_drink_remind,                /* 喝水提醒事件 */
+    app_thread_lvgl_ui_remind_drink,                /* 喝水提醒事件 */
 } app_thread_lvgl_ui_scene_event;
 
 /* lvgl:tick */

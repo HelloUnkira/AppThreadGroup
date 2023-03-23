@@ -11,8 +11,8 @@
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 
-#include "app_lv_ui_drink_remind.h"
-#include "app_lv_ui_drink_remind_presenter.h"
+#include "app_lv_ui_remind_drink.h"
+#include "app_lv_ui_remind_drink_presenter.h"
 
 #include "app_lv_ui_clock_presenter.h"
 
@@ -40,7 +40,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 /*@brief     界面显示
  *@param[in] scene 场景
  */
-static void app_lv_ui_drink_remind_show(void *scene)
+static void app_lv_ui_remind_drink_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
@@ -65,14 +65,14 @@ static void app_lv_ui_drink_remind_show(void *scene)
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }
-    app_lv_scene_drink_remind.self = app_lv_ui_res_local == NULL ? NULL :
+    app_lv_scene_remind_drink.self = app_lv_ui_res_local == NULL ? NULL :
                                      app_lv_ui_res_local->scene;
 }
 
 /*@brief     界面隐藏
  *@param[in] scene 场景
  */
-static void app_lv_ui_drink_remind_hide(void *scene)
+static void app_lv_ui_remind_drink_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化显示动画 */
@@ -82,12 +82,12 @@ static void app_lv_ui_drink_remind_hide(void *scene)
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_scene_drink_remind.self = app_lv_ui_res_local == NULL ? NULL :
+    app_lv_scene_remind_drink.self = app_lv_ui_res_local == NULL ? NULL :
                                      app_lv_ui_res_local->scene;
 }
 
-app_lv_scene_t app_lv_scene_drink_remind = {
+app_lv_scene_t app_lv_scene_remind_drink = {
     /* 场景资源节点 */
-    .show = app_lv_ui_drink_remind_show,
-    .hide = app_lv_ui_drink_remind_hide,
+    .show = app_lv_ui_remind_drink_show,
+    .hide = app_lv_ui_remind_drink_hide,
 };

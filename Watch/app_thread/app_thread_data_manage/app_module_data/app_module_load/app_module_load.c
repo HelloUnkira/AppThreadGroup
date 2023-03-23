@@ -12,7 +12,7 @@
 #include "app_thread_data_manage.h"
 #include "app_module_do_not_disturb.h"
 #include "app_module_clock.h"
-#include "app_module_drink_remind.h"
+#include "app_module_remind_drink.h"
 
 /* 这里不存在并发读写导致的时序不同步,无需保护 */
 static bool app_module_load_status_not_over = true;
@@ -31,7 +31,7 @@ void app_module_load_process(void)
     APP_SYS_LOG_WARN("...");
     app_module_clock_load();
     app_module_do_not_disturb_load();
-    app_module_drink_remind_load();
+    app_module_remind_drink_load();
     /* ... */
     app_module_load_status_not_over = false;
 }

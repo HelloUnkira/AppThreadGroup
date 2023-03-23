@@ -425,14 +425,14 @@ void app_lv_ui_scene_event(uint32_t event, uint8_t *data, uint32_t size)
         }
         break;
     }
-    case app_thread_lvgl_ui_drink_remind: {
+    case app_thread_lvgl_ui_remind_drink: {
         /* 如果进入到低功耗模式先唤醒场景 */
         if (app_module_system_dlps_get()) {
-            app_lv_scene_add(&app_lv_scene_drink_remind, true);
+            app_lv_scene_add(&app_lv_scene_remind_drink, true);
             app_module_system_dlps_set(false);
         } else {
             /* 喝水提醒事件 */
-            app_lv_scene_add(&app_lv_scene_drink_remind, false);
+            app_lv_scene_add(&app_lv_scene_remind_drink, false);
         }
         break;
     }

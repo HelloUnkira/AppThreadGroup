@@ -5,8 +5,8 @@
 #include "app_std_lib.h"
 #include "app_sys_log.h"
 
-#include "app_lv_ui_drink_remind.h"
-#include "app_lv_ui_drink_remind_presenter.h"
+#include "app_lv_ui_remind_drink.h"
+#include "app_lv_ui_remind_drink_presenter.h"
 
 /*@brief lvgl ui数据交互回调
  */
@@ -14,6 +14,6 @@ static void app_lv_ui_null(void)
 {
 }
 
-app_lv_ui_drink_remind_presenter_t app_lv_ui_drink_remind_presenter = {
+app_lv_ui_remind_drink_presenter_t app_lv_ui_remind_drink_presenter = {
     .null = app_lv_ui_null,
 };

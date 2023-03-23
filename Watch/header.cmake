@@ -44,7 +44,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_countdown
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_stopwatch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_world_time
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_drink_remind
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_misc
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_do_not_disturb
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_trace
