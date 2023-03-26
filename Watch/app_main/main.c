@@ -6,7 +6,7 @@
 #error "arch os not adaptor yet"
 #elif APP_OS_IS_LINUX
 
-#include <unistd.h> 
+#include <unistd.h>
 #include <signal.h>
 #include <sys/time.h>
 #include <time.h> 
