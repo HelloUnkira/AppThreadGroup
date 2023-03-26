@@ -2,7 +2,7 @@
 #define APP_SYS_TIMER_H
 
 typedef struct {
-    void    *near;                      /* 内部使用:下一节点 */
+    void    *buddy;                     /* 内部使用:下一节点 */
     void   (*expired)(void *timer);     /* 到期回调 */
     void    *user_data;                 /* 用户挂载数据 */
     uint32_t reduce;                    /* 内部使用:约减数 */

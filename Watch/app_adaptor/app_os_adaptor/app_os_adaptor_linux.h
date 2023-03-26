@@ -6,6 +6,9 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <unistd.h>
+#include <signal.h>
+#include <sys/time.h>
+#include <time.h> 
 
 /* app thread */
 typedef struct {

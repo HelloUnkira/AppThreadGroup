@@ -19,9 +19,9 @@ static app_mutex_t app_sys_ext_mem_mutex = {0};
  *@param[in] size    数据缓存大小
  *@retval            读取数据实际大小(失败返回负数)
  */
-ssize_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
-    ssize_t retval = 0;
+    size_t retval = 0;
     app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     
@@ -60,9 +60,9 @@ ssize_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
  *@param[in] size    数据缓存大小
  *@retval            写入数据实际大小(失败返回负数)
  */
-ssize_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
-    ssize_t retval = 0;
+    size_t retval = 0;
     app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     

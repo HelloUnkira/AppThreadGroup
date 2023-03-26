@@ -254,7 +254,7 @@ void app_module_clock_dump(void)
             app_module_clock_t clock;
             uint32_t crc32;
         };
-    } clock_data = {};
+    } clock_data;
     
     app_module_clock_get_system_clock(&clock_data.clock);
     clock_data.crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
@@ -271,7 +271,7 @@ void app_module_clock_load(void)
             app_module_clock_t clock;
             uint32_t crc32;
         };
-    } clock_data = {};
+    } clock_data;
     
     app_sys_ext_src_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
     uint32_t crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));

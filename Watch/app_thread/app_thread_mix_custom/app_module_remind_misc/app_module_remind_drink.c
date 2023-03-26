@@ -156,7 +156,7 @@ void app_module_remind_drink_load(void)
             app_module_remind_drink_t remind;
             uint32_t crc32;
         } data;
-    } remind_data = {};
+    } remind_data;
     
     app_sys_ext_src_read("mix_chunk_small", "drink remind", remind_data.buffer, sizeof(remind_data));
     uint32_t crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_drink_t));

@@ -8,8 +8,8 @@
  */
 
 /* APP OS adaptor: */
-#define APP_OS_IS_WINDOWS   0
-#define APP_OS_IS_LINUX     1
+#define APP_OS_IS_WINDOWS   1
+#define APP_OS_IS_LINUX     0
 #define APP_OS_IS_ZEPHYR    0
 #define APP_OS_IS_FREERTOS  0
 

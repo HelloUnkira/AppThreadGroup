@@ -1,0 +1,15 @@
+# 多核编译加速:
+# if (WIN32)
+    # if(MSVC)
+        # option(USE_MP "use multiple" ON)
+        # option(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP 
+            # "Set The Global Option COMPILE_FLAGS /MP to target." ON)
+        # if(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP OR USE_MP)
+            # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
+            # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
+        # endif()
+        # set(VS_STARTUP_PROJECT ${PROJECT_NAME})
+    # endif(MSVC)
+# endif()
+# add_compile_options(-j8)
+add_compile_options(/MP)

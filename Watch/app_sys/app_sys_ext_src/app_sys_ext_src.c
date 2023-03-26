@@ -16,7 +16,7 @@
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-ssize_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, ssize_t size)
+size_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
     const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name(chunk_name, data_name);
@@ -32,7 +32,7 @@ ssize_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-ssize_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, ssize_t size)
+size_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
     const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name(chunk_name, data_name);

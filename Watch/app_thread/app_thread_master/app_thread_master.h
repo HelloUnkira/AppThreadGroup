@@ -3,7 +3,7 @@
 
 /* 这是app_sys_pipe_pkg_t的副本重名 */
 typedef struct {
-    void    *near;          /* 管道是队列 */
+    void    *buddy;         /* 管道是队列 */
     uint32_t thread;        /* 接收者线程ID */
     uint32_t module;        /* 接收者线程模组ID */
     uint32_t event;         /* 接收者线程模组事件 */

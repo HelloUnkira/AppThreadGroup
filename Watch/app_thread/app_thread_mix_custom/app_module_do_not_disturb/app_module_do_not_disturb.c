@@ -36,7 +36,7 @@ bool app_module_do_not_disturb_status(void)
     /* 今天需要勿扰 */
     if ((app_module_do_not_disturb.week & (1 << clock.week)) != 0)
     for (uint8_t idx = 0; idx < APP_MODULE_DO_NOT_DISTURB_TIME_TABLE_NUM; idx++)
-    if (app_module_do_not_disturb.valid_bits & (1 << idx) != 0)
+    if ((app_module_do_not_disturb.valid_bits & (1 << idx)) != 0)
     for (uint8_t idx = 0; idx < APP_MODULE_DO_NOT_DISTURB_TIME_TABLE_NUM; idx++) {
         uint16_t c_secs   = clock.hour * 60 * 60 + clock.minute * 60 + clock.second;
         uint16_t t_secs_s = app_module_do_not_disturb.table[idx].time_s[0] * 60 * 60 +
@@ -123,7 +123,7 @@ void app_module_do_not_disturb_load(void)
             app_module_do_not_disturb_t do_not_disturb;
             uint32_t crc32;
         } data;
-    } do_not_disturb_data = {};
+    } do_not_disturb_data;
     
     app_sys_ext_src_read("mix_chunk_small", "do not disturb", do_not_disturb_data.buffer, sizeof(do_not_disturb_data));
     uint32_t crc32 = app_sys_crc32(do_not_disturb_data.buffer, sizeof(app_module_do_not_disturb_t));

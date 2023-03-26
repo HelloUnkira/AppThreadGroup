@@ -3,8 +3,9 @@
 
 #if APP_LV_DRV_USE_WIN
 
-#include <window.h>
-#include <Window.h>
+#include <Windows.h>
+#include <windows.h>
+#include <windowsx.h>
 /* windows: */
 #include "app_lv_drv_win_mouse.h"
 #include "app_lv_drv_win_mousewheel.h"

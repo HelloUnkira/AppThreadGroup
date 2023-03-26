@@ -24,7 +24,7 @@ bool app_sys_timer_stop(app_sys_timer_t *timer)
     if (app_sys_timer_list != NULL) {
         /* 检查第一个等待者 */
         if (app_sys_timer_list == timer) {
-            app_sys_timer_list  = timer->near;
+            app_sys_timer_list  = timer->buddy;
             /* 如果后面还有等待者,需要将约减值累加到后面 */
             if (app_sys_timer_list != NULL)
                 app_sys_timer_list->reduce += timer->reduce;
@@ -32,18 +32,18 @@ bool app_sys_timer_stop(app_sys_timer_t *timer)
         } else {
             current = app_sys_timer_list;
             /* 遍历等待者队列 */
-            while (current->near != NULL) {
+            while (current->buddy != NULL) {
                 /* 如果下一等待着是目标 */
-                if (current->near == timer) {
-                    current->near  = timer->near;
+                if (current->buddy == timer) {
+                    current->buddy  = timer->buddy;
                     /* 如果后面还有等待者,需要将约减值累加到后面 */
-                    if (current->near != NULL)
-                        ((app_sys_timer_t *)current->near)->reduce += timer->reduce;
+                    if (current->buddy != NULL)
+                        ((app_sys_timer_t *)current->buddy)->reduce += timer->reduce;
                     retval = true;
                     break;
                 }
                 /* 检查下一个等待者 */
-                current = current->near;
+                current = current->buddy;
             }
         }
     }
@@ -74,12 +74,12 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
                 break;
             }
             /* 检查下一个等待者 */
-            current = current->near;
+            current = current->buddy;
         }
     }
     /* 检查等待者队列 */
     if (status) {
-        timer->near = NULL;
+        timer->buddy = NULL;
         timer->reduce = timer->peroid;
         if (app_sys_timer_list == NULL) {
             app_sys_timer_list  = timer;
@@ -90,7 +90,7 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
     if (status)
     if (app_sys_timer_list->reduce >= timer->reduce) {
         app_sys_timer_list->reduce -= timer->reduce;
-        timer->near = app_sys_timer_list;
+        timer->buddy = app_sys_timer_list;
         app_sys_timer_list = timer;
         status = false;
     }
@@ -99,25 +99,25 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
         current = app_sys_timer_list;
         timer->reduce -= current->reduce;
         /* 遍历等待者队列 */
-        while (current->near != NULL) {
+        while (current->buddy != NULL) {
             /* 如果下一等待着不是目标 */
-            if (timer->reduce >= ((app_sys_timer_t *)current->near)->reduce) {
-                timer->reduce -= ((app_sys_timer_t *)current->near)->reduce;
+            if (timer->reduce >= ((app_sys_timer_t *)current->buddy)->reduce) {
+                timer->reduce -= ((app_sys_timer_t *)current->buddy)->reduce;
                 /* 检查下一个等待者 */
-                current = current->near;
+                current = current->buddy;
                 continue;
             }
             /* 如果下一等待着是目标 */
-            ((app_sys_timer_t *)current->near)->reduce -= timer->reduce;
-            timer->near = current->near;
-            current->near = timer;
+            ((app_sys_timer_t *)current->buddy)->reduce -= timer->reduce;
+            timer->buddy = current->buddy;
+            current->buddy = timer;
             status = false;
             break;
         }
     }
     /* 添加到末尾 */
     if (status)
-        current->near = timer;
+        current->buddy = timer;
     /*  */
     app_mutex_give(&app_sys_timer_mutex);
     /*  */
@@ -147,7 +147,7 @@ void app_sys_timer_reduce(void)
         if (status)
         if (app_sys_timer_list->reduce == 0) {
             timer = app_sys_timer_list;
-            app_sys_timer_list = timer->near;
+            app_sys_timer_list = timer->buddy;
             /* 如果还能继续约减 */
             if (app_sys_timer_list != NULL)
             if (app_sys_timer_list->reduce == 0)

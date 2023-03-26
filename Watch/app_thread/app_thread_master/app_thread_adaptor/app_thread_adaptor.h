@@ -25,6 +25,7 @@ void app_thread_mix_custom_routine(void);
 void app_thread_data_manage_routine(void);
 void app_thread_lvgl_routine(void);
 
+#include "app_thread_adaptor_windows.h"
 #include "app_thread_adaptor_linux.h"
 #include "app_thread_adaptor_zephyr.h"
 #include "app_thread_adaptor_freertos.h"

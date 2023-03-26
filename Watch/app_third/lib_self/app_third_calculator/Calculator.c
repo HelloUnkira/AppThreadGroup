@@ -89,9 +89,9 @@ static inline void CalculatorFree(void *pointer)
 /*************************************************************************************************/
 /* 符号记录(表明支持的基本运算规则): */
 enum {
-    DEFAULT         = 0,
-    SUCCESS         = 1,
-    ERROR           = 2,
+    F_DEFAULT       = 0,
+    F_SUCCESS       = 1,
+    F_ERROR         = 2,
     TYPEDATA        ,
     TYPEFLAG        ,
     /* 内置解析的括号 */
@@ -392,7 +392,7 @@ static inline uint8_t CalculatorParse(char *Expression, uint32_t *Index,
                                       double *Data,     uint8_t *Flag)
 {
     if (Expression[*Index] == '\0')
-        return SUCCESS;
+        return F_SUCCESS;
     /* 1.先过滤一次留白 */
     while (CalculateIsBlank(Expression[*Index]) == true)
         (*Index) += 1;
@@ -445,7 +445,7 @@ static inline uint8_t CalculatorParse(char *Expression, uint32_t *Index,
             ERROR_PRINT(true, "CalculatorParse:Flag");
             ERROR_PRINT(true, String);
             CalculatorFree(String);
-            return ERROR;
+            return F_ERROR;
         }
         /* 指针重定位 */
         *Index = IndexNew;
@@ -474,7 +474,7 @@ static inline uint8_t CalculatorParse(char *Expression, uint32_t *Index,
             ERROR_PRINT(true, "CalculatorParse:Number");
             ERROR_PRINT(true, String);
             CalculatorFree(String);
-            return ERROR;
+            return F_ERROR;
         }
         /* 指针重定位 */
         *Index = IndexNew;
@@ -483,7 +483,7 @@ static inline uint8_t CalculatorParse(char *Expression, uint32_t *Index,
         return TYPEDATA;
     }
     ERROR_PRINT(true, "CalculatorParse:Unkonwn");
-    return ERROR;
+    return F_ERROR;
 }
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -507,11 +507,11 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
     ERROR_PRINT(FlagStack   == NULL || FlagMax   == 0,
                 "CalculatorMathExpression: FlagXxx");
     /* 后缀表达式计算 */
-    uint8_t  Type   = DEFAULT;  //当前状态
-    uint8_t  State  = DEFAULT;  //程序运行状态
-    uint32_t Index  = 0;        //索引进动情况
-    double   Data   = 0;        //数据暂存记录
-    uint8_t  Flag   = DEFAULT;  //符号暂存记录
+    uint8_t  Type   = F_DEFAULT;    //当前状态
+    uint8_t  State  = F_DEFAULT;    //程序运行状态
+    uint32_t Index  = 0;            //索引进动情况
+    double   Data   = 0;            //数据暂存记录
+    uint8_t  Flag   = F_DEFAULT;    //符号暂存记录
     /* 后缀表达式解析 */
     /* 先到符号栈压入一个左括号 */
     FlagStack[++FlagTop] = I_Left;
@@ -522,18 +522,18 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
         if (Expression[Index] == '\0') {
             Flag  = I_Right;
             Type  = TYPEFLAG;
-            State = SUCCESS;
+            State = F_SUCCESS;
         }
         /* 解析一个数据或符号 */
         if (Expression[Index] != '\0')
             Type = CalculatorParse(Expression, &Index, TypeLast, FlagLast, &Data, &Flag);
         /* 错误检查 */
-        if (Type == ERROR) {
+        if (Type == F_ERROR) {
             char ErrorString[30] = {0};
             sprintf(ErrorString, "Error Index:%d", Index);
             ERROR_PRINT(true, ErrorString);
             Print(ErrorString);
-            State == ERROR;
+            State == F_ERROR;
             break;
         }
         /* 如果解析到了一个数据 */
@@ -611,7 +611,7 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
                     sprintf(ErrorString, "Error Index:%d", Index);
                     ERROR_PRINT(true, ErrorString);
                     Print(ErrorString);
-                    State == ERROR;
+                    State == F_ERROR;
                     break;
                 }
                 /* 使用解析后的参数数量计算栈顶结果 */
@@ -620,7 +620,7 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
                     sprintf(ErrorString, "Error Index:%d", Index);
                     ERROR_PRINT(true, ErrorString);
                     Print(ErrorString);
-                    State == ERROR;
+                    State == F_ERROR;
                     break;
                 }
                 /* 获取运算操作数 */
@@ -639,7 +639,7 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
                     sprintf(ErrorString, "Error Index:%d", Index);
                     ERROR_PRINT(true, ErrorString);
                     Print(ErrorString);
-                    State == ERROR;
+                    State == F_ERROR;
                     break;
                 }
                 /* 栈顶结果重新入栈 */
@@ -655,20 +655,20 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
         /* 保留状态 */
         TypeLast = Type;
         FlagLast = Flag;
-    } while (State != SUCCESS && State != ERROR);
+    } while (State != F_SUCCESS && State != F_ERROR);
     /* 错误检查: */
     if (FlagTop != 0) {
-        ERROR_PRINT(true, "ERROR: Flag Too Much\n");
-        Print("ERROR: Flag Too Much\n");
-        State = ERROR;
+        ERROR_PRINT(true, "F_ERROR: Flag Too Much\n");
+        Print("F_ERROR: Flag Too Much\n");
+        State = F_ERROR;
     }
     if (NumberTop != 1) {
-        ERROR_PRINT(true, "ERROR: Number Too Much\n");
-        Print("ERROR: Number Too Much\n");
-        State = ERROR;
+        ERROR_PRINT(true, "F_ERROR: Number Too Much\n");
+        Print("F_ERROR: Number Too Much\n");
+        State = F_ERROR;
     }
     
-    if (State == SUCCESS)
+    if (State == F_SUCCESS)
         *Result = NumberStack[NumberTop];
     /* 结束运行 */
     NumberMax = 0;
@@ -677,9 +677,9 @@ bool CalculatorMathExpression(char *Expression, double *Result, ErrorPrint Print
     CalculatorStack(sizeof(double),  (void **)&NumberStack, &NumberMax);
     CalculatorStack(sizeof(uint8_t), (void **)&FlagStack,   &FlagMax);
     /* 计算结果反馈 */
-    if (State != SUCCESS)
+    if (State != F_SUCCESS)
         return false;
-    if (State == SUCCESS)
+    if (State == F_SUCCESS)
         return true;
 }
 /*************************************************************************************************/

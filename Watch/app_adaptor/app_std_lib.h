@@ -11,5 +11,6 @@
 /* C std lib need hook perhaps */
 #include <stdlib.h>
 #include <stdio.h>
+#include <time.h>
 
 #endif

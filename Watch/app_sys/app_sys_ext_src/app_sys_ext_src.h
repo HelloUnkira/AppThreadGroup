@@ -4,7 +4,7 @@
 typedef struct {
     char     *data_name;
     uintptr_t data_base;
-    uintptr_t data_size;
+    size_t    data_size;
 } app_sys_ext_src_t;
 
 /*@brief     读取资源从指定chunk的指定data段
@@ -14,7 +14,7 @@ typedef struct {
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-ssize_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, ssize_t size);
+size_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size);
 
 /*@brief     写入资源到指定chunk的指定data段
  *@param[in] chunk_name chunk名字
@@ -23,6 +23,6 @@ ssize_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-ssize_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, ssize_t size);
+size_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size);
 
 #endif

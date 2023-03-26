@@ -7,6 +7,7 @@
 #include "app_third_multi_lang_str.h"
 
 static const char * app_third_multi_lang_str_table[15][3] = {
+#if 0
 	{"NULL","无效的","無効な",},
 	{"Watch List","监视列表","監視リスト",},
 	{"Calculator","计算器","計算機",},
@@ -22,6 +23,9 @@ static const char * app_third_multi_lang_str_table[15][3] = {
 	{"Pause","暂停","一時停止",},
 	{"Countdown Times Up","倒数计时","カウントダウン",},
 	{"Confirm","证实","かくにん",},
+#else
+	{"","",""},
+#endif
 };
 
 static uint32_t app_third_multi_lang_str_index = 0;

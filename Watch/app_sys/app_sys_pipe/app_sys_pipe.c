@@ -54,7 +54,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
     package_new = app_mem_alloc(sizeof(app_sys_pipe_pkg_t));
-    package_new->near     = NULL;
+    package_new->buddy    = NULL;
     package_new->thread   = package->thread;
     package_new->module   = package->module;
     package_new->event    = package->event;
@@ -69,7 +69,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
         pipe->head = package_new;
         pipe->tail = package_new;
     } else {
-        pipe->tail->near = package_new;
+        pipe->tail->buddy = package_new;
         pipe->tail = package_new;
     }
     pipe->number++;
@@ -92,7 +92,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     if (pipe->number != 0) {
         pipe->number--;
         package_new = pipe->head;
-        pipe->head  = pipe->head->near;
+        pipe->head  = pipe->head->buddy;
         if (pipe->number == 0) {
             pipe->head = NULL;
             pipe->tail = NULL;
@@ -102,7 +102,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     app_critical_exit();
     app_mutex_give(&pipe->mutex);
     /* 转储消息资源资源, 销毁资源包 */
-    package->near     = NULL;
+    package->buddy    = NULL;
     package->thread   = package_new->thread;
     package->module   = package_new->module;
     package->event    = package_new->event;

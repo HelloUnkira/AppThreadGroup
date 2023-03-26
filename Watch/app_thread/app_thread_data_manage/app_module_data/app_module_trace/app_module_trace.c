@@ -47,7 +47,7 @@ typedef union {
 } app_module_trace_item_t;
 
 static app_mutex_t app_module_trace_text_mutex = {0};
-static app_module_trace_text_t app_module_trace_text = {};
+static app_module_trace_text_t app_module_trace_text;
 static const uint32_t app_module_trace_text_size = sizeof(app_module_trace_text);
 static const uint32_t app_module_trace_info_size = sizeof(uintptr_t) * 3;
 
@@ -78,7 +78,7 @@ static uint32_t app_module_trace_text_space(void)
  */
 void app_module_trace_text_ready(void)
 {
-    app_module_trace_text_t trace_text = {};
+    app_module_trace_text_t trace_text;
     app_mutex_process(&app_module_trace_text_mutex);
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
     const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
@@ -103,7 +103,7 @@ void app_module_trace_text_ready(void)
  */
 void app_module_trace_text_reset(void)
 {
-    app_module_trace_text_t trace_text = {};
+    app_module_trace_text_t trace_text;
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
     const app_sys_ext_src_t  *source  = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     app_mutex_take(&app_module_trace_text_mutex);
@@ -250,12 +250,12 @@ static void app_module_trace_text_update(void)
  */
 void app_module_trace_text_dump(char text[APP_MODULE_TRACE_LOG_MAX])
 {
-    app_module_trace_item_t item = {};
+    app_module_trace_item_t item;
     memcpy(item.text, text, APP_MODULE_TRACE_LOG_MAX);
     item.length = strlen(item.text) + 1;
     /* 如果空间不够,则先丢弃式加载多条 */
     while (app_module_trace_text_space() < item.length + sizeof(uint32_t)) {
-        app_module_trace_item_t item_temp = {};
+        app_module_trace_item_t item_temp;
         app_module_trace_text_load_one(&item_temp);
     }
     app_module_trace_text_dump_one(&item);
@@ -269,7 +269,7 @@ bool app_module_trace_text_load(char text[APP_MODULE_TRACE_LOG_MAX])
 {
     if (app_module_trace_text_used() == 0)
         return false;
-    app_module_trace_item_t item = {};
+    app_module_trace_item_t item;
     app_module_trace_text_load_one(&item);
     memcpy(text, item.text, APP_MODULE_TRACE_LOG_MAX);
     app_module_trace_text_update();
