@@ -8,5 +8,3 @@ set_target_properties(app_main PROPERTIES LINKER_LANGUAGE C)
 target_link_libraries(app_main PUBLIC app_thread)
 # 重命名
 set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")
-# 指定exe输出到app_exe
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/app_exe)

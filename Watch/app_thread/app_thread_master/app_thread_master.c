@@ -118,10 +118,10 @@ void app_thread_group_run(void)
         app_sem_process(&app_thread_sem_dst[idx]);
         app_sem_process(&app_thread_sem_src);
     /* 就绪系统子模组 */
-    app_sys_build_time();
     app_sys_log_ready();
     app_sys_timer_ready();
     app_sys_ext_mem_ready();
+    app_sys_build_time();
     /* 就绪线程子模组 */
     app_thread_master_ready();
     app_thread_mix_irq_ready();
