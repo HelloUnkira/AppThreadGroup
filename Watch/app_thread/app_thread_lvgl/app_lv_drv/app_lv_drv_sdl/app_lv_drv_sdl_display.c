@@ -128,8 +128,10 @@ void app_lv_display_ready(void)
     if (1) {
         SDL_Init(SDL_INIT_VIDEO);
         SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
-        app_lv_display_create(&app_lv_display_screen);
-    }
+        app_lv_display_create(&app_lv_display_screen);
+
+    }
+
     /* 反初始化SDL屏幕(不需要) */
     if (0) {
         app_lv_display_destroy(&app_lv_display_screen);

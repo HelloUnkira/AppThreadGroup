@@ -41,6 +41,7 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
  */
 HRESULT CALLBACK app_lv_driver_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    printf_s("message:%d\n", uMsg);
     if (app_lv_mouse_msg_cb(hWnd, uMsg, wParam, lParam) == TRUE)
         return 0;
     if (app_lv_keyboard_msg_cb(hWnd, uMsg, wParam, lParam) == TRUE)
@@ -142,7 +143,7 @@ void app_lv_driver_ready(void)
     lv_obj_set_style_border_color(top, lv_palette_main(LV_PALETTE_BLUE), 0);
 }
 
-/*@brief lvgl的驱动设备SDL回调接口
+/*@brief lvgl的驱动设备Win回调接口
  *       内部使用: 被lvgl线程使用
  */
 void app_lv_driver_handler(void)
@@ -158,17 +159,14 @@ void app_lv_driver_handler(void)
         app_module_system_delay_set(2);
         app_module_system_status_set(app_module_system_reset);
     }
-    
+
+    HWND app_lv_display_get_window(void);
     /* 更新处理 */
     MSG message;
     while(1) {
-        BOOL retval = PeekMessageW(&message, NULL, 0, 0, TRUE);
-        if (retval == 0)
+        BOOL retval = PeekMessageW(&message, app_lv_display_get_window(), 0, 0, TRUE);
+        if (!retval)
             break;
-        if (retval == -1) {
-            APP_SYS_LOG_WARN("app_lv_driver_handler: %d", retval);
-            break;
-        }
         /* 消息传递 */
         TranslateMessage(&message);
         DispatchMessageW(&message);
