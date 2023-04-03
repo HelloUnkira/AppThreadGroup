@@ -88,7 +88,7 @@ void app_thread_master_routine(void)
             app_sys_pipe_take(send_pipe, &package);
             app_thread_get_sync(package.thread, &recv_sem);
             app_thread_get_pipe(package.thread, &recv_pipe);
-            app_sys_pipe_give(recv_pipe, &package);
+            app_sys_pipe_give(recv_pipe, &package, false);
             app_sem_give(recv_sem);
         }
     }
@@ -104,7 +104,7 @@ bool app_package_notify(app_package_t *package)
     /* 线程组接收新包 */
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
-    app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package);
+    app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
     app_sem_give(send_sem);
     return true;
 }

@@ -510,7 +510,12 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         /* 让主流程直接接收进程 */
         /* 该动作交付系统完成 */
         /* 因为还有一段显示内容 */
-        PostQuitMessage(0);
+        // PostQuitMessage(0);
+        return TRUE;
+    case WM_CLOSE:
+        /* 点击窗口右上角关闭会产生该事件 */
+        /* 我们在此处拦截它,不让它进一步传入默认处理流程 */
+        app_lv_display_quit = true;
         return TRUE;
     case WM_QUIT:
         app_lv_display_quit = true;

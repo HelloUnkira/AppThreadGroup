@@ -10,7 +10,7 @@
 #define LV_DRV_ZOOM         1
 /* display:多缓冲区 */
 /*         插个眼:现在多缓冲区有渲染问题,显示错误 */
-#define LV_DRV_DBUFFER      0
+#define LV_DRV_DBUFFER      1
 
 /* mouse:鼠标 */
 #define LV_DRV_MOUSE            1

@@ -13,7 +13,6 @@
 #include "app_thread_mix_irq.h"
 #include "app_module_timer.h"
 
-
 /*@brief 约减软件定时器
  *       内部使用: 被mix irq线程使用
  */
@@ -27,9 +26,10 @@ void app_module_timer_reduce(void)
 void app_module_timer_1ms_update(void)
 {
     app_package_t package = {
-        .thread = app_thread_id_mix_irq,
-        .module = app_thread_mix_irq_timer,
-        .event  = app_thread_mix_irq_timer_reduce_update,
+        .thread   = app_thread_id_mix_irq,
+        .module   = app_thread_mix_irq_timer,
+        .event    = app_thread_mix_irq_timer_reduce_update,
+        .priority = app_package_priority_real_time,
     };
     app_package_notify(&package);
 }

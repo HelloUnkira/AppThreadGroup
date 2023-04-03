@@ -15,8 +15,8 @@
 #include "app_os_adaptor.h"
 #include "app_sys_pipe.h"
 
-/*@brief        初始化管道
- *@param[in]    pipe 管道实例
+/*@brief     初始化管道
+ *@param[in] pipe 管道实例
  */
 void app_sys_pipe_ready(app_sys_pipe_t *pipe)
 {
@@ -26,9 +26,9 @@ void app_sys_pipe_ready(app_sys_pipe_t *pipe)
     app_mutex_process(&pipe->mutex);
 }
 
-/*@brief        获取管道资源包数量
- *@param[in]    pipe 管道实例
- *@retval       管道资源包数量
+/*@brief     获取管道资源包数量
+ *@param[in] pipe 管道实例
+ *@retval    管道资源包数量
  */
 uint32_t app_sys_pipe_package_num(app_sys_pipe_t *pipe)
 {
@@ -45,12 +45,14 @@ uint32_t app_sys_pipe_package_num(app_sys_pipe_t *pipe)
     return number;
 }
 
-/*@brief        交付一个包给管道
- *@param[in]    pipe     管道实例
- *@param[in]    package  事件资源包(栈资源,非堆资源或静态资源)
+/*@brief     交付一个包给管道
+ *@param[in] pipe    管道实例
+ *@param[in] package 事件资源包(栈资源,非堆资源或静态资源)
+ *@param[in] normal  不使用优先级
  */
-void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
+void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal)
 {
+    app_sys_pipe_pkg_t *nonius = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
     package_new = app_mem_alloc(sizeof(app_sys_pipe_pkg_t));
@@ -58,19 +60,33 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     package_new->thread   = package->thread;
     package_new->module   = package->module;
     package_new->event    = package->event;
+    package_new->priority = package->priority;
     package_new->dynamic  = package->dynamic;
     package_new->size     = package->size;
     package_new->data     = package->data;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
     app_critical_enter();
-    /* 资源包加入到管道 */
-    if (pipe->number == 0) {
+    /* 资源包加入到管道(优先队列) */
+    if (0) {
+    } else if (pipe->number == 0) {
         pipe->head = package_new;
         pipe->tail = package_new;
-    } else {
+    } else if (package_new->priority <= pipe->tail->priority || normal) {
         pipe->tail->buddy = package_new;
         pipe->tail = package_new;
+    } else if (package_new->priority >  pipe->head->priority) {
+        package_new->buddy = pipe->head;
+        pipe->head = package_new->buddy;
+    } else {
+        for (nonius = pipe->head; nonius->buddy != NULL; nonius = nonius->buddy) {
+            app_sys_pipe_pkg_t *current = nonius->buddy;
+            if (current->priority < package_new->priority) {
+                package_new->buddy = nonius->buddy;
+                nonius->buddy = package_new;
+                break;
+            }
+        }
     }
     pipe->number++;
     /* 出界 */
@@ -78,9 +94,9 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     app_mutex_give(&pipe->mutex);
 }
 
-/*@brief        从管道提取一个包
- *@param[in]    pipe     管道实例
- *@param[out]   package  事件资源包(栈资源,非堆资源或静态资源)
+/*@brief      从管道提取一个包
+ *@param[in]  pipe     管道实例
+ *@param[out] package  事件资源包(栈资源,非堆资源或静态资源)
  */
 void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
 {

@@ -3,14 +3,27 @@
 
 /* 这是app_sys_pipe_pkg_t的副本重名 */
 typedef struct {
-    void    *buddy;         /* 管道是队列 */
-    uint32_t thread;        /* 接收者线程ID */
-    uint32_t module;        /* 接收者线程模组ID */
-    uint32_t event;         /* 接收者线程模组事件 */
-    uint32_t dynamic;       /* 本次传输包裹状态 */
+    void    *buddy;         /* 管道是优先队列 */
+    uint64_t thread:10;     /* 接收者线程 */
+    uint64_t module:10;     /* 接收者线程模组 */
+    uint64_t event:10;      /* 接收者线程模组事件 */
+    uint64_t priority:8;    /* 接收者线程模组事件优先级(数字越大优先级越高) */
+    uint64_t dynamic:1;     /* 本次传输包裹状态 */
     uint32_t size;          /* 协议数据流大小 */
     void    *data;          /* 协议数据流(浅拷贝) */
 } app_package_t;
+
+/* 事件包裹推荐优先级 */
+/* 归0初始化事件包默认为最低优先级 */
+/* 实时优先级专用于密集化时间敏感事件 */
+typedef enum {
+    app_package_priority_lowest = 0,
+    app_package_priority_normal_below,
+    app_package_priority_normal,
+    app_package_priority_normal_above,
+    app_package_priority_highest,
+    app_package_priority_real_time,
+} app_package_priority_t;
 
 /*@brief        通过从线程ID获得与主线程的同步资源
  *@param[in]    thread 线程ID

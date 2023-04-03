@@ -153,6 +153,6 @@ void app_module_system_1msec_update(uint32_t count)
         app_lv_tick_inc_update();
     if (count % LV_SCHED_TICK_EXEC == 0)
         app_lv_tick_exec_update();
-    if (count % LV_SCHED_SDL_EVNET == 0)
+    if (count % LV_SCHED_DRV_EVENT == 0)
         app_lv_drv_update();
 }
