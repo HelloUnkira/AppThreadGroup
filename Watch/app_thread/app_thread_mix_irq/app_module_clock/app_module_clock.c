@@ -303,12 +303,13 @@ void app_module_clock_1s_update(uint64_t utc_new)
     static uint64_t utc = 0;
     utc = utc_new;
     app_package_t package = {
-        .thread  = app_thread_id_mix_irq,
-        .module  = app_thread_mix_irq_clock,
-        .event   = app_thread_mix_irq_clock_timestamp_update,
-        .dynamic = false,
-        .size    = sizeof(uint64_t),
-        .data    = &utc,
+        .thread   = app_thread_id_mix_irq,
+        .module   = app_thread_mix_irq_clock,
+        .event    = app_thread_mix_irq_clock_timestamp_update,
+        .priority = app_package_priority_highest,
+        .dynamic  = false,
+        .size     = sizeof(uint64_t),
+        .data     = &utc,
     };
     app_package_notify(&package);
 }

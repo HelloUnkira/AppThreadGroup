@@ -15,11 +15,12 @@
 #include "app_thread_mix_custom.h"
 #include "app_thread_lvgl.h"
 #include "app_module_clock.h"
-#include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
+#include "app_module_remind_group.h"
 #include "app_module_do_not_disturb.h"
 #include "app_module_remind_drink.h"
+#include "app_module_alarm.h"
 
 /*@brief 混合事件线程模组初始化
  */
@@ -62,21 +63,6 @@ void app_thread_mix_custom_routine(void)
                     app_sys_work_execute((void *)package.data);
                 break;
             }
-            case app_thread_mix_custom_alarm: {
-                if (package.size != sizeof(app_module_alarm_t))
-                    break;
-                if (package.data == NULL)
-                    break;
-                app_module_alarm_t *alarm = package.data;
-                /* 根据实际的情况处理或者转发事件包到特定的线程特定的模组 */
-                if (package.event == app_thread_mix_custom_alarm_expired);
-                /* 常规式闹钟事件 */
-                if (package.event == app_thread_mix_custom_alarm_month);
-                if (package.event == app_thread_mix_custom_alarm_week);
-                /* 提醒式闹钟事件 */
-                if (package.event == app_thread_mix_custom_alarm_repeat);
-                break;
-            }
             case app_thread_mix_custom_stopwatch: {
                 /* 秒表模组更新事件 */
                 if (package.event == app_thread_mix_custom_stopwatch_msec_update)
@@ -98,6 +84,12 @@ void app_thread_mix_custom_routine(void)
                 }
                 break;
             }
+            case app_thread_mix_custom_remind_group: {
+                if (package.event == app_thread_mix_custom_remind_group_update) {
+                    app_module_remind_group_update();
+                }
+                break;
+            }
             case app_thread_mix_custom_remind_misc: {
                 if (package.event == app_thread_mix_custom_remind_drink_update)
                     app_module_remind_drink_xmin_update();
@@ -110,6 +102,21 @@ void app_thread_mix_custom_routine(void)
                     };
                     app_package_notify(&package);
                 }
+                break;
+            }
+            case app_thread_mix_custom_alarm: {
+                if (package.size != sizeof(app_module_alarm_t))
+                    break;
+                if (package.data == NULL)
+                    break;
+                app_module_alarm_t *alarm = package.data;
+                /* 根据实际的情况处理或者转发事件包到特定的线程特定的模组 */
+                if (package.event == app_thread_mix_custom_alarm_expired);
+                /* 常规式闹钟事件 */
+                if (package.event == app_thread_mix_custom_alarm_month);
+                if (package.event == app_thread_mix_custom_alarm_week);
+                /* 提醒式闹钟事件 */
+                if (package.event == app_thread_mix_custom_alarm_repeat);
                 break;
             }
             default: {
