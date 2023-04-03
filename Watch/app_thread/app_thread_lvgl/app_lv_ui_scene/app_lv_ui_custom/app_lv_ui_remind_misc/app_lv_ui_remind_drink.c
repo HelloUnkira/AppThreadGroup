@@ -61,7 +61,8 @@ static void app_lv_ui_remind_drink_show(void *scene)
         lv_obj_add_event_cb(btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
         lv_label_set_text(lbl_c, "Confirm");
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }

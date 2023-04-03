@@ -155,7 +155,8 @@ void app_lv_ui_event_default(lv_event_t *e)
     }
     case LV_EVENT_PRESSED: {
         APP_SYS_LOG_INFO("LV_EVENT_PRESSED");
-        break;
+        break;
+
     }
     case LV_EVENT_PRESSING: {
         APP_SYS_LOG_INFO("LV_EVENT_PRESSING");

@@ -77,7 +77,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
         pipe->tail = package_new;
     } else if (package_new->priority >  pipe->head->priority) {
         package_new->buddy = pipe->head;
-        pipe->head = package_new->buddy;
+        pipe->head = package_new;
     } else {
         for (nonius = pipe->head; nonius->buddy != NULL; nonius = nonius->buddy) {
             app_sys_pipe_pkg_t *current = nonius->buddy;
@@ -117,11 +117,14 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     /* 出界 */
     app_critical_exit();
     app_mutex_give(&pipe->mutex);
+    if (package_new == NULL)
+        return;
     /* 转储消息资源资源, 销毁资源包 */
     package->buddy    = NULL;
     package->thread   = package_new->thread;
     package->module   = package_new->module;
     package->event    = package_new->event;
+    package->priority = package_new->priority;
     package->dynamic  = package_new->dynamic;
     package->size     = package_new->size;
     package->data     = package_new->data;
