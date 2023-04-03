@@ -213,7 +213,7 @@ lv_obj_t * app_lv_ui_style_arc(lv_obj_t *parent, lv_coord_t size, lv_coord_t wid
     lv_obj_set_style_arc_width(arc, width, 0);
     lv_obj_set_style_arc_width(arc, width, LV_PART_INDICATOR);
     lv_obj_set_style_arc_color(arc, lv_palette_darken(color, 4), 0);
-    lv_obj_set_style_arc_color(arc, lv_palette_darken(color, 1), LV_PART_INDICATOR);
+    lv_obj_set_style_arc_color(arc, lv_palette_lighten(color, 1), LV_PART_INDICATOR);
     lv_arc_set_mode(arc, LV_ARC_MODE_NORMAL);
     lv_arc_set_range(arc, min, max);
     lv_arc_set_bg_angles(arc, start, end);
@@ -388,7 +388,7 @@ lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_co
     return bar;
 }
 
-/*@brief     渐变折现图表
+/*@brief     渐变折线图表
  *           无点折线图,水平线5等分,0~100百分比数据点,无刻度标签,固定宽高,24条数据
  *param[in]  parent  父控件
  */
@@ -398,7 +398,7 @@ lv_obj_t * app_lv_ui_style_fade_chart(lv_obj_t *parent)
     app_lv_ui_style_object(chart);
     lv_obj_set_size(chart, LV_HOR_RES - 20, 120);
     lv_obj_add_event_cb(chart, app_lv_ui_chart_fade_event_cb, LV_EVENT_ALL, NULL);
-    lv_obj_set_style_bg_color(chart, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
+    //lv_obj_set_style_bg_color(chart, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
     lv_obj_set_style_size(chart, 1, LV_PART_INDICATOR);
     lv_chart_set_type(chart, LV_CHART_TYPE_LINE);
     lv_chart_set_point_count(chart, 24);

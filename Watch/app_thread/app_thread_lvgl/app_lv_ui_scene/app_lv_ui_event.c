@@ -390,8 +390,8 @@ void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
                 draw_part_dsc->line_dsc->width = 1;
                 draw_part_dsc->line_dsc->dash_gap = 1;
                 draw_part_dsc->line_dsc->dash_width = 1;
-                draw_part_dsc->line_dsc->color = lv_color_white();
-                draw_part_dsc->line_dsc->opa = LV_OPA_10;
+                draw_part_dsc->line_dsc->color = lv_palette_main(LV_PALETTE_GREY);
+                draw_part_dsc->line_dsc->opa = LV_OPA_COVER;
             /* 水平线 */
             } else {
                 /* 虚线分界线,根据draw_part_dsc->id区分是哪一条虚线,这里统一不使用 */
@@ -399,8 +399,8 @@ void app_lv_ui_chart_fade_event_cb(lv_event_t * e)
                 draw_part_dsc->line_dsc->width = 1;
                 draw_part_dsc->line_dsc->dash_gap = 1;
                 draw_part_dsc->line_dsc->dash_width = 1;
-                draw_part_dsc->line_dsc->color = lv_color_white();
-                draw_part_dsc->line_dsc->opa = LV_OPA_10;
+                draw_part_dsc->line_dsc->color = lv_palette_main(LV_PALETTE_GREY);
+                draw_part_dsc->line_dsc->opa = LV_OPA_COVER;
             }
         }
         break;

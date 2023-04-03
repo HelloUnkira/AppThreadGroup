@@ -149,7 +149,7 @@ lv_obj_t * app_lv_ui_style_loading_spinner(lv_obj_t *parent, lv_coord_t size, lv
  */
 lv_obj_t * app_lv_ui_style_loading_bar(lv_obj_t *parent, lv_coord_t width, lv_coord_t height, lv_grad_dir_t grad);
 
-/*@brief     渐变折现图表
+/*@brief     渐变折线图表
  *           无点折线图,水平线5等分,0~100百分比数据点,无刻度标签,固定宽高,24条数据
  *param[in]  parent  父控件
  */
