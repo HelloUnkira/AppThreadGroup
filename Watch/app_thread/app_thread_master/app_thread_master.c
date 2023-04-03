@@ -72,6 +72,9 @@ void app_thread_master_routine(void)
     app_sys_pipe_t *recv_pipe = NULL;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
     app_sys_pipe_pkg_t package = {0};
+    /* 因为有些准备动作只适合在子线程中完成 */
+    /* 将其从上面的接口中推延到此处 */ {
+    }
     /* 主流程 */
     while (true) {
         app_sem_take(send_sem);
@@ -81,7 +84,7 @@ void app_thread_master_routine(void)
                               app_sys_pipe_package_num(send_pipe));
         #endif
         /* 主线程派发包到指定子线程 */
-        while (app_sys_pipe_package_num(send_pipe)) {
+        while (app_sys_pipe_package_num(send_pipe) != 0) {
             app_sys_pipe_take(send_pipe, &package);
             app_thread_get_sync(package.thread, &recv_sem);
             app_thread_get_pipe(package.thread, &recv_pipe);

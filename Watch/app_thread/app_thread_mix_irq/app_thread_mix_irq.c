@@ -46,6 +46,9 @@ void app_thread_mix_irq_routine(void)
     app_sys_pipe_pkg_t package = {0};
     app_thread_get_sync(app_thread_id_mix_irq, &sem);
     app_thread_get_pipe(app_thread_id_mix_irq, &pipe);
+    /* 因为有些准备动作只适合在子线程中完成 */
+    /* 将其从上面的接口中推延到此处 */ {
+    }
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
@@ -54,7 +57,7 @@ void app_thread_mix_irq_routine(void)
             APP_SYS_LOG_WARN("thread mix irq recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
         #endif
-        while (app_sys_pipe_package_num(pipe)) {
+        while (app_sys_pipe_package_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package);
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {

@@ -33,7 +33,9 @@ void app_thread_lvgl_ready(void)
     /* 框架初始化 */
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
-    app_lv_driver_ready();
+    #if APP_LV_DRV_USE_WIN == 0
+        app_lv_driver_ready();
+    #endif
     /* 模组初始化 */
     app_lv_ui_check_time_ready();
 }
@@ -47,6 +49,13 @@ void app_thread_lvgl_routine(void)
     app_sys_pipe_pkg_t package = {0};
     app_thread_get_sync(app_thread_id_lvgl, &sem);
     app_thread_get_pipe(app_thread_id_lvgl, &pipe);
+    /* 因为有些准备动作只适合在子线程中完成 */
+    /* 将其从上面的接口中推延到此处 */ {
+        /* 初始化与lvgl绑定的驱动设备 */
+        #if APP_LV_DRV_USE_WIN == 1
+            app_lv_driver_ready();
+        #endif
+    }
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
@@ -55,7 +64,7 @@ void app_thread_lvgl_routine(void)
             APP_SYS_LOG_WARN("thread lvgl recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
         #endif
-        while (app_sys_pipe_package_num(pipe)) {
+        while (app_sys_pipe_package_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package);
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {

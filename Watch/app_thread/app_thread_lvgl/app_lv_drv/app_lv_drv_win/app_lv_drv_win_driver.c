@@ -41,7 +41,6 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
  */
 HRESULT CALLBACK app_lv_driver_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-    printf_s("message:%d\n", uMsg);
     if (app_lv_mouse_msg_cb(hWnd, uMsg, wParam, lParam) == TRUE)
         return 0;
     if (app_lv_keyboard_msg_cb(hWnd, uMsg, wParam, lParam) == TRUE)
@@ -163,7 +162,7 @@ void app_lv_driver_handler(void)
     HWND app_lv_display_get_window(void);
     /* 更新处理 */
     MSG message;
-    while(1) {
+    while(true) {
         BOOL retval = PeekMessageW(&message, app_lv_display_get_window(), 0, 0, TRUE);
         if (!retval)
             break;
