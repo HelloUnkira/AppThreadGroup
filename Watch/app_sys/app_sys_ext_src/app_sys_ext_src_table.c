@@ -29,28 +29,34 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 		.data_base = 0x0,
 	},
 	{
-		/* do not disturb + crc32 */
-		.data_name = "do not disturb",
-		.data_size = 30,
+		/* remind alarm + crc32 */
+		.data_name = "remind alarm",
+		.data_size = 65 * 10 + 10,
 		.data_base = 0x1e,
 	},
 	{
-		/* drink remind + crc32 */
-		.data_name = "drink remind",
+		/* remind drink + crc32 */
+		.data_name = "remind drink",
 		.data_size = 20,
-		.data_base = 0x3c,
+		.data_base = 0x2b2,
+	},
+	{
+		/* do not disturb + crc32 */
+		.data_name = "do not disturb",
+		.data_size = 30,
+		.data_base = 0x2c6,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
 		.data_size = 20 * 10,
-		.data_base = 0x50,
+		.data_base = 0x2e4,
 	},
 	{
 		/* trace log text */
 		.data_name = "trace log text",
 		.data_size = 4096 * 2,
-		.data_base = 0x118,
+		.data_base = 0x3ac,
 	},
 };
 

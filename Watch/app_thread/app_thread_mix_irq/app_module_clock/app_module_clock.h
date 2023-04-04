@@ -119,6 +119,10 @@ void app_module_clock_local_update(void);
  */
 void app_module_clock_timestamp_update(uint64_t utc_new);
 
+/*@brief 系统时钟复位清除
+ */
+void app_module_clock_clean(void);
+
 /*@brief 系统时钟转储到外存
  */
 void app_module_clock_dump(void);

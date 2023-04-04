@@ -4,17 +4,18 @@
 #include "app_std_lib.h"
 #include "app_os_adaptor.h"
 #include "app_sys_timer.h"
+#include "app_sys_ext_mem.h"
+#include "app_sys_ext_mem_table.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_data_manage.h"
 #include "app_thread_lvgl.h"
 #include "app_module_clock.h"
-#include "app_module_alarm.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_table.h"
+#include "app_module_remind_group.h"
+#include "app_module_remind_alarm.h"
 #include "app_module_system.h"
 #include "app_module_trace.h"
 
@@ -75,45 +76,54 @@ static inline void app_module_countdown_test(void)
     app_module_countdown_start();
 }
 
-/*@brief 闹钟模组测试
+/*@brief 提醒闹钟模组测试
  */
-static inline void app_module_alarm_test(void)
+static inline void app_module_remind_alarm_test(void)
 {
-    static app_module_alarm_t array[5] = {0};
-    uint32_t alarm_group_id = app_module_alarm_group_register(array, 5);
-    app_module_alarm_t alarm1 = {.clock_base.year   = 2023,
-                                 .clock_base.month  = 1,
-                                 .clock_base.day    = 1,
-                                 .clock_base.second = 2,
-                                 .onoff = 1,
-                                 .field_month = 0b00000001000,
-                                 .field_week = 0b0000100,
-                                 .type = app_module_alarm_custom,};
-    app_module_alarm_t alarm2 = {.clock_base.year   = 2023,
-                                 .clock_base.month  = 1,
-                                 .clock_base.day    = 1,
-                                 .clock_base.second = 4,
-                                 .onoff = 1,
-                                 .field_month = 0b00000001000,
-                                 .field_week = 0b0000100,
-                                 .type = app_module_alarm_custom,};
-    app_module_alarm_t alarm3 = {.clock_base.year   = 2023,
-                                 .clock_base.month  = 1,
-                                 .clock_base.day    = 1,
-                                 .clock_base.second = 5,
-                                 .onoff = 1,
-                                 .repeat = 3,
-                                 .type = app_module_alarm_repeat,};
-    app_module_clock_to_utc(&alarm1.clock_base);
-    app_module_clock_to_utc(&alarm2.clock_base);
-    app_module_clock_to_utc(&alarm3.clock_base);
-    app_module_clock_to_week(&alarm1.clock_base);
-    app_module_clock_to_week(&alarm2.clock_base);
-    app_module_clock_to_week(&alarm3.clock_base);
-
-    app_module_alarm_add(alarm_group_id, &alarm1);
-    app_module_alarm_add(alarm_group_id, &alarm2);
-    app_module_alarm_add(alarm_group_id, &alarm3);
+    app_module_remind_item_t       *remind_item = NULL;
+    app_module_remind_alarm_info_t *alarm_info = NULL;
+    
+    app_module_remind_alarm_array_lock();
+    app_module_remind_alarm_array(&remind_item, &alarm_info);
+    /* 提醒闹钟0(常规模式): */
+    const char *alarm_name_0 = "Alarm 0";
+    alarm_info[0].snooze_count = 0;
+    alarm_info[0].duration = 300;
+    memcpy(alarm_info[0].name, alarm_name_0, sizeof(alarm_name_0));
+    remind_item[0].valid = true;
+    remind_item[0].onoff = true;
+    remind_item[0].type  = app_module_remind_item_custom;
+    remind_item[0].month = 0b00000001000;
+    remind_item[0].week  = 0b0000100;
+    remind_item[0].clock.year   = 2023;
+    remind_item[0].clock.month  = 1;
+    remind_item[0].clock.day    = 1;
+    remind_item[0].clock.hour   = 0;
+    remind_item[0].clock.minute = 0;
+    remind_item[0].clock.second = 2;
+    app_module_clock_to_utc(&remind_item[0].clock);
+    app_module_clock_to_week(&remind_item[0].clock);
+    remind_item[0].offset_utc = remind_item[0].clock.utc /* +-xxx sec */;
+    /* 提醒闹钟1(滚动模式) */
+    const char *alarm_name_1 = "Alarm 1";
+    alarm_info[1].snooze_count = 0;
+    alarm_info[1].duration = 300;
+    memcpy(alarm_info[1].name, alarm_name_1, sizeof(alarm_name_1));
+    remind_item[1].valid  = true;
+    remind_item[1].onoff  = true;
+    remind_item[1].type   = app_module_remind_item_repeat;
+    remind_item[1].repeat = 3;
+    remind_item[1].clock.year   = 2023;
+    remind_item[1].clock.month  = 1;
+    remind_item[1].clock.day    = 1;
+    remind_item[1].clock.hour   = 1;
+    remind_item[1].clock.minute = 1;
+    remind_item[1].clock.second = 2;
+    app_module_clock_to_utc(&remind_item[1].clock);
+    app_module_clock_to_week(&remind_item[1].clock);
+    remind_item[1].offset_utc = remind_item[1].clock.utc /* +-xxx sec */;
+    /* 继续添加 */
+    app_module_remind_alarm_array_unlock();
 }
 
 /*@brief 日志转储测试

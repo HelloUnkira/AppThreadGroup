@@ -244,6 +244,16 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     #endif
 }
 
+/*@brief 系统时钟复位清除
+ */
+void app_module_clock_clean(void)
+{
+    app_module_clock_t clock = {.year = 2020, .month = 1, .day = 1,};
+    app_module_clock_to_week(&clock);
+    app_module_clock_to_utc(&clock);
+    app_module_clock_set_system_clock(&clock);
+}
+
 /*@brief 系统时钟转储到外存
  */
 void app_module_clock_dump(void)
@@ -278,10 +288,7 @@ void app_module_clock_load(void)
     if (crc32 == clock_data.crc32)
         app_module_clock_set_system_clock(&clock_data.clock);
     if (crc32 != clock_data.crc32) {
-        app_module_clock_t clock = {.year = 2020, .month = 1, .day = 1,};
-        app_module_clock_to_week(&clock);
-        app_module_clock_to_utc(&clock);
-        app_module_clock_set_system_clock(&clock);
+        app_module_clock_clean();
         APP_SYS_LOG_WARN("load system clock fail");
     }
 }

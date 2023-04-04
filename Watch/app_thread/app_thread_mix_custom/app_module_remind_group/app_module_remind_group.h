@@ -22,15 +22,11 @@ typedef struct {
     uint32_t type:4;            /* 提醒模式 */
     uint32_t valid:1;           /* 有效性 */
     uint32_t onoff:1;           /* 启停状态 */
-    /* 使用者自行维护字段 */
-    uint8_t *data;              /* 扩充数据包 */
-    uint32_t size;              /* 扩充数据包长度 */
 } app_module_remind_item_t;
 
 typedef struct {
     void       *array;      /* 提醒项数组 */
     uint32_t    number;     /* 提醒项数量 */
-    uint32_t    used;       /* 提醒项使用数量 */
 } app_module_remind_group_t;
 
 typedef struct {
@@ -73,7 +69,7 @@ void app_module_remind_group_del(uint32_t remind_group_id);
 /*@brief 更新提醒组
  *       内部使用: 被mix custom线程使用
  */
-void app_module_remind_group_update(void);
+void app_module_remind_group_reflush(void);
 
 /*@brief 初始化提醒组
  */

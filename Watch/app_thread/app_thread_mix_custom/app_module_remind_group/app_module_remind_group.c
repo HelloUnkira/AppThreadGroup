@@ -19,7 +19,7 @@ static app_module_remind_group_t app_module_remind_group[APP_MODULE_REMIND_GROUP
 /*@brief     更新提醒组事件
  *@param[in] clock 时钟实例
  */
-void app_module_remind_group_timestamp(app_module_clock_t clock[1])
+void app_module_remind_group_update(app_module_clock_t clock[1])
 {
     app_package_t package = {
         .thread  = app_thread_id_mix_custom,
@@ -31,7 +31,7 @@ void app_module_remind_group_timestamp(app_module_clock_t clock[1])
 
 /*@brief 生成提醒组事件
  */
-static app_module_remind_group_event(app_module_remind_package_t remind, uint32_t event)
+static void app_module_remind_group_throw_event(app_module_remind_package_t remind, uint32_t event)
 {
     app_module_remind_package_t *remind_new = app_mem_alloc(sizeof(app_module_remind_package_t));
     remind_new->remind_group = remind.remind_group;
@@ -51,11 +51,11 @@ static app_module_remind_group_event(app_module_remind_package_t remind, uint32_
 /*@brief 更新提醒组
  *       内部使用: 被mix custom线程使用
  */
-void app_module_remind_group_update(void)
+void app_module_remind_group_reflush(void)
 {
     const uint32_t day_secs = 24 * 60 * 60;
     app_module_remind_item_t   *item   = NULL;
-    app_module_remind_item_t  **list   = NULL;
+    app_module_remind_item_t   *list   = NULL;
     app_module_remind_group_t  *group  = NULL;
     app_module_remind_package_t remind = {0};
     app_module_clock_t clock = {0};
@@ -66,19 +66,19 @@ void app_module_remind_group_update(void)
     for (uint32_t idx1 = 0; idx1 < APP_MODULE_REMIND_GROUP_MAX; idx1++) {
         if ((group = &app_module_remind_group[idx1])->array == NULL)
             continue;
-        /* 提醒数据(可能使用) */
-        remind.remind_group = idx1;
-        remind.remind_item  = item;
         /* 检查这个提醒组内所有提醒项 */
         for (uint32_t idx2 = 0; idx2 < group->number; idx2++) {
-            if (!(item = (list = group->array)[idx2])->valid)
+            if (!(item = &(list = group->array)[idx2])->valid)
                  continue;
+            /* 提醒数据(可能使用) */
+            remind.remind_group = idx1;
+            remind.remind_item  = item;
             /* 初次命中 */
             if (clock.utc == item->clock.utc)
-                app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_first);
+                app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_first);
             /* 初次偏移命中 */
             if (clock.utc == item->offset_utc)
-                app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_first_offset);
+                app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_first_offset);
             /* 时分秒命中,对天,星期,月份进行二次检查命中 */
             switch (item->type) {
             case app_module_remind_item_custom: {
@@ -94,19 +94,19 @@ void app_module_remind_group_update(void)
                 if (item->clock.week == clock.week && (item->week & (1 < clock.week)) != 0) {
                     /* 星期命中 */
                     if (cc_sec_s == t1_sec_s)
-                        app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_week);
+                        app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_week);
                     /* 星期偏移命中 */
                     if (cc_sec_s == t2_sec_s)
-                        app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_week_offset);
+                        app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_week_offset);
                 }
                 /* 月份检查:今天和目标都是同一日,且对应月份处于激活态 */
                 if (item->clock.day == clock.day && (item->month & (1 < clock.month)) != 0) {
                     /* 星期命中 */
                     if (cc_sec_s == t1_sec_s)
-                        app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_month);
+                        app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_month);
                     /* 星期偏移命中 */
                     if (cc_sec_s == t2_sec_s)
-                        app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_month_offset);
+                        app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_month_offset);
                 }
                 break;
             }
@@ -118,9 +118,9 @@ void app_module_remind_group_update(void)
                 uint32_t off_utc_1 = cc_sec_s > t1_sec_s ? cc_sec_s - t1_sec_s : t1_sec_s - cc_sec_s;
                 uint32_t off_utc_2 = cc_sec_s > t2_sec_s ? cc_sec_s - t2_sec_s : t2_sec_s - cc_sec_s;
                 if (off_utc_1 % item->repeat == 0)
-                    app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_repeat);
+                    app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_repeat);
                 if (off_utc_2 % item->repeat == 0)
-                    app_module_remind_group_event(remind, app_thread_mix_custom_remind_group_repeat_offset);
+                    app_module_remind_group_throw_event(remind, app_thread_mix_custom_remind_group_repeat_offset);
                 break;
             }
             default:
@@ -156,11 +156,12 @@ uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t n
  */
 void app_module_remind_group_del(uint32_t remind_group_id)
 {
-    APP_SYS_ASSERT(remind_group_id < APP_MODULE_REMIND_GROUP_MAX);
-    app_mutex_take(&app_module_remind_group_mutex);
-    app_module_remind_group[remind_group_id].array  = NULL;
-    app_module_remind_group[remind_group_id].number = 0;
-    app_mutex_give(&app_module_remind_group_mutex);
+    if (remind_group_id < APP_MODULE_REMIND_GROUP_MAX) {
+        app_mutex_take(&app_module_remind_group_mutex);
+        app_module_remind_group[remind_group_id].array  = NULL;
+        app_module_remind_group[remind_group_id].number = 0;
+        app_mutex_give(&app_module_remind_group_mutex);
+    }
 }
 
 /*@brief 初始化提醒组
@@ -171,6 +172,5 @@ void app_module_remind_group_ready(void)
     for (uint32_t idx = 0; idx < APP_MODULE_REMIND_GROUP_MAX; idx++) {
         app_module_remind_group[idx].array  = NULL;
         app_module_remind_group[idx].number = 0;
-        app_module_remind_group[idx].used   = 0;
     }
 }

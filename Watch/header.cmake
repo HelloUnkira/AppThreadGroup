@@ -40,11 +40,11 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_clock
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_irq/app_module_vibrate
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_alarm
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_countdown
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_stopwatch
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_world_time
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_group
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_alarm
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_misc
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_do_not_disturb
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage

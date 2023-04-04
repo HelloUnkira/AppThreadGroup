@@ -11,8 +11,10 @@
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
 #include "app_module_clock.h"
-#include "app_module_do_not_disturb.h"
+#include "app_module_remind_group.h"
+#include "app_module_remind_alarm.h"
 #include "app_module_remind_drink.h"
+#include "app_module_do_not_disturb.h"
 #include "app_module_shutdown.h"
 
 /* 这里不存在并发读写导致的时序不同步,无需保护 */
@@ -31,8 +33,9 @@ void app_module_dump_process(void)
 {
     APP_SYS_LOG_WARN("...");
     app_module_clock_dump();
-    app_module_do_not_disturb_dump();
+    app_module_remind_alarm_dump();
     app_module_remind_drink_dump();
+    app_module_do_not_disturb_dump();
     /* ... */
     app_module_shutdown_dump();
     /* ... */

@@ -87,7 +87,7 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     if (cond)
         return;
     /* 输出错误信息 */
-    APP_SYS_LOG_ERROR_RAW("APP_SYS_ASSERT:[%s][%d]", func, line);
+    APP_SYS_LOG_ERROR_RAW("APP_SYS_ASSERT:[%s][%s][%d]", file, func, line);
     /* 异常导致的错误直接重启系统 */
     app_os_reset();
 }

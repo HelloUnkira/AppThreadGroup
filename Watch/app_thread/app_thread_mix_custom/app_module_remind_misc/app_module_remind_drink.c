@@ -143,7 +143,7 @@ void app_module_remind_drink_dump(void)
     } remind_data = {.data.remind = app_module_remind_drink};
     
     remind_data.data.crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_drink_t));
-    app_sys_ext_src_write("mix_chunk_small", "drink remind", remind_data.buffer, sizeof(remind_data));
+    app_sys_ext_src_write("mix_chunk_small", "remind drink", remind_data.buffer, sizeof(remind_data));
 }
 
 /*@brief 喝水提醒加载到内存
@@ -158,7 +158,7 @@ void app_module_remind_drink_load(void)
         } data;
     } remind_data;
     
-    app_sys_ext_src_read("mix_chunk_small", "drink remind", remind_data.buffer, sizeof(remind_data));
+    app_sys_ext_src_read("mix_chunk_small", "remind drink", remind_data.buffer, sizeof(remind_data));
     uint32_t crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_drink_t));
     if (crc32 == remind_data.data.crc32) {
         app_mutex_take(&app_module_remind_drink_mutex);
