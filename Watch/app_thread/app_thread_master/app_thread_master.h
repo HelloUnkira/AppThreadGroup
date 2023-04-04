@@ -58,9 +58,9 @@ typedef enum {
     app_thread_id_data_manage,      /* 数据管理线程(priority:5) */
     app_thread_id_lvgl,             /* lvgl线程(priority:4) */
     /* 继续添加其他线程 */
-    app_thread_id_num,              /* 占位符:子线程组数量 */
+    app_thread_id_number,              /* 占位符:子线程组数量 */
     app_thread_id_unknown,          /* 占位符:未知来源,不可为未知去处 */
-} app_thread_id_set;
+} app_thread_id_t;
 
 /* 线程组事件 */
 /* 备注:每一个子线程都必须可以处理的系统公共事件 */
@@ -68,7 +68,7 @@ typedef enum {
 typedef enum {  /* 线程组模组 */
     app_thread_group_work,
     app_thread_group_num,
-} app_thread_group_module;
+} app_thread_group_t;
 
 /*@brief 初始化所有线程及其附属资源
  *       启动所有线程

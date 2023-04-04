@@ -5,7 +5,14 @@ typedef enum {
     app_module_remind_item_none = 0,
     app_module_remind_item_custom,
     app_module_remind_item_repeat,
-} app_module_remind_item_type;
+} app_module_remind_item_type_t;
+
+typedef enum {
+    app_module_remind_group_alarm,
+    app_module_remind_group_unknown,
+    app_module_remind_group_number,
+    /* 添加其他类型... */
+} app_module_remind_group_type_t;
 
 typedef struct {
     app_module_clock_t clock;   /* 提醒点(所有字段均需有效) */
@@ -31,11 +38,9 @@ typedef struct {
 
 typedef struct {
     uint32_t remind_group;
-    void    *remind_item;
+    uint32_t remind_item;
+    uint32_t remind_type;
 } app_module_remind_package_t;
-
-/* 本地提醒组限制 */
-#define APP_MODULE_REMIND_GROUP_MAX     5
 
 /*为什么需要组?
  *总有一些奇奇怪怪的提醒流程不可以被预见

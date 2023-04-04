@@ -10,6 +10,9 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
+#include "app_module_clock.h"
+#include "app_module_remind_group.h"
+#include "app_module_remind_alarm.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -424,6 +427,13 @@ void app_lv_ui_scene_event(uint32_t event, uint8_t *data, uint32_t size)
             /* 倒计时提醒事件 */
             app_lv_scene_add(&app_lv_scene_countdown_remind, false);
         }
+        break;
+    }
+    case app_thread_lvgl_ui_remind_alarm: {
+        app_module_remind_package_t *remind = data;
+        remind->remind_group;
+        remind->remind_item;
+        remind->remind_type;
         break;
     }
     case app_thread_lvgl_ui_remind_drink: {

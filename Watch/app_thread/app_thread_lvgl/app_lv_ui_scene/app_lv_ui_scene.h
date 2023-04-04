@@ -1,8 +1,12 @@
 #ifndef APP_LV_UI_SCENE_H
 #define APP_LV_UI_SCENE_H
 
+/* default scene */
+extern app_lv_scene_t app_lv_scene_watch_start;
+extern app_lv_scene_t app_lv_scene_watch_stop;
+extern app_lv_scene_t app_lv_scene_watch_null;
+extern app_lv_scene_t app_lv_scene_watch_dlps;
 /* main scene */
-extern app_lv_scene_t app_lv_scene_watch;
 extern app_lv_scene_t app_lv_scene_main;
 /* group scene */
 extern app_lv_scene_t app_lv_scene_list;

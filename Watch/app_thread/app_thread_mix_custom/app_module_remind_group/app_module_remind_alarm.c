@@ -21,6 +21,15 @@ static app_mutex_t                    app_module_remind_alarm_mutex = {0};
 static app_module_remind_item_t       app_module_remind_alarm_item[APP_MODULE_REMIND_ALARM_MAX] = {0};
 static app_module_remind_alarm_info_t app_module_remind_alarm_info[APP_MODULE_REMIND_ALARM_MAX] = {0};
 
+/*@brief      提醒组是否为提醒闹钟组
+ *@param[out] remind_group 提醒组
+ *@retval     是否为闹钟组
+ */
+bool app_module_remind_alarm_group_check(uint32_t remind_group)
+{
+    return remind_group == app_module_remind_alarm_group;
+}
+
 /*@brief 锁定提醒闹钟列表
  *       此时提醒闹钟列表不再迭代,也不生成事件
  *       可以直接对提醒闹钟列表本地修改

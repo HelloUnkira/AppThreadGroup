@@ -89,6 +89,18 @@ void app_thread_mix_custom_routine(void)
                 if (package.event == app_thread_mix_custom_remind_group_update) {
                     app_module_remind_group_reflush();
                 }
+                if (package.event == app_thread_mix_custom_remind_group_package) { 
+                    /* 提醒组事件分拣 */
+                    app_module_remind_package_t *remind = package.data;
+                    /* 该提醒组事件来自提醒闹钟组: */
+                    if (app_module_remind_alarm_group_check(remind->remind_group)) {
+                        /* 发送闹钟事件(直接转发) */
+                        package.thread = app_thread_id_lvgl;
+                        package.module = app_thread_lvgl_ui_scene;
+                        package.event  = app_thread_lvgl_ui_remind_alarm;
+                        app_package_notify(&package);
+                    }
+                }
                 break;
             }
             case app_thread_mix_custom_remind_misc: {

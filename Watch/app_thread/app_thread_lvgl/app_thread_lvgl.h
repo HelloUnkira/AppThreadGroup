@@ -5,7 +5,7 @@ typedef enum {  /* 线程模组 */
     app_thread_lvgl_system = 0,     /* 系统模组 */
     app_thread_lvgl_sched,          /* GUI事件调度模组 */
     app_thread_lvgl_ui_scene,       /* UI场景基础模组 */
-} app_thread_lvgl_module;
+} app_thread_lvgl_module_t;
 
 typedef enum {  /* GUI事件调度模组事件 */
     app_thread_lvgl_sched_inc,          /* lvgl时钟约减事件 */
@@ -14,7 +14,7 @@ typedef enum {  /* GUI事件调度模组事件 */
     app_thread_lvgl_sched_scene,        /* lvgl场景处理事件 */
     app_thread_lvgl_sched_dlps_enter,   /* lvgl进入dlps事件 */
     app_thread_lvgl_sched_dlps_exit,    /* lvgl退出dlps事件 */
-} app_thread_lvgl_sched_event;
+} app_thread_lvgl_sched_event_t;
 
 typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_start,                 /* UI场景进入 */
@@ -22,8 +22,9 @@ typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_check_time,            /* UI场景计时检查 */
     /* 下述事件对应于特定场景内需要的事件 */
     app_thread_lvgl_ui_countdown_remind,            /* 倒计时提醒事件 */
-    app_thread_lvgl_ui_remind_drink,                /* 喝水提醒事件 */
-} app_thread_lvgl_ui_scene_event;
+    app_thread_lvgl_ui_remind_alarm,                /* 提醒闹钟事件 */
+    app_thread_lvgl_ui_remind_drink,                /* 提醒喝水事件 */
+} app_thread_lvgl_ui_scene_event_t;
 
 /* lvgl:tick */
 #define LV_SCHED_TICK_INC       1

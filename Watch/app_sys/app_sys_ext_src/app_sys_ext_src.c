@@ -21,9 +21,9 @@ size_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8
 {
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
     const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name(chunk_name, data_name);
-    APP_SYS_ASSERT(ext_mem == NULL);
-    APP_SYS_ASSERT(ext_src == NULL);
-    APP_SYS_ASSERT(ext_src->data_size < size);
+    APP_SYS_ASSERT(ext_mem != NULL);
+    APP_SYS_ASSERT(ext_src != NULL);
+    APP_SYS_ASSERT(ext_src->data_size >= size);
     return app_sys_ext_mem_read(ext_mem, ext_src->data_base, buffer, size);
 }
 
@@ -38,8 +38,8 @@ size_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint
 {
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
     const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name(chunk_name, data_name);
-    APP_SYS_ASSERT(ext_mem == NULL);
-    APP_SYS_ASSERT(ext_src == NULL);
-    APP_SYS_ASSERT(ext_src->data_size < size);
+    APP_SYS_ASSERT(ext_mem != NULL);
+    APP_SYS_ASSERT(ext_src != NULL);
+    APP_SYS_ASSERT(ext_src->data_size >= size);
     return app_sys_ext_mem_write(ext_mem, ext_src->data_base, buffer, size);
 }

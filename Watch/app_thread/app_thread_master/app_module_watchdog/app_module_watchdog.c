@@ -14,7 +14,7 @@
 #include "app_module_clock.h"
 
 static app_mutex_t app_module_watchdog_mutex = {0};
-static uint8_t app_module_watchdog_count[app_thread_id_num] = {0};
+static uint8_t app_module_watchdog_count[app_thread_id_number] = {0};
 
 /*@brief     线程软件看门狗喂狗
  *@param[in] thread_id 线程编号
@@ -22,7 +22,7 @@ static uint8_t app_module_watchdog_count[app_thread_id_num] = {0};
 static void app_module_watchdog_feed_work(void *argument)
 {
     uint8_t thread_id = (uint8_t)(uintptr_t)argument;
-    if (thread_id < app_thread_id_num) {
+    if (thread_id < app_thread_id_number) {
         app_mutex_take(&app_module_watchdog_mutex);
         app_module_watchdog_count[thread_id] = 0;
         app_mutex_give(&app_module_watchdog_mutex);
@@ -34,7 +34,7 @@ static void app_module_watchdog_feed_work(void *argument)
  */
 void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 {
-    for (uint8_t idx = 0; idx < app_thread_id_num; idx++) {
+    for (uint8_t idx = 0; idx < app_thread_id_number; idx++) {
         /* 每隔1s发送一次软件看门狗喂狗事件 */
         app_package_t package = {
             .thread  = idx,

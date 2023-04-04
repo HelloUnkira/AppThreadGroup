@@ -10,6 +10,12 @@ typedef struct {
     uint8_t name[APP_MODULE_REMIND_ALARM_NAME_MAX];
 } app_module_remind_alarm_info_t;
 
+/*@brief      提醒组是否为提醒闹钟组
+ *@param[out] remind_group 提醒组
+ *@retval     是否为闹钟组
+ */
+bool app_module_remind_alarm_group_check(uint32_t remind_group);
+
 /*@brief 锁定提醒闹钟列表
  *       此时提醒闹钟列表不再迭代,也不生成事件
  *       可以直接对提醒闹钟列表本地修改

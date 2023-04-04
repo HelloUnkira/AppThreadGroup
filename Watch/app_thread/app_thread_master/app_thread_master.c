@@ -30,9 +30,9 @@
 /* 管道集合,为每一个线程分发一套传输管道 */
 /* 信号量,控制线程组的进动 */
 static app_sem_t app_thread_sem_src = {0};
-static app_sem_t app_thread_sem_dst[app_thread_id_num] = {0};
+static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
-static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_num] = {0};
+static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
 
 /*@brief        通过从线程ID获得管道同步资源
  *@param[in]    thread 线程ID
@@ -40,7 +40,7 @@ static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_num] = {0};
  */
 void app_thread_get_sync(uint32_t thread, app_sem_t **sem)
 {
-    if (thread < app_thread_id_num)
+    if (thread < app_thread_id_number)
         *sem = &app_thread_sem_dst[thread];
 }
 
@@ -50,7 +50,7 @@ void app_thread_get_sync(uint32_t thread, app_sem_t **sem)
  */
 void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
 {
-    if (thread < app_thread_id_num)
+    if (thread < app_thread_id_number)
        *pipe = &app_thread_pipe_dst[thread];
 }
 
@@ -114,10 +114,10 @@ bool app_package_notify(app_package_t *package)
 void app_thread_group_run(void)
 {
     /* 就绪管道和同步资源 */
-    for (uint32_t idx = 0; idx < app_thread_id_num; idx++)
+    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
         app_sys_pipe_ready(&app_thread_pipe_dst[idx]);
         app_sys_pipe_ready(&app_thread_pipe_src);
-    for (uint32_t idx = 0; idx < app_thread_id_num; idx++)
+    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
         app_sem_process(&app_thread_sem_dst[idx]);
         app_sem_process(&app_thread_sem_src);
     /* 就绪系统子模组 */

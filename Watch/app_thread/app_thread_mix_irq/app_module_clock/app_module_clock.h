@@ -76,7 +76,7 @@ void app_module_clock_to_dtime(app_module_clock_t *clock);
 typedef enum {
     app_module_clock_update_default,
     app_module_clock_update_first_set,
-} app_module_clock_update_event;
+} app_module_clock_update_event_t;
 
 /* 本地时钟触发回调 */
 typedef void (*app_module_clock_cb1)(app_module_clock_t clock[1]);

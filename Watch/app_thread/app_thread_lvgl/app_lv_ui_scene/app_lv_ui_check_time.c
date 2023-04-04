@@ -18,10 +18,8 @@
 #include "app_lv_drv.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_check_time.h"
-
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_watch.h"
+#include "app_lv_ui_check_time.h"
 
 static app_mutex_t app_lv_ui_check_time_mutex = {0};
 static app_sys_timer_t app_lv_ui_check_time_timer = {0};
@@ -87,7 +85,6 @@ void app_lv_ui_check_time_update(void)
     }
     app_mutex_give(&app_lv_ui_check_time_mutex);
 }
-
 
 /*@brief 界面状态控制更新
  *       内部使用: 被lvgl线程使用

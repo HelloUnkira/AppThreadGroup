@@ -22,16 +22,16 @@ typedef struct {
 } app_lv_ui_res_list_t;
 
 static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    {"Null",                &app_lv_scene_watch,},
-    {"Null",                &app_lv_scene_watch,},
+    {"Null",                &app_lv_scene_watch_null,},
+    {"Null",                &app_lv_scene_watch_null,},
     {"Data Daily",          &app_lv_scene_data_daily,},
     {"Calculator",          &app_lv_scene_calculator,},
     {"Stopwatch",           &app_lv_scene_stopwatch,},
     {"Countdown",           &app_lv_scene_countdown,},
     {"Internal Test",       &app_lv_scene_test_list,},
-    {"Null",                &app_lv_scene_watch,},
-    {"Null",                &app_lv_scene_watch,},
-    {"Null",                &app_lv_scene_watch,},
+    {"Null",                &app_lv_scene_watch_null,},
+    {"Null",                &app_lv_scene_watch_null,},
+    {"Null",                &app_lv_scene_watch_null,},
 };
 
 static const uint32_t app_lv_ui_res_list_len = sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]);
