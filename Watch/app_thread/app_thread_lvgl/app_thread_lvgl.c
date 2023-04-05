@@ -25,6 +25,7 @@
 #include "app_lv_ui_event_object.h"
 #include "app_lv_ui_event_scene.h"
 #include "app_lv_ui_check_time.h"
+#include "app_lv_ui_test.h"
 
 /*@brief lvgl线程模组初始化
  */
@@ -117,17 +118,8 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             case app_thread_lvgl_ui_scene: {
-                #if 0
-                    /* 禁用超时回退 */
-                    app_lv_ui_check_time_reset(0, 0);
-                    app_lv_ui_check_time_exec(false);
-                    /* 做些什么:测试代码 */
-                    #if 0
-                    lv_obj_t *img = lv_img_create(lv_scr_act());
-                    lv_img_set_src(img, "/:test_find_phone.png");
-                    lv_obj_center(img);
-                    #else
-                    #endif
+                #if APP_LV_UI_TEST_USE
+                app_lv_ui_test_scene();
                 #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
@@ -158,9 +150,12 @@ void app_thread_lvgl_routine(void)
                 }
                 #endif
                 /* 产生到特定场景内的事件...... */
-                app_lv_ui_scene_event(package.event, package.data, package.size);
-                if (package.dynamic)
-                    app_mem_free(package.data);
+                if (true) {
+                    app_lv_ui_scene_event(package.event, package.data, package.size);
+                    if (package.dynamic)
+                        app_mem_free(package.data);
+                    break;
+                }
                 break;
             }
             default: {

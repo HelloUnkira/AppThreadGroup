@@ -40,7 +40,7 @@ void app_lv_drv_update(void)
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_sched,
         .event  = app_thread_lvgl_sched_drv,
-        .priority = app_package_priority_normal,
+        .priority = app_package_priority_normal_above,
     };
     app_package_notify(&package);
 }

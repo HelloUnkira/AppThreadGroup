@@ -364,12 +364,12 @@ void app_lv_display_flush_manual(lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_co
 void app_lv_display_ready(void)
 {
     /* 初始化SDL */
-    if (1) {
+    if (true) {
         app_lv_display_create(&app_lv_display_screen);
     }
     
     /* 反初始化SDL屏幕(不需要) */
-    if (0) {
+    if (false) {
         app_lv_display_destroy(&app_lv_display_screen);
     }
 }

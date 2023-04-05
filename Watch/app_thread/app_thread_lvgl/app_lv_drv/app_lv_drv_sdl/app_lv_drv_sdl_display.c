@@ -125,7 +125,7 @@ static int app_lv_display_sdl_quit_filter(void * userdata, SDL_Event * event)
 void app_lv_display_ready(void)
 {
     /* 初始化SDL */
-    if (1) {
+    if (true) {
         SDL_Init(SDL_INIT_VIDEO);
         SDL_SetEventFilter(app_lv_display_sdl_quit_filter, NULL);
         app_lv_display_create(&app_lv_display_screen);
@@ -133,7 +133,7 @@ void app_lv_display_ready(void)
     }
 
     /* 反初始化SDL屏幕(不需要) */
-    if (0) {
+    if (false) {
         app_lv_display_destroy(&app_lv_display_screen);
         SDL_Quit();
     }
