@@ -253,6 +253,7 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **time, lv_obj_t **t
     app_lv_ui_style_object(obj_box);
     lv_obj_set_size(obj_box, LV_HOR_RES, 40);
     lv_obj_set_style_pad_all(obj_box, 10, 0);
+    lv_obj_set_style_bg_opa(obj_box, LV_OPA_TRANSP, 0);
     lv_obj_align(obj_box, LV_ALIGN_TOP_MID, 0, 0);
     /* 左上角按钮 */
     lv_obj_t *btn = app_lv_ui_style_btn(obj_box);
@@ -293,6 +294,7 @@ lv_obj_t * app_lv_ui_style_one_btn(lv_obj_t *parent, lv_obj_t **btn_c, lv_obj_t 
     app_lv_ui_style_object(btn);
     lv_obj_set_size(btn, LV_HOR_RES, 60);
     lv_obj_set_style_pad_all(btn, 10, 0);
+    lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
     lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
     /* 中心按键 */
     *btn_c = app_lv_ui_style_btn(btn);
@@ -322,6 +324,7 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     app_lv_ui_style_object(btn);
     lv_obj_set_size(btn, LV_HOR_RES, 60);
     lv_obj_set_style_pad_all(btn, 10, 0);
+    lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
     lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
     /* 左下角按钮 */
     *btn_l = app_lv_ui_style_btn(btn);

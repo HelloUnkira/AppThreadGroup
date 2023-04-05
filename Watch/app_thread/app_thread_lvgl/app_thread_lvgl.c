@@ -123,7 +123,7 @@ void app_thread_lvgl_routine(void)
                 #else
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
-                    app_lv_ui_event_default_config(true);
+                    app_lv_ui_event_default_config(NULL, true);
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_start, false);
                     app_lv_ui_check_time_reset(0, 0);
@@ -133,7 +133,7 @@ void app_thread_lvgl_routine(void)
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
-                    app_lv_ui_event_default_config(false);
+                    app_lv_ui_event_default_config(NULL, false);
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_stop, false);
                     app_lv_ui_check_time_reset(0, 0);

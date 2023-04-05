@@ -168,6 +168,7 @@ static void app_lv_ui_stopwatch_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_stopwatch.self = app_lv_ui_res_local->scene;
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
         title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
@@ -193,9 +194,6 @@ static void app_lv_ui_stopwatch_show(void *scene)
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }
-    app_lv_ui_stopwatch.self =
-    app_lv_ui_res_local == NULL ? NULL :
-    app_lv_ui_res_local->scene;
 }
 
 /*@brief     界面隐藏
@@ -210,12 +208,10 @@ static void app_lv_ui_stopwatch_hide(void *scene)
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
+        app_lv_ui_stopwatch.self = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_ui_stopwatch.self =
-    app_lv_ui_res_local == NULL ? NULL :
-    app_lv_ui_res_local->scene;
 }
 
 app_lv_scene_t app_lv_ui_stopwatch = {

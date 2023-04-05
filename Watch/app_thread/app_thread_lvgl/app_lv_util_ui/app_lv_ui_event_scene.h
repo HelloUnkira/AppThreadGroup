@@ -6,9 +6,10 @@
 void app_lv_ui_event_default(lv_event_t *e);
 
 /*@brief    场景默认事件响应回调设置
+ *param[in] scene  事件捕获场景,为NULL默认为scr
  *param[in] enable 启用或者禁用
  */
-void app_lv_ui_event_default_config(bool enable);
+void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable);
 
 /*@brief 点击返回上一层
  */

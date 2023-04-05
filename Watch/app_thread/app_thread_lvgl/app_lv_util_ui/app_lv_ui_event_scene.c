@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_sys_log.h"
@@ -19,6 +19,7 @@
 #include "app_lv_drv.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_scene.h"
+#include "app_lv_ui_float.h"
 #include "app_lv_ui_check_time.h"
 
 /*@brief 界面默认事件响应回调
@@ -51,6 +52,10 @@ void app_lv_ui_event_default(lv_event_t *e)
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
+        if (app_lv_ui_float_cannot_gestrue(LV_DIR_LEFT))
+            break;
+        if (app_lv_ui_float_cannot_gestrue(LV_DIR_RIGHT))
+            break;
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
@@ -220,18 +225,20 @@ void app_lv_ui_event_default(lv_event_t *e)
 }
 
 /*@brief    场景默认事件响应回调设置
+ *param[in] scene  事件捕获场景,为NULL默认为scr
  *param[in] enable 启用或者禁用
  */
-void app_lv_ui_event_default_config(bool enable)
+void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable)
 {
+    scene = scene == NULL ? lv_scr_act() : scene;
     static bool event_config = false;
     if (enable) {
         if (event_config)
             return;
         event_config = true;
         lv_group_t *group = app_lv_driver_get_kb_group();
-        lv_obj_add_event_cb(lv_scr_act(), app_lv_ui_event_default, LV_EVENT_ALL, NULL);
-        lv_group_add_obj(group, lv_scr_act());
+        lv_obj_add_event_cb(scene, app_lv_ui_event_default, LV_EVENT_ALL, NULL);
+        lv_group_add_obj(group, scene);
         lv_group_focus_freeze(group, true);
     } else {
         if (!event_config)
@@ -239,8 +246,8 @@ void app_lv_ui_event_default_config(bool enable)
         event_config = false;
         lv_group_t *group = app_lv_driver_get_kb_group();
         lv_group_focus_freeze(group, false);
-        lv_group_remove_obj(lv_scr_act());
-        lv_obj_remove_event_cb(lv_scr_act(), app_lv_ui_event_default);
+        lv_group_remove_obj(scene);
+        lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
     }
 }
 

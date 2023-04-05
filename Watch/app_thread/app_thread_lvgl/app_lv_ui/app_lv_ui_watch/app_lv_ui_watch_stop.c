@@ -49,8 +49,9 @@ static void app_lv_ui_watch_stop_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_watch_stop.self = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应 */
-        app_lv_ui_event_default_config(false);
+        app_lv_ui_event_default_config(NULL, false);
         /* 初始化加载圆环 */
         app_lv_ui_res_local->spinner = app_lv_ui_style_loading_spinner(app_lv_ui_res_local->scene, 30, 5);
         lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, 20, 20);
@@ -67,9 +68,6 @@ static void app_lv_ui_watch_stop_show(void *scene)
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     0, 0, 100, 2000);
     }
-    app_lv_ui_watch_stop.self =
-    app_lv_ui_res_local == NULL ? NULL :
-    app_lv_ui_res_local->scene;
 }
 
 /*@brief     界面隐藏
@@ -81,15 +79,13 @@ static void app_lv_ui_watch_stop_hide(void *scene)
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 启用默认事件响应 */
-        app_lv_ui_event_default_config(true);
+        app_lv_ui_event_default_config(NULL, true);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
+        app_lv_ui_watch_stop.self = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
-    app_lv_ui_watch_stop.self =
-    app_lv_ui_res_local == NULL ? NULL :
-    app_lv_ui_res_local->scene;
 }
 
 app_lv_scene_t app_lv_ui_watch_stop = {
