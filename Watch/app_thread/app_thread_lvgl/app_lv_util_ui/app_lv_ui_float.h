@@ -23,9 +23,10 @@ typedef struct {
  */
 bool app_lv_ui_float_cannot_gestrue(lv_dir_t direct);
 
-/*@brief 浮动子窗口复位(如果未复位的话)
+/*@brief  浮动子窗口复位(如果未复位的话)
+ *@retval 是否进行复位
  */
-void app_lv_ui_float_reset(void);
+bool app_lv_ui_float_reset(void);
 
 /*@brief     浮窗激活
  *@param[in] scene 场景

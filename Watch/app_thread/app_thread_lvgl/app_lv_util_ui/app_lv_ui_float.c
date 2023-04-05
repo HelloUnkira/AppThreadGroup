@@ -98,20 +98,21 @@ static bool app_lv_ui_float_threshold(app_lv_ui_float_t *float_var, lv_point_t p
     return true;
 }
 
-/*@brief 浮动子窗口复位(如果未复位的话)
+/*@brief  浮动子窗口复位(如果未复位的话)
+ *@retval 是否进行复位
  */
-void app_lv_ui_float_reset(void)
+bool app_lv_ui_float_reset(void)
 {
     app_lv_ui_float_t *float_var = app_lv_ui_float_act;
     /* 需要有活动浮窗存在 */
     if (float_var == NULL)
-        return;
+        return false;
     /* 不存在未复位的浮窗 */
     if (!float_var->cover)
-        return;
+        return false;
     /* 滚动事件未结束,暂时不处理 */
     if (float_var->scroll_w != LV_DIR_NONE)
-        return;
+        return false;
     /* 滚动方向为水平滚动 */
     if (float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr) {
         /* 不管什么情况,回弹它 */
@@ -136,6 +137,7 @@ void app_lv_ui_float_reset(void)
     /* 没有活动浮窗 */
     if (!float_var->cover)
         app_lv_ui_float_act = NULL;
+    return true;
 }
 
 /*@brief 浮动子窗口特效回调

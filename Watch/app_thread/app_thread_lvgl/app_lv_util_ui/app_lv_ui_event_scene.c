@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_std_lib.h"
 #include "app_sys_log.h"
@@ -56,10 +56,11 @@ void app_lv_ui_event_default(lv_event_t *e)
             /* 场景栈手势被浮窗锁定 */
             if (app_lv_ui_float_cannot_gestrue(dir))
                 break;
-            /* 浮动子窗口复位(如果未复位的话) */
-            app_lv_ui_float_reset();
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
+            /* 浮动子窗口复位(如果未复位的话) */
+            if (app_lv_ui_float_reset())
+                break;
             /* 左右滑动回到上一层 */
             if (app_lv_scene_get_nest() > 1) {
                 app_lv_scene_t scene = {0};
@@ -123,8 +124,12 @@ void app_lv_ui_event_default(lv_event_t *e)
                     }
                 }
                 /* 主界面进入下一层 */
-                if (app_lv_scene_get_nest() == 1)
+                if (app_lv_scene_get_nest() == 1) {
+                    /* 浮窗复位,如果可以,此时不做别的操作 */
+                    if (app_lv_ui_float_reset())
+                        break;
                     app_lv_scene_add(&app_lv_ui_list, false);
+                }
             }
         }
         /* 添加其他事件 */
@@ -164,7 +169,6 @@ void app_lv_ui_event_default(lv_event_t *e)
     case LV_EVENT_PRESSED: {
         APP_SYS_LOG_INFO("LV_EVENT_PRESSED");
         break;
-
     }
     case LV_EVENT_PRESSING: {
         APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
@@ -191,14 +195,29 @@ void app_lv_ui_event_default(lv_event_t *e)
         break;
     }
     case LV_EVENT_SCROLL_BEGIN: {
+        lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
+        if (obj == NULL)
+            break;
+        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
+        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
         APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
         break;
     }
     case LV_EVENT_SCROLL_END: {
+        lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
+        if (obj == NULL)
+            break;
+        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
+        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
         APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
         break;
     }
     case LV_EVENT_SCROLL: {
+        lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
+        if (obj == NULL)
+            break;
+        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
+        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
         APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
         break;
     }
