@@ -20,9 +20,10 @@
 #include "app_lv_drv.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_event.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_style.h"
+#include "app_lv_ui_event_object.h"
+#include "app_lv_ui_event_scene.h"
 #include "app_lv_ui_check_time.h"
 
 /*@brief lvgl线程模组初始化
@@ -92,7 +93,7 @@ void app_thread_lvgl_routine(void)
                 /* 与lvgl绑定的驱动设备进入DLPS */
                 if (package.event == app_thread_lvgl_sched_dlps_enter) {
                     /* 进入dlps界面 */
-                    app_lv_scene_add(&app_lv_scene_watch_dlps, false);
+                    app_lv_scene_add(&app_lv_ui_watch_dlps, false);
                     /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
                     app_lv_display_dlps_enter();
                     // app_lv_keyboard_dlps_enter();
@@ -131,8 +132,8 @@ void app_thread_lvgl_routine(void)
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
                     app_lv_ui_event_default_config(true);
-                    app_lv_scene_reset(&app_lv_scene_main, false);
-                    app_lv_scene_add(&app_lv_scene_watch_start, false);
+                    app_lv_scene_reset(&app_lv_ui_main, false);
+                    app_lv_scene_add(&app_lv_ui_watch_start, false);
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(true);
                     APP_SYS_LOG_WARN("ui scene start");
@@ -141,8 +142,8 @@ void app_thread_lvgl_routine(void)
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
                     app_lv_ui_event_default_config(false);
-                    app_lv_scene_reset(&app_lv_scene_main, false);
-                    app_lv_scene_add(&app_lv_scene_watch_stop, false);
+                    app_lv_scene_reset(&app_lv_ui_main, false);
+                    app_lv_scene_add(&app_lv_ui_watch_stop, false);
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(true);
                 if (app_module_system_dlps_get())
