@@ -46,7 +46,6 @@ static void app_lv_ui_main_show(void *scene)
         lv_obj_center(app_lv_ui_res_local->label);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
-
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     0, 0, 100, 1000);
     }
@@ -73,14 +72,11 @@ static void app_lv_ui_main_hide(void *scene)
     app_lv_ui_res_local->scene;
 }
 
-app_lv_scene_set_t app_lv_ui_main_set = {
-    .cross_vlist_t = &app_lv_ui_watch_null,
-    .cross_vlist_b = &app_lv_ui_watch_null,
-};
-
 app_lv_scene_t app_lv_ui_main = {
     /* 场景资源节点 */
-    .scene_set = &app_lv_ui_main_set,
+    .float_t = &app_lv_ui_watch_null,
+    .float_b = &app_lv_ui_watch_null,
+    /*  */
     .show = app_lv_ui_main_show,
     .hide = app_lv_ui_main_hide,
 };

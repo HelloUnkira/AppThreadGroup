@@ -8,22 +8,18 @@ typedef enum {
 } app_lv_scene_event_t;
 
 typedef struct {
-    /* 临近场景(浮动窗口) */
-    void *cross_hlist_l;    /* 临近场景(left:0,right:1) */
-    void *cross_hlist_r;    /* 临近场景(left:0,right:1) */
-    void *cross_vlist_t;    /* 临近场景(top:0,bottom:1) */
-    void *cross_vlist_b;    /* 临近场景(top:0,bottom:1) */
-    /* 临近场景(平行窗口) */
-    void **parral_hlist;
-    void **parral_vlist;
-    uint8_t parral_hnum;
-    uint8_t parral_vnum;
-} app_lv_scene_set_t;
-
-typedef struct {
     /* 场景资源节点 */
     void *self;
-    const void *scene_set;          /* 临近场景集 */
+    /* 临近场景(浮动窗口) */
+    void *float_l;  /* 临近场景(left:0,right:1) */
+    void *float_r;  /* 临近场景(left:0,right:1) */
+    void *float_t;  /* 临近场景(top:0,bottom:1) */
+    void *float_b;  /* 临近场景(top:0,bottom:1) */
+    /* 临近场景(平行窗口) */
+    void  **list_h;
+    void  **list_v;
+    uint8_t list_hnum;
+    uint8_t list_vnum;
     /* 场景触发事件及回调 */
     uint8_t event;                  /* 触发事件 */
     void  (*show)(void *scene);     /* 载入场景 */

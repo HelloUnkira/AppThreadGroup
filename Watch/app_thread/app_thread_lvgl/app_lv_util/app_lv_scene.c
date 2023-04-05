@@ -160,10 +160,9 @@ uint8_t app_lv_scene_get_nest(void)
  */
 void app_lv_scene_active(app_lv_scene_t *scene)
 {
-    APP_SYS_ASSERT(scene != 0);
+    APP_SYS_ASSERT(scene != NULL);
     scene->event = app_lv_scene_need_show;
     app_lv_scene_sched(scene);
-    lv_obj_add_flag(scene->self, LV_OBJ_FLAG_HIDDEN);
 }
 
 /*@brief    失活一个游离窗口
@@ -173,7 +172,7 @@ void app_lv_scene_active(app_lv_scene_t *scene)
  */
 void app_lv_scene_hidden(app_lv_scene_t *scene)
 {
-    APP_SYS_ASSERT(scene != 0);
+    APP_SYS_ASSERT(scene != NULL);
     lv_obj_set_parent(scene->self, lv_scr_act());
     scene->event = app_lv_scene_need_hide;
     app_lv_scene_sched(scene);
