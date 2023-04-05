@@ -52,11 +52,12 @@ void app_lv_ui_event_default(lv_event_t *e)
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
         APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
-        if (app_lv_ui_float_cannot_gestrue(LV_DIR_LEFT))
-            break;
-        if (app_lv_ui_float_cannot_gestrue(LV_DIR_RIGHT))
-            break;
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
+            /* 场景栈手势被浮窗锁定 */
+            if (app_lv_ui_float_cannot_gestrue(dir))
+                break;
+            /* 浮动子窗口复位(如果未复位的话) */
+            app_lv_ui_float_reset();
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
             /* 左右滑动回到上一层 */

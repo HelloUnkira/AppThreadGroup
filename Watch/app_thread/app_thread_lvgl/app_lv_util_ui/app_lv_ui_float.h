@@ -18,15 +18,14 @@ typedef struct {
     uint32_t   anim_period;
 } app_lv_ui_float_t;
 
-/*@brief  浮动子窗口是否在覆盖中
- *@retval 浮动子窗口覆盖状态
- */
-bool app_lv_ui_float_is_cover(void);
-
 /*@brief  浮动子窗口禁用手势
  *@retval 浮动子窗口需要禁用指定手势
  */
 bool app_lv_ui_float_cannot_gestrue(lv_dir_t direct);
+
+/*@brief 浮动子窗口复位(如果未复位的话)
+ */
+void app_lv_ui_float_reset(void);
 
 /*@brief     浮窗激活
  *@param[in] scene 场景

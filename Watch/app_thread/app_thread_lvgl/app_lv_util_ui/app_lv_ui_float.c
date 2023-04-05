@@ -21,25 +21,18 @@ static app_lv_ui_float_t  app_lv_ui_float_pt = {0};
 static app_lv_ui_float_t  app_lv_ui_float_pb = {0};
 static app_lv_ui_float_t *app_lv_ui_float_act = NULL;
 
-/*@brief  浮动子窗口是否在覆盖中
- *@retval 浮动子窗口覆盖状态
- */
-bool app_lv_ui_float_is_cover(void)
-{
-    return app_lv_ui_float_pl.cover || app_lv_ui_float_pr.cover ||
-           app_lv_ui_float_pt.cover || app_lv_ui_float_pb.cover;
-}
-
 /*@brief  浮动子窗口禁用手势
  *@retval 浮动子窗口需要禁用指定手势
  */
 bool app_lv_ui_float_cannot_gestrue(lv_dir_t direct)
 {
+    app_lv_ui_float_t *float_var = app_lv_ui_float_act;
+    
     if ((direct & LV_DIR_LEFT) || (direct & LV_DIR_RIGHT))
-    if ((app_lv_ui_float_pl.valid || app_lv_ui_float_pr.valid))
+    if ((float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr))
         return true;
     if ((direct & LV_DIR_TOP) || (direct & LV_DIR_BOTTOM))
-    if ((app_lv_ui_float_pt.valid || app_lv_ui_float_pb.valid))
+    if ((float_var == &app_lv_ui_float_pt || float_var == &app_lv_ui_float_pb))
         return true;
     return false;
 }
@@ -51,7 +44,7 @@ static void app_lv_ui_float_set_opa_recursion(lv_obj_t *obj, uint32_t opa)
     lv_obj_set_style_opa(obj, opa, 0);
 
     uint32_t child_cnt = obj->spec_attr->child_cnt;
-    lv_obj_t** children = obj->spec_attr->children;
+    lv_obj_t **children = obj->spec_attr->children;
     for (uint32_t idx = 0; idx < child_cnt; idx++)
         app_lv_ui_float_set_opa_recursion(children[idx], opa);
 }
@@ -103,6 +96,46 @@ static bool app_lv_ui_float_threshold(app_lv_ui_float_t *float_var, lv_point_t p
             return false;
     }
     return true;
+}
+
+/*@brief 浮动子窗口复位(如果未复位的话)
+ */
+void app_lv_ui_float_reset(void)
+{
+    app_lv_ui_float_t *float_var = app_lv_ui_float_act;
+    /* 需要有活动浮窗存在 */
+    if (float_var == NULL)
+        return;
+    /* 不存在未复位的浮窗 */
+    if (!float_var->cover)
+        return;
+    /* 滚动事件未结束,暂时不处理 */
+    if (float_var->scroll_w != LV_DIR_NONE)
+        return;
+    /* 滚动方向为水平滚动 */
+    if (float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr) {
+        /* 不管什么情况,回弹它 */
+        lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(float_var->scene), float_var->resume_x);
+        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 0);
+        float_var->cover = false;
+        lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_x);
+    }
+    /* 滚动方向为垂直滚动 */
+    if (float_var == &app_lv_ui_float_pt || float_var == &app_lv_ui_float_pb) {
+        /* 不管什么情况,回弹它 */
+        lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(float_var->scene), float_var->resume_y);
+        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 0);
+        float_var->cover = false;
+        lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_y);
+    }
+    lv_anim_set_exec_cb(&float_var->anim_opa, (lv_anim_exec_xcb_t)app_lv_ui_float_set_opa_recursion);
+    lv_anim_start(&float_var->anim_pos);
+    lv_anim_start(&float_var->anim_opa);
+    /* 清除滑动记录 */
+    float_var->scroll_w = LV_DIR_NONE;
+    /* 没有活动浮窗 */
+    if (!float_var->cover)
+        app_lv_ui_float_act = NULL;
 }
 
 /*@brief 浮动子窗口特效回调
