@@ -21,26 +21,13 @@ static app_lv_ui_float_t  app_lv_ui_float_pt = {0};
 static app_lv_ui_float_t  app_lv_ui_float_pb = {0};
 static app_lv_ui_float_t *app_lv_ui_float_act = NULL;
 
-/*@brief  浮动子窗口禁用手势
- *@retval 浮动子窗口需要禁用指定手势
- */
-bool app_lv_ui_float_cannot_gestrue(lv_dir_t direct)
-{
-    app_lv_ui_float_t *float_var = app_lv_ui_float_act;
-    
-    if ((direct & LV_DIR_LEFT) || (direct & LV_DIR_RIGHT))
-    if ((float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr))
-        return true;
-    if ((direct & LV_DIR_TOP) || (direct & LV_DIR_BOTTOM))
-    if ((float_var == &app_lv_ui_float_pt || float_var == &app_lv_ui_float_pb))
-        return true;
-    return false;
-}
-
 /*@brief 浮动子窗口透明度递归改变回调
  */
-static void app_lv_ui_float_set_opa_recursion(lv_obj_t *obj, uint32_t opa)
+static void app_lv_ui_float_set_opa_recursion(void *var, int32_t val)
 {
+    uint8_t   opa = val;
+    lv_obj_t *obj = var;
+    
     lv_obj_set_style_opa(obj, opa, 0);
 
     uint32_t child_cnt = obj->spec_attr->child_cnt;
@@ -49,12 +36,49 @@ static void app_lv_ui_float_set_opa_recursion(lv_obj_t *obj, uint32_t opa)
         app_lv_ui_float_set_opa_recursion(children[idx], opa);
 }
 
+/*@brief  浮动子窗口滚动处理
+ */
+static void app_lv_ui_float_scroll(app_lv_ui_float_t *float_var, lv_indev_t *act)
+{
+    const lv_coord_t scroll_threshold = -10;
+    /* 统一先锁定滚动 */
+    float_var->scroll = true;
+    /* 按下时,记录按下点 */
+    lv_point_t point = {0};
+    lv_indev_get_point(act, &point);
+    lv_obj_t *obj = lv_indev_get_scroll_obj(act);
+    if (obj == NULL)
+        return;
+    /* 水平方向锁定(对象在起始点时,对象在结束点时) */
+    if (float_var->resume_x > 0 && float_var->resume_y == 0)
+    if (scroll_threshold > lv_obj_get_scroll_left(obj))
+        float_var->scroll = false;
+    if (float_var->resume_x < 0 && float_var->resume_y == 0)
+    if (scroll_threshold > lv_obj_get_scroll_right(obj))
+        float_var->scroll = false;
+    /* 垂直方向锁定(对象在起始点时,对象在结束点时)  */
+    if (float_var->resume_y > 0 && float_var->resume_x == 0)
+    if (scroll_threshold > lv_obj_get_scroll_top(obj))
+        float_var->scroll = false;
+    if (float_var->resume_y < 0 && float_var->resume_x == 0)
+    if (scroll_threshold > lv_obj_get_scroll_bottom(obj))
+        float_var->scroll = false;
+    /* ... */
+    APP_SYS_LOG_INFO("scroll:%d",           float_var->scroll);
+    APP_SYS_LOG_INFO("scroll_x:%d",         lv_obj_get_scroll_x(obj));
+    APP_SYS_LOG_INFO("scroll_y:%d",         lv_obj_get_scroll_y(obj));
+    APP_SYS_LOG_INFO("scroll_top:%d",       lv_obj_get_scroll_top(obj));
+    APP_SYS_LOG_INFO("scroll_bottom:%d",    lv_obj_get_scroll_bottom(obj));
+    APP_SYS_LOG_INFO("scroll_left:%d",      lv_obj_get_scroll_left(obj));
+    APP_SYS_LOG_INFO("scroll_right:%d",     lv_obj_get_scroll_right(obj));
+}
+
 /*@brief  浮动子窗口位移门限检查
  *@retval 是否有足够的滑动位移
  */
 static bool app_lv_ui_float_threshold(app_lv_ui_float_t *float_var, lv_point_t point)
 {
-    const uint32_t click_threshold = 10;
+    const lv_coord_t click_threshold = 30;
     lv_coord_t obj_x = lv_obj_get_x(float_var->scene);
     lv_coord_t obj_y = lv_obj_get_y(float_var->scene);
     /* 水平方向锁定(对象在起始点时,对象在结束点时) */
@@ -129,7 +153,7 @@ bool app_lv_ui_float_reset(void)
         float_var->cover = false;
         lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_y);
     }
-    lv_anim_set_exec_cb(&float_var->anim_opa, (lv_anim_exec_xcb_t)app_lv_ui_float_set_opa_recursion);
+    lv_anim_set_exec_cb(&float_var->anim_opa, app_lv_ui_float_set_opa_recursion);
     lv_anim_start(&float_var->anim_pos);
     lv_anim_start(&float_var->anim_opa);
     /* 清除滑动记录 */
@@ -155,6 +179,20 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
         return;
     
     switch(lv_event_get_code(e)) {
+    case LV_EVENT_SCROLL_BEGIN: {
+        /* 子界面能够滚动时,锁定尝试 */
+        app_lv_ui_float_scroll(float_var, act);
+        break;
+    }
+    case LV_EVENT_SCROLL: {
+        /* 子界面能够滚动时,锁定尝试 */
+        app_lv_ui_float_scroll(float_var, act);
+        break;
+    }
+    case LV_EVENT_SCROLL_END: {
+        float_var->scroll = false;
+        break;
+    }
     case LV_EVENT_PRESSED: {
         /* 按下时,记录按下点 */
         lv_point_t point = {0};
@@ -167,6 +205,9 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
         /* 按下时,记录按下点 */
         lv_point_t point = {0};
         lv_indev_get_point(act, &point);
+        /* 有效滚动中锁定门限 */
+        if (float_var->scroll)
+            break;
         /* 滚动方向需要满足滚动条件 */
         if (!app_lv_ui_float_threshold(float_var, point))
             break;
@@ -325,7 +366,7 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
             }
             lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_y);
         }
-        lv_anim_set_exec_cb(&float_var->anim_opa, (lv_anim_exec_xcb_t)app_lv_ui_float_set_opa_recursion);
+        lv_anim_set_exec_cb(&float_var->anim_opa, app_lv_ui_float_set_opa_recursion);
         lv_anim_start(&float_var->anim_pos);
         lv_anim_start(&float_var->anim_opa);
         /* 清除滑动记录 */
@@ -392,13 +433,29 @@ static void app_lv_ui_float_link(lv_obj_t *parent, lv_obj_t *child, lv_dir_t dir
     /* 浮动子窗口动画重置 */
     lv_anim_init(&float_var->anim_pos);
     lv_anim_init(&float_var->anim_opa);
-    lv_anim_set_var(&float_var->anim_pos, float_var->scene);
-    lv_anim_set_var(&float_var->anim_opa, float_var->scene);
-    lv_anim_set_time(&float_var->anim_pos, float_var->anim_period);
-    lv_anim_set_time(&float_var->anim_opa, float_var->anim_period);
+    lv_anim_set_var(&float_var->anim_pos,   float_var->scene);
+    lv_anim_set_var(&float_var->anim_opa,   float_var->scene);
+    lv_anim_set_time(&float_var->anim_pos,  float_var->anim_period);
+    lv_anim_set_time(&float_var->anim_opa,  float_var->anim_period);
     /* 悬挂浮动子窗口事件响应 */
     lv_obj_add_event_cb(parent, app_lv_ui_float_event_cb, LV_EVENT_ALL, float_var);
     lv_obj_add_event_cb(child,  app_lv_ui_float_event_cb, LV_EVENT_ALL, float_var);
+}
+
+/*@brief  浮动子窗口禁用手势
+ *@retval 浮动子窗口需要禁用指定手势
+ */
+bool app_lv_ui_float_cannot_gestrue(lv_dir_t direct)
+{
+    app_lv_ui_float_t *float_var = app_lv_ui_float_act;
+    
+    if ((direct & LV_DIR_LEFT) || (direct & LV_DIR_RIGHT))
+    if ((float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr))
+        return true;
+    if ((direct & LV_DIR_TOP) || (direct & LV_DIR_BOTTOM))
+    if ((float_var == &app_lv_ui_float_pt || float_var == &app_lv_ui_float_pb))
+        return true;
+    return false;
 }
 
 /*@brief     浮窗激活

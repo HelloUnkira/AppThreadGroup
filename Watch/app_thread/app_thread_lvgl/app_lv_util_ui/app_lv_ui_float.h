@@ -13,6 +13,7 @@ typedef struct {
     uint32_t   percent;
     uint32_t   valid:1;
     uint32_t   cover:1;
+    uint32_t   scroll:1;
     lv_anim_t  anim_pos;
     lv_anim_t  anim_opa;
     uint32_t   anim_period;

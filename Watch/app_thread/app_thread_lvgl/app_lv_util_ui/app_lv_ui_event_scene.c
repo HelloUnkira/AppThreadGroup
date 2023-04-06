@@ -195,30 +195,42 @@ void app_lv_ui_event_default(lv_event_t *e)
         break;
     }
     case LV_EVENT_SCROLL_BEGIN: {
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
         lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
         if (obj == NULL)
             break;
-        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
-        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
+        APP_SYS_LOG_DEBUG("scroll_x:%d",        lv_obj_get_scroll_x(obj));
+        APP_SYS_LOG_DEBUG("scroll_y:%d",        lv_obj_get_scroll_y(obj));
+        APP_SYS_LOG_DEBUG("scroll_top:%d",      lv_obj_get_scroll_top(obj));
+        APP_SYS_LOG_DEBUG("scroll_bottom:%d",   lv_obj_get_scroll_bottom(obj));
+        APP_SYS_LOG_DEBUG("scroll_left:%d",     lv_obj_get_scroll_left(obj));
+        APP_SYS_LOG_DEBUG("scroll_right:%d",    lv_obj_get_scroll_right(obj));
         break;
     }
     case LV_EVENT_SCROLL_END: {
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
         lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
         if (obj == NULL)
             break;
-        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
-        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
+        APP_SYS_LOG_DEBUG("scroll_x:%d",        lv_obj_get_scroll_x(obj));
+        APP_SYS_LOG_DEBUG("scroll_y:%d",        lv_obj_get_scroll_y(obj));
+        APP_SYS_LOG_DEBUG("scroll_top:%d",      lv_obj_get_scroll_top(obj));
+        APP_SYS_LOG_DEBUG("scroll_bottom:%d",   lv_obj_get_scroll_bottom(obj));
+        APP_SYS_LOG_DEBUG("scroll_left:%d",     lv_obj_get_scroll_left(obj));
+        APP_SYS_LOG_DEBUG("scroll_right:%d",    lv_obj_get_scroll_right(obj));
         break;
     }
     case LV_EVENT_SCROLL: {
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
         lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
         if (obj == NULL)
             break;
-        printf("lv_obj_get_scroll_x:%d\n", lv_obj_get_scroll_x(obj));
-        printf("lv_obj_get_scroll_y:%d\n", lv_obj_get_scroll_y(obj));
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
+        APP_SYS_LOG_DEBUG("scroll_x:%d",        lv_obj_get_scroll_x(obj));
+        APP_SYS_LOG_DEBUG("scroll_y:%d",        lv_obj_get_scroll_y(obj));
+        APP_SYS_LOG_DEBUG("scroll_top:%d",      lv_obj_get_scroll_top(obj));
+        APP_SYS_LOG_DEBUG("scroll_bottom:%d",   lv_obj_get_scroll_bottom(obj));
+        APP_SYS_LOG_DEBUG("scroll_left:%d",     lv_obj_get_scroll_left(obj));
+        APP_SYS_LOG_DEBUG("scroll_right:%d",    lv_obj_get_scroll_right(obj));
         break;
     }
     default:
