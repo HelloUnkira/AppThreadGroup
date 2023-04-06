@@ -117,7 +117,7 @@ bool app_lv_ui_float_reset(void)
     if (float_var == &app_lv_ui_float_pl || float_var == &app_lv_ui_float_pr) {
         /* 不管什么情况,回弹它 */
         lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(float_var->scene), float_var->resume_x);
-        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 0);
+        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_width(float_var->scene), 0);
         float_var->cover = false;
         lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_x);
     }
@@ -125,7 +125,7 @@ bool app_lv_ui_float_reset(void)
     if (float_var == &app_lv_ui_float_pt || float_var == &app_lv_ui_float_pb) {
         /* 不管什么情况,回弹它 */
         lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(float_var->scene), float_var->resume_y);
-        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 0);
+        lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_height(float_var->scene), 0);
         float_var->cover = false;
         lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_y);
     }
@@ -176,22 +176,22 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
            if (float_var->resume_x > 0 && float_var->resume_y == 0) {
                 float_var->scroll_w = LV_DIR_HOR;
                 float_var->scroll_x = point.x;
-                float_var->percent  = LV_HOR_RES - point.x;
+                float_var->percent  = lv_obj_get_width(obj) - point.x;
             }
             if (float_var->resume_x < 0 && float_var->resume_y == 0) {
                 float_var->scroll_w = LV_DIR_HOR;
-                float_var->scroll_x = point.x - LV_HOR_RES;
+                float_var->scroll_x = point.x - lv_obj_get_width(obj);
                 float_var->percent  = point.x;
             }
             /* 垂直方向锁定(对象在起始点时,对象在结束点时)  */
             if (float_var->resume_y > 0 && float_var->resume_x == 0) {
                 float_var->scroll_w = LV_DIR_VER;
                 float_var->scroll_y = point.y;
-                float_var->percent  = LV_VER_RES - point.y;
+                float_var->percent  = lv_obj_get_height(obj) - point.y;
             }
             if (float_var->resume_y < 0 && float_var->resume_x == 0) {
                 float_var->scroll_w = LV_DIR_VER;
-                float_var->scroll_y = point.y - LV_VER_RES;
+                float_var->scroll_y = point.y - lv_obj_get_height(obj);
                 float_var->percent  = point.y;
             }
             /* 未抓获滚动方向 */
@@ -203,13 +203,13 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
             /* 滚动方向为水平滚动 */
             if (float_var->scroll_w == LV_DIR_HOR) {
                 lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), float_var->scroll_x);
-                lv_anim_set_values(&float_var->anim_opa, 0, float_var->percent * 255 / LV_HOR_RES);
+                lv_anim_set_values(&float_var->anim_opa, 0, float_var->percent * 255 / lv_obj_get_width(obj));
                 lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_x);
             }
             /* 滚动方向为垂直滚动 */
             if (float_var->scroll_w == LV_DIR_VER) {
                 lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), float_var->scroll_y);
-                lv_anim_set_values(&float_var->anim_opa, 0, float_var->percent * 255 / LV_VER_RES);
+                lv_anim_set_values(&float_var->anim_opa, 0, float_var->percent * 255 / lv_obj_get_height(obj));
                 lv_anim_set_exec_cb(&float_var->anim_pos, (lv_anim_exec_xcb_t)lv_obj_set_y);
             }
             lv_anim_set_exec_cb(&float_var->anim_opa, (lv_anim_exec_xcb_t)app_lv_ui_float_set_opa_recursion);
@@ -221,19 +221,19 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
                 /* 水平方向更新 */
                 if (float_var->resume_x > 0 && float_var->resume_y == 0) {
                     float_var->scroll_x = point.x;
-                    float_var->percent  = LV_HOR_RES - point.x;
+                    float_var->percent  = lv_obj_get_width(obj) - point.x;
                 }
                 if (float_var->resume_x < 0 && float_var->resume_y == 0) {
-                    float_var->scroll_x = point.x - LV_HOR_RES;
+                    float_var->scroll_x = point.x - lv_obj_get_width(obj);
                     float_var->percent  = point.x;
                 }
                 lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), float_var->scroll_x);
-                lv_anim_set_values(&float_var->anim_opa, lv_obj_get_style_opa(obj, 0), float_var->percent * 255 / LV_HOR_RES);
+                lv_anim_set_values(&float_var->anim_opa, lv_obj_get_style_opa(obj, 0), float_var->percent * 255 / lv_obj_get_width(obj));
                 /* 动画只会播放一次 */
                 if (lv_anim_get_playtime(&float_var->anim_pos) >= float_var->anim_period - 1 &&
                     lv_anim_get_playtime(&float_var->anim_opa) >= float_var->anim_period - 1) {
                     lv_obj_set_x(obj, float_var->scroll_x);
-                    app_lv_ui_float_set_opa_recursion(obj, float_var->percent * 255 / LV_HOR_RES);
+                    app_lv_ui_float_set_opa_recursion(obj, float_var->percent * 255 / lv_obj_get_width(obj));
                 }
             }
             /* 滚动方向为垂直滚动 */
@@ -241,19 +241,19 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
                 /* 垂直方向更新 */
                 if (float_var->resume_y > 0 && float_var->resume_x == 0) {
                     float_var->scroll_y = point.y;
-                    float_var->percent  = LV_VER_RES - point.y;
+                    float_var->percent  = lv_obj_get_height(obj) - point.y;
                 }
                 if (float_var->resume_y < 0 && float_var->resume_x == 0) {
-                    float_var->scroll_y = point.y - LV_VER_RES;
+                    float_var->scroll_y = point.y - lv_obj_get_height(obj);
                     float_var->percent  = point.y;
                 }
                 lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), float_var->scroll_y);
-                lv_anim_set_values(&float_var->anim_opa, lv_obj_get_style_opa(obj, 0), float_var->percent * 255 / LV_VER_RES);
+                lv_anim_set_values(&float_var->anim_opa, lv_obj_get_style_opa(obj, 0), float_var->percent * 255 / lv_obj_get_height(obj));
                 /* 动画只会播放一次 */
                 if (lv_anim_get_playtime(&float_var->anim_pos) >= float_var->anim_period - 1 &&
                     lv_anim_get_playtime(&float_var->anim_opa) >= float_var->anim_period - 1) {
                     lv_obj_set_y(obj, float_var->scroll_y);
-                    app_lv_ui_float_set_opa_recursion(obj, float_var->percent * 255 / LV_VER_RES);
+                    app_lv_ui_float_set_opa_recursion(obj, float_var->percent * 255 / lv_obj_get_height(obj));
                 }
             }
         }
@@ -267,8 +267,8 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
         lv_point_t point = {0};
         lv_indev_get_point(act, &point);
         /* 根据滚动方向,将坐标动画偏移到指针点 */
-        uint32_t rollback_x = 70; //LV_HOR_RES / 3
-        uint32_t rollback_y = 80; //LV_VER_RES / 3
+        uint32_t rollback_x = 70; //lv_obj_get_width(float_var->scene) / 3
+        uint32_t rollback_y = 80; //lv_obj_get_height(float_var->scene) / 3
         /* 滚动方向为水平滚动 */
         if (float_var->scroll_w == LV_DIR_HOR) {
             /* 计算偏移量 */
@@ -277,21 +277,21 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
             if (delta_x < rollback_x) {
                 if (float_var->cover) {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), 0);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 255);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_width(obj), 255);
                     float_var->cover = true;
                 } else {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), float_var->resume_x);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 0);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_width(obj), 0);
                     float_var->cover = false;
                 }
             } else {
                 if (float_var->cover) {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), float_var->resume_x);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 0);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_width(obj), 0);
                     float_var->cover = false;
                 } else {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_x(obj), 0);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_HOR_RES, 255);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_width(obj), 255);
                     float_var->cover = true;
                 }
             }
@@ -305,21 +305,21 @@ static void app_lv_ui_float_event_cb(lv_event_t * e)
             if (delta_y < rollback_y) {
                 if (float_var->cover) {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), 0);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 255);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_height(obj), 255);
                     float_var->cover = true;
                 } else {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), float_var->resume_y);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 0);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_height(obj), 0);
                     float_var->cover = false;
                 }
             } else {
                 if (float_var->cover) {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), float_var->resume_y);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 0);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_height(obj), 0);
                     float_var->cover = false;
                 } else {
                     lv_anim_set_values(&float_var->anim_pos, lv_obj_get_y(obj), 0);
-                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / LV_VER_RES, 255);
+                    lv_anim_set_values(&float_var->anim_opa, float_var->percent * 255 / lv_obj_get_height(obj), 255);
                     float_var->cover = true;
                 }
             }
@@ -352,30 +352,30 @@ static void app_lv_ui_float_link(lv_obj_t *parent, lv_obj_t *child, lv_dir_t dir
     /* 重置浮窗参数 */
     app_lv_ui_float_t *float_var = NULL;
     /* 子窗口漂浮,成为父窗口的子窗口,样式固定 */
-    // lv_obj_add_flag(child, LV_OBJ_FLAG_FLOATING);
+    lv_obj_add_flag(child, LV_OBJ_FLAG_FLOATING);
     lv_obj_set_parent(child, parent);
     lv_obj_set_style_opa(child, 0, 0);
     /* 设置初始位置 */
     switch (direct) {
     case LV_DIR_LEFT:
         float_var = &app_lv_ui_float_pl;
-        float_var->resume_x = -LV_HOR_RES;
+        float_var->resume_x = -lv_obj_get_width(child);
         float_var->resume_y = 0;
         break;
     case LV_DIR_RIGHT:
         float_var = &app_lv_ui_float_pr;
-        float_var->resume_x = +LV_HOR_RES;
+        float_var->resume_x = +lv_obj_get_width(child);
         float_var->resume_y = 0;
         break;
     case LV_DIR_TOP:
         float_var = &app_lv_ui_float_pt;
         float_var->resume_x = 0;
-        float_var->resume_y = -LV_VER_RES;
+        float_var->resume_y = -lv_obj_get_height(child);
         break;
     case LV_DIR_BOTTOM:
         float_var = &app_lv_ui_float_pb;
         float_var->resume_x = 0;
-        float_var->resume_y = +LV_VER_RES;
+        float_var->resume_y = +lv_obj_get_height(child);
         break;
     default:
         APP_SYS_ASSERT(true == false);
