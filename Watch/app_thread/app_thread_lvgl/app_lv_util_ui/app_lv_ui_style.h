@@ -41,7 +41,7 @@ static inline lv_coord_t app_lv_ui_ver_pct(uint8_t pct)
 }
 
 /*@brief    默认控件风格
- *          黑色背景,无边框,无阴影,无间隙
+ *          黑色背景,无边框,无阴影,无间隙,无外部线
  *param[in] obj 控件
  */
 void app_lv_ui_style_object(lv_obj_t *obj);
@@ -81,6 +81,12 @@ lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent);
  *param[in]  parent 父控件
  */
 lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent);
+
+/*@brief     按钮框
+ *           黑色背景,指定色边框,标准弧度45
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_btn_box(lv_obj_t *parent, lv_coord_t width, lv_color_t color);
 
 /*@brief     特效按钮矩阵
  *           蓝色背景,无边框,默认全响应

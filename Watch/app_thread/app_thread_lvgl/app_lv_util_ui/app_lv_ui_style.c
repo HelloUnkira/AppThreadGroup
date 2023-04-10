@@ -18,7 +18,7 @@
 #include "app_lv_ui_event_scene.h"
 
 /*@brief    默认控件风格
- *          黑色背景,无边框,无阴影,无间隙
+ *          黑色背景,无边框,无阴影,无间隙,无外部线
  *param[in] obj 控件
  */
 void app_lv_ui_style_object(lv_obj_t *obj)
@@ -29,14 +29,18 @@ void app_lv_ui_style_object(lv_obj_t *obj)
     lv_obj_set_style_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(obj, lv_color_black(), 0);
-    lv_obj_set_style_border_side(obj, 0, 0);
     lv_obj_set_style_border_opa(obj, LV_OPA_COVER, 0);
-    lv_obj_set_style_border_width(obj, 0, 0);
     lv_obj_set_style_border_side(obj, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(obj, 0, 0);
     lv_obj_set_style_border_color(obj, lv_color_black(), 0);
     lv_obj_set_style_shadow_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_shadow_width(obj, 0, 0);
     lv_obj_set_style_shadow_color(obj, lv_color_black(), 0);
+    lv_obj_set_style_outline_pad(obj, 0, 0);
+    lv_obj_set_style_outline_opa(obj, LV_OPA_COVER, 0);
+    lv_obj_set_style_outline_width(obj, 0, 0);
+    lv_obj_set_style_outline_color(obj, lv_color_black(), 0);
+    lv_obj_set_style_outline_color_filtered(obj, lv_color_black(), 0);
 }
 
 /*@brief 默认界面风格
@@ -112,6 +116,22 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
     app_lv_ui_style_object(btn);
     lv_obj_set_style_radius(btn, 45, 0);
     lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);
+    return btn;
+}
+
+/*@brief     按钮框
+ *           黑色背景,指定色边框,标准弧度45
+ *param[in]  parent 父控件
+ */
+lv_obj_t * app_lv_ui_style_btn_box(lv_obj_t *parent, lv_coord_t width, lv_color_t color)
+{
+    lv_obj_t *btn = lv_btn_create(parent);
+    app_lv_ui_style_object(btn);
+    lv_obj_set_style_radius(btn, 45, 0);
+    lv_obj_set_style_border_opa(btn, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_side(btn, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(btn, width, 0);
+    lv_obj_set_style_border_color(btn, color, 0);
     return btn;
 }
 
