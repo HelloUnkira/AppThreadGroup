@@ -12,6 +12,7 @@ extern app_lv_scene_t app_lv_ui_main;
 extern app_lv_scene_t app_lv_ui_list;
 extern app_lv_scene_t app_lv_ui_test_list;
 /* base scene */
+extern app_lv_scene_t app_lv_ui_qrcode;
 extern app_lv_scene_t app_lv_ui_clock;
 extern app_lv_scene_t app_lv_ui_calendar;
 extern app_lv_scene_t app_lv_ui_stopwatch;

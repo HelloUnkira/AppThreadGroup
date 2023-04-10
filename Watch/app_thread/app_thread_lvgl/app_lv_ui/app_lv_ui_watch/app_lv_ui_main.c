@@ -25,10 +25,32 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
+    static uint32_t count = 0;
+    if (count++ < 100)
     if (value <= 100) {
         uint8_t label_opa = (uint32_t)((float)value * 2.55);
         lv_obj_set_style_text_opa(app_lv_ui_res_local->label, label_opa, 0);
     }
+    #if 0
+    /* 浮动子窗口检查 */
+    app_lv_scene_t *scene = NULL;
+    scene = app_lv_ui_main.float_t;
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene->self != NULL);
+    APP_SYS_LOG_INFO("float_t(x:%d,y:%d,w:%d,h:%d)\n", lv_obj_get_x(scene->self), lv_obj_get_y(scene->self), lv_obj_get_width(scene->self), lv_obj_get_height(scene->self));
+    scene = app_lv_ui_main.float_b;
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene->self != NULL);
+    APP_SYS_LOG_INFO("float_b(x:%d,y:%d,w:%d,h:%d)\n", lv_obj_get_x(scene->self), lv_obj_get_y(scene->self), lv_obj_get_width(scene->self), lv_obj_get_height(scene->self));
+    scene = app_lv_ui_main.float_l;
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene->self != NULL);
+    APP_SYS_LOG_INFO("float_l(x:%d,y:%d,w:%d,h:%d)\n", lv_obj_get_x(scene->self), lv_obj_get_y(scene->self), lv_obj_get_width(scene->self), lv_obj_get_height(scene->self));
+    scene = app_lv_ui_main.float_r;
+    APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(scene->self != NULL);
+    APP_SYS_LOG_INFO("float_r(x:%d,y:%d,w:%d,h:%d)\n", lv_obj_get_x(scene->self), lv_obj_get_y(scene->self), lv_obj_get_width(scene->self), lv_obj_get_height(scene->self));
+    #endif
 }
 
 /*@brief     界面显示
@@ -46,12 +68,12 @@ static void app_lv_ui_main_show(void *scene)
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Main");
         lv_obj_center(app_lv_ui_res_local->label);
+        /* 浮动子窗口 */
+        app_lv_ui_float_active(&app_lv_ui_main);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     0, 0, 100, 1000);
-        /* 浮动子窗口 */
-        app_lv_ui_float_active(&app_lv_ui_main);
     }
 }
 
@@ -61,10 +83,10 @@ static void app_lv_ui_main_show(void *scene)
 static void app_lv_ui_main_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
-        /* 浮动子窗口 */
-        app_lv_ui_float_hidden(&app_lv_ui_main);
         /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
+        /* 浮动子窗口 */
+        app_lv_ui_float_hidden(&app_lv_ui_main);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_lv_ui_main.self = NULL;
@@ -75,10 +97,13 @@ static void app_lv_ui_main_hide(void *scene)
 
 app_lv_scene_t app_lv_ui_main = {
     /* 场景资源节点 */
-    .float_l = &app_lv_ui_clock,
-    .float_r = &app_lv_ui_calendar,
-    .float_t = &app_lv_ui_list,
-    .float_b = &app_lv_ui_test_list,
+    .float_l = &app_lv_ui_list,
+    .float_r = &app_lv_ui_test_list,
+    .float_t = &app_lv_ui_clock,
+    .float_b = &app_lv_ui_calendar,
+    /* 什么意思???坐标不能控制??? */
+//    .float_t = &app_lv_ui_qrcode,
+//    .float_t = &app_lv_ui_watch_null,
     /*  */
     .show = app_lv_ui_main_show,
     .hide = app_lv_ui_main_hide,

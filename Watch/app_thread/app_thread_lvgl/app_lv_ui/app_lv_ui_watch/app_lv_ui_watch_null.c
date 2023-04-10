@@ -35,7 +35,6 @@ static void app_lv_ui_watch_null_show(void *scene)
         app_lv_ui_watch_null.self = app_lv_ui_res_local->scene;
         /* 初始化居中标签 */
         app_lv_ui_res_local->label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
-        lv_obj_set_style_text_opa(app_lv_ui_res_local->label, LV_OPA_COVER, 0);
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(app_lv_ui_res_local->label, "NULL");
         lv_obj_center(app_lv_ui_res_local->label);
