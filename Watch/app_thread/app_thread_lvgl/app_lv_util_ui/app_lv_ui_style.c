@@ -12,6 +12,8 @@
 #include "lvgl.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
+#include "app_lv_ui_style.h"
+#include "app_lv_ui_multi_font.h"
 #include "app_lv_ui_event_object.h"
 #include "app_lv_ui_event_scene.h"
 
@@ -95,10 +97,8 @@ lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent)
  */
 lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent)
 {
-    #define app_lv_ui_style_label_large_font  &lv_font_montserrat_22
-    
     lv_obj_t *label = app_lv_ui_style_label(parent);
-    lv_obj_set_style_text_font(label, app_lv_ui_style_label_large_font, 0);
+    lv_obj_set_style_text_font(label, app_lv_ui_multi_font(app_lv_ui_multi_font_24), 0);
     return label;
 }
 
@@ -125,11 +125,11 @@ lv_obj_t * app_lv_ui_style_btnmatrix(lv_obj_t *parent, const char *map[])
     lv_obj_t *btnmatrix = lv_btnmatrix_create(parent);
     app_lv_ui_style_object(btnmatrix);
     lv_obj_set_style_pad_all(btnmatrix, 20, 0);
-    lv_obj_set_style_pad_row(btnmatrix, 10, 0);
-    lv_obj_set_style_pad_column(btnmatrix, 10, 0);
-    lv_obj_set_style_height(btnmatrix, 20, LV_PART_ITEMS);
+    lv_obj_set_style_pad_row(btnmatrix, app_lv_ui_ver_pct(2), 0);
+    lv_obj_set_style_pad_column(btnmatrix, app_lv_ui_hor_pct(2), 0);
+    lv_obj_set_style_height(btnmatrix, app_lv_ui_ver_pct(10), LV_PART_ITEMS);
     lv_obj_set_style_radius(btnmatrix, 45, LV_PART_ITEMS);
-    lv_obj_set_style_width(btnmatrix, LV_HOR_RES / 3 - 20, LV_PART_ITEMS);
+    lv_obj_set_style_width(btnmatrix, app_lv_ui_hor_pct(30), LV_PART_ITEMS);
     lv_obj_set_style_bg_color(btnmatrix, lv_palette_main(LV_PALETTE_BLUE), LV_PART_ITEMS);
     lv_btnmatrix_set_map(btnmatrix, map);
     lv_btnmatrix_set_btn_ctrl_all(btnmatrix, LV_BTNMATRIX_CTRL_CHECKABLE);
@@ -143,15 +143,13 @@ lv_obj_t * app_lv_ui_style_btnmatrix(lv_obj_t *parent, const char *map[])
 
 lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent)
 {
-    #define app_lv_ui_style_textarea_font      &lv_font_montserrat_22
-    
     lv_obj_t *textarea = lv_textarea_create(parent);
     app_lv_ui_style_object(textarea);
     lv_obj_set_style_anim_time(textarea, 500, LV_PART_CURSOR);
     lv_obj_set_style_border_side(textarea,LV_BORDER_SIDE_FULL, 0);
     lv_obj_set_style_border_width(textarea, 3, 0);
     lv_obj_set_style_border_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
-    lv_obj_set_style_text_font(textarea, app_lv_ui_style_textarea_font, 0);
+    lv_obj_set_style_text_font(textarea,  app_lv_ui_multi_font(app_lv_ui_multi_font_24), 0);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_GREY), LV_PART_TEXTAREA_PLACEHOLDER);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_RED), LV_PART_CURSOR);
@@ -173,17 +171,14 @@ lv_obj_t * app_lv_ui_style_textarea(lv_obj_t *parent)
  */
 lv_obj_t * app_lv_ui_style_roller(lv_obj_t *parent, lv_coord_t width, const char *options, uint8_t vis_row)
 {
-    #define app_lv_ui_style_roller_rolcus_font      &lv_font_montserrat_22
-    #define app_lv_ui_style_roller_rolsel_font      &lv_font_montserrat_28
-    
     lv_obj_t *roller = lv_roller_create(parent);
     app_lv_ui_style_object(roller);
     lv_obj_add_event_cb(roller, app_lv_ui_roller_mask_event_cb, LV_EVENT_ALL, NULL);
     lv_obj_set_width(roller, width);
     lv_obj_set_style_bg_opa(roller, LV_OPA_TRANSP, 0);
     lv_obj_set_style_bg_opa(roller, LV_OPA_TRANSP, LV_PART_SELECTED);
-    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolcus_font, 0);
-    lv_obj_set_style_text_font(roller, app_lv_ui_style_roller_rolsel_font, LV_PART_SELECTED);
+    lv_obj_set_style_text_font(roller, app_lv_ui_font(32), 0);
+    lv_obj_set_style_text_font(roller, app_lv_ui_font(48), LV_PART_SELECTED);
     lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);
     lv_roller_set_options(roller, options, LV_ROLLER_MODE_NORMAL);//LV_ROLLER_MODE_INFINITE);///* 滚动模式显示异常 */
     lv_roller_set_visible_row_count(roller, vis_row);
@@ -228,12 +223,9 @@ lv_obj_t * app_lv_ui_style_arc(lv_obj_t *parent, lv_coord_t size, lv_coord_t wid
  */
 lv_obj_t * app_lv_ui_style_label_title(lv_obj_t *parent)
 {
-    #define app_lv_ui_style_label_title_font  &lv_font_montserrat_22
-    
     lv_obj_t *label = app_lv_ui_style_label(parent);
-    lv_obj_set_size(label, LV_HOR_RES - 20, 30);
-    lv_obj_set_style_pad_ver(label, 3, 0);
-    lv_obj_set_style_text_font(label, app_lv_ui_style_label_title_font, 0);
+    lv_obj_set_size(label, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(8));
+    lv_obj_set_style_text_font(label, app_lv_ui_multi_font(app_lv_ui_multi_font_24), 0);
     return label;
 }
 
@@ -251,29 +243,31 @@ lv_obj_t * app_lv_ui_style_title(lv_obj_t *parent, lv_obj_t **time, lv_obj_t **t
     /* 组合控件 */
     lv_obj_t *obj_box = lv_obj_create(parent);
     app_lv_ui_style_object(obj_box);
-    lv_obj_set_size(obj_box, LV_HOR_RES, 40);
-    lv_obj_set_style_pad_all(obj_box, 10, 0);
+    lv_obj_set_size(obj_box, LV_HOR_RES, app_lv_ui_ver_pct(10));
     lv_obj_set_style_bg_opa(obj_box, LV_OPA_TRANSP, 0);
     lv_obj_align(obj_box, LV_ALIGN_TOP_MID, 0, 0);
     /* 左上角按钮 */
     lv_obj_t *btn = app_lv_ui_style_btn(obj_box);
-    lv_obj_set_size(btn, 20, 20);
+    lv_obj_set_size(btn, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(8));
     lv_obj_add_event_cb(btn, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
     lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
-    lv_obj_align(btn, LV_ALIGN_LEFT_MID, 10, 0);
+    lv_obj_align(btn, LV_ALIGN_LEFT_MID, app_lv_ui_hor_pct(5), 0);
     lv_obj_t *label = app_lv_ui_style_label(btn);
     lv_label_set_text_static(label, LV_SYMBOL_BACKSPACE);
     lv_obj_align(label, LV_ALIGN_CENTER, 0, 0);
     /* 中部文本 */
     *title = app_lv_ui_style_label(obj_box);
-    lv_obj_set_size(*title, LV_HOR_RES - 140, 20);
+    lv_obj_set_size(*title, app_lv_ui_hor_pct(40), app_lv_ui_ver_pct(8));
+    lv_obj_set_style_pad_top(*title, app_lv_ui_ver_pct(2), 0);
     lv_obj_set_style_text_align(*title, LV_TEXT_ALIGN_LEFT, 0);
-    lv_obj_align_to(*title, btn, LV_ALIGN_OUT_RIGHT_MID, 10, 0);
+    lv_obj_align_to(*title, btn, LV_ALIGN_OUT_RIGHT_MID, app_lv_ui_hor_pct(1), 0);
     lv_label_set_text(*title, "Null");
     /* 右上角时间 */
     *time = app_lv_ui_style_label(obj_box);
-    lv_obj_set_size(*time, 60, 20);
-    lv_obj_align(*time, LV_ALIGN_RIGHT_MID, -10, 0);
+    lv_obj_set_size(*time, app_lv_ui_hor_pct(40), app_lv_ui_ver_pct(8));
+    lv_obj_set_style_pad_top(*time, app_lv_ui_ver_pct(2), 0);
+    lv_obj_set_style_text_align(*time, LV_TEXT_ALIGN_RIGHT, 0);
+    lv_obj_align(*time, LV_ALIGN_RIGHT_MID, -app_lv_ui_hor_pct(5), 0);
     lv_label_set_text(*time, "00:00");
     /* 组合控件 */
     return obj_box;
@@ -292,13 +286,13 @@ lv_obj_t * app_lv_ui_style_one_btn(lv_obj_t *parent, lv_obj_t **btn_c, lv_obj_t 
     /* 下部按钮 */
     lv_obj_t *btn = lv_obj_create(parent);
     app_lv_ui_style_object(btn);
-    lv_obj_set_size(btn, LV_HOR_RES, 60);
-    lv_obj_set_style_pad_all(btn, 10, 0);
+    lv_obj_set_size(btn, LV_HOR_RES, app_lv_ui_ver_pct(25));
+    lv_obj_set_style_pad_all(btn, app_lv_ui_hor_pct(1), 0);
     lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
     lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
     /* 中心按键 */
     *btn_c = app_lv_ui_style_btn(btn);
-    lv_obj_set_size(*btn_c, LV_HOR_RES - 20, 40);
+    lv_obj_set_size(*btn_c, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(20));
     lv_obj_align(*btn_c, LV_ALIGN_CENTER, 0, 0);
     *lbl_c = app_lv_ui_style_label_title(*btn_c);
     lv_obj_align(*lbl_c, LV_ALIGN_CENTER, 0, 0);
@@ -322,21 +316,21 @@ lv_obj_t * app_lv_ui_style_two_btns(lv_obj_t *parent, lv_obj_t **btn_l, lv_obj_t
     /* 下部按钮 */
     lv_obj_t *btn = lv_obj_create(parent);
     app_lv_ui_style_object(btn);
-    lv_obj_set_size(btn, LV_HOR_RES, 60);
-    lv_obj_set_style_pad_all(btn, 10, 0);
+    lv_obj_set_size(btn, LV_HOR_RES, app_lv_ui_ver_pct(25));
+    lv_obj_set_style_pad_all(btn, app_lv_ui_hor_pct(1), 0);
     lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
     lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
     /* 左下角按钮 */
     *btn_l = app_lv_ui_style_btn(btn);
-    lv_obj_set_size(*btn_l, LV_HOR_RES / 2 - 20, 40);
-    lv_obj_align(*btn_l, LV_ALIGN_LEFT_MID, 5, 0);
+    lv_obj_set_size(*btn_l, app_lv_ui_hor_pct(45), app_lv_ui_ver_pct(20));
+    lv_obj_align(*btn_l, LV_ALIGN_LEFT_MID, app_lv_ui_hor_pct(1), 0);
     *lbl_l = app_lv_ui_style_label_title(*btn_l);
     lv_obj_align(*lbl_l, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(*lbl_l, "L_Btn");
     /* 右下角按钮 */
     *btn_r = app_lv_ui_style_btn(btn);
-    lv_obj_set_size(*btn_r, LV_HOR_RES / 2 - 20, 40);
-    lv_obj_align(*btn_r, LV_ALIGN_RIGHT_MID, -5, 0);
+    lv_obj_set_size(*btn_r, app_lv_ui_hor_pct(45), app_lv_ui_ver_pct(20));
+    lv_obj_align(*btn_r, LV_ALIGN_RIGHT_MID, -app_lv_ui_hor_pct(1), 0);
     *lbl_r = app_lv_ui_style_label_title(*btn_r);
     lv_obj_align(*lbl_r, LV_ALIGN_CENTER, 0, 0);
     lv_label_set_text(*lbl_r, "R_Btn");
@@ -400,7 +394,7 @@ lv_obj_t * app_lv_ui_style_fade_chart(lv_obj_t *parent)
 {
     lv_obj_t *chart = lv_chart_create(parent);
     app_lv_ui_style_object(chart);
-    lv_obj_set_size(chart, LV_HOR_RES - 20, 120);
+    lv_obj_set_size(chart, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(20));
     lv_obj_add_event_cb(chart, app_lv_ui_chart_fade_event_cb, LV_EVENT_ALL, NULL);
     //lv_obj_set_style_bg_color(chart, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
     lv_obj_set_style_size(chart, 1, LV_PART_INDICATOR);

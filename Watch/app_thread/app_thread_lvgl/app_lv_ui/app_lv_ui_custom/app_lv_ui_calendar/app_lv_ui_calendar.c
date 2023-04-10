@@ -103,7 +103,7 @@ static void app_lv_ui_calendar_show(void *scene)
         app_lv_ui_res_local->calendar = lv_calendar_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(app_lv_ui_res_local->calendar);
         lv_obj_add_event_cb(app_lv_ui_res_local->calendar, app_lv_ui_calendar_cb, LV_EVENT_ALL, NULL);
-        lv_obj_align(app_lv_ui_res_local->calendar, LV_ALIGN_BOTTOM_MID, 0, 0);
+        lv_obj_align_to(app_lv_ui_res_local->calendar, app_lv_ui_res_local->label_dtime, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(10));
         lv_obj_set_style_border_width(app_lv_ui_res_local->calendar, 0, 0);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,

@@ -150,16 +150,16 @@ static void app_lv_ui_countdown_show(void *scene)
         /* 绘制日期后三位滚轮 */
         lv_obj_t *rol_set = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(rol_set);
-        lv_obj_set_width(rol_set, LV_HOR_RES);
-        lv_obj_align_to(rol_set, app_lv_ui_res_local->tick, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        lv_obj_set_size(rol_set, LV_HOR_RES, app_lv_ui_ver_pct(50));
+        lv_obj_align_to(rol_set, app_lv_ui_res_local->tick, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(10));
         /* 绘制分滚轮,中心对齐 */
-        app_lv_ui_res_local->rol_m = app_lv_ui_style_roller(rol_set, 50, app_lv_ui_res_0_59, 3);
-        lv_obj_align(app_lv_ui_res_local->rol_m, LV_ALIGN_CENTER, 0, 0);
+        app_lv_ui_res_local->rol_m = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        lv_obj_align(app_lv_ui_res_local->rol_m, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制时滚轮,分滚轮左外对齐 */
-        app_lv_ui_res_local->rol_h = app_lv_ui_style_roller(rol_set, 50, app_lv_ui_res_0_23, 3);
+        app_lv_ui_res_local->rol_h = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_23, 3);
         lv_obj_align_to(app_lv_ui_res_local->rol_h, app_lv_ui_res_local->rol_m, LV_ALIGN_OUT_LEFT_MID, 0, 0);
         /* 绘制秒滚轮,分滚轮右外对齐 */
-        app_lv_ui_res_local->rol_s = app_lv_ui_style_roller(rol_set, 50, app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->rol_s = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->rol_s, app_lv_ui_res_local->rol_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 底部双按钮组 */
         lv_obj_t *btn = app_lv_ui_style_two_btns(app_lv_ui_res_local->scene,

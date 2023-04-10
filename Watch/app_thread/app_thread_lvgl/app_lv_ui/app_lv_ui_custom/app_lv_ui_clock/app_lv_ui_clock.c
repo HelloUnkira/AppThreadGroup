@@ -96,16 +96,16 @@ static void app_lv_ui_clock_show(void *scene)
         /* 绘制日期后三位滚轮 */
         lv_obj_t *roller_set = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(roller_set);
-        lv_obj_set_width(roller_set, LV_HOR_RES);
+        lv_obj_set_size(roller_set, LV_HOR_RES, app_lv_ui_ver_pct(50));
         lv_obj_align(roller_set, LV_ALIGN_CENTER, 0, 0);
         /* 绘制分滚轮,中心对齐 */
-        app_lv_ui_res_local->roller_m = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_59, 3);
-        lv_obj_align(app_lv_ui_res_local->roller_m, LV_ALIGN_CENTER, 0, 0);
+        app_lv_ui_res_local->roller_m = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        lv_obj_align(app_lv_ui_res_local->roller_m, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制时滚轮,分滚轮左外对齐 */
-        app_lv_ui_res_local->roller_h = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_23, 3);
+        app_lv_ui_res_local->roller_h = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_23, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_h, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_LEFT_MID, 0, 0);
         /* 绘制秒滚轮,分滚轮右外对齐 */
-        app_lv_ui_res_local->roller_s = app_lv_ui_style_roller(roller_set, 50, app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->roller_s = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_s, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,

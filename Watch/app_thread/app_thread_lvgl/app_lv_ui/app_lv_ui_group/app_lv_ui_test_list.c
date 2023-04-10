@@ -21,14 +21,16 @@ typedef struct {
     app_lv_scene_t *scene;
 } app_lv_ui_res_list_t;
 
+/* 不能直接通过跳转逻辑进入的界面加入到测试列表中 */
 static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    {"Null",                &app_lv_ui_watch_null,},
-    {"Null",                &app_lv_ui_watch_null,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Watch Start",         &app_lv_ui_watch_start,},
+    {"Watch Stop",          &app_lv_ui_watch_stop,},
+    {"Watch Dlps",          &app_lv_ui_watch_dlps,},
+    {"Watch Null",          &app_lv_ui_watch_null,},
     {"System Clock",        &app_lv_ui_clock,},
     {"Calendar",            &app_lv_ui_calendar,},
-    {"Null",                &app_lv_ui_watch_null,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Remind Drink",        &app_lv_ui_remind_drink,},
+    {"Countdown Remind",    &app_lv_ui_countdown_remind,},
     {"Null",                &app_lv_ui_watch_null,},
 };
 

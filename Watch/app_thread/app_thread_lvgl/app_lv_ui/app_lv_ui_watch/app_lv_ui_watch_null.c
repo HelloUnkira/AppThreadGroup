@@ -39,13 +39,6 @@ static void app_lv_ui_watch_null_show(void *scene)
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(app_lv_ui_res_local->label, "NULL");
         lv_obj_center(app_lv_ui_res_local->label);
-
-        /* 下部按键 */
-        lv_obj_t* btn = NULL, * btn_c = NULL, * lbl_c = NULL;
-        btn = app_lv_ui_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
-        lv_label_set_text(lbl_c, "NULL");
-
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->scene, lv_color_white(), 0);
     }
 }
 

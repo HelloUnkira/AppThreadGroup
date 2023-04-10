@@ -73,6 +73,16 @@ static void app_lv_ui_local_tick_list_set(bool refr)
             lv_label_set_text_fmt(label2, "%.2u:%.2u:%.2u.%.3u",
                                   tick_list[idx].hour, tick_list[idx].minute, tick_list[idx].second, tick_list[idx].msec);
             lv_obj_align(label2, LV_ALIGN_RIGHT_MID, 0, 0);
+            /* 第一个的背景色染成亮蓝色 */
+            if (idx == 0)
+            {
+                lv_obj_set_style_bg_opa(label,  LV_OPA_50, 0);
+                lv_obj_set_style_bg_opa(label1, LV_OPA_50, 0);
+                lv_obj_set_style_bg_opa(label2, LV_OPA_50, 0);
+                lv_obj_set_style_bg_color(label,  lv_palette_main(LV_PALETTE_LIGHT_BLUE), 0);
+                lv_obj_set_style_bg_color(label1, lv_palette_main(LV_PALETTE_LIGHT_BLUE), 0);
+                lv_obj_set_style_bg_color(label2, lv_palette_main(LV_PALETTE_LIGHT_BLUE), 0);
+            }
         }
     }
 }

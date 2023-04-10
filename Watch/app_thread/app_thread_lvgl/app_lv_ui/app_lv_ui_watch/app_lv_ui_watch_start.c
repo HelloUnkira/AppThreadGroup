@@ -51,18 +51,18 @@ static void app_lv_ui_watch_start_show(void *scene)
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
         app_lv_ui_watch_start.self = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应 */
-        app_lv_ui_event_default_config(NULL, false);
+        app_lv_ui_event_default_config(NULL, false, NULL);
         /* 初始化加载圆环 */
-        app_lv_ui_res_local->spinner = app_lv_ui_style_loading_spinner(app_lv_ui_res_local->scene, 30, 5);
-        lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, 20, 20);
+        app_lv_ui_res_local->spinner = app_lv_ui_style_loading_spinner(app_lv_ui_res_local->scene, 50, 10);
+        lv_obj_align(app_lv_ui_res_local->spinner, LV_ALIGN_TOP_LEFT, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(15));
         /* 初始化居中标签 */
         app_lv_ui_res_local->label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(app_lv_ui_res_local->label, "App Thread Group LVGL Watch");
         lv_obj_center(app_lv_ui_res_local->label);
         /* 初始化加载进度条 */
-        app_lv_ui_res_local->bar = app_lv_ui_style_loading_bar(app_lv_ui_res_local->scene, 200, 20, LV_GRAD_DIR_HOR);
-        lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
+        app_lv_ui_res_local->bar = app_lv_ui_style_loading_bar(app_lv_ui_res_local->scene, app_lv_ui_hor_pct(80), app_lv_ui_ver_pct(10), LV_GRAD_DIR_HOR);
+        lv_obj_align_to(app_lv_ui_res_local->bar, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(3));
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
@@ -79,7 +79,7 @@ static void app_lv_ui_watch_start_hide(void *scene)
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 启用默认事件响应 */
-        app_lv_ui_event_default_config(NULL, true);
+        app_lv_ui_event_default_config(NULL, true, NULL);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_lv_ui_watch_start.self = NULL;

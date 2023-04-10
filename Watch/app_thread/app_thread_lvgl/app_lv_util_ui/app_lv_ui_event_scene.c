@@ -119,7 +119,9 @@ void app_lv_ui_event_default(lv_event_t *e)
                                 lv_group_set_editing(mw_group, true);
                         } else {
                             /* 其他类型控件发送点击事件即可 */
-                            lv_event_send(mw_focus_obj, LV_EVENT_CLICKED, lv_indev_get_act());
+                            lv_event_send(mw_focus_obj, LV_EVENT_PRESSED,  lv_indev_get_act());
+                            lv_event_send(mw_focus_obj, LV_EVENT_RELEASED, lv_indev_get_act());
+                            lv_event_send(mw_focus_obj, LV_EVENT_CLICKED,  lv_indev_get_act());
                         }
                     }
                 }
@@ -129,6 +131,25 @@ void app_lv_ui_event_default(lv_event_t *e)
                     if (app_lv_ui_float_reset())
                         break;
                     app_lv_scene_add(&app_lv_ui_list, false);
+                }
+            }
+            /* 模拟器上鼠标不太好通过滑动触发手势 */
+            /* 这里加四个扩充按键作为手势触发,这里直接发送到顶层即可 */
+            if (key == LV_KEY_UP || key == LV_KEY_DOWN || key == LV_KEY_LEFT || key == LV_KEY_RIGHT) {
+                lv_dir_t dir = key == LV_KEY_UP    ? LV_DIR_TOP :
+                               key == LV_KEY_DOWN  ? LV_DIR_BOTTOM :
+                               key == LV_KEY_LEFT  ? LV_DIR_LEFT :
+                               key == LV_KEY_RIGHT ? LV_DIR_RIGHT : LV_DIR_NONE;
+                APP_SYS_ASSERT(dir != LV_DIR_NONE);
+                app_lv_scene_t *scene = NULL;
+                app_lv_scene_get_top(&scene);
+                APP_SYS_ASSERT(scene != NULL);
+                lv_indev_t *indev = lv_indev_get_act();
+                /* 这样子并不好,破坏了OOP的语义,属性被暴露出来 */
+                /* 但是因为源码未提供相关接口,不能擅自添加接口,这里妥协为之 */
+                if (indev != NULL) {
+                    indev->proc.types.pointer.gesture_dir = dir;
+                    lv_event_send(lv_scr_act(), LV_EVENT_GESTURE, indev);
                 }
             }
         }
@@ -257,19 +278,22 @@ void app_lv_ui_event_default(lv_event_t *e)
 }
 
 /*@brief    场景默认事件响应回调设置
- *param[in] scene  事件捕获场景,为NULL默认为scr
- *param[in] enable 启用或者禁用
+ *param[in] scene    事件捕获场景,为NULL默认为scr
+ *param[in] enable   启用或者禁用
+ *param[in] redirect 场景默认事件重定向
  */
-void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable)
+void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t redirect)
 {
     scene = scene == NULL ? lv_scr_act() : scene;
+    redirect = redirect == NULL ? app_lv_ui_event_default : redirect;
+    
     static bool event_config = false;
     if (enable) {
         if (event_config)
             return;
         event_config = true;
         lv_group_t *group = app_lv_driver_get_kb_group();
-        lv_obj_add_event_cb(scene, app_lv_ui_event_default, LV_EVENT_ALL, NULL);
+        lv_obj_add_event_cb(scene, redirect, LV_EVENT_ALL, NULL);
         lv_group_add_obj(group, scene);
         lv_group_focus_freeze(group, true);
     } else {
@@ -279,7 +303,7 @@ void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable)
         lv_group_t *group = app_lv_driver_get_kb_group();
         lv_group_focus_freeze(group, false);
         lv_group_remove_obj(scene);
-        lv_obj_remove_event_cb(scene, app_lv_ui_event_default);
+        lv_obj_remove_event_cb(scene, redirect);
     }
 }
 

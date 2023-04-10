@@ -72,7 +72,9 @@ static uint32_t app_lv_ui_get_tab_step_max(void)
 static void app_lv_ui_get_tab_step(uint32_t table[24])
 {
     /* 获取今日[0~23]每小时的步数记录 */
-    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 100, idx++);
+    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 30 +  0, idx++);
+    for (uint8_t idx = 6; idx < 20; table[idx] = rand() % 20 + 30, idx++);
+    for (uint8_t idx = 9; idx < 18; table[idx] = rand() % 50 + 50, idx++);
 }
 
 /*@brief lvgl ui数据交互回调
@@ -88,7 +90,9 @@ static uint32_t app_lv_ui_get_tab_cal_max(void)
 static void app_lv_ui_get_tab_cal(uint32_t table[24])
 {
     /* 获取今日[0~23]每小时的卡路里记录 */
-    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 100, idx++);
+    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 30 +  0, idx++);
+    for (uint8_t idx = 6; idx < 20; table[idx] = rand() % 20 + 30, idx++);
+    for (uint8_t idx = 9; idx < 18; table[idx] = rand() % 50 + 50, idx++);
 }
 
 /*@brief lvgl ui数据交互回调
@@ -103,8 +107,10 @@ static uint32_t app_lv_ui_get_tab_act_max(void)
  */
 static void app_lv_ui_get_tab_act(uint32_t table[24])
 {
-    /* 获取今日[0~23]每小时的卡路里记录 */
-    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 60, idx++);
+    /* 获取今日[0~23]每小时的活动时间记录 */
+    for (uint8_t idx = 0; idx < 24; table[idx] = rand() % 20 +  0, idx++);
+    for (uint8_t idx = 6; idx < 20; table[idx] = rand() % 20 + 20, idx++);
+    for (uint8_t idx = 9; idx < 18; table[idx] = rand() % 20 + 40, idx++);
 }
 
 /*@brief lvgl ui数据交互回调

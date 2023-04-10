@@ -21,6 +21,25 @@ static inline lv_coord_t app_lv_ui_zoom_y(lv_coord_t y)
     return (lv_coord_t)((double)LV_VER_RES / (double)100 * (double)y);
 }
 
+/*@brief     水平宽度百分比
+ *@param[in] 水平像素
+ *@retval    转换后的像素
+ */
+static inline lv_coord_t app_lv_ui_hor_pct(uint8_t pct)
+{
+    APP_SYS_ASSERT(pct <= 100);
+    return (lv_coord_t)((double)LV_HOR_RES * pct / 100.0);
+}
+/*@brief     垂直宽度百分比
+ *@param[in] 垂直像素
+ *@retval    转换后的像素
+ */
+static inline lv_coord_t app_lv_ui_ver_pct(uint8_t pct)
+{
+    APP_SYS_ASSERT(pct <= 100);
+    return (lv_coord_t)((double)LV_VER_RES * pct / 100.0);
+}
+
 /*@brief    默认控件风格
  *          黑色背景,无边框,无阴影,无间隙
  *param[in] obj 控件

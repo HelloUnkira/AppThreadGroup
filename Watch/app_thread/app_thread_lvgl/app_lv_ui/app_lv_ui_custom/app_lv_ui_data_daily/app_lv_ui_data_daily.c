@@ -100,15 +100,15 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
             lv_chart_set_next_value(app_lv_ui_res_local->chart_act, app_lv_ui_res_local->chart_act_ser, table[idx]);
         /* 三图表文本刷新 */
         if (app_lv_ui_clock_presenter.is_24()) {
-            lv_label_set_text(app_lv_ui_res_local->chart_step_lb,  "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_step_rb,  "24:00");
+            lv_label_set_text(app_lv_ui_res_local->chart_step_lb, "00:00");
+            lv_label_set_text(app_lv_ui_res_local->chart_step_rb, "23:59");
             lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  "24:00");
+            lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  "23:59");
             lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  "24:00");
+            lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  "23:59");
         } else {
-            lv_label_set_text(app_lv_ui_res_local->chart_step_lb,  "12:00 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_step_rb,  "11:59 AM");
+            lv_label_set_text(app_lv_ui_res_local->chart_step_lb, "12:00 AM");
+            lv_label_set_text(app_lv_ui_res_local->chart_step_rb, "11:59 AM");
             lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  "12:00 AM");
             lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  "11:59 AM");
             lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  "12:00 AM");

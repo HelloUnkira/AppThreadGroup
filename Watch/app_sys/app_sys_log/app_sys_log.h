@@ -5,6 +5,9 @@
 #define APP_SYS_LOG_THREAD_CHECK    1
 #define APP_SYS_LOG_MODULE_CHECK    1
 
+/* 全局断言检查开关 */
+#define APP_SYS_ASSERT_STATUS           1   /* 1:ENABLE,0:DISABLE */
+
 /* 全局宏控开关及其等级 */
 #define APP_SYS_LOG_GLOBAL_STATUS       1   /* 1:ENABLE,0:DISABLE */
 
@@ -90,8 +93,11 @@ void app_sys_log_ready(void);
 void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond);
 
 /* 断言:条件为真继续执行,为假时中断系统 */
-#define APP_SYS_ASSERT(cond)    \
-        app_sys_assert(__FILE__, __func__, __LINE__, cond)
+#if APP_SYS_ASSERT_STATUS
+#define APP_SYS_ASSERT(cond)    (app_sys_assert(__FILE__, __func__, __LINE__, cond))
+#else
+#define APP_SYS_ASSERT(cond)    (cond)
+#endif
 
 /*@brief 编译时间
  */

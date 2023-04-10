@@ -20,5 +20,7 @@ extern app_lv_scene_t app_lv_ui_countdown_remind;
 extern app_lv_scene_t app_lv_ui_remind_drink;
 extern app_lv_scene_t app_lv_ui_calculator;
 extern app_lv_scene_t app_lv_ui_data_daily;
+/* extern: mini game */
+extern app_lv_scene_t app_lv_ui_2048;
 
 #endif

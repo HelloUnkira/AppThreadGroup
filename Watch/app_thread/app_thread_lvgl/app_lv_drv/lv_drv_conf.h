@@ -4,8 +4,8 @@
 #include "lv_conf.h"
 
 /* display:屏幕尺寸,宽与高 */
-#define LV_DRV_HOR_RES     240
-#define LV_DRV_VER_RES     280
+#define LV_DRV_HOR_RES     360
+#define LV_DRV_VER_RES     360
 /* display:屏幕缩放因子 */
 #define LV_DRV_ZOOM         1
 /* display:多缓冲区 */
