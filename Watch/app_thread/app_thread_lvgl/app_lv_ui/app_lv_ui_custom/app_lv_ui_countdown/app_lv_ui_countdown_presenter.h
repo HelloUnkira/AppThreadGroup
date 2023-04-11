@@ -9,8 +9,6 @@ typedef struct {
     void (*reset)(void);
     void (*start)(void);
     void (*stop)(void);
-    void (*remind_start)(void);
-    void (*remind_end)(void);
 } app_lv_ui_countdown_presenter_t;
 
 extern app_lv_ui_countdown_presenter_t app_lv_ui_countdown_presenter;

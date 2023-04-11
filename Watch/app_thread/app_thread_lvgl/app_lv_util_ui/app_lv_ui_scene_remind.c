@@ -8,6 +8,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_module_vibrate.h"
 #include "app_module_system.h"
 
 #include "app_lv_scene.h"
@@ -53,6 +54,19 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
     /* 勿扰模式是否产生提醒??? */
     if (app_module_do_not_disturb_status())
         return;
+    /* 是否配置无声震动? */
+    if (true/* 开启震动 */) {
+        /* 根据不同的场景配置不同的震动旋律 */
+        app_module_vibrate_t vibrate = {
+            .melody = app_module_vibrate_melody_default_1,
+            .period = 500,
+            .repeat = 2,
+        };
+        /* 可以先获取震动状态考虑是否需要打断,这里默认打断 */
+        app_module_vibrate_stop();
+        app_module_vibrate_set(&vibrate);
+        app_module_vibrate_start();
+    }
     /* 如果进入到低功耗模式先唤醒场景 */
     if (app_module_system_dlps_get()) {
         app_lv_scene_add(remind_scene, true);
