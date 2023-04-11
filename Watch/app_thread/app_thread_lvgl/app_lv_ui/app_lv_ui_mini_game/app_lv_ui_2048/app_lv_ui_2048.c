@@ -205,7 +205,6 @@ static void app_lv_ui_2048_show(void *scene)
         app_lv_ui_style_object(list);
         lv_obj_set_size(list, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(75));
         lv_obj_set_style_pad_row(list, app_lv_ui_ver_pct(1), 0);
-        lv_obj_align(list, LV_ALIGN_RIGHT_MID, -app_lv_ui_hor_pct(1), 0);
         /* 固定按钮 */
         lv_obj_t *list_lbl = NULL, *list_btn = NULL;
         list_btn = app_lv_ui_style_btn(list);
@@ -213,31 +212,33 @@ static void app_lv_ui_2048_show(void *scene)
         lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
         list_lbl = app_lv_ui_style_label(list_btn);
         lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(list_lbl, "Reset");
+        lv_label_set_text_static(list_lbl, LV_SYMBOL_REFRESH);
         list_btn = app_lv_ui_style_btn(list);
         lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-2));
         lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
         list_lbl = app_lv_ui_style_label(list_btn);
         lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(list_lbl, "Up");
+        lv_label_set_text_static(list_lbl, LV_SYMBOL_UP);
         list_btn = app_lv_ui_style_btn(list);
         lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-3));
         lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
         list_lbl = app_lv_ui_style_label(list_btn);
         lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(list_lbl, "Left");
+        lv_label_set_text_static(list_lbl, LV_SYMBOL_LEFT);
         list_btn = app_lv_ui_style_btn(list);
         lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-4));
         lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
         list_lbl = app_lv_ui_style_label(list_btn);
         lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(list_lbl, "Right");
+        lv_label_set_text_static(list_lbl, LV_SYMBOL_RIGHT);
         list_btn = app_lv_ui_style_btn(list);
         lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-5));
         lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
         list_lbl = app_lv_ui_style_label(list_btn);
         lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(list_lbl, "Down");
+        lv_label_set_text_static(list_lbl, LV_SYMBOL_DOWN);
+        /* 更新列表布局 */
+        lv_obj_align(list, LV_ALIGN_BOTTOM_RIGHT, -app_lv_ui_hor_pct(1), 0);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,

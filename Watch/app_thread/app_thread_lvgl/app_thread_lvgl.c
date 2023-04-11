@@ -124,23 +124,27 @@ void app_thread_lvgl_routine(void)
                 /* 启动UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_start) {
                     app_lv_ui_event_default_config(NULL, true, NULL);
-                    app_lv_scene_reset(&app_lv_ui_main, false);
-                    app_lv_scene_add(&app_lv_ui_watch_start, false);
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(true);
                     APP_SYS_LOG_WARN("ui scene start");
+                    app_lv_scene_reset(&app_lv_ui_main, false);
+                    #if !APP_LV_UI_MODE_DEVELOPMENT
+                    app_lv_scene_add(&app_lv_ui_watch_start, false);
+                    #endif
                     break;
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
                     app_lv_ui_event_default_config(NULL, false, NULL);
-                    app_lv_scene_reset(&app_lv_ui_main, false);
-                    app_lv_scene_add(&app_lv_ui_watch_stop, false);
                     app_lv_ui_check_time_reset(0, 0);
                     app_lv_ui_check_time_exec(true);
                 if (app_module_system_dlps_get())
                     app_module_system_dlps_set(false);
                     APP_SYS_LOG_WARN("ui scene stop");
+                    app_lv_scene_reset(&app_lv_ui_main, false);
+                    #if !APP_LV_UI_MODE_DEVELOPMENT
+                    app_lv_scene_add(&app_lv_ui_watch_stop, false);
+                    #endif
                     break;
                 }
                 /* UI场景计时检查 */
