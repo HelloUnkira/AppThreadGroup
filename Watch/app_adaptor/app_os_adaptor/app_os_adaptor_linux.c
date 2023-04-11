@@ -89,7 +89,7 @@ void app_mutex_give(app_mutex_t *mutex)
 
 /*@brief        内存分配
  *@param[in]    size 分配空间字节大小
- #@retval       分配空间,失败为NULL
+ *@retval       分配空间,失败为NULL
  */
 void * app_mem_alloc(uint32_t size)
 {
@@ -99,7 +99,7 @@ void * app_mem_alloc(uint32_t size)
 /*@brief        内存分配
  *@param[in]    pointer 分配空间回收
  *@param[in]    size    分配空间字节大小
- #@retval       分配空间,失败为NULL
+ *@retval       分配空间,失败为NULL
  */
 void * app_mem_realloc(void *pointer, uint32_t size)
 {

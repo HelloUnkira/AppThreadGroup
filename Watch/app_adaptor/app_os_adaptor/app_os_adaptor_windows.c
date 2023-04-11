@@ -13,7 +13,7 @@
   *              创建一个线程并启动(线程创建时立即启动)
   *@param[in]    thread 静态实例
   */
-void app_thread_process(app_thread_t* thread)
+void app_thread_process(app_thread_t *thread)
 {
     thread->stacksize = 8 * 1024 * 1024;
     // thread->handle = _beginthreadex(NULL,
@@ -44,7 +44,7 @@ bool app_os_not_in_irq(void)
 /*@brief        创建一个信号量并准备好使用
  *@param[in]    sem 静态实例
  */
-void app_sem_process(app_sem_t* sem)
+void app_sem_process(app_sem_t *sem)
 {
     sem->sem = CreateSemaphore(NULL, 0, 100, NULL);
 }
@@ -52,7 +52,7 @@ void app_sem_process(app_sem_t* sem)
 /*@brief        获取一个信号量
  *@param[in]    sem 静态实例
  */
-void app_sem_take(app_sem_t* sem)
+void app_sem_take(app_sem_t *sem)
 {
     WaitForSingleObject(sem->sem, INFINITE);
 }
@@ -60,7 +60,7 @@ void app_sem_take(app_sem_t* sem)
 /*@brief        发布一个信号量
  *@param[in]    sem 静态实例
  */
-void app_sem_give(app_sem_t* sem)
+void app_sem_give(app_sem_t *sem)
 {
     ReleaseSemaphore(sem->sem, 1, NULL);
 }
@@ -68,7 +68,7 @@ void app_sem_give(app_sem_t* sem)
 /*@brief        创建一个互斥锁并准备好使用
  *@param[in]    mutex 静态实例
  */
-void app_mutex_process(app_mutex_t* mutex)
+void app_mutex_process(app_mutex_t *mutex)
 {
     mutex->mutex = CreateMutex(NULL, FALSE, NULL);
 }
@@ -76,7 +76,7 @@ void app_mutex_process(app_mutex_t* mutex)
 /*@brief        抢占一个互斥锁(中断环境不可调用)
  *@param[in]    mutex 静态实例
  */
-void app_mutex_take(app_mutex_t* mutex)
+void app_mutex_take(app_mutex_t *mutex)
 {
     if (app_os_not_in_irq())
         WaitForSingleObject(mutex->mutex, INFINITE);
@@ -85,7 +85,7 @@ void app_mutex_take(app_mutex_t* mutex)
 /*@brief        释放一个互斥锁(中断环境不可调用)
  *@param[in]    mutex 静态实例
  */
-void app_mutex_give(app_mutex_t* mutex)
+void app_mutex_give(app_mutex_t *mutex)
 {
     if (app_os_not_in_irq())
         ReleaseMutex(mutex->mutex);
@@ -93,9 +93,9 @@ void app_mutex_give(app_mutex_t* mutex)
 
 /*@brief        内存分配
  *@param[in]    size 分配空间字节大小
- #@retval       分配空间,失败为NULL
+ *@retval       分配空间,失败为NULL
  */
-void* app_mem_alloc(uint32_t size)
+void * app_mem_alloc(uint32_t size)
 {
     return malloc(size);
 }
@@ -103,9 +103,9 @@ void* app_mem_alloc(uint32_t size)
 /*@brief        内存分配
  *@param[in]    pointer 分配空间回收
  *@param[in]    size    分配空间字节大小
- #@retval       分配空间,失败为NULL
+ *@retval       分配空间,失败为NULL
  */
-void* app_mem_realloc(void* pointer, uint32_t size)
+void * app_mem_realloc(void *pointer, uint32_t size)
 {
     return realloc(pointer, size);
 }
