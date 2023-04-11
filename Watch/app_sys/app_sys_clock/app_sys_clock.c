@@ -2,7 +2,7 @@
  *    一些和时钟运算相关的功能组件
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 #include "app_sys_clock.h"
 
 /*@brief     闰年判断

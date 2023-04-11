@@ -6,4 +6,4 @@
 file(GLOB_RECURSE SOURCES *.c)
 add_library(app_self STATIC ${SOURCES})
 set_target_properties(app_self PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(app_self PUBLIC app_adaptor)
+target_link_libraries(app_self PUBLIC app_ext)

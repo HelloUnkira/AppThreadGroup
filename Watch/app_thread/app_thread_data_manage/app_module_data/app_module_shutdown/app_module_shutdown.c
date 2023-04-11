@@ -2,7 +2,7 @@
  *    关机前转存到外存的追踪日志信息
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 #include "app_module_trace.h"
 #include "app_module_system.h"
 #include "app_module_clock.h"

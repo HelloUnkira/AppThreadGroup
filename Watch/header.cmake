@@ -2,13 +2,13 @@
 # 虽然依赖关系是线性向下的,但这里不打算对各个子库明细外部依赖
 
 # 生成文件路径
-set(app_adaptor_path
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor/app_arch_ext_mem
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_arch_adaptor/app_arch_driver
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_os_adaptor
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_adaptor/app_os_adaptor/app_os_ext_mem
+set(app_ext_path
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext/app_ext_arch
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext/app_ext_arch/app_ext_arch_ext_mem
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext/app_ext_arch/app_ext_arch_dev
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext/app_ext_os
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_ext/app_ext_os/app_ext_os_ext_mem
 )
 set(app_sys_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys
@@ -83,7 +83,7 @@ set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main
 )
 # 编译器添加文件搜索路径
-include_directories(${app_adaptor_path})
+include_directories(${app_ext_path})
 include_directories(${app_sys_path})
 include_directories(${app_third_path})
 include_directories(${app_thread_path})

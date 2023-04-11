@@ -1,8 +1,8 @@
 #ifndef APP_FUNCTION_TEST
 #define APP_FUNCTION_TEST
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
+#include "app_ext_lib.h"
+
 #include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_table.h"

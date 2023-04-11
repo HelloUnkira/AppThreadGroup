@@ -1,8 +1,7 @@
 /*实现目标:
  *    工作处理
  */
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
+#include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_work.h"
 

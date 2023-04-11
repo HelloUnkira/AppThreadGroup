@@ -3,7 +3,7 @@
  *参考app_third_multi_lang_str.json中的模式生成源
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 #include "app_third_multi_lang_str.h"
 
 static const char * app_third_multi_lang_str_table[15][3] = {

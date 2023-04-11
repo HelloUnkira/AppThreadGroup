@@ -3,7 +3,7 @@
  *    Airoha Technology Corp
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 
 /*@brief     计算数据流的checksum32校验
  *@param[in] data 数据流

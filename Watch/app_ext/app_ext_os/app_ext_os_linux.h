@@ -1,5 +1,5 @@
-#ifndef APP_OS_ADAPTOR_LINUX_H
-#define APP_OS_ADAPTOR_LINUX_H
+#ifndef APP_EXT_OS_LINUX_H
+#define APP_EXT_OS_LINUX_H
 
 #if APP_OS_IS_LINUX
 

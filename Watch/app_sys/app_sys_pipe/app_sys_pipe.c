@@ -11,8 +11,7 @@
  *    此外:管道是线程专用容器,其他模组不得独自使用
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
+#include "app_ext_lib.h"
 #include "app_sys_pipe.h"
 
 /*@brief     初始化管道

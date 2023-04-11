@@ -4,8 +4,7 @@
  *         所以做一个效果类似的RTOS软件定时器
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
+#include "app_ext_lib.h"
 #include "app_sys_timer.h"
 
 static app_mutex_t app_sys_timer_mutex = {0};

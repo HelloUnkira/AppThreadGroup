@@ -1,5 +1,5 @@
-#ifndef APP_STD_LIB_H
-#define APP_STD_LIB_H
+#ifndef APP_EXT_LIB_H
+#define APP_EXT_LIB_H
 
 /* C std lib */
 #include <stdarg.h>
@@ -12,5 +12,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+/* Arch lib hook */
+#include "app_ext_arch.h"
+/* OS lib hook */
+#include "app_ext_os.h"
 
 #endif

@@ -11,7 +11,7 @@ def encode_app_sys_ext_src_table_c(file, file_list, json_list):
     file.write('/*一个代替注册的,脚本自动生成的,本地静态的外存data表\n')
     file.write(' *通过app_sys_ext_src_table.py生成\n')
     file.write(' *参考本目录下的.json中的模式生成源\n */\n\n')
-    file.write('#include "app_std_lib.h"\n')
+    file.write('#include "app_ext_lib.h"\n')
     file.write('#include "app_sys_ext_src.h"\n\n')
     # 提取所有外源依赖
     for index, json_text in enumerate(json_list):    # 字典列表中是字典

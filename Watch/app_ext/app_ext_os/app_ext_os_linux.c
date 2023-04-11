@@ -4,8 +4,7 @@
  *     对所有平台做一个全通配的最低配置
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
+#include "app_ext_lib.h"
 
 #if APP_OS_IS_LINUX
 

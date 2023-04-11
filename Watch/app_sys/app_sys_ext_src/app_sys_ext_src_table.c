@@ -3,7 +3,7 @@
  *参考本目录下的.json中的模式生成源
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 #include "app_sys_ext_src.h"
 
 static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_large_table[] = {

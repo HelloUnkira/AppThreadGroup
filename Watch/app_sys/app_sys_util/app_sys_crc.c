@@ -3,7 +3,7 @@
  *    Airoha Technology Corp
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 
 /* 校验表 */
 static const uint32_t app_sys_crc32_table[256] = 

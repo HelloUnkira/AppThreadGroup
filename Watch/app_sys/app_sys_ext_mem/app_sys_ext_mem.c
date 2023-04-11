@@ -3,10 +3,7 @@
  *    将各种数据以chunk的形式组织起来
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
-#include "app_arch_ext_mem.h"
-#include "app_os_ext_mem.h"
+#include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_ext_mem.h"
 

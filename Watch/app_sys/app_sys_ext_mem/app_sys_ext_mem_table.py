@@ -12,7 +12,7 @@ def encode_app_sys_ext_mem_table_c(file, dir_list):
     file.write('/*一个代替注册的,脚本自动生成的,本地静态的外存chunk表\n')
     file.write(' *通过app_sys_ext_mem_table.py生成\n')
     file.write(' *参考app_sys_ext_mem_table.json中的模式生成源\n */\n\n')
-    file.write('#include "app_std_lib.h"\n')
+    file.write('#include "app_ext_lib.h"\n')
     file.write('#include "app_sys_ext_mem.h"\n\n')
     # 先提取所有的chunk_base,然后为此生成chunk_offset
     chunk_base = []

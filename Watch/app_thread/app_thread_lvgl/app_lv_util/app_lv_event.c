@@ -3,7 +3,7 @@
  *    lvgl事件
  */
 
-#include "app_std_lib.h"
+#include "app_ext_lib.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
 

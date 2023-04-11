@@ -2,9 +2,7 @@
  *    系统提供的文件系统相关的功能组件
  */
 
-#include "app_std_lib.h"
-#include "app_os_adaptor.h"
-#include "app_os_ext_mem.h"
+#include "app_ext_lib.h"
 
 #if APP_OS_EXT_MEM && APP_OS_IS_WINDOWS
 

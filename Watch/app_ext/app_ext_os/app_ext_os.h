@@ -1,5 +1,5 @@
-#ifndef APP_OS_ADAPTOR_H
-#define APP_OS_ADAPTOR_H
+#ifndef APP_EXT_OS_H
+#define APP_EXT_OS_H
 
 /* 实现目标:
  *     APP需要对系统进行的封装体
@@ -13,10 +13,13 @@
 #define APP_OS_IS_ZEPHYR    0
 #define APP_OS_IS_FREERTOS  0
 
-#include "app_os_adaptor_windows.h"
-#include "app_os_adaptor_linux.h"
-#include "app_os_adaptor_zephyr.h"
-#include "app_os_adaptor_freertos.h"
+/* OS custom adaptor */
+#include "app_ext_os_windows.h"
+#include "app_ext_os_linux.h"
+#include "app_ext_os_zephyr.h"
+#include "app_ext_os_freertos.h"
+/* OS ext mem adaptor */
+#include "app_ext_os_ext_mem.h"
 
 /*@brief        准备与执行线程
  *              创建一个线程并启动(线程创建时立即启动)
