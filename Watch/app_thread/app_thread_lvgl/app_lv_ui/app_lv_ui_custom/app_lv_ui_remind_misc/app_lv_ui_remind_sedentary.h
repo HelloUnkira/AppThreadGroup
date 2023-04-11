@@ -1,0 +1,4 @@
+#ifndef APP_LV_UI_REMIND_SEDENTARY_H
+#define APP_LV_UI_REMIND_SEDENTARY_H
+
+#endif

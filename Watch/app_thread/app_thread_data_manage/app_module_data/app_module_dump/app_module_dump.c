@@ -12,6 +12,7 @@
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
+#include "app_module_remind_sedentary.h"
 #include "app_module_remind_drink.h"
 #include "app_module_do_not_disturb.h"
 #include "app_module_shutdown.h"
@@ -33,6 +34,7 @@ void app_module_dump_process(void)
     APP_SYS_LOG_WARN("...");
     app_module_clock_dump();
     app_module_remind_alarm_dump();
+    app_module_remind_sedentary_dump();
     app_module_remind_drink_dump();
     app_module_do_not_disturb_dump();
     /* ... */

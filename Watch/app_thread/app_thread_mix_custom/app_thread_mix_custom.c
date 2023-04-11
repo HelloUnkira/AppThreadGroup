@@ -18,6 +18,7 @@
 #include "app_module_countdown.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
+#include "app_module_remind_sedentary.h"
 #include "app_module_remind_drink.h"
 #include "app_module_do_not_disturb.h"
 
@@ -103,8 +104,19 @@ void app_thread_mix_custom_routine(void)
                 break;
             }
             case app_thread_mix_custom_remind_misc: {
+                if (package.event == app_thread_mix_custom_remind_sedentary_update)
+                    app_module_remind_sedentary_xmin_update();
                 if (package.event == app_thread_mix_custom_remind_drink_update)
                     app_module_remind_drink_xmin_update();
+                /* 走动提醒模组到期事件 */
+                if (package.event == app_thread_mix_custom_remind_sedentary_interval) {
+                    app_package_t package = {
+                        .thread  = app_thread_id_lvgl,
+                        .module  = app_thread_lvgl_ui_scene,
+                        .event   = app_thread_lvgl_ui_remind_sedentary,
+                    };
+                    app_package_notify(&package);
+                }
                 /* 喝水提醒模组到期事件 */
                 if (package.event == app_thread_mix_custom_remind_drink_interval) {
                     app_package_t package = {

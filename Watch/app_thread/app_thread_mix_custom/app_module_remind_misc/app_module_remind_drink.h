@@ -14,10 +14,6 @@ typedef struct {
     uint8_t week:7;         /* 周:日一二三四五六:[0, 6] */
 } app_module_remind_drink_t;
 
-/*@brief 喝水提醒默认设置
- */
-void app_module_remind_drink_reset(void);
-
 /*@brief     喝水提醒设置
  *@param[in] remind_drink 喝水提醒参数
  */
@@ -27,6 +23,10 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink);
  *@param[in] remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink);
+
+/*@brief 喝水提醒默认设置
+ */
+void app_module_remind_drink_reset(void);
 
 /*@brief 喝水提醒更新事件
  *       内部使用: 被mix custom线程使用

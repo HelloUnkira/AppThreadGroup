@@ -94,6 +94,8 @@ void app_module_vibrate_msec_update(void)
         app_module_vibrate_stop();
         return;
     }
+    if (vibrate.melody == NULL)
+        return;
     /* 更新震动节拍 */
     static uint8_t melody_last = 0;
     static uint8_t melody_curr = 0;

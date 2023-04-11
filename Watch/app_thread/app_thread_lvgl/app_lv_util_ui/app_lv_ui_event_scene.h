@@ -16,8 +16,4 @@ void app_lv_ui_event_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t 
  */
 void app_lv_ui_event_click_turn_back_cb(lv_event_t *e);
 
-/*@brief 场景内事件处理集合
- */
-void app_lv_ui_scene_event(uint32_t event, uint8_t *data, uint32_t size);
-
 #endif

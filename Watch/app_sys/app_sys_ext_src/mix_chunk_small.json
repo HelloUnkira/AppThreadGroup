@@ -14,6 +14,11 @@
             "data_size"  : "65 * 10 + 10"
         },
         {
+            "data_brief" : "remind sedentary + crc32",
+            "data_name"  : "remind sedentary",
+            "data_size"  : "20"
+        },
+        {
             "data_brief" : "remind drink + crc32",
             "data_name"  : "remind drink",
             "data_size"  : "20"

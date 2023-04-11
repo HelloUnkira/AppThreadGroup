@@ -34,6 +34,8 @@ typedef enum {  /* 提醒组模组 */
 }app_thread_mix_custom_remind_group_event_t;
 
 typedef enum {  /* 杂项提醒模组事件 */
+    app_thread_mix_custom_remind_sedentary_update,
+    app_thread_mix_custom_remind_sedentary_interval,
     app_thread_mix_custom_remind_drink_update,
     app_thread_mix_custom_remind_drink_interval,
 } app_thread_mix_custom_remind_misc_event_t;

@@ -12,6 +12,9 @@
 #include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
+#include "app_module_clock.h"
+#include "app_module_remind_group.h"
+#include "app_module_remind_alarm.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -24,6 +27,7 @@
 #include "app_lv_ui_event_object.h"
 #include "app_lv_ui_event_scene.h"
 #include "app_lv_ui_check_time.h"
+#include "app_lv_ui_scene_remind.h"
 #include "app_lv_ui_test.h"
 
 /*@brief lvgl线程模组初始化
@@ -130,7 +134,6 @@ void app_thread_lvgl_routine(void)
                     #if !APP_LV_UI_MODE_DEVELOPMENT
                     app_lv_scene_add(&app_lv_ui_watch_start, false);
                     #endif
-                    break;
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
@@ -144,19 +147,40 @@ void app_thread_lvgl_routine(void)
                     #if !APP_LV_UI_MODE_DEVELOPMENT
                     app_lv_scene_add(&app_lv_ui_watch_stop, false);
                     #endif
-                    break;
                 }
                 /* UI场景计时检查 */
                 if (package.event == app_thread_lvgl_ui_scene_check_time) {
                     app_lv_ui_check_time_update();
-                    break;
                 }
                 #endif
-                /* 产生到特定场景内的事件...... */
-                if (true) {
-                    app_lv_ui_scene_event(package.event, package.data, package.size);
+                /* 集成场景 */
+                switch (package.event) {
+                /* 倒计时提醒 */
+                case app_thread_lvgl_ui_countdown_remind: {
+                    app_lv_ui_scene_remind(&app_lv_ui_countdown_remind);
+                    break;
+                }
+                /* 提醒闹钟 */
+                case app_thread_lvgl_ui_remind_alarm: {
+                    app_module_remind_package_t *remind = package.data;
+                    remind->remind_group;
+                    remind->remind_item;
+                    remind->remind_type;
                     if (package.dynamic)
                         app_mem_free(package.data);
+                    break;
+                }
+                /* 提醒走动 */
+                case app_thread_lvgl_ui_remind_sedentary: {
+                    app_lv_ui_scene_remind(&app_lv_ui_remind_sedentary);
+                    break;
+                }
+                /* 提醒喝水 */
+                case app_thread_lvgl_ui_remind_drink: {
+                    app_lv_ui_scene_remind(&app_lv_ui_remind_drink);
+                    break;
+                }
+                default:
                     break;
                 }
                 break;

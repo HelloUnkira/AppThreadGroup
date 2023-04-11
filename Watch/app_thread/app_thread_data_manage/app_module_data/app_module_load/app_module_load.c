@@ -32,6 +32,7 @@ void app_module_load_process(void)
     APP_SYS_LOG_WARN("...");
     app_module_clock_load();
     app_module_remind_alarm_load();
+    app_module_remind_sedentary_load();
     app_module_remind_drink_load();
     app_module_do_not_disturb_load();
     /* ... */
