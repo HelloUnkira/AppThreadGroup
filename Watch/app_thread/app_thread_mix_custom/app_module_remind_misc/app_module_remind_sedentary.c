@@ -95,7 +95,8 @@ void app_module_remind_sedentary_xmin_update(void)
             if (t_mins_s <= c_mins && c_mins <= t_mins_e) {
                 /* 到达提醒间隔点 */
                 if (c_mins - t_mins_s > remind_sedentary.interval &&
-                    remind_sedentary.reflush >= c_mins - remind_sedentary.interval) {
+                   (remind_sedentary.reflush >= c_mins - remind_sedentary.interval ||
+                    remind_sedentary.reflush == 0)) {
                     remind_sedentary.reflush  = c_mins;
                     /* 发送提醒事件 */
                     app_package_t package = {
@@ -116,7 +117,8 @@ void app_module_remind_sedentary_xmin_update(void)
             if (t_mins_s <= c_mins && c_mins <= t_mins_e) {
                 /* 到达提醒间隔点 */
                 if (c_mins - t_mins_s > remind_sedentary.interval &&
-                    remind_sedentary.reflush >= c_mins - remind_sedentary.interval) {
+                   (remind_sedentary.reflush >= c_mins - remind_sedentary.interval ||
+                    remind_sedentary.reflush == 0)) {
                     remind_sedentary.reflush  = c_mins;
                     /* 发送提醒事件 */
                     app_package_t package = {
@@ -149,13 +151,15 @@ void app_module_remind_sedentary_update(app_module_clock_t clock[1])
  */
 void app_module_remind_sedentary_dump(void)
 {
+    app_module_remind_sedentary_t remind_sedentary = {0};
+    app_module_remind_sedentary_get(&remind_sedentary);
     union {
         uint8_t buffer[0];
         struct {
             app_module_remind_sedentary_t remind;
             uint32_t crc32;
         } data;
-    } remind_data = {.data.remind = app_module_remind_sedentary};
+    } remind_data = {.data.remind = remind_sedentary};
     
     remind_data.data.crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_sedentary_t));
     app_sys_ext_src_write("mix_chunk_small", "remind sedentary", remind_data.buffer, sizeof(remind_data));
@@ -176,9 +180,9 @@ void app_module_remind_sedentary_load(void)
     app_sys_ext_src_read("mix_chunk_small", "remind sedentary", remind_data.buffer, sizeof(remind_data));
     uint32_t crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_sedentary_t));
     if (crc32 == remind_data.data.crc32) {
-        app_mutex_take(&app_module_remind_sedentary_mutex);
-        app_module_remind_sedentary = remind_data.data.remind;
-        app_mutex_give(&app_module_remind_sedentary_mutex);
+        app_module_remind_sedentary_t remind_sedentary = {0};
+        remind_sedentary = remind_data.data.remind;
+        app_module_remind_sedentary_set(&remind_sedentary);
     }
     if (crc32 != remind_data.data.crc32) {
         app_module_remind_sedentary_reset();
