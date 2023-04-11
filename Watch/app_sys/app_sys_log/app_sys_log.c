@@ -53,7 +53,7 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
     
     app_mutex_take(&app_sys_log_mutex);
     if (status == 0) {
-        app_sys_log_msg1(format, list);
+        app_sys_log_msg2(format, list);
     } else {
         /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
         #if 0

@@ -53,7 +53,7 @@ void app_module_vibrate_ready(void);
 uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period);
 
 /*@brief 震动节拍默认回调2
- *       先升后降,波峰式震动
+ *       先升后降,波峰波谷式震动
  *@param[in] current 周期内的到达点,进度
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]

@@ -67,6 +67,8 @@ static void app_lv_ui_countdown_remind_show(void *scene)
 
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
+        /* 开启提醒 */
+        app_lv_ui_countdown_presenter.remind_start();
     }
 }
 
@@ -76,6 +78,8 @@ static void app_lv_ui_countdown_remind_show(void *scene)
 static void app_lv_ui_countdown_remind_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
+        /* 开启提醒 */
+        app_lv_ui_countdown_presenter.remind_end();
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */

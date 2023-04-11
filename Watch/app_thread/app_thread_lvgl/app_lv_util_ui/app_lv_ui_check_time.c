@@ -35,13 +35,15 @@ void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time)
 {
     APP_SYS_LOG_INFO("");
     app_mutex_take(&app_lv_ui_check_time_mutex);
-    app_lv_ui_over_time_bak = over_time != 0 ? over_time : app_lv_ui_over_time_bak;
-    app_lv_ui_idle_time_bak = idle_time != 0 ? idle_time : app_lv_ui_idle_time_bak;
+    app_lv_ui_over_time_bak = over_time != 0 ? over_time : APP_LV_UI_OVER_TIME;
+    app_lv_ui_idle_time_bak = idle_time != 0 ? idle_time : APP_LV_UI_IDLE_TIME;
+    /* 是否需要一起禁用???
     if (over_time == APP_LV_UI_OVER_TIME_MAX ||
         idle_time == APP_LV_UI_IDLE_TIME_MAX) {
         app_lv_ui_over_time_bak = APP_LV_UI_OVER_TIME_MAX;
         app_lv_ui_idle_time_bak = APP_LV_UI_IDLE_TIME_MAX;
     }
+    */
     app_lv_ui_over_time = app_lv_ui_over_time_bak;
     app_lv_ui_idle_time = app_lv_ui_idle_time_bak;
     app_lv_ui_dlps = true;

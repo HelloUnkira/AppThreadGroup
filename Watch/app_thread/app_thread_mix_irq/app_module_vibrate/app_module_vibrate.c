@@ -64,6 +64,7 @@ void app_module_vibrate_start(void)
     app_module_vibrate.onoff = true;
     app_mutex_give(&app_module_vibrate_mutex);
     app_sys_timer_start(&app_module_vibrate_timer);
+    APP_SYS_LOG_WARN("vibrate start");
 }
 
 /*@brief 震动模组停止
@@ -74,6 +75,7 @@ void app_module_vibrate_stop(void)
     app_mutex_take(&app_module_vibrate_mutex);
     app_module_vibrate.onoff = false;
     app_mutex_give(&app_module_vibrate_mutex);
+    APP_SYS_LOG_WARN("vibrate end");
 }
 
 /*@brief 震动模组事件处理
@@ -96,9 +98,12 @@ void app_module_vibrate_msec_update(void)
     static uint8_t melody_last = 0;
     static uint8_t melody_curr = 0;
     melody_curr = vibrate.melody(vibrate.tick, vibrate.period);
+    if (vibrate.tick == 0)
+        APP_SYS_LOG_INFO_RAW("melody:");
     if (melody_last != melody_curr) {
         melody_last  = melody_curr;
-        APP_SYS_LOG_INFO("app_module_vibrate update:%d", melody_curr);
+        APP_SYS_LOG_INFO_RAW("%u ", melody_curr);
+        /* 在此处更新震动,百分比 */
     }
     /* 更新震动计数 */
     if (vibrate.tick >= vibrate.period) {
@@ -147,7 +152,7 @@ uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period)
 }
 
 /*@brief 震动节拍默认回调2
- *       先升后降,波峰式震动
+ *       先升后降,波峰波谷式震动
  *@param[in] current 周期内的到达点,进度
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
