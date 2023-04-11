@@ -28,6 +28,7 @@ set(app_third_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Calculator
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Game2048
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Tetris
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl/lib_lvgl
 )
@@ -78,6 +79,7 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui/app_lv_ui_custom/app_lv_ui_data_daily
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui/app_lv_ui_mini_game
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui/app_lv_ui_mini_game/app_lv_ui_2048
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_ui/app_lv_ui_mini_game/app_lv_ui_tetris
 )
 set(app_main_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_main

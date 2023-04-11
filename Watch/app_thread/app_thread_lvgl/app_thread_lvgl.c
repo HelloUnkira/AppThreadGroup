@@ -131,9 +131,7 @@ void app_thread_lvgl_routine(void)
                     app_lv_ui_check_time_exec(true);
                     APP_SYS_LOG_WARN("ui scene start");
                     app_lv_scene_reset(&app_lv_ui_main, false);
-                    #if !APP_LV_UI_MODE_DEVELOPMENT
                     app_lv_scene_add(&app_lv_ui_watch_start, false);
-                    #endif
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
@@ -144,9 +142,7 @@ void app_thread_lvgl_routine(void)
                     app_module_system_dlps_set(false);
                     APP_SYS_LOG_WARN("ui scene stop");
                     app_lv_scene_reset(&app_lv_ui_main, false);
-                    #if !APP_LV_UI_MODE_DEVELOPMENT
                     app_lv_scene_add(&app_lv_ui_watch_stop, false);
-                    #endif
                 }
                 /* UI场景计时检查 */
                 if (package.event == app_thread_lvgl_ui_scene_check_time) {

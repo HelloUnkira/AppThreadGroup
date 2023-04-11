@@ -25,7 +25,7 @@ static lv_font_t *app_lv_ui_multi_font_table[app_lv_ui_multi_font_num] = {0};
 
 /*@brief 加载动态多字库表
  */
-static inline app_lv_ui_multi_font_free(void)
+static inline void app_lv_ui_multi_font_free(void)
 {
     for (uint32_t idx = 0; idx < app_lv_ui_multi_font_num; idx++) {
         lv_font_free(app_lv_ui_multi_font_table[idx]);
@@ -35,7 +35,7 @@ static inline app_lv_ui_multi_font_free(void)
 
 /*@brief 加载动态多字库表
  */
-static inline app_lv_ui_multi_font_load(uint32_t multi_font_type)
+static inline void app_lv_ui_multi_font_load(uint32_t multi_font_type)
 {
     switch (multi_font_type) {
     case app_lv_ui_multi_font_chinese:

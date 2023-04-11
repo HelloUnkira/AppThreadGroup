@@ -29,7 +29,7 @@ typedef enum {
  *@param[in]    thread 线程ID
  *@param[out]   sem 信号量
  */
-#ifdef APP_OS_ADAPTOR_H
+#ifdef APP_EXT_OS_H
 void app_thread_get_sync(uint32_t thread, app_sem_t **sem);
 #endif
 

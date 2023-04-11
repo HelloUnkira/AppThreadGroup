@@ -30,7 +30,7 @@ static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Countdown",           &app_lv_ui_countdown,},
     {"Null",                &app_lv_ui_watch_null,},
     {"2048",                &app_lv_ui_2048,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Tetris",              &app_lv_ui_tetris,},
     {"Null",                &app_lv_ui_watch_null,},
     {"Internal Test",       &app_lv_ui_test_list,},
 };

@@ -10,6 +10,7 @@
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_event_scene.h"
+#include "app_lv_ui_check_time.h"
 
 #include "app_lv_ui_2048.h"
 #include "app_lv_ui_2048_presenter.h"
@@ -69,7 +70,7 @@ static void app_lv_ui_local_list_btn_cb(lv_event_t *e)
     case (uintptr_t)(-1): {
         /* 清空目标矩阵 */
         uint8_t (*matrix)[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM] = NULL;
-        app_lv_ui_2048_presenter.get_matrix(&matrix);
+        app_lv_ui_2048_presenter.get_matrix((void **)&matrix);
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++)
             (*matrix)[idx1][idx2] = 0;
@@ -130,7 +131,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     /* 矩阵刷新 */
     uint32_t score = 0;
     uint8_t (*matrix)[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM] = NULL;
-    app_lv_ui_2048_presenter.get_matrix(&matrix);
+    app_lv_ui_2048_presenter.get_matrix((void **)&matrix);
     for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
     for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++) {
          uint8_t text[20] = {0};
@@ -164,6 +165,8 @@ static void app_lv_ui_2048_show(void *scene)
         /* 禁用默认事件响应,事件重定向使用 */
         app_lv_ui_event_default_config(NULL, false, NULL);
         app_lv_ui_event_default_config(NULL, true,  app_lv_ui_event_default_redirect);
+        /* 界面常亮 */
+        app_lv_ui_check_time_reset(APP_LV_UI_OVER_TIME_MAX, 0);
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
         title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
@@ -259,6 +262,8 @@ static void app_lv_ui_2048_hide(void *scene)
         /* 启用默认事件响应,事件重定向取消 */
         app_lv_ui_event_default_config(NULL, false, app_lv_ui_event_default_redirect);
         app_lv_ui_event_default_config(NULL, true,  NULL);
+        /* 界面恢复 */
+        app_lv_ui_check_time_reset(0, 0);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_lv_ui_2048.self = NULL;
