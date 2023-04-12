@@ -6,7 +6,7 @@
         {
             "data_brief" : "system clock + crc32",
             "data_name"  : "system clock",
-            "data_size"  : "30"
+            "data_size"  : "40"
         },
         {
             "data_brief" : "remind alarm + crc32",

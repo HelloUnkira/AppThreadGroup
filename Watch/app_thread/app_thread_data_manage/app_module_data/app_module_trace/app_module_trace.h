@@ -1,34 +1,58 @@
 #ifndef APP_MODULE_TRACE_H
 #define APP_MODULE_TRACE_H
 
-/*当前提供模式:
- *    1.函数追踪队列(搭配lst或map进一步确认调用链)
- *    2.日志追踪队列
- */
-
-/*@brief 函数追踪队列
- */
-void app_module_trace_func(void *func);
-
 /* 单次存储日志文本最大长度(包括字符串结尾'\0') */
 #define APP_MODULE_TRACE_LOG_MAX    128/*1*/
- 
-/*@brief 日志追踪队列初始化
- */
-void app_module_trace_text_ready(void);
+
+typedef union {
+    uint8_t buffer[0];
+    struct {
+        struct {
+            uintptr_t head;
+            uintptr_t tail;
+            uintptr_t peek;
+            uintptr_t zone;
+        } info;
+        uint32_t crc32;
+    };
+} app_module_trace_text_t;
+
+typedef union {
+    uint8_t buffer[0];
+    struct {
+        uintptr_t length;
+        uint8_t   text[APP_MODULE_TRACE_LOG_MAX + 1];
+    };
+} app_module_trace_item_t;
 
 /*@brief 日志追踪队列重置
  */
 void app_module_trace_text_reset(void);
 
-/*@brief      日志追踪队列尾加入一段日志
- *@param[in]  text 日志文本
+/*@brief 日志追踪队列初始化
  */
-void app_module_trace_text_dump(char text[APP_MODULE_TRACE_LOG_MAX]);
+void app_module_trace_text_ready(void);
 
-/*@brief      日志追踪队列头取出一段日志
+/*@brief      日志追踪队列尾转入一段日志
+ *@param[in]  text       日志文本
+ *@param[in]  need_cover 覆盖式加入日志
+ *                       如果空间不足则会不断丢弃最旧的数据
+ *                       直到空间完全释放也不能加入
+ *                       或者可以加入新条目为止
+ *@retval     成功或者失败
+ */
+bool app_module_trace_text_dump(char text[APP_MODULE_TRACE_LOG_MAX], bool need_cover);
+
+/*@brief      日志追踪队列头转出一段日志
  *@param[out] text 日志文本
+ *@retval     成功或者失败
  */
 bool app_module_trace_text_load(char text[APP_MODULE_TRACE_LOG_MAX]);
+
+/*@brief      日志追踪队列窥探一段日志(自动迭代到下一段日志)
+ *@param[out] text 日志文本
+ *@retval     成功或者失败
+ */
+bool app_module_trace_text_peek(char text[APP_MODULE_TRACE_LOG_MAX]);
 
 #endif

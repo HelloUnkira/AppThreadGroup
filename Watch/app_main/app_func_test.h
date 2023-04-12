@@ -136,7 +136,7 @@ static inline void app_module_trace_test(void)
 
     static uint32_t offset = 0;
     offset %= APP_MODULE_TRACE_LOG_MAX;
-    app_module_trace_text_dump(tin + offset);
+    app_module_trace_text_dump(tin + offset, true);
     uint8_t tout[APP_MODULE_TRACE_LOG_MAX] = {0};
     app_module_trace_text_load(tout);
     if (memcmp(tout, tin + offset, APP_MODULE_TRACE_LOG_MAX) != 0)

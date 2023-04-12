@@ -27,6 +27,7 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Watch Stop",          &app_lv_ui_watch_stop,},
     {"Watch Dlps",          &app_lv_ui_watch_dlps,},
     {"Watch Null",          &app_lv_ui_watch_null,},
+    {"Trace Text",          &app_lv_ui_trace_text,},
     {"System Clock",        &app_lv_ui_clock,},
     {"Calendar",            &app_lv_ui_calendar,},
     {"Remind Drink",        &app_lv_ui_remind_drink,},

@@ -3,8 +3,6 @@
 
 /* 该结构继承自app_sys_clock_t */
 /* 与app_sys_clock_t字段自顶对齐,允许继续向下扩展其他字段 */
-#pragma pack(push)
-#pragma pack(1)
 typedef struct {
     uint64_t utc;       /* 协调世界时UTC */
     uint16_t year;      /* 年 */
@@ -20,7 +18,6 @@ typedef struct {
     uint8_t  is_am:1;   /* 12小时:上午 */
     uint8_t  is_pm:1;   /* 12小时:下午 */
 } app_module_clock_t;
-#pragma pack(pop)
 
 /*@brief     闰年判断
  *@param[in] clock 时钟实例{.year,}

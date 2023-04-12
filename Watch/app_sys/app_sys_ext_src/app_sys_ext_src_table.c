@@ -25,44 +25,44 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 	{
 		/* system clock + crc32 */
 		.data_name = "system clock",
-		.data_size = 30,
+		.data_size = 40,
 		.data_base = 0x0,
 	},
 	{
 		/* remind alarm + crc32 */
 		.data_name = "remind alarm",
 		.data_size = 65 * 10 + 10,
-		.data_base = 0x1e,
+		.data_base = 0x28,
 	},
 	{
 		/* remind sedentary + crc32 */
 		.data_name = "remind sedentary",
 		.data_size = 20,
-		.data_base = 0x2b2,
+		.data_base = 0x2bc,
 	},
 	{
 		/* remind drink + crc32 */
 		.data_name = "remind drink",
 		.data_size = 20,
-		.data_base = 0x2c6,
+		.data_base = 0x2d0,
 	},
 	{
 		/* do not disturb + crc32 */
 		.data_name = "do not disturb",
 		.data_size = 30,
-		.data_base = 0x2da,
+		.data_base = 0x2e4,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
 		.data_size = 20 * 10,
-		.data_base = 0x2f8,
+		.data_base = 0x302,
 	},
 	{
 		/* trace log text */
 		.data_name = "trace log text",
 		.data_size = 4096 * 2,
-		.data_base = 0x3c0,
+		.data_base = 0x3ca,
 	},
 };
 

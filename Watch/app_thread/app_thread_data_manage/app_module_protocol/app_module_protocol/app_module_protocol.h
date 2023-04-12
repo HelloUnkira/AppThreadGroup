@@ -5,7 +5,7 @@
 #define APP_MODULE_PROTOCOL_PKG_TYPE_SIZE   10  /* k = log2(协议包命令及事件最大数量) + 1 */
 #define APP_MODULE_PROTOCOL_PKG_DATA_SIZE   12  /* k = log2(协议包最大大小) + 1 */
 
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef struct {
     uint64_t head:1;    /* 起始协议包(多协议包传输开始标记) */
     uint64_t tail:1;    /* 终止协议包(多协议包传输结束标记) */
@@ -15,7 +15,7 @@ typedef struct {
     uint64_t size:      APP_MODULE_PROTOCOL_PKG_DATA_SIZE;  /* 协议包数据总长度 */
     uint64_t crc8:8;    /* 校验协议包数据,传输乱序检查 */
 } app_module_protocol_pkg_t;
-#pragma pack()
+#pragma pack(pop)
 
 typedef struct {
     /* 填充tx协议包 or 解析rx协议包 */
