@@ -189,17 +189,8 @@ static void app_lv_ui_2048_show(void *scene)
         lv_obj_align_to(matrix, app_lv_ui_res_local->score, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++) {
-            app_lv_ui_res_local->btn_matrix[idx1][idx2] = app_lv_ui_style_btn(matrix);
+            app_lv_ui_res_local->btn_matrix[idx1][idx2] = app_lv_ui_style_btn_block(matrix, 4, 4, 1);
             lv_obj_set_size(app_lv_ui_res_local->btn_matrix[idx1][idx2], app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(15));
-            lv_obj_set_style_radius(app_lv_ui_res_local->btn_matrix[idx1][idx2], 0, 0);
-            lv_obj_set_style_pad_all(app_lv_ui_res_local->btn_matrix[idx1][idx2], 4, 0);
-            lv_obj_set_style_border_side(app_lv_ui_res_local->btn_matrix[idx1][idx2], LV_BORDER_SIDE_FULL, 0);
-            lv_obj_set_style_border_width(app_lv_ui_res_local->btn_matrix[idx1][idx2], 4, 0);
-            lv_obj_set_style_border_color(app_lv_ui_res_local->btn_matrix[idx1][idx2], lv_color_black(), 0);
-            lv_obj_set_style_outline_opa(app_lv_ui_res_local->btn_matrix[idx1][idx2], LV_OPA_COVER, 0);
-            lv_obj_set_style_outline_width(app_lv_ui_res_local->btn_matrix[idx1][idx2], 1, 0);
-            lv_obj_set_style_outline_color(app_lv_ui_res_local->btn_matrix[idx1][idx2], lv_color_white(), 0);
-            lv_obj_set_style_outline_color_filtered(app_lv_ui_res_local->btn_matrix[idx1][idx2], lv_color_white(), 0);
             app_lv_ui_res_local->lbl_matrix[idx1][idx2] = app_lv_ui_style_label(app_lv_ui_res_local->btn_matrix[idx1][idx2]);
             lv_obj_align(app_lv_ui_res_local->lbl_matrix[idx1][idx2], LV_ALIGN_CENTER, 0, 0);
         }
@@ -209,45 +200,23 @@ static void app_lv_ui_2048_show(void *scene)
         lv_obj_set_size(list, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(75));
         lv_obj_set_style_pad_row(list, app_lv_ui_ver_pct(1), 0);
         /* 固定按钮 */
-        lv_obj_t *list_lbl = NULL, *list_btn = NULL;
-        list_btn = app_lv_ui_style_btn(list);
-        lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-1));
-        lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
-        list_lbl = app_lv_ui_style_label(list_btn);
-        lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_static(list_lbl, LV_SYMBOL_REFRESH);
-        list_btn = app_lv_ui_style_btn(list);
-        lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-2));
-        lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
-        list_lbl = app_lv_ui_style_label(list_btn);
-        lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_static(list_lbl, LV_SYMBOL_UP);
-        list_btn = app_lv_ui_style_btn(list);
-        lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-3));
-        lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
-        list_lbl = app_lv_ui_style_label(list_btn);
-        lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_static(list_lbl, LV_SYMBOL_LEFT);
-        list_btn = app_lv_ui_style_btn(list);
-        lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-4));
-        lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
-        list_lbl = app_lv_ui_style_label(list_btn);
-        lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_static(list_lbl, LV_SYMBOL_RIGHT);
-        list_btn = app_lv_ui_style_btn(list);
-        lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(-5));
-        lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
-        list_lbl = app_lv_ui_style_label(list_btn);
-        lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text_static(list_lbl, LV_SYMBOL_DOWN);
+        const char *btn_text[] = {LV_SYMBOL_REFRESH, LV_SYMBOL_UP, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_DOWN};
+        for (uint8_t idx = 0; idx < 5; idx++) {
+            lv_obj_t *list_btn = app_lv_ui_style_btn(list);
+            lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(0 - (idx + 1)));
+            lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
+            lv_obj_t *list_lbl = app_lv_ui_style_label(list_btn);
+            lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
+            lv_label_set_text_static(list_lbl, btn_text[idx]);
+        }
         /* 更新列表布局 */
         lv_obj_align(list, LV_ALIGN_BOTTOM_RIGHT, -app_lv_ui_hor_pct(1), 0);
+        /* 重新就绪检查 */
+        app_lv_ui_2048_presenter.ready(0);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
-        /* 重新就绪检查 */
-        app_lv_ui_2048_presenter.ready(0);
     }
 }
 

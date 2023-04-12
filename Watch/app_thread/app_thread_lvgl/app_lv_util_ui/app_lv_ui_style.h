@@ -82,6 +82,11 @@ lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent);
  */
 lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent);
 
+/*@brief 显示按钮块
+ *       无圆角,外部线白色,边界线黑色
+ */
+lv_obj_t * app_lv_ui_style_btn_block(lv_obj_t *parent, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width);
+
 /*@brief     按钮框
  *           黑色背景,指定色边框,标准弧度45
  *param[in]  parent 父控件

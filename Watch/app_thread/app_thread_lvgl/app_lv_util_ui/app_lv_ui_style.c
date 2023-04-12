@@ -118,6 +118,25 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
     return btn;
 }
 
+/*@brief 显示按钮块
+ *       无圆角,外部线白色,边界线黑色
+ */
+lv_obj_t * app_lv_ui_style_btn_block(lv_obj_t *parent, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width)
+{
+    lv_obj_t *btn = app_lv_ui_style_btn(parent);
+    lv_obj_set_style_radius(btn, 0, 0);
+    lv_obj_set_style_pad_all(btn, pad_with, 0);
+    lv_obj_set_style_border_opa(btn, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_side(btn, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(btn, border_width, 0);
+    lv_obj_set_style_border_color(btn, lv_color_black(), 0);
+    lv_obj_set_style_outline_opa(btn, LV_OPA_COVER, 0);
+    lv_obj_set_style_outline_width(btn, outline_width, 0);
+    lv_obj_set_style_outline_color(btn, lv_color_white(), 0);
+    lv_obj_set_style_outline_color_filtered(btn, lv_color_white(), 0);
+    return btn;
+}
+
 /*@brief     按钮框
  *           黑色背景,指定色边框,标准弧度45
  *param[in]  parent 父控件
