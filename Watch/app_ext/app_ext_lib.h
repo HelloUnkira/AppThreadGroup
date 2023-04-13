@@ -6,6 +6,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <inttypes.h>
 #include <string.h>
 #include <math.h>
 /* C std lib need hook perhaps */

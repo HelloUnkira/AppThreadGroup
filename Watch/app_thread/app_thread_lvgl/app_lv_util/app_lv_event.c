@@ -37,9 +37,9 @@ void app_lv_tick_exec_update(void)
 void app_lv_drv_update(void)
 {
     app_package_t package = {
-        .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_sched,
-        .event  = app_thread_lvgl_sched_drv,
+        .thread   = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_sched,
+        .event    = app_thread_lvgl_sched_drv,
         .priority = app_package_priority_normal_above,
     };
     app_package_notify(&package);
@@ -50,12 +50,13 @@ void app_lv_drv_update(void)
 void app_lv_scene_update(void *scene)
 {
     app_package_t package = {
-        .thread  = app_thread_id_lvgl,
-        .module  = app_thread_lvgl_sched,
-        .event   = app_thread_lvgl_sched_scene,
-        .dynamic = false,
-        .size    = sizeof(void *),
-        .data    = scene,
+        .thread   = app_thread_id_lvgl,
+        .module   = app_thread_lvgl_sched,
+        .event    = app_thread_lvgl_sched_scene,
+        .priority = app_package_priority_normal,
+        .dynamic  = false,
+        .size     = sizeof(void *),
+        .data     = scene,
     };
     app_package_notify(&package);
 }

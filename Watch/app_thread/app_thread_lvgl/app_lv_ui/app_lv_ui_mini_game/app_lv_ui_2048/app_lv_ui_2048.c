@@ -166,7 +166,7 @@ static void app_lv_ui_2048_show(void *scene)
         app_lv_ui_event_default_config(NULL, false, NULL);
         app_lv_ui_event_default_config(NULL, true,  app_lv_ui_event_default_redirect);
         /* 界面常亮 */
-        app_lv_ui_check_time_reset(APP_LV_UI_OVER_TIME_MAX, 0);
+        app_lv_ui_check_time_exec(false);
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
         title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
@@ -233,6 +233,7 @@ static void app_lv_ui_2048_hide(void *scene)
         app_lv_ui_event_default_config(NULL, true,  NULL);
         /* 界面恢复 */
         app_lv_ui_check_time_reset(0, 0);
+        app_lv_ui_check_time_exec(true);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_lv_ui_2048.self = NULL;
