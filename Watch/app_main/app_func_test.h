@@ -17,7 +17,7 @@
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
 #include "app_module_system.h"
-#include "app_module_trace.h"
+#include "app_sys_trace_text.h"
 
 void app_module_timer_test_callback(void *timer)
 {
@@ -128,18 +128,18 @@ static inline void app_module_remind_alarm_test(void)
 
 /*@brief 日志转储测试
  */
-static inline void app_module_trace_test(void)
+static inline void app_sys_trace_test(void)
 {
-    uint8_t tin[APP_MODULE_TRACE_LOG_MAX * 2] ={0};
-    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_LOG_MAX; idx++)
-        tin[idx] = tin[idx + APP_MODULE_TRACE_LOG_MAX] = '0' + idx % 10;
+    uint8_t tin[APP_MODULE_TRACE_TEXT_MAX * 2] ={0};
+    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_TEXT_MAX; idx++)
+        tin[idx] = tin[idx + APP_MODULE_TRACE_TEXT_MAX] = '0' + idx % 10;
 
     static uint32_t offset = 0;
-    offset %= APP_MODULE_TRACE_LOG_MAX;
-    app_module_trace_text_dump(tin + offset, true);
-    uint8_t tout[APP_MODULE_TRACE_LOG_MAX] = {0};
-    app_module_trace_text_load(tout);
-    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_LOG_MAX) != 0)
+    offset %= APP_MODULE_TRACE_TEXT_MAX;
+    app_sys_trace_text_dump(tin + offset, true);
+    uint8_t tout[APP_MODULE_TRACE_TEXT_MAX] = {0};
+    app_sys_trace_text_load(tout);
+    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_TEXT_MAX) != 0)
         printf("track log error\n");
     offset++;
 }

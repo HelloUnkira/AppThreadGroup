@@ -1,8 +1,8 @@
-#ifndef APP_MODULE_TRACE_H
-#define APP_MODULE_TRACE_H
+#ifndef APP_MODULE_TRACE_TEXT_H
+#define APP_MODULE_TRACE_TEXT_H
 
 /* 单次存储日志文本最大长度(包括字符串结尾'\0') */
-#define APP_MODULE_TRACE_LOG_MAX    128/*1*/
+#define APP_MODULE_TRACE_TEXT_MAX    128/*1*/
 
 typedef union {
     uint8_t buffer[0];
@@ -15,23 +15,23 @@ typedef union {
         } info;
         uint32_t crc32;
     };
-} app_module_trace_text_t;
+} app_sys_trace_text_t;
 
 typedef union {
     uint8_t buffer[0];
     struct {
         uintptr_t length;
-        uint8_t   text[APP_MODULE_TRACE_LOG_MAX + 1];
+        uint8_t   text[APP_MODULE_TRACE_TEXT_MAX + 1];
     };
-} app_module_trace_item_t;
+} app_sys_trace_item_t;
 
 /*@brief 日志追踪队列重置
  */
-void app_module_trace_text_reset(void);
+void app_sys_trace_text_reset(void);
 
 /*@brief 日志追踪队列初始化
  */
-void app_module_trace_text_ready(void);
+void app_sys_trace_text_ready(void);
 
 /*@brief      日志追踪队列尾转入一段日志
  *@param[in]  text       日志文本
@@ -41,18 +41,18 @@ void app_module_trace_text_ready(void);
  *                       或者可以加入新条目为止
  *@retval     成功或者失败
  */
-bool app_module_trace_text_dump(char text[APP_MODULE_TRACE_LOG_MAX], bool need_cover);
+bool app_sys_trace_text_dump(char text[APP_MODULE_TRACE_TEXT_MAX], bool need_cover);
 
 /*@brief      日志追踪队列头转出一段日志
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_module_trace_text_load(char text[APP_MODULE_TRACE_LOG_MAX]);
+bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX]);
 
 /*@brief      日志追踪队列窥探一段日志(自动迭代到下一段日志)
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_module_trace_text_peek(char text[APP_MODULE_TRACE_LOG_MAX]);
+bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX]);
 
 #endif
