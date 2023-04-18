@@ -32,6 +32,7 @@ static app_sem_t app_thread_sem_src = {0};
 static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
+static app_mutex_t app_thread_mutex = {0};
 
 /*@brief        通过从线程ID获得管道同步资源
  *@param[in]    thread 线程ID
@@ -76,7 +77,12 @@ void app_thread_master_routine(void)
     }
     /* 主流程 */
     while (true) {
+        #if APP_THREAD_GROUP_REALTIME
         app_sem_take(send_sem);
+        #else
+        app_delay_ms(APP_THREAD_GROUP_TIME_SLICE);
+        #endif
+        app_mutex_take(&app_thread_mutex);
         #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread masther recv too much package:%u",
@@ -90,6 +96,7 @@ void app_thread_master_routine(void)
             app_sys_pipe_give(recv_pipe, &package, false);
             app_sem_give(recv_sem);
         }
+        app_mutex_give(&app_thread_mutex);
     }
 }
 
@@ -103,8 +110,12 @@ bool app_package_notify(app_package_t *package)
     /* 线程组接收新包 */
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
+    app_mutex_take(&app_thread_mutex);
     app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
+    app_mutex_give(&app_thread_mutex);
+    #if APP_THREAD_GROUP_REALTIME
     app_sem_give(send_sem);
+    #endif
     return true;
 }
 
@@ -112,6 +123,7 @@ bool app_package_notify(app_package_t *package)
  */
 void app_thread_group_run(void)
 {
+    app_mutex_process(&app_thread_mutex);
     /* 就绪管道和同步资源 */
     for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
         app_sys_pipe_ready(&app_thread_pipe_dst[idx]);

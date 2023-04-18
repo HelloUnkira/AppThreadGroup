@@ -5,8 +5,8 @@
 #define APP_LV_UI_2048_NUM      4
 
 typedef struct {
-    void (*ready)(uint8_t difficult);
-    void (*execute)(lv_dir_t direct);
+    bool (*ready)(uint8_t difficult);
+    bool (*execute)(lv_dir_t direct);
     void (*get_matrix)(void **matrix);
 } app_lv_ui_2048_presenter_t;
 

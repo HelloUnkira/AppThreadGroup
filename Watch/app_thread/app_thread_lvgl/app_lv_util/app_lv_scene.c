@@ -156,23 +156,31 @@ uint8_t app_lv_scene_get_nest(void)
  *          注意:它调用了敏感资源,对它的递归调用
  *               不能到lv_timer_handler
  *param[in] scene 游离窗口
+ *param[in] right_now 是否就地激活
  */
-void app_lv_scene_active(app_lv_scene_t *scene)
+void app_lv_scene_active(app_lv_scene_t *scene, bool right_now)
 {
     APP_SYS_ASSERT(scene != NULL);
     scene->event = app_lv_scene_need_show;
-    app_lv_scene_sched(scene);
+    if (right_now)
+        app_lv_scene_sched(scene);
+    else
+        app_lv_scene_update(scene);
 }
 
 /*@brief    失活一个游离窗口
  *          注意:它调用了敏感资源,对它的递归调用
  *               不能到lv_timer_handler
  *param[in] scene 游离窗口
+ *param[in] right_now 是否就地失活
  */
-void app_lv_scene_hidden(app_lv_scene_t *scene)
+void app_lv_scene_hidden(app_lv_scene_t *scene, bool right_now)
 {
     APP_SYS_ASSERT(scene != NULL);
     lv_obj_set_parent(scene->self, lv_scr_act());
     scene->event = app_lv_scene_need_hide;
-    app_lv_scene_sched(scene);
+    if (right_now)
+        app_lv_scene_sched(scene);
+    else
+        app_lv_scene_update(scene);
 }

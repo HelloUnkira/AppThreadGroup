@@ -24,6 +24,7 @@ typedef struct {
     lv_obj_t *score;
     lv_obj_t *btn_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
     lv_obj_t *lbl_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
+    bool      execute;
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -40,16 +41,24 @@ static void app_lv_ui_event_default_redirect(lv_event_t *e)
         
         switch (dir) {
         case LV_DIR_LEFT:
-            app_lv_ui_2048_presenter.execute(LV_DIR_LEFT);
+            if (app_lv_ui_res_local->execute)
+                app_lv_ui_res_local->execute =
+                app_lv_ui_2048_presenter.execute(LV_DIR_LEFT);
             break;
         case LV_DIR_RIGHT:
-            app_lv_ui_2048_presenter.execute(LV_DIR_RIGHT);
+            if (app_lv_ui_res_local->execute)
+                app_lv_ui_res_local->execute =
+                app_lv_ui_2048_presenter.execute(LV_DIR_RIGHT);
             break;
         case LV_DIR_TOP:
-            app_lv_ui_2048_presenter.execute(LV_DIR_TOP);
+            if (app_lv_ui_res_local->execute)
+                app_lv_ui_res_local->execute =
+                app_lv_ui_2048_presenter.execute(LV_DIR_TOP);
             break;
         case LV_DIR_BOTTOM:
-            app_lv_ui_2048_presenter.execute(LV_DIR_BOTTOM);
+            if (app_lv_ui_res_local->execute)
+                app_lv_ui_res_local->execute =
+                app_lv_ui_2048_presenter.execute(LV_DIR_BOTTOM);
             break;
         default:
             break;
@@ -75,23 +84,31 @@ static void app_lv_ui_local_list_btn_cb(lv_event_t *e)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++)
             (*matrix)[idx1][idx2] = 0;
         /* 重新就绪检查 */
-        app_lv_ui_2048_presenter.ready(0);
+        app_lv_ui_res_local->execute = app_lv_ui_2048_presenter.ready(0);
         break;
     }
     case (uintptr_t)(-2): {
-        app_lv_ui_2048_presenter.execute(LV_DIR_TOP);
+        if (app_lv_ui_res_local->execute)
+            app_lv_ui_res_local->execute =
+            app_lv_ui_2048_presenter.execute(LV_DIR_TOP);
         break;
     }
     case (uintptr_t)(-3): {
-        app_lv_ui_2048_presenter.execute(LV_DIR_LEFT);
+        if (app_lv_ui_res_local->execute)
+            app_lv_ui_res_local->execute =
+            app_lv_ui_2048_presenter.execute(LV_DIR_LEFT);
         break;
     }
     case (uintptr_t)(-4): {
-        app_lv_ui_2048_presenter.execute(LV_DIR_RIGHT);
+        if (app_lv_ui_res_local->execute)
+            app_lv_ui_res_local->execute =
+            app_lv_ui_2048_presenter.execute(LV_DIR_RIGHT);
         break;
     }
     case (uintptr_t)(-5): {
-        app_lv_ui_2048_presenter.execute(LV_DIR_BOTTOM);
+        if (app_lv_ui_res_local->execute)
+            app_lv_ui_res_local->execute =
+            app_lv_ui_2048_presenter.execute(LV_DIR_BOTTOM);
         break;
     }
     default:
@@ -147,9 +164,14 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         else
             lv_label_set_text_fmt(app_lv_ui_res_local->lbl_matrix[idx1][idx2], "%u", data);
         lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_matrix[idx1][idx2], color_idx[(*matrix)[idx1][idx2]], 0);
-        score += data;
+        score += data != 1 ? data : 0;
     }
+    #if 1
     lv_label_set_text_fmt(app_lv_ui_res_local->score, "Score:%d", score);
+    #else
+    lv_label_set_text_fmt(app_lv_ui_res_local->score, "Score:%d%s", score,
+                          app_lv_ui_res_local->execute ? "" : " \t Game Over");
+    #endif
 }
 
 /*@brief     界面显示
@@ -212,7 +234,7 @@ static void app_lv_ui_2048_show(void *scene)
         /* 更新列表布局 */
         lv_obj_align(list, LV_ALIGN_BOTTOM_RIGHT, -app_lv_ui_hor_pct(1), 0);
         /* 重新就绪检查 */
-        app_lv_ui_2048_presenter.ready(0);
+        app_lv_ui_res_local->execute = app_lv_ui_2048_presenter.ready(0);
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,

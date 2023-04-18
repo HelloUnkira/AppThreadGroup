@@ -78,14 +78,16 @@ uint8_t app_lv_scene_get_nest(void);
  *          注意:它调用了敏感资源,对它的递归调用
  *               不能到lv_timer_handler
  *param[in] scene 游离窗口
+ *param[in] right_now 是否就地激活
  */
-void app_lv_scene_active(app_lv_scene_t *scene);
+void app_lv_scene_active(app_lv_scene_t *scene, bool right_now);
 
 /*@brief    失活一个游离窗口
  *          注意:它调用了敏感资源,对它的递归调用
  *               不能到lv_timer_handler
  *param[in] scene 游离窗口
+ *param[in] right_now 是否就地失活
  */
-void app_lv_scene_hidden(app_lv_scene_t *scene);
+void app_lv_scene_hidden(app_lv_scene_t *scene, bool right_now);
 
 #endif

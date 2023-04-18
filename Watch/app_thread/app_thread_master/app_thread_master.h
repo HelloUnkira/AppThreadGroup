@@ -1,6 +1,15 @@
 #ifndef APP_THREAD_MASTER_H
 #define APP_THREAD_MASTER_H
 
+/* 线程组工作模式
+ * 线程组以事件组优先级进行实时调度或分时调度
+ * 实时调度会保证优先级高的事件被立即激活
+ * 分时调度以指定时间片内收集的事件进行调度
+ * 分时调度会降低部分并发性但能节约部分调度性能
+ */
+#define APP_THREAD_GROUP_REALTIME   0
+#define APP_THREAD_GROUP_TIME_SLICE 10
+
 /* 这是app_sys_pipe_pkg_t的副本重名 */
 typedef struct {
     void    *buddy;         /* 管道是优先队列 */
@@ -42,7 +51,11 @@ void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe);
 #endif
 
 /* 线程组线程包裹接收最大警告线(警告) */
+#if APP_THREAD_GROUP_REALTIME
 #define APP_THREAD_PACKAGE_MAX  20
+#else
+#define APP_THREAD_PACKAGE_MAX  100
+#endif
 
 /*@brief        线程组接收一个事件包
  *@param[in]    thread_id 线程ID

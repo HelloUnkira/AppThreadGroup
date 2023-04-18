@@ -466,7 +466,7 @@ void app_lv_ui_float_active(app_lv_scene_t *scene)
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_t;
         /* 激活一个窗口 */
-        app_lv_scene_active(scene->float_t);
+        app_lv_scene_active(scene->float_t, true);
         /* 父子窗口 */
         memset(&app_lv_ui_float_pt, 0, sizeof(app_lv_ui_float_t));
         app_lv_ui_float_link(scene->self, app_lv_ui_float->self, LV_DIR_TOP);
@@ -475,7 +475,7 @@ void app_lv_ui_float_active(app_lv_scene_t *scene)
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_b;
         /* 激活一个窗口 */
-        app_lv_scene_active(scene->float_b);
+        app_lv_scene_active(scene->float_b, true);
         /* 父子窗口 */
         memset(&app_lv_ui_float_pb, 0, sizeof(app_lv_ui_float_t));
         app_lv_ui_float_link(scene->self, app_lv_ui_float->self, LV_DIR_BOTTOM);
@@ -484,7 +484,7 @@ void app_lv_ui_float_active(app_lv_scene_t *scene)
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_l;
         /* 激活一个窗口 */
-        app_lv_scene_active(scene->float_l);
+        app_lv_scene_active(scene->float_l, true);
         /* 父子窗口 */
         memset(&app_lv_ui_float_pl, 0, sizeof(app_lv_ui_float_t));
         app_lv_ui_float_link(scene->self, app_lv_ui_float->self, LV_DIR_LEFT);
@@ -493,7 +493,7 @@ void app_lv_ui_float_active(app_lv_scene_t *scene)
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_r;
         /* 激活一个窗口 */
-        app_lv_scene_active(scene->float_r);
+        app_lv_scene_active(scene->float_r, true);
         /* 父子窗口 */
         memset(&app_lv_ui_float_pr, 0, sizeof(app_lv_ui_float_t));
         app_lv_ui_float_link(scene->self, app_lv_ui_float->self, LV_DIR_RIGHT);
@@ -509,28 +509,28 @@ void app_lv_ui_float_hidden(app_lv_scene_t *scene)
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_t;
         /* 失活一个窗口 */
-        app_lv_scene_hidden(scene->float_t);
+        app_lv_scene_hidden(scene->float_t, true);
         memset(&app_lv_ui_float_pt, 0, sizeof(app_lv_ui_float_t));
     }
     if (scene->float_b != NULL) {
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_b;
         /* 失活一个窗口 */
-        app_lv_scene_hidden(scene->float_b);
+        app_lv_scene_hidden(scene->float_b, true);
         memset(&app_lv_ui_float_pb, 0, sizeof(app_lv_ui_float_t));
     }
     if (scene->float_l != NULL) {
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_l;
         /* 失活一个窗口 */
-        app_lv_scene_hidden(scene->float_l);
+        app_lv_scene_hidden(scene->float_l, true);
         memset(&app_lv_ui_float_pl, 0, sizeof(app_lv_ui_float_t));
     }
     if (scene->float_r != NULL) {
         /* 获得浮窗 */
         app_lv_scene_t* app_lv_ui_float = scene->float_r;
         /* 失活一个窗口 */
-        app_lv_scene_hidden(scene->float_r);
+        app_lv_scene_hidden(scene->float_r, true);
         memset(&app_lv_ui_float_pr, 0, sizeof(app_lv_ui_float_t));
     }
 }

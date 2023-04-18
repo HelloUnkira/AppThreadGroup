@@ -27,7 +27,7 @@ static uint32_t app_lv_ui_random(uint32_t number)
 
 /*@brief lvgl ui数据交互回调
  */
-static void app_lv_ui_ready(uint8_t difficult)
+static bool app_lv_ui_ready(uint8_t difficult)
 {
     /* 这里简化,默认难度为2 */
     difficult = 2;
@@ -47,13 +47,12 @@ static void app_lv_ui_ready(uint8_t difficult)
     if  (data != 0)
          return;
     /* 重加载2048 */
-    bool retval = Game2048_Ready(&app_lv_ui_2048, difficult);
-    APP_SYS_ASSERT(retval);
+    return Game2048_Ready(&app_lv_ui_2048, difficult);
 }
 
 /*@brief lvgl ui数据交互回调
  */
-static void app_lv_ui_execute(lv_dir_t direct)
+static bool app_lv_ui_execute(lv_dir_t direct)
 {
     Game2048Way way = Game2048_None;
     
@@ -75,8 +74,7 @@ static void app_lv_ui_execute(lv_dir_t direct)
     }
     
     APP_SYS_ASSERT(way != Game2048_None);
-    bool retval = Game2048_Execute(&app_lv_ui_2048, way);
-    APP_SYS_ASSERT(retval);
+    return Game2048_Execute(&app_lv_ui_2048, way);
 }
 
 /*@brief lvgl ui数据交互回调
