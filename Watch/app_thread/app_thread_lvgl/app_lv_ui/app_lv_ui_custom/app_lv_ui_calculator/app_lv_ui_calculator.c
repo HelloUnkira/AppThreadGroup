@@ -186,12 +186,9 @@ static void app_lv_ui_res_btnlist_str_cb(lv_event_t *e)
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 左上角系统时钟更新 */
-    lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
-                          app_lv_ui_clock_presenter.is_24() ? "" :
-                          app_lv_ui_clock_presenter.is_am() ? "AM" :
-                          app_lv_ui_clock_presenter.is_pm() ? "PM" : "",
-                          app_lv_ui_clock_presenter.get_hour(),
-                          app_lv_ui_clock_presenter.get_minute());
+    char format_clock_1[20] = {0};
+    app_lv_ui_clock_presenter.format_clock_1(format_clock_1);
+    lv_label_set_text(app_lv_ui_res_local->time, format_clock_1);
 }
 
 /*@brief     界面显示

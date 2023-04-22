@@ -9,6 +9,7 @@
 #include "app_lv_scene.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_style.h"
+#include "app_lv_ui_multi_font.h"
 
 #include "app_lv_ui_data_daily.h"
 #include "app_lv_ui_data_daily_presenter.h"
@@ -22,15 +23,18 @@ typedef struct {
     lv_obj_t *arc_cal;
     lv_obj_t *arc_step;
     lv_obj_t *arc_walk_cnt;
-    lv_obj_t *data_cal_cur;
-    lv_obj_t *data_cal_tar;
-    lv_obj_t *data_cal_unit;
-    lv_obj_t *data_step_cur;
-    lv_obj_t *data_step_tar;
-    lv_obj_t *data_step_unit;
-    lv_obj_t *data_act_cur;
-    lv_obj_t *data_act_tar;
-    lv_obj_t *data_act_unit;
+    lv_obj_t  *data_cal_spans;
+    lv_span_t *data_cal_cur;
+    lv_span_t *data_cal_tar;
+    lv_span_t *data_cal_unit;
+    lv_obj_t  *data_step_spans;
+    lv_span_t *data_step_cur;
+    lv_span_t *data_step_tar;
+    lv_span_t *data_step_unit;
+    lv_obj_t  *data_act_spans;
+    lv_span_t *data_act_cur;
+    lv_span_t *data_act_tar;
+    lv_span_t *data_act_unit;
     lv_obj_t *chart_step;
     lv_chart_series_t *chart_step_ser;
     lv_obj_t *chart_step_lb;
@@ -47,17 +51,27 @@ typedef struct {
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
+static void app_lv_ui_local_style_span_data(lv_obj_t *spans, lv_span_t **cur, lv_span_t **tar, lv_span_t **unit, lv_palette_t palette)
+{
+    *cur  = lv_spangroup_new_span(spans);
+    *tar  = lv_spangroup_new_span(spans);
+    *unit = lv_spangroup_new_span(spans);
+    lv_style_set_text_font(&(*cur)->style,   app_lv_ui_multi_font(app_lv_ui_multi_font_28));
+    lv_style_set_text_font(&(*tar)->style,   app_lv_ui_multi_font(app_lv_ui_multi_font_24));
+    lv_style_set_text_font(&(*unit)->style,  app_lv_ui_multi_font(app_lv_ui_multi_font_20));
+    lv_style_set_text_color(&(*cur)->style,  lv_palette_main(palette));
+    lv_style_set_text_color(&(*tar)->style,  lv_palette_darken(palette, 4));
+    lv_style_set_text_color(&(*unit)->style, lv_palette_darken(palette, 4));
+}
+
 /*@brief 界面动画定时器回调
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 左上角系统时钟更新 */
-    lv_label_set_text_fmt(app_lv_ui_res_local->time, "%s %.2u:%.2u",
-                          app_lv_ui_clock_presenter.is_24() ? "" :
-                          app_lv_ui_clock_presenter.is_am() ? "AM" :
-                          app_lv_ui_clock_presenter.is_pm() ? "PM" : "",
-                          app_lv_ui_clock_presenter.get_hour(),
-                          app_lv_ui_clock_presenter.get_minute());
+    char format_clock_1[20] = {0};
+    app_lv_ui_clock_presenter.format_clock_1(format_clock_1);
+    lv_label_set_text(app_lv_ui_res_local->time, format_clock_1);
     /* 数据资源刷新 */
     if (value == 0) {
         /* 三环数据刷新 */
@@ -74,15 +88,28 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         lv_arc_set_value(app_lv_ui_res_local->arc_step, val_step);
         lv_arc_set_value(app_lv_ui_res_local->arc_walk_cnt, val_walk_cnt);
         /* 三环数据显示 */
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_cal_cur,    "%d",  app_lv_ui_data_daily_presenter.get_cur_cal());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_cal_tar,    "/%d", app_lv_ui_data_daily_presenter.get_tar_cal());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_cal_unit,   "Calories");
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_step_cur,   "%d",  app_lv_ui_data_daily_presenter.get_cur_step());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_step_tar,   "/%d", app_lv_ui_data_daily_presenter.get_tar_step());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_step_unit,  "Steps");
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_act_cur,    "%d",  app_lv_ui_data_daily_presenter.get_cur_walk_cnt());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_act_tar,    "/%d", app_lv_ui_data_daily_presenter.get_tar_walk_cnt());
-        lv_label_set_text_fmt(app_lv_ui_res_local->data_act_unit,   "Hours");
+        char data_str1[20] = {0}, data_str2[20] = {0}, data_str3[20] = {0};
+        sprintf(data_str1, "%d",  app_lv_ui_data_daily_presenter.get_cur_cal());
+        sprintf(data_str2, "/%d", app_lv_ui_data_daily_presenter.get_tar_cal());
+        sprintf(data_str3, "%s",  "Calories");
+        lv_span_set_text(app_lv_ui_res_local->data_cal_cur,  data_str1);
+        lv_span_set_text(app_lv_ui_res_local->data_cal_tar,  data_str2);
+        lv_span_set_text(app_lv_ui_res_local->data_cal_unit, data_str3);
+        sprintf(data_str1, "%d",  app_lv_ui_data_daily_presenter.get_cur_step());
+        sprintf(data_str2, "/%d", app_lv_ui_data_daily_presenter.get_tar_step());
+        sprintf(data_str3, "%s",  "Steps");
+        lv_span_set_text(app_lv_ui_res_local->data_step_cur,  data_str1);
+        lv_span_set_text(app_lv_ui_res_local->data_step_tar,  data_str2);
+        lv_span_set_text(app_lv_ui_res_local->data_step_unit, data_str3);
+        sprintf(data_str1, "%d",  app_lv_ui_data_daily_presenter.get_cur_walk_cnt());
+        sprintf(data_str2, "/%d", app_lv_ui_data_daily_presenter.get_tar_walk_cnt());
+        sprintf(data_str3, "%s",  "Hours");
+        lv_span_set_text(app_lv_ui_res_local->data_act_cur,  data_str1);
+        lv_span_set_text(app_lv_ui_res_local->data_act_tar,  data_str2);
+        lv_span_set_text(app_lv_ui_res_local->data_act_unit, data_str3);
+        lv_spangroup_refr_mode(app_lv_ui_res_local->data_cal_spans);
+        lv_spangroup_refr_mode(app_lv_ui_res_local->data_step_spans);
+        lv_spangroup_refr_mode(app_lv_ui_res_local->data_act_spans);
         /* 三图表数据表示 */
         uint32_t table_max = 0;
         uint32_t table[24] = {0};
@@ -99,32 +126,12 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         for (uint32_t idx = 0; idx < 24; idx++)
             lv_chart_set_next_value(app_lv_ui_res_local->chart_act, app_lv_ui_res_local->chart_act_ser, table[idx]);
         /* 三图表文本刷新 */
-        if (app_lv_ui_clock_presenter.is_24()) {
-            lv_label_set_text(app_lv_ui_res_local->chart_step_lb, "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_step_rb, "23:59");
-            lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  "23:59");
-            lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  "00:00");
-            lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  "23:59");
-        } else {
-            lv_label_set_text(app_lv_ui_res_local->chart_step_lb, "12:00 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_step_rb, "11:59 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  "12:00 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  "11:59 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  "12:00 AM");
-            lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  "11:59 AM");
-        }
-        /* 文本变化,刷新布局 */
-        lv_obj_align_to(app_lv_ui_res_local->data_step_cur,  app_lv_ui_res_local->chart_step,    LV_ALIGN_OUT_TOP_LEFT,  0, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_step_tar,  app_lv_ui_res_local->data_step_cur, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_step_unit, app_lv_ui_res_local->data_step_tar, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_cal_cur,  app_lv_ui_res_local->chart_cal,    LV_ALIGN_OUT_TOP_LEFT,  0, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_cal_tar,  app_lv_ui_res_local->data_cal_cur, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_cal_unit, app_lv_ui_res_local->data_cal_tar, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_act_cur,  app_lv_ui_res_local->chart_act,    LV_ALIGN_OUT_TOP_LEFT,  0, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_act_tar,  app_lv_ui_res_local->data_act_cur, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        lv_obj_align_to(app_lv_ui_res_local->data_act_unit, app_lv_ui_res_local->data_act_tar, LV_ALIGN_OUT_RIGHT_MID, 5, 0);
-        /* 文本变化,刷新布局 */
+        lv_label_set_text(app_lv_ui_res_local->chart_step_lb, app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_step_rb, app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
         lv_obj_align_to(app_lv_ui_res_local->chart_step_lb, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_BOTTOM_LEFT,  0, 5);
         lv_obj_align_to(app_lv_ui_res_local->chart_step_rb, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 5);
         lv_obj_align_to(app_lv_ui_res_local->chart_cal_lb, app_lv_ui_res_local->chart_cal, LV_ALIGN_OUT_BOTTOM_LEFT,    0, 5);
@@ -151,7 +158,7 @@ static void app_lv_ui_data_daily_show(void *scene)
         /* 数据集合 */
         lv_obj_t *data_set = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(data_set);
-        lv_obj_set_size(data_set, LV_HOR_RES, LV_VER_RES - 60);
+        lv_obj_set_size(data_set, LV_HOR_RES, app_lv_ui_ver_pct(90));
         lv_obj_align_to(data_set, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 三环每日数据 */
         app_lv_ui_res_local->arc_cal = app_lv_ui_style_arc(data_set, 80, 15, LV_PALETTE_RED, 0, 100, 0, 360, 270);
@@ -163,44 +170,53 @@ static void app_lv_ui_data_daily_show(void *scene)
         /* 三图表数据集合 */
         lv_obj_t *chart_set = lv_obj_create(data_set);
         app_lv_ui_style_object(chart_set);
-        lv_obj_set_size(chart_set, LV_HOR_RES, (120 + 60) * 3);
-        lv_obj_align(chart_set, LV_ALIGN_TOP_MID, 0, 180);
+        lv_obj_set_size(chart_set, LV_HOR_RES, app_lv_ui_ver_pct(160));
+        lv_obj_align(chart_set, LV_ALIGN_TOP_MID, 0, app_lv_ui_ver_pct(50));
         /* 三图表数据 */
         app_lv_ui_res_local->chart_step = app_lv_ui_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_step_ser = lv_chart_add_series(app_lv_ui_res_local->chart_step, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_PRIMARY_Y);
-        lv_obj_align(app_lv_ui_res_local->chart_step, LV_ALIGN_CENTER, 0, - (120 + 60));
+        lv_obj_align(app_lv_ui_res_local->chart_step, LV_ALIGN_CENTER, 0, -app_lv_ui_ver_pct(50));
         app_lv_ui_res_local->chart_cal = app_lv_ui_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_cal_ser = lv_chart_add_series(app_lv_ui_res_local->chart_cal, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
         lv_obj_align(app_lv_ui_res_local->chart_cal, LV_ALIGN_CENTER, 0, 0);
         app_lv_ui_res_local->chart_act = app_lv_ui_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_act_ser = lv_chart_add_series(app_lv_ui_res_local->chart_act, lv_palette_main(LV_PALETTE_BLUE), LV_CHART_AXIS_PRIMARY_Y);
-        lv_obj_align(app_lv_ui_res_local->chart_act, LV_ALIGN_CENTER, 0, + (120 + 60));
+        lv_obj_align(app_lv_ui_res_local->chart_act, LV_ALIGN_CENTER, 0,  +app_lv_ui_ver_pct(50));
         /* 三环数据 */
-        app_lv_ui_res_local->data_cal_cur = app_lv_ui_style_label_large(chart_set);
-        app_lv_ui_res_local->data_cal_tar = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->data_cal_unit = app_lv_ui_style_label(chart_set);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_cal_cur, lv_palette_main(LV_PALETTE_RED), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_cal_tar, lv_palette_darken(LV_PALETTE_RED, 4), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_cal_unit, lv_palette_darken(LV_PALETTE_RED, 4), 0);
-        app_lv_ui_res_local->data_step_cur = app_lv_ui_style_label_large(chart_set);
-        app_lv_ui_res_local->data_step_tar = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->data_step_unit = app_lv_ui_style_label(chart_set);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_step_cur, lv_palette_main(LV_PALETTE_GREEN), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_step_tar, lv_palette_darken(LV_PALETTE_GREEN, 4), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_step_unit, lv_palette_darken(LV_PALETTE_GREEN, 4), 0);
-        app_lv_ui_res_local->data_act_cur = app_lv_ui_style_label_large(chart_set);
-        app_lv_ui_res_local->data_act_tar = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->data_act_unit = app_lv_ui_style_label(chart_set);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_act_cur, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_act_tar, lv_palette_darken(LV_PALETTE_BLUE, 4), 0);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->data_act_unit, lv_palette_darken(LV_PALETTE_BLUE, 4), 0);
+        app_lv_ui_res_local->data_cal_spans  = app_lv_ui_style_spangroup(chart_set);
+        app_lv_ui_res_local->data_step_spans = app_lv_ui_style_spangroup(chart_set);
+        app_lv_ui_res_local->data_act_spans  = app_lv_ui_style_spangroup(chart_set);
+        lv_obj_set_size(app_lv_ui_res_local->data_cal_spans,  LV_HOR_RES, app_lv_ui_ver_pct(10));
+        lv_obj_set_size(app_lv_ui_res_local->data_step_spans, LV_HOR_RES, app_lv_ui_ver_pct(10));
+        lv_obj_set_size(app_lv_ui_res_local->data_act_spans,  LV_HOR_RES, app_lv_ui_ver_pct(10));
+        lv_obj_align_to(app_lv_ui_res_local->data_cal_spans,  app_lv_ui_res_local->chart_cal,  LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+        lv_obj_align_to(app_lv_ui_res_local->data_step_spans, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+        lv_obj_align_to(app_lv_ui_res_local->data_act_spans,  app_lv_ui_res_local->chart_act,  LV_ALIGN_OUT_TOP_LEFT, 0, 0);
+        app_lv_ui_local_style_span_data(app_lv_ui_res_local->data_cal_spans,
+                                       &app_lv_ui_res_local->data_cal_cur,
+                                       &app_lv_ui_res_local->data_cal_tar,
+                                       &app_lv_ui_res_local->data_cal_unit, LV_PALETTE_RED);
+        app_lv_ui_local_style_span_data(app_lv_ui_res_local->data_step_spans,
+                                       &app_lv_ui_res_local->data_step_cur,
+                                       &app_lv_ui_res_local->data_step_tar,
+                                       &app_lv_ui_res_local->data_step_unit, LV_PALETTE_GREEN);
+        app_lv_ui_local_style_span_data(app_lv_ui_res_local->data_act_spans,
+                                       &app_lv_ui_res_local->data_act_cur,
+                                       &app_lv_ui_res_local->data_act_tar,
+                                       &app_lv_ui_res_local->data_act_unit, LV_PALETTE_GREEN);
         /* 三环图表追加文本信息 */
         app_lv_ui_res_local->chart_step_lb = app_lv_ui_style_label(chart_set);
         app_lv_ui_res_local->chart_step_rb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_cal_lb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_cal_rb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_act_lb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_act_rb = app_lv_ui_style_label(chart_set);
+        app_lv_ui_res_local->chart_cal_lb  = app_lv_ui_style_label(chart_set);
+        app_lv_ui_res_local->chart_cal_rb  = app_lv_ui_style_label(chart_set);
+        app_lv_ui_res_local->chart_act_lb  = app_lv_ui_style_label(chart_set);
+        app_lv_ui_res_local->chart_act_rb  = app_lv_ui_style_label(chart_set);
+        lv_obj_set_height(app_lv_ui_res_local->chart_step_lb, app_lv_ui_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_step_rb, app_lv_ui_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_cal_lb,  app_lv_ui_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_cal_rb,  app_lv_ui_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_act_lb,  app_lv_ui_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_act_rb,  app_lv_ui_ver_pct(10));
         /* ...可以继续添加... */
         /* ...这里略过... */
         /* 初始化显示动画 */

@@ -27,7 +27,6 @@ static inline lv_coord_t app_lv_ui_zoom_y(lv_coord_t y)
  */
 static inline lv_coord_t app_lv_ui_hor_pct(uint8_t pct)
 {
-    APP_SYS_ASSERT(pct <= 100);
     return (lv_coord_t)((double)LV_HOR_RES * pct / 100.0);
 }
 /*@brief     垂直宽度百分比
@@ -36,7 +35,6 @@ static inline lv_coord_t app_lv_ui_hor_pct(uint8_t pct)
  */
 static inline lv_coord_t app_lv_ui_ver_pct(uint8_t pct)
 {
-    APP_SYS_ASSERT(pct <= 100);
     return (lv_coord_t)((double)LV_VER_RES * pct / 100.0);
 }
 
@@ -70,11 +68,11 @@ void app_lv_ui_style_object_anim(lv_obj_t *obj, lv_anim_t *anim, lv_anim_exec_xc
  */
 lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent);
 
-/*@brief     大号文本标签
- *           黑色背景,无边框,白色滚动长文
+/*@brief     默认组合文本
+ *           自动扩展,左对齐,无缩进
  *param[in]  parent 父控件
  */
-lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent);
+lv_obj_t * app_lv_ui_style_spangroup(lv_obj_t *parent);
 
 /*@brief     默认按钮
  *           蓝色背景,无边框,标准弧度45

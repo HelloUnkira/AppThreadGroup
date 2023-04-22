@@ -13,6 +13,8 @@ typedef struct {
     uint8_t  (*get_minute)(void);
     uint8_t  (*get_second)(void);
     uint8_t  (*get_week)(void);
+    /* extern */
+    void     (*format_clock_1)(char str[20]);
 } app_lv_ui_clock_presenter_t;
 
 extern app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter;

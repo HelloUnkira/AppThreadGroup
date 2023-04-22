@@ -108,6 +108,18 @@ static uint8_t app_lv_ui_get_week(void)
     return clock.week;
 }
 
+/*@brief lvgl ui数据交互回调
+ */
+static uint8_t app_lv_ui_format_clock_1(char str[20])
+{
+    sprintf(str, "%.2u:%.2u%s",
+                  app_lv_ui_get_hour(),
+                  app_lv_ui_get_minute(),
+                  app_lv_ui_is_24() ? "" :
+                  app_lv_ui_is_am() ? " AM" :
+                  app_lv_ui_is_pm() ? " PM" : "");
+}
+
 app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {
     .is_am          = app_lv_ui_is_am,
     .is_pm          = app_lv_ui_is_pm,
@@ -120,4 +132,6 @@ app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {
     .get_minute     = app_lv_ui_get_minute,
     .get_second     = app_lv_ui_get_second,
     .get_week       = app_lv_ui_get_week,
+    /* extern */
+    .format_clock_1 = app_lv_ui_format_clock_1,
 };

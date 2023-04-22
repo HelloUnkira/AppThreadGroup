@@ -6,6 +6,7 @@
 #include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_table.h"
+#include "app_sys_trace_text.h"
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
@@ -17,7 +18,6 @@
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
 #include "app_module_system.h"
-#include "app_sys_trace_text.h"
 
 void app_module_timer_test_callback(void *timer)
 {

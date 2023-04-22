@@ -94,15 +94,21 @@ lv_obj_t * app_lv_ui_style_label(lv_obj_t *parent)
     return label;
 }
 
-/*@brief     大号文本标签
- *           黑色背景,无边框,白色滚动长文
+/*@brief     默认组合文本
+ *           自动扩展,左对齐,无缩进
  *param[in]  parent 父控件
  */
-lv_obj_t * app_lv_ui_style_label_large(lv_obj_t * parent)
+lv_obj_t * app_lv_ui_style_spangroup(lv_obj_t *parent)
 {
-    lv_obj_t *label = app_lv_ui_style_label(parent);
-    lv_obj_set_style_text_font(label, app_lv_ui_multi_font(app_lv_ui_multi_font_24), 0);
-    return label;
+    lv_obj_t *spangroup = lv_spangroup_create(parent);
+    app_lv_ui_style_object(spangroup);
+    lv_obj_set_style_bg_opa(spangroup, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_text_opa(spangroup, LV_OPA_COVER, 0);
+    lv_spangroup_set_align(spangroup, LV_TEXT_ALIGN_LEFT);
+    lv_spangroup_set_mode(spangroup, LV_SPAN_MODE_EXPAND);
+    lv_spangroup_set_overflow(spangroup, LV_SPAN_OVERFLOW_ELLIPSIS);
+    lv_spangroup_set_indent(spangroup, 0);
+    return spangroup;
 }
 
 /*@brief     默认按钮
@@ -432,7 +438,7 @@ lv_obj_t * app_lv_ui_style_fade_chart(lv_obj_t *parent)
 {
     lv_obj_t *chart = lv_chart_create(parent);
     app_lv_ui_style_object(chart);
-    lv_obj_set_size(chart, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(20));
+    lv_obj_set_size(chart, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(30));
     lv_obj_add_event_cb(chart, app_lv_ui_chart_fade_event_cb, LV_EVENT_ALL, NULL);
     //lv_obj_set_style_bg_color(chart, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
     lv_obj_set_style_size(chart, 1, LV_PART_INDICATOR);
