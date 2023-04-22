@@ -77,6 +77,45 @@ void app_lv_ui_style_object_anim(lv_obj_t *obj, lv_anim_t *anim, lv_anim_exec_xc
     lv_anim_start(anim);
 }
 
+/*@brief     对齐中心内容域
+ *param[in]  parent 父控件
+ *param[in]  align  部分对齐
+ */
+void app_lv_ui_style_object_content_align(lv_obj_t *obj, lv_align_t align)
+{
+    lv_coord_t width  = lv_obj_get_width(obj);
+    lv_coord_t height = lv_obj_get_height(obj);
+    lv_coord_t content_width  = lv_obj_get_content_width(obj);
+    lv_coord_t content_height = lv_obj_get_content_height(obj);
+    /* 先清空pad */
+    lv_obj_set_style_pad_all(obj, 0, 0);
+    /* 这个默认是左上角对齐,所以只需要对齐俩个方向 */
+    switch (align) {
+    case LV_ALIGN_CENTER:
+        lv_obj_set_style_pad_top(obj, (width - content_width) / 2, 0);
+        lv_obj_set_style_pad_left(obj, (width - content_width) / 2, 0);
+        break;
+    case LV_ALIGN_LEFT_MID:
+        lv_obj_set_style_pad_top(obj, (width - content_width) / 2, 0);
+        lv_obj_set_style_pad_left(obj, 0, 0);
+        break;
+    case LV_ALIGN_RIGHT_MID:
+        lv_obj_set_style_pad_top(obj, (width - content_width) / 2, 0);
+        lv_obj_set_style_pad_left(obj, width - content_width, 0);
+        break;
+    case LV_ALIGN_TOP_MID:
+        lv_obj_set_style_pad_top(obj, 0, 0);
+        lv_obj_set_style_pad_left(obj, (width - content_width) / 2, 0);
+        break;
+    case LV_ALIGN_BOTTOM_MID:
+        lv_obj_set_style_pad_top(obj, width - content_width, 0);
+        lv_obj_set_style_pad_left(obj, (width - content_width) / 2, 0);
+        break;
+    default:
+        break;
+    }
+}
+
 /*@brief     文本标签
  *           黑色背景,无边框,白色滚动长文
  *param[in]  parent 父控件

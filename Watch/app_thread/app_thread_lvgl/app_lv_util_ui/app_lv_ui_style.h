@@ -62,6 +62,12 @@ lv_obj_t * app_lv_ui_style_scene(void);
  */
 void app_lv_ui_style_object_anim(lv_obj_t *obj, lv_anim_t *anim, lv_anim_exec_xcb_t exec, uint16_t repeat, int32_t start, int32_t end, uint32_t period);
 
+/*@brief     对齐中心内容域
+ *param[in]  parent 父控件
+ *param[in]  align  部分对齐
+ */
+void app_lv_ui_style_object_content_align(lv_obj_t *obj, lv_align_t align);
+
 /*@brief     文本标签
  *           黑色背景,无边框,白色滚动长文
  *param[in]  parent 父控件
