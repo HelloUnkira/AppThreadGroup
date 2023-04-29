@@ -222,7 +222,7 @@ static void app_lv_ui_tetris_show(void *scene)
         lv_obj_set_style_pad_column(matrix, 0, 0);
         lv_obj_set_style_grid_row_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_row_dsc, 0);
         lv_obj_set_style_grid_column_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_col_dsc, 0);
-        lv_obj_align_to(matrix, app_lv_ui_res_local->erase_line, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
+        lv_obj_align_to(matrix, app_lv_ui_res_local->erase_line, LV_ALIGN_OUT_BOTTOM_LEFT, 0, app_lv_ui_ver_pct(10));
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++) {
             app_lv_ui_res_local->btn_matrix[idx1][idx2] = app_lv_ui_style_btn_block(matrix, 1, 1, 1);
@@ -232,7 +232,7 @@ static void app_lv_ui_tetris_show(void *scene)
         /* 创建显示矩阵 */
         lv_obj_t *graph = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(graph);
-        lv_obj_set_size(graph, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(20));
+        lv_obj_set_size(graph, app_lv_ui_hor_pct(25), app_lv_ui_ver_pct(25));
         lv_obj_set_style_layout(graph, LV_LAYOUT_GRID, 0);
         lv_obj_set_style_pad_row(graph, 0, 0);
         lv_obj_set_style_pad_column(graph, 0, 0);
@@ -261,7 +261,7 @@ static void app_lv_ui_tetris_show(void *scene)
             lv_label_set_text_static(list_lbl, btn_text[idx]);
         }
         /* 更新列表布局 */
-        lv_obj_align(list, LV_ALIGN_RIGHT_MID, -app_lv_ui_hor_pct(1), app_lv_ui_ver_pct(20));
+        lv_obj_align_to(list, matrix, LV_ALIGN_OUT_RIGHT_MID, app_lv_ui_hor_pct(1), 0);
         /* 初始计数, 设置速度(可以额外制作控件修改speed) */
         app_lv_ui_res_local->count = 0;
         app_lv_ui_res_local->speed = 30;

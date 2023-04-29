@@ -18,12 +18,14 @@
 #include "app_lv_ui_clock_presenter.h"
 
 typedef struct {
-    lv_anim_t anim;
-    lv_obj_t *scene;
-    lv_obj_t *time;
-    lv_obj_t *score;
-    lv_obj_t *btn_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
-    lv_obj_t *lbl_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
+    lv_anim_t  anim;
+    lv_obj_t  *scene;
+    lv_obj_t  *time;
+    lv_obj_t  *score;
+    lv_obj_t  *btn_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
+    lv_obj_t  *lbl_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
+    lv_coord_t btn_matrix_row_dsc[APP_LV_UI_2048_NUM + 1];
+    lv_coord_t btn_matrix_col_dsc[APP_LV_UI_2048_NUM + 1];
     bool      execute;
 } app_lv_ui_res_local_t;
 
@@ -198,38 +200,46 @@ static void app_lv_ui_2048_show(void *scene)
         lv_obj_set_style_text_align(app_lv_ui_res_local->score, LV_TEXT_ALIGN_LEFT, 0);
         lv_obj_align_to(app_lv_ui_res_local->score, title_box, LV_ALIGN_OUT_BOTTOM_LEFT, app_lv_ui_hor_pct(5), 0);
         lv_label_set_text(app_lv_ui_res_local->score, "Score:0");
+        /* 初始化参数 */
+        app_lv_ui_res_local->btn_matrix_row_dsc[APP_LV_UI_2048_NUM] = LV_GRID_TEMPLATE_LAST;
+        app_lv_ui_res_local->btn_matrix_col_dsc[APP_LV_UI_2048_NUM] = LV_GRID_TEMPLATE_LAST;
+        for (uint32_t idx = 0; idx < APP_LV_UI_2048_NUM; app_lv_ui_res_local->btn_matrix_row_dsc[idx] = app_lv_ui_hor_pct(15), idx++);
+        for (uint32_t idx = 0; idx < APP_LV_UI_2048_NUM; app_lv_ui_res_local->btn_matrix_col_dsc[idx] = app_lv_ui_ver_pct(15), idx++);
         /* 创建显示矩阵 */
         lv_obj_t *matrix = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(matrix);
         lv_obj_set_size(matrix, app_lv_ui_hor_pct(75), app_lv_ui_ver_pct(75));
-        lv_obj_set_style_layout(matrix, LV_LAYOUT_FLEX, 0);
-        lv_obj_set_style_flex_flow(matrix, LV_FLEX_FLOW_ROW_WRAP, 0);
-        lv_obj_set_style_flex_main_place(matrix, LV_FLEX_ALIGN_SPACE_EVENLY, 0);
+        lv_obj_set_style_layout(matrix, LV_LAYOUT_GRID, 0);
+        lv_obj_set_style_pad_row(matrix, 0, 0);
+        lv_obj_set_style_pad_column(matrix, 0, 0);
+        lv_obj_set_style_grid_row_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_row_dsc, 0);
+        lv_obj_set_style_grid_column_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_col_dsc, 0);
         lv_obj_align_to(matrix, app_lv_ui_res_local->score, LV_ALIGN_OUT_BOTTOM_LEFT, 0, 0);
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++) {
             app_lv_ui_res_local->btn_matrix[idx1][idx2] = app_lv_ui_style_btn_block(matrix, 4, 4, 1);
-            lv_obj_set_size(app_lv_ui_res_local->btn_matrix[idx1][idx2], app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(15));
+            lv_obj_set_grid_cell(app_lv_ui_res_local->btn_matrix[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx2, 1,
+                                                                              LV_GRID_ALIGN_STRETCH, idx1, 1);
             app_lv_ui_res_local->lbl_matrix[idx1][idx2] = app_lv_ui_style_label(app_lv_ui_res_local->btn_matrix[idx1][idx2]);
             lv_obj_align(app_lv_ui_res_local->lbl_matrix[idx1][idx2], LV_ALIGN_CENTER, 0, 0);
         }
         /* 初始化列表,右部 */
         lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(list);
-        lv_obj_set_size(list, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(75));
+        lv_obj_set_size(list, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(60));
         lv_obj_set_style_pad_row(list, app_lv_ui_ver_pct(1), 0);
         /* 固定按钮 */
         const char *btn_text[] = {LV_SYMBOL_REFRESH, LV_SYMBOL_UP, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_DOWN};
         for (uint8_t idx = 0; idx < 5; idx++) {
             lv_obj_t *list_btn = app_lv_ui_style_btn(list);
             lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(0 - (idx + 1)));
-            lv_obj_set_size(list_btn, app_lv_ui_hor_pct(20), app_lv_ui_ver_pct(12));
+            lv_obj_set_size(list_btn, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(8));
             lv_obj_t *list_lbl = app_lv_ui_style_label(list_btn);
             lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
             lv_label_set_text_static(list_lbl, btn_text[idx]);
         }
         /* 更新列表布局 */
-        lv_obj_align(list, LV_ALIGN_BOTTOM_RIGHT, -app_lv_ui_hor_pct(1), 0);
+        lv_obj_align_to(list, matrix, LV_ALIGN_OUT_RIGHT_MID, app_lv_ui_hor_pct(1), 0);
         /* 重新就绪检查 */
         app_lv_ui_res_local->execute = app_lv_ui_2048_presenter.ready(0);
         /* 初始化显示动画 */
