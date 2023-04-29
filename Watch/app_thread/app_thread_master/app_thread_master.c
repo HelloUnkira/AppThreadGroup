@@ -90,7 +90,7 @@ void app_thread_master_routine(void)
         #endif
         /* 主线程派发包到指定子线程 */
         while (app_sys_pipe_package_num(send_pipe) != 0) {
-            app_sys_pipe_take(send_pipe, &package);
+            app_sys_pipe_take(send_pipe, &package, false);
             app_thread_get_sync(package.thread, &recv_sem);
             app_thread_get_pipe(package.thread, &recv_pipe);
             app_sys_pipe_give(recv_pipe, &package, false);

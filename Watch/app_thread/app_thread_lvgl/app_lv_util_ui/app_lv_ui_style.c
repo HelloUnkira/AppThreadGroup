@@ -163,6 +163,52 @@ lv_obj_t * app_lv_ui_style_btn(lv_obj_t *parent)
     return btn;
 }
 
+/*@brief 显示标签块
+ *       无圆角,外部线白色,边界线黑色
+ */
+lv_obj_t * app_lv_ui_style_label_block(lv_obj_t *parent, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width)
+{
+    lv_obj_t *label = app_lv_ui_style_label(parent);
+    lv_label_set_text(label, "");
+    lv_obj_set_style_radius(label, 0, 0);
+    lv_obj_set_style_bg_opa(label, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_all(label, pad_with, 0);
+    lv_obj_set_style_border_opa(label, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_side(label, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(label, border_width, 0);
+    lv_obj_set_style_border_color(label, lv_color_black(), 0);
+    lv_obj_set_style_outline_opa(label, LV_OPA_COVER, 0);
+    lv_obj_set_style_outline_width(label, outline_width, 0);
+    lv_obj_set_style_outline_color(label, lv_color_white(), 0);
+    lv_obj_set_style_outline_color_filtered(label, lv_color_white(), 0);
+    return label;
+}
+
+/*@brief 显示标签块
+ *       无圆角,外部线白色,边界线黑色
+ */
+lv_obj_t * app_lv_ui_style_label_block2(lv_obj_t *parent, lv_obj_t **container, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width)
+{
+    *container = app_lv_ui_style_label(parent);
+    lv_label_set_text(*container, "");
+    lv_obj_set_style_radius(*container, 0, 0);
+    lv_obj_set_style_pad_all(*container, pad_with, 0);
+    lv_obj_set_style_border_opa(*container, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_side(*container, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(*container, border_width, 0);
+    lv_obj_set_style_border_color(*container, lv_color_black(), 0);
+    lv_obj_set_style_outline_opa(*container, LV_OPA_COVER, 0);
+    lv_obj_set_style_outline_width(*container, outline_width, 0);
+    lv_obj_set_style_outline_color(*container, lv_color_white(), 0);
+    lv_obj_set_style_outline_color_filtered(*container, lv_color_white(), 0);
+    lv_obj_t *obj = lv_obj_create(*container);
+    app_lv_ui_style_object(obj);
+    lv_obj_set_size(obj, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_radius(obj, 0, 0);
+    lv_obj_align(obj, LV_ALIGN_CENTER, 0, 0);
+    return obj;
+}
+
 /*@brief 显示按钮块
  *       无圆角,外部线白色,边界线黑色
  */
@@ -180,6 +226,31 @@ lv_obj_t * app_lv_ui_style_btn_block(lv_obj_t *parent, lv_coord_t pad_with, lv_c
     lv_obj_set_style_outline_color(btn, lv_color_white(), 0);
     lv_obj_set_style_outline_color_filtered(btn, lv_color_white(), 0);
     return btn;
+}
+
+/*@brief 显示按钮块
+ *       无圆角,外部线白色,边界线黑色
+ */
+lv_obj_t * app_lv_ui_style_btn_block2(lv_obj_t *parent, lv_obj_t **container, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width)
+{
+    *container = app_lv_ui_style_btn(parent);
+    lv_obj_set_style_radius(*container, 0, 0);
+    lv_obj_set_style_pad_all(*container, pad_with, 0);
+    lv_obj_set_style_bg_opa(*container, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_opa(*container, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_side(*container, LV_BORDER_SIDE_FULL, 0);
+    lv_obj_set_style_border_width(*container, border_width, 0);
+    lv_obj_set_style_border_color(*container, lv_color_black(), 0);
+    lv_obj_set_style_outline_opa(*container, LV_OPA_COVER, 0);
+    lv_obj_set_style_outline_width(*container, outline_width, 0);
+    lv_obj_set_style_outline_color(*container, lv_color_white(), 0);
+    lv_obj_set_style_outline_color_filtered(*container, lv_color_white(), 0);
+    lv_obj_t *obj = lv_obj_create(*container);
+    app_lv_ui_style_object(obj);
+    lv_obj_set_size(obj, lv_pct(100), lv_pct(100));
+    lv_obj_set_style_radius(obj, 0, 0);
+    lv_obj_align(obj, LV_ALIGN_CENTER, 0, 0);
+    return obj;
 }
 
 /*@brief     按钮框

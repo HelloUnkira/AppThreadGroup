@@ -7,11 +7,6 @@
 #define APP_LV_UI_TETRIS_SCALE       4
 
 typedef struct {
-    uint8_t status:1;
-    uint8_t record:7;
-} app_lv_ui_tetris_block_t;
-
-typedef struct {
     bool (*ready)(void);
     bool (*execute)(void);
     bool (*move_step)(void);

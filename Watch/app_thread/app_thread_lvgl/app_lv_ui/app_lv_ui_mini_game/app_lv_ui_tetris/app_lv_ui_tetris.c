@@ -22,12 +22,12 @@ typedef struct {
     lv_obj_t  *scene;
     lv_obj_t  *time;
     lv_obj_t  *erase_line;
-    lv_obj_t  *btn_matrix[APP_LV_UI_TETRIS_LINE][APP_LV_UI_TETRIS_ELEMENT];
-    lv_coord_t btn_matrix_row_dsc[APP_LV_UI_TETRIS_LINE + 1];
-    lv_coord_t btn_matrix_col_dsc[APP_LV_UI_TETRIS_ELEMENT + 1];
-    lv_obj_t  *btn_graph[APP_LV_UI_TETRIS_SCALE][APP_LV_UI_TETRIS_SCALE];
-    lv_coord_t btn_graph_row_dsc[APP_LV_UI_TETRIS_SCALE + 1];
-    lv_coord_t btn_graph_col_dsc[APP_LV_UI_TETRIS_SCALE + 1];
+    lv_obj_t  *lbl_matrix[APP_LV_UI_TETRIS_LINE][APP_LV_UI_TETRIS_ELEMENT];
+    lv_coord_t lbl_matrix_row_dsc[APP_LV_UI_TETRIS_LINE + 1];
+    lv_coord_t lbl_matrix_col_dsc[APP_LV_UI_TETRIS_ELEMENT + 1];
+    lv_obj_t  *lbl_graph[APP_LV_UI_TETRIS_SCALE][APP_LV_UI_TETRIS_SCALE];
+    lv_coord_t lbl_graph_row_dsc[APP_LV_UI_TETRIS_SCALE + 1];
+    lv_coord_t lbl_graph_col_dsc[APP_LV_UI_TETRIS_SCALE + 1];
     uint64_t   speed:8;
     uint64_t   count:8;
 } app_lv_ui_res_local_t;
@@ -148,24 +148,24 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
     for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++)
         if ((*matrix)[idx1][idx2].status)
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_matrix[idx2][idx1], color_idx[(*matrix)[idx1][idx2].record + 1], 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_matrix[idx2][idx1], color_idx[(*matrix)[idx1][idx2].record + 1], 0);
         else
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_matrix[idx2][idx1], color_idx[0], 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_matrix[idx2][idx1], color_idx[0], 0);
     /* 当前图元刷新 */
     app_lv_ui_tetris_presenter.get_graph((void **)&graph, &scale, &off_x, &off_y);
     for (uint8_t idx1 = 0; idx1 < scale; idx1++)
     for (uint8_t idx2 = 0; idx2 < scale; idx2++)
         if ((*graph)[idx1][idx2].status)
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_matrix[idx2 + off_x][idx1 + off_y], color_idx[(*graph)[idx1][idx2].record + 1], 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_matrix[idx2 + off_x][idx1 + off_y], color_idx[(*graph)[idx1][idx2].record + 1], 0);
     /* 下一图元刷新 */
     app_lv_ui_tetris_presenter.get_graph_next((void **)&graph, &scale);
     for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_SCALE; idx1++)
     for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_SCALE; idx2++)
-        lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_graph[idx2][idx1], color_idx[0], 0);
+        lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_graph[idx2][idx1], color_idx[0], 0);
     for (uint8_t idx1 = 0; idx1 < scale; idx1++)
     for (uint8_t idx2 = 0; idx2 < scale; idx2++)
         if ((*graph)[idx1][idx2].status)
-            lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_graph[idx2][idx1], color_idx[(*graph)[idx1][idx2].record + 1], 0);
+            lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_graph[idx2][idx1], color_idx[(*graph)[idx1][idx2].record + 1], 0);
     /* 递进到下一次 */
     if (app_lv_ui_res_local->count++ % app_lv_ui_res_local->speed == 0) {
         run_status = app_lv_ui_tetris_presenter.execute();
@@ -195,7 +195,7 @@ static void app_lv_ui_tetris_show(void *scene)
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
         title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
-        lv_label_set_text(title, "tetris");
+        lv_label_set_text(title, "Tetris");
         /* 创建第一行数据 */
         app_lv_ui_res_local->erase_line = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_size(app_lv_ui_res_local->erase_line, app_lv_ui_hor_pct(50), app_lv_ui_ver_pct(15));
@@ -205,14 +205,14 @@ static void app_lv_ui_tetris_show(void *scene)
         lv_obj_align_to(app_lv_ui_res_local->erase_line, title_box, LV_ALIGN_OUT_BOTTOM_LEFT, app_lv_ui_hor_pct(5), 0);
         lv_label_set_text(app_lv_ui_res_local->erase_line, "Erase Line:0");
         /* 初始化参数 */
-        app_lv_ui_res_local->btn_matrix_row_dsc[APP_LV_UI_TETRIS_LINE]    = LV_GRID_TEMPLATE_LAST;
-        app_lv_ui_res_local->btn_matrix_col_dsc[APP_LV_UI_TETRIS_ELEMENT] = LV_GRID_TEMPLATE_LAST;
-        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_LINE;     app_lv_ui_res_local->btn_matrix_row_dsc[idx] = app_lv_ui_hor_pct(5), idx++);
-        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_ELEMENT;  app_lv_ui_res_local->btn_matrix_col_dsc[idx] = app_lv_ui_ver_pct(5), idx++);
-        app_lv_ui_res_local->btn_graph_row_dsc[APP_LV_UI_TETRIS_SCALE]    = LV_GRID_TEMPLATE_LAST;
-        app_lv_ui_res_local->btn_graph_col_dsc[APP_LV_UI_TETRIS_SCALE] = LV_GRID_TEMPLATE_LAST;
-        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_SCALE; app_lv_ui_res_local->btn_graph_row_dsc[idx] = app_lv_ui_hor_pct(5), idx++);
-        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_SCALE; app_lv_ui_res_local->btn_graph_col_dsc[idx] = app_lv_ui_ver_pct(5), idx++);
+        app_lv_ui_res_local->lbl_matrix_row_dsc[APP_LV_UI_TETRIS_LINE]    = LV_GRID_TEMPLATE_LAST;
+        app_lv_ui_res_local->lbl_matrix_col_dsc[APP_LV_UI_TETRIS_ELEMENT] = LV_GRID_TEMPLATE_LAST;
+        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_LINE;     app_lv_ui_res_local->lbl_matrix_row_dsc[idx] = app_lv_ui_hor_pct(5), idx++);
+        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_ELEMENT;  app_lv_ui_res_local->lbl_matrix_col_dsc[idx] = app_lv_ui_ver_pct(5), idx++);
+        app_lv_ui_res_local->lbl_graph_row_dsc[APP_LV_UI_TETRIS_SCALE]    = LV_GRID_TEMPLATE_LAST;
+        app_lv_ui_res_local->lbl_graph_col_dsc[APP_LV_UI_TETRIS_SCALE] = LV_GRID_TEMPLATE_LAST;
+        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_SCALE; app_lv_ui_res_local->lbl_graph_row_dsc[idx] = app_lv_ui_hor_pct(5), idx++);
+        for (uint32_t idx = 0; idx < APP_LV_UI_TETRIS_SCALE; app_lv_ui_res_local->lbl_graph_col_dsc[idx] = app_lv_ui_ver_pct(5), idx++);
         /* 创建显示矩阵 */
         lv_obj_t *matrix = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_ui_style_object(matrix);
@@ -220,13 +220,13 @@ static void app_lv_ui_tetris_show(void *scene)
         lv_obj_set_style_layout(matrix, LV_LAYOUT_GRID, 0);
         lv_obj_set_style_pad_row(matrix, 0, 0);
         lv_obj_set_style_pad_column(matrix, 0, 0);
-        lv_obj_set_style_grid_row_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_row_dsc, 0);
-        lv_obj_set_style_grid_column_dsc_array(matrix, app_lv_ui_res_local->btn_matrix_col_dsc, 0);
+        lv_obj_set_style_grid_row_dsc_array(matrix, app_lv_ui_res_local->lbl_matrix_row_dsc, 0);
+        lv_obj_set_style_grid_column_dsc_array(matrix, app_lv_ui_res_local->lbl_matrix_col_dsc, 0);
         lv_obj_align_to(matrix, app_lv_ui_res_local->erase_line, LV_ALIGN_OUT_BOTTOM_LEFT, 0, app_lv_ui_ver_pct(10));
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++) {
-            app_lv_ui_res_local->btn_matrix[idx1][idx2] = app_lv_ui_style_btn_block(matrix, 1, 1, 1);
-            lv_obj_set_grid_cell(app_lv_ui_res_local->btn_matrix[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx1, 1,
+            app_lv_ui_res_local->lbl_matrix[idx1][idx2] = app_lv_ui_style_label_block(matrix, 1, 1, 1);
+            lv_obj_set_grid_cell(app_lv_ui_res_local->lbl_matrix[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx1, 1,
                                                                               LV_GRID_ALIGN_STRETCH, idx2, 1);
         }
         /* 创建显示矩阵 */
@@ -236,13 +236,13 @@ static void app_lv_ui_tetris_show(void *scene)
         lv_obj_set_style_layout(graph, LV_LAYOUT_GRID, 0);
         lv_obj_set_style_pad_row(graph, 0, 0);
         lv_obj_set_style_pad_column(graph, 0, 0);
-        lv_obj_set_style_grid_row_dsc_array(graph, app_lv_ui_res_local->btn_graph_row_dsc, 0);
-        lv_obj_set_style_grid_column_dsc_array(graph, app_lv_ui_res_local->btn_graph_col_dsc, 0);
+        lv_obj_set_style_grid_row_dsc_array(graph, app_lv_ui_res_local->lbl_graph_row_dsc, 0);
+        lv_obj_set_style_grid_column_dsc_array(graph, app_lv_ui_res_local->lbl_graph_col_dsc, 0);
         lv_obj_align_to(graph, title_box, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 0);
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_SCALE; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_SCALE; idx2++) {
-            app_lv_ui_res_local->btn_graph[idx1][idx2] = app_lv_ui_style_btn_block(graph, 1, 1, 1);
-            lv_obj_set_grid_cell(app_lv_ui_res_local->btn_graph[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx1, 1,
+            app_lv_ui_res_local->lbl_graph[idx1][idx2] = app_lv_ui_style_label_block(graph, 1, 1, 1);
+            lv_obj_set_grid_cell(app_lv_ui_res_local->lbl_graph[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx1, 1,
                                                                              LV_GRID_ALIGN_STRETCH, idx2, 1);
         }
         /* 初始化列表,右部 */
@@ -252,7 +252,7 @@ static void app_lv_ui_tetris_show(void *scene)
         lv_obj_set_style_pad_row(list, app_lv_ui_ver_pct(1), 0);
         /* 固定按钮 */
         const char *btn_text[] = {LV_SYMBOL_REFRESH, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_DOWN, LV_SYMBOL_MINUS, LV_SYMBOL_PLUS};
-        for (uint8_t idx = 0; idx < 6; idx++) {
+        for (uint8_t idx = 0; idx < sizeof(btn_text) / sizeof(btn_text[0]); idx++) {
             lv_obj_t *list_btn = app_lv_ui_style_btn(list);
             lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(0 - (idx + 1)));
             lv_obj_set_size(list_btn, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(8));

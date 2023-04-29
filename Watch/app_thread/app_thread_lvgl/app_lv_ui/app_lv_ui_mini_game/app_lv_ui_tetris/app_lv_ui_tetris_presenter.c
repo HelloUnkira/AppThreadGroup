@@ -36,24 +36,22 @@ static void app_lv_ui_set_record(uint32_t type, TetrisBlock *block)
  */
 static bool app_lv_ui_ready(void)
 {
+    /* 检查一下:如果矩阵为0,则刷新指定数据 */
+    /* 检查一下:如果矩阵不为0,则使用原来记录的数据 */
+    app_lv_ui_tetris_block_t (*matrix)[APP_LV_UI_TETRIS_LINE][APP_LV_UI_TETRIS_ELEMENT] = (void *)app_lv_ui_tetris_matrix;
+    for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
+    for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++)
+        if ((*matrix)[idx1][idx2].status != 0)
+            return app_lv_ui_tetris_status;
+    /* 配置tetris参数 */
     app_lv_ui_tetris.Elements  = APP_LV_UI_TETRIS_ELEMENT;
     app_lv_ui_tetris.Lines     = APP_LV_UI_TETRIS_LINE;
     app_lv_ui_tetris.Matrix    = (TetrisBlock *)app_lv_ui_tetris_matrix;
     app_lv_ui_tetris.EraseLine = 0;
     app_lv_ui_tetris.GetType   = app_lv_ui_get_type;
     app_lv_ui_tetris.SetRecord = app_lv_ui_set_record;
-    /* 检查一下:如果矩阵为0,则刷新指定数据 */
-    /* 检查一下:如果矩阵不为0,则使用原来记录的数据 */
-    static bool not_ready_yet = true;
-    uint8_t data = 0;
-    app_lv_ui_tetris_block_t (*matrix)[APP_LV_UI_TETRIS_LINE][APP_LV_UI_TETRIS_ELEMENT] = (void *)app_lv_ui_tetris_matrix;
-    for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
-    for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++)
-         data |= (*matrix)[idx1][idx2].status;
-    if  (data != 0)
-         return app_lv_ui_tetris_status;
     /* 重加载tetris */
-    app_lv_ui_tetris_status = Tetris_Ready(&app_lv_ui_tetris);
+    return app_lv_ui_tetris_status = Tetris_Ready(&app_lv_ui_tetris);
 }
 
 /*@brief lvgl ui数据交互回调

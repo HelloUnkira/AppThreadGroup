@@ -135,7 +135,7 @@ void app_delay_ms(uint32_t ms)
 {
     /* 延时可能会涉及到调度 */
     /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
-    k_msleep(ms);
+    k_sleep(K_MSEC(ms));
 }
 
 /*@brief 微秒延时
@@ -144,7 +144,20 @@ void app_delay_us(uint32_t us)
 {
     /* 延时可能会涉及到调度 */
     /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
-    k_usleep(us);
+    k_busy_wait(us);
+}
+
+/*@brief 计算一段代码的延时时间(ms)
+ */
+uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+{
+    if (run) {
+        execute_ms->start = k_cycle_get_32();
+        return 0;
+    } else {
+        execute_ms->end = k_cycle_get_32();
+        return (double)(execute_ms->end - execute_ms->start) * 1000 / sys_clock_hw_cycles_per_sec;
+    }
 }
 
 /*@brief 重启

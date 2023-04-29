@@ -49,7 +49,13 @@ void app_thread_data_manage_routine(void)
                               app_sys_pipe_package_num(pipe));
         #endif
         while (app_sys_pipe_package_num(pipe) != 0) {
-            app_sys_pipe_take(pipe, &package);
+            app_sys_pipe_take(pipe, &package, false);
+            /* 计算事件处理时间(开始) */
+            #if APP_SYS_LOG_THREAD_CHECK
+            bool execute_ms_remind = true;
+            app_execute_ms_t execute_ms = {0};
+            app_execute_ms(&execute_ms, true);
+            #endif
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
             case app_thread_data_manage_system: {
@@ -109,6 +115,18 @@ void app_thread_data_manage_routine(void)
                 break;
             }
             }
+            /* 计算事件处理时间(结束) */
+            #if APP_SYS_LOG_THREAD_CHECK
+            uint32_t ms = app_execute_ms(&execute_ms, false);
+            if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {
+                APP_SYS_LOG_WARN("thread data center package execute %d ms", ms);
+                APP_SYS_LOG_WARN("package thread:%u", package.thread);
+                APP_SYS_LOG_WARN("package module:%u", package.module);
+                APP_SYS_LOG_WARN("package event:%u",  package.event);
+                APP_SYS_LOG_WARN("package data:%p",   package.data);
+                APP_SYS_LOG_WARN("package size:%u",   package.size);
+            }
+            #endif
         }
     }
 }

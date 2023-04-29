@@ -24,6 +24,12 @@ typedef struct {
     struct k_mutex mutex;   /* 互斥锁空间 */
 } app_mutex_t;
 
+/* app execute ms */
+typedef struct {
+    uint32_t start;
+    uint32_t end;
+} app_execute_ms_t;
+
 /*@brief 打印输出转接宏
  */
 #define APP_OS_PRINT

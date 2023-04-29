@@ -29,25 +29,20 @@ static uint32_t app_lv_ui_random(uint32_t number)
  */
 static bool app_lv_ui_ready(uint8_t difficult)
 {
-    /* 这里简化,默认难度为2 */
-    difficult = 2;
-    /* 资源绑定 */
+    /* 检查一下:如果矩阵为0,则刷新指定数据 */
+    /* 检查一下:如果矩阵不为0,则使用原来记录的数据 */
+    uint8_t (*matrix)[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM] = app_lv_ui_2048_matrix;
+    for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
+    for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++)
+        if ((*matrix)[idx1][idx2] != 0)
+            return true;
+    /* 配置2048参数 */
     app_lv_ui_2048.Random = app_lv_ui_random;
     app_lv_ui_2048.Matrix = app_lv_ui_2048_matrix;
     app_lv_ui_2048.Buffer = app_lv_ui_2048_buffer;
     app_lv_ui_2048.Scale  = APP_LV_UI_2048_NUM;
-    /* 检查一下:如果矩阵为0,则刷新指定数据 */
-    /* 检查一下:如果矩阵不为0,则使用原来记录的数据 */
-    static bool not_ready_yet = true;
-    uint8_t   data = 0;
-    uint8_t (*matrix)[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM] = app_lv_ui_2048_matrix;
-    for (uint8_t idx1 = 0; idx1 < APP_LV_UI_2048_NUM; idx1++)
-    for (uint8_t idx2 = 0; idx2 < APP_LV_UI_2048_NUM; idx2++)
-         data |= (*matrix)[idx1][idx2];
-    if  (data != 0)
-         return;
-    /* 重加载2048 */
-    return Game2048_Ready(&app_lv_ui_2048, difficult);
+    /* 重加载2048(这里简化,默认难度为2) */
+    return Game2048_Ready(&app_lv_ui_2048, difficult = 2);
 }
 
 /*@brief lvgl ui数据交互回调

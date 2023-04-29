@@ -230,7 +230,7 @@ static void app_lv_ui_2048_show(void *scene)
         lv_obj_set_style_pad_row(list, app_lv_ui_ver_pct(1), 0);
         /* 固定按钮 */
         const char *btn_text[] = {LV_SYMBOL_REFRESH, LV_SYMBOL_UP, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_DOWN};
-        for (uint8_t idx = 0; idx < 5; idx++) {
+        for (uint8_t idx = 0; idx < sizeof(btn_text) / sizeof(btn_text[0]); idx++) {
             lv_obj_t *list_btn = app_lv_ui_style_btn(list);
             lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(0 - (idx + 1)));
             lv_obj_set_size(list_btn, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(8));

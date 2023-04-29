@@ -96,18 +96,46 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
 /*@brief      从管道提取一个包
  *@param[in]  pipe     管道实例
  *@param[out] package  事件资源包(栈资源,非堆资源或静态资源)
+ *@param[in]  hit      对指定事件资源包进行命中
  */
-void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
+void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool hit)
 {
+    app_sys_pipe_pkg_t *nonius = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
     app_critical_enter();
     /* 资源包提取出管道 */
     if (pipe->number != 0) {
-        pipe->number--;
-        package_new = pipe->head;
-        pipe->head  = pipe->head->buddy;
+        /* 需要命中指定资源包 */
+        if (hit) {
+            nonius = pipe->head;
+            if (nonius->thread == package->thread &&
+                nonius->module == package->module &&
+                nonius->event  == package->event) {
+                package_new = pipe->head;
+                pipe->head  = pipe->head->buddy;
+                pipe->number--;
+            } else {
+                for (nonius = pipe->head; nonius->buddy != NULL; nonius = nonius->buddy) {
+                    app_sys_pipe_pkg_t *current = nonius->buddy;
+                    if (current->thread == package->thread &&
+                        current->module == package->module &&
+                        current->event  == package->event) {
+                        package_new   = current;
+                        nonius->buddy = current->buddy;
+                        if (pipe->tail == current)
+                            pipe->tail  = nonius;
+                        pipe->number--;
+                        break;
+                    }
+                }
+            }
+        } else {
+            package_new = pipe->head;
+            pipe->head  = pipe->head->buddy;
+            pipe->number--;
+        }
         if (pipe->number == 0) {
             pipe->head = NULL;
             pipe->tail = NULL;
@@ -116,9 +144,9 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
     /* 出界 */
     app_critical_exit();
     app_mutex_give(&pipe->mutex);
+    /* 转储消息资源资源, 销毁资源包 */
     if (package_new == NULL)
         return;
-    /* 转储消息资源资源, 销毁资源包 */
     package->buddy    = NULL;
     package->thread   = package_new->thread;
     package->module   = package_new->module;

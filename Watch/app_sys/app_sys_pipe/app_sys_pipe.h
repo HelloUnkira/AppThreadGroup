@@ -40,7 +40,8 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
 /*@brief      从管道提取一个包
  *@param[in]  pipe     管道实例
  *@param[out] package  事件资源包(栈资源,非堆资源或静态资源)
+ *@param[in]  hit      对指定事件资源包进行命中
  */
-void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package);
+void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool hit);
 
 #endif

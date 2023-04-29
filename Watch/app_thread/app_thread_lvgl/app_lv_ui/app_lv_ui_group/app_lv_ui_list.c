@@ -31,6 +31,7 @@ static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_ui_watch_null,},
     {"2048",                &app_lv_ui_2048,},
     {"Tetris",              &app_lv_ui_tetris,},
+    {"Maze",                &app_lv_ui_maze,},
     {"Null",                &app_lv_ui_watch_null,},
     {"Internal Test",       &app_lv_ui_test_list,},
 };

@@ -31,6 +31,13 @@ typedef struct {
     HANDLE mutex;   /* 互斥锁空间 */
 } app_mutex_t;
 
+/* app execute ms */
+typedef struct {
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER start;
+    LARGE_INTEGER end;
+} app_execute_ms_t;
+
 /*@brief 打印输出转接宏
  */
 #define APP_OS_PRINT    printf

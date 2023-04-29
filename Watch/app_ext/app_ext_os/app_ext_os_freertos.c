@@ -148,7 +148,7 @@ void app_delay_ms(uint32_t ms)
 {
     /* 延时可能会涉及到调度 */
     /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
-    vTaskDelay(ms);
+    vTaskDelay(pdMS_TO_TICKS(ms));
 }
 
 /*@brief 微秒延时
@@ -158,6 +158,19 @@ void app_delay_us(uint32_t us)
     /* 延时可能会涉及到调度 */
     /* 取决于操作系统单次轮转的时间片大小及RTC精度 */
     //根据平台提供;
+}
+
+/*@brief 计算一段代码的延时时间(ms)
+ */
+uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+{
+    if (run) {
+        execute_ms->start = xTaskGetTickCount();
+        return 0;
+    } else {
+        execute_ms->end = xTaskGetTickCount();
+        return (double)(execute_ms->end - execute_ms->start) * 1000 / configTICK_RATE_HZ;
+    }
 }
 
 /*@brief 重启

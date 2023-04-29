@@ -210,6 +210,20 @@ void app_delay_us(uint32_t us)
 	}
 }
 
+/*@brief 计算一段代码的延时时间(ms)
+ */
+uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+{
+    if (run) {
+        clock_gettime(CLOCK_MONOTONIC, &execute_ms->start);
+        return 0;
+    } else {
+        clock_gettime(CLOCK_MONOTONIC, &execute_ms->end);;
+        return (double)(execute_ms->end.tv_sec -  execute_ms->start.tv_sec) * 1000 +
+                       (execute_ms->end.tv_nsec - execute_ms->start.tv_nsec) / 1000000.0;
+    }
+}
+
 /*@brief 重启
  */
 void app_os_reset(void)

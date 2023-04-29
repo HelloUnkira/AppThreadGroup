@@ -159,6 +159,20 @@ void app_delay_us(uint32_t us)
          QueryPerformanceCounter(&dw_c));
 }
 
+/*@brief 计算一段代码的延时时间(ms)
+ */
+uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+{
+    if (run) {
+        QueryPerformanceFrequency(&execute_ms->frequency);
+        QueryPerformanceCounter(&execute_ms->start);
+        return 0;
+    } else {
+        QueryPerformanceCounter(&execute_ms->end);
+        return (double)(execute_ms->end.QuadPart - execute_ms->start.QuadPart) / execute_ms->frequency.QuadPart * 1000;
+    }
+}
+
 /*@brief 重启
  */
 void app_os_reset(void)

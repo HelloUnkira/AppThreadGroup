@@ -95,6 +95,10 @@ void app_delay_ms(uint32_t ms);
  */
 void app_delay_us(uint32_t us);
 
+/*@brief 计算一段代码的延时时间(ms)
+ */
+uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run);
+
 /*@brief 重启
  */
 void app_os_reset(void);

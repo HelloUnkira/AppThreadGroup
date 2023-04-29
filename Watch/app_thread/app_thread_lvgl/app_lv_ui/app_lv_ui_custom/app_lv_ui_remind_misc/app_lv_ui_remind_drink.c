@@ -52,7 +52,7 @@ static void app_lv_ui_remind_drink_show(void *scene)
         lv_obj_t *times_up = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(times_up, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align(times_up, LV_ALIGN_CENTER, 0, 0);
-        lv_label_set_text(times_up, "Drink Remind Times Up");
+        lv_label_set_text(times_up, "Drink Times Up");
         /* 下部按键 */
         lv_obj_t *btn = NULL, *btn_c = NULL, *lbl_c = NULL;
         btn = app_lv_ui_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);

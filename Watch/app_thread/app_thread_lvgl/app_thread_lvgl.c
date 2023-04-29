@@ -69,7 +69,13 @@ void app_thread_lvgl_routine(void)
                               app_sys_pipe_package_num(pipe));
         #endif
         while (app_sys_pipe_package_num(pipe) != 0) {
-            app_sys_pipe_take(pipe, &package);
+            app_sys_pipe_take(pipe, &package, false);
+            /* 计算事件处理时间(开始) */
+            #if APP_SYS_LOG_THREAD_CHECK
+            bool execute_ms_remind = true;
+            app_execute_ms_t execute_ms = {0};
+            app_execute_ms(&execute_ms, true);
+            #endif
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
             case app_thread_lvgl_system: {
@@ -84,7 +90,26 @@ void app_thread_lvgl_routine(void)
                 }
                 /* lvgl时钟调度事件 */
                 if (package.event == app_thread_lvgl_sched_exec) {
+                    /* 计算事件处理时间(开始) */
+                    app_execute_ms_t event_execute_ms = {0};
+                    app_execute_ms(&event_execute_ms, true);
                     lv_timer_handler();
+                    /* 计算事件处理时间(结束) */
+                    uint32_t ms = app_execute_ms(&event_execute_ms, false);
+                    /* 系统对于此事件包的处理负载过大,主动丢弃一部分相同的事件包 */
+                    /* 这是无奈之举,应该避免事件包的丢弃,这会对事件系统产生危害 */
+                    /* 对于此处的影响是:适应性降帧 */
+                    if (ms > APP_SYS_LOG_EXECUTE_MS) {
+                        uint32_t discard_cnt = ms / LV_SCHED_TICK_EXEC + 1;
+                        for (uint32_t idx = 0; idx < discard_cnt; idx++) {
+                            if (app_sys_pipe_package_num(pipe) != 0)
+                                app_sys_pipe_take(pipe, &package, true);
+                            else
+                                break;
+                        }
+                        APP_SYS_LOG_WARN("app_thread_lvgl_sched_exec ms:%d discard package:%d", ms, discard_cnt);
+                        execute_ms_remind = false;
+                    }
                 }
                 /* lvgl驱动检查事件 */
                 if (package.event == app_thread_lvgl_sched_drv) {
@@ -193,6 +218,19 @@ void app_thread_lvgl_routine(void)
                 break;
             }
             }
+            /* 计算事件处理时间(结束) */
+            #if APP_SYS_LOG_THREAD_CHECK
+            uint32_t ms = app_execute_ms(&execute_ms, false);
+            /* 如果我们已经手动处理了该事件包,无需再检查 */
+            if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {
+                APP_SYS_LOG_WARN("thread lvgl package execute %d ms", ms);
+                APP_SYS_LOG_WARN("package thread:%u", package.thread);
+                APP_SYS_LOG_WARN("package module:%u", package.module);
+                APP_SYS_LOG_WARN("package event:%u",  package.event);
+                APP_SYS_LOG_WARN("package data:%p",   package.data);
+                APP_SYS_LOG_WARN("package size:%u",   package.size);
+            }
+            #endif
         }
     }
 }

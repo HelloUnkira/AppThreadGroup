@@ -30,6 +30,12 @@ typedef struct {
     pthread_mutex_t mutex;  /* 互斥锁空间 */
 } app_mutex_t;
 
+/* app execute ms */
+typedef struct {
+    struct timespec start;
+    struct timespec end;
+} app_execute_ms_t;
+
 /*@brief 打印输出转接宏
  */
 #define APP_OS_PRINT    printf
