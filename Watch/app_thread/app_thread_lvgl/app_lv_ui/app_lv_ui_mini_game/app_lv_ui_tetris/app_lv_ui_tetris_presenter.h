@@ -9,6 +9,7 @@
 typedef struct {
     bool (*ready)(void);
     bool (*execute)(void);
+    void (*clean)(void);
     bool (*move_step)(void);
     bool (*move_left)(void);
     bool (*move_right)(void);

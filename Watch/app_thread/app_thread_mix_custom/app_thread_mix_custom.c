@@ -58,7 +58,7 @@ void app_thread_mix_custom_routine(void)
         while (app_sys_pipe_package_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
-            #if APP_SYS_LOG_THREAD_CHECK
+            #if APP_SYS_LOG_EXECUTE
             bool execute_ms_remind = true;
             app_execute_ms_t execute_ms = {0};
             app_execute_ms(&execute_ms, true);
@@ -147,7 +147,7 @@ void app_thread_mix_custom_routine(void)
             }
             }
             /* 计算事件处理时间(结束) */
-            #if APP_SYS_LOG_THREAD_CHECK
+            #if APP_SYS_LOG_EXECUTE
             uint32_t ms = app_execute_ms(&execute_ms, false);
             if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {
                 APP_SYS_LOG_WARN("thread mix custom package execute %d ms", ms);

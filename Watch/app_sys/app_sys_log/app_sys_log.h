@@ -5,6 +5,7 @@
 #define APP_SYS_LOG_THREAD_CHECK    1
 #define APP_SYS_LOG_MODULE_CHECK    1
 /* 线程执行时间检查(ms) */
+#define APP_SYS_LOG_EXECUTE         0
 #define APP_SYS_LOG_EXECUTE_MS      10
 
 /* 全局断言检查开关 */

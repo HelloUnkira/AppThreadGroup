@@ -24,7 +24,7 @@ static const char * app_lv_ui_peek_one(void)
 
 /*@brief lvgl ui数据交互回调
  */
-static const char * app_lv_ui_reset(void)
+static void app_lv_ui_reset(void)
 {
     app_sys_trace_text_reset();
 }

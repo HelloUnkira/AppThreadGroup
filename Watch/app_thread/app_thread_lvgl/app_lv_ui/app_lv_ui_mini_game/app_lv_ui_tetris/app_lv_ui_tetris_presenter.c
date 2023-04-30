@@ -63,6 +63,18 @@ static bool app_lv_ui_execute(void)
 
 /*@brief lvgl ui数据交互回调
  */
+static void app_lv_ui_clean(void)
+{
+    /* 清空目标矩阵 */
+    app_lv_ui_tetris_block_t (*matrix)[APP_LV_UI_TETRIS_LINE][APP_LV_UI_TETRIS_ELEMENT] = NULL;
+    app_lv_ui_tetris_presenter.get_matrix((void **)&matrix);
+    for (uint8_t idx1 = 0; idx1 < APP_LV_UI_TETRIS_LINE; idx1++)
+    for (uint8_t idx2 = 0; idx2 < APP_LV_UI_TETRIS_ELEMENT; idx2++)
+        (*matrix)[idx1][idx2].status = 0;
+}
+
+/*@brief lvgl ui数据交互回调
+ */
 static bool app_lv_ui_move_step(void)
 {
     return Tetris_MoveStep(&app_lv_ui_tetris);
@@ -130,22 +142,22 @@ static void app_lv_ui_get_erase_line(uint32_t *erase_line)
 
 /*@brief lvgl ui数据交互回调
  */
-static void app_lv_ui_get_set_status(bool *status)
+static void app_lv_ui_set_status(bool *status)
 {
     app_lv_ui_tetris_status = *status;
 }
 
 /*@brief lvgl ui数据交互回调
  */
-static void app_lv_ui_get_get_status(bool *status)
+static void app_lv_ui_get_status(bool *status)
 {
     *status = app_lv_ui_tetris_status;
 }
 
-
 app_lv_ui_tetris_presenter_t app_lv_ui_tetris_presenter = {
     .ready          = app_lv_ui_ready,
     .execute        = app_lv_ui_execute,
+    .clean          = app_lv_ui_clean,
     .move_step      = app_lv_ui_move_step,
     .move_left      = app_lv_ui_move_left,
     .move_right     = app_lv_ui_move_right,
@@ -155,6 +167,6 @@ app_lv_ui_tetris_presenter_t app_lv_ui_tetris_presenter = {
     .get_graph      = app_lv_ui_get_graph,
     .get_graph_next = app_lv_ui_get_graph_next,
     .get_erase_line = app_lv_ui_get_erase_line,
-    .set_status     = app_lv_ui_get_set_status,
-    .get_status     = app_lv_ui_get_get_status,
+    .set_status     = app_lv_ui_set_status,
+    .get_status     = app_lv_ui_get_status,
 };

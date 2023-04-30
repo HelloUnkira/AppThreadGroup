@@ -63,7 +63,7 @@ void app_thread_lvgl_routine(void)
     /* 主流程 */
     while (true) {
         app_sem_take(sem);
-        #if APP_SYS_LOG_THREAD_CHECK
+        #if APP_SYS_LOG_EXECUTE
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread lvgl recv too much package:%u",
                               app_sys_pipe_package_num(pipe));
@@ -107,7 +107,9 @@ void app_thread_lvgl_routine(void)
                             else
                                 break;
                         }
+                        #if APP_SYS_LOG_EXECUTE
                         APP_SYS_LOG_WARN("app_thread_lvgl_sched_exec ms:%d discard package:%d", ms, discard_cnt);
+                        #endif
                         execute_ms_remind = false;
                     }
                 }
@@ -219,7 +221,7 @@ void app_thread_lvgl_routine(void)
             }
             }
             /* 计算事件处理时间(结束) */
-            #if APP_SYS_LOG_THREAD_CHECK
+            #if APP_SYS_LOG_EXECUTE
             uint32_t ms = app_execute_ms(&execute_ms, false);
             /* 如果我们已经手动处理了该事件包,无需再检查 */
             if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {

@@ -9,6 +9,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_module_vibrate.h"
+#include "app_module_do_not_disturb.h"
 #include "app_module_system.h"
 
 #include "app_lv_scene.h"
@@ -50,10 +51,10 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
             break;
     /* 比较场景优先级 */
     if (priority1 <= priority2)
-        return;
+        return false;
     /* 勿扰模式是否产生提醒??? */
     if (app_module_do_not_disturb_status())
-        return;
+        return false;
     /* 是否配置无声震动? */
     if (true/* 开启震动 */) {
         /* 根据不同的场景配置不同的震动旋律 */
@@ -75,4 +76,5 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
         /* 提醒事件 */
         app_lv_scene_add(remind_scene, false);
     }
+    return true;
 }
