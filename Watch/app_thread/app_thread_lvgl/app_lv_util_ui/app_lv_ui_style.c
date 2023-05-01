@@ -228,6 +228,7 @@ lv_obj_t * app_lv_ui_style_btn_block(lv_obj_t *parent, lv_coord_t pad_with, lv_c
 lv_obj_t * app_lv_ui_style_btn_block2(lv_obj_t *parent, lv_obj_t **container, lv_coord_t pad_with, lv_coord_t border_width, lv_coord_t outline_width)
 {
     *container = app_lv_ui_style_btn(parent);
+    lv_obj_remove_style_all(*container);
     lv_obj_set_style_radius(*container, 0, 0);
     lv_obj_set_style_pad_all(*container, pad_with, 0);
     lv_obj_set_style_bg_opa(*container, LV_OPA_TRANSP, 0);

@@ -27,5 +27,6 @@ extern app_lv_scene_t app_lv_ui_data_daily;
 extern app_lv_scene_t app_lv_ui_2048;
 extern app_lv_scene_t app_lv_ui_tetris;
 extern app_lv_scene_t app_lv_ui_maze;
+extern app_lv_scene_t app_lv_ui_snake;
 
 #endif

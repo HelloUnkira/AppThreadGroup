@@ -4,7 +4,7 @@
 /* 线程检查与线程子模组检查 */
 #define APP_SYS_LOG_THREAD_CHECK    1
 #define APP_SYS_LOG_MODULE_CHECK    1
-/* 线程执行时间检查(ms) */
+/* 线程事件包执行时间检查(ms) */
 #define APP_SYS_LOG_EXECUTE         0
 #define APP_SYS_LOG_EXECUTE_MS      10
 

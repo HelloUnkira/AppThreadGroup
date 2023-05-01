@@ -25,6 +25,8 @@ typedef struct {
     lv_obj_t  *lbl_matrix2[APP_LV_UI_MAZE_LINE][APP_LV_UI_MAZE_ELEMENT];
     lv_coord_t lbl_matrix_row_dsc[APP_LV_UI_MAZE_LINE + 1];
     lv_coord_t lbl_matrix_col_dsc[APP_LV_UI_MAZE_ELEMENT + 1];
+    bool       refr;    /* 迷宫本体最开始刷一次即可 */
+    bool       move;    /* 产生动作才刷新像素块 */
     bool       run;
 } app_lv_ui_res_local_t;
 
@@ -42,21 +44,27 @@ static void app_lv_ui_event_default_redirect(lv_event_t *e)
         /* 结束了重置 */
         if (!app_lv_ui_res_local->run) {
              app_lv_ui_maze_presenter.clean();
-             app_lv_ui_res_local->run = app_lv_ui_maze_presenter.ready();
+             app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.ready();
+             app_lv_ui_res_local->refr = true;
+             app_lv_ui_res_local->move = true;
              return;
         }
         switch (dir) {
         case LV_DIR_LEFT:
-            app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_LEFT);
+            app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_LEFT);
+            app_lv_ui_res_local->move = true;
             break;
         case LV_DIR_RIGHT:
-            app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_RIGHT);
+            app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_RIGHT);
+            app_lv_ui_res_local->move = true;
             break;
         case LV_DIR_TOP:
-            app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_TOP);
+            app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_TOP);
+            app_lv_ui_res_local->move = true;
             break;
         case LV_DIR_BOTTOM:
-            app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_BOTTOM);
+            app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_BOTTOM);
+            app_lv_ui_res_local->move = true;
             break;
         default:
             break;
@@ -74,7 +82,8 @@ static void app_lv_ui_local_list_btn_cb(lv_event_t *e)
     /* 结束了重置 */
     if (!app_lv_ui_res_local->run) {
          app_lv_ui_maze_presenter.clean();
-         app_lv_ui_res_local->run = app_lv_ui_maze_presenter.ready();
+         app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.ready();
+         app_lv_ui_res_local->refr = true;
          return;
     }
     uintptr_t btn_idx = (uintptr_t)lv_event_get_user_data(e);
@@ -83,23 +92,29 @@ static void app_lv_ui_local_list_btn_cb(lv_event_t *e)
     case (uintptr_t)(-1): {
         /* 重新就绪检查 */
         app_lv_ui_maze_presenter.clean();
-        app_lv_ui_res_local->run = app_lv_ui_maze_presenter.ready();
+        app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.ready();
+        app_lv_ui_res_local->refr = true;
+        app_lv_ui_res_local->move = true;
         break;
     }
     case (uintptr_t)(-2): {
-        app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_TOP);
+        app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_TOP);
+        app_lv_ui_res_local->move = true;
         break;
     }
     case (uintptr_t)(-3): {
-        app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_LEFT);
+        app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_LEFT);
+        app_lv_ui_res_local->move = true;
         break;
     }
     case (uintptr_t)(-4): {
-        app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_RIGHT);
+        app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_RIGHT);
+        app_lv_ui_res_local->move = true;
         break;
     }
     case (uintptr_t)(-5): {
-        app_lv_ui_res_local->run = app_lv_ui_maze_presenter.execute(LV_DIR_BOTTOM);
+        app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.execute(LV_DIR_BOTTOM);
+        app_lv_ui_res_local->move = true;
         break;
     }
     default:
@@ -127,6 +142,9 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     /* 矩阵刷新 */
     app_lv_ui_maze_block_t (*matrix)[APP_LV_UI_MAZE_LINE][APP_LV_UI_MAZE_ELEMENT] = NULL;
     app_lv_ui_maze_presenter.get_matrix((void **)&matrix);
+    /* 迷宫本体只需要刷新一次 */
+    if (app_lv_ui_res_local->refr) {
+        app_lv_ui_res_local->refr = false;
     for (uint8_t idx1 = 0; idx1 < APP_LV_UI_MAZE_LINE; idx1++)
     for (uint8_t idx2 = 0; idx2 < APP_LV_UI_MAZE_ELEMENT; idx2++) {
         lv_obj_set_style_border_side(app_lv_ui_res_local->lbl_matrix1[idx1][idx2], LV_BORDER_SIDE_NONE, 0);
@@ -163,12 +181,17 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
             }
         }
     }
+    }
+    /* 迷宫本体只需要刷新一次 */
+    if (app_lv_ui_res_local->move) {
+        app_lv_ui_res_local->move = false;
     for (uint8_t idx1 = 0; idx1 < APP_LV_UI_MAZE_LINE; idx1++)
     for (uint8_t idx2 = 0; idx2 < APP_LV_UI_MAZE_ELEMENT; idx2++)
         if ((*matrix)[idx1][idx2].record)
             lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_matrix2[idx2][idx1], color_idx[(*matrix)[idx1][idx2].record + 1], 0);
         else
             lv_obj_set_style_bg_color(app_lv_ui_res_local->lbl_matrix2[idx2][idx1], lv_color_black(), 0);
+    }
 }
 
 /*@brief     界面显示
@@ -233,10 +256,12 @@ static void app_lv_ui_maze_show(void *scene)
         lv_obj_align_to(list, matrix, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 重新就绪检查 */
         app_lv_ui_res_local->run  = app_lv_ui_maze_presenter.ready();
+        app_lv_ui_res_local->refr = true;
+        app_lv_ui_res_local->move = true;
         /* 初始化显示动画 */
         app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
-                                    LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
+                                    LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }
 }
 
