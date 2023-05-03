@@ -19,7 +19,46 @@
 #include "app_module_remind_alarm.h"
 #include "app_module_system.h"
 
-void app_module_timer_test_callback(void *timer)
+/*@brief 日志转储测试
+ */
+static inline void app_sys_trace_test(void)
+{
+    uint8_t tin[APP_MODULE_TRACE_TEXT_MAX * 2] ={0};
+    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_TEXT_MAX; idx++)
+        tin[idx] = tin[idx + APP_MODULE_TRACE_TEXT_MAX] = '0' + idx % 10;
+
+    static uint32_t offset = 0;
+    offset %= APP_MODULE_TRACE_TEXT_MAX;
+    app_sys_trace_text_dump(tin + offset, true);
+    uint8_t tout[APP_MODULE_TRACE_TEXT_MAX] = {0};
+    app_sys_trace_text_load(tout);
+    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_TEXT_MAX) != 0)
+        printf("track log error\n");
+    offset++;
+}
+
+/*@brief 外存chunk刷新测试
+ */
+static inline void app_sys_ext_mem_chunk_reflush(void)
+{
+    uint8_t block[4096] = {0};
+    for (uint32_t idx = 0; idx < sizeof(block); block[idx] = ~0, idx++);
+    /* 打开并关闭一次,保证chunk文件存在 */
+    fclose(fopen("mix_chunk_small", "wb"));
+    fclose(fopen("mix_chunk_large", "wb"));
+    /*  */
+    const app_sys_ext_mem_t *ext_mem1 = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_t *ext_mem2 = app_sys_ext_mem_find_by_name("mix_chunk_large");
+    /*  */
+    printf("reflush start...\n");
+    for (uint32_t idx = 0; idx < ext_mem1->chunk_size; idx += sizeof(block))
+        app_sys_ext_mem_write(ext_mem1, idx, block, sizeof(block));
+    for (uint32_t idx = 0; idx < ext_mem2->chunk_size; idx += sizeof(block))
+        app_sys_ext_mem_write(ext_mem2, idx, block, sizeof(block));
+    printf("reflush end...\n");
+}
+
+void app_sys_timer_test_callback(void *timer)
 {
     app_sys_timer_t *local = timer;
     uint32_t *data = local->user_data;
@@ -32,23 +71,23 @@ void app_module_timer_test_callback(void *timer)
 
 /*@brief 软件定时器模组测试
  */
-static inline void app_module_timer_test(void)
+static inline void app_sys_timer_test(void)
 {
     static uint32_t label_1[2] = {1, 0};
     static uint32_t label_2[2] = {2, 0};
     static uint32_t label_3[2] = {3, 0};
     static app_sys_timer_t timer1 = {
-        .expired   = app_module_timer_test_callback,
+        .expired   = app_sys_timer_test_callback,
         .user_data = &label_1,
         .peroid    = 1000,
         .reload    = true};
     static app_sys_timer_t timer2 = {
-        .expired   = app_module_timer_test_callback,
+        .expired   = app_sys_timer_test_callback,
         .user_data = &label_2,
         .peroid    = 2000,
         .reload    = true};
     static app_sys_timer_t timer3 = {
-        .expired   = app_module_timer_test_callback,
+        .expired   = app_sys_timer_test_callback,
         .user_data = &label_3,
         .peroid    = 3000,
         .reload    = true};
@@ -126,53 +165,11 @@ static inline void app_module_remind_alarm_test(void)
     app_module_remind_alarm_array_unlock();
 }
 
-/*@brief 日志转储测试
- */
-static inline void app_sys_trace_test(void)
-{
-    uint8_t tin[APP_MODULE_TRACE_TEXT_MAX * 2] ={0};
-    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_TEXT_MAX; idx++)
-        tin[idx] = tin[idx + APP_MODULE_TRACE_TEXT_MAX] = '0' + idx % 10;
-
-    static uint32_t offset = 0;
-    offset %= APP_MODULE_TRACE_TEXT_MAX;
-    app_sys_trace_text_dump(tin + offset, true);
-    uint8_t tout[APP_MODULE_TRACE_TEXT_MAX] = {0};
-    app_sys_trace_text_load(tout);
-    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_TEXT_MAX) != 0)
-        printf("track log error\n");
-    offset++;
-}
-
-/*@brief 外存chunk刷新测试
- */
-static inline void app_sys_ext_mem_chunk_reflush(void)
-{
-    uint8_t block[4096] = {0};
-    for (uint32_t idx = 0; idx < sizeof(block); block[idx] = ~0, idx++);
-    /* 打开并关闭一次,保证chunk文件存在 */
-    fclose(fopen("mix_chunk_small", "wb"));
-    fclose(fopen("mix_chunk_large", "wb"));
-    /*  */
-    const app_sys_ext_mem_t *ext_mem1 = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_mem_t *ext_mem2 = app_sys_ext_mem_find_by_name("mix_chunk_large");
-    /*  */
-    printf("reflush start...\n");
-    for (uint32_t idx = 0; idx < ext_mem1->chunk_size; idx += sizeof(block))
-        app_sys_ext_mem_write(ext_mem1, idx, block, sizeof(block));
-    for (uint32_t idx = 0; idx < ext_mem2->chunk_size; idx += sizeof(block))
-        app_sys_ext_mem_write(ext_mem2, idx, block, sizeof(block));
-    printf("reflush end...\n");
-}
-
 static void app_main_fake_hard_clock_irq(void)
 {
-    //SIGALRM:      以系统真实的时间来计算
-    //SIGVTALRM:    以该进程在用户态下花费的时间来计算
-    //SIGPROF:      以该进程在用户态下和内核态下所费的时间来计算
     static uint32_t count = 0;count++;
-    /* linux system 1 ms tick */
-    if (count % 1000 == 0)
+    /* 1 ms tick */
+    if (0 && count % 1000 == 0)
         printf("signal 1 second handler\n");
     /* 1msec system update: */
     app_module_system_1msec_update(count);
@@ -189,12 +186,7 @@ static void app_main_fake_hard_clock_irq(void)
     /* test timer */
     #if 0
     if (count == 1000)
-        app_module_timer_test();
-    #endif
-    /* test alarm group */
-    #if 0
-    if (count == 1000)
-        app_module_alarm_test();
+        app_sys_timer_test();
     #endif
     /* test stopwatch */
     #if 0
@@ -205,6 +197,11 @@ static void app_main_fake_hard_clock_irq(void)
     #if 0
     if (count == 1000)
         app_module_countdown_test();
+    #endif
+    /* test alarm group */
+    #if 1
+    if (count == 1000)
+        app_module_remind_alarm_test();
     #endif
     /* test package... */
     #if 0

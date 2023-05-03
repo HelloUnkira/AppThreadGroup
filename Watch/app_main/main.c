@@ -24,14 +24,17 @@ static void app_main_update_sys_time(void)
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     
-    printf("年:%d\n",      clock.year);/*获取当前年份,从1900开始，所以要加1900*/
-    printf("月:%d\n",      clock.month);/*获取当前月份,范围是0-11,所以要加1*/
-    printf("日:%d\n",      clock.day);/*获取当前月份日数,范围是1-31*/
-    printf("时::%d\n",     clock.hour);/*获取当前时,这里获取西方的时间,刚好相差八个小时*/
-    printf("分:%d\n",      clock.minute); /*获取当前分*/
-    printf("秒:%d\n",      clock.second); /*获取当前秒*/
-    printf("UTC:%ld\n",   clock.utc);
-    printf("天:%d\n",      p->tm_yday); /*从今年1月1日算起至今的天数，范围为0-365*/
+    /*获取当前年份,从1900开始,所以要加1900*/
+    /*获取当前月份,范围是0-11,所以要加1*/
+    /*获取当前月份日数,范围是1-31*/
+    /*获取当前时,这里获取西方的时间,刚好相差八个小时*/
+    /*获取当前分*/
+    /*获取当前秒*/
+    /*从今年1月1日算起至今的天数，范围为0-365*/
+    printf("dtime:%d/%d/%d %d:%d:%d utc:%d days:%d\n",
+            clock.year, clock.month,  clock.day,
+            clock.hour, clock.minute, clock.second,
+            clock.utc,  p->tm_yday);
     
     app_module_clock_set_system_clock(&clock);
 }
@@ -58,14 +61,17 @@ static void app_main_update_sys_time(void)
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     
-    printf("年:%d\n",      clock.year);/*获取当前年份,从1900开始，所以要加1900*/
-    printf("月:%d\n",      clock.month);/*获取当前月份,范围是0-11,所以要加1*/
-    printf("日:%d\n",      clock.day);/*获取当前月份日数,范围是1-31*/
-    printf("时::%d\n",     clock.hour);/*获取当前时,这里获取西方的时间,刚好相差八个小时*/
-    printf("分:%d\n",      clock.minute); /*获取当前分*/
-    printf("秒:%d\n",      clock.second); /*获取当前秒*/
-    printf("UTC:%ld\n",   clock.utc);
-    printf("天:%d\n",      p->tm_yday); /*从今年1月1日算起至今的天数，范围为0-365*/
+    /*获取当前年份,从1900开始,所以要加1900*/
+    /*获取当前月份,范围是0-11,所以要加1*/
+    /*获取当前月份日数,范围是1-31*/
+    /*获取当前时,这里获取西方的时间,刚好相差八个小时*/
+    /*获取当前分*/
+    /*获取当前秒*/
+    /*从今年1月1日算起至今的天数，范围为0-365*/
+    printf("dtime:%d/%d/%d %d:%d:%d utc:%d days:%d\n",
+            clock.year, clock.month,  clock.day,
+            clock.hour, clock.minute, clock.second,
+            clock.utc,  p->tm_yday);
     
     app_module_clock_set_system_clock(&clock);
 }
