@@ -11,28 +11,44 @@
 /* 全局断言检查开关 */
 #define APP_SYS_ASSERT_STATUS           1   /* 1:ENABLE,0:DISABLE */
 
-/* 全局宏控开关及其等级 */
+/* 全局宏控开关(完全启用或禁用) */
 #define APP_SYS_LOG_GLOBAL_STATUS       1   /* 1:ENABLE,0:DISABLE */
+/* 全局宏控覆盖开关(覆盖本地宏控等级) */
+#define APP_SYS_LOG_GLOBAL_OVERLAY      0   /* 1:ENABLE,0:DISABLE */
+/* 全局宏控等级(全局宏控覆盖开关启用时有效, 用于覆盖本地宏控等级) */
+#define APP_SYS_LOG_GLOBAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+
+/* 全局宏控覆盖监管 */
+#if     APP_SYS_LOG_GLOBAL_OVERLAY
+#ifdef  APP_SYS_LOG_LOCAL_STATUS
+#undef  APP_SYS_LOG_LOCAL_STATUS
+#endif
+#ifdef  APP_SYS_LOG_LOCAL_LEVEL
+#undef  APP_SYS_LOG_LOCAL_LEVEL
+#endif
+#define APP_SYS_LOG_LOCAL_STATUS    APP_SYS_LOG_GLOBAL_STATUS
+#define APP_SYS_LOG_LOCAL_LEVEL     APP_SYS_LOG_GLOBAL_LEVEL
+#endif
 
 /* 全局打印宏控检测,局部打印宏控检测 */
 #if (APP_SYS_LOG_GLOBAL_STATUS && APP_SYS_LOG_LOCAL_STATUS)
 /* DEBUG */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 0
+#if     APP_SYS_LOG_LOCAL_LEVEL <= 0
 #define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* INFO */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 1
+#if     APP_SYS_LOG_LOCAL_LEVEL <= 1
 #define APP_SYS_LOG_INFO(...)       app_sys_log_msg(1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(0, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* WARN */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 2
+#if     APP_SYS_LOG_LOCAL_LEVEL <= 2
 #define APP_SYS_LOG_WARN(...)       app_sys_log_msg(1, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(0, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* ERROR */
-#if APP_SYS_LOG_LOCAL_LEVEL <= 3
+#if     APP_SYS_LOG_LOCAL_LEVEL <= 3
 #define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(1, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
