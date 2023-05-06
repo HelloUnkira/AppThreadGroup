@@ -4,7 +4,7 @@
 #if 0
 #elif APP_OS_IS_WINDOWS
 
-static void app_main_update_sys_time(void)
+static void app_main_update_sys_clock(void)
 {
     time_t timep;
     struct tm *p;
@@ -41,7 +41,7 @@ static void app_main_update_sys_time(void)
 
 #elif APP_OS_IS_LINUX
 
-static void app_main_update_sys_time(void)
+static void app_main_update_sys_clock(void)
 {
     time_t timep;
     struct tm *p;
@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         {
             static uint64_t count = 0;
             if (count++ == 5 * 1000)
-                app_main_update_sys_time();
+                app_main_update_sys_clock();
         }
     }
     #elif 0

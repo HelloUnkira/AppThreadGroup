@@ -11,6 +11,9 @@
 /* 全局断言检查开关 */
 #define APP_SYS_ASSERT_STATUS           1   /* 1:ENABLE,0:DISABLE */
 
+/* 全局函数追踪检查开关 */
+#define APP_SYS_EXECUTE_TRACE_STATUS    1   /* 1:ENABLE,0:DISABLE */
+
 /* 全局宏控开关(完全启用或禁用) */
 #define APP_SYS_LOG_GLOBAL_STATUS       1   /* 1:ENABLE,0:DISABLE */
 /* 全局宏控覆盖开关(覆盖本地宏控等级) */
@@ -18,20 +21,25 @@
 /* 全局宏控等级(全局宏控覆盖开关启用时有效, 用于覆盖本地宏控等级) */
 #define APP_SYS_LOG_GLOBAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-/* 全局宏控覆盖监管 */
+/* 本地宏控(本文件被包含前配置) */
+#ifndef APP_SYS_LOG_LOCAL_STATUS
+#define APP_SYS_LOG_LOCAL_STATUS        0   /* 1:ENABLE,0:DISABLE */
+#endif
+#ifndef APP_SYS_LOG_LOCAL_LEVEL
+#define APP_SYS_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#endif
+
+/* 全局宏控覆盖(覆盖所有本地宏控) */
 #if     APP_SYS_LOG_GLOBAL_OVERLAY
-#ifdef  APP_SYS_LOG_LOCAL_STATUS
 #undef  APP_SYS_LOG_LOCAL_STATUS
-#endif
-#ifdef  APP_SYS_LOG_LOCAL_LEVEL
-#undef  APP_SYS_LOG_LOCAL_LEVEL
-#endif
 #define APP_SYS_LOG_LOCAL_STATUS    APP_SYS_LOG_GLOBAL_STATUS
+#undef  APP_SYS_LOG_LOCAL_LEVEL
 #define APP_SYS_LOG_LOCAL_LEVEL     APP_SYS_LOG_GLOBAL_LEVEL
 #endif
 
 /* 全局打印宏控检测,局部打印宏控检测 */
-#if (APP_SYS_LOG_GLOBAL_STATUS && APP_SYS_LOG_LOCAL_STATUS)
+#if     APP_SYS_LOG_GLOBAL_STATUS
+#if     APP_SYS_LOG_LOCAL_STATUS
 /* DEBUG */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 0
 #define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
@@ -53,6 +61,7 @@
 #define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* NONE */
+#endif
 #endif
 
 #ifndef APP_SYS_LOG_DEBUG
@@ -102,20 +111,31 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
  */
 void app_sys_log_ready(void);
 
-/* 扩展补充...... */
-
 /*@brief     断言
  *@param[in] file 文件名
+ *@param[in] func 函数名
  *@param[in] line 文件行数
  *@param[in] cond 断言条件
  */
 void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond);
 
 /* 断言:条件为真继续执行,为假时中断系统 */
-#if APP_SYS_ASSERT_STATUS
+#if     APP_SYS_ASSERT_STATUS
 #define APP_SYS_ASSERT(cond)    (app_sys_assert(__FILE__, __func__, __LINE__, cond))
 #else
 #define APP_SYS_ASSERT(cond)    (cond)
+#endif
+
+/*@brief     函数执行追踪
+ *@param[in] file 文件名
+ *@param[in] func 函数名
+ *@param[in] line 文件行数
+ *@param[in] step 执行编号
+ */
+void app_sys_execute_trace(const char *file, const char *func, uint32_t line, uint32_t step);
+
+#if     APP_SYS_EXECUTE_TRACE_STATUS
+#define APP_SYS_EXECUTE_TRACE(step)     (app_sys_execute_trace(__FILE__, __func__, __LINE__, step))
 #endif
 
 /*@brief 编译时间

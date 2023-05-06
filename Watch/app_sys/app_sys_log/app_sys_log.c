@@ -2,9 +2,6 @@
  *    泛用的格式输出流模组
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
-
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 
@@ -78,6 +75,7 @@ void app_sys_log_msg(unsigned char status, char flag, const char *file, const ch
 
 /*@brief     断言
  *@param[in] file 文件名
+ *@param[in] func 函数名
  *@param[in] line 文件行数
  *@param[in] cond 断言条件
  */
@@ -86,14 +84,28 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     if (cond)
         return;
     /* 输出错误信息 */
-    APP_SYS_LOG_ERROR_RAW("APP_SYS_ASSERT:[%s][%s][%d]", file, func, line);
+    app_sys_log_msg(0, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%s][%d]", file, func, line);
+    app_sys_log_msg(0, 'E', "", "", 0, "\r\n");
     /* 异常导致的错误直接重启系统 */
     app_os_reset();
+}
+
+/*@brief     函数执行追踪
+ *@param[in] file 文件名
+ *@param[in] func 函数名
+ *@param[in] line 文件行数
+ *@param[in] step 执行编号
+ */
+void app_sys_execute_trace(const char *file, const char *func, uint32_t line, uint32_t step)
+{
+    app_sys_log_msg(0, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%s][%d]:%d", file, func, line, step);
+    app_sys_log_msg(0, 'D', "", "", 0, "\r\n");
 }
 
 /*@brief 编译时间
  */
 void app_sys_build_time(void)
 {
-    APP_SYS_LOG_INFO_RAW("FW Build Time:%s,%s", __DATE__, __TIME__);
+    app_sys_log_msg(0, 'D', "", "", 0, "FW Build Time:%s,%s", __DATE__, __TIME__);
+    app_sys_log_msg(0, 'D', "", "", 0, "\r\n");
 }
