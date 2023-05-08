@@ -1,2 +1,0 @@
-git submodule add https://github.com/lvgl/lvgl/tree/release/v8.1 lib_lvgl/lib_lvgl
-
