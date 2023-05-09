@@ -32,6 +32,8 @@ set(app_third_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Tetris
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Maze
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_self/study_record/Snake
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_json
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_json/lib_json
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_third/lib_lvgl/lib_lvgl
 )

@@ -2,3 +2,7 @@
 	path = Watch/app_third/lib_lvgl/lib_lvgl
 	url = https://github.com/lvgl/lvgl.git
 	branch = release/v8.2
+[submodule "Watch/app_third/lib_json/lib_json"]
+	path = Watch/app_third/lib_json/lib_json
+	url = https://github.com/DaveGamble/cJSON.git
+	branch = master

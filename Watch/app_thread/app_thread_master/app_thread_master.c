@@ -21,6 +21,7 @@
 #include "app_sys_pipe.h"
 #include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
+#include "app_sys_trace_text.h"
 #include "app_thread_adaptor.h"
 #include "app_thread_master.h"
 #include "app_module_system.h"
@@ -135,6 +136,7 @@ void app_thread_group_run(void)
     app_sys_log_ready();
     app_sys_timer_ready();
     app_sys_ext_mem_ready();
+    app_sys_trace_text_ready();
     app_sys_build_time();
     /* 就绪线程子模组 */
     app_thread_master_ready();

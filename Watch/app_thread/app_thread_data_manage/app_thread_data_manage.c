@@ -12,7 +12,6 @@
 #include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_data_manage.h"
-#include "app_sys_trace_text.h"
 #include "app_module_protocol.h"
 #include "app_module_transfer.h"
 #include "app_module_transfer_adaptor.h"
@@ -20,12 +19,18 @@
 #include "app_module_load.h"
 #include "app_module_shutdown.h"
 
+#include "cJSON.h"
+
 /*@brief 数据管理线程初始化
  */
 void app_thread_data_manage_ready(void)
 {
-    /* 模组初始化 */
-    app_sys_trace_text_ready();
+    /* cJSON组件初始化 */
+    cJSON_Hooks cjson_hooks = {
+        .malloc_fn = app_mem_alloc,
+        .free_fn   = app_mem_free,
+    };
+    cJSON_InitHooks(&cjson_hooks);
 }
 
 /*@brief 数据管理线程服务例程
