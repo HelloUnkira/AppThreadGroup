@@ -37,8 +37,8 @@ void app_thread_manage_routine(void)
     app_sem_t  *sem  = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync(app_thread_id_data_manage, &sem);
-    app_thread_get_pipe(app_thread_id_data_manage, &pipe);
+    app_thread_get_sync(app_thread_id_manage, &sem);
+    app_thread_get_pipe(app_thread_id_manage, &pipe);
     /* 因为有些准备动作只适合在子线程中完成 */
     /* 将其从上面的接口中推延到此处 */ {
     }
@@ -73,6 +73,20 @@ void app_thread_manage_routine(void)
             case app_thread_manage_load: {
                 /* 将系统敏感的资源加载到内存 */
                 app_module_load_process();
+                break;
+            }
+            case app_thread_manage_transfer: {
+                if (package.event == app_thread_manage_transfer_notify)
+                    app_module_transfer_notify(package.data);
+                if (package.event == app_thread_manage_transfer_respond)
+                    app_module_transfer_respond(package.data);
+                if (package.event == app_thread_manage_transfer_throw)
+                    app_module_transfer_throw(package.data);
+                if (package.event == app_thread_manage_transfer_dispatch)
+                    app_module_transfer_dispatch(package.data);
+                
+                if (package.dynamic)
+                    app_mem_free(package.data);
                 break;
             }
             default: {

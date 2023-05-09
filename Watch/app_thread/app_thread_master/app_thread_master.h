@@ -68,7 +68,7 @@ bool app_package_notify(app_package_t *package);
 typedef enum {
     app_thread_id_mix_irq,          /* 混合中断线程(priority:2) */
     app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
-    app_thread_id_data_manage,      /* 数据管理线程(priority:5) */
+    app_thread_id_manage,           /* 数据管理线程(priority:5) */
     app_thread_id_lvgl,             /* lvgl线程(priority:4) */
     /* 继续添加其他线程 */
     app_thread_id_number,              /* 占位符:子线程组数量 */

@@ -60,6 +60,8 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_dump
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_load
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_shutdown
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_transfer
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_protocol
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv/app_lv_drv_sdl

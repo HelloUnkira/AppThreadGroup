@@ -51,7 +51,7 @@ void app_module_dump_event(void)
     /* 向线程发送转储事件 */
     if (not_dump_yet) {
         app_package_t package = {
-            .thread = app_thread_id_data_manage,
+            .thread = app_thread_id_manage,
             .module = app_thread_manage_dump,
             .event  = 0,
         };

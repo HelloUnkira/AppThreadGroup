@@ -48,7 +48,7 @@ void app_module_load_event(void)
     /* 向线程发送加载事件 */
     if (not_load_yet) {
         app_package_t package = {
-            .thread = app_thread_id_data_manage,
+            .thread = app_thread_id_manage,
             .module = app_thread_manage_load,
             .event  = 0,
         };
