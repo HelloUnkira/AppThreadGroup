@@ -10,7 +10,7 @@
 #include "app_thread_master.h"
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
-#include "app_thread_data_manage.h"
+#include "app_thread_manage.h"
 #include "app_thread_lvgl.h"
 #include "app_module_clock.h"
 #include "app_module_stopwatch.h"

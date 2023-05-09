@@ -81,7 +81,7 @@ void app_module_remind_sedentary_xmin_update(void)
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     
-    APP_SYS_LOG_WARN("");
+    APP_SYS_LOG_INFO("");
     app_module_remind_sedentary_t remind_sedentary = {0};
     app_module_remind_sedentary_get(&remind_sedentary);
     /* 今天需要提醒 */

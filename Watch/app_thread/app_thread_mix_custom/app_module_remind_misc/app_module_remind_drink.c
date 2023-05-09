@@ -66,7 +66,7 @@ void app_module_remind_drink_xmin_update(void)
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     
-    APP_SYS_LOG_WARN("");
+    APP_SYS_LOG_INFO("");
     app_module_remind_drink_t remind_drink = {0};
     app_module_remind_drink_get(&remind_drink);
     /* 今天需要提醒 */

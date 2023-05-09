@@ -8,7 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_master.h"
-#include "app_thread_data_manage.h"
+#include "app_thread_manage.h"
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
@@ -49,7 +49,7 @@ void app_module_load_event(void)
     if (not_load_yet) {
         app_package_t package = {
             .thread = app_thread_id_data_manage,
-            .module = app_thread_data_manage_load,
+            .module = app_thread_manage_load,
             .event  = 0,
         };
         app_package_notify(&package);

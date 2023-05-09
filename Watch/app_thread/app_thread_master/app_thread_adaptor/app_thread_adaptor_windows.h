@@ -20,9 +20,9 @@ DWORD WINAPI app_thread_mix_custom_routine_adaptor(LPVOID lpParam)
     app_thread_mix_custom_routine();
 }
 
-DWORD WINAPI app_thread_data_manage_routine_adaptor(LPVOID lpParam)
+DWORD WINAPI app_thread_manage_routine_adaptor(LPVOID lpParam)
 {
-    app_thread_data_manage_routine();
+    app_thread_manage_routine();
 }
 
 DWORD WINAPI app_thread_lvgl_routine_adaptor(LPVOID lpParam)
@@ -52,9 +52,9 @@ app_thread_t app_thread_mix_custom = {
    .args     = NULL,
 };
 
-app_thread_t app_thread_data_manage = {
+app_thread_t app_thread_manage = {
    .priority = THREAD_PRIORITY_BELOW_NORMAL,
-   .routine  = app_thread_data_manage_routine_adaptor,
+   .routine  = app_thread_manage_routine_adaptor,
    .args     = NULL,
 };
 

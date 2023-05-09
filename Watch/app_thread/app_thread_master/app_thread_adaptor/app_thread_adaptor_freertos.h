@@ -14,8 +14,8 @@ static  StackType_t app_thread_mix_irq_stack[APP_THREAD_MIX_IRQ_STACK_SIZE];
 #define APP_THREAD_MIX_CUSTOM_STACK_SIZE  (1024)
 static  StackType_t app_thread_mix_custom_stack[APP_THREAD_MIX_CUSTOM_STACK_SIZE];
 
-#define APP_THREAD_DATA_MANAGE_STACK_SIZE   (1024)
-static  StackType_t app_thread_data_manage_stack[APP_THREAD_DATA_MANAGE_STACK_SIZE];
+#define APP_THREAD_MANAGE_STACK_SIZE   (1024)
+static  StackType_t app_thread_manage_stack[APP_THREAD_MANAGE_STACK_SIZE];
 
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  StackType_t app_thread_lvgl_stack[APP_THREAD_LVGL_STACK_SIZE];
@@ -39,9 +39,9 @@ void * app_thread_mix_custom_routine_adaptor(void *pvParameters)
     app_thread_mix_custom_routine();
 }
 
-void * app_thread_data_manage_routine_adaptor(void *pvParameters)
+void * app_thread_manage_routine_adaptor(void *pvParameters)
 {
-    app_thread_data_manage_routine();
+    app_thread_manage_routine();
 }
 
 void * app_thread_lvgl_routine_adaptor(void *pvParameters)
@@ -77,12 +77,12 @@ app_thread_t app_thread_mix_custom = {
     .name       = "app_thread_mix_custom",
 };
 
-app_thread_t app_thread_data_manage = {
-    .stack      = app_thread_data_manage_stack,
-    .stack_size = APP_THREAD_DATA_MANAGE_STACK_SIZE,
+app_thread_t app_thread_manage = {
+    .stack      = app_thread_manage_stack,
+    .stack_size = APP_THREAD_MANAGE_STACK_SIZE,
     .priority   = 5,
-    .task       = app_thread_data_manage_routine_adaptor,
-    .name       = "app_thread_data_manage",
+    .task       = app_thread_manage_routine_adaptor,
+    .name       = "app_thread_manage",
 };
 
 app_thread_t app_thread_lvgl = {

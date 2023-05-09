@@ -56,13 +56,10 @@ set(app_thread_path
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_alarm
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_remind_misc
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_mix_custom/app_module_do_not_disturb
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_dump
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_load
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_data/app_module_shutdown
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_protocol
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer
-    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_data_manage/app_module_protocol/app_module_transfer_adaptor
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_dump
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_load
+    ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_manage/app_module_storage/app_module_shutdown
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv
     ${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_drv/app_lv_drv_sdl
