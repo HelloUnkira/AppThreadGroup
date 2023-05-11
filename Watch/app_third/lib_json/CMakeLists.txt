@@ -1,6 +1,4 @@
 # cJSON 库:
-# git 根目录执行命令添加子仓库
-# git submodule add -f --branch release/v8.0 https://github.com/lvgl/lvgl.git Watch/app_third/lib_lvgl/lib_lvgl
 
 # 收集源,生成库,指定库的链接语言,添加库依赖
 file(GLOB_RECURSE SOURCES cJSON.c cJSON_Utils.c)

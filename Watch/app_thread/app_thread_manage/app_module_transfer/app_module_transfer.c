@@ -26,14 +26,16 @@ bool app_module_transfer_notify(void *json_object)
     char *json_stream = cJSON_Print(json_item);
     /* 检查JSON */
     #if APP_SYS_LOG_TRANSFER_CHECK
-    APP_SYS_LOG_INFO("app_module_respond json:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO("");
+    APP_SYS_LOG_INFO_RAW("json:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     APP_SYS_LOG_INFO_RAW(json_stream);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 销毁JSON对象 */
     cJSON_Delete(json_item);
     /* 压缩JSON数据流 */
     cJSON_Minify(json_stream);
-    /* 检查JSON */
     /* 传输JSON数据流 */
     return app_module_transfer_throw(json_stream);
 }
@@ -47,15 +49,22 @@ bool app_module_transfer_respond(uint8_t *json_stream)
     /* 解析JSON */
     cJSON *json_item = cJSON_Parse(json_stream);
     if (json_item == NULL) {
-        APP_SYS_LOG_ERROR("app_module_respond error:");
-        APP_SYS_LOG_ERROR("%s", json_stream);
+        char *error = cJSON_GetErrorPtr();
+        APP_SYS_LOG_ERROR("");
+        APP_SYS_LOG_ERROR_RAW("error:%s", error);
+        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_ERROR_RAW(json_stream);
+        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
         return false;
     }
     /* 检查JSON */
     #if APP_SYS_LOG_TRANSFER_CHECK
     char *json_format = cJSON_Print(json_item);
-    APP_SYS_LOG_INFO("app_module_respond json:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO("");
+    APP_SYS_LOG_INFO_RAW("json:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     APP_SYS_LOG_INFO_RAW(json_format);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     app_mem_free(json_format);
     #endif
     /* 派发JSON */
@@ -68,6 +77,15 @@ bool app_module_transfer_respond(uint8_t *json_stream)
  */
 bool app_module_transfer_throw(uint8_t *json_stream)
 {
+    /* 检查JSON */
+    #if APP_SYS_LOG_TRANSFER_CHECK
+    APP_SYS_LOG_INFO_RAW("json minify:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW(json_stream);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    #endif
+    /* 传给底层,发出去,或者继续转包 */
+    app_mem_free(json_stream);
 }
 
 /*@brief     协议适配层,派发协议数据
@@ -78,5 +96,10 @@ bool app_module_transfer_dispatch(void *json_object)
 {
     cJSON *json_item = json_object;
     
+    if (app_module_transfer_respond_system_clock(json_object))
+        return true;
+    
+    
     cJSON_Delete(json_item);
+    return false;
 }

@@ -80,13 +80,6 @@ void app_thread_manage_routine(void)
                     app_module_transfer_notify(package.data);
                 if (package.event == app_thread_manage_transfer_respond)
                     app_module_transfer_respond(package.data);
-                if (package.event == app_thread_manage_transfer_throw)
-                    app_module_transfer_throw(package.data);
-                if (package.event == app_thread_manage_transfer_dispatch)
-                    app_module_transfer_dispatch(package.data);
-                
-                if (package.dynamic)
-                    app_mem_free(package.data);
                 break;
             }
             default: {

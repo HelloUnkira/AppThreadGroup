@@ -91,6 +91,9 @@
 #define APP_SYS_LOG_ERROR_RAW(...)
 #endif
 
+/* 扩展:打印时用于换行的宏转换 */
+#define APP_SYS_LOG_LINE    "\r\n"
+
 /* 控制打印集合 */
 /* 无格式打印:{内容} */
 /* 带格式打印:[文件名][行数][级别]{内容}[换行] */

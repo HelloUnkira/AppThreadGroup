@@ -106,7 +106,7 @@ int main(int argc, char *argv[])
         {
             static uint64_t count = 0;
             if (count++ == 7 * 1000)
-                app_module_protocol_system_time();
+                app_module_protocol_notify(app_module_protocol_system_clock, 0);
         }
         /* 更新系统时钟(5s later) */
         {

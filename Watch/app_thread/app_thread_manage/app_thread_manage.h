@@ -11,8 +11,6 @@ typedef enum {  /* 线程模组 */
 typedef enum {  /* JSON传输模组事件 */
     app_thread_manage_transfer_notify,
     app_thread_manage_transfer_respond,
-    app_thread_manage_transfer_throw,
-    app_thread_manage_transfer_dispatch,
 } app_thread_manage_transfer_event_t;
 
 #endif

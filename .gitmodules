@@ -6,3 +6,7 @@
 	path = Watch/app_third/lib_json/lib_json
 	url = https://github.com/DaveGamble/cJSON.git
 	branch = master
+[submodule "Watch/app_third/lib_nanopb/lib_nanopb"]
+	path = Watch/app_third/lib_nanopb/lib_nanopb
+	url = https://github.com/nanopb/nanopb.git
+	branch = master
