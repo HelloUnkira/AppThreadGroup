@@ -1,6 +1,4 @@
 lib_lvgl/lib_lvgl
 lib_json/lib_json
 lib_nanopb/lib_nanopb
-lib_nanopb/nanopb-x86
-lib_nanopb/nanopb-x86.zip
-lib_nanopb/protoc.exe.lnk
+lib_nanopb/nanopb_x86

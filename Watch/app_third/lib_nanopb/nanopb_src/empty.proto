@@ -1,0 +1,16 @@
+
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+
+enum EmptyEnum {
+    EMPTY_DEFAULT=0;
+    EMPTY_NULL=1;
+    EMPTY_NONE=2;
+}
+
+message EmptyMessage {
+	string name = 1;
+	uint32 data32 = 2;	
+	string distributor = 3;
+	EmptyEnum status = 4;
+}
