@@ -11,6 +11,8 @@
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
 #include "app_module_transfer.h"
+#include "app_module_transfer_mix.h"
+#include "app_module_protocol.h"
 
 #include "cJSON.h"
 

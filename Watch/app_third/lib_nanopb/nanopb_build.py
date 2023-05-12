@@ -8,13 +8,15 @@
 import os
 import os.path
 
+compile = r'.\nanopb_x86\generator-bin\protoc.exe '
+execute = r'--proto_path=.\nanopb_src --nanopb_out=.\nanopb_out '
 
 def nanopb_recuse_build(path) -> None:
     for item in os.listdir(path):
         if os.path.isfile(path + '\\' + item):
             if item.split('.')[-1] == 'proto':
-                print(r'.\nanopb_x86\generator-bin\protoc.exe --nanopb_out=. ' + path + '\\' + item)
-                os.system(r'.\nanopb_x86\generator-bin\protoc.exe --nanopb_out=. ' + path + '\\' + item)
+                print(compile + execute + path + '\\' + item)
+                os.system(compile + execute + path + '\\' + item)
         if os.path.isdir(path + '\\' + item):
             nanopb_recuse_build(path + '\\' + item)
 

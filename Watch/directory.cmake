@@ -1,0 +1,36 @@
+# 将所有的文件搜索路径集中到此处
+
+# 摘要于网络资源
+# 自动查找头文件路径函数(去重)
+macro(FIND_TARGET_PATH target_path_set target_root_path)
+    set(${target_path_set} "")
+    file(GLOB_RECURSE target_path_list "${target_root_path}/*.h")
+    foreach(target_path ${target_path_list})
+        string(REGEX REPLACE "(.*)/.*" "\\1" target ${target_path})
+        if(IS_DIRECTORY ${target})
+            list(FIND ${target_path_set} ${target} hit_target)
+            if(${hit_target} LESS 0)
+                list(APPEND ${target_path_set} ${target})
+            else()
+            endif()
+        endif()
+    endforeach()
+endmacro()
+
+FIND_TARGET_PATH(app_ext_path     ${CMAKE_CURRENT_SOURCE_DIR}/app_ext)
+FIND_TARGET_PATH(app_sys_path     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys)
+FIND_TARGET_PATH(app_third_path   ${CMAKE_CURRENT_SOURCE_DIR}/app_third)
+FIND_TARGET_PATH(app_thread_path  ${CMAKE_CURRENT_SOURCE_DIR}/app_thread)
+FIND_TARGET_PATH(app_main_path    ${CMAKE_CURRENT_SOURCE_DIR}/app_main)
+
+# 编译器添加文件搜索路径
+# message(${app_ext_path})
+# message(${app_sys_path})
+# message(${app_third_path})
+# message(${app_thread_path})
+# message(${app_main_path})
+include_directories(${app_ext_path})
+include_directories(${app_sys_path})
+include_directories(${app_third_path})
+include_directories(${app_thread_path})
+include_directories(${app_main_path})

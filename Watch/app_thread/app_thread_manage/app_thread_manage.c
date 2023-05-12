@@ -15,6 +15,7 @@
 #include "app_module_dump.h"
 #include "app_module_load.h"
 #include "app_module_shutdown.h"
+#include "app_module_transfer.h"
 
 #include "cJSON.h"
 

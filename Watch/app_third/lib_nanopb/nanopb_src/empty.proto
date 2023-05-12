@@ -1,6 +1,8 @@
 
-syntax = "proto3";
-option optimize_for = LITE_RUNTIME;
+syntax = "proto2";
+import "nanopb/nanopb.proto";
+
+option java_package = "com.empty.nanopb";
 
 enum EmptyEnum {
     EMPTY_DEFAULT=0;
@@ -9,8 +11,8 @@ enum EmptyEnum {
 }
 
 message EmptyMessage {
-	string name = 1;
-	uint32 data32 = 2;	
-	string distributor = 3;
-	EmptyEnum status = 4;
+	required string name = 1;
+	required string distributor = 3;
+	optional uint32 data32 = 2 [(nanopb).int_size = IS_32];
+	optional EmptyEnum status = 4;
 }
