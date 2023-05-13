@@ -55,8 +55,14 @@
 #define APP_SYS_LOG_LOCAL_LEVEL     APP_SYS_LOG_GLOBAL_LEVEL
 #endif
 
+/* 全局持久化宏控限制 */
+/* 备注:不是所有的模组都需要使用该功能, 例如持久化模组自己 */
+#ifndef APP_SYS_LOG_RECORD_LIMIT
+#define APP_SYS_LOG_RECORD_LIMIT    0   /* 1:ENABLE,0:DISABLE */
+#endif
+
 /* 全局持久化宏控覆盖(依赖本地宏控) */
-#if     APP_SYS_LOG_RECORD_STATUS
+#if    (APP_SYS_LOG_RECORD_STATUS && !APP_SYS_LOG_RECORD_LIMIT)
 #define APP_SYS_LOG_RECORD_0        APP_SYS_LOG_RECORD_LEVEL <= 0 ? true : false
 #define APP_SYS_LOG_RECORD_1        APP_SYS_LOG_RECORD_LEVEL <= 1 ? true : false
 #define APP_SYS_LOG_RECORD_2        APP_SYS_LOG_RECORD_LEVEL <= 2 ? true : false
@@ -69,8 +75,7 @@
 #endif
 
 /* 全局宏控检测,局部宏控检测 */
-#if     APP_SYS_LOG_GLOBAL_STATUS
-#if     APP_SYS_LOG_LOCAL_STATUS
+#if    (APP_SYS_LOG_GLOBAL_STATUS && APP_SYS_LOG_LOCAL_STATUS)
 /* DEBUG */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 0
 #define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(true,  APP_SYS_LOG_RECORD_0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
@@ -92,7 +97,6 @@
 #define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(false, APP_SYS_LOG_RECORD_3, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* NONE */
-#endif
 #endif
 
 #ifndef APP_SYS_LOG_DEBUG

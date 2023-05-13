@@ -1,7 +1,8 @@
 /*实现目标:
  *    转存到外存的追踪日志信息
  */
-
+    
+#define APP_SYS_LOG_RECORD_LIMIT     1
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
@@ -111,28 +112,6 @@ static bool app_sys_trace_text_dump_one(app_sys_trace_item_t *item, uintptr_t of
     return true;
 }
 
-/*@brief 更新头部资源
- */
-static void app_sys_trace_text_reflush(void)
-{
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
-    /* 更新校验 */
-    app_mutex_take(&app_sys_trace_text_mutex);
-    app_sys_trace_text.crc32 = app_sys_crc32(app_sys_trace_text.buffer, app_sys_trace_info_size);
-    app_sys_trace_text_t trace_text = app_sys_trace_text;
-    app_mutex_give(&app_sys_trace_text_mutex);
-    /* 回写日志追踪队列结构以刷新外存 */
-    app_sys_ext_mem_write(ext_mem, ext_src->data_base, trace_text.buffer, app_sys_trace_text_size);
-    /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
-    APP_SYS_LOG_INFO("trace_text.zone:%lu", trace_text.info.zone);
-    APP_SYS_LOG_INFO("trace_text.head:%lu", trace_text.info.head);
-    APP_SYS_LOG_INFO("trace_text.tail:%lu", trace_text.info.tail);
-    APP_SYS_LOG_INFO("trace_text.peek:%lu", trace_text.info.peek);
-    #endif
-}
-
 /*@brief 已使用空间
  */
 static uintptr_t app_sys_trace_text_used(void)
@@ -151,6 +130,58 @@ static uintptr_t app_sys_trace_text_space(void)
     uintptr_t retval = app_sys_trace_text.info.zone - app_sys_trace_text.info.tail + app_sys_trace_text.info.head;
     app_mutex_give(&app_sys_trace_text_mutex);
     return retval;
+}
+
+/*@brief 记录点索引回退
+ */
+static void app_sys_trace_text_rewind(void)
+{
+    app_mutex_take(&app_sys_trace_text_mutex);
+    uintptr_t zone = app_sys_trace_text.info.zone;
+    uintptr_t head = app_sys_trace_text.info.head;
+    uintptr_t tail = app_sys_trace_text.info.tail;
+    app_mutex_give(&app_sys_trace_text_mutex);
+    /* 环形索引记录回退 */
+    bool not_update = true;
+    uintptr_t rewind_index = 1 << (sizeof(uintptr_t) * 8 - 1);
+    if (head >= rewind_index ||
+        tail >= rewind_index) {
+        rewind_index /= zone;
+        rewind_index *= zone;
+        head -= rewind_index;
+        tail -= rewind_index;
+        not_update = false;
+    }
+    if (not_update)
+        return;
+    app_mutex_take(&app_sys_trace_text_mutex);
+    app_sys_trace_text.info.head = head;
+    app_sys_trace_text.info.tail = tail;
+    app_mutex_give(&app_sys_trace_text_mutex);
+}
+
+/*@brief 更新头部资源
+ */
+static void app_sys_trace_text_reflush(void)
+{
+    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    /* 记录点索引回退 */
+    app_sys_trace_text_rewind();
+    /* 更新校验 */
+    app_mutex_take(&app_sys_trace_text_mutex);
+    app_sys_trace_text.crc32 = app_sys_crc32(app_sys_trace_text.buffer, app_sys_trace_info_size);
+    app_sys_trace_text_t trace_text = app_sys_trace_text;
+    app_mutex_give(&app_sys_trace_text_mutex);
+    /* 回写日志追踪队列结构以刷新外存 */
+    app_sys_ext_mem_write(ext_mem, ext_src->data_base, trace_text.buffer, app_sys_trace_text_size);
+    /*  */
+    #if APP_SYS_LOG_MODULE_CHECK
+    APP_SYS_LOG_INFO("trace_text.zone:%lu", trace_text.info.zone);
+    APP_SYS_LOG_INFO("trace_text.head:%lu", trace_text.info.head);
+    APP_SYS_LOG_INFO("trace_text.tail:%lu", trace_text.info.tail);
+    APP_SYS_LOG_INFO("trace_text.peek:%lu", trace_text.info.peek);
+    #endif
 }
 
 /*@brief 日志追踪队列复位
@@ -233,10 +264,10 @@ bool app_sys_trace_text_dump(char text[APP_MODULE_TRACE_TEXT_MAX], bool need_cov
         /* 加载一个条目,然后丢弃它 */
         app_sys_trace_item_t trace_item_temp;
         app_mutex_take(&app_sys_trace_text_mutex);
-        uintptr_t head = app_sys_trace_text.info.head;
         uintptr_t zone = app_sys_trace_text.info.zone;
-        retval = app_sys_trace_text_load_one(&trace_item_temp, head, zone, &head);
-        app_sys_trace_text.info.head = head;
+        uintptr_t head = app_sys_trace_text.info.head % zone, head_new = 0;
+        retval = app_sys_trace_text_load_one(&trace_item_temp, head, zone, &head_new);
+        app_sys_trace_text.info.head += (head_new - head) % zone;
         app_mutex_give(&app_sys_trace_text_mutex);
         /* 注意返回值,日志信息紊乱要终止 */
         if (!retval) {
@@ -248,10 +279,10 @@ bool app_sys_trace_text_dump(char text[APP_MODULE_TRACE_TEXT_MAX], bool need_cov
     }
     /* 现在空间已经足够,转储新条目 */
     app_mutex_take(&app_sys_trace_text_mutex);
-    uintptr_t tail = app_sys_trace_text.info.tail;
     uintptr_t zone = app_sys_trace_text.info.zone;
-    retval = app_sys_trace_text_dump_one(&trace_item, tail, zone, &tail);
-    app_sys_trace_text.info.tail = tail;
+    uintptr_t tail = app_sys_trace_text.info.tail % zone, tail_new = 0;
+    retval = app_sys_trace_text_dump_one(&trace_item, tail, zone, &tail_new);
+    app_sys_trace_text.info.tail += (tail_new - tail) % zone;
     app_mutex_give(&app_sys_trace_text_mutex);
     /* 注意返回值,日志信息紊乱要终止 */
     if (!retval) {
@@ -275,10 +306,10 @@ bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX])
     bool retval = false;
     app_sys_trace_item_t trace_item;
     app_mutex_take(&app_sys_trace_text_mutex);
-    uintptr_t head = app_sys_trace_text.info.head;
     uintptr_t zone = app_sys_trace_text.info.zone;
-    retval = app_sys_trace_text_load_one(&trace_item, head, zone, &head);
-    app_sys_trace_text.info.head = head;
+    uintptr_t head = app_sys_trace_text.info.head % zone, head_new = 0;
+    retval = app_sys_trace_text_load_one(&trace_item, head, zone, &head_new);
+    app_sys_trace_text.info.head += (head_new - head) % zone;
     app_mutex_give(&app_sys_trace_text_mutex);
     /* 注意返回值,日志信息紊乱要终止 */
     if (!retval) {
@@ -320,10 +351,10 @@ bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX])
     /* 加载一个条目 */
     app_sys_trace_item_t trace_item;
     app_mutex_take(&app_sys_trace_text_mutex);
-    uintptr_t peek = app_sys_trace_text.info.peek;
     uintptr_t zone = app_sys_trace_text.info.zone;
-    retval = app_sys_trace_text_load_one(&trace_item, peek, zone, &peek);
-    app_sys_trace_text.info.peek = peek;
+    uintptr_t peek = app_sys_trace_text.info.peek % zone, peek_new = 0;
+    retval = app_sys_trace_text_load_one(&trace_item, peek, zone, &peek_new);
+    app_sys_trace_text.info.peek += (peek_new - peek) % zone;
     app_mutex_give(&app_sys_trace_text_mutex);
     /* 注意返回值,日志信息紊乱要终止 */
     if (!retval) {
