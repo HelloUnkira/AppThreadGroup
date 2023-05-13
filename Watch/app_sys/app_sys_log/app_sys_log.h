@@ -1,6 +1,10 @@
 #ifndef APP_SYS_LOG_H
 #define APP_SYS_LOG_H
 
+/*
+ * 配置项起始
+ */
+
 /* 线程事件包执行时间检查(ms) */
 #define APP_SYS_LOG_EXECUTE         0
 #define APP_SYS_LOG_EXECUTE_MS      10
@@ -23,6 +27,18 @@
 /* 全局宏控等级(全局宏控覆盖开关启用时有效, 用于覆盖本地宏控等级) */
 #define APP_SYS_LOG_GLOBAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
+/* 全局宏控本地持久化开关 */
+/* 注意:它受外部宏控管制,完全使用它需要激活全局宏控覆盖 */
+#define APP_SYS_LOG_RECORD_STATUS       1   /* 1:ENABLE,0:DISABLE */
+/* 全局宏控本地持久化等级 */
+#define APP_SYS_LOG_RECORD_LEVEL        3   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+/* 全局宏控本地持久化单条目长度限制(包含结尾字符) */
+#define APP_SYS_LOG_RECORD_LENGTH       128
+
+/*
+ * 配置项结束
+ */
+
 /* 本地宏控(本文件被包含前配置) */
 #ifndef APP_SYS_LOG_LOCAL_STATUS
 #define APP_SYS_LOG_LOCAL_STATUS        0   /* 1:ENABLE,0:DISABLE */
@@ -39,28 +55,41 @@
 #define APP_SYS_LOG_LOCAL_LEVEL     APP_SYS_LOG_GLOBAL_LEVEL
 #endif
 
-/* 全局打印宏控检测,局部打印宏控检测 */
+/* 全局持久化宏控覆盖(依赖本地宏控) */
+#if     APP_SYS_LOG_RECORD_STATUS
+#define APP_SYS_LOG_RECORD_0        APP_SYS_LOG_RECORD_LEVEL <= 0 ? true : false
+#define APP_SYS_LOG_RECORD_1        APP_SYS_LOG_RECORD_LEVEL <= 1 ? true : false
+#define APP_SYS_LOG_RECORD_2        APP_SYS_LOG_RECORD_LEVEL <= 2 ? true : false
+#define APP_SYS_LOG_RECORD_3        APP_SYS_LOG_RECORD_LEVEL <= 3 ? true : false
+#else
+#define APP_SYS_LOG_RECORD_0        false
+#define APP_SYS_LOG_RECORD_1        false
+#define APP_SYS_LOG_RECORD_2        false
+#define APP_SYS_LOG_RECORD_3        false
+#endif
+
+/* 全局宏控检测,局部宏控检测 */
 #if     APP_SYS_LOG_GLOBAL_STATUS
 #if     APP_SYS_LOG_LOCAL_STATUS
 /* DEBUG */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 0
-#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(1, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_DEBUG(...)      app_sys_log_msg(true,  APP_SYS_LOG_RECORD_0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_DEBUG_RAW(...)  app_sys_log_msg(false, APP_SYS_LOG_RECORD_0, 'D', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* INFO */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 1
-#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(0, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_INFO(...)       app_sys_log_msg(true,  APP_SYS_LOG_RECORD_1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_INFO_RAW(...)   app_sys_log_msg(false, APP_SYS_LOG_RECORD_1, 'I', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* WARN */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 2
-#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(1, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(0, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_WARN(...)       app_sys_log_msg(true,  APP_SYS_LOG_RECORD_2, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_WARN_RAW(...)   app_sys_log_msg(false, APP_SYS_LOG_RECORD_2, 'W', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* ERROR */
 #if     APP_SYS_LOG_LOCAL_LEVEL <= 3
-#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(1, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
-#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(0, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_ERROR(...)      app_sys_log_msg(true,  APP_SYS_LOG_RECORD_3, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
+#define APP_SYS_LOG_ERROR_RAW(...)  app_sys_log_msg(false, APP_SYS_LOG_RECORD_3, 'E', __FILE__, __func__, __LINE__, __VA_ARGS__)
 #endif
 /* NONE */
 #endif
@@ -91,17 +120,26 @@
 #define APP_SYS_LOG_ERROR_RAW(...)
 #endif
 
-/* 扩展:打印时用于换行的宏转换 */
+/* 扩展:日志换行的宏转换 */
 #define APP_SYS_LOG_LINE    "\r\n"
 
-/* 控制打印集合 */
-/* 无格式打印:{内容} */
-/* 带格式打印:[文件名][行数][级别]{内容}[换行] */
+typedef struct {
+    void (*message1)(const char *format, ...);
+    void (*message2)(const char *format, va_list list);
+    void (*persistent)(const char *text);
+} app_sys_log_t;
+
+/*@brief 日志模组初始化
+ *       内部使用: 被线程使用
+ */
+void app_sys_log_ready(app_sys_log_t sys_log);
 
 /*@brief     格式日志输出接口
+ *           内部使用: 被宏函数使用
  *           无格式打印:{内容}
  *           带格式打印:[文件名][行数][级别]{内容}[换行]
  *@param[in] status 日志信息是否带格式
+ *@param[in] record 日志信息是否需记录
  *@param[in] file   日志信息输出文件名
  *@param[in] line   日志信息输出文件内行数
  *@param[in] func   日志信息输出文件内函数名
@@ -109,12 +147,7 @@
  *@param[in] format 日志信息格式化信息
  *@param[in] ...    日志信息信息变参
  */
-void app_sys_log_msg(unsigned char status, char flag, const char *file, const char *func, uint32_t line, const char *format, ...);
-
-/*@brief 日志模组初始化
- *       内部使用: 被线程使用
- */
-void app_sys_log_ready(void);
+void app_sys_log_msg(bool status, bool record, char flag, const char *file, const char *func, uint32_t line, const char *format, ...);
 
 /*@brief     断言
  *@param[in] file 文件名

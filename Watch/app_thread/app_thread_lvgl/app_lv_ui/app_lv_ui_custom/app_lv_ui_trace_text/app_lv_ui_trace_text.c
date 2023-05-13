@@ -81,6 +81,8 @@ static void app_lv_ui_trace_text_show(void *scene)
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, app_lv_ui_ver_pct(2));
         /* trace_text */
         lv_obj_t *text_box = lv_obj_create(app_lv_ui_res_local->scene);
+        app_lv_ui_style_object(text_box);
+        lv_obj_set_style_bg_color(text_box, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
         lv_obj_set_size(text_box, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(63));
         lv_obj_align_to(text_box, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         app_lv_ui_res_local->text = app_lv_ui_style_label(text_box);

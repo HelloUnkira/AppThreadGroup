@@ -2,7 +2,7 @@
 #define APP_MODULE_TRACE_TEXT_H
 
 /* 单次存储日志文本最大长度(包括字符串结尾'\0') */
-#define APP_MODULE_TRACE_TEXT_MAX    128/*1*/
+#define APP_MODULE_TRACE_TEXT_MAX    128
 
 typedef union {
     uint8_t buffer[0];
@@ -54,5 +54,13 @@ bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX]);
  *@retval     成功或者失败
  */
 bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX]);
+
+/*@brief 日志持久化转接口
+ *       暂时写在此处,没有找到好的地方容纳它
+ */
+static inline app_sys_trace_log_persistent(char *text)
+{
+    app_sys_trace_text_dump(text, true);
+}
 
 #endif

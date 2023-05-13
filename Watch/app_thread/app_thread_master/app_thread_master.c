@@ -133,7 +133,12 @@ void app_thread_group_run(void)
         app_sem_process(&app_thread_sem_dst[idx]);
         app_sem_process(&app_thread_sem_src);
     /* 就绪系统子模组 */
-    app_sys_log_ready();
+    app_sys_log_t sys_log = {
+        .message1   = app_ext_arch_log_msg1,
+        .message2   = app_ext_arch_log_msg2,
+        .persistent = app_sys_trace_log_persistent,
+    };
+    app_sys_log_ready(sys_log);
     app_sys_timer_ready();
     app_sys_ext_mem_ready();
     app_sys_trace_text_ready();

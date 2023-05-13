@@ -7,5 +7,25 @@
 #include "app_ext_lib.h"
 
 #if APP_ARCH_IS_PC
-/* 继续补充 */
+
+/*@brief     变参函数式LOG输出接口
+ *@param[in] format 格式化字符串
+ */
+void app_ext_arch_log_msg1(const char *format, ...)
+{
+    va_list  list;
+    va_start(list, format);
+    vprintf(format, list);
+    va_end(list);
+}
+
+/*@brief     变参列表式LOG输出接口
+ *@param[in] format 格式化字符串
+ *@param[in] list   变参列表
+ */
+void app_ext_arch_log_msg2(const char *format, va_list list)
+{
+    vprintf(format, list);
+}
+
 #endif
