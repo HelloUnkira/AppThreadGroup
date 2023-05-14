@@ -29,10 +29,16 @@ static void app_lv_ui_btn_l_cb(lv_event_t *e)
     case LV_EVENT_CLICKED: {
         /* 循环提出所有条目 */
         lv_label_set_text(app_lv_ui_res_local->text, "");
-        char *str = NULL;
+        char *str = NULL, *str_new = NULL;
         do {
             str = app_lv_ui_trace_text_presenter.peek_one();
-            lv_label_ins_text(app_lv_ui_res_local->text, strlen(lv_label_get_text(app_lv_ui_res_local->text)), str);
+            uint32_t size = strlen(str) + 2;
+            str_new = lv_mem_alloc(size);
+            lv_memset(str_new, 0, size);
+            lv_memcpy(str_new, str, size);
+            str_new[size - 2] = '\n';
+            lv_label_ins_text(app_lv_ui_res_local->text, strlen(lv_label_get_text(app_lv_ui_res_local->text)), str_new);
+            lv_mem_free(str_new);
         } while (strlen(str) != 0);
         break;
     }

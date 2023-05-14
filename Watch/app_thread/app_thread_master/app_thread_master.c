@@ -34,6 +34,37 @@ static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
 static app_mutex_t app_thread_mutex = {0};
+/* 计算子线程工作时间(ms) */
+#if APP_SYS_LOG_EXECUTE
+static uint64_t app_thread_execute_ms[app_thread_id_number] = {0};
+#endif
+
+/*@brief        设置子线程执行时间
+ *@param[in]    uint32_t thread 线程ID
+ *@param[out]   子线程执行时间(ms)
+ */
+#if APP_SYS_LOG_EXECUTE
+void app_thread_execute_ms_set(uint32_t thread, uint64_t *execute_ms)
+{
+    /* 注意:这里的时间设置为累加设置 */
+    app_mutex_take(&app_thread_mutex);
+    app_thread_execute_ms[thread] += *execute_ms;
+    app_mutex_give(&app_thread_mutex);
+}
+#endif
+
+/*@brief        获得子线程执行时间
+ *@param[in]    uint32_t thread 线程ID
+ *@param[out]   子线程执行时间(ms)
+ */
+#if APP_SYS_LOG_EXECUTE
+void app_thread_execute_ms_get(uint32_t thread, uint64_t *execute_ms)
+{
+    app_mutex_take(&app_thread_mutex);
+    *execute_ms = app_thread_execute_ms[thread];
+    app_mutex_give(&app_thread_mutex);
+}
+#endif
 
 /*@brief        通过从线程ID获得管道同步资源
  *@param[in]    thread 线程ID

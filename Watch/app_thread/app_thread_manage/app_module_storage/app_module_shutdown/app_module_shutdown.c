@@ -3,7 +3,9 @@
  */
 
 #include "app_ext_lib.h"
+#include "app_sys_log.h"
 #include "app_sys_trace_text.h"
+#include "app_thread_master.h"
 #include "app_module_system.h"
 #include "app_module_clock.h"
 
@@ -13,23 +15,46 @@ void app_module_shutdown_dump(void)
 {
     char text[APP_MODULE_TRACE_TEXT_MAX] = {0};
     snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
-             "shutdown trace:\r\n");
+             "shutdown trace:");
     app_sys_trace_text_dump(text, true);
     /* 当次关机条件信息: */
     snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
-             "shutdown condition:%d\r\n",
-             app_module_system_status_get());
+             "shutdown condition:%" PRIu8,
+              app_module_system_status_get());
     app_sys_trace_text_dump(text, true);
     /* 线程组工作时间: */
     snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
-             "app thread group work time:%lu\n\n",
+             "app thread group work time:%" PRIu64,
               app_module_clock_get_sec_tick());
     app_sys_trace_text_dump(text, true);
+    #if APP_SYS_LOG_EXECUTE
+    uint64_t execute_ms = 0;
+    app_thread_execute_ms_get(app_thread_id_mix_irq, &execute_ms);
+    snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
+             "app_thread_id_mix_irq:%.4lf",
+            (double)execute_ms / 1000.0);
+    app_sys_trace_text_dump(text, true);
+    app_thread_execute_ms_get(app_thread_id_mix_custom, &execute_ms);
+    snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
+             "app_thread_id_mix_custom:%.4lf",
+            (double)execute_ms / 1000.0);
+    app_sys_trace_text_dump(text, true);
+    app_thread_execute_ms_get(app_thread_id_manage, &execute_ms);
+    snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
+             "app_thread_id_manage:%.4lf",
+            (double)execute_ms / 1000.0);
+    app_sys_trace_text_dump(text, true);
+    app_thread_execute_ms_get(app_thread_id_lvgl, &execute_ms);
+    snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
+             "app_thread_id_lvgl:%.4lf",
+            (double)execute_ms / 1000.0);
+    app_sys_trace_text_dump(text, true);
+    #endif
     /* 关机的时间信息: */
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     snprintf(text, APP_MODULE_TRACE_TEXT_MAX,
-             "dtime:%d-%d-%d;%d;%d:%d:%d\r\n",
+             "dtime:%u-%u-%u;%u;%u:%u:%u",
              clock.year, clock.month,  clock.day, clock.week,
              clock.hour, clock.minute, clock.second);
     app_sys_trace_text_dump(text, true);

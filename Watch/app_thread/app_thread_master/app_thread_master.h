@@ -34,6 +34,22 @@ typedef enum {
     app_package_priority_real_time,
 } app_package_priority_t;
 
+/*@brief        设置子线程执行时间
+ *@param[in]    uint32_t thread 线程ID
+ *@param[out]   子线程执行时间(ms)
+ */
+#if APP_SYS_LOG_EXECUTE
+void app_thread_execute_ms_set(uint32_t thread, uint64_t *execute_ms);
+#endif
+
+/*@brief        获得子线程执行时间
+ *@param[in]    uint32_t thread 线程ID
+ *@param[out]   子线程执行时间(ms)
+ */
+#if APP_SYS_LOG_EXECUTE
+void app_thread_execute_ms_get(uint32_t thread, uint64_t *execute_ms);
+#endif
+
 /*@brief        通过从线程ID获得与主线程的同步资源
  *@param[in]    thread 线程ID
  *@param[out]   sem 信号量
