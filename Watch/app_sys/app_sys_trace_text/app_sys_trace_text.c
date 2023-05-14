@@ -143,7 +143,7 @@ static void app_sys_trace_text_rewind(void)
     app_mutex_give(&app_sys_trace_text_mutex);
     /* 环形索引记录回退 */
     bool not_update = true;
-    uintptr_t rewind_index = 1 << (sizeof(uintptr_t) * 8 - 1);
+    uintptr_t rewind_index = (uintptr_t)1 << (sizeof(uintptr_t) * 8 - 1);
     if (head >= rewind_index ||
         tail >= rewind_index) {
         rewind_index /= zone;

@@ -102,11 +102,15 @@ int main(int argc, char *argv[])
         /* 居然是最简单的做法...... */
         app_main_fake_hard_clock_irq();
         app_delay_us(1000);
-        /* 测试目标(7s later) */
+        /* 测试协议目标(7s later) */
         {
             static uint64_t count = 0;
-            if (count++ == 7 * 1000)
-                app_module_protocol_notify(app_module_protocol_system_clock, 0);
+            if (count++ == 7 * 1000) {
+                app_module_protocol_t protocol = {
+                    .notify.type = app_module_protocol_system_clock,
+                };
+                app_module_protocol_notify(&protocol);
+            }
         }
         /* 更新系统时钟(5s later) */
         {

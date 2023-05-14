@@ -10,16 +10,17 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
-#include "app_module_transfer.h"
-#include "app_module_transfer_mix.h"
-
+#include "app_module_protocol.h"
 #include "app_module_clock.h"
 
+#if      APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
+#include "app_json_xfer.h"
+#include "app_json_xfer_mix.h"
 
 /*@brief 打包传输系统时钟
  */
-void app_module_transfer_notify_system_clock(void)
+void app_json_xfer_notify_system_clock(void)
 {
     char clock_string[20] = {0};
     app_module_clock_t clock = {0};
@@ -39,24 +40,14 @@ void app_module_transfer_notify_system_clock(void)
     cJSON_AddNumberToObject(src_item, "zone",   clock.zone_sec);
     cJSON_AddNumberToObject(src_item, "is_24",  clock.is_24);
     /* 传输对象发送通知 */
-    app_package_t package = {
-        .thread  = app_thread_id_manage,
-        .module  = app_thread_manage_transfer,
-        .event   = app_thread_manage_transfer_notify,
-        .data    = json_item,
-        .size    = 0,
-    };
-    app_package_notify(&package);
+    app_json_xfer_notify(json_item);
 }
 
 /*@brief 传输接收系统时钟
  */
-bool app_module_transfer_respond_system_clock(void *json_object)
+bool app_json_xfer_respond_system_clock(void *json_object)
 {
     cJSON *json_item = json_object;
-    /* 匹配是否为目标包 */
-    if (strcmp(cJSON_GetStringValue(cJSON_GetObjectItem(json_item, "type")), "sys clk") != 0)
-        return false;
     /* 获得目标包数据 */
     cJSON *src_item = cJSON_GetObjectItem(json_item, "src");
     /* 解析目标包数据 */
@@ -74,3 +65,6 @@ bool app_module_transfer_respond_system_clock(void *json_object)
     app_module_clock_set_system_clock(&clock);
     return true;
 }
+
+#endif
+

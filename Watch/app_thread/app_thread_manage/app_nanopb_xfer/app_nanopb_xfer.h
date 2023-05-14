@@ -1,6 +1,7 @@
-#ifndef EMPTY_EXAMPLE_H
-#define EMPTY_EXAMPLE_H
+#ifndef APP_NANOPB_XFER_H
+#define APP_NANOPB_XFER_H
 
+/* 创建nanopb encode流程函数 */
 #define APP_NANOPB_ENCODE(msg_type_field, msg_type, msg_name)       \
 static inline uint32_t app_nanopb_encode_##msg_type_field##(msg_type *msg_name, uint8_t *buffer, uint32_t size)     \
 {                                                                   \
@@ -10,6 +11,7 @@ static inline uint32_t app_nanopb_encode_##msg_type_field##(msg_type *msg_name, 
     return stream.bytes_written;                                    \
 }
 
+/* 创建nanopb decode流程函数 */
 #define APP_NANOPB_DECODE(msg_type_field, msg_type, msg_name)       \
 static inline uint32_t app_nanopb_decode_##msg_type_field##(msg_type *msg_name, uint8_t *buffer, uint32_t size)     \
 {                                                                   \

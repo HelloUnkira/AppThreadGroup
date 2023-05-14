@@ -12,7 +12,7 @@
 #define APP_SYS_LOG_THREAD_CHECK    1
 #define APP_SYS_LOG_MODULE_CHECK    1
 /* 线程交互数据流检查 */
-#define APP_SYS_LOG_TRANSFER_CHECK  1
+#define APP_SYS_LOG_PROTOCOL_CHECK  1
 
 /* 全局断言检查开关 */
 #define APP_SYS_ASSERT_STATUS           1   /* 1:ENABLE,0:DISABLE */

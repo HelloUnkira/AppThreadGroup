@@ -5,12 +5,16 @@ typedef enum {  /* 线程模组 */
     app_thread_manage_system = 0,  /* 系统模组 */
     app_thread_manage_dump,        /* 资源转储模组 */
     app_thread_manage_load,        /* 资源加载模组 */
-    app_thread_manage_transfer,    /* JSON传输模组 */
+    app_thread_manage_protocol,    /* 协议传输模组 */
 } app_thread_manage_module_t;
 
-typedef enum {  /* JSON传输模组事件 */
-    app_thread_manage_transfer_notify,
-    app_thread_manage_transfer_respond,
-} app_thread_manage_transfer_event_t;
+typedef enum {  /* 协议传输模组事件 */
+    app_thread_manage_protocol_notify,
+    app_thread_manage_protocol_respond,
+} app_thread_manage_protocol_event_t;
+
+/* 序列化及反序列化传输协议 */
+#define APP_MODULE_PROTOCOL_USE_JSON       1
+#define APP_MODULE_PROTOCOL_USE_NANOPB     0
 
 #endif

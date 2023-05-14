@@ -15,20 +15,14 @@
 #include "app_module_dump.h"
 #include "app_module_load.h"
 #include "app_module_shutdown.h"
-#include "app_module_transfer.h"
-
-#include "cJSON.h"
+#include "app_module_protocol.h"
 
 /*@brief 数据管理线程初始化
  */
 void app_thread_manage_ready(void)
 {
-    /* cJSON组件初始化 */
-    cJSON_Hooks cjson_hooks = {
-        .malloc_fn = app_mem_alloc,
-        .free_fn   = app_mem_free,
-    };
-    cJSON_InitHooks(&cjson_hooks);
+    /* 模组初始化 */
+    app_module_protocol_ready();
 }
 
 /*@brief 数据管理线程服务例程
@@ -76,11 +70,13 @@ void app_thread_manage_routine(void)
                 app_module_load_process();
                 break;
             }
-            case app_thread_manage_transfer: {
-                if (package.event == app_thread_manage_transfer_notify)
-                    app_module_transfer_notify(package.data);
-                if (package.event == app_thread_manage_transfer_respond)
-                    app_module_transfer_respond(package.data);
+            case app_thread_manage_protocol: {
+                if (package.event == app_thread_manage_protocol_notify)
+                    app_module_protocol_notify_handler(package.data, package.size);
+                if (package.event == app_thread_manage_protocol_respond)
+                    app_module_protocol_respond_handler(package.data, package.size);
+                if (package.dynamic)
+                    app_mem_free(package.data);
                 break;
             }
             default: {

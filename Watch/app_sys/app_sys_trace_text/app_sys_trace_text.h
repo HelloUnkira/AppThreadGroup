@@ -58,7 +58,7 @@ bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX]);
 /*@brief 日志持久化转接口
  *       暂时写在此处,没有找到好的地方容纳它
  */
-static inline app_sys_trace_log_persistent(char *text)
+static inline void app_sys_trace_log_persistent(char *text)
 {
     app_sys_trace_text_dump(text, true);
 }

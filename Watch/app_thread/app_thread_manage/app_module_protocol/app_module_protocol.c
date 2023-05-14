@@ -10,28 +10,136 @@
 #include "app_sys_log.h"
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
-#include "app_module_transfer.h"
-#include "app_module_transfer_mix.h"
 #include "app_module_protocol.h"
 
+#if 0
+#elif APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
+#include "app_json_xfer.h"
+#include "app_json_xfer_mix.h"
+#elif APP_MODULE_PROTOCOL_USE_NANOPB
+#else
+#endif
 
 /*@brief     传输协议
- *@param[in] type   传输类型
- *@param[in] status 传输流程状态,内部约定
+ *@param[in] protocol 传输协议包(栈资源,非堆资源或静态资源)
  */
-void app_module_protocol_notify(uint32_t type, uint32_t status)
+void app_module_protocol_notify(app_module_protocol_t *protocol)
 {
-    switch (type) {
+    app_module_protocol_t *protocol_new = app_mem_alloc(sizeof(app_module_protocol_t));
+    memcpy(protocol_new, protocol, sizeof(app_module_protocol_t));
+    /* 传输对象发送通知 */
+    app_package_t package = {
+        .thread  = app_thread_id_manage,
+        .module  = app_thread_manage_protocol,
+        .event   = app_thread_manage_protocol_notify,
+        .dynamic = true,
+        .data    = protocol_new,
+        .size    = sizeof(app_module_protocol_t),
+    };
+    app_package_notify(&package);
+}
+
+/*@brief     传输协议
+ *@param[in] protocol 传输协议包(栈资源,非堆资源或静态资源)
+ */
+void app_module_protocol_respond(app_module_protocol_t *protocol)
+{
+    app_module_protocol_t *protocol_new = app_mem_alloc(sizeof(app_module_protocol_t));
+    memcpy(protocol_new, protocol, sizeof(app_module_protocol_t));
+    /* 传输对象发送通知 */
+    app_package_t package = {
+        .thread  = app_thread_id_manage,
+        .module  = app_thread_manage_protocol,
+        .event   = app_thread_manage_protocol_respond,
+        .dynamic = true,
+        .data    = protocol_new,
+        .size    = sizeof(app_module_protocol_t),
+    };
+    app_package_notify(&package);
+}
+
+/*@brief     传输协议
+ *@param[in] data 传输数据
+ *@param[in] size 传输数据大小
+ */
+void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
+{
+    app_module_protocol_t *protocol = (void *)data;
+    
+    #if 0
+    #elif APP_MODULE_PROTOCOL_USE_JSON
+    switch (protocol->notify.type) {
     case app_module_protocol_system_clock: {
-         app_module_transfer_notify_system_clock();
+         app_json_xfer_notify_system_clock();
          break;
     }
     default: {
         #if APP_SYS_LOG_MODULE_CHECK
-        APP_SYS_LOG_ERROR("protocol have unknown type:%d", type);
+        APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
         #endif
         break;
     }
     }
+    #elif APP_MODULE_PROTOCOL_USE_NANOPB
+    switch (protocol->notify.type) {
+    case app_module_protocol_system_clock: {
+         break;
+    }
+    default: {
+        #if APP_SYS_LOG_MODULE_CHECK
+        APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
+        #endif
+        break;
+    }
+    }
+    #else
+    #error "app module protocol is unknown"
+    #endif
+}
+
+/*@brief     传输协议
+ *@param[in] data 传输数据
+ *@param[in] size 传输数据大小
+ */
+void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
+{
+    app_module_protocol_t *protocol = (void *)data;
+    /* 检查数据流 */
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO_RAW("size:%d", protocol->respond.size);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW("data:%s", protocol->respond.data);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    #endif
+    
+    #if 0
+    #elif APP_MODULE_PROTOCOL_USE_JSON
+    app_json_xfer_respond(protocol->respond.data);
+    #elif APP_MODULE_PROTOCOL_USE_NANOPB
+    #else
+    #error "app module protocol is unknown"
+    #endif
+    
+    if (protocol->respond.dynamic)
+        app_mem_free(protocol->respond.data);
+}
+
+/*@brief 系统时钟模组初始化
+ *       内部使用: 被namage线程使用
+ */
+void app_module_protocol_ready(void)
+{
+    #if 0
+    #elif APP_MODULE_PROTOCOL_USE_JSON
+    /* cJSON组件初始化 */
+    cJSON_Hooks cjson_hooks = {
+        .malloc_fn = app_mem_alloc,
+        .free_fn   = app_mem_free,
+    };
+    cJSON_InitHooks(&cjson_hooks);
+    #elif APP_MODULE_PROTOCOL_USE_NANOPB
+    #else
+    #error "app module protocol is unknown"
+    #endif
 }
