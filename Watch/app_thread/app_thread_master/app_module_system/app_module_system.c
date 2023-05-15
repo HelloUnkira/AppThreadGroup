@@ -17,6 +17,7 @@
 #include "app_module_clock.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
+
 #include "app_lv_event.h"
 
 static    bool app_module_system_dlps_exec = false;
@@ -147,11 +148,4 @@ void app_module_system_1msec_update(uint32_t count)
         uint64_t utc_new = 0; /* 在此处获取RTC的UTC */
         app_module_clock_1s_update(utc_new);
     }
-    /* lvgl tick source */
-    if (count % LV_SCHED_TICK_INC == 0)
-        app_lv_tick_inc_update();
-    if (count % LV_SCHED_TICK_EXEC == 0)
-        app_lv_tick_exec_update();
-    if (count % LV_SCHED_DRV_EVENT == 0)
-        app_lv_drv_update();
 }

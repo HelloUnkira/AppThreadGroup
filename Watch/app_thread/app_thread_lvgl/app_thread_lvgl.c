@@ -21,6 +21,7 @@
 #include "lv_drv_conf.h"
 #include "app_lv_drv.h"
 #include "app_lv_event.h"
+#include "app_lv_timer.h"
 #include "app_lv_scene.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_style.h"
@@ -41,6 +42,8 @@ void app_thread_lvgl_ready(void)
         app_lv_driver_ready();
     #endif
     /* 模组初始化 */
+    app_lv_timer_ready();
+    /* 模组初始化 */
     app_lv_ui_check_time_ready();
 }
 
@@ -59,6 +62,8 @@ void app_thread_lvgl_routine(void)
         #if APP_LV_DRV_USE_WIN == 1
             app_lv_driver_ready();
         #endif
+        /* 初始化启动lvgl调度定时器 */
+        app_lv_timer_start();
     }
     /* 主流程 */
     while (true) {
@@ -104,7 +109,7 @@ void app_thread_lvgl_routine(void)
                     /* 系统对于此事件包的处理负载过大,主动丢弃一部分相同的事件包 */
                     /* 这是无奈之举,应该避免事件包的丢弃,这会对事件系统产生危害 */
                     /* 对于此处的影响是:适应性降帧 */
-                    if (ms > APP_SYS_LOG_EXECUTE_MS) {
+                    if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS) {
                         uint32_t discard_cnt = ms / LV_SCHED_TICK_EXEC + 1;
                         for (uint32_t idx = 0; idx < discard_cnt; idx++) {
                             if (app_sys_pipe_package_num(pipe) != 0)
@@ -229,7 +234,7 @@ void app_thread_lvgl_routine(void)
             #if APP_SYS_LOG_EXECUTE_CHECK
             uint32_t ms = app_execute_ms(&execute_ms, false);
             /* 如果我们已经手动处理了该事件包,无需再检查 */
-            if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {
+            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_ms_remind) {
                 APP_SYS_LOG_WARN("thread lvgl package execute %d ms", ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
                 APP_SYS_LOG_WARN("package module:%u", package.module);

@@ -154,7 +154,7 @@ void app_thread_mix_custom_routine(void)
             /* 计算事件处理时间(结束) */
             #if APP_SYS_LOG_EXECUTE_CHECK
             uint32_t ms = app_execute_ms(&execute_ms, false);
-            if (ms > APP_SYS_LOG_EXECUTE_MS && execute_ms_remind) {
+            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_ms_remind) {
                 APP_SYS_LOG_WARN("thread mix custom package execute %d ms", ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
                 APP_SYS_LOG_WARN("package module:%u", package.module);

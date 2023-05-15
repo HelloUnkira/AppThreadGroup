@@ -7,6 +7,9 @@
 #include "app_thread_master.h"
 #include "app_thread_lvgl.h"
 
+#include "lvgl.h"
+#include "app_lv_event.h"
+
 /*@brief lvgl tick更新
  */
 void app_lv_tick_inc_update(void)
