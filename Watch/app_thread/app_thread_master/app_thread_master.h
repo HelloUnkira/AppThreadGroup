@@ -39,7 +39,7 @@ typedef enum {
  *@param[out]   子线程执行时间(ms)
  */
 #if APP_SYS_LOG_EXECUTE
-void app_thread_execute_ms_set(uint32_t thread, uint64_t *execute_ms);
+void app_thread_execute_us_set(uint32_t thread, double *execute_us);
 #endif
 
 /*@brief        获得子线程执行时间
@@ -47,7 +47,7 @@ void app_thread_execute_ms_set(uint32_t thread, uint64_t *execute_ms);
  *@param[out]   子线程执行时间(ms)
  */
 #if APP_SYS_LOG_EXECUTE
-void app_thread_execute_ms_get(uint32_t thread, uint64_t *execute_ms);
+void app_thread_execute_us_get(uint32_t thread, double *execute_us);
 #endif
 
 /*@brief        通过从线程ID获得与主线程的同步资源

@@ -1,0 +1,36 @@
+syntax = "proto2";
+import "nanopb/nanopb.proto";
+option java_package = "com.app_pb_msg_mix.nanopb";
+option java_outer_classname = "AppPB_MsgMixProto";
+/* (协议版本,依赖包,Java包字段:Java编译时使用) */
+
+/* 系统时钟消息(日历时间) */
+message AppPB_SystemClock {
+    /* 系统时钟制式 */
+    enum Mode {
+        IS_12=0;
+        IS_24=1;
+    }
+    required uint64 year   = 1 [(nanopb).int_size = IS_16, default = 2023];     //年(UTC的0时区)
+    required uint64 month  = 2 [(nanopb).int_size = IS_8,  default = 1];        //月(UTC的0时区)
+    required uint64 day    = 3 [(nanopb).int_size = IS_8,  default = 1];        //日(UTC的0时区)
+    required uint64 hour   = 4 [(nanopb).int_size = IS_8,  default = 0];        //时(UTC的0时区)
+    required uint64 minute = 5 [(nanopb).int_size = IS_8,  default = 0];        //分(UTC的0时区)
+    required uint64 second = 6 [(nanopb).int_size = IS_8,  default = 0];        //秒(UTC的0时区)
+    required sint64 zone   = 7 [(nanopb).int_size = IS_32, default = 28800];    //时区偏移(秒),带符号
+    required   Mode mode   = 8 [default = IS_24];
+}
+
+/* 世界时钟消息 */
+message AppPB_WorldClock {
+    required string city_name   = 1 [(nanopb).type = FT_POINTER];                   //城市名称
+    required sint64 zone_offset = 2 [(nanopb).int_size = IS_32, default = 28800];   //时区偏移(秒),带符号
+    required double longitude   = 3 [default = 116.20];                             //经度:东经+,西经-
+    required double latitude    = 4 [default = 39.56];                              //维度:北纬+,南纬-
+    optional uint32 city_id     = 5 [(nanopb).int_size = IS_32];                    //城市ID
+    
+    /* 世界时钟列表 */
+    message List {
+        repeated AppPB_WorldClock node = 1 [(nanopb).type = FT_POINTER];
+    }
+}

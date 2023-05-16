@@ -32,7 +32,7 @@ typedef struct {
 typedef struct {
     TickType_t start;
     TickType_t end;
-} app_execute_ms_t;
+} app_execute_us_t;
 
 /*@brief 打印输出转接宏
  */

@@ -13,7 +13,7 @@
 #include "app_module_protocol.h"
 #include "app_module_clock.h"
 
-#if      APP_MODULE_PROTOCOL_USE_JSON
+#if       APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
 #include "app_json_xfer.h"
 #include "app_json_xfer_mix.h"
@@ -45,7 +45,7 @@ void app_json_xfer_notify_system_clock(void)
 
 /*@brief 传输接收系统时钟
  */
-bool app_json_xfer_respond_system_clock(void *json_object)
+bool app_json_xfer_respond_system_clock(cJSON *json_object)
 {
     cJSON *json_item = json_object;
     /* 获得目标包数据 */
@@ -67,4 +67,3 @@ bool app_json_xfer_respond_system_clock(void *json_object)
 }
 
 #endif
-

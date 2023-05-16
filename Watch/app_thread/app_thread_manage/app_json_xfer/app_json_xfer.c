@@ -12,7 +12,7 @@
 #include "app_thread_manage.h"
 #include "app_module_protocol.h"
 
-#if      APP_MODULE_PROTOCOL_USE_JSON
+#if       APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
 #include "app_json_xfer.h"
 #include "app_json_xfer_mix.h"
@@ -21,7 +21,7 @@
  *@param[in] json_object JSON对象
  *@retval    推送是否成功
  */
-bool app_json_xfer_notify(void *json_object)
+bool app_json_xfer_notify(cJSON *json_object)
 {
     /* 获得JSON对象 */
     cJSON *json_item = json_object;
@@ -108,7 +108,7 @@ bool app_json_xfer_throw(uint8_t *json_stream)
  *@param[in] json_object JSON对象
  *@retval    派发是否成功
  */
-bool app_json_xfer_dispatch(void *json_object)
+bool app_json_xfer_dispatch(cJSON *json_object)
 {
     cJSON *json_item = json_object;
     /* 解析数据包 */

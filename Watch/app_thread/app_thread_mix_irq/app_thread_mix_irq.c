@@ -54,8 +54,8 @@ void app_thread_mix_irq_routine(void)
         app_sem_take(sem);
         /* 计算事件处理时间(开始) */
         #if APP_SYS_LOG_EXECUTE
-        app_execute_ms_t execute_ms = {0};
-        app_execute_ms(&execute_ms, true);
+        app_execute_us_t execute_us = {0};
+        app_execute_us(&execute_us, true);
         #endif
         #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
@@ -66,9 +66,9 @@ void app_thread_mix_irq_routine(void)
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
             #if APP_SYS_LOG_EXECUTE_CHECK
-            bool execute_ms_remind = true;
-            app_execute_ms_t execute_ms = {0};
-            app_execute_ms(&execute_ms, true);
+            bool execute_us_remind = true;
+            app_execute_us_t execute_us = {0};
+            app_execute_us(&execute_us, true);
             #endif
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
@@ -110,8 +110,8 @@ void app_thread_mix_irq_routine(void)
             }
             /* 计算事件处理时间(结束) */
             #if APP_SYS_LOG_EXECUTE_CHECK
-            uint32_t ms = app_execute_ms(&execute_ms, false);
-            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_ms_remind) {
+            uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
+            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_us_remind) {
                 APP_SYS_LOG_WARN("thread mix irq package execute %d ms", ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
                 APP_SYS_LOG_WARN("package module:%u", package.module);
@@ -123,8 +123,8 @@ void app_thread_mix_irq_routine(void)
         }
         /* 计算事件处理时间(结束) */
         #if APP_SYS_LOG_EXECUTE
-        uint64_t ms = app_execute_ms(&execute_ms, false);
-        app_thread_execute_ms_set(app_thread_id_mix_irq, &ms);
+        double ms = app_execute_us(&execute_us, false) / 1000.0;
+        app_thread_execute_us_set(app_thread_id_mix_irq, &ms);
         #endif
     }
 }

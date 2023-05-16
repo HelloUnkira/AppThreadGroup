@@ -147,16 +147,16 @@ void app_delay_us(uint32_t us)
     k_busy_wait(us);
 }
 
-/*@brief 计算一段代码的延时时间(ms)
+/*@brief 计算一段代码的延时时间(us)
  */
-uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+double app_execute_us(app_execute_us_t *execute_us, bool run)
 {
     if (run) {
-        execute_ms->start = k_cycle_get_32();
+        execute_us->start = k_cycle_get_32();
         return 0;
     } else {
-        execute_ms->end = k_cycle_get_32();
-        return (double)(execute_ms->end - execute_ms->start) * 1000 / sys_clock_hw_cycles_per_sec;
+        execute_us->end = k_cycle_get_32();
+        return (double)(execute_us->end - execute_us->start) * 1000 * 1000 / sys_clock_hw_cycles_per_sec;
     }
 }
 

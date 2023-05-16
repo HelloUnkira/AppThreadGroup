@@ -28,7 +28,7 @@ typedef struct {
 typedef struct {
     uint32_t start;
     uint32_t end;
-} app_execute_ms_t;
+} app_execute_us_t;
 
 /*@brief 打印输出转接宏
  */

@@ -1,9 +1,6 @@
 #ifndef APP_MODULE_PROTOCOL_H
 #define APP_MODULE_PROTOCOL_H
 
-/* 本地回环:用于测试部分数据的上层环路 */
-#define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK  1
-
 typedef enum {
     app_module_protocol_default = 0,
     app_module_protocol_system_clock,

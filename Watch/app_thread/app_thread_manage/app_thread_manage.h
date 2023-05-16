@@ -14,7 +14,9 @@ typedef enum {  /* 协议传输模组事件 */
 } app_thread_manage_protocol_event_t;
 
 /* 序列化及反序列化传输协议 */
-#define APP_MODULE_PROTOCOL_USE_JSON       1
-#define APP_MODULE_PROTOCOL_USE_NANOPB     0
+#define APP_MODULE_PROTOCOL_USE_JSON            0
+#define APP_MODULE_PROTOCOL_USE_NANOPB          1
+/* 本地回环:用于测试数据通路的上层环路 */
+#define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK      1
 
 #endif

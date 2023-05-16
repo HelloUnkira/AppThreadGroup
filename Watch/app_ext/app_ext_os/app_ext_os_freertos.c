@@ -160,16 +160,16 @@ void app_delay_us(uint32_t us)
     //根据平台提供;
 }
 
-/*@brief 计算一段代码的延时时间(ms)
+/*@brief 计算一段代码的延时时间(us)
  */
-uint32_t app_execute_ms(app_execute_ms_t *execute_ms, bool run)
+double app_execute_us(app_execute_us_t *execute_us, bool run)
 {
     if (run) {
-        execute_ms->start = xTaskGetTickCount();
+        execute_us->start = xTaskGetTickCount();
         return 0;
     } else {
-        execute_ms->end = xTaskGetTickCount();
-        return (double)(execute_ms->end - execute_ms->start) * 1000 / configTICK_RATE_HZ;
+        execute_us->end = xTaskGetTickCount();
+        return (double)(execute_us->end - execute_us->start) * 1000 * 1000 / configTICK_RATE_HZ;
     }
 }
 
