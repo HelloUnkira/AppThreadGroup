@@ -60,6 +60,16 @@ bool app_json_xfer_respond_system_clock(cJSON *json_object)
         .zone_sec   = cJSON_GetNumberValue(cJSON_GetObjectItem(src_item, "zone"))  + 0.5,
         .is_24      = cJSON_GetNumberValue(cJSON_GetObjectItem(src_item, "is_24")) + 0.5,
     };
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO("system_clock.year:%u",    clock.year);
+    APP_SYS_LOG_INFO("system_clock.month:%u",   clock.month);
+    APP_SYS_LOG_INFO("system_clock.day:%u",     clock.day);
+    APP_SYS_LOG_INFO("system_clock.hour:%u",    clock.hour);
+    APP_SYS_LOG_INFO("system_clock.minute:%u",  clock.minute);
+    APP_SYS_LOG_INFO("system_clock.second:%u",  clock.second);
+    APP_SYS_LOG_INFO("system_clock.zone:%u",    clock.zone_sec);
+    APP_SYS_LOG_INFO("system_clock.mode:%u",    clock.is_24);
+    #endif
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);

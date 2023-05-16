@@ -1,22 +1,23 @@
 syntax = "proto2";
-import "nanopb/nanopb.proto";
 import "app_pb_msg_mix.proto";
 option java_package = "com.message_mix.nanopb";
 option java_outer_classname = "MessageMixProto";
 /* (协议版本,依赖包,Java包字段:Java编译时使用) */
 
-/* 组合消息(通过不同的消息特征编号区分不同的消息) */
+/* 组合消息(所有nanopb子消息打包成一个整体) */
 message AppPB_MsgSet {
-    required AppPB_MsgTypeSet type = 1;
+    /* 组合消息类型 */
+    enum Type {
+        Is_Default          = 0x0000;
+        Is_SystemClock      = 0x0010;
+        Is_WorldClock       = 0x0011;
+    }
+    /* 组合消息 */
+    required Type type = 1;
+    /* 单一性组合消息包 */
     oneof payload {
-        AppPB_SystemClock   system_clock = 20;
-        AppPB_WorldClock    world_clock  = 21;
+        AppPB_SystemClock   system_clock = 0x0010;
+        AppPB_WorldClock    world_clock  = 0x0011;
     }
 }
 
-/* 组合消息类型 */
-enum AppPB_MsgTypeSet {
-    AppPB_MsgType_Is_Default                    = 0x0000;
-    AppPB_MsgType_Is_SystemClock                = 0x0010;
-    AppPB_MsgType_Is_WorldClock                 = 0x0011;
-}

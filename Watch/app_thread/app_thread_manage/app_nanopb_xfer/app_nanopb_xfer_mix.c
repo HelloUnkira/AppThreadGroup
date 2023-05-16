@@ -29,7 +29,8 @@ void app_nanopb_xfer_notify_system_clock(void)
     app_module_clock_get_system_clock(&clock);
     /* 数据打包 */
     AppPB_MsgSet message = {
-        .type = AppPB_MsgTypeSet_AppPB_MsgType_Is_SystemClock,
+        .type = AppPB_MsgSet_Type_Is_SystemClock,
+        .which_payload = AppPB_MsgSet_system_clock_tag,
         .payload.system_clock = {
             .year   = clock.year,
             .month  = clock.month,
@@ -49,6 +50,8 @@ void app_nanopb_xfer_notify_system_clock(void)
  */
 bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
 {
+    if (message->type != AppPB_MsgSet_Type_Is_SystemClock)
+        return;
     app_module_clock_t clock = {
         .year       = message->payload.system_clock.year,
         .month      = message->payload.system_clock.month,
@@ -59,6 +62,16 @@ bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
         .zone_sec   = message->payload.system_clock.zone,
         .is_24      = message->payload.system_clock.mode,
     };
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO("system_clock.year:%u",    clock.year);
+    APP_SYS_LOG_INFO("system_clock.month:%u",   clock.month);
+    APP_SYS_LOG_INFO("system_clock.day:%u",     clock.day);
+    APP_SYS_LOG_INFO("system_clock.hour:%u",    clock.hour);
+    APP_SYS_LOG_INFO("system_clock.minute:%u",  clock.minute);
+    APP_SYS_LOG_INFO("system_clock.second:%u",  clock.second);
+    APP_SYS_LOG_INFO("system_clock.zone:%u",    clock.zone_sec);
+    APP_SYS_LOG_INFO("system_clock.mode:%u",    clock.is_24);
+    #endif
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);

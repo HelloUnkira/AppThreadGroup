@@ -4,7 +4,6 @@
 #ifndef PB_APP_PB_MSG_SET_PB_H_INCLUDED
 #define PB_APP_PB_MSG_SET_PB_H_INCLUDED
 #include <pb.h>
-#include "nanopb/nanopb.pb.h"
 #include "app_pb_msg_mix.pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
@@ -13,16 +12,17 @@
 
 /* Enum definitions */
 /* 组合消息类型 */
-typedef enum _AppPB_MsgTypeSet {
-    AppPB_MsgTypeSet_AppPB_MsgType_Is_Default = 0,
-    AppPB_MsgTypeSet_AppPB_MsgType_Is_SystemClock = 16,
-    AppPB_MsgTypeSet_AppPB_MsgType_Is_WorldClock = 17
-} AppPB_MsgTypeSet;
+typedef enum _AppPB_MsgSet_Type {
+    AppPB_MsgSet_Type_Is_Default = 0,
+    AppPB_MsgSet_Type_Is_SystemClock = 16,
+    AppPB_MsgSet_Type_Is_WorldClock = 17
+} AppPB_MsgSet_Type;
 
 /* Struct definitions */
-/* 组合消息(通过不同的消息特征编号区分不同的消息) */
+/* 组合消息(所有nanopb子消息打包成一个整体) */
 typedef struct _AppPB_MsgSet {
-    AppPB_MsgTypeSet type;
+    /* 组合消息 */
+    AppPB_MsgSet_Type type;
     pb_size_t which_payload;
     union {
         AppPB_SystemClock system_clock;
@@ -36,27 +36,27 @@ extern "C" {
 #endif
 
 /* Helper constants for enums */
-#define _AppPB_MsgTypeSet_MIN AppPB_MsgTypeSet_AppPB_MsgType_Is_Default
-#define _AppPB_MsgTypeSet_MAX AppPB_MsgTypeSet_AppPB_MsgType_Is_WorldClock
-#define _AppPB_MsgTypeSet_ARRAYSIZE ((AppPB_MsgTypeSet)(AppPB_MsgTypeSet_AppPB_MsgType_Is_WorldClock+1))
+#define _AppPB_MsgSet_Type_MIN AppPB_MsgSet_Type_Is_Default
+#define _AppPB_MsgSet_Type_MAX AppPB_MsgSet_Type_Is_WorldClock
+#define _AppPB_MsgSet_Type_ARRAYSIZE ((AppPB_MsgSet_Type)(AppPB_MsgSet_Type_Is_WorldClock+1))
 
-#define AppPB_MsgSet_type_ENUMTYPE AppPB_MsgTypeSet
+#define AppPB_MsgSet_type_ENUMTYPE AppPB_MsgSet_Type
 
 
 /* Initializer values for message structs */
-#define AppPB_MsgSet_init_default                {_AppPB_MsgTypeSet_MIN, 0, {AppPB_SystemClock_init_default}}
-#define AppPB_MsgSet_init_zero                   {_AppPB_MsgTypeSet_MIN, 0, {AppPB_SystemClock_init_zero}}
+#define AppPB_MsgSet_init_default                {_AppPB_MsgSet_Type_MIN, 0, {AppPB_SystemClock_init_default}}
+#define AppPB_MsgSet_init_zero                   {_AppPB_MsgSet_Type_MIN, 0, {AppPB_SystemClock_init_zero}}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_MsgSet_type_tag                    1
-#define AppPB_MsgSet_system_clock_tag            20
-#define AppPB_MsgSet_world_clock_tag             21
+#define AppPB_MsgSet_system_clock_tag            16
+#define AppPB_MsgSet_world_clock_tag             17
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_MsgSet_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, UENUM,    type,              1) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,system_clock,payload.system_clock),  20) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock),  21)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,system_clock,payload.system_clock),  16) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock),  17)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
 #define AppPB_MsgSet_payload_system_clock_MSGTYPE AppPB_SystemClock
@@ -69,7 +69,7 @@ extern const pb_msgdesc_t AppPB_MsgSet_msg;
 
 /* Maximum encoded size of messages (where known) */
 #if defined(AppPB_WorldClock_size)
-union AppPB_MsgSet_payload_size_union {char f21[(7 + AppPB_WorldClock_size)]; char f0[30];};
+union AppPB_MsgSet_payload_size_union {char f17[(7 + AppPB_WorldClock_size)]; char f0[30];};
 #endif
 #if defined(AppPB_WorldClock_size)
 #define AppPB_MsgSet_size                        (2 + sizeof(union AppPB_MsgSet_payload_size_union))
