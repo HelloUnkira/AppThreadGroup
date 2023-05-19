@@ -4,6 +4,9 @@
 /* 协议传输缓冲区最大块 */
 #define APP_MODULE_TRANSFER_BLOCK   4096
 
+/* 传输接收超时 */
+#define APP_MODULE_TRANSFER_RESPOND_TIMEOUT 3000
+
 #pragma pack(push, 1)
 typedef struct {
     uint16_t head:1;    /* 起始协议包(多协议包传输开始标记) */

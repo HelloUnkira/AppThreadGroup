@@ -8,11 +8,27 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_crc.h"
+#include "app_sys_timer.h"
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
 #include "app_module_protocol.h"
 #include "app_module_transfer.h"
+
+/* 注意:因为写权限高于读权限,且读写分离,该变量无需额外保护 */
+static bool app_module_transfer_respond_timeout_status = false;
+static app_sys_timer_t app_module_transfer_respond_timeout_timer = {0};
+
+/*@brief 传输分包接收定时器回调
+ */
+static void app_module_transfer_respond_timeout_timer_handler(void *timer)
+{
+    APP_SYS_LOG_ERROR("respond timeout");
+    /* 设置超时标记 */
+    app_module_transfer_respond_timeout_status = true;
+    /* 使用一个空的结束包促使接收流程结束 */
+    app_module_transfer_t transfer_none = {.tail = true};
+    app_module_transfer_respond(&transfer_none);
+}
 
 /*@brief  传输分包包大小
  *        保证底层至少能刚好接收该包并打包发送
@@ -96,6 +112,10 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
         offset = 0;
         stream = app_mem_alloc(length);
         memset(stream, 0, length);
+        /* 就绪并启动超时定时器监控 */
+        app_module_transfer_respond_timeout_timer.expired = app_module_transfer_respond_timeout_timer_handler;
+        app_module_transfer_respond_timeout_timer.peroid  = APP_MODULE_TRANSFER_RESPOND_TIMEOUT;
+        app_sys_timer_start(&app_module_transfer_respond_timeout_timer);
     }
     /* 防御:出现意外的响应时 */
     if (stream == NULL) {
@@ -133,23 +153,36 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
         APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
+    /* 更新超时监控 */
+    app_sys_timer_stop(&app_module_transfer_respond_timeout_timer);
+    app_sys_timer_start(&app_module_transfer_respond_timeout_timer);
     /* 接收到最后一个缓冲块 */
     if (transfer->tail) {
-        /* 现在打包新的传输队列 */
-        #if APP_SYS_LOG_PROTOCOL_CHECK
-        APP_SYS_LOG_INFO("catch fully package:%u", offset);
-        for (uint32_t idx = 0; idx < offset; idx++)
-            APP_SYS_LOG_INFO_RAW("%02x ", stream[idx]);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-        #endif
-        /* 传输到目标 */
-        app_module_protocol_t protocol = {
-            .respond.data    = stream,
-            .respond.size    = offset,
-            .respond.dynamic = true,
-        };
-        app_module_protocol_respond(&protocol);
+        /* 触发超时结束 */
+        if (app_module_transfer_respond_timeout_status)
+        {
+            app_module_transfer_respond_timeout_status = false;
+            app_mem_free(stream);
+        }
+        else
+        {
+            /* 现在打包新的传输队列 */
+            #if APP_SYS_LOG_PROTOCOL_CHECK
+            APP_SYS_LOG_INFO("catch fully package:%u", offset);
+            for (uint32_t idx = 0; idx < offset; idx++)
+                APP_SYS_LOG_INFO_RAW("%02x ", stream[idx]);
+            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            #endif
+            /* 传输到目标 */
+            app_module_protocol_t protocol = {
+                .respond.data    = stream,
+                .respond.size    = offset,
+                .respond.dynamic = true,
+            };
+            app_module_protocol_respond(&protocol);
+        }
         offset = 0;
         stream = NULL;
+        app_sys_timer_stop(&app_module_transfer_respond_timeout_timer);
     }
 }

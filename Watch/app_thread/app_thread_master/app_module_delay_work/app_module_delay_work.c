@@ -39,7 +39,6 @@ void app_module_delay_work_submit(app_module_delay_work_t *delay_work, uint32_t 
     delay_work->timer.user_data = delay_work;
     delay_work->timer.expired   = app_module_delay_work_timer_handler;
     delay_work->timer.peroid    = delay_ms;
-    delay_work->timer.reload    = false;
     app_sys_timer_start(&delay_work->timer);
 }
 
