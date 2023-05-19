@@ -15,8 +15,9 @@ typedef struct {
 typedef struct {
     app_sys_pipe_pkg_t *head;    /* 管道头 */
     app_sys_pipe_pkg_t *tail;    /* 管道尾 */
-    unsigned int   number;  /* 管道项数 */
-    app_mutex_t    mutex;   /* 管道资源保护 */
+    unsigned int   number;      /* 管道项数 */
+    app_mutex_t    mutex;       /* 管道资源保护 */
+    app_critical_t critical;    /* 管道资源临界区保护 */
 } app_sys_pipe_t;
 
 /*@brief     初始化管道

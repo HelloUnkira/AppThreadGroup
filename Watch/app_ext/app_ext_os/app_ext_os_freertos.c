@@ -100,6 +100,20 @@ void app_mutex_give(app_mutex_t *mutex)
         xSemaphoreGive(mutex->mutex);
 }
 
+/*@brief 临界区保护(注意:当且仅当必要的使用)
+ */
+void app_critical_enter(app_critical_t *critical)
+{
+    taskDISABLE_INTERRUPTS();
+}
+
+/*@brief 临界区退出(注意:当且仅当必要的使用)
+ */
+void app_critical_exit(app_critical_t *critical)
+{
+    taskENABLE_INTERRUPTS();
+}
+
 /*@brief        内存分配
  *@param[in]    size 分配空间字节大小
  *@retval       分配空间,失败为NULL
@@ -126,20 +140,6 @@ void * app_mem_realloc(void *pointer, uint32_t size)
 void app_mem_free(void *pointer)
 {
     vPortFree(pointer);
-}
-
-/*@brief 临界区保护(注意:当且仅当必要的使用)
- */
-void app_critical_enter(void)
-{
-    taskDISABLE_INTERRUPTS();
-}
-
-/*@brief 临界区退出(注意:当且仅当必要的使用)
- */
-void app_critical_exit(void)
-{
-    taskENABLE_INTERRUPTS();
 }
 
 /*@brief 毫秒延时

@@ -24,6 +24,12 @@ typedef struct {
     struct k_mutex mutex;   /* 互斥锁空间 */
 } app_mutex_t;
 
+/* app critical */
+typedef struct {
+    /* 临界区需要保留的一些信息,如中断标志位等等 */
+    uintptr_t reserve;
+} app_critical_t;
+
 /* app execute ms */
 typedef struct {
     uint32_t start;

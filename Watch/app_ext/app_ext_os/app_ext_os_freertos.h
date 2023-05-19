@@ -28,6 +28,12 @@ typedef struct {
     SemaphoreHandle_t mutex;  /* 互斥锁空间 */
 } app_mutex_t;
 
+/* app critical */
+typedef struct {
+    /* 临界区需要保留的一些信息,如中断标志位等等 */
+    uintptr_t reserve;
+} app_critical_t;
+
 /* app execute ms */
 typedef struct {
     TickType_t start;

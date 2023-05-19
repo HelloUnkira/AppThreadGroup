@@ -34,11 +34,11 @@ uint32_t app_sys_pipe_package_num(app_sys_pipe_t *pipe)
     uint32_t number = 0;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
-    app_critical_enter();
+    app_critical_enter(&pipe->critical);
     /* 资源检查 */
     number = pipe->number;
     /* 出界 */
-    app_critical_exit();
+    app_critical_exit(&pipe->critical);
     app_mutex_give(&pipe->mutex);
     /* 通报 */
     return number;
@@ -65,7 +65,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     package_new->data     = package->data;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
-    app_critical_enter();
+    app_critical_enter(&pipe->critical);
     /* 资源包加入到管道(优先队列) */
     if (0) {
     } else if (pipe->number == 0) {
@@ -89,7 +89,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     }
     pipe->number++;
     /* 出界 */
-    app_critical_exit();
+    app_critical_exit(&pipe->critical);
     app_mutex_give(&pipe->mutex);
 }
 
@@ -104,7 +104,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
-    app_critical_enter();
+    app_critical_enter(&pipe->critical);
     /* 资源包提取出管道 */
     if (pipe->number != 0) {
         /* 需要命中指定资源包 */
@@ -142,7 +142,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
         }
     }
     /* 出界 */
-    app_critical_exit();
+    app_critical_exit(&pipe->critical);
     app_mutex_give(&pipe->mutex);
     /* 转储消息资源资源, 销毁资源包 */
     if (package_new == NULL)

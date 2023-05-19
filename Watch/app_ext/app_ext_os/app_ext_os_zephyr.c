@@ -88,6 +88,20 @@ void app_mutex_give(app_mutex_t *mutex)
         k_mutex_unlock(&mutex->mutex);
 }
 
+/*@brief 临界区保护(注意:当且仅当必要的使用)
+ */
+void app_critical_enter(app_critical_t *critical)
+{
+    __disable_irq();
+}
+
+/*@brief 临界区退出(注意:当且仅当必要的使用)
+ */
+void app_critical_exit(app_critical_t *critical)
+{
+    __enable_irq();
+}
+
 /*@brief        内存分配
  *@param[in]    size 分配空间字节大小
  *@retval       分配空间,失败为NULL
@@ -113,20 +127,6 @@ void * app_mem_realloc(void *pointer, uint32_t size)
 void app_mem_free(void *pointer)
 {
     free(pointer);
-}
-
-/*@brief 临界区保护(注意:当且仅当必要的使用)
- */
-void app_critical_enter(void)
-{
-    __disable_irq();
-}
-
-/*@brief 临界区退出(注意:当且仅当必要的使用)
- */
-void app_critical_exit(void)
-{
-    __enable_irq();
 }
 
 /*@brief 毫秒延时
