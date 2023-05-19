@@ -37,8 +37,8 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         /* 每隔1s发送一次软件看门狗喂狗事件 */
         app_package_t package = {
             .thread  = idx,
-            .module  = app_thread_group_work,  /* 线程组工作模组 */
-            .event   = 0,
+            .module  = 0,                       /* 线程组系统模组 */
+            .event   = app_thread_group_work,   /* 线程组工作事件 */
             .dynamic = true,
             .size    = sizeof(app_sys_work_t),
             .data    = app_sys_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),

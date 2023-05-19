@@ -35,8 +35,9 @@ typedef enum {
 } app_package_priority_t;
 
 /*@brief        设置子线程执行时间
+ *              注意:这里的时间设置为累加设置
  *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(ms)
+ *@param[out]   子线程执行时间(us)
  */
 #if APP_SYS_LOG_EXECUTE
 void app_thread_execute_us_set(uint32_t thread, double *execute_us);
@@ -44,7 +45,7 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us);
 
 /*@brief        获得子线程执行时间
  *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(ms)
+ *@param[out]   子线程执行时间(us)
  */
 #if APP_SYS_LOG_EXECUTE
 void app_thread_execute_us_get(uint32_t thread, double *execute_us);
@@ -93,7 +94,7 @@ typedef enum {
 
 /* 线程组事件 */
 /* 备注:每一个子线程都必须可以处理的系统公共事件 */
-/* 备注:占用每一个子线程的默认0号模组 */
+/* 备注:占用每一个子线程的0号模组 */
 typedef enum {  /* 线程组模组 */
     app_thread_group_work,
     app_thread_group_num,

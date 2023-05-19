@@ -34,14 +34,15 @@ static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
 static app_mutex_t app_thread_mutex = {0};
-/* 计算子线程工作时间(ms) */
+/* 计算子线程工作时间(us) */
 #if APP_SYS_LOG_EXECUTE
 static double app_thread_execute_us[app_thread_id_number] = {0};
 #endif
 
 /*@brief        设置子线程执行时间
+ *              注意:这里的时间设置为累加设置
  *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(ms)
+ *@param[out]   子线程执行时间(us)
  */
 #if APP_SYS_LOG_EXECUTE
 void app_thread_execute_us_set(uint32_t thread, double *execute_us)
@@ -55,7 +56,7 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us)
 
 /*@brief        获得子线程执行时间
  *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(ms)
+ *@param[out]   子线程执行时间(us)
  */
 #if APP_SYS_LOG_EXECUTE
 void app_thread_execute_us_get(uint32_t thread, double *execute_us)
