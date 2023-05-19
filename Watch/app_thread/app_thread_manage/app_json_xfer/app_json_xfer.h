@@ -15,18 +15,6 @@ bool app_json_xfer_notify(cJSON *json_object);
  */
 bool app_json_xfer_respond(uint8_t *json_stream);
 
-/*@brief     协议适配层,接收协议数据
- *@param[in] json_stream JSON数据流
- *@retval    解析是否成功
- */
-bool app_json_xfer_throw(uint8_t *json_stream);
-
-/*@brief     协议适配层,派发协议数据
- *@param[in] json_object JSON对象
- *@retval    派发是否成功
- */
-bool app_json_xfer_dispatch(cJSON *json_object);
-
 #endif
 
 #endif

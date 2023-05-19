@@ -11,6 +11,7 @@
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
 #include "app_module_protocol.h"
+#include "app_module_transfer.h"
 
 #if       APP_MODULE_PROTOCOL_USE_JSON
 #include "cJSON.h"
@@ -39,8 +40,18 @@ bool app_json_xfer_notify(cJSON *json_object)
     cJSON_Delete(json_item);
     /* 压缩JSON数据流 */
     cJSON_Minify(json_stream);
+    /* 检查JSON */
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO_RAW("json minify:%d", strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW(json_stream);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    #endif
     /* 传输JSON数据流 */
-    return app_json_xfer_throw(json_stream);
+    app_module_transfer_notify(json_stream, strlen(json_stream));
+    /* 回收JSON对象 */
+    cJSON_free(json_stream);
+    return true;
 }
 
 /*@brief     协议适配层,接收协议数据
@@ -70,48 +81,7 @@ bool app_json_xfer_respond(uint8_t *json_stream)
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     cJSON_free(json_format);
     #endif
-    /* 派发JSON */
-    return app_json_xfer_dispatch(json_item);
-}
-
-/*@brief     协议适配层,接收协议数据
- *@param[in] json_stream JSON数据流
- *@retval    解析是否成功
- */
-bool app_json_xfer_throw(uint8_t *json_stream)
-{
-    /* 检查JSON */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("json minify:%d", strlen(json_stream));
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    APP_SYS_LOG_INFO_RAW(json_stream);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
-    /* 本地回环 */
-    #if APP_MODULE_PROTOCOL_LOCAL_LOOPBACK
-    uint32_t size = strlen(json_stream) + 1;
-    uint8_t *data = app_mem_alloc(size);
-    memset(data, 0 , size);
-    memcpy(data, json_stream, size);
-    app_module_protocol_t protocol = {
-        .respond.data    = data,
-        .respond.size    = size,
-        .respond.dynamic = true,
-    };
-    app_module_protocol_respond(&protocol);
-    #endif
-    /* 传给底层,发出去 */
-    cJSON_free(json_stream);
-}
-
-/*@brief     协议适配层,派发协议数据
- *@param[in] json_object JSON对象
- *@retval    派发是否成功
- */
-bool app_json_xfer_dispatch(cJSON *json_object)
-{
-    cJSON *json_item = json_object;
-    /* 解析数据包 */
+    /* 解析JSON */
     char *type_string = cJSON_GetStringValue(cJSON_GetObjectItem(json_item, "type"));
     /* 检查JSON */
     #if APP_SYS_LOG_PROTOCOL_CHECK
@@ -119,13 +89,14 @@ bool app_json_xfer_dispatch(cJSON *json_object)
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 匹配数据包 */
+    bool retval = false;
     if (strcmp(type_string, "sys clk") == 0) {
-        app_json_xfer_respond_system_clock(json_object);
-        return true;
+        app_json_xfer_respond_system_clock(json_item);
+        retval = true;
     }
-    /* 继续添加其他类型... */
+    /* 回收JSON对象 */
     cJSON_Delete(json_item);
-    return false;
+    return retval;
 }
 
 #endif

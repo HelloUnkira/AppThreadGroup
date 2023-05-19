@@ -82,9 +82,7 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
          break;
     }
     default: {
-        #if APP_SYS_LOG_MODULE_CHECK
         APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
-        #endif
         break;
     }
     }
@@ -95,9 +93,7 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
          break;
     }
     default: {
-        #if APP_SYS_LOG_MODULE_CHECK
         APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
-        #endif
         break;
     }
     }

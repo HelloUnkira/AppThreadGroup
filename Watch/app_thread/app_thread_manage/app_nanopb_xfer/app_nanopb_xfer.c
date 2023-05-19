@@ -11,6 +11,7 @@
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
 #include "app_module_protocol.h"
+#include "app_module_transfer.h"
 
 #if       APP_MODULE_PROTOCOL_USE_NANOPB
 #include "pb_common.h"
@@ -37,8 +38,18 @@ bool app_nanopb_xfer_notify(AppPB_MsgSet *message)
     if (!pb_encode(&stream, AppPB_MsgSet_fields, message))
          APP_SYS_LOG_ERROR("encode fail:%s", stream.errmsg);
     // stream.bytes_written;
+    /* 检查nanopb数据流 */
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO_RAW("nanopb encode:%d", size);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    for (uint32_t idx = 0; idx < size; idx++)
+        APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
+    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    #endif
     /* 传输nanopb数据流 */
-    return app_nanopb_xfer_throw(buffer, size);
+    app_module_transfer_notify(buffer, size);
+    /* 回收nanopb缓冲区 */
+    app_mem_free(buffer);
 }
 
 /*@brief     协议适配层,接收协议数据
@@ -63,61 +74,23 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
     if (!pb_decode(&stream, AppPB_MsgSet_fields, &message))
          APP_SYS_LOG_ERROR("decode fail:%s", stream.errmsg);
     // stream.bytes_left;
-    /* 传输nanopb数据流 */
-    return app_nanopb_xfer_dispatch(&message);
-}
-
-/*@brief     协议适配层,接收协议数据
- *@param[in] buffer nanopb编码流
- *@param[in] size   nanopb编码流大小
- *@retval    投递是否成功
- */
-bool app_nanopb_xfer_throw(uint8_t *buffer, uint32_t size)
-{
     /* 检查nanopb */
     #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("nanopb encode:%d", size);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    for (uint32_t idx = 0; idx < size; idx++)
-        APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
-    /* 本地回环 */
-    #if APP_MODULE_PROTOCOL_LOCAL_LOOPBACK
-    uint8_t *data = app_mem_alloc(size);
-    memcpy(data, buffer, size);
-    app_module_protocol_t protocol = {
-        .respond.data    = data,
-        .respond.size    = size,
-        .respond.dynamic = true,
-    };
-    app_module_protocol_respond(&protocol);
-    #endif
-    /* 传给底层,发出去 */
-    app_mem_free(buffer);
-}
-
-/*@brief     协议适配层,派发协议数据
- *@param[in] message nanopb集合对象
- *@retval    派发是否成功
- */
-bool app_nanopb_xfer_dispatch(AppPB_MsgSet *message)
-{
-    /* 检查nanopb */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("nanopb type:%d", message->type);
+    APP_SYS_LOG_INFO_RAW("nanopb type:%d", message.type);
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 匹配数据包 */
-    switch (message->which_payload) {
+    bool retval = false;
+    switch (message.which_payload) {
     case AppPB_MsgSet_system_clock_tag:
-        return app_nanopb_xfer_respond_system_clock(message);
+        retval = app_nanopb_xfer_respond_system_clock(&message);
+        break;
     default:
-        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d", message->type);
+        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d", message.type);
         APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-        return false;
+        break;
     }
-    return false;
+    return retval;
 }
 
 #endif

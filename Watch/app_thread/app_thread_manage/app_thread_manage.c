@@ -16,6 +16,7 @@
 #include "app_module_load.h"
 #include "app_module_shutdown.h"
 #include "app_module_protocol.h"
+#include "app_module_transfer.h"
 
 /*@brief 数据管理线程初始化
  */
@@ -80,6 +81,15 @@ void app_thread_manage_routine(void)
                     app_module_protocol_notify_handler(package.data, package.size);
                 if (package.event == app_thread_manage_protocol_respond)
                     app_module_protocol_respond_handler(package.data, package.size);
+                if (package.dynamic)
+                    app_mem_free(package.data);
+                break;
+            }
+            case app_thread_manage_transfer: {
+                if (package.event == app_thread_manage_transfer_notify)
+                    app_module_transfer_notify(package.data, package.size);
+                if (package.event == app_thread_manage_transfer_respond)
+                    app_module_transfer_respond(package.data);
                 if (package.dynamic)
                     app_mem_free(package.data);
                 break;
