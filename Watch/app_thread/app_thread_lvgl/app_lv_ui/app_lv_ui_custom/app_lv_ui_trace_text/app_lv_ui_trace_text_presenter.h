@@ -2,6 +2,7 @@
 #define APP_LV_UI_TRACE_TEXT_PRESENTER_H
 
 typedef struct {
+    void (*peek_reset)(void);
     const char * (*peek_one)(void);
     void (*reset)(void);
 } app_lv_ui_trace_text_presenter_t;

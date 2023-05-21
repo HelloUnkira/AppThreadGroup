@@ -107,7 +107,8 @@ int main(int argc, char *argv[])
             static uint64_t count = 0;
             if (count++ == 7 * 1000) {
                 app_module_protocol_t protocol = {
-                    .notify.type = app_module_protocol_system_clock,
+                    //.notify.type = app_module_protocol_system_clock,
+                    .notify.type = app_module_protocol_trace_text,
                 };
                 app_module_protocol_notify(&protocol);
             }

@@ -8,6 +8,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_sys_trace_text.h"
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
 #include "app_module_protocol.h"
@@ -41,6 +42,8 @@ void app_json_xfer_notify_system_clock(void)
     cJSON_AddNumberToObject(src_item, "is_24",  clock.is_24);
     /* 传输对象发送通知 */
     app_json_xfer_notify(json_item);
+    /* 销毁传输对象 */
+    cJSON_Delete(json_item);
 }
 
 /*@brief 传输接收系统时钟
@@ -73,6 +76,43 @@ bool app_json_xfer_respond_system_clock(cJSON *json_object)
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);
+    return true;
+}
+
+/*@brief 打包传输系统追踪日志文本
+ */
+void app_json_xfer_notify_trace_text(void)
+{
+    app_sys_trace_text_peek_reset();
+    while (true) {
+        /* 循环提取日志信息 */
+        char trace_text[APP_MODULE_TRACE_TEXT_MAX + 1] = {0};
+        app_sys_trace_text_peek(trace_text);
+        if (strlen(trace_text) == 0)
+            break;
+        /* 创建传输对象 */
+        cJSON *json_item = cJSON_CreateObject();
+        cJSON_AddStringToObject(json_item, "type", "trace text");
+        /* 数据打包 */
+        cJSON_AddStringToObject(json_item, "text", trace_text);
+        /* 传输对象发送通知 */
+        app_json_xfer_notify(json_item);
+        /* 销毁传输对象 */
+        cJSON_Delete(json_item);
+    }
+}
+
+/*@brief 传输接收系统追踪日志文本
+ */
+bool app_json_xfer_respond_trace_text(cJSON *json_object)
+{
+    cJSON *json_item = json_object;
+    /* 获得目标包数据 */
+    /* 解析目标包数据 */
+    char *trace_text = cJSON_GetStringValue(cJSON_GetObjectItem(json_item, "text"));
+#if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO("trace text:%s", trace_text);
+#endif
     return true;
 }
 

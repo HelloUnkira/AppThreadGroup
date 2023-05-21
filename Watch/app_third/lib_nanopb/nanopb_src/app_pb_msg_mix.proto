@@ -21,16 +21,20 @@ message AppPB_SystemClock {
     required   Mode mode   = 8 [default = IS_24];
 }
 
+/* 传输日志消息 */
+/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+message AppPB_TraceText {
+    required string trace_text = 1 [(nanopb).max_size = 129, default = "unknown"];  //单条传输文本消息
+}
+
 /* 世界时钟消息 */
+/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
 message AppPB_WorldClock {
-    required string city_name   = 1 [(nanopb).type = FT_POINTER];                   //城市名称
-    required sint64 zone_offset = 2 [(nanopb).int_size = IS_32, default = 28800];   //时区偏移(秒),带符号
-    required double longitude   = 3 [default = 116.20];                             //经度:东经+,西经-
-    required double latitude    = 4 [default = 39.56];                              //维度:北纬+,南纬-
-    optional uint32 city_id     = 5 [(nanopb).int_size = IS_32];                    //城市ID
-    
-    /* 世界时钟列表 */
-    message List {
-        repeated AppPB_WorldClock node = 1 [(nanopb).type = FT_POINTER];
-    }
+    required uint32 now_index   = 1 [(nanopb).int_size = IS_8, default = 0];        //世界时钟当前索引
+    required uint32 max_count   = 2 [(nanopb).int_size = IS_8, default = 10];       //世界时钟数量
+    required string city_name   = 3 [(nanopb).max_size = 100, default = "unknown"]; //城市名称
+    required sint64 zone_offset = 4 [(nanopb).int_size = IS_32, default = 28800];   //时区偏移(秒),带符号
+    required double longitude   = 5 [default = 116.20];                             //经度:东经+,西经-
+    required double latitude    = 6 [default = 39.56];                              //维度:北纬+,南纬-
+    optional uint32 city_id     = 7 [(nanopb).int_size = IS_32];                    //城市ID
 }

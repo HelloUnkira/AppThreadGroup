@@ -15,7 +15,8 @@
 typedef enum _AppPB_MsgSet_Type {
     AppPB_MsgSet_Type_Is_Default = 0,
     AppPB_MsgSet_Type_Is_SystemClock = 16,
-    AppPB_MsgSet_Type_Is_WorldClock = 17
+    AppPB_MsgSet_Type_Is_TraceText = 17,
+    AppPB_MsgSet_Type_Is_WorldClock = 257
 } AppPB_MsgSet_Type;
 
 /* Struct definitions */
@@ -26,6 +27,7 @@ typedef struct _AppPB_MsgSet {
     pb_size_t which_payload;
     union {
         AppPB_SystemClock system_clock;
+        AppPB_TraceText trace_text;
         AppPB_WorldClock world_clock;
     } payload;
 } AppPB_MsgSet;
@@ -50,16 +52,19 @@ extern "C" {
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_MsgSet_type_tag                    1
 #define AppPB_MsgSet_system_clock_tag            16
-#define AppPB_MsgSet_world_clock_tag             17
+#define AppPB_MsgSet_trace_text_tag              17
+#define AppPB_MsgSet_world_clock_tag             257
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_MsgSet_FIELDLIST(X, a) \
 X(a, STATIC,   REQUIRED, UENUM,    type,              1) \
 X(a, STATIC,   ONEOF,    MESSAGE,  (payload,system_clock,payload.system_clock),  16) \
-X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock),  17)
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,trace_text,payload.trace_text),  17) \
+X(a, STATIC,   ONEOF,    MESSAGE,  (payload,world_clock,payload.world_clock), 257)
 #define AppPB_MsgSet_CALLBACK NULL
 #define AppPB_MsgSet_DEFAULT NULL
 #define AppPB_MsgSet_payload_system_clock_MSGTYPE AppPB_SystemClock
+#define AppPB_MsgSet_payload_trace_text_MSGTYPE AppPB_TraceText
 #define AppPB_MsgSet_payload_world_clock_MSGTYPE AppPB_WorldClock
 
 extern const pb_msgdesc_t AppPB_MsgSet_msg;
@@ -68,12 +73,7 @@ extern const pb_msgdesc_t AppPB_MsgSet_msg;
 #define AppPB_MsgSet_fields &AppPB_MsgSet_msg
 
 /* Maximum encoded size of messages (where known) */
-#if defined(AppPB_WorldClock_size)
-union AppPB_MsgSet_payload_size_union {char f17[(7 + AppPB_WorldClock_size)]; char f0[30];};
-#endif
-#if defined(AppPB_WorldClock_size)
-#define AppPB_MsgSet_size                        (2 + sizeof(union AppPB_MsgSet_payload_size_union))
-#endif
+#define AppPB_MsgSet_size                        144
 
 #ifdef __cplusplus
 } /* extern "C" */

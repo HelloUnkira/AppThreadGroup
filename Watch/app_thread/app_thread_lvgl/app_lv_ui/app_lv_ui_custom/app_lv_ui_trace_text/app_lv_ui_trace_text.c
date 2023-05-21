@@ -29,6 +29,7 @@ static void app_lv_ui_btn_l_cb(lv_event_t *e)
     case LV_EVENT_CLICKED: {
         /* 循环提出所有条目 */
         lv_label_set_text(app_lv_ui_res_local->text, "");
+        app_lv_ui_trace_text_presenter.peek_reset();
         char *str = NULL, *str_new = NULL;
         do {
             str = app_lv_ui_trace_text_presenter.peek_one();

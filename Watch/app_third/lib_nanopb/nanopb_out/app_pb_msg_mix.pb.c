@@ -9,10 +9,10 @@
 PB_BIND(AppPB_SystemClock, AppPB_SystemClock, AUTO)
 
 
+PB_BIND(AppPB_TraceText, AppPB_TraceText, AUTO)
+
+
 PB_BIND(AppPB_WorldClock, AppPB_WorldClock, AUTO)
-
-
-PB_BIND(AppPB_WorldClock_List, AppPB_WorldClock_List, AUTO)
 
 
 

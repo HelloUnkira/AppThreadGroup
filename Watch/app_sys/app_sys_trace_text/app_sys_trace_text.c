@@ -366,3 +366,13 @@ bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX])
     app_sys_trace_text_reflush();
     return true;
 }
+
+/*@brief 日志追踪队列窥探指针重置
+ */
+void app_sys_trace_text_peek_reset(void)
+{
+    app_mutex_take(&app_sys_trace_text_mutex);
+    app_sys_trace_text.info.peek = app_sys_trace_text.info.head;
+    app_mutex_give(&app_sys_trace_text_mutex);
+}
+

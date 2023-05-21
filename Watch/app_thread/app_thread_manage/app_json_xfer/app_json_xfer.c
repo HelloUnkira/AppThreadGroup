@@ -36,8 +36,6 @@ bool app_json_xfer_notify(cJSON *json_object)
     APP_SYS_LOG_INFO_RAW(json_stream);
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
-    /* 销毁JSON对象 */
-    cJSON_Delete(json_item);
     /* 压缩JSON数据流 */
     cJSON_Minify(json_stream);
     /* 检查JSON */
@@ -92,6 +90,11 @@ bool app_json_xfer_respond(uint8_t *json_stream)
     bool retval = false;
     if (strcmp(type_string, "sys clk") == 0) {
         app_json_xfer_respond_system_clock(json_item);
+        retval = true;
+    }
+    else
+    if (strcmp(type_string, "trace text") == 0) {
+        app_json_xfer_respond_trace_text(json_item);
         retval = true;
     }
     /* 回收JSON对象 */

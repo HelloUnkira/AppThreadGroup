@@ -88,8 +88,18 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     if (cond)
         return;
     /* 输出错误信息 */
+    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
+    #if 0
+    #elif 1
+    app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%d]", func, line);
+    app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
+    #elif 0
+    app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%d]", file, line);
+    app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
+    #else
     app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%s][%d]", file, func, line);
     app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
+    #endif
     /* 异常导致的错误直接重启系统 */
     app_os_reset();
 }
@@ -102,8 +112,18 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
  */
 void app_sys_execute_trace(const char *file, const char *func, uint32_t line, uint32_t step)
 {
+    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
+    #if 0
+    #elif 1
+    app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%d]:%d", func, line, step);
+    app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
+    #elif 0
+    app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%d]:%d", file, line, step);
+    app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
+    #else
     app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%s][%d]:%d", file, func, line, step);
     app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
+    #endif
 }
 
 /*@brief 编译时间

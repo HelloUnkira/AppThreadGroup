@@ -81,6 +81,10 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
          app_json_xfer_notify_system_clock();
          break;
     }
+    case app_module_protocol_trace_text: {
+         app_json_xfer_notify_trace_text();
+         break;
+    }
     default: {
         APP_SYS_LOG_ERROR("protocol have unknown type:%d", protocol->notify.type);
         break;
@@ -90,6 +94,10 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     switch (protocol->notify.type) {
     case app_module_protocol_system_clock: {
          app_nanopb_xfer_notify_system_clock();
+         break;
+    }
+    case app_module_protocol_trace_text: {
+         app_nanopb_xfer_notify_trace_text();
          break;
     }
     default: {

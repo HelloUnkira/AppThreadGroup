@@ -55,6 +55,10 @@ bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX]);
  */
 bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX]);
 
+/*@brief 日志追踪队列窥探指针重置
+ */
+void app_sys_trace_text_peek_reset(void);
+
 /*@brief 日志持久化转接口
  *       暂时写在此处,没有找到好的地方容纳它
  */

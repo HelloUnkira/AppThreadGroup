@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
@@ -84,6 +84,9 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
     switch (message.which_payload) {
     case AppPB_MsgSet_system_clock_tag:
         retval = app_nanopb_xfer_respond_system_clock(&message);
+        break;
+    case AppPB_MsgSet_trace_text_tag:
+        retval = app_nanopb_xfer_respond_trace_text(&message);
         break;
     default:
         APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d", message.type);

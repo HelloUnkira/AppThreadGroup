@@ -4,7 +4,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
@@ -74,6 +74,15 @@ bool app_module_transfer_notify(uint8_t *data, uint32_t size)
         transfer->head = offset == 0 ? true : false;
         offset += transfer->size;
         transfer->tail = offset == size ? true : false;
+        /* 检查数据流 */
+        #if APP_SYS_LOG_PROTOCOL_CHECK
+        APP_SYS_LOG_INFO("send package:%u", transfer->size);
+        APP_SYS_LOG_INFO("package head:%u", transfer->head);
+        APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
+        for (uint32_t idx = 0; idx < transfer->size; idx++)
+            APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
+        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        #endif
         /* 传输缓冲块 */
         // app_module_transfer_throw(transfer);
         /* 本地回环 */
@@ -145,8 +154,9 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
     /* 将数据包进行流式存储 */
     memcpy(stream + offset, transfer->data, transfer->size);
     offset += transfer->size;
+    /* 检查数据流 */
     #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO("catch current package:%u", transfer->size);
+    APP_SYS_LOG_INFO("recv package:%u", transfer->size);
     APP_SYS_LOG_INFO("package head:%u", transfer->head);
     APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
     for (uint32_t idx = 0; idx < transfer->size; idx++)

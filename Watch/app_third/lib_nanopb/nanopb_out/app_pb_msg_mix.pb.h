@@ -30,21 +30,22 @@ typedef struct _AppPB_SystemClock {
     AppPB_SystemClock_Mode mode;
 } AppPB_SystemClock;
 
-/* 世界时钟消息 */
+/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+typedef struct _AppPB_TraceText {
+    char trace_text[129]; /* 单条传输文本消息 */
+} AppPB_TraceText;
+
+/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
 typedef struct _AppPB_WorldClock {
-    char *city_name; /* 城市名称 */
+    uint8_t now_index; /* 世界时钟当前索引 */
+    uint8_t max_count; /* 世界时钟数量 */
+    char city_name[100]; /* 城市名称 */
     int32_t zone_offset; /* 时区偏移(秒),带符号 */
     double longitude; /* 经度:东经+,西经- */
     double latitude; /* 维度:北纬+,南纬- */
     bool has_city_id;
     uint32_t city_id; /* 城市ID */
 } AppPB_WorldClock;
-
-/* 世界时钟列表 */
-typedef struct _AppPB_WorldClock_List {
-    pb_size_t node_count;
-    struct _AppPB_WorldClock *node;
-} AppPB_WorldClock_List;
 
 
 #ifdef __cplusplus
@@ -63,11 +64,11 @@ extern "C" {
 
 /* Initializer values for message structs */
 #define AppPB_SystemClock_init_default           {2023ull, 1ull, 1ull, 0ull, 0ull, 0ull, 28800, AppPB_SystemClock_Mode_IS_24}
-#define AppPB_WorldClock_init_default            {NULL, 28800, 116.2, 39.56, false, 0}
-#define AppPB_WorldClock_List_init_default       {0, NULL}
+#define AppPB_TraceText_init_default             {"unknown"}
+#define AppPB_WorldClock_init_default            {0u, 10u, "unknown", 28800, 116.2, 39.56, false, 0}
 #define AppPB_SystemClock_init_zero              {0, 0, 0, 0, 0, 0, 0, _AppPB_SystemClock_Mode_MIN}
-#define AppPB_WorldClock_init_zero               {NULL, 0, 0, 0, false, 0}
-#define AppPB_WorldClock_List_init_zero          {0, NULL}
+#define AppPB_TraceText_init_zero                {""}
+#define AppPB_WorldClock_init_zero               {0, 0, "", 0, 0, 0, false, 0}
 
 /* Field tags (for use in manual encoding/decoding) */
 #define AppPB_SystemClock_year_tag               1
@@ -78,12 +79,14 @@ extern "C" {
 #define AppPB_SystemClock_second_tag             6
 #define AppPB_SystemClock_zone_tag               7
 #define AppPB_SystemClock_mode_tag               8
-#define AppPB_WorldClock_city_name_tag           1
-#define AppPB_WorldClock_zone_offset_tag         2
-#define AppPB_WorldClock_longitude_tag           3
-#define AppPB_WorldClock_latitude_tag            4
-#define AppPB_WorldClock_city_id_tag             5
-#define AppPB_WorldClock_List_node_tag           1
+#define AppPB_TraceText_trace_text_tag           1
+#define AppPB_WorldClock_now_index_tag           1
+#define AppPB_WorldClock_max_count_tag           2
+#define AppPB_WorldClock_city_name_tag           3
+#define AppPB_WorldClock_zone_offset_tag         4
+#define AppPB_WorldClock_longitude_tag           5
+#define AppPB_WorldClock_latitude_tag            6
+#define AppPB_WorldClock_city_id_tag             7
 
 /* Struct field encoding specification for nanopb */
 #define AppPB_SystemClock_FIELDLIST(X, a) \
@@ -98,34 +101,35 @@ X(a, STATIC,   REQUIRED, UENUM,    mode,              8)
 #define AppPB_SystemClock_CALLBACK NULL
 #define AppPB_SystemClock_DEFAULT (const pb_byte_t*)"\x08\xe7\x0f\x10\x01\x18\x01\x20\x00\x28\x00\x30\x00\x38\x80\xc2\x03\x40\x01\x00"
 
-#define AppPB_WorldClock_FIELDLIST(X, a) \
-X(a, POINTER,  REQUIRED, STRING,   city_name,         1) \
-X(a, STATIC,   REQUIRED, SINT64,   zone_offset,       2) \
-X(a, STATIC,   REQUIRED, DOUBLE,   longitude,         3) \
-X(a, STATIC,   REQUIRED, DOUBLE,   latitude,          4) \
-X(a, STATIC,   OPTIONAL, UINT32,   city_id,           5)
-#define AppPB_WorldClock_CALLBACK NULL
-#define AppPB_WorldClock_DEFAULT (const pb_byte_t*)"\x10\x80\xc2\x03\x19\xcd\xcc\xcc\xcc\xcc\x0c\x5d\x40\x21\x48\xe1\x7a\x14\xae\xc7\x43\x40\x00"
+#define AppPB_TraceText_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, STRING,   trace_text,        1)
+#define AppPB_TraceText_CALLBACK NULL
+#define AppPB_TraceText_DEFAULT (const pb_byte_t*)"\x0a\x07\x75\x6e\x6b\x6e\x6f\x77\x6e\x00"
 
-#define AppPB_WorldClock_List_FIELDLIST(X, a) \
-X(a, POINTER,  REPEATED, MESSAGE,  node,              1)
-#define AppPB_WorldClock_List_CALLBACK NULL
-#define AppPB_WorldClock_List_DEFAULT NULL
-#define AppPB_WorldClock_List_node_MSGTYPE AppPB_WorldClock
+#define AppPB_WorldClock_FIELDLIST(X, a) \
+X(a, STATIC,   REQUIRED, UINT32,   now_index,         1) \
+X(a, STATIC,   REQUIRED, UINT32,   max_count,         2) \
+X(a, STATIC,   REQUIRED, STRING,   city_name,         3) \
+X(a, STATIC,   REQUIRED, SINT64,   zone_offset,       4) \
+X(a, STATIC,   REQUIRED, DOUBLE,   longitude,         5) \
+X(a, STATIC,   REQUIRED, DOUBLE,   latitude,          6) \
+X(a, STATIC,   OPTIONAL, UINT32,   city_id,           7)
+#define AppPB_WorldClock_CALLBACK NULL
+#define AppPB_WorldClock_DEFAULT (const pb_byte_t*)"\x08\x00\x10\x0a\x1a\x07\x75\x6e\x6b\x6e\x6f\x77\x6e\x20\x80\xc2\x03\x29\xcd\xcc\xcc\xcc\xcc\x0c\x5d\x40\x31\x48\xe1\x7a\x14\xae\xc7\x43\x40\x00"
 
 extern const pb_msgdesc_t AppPB_SystemClock_msg;
+extern const pb_msgdesc_t AppPB_TraceText_msg;
 extern const pb_msgdesc_t AppPB_WorldClock_msg;
-extern const pb_msgdesc_t AppPB_WorldClock_List_msg;
 
 /* Defines for backwards compatibility with code written before nanopb-0.4.0 */
 #define AppPB_SystemClock_fields &AppPB_SystemClock_msg
+#define AppPB_TraceText_fields &AppPB_TraceText_msg
 #define AppPB_WorldClock_fields &AppPB_WorldClock_msg
-#define AppPB_WorldClock_List_fields &AppPB_WorldClock_List_msg
 
 /* Maximum encoded size of messages (where known) */
-/* AppPB_WorldClock_size depends on runtime parameters */
-/* AppPB_WorldClock_List_size depends on runtime parameters */
 #define AppPB_SystemClock_size                   27
+#define AppPB_TraceText_size                     131
+#define AppPB_WorldClock_size                    137
 
 #ifdef __cplusplus
 } /* extern "C" */

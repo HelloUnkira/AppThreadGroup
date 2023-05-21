@@ -9,17 +9,24 @@
 #include "app_lv_ui_trace_text.h"
 #include "app_lv_ui_trace_text_presenter.h"
 
-static char app_lv_ui_trace_text_text[APP_MODULE_TRACE_TEXT_MAX + 1] = {0};
+static char app_lv_ui_trace_text[APP_MODULE_TRACE_TEXT_MAX + 1] = {0};
+
+/*@brief lvgl ui数据交互回调
+ */
+static void app_lv_ui_peek_reset(void)
+{
+    app_sys_trace_text_peek_reset();
+}
 
 /*@brief lvgl ui数据交互回调
  */
 static const char * app_lv_ui_peek_one(void)
 {
-    memset(app_lv_ui_trace_text_text, '\0', APP_MODULE_TRACE_TEXT_MAX + 1);
-    if (!app_sys_trace_text_peek(app_lv_ui_trace_text_text))
+    memset(app_lv_ui_trace_text, '\0', APP_MODULE_TRACE_TEXT_MAX + 1);
+    if (!app_sys_trace_text_peek(app_lv_ui_trace_text))
         APP_SYS_LOG_WARN("can not take trace text");
-        APP_SYS_LOG_INFO(app_lv_ui_trace_text_text);
-    return app_lv_ui_trace_text_text;
+        APP_SYS_LOG_INFO(app_lv_ui_trace_text);
+    return app_lv_ui_trace_text;
 }
 
 /*@brief lvgl ui数据交互回调
@@ -30,6 +37,7 @@ static void app_lv_ui_reset(void)
 }
 
 app_lv_ui_trace_text_presenter_t app_lv_ui_trace_text_presenter = {
-    .peek_one = app_lv_ui_peek_one,
-    .reset    = app_lv_ui_reset,
+    .peek_reset = app_lv_ui_peek_reset,
+    .peek_one   = app_lv_ui_peek_one,
+    .reset      = app_lv_ui_reset,
 };
