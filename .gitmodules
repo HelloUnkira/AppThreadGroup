@@ -10,3 +10,7 @@
 	path = Watch/app_third/lib_nanopb/lib_nanopb
 	url = https://github.com/nanopb/nanopb.git
 	branch = master
+[submodule "Watch/app_third/lib_self/StudyRecord"]
+	path = Watch/app_third/lib_self/StudyRecord
+	url = https://github.com/HelloUnkira/StudyRecord.git
+	branch = main

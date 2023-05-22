@@ -1,7 +1,7 @@
 # git 根目录执行命令添加子仓库:
 
 # 自己的库
-# git submodule add -f --branch master https://github.com/HelloUnkira/StudyRecord.git Watch/app_third/lib_self/study_record
+# git submodule add -f --branch main https://github.com/HelloUnkira/StudyRecord.git Watch/app_third/lib_self/StudyRecord
 # LVGL库:
 # git submodule add -f --branch release/v8.0 https://github.com/lvgl/lvgl.git Watch/app_third/lib_lvgl/lib_lvgl
 # git submodule add -f --branch release/v8.1 https://github.com/lvgl/lvgl.git Watch/app_third/lib_lvgl/lib_lvgl
