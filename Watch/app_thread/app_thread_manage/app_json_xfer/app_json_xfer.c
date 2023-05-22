@@ -80,22 +80,25 @@ bool app_json_xfer_respond(uint8_t *json_stream)
     cJSON_free(json_format);
     #endif
     /* 解析JSON */
-    char *type_string = cJSON_GetStringValue(cJSON_GetObjectItem(json_item, "type"));
+    uint32_t type = cJSON_GetNumberValue(cJSON_GetObjectItem(json_item, "type"));
     /* 检查JSON */
     #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("json type:%s", type_string);
+    APP_SYS_LOG_INFO_RAW("json type:%d", type);
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 匹配数据包 */
     bool retval = false;
-    if (strcmp(type_string, "sys clk") == 0) {
-        app_json_xfer_respond_system_clock(json_item);
-        retval = true;
-    }
-    else
-    if (strcmp(type_string, "trace text") == 0) {
-        app_json_xfer_respond_trace_text(json_item);
-        retval = true;
+    switch (type) {
+    case app_json_xfer_msg_is_trace_text:
+        retval = app_json_xfer_respond_trace_text(json_item);
+        break;
+    case app_json_xfer_msg_is_system_clock:
+        retval = app_json_xfer_respond_system_clock(json_item);
+        break;
+    default:
+        APP_SYS_LOG_INFO_RAW("unknown json type:%d", type);
+        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        break;
     }
     /* 回收JSON对象 */
     cJSON_Delete(json_item);

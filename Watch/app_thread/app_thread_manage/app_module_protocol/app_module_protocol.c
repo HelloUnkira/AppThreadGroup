@@ -21,7 +21,7 @@
 #include "pb_common.h"
 #include "pb_encode.h"
 #include "pb_decode.h"
-#include "app_pb_msg_set.pb.h"
+#include "app_nanopb_set.pb.h"
 #include "app_nanopb_xfer.h"
 #include "app_nanopb_xfer_mix.h"
 #else
@@ -77,12 +77,12 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     #if 0
     #elif APP_MODULE_PROTOCOL_USE_JSON
     switch (protocol->notify.type) {
-    case app_module_protocol_system_clock: {
-         app_json_xfer_notify_system_clock();
-         break;
-    }
     case app_module_protocol_trace_text: {
          app_json_xfer_notify_trace_text();
+         break;
+    }
+    case app_module_protocol_system_clock: {
+         app_json_xfer_notify_system_clock();
          break;
     }
     default: {
@@ -92,12 +92,12 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     }
     #elif APP_MODULE_PROTOCOL_USE_NANOPB
     switch (protocol->notify.type) {
-    case app_module_protocol_system_clock: {
-         app_nanopb_xfer_notify_system_clock();
-         break;
-    }
     case app_module_protocol_trace_text: {
          app_nanopb_xfer_notify_trace_text();
+         break;
+    }
+    case app_module_protocol_system_clock: {
+         app_nanopb_xfer_notify_system_clock();
          break;
     }
     default: {

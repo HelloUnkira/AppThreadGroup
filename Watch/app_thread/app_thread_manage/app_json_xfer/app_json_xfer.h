@@ -3,6 +3,12 @@
 
 #if APP_MODULE_PROTOCOL_USE_JSON
 
+typedef enum {
+    app_json_xfer_msg_is_default = 0,
+    app_json_xfer_msg_is_trace_text,
+    app_json_xfer_msg_is_system_clock,
+} app_json_xfer_msg_type;
+
 /*@brief     协议适配层,推送协议数据
  *@param[in] json_object JSON对象
  *@retval    推送是否成功

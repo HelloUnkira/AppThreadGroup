@@ -1,0 +1,42 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+/* Java包字段:Java编译时使用 */
+option java_package = "com.message_mix.nanopb";
+option java_outer_classname = "AppPB_MsgMixProto";
+/* 依赖包 */
+import "nanopb/nanopb.proto";
+
+/* 系统时钟消息(日历时间) */
+message AppPB_SystemClock {
+    /* 系统时钟制式 */
+    enum Mode {
+        IS_24 = 0;
+        IS_12 = 1;
+    }
+    uint64 year   = 1 [(nanopb).int_size = IS_16]; //年(UTC的0时区)
+    uint64 month  = 2 [(nanopb).int_size = IS_8];  //月(UTC的0时区)
+    uint64 day    = 3 [(nanopb).int_size = IS_8];  //日(UTC的0时区)
+    uint64 hour   = 4 [(nanopb).int_size = IS_8];  //时(UTC的0时区)
+    uint64 minute = 5 [(nanopb).int_size = IS_8];  //分(UTC的0时区)
+    uint64 second = 6 [(nanopb).int_size = IS_8];  //秒(UTC的0时区)
+    sint64 zone   = 7 [(nanopb).int_size = IS_32]; //时区偏移(秒),带符号
+      Mode mode   = 8;
+}
+
+/* 传输日志消息 */
+/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+message AppPB_TraceText {
+    string trace_text = 1 [(nanopb).max_size = 129];  //单条传输文本消息
+}
+
+/* 世界时钟消息 */
+/* 这里携带俩个额外的参数确定世界时钟数量以及当前世界时钟位置 */
+message AppPB_WorldClock {
+    uint32 now_index   = 1 [(nanopb).int_size = IS_8];     //世界时钟当前索引
+    uint32 max_count   = 2 [(nanopb).int_size = IS_8];     //世界时钟数量
+    string city_name   = 3 [(nanopb).max_size = 100];      //城市名称
+    sint64 zone_offset = 4 [(nanopb).int_size = IS_32];    //时区偏移(秒),带符号
+    double longitude   = 5;                                //经度:东经+,西经-
+    double latitude    = 6;                                //维度:北纬+,南纬-
+    uint32 city_id     = 7 [(nanopb).int_size = IS_32];    //城市ID
+}

@@ -1,0 +1,22 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+/* Java包字段:Java编译时使用 */
+option java_package = "com.message_set.nanopb";
+option java_outer_classname = "AppPB_MsgSetProto";
+/* 依赖包 */
+import "app_nanopb_aux.proto";
+import "app_nanopb_mix.proto";
+
+/* 组合消息(所有nanopb子消息打包成一个整体) */
+message AppPB_MsgSet {
+    /* 单一性组合消息 */
+    oneof payload {
+        /* 内部消息:0x01~0x20 */
+        AppPB_ACK           ack             = 0x0001;
+        /* 系统消息:0x21~0x50 */
+        AppPB_TraceText     trace_text      = 0x0021;
+        /* 功能消息:0x50~ */
+        AppPB_SystemClock   system_clock    = 0x0050;
+        AppPB_WorldClock    world_clock     = 0x0051;
+    }
+}

@@ -17,7 +17,7 @@
 #include "pb_common.h"
 #include "pb_encode.h"
 #include "pb_decode.h"
-#include "app_pb_msg_set.pb.h"
+#include "app_nanopb_set.pb.h"
 #include "app_nanopb_xfer.h"
 #include "app_nanopb_xfer_mix.h"
 
@@ -82,11 +82,11 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
     /* 匹配数据包 */
     bool retval = false;
     switch (message.which_payload) {
-    case AppPB_MsgSet_system_clock_tag:
-        retval = app_nanopb_xfer_respond_system_clock(&message);
-        break;
     case AppPB_MsgSet_trace_text_tag:
         retval = app_nanopb_xfer_respond_trace_text(&message);
+        break;
+    case AppPB_MsgSet_system_clock_tag:
+        retval = app_nanopb_xfer_respond_system_clock(&message);
         break;
     default:
         APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d", message.type);

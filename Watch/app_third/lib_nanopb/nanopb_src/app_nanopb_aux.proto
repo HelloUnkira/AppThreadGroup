@@ -1,0 +1,19 @@
+syntax = "proto3";
+option optimize_for = LITE_RUNTIME;
+/* Java包字段:Java编译时使用 */
+option java_package = "com.message_aux.nanopb";
+option java_outer_classname = "AppPB_MsgFileAux";
+/* 依赖包 */
+import "nanopb/nanopb.proto";
+
+/* 辅助应答消息 */
+message AppPB_ACK {
+    /* 当次应答错误码 */
+    enum ErrorCode {
+        SUCCEED     = 0x00;     //无错误,应答成功
+        CRC_FAILED  = 0x01;     //CRC校验失败
+        CHK_FAILED  = 0x02;     //CheckSum校验失败
+    }
+    
+    ErrorCode error_code = 1;
+}

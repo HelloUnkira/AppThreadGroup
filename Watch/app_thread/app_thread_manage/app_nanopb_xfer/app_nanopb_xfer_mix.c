@@ -18,9 +18,37 @@
 #include "pb_common.h"
 #include "pb_encode.h"
 #include "pb_decode.h"
-#include "app_pb_msg_set.pb.h"
+#include "app_nanopb_set.pb.h"
 #include "app_nanopb_xfer.h"
 #include "app_nanopb_xfer_mix.h"
+
+/*@brief 打包传输系统追踪日志文本
+ */
+void app_nanopb_xfer_notify_trace_text(void)
+{
+    app_sys_trace_text_peek_reset();
+    while (true) {
+        /* 数据打包 */
+        AppPB_MsgSet message = {
+            .which_payload = AppPB_MsgSet_trace_text_tag,
+        };
+        /* 循环提取日志信息 */
+        app_sys_trace_text_peek(message.payload.trace_text.trace_text);
+        if (strlen(message.payload.trace_text.trace_text) == 0)
+            break;
+        /* 传输对象发送通知 */
+        app_nanopb_xfer_notify(&message);
+    }
+}
+
+/*@brief 传输接收系统追踪日志文本
+ */
+bool app_nanopb_xfer_respond_trace_text(AppPB_MsgSet *message)
+{
+    #if APP_SYS_LOG_PROTOCOL_CHECK
+    APP_SYS_LOG_INFO("trace text:%s", message->payload.trace_text.trace_text);
+    #endif
+}
 
 /*@brief 打包传输系统时钟
  */
@@ -30,7 +58,6 @@ void app_nanopb_xfer_notify_system_clock(void)
     app_module_clock_get_system_clock(&clock);
     /* 数据打包 */
     AppPB_MsgSet message = {
-        .type = AppPB_MsgSet_Type_Is_SystemClock,
         .which_payload = AppPB_MsgSet_system_clock_tag,
         .payload.system_clock = {
             .year   = clock.year,
@@ -51,8 +78,6 @@ void app_nanopb_xfer_notify_system_clock(void)
  */
 bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
 {
-    if (message->type != AppPB_MsgSet_Type_Is_SystemClock)
-        return;
     app_module_clock_t clock = {
         .year       = message->payload.system_clock.year,
         .month      = message->payload.system_clock.month,
@@ -77,37 +102,6 @@ bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
     app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);
     return true;
-}
-
-/*@brief 打包传输系统追踪日志文本
- */
-void app_nanopb_xfer_notify_trace_text(void)
-{
-    app_sys_trace_text_peek_reset();
-    while (true) {
-        /* 数据打包 */
-        AppPB_MsgSet message = {
-            .type = AppPB_MsgSet_Type_Is_TraceText,
-            .which_payload = AppPB_MsgSet_trace_text_tag,
-        };
-        /* 循环提取日志信息 */
-        app_sys_trace_text_peek(message.payload.trace_text.trace_text);
-        if (strlen(message.payload.trace_text.trace_text) == 0)
-            break;
-        /* 传输对象发送通知 */
-        app_nanopb_xfer_notify(&message);
-    }
-}
-
-/*@brief 传输接收系统追踪日志文本
- */
-bool app_nanopb_xfer_respond_trace_text(AppPB_MsgSet *message)
-{
-    if (message->type != AppPB_MsgSet_Type_Is_TraceText)
-        return;
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO("trace text:%s", message->payload.trace_text.trace_text);
-    #endif
 }
 
 #endif
