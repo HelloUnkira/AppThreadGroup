@@ -10,13 +10,13 @@ typedef enum {
     app_lv_ui_multi_font_24,
     app_lv_ui_multi_font_28,
     app_lv_ui_multi_font_num,
-} app_lv_ui_multi_font_size;
+} app_lv_ui_multi_font_size_t;
 
 typedef enum {
     app_lv_ui_multi_font_default,
     app_lv_ui_multi_font_english,
     app_lv_ui_multi_font_chinese,
-} app_lv_ui_multi_font_type;
+} app_lv_ui_multi_font_type_t;
 
 /* 默认多字库表标号 */
 #define APP_LV_UI_MULTI_FONT_DEFAULT    app_lv_ui_multi_font_16

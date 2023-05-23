@@ -5,7 +5,7 @@ typedef enum {
     app_module_protocol_default = 0,
     app_module_protocol_trace_text,
     app_module_protocol_system_clock,
-} app_module_protocol_notify_type;
+} app_module_protocol_notify_type_t;
 
 typedef struct {
     struct {

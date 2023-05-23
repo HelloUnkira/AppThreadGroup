@@ -103,6 +103,10 @@ typedef enum {  /* 线程组模组 */
 /*@brief 初始化所有线程及其附属资源
  *       启动所有线程
  */
-void app_thread_group_run(void);
+void app_thread_group_sched(void);
+
+/*@brief 获得线程组初始化状态
+ */
+bool app_thread_group_status_get(void);
 
 #endif

@@ -12,6 +12,7 @@
 #include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_manage.h"
+#include "app_module_data_center.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
 #include "app_module_shutdown.h"
@@ -23,6 +24,7 @@
 void app_thread_manage_ready(void)
 {
     /* 模组初始化 */
+    app_module_data_center_ready();
     app_module_protocol_ready();
 }
 

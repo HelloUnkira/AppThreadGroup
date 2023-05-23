@@ -87,7 +87,7 @@ static void app_main_update_sys_clock(void)
 int main(int argc, char *argv[])
 {
     /* 启动APP调度策略 */
-    app_thread_group_run();
+    app_thread_group_sched();
     /* 主线程滚动阻塞 */
     #if 0
     #elif 1

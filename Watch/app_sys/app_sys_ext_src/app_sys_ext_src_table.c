@@ -10,59 +10,71 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_large_table[] = {
 	{
 		/* unknown */
 		.data_name = "unknown",
-		.data_size = 20 * 10,
+		.data_size = 512 * 1,
 		.data_base = 0x0,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
-		.data_size = 20 * 10,
-		.data_base = 0xc8,
+		.data_size = 512 * 1,
+		.data_base = 0x200,
 	},
 };
 
 static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 	{
+		/* trace log text */
+		.data_name = "trace log text",
+		.data_size = 4096 * 1,
+		.data_base = 0x0,
+	},
+	{
+		/* system profile */
+		.data_name = "system profile",
+		.data_size = 512 * 1,
+		.data_base = 0x1000,
+	},
+	{
+		/* user profile */
+		.data_name = "user profile",
+		.data_size = 512 * 1,
+		.data_base = 0x1200,
+	},
+	{
 		/* system clock + crc32 */
 		.data_name = "system clock",
 		.data_size = 40,
-		.data_base = 0x0,
+		.data_base = 0x1400,
 	},
 	{
 		/* remind alarm + crc32 */
 		.data_name = "remind alarm",
 		.data_size = 65 * 10 + 10,
-		.data_base = 0x28,
+		.data_base = 0x1428,
 	},
 	{
 		/* remind sedentary + crc32 */
 		.data_name = "remind sedentary",
 		.data_size = 20,
-		.data_base = 0x2bc,
+		.data_base = 0x16bc,
 	},
 	{
 		/* remind drink + crc32 */
 		.data_name = "remind drink",
 		.data_size = 20,
-		.data_base = 0x2d0,
+		.data_base = 0x16d0,
 	},
 	{
 		/* do not disturb + crc32 */
 		.data_name = "do not disturb",
 		.data_size = 30,
-		.data_base = 0x2e4,
+		.data_base = 0x16e4,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
-		.data_size = 20 * 10,
-		.data_base = 0x302,
-	},
-	{
-		/* trace log text */
-		.data_name = "trace log text",
-		.data_size = 4096 * 2,
-		.data_base = 0x3ca,
+		.data_size = 512 * 1,
+		.data_base = 0x1702,
 	},
 };
 

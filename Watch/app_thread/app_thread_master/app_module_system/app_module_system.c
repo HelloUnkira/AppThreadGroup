@@ -136,11 +136,14 @@ void app_module_system_ready(void)
 }
 
 /*@brief     系统1毫秒更新事件
- *           硬件时钟中断或软件定时器中执行
+ *           硬件时钟中断中执行
  *@param[in] count 毫秒计数器,每毫秒+1
  */
 void app_module_system_1msec_update(uint32_t count)
 {
+    /* 线程组不在工作中,Tick是没有意义的 */
+    if (!app_thread_group_status_get(true))
+         return;
     /* timer msec update */
     app_module_timer_1ms_update();
     /* clock source */

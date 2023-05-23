@@ -4,6 +4,21 @@
     "data_group" :
     [
         {
+            "data_brief" : "trace log text",
+            "data_name"  : "trace log text",
+            "data_size"  : "4096 * 1"
+        },
+        {
+            "data_brief" : "system profile",
+            "data_name"  : "system profile",
+            "data_size"  : "512 * 1"
+        },
+        {
+            "data_brief" : "user profile",
+            "data_name"  : "user profile",
+            "data_size"  : "512 * 1"
+        },
+        {
             "data_brief" : "system clock + crc32",
             "data_name"  : "system clock",
             "data_size"  : "40"
@@ -31,12 +46,7 @@
         {
             "data_brief" : "unknown",
             "data_name"  : "unknown",
-            "data_size"  : "20 * 10"
-        },
-        {
-            "data_brief" : "trace log text",
-            "data_name"  : "trace log text",
-            "data_size"  : "4096 * 2"
+            "data_size"  : "512 * 1"
         }
     ]
 }

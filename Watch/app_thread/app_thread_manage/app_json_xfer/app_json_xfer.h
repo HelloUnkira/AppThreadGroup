@@ -7,7 +7,7 @@ typedef enum {
     app_json_xfer_msg_is_default = 0,
     app_json_xfer_msg_is_trace_text,
     app_json_xfer_msg_is_system_clock,
-} app_json_xfer_msg_type;
+} app_json_xfer_msg_type_t;
 
 /*@brief     协议适配层,推送协议数据
  *@param[in] json_object JSON对象

@@ -29,6 +29,7 @@
 
 /* 管道集合,为每一个线程分发一套传输管道 */
 /* 信号量,控制线程组的进动 */
+static bool app_thread_group_status = false;
 static app_sem_t app_thread_sem_src = {0};
 static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
@@ -152,9 +153,10 @@ bool app_package_notify(app_package_t *package)
     return true;
 }
 
-/*@brief 准备并启动所有线程及其附属资源
+/*@brief 线程组运行
+ *       准备并启动所有线程及其附属资源
  */
-void app_thread_group_run(void)
+void app_thread_group_sched(void)
 {
     app_mutex_process(&app_thread_mutex);
     /* 就绪管道和同步资源 */
@@ -187,5 +189,17 @@ void app_thread_group_run(void)
     app_thread_process(&app_thread_mix_custom);
     app_thread_process(&app_thread_manage);
     app_thread_process(&app_thread_lvgl);
+    /* 设置线程组就绪 */
+    app_thread_group_status = true;
 }
 
+/*@brief 获得线程组初始化状态
+ */
+bool app_thread_group_status_get(void)
+{
+    app_critical_t critical = {0};
+    app_critical_enter(&critical);
+    bool status = app_thread_group_status;
+    app_critical_exit(&critical);
+    return status;
+}
