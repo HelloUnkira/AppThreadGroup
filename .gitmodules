@@ -13,4 +13,4 @@
 [submodule "Watch/app_third/lib_self/StudyRecord"]
 	path = Watch/app_third/lib_self/StudyRecord
 	url = https://github.com/HelloUnkira/StudyRecord.git
-	branch = main
+	branch = master
