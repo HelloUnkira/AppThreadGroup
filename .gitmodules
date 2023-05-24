@@ -1,16 +1,16 @@
-[submodule "Watch/app_third/lib_lvgl/lib_lvgl"]
-	path = Watch/app_third/lib_lvgl/lib_lvgl
+[submodule "AppThreadGroup/app_third/lib_lvgl/lib_lvgl"]
+	path = AppThreadGroup/app_third/lib_lvgl/lib_lvgl
 	url = https://github.com/lvgl/lvgl.git
 	branch = release/v8.2
-[submodule "Watch/app_third/lib_json/lib_json"]
-	path = Watch/app_third/lib_json/lib_json
+[submodule "AppThreadGroup/app_third/lib_json/lib_json"]
+	path = AppThreadGroup/app_third/lib_json/lib_json
 	url = https://github.com/DaveGamble/cJSON.git
 	branch = master
-[submodule "Watch/app_third/lib_nanopb/lib_nanopb"]
-	path = Watch/app_third/lib_nanopb/lib_nanopb
+[submodule "AppThreadGroup/app_third/lib_nanopb/lib_nanopb"]
+	path = AppThreadGroup/app_third/lib_nanopb/lib_nanopb
 	url = https://github.com/nanopb/nanopb.git
 	branch = master
-[submodule "Watch/app_third/lib_self/StudyRecord"]
-	path = Watch/app_third/lib_self/StudyRecord
+[submodule "AppThreadGroup/app_third/lib_self/StudyRecord"]
+	path = AppThreadGroup/app_third/lib_self/StudyRecord
 	url = https://github.com/HelloUnkira/StudyRecord.git
 	branch = master
