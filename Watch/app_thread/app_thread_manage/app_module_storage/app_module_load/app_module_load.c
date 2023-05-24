@@ -44,16 +44,13 @@ void app_module_load_process(void)
  */
 void app_module_load_event(void)
 {
-    static bool not_load_yet = true;
+    app_module_load_status_not_over = true;
     /* 向线程发送加载事件 */
-    if (not_load_yet) {
-        app_package_t package = {
-            .thread = app_thread_id_manage,
-            .module = app_thread_manage_load,
-            .event  = 0,
-        };
-        app_package_notify(&package);
-        APP_SYS_LOG_WARN("");
-        not_load_yet = false;
-    }
+    app_package_t package = {
+        .thread = app_thread_id_manage,
+        .module = app_thread_manage_load,
+        .event  = 0,
+    };
+    app_package_notify(&package);
+    APP_SYS_LOG_WARN("");
 }

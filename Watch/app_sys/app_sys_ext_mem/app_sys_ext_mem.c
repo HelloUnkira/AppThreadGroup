@@ -22,8 +22,8 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
     app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     
-    /* chunk_base == 0x20000000, 保留内存 */
-    if (ext_mem->chunk_base == 0x20000000) {
+    /* chunk_base == 0x02000000, 保留内存 */
+    if (ext_mem->chunk_base == 0x02000000) {
         #if 0
         #elif APP_OS_EXT_MEM
             retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
@@ -33,8 +33,19 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
         #error "unknown ext mem adaptor"
         #endif
     }
-    /* chunk_base == 0x80000000, 闪存 */
-    if (ext_mem->chunk_base == 0x80000000) {
+    /* chunk_base == 0x08000000, 闪存 */
+    if (ext_mem->chunk_base == 0x08000000) {
+        #if 0
+        #elif APP_OS_EXT_MEM
+            retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
+        #elif APP_ARCH_EXT_MEM
+            retval = app_arch_ext_mem_read((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
+        #else
+        #error "unknown ext mem adaptor"
+        #endif
+    }
+    /* chunk_base == 0x10000000, SD卡 */
+    if (ext_mem->chunk_base == 0x10000000) {
         #if 0
         #elif APP_OS_EXT_MEM
             retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
@@ -63,8 +74,8 @@ size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
     app_mutex_take(&app_sys_ext_mem_mutex);
     /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     
-    /* chunk_base == 0x20000000, 保留内存 */
-    if (ext_mem->chunk_base == 0x20000000) {
+    /* chunk_base == 0x02000000, 保留内存 */
+    if (ext_mem->chunk_base == 0x02000000) {
         #if 0
         #elif APP_OS_EXT_MEM
             retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
@@ -74,8 +85,19 @@ size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
         #error "unknown ext mem adaptor"
         #endif
     }
-    /* ext_mem->chunk_base == 0x80000000, 闪存 */
-    if (ext_mem->chunk_base == 0x80000000) {
+    /* ext_mem->chunk_base == 0x08000000, 闪存 */
+    if (ext_mem->chunk_base == 0x08000000) {
+        #if 0
+        #elif APP_OS_EXT_MEM
+            retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
+        #elif APP_ARCH_EXT_MEM
+            retval = app_arch_ext_mem_write((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
+        #else
+        #error "unknown ext mem adaptor"
+        #endif
+    }
+    /* chunk_base == 0x10000000, SD卡 */
+    if (ext_mem->chunk_base == 0x10000000) {
         #if 0
         #elif APP_OS_EXT_MEM
             retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);

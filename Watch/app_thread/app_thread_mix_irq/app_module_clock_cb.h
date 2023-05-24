@@ -91,7 +91,7 @@ void app_module_clock_cb1_empty(app_module_clock_t clock[1])
 {
 }
 
-/*@brief     一类时钟空回调(占位回调,防止优化禁用)
+/*@brief     二类时钟空回调(占位回调,防止优化禁用)
  *@param[in] last_clock 时钟实例
  *@param[in] last_clock 时钟实例
  *@param[in] event      时钟事件

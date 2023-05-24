@@ -155,7 +155,11 @@ void app_lv_driver_handler(void)
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
         app_module_system_delay_set(2);
-        app_module_system_status_set(app_module_system_reset);
+        app_module_system_status_set(app_module_system_invalid);
+        if (app_module_system_mode_get() != app_module_system_shutdown)
+            app_module_system_mode_set(app_module_system_shutdown);
+        else
+            app_module_system_mode_set(app_module_system_normal);
     }
 
     HWND app_lv_display_get_window(void);

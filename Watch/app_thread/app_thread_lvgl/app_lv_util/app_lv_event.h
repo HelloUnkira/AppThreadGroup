@@ -21,13 +21,17 @@ void app_lv_scene_update(void *scene);
  */
 void app_lv_scene_start(void);
 
-/*@brief lvgl 场景启动
+/*@brief lvgl 场景停止
  */
 void app_lv_scene_stop(void);
 
-/*@brief lvgl 场景启动
+/*@brief lvgl 场景低功耗
  */
 void app_lv_scene_dlps(bool status);
+
+/*@brief lvgl 场景停止
+ */
+void app_lv_scene_shutdown(void);
 
 #endif
 

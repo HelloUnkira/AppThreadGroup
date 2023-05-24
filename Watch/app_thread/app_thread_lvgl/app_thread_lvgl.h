@@ -19,6 +19,7 @@ typedef enum {  /* GUI事件调度模组事件 */
 typedef enum {  /* GUI场景事件 */
     app_thread_lvgl_ui_scene_start,                 /* UI场景进入 */
     app_thread_lvgl_ui_scene_stop,                  /* UI场景退出 */
+    app_thread_lvgl_ui_scene_shutdown,              /* UI场景关机 */
     app_thread_lvgl_ui_scene_check_time,            /* UI场景计时检查 */
     /* 下述事件对应于特定场景内需要的事件 */
     app_thread_lvgl_ui_countdown_remind,            /* 倒计时提醒事件 */

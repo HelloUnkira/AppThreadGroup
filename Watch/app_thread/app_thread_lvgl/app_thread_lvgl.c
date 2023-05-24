@@ -169,6 +169,11 @@ void app_thread_lvgl_routine(void)
                     APP_SYS_LOG_WARN("ui scene start");
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_start, false);
+                    /* 更新lvgl设备 */
+                    app_lv_mouse_dlps_exit();
+                    app_lv_mousewheel_dlps_exit();
+                    // app_lv_keyboard_dlps_exit();
+                    app_lv_display_dlps_exit();
                 }
                 /* 终止UI场景 */
                 if (package.event == app_thread_lvgl_ui_scene_stop) {
@@ -180,6 +185,25 @@ void app_thread_lvgl_routine(void)
                     APP_SYS_LOG_WARN("ui scene stop");
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_stop, false);
+                    /* 更新lvgl设备 */
+                    app_lv_display_dlps_enter();
+                    app_lv_keyboard_dlps_enter();
+                    app_lv_mousewheel_dlps_enter();
+                    app_lv_mouse_dlps_enter();
+                }
+                /* 进入UI场景(关机) */
+                if (package.event == app_thread_lvgl_ui_scene_shutdown) {
+                    /* 禁用UI的一切交互,仅保留按压事件响应 */
+                    app_lv_ui_event_default_config(NULL, true, NULL);
+                    app_lv_ui_check_time_reset(0, 0);
+                    app_lv_ui_check_time_exec(false);
+                    APP_SYS_LOG_WARN("ui scene shutdown");
+                    app_lv_scene_reset(&app_lv_ui_watch_dlps, false);
+                    /* 更新lvgl设备 */
+                    app_lv_display_dlps_enter();
+                    // app_lv_keyboard_dlps_enter();
+                    app_lv_mousewheel_dlps_enter();
+                    app_lv_mouse_dlps_enter();
                 }
                 /* UI场景计时检查 */
                 if (package.event == app_thread_lvgl_ui_scene_check_time) {

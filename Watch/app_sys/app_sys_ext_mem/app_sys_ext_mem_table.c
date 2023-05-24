@@ -10,23 +10,30 @@ static const app_sys_ext_mem_t app_sys_ext_mem_table[] = {
 	{
 		/* static memory, suitable thermal data */
 		.chunk_name 	= "static_memory",
-		.chunk_base 	=  0x20000000,
-		.chunk_size 	=  4096 * 50,
+		.chunk_base 	=  0x02000000,
+		.chunk_size 	=  1024 * 10,
 		.chunk_offset 	=  0x0,
 	},
 	{
 		/* flash memory: large mix data chunk, suitable RAW management */
 		.chunk_name 	= "mix_chunk_large",
-		.chunk_base 	=  0x80000000,
-		.chunk_size 	=  4096 * 50,
+		.chunk_base 	=  0x08000000,
+		.chunk_size 	=  1024 * 200,
 		.chunk_offset 	=  0x0,
 	},
 	{
 		/* flash memory: small mix data chunk, suitable FS management */
 		.chunk_name 	= "mix_chunk_small",
-		.chunk_base 	=  0x80000000,
-		.chunk_size 	=  4096 * 10,
+		.chunk_base 	=  0x08000000,
+		.chunk_size 	=  1024 * 40,
 		.chunk_offset 	=  0x32000,
+	},
+	{
+		/* secure digital memory card, suitable permanently data */
+		.chunk_name 	= "sd_mem_card",
+		.chunk_base 	=  0x10000000,
+		.chunk_size 	=  1024 * 1024 * 8,
+		.chunk_offset 	=  0x0,
 	},
 };
 

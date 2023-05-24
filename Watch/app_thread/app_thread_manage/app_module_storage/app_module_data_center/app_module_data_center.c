@@ -25,12 +25,10 @@ static uint8_t app_module_data_center_static_assert[sizeof(app_module_data_cente
 
 /*@brief      获得数据中心的数据源,直接本地修改
  *@param[out] data_center数据中心索引地址
- *@param[out] type 当前数据缓存类型
  */
-void app_module_data_center_source(app_module_data_center_t **data_center, uint32_t *type)
+void app_module_data_center_source(app_module_data_center_t **data_center)
 {
     *data_center = &app_module_data_center;
-    *type = app_module_data_center_type;
 }
 
 /*@brief 更换目标数据类型并锁定数据中心,静止更换其他类型数据
@@ -47,6 +45,10 @@ void app_module_data_center_load(uint32_t type)
     
     APP_SYS_ASSERT(app_module_data_center_number > type);
     app_mutex_take(&app_module_data_center_mutex);
+    /* 本地缓存命中时不要再继续加载了 */
+    if (app_module_data_center_type == type)
+        return;
+    /* 清空缓存并命中指定类型的数据块 */
     memset(&data_center_data, 0, sizeof(data_center_data));
     app_module_data_center_type = type;
     switch (app_module_data_center_type)
@@ -63,7 +65,8 @@ void app_module_data_center_load(uint32_t type)
         break;
     }
     uint32_t crc32 = app_sys_crc32(&data_center_data.data_center, sizeof(app_module_data_center_t));
-    if (crc32 != data_center_data.crc32) {
+    /* 如果当次校验与最开始加载时不一样表明数据无效化了 */
+    if (data_center_data.crc32 != crc32) {
         memset(&data_center_data, 0, sizeof(data_center_data));
         APP_SYS_LOG_WARN("load data center fail:%d", type);
     }
@@ -81,19 +84,23 @@ void app_module_data_center_dump(void)
         };
     } data_center_data;
     
-    data_center_data.crc32 = app_sys_crc32(&data_center_data.data_center, sizeof(app_module_data_center_t));
-    switch (app_module_data_center_type)
-    {
-    case app_module_data_center_system_profile:
-        app_sys_ext_src_write("mix_chunk_small", APP_MODULE_DATA_CENTER_SYSTEM_PROFILE,
-                               data_center_data.buffer, sizeof(data_center_data));
-        break;
-    case app_module_data_center_user_profile:
-        app_sys_ext_src_write("mix_chunk_small", APP_MODULE_DATA_CENTER_USER_PROFILE,
-                               data_center_data.buffer, sizeof(data_center_data));
-        break;
-    default:
-        break;
+    uint32_t crc32 = app_sys_crc32(&data_center_data.data_center, sizeof(app_module_data_center_t));
+    /* 如果当次校验与最开始加载时一样表明数据未修改无需转储 */
+    if (data_center_data.crc32 != crc32) {
+        data_center_data.crc32  = crc32;
+        switch (app_module_data_center_type)
+        {
+        case app_module_data_center_system_profile:
+            app_sys_ext_src_write("mix_chunk_small", APP_MODULE_DATA_CENTER_SYSTEM_PROFILE,
+                                   data_center_data.buffer, sizeof(data_center_data));
+            break;
+        case app_module_data_center_user_profile:
+            app_sys_ext_src_write("mix_chunk_small", APP_MODULE_DATA_CENTER_USER_PROFILE,
+                                   data_center_data.buffer, sizeof(data_center_data));
+            break;
+        default:
+            break;
+        }
     }
     app_mutex_give(&app_module_data_center_mutex);
 }

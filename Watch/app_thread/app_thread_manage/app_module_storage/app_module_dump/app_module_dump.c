@@ -47,16 +47,13 @@ void app_module_dump_process(void)
  */
 void app_module_dump_event(void)
 {
-    static bool not_dump_yet = true;
+    app_module_dump_status_not_over = true;
     /* 向线程发送转储事件 */
-    if (not_dump_yet) {
-        app_package_t package = {
-            .thread = app_thread_id_manage,
-            .module = app_thread_manage_dump,
-            .event  = 0,
-        };
-        app_package_notify(&package);
-        APP_SYS_LOG_WARN("");
-        not_dump_yet = false;
-    }
+    app_package_t package = {
+        .thread = app_thread_id_manage,
+        .module = app_thread_manage_dump,
+        .event  = 0,
+    };
+    app_package_notify(&package);
+    APP_SYS_LOG_WARN("");
 }

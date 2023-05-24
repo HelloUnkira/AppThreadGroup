@@ -14,7 +14,7 @@ typedef union {
     #define APP_MODULE_DATA_CENTER_SYSTEM_PROFILE   "system profile"
     /* 数据中心管理资源:系统配置结构 */
     struct {
-        uint8_t dev_work_mode:4;    /* 设备工作模式 */
+        uint8_t system_mode:4;  /* 设备工作模式 */
     } system_profile;
     /* --------------------------------------------------------------------- */
     /* 数据中心管理资源:用户配置字段 */
@@ -29,9 +29,8 @@ typedef union {
 
 /*@brief      获得数据中心的数据源,直接本地修改
  *@param[out] data_center数据中心索引地址
- *@param[out] type 当前数据缓存类型
  */
-void app_module_data_center_source(app_module_data_center_t **data_center, uint32_t *type);
+void app_module_data_center_source(app_module_data_center_t **data_center);
 
 /*@brief 更换目标数据类型并锁定数据中心,静止更换其他类型数据
  */

@@ -23,26 +23,63 @@
  */
 void app_lv_ui_event_default(lv_event_t *e)
 {
-    #if 0  /* 输入设备的事件表 */
-    LV_EVENT_PRESSED,
-    LV_EVENT_PRESSING,
-    LV_EVENT_PRESS_LOST,
-    LV_EVENT_SHORT_CLICKED,
-    LV_EVENT_LONG_PRESSED,
-    LV_EVENT_LONG_PRESSED_REPEAT,
-    LV_EVENT_CLICKED,
-    LV_EVENT_RELEASED,
-    LV_EVENT_SCROLL_BEGIN,
-    LV_EVENT_SCROLL_END,
-    LV_EVENT_SCROLL,
-    LV_EVENT_GESTURE,
-    LV_EVENT_KEY,
-    LV_EVENT_FOCUSED,
-    LV_EVENT_DEFOCUSED,
-    LV_EVENT_LEAVE
-    #endif
-
     lv_event_code_t code = lv_event_get_code(e);
+    
+    /* 内部记录按压与长按压特殊响应流程 */
+    /* 用于响应内部长按压按键事件 */
+    static bool catch_key_enter = false;
+    static uint8_t count_key_enter = 0;
+    switch (code) {
+        case LV_EVENT_PRESSED:
+            count_key_enter = 0;
+            break;
+        case LV_EVENT_RELEASED:
+            count_key_enter = 0;
+            catch_key_enter = false;
+            break;
+        case LV_EVENT_KEY: {
+            uint32_t key = lv_indev_get_key(lv_indev_get_act());
+            catch_key_enter = (key == LV_KEY_ENTER ? true : false);
+            break;
+        }
+        case LV_EVENT_LONG_PRESSED:
+            count_key_enter += 4;
+            APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
+            break;
+        case LV_EVENT_LONG_PRESSED_REPEAT:
+            count_key_enter++;
+            APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT:%u %u", catch_key_enter, count_key_enter);
+            break;
+        default:
+            break;
+    }
+    /* 同时抓获目标按键及其按压次数达标 */
+    if (catch_key_enter && count_key_enter == 3 * 10) {
+        APP_SYS_LOG_WARN("catch key enter long click");
+        /* 忽略掉当次按下,剩下的所有事件 */
+        lv_indev_wait_release(lv_event_get_indev(e));
+        /* 选择不同的流程 */
+        if (app_module_system_mode_get() == app_module_system_shutdown) {
+            app_module_system_delay_set(2);
+            app_module_system_status_set(app_module_system_invalid);
+            /* 电量不足为低电量模式,充足为正常模式 */
+            app_module_system_mode_set(app_module_system_normal);
+        } else {
+            app_module_system_delay_set(2);
+            app_module_system_status_set(app_module_system_invalid);
+            /* 电量不足为低电量模式,充足为正常模式 */
+            app_module_system_mode_set(app_module_system_shutdown);
+        }
+        catch_key_enter = false;
+        count_key_enter = 0;
+        return;
+    } else {
+        /* 关机模式:只允许响应按键及其相关事件 */
+        if (app_module_system_mode_get() == app_module_system_shutdown)
+            return;
+        /* 正常模式:响应其他事件 */
+    }
+    
     /* 响应输入设备的事件 */
     switch (code) {
     case LV_EVENT_GESTURE: {
