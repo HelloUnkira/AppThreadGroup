@@ -2,6 +2,8 @@
 
 # 自己的库
 # git submodule add -f --branch master https://github.com/HelloUnkira/StudyRecord.git AppThreadGroup/app_third/lib_self/StudyRecord
+# JS库
+# git submodule add -f --branch master https://github.com/jerryscript-project/jerryscript.git AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
 # LVGL库:
 # git submodule add -f --branch release/v8.0 https://github.com/lvgl/lvgl.git AppThreadGroup/app_third/lib_lvgl/lib_lvgl
 # git submodule add -f --branch release/v8.1 https://github.com/lvgl/lvgl.git AppThreadGroup/app_third/lib_lvgl/lib_lvgl
@@ -16,6 +18,7 @@
 
 # 载入第三方库
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_self)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_jerryscript)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_nanopb)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lvgl)

@@ -14,3 +14,7 @@
 	path = AppThreadGroup/app_third/lib_self/StudyRecord
 	url = https://github.com/HelloUnkira/StudyRecord.git
 	branch = master
+[submodule "AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript"]
+	path = AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
+	url = https://github.com/jerryscript-project/jerryscript.git
+	branch = master
