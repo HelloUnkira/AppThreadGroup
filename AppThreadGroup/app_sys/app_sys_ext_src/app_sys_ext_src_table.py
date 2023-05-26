@@ -113,4 +113,4 @@ def encode_app_sys_ext_src_table():
 
 if __name__ == '__main__':
     encode_app_sys_ext_src_table()
-    input('\nscript generation completed\n')
+    print('app sys ext src table generation completed')

@@ -4,7 +4,6 @@
 #ifndef PB_NANOPB_NANOPB_PB_H_INCLUDED
 #define PB_NANOPB_NANOPB_PB_H_INCLUDED
 #include <pb.h>
-#include "nanopb/google/protobuf/descriptor.pb.h"
 
 #if PB_PROTO_HEADER_VERSION != 40
 #error Regenerate this file with the current version of nanopb generator.

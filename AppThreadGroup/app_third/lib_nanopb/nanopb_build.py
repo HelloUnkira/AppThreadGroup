@@ -24,4 +24,4 @@ def nanopb_recuse_build(path) -> None:
 
 if __name__ == '__main__':
     nanopb_recuse_build(r'.\nanopb_src')
-    input('nanopb protoc recuse build finish')
+    print('nanopb protoc recuse build finish')

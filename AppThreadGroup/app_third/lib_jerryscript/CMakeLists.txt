@@ -23,3 +23,7 @@ set(JERRY_VERSION "" CACHE STRING "See Next Level: CMakeLists.txt")
 # 此处为外部强行链接,启用相关权限CMP0079
 cmake_policy(SET CMP0079 NEW)
 target_link_libraries(jerry-core jerry-port)
+# 本地Python脚本执行,更新源
+set(PYTHON "python.exe")
+execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/js_convert.py
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})

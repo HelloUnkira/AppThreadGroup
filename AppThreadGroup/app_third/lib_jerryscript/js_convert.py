@@ -34,4 +34,4 @@ def js_convert_recuse_rename(path) -> None:
 if __name__ == '__main__':
     js_convert_recuse(r'.\js_convert_target')
     js_convert_recuse_rename(r'.\js_convert_target')
-    input('js convert recuse package finish')
+    print('js convert recuse package finish')

@@ -100,4 +100,4 @@ def encode_app_sys_ext_mem_table():
 
 if __name__ == '__main__':
     encode_app_sys_ext_mem_table()
-    input('\nscript generation completed\n')
+    print('app sys ext mem table generation completed')
