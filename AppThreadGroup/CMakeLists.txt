@@ -1,5 +1,5 @@
 cmake_minimum_required (VERSION 3.10.1)
-project(app_main C)
+project(app_thread_group C)
 # 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
 link_libraries(-lm -lpthread -lSDL2)
 # 导入文件搜索路径,编译参数

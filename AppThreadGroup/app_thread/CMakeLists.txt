@@ -2,6 +2,7 @@
 file(GLOB_RECURSE SOURCES *.c)
 add_library(app_thread STATIC ${SOURCES})
 set_target_properties(app_thread PROPERTIES LINKER_LANGUAGE C)
+target_link_libraries(app_thread PUBLIC jerry-core)
 target_link_libraries(app_thread PUBLIC lvgl)
 target_link_libraries(app_thread PUBLIC lvgl_examples)
 target_link_libraries(app_thread PUBLIC lvgl_demos)
