@@ -5,62 +5,73 @@
 
 /* @服务例程适配<Start> */
 
-void * app_thread_master_routine_adaptor(void *args)
+static void * app_thread_master_routine_adaptor(void *args)
 {
     app_thread_master_routine();
 }
 
-void * app_thread_mix_irq_routine_adaptor(void *args)
+static void * app_thread_mix_irq_routine_adaptor(void *args)
 {
     app_thread_mix_irq_routine();
 }
 
-void * app_thread_mix_custom_routine_adaptor(void *args)
+static void * app_thread_mix_custom_routine_adaptor(void *args)
 {
     app_thread_mix_custom_routine();
 }
 
-void * app_thread_manage_routine_adaptor(void *args)
+static void * app_thread_manage_routine_adaptor(void *args)
 {
     app_thread_manage_routine();
 }
 
-void * app_thread_lvgl_routine_adaptor(void *args)
+static void * app_thread_lvgl_routine_adaptor(void *args)
 {
     app_thread_lvgl_routine();
+}
+
+static void * app_thread_jerryscript_routine_adaptor(void *args)
+{
+    app_thread_jerryscript_routine();
 }
 
 /* @服务例程适配<End> */
 
 /* @线程体<Start> */
 
-app_thread_t app_thread_master = {
+static app_thread_t app_thread_master = {
    .priority = 1,
    .routine  = app_thread_master_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_mix_irq = {
+static app_thread_t app_thread_mix_irq = {
    .priority = 2,
    .routine  = app_thread_mix_irq_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_mix_custom = {
+static app_thread_t app_thread_mix_custom = {
    .priority = 3,
    .routine  = app_thread_mix_custom_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_manage = {
+static app_thread_t app_thread_manage = {
    .priority = 5,
    .routine  = app_thread_manage_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_lvgl = {
+static app_thread_t app_thread_lvgl = {
    .priority = 4,
    .routine  = app_thread_lvgl_routine_adaptor,
+   .args     = NULL,
+};
+
+static app_thread_t app_thread_jerryscript = {
+   .priority = 5,
+   .routine  = app_thread_jerryscript_routine_adaptor,
    .args     = NULL,
 };
 

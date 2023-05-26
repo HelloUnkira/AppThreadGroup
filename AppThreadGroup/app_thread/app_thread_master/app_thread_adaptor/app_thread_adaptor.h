@@ -18,12 +18,14 @@ void app_thread_mix_irq_ready(void);
 void app_thread_mix_custom_ready(void);
 void app_thread_manage_ready(void);
 void app_thread_lvgl_ready(void);
+void app_thread_jerryscript_ready(void);
 /* 线程组服务例程 */
 void app_thread_master_routine(void);
 void app_thread_mix_irq_routine(void);
 void app_thread_mix_custom_routine(void);
 void app_thread_manage_routine(void);
 void app_thread_lvgl_routine(void);
+void app_thread_jerryscript_routine(void);
 
 #include "app_thread_adaptor_windows.h"
 #include "app_thread_adaptor_linux.h"

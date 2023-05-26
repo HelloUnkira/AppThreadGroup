@@ -68,7 +68,7 @@ void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe);
 #endif
 
 /* 线程组线程包裹接收最大警告线(警告) */
-#if APP_THREAD_GROUP_REALTIME
+#if     APP_THREAD_GROUP_REALTIME
 #define APP_THREAD_PACKAGE_MAX  20
 #else
 #define APP_THREAD_PACKAGE_MAX  100
@@ -87,9 +87,9 @@ typedef enum {
     app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
     app_thread_id_manage,           /* 数据管理线程(priority:5) */
     app_thread_id_lvgl,             /* lvgl线程(priority:4) */
-    /* 继续添加其他线程 */
+    app_thread_id_jerryscript,      /* jerryscript线程(priority:5) */
+    /* 继续添加其他线程... */
     app_thread_id_number,              /* 占位符:子线程组数量 */
-    app_thread_id_unknown,          /* 占位符:未知来源,不可为未知去处 */
 } app_thread_id_t;
 
 /* 线程组事件 */
@@ -103,7 +103,7 @@ typedef enum {  /* 线程组模组 */
 /*@brief 初始化所有线程及其附属资源
  *       启动所有线程
  */
-void app_thread_group_sched(void);
+void app_thread_group_schedule(void);
 
 /*@brief 获得线程组初始化状态
  */

@@ -11,10 +11,10 @@ static app_sys_log_t app_sys_log = {0};
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
  */
-void app_sys_log_ready(app_sys_log_t sys_log)
+void app_sys_log_ready(app_sys_log_t log)
 {
     app_mutex_process(&app_sys_log_mutex);
-    app_sys_log = sys_log;
+    app_sys_log = log;
 }
 
 /*@brief     格式日志输出接口

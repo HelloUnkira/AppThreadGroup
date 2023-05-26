@@ -5,62 +5,73 @@
 
 /* @服务例程适配<Start> */
 
-DWORD WINAPI app_thread_master_routine_adaptor(LPVOID lpParam)
+static DWORD WINAPI app_thread_master_routine_adaptor(LPVOID lpParam)
 {
     app_thread_master_routine();
 }
 
-DWORD WINAPI app_thread_mix_irq_routine_adaptor(LPVOID lpParam)
+static DWORD WINAPI app_thread_mix_irq_routine_adaptor(LPVOID lpParam)
 {
     app_thread_mix_irq_routine();
 }
 
-DWORD WINAPI app_thread_mix_custom_routine_adaptor(LPVOID lpParam)
+static DWORD WINAPI app_thread_mix_custom_routine_adaptor(LPVOID lpParam)
 {
     app_thread_mix_custom_routine();
 }
 
-DWORD WINAPI app_thread_manage_routine_adaptor(LPVOID lpParam)
+static DWORD WINAPI app_thread_manage_routine_adaptor(LPVOID lpParam)
 {
     app_thread_manage_routine();
 }
 
-DWORD WINAPI app_thread_lvgl_routine_adaptor(LPVOID lpParam)
+static DWORD WINAPI app_thread_lvgl_routine_adaptor(LPVOID lpParam)
 {
     app_thread_lvgl_routine();
+}
+
+static DWORD WINAPI app_thread_jerryscript_routine_adaptor(LPVOID lpParam)
+{
+    app_thread_jerryscript_routine();
 }
 
 /* @服务例程适配<End> */
 
 /* @线程体<Start> */
 
-app_thread_t app_thread_master = {
+static app_thread_t app_thread_master = {
    .priority = THREAD_PRIORITY_HIGHEST,
    .routine  = app_thread_master_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_mix_irq = {
+static app_thread_t app_thread_mix_irq = {
    .priority = THREAD_PRIORITY_ABOVE_NORMAL,
    .routine  = app_thread_mix_irq_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_mix_custom = {
+static app_thread_t app_thread_mix_custom = {
    .priority = THREAD_PRIORITY_NORMAL,
    .routine  = app_thread_mix_custom_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_manage = {
+static app_thread_t app_thread_manage = {
    .priority = THREAD_PRIORITY_BELOW_NORMAL,
    .routine  = app_thread_manage_routine_adaptor,
    .args     = NULL,
 };
 
-app_thread_t app_thread_lvgl = {
+static app_thread_t app_thread_lvgl = {
    .priority = THREAD_PRIORITY_NORMAL,
    .routine  = app_thread_lvgl_routine_adaptor,
+   .args     = NULL,
+};
+
+static app_thread_t app_thread_jerryscript = {
+   .priority = THREAD_PRIORITY_BELOW_NORMAL,
+   .routine  = app_thread_jerryscript_routine_adaptor,
    .args     = NULL,
 };
 

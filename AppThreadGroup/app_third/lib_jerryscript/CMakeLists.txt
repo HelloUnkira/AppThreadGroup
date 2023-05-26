@@ -1,8 +1,8 @@
 
 # 配置第三方库
 set(JERRY_CMDLINE   OFF CACHE BOOL "See Next Level: CMakeLists.txt")
-set(JERRY_EXT       OFF CACHE BOOL "See Next Level: CMakeLists.txt")
-set(JERRY_MATH      OFF CACHE BOOL "See Next Level: CMakeLists.txt")
+set(JERRY_EXT       ON  CACHE BOOL "See Next Level: CMakeLists.txt")
+set(JERRY_MATH      ON  CACHE BOOL "See Next Level: CMakeLists.txt")
 # 备注:JERRY_PORT不应该使用,要自适配
 set(JERRY_PORT      OFF CACHE BOOL "See Next Level: CMakeLists.txt")
 # 配置第三方库
