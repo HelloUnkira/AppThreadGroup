@@ -16,7 +16,7 @@ def nanopb_recuse_build(path) -> None:
     for item in os.listdir(path):
         if os.path.isfile(path + '\\' + item):
            #if item.split('.')[-1] == 'proto':
-            if item.split('.')[-1] == 'proto' and item.split('.')[0] != 'nanopb':
+            if item.split('.')[-1] == 'proto' and item.split('.')[0] != 'descriptor' and item.split('.')[0] != 'nanopb':
                 print(compile + execute + path + '\\' + item)
                 os.system(compile + execute + path + '\\' + item)
         if os.path.isdir(path + '\\' + item):
