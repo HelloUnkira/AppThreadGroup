@@ -11,6 +11,7 @@ import os.path
 compile = r'.\nanopb_x86\generator-bin\protoc.exe '
 execute = r'--proto_path=.\nanopb_src --nanopb_out=.\nanopb_out '
 
+
 def nanopb_recuse_build(path) -> None:
     for item in os.listdir(path):
         if os.path.isfile(path + '\\' + item):

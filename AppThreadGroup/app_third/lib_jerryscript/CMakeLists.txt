@@ -20,4 +20,6 @@ execute_process(COMMAND
     OUTPUT_STRIP_TRAILING_WHITESPACE)
 set(JERRY_VERSION "" CACHE STRING "See Next Level: CMakeLists.txt")
 # 配置额外的链接关系...
-# target_link_libraries(jerry-core PUBLIC jerry-port)
+# 此处为外部强行链接,启用相关权限CMP0079
+cmake_policy(SET CMP0079 NEW)
+target_link_libraries(jerry-core jerry-port)

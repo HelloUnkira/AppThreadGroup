@@ -9,6 +9,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
+#include "app_sys_work.h"
 #include "app_thread_master.h"
 #include "app_thread_jerryscript.h"
 
@@ -20,7 +21,7 @@
 void app_thread_jerryscript_ready(void)
 {
     /* 框架初始化 */
-    
+    jerry_init(JERRY_INIT_EMPTY);
     
     /* 模组初始化 */
 }
