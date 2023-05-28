@@ -1,7 +1,7 @@
 /*实现目标:
  *    lv适配Win模拟器
  */
-    
+
 #include "lvgl.h"
 #include "lv_drv_conf.h"
 #include "app_lv_drv.h"

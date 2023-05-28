@@ -1,6 +1,5 @@
-/*
- *实现目的:
- *    lvgl超时回主界面以及息屏
+/*实现目标:
+ *    lvgl场景提醒管理
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1

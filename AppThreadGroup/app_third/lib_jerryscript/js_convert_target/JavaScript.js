@@ -3,8 +3,7 @@
 //https://www.w3school.com.cn/js/js_string_templates.asp
 
 //这里只使用接口
-//console.log
-//ido_debug_info
+//this.app_js_info
 
 //约定:
 //Jerry对new关键字不支持
@@ -32,9 +31,9 @@ var y = 2.5;
 //加减乘除
 var z = 1.0/(x+y)*(x-y);
 var start = "!!!hello world!!!";
-ido_debug_info("");
-console.log(start);
-console.log("1.0/(x+y)*(x-y):", 1.0/(x+y)*(x-y), " result:", z);
+this.app_js_info("");
+this.app_js_info(start);
+this.app_js_info("1.0/(x+y)*(x-y):", 1.0/(x+y)*(x-y), " result:", z);
 //let 和 const
 {
     const PAI = 3.1415926;  //创建常量,不可重新赋值
@@ -45,26 +44,26 @@ var x = 1;      //这里定义了同名变量(之前的那个就会失效)
 var y = 0.5;    //这种出现了同名情况(实际上是由于提升导致的)
 var z = 1.0/(x+y)*(x-y);
 var a = 33 % 7; //取模
-console.log("z:", (z -= ++z), "z:", z);
-console.log("a:", (a += a--), "a:", a);
-console.log("a**2:", a**2);  //幂运算:pow(x,y)
+this.app_js_info("z:", (z -= ++z), "z:", z);
+this.app_js_info("a:", (a += a--), "a:", a);
+this.app_js_info("a**2:", a**2);  //幂运算:pow(x,y)
 //字符串级联
 var str1 = "Hello";
 var str2 = "Kitty";
 var str3 = str1 + str2;
 //中间夹个变量
-console.log(x + " " + str1 + " " + y + " " + str2 + " " + z);
-console.log(str3);
+this.app_js_info(x + " " + str1 + " " + y + " " + str2 + " " + z);
+this.app_js_info(str3);
 //比较运算(忽略>,<,>=,<=)
-console.log("(1 ==  1.0):", 1 ==  1.0); //等于(类型不一定相等: 1 == "1")
-console.log("(1 !=  1.0):", 1 !=  1.0); //不等于
-console.log("(1 === 1.0):", 1 === 1.0); //等值等类型
-console.log("(1 !== 1.0):", 1 !== 1.0); //不等值或不等类型
+this.app_js_info("(1 ==  1.0):", 1 ==  1.0); //等于(类型不一定相等: 1 == "1")
+this.app_js_info("(1 !=  1.0):", 1 !=  1.0); //不等于
+this.app_js_info("(1 === 1.0):", 1 === 1.0); //等值等类型
+this.app_js_info("(1 !== 1.0):", 1 !== 1.0); //不等值或不等类型
 //逻辑运算(忽略&&,||,!)(忽略&,|,!,^)
 //!!!JavaScript使用32位有符号数!!!
-console.log("(-1 <<  1):", -1 <<  1);   //填0左位移
-console.log("(-1 >>  1):", -1 >>  1);   //符号右位移
-console.log("(-1 >>> 1):", -1 >>> 1);   //填0右位移
+this.app_js_info("(-1 <<  1):", -1 <<  1);   //填0左位移
+this.app_js_info("(-1 >>  1):", -1 >>  1);   //符号右位移
+this.app_js_info("(-1 >>> 1):", -1 >>> 1);   //填0右位移
 //复合赋值(+=，-=,*=,/=,%=,<<=,>>=,>>>=,&=,^=,|=,**=)
 //函数1
 var f1 = function(x, y) {
@@ -74,112 +73,112 @@ var f1 = function(x, y) {
 function f2(x, y) {
     return x ** y;
 }
-console.log("2**3:", f1(2,3));
-console.log("2**3:", f2(2,3));
+this.app_js_info("2**3:", f1(2,3));
+this.app_js_info("2**3:", f2(2,3));
 //匿名函数(打印不执行函数,这里相当于传函数指针)
-console.log("2**3:", function() {return 2**3});
+this.app_js_info("2**3:", function() {return 2**3});
 //对象
 var object = {
     type :"hello ketty",
     state:"so beautiful",
 };
-console.log(object, " ", object.type, " ", object.state);
+this.app_js_info(object, " ", object.type, " ", object.state);
 //字符串方法(等等)
 var str = "1 11 101 11 1 11 1"
 //搜索
-console.log("str.indexOf:",      str.indexOf("1"));
-console.log("str.lastIndexOf:",  str.lastIndexOf("1"));
-console.log("str.indexOf:",      str.indexOf("1", 2));
-console.log("str.lastIndexOf:",  str.lastIndexOf("1", 18));
-console.log("str.search:",       str.search("101"));
+this.app_js_info("str.indexOf:",      str.indexOf("1"));
+this.app_js_info("str.lastIndexOf:",  str.lastIndexOf("1"));
+this.app_js_info("str.indexOf:",      str.indexOf("1", 2));
+this.app_js_info("str.lastIndexOf:",  str.lastIndexOf("1", 18));
+this.app_js_info("str.search:",       str.search("101"));
 //提取
-console.log("str.slice:",        str.slice(3, 7));       //3~7
-console.log("str.slice:",        str.slice(-7, -3));     //逆向
-console.log("str.slice:",        str.slice(3));          //3~end
-console.log("str.slice:",        str.slice(-2));         //逆向~start
-console.log("str.substring:",    str.substring(3, 7));   //3~7
-console.log("str.substring:",    str.substring(3));      //3~end
-console.log("str.substr:",       str.substr(3, 4));      //3~3 + 4
-console.log("str.substr:",       str.substr(3));         //3~end
-console.log("str.substr:",       str.substr(-5));        //逆向~start
+this.app_js_info("str.slice:",        str.slice(3, 7));       //3~7
+this.app_js_info("str.slice:",        str.slice(-7, -3));     //逆向
+this.app_js_info("str.slice:",        str.slice(3));          //3~end
+this.app_js_info("str.slice:",        str.slice(-2));         //逆向~start
+this.app_js_info("str.substring:",    str.substring(3, 7));   //3~7
+this.app_js_info("str.substring:",    str.substring(3));      //3~end
+this.app_js_info("str.substr:",       str.substr(3, 4));      //3~3 + 4
+this.app_js_info("str.substr:",       str.substr(3));         //3~end
+this.app_js_info("str.substr:",       str.substr(-5));        //逆向~start
 //替换
-console.log("str.replace",       str.replace("101", "010"));
+this.app_js_info("str.replace",       str.replace("101", "010"));
 //转化
 var str = "  Hello Kitty  ";
-console.log("str.toUpperCase:",  str.toUpperCase());
-console.log("str.toLowerCase:",  str.toLowerCase());
+this.app_js_info("str.toUpperCase:",  str.toUpperCase());
+this.app_js_info("str.toLowerCase:",  str.toLowerCase());
 //连接
-console.log("str.concat:",       str.concat(" MIUSA "));
-console.log("str.trim:",         str.trim());            //移除俩端留白
+this.app_js_info("str.concat:",       str.concat(" MIUSA "));
+this.app_js_info("str.trim:",         str.trim());            //移除俩端留白
 //定位
-console.log("str.charAt:",       str.charAt(4));
-console.log("str.charCodeAt:",   str.charCodeAt(4));
+this.app_js_info("str.charAt:",       str.charAt(4));
+this.app_js_info("str.charCodeAt:",   str.charCodeAt(4));
 //匹配
-console.log("str.includes:",     str.includes("Kitty"));
+this.app_js_info("str.includes:",     str.includes("Kitty"));
 //数字字符串(除+)
-console.log("100 * 10:",         "100" * "10");
-console.log("100 / 10:",         "100" / "10");
-console.log("100 - 10:",         "100" - "10");
+this.app_js_info("100 * 10:",         "100" * "10");
+this.app_js_info("100 / 10:",         "100" / "10");
+this.app_js_info("100 - 10:",         "100" - "10");
 //数字关键字: -Infinity , Infinity , NaN 
 //数字方法
 var number = 100.101;
-console.log("100 / \"Kitty\":",          100 / "Kitty");
-console.log("100 / 0:",                  100 / 0);
-console.log("100 / 0:",                  100 / 0);
+this.app_js_info("100 / \"Kitty\":",          100 / "Kitty");
+this.app_js_info("100 / 0:",                  100 / 0);
+this.app_js_info("100 / 0:",                  100 / 0);
 //方法
-console.log("number.toString:",          (101.010).toString());
-console.log("number.toExponential",      number.toExponential());    //转成指数形式
-console.log("number.toExponential",      number.toExponential(5));   //保留指定小数位
-console.log("number.toFixed",            number.toFixed());
-console.log("number.toFixed",            number.toFixed(5));
-console.log("number.toPrecision",        number.toPrecision());      //转成字符串
-console.log("number.toPrecision",        number.toPrecision(3));     //指定保留位
-console.log("number.valueOf:",           (102 + 3).valueOf());
+this.app_js_info("number.toString:",          (101.010).toString());
+this.app_js_info("number.toExponential",      number.toExponential());    //转成指数形式
+this.app_js_info("number.toExponential",      number.toExponential(5));   //保留指定小数位
+this.app_js_info("number.toFixed",            number.toFixed());
+this.app_js_info("number.toFixed",            number.toFixed(5));
+this.app_js_info("number.toPrecision",        number.toPrecision());      //转成字符串
+this.app_js_info("number.toPrecision",        number.toPrecision(3));     //指定保留位
+this.app_js_info("number.valueOf:",           (102 + 3).valueOf());
 //强转
-console.log("Number:",                   Number(number));
-console.log("Number:",                   parseFloat("101.010 202.020")); //从头解析
-console.log("Number:",                   parseInt("101.010 202.020"));   //从头解析
+this.app_js_info("Number:",                   Number(number));
+this.app_js_info("Number:",                   parseFloat("101.010 202.020")); //从头解析
+this.app_js_info("Number:",                   parseInt("101.010 202.020"));   //从头解析
 //范围
-console.log("MAX_VALUE:",                Number.MAX_VALUE);
-console.log("MIN_VALUE:",                Number.MIN_VALUE);
-console.log("POSITIVE_INFINITY:",        Number.POSITIVE_INFINITY);
-console.log("NEGATIVE_INFINITY:",        Number.NEGATIVE_INFINITY);
-console.log("NEGATIVE_INFINITY:",        Number.NEGATIVE_INFINITY);
-console.log("NaN:",                      Number.NaN);
+this.app_js_info("MAX_VALUE:",                Number.MAX_VALUE);
+this.app_js_info("MIN_VALUE:",                Number.MIN_VALUE);
+this.app_js_info("POSITIVE_INFINITY:",        Number.POSITIVE_INFINITY);
+this.app_js_info("NEGATIVE_INFINITY:",        Number.NEGATIVE_INFINITY);
+this.app_js_info("NEGATIVE_INFINITY:",        Number.NEGATIVE_INFINITY);
+this.app_js_info("NaN:",                      Number.NaN);
 //数组
 //它很像Python中的列表(可以疯狂嵌套,兼容万物)(所以部分不额外说)
 var array  = [[1, [true]], "1", ["hello",[["world"],[function(){},{type:"object"}]]]];
 var array1 = ["lala"];
 var array2 = ["lala"];
-console.log("array:" + array);
-console.log("array:" + array.toString());
-console.log("array:" + array.join("#")); //同上,挂分隔符
-console.log("array:" + array.pop());         //尾移除
-console.log("array:" + array.push("lala"));  //尾追加
-console.log("array:" + array.shift());       //弹出首项,剩余左移
-console.log("array:" + array.unshift("0"));  //追加首项,剩余右移
-//console.log("array:" + array[array.length] = "lala");  //语法错误.未知
+this.app_js_info("array:" + array);
+this.app_js_info("array:" + array.toString());
+this.app_js_info("array:" + array.join("#")); //同上,挂分隔符
+this.app_js_info("array:" + array.pop());         //尾移除
+this.app_js_info("array:" + array.push("lala"));  //尾追加
+this.app_js_info("array:" + array.shift());       //弹出首项,剩余左移
+this.app_js_info("array:" + array.unshift("0"));  //追加首项,剩余右移
+//this.app_js_info("array:" + array[array.length] = "lala");  //语法错误.未知
 var array  = [[1, [true]], "1", ["hello",[["world"],[function(){},{type:"object"}]]]];
 //第一个0表明下标0,第二个表明要移除元素个数(先移除后追加)
-console.log("array:" + array.splice(0,0,"lala","lala"));
-console.log("array:" + array.splice(0,2,"lala","lala"));
+this.app_js_info("array:" + array.splice(0,0,"lala","lala"));
+this.app_js_info("array:" + array.splice(0,2,"lala","lala"));
 //连接不定个数的数组
-console.log("array:" + array.concat(array1, array2));
+this.app_js_info("array:" + array.concat(array1, array2));
 //切割
-console.log("array:" + array.slice(1));
-console.log("array:" + array.slice(0, 3));
+this.app_js_info("array:" + array.slice(1));
+this.app_js_info("array:" + array.slice(0, 3));
 //排序
-console.log("array:" + array.sort());    //默认转字符串排序
+this.app_js_info("array:" + array.sort());    //默认转字符串排序
 //翻转
-console.log("array:" + array.sort().reverse());
+this.app_js_info("array:" + array.sort().reverse());
 var array1 = [40, 100, 1, 5, 25, 10];
-console.log("array:" + array1.sort(function(a,b){return a-b;}));  //数字顺排序
-console.log("array:" + array1.sort(function(a,b){return b-a;}));  //数字反排序
+this.app_js_info("array:" + array1.sort(function(a,b){return a-b;}));  //数字顺排序
+this.app_js_info("array:" + array1.sort(function(a,b){return b-a;}));  //数字反排序
 //洗牌排序(乱排序...排乱序...)
-console.log("array:" + array1.sort(function(a,b){return 0.5-Math.random()}));
+this.app_js_info("array:" + array1.sort(function(a,b){return 0.5-Math.random()}));
 //找最大最小(引擎不支持)
-//console.log("array:" + array1.sort(function(array){return Math.max.apply(null, arr);}));
-//console.log("array:" + array1.sort(function(array){return Math.min.apply(null, arr);}));
+//this.app_js_info("array:" + array1.sort(function(array){return Math.max.apply(null, arr);}));
+//this.app_js_info("array:" + array1.sort(function(array){return Math.min.apply(null, arr);}));
 //自定义比值函数可以排序各种各样的数组(对象数组,等等)
 //找最大最小(这是自定义的数字数组的查找):
 function function_max (array) {
@@ -198,41 +197,41 @@ function function_min (array) {
     return min;
 }
 //发现无效(???)(插个眼)(直接用上面的自定义都行了)
-console.log("array:" + array1.sort(function_max));
-console.log("array:" + array1.sort(function_min));
+this.app_js_info("array:" + array1.sort(function_max));
+this.app_js_info("array:" + array1.sort(function_min));
 //数组迭代(不支持)
-//console.log("array:" + array1.forEach(function_max));
-//console.log("array:" + array1.forEach(function_min));
+//this.app_js_info("array:" + array1.forEach(function_max));
+//this.app_js_info("array:" + array1.forEach(function_min));
 //数学
-console.log("math.E:",           Math.E);
-console.log("math.PI:",          Math.PI);
-console.log("math.SQRT2:",       Math.SQRT2);
-console.log("math.SQRT1_2:",     Math.SQRT1_2);
-console.log("math.LN2:",         Math.LN2);
-console.log("math.LN10:",        Math.LN10);
-console.log("math.LOG2E:",       Math.LOG2E);
-console.log("math.LOG10E:",      Math.LOG10E);
+this.app_js_info("math.E:",           Math.E);
+this.app_js_info("math.PI:",          Math.PI);
+this.app_js_info("math.SQRT2:",       Math.SQRT2);
+this.app_js_info("math.SQRT1_2:",     Math.SQRT1_2);
+this.app_js_info("math.LN2:",         Math.LN2);
+this.app_js_info("math.LN10:",        Math.LN10);
+this.app_js_info("math.LOG2E:",       Math.LOG2E);
+this.app_js_info("math.LOG10E:",      Math.LOG10E);
 //
-console.log("math.abs:",         Math.abs(-4.7));
+this.app_js_info("math.abs:",         Math.abs(-4.7));
 //取整和随机搭配即可获得随机整数,   Math.floor(Math.random(0,1) * 10); //[0,1) * 10 范围
-console.log("math.ceil:",        Math.ceil(4.7));    //上取整
-console.log("math.floor:",       Math.floor(4.7));   //下取整
-console.log("math.round:",       Math.round(4.7));   //就近取整
-console.log("math.random:",      Math.random(0,1));  //[0,1)
-console.log("math.min:",         Math.min(0, 450, 35, 10, -8, -300, -78));
-console.log("math.max:",         Math.max(0, 450, 35, 10, -8, -300, -78));
+this.app_js_info("math.ceil:",        Math.ceil(4.7));    //上取整
+this.app_js_info("math.floor:",       Math.floor(4.7));   //下取整
+this.app_js_info("math.round:",       Math.round(4.7));   //就近取整
+this.app_js_info("math.random:",      Math.random(0,1));  //[0,1)
+this.app_js_info("math.min:",         Math.min(0, 450, 35, 10, -8, -300, -78));
+this.app_js_info("math.max:",         Math.max(0, 450, 35, 10, -8, -300, -78));
 //
-console.log("math.pow:",         Math.pow(8,2));
-console.log("math.exp:",         Math.exp(1));       //e**x
-console.log("math.sqrt:",        Math.sqrt(8));
-console.log("math.log:",         Math.log(10));      //以e为底
-console.log("math.sin:",         Math.sin(90 / 180 * Math.PI));
-console.log("math.cos:",         Math.cos(0  / 180 * Math.PI));
-console.log("math.tan:",         Math.tan(45 / 180 * Math.PI));
-console.log("math.asin:",        Math.asin(Math.sin(90 / 180 * Math.PI)));
-console.log("math.acos:",        Math.acos(Math.cos(0  / 180 * Math.PI)));
-console.log("math.atan:",        Math.atan(Math.tan(45 / 180 * Math.PI)));
-console.log("math.atan2:",       Math.atan2(3, 2)); //坐标(y,x)求正切
+this.app_js_info("math.pow:",         Math.pow(8,2));
+this.app_js_info("math.exp:",         Math.exp(1));       //e**x
+this.app_js_info("math.sqrt:",        Math.sqrt(8));
+this.app_js_info("math.log:",         Math.log(10));      //以e为底
+this.app_js_info("math.sin:",         Math.sin(90 / 180 * Math.PI));
+this.app_js_info("math.cos:",         Math.cos(0  / 180 * Math.PI));
+this.app_js_info("math.tan:",         Math.tan(45 / 180 * Math.PI));
+this.app_js_info("math.asin:",        Math.asin(Math.sin(90 / 180 * Math.PI)));
+this.app_js_info("math.acos:",        Math.acos(Math.cos(0  / 180 * Math.PI)));
+this.app_js_info("math.atan:",        Math.atan(Math.tan(45 / 180 * Math.PI)));
+this.app_js_info("math.atan2:",       Math.atan2(3, 2)); //坐标(y,x)求正切
 //逻辑,比较与C相近
 // (case,default,break,continue)与C形式完全一致
 //if else   与C形式完全一致
@@ -246,42 +245,42 @@ console.log("math.atan2:",       Math.atan2(3, 2)); //坐标(y,x)求正切
 var array = [1, true, "1", function(){}, {type:object}, "hello kitty"];
 var object = {type:"object",string:"hello kitty",value:true,data:1234};
 //遍历对象属性
-console.log("object:")
+this.app_js_info("object:")
 for (let i in object) {
-    console.log(i+":",object["" + i]);  //转为字符串
-    console.log(" ");
+    this.app_js_info(i+":",object["" + i]);  //转为字符串
+    this.app_js_info(" ");
 }
-console.log("");
+this.app_js_info("");
 
 //遍历数组
-console.log("array:")
+this.app_js_info("array:")
 for (let i in array) {
-    console.log(array[i]);
-    console.log(" ");
+    this.app_js_info(array[i]);
+    this.app_js_info(" ");
 }
-console.log("");
+this.app_js_info("");
 
 //of不支持迭代对象!
 //不要随意使用of,使用上述的in
-//console.log("array:")
+//this.app_js_info("array:")
 //for (let i of array) {
-//    console.log(array[i]);
-//    console.log(" ");
+//    this.app_js_info(array[i]);
+//    this.app_js_info(" ");
 //}
-//console.log("");
+//this.app_js_info("");
 
 //类型检查
-console.log("typeof:", typeof object);     //这是一个对象类型
-console.log("typeof:", typeof array);      //这是一个数组类型
+this.app_js_info("typeof:", typeof object);     //这是一个对象类型
+this.app_js_info("typeof:", typeof array);      //这是一个数组类型
 //基本位运算(与C形式完全一致)
 //特殊位运算操作
-console.log("parseInt:", (100102 >>> 0).toString(2));        //10进制转2进制
-console.log("parseInt:", parseInt(100102, 2).toString(10));  //10进制转2进制
+this.app_js_info("parseInt:", (100102 >>> 0).toString(2));        //10进制转2进制
+this.app_js_info("parseInt:", parseInt(100102, 2).toString(10));  //10进制转2进制
 //字符串正则表达式:
 var string = "hello kitty";
-console.log("str.search:",    str.search(/Kitty/));
-console.log("str.search:",    str.search(/kitty/i));
-console.log("str.replace:",   str.replace(/kitty/i, "Kitty"));
+this.app_js_info("str.search:",    str.search(/Kitty/));
+this.app_js_info("str.search:",    str.search(/kitty/i));
+this.app_js_info("str.replace:",   str.replace(/kitty/i, "Kitty"));
 //正则表达式规则(注意在notepad++中颜色的变化)
 //第一个项是模式,后面是可选的修饰符
 //见:https://www.w3school.com.cn/js/js_regexp.asp测试案例
@@ -309,11 +308,11 @@ catch(error) {
     //TypeError:        类型错误
     //URIError:         encodeURI()中发生的错误
     //建议把它们都打印出来:
-    console.log("what happend?:", error);
-    console.log("what happend?:", error.name, error.message);
+    this.app_js_info("what happend?:", error);
+    this.app_js_info("what happend?:", error.name, error.message);
 }
 finally {
-    console.log("it has to be here");
+    this.app_js_info("it has to be here");
 }
 
 //使用严格模式,是否有效?
@@ -324,7 +323,7 @@ try {
 }
 catch(error) {
     //如果抛出异常,说明严格模式有效,否则就是常用的提升
-    console.log("use strict finished");
+    this.app_js_info("use strict finished");
 }
 
 //this指针(参考C++语法)
@@ -335,12 +334,12 @@ var object      = {         //this 指向本地对象
     value   :true,
     data    :1234,
     test    : function () {
-        console.log("object:",    this);
-        console.log(" type:",    this.type);
-        console.log(" string:",  this.string);
-        console.log(" value:",   this.value);
-        console.log(" data:",    this.data);
-        console.log("");
+        this.app_js_info("object:",    this);
+        this.app_js_info(" type:",    this.type);
+        this.app_js_info(" string:",  this.string);
+        this.app_js_info(" value:",   this.value);
+        this.app_js_info(" data:",    this.data);
+        this.app_js_info("");
     },
     //对象访问器get,让函数以属性形式访问
     //测试发现,Jerry对set不支持,所以
@@ -423,10 +422,10 @@ var f2 = () => {
 var f3 = () => "special arrow function";    //只有一条语句时
 var f4 = (argument) => "special arrow function get:" + argument;
 //
-console.log(f1());
-console.log(f2());
-console.log(f3());
-console.log(f4("halo"));
+this.app_js_info(f1());
+this.app_js_info(f2());
+this.app_js_info(f3());
+this.app_js_info(f4("halo"));
 
 //类(前面的都只是对象:对象是实例,类是模板;参考Java)
 //类需要new关键字生成对象,Jerry对new关键字不支持
@@ -442,11 +441,11 @@ class classname {
     }
     //方法(无需加function)
     test() {
-        console.log("object:",   this);
-        console.log("type:",    this.type);
-        console.log("value:",   this.value);
-        console.log("data:",    this.data);
-        console.log("");
+        this.app_js_info("object:",   this);
+        this.app_js_info("type:",    this.type);
+        this.app_js_info("value:",   this.value);
+        this.app_js_info("data:",    this.data);
+        this.app_js_info("");
     }
 }
 //创建对象(使用数组初始化)
@@ -480,9 +479,9 @@ var count = (function() {
         return counter += 1;
     }
 })();
-console.log("count:", count());
-console.log("count:", count());
-console.log("count:", count());
+this.app_js_info("count:", count());
+this.app_js_info("count:", count());
+this.app_js_info("count:", count());
 
 //上述的代码最终可分解为如下
 /*
@@ -497,5 +496,5 @@ count = function () {
 }
 */
 
-//console.log(instanceof object); //对象类型的实例(编译不过)
+//this.app_js_info(instanceof object); //对象类型的实例(编译不过)
 
