@@ -55,14 +55,8 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
     package_new = app_mem_alloc(sizeof(app_sys_pipe_pkg_t));
-    package_new->buddy    = NULL;
-    package_new->thread   = package->thread;
-    package_new->module   = package->module;
-    package_new->event    = package->event;
-    package_new->priority = package->priority;
-    package_new->dynamic  = package->dynamic;
-    package_new->size     = package->size;
-    package_new->data     = package->data;
+    memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
+    package_new->buddy = NULL;
     /* 入界 */
     app_mutex_take(&pipe->mutex);
     app_critical_enter(&pipe->critical);
@@ -147,13 +141,7 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     /* 转储消息资源资源, 销毁资源包 */
     if (package_new == NULL)
         return;
+    memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
     package->buddy    = NULL;
-    package->thread   = package_new->thread;
-    package->module   = package_new->module;
-    package->event    = package_new->event;
-    package->priority = package_new->priority;
-    package->dynamic  = package_new->dynamic;
-    package->size     = package_new->size;
-    package->data     = package_new->data;
     app_mem_free(package_new);
 }

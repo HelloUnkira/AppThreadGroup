@@ -13,11 +13,11 @@ typedef struct {
 } app_sys_pipe_pkg_t;
 
 typedef struct {
-    app_sys_pipe_pkg_t *head;    /* 管道头 */
-    app_sys_pipe_pkg_t *tail;    /* 管道尾 */
-    unsigned int   number;      /* 管道项数 */
-    app_mutex_t    mutex;       /* 管道资源保护 */
-    app_critical_t critical;    /* 管道资源临界区保护 */
+    app_sys_pipe_pkg_t *head;       /* 管道头 */
+    app_sys_pipe_pkg_t *tail;       /* 管道尾 */
+    uint32_t            number;     /* 管道项数 */
+    app_mutex_t         mutex;      /* 管道资源互斥锁保护(用于线程互斥) */
+    app_critical_t      critical;   /* 管道资源临界区保护(用于混合环境互斥) */
 } app_sys_pipe_t;
 
 /*@brief     初始化管道
