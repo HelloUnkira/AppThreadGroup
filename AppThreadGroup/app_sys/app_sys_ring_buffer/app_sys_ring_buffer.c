@@ -91,10 +91,10 @@ void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
     
     /* 缓冲区大小字节对齐加速 */
     uint32_t mask = ((size != 0) && ((size & (size - 1)) == 0)) ? (size - 1) : 0;
-
-	ring_buffer->buffer = buffer;
-	ring_buffer->size   = size;
-	ring_buffer->mask   = mask;
+    
+    ring_buffer->buffer = buffer;
+    ring_buffer->size   = size;
+    ring_buffer->mask   = mask;
     ring_buffer->head   = 0;
     ring_buffer->tail   = 0;
     ring_buffer->type   = type;
