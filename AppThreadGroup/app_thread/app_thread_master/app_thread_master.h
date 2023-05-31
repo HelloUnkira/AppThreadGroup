@@ -97,6 +97,7 @@ typedef enum {
 /* 备注:占用每一个子线程的0号模组 */
 typedef enum {  /* 线程组模组 */
     app_thread_group_work,
+    app_thread_group_works,
     app_thread_group_num,
 } app_thread_group_t;
 

@@ -133,13 +133,21 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
         uint8_t not_start_yet:1;
         uint8_t not_stop_yet:1;
         uint8_t not_shutdown_yet:1;
+        uint8_t not_srand_yet:1;
     } ctrl_status = {
         .not_load_yet       = true,
         .not_dump_yet       = true,
         .not_start_yet      = true,
         .not_stop_yet       = true,
         .not_shutdown_yet   = true,
+        .not_srand_yet      = true,
     };
+    
+    /* 辅助初始化:随机数种子 */
+    if (ctrl_status.not_srand_yet) {
+        ctrl_status.not_srand_yet = false;
+        srand(clock[0].utc);
+    }
     
     app_mutex_take(&app_module_system_mutex);
     uint8_t   mode = app_module_system_mode;

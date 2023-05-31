@@ -74,6 +74,8 @@ void app_thread_mix_irq_routine(void)
             case app_thread_mix_irq_system: {
                 if (package.event == app_thread_group_work)
                     app_sys_work_execute((void *)package.data);
+                if (package.event == app_thread_group_works)
+                    app_sys_works_execute((void *)package.data);
                 break;
             }
             case app_thread_mix_irq_timer: {
