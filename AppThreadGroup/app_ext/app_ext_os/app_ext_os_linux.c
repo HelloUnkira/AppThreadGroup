@@ -86,18 +86,32 @@ void app_mutex_give(app_mutex_t *mutex)
         pthread_mutex_unlock(&mutex->mutex);
 }
 
+/*@brief        创建一个临界区并准备好使用
+ *@param[in]    critical 临界区实例
+ */
+void app_critical_process(app_critical_t *critical)
+{
+    /* Linux不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+    app_mutex_process(&critical->mutex);
+    critical->mutex_ready = true;
+}
+
 /*@brief 临界区保护(注意:当且仅当必要的使用)
  */
 void app_critical_enter(app_critical_t *critical)
 {
-    /* Linux不需要临界区保护,因为资源不会被中断打断 */
+    /* Linux不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+    if (critical->mutex_ready)
+        app_mutex_take(&critical->mutex);
 }
 
 /*@brief 临界区退出(注意:当且仅当必要的使用)
  */
 void app_critical_exit(app_critical_t *critical)
 {
-    /* Linux不需要临界区保护,因为资源不会被中断打断 */
+    /* Linux不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+    if (critical->mutex_ready)
+        app_mutex_give(&critical->mutex);
 }
 
 /*@brief        内存分配

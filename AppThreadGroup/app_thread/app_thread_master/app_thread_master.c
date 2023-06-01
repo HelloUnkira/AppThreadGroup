@@ -33,7 +33,6 @@ static app_sem_t app_thread_sem_src = {0};
 static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
-static app_mutex_t app_thread_mutex = {0};
 /* 计算子线程工作时间(us) */
 #if APP_SYS_LOG_EXECUTE
 static double app_thread_execute_us[app_thread_id_number] = {0};
@@ -48,9 +47,7 @@ static double app_thread_execute_us[app_thread_id_number] = {0};
 void app_thread_execute_us_set(uint32_t thread, double *execute_us)
 {
     /* 注意:这里的时间设置为累加设置 */
-    app_mutex_take(&app_thread_mutex);
     app_thread_execute_us[thread] += *execute_us;
-    app_mutex_give(&app_thread_mutex);
 }
 #endif
 
@@ -61,9 +58,7 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us)
 #if APP_SYS_LOG_EXECUTE
 void app_thread_execute_us_get(uint32_t thread, double *execute_us)
 {
-    app_mutex_take(&app_thread_mutex);
     *execute_us = app_thread_execute_us[thread];
-    app_mutex_give(&app_thread_mutex);
 }
 #endif
 
@@ -115,7 +110,6 @@ void app_thread_master_routine(void)
         #else
         app_delay_ms(APP_THREAD_GROUP_TIME_SLICE);
         #endif
-        app_mutex_take(&app_thread_mutex);
         #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread masther recv too much package:%u",
@@ -129,7 +123,6 @@ void app_thread_master_routine(void)
             app_sys_pipe_give(recv_pipe, &package, false);
             app_sem_give(recv_sem);
         }
-        app_mutex_give(&app_thread_mutex);
     }
 }
 
@@ -143,9 +136,7 @@ bool app_package_notify(app_package_t *package)
     /* 线程组接收新包 */
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
-    app_mutex_take(&app_thread_mutex);
     app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
-    app_mutex_give(&app_thread_mutex);
     #if APP_THREAD_GROUP_REALTIME
     app_sem_give(send_sem);
     #endif
@@ -157,7 +148,6 @@ bool app_package_notify(app_package_t *package)
  */
 void app_thread_group_schedule(void)
 {
-    app_mutex_process(&app_thread_mutex);
     /* 就绪管道和同步资源 */
     for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
         app_sys_pipe_ready(&app_thread_pipe_dst[idx]);
@@ -198,9 +188,6 @@ void app_thread_group_schedule(void)
  */
 bool app_thread_group_status_get(void)
 {
-    app_critical_t critical = {0};
-    app_critical_enter(&critical);
     bool status = app_thread_group_status;
-    app_critical_exit(&critical);
     return status;
 }

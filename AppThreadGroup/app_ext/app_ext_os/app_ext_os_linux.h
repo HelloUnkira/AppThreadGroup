@@ -32,8 +32,9 @@ typedef struct {
 
 /* app critical */
 typedef struct {
-    /* 临界区需要保留的一些信息,如中断标志位等等 */
-    uintptr_t reserve;
+    /* 纯软件环境,临界区使用互斥锁代替 */
+    bool mutex_ready;
+    app_mutex_t mutex;
 } app_critical_t;
 
 /* app execute ms */

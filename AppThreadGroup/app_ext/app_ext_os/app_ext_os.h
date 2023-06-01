@@ -61,6 +61,14 @@ void app_mutex_take(app_mutex_t *mutex);
  */
 void app_mutex_give(app_mutex_t *mutex);
 
+/*@brief        创建一个临界区并准备好使用
+ *              注意:这个接口本身不需要存在
+ *                   只是为了软件环境下区分临界区退化后
+ *                   执行是否有效而去做的选择
+ *@param[in]    critical 临界区实例
+ */
+void app_critical_process(app_critical_t *critical);
+
 /*@brief 临界区保护(注意:当且仅当必要的使用)
  */
 void app_critical_enter(app_critical_t *critical);

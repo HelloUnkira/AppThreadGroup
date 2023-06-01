@@ -88,6 +88,13 @@ void app_mutex_give(app_mutex_t *mutex)
         k_mutex_unlock(&mutex->mutex);
 }
 
+/*@brief        创建一个临界区并准备好使用
+ *@param[in]    critical 临界区实例
+ */
+void app_critical_process(app_critical_t *critical)
+{
+}
+
 /*@brief 临界区保护(注意:当且仅当必要的使用)
  */
 void app_critical_enter(app_critical_t *critical)
