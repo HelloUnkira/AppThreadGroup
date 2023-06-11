@@ -30,6 +30,10 @@
 # master https://github.com/Mbed-TLS/mbedtls.git
 # AppThreadGroup/app_third/lib_mbedtls/lib_mbedtls
 #
+# TinyEKF库(Extend Kalman Filter):
+# master https://github.com/simondlevy/TinyEKF.git
+# AppThreadGroup/app_third/lib_TinyEKF/lib_TinyEKF
+#
 
 # 载入第三方库
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_self)
