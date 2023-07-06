@@ -66,7 +66,7 @@ void app_thread_lvgl_routine(void)
     }
     /* 主流程 */
     while (true) {
-        app_sem_take(sem);
+        app_sem_process(sem, app_sem_take);
         /* 计算事件处理时间(开始) */
         #if APP_SYS_LOG_EXECUTE
         app_execute_us_t execute_us = {0};

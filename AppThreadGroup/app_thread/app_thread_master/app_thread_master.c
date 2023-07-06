@@ -121,7 +121,7 @@ void app_thread_master_routine(void)
             app_thread_get_sync(package.thread, &recv_sem);
             app_thread_get_pipe(package.thread, &recv_pipe);
             app_sys_pipe_give(recv_pipe, &package, false);
-            app_sem_give(recv_sem);
+            app_sem_process(recv_sem, app_sem_give);
         }
     }
 }
@@ -138,7 +138,7 @@ bool app_package_notify(app_package_t *package)
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
     app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
     #if APP_THREAD_GROUP_REALTIME
-    app_sem_give(send_sem);
+    app_sem_process(send_sem, app_sem_give);
     #endif
     return true;
 }
@@ -153,8 +153,8 @@ void app_thread_group_schedule(void)
         app_sys_pipe_ready(&app_thread_pipe_dst[idx]);
         app_sys_pipe_ready(&app_thread_pipe_src);
     for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
-        app_sem_process(&app_thread_sem_dst[idx]);
-        app_sem_process(&app_thread_sem_src);
+        app_sem_process(&app_thread_sem_dst[idx],   app_sem_create);
+        app_sem_process(&app_thread_sem_src,        app_sem_create);
     /* 就绪系统子模组 */
     app_sys_log_t log = {
         .message1   = app_ext_arch_log_msg1,

@@ -46,28 +46,30 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
     }
 }
 
-/*@brief        创建一个信号量并准备好使用
- *@param[in]    sem 静态实例
+/*@brief        信号量操作流程集合
+ *@param[in]    sem    实例
+ *@param[in]    option 实例动作
  */
-void app_sem_process(app_sem_t *sem)
+void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 {
-    sem_init(&sem->sem, 0, 100);
-}
-
-/*@brief        获取一个信号量
- *@param[in]    sem 静态实例
- */
-void app_sem_take(app_sem_t *sem)
-{
-    sem_post(&sem->sem);
-}
-
-/*@brief        发布一个信号量
- *@param[in]    sem 静态实例
- */
-void app_sem_give(app_sem_t *sem)
-{
-    sem_wait(&sem->sem);
+    switch (option) {
+    case app_sem_create: {
+        sem_init(&sem->sem, 0, 100);
+        break;
+    }
+    case app_sem_take: {
+        sem_post(&sem->sem);
+        break;
+    }
+    case app_sem_give: {
+        sem_wait(&sem->sem);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_sem_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        创建一个互斥锁并准备好使用

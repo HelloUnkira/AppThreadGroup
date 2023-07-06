@@ -39,20 +39,19 @@ typedef enum {
  */
 void app_thread_process(app_thread_t *thread, app_thread_option_t option);
 
-/*@brief        创建一个信号量并准备好使用
- *@param[in]    sem 静态实例
- */
-void app_sem_process(app_sem_t *sem);
+typedef enum {
+    app_sem_default = 0,    /* 占位符 */
+    app_sem_create,         /* 信号量创建 */
+    app_sem_destroy,        /* 信号量销毁 */
+    app_sem_take,           /* 信号量获取 */
+    app_sem_give,           /* 信号量释放 */
+} app_sem_option_t;
 
-/*@brief        获取一个信号量
- *@param[in]    sem 静态实例
+/*@brief        信号量操作流程集合
+ *@param[in]    sem    实例
+ *@param[in]    option 实例动作
  */
-void app_sem_take(app_sem_t *sem);
-
-/*@brief        发布一个信号量
- *@param[in]    sem 静态实例
- */
-void app_sem_give(app_sem_t *sem);
+void app_sem_process(app_sem_t *sem, app_sem_option_t option);
 
 /*@brief        创建一个互斥锁并准备好使用
  *@param[in]    mutex 静态实例
