@@ -21,15 +21,23 @@
 /* OS ext mem adaptor */
 #include "app_ext_os_ext_mem.h"
 
-/*@brief        准备与执行线程
- *              创建一个线程并启动(线程创建时立即启动)
- *@param[in]    thread 静态实例
- */
-void app_thread_process(app_thread_t *thread);
-
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void);
+
+typedef enum {
+    app_thread_default = 0,     /* 占位符 */
+    app_thread_create,          /* 线程创建 */
+    app_thread_destroy,         /* 线程销毁 */
+    app_thread_suspend,         /* 线程悬挂 */
+    app_thread_resume,          /* 线程恢复 */
+} app_thread_option_t;
+
+/*@brief        线程操作流程集合
+ *@param[in]    thread 实例
+ *@param[in]    option 实例动作
+ */
+void app_thread_process(app_thread_t *thread, app_thread_option_t option);
 
 /*@brief        创建一个信号量并准备好使用
  *@param[in]    sem 静态实例

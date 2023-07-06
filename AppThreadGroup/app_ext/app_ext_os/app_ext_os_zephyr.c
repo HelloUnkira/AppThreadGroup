@@ -8,21 +8,6 @@
 
 #if APP_OS_IS_ZEPHYR
 
-/*@brief        准备与执行线程
- *              创建一个线程并启动(线程创建时立即启动)
- *@param[in]    thread 静态实例
- */
-void app_thread_process(app_thread_t *thread)
-{
-    k_thread_create(&thread->thread,
-                     thread->stack,
-                     thread->stack_size,
-                     thread->entry,
-                     NULL, NULL, NULL,
-                     thread->prio, 0,
-                     K_NO_WAIT);
-}
-
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void)
@@ -36,6 +21,30 @@ bool app_os_not_in_irq(void)
         return true;
     else
         return false;
+}
+
+/*@brief        线程操作流程集合
+ *@param[in]    thread 实例
+ *@param[in]    option 实例动作
+ */
+void app_thread_process(app_thread_t *thread, app_thread_option_t option)
+{
+    switch (option) {
+    case app_thread_create: {
+        k_thread_create(&thread->thread,
+                         thread->stack,
+                         thread->stack_size,
+                         thread->entry,
+                         NULL, NULL, NULL,
+                         thread->prio, 0,
+                         K_NO_WAIT);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_thread_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        创建一个信号量并准备好使用

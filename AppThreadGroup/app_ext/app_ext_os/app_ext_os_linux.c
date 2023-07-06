@@ -8,32 +8,42 @@
 
 #if APP_OS_IS_LINUX
 
-/*@brief        准备与执行线程
- *              创建一个线程并启动(线程创建时立即启动)
- *@param[in]    thread 静态实例
- */
-void app_thread_process(app_thread_t *thread)
-{
-    thread->stacksize = 8 * 1024 * 1024;
-    struct sched_param param = {.sched_priority = thread->priority};
-    pthread_attr_init(&thread->attribute);
-    pthread_attr_setschedparam(&thread->attribute,  &param);
-    //pthread_attr_setschedpolicy(&thread->attribute,  SCHED_RR);
-    pthread_attr_setguardsize(&thread->attribute,    7 * 1024 *1024);
-    pthread_attr_setstacksize(&thread->attribute,    thread->stacksize);
-    pthread_attr_setinheritsched(&thread->attribute, PTHREAD_EXPLICIT_SCHED);
-    pthread_attr_setdetachstate(&thread->attribute,  PTHREAD_CREATE_JOINABLE);
-    pthread_create(&thread->thread,
-                   &thread->attribute,
-                    thread->routine,
-                    thread->args);
-}
-
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void)
 {
+    /* 模拟器环境不存在硬件中断环境 */
     return true;
+}
+
+/*@brief        线程操作流程集合
+ *@param[in]    thread 实例
+ *@param[in]    option 实例动作
+ */
+void app_thread_process(app_thread_t *thread, app_thread_option_t option)
+{
+    switch (option) {
+    case app_thread_create: {
+        thread->stacksize = 8 * 1024 * 1024;
+        struct sched_param param = {.sched_priority = thread->priority};
+        pthread_attr_init(&thread->attribute);
+        pthread_attr_setschedparam(&thread->attribute,  &param);
+        //pthread_attr_setschedpolicy(&thread->attribute,  SCHED_RR);
+        pthread_attr_setguardsize(&thread->attribute,    7 * 1024 *1024);
+        pthread_attr_setstacksize(&thread->attribute,    thread->stacksize);
+        pthread_attr_setinheritsched(&thread->attribute, PTHREAD_EXPLICIT_SCHED);
+        pthread_attr_setdetachstate(&thread->attribute,  PTHREAD_CREATE_JOINABLE);
+        pthread_create(&thread->thread,
+                       &thread->attribute,
+                        thread->routine,
+                        thread->args);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_thread_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        创建一个信号量并准备好使用

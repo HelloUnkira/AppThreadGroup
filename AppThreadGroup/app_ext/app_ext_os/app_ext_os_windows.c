@@ -8,36 +8,46 @@
 
 #if APP_OS_IS_WINDOWS
 
- /*@brief        准备与执行线程
-  *              创建一个线程并启动(线程创建时立即启动)
-  *@param[in]    thread 静态实例
-  */
-void app_thread_process(app_thread_t *thread)
-{
-    thread->stacksize = 8 * 1024 * 1024;
-    // thread->handle = _beginthreadex(NULL,
-                                    // thread->stacksize, /* 堆栈大小 */
-                                    // thread->routine,   /* 线程体 */
-                                    // thread->args,      /* 线程参数 */
-                                    // CREATE_SUSPENDED,
-                                    // NULL);
-    DWORD ThreadID = 0;
-    thread->handle = CreateThread(NULL,
-        thread->stacksize, /* 堆栈大小 */
-        (LPTHREAD_START_ROUTINE)
-        thread->routine,   /* 线程体 */
-        thread->args,      /* 线程参数 */
-        CREATE_SUSPENDED,
-        &ThreadID);
-    SetThreadPriority(thread->handle, thread->priority);
-    ResumeThread(thread->handle);
-}
-
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void)
 {
+    /* 模拟器环境不存在硬件中断环境 */
     return true;
+}
+
+/*@brief        线程操作流程集合
+*@param[in]    thread 实例
+*@param[in]    option 实例动作
+*/
+ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
+{
+    switch (option) {
+    case app_thread_create: {
+        thread->stacksize = 8 * 1024 * 1024;
+        // thread->handle = _beginthreadex(NULL,
+                                        // thread->stacksize, /* 堆栈大小 */
+                                        // thread->routine,   /* 线程体 */
+                                        // thread->args,      /* 线程参数 */
+                                        // CREATE_SUSPENDED,
+                                        // NULL);
+        DWORD ThreadID = 0;
+        thread->handle = CreateThread(NULL,
+            thread->stacksize, /* 堆栈大小 */
+            (LPTHREAD_START_ROUTINE)
+            thread->routine,   /* 线程体 */
+            thread->args,      /* 线程参数 */
+            CREATE_SUSPENDED,
+            &ThreadID);
+        SetThreadPriority(thread->handle, thread->priority);
+        ResumeThread(thread->handle);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_thread_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        创建一个信号量并准备好使用

@@ -174,12 +174,12 @@ void app_thread_group_schedule(void)
     app_thread_lvgl_ready();
     app_thread_jerryscript_ready();
     /* 就绪和启用线程组 */
-    app_thread_process(&app_thread_master);
-    app_thread_process(&app_thread_mix_irq);
-    app_thread_process(&app_thread_mix_custom);
-    app_thread_process(&app_thread_manage);
-    app_thread_process(&app_thread_lvgl);
-    app_thread_process(&app_thread_jerryscript);
+    app_thread_process(&app_thread_master,          app_thread_create);
+    app_thread_process(&app_thread_mix_irq,         app_thread_create);
+    app_thread_process(&app_thread_mix_custom,      app_thread_create);
+    app_thread_process(&app_thread_manage,          app_thread_create);
+    app_thread_process(&app_thread_lvgl,            app_thread_create);
+    app_thread_process(&app_thread_jerryscript,     app_thread_create);
     /* 设置线程组就绪 */
     app_thread_group_status = true;
 }
