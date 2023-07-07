@@ -104,32 +104,36 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
     }
 }
 
-/*@brief        创建一个临界区并准备好使用
- *@param[in]    critical 临界区实例
+/*@brief        临界区操作流程集合
+ *@param[in]    critical 实例
+ *@param[in]    option   实例动作
  */
-void app_critical_process(app_critical_t *critical)
+void app_critical_process(app_critical_t *critical, app_critical_option_t option)
 {
-    /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
-    app_mutex_process(&critical->mutex, app_mutex_create);
-    critical->mutex_ready = true;
-}
-
-/*@brief 临界区保护(注意:当且仅当必要的使用)
- */
-void app_critical_enter(app_critical_t *critical)
-{
-    /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
-    if (critical->mutex_ready)
-        app_mutex_process(&critical->mutex, app_mutex_take);
-}
-
-/*@brief 临界区退出(注意:当且仅当必要的使用)
- */
-void app_critical_exit(app_critical_t *critical)
-{
-    /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
-    if (critical->mutex_ready)
-        app_mutex_process(&critical->mutex, app_mutex_give);
+    switch (option) {
+    case app_critical_create: {
+        /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+        app_mutex_process(&critical->mutex, app_mutex_create);
+        critical->mutex_ready = true;
+        break;
+    }
+    case app_critical_enter: {
+        /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+        if (critical->mutex_ready)
+            app_mutex_process(&critical->mutex, app_mutex_take);
+        break;
+    }
+    case app_critical_exit: {
+        /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+        if (critical->mutex_ready)
+            app_mutex_process(&critical->mutex, app_mutex_give);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_critical_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        内存分配

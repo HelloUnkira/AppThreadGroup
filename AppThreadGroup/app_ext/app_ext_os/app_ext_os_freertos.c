@@ -113,25 +113,26 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
     }
 }
 
-/*@brief        创建一个临界区并准备好使用
- *@param[in]    critical 临界区实例
+/*@brief        临界区操作流程集合
+ *@param[in]    critical 实例
+ *@param[in]    option   实例动作
  */
-void app_critical_process(app_critical_t *critical)
+void app_critical_process(app_critical_t *critical, app_critical_option_t option)
 {
-}
-
-/*@brief 临界区保护(注意:当且仅当必要的使用)
- */
-void app_critical_enter(app_critical_t *critical)
-{
-    taskDISABLE_INTERRUPTS();
-}
-
-/*@brief 临界区退出(注意:当且仅当必要的使用)
- */
-void app_critical_exit(app_critical_t *critical)
-{
-    taskENABLE_INTERRUPTS();
+    switch (option) {
+    case app_critical_enter: {
+        taskDISABLE_INTERRUPTS();
+        break;
+    }
+    case app_critical_exit: {
+        taskENABLE_INTERRUPTS();
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_critical_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        内存分配

@@ -67,21 +67,19 @@ typedef enum {
  */
 void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option);
 
-/*@brief        创建一个临界区并准备好使用
- *              注意:这个接口本身不需要存在
- *                   只是为了软件环境下区分临界区退化后
- *                   执行是否有效而去做的选择
- *@param[in]    critical 临界区实例
- */
-void app_critical_process(app_critical_t *critical);
+typedef enum {
+    app_critical_default = 0,   /* 占位符 */
+    app_critical_create,        /* 临界区创建 */
+    app_critical_destroy,       /* 临界区销毁 */
+    app_critical_enter,         /* 临界区进入 */
+    app_critical_exit,          /* 临界区退出 */
+} app_critical_option_t;
 
-/*@brief 临界区保护(注意:当且仅当必要的使用)
+/*@brief        临界区操作流程集合
+ *@param[in]    critical 实例
+ *@param[in]    option   实例动作
  */
-void app_critical_enter(app_critical_t *critical);
-
-/*@brief 临界区退出(注意:当且仅当必要的使用)
- */
-void app_critical_exit(app_critical_t *critical);
+void app_critical_process(app_critical_t *critical, app_critical_option_t option);
 
 /*@brief        内存分配
  *@param[in]    size 分配空间字节大小
