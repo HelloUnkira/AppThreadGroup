@@ -33,7 +33,7 @@ static uint8_t app_lv_ui_idle_time_bak = APP_LV_UI_IDLE_TIME;
 void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time)
 {
     APP_SYS_LOG_INFO("");
-    app_mutex_take(&app_lv_ui_check_time_mutex);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_take);
     app_lv_ui_over_time_bak = over_time != 0 ? over_time : APP_LV_UI_OVER_TIME;
     app_lv_ui_idle_time_bak = idle_time != 0 ? idle_time : APP_LV_UI_IDLE_TIME;
     /* 是否需要一起禁用???
@@ -47,7 +47,7 @@ void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time)
     app_lv_ui_idle_time = app_lv_ui_idle_time_bak;
     app_lv_ui_dlps = true;
     app_lv_ui_back = true;
-    app_mutex_give(&app_lv_ui_check_time_mutex);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_give);
 }
 
 /*@brief 界面状态控制更新
@@ -55,7 +55,7 @@ void app_lv_ui_check_time_reset(uint8_t over_time, uint8_t idle_time)
  */
 void app_lv_ui_check_time_update(void)
 {
-    app_mutex_take(&app_lv_ui_check_time_mutex);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_take);
     /* 约减超时等待 */
     if (app_lv_ui_over_time != 0 &&
         app_lv_ui_over_time != APP_LV_UI_OVER_TIME_MAX)
@@ -83,7 +83,7 @@ void app_lv_ui_check_time_update(void)
             }
         }
     }
-    app_mutex_give(&app_lv_ui_check_time_mutex);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_give);
 }
 
 /*@brief 界面状态控制更新
@@ -104,7 +104,7 @@ static void app_lv_ui_check_time_timer_handler(void *timer)
  */
 void app_lv_ui_check_time_ready(void)
 {
-    app_mutex_process(&app_lv_ui_check_time_mutex);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_create);
     app_lv_ui_check_time_timer.expired = app_lv_ui_check_time_timer_handler;
     app_lv_ui_check_time_timer.peroid  = 1000;
     app_lv_ui_check_time_timer.reload  = true;

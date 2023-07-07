@@ -99,9 +99,9 @@ static app_module_clock_t app_module_clock[2] = {0};
  */
 uint64_t app_module_clock_get_sec_tick(void)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     uint64_t retval = app_module_clock_sec_tick;
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     return retval;
 }
 
@@ -110,10 +110,10 @@ uint64_t app_module_clock_get_sec_tick(void)
  */
 void app_module_clock_set_system_clock_zone(int32_t zone_sec)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     app_module_clock[0].zone_sec = zone_sec;
     app_module_clock[1].zone_sec = zone_sec;
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
 }
 
 /*@brief     设置时区偏移(中断环境下不可调用)
@@ -121,10 +121,10 @@ void app_module_clock_set_system_clock_zone(int32_t zone_sec)
  */
 void app_module_clock_set_system_clock_mode(bool is_24)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     app_module_clock[0].is_24 = is_24;
     app_module_clock[1].is_24 = is_24;
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
 
 }
 
@@ -133,9 +133,9 @@ void app_module_clock_set_system_clock_mode(bool is_24)
  */
 void app_module_clock_get_system_clock(app_module_clock_t *clock)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     *clock = app_module_clock[1];
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     /* 扩展补充 */
     if (clock->zone_sec != 0) {
         clock->utc += clock->zone_sec;
@@ -159,10 +159,10 @@ void app_module_clock_get_system_clock(app_module_clock_t *clock)
  */
 void app_module_clock_set_system_clock(app_module_clock_t *clock)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     app_module_clock[0] = app_module_clock[1];
     app_module_clock[1] = *clock;
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     /* 向线程发送时钟更新事件 */
     app_package_t package = {
         .thread = app_thread_id_mix_irq,
@@ -178,11 +178,11 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
 void app_module_clock_local_update(void)
 {
     /* 获得时钟更新 */
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     app_module_clock_t clock[2] = {0};
     clock[0] = app_module_clock[0];
     clock[1] = app_module_clock[1];
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     /* 它只有一个调用者,所以无需保护 */
     static bool clock_is_sync = false;
     /* 检查是否第一次更新时钟 */
@@ -202,7 +202,7 @@ void app_module_clock_local_update(void)
  */
 void app_module_clock_timestamp_update(uint64_t utc_new)
 {
-    app_mutex_take(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_take);
     /* 获得时钟更新 */
     app_module_clock_t clock_old = app_module_clock[1];
     if (utc_new != 0)
@@ -213,7 +213,7 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     app_module_clock_to_week(&app_module_clock[1]);
     app_module_clock_t clock_new = app_module_clock[1];
     app_module_clock_sec_tick++;
-    app_mutex_give(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     /* 秒回调集更新 */
     if (clock_old.second != clock_new.second)
         for (uint32_t idx = 0; idx < app_module_clock_second_cb_size; idx++)
@@ -299,7 +299,7 @@ void app_module_clock_ready(void)
 {
     app_module_clock_to_dtime(&app_module_clock[1]);
     app_module_clock_to_week(&app_module_clock[1]);
-    app_mutex_process(&app_module_clock_mutex);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_create);
 }
 
 /*@brief 时钟模组更新

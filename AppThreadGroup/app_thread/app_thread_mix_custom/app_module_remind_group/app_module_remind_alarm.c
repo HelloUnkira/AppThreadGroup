@@ -36,10 +36,10 @@ bool app_module_remind_alarm_group_check(uint32_t remind_group)
 void app_module_remind_alarm_array_lock(void)
 {
     /* 移除出提醒组,打断其事件更新 */
-    app_mutex_take(&app_module_remind_alarm_mutex);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_take);
     app_module_remind_group_del(app_module_remind_alarm_group);
     app_module_remind_alarm_group = -1;
-    app_mutex_give(&app_module_remind_alarm_mutex);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_give);
 }
 
 /*@brief 解锁提醒闹钟列表
@@ -49,9 +49,9 @@ void app_module_remind_alarm_array_lock(void)
 void app_module_remind_alarm_array_unlock(void)
 {
     /* 加入进提醒组,恢复其事件更新 */
-    app_mutex_take(&app_module_remind_alarm_mutex);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_take);
     app_module_remind_alarm_group = app_module_remind_group_add(app_module_remind_alarm_item, APP_MODULE_REMIND_ALARM_MAX);
-    app_mutex_give(&app_module_remind_alarm_mutex);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_give);
 }
 
 /*@brief      提醒闹钟列表
@@ -130,5 +130,5 @@ void app_module_remind_alarm_load(void)
  */
 void app_module_remind_alarm_ready(void)
 {
-    app_mutex_process(&app_module_remind_alarm_mutex);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_create);
 }

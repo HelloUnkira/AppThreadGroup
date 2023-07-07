@@ -22,12 +22,12 @@ static app_module_vibrate_t app_module_vibrate = {0};
 static bool app_module_vibrate_invalid(void)
 {
     bool invalid_check = false;
-    app_mutex_take(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     if (app_module_vibrate.period == 0)
         invalid_check = true;
     if (app_module_vibrate.melody == NULL)
         invalid_check = true;
-    app_mutex_give(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     return invalid_check;
 }
 
@@ -36,9 +36,9 @@ static bool app_module_vibrate_invalid(void)
  */
 void app_module_vibrate_set(app_module_vibrate_t *vibrate)
 {
-    app_mutex_take(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     app_module_vibrate = *vibrate;
-    app_mutex_give(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
 }
 
 /*@brief        获取震动模组
@@ -46,9 +46,9 @@ void app_module_vibrate_set(app_module_vibrate_t *vibrate)
  */
 void app_module_vibrate_get(app_module_vibrate_t *vibrate)
 {
-    app_mutex_take(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     *vibrate = app_module_vibrate;
-    app_mutex_give(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
 }
 
 /*@brief 震动模组启动
@@ -58,11 +58,11 @@ void app_module_vibrate_start(void)
 {
     if (app_module_vibrate_invalid())
         return;
-    app_mutex_take(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     app_module_vibrate.tick = 0;
     app_module_vibrate.count = 0;
     app_module_vibrate.onoff = true;
-    app_mutex_give(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     app_sys_timer_start(&app_module_vibrate_timer);
     APP_SYS_LOG_WARN("vibrate start");
 }
@@ -72,9 +72,9 @@ void app_module_vibrate_start(void)
 void app_module_vibrate_stop(void)
 {
     app_sys_timer_stop(&app_module_vibrate_timer);
-    app_mutex_take(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     app_module_vibrate.onoff = false;
-    app_mutex_give(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     APP_SYS_LOG_WARN("vibrate end");
 }
 
@@ -133,7 +133,7 @@ static void app_module_vibrate_timer_handler(void *timer)
  */
 void app_module_vibrate_ready(void)
 {
-    app_mutex_process(&app_module_vibrate_mutex);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_create);
     app_module_vibrate_timer.expired = app_module_vibrate_timer_handler;
     app_module_vibrate_timer.peroid  = 1;
     app_module_vibrate_timer.reload  = true;

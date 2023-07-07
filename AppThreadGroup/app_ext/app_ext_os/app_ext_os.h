@@ -53,20 +53,19 @@ typedef enum {
  */
 void app_sem_process(app_sem_t *sem, app_sem_option_t option);
 
-/*@brief        创建一个互斥锁并准备好使用
- *@param[in]    mutex 静态实例
- */
-void app_mutex_process(app_mutex_t *mutex);
+typedef enum {
+    app_mutex_default = 0,  /* 占位符 */
+    app_mutex_create,       /* 互斥锁创建 */
+    app_mutex_destroy,      /* 互斥锁销毁 */
+    app_mutex_take,         /* 互斥锁获取 */
+    app_mutex_give,         /* 互斥锁释放 */
+} app_mutex_option_t;
 
-/*@brief        抢占一个互斥锁(中断环境不可调用)
- *@param[in]    mutex 静态实例
+/*@brief        互斥锁操作流程集合
+ *@param[in]    mutex  实例
+ *@param[in]    option 实例动作
  */
-void app_mutex_take(app_mutex_t *mutex);
-
-/*@brief        释放一个互斥锁(中断环境不可调用)
- *@param[in]    mutex 静态实例
- */
-void app_mutex_give(app_mutex_t *mutex);
+void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option);
 
 /*@brief        创建一个临界区并准备好使用
  *              注意:这个接口本身不需要存在

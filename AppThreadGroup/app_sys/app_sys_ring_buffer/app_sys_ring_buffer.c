@@ -28,10 +28,10 @@ static inline void app_sys_ring_buffer_rewind_index(app_sys_ring_buffer *ring_bu
  */
 void app_sys_ring_buffer_reset(app_sys_ring_buffer *ring_buffer)
 {
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     ring_buffer->head = 0;
     ring_buffer->tail = 0;
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
 }
 
 /*@brief        环形队列为空判断(中断环境下不可调用)
@@ -40,9 +40,9 @@ void app_sys_ring_buffer_reset(app_sys_ring_buffer *ring_buffer)
  */
 bool app_sys_ring_buffer_is_empty(app_sys_ring_buffer *ring_buffer)
 {
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     bool result = (ring_buffer->head == ring_buffer->tail) ? true : false;
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     return result;
 }
 
@@ -52,9 +52,9 @@ bool app_sys_ring_buffer_is_empty(app_sys_ring_buffer *ring_buffer)
  */
 uint32_t app_sys_ring_buffer_get_item(app_sys_ring_buffer *ring_buffer)
 {
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     uint32_t item = ring_buffer->tail - ring_buffer->head;
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     return item;
 }
 
@@ -64,9 +64,9 @@ uint32_t app_sys_ring_buffer_get_item(app_sys_ring_buffer *ring_buffer)
  */
 uint32_t app_sys_ring_buffer_get_space(app_sys_ring_buffer *ring_buffer)
 {
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     uint32_t space = ring_buffer->size - (ring_buffer->tail - ring_buffer->head);
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     return space;
 }
 
@@ -98,7 +98,7 @@ void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
     ring_buffer->head   = 0;
     ring_buffer->tail   = 0;
     ring_buffer->type   = type;
-    app_mutex_process(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_create);
 }
 
 /*@brief        从环形队列获取数据(无参数检查)
@@ -122,7 +122,7 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
         result = -1;
     
     if (result == 0)
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     if (result == 0)
     switch (ring_buffer->type) {
     case 1:
@@ -181,7 +181,7 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
     if (result == 0)
     app_sys_ring_buffer_rewind_index(ring_buffer);
     if (result == 0 || result == -2)
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     
     return result;
 }
@@ -205,7 +205,7 @@ int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, u
         result = -1;
 
     if (result == 0)
-    app_mutex_take(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     if (result == 0)
     switch (ring_buffer->type) {
     case 1:
@@ -265,7 +265,7 @@ int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, u
     if (result == 0)
     app_sys_ring_buffer_rewind_index(ring_buffer);
     if (result == 0 || result == -2)
-    app_mutex_give(&ring_buffer->mutex);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     
     return result;
 }

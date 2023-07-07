@@ -20,9 +20,9 @@ static app_module_do_not_disturb_t app_module_do_not_disturb = {0};
  */
 void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
 {
-    app_mutex_take(&app_module_do_not_disturb_mutex);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_take);
     app_module_do_not_disturb = *do_not_disturb;
-    app_mutex_give(&app_module_do_not_disturb_mutex);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_give);
 }
 
 /*@brief     勿扰模式获取
@@ -30,9 +30,9 @@ void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
  */
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
 {
-    app_mutex_take(&app_module_do_not_disturb_mutex);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_take);
     *do_not_disturb = app_module_do_not_disturb;
-    app_mutex_give(&app_module_do_not_disturb_mutex);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_give);
 }
 
 /*@brief  勿扰模式状态检查
@@ -145,5 +145,5 @@ void app_module_do_not_disturb_load(void)
  */
 void app_module_do_not_disturb_ready(void)
 {
-    app_mutex_process(&app_module_do_not_disturb_mutex);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_create);
 }

@@ -13,7 +13,7 @@ static app_sys_log_t app_sys_log = {0};
  */
 void app_sys_log_ready(app_sys_log_t log)
 {
-    app_mutex_process(&app_sys_log_mutex);
+    app_mutex_process(&app_sys_log_mutex, app_mutex_create);
     app_sys_log = log;
 }
 
@@ -34,7 +34,7 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
     va_list  list;
     va_start(list, format);
     
-    app_mutex_take(&app_sys_log_mutex);
+    app_mutex_process(&app_sys_log_mutex, app_mutex_take);
     if (status) {
         /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
         #if 0
@@ -72,7 +72,7 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
             app_sys_log.persistent(text);
         }
     }
-    app_mutex_give(&app_sys_log_mutex);
+    app_mutex_process(&app_sys_log_mutex, app_mutex_give);
     
     va_end(list);
 }

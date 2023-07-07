@@ -18,7 +18,7 @@ bool app_sys_timer_stop(app_sys_timer_t *timer)
 {
     bool retval = false;
     app_sys_timer_t *current = NULL;
-    app_mutex_take(&app_sys_timer_mutex);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
     /* 检查等待者队列 */
     if (app_sys_timer_list != NULL) {
         /* 检查第一个等待者 */
@@ -46,7 +46,7 @@ bool app_sys_timer_stop(app_sys_timer_t *timer)
             }
         }
     }
-    app_mutex_give(&app_sys_timer_mutex);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
     return retval;
 }
 
@@ -61,7 +61,7 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
     if (timer->expired == NULL || timer->peroid == 0)
         return false;
     /* 初始化软件定时器 */
-    app_mutex_take(&app_sys_timer_mutex);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
     /* 预检查:不要出现相同参数的软件定时器 */
     if (status) {
         current = app_sys_timer_list;
@@ -118,7 +118,7 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
     if (status)
         current->buddy = timer;
     /*  */
-    app_mutex_give(&app_sys_timer_mutex);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
     /*  */
     return true;
 }
@@ -133,7 +133,7 @@ void app_sys_timer_reduce(void)
         bool status = true;
         app_sys_timer_t *timer = NULL;
         loop = false;
-        app_mutex_take(&app_sys_timer_mutex);
+        app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
         /* 检查等待者队列 */
         if (status)
         if (app_sys_timer_list == NULL)
@@ -152,7 +152,7 @@ void app_sys_timer_reduce(void)
             if (app_sys_timer_list->reduce == 0)
                 loop = true;
         }
-        app_mutex_give(&app_sys_timer_mutex);
+        app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
         /* 处理该约减者 */
         if (timer != NULL) {
             /* 检查是否需要重加载 */
@@ -169,5 +169,5 @@ void app_sys_timer_reduce(void)
  */
 void app_sys_timer_ready(void)
 {
-    app_mutex_process(&app_sys_timer_mutex);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_create);
 }

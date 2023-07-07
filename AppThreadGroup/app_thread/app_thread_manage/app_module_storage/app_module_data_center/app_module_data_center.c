@@ -44,7 +44,7 @@ void app_module_data_center_load(uint32_t type)
     } data_center_data;
     
     APP_SYS_ASSERT(app_module_data_center_number > type);
-    app_mutex_take(&app_module_data_center_mutex);
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_take);
     /* 本地缓存命中时不要再继续加载了 */
     if (app_module_data_center_type == type)
         return;
@@ -102,7 +102,7 @@ void app_module_data_center_dump(void)
             break;
         }
     }
-    app_mutex_give(&app_module_data_center_mutex);
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_give);
 }
 
 /*@brief 数据中心模组初始化
@@ -110,6 +110,6 @@ void app_module_data_center_dump(void)
  */
 void app_module_data_center_ready(void)
 {
-    app_mutex_process(&app_module_data_center_mutex);
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_create);
 }
 

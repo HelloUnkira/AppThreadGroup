@@ -73,30 +73,32 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
     }
 }
 
-/*@brief        创建一个互斥锁并准备好使用
- *@param[in]    mutex 静态实例
+/*@brief        互斥锁操作流程集合
+ *@param[in]    mutex  实例
+ *@param[in]    option 实例动作
  */
-void app_mutex_process(app_mutex_t *mutex)
+void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 {
-    k_mutex_init(&mutex->mutex);
-}
-
-/*@brief        抢占一个互斥锁(中断环境不可调用)
- *@param[in]    mutex 静态实例
- */
-void app_mutex_take(app_mutex_t *mutex)
-{
-    if (app_os_not_in_irq())
-        k_mutex_lock(&mutex->mutex, K_FOREVER);
-}
-
-/*@brief        释放一个互斥锁(中断环境不可调用)
- *@param[in]    mutex 静态实例
- */
-void app_mutex_give(app_mutex_t *mutex)
-{
-    if (app_os_not_in_irq())
-        k_mutex_unlock(&mutex->mutex);
+    switch (option) {
+    case app_mutex_create: {
+        k_mutex_init(&mutex->mutex);
+        break;
+    }
+    case app_mutex_take: {
+        if (app_os_not_in_irq())
+            k_mutex_lock(&mutex->mutex, K_FOREVER);
+        break;
+    }
+    case app_mutex_give: {
+        if (app_os_not_in_irq())
+            k_mutex_unlock(&mutex->mutex);
+        break;
+    }
+    default:
+        app_ext_arch_log_msg1("app_mutex_process option is not unsupported:%u", option);
+        app_os_reset();
+        break;
+    }
 }
 
 /*@brief        创建一个临界区并准备好使用

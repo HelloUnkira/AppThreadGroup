@@ -22,9 +22,9 @@ static app_module_remind_drink_t app_module_remind_drink = {0};
  */
 void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
 {
-    app_mutex_take(&app_module_remind_drink_mutex);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_take);
     app_module_remind_drink = *remind_drink;
-    app_mutex_give(&app_module_remind_drink_mutex);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
 }
 
 /*@brief     喝水提醒获取
@@ -32,9 +32,9 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
 {
-    app_mutex_take(&app_module_remind_drink_mutex);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_take);
     *remind_drink = app_module_remind_drink;
-    app_mutex_give(&app_module_remind_drink_mutex);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
 }
 
 /*@brief 喝水提醒默认设置
@@ -174,5 +174,5 @@ void app_module_remind_drink_load(void)
  */
 void app_module_remind_drink_ready(void)
 {
-    app_mutex_process(&app_module_remind_drink_mutex);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_create);
 }

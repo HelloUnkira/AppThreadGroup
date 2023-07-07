@@ -34,10 +34,10 @@ static app_mutex_t app_module_system_mutex = {0};
  */
 void app_module_system_dlps_set(bool status)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     app_module_system_dlps_exec = true;
     app_module_system_dlps_status = status;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     app_lv_scene_dlps(status);
 }
 
@@ -46,9 +46,9 @@ void app_module_system_dlps_set(bool status)
  */
 bool app_module_system_dlps_get(void)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     bool status = app_module_system_dlps_status;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     return status;
 }
 
@@ -57,9 +57,9 @@ bool app_module_system_dlps_get(void)
  */
 void app_module_system_status_set(uint8_t status)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     app_module_system_status = status;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
 /*@brief  获取系统状态
@@ -67,9 +67,9 @@ void app_module_system_status_set(uint8_t status)
  */
 uint8_t app_module_system_status_get(void)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     uint8_t status = app_module_system_status;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     return status;
 }
 
@@ -78,9 +78,9 @@ uint8_t app_module_system_status_get(void)
  */
 void app_module_system_delay_set(uint8_t delay)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     app_module_system_delay = delay;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
 /*@brief  获取系统延时
@@ -88,9 +88,9 @@ void app_module_system_delay_set(uint8_t delay)
  */
 uint8_t app_module_system_delay_get(void)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     uint8_t delay = app_module_system_delay;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     return delay;
 }
 
@@ -99,9 +99,9 @@ uint8_t app_module_system_delay_get(void)
  */
 void app_module_system_mode_set(uint8_t mode)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     app_module_system_mode_bak = mode;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     
     /* 更新系统工作模式 */
     app_module_data_center_t *data_center = NULL;
@@ -116,9 +116,9 @@ void app_module_system_mode_set(uint8_t mode)
  */
 uint8_t app_module_system_mode_get(void)
 {
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     uint8_t mode = app_module_system_mode_bak;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     return mode;
 }
 
@@ -149,11 +149,11 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
         srand(clock[0].utc);
     }
     
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     uint8_t   mode = app_module_system_mode;
     uint8_t status = app_module_system_status;
     bool  is_valid = app_module_system_status == app_module_system_valid;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
     /* 系统开机加载流程 */
     if (ctrl_status.not_load_yet) {
         ctrl_status.not_load_yet = false;
@@ -171,11 +171,11 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     if (mode == app_module_system_low_power ||
         mode == app_module_system_normal) {
         /* 仅正常模式DLPS才会有效 */
-        app_mutex_take(&app_module_system_mutex);
+        app_mutex_process(&app_module_system_mutex, app_mutex_take);
         bool   dlps_exec = app_module_system_dlps_exec;
         bool dlps_status = app_module_system_dlps_status;
         app_module_system_dlps_exec = false;
-        app_mutex_give(&app_module_system_mutex);
+        app_mutex_process(&app_module_system_mutex, app_mutex_give);
         /* 执行DLPS检测 */
         if (dlps_exec) {
             /* 进入dlps */
@@ -225,7 +225,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     if (app_module_dump_not_over())
         return;
     /* 系统倒计时 */
-    app_mutex_take(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_take);
     /* 数据转储结束,重置系统 */
     if (app_module_system_delay == 0) {
         app_module_system_status = app_module_system_valid;
@@ -234,14 +234,14 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     }
     if (app_module_system_delay != 0)
         app_module_system_delay--;
-    app_mutex_give(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
 /*@brief 初始化系统模组
  */
 void app_module_system_ready(void)
 {
-    app_mutex_process(&app_module_system_mutex);
+    app_mutex_process(&app_module_system_mutex, app_mutex_create);
     
     /* 更新系统工作模式 */
     app_module_data_center_t *data_center = NULL;

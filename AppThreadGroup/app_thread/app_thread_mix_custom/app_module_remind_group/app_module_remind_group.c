@@ -60,7 +60,7 @@ void app_module_remind_group_reflush(void)
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     /* 在组的访问更新流程内,完全禁止对组的操作 */
-    app_mutex_take(&app_module_remind_group_mutex);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_take);
     /* 检查所有提醒组内所有提醒项 */
     for (uint32_t idx1 = 0; idx1 < app_module_remind_group_number; idx1++) {
         if ((group = &app_module_remind_group[idx1])->array == NULL)
@@ -143,7 +143,7 @@ void app_module_remind_group_reflush(void)
             }
         }
     }
-    app_mutex_give(&app_module_remind_group_mutex);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_give);
 }
 
 /*@brief     添加提醒组
@@ -154,7 +154,7 @@ void app_module_remind_group_reflush(void)
 uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t number)
 {
     uint32_t remind_group_id = -1;
-    app_mutex_take(&app_module_remind_group_mutex);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_take);
     for (uint32_t idx = 0; idx < app_module_remind_group_number; idx++)
         if (app_module_remind_group[idx].array == NULL) {
             app_module_remind_group[idx].array  = array;
@@ -162,7 +162,7 @@ uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t n
             remind_group_id = idx;
             break;
         }
-    app_mutex_give(&app_module_remind_group_mutex);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_give);
     return remind_group_id;
 }
 
@@ -172,10 +172,10 @@ uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t n
 void app_module_remind_group_del(uint32_t remind_group_id)
 {
     if (remind_group_id < app_module_remind_group_number) {
-        app_mutex_take(&app_module_remind_group_mutex);
+        app_mutex_process(&app_module_remind_group_mutex, app_mutex_take);
         app_module_remind_group[remind_group_id].array  = NULL;
         app_module_remind_group[remind_group_id].number = 0;
-        app_mutex_give(&app_module_remind_group_mutex);
+        app_mutex_process(&app_module_remind_group_mutex, app_mutex_give);
     }
 }
 
@@ -183,7 +183,7 @@ void app_module_remind_group_del(uint32_t remind_group_id)
  */
 void app_module_remind_group_ready(void)
 {
-    app_mutex_process(&app_module_remind_group_mutex);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_create);
     for (uint32_t idx = 0; idx < app_module_remind_group_number; idx++) {
         app_module_remind_group[idx].array  = NULL;
         app_module_remind_group[idx].number = 0;

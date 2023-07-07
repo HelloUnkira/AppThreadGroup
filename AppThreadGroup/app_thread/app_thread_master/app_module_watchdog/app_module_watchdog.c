@@ -22,9 +22,9 @@ static void app_module_watchdog_feed_work(void *argument)
 {
     uint8_t thread_id = (uint8_t)(uintptr_t)argument;
     if (thread_id < app_thread_id_number) {
-        app_mutex_take(&app_module_watchdog_mutex);
+        app_mutex_process(&app_module_watchdog_mutex, app_mutex_take);
         app_module_watchdog_count[thread_id] = 0;
-        app_mutex_give(&app_module_watchdog_mutex);
+        app_mutex_process(&app_module_watchdog_mutex, app_mutex_give);
     }
 }
 
@@ -45,12 +45,12 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         };
         app_package_notify(&package);
         /* 如果超出最大时限,出错断言 */
-        app_mutex_take(&app_module_watchdog_mutex);
+        app_mutex_process(&app_module_watchdog_mutex, app_mutex_take);
         if (app_module_watchdog_count[idx]++ > APP_MODULE_WATCHDOG_XS) {
             APP_SYS_LOG_ERROR("catch thread %u block", idx);
             APP_SYS_ASSERT(true == false);
         }
-        app_mutex_give(&app_module_watchdog_mutex);
+        app_mutex_process(&app_module_watchdog_mutex, app_mutex_give);
     }
 }
 
@@ -58,5 +58,5 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
  */
 void app_module_watchdog_ready(void)
 {
-    app_mutex_process(&app_module_watchdog_mutex);
+    app_mutex_process(&app_module_watchdog_mutex, app_mutex_create);
 }

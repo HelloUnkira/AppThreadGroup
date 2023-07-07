@@ -23,9 +23,9 @@ static app_module_remind_sedentary_t app_module_remind_sedentary = {0};
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary)
 {
     /* reflush_utc是内部特殊字段,不可设置 */
-    app_mutex_take(&app_module_remind_sedentary_mutex);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_take);
     app_module_remind_sedentary = *remind_sedentary;
-    app_mutex_give(&app_module_remind_sedentary_mutex);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
 }
 
 /*@brief     走动提醒获取
@@ -33,9 +33,9 @@ void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_seden
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary)
 {
-    app_mutex_take(&app_module_remind_sedentary_mutex);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_take);
     *remind_sedentary = app_module_remind_sedentary;
-    app_mutex_give(&app_module_remind_sedentary_mutex);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
 }
 
 /*@brief 走动提醒默认设置
@@ -195,5 +195,5 @@ void app_module_remind_sedentary_load(void)
  */
 void app_module_remind_sedentary_ready(void)
 {
-    app_mutex_process(&app_module_remind_sedentary_mutex);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_create);
 }

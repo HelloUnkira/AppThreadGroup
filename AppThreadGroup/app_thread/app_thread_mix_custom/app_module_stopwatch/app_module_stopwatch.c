@@ -24,9 +24,9 @@ static app_module_stopwatch_t app_module_stopwatch = {0};
  */
 void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
 {
-    app_mutex_take(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
     app_module_stopwatch = *stopwatch;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
 }
 
 /*@brief        获取秒表
@@ -34,9 +34,9 @@ void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
  */
 void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch)
 {
-    app_mutex_take(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
     *stopwatch = app_module_stopwatch;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
 }
 
 /*@brief 复位秒表
@@ -44,18 +44,18 @@ void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch)
 void app_module_stopwatch_reset(void)
 {
     app_module_stopwatch_t stopwatch = {0};
-    app_mutex_take(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
     app_module_stopwatch = stopwatch;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
 }
 
 /*@brief 启动秒表
  */
 void app_module_stopwatch_start(void)
 {
-    app_mutex_take(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
     app_module_stopwatch.onoff = true;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
     app_sys_timer_start(&app_module_stopwatch_timer);
 }
 
@@ -63,9 +63,9 @@ void app_module_stopwatch_start(void)
  */
 void app_module_stopwatch_stop(void)
 {
-    app_mutex_take(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
     app_module_stopwatch.onoff = false;
-    app_mutex_give(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
     app_sys_timer_stop(&app_module_stopwatch_timer);
 }
 
@@ -117,7 +117,7 @@ static void app_module_stopwatch_timer_handler(void *timer)
  */
 void app_module_stopwatch_ready(void)
 {
-    app_mutex_process(&app_module_stopwatch_mutex);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_create);
     app_module_stopwatch_timer.expired = app_module_stopwatch_timer_handler;
     app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
     app_module_stopwatch_timer.reload  = true;
