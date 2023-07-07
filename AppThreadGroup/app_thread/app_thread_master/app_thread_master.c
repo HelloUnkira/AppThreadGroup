@@ -79,7 +79,7 @@ void app_thread_get_sync(uint32_t thread, app_sem_t **sem)
 void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
 {
     if (thread < app_thread_id_number)
-       *pipe = &app_thread_pipe_dst[thread];
+        *pipe = &app_thread_pipe_dst[thread];
 }
 
 /*@brief 主线程模组初始化
