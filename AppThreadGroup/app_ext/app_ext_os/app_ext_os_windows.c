@@ -61,6 +61,10 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
         sem->sem = CreateSemaphore(NULL, 0, 100, NULL);
         break;
     }
+    case app_sem_destroy: {
+        CloseHandle(sem->sem);
+        break;
+    }
     case app_sem_take: {
         WaitForSingleObject(sem->sem, INFINITE);
         break;
@@ -85,6 +89,10 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
     switch (option) {
     case app_mutex_create: {
         mutex->mutex = CreateMutex(NULL, FALSE, NULL);
+        break;
+    }
+    case app_mutex_destroy: {
+        CloseHandle(mutex->mutex);
         break;
     }
     case app_mutex_take: {
@@ -115,6 +123,12 @@ void app_critical_process(app_critical_t *critical, app_critical_option_t option
         /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
         app_mutex_process(&critical->mutex, app_mutex_create);
         critical->mutex_ready = true;
+        break;
+    }
+    case app_critical_destroy: {
+        /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+        app_mutex_process(&critical->mutex, app_mutex_destroy);
+        critical->mutex_ready = false;
         break;
     }
     case app_critical_enter: {
