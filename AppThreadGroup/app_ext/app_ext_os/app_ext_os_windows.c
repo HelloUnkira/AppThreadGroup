@@ -17,10 +17,10 @@ bool app_os_not_in_irq(void)
 }
 
 /*@brief        线程操作流程集合
-*@param[in]    thread 实例
-*@param[in]    option 实例动作
-*/
- void app_thread_process(app_thread_t *thread, app_thread_option_t option)
+ *@param[in]    thread 实例
+ *@param[in]    option 实例动作
+ */
+void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 {
     switch (option) {
     case app_thread_create: {
