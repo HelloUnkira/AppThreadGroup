@@ -9,8 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_sys_work.h"
-#include "app_thread_master.h"
-#include "app_thread_manage.h"
+#include "app_thread_group.h"
 #include "app_module_data_center.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
@@ -63,9 +62,9 @@ void app_thread_manage_routine(void)
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
             case app_thread_manage_system: {
-                if (package.event == app_thread_group_work)
+                if (package.event == app_thread_event_work)
                     app_sys_work_execute((void *)package.data);
-                if (package.event == app_thread_group_works)
+                if (package.event == app_thread_event_works)
                     app_sys_works_execute((void *)package.data);
                 break;
             }

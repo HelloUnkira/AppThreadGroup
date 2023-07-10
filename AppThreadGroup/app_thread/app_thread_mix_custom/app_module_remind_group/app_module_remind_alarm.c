@@ -9,8 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
@@ -130,5 +129,5 @@ void app_module_remind_alarm_load(void)
  */
 void app_module_remind_alarm_ready(void)
 {
-    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_create);
+    app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_static);
 }

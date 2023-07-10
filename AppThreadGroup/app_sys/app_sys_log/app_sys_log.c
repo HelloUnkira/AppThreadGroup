@@ -13,7 +13,7 @@ static app_sys_log_t app_sys_log = {0};
  */
 void app_sys_log_ready(app_sys_log_t log)
 {
-    app_mutex_process(&app_sys_log_mutex, app_mutex_create);
+    app_mutex_process(&app_sys_log_mutex, app_mutex_static);
     app_sys_log = log;
 }
 

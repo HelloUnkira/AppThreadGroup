@@ -8,8 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_irq.h"
+#include "app_thread_group.h"
 #include "app_module_vibrate.h"
 
 static app_mutex_t app_module_vibrate_mutex = {0};
@@ -121,19 +120,19 @@ void app_module_vibrate_msec_update(void)
 static void app_module_vibrate_timer_handler(void *timer)
 {
     /* 发送震动模组更新事件 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_mix_irq,
         .module = app_thread_mix_irq_vibrate,
         .event  = app_thread_mix_irq_vibrate_msec_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 震动模组初始化
  */
 void app_module_vibrate_ready(void)
 {
-    app_mutex_process(&app_module_vibrate_mutex, app_mutex_create);
+    app_mutex_process(&app_module_vibrate_mutex, app_mutex_static);
     app_module_vibrate_timer.expired = app_module_vibrate_timer_handler;
     app_module_vibrate_timer.peroid  = 1;
     app_module_vibrate_timer.reload  = true;

@@ -11,8 +11,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_group.h"
 #include "app_module_stopwatch.h"
 
 static app_mutex_t app_module_stopwatch_mutex = {0};
@@ -105,19 +104,19 @@ void app_module_stopwatch_xmsec_update(void)
 static void app_module_stopwatch_timer_handler(void *timer)
 {
     /* 发送倒计时事件 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_mix_custom,
         .module = app_thread_mix_custom_stopwatch,
         .event  = app_thread_mix_custom_stopwatch_msec_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 秒表模组初始化
  */
 void app_module_stopwatch_ready(void)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_create);
+    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_static);
     app_module_stopwatch_timer.expired = app_module_stopwatch_timer_handler;
     app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
     app_module_stopwatch_timer.reload  = true;

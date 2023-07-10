@@ -10,8 +10,7 @@
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
 #include "app_module_clock.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_group.h"
 #include "app_module_remind_drink.h"
 
 static app_mutex_t app_module_remind_drink_mutex = {0};
@@ -81,12 +80,12 @@ void app_module_remind_drink_xmin_update(void)
                 /* 到达提醒间隔点 */
                 if (((c_mins - t_mins_s) % remind_drink.interval) == 0) {
                     /* 发送提醒事件 */
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread = app_thread_id_mix_custom,
                         .module = app_thread_mix_custom_remind_misc,
                         .event  = app_thread_mix_custom_remind_drink_interval,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
             }
         }
@@ -100,12 +99,12 @@ void app_module_remind_drink_xmin_update(void)
                 /* 到达提醒间隔点 */
                 if (((c_mins - t_mins_s) % remind_drink.interval) == 0) {
                     /* 发送提醒事件 */
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread = app_thread_id_mix_custom,
                         .module = app_thread_mix_custom_remind_misc,
                         .event  = app_thread_mix_custom_remind_drink_interval,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
             }
         }
@@ -118,12 +117,12 @@ void app_module_remind_drink_xmin_update(void)
  */
 void app_module_remind_drink_update(app_module_clock_t clock[1])
 {
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_mix_custom,
         .module = app_thread_mix_custom_remind_misc,
         .event  = app_thread_mix_custom_remind_drink_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 喝水提醒转储到外存
@@ -174,5 +173,5 @@ void app_module_remind_drink_load(void)
  */
 void app_module_remind_drink_ready(void)
 {
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_create);
+    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_static);
 }

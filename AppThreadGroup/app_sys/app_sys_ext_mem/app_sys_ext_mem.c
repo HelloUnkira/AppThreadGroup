@@ -117,7 +117,7 @@ size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
  */
 void app_sys_ext_mem_ready(void)
 {
-    app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_create);
+    app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_static);
     
     #if APP_OS_EXT_MEM
     int32_t retval_1 = app_os_ext_mem_ready();

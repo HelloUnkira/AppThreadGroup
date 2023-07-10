@@ -37,7 +37,7 @@ bool app_os_not_in_irq(void)
 void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 {
     switch (option) {
-    case app_thread_create: {
+    case app_thread_static: {
         xTaskCreate(thread->task,
                     thread->name,
                     thread->stack_size,
@@ -60,7 +60,7 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 {
     switch (option) {
-    case app_sem_create: {
+    case app_sem_static: {
         sem->sem = xSemaphoreCreateCounting(100, 0);
         break;
     }
@@ -92,7 +92,7 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 {
     switch (option) {
-    case app_mutex_create: {
+    case app_mutex_static: {
         mutex->mutex = xSemaphoreCreateMutex();
         break;
     }

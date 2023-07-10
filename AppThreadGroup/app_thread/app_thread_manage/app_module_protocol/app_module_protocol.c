@@ -8,8 +8,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_thread_master.h"
-#include "app_thread_manage.h"
+#include "app_thread_group.h"
 #include "app_module_protocol.h"
 
 #if 0
@@ -36,7 +35,7 @@ void app_module_protocol_notify(app_module_protocol_t *protocol)
     app_module_protocol_t *protocol_new = app_mem_alloc(sizeof(app_module_protocol_t));
     memcpy(protocol_new, protocol, sizeof(app_module_protocol_t));
     /* 传输对象发送通知 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread  = app_thread_id_manage,
         .module  = app_thread_manage_protocol,
         .event   = app_thread_manage_protocol_notify,
@@ -44,7 +43,7 @@ void app_module_protocol_notify(app_module_protocol_t *protocol)
         .data    = protocol_new,
         .size    = sizeof(app_module_protocol_t),
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief     传输协议
@@ -55,7 +54,7 @@ void app_module_protocol_respond(app_module_protocol_t *protocol)
     app_module_protocol_t *protocol_new = app_mem_alloc(sizeof(app_module_protocol_t));
     memcpy(protocol_new, protocol, sizeof(app_module_protocol_t));
     /* 传输对象发送通知 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread  = app_thread_id_manage,
         .module  = app_thread_manage_protocol,
         .event   = app_thread_manage_protocol_respond,
@@ -63,7 +62,7 @@ void app_module_protocol_respond(app_module_protocol_t *protocol)
         .data    = protocol_new,
         .size    = sizeof(app_module_protocol_t),
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief     传输协议

@@ -18,17 +18,10 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
-#include "app_sys_timer.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_trace_text.h"
-#include "app_thread_adaptor.h"
-#include "app_thread_master.h"
-#include "app_module_system.h"
-#include "app_module_watchdog.h"
+#include "app_thread_group.h"
 
-/* 管道集合,为每一个线程分发一套传输管道 */
 /* 信号量,控制线程组的进动 */
-static bool app_thread_group_status = false;
+/* 管道集合,控制线程组的事件包传递 */
 static app_sem_t app_thread_sem_src = {0};
 static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
@@ -86,9 +79,13 @@ void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
  */
 void app_thread_master_ready(void)
 {
-    /* 模组初始化 */
-    app_module_system_ready();
-    app_module_watchdog_ready();
+    /* 就绪管道和同步资源 */
+    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
+        app_sys_pipe_ready(&app_thread_pipe_dst[idx]);
+        app_sys_pipe_ready(&app_thread_pipe_src);
+    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
+        app_sem_process(&app_thread_sem_dst[idx],   app_sem_static);
+        app_sem_process(&app_thread_sem_src,        app_sem_static);
 }
 
 /*@brief 主线程服务例程
@@ -105,10 +102,10 @@ void app_thread_master_routine(void)
     }
     /* 主流程 */
     while (true) {
-        #if APP_THREAD_GROUP_REALTIME
+        #if APP_THREAD_MASTER_REALTIME
         app_sem_take(send_sem);
         #else
-        app_delay_ms(APP_THREAD_GROUP_TIME_SLICE);
+        app_delay_ms(APP_THREAD_MASTER_TIME_SLICE);
         #endif
         #if APP_SYS_LOG_THREAD_CHECK
         if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
@@ -131,63 +128,14 @@ void app_thread_master_routine(void)
  *@param[in]    package   事件包
  #@retval       失败表明线程组中止,不接收新的事件包
  */
-bool app_package_notify(app_package_t *package)
+bool app_thread_package_notify(app_thread_package_t *package)
 {
     /* 线程组接收新包 */
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
     app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
-    #if APP_THREAD_GROUP_REALTIME
+    #if APP_THREAD_MASTER_REALTIME
     app_sem_process(send_sem, app_sem_give);
     #endif
     return true;
-}
-
-/*@brief 线程组运行
- *       准备并启动所有线程及其附属资源
- */
-void app_thread_group_schedule(void)
-{
-    /* 就绪管道和同步资源 */
-    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
-        app_sys_pipe_ready(&app_thread_pipe_dst[idx]);
-        app_sys_pipe_ready(&app_thread_pipe_src);
-    for (uint32_t idx = 0; idx < app_thread_id_number; idx++)
-        app_sem_process(&app_thread_sem_dst[idx],   app_sem_create);
-        app_sem_process(&app_thread_sem_src,        app_sem_create);
-    /* 就绪系统子模组 */
-    app_sys_log_t log = {
-        .message1   = app_ext_arch_log_msg1,
-        .message2   = app_ext_arch_log_msg2,
-        .persistent = app_sys_trace_log_persistent,
-    };
-    app_sys_log_ready(log);
-    app_sys_timer_ready();
-    app_sys_ext_mem_ready();
-    app_sys_trace_text_ready();
-    app_sys_build_time();
-    /* 就绪线程子模组 */
-    app_thread_master_ready();
-    app_thread_mix_irq_ready();
-    app_thread_mix_custom_ready();
-    app_thread_manage_ready();
-    app_thread_lvgl_ready();
-    app_thread_jerryscript_ready();
-    /* 就绪和启用线程组 */
-    app_thread_process(&app_thread_master,          app_thread_create);
-    app_thread_process(&app_thread_mix_irq,         app_thread_create);
-    app_thread_process(&app_thread_mix_custom,      app_thread_create);
-    app_thread_process(&app_thread_manage,          app_thread_create);
-    app_thread_process(&app_thread_lvgl,            app_thread_create);
-    app_thread_process(&app_thread_jerryscript,     app_thread_create);
-    /* 设置线程组就绪 */
-    app_thread_group_status = true;
-}
-
-/*@brief 获得线程组初始化状态
- */
-bool app_thread_group_status_get(void)
-{
-    bool status = app_thread_group_status;
-    return status;
 }

@@ -7,8 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
 
@@ -20,12 +19,12 @@ static app_module_remind_group_t app_module_remind_group[app_module_remind_group
  */
 void app_module_remind_group_update(app_module_clock_t clock[1])
 {
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread  = app_thread_id_mix_custom,
         .module  = app_thread_mix_custom_remind_group,
         .event   = app_thread_mix_custom_remind_group_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 生成提醒组事件
@@ -36,7 +35,7 @@ static void app_module_remind_group_throw_event(app_module_remind_package_t remi
     remind_new->remind_group = remind.remind_group;
     remind_new->remind_item  = remind.remind_item;
     
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread  = app_thread_id_mix_custom,
         .module  = app_thread_mix_custom_remind_group,
         .event   = app_thread_mix_custom_remind_group_package,
@@ -44,7 +43,7 @@ static void app_module_remind_group_throw_event(app_module_remind_package_t remi
         .size    = sizeof(app_module_remind_package_t),
         .data    = remind_new,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 更新提醒组
@@ -183,7 +182,7 @@ void app_module_remind_group_del(uint32_t remind_group_id)
  */
 void app_module_remind_group_ready(void)
 {
-    app_mutex_process(&app_module_remind_group_mutex, app_mutex_create);
+    app_mutex_process(&app_module_remind_group_mutex, app_mutex_static);
     for (uint32_t idx = 0; idx < app_module_remind_group_number; idx++) {
         app_module_remind_group[idx].array  = NULL;
         app_module_remind_group[idx].number = 0;

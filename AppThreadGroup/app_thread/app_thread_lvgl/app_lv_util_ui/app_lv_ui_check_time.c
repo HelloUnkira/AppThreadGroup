@@ -8,8 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
-#include "app_thread_master.h"
-#include "app_thread_lvgl.h"
+#include "app_thread_group.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -92,19 +91,19 @@ void app_lv_ui_check_time_update(void)
 static void app_lv_ui_check_time_timer_handler(void *timer)
 {
     /* 发送场景计时检查事件 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_ui_scene,
         .event  = app_thread_lvgl_ui_scene_check_time,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief lvgl 时间检查更新初始化
  */
 void app_lv_ui_check_time_ready(void)
 {
-    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_create);
+    app_mutex_process(&app_lv_ui_check_time_mutex, app_mutex_static);
     app_lv_ui_check_time_timer.expired = app_lv_ui_check_time_timer_handler;
     app_lv_ui_check_time_timer.peroid  = 1000;
     app_lv_ui_check_time_timer.reload  = true;

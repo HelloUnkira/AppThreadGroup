@@ -98,7 +98,7 @@ void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
     ring_buffer->head   = 0;
     ring_buffer->tail   = 0;
     ring_buffer->type   = type;
-    app_mutex_process(&ring_buffer->mutex, app_mutex_create);
+    app_mutex_process(&ring_buffer->mutex, app_mutex_static);
 }
 
 /*@brief        从环形队列获取数据(无参数检查)

@@ -27,6 +27,7 @@ bool app_os_not_in_irq(void);
 
 typedef enum {
     app_thread_default = 0,     /* 占位符 */
+    app_thread_static,          /* 线程准备(内存常驻) */
     app_thread_create,          /* 线程创建 */
     app_thread_destroy,         /* 线程销毁 */
     app_thread_suspend,         /* 线程悬挂 */
@@ -41,6 +42,7 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option);
 
 typedef enum {
     app_sem_default = 0,    /* 占位符 */
+    app_sem_static,         /* 信号量准备(内存常驻) */
     app_sem_create,         /* 信号量创建 */
     app_sem_destroy,        /* 信号量销毁 */
     app_sem_take,           /* 信号量获取 */
@@ -55,6 +57,7 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option);
 
 typedef enum {
     app_mutex_default = 0,  /* 占位符 */
+    app_mutex_static,       /* 互斥锁准备(内存常驻) */
     app_mutex_create,       /* 互斥锁创建 */
     app_mutex_destroy,      /* 互斥锁销毁 */
     app_mutex_take,         /* 互斥锁获取 */
@@ -69,6 +72,7 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option);
 
 typedef enum {
     app_critical_default = 0,   /* 占位符 */
+    app_critical_static,        /* 临界区准备(内存常驻) */
     app_critical_create,        /* 临界区创建 */
     app_critical_destroy,       /* 临界区销毁 */
     app_critical_enter,         /* 临界区进入 */

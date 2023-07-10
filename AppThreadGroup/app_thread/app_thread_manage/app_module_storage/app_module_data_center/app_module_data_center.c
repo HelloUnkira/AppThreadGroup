@@ -110,6 +110,6 @@ void app_module_data_center_dump(void)
  */
 void app_module_data_center_ready(void)
 {
-    app_mutex_process(&app_module_data_center_mutex, app_mutex_create);
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_static);
 }
 

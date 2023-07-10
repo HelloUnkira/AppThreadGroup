@@ -5,7 +5,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_trace_text.h"
-#include "app_thread_master.h"
+#include "app_thread_group.h"
 #include "app_module_system.h"
 #include "app_module_clock.h"
 

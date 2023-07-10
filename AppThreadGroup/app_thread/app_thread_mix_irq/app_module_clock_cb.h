@@ -1,5 +1,5 @@
-#ifdef APP_MODULE_CLOCK_H
-#ifdef APP_MODULE_CLOCK_CB_H
+#ifndef APP_MODULE_CLOCK_CB_H
+#define APP_MODULE_CLOCK_CB_H
 
 /*实现目标:
  *一个代替动态注册的,静态本地导入的时钟秒时分天回调集
@@ -100,5 +100,4 @@ void app_module_clock_cb2_empty(app_module_clock_t clock[2], uint32_t event)
 {
 }
 
-#endif
 #endif

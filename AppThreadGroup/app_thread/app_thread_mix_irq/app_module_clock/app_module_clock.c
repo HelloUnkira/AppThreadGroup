@@ -10,10 +10,8 @@
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
 #include "app_sys_clock.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_irq.h"
+#include "app_thread_group.h"
 #include "app_module_clock.h"
-#define   APP_MODULE_CLOCK_CB_H
 #include "app_module_clock_cb.h"
 
 /*@brief     闰年判断
@@ -164,12 +162,12 @@ void app_module_clock_set_system_clock(app_module_clock_t *clock)
     app_module_clock[1] = *clock;
     app_mutex_process(&app_module_clock_mutex, app_mutex_give);
     /* 向线程发送时钟更新事件 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_mix_irq,
         .module = app_thread_mix_irq_clock,
         .event  = app_thread_mix_irq_clock_local_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 系统时钟更新事件
@@ -299,7 +297,7 @@ void app_module_clock_ready(void)
 {
     app_module_clock_to_dtime(&app_module_clock[1]);
     app_module_clock_to_week(&app_module_clock[1]);
-    app_mutex_process(&app_module_clock_mutex, app_mutex_create);
+    app_mutex_process(&app_module_clock_mutex, app_mutex_static);
 }
 
 /*@brief 时钟模组更新
@@ -308,14 +306,14 @@ void app_module_clock_1s_update(uint64_t utc_new)
 {
     static uint64_t utc = 0;
     utc = utc_new;
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread   = app_thread_id_mix_irq,
         .module   = app_thread_mix_irq_clock,
         .event    = app_thread_mix_irq_clock_timestamp_update,
-        .priority = app_package_priority_highest,
+        .priority = app_thread_package_priority_highest,
         .dynamic  = false,
         .size     = sizeof(uint64_t),
         .data     = &utc,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }

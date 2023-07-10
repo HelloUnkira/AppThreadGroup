@@ -10,8 +10,7 @@
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
 #include "app_module_clock.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
+#include "app_thread_group.h"
 #include "app_module_remind_sedentary.h"
 
 static app_mutex_t app_module_remind_sedentary_mutex = {0};
@@ -99,12 +98,12 @@ void app_module_remind_sedentary_xmin_update(void)
                     remind_sedentary.reflush == 0)) {
                     remind_sedentary.reflush  = c_mins;
                     /* 发送提醒事件 */
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread = app_thread_id_mix_custom,
                         .module = app_thread_mix_custom_remind_misc,
                         .event  = app_thread_mix_custom_remind_sedentary_interval,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
             }
         }
@@ -121,12 +120,12 @@ void app_module_remind_sedentary_xmin_update(void)
                     remind_sedentary.reflush == 0)) {
                     remind_sedentary.reflush  = c_mins;
                     /* 发送提醒事件 */
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread = app_thread_id_mix_custom,
                         .module = app_thread_mix_custom_remind_misc,
                         .event  = app_thread_mix_custom_remind_sedentary_interval,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
             }
         }
@@ -139,12 +138,12 @@ void app_module_remind_sedentary_xmin_update(void)
  */
 void app_module_remind_sedentary_update(app_module_clock_t clock[1])
 {
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_mix_custom,
         .module = app_thread_mix_custom_remind_misc,
         .event  = app_thread_mix_custom_remind_sedentary_update,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
 }
 
 /*@brief 走动提醒转储到外存
@@ -195,5 +194,5 @@ void app_module_remind_sedentary_load(void)
  */
 void app_module_remind_sedentary_ready(void)
 {
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_create);
+    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_static);
 }

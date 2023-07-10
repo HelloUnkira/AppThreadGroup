@@ -210,7 +210,7 @@ void app_sys_trace_text_reset(void)
  */
 void app_sys_trace_text_ready(void)
 {
-    app_mutex_process(&app_sys_trace_text_mutex, app_mutex_create);
+    app_mutex_process(&app_sys_trace_text_mutex, app_mutex_static);
     const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
     const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
     APP_SYS_ASSERT(app_sys_trace_text_size < ext_src->data_size);

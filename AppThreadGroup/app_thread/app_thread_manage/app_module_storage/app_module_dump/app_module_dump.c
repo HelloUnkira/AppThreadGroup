@@ -7,8 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_thread_master.h"
-#include "app_thread_manage.h"
+#include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
@@ -49,11 +48,11 @@ void app_module_dump_event(void)
 {
     app_module_dump_status_not_over = true;
     /* 向线程发送转储事件 */
-    app_package_t package = {
+    app_thread_package_t package = {
         .thread = app_thread_id_manage,
         .module = app_thread_manage_dump,
         .event  = 0,
     };
-    app_package_notify(&package);
+    app_thread_package_notify(&package);
     APP_SYS_LOG_WARN("");
 }

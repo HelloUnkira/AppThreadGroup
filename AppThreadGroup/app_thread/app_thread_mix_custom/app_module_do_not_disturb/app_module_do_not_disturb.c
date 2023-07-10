@@ -145,5 +145,5 @@ void app_module_do_not_disturb_load(void)
  */
 void app_module_do_not_disturb_ready(void)
 {
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_create);
+    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_static);
 }

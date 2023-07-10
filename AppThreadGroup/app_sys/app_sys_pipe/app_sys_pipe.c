@@ -22,7 +22,7 @@ void app_sys_pipe_ready(app_sys_pipe_t *pipe)
     pipe->head = NULL;
     pipe->tail = NULL;
     pipe->number = 0;
-    app_critical_process(&pipe->critical, app_critical_create);
+    app_critical_process(&pipe->critical, app_critical_static);
 }
 
 /*@brief     获取管道资源包数量

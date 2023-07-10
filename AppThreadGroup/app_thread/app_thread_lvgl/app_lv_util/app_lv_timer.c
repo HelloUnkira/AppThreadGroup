@@ -8,8 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
-#include "app_thread_master.h"
-#include "app_thread_lvgl.h"
+#include "app_thread_group.h"
 
 #include "lvgl.h"
 #include "app_lv_event.h"

@@ -169,5 +169,5 @@ void app_sys_timer_reduce(void)
  */
 void app_sys_timer_ready(void)
 {
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_create);
+    app_mutex_process(&app_sys_timer_mutex, app_mutex_static);
 }

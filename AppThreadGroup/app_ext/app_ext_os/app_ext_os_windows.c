@@ -23,7 +23,7 @@ bool app_os_not_in_irq(void)
 void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 {
     switch (option) {
-    case app_thread_create: {
+    case app_thread_static: {
         thread->stacksize = 8 * 1024 * 1024;
         // thread->handle = _beginthreadex(NULL,
                                         // thread->stacksize, /* 堆栈大小 */
@@ -57,7 +57,8 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 {
     switch (option) {
-    case app_sem_create: {
+    case app_sem_create:
+    case app_sem_static: {
         sem->sem = CreateSemaphore(NULL, 0, 100, NULL);
         break;
     }
@@ -87,7 +88,8 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 {
     switch (option) {
-    case app_mutex_create: {
+    case app_mutex_create:
+    case app_mutex_static: {
         mutex->mutex = CreateMutex(NULL, FALSE, NULL);
         break;
     }
@@ -119,9 +121,10 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 void app_critical_process(app_critical_t *critical, app_critical_option_t option)
 {
     switch (option) {
-    case app_critical_create: {
+    case app_critical_create:
+    case app_critical_static: {
         /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
-        app_mutex_process(&critical->mutex, app_mutex_create);
+        app_mutex_process(&critical->mutex, app_mutex_static);
         critical->mutex_ready = true;
         break;
     }

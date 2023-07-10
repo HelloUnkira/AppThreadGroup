@@ -9,9 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
 #include "app_sys_work.h"
-#include "app_thread_master.h"
-#include "app_thread_mix_custom.h"
-#include "app_thread_lvgl.h"
+#include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
@@ -70,9 +68,9 @@ void app_thread_mix_custom_routine(void)
             /* 现在我们需要处理这个包裹了 */
             switch (package.module) {
             case app_thread_mix_custom_system: {
-                if (package.event == app_thread_group_work)
+                if (package.event == app_thread_event_work)
                     app_sys_work_execute((void *)package.data);
-                if (package.event == app_thread_group_works)
+                if (package.event == app_thread_event_works)
                     app_sys_works_execute((void *)package.data);
                 break;
             }
@@ -88,12 +86,12 @@ void app_thread_mix_custom_routine(void)
                     app_module_countdown_xmsec_update();
                 /* 倒计时模组到期事件 */
                 if (package.event == app_thread_mix_custom_countdown_expired) {
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread  = app_thread_id_lvgl,
                         .module  = app_thread_lvgl_ui_scene,
                         .event   = app_thread_lvgl_ui_countdown_remind,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
                 break;
             }
@@ -110,7 +108,7 @@ void app_thread_mix_custom_routine(void)
                         package.thread = app_thread_id_lvgl;
                         package.module = app_thread_lvgl_ui_scene;
                         package.event  = app_thread_lvgl_ui_remind_alarm;
-                        app_package_notify(&package);
+                        app_thread_package_notify(&package);
                     }
                 }
                 break;
@@ -122,21 +120,21 @@ void app_thread_mix_custom_routine(void)
                     app_module_remind_drink_xmin_update();
                 /* 走动提醒模组到期事件 */
                 if (package.event == app_thread_mix_custom_remind_sedentary_interval) {
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread  = app_thread_id_lvgl,
                         .module  = app_thread_lvgl_ui_scene,
                         .event   = app_thread_lvgl_ui_remind_sedentary,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
                 /* 喝水提醒模组到期事件 */
                 if (package.event == app_thread_mix_custom_remind_drink_interval) {
-                    app_package_t package = {
+                    app_thread_package_t package = {
                         .thread  = app_thread_id_lvgl,
                         .module  = app_thread_lvgl_ui_scene,
                         .event   = app_thread_lvgl_ui_remind_drink,
                     };
-                    app_package_notify(&package);
+                    app_thread_package_notify(&package);
                 }
                 break;
             }
