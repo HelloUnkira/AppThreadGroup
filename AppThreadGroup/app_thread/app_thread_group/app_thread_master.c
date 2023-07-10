@@ -108,12 +108,12 @@ void app_thread_master_routine(void)
         app_delay_ms(APP_THREAD_MASTER_TIME_SLICE);
         #endif
         #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_package_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
+        if (app_sys_pipe_pkg_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread masther recv too much package:%u",
-                              app_sys_pipe_package_num(send_pipe));
+                              app_sys_pipe_pkg_num(send_pipe));
         #endif
         /* 主线程派发包到指定子线程 */
-        while (app_sys_pipe_package_num(send_pipe) != 0) {
+        while (app_sys_pipe_pkg_num(send_pipe) != 0) {
             app_sys_pipe_take(send_pipe, &package, false);
             app_thread_get_sync(package.thread, &recv_sem);
             app_thread_get_pipe(package.thread, &recv_pipe);

@@ -9,7 +9,7 @@
 #include "app_lv_ui_trace_text.h"
 #include "app_lv_ui_trace_text_presenter.h"
 
-static char app_lv_ui_trace_text[APP_MODULE_TRACE_TEXT_MAX + 1] = {0};
+static char app_lv_ui_trace_text[APP_SYS_TRACE_TEXT_MAX + 1] = {0};
 
 /*@brief lvgl ui数据交互回调
  */
@@ -22,7 +22,7 @@ static void app_lv_ui_peek_reset(void)
  */
 static const char * app_lv_ui_peek_one(void)
 {
-    memset(app_lv_ui_trace_text, '\0', APP_MODULE_TRACE_TEXT_MAX + 1);
+    memset(app_lv_ui_trace_text, '\0', APP_SYS_TRACE_TEXT_MAX + 1);
     if (!app_sys_trace_text_peek(app_lv_ui_trace_text))
         APP_SYS_LOG_WARN("can not take trace text");
         APP_SYS_LOG_INFO(app_lv_ui_trace_text);

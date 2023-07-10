@@ -20,16 +20,16 @@
  */
 static inline void app_sys_trace_test(void)
 {
-    uint8_t tin[APP_MODULE_TRACE_TEXT_MAX * 2] ={0};
-    for (uint32_t idx = 0; idx < APP_MODULE_TRACE_TEXT_MAX; idx++)
-        tin[idx] = tin[idx + APP_MODULE_TRACE_TEXT_MAX] = '0' + idx % 10;
+    uint8_t tin[APP_SYS_TRACE_TEXT_MAX * 2] ={0};
+    for (uint32_t idx = 0; idx < APP_SYS_TRACE_TEXT_MAX; idx++)
+        tin[idx] = tin[idx + APP_SYS_TRACE_TEXT_MAX] = '0' + idx % 10;
 
     static uint32_t offset = 0;
-    offset %= APP_MODULE_TRACE_TEXT_MAX;
+    offset %= APP_SYS_TRACE_TEXT_MAX;
     app_sys_trace_text_dump(tin + offset, true);
-    uint8_t tout[APP_MODULE_TRACE_TEXT_MAX] = {0};
+    uint8_t tout[APP_SYS_TRACE_TEXT_MAX] = {0};
     app_sys_trace_text_load(tout);
-    if (memcmp(tout, tin + offset, APP_MODULE_TRACE_TEXT_MAX) != 0)
+    if (memcmp(tout, tin + offset, APP_SYS_TRACE_TEXT_MAX) != 0)
         printf("track log error\n");
     offset++;
 }

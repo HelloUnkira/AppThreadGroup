@@ -72,11 +72,11 @@ void app_thread_lvgl_routine(void)
         app_execute_us(&execute_us, true);
         #endif
         #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
+        if (app_sys_pipe_pkg_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread lvgl recv too much package:%u",
-                              app_sys_pipe_package_num(pipe));
+                              app_sys_pipe_pkg_num(pipe));
         #endif
-        while (app_sys_pipe_package_num(pipe) != 0) {
+        while (app_sys_pipe_pkg_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
             #if APP_SYS_LOG_EXECUTE_CHECK
@@ -112,7 +112,7 @@ void app_thread_lvgl_routine(void)
                     if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS) {
                         uint32_t discard_cnt = ms / LV_SCHED_TICK_EXEC + 1;
                         for (uint32_t idx = 0; idx < discard_cnt; idx++) {
-                            if (app_sys_pipe_package_num(pipe) != 0)
+                            if (app_sys_pipe_pkg_num(pipe) != 0)
                                 app_sys_pipe_take(pipe, &package, true);
                             else
                                 break;

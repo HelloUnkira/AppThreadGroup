@@ -47,11 +47,11 @@ void app_thread_manage_routine(void)
         app_execute_us(&execute_us, true);
         #endif
         #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_package_num(pipe) >= APP_THREAD_PACKAGE_MAX)
+        if (app_sys_pipe_pkg_num(pipe) >= APP_THREAD_PACKAGE_MAX)
             APP_SYS_LOG_WARN("thread data manage recv too much package:%u",
-                              app_sys_pipe_package_num(pipe));
+                              app_sys_pipe_pkg_num(pipe));
         #endif
-        while (app_sys_pipe_package_num(pipe) != 0) {
+        while (app_sys_pipe_pkg_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
             #if APP_SYS_LOG_EXECUTE_CHECK
@@ -98,7 +98,7 @@ void app_thread_manage_routine(void)
             }
             default: {
                 #if APP_SYS_LOG_THREAD_CHECK
-                APP_SYS_LOG_ERROR("thread data center pipe recv a unknown package");
+                APP_SYS_LOG_ERROR("thread data manage pipe recv a unknown package");
                 APP_SYS_LOG_ERROR("package thread:%u", package.thread);
                 APP_SYS_LOG_ERROR("package module:%u", package.module);
                 APP_SYS_LOG_ERROR("package event:%u",  package.event);
@@ -112,7 +112,7 @@ void app_thread_manage_routine(void)
             #if APP_SYS_LOG_EXECUTE_CHECK
             uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
             if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_us_remind) {
-                APP_SYS_LOG_WARN("thread data center package execute %d ms", ms);
+                APP_SYS_LOG_WARN("thread data manage package execute %d ms", ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
                 APP_SYS_LOG_WARN("package module:%u", package.module);
                 APP_SYS_LOG_WARN("package event:%u",  package.event);

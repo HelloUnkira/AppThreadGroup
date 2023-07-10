@@ -4,13 +4,13 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_ring_buffer.h"
+#include "app_sys_rbuf.h"
 
 /*@brief        索引回退运算
  *@param[in]    ring_buffer 实例
  *@param[in]    index       索引
  */
-static inline void app_sys_ring_buffer_rewind_index(app_sys_ring_buffer *ring_buffer)
+static inline void app_sys_rbuf_rewind_index(app_sys_rbuf *ring_buffer)
 {
     /* 环形缓冲区回退 */
     #define APP_SYS_RING_BUFFER_MAX     0x80000000
@@ -26,7 +26,7 @@ static inline void app_sys_ring_buffer_rewind_index(app_sys_ring_buffer *ring_bu
 /*@brief        环形队列重置(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
  */
-void app_sys_ring_buffer_reset(app_sys_ring_buffer *ring_buffer)
+void app_sys_rbuf_reset(app_sys_rbuf *ring_buffer)
 {
     app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     ring_buffer->head = 0;
@@ -38,7 +38,7 @@ void app_sys_ring_buffer_reset(app_sys_ring_buffer *ring_buffer)
  *@param[in]    ring_buffer 实例
  *@retval       是否为空
  */
-bool app_sys_ring_buffer_is_empty(app_sys_ring_buffer *ring_buffer)
+bool app_sys_rbuf_is_empty(app_sys_rbuf *ring_buffer)
 {
     app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     bool result = (ring_buffer->head == ring_buffer->tail) ? true : false;
@@ -50,7 +50,7 @@ bool app_sys_ring_buffer_is_empty(app_sys_ring_buffer *ring_buffer)
  *@param[in]    ring_buffer 实例
  *@retval       占用条目数量
  */
-uint32_t app_sys_ring_buffer_get_item(app_sys_ring_buffer *ring_buffer)
+uint32_t app_sys_rbuf_get_item(app_sys_rbuf *ring_buffer)
 {
     app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     uint32_t item = ring_buffer->tail - ring_buffer->head;
@@ -62,7 +62,7 @@ uint32_t app_sys_ring_buffer_get_item(app_sys_ring_buffer *ring_buffer)
  *@param[in]    ring_buffer 实例
  *@retval       空闲条目数量
  */
-uint32_t app_sys_ring_buffer_get_space(app_sys_ring_buffer *ring_buffer)
+uint32_t app_sys_rbuf_get_space(app_sys_rbuf *ring_buffer)
 {
     app_mutex_process(&ring_buffer->mutex, app_mutex_take);
     uint32_t space = ring_buffer->size - (ring_buffer->tail - ring_buffer->head);
@@ -77,8 +77,7 @@ uint32_t app_sys_ring_buffer_get_space(app_sys_ring_buffer *ring_buffer)
  *@param[in]    buffer      指定的缓冲区,为对齐的字流(不是字节流)(如下)
  *@param[in]    size        对齐字流的长度
  */
-void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
-                               void *buffer, uint32_t size)
+void app_sys_rbuf_ready(app_sys_rbuf *ring_buffer, uint8_t type, void *buffer, uint32_t size)
 {
     /* 简要的字节对齐修正 */
     /* 地址截断,通过最后几位确定是否字节对齐 */
@@ -108,7 +107,7 @@ void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
  *@retval       -1          数据不足
  *@retval       -2          实例类型错误
  */
-int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, uint32_t length)
+int32_t app_sys_rbuf_gets(app_sys_rbuf *ring_buffer, void *data, uint32_t length)
 {
     int32_t   result  = 0;
     uint8_t  *buffer1 = data;
@@ -117,8 +116,8 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
     uint64_t *buffer8 = data;
     
     if (result == 0)
-    if (app_sys_ring_buffer_is_empty(ring_buffer) ||
-        app_sys_ring_buffer_get_item(ring_buffer) < length)
+    if (app_sys_rbuf_is_empty(ring_buffer) ||
+        app_sys_rbuf_get_item(ring_buffer) < length)
         result = -1;
     
     if (result == 0)
@@ -179,7 +178,7 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
     if (result == 0)
     ring_buffer->head += length;
     if (result == 0)
-    app_sys_ring_buffer_rewind_index(ring_buffer);
+    app_sys_rbuf_rewind_index(ring_buffer);
     if (result == 0 || result == -2)
     app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     
@@ -192,7 +191,7 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
  *@param[in]    length      所需推送数据长度
  *@retval       -1:         空间不足
  */
-int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, uint32_t length)
+int32_t app_sys_rbuf_puts(app_sys_rbuf *ring_buffer, void *data, uint32_t length)
 {
     int32_t   result  = 0;
     uint8_t  *buffer1 = data;
@@ -201,7 +200,7 @@ int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, u
     uint64_t *buffer8 = data;
     
     if (result == 0)
-    if (app_sys_ring_buffer_get_space(ring_buffer) < length)
+    if (app_sys_rbuf_get_space(ring_buffer) < length)
         result = -1;
 
     if (result == 0)
@@ -263,7 +262,7 @@ int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, u
     if (result == 0)
     ring_buffer->tail += length;
     if (result == 0)
-    app_sys_ring_buffer_rewind_index(ring_buffer);
+    app_sys_rbuf_rewind_index(ring_buffer);
     if (result == 0 || result == -2)
     app_mutex_process(&ring_buffer->mutex, app_mutex_give);
     

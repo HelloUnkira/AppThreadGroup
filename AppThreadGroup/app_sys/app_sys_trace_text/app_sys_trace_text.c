@@ -1,7 +1,7 @@
 /*实现目标:
  *    转存到外存的追踪日志信息
  */
-    
+
 #define APP_SYS_LOG_RECORD_LIMIT     1
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
@@ -44,7 +44,7 @@ static bool app_sys_trace_text_load_one(app_sys_trace_item_t *item, uintptr_t of
     offset += sizeof(uintptr_t);
     offset %= zone;
     /* 日志数据紊乱,清除并投递警告 */
-    if (item->length > APP_MODULE_TRACE_TEXT_MAX + 1) {
+    if (item->length > APP_SYS_TRACE_TEXT_MAX + 1) {
         APP_SYS_LOG_ERROR("trace log data invalid");
         return false;
     }
@@ -90,7 +90,7 @@ static bool app_sys_trace_text_dump_one(app_sys_trace_item_t *item, uintptr_t of
     offset += sizeof(uintptr_t);
     offset %= zone;
     /* 日志数据紊乱,清除并投递警告 */
-    if (item->length > APP_MODULE_TRACE_TEXT_MAX + 1) {
+    if (item->length > APP_SYS_TRACE_TEXT_MAX + 1) {
         APP_SYS_LOG_ERROR("trace log data invalid");
         return false;
     }
@@ -242,12 +242,12 @@ void app_sys_trace_text_ready(void)
  *                       或者可以加入新条目为止
  *@retval     成功或者失败
  */
-bool app_sys_trace_text_dump(char text[APP_MODULE_TRACE_TEXT_MAX], bool need_cover)
+bool app_sys_trace_text_dump(char text[APP_SYS_TRACE_TEXT_MAX], bool need_cover)
 {
     bool retval = false;
     app_sys_trace_item_t trace_item;
-    memcpy(trace_item.text, text, APP_MODULE_TRACE_TEXT_MAX);
-    trace_item.text[APP_MODULE_TRACE_TEXT_MAX] = '\0';
+    memcpy(trace_item.text, text, APP_SYS_TRACE_TEXT_MAX);
+    trace_item.text[APP_SYS_TRACE_TEXT_MAX] = '\0';
     trace_item.length = strlen(trace_item.text) + 1;
     /* 如果空间不够,则先丢弃式加载多条 */
     while (app_sys_trace_text_space() < trace_item.length + sizeof(uint32_t)) {
@@ -298,7 +298,7 @@ bool app_sys_trace_text_dump(char text[APP_MODULE_TRACE_TEXT_MAX], bool need_cov
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX])
+bool app_sys_trace_text_load(char text[APP_SYS_TRACE_TEXT_MAX])
 {
     if (app_sys_trace_text_used() == 0)
         return false;
@@ -317,7 +317,7 @@ bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX])
         APP_SYS_LOG_ERROR("data is disorder, need reset now");
         return false;
     }
-    memcpy(text, trace_item.text, APP_MODULE_TRACE_TEXT_MAX);
+    memcpy(text, trace_item.text, APP_SYS_TRACE_TEXT_MAX);
     app_sys_trace_text_reflush();
     return true;
 }
@@ -326,7 +326,7 @@ bool app_sys_trace_text_load(char text[APP_MODULE_TRACE_TEXT_MAX])
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX])
+bool app_sys_trace_text_peek(char text[APP_SYS_TRACE_TEXT_MAX])
 {
     if (app_sys_trace_text_used() == 0)
         return false;
@@ -362,7 +362,7 @@ bool app_sys_trace_text_peek(char text[APP_MODULE_TRACE_TEXT_MAX])
         APP_SYS_LOG_ERROR("data is disorder, need reset now");
         return false;
     }
-    memcpy(text, trace_item.text, APP_MODULE_TRACE_TEXT_MAX);
+    memcpy(text, trace_item.text, APP_SYS_TRACE_TEXT_MAX);
     app_sys_trace_text_reflush();
     return true;
 }

@@ -25,7 +25,7 @@ void app_json_xfer_notify_trace_text(void)
     app_sys_trace_text_peek_reset();
     while (true) {
         /* 循环提取日志信息 */
-        char trace_text[APP_MODULE_TRACE_TEXT_MAX + 1] = {0};
+        char trace_text[APP_SYS_TRACE_TEXT_MAX + 1] = {0};
         app_sys_trace_text_peek(trace_text);
         if (strlen(trace_text) == 0)
             break;

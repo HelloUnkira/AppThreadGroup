@@ -30,7 +30,7 @@ typedef struct _AppPB_SystemClock {
     AppPB_SystemClock_Mode mode;
 } AppPB_SystemClock;
 
-/* 追踪日志消息文本最大限制 APP_MODULE_TRACE_TEXT_MAX + 1 */
+/* 追踪日志消息文本最大限制 APP_SYS_TRACE_TEXT_MAX + 1 */
 typedef struct _AppPB_TraceText {
     char trace_text[129]; /* 单条传输文本消息 */
 } AppPB_TraceText;

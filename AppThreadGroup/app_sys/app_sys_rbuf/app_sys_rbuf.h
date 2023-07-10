@@ -1,5 +1,5 @@
-#ifndef APP_SYS_RING_BUFFER_H
-#define APP_SYS_RING_BUFFER_H
+#ifndef APP_SYS_RBUF_H
+#define APP_SYS_RBUF_H
 
 typedef struct {
     /* 类型缓冲区: */
@@ -16,30 +16,30 @@ typedef struct {
     uint32_t    tail;       /* 队列结束位置(进动点,非实际下标) */
     uint8_t     type;       /* 字节对齐类型(1,2,4,8) */
     app_mutex_t mutex;      /* 资源保护 */
-} app_sys_ring_buffer;
+} app_sys_rbuf;
 
 /*@brief        环形队列重置(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
  */
-void app_sys_ring_buffer_reset(app_sys_ring_buffer *ring_buffer);
+void app_sys_rbuf_reset(app_sys_rbuf *ring_buffer);
 
 /*@brief        环形队列为空判断(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
  *@retval       是否为空
  */
-bool app_sys_ring_buffer_is_empty(app_sys_ring_buffer *ring_buffer);
+bool app_sys_rbuf_is_empty(app_sys_rbuf *ring_buffer);
 
 /*@brief        获取环形队列已有条目(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
  *@retval       占用条目数量
  */
-uint32_t app_sys_ring_buffer_get_item(app_sys_ring_buffer *ring_buffer);
+uint32_t app_sys_rbuf_get_item(app_sys_rbuf *ring_buffer);
 
 /*@brief        获取环形队列空闲条目(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
  *@retval       空闲条目数量
  */
-uint32_t app_sys_ring_buffer_get_space(app_sys_ring_buffer *ring_buffer);
+uint32_t app_sys_rbuf_get_space(app_sys_rbuf *ring_buffer);
 
 /*@brief        就绪环形队列(无参数检查)(中断环境下不可调用)
  *              当满足buffer为字节对齐且size为2的次方达到最大效率
@@ -48,8 +48,7 @@ uint32_t app_sys_ring_buffer_get_space(app_sys_ring_buffer *ring_buffer);
  *@param[in]    buffer      指定的缓冲区,为对齐的字流(不是字节流)(如下)
  *@param[in]    size        对齐字流的长度
  */
-void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
-                               void *buffer, uint32_t size);
+void app_sys_rbuf_ready(app_sys_rbuf *ring_buffer, uint8_t type, void *buffer, uint32_t size);
 
 /*@brief        从环形队列获取数据(无参数检查)(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
@@ -58,7 +57,7 @@ void app_sys_ring_buffer_ready(app_sys_ring_buffer *ring_buffer, uint8_t type,
  *@retval       -1          数据不足
  *@retval       -2          实例类型错误
  */
-int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, uint32_t length);
+int32_t app_sys_rbuf_gets(app_sys_rbuf *ring_buffer, void *data, uint32_t length);
 
 /*@brief        向环形队列推送数据(无参数检查)(中断环境下不可调用)
  *@param[in]    ring_buffer 实例
@@ -67,6 +66,6 @@ int32_t app_sys_ring_buffer_gets(app_sys_ring_buffer *ring_buffer, void *data, u
  *@retval       -1          空间不足
  *@retval       -2          实例类型错误
  */
-int32_t app_sys_ring_buffer_puts(app_sys_ring_buffer *ring_buffer, void *data, uint32_t length);
+int32_t app_sys_rbuf_puts(app_sys_rbuf *ring_buffer, void *data, uint32_t length);
 
 #endif

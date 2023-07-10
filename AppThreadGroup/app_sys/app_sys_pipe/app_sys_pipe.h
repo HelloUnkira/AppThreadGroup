@@ -28,7 +28,7 @@ void app_sys_pipe_ready(app_sys_pipe_t *pipe);
  *@param[in] pipe 管道实例
  *@retval    管道资源包数量
  */
-uint32_t app_sys_pipe_package_num(app_sys_pipe_t *pipe);
+uint32_t app_sys_pipe_pkg_num(app_sys_pipe_t *pipe);
 
 /*@brief     交付一个包给管道
  *@param[in] pipe     管道实例
