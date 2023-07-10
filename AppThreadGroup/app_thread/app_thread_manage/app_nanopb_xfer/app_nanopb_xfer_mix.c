@@ -8,7 +8,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_trace_text.h"
+#include "app_sys_log_text.h"
 #include "app_thread_group.h"
 #include "app_module_protocol.h"
 #include "app_module_clock.h"
@@ -25,14 +25,14 @@
  */
 void app_nanopb_xfer_notify_trace_text(void)
 {
-    app_sys_trace_text_peek_reset();
+    app_sys_log_text_peek_reset();
     while (true) {
         /* 数据打包 */
         AppPB_MsgSet message = {
             .which_payload = AppPB_MsgSet_trace_text_tag,
         };
         /* 循环提取日志信息 */
-        app_sys_trace_text_peek(message.payload.trace_text.trace_text);
+        app_sys_log_text_peek(message.payload.trace_text.trace_text);
         if (strlen(message.payload.trace_text.trace_text) == 0)
             break;
         /* 传输对象发送通知 */

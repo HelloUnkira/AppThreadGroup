@@ -10,8 +10,8 @@
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_style.h"
 
-#include "app_lv_ui_trace_text.h"
-#include "app_lv_ui_trace_text_presenter.h"
+#include "app_lv_ui_log_text.h"
+#include "app_lv_ui_log_text_presenter.h"
 
 typedef struct {
     lv_anim_t anim;
@@ -29,10 +29,10 @@ static void app_lv_ui_btn_l_cb(lv_event_t *e)
     case LV_EVENT_CLICKED: {
         /* 循环提出所有条目 */
         lv_label_set_text(app_lv_ui_res_local->text, "");
-        app_lv_ui_trace_text_presenter.peek_reset();
+        app_lv_ui_log_text_presenter.peek_reset();
         char *str = NULL, *str_new = NULL;
         do {
-            str = app_lv_ui_trace_text_presenter.peek_one();
+            str = app_lv_ui_log_text_presenter.peek_one();
             uint32_t size = strlen(str) + 2;
             str_new = lv_mem_alloc(size);
             lv_memset(str_new, 0, size);
@@ -56,7 +56,7 @@ static void app_lv_ui_btn_r_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_CLICKED: {
         /* 复位 */
-        app_lv_ui_trace_text_presenter.reset();
+        app_lv_ui_log_text_presenter.reset();
         break;
     }
     default:
@@ -74,13 +74,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 /*@brief     界面显示
  *@param[in] scene 场景
  */
-static void app_lv_ui_trace_text_show(void *scene)
+static void app_lv_ui_log_text_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_ui_style_scene();
-        app_lv_ui_trace_text.self = app_lv_ui_res_local->scene;
+        app_lv_ui_log_text.self = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
         lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_BLUE), 0);
@@ -114,21 +114,21 @@ static void app_lv_ui_trace_text_show(void *scene)
 /*@brief     界面隐藏
  *@param[in] scene 场景
  */
-static void app_lv_ui_trace_text_hide(void *scene)
+static void app_lv_ui_log_text_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
-        app_lv_ui_trace_text.self = NULL;
+        app_lv_ui_log_text.self = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
 }
 
-app_lv_scene_t app_lv_ui_trace_text = {
+app_lv_scene_t app_lv_ui_log_text = {
     /* 场景资源节点 */
-    .show = app_lv_ui_trace_text_show,
-    .hide = app_lv_ui_trace_text_hide,
+    .show = app_lv_ui_log_text_show,
+    .hide = app_lv_ui_log_text_hide,
 };

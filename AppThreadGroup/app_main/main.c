@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     while (true) {
         #if 0
         /* 测试日志追踪 */
-        app_sys_trace_test();
+        app_sys_log_test();
         #endif
         /* 测试中我们在主线程 */
         /* 模拟发送1ms定时器中断事件 */

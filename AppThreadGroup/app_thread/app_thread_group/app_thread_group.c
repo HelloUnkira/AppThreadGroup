@@ -9,7 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
-#include "app_sys_trace_text.h"
+#include "app_sys_log_text.h"
 #include "app_thread_adaptor.h"
 #include "app_thread_group.h"
 #include "app_module_system.h"
@@ -26,12 +26,12 @@ void app_thread_group_schedule(void)
     app_sys_log_t log = {
         .message1   = app_ext_arch_log_msg1,
         .message2   = app_ext_arch_log_msg2,
-        .persistent = app_sys_trace_log_persistent,
+        .persistent = app_sys_log_persistent,
     };
     app_sys_log_ready(log);
-    app_sys_timer_ready();
     app_sys_ext_mem_ready();
-    app_sys_trace_text_ready();
+    app_sys_log_text_ready();
+    app_sys_timer_ready();
     app_sys_build_time();
     /* 就绪线程公共子模组 */
     app_module_system_ready();
