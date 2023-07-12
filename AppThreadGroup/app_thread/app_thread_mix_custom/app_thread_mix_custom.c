@@ -70,8 +70,6 @@ void app_thread_mix_custom_routine(void)
             case app_thread_mix_custom_system: {
                 if (package.event == app_thread_event_work)
                     app_sys_work_execute((void *)package.data);
-                if (package.event == app_thread_event_works)
-                    app_sys_works_execute((void *)package.data);
                 break;
             }
             case app_thread_mix_custom_stopwatch: {

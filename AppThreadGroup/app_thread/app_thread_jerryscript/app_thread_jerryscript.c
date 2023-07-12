@@ -78,8 +78,6 @@ void app_thread_jerryscript_routine(void)
             case app_thread_jerryscript_system: {
                 if (package.event == app_thread_event_work)
                     app_sys_work_execute((void *)package.data);
-                if (package.event == app_thread_event_works)
-                    app_sys_works_execute((void *)package.data);
                 break;
             }
 

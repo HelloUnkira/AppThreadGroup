@@ -39,9 +39,7 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
             .thread  = idx,
             .module  = 0,                       /* 线程组系统模组 */
             .event   = app_thread_event_work,   /* 线程组工作事件 */
-            .dynamic = true,
-            .size    = sizeof(app_sys_work_t),
-            .data    = app_sys_work_make(app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
+            .data    = app_sys_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
         };
         app_thread_package_notify(&package);
         /* 如果超出最大时限,出错断言 */
