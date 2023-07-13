@@ -1,0 +1,118 @@
+/* 实现目标:
+ *     APP需要对系统驱动进行的封装体
+ *     这是一个参考样板
+ */
+
+#include "app_ext_lib.h"
+
+/* 包含平台文件,生成下述抽象接口的实体 */
+
+/*@brief     空设备初始化
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_init(app_arch_dev_t *driver)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备反初始化
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_deinit(app_arch_dev_t *driver)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备打开
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_open(app_arch_dev_t *driver)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备关闭
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_close(app_arch_dev_t *driver)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备读取
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_read(app_arch_dev_t *driver, uint8_t *data, uint32_t len)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备写入
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_write(app_arch_dev_t *driver, uint8_t *data, uint32_t len)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备I/O流处理
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static int64_t app_arch_dev_empty_hal_ioctl(app_arch_dev_t *driver, uint8_t *data, uint32_t len)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     空设备数据流地址映射
+ *@param[in] driver 设备实例
+ *@retval    返回值
+ */
+static inline void * app_arch_dev_empty_hal_data_addr(app_arch_dev_t *driver)
+{
+    const app_arch_dev_empty_cfg_t *cfg = driver->cfg;
+    /* 填充目标平台下的动作 */
+}
+
+/* 静态配置的设备操作参数 */
+static const app_arch_dev_empty_cfg_t app_arch_dev_empty_cfg = {
+    .args = NULL,
+};
+
+/* 静态配置的设备操作集合 */
+static const app_arch_dev_empty_api_t app_arch_dev_empty_api = {
+    .init       = app_arch_dev_empty_hal_init,
+    .deinit     = app_arch_dev_empty_hal_deinit,
+    .open       = app_arch_dev_empty_hal_open,
+    .close      = app_arch_dev_empty_hal_close,
+    .read       = app_arch_dev_empty_hal_read,
+    .write      = app_arch_dev_empty_hal_write,
+    .ioctl      = app_arch_dev_empty_hal_ioctl,
+    .data_addr  = app_arch_dev_empty_hal_data_addr,
+};
+
+/* 动态的设备操作数据 */
+static app_arch_dev_empty_data_t app_arch_dev_empty_data = {
+    .data = NULL,
+};
+
+/* 静态配置的设备实例 */
+const app_arch_dev_t app_arch_dev_empty = {
+    .name = "app_arch_dev_empty",
+    .cfg  = &app_arch_dev_empty_cfg,
+    .api  = &app_arch_dev_empty_api,
+    .data = &app_arch_dev_empty_data,
+};

@@ -17,15 +17,34 @@
 
 static bool app_thread_group_status = false;
 
+/*@brief 日志持久化转接口
+ *       暂时写在此处,没有找到好的地方容纳它
+ */
+static void app_sys_log_persistent(char *text)
+{
+    app_sys_log_text_dump(text, true);
+}
+
 /*@brief 线程组运行
  *       准备并启动所有线程及其附属资源
  */
 void app_thread_group_schedule(void)
 {
+    /*
+     *!!!就绪app ext(arch)层
+     */
+    app_arch_ready();
+    /*
+     *!!!就绪app ext(os)层
+     */
+    app_os_ready();
+    /*
+     *!!!就绪app sys层
+     */
     /* 就绪系统子模组 */
     app_sys_log_t log = {
-        .message1   = app_ext_arch_log_msg1,
-        .message2   = app_ext_arch_log_msg2,
+        .message1   = app_arch_log_msg1,
+        .message2   = app_arch_log_msg2,
         .persistent = app_sys_log_persistent,
     };
     app_sys_log_ready(log);
@@ -33,6 +52,9 @@ void app_thread_group_schedule(void)
     app_sys_log_text_ready();
     app_sys_timer_ready();
     app_sys_build_time();
+    /*
+     *!!!就绪app thread层
+     */
     /* 就绪线程公共子模组 */
     app_module_system_ready();
     app_module_watchdog_ready();
@@ -57,6 +79,11 @@ void app_thread_group_schedule(void)
     app_thread_group_status = true;
     app_critical_process(&critical, app_critical_exit);
     app_critical_process(&critical, app_critical_destroy);
+    /*
+     * OS调度
+     */
+    APP_SYS_LOG_INFO("app thread group schedule");
+    app_os_schedule();
 }
 
 /*@brief 获得线程组初始化状态

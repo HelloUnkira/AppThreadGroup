@@ -11,17 +11,21 @@
 #include "app_ext_arch_ext_mem.h"
 /* arch driver abstract adaptor */
 #include "app_ext_arch_dev.h"
-#include "app_ext_arch_dev_pc_empty.h"
+#include "app_ext_arch_dev_empty.h"
+
+/*@brief 初始化平台
+ */
+void app_arch_ready(void);
 
 /*@brief     变参函数式LOG输出接口
  *@param[in] format 格式化字符串
  */
-void app_ext_arch_log_msg1(const char *format, ...);
+void app_arch_log_msg1(const char *format, ...);
 
 /*@brief     变参列表式LOG输出接口
  *@param[in] format 格式化字符串
  *@param[in] list   变参列表
  */
-void app_ext_arch_log_msg2(const char *format, va_list list);
+void app_arch_log_msg2(const char *format, va_list list);
 
 #endif

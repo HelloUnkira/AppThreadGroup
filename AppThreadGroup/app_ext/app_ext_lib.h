@@ -13,9 +13,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+
 /* Arch lib hook */
-#include "app_ext_arch.h"
 /* OS lib hook */
+#include "app_ext_arch.h"
 #include "app_ext_os.h"
 
 #endif

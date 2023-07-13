@@ -21,6 +21,14 @@
 /* OS ext mem adaptor */
 #include "app_ext_os_ext_mem.h"
 
+/*@brief 初始化OS
+ */
+void app_os_ready(void);
+
+/*@brief 调度OS
+ */
+void app_os_schedule(void);
+
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void);

@@ -59,12 +59,4 @@ bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX]);
  */
 void app_sys_log_text_peek_reset(void);
 
-/*@brief 日志持久化转接口
- *       暂时写在此处,没有找到好的地方容纳它
- */
-static inline void app_sys_log_persistent(char *text)
-{
-    app_sys_log_text_dump(text, true);
-}
-
 #endif

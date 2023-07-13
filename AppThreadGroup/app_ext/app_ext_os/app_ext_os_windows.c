@@ -8,6 +8,18 @@
 
 #if APP_OS_IS_WINDOWS
 
+/*@brief 初始化OS
+ */
+void app_os_ready(void)
+{
+}
+
+/*@brief 调度OS
+ */
+void app_os_schedule(void)
+{
+}
+
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void)
@@ -44,7 +56,7 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
         break;
     }
     default:
-        app_ext_arch_log_msg1("app_thread_process option is not unsupported:%u", option);
+        app_arch_log_msg1("app_thread_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -75,7 +87,7 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
         break;
     }
     default:
-        app_ext_arch_log_msg1("app_sem_process option is not unsupported:%u", option);
+        app_arch_log_msg1("app_sem_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -108,7 +120,7 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
         break;
     }
     default:
-        app_ext_arch_log_msg1("app_mutex_process option is not unsupported:%u", option);
+        app_arch_log_msg1("app_mutex_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -147,7 +159,7 @@ void app_critical_process(app_critical_t *critical, app_critical_option_t option
         break;
     }
     default:
-        app_ext_arch_log_msg1("app_critical_process option is not unsupported:%u", option);
+        app_arch_log_msg1("app_critical_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -227,6 +239,7 @@ double app_execute_us(app_execute_us_t *execute_us, bool run)
 void app_os_reset(void)
 {
     exit(-1);
+    while (true);
 }
 
 #endif
