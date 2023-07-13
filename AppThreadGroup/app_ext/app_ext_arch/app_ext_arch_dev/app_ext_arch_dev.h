@@ -8,9 +8,13 @@ typedef struct {
     void *data;         /* 设备操作数据 */
 } app_arch_dev_t;
 
-/* template */
-#include "app_ext_arch_dev_empty.h"
-/* temperature */
-#include "app_ext_arch_temp.h"
+#include "app_ext_arch_dev_empty.h"     /* template */
+#include "app_ext_arch_vibrate.h"       /* vibrate */
+#include "app_ext_arch_temperature.h"   /* temperature */
+
+/* 设备抽象实例 */
+extern const app_arch_dev_t app_arch_dev_empty;
+extern const app_arch_dev_t app_arch_vibrate;
+extern const app_arch_dev_t app_arch_temperature;
 
 #endif

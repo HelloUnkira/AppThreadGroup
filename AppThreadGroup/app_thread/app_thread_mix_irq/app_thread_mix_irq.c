@@ -94,6 +94,13 @@ void app_thread_mix_irq_routine(void)
                     app_module_vibrate_msec_update();
                 break;
             }
+            case app_thread_mix_irq_temperature: {
+                if (package.event == app_thread_mix_irq_temperature_xms_update)
+                    app_module_temperature_xms_update();
+                if (package.event == app_thread_mix_irq_temperature_xs_update)
+                    app_module_temperature_xs_update();
+                break;
+            }
             default: {
                 #if APP_SYS_LOG_THREAD_CHECK
                 APP_SYS_LOG_ERROR("thread mix irq pipe recv a unknown package");

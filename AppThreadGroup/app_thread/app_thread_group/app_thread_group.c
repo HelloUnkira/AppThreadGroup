@@ -43,9 +43,9 @@ void app_thread_group_schedule(void)
      */
     /* 就绪系统子模组 */
     app_sys_log_t log = {
-        .message1   = app_arch_log_msg1,
-        .message2   = app_arch_log_msg2,
-        .persistent = app_sys_log_persistent,
+        .message1   = (void *)app_arch_log_msg1,
+        .message2   = (void *)app_arch_log_msg2,
+        .persistent = (void *)app_sys_log_persistent,
     };
     app_sys_log_ready(log);
     app_sys_ext_mem_ready();

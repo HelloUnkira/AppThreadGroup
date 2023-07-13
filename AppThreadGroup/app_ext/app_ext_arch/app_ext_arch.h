@@ -5,8 +5,6 @@
 #define APP_ARCH_IS_UNKNOWN     0
 #define APP_ARCH_IS_PC          1
 
-/* arch custom adaptor */
-#include "app_ext_arch_pc.h"
 /* arch ext mem adaptor */
 #include "app_ext_arch_ext_mem.h"
 /* arch driver abstract adaptor */

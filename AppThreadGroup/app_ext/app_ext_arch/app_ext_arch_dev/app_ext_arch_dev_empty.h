@@ -1,14 +1,6 @@
 #ifndef APP_EXT_ARCH_DEV_EMPTY_H
 #define APP_EXT_ARCH_DEV_EMPTY_H
 
-/* 设备empty抽象实例... */
-extern const app_arch_dev_t app_arch_dev_empty;
-
-/* 设备empty抽象操作参数 */
-typedef struct {
-    void *args;
-} app_arch_dev_empty_cfg_t;
-
 /* 设备empty抽象操作接口 */
 typedef struct {
     int64_t (*init)(app_arch_dev_t *driver);

@@ -5,7 +5,10 @@
 
 #include "app_ext_lib.h"
 
-/* 包含平台文件,生成下述抽象接口的实体 */
+/* 设备empty抽象操作参数 */
+typedef struct {
+    void *args;
+} app_arch_dev_empty_cfg_t;
 
 /*@brief     空设备初始化
  *@param[in] driver 设备实例

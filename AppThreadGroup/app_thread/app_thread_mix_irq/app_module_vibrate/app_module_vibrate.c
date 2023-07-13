@@ -64,6 +64,7 @@ void app_module_vibrate_start(void)
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     app_sys_timer_start(&app_module_vibrate_timer);
     APP_SYS_LOG_WARN("vibrate start");
+    app_arch_vibrate_open(&app_arch_vibrate);
 }
 
 /*@brief 震动模组停止
@@ -75,6 +76,7 @@ void app_module_vibrate_stop(void)
     app_module_vibrate.onoff = false;
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     APP_SYS_LOG_WARN("vibrate end");
+    app_arch_vibrate_close(&app_arch_vibrate);
 }
 
 /*@brief 震动模组事件处理
@@ -105,6 +107,7 @@ void app_module_vibrate_msec_update(void)
         melody_last  = melody_curr;
         APP_SYS_LOG_INFO_RAW("%u ", melody_curr);
         /* 在此处更新震动,百分比 */
+        app_arch_vibrate_update(&app_arch_vibrate, melody_curr);
     }
     /* 更新震动计数 */
     if (vibrate.tick >= vibrate.period) {
