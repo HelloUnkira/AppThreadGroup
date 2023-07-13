@@ -8,6 +8,8 @@ typedef struct {
     void *data;         /* 设备操作数据 */
 } app_arch_dev_t;
 
+/* template */
+#include "app_ext_arch_dev_empty.h"
 /* temperature */
 #include "app_ext_arch_temp.h"
 

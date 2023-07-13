@@ -4,13 +4,14 @@
 
 #include "app_ext_lib.h"
 
+#if APP_ARCH_IS_PC
+
 /*@brief     temperature设备获得当前温度值
  *@param[in] driver 设备实例
  *@retval    获得当前温度值
  */
-static float app_arch_temp_get_curr(app_arch_dev_t *driver)
+static float app_arch_temp_get_curr(void)
 {
-    const app_arch_temp_cfg_t *cfg = driver->cfg;
     /* 这里伪造一下数据即可,因为是模拟 */
     return 36.0 + rand() % 6000 / 1.0e-3;
 }
@@ -63,11 +64,11 @@ static bool app_arch_temp_hal_manual_xms_measure(app_arch_dev_t *driver)
                 data->manual_val        = 0.0;
         }
         /* 获得此刻温度测量数据 */
-        float val = app_arch_temp_get_curr(driver);
+        float val = app_arch_temp_get_curr();
         /* 暂存温度数据 */
         data->manual_tmp_arr[data->manual_tmp_cnt++] = val;
         /* 暂存温度中值滤波 */
-        if (data->manual_tmp_cnt >= 3) {
+        if (data->manual_tmp_cnt >= 2) {
             /* 简单排序一下 */
             for (uint8_t i = 0; i < data->manual_tmp_cnt; i++)
             for (uint8_t j = i + 1; j < data->manual_tmp_cnt; j++)
@@ -138,3 +139,5 @@ const app_arch_dev_t app_arch_temp = {
     .api  = &app_arch_temp_api,
     .data = &app_arch_temp_data,
 };
+
+#endif
