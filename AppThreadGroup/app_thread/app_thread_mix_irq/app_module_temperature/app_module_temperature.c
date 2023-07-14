@@ -21,9 +21,8 @@ static app_module_temperature_t app_module_temperature  = {0};
  */
 bool app_module_temperature_measure_status(void)
 {
-    bool measure_status = false;
     app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
-    measure_status = app_module_temperature.measure_status;
+    bool measure_status = app_module_temperature.measure_status;
     app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
     return measure_status;
 }
@@ -33,16 +32,26 @@ bool app_module_temperature_measure_status(void)
  */
 bool app_module_temperature_measure_result(void)
 {
-    bool measure_result = false;
     app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
-    measure_result = app_module_temperature.measure_result;
+    bool measure_result = app_module_temperature.measure_result;
     app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
     return measure_result;
 }
 
+/*@brief  温度模组测量结果
+ *@retval 测量结果
+ */
+float app_module_temperature_measure_value(void)
+{
+    app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
+    float measure_val = app_module_temperature.measure_val;
+    app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
+    return measure_val;
+}
+
 /*@brief 温度模组启动测量
  */
-void app_module_temperature_measure_run(void)
+void app_module_temperature_measure(void)
 {
     app_sys_timer_stop(&app_module_temperature_xms_timer);
     app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
@@ -85,6 +94,7 @@ void app_module_temperature_xms_update(void)
         temperature->measure_status = false;
         temperature->measure_result = true;
         measure_over = true;
+        APP_SYS_LOG_INFO("temprature measure over");
         /* 开启周期测量时,将此次测量提交 */
         if (temperature->measure_xs_status) {
             /* 获得此次温度测量数据 */
@@ -132,8 +142,10 @@ void app_module_temperature_xms_update(void)
     }
     /* 测量中... */
     if (temperature->measure_status) {
+        APP_SYS_LOG_INFO("temprature measure ...");
         /* 获得此刻温度测量数据 */
         float val = app_arch_temperature_get_value(&app_arch_temperature);
+        APP_SYS_LOG_INFO("temprature val:%f", val);
         /* 如果使用温度算法,此处数据交付算法,否则走下面的简化流程 */ {
             /* 暂存温度数据 */
             temperature->measure_tmp_arr[temperature->measure_tmp_cnt++] = val;
@@ -161,6 +173,7 @@ void app_module_temperature_xms_update(void)
                     val /= 2.0;
                 }
                 temperature->measure_val = val;
+                APP_SYS_LOG_INFO("temprature measure_val:%f", temperature->measure_val);
             }
         }
     }
@@ -185,7 +198,7 @@ void app_module_temperature_xs_update(void)
     app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
     
     if (measure_xs_status)
-        app_module_temperature_measure_run();
+        app_module_temperature_measure();
 }
 
 /*@brief 温度模组软件定时器回调

@@ -15,12 +15,12 @@ typedef struct {
  *@param[in] driver 设备实例
  *@retval    测量是否完毕
  */
-static bool app_arch_temperature_hal_get_value(app_arch_dev_t *driver)
+static float app_arch_temperature_hal_get_value(app_arch_dev_t *driver)
 {
     const app_arch_temperature_cfg_t *cfg = driver->cfg;
     app_arch_temperature_data_t *data = driver->data;
     /* 这里伪造一下数据即可,因为是模拟 */
-    return 36.0 + rand() % 6000 / 1.0e-3;
+    return 36.0 + rand() % 6000 * 1.0e-3;
 }
 
 /*@brief     temperature设备进入dlps模式

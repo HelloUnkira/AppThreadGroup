@@ -33,6 +33,8 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Remind Drink",        &app_lv_ui_remind_drink,},
     {"Countdown Remind",    &app_lv_ui_countdown_remind,},
     {"Null",                &app_lv_ui_watch_null,},
+    {"Temperature",         &app_lv_ui_temperature,},
+    {"Null",                &app_lv_ui_watch_null,},
 };
 
 static const uint32_t app_lv_ui_res_list_len = sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]);

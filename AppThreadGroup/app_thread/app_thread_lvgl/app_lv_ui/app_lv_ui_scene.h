@@ -23,6 +23,8 @@ extern app_lv_scene_t app_lv_ui_countdown_remind;
 extern app_lv_scene_t app_lv_ui_remind_sedentary;
 extern app_lv_scene_t app_lv_ui_remind_drink;
 extern app_lv_scene_t app_lv_ui_data_daily;
+/* test function */
+extern app_lv_scene_t app_lv_ui_temperature;
 /* extern: mini game */
 extern app_lv_scene_t app_lv_ui_2048;
 extern app_lv_scene_t app_lv_ui_tetris;

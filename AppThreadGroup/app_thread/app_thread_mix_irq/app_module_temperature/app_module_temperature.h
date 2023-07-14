@@ -37,9 +37,14 @@ bool app_module_temperature_measure_status(void);
  */
 bool app_module_temperature_measure_result(void);
 
+/*@brief  温度模组测量结果
+ *@retval 测量结果
+ */
+float app_module_temperature_measure_value(void);
+
 /*@brief 温度模组启动测量
  */
-void app_module_temperature_measure_run(void);
+void app_module_temperature_measure(void);
 
 /*@brief     温度模组启动测量
  *@param[in] run 是否启动
