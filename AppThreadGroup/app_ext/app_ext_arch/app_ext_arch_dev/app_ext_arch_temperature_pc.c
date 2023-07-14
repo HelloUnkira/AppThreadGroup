@@ -23,6 +23,46 @@ static bool app_arch_temperature_hal_get_value(app_arch_dev_t *driver)
     return 36.0 + rand() % 6000 / 1.0e-3;
 }
 
+/*@brief     temperature设备进入dlps模式
+ *@param[in] driver 设备实例
+ */
+static void app_arch_temperature_hal_dlps_enter(app_arch_dev_t *driver)
+{
+    const app_arch_temperature_cfg_t *cfg = driver->cfg;
+    app_arch_temperature_data_t *data = driver->data;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     temperature设备退出dlps模式
+ *@param[in] driver 设备实例
+ */
+static void app_arch_temperature_hal_dlps_exit(app_arch_dev_t *driver)
+{
+    const app_arch_temperature_cfg_t *cfg = driver->cfg;
+    app_arch_temperature_data_t *data = driver->data;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     temperature设备进入shutdown模式
+ *@param[in] driver 设备实例
+ */
+static void app_arch_temperature_hal_shutdown_enter(app_arch_dev_t *driver)
+{
+    const app_arch_temperature_cfg_t *cfg = driver->cfg;
+    app_arch_temperature_data_t *data = driver->data;
+    /* 填充目标平台下的动作 */
+}
+
+/*@brief     temperature设备退出shutdown模式
+ *@param[in] driver 设备实例
+ */
+static void app_arch_temperature_hal_shutdown_exit(app_arch_dev_t *driver)
+{
+    const app_arch_temperature_cfg_t *cfg = driver->cfg;
+    app_arch_temperature_data_t *data = driver->data;
+    /* 填充目标平台下的动作 */
+}
+
 /* 静态配置的设备操作参数 */
 static const app_arch_temperature_cfg_t app_arch_temperature_cfg = {
     .args = NULL,
@@ -30,7 +70,11 @@ static const app_arch_temperature_cfg_t app_arch_temperature_cfg = {
 
 /* 静态配置的设备操作集合 */
 static const app_arch_temperature_api_t app_arch_temperature_api = {
-    .get_value = app_arch_temperature_hal_get_value,
+    .get_value      = app_arch_temperature_hal_get_value,
+    .dlps_enter     = app_arch_temperature_hal_dlps_enter,
+    .dlps_exit      = app_arch_temperature_hal_dlps_exit,
+    .shutdown_enter = app_arch_temperature_hal_shutdown_enter,
+    .shutdown_exit  = app_arch_temperature_hal_shutdown_exit,
 };
 
 /* 动态的设备操作数据 */

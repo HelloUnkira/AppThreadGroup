@@ -53,6 +53,25 @@ void app_module_temperature_measure_run(void)
     app_sys_timer_start(&app_module_temperature_xms_timer);
 }
 
+/*@brief     温度模组启动测量
+ *@param[in] run 是否启动
+ */
+void app_module_temperature_measure_auto(bool run)
+{
+    if (run) {
+        app_sys_timer_stop(&app_module_temperature_xs_timer);
+        app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
+        app_module_temperature.measure_xs_status = true;
+        app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
+        app_sys_timer_start(&app_module_temperature_xs_timer);
+    } else {
+        app_sys_timer_stop(&app_module_temperature_xs_timer);
+        app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
+        app_module_temperature.measure_xs_status = false;
+        app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
+    }
+}
+
 /*@brief 温度模组事件处理
  *       内部使用: 被mix irq线程使用
  */
@@ -66,36 +85,82 @@ void app_module_temperature_xms_update(void)
         temperature->measure_status = false;
         temperature->measure_result = true;
         measure_over = true;
+        /* 开启周期测量时,将此次测量提交 */
+        if (temperature->measure_xs_status) {
+            /* 获得此次温度测量数据 */
+            float val = temperature->measure_val;
+            /* 检查数据记录 */
+            if (temperature->measure_xs_cnt >= APP_MODULE_TEMPERATURE_XS) {
+                temperature->measure_xs_cnt -= APP_MODULE_TEMPERATURE_XS;
+                /* 暂存温度数据 */
+                temperature->measure_one_arr[temperature->measure_one_cnt++] = val;
+                /* 暂存温度中值滤波 */
+                if (temperature->measure_one_cnt >= 2) {
+                    /* 简单排序一下 */
+                    for (uint8_t i = 0; i < temperature->measure_one_cnt; i++)
+                    for (uint8_t j = i + 1; j < temperature->measure_one_cnt; j++)
+                        if (temperature->measure_one_arr[i] > temperature->measure_one_arr[j]) {
+                            float val_i = temperature->measure_one_arr[i];
+                            float val_j = temperature->measure_one_arr[j];
+                            temperature->measure_one_arr[i] = val_j;
+                            temperature->measure_one_arr[j] = val_i;
+                        }
+                    /* 取中值 */
+                    if (temperature->measure_day_cnt % 2 != 0)
+                        val = temperature->measure_one_arr[temperature->measure_day_cnt / 2];
+                    else {
+                        val  = 0.0;
+                        val += temperature->measure_one_arr[temperature->measure_day_cnt / 2];
+                        val += temperature->measure_one_arr[temperature->measure_day_cnt / 2 + 1];
+                        val /= 2.0;
+                    }
+                }
+                /* 检查数据记录 */
+                if (temperature->measure_one_cnt >= APP_MODULE_TEMPERATURE_X_MGE) {
+                    temperature->measure_one_cnt -= APP_MODULE_TEMPERATURE_X_MGE;
+                    /* 暂存温度数据 */
+                    if (temperature->measure_day_cnt - 1 < APP_MODULE_TEMPERATURE_X_CNT)
+                        temperature->measure_day_arr[temperature->measure_day_cnt++] = val;
+                    else {
+                        for (uint8_t i = 0; i + 1 < temperature->measure_one_cnt; i++)
+                            temperature->measure_one_arr[i] = temperature->measure_one_arr[i + 1];
+                        temperature->measure_day_arr[temperature->measure_day_cnt] = val;
+                    }
+                }
+            }
+        }
     }
     /* 测量中... */
     if (temperature->measure_status) {
         /* 获得此刻温度测量数据 */
         float val = app_arch_temperature_get_value(&app_arch_temperature);
-        /* 暂存温度数据 */
-        temperature->measure_tmp_arr[temperature->measure_tmp_cnt++] = val;
-        /* 暂存温度数据不足 */
-        if (temperature->measure_tmp_cnt == 0) 
-            temperature->measure_val      = 0.0;
-        /* 暂存温度中值滤波 */
-        if (temperature->measure_tmp_cnt >= 2) {
-            /* 简单排序一下 */
-            for (uint8_t i = 0; i < temperature->measure_tmp_cnt; i++)
-            for (uint8_t j = i + 1; j < temperature->measure_tmp_cnt; j++)
-                if (temperature->measure_tmp_arr[i] > temperature->measure_tmp_arr[j]) {
-                    float val_i = temperature->measure_tmp_arr[i];
-                    float val_j = temperature->measure_tmp_arr[j];
-                    temperature->measure_tmp_arr[i] = val_j;
-                    temperature->measure_tmp_arr[j] = val_i;
+        /* 如果使用温度算法,此处数据交付算法,否则走下面的简化流程 */ {
+            /* 暂存温度数据 */
+            temperature->measure_tmp_arr[temperature->measure_tmp_cnt++] = val;
+            /* 暂存温度数据不足 */
+            if (temperature->measure_tmp_cnt == 0) 
+                temperature->measure_val      = 0.0;
+            /* 暂存温度中值滤波 */
+            if (temperature->measure_tmp_cnt >= 2) {
+                /* 简单排序一下 */
+                for (uint8_t i = 0; i < temperature->measure_tmp_cnt; i++)
+                for (uint8_t j = i + 1; j < temperature->measure_tmp_cnt; j++)
+                    if (temperature->measure_tmp_arr[i] > temperature->measure_tmp_arr[j]) {
+                        float val_i = temperature->measure_tmp_arr[i];
+                        float val_j = temperature->measure_tmp_arr[j];
+                        temperature->measure_tmp_arr[i] = val_j;
+                        temperature->measure_tmp_arr[j] = val_i;
+                    }
+                /* 取中值 */
+                if (temperature->measure_tmp_cnt % 2 != 0)
+                    val = temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2];
+                else {
+                    val  = 0.0;
+                    val += temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2];
+                    val += temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2 + 1];
+                    val /= 2.0;
                 }
-            /* 取中值 */
-            if (temperature->measure_tmp_cnt % 2 != 0) {
-                val = temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2];
                 temperature->measure_val = val;
-            } else {
-                val  = 0.0;
-                val += temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2];
-                val += temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2 + 1];
-                temperature->measure_val = val / 2;
             }
         }
     }
@@ -110,13 +175,24 @@ void app_module_temperature_xms_update(void)
  */
 void app_module_temperature_xs_update(void)
 {
+    bool measure_xs_status = false;
+    /* 叠加测量计数器 */
+    app_mutex_process(&app_module_temperature_mutex, app_mutex_take);
+    app_module_temperature_t *temperature = &app_module_temperature;
+    measure_xs_status = temperature->measure_xs_status;
+    if (temperature->measure_xs_status)
+        temperature->measure_xs_cnt++;
+    app_mutex_process(&app_module_temperature_mutex, app_mutex_give);
+    
+    if (measure_xs_status)
+        app_module_temperature_measure_run();
 }
 
 /*@brief 温度模组软件定时器回调
  */
 static void app_module_temperature_xms_timer_handler(void *timer)
 {
-    /* 发送震动模组更新事件 */
+    /* 发送温度模组更新事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_mix_irq,
         .module = app_thread_mix_irq_temperature,
@@ -129,7 +205,7 @@ static void app_module_temperature_xms_timer_handler(void *timer)
  */
 static void app_module_temperature_xs_timer_handler(void *timer)
 {
-    /* 发送震动模组更新事件 */
+    /* 发送温度模组更新事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_mix_irq,
         .module = app_thread_mix_irq_temperature,
