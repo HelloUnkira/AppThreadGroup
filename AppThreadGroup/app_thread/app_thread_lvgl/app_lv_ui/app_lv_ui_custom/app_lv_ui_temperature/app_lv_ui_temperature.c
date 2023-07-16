@@ -50,17 +50,14 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     app_lv_ui_clock_presenter.format_clock_1(format_clock_1);
     lv_label_set_text(app_lv_ui_res_local->time, format_clock_1);
     
+    lv_obj_set_style_text_color(app_lv_ui_res_local->temp,
+                                app_lv_ui_temperature_presenter.measure_result() ?
+                                lv_palette_main(LV_PALETTE_BLUE) : lv_palette_main(LV_PALETTE_GREY), 0);
+    
     char temp_digit[20] = {0};
-    if (app_lv_ui_temperature_presenter.measure_result()) {
-        sprintf(temp_digit, "%.2f", app_lv_ui_temperature_presenter.get_value());
-        APP_SYS_LOG_INFO("temp_digit:%s", temp_digit);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->temp, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_label_set_text_fmt(app_lv_ui_res_local->temp, "Temperature:%s", temp_digit);
-    } else {
-        sprintf(temp_digit, "%.2f", 0.00);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->temp, lv_palette_darken(LV_PALETTE_BLUE, 1), 0);
-        lv_label_set_text_fmt(app_lv_ui_res_local->temp, "Temperature:%s", temp_digit);
-    }
+    sprintf(temp_digit, "%.2f", app_lv_ui_temperature_presenter.get_value());
+    APP_SYS_LOG_INFO("temp_digit:%s", temp_digit);
+    lv_label_set_text_fmt(app_lv_ui_res_local->temp, "Temperature:%s", temp_digit);
 }
 
 /*@brief     界面显示

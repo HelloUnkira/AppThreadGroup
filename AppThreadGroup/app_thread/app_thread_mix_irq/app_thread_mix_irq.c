@@ -24,7 +24,9 @@
 #include "app_thread_group.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
+#include "app_module_battery.h"
 #include "app_module_vibrate.h"
+#include "app_module_temperature.h"
 
 /*@brief 混合中断线程模组初始化
  */
@@ -88,6 +90,21 @@ void app_thread_mix_irq_routine(void)
                     uint64_t utc_new = package.data != NULL ? *(uint64_t *)package.data : 0;
                     app_module_clock_timestamp_update(utc_new);
                 }
+                break;
+            }
+            case app_thread_mix_irq_battery: {
+                if (package.event == app_thread_mix_irq_battery_charge)
+                    /* 产生充电事件了 */;
+                if (package.event == app_thread_mix_irq_battery_discharge)
+                    /* 产生放电事件了 */;
+                if (package.event == app_thread_mix_irq_battery_charge_check)
+                    app_module_battery_charge_check();
+                if (package.event == app_thread_mix_irq_battery_voltage_check)
+                    app_module_battery_voltage_check();
+                if (package.event == app_thread_mix_irq_battery_charge_xms_update)
+                    app_module_battery_charge_xms_update();
+                if (package.event == app_thread_mix_irq_battery_voltage_xms_update)
+                    app_module_battery_voltage_xms_update();
                 break;
             }
             case app_thread_mix_irq_vibrate: {

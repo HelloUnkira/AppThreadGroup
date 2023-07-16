@@ -20,7 +20,7 @@ typedef struct {
  *@param[in] data 编码数据流
  *@param[in] size 编码数据流大小
  */
-void app_module_transfer_notify(uint8_t *data, uint32_t size);
+bool app_module_transfer_notify(uint8_t *data, uint32_t size);
 
 /*@brief     接收协议数据并组包解析
  *@param[in] data 编码数据流

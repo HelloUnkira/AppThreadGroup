@@ -16,6 +16,24 @@ static app_sys_timer_t app_module_temperature_xms_timer = {0};
 static app_sys_timer_t app_module_temperature_xs_timer  = {0};
 static app_module_temperature_t app_module_temperature  = {0};
 
+/*@brief 比较函数
+ */
+static int app_module_temperature_compare(const void *data1, const void *data2)
+{
+    if (*(float *)data1 <  *(float *)data2)
+        return -1;
+    if (*(float *)data1 == *(float *)data2)
+        return +0;
+    if (*(float *)data1 >  *(float *)data2)
+        return +1;
+}
+
+/*@brief 温度模组测量状态更新算法
+ */
+static void app_module_temperature_algorithm(app_module_temperature_t *temperature)
+{
+}
+
 /*@brief  温度模组测量状态
  *@retval 是否在测量之中
  */
@@ -107,14 +125,9 @@ void app_module_temperature_xms_update(void)
                 /* 暂存温度中值滤波 */
                 if (temperature->measure_one_cnt >= 2) {
                     /* 简单排序一下 */
-                    for (uint8_t i = 0; i < temperature->measure_one_cnt; i++)
-                    for (uint8_t j = i + 1; j < temperature->measure_one_cnt; j++)
-                        if (temperature->measure_one_arr[i] > temperature->measure_one_arr[j]) {
-                            float val_i = temperature->measure_one_arr[i];
-                            float val_j = temperature->measure_one_arr[j];
-                            temperature->measure_one_arr[i] = val_j;
-                            temperature->measure_one_arr[j] = val_i;
-                        }
+                    qsort(temperature->measure_one_arr,
+                          temperature->measure_one_cnt, sizeof(float),
+                          app_module_temperature_compare);
                     /* 取中值 */
                     if (temperature->measure_day_cnt % 2 != 0)
                         val = temperature->measure_one_arr[temperature->measure_day_cnt / 2];
@@ -134,7 +147,7 @@ void app_module_temperature_xms_update(void)
                     else {
                         for (uint8_t i = 0; i + 1 < temperature->measure_one_cnt; i++)
                             temperature->measure_one_arr[i] = temperature->measure_one_arr[i + 1];
-                        temperature->measure_day_arr[temperature->measure_day_cnt] = val;
+                            temperature->measure_day_arr[temperature->measure_day_cnt] = val;
                     }
                 }
             }
@@ -155,14 +168,9 @@ void app_module_temperature_xms_update(void)
             /* 暂存温度中值滤波 */
             if (temperature->measure_tmp_cnt >= 2) {
                 /* 简单排序一下 */
-                for (uint8_t i = 0; i < temperature->measure_tmp_cnt; i++)
-                for (uint8_t j = i + 1; j < temperature->measure_tmp_cnt; j++)
-                    if (temperature->measure_tmp_arr[i] > temperature->measure_tmp_arr[j]) {
-                        float val_i = temperature->measure_tmp_arr[i];
-                        float val_j = temperature->measure_tmp_arr[j];
-                        temperature->measure_tmp_arr[i] = val_j;
-                        temperature->measure_tmp_arr[j] = val_i;
-                    }
+                qsort(temperature->measure_tmp_arr,
+                      temperature->measure_tmp_cnt, sizeof(float),
+                      app_module_temperature_compare);
                 /* 取中值 */
                 if (temperature->measure_tmp_cnt % 2 != 0)
                     val = temperature->measure_tmp_arr[temperature->measure_tmp_cnt / 2];
