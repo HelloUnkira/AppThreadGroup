@@ -11,12 +11,14 @@ typedef struct {
 #include "app_ext_arch_dev_empty.h"     /* template */
 #include "app_ext_arch_battery.h"       /* battery */
 #include "app_ext_arch_vibrate.h"       /* vibrate */
+#include "app_ext_arch_backlight.h"     /* backlight */
 #include "app_ext_arch_temperature.h"   /* temperature */
 
 /* 设备抽象实例 */
 extern const app_arch_dev_t app_arch_dev_empty;
 extern const app_arch_dev_t app_arch_battery;
 extern const app_arch_dev_t app_arch_vibrate;
+extern const app_arch_dev_t app_arch_backlight;
 extern const app_arch_dev_t app_arch_temperature;
 
 #endif

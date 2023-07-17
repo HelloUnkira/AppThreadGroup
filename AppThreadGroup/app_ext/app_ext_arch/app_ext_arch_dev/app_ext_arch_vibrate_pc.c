@@ -8,7 +8,7 @@
 
 /* 设备vibrate抽象操作参数 */
 typedef struct {
-    void *parameter;
+    void *args;
 } app_arch_vibrate_cfg_t;
 
 /*@brief     vibrate设备打开
@@ -84,7 +84,7 @@ static void app_arch_vibrate_hal_shutdown_exit(app_arch_dev_t *driver)
 
 /* 静态配置的设备操作参数 */
 static const app_arch_vibrate_cfg_t app_arch_vibrate_cfg = {
-    .parameter = NULL,
+    .args = NULL,
 };
 
 /* 静态配置的设备操作集合 */
