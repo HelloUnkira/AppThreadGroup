@@ -295,9 +295,9 @@ void app_module_clock_load(void)
  */
 void app_module_clock_ready(void)
 {
+    app_mutex_process(&app_module_clock_mutex, app_mutex_static);
     app_module_clock_to_dtime(&app_module_clock[1]);
     app_module_clock_to_week(&app_module_clock[1]);
-    app_mutex_process(&app_module_clock_mutex, app_mutex_static);
 }
 
 /*@brief 时钟模组更新

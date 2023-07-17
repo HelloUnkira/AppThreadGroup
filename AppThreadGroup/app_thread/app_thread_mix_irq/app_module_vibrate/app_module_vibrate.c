@@ -13,7 +13,7 @@
 
 static app_mutex_t app_module_vibrate_mutex = {0};
 static app_sys_timer_t app_module_vibrate_timer = {0};
-static app_module_vibrate_t app_module_vibrate = {0};
+static app_module_vibrate_t app_module_vibrate  = {0};
 
 /*@brief  震动模组工作有效性检查
  *@retval 模组是否有效
