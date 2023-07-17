@@ -72,8 +72,11 @@ static const app_arch_rtc_cfg_t app_arch_rtc_cfg = {
 
 /* 静态配置的设备操作集合 */
 static const app_arch_rtc_api_t app_arch_rtc_api = {
-    .ready  = app_arch_rtc_hal_ready,
-    .feed   = app_arch_rtc_hal_feed,
+    .ready      = app_arch_rtc_hal_ready,
+    .irq_cb_reg = app_arch_rtc_hal_irq_cb_reg,
+    .execute    = app_arch_rtc_hal_execute,
+    .get_utc    = app_arch_rtc_hal_get_utc,
+    .set_utc    = app_arch_rtc_hal_set_utc,
 };
 
 /* 动态的设备操作数据 */

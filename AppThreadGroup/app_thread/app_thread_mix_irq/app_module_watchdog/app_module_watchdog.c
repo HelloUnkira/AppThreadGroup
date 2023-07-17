@@ -9,6 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_work.h"
 #include "app_thread_group.h"
+#include "app_module_clock.h"
 #include "app_module_watchdog.h"
 
 static app_mutex_t app_module_watchdog_mutex = {0};
