@@ -269,5 +269,10 @@ void app_module_system_1msec_update(uint32_t count)
             app_module_rtc_get(&rtc);
             app_module_clock_1s_update(rtc.utc);
         }
+        /* 一些补充的扩展配置,与OS相关 */
+        if (count == 3000) {
+            void app_thread_os_extend(void);
+            app_thread_os_extend();
+        }
     }
 }

@@ -17,13 +17,20 @@ void app_arch_ready(void)
     rand();
     /* cpu freq and clock freq */
     
-    /* peripheral */
+    /* peripheral: log */
+    app_arch_log_ready();
     
 }
 
 /*@brief 运行平台
  */
 void app_arch_execute(void)
+{
+}
+
+/*@brief LOG输出初始化
+ */
+void app_arch_log_ready(void)
 {
 }
 

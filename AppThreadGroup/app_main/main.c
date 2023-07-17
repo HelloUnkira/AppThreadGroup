@@ -85,17 +85,12 @@ int main(int argc, char *argv[])
         /* 模拟发送1ms定时器中断事件 */
         /* 我是实在没想到这种方式 */
         /* 居然是最简单的做法...... */
+        #if APP_ARCH_IS_PC
         /* fake hard clock 1ms irq */
         static uint32_t count = 0;
         app_module_system_1msec_update(count++);
         app_delay_us(1000);
-        /* ........ */
-        #if 1
-        /* 一些补充的扩展配置,与OS相关 */
-        if (count == 3000) {
-            void app_thread_os_extend(void);
-            app_thread_os_extend();
-        }
+        #else
         #endif
         /* test:... */
         #if 0
