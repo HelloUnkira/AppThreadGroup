@@ -1,8 +1,8 @@
 #ifndef APP_MODULE_CLOCK_H
 #define APP_MODULE_CLOCK_H
 
-/* 该结构继承自app_sys_clock_t */
-/* 与app_sys_clock_t字段自顶对齐,允许继续向下扩展其他字段 */
+/* 该结构继承自app_sys_clk_t */
+/* 与app_sys_clk_t字段自顶对齐,允许继续向下扩展其他字段 */
 typedef struct {
     uint64_t utc;       /* 协调世界时UTC */
     uint16_t year;      /* 年 */

@@ -1,0 +1,6 @@
+{
+    "type"   : "app_sys_idx_str",
+    "brief"  : "app_sys_idx_str: suggest：xlsx workbook and sheet",
+    "xlsx"   : "translate.xlsx",
+    "sheet"  : "translate"
+}

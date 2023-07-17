@@ -7,9 +7,9 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_sys_clk.h"
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
-#include "app_sys_clock.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_clock_cb.h"
@@ -20,7 +20,7 @@
  */
 bool app_module_clock_is_leap_year(app_module_clock_t *clock)
 {
-    return app_sys_clock_is_leap_year((app_sys_clock_t *)clock);
+    return app_sys_clk_is_leap_year((app_sys_clk_t *)clock);
 }
 
 /*@brief     下一闰年
@@ -29,7 +29,7 @@ bool app_module_clock_is_leap_year(app_module_clock_t *clock)
  */
 void app_module_clock_next_leap_year(app_module_clock_t *clock, app_module_clock_t *leap_clock)
 {
-    app_sys_clock_next_leap_year((app_sys_clock_t *)clock, (app_sys_clock_t *)leap_clock);
+    app_sys_clk_next_leap_year((app_sys_clk_t *)clock, (app_sys_clk_t *)leap_clock);
 }
 
 /*@brief     一个月有多少天
@@ -38,7 +38,7 @@ void app_module_clock_next_leap_year(app_module_clock_t *clock, app_module_clock
  */
 uint32_t app_module_clock_month_days(app_module_clock_t *clock)
 {
-    return app_sys_clock_month_days((app_sys_clock_t *)clock);
+    return app_sys_clk_month_days((app_sys_clk_t *)clock);
 }
 
 /*@brief     一年过了多少天
@@ -47,7 +47,7 @@ uint32_t app_module_clock_month_days(app_module_clock_t *clock)
  */
 uint32_t app_module_clock_year_days(app_module_clock_t *clock)
 {
-    return app_sys_clock_year_days((app_sys_clock_t *)clock);
+    return app_sys_clk_year_days((app_sys_clk_t *)clock);
 }
 
 /*@brief     俩个日期间的天数
@@ -57,7 +57,7 @@ uint32_t app_module_clock_year_days(app_module_clock_t *clock)
  */
 uint32_t app_module_clock_how_many_days(app_module_clock_t *clock1, app_module_clock_t *clock2)
 {
-    return app_sys_clock_how_many_days((app_sys_clock_t *)clock1, (app_sys_clock_t *)clock2);
+    return app_sys_clk_how_many_days((app_sys_clk_t *)clock1, (app_sys_clk_t *)clock2);
 }
 
 /*@brief      星期转化(蔡勒公式)
@@ -66,7 +66,7 @@ uint32_t app_module_clock_how_many_days(app_module_clock_t *clock1, app_module_c
  */
 void app_module_clock_to_week(app_module_clock_t *clock)
 {
-    app_sys_clock_to_week((app_sys_clock_t *)clock);
+    app_sys_clk_to_week((app_sys_clk_t *)clock);
 }
 
 /*@brief      日期转化为utc
@@ -75,7 +75,7 @@ void app_module_clock_to_week(app_module_clock_t *clock)
  */
 void app_module_clock_to_utc(app_module_clock_t *clock)
 {
-    app_sys_clock_to_utc((app_sys_clock_t *)clock);
+    app_sys_clk_to_utc((app_sys_clk_t *)clock);
 }
 
 /*@brief      utc转化为日期
@@ -84,7 +84,7 @@ void app_module_clock_to_utc(app_module_clock_t *clock)
  */
 void app_module_clock_to_dtime(app_module_clock_t *clock)
 {
-    app_sys_clock_to_dtime((app_sys_clock_t *)clock);
+    app_sys_clk_to_dtime((app_sys_clk_t *)clock);
 }
 
 /* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
