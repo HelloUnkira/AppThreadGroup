@@ -13,7 +13,6 @@
 #include "app_thread_adaptor.h"
 #include "app_thread_group.h"
 #include "app_module_system.h"
-#include "app_module_watchdog.h"
 
 static bool app_thread_group_status = false;
 
@@ -57,7 +56,6 @@ void app_thread_group_schedule(void)
      */
     /* 就绪线程公共子模组 */
     app_module_system_ready();
-    app_module_watchdog_ready();
     /* 就绪线程子模组 */
     app_thread_master_ready();
     app_thread_mix_irq_ready();
@@ -84,6 +82,7 @@ void app_thread_group_schedule(void)
      */
     APP_SYS_LOG_INFO("app thread group schedule");
     app_os_schedule();
+    app_arch_execute();
 }
 
 /*@brief 获得线程组初始化状态

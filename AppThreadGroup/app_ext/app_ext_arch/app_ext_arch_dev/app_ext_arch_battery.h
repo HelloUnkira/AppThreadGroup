@@ -23,7 +23,8 @@ typedef struct {
     const uint32_t curve_charge_item;
     const void    *curve_discharge;
     const uint32_t curve_discharge_item;
-    
+    /* 充电事件通报回调 */
+    void (*charge_irq_cb)(void);
 } app_arch_battery_data_t;
 
 /*@brief     battery设备初始化

@@ -11,9 +11,6 @@ typedef struct {
     void *args;
 } app_arch_battery_cfg_t;
 
-/* 充电事件通报回调 */
-static void(*app_arch_battery_hal_charge_irq_cb)(void) = NULL;
-
 /*@brief     battery设备初始化
  *@param[in] driver 设备实例
  *@retval    当前温度值
@@ -58,7 +55,7 @@ static void app_arch_battery_hal_charge_irq_cb_reg(app_arch_dev_t *driver, void(
     const app_arch_battery_cfg_t *cfg = driver->cfg;
     app_arch_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
-    app_arch_battery_hal_charge_irq_cb = cb;
+    data->charge_irq_cb = cb;
 }
 
 /*@brief     battery设备电池电压(mV)
@@ -139,6 +136,8 @@ static app_arch_battery_data_t app_arch_battery_data = {
     .curve_discharge        = app_arch_battery_hal_curve_discharge,
     .curve_discharge_item   = sizeof(app_arch_battery_hal_curve_discharge) /
                               sizeof(app_arch_battery_hal_curve_discharge[0]),
+    
+    .charge_irq_cb          = NULL,
 };
 
 /* 静态配置的设备实例 */

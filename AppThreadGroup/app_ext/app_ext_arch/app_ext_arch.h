@@ -14,6 +14,10 @@
  */
 void app_arch_ready(void);
 
+/*@brief 运行平台
+ */
+void app_arch_execute(void);
+
 /*@brief     变参函数式LOG输出接口
  *@param[in] format 格式化字符串
  */

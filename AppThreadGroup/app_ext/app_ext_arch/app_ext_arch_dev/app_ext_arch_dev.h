@@ -9,6 +9,8 @@ typedef struct {
 } app_arch_dev_t;
 
 #include "app_ext_arch_dev_empty.h"     /* template */
+#include "app_ext_arch_rtc.h"           /* rtc */
+#include "app_ext_arch_watchdog.h"      /* watchdog */
 #include "app_ext_arch_battery.h"       /* battery */
 #include "app_ext_arch_vibrate.h"       /* vibrate */
 #include "app_ext_arch_backlight.h"     /* backlight */
@@ -16,6 +18,8 @@ typedef struct {
 
 /* 设备抽象实例 */
 extern const app_arch_dev_t app_arch_dev_empty;
+extern const app_arch_dev_t app_arch_rtc;
+extern const app_arch_dev_t app_arch_watchdog;
 extern const app_arch_dev_t app_arch_battery;
 extern const app_arch_dev_t app_arch_vibrate;
 extern const app_arch_dev_t app_arch_backlight;

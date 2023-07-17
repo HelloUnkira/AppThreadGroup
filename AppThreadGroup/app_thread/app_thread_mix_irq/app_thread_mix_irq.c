@@ -24,6 +24,8 @@
 #include "app_thread_group.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
+#include "app_module_rtc.h"
+#include "app_module_watchdog.h"
 #include "app_module_battery.h"
 #include "app_module_vibrate.h"
 #include "app_module_backlight.h"
@@ -33,8 +35,11 @@
  */
 void app_thread_mix_irq_ready(void)
 {
-    /* 模组初始化 */
+    /* 软件模组初始化 */
     app_module_clock_ready();
+    /* 硬件相关模组初始化 */
+    app_module_rtc_ready();
+    app_module_watchdog_ready();
     app_module_battery_ready();
     app_module_vibrate_ready();
     app_module_backlight_ready();
