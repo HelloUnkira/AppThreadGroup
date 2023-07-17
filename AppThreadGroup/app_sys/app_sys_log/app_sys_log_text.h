@@ -59,4 +59,9 @@ bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX]);
  */
 void app_sys_log_text_peek_reset(void);
 
+/*@brief 日志追踪队列转储和加载测试
+ *       此测试模式只能单独使用
+ */
+void app_sys_log_text_test(void);
+
 #endif

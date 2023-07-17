@@ -26,6 +26,12 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
  */
 size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size);
 
+/*@brief     使用数据元刷新文件
+ *@param[in] ext_mem chunk静态实例
+ *@param[in] value   指定数据元
+ */
+void app_sys_ext_mem_reflush(const app_sys_ext_mem_t *ext_mem, uint8_t value);
+
 /*@brief 初始化原生外存
  */
 void app_sys_ext_mem_ready(void);

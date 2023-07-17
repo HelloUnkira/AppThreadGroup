@@ -10,9 +10,10 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
-#include "app_module_system.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
+#include "app_module_rtc.h"
+#include "app_module_system.h"
 #include "app_module_data_center.h"
 #include "app_module_dump.h"
 #include "app_module_load.h"
@@ -256,14 +257,17 @@ void app_module_system_ready(void)
  */
 void app_module_system_1msec_update(uint32_t count)
 {
+    if (count % 1000 == 0)
+        APP_SYS_LOG_INFO('1s handler');
     /* 线程组不在工作中,Tick是没有意义的 */
     if (app_thread_group_status_get()) {
         /* timer msec update */
         app_module_timer_1ms_update();
         /* clock source */
         if (count % 1000 == 0) {
-            uint64_t utc_new = 0; /* 在此处获取RTC的UTC */
-            app_module_clock_1s_update(utc_new);
+            app_module_rtc_t rtc = {0};
+            app_module_rtc_get(&rtc);
+            app_module_clock_1s_update(rtc.utc);
         }
     }
 }

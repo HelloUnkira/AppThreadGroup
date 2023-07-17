@@ -32,4 +32,8 @@ void app_sys_timer_reduce(void);
  */
 void app_sys_timer_ready(void);
 
+/*@brief 软件定时器模组测试
+ */
+void app_sys_timer_test(void);
+
 #endif

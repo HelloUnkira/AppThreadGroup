@@ -376,3 +376,24 @@ void app_sys_log_text_peek_reset(void)
     app_mutex_process(&app_sys_log_text_mutex, app_mutex_give);
 }
 
+/*@brief 日志追踪队列转储和加载测试
+ *       此测试模式只能单独使用
+ */
+void app_sys_log_text_test(void)
+{
+    static uint32_t offset = 0;
+    uint8_t log_text_i[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+    uint8_t log_text_o[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+    
+    for (uint32_t idx = 0; idx < APP_SYS_LOG_TEXT_MAX; idx++) {
+        log_text_i[idx] = '0' + idx % 10;
+        log_text_i[idx + APP_SYS_LOG_TEXT_MAX] = '0' + idx % 10;
+    }
+    
+    app_sys_log_text_dump(log_text_i + offset, true);
+    app_sys_log_text_load(log_text_o);
+    if (memcmp(log_text_o, log_text_i + offset, APP_SYS_LOG_TEXT_MAX) != 0)
+        APP_SYS_LOG_ERROR("log error");
+    
+    offset = (offset + 1) % APP_SYS_LOG_TEXT_MAX;
+}
