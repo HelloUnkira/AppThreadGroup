@@ -17,4 +17,8 @@ void app_module_rtc_get(app_module_rtc_t *rtc);
  */
 void app_module_rtc_ready(void);
 
+/*@brief 运行RTC模组
+ */
+void app_module_rtc_execute(void);
+
 #endif

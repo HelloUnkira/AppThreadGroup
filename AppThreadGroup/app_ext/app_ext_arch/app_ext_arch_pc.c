@@ -18,10 +18,6 @@ void app_arch_ready(void)
     /* cpu freq and clock freq */
     
     /* peripheral */
-    app_arch_rtc_ready(&app_arch_rtc);
-    app_arch_watchdog_ready(&app_arch_watchdog);
-    app_arch_battery_ready(&app_arch_battery);
-    app_arch_backlight_ready(&app_arch_backlight);
     
 }
 
@@ -29,7 +25,6 @@ void app_arch_ready(void)
  */
 void app_arch_execute(void)
 {
-    app_arch_rtc_execute(&app_arch_rtc);
 }
 
 /*@brief     变参函数式LOG输出接口

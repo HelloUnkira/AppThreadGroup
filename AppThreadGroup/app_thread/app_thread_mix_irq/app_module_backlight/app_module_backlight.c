@@ -40,4 +40,5 @@ void app_module_backlight_get(app_module_backlight_t *backlight)
 void app_module_backlight_ready(void)
 {
     app_mutex_process(&app_module_backlight_mutex, app_mutex_static);
+    app_arch_backlight_ready(&app_arch_backlight);
 }

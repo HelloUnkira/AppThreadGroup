@@ -1,5 +1,5 @@
 /*实现目标:
- *    实时钟模组
+ *    RTC模组
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
@@ -53,5 +53,13 @@ void app_module_rtc_get(app_module_rtc_t *rtc)
 void app_module_rtc_ready(void)
 {
     app_mutex_process(&app_module_rtc_mutex, app_mutex_static);
+    app_arch_rtc_ready(&app_arch_rtc);
     app_arch_rtc_irq_cb_reg(&app_arch_rtc, app_module_rtc_cb);
+}
+
+/*@brief 运行RTC模组
+ */
+void app_module_rtc_execute(void)
+{
+    app_arch_rtc_execute(&app_arch_rtc);
 }

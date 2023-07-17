@@ -60,4 +60,5 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 void app_module_watchdog_ready(void)
 {
     app_mutex_process(&app_module_watchdog_mutex, app_mutex_static);
+    app_arch_watchdog_ready(&app_arch_watchdog);
 }
