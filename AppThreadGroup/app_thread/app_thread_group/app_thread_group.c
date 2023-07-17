@@ -17,14 +17,6 @@
 
 static bool app_thread_group_status = false;
 
-/*@brief 日志持久化转接口
- *       暂时写在此处,没有找到好的地方容纳它
- */
-static void app_sys_log_persistent(char *text)
-{
-    app_sys_log_text_dump(text, true);
-}
-
 /*@brief 线程组运行
  *       准备并启动所有线程及其附属资源
  */
@@ -45,7 +37,7 @@ void app_thread_group_schedule(void)
     app_sys_log_t log = {
         .message1   = (void *)app_arch_log_msg1,
         .message2   = (void *)app_arch_log_msg2,
-        .persistent = (void *)app_sys_log_persistent,
+        .persistent = (void *)app_sys_log_text_persistent,
     };
     app_sys_log_ready(log);
     app_sys_ext_mem_ready();

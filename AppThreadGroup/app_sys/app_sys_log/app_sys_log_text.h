@@ -59,6 +59,12 @@ bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX]);
  */
 void app_sys_log_text_peek_reset(void);
 
+/*@brief     日志持久化转接口
+ *           这只是一个转接口,外界不可使用
+ *@param[in] text 日志文本
+ */
+void app_sys_log_text_persistent(char *text);
+
 /*@brief 日志追踪队列转储和加载测试
  *       此测试模式只能单独使用
  */

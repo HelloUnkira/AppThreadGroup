@@ -376,6 +376,15 @@ void app_sys_log_text_peek_reset(void)
     app_mutex_process(&app_sys_log_text_mutex, app_mutex_give);
 }
 
+/*@brief     日志持久化转接口
+ *           这只是一个转接口,外界不可使用
+ *@param[in] text 日志文本
+ */
+void app_sys_log_text_persistent(char *text)
+{
+    app_sys_log_text_dump(text, true);
+}
+
 /*@brief 日志追踪队列转储和加载测试
  *       此测试模式只能单独使用
  */

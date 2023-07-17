@@ -36,7 +36,6 @@
 void app_thread_mix_irq_ready(void)
 {
     /* 软件模组初始化 */
-    app_module_timer_ready();
     app_module_clock_ready();
     /* 硬件相关模组初始化 */
     app_module_rtc_ready();

@@ -17,8 +17,8 @@ void app_arch_ready(void)
     rand();
     /* cpu freq and clock freq */
     
-    /* peripheral: log */
-    app_arch_log_ready();
+    /* peripheral: log(custom device) */
+    app_arch_log_ready(&app_arch_log);
     
 }
 
@@ -26,32 +26,6 @@ void app_arch_ready(void)
  */
 void app_arch_execute(void)
 {
-}
-
-/*@brief LOG输出初始化
- */
-void app_arch_log_ready(void)
-{
-}
-
-/*@brief     变参函数式LOG输出接口
- *@param[in] format 格式化字符串
- */
-void app_arch_log_msg1(const char *format, ...)
-{
-    va_list  list;
-    va_start(list, format);
-    vprintf(format, list);
-    va_end(list);
-}
-
-/*@brief     变参列表式LOG输出接口
- *@param[in] format 格式化字符串
- *@param[in] list   变参列表
- */
-void app_arch_log_msg2(const char *format, va_list list)
-{
-    vprintf(format, list);
 }
 
 #endif
