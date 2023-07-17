@@ -105,6 +105,12 @@ static app_thread_t app_thread_jerryscript = {
 
 /* @线程体<End> */
 
+/*@brief OS扩展配置,线程就绪后配置
+ */
+void app_thread_os_extend(void)
+{
+}
+
 #endif
 
 #endif

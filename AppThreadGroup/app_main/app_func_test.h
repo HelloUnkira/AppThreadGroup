@@ -8,8 +8,8 @@
 #include "app_sys_ext_mem_table.h"
 #include "app_sys_log_text.h"
 #include "app_thread_group.h"
-#include "app_module_protocol.h"
 #include "app_module_clock.h"
+#include "app_module_protocol.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
 #include "app_module_remind_group.h"
@@ -162,48 +162,72 @@ static inline void app_module_remind_alarm_test(void)
     app_module_remind_alarm_array_unlock();
 }
 
-static void app_main_fake_hard_clock_irq(void)
+static void app_main_1ms_loop(void)
 {
-    static uint32_t count = 0;count++;
-    /* 1 ms tick */
+    #if 0
+    #elif 0
+    /* chunk刷新,将其都刷为0 */
+    app_sys_ext_mem_chunk_reflush();
+    #elif 1
+    #if 0
+    /* 测试日志追踪 */
+    app_sys_log_test();
+    #endif
+    /* fake hard clock 1ms irq */
+    static uint32_t count = 0;
+    /* 1msec system update: */
+    app_module_system_1msec_update(count++);
+    app_delay_us(1000);
+    /* 1msec system update: */
     if (0 && count % 1000 == 0)
         printf("signal 1 second handler\n");
-    /* 1msec system update: */
-    app_module_system_1msec_update(count);
     /* ........ */
+    #if 1
+    /* 一些补充的扩展配置,与OS相关 */
+    if (count == 3000) {
+        void app_thread_os_extend(void);
+        app_thread_os_extend();
+    }
+    #endif
     /* test:... */
-    /* ........ */
-    /* test reset load and dump */
     #if 0
+    #elif 0
+    /* test reset load and dump */
     if (count % 5000 == 0) {
         app_module_system_delay_set(2);
         app_module_system_status_set(app_module_system_reset);
     }
-    #endif
+    #elif 0
     /* test timer */
-    #if 0
     if (count == 1000)
         app_sys_timer_test();
-    #endif
+    #elif 0
     /* test stopwatch */
-    #if 0
     if (count == 1000)
         app_module_stopwatch_test();
-    #endif
+    #elif 0
     /* test countdown */
-    #if 0
     if (count == 1000)
         app_module_countdown_test();
-    #endif
+    #elif 0
     /* test alarm group */
-    #if 1
     if (count == 1000)
         app_module_remind_alarm_test();
-    #endif
+    #elif 0
     /* test package... */
-    #if 0
     if (count % 1000 == 0)
         app_thread_workqueue_test();
+    #elif 0
+    /* test protocol(7s later) */
+    if (count == 1000 * 7) {
+        app_module_protocol_t protocol = {
+          //.notify.type = app_module_protocol_system_clock,
+            .notify.type = app_module_protocol_trace_text,
+        };
+        app_module_protocol_notify(&protocol);
+    }
+    #else
+    #endif
     #endif
 }
 

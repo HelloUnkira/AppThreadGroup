@@ -10,9 +10,10 @@
 #include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_log_text.h"
-#include "app_thread_adaptor.h"
 #include "app_thread_group.h"
+#include "app_module_clock.h"
 #include "app_module_system.h"
+#include "app_thread_adaptor.h"
 
 static bool app_thread_group_status = false;
 
