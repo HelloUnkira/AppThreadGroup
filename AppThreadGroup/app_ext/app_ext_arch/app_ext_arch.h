@@ -7,8 +7,6 @@
 
 /* arch ext mem adaptor */
 #include "app_ext_arch_ext_mem.h"
-/* arch driver abstract adaptor */
-#include "app_ext_arch_dev.h"
 
 /*@brief 初始化平台
  */

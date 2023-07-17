@@ -35,8 +35,8 @@ void app_thread_group_schedule(void)
      */
     /* 就绪系统子模组 */
     app_sys_log_t log = {
-        .message1   = (void *)app_arch_log_msg1,
-        .message2   = (void *)app_arch_log_msg2,
+        .message1   = (void *)app_dev_log_msg1,
+        .message2   = (void *)app_dev_log_msg2,
         .persistent = (void *)app_sys_log_text_persistent,
     };
     app_sys_log_ready(log);

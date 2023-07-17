@@ -31,7 +31,7 @@ static void app_module_battery_voltage_algorithm(app_module_battery_t *battery)
 uint8_t app_module_battery_charge_status(void)
 {
     app_mutex_process(&app_module_battery_mutex, app_mutex_take);
-    uint8_t charge_status = app_arch_battery_charge_status(&app_arch_battery);
+    uint8_t charge_status = app_dev_battery_charge_status(&app_dev_battery);
     app_mutex_process(&app_module_battery_mutex, app_mutex_give);
     return charge_status;
 }
@@ -42,7 +42,7 @@ uint8_t app_module_battery_charge_status(void)
 uint8_t app_module_battery_charge_full(void)
 {
     app_mutex_process(&app_module_battery_mutex, app_mutex_take);
-    uint8_t charge_full = app_arch_battery_charge_full(&app_arch_battery);
+    uint8_t charge_full = app_dev_battery_charge_full(&app_dev_battery);
     app_mutex_process(&app_module_battery_mutex, app_mutex_give);
     return charge_full;
 }
@@ -156,14 +156,14 @@ void app_module_battery_voltage_xms_update(void)
     app_mutex_process(&app_module_battery_mutex, app_mutex_take);
     app_module_battery_t *battery = &app_module_battery;
     /* 获得采样值 */
-    uint32_t voltage_sample = app_arch_battery_voltage_measure(&app_arch_battery);
+    uint32_t voltage_sample = app_dev_battery_voltage_measure(&app_dev_battery);
     battery->voltage_sample = voltage_sample;
     /* 读取充放电曲线表 */
     APP_ARCH_BATTERY_CURVE_DATA *table = NULL; uint32_t table_item = 0;
     if (battery->charge_status == 1)
-        app_arch_battery_curve_charge_table(&app_arch_battery, &table, &table_item);
+        app_dev_battery_curve_charge_table(&app_dev_battery, &table, &table_item);
     if (battery->charge_status == 0)
-        app_arch_battery_curve_discharge_table(&app_arch_battery, &table, &table_item);
+        app_dev_battery_curve_discharge_table(&app_dev_battery, &table, &table_item);
     APP_SYS_ASSERT(table[0].voltage > 0);
     /* 充放电曲线表找到区间计算百分比 */
     for (uint32_t idx = 1; table[idx].voltage > 0; idx++)
@@ -236,8 +236,8 @@ static void app_module_battery_charge_irq_cb(void)
 void app_module_battery_ready(void)
 {
     app_mutex_process(&app_module_battery_mutex, app_mutex_static);
-    app_arch_battery_ready(&app_arch_battery);
-    app_arch_battery_charge_irq_cb_reg(&app_arch_battery, app_module_battery_charge_irq_cb);
+    app_dev_battery_ready(&app_dev_battery);
+    app_dev_battery_charge_irq_cb_reg(&app_dev_battery, app_module_battery_charge_irq_cb);
     app_module_battery_charge_xms_timer.expired  = app_module_battery_charge_xms_timer_handler;
     app_module_battery_charge_xms_timer.peroid   = APP_MODULE_BATTERY_CHARGE_PEROID;
     app_module_battery_charge_xms_timer.reload   = true;

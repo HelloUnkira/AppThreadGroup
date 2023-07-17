@@ -34,7 +34,7 @@ static void app_module_watchdog_feed_work(void *argument)
 void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 {
     if (app_module_watchdog.count_fw++ % APP_MODULE_WATCHDOG_XS == 0)
-        app_arch_watchdog_feed(&app_arch_watchdog);
+        app_dev_watchdog_feed(&app_dev_watchdog);
     /* 批量向其他子线程递进软件看门狗的喂狗任务 */
     for (uint8_t idx = 0; idx < app_thread_id_number; idx++) {
         /* 每隔1s发送一次软件看门狗喂狗事件 */
@@ -60,5 +60,5 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 void app_module_watchdog_ready(void)
 {
     app_mutex_process(&app_module_watchdog_mutex, app_mutex_static);
-    app_arch_watchdog_ready(&app_arch_watchdog);
+    app_dev_watchdog_ready(&app_dev_watchdog);
 }

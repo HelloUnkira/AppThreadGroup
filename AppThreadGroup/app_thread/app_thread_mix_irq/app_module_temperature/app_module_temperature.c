@@ -157,7 +157,7 @@ void app_module_temperature_xms_update(void)
     if (temperature->measure_status) {
         APP_SYS_LOG_INFO("temprature measure ...");
         /* 获得此刻温度测量数据 */
-        float val = app_arch_temperature_get_value(&app_arch_temperature);
+        float val = app_dev_temperature_get_value(&app_dev_temperature);
         APP_SYS_LOG_INFO("temprature val:%f", val);
         /* 如果使用温度算法,此处数据交付算法,否则走下面的简化流程 */ {
             /* 暂存温度数据 */

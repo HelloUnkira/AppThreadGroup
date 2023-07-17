@@ -3,14 +3,14 @@
 
 /* 设备battery抽象操作接口 */
 typedef struct {
-    void     (*ready)(app_arch_dev_t *driver);
-    uint8_t  (*charge_full)(app_arch_dev_t *driver);
-    uint8_t  (*charge_status)(app_arch_dev_t *driver);
-    void     (*charge_irq_cb_reg)(app_arch_dev_t *driver, void(*cb)(void));
-    uint32_t (*voltage_measure)(app_arch_dev_t *driver);
-    void     (*curve_charge_table)(app_arch_dev_t *driver, void **table, uint32_t *item);
-    void     (*curve_discharge_table)(app_arch_dev_t *driver, void **table, uint32_t *item);
-} app_arch_battery_api_t;
+    void     (*ready)(app_dev_t *driver);
+    uint8_t  (*charge_full)(app_dev_t *driver);
+    uint8_t  (*charge_status)(app_dev_t *driver);
+    void     (*charge_irq_cb_reg)(app_dev_t *driver, void(*cb)(void));
+    uint32_t (*voltage_measure)(app_dev_t *driver);
+    void     (*curve_charge_table)(app_dev_t *driver, void **table, uint32_t *item);
+    void     (*curve_discharge_table)(app_dev_t *driver, void **table, uint32_t *item);
+} app_dev_battery_api_t;
 
 /* 设备battery抽象操作数据 */
 typedef struct {
@@ -25,16 +25,16 @@ typedef struct {
     const uint32_t curve_discharge_item;
     /* 充电事件通报回调 */
     void (*charge_irq_cb)(void);
-} app_arch_battery_data_t;
+} app_dev_battery_data_t;
 
 /*@brief     battery设备初始化
  *@param[in] driver 设备实例
  *@retval    当前温度值
  */
-static inline void app_arch_battery_ready(app_arch_dev_t *driver)
+static inline void app_dev_battery_ready(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         api->ready(driver);
     }
 }
@@ -43,10 +43,10 @@ static inline void app_arch_battery_ready(app_arch_dev_t *driver)
  *@param[in] driver 设备实例
  *@retval    0:未充满; 1:已充满; -1:不支持;
  */
-static inline uint8_t app_arch_battery_charge_full(app_arch_dev_t *driver)
+static inline uint8_t app_dev_battery_charge_full(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         return api->charge_full(driver);
     }
     return -1;
@@ -56,10 +56,10 @@ static inline uint8_t app_arch_battery_charge_full(app_arch_dev_t *driver)
  *@param[in] driver 设备实例
  *@retval    0:未充电; 1:充电中;
  */
-static inline uint8_t app_arch_battery_charge_status(app_arch_dev_t *driver)
+static inline uint8_t app_dev_battery_charge_status(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         return api->charge_status(driver);
     }
     return 0;
@@ -69,10 +69,10 @@ static inline uint8_t app_arch_battery_charge_status(app_arch_dev_t *driver)
  *@param[in] driver 设备实例
  *@param[in] cb     充电事件通报回调
  */
-static inline void app_arch_battery_charge_irq_cb_reg(app_arch_dev_t *driver, void(*cb)(void))
+static inline void app_dev_battery_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         api->charge_irq_cb_reg(driver, cb);
     }
 }
@@ -81,10 +81,10 @@ static inline void app_arch_battery_charge_irq_cb_reg(app_arch_dev_t *driver, vo
  *@param[in] driver 设备实例
  *@retval    电池电压
  */
-static inline uint32_t app_arch_battery_voltage_measure(app_arch_dev_t *driver)
+static inline uint32_t app_dev_battery_voltage_measure(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         return api->voltage_measure(driver);
     }
     return 0;
@@ -95,10 +95,10 @@ static inline uint32_t app_arch_battery_voltage_measure(app_arch_dev_t *driver)
  *@param[in] table  曲线表(APP_ARCH_BATTERY_CURVE_DATA类型)
  *@param[in] item   元素个数
  */
-static inline void app_arch_battery_curve_charge_table(app_arch_dev_t *driver, void **table, uint32_t *item)
+static inline void app_dev_battery_curve_charge_table(app_dev_t *driver, void **table, uint32_t *item)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         api->curve_charge_table(driver, table, item);
     }
 }
@@ -108,10 +108,10 @@ static inline void app_arch_battery_curve_charge_table(app_arch_dev_t *driver, v
  *@param[in] table  曲线表(APP_ARCH_BATTERY_CURVE_DATA类型)
  *@param[in] item   元素个数
  */
-static inline void app_arch_battery_curve_discharge_table(app_arch_dev_t *driver, void **table, uint32_t *item)
+static inline void app_dev_battery_curve_discharge_table(app_dev_t *driver, void **table, uint32_t *item)
 {
     if (driver != NULL && driver->api != NULL) {
-        const app_arch_battery_api_t *api = driver->api;
+        const app_dev_battery_api_t *api = driver->api;
         api->curve_discharge_table(driver, table, item);
     }
 }

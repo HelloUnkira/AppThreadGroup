@@ -18,5 +18,6 @@
 /* OS lib hook */
 #include "app_ext_arch.h"
 #include "app_ext_os.h"
+#include "app_ext_dev.h"
 
 #endif

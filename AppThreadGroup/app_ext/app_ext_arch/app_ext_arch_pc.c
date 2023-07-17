@@ -18,7 +18,7 @@ void app_arch_ready(void)
     /* cpu freq and clock freq */
     
     /* peripheral: log(custom device) */
-    app_arch_log_ready(&app_arch_log);
+    app_dev_log_ready(&app_dev_log);
     
 }
 
