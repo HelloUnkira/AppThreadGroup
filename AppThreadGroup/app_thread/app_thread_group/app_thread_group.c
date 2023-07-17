@@ -31,6 +31,10 @@ void app_thread_group_schedule(void)
      */
     app_os_ready();
     /*
+     *!!!就绪app ext(dev)层
+     */
+    app_dev_ready();
+    /*
      *!!!就绪app sys层
      */
     /* 就绪系统子模组 */
@@ -71,11 +75,10 @@ void app_thread_group_schedule(void)
     app_critical_process(&critical, app_critical_exit);
     app_critical_process(&critical, app_critical_destroy);
     /*
-     * OS调度
+     * 调度
      */
     APP_SYS_LOG_INFO("app thread group schedule");
     app_os_schedule();
-    app_arch_execute();
 }
 
 /*@brief 获得线程组初始化状态

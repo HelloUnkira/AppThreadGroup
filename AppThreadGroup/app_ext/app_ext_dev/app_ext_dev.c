@@ -8,15 +8,11 @@
 
 #if APP_ARCH_IS_PC
 
-/*@brief 初始化平台
+/*@brief 初始化设备
  */
-void app_arch_ready(void)
+void app_dev_ready(void)
 {
-    /* rand seed */
-    srand(time(0));
-    rand();
-    /* cpu freq and clock freq */
-    
+    app_dev_log_ready(&app_dev_log);
 }
 
 #endif

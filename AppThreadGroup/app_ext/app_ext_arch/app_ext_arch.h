@@ -12,8 +12,4 @@
  */
 void app_arch_ready(void);
 
-/*@brief 运行平台
- */
-void app_arch_execute(void);
-
 #endif

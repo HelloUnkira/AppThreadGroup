@@ -28,4 +28,8 @@ extern const app_dev_t app_dev_temperature;
 #include "app_ext_dev_backlight.h"      /* backlight */
 #include "app_ext_dev_temperature.h"    /* temperature */
 
+/*@brief 初始化设备
+ */
+void app_dev_ready(void);
+
 #endif

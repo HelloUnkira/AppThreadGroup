@@ -55,11 +55,5 @@ void app_module_rtc_ready(void)
     app_mutex_process(&app_module_rtc_mutex, app_mutex_static);
     app_dev_rtc_ready(&app_dev_rtc);
     app_dev_rtc_irq_cb_reg(&app_dev_rtc, app_module_rtc_cb);
-}
-
-/*@brief 运行RTC模组
- */
-void app_module_rtc_execute(void)
-{
     app_dev_rtc_execute(&app_dev_rtc);
 }
