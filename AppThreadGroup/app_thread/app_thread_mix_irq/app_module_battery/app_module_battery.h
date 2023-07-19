@@ -26,6 +26,12 @@ typedef struct {
     /* ...... */
 } app_module_battery_t;
 
+/*@brief     电池电量百分比转等级
+ *@param[in] percent 电量百分比
+ *@param[in] level   电量等级
+ */
+uint8_t app_module_battery_level(uint8_t percent, uint8_t level);
+
 /*@brief  电池模组充电状态检查
  *@retval 0:未充电; 1:充电中;
  */

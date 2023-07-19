@@ -25,6 +25,18 @@ static void app_module_battery_voltage_algorithm(app_module_battery_t *battery)
     //生成battery->voltage_filter以及battery->percent_filter
 }
 
+/*@brief     电池电量百分比转等级
+ *@param[in] percent 电量百分比
+ *@param[in] level   电量等级
+ */
+uint8_t app_module_battery_level(uint8_t percent, uint8_t level)
+{
+    for (int32_t idx = level - 1; idx > 0; idx--)
+        if (percent >= (100 * idx + level / 2) / level)
+            return idx;
+            return 0;
+}
+
 /*@brief  电池模组充电状态检查
  *@retval 0:未充电; 1:充电中;
  */
