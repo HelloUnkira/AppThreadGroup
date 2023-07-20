@@ -250,29 +250,3 @@ void app_module_system_ready(void)
     APP_SYS_LOG_WARN("system mode:%u", app_module_system_mode);
     app_module_data_center_dump();
 }
-
-/*@brief     系统1毫秒更新事件
- *           硬件时钟中断中执行
- *@param[in] count 毫秒计数器,每毫秒+1
- */
-void app_module_system_1msec_update(uint32_t count)
-{
-    if (count % 1000 == 0)
-        APP_SYS_LOG_INFO('1s handler');
-    /* 线程组不在工作中,Tick是没有意义的 */
-    if (app_thread_group_status_get()) {
-        /* timer msec update */
-        app_module_timer_1ms_update();
-        /* clock source */
-        if (count % 1000 == 0) {
-            app_module_rtc_t rtc = {0};
-            app_module_rtc_get(&rtc);
-            app_module_clock_1s_update(rtc.utc);
-        }
-        /* 一些补充的扩展配置,与OS相关 */
-        if (count == 3000) {
-            void app_thread_os_extend(void);
-            app_thread_os_extend();
-        }
-    }
-}

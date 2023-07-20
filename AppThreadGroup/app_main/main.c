@@ -6,12 +6,12 @@
 #include "app_sys_log_text.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
+#include "app_module_rtc.h"
 #include "app_module_protocol.h"
 #include "app_module_stopwatch.h"
 #include "app_module_countdown.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
-#include "app_module_system.h"
 
 /*@brief 提醒闹钟模组测试
  */
@@ -87,8 +87,7 @@ int main(int argc, char *argv[])
         /* 居然是最简单的做法...... */
         #if APP_ARCH_IS_PC
         /* fake hard clock 1ms irq */
-        static uint32_t count = 0;
-        app_module_system_1msec_update(count++);
+        app_module_rtc_1ms_cb();
         app_delay_us(1000);
         #else
         #endif

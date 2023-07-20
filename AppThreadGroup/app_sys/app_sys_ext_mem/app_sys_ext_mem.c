@@ -21,44 +21,14 @@ static app_mutex_t app_sys_ext_mem_mutex = {0};
  */
 size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
-    size_t retval = 0;
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
-    /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     APP_SYS_LOG_INFO("read start");
-    /* chunk_base == 0x02000000, 保留内存 */
-    if (ext_mem->chunk_base == 0x02000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_read((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* chunk_base == 0x08000000, 闪存 */
-    if (ext_mem->chunk_base == 0x08000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_read((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* chunk_base == 0x10000000, SD卡 */
-    if (ext_mem->chunk_base == 0x10000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_read((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_read((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* 继续添加其他类型外存介质的映射空间 */
+    app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
+    memcpy(&ext_mem_data->ext_mem, ext_mem, sizeof(ext_mem_data->ext_mem));
+    ext_mem_data->rw_args.offset = offset;
+    ext_mem_data->rw_args.buffer = buffer;
+    ext_mem_data->rw_args.size   = size;
+    size_t retval = app_dev_ext_mem_read(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("read end");
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval;
@@ -73,44 +43,14 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
  */
 size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
 {
-    size_t retval = 0;
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
-    /* 根据chunk_base的不同使用不同的底层读写接口,取决于平台分布情况,这里忽略 */
     APP_SYS_LOG_INFO("write start");
-    /* chunk_base == 0x02000000, 保留内存 */
-    if (ext_mem->chunk_base == 0x02000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_write((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* ext_mem->chunk_base == 0x08000000, 闪存 */
-    if (ext_mem->chunk_base == 0x08000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_write((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* chunk_base == 0x10000000, SD卡 */
-    if (ext_mem->chunk_base == 0x10000000) {
-        #if 0
-        #elif APP_OS_EXT_MEM
-        retval = app_os_ext_mem_write((const app_os_ext_mem_t *)ext_mem, offset, buffer, size);
-        #elif APP_ARCH_EXT_MEM
-        retval = app_arch_ext_mem_write((const app_arch_ext_mem_t *)ext_mem, offset, buffer, size);
-        #else
-        #error "unknown ext mem adaptor"
-        #endif
-    }
-    /* 继续添加其他类型外存介质的映射空间 */
+    app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
+    memcpy(&ext_mem_data->ext_mem, ext_mem, sizeof(ext_mem_data->ext_mem));
+    ext_mem_data->rw_args.offset = offset;
+    ext_mem_data->rw_args.buffer = buffer;
+    ext_mem_data->rw_args.size   = size;
+    size_t retval = app_dev_ext_mem_write(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("write end");
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval;
@@ -137,20 +77,6 @@ void app_sys_ext_mem_reflush(const app_sys_ext_mem_t *ext_mem, uint8_t value)
 void app_sys_ext_mem_ready(void)
 {
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_static);
-    
-    #if APP_OS_EXT_MEM
-    int32_t retval_1 = app_os_ext_mem_ready();
-    if (retval_1 != 0) {
-        APP_SYS_LOG_ERROR("retval_1:%d", retval_1);
-        APP_SYS_ASSERT(retval_1 == 0);
-    }
-    #endif
-    
-    #if APP_ARCH_EXT_MEM
-    int32_t retval_2 = app_arch_ext_mem_ready();
-    if (retval_2 != 0) {
-        APP_SYS_LOG_ERROR("retval_2:%d", retval_2);
-        APP_SYS_ASSERT(retval_2 == 0);
-    }
-    #endif
+    int32_t retval = app_dev_ext_mem_ready(&app_dev_ext_mem);
+    APP_SYS_ASSERT(retval == 0);
 }

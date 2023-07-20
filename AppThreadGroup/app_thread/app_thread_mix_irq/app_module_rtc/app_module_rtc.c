@@ -17,15 +17,28 @@ static app_module_rtc_t app_module_rtc = {0};
 
 /*@brief RTC模组1ms事件中断回调
  */
-static void app_module_rtc_cb(void)
+void app_module_rtc_1ms_cb(void)
 {
-    #if APP_ARCH_IS_PC
-    #else
     static uint32_t count = 0;
     app_mutex_process(&app_module_rtc_mutex, app_mutex_take);
-    app_module_system_1msec_update(count++);
+    if (count++ % 1000 == 0)
+        APP_SYS_LOG_INFO('1s handler');
+    /* 线程组不在工作中,Tick是没有意义的 */
+    if (app_thread_group_status_get()) {
+        /* timer msec update */
+        app_module_timer_1ms_update();
+        /* clock source */
+        if (count % 1000 == 0) {
+            app_dev_rtc_get_utc(&app_dev_rtc, &app_module_rtc.utc);
+            app_module_clock_1s_update(app_module_rtc.utc);
+        }
+        /* 一些补充的扩展配置,与OS相关 */
+        if (count == 3000) {
+            void app_thread_os_extend(void);
+            app_thread_os_extend();
+        }
+    }
     app_mutex_process(&app_module_rtc_mutex, app_mutex_give);
-    #endif
 }
 
 /*@brief 设置RTC模组
@@ -54,6 +67,6 @@ void app_module_rtc_ready(void)
 {
     app_mutex_process(&app_module_rtc_mutex, app_mutex_static);
     app_dev_rtc_ready(&app_dev_rtc);
-    app_dev_rtc_irq_cb_reg(&app_dev_rtc, app_module_rtc_cb);
+    app_dev_rtc_irq_cb_reg(&app_dev_rtc, app_module_rtc_1ms_cb);
     app_dev_rtc_execute(&app_dev_rtc);
 }

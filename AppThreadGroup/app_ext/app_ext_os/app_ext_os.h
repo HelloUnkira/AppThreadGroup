@@ -13,8 +13,6 @@
 #define APP_OS_IS_ZEPHYR    0
 #define APP_OS_IS_FREERTOS  0
 
-/* OS ext mem adaptor */
-#include "app_ext_os_ext_mem.h"
 /* OS custom adaptor */
 #include "app_ext_os_windows.h"
 #include "app_ext_os_linux.h"

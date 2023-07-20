@@ -58,10 +58,4 @@ uint8_t app_module_system_mode_get(void);
  */
 void app_module_system_ready(void);
 
-/*@brief     系统1毫秒更新事件
- *           硬件时钟中断中执行
- *@param[in] count 毫秒计数器,每毫秒+1
- */
-void app_module_system_1msec_update(uint32_t count);
-
 #endif
