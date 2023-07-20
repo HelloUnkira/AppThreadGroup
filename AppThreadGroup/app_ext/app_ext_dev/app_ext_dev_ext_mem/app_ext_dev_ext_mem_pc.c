@@ -37,26 +37,30 @@ static size_t app_dev_ext_mem_hal_read(app_dev_t *driver)
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0)
         return -1;
     
+    /* 检查溢出 */
+    if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size)
+        return -2;
+    
     size_t retval = -1;
     /* chunk_base == 0x02000000, 保留内存 */
     if (data->ext_mem.chunk_base == 0x02000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_static", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fread(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
     }
     /* chunk_base == 0x08000000, 闪存 */
     if (data->ext_mem.chunk_base == 0x08000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_flash", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fread(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
         
     }
     /* chunk_base == 0x10000000, SD卡 */
     if (data->ext_mem.chunk_base == 0x10000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_sd_card", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fread(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
     }
@@ -77,25 +81,29 @@ static size_t app_dev_ext_mem_hal_write(app_dev_t *driver)
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0)
         return -1;
     
+    /* 检查溢出 */
+    if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size)
+        return -2;
+    
     size_t retval = -1;
     /* chunk_base == 0x02000000, 保留内存 */
     if (data->ext_mem.chunk_base == 0x02000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_static", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fwrite(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
     }
     /* chunk_base == 0x08000000, 闪存 */
     if (data->ext_mem.chunk_base == 0x08000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_flash", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fwrite(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
     }
     /* chunk_base == 0x10000000, SD卡 */
     if (data->ext_mem.chunk_base == 0x10000000) {
-        FILE *file = fopen(data->ext_mem.chunk_name, "rb+");
-        fseek(file, data->rw_args.offset, SEEK_SET);
+        FILE *file = fopen("ext_mem_sd_card", "rb+");
+        fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fwrite(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
     }
@@ -132,9 +140,9 @@ static const app_dev_ext_mem_api_t app_dev_ext_mem_api = {
 /* 动态的设备操作数据 */
 static app_dev_ext_mem_data_t app_dev_ext_mem_data = {
     .ext_mem = {
-        .chunk_name = NULL,
-        .chunk_base = 0x00000000,
-        .chunk_size = 0,
+        .chunk_base   = 0x00000000,
+        .chunk_size   = 0,
+        .chunk_offset = 0,
     },
     .rw_args = {
         .offset = 0x00000000,

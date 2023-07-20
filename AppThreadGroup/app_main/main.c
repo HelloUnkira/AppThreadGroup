@@ -71,11 +71,30 @@ int main(int argc, char *argv[])
     while (true) {
         #if 0
         #elif 0
-        /* chunk刷新,将其都刷为0xFF */
-        fclose(fopen("mix_chunk_small", "wb"));
-        fclose(fopen("mix_chunk_large", "wb"));
-        app_sys_ext_mem_reflush(app_sys_ext_mem_find_by_name("mix_chunk_small"), 0xFF);
-        app_sys_ext_mem_reflush(app_sys_ext_mem_find_by_name("mix_chunk_large"), 0xFF);
+        /* 生成物理外存映射,将其都刷为0xFF */
+        #if APP_ARCH_IS_PC
+        uint8_t buffer[1024] = {0};
+        for (uint32_t idx = 0; idx < 1024; buffer[idx] = 0xff, idx++);
+        fclose(fopen("ext_mem_static",  "wb")); // 64K
+        fclose(fopen("ext_mem_flash",   "wb")); // 8M
+        fclose(fopen("ext_mem_sd_card", "wb")); // 16M
+        FILE *file1 = fopen("ext_mem_static",  "rb+");
+        FILE *file2 = fopen("ext_mem_flash",   "rb+");
+        FILE *file3 = fopen("ext_mem_sd_card", "rb+");
+        fseek(file1, 0, SEEK_SET);
+        fseek(file2, 0, SEEK_SET);
+        fseek(file3, 0, SEEK_SET);
+        for (uint32_t idx = 0; idx < 64; idx++)
+            fwrite(buffer, 1024, 1, file1);
+        for (uint32_t idx = 0; idx < 1024 * 8; idx++)
+            fwrite(buffer, 1024, 1, file2);
+        for (uint32_t idx = 0; idx < 1024 * 16; idx++)
+            fwrite(buffer, 1024, 1, file3);
+        fclose(file1);
+        fclose(file2);
+        fclose(file3);
+        #endif
+        break;
         #elif 1
         #if 0
         /* 测试日志追踪 */

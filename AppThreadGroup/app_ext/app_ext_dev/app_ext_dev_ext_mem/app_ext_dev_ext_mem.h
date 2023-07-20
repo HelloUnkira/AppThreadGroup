@@ -12,9 +12,9 @@ typedef struct {
 /* 设备ext_mem抽象操作数据 */
 typedef struct {
     struct {
-        const char * chunk_name;    /* 使用name读写chunk */
-        uintptr_t    chunk_base;    /* 使用base读写chunk */
-        size_t       chunk_size;    /* chunk大小 */
+        uintptr_t chunk_base;       /* 使用base读写chunk */
+        size_t    chunk_size;       /* chunk大小 */
+        uintptr_t chunk_offset;     /* 相对chunk_base的基址偏移量 */
     } ext_mem;
     struct {
         uintptr_t offset;

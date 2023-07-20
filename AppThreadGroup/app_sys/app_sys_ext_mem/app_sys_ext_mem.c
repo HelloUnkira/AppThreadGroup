@@ -3,6 +3,7 @@
  *    将各种数据以chunk的形式组织起来
  */
 
+#define APP_SYS_LOG_RECORD_LIMIT     1
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
@@ -24,12 +25,15 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("read start");
     app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
-    memcpy(&ext_mem_data->ext_mem, ext_mem, sizeof(ext_mem_data->ext_mem));
+    ext_mem_data->ext_mem.chunk_base   = ext_mem->chunk_base;
+    ext_mem_data->ext_mem.chunk_size   = ext_mem->chunk_size;
+    ext_mem_data->ext_mem.chunk_offset = ext_mem->chunk_offset;
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
     size_t retval = app_dev_ext_mem_read(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("read end");
+    APP_SYS_LOG_INFO("retval:%d", retval);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval;
 }
@@ -46,12 +50,15 @@ size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("write start");
     app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
-    memcpy(&ext_mem_data->ext_mem, ext_mem, sizeof(ext_mem_data->ext_mem));
+    ext_mem_data->ext_mem.chunk_base   = ext_mem->chunk_base;
+    ext_mem_data->ext_mem.chunk_size   = ext_mem->chunk_size;
+    ext_mem_data->ext_mem.chunk_offset = ext_mem->chunk_offset;
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
     size_t retval = app_dev_ext_mem_write(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("write end");
+    APP_SYS_LOG_INFO("retval:%d", retval);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval;
 }
