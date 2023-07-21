@@ -10,6 +10,8 @@
 #include "app_sys_work.h"
 #include "app_thread_group.h"
 #include "app_module_rtc.h"
+#include "app_module_timer.h"
+#include "app_module_clock.h"
 #include "app_module_system.h"
 
 static app_mutex_t app_module_rtc_mutex = {0};

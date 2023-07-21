@@ -18,9 +18,9 @@ static app_mutex_t app_sys_ext_mem_mutex = {0};
  *@param[in] offset  数据偏移
  *@param[in] buffer  数据缓存
  *@param[in] size    数据缓存大小
- *@retval            读取数据实际大小(失败返回负数)
+ *@retval            成功或者失败
  */
-size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("read start");
@@ -31,11 +31,11 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
-    size_t retval = app_dev_ext_mem_read(&app_dev_ext_mem);
+    int32_t retval = app_dev_ext_mem_read(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("read end");
-    APP_SYS_LOG_INFO("retval:%d", retval);
+    APP_SYS_ASSERT(retval == 0);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
-    return retval;
+    return retval == 0;
 }
 
 /*@brief             写入数据到指定的文件中
@@ -43,9 +43,9 @@ size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, 
  *@param[in] offset  数据偏移
  *@param[in] buffer  数据缓存
  *@param[in] size    数据缓存大小
- *@retval            写入数据实际大小(失败返回负数)
+ *@retval            成功或者失败
  */
-size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size)
+bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("write start");
@@ -56,11 +56,11 @@ size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset,
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
-    size_t retval = app_dev_ext_mem_write(&app_dev_ext_mem);
+    int32_t retval = app_dev_ext_mem_write(&app_dev_ext_mem);
     APP_SYS_LOG_INFO("write end");
-    APP_SYS_LOG_INFO("retval:%d", retval);
+    APP_SYS_ASSERT(retval == 0);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
-    return retval;
+    return retval == 0;
 }
 
 /*@brief     使用数据元刷新文件

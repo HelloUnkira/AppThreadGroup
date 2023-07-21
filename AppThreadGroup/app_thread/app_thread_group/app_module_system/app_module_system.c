@@ -10,9 +10,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
-#include "app_module_timer.h"
 #include "app_module_clock.h"
-#include "app_module_rtc.h"
 #include "app_module_system.h"
 #include "app_module_data_center.h"
 #include "app_module_dump.h"
@@ -241,7 +239,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
 void app_module_system_ready(void)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_static);
-    
     /* 更新系统工作模式 */
     app_module_data_center_t *data_center = NULL;
     app_module_data_center_load(app_module_data_center_system_profile);

@@ -4,8 +4,8 @@
 /* 设备ext_mem抽象操作接口 */
 typedef struct {
     int32_t (*ready)(app_dev_t *driver);
-    size_t  (*read)(app_dev_t *driver);
-    size_t  (*write)(app_dev_t *driver);
+    int32_t (*read)(app_dev_t *driver);
+    int32_t (*write)(app_dev_t *driver);
     void *  (*data_addr)(app_dev_t *driver);
 } app_dev_ext_mem_api_t;
 
@@ -13,13 +13,13 @@ typedef struct {
 typedef struct {
     struct {
         uintptr_t chunk_base;       /* 使用base读写chunk */
-        size_t    chunk_size;       /* chunk大小 */
+        uintptr_t chunk_size;       /* chunk大小 */
         uintptr_t chunk_offset;     /* 相对chunk_base的基址偏移量 */
     } ext_mem;
     struct {
         uintptr_t offset;
         uint8_t  *buffer;
-        size_t    size;
+        uintptr_t size;
     } rw_args;
 } app_dev_ext_mem_data_t;
 
@@ -37,10 +37,10 @@ static inline int32_t app_dev_ext_mem_ready(app_dev_t *driver)
 }
 
 /*@brief     ext_mem设备读取
- *@param[in] driver  设备实例
- *@retval    读取数据实际大小(失败返回负数)
+ *@param[in] driver 设备实例
+ *@retval    失败返回负数
  */
-static inline size_t app_dev_ext_mem_read(app_dev_t *driver)
+static inline int32_t app_dev_ext_mem_read(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
         const app_dev_ext_mem_api_t *api = driver->api;
@@ -50,10 +50,10 @@ static inline size_t app_dev_ext_mem_read(app_dev_t *driver)
 }
 
 /*@brief     ext_mem设备写入
- *@param[in] driver  设备实例
- *@retval    写入数据实际大小(失败返回负数)
+ *@param[in] driver 设备实例
+ *@retval    失败返回负数
  */
-static inline size_t app_dev_ext_mem_write(app_dev_t *driver)
+static inline int32_t app_dev_ext_mem_write(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
         const app_dev_ext_mem_api_t *api = driver->api;

@@ -26,10 +26,10 @@ static int32_t app_dev_ext_mem_hal_ready(app_dev_t *driver)
 }
 
 /*@brief     ext_mem设备读取
- *@param[in] driver  设备实例
- *@retval    读取数据实际大小(失败返回负数)
+ *@param[in] driver 设备实例
+ *@retval    失败返回负数
  */
-static size_t app_dev_ext_mem_hal_read(app_dev_t *driver)
+static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
 {
     const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
@@ -66,14 +66,14 @@ static size_t app_dev_ext_mem_hal_read(app_dev_t *driver)
     }
     
     memset(data, 0, sizeof(app_dev_ext_mem_data_t));
-    return retval;
+    return retval == 1 ? 0 : -3;
 }
 
 /*@brief     ext_mem设备写入
- *@param[in] driver  设备实例
- *@retval    写入数据实际大小(失败返回负数)
+ *@param[in] driver 设备实例
+ *@retval    失败返回负数
  */
-static size_t app_dev_ext_mem_hal_write(app_dev_t *driver)
+static int32_t app_dev_ext_mem_hal_write(app_dev_t *driver)
 {
     const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
@@ -109,7 +109,7 @@ static size_t app_dev_ext_mem_hal_write(app_dev_t *driver)
     }
     
     memset(data, 0, sizeof(app_dev_ext_mem_data_t));
-    return retval;
+    return retval == 1 ? 0 : -3;
 }
 
 /*@brief     ext_mem设备数据流地址映射

@@ -2,10 +2,10 @@
 #define APP_SYS_EXT_MEM_H
 
 typedef struct {
-    char     *chunk_name;   /* 读写chunk使用 */
-    uintptr_t chunk_base;   /* 当前chunk落在指定物理实体基地址映射(保留内存,闪存,卡,其他介质...) */
-    size_t    chunk_size;   /* 当前chunk大小 */
-    uintptr_t chunk_offset; /* 相对chunk_base的基址偏移量 */
+    const char *chunk_name;     /* 读写chunk使用 */
+    uintptr_t   chunk_base;     /* 当前chunk落在指定物理实体基地址映射(保留内存,闪存,卡,其他介质...) */
+    uintptr_t   chunk_size;     /* 当前chunk大小 */
+    uintptr_t   chunk_offset;   /* 相对chunk_base的基址偏移量 */
 } app_sys_ext_mem_t;
 
 /*@brief             读取数据从指定的文件中
@@ -13,18 +13,18 @@ typedef struct {
  *@param[in] offset  数据偏移
  *@param[in] buffer  数据缓存
  *@param[in] size    数据缓存大小
- *@retval            读取数据实际大小(失败返回负数)
+ *@retval            成功或者失败
  */
-size_t app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size);
+bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size);
 
 /*@brief             写入数据到指定的文件中
  *@param[in] ext_mem chunk静态实例
  *@param[in] offset  数据偏移
  *@param[in] buffer  数据缓存
  *@param[in] size    数据缓存大小
- *@retval            写入数据实际大小(失败返回负数)
+ *@retval            成功或者失败
  */
-size_t app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, size_t size);
+bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size);
 
 /*@brief     使用数据元刷新文件
  *@param[in] ext_mem chunk静态实例
