@@ -18,86 +18,63 @@
 
 #include "app_lv_event.h"
 
-static    bool app_module_system_dlps_exec = false;
-static    bool app_module_system_dlps_status = false;
-static uint8_t app_module_system_delay = 0;
-static uint8_t app_module_system_status = 0;
-static uint8_t app_module_system_mode = 0;
-static uint8_t app_module_system_mode_bak = 0;
+static app_module_system_t app_module_system = {0};
 static app_mutex_t app_module_system_mutex = {0};
 
 /*@brief     系统进出DLPS
- *@param[in] status true:进入dlps;false:退出dlps
+ *@param[in] dlps true:进入dlps;false:退出dlps
  */
-void app_module_system_dlps_set(bool status)
+void app_module_system_dlps_set(bool dlps)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    app_module_system_dlps_exec = true;
-    app_module_system_dlps_status = status;
+    if (app_module_system.dlps_status != dlps) {
+        app_module_system.dlps_exec = true;
+        
+        app_lv_scene_dlps(dlps);
+    }
+    app_module_system.dlps_status = dlps;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    app_lv_scene_dlps(status);
 }
 
 /*@brief  系统进出DLPS
- *@retval status true:进入dlps;false:退出dlps
+ *@retval true:进入dlps;false:退出dlps
  */
 bool app_module_system_dlps_get(void)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    bool status = app_module_system_dlps_status;
+    bool dlps = app_module_system.dlps_status;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    return status;
+    return dlps;
 }
 
-/*@brief     设置系统状态
- *@param[in] status 系统状态枚举量
+/*@brief     设置系统运行状态
+ *@param[in] valid 系统运行
  */
-void app_module_system_status_set(uint8_t status)
+void app_module_system_valid_set(bool valid)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    app_module_system_status = status;
-    app_mutex_process(&app_module_system_mutex, app_mutex_give);
-}
-
-/*@brief  获取系统状态
- *@retval 系统状态枚举量
- */
-uint8_t app_module_system_status_get(void)
-{
-    app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    uint8_t status = app_module_system_status;
-    app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    return status;
-}
-
-/*@brief     设置系统延时
- *@param[in] delay 系统延时秒数
- */
-void app_module_system_delay_set(uint8_t delay)
-{
-    app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    app_module_system_delay = delay;
+    app_module_system.valid = valid;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
-/*@brief  获取系统延时
- *@retval 系统延时秒数
+/*@brief  获取系统运行状态
+ *@retval 系统运行
  */
-uint8_t app_module_system_delay_get(void)
+bool app_module_system_valid_get(void)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    uint8_t delay = app_module_system_delay;
+    uint8_t valid = app_module_system.valid;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    return delay;
+    return valid;
 }
 
 /*@brief     设置系统工作模式
- *@param[in] status 系统工作模式枚举量
+ *@param[in] mode 系统工作模式枚举量
  */
 void app_module_system_mode_set(uint8_t mode)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    app_module_system_mode_bak = mode;
+    app_module_system.mode_bak = mode;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
     
     /* 更新系统工作模式 */
@@ -114,7 +91,7 @@ void app_module_system_mode_set(uint8_t mode)
 uint8_t app_module_system_mode_get(void)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    uint8_t mode = app_module_system_mode_bak;
+    uint8_t mode = app_module_system.mode_bak;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
     return mode;
 }
@@ -124,114 +101,42 @@ uint8_t app_module_system_mode_get(void)
  */
 void app_module_system_ctrl_check(app_module_clock_t clock[1])
 {
-    static struct {
-        uint8_t not_load_yet:1;
-        uint8_t not_dump_yet:1;
-        uint8_t not_start_yet:1;
-        uint8_t not_stop_yet:1;
-        uint8_t not_shutdown_yet:1;
-        uint8_t not_srand_yet:1;
-    } ctrl_status = {
-        .not_load_yet       = true,
-        .not_dump_yet       = true,
-        .not_start_yet      = true,
-        .not_stop_yet       = true,
-        .not_shutdown_yet   = true,
-        .not_srand_yet      = true,
-    };
+    bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_system_t *system);
+    bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_module_system_t *system);
     
-    /* 辅助初始化:随机数种子 */
-    if (ctrl_status.not_srand_yet) {
-        ctrl_status.not_srand_yet = false;
-        srand(clock[0].utc);
-    }
-    
+    /* 系统模式调度 */
+    bool system_is_working = false;
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
-    uint8_t   mode = app_module_system_mode;
-    uint8_t status = app_module_system_status;
-    bool  is_valid = app_module_system_status == app_module_system_valid;
+    switch (app_module_system.mode) {
+    case app_module_system_normal: {
+        system_is_working = app_module_system_mode_normal_ctrl(clock, &app_module_system);
+        break;
+    }
+    case app_module_system_shutdown: {
+        system_is_working = app_module_system_mode_shutdown_ctrl(clock, &app_module_system);
+        break;
+    }
+    default:
+        app_module_system.mode     = app_module_system_normal;
+        app_module_system.mode_bak = app_module_system_normal;
+        break;
+    }
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    /* 系统开机加载流程 */
-    if (ctrl_status.not_load_yet) {
-        ctrl_status.not_load_yet = false;
-        app_module_load_event();
-    }
-    if (app_module_load_not_over())
+    
+    /* 模式托管中 */
+    if (system_is_working)
         return;
-    /* 工作模式1:低功耗 */
-    if (mode == app_module_system_low_power) {
-        /* 在这里强行禁用一些功能或模组 */
-        /* 低功耗模式也就只是功能受限的正常模式 */
-    }
-    /* 工作模式1:低功耗 */
-    /* 工作模式2:正常 */
-    if (mode == app_module_system_low_power ||
-        mode == app_module_system_normal) {
-        /* 仅正常模式DLPS才会有效 */
-        app_mutex_process(&app_module_system_mutex, app_mutex_take);
-        bool   dlps_exec = app_module_system_dlps_exec;
-        bool dlps_status = app_module_system_dlps_status;
-        app_module_system_dlps_exec = false;
-        app_mutex_process(&app_module_system_mutex, app_mutex_give);
-        /* 执行DLPS检测 */
-        if (dlps_exec) {
-            /* 进入dlps */
-            if (dlps_status) {
-                APP_SYS_LOG_WARN("dlps enter");
-            }
-            /* 退出dlps */
-            if (!dlps_status) {
-                APP_SYS_LOG_WARN("dlps exit");
-            }
-        }
-        /* 执行场景加载 */
-        if (ctrl_status.not_start_yet) {
-            ctrl_status.not_start_yet = false;
-            app_lv_scene_start();
-        }
-        /* 系统工作中... */
-        if (is_valid)
-            return;
-        /* 执行场景转储 */
-        if (ctrl_status.not_stop_yet) {
-            ctrl_status.not_stop_yet = false;
-            app_lv_scene_stop();
-        }
-    }
-    /* 工作模式1:低功耗 */
-    if (mode == app_module_system_low_power) {
-        /* 在这里恢复禁用一些功能或模组 */
-        /* 低功耗模式也就只是功能受限的正常模式 */
-    }
-    /* 工作模式3:关机(假关机,系统处于监控状态) */
-    if (mode == app_module_system_shutdown) {
-        /* 执行场景关机 */
-        if (ctrl_status.not_shutdown_yet) {
-            ctrl_status.not_shutdown_yet = false;
-            app_lv_scene_shutdown();
-        }
-        /* 系统工作中... */
-        if (is_valid)
-            return;
-    }
-    /* 系统关机转储流程 */
-    if (ctrl_status.not_dump_yet) {
-        ctrl_status.not_dump_yet = false;
-        app_module_dump_event();
-    }
-    if (app_module_dump_not_over())
-        return;
+    
     /* 系统倒计时 */
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
     /* 数据转储结束,重置系统 */
-    if (app_module_system_delay == 0) {
-        app_module_system_status = app_module_system_valid;
-        app_module_system_mode   = app_module_system_mode_bak;
-        memset(&ctrl_status, 0xff, sizeof(ctrl_status));
-    }
-    if (app_module_system_delay != 0)
-        app_module_system_delay--;
+    app_module_system.valid = true;
+    app_module_system.mode  = app_module_system.mode_bak;
+    memset(&app_module_system.ctrl, 0xff, sizeof(app_module_system.ctrl));
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
+    /* 重置系统一般最简单的就是系统复位,程序重开始 */
+    /* 否则需要手动对所有的状态和流程进行适配 */
+    // app_os_reset();
 }
 
 /*@brief 初始化系统模组
@@ -243,7 +148,12 @@ void app_module_system_ready(void)
     app_module_data_center_t *data_center = NULL;
     app_module_data_center_load(app_module_data_center_system_profile);
     app_module_data_center_source(&data_center);
-    app_module_system_mode = data_center->system_profile.system_mode;
-    APP_SYS_LOG_WARN("system mode:%u", app_module_system_mode);
+    app_module_system.mode = data_center->system_profile.system_mode;
+    APP_SYS_LOG_WARN("system mode:%u", app_module_system.mode);
+    if (app_module_system.mode >= app_module_system_num)
+        app_module_system.mode  = app_module_system_normal;
     app_module_data_center_dump();
+    /* 准备系统监管 */
+    app_module_system.valid = true;
+    memset(&app_module_system.ctrl, 0xff, sizeof(app_module_system.ctrl));
 }

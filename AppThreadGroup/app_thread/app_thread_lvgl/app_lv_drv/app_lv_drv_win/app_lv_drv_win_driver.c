@@ -153,14 +153,13 @@ void app_lv_driver_handler(void)
         APP_SYS_LOG_WARN("");
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
-        app_module_system_delay_set(2);
-        app_module_system_status_set(app_module_system_invalid);
+            app_module_system_valid_set(false);
         if (app_module_system_mode_get() != app_module_system_shutdown)
             app_module_system_mode_set(app_module_system_shutdown);
         else
             app_os_reset();
     }
-
+    
     HWND app_lv_display_get_window(void);
     /* 更新处理 */
     MSG message;
@@ -171,7 +170,7 @@ void app_lv_driver_handler(void)
         /* 消息传递 */
         TranslateMessage(&message);
         DispatchMessageW(&message);
-
+        
         if (message.message == WM_QUIT)
             app_lv_driver_shutdown = true;
     }

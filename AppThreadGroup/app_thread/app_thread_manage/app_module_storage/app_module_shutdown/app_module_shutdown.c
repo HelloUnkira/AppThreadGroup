@@ -20,7 +20,7 @@ void app_module_shutdown_dump(void)
     /* 当次关机条件信息: */
     snprintf(text, APP_SYS_LOG_TEXT_MAX,
              "shutdown condition:%" PRIu8,
-              app_module_system_status_get());
+              app_module_system_valid_get());
     app_sys_log_text_dump(text, true);
     /* 线程组工作时间: */
     snprintf(text, APP_SYS_LOG_TEXT_MAX, "app thread group work time:%" PRIu64,

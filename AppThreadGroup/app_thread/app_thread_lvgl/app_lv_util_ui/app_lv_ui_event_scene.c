@@ -52,26 +52,28 @@ void app_lv_ui_event_default(lv_event_t *e)
             break;
     }
     /* 同时抓获目标按键及其按压次数达标 */
-    if (catch_key_enter && count_key_enter == 3 * 10) {
+    if (catch_key_enter && count_key_enter >= 3 * 10) {
         APP_SYS_LOG_WARN("catch key enter long click");
         /* 忽略掉当次按下,剩下的所有事件 */
         lv_indev_wait_release(lv_event_get_indev(e));
         /* 选择不同的流程 */
         if (app_module_system_mode_get() == app_module_system_shutdown) {
-            app_module_system_delay_set(2);
-            app_module_system_status_set(app_module_system_invalid);
             /* 电量不足为低电量模式,充足为正常模式 */
             app_module_system_mode_set(app_module_system_normal);
+            app_module_system_valid_set(false);
         } else {
-            app_module_system_delay_set(2);
-            app_module_system_status_set(app_module_system_invalid);
             /* 电量不足为低电量模式,充足为正常模式 */
             app_module_system_mode_set(app_module_system_shutdown);
+            app_module_system_valid_set(false);
         }
         catch_key_enter = false;
         count_key_enter = 0;
         return;
-    } else {
+    }
+    else if (catch_key_enter && count_key_enter != 0) {
+        return;
+    }
+    else {
         /* 关机模式:只允许响应按键及其相关事件 */
         if (app_module_system_mode_get() == app_module_system_shutdown)
             return;
