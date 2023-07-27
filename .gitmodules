@@ -18,3 +18,7 @@
 	path = AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
 	url = https://github.com/jerryscript-project/jerryscript.git
 	branch = master
+[submodule "AppThreadGroup/app_third/lib_fatfs/lib_fatfs"]
+	path = AppThreadGroup/app_third/lib_fatfs/lib_fatfs
+	url = https://github.com/abbrev/fatfs.git
+	branch = master

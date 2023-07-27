@@ -5,6 +5,10 @@
 # master https://github.com/HelloUnkira/StudyRecord.git
 # AppThreadGroup/app_third/lib_self/StudyRecord
 #
+# FatFS库:
+# master https://github.com/abbrev/fatfs.git
+# AppThreadGroup/app_third/lib_fatfs/lib_fatfs
+#
 # JerryScript库(JS):
 # master https://github.com/jerryscript-project/jerryscript.git
 # AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
@@ -37,6 +41,7 @@
 
 # 载入第三方库
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_self)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_fatfs)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_jerryscript)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_nanopb)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json)
