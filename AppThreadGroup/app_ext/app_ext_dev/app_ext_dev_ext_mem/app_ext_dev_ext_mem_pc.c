@@ -34,8 +34,13 @@ static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
     const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
-    if (data->rw_args.buffer == NULL || data->rw_args.size == 0)
+    if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
+        APP_DEV_LOG_MSG_FMT("data->rw_args.buffer:%p"   APP_DEV_LOG_MSG_LINE
+                            "data->rw_args.size:%x"     APP_DEV_LOG_MSG_LINE,
+                            data->rw_args.buffer,
+                            data->rw_args.size);
         return -1;
+    }
     
     /* 检查溢出 */
     if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size) {
@@ -84,8 +89,13 @@ static int32_t app_dev_ext_mem_hal_write(app_dev_t *driver)
     const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
-    if (data->rw_args.buffer == NULL || data->rw_args.size == 0)
+    if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
+        APP_DEV_LOG_MSG_FMT("data->rw_args.buffer:%p"   APP_DEV_LOG_MSG_LINE
+                            "data->rw_args.size:%x"     APP_DEV_LOG_MSG_LINE,
+                            data->rw_args.buffer,
+                            data->rw_args.size);
         return -1;
+    }
     
     /* 检查溢出 */
     if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size) {

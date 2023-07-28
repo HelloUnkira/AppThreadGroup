@@ -248,8 +248,8 @@ static void app_module_battery_charge_irq_cb(void)
 void app_module_battery_ready(void)
 {
     app_mutex_process(&app_module_battery_mutex, app_mutex_static);
-    app_dev_battery_ready(&app_dev_battery);
     app_dev_battery_charge_irq_cb_reg(&app_dev_battery, app_module_battery_charge_irq_cb);
+    app_dev_battery_ready(&app_dev_battery);
     app_module_battery_charge_xms_timer.expired  = app_module_battery_charge_xms_timer_handler;
     app_module_battery_charge_xms_timer.peroid   = APP_MODULE_BATTERY_CHARGE_PEROID;
     app_module_battery_charge_xms_timer.reload   = true;

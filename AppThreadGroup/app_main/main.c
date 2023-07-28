@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
         /* 生成物理外存映射,将其都刷为0xFF */
         app_sys_ext_mem_remake();
         break;
-        #elif 1
+        #elif 0
         /* 测试日志追踪 */
         app_sys_log_text_test();
         break;
@@ -35,13 +35,12 @@ int main(int argc, char *argv[])
         #elif 1
         /* 测试中我们在主线程 */
         /* 模拟发送1ms定时器中断事件 */
-        /* 我是实在没想到这种方式 */
-        /* 居然是最简单的做法...... */
         #if APP_ARCH_IS_PC
         /* fake hard clock 1ms irq */
         app_module_rtc_1ms_cb();
         app_delay_us(1000);
         #else
+        #error "delete this error"
         #endif
         /* test:... */
         #if 0
@@ -51,9 +50,16 @@ int main(int argc, char *argv[])
             app_sys_timer_test();
         #elif 0
         /* test reset load and dump */
-        if (count % 5000 == 0) {
-            app_module_system_delay_set(2);
-            app_module_system_status_set(app_module_system_reset);
+        if (count == 5000)
+            app_module_system_valid_set(false);
+        #elif 0
+        /* test protocol(7s later) */
+        if (count == 1000 * 7) {
+            app_module_protocol_t protocol = {
+              //.notify.type = app_module_protocol_system_clock,
+                .notify.type = app_module_protocol_trace_text,
+            };
+            app_module_protocol_notify(&protocol);
         }
         #elif 0
         /* test stopwatch */
@@ -64,12 +70,12 @@ int main(int argc, char *argv[])
         #elif 0
         /* test countdown */
         if (count == 1000) {
-            app_module_countdown_reset();
             app_module_countdown_t countdown = {
                 .hour   = 0,
                 .minute = 0,
                 .second = 13,
             };
+            app_module_countdown_reset();
             app_module_countdown_set(&countdown);
             app_module_countdown_start();
         }
@@ -77,15 +83,6 @@ int main(int argc, char *argv[])
         /* test alarm group */
         if (count == 1000)
             app_module_remind_alarm_test();
-        #elif 0
-        /* test protocol(7s later) */
-        if (count == 1000 * 7) {
-            app_module_protocol_t protocol = {
-              //.notify.type = app_module_protocol_system_clock,
-                .notify.type = app_module_protocol_trace_text,
-            };
-            app_module_protocol_notify(&protocol);
-        }
         #else
         #endif
         #endif
