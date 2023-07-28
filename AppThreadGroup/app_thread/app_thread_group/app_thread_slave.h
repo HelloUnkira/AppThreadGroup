@@ -11,7 +11,7 @@ typedef bool (*app_thread_slave_routine_package_cb)(app_thread_package_t *packag
  *@param[in] package_cb    子线程服务例程处理部
  */
 void app_thread_slave_routine(uint32_t app_thread_id,
-                                          app_thread_slave_routine_ready_cb   ready_cb,
-                                          app_thread_slave_routine_package_cb package_cb);
+                              app_thread_slave_routine_ready_cb   ready_cb,
+                              app_thread_slave_routine_package_cb package_cb);
 
 #endif

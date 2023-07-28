@@ -7,10 +7,12 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_sys_timer.h"
 #include "app_sys_clk.h"
 #include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
 #include "app_thread_group.h"
+#include "app_module_rtc.h"
 #include "app_module_clock.h"
 #include "app_module_clock_cb.h"
 
@@ -90,6 +92,7 @@ void app_module_clock_to_dtime(app_module_clock_t *clock)
 /* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
 static uint64_t app_module_clock_sec_tick = {0};
 static app_mutex_t app_module_clock_mutex = {0};
+static app_sys_timer_t app_module_clock_timer = {0};
 static app_module_clock_t app_module_clock[2] = {0};
 
 /*@brief     获得系统开机时间(中断环境下不可调用)
@@ -290,22 +293,12 @@ void app_module_clock_load(void)
     }
 }
 
-/*@brief 系统时钟模组初始化
- *       内部使用: 被mix irq线程使用
+/*@brief 系统时钟软件定时器模组回调
  */
-void app_module_clock_ready(void)
+static void app_module_clock_timer_handler(void *timer)
 {
-    app_mutex_process(&app_module_clock_mutex, app_mutex_static);
-    app_module_clock_to_dtime(&app_module_clock[1]);
-    app_module_clock_to_week(&app_module_clock[1]);
-}
-
-/*@brief 时钟模组更新
- */
-void app_module_clock_1s_update(uint64_t utc_new)
-{
-    static uint64_t utc = 0;
-    utc = utc_new;
+    static app_module_rtc_t rtc = {0};
+    app_module_rtc_get(&rtc);
     app_thread_package_t package = {
         .thread   = app_thread_id_mix_irq,
         .module   = app_thread_mix_irq_clock,
@@ -313,7 +306,19 @@ void app_module_clock_1s_update(uint64_t utc_new)
         .priority = app_thread_package_priority_highest,
         .dynamic  = false,
         .size     = sizeof(uint64_t),
-        .data     = &utc,
+        .data     = &rtc.utc,
     };
     app_thread_package_notify(&package);
+}
+
+/*@brief 系统时钟模组初始化
+ *       内部使用: 被mix irq线程使用
+ */
+void app_module_clock_ready(void)
+{
+    app_mutex_process(&app_module_clock_mutex, app_mutex_static);
+    app_module_clock_timer.expired = app_module_clock_timer_handler;
+    app_module_clock_timer.peroid  = 1000;
+    app_module_clock_timer.reload  = true;
+    app_sys_timer_start(&app_module_clock_timer);
 }

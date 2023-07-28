@@ -11,8 +11,6 @@
 #include "app_thread_group.h"
 #include "app_module_rtc.h"
 #include "app_module_timer.h"
-#include "app_module_clock.h"
-#include "app_module_system.h"
 
 static app_mutex_t app_module_rtc_mutex = {0};
 static app_module_rtc_t app_module_rtc = {0};
@@ -29,11 +27,6 @@ void app_module_rtc_1ms_cb(void)
     if (app_thread_group_status_get()) {
         /* timer msec update */
         app_module_timer_1ms_update();
-        /* clock source */
-        if (count % 1000 == 0) {
-            app_dev_rtc_get_utc(&app_dev_rtc, &app_module_rtc.utc);
-            app_module_clock_1s_update(app_module_rtc.utc);
-        }
         /* 一些补充的扩展配置,与OS相关 */
         if (count == 3000) {
             void app_thread_os_extend(void);
