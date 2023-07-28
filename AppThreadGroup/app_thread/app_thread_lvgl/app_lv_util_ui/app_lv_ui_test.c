@@ -24,9 +24,13 @@ void app_lv_ui_test_scene(void)
     /* 做些什么:测试代码 */
     #if 0
     #elif 1
-    lv_obj_t *img = lv_img_create(lv_scr_act());
-    lv_img_set_src(img, "S:/lvgl_ext_src/LVGL.png");
-    lv_obj_center(img);
+    static bool only_one = true;
+    if (only_one) {
+        only_one = false;
+        lv_obj_t *img = lv_img_create(lv_scr_act());
+        lv_img_set_src(img, "S:/lvgl_ext_src/LVGL.png");
+        lv_obj_center(img);
+    }
     #else
     #endif
 }

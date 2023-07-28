@@ -127,7 +127,7 @@
 #endif
 
 /* 扩展:日志换行的宏转换 */
-#define APP_SYS_LOG_LINE    "\r\n"
+#define APP_SYS_LOG_LINE    APP_DEV_LOG_MSG_LINE
 
 typedef struct {
     void (*message1)(const char *format, ...);

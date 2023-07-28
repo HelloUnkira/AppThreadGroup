@@ -14,6 +14,7 @@
 #include "app_module_clock.h"
 #include "app_module_system.h"
 #include "app_thread_adaptor.h"
+#include "app_third_fatfs.h"
 
 static bool app_thread_group_status = false;
 
@@ -51,6 +52,7 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app third层
      */
+    app_third_fatfs_init();
     /*
      *!!!就绪app thread层
      */

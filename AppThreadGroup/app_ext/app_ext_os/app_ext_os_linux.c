@@ -52,7 +52,7 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
         break;
     }
     default:
-        app_dev_log_msg1("app_thread_process option is not unsupported:%u", option);
+        APP_DEV_LOG_MSG_FMT("app_thread_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -78,7 +78,7 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
         break;
     }
     default:
-        app_dev_log_msg1("app_sem_process option is not unsupported:%u", option);
+        APP_DEV_LOG_MSG_FMT("app_sem_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -106,7 +106,7 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
         break;
     }
     default:
-        app_dev_log_msg1("app_mutex_process option is not unsupported:%u", option);
+        APP_DEV_LOG_MSG_FMT("app_mutex_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }
@@ -138,7 +138,7 @@ void app_critical_process(app_critical_t *critical, app_critical_option_t option
         break;
     }
     default:
-        app_dev_log_msg1("app_critical_process option is not unsupported:%u", option);
+        APP_DEV_LOG_MSG_FMT("app_critical_process option is not unsupported:%u", option);
         app_os_reset();
         break;
     }

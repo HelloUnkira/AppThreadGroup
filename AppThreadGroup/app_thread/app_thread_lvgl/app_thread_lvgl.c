@@ -158,13 +158,6 @@ void app_thread_lvgl_routine(void)
             }
             case app_thread_lvgl_ui_scene: {
                 #if APP_LV_UI_TEST_USE
-                /* 启动UI场景 */
-                if (package.event == app_thread_lvgl_ui_scene_start)
-                    app_third_fatfs_init();
-                /* 终止UI场景 */
-                if (package.event == app_thread_lvgl_ui_scene_stop)
-                    app_third_fatfs_deinit();
-                
                 app_lv_ui_test_scene();
                 #else
                 /* 启动UI场景 */
@@ -176,7 +169,6 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_start, false);
                     /* 更新lvgl设备 */
-                    app_third_fatfs_init();
                     app_lv_mouse_dlps_exit();
                     app_lv_mousewheel_dlps_exit();
                     // app_lv_keyboard_dlps_exit();
@@ -193,7 +185,6 @@ void app_thread_lvgl_routine(void)
                     app_lv_scene_reset(&app_lv_ui_main, false);
                     app_lv_scene_add(&app_lv_ui_watch_stop, false);
                     /* 更新lvgl设备 */
-                    app_third_fatfs_deinit();
                     app_lv_display_dlps_enter();
                     app_lv_keyboard_dlps_enter();
                     app_lv_mousewheel_dlps_enter();
@@ -208,6 +199,7 @@ void app_thread_lvgl_routine(void)
                     APP_SYS_LOG_WARN("ui scene shutdown");
                     app_lv_scene_reset(&app_lv_ui_watch_dlps, false);
                     /* 更新lvgl设备 */
+                    app_third_fatfs_deinit();
                     app_lv_display_dlps_enter();
                     // app_lv_keyboard_dlps_enter();
                     app_lv_mousewheel_dlps_enter();

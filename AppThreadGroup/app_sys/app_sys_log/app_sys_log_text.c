@@ -36,9 +36,12 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
     uintptr_t base = app_sys_log_text_size + ext_src->data_base;
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + sizeof(uintptr_t) < zone) {
+        if (sizeof(uintptr_t) != 0)
         app_sys_ext_mem_read(ext_mem, base + offset, item->buffer, sizeof(uintptr_t));
     } else {
+        if (zone - offset != 0)
         app_sys_ext_mem_read(ext_mem, base + offset, item->buffer, zone - offset);
+        if (sizeof(uintptr_t) - (zone - offset) != 0)
         app_sys_ext_mem_read(ext_mem, base, item->buffer + zone - offset, sizeof(uintptr_t) - (zone - offset));
     }
     offset += sizeof(uintptr_t);
@@ -50,9 +53,12 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
     }
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + item->length < zone) {
+        if (item->length != 0)
         app_sys_ext_mem_read(ext_mem, base + offset, item->text, item->length);
     } else {
+        if (zone - offset != 0)
         app_sys_ext_mem_read(ext_mem, base + offset, item->text, zone - offset);
+        if (item->length - (zone - offset) != 0)
         app_sys_ext_mem_read(ext_mem, base, item->text + zone - offset, item->length - (zone - offset));
     }
     offset += item->length;
@@ -82,9 +88,12 @@ static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset
     uintptr_t base = app_sys_log_text_size + ext_src->data_base;
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + sizeof(uintptr_t) < zone) {
+        if (sizeof(uintptr_t) != 0)
         app_sys_ext_mem_write(ext_mem, base + offset, item->buffer, sizeof(uintptr_t));
     } else {
+        if (zone - offset != 0)
         app_sys_ext_mem_write(ext_mem, base + offset, item->buffer, zone - offset);
+        if (sizeof(uintptr_t) - (zone - offset) != 0)
         app_sys_ext_mem_write(ext_mem, base, item->buffer + zone - offset, sizeof(uintptr_t) - (zone - offset));
     }
     offset += sizeof(uintptr_t);
@@ -96,9 +105,12 @@ static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset
     }
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + item->length < zone) {
+        if (sizeof(uintptr_t) != 0)
         app_sys_ext_mem_write(ext_mem, base + offset, item->text, item->length);
     } else {
+        if (zone - offset != 0)
         app_sys_ext_mem_write(ext_mem, base + offset, item->text, zone - offset);
+        if (item->length - (zone - offset) != 0)
         app_sys_ext_mem_write(ext_mem, base, item->text + zone - offset, item->length - (zone - offset));
     }
     offset += item->length;
@@ -390,19 +402,36 @@ void app_sys_log_text_persistent(char *text)
  */
 void app_sys_log_text_test(void)
 {
-    static uint32_t offset = 0;
-    uint8_t log_text_i[APP_SYS_LOG_TEXT_MAX * 2] = {0};
-    uint8_t log_text_o[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+    /* 复位日志追踪队列 */
+    app_sys_log_text_reset();
     
-    for (uint32_t idx = 0; idx < APP_SYS_LOG_TEXT_MAX; idx++) {
-        log_text_i[idx] = '0' + idx % 10;
-        log_text_i[idx + APP_SYS_LOG_TEXT_MAX] = '0' + idx % 10;
+    /* 改一下这里即可 */
+    uint32_t time_s = 5;        // s
+    uint32_t peroid = 1000;     // us
+    uint32_t target = 1000 * 1000 / peroid;  //1s执行次数(无需修改)
+    
+    /* 测试(注意:I/O可能被占满,导致时间不准) */
+    for (uint32_t count = 0; count < time_s * target; count++) {
+        
+        if (count % target == 0)
+            APP_SYS_LOG_WARN("log test count:%d", count);
+        
+        static uint32_t offset = 0;
+        uint8_t log_text_i[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+        uint8_t log_text_o[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+        
+        for (uint32_t idx = 0; idx < APP_SYS_LOG_TEXT_MAX; idx++)
+            log_text_i[idx] = log_text_i[idx + APP_SYS_LOG_TEXT_MAX] = '0' + idx % 10;
+        
+        app_sys_log_text_dump(log_text_i + offset, true);
+        app_sys_log_text_load(log_text_o);
+        
+        if (memcmp(log_text_o, log_text_i + offset, APP_SYS_LOG_TEXT_MAX) != 0)
+            APP_SYS_LOG_ERROR("log error");
+        
+        offset += 1;
+        offset %= APP_SYS_LOG_TEXT_MAX;
+        
+        app_delay_us(peroid);
     }
-    
-    app_sys_log_text_dump(log_text_i + offset, true);
-    app_sys_log_text_load(log_text_o);
-    if (memcmp(log_text_o, log_text_i + offset, APP_SYS_LOG_TEXT_MAX) != 0)
-        APP_SYS_LOG_ERROR("log error");
-    
-    offset = (offset + 1) % APP_SYS_LOG_TEXT_MAX;
 }

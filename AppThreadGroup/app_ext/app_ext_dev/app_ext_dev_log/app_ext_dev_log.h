@@ -56,4 +56,10 @@ static inline void app_dev_log_msg2(const char *format, va_list list)
     app_dev_log_msg(&app_dev_log, format, list);
 }
 
+/*@brief 本层级模组使用的宏
+ */
+#define APP_DEV_LOG_MSG_FMT     app_dev_log_msg1
+#define APP_DEV_LOG_MSG_LST     app_dev_log_msg2
+#define APP_DEV_LOG_MSG_LINE    "\r\n"
+
 #endif

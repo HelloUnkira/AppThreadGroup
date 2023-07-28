@@ -129,6 +129,6 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     if (package_new == NULL)
         return;
     memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
-    package->buddy    = NULL;
+    package->buddy = NULL;
     app_mem_free(package_new);
 }
