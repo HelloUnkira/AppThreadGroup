@@ -55,7 +55,6 @@ static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
         fseek(file, data->ext_mem.chunk_offset + data->rw_args.offset, SEEK_SET);
         retval = fread(data->rw_args.buffer, data->rw_args.size, 1, file);
         fclose(file);
-        
     }
     /* chunk_base == 0x10000000, SD卡 */
     if (data->ext_mem.chunk_base == 0x10000000) {

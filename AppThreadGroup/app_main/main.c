@@ -13,55 +13,146 @@
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
 
-/*@brief 提醒闹钟模组测试
- */
-static inline void app_module_remind_alarm_test(void)
+#if APP_OS_IS_WINDOWS
+
+#include "ff.h"
+
+/* 生成物理外存映射,将其都刷为0xFF */
+static inline void app_sys_ext_mem_pc_refr(void)
 {
-    app_module_remind_item_t       *remind_item = NULL;
-    app_module_remind_alarm_info_t *alarm_info  = NULL;
-    
-    app_module_remind_alarm_array_lock();
-    app_module_remind_alarm_array(&remind_item, &alarm_info);
-    /* 提醒闹钟0(常规模式): */
-    const char *alarm_name_0 = "Alarm 0";
-    alarm_info[0].snooze_count = 0;
-    alarm_info[0].duration = 300;
-    memcpy(alarm_info[0].name, alarm_name_0, sizeof(alarm_name_0));
-    remind_item[0].valid = true;
-    remind_item[0].onoff = true;
-    remind_item[0].type  = app_module_remind_item_custom;
-    remind_item[0].month = 0b00000001000;
-    remind_item[0].week  = 0b0000100;
-    remind_item[0].clock.year   = 2023;
-    remind_item[0].clock.month  = 1;
-    remind_item[0].clock.day    = 1;
-    remind_item[0].clock.hour   = 0;
-    remind_item[0].clock.minute = 0;
-    remind_item[0].clock.second = 2;
-    app_module_clock_to_utc(&remind_item[0].clock);
-    app_module_clock_to_week(&remind_item[0].clock);
-    remind_item[0].offset_utc = remind_item[0].clock.utc /* +-xxx sec */;
-    /* 提醒闹钟1(滚动模式) */
-    const char *alarm_name_1 = "Alarm 1";
-    alarm_info[1].snooze_count = 0;
-    alarm_info[1].duration = 300;
-    memcpy(alarm_info[1].name, alarm_name_1, sizeof(alarm_name_1));
-    remind_item[1].valid  = true;
-    remind_item[1].onoff  = true;
-    remind_item[1].type   = app_module_remind_item_repeat;
-    remind_item[1].repeat = 3;
-    remind_item[1].clock.year   = 2023;
-    remind_item[1].clock.month  = 1;
-    remind_item[1].clock.day    = 1;
-    remind_item[1].clock.hour   = 1;
-    remind_item[1].clock.minute = 1;
-    remind_item[1].clock.second = 2;
-    app_module_clock_to_utc(&remind_item[1].clock);
-    app_module_clock_to_week(&remind_item[1].clock);
-    remind_item[1].offset_utc = remind_item[1].clock.utc /* +-xxx sec */;
-    /* 继续添加 */
-    app_module_remind_alarm_array_unlock();
+    uint8_t buffer[1024] = {0};
+    for (uint32_t idx = 0; idx < 1024; buffer[idx] = 0xff, idx++);
+    fclose(fopen("ext_mem_static",  "wb")); // 64K
+    fclose(fopen("ext_mem_flash",   "wb")); // 8M
+    fclose(fopen("ext_mem_sd_card", "wb")); // 16M
+    FILE *file1 = fopen("ext_mem_static",  "rb+");
+    FILE *file2 = fopen("ext_mem_flash",   "rb+");
+    FILE *file3 = fopen("ext_mem_sd_card", "rb+");
+    fseek(file1, 0, SEEK_SET);
+    fseek(file2, 0, SEEK_SET);
+    fseek(file3, 0, SEEK_SET);
+    for (uint32_t idx = 0; idx < 64; idx++)
+        fwrite(buffer, 1024, 1, file1);
+    for (uint32_t idx = 0; idx < 1024 * 8; idx++)
+        fwrite(buffer, 1024, 1, file2);
+    for (uint32_t idx = 0; idx < 1024 * 16; idx++)
+        fwrite(buffer, 1024, 1, file3);
+    fclose(file1);
+    fclose(file2);
+    fclose(file3);
 }
+
+/* 通过文件系统将文件打包到外存映射中 */
+static inline void app_sys_ext_mem_pc_refr_fs_pkg_recursion(char *path)
+{
+    FRESULT retval = FR_OK;
+    if ((retval = f_mkdir(path)) != FR_OK)
+        printf("f_mkdir fail:%d\n", retval);
+    
+    WIN32_FIND_DATAA fdata;
+    char path_curr[256] = {0};
+    sprintf(path_curr, "%s\\*", path);
+    HANDLE dir = FindFirstFileA(path_curr, &fdata);
+    
+    do {
+        if (strcmp(fdata.cFileName,  ".") == 0 ||
+            strcmp(fdata.cFileName, "..") == 0)
+            continue;
+        
+        if (fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
+            char path_next[256] = {0};
+            sprintf(path_next, "%s\\%s", path, fdata.cFileName);
+            printf("%s\n", path_next);
+            app_sys_ext_mem_pc_refr_fs_pkg_recursion(path_next);
+        } else {
+            char path_file[256] = {0};
+            sprintf(path_file, "%s\\%s", path, fdata.cFileName);
+            printf("%s\n", path_file);
+            UINT file_old_size = 0;
+            UINT file_new_size = 0;
+            
+            FILE *file_old = fopen(path_file, "rb+");
+            fseek(file_old, 0, SEEK_END);
+            file_old_size = ftell(file_old);
+            fseek(file_old, 0, SEEK_SET);
+            uint8_t *buffer1 = malloc(file_old_size);
+            if (fread(buffer1, file_old_size, 1, file_old) != 1)
+                printf("fread fail\n");
+            fclose(file_old);
+            
+            FIL file_new = {0};
+            BYTE mode = FA_CREATE_NEW | FA_READ | FA_WRITE;
+            if ((retval = f_open(&file_new, path_file, mode)) != FR_OK)
+                printf("f_open fail:%d\n", retval);
+            f_truncate(&file_new);
+            if ((retval = f_write(&file_new, buffer1, file_old_size, &file_new_size)) != FR_OK || file_old_size != file_new_size)
+                printf("f_write fail:%d\n", retval);
+            if ((retval = f_close(&file_new)) != FR_OK)
+                printf("f_close fail:%d\n", retval);
+            
+            free(buffer1);
+        }
+    } while (FindNextFileA(dir, &fdata));
+}
+
+/* 通过文件系统将文件打包到外存映射中 */
+static inline void app_sys_ext_mem_pc_refr_fs_chk_recursion(char *path)
+{
+    static FILINFO fno;
+    FRESULT retval = FR_OK;
+    
+    DIR dir;
+    retval = f_opendir(&dir, path);
+    if (retval != FR_OK)
+        printf("f_opendir fail:%d\n", retval);
+    
+    while (true) {
+        retval = f_readdir(&dir, &fno);
+        if (retval != FR_OK || fno.fname[0] == 0)
+            break;
+        
+        if (strcmp(fno.fname,  ".") == 0 ||
+            strcmp(fno.fname, "..") == 0)
+            continue;
+        
+        if (fno.fattrib & AM_DIR) {
+            char path_next[256] = {0};
+            sprintf(path_next, "%s/%s", path, fno.fname);
+            printf("%s\n", path_next);
+            app_sys_ext_mem_pc_refr_fs_chk_recursion(path_next);
+        } else {
+            char path_file[256] = {0};
+            sprintf(path_file, "%s/%s", path, fno.fname);
+            printf("%s\n", path_file);
+        }
+    }
+    f_closedir(&dir);
+}
+
+/* 通过文件系统将文件打包到外存映射中 */
+static inline void app_sys_ext_mem_pc_refr_fs(char *path)
+{
+    FRESULT retval = FR_OK;
+    /* 重构文件系统 */
+    BYTE work_station[1024 * 64] = {0};
+    const MKFS_PARM opt = {FM_FAT, 0, 0, 0, 0};
+    retval = f_mkfs("", &opt, work_station, sizeof(work_station));
+    if (retval != FR_OK)
+        printf("f_mkfs fail:%d\n", retval);
+    /* 挂载文件系统 */
+    FATFS fat_fs = {0};
+    retval = f_mount(&fat_fs, "", 1);
+    if (retval != FR_OK)
+        printf("f_mount fail:%d\n", retval);
+    app_sys_ext_mem_pc_refr_fs_pkg_recursion(path);
+    printf("\n\n\nfat fs recursion:\n\n\n");
+    app_sys_ext_mem_pc_refr_fs_chk_recursion(path);
+    retval = f_unmount("");
+    if (retval != FR_OK)
+        printf("f_unmount fail:%d\n", retval);
+}
+
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -70,30 +161,11 @@ int main(int argc, char *argv[])
     /* 主线程滚动阻塞 */
     while (true) {
         #if 0
-        #elif 0
-        /* 生成物理外存映射,将其都刷为0xFF */
-        #if APP_ARCH_IS_PC
-        uint8_t buffer[1024] = {0};
-        for (uint32_t idx = 0; idx < 1024; buffer[idx] = 0xff, idx++);
-        fclose(fopen("ext_mem_static",  "wb")); // 64K
-        fclose(fopen("ext_mem_flash",   "wb")); // 8M
-        fclose(fopen("ext_mem_sd_card", "wb")); // 16M
-        FILE *file1 = fopen("ext_mem_static",  "rb+");
-        FILE *file2 = fopen("ext_mem_flash",   "rb+");
-        FILE *file3 = fopen("ext_mem_sd_card", "rb+");
-        fseek(file1, 0, SEEK_SET);
-        fseek(file2, 0, SEEK_SET);
-        fseek(file3, 0, SEEK_SET);
-        for (uint32_t idx = 0; idx < 64; idx++)
-            fwrite(buffer, 1024, 1, file1);
-        for (uint32_t idx = 0; idx < 1024 * 8; idx++)
-            fwrite(buffer, 1024, 1, file2);
-        for (uint32_t idx = 0; idx < 1024 * 16; idx++)
-            fwrite(buffer, 1024, 1, file3);
-        fclose(file1);
-        fclose(file2);
-        fclose(file3);
-        #endif
+        #elif 0 && APP_OS_IS_WINDOWS
+        app_sys_ext_mem_pc_refr();
+        break;
+        #elif 1 && APP_OS_IS_WINDOWS
+        app_sys_ext_mem_pc_refr_fs("lvgl_ext_src");
         break;
         #elif 1
         #if 0

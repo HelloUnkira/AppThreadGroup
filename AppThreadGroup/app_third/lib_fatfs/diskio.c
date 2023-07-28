@@ -6,13 +6,12 @@
 #include "app_sys_log.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_table.h"
+#include "app_module_clock.h"
 
 #include "ff.h"
 #include "diskio.h"
 
-#define APP_FATFS_EXT_MEM           0       /* 抽象外存文件系统 */
-#define APP_FATFS_EXT_MEM_SECTOR    4096    /* 抽象外存文件系统的扇区尺寸 */
-#define APP_FATFS_EXT_MEM_BLOCK     512     /* 抽象外存文件系统的块尺寸 */
+#define APP_FATFS_EXT_MEM   0   /* 抽象外存文件系统 */
 
 DSTATUS disk_status(BYTE pdrv)
 {
@@ -41,8 +40,8 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
     if (pdrv == APP_FATFS_EXT_MEM) {
         
         uint8_t  *buffer = (void *)buff;
-        uintptr_t offset = APP_FATFS_EXT_MEM_SECTOR * (uintptr_t)sector;
-        uintptr_t size   = APP_FATFS_EXT_MEM_SECTOR * (uintptr_t)count;
+        uintptr_t offset = FF_MAX_SS * (uintptr_t)sector;
+        uintptr_t size   = FF_MAX_SS * (uintptr_t)count;
         
         const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
         if (app_sys_ext_mem_read(ext_mem, offset, buffer, size))
@@ -63,8 +62,8 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
     if (pdrv == APP_FATFS_EXT_MEM) {
         
         uint8_t  *buffer = (void *)buff;
-        uintptr_t offset = APP_FATFS_EXT_MEM_SECTOR * (uintptr_t)sector;
-        uintptr_t size   = APP_FATFS_EXT_MEM_SECTOR * (uintptr_t)count;
+        uintptr_t offset = FF_MAX_SS * (uintptr_t)sector;
+        uintptr_t size   = FF_MAX_SS * (uintptr_t)count;
         
         const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
         if (app_sys_ext_mem_write(ext_mem, offset, buffer, size))
@@ -90,15 +89,15 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
         }
         case GET_SECTOR_COUNT: {
             const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
-            *(DWORD *)buff = ext_mem->chunk_size / APP_FATFS_EXT_MEM_SECTOR;
+            *(DWORD *)buff = ext_mem->chunk_size / FF_MAX_SS;
             return RES_OK;
         }
         case GET_SECTOR_SIZE: {
-            *(DWORD *)buff = APP_FATFS_EXT_MEM_SECTOR;
+            *(DWORD *)buff = FF_MAX_SS;
             return RES_OK;
         }
         case GET_BLOCK_SIZE: {
-            *(DWORD *)buff = APP_FATFS_EXT_MEM_BLOCK;
+            *(DWORD *)buff = 1;
             return RES_OK;
         }
         default: {
@@ -112,3 +111,12 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
         return RES_PARERR;
     }
 }
+
+#if !FF_FS_READONLY && !FF_FS_NORTC
+DWORD get_fattime(void)
+{
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    return (DWORD)clock.utc;
+}
+#endif

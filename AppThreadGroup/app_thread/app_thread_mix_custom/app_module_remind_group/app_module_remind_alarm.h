@@ -50,4 +50,8 @@ void app_module_remind_alarm_load(void);
  */
 void app_module_remind_alarm_ready(void);
 
+/*@brief 提醒闹钟模组测试
+ */
+void app_module_remind_alarm_test(void);
+
 #endif

@@ -131,3 +131,53 @@ void app_module_remind_alarm_ready(void)
 {
     app_mutex_process(&app_module_remind_alarm_mutex, app_mutex_static);
 }
+
+/*@brief 提醒闹钟模组测试
+ */
+void app_module_remind_alarm_test(void)
+{
+    app_module_remind_item_t       *remind_item = NULL;
+    app_module_remind_alarm_info_t *alarm_info  = NULL;
+    
+    app_module_remind_alarm_array_lock();
+    app_module_remind_alarm_array(&remind_item, &alarm_info);
+    /* 提醒闹钟0(常规模式): */
+    const char *alarm_name_0 = "Alarm 0";
+    alarm_info[0].snooze_count = 0;
+    alarm_info[0].duration = 300;
+    memcpy(alarm_info[0].name, alarm_name_0, sizeof(alarm_name_0));
+    remind_item[0].valid = true;
+    remind_item[0].onoff = true;
+    remind_item[0].type  = app_module_remind_item_custom;
+    remind_item[0].month = 0b00000001000;
+    remind_item[0].week  = 0b0000100;
+    remind_item[0].clock.year   = 2023;
+    remind_item[0].clock.month  = 1;
+    remind_item[0].clock.day    = 1;
+    remind_item[0].clock.hour   = 0;
+    remind_item[0].clock.minute = 0;
+    remind_item[0].clock.second = 2;
+    app_module_clock_to_utc(&remind_item[0].clock);
+    app_module_clock_to_week(&remind_item[0].clock);
+    remind_item[0].offset_utc = remind_item[0].clock.utc /* +-xxx sec */;
+    /* 提醒闹钟1(滚动模式) */
+    const char *alarm_name_1 = "Alarm 1";
+    alarm_info[1].snooze_count = 0;
+    alarm_info[1].duration = 300;
+    memcpy(alarm_info[1].name, alarm_name_1, sizeof(alarm_name_1));
+    remind_item[1].valid  = true;
+    remind_item[1].onoff  = true;
+    remind_item[1].type   = app_module_remind_item_repeat;
+    remind_item[1].repeat = 3;
+    remind_item[1].clock.year   = 2023;
+    remind_item[1].clock.month  = 1;
+    remind_item[1].clock.day    = 1;
+    remind_item[1].clock.hour   = 1;
+    remind_item[1].clock.minute = 1;
+    remind_item[1].clock.second = 2;
+    app_module_clock_to_utc(&remind_item[1].clock);
+    app_module_clock_to_week(&remind_item[1].clock);
+    remind_item[1].offset_utc = remind_item[1].clock.utc /* +-xxx sec */;
+    /* 继续添加 */
+    app_module_remind_alarm_array_unlock();
+}
