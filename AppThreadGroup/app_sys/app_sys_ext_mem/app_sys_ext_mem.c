@@ -22,6 +22,7 @@ static app_mutex_t app_sys_ext_mem_mutex = {0};
  */
 bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
+    int32_t retval = 0;
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("read start");
     app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
@@ -31,9 +32,9 @@ bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, ui
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
-    int32_t retval = app_dev_ext_mem_read(&app_dev_ext_mem);
+    if ((retval = app_dev_ext_mem_read(&app_dev_ext_mem)) != 0)
+        APP_SYS_LOG_ERROR("retval:%d", retval);
     APP_SYS_LOG_INFO("read end");
-    APP_SYS_ASSERT(retval == 0);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval == 0;
 }
@@ -47,6 +48,7 @@ bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, ui
  */
 bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
+    int32_t retval = 0;
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     APP_SYS_LOG_INFO("write start");
     app_dev_ext_mem_data_t *ext_mem_data = app_dev_ext_mem_data_addr(&app_dev_ext_mem);
@@ -56,9 +58,9 @@ bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, u
     ext_mem_data->rw_args.offset = offset;
     ext_mem_data->rw_args.buffer = buffer;
     ext_mem_data->rw_args.size   = size;
-    int32_t retval = app_dev_ext_mem_write(&app_dev_ext_mem);
+    if ((retval = app_dev_ext_mem_write(&app_dev_ext_mem)) != 0)
+        APP_SYS_LOG_ERROR("retval:%d", retval);
     APP_SYS_LOG_INFO("write end");
-    APP_SYS_ASSERT(retval == 0);
     app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     return retval == 0;
 }

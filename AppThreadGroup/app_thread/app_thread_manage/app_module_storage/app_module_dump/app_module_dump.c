@@ -30,6 +30,7 @@ bool app_module_dump_not_over(void)
  */
 void app_module_dump_process(void)
 {
+    APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
     app_module_clock_dump();
     app_module_remind_alarm_dump();
@@ -40,6 +41,7 @@ void app_module_dump_process(void)
     app_module_shutdown_dump();
     /* ... */
     app_module_dump_status_not_over = false;
+    APP_SYS_LOG_WARN("end");
 }
 
 /*@brief 系统转储模组启动

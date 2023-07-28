@@ -15,8 +15,10 @@
 
 DSTATUS disk_status(BYTE pdrv)
 {
+    /* 无事可做 */
+    return RES_OK;
+    
     if (pdrv == APP_FATFS_EXT_MEM) {
-        /* 无事可做 */
         return RES_OK;
     } else {
         APP_SYS_ASSERT(RES_OK == STA_NOINIT);
@@ -26,8 +28,10 @@ DSTATUS disk_status(BYTE pdrv)
 
 DSTATUS disk_initialize(BYTE pdrv)
 {
+    /* 无事可做 */
+    return RES_OK;
+    
     if (pdrv == APP_FATFS_EXT_MEM) {
-        /* 无事可做 */
         return RES_OK;
     } else {
         APP_SYS_ASSERT(RES_OK == STA_NOINIT);
@@ -48,7 +52,6 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             return RES_OK;
         else
             return RES_ERROR;
-        
     } else {
         APP_SYS_ASSERT(RES_OK == RES_ERROR);
         return RES_ERROR;
@@ -70,7 +73,6 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
             return RES_OK;
         else
             return RES_ERROR;
-        
     } else {
         APP_SYS_ASSERT(RES_OK == RES_ERROR);
         return RES_ERROR;
@@ -89,11 +91,11 @@ DRESULT disk_ioctl(BYTE pdrv, BYTE cmd, void *buff)
         }
         case GET_SECTOR_COUNT: {
             const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
-            *(DWORD *)buff = ext_mem->chunk_size / FF_MAX_SS;
+            *(LBA_t *)buff = ext_mem->chunk_size / FF_MAX_SS;
             return RES_OK;
         }
         case GET_SECTOR_SIZE: {
-            *(DWORD *)buff = FF_MAX_SS;
+            *(WORD  *)buff = FF_MAX_SS;
             return RES_OK;
         }
         case GET_BLOCK_SIZE: {
@@ -117,6 +119,26 @@ DWORD get_fattime(void)
 {
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
-    return (DWORD)clock.utc;
+    
+    union {
+        DWORD retval;
+        struct {
+            uint32_t year:7;
+            uint32_t month:4;
+            uint32_t day:5;
+            uint32_t hour:5;
+            uint32_t minute:6;
+            uint32_t second:5;
+        } clock;
+    } dtime = {
+        .clock.year   = clock.year,
+        .clock.month  = clock.month,
+        .clock.day    = clock.day,
+        .clock.hour   = clock.hour,
+        .clock.minute = clock.minute,
+        .clock.second = clock.second,
+    };
+    
+    return dtime.retval;
 }
 #endif

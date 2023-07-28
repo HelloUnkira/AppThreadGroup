@@ -25,12 +25,12 @@ int main(int argc, char *argv[])
         app_sys_ext_mem_remake();
         break;
         #elif 0
-        /* 测试日志追踪 */
-        app_sys_log_text_test();
-        break;
-        #elif 0
         /* 通过文件系统将文件打包到外存映射中 */
         app_third_fatfs_remake("lvgl_ext_src");
+        break;
+        #elif 0
+        /* 测试日志追踪 */
+        app_sys_log_text_test();
         break;
         #elif 1
         /* 测试中我们在主线程 */

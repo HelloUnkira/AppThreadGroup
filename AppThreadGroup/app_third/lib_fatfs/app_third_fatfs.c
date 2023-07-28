@@ -37,8 +37,10 @@ void app_third_fatfs_info(char *path)
     APP_SYS_LOG_INFO("Total space: %lu KB", total_sectors / 2);
     
     APP_SYS_LOG_INFO("");
-    APP_SYS_LOG_INFO("fs->fs_type:%s",      fs->fs_type == FS_FAT12 ? "FAT12" : fs->fs_type == FS_FAT16 ? "FAT16" :
-                                            fs->fs_type == FS_FAT32 ? "FAT32" : fs->fs_type == FS_EXFAT ? "exFAT" : "N/A");
+    APP_SYS_LOG_INFO("fs->fs_type:%s",      fs->fs_type == FS_FAT12 ? "FAT12" :
+                                            fs->fs_type == FS_FAT16 ? "FAT16" :
+                                            fs->fs_type == FS_FAT32 ? "FAT32" :
+                                            fs->fs_type == FS_EXFAT ? "exFAT" : "N/A");
     APP_SYS_LOG_INFO("fs->id: %x",          fs->id);
     APP_SYS_LOG_INFO("fs->pdrv: %x",        fs->pdrv);
     APP_SYS_LOG_INFO("fs->ldrv: %x",        fs->ldrv);
@@ -65,13 +67,11 @@ void app_third_fatfs_walk(char *path)
     FRESULT retval = FR_OK;
     
     DIR dir;
-    retval = f_opendir(&dir, path);
-    if (retval != FR_OK)
+    if ((retval = f_opendir(&dir, path)) != FR_OK)
         APP_SYS_LOG_WARN("f_opendir fail:%d", retval);
     
     while (true) {
-        retval = f_readdir(&dir, &fno);
-        if (retval != FR_OK || fno.fname[0] == 0)
+        if ((retval = f_readdir(&dir, &fno)) != FR_OK || fno.fname[0] == 0)
             break;
         
         if (strcmp(fno.fname,  ".") == 0 ||
@@ -146,11 +146,10 @@ static void app_third_fatfs_remake_recursion(char *path)
             APP_SYS_LOG_INFO("%s", path_next);
             app_third_fatfs_remake_recursion(path_next);
         } else {
+            UINT file_old_size = 0;
             char path_file[256] = {0};
             sprintf(path_file, "%s\\%s", path, fdata.cFileName);
             APP_SYS_LOG_INFO("%s", path_file);
-            UINT file_old_size = 0;
-            UINT file_new_size = 0;
             
             FILE *file_old = fopen(path_file, "rb+");
             fseek(file_old, 0, SEEK_END);
@@ -162,8 +161,11 @@ static void app_third_fatfs_remake_recursion(char *path)
             fclose(file_old);
             
             FIL file_new = {0};
+            UINT file_new_size = 0;
+            char path_file_new[256] = {0};
+            sprintf(path_file_new, "%s/%s", path, fdata.cFileName);
             BYTE mode = FA_CREATE_NEW | FA_READ | FA_WRITE;
-            if ((retval = f_open(&file_new, path_file, mode)) != FR_OK)
+            if ((retval = f_open(&file_new, path_file_new, mode)) != FR_OK)
                 APP_SYS_LOG_WARN("f_open fail:%d", retval);
             f_truncate(&file_new);
             if ((retval = f_write(&file_new, buffer1, file_old_size, &file_new_size)) != FR_OK || file_old_size != file_new_size)
@@ -189,7 +191,7 @@ void app_third_fatfs_remake(char *path)
     FRESULT retval = FR_OK;
     /* 重构文件系统 */
     BYTE work_station[1024 * 64] = {0};
-    const MKFS_PARM opt = {FM_FAT, 0, 0, 0, 0};
+    const MKFS_PARM opt = {FM_ANY, 0, 0, 0, 0};
     if ((retval = f_mkfs("", &opt, work_station, sizeof(work_station))) != FR_OK)
         APP_SYS_LOG_WARN("f_mkfs fail:%d", retval);
     /* 挂载文件系统 */
@@ -202,7 +204,7 @@ void app_third_fatfs_remake(char *path)
     /* 输出文件系统基本信息 */
     app_third_fatfs_info("");
     /* 递归遍历文件系统的文件列表 */
-    app_third_fatfs_walk(path);
+    app_third_fatfs_walk("");
     
     if ((retval = f_unmount("")) != FR_OK)
         APP_SYS_LOG_WARN("f_unmount fail:%d", retval);
@@ -211,4 +213,3 @@ void app_third_fatfs_remake(char *path)
     #error "unknown"
     #endif
 }
-

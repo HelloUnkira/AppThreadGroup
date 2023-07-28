@@ -29,6 +29,7 @@ bool app_module_load_not_over(void)
  */
 void app_module_load_process(void)
 {
+    APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
     app_module_clock_load();
     app_module_remind_alarm_load();
@@ -37,6 +38,7 @@ void app_module_load_process(void)
     app_module_do_not_disturb_load();
     /* ... */
     app_module_load_status_not_over = false;
+    APP_SYS_LOG_WARN("end");
 }
 
 /*@brief 系统加载模组启动
