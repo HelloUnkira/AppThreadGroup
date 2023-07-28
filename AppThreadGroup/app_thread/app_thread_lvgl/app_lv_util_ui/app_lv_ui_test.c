@@ -23,8 +23,9 @@ void app_lv_ui_test_scene(void)
     app_lv_ui_check_time_exec(false);
     /* 做些什么:测试代码 */
     #if 0
+    #elif 1
     lv_obj_t *img = lv_img_create(lv_scr_act());
-    lv_img_set_src(img, "S:test_find_phone.png");
+    lv_img_set_src(img, "S:/lvgl_ext_src/LVGL.png");
     lv_obj_center(img);
     #else
     #endif

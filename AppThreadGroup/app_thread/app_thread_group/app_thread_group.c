@@ -49,6 +49,9 @@ void app_thread_group_schedule(void)
     app_sys_timer_ready();
     app_sys_build_time();
     /*
+     *!!!就绪app third层
+     */
+    /*
      *!!!就绪app thread层
      */
     /* 就绪线程公共子模组 */
