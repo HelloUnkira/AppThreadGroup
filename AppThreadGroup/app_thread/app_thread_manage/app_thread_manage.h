@@ -2,7 +2,7 @@
 #define APP_THREAD_MANAGE_H
 
 typedef enum {  /* 线程模组 */
-    app_thread_manage_system = 0,  /* 系统模组 */
+    app_thread_manage_none = 0,    /* 系统模组,占位符(线程组公共事件) */
     app_thread_manage_dump,        /* 资源转储模组 */
     app_thread_manage_load,        /* 资源加载模组 */
     app_thread_manage_protocol,    /* 协议传输模组 */

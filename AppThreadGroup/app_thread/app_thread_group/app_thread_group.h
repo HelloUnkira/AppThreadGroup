@@ -30,6 +30,9 @@ typedef enum {  /* 线程组模组 */
 } app_thread_event_t;
 
 #include "app_thread_master.h"
+#include "app_thread_slave.h"
+
+/* 自定义子线程 */
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_manage.h"

@@ -32,139 +32,92 @@ void app_thread_mix_custom_ready(void)
     app_module_do_not_disturb_ready();
 }
 
+/*@brief 子线程服务例程就绪部
+ */
+static void app_thread_mix_custom_routine_ready_cb(void)
+{
+}
+
+/*@brief 子线程服务例程处理部
+ */
+static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
+{
+    switch (package->module) {
+    case app_thread_mix_custom_stopwatch: {
+        /* 秒表模组更新事件 */
+        if (package->event == app_thread_mix_custom_stopwatch_msec_update)
+            app_module_stopwatch_xmsec_update();
+        return true;
+    }
+    case app_thread_mix_custom_countdown: {
+        /* 倒计时模组更新事件 */
+        if (package->event == app_thread_mix_custom_stopwatch_msec_update)
+            app_module_countdown_xmsec_update();
+        /* 倒计时模组到期事件 */
+        if (package->event == app_thread_mix_custom_countdown_expired) {
+            app_thread_package_t package = {
+                .thread  = app_thread_id_lvgl,
+                .module  = app_thread_lvgl_ui_scene,
+                .event   = app_thread_lvgl_ui_countdown_remind,
+            };
+            app_thread_package_notify(&package);
+        }
+        return true;
+    }
+    case app_thread_mix_custom_remind_group: {
+        if (package->event == app_thread_mix_custom_remind_group_update) {
+            app_module_remind_group_reflush();
+        }
+        if (package->event == app_thread_mix_custom_remind_group_package) { 
+            /* 提醒组事件分拣 */
+            app_module_remind_package_t *remind = package->data;
+            /* 该提醒组事件来自提醒闹钟组: */
+            if (app_module_remind_alarm_group_check(remind->remind_group)) {
+                /* 发送闹钟事件(直接转发) */
+                package->thread = app_thread_id_lvgl;
+                package->module = app_thread_lvgl_ui_scene;
+                package->event  = app_thread_lvgl_ui_remind_alarm;
+                app_thread_package_notify(&package);
+            }
+        }
+        return true;
+    }
+    case app_thread_mix_custom_remind_misc: {
+        if (package->event == app_thread_mix_custom_remind_sedentary_update)
+            app_module_remind_sedentary_xmin_update();
+        if (package->event == app_thread_mix_custom_remind_drink_update)
+            app_module_remind_drink_xmin_update();
+        /* 走动提醒模组到期事件 */
+        if (package->event == app_thread_mix_custom_remind_sedentary_interval) {
+            app_thread_package_t package = {
+                .thread  = app_thread_id_lvgl,
+                .module  = app_thread_lvgl_ui_scene,
+                .event   = app_thread_lvgl_ui_remind_sedentary,
+            };
+            app_thread_package_notify(&package);
+        }
+        /* 喝水提醒模组到期事件 */
+        if (package->event == app_thread_mix_custom_remind_drink_interval) {
+            app_thread_package_t package = {
+                .thread  = app_thread_id_lvgl,
+                .module  = app_thread_lvgl_ui_scene,
+                .event   = app_thread_lvgl_ui_remind_drink,
+            };
+            app_thread_package_notify(&package);
+        }
+        return true;
+    }
+    default:
+        break;
+    }
+    return false;
+}
+
 /*@brief 混合事件线程服务例程
  */
 void app_thread_mix_custom_routine(void)
 {
-    app_sem_t *sem = NULL;
-    app_sys_pipe_t *pipe = NULL;
-    app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync(app_thread_id_mix_custom, &sem);
-    app_thread_get_pipe(app_thread_id_mix_custom, &pipe);
-    /* 因为有些准备动作只适合在子线程中完成 */
-    /* 将其从上面的接口中推延到此处 */ {
-    }
-    /* 主流程 */
-    while (true) {
-        app_sem_process(sem, app_sem_take);
-        /* 计算事件处理时间(开始) */
-        #if APP_SYS_LOG_EXECUTE
-        app_execute_us_t execute_us = {0};
-        app_execute_us(&execute_us, true);
-        #endif
-        #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_pkg_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread mix custom recv too much package:%u",
-                              app_sys_pipe_pkg_num(pipe));
-        #endif
-        while (app_sys_pipe_pkg_num(pipe) != 0) {
-            app_sys_pipe_take(pipe, &package, false);
-            /* 计算事件处理时间(开始) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
-            bool execute_us_remind = true;
-            app_execute_us_t execute_us = {0};
-            app_execute_us(&execute_us, true);
-            #endif
-            /* 现在我们需要处理这个包裹了 */
-            switch (package.module) {
-            case app_thread_mix_custom_system: {
-                if (package.event == app_thread_event_work)
-                    app_sys_work_execute((void *)package.data);
-                break;
-            }
-            case app_thread_mix_custom_stopwatch: {
-                /* 秒表模组更新事件 */
-                if (package.event == app_thread_mix_custom_stopwatch_msec_update)
-                    app_module_stopwatch_xmsec_update();
-                break;
-            }
-            case app_thread_mix_custom_countdown: {
-                /* 倒计时模组更新事件 */
-                if (package.event == app_thread_mix_custom_stopwatch_msec_update)
-                    app_module_countdown_xmsec_update();
-                /* 倒计时模组到期事件 */
-                if (package.event == app_thread_mix_custom_countdown_expired) {
-                    app_thread_package_t package = {
-                        .thread  = app_thread_id_lvgl,
-                        .module  = app_thread_lvgl_ui_scene,
-                        .event   = app_thread_lvgl_ui_countdown_remind,
-                    };
-                    app_thread_package_notify(&package);
-                }
-                break;
-            }
-            case app_thread_mix_custom_remind_group: {
-                if (package.event == app_thread_mix_custom_remind_group_update) {
-                    app_module_remind_group_reflush();
-                }
-                if (package.event == app_thread_mix_custom_remind_group_package) { 
-                    /* 提醒组事件分拣 */
-                    app_module_remind_package_t *remind = package.data;
-                    /* 该提醒组事件来自提醒闹钟组: */
-                    if (app_module_remind_alarm_group_check(remind->remind_group)) {
-                        /* 发送闹钟事件(直接转发) */
-                        package.thread = app_thread_id_lvgl;
-                        package.module = app_thread_lvgl_ui_scene;
-                        package.event  = app_thread_lvgl_ui_remind_alarm;
-                        app_thread_package_notify(&package);
-                    }
-                }
-                break;
-            }
-            case app_thread_mix_custom_remind_misc: {
-                if (package.event == app_thread_mix_custom_remind_sedentary_update)
-                    app_module_remind_sedentary_xmin_update();
-                if (package.event == app_thread_mix_custom_remind_drink_update)
-                    app_module_remind_drink_xmin_update();
-                /* 走动提醒模组到期事件 */
-                if (package.event == app_thread_mix_custom_remind_sedentary_interval) {
-                    app_thread_package_t package = {
-                        .thread  = app_thread_id_lvgl,
-                        .module  = app_thread_lvgl_ui_scene,
-                        .event   = app_thread_lvgl_ui_remind_sedentary,
-                    };
-                    app_thread_package_notify(&package);
-                }
-                /* 喝水提醒模组到期事件 */
-                if (package.event == app_thread_mix_custom_remind_drink_interval) {
-                    app_thread_package_t package = {
-                        .thread  = app_thread_id_lvgl,
-                        .module  = app_thread_lvgl_ui_scene,
-                        .event   = app_thread_lvgl_ui_remind_drink,
-                    };
-                    app_thread_package_notify(&package);
-                }
-                break;
-            }
-            default: {
-                #if APP_SYS_LOG_THREAD_CHECK
-                APP_SYS_LOG_ERROR("thread mix custom pipe recv a unknown package");
-                APP_SYS_LOG_ERROR("package thread:%u", package.thread);
-                APP_SYS_LOG_ERROR("package module:%u", package.module);
-                APP_SYS_LOG_ERROR("package event:%u",  package.event);
-                APP_SYS_LOG_ERROR("package data:%p",   package.data);
-                APP_SYS_LOG_ERROR("package size:%u",   package.size);
-                #endif
-                break;
-            }
-            }
-            /* 计算事件处理时间(结束) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
-            uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
-            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_us_remind) {
-                APP_SYS_LOG_WARN("thread mix custom package execute %d ms", ms);
-                APP_SYS_LOG_WARN("package thread:%u", package.thread);
-                APP_SYS_LOG_WARN("package module:%u", package.module);
-                APP_SYS_LOG_WARN("package event:%u",  package.event);
-                APP_SYS_LOG_WARN("package data:%p",   package.data);
-                APP_SYS_LOG_WARN("package size:%u",   package.size);
-            }
-            #endif
-        }
-        /* 计算事件处理时间(结束) */
-        #if APP_SYS_LOG_EXECUTE
-        double ms = app_execute_us(&execute_us, false) / 1000.0;
-        app_thread_execute_us_set(app_thread_id_mix_custom, &ms);
-        #endif
-    }
+    app_thread_slave_routine(app_thread_id_mix_custom,
+                             app_thread_mix_custom_routine_ready_cb,
+                             app_thread_mix_custom_routine_package_cb);
 }

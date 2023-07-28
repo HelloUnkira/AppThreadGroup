@@ -46,116 +46,68 @@ void app_thread_mix_irq_ready(void)
     app_module_temperature_ready();
 }
 
+/*@brief 子线程服务例程就绪部
+ */
+static void app_thread_mix_irq_routine_ready_cb(void)
+{
+}
+
+/*@brief 子线程服务例程处理部
+ */
+static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
+{
+    switch (package->module)
+    {
+    case app_thread_mix_irq_timer: {
+        if (package->event == app_thread_mix_irq_timer_reduce_update)
+            app_module_timer_reduce();
+        return true;
+    }
+    case app_thread_mix_irq_clock: {
+        if (package->event == app_thread_mix_irq_clock_local_update)
+            app_module_clock_local_update();
+        if (package->event == app_thread_mix_irq_clock_timestamp_update)
+            app_module_clock_timestamp_update(package->data != NULL ? *(uint64_t *)package->data : 0);
+        return true;
+    }
+    case app_thread_mix_irq_battery: {
+        if (package->event == app_thread_mix_irq_battery_charge)
+            /* 产生充电事件了 */;
+        if (package->event == app_thread_mix_irq_battery_discharge)
+            /* 产生放电事件了 */;
+        if (package->event == app_thread_mix_irq_battery_charge_check)
+            app_module_battery_charge_check();
+        if (package->event == app_thread_mix_irq_battery_voltage_check)
+            app_module_battery_voltage_check();
+        if (package->event == app_thread_mix_irq_battery_charge_xms_update)
+            app_module_battery_charge_xms_update();
+        if (package->event == app_thread_mix_irq_battery_voltage_xms_update)
+            app_module_battery_voltage_xms_update();
+        return true;
+    }
+    case app_thread_mix_irq_vibrate: {
+        if (package->event == app_thread_mix_irq_vibrate_msec_update)
+            app_module_vibrate_msec_update();
+        return true;
+    }
+    case app_thread_mix_irq_temperature: {
+        if (package->event == app_thread_mix_irq_temperature_xms_update)
+            app_module_temperature_xms_update();
+        if (package->event == app_thread_mix_irq_temperature_xs_update)
+            app_module_temperature_xs_update();
+        return true;
+    }
+    default:
+        break;
+    }
+    return false;
+}
+
 /*@brief 混合中断线程服务例程
  */
 void app_thread_mix_irq_routine(void)
 {
-    app_sem_t *sem = NULL;
-    app_sys_pipe_t *pipe = NULL;
-    app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync(app_thread_id_mix_irq, &sem);
-    app_thread_get_pipe(app_thread_id_mix_irq, &pipe);
-    /* 因为有些准备动作只适合在子线程中完成 */
-    /* 将其从上面的接口中推延到此处 */ {
-    }
-    /* 主流程 */
-    while (true) {
-        app_sem_process(sem, app_sem_take);
-        /* 计算事件处理时间(开始) */
-        #if APP_SYS_LOG_EXECUTE
-        app_execute_us_t execute_us = {0};
-        app_execute_us(&execute_us, true);
-        #endif
-        #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_pkg_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread mix irq recv too much package:%u",
-                              app_sys_pipe_pkg_num(pipe));
-        #endif
-        while (app_sys_pipe_pkg_num(pipe) != 0) {
-            app_sys_pipe_take(pipe, &package, false);
-            /* 计算事件处理时间(开始) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
-            bool execute_us_remind = true;
-            app_execute_us_t execute_us = {0};
-            app_execute_us(&execute_us, true);
-            #endif
-            /* 现在我们需要处理这个包裹了 */
-            switch (package.module) {
-            case app_thread_mix_irq_system: {
-                if (package.event == app_thread_event_work)
-                    app_sys_work_execute((void *)package.data);
-                break;
-            }
-            case app_thread_mix_irq_timer: {
-                if (package.event == app_thread_mix_irq_timer_reduce_update)
-                    app_module_timer_reduce();
-                break;
-            }
-            case app_thread_mix_irq_clock: {
-                if (package.event == app_thread_mix_irq_clock_local_update)
-                    app_module_clock_local_update();
-                if (package.event == app_thread_mix_irq_clock_timestamp_update) {
-                    uint64_t utc_new = package.data != NULL ? *(uint64_t *)package.data : 0;
-                    app_module_clock_timestamp_update(utc_new);
-                }
-                break;
-            }
-            case app_thread_mix_irq_battery: {
-                if (package.event == app_thread_mix_irq_battery_charge)
-                    /* 产生充电事件了 */;
-                if (package.event == app_thread_mix_irq_battery_discharge)
-                    /* 产生放电事件了 */;
-                if (package.event == app_thread_mix_irq_battery_charge_check)
-                    app_module_battery_charge_check();
-                if (package.event == app_thread_mix_irq_battery_voltage_check)
-                    app_module_battery_voltage_check();
-                if (package.event == app_thread_mix_irq_battery_charge_xms_update)
-                    app_module_battery_charge_xms_update();
-                if (package.event == app_thread_mix_irq_battery_voltage_xms_update)
-                    app_module_battery_voltage_xms_update();
-                break;
-            }
-            case app_thread_mix_irq_vibrate: {
-                if (package.event == app_thread_mix_irq_vibrate_msec_update)
-                    app_module_vibrate_msec_update();
-                break;
-            }
-            case app_thread_mix_irq_temperature: {
-                if (package.event == app_thread_mix_irq_temperature_xms_update)
-                    app_module_temperature_xms_update();
-                if (package.event == app_thread_mix_irq_temperature_xs_update)
-                    app_module_temperature_xs_update();
-                break;
-            }
-            default: {
-                #if APP_SYS_LOG_THREAD_CHECK
-                APP_SYS_LOG_ERROR("thread mix irq pipe recv a unknown package");
-                APP_SYS_LOG_ERROR("package thread:%u", package.thread);
-                APP_SYS_LOG_ERROR("package module:%u", package.module);
-                APP_SYS_LOG_ERROR("package event:%u",  package.event);
-                APP_SYS_LOG_ERROR("package data:%p",   package.data);
-                APP_SYS_LOG_ERROR("package size:%u",   package.size);
-                #endif
-                break;
-            }
-            }
-            /* 计算事件处理时间(结束) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
-            uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
-            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_us_remind) {
-                APP_SYS_LOG_WARN("thread mix irq package execute %d ms", ms);
-                APP_SYS_LOG_WARN("package thread:%u", package.thread);
-                APP_SYS_LOG_WARN("package module:%u", package.module);
-                APP_SYS_LOG_WARN("package event:%u",  package.event);
-                APP_SYS_LOG_WARN("package data:%p",   package.data);
-                APP_SYS_LOG_WARN("package size:%u",   package.size);
-            }
-            #endif
-        }
-        /* 计算事件处理时间(结束) */
-        #if APP_SYS_LOG_EXECUTE
-        double ms = app_execute_us(&execute_us, false) / 1000.0;
-        app_thread_execute_us_set(app_thread_id_mix_irq, &ms);
-        #endif
-    }
+    app_thread_slave_routine(app_thread_id_mix_irq,
+                             app_thread_mix_irq_routine_ready_cb,
+                             app_thread_mix_irq_routine_package_cb);
 }
