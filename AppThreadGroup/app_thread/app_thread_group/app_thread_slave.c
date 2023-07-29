@@ -8,8 +8,9 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
-#include "app_sys_work.h"
+#include "app_sys_timer.h"
 #include "app_thread_group.h"
+#include "app_module_work.h"
 
 /*@brief     从线程服务例程结构模板
  *           这是通用化的结构模板,每个子线程均使用它
@@ -75,7 +76,7 @@ void app_thread_slave_routine(uint32_t app_thread_id,
                 switch (package.module) {
                 case 0: {
                     if (package.event == app_thread_event_work)
-                        app_sys_work_execute((void *)package.data);
+                        app_module_work_execute((void *)package.data);
                     break;
                 }
                 default: {

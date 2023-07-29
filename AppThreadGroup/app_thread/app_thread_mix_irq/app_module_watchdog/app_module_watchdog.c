@@ -7,10 +7,11 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_work.h"
+#include "app_sys_timer.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_watchdog.h"
+#include "app_module_work.h"
 
 static app_mutex_t app_module_watchdog_mutex = {0};
 static app_module_watchdog_t app_module_watchdog = {0};
@@ -42,7 +43,7 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
             .thread  = idx,
             .module  = 0,                       /* 线程组系统模组 */
             .event   = app_thread_event_work,   /* 线程组工作事件 */
-            .data    = app_sys_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
+            .data    = app_module_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
         };
         app_thread_package_notify(&package);
         /* 如果超出最大时限,出错断言 */

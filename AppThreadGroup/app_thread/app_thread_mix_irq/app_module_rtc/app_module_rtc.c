@@ -7,10 +7,9 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_work.h"
 #include "app_thread_group.h"
-#include "app_module_rtc.h"
 #include "app_module_timer.h"
+#include "app_module_rtc.h"
 
 static app_mutex_t app_module_rtc_mutex = {0};
 static app_module_rtc_t app_module_rtc = {0};

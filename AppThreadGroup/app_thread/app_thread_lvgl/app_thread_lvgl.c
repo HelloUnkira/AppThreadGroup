@@ -8,7 +8,6 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_pipe.h"
-#include "app_sys_work.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_remind_group.h"
