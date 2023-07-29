@@ -76,7 +76,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
                 package->thread = app_thread_id_lvgl;
                 package->module = app_thread_lvgl_ui_scene;
                 package->event  = app_thread_lvgl_ui_remind_alarm;
-                app_thread_package_notify(&package);
+                app_thread_package_notify(package);
             }
         }
         return true;
