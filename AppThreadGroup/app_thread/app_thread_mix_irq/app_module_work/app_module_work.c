@@ -86,8 +86,8 @@ void app_module_work_delay_submit(app_module_work_t *work, uint32_t delay_ms, ui
 {
     app_module_work_delay_t *work_delay = app_mem_alloc(sizeof(app_module_work_delay_t));
     memset(&work_delay->timer, 0, sizeof(app_sys_timer_t));
-    work_delay->work            = work;
-    work_delay->timer.user_data = work_delay;
+    work_delay->work            = (void *)work;
+    work_delay->timer.user_data = (void *)work_delay;
     work_delay->timer.expired   = app_module_work_delay_timer_handler;
     work_delay->timer.peroid    = delay_ms;
     work_delay->thread          = thread;

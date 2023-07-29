@@ -11,8 +11,8 @@ typedef struct {
 
 typedef struct {
     app_sys_timer_t timer;
-    app_module_work_t *work;
     uint32_t thread;
+    void    *work;
 } app_module_work_delay_t;
 
 /*@brief 处理一份工作清单
@@ -28,7 +28,7 @@ void app_module_work_execute(app_module_work_t *works);
 app_module_work_t * app_module_work_make(uint32_t num, ...);
 
 /*@brief     迟延工作清单提交
- *@param[in] work       一份工作清单(app_module_work_list_make生成)
+ *@param[in] work       一份工作清单(app_module_work_make生成)
  *@param[in] delay_ms   延迟时间
  *@param[in] thread     目标线程
  */
