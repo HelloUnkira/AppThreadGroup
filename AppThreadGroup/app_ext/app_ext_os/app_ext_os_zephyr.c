@@ -23,7 +23,7 @@ void app_os_schedule(void)
 /*@brief 当前环境是否为中断环境(注意:当且仅当必要的使用)
  */
 bool app_os_not_in_irq(void)
-{        
+{
     uint32_t interrupt;
     
     /* 获取当前正在执行的中断数 */

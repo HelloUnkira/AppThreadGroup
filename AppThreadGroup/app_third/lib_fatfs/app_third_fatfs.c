@@ -1,6 +1,6 @@
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
@@ -67,6 +67,7 @@ void app_third_fatfs_walk(char *path)
     FRESULT retval = FR_OK;
     
     DIR dir;
+    APP_SYS_LOG_INFO(path);
     if ((retval = f_opendir(&dir, path)) != FR_OK)
         APP_SYS_LOG_WARN("f_opendir fail:%d", retval);
     
@@ -74,19 +75,23 @@ void app_third_fatfs_walk(char *path)
         if ((retval = f_readdir(&dir, &fno)) != FR_OK || fno.fname[0] == 0)
             break;
         
-        if (strcmp(fno.fname,  ".") == 0 ||
-            strcmp(fno.fname, "..") == 0)
+        if (strcmp(fno.fname, ".") == 0 || strcmp(fno.fname, "..") == 0)
             continue;
         
         if (fno.fattrib & AM_DIR) {
             char path_next[256] = {0};
             sprintf(path_next, "%s/%s", path, fno.fname);
-            APP_SYS_LOG_INFO(path_next);
             app_third_fatfs_walk(path_next);
         } else {
             char path_file[256] = {0};
             sprintf(path_file, "%s/%s", path, fno.fname);
             APP_SYS_LOG_INFO(path_file);
+            
+            FIL file = {0};
+            if ((retval = f_open(&file, path_file, FA_READ | FA_WRITE)) != FR_OK)
+                APP_SYS_LOG_WARN("f_open fail:%d", retval);
+            if ((retval = f_close(&file)) != FR_OK)
+                APP_SYS_LOG_WARN("f_close fail:%d", retval);
         }
     }
     f_closedir(&dir);
@@ -106,9 +111,14 @@ void app_third_fatfs_init(void)
     app_third_fatfs_info("");
     /* 递归遍历文件系统的文件列表 */
     app_third_fatfs_walk("");
+    
+    #if APP_THIRD_FATFS_USE_TEST_MODE
+    for (uint32_t idx = 0; idx < 1000; idx++)
+        app_third_fatfs_walk("");
+    #endif
 }
 
-/*@brief 初始化FatFS
+/*@brief 反初始化FatFS
  */
 void app_third_fatfs_deinit(void)
 {

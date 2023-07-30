@@ -263,7 +263,7 @@
 */
 
 
-#define FF_FS_LOCK		3
+#define FF_FS_LOCK		20  /* 可同时打开文件以及子目录数量!!! */
 /* The option FF_FS_LOCK switches file lock function to control duplicated file open
 /  and illegal operation to open objects. This option must be 0 when FF_FS_READONLY
 /  is 1.

@@ -1,6 +1,8 @@
 #ifndef APP_THIRD_FATFS_H
 #define APP_THIRD_FATFS_H
 
+#define APP_THIRD_FATFS_USE_TEST_MODE   0
+
 /*@brief     文件系统基本信息
  *@param[in] path 根路径
  */
@@ -15,7 +17,7 @@ void app_third_fatfs_walk(char *path);
  */
 void app_third_fatfs_init(void);
 
-/*@brief 初始化FatFS
+/*@brief 反初始化FatFS
  */
 void app_third_fatfs_deinit(void);
 

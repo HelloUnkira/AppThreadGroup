@@ -42,7 +42,6 @@ DSTATUS disk_initialize(BYTE pdrv)
 DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 {
     if (pdrv == APP_FATFS_EXT_MEM) {
-        
         uint8_t  *buffer = (void *)buff;
         uintptr_t offset = FF_MAX_SS * (uintptr_t)sector;
         uintptr_t size   = FF_MAX_SS * (uintptr_t)count;
@@ -50,8 +49,10 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
         const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
         if (app_sys_ext_mem_read(ext_mem, offset, buffer, size))
             return RES_OK;
-        else
+        else {
+            APP_SYS_ASSERT(RES_OK == RES_ERROR);
             return RES_ERROR;
+        }
     } else {
         APP_SYS_ASSERT(RES_OK == RES_ERROR);
         return RES_ERROR;
@@ -63,7 +64,6 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
 DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
 {
     if (pdrv == APP_FATFS_EXT_MEM) {
-        
         uint8_t  *buffer = (void *)buff;
         uintptr_t offset = FF_MAX_SS * (uintptr_t)sector;
         uintptr_t size   = FF_MAX_SS * (uintptr_t)count;
@@ -71,8 +71,10 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
         const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("fat_fs");
         if (app_sys_ext_mem_write(ext_mem, offset, buffer, size))
             return RES_OK;
-        else
+        else {
+            APP_SYS_ASSERT(RES_OK == RES_ERROR);
             return RES_ERROR;
+        }
     } else {
         APP_SYS_ASSERT(RES_OK == RES_ERROR);
         return RES_ERROR;

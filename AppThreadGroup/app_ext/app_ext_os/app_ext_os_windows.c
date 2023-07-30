@@ -133,10 +133,15 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 void app_critical_process(app_critical_t *critical, app_critical_option_t option)
 {
     switch (option) {
-    case app_critical_create:
     case app_critical_static: {
         /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
         app_mutex_process(&critical->mutex, app_mutex_static);
+        critical->mutex_ready = true;
+        break;
+    }
+    case app_critical_create: {
+        /* Windows不需要临界区保护,因为资源不会被中断打断,临界区退化为互斥锁 */
+        app_mutex_process(&critical->mutex, app_mutex_create);
         critical->mutex_ready = true;
         break;
     }

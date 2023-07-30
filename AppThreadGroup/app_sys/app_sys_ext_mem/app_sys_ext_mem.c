@@ -74,10 +74,8 @@ void app_sys_ext_mem_reflush(const app_sys_ext_mem_t *ext_mem, uint8_t value)
     uint8_t block[4096] = {0};
     for (uint32_t idx = 0; idx < sizeof(block); block[idx] = value, idx++);
     APP_SYS_LOG_INFO("reflush start");
-    app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_take);
     for (uint32_t idx = 0; idx < ext_mem->chunk_size; idx += sizeof(block))
         app_sys_ext_mem_write(ext_mem, idx, block, sizeof(block));
-    app_mutex_process(&app_sys_ext_mem_mutex, app_mutex_give);
     APP_SYS_LOG_INFO("reflush end");
 }
 
