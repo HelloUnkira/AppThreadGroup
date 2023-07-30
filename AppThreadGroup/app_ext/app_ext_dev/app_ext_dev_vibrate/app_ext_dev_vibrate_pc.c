@@ -62,26 +62,6 @@ static void app_dev_vibrate_hal_dlps_exit(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     vibrate设备进入shutdown模式
- *@param[in] driver 设备实例
- */
-static void app_dev_vibrate_hal_shutdown_enter(app_dev_t *driver)
-{
-    const app_dev_vibrate_cfg_t *cfg = driver->cfg;
-    app_dev_vibrate_data_t *data = driver->data;
-    /* 填充目标平台下的动作 */
-}
-
-/*@brief     vibrate设备退出shutdown模式
- *@param[in] driver 设备实例
- */
-static void app_dev_vibrate_hal_shutdown_exit(app_dev_t *driver)
-{
-    const app_dev_vibrate_cfg_t *cfg = driver->cfg;
-    app_dev_vibrate_data_t *data = driver->data;
-    /* 填充目标平台下的动作 */
-}
-
 /* 静态配置的设备操作参数 */
 static const app_dev_vibrate_cfg_t app_dev_vibrate_cfg = {
     .args = NULL,
@@ -89,13 +69,11 @@ static const app_dev_vibrate_cfg_t app_dev_vibrate_cfg = {
 
 /* 静态配置的设备操作集合 */
 static const app_dev_vibrate_api_t app_dev_vibrate_api = {
-    .open               = app_dev_vibrate_hal_open,
-    .close              = app_dev_vibrate_hal_close,
-    .update             = app_dev_vibrate_hal_update,
-    .dlps_enter         = app_dev_vibrate_hal_dlps_enter,
-    .dlps_exit          = app_dev_vibrate_hal_dlps_exit,
-    .shutdown_enter     = app_dev_vibrate_hal_shutdown_enter,
-    .shutdown_exit      = app_dev_vibrate_hal_shutdown_exit,
+    .open           = app_dev_vibrate_hal_open,
+    .close          = app_dev_vibrate_hal_close,
+    .update         = app_dev_vibrate_hal_update,
+    .dlps_enter     = app_dev_vibrate_hal_dlps_enter,
+    .dlps_exit      = app_dev_vibrate_hal_dlps_exit,
 };
 
 /* 动态的设备操作数据 */
