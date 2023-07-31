@@ -7,9 +7,10 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_timer.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_log_text.h"
+#include "app_sys_timer.h"
+#include "app_sys_pipe.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_system.h"
@@ -47,6 +48,7 @@ void app_thread_group_schedule(void)
     app_sys_ext_mem_ready();
     app_sys_log_text_ready();
     app_sys_timer_ready();
+    app_sys_pipe_slab_ready();
     app_sys_build_time();
     /*
      *!!!就绪app thread层

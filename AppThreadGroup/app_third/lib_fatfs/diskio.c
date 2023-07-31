@@ -15,26 +15,22 @@
 
 DSTATUS disk_status(BYTE pdrv)
 {
-    /* 无事可做 */
-    return RES_OK;
-    
     if (pdrv == APP_FATFS_EXT_MEM) {
         return RES_OK;
     } else {
-        APP_SYS_ASSERT(RES_OK == STA_NOINIT);
+        // APP_SYS_ASSERT(RES_OK == STA_NOINIT);
+        APP_SYS_LOG_ERROR("pdrv:%u", pdrv);
         return STA_NOINIT;
     }
 }
 
 DSTATUS disk_initialize(BYTE pdrv)
 {
-    /* 无事可做 */
-    return RES_OK;
-    
     if (pdrv == APP_FATFS_EXT_MEM) {
         return RES_OK;
     } else {
-        APP_SYS_ASSERT(RES_OK == STA_NOINIT);
+        // APP_SYS_ASSERT(RES_OK == STA_NOINIT);
+        APP_SYS_LOG_ERROR("pdrv:%u", pdrv);
         return STA_NOINIT;
     }
 }
@@ -54,7 +50,8 @@ DRESULT disk_read(BYTE pdrv, BYTE *buff, LBA_t sector, UINT count)
             return RES_ERROR;
         }
     } else {
-        APP_SYS_ASSERT(RES_OK == RES_ERROR);
+        // APP_SYS_ASSERT(RES_OK == RES_ERROR);
+        APP_SYS_LOG_ERROR("pdrv:%u", pdrv);
         return RES_ERROR;
     }
 }
@@ -76,7 +73,8 @@ DRESULT disk_write(BYTE pdrv, const BYTE *buff, LBA_t sector, UINT count)
             return RES_ERROR;
         }
     } else {
-        APP_SYS_ASSERT(RES_OK == RES_ERROR);
+        // APP_SYS_ASSERT(RES_OK == RES_ERROR);
+        APP_SYS_LOG_ERROR("pdrv:%u", pdrv);
         return RES_ERROR;
     }
 }

@@ -42,7 +42,7 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         rect_area.y1 = roller_coords.y1;
         rect_area.y2 = roller_coords.y1 + (lv_obj_get_height(obj) - line_height - line_space) / 2;
         /* 创建上部渐变蒙层 */
-        lv_draw_mask_fade_param_t * fade_mask_t = app_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
+        lv_draw_mask_fade_param_t * fade_mask_t = lv_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
         lv_draw_mask_fade_init(fade_mask_t, &rect_area, LV_OPA_TRANSP, rect_area.y1, LV_OPA_COVER, rect_area.y2);
         roller_mask_id_t = lv_draw_mask_add(fade_mask_t, NULL);
         /* 重定位下部蒙层绘制域 */
@@ -51,7 +51,7 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         rect_area.y1 = rect_area.y2 + line_height + line_space - 1;
         rect_area.y2 = roller_coords.y2;
         /* 创建下部渐变蒙层 */
-        lv_draw_mask_fade_param_t * fade_mask_b = app_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
+        lv_draw_mask_fade_param_t * fade_mask_b = lv_mem_alloc(sizeof(lv_draw_mask_fade_param_t));
         lv_draw_mask_fade_init(fade_mask_b, &rect_area, LV_OPA_COVER, rect_area.y1, LV_OPA_TRANSP, rect_area.y2);
         roller_mask_id_b = lv_draw_mask_add(fade_mask_b, NULL);
         break;
@@ -62,8 +62,8 @@ void app_lv_ui_roller_mask_event_cb(lv_event_t * e)
         lv_draw_mask_fade_param_t * fade_mask_b = lv_draw_mask_remove_id(roller_mask_id_b);
 //        lv_draw_mask_free_param(fade_mask_t);
 //        lv_draw_mask_free_param(fade_mask_b);
-        app_mem_free(fade_mask_t);
-        app_mem_free(fade_mask_b);
+        lv_mem_free(fade_mask_t);
+        lv_mem_free(fade_mask_b);
         roller_mask_id_t = -1;
         roller_mask_id_b = -1;
         break;
