@@ -46,7 +46,7 @@ bool app_nanopb_xfer_notify(AppPB_MsgSet *message)
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 传输nanopb数据流 */
-    app_module_transfer_notify(buffer, size);
+    app_module_transfer_notify(0, buffer, size);
     /* 回收nanopb缓冲区 */
     app_mem_free(buffer);
 }

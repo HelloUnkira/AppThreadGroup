@@ -43,6 +43,8 @@ int main(int argc, char *argv[])
         #error "delete this error"
         #endif
         /* test:... */
+        static uint32_t count = 0;
+        count++;
         #if 0
         #elif 0
         /* test timer */
@@ -52,9 +54,9 @@ int main(int argc, char *argv[])
         /* test reset load and dump */
         if (count == 5000)
             app_module_system_valid_set(false);
-        #elif 0
-        /* test protocol(7s later) */
-        if (count == 1000 * 7) {
+        #elif 1
+        /* test protocol(3s later) */
+        if (count == 1000 * 3) {
             app_module_protocol_t protocol = {
               //.notify.type = app_module_protocol_system_clock,
                 .notify.type = app_module_protocol_trace_text,

@@ -45,7 +45,7 @@ bool app_json_xfer_notify(cJSON *json_object)
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 传输JSON数据流 */
-    app_module_transfer_notify(json_stream, strlen(json_stream));
+    app_module_transfer_notify(0, json_stream, strlen(json_stream));
     /* 回收JSON对象 */
     cJSON_free(json_stream);
     return true;

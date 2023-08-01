@@ -57,7 +57,7 @@ static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, 
     }
     case app_thread_manage_transfer: {
         if (package->event == app_thread_manage_transfer_notify)
-            app_module_transfer_notify(package->data, package->size);
+            app_module_transfer_notify(0, package->data, package->size);
         if (package->event == app_thread_manage_transfer_respond)
             app_module_transfer_respond(package->data);
         if (package->dynamic)
