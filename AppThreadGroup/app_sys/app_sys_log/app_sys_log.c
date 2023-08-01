@@ -34,28 +34,33 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
     va_list  list;
     va_start(list, format);
     
+    /* 文件名跳过路径,不需要使用时屏蔽即可 */
+    /* 这里可以让编译器自优化 */
+    int32_t separator = 0;
+    int32_t file_len  = strlen(file);
+    for (separator = file_len - 1; separator > 0; separator--)
+        if (file[separator] == '/' || file[separator] == '\\') {
+            if (separator < file_len)
+                file += separator + 1;
+            break;
+        }
+    
+    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
+    char str_fmt[256] = {0};
+    // snprintf(str_fmt, sizeof(str_fmt), "[%s][%u][%c]", func, line, flag);
+    // snprintf(str_fmt, sizeof(str_fmt), "[%s][%u][%c]", file, line, flag);
+    snprintf(str_fmt, sizeof(str_fmt), "[%s][%s][%u][%c]", file, func, line, flag);
+    
     app_mutex_process(&app_sys_log_mutex, app_mutex_take);
     if (status) {
-        /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
-        #if 0
-        #elif 1
-        app_sys_log.message1("[%s][%u][%c]", func, line, flag);
+        app_sys_log.message1(str_fmt);
         app_sys_log.message2(format, list);
         app_sys_log.message1(APP_SYS_LOG_LINE);
-        #elif 0
-        app_sys_log.message1("[%s][%u][%c]", file, line, flag);
-        app_sys_log.message2(format, list);
-        app_sys_log.message1(APP_SYS_LOG_LINE);
-        #else
-        app_sys_log.message1("[%s][%s][%u][%c]", file, func, line, flag);
-        app_sys_log.message2(format, list);
-        app_sys_log.message1(APP_SYS_LOG_LINE);
-        #endif
         /* 格式化信息持久化 */
         if (record) {
             uint32_t offset = 0;
             char text[APP_SYS_LOG_RECORD_LENGTH] = {0};
-            offset +=  snprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, "[%s][%u][%c]", func, line, flag);
+            offset +=  snprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, str_fmt);
             offset += vsnprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, format, list);
             offset +=  snprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, APP_SYS_LOG_LINE);
             text[APP_SYS_LOG_RECORD_LENGTH - 1] = '\0';
