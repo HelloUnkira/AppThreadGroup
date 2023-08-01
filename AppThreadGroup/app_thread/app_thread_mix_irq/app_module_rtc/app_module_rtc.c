@@ -18,6 +18,7 @@ static app_module_rtc_t app_module_rtc = {0};
  */
 void app_module_rtc_1ms_cb(void)
 {
+    /* 心跳是生命之源 */
     static uint32_t count = 0;
     app_mutex_process(&app_module_rtc_mutex, app_mutex_take);
     if (count++ % 1000 == 0)

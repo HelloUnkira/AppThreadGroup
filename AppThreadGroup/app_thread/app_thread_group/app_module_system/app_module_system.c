@@ -81,7 +81,11 @@ void app_module_system_mode_set(uint8_t mode)
     app_module_data_center_t *data_center = NULL;
     app_module_data_center_load(app_module_data_center_system_profile);
     app_module_data_center_source(&data_center);
+    #if APP_ARCH_IS_PC
+    data_center->system_profile.system_mode = app_module_system_normal;
+    #else
     data_center->system_profile.system_mode = mode;
+    #endif
     app_module_data_center_dump();
 }
 

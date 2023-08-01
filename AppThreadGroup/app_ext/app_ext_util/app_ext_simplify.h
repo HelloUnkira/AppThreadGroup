@@ -263,13 +263,17 @@ static inline uint8_t app_char_alnum_to_hex(char C) {return app_char_is_digit(C)
  */
 #define app_expr_unused(expr)  do {(volatile void *)(expr);} while (0)
 
+/*@brief 静态断言
+ */
+#define app_expr_assert_static(name, expr)  static uint8_t name##_static_assert[expr ? 1 : -1];
+
 /*@brief 条件检查
  */
 #define app_expr_cond(cond, expr)  if (cond) do {expr;} while (0)
 
 /*@brief 从成员地址(编译解析)中计算其(结构)所有者地址
  */
-#define app_owner_calc(type, name, addr)    ((type *)((uintptr_t)(addr) - ((uintptr_t)&((type *)0)->name)))
+#define app_owner_off(type, name, addr)    ((type *)((uintptr_t)(addr) - ((uintptr_t)&((type *)0)->name)))
 
 /*@brief 静态数组成员数量
  */
@@ -301,7 +305,7 @@ static inline uint8_t app_char_alnum_to_hex(char C) {return app_char_is_digit(C)
 
 /*@brief 数组左移位(右边填充指定值)
  */
-#define app_arr_lshift(arr, len, cnt, val)                  \
+#define app_arr_lsft(arr, len, cnt, val)                    \
     do {                                                    \
         for (int32_t idx = 0; idx + cnt < len; idx++)       \
             arr[idx] = arr[idx + cnt];                      \
@@ -311,7 +315,7 @@ static inline uint8_t app_char_alnum_to_hex(char C) {return app_char_is_digit(C)
 
 /*@brief 数组右移位(左边填充指定值)
  */
-#define app_arr_rshift(arr, len, cnt, val)                  \
+#define app_arr_rsft(arr, len, cnt, val)                    \
     do {                                                    \
         for (int32_t idx = len - 1; idx - cnt >= 0; idx--)  \
             arr[idx] = arr[idx - cnt];                      \
