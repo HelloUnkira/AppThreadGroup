@@ -10,6 +10,7 @@
 #include "app_sys_log.h"
 #include "app_sys_log_text.h"
 #include "app_thread_group.h"
+#include "app_module_transfer.h"
 #include "app_module_protocol.h"
 #include "app_module_clock.h"
 
@@ -35,7 +36,7 @@ void app_json_xfer_notify_trace_text(void)
         /* 数据打包 */
         cJSON_AddStringToObject(json_item, "text", trace_text);
         /* 传输对象发送通知 */
-        app_json_xfer_notify(json_item);
+        app_json_xfer_notify(app_module_transfer_chan_high, json_item);
         /* 销毁传输对象 */
         cJSON_Delete(json_item);
     }
@@ -78,7 +79,7 @@ void app_json_xfer_notify_system_clock(void)
     cJSON_AddNumberToObject(src_item, "zone",   clock.zone_sec);
     cJSON_AddNumberToObject(src_item, "is_24",  clock.is_24);
     /* 传输对象发送通知 */
-    app_json_xfer_notify(json_item);
+    app_json_xfer_notify(app_module_transfer_chan_low, json_item);
     /* 销毁传输对象 */
     cJSON_Delete(json_item);
 }

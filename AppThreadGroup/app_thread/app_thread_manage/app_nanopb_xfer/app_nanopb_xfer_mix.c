@@ -10,6 +10,7 @@
 #include "app_sys_log.h"
 #include "app_sys_log_text.h"
 #include "app_thread_group.h"
+#include "app_module_transfer.h"
 #include "app_module_protocol.h"
 #include "app_module_clock.h"
 
@@ -36,7 +37,7 @@ void app_nanopb_xfer_notify_trace_text(void)
         if (strlen(message.payload.trace_text.trace_text) == 0)
             break;
         /* 传输对象发送通知 */
-        app_nanopb_xfer_notify(&message);
+        app_nanopb_xfer_notify(app_module_transfer_chan_high, &message);
     }
 }
 
@@ -70,7 +71,7 @@ void app_nanopb_xfer_notify_system_clock(void)
         },
     };
     /* 传输对象发送通知 */
-    app_nanopb_xfer_notify(&message);
+    app_nanopb_xfer_notify(app_module_transfer_chan_low, &message);
 }
 
 /*@brief 传输接收系统时钟

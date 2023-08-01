@@ -24,7 +24,7 @@
  *@param[in] message nanopb集合对象
  *@retval    推送是否成功
  */
-bool app_nanopb_xfer_notify(AppPB_MsgSet *message)
+bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *message)
 {
     /* 计算缓冲区的大小 */
     size_t size = 0;
@@ -46,7 +46,7 @@ bool app_nanopb_xfer_notify(AppPB_MsgSet *message)
     APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     #endif
     /* 传输nanopb数据流 */
-    app_module_transfer_notify(0, buffer, size);
+    app_module_transfer_notify(channel, buffer, size);
     /* 回收nanopb缓冲区 */
     app_mem_free(buffer);
 }
