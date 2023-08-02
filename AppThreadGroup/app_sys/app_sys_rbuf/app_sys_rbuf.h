@@ -29,6 +29,12 @@ void app_sys_rbuf_reset(app_sys_rbuf *rbuf);
  */
 bool app_sys_rbuf_is_empty(app_sys_rbuf *rbuf);
 
+/*@brief        获取环形队列类型
+ *@param[in]    rbuf 实例
+ *@retval       环形队列类型
+ */
+uint8_t app_sys_rbuf_get_type(app_sys_rbuf *rbuf);
+
 /*@brief        获取环形队列已有条目(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       占用条目数量
@@ -74,23 +80,23 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
  *    此外gets和puts仅配套使用以免缓冲区紊乱
  */
 
-/*@brief 定长数据的gets接口,参数细节与原型一致,扩展为(type)
- *       int32_t app_sys_rbuf_gets_(type)(app_sys_rbuf *rbuf, (type) *data);
+/*@brief 定长数据的gets接口,参数细节与原型一致
+ *       注意:这里的环形队列类型需要和type对齐
+ *       建议使用以下宏对齐type以加速:
+ *           #pragma pack(push, x)
+ *           #pragma pack(pop)
  */
-#define APP_SYS_RBUF_GETS_FIXED(type)                                               \
-static inline int32_t app_sys_rbuf_gets_##type##(app_sys_rbuf *rbuf, type *data)    \
-{                                                                                   \
-    return app_sys_rbuf_gets(rbuf, (void *)data, sizeof(type));                     \
-}                                                                                   \
+#define APP_SYS_RBUF_GETS_FIXED(rbuf, data, type)   \
+        app_sys_rbuf_gets(rbuf, (void *)data, sizeof(type) / app_sys_rbuf_get_type(rbuf))
 
-/*@brief 定长数据的puts接口,参数细节与原型一致,扩展为(type)
- *       int32_t app_sys_rbuf_puts_(type)(app_sys_rbuf *rbuf, (type) *data);
+/*@brief 定长数据的puts接口,参数细节与原型一致
+ *       注意:这里的环形队列类型需要和type对齐
+ *       建议使用以下宏对齐type以加速:
+ *           #pragma pack(push, x)
+ *           #pragma pack(pop)
  */
-#define APP_SYS_RBUF_PUTS_FIXED(type)                                               \
-static inline int32_t app_sys_rbuf_puts_##type##(app_sys_rbuf *rbuf, type *data)    \
-{                                                                                   \
-    return app_sys_rbuf_puts(rbuf, (void *)data, sizeof(type));                     \
-}                                                                                   \
+#define APP_SYS_RBUF_PUTS_FIXED(rbuf, data, type)   \
+        app_sys_rbuf_puts(rbuf, (void *)data, sizeof(type) / app_sys_rbuf_get_type(rbuf))
 
 /*@brief 非定长数据的gets接口,参数细节与原型一致
  *       注意:data的缓冲区有一个最大值上限,双方约定即可

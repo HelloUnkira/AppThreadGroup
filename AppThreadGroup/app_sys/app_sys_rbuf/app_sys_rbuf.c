@@ -46,6 +46,18 @@ bool app_sys_rbuf_is_empty(app_sys_rbuf *rbuf)
     return is_empty;
 }
 
+/*@brief        获取环形队列类型
+ *@param[in]    rbuf 实例
+ *@retval       环形队列类型
+ */
+uint8_t app_sys_rbuf_get_type(app_sys_rbuf *rbuf)
+{
+    app_mutex_process(&rbuf->mutex, app_mutex_take);
+    uint8_t type = rbuf->type;
+    app_mutex_process(&rbuf->mutex, app_mutex_give);
+    return type;
+}
+
 /*@brief        获取环形队列已有条目(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       占用条目数量
