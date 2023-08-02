@@ -209,7 +209,6 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length)
 }
 
 /*@brief 非定长数据的gets接口,参数细节与原型一致
-
  *       注意:data的缓冲区有一个最大值上限,双方约定即可
  */
 int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length)
@@ -222,7 +221,6 @@ int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *leng
 }
 
 /*@brief 非定长数据的puts接口,参数细节与原型一致
-
  *       注意:data的缓冲区有一个最大值上限,双方约定即可
  */
 int32_t app_sys_rbuf_puts_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length)
