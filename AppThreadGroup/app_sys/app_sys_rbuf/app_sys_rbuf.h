@@ -68,4 +68,38 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf *rbuf, void *data, uint32_t length);
  */
 int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
 
+/*补充扩展:
+ *    上述满足线程安全的环形缓冲区所需接口已具完备性
+ *    下面是一些补充简化的接口
+ *    此外gets和puts仅配套使用以免缓冲区紊乱
+ */
+
+/*@brief 定长数据的gets接口,参数细节与原型一致,扩展为(type)
+ *       int32_t app_sys_rbuf_gets_(type)(app_sys_rbuf *rbuf, (type) *data);
+ */
+#define APP_SYS_RBUF_GETS_FIXED(type)                                               \
+static inline int32_t app_sys_rbuf_gets_##type##(app_sys_rbuf *rbuf, type *data)    \
+{                                                                                   \
+    return app_sys_rbuf_gets(rbuf, (void *)data, sizeof(type));                     \
+}                                                                                   \
+
+/*@brief 定长数据的puts接口,参数细节与原型一致,扩展为(type)
+ *       int32_t app_sys_rbuf_puts_(type)(app_sys_rbuf *rbuf, (type) *data);
+ */
+#define APP_SYS_RBUF_PUTS_FIXED(type)                                               \
+static inline int32_t app_sys_rbuf_puts_##type##(app_sys_rbuf *rbuf, type *data)    \
+{                                                                                   \
+    return app_sys_rbuf_puts(rbuf, (void *)data, sizeof(type));                     \
+}                                                                                   \
+
+/*@brief 非定长数据的gets接口,参数细节与原型一致
+ *       注意:data的缓冲区有一个最大值上限,双方约定即可
+ */
+int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length);
+
+/*@brief 非定长数据的puts接口,参数细节与原型一致
+ *       注意:data的缓冲区有一个最大值上限,双方约定即可
+ */
+int32_t app_sys_rbuf_puts_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length);
+
 #endif

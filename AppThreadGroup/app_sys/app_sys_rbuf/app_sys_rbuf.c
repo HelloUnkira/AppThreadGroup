@@ -109,79 +109,49 @@ void app_sys_rbuf_ready(app_sys_rbuf *rbuf, uint8_t type, void *buffer, uint32_t
  */
 int32_t app_sys_rbuf_gets(app_sys_rbuf *rbuf, void *data, uint32_t length)
 {
-    int32_t   result  = 0;
     uint8_t  *buffer1 = data;
     uint16_t *buffer2 = data;
     uint32_t *buffer4 = data;
     uint64_t *buffer8 = data;
     
-    if (result == 0)
     if (app_sys_rbuf_is_empty(rbuf) ||
         app_sys_rbuf_get_item(rbuf) < length)
-        result = -1;
+        return -1;
     
-    if (result == 0)
+    /* 模板 */
+    #define APP_SYS_RBBUF_GETS_TEMPLATE(type)                       \
+        if (rbuf->mask != 0)                                        \
+            for (uint32_t idx = 0; idx < length; idx++) {           \
+                 uint32_t idx1 = (idx + rbuf->head) & rbuf->mask;   \
+                 buffer##type##[idx] = rbuf->buffer##type##[idx1];  \
+            }                                                       \
+        if (rbuf->mask == 0)                                        \
+            for (uint32_t idx = 0; idx < length; idx++) {           \
+                 uint32_t idx1 = (idx + rbuf->head) % rbuf->size;   \
+                 buffer##type##[idx] = rbuf->buffer##type##[idx1];  \
+            }                                                       \
+        rbuf->head += length;                                       \
+        app_sys_rbuf_rewind_index(rbuf);                            \
+    
+    int32_t result = 0;
     app_mutex_process(&rbuf->mutex, app_mutex_take);
-    if (result == 0)
     switch (rbuf->type) {
     case 1:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) & rbuf->mask;
-                 buffer1[idx] = rbuf->buffer1[idx1];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) % rbuf->size;
-                 buffer1[idx] = rbuf->buffer1[idx1];
-            }
+        APP_SYS_RBBUF_GETS_TEMPLATE(1);
         break;
     case 2:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) & rbuf->mask;
-                 buffer2[idx] = rbuf->buffer2[idx1];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) % rbuf->size;
-                 buffer2[idx] = rbuf->buffer2[idx1];
-            }
+        APP_SYS_RBBUF_GETS_TEMPLATE(2);
         break;
     case 4:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) & rbuf->mask;
-                 buffer4[idx] = rbuf->buffer4[idx1];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) % rbuf->size;
-                 buffer4[idx] = rbuf->buffer4[idx1];
-            }
+        APP_SYS_RBBUF_GETS_TEMPLATE(4);
         break;
     case 8:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) & rbuf->mask;
-                 buffer8[idx] = rbuf->buffer8[idx1];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->head) % rbuf->size;
-                 buffer8[idx] = rbuf->buffer8[idx1];
-            }
+        APP_SYS_RBBUF_GETS_TEMPLATE(8);
         break;
     default:
         result = -2;
     }
-    if (result == 0)
-    rbuf->head += length;
-    if (result == 0)
-    app_sys_rbuf_rewind_index(rbuf);
-    if (result == 0 || result == -2)
     app_mutex_process(&rbuf->mutex, app_mutex_give);
-    
     return result;
 }
 
@@ -193,78 +163,73 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf *rbuf, void *data, uint32_t length)
  */
 int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length)
 {
-    int32_t   result  = 0;
     uint8_t  *buffer1 = data;
     uint16_t *buffer2 = data;
     uint32_t *buffer4 = data;
     uint64_t *buffer8 = data;
     
-    if (result == 0)
     if (app_sys_rbuf_get_space(rbuf) < length)
-        result = -1;
-
-    if (result == 0)
+        return -1;
+    
+    /* 模板 */
+    #define APP_SYS_RBBUF_PUTS_TEMPLATE(type)                       \
+        if (rbuf->mask != 0)                                        \
+            for (uint32_t idx = 0; idx < length; idx++) {           \
+                 uint32_t idx1 = (idx + rbuf->tail) & rbuf->mask;   \
+                 rbuf->buffer##type##[idx1] = buffer##type##[idx];  \
+            }                                                       \
+        if (rbuf->mask == 0)                                        \
+            for (uint32_t idx = 0; idx < length; idx++) {           \
+                 uint32_t idx1 = (idx + rbuf->tail) % rbuf->size;   \
+                 rbuf->buffer##type##[idx1] = buffer##type##[idx];  \
+            }                                                       \
+        rbuf->tail += length;                                       \
+        app_sys_rbuf_rewind_index(rbuf);                            \
+    
+    int32_t result = 0;
     app_mutex_process(&rbuf->mutex, app_mutex_take);
-    if (result == 0)
     switch (rbuf->type) {
     case 1:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) & rbuf->mask;
-                 rbuf->buffer1[idx1] = buffer1[idx];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) % rbuf->size;
-                 rbuf->buffer1[idx1] = buffer1[idx];
-            }
+        APP_SYS_RBBUF_PUTS_TEMPLATE(1);
         break;
     case 2:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) & rbuf->mask;
-                 rbuf->buffer2[idx1] = buffer2[idx];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) % rbuf->size;
-                 rbuf->buffer2[idx1] = buffer2[idx];
-            }
+        APP_SYS_RBBUF_PUTS_TEMPLATE(2);
         break;
     case 4:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) & rbuf->mask;
-                 rbuf->buffer4[idx1] = buffer4[idx];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) % rbuf->size;
-                 rbuf->buffer4[idx1] = buffer4[idx];
-            }
+        APP_SYS_RBBUF_PUTS_TEMPLATE(4);
         break;
     case 8:
-        if (rbuf->mask != 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) & rbuf->mask;
-                 rbuf->buffer8[idx1] = buffer8[idx];
-            }
-        if (rbuf->mask == 0)
-            for (uint32_t idx = 0; idx < length; idx++) {
-                 uint32_t idx1 = (idx + rbuf->tail) % rbuf->size;
-                 rbuf->buffer8[idx1] = buffer8[idx];
-            }
+        APP_SYS_RBBUF_PUTS_TEMPLATE(8);
         break;
     default:
         result = -2;
     }
-    
-    if (result == 0)
-    rbuf->tail += length;
-    if (result == 0)
-    app_sys_rbuf_rewind_index(rbuf);
-    if (result == 0 || result == -2)
     app_mutex_process(&rbuf->mutex, app_mutex_give);
-    
     return result;
+}
+
+/*@brief 非定长数据的gets接口,参数细节与原型一致
+
+ *       注意:data的缓冲区有一个最大值上限,双方约定即可
+ */
+int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length)
+{
+    if (app_sys_rbuf_get_item(rbuf) < sizeof(uint64_t) / rbuf->type)
+        return -1;
+    app_sys_rbuf_gets(rbuf, (void *)length, sizeof(uint64_t) / rbuf->type);
+    app_sys_rbuf_gets(rbuf, (void *)data,  *length);
+    return 0;
+}
+
+/*@brief 非定长数据的puts接口,参数细节与原型一致
+
+ *       注意:data的缓冲区有一个最大值上限,双方约定即可
+ */
+int32_t app_sys_rbuf_puts_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length)
+{
+    if (app_sys_rbuf_get_space(rbuf) < sizeof(uint64_t) / rbuf->type + length)
+        return -1;
+    app_sys_rbuf_puts(rbuf, (void *)length, sizeof(uint64_t) / rbuf->type);
+    app_sys_rbuf_puts(rbuf, (void *)data,  *length);
+    return 0;
 }
