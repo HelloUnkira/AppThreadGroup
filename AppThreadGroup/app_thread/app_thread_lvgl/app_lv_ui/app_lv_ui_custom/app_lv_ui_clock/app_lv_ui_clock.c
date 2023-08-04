@@ -107,8 +107,8 @@ static void app_lv_ui_clock_show(void *scene)
         lv_obj_align_to(app_lv_ui_res_local->roller_s, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
-                                   &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
-                                    LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
+                                &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                 LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
     }
 }
 

@@ -150,10 +150,8 @@ uint8_t app_lv_scene_get_nest(void)
     return app_lv_scene_num;
 }
 
-/*@brief    激活一个游离窗口,该窗口不受场景栈管理
- *          可被其他窗口重新继承,默认不显示(LV_OBJ_FLAG_HIDDEN)
- *          注意:它调用了敏感资源,对它的递归调用
- *               不能到lv_timer_handler
+/*@brief    激活一个游离窗口,该窗口不受场景栈管理,被其他窗口重新继承
+ *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
  *param[in] scene 游离窗口
  *param[in] right_now 是否就地激活
  */
@@ -168,8 +166,7 @@ void app_lv_scene_active(app_lv_scene_t *scene, bool right_now)
 }
 
 /*@brief    失活一个游离窗口
- *          注意:它调用了敏感资源,对它的递归调用
- *               不能到lv_timer_handler
+ *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
  *param[in] scene 游离窗口
  *param[in] right_now 是否就地失活
  */

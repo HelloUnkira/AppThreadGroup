@@ -117,7 +117,10 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
     }
     case app_thread_lvgl_ui_scene: {
         #if APP_LV_UI_TEST_USE
-        app_lv_ui_test_scene();
+        /* 禁用超时回退 */
+        app_lv_check_time_reset(0, 0);
+        app_lv_check_time_exec(false);
+        app_lv_scene_reset(&app_lv_ui_test, false);
         #else
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {

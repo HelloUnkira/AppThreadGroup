@@ -169,8 +169,8 @@ static void app_lv_ui_fs_info_show(void *scene)
         lv_label_set_text(lbl_c, "Reflush");
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
-                                   &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
-                                    LV_ANIM_REPEAT_INFINITE, 0, 1, 1000);
+                                &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
+                                 LV_ANIM_REPEAT_INFINITE, 0, 1, 1000);
         /*  */
         app_lv_ui_res_local->fs_info_size = 0;
         app_lv_ui_res_local->fs_info = NULL;
