@@ -85,15 +85,13 @@ bool app_module_transfer_notify(app_module_transfer_chan_t channel, uint8_t *dat
         offset += transfer->size;
         transfer->tail = offset == size ? true : false;
         /* 检查数据流 */
-        #if APP_SYS_LOG_PROTOCOL_CHECK
         APP_SYS_LOG_INFO("send package:%u", transfer->size);
         APP_SYS_LOG_INFO("package chan:%u", transfer->chan);
         APP_SYS_LOG_INFO("package head:%u", transfer->head);
         APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
         for (uint32_t idx = 0; idx < transfer->size; idx++)
             APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-        #endif
+            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
         /* 传输缓冲块 */
         // app_module_transfer_throw(transfer);
         /* 本地回环 */
@@ -132,18 +130,16 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
     /* 容错检查 */
     if (transfer->chan >= app_module_transfer_chan_num) {
         APP_SYS_LOG_WARN("transfer channel is invalid :%u", transfer->chan);
-        return false;
+        return;
     }
     /* 接收到第一个缓冲块 */
     if (transfer->head) {
         /* 现在检查旧的传输队列 */
         if (zone[transfer->chan].stream != NULL) {
             APP_SYS_LOG_ERROR("catch leak package:%u", zone[transfer->chan].offset);
-            #if APP_SYS_LOG_PROTOCOL_CHECK
             for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
                 APP_SYS_LOG_ERROR_RAW("%02x ", zone[transfer->chan].stream[idx]);
-            APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
-            #endif
+                APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
             app_mem_free(zone[transfer->chan].stream);
         }
         /* 开始了新一次的传输 */
@@ -159,14 +155,12 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
     /* 防御:出现意外的响应时 */
     if (zone[transfer->chan].stream == NULL) {
         APP_SYS_LOG_ERROR("catch unknown package");
-        #if APP_SYS_LOG_PROTOCOL_CHECK
         APP_SYS_LOG_ERROR("package chan:%u", transfer->chan);
         APP_SYS_LOG_ERROR("package head:%u", transfer->head);
         APP_SYS_LOG_ERROR("package tail:%u", transfer->tail);
         for (uint32_t idx = 0; idx < transfer->size; idx++)
             APP_SYS_LOG_ERROR_RAW("%02x ", transfer->data[idx]);
-        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
-        #endif
+            APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
         app_mem_free(zone[transfer->chan].stream);
         zone[transfer->chan].offset = 0;
         zone[transfer->chan].stream = NULL;
@@ -175,26 +169,22 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
     /* 防御:传输数据包超限 */
     if (zone[transfer->chan].offset + transfer->size > zone[transfer->chan].length) {
         APP_SYS_LOG_ERROR("catch overflow package:%u", zone[transfer->chan].offset);
-        #if APP_SYS_LOG_PROTOCOL_CHECK
         for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
             APP_SYS_LOG_ERROR_RAW("%02x ", zone[transfer->chan].stream[idx]);
-        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
-        #endif
+            APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
         return;
     }
     /* 将数据包进行流式存储 */
     memcpy(zone[transfer->chan].stream + zone[transfer->chan].offset, transfer->data, transfer->size);
     zone[transfer->chan].offset += transfer->size;
     /* 检查数据流 */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
     APP_SYS_LOG_INFO("recv package:%u", transfer->size);
     APP_SYS_LOG_INFO("package chan:%u", transfer->chan);
     APP_SYS_LOG_INFO("package head:%u", transfer->head);
     APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
     for (uint32_t idx = 0; idx < transfer->size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     /* 更新超时监控 */
     app_sys_timer_stop(&app_module_transfer_respond_timeout_timer[transfer->chan]);
     app_sys_timer_start(&app_module_transfer_respond_timeout_timer[transfer->chan]);
@@ -206,12 +196,10 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
             app_mem_free(zone[transfer->chan].stream);
         } else {
             /* 现在打包新的传输队列 */
-            #if APP_SYS_LOG_PROTOCOL_CHECK
             APP_SYS_LOG_INFO("catch fully package:%u", zone[transfer->chan].offset);
             for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
                 APP_SYS_LOG_INFO_RAW("%02x ", zone[transfer->chan].stream[idx]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-            #endif
+                APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
             /* 传输到目标 */
             app_module_protocol_t protocol = {
                 .respond.data    = zone[transfer->chan].stream,

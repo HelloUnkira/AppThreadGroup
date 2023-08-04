@@ -92,11 +92,9 @@ void app_module_stopwatch_xmsec_update(void)
     stopwatch.hour   = seconds / 60 / 60 % 60;
     app_module_stopwatch_set(&stopwatch);
     
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("stopwatch:%u:%u:%u:%u",
                       stopwatch.hour,stopwatch.minute,stopwatch.second,
                       stopwatch.msec);
-    #endif
 }
 
 /*@brief 倒计时软件定时器模组回调

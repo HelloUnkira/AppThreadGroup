@@ -121,7 +121,7 @@ void app_lv_event_ui_default(lv_event_t *e)
                      app_module_system_dlps_set(true);
                 /* 回到主界面 */
                 if (app_lv_scene_get_nest() != 1)
-                    app_lv_scene_reset(&app_lv_ui_main, false);
+                    app_lv_scene_reset(&app_lv_ui_wheel, false);
             }
             /* 返回上一层 */
             if (key == LV_KEY_BACKSPACE) {

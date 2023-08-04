@@ -23,17 +23,17 @@ typedef struct {
 
 static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Qrcode",              &app_lv_ui_qrcode,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Null",                &app_lv_ui_null,},
     {"Data Daily",          &app_lv_ui_data_daily,},
     {"Calculator",          &app_lv_ui_calculator,},
     {"Stopwatch",           &app_lv_ui_stopwatch,},
     {"Countdown",           &app_lv_ui_countdown,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Null",                &app_lv_ui_null,},
     {"2048",                &app_lv_ui_2048,},
     {"Tetris",              &app_lv_ui_tetris,},
     {"Maze",                &app_lv_ui_maze,},
     {"Snake",               &app_lv_ui_snake,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Null",                &app_lv_ui_null,},
     {"Internal Test",       &app_lv_ui_test_list,},
 };
 

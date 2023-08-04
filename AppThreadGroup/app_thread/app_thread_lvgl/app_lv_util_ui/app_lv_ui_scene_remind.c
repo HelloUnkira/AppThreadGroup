@@ -35,7 +35,7 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
     /* 查找当前有效显示场景 */
     app_lv_scene_t *current_scene = NULL;
     app_lv_scene_get_top(&current_scene);
-    if (current_scene == &app_lv_ui_watch_dlps)
+    if (current_scene == &app_lv_ui_dlps)
         app_lv_scene_get_last(&current_scene);
     APP_SYS_ASSERT(current_scene != NULL);
     /* 查找当前场景的优先级 */

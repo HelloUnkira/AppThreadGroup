@@ -26,7 +26,7 @@ void app_module_shutdown_dump(void)
     snprintf(text, APP_SYS_LOG_TEXT_MAX, "app thread group work time:%" PRIu64,
               app_module_clock_get_sec_tick());
     app_sys_log_text_dump(text, true);
-    #if APP_SYS_LOG_EXECUTE
+    #if APP_THREAD_SLAVE_EXECUTE_TIME
     double execute_us = 0;
     app_thread_execute_us_get(app_thread_id_mix_irq, &execute_us);
     snprintf(text, APP_SYS_LOG_TEXT_MAX, "app_thread_id_mix_irq:%.8lf",

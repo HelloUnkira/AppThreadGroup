@@ -38,13 +38,10 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
          APP_SYS_LOG_ERROR("encode fail:%s", stream.errmsg);
     // stream.bytes_written;
     /* 检查nanopb数据流 */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("nanopb encode:%d", size);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW("nanopb encode:%d" APP_SYS_LOG_LINE, size);
     for (uint32_t idx = 0; idx < size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     /* 传输nanopb数据流 */
     app_module_transfer_notify(channel, buffer, size);
     /* 回收nanopb缓冲区 */
@@ -59,13 +56,10 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
 bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
 {
     /* 检查nanopb */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("nanopb decode:%d", size);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW("nanopb decode:%d" APP_SYS_LOG_LINE, size);
     for (uint32_t idx = 0; idx < size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
     /* 创建传输对象 */
     AppPB_MsgSet message = AppPB_MsgSet_init_zero;
     /* nanopb解码 */
@@ -74,10 +68,7 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
          APP_SYS_LOG_ERROR("decode fail:%s", stream.errmsg);
     // stream.bytes_left;
     /* 检查nanopb */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("nanopb type:%d", message.type);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+    APP_SYS_LOG_INFO_RAW("nanopb type:%d" APP_SYS_LOG_LINE, message.type);
     /* 匹配数据包 */
     bool retval = false;
     switch (message.which_payload) {
@@ -88,8 +79,7 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
         retval = app_nanopb_xfer_respond_system_clock(&message);
         break;
     default:
-        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d", message.type);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d" APP_SYS_LOG_LINE, message.type);
         break;
     }
     return retval;

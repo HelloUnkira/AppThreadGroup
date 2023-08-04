@@ -78,7 +78,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             /* 计算事件处理时间(结束) */
             uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
             /* 此处适应性降帧 */
-            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS)
+            if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS)
                 *discard_count = ms / LV_SCHED_TICK_EXEC + 1;
         }
         /* lvgl驱动检查事件 */
@@ -92,7 +92,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
             /* 进入dlps界面 */
-            app_lv_scene_add(&app_lv_ui_watch_dlps, false);
+            app_lv_scene_add(&app_lv_ui_dlps, false);
             /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
             app_lv_display_dlps_enter();
             // app_lv_keyboard_dlps_enter();
@@ -128,8 +128,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(true);
             APP_SYS_LOG_WARN("ui scene start");
-            app_lv_scene_reset(&app_lv_ui_main, false);
-            app_lv_scene_add(&app_lv_ui_watch_start, false);
+            app_lv_scene_reset(&app_lv_ui_wheel, false);
+            app_lv_scene_add(&app_lv_ui_start, false);
             /* 更新lvgl设备 */
             app_lv_mouse_dlps_exit();
             app_lv_mousewheel_dlps_exit();
@@ -144,8 +144,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
             APP_SYS_LOG_WARN("ui scene stop");
-            app_lv_scene_reset(&app_lv_ui_main, false);
-            app_lv_scene_add(&app_lv_ui_watch_stop, false);
+            app_lv_scene_reset(&app_lv_ui_wheel, false);
+            app_lv_scene_add(&app_lv_ui_stop, false);
             /* 更新lvgl设备 */
             app_lv_display_dlps_enter();
             app_lv_keyboard_dlps_enter();
@@ -159,7 +159,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(false);
             APP_SYS_LOG_WARN("ui scene shutdown");
-            app_lv_scene_reset(&app_lv_ui_watch_dlps, false);
+            app_lv_scene_reset(&app_lv_ui_dlps, false);
             /* 更新lvgl设备 */
             app_lv_display_dlps_enter();
             // app_lv_keyboard_dlps_enter();

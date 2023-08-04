@@ -28,22 +28,14 @@ bool app_json_xfer_notify(app_module_transfer_chan_t channel, cJSON *json_object
     /* 将JSON对象转为JSON数据流 */
     char *json_stream = cJSON_Print(json_item);
     /* 检查JSON */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
     APP_SYS_LOG_INFO("");
-    APP_SYS_LOG_INFO_RAW("json:%d", strlen(json_stream));
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    APP_SYS_LOG_INFO_RAW(json_stream);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+    APP_SYS_LOG_INFO_RAW("json:%d" APP_SYS_LOG_LINE, strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW("%s" APP_SYS_LOG_LINE, json_stream);
     /* 压缩JSON数据流 */
     cJSON_Minify(json_stream);
     /* 检查JSON */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("json minify:%d", strlen(json_stream));
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    APP_SYS_LOG_INFO_RAW(json_stream);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+    APP_SYS_LOG_INFO_RAW("json minify:%d" APP_SYS_LOG_LINE, strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW("%s" APP_SYS_LOG_LINE, json_stream);
     /* 传输JSON数据流 */
     app_module_transfer_notify(channel, json_stream, strlen(json_stream));
     /* 回收JSON对象 */
@@ -62,29 +54,20 @@ bool app_json_xfer_respond(uint8_t *json_stream)
     if (json_item == NULL) {
         char *error = cJSON_GetErrorPtr();
         APP_SYS_LOG_ERROR("");
-        APP_SYS_LOG_ERROR_RAW("error:%s", error);
-        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
-        APP_SYS_LOG_ERROR_RAW(json_stream);
-        APP_SYS_LOG_ERROR_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_ERROR_RAW("error:%s" APP_SYS_LOG_LINE, error);
+        APP_SYS_LOG_ERROR_RAW("%s" APP_SYS_LOG_LINE, json_stream);
         return false;
     }
     /* 检查JSON */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
     char *json_format = cJSON_Print(json_item);
     APP_SYS_LOG_INFO("");
-    APP_SYS_LOG_INFO_RAW("json:%d", strlen(json_stream));
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    APP_SYS_LOG_INFO_RAW(json_format);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW("json:%d" APP_SYS_LOG_LINE, strlen(json_stream));
+    APP_SYS_LOG_INFO_RAW("%s" APP_SYS_LOG_LINE, json_format);
     cJSON_free(json_format);
-    #endif
     /* 解析JSON */
     uint32_t type = cJSON_GetNumberValue(cJSON_GetObjectItem(json_item, "type"));
     /* 检查JSON */
-    #if APP_SYS_LOG_PROTOCOL_CHECK
-    APP_SYS_LOG_INFO_RAW("json type:%d", type);
-    APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
-    #endif
+    APP_SYS_LOG_INFO_RAW("json type:%d" APP_SYS_LOG_LINE, type);
     /* 匹配数据包 */
     bool retval = false;
     switch (type) {
@@ -95,8 +78,7 @@ bool app_json_xfer_respond(uint8_t *json_stream)
         retval = app_json_xfer_respond_system_clock(json_item);
         break;
     default:
-        APP_SYS_LOG_INFO_RAW("unknown json type:%d", type);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW("unknown json type:%d" APP_SYS_LOG_LINE, type);
         break;
     }
     /* 回收JSON对象 */

@@ -110,11 +110,9 @@ void app_module_countdown_xmsec_update(void)
     countdown.hour   = seconds / 60 / 60 % 60;
     app_module_countdown_set(&countdown);
     
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("countdown:%u:%u:%u:%u - %u",
                       countdown.hour,countdown.minute,countdown.second,
                       countdown.msec,countdown.onoff);
-    #endif
 }
 
 /*@brief 倒计时软件定时器模组回调

@@ -8,12 +8,12 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_sys_log_text.h"
 #include "app_sys_crc.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_table.h"
 #include "app_sys_ext_src.h"
 #include "app_sys_ext_src_table.h"
-#include "app_sys_log_text.h"
 
 static app_mutex_t app_sys_log_text_mutex = {0};
 static app_sys_log_text_t app_sys_log_text;
@@ -64,10 +64,9 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
     offset += item->length;
     offset %= zone;
     /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("item.length:%u", item->length);
     APP_SYS_LOG_INFO("item.text:%s",   item->text);
-    #endif
+    
     *offset_new = offset;
     return true;
 }
@@ -116,10 +115,9 @@ static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset
     offset += item->length;
     offset %= zone;
     /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("item.length:%u", item->length);
     APP_SYS_LOG_INFO("item.text:%s",   item->text);
-    #endif
+    
     *offset_new = offset;
     return true;
 }
@@ -188,12 +186,10 @@ static void app_sys_log_text_reflush(void)
     /* 回写日志追踪队列结构以刷新外存 */
     app_sys_ext_mem_write(ext_mem, ext_src->data_base, trace_text.buffer, app_sys_log_text_size);
     /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("trace_text.zone:%lu", trace_text.info.zone);
     APP_SYS_LOG_INFO("trace_text.head:%lu", trace_text.info.head);
     APP_SYS_LOG_INFO("trace_text.tail:%lu", trace_text.info.tail);
     APP_SYS_LOG_INFO("trace_text.peek:%lu", trace_text.info.peek);
-    #endif
 }
 
 /*@brief 日志追踪队列复位
@@ -235,12 +231,10 @@ void app_sys_log_text_ready(void)
     app_sys_log_text = trace_text;
     app_mutex_process(&app_sys_log_text_mutex, app_mutex_give);
     /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("trace_text.zone:%lu", trace_text.info.zone);
     APP_SYS_LOG_INFO("trace_text.head:%lu", trace_text.info.head);
     APP_SYS_LOG_INFO("trace_text.tail:%lu", trace_text.info.tail);
     APP_SYS_LOG_INFO("trace_text.peek:%lu", trace_text.info.peek);
-    #endif
     /* 错误的信息需要对其进行复位 */
     if (trace_text.crc32 != crc32 || trace_text.info.zone != ext_src->data_size - app_sys_log_text_size)
         app_sys_log_text_reset();

@@ -27,7 +27,7 @@ static app_sem_t app_thread_sem_dst[app_thread_id_number] = {0};
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst[app_thread_id_number] = {0};
 /* 计算子线程工作时间(us) */
-#if APP_SYS_LOG_EXECUTE
+#if APP_THREAD_SLAVE_EXECUTE_TIME
 static double app_thread_execute_us[app_thread_id_number] = {0};
 #endif
 
@@ -36,7 +36,7 @@ static double app_thread_execute_us[app_thread_id_number] = {0};
  *@param[in]    uint32_t thread 线程ID
  *@param[out]   子线程执行时间(us)
  */
-#if APP_SYS_LOG_EXECUTE
+#if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_set(uint32_t thread, double *execute_us)
 {
     /* 注意:这里的时间设置为累加设置 */
@@ -48,7 +48,7 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us)
  *@param[in]    uint32_t thread 线程ID
  *@param[out]   子线程执行时间(us)
  */
-#if APP_SYS_LOG_EXECUTE
+#if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_get(uint32_t thread, double *execute_us)
 {
     *execute_us = app_thread_execute_us[thread];
@@ -107,11 +107,10 @@ void app_thread_master_routine(void)
         #else
         app_delay_ms(APP_THREAD_MASTER_TIME_SLICE);
         #endif
-        #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_pkg_num(send_pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread masther recv too much package:%u",
-                              app_sys_pipe_pkg_num(send_pipe));
-        #endif
+        /* 线程包数量警告检查 */
+        uint32_t pkg_num = app_sys_pipe_pkg_num(send_pipe);
+        if (APP_THREAD_PACKAGE_MAX <= pkg_num)
+            APP_SYS_LOG_WARN("thread master recv too much package:%u", pkg_num);
         /* 主线程派发包到指定子线程 */
         while (app_sys_pipe_pkg_num(send_pipe) != 0) {
             app_sys_pipe_take(send_pipe, &package, false);

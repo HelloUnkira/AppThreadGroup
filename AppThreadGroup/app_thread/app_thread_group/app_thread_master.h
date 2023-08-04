@@ -6,7 +6,7 @@
  *@param[in]    uint32_t thread 线程ID
  *@param[out]   子线程执行时间(us)
  */
-#if APP_SYS_LOG_EXECUTE
+#if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_set(uint32_t thread, double *execute_us);
 #endif
 
@@ -14,7 +14,7 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us);
  *@param[in]    uint32_t thread 线程ID
  *@param[out]   子线程执行时间(us)
  */
-#if APP_SYS_LOG_EXECUTE
+#if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_get(uint32_t thread, double *execute_us);
 #endif
 
@@ -32,22 +32,6 @@ void app_thread_get_sync(uint32_t thread, app_sem_t **sem);
  */
 #ifdef APP_SYS_PIPE_H
 void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe);
-#endif
-
-/* 主线程调度模式
- * 线程组以事件组优先级进行实时调度或分时调度
- * 实时调度会保证优先级高的事件被立即激活
- * 分时调度以指定时间片内收集的事件进行调度
- * 分时调度会降低部分并发性但能节约部分调度性能
- */
-#define APP_THREAD_MASTER_REALTIME      0
-#define APP_THREAD_MASTER_TIME_SLICE    10
-
-/* 线程组线程包裹接收最大警告线(警告) */
-#if     APP_THREAD_MASTER_REALTIME
-#define APP_THREAD_PACKAGE_MAX  20
-#else
-#define APP_THREAD_PACKAGE_MAX  100
 #endif
 
 /* 这是app_sys_pipe_pkg_t的副本重名 */

@@ -2,12 +2,12 @@
 #define APP_LV_UI_SCENE_H
 
 /* default scene */
-extern app_lv_scene_t app_lv_ui_watch_start;
-extern app_lv_scene_t app_lv_ui_watch_stop;
-extern app_lv_scene_t app_lv_ui_watch_null;
-extern app_lv_scene_t app_lv_ui_watch_dlps;
+extern app_lv_scene_t app_lv_ui_start;
+extern app_lv_scene_t app_lv_ui_stop;
+extern app_lv_scene_t app_lv_ui_null;
+extern app_lv_scene_t app_lv_ui_dlps;
 /* main scene */
-extern app_lv_scene_t app_lv_ui_main;
+extern app_lv_scene_t app_lv_ui_wheel;
 extern app_lv_scene_t app_lv_ui_test;
 /* group scene */
 extern app_lv_scene_t app_lv_ui_list;

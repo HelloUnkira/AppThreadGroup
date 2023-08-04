@@ -106,10 +106,10 @@ void app_thread_os_extend(void)
     /*获取当前分*/
     /*获取当前秒*/
     /*从今年1月1日算起至今的天数，范围为0-365*/
-    printf("dtime:%d/%d/%d %d:%d:%d utc:%d days:%d\n",
-            clock.year, clock.month,  clock.day,
-            clock.hour, clock.minute, clock.second,
-            clock.utc,  p->tm_yday);
+    APP_SYS_LOG_INFO("dtime:%d/%d/%d %d:%d:%d utc:%d days:%d",
+                      clock.year, clock.month,  clock.day,
+                      clock.hour, clock.minute, clock.second,
+                      clock.utc,  p->tm_yday);
     
     app_module_clock_set_system_clock(&clock);
 }

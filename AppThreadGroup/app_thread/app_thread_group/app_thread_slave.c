@@ -37,19 +37,19 @@ void app_thread_slave_routine(uint32_t app_thread_id,
     while (true) {
         app_sem_process(sem, app_sem_take);
         /* 计算事件处理时间(开始) */
-        #if APP_SYS_LOG_EXECUTE
+        #if APP_THREAD_SLAVE_EXECUTE_TIME
         app_execute_us_t execute_us = {0};
         app_execute_us(&execute_us, true);
         #endif
-        #if APP_SYS_LOG_THREAD_CHECK
-        if (app_sys_pipe_pkg_num(pipe) >= APP_THREAD_PACKAGE_MAX)
-            APP_SYS_LOG_WARN("thread %u recv too much package:%u", app_thread_id,
-                              app_sys_pipe_pkg_num(pipe));
-        #endif
+        /* 线程包数量警告检查 */
+        uint32_t pkg_num = app_sys_pipe_pkg_num(pipe);
+        if (APP_THREAD_PACKAGE_MAX <= pkg_num)
+            APP_SYS_LOG_WARN("thread %u recv too much package:%u", app_thread_id, pkg_num);
+        /* 指定子线程处理主线程派发包 */
         while (app_sys_pipe_pkg_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
+            #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
             bool execute_us_remind = true;
             app_execute_us_t execute_us = {0};
             app_execute_us(&execute_us, true);
@@ -66,7 +66,7 @@ void app_thread_slave_routine(uint32_t app_thread_id,
                         break;
                 /* 我们向外界提供警告,希望期盼进一步的优化 */
                 if (discard_count != 0) {
-                    #if APP_SYS_LOG_EXECUTE_CHECK
+                    #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
                     APP_SYS_LOG_WARN("thread %u discard package:%d", app_thread_id, discard_count);
                     execute_us_remind = false;
                     #endif
@@ -80,22 +80,20 @@ void app_thread_slave_routine(uint32_t app_thread_id,
                     break;
                 }
                 default: {
-                    #if APP_SYS_LOG_THREAD_CHECK
                     APP_SYS_LOG_ERROR("thread %u pipe recv a unknown package", app_thread_id);
                     APP_SYS_LOG_ERROR("package thread:%u", package.thread);
                     APP_SYS_LOG_ERROR("package module:%u", package.module);
                     APP_SYS_LOG_ERROR("package event:%u",  package.event);
                     APP_SYS_LOG_ERROR("package data:%p",   package.data);
                     APP_SYS_LOG_ERROR("package size:%u",   package.size);
-                    #endif
                     break;
                 }
                 }
             }
             /* 计算事件处理时间(结束) */
-            #if APP_SYS_LOG_EXECUTE_CHECK
+            #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
             uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
-            if (ms > APP_SYS_LOG_EXECUTE_CHECK_MS && execute_us_remind) {
+            if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS && execute_us_remind) {
                 APP_SYS_LOG_WARN("thread %u package execute %d ms", app_thread_id, ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
                 APP_SYS_LOG_WARN("package module:%u", package.module);
@@ -106,7 +104,7 @@ void app_thread_slave_routine(uint32_t app_thread_id,
             #endif
         }
         /* 计算事件处理时间(结束) */
-        #if APP_SYS_LOG_EXECUTE
+        #if APP_THREAD_SLAVE_EXECUTE_TIME
         double ms = app_execute_us(&execute_us, false) / 1000.0;
         app_thread_execute_us_set(app_thread_id, &ms);
         #endif

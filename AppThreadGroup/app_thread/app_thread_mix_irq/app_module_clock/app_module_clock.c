@@ -232,7 +232,6 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
         for (uint32_t idx = 0; idx < app_module_clock_day_cb_size; idx++)
             app_module_clock_day_cb[idx](&clock_new);
     /*  */
-    #if APP_SYS_LOG_MODULE_CHECK
     APP_SYS_LOG_INFO("clock_old: utc=%lu,%u, %u-%u-%u, %u:%u:%u",
                       clock_old.utc,clock_old.week,
                       clock_old.year,clock_old.month,clock_old.day,
@@ -241,7 +240,6 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
                       clock_new.utc,clock_new.week,
                       clock_new.year,clock_new.month,clock_new.day,
                       clock_new.hour,clock_new.minute,clock_new.second);
-    #endif
 }
 
 /*@brief 系统时钟复位清除

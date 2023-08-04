@@ -23,19 +23,19 @@ typedef struct {
 
 /* 不能直接通过跳转逻辑进入的界面加入到测试列表中 */
 static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    {"Watch Start",         &app_lv_ui_watch_start,},
-    {"Watch Stop",          &app_lv_ui_watch_stop,},
-    {"Watch Dlps",          &app_lv_ui_watch_dlps,},
-    {"Watch Null",          &app_lv_ui_watch_null,},
+    {"Watch Start",         &app_lv_ui_start,},
+    {"Watch Stop",          &app_lv_ui_stop,},
+    {"Watch Dlps",          &app_lv_ui_dlps,},
+    {"Watch Null",          &app_lv_ui_null,},
     {"Log Text",            &app_lv_ui_log_text,},
     {"FS Info",             &app_lv_ui_fs_info,},
     {"System Clock",        &app_lv_ui_clock,},
     {"Calendar",            &app_lv_ui_calendar,},
     {"Remind Drink",        &app_lv_ui_remind_drink,},
     {"Countdown Remind",    &app_lv_ui_countdown_remind,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Null",                &app_lv_ui_null,},
     {"Temperature",         &app_lv_ui_temperature,},
-    {"Null",                &app_lv_ui_watch_null,},
+    {"Null",                &app_lv_ui_null,},
 };
 
 static const uint32_t app_lv_ui_res_list_len = sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]);

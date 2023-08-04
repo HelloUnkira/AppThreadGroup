@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
@@ -40,9 +40,10 @@ void app_thread_group_schedule(void)
      */
     /* 就绪系统子模组 */
     app_sys_log_t log = {
-        .message1   = (void *)app_dev_log_msg1,
-        .message2   = (void *)app_dev_log_msg2,
-        .persistent = (void *)app_sys_log_text_persistent,
+        .message1         = (void *)app_dev_log_msg1,
+        .message2         = (void *)app_dev_log_msg2,
+        .persistent       = (void *)app_sys_log_text_persistent,
+        .persistent_limit = APP_SYS_LOG_TEXT_MAX,
     };
     app_sys_log_ready(log);
     app_sys_ext_mem_ready();

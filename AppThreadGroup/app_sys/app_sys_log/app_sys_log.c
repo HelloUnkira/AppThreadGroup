@@ -8,6 +8,25 @@
 static app_mutex_t app_sys_log_mutex = {0};
 static app_sys_log_t app_sys_log = {0};
 
+/*@brief     日志模组输出文件名去除路径
+ *@param[in] file 带路径的文件名称
+ *@retval    去除路径后的文件名
+ */
+static const char * app_sys_log_file(const char *file)
+{
+    /* 文件名跳过路径,不需要使用时屏蔽即可 */
+    /* 这里可以让编译器自优化 */
+    int32_t separator = 0;
+    int32_t file_len  = strlen(file);
+    for (separator = file_len - 1; separator >= 0; separator--)
+        if (file[separator] == '/' || file[separator] == '\\') {
+            if (separator < file_len)
+                file += separator + 1;
+            break;
+        }
+    return file;
+}
+
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
  */
@@ -34,47 +53,44 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
     va_list  list;
     va_start(list, format);
     
-    /* 文件名跳过路径,不需要使用时屏蔽即可 */
-    /* 这里可以让编译器自优化 */
-    int32_t separator = 0;
-    int32_t file_len  = strlen(file);
-    for (separator = file_len - 1; separator > 0; separator--)
-        if (file[separator] == '/' || file[separator] == '\\') {
-            if (separator < file_len)
-                file += separator + 1;
-            break;
-        }
-    
-    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
-    char str_fmt[256] = {0};
-    // snprintf(str_fmt, sizeof(str_fmt), "[%s][%u][%c]", func, line, flag);
-    // snprintf(str_fmt, sizeof(str_fmt), "[%s][%u][%c]", file, line, flag);
-    snprintf(str_fmt, sizeof(str_fmt), "[%s][%s][%u][%c]", file, func, line, flag);
-    
     app_mutex_process(&app_sys_log_mutex, app_mutex_take);
     if (status) {
-        app_sys_log.message1(str_fmt);
-        app_sys_log.message2(format, list);
-        app_sys_log.message1(APP_SYS_LOG_LINE);
+        file = app_sys_log_file(file);
+        /* 格式化选择,按需求选取即可 */
+           app_sys_log.message1("[%s][%u][%c]", func, line, flag);
+        // app_sys_log.message1("[%s][%u][%c]", file, line, flag);
+        // app_sys_log.message1("[%s][%s][%u][%c]", file, func, line, flag);
+           app_sys_log.message2(format, list);
+           app_sys_log.message1(APP_SYS_LOG_LINE);
         /* 格式化信息持久化 */
         if (record) {
             uint32_t offset = 0;
-            char text[APP_SYS_LOG_RECORD_LENGTH] = {0};
-            offset +=  snprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, str_fmt);
-            offset += vsnprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, format, list);
-            offset +=  snprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, APP_SYS_LOG_LINE);
-            text[APP_SYS_LOG_RECORD_LENGTH - 1] = '\0';
+            char *text = app_mem_alloc(app_sys_log.persistent_limit);
+            /* 格式化选择,按需求选取即可 */
+               offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, "[%s][%u][%c]", func, line, flag);
+            // offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, "[%s][%u][%c]", file, line, flag);
+            // offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, "[%s][%s][%u][%c]", file, func, line, flag);
+               offset += vsnprintf(text + offset, app_sys_log.persistent_limit - offset, format, list);
+               offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, APP_SYS_LOG_LINE);
+            text[app_sys_log.persistent_limit - 1] = '\0';
             app_sys_log.persistent(text);
+            app_mem_free(text);
         }
     } else {
-        app_sys_log.message2(format, list);
+        // app_sys_log.message1("");
+           app_sys_log.message2(format, list);
+        // app_sys_log.message1(APP_SYS_LOG_LINE);
         /* 格式化信息持久化 */
         if (record) {
             uint32_t offset = 0;
-            char text[APP_SYS_LOG_RECORD_LENGTH] = {0};
-            offset += vsnprintf(text + offset, APP_SYS_LOG_RECORD_LENGTH - offset, format, list);
-            text[APP_SYS_LOG_RECORD_LENGTH - 1] = '\0';
+            char *text = app_mem_alloc(app_sys_log.persistent_limit);
+            /* 格式化选择,按需求选取即可 */
+            // offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, "");
+               offset += vsnprintf(text + offset, app_sys_log.persistent_limit - offset, format, list);
+            // offset +=  snprintf(text + offset, app_sys_log.persistent_limit - offset, APP_SYS_LOG_LINE);
+            text[app_sys_log.persistent_limit - 1] = '\0';
             app_sys_log.persistent(text);
+            app_mem_free(text);
         }
     }
     app_mutex_process(&app_sys_log_mutex, app_mutex_give);
@@ -92,19 +108,14 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
 {
     if (cond)
         return;
+    
+    file = app_sys_log_file(file);
     /* 输出错误信息 */
-    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
-    #if 0
-    #elif 1
-    app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%d]", func, line);
-    app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
-    #elif 0
-    app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%d]", file, line);
-    app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
-    #else
-    app_sys_log_msg(false, true, 'E', "", "", 0, "APP_SYS_ASSERT:[%s][%s][%d]", file, func, line);
-    app_sys_log_msg(false, true, 'E', "", "", 0,  APP_SYS_LOG_LINE);
-    #endif
+    /* 格式化选择,按需求选取即可 */
+       app_sys_log_msg(false, true, 'E', "", "", 0, "[%s][%u]"     APP_SYS_LOG_LINE, func, line);
+    // app_sys_log_msg(false, true, 'E', "", "", 0, "[%s][%u]"     APP_SYS_LOG_LINE, file, line);
+    // app_sys_log_msg(false, true, 'E', "", "", 0, "[%s][%s][%u]" APP_SYS_LOG_LINE, file, func, line);
+    
     /* 异常导致的错误直接重启系统 */
     app_os_reset();
 }
@@ -117,24 +128,26 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
  */
 void app_sys_execute_trace(const char *file, const char *func, uint32_t line, uint32_t step)
 {
-    /* 格式化一般有俩种选择(1:文件名+行数,2:函数名+行数),按需求选取即可 */
-    #if 0
-    #elif 1
-    app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%d]:%d", func, line, step);
-    app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
-    #elif 0
-    app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%d]:%d", file, line, step);
-    app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
-    #else
-    app_sys_log_msg(false, true, 'D', "", "", 0, "APP_SYS_EXECUTE_TRACE:[%s][%s][%d]:%d", file, func, line, step);
-    app_sys_log_msg(false, true, 'D', "", "", 0,  APP_SYS_LOG_LINE);
-    #endif
+    file = app_sys_log_file(file);
+    /* 输出警告信息 */
+    /* 格式化选择,按需求选取即可 */
+       app_sys_log_msg(false, true, 'D', "", "", 0, "[%s][%u]:%d"     APP_SYS_LOG_LINE, func, line, step);
+    // app_sys_log_msg(false, true, 'D', "", "", 0, "[%s][%u]:%d"     APP_SYS_LOG_LINE, file, line, step);
+    // app_sys_log_msg(false, true, 'D', "", "", 0, "[%s][%s][%u]:%d" APP_SYS_LOG_LINE, file, func, line, step);
 }
 
 /*@brief 编译时间
  */
 void app_sys_build_time(void)
 {
-    app_sys_log_msg(false, false, 'D', "", "", 0, "FW Build Time:%s,%s", __DATE__, __TIME__);
-    app_sys_log_msg(false, false, 'D', "", "", 0, APP_SYS_LOG_LINE);
+    const char *file = __FILE__;
+    const char *func = __func__;
+    uint32_t    line = __LINE__;
+    
+    file = app_sys_log_file(file);
+    /* 输出警告信息 */
+    /* 格式化选择,按需求选取即可 */
+       app_sys_log_msg(false, false, 'D', "", "", 0, "[%s][%u]:%s,%s"     APP_SYS_LOG_LINE, func, line, __DATE__, __TIME__);
+    // app_sys_log_msg(false, false, 'D', "", "", 0, "[%s][%u]:%s,%s"     APP_SYS_LOG_LINE, file, line, __DATE__, __TIME__);
+    // app_sys_log_msg(false, false, 'D', "", "", 0, "[%s][%s][%u]:%s,%s" APP_SYS_LOG_LINE, file, func, line, __DATE__, __TIME__);
 }

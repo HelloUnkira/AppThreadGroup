@@ -26,8 +26,8 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     if (value <= 100) {
-        uint8_t val = (value);
-        uint8_t opa = (uint32_t)((float)value * 2.55);
+        uint8_t val = (100 - value);
+        uint8_t opa = (uint32_t)((float)(100 - value) * 2.55);
         lv_obj_set_style_opa(app_lv_ui_res_local->spinner, opa, 0);
         lv_obj_set_style_text_opa(app_lv_ui_res_local->label, opa, 0);
         lv_obj_set_style_opa(app_lv_ui_res_local->bar, opa, 0);
@@ -43,13 +43,13 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 /*@brief     界面显示
  *@param[in] scene 场景
  */
-static void app_lv_ui_watch_start_show(void *scene)
+static void app_lv_ui_stop_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
-        app_lv_ui_watch_start.self = app_lv_ui_res_local->scene;
+        app_lv_ui_stop.self = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应 */
         app_lv_event_ui_default_config(NULL, false, NULL);
         /* 初始化加载圆环 */
@@ -73,7 +73,7 @@ static void app_lv_ui_watch_start_show(void *scene)
 /*@brief     界面隐藏
  *@param[in] scene 场景
  */
-static void app_lv_ui_watch_start_hide(void *scene)
+static void app_lv_ui_stop_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化显示动画 */
@@ -82,14 +82,14 @@ static void app_lv_ui_watch_start_hide(void *scene)
         app_lv_event_ui_default_config(NULL, true, NULL);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
-        app_lv_ui_watch_start.self = NULL;
+        app_lv_ui_stop.self = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
 }
 
-app_lv_scene_t app_lv_ui_watch_start = {
+app_lv_scene_t app_lv_ui_stop = {
     /* 场景资源节点 */
-    .show = app_lv_ui_watch_start_show,
-    .hide = app_lv_ui_watch_start_hide,
+    .show = app_lv_ui_stop_show,
+    .hide = app_lv_ui_stop_hide,
 };

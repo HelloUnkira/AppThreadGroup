@@ -45,9 +45,7 @@ void app_nanopb_xfer_notify_trace_text(void)
  */
 bool app_nanopb_xfer_respond_trace_text(AppPB_MsgSet *message)
 {
-    #if APP_SYS_LOG_PROTOCOL_CHECK
     APP_SYS_LOG_INFO("trace text:%s", message->payload.trace_text.trace_text);
-    #endif
 }
 
 /*@brief 打包传输系统时钟
@@ -88,7 +86,6 @@ bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
         .zone_sec   = message->payload.system_clock.zone,
         .is_24      = message->payload.system_clock.mode,
     };
-    #if APP_SYS_LOG_PROTOCOL_CHECK
     APP_SYS_LOG_INFO("system_clock.year:%u",    clock.year);
     APP_SYS_LOG_INFO("system_clock.month:%u",   clock.month);
     APP_SYS_LOG_INFO("system_clock.day:%u",     clock.day);
@@ -97,7 +94,7 @@ bool app_nanopb_xfer_respond_system_clock(AppPB_MsgSet *message)
     APP_SYS_LOG_INFO("system_clock.second:%u",  clock.second);
     APP_SYS_LOG_INFO("system_clock.zone:%u",    clock.zone_sec);
     APP_SYS_LOG_INFO("system_clock.mode:%u",    clock.is_24);
-    #endif
+    
     app_module_clock_to_utc(&clock);
     app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);
