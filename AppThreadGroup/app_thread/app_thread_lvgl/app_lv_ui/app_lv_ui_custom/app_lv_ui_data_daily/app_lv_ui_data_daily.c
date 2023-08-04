@@ -7,9 +7,9 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
+#include "app_lv_multi_font.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
-#include "app_lv_ui_multi_font.h"
 
 #include "app_lv_ui_data_daily.h"
 #include "app_lv_ui_data_daily_presenter.h"
@@ -56,9 +56,9 @@ static void app_lv_ui_local_style_span_data(lv_obj_t *spans, lv_span_t **cur, lv
     *cur  = lv_spangroup_new_span(spans);
     *tar  = lv_spangroup_new_span(spans);
     *unit = lv_spangroup_new_span(spans);
-    lv_style_set_text_font(&(*cur)->style,   app_lv_ui_multi_font(app_lv_ui_multi_font_28));
-    lv_style_set_text_font(&(*tar)->style,   app_lv_ui_multi_font(app_lv_ui_multi_font_24));
-    lv_style_set_text_font(&(*unit)->style,  app_lv_ui_multi_font(app_lv_ui_multi_font_20));
+    lv_style_set_text_font(&(*cur)->style,   app_lv_multi_font(app_lv_multi_font_28));
+    lv_style_set_text_font(&(*tar)->style,   app_lv_multi_font(app_lv_multi_font_24));
+    lv_style_set_text_font(&(*unit)->style,  app_lv_multi_font(app_lv_multi_font_20));
     lv_style_set_text_color(&(*cur)->style,  lv_palette_main(palette));
     lv_style_set_text_color(&(*tar)->style,  lv_palette_darken(palette, 4));
     lv_style_set_text_color(&(*unit)->style, lv_palette_darken(palette, 4));
@@ -149,46 +149,46 @@ static void app_lv_ui_data_daily_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_data_daily.self = app_lv_ui_res_local->scene;
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
-        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        title_box = app_lv_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Data Daily");
         /* 数据集合 */
         lv_obj_t *data_set = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(data_set);
-        lv_obj_set_size(data_set, LV_HOR_RES, app_lv_ui_ver_pct(90));
+        app_lv_style_object(data_set);
+        lv_obj_set_size(data_set, LV_HOR_RES, app_lv_style_ver_pct(90));
         lv_obj_align_to(data_set, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 三环每日数据 */
-        app_lv_ui_res_local->arc_cal = app_lv_ui_style_arc(data_set, 80, 15, LV_PALETTE_RED, 0, 100, 0, 360, 270);
+        app_lv_ui_res_local->arc_cal = app_lv_style_arc(data_set, 80, 15, LV_PALETTE_RED, 0, 100, 0, 360, 270);
         lv_obj_align(app_lv_ui_res_local->arc_cal, LV_ALIGN_TOP_LEFT, 40, 40);
-        app_lv_ui_res_local->arc_step = app_lv_ui_style_arc(data_set, 140, 15, LV_PALETTE_GREEN, 0, 100, 0 + 15, 180 - 15, 180);
+        app_lv_ui_res_local->arc_step = app_lv_style_arc(data_set, 140, 15, LV_PALETTE_GREEN, 0, 100, 0 + 15, 180 - 15, 180);
         lv_obj_align(app_lv_ui_res_local->arc_step, LV_ALIGN_TOP_LEFT, 10, 10);
-        app_lv_ui_res_local->arc_walk_cnt = app_lv_ui_style_arc(data_set, 140, 15, LV_PALETTE_BLUE, 0, 100, 0 + 15, 180 - 15, 0);
+        app_lv_ui_res_local->arc_walk_cnt = app_lv_style_arc(data_set, 140, 15, LV_PALETTE_BLUE, 0, 100, 0 + 15, 180 - 15, 0);
         lv_obj_align(app_lv_ui_res_local->arc_walk_cnt, LV_ALIGN_TOP_LEFT, 10, 10);
         /* 三图表数据集合 */
         lv_obj_t *chart_set = lv_obj_create(data_set);
-        app_lv_ui_style_object(chart_set);
-        lv_obj_set_size(chart_set, LV_HOR_RES, app_lv_ui_ver_pct(160));
-        lv_obj_align(chart_set, LV_ALIGN_TOP_MID, 0, app_lv_ui_ver_pct(50));
+        app_lv_style_object(chart_set);
+        lv_obj_set_size(chart_set, LV_HOR_RES, app_lv_style_ver_pct(160));
+        lv_obj_align(chart_set, LV_ALIGN_TOP_MID, 0, app_lv_style_ver_pct(50));
         /* 三图表数据 */
-        app_lv_ui_res_local->chart_step = app_lv_ui_style_fade_chart(chart_set);
+        app_lv_ui_res_local->chart_step = app_lv_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_step_ser = lv_chart_add_series(app_lv_ui_res_local->chart_step, lv_palette_main(LV_PALETTE_GREEN), LV_CHART_AXIS_PRIMARY_Y);
-        lv_obj_align(app_lv_ui_res_local->chart_step, LV_ALIGN_CENTER, 0, -app_lv_ui_ver_pct(50));
-        app_lv_ui_res_local->chart_cal = app_lv_ui_style_fade_chart(chart_set);
+        lv_obj_align(app_lv_ui_res_local->chart_step, LV_ALIGN_CENTER, 0, -app_lv_style_ver_pct(50));
+        app_lv_ui_res_local->chart_cal = app_lv_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_cal_ser = lv_chart_add_series(app_lv_ui_res_local->chart_cal, lv_palette_main(LV_PALETTE_RED), LV_CHART_AXIS_PRIMARY_Y);
         lv_obj_align(app_lv_ui_res_local->chart_cal, LV_ALIGN_CENTER, 0, 0);
-        app_lv_ui_res_local->chart_act = app_lv_ui_style_fade_chart(chart_set);
+        app_lv_ui_res_local->chart_act = app_lv_style_fade_chart(chart_set);
         app_lv_ui_res_local->chart_act_ser = lv_chart_add_series(app_lv_ui_res_local->chart_act, lv_palette_main(LV_PALETTE_BLUE), LV_CHART_AXIS_PRIMARY_Y);
-        lv_obj_align(app_lv_ui_res_local->chart_act, LV_ALIGN_CENTER, 0,  +app_lv_ui_ver_pct(50));
+        lv_obj_align(app_lv_ui_res_local->chart_act, LV_ALIGN_CENTER, 0,  +app_lv_style_ver_pct(50));
         /* 三环数据 */
-        app_lv_ui_res_local->data_cal_spans  = app_lv_ui_style_spangroup(chart_set);
-        app_lv_ui_res_local->data_step_spans = app_lv_ui_style_spangroup(chart_set);
-        app_lv_ui_res_local->data_act_spans  = app_lv_ui_style_spangroup(chart_set);
-        lv_obj_set_size(app_lv_ui_res_local->data_cal_spans,  LV_HOR_RES, app_lv_ui_ver_pct(10));
-        lv_obj_set_size(app_lv_ui_res_local->data_step_spans, LV_HOR_RES, app_lv_ui_ver_pct(10));
-        lv_obj_set_size(app_lv_ui_res_local->data_act_spans,  LV_HOR_RES, app_lv_ui_ver_pct(10));
+        app_lv_ui_res_local->data_cal_spans  = app_lv_style_spangroup(chart_set);
+        app_lv_ui_res_local->data_step_spans = app_lv_style_spangroup(chart_set);
+        app_lv_ui_res_local->data_act_spans  = app_lv_style_spangroup(chart_set);
+        lv_obj_set_size(app_lv_ui_res_local->data_cal_spans,  LV_HOR_RES, app_lv_style_ver_pct(10));
+        lv_obj_set_size(app_lv_ui_res_local->data_step_spans, LV_HOR_RES, app_lv_style_ver_pct(10));
+        lv_obj_set_size(app_lv_ui_res_local->data_act_spans,  LV_HOR_RES, app_lv_style_ver_pct(10));
         lv_obj_align_to(app_lv_ui_res_local->data_cal_spans,  app_lv_ui_res_local->chart_cal,  LV_ALIGN_OUT_TOP_LEFT, 0, 0);
         lv_obj_align_to(app_lv_ui_res_local->data_step_spans, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_TOP_LEFT, 0, 0);
         lv_obj_align_to(app_lv_ui_res_local->data_act_spans,  app_lv_ui_res_local->chart_act,  LV_ALIGN_OUT_TOP_LEFT, 0, 0);
@@ -205,22 +205,22 @@ static void app_lv_ui_data_daily_show(void *scene)
                                        &app_lv_ui_res_local->data_act_tar,
                                        &app_lv_ui_res_local->data_act_unit, LV_PALETTE_GREEN);
         /* 三环图表追加文本信息 */
-        app_lv_ui_res_local->chart_step_lb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_step_rb = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_cal_lb  = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_cal_rb  = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_act_lb  = app_lv_ui_style_label(chart_set);
-        app_lv_ui_res_local->chart_act_rb  = app_lv_ui_style_label(chart_set);
-        lv_obj_set_height(app_lv_ui_res_local->chart_step_lb, app_lv_ui_ver_pct(10));
-        lv_obj_set_height(app_lv_ui_res_local->chart_step_rb, app_lv_ui_ver_pct(10));
-        lv_obj_set_height(app_lv_ui_res_local->chart_cal_lb,  app_lv_ui_ver_pct(10));
-        lv_obj_set_height(app_lv_ui_res_local->chart_cal_rb,  app_lv_ui_ver_pct(10));
-        lv_obj_set_height(app_lv_ui_res_local->chart_act_lb,  app_lv_ui_ver_pct(10));
-        lv_obj_set_height(app_lv_ui_res_local->chart_act_rb,  app_lv_ui_ver_pct(10));
+        app_lv_ui_res_local->chart_step_lb = app_lv_style_label(chart_set);
+        app_lv_ui_res_local->chart_step_rb = app_lv_style_label(chart_set);
+        app_lv_ui_res_local->chart_cal_lb  = app_lv_style_label(chart_set);
+        app_lv_ui_res_local->chart_cal_rb  = app_lv_style_label(chart_set);
+        app_lv_ui_res_local->chart_act_lb  = app_lv_style_label(chart_set);
+        app_lv_ui_res_local->chart_act_rb  = app_lv_style_label(chart_set);
+        lv_obj_set_height(app_lv_ui_res_local->chart_step_lb, app_lv_style_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_step_rb, app_lv_style_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_cal_lb,  app_lv_style_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_cal_rb,  app_lv_style_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_act_lb,  app_lv_style_ver_pct(10));
+        lv_obj_set_height(app_lv_ui_res_local->chart_act_rb,  app_lv_style_ver_pct(10));
         /* ...可以继续添加... */
         /* ...这里略过... */
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }

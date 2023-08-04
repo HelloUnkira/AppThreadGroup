@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_clock.h"
 #include "app_lv_ui_clock_presenter.h"
@@ -80,33 +80,33 @@ static void app_lv_ui_clock_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_clock.self = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text_static(label, "System Clock");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制日期 */
-        app_lv_ui_res_local->label_dtime = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->label_dtime = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_label_set_recolor(app_lv_ui_res_local->label_dtime, true);
         lv_obj_align_to(app_lv_ui_res_local->label_dtime, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */
         lv_obj_t *roller_set = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(roller_set);
-        lv_obj_set_size(roller_set, LV_HOR_RES, app_lv_ui_ver_pct(50));
+        app_lv_style_object(roller_set);
+        lv_obj_set_size(roller_set, LV_HOR_RES, app_lv_style_ver_pct(50));
         lv_obj_align(roller_set, LV_ALIGN_CENTER, 0, 0);
         /* 绘制分滚轮,中心对齐 */
-        app_lv_ui_res_local->roller_m = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->roller_m = app_lv_style_roller(roller_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align(app_lv_ui_res_local->roller_m, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制时滚轮,分滚轮左外对齐 */
-        app_lv_ui_res_local->roller_h = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_23, 3);
+        app_lv_ui_res_local->roller_h = app_lv_style_roller(roller_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_23, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_h, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_LEFT_MID, 0, 0);
         /* 绘制秒滚轮,分滚轮右外对齐 */
-        app_lv_ui_res_local->roller_s = app_lv_ui_style_roller(roller_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->roller_s = app_lv_style_roller(roller_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->roller_s, app_lv_ui_res_local->roller_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
     }

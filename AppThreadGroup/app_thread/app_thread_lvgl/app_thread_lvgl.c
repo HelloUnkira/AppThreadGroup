@@ -21,11 +21,10 @@
 #include "app_lv_event.h"
 #include "app_lv_timer.h"
 #include "app_lv_scene.h"
+#include "app_lv_check_time.h"
+#include "app_lv_event_ui.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
-#include "app_lv_ui_event_object.h"
-#include "app_lv_ui_event_scene.h"
-#include "app_lv_ui_check_time.h"
 #include "app_lv_ui_scene_remind.h"
 #include "app_lv_ui_test.h"
 
@@ -44,7 +43,7 @@ void app_thread_lvgl_ready(void)
     /* 模组初始化 */
     app_lv_timer_ready();
     /* 模组初始化 */
-    app_lv_ui_check_time_ready();
+    app_lv_check_time_ready();
 }
 
 /*@brief 子线程服务例程就绪部
@@ -103,8 +102,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         /* 与lvgl绑定的驱动设备退出DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_exit) {
             /* 计时重置 */
-            app_lv_ui_check_time_reset(0, 0);
-            app_lv_ui_check_time_exec(true);
+            app_lv_check_time_reset(0, 0);
+            app_lv_check_time_exec(true);
             /* 开启设备 */
             app_lv_mouse_dlps_exit();
             app_lv_mousewheel_dlps_exit();
@@ -122,9 +121,9 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         #else
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
-            app_lv_ui_event_default_config(NULL, true, NULL);
-            app_lv_ui_check_time_reset(0, 0);
-            app_lv_ui_check_time_exec(true);
+            app_lv_event_ui_default_config(NULL, true, NULL);
+            app_lv_check_time_reset(0, 0);
+            app_lv_check_time_exec(true);
             APP_SYS_LOG_WARN("ui scene start");
             app_lv_scene_reset(&app_lv_ui_main, false);
             app_lv_scene_add(&app_lv_ui_watch_start, false);
@@ -136,9 +135,9 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         /* 终止UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_stop) {
-            app_lv_ui_event_default_config(NULL, false, NULL);
-            app_lv_ui_check_time_reset(0, 0);
-            app_lv_ui_check_time_exec(true);
+            app_lv_event_ui_default_config(NULL, false, NULL);
+            app_lv_check_time_reset(0, 0);
+            app_lv_check_time_exec(true);
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
             APP_SYS_LOG_WARN("ui scene stop");
@@ -153,9 +152,9 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         /* 进入UI场景(关机) */
         if (package->event == app_thread_lvgl_ui_scene_shutdown) {
             /* 禁用UI的一切交互,仅保留按压事件响应 */
-            app_lv_ui_event_default_config(NULL, true, NULL);
-            app_lv_ui_check_time_reset(0, 0);
-            app_lv_ui_check_time_exec(false);
+            app_lv_event_ui_default_config(NULL, true, NULL);
+            app_lv_check_time_reset(0, 0);
+            app_lv_check_time_exec(false);
             APP_SYS_LOG_WARN("ui scene shutdown");
             app_lv_scene_reset(&app_lv_ui_watch_dlps, false);
             /* 更新lvgl设备 */
@@ -168,7 +167,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         /* UI场景计时检查 */
         if (package->event == app_thread_lvgl_ui_scene_check_time) {
-            app_lv_ui_check_time_update();
+            app_lv_check_time_update();
         }
         #endif
         /* 集成场景 */

@@ -7,20 +7,18 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_check_time.h"
+#include "app_lv_event_ui.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
-#include "app_lv_ui_event_object.h"
-#include "app_lv_ui_event_scene.h"
-#include "app_lv_ui_check_time.h"
-
 
 /*@brief 测试指定场景
  */
 void app_lv_ui_test_scene(void)
 {
     /* 禁用超时回退 */
-    app_lv_ui_check_time_reset(0, 0);
-    app_lv_ui_check_time_exec(false);
+    app_lv_check_time_reset(0, 0);
+    app_lv_check_time_exec(false);
     /* 做些什么:测试代码 */
     #if 0
     #elif 0

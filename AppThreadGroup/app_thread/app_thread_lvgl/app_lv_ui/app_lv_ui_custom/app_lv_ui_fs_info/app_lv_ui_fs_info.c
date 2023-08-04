@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_fs_info.h"
 
@@ -145,30 +145,30 @@ static void app_lv_ui_fs_info_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_fs_info.self = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(label, "FS Info");
-        lv_obj_align(label, LV_ALIGN_TOP_MID, 0, app_lv_ui_ver_pct(2));
+        lv_obj_align(label, LV_ALIGN_TOP_MID, 0, app_lv_style_ver_pct(2));
         /* trace_text */
         lv_obj_t *text_box = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(text_box);
+        app_lv_style_object(text_box);
         lv_obj_set_style_bg_color(text_box, lv_palette_darken(LV_PALETTE_GREY, 4), 0);
-        lv_obj_set_size(text_box, app_lv_ui_hor_pct(90), app_lv_ui_ver_pct(63));
+        lv_obj_set_size(text_box, app_lv_style_hor_pct(90), app_lv_style_ver_pct(63));
         lv_obj_align_to(text_box, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-        app_lv_ui_res_local->text = app_lv_ui_style_label(text_box);
+        app_lv_ui_res_local->text = app_lv_style_label(text_box);
         lv_obj_set_style_text_align(app_lv_ui_res_local->text, LV_TEXT_ALIGN_LEFT, 0);
         lv_label_set_long_mode(app_lv_ui_res_local->text, LV_LABEL_LONG_WRAP);
         lv_label_set_text(app_lv_ui_res_local->text, "");
         /* 下部按键 */
         lv_obj_t *btn = NULL, *btn_c = NULL, *lbl_c = NULL;
-        btn = app_lv_ui_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
+        btn = app_lv_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
         lv_obj_add_event_cb(btn_c, app_lv_ui_btn_c_cb, LV_EVENT_CLICKED, NULL);
         lv_label_set_text(lbl_c, "Reflush");
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 1, 1000);
         /*  */

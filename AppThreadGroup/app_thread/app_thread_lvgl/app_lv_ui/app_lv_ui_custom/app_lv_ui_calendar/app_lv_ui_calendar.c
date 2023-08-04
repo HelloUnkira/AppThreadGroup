@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_calendar.h"
 #include "app_lv_ui_clock_presenter.h"
@@ -88,25 +88,25 @@ static void app_lv_ui_calendar_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_calendar.self = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
         lv_label_set_text_static(label, "Calendar");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制日期 */
-        app_lv_ui_res_local->label_dtime = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->label_dtime = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_label_set_recolor(app_lv_ui_res_local->label_dtime, true);
         lv_obj_align_to(app_lv_ui_res_local->label_dtime, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日历表 */
         app_lv_ui_res_local->calendar = lv_calendar_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(app_lv_ui_res_local->calendar);
+        app_lv_style_object(app_lv_ui_res_local->calendar);
         lv_obj_add_event_cb(app_lv_ui_res_local->calendar, app_lv_ui_calendar_cb, LV_EVENT_ALL, NULL);
-        lv_obj_align_to(app_lv_ui_res_local->calendar, app_lv_ui_res_local->label_dtime, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(10));
+        lv_obj_align_to(app_lv_ui_res_local->calendar, app_lv_ui_res_local->label_dtime, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_style_ver_pct(10));
         lv_obj_set_style_border_width(app_lv_ui_res_local->calendar, 0, 0);
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 3, 1000);
     }

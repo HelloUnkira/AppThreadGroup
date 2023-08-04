@@ -19,37 +19,37 @@
 #include "lvgl.h"
 #include "app_lv_event.h"
 #include "app_lv_scene.h"
-#include "app_lv_ui_multi_font.h"
+#include "app_lv_multi_font.h"
 
-static lv_font_t *app_lv_ui_multi_font_table[app_lv_ui_multi_font_num] = {0};
+static lv_font_t *app_lv_multi_font_table[app_lv_multi_font_num] = {0};
 
 /*@brief 加载动态多字库表
  */
-static inline void app_lv_ui_multi_font_free(void)
+static inline void app_lv_multi_font_free(void)
 {
-    for (uint32_t idx = 0; idx < app_lv_ui_multi_font_num; idx++) {
-        lv_font_free(app_lv_ui_multi_font_table[idx]);
-        app_lv_ui_multi_font_table[idx] = NULL;
+    for (uint32_t idx = 0; idx < app_lv_multi_font_num; idx++) {
+        lv_font_free(app_lv_multi_font_table[idx]);
+        app_lv_multi_font_table[idx] = NULL;
     }
 }
 
 /*@brief 加载动态多字库表
  */
-static inline void app_lv_ui_multi_font_load(uint32_t multi_font_type)
+static inline void app_lv_multi_font_load(uint32_t multi_font_type)
 {
     switch (multi_font_type) {
-    case app_lv_ui_multi_font_chinese:
-        app_lv_ui_multi_font_table[app_lv_ui_multi_font_16] =
-            lv_font_load("S:app_lv_ui_multi_font_chinese_16.bin");
-        app_lv_ui_multi_font_table[app_lv_ui_multi_font_20] =
-            lv_font_load("S:app_lv_ui_multi_font_chinese_20.bin");
-        app_lv_ui_multi_font_table[app_lv_ui_multi_font_24] =
-            lv_font_load("S:app_lv_ui_multi_font_chinese_24.bin");
-        app_lv_ui_multi_font_table[app_lv_ui_multi_font_28] =
-            lv_font_load("S:app_lv_ui_multi_font_chinese_28.bin");
+    case app_lv_multi_font_chinese:
+        app_lv_multi_font_table[app_lv_multi_font_16] =
+            lv_font_load("S:app_lv_multi_font_chinese_16.bin");
+        app_lv_multi_font_table[app_lv_multi_font_20] =
+            lv_font_load("S:app_lv_multi_font_chinese_20.bin");
+        app_lv_multi_font_table[app_lv_multi_font_24] =
+            lv_font_load("S:app_lv_multi_font_chinese_24.bin");
+        app_lv_multi_font_table[app_lv_multi_font_28] =
+            lv_font_load("S:app_lv_multi_font_chinese_28.bin");
         break;
-    case app_lv_ui_multi_font_default:
-    case app_lv_ui_multi_font_english:
+    case app_lv_multi_font_default:
+    case app_lv_multi_font_english:
         /* 使用默认静态字库表 */
     default:
         break;
@@ -59,16 +59,16 @@ static inline void app_lv_ui_multi_font_load(uint32_t multi_font_type)
 /*@brief     设置当前使用的多字库
  *@param[in] multi_font_type 多字库类型
  */
-void app_lv_ui_multi_font_update(uint32_t multi_font_type)
+void app_lv_multi_font_update(uint32_t multi_font_type)
 {
     /* 清空动态字库表 */
-    app_lv_ui_multi_font_free();
+    app_lv_multi_font_free();
     /* 加载动态字库表 */
-    app_lv_ui_multi_font_load(multi_font_type);
+    app_lv_multi_font_load(multi_font_type);
     /* 更新默认主题字体 */
     lv_font_t *font = lv_font_default();
-    if (NULL != app_lv_ui_multi_font_table[APP_LV_UI_MULTI_FONT_DEFAULT])
-        font  = app_lv_ui_multi_font_table[APP_LV_UI_MULTI_FONT_DEFAULT];
+    if (NULL != app_lv_multi_font_table[APP_LV_MULTI_FONT_DEFAULT])
+        font  = app_lv_multi_font_table[APP_LV_MULTI_FONT_DEFAULT];
     /* 获得默认显示器及其默认主题,更新它 */
     lv_disp_t *disp = lv_disp_get_default();
     lv_theme_t *theme = lv_theme_get_from_obj(disp);
@@ -83,34 +83,34 @@ void app_lv_ui_multi_font_update(uint32_t multi_font_type)
 /*@brief     获取当前使用的多字库的指定尺寸
  *@param[in] multi_font_size 多字库尺寸
  */
-lv_font_t * app_lv_ui_multi_font(uint32_t multi_font_size)
+lv_font_t * app_lv_multi_font(uint32_t multi_font_size)
 {
-    APP_SYS_ASSERT(app_lv_ui_multi_font_num >= multi_font_size);
-    lv_font_t *font = app_lv_ui_multi_font_table[multi_font_size];
+    APP_SYS_ASSERT(app_lv_multi_font_num >= multi_font_size);
+    lv_font_t *font = app_lv_multi_font_table[multi_font_size];
     /* 多字库没有, */
     if (font == NULL) {
         font  = lv_font_default();
         /* 返回目标默认静态字体 */
         switch (multi_font_size) {
-        case app_lv_ui_multi_font_16: {
+        case app_lv_multi_font_16: {
             #if LV_FONT_MONTSERRAT_16
             font = &lv_font_montserrat_16;
             #endif
             break;
         }
-        case app_lv_ui_multi_font_20: {
+        case app_lv_multi_font_20: {
             #if LV_FONT_MONTSERRAT_20
             font = &lv_font_montserrat_20;
             #endif
             break;
         }
-        case app_lv_ui_multi_font_24: {
+        case app_lv_multi_font_24: {
             #if LV_FONT_MONTSERRAT_24
             font = &lv_font_montserrat_24;
             #endif
             break;
         }
-        case app_lv_ui_multi_font_28: {
+        case app_lv_multi_font_28: {
             #if LV_FONT_MONTSERRAT_28
             font = &lv_font_montserrat_28;
             #endif

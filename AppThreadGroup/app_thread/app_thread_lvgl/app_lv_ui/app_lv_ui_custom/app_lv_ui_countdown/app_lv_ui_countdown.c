@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_countdown.h"
 #include "app_lv_ui_countdown_remind.h"
@@ -134,32 +134,32 @@ static void app_lv_ui_countdown_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_countdown.self = app_lv_ui_res_local->scene;
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
-        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        title_box = app_lv_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Countdown");
         /* 主体文本 */
-        app_lv_ui_res_local->tick = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->tick = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tick, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align_to(app_lv_ui_res_local->tick, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 绘制日期后三位滚轮 */
         lv_obj_t *rol_set = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(rol_set);
-        lv_obj_set_size(rol_set, LV_HOR_RES, app_lv_ui_ver_pct(50));
-        lv_obj_align_to(rol_set, app_lv_ui_res_local->tick, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(10));
+        app_lv_style_object(rol_set);
+        lv_obj_set_size(rol_set, LV_HOR_RES, app_lv_style_ver_pct(50));
+        lv_obj_align_to(rol_set, app_lv_ui_res_local->tick, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_style_ver_pct(10));
         /* 绘制分滚轮,中心对齐 */
-        app_lv_ui_res_local->rol_m = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->rol_m = app_lv_style_roller(rol_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align(app_lv_ui_res_local->rol_m, LV_ALIGN_TOP_MID, 0, 0);
         /* 绘制时滚轮,分滚轮左外对齐 */
-        app_lv_ui_res_local->rol_h = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_23, 3);
+        app_lv_ui_res_local->rol_h = app_lv_style_roller(rol_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_23, 3);
         lv_obj_align_to(app_lv_ui_res_local->rol_h, app_lv_ui_res_local->rol_m, LV_ALIGN_OUT_LEFT_MID, 0, 0);
         /* 绘制秒滚轮,分滚轮右外对齐 */
-        app_lv_ui_res_local->rol_s = app_lv_ui_style_roller(rol_set, app_lv_ui_hor_pct(30), app_lv_ui_res_0_59, 3);
+        app_lv_ui_res_local->rol_s = app_lv_style_roller(rol_set, app_lv_style_hor_pct(30), app_lv_ui_res_0_59, 3);
         lv_obj_align_to(app_lv_ui_res_local->rol_s, app_lv_ui_res_local->rol_m, LV_ALIGN_OUT_RIGHT_MID, 0, 0);
         /* 底部双按钮组 */
-        lv_obj_t *btn = app_lv_ui_style_two_btns(app_lv_ui_res_local->scene,
+        lv_obj_t *btn = app_lv_style_two_btns(app_lv_ui_res_local->scene,
                                                 &app_lv_ui_res_local->btn_l,
                                                 &app_lv_ui_res_local->lbl_l,
                                                 &app_lv_ui_res_local->btn_r,
@@ -167,7 +167,7 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_l, app_lv_ui_btn_l_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_r, app_lv_ui_btn_r_cb, LV_EVENT_CLICKED, NULL);
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
         /* 滚轮选中刷新 */

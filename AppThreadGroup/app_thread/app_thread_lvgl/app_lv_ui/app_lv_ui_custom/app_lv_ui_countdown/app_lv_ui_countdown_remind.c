@@ -7,9 +7,9 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
+#include "app_lv_event_ui.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
-#include "app_lv_ui_event_scene.h"
 
 #include "app_lv_ui_countdown.h"
 #include "app_lv_ui_countdown_remind.h"
@@ -43,24 +43,24 @@ static void app_lv_ui_countdown_remind_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_countdown_remind.self = app_lv_ui_res_local->scene;
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
-        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        title_box = app_lv_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Countdown Remind");
         /* 中心文本 */
-        lv_obj_t *times_up = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *times_up = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(times_up, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align(times_up, LV_ALIGN_CENTER, 0, 0);
         lv_label_set_text(times_up, "Countdown Times Up");
         /* 下部按键 */
         lv_obj_t *btn = NULL, *btn_c = NULL, *lbl_c = NULL;
-        btn = app_lv_ui_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
-        lv_obj_add_event_cb(btn_c, app_lv_ui_event_click_turn_back_cb, LV_EVENT_CLICKED, NULL);
+        btn = app_lv_style_one_btn(app_lv_ui_res_local->scene, &btn_c, &lbl_c);
+        lv_obj_add_event_cb(btn_c, app_lv_event_ui_backtrack_cb, LV_EVENT_CLICKED, NULL);
         lv_label_set_text(lbl_c, "Confirm");
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }

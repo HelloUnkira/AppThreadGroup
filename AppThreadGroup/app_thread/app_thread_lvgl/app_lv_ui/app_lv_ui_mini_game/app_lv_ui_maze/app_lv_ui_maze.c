@@ -7,10 +7,10 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_check_time.h"
+#include "app_lv_style.h"
+#include "app_lv_event_ui.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
-#include "app_lv_ui_event_scene.h"
-#include "app_lv_ui_check_time.h"
 
 #include "app_lv_ui_maze.h"
 #include "app_lv_ui_maze_presenter.h"
@@ -34,7 +34,7 @@ static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 /*@brief 界面默认事件响应回调(本地重定向)
  */
-static void app_lv_ui_event_default_redirect(lv_event_t *e)
+static void app_lv_event_ui_default_redirect(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     /* 手势事件重定向为指定动作 */
@@ -72,7 +72,7 @@ static void app_lv_ui_event_default_redirect(lv_event_t *e)
         return;
     }
     /* 其他事件不做重定向 */
-    app_lv_ui_event_default(e);
+    app_lv_event_ui_default(e);
 }
 
 /*@brief 界面自定义事件回调
@@ -202,53 +202,53 @@ static void app_lv_ui_maze_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_maze.self = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应,事件重定向使用 */
-        app_lv_ui_event_default_config(NULL, false, NULL);
-        app_lv_ui_event_default_config(NULL, true,  app_lv_ui_event_default_redirect);
+        app_lv_event_ui_default_config(NULL, false, NULL);
+        app_lv_event_ui_default_config(NULL, true,  app_lv_event_ui_default_redirect);
         /* 界面常亮 */
-        app_lv_ui_check_time_exec(false);
+        app_lv_check_time_exec(false);
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
-        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        title_box = app_lv_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Maze");
         /* 初始化参数 */
         app_lv_ui_res_local->lbl_matrix_row_dsc[APP_LV_UI_MAZE_LINE]    = LV_GRID_TEMPLATE_LAST;
         app_lv_ui_res_local->lbl_matrix_col_dsc[APP_LV_UI_MAZE_ELEMENT] = LV_GRID_TEMPLATE_LAST;
-        for (uint32_t idx = 0; idx < APP_LV_UI_MAZE_LINE;     app_lv_ui_res_local->lbl_matrix_row_dsc[idx] = app_lv_ui_hor_pct(5), idx++);
-        for (uint32_t idx = 0; idx < APP_LV_UI_MAZE_ELEMENT;  app_lv_ui_res_local->lbl_matrix_col_dsc[idx] = app_lv_ui_ver_pct(5), idx++);
+        for (uint32_t idx = 0; idx < APP_LV_UI_MAZE_LINE;     app_lv_ui_res_local->lbl_matrix_row_dsc[idx] = app_lv_style_hor_pct(5), idx++);
+        for (uint32_t idx = 0; idx < APP_LV_UI_MAZE_ELEMENT;  app_lv_ui_res_local->lbl_matrix_col_dsc[idx] = app_lv_style_ver_pct(5), idx++);
         /* 创建显示矩阵 */
         lv_obj_t *matrix = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(matrix);
-        lv_obj_set_size(matrix, app_lv_ui_hor_pct(85), app_lv_ui_ver_pct(70));
+        app_lv_style_object(matrix);
+        lv_obj_set_size(matrix, app_lv_style_hor_pct(85), app_lv_style_ver_pct(70));
         lv_obj_set_style_layout(matrix, LV_LAYOUT_GRID, 0);
         lv_obj_set_style_pad_row(matrix, 0, 0);
         lv_obj_set_style_pad_column(matrix, 0, 0);
         lv_obj_set_style_grid_row_dsc_array(matrix, app_lv_ui_res_local->lbl_matrix_row_dsc, 0);
         lv_obj_set_style_grid_column_dsc_array(matrix, app_lv_ui_res_local->lbl_matrix_col_dsc, 0);
-        lv_obj_align_to(matrix, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_ui_ver_pct(1));
+        lv_obj_align_to(matrix, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_style_ver_pct(1));
         for (uint8_t idx1 = 0; idx1 < APP_LV_UI_MAZE_LINE; idx1++)
         for (uint8_t idx2 = 0; idx2 < APP_LV_UI_MAZE_ELEMENT; idx2++) {
-            app_lv_ui_res_local->lbl_matrix2[idx1][idx2] = app_lv_ui_style_btn_block2(matrix, &app_lv_ui_res_local->lbl_matrix1[idx1][idx2], 2, 1, 0);
+            app_lv_ui_res_local->lbl_matrix2[idx1][idx2] = app_lv_style_btn_block2(matrix, &app_lv_ui_res_local->lbl_matrix1[idx1][idx2], 2, 1, 0);
             lv_obj_set_grid_cell(app_lv_ui_res_local->lbl_matrix1[idx1][idx2], LV_GRID_ALIGN_STRETCH, idx1, 1, LV_GRID_ALIGN_STRETCH, idx2, 1);
         }
         /* 初始化列表,右部 */
         lv_obj_t *list  = lv_obj_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(list);
-        lv_obj_set_size(list, LV_HOR_RES, app_lv_ui_ver_pct(15));
+        app_lv_style_object(list);
+        lv_obj_set_size(list, LV_HOR_RES, app_lv_style_ver_pct(15));
         lv_obj_set_style_pad_all(list, 10, 0);
         lv_obj_set_style_layout(list, LV_LAYOUT_FLEX, 0);
         lv_obj_set_style_flex_flow(list, LV_FLEX_FLOW_ROW_WRAP, 0);
         lv_obj_set_style_flex_main_place(list, LV_FLEX_ALIGN_SPACE_EVENLY, 0);
-        lv_obj_set_style_pad_column(list, app_lv_ui_hor_pct(1), 0);
+        lv_obj_set_style_pad_column(list, app_lv_style_hor_pct(1), 0);
         /* 固定按钮 */
         const char *btn_text[] = {LV_SYMBOL_REFRESH, LV_SYMBOL_UP, LV_SYMBOL_LEFT, LV_SYMBOL_RIGHT, LV_SYMBOL_DOWN};
         for (uint8_t idx = 0; idx < sizeof(btn_text) / sizeof(btn_text[0]); idx++) {
-            lv_obj_t *list_btn = app_lv_ui_style_btn(list);
+            lv_obj_t *list_btn = app_lv_style_btn(list);
             lv_obj_add_event_cb(list_btn, app_lv_ui_local_list_btn_cb, LV_EVENT_CLICKED, (void *)(uintptr_t)(0 - (idx + 1)));
-            lv_obj_set_size(list_btn, app_lv_ui_hor_pct(15), app_lv_ui_ver_pct(8));
-            lv_obj_t *list_lbl = app_lv_ui_style_label(list_btn);
+            lv_obj_set_size(list_btn, app_lv_style_hor_pct(15), app_lv_style_ver_pct(8));
+            lv_obj_t *list_lbl = app_lv_style_label(list_btn);
             lv_obj_align(list_lbl, LV_ALIGN_CENTER, 0, 0);
             lv_label_set_text_static(list_lbl, btn_text[idx]);
         }
@@ -259,7 +259,7 @@ static void app_lv_ui_maze_show(void *scene)
         app_lv_ui_res_local->refr = true;
         app_lv_ui_res_local->move = true;
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);
     }
@@ -274,11 +274,11 @@ static void app_lv_ui_maze_hide(void *scene)
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 启用默认事件响应,事件重定向取消 */
-        app_lv_ui_event_default_config(NULL, false, app_lv_ui_event_default_redirect);
-        app_lv_ui_event_default_config(NULL, true,  NULL);
+        app_lv_event_ui_default_config(NULL, false, app_lv_event_ui_default_redirect);
+        app_lv_event_ui_default_config(NULL, true,  NULL);
         /* 界面恢复 */
-        app_lv_ui_check_time_reset(0, 0);
-        app_lv_ui_check_time_exec(true);
+        app_lv_check_time_reset(0, 0);
+        app_lv_check_time_exec(true);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         app_lv_ui_maze.self = NULL;

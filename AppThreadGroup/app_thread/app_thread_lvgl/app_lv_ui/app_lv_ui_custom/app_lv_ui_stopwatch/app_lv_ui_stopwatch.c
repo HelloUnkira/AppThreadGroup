@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_stopwatch.h"
 #include "app_lv_ui_stopwatch_presenter.h"
@@ -45,7 +45,7 @@ static void app_lv_ui_local_tick_list_set(bool refr)
 {
     if (app_lv_ui_res_local->tick_list == NULL) {
         app_lv_ui_res_local->tick_list  = lv_list_create(app_lv_ui_res_local->scene);
-        app_lv_ui_style_object(app_lv_ui_res_local->tick_list);
+        app_lv_style_object(app_lv_ui_res_local->tick_list);
         lv_obj_set_size(app_lv_ui_res_local->tick_list, LV_HOR_RES, LV_VER_RES - 160);
         lv_obj_set_style_pad_all(app_lv_ui_res_local->tick_list, 10, 0);
         lv_obj_set_style_pad_row(app_lv_ui_res_local->tick_list,  5, 0);
@@ -57,11 +57,11 @@ static void app_lv_ui_local_tick_list_set(bool refr)
         app_lv_ui_stopwatch_presenter.get_tick_list(&tick_list);
         uint8_t tick_num = app_lv_ui_stopwatch_presenter.get_tick_num();
         for (uint8_t idx = 0; idx < tick_num; idx++) {
-            lv_obj_t *label = app_lv_ui_style_label(app_lv_ui_res_local->tick_list);
+            lv_obj_t *label = app_lv_style_label(app_lv_ui_res_local->tick_list);
             lv_obj_set_size(label, LV_HOR_RES - 40, 20);
             lv_obj_set_style_text_color(label, lv_color_black(), 0);
             lv_label_set_text(label, "");
-            lv_obj_t *label1 = app_lv_ui_style_label(label);
+            lv_obj_t *label1 = app_lv_style_label(label);
             lv_obj_set_width(label1, 30);
             lv_obj_set_style_text_color(label1, lv_palette_main(LV_PALETTE_GREY), 0);
             lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_RIGHT, 0);
@@ -174,21 +174,21 @@ static void app_lv_ui_stopwatch_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_stopwatch.self = app_lv_ui_res_local->scene;
         /* 默认顶部风格 */
         lv_obj_t *title_box = NULL, *title = NULL;
-        title_box = app_lv_ui_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
+        title_box = app_lv_style_title(app_lv_ui_res_local->scene, &app_lv_ui_res_local->time, &title);
         lv_label_set_text(title, "Stopwatch");
         /* 主体时间 */
-        app_lv_ui_res_local->tick_main = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        app_lv_ui_res_local->tick_main = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->tick_main, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_obj_align_to(app_lv_ui_res_local->tick_main, title_box, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 计数列表(点击时更新) */
         app_lv_ui_res_local->tick_list = NULL;
         app_lv_ui_local_tick_list_set(false);
         /* 底部双按钮组 */
-        lv_obj_t *btn = app_lv_ui_style_two_btns(app_lv_ui_res_local->scene,
+        lv_obj_t *btn = app_lv_style_two_btns(app_lv_ui_res_local->scene,
                                                 &app_lv_ui_res_local->btn_l,
                                                 &app_lv_ui_res_local->lbl_l,
                                                 &app_lv_ui_res_local->btn_r,
@@ -196,7 +196,7 @@ static void app_lv_ui_stopwatch_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_l, app_lv_ui_btn_l_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_r, app_lv_ui_btn_r_cb, LV_EVENT_CLICKED, NULL);
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
 
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 10, 1000);

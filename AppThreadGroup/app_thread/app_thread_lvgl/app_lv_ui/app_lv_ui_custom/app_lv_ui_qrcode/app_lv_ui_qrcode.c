@@ -7,8 +7,8 @@
 
 #include "lvgl.h"
 #include "app_lv_scene.h"
+#include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_style.h"
 
 #include "app_lv_ui_qrcode.h"
 #include "app_lv_ui_qrcode_presenter.h"
@@ -37,19 +37,19 @@ static void app_lv_ui_qrcode_show(void *scene)
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
-        app_lv_ui_res_local->scene = app_lv_ui_style_scene();
+        app_lv_ui_res_local->scene = app_lv_style_scene();
         app_lv_ui_qrcode.self = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
-        lv_obj_t *label = app_lv_ui_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(label, "QR Code");
         lv_obj_align(label, LV_ALIGN_TOP_MID, 0, 0);
         /* qrcode */
         app_lv_ui_res_local->qrcode = lv_qrcode_create(app_lv_ui_res_local->scene, 200, lv_color_black(), lv_color_white());
-        app_lv_ui_style_object(app_lv_ui_res_local->qrcode);
+        app_lv_style_object(app_lv_ui_res_local->qrcode);
         lv_obj_align(app_lv_ui_res_local->qrcode, LV_ALIGN_CENTER, 0, 0);
         /* 初始化显示动画 */
-        app_lv_ui_style_object_anim(app_lv_ui_res_local->scene,
+        app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                    &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
                                     LV_ANIM_REPEAT_INFINITE, 0, 1, 1000);
     }
