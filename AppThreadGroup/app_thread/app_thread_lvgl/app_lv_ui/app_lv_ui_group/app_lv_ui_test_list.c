@@ -23,10 +23,10 @@ typedef struct {
 
 /* 不能直接通过跳转逻辑进入的界面加入到测试列表中 */
 static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
-    {"Watch Start",         &app_lv_ui_start,},
-    {"Watch Stop",          &app_lv_ui_stop,},
-    {"Watch Dlps",          &app_lv_ui_dlps,},
-    {"Watch Null",          &app_lv_ui_null,},
+    {"Start",               &app_lv_ui_start,},
+    {"Stop",                &app_lv_ui_stop,},
+    {"Dlps",                &app_lv_ui_dlps,},
+    {"Null",                &app_lv_ui_null,},
     {"Log Text",            &app_lv_ui_log_text,},
     {"FS Info",             &app_lv_ui_fs_info,},
     {"System Clock",        &app_lv_ui_clock,},
@@ -67,6 +67,7 @@ static void app_lv_ui_test_list_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
+        ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
         /* 初始化标签,上中部 */
         lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
@@ -100,6 +101,7 @@ static void app_lv_ui_test_list_hide(void *scene)
     if (app_lv_ui_res_local != NULL) {
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
+        ((app_lv_scene_t *)scene)->root = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }

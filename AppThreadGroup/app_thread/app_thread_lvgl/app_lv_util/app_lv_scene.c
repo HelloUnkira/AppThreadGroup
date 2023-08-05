@@ -150,12 +150,11 @@ uint8_t app_lv_scene_get_nest(void)
     return app_lv_scene_num;
 }
 
-#if 0
-
-/*@brief    激活一个游离窗口,该窗口不受场景栈管理,被其他窗口重新继承
+/*@brief    激活一个游离窗口,该窗口不受场景栈管理
  *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
- *param[in] scene 游离窗口
- *param[in] right_now 是否就地激活
+ *          此外:在它的调用之前,scene内部资源应该以lv_scr_act()为根对象
+ *param[in] scene     游离窗口
+ *param[in] right_now 就地执行
  */
 void app_lv_scene_active(app_lv_scene_t *scene, bool right_now)
 {
@@ -167,20 +166,18 @@ void app_lv_scene_active(app_lv_scene_t *scene, bool right_now)
         app_lv_scene_update(scene);
 }
 
-/*@brief    失活一个游离窗口
+/*@brief    失活一个游离窗口,该窗口不受场景栈管理
  *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
- *param[in] scene 游离窗口
- *param[in] right_now 是否就地失活
+ *          此外:在它的调用之前,scene内部资源应该以lv_scr_act()为根对象
+ *param[in] scene     游离窗口
+ *param[in] right_now 就地执行
  */
 void app_lv_scene_hidden(app_lv_scene_t *scene, bool right_now)
 {
     APP_SYS_ASSERT(scene != NULL);
-    lv_obj_set_parent(scene->self, lv_scr_act());
     scene->event = app_lv_scene_need_hide;
     if (right_now)
         app_lv_scene_sched(scene);
     else
         app_lv_scene_update(scene);
 }
-
-#endif

@@ -12,7 +12,8 @@ typedef struct {
     uint8_t event;                  /* 触发事件 */
     void  (*show)(void *scene);     /* 载入场景 */
     void  (*hide)(void *scene);     /* 移除场景 */
-    /* ... */
+    /* 场景指示的根场景(lv_obj_t *) */
+    void   *root;
 } app_lv_scene_t;
 
 /* 场景最大嵌套数量 */
@@ -61,22 +62,20 @@ void app_lv_scene_del(app_lv_scene_t *scene);
  */
 uint8_t app_lv_scene_get_nest(void);
 
-#if 0
-
-/*@brief    激活一个游离窗口,该窗口不受场景栈管理,被其他窗口重新继承
+/*@brief    激活一个游离窗口,该窗口不受场景栈管理
  *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
- *param[in] scene 游离窗口
- *param[in] right_now 是否就地激活
+ *          此外:在它的调用之前,scene内部资源应该以lv_scr_act()为根对象
+ *param[in] scene     游离窗口
+ *param[in] right_now 就地执行
  */
 void app_lv_scene_active(app_lv_scene_t *scene, bool right_now);
 
-/*@brief    失活一个游离窗口
+/*@brief    失活一个游离窗口,该窗口不受场景栈管理
  *          注意:它调用了敏感资源,对它的递归调用,不能到lv_timer_handler
- *param[in] scene 游离窗口
- *param[in] right_now 是否就地失活
+ *          此外:在它的调用之前,scene内部资源应该以lv_scr_act()为根对象
+ *param[in] scene     游离窗口
+ *param[in] right_now 就地执行
  */
 void app_lv_scene_hidden(app_lv_scene_t *scene, bool right_now);
-
-#endif
 
 #endif

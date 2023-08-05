@@ -29,4 +29,6 @@ void app_lv_ui_wheel_event(app_lv_ui_wheel_t *wheel);
  */
 void app_lv_ui_wheel_sched(void *data, uint32_t size);
 
+#include "app_lv_ui_wheel_float.h"
+
 #endif
