@@ -16,36 +16,36 @@ typedef struct {
     uint32_t    tail;       /* 队列结束位置(进动点,非实际下标) */
     uint8_t     type;       /* 字节对齐类型(1,2,4,8) */
     app_mutex_t mutex;      /* 资源保护 */
-} app_sys_rbuf;
+} app_sys_rbuf_t;
 
 /*@brief        环形队列重置(中断环境下不可调用)
  *@param[in]    rbuf 实例
  */
-void app_sys_rbuf_reset(app_sys_rbuf *rbuf);
+void app_sys_rbuf_reset(app_sys_rbuf_t *rbuf);
 
 /*@brief        环形队列为空判断(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       是否为空
  */
-bool app_sys_rbuf_is_empty(app_sys_rbuf *rbuf);
+bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf);
 
-/*@brief        获取环形队列类型
+/*@brief        获取环形队列类型(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       环形队列类型
  */
-uint8_t app_sys_rbuf_get_type(app_sys_rbuf *rbuf);
+uint8_t app_sys_rbuf_get_type(app_sys_rbuf_t *rbuf);
 
 /*@brief        获取环形队列已有条目(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       占用条目数量
  */
-uint32_t app_sys_rbuf_get_item(app_sys_rbuf *rbuf);
+uint32_t app_sys_rbuf_get_item(app_sys_rbuf_t *rbuf);
 
 /*@brief        获取环形队列空闲条目(中断环境下不可调用)
  *@param[in]    rbuf 实例
  *@retval       空闲条目数量
  */
-uint32_t app_sys_rbuf_get_space(app_sys_rbuf *rbuf);
+uint32_t app_sys_rbuf_get_space(app_sys_rbuf_t *rbuf);
 
 /*@brief        就绪环形队列(无参数检查)(中断环境下不可调用)
  *              当满足buffer为字节对齐且size为2的次方达到最大效率
@@ -54,7 +54,7 @@ uint32_t app_sys_rbuf_get_space(app_sys_rbuf *rbuf);
  *@param[in]    buffer 指定的缓冲区,为对齐的字流(不是字节流)(如下)
  *@param[in]    size   对齐字流的长度
  */
-void app_sys_rbuf_ready(app_sys_rbuf *rbuf, uint8_t type, void *buffer, uint32_t size);
+void app_sys_rbuf_ready(app_sys_rbuf_t *rbuf, uint8_t type, void *buffer, uint32_t size);
 
 /*@brief        从环形队列获取数据(无参数检查)(中断环境下不可调用)
  *@param[in]    rbuf   实例
@@ -63,7 +63,7 @@ void app_sys_rbuf_ready(app_sys_rbuf *rbuf, uint8_t type, void *buffer, uint32_t
  *@retval       -1     数据不足
  *@retval       -2     实例类型错误
  */
-int32_t app_sys_rbuf_gets(app_sys_rbuf *rbuf, void *data, uint32_t length);
+int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length);
 
 /*@brief        向环形队列推送数据(无参数检查)(中断环境下不可调用)
  *@param[in]    rbuf   实例
@@ -72,7 +72,7 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf *rbuf, void *data, uint32_t length);
  *@retval       -1     空间不足
  *@retval       -2     实例类型错误
  */
-int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
+int32_t app_sys_rbuf_puts(app_sys_rbuf_t *rbuf, void *data, uint32_t length);
 
 /*补充扩展:
  *    上述满足线程安全的环形缓冲区所需接口已具完备性
@@ -80,7 +80,7 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
  *    此外gets和puts仅配套使用以免缓冲区紊乱
  */
 
-/*@brief 定长数据的gets接口,参数细节与原型一致
+/*@brief 定长数据的gets接口,参数细节与原型一致(中断环境下不可调用)
  *       注意:这里的环形队列类型需要和type对齐
  *       建议使用以下宏对齐type以加速:
  *           #pragma pack(push, x)
@@ -89,7 +89,7 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
 #define APP_SYS_RBUF_GETS_FIXED(rbuf, data, type)   \
         app_sys_rbuf_gets(rbuf, (void *)data, sizeof(type) / app_sys_rbuf_get_type(rbuf))
 
-/*@brief 定长数据的puts接口,参数细节与原型一致
+/*@brief 定长数据的puts接口,参数细节与原型一致(中断环境下不可调用)
  *       注意:这里的环形队列类型需要和type对齐
  *       建议使用以下宏对齐type以加速:
  *           #pragma pack(push, x)
@@ -98,14 +98,28 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf *rbuf, void *data, uint32_t length);
 #define APP_SYS_RBUF_PUTS_FIXED(rbuf, data, type)   \
         app_sys_rbuf_puts(rbuf, (void *)data, sizeof(type) / app_sys_rbuf_get_type(rbuf))
 
-/*@brief 非定长数据的gets接口,参数细节与原型一致
+/*@brief 非定长数据的gets接口,参数细节与原型一致(中断环境下不可调用)
  *       注意:data的缓冲区有一个最大值上限,双方约定即可
  */
-int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length);
+static inline int32_t app_sys_rbuf_gets_unfixed(app_sys_rbuf_t *rbuf, void *data, uint64_t *length)
+{
+    if (app_sys_rbuf_get_item(rbuf) < sizeof(uint64_t) / rbuf->type)
+        return -1;
+    app_sys_rbuf_gets(rbuf, (void *)length, sizeof(uint64_t) / rbuf->type);
+    app_sys_rbuf_gets(rbuf, (void *)data,  *length);
+    return 0;
+}
 
-/*@brief 非定长数据的puts接口,参数细节与原型一致
+/*@brief 非定长数据的puts接口,参数细节与原型一致(中断环境下不可调用)
  *       注意:data的缓冲区有一个最大值上限,双方约定即可
  */
-int32_t app_sys_rbuf_puts_unfixed(app_sys_rbuf *rbuf, void *data, uint64_t *length);
+static inline int32_t app_sys_rbuf_puts_unfixed(app_sys_rbuf_t *rbuf, void *data, uint64_t *length)
+{
+    if (app_sys_rbuf_get_space(rbuf) < sizeof(uint64_t) / rbuf->type + length)
+        return -1;
+    app_sys_rbuf_puts(rbuf, (void *)length, sizeof(uint64_t) / rbuf->type);
+    app_sys_rbuf_puts(rbuf, (void *)data,  *length);
+    return 0;
+}
 
 #endif

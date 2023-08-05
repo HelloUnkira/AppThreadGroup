@@ -126,7 +126,7 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
  *@param[in] line 文件行数
  *@param[in] step 执行编号
  */
-void app_sys_execute_trace(const char *file, const char *func, uint32_t line, uint32_t step)
+void app_sys_trace(const char *file, const char *func, uint32_t line, uint32_t step)
 {
     file = app_sys_log_file(file);
     /* 输出警告信息 */

@@ -105,9 +105,9 @@ static void app_sys_pipe_slab_free(void *ptr)
     app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_give);
 }
 
-/*@brief 初始化管道分配器
+/*@brief 初始化管道资源
  */
-void app_sys_pipe_slab_ready(void)
+void app_sys_pipe_src_ready(void)
 {
     app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_static);
 }
@@ -127,7 +127,7 @@ void app_sys_pipe_ready(app_sys_pipe_t *pipe)
  *@param[in] pipe 管道实例
  *@retval    管道资源包数量
  */
-uint32_t app_sys_pipe_pkg_num(app_sys_pipe_t *pipe)
+uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe)
 {
     uint32_t number = 0;
     app_critical_process(&pipe->critical, app_critical_enter);

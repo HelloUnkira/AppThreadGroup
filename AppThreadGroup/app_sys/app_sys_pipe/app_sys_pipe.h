@@ -32,9 +32,9 @@ typedef struct {
     app_critical_t      critical;   /* 管道资源临界区保护 */
 } app_sys_pipe_t;
 
-/*@brief 初始化管道分配器
+/*@brief 初始化管道资源
  */
-void app_sys_pipe_slab_ready(void);
+void app_sys_pipe_src_ready(void);
 
 /*@brief     初始化管道
  *@param[in] pipe 管道实例
@@ -45,7 +45,7 @@ void app_sys_pipe_ready(app_sys_pipe_t *pipe);
  *@param[in] pipe 管道实例
  *@retval    管道资源包数量
  */
-uint32_t app_sys_pipe_pkg_num(app_sys_pipe_t *pipe);
+uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe);
 
 /*@brief     交付一个包给管道
  *@param[in] pipe     管道实例

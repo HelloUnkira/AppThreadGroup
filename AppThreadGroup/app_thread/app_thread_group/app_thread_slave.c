@@ -42,11 +42,11 @@ void app_thread_slave_routine(uint32_t app_thread_id,
         app_execute_us(&execute_us, true);
         #endif
         /* 线程包数量警告检查 */
-        uint32_t pkg_num = app_sys_pipe_pkg_num(pipe);
+        uint32_t pkg_num = app_sys_pipe_num(pipe);
         if (APP_THREAD_PACKAGE_MAX <= pkg_num)
             APP_SYS_LOG_WARN("thread %u recv too much package:%u", app_thread_id, pkg_num);
         /* 指定子线程处理主线程派发包 */
-        while (app_sys_pipe_pkg_num(pipe) != 0) {
+        while (app_sys_pipe_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);
             /* 计算事件处理时间(开始) */
             #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
@@ -60,7 +60,7 @@ void app_thread_slave_routine(uint32_t app_thread_id,
                 /* 系统对于此事件包的处理负载过大,主动丢弃一部分相同的事件包 */
                 /* 这是无奈之举,应该避免事件包的丢弃,这会对事件系统产生危害 */
                 for (uint32_t idx = 0; idx < discard_count; idx++)
-                    if (app_sys_pipe_pkg_num(pipe) != 0)
+                    if (app_sys_pipe_num(pipe) != 0)
                         app_sys_pipe_take(pipe, &package, true);
                     else
                         break;

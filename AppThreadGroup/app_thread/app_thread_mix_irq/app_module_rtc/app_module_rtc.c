@@ -24,7 +24,7 @@ void app_module_rtc_1ms_cb(void)
     if (count++ % 1000 == 0)
         APP_SYS_LOG_INFO('1s handler');
     /* 线程组不在工作中,Tick是没有意义的 */
-    if (app_thread_group_status_get()) {
+    if (app_thread_group_run_status()) {
         /* timer msec update */
         app_module_timer_1ms_update();
         /* 一些补充的扩展配置,与OS相关 */

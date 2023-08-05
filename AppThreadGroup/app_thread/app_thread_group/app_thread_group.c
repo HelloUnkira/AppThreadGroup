@@ -9,8 +9,8 @@
 #include "app_sys_log.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_log_text.h"
-#include "app_sys_timer.h"
 #include "app_sys_pipe.h"
+#include "app_sys_timer.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_system.h"
@@ -48,8 +48,8 @@ void app_thread_group_schedule(void)
     app_sys_log_ready(log);
     app_sys_ext_mem_ready();
     app_sys_log_text_ready();
+    app_sys_pipe_src_ready();
     app_sys_timer_ready();
-    app_sys_pipe_slab_ready();
     app_sys_build_time();
     /*
      *!!!就绪app thread层
@@ -86,7 +86,7 @@ void app_thread_group_schedule(void)
 
 /*@brief 获得线程组初始化状态
  */
-bool app_thread_group_status_get(void)
+bool app_thread_group_run_status(void)
 {
     app_critical_t critical = {0};
     app_critical_process(&critical, app_critical_create);

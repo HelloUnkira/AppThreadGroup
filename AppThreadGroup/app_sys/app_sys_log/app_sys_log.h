@@ -35,16 +35,20 @@
 
 /* 全局宏控覆盖(覆盖所有本地宏控) */
 #if     APP_SYS_LOG_GLOBAL_OVERLAY
+#ifdef  APP_SYS_LOG_LOCAL_STATUS
 #undef  APP_SYS_LOG_LOCAL_STATUS
-#define APP_SYS_LOG_LOCAL_STATUS    APP_SYS_LOG_GLOBAL_STATUS
+#define APP_SYS_LOG_LOCAL_STATUS        APP_SYS_LOG_GLOBAL_STATUS
+#endif
+#ifdef  APP_SYS_LOG_LOCAL_LEVEL
 #undef  APP_SYS_LOG_LOCAL_LEVEL
-#define APP_SYS_LOG_LOCAL_LEVEL     APP_SYS_LOG_GLOBAL_LEVEL
+#define APP_SYS_LOG_LOCAL_LEVEL         APP_SYS_LOG_GLOBAL_LEVEL
+#endif
 #endif
 
 /* 全局持久化宏控限制 */
 /* 备注:不是所有的模组都需要使用该功能, 例如持久化模组自己 */
 #ifndef APP_SYS_LOG_RECORD_LIMIT
-#define APP_SYS_LOG_RECORD_LIMIT    0   /* 1:ENABLE,0:DISABLE */
+#define APP_SYS_LOG_RECORD_LIMIT        0   /* 1:ENABLE,0:DISABLE */
 #endif
 
 /* 全局持久化宏控覆盖(依赖本地宏控) */
@@ -97,9 +101,6 @@
 /* NONE */
 #endif
 
-/* 扩展:日志换行的宏转换 */
-#define APP_SYS_LOG_LINE    APP_DEV_LOG_MSG_LINE
-
 /* 断言:条件为真继续执行,为假时中断系统 */
 #if     APP_SYS_ASSERT_STATUS
 #define APP_SYS_ASSERT(cond)    (app_sys_assert(__FILE__, __func__, __LINE__, cond))
@@ -109,10 +110,13 @@
 
 /* 追踪执行:标明执行到函数的哪一个步骤 */
 #if     APP_SYS_TRACE_STATUS
-#define APP_SYS_TRACE_EXECUTE(step)     (app_sys_trace_execute(__FILE__, __func__, __LINE__, step))
+#define APP_SYS_TRACE(step)     (app_sys_trace(__FILE__, __func__, __LINE__, step))
 #else
-#define APP_SYS_TRACE_EXECUTE(step)
+#define APP_SYS_TRACE(step)
 #endif
+
+/* 扩展:日志换行的宏转换 */
+#define APP_SYS_LOG_LINE    APP_DEV_LOG_MSG_LINE
 
 /* ----------下面是未使用宏包装的函数,不建议直接使用,不利于项目代码裁剪---------- */
 
@@ -157,7 +161,7 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
  *@param[in] line 文件行数
  *@param[in] step 执行编号
  */
-void app_sys_trace_execute(const char *file, const char *func, uint32_t line, uint32_t step);
+void app_sys_trace(const char *file, const char *func, uint32_t line, uint32_t step);
 
 /*@brief 编译时间
  */

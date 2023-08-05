@@ -8,7 +8,7 @@ void app_thread_group_schedule(void);
 
 /*@brief 获得线程组初始化状态
  */
-bool app_thread_group_status_get(void);
+bool app_thread_group_run_status(void);
 
 /* 子线程组编号 */
 typedef enum {
