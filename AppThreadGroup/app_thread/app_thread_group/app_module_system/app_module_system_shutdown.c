@@ -11,8 +11,8 @@
 #include "app_module_clock.h"
 #include "app_module_system.h"
 #include "app_module_data_center.h"
-#include "app_module_dump.h"
-#include "app_module_load.h"
+#include "app_module_data_dump.h"
+#include "app_module_data_load.h"
 
 #include "app_lv_event.h"
 

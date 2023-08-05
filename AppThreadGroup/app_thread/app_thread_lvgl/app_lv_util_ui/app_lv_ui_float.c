@@ -13,6 +13,8 @@
 #include "app_lv_scene.h"
 #include "app_lv_ui_float.h"
 
+#if 0
+
 /* 四个浮动子窗口私有数据 */
 static app_lv_ui_float_t  app_lv_ui_float_pl = {0};
 static app_lv_ui_float_t  app_lv_ui_float_pr = {0};
@@ -534,3 +536,6 @@ void app_lv_ui_float_hidden(app_lv_scene_t *scene)
         memset(&app_lv_ui_float_pr, 0, sizeof(app_lv_ui_float_t));
     }
 }
+
+#endif
+

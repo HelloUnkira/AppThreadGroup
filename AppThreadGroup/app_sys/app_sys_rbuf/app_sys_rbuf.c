@@ -50,7 +50,7 @@ bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf)
  *@param[in]    rbuf 实例
  *@retval       环形队列类型
  */
-uint8_t app_sys_rbuf_get_type(app_sys_rbuf_t *rbuf)
+uint8_t app_sys_rbuf_type(app_sys_rbuf_t *rbuf)
 {
     app_mutex_process(&rbuf->mutex, app_mutex_take);
     uint8_t type = rbuf->type;
@@ -62,7 +62,7 @@ uint8_t app_sys_rbuf_get_type(app_sys_rbuf_t *rbuf)
  *@param[in]    rbuf 实例
  *@retval       占用条目数量
  */
-uint32_t app_sys_rbuf_get_item(app_sys_rbuf_t *rbuf)
+uint32_t app_sys_rbuf_item(app_sys_rbuf_t *rbuf)
 {
     app_mutex_process(&rbuf->mutex, app_mutex_take);
     uint32_t item = rbuf->tail - rbuf->head;
@@ -74,7 +74,7 @@ uint32_t app_sys_rbuf_get_item(app_sys_rbuf_t *rbuf)
  *@param[in]    rbuf 实例
  *@retval       空闲条目数量
  */
-uint32_t app_sys_rbuf_get_space(app_sys_rbuf_t *rbuf)
+uint32_t app_sys_rbuf_space(app_sys_rbuf_t *rbuf)
 {
     app_mutex_process(&rbuf->mutex, app_mutex_take);
     uint32_t space = rbuf->size - (rbuf->tail - rbuf->head);
@@ -127,7 +127,7 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
     uint64_t *buffer8 = data;
     
     if (app_sys_rbuf_is_empty(rbuf) ||
-        app_sys_rbuf_get_item(rbuf) < length)
+        app_sys_rbuf_item(rbuf) < length)
         return -1;
     
     /* 模板 */
@@ -180,7 +180,7 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
     uint32_t *buffer4 = data;
     uint64_t *buffer8 = data;
     
-    if (app_sys_rbuf_get_space(rbuf) < length)
+    if (app_sys_rbuf_space(rbuf) < length)
         return -1;
     
     /* 模板 */

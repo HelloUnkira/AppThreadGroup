@@ -49,7 +49,6 @@ static void app_lv_ui_start_show(void *scene)
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
-        app_lv_ui_start.self = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应 */
         app_lv_event_ui_default_config(NULL, false, NULL);
         /* 初始化加载圆环 */
@@ -82,7 +81,6 @@ static void app_lv_ui_start_hide(void *scene)
         app_lv_event_ui_default_config(NULL, true, NULL);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
-        app_lv_ui_start.self = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }

@@ -1,6 +1,8 @@
 #ifndef APP_LV_UI_FLOAT_H
 #define APP_LV_UI_FLOAT_H
 
+#if 0
+
 typedef struct {
     lv_obj_t  *scene;
     lv_coord_t click_x;
@@ -38,5 +40,7 @@ void app_lv_ui_float_active(app_lv_scene_t *scene);
  *@param[in] scene 场景
  */
 void app_lv_ui_float_hidden(app_lv_scene_t *scene);
+
+#endif
 
 #endif

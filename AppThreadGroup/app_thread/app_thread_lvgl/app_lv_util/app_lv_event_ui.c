@@ -16,7 +16,6 @@
 #include "app_lv_check_time.h"
 #include "app_lv_event_ui.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_float.h"
 
 /*@brief 界面默认事件响应回调
  */
@@ -88,14 +87,18 @@ void app_lv_event_ui_default(lv_event_t *e)
         APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
+            
             /* 场景栈手势被浮窗锁定 */
-            if (app_lv_ui_float_cannot_gestrue(dir))
-                break;
+            // if (app_lv_ui_float_cannot_gestrue(dir))
+            //     break;
+            
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
+            
             /* 浮动子窗口复位(如果未复位的话) */
-            if (app_lv_ui_float_reset())
-                break;
+            // if (app_lv_ui_float_reset())
+            //     break;
+            
             /* 左右滑动回到上一层 */
             if (app_lv_scene_get_nest() > 1) {
                 app_lv_scene_t scene = {0};
@@ -163,8 +166,8 @@ void app_lv_event_ui_default(lv_event_t *e)
                 /* 主界面进入下一层 */
                 if (app_lv_scene_get_nest() == 1) {
                     /* 浮窗复位,如果可以,此时不做别的操作 */
-                    if (app_lv_ui_float_reset())
-                        break;
+                    // if (app_lv_ui_float_reset())
+                    //     break;
                     app_lv_scene_add(&app_lv_ui_list, false);
                 }
             }

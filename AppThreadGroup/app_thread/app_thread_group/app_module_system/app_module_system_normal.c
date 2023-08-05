@@ -11,8 +11,8 @@
 #include "app_module_clock.h"
 #include "app_module_system.h"
 #include "app_module_data_center.h"
-#include "app_module_dump.h"
-#include "app_module_load.h"
+#include "app_module_data_dump.h"
+#include "app_module_data_load.h"
 
 #include "app_lv_event.h"
 
@@ -28,9 +28,9 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     /* 系统开机加载流程 */
     if (system->ctrl.normal.not_load_yet) {
         system->ctrl.normal.not_load_yet = false;
-        app_module_load_event();
+        app_module_data_load_event();
     }
-    if (app_module_load_not_over())
+    if (app_module_data_load_not_over())
         return true;
     /* DLPS管控 */
     if (system->dlps_exec) {
@@ -60,9 +60,9 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     /* 系统关机转储流程 */
     if (system->ctrl.normal.not_dump_yet) {
         system->ctrl.normal.not_dump_yet = false;
-        app_module_dump_event();
+        app_module_data_dump_event();
     }
-    if (app_module_dump_not_over())
+    if (app_module_data_dump_not_over())
         return true;
     
     /* normal模式结束,进行系统模式切换 */

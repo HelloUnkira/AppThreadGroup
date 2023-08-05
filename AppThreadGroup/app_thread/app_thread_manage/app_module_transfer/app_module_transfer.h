@@ -9,7 +9,7 @@
 
 /* 传输信道 */
 /* 不同的信道对应不同的底层传输媒介 */
-typedef enum {
+typedef enum {
     app_module_transfer_chan_low = 0,   /* 低速传输信道,默认信道 */
     app_module_transfer_chan_high,      /* 高速传输信道 */
     app_module_transfer_chan_num,

@@ -10,8 +10,8 @@
 #include "app_sys_pipe.h"
 #include "app_thread_group.h"
 #include "app_module_data_center.h"
-#include "app_module_dump.h"
-#include "app_module_load.h"
+#include "app_module_data_dump.h"
+#include "app_module_data_load.h"
 #include "app_module_shutdown.h"
 #include "app_module_protocol.h"
 #include "app_module_transfer.h"
@@ -36,14 +36,14 @@ static void app_thread_manage_routine_ready_cb(void)
 static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
 {
     switch (package->module) {
-    case app_thread_manage_dump: {
+    case app_thread_manage_data_dump: {
         /* 将系统敏感的资源转储到外存 */
-        app_module_dump_process();
+        app_module_data_dump_process();
         return true;
     }
-    case app_thread_manage_load: {
+    case app_thread_manage_data_load: {
         /* 将系统敏感的资源加载到内存 */
-        app_module_load_process();
+        app_module_data_load_process();
         return true;
     }
     case app_thread_manage_protocol: {

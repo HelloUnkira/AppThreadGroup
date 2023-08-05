@@ -25,6 +25,7 @@
 #include "app_lv_event_ui.h"
 #include "app_lv_style.h"
 #include "app_lv_ui_scene.h"
+#include "app_lv_ui_wheel.h"
 #include "app_lv_ui_scene_remind.h"
 #include "app_lv_ui_test.h"
 
@@ -89,6 +90,10 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         if (package->event == app_thread_lvgl_sched_scene) {
             app_lv_scene_sched(package->data);
         }
+        /* lvgl场景计时检查 */
+        if (package->event == app_thread_lvgl_sched_check_time) {
+            app_lv_check_time_update();
+        }
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
             /* 进入dlps界面 */
@@ -116,12 +121,19 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         return true;
     }
     case app_thread_lvgl_ui_scene: {
+        /* 测试模式拦截该模组全部事件 */
         #if APP_LV_UI_TEST_USE
         /* 禁用超时回退 */
         app_lv_check_time_reset(0, 0);
         app_lv_check_time_exec(false);
         app_lv_scene_reset(&app_lv_ui_test, false);
-        #else
+        return true;
+        #endif
+        
+        /* UI场景轮盘配置 */
+        if (package->event == app_thread_lvgl_ui_scene_wheel) {
+            app_lv_ui_wheel_sched(package->data, package->size);
+        }
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
             app_lv_event_ui_default_config(NULL, true, NULL);
@@ -168,41 +180,33 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             /* 反初始化文件系统 */
             app_third_fatfs_deinit();
         }
-        /* UI场景计时检查 */
-        if (package->event == app_thread_lvgl_ui_scene_check_time) {
-            app_lv_check_time_update();
-        }
-        #endif
-        /* 集成场景 */
-        switch (package->event) {
+        
+        /* 集成场景(开始) */
+        
         /* 倒计时提醒 */
-        case app_thread_lvgl_ui_countdown_remind: {
+        if (package->event == app_thread_lvgl_ui_countdown_remind) {
             app_lv_ui_scene_remind(&app_lv_ui_countdown_remind);
-            break;
         }
         /* 提醒闹钟 */
-        case app_thread_lvgl_ui_remind_alarm: {
+        if (package->event == app_thread_lvgl_ui_remind_alarm) {
             app_module_remind_package_t *remind = package->data;
             remind->remind_group;
             remind->remind_item;
             remind->remind_type;
             if (package->dynamic)
                 app_mem_free(package->data);
-            break;
         }
         /* 提醒走动 */
-        case app_thread_lvgl_ui_remind_sedentary: {
+        if (package->event == app_thread_lvgl_ui_remind_sedentary) {
             app_lv_ui_scene_remind(&app_lv_ui_remind_sedentary);
-            break;
         }
         /* 提醒喝水 */
-        case app_thread_lvgl_ui_remind_drink: {
+        if (package->event == app_thread_lvgl_ui_remind_drink) {
             app_lv_ui_scene_remind(&app_lv_ui_remind_drink);
-            break;
         }
-        default:
-            break;
-        }
+        
+        /* 集成场景(结束) */
+        
         return true;
     }
     default:

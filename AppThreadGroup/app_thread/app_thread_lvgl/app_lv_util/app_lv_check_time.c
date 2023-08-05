@@ -88,8 +88,8 @@ static void app_lv_check_time_timer_handler(void *timer)
     /* 发送场景计时检查事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_ui_scene,
-        .event  = app_thread_lvgl_ui_scene_check_time,
+        .module = app_thread_lvgl_sched,
+        .event  = app_thread_lvgl_sched_check_time,
     };
     app_thread_package_notify(&package);
 }

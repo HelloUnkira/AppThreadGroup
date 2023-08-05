@@ -14,45 +14,42 @@
 #include "app_module_remind_sedentary.h"
 #include "app_module_remind_drink.h"
 #include "app_module_do_not_disturb.h"
-#include "app_module_shutdown.h"
 
 /* 这里不存在并发读写导致的时序不同步,无需保护 */
-static bool app_module_dump_status_not_over = true;
+static bool app_module_data_load_status_not_over = true;
 
-/*@brief 转储流程是否结束
+/*@brief 加载流程是否结束
  */
-bool app_module_dump_not_over(void)
+bool app_module_data_load_not_over(void)
 {
-    return app_module_dump_status_not_over;
+    return app_module_data_load_status_not_over;
 }
 
-/*@brief 资源数据从内存转储到外存
+/*@brief 资源数据从外存加载到内存
  */
-void app_module_dump_process(void)
+void app_module_data_load_process(void)
 {
     APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
-    app_module_clock_dump();
-    app_module_remind_alarm_dump();
-    app_module_remind_sedentary_dump();
-    app_module_remind_drink_dump();
-    app_module_do_not_disturb_dump();
+    app_module_clock_load();
+    app_module_remind_alarm_load();
+    app_module_remind_sedentary_load();
+    app_module_remind_drink_load();
+    app_module_do_not_disturb_load();
     /* ... */
-    app_module_shutdown_dump();
-    /* ... */
-    app_module_dump_status_not_over = false;
+    app_module_data_load_status_not_over = false;
     APP_SYS_LOG_WARN("end");
 }
 
-/*@brief 系统转储模组启动
+/*@brief 系统加载模组启动
  */
-void app_module_dump_event(void)
+void app_module_data_load_event(void)
 {
-    app_module_dump_status_not_over = true;
-    /* 向线程发送转储事件 */
+    app_module_data_load_status_not_over = true;
+    /* 向线程发送加载事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_manage,
-        .module = app_thread_manage_dump,
+        .module = app_thread_manage_data_load,
         .event  = 0,
     };
     app_thread_package_notify(&package);

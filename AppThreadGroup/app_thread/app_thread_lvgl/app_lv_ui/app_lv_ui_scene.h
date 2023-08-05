@@ -8,6 +8,7 @@ extern app_lv_scene_t app_lv_ui_null;
 extern app_lv_scene_t app_lv_ui_dlps;
 /* main scene */
 extern app_lv_scene_t app_lv_ui_wheel;
+extern app_lv_scene_t app_lv_ui_watch_face;
 extern app_lv_scene_t app_lv_ui_test;
 /* group scene */
 extern app_lv_scene_t app_lv_ui_list;
