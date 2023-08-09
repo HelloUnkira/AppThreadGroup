@@ -8,6 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -57,13 +58,13 @@ void app_lv_event_ui_default(lv_event_t *e)
         /* 忽略掉当次按下,剩下的所有事件 */
         lv_indev_wait_release(lv_event_get_indev(e));
         /* 选择不同的流程 */
-        if (app_module_system_mode_get() == app_module_system_shutdown) {
+        if (app_module_system_mode_get() == app_module_data_center_system_mode_shutdown) {
             /* 电量不足为低电量模式,充足为正常模式 */
-            app_module_system_mode_set(app_module_system_normal);
+            app_module_system_mode_set(app_module_data_center_system_mode_normal);
             app_module_system_valid_set(false);
         } else {
             /* 电量不足为低电量模式,充足为正常模式 */
-            app_module_system_mode_set(app_module_system_shutdown);
+            app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
             app_module_system_valid_set(false);
         }
         catch_key_enter = false;
@@ -75,7 +76,7 @@ void app_lv_event_ui_default(lv_event_t *e)
     }
     else {
         /* 关机模式:只允许响应按键及其相关事件 */
-        if (app_module_system_mode_get() == app_module_system_shutdown)
+        if (app_module_system_mode_get() == app_module_data_center_system_mode_shutdown)
             return;
         /* 正常模式:响应其他事件 */
     }

@@ -1,15 +1,6 @@
 #ifndef APP_MODULE_SYSTEM_H
 #define APP_MODULE_SYSTEM_H
 
-/* 系统工作模式 */
-typedef enum {
-    app_module_system_normal,
-    app_module_system_shutdown,
-    app_module_system_low_power,
-    app_module_system_ota,
-    app_module_system_num,
-} app_module_system_mode_t;
-
 typedef struct {
     uint8_t mode;           /* 当前工作模式 */
     uint8_t mode_bak;       /* 待切换工作模式 */

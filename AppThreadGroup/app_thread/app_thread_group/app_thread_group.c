@@ -54,8 +54,6 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app thread层
      */
-    /* 就绪线程公共子模组 */
-    app_module_system_ready();
     /* 就绪线程子模组 */
     app_thread_master_ready();
     app_thread_mix_irq_ready();
@@ -63,6 +61,8 @@ void app_thread_group_schedule(void)
     app_thread_manage_ready();
     app_thread_lvgl_ready();
     app_thread_jerryscript_ready();
+    /* 就绪线程公共子模组 */
+    app_module_system_ready();
     /* 就绪和启用线程组 */
     app_thread_process(&app_thread_master,          app_thread_static);
     app_thread_process(&app_thread_mix_irq,         app_thread_static);

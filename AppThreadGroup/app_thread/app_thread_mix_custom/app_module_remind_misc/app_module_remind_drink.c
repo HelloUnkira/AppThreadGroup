@@ -7,10 +7,9 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_crc.h"
-#include "app_sys_ext_src.h"
 #include "app_module_clock.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_remind_drink.h"
 
 static app_mutex_t app_module_remind_drink_mutex = {0};
@@ -131,38 +130,31 @@ void app_module_remind_drink_dump(void)
 {
     app_module_remind_drink_t remind_drink = {0};
     app_module_remind_drink_get(&remind_drink);
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_drink_t remind;
-            uint32_t crc32;
-        } data;
-    } remind_data = {.data.remind = remind_drink};
     
-    remind_data.data.crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_drink_t));
-    app_sys_ext_src_write("mix_chunk_small", "remind drink", remind_data.buffer, sizeof(remind_data));
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_profile);
+    app_module_data_center_source(&data_center);
+    memcpy(&data_center->user_profile.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_data_center_dump();
 }
 
 /*@brief 喝水提醒加载到内存
  */
 void app_module_remind_drink_load(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_drink_t remind;
-            uint32_t crc32;
-        } data;
-    } remind_data;
+    app_module_remind_drink_t remind_drink = {0};
     
-    app_sys_ext_src_read("mix_chunk_small", "remind drink", remind_data.buffer, sizeof(remind_data));
-    uint32_t crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_drink_t));
-    if (crc32 == remind_data.data.crc32) {
-        app_module_remind_drink_t remind_drink = {0};
-        remind_drink = remind_data.data.remind;
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_profile);
+    bool retval = app_module_data_center_source(&data_center);
+    memcpy(&remind_drink, &data_center->user_profile.remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_data_center_dump();
+    
+    if(retval)
         app_module_remind_drink_set(&remind_drink);
-    }
-    if (crc32 != remind_data.data.crc32) {
+    else {
         app_module_remind_drink_reset();
         APP_SYS_LOG_WARN("load drink remind fail");
     }

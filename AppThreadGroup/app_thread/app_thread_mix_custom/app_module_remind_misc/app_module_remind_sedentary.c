@@ -7,10 +7,9 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_crc.h"
-#include "app_sys_ext_src.h"
 #include "app_module_clock.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_remind_sedentary.h"
 
 static app_mutex_t app_module_remind_sedentary_mutex = {0};
@@ -152,38 +151,31 @@ void app_module_remind_sedentary_dump(void)
 {
     app_module_remind_sedentary_t remind_sedentary = {0};
     app_module_remind_sedentary_get(&remind_sedentary);
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_sedentary_t remind;
-            uint32_t crc32;
-        } data;
-    } remind_data = {.data.remind = remind_sedentary};
     
-    remind_data.data.crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_sedentary_t));
-    app_sys_ext_src_write("mix_chunk_small", "remind sedentary", remind_data.buffer, sizeof(remind_data));
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_profile);
+    app_module_data_center_source(&data_center);
+    memcpy(&data_center->user_profile.remind_sedentary, &remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_dump();
 }
 
 /*@brief 走动提醒加载到内存
  */
 void app_module_remind_sedentary_load(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_sedentary_t remind;
-            uint32_t crc32;
-        } data;
-    } remind_data;
+    app_module_remind_sedentary_t remind_sedentary = {0};
     
-    app_sys_ext_src_read("mix_chunk_small", "remind sedentary", remind_data.buffer, sizeof(remind_data));
-    uint32_t crc32 = app_sys_crc32(remind_data.buffer, sizeof(app_module_remind_sedentary_t));
-    if (crc32 == remind_data.data.crc32) {
-        app_module_remind_sedentary_t remind_sedentary = {0};
-        remind_sedentary = remind_data.data.remind;
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_profile);
+    bool retval = app_module_data_center_source(&data_center);
+    memcpy(&remind_sedentary, &data_center->user_profile.remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_dump();
+    
+    if(retval)
         app_module_remind_sedentary_set(&remind_sedentary);
-    }
-    if (crc32 != remind_data.data.crc32) {
+    else {
         app_module_remind_sedentary_reset();
         APP_SYS_LOG_WARN("load sedentary remind fail");
     }

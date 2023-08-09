@@ -323,12 +323,13 @@ static inline uint8_t app_char_alnum_to_hex(char C) {return app_char_is_digit(C)
             arr[idx] = val;                                 \
     } while (0)                                             \
 
-/*@brief 大小比较,绝对值
+/*@brief 大小比较,绝对值,绝对距离
  *       泛化封装:(不建议直接使用)
  */
-#define app_min(x, y)   ((x) < (y) ? (x) : (y))
-#define app_max(x, y)   ((x) > (y) ? (x) : (y))
-#define app_abs(x)      ((x) <  0 ? -(x) : (x))
+#define app_min(x, y)       ((x) < (y) ? (x) : (y))
+#define app_max(x, y)       ((x) > (y) ? (x) : (y))
+#define app_abs(x)          ((x) <  0 ? -(x) : (x))
+#define app_between(x, y)   ((x) > (y) ? (x) - (y) ? (y) - (x))
 
 /*@brief 最小值
  */

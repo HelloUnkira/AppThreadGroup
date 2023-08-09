@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_module_data_center.h"
 #include "app_module_system.h"
 
 #include "lvgl.h"
@@ -154,8 +155,8 @@ void app_lv_driver_handler(void)
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
             app_module_system_valid_set(false);
-        if (app_module_system_mode_get() != app_module_system_shutdown)
-            app_module_system_mode_set(app_module_system_shutdown);
+        if (app_module_system_mode_get() != app_module_data_center_system_mode_shutdown)
+            app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
         else
             app_os_reset();
     }

@@ -44,6 +44,8 @@ static void app_lv_ui_wheel_show(void *scene)
         lv_label_set_text_static(app_lv_ui_res_local->label, "Wheel");
         lv_obj_center(app_lv_ui_res_local->label);
         
+        
+        
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                 &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,
@@ -57,9 +59,11 @@ static void app_lv_ui_wheel_show(void *scene)
 static void app_lv_ui_wheel_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
+        
+        
+        
         /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
-        
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         ((app_lv_scene_t *)scene)->root = NULL;
@@ -80,8 +84,9 @@ void app_lv_ui_wheel_event(app_lv_ui_wheel_t *wheel)
 {
     APP_SYS_ASSERT(wheel != NULL);
     /* 轮盘信息在场景栈show前创建,那么它就刚好在下一show事件之前 */
-    app_lv_ui_wheel_t *wheel_sched  = lv_mem_alloc(sizeof(app_lv_ui_wheel_t));
+    app_lv_ui_wheel_t *wheel_sched = lv_mem_alloc(sizeof(app_lv_ui_wheel_t));
     lv_memcpy(wheel_sched, wheel, sizeof(app_lv_ui_wheel_t));
+    wheel_sched->scene = &app_lv_ui_wheel;
     /* 向线程发送配置轮盘子窗口信息事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,

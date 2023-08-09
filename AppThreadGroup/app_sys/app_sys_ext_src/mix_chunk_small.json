@@ -14,39 +14,24 @@
             "data_size"  : "512 * 1"
         },
         {
+            "data_brief" : "system data",
+            "data_name"  : "system data",
+            "data_size"  : "1024 * 1"
+        },
+        {
             "data_brief" : "user profile",
             "data_name"  : "user profile",
-            "data_size"  : "512 * 1"
+            "data_size"  : "1024 * 1"
         },
         {
-            "data_brief" : "system clock + crc32",
-            "data_name"  : "system clock",
-            "data_size"  : "40"
-        },
-        {
-            "data_brief" : "remind alarm + crc32",
-            "data_name"  : "remind alarm",
-            "data_size"  : "65 * 10 + 10"
-        },
-        {
-            "data_brief" : "remind sedentary + crc32",
-            "data_name"  : "remind sedentary",
-            "data_size"  : "20"
-        },
-        {
-            "data_brief" : "remind drink + crc32",
-            "data_name"  : "remind drink",
-            "data_size"  : "20"
-        },
-        {
-            "data_brief" : "do not disturb + crc32",
-            "data_name"  : "do not disturb",
-            "data_size"  : "30"
+            "data_brief" : "user data",
+            "data_name"  : "user data",
+            "data_size"  : "4096 * 1"
         },
         {
             "data_brief" : "unknown",
             "data_name"  : "unknown",
-            "data_size"  : "512 * 1"
+            "data_size"  : "4096 * 1"
         }
     ]
 }

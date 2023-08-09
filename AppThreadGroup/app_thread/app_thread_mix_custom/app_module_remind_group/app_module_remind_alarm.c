@@ -7,10 +7,9 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_crc.h"
-#include "app_sys_ext_src.h"
 #include "app_thread_group.h"
 #include "app_module_clock.h"
+#include "app_module_data_center.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
 
@@ -77,49 +76,43 @@ void app_module_remind_alarm_clean(void)
  */
 void app_module_remind_alarm_dump(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX];
-            app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX];
-            uint32_t crc32;
-        };
-    } remind_alarm_data;
-    
+    app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX] = {0};
+    app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX] = {0};
     app_module_remind_alarm_array_lock();
-    memcpy(remind_alarm_data.remind_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
-    memcpy(remind_alarm_data.alarm_info,  app_module_remind_alarm_info, sizeof(app_module_remind_alarm_info));
+    memcpy(&remind_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
+    memcpy(&alarm_info,  app_module_remind_alarm_info, sizeof(app_module_remind_alarm_info));
     app_module_remind_alarm_array_unlock();
     
-    uint32_t offset_data_size = (uintptr_t)&remind_alarm_data.crc32 - (uintptr_t)remind_alarm_data.buffer;
-    remind_alarm_data.crc32 = app_sys_crc32(remind_alarm_data.buffer, offset_data_size);
-    app_sys_ext_src_write("mix_chunk_small", "remind alarm", remind_alarm_data.buffer, sizeof(remind_alarm_data));
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_data);
+    app_module_data_center_source(&data_center);
+    memcpy(&data_center->user_data.remind_alarm.remind_item, &remind_item, sizeof(app_module_remind_alarm_item));
+    memcpy(&data_center->user_data.remind_alarm.alarm_info,  &alarm_info,  sizeof(app_module_remind_alarm_info));
+    app_module_data_center_dump();
 }
 
 /*@brief 提醒闹钟加载到内存
  */
 void app_module_remind_alarm_load(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX];
-            app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX];
-            uint32_t crc32;
-        };
-    } remind_alarm_data;
+    app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX] = {0};
+    app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX] = {0};
     
-    uint32_t offset_data_size = (uintptr_t)&remind_alarm_data.crc32 - (uintptr_t)remind_alarm_data.buffer;
-    app_sys_ext_src_read("mix_chunk_small", "remind alarm", remind_alarm_data.buffer, sizeof(remind_alarm_data));
-    uint32_t crc32 = app_sys_crc32(remind_alarm_data.buffer, offset_data_size);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_user_data);
+    bool retval = app_module_data_center_source(&data_center);
+    memcpy(&remind_item, &data_center->user_data.remind_alarm.remind_item, sizeof(app_module_remind_alarm_item));
+    memcpy(&alarm_info,  &data_center->user_data.remind_alarm.alarm_info,  sizeof(app_module_remind_alarm_info));
+    app_module_data_center_dump();
     
-    if (crc32 == remind_alarm_data.crc32) {
+    if(retval) {
         app_module_remind_alarm_array_lock();
-        memcpy(app_module_remind_alarm_item, remind_alarm_data.remind_item, sizeof(app_module_remind_alarm_item));
-        memcpy(app_module_remind_alarm_info, remind_alarm_data.alarm_info,  sizeof(app_module_remind_alarm_info));
+        memcpy(app_module_remind_alarm_item, &remind_item, sizeof(app_module_remind_alarm_item));
+        memcpy(app_module_remind_alarm_info, &alarm_info,  sizeof(app_module_remind_alarm_info));
         app_module_remind_alarm_array_unlock();
-    }
-    if (crc32 != remind_alarm_data.crc32) {
+    } else {
         app_module_remind_alarm_clean();
         APP_SYS_LOG_WARN("load remind alarm fail");
     }

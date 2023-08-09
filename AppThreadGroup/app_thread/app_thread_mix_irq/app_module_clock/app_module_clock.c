@@ -9,9 +9,8 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_sys_clk.h"
-#include "app_sys_crc.h"
-#include "app_sys_ext_src.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_rtc.h"
 #include "app_module_clock.h"
 #include "app_module_clock_cb.h"
@@ -247,8 +246,8 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
 void app_module_clock_clean(void)
 {
     app_module_clock_t clock = {.year = 2020, .month = 1, .day = 1,};
-    app_module_clock_to_week(&clock);
     app_module_clock_to_utc(&clock);
+    app_module_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);
 }
 
@@ -256,36 +255,33 @@ void app_module_clock_clean(void)
  */
 void app_module_clock_dump(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_clock_t clock;
-            uint32_t crc32;
-        };
-    } clock_data;
+    app_module_clock_t clock;
+    app_module_clock_get_system_clock(&clock);
     
-    app_module_clock_get_system_clock(&clock_data.clock);
-    clock_data.crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
-    app_sys_ext_src_write("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_system_data);
+    app_module_data_center_source(&data_center);
+    memcpy(&data_center->system_data.system_clock, &clock, sizeof(app_module_clock_t));
+    app_module_data_center_dump();
 }
 
 /*@brief 系统时钟加载到内存
  */
 void app_module_clock_load(void)
 {
-    union {
-        uint8_t buffer[0];
-        struct {
-            app_module_clock_t clock;
-            uint32_t crc32;
-        };
-    } clock_data;
+    app_module_clock_t clock;
     
-    app_sys_ext_src_read("mix_chunk_small", "system clock", clock_data.buffer, sizeof(clock_data));
-    uint32_t crc32 = app_sys_crc32(clock_data.buffer, sizeof(app_module_clock_t));
-    if (crc32 == clock_data.crc32)
-        app_module_clock_set_system_clock(&clock_data.clock);
-    if (crc32 != clock_data.crc32) {
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = NULL;
+    app_module_data_center_load(app_module_data_center_system_data);
+    bool retval = app_module_data_center_source(&data_center);
+    memcpy(&clock, &data_center->system_data.system_clock, sizeof(app_module_clock_t));
+    app_module_data_center_dump();
+    
+    if (clock.utc != 0)
+        app_module_clock_set_system_clock(&clock);
+    if (clock.utc == 0) {
         app_module_clock_clean();
         APP_SYS_LOG_WARN("load system clock fail");
     }
