@@ -31,32 +31,32 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 	{
 		/* system profile */
 		.data_name = "system profile",
-		.data_size = 1024 * 1,
+		.data_size = 512 * 1,
 		.data_base = 0x1000,
 	},
 	{
 		/* system data */
 		.data_name = "system data",
 		.data_size = 1024 * 1,
-		.data_base = 0x1400,
+		.data_base = 0x1200,
 	},
 	{
 		/* user profile */
 		.data_name = "user profile",
 		.data_size = 1024 * 1,
-		.data_base = 0x1800,
+		.data_base = 0x1600,
 	},
 	{
 		/* user data */
 		.data_name = "user data",
-		.data_size = 1024 * 1,
-		.data_base = 0x1c00,
+		.data_size = 4096 * 1,
+		.data_base = 0x1a00,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
 		.data_size = 4096 * 1,
-		.data_base = 0x2000,
+		.data_base = 0x2a00,
 	},
 };
 

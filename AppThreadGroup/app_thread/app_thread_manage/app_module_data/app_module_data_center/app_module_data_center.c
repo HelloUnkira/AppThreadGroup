@@ -12,8 +12,8 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_crc.h"
 #include "app_sys_ext_src.h"
+#include "app_sys_util.h"
 #include "app_module_data_center.h"
 
 static app_mutex_t app_module_data_center_mutex = {0};
@@ -139,12 +139,12 @@ void app_module_data_center_dump(void)
         };
     } data_center_data;
     memset(&data_center_data, 0, sizeof(data_center_data));
+    memcpy(&data_center_data.data_center, &app_module_data_center, sizeof(app_module_data_center_t));
     
     char    *chunk_name = NULL;
     char    *data_name  = NULL;
     uint32_t data_size  = 0;
     app_module_data_center_get_ext_src_by_type(&chunk_name, &data_name, &data_size);
-    memcpy(&data_center_data.data_center, &app_module_data_center, sizeof(app_module_data_center_t));
     data_center_data.crc32 = app_sys_crc32(&data_center_data.data_center, data_size);
     /* 数据未修改,不做实际转存 */
     if (data_center_data.crc32 != app_module_data_center_crc32) {
