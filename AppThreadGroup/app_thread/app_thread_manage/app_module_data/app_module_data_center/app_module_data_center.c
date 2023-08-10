@@ -42,7 +42,7 @@ static void app_module_data_center_get_ext_src_by_type(char **chunk_name, char *
         {app_module_data_center_user_data,          "user data"     ,   sizeof(data_center.user_data)},
     };
     
-    for (uint32_t idx = 0; idx < app_arr_len(app_module_data_center_type_table); idx++)
+    for (uint32_t idx = 0; idx < app_ext_arr_len(app_module_data_center_type_table); idx++)
         if (app_module_data_center_type_table[idx].type == app_module_data_center_type) {
             *chunk_name = ext_mem_name;
             *data_name  = app_module_data_center_type_table[idx].ext_src;
@@ -163,10 +163,10 @@ void app_module_data_center_ready(void)
     
     const app_module_data_center_t data_center = {0};
     /* 追加一个静态断言,如果缓存块超出目标,则迫使它编译失败 */
-    app_expr_assert_static(app_module_data_center_system_profile,   sizeof(data_center.system_profile)  <= 512);
-    app_expr_assert_static(app_module_data_center_system_data,      sizeof(data_center.system_data)     <= 1024);
-    app_expr_assert_static(app_module_data_center_user_profile,     sizeof(data_center.user_profile)    <= 1024);
-    app_expr_assert_static(app_module_data_center_user_data,        sizeof((data_center.user_data))     <= 4096);
+    app_ext_expr_assert_static(app_module_data_center_system_profile,   sizeof(data_center.system_profile)  <= 512);
+    app_ext_expr_assert_static(app_module_data_center_system_data,      sizeof(data_center.system_data)     <= 1024);
+    app_ext_expr_assert_static(app_module_data_center_user_profile,     sizeof(data_center.user_profile)    <= 1024);
+    app_ext_expr_assert_static(app_module_data_center_user_data,        sizeof((data_center.user_data))     <= 4096);
     
     APP_SYS_LOG_WARN("data_center:%d", sizeof(app_module_data_center_t));
     APP_SYS_LOG_WARN("data_center.system_profile:%d",       sizeof(data_center.system_profile));

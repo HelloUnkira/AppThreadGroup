@@ -4,6 +4,7 @@
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_table.h"
 #include "app_sys_log_text.h"
+
 #include "app_thread_group.h"
 #include "app_module_clock.h"
 #include "app_module_rtc.h"
@@ -55,6 +56,15 @@ int main(int argc, char *argv[])
         if (count == 5000)
             app_module_system_valid_set(false);
         #elif 1
+        /* test sys util plug  */
+        if (count == 1000 * 1) {
+            void app_sys_list_dl_test(void);
+            void app_sys_list_sl_test(void);
+            app_sys_list_dl_test();
+            app_sys_list_sl_test();
+            void app_sys_fft_test(void);
+            app_sys_fft_test();
+        }
         /* test protocol(3s later) */
         if (count == 1000 * 3) {
             app_module_protocol_t protocol = {

@@ -3,7 +3,8 @@
  *    备注:某些平台没有RTOS软件定时器
  *         所以做一个效果类似的RTOS软件定时器
  */
-
+    
+#define APP_SYS_LOG_RECORD_LIMIT     1
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
