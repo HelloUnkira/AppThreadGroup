@@ -106,7 +106,7 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
  */
 void app_thread_mix_irq_routine(void)
 {
-    app_thread_slave_routine(app_thread_id_mix_irq,
+    app_thread_slave_process(app_thread_id_mix_irq,
                              app_thread_mix_irq_routine_ready_cb,
                              app_thread_mix_irq_routine_package_cb);
 }

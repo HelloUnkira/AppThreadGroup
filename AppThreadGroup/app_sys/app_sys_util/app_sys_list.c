@@ -444,5 +444,3 @@ void app_sys_stack_gs_push(app_sys_stack_gs_t *stack, app_sys_stack_gn_t *node)
 /*
  *keep adding
  */
-
-

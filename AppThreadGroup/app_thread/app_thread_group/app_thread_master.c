@@ -75,7 +75,7 @@ void app_thread_get_pipe(uint32_t thread, app_sys_pipe_t **pipe)
         *pipe = &app_thread_pipe_dst[thread];
 }
 
-/*@brief 主线程模组初始化
+/*@brief 主线程初始化
  */
 void app_thread_master_ready(void)
 {

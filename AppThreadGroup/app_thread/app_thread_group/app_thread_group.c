@@ -54,7 +54,7 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app thread层
      */
-    /* 就绪线程子模组 */
+    /* 就绪主从线程组其附属模组 */
     app_thread_master_ready();
     app_thread_mix_irq_ready();
     app_thread_mix_custom_ready();

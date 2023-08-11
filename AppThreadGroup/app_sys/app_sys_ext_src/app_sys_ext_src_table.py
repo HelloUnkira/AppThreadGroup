@@ -97,8 +97,8 @@ def encode_app_sys_ext_src_table():
         json_dict = json.loads(json_file.read())
         # 仅支持批量化资源总表管理
         if json_dict['type'] == file_name:
-            json_list.append(json_dict)
             file_list.append(file_name)
+            json_list.append(json_dict)
         json_file.close()
     # 开启俩个文件
     app_sys_ext_src_table_h = open('app_sys_ext_src_table.h', mode='w', encoding='utf-8')

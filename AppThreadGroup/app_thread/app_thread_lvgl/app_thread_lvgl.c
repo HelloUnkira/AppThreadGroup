@@ -219,7 +219,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
  */
 void app_thread_lvgl_routine(void)
 {
-    app_thread_slave_routine(app_thread_id_lvgl,
+    app_thread_slave_process(app_thread_id_lvgl,
                              app_thread_lvgl_routine_ready_cb,
                              app_thread_lvgl_routine_package_cb);
 }

@@ -116,7 +116,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
  */
 void app_thread_mix_custom_routine(void)
 {
-    app_thread_slave_routine(app_thread_id_mix_custom,
+    app_thread_slave_process(app_thread_id_mix_custom,
                              app_thread_mix_custom_routine_ready_cb,
                              app_thread_mix_custom_routine_package_cb);
 }

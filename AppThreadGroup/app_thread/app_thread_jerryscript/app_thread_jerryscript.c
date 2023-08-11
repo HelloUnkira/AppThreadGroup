@@ -62,7 +62,7 @@ static bool app_thread_jerryscript_routine_package_cb(app_thread_package_t *pack
  */
 void app_thread_jerryscript_routine(void)
 {
-    app_thread_slave_routine(app_thread_id_jerryscript,
+    app_thread_slave_process(app_thread_id_jerryscript,
                              app_thread_jerryscript_routine_ready_cb,
                              app_thread_jerryscript_routine_package_cb);
 }
