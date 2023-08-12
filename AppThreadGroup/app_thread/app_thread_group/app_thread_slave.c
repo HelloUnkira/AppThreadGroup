@@ -7,10 +7,41 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
 #include "app_module_work.h"
+#include "app_module_system.h"
+
+/*@brief 子线程准备
+ */
+void app_thread_slave_prepare(void)
+{
+    /* 线程组模组初始化 */
+    void app_thread_mix_irq_ready(void);
+    void app_thread_mix_custom_ready(void);
+    void app_thread_manage_ready(void);
+    void app_thread_lvgl_ready(void);
+    void app_thread_jerryscript_ready(void);
+    /* 线程组模组初始化 */
+    app_thread_mix_irq_ready();
+    app_thread_mix_custom_ready();
+    app_thread_manage_ready();
+    app_thread_lvgl_ready();
+    app_thread_jerryscript_ready();
+    /* 就绪线程公共子模组 */
+    app_module_system_ready();
+}
+
+/*@brief 子线程调度
+ */
+void app_thread_slave_schedule(void)
+{
+    app_thread_process(&app_thread_mix_irq,         app_thread_static);
+    app_thread_process(&app_thread_mix_custom,      app_thread_static);
+    app_thread_process(&app_thread_manage,          app_thread_static);
+    app_thread_process(&app_thread_lvgl,            app_thread_static);
+    app_thread_process(&app_thread_jerryscript,     app_thread_static);
+}
 
 /*@brief     从线程服务例程结构模板
  *           这是通用化的结构模板,每个子线程均使用它
@@ -25,8 +56,8 @@ void app_thread_slave_process(uint32_t app_thread_id,
     app_sem_t *sem = NULL;
     app_sys_pipe_t *pipe = NULL;
     app_sys_pipe_pkg_t package = {0};
-    app_thread_get_sync(app_thread_id, &sem);
-    app_thread_get_pipe(app_thread_id, &pipe);
+    app_thread_src_sem(app_thread_id, &sem);
+    app_thread_src_pipe(app_thread_id, &pipe);
     /* 这是通用化的结构模板 */
     APP_SYS_ASSERT(ready_cb   != NULL);
     APP_SYS_ASSERT(package_cb != NULL);

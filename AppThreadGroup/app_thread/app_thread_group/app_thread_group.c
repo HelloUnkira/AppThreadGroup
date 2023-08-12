@@ -9,12 +9,8 @@
 #include "app_sys_log.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_log_text.h"
-#include "app_sys_pipe.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
-#include "app_module_clock.h"
-#include "app_module_system.h"
-#include "app_thread_adaptor.h"
 
 static bool app_thread_group_status = false;
 
@@ -55,21 +51,11 @@ void app_thread_group_schedule(void)
      *!!!就绪app thread层
      */
     /* 就绪主从线程组其附属模组 */
-    app_thread_master_ready();
-    app_thread_mix_irq_ready();
-    app_thread_mix_custom_ready();
-    app_thread_manage_ready();
-    app_thread_lvgl_ready();
-    app_thread_jerryscript_ready();
-    /* 就绪线程公共子模组 */
-    app_module_system_ready();
+    app_thread_master_prepare();
+    app_thread_slave_prepare();
     /* 就绪和启用线程组 */
-    app_thread_process(&app_thread_master,          app_thread_static);
-    app_thread_process(&app_thread_mix_irq,         app_thread_static);
-    app_thread_process(&app_thread_mix_custom,      app_thread_static);
-    app_thread_process(&app_thread_manage,          app_thread_static);
-    app_thread_process(&app_thread_lvgl,            app_thread_static);
-    app_thread_process(&app_thread_jerryscript,     app_thread_static);
+    app_thread_master_schedule();
+    app_thread_slave_schedule();
     /* 设置线程组就绪 */
     app_critical_t critical = {0};
     app_critical_process(&critical, app_critical_create);

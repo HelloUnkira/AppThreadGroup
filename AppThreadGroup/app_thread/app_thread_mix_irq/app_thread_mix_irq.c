@@ -19,7 +19,6 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_group.h"
 #include "app_module_timer.h"
 #include "app_module_clock.h"
@@ -104,7 +103,7 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
 
 /*@brief 混合中断线程服务例程
  */
-void app_thread_mix_irq_routine(void)
+APP_THREAD_GROUP_HANDLER(app_thread_mix_irq_routine)
 {
     app_thread_slave_process(app_thread_id_mix_irq,
                              app_thread_mix_irq_routine_ready_cb,

@@ -28,10 +28,8 @@ void app_module_rtc_1ms_cb(void)
         /* timer msec update */
         app_module_timer_1ms_update();
         /* 一些补充的扩展配置,与OS相关 */
-        if (count == 3000) {
-            void app_thread_os_extend(void);
-            app_thread_os_extend();
-        }
+        if (count == 3000)
+            app_thread_group_extend();
     }
     app_mutex_process(&app_module_rtc_mutex, app_mutex_give);
 }

@@ -7,7 +7,6 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
-#include "app_sys_pipe.h"
 #include "app_thread_group.h"
 #include "app_module_data_center.h"
 #include "app_module_data_dump.h"
@@ -72,7 +71,7 @@ static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, 
 
 /*@brief 数据管理线程服务例程
  */
-void app_thread_manage_routine(void)
+APP_THREAD_GROUP_HANDLER(app_thread_manage_routine)
 {
     app_thread_slave_process(app_thread_id_manage,
                              app_thread_manage_routine_ready_cb,
