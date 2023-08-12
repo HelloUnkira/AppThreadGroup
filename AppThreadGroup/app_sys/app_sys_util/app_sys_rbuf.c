@@ -29,9 +29,7 @@ static void app_sys_rbuf_rewind_index(app_sys_rbuf_t *rbuf)
  */
 void app_sys_rbuf_reset(app_sys_rbuf_t *rbuf)
 {
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
     rbuf->head = rbuf->tail = 0;
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
 }
 
 /*@brief        环形队列为空判断(中断环境下不可调用)
@@ -40,10 +38,7 @@ void app_sys_rbuf_reset(app_sys_rbuf_t *rbuf)
  */
 bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf)
 {
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
-    bool is_empty = (rbuf->head == rbuf->tail) ? true : false;
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
-    return is_empty;
+    return rbuf->head == rbuf->tail ? true : false;
 }
 
 /*@brief        获取环形队列类型(中断环境下不可调用)
@@ -52,10 +47,7 @@ bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf)
  */
 uint8_t app_sys_rbuf_type(app_sys_rbuf_t *rbuf)
 {
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
-    uint8_t type = rbuf->type;
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
-    return type;
+    return rbuf->type;
 }
 
 /*@brief        获取环形队列已有条目(中断环境下不可调用)
@@ -64,10 +56,7 @@ uint8_t app_sys_rbuf_type(app_sys_rbuf_t *rbuf)
  */
 uint32_t app_sys_rbuf_item(app_sys_rbuf_t *rbuf)
 {
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
-    uint32_t item = rbuf->tail - rbuf->head;
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
-    return item;
+    return rbuf->tail - rbuf->head;
 }
 
 /*@brief        获取环形队列空闲条目(中断环境下不可调用)
@@ -76,10 +65,7 @@ uint32_t app_sys_rbuf_item(app_sys_rbuf_t *rbuf)
  */
 uint32_t app_sys_rbuf_space(app_sys_rbuf_t *rbuf)
 {
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
-    uint32_t space = rbuf->size - (rbuf->tail - rbuf->head);
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
-    return space;
+    return rbuf->size - (rbuf->tail - rbuf->head);
 }
 
 /*@brief        就绪环形队列(无参数检查)(中断环境下不可调用)
@@ -109,7 +95,6 @@ void app_sys_rbuf_ready(app_sys_rbuf_t *rbuf, uint8_t type, void *buffer, uint32
     rbuf->head   = 0;
     rbuf->tail   = 0;
     rbuf->type   = type;
-    app_mutex_process(&rbuf->mutex, app_mutex_static);
 }
 
 /*@brief        从环形队列获取数据(无参数检查)(中断环境下不可调用)
@@ -146,7 +131,7 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
         app_sys_rbuf_rewind_index(rbuf);                            \
     
     int32_t result = 0;
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
+    
     switch (rbuf->type) {
     case 1:
         APP_SYS_RBBUF_GETS_TEMPLATE(1);
@@ -163,7 +148,7 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
     default:
         result = -2;
     }
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
+    
     return result;
 }
 
@@ -199,7 +184,7 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
         app_sys_rbuf_rewind_index(rbuf);                            \
     
     int32_t result = 0;
-    app_mutex_process(&rbuf->mutex, app_mutex_take);
+    
     switch (rbuf->type) {
     case 1:
         APP_SYS_RBBUF_PUTS_TEMPLATE(1);
@@ -216,6 +201,6 @@ int32_t app_sys_rbuf_puts(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
     default:
         result = -2;
     }
-    app_mutex_process(&rbuf->mutex, app_mutex_give);
+    
     return result;
 }

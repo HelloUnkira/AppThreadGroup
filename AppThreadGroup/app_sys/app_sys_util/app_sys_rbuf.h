@@ -10,12 +10,11 @@ typedef struct {
         uint32_t *buffer4;  /* 缓冲区(4字节对齐) */
         uint64_t *buffer8;  /* 缓冲区(8字节对齐) */
     };
-    uint32_t    size;       /* 最大数据条目(byte = type * 条目) */
-    uint32_t    mask;       /* 最大条目掩码(加速运算) */
-    uint32_t    head;       /* 队列起始位置(进动点,非实际下标) */
-    uint32_t    tail;       /* 队列结束位置(进动点,非实际下标) */
-    uint8_t     type;       /* 字节对齐类型(1,2,4,8) */
-    app_mutex_t mutex;      /* 资源保护 */
+    uint32_t size;  /* 最大数据条目(byte = type * 条目) */
+    uint32_t mask;  /* 最大条目掩码(加速运算) */
+    uint32_t head;  /* 队列起始位置(进动点,非实际下标) */
+    uint32_t tail;  /* 队列结束位置(进动点,非实际下标) */
+    uint8_t  type;  /* 字节对齐类型(1,2,4,8) */
 } app_sys_rbuf_t;
 
 /*@brief        环形队列重置(中断环境下不可调用)

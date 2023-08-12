@@ -48,6 +48,8 @@ int main(int argc, char *argv[])
         count++;
         /* test sys util plug(always test)  */
         if (count == 1000 * 1) {
+            void app_sys_rbuf_test(void);
+            app_sys_rbuf_test();
             void app_sys_list_dl_test(void);
             void app_sys_list_sl_test(void);
             app_sys_list_dl_test();
