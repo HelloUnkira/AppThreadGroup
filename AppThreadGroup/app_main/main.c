@@ -54,6 +54,8 @@ int main(int argc, char *argv[])
             app_sys_list_sl_test();
             void app_sys_hashtable_test(void);
             app_sys_hashtable_test();
+            void app_sys_app_sys_matrix_test(void);
+            app_sys_app_sys_matrix_test();
             void app_sys_fft_test(void);
             app_sys_fft_test();
         }
