@@ -60,6 +60,8 @@ int main(int argc, char *argv[])
             app_sys_app_sys_matrix_test();
             void app_sys_fft_test(void);
             app_sys_fft_test();
+            void app_sys_ext_mem_cache_test(void);
+            app_sys_ext_mem_cache_test();
         }
         #if 0
         #elif 0

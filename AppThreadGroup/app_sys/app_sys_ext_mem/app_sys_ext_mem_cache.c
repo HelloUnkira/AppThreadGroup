@@ -23,17 +23,20 @@ static bool app_sys_ext_mem_cache_sort(app_sys_list_dn_t *node1, app_sys_list_dn
 
 /*@brief     缓存就绪,配置参数
  *@param[in] cache 缓存实例
+ *@param[in] ext_mem 外存静态实例
  *@param[in] unit  缓存单元门限
  *@param[in] total 缓存总门限
  */
-void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, uint32_t unit, uint32_t total)
+void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_ext_mem_t *ext_mem, uint32_t unit, uint32_t total)
 {
+    APP_SYS_ASSERT(ext_mem != NULL);
     APP_SYS_ASSERT(unit < total);
-    cache->unit  = unit;    /* 单元资源门限 */
-    cache->usage = 0;       /* 内存资源占用 */
-    cache->total = total;   /* 内存资源总占用门限 */
     app_mutex_process(&cache->mutex, app_mutex_static);
     app_sys_list_dl_reset(&cache->dl_list);
+    cache->ext_mem = ext_mem;
+    cache->unit    = unit;    /* 单元资源门限 */
+    cache->usage   = 0;       /* 内存资源占用 */
+    cache->total   = total;   /* 内存资源总占用门限 */
 }
 
 /*@brief     缓存刷新(清理内存)
@@ -62,7 +65,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
         app_sys_list_dl_remove(&cache->dl_list, node);
         /* 污染标记,数据回写 */
         if (unit->dirty)
-        if (!app_sys_ext_mem_write(unit->ext_mem, unit->offset, unit->buffer, unit->size))
+        if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
             APP_SYS_LOG_ERROR("data write fail");
         /* 约减使用率 */
         cache->usage -= unit->size;
@@ -77,14 +80,13 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
 }
 
 /*@brief      缓存资源获取
- *@param[in]  cache 缓存实例
- *@param[in]  ext_mem 外存静态实例
- *@param[in]  offset  外存数据偏移
- *@param[in]  size    外存数据大小
- *@param[out] buffer  更新到内存的外存数据
+ *@param[in]  cache  缓存实例
+ *@param[in]  offset 外存数据偏移
+ *@param[in]  size   外存数据大小
+ *@param[out] buffer 更新到内存的外存数据
  *@retval     操作结果
  */
-uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uintptr_t size, uint8_t **buffer)
+uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t offset, uintptr_t size, uint8_t **buffer)
 {
     uint32_t retval = 0;
     app_mutex_process(&cache->mutex, app_mutex_take);
@@ -117,7 +119,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, const app_sy
         node = curr;
         unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
         /* 所有数据均命中时才算缓存命中 */
-        if (unit->ext_mem == ext_mem && unit->offset == offset && unit->size == size)
+        if (unit->offset == offset && unit->size == size)
             break;
         unit = NULL;
         node = NULL;
@@ -159,7 +161,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, const app_sy
             app_sys_list_dl_remove(&cache->dl_list, node);
             /* 污染标记,数据回写 */
             if (unit->dirty)
-            if (!app_sys_ext_mem_write(unit->ext_mem, unit->offset, unit->buffer, unit->size))
+            if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
                 APP_SYS_LOG_ERROR("data write fail");
             /* 约减使用率 */
             cache->usage -= unit->size;
@@ -171,7 +173,6 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, const app_sy
         }
         /* 为数据区申请新资源 */
         unit = app_mem_alloc(sizeof(app_sys_ext_mem_cache_unit_t));
-        unit->ext_mem = ext_mem;
         unit->offset  = offset;
         unit->buffer  = app_mem_alloc(size);
         unit->size    = size;
@@ -179,10 +180,11 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, const app_sy
         unit->dirty   = false;
         unit->lock    = true;
         app_sys_list_dn_reset(&unit->dl_node);
+        cache->usage += size;
        *buffer = unit->buffer;
         node  = &unit->dl_node;
         /* 数据读取 */
-        if (!app_sys_ext_mem_read(unit->ext_mem, unit->offset, unit->buffer, unit->size))
+        if (!app_sys_ext_mem_read(cache->ext_mem, unit->offset, unit->buffer, unit->size))
             APP_SYS_LOG_ERROR("data read fail");
         /* 重新带计数优先级加入 */
         app_sys_queue_dpq_enqueue(&cache->dl_list, node, app_sys_ext_mem_cache_sort);
