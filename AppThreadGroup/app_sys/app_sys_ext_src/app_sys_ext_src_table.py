@@ -69,8 +69,8 @@ def encode_app_sys_ext_src_table_c(file, file_list, json_list):
 
 # 编写集成化头文件
 def encode_app_sys_ext_src_table_h(file):
-    file.write('#ifndef APP_SYS_SRC_TABLE_H\n')
-    file.write('#define APP_SYS_SRC_TABLE_H\n\n')
+    file.write('#ifndef APP_SYS_EXT_SRC_TABLE_H\n')
+    file.write('#define APP_SYS_EXT_SRC_TABLE_H\n\n')
     # 编写固化访问函数
     file.write('/*@通过chunk名字以及data名字索引data静态实例\n')
     file.write(' *@param[in] chunk_name名字\n')

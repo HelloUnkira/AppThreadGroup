@@ -1,5 +1,5 @@
-#ifndef APP_SYS_SRC_TABLE_H
-#define APP_SYS_SRC_TABLE_H
+#ifndef APP_SYS_EXT_SRC_TABLE_H
+#define APP_SYS_EXT_SRC_TABLE_H
 
 /*@通过chunk名字以及data名字索引data静态实例
  *@param[in] chunk_name名字

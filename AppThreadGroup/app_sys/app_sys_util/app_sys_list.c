@@ -258,110 +258,66 @@ void app_sys_list_sl_remove(app_sys_list_sl_t *list, app_sys_list_sn_t *target, 
 }
 
 /*
- *链表容器复用:通用队列(Generics Queue)
+ *链表容器复用:通用队列(Queue)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
  */
-
-/*@brief     重置队列
- *@param[in] queue 队列实例
- */
-void app_sys_queue_gq_reset(app_sys_queue_gq_t *queue)
-{
-    app_sys_list_sl_reset((app_sys_list_sl_t *)queue);
-}
-
-/*@brief     重置队列节点
- *@param[in] node 队列节点实例
- */
-void app_sys_queue_gn_reset(app_sys_queue_gn_t *node)
-{
-    app_sys_list_sn_reset((app_sys_list_sn_t *)node);
-}
-
-/*@brief     队列访问队列头节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_gn_t * app_sys_queue_gq_head(app_sys_queue_gq_t *queue)
-{
-    return (app_sys_queue_gn_t *)app_sys_list_sl_head((app_sys_list_sl_t *)queue);
-}
-
-/*@brief     队列访问队列尾节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_gn_t * app_sys_queue_gq_tail(app_sys_queue_gq_t *queue)
-{
-    return (app_sys_queue_gn_t *)app_sys_list_sl_tail((app_sys_list_sl_t *)queue);
-}
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_gn_t * app_sys_queue_gq_dequeue(app_sys_queue_gq_t *queue)
+app_sys_queue_sgn_t * app_sys_queue_sgq_dequeue(app_sys_queue_sgq_t *queue)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head((app_sys_list_sl_t *)queue);
-    app_sys_list_sl_remove((app_sys_list_sl_t *)queue, NULL, node);
-    return (app_sys_queue_gn_t *)node;
+    app_sys_list_sn_t *node = app_sys_list_sl_head(queue);
+    app_sys_list_sl_remove(queue, NULL, node);
+    return node;
 }
 
 /*@brief     队列节点入队列
  *@param[in] queue 队列实例
  *@param[in] node  队列节点实例
  */
-void app_sys_queue_gq_enqueue(app_sys_queue_gq_t *queue, app_sys_queue_gn_t *node)
+void app_sys_queue_sgq_enqueue(app_sys_queue_sgq_t *queue, app_sys_queue_sgn_t *node)
 {
-    app_sys_list_sl_ainsert((app_sys_list_sl_t *)queue, (app_sys_list_sn_t *)node);
-}
-
-/*
- *链表容器复用:优先队列(Priority Queue)
- */
-
-/*@brief     重置队列
- *@param[in] queue 队列实例
- */
-void app_sys_queue_pq_reset(app_sys_queue_pq_t *queue)
-{
-    app_sys_list_sl_reset((app_sys_list_sl_t *)queue);
-}
-
-/*@brief     重置队列节点
- *@param[in] node 队列节点实例
- */
-void app_sys_queue_pn_reset(app_sys_queue_pn_t *node)
-{
-    app_sys_list_sn_reset((app_sys_list_sn_t *)node);
-}
-
-/*@brief     队列访问队列头节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_pn_t * app_sys_queue_pq_first(app_sys_queue_pq_t *queue)
-{
-    return (app_sys_queue_pn_t *)app_sys_list_sl_head((app_sys_list_sl_t *)queue);
-}
-
-/*@brief     队列访问队列尾节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_pn_t * app_sys_queue_pq_last(app_sys_queue_pq_t *queue)
-{
-    return (app_sys_queue_pn_t *)app_sys_list_sl_tail((app_sys_list_sl_t *)queue);
+    app_sys_list_sl_ainsert(queue, node);
 }
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_pn_t * app_sys_queue_pq_dequeue(app_sys_queue_pq_t *queue)
+app_sys_queue_dgn_t * app_sys_queue_dgq_dequeue(app_sys_queue_dgq_t *queue)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head((app_sys_list_sl_t *)queue);
-    app_sys_list_sl_remove((app_sys_list_sl_t *)queue, NULL, node);
-    return (app_sys_queue_pn_t *)node;
+    app_sys_list_dn_t *node = app_sys_list_dl_head(queue);
+    app_sys_list_dl_remove(queue, node);
+    return node;
+}
+
+/*@brief     队列节点入队列
+ *@param[in] queue 队列实例
+ *@param[in] node  队列节点实例
+ */
+void app_sys_queue_dgq_enqueue(app_sys_queue_dgq_t *queue, app_sys_queue_dgn_t *node)
+{
+    app_sys_list_dl_ainsert(queue, NULL, node);
+}
+
+/*
+ *链表容器复用:优先队列(Priority Queue)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
+ */
+
+/*@brief     队列节点出队列
+ *@param[in] queue 队列实例
+ *@retval    队列节点实例
+ */
+app_sys_queue_spn_t * app_sys_queue_spq_dequeue(app_sys_queue_spq_t *queue)
+{
+    app_sys_list_sn_t *node = app_sys_list_sl_head(queue);
+    app_sys_list_sl_remove(queue, NULL, node);
+    return node;
 }
 
 /*@brief     队列节点入队列
@@ -369,76 +325,112 @@ app_sys_queue_pn_t * app_sys_queue_pq_dequeue(app_sys_queue_pq_t *queue)
  *@param[in] node    队列节点实例
  *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
-void app_sys_queue_pq_enqueue(app_sys_queue_pq_t *queue, app_sys_queue_pn_t *node,
-                              bool (*compare)(app_sys_queue_pn_t *node1, app_sys_queue_pn_t *node2))
+void app_sys_queue_spq_enqueue(app_sys_queue_spq_t *queue, app_sys_queue_spn_t *node,
+                               bool (*compare)(app_sys_queue_spn_t *node1, app_sys_queue_spn_t *node2))
 {
     if (compare != NULL) {
         /* 迭代所有元素 */
         app_sys_list_sn_t *curr = NULL;
-        app_sys_list_sl_tra((app_sys_list_sl_t *)queue, prev) {
+        app_sys_list_sl_tra(queue, prev) {
             /* 第一次:比较队列头 */
             if (curr == NULL && compare(node, prev)) {
-                app_sys_list_sl_pinsert((app_sys_list_sl_t *)queue, node);
+                app_sys_list_sl_pinsert(queue, node);
                 return;
             }
             /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
             if (curr != NULL && compare(node, curr)) {
-                app_sys_list_sl_insert((app_sys_list_sl_t *)queue, prev, node);
+                app_sys_list_sl_insert(queue, prev, node);
                 return;
             }
             curr = prev;
         }
     }
-    app_sys_list_sl_ainsert((app_sys_list_sl_t *)queue, (app_sys_list_sn_t *)node);
+    app_sys_list_sl_ainsert(queue, node);
+}
+
+/*@brief     队列节点出队列
+ *@param[in] queue 队列实例
+ *@retval    队列节点实例
+ */
+app_sys_queue_dpn_t * app_sys_queue_dpq_dequeue(app_sys_queue_dpq_t *queue)
+{
+    app_sys_list_dn_t *node = app_sys_list_dl_head(queue);
+    app_sys_list_dl_remove(queue, node);
+    return node;
+}
+
+/*@brief     队列节点入队列
+ *@param[in] queue   队列实例
+ *@param[in] node    队列节点实例
+ *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+ */
+void app_sys_queue_dpq_enqueue(app_sys_queue_dpq_t *queue, app_sys_queue_dpn_t *node,
+                               bool (*compare)(app_sys_queue_dpn_t *node1, app_sys_queue_dpn_t *node2))
+{
+    if (compare != NULL) {
+        /* 迭代所有元素 */
+        app_sys_list_dn_t *curr = NULL;
+        app_sys_list_dl_btra(queue, prev) {
+            /* 第一次:比较队列头 */
+            if (curr == NULL && compare(node, prev)) {
+                app_sys_list_dl_pinsert(queue, NULL, node);
+                return;
+            }
+            /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
+            if (curr != NULL && compare(node, curr)) {
+                app_sys_list_dl_ainsert(queue, prev, node);
+                return;
+            }
+            curr = prev;
+        }
+    }
+    app_sys_list_dl_ainsert(queue, NULL, node);
 }
 
 /*
- *链表容器复用:通用栈(Generics Stack)
+ *链表容器复用:通用栈(Stack)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,栈顶即链表头
  */
-
-/*@brief     重置栈
- *@param[in] stack 栈实例
- */
-void app_sys_stack_gs_reset(app_sys_stack_gs_t *stack)
-{
-    app_sys_list_sl_reset((app_sys_list_sl_t *)stack);
-}
-
-/*@brief     重置栈节点
- *@param[in] node 栈节点实例
- */ 
-void app_sys_stack_gn_reset(app_sys_stack_gn_t *node)
-{
-    app_sys_list_sn_reset((app_sys_list_sn_t *)node);
-}
-
-/*@brief     栈访问栈顶节点
- *@param[in] stack 栈实例
- *@retval    栈节点实例
- */
-app_sys_stack_gn_t * app_sys_stack_gs_top(app_sys_stack_gs_t *stack)
-{
-    return (app_sys_stack_gn_t *)app_sys_list_sl_head((app_sys_list_sl_t *)stack);
-}
 
 /*@brief     栈节点出栈
  *@param[in] stack 栈实例
  *@retval    栈节点实例
  */
-app_sys_stack_gn_t * app_sys_stack_gs_pop(app_sys_stack_gs_t *stack)
+app_sys_stack_sgn_t * app_sys_stack_sgs_pop(app_sys_stack_sgs_t *stack)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head((app_sys_list_sl_t *)stack);
-    app_sys_list_sl_remove((app_sys_list_sl_t *)stack, NULL, node);
-    return (app_sys_stack_gn_t *)node;
+    app_sys_list_sn_t *node = app_sys_list_sl_head(stack);
+    app_sys_list_sl_remove(stack, NULL, node);
+    return node;
 }
 
 /*@brief     栈节点入栈
  *@param[in] stack 栈实例
  *@param[in] node  栈节点实例
  */
-void app_sys_stack_gs_push(app_sys_stack_gs_t *stack, app_sys_stack_gn_t *node)
+void app_sys_stack_sgs_push(app_sys_stack_sgs_t *stack, app_sys_stack_sgn_t *node)
 {
-    app_sys_list_sl_pinsert((app_sys_list_sl_t *)stack, (app_sys_list_sn_t *)node);
+    app_sys_list_sl_pinsert(stack, node);
+}
+
+/*@brief     栈节点出栈
+ *@param[in] stack 栈实例
+ *@retval    栈节点实例
+ */
+app_sys_stack_dgn_t * app_sys_stack_dgs_pop(app_sys_stack_dgs_t *stack)
+{
+    app_sys_list_dn_t *node = app_sys_list_dl_head(stack);
+    app_sys_list_dl_remove(stack, node);
+    return node;
+}
+
+/*@brief     栈节点入栈
+ *@param[in] stack 栈实例
+ *@param[in] node  栈节点实例
+ */
+void app_sys_stack_dgs_push(app_sys_stack_dgs_t *stack, app_sys_stack_dgn_t *node)
+{
+    app_sys_list_dl_pinsert(stack, NULL, node);
 }
 
 /*

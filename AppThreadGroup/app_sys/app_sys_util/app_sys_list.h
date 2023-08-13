@@ -159,123 +159,113 @@ void app_sys_list_sl_remove(app_sys_list_sl_t *list, app_sys_list_sn_t *target, 
     for (app_sys_list_sn_t *node = app_sys_list_sl_head(list); node != NULL; node = app_sys_list_sn_buddy(node))
 
 /*
- *链表容器复用:通用队列(Generics Queue)
+ *链表容器复用:通用队列(Queue)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
  */
 
-typedef app_sys_list_sl_t app_sys_queue_gq_t;
-typedef app_sys_list_sn_t app_sys_queue_gn_t;
-
-/*@brief     重置队列
- *@param[in] queue 队列实例
- */
-void app_sys_queue_gq_reset(app_sys_queue_gq_t *queue);
-
-/*@brief     重置队列节点
- *@param[in] node 队列节点实例
- */
-void app_sys_queue_gn_reset(app_sys_queue_gn_t *node);
-
-/*@brief     队列访问队列头节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_gn_t * app_sys_queue_gq_first(app_sys_queue_gq_t *queue);
-
-/*@brief     队列访问队列尾节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_gn_t * app_sys_queue_gq_last(app_sys_queue_gq_t *queue);
+typedef app_sys_list_sl_t app_sys_queue_sgq_t;
+typedef app_sys_list_sn_t app_sys_queue_sgn_t;
+typedef app_sys_list_dl_t app_sys_queue_dgq_t;
+typedef app_sys_list_dn_t app_sys_queue_dgn_t;
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_gn_t * app_sys_queue_gq_dequeue(app_sys_queue_gq_t *queue);
+app_sys_queue_sgn_t * app_sys_queue_sgq_dequeue(app_sys_queue_sgq_t *queue);
 
 /*@brief     队列节点入队列
  *@param[in] queue 队列实例
  *@param[in] node  队列节点实例
  */
-void app_sys_queue_gq_enqueue(app_sys_queue_gq_t *queue, app_sys_queue_gn_t *node);
-
-/*
- *链表容器复用:优先队列(Priority Queue)
- */
-
-typedef app_sys_list_sl_t app_sys_queue_pq_t;
-typedef app_sys_list_sn_t app_sys_queue_pn_t;
-
-/*@brief     重置队列
- *@param[in] queue 队列实例
- */
-void app_sys_queue_pq_reset(app_sys_queue_pq_t *queue);
-
-/*@brief     重置队列节点
- *@param[in] node 队列节点实例
- */
-void app_sys_queue_pn_reset(app_sys_queue_pn_t *node);
-
-/*@brief     队列访问队列头节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_pn_t * app_sys_queue_pq_head(app_sys_queue_pq_t *queue);
-
-/*@brief     队列访问队列尾节点
- *@param[in] queue 队列实例
- *@retval    队列节点实例
- */
-app_sys_queue_pn_t * app_sys_queue_pq_tail(app_sys_queue_pq_t *queue);
+void app_sys_queue_sgq_enqueue(app_sys_queue_sgq_t *queue, app_sys_queue_sgn_t *node);
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_pn_t * app_sys_queue_pq_dequeue(app_sys_queue_pq_t *queue);
+app_sys_queue_dgn_t * app_sys_queue_dgq_dequeue(app_sys_queue_dgq_t *queue);
+
+/*@brief     队列节点入队列
+ *@param[in] queue 队列实例
+ *@param[in] node  队列节点实例
+ */
+void app_sys_queue_dgq_enqueue(app_sys_queue_dgq_t *queue, app_sys_queue_dgn_t *node);
+
+/*
+ *链表容器复用:优先队列(Priority Queue)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
+ */
+
+typedef app_sys_list_sl_t app_sys_queue_spq_t;
+typedef app_sys_list_sn_t app_sys_queue_spn_t;
+typedef app_sys_list_dl_t app_sys_queue_dpq_t;
+typedef app_sys_list_dn_t app_sys_queue_dpn_t;
+
+/*@brief     队列节点出队列
+ *@param[in] queue 队列实例
+ *@retval    队列节点实例
+ */
+app_sys_queue_spn_t * app_sys_queue_spq_dequeue(app_sys_queue_spq_t *queue);
 
 /*@brief     队列节点入队列
  *@param[in] queue   队列实例
  *@param[in] node    队列节点实例
  *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
-void app_sys_queue_pq_enqueue(app_sys_queue_pq_t *queue, app_sys_queue_pn_t *node,
-                              bool (*compare)(app_sys_queue_pn_t *node1, app_sys_queue_pn_t *node2));
+void app_sys_queue_spq_enqueue(app_sys_queue_spq_t *queue, app_sys_queue_spn_t *node,
+                               bool (*compare)(app_sys_queue_spn_t *node1, app_sys_queue_spn_t *node2));
+
+/*@brief     队列节点出队列
+ *@param[in] queue 队列实例
+ *@retval    队列节点实例
+ */
+app_sys_queue_dpn_t * app_sys_queue_dpq_dequeue(app_sys_queue_dpq_t *queue);
+
+/*@brief     队列节点入队列
+ *@param[in] queue   队列实例
+ *@param[in] node    队列节点实例
+ *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+ */
+void app_sys_queue_dpq_enqueue(app_sys_queue_dpq_t *queue, app_sys_queue_dpn_t *node,
+                               bool (*compare)(app_sys_queue_dpn_t *node1, app_sys_queue_dpn_t *node2));
 
 /*
- *链表容器复用:通用栈(Generics Stack)
+ *链表容器复用:通用栈(Stack)
+ *因为它是完全意义上的复用,但不应该不受限制的使用
+ *所以保留了链表的基本操作,栈顶即链表头
  */
 
-typedef app_sys_list_sl_t app_sys_stack_gs_t;
-typedef app_sys_list_sn_t app_sys_stack_gn_t;
-
-/*@brief     重置栈
- *@param[in] stack 栈实例
- */
-void app_sys_stack_gs_reset(app_sys_stack_gs_t *stack);
-
-/*@brief     重置栈节点
- *@param[in] node 栈节点实例
- */ 
-void app_sys_stack_gn_reset(app_sys_stack_gn_t *node);
-
-/*@brief     栈访问栈顶节点
- *@param[in] stack 栈实例
- *@retval    栈节点实例
- */
-app_sys_stack_gn_t * app_sys_stack_gs_top(app_sys_stack_gs_t *stack);
+typedef app_sys_list_sl_t app_sys_stack_sgs_t;
+typedef app_sys_list_sn_t app_sys_stack_sgn_t;
+typedef app_sys_list_dl_t app_sys_stack_dgs_t;
+typedef app_sys_list_dn_t app_sys_stack_dgn_t;
 
 /*@brief     栈节点出栈
  *@param[in] stack 栈实例
  *@retval    栈节点实例
  */
-app_sys_stack_gn_t * app_sys_stack_gs_pop(app_sys_stack_gs_t *stack);
+app_sys_stack_sgn_t * app_sys_stack_sgs_pop(app_sys_stack_sgs_t *stack);
 
 /*@brief     栈节点入栈
  *@param[in] stack 栈实例
  *@param[in] node  栈节点实例
  */
-void app_sys_stack_gs_push(app_sys_stack_gs_t *stack, app_sys_stack_gn_t *node);
+void app_sys_stack_sgs_push(app_sys_stack_sgs_t *stack, app_sys_stack_sgn_t *node);
+
+/*@brief     栈节点出栈
+ *@param[in] stack 栈实例
+ *@retval    栈节点实例
+ */
+app_sys_stack_dgn_t * app_sys_stack_dgs_pop(app_sys_stack_dgs_t *stack);
+
+/*@brief     栈节点入栈
+ *@param[in] stack 栈实例
+ *@param[in] node  栈节点实例
+ */
+void app_sys_stack_dgs_push(app_sys_stack_dgs_t *stack, app_sys_stack_dgn_t *node);
 
 /*
  *keep adding

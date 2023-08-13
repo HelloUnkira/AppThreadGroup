@@ -106,5 +106,4 @@ void app_sys_hashtable_test(void)
     APP_SYS_LOG_INFO("app_sys_hashtable_gt_remove:");
     app_sys_hashtable_gt_visit(&test_table, app_sys_hashtable_test_fv);
     
-    return 0;
 }
