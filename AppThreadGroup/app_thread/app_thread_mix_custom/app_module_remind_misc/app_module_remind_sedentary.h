@@ -20,14 +20,15 @@ typedef struct {
  */
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary);
 
-/*@brief     走动提醒获取
- *@param[in] remind_sedentary 走动提醒参数
+/*@brief      走动提醒获取
+ *@param[out] remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary);
 
-/*@brief 走动提醒默认设置
+/*@brief      走动提醒默认设置
+ *@param[out] remind_sedentary 走动提醒参数
  */
-void app_module_remind_sedentary_reset(void);
+void app_module_remind_sedentary_reset(app_module_remind_sedentary_t *remind_sedentary);
 
 /*@brief 走到提醒时长刷新
  *       如果产生了活动或走动,应该刷新它

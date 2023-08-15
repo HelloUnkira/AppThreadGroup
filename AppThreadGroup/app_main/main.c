@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
         static uint32_t count = 0;
         count++;
         /* test sys util plug(always test)  */
-        if (count == 1000 * 1) {
+        if (count == 1000 * 10) {
             void app_sys_rbuf_test(void);
             app_sys_rbuf_test();
             void app_sys_list_dl_test(void);

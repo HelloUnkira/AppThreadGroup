@@ -9,6 +9,11 @@
             "data_size"  : "4096 * 1"
         },
         {
+            "data_brief" : "module source",
+            "data_name"  : "module source",
+            "data_size"  : "1024 * 1"
+        },
+        {
             "data_brief" : "system profile",
             "data_name"  : "system profile",
             "data_size"  : "512 * 1"
@@ -21,12 +26,12 @@
         {
             "data_brief" : "user profile",
             "data_name"  : "user profile",
-            "data_size"  : "1024 * 1"
+            "data_size"  : "512 * 1"
         },
         {
             "data_brief" : "user data",
             "data_name"  : "user data",
-            "data_size"  : "4096 * 1"
+            "data_size"  : "1024 * 1"
         },
         {
             "data_brief" : "unknown",

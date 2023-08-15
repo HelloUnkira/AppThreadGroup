@@ -29,34 +29,40 @@ static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_small_table[] = {
 		.data_base = 0x0,
 	},
 	{
+		/* module source */
+		.data_name = "module source",
+		.data_size = 1024 * 1,
+		.data_base = 0x1000,
+	},
+	{
 		/* system profile */
 		.data_name = "system profile",
 		.data_size = 512 * 1,
-		.data_base = 0x1000,
+		.data_base = 0x1400,
 	},
 	{
 		/* system data */
 		.data_name = "system data",
 		.data_size = 1024 * 1,
-		.data_base = 0x1200,
+		.data_base = 0x1600,
 	},
 	{
 		/* user profile */
 		.data_name = "user profile",
-		.data_size = 1024 * 1,
-		.data_base = 0x1600,
+		.data_size = 512 * 1,
+		.data_base = 0x1a00,
 	},
 	{
 		/* user data */
 		.data_name = "user data",
-		.data_size = 4096 * 1,
-		.data_base = 0x1a00,
+		.data_size = 1024 * 1,
+		.data_base = 0x1c00,
 	},
 	{
 		/* unknown */
 		.data_name = "unknown",
 		.data_size = 4096 * 1,
-		.data_base = 0x2a00,
+		.data_base = 0x2000,
 	},
 };
 

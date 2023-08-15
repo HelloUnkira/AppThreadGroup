@@ -4,6 +4,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
+#include "app_sys_log_text.h"
 
 static app_mutex_t app_sys_log_mutex = {0};
 static app_sys_log_t app_sys_log = {0};
@@ -30,10 +31,13 @@ static const char * app_sys_log_file(const char *file)
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
  */
-void app_sys_log_ready(app_sys_log_t log)
+void app_sys_log_ready(void)
 {
     app_mutex_process(&app_sys_log_mutex, app_mutex_static);
-    app_sys_log = log;
+    app_sys_log.message1         = (void *)app_dev_log_msg1;
+    app_sys_log.message2         = (void *)app_dev_log_msg2;
+    app_sys_log.persistent       = (void *)app_sys_log_text_persistent;
+    app_sys_log.persistent_limit = APP_SYS_LOG_TEXT_MAX;
 }
 
 /*@brief     格式日志输出接口

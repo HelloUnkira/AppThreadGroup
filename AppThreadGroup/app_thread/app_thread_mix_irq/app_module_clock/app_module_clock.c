@@ -307,50 +307,43 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
                       clock_new.hour,clock_new.minute,clock_new.second);
 }
 
-/*@brief 系统时钟复位清除
+/*@brief      系统时钟复位清除
+ *@param[out] clock 时钟实例
  */
-void app_module_clock_clean(void)
+void app_module_clock_reset(app_module_clock_t *clock)
 {
-    app_module_clock_t clock = {.year = 2020, .month = 1, .day = 1,};
-    app_module_clock_to_utc(&clock);
-    app_module_clock_to_week(&clock);
-    app_module_clock_set_system_clock(&clock);
+    clock->year   = 2020;
+    clock->month  = 1;
+    clock->day    = 1;
+    clock->hour   = 0;
+    clock->minute = 0;
+    clock->second = 0;
+    app_module_clock_to_utc(clock);
+    app_module_clock_to_week(clock);
 }
 
 /*@brief 系统时钟转储到外存
  */
 void app_module_clock_dump(void)
 {
-    app_module_clock_t clock;
-    app_module_clock_get_system_clock(&clock);
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_system_data);
-    app_module_data_center_source(&data_center);
-    memcpy(&data_center->system_data.system_clock, &clock, sizeof(app_module_clock_t));
-    app_module_data_center_dump();
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.system_clock, &clock, sizeof(app_module_clock_t));
+    app_module_data_center_give();
 }
 
 /*@brief 系统时钟加载到内存
  */
 void app_module_clock_load(void)
 {
-    app_module_clock_t clock;
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_system_data);
-    bool retval = app_module_data_center_source(&data_center);
-    memcpy(&clock, &data_center->system_data.system_clock, sizeof(app_module_clock_t));
-    app_module_data_center_dump();
-    
-    if (clock.utc != 0)
-        app_module_clock_set_system_clock(&clock);
-    if (clock.utc == 0) {
-        app_module_clock_clean();
-        APP_SYS_LOG_WARN("load system clock fail");
-    }
+    app_module_clock_t clock = {0};
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&clock, &data_center->module_source.system_clock, sizeof(app_module_clock_t));
+    app_module_clock_set_system_clock(&clock);
+    app_module_data_center_give();
 }
 
 /*@brief 系统时钟软件定时器模组回调

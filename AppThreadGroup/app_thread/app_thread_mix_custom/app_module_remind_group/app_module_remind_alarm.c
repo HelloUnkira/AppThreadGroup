@@ -62,60 +62,40 @@ void app_module_remind_alarm_array(app_module_remind_item_t **remind_item, app_m
     *alarm_info  = app_module_remind_alarm_info;
 }
 
-/*@brief 提醒闹钟复位清除
+/*@brief      提醒闹钟复位清除
+ *@param[out] remind_item 提醒闹钟列表
+ *@param[out] alarm_info  提醒闹钟信息列表
  */
-void app_module_remind_alarm_clean(void)
+void app_module_remind_alarm_reset(app_module_remind_item_t **remind_item, app_module_remind_alarm_info_t **alarm_info)
 {
-    app_module_remind_alarm_array_lock();
-    memset(app_module_remind_alarm_item, 0, sizeof(app_module_remind_alarm_item));
-    memset(app_module_remind_alarm_info, 0, sizeof(app_module_remind_alarm_info));
-    app_module_remind_alarm_array_unlock();
+    memset(remind_item, 0, sizeof(app_module_remind_alarm_item));
+    memset(alarm_info,  0, sizeof(app_module_remind_alarm_info));
 }
 
 /*@brief 提醒闹钟转储到外存
  */
 void app_module_remind_alarm_dump(void)
 {
-    app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX] = {0};
-    app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX] = {0};
-    app_module_remind_alarm_array_lock();
-    memcpy(&remind_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
-    memcpy(&alarm_info,  app_module_remind_alarm_info, sizeof(app_module_remind_alarm_info));
-    app_module_remind_alarm_array_unlock();
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_data);
-    app_module_data_center_source(&data_center);
-    memcpy(&data_center->user_data.remind_alarm.remind_item, &remind_item, sizeof(app_module_remind_alarm_item));
-    memcpy(&data_center->user_data.remind_alarm.alarm_info,  &alarm_info,  sizeof(app_module_remind_alarm_info));
-    app_module_data_center_dump();
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    app_module_remind_alarm_array_lock();
+    memcpy(&data_center->module_source.remind_alarm.remind_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
+    memcpy(&data_center->module_source.remind_alarm.alarm_info,  app_module_remind_alarm_info,  sizeof(app_module_remind_alarm_info));
+    app_module_remind_alarm_array_unlock();
+    app_module_data_center_give();
 }
 
 /*@brief 提醒闹钟加载到内存
  */
 void app_module_remind_alarm_load(void)
 {
-    app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX] = {0};
-    app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX] = {0};
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_data);
-    bool retval = app_module_data_center_source(&data_center);
-    memcpy(&remind_item, &data_center->user_data.remind_alarm.remind_item, sizeof(app_module_remind_alarm_item));
-    memcpy(&alarm_info,  &data_center->user_data.remind_alarm.alarm_info,  sizeof(app_module_remind_alarm_info));
-    app_module_data_center_dump();
-    
-    if(retval) {
-        app_module_remind_alarm_array_lock();
-        memcpy(app_module_remind_alarm_item, &remind_item, sizeof(app_module_remind_alarm_item));
-        memcpy(app_module_remind_alarm_info, &alarm_info,  sizeof(app_module_remind_alarm_info));
-        app_module_remind_alarm_array_unlock();
-    } else {
-        app_module_remind_alarm_clean();
-        APP_SYS_LOG_WARN("load remind alarm fail");
-    }
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    app_module_remind_alarm_array_lock();
+    memcpy(app_module_remind_alarm_item, &data_center->module_source.remind_alarm.remind_item, sizeof(app_module_remind_alarm_item));
+    memcpy(app_module_remind_alarm_info, &data_center->module_source.remind_alarm.alarm_info,  sizeof(app_module_remind_alarm_info));
+    app_module_remind_alarm_array_unlock();
+    app_module_data_center_give();
 }
 
 /*@brief 初始化提醒闹钟组

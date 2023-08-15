@@ -20,8 +20,8 @@ typedef struct {
  */
 void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb);
 
-/*@brief     勿扰模式获取
- *@param[in] do_not_disturb 勿扰模式参数
+/*@brief      勿扰模式获取
+ *@param[out] do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb);
 
@@ -30,9 +30,10 @@ void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb);
  */
 bool app_module_do_not_disturb_status(void);
 
-/*@brief 勿扰模式默认设置
+/*@brief      勿扰模式默认设置
+ *@param[out] do_not_disturb 勿扰模式参数
  */
-void app_module_do_not_disturb_reset(void);
+void app_module_do_not_disturb_reset(app_module_do_not_disturb_t *do_not_disturb);
 
 /*@brief 勿扰状态转储到外存
  */

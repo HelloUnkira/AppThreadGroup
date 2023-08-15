@@ -35,13 +35,7 @@ void app_thread_group_schedule(void)
      *!!!就绪app sys层
      */
     /* 就绪系统子模组 */
-    app_sys_log_t log = {
-        .message1         = (void *)app_dev_log_msg1,
-        .message2         = (void *)app_dev_log_msg2,
-        .persistent       = (void *)app_sys_log_text_persistent,
-        .persistent_limit = APP_SYS_LOG_TEXT_MAX,
-    };
-    app_sys_log_ready(log);
+    app_sys_log_ready();
     app_sys_ext_mem_ready();
     app_sys_log_text_ready();
     app_sys_pipe_src_ready();

@@ -26,8 +26,8 @@ void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_seden
     app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
 }
 
-/*@brief     走动提醒获取
- *@param[in] remind_sedentary 走动提醒参数
+/*@brief      走动提醒获取
+ *@param[out] remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary)
 {
@@ -36,26 +36,25 @@ void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_seden
     app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
 }
 
-/*@brief 走动提醒默认设置
+/*@brief      走动提醒默认设置
+ *@param[out] remind_sedentary 走动提醒参数
  */
-void app_module_remind_sedentary_reset(void)
+void app_module_remind_sedentary_reset(app_module_remind_sedentary_t *remind_sedentary)
 {
     /* 9:00~11:30;13:00~18:00;1mins,workday */
-    app_module_remind_sedentary_t remind_sedentary = {0};
-    remind_sedentary.reflush      = 0;
-    remind_sedentary.am_time_s[0] = 9;
-    remind_sedentary.am_time_s[1] = 0;
-    remind_sedentary.am_time_e[0] = 11;
-    remind_sedentary.am_time_e[1] = 30;
-    remind_sedentary.pm_time_s[0] = 13;
-    remind_sedentary.pm_time_s[1] = 0;
-    remind_sedentary.pm_time_e[0] = 18;
-    remind_sedentary.pm_time_e[1] = 30;
-    remind_sedentary.am_valid = true;
-    remind_sedentary.pm_valid = true;
-    remind_sedentary.interval = 15;
-    remind_sedentary.week = 0b0111110;
-    app_module_remind_sedentary_set(&remind_sedentary);
+    remind_sedentary->reflush      = 0;
+    remind_sedentary->am_time_s[0] = 9;
+    remind_sedentary->am_time_s[1] = 0;
+    remind_sedentary->am_time_e[0] = 11;
+    remind_sedentary->am_time_e[1] = 30;
+    remind_sedentary->pm_time_s[0] = 13;
+    remind_sedentary->pm_time_s[1] = 0;
+    remind_sedentary->pm_time_e[0] = 18;
+    remind_sedentary->pm_time_e[1] = 30;
+    remind_sedentary->am_valid = true;
+    remind_sedentary->pm_valid = true;
+    remind_sedentary->interval = 15;
+    remind_sedentary->week = 0b0111110;
 }
 
 /*@brief 走到提醒时长刷新
@@ -149,36 +148,24 @@ void app_module_remind_sedentary_update(app_module_clock_t clock[1])
  */
 void app_module_remind_sedentary_dump(void)
 {
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
     app_module_remind_sedentary_t remind_sedentary = {0};
     app_module_remind_sedentary_get(&remind_sedentary);
-    
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    app_module_data_center_source(&data_center);
-    memcpy(&data_center->user_profile.remind_sedentary, &remind_sedentary, sizeof(app_module_remind_sedentary_t));
-    app_module_data_center_dump();
+    memcpy(&data_center->module_source.remind_sedentary, &remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_give();
 }
 
 /*@brief 走动提醒加载到内存
  */
 void app_module_remind_sedentary_load(void)
 {
-    app_module_remind_sedentary_t remind_sedentary = {0};
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    bool retval = app_module_data_center_source(&data_center);
-    memcpy(&remind_sedentary, &data_center->user_profile.remind_sedentary, sizeof(app_module_remind_sedentary_t));
-    app_module_data_center_dump();
-    
-    if(retval)
-        app_module_remind_sedentary_set(&remind_sedentary);
-    else {
-        app_module_remind_sedentary_reset();
-        APP_SYS_LOG_WARN("load sedentary remind fail");
-    }
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    app_module_remind_sedentary_t remind_sedentary = {0};
+    memcpy(&remind_sedentary, &data_center->module_source.remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_remind_sedentary_set(&remind_sedentary);
+    app_module_data_center_give();
 }
 
 /*@brief 走动提醒模组初始化

@@ -19,14 +19,15 @@ typedef struct {
  */
 void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink);
 
-/*@brief     喝水提醒获取
- *@param[in] remind_drink 喝水提醒参数
+/*@brief      喝水提醒获取
+ *@param[out] remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink);
 
-/*@brief 喝水提醒默认设置
+/*@brief      喝水提醒默认设置
+ *@param[out] remind_drink 喝水提醒参数
  */
-void app_module_remind_drink_reset(void);
+void app_module_remind_drink_reset(app_module_remind_drink_t *remind_drink);
 
 /*@brief 喝水提醒更新事件
  *       内部使用: 被mix custom线程使用

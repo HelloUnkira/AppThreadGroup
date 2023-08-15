@@ -78,15 +78,13 @@ void app_module_system_mode_set(uint8_t mode)
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
     
     /* 更新系统工作模式 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_system_profile);
-    app_module_data_center_source(&data_center);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_system_profile);
     #if APP_ARCH_IS_PC
     data_center->system_profile.system_mode = app_module_data_center_system_mode_normal;
     #else
     data_center->system_profile.system_mode = mode;
     #endif
-    app_module_data_center_dump();
+    app_module_data_center_give();
 }
 
 /*@brief  获取系统工作模式
@@ -149,16 +147,14 @@ void app_module_system_ready(void)
 {
     app_mutex_process(&app_module_system_mutex, app_mutex_static);
     /* 更新系统工作模式 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_system_profile);
-    app_module_data_center_source(&data_center);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_system_profile);
     app_module_system.mode = data_center->system_profile.system_mode;
     APP_SYS_LOG_WARN("system mode:%u", app_module_system.mode);
     if (app_module_system.mode >= app_module_data_center_system_mode_num) {
         app_module_system.mode  = app_module_data_center_system_mode_normal;
         data_center->system_profile.system_mode = app_module_system.mode;
     }
-    app_module_data_center_dump();
+    app_module_data_center_give();
     /* 准备系统监管 */
     app_module_system.valid = true;
     memset(&app_module_system.ctrl, 0xff, sizeof(app_module_system.ctrl));

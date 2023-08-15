@@ -24,8 +24,8 @@ void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
     app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_give);
 }
 
-/*@brief     勿扰模式获取
- *@param[in] do_not_disturb 勿扰模式参数
+/*@brief      勿扰模式获取
+ *@param[out] do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
 {
@@ -72,27 +72,26 @@ bool app_module_do_not_disturb_status(void)
     return retval;
 }
 
-/*@brief 勿扰模式默认设置
+/*@brief      勿扰模式默认设置
+ *@param[out] do_not_disturb 勿扰模式参数
  */
-void app_module_do_not_disturb_reset(void)
+void app_module_do_not_disturb_reset(app_module_do_not_disturb_t *do_not_disturb)
 {
     /* 9:00~11:30;13:00~18:00;workday */
-    app_module_do_not_disturb_t do_not_disturb;
-    do_not_disturb.table[0].time_s[0] = 9;
-    do_not_disturb.table[0].time_s[1] = 0;
-    do_not_disturb.table[0].time_s[2] = 0;
-    do_not_disturb.table[0].time_e[0] = 11;
-    do_not_disturb.table[0].time_e[1] = 30;
-    do_not_disturb.table[0].time_e[2] = 0;
-    do_not_disturb.table[1].time_s[0] = 13;
-    do_not_disturb.table[1].time_s[1] = 0;
-    do_not_disturb.table[1].time_s[2] = 0;
-    do_not_disturb.table[1].time_e[0] = 18;
-    do_not_disturb.table[1].time_e[1] = 0;
-    do_not_disturb.table[1].time_e[2] = 0;
-    do_not_disturb.valid_bits = 0b11;
-    do_not_disturb.week = 0b0111110;
-    app_module_do_not_disturb_set(&do_not_disturb);
+    do_not_disturb->table[0].time_s[0] = 9;
+    do_not_disturb->table[0].time_s[1] = 0;
+    do_not_disturb->table[0].time_s[2] = 0;
+    do_not_disturb->table[0].time_e[0] = 11;
+    do_not_disturb->table[0].time_e[1] = 30;
+    do_not_disturb->table[0].time_e[2] = 0;
+    do_not_disturb->table[1].time_s[0] = 13;
+    do_not_disturb->table[1].time_s[1] = 0;
+    do_not_disturb->table[1].time_s[2] = 0;
+    do_not_disturb->table[1].time_e[0] = 18;
+    do_not_disturb->table[1].time_e[1] = 0;
+    do_not_disturb->table[1].time_e[2] = 0;
+    do_not_disturb->valid_bits = 0b11;
+    do_not_disturb->week = 0b0111110;
 }
 
 /*@brief 勿扰状态转储到外存
@@ -101,13 +100,10 @@ void app_module_do_not_disturb_dump(void)
 {
     app_module_do_not_disturb_t do_not_disturb = {0};
     app_module_do_not_disturb_get(&do_not_disturb);
-    
-    /* 更新系统时间 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    app_module_data_center_source(&data_center);
-    memcpy(&data_center->user_profile.do_not_disturb, &do_not_disturb, sizeof(app_module_do_not_disturb_t));
-    app_module_data_center_dump();
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.do_not_disturb, &do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_data_center_give();
 }
 
 /*@brief 勿扰状态加载到内存
@@ -115,22 +111,11 @@ void app_module_do_not_disturb_dump(void)
 void app_module_do_not_disturb_load(void)
 {
     app_module_do_not_disturb_t do_not_disturb = {0};
-
-    app_module_remind_drink_t remind_drink = {0};
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    bool retval = app_module_data_center_source(&data_center);
-    memcpy(&do_not_disturb, &data_center->user_profile.do_not_disturb, sizeof(app_module_do_not_disturb_t));
-    app_module_data_center_dump();
-    
-    if(retval)
-        app_module_do_not_disturb_set(&do_not_disturb);
-    else {
-        app_module_do_not_disturb_reset();
-        APP_SYS_LOG_WARN("load do not disturb fail");
-    }
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&do_not_disturb, &data_center->module_source.do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_do_not_disturb_set(&do_not_disturb);
+    app_module_data_center_give();
 }
 
 /*@brief 勿扰模组初始化

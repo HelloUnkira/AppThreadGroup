@@ -130,7 +130,7 @@ typedef struct {
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
  */
-void app_sys_log_ready(app_sys_log_t log);
+void app_sys_log_ready(void);
 
 /*@brief     格式日志输出接口
  *           内部使用: 被宏函数使用

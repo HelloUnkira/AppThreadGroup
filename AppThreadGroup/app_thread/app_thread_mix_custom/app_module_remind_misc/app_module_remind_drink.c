@@ -25,8 +25,8 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
     app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
 }
 
-/*@brief     喝水提醒获取
- *@param[in] remind_drink 喝水提醒参数
+/*@brief      喝水提醒获取
+ *@param[out] remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
 {
@@ -35,25 +35,24 @@ void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
     app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
 }
 
-/*@brief 喝水提醒默认设置
+/*@brief      喝水提醒默认设置
+ *@param[out] remind_drink 喝水提醒参数
  */
-void app_module_remind_drink_reset(void)
+void app_module_remind_drink_reset(app_module_remind_drink_t *remind_drink)
 {
     /* 9:00~11:30;13:00~18:00;1mins,workday */
-    app_module_remind_drink_t remind_drink = {0};
-    remind_drink.am_time_s[0] = 9;
-    remind_drink.am_time_s[1] = 0;
-    remind_drink.am_time_e[0] = 11;
-    remind_drink.am_time_e[1] = 30;
-    remind_drink.pm_time_s[0] = 13;
-    remind_drink.pm_time_s[1] = 0;
-    remind_drink.pm_time_e[0] = 18;
-    remind_drink.pm_time_e[1] = 30;
-    remind_drink.am_valid = true;
-    remind_drink.pm_valid = true;
-    remind_drink.interval = 15;
-    remind_drink.week = 0b0111110;
-    app_module_remind_drink_set(&remind_drink);
+    remind_drink->am_time_s[0] = 9;
+    remind_drink->am_time_s[1] = 0;
+    remind_drink->am_time_e[0] = 11;
+    remind_drink->am_time_e[1] = 30;
+    remind_drink->pm_time_s[0] = 13;
+    remind_drink->pm_time_s[1] = 0;
+    remind_drink->pm_time_e[0] = 18;
+    remind_drink->pm_time_e[1] = 30;
+    remind_drink->am_valid = true;
+    remind_drink->pm_valid = true;
+    remind_drink->interval = 15;
+    remind_drink->week = 0b0111110;
 }
 
 /*@brief 喝水提醒更新事件
@@ -128,36 +127,24 @@ void app_module_remind_drink_update(app_module_clock_t clock[1])
  */
 void app_module_remind_drink_dump(void)
 {
-    app_module_remind_drink_t remind_drink = {0};
-    app_module_remind_drink_get(&remind_drink);
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    app_module_data_center_source(&data_center);
-    memcpy(&data_center->user_profile.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
-    app_module_data_center_dump();
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    app_module_remind_drink_t remind_drink = {0};
+    memcpy(&data_center->module_source.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_remind_drink_get(&remind_drink);
+    app_module_data_center_give();
 }
 
 /*@brief 喝水提醒加载到内存
  */
 void app_module_remind_drink_load(void)
 {
-    app_module_remind_drink_t remind_drink = {0};
-    
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = NULL;
-    app_module_data_center_load(app_module_data_center_user_profile);
-    bool retval = app_module_data_center_source(&data_center);
-    memcpy(&remind_drink, &data_center->user_profile.remind_drink, sizeof(app_module_remind_drink_t));
-    app_module_data_center_dump();
-    
-    if(retval)
-        app_module_remind_drink_set(&remind_drink);
-    else {
-        app_module_remind_drink_reset();
-        APP_SYS_LOG_WARN("load drink remind fail");
-    }
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    app_module_remind_drink_t remind_drink = {0};
+    memcpy(&remind_drink, &data_center->module_source.remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_remind_drink_set(&remind_drink);
+    app_module_data_center_give();
 }
 
 /*@brief 喝水提醒模组初始化
