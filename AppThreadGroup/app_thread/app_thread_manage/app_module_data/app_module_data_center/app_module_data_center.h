@@ -8,12 +8,6 @@
 #include "app_module_remind_alarm.h"
 #include "app_module_do_not_disturb.h"
 
-/*备注:
- *    将各种各样的零碎数据统一打包到此结构中
- *    通过不同的结构块区分不同类型的数据区域
- *    并以一个完全统一的接口对需要持久化的资源统一访问
- */
-
 // #pragma pack(push, 1)
 typedef struct {
     uint32_t crc32; /* 公共字段,以做校验 */
@@ -21,6 +15,14 @@ typedef struct {
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源占位标识,本字段无使用意义(type),不占内存与外存 */
         enum {
+            /*备注:
+             *    将各种各样的零碎数据统一打包到此结构中
+             *    通过不同的结构块区分不同类型的数据区域
+             *    并以一个完全统一的接口对需要持久化的资源统一访问
+             *    因为数据中心使用了缓存机制,为了提升缓存性能
+             *    尽可能的将大数据块切碎成各种各样类型的小集合
+             *    那么缓存的热缓冲机制能充分被发挥出效果
+             */
             app_module_data_center_none = 0,
             app_module_data_center_module_source,   /* 模组资源 */
             app_module_data_center_system_profile,  /* 系统配置 */

@@ -1,14 +1,13 @@
 /*实现目标:
- *    系统相关的功能组件
- *    全局的记录所有杂项数据资源
- *    注意:被注入到这里的数据资源是不需要内存常驻的
- *         这能有效节约足够的内存资源
- *
- *         仅需使用时加载并转储
+ *    带缓存机制的数据中心
+ *    全局记录所有杂项数据资源
+ *    被注入到这里的数据资源是不需要内存常驻的
+ *    能有效节约足够的内存资源
+ *    数据仅需使用时加载并转储
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
