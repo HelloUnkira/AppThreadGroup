@@ -6,6 +6,7 @@ typedef enum {
     app_sys_ext_mem_cache_overflow,     /* 获取的资源超出缓存单元门限 */
     app_sys_ext_mem_cache_hit,          /* 缓存命中 */
     app_sys_ext_mem_cache_unhit,        /* 缓存未命中 */
+    app_sys_ext_mem_cache_overlay,
 } app_sys_ext_mem_cache_status_t;
 
 typedef struct {
@@ -15,7 +16,7 @@ typedef struct {
     uintptr_t   size;
     uint8_t     count:7;
     uint8_t     dirty:1;
-    uint8_t     lock:1;
+    uint8_t     lock:7;
 } app_sys_ext_mem_cache_unit_t;
 
 typedef struct {
@@ -25,6 +26,8 @@ typedef struct {
     uint32_t unit;      /* 缓存对内存资源使用单元门限 */
     uint32_t usage;     /* 缓存对内存资源占用情况 */
     uint32_t total;     /* 缓存对内存资源占用总门限 */
+    uint32_t cnt_hit;   /* 命中次数 */
+    uint32_t cnt_unhit; /* 非命中次数 */
 } app_sys_ext_mem_cache_t;
 
 /*@brief     缓存就绪,配置参数

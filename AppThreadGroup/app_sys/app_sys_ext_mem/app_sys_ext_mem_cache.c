@@ -33,10 +33,12 @@ void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_e
     APP_SYS_ASSERT(unit < total);
     app_mutex_process(&cache->mutex, app_mutex_static);
     app_sys_list_dl_reset(&cache->dl_list);
-    cache->ext_mem = ext_mem;
-    cache->unit    = unit;    /* 单元资源门限 */
-    cache->usage   = 0;       /* 内存资源占用 */
-    cache->total   = total;   /* 内存资源总占用门限 */
+    cache->ext_mem   = ext_mem;
+    cache->unit      = unit;    /* 单元资源门限 */
+    cache->usage     = 0;       /* 内存资源占用 */
+    cache->total     = total;   /* 内存资源总占用门限 */
+    cache->cnt_hit   = 0;
+    cache->cnt_unhit = 0;
 }
 
 /*@brief     缓存刷新(清理内存)
@@ -53,10 +55,10 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
         /* 前向遍历,找已经解锁的资源 */
         app_sys_list_dl_ftra(&cache->dl_list, curr) {
             unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
-            node = &unit->dl_node;
+            node = curr;
             if (force)
                 break;
-            if (!unit->lock)
+            if (unit->lock == 0)
                  break;
             unit = NULL;
         }
@@ -66,7 +68,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
         /* 污染标记,数据回写 */
         if (unit->dirty)
         if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
-            APP_SYS_LOG_ERROR("data write fail");
+             APP_SYS_LOG_ERROR("data write fail");
         /* 约减使用率 */
         cache->usage -= unit->size;
         /* 回收数据区 */
@@ -127,8 +129,8 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
     /* 如果缓存命中时 */
     if (unit  != NULL) {
        *buffer = unit->buffer;
-        /* 重新上锁 */
-        unit->lock = true;
+        /* 上锁 */
+        unit->lock++;
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
@@ -137,6 +139,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
             /* 重新带计数优先级加入 */
             app_sys_queue_dpq_enqueue(&cache->dl_list, node, app_sys_ext_mem_cache_sort);
         }
+        cache->cnt_hit++;
         retval = app_sys_ext_mem_cache_hit;
         goto over;
     }
@@ -147,8 +150,8 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
             /* 前向遍历,找已经解锁的资源 */
             app_sys_list_dl_ftra(&cache->dl_list, curr) {
                 unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
-                node = &unit->dl_node;
-                if (!unit->lock)
+                node = curr;
+                if (unit->lock == 0)
                      break;
                 unit = NULL;
             }
@@ -162,7 +165,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
             /* 污染标记,数据回写 */
             if (unit->dirty)
             if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
-                APP_SYS_LOG_ERROR("data write fail");
+                 APP_SYS_LOG_ERROR("data write fail");
             /* 约减使用率 */
             cache->usage -= unit->size;
             /* 回收数据区 */
@@ -178,16 +181,17 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         unit->size    = size;
         unit->count   = 1;
         unit->dirty   = false;
-        unit->lock    = true;
+        unit->lock    = 1;
         app_sys_list_dn_reset(&unit->dl_node);
         cache->usage += size;
        *buffer = unit->buffer;
         node  = &unit->dl_node;
         /* 数据读取 */
         if (!app_sys_ext_mem_read(cache->ext_mem, unit->offset, unit->buffer, unit->size))
-            APP_SYS_LOG_ERROR("data read fail");
+             APP_SYS_LOG_ERROR("data read fail");
         /* 重新带计数优先级加入 */
         app_sys_queue_dpq_enqueue(&cache->dl_list, node, app_sys_ext_mem_cache_sort);
+        cache->cnt_unhit++;
         retval = app_sys_ext_mem_cache_unhit;
         goto over;
     }
@@ -229,8 +233,8 @@ uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uint8_t *buf
     }
     /* 如果缓存命中时 */
     if (unit != NULL) {
-        unit->lock  = false;
-        unit->dirty = dirty;
+        unit->lock--;
+        unit->dirty = dirty ? dirty : unit->dirty;
         retval = app_sys_ext_mem_cache_hit;
         goto over;
     }

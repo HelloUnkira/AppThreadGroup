@@ -33,11 +33,11 @@ void app_module_data_dump_process(void)
 {
     APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
-    //app_module_clock_dump();
-    //app_module_remind_alarm_dump();
-    //app_module_remind_sedentary_dump();
-    //app_module_remind_drink_dump();
-    //app_module_do_not_disturb_dump();
+    app_module_clock_dump();
+    app_module_remind_alarm_dump();
+    app_module_remind_sedentary_dump();
+    app_module_remind_drink_dump();
+    app_module_do_not_disturb_dump();
     /* ... */
     app_module_shutdown_dump();
     app_module_data_center_reflush(false);
