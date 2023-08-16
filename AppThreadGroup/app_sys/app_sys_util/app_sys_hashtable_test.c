@@ -13,7 +13,7 @@
 
 /*@brief 摘要的来源网络的Hash散列函数
  */
-static inline uint32_t app_sys_hashtable_elf_hash(uint8_t *data, uint32_t length)
+uint32_t app_sys_hashtable_elf_hash(uint8_t *data, uint32_t length)
 {
     uint64_t h = 0, g = 0;
     
@@ -54,9 +54,6 @@ bool app_sys_hashtable_test_fc(app_sys_hashtable_dn_t *node1, app_sys_hashtable_
 
 void app_sys_hashtable_test_fv(app_sys_hashtable_dn_t *target, uint32_t idx)
 {
-    if (target == NULL)
-        return;
-    
     app_sys_hashtable_test_t *test = app_ext_own_ofs(app_sys_hashtable_test_t, node, target);
     
     static uint32_t idx_ofs = -1;
@@ -77,6 +74,7 @@ void app_sys_hashtable_test(void)
     app_sys_hashtable_dl_reset(test_list,   APP_SYS_HASHTABLE_TEST_LENGTH);
     app_sys_hashtable_dt_reset(&test_table, app_sys_hashtable_test_fd,
                                             app_sys_hashtable_test_fc,
+                                            app_sys_hashtable_test_fv,
                                 test_list,  APP_SYS_HASHTABLE_TEST_LENGTH);
     
     /* 随机生成100个键值对 */
@@ -89,7 +87,7 @@ void app_sys_hashtable_test(void)
     }
     
     APP_SYS_LOG_INFO("app_sys_hashtable_dt_insert:");
-    app_sys_hashtable_dt_visit(&test_table, app_sys_hashtable_test_fv);
+    app_sys_hashtable_dt_visit(&test_table);
     
     /* 随机移除一半的键值对 */
     for (uint32_t idx = 0; idx < 50; idx) {
@@ -104,6 +102,6 @@ void app_sys_hashtable_test(void)
     }
     
     APP_SYS_LOG_INFO("app_sys_hashtable_dt_remove:");
-    app_sys_hashtable_dt_visit(&test_table, app_sys_hashtable_test_fv);
+    app_sys_hashtable_dt_visit(&test_table);
     
 }

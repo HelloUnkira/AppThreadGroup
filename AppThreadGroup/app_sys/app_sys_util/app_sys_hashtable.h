@@ -16,6 +16,7 @@ typedef void     (*app_sys_hashtable_dt_fv_t)(app_sys_hashtable_dn_t *node,  uin
 typedef struct {
     app_sys_hashtable_dt_fd_t digest;   /* 摘要函数,散列函数 */
     app_sys_hashtable_dt_fc_t confirm;  /* 比较函数 */
+    app_sys_hashtable_dt_fv_t visit;    /* 访问函数 */
     app_sys_hashtable_dl_t   *list;     /* 散列链表 */
     uint32_t length;
 } app_sys_hashtable_dt_t;
@@ -41,7 +42,8 @@ void app_sys_hashtable_dl_reset(app_sys_hashtable_dl_t *list, uint32_t length);
 void app_sys_hashtable_dt_reset(app_sys_hashtable_dt_t   *table,
                                 app_sys_hashtable_dt_fd_t digest,
                                 app_sys_hashtable_dt_fc_t confirm,
-                                app_sys_hashtable_dl_t   *list,     uint32_t length);
+                                app_sys_hashtable_dt_fv_t visit,
+                                app_sys_hashtable_dl_t   *list, uint32_t length);
 
 /*@brief     哈希表插入节点
  *@param[in] table 哈希表实例
@@ -64,9 +66,8 @@ app_sys_hashtable_dn_t * app_sys_hashtable_dt_search(app_sys_hashtable_dt_t *tab
 
 /*@brief     哈希表访问所有节点
  *@param[in] table 哈希表实例
- *@param[in] visit 哈希访问函数
  */
-void app_sys_hashtable_dt_visit(app_sys_hashtable_dt_t *table, app_sys_hashtable_dt_fv_t visit);
+void app_sys_hashtable_dt_visit(app_sys_hashtable_dt_t *table);
 
 /*
  *keep adding

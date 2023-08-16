@@ -11,6 +11,7 @@ typedef enum {
 
 typedef struct {
     app_sys_list_dn_t dl_node;
+    app_sys_hashtable_dn_t ht_node;
     uintptr_t   offset;
     uint8_t    *buffer;
     uintptr_t   size;
@@ -22,6 +23,9 @@ typedef struct {
 typedef struct {
     app_mutex_t mutex;
     app_sys_list_dl_t dl_list;
+    app_sys_hashtable_dl_t *ht_list;
+    app_sys_hashtable_dt_t  ht_table;
+    uint32_t ht_list_num;
     const app_sys_ext_mem_t *ext_mem;
     uint32_t unit;      /* 缓存对内存资源使用单元门限 */
     uint32_t usage;     /* 缓存对内存资源占用情况 */
@@ -48,17 +52,18 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force);
  *@param[in]  cache  缓存实例
  *@param[in]  offset 外存数据偏移
  *@param[in]  size   外存数据大小
- *@param[out] buffer 更新到内存的外存数据
+ *@param[out] buffer 内存数据地址
  *@retval     操作结果
  */
 uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t offset, uintptr_t size, uint8_t **buffer);
 
 /*@brief     缓存资源获取
  *@param[in] cache  缓存实例
- *@param[in] buffer 内存数据
+ *@param[in] offset 外存数据偏移
+ *@param[in] buffer 内存数据地址
  *@param[in] dirty  内存数据是否修改
  *@retval    操作结果
  */
-uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uint8_t *buffer, bool dirty);
+uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uintptr_t offset, uint8_t *buffer, bool dirty);
 
 #endif

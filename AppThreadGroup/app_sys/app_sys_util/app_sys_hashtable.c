@@ -27,23 +27,26 @@ void app_sys_hashtable_dn_reset(app_sys_hashtable_dn_t *node)
 void app_sys_hashtable_dl_reset(app_sys_hashtable_dl_t *list, uint32_t length)
 {
     for (uint32_t idx = 0; idx < length; idx++)
-        app_sys_list_dl_reset((app_sys_list_dl_t *)&list[idx]);
+        app_sys_list_dl_reset(&list[idx]);
 }
 
 /*@brief     重置哈希表
  *@param[in] table   哈希表实例
  *@param[in] digest  哈希散列函数,哈希摘要函数
  *@param[in] confirm 哈希比较函数
+ *@param[in] visit   哈希访问函数
  *@param[in] list    哈希表一级链表实例
  *@param[in] length  哈希表一级链表实例长度
  */
 void app_sys_hashtable_dt_reset(app_sys_hashtable_dt_t   *table,
                                 app_sys_hashtable_dt_fd_t digest,
                                 app_sys_hashtable_dt_fc_t confirm,
-                                app_sys_hashtable_dl_t   *list,     uint32_t length)
+                                app_sys_hashtable_dt_fv_t visit,
+                                app_sys_hashtable_dl_t   *list, uint32_t length)
 {
     table->digest  = digest;
     table->confirm = confirm;
+    table->visit   = visit;
     table->list    = list;
     table->length  = length;
 }
@@ -91,15 +94,14 @@ app_sys_hashtable_dn_t * app_sys_hashtable_dt_search(app_sys_hashtable_dt_t *tab
 
 /*@brief     哈希表访问所有节点
  *@param[in] table 哈希表实例
- *@param[in] visit 哈希访问函数
  */
-void app_sys_hashtable_dt_visit(app_sys_hashtable_dt_t *table, app_sys_hashtable_dt_fv_t visit)
+void app_sys_hashtable_dt_visit(app_sys_hashtable_dt_t *table)
 {
     for (uint32_t idx = 0; idx < table->length; idx++) {
         /* 对称语义,二选其一 */
         // app_sys_list_dl_ftra(&table->list[idx], curr)
            app_sys_list_dl_btra(&table->list[idx], curr) {
-           visit(curr, idx);
+           table->visit(curr, idx);
         }
     }
 }

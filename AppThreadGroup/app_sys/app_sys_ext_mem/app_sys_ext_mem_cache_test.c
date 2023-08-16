@@ -9,6 +9,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_list.h"
+#include "app_sys_hashtable.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_cache.h"
 #include "app_sys_ext_mem_table.h"
@@ -33,11 +34,12 @@ void app_sys_ext_mem_cache_test(void)
         /*  */
         uintptr_t block_ofs = (50 / (wheel_cnt + 1)) * (1 + cnt / unit_cnt);
         /* 缓存命中测试 */
-        uint32_t retval = app_sys_ext_mem_cache_take(&static_memory_cache, rand() % block_ofs * 1024, 1024, &buffer);
+        uintptr_t offset = rand() % block_ofs * 1024;
+        uint32_t retval  = app_sys_ext_mem_cache_take(&static_memory_cache, offset, 1024, &buffer);
         hit_cnt   += retval == app_sys_ext_mem_cache_hit ? 1 : 0;
         unhit_cnt += retval == app_sys_ext_mem_cache_unhit ? 1 : 0;
         for (uint32_t idx = 0; idx < 1024; buffer[idx] += 1, idx++);
-        app_sys_ext_mem_cache_give(&static_memory_cache, buffer, true);
+        app_sys_ext_mem_cache_give(&static_memory_cache, offset, buffer, true);
         
         if (cnt != 0 && cnt % unit_cnt == 0) {
             APP_SYS_LOG_INFO("cache unit:%u",  static_memory_cache.unit);

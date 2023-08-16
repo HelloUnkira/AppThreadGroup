@@ -12,6 +12,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_sys_list.h"
+#include "app_sys_hashtable.h"
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_cache.h"
 #include "app_sys_ext_mem_table.h"
@@ -124,7 +125,7 @@ void app_module_data_center_give(void)
     uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, type, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_module_data_center_handle->crc32 = app_sys_crc32(&app_module_data_center_handle->type, size);
-    app_sys_ext_mem_cache_give(&app_module_data_center_cache, app_module_data_center_handle, app_module_data_center_handle->crc32 != app_module_data_center_crc32);
+    app_sys_ext_mem_cache_give(&app_module_data_center_cache, ext_src->data_base, app_module_data_center_handle, app_module_data_center_handle->crc32 != app_module_data_center_crc32);
     APP_SYS_LOG_INFO("data center:%d", app_module_data_center_type);
     APP_SYS_LOG_INFO("give[%p,%p]:%d", app_module_data_center_handle, app_module_data_center_handle + size + ofs, size + ofs);
     app_module_data_center_handle = NULL;
