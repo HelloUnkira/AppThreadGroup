@@ -29,21 +29,6 @@
 #include "app_module_backlight.h"
 #include "app_module_temperature.h"
 
-/*@brief 混合中断线程模组初始化
- */
-void app_thread_mix_irq_ready(void)
-{
-    /* 软件模组初始化 */
-    app_module_clock_ready();
-    /* 硬件相关模组初始化 */
-    app_module_rtc_ready();
-    app_module_watchdog_ready();
-    app_module_battery_ready();
-    app_module_vibrate_ready();
-    app_module_backlight_ready();
-    app_module_temperature_ready();
-}
-
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_mix_irq_routine_ready_cb(void)

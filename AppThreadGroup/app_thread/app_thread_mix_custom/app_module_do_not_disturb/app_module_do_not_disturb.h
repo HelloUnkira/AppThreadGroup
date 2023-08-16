@@ -35,17 +35,4 @@ bool app_module_do_not_disturb_status(void);
  */
 void app_module_do_not_disturb_reset(app_module_do_not_disturb_t *do_not_disturb);
 
-/*@brief 勿扰状态转储到外存
- */
-void app_module_do_not_disturb_dump(void);
-
-/*@brief 勿扰状态加载到内存
- */
-void app_module_do_not_disturb_load(void);
-
-/*@brief 勿扰模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_do_not_disturb_ready(void);
-
 #endif

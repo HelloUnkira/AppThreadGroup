@@ -128,7 +128,8 @@ typedef struct {
                 uint64_t battery_level:8;       // 电量
                 uint64_t detect_level:8;        // 检测电量
                 uint64_t detect_count:8;        // 检测计数
-                struct {
+                struct {
+
                     uint64_t bright:24;         // 亮屏时长(s)
                     uint64_t vibrate:24;        // 震动时长(s)
                     uint64_t accelerate:24;     // 加速度计时长(s)

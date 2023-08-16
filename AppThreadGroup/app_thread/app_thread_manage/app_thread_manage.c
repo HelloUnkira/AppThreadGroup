@@ -8,26 +8,18 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
-#include "app_module_data_center.h"
 #include "app_module_data_dump.h"
 #include "app_module_data_load.h"
 #include "app_module_shutdown.h"
 #include "app_module_protocol.h"
 #include "app_module_transfer.h"
 
-/*@brief 数据管理线程初始化
- */
-void app_thread_manage_ready(void)
-{
-    /* 模组初始化 */
-    app_module_data_center_ready();
-    app_module_protocol_ready();
-}
-
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_manage_routine_ready_cb(void)
 {
+    /* 软件模组初始化 */
+    app_module_protocol_ready();
 }
 
 /*@brief 子线程服务例程处理部

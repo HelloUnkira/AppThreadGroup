@@ -12,18 +12,15 @@
 #include "app_module_data_center.h"
 #include "app_module_remind_sedentary.h"
 
-static app_mutex_t app_module_remind_sedentary_mutex = {0};
-static app_module_remind_sedentary_t app_module_remind_sedentary = {0};
-
 /*@brief     走动提醒设置
  *@param[in] remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary)
 {
-    /* reflush_utc是内部特殊字段,不可设置 */
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_take);
-    app_module_remind_sedentary = *remind_sedentary;
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.remind_sedentary, remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_give();
 }
 
 /*@brief      走动提醒获取
@@ -31,9 +28,10 @@ void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_seden
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary)
 {
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_take);
-    *remind_sedentary = app_module_remind_sedentary;
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_give);
+    /* 提取数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(remind_sedentary, &data_center->module_source.remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_give();
 }
 
 /*@brief      走动提醒默认设置
@@ -142,36 +140,4 @@ void app_module_remind_sedentary_update(app_module_clock_t clock[1])
         .event  = app_thread_mix_custom_remind_sedentary_update,
     };
     app_thread_package_notify(&package);
-}
-
-/*@brief 走动提醒转储到外存
- */
-void app_module_remind_sedentary_dump(void)
-{
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    app_module_remind_sedentary_t remind_sedentary = {0};
-    app_module_remind_sedentary_get(&remind_sedentary);
-    memcpy(&data_center->module_source.remind_sedentary, &remind_sedentary, sizeof(app_module_remind_sedentary_t));
-    app_module_data_center_give();
-}
-
-/*@brief 走动提醒加载到内存
- */
-void app_module_remind_sedentary_load(void)
-{
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    app_module_remind_sedentary_t remind_sedentary = {0};
-    memcpy(&remind_sedentary, &data_center->module_source.remind_sedentary, sizeof(app_module_remind_sedentary_t));
-    app_module_remind_sedentary_set(&remind_sedentary);
-    app_module_data_center_give();
-}
-
-/*@brief 走动提醒模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_remind_sedentary_ready(void)
-{
-    app_mutex_process(&app_module_remind_sedentary_mutex, app_mutex_static);
 }

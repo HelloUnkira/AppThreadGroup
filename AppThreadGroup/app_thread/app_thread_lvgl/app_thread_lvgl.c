@@ -28,32 +28,20 @@
 #include "app_lv_ui_scene_remind.h"
 #include "app_lv_ui_test.h"
 
-/*@brief lvgl线程模组初始化
+/*@brief 子线程服务例程就绪部
  */
-void app_thread_lvgl_ready(void)
+static void app_thread_lvgl_routine_ready_cb(void)
 {
     /* 初始化文件系统 */
     app_third_fatfs_init();
     /* 框架初始化 */
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
-    #if APP_LV_DRV_USE_WIN == 0
     app_lv_driver_ready();
-    #endif
     /* 模组初始化 */
     app_lv_timer_ready();
     /* 模组初始化 */
     app_lv_check_time_ready();
-}
-
-/*@brief 子线程服务例程就绪部
- */
-static void app_thread_lvgl_routine_ready_cb(void)
-{
-    /* 初始化与lvgl绑定的驱动设备 */
-    #if APP_LV_DRV_USE_WIN == 1
-    app_lv_driver_ready();
-    #endif
     /* 初始化启动lvgl调度定时器 */
     app_lv_timer_start();
 }

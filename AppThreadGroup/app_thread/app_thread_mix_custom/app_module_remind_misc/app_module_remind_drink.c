@@ -12,17 +12,15 @@
 #include "app_module_data_center.h"
 #include "app_module_remind_drink.h"
 
-static app_mutex_t app_module_remind_drink_mutex = {0};
-static app_module_remind_drink_t app_module_remind_drink = {0};
-
 /*@brief     喝水提醒设置
  *@param[in] remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
 {
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_take);
-    app_module_remind_drink = *remind_drink;
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_data_center_give();
 }
 
 /*@brief      喝水提醒获取
@@ -30,9 +28,10 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
 {
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_take);
-    *remind_drink = app_module_remind_drink;
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_give);
+    /* 提取数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&remind_drink, &data_center->module_source.remind_drink, sizeof(app_module_remind_drink_t));
+    app_module_data_center_give();
 }
 
 /*@brief      喝水提醒默认设置
@@ -121,36 +120,4 @@ void app_module_remind_drink_update(app_module_clock_t clock[1])
         .event  = app_thread_mix_custom_remind_drink_update,
     };
     app_thread_package_notify(&package);
-}
-
-/*@brief 喝水提醒转储到外存
- */
-void app_module_remind_drink_dump(void)
-{
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    app_module_remind_drink_t remind_drink = {0};
-    memcpy(&data_center->module_source.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
-    app_module_remind_drink_get(&remind_drink);
-    app_module_data_center_give();
-}
-
-/*@brief 喝水提醒加载到内存
- */
-void app_module_remind_drink_load(void)
-{
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    app_module_remind_drink_t remind_drink = {0};
-    memcpy(&remind_drink, &data_center->module_source.remind_drink, sizeof(app_module_remind_drink_t));
-    app_module_remind_drink_set(&remind_drink);
-    app_module_data_center_give();
-}
-
-/*@brief 喝水提醒模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_remind_drink_ready(void)
-{
-    app_mutex_process(&app_module_remind_drink_mutex, app_mutex_static);
 }

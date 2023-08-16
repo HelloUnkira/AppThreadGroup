@@ -40,17 +40,4 @@ void app_module_remind_sedentary_reflush(void);
  */
 void app_module_remind_sedentary_xmin_update(void);
 
-/*@brief 走动提醒转储到外存
- */
-void app_module_remind_sedentary_dump(void);
-
-/*@brief 走动提醒加载到内存
- */
-void app_module_remind_sedentary_load(void);
-
-/*@brief 走动提醒模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_remind_sedentary_ready(void);
-
 #endif

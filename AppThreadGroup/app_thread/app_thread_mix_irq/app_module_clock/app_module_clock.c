@@ -305,6 +305,13 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
                       clock_new.utc,clock_new.week,
                       clock_new.year,clock_new.month,clock_new.day,
                       clock_new.hour,clock_new.minute,clock_new.second);
+    
+    /* 更新数据中心资源 */
+    app_module_clock_t clock = {0};
+    app_module_clock_get_system_clock(&clock);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.system_clock, &clock, sizeof(app_module_clock_t));
+    app_module_data_center_give();
 }
 
 /*@brief      系统时钟复位清除
@@ -320,30 +327,6 @@ void app_module_clock_reset(app_module_clock_t *clock)
     clock->second = 0;
     app_module_clock_to_utc(clock);
     app_module_clock_to_week(clock);
-}
-
-/*@brief 系统时钟转储到外存
- */
-void app_module_clock_dump(void)
-{
-    /* 更新数据中心资源 */
-    app_module_clock_t clock = {0};
-    app_module_clock_get_system_clock(&clock);
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.system_clock, &clock, sizeof(app_module_clock_t));
-    app_module_data_center_give();
-}
-
-/*@brief 系统时钟加载到内存
- */
-void app_module_clock_load(void)
-{
-    /* 更新数据中心资源 */
-    app_module_clock_t clock = {0};
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&clock, &data_center->module_source.system_clock, sizeof(app_module_clock_t));
-    app_module_clock_set_system_clock(&clock);
-    app_module_data_center_give();
 }
 
 /*@brief 系统时钟软件定时器模组回调
@@ -374,4 +357,10 @@ void app_module_clock_ready(void)
     app_module_clock_timer.peroid  = 1000;
     app_module_clock_timer.reload  = true;
     app_sys_timer_start(&app_module_clock_timer);
+    /* 提取数据中心资源 */
+    app_module_clock_t clock = {0};
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&clock, &data_center->module_source.system_clock, sizeof(app_module_clock_t));
+    app_module_clock_set_system_clock(&clock);
+    app_module_data_center_give();
 }

@@ -34,17 +34,4 @@ void app_module_remind_drink_reset(app_module_remind_drink_t *remind_drink);
  */
 void app_module_remind_drink_xmin_update(void);
 
-/*@brief 喝水提醒转储到外存
- */
-void app_module_remind_drink_dump(void);
-
-/*@brief 喝水提醒加载到内存
- */
-void app_module_remind_drink_load(void);
-
-/*@brief 喝水提醒模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_remind_drink_ready(void);
-
 #endif

@@ -14,9 +14,9 @@
 #include "app_js_util.h"
 #include "app_js_log.h"
 
-/*@brief 混合中断线程模组初始化
+/*@brief 子线程服务例程就绪部
  */
-void app_thread_jerryscript_ready(void)
+static void app_thread_jerryscript_routine_ready_cb(void)
 {
     #if 0
     /* 测试流程 */
@@ -36,12 +36,6 @@ void app_thread_jerryscript_ready(void)
     
     jerry_cleanup();
     #endif
-}
-
-/*@brief 子线程服务例程就绪部
- */
-static void app_thread_jerryscript_routine_ready_cb(void)
-{
 }
 
 /*@brief 子线程服务例程处理部

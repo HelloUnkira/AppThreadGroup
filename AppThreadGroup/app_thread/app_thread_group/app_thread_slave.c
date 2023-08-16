@@ -9,25 +9,58 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
-#include "app_module_work.h"
 #include "app_module_system.h"
+/* mix irq: */
+#include "app_module_work.h"
+#include "app_module_timer.h"
+#include "app_module_clock.h"
+#include "app_module_rtc.h"
+#include "app_module_watchdog.h"
+#include "app_module_battery.h"
+#include "app_module_vibrate.h"
+#include "app_module_backlight.h"
+#include "app_module_temperature.h"
+/* mix custom: */
+#include "app_module_stopwatch.h"
+#include "app_module_countdown.h"
+/* data center */
+#include "app_module_data_center.h"
 
 /*@brief 子线程准备
  */
 void app_thread_slave_prepare(void)
 {
-    /* 线程组模组初始化 */
-    void app_thread_mix_irq_ready(void);
-    void app_thread_mix_custom_ready(void);
-    void app_thread_manage_ready(void);
-    void app_thread_lvgl_ready(void);
-    void app_thread_jerryscript_ready(void);
-    /* 线程组模组初始化 */
-    app_thread_mix_irq_ready();
-    app_thread_mix_custom_ready();
-    app_thread_manage_ready();
-    app_thread_lvgl_ready();
-    app_thread_jerryscript_ready();
+    /*
+     *系统软件模组初始化
+     *它关乎数据使用基础,需要优先初始化
+     */
+    app_module_data_center_ready();
+    /*
+     *mix irq相关模组初始化
+     */
+    app_module_clock_ready();
+    app_module_rtc_ready();
+    app_module_watchdog_ready();
+    app_module_battery_ready();
+    app_module_vibrate_ready();
+    app_module_backlight_ready();
+    app_module_temperature_ready();
+    /*
+     *mix custom软件模组初始化
+     */
+    app_module_stopwatch_ready();
+    app_module_countdown_ready();
+    app_module_remind_group_ready();
+    app_module_remind_alarm_ready();
+    /*
+     *manage软件模组初始化
+     */
+    /*
+     *lvgl软件模组初始化
+     */
+    /*
+     *jerryscript软件模组初始化
+     */
     /* 就绪线程公共子模组 */
     app_module_system_ready();
 }

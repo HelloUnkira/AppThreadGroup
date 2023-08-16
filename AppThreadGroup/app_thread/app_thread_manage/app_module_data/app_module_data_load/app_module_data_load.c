@@ -8,12 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
-#include "app_module_clock.h"
-#include "app_module_remind_group.h"
-#include "app_module_remind_alarm.h"
-#include "app_module_remind_sedentary.h"
-#include "app_module_remind_drink.h"
-#include "app_module_do_not_disturb.h"
+#include "app_module_data_center.h"
 
 /* 这里不存在并发读写导致的时序不同步,无需保护 */
 static bool app_module_data_load_status_not_over = true;
@@ -31,11 +26,7 @@ void app_module_data_load_process(void)
 {
     APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
-    app_module_clock_load();
     app_module_remind_alarm_load();
-    app_module_remind_sedentary_load();
-    app_module_remind_drink_load();
-    app_module_do_not_disturb_load();
     /* ... */
     app_module_data_load_status_not_over = false;
     APP_SYS_LOG_WARN("end");

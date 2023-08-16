@@ -119,14 +119,6 @@ void app_module_clock_timestamp_update(uint64_t utc_new);
  */
 void app_module_clock_reset(app_module_clock_t *clock);
 
-/*@brief 系统时钟转储到外存
- */
-void app_module_clock_dump(void);
-
-/*@brief 系统时钟加载到内存
- */
-void app_module_clock_load(void);
-
 /*@brief 系统时钟模组初始化
  *       内部使用: 被mix irq线程使用
  */

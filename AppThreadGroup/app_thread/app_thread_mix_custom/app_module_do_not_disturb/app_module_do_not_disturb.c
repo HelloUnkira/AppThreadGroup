@@ -11,17 +11,15 @@
 #include "app_module_data_center.h"
 #include "app_module_do_not_disturb.h"
 
-static app_mutex_t app_module_do_not_disturb_mutex = {0};
-static app_module_do_not_disturb_t app_module_do_not_disturb = {0};
-
 /*@brief     勿扰模式设置
  *@param[in] do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
 {
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_take);
-    app_module_do_not_disturb = *do_not_disturb;
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_give);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.do_not_disturb, do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_data_center_give();
 }
 
 /*@brief      勿扰模式获取
@@ -29,9 +27,10 @@ void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
  */
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
 {
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_take);
-    *do_not_disturb = app_module_do_not_disturb;
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_give);
+    /* 提取数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(do_not_disturb, &data_center->module_source.do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_data_center_give();
 }
 
 /*@brief  勿扰模式状态检查
@@ -92,36 +91,4 @@ void app_module_do_not_disturb_reset(app_module_do_not_disturb_t *do_not_disturb
     do_not_disturb->table[1].time_e[2] = 0;
     do_not_disturb->valid_bits = 0b11;
     do_not_disturb->week = 0b0111110;
-}
-
-/*@brief 勿扰状态转储到外存
- */
-void app_module_do_not_disturb_dump(void)
-{
-    app_module_do_not_disturb_t do_not_disturb = {0};
-    app_module_do_not_disturb_get(&do_not_disturb);
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.do_not_disturb, &do_not_disturb, sizeof(app_module_do_not_disturb_t));
-    app_module_data_center_give();
-}
-
-/*@brief 勿扰状态加载到内存
- */
-void app_module_do_not_disturb_load(void)
-{
-    app_module_do_not_disturb_t do_not_disturb = {0};
-    /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&do_not_disturb, &data_center->module_source.do_not_disturb, sizeof(app_module_do_not_disturb_t));
-    app_module_do_not_disturb_set(&do_not_disturb);
-    app_module_data_center_give();
-}
-
-/*@brief 勿扰模组初始化
- *       内部使用: 被mix custom线程使用
- */
-void app_module_do_not_disturb_ready(void)
-{
-    app_mutex_process(&app_module_do_not_disturb_mutex, app_mutex_static);
 }
