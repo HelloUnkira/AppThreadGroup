@@ -34,25 +34,25 @@ typedef struct {
     uint32_t key;
     uint32_t data;
     /* 我们将哈希表侵入到该数据集合内部 */
-    app_sys_hashtable_gn_t node;
+    app_sys_hashtable_dn_t node;
     uint32_t keep;
     uint32_t adding;
 } app_sys_hashtable_test_t;
 
-uint32_t app_sys_hashtable_test_fd(app_sys_hashtable_gn_t *target)
+uint32_t app_sys_hashtable_test_fd(app_sys_hashtable_dn_t *target)
 {
     app_sys_hashtable_test_t *test = app_ext_own_ofs(app_sys_hashtable_test_t, node, target);
     return app_sys_hashtable_elf_hash((uint8_t *)&test->key, sizeof(uint32_t));
 }
 
-bool app_sys_hashtable_test_fc(app_sys_hashtable_gn_t *node1, app_sys_hashtable_gn_t *node2)
+bool app_sys_hashtable_test_fc(app_sys_hashtable_dn_t *node1, app_sys_hashtable_dn_t *node2)
 {
     app_sys_hashtable_test_t *test1 = app_ext_own_ofs(app_sys_hashtable_test_t, node, node1);
     app_sys_hashtable_test_t *test2 = app_ext_own_ofs(app_sys_hashtable_test_t, node, node2);
     return test1->key == test2->key;
 }
 
-void app_sys_hashtable_test_fv(app_sys_hashtable_gn_t *target, uint32_t idx)
+void app_sys_hashtable_test_fv(app_sys_hashtable_dn_t *target, uint32_t idx)
 {
     if (target == NULL)
         return;
@@ -71,11 +71,11 @@ void app_sys_hashtable_test_fv(app_sys_hashtable_gn_t *target, uint32_t idx)
 void app_sys_hashtable_test(void)
 {
     #define APP_SYS_HASHTABLE_TEST_LENGTH 10
-    app_sys_hashtable_gt_t test_table = {0};
-    app_sys_hashtable_gl_t test_list[APP_SYS_HASHTABLE_TEST_LENGTH] = {0};
+    app_sys_hashtable_dt_t test_table = {0};
+    app_sys_hashtable_dl_t test_list[APP_SYS_HASHTABLE_TEST_LENGTH] = {0};
     
-    app_sys_hashtable_gl_reset(test_list,   APP_SYS_HASHTABLE_TEST_LENGTH);
-    app_sys_hashtable_gt_reset(&test_table, app_sys_hashtable_test_fd,
+    app_sys_hashtable_dl_reset(test_list,   APP_SYS_HASHTABLE_TEST_LENGTH);
+    app_sys_hashtable_dt_reset(&test_table, app_sys_hashtable_test_fd,
                                             app_sys_hashtable_test_fc,
                                 test_list,  APP_SYS_HASHTABLE_TEST_LENGTH);
     
@@ -84,26 +84,26 @@ void app_sys_hashtable_test(void)
         app_sys_hashtable_test_t *data = app_mem_alloc(sizeof(app_sys_hashtable_test_t));
         data->key  = idx;
         data->data = rand() % 100;
-        app_sys_hashtable_gn_reset(&(data->node));
-        app_sys_hashtable_gt_insert(&test_table, &(data->node));
+        app_sys_hashtable_dn_reset(&(data->node));
+        app_sys_hashtable_dt_insert(&test_table, &(data->node));
     }
     
-    APP_SYS_LOG_INFO("app_sys_hashtable_gt_insert:");
-    app_sys_hashtable_gt_visit(&test_table, app_sys_hashtable_test_fv);
+    APP_SYS_LOG_INFO("app_sys_hashtable_dt_insert:");
+    app_sys_hashtable_dt_visit(&test_table, app_sys_hashtable_test_fv);
     
     /* 随机移除一半的键值对 */
     for (uint32_t idx = 0; idx < 50; idx) {
         /* 查询 */
         app_sys_hashtable_test_t  data = {.key = rand() % 100};
-        app_sys_hashtable_gn_t *target = app_sys_hashtable_gt_search(&test_table, &(data.node));
+        app_sys_hashtable_dn_t *target = app_sys_hashtable_dt_search(&test_table, &(data.node));
         if (target == NULL)
             continue;
-        app_sys_hashtable_gt_remove(&test_table, target);
+        app_sys_hashtable_dt_remove(&test_table, target);
         app_mem_free(app_ext_own_ofs(app_sys_hashtable_test_t, node, target));
         idx++;
     }
     
-    APP_SYS_LOG_INFO("app_sys_hashtable_gt_remove:");
-    app_sys_hashtable_gt_visit(&test_table, app_sys_hashtable_test_fv);
+    APP_SYS_LOG_INFO("app_sys_hashtable_dt_remove:");
+    app_sys_hashtable_dt_visit(&test_table, app_sys_hashtable_test_fv);
     
 }
