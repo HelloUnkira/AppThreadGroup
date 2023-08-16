@@ -62,16 +62,6 @@ void app_module_remind_alarm_array(app_module_remind_item_t **remind_item, app_m
     *alarm_info  = app_module_remind_alarm_info;
 }
 
-/*@brief      提醒闹钟复位清除
- *@param[out] remind_item 提醒闹钟列表
- *@param[out] alarm_info  提醒闹钟信息列表
- */
-void app_module_remind_alarm_reset(app_module_remind_item_t *remind_item, app_module_remind_alarm_info_t *alarm_info)
-{
-    memset(remind_item, 0, sizeof(app_module_remind_alarm_item));
-    memset(alarm_info,  0, sizeof(app_module_remind_alarm_info));
-}
-
 /*@brief 提醒闹钟转储到外存
  */
 void app_module_remind_alarm_dump(void)

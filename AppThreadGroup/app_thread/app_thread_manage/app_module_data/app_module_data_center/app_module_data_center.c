@@ -51,12 +51,12 @@ static void app_module_data_center_reset(void)
     APP_SYS_ASSERT(app_module_data_center_type < app_module_data_center_num);
     /* 求字段大小,如sizeof(app_module_data_center_handle->module_source) */
     app_module_data_center_t *data_center = app_module_data_center_handle;
+    uint32_t data_size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
+    memset(&data_center->type, 0, data_size);
     
     switch (app_module_data_center_type) {
     case app_module_data_center_module_source:
         app_module_clock_reset(&data_center->module_source.clock);
-        app_module_remind_alarm_reset(data_center->module_source.remind_alarm.remind_item,
-                                      data_center->module_source.remind_alarm.alarm_info);
         app_module_remind_drink_reset(&data_center->module_source.remind_drink);
         app_module_remind_sedentary_reset(&data_center->module_source.remind_sedentary);
         app_module_do_not_disturb_reset(&data_center->module_source.do_not_disturb);
