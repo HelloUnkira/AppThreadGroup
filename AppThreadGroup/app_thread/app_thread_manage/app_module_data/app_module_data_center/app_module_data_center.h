@@ -2,6 +2,8 @@
 #define APP_MODULE_DATA_CENTER_H
 
 #include "app_module_clock.h"
+#include "app_module_countdown.h"
+#include "app_module_stopwatch.h"
 #include "app_module_remind_drink.h"
 #include "app_module_remind_sedentary.h"
 #include "app_module_remind_group.h"
@@ -36,7 +38,11 @@ typedef struct {
         /* 模组专用字段,模组内部使用:静止访问该字段 */
         struct {
             /* system data: app_module_clock */
-            app_module_clock_t system_clock;
+            app_module_clock_t clock;
+            /* user data: app_module_countdown */
+            app_module_countdown_t countdown;
+            /* user data: app_module_stopwatch */
+            app_module_stopwatch_t stopwatch;
             /* user profile: app_module_remind_drink */
             /* 模组专用字段,模组内部使用:静止访问该字段 */
             app_module_remind_drink_t remind_drink;

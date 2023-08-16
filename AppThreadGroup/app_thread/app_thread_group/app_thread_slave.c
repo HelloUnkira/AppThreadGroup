@@ -20,9 +20,6 @@
 #include "app_module_vibrate.h"
 #include "app_module_backlight.h"
 #include "app_module_temperature.h"
-/* mix custom: */
-#include "app_module_stopwatch.h"
-#include "app_module_countdown.h"
 /* data center */
 #include "app_module_data_center.h"
 

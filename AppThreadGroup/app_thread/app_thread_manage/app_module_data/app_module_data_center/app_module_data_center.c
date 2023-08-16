@@ -54,7 +54,7 @@ static void app_module_data_center_reset(void)
     
     switch (app_module_data_center_type) {
     case app_module_data_center_module_source:
-        app_module_clock_reset(&data_center->module_source.system_clock);
+        app_module_clock_reset(&data_center->module_source.clock);
         app_module_remind_alarm_reset(data_center->module_source.remind_alarm.remind_item,
                                       data_center->module_source.remind_alarm.alarm_info);
         app_module_remind_drink_reset(&data_center->module_source.remind_drink);

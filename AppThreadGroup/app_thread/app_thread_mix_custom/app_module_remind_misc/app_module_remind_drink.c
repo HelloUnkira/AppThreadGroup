@@ -19,7 +19,7 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
 {
     /* 更新数据中心资源 */
     app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.remind_drink, &remind_drink, sizeof(app_module_remind_drink_t));
+    memcpy(&data_center->module_source.remind_drink, remind_drink, sizeof(app_module_remind_drink_t));
     app_module_data_center_give();
 }
 
@@ -30,7 +30,7 @@ void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
 {
     /* 提取数据中心资源 */
     app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&remind_drink, &data_center->module_source.remind_drink, sizeof(app_module_remind_drink_t));
+    memcpy(remind_drink, &data_center->module_source.remind_drink, sizeof(app_module_remind_drink_t));
     app_module_data_center_give();
 }
 

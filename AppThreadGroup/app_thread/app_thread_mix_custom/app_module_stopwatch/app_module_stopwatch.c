@@ -12,20 +12,20 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_stopwatch.h"
 
-static app_mutex_t app_module_stopwatch_mutex = {0};
 static app_sys_timer_t app_module_stopwatch_timer = {0};
-static app_module_stopwatch_t app_module_stopwatch = {0};
 
 /*@brief        设置秒表
  *@param[out]   stopwatch 秒表实例
  */
 void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
-    app_module_stopwatch = *stopwatch;
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.stopwatch, stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_give();
 }
 
 /*@brief        获取秒表
@@ -33,28 +33,31 @@ void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
  */
 void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
-    *stopwatch = app_module_stopwatch;
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
+    /* 提取数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(stopwatch, &data_center->module_source.stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_give();
 }
 
 /*@brief 复位秒表
  */
 void app_module_stopwatch_reset(void)
 {
+    /* 更新数据中心资源 */
     app_module_stopwatch_t stopwatch = {0};
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
-    app_module_stopwatch = stopwatch;
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.stopwatch, &stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_give();
 }
 
 /*@brief 启动秒表
  */
 void app_module_stopwatch_start(void)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
-    app_module_stopwatch.onoff = true;
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
+    app_module_stopwatch_t stopwatch = {0};
+    app_module_stopwatch_get(&stopwatch);
+    stopwatch.onoff = true;
+    app_module_stopwatch_set(&stopwatch);
     app_sys_timer_start(&app_module_stopwatch_timer);
 }
 
@@ -62,9 +65,10 @@ void app_module_stopwatch_start(void)
  */
 void app_module_stopwatch_stop(void)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_take);
-    app_module_stopwatch.onoff = false;
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_give);
+    app_module_stopwatch_t stopwatch = {0};
+    app_module_stopwatch_get(&stopwatch);
+    stopwatch.onoff = false;
+    app_module_stopwatch_set(&stopwatch);
     app_sys_timer_stop(&app_module_stopwatch_timer);
 }
 
@@ -114,7 +118,6 @@ static void app_module_stopwatch_timer_handler(void *timer)
  */
 void app_module_stopwatch_ready(void)
 {
-    app_mutex_process(&app_module_stopwatch_mutex, app_mutex_static);
     app_module_stopwatch_timer.expired = app_module_stopwatch_timer_handler;
     app_module_stopwatch_timer.peroid  = APP_MODULE_STOPWATCH_MSEC;
     app_module_stopwatch_timer.reload  = true;

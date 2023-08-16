@@ -260,6 +260,13 @@ void app_module_clock_local_update(void)
     /* 执行更新事件 */
     for (uint32_t idx = 0; idx < app_module_clock_update_cb_size; idx++)
         app_module_clock_update_cb[idx](clock, update_event);
+    
+    /* 更新数据中心资源 */
+    app_module_clock_t local_clock = {0};
+    app_module_clock_get_system_clock(&local_clock);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.clock, &local_clock, sizeof(app_module_clock_t));
+    app_module_data_center_give();
 }
 
 /*@brief     系统时间戳更新回调
@@ -307,10 +314,10 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
                       clock_new.hour,clock_new.minute,clock_new.second);
     
     /* 更新数据中心资源 */
-    app_module_clock_t clock = {0};
-    app_module_clock_get_system_clock(&clock);
+    app_module_clock_t local_clock = {0};
+    app_module_clock_get_system_clock(&local_clock);
     app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.system_clock, &clock, sizeof(app_module_clock_t));
+    memcpy(&data_center->module_source.clock, &local_clock, sizeof(app_module_clock_t));
     app_module_data_center_give();
 }
 
@@ -360,7 +367,7 @@ void app_module_clock_ready(void)
     /* 提取数据中心资源 */
     app_module_clock_t clock = {0};
     app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&clock, &data_center->module_source.system_clock, sizeof(app_module_clock_t));
+    memcpy(&clock, &data_center->module_source.clock, sizeof(app_module_clock_t));
     app_module_clock_set_system_clock(&clock);
     app_module_data_center_give();
 }

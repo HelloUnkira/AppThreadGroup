@@ -12,20 +12,20 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
+#include "app_module_data_center.h"
 #include "app_module_countdown.h"
 
-static app_mutex_t app_module_countdown_mutex = {0};
 static app_sys_timer_t app_module_countdown_timer = {0};
-static app_module_countdown_t app_module_countdown = {0};
 
 /*@brief        设置倒计时
  *@param[in]    countdown 倒计时实例
  */
 void app_module_countdown_set(app_module_countdown_t *countdown)
 {
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_take);
-    app_module_countdown = *countdown;
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_give);
+    /* 更新数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.countdown, countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_give();
 }
 
 /*@brief        获取倒计时
@@ -33,28 +33,31 @@ void app_module_countdown_set(app_module_countdown_t *countdown)
  */
 void app_module_countdown_get(app_module_countdown_t *countdown)
 {
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_take);
-    *countdown = app_module_countdown;
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_give);
+    /* 提取数据中心资源 */
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(countdown, &data_center->module_source.countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_give();
 }
 
 /*@brief 复位倒计时
  */
 void app_module_countdown_reset(void)
 {
+    /* 更新数据中心资源 */
     app_module_countdown_t countdown = {0};
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_take);
-    app_module_countdown = countdown;
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_give);
+    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
+    memcpy(&data_center->module_source.countdown, &countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_give();
 }
 
 /*@brief 启动倒计时
  */
 void app_module_countdown_start(void)
 {
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_take);
-    app_module_countdown.onoff = true;
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_give);
+    app_module_countdown_t countdown = {0};
+    app_module_countdown_get(&countdown);
+    countdown.onoff = true;
+    app_module_countdown_set(&countdown);
     app_sys_timer_start(&app_module_countdown_timer);
 }
 
@@ -62,9 +65,10 @@ void app_module_countdown_start(void)
  */
 void app_module_countdown_stop(void)
 {
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_take);
-    app_module_countdown.onoff = false;
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_give);
+    app_module_countdown_t countdown = {0};
+    app_module_countdown_get(&countdown);
+    countdown.onoff = false;
+    app_module_countdown_set(&countdown);
     app_sys_timer_stop(&app_module_countdown_timer);
 }
 
@@ -132,7 +136,6 @@ static void app_module_countdown_timer_handler(void *timer)
  */
 void app_module_countdown_ready(void)
 {
-    app_mutex_process(&app_module_countdown_mutex, app_mutex_static);
     app_module_countdown_timer.expired = app_module_countdown_timer_handler;
     app_module_countdown_timer.peroid  = APP_MODULE_COUNTDOWN_MSEC;
     app_module_countdown_timer.reload  = true;
