@@ -8,19 +8,17 @@
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
 #include "app_thread_group.h"
-#include "app_module_clock.h"
-#include "app_module_stopwatch.h"
-#include "app_module_countdown.h"
-#include "app_module_remind_group.h"
-#include "app_module_remind_alarm.h"
-#include "app_module_remind_sedentary.h"
-#include "app_module_remind_drink.h"
-#include "app_module_do_not_disturb.h"
+#include "app_module_data_center.h"
 
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_mix_custom_routine_ready_cb(void)
 {
+    /* 相关模组初始化 */
+    app_module_stopwatch_ready();
+    app_module_countdown_ready();
+    app_module_remind_group_ready();
+    app_module_remind_alarm_ready();
 }
 
 /*@brief 子线程服务例程处理部

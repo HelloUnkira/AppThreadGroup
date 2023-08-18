@@ -31,10 +31,8 @@ typedef enum {  /* GUI场景事件 */
 
 /* lvgl:tick */
 #define LV_SCHED_TICK_INC       1
-
 /* lvgl:exec */
 #define LV_SCHED_TICK_EXEC      10
-
 /* lvgl:drv check */
 #define LV_SCHED_DRV_EVENT      5
 

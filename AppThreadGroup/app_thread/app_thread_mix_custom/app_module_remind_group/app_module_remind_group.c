@@ -34,6 +34,7 @@ static void app_module_remind_group_throw_event(app_module_remind_package_t remi
     app_module_remind_package_t *remind_new = app_mem_alloc(sizeof(app_module_remind_package_t));
     remind_new->remind_group = remind.remind_group;
     remind_new->remind_item  = remind.remind_item;
+    remind_new->remind_type  = remind.remind_type;
     
     app_thread_package_t package = {
         .thread  = app_thread_id_mix_custom,

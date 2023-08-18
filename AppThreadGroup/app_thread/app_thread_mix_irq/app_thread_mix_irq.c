@@ -33,6 +33,14 @@
  */
 static void app_thread_mix_irq_routine_ready_cb(void)
 {
+    /* 相关模组初始化 */
+    app_module_clock_ready();
+    app_module_rtc_ready();
+    app_module_watchdog_ready();
+    app_module_battery_ready();
+    app_module_vibrate_ready();
+    app_module_backlight_ready();
+    app_module_temperature_ready();
 }
 
 /*@brief 子线程服务例程处理部

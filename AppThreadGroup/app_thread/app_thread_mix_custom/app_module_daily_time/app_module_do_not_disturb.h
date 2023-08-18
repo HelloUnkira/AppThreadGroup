@@ -1,18 +1,12 @@
 #ifndef APP_MODULE_DO_NOT_DISTURB_H
 #define APP_MODULE_DO_NOT_DISTURB_H
 
-/* DND: Do Not Disturb, 勿扰 */
-
-/* 勿扰时间表数量,一般俩个就够了,上午一个下午一个 */
-#define APP_MODULE_DO_NOT_DISTURB_TIME_TABLE_NUM    2
+#include "app_module_daily_time.h"
+/* 时间表检查函数:app_module_daily_time_do_not_disturb_t */
+APP_MODULE_DAILY_TIME_T(app_module_daily_time_do_not_disturb_t, 2);
 
 typedef struct {
-    struct {
-        uint8_t time_s[3];      /* 勿扰开始时间[时,分,秒] */
-        uint8_t time_e[3];      /* 勿扰结束时间[时,分,秒] */
-    } table[APP_MODULE_DO_NOT_DISTURB_TIME_TABLE_NUM];              /* 勿扰时间表 */
-    uint32_t valid_bits:APP_MODULE_DO_NOT_DISTURB_TIME_TABLE_NUM;   /* 勿扰时间表位域 */
-    uint32_t week:7;            /* 周:日一二三四五六:[0, 6] */
+    app_module_daily_time_do_not_disturb_t daily_time;
 } app_module_do_not_disturb_t;
 
 /*@brief     勿扰模式设置

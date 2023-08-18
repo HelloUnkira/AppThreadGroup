@@ -23,7 +23,6 @@ static void app_js_log_recursion(const jerry_value_t value, uint32_t level)
     /* bool类型:打印true或者false */
     if (jerry_value_is_boolean(value)) {
         APP_SYS_LOG_INFO_RAW("%s", jerry_value_is_true(value)  ? "true" :
-
                                    jerry_value_is_false(value) ? "false" : "unknown");
         return;
     }
