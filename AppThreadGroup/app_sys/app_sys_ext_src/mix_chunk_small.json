@@ -11,7 +11,32 @@
         {
             "data_brief" : "module source",
             "data_name"  : "module source",
-            "data_size"  : "1024 * 1"
+            "data_size"  : "512 * 1"
+        },
+        {
+            "data_brief" : "module weather",
+            "data_name"  : "module weather",
+            "data_size"  : "1024 * 4"
+        },
+        {
+            "data_brief" : "module world time",
+            "data_name"  : "module world time",
+            "data_size"  : "1024 * 4"
+        },
+        {
+            "data_brief" : "remind alarm",
+            "data_name"  : "remind alarm",
+            "data_size"  : "1024 * 4"
+        },
+        {
+            "data_brief" : "remind calendar",
+            "data_name"  : "remind calendar",
+            "data_size"  : "1024 * 4"
+        },
+        {
+            "data_brief" : "remind matter",
+            "data_name"  : "remind matter",
+            "data_size"  : "1024 * 4"
         },
         {
             "data_brief" : "system profile",
@@ -21,7 +46,7 @@
         {
             "data_brief" : "system data",
             "data_name"  : "system data",
-            "data_size"  : "1024 * 1"
+            "data_size"  : "512 * 1"
         },
         {
             "data_brief" : "user profile",
@@ -31,7 +56,7 @@
         {
             "data_brief" : "user data",
             "data_name"  : "user data",
-            "data_size"  : "1024 * 1"
+            "data_size"  : "512 * 1"
         },
         {
             "data_brief" : "unknown",

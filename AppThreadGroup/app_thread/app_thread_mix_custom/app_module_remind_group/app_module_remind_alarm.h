@@ -29,10 +29,10 @@ void app_module_remind_alarm_array_lock(void);
 void app_module_remind_alarm_array_unlock(void);
 
 /*@brief      提醒闹钟列表
- *@param[out] remind_item 提醒闹钟列表
- *@param[out] alarm_info  提醒闹钟信息列表
+ *@param[out] alarm_item 提醒闹钟列表
+ *@param[out] alarm_info 提醒闹钟信息列表
  */
-void app_module_remind_alarm_array(app_module_remind_item_t **remind_item, app_module_remind_alarm_info_t **alarm_info);
+void app_module_remind_alarm_array(app_module_remind_item_t **alarm_item, app_module_remind_alarm_info_t **alarm_info);
 
 /*@brief 提醒闹钟转储到外存
  */

@@ -1,89 +1,108 @@
 #ifndef APP_MODULE_DATA_CENTER_H
 #define APP_MODULE_DATA_CENTER_H
 
+#include "app_module_data_center_type.h"
+
 #include "app_module_clock.h"
 #include "app_module_countdown.h"
 #include "app_module_stopwatch.h"
+#include "app_module_weather.h"
+#include "app_module_world_time.h"
 #include "app_module_remind_drink.h"
 #include "app_module_remind_sedentary.h"
 #include "app_module_remind_group.h"
 #include "app_module_remind_alarm.h"
+#include "app_module_remind_calendar.h"
+#include "app_module_remind_matter.h"
 #include "app_module_do_not_disturb.h"
 
-// #pragma pack(push, 1)
+/*备注:
+ *    将各种各样的零碎数据统一打包到此结构中
+ *    通过不同的结构块区分不同类型的数据区域
+ *    并以一个完全统一的接口对需要持久化的资源统一访问
+ *    因为数据中心使用了缓存机制,为了提升缓存性能
+ *    尽可能的将大数据块切碎成各种各样类型的小集合
+ *    那么缓存的热缓冲机制能充分被发挥出效果
+ */
+typedef enum {
+    app_module_data_center_none = 0,
+    app_module_data_center_module_source,           /* 模组资源 */
+    app_module_data_center_module_weather,          /* 模组资源 */
+    app_module_data_center_module_world_time,       /* 模组资源 */
+    app_module_data_center_remind_alarm,            /* 提醒闹钟 */
+    app_module_data_center_remind_calendar,         /* 提醒日历 */
+    app_module_data_center_remind_matter,           /* 提醒事项 */
+    app_module_data_center_system_profile,          /* 系统配置 */
+    app_module_data_center_system_data,             /* 系统数据 */
+    app_module_data_center_user_profile,            /* 用户配置 */
+    app_module_data_center_user_data,               /* 用户数据 */
+    app_module_data_center_num,
+} app_module_data_center_type_t;
+
 typedef struct {
     uint32_t crc32; /* 公共字段,以做校验 */
     union {
         /* --------------------------------------------------------------------- */
-        /* 数据中心管理资源占位标识,本字段无使用意义(type),不占内存与外存 */
-        enum {
-            /*备注:
-             *    将各种各样的零碎数据统一打包到此结构中
-             *    通过不同的结构块区分不同类型的数据区域
-             *    并以一个完全统一的接口对需要持久化的资源统一访问
-             *    因为数据中心使用了缓存机制,为了提升缓存性能
-             *    尽可能的将大数据块切碎成各种各样类型的小集合
-             *    那么缓存的热缓冲机制能充分被发挥出效果
-             */
-            app_module_data_center_none = 0,
-            app_module_data_center_module_source,   /* 模组资源 */
-            app_module_data_center_system_profile,  /* 系统配置 */
-            app_module_data_center_system_data,     /* 系统数据 */
-            app_module_data_center_user_profile,    /* 用户配置 */
-            app_module_data_center_user_data,       /* 用户数据 */
-            app_module_data_center_num,
-        } type;
+        /* 数据中心管理资源占位标识(内部偏移计算使用) */
+        uintptr_t offset;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(module source) */
         /* 模组专用字段,模组内部使用:静止访问该字段 */
         struct {
-            /* system data: app_module_clock */
-            app_module_clock_t clock;
-            /* user data: app_module_countdown */
-            app_module_countdown_t countdown;
-            /* user data: app_module_stopwatch */
-            app_module_stopwatch_t stopwatch;
-            /* user profile: app_module_remind_drink */
             /* 模组专用字段,模组内部使用:静止访问该字段 */
-            app_module_remind_drink_t remind_drink;
-            /* user profile: app_module_remind_sedentary */
-            /* 模组专用字段,模组内部使用:静止访问该字段 */
-            app_module_remind_sedentary_t remind_sedentary;
-            /* user profile: app_module_do_not_disturb */
-            /* 模组专用字段,模组内部使用:静止访问该字段 */
-            app_module_do_not_disturb_t do_not_disturb;
-            /* user data: app_module_remind_alarm */
-            /* 模组专用字段,模组内部使用:静止访问该字段 */
-            struct {
-                app_module_remind_item_t       remind_item[APP_MODULE_REMIND_ALARM_MAX];
-                app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX];
-            } remind_alarm;
+            app_module_clock_t                  clock;
+            app_module_countdown_t              countdown;
+            app_module_stopwatch_t              stopwatch;
+            app_module_remind_drink_t           remind_drink;
+            app_module_remind_sedentary_t       remind_sedentary;
+            app_module_do_not_disturb_t         do_not_disturb;
             /* keep adding... */
         } module_source;
         /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(module weather) */
+        /* 模组专用字段,模组内部使用:静止访问该字段 */
+        struct {
+            app_module_weather_t weather[APP_MODULE_WEATHER_MAX];
+        } module_weather;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(module world_time) */
+        /* 模组专用字段,模组内部使用:静止访问该字段 */
+        struct {
+            app_module_world_time_t world_time[APP_MODULE_WORLD_TIME_MAX];
+        } module_world_time;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(remind alarm) */
+        /* 模组专用字段,模组内部使用:静止访问该字段 */
+        struct {
+            app_module_remind_item_t       alarm_item[APP_MODULE_REMIND_ALARM_MAX];
+            app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX];
+        } remind_alarm;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(remind calendar) */
+        /* 模组专用字段,模组内部使用:静止访问该字段 */
+        struct {
+            app_module_remind_item_t          calendar_item[APP_MODULE_REMIND_CALENDAR_MAX];
+            app_module_remind_calendar_info_t calendar_info[APP_MODULE_REMIND_CALENDAR_MAX];
+        } remind_calendar;
+        /* --------------------------------------------------------------------- */
+        /* 数据中心管理资源(remind matter) */
+        /* 模组专用字段,模组内部使用:静止访问该字段 */
+        struct {
+            app_module_remind_item_t        matter_item[APP_MODULE_REMIND_MATTER_MAX];
+            app_module_remind_matter_info_t matter_info[APP_MODULE_REMIND_MATTER_MAX];
+        } remind_matter;
+        /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(system profile) */
         struct {
-            enum {
-                app_module_data_center_system_mode_normal,
-                app_module_data_center_system_mode_shutdown,
-                app_module_data_center_system_mode_low_power,
-                app_module_data_center_system_mode_ota_update,
-                app_module_data_center_system_mode_num,
-            } system_mode;              // 设备工作模式
             uint64_t id:16;             // 设备号
             uint64_t is_pair:1;         // 配对状态
             uint64_t ver_major:8;       // 主版本号
             uint64_t ver_minor:8;       // 次版本号
             uint64_t ver_patch:8;       // 补版本号
+            uint8_t  system_mode;       // 设备工作模式
             /* system profile: backlight */
             struct {
-                enum {
-                    app_module_data_center_backlight_level_1,
-                    app_module_data_center_backlight_level_2,
-                    app_module_data_center_backlight_level_3,
-                    app_module_data_center_backlight_level_4,
-                    app_module_data_center_backlight_level_5,
-                } level;
+                uint8_t backlight_level;
                 uint8_t cover_sleep:1;      // 覆盖息屏开关
                 uint8_t dtouch_awake:1;     // 双击亮屏开关
                 uint8_t opera:1;            // 0 as auto mode
@@ -114,28 +133,27 @@ typedef struct {
             } bind_auth;
             /* system data: power save */
             struct {
-                uint64_t onoff:1;                // 省电模式开关
-                uint64_t gesture:1;              // 手势亮屏开关
-                uint64_t cover_sleep:1;          // 覆盖息屏开关
-                uint64_t dtouch_awake:1;         // 双击亮屏开关
-                uint64_t backlight_auto:1;       // 背光自动模式开关
-                uint64_t backlight_level:1;      // 背光等级
-                uint64_t backlight_duration:1;   // 背光持续时间
+                uint8_t onoff:1;                // 省电模式开关
+                uint8_t gesture:1;              // 手势亮屏开关
+                uint8_t cover_sleep:1;          // 覆盖息屏开关
+                uint8_t dtouch_awake:1;         // 双击亮屏开关
+                uint8_t backlight_auto:1;       // 背光自动模式开关
+                uint8_t backlight_level:1;      // 背光等级
+                uint8_t backlight_duration:1;   // 背光持续时间
                 /* 省电模式主要针对屏幕亮灭做限制,可以继续添加其他内容 */
             } save_power;
             /* system data: device usage statistics */
             struct {
-                uint64_t record_utc:36;         // clock fisrt update
+                uint64_t record_utc:36;         // 第一次更新UTC
+                uint8_t  detect_level;          // 检测电量
+                uint8_t  detect_count;          // 检测计数
+                uint8_t  battery_level;         // 电量
                 struct {
                     uint64_t utc:36;            // 记录时间
                     uint64_t voltage:16;        // 电压值
                     uint64_t percent:8;         // 电量
                 } charge[3];                    // [0:开始;1:结束;2:充满]
-                uint64_t battery_level:8;       // 电量
-                uint64_t detect_level:8;        // 检测电量
-                uint64_t detect_count:8;        // 检测计数
                 struct {
-
                     uint64_t bright:24;         // 亮屏时长(s)
                     uint64_t vibrate:24;        // 震动时长(s)
                     uint64_t accelerate:24;     // 加速度计时长(s)
@@ -153,87 +171,46 @@ typedef struct {
                     uint64_t key:16;            // 按键次数
                 } duration;
             } device_usage;
+            /* keep adding */
         } system_data;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(user profile) */
         struct {
             uint64_t brithday_utc:36;   // brithday
-            uint64_t height:8;          // cm
-            uint64_t weight:8;          // cm
-            uint64_t stride:8;          // stride cm
-            uint64_t stride_run:8;      // stride run cm
-            uint64_t stride_walk:8;     // stride walk cm
-            uint64_t gender:1;          // 0 as boy
+            uint64_t version_app:9;     // major:minor:patch(3:3:3)
+            uint8_t height;             // cm
+            uint8_t weight;             // cm
+            uint8_t stride;             // stride cm
+            uint8_t stride_run;         // stride run cm
+            uint8_t stride_walk;        // stride walk cm
+            uint8_t gender:1;           // 0 as boy
                                         // 1 as girl
-            uint64_t metric:1;          // 0 as km
+            uint8_t metric:1;           // 0 as km
                                         // 1 as mi
-            uint64_t mode_time:1;       // 0 as 24 mode
+            uint8_t mode_time:1;        // 0 as 24 mode
                                         // 1 as 12 mode
-            uint64_t mode_temp:1;       // 0 as C" mode
+            uint8_t mode_temp:1;        // 0 as C" mode
                                         // 1 as F" mode
-            uint64_t mode_voice:1;      // 0 as disable voice
+            uint8_t mode_voice:1;       // 0 as disable voice
                                         // 1 as enabble voice
-            uint64_t mode_vibrate:1;    // 0 as disable vibrate
+            uint8_t mode_vibrate:1;     // 0 as disable vibrate
                                         // 1 as enabble vibrate
-            uint64_t state_bind:1;      // 0 as unbind state
+            uint8_t state_bind:1;       // 0 as unbind state
                                         // 1 as bind   state
-            uint64_t state_hand:1;      // 0 as left   hand
+            uint8_t state_hand:1;       // 0 as left   hand
                                         // 1 as right  hand
-            uint64_t state_week:2;      // 0 as start in monday
+            uint8_t state_week:2;       // 0 as start in monday
                                         // 1 as start in sunday
                                         // 2 as start in saturday
-            uint64_t phone_version:9;   // major:minor:patch(3:3:3)
-            uint64_t phone_type:2;      // 0 as Android
+            uint8_t phone_type:2;       // 0 as Android
                                         // 1 as IOS
                                         // 2 as Harmony
-            uint64_t find_phone:1;      // 1 as open
+            uint8_t find_phone:1;       // 1 as open
                                         // 0 as close
-            uint64_t find_band:1;       // 1 as open
+            uint8_t find_band:1;        // 1 as open
                                         // 0 as close
             /* user profile: language */
-            enum {
-                app_module_data_center_lang_none = 0,   // 无效
-                /* europe: */
-                app_module_data_center_lang_en,         // 英语
-                app_module_data_center_lang_fra,        // 法语
-                app_module_data_center_lang_de,         // 德语
-                app_module_data_center_lang_it,         // 意大利
-                app_module_data_center_lang_pt,         // 葡萄牙
-                app_module_data_center_lang_spa,        // 西班牙
-                app_module_data_center_lang_pl,         // 波兰语
-                app_module_data_center_lang_cs,         // 捷克语
-                app_module_data_center_lang_nl,         // 荷兰语
-                app_module_data_center_lang_lit,        // 立陶宛
-                app_module_data_center_lang_swe,        // 瑞典语
-                app_module_data_center_lang_fin,        // 芬兰语
-                app_module_data_center_lang_per,        // 波斯语
-                app_module_data_center_lang_nor,        // 挪威语
-                app_module_data_center_lang_sk,         // 斯洛伐克语
-                app_module_data_center_lang_hu,         // 匈牙利
-                app_module_data_center_lang_dan,        // 丹麦语
-                app_module_data_center_lang_ukr,        // 乌克兰语
-                app_module_data_center_lang_tr,         // 土耳其语
-                app_module_data_center_lang_rom,        // 罗马尼亚
-                app_module_data_center_lang_slo,        // 斯洛文尼亚
-                app_module_data_center_lang_hrv,        // 克罗地亚语
-                app_module_data_center_lang_el,         // 希腊语
-                app_module_data_center_lang_hi,         // 印地语
-                /* asia */
-                app_module_data_center_lang_zh,         // 中文
-                app_module_data_center_lang_cht,        // 繁体中文
-                app_module_data_center_lang_jp,         // 日语
-                app_module_data_center_lang_kor,        // 韩语
-                app_module_data_center_lang_ru,         // 俄语
-                app_module_data_center_lang_vie,        // 越南
-                app_module_data_center_lang_th,         // 泰国
-                app_module_data_center_lang_fli,        // 菲律宾
-                app_module_data_center_lang_bur,        // 缅甸
-                app_module_data_center_lang_id,         // 印尼语
-                /* other */
-                app_module_data_center_lang_ara,        // 阿拉伯语
-                /*  */
-                app_module_data_center_lang_num,
-            } lang;
+            uint8_t lang;
             /* user profile: user goal */
             struct {
                 uint64_t step:32;               // 步数
@@ -248,6 +225,53 @@ typedef struct {
                 uint64_t onoff:1;               // 1 as open
                                                 // 0 as close
             } goal;
+            /* user profile: user volume */
+            struct {
+                uint8_t volume_system_level;
+                uint8_t volume_system_index;
+                uint8_t volume_notify_level;
+                uint8_t volume_notify_index;
+                uint8_t volume_call_level;
+                uint8_t volume_call_index;
+                uint8_t volume_alarm_level;
+                uint8_t volume_alarm_index;
+                uint8_t volume_sport_level;
+                uint8_t volume_sport_index;
+            } volume;
+            /* user profile: user fitness monitor */
+            struct {
+                uint8_t time_s[2];              // 监控起始[时,分]
+                uint8_t time_e[2];              // 监控结束[时,分]
+                uint8_t notify:2;               // 0 as close
+                                                // 1 as mute
+                                                // 2 as allow
+                                                // 3 as disallow
+                uint8_t onoff:1;                // 1 as open
+                                                // 0 as close
+            } fitness;
+            /* user profile: user noise monitor */
+            struct {
+                uint8_t time_s[2];              // 监控起始[时,分]
+                uint8_t time_e[2];              // 监控结束[时,分]
+                uint8_t value;                  // 阈值
+                uint8_t onoff:1;                // 1 as open
+                                                // 0 as close
+                uint8_t onoff_noise:1;          // 1 as open
+                                                // 0 as close
+            } noise;
+            /* user profile: user temperature monitor */
+            struct {
+                uint8_t time_s[2];              // 监控起始[时,分]
+                uint8_t time_e[2];              // 监控结束[时,分]
+                uint8_t onoff:1;                // 1 as open
+                                                // 0 as close
+            } temperature;
+            /* user profile: user motion recognition */
+            struct {
+                /* 添加各个模式的开关... */
+                uint8_t onoff:1;                // 1 as open
+                                                // 0 as close
+            } motion_recognition;
             /* user profile: aod watchface */
             struct {
                 uint8_t time_s[2];              // 提醒起始[时,分]
@@ -256,49 +280,16 @@ typedef struct {
                 uint8_t onoff:1;                // 1 as open
                                                 // 0 as close
             } aod_watchface;
-            /* user profile: ui level 2 theme */
-            enum {
-                app_module_data_center_ui_theme_level2_is_list,
-                app_module_data_center_ui_theme_level2_is_grid,
-                app_module_data_center_ui_theme_level2_is_chessboard,
-                app_module_data_center_ui_theme_level2_num,
-            } ui_theme_level2;
+            /* user profile: ui theme level2 */
+            uint8_t ui_theme_level2;
+            /* keep adding */
         } user_profile;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(user data) */
         struct {
             /* user data: function usage statistics(buried data) */
             struct {
-                enum {
-                    /* health: */
-                    app_module_data_center_usage_spo2,
-                    app_module_data_center_usage_sleep,
-                    app_module_data_center_usage_noise,
-                    app_module_data_center_usage_stress,
-                    app_module_data_center_usage_breath,
-                    app_module_data_center_usage_heartrate,
-                    app_module_data_center_usage_body_energy,
-                    app_module_data_center_usage_click_measure,
-                    app_module_data_center_usage_female_health,
-                    app_module_data_center_usage_activity,
-                    /* plug */
-                    app_module_data_center_usage_alexa,
-                    app_module_data_center_usage_music,
-                    app_module_data_center_usage_phone,
-                    app_module_data_center_usage_clock,
-                    app_module_data_center_usage_camera,
-                    app_module_data_center_usage_weather,
-                    app_module_data_center_usage_reminder,
-                    app_module_data_center_usage_findphone,
-                    app_module_data_center_usage_flashlight,
-                    /* sport */
-                    app_module_data_center_usage_sports,
-                    app_module_data_center_usage_sports_records,
-                    app_module_data_center_usage_running_courses,
-                    /* num */
-                    app_module_data_center_usage_num,
-                    app_module_data_center_usage_sports_list = 5,
-                } usage_type;
+                uint8_t  usage_type;
                 /* use count:(use type is enum re) */
                 uint16_t usage_count[app_module_data_center_usage_num];
                 uint16_t usage_queue[3];        // [0:curr;1:prev;2:prev 1]
@@ -306,36 +297,13 @@ typedef struct {
                 uint16_t sports_list_count[app_module_data_center_usage_sports_list];
                 uint16_t sports_list_type[app_module_data_center_usage_sports_list];
             } func_usage;
+            /* keep adding */
         } user_data;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源:keep adding */
         /* --------------------------------------------------------------------- */
-        /* 转换单位(系数) */
-        #define APP_MODULE_DATA_CENTER_M_TO_MI      0.00062137      /* 米转英里 */
-        #define APP_MODULE_DATA_CENTER_KM_TO_MI     0.62137120      /* 公里转英里 */
-        #define APP_MODULE_DATA_CENTER_MI_TO_KM     1.60934400      /* 英里转公里 */
-        #define APP_MODULE_DATA_CENTER_CM_TO_IN     0.03280000      /* 厘米转英尺 */ 
-        #define APP_MODULE_DATA_CENTER_CM_TO_INCH   0.39360000      /* 厘米转英寸 */
-        #define APP_MODULE_DATA_CENTER_M_TO_YD      1.09360000      /* 米转码 */
-        #define APP_MODULE_DATA_CENTER_YD_TO_M      0.91440000      /* 码转米 */
-        /* 最大数据(Activity) */
-        #define APP_MODULE_DATA_CENTER_STEP_MAX            (99999)     // 步数数据最大值
-        #define APP_MODULE_DATA_CENTER_DIST_MAX            (999999)    // 距离数据的最大值(m)
-        #define APP_MODULE_DATA_CENTER_CALORIE_MAX         (9999)      // 燃烧热量数据的最大值(cal)
-        #define APP_MODULE_DATA_CENTER_DURATION_MAX        (1440)      // 锻炼时长数据的最大值(min)
-        #define APP_MODULE_DATA_CENTER_WALK_TIME_MAX       (24)        // 走动时长最大值(h)
-        #define APP_MODULE_DATA_CENTER_WALK_TIME_GOAL_MAX  (14)        // 走动时长目标最大值(h)
-        /* 最大数据(Sport) */
-        #define APP_MODULE_DATA_CENTER_SETP_FREQ_MAX       (399)       // 步频 SPM
-        #define APP_MODULE_DATA_CENTER_HEART_RATE_MAX      (220)       // 心率 BPM
-        #define APP_MODULE_DATA_CENTER_SPEED_MAX           (9999)      // 最大速度((1/100)*km/h)
-        #define APP_MODULE_DATA_CENTER_LAPS_MAX            (10)        // 最大游泳躺数
-        #define APP_MODULE_DATA_CENTER_VO2_MAX_MAX         (99)        // 最大摄氧量(ml/kg/min)
-        #define APP_MODULE_DATA_CENTER_TE_MAX              (49)        // 有氧训练效果(x10)
-        /* --------------------------------------------------------------------- */
     };
 } app_module_data_center_t;
-// #pragma pack(pop)
 
 /*@brief    更换目标数据类型并锁定数据中心
  *param[in] type 数据中心类型(app_module_data_center_t(type))

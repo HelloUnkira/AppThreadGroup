@@ -10,7 +10,7 @@
  */
 
 static const app_module_world_time_t app_module_world_time_table[] = {
-    {-1, "NULL", 0, 0.0, 0.0},
+    {-1, 0, 0.0, 0.0, "NULL"},
 };
 
 #endif

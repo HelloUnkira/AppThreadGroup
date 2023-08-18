@@ -9,7 +9,8 @@ typedef enum {
 
 typedef enum {
     app_module_remind_group_alarm,
-    app_module_remind_group_unknown,
+    app_module_remind_group_calendar,
+    app_module_remind_group_matter,
     app_module_remind_group_number,
     /* 添加其他类型... */
 } app_module_remind_group_type_t;

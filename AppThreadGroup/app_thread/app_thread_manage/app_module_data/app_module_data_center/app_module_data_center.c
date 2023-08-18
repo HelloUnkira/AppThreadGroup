@@ -7,7 +7,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_log.h"
@@ -33,11 +33,16 @@ static const struct {
     const char *data_name;
     uint32_t data_size;
 } app_module_data_center_type_table[] = {
-    {app_module_data_center_module_source,      "module source",    sizeof(app_module_data_center_handle->module_source)},
-    {app_module_data_center_system_profile,     "system profile",   sizeof(app_module_data_center_handle->system_profile)},
-    {app_module_data_center_system_data,        "system data"   ,   sizeof(app_module_data_center_handle->system_data)},
-    {app_module_data_center_user_profile,       "user profile"  ,   sizeof(app_module_data_center_handle->user_profile)},
-    {app_module_data_center_user_data,          "user data"     ,   sizeof(app_module_data_center_handle->user_data)},
+    {app_module_data_center_module_source,      "module source",        sizeof(app_module_data_center_handle->module_source)},
+    {app_module_data_center_module_weather,     "module weather",       sizeof(app_module_data_center_handle->module_weather)},
+    {app_module_data_center_module_world_time,  "module world time",    sizeof(app_module_data_center_handle->module_world_time)},
+    {app_module_data_center_remind_alarm,       "remind alarm",         sizeof(app_module_data_center_handle->remind_alarm)},
+    {app_module_data_center_remind_calendar,    "remind calendar",      sizeof(app_module_data_center_handle->remind_calendar)},
+    {app_module_data_center_remind_matter,      "remind matter",        sizeof(app_module_data_center_handle->remind_matter)},
+    {app_module_data_center_system_profile,     "system profile",       sizeof(app_module_data_center_handle->system_profile)},
+    {app_module_data_center_system_data,        "system data"   ,       sizeof(app_module_data_center_handle->system_data)},
+    {app_module_data_center_user_profile,       "user profile"  ,       sizeof(app_module_data_center_handle->user_profile)},
+    {app_module_data_center_user_data,          "user data"     ,       sizeof(app_module_data_center_handle->user_data)},
 };
 
 /*@brief 重置数据中心的数据源
@@ -52,7 +57,7 @@ static void app_module_data_center_reset(void)
     /* 求字段大小,如sizeof(app_module_data_center_handle->module_source) */
     app_module_data_center_t *data_center = app_module_data_center_handle;
     uint32_t data_size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
-    memset(&data_center->type, 0, data_size);
+    memset(&data_center->offset, 0, data_size);
     
     switch (app_module_data_center_type) {
     case app_module_data_center_module_source:
@@ -60,6 +65,16 @@ static void app_module_data_center_reset(void)
         app_module_remind_drink_reset(&data_center->module_source.remind_drink);
         app_module_remind_sedentary_reset(&data_center->module_source.remind_sedentary);
         app_module_do_not_disturb_reset(&data_center->module_source.do_not_disturb);
+        break;
+    case app_module_data_center_module_weather:
+        break;
+    case app_module_data_center_module_world_time:
+        break;
+    case app_module_data_center_remind_alarm:
+        break;
+    case app_module_data_center_remind_calendar:
+        break;
+    case app_module_data_center_remind_matter:
         break;
     case app_module_data_center_system_profile:
         break;
@@ -101,12 +116,12 @@ app_module_data_center_t * app_module_data_center_take(uint32_t type)
     
     APP_SYS_ASSERT(app_module_data_center_handle == NULL);
     const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
-    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, type, 0); ofs = -ofs;
+    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_sys_ext_mem_cache_take(&app_module_data_center_cache, ext_src->data_base, size + ofs, &app_module_data_center_handle);
     APP_SYS_LOG_INFO("data center:%d", app_module_data_center_type);
     APP_SYS_LOG_INFO("take[%p,%p]:%d", app_module_data_center_handle, app_module_data_center_handle + size + ofs, size + ofs);
-    app_module_data_center_crc32 = app_sys_crc32(&app_module_data_center_handle->type, size);
+    app_module_data_center_crc32 = app_sys_crc32(&app_module_data_center_handle->offset, size);
     APP_SYS_ASSERT(app_module_data_center_handle != NULL);
     /* 如果当次校验与最开始加载时不一样表明数据无效化了 */
     if (app_module_data_center_handle->crc32 != app_module_data_center_crc32) {
@@ -122,9 +137,9 @@ void app_module_data_center_give(void)
 {
     APP_SYS_ASSERT(app_module_data_center_handle != NULL);
     const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
-    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, type, 0); ofs = -ofs;
+    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
-    app_module_data_center_handle->crc32 = app_sys_crc32(&app_module_data_center_handle->type, size);
+    app_module_data_center_handle->crc32 = app_sys_crc32(&app_module_data_center_handle->offset, size);
     app_sys_ext_mem_cache_give(&app_module_data_center_cache, ext_src->data_base, app_module_data_center_handle, app_module_data_center_handle->crc32 != app_module_data_center_crc32);
     APP_SYS_LOG_INFO("data center:%d", app_module_data_center_type);
     APP_SYS_LOG_INFO("give[%p,%p]:%d", app_module_data_center_handle, app_module_data_center_handle + size + ofs, size + ofs);
@@ -164,7 +179,7 @@ void app_module_data_center_ready(void)
     APP_SYS_LOG_INFO("data_center size all:%d", data_size_all);
     APP_SYS_LOG_INFO("data_center:%d", sizeof(app_module_data_center_t));
     for (uint32_t idx = 0; idx < app_ext_arr_len(app_module_data_center_type_table); idx++)
-        APP_SYS_LOG_INFO("%d:%s:%d", app_module_data_center_type_table[idx].type,
-                                     app_module_data_center_type_table[idx].data_name,
-                                     app_module_data_center_type_table[idx].data_size);
+        APP_SYS_LOG_INFO("%02d:%s:%d", app_module_data_center_type_table[idx].type,
+                                       app_module_data_center_type_table[idx].data_name,
+                                       app_module_data_center_type_table[idx].data_size);
 }
