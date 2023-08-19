@@ -37,11 +37,13 @@ static void * app_sys_pipe_slab_alloc(void)
     if (slab == NULL) {
         slab  = app_mem_alloc(sizeof(app_sys_pipe_slab_t));
         /* 加入一个抖动用于消抖 */
-        uint32_t debounce = rand();
+        uint32_t debounce = rand() % APP_SYS_PIPE_SLAB_DEBOUNCE;
         /* 平台字节对齐,配置分配器 */
         slab->blk_num   = APP_SYS_PIPE_SLAB_UNIT;
-        if (debounce % 2 == 0) slab->blk_num += debounce % APP_SYS_PIPE_SLAB_DEBOUNCE;
-        if (debounce % 2 != 0) slab->blk_num -= debounce % APP_SYS_PIPE_SLAB_DEBOUNCE;
+        if (debounce % 2 == 0)
+            slab->blk_num += debounce;
+        if (debounce % 2 != 0)
+            slab->blk_num -= debounce;
         slab->blk_size  = sizeof(app_sys_pipe_pkg_t);
         slab->blk_size -= sizeof(app_sys_pipe_pkg_t) % sizeof(uintptr_t);
         slab->blk_size += sizeof(uintptr_t);
@@ -65,7 +67,7 @@ static void * app_sys_pipe_slab_alloc(void)
         slab->next = app_sys_pipe_slab_list;
         if (app_sys_pipe_slab_list != NULL)
             app_sys_pipe_slab_list->prev = slab;
-        app_sys_pipe_slab_list = slab;
+            app_sys_pipe_slab_list = slab;
     }
     /* 从分配器获取首块,块索引移动到下一块,计数器加一 */
     ptr = slab->blk_list;
@@ -94,8 +96,10 @@ static void app_sys_pipe_slab_free(void *ptr)
         }
     /* 回收此分配器 */
     if (slab->blk_used == 0) {
-        if (slab->prev != NULL) ((app_sys_pipe_slab_t *)(slab->prev))->next = slab->next;
-        if (slab->next != NULL) ((app_sys_pipe_slab_t *)(slab->next))->prev = slab->prev;
+        if (slab->prev != NULL)
+          ((app_sys_pipe_slab_t *)(slab->prev))->next = slab->next;
+        if (slab->next != NULL)
+          ((app_sys_pipe_slab_t *)(slab->next))->prev = slab->prev;
         if (app_sys_pipe_slab_list == slab)
             app_sys_pipe_slab_list  = slab->next;
         slab->blk_list = slab->mem_s;
