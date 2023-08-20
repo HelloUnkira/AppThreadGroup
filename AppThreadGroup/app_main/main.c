@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 {
     /* 启动APP调度策略 */
     app_thread_group_schedule();
+    
     /* 主线程滚动阻塞 */
     while (true) {
         #if 0
@@ -34,6 +35,27 @@ int main(int argc, char *argv[])
         app_sys_log_text_test();
         break;
         #elif 1
+        /* test sys util plug */
+        /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
+        void app_sys_rbuf_test(void);
+        app_sys_rbuf_test();
+        void app_sys_list_dl_test(void);
+        void app_sys_list_sl_test(void);
+        app_sys_list_dl_test();
+        app_sys_list_sl_test();
+        void app_sys_tree_rb_test(void);
+        app_sys_tree_rb_test();
+        void app_sys_hashtable_test(void);
+        app_sys_hashtable_test();
+        void app_sys_app_sys_matrix_test(void);
+        app_sys_app_sys_matrix_test();
+        void app_sys_fft_test(void);
+        app_sys_fft_test();
+        void app_sys_ext_mem_cache_test(void);
+        app_sys_ext_mem_cache_test();
+        
+        break;
+        #elif 1
         /* 测试中我们在主线程 */
         /* 模拟发送1ms定时器中断事件 */
         #if APP_ARCH_IS_PC
@@ -46,23 +68,6 @@ int main(int argc, char *argv[])
         /* test:... */
         static uint32_t count = 0;
         count++;
-        /* test sys util plug(always test)  */
-        if (count == 1000 * 10) {
-            void app_sys_rbuf_test(void);
-            app_sys_rbuf_test();
-            void app_sys_list_dl_test(void);
-            void app_sys_list_sl_test(void);
-            app_sys_list_dl_test();
-            app_sys_list_sl_test();
-            void app_sys_hashtable_test(void);
-            app_sys_hashtable_test();
-            void app_sys_app_sys_matrix_test(void);
-            app_sys_app_sys_matrix_test();
-            void app_sys_fft_test(void);
-            app_sys_fft_test();
-            void app_sys_ext_mem_cache_test(void);
-            app_sys_ext_mem_cache_test();
-        }
         #if 0
         #elif 0
         /* test timer */
