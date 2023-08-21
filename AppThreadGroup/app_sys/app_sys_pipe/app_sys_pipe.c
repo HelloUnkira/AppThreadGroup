@@ -22,6 +22,24 @@
 
 static app_sys_slab_t app_sys_pipe_slab = {0};
 
+/*@brief 优先级排序入队列比较函数
+ */
+static bool app_sys_pipe_sort(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
+{
+    app_sys_pipe_pkg_t *pkg1 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
+    app_sys_pipe_pkg_t *pkg2 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
+    return pkg1->priority > pkg2->priority;
+}
+
+/*@brief 事件包匹配函数
+ */
+static bool app_sys_pipe_confirm(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
+{
+    app_sys_pipe_pkg_t *pkg1 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
+    app_sys_pipe_pkg_t *pkg2 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
+    return pkg1->thread == pkg2->thread && pkg1->module == pkg2->module && pkg1->event  == pkg2->event;
+}
+
 /*@brief 初始化管道资源
  */
 void app_sys_pipe_src_ready(void)
@@ -34,10 +52,9 @@ void app_sys_pipe_src_ready(void)
  */
 void app_sys_pipe_ready(app_sys_pipe_t *pipe)
 {
-    pipe->head = NULL;
-    pipe->tail = NULL;
-    pipe->number = 0;
+    app_sys_list_dl_reset(&pipe->dl_list);
     app_critical_process(&pipe->critical, app_critical_static);
+    pipe->number = 0;
 }
 
 /*@brief     获取管道资源包数量
@@ -66,29 +83,13 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     /* 生成资源包, 转储消息资源资源 */
     package_new = app_sys_slab_alloc(&app_sys_pipe_slab);
     memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
-    package_new->buddy = NULL;
+    app_sys_list_dn_reset(&package_new->dl_node);
     app_critical_process(&pipe->critical, app_critical_enter);
     /* 资源包加入到管道(优先队列) */
-    if (0) {
-    } else if (pipe->number == 0) {
-        pipe->head = package_new;
-        pipe->tail = package_new;
-    } else if (package_new->priority <= pipe->tail->priority || normal) {
-        pipe->tail->buddy = package_new;
-        pipe->tail = package_new;
-    } else if (package_new->priority >  pipe->head->priority) {
-        package_new->buddy = pipe->head;
-        pipe->head = package_new;
-    } else {
-        for (nonius = pipe->head; nonius->buddy != NULL; nonius = nonius->buddy) {
-            app_sys_pipe_pkg_t *current = nonius->buddy;
-            if (current->priority < package_new->priority) {
-                package_new->buddy = nonius->buddy;
-                nonius->buddy = package_new;
-                break;
-            }
-        }
-    }
+    if (normal)
+        app_sys_list_dl_ainsert(&pipe->dl_list, NULL, &package_new->dl_node);
+    else
+        app_sys_queue_dpq_enqueue(&pipe->dl_list, &package_new->dl_node, app_sys_pipe_sort);
     pipe->number++;
     app_critical_process(&pipe->critical, app_critical_exit);
 }
@@ -107,36 +108,18 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     if (pipe->number != 0) {
         /* 需要命中指定资源包 */
         if (hit) {
-            nonius = pipe->head;
-            if (nonius->thread == package->thread &&
-                nonius->module == package->module &&
-                nonius->event  == package->event) {
-                package_new = pipe->head;
-                pipe->head  = pipe->head->buddy;
-                pipe->number--;
-            } else {
-                for (nonius = pipe->head; nonius->buddy != NULL; nonius = nonius->buddy) {
-                    app_sys_pipe_pkg_t *current = nonius->buddy;
-                    if (current->thread == package->thread &&
-                        current->module == package->module &&
-                        current->event  == package->event) {
-                        package_new   = current;
-                        nonius->buddy = current->buddy;
-                        if (pipe->tail == current)
-                            pipe->tail  = nonius;
-                        pipe->number--;
-                        break;
-                    }
+            app_sys_list_dl_btra(&pipe->dl_list, node)
+                if (app_sys_pipe_confirm(&package->dl_node, node)) {
+                    package_new = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+                    break;
                 }
-            }
         } else {
-            package_new = pipe->head;
-            pipe->head  = pipe->head->buddy;
-            pipe->number--;
+            app_sys_list_dn_t *node = app_sys_list_dl_head(&pipe->dl_list);
+            package_new = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
         }
-        if (pipe->number == 0) {
-            pipe->head = NULL;
-            pipe->tail = NULL;
+        if (package_new != NULL) {
+            app_sys_list_dl_remove(&pipe->dl_list, &package_new->dl_node);
+            pipe->number--;
         }
     }
     app_critical_process(&pipe->critical, app_critical_exit);
@@ -144,6 +127,5 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     if (package_new == NULL)
         return;
     memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
-    package->buddy = NULL;
     app_sys_slab_free(&app_sys_pipe_slab, package_new);
 }
