@@ -52,7 +52,7 @@ void app_sys_tree_rb_test(void)
     #define APP_SYS_TREE_RB_MAX_HALF    (APP_SYS_TREE_RB_MAX / 2)
     
     app_sys_tree_rbt_t *tree = app_mem_alloc(sizeof(app_sys_tree_rbt_t));
-    app_sys_tree_rbt_config(tree, app_sys_tree_rb_test_compare, app_sys_tree_rb_test_confirm);
+    app_sys_tree_rbt_config(tree, app_sys_tree_rb_test_compare, app_sys_tree_rb_test_confirm, app_sys_tree_rb_test_visit);
     
     app_sys_tree_rbn_t **queue = app_mem_alloc(sizeof(app_sys_tree_rbn_t *)  * APP_SYS_TREE_RB_MAX);
     app_sys_tree_rbn_t **stack = app_mem_alloc(sizeof(app_sys_tree_rbn_t *)  * APP_SYS_TREE_RB_MAX);
@@ -69,7 +69,7 @@ void app_sys_tree_rb_test(void)
     }
     
     APP_SYS_LOG_INFO("------------------------------------------------------------");
-    app_sys_tree_rbt_seq_tra(tree, app_sys_tree_rb_test_visit, queue, APP_SYS_TREE_RB_MAX);//插入检查
+    app_sys_tree_rbt_seq_tra(tree, queue, APP_SYS_TREE_RB_MAX);//插入检查
     APP_SYS_LOG_INFO("check:%d", app_sys_tree_rbt_check_valid(tree, stack, flags, APP_SYS_TREE_RB_MAX));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     app_delay_ms(2000);
@@ -90,7 +90,7 @@ void app_sys_tree_rb_test(void)
     }
     
     APP_SYS_LOG_INFO("------------------------------------------------------------");
-    app_sys_tree_rbt_seq_tra(tree, app_sys_tree_rb_test_visit, queue, APP_SYS_TREE_RB_MAX);//删除检查
+    app_sys_tree_rbt_seq_tra(tree, queue, APP_SYS_TREE_RB_MAX);//删除检查
     APP_SYS_LOG_INFO("check:%d", app_sys_tree_rbt_check_valid(tree, stack, flags, APP_SYS_TREE_RB_MAX));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     app_delay_ms(2000);

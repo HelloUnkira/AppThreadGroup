@@ -41,7 +41,7 @@ typedef struct app_sys_tree_rbn {
 typedef uint8_t (*app_sys_tree_rbt_compare_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
 /* 匹配函数:node1与node2的关键字一致返回0 */
 typedef uint8_t (*app_sys_tree_rbt_confirm_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
-/* 访问函数 */
+/* 访问函数:节点和颜色 */
 typedef void (*app_sys_tree_rbt_visit_t)(app_sys_tree_rbn_t *node, uint8_t color);
 
 /* 红黑树集合(树根) */
@@ -49,6 +49,7 @@ typedef struct {
     app_sys_tree_rbn_t *root;
     app_sys_tree_rbt_compare_t compare;
     app_sys_tree_rbt_confirm_t confirm;
+    app_sys_tree_rbt_visit_t   visit;
 } app_sys_tree_rbt_t;
 
 /*@brief         插入函数
@@ -115,8 +116,9 @@ void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node);
  *@param[in] tree 红黑树实例
  *@param[in] compare 红黑树比较语义
  *@param[in] confirm 红黑树确认语义
+ *@param[in] visit   红黑树访问语义
  */
-void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm);
+void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm, app_sys_tree_rbt_visit_t visit);
 
 /*@brief     根切换函数
  *@param[in] tree 红黑树实例
@@ -124,9 +126,9 @@ void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_
  */
 void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief     根切换函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief      根切换函数
+ *@param[in]  tree 红黑树实例
+ *@param[out] node 红黑节点实例
  */
 void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **node);
 
@@ -137,13 +139,16 @@ void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **no
 
 /*@brief     数据的层序遍历并访问(窥探)
  *@param[in] tree  红黑树实例
- *@param[in] visit 红黑树节点访问函数
+ *@param[in] queue 红黑树节点实例队列数组
+ *@param[in] len   红黑树节点实例队列数组长度
  */
-void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t visit, app_sys_tree_rbn_t **queue, int32_t len);
+void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **queue, int32_t len);
 
 /*@brief     验证一棵树是否为红黑树(内部检查)
  *@param[in] tree  红黑树实例
- *@param[in] visit 红黑树节点访问函数
+ *@param[in] stack 红黑树节点实例栈数组
+ *@param[in] flags 红黑树节点实例栈数组
+ *@param[in] len   红黑树节点实例栈数组长度
  *@retval    0:失败;1:成功
  */
 uint8_t app_sys_tree_rbt_check_valid(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **stack, int32_t *flags, int32_t len);

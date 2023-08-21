@@ -34,7 +34,7 @@ int main(int argc, char *argv[])
         /* 测试日志追踪 */
         app_sys_log_text_test();
         break;
-        #elif 1
+        #elif 0
         /* test sys util plug */
         /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
         void app_sys_rbuf_test(void);

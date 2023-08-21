@@ -16,104 +16,17 @@
  */
 
 #include "app_ext_lib.h"
+#include "app_sys_list.h"
+#include "app_sys_slab.h"
 #include "app_sys_pipe.h"
 
-static app_mutex_t app_sys_pipe_slab_mutex = {0};
-static app_sys_pipe_slab_t *app_sys_pipe_slab_list = NULL;
-
-/*@brief  向slab分配器获取一个块
- *@retval 新的块
- */
-static void * app_sys_pipe_slab_alloc(void)
-{
-    uint8_t *ptr = NULL;
-    app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_take);
-    app_sys_pipe_slab_t *slab = app_sys_pipe_slab_list;
-    /* 先检查分配器是否还有块 */
-    for (slab = slab; slab != NULL; slab = slab->next)
-        if (slab->blk_used < slab->blk_num)
-            break;
-    /* 没有空闲分配器,生成一个新的分配器 */
-    if (slab == NULL) {
-        slab  = app_mem_alloc(sizeof(app_sys_pipe_slab_t));
-        /* 加入一个抖动用于消抖 */
-        uint32_t debounce = rand() % APP_SYS_PIPE_SLAB_DEBOUNCE;
-        /* 平台字节对齐,配置分配器 */
-        slab->blk_num   = APP_SYS_PIPE_SLAB_UNIT;
-        if (debounce % 2 == 0)
-            slab->blk_num += debounce;
-        if (debounce % 2 != 0)
-            slab->blk_num -= debounce;
-        slab->blk_size  = sizeof(app_sys_pipe_pkg_t);
-        slab->blk_size -= sizeof(app_sys_pipe_pkg_t) % sizeof(uintptr_t);
-        slab->blk_size += sizeof(uintptr_t);
-        slab->blk_list  = app_mem_alloc(slab->blk_size * slab->blk_num);
-        slab->blk_used  = 0;
-        slab->mem_s = slab->blk_list;
-        slab->mem_e = slab->blk_list + slab->blk_size * slab->blk_num;
-        /* 索引回退 */
-        slab->blk_list -= slab->blk_size;
-        /* 初始化块链表 */
-        for (uint32_t idx = 0; idx < slab->blk_num; idx++) {
-            /* 当前块移动到下一块 */
-            slab->blk_list += slab->blk_size;
-            /* 当前块指向前一块索引 */
-            *((uint8_t **)(slab->blk_list)) = ptr;
-            /* 前一块移动到当前块 */
-            ptr = slab->blk_list;
-        }
-        /* 分配器加入到分配器链表 */
-        slab->prev = NULL;
-        slab->next = app_sys_pipe_slab_list;
-        if (app_sys_pipe_slab_list != NULL)
-            app_sys_pipe_slab_list->prev = slab;
-            app_sys_pipe_slab_list = slab;
-    }
-    /* 从分配器获取首块,块索引移动到下一块,计数器加一 */
-    ptr = slab->blk_list;
-    slab->blk_list = *((uint8_t **)ptr);
-    slab->blk_used++;
-    /*  */
-    app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_give);
-    return ptr;
-}
-
-/*@brief     向slab分配器归还一个块
- *@param[in] 旧的块
- */
-static void app_sys_pipe_slab_free(void *ptr)
-{
-    app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_take);
-    app_sys_pipe_slab_t *slab = app_sys_pipe_slab_list;
-    /* 检查回收块是否落在此分配器内 */
-    for (slab = slab; slab != NULL; slab = slab->next)
-        if (slab->mem_s <= ptr && slab->mem_e > ptr) {
-            /* 从分配器释放首块,块索引移动到下一块,计数器减一 */
-            *((uint8_t **)(ptr)) = slab->blk_list;
-            slab->blk_list = ptr;
-            slab->blk_used --;
-            break;
-        }
-    /* 回收此分配器 */
-    if (slab->blk_used == 0) {
-        if (slab->prev != NULL)
-          ((app_sys_pipe_slab_t *)(slab->prev))->next = slab->next;
-        if (slab->next != NULL)
-          ((app_sys_pipe_slab_t *)(slab->next))->prev = slab->prev;
-        if (app_sys_pipe_slab_list == slab)
-            app_sys_pipe_slab_list  = slab->next;
-        slab->blk_list = slab->mem_s;
-        app_mem_free(slab->blk_list);
-        app_mem_free(slab);
-    }
-    app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_give);
-}
+static app_sys_slab_t app_sys_pipe_slab = {0};
 
 /*@brief 初始化管道资源
  */
 void app_sys_pipe_src_ready(void)
 {
-    app_mutex_process(&app_sys_pipe_slab_mutex, app_mutex_static);
+    app_sys_slab_ready(&app_sys_pipe_slab, sizeof(app_sys_pipe_pkg_t), 50, 10);
 }
 
 /*@brief     初始化管道
@@ -151,7 +64,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     app_sys_pipe_pkg_t *nonius = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
-    package_new = app_sys_pipe_slab_alloc();
+    package_new = app_sys_slab_alloc(&app_sys_pipe_slab);
     memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
     package_new->buddy = NULL;
     app_critical_process(&pipe->critical, app_critical_enter);
@@ -232,5 +145,5 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
         return;
     memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
     package->buddy = NULL;
-    app_sys_pipe_slab_free(package_new);
+    app_sys_slab_free(&app_sys_pipe_slab, package_new);
 }

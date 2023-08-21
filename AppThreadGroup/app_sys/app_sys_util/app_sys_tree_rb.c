@@ -42,6 +42,15 @@ static inline void app_sys_tree_rbt_set_confirm(app_sys_tree_rbt_t *tree, app_sy
     tree->confirm = confirm;
 }
 
+/*@brief     红黑树(设置语义)
+ *@param[in] tree    红黑树实例
+ *@param[in] compare 红黑树访问语义
+ */
+static inline void app_sys_tree_rbt_set_visit(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t visit)
+{
+    tree->visit = visit;
+}
+
 /*@brief     红黑树(获取语义)
  *@param[in] tree 红黑树实例
  *@retval    红黑树根
@@ -52,32 +61,37 @@ static inline app_sys_tree_rbn_t * app_sys_tree_rbt_get_root(app_sys_tree_rbt_t 
 }
 
 /*@brief     红黑树(获取语义)
- *@param[in] tree  红黑树实例
- *@param[in] node1 红黑节点实例1
- *@param[in] node2 红黑节点实例2
+ *@param[in] tree 红黑树实例
  *@retval    红黑树比较语义
  */
-static inline uint8_t app_sys_tree_rbt_get_compare(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2)
+static inline app_sys_tree_rbt_compare_t app_sys_tree_rbt_get_compare(app_sys_tree_rbt_t *tree)
 {
-    return tree->compare(node1, node2);
+    return tree->compare;
 }
 
 /*@brief     红黑树(获取语义)
- *@param[in] tree  红黑树实例
- *@param[in] node1 红黑节点实例1
- *@param[in] node2 红黑节点实例2
+ *@param[in] tree 红黑树实例
  *@retval    红黑树确认语义
  */
-static inline uint8_t app_sys_tree_rbt_get_confirm(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2)
+static inline app_sys_tree_rbt_confirm_t app_sys_tree_rbt_get_confirm(app_sys_tree_rbt_t *tree)
 {
-    return tree->confirm(node1, node2);
+    return tree->confirm;
+}
+
+/*@brief     红黑树(获取语义)
+ *@param[in] tree 红黑树实例
+ *@retval    红黑树访问语义
+ */
+static inline app_sys_tree_rbt_visit_t app_sys_tree_rbt_get_visit(app_sys_tree_rbt_t *tree)
+{
+    return tree->visit;
 }
 
 /*@brief     红黑节点(设置语义)
  *@param[in] node  红黑节点实例
  *@param[in] color 红黑节点颜色
  */
-static inline void app_sys_tree_rbn_set_color(app_sys_tree_rbn_t *node, uint8_t color)
+static inline void app_sys_tree_rbn_set_color(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t color)
 {
     uintptr_t retval = 0;
     
@@ -108,7 +122,7 @@ static inline void app_sys_tree_rbn_set_parent(app_sys_tree_rbn_t *node, app_sys
  *@param[in] child 红黑节点实例
  *@param[in] side  红黑节点方向
  */
-static inline void app_sys_tree_rbn_set_child(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *child, uint8_t side)
+static inline void app_sys_tree_rbn_set_child(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *child, app_sys_tree_rbn_status_t side)
 {
     if (side == app_sys_tree_rbn_side_l)
         node->child_l = child;
@@ -120,14 +134,14 @@ static inline void app_sys_tree_rbn_set_child(app_sys_tree_rbn_t *node, app_sys_
  *@param[in] node 红黑节点实例
  *@retval    红黑节点颜色
  */
-static inline uint8_t app_sys_tree_rbn_get_color(app_sys_tree_rbn_t *node)
+static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_color(app_sys_tree_rbn_t *node)
 {
     uintptr_t retval = 0;
     
     retval |= (uintptr_t)(node->parent_color);
     retval &= (uintptr_t)(1);
     
-    return (uint8_t)retval;
+    return (app_sys_tree_rbn_status_t)retval;
 }
 
 /*@brief     红黑节点(获取语义)
@@ -149,7 +163,7 @@ static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_parent(app_sys_tree_rbn_
  *@param[in] side 红黑节点方向
  *@retval    红黑节点实例
  */
-static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_child(app_sys_tree_rbn_t *node, uint8_t side)
+static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_child(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
     return side == app_sys_tree_rbn_side_l ? node->child_l :
            side == app_sys_tree_rbn_side_r ? node->child_r : NULL;
@@ -160,7 +174,7 @@ static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_child(app_sys_tree_rbn_t
  *@param[in] parent 红黑节点实例
  *@retval    红黑节点方向
  */
-static inline uint8_t app_sys_tree_rbn_get_side(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *parent)
+static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *parent)
 {
     return node == parent->child_l ? app_sys_tree_rbn_side_l :
            node == parent->child_r ? app_sys_tree_rbn_side_r : app_sys_tree_rbn_error;
@@ -170,7 +184,7 @@ static inline uint8_t app_sys_tree_rbn_get_side(app_sys_tree_rbn_t *node, app_sy
  *@param[in] side 红黑节点方向
  *@retval    红黑节点方向
  */
-static inline uint8_t app_sys_tree_rbn_get_side_other(uint8_t side)
+static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side_other(app_sys_tree_rbn_status_t side)
 {
     return side == app_sys_tree_rbn_side_l ? app_sys_tree_rbn_side_r :
            side == app_sys_tree_rbn_side_r ? app_sys_tree_rbn_side_l : app_sys_tree_rbn_error;
@@ -191,8 +205,8 @@ static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t
     APP_SYS_TREE_RBT_CHECK(child  == NULL, "child");
     APP_SYS_TREE_RBT_CHECK(parent == NULL, "parent");
     /* 1.获得父子节点的对位关系,父亲与对顶位孙子的对位关系 */
-    uint8_t side       = app_sys_tree_rbn_get_side(child, parent);
-    uint8_t side_other = app_sys_tree_rbn_get_side_other(side);
+    app_sys_tree_rbn_status_t side       = app_sys_tree_rbn_get_side(child, parent);
+    app_sys_tree_rbn_status_t side_other = app_sys_tree_rbn_get_side_other(side);
     /* 2.获得祖父节点,获得父亲对顶位的孙子节点 */
     app_sys_tree_rbn_t *ancestor = app_sys_tree_rbn_get_parent(parent);
     app_sys_tree_rbn_t *son      = app_sys_tree_rbn_get_child(child, side_other);
@@ -218,7 +232,7 @@ static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t
  *@param[in]     side  红黑节点方向
  *@retval        红黑节点实例
  */
-static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_t *node, uint8_t side)
+static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
     APP_SYS_TREE_RBT_CHECK(node == NULL, "node");
     APP_SYS_TREE_RBT_CHECK(side == app_sys_tree_rbn_error, "side");
@@ -234,14 +248,14 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_
  *@param[in]     side  红黑节点方向
  *@retval        红黑节点实例
  */
-static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rbn_t *node, uint8_t side)
+static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
     APP_SYS_TREE_RBT_CHECK(node == NULL, "node");
     APP_SYS_TREE_RBT_CHECK(side == app_sys_tree_rbn_error, "side");
     
     app_sys_tree_rbn_t *child  = app_sys_tree_rbn_get_child(node, side);
     app_sys_tree_rbn_t *parent = app_sys_tree_rbn_get_parent(node);
-    uint8_t side_other = app_sys_tree_rbn_get_side_other(side);
+    app_sys_tree_rbn_status_t side_other = app_sys_tree_rbn_get_side_other(side);
     /* 先找孩子最大项 */
     if (child != NULL)
         return app_sys_tree_rbt_search_min_or_max(child, side_other);
@@ -275,15 +289,15 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tre
     app_sys_tree_rbn_t *node = app_sys_tree_rbt_get_root(tree);
     while (node != NULL) {
         /* 关键字匹配成功,返回 */
-        if (app_sys_tree_rbt_get_confirm(tree, target, node) == 0)
+        if (app_sys_tree_rbt_get_confirm(tree)(target, node) == 0)
             return node;
         /* 该结点小于此本结点,到左子树去 */
-        if (app_sys_tree_rbt_get_compare(tree, target, node) != 0) {
+        if (app_sys_tree_rbt_get_compare(tree)(target, node) != 0) {
             node = app_sys_tree_rbn_get_child(node, app_sys_tree_rbn_side_l);
             continue;
         }
         /* 该结点大于此本结点,到右子树去 */
-        if (app_sys_tree_rbt_get_compare(tree, target, node) == 0) {
+        if (app_sys_tree_rbt_get_compare(tree)(target, node) == 0) {
             node = app_sys_tree_rbn_get_child(node, app_sys_tree_rbn_side_r);
             continue;
         }
@@ -319,7 +333,7 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
     /* 3.从根节点开始寻找插入的起始位置并插入 */
     while (insert_node != NULL) {
         /* 左子树为空且该结点小于此本结点,表示结点可以插到其左子树 */
-        if (app_sys_tree_rbt_get_compare(tree, node, insert_node) != 0) {
+        if (app_sys_tree_rbt_get_compare(tree)(node, insert_node) != 0) {
             /* 获得其左孩子 */
             insert_node_l = app_sys_tree_rbn_get_child(insert_node, app_sys_tree_rbn_side_l);
             /* 左孩子不为空继续迭代,左孩子为空插入 */
@@ -332,7 +346,7 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
             return;
         }
         /* 右子树为空且该节点不小于此本节点,表示结点可以插到其右子树 */
-        if (app_sys_tree_rbt_get_compare(tree, node, insert_node) == 0) {
+        if (app_sys_tree_rbt_get_compare(tree)(node, insert_node) == 0) {
             /* 获得其右孩子 */
             insert_node_r = app_sys_tree_rbn_get_child(insert_node, app_sys_tree_rbn_side_r);
             /* 右孩子不为空继续迭代,右孩子为空插入 */
@@ -368,8 +382,8 @@ static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
         /* 情况3:插入节点的父节点是红色(无需判断,一定是红节点) */
         /* 1.获得祖父节点(红色父节点一定有祖父节点) */
         app_sys_tree_rbn_t *ancestor = app_sys_tree_rbn_get_parent(parent);
-        uint8_t side       = app_sys_tree_rbn_get_side(parent, ancestor);
-        uint8_t side_other = app_sys_tree_rbn_get_side_other(side);
+        app_sys_tree_rbn_status_t side       = app_sys_tree_rbn_get_side(parent, ancestor);
+        app_sys_tree_rbn_status_t side_other = app_sys_tree_rbn_get_side_other(side);
         /* 2.获得叔叔节点 */
         app_sys_tree_rbn_t *uncle = app_sys_tree_rbn_get_child(ancestor, side_other);
         /* 情况3.1:同时出现双红色节点,将冲突向上调一层 */
@@ -385,7 +399,7 @@ static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
         }
         
         /* 情况3.2:不管叔叔节点是否存在或者为黑色,此时调整只能在内部进行 */
-        uint8_t side_child = app_sys_tree_rbn_get_side(node, parent);
+        app_sys_tree_rbn_status_t side_child = app_sys_tree_rbn_get_side(node, parent);
         /* 情况3.2.1:如果是之字型分支,先通过旋转调整到俩个对位 */
         if ((side == app_sys_tree_rbn_side_l && side_child == app_sys_tree_rbn_side_r) ||
             (side == app_sys_tree_rbn_side_r && side_child == app_sys_tree_rbn_side_l)) {
@@ -423,7 +437,7 @@ static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
  *@param[in,out] node 红黑节点实例
  *@param[out]    side 红黑节点方向
  */
-static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, uint8_t *side)
+static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t *side)
 {
     APP_SYS_TREE_RBT_CHECK(tree == NULL, "tree");
     APP_SYS_TREE_RBT_CHECK(node == NULL, "node");
@@ -489,8 +503,8 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
         if (node_child_r != NULL)
             app_sys_tree_rbn_set_parent(node_child_r, prev);
         /* 交换俩个节点颜色 */
-        uint8_t node_color = app_sys_tree_rbn_get_color(node);
-        uint8_t prev_color = app_sys_tree_rbn_get_color(prev);
+        app_sys_tree_rbn_status_t node_color = app_sys_tree_rbn_get_color(node);
+        app_sys_tree_rbn_status_t prev_color = app_sys_tree_rbn_get_color(prev);
         app_sys_tree_rbn_set_color(node, prev_color);
         app_sys_tree_rbn_set_color(prev, node_color);
         /* 3.此时被删除元素变成其后继结点 */
@@ -519,7 +533,7 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
  *@param[in,out] node 红黑节点实例
  *@param[out]    side 红黑节点方向
  */
-static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, uint8_t side)
+static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
     APP_SYS_TREE_RBT_CHECK(tree == NULL, "tree");
     APP_SYS_TREE_RBT_CHECK(node == NULL, "node");
@@ -527,7 +541,7 @@ static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     /* 情况1:删除空节点,无需调整 */
     APP_SYS_TREE_RBT_CHECK_RETURN(node == NULL);
     /* 1.获得删除的节点的父亲和左右孩子 */
-    uint8_t color = app_sys_tree_rbn_get_color(node);
+    app_sys_tree_rbn_status_t color = app_sys_tree_rbn_get_color(node);
     app_sys_tree_rbn_t *child_l  = app_sys_tree_rbn_get_child(node, app_sys_tree_rbn_side_l);
     app_sys_tree_rbn_t *child_r  = app_sys_tree_rbn_get_child(node, app_sys_tree_rbn_side_r);
     app_sys_tree_rbn_t *only_one = child_l == NULL ? child_r : child_l;
@@ -541,7 +555,7 @@ static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     /* 情况4:自己是黑色,删除导致缺失了一个黑色 */
     do {
         app_sys_tree_rbn_t *parent = app_sys_tree_rbn_get_parent(node);
-        uint8_t side_sibling = app_sys_tree_rbn_get_side_other(side);
+        app_sys_tree_rbn_status_t side_sibling = app_sys_tree_rbn_get_side_other(side);
         /* 情况4.1:删除的节点为根节点(或者调整到根节点),什么都不做 */
         APP_SYS_TREE_RBT_CHECK_RETURN(parent == NULL);
         /* 否则,删除黑色节点导致的不平衡兄弟一定存在 */
@@ -655,7 +669,7 @@ void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
     APP_SYS_TREE_RBT_CHECK_RETURN(node == NULL);
     
-    uint8_t side = app_sys_tree_rbn_error;
+    app_sys_tree_rbn_status_t side = app_sys_tree_rbn_error;
     
     app_sys_tree_rbt_remove_only(tree,   node, &side);  
     app_sys_tree_rbt_remove_adjust(tree, node,  side);
@@ -741,13 +755,15 @@ void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node)
  *@param[in] tree 红黑树实例
  *@param[in] compare 红黑树比较语义
  *@param[in] confirm 红黑树确认语义
+ *@param[in] visit   红黑树访问语义
  */
-void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm)
+void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm, app_sys_tree_rbt_visit_t visit)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
     app_sys_tree_rbt_set_root(tree, NULL);
     app_sys_tree_rbt_set_compare(tree, compare);
     app_sys_tree_rbt_set_confirm(tree, confirm);
+    app_sys_tree_rbt_set_visit(tree,   visit);
 }
 
 /*@brief     根切换函数
@@ -761,9 +777,9 @@ void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *nod
     app_sys_tree_rbt_set_root(tree, node);
 }
 
-/*@brief     根切换函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief      根切换函数
+ *@param[in]  tree 红黑树实例
+ *@param[out] node 红黑节点实例
  */
 void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **node)
 {
@@ -772,9 +788,10 @@ void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **no
 
 /*@brief     数据的层序遍历并访问(窥探)
  *@param[in] tree  红黑树实例
- *@param[in] visit 红黑树节点访问函数
+ *@param[in] queue 红黑树节点实例队列数组
+ *@param[in] len   红黑树节点实例队列数组长度
  */
-void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t visit, app_sys_tree_rbn_t **queue, int32_t len)
+void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **queue, int32_t len)
 {
     /* 层序遍历(这里使用循环队列): */
     
@@ -790,7 +807,7 @@ void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t
         node_num--;
         APP_SYS_TREE_RBT_CHECK_RETURN(node == NULL);
         /* 节点访问 */
-        visit(node, app_sys_tree_rbn_get_color(node));
+        app_sys_tree_rbt_get_visit(tree)(node, app_sys_tree_rbn_get_color(node));
         /* 这是一个循环队列 */
         if (queue_h >= len)
             queue_h  = 0;
@@ -820,7 +837,9 @@ void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t
 
 /*@brief     验证一棵树是否为红黑树(内部检查)
  *@param[in] tree  红黑树实例
- *@param[in] visit 红黑树节点访问函数
+ *@param[in] stack 红黑树节点实例栈数组
+ *@param[in] flags 红黑树节点实例栈数组
+ *@param[in] len   红黑树节点实例栈数组长度
  *@retval    0:失败;1:成功
  */
 uint8_t app_sys_tree_rbt_check_valid(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **stack, int32_t *flags, int32_t len)

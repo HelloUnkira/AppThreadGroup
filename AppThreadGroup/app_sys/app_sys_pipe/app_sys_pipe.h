@@ -21,7 +21,7 @@ typedef struct {
     uint64_t event:10;      /* 接收者线程模组事件 */
     uint64_t priority:8;    /* 接收者线程模组事件优先级(数字越大优先级越高) */
     uint64_t dynamic:1;     /* 本次传输包裹状态 */
-    uint32_t size;          /* 协议数据流大小 */
+    uint64_t size:24;       /* 协议数据流大小(16M) */
     void    *data;          /* 协议数据流(浅拷贝) */
 } app_sys_pipe_pkg_t;
 
