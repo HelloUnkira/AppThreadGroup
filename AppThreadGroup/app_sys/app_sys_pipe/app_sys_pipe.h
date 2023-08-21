@@ -2,19 +2,6 @@
 #define APP_SYS_PIPE_H
 
 typedef struct {
-    #define  APP_SYS_PIPE_SLAB_UNIT         50  /* 分配颗粒(偏好性(性能:大,内存:小)) */
-    #define  APP_SYS_PIPE_SLAB_DEBOUNCE     10  /* 去抖动 */
-    void    *prev;      /* 上一管理区 */
-    void    *next;      /* 下一管理区 */
-    uint8_t *mem_s;     /* 管理区起始地址 */
-    uint8_t *mem_e;     /* 管理区结束地址 */
-    uint8_t *blk_list;  /* 空闲块链表集 */
-    uint32_t blk_used;  /* 使用字节明细 */
-    uint32_t blk_size;  /* 块大小 */
-    uint32_t blk_num;   /* 块数量 */
-} app_sys_pipe_slab_t;
-
-typedef struct {
     void    *buddy;         /* 管道是优先队列(它的兄弟) */
     uint64_t thread:10;     /* 接收者线程 */
     uint64_t module:10;     /* 接收者线程模组 */
