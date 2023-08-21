@@ -9,6 +9,7 @@
 #include "app_sys_log.h"
 #include "app_sys_timer.h"
 #include "app_thread_group.h"
+#include "app_module_work.h"
 
 #include "app_module_data_center.h"
 #include "app_module_system.h"
