@@ -1,21 +1,6 @@
 #ifndef APP_MODULE_DATA_CENTER_H
 #define APP_MODULE_DATA_CENTER_H
 
-#include "app_module_data_center_type.h"
-
-#include "app_module_clock.h"
-#include "app_module_countdown.h"
-#include "app_module_stopwatch.h"
-#include "app_module_weather.h"
-#include "app_module_world_time.h"
-#include "app_module_remind_drink.h"
-#include "app_module_remind_sedentary.h"
-#include "app_module_remind_group.h"
-#include "app_module_remind_alarm.h"
-#include "app_module_remind_calendar.h"
-#include "app_module_remind_matter.h"
-#include "app_module_do_not_disturb.h"
-
 /*备注:
  *    将各种各样的零碎数据统一打包到此结构中
  *    通过不同的结构块区分不同类型的数据区域

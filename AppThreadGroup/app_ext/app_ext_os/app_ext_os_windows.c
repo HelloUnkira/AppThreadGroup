@@ -57,7 +57,7 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
     }
     default:
         APP_DEV_LOG_MSG_FMT("app_thread_process option is not unsupported:%u", option);
-        app_os_reset();
+        app_arch_reset();
         break;
     }
 }
@@ -88,7 +88,7 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
     }
     default:
         APP_DEV_LOG_MSG_FMT("app_sem_process option is not unsupported:%u", option);
-        app_os_reset();
+        app_arch_reset();
         break;
     }
 }
@@ -121,7 +121,7 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
     }
     default:
         APP_DEV_LOG_MSG_FMT("app_mutex_process option is not unsupported:%u", option);
-        app_os_reset();
+        app_arch_reset();
         break;
     }
 }
@@ -165,7 +165,7 @@ void app_critical_process(app_critical_t *critical, app_critical_option_t option
     }
     default:
         APP_DEV_LOG_MSG_FMT("app_critical_process option is not unsupported:%u", option);
-        app_os_reset();
+        app_arch_reset();
         break;
     }
 }
@@ -237,14 +237,6 @@ double app_execute_us(app_execute_us_t *execute_us, bool run)
         QueryPerformanceCounter(&execute_us->end);
         return (double)(execute_us->end.QuadPart - execute_us->start.QuadPart) * 1000 * 1000 / execute_us->frequency.QuadPart;
     }
-}
-
-/*@brief 重启
- */
-void app_os_reset(void)
-{
-    exit(-1);
-    while (true);
 }
 
 #endif

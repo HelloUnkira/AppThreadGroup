@@ -1,7 +1,6 @@
 #ifndef APP_MODULE_REMIND_SEDENTARY_H
 #define APP_MODULE_REMIND_SEDENTARY_H
 
-#include "app_module_daily_time.h"
 /* 时间表检查函数:app_module_daily_time_remind_sedentary_t */
 APP_MODULE_DAILY_TIME_T(app_module_daily_time_remind_sedentary_t, 2);
 

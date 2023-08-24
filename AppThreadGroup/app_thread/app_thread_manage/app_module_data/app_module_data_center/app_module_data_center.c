@@ -10,16 +10,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_list.h"
-#include "app_sys_hashtable.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_cache.h"
-#include "app_sys_ext_mem_table.h"
-#include "app_sys_ext_src.h"
-#include "app_sys_ext_src_table.h"
-#include "app_sys_util.h"
-#include "app_module_data_center.h"
+#include "app_sys_lib.h"
+#include "app_thread_group.h"
 
 static app_mutex_t app_module_data_center_mutex = {0};
 static app_sys_ext_mem_cache_t app_module_data_center_cache = {0};
@@ -95,7 +87,7 @@ static void app_module_data_center_reset(void)
  */
 static const app_sys_ext_src_t * app_module_data_center_find_ext_src_by_type(void)
 {
-    for (uint32_t idx = 0; idx < app_ext_arr_len(app_module_data_center_type_table); idx++)
+    for (uint32_t idx = 0; idx < app_sys_arr_len(app_module_data_center_type_table); idx++)
         if (app_module_data_center_type_table[idx].type == app_module_data_center_type)
             return app_sys_ext_src_find_by_name("mix_chunk_small", app_module_data_center_type_table[idx].data_name);
     APP_SYS_LOG_ERROR("data center catch unknown type:%u", app_module_data_center_type);
@@ -116,7 +108,7 @@ app_module_data_center_t * app_module_data_center_take(uint32_t type)
     
     APP_SYS_ASSERT(app_module_data_center_handle == NULL);
     const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
-    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
+    uintptr_t ofs  = app_sys_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_sys_ext_mem_cache_take(&app_module_data_center_cache, ext_src->data_base, size + ofs, &app_module_data_center_handle);
     APP_SYS_LOG_INFO("data center:%d", app_module_data_center_type);
@@ -137,7 +129,7 @@ void app_module_data_center_give(void)
 {
     APP_SYS_ASSERT(app_module_data_center_handle != NULL);
     const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
-    uintptr_t ofs  = app_ext_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
+    uintptr_t ofs  = app_sys_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_module_data_center_handle->crc32 = app_sys_crc32(&app_module_data_center_handle->offset, size);
     app_sys_ext_mem_cache_give(&app_module_data_center_cache, ext_src->data_base, app_module_data_center_handle, app_module_data_center_handle->crc32 != app_module_data_center_crc32);
@@ -168,7 +160,7 @@ void app_module_data_center_reflush(bool force)
 void app_module_data_center_ready(void)
 {
     uint32_t data_size_all = 0;
-    for (uint32_t idx = 0; idx < app_ext_arr_len(app_module_data_center_type_table); idx++)
+    for (uint32_t idx = 0; idx < app_sys_arr_len(app_module_data_center_type_table); idx++)
         data_size_all += app_module_data_center_type_table[idx].data_size;
 
     uint32_t unit  = sizeof(app_module_data_center_t);
@@ -178,7 +170,7 @@ void app_module_data_center_ready(void)
     
     APP_SYS_LOG_INFO("data_center size all:%d", data_size_all);
     APP_SYS_LOG_INFO("data_center:%d", sizeof(app_module_data_center_t));
-    for (uint32_t idx = 0; idx < app_ext_arr_len(app_module_data_center_type_table); idx++)
+    for (uint32_t idx = 0; idx < app_sys_arr_len(app_module_data_center_type_table); idx++)
         APP_SYS_LOG_INFO("%02d:%s:%d", app_module_data_center_type_table[idx].type,
                                        app_module_data_center_type_table[idx].data_name,
                                        app_module_data_center_type_table[idx].data_size);

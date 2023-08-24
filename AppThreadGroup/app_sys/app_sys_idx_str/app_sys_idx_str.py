@@ -19,7 +19,7 @@ def encode_app_sys_idx_str_c(file, xlsx_sheet, sheet_row, sheet_col):
     file.write(' *通过app_sys_idx_str.py生成\n')
     file.write(' *参考app_sys_idx_str.json中的模式生成源\n */\n\n')
     file.write('#include "app_ext_lib.h"\n')
-    file.write('#include "app_sys_idx_str.h"\n\n')
+    file.write('#include "app_sys_lib.h"\n\n')
     # 提取所有外源依赖
     file.write('static const char * app_sys_idx_str_table[%d][%d] = {\n' % (sheet_row, sheet_col))
     for item in xlsx_sheet.rows:

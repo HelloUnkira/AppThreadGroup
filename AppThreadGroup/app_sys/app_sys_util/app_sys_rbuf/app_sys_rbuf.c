@@ -4,7 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_rbuf.h"
+#include "app_sys_lib.h"
 
 /*@brief        索引回退运算
  *@param[in]    rbuf  实例

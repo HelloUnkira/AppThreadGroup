@@ -6,11 +6,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-
-#include "lvgl.h"
-#include "app_lv_event.h"
-#include "app_lv_scene.h"
+#include "app_sys_lib.h"
+#include "app_lv_lib.h"
 
 static uint8_t app_lv_scene_num = 0;
 static app_lv_scene_t app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};

@@ -3,10 +3,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_table.h"
-#include "app_module_clock.h"
+#include "app_sys_lib.h"
+#include "app_thread_group.h"
 
 #include "ff.h"
 #include "diskio.h"

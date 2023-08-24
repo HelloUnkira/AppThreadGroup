@@ -3,7 +3,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_matrix.h"
+#include "app_sys_lib.h"
 
 /* 矩阵转数列 */
 //#define app_sys_matrix_to_array(j, i, row) ((j) * (row) + (i))

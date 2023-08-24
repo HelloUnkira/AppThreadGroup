@@ -6,12 +6,9 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_timer.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-
-#include "lvgl.h"
-#include "app_lv_event.h"
+#include "app_lv_lib.h"
 
 static app_sys_timer_t app_lv_timer = {0};
 

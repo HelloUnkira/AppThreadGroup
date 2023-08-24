@@ -7,8 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_fft.h"
+#include "app_sys_lib.h"
 
 /*@brief 快速傅里叶变换测试
  */
@@ -30,13 +29,13 @@ void app_sys_fft_test(void)
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     
@@ -65,18 +64,18 @@ void app_sys_fft_test(void)
     APP_SYS_LOG_INFO("FFT:");
     for (k = 0; k < len; k++)
         APP_SYS_LOG_INFO_RAW("%d ",array1[k]);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     APP_SYS_LOG_INFO("REAL:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     
@@ -92,18 +91,18 @@ void app_sys_fft_test(void)
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (k = 0; k < len; k++)
         APP_SYS_LOG_INFO_RAW("%d ",array2[k]);
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     APP_SYS_LOG_INFO("REAL:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
 }

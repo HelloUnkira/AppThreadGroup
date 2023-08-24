@@ -3,7 +3,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "jerryscript-port.h"
 
 #if 0

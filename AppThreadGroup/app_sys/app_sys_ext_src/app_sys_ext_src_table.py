@@ -12,7 +12,7 @@ def encode_app_sys_ext_src_table_c(file, file_list, json_list):
     file.write(' *通过app_sys_ext_src_table.py生成\n')
     file.write(' *参考本目录下的.json中的模式生成源\n */\n\n')
     file.write('#include "app_ext_lib.h"\n')
-    file.write('#include "app_sys_ext_src.h"\n\n')
+    file.write('#include "app_sys_lib.h"\n\n')
     # 提取所有外源依赖
     for index, json_text in enumerate(json_list):    # 字典列表中是字典
         file.write('static const app_sys_ext_src_t app_sys_ext_src_%s_table[] = {\n' % file_list[index])

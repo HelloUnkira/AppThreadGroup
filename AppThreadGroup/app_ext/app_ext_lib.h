@@ -14,14 +14,12 @@
 #include <stdio.h>
 #include <time.h>
 
-/* Util */
-#include "app_ext_simplify.h"
-#include "app_ext_error_code.h"
-
 /* Arch lib hook */
+/* Dev lib hook */
 /* OS lib hook */
 #include "app_ext_arch.h"
-#include "app_ext_os.h"
 #include "app_ext_dev.h"
+#include "app_ext_os.h"
+
 
 #endif

@@ -6,14 +6,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-
-#include "lvgl.h"
-#include "app_lv_event.h"
-#include "app_lv_scene.h"
-#include "app_lv_style.h"
-#include "app_lv_multi_font.h"
-#include "app_lv_event_ui.h"
+#include "app_sys_lib.h"
+#include "app_lv_lib.h"
 
 /*@brief    默认控件风格
  *          黑色背景,无边框,无阴影,无间隙,无外部线

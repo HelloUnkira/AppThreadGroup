@@ -7,20 +7,11 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_log_text.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_transfer.h"
-#include "app_module_protocol.h"
-#include "app_module_clock.h"
+#include "app_protocol_lib.h"
 
-#if       APP_MODULE_PROTOCOL_USE_NANOPB
-#include "pb_common.h"
-#include "pb_encode.h"
-#include "pb_decode.h"
-#include "app_nanopb_set.pb.h"
-#include "app_nanopb_xfer.h"
-#include "app_nanopb_xfer_mix.h"
+#if APP_MODULE_PROTOCOL_USE_NANOPB
 
 /*@brief 打包传输系统追踪日志文本
  */

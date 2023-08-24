@@ -6,27 +6,10 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_clock.h"
-#include "app_module_remind_group.h"
-#include "app_module_remind_alarm.h"
-#include "app_module_system.h"
 #include "app_third_fatfs.h"
-
-#include "lvgl.h"
-#include "lv_drv_conf.h"
-#include "app_lv_drv.h"
-#include "app_lv_event.h"
-#include "app_lv_timer.h"
-#include "app_lv_scene.h"
-#include "app_lv_check_time.h"
-#include "app_lv_event_ui.h"
-#include "app_lv_style.h"
-#include "app_lv_ui_scene.h"
-#include "app_lv_ui_wheel.h"
-#include "app_lv_ui_scene_remind.h"
-#include "app_lv_ui_test.h"
+#include "app_lv_lib.h"
 
 /*@brief 子线程服务例程就绪部
  */

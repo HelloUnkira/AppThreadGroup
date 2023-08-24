@@ -10,10 +10,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-
-#include "jerryscript.h"
-#include "app_js_util.h"
+#include "app_sys_lib.h"
+#include "app_js_lib.h"
 
 /*@brief     对象数量计数回调
  *           搭配jerry_object_foreach使用

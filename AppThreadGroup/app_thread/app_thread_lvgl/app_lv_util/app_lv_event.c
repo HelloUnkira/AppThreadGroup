@@ -3,10 +3,9 @@
  */
 
 #include "app_ext_lib.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-
-#include "lvgl.h"
-#include "app_lv_event.h"
+#include "app_lv_lib.h"
 
 /*@brief lvgl tick更新
  */

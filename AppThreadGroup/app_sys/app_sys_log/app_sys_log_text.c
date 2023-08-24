@@ -7,13 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_log_text.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_table.h"
-#include "app_sys_ext_src.h"
-#include "app_sys_ext_src_table.h"
-#include "app_sys_util.h"
+#include "app_sys_lib.h"
 
 static app_mutex_t app_sys_log_text_mutex = {0};
 static app_sys_log_text_t app_sys_log_text;

@@ -7,8 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_matrix.h"
+#include "app_sys_lib.h"
 
 /*@brief 通用矩阵功能测试
  */
@@ -32,27 +31,27 @@ void app_sys_app_sys_matrix_test(void)
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix1[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         APP_SYS_LOG_INFO("matrix2:");
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix2[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = n; j < n * 2; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix2[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         APP_SYS_LOG_INFO("matrix0:");
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix0[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         app_sys_matrix_star((double *)matrix3, (double *)matrix1, (double *)matrix0, n, n, n);
@@ -62,7 +61,7 @@ void app_sys_app_sys_matrix_test(void)
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix3[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         double ret0 = app_sys_matrix_val((double *)matrix1, (double *)matrix3, n);
@@ -72,7 +71,7 @@ void app_sys_app_sys_matrix_test(void)
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix3[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
     }
@@ -101,14 +100,14 @@ void app_sys_app_sys_matrix_test(void)
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix1[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         APP_SYS_LOG_INFO("matrix0:");
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix0[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         app_sys_matrix_star((double *)matrix3, (double *)matrix1, (double *)matrix0, n, n, n);
@@ -118,7 +117,7 @@ void app_sys_app_sys_matrix_test(void)
         for (uint32_t i = 0; i < n; i++) {
         for (uint32_t j = 0; j < n; j++)
             APP_SYS_LOG_INFO_RAW("%lf\t", matrix3[i][j]);
-            APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
         }
         APP_SYS_LOG_INFO("------------------------------------------------------------");
         double sum = 0.0;

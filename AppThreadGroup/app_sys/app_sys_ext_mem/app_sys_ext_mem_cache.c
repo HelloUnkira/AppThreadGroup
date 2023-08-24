@@ -7,18 +7,14 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_list.h"
-#include "app_sys_hashtable.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_cache.h"
+#include "app_sys_lib.h"
 
 /*@brief 缓存带计数优先级排序入队列比较回调
  */
 static bool app_sys_ext_mem_cache_sort(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
 {
-    app_sys_ext_mem_cache_unit_t *unit1 = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node1);
-    app_sys_ext_mem_cache_unit_t *unit2 = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node2);
+    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node1);
+    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node2);
     return unit1->count >= unit2->count;
 }
 
@@ -26,7 +22,7 @@ static bool app_sys_ext_mem_cache_sort(app_sys_list_dn_t *node1, app_sys_list_dn
  */
 static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_hashtable_dn_t *node)
 {
-    app_sys_ext_mem_cache_unit_t *unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
+    app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     /* 摘要的来源网络的Hash散列函数 */
     uint32_t app_sys_hashtable_elf_hash(uint8_t *data, uint32_t length);
     return app_sys_hashtable_elf_hash((void *)&unit->offset, sizeof(uintptr_t));
@@ -36,8 +32,8 @@ static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_hashtable_dn_t *node)
  */
 static bool app_sys_ext_mem_cache_fc_t(app_sys_hashtable_dn_t *node1, app_sys_hashtable_dn_t *node2)
 {
-    app_sys_ext_mem_cache_unit_t *unit1 = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
-    app_sys_ext_mem_cache_unit_t *unit2 = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
+    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
+    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
     return unit1->offset == unit2->offset;
 }
 
@@ -45,7 +41,7 @@ static bool app_sys_ext_mem_cache_fc_t(app_sys_hashtable_dn_t *node1, app_sys_ha
  */
 static void app_sys_ext_mem_cache_fv_t(app_sys_hashtable_dn_t *node,  uint32_t idx)
 {
-    app_sys_ext_mem_cache_unit_t *unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
+    app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     APP_SYS_LOG_INFO("%u: <%x, %x, %p, %u, %u, %u>", idx,
                       unit->offset, unit->size,  unit->buffer,
                       unit->count,  unit->dirty, unit->lock);
@@ -92,7 +88,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
     while (true) {
         /* 前向遍历,找已经解锁的资源 */
         app_sys_list_dl_ftra(&cache->dl_list, curr) {
-            unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
+            unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
             if (force)
                 break;
             if (unit->lock == 0)
@@ -140,7 +136,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
     app_sys_hashtable_dn_t *node_match = NULL;
     app_sys_ext_mem_cache_unit_t unit_match = {.offset = offset};
     if ((node_match = app_sys_hashtable_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
-        unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
+        unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
     /* 如果缓存命中时 */
     if (unit  != NULL) {
        *buffer = unit->buffer;
@@ -160,12 +156,12 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
     /* 对缓存计数器进行一次重衰减(rewind),老化它 */
     app_sys_list_dn_t *node = NULL;
     if ((node = app_sys_list_dl_tail(&cache->dl_list)) != NULL) {
-         unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node);
+         unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node);
          uint8_t count = unit->count;
          if (count != 0) {
              // app_sys_list_dl_ftra(&cache->dl_list, curr)
                 app_sys_list_dl_btra(&cache->dl_list, curr) {
-                unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
+                unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
                 unit->count -= count;
              }
          }
@@ -178,7 +174,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         while (cache->usage + size > cache->total) {
             /* 前向遍历,找已经解锁的资源 */
             app_sys_list_dl_ftra(&cache->dl_list, curr) {
-                unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
+                unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
                 if (unit->lock == 0)
                      break;
                 unit = NULL;
@@ -244,7 +240,7 @@ uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uintptr_t of
     app_sys_hashtable_dn_t *node_match = NULL;
     app_sys_ext_mem_cache_unit_t unit_match = {.offset = offset};
     if ((node_match = app_sys_hashtable_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
-        unit = app_ext_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
+        unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
     /* 如果缓存未命中时 */
     if (unit == NULL) {
         /* 资源可能被强制回收了,警告 */

@@ -6,17 +6,9 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_timer.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_system.h"
-
-#include "lvgl.h"
-#include "app_lv_drv.h"
-#include "app_lv_event.h"
-#include "app_lv_scene.h"
-#include "app_lv_check_time.h"
-#include "app_lv_ui_scene.h"
+#include "app_lv_lib.h"
 
 static app_mutex_t app_lv_check_time_mutex = {0};
 static app_sys_timer_t app_lv_check_time_timer = {0};

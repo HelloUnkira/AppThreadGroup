@@ -4,8 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_list.h"
-#include "app_sys_hashtable.h"
+#include "app_sys_lib.h"
 
 /*
  *哈希表(Generics HashTable)

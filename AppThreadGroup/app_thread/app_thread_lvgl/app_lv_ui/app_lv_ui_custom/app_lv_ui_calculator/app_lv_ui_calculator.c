@@ -3,17 +3,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-
-#include "lvgl.h"
-#include "app_lv_scene.h"
-#include "app_lv_style.h"
-#include "app_lv_ui_scene.h"
-
-#include "app_lv_ui_calculator.h"
-#include "app_lv_ui_calculator_presenter.h"
-
-#include "app_lv_ui_clock_presenter.h"
+#include "app_sys_lib.h"
+#include "app_lv_lib.h"
 
 /* 根据实际情况使用,不一定要按键矩阵 */
 #define APP_LV_RES_USE_BTNMATRIX   0

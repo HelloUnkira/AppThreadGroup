@@ -37,4 +37,15 @@ typedef enum {  /* 温度模组事件 */
     app_thread_mix_irq_temperature_xs_update,
 } app_thread_mix_irq_temperature_event_t;
 
+/* 子线程模组 */
+#include "app_module_work.h"
+#include "app_module_timer.h"
+#include "app_module_clock.h"
+#include "app_module_rtc.h"
+#include "app_module_watchdog.h"
+#include "app_module_battery.h"
+#include "app_module_vibrate.h"
+#include "app_module_backlight.h"
+#include "app_module_temperature.h"
+
 #endif

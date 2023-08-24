@@ -1,8 +1,6 @@
 #ifndef APP_THREAD_MASTER_H
 #define APP_THREAD_MASTER_H
 
-#include "app_sys_list.h"
-#include "app_sys_pipe.h"
 typedef   app_sys_pipe_pkg_t app_thread_package_t;
 
 /* 事件包裹推荐优先级 */

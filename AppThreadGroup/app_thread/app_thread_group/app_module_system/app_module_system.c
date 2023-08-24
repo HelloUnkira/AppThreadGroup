@@ -8,13 +8,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_clock.h"
-#include "app_module_data_center.h"
-#include "app_module_data_dump.h"
-#include "app_module_data_load.h"
-#include "app_module_system.h"
 
 #include "app_lv_event.h"
 
@@ -138,7 +133,7 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
     /* 重置系统一般最简单的就是系统复位,程序重开始 */
     /* 否则需要手动对所有的状态和流程进行适配 */
-    // app_os_reset();
+    // app_arch_reset();
 }
 
 /*@brief 初始化系统模组

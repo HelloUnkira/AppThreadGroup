@@ -6,13 +6,9 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_module_data_center.h"
-#include "app_module_system.h"
-
-#include "lvgl.h"
-#include "lv_drv_conf.h"
-#include "app_lv_drv.h"
+#include "app_sys_lib.h"
+#include "app_thread_group.h"
+#include "app_lv_lib.h"
 
 #if APP_LV_DRV_USE_SDL
 
@@ -141,7 +137,7 @@ void app_lv_driver_handler(void)
         if (app_module_system_mode_get() != app_module_data_center_system_mode_shutdown)
             app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
         else
-            app_os_reset();
+            app_arch_reset();
     }
     
     /* 更新处理 */

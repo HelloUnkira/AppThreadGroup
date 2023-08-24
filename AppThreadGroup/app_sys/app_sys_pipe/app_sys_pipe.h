@@ -3,14 +3,25 @@
 
 typedef struct {
     app_sys_list_dn_t dl_node;
-    void    *buddy;         /* 管道是优先队列(它的兄弟) */
     uint64_t thread:10;     /* 接收者线程 */
     uint64_t module:10;     /* 接收者线程模组 */
     uint64_t event:10;      /* 接收者线程模组事件 */
     uint64_t priority:8;    /* 接收者线程模组事件优先级(数字越大优先级越高) */
-    uint64_t dynamic:1;     /* 本次传输包裹状态 */
-    uint64_t size:24;       /* 协议数据流大小(16M) */
-    void    *data;          /* 协议数据流(浅拷贝) */
+    uint64_t ticks:20;      /* 事件包生成时的Tick,与处理时获取的Tick核对确认迟延数 */
+    /* 扩展字段:用户自定义追加: */
+    /* 事件可以携带通用结构信息 */
+    union {
+        /* 通用结构信息(数据量极少,支持任意类型和种类的数据): */
+        struct {
+            uint64_t dynamic:1;     /* 协议数据流是动态生成,使用完毕要回收 */
+            uint64_t size:24;       /* 协议数据流大小(16M) */
+            void    *data;          /* 协议数据流(浅拷贝) */
+        };
+        /* 扩展迷你信息(数据量极少,通常表示状态类数据): */
+        uintptr_t byte_align;
+        uint64_t  byte_fixed;
+        /* ... */
+    };
 } app_sys_pipe_pkg_t;
 
 typedef struct {

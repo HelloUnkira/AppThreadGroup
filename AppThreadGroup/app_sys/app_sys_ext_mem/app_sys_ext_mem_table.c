@@ -4,7 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_ext_mem.h"
+#include "app_sys_lib.h"
 
 static const app_sys_ext_mem_t app_sys_ext_mem_table[] = {
 	{

@@ -1,5 +1,5 @@
-#ifndef APP_EXT_ARCH_BATTERY_H
-#define APP_EXT_ARCH_BATTERY_H
+#ifndef APP_EXT_DEV_BATTERY_H
+#define APP_EXT_DEV_BATTERY_H
 
 /* 设备battery抽象操作接口 */
 typedef struct {

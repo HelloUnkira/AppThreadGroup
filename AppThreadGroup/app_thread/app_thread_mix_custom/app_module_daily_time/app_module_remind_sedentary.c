@@ -6,11 +6,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_module_clock.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_data_center.h"
-#include "app_module_remind_sedentary.h"
 
 /* 时间表检查函数:app_module_daily_time_remind_sedentary_f */
 APP_MODULE_DAILY_TIME_F(app_module_daily_time_remind_sedentary_t, app_module_daily_time_remind_sedentary_f, 2);

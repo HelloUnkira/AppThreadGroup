@@ -4,7 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_ext_src.h"
+#include "app_sys_lib.h"
 
 static const app_sys_ext_src_t app_sys_ext_src_mix_chunk_large_table[] = {
 	{

@@ -40,4 +40,19 @@ typedef enum {  /* 杂项提醒模组事件 */
     app_thread_mix_custom_remind_drink_interval,
 } app_thread_mix_custom_remind_misc_event_t;
 
+/* 子线程模组 */
+#include "app_module_countdown.h"
+#include "app_module_stopwatch.h"
+#include "app_module_weather.h"
+#include "app_module_world_time.h"
+#include "app_module_remind_group.h"
+#include "app_module_remind_alarm.h"
+#include "app_module_remind_calendar.h"
+#include "app_module_remind_menstruation.h"
+#include "app_module_remind_matter.h"
+#include "app_module_daily_time.h"
+#include "app_module_remind_drink.h"
+#include "app_module_remind_sedentary.h"
+#include "app_module_do_not_disturb.h"
+
 #endif

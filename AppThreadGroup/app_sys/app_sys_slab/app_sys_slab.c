@@ -7,9 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_list.h"
-#include "app_sys_slab.h"
+#include "app_sys_lib.h"
 
 /*@brief     初始化slab分配器
  *@param[in] slab     slab分配器实例
@@ -43,7 +41,7 @@ void * app_sys_slab_alloc(app_sys_slab_t *slab)
     /* 先检查分配器是否还有块 */
     app_sys_slab_item_t *item = NULL;
     app_sys_list_dl_ftra(&slab->dl_list, node) {
-        item = app_ext_own_ofs(app_sys_slab_item_t, dl_node, node);
+        item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
         if (item->blk_used < item->blk_num)
             break;
         item = NULL;
@@ -94,7 +92,7 @@ void app_sys_slab_free(app_sys_slab_t *slab, void *ptr)
     /* 检查回收块是否落在此分配器内 */
     app_sys_slab_item_t *item = NULL;
     app_sys_list_dl_ftra(&slab->dl_list, node) {
-        item = app_ext_own_ofs(app_sys_slab_item_t, dl_node, node);
+        item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
         if (item->mem_s <= ptr && ptr < item->mem_e)
             break;
         item = NULL;

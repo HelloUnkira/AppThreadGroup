@@ -18,16 +18,8 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_timer.h"
-#include "app_module_clock.h"
-#include "app_module_rtc.h"
-#include "app_module_watchdog.h"
-#include "app_module_battery.h"
-#include "app_module_vibrate.h"
-#include "app_module_backlight.h"
-#include "app_module_temperature.h"
 
 /*@brief 子线程服务例程就绪部
  */
@@ -58,7 +50,7 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
         if (package->event == app_thread_mix_irq_clock_local_update)
             app_module_clock_local_update();
         if (package->event == app_thread_mix_irq_clock_timestamp_update)
-            app_module_clock_timestamp_update(package->data != NULL ? *(uint64_t *)package->data : 0);
+            app_module_clock_timestamp_update(package->byte_fixed);
         return true;
     }
     case app_thread_mix_irq_battery: {

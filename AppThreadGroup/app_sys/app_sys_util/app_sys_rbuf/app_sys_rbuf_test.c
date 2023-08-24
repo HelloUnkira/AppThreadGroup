@@ -7,8 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_rbuf.h"
+#include "app_sys_lib.h"
 
 /*@brief 环形队列测试
  *       迭代位置过大,需要单独测试索引

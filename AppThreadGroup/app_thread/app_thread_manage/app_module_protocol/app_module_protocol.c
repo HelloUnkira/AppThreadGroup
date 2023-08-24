@@ -7,26 +7,9 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_transfer.h"
-#include "app_module_protocol.h"
-
-#if 0
-#elif APP_MODULE_PROTOCOL_USE_JSON
-#include "cJSON.h"
-#include "app_json_xfer.h"
-#include "app_json_xfer_mix.h"
-#elif APP_MODULE_PROTOCOL_USE_NANOPB
-#include "pb_common.h"
-#include "pb_encode.h"
-#include "pb_decode.h"
-#include "app_nanopb_set.pb.h"
-#include "app_nanopb_xfer.h"
-#include "app_nanopb_xfer_mix.h"
-#else
-#error "app module protocol is unknown"
-#endif
+#include "app_protocol_lib.h"
 
 /*@brief     传输协议
  *@param[in] protocol 传输协议包(栈资源,非堆资源或静态资源)
@@ -118,8 +101,8 @@ void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
 {
     app_module_protocol_t *protocol = (void *)data;
     /* 检查数据流 */
-    APP_SYS_LOG_INFO_RAW("size:%d%s", protocol->respond.size, APP_SYS_LOG_LINE);
-    APP_SYS_LOG_INFO_RAW("data:%s%s", protocol->respond.data, APP_SYS_LOG_LINE);
+    APP_SYS_LOG_INFO_RAW("size:%d%s", protocol->respond.size, app_sys_msg_line());
+    APP_SYS_LOG_INFO_RAW("data:%s%s", protocol->respond.data, app_sys_msg_line());
     
     #if 0
     #elif APP_MODULE_PROTOCOL_USE_JSON

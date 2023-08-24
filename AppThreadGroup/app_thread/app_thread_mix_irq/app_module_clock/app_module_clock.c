@@ -6,12 +6,9 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_timer.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "app_module_data_center.h"
-#include "app_module_rtc.h"
-#include "app_module_clock.h"
+#define   APP_MODULE_CLOCK_CB_H
 #include "app_module_clock_cb.h"
 
 /*@brief     闰年判断
@@ -191,7 +188,6 @@ void app_module_clock_set_system_clock_mode(bool is_24)
     app_module_clock[0].is_24 = is_24;
     app_module_clock[1].is_24 = is_24;
     app_mutex_process(&app_module_clock_mutex, app_mutex_give);
-
 }
 
 /*@brief     获得系统时间(中断环境下不可调用)
@@ -343,13 +339,11 @@ static void app_module_clock_timer_handler(void *timer)
     static app_module_rtc_t rtc = {0};
     app_module_rtc_get(&rtc);
     app_thread_package_t package = {
-        .thread   = app_thread_id_mix_irq,
-        .module   = app_thread_mix_irq_clock,
-        .event    = app_thread_mix_irq_clock_timestamp_update,
-        .priority = app_thread_package_priority_highest,
-        .dynamic  = false,
-        .size     = sizeof(uint64_t),
-        .data     = &rtc.utc,
+        .thread     = app_thread_id_mix_irq,
+        .module     = app_thread_mix_irq_clock,
+        .event      = app_thread_mix_irq_clock_timestamp_update,
+        .priority   = app_thread_package_priority_highest,
+        .byte_fixed = rtc.utc,
     };
     app_thread_package_notify(&package);
 }

@@ -236,7 +236,7 @@
 
 /*Add a custom handler when assert happens e.g. to restart the MCU*/
 #define LV_ASSERT_HANDLER_INCLUDE   "app_ext_lib.h"
-#define LV_ASSERT_HANDLER            app_os_reset();   /*Halt by default*/
+#define LV_ASSERT_HANDLER            app_arch_reset();   /*Halt by default*/
 
 /*-------------
  * Others

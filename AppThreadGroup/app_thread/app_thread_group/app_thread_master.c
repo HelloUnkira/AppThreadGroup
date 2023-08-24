@@ -16,7 +16,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
+#include "app_sys_lib.h"
 #include "app_thread_group.h"
 
 /* 信号量,控制线程组的进动 */
@@ -82,7 +82,7 @@ bool app_thread_id_is_valid(uint32_t thread)
                    (app_thread_id_d_s < thread && thread < app_thread_id_d_e));
     
     app_mutex_process(&app_thread_mutex, app_mutex_take);
-    bool valid = app_ext_bit_ext_get_u8(app_thread_used_d, thread - app_thread_id_d_s - 1) != 0;
+    bool valid = app_sys_bit_ext_get_u8(app_thread_used_d, thread - app_thread_id_d_s - 1) != 0;
     app_mutex_process(&app_thread_mutex, app_mutex_give);
     return valid;
 }
@@ -97,8 +97,8 @@ uint32_t app_thread_id_alloc(void)
     uint32_t thread = 0;
     app_mutex_process(&app_thread_mutex, app_mutex_take);
     for (uint32_t idx = app_thread_id_d_s + 1; idx <= app_thread_id_d_e - 1; idx++)
-        if (app_ext_bit_ext_get_u8(app_thread_used_d, idx) == 0) {
-            app_ext_bit_ext_set_u8(app_thread_used_d, idx - app_thread_id_d_s - 1);
+        if (app_sys_bit_ext_get_u8(app_thread_used_d, idx) == 0) {
+            app_sys_bit_ext_set_u8(app_thread_used_d, idx - app_thread_id_d_s - 1);
             thread = idx;
             break;
         }
@@ -140,7 +140,7 @@ void app_thread_id_free(uint32_t thread, void (*burn)(app_thread_package_t *pack
         APP_SYS_ASSERT(burn != NULL);
         burn(&package);
     }
-    app_ext_bit_ext_rst_u8(app_thread_used_d, thread - app_thread_id_d_s - 1);
+    app_sys_bit_ext_rst_u8(app_thread_used_d, thread - app_thread_id_d_s - 1);
     app_mutex_process(&app_thread_mutex, app_mutex_give);
 }
 

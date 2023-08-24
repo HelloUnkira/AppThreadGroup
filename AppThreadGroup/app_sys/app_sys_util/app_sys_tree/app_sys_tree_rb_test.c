@@ -6,9 +6,8 @@
 #define APP_SYS_LOG_LOCAL_STATUS     1
 #define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include <app_ext_lib.h>
-#include <app_sys_log.h>
-#include <app_sys_tree_rb.h>
+#include "app_ext_lib.h"
+#include "app_sys_lib.h"
 
 //这是我要获得红黑树语义的数据结构
 typedef struct {
@@ -21,23 +20,23 @@ typedef struct {
 
 uint8_t app_sys_tree_rb_test_compare(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2)
 {
-    app_sys_tree_rb_test_t *test1 = app_ext_own_ofs(app_sys_tree_rb_test_t, rbn_node, node1);
-    app_sys_tree_rb_test_t *test2 = app_ext_own_ofs(app_sys_tree_rb_test_t, rbn_node, node2);
+    app_sys_tree_rb_test_t *test1 = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node1);
+    app_sys_tree_rb_test_t *test2 = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node2);
     
     return test1->key < test2->key ? 1 : 0;
 }
 
 uint8_t app_sys_tree_rb_test_confirm(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2)
 {
-    app_sys_tree_rb_test_t *test1 = app_ext_own_ofs(app_sys_tree_rb_test_t, rbn_node, node1);
-    app_sys_tree_rb_test_t *test2 = app_ext_own_ofs(app_sys_tree_rb_test_t, rbn_node, node2);
+    app_sys_tree_rb_test_t *test1 = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node1);
+    app_sys_tree_rb_test_t *test2 = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node2);
     
     return test1->key == test2->key ? 0 : 1;
 }
 
 void app_sys_tree_rb_test_visit(app_sys_tree_rbn_t *node, uint8_t color)
 {
-    app_sys_tree_rb_test_t *test = app_ext_own_ofs(app_sys_tree_rb_test_t, rbn_node, node);
+    app_sys_tree_rb_test_t *test = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node);
     
     return;
     /* 暴力测试时不全部打印 */

@@ -4,11 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_ext_mem.h"
-#include "app_sys_ext_mem_table.h"
-#include "app_sys_ext_src.h"
-#include "app_sys_ext_src_table.h"
+#include "app_sys_lib.h"
 
 /*@brief     读取资源从指定chunk的指定data段
  *@param[in] chunk_name chunk名字

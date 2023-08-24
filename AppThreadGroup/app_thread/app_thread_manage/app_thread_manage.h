@@ -25,4 +25,13 @@ typedef enum {  /* 协议传输模组事件 */
 /* 本地回环:用于测试数据通路的上层环路 */
 #define APP_MODULE_PROTOCOL_LOCAL_LOOPBACK      1
 
+/* 子线程模组 */
+#include "app_module_transfer.h"
+#include "app_module_protocol.h"
+#include "app_module_data_center_type.h"
+#include "app_module_data_center.h"
+#include "app_module_data_load.h"
+#include "app_module_data_dump.h"
+#include "app_module_shutdown.h"
+
 #endif

@@ -1,7 +1,6 @@
 #ifndef APP_MODULE_DO_NOT_DISTURB_H
 #define APP_MODULE_DO_NOT_DISTURB_H
 
-#include "app_module_daily_time.h"
 /* 时间表检查函数:app_module_daily_time_do_not_disturb_t */
 APP_MODULE_DAILY_TIME_T(app_module_daily_time_do_not_disturb_t, 2);
 

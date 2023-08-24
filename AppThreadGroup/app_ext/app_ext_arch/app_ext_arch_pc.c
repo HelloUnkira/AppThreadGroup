@@ -14,9 +14,26 @@ void app_arch_ready(void)
 {
     /* rand seed */
     srand(time(0));
-    rand();
     /* cpu freq and clock freq */
     
+}
+
+/*@brief 重启平台
+ */
+void app_arch_reset(void)
+{
+    exit(-1);
+    while (true);
+}
+
+/*@brief     重启平台
+ *@param[in] ms 延时时间(ms)
+ */
+void app_arch_reset_delay_ms(uint32_t ms)
+{
+    app_delay_ms(ms);
+    exit(-1);
+    while (true);
 }
 
 #endif

@@ -5,7 +5,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_timer.h"
+#include "app_sys_lib.h"
 
 static app_mutex_t app_sys_timer_mutex = {0};
 static app_sys_timer_t *app_sys_timer_list = NULL;

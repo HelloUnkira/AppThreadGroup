@@ -3,7 +3,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_fft.h"
+#include "app_sys_lib.h"
 
 /*@brief     快速傅里叶变换
  *@param[in] fft 傅里叶变换数据实例

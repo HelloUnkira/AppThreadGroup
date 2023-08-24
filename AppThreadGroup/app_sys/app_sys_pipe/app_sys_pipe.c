@@ -16,9 +16,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_list.h"
-#include "app_sys_slab.h"
-#include "app_sys_pipe.h"
+#include "app_sys_lib.h"
 
 static app_sys_slab_t app_sys_pipe_slab = {0};
 
@@ -26,8 +24,8 @@ static app_sys_slab_t app_sys_pipe_slab = {0};
  */
 static bool app_sys_pipe_sort(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
 {
-    app_sys_pipe_pkg_t *pkg1 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
-    app_sys_pipe_pkg_t *pkg2 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
+    app_sys_pipe_pkg_t *pkg1 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
+    app_sys_pipe_pkg_t *pkg2 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
     return pkg1->priority > pkg2->priority;
 }
 
@@ -35,8 +33,8 @@ static bool app_sys_pipe_sort(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2
  */
 static bool app_sys_pipe_confirm(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
 {
-    app_sys_pipe_pkg_t *pkg1 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
-    app_sys_pipe_pkg_t *pkg2 = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
+    app_sys_pipe_pkg_t *pkg1 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
+    app_sys_pipe_pkg_t *pkg2 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
     return pkg1->thread == pkg2->thread && pkg1->module == pkg2->module && pkg1->event  == pkg2->event;
 }
 
@@ -110,12 +108,12 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
         if (hit) {
             app_sys_list_dl_btra(&pipe->dl_list, node)
                 if (app_sys_pipe_confirm(&package->dl_node, node)) {
-                    package_new = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+                    package_new = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
                     break;
                 }
         } else {
             app_sys_list_dn_t *node = app_sys_list_dl_head(&pipe->dl_list);
-            package_new = app_ext_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+            package_new = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
         }
         if (package_new != NULL) {
             app_sys_list_dl_remove(&pipe->dl_list, &package_new->dl_node);

@@ -2,9 +2,7 @@
  *    lv适配SDL模拟器
  */
 
-#include "lvgl.h"
-#include "lv_drv_conf.h"
-#include "app_lv_drv.h"
+#include "app_lv_lib.h"
 
 #if APP_LV_DRV_USE_SDL
 

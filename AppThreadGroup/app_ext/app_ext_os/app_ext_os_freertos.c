@@ -206,11 +206,4 @@ double app_execute_us(app_execute_us_t *execute_us, bool run)
     }
 }
 
-/*@brief 重启
- */
-void app_os_reset(void)
-{
-    while (true);
-}
-
 #endif

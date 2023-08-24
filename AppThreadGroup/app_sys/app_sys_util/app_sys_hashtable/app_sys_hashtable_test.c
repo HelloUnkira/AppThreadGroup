@@ -7,9 +7,7 @@
 #define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
-#include "app_sys_log.h"
-#include "app_sys_list.h"
-#include "app_sys_hashtable.h"
+#include "app_sys_lib.h"
 
 /*@brief 摘要的来源网络的Hash散列函数
  */
@@ -41,26 +39,26 @@ typedef struct {
 
 uint32_t app_sys_hashtable_test_fd(app_sys_hashtable_dn_t *target)
 {
-    app_sys_hashtable_test_t *test = app_ext_own_ofs(app_sys_hashtable_test_t, node, target);
+    app_sys_hashtable_test_t *test = app_sys_own_ofs(app_sys_hashtable_test_t, node, target);
     return app_sys_hashtable_elf_hash((uint8_t *)&test->key, sizeof(uint32_t));
 }
 
 bool app_sys_hashtable_test_fc(app_sys_hashtable_dn_t *node1, app_sys_hashtable_dn_t *node2)
 {
-    app_sys_hashtable_test_t *test1 = app_ext_own_ofs(app_sys_hashtable_test_t, node, node1);
-    app_sys_hashtable_test_t *test2 = app_ext_own_ofs(app_sys_hashtable_test_t, node, node2);
+    app_sys_hashtable_test_t *test1 = app_sys_own_ofs(app_sys_hashtable_test_t, node, node1);
+    app_sys_hashtable_test_t *test2 = app_sys_own_ofs(app_sys_hashtable_test_t, node, node2);
     return test1->key == test2->key;
 }
 
 void app_sys_hashtable_test_fv(app_sys_hashtable_dn_t *target, uint32_t idx)
 {
-    app_sys_hashtable_test_t *test = app_ext_own_ofs(app_sys_hashtable_test_t, node, target);
+    app_sys_hashtable_test_t *test = app_sys_own_ofs(app_sys_hashtable_test_t, node, target);
     
     static uint32_t idx_ofs = -1;
     
     if (idx_ofs != idx) {
         idx_ofs  = idx;
-        APP_SYS_LOG_INFO_RAW(APP_SYS_LOG_LINE);
+        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
     }
     APP_SYS_LOG_INFO_RAW("<%2u, %2u>", test->key, test->data);
 }
@@ -97,7 +95,7 @@ void app_sys_hashtable_test(void)
         if (target == NULL)
             continue;
         app_sys_hashtable_dt_remove(&test_table, target);
-        app_mem_free(app_ext_own_ofs(app_sys_hashtable_test_t, node, target));
+        app_mem_free(app_sys_own_ofs(app_sys_hashtable_test_t, node, target));
         idx++;
     }
     

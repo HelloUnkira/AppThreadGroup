@@ -13,7 +13,7 @@ def encode_app_sys_ext_mem_table_c(file, dir_list):
     file.write(' *通过app_sys_ext_mem_table.py生成\n')
     file.write(' *参考app_sys_ext_mem_table.json中的模式生成源\n */\n\n')
     file.write('#include "app_ext_lib.h"\n')
-    file.write('#include "app_sys_ext_mem.h"\n\n')
+    file.write('#include "app_sys_lib.h"\n\n')
     # 先提取所有的chunk_base,然后为此生成chunk_offset
     chunk_base = []
     chunk_offset = []
