@@ -118,7 +118,7 @@
 /*@brief  换行字符串
  *@retval 返回换行字符串
  */
-const char * app_sys_msg_line(void);
+const char * app_sys_log_line(void);
 
 /* ----------下面是未使用宏包装的函数,不建议直接使用,不利于项目代码裁剪---------- */
 

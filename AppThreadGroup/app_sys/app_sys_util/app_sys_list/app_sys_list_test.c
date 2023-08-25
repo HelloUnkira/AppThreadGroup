@@ -48,7 +48,7 @@ void app_sys_list_test_data_check(app_sys_list_test_t *test)
     APP_SYS_LOG_INFO_RAW("data_f:%6f,",   test->data_f);
     APP_SYS_LOG_INFO_RAW("data_d:%8f,",   test->data_d);
     APP_SYS_LOG_INFO_RAW("data_str:%s,",  test->data_str);
-    APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+    APP_SYS_LOG_INFO_RAW(app_sys_log_line());
 }
 
 /*@brief 侵入式双链表测试

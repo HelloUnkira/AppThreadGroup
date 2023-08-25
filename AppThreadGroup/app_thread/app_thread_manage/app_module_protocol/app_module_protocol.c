@@ -101,8 +101,8 @@ void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
 {
     app_module_protocol_t *protocol = (void *)data;
     /* 检查数据流 */
-    APP_SYS_LOG_INFO_RAW("size:%d%s", protocol->respond.size, app_sys_msg_line());
-    APP_SYS_LOG_INFO_RAW("data:%s%s", protocol->respond.data, app_sys_msg_line());
+    APP_SYS_LOG_INFO_RAW("size:%d%s", protocol->respond.size, app_sys_log_line());
+    APP_SYS_LOG_INFO_RAW("data:%s%s", protocol->respond.data, app_sys_log_line());
     
     #if 0
     #elif APP_MODULE_PROTOCOL_USE_JSON

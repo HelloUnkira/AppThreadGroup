@@ -32,18 +32,26 @@ int main(int argc, char *argv[])
         void app_sys_list_sl_test(void);
         app_sys_list_dl_test();
         app_sys_list_sl_test();
+        void app_sys_tree_s_test(void);
         void app_sys_tree_rb_test(void);
+        app_sys_tree_s_test();
         app_sys_tree_rb_test();
-        void app_sys_hashtable_test(void);
-        app_sys_hashtable_test();
-        void app_sys_app_sys_matrix_test(void);
-        app_sys_app_sys_matrix_test();
+        void app_sys_table_test(void);
+        app_sys_table_test();
+        void app_sys_handle_test(void);
+        void app_sys_matrix_test(void);
         void app_sys_fft_test(void);
+        app_sys_handle_test();
+        app_sys_matrix_test();
         app_sys_fft_test();
+        break;
+        #elif 0
+        /* test sys func */
         void app_sys_ext_mem_cache_test(void);
         app_sys_ext_mem_cache_test();
-        
-        break;
+        void app_sys_timer_test(void);
+        app_sys_timer_test();
+        while (1);
         #elif 1
         /* 测试中我们在主线程 */
         /* 模拟发送1ms定时器中断事件 */
@@ -58,16 +66,6 @@ int main(int argc, char *argv[])
         static uint32_t count = 0;
         count++;
         #if 0
-        #elif 0
-        /* test timer */
-        if (count == 1000 * 1) {
-            void app_sys_timer_test(void);
-            app_sys_timer_test();
-        }
-        #elif 0
-        /* test reset load and dump */
-        if (count == 1000 * 5)
-            app_module_system_valid_set(false);
         #elif 1
         /* test protocol(3s later) */
         if (count == 1000 * 3) {

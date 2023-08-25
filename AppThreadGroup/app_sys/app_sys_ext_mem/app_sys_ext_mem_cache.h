@@ -11,7 +11,7 @@ typedef enum {
 
 typedef struct {
     app_sys_list_dn_t dl_node;
-    app_sys_hashtable_dn_t ht_node;
+    app_sys_table_dn_t ht_node;
     uintptr_t   offset;
     uint8_t    *buffer;
     uintptr_t   size;
@@ -23,8 +23,8 @@ typedef struct {
 typedef struct {
     app_mutex_t mutex;
     app_sys_list_dl_t dl_list;
-    app_sys_hashtable_dl_t *ht_list;
-    app_sys_hashtable_dt_t  ht_table;
+    app_sys_table_dl_t *ht_list;
+    app_sys_table_dt_t  ht_table;
     uint32_t ht_list_num;
     const app_sys_ext_mem_t *ext_mem;
     uint32_t unit;      /* 缓存对内存资源使用单元门限 */

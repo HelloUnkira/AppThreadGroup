@@ -29,13 +29,13 @@ void app_sys_fft_test(void)
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     
@@ -64,18 +64,18 @@ void app_sys_fft_test(void)
     APP_SYS_LOG_INFO("FFT:");
     for (k = 0; k < len; k++)
         APP_SYS_LOG_INFO_RAW("%d ",array1[k]);
-        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     APP_SYS_LOG_INFO("REAL:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     
@@ -91,18 +91,18 @@ void app_sys_fft_test(void)
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (k = 0; k < len; k++)
         APP_SYS_LOG_INFO_RAW("%d ",array2[k]);
-        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     APP_SYS_LOG_INFO("REAL:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",real_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("IMAG:");
     for (k = 0; k < len; k += 4) {
         for (i = k; i < k + 4; i++)
             APP_SYS_LOG_INFO_RAW("%lf\t",imag_list[i]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
 }

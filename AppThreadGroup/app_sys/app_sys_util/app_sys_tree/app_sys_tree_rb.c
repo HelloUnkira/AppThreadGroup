@@ -194,7 +194,7 @@ static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side_other(app_sys_
 #define APP_SYS_TREE_RBT_CHECK_RETURN_NULL(expr)    if (expr) return NULL;
 
 /*@brief         红黑树核心动作:交换(左右旋转)
- *@param[in,out] child  红黑树实例
+ *@param[in,out] tree   红黑树实例
  *@param[in,out] child  红黑节点实例
  *@param[in,out] parent 红黑节点实例
  */
@@ -227,8 +227,8 @@ static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t
 }
 
 /*@brief         搜索函数(大小元)
- *@param[in,out] child 红黑节点实例
- *@param[in]     side  红黑节点方向
+ *@param[in,out] node 红黑节点实例
+ *@param[in]     side 红黑节点方向
  *@retval        红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
@@ -243,8 +243,8 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_
 }
 
 /*@brief         搜索函数(前驱和后继)
- *@param[in,out] child 红黑节点实例
- *@param[in]     side  红黑节点方向
+ *@param[in,out] node 红黑节点实例
+ *@param[in]     side 红黑节点方向
  *@retval        红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
@@ -451,17 +451,16 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
     if (child_l != NULL && child_r != NULL) {
         /* 1.获取其前驱和后继(这里使用最大前驱,也可以使用最小后继,反一下即可) */
         app_sys_tree_rbn_t *prev = app_sys_tree_rbt_search_min_or_max(child_l, app_sys_tree_rbn_side_r);
-        app_sys_tree_rbn_t *next = app_sys_tree_rbt_search_min_or_max(child_r, app_sys_tree_rbn_side_l);
         /* 2.更新需要交换的俩个父亲的孩子信息 */
         app_sys_tree_rbn_t *prev_parent = app_sys_tree_rbn_get_parent(prev);
-        app_sys_tree_rbn_t *next_parent = app_sys_tree_rbn_get_parent(node);
+        app_sys_tree_rbn_t *node_parent = app_sys_tree_rbn_get_parent(node);
         /* 这里有一些特殊情况需要检查,原则上,这是通过在节点之间交换子指针 */
         /* 并将指向它们的节点从它们的父节点重新定位来实现的,但是: */
         /* (1)上面的节点可能是树的根,没有父节点 */
-        if (next_parent == NULL)
+        if (node_parent == NULL)
             app_sys_tree_rbt_set_root(tree, prev);
-        if (next_parent != NULL)
-            app_sys_tree_rbn_set_child(next_parent, prev, app_sys_tree_rbn_get_side(node, next_parent));
+        if (node_parent != NULL)
+            app_sys_tree_rbn_set_child(node_parent, prev, app_sys_tree_rbn_get_side(node, node_parent));
         /* (2)下面的节点可能是上面节点的直接子节点 */
         if (prev_parent == node) {
             /* 交换俩个节点的左孩子 */
@@ -473,7 +472,7 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
             if (prev_child_l != NULL)
                 app_sys_tree_rbn_set_parent(prev_child_l, node);
             /* 交换俩个节点的父亲 */
-            app_sys_tree_rbn_set_parent(prev, next_parent);
+            app_sys_tree_rbn_set_parent(prev, node_parent);
             app_sys_tree_rbn_set_parent(node, prev);
         }
         if (prev_parent != node) {
@@ -490,7 +489,7 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
             if (prev_child_l != NULL)
                 app_sys_tree_rbn_set_parent(prev_child_l, node);
             /* 交换俩个节点的父亲 */
-            app_sys_tree_rbn_set_parent(prev, next_parent);
+            app_sys_tree_rbn_set_parent(prev, node_parent);
             app_sys_tree_rbn_set_parent(node, prev_parent);
         }
         /* 交换俩个节点的右孩子 */
@@ -738,6 +737,7 @@ void app_sys_tree_rbt_reset(app_sys_tree_rbt_t *tree)
     app_sys_tree_rbt_set_root(tree, NULL);
     app_sys_tree_rbt_set_compare(tree, NULL);
     app_sys_tree_rbt_set_confirm(tree, NULL);
+    app_sys_tree_rbt_set_visit(tree, NULL);
 }
 
 /*@brief     复位函数
@@ -762,7 +762,7 @@ void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_
     app_sys_tree_rbt_set_root(tree, NULL);
     app_sys_tree_rbt_set_compare(tree, compare);
     app_sys_tree_rbt_set_confirm(tree, confirm);
-    app_sys_tree_rbt_set_visit(tree,   visit);
+    app_sys_tree_rbt_set_visit(tree, visit);
 }
 
 /*@brief     根切换函数

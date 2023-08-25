@@ -88,7 +88,7 @@ bool app_module_transfer_notify(app_module_transfer_chan_t channel, uint8_t *dat
         APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
         for (uint32_t idx = 0; idx < transfer->size; idx++)
             APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
-            APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
         /* 传输缓冲块 */
         // app_module_transfer_throw(transfer);
         /* 本地回环 */
@@ -136,7 +136,7 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
             APP_SYS_LOG_ERROR("catch leak package:%u", zone[transfer->chan].offset);
             for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
                 APP_SYS_LOG_ERROR_RAW("%02x ", zone[transfer->chan].stream[idx]);
-                APP_SYS_LOG_ERROR_RAW(app_sys_msg_line());
+                APP_SYS_LOG_ERROR_RAW(app_sys_log_line());
             app_mem_free(zone[transfer->chan].stream);
         }
         /* 开始了新一次的传输 */
@@ -157,7 +157,7 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
         APP_SYS_LOG_ERROR("package tail:%u", transfer->tail);
         for (uint32_t idx = 0; idx < transfer->size; idx++)
             APP_SYS_LOG_ERROR_RAW("%02x ", transfer->data[idx]);
-            APP_SYS_LOG_ERROR_RAW(app_sys_msg_line());
+            APP_SYS_LOG_ERROR_RAW(app_sys_log_line());
         app_mem_free(zone[transfer->chan].stream);
         zone[transfer->chan].offset = 0;
         zone[transfer->chan].stream = NULL;
@@ -168,7 +168,7 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
         APP_SYS_LOG_ERROR("catch overflow package:%u", zone[transfer->chan].offset);
         for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
             APP_SYS_LOG_ERROR_RAW("%02x ", zone[transfer->chan].stream[idx]);
-            APP_SYS_LOG_ERROR_RAW(app_sys_msg_line());
+            APP_SYS_LOG_ERROR_RAW(app_sys_log_line());
         return;
     }
     /* 将数据包进行流式存储 */
@@ -181,7 +181,7 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
     APP_SYS_LOG_INFO("package tail:%u", transfer->tail);
     for (uint32_t idx = 0; idx < transfer->size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", transfer->data[idx]);
-        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     /* 更新超时监控 */
     app_sys_timer_stop(&app_module_transfer_respond_timeout_timer[transfer->chan]);
     app_sys_timer_start(&app_module_transfer_respond_timeout_timer[transfer->chan]);
@@ -196,7 +196,7 @@ void app_module_transfer_respond(app_module_transfer_t *transfer)
             APP_SYS_LOG_INFO("catch fully package:%u", zone[transfer->chan].offset);
             for (uint32_t idx = 0; idx < zone[transfer->chan].offset; idx++)
                 APP_SYS_LOG_INFO_RAW("%02x ", zone[transfer->chan].stream[idx]);
-                APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+                APP_SYS_LOG_INFO_RAW(app_sys_log_line());
             /* 传输到目标 */
             app_module_protocol_t protocol = {
                 .respond.data    = zone[transfer->chan].stream,

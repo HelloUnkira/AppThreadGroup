@@ -4,7 +4,7 @@
 
 #define APP_SYS_LOG_RECORD_LIMIT     1
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -37,8 +37,6 @@ uint8_t app_sys_tree_rb_test_confirm(app_sys_tree_rbn_t *node1, app_sys_tree_rbn
 void app_sys_tree_rb_test_visit(app_sys_tree_rbn_t *node, uint8_t color)
 {
     app_sys_tree_rb_test_t *test = app_sys_own_ofs(app_sys_tree_rb_test_t, rbn_node, node);
-    
-    return;
     /* 暴力测试时不全部打印 */
     APP_SYS_LOG_DEBUG("key:%d val:%d color:%s", test->key, test->rand_val,
                       color == app_sys_tree_rbn_color_b ? "BLACK" :

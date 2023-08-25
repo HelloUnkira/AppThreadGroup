@@ -373,7 +373,7 @@ static inline uint64_t app_sys_abs_u64(int64_t x) {return app_sys_abs(x);}
 /*@brief 区间映射
  *       泛化封装:(不建议直接使用)
  */
-#define app_sys_map(x, l_i, r_i, l_o, r_o)  ((((r_o) - (l_o)) / ((r_i) - (l_i))) * ((x) - (l_i)) + (l_o))
+#define app_sys_map(x, l_i, r_i, l_o, r_o)  (((x) - (l_i)) * (((r_o) - (l_o)) / ((r_i) - (l_i))) + (l_o))
 
 /*@brief 区间映射
  */

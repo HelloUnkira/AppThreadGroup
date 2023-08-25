@@ -31,10 +31,10 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
          APP_SYS_LOG_ERROR("encode fail:%s", stream.errmsg);
     // stream.bytes_written;
     /* 检查nanopb数据流 */
-    APP_SYS_LOG_INFO_RAW("nanopb encode:%d" app_sys_msg_line(), size);
+    APP_SYS_LOG_INFO_RAW("nanopb encode:%d" app_sys_log_line(), size);
     for (uint32_t idx = 0; idx < size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
-        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     /* 传输nanopb数据流 */
     app_module_transfer_notify(channel, buffer, size);
     /* 回收nanopb缓冲区 */
@@ -49,10 +49,10 @@ bool app_nanopb_xfer_notify(app_module_transfer_chan_t channel, AppPB_MsgSet *me
 bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
 {
     /* 检查nanopb */
-    APP_SYS_LOG_INFO_RAW("nanopb decode:%d" app_sys_msg_line(), size);
+    APP_SYS_LOG_INFO_RAW("nanopb decode:%d" app_sys_log_line(), size);
     for (uint32_t idx = 0; idx < size; idx++)
         APP_SYS_LOG_INFO_RAW("%02x ", buffer[idx]);
-        APP_SYS_LOG_INFO_RAW(app_sys_msg_line());
+        APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     /* 创建传输对象 */
     AppPB_MsgSet message = AppPB_MsgSet_init_zero;
     /* nanopb解码 */
@@ -61,7 +61,7 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
          APP_SYS_LOG_ERROR("decode fail:%s", stream.errmsg);
     // stream.bytes_left;
     /* 检查nanopb */
-    APP_SYS_LOG_INFO_RAW("nanopb type:%d" app_sys_msg_line(), message.type);
+    APP_SYS_LOG_INFO_RAW("nanopb type:%d" app_sys_log_line(), message.type);
     /* 匹配数据包 */
     bool retval = false;
     switch (message.which_payload) {
@@ -72,7 +72,7 @@ bool app_nanopb_xfer_respond(uint8_t *buffer, uint32_t size)
         retval = app_nanopb_xfer_respond_system_clock(&message);
         break;
     default:
-        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d" app_sys_msg_line(), message.type);
+        APP_SYS_LOG_INFO_RAW("unknown nanopb type:%d" app_sys_log_line(), message.type);
         break;
     }
     return retval;

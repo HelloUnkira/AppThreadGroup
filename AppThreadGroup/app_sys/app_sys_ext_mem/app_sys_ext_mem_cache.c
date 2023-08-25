@@ -20,17 +20,17 @@ static bool app_sys_ext_mem_cache_sort(app_sys_list_dn_t *node1, app_sys_list_dn
 
 /*@brief 哈希散列函数,哈希摘要函数
  */
-static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_hashtable_dn_t *node)
+static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_table_dn_t *node)
 {
     app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     /* 摘要的来源网络的Hash散列函数 */
-    uint32_t app_sys_hashtable_elf_hash(uint8_t *data, uint32_t length);
-    return app_sys_hashtable_elf_hash((void *)&unit->offset, sizeof(uintptr_t));
+    uint32_t app_sys_table_elf_hash(uint8_t *data, uint32_t length);
+    return app_sys_table_elf_hash((void *)&unit->offset, sizeof(uintptr_t));
 }
 
 /*@brief 哈希比较函数
  */
-static bool app_sys_ext_mem_cache_fc_t(app_sys_hashtable_dn_t *node1, app_sys_hashtable_dn_t *node2)
+static bool app_sys_ext_mem_cache_fc_t(app_sys_table_dn_t *node1, app_sys_table_dn_t *node2)
 {
     app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
     app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
@@ -39,7 +39,7 @@ static bool app_sys_ext_mem_cache_fc_t(app_sys_hashtable_dn_t *node1, app_sys_ha
 
 /*@brief 哈希访问函数
  */
-static void app_sys_ext_mem_cache_fv_t(app_sys_hashtable_dn_t *node,  uint32_t idx)
+static void app_sys_ext_mem_cache_fv_t(app_sys_table_dn_t *node,  uint32_t idx)
 {
     app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     APP_SYS_LOG_INFO("%u: <%x, %x, %p, %u, %u, %u>", idx,
@@ -60,12 +60,12 @@ void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_e
     app_mutex_process(&cache->mutex, app_mutex_static);
     app_sys_list_dl_reset(&cache->dl_list);
     cache->ht_list_num = total / unit + 1;
-    cache->ht_list = app_mem_alloc(sizeof(app_sys_hashtable_dl_t) * cache->ht_list_num);
-    app_sys_hashtable_dt_fd_t digest  = app_sys_ext_mem_cache_fd_t;
-    app_sys_hashtable_dt_fc_t confirm = app_sys_ext_mem_cache_fc_t;
-    app_sys_hashtable_dt_fv_t visit   = app_sys_ext_mem_cache_fv_t;
-    app_sys_hashtable_dl_reset(cache->ht_list, cache->ht_list_num);
-    app_sys_hashtable_dt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, cache->ht_list_num);
+    cache->ht_list = app_mem_alloc(sizeof(app_sys_table_dl_t) * cache->ht_list_num);
+    app_sys_table_dt_fd_t digest  = app_sys_ext_mem_cache_fd_t;
+    app_sys_table_dt_fc_t confirm = app_sys_ext_mem_cache_fc_t;
+    app_sys_table_dt_fv_t visit   = app_sys_ext_mem_cache_fv_t;
+    app_sys_table_dl_reset(cache->ht_list, cache->ht_list_num);
+    app_sys_table_dt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, cache->ht_list_num);
     cache->ext_mem   = ext_mem;
     cache->unit      = unit;    /* 单元资源门限 */
     cache->usage     = 0;       /* 内存资源占用 */
@@ -82,7 +82,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
 {
     app_mutex_process(&cache->mutex, app_mutex_take);
     /* 输出一次缓存布局(如果刷新了信息) */
-    app_sys_hashtable_dt_visit(&cache->ht_table);
+    app_sys_table_dt_visit(&cache->ht_table);
     /* 所有已解锁资源全部回收 */
     app_sys_ext_mem_cache_unit_t *unit = NULL;
     while (true) {
@@ -98,7 +98,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
         if (unit == NULL)
             goto over;
         app_sys_list_dl_remove(&cache->dl_list, &unit->dl_node);
-        app_sys_hashtable_dt_remove(&cache->ht_table, &unit->ht_node);
+        app_sys_table_dt_remove(&cache->ht_table, &unit->ht_node);
         /* 污染标记,数据回写 */
         if (unit->dirty)
         if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
@@ -133,9 +133,9 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
     }
     /* 迭代缓存链表,尝试命中目标缓存 */
     app_sys_ext_mem_cache_unit_t *unit = NULL;
-    app_sys_hashtable_dn_t *node_match = NULL;
+    app_sys_table_dn_t *node_match = NULL;
     app_sys_ext_mem_cache_unit_t unit_match = {.offset = offset};
-    if ((node_match = app_sys_hashtable_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
+    if ((node_match = app_sys_table_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
         unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
     /* 如果缓存命中时 */
     if (unit  != NULL) {
@@ -186,7 +186,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
                 goto over;
             }
             app_sys_list_dl_remove(&cache->dl_list, &unit->dl_node);
-            app_sys_hashtable_dt_remove(&cache->ht_table, &unit->ht_node);
+            app_sys_table_dt_remove(&cache->ht_table, &unit->ht_node);
             /* 污染标记,数据回写 */
             if (unit->dirty)
             if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
@@ -214,7 +214,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
              APP_SYS_LOG_ERROR("data read fail");
         /* 带计数优先级加入 */
         app_sys_queue_dpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
-        app_sys_hashtable_dt_insert(&cache->ht_table, &unit->ht_node);
+        app_sys_table_dt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
         retval = app_sys_ext_mem_cache_unhit;
         goto over;
@@ -237,9 +237,9 @@ uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uintptr_t of
     app_mutex_process(&cache->mutex, app_mutex_take);
     /* 迭代缓存链表,尝试命中目标缓存 */
     app_sys_ext_mem_cache_unit_t *unit = NULL;
-    app_sys_hashtable_dn_t *node_match = NULL;
+    app_sys_table_dn_t *node_match = NULL;
     app_sys_ext_mem_cache_unit_t unit_match = {.offset = offset};
-    if ((node_match = app_sys_hashtable_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
+    if ((node_match = app_sys_table_dt_search(&cache->ht_table, &unit_match.ht_node)) != NULL)
         unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node_match);
     /* 如果缓存未命中时 */
     if (unit == NULL) {
