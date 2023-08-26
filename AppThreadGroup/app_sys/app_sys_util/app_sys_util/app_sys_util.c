@@ -158,3 +158,130 @@ uint8_t app_sys_crc8(uint8_t *data, uint32_t size)
     
     return crc8;
 }
+
+/* 补充收集:misc */
+
+/*@brief     将一个索引下标数组随机打乱
+ *@param[in] arr 索引下标数组
+ *@param[in] len 索引下标数组长度
+ */
+void app_sys_idx_shuffle(uint32_t *arr, uint32_t len)
+{
+    /* 1.先将其序列化 */
+    for (uint32_t idx = 0; idx < len; idx++)
+        arr[idx] = idx;
+    /* 2.逆向乱序 */
+    for (uint32_t idx = 0; idx < len; idx++) {
+        /* 取一个随机下标 */
+        uint32_t idx1 = rand() % (len - idx);
+        uint32_t idx2 = len - 1 - idx;
+        /* 交换idx1 与 len - 1 - idx */
+        uint32_t tmp1 = arr[idx1];
+        uint32_t tmp2 = arr[idx2];
+        arr[idx1] = tmp2;
+        arr[idx2] = tmp1;
+    }
+}
+
+/*@brief     移动指定字符到尾部
+ *@param[in] str 字符串
+ *@param[in] c   指定字符
+ *@param[in] rev rev时移动到头部
+ */
+void app_sys_str_move(char *str, char c, bool rev)
+{
+    uint32_t len = strlen(str);
+    /* 逆序,移动字符到头部使用 */
+    if (rev) {
+        char    *arr = str;
+        uint32_t pos = len;
+        do {/* 通用组件:逆序数组 */
+            for (uint32_t idx0 = 0; idx0 < pos / 2; idx0++) {
+                 uint32_t idx1 = pos - 1 - idx0;
+                 char tmp1 = arr[idx0];
+                 char tmp2 = arr[idx1];
+                 arr[idx0] = tmp2;
+                 arr[idx1] = tmp1;
+            }
+        } while (0);
+    }
+    /* 双指针移动字符 */
+    if (true) {
+        uint32_t pos1 = 0, pos2 = 0;
+        for (; pos2 < len; pos2++)
+            if (str[pos2]  != c)
+                str[pos1++] = str[pos2];
+        for (; pos1 < len; pos1++)
+                str[pos1] = c;
+    }
+    /* 逆序,移动字符到头部使用 */
+    if (rev) {
+        char    *arr = str;
+        uint32_t pos = len;
+        do {/* 通用组件:逆序数组 */
+            for (uint32_t idx0 = 0; idx0 < pos / 2; idx0++) {
+                 uint32_t idx1 = pos - 1 - idx0;
+                 char tmp1 = arr[idx0];
+                 char tmp2 = arr[idx1];
+                 arr[idx0] = tmp2;
+                 arr[idx1] = tmp1;
+            }
+        } while(0);
+    }
+}
+
+/*@brief     循环左旋转字符串
+ *@param[in] str 字符串
+ *@param[in] ofs 旋转点
+ *@param[in] rev rev时循环右旋转
+ */
+void app_sys_str_rotate(char *str, uint32_t ofs, bool rev)
+{
+    uint32_t len = strlen(str);
+    
+    if (rev)
+        ofs  = len - ofs;
+        ofs %= len;
+    if (ofs == 0 || len == 0)
+        return;
+    
+    uint32_t pos[3][2] = {{0, ofs - 1}, {ofs, len - 1}, {0, len - 1},};
+    
+    for (uint8_t I = 0; I < 3; I++) {
+        for (uint32_t pos1 = pos[I][0], pos2 = pos[I][1]; pos1 < pos2; pos1++, pos2--) {
+            char tmp1 = str[pos1];
+            char tmp2 = str[pos2];
+            str[pos1] = tmp2;
+            str[pos2] = tmp1;
+        }
+    }
+}
+
+/*@brief     指定字符为分割点逆序字符串
+ *@param[in] str 字符串
+ *@param[in] c   指定字符
+ */
+void app_sys_str_reverse(char *str, char c)
+{
+    uint32_t pos = 0, pos1 = 0, pos2 = 0, len = strlen(str);
+    
+    if (len == 0)
+        return;
+    
+    while(pos < len) {
+        for (pos1 = pos;  str[pos1] == c && str[pos1] != 0; pos1++);
+        for (pos2 = pos1; str[pos2] != c && str[pos2] != 0; pos2++);
+        for (pos  = pos2--; pos1 < pos2; pos1++, pos2--) {
+            char tmp1 = str[pos1];
+            char tmp2 = str[pos2];
+            str[pos1] = tmp2;
+            str[pos2] = tmp1;
+        }
+    }
+    for (pos1 = 0, pos2 = len - 1; pos1 < pos2; pos1++, pos2--) {
+            char tmp1 = str[pos1];
+            char tmp2 = str[pos2];
+            str[pos1] = tmp2;
+            str[pos2] = tmp1;
+    }
+}

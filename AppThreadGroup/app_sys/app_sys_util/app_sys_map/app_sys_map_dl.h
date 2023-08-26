@@ -1,10 +1,6 @@
 #ifndef APP_SYS_MAP_OL_H
 #define APP_SYS_MAP_OL_H
 
-/* 载体为十字链表,重邻接表的图 */
-/* 链表容器扩容的图 */
-/* 无向图==双向权值一致的有向图 */
-
 typedef struct {
     app_sys_list_dn_t buddy;    /* 伙伴顶点项 */
     app_sys_list_dl_t e_set_i;  /* 入度边集合 */
@@ -14,17 +10,17 @@ typedef struct {
 typedef struct {
     app_sys_list_dn_t e_item_i; /* 入度边项 */
     app_sys_list_dn_t e_item_o; /* 出度边项 */
-    app_sys_map_dlv_t *v_i;    /* 弧的发起者 */
-    app_sys_map_dlv_t *v_o;    /* 弧的接受者 */
+    app_sys_map_dlv_t *v_i;     /* 弧的发起者 */
+    app_sys_map_dlv_t *v_o;     /* 弧的接受者 */
 } app_sys_map_dle_t;
 
 typedef bool (*app_sys_map_dlm_fc_t)(app_sys_map_dlv_t *v_i, app_sys_map_dlv_t *v_o);
 typedef void (*app_sys_map_dlm_fv_t)(app_sys_map_dlv_t *v,   app_sys_map_dle_t *e, char *str);
 
 typedef struct {
-    app_sys_list_dl_t set;         /* 顶点集合 */
-    app_sys_map_dlm_fc_t confirm;    /* 比较函数 */
-    app_sys_map_dlm_fv_t visit;      /* 访问函数 */
+    app_sys_list_dl_t    set;       /* 顶点集合 */
+    app_sys_map_dlm_fc_t confirm;   /* 比较函数 */
+    app_sys_map_dlm_fv_t visit;     /* 访问函数 */
 } app_sys_map_dlm_t;
 
 /*@brief     图顶点重置

@@ -1,6 +1,7 @@
 /*实现目标:
  *    侵入式迷你哈希表
  *    依赖侵入式链表,链地址法
+ *    链表容器扩展的链地址法
  *    从当前地址获得它的所有者地址(编译时解析)
  *    使用_offset或者container_of或者_owner
  */
@@ -8,15 +9,10 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*
- *哈希表(Generics HashTable)
- *仅链表容器扩展的链地址法
- */
-
 /*@brief     重置哈希表二级节点
  *@param[in] node 哈希表二级节点实例
  */
-void app_sys_table_dn_reset(app_sys_table_dn_t *node)
+void app_sys_table_dln_reset(app_sys_table_dln_t *node)
 {
     app_sys_list_dn_reset(node);
 }
@@ -25,7 +21,7 @@ void app_sys_table_dn_reset(app_sys_table_dn_t *node)
  *@param[in] list   哈希表一级链表实例
  *@param[in] length 哈希表一级链表实例长度
  */
-void app_sys_table_dl_reset(app_sys_table_dl_t *list, uint32_t length)
+void app_sys_table_dll_reset(app_sys_table_dll_t *list, uint32_t length)
 {
     for (uint32_t idx = 0; idx < length; idx++)
         app_sys_list_dl_reset(&list[idx]);
@@ -39,7 +35,7 @@ void app_sys_table_dl_reset(app_sys_table_dl_t *list, uint32_t length)
  *@param[in] list    哈希表一级链表实例
  *@param[in] length  哈希表一级链表实例长度
  */
-void app_sys_table_dt_reset(app_sys_table_dt_t   *table, app_sys_table_dt_fd_t digest, app_sys_table_dt_fc_t confirm, app_sys_table_dt_fv_t visit, app_sys_table_dl_t *list, uint32_t length)
+void app_sys_table_dlt_reset(app_sys_table_dlt_t   *table, app_sys_table_dlt_fd_t digest, app_sys_table_dlt_fc_t confirm, app_sys_table_dlt_fv_t visit, app_sys_table_dll_t *list, uint32_t length)
 {
     table->digest  = digest;
     table->confirm = confirm;
@@ -52,7 +48,7 @@ void app_sys_table_dt_reset(app_sys_table_dt_t   *table, app_sys_table_dt_fd_t d
  *@param[in] table 哈希表实例
  *@param[in] node  哈希表二级节点实例
  */
-void app_sys_table_dt_insert(app_sys_table_dt_t *table, app_sys_table_dn_t *node)
+void app_sys_table_dlt_insert(app_sys_table_dlt_t *table, app_sys_table_dln_t *node)
 {
     /* 散列,追加(对称语义,二选其一) */
     uint32_t idx = table->digest(node) % table->length;
@@ -64,7 +60,7 @@ void app_sys_table_dt_insert(app_sys_table_dt_t *table, app_sys_table_dn_t *node
  *@param[in] table 哈希表实例
  *@param[in] node  哈希表二级节点实例
  */
-void app_sys_table_dt_remove(app_sys_table_dt_t *table, app_sys_table_dn_t *node)
+void app_sys_table_dlt_remove(app_sys_table_dlt_t *table, app_sys_table_dln_t *node)
 {
     /* 散列,移除 */
     uint32_t idx = table->digest(node) % table->length;
@@ -76,7 +72,7 @@ void app_sys_table_dt_remove(app_sys_table_dt_t *table, app_sys_table_dn_t *node
  *@param[in] node  哈希表二级节点实例(假,伪造)
  *@retval    哈希表二级节点实例(真)
  */
-app_sys_table_dn_t * app_sys_table_dt_search(app_sys_table_dt_t *table, app_sys_table_dn_t *node)
+app_sys_table_dln_t * app_sys_table_dlt_search(app_sys_table_dlt_t *table, app_sys_table_dln_t *node)
 {
     /* 散列,遍历 */
     uint32_t idx = table->digest(node) % table->length;
@@ -92,7 +88,7 @@ app_sys_table_dn_t * app_sys_table_dt_search(app_sys_table_dt_t *table, app_sys_
 /*@brief     哈希表访问所有节点
  *@param[in] table 哈希表实例
  */
-void app_sys_table_dt_visit(app_sys_table_dt_t *table)
+void app_sys_table_dlt_visit(app_sys_table_dlt_t *table)
 {
     for (uint32_t idx = 0; idx < table->length; idx++) {
         /* 对称语义,二选其一 */

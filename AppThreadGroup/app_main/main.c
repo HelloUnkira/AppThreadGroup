@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
         /* 测试日志追踪 */
         app_sys_log_text_test();
         break;
-        #elif 1
+        #elif 0
         /* test sys util plug */
         /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
         void app_sys_rbuf_test(void);
@@ -40,8 +40,8 @@ int main(int argc, char *argv[])
         app_sys_tree_rb_test();
         app_sys_tree_fl_test();
         app_sys_tree_fw_test();
-        void app_sys_table_test(void);
-        app_sys_table_test();
+        void app_sys_table_dl_test(void);
+        app_sys_table_dl_test();
         void app_sys_map_dlm_test(void);
         app_sys_map_dlm_test();
         void app_sys_handle_test(void);
