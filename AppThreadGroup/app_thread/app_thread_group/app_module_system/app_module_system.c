@@ -131,9 +131,6 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     app_module_system.mode  = app_module_system.mode_bak;
     memset(&app_module_system.ctrl, 0xff, sizeof(app_module_system.ctrl));
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
-    /* 重置系统一般最简单的就是系统复位,程序重开始 */
-    /* 否则需要手动对所有的状态和流程进行适配 */
-    // app_arch_reset();
 }
 
 /*@brief 初始化系统模组

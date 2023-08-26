@@ -140,13 +140,27 @@ void app_module_data_center_give(void)
     app_mutex_process(&app_module_data_center_mutex, app_mutex_give);
 }
 
-/*@brief     刷新数据中心
- *@param[in] force 强制刷新数据中心(不建议使用)
+/*@brief 刷新数据中心
  */
-void app_module_data_center_reflush(bool force)
+void app_module_data_center_reflush(void)
 {
     app_mutex_process(&app_module_data_center_mutex, app_mutex_take);
-    app_sys_ext_mem_cache_reflush(&app_module_data_center_cache, force);
+    app_sys_ext_mem_cache_reflush(&app_module_data_center_cache);
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_give);
+    APP_SYS_LOG_INFO("data center cache usage:%d", app_module_data_center_cache.usage);
+    APP_SYS_LOG_INFO("data center cache total:%d", app_module_data_center_cache.total);
+    APP_SYS_LOG_INFO("data center cache hit:%d",   app_module_data_center_cache.cnt_hit);
+    APP_SYS_LOG_INFO("data center cache unhit:%d", app_module_data_center_cache.cnt_unhit);
+}
+
+/*@brief     回收数据中心资源
+ *@param[in] force 强制回收数据中心资源(不建议使用)
+ *           不建议使用,这会导致非正常的逻辑
+ */
+void app_module_data_center_recycle(bool force)
+{
+    app_mutex_process(&app_module_data_center_mutex, app_mutex_take);
+    app_sys_ext_mem_cache_recycle(&app_module_data_center_cache, force);
     app_mutex_process(&app_module_data_center_mutex, app_mutex_give);
     APP_SYS_LOG_INFO("data center cache usage:%d", app_module_data_center_cache.usage);
     APP_SYS_LOG_INFO("data center cache total:%d", app_module_data_center_cache.total);

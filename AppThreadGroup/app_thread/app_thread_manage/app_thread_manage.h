@@ -32,6 +32,5 @@ typedef enum {  /* 协议传输模组事件 */
 #include "app_module_data_center.h"
 #include "app_module_data_load.h"
 #include "app_module_data_dump.h"
-#include "app_module_shutdown.h"
 
 #endif

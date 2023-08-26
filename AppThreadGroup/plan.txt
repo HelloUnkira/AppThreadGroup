@@ -1,0 +1,22 @@
+结构重组:
+    适用于多项目结构构建
+app_thread_group:
+    多模式流程切换完善(不重启流程)
+app_thread_mix_irq:
+    驱动的逻辑流程(非硬件)
+    驱动相关的算法
+app_thread_mix_custom:
+    提醒组的测试和完善
+    老化测试,工厂测试,产线测试
+app_thread_manage:
+    数据中心字段补充与完善
+    PB协议补充与完善
+app_thread_lvgl:
+    FatFS多线程环境下工作异常
+    Font为适配,生成工具?
+    Pic未适配,生成工具?
+    一级界面浮窗与滚窗
+    二级界面的主题
+    非8.0循环滚轮显示异常
+app_thread_jerryscript:
+    引擎不能工作

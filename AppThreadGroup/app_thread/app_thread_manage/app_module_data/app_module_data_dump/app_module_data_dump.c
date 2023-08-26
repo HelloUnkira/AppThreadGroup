@@ -26,9 +26,9 @@ void app_module_data_dump_process(void)
     APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
     app_module_remind_alarm_dump();
-    /* ... */
-    app_module_shutdown_dump();
-    app_module_data_center_reflush(false);
+    /* 这里不能是true,因为关机流程还未结束 */
+    app_module_data_center_reflush();
+    app_module_data_center_recycle(false);
     /* ... */
     app_module_data_dump_status_not_over = false;
     APP_SYS_LOG_WARN("end");

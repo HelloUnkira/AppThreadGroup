@@ -300,11 +300,15 @@ app_module_data_center_t * app_module_data_center_take(uint32_t type);
  */
 void app_module_data_center_give(void);
 
-/*@brief     刷新数据中心
- *@param[in] force 强制刷新数据中心
+/*@brief 刷新数据中心
+ */
+void app_module_data_center_reflush(void);
+
+/*@brief     回收数据中心资源
+ *@param[in] force 强制回收数据中心资源(不建议使用)
  *           不建议使用,这会导致非正常的逻辑
  */
-void app_module_data_center_reflush(bool force);
+void app_module_data_center_recycle(bool force);
 
 /*@brief 数据中心模组初始化
  *       内部使用: 被manage线程使用

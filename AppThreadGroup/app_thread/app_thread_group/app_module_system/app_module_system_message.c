@@ -1,5 +1,5 @@
 /*实现目标:
- *    关机前转存到外存的追踪日志信息
+ *    日志信息记录
  */
 
 #include "app_ext_lib.h"
@@ -8,7 +8,7 @@
 
 /*@param 关机前的最后所需要转储的日志信息
  */
-void app_module_shutdown_dump(void)
+void app_module_system_message_shutdown(void)
 {
     char text[APP_SYS_LOG_TEXT_MAX] = {0};
     snprintf(text, APP_SYS_LOG_TEXT_MAX,

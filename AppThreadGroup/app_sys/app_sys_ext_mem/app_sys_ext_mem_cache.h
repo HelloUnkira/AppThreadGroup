@@ -42,11 +42,16 @@ typedef struct {
  */
 void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_ext_mem_t *ext_mem, uint32_t unit, uint32_t total);
 
-/*@brief     缓存刷新(清理内存)
+/*@brief     缓存刷新
  *@param[in] cache 缓存实例
- *@param[in] force 强制刷新模式(仅在完全不使用它时使用)
  */
-void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force);
+void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache);
+
+/*@brief     缓存回收(清理内存)
+ *@param[in] cache 缓存实例
+ *@param[in] force 强制回收模式(仅在完全不使用它时使用)
+ */
+void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force);
 
 /*@brief      缓存资源获取
  *@param[in]  cache  缓存实例

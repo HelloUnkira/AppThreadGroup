@@ -39,7 +39,7 @@ void app_sys_ext_mem_cache_test(void)
             APP_SYS_LOG_INFO("cache unit:%u",  static_memory_cache.unit);
             APP_SYS_LOG_INFO("cache total:%u", static_memory_cache.total);
             APP_SYS_LOG_INFO("cache usage:%u", static_memory_cache.usage);
-            app_sys_ext_mem_cache_reflush(&static_memory_cache, false);
+            app_sys_ext_mem_cache_reflush(&static_memory_cache);
             APP_SYS_LOG_INFO("cache usage:%u", static_memory_cache.usage);
             APP_SYS_LOG_INFO("hit_cnt:%d,   predict:(%d,%d)%f, reality:%f",   hit_cnt, 10, block_ofs,       (float)10 / block_ofs, (float)  hit_cnt / (hit_cnt + unhit_cnt));
             APP_SYS_LOG_INFO("unhit_cnt:%d, predict:(%d,%d)%f, reality:%f", unhit_cnt, 10, block_ofs, 1.0 - (float)10 / block_ofs, (float)unhit_cnt / (hit_cnt + unhit_cnt));
@@ -51,6 +51,6 @@ void app_sys_ext_mem_cache_test(void)
     APP_SYS_LOG_INFO("cache unit:%u",  static_memory_cache.unit);
     APP_SYS_LOG_INFO("cache total:%u", static_memory_cache.total);
     APP_SYS_LOG_INFO("cache usage:%u", static_memory_cache.usage);
-    app_sys_ext_mem_cache_reflush(&static_memory_cache, true);
+    app_sys_ext_mem_cache_recycle(&static_memory_cache, true);
     APP_SYS_LOG_INFO("cache usage:%u", static_memory_cache.usage);
 }

@@ -74,11 +74,35 @@ void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_e
     cache->cnt_unhit = 0;
 }
 
-/*@brief     缓存刷新(清理内存)
+/*@brief     缓存刷新
  *@param[in] cache 缓存实例
- *@param[in] force 强制刷新模式(仅在完全不使用它时使用)
  */
-void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache, bool force)
+void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache)
+{
+    app_mutex_process(&cache->mutex, app_mutex_take);
+    /* 输出一次缓存布局(如果刷新了信息) */
+    app_sys_table_dlt_visit(&cache->ht_table);
+    /* 所有已解锁资源全部回收 */
+    app_sys_ext_mem_cache_unit_t *unit = NULL;
+    /* 前向遍历,针对所有资源 */
+    app_sys_list_dl_ftra(&cache->dl_list, curr) {
+        unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
+        /* 污染标记,数据回写 */
+        if (unit->dirty) {
+            unit->dirty = false;
+        if (!app_sys_ext_mem_write(cache->ext_mem, unit->offset, unit->buffer, unit->size))
+             APP_SYS_LOG_ERROR("data write fail");
+        }
+    }
+    /*  */
+    app_mutex_process(&cache->mutex, app_mutex_give);
+}
+
+/*@brief     缓存回收(清理内存)
+ *@param[in] cache 缓存实例
+ *@param[in] force 强制回收模式(仅在完全不使用它时使用)
+ */
+void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
 {
     app_mutex_process(&cache->mutex, app_mutex_take);
     /* 输出一次缓存布局(如果刷新了信息) */
