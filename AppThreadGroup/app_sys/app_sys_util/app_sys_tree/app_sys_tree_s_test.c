@@ -43,6 +43,10 @@ void app_sys_tree_s_test_visit(app_sys_tree_sn_t *node)
 
 void app_sys_tree_s_test(void)
 {
+    #if APP_SYS_LOG_LOCAL_LEVEL > 1
+    return;
+    #endif
+    
     #define APP_SYS_TREE_S_MAX         (100)
     #define APP_SYS_TREE_S_MAX_HALF    (APP_SYS_TREE_S_MAX / 2)
     

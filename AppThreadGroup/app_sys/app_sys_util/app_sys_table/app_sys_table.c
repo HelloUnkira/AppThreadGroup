@@ -1,6 +1,8 @@
 /*实现目标:
  *    侵入式迷你哈希表
  *    依赖侵入式链表,链地址法
+ *    从当前地址获得它的所有者地址(编译时解析)
+ *    使用_offset或者container_of或者_owner
  */
 
 #include "app_ext_lib.h"

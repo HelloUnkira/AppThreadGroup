@@ -71,9 +71,9 @@ void app_sys_table_test(void)
     
     app_sys_table_dl_reset(test_list,   APP_SYS_TABLE_TEST_LENGTH);
     app_sys_table_dt_reset(&test_table, app_sys_table_test_fd,
-                                            app_sys_table_test_fc,
-                                            app_sys_table_test_fv,
-                                test_list,  APP_SYS_TABLE_TEST_LENGTH);
+                                        app_sys_table_test_fc,
+                                        app_sys_table_test_fv,
+                            test_list,  APP_SYS_TABLE_TEST_LENGTH);
     
     /* 随机生成100个键值对 */
     for (uint32_t idx = 0; idx < 100; idx++) {
@@ -101,5 +101,4 @@ void app_sys_table_test(void)
     
     APP_SYS_LOG_INFO("app_sys_table_dt_remove:");
     app_sys_table_dt_visit(&test_table);
-    
 }

@@ -36,6 +36,7 @@ void app_sys_table_dl_reset(app_sys_table_dl_t *list, uint32_t length);
  *@param[in] table   哈希表实例
  *@param[in] digest  哈希散列函数,哈希摘要函数
  *@param[in] confirm 哈希比较函数
+ *@param[in] visit   哈希访问函数
  *@param[in] list    哈希表一级链表实例
  *@param[in] length  哈希表一级链表实例长度
  */

@@ -60,6 +60,4 @@ void app_sys_handle_test(void)
     /* 释放 */
     for (idx = 0; idx < APP_SYS_HANDLE_TEST_MAX; idx++)
         app_sys_handle_give(arr[idx]);
-
-    return 0;
 }

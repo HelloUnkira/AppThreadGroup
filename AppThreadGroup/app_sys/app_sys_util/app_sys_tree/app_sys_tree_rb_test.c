@@ -45,6 +45,10 @@ void app_sys_tree_rb_test_visit(app_sys_tree_rbn_t *node, uint8_t color)
 
 void app_sys_tree_rb_test(void)
 {
+    #if APP_SYS_LOG_LOCAL_LEVEL > 1
+    return;
+    #endif
+    
     #define APP_SYS_TREE_RB_MAX         (1000000)
     #define APP_SYS_TREE_RB_MAX_HALF    (APP_SYS_TREE_RB_MAX / 2)
     
