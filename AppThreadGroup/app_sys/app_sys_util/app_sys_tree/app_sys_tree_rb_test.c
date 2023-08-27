@@ -53,6 +53,7 @@ void app_sys_tree_rb_test(void)
     #define APP_SYS_TREE_RB_MAX_HALF    (APP_SYS_TREE_RB_MAX / 2)
     
     app_sys_tree_rbt_t *tree = app_mem_alloc(sizeof(app_sys_tree_rbt_t));
+    app_sys_tree_rbt_reset(tree);
     app_sys_tree_rbt_config(tree, app_sys_tree_rb_test_compare, app_sys_tree_rb_test_confirm, app_sys_tree_rb_test_visit);
     
     app_sys_tree_rbn_t **queue = app_mem_alloc(sizeof(app_sys_tree_rbn_t *)  * APP_SYS_TREE_RB_MAX);
@@ -101,39 +102,23 @@ void app_sys_tree_rb_test(void)
     //其数据是不会被做任何修改的,可以只修改关键字或其他,重新插入
     //如果出现一堆重复key,那么它们可以被视作为一个集合
     //反复的移除可以获得指定集合中全部的数据项
-    app_sys_tree_rbn_t *node = NULL;
-    
-    //先找到最小的数
-    node = app_sys_tree_rbt_search_min(tree);
-    //最小项没有前驱
     APP_SYS_LOG_INFO("------------------------------------------------------------");
-    if (app_sys_tree_rbn_search_prev(node) != NULL)
+    //找到最小的数,找到最大的数
+    app_sys_tree_rbn_t *min = app_sys_tree_rbt_search_min(tree);
+    app_sys_tree_rbn_t *max = app_sys_tree_rbt_search_max(tree);
+    //最小项没有前驱,最大项没有后继
+    if (app_sys_tree_rbn_search_prev(min) != NULL)
+        APP_SYS_LOG_INFO("tree is error");
+    if (app_sys_tree_rbn_search_next(max) != NULL)
         APP_SYS_LOG_INFO("tree is error");
     app_delay_ms(2000);
-    //从树的最左叶子节点遍历到最右叶子节点
-    while (node != NULL)
-    {
-        //打印该节点(color是无效值)
-        app_sys_tree_rb_test_visit(node, 9);
-        //迭代获得指定节点的后继
-        node = app_sys_tree_rbn_search_next(node);
-    }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
-    
-    //从剩下数中,先找到最大的数
-    node = app_sys_tree_rbt_search_max(tree);
-    //最大项没有后继
+    //从树的最左叶子节点遍历到最右叶子节点,打印该节点(color是无效值)
+    app_sys_tree_rbt_btra(tree, node)
+    app_sys_tree_rb_test_visit(node, app_sys_tree_rbn_error);
     APP_SYS_LOG_INFO("------------------------------------------------------------");
-    if (app_sys_tree_rbn_search_next(node) != NULL)
-        APP_SYS_LOG_INFO("tree is error");
-    app_delay_ms(2000);
-    //从树的最右叶子节点遍历到最左叶子节点
-    while (node != NULL)
-    {
-        //打印该节点(color是无效值)
-        app_sys_tree_rb_test_visit(node, 9);
-        //迭代获得指定节点的前驱
-        node = app_sys_tree_rbn_search_prev(node);
-    }
+    //从树的最右叶子节点遍历到最左叶子节点,打印该节点(color是无效值)
+    app_sys_tree_rbt_ftra(tree, node)
+    app_sys_tree_rb_test_visit(node, app_sys_tree_rbn_error);
     APP_SYS_LOG_INFO("------------------------------------------------------------");
 }

@@ -38,11 +38,11 @@ typedef struct app_sys_tree_rbn {
 } app_sys_tree_rbn_t;
 
 /* 比较函数:node1严格小于node2返回非零值 */
-typedef uint8_t (*app_sys_tree_rbt_compare_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
 /* 匹配函数:node1与node2的关键字一致返回0 */
-typedef uint8_t (*app_sys_tree_rbt_confirm_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
 /* 访问函数:节点和颜色 */
-typedef void (*app_sys_tree_rbt_visit_t)(app_sys_tree_rbn_t *node, uint8_t color);
+typedef uint8_t (*app_sys_tree_rbt_compare_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
+typedef uint8_t (*app_sys_tree_rbt_confirm_t)(app_sys_tree_rbn_t *node1, app_sys_tree_rbn_t *node2);
+typedef void    (*app_sys_tree_rbt_visit_t)(app_sys_tree_rbn_t *node, uint8_t color);
 
 /* 红黑树集合(树根) */
 typedef struct {
@@ -71,18 +71,6 @@ void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief     搜索函数(前驱节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
- */
-app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node);
-
-/*@brief     搜索函数(后继节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
- */
-app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node);
-
 /*@brief     搜索函数(最小节点)
  *@param[in] tree 红黑树实例
  *@retval    红黑节点实例
@@ -94,6 +82,18 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree);
  *@retval    红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree);
+
+/*@brief     搜索函数(前驱节点)
+ *@param[in] node 红黑节点实例
+ *@retval    红黑节点实例
+ */
+app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node);
+
+/*@brief     搜索函数(后继节点)
+ *@param[in] node 红黑节点实例
+ *@retval    红黑节点实例
+ */
+app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node);
 
 /* 向后遍历红黑树 */
 #define app_sys_tree_rbt_btra(tree, node)   \

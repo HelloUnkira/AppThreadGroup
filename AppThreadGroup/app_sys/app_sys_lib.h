@@ -11,6 +11,7 @@
 #include "app_sys_list.h"
 #include "app_sys_tree_s.h"
 #include "app_sys_tree_rb.h"
+#include "app_sys_tree_rbs.h"
 #include "app_sys_tree_fd.h"
 #include "app_sys_table_dl.h"
 #include "app_sys_map_dl.h"
@@ -30,6 +31,7 @@
 #include "app_sys_timer.h"
 #include "app_sys_slab.h"
 #include "app_sys_pipe.h"
+#include "app_sys_misc.h"
 #include "app_sys_util.h"
 
 /*@brief 初始化系统

@@ -34,10 +34,12 @@ int main(int argc, char *argv[])
         app_sys_list_sl_test();
         void app_sys_tree_s_test(void);
         void app_sys_tree_rb_test(void);
+        void app_sys_tree_rbs_test(void);
         void app_sys_tree_fl_test(void);
         void app_sys_tree_fw_test(void);
         app_sys_tree_s_test();
         app_sys_tree_rb_test();
+        app_sys_tree_rbs_test();
         app_sys_tree_fl_test();
         app_sys_tree_fw_test();
         void app_sys_table_dl_test(void);

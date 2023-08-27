@@ -16,11 +16,13 @@ add_compile_options(/MP)
 
 # 编译器禁用警告
 # Visual Studio一大堆警告,甚至库里面都有,屏蔽掉不必要关心的警告
+# /* 屏蔽警告4005:宏重定义 */
 # /* 屏蔽警告4018:表达式左右值类型不匹配 */
 # /* 屏蔽警告4047:间接类型不匹配 */
 # /* 屏蔽警告4090:限定符类型不对 */
 # /* 屏蔽警告4100:未引用的形参 */
 # /* 屏蔽警告4127:条件表达式是常量 */
+# /* 屏蔽警告4146:无符号类型运用负运算符 */
 # /* 屏蔽警告4189:局部变量初始化但不使用 */
 # /* 屏蔽警告4200:0大小数组 */
 # /* 屏蔽警告4201:匿名结构/联合体 */
@@ -42,12 +44,14 @@ add_compile_options(/MP)
 # /* 屏蔽警告4819:非 Unicode文件,包含不能表示的字符 */
 # /* 屏蔽警告6387:参数可能为0 */
 add_compile_options(/W4)
+add_compile_options(/wd4005)
 add_compile_options(/wd4018)
 add_compile_options(/wd4047)
 add_compile_options(/wd4057)
 add_compile_options(/wd4090)
 add_compile_options(/wd4100)
 add_compile_options(/wd4127)
+add_compile_options(/wd4146)
 add_compile_options(/wd4133)
 add_compile_options(/wd4189)
 add_compile_options(/wd4200)
@@ -61,6 +65,7 @@ add_compile_options(/wd4305)
 add_compile_options(/wd4334)
 add_compile_options(/wd4389)
 add_compile_options(/wd4456)
+add_compile_options(/wd4457)
 add_compile_options(/wd4477)
 add_compile_options(/wd4553)
 add_compile_options(/wd4701)

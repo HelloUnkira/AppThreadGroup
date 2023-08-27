@@ -281,8 +281,8 @@ static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rb
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *target)
 {
     APP_SYS_TREE_RBT_CHECK(tree == NULL, "tree");
-    APP_SYS_TREE_RBT_CHECK(tree->compare == NULL, "compare");
-    APP_SYS_TREE_RBT_CHECK(tree->confirm == NULL, "confirm");
+    APP_SYS_TREE_RBT_CHECK(app_sys_tree_rbt_get_compare(tree) == NULL, "compare");
+    APP_SYS_TREE_RBT_CHECK(app_sys_tree_rbt_get_confirm(tree) == NULL, "confirm");
     APP_SYS_TREE_RBT_CHECK(target == NULL, "target");
     
     app_sys_tree_rbn_t *node = app_sys_tree_rbt_get_root(tree);
@@ -312,13 +312,13 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
 {
     APP_SYS_TREE_RBT_CHECK(tree == NULL, "tree");
     APP_SYS_TREE_RBT_CHECK(node == NULL, "node");
-    APP_SYS_TREE_RBT_CHECK(tree->compare == NULL, "compare");
+    APP_SYS_TREE_RBT_CHECK(app_sys_tree_rbt_get_compare(tree) == NULL, "compare");
     
     /* 1.初始化要插入的节点(插入节点都是红色的) */
     app_sys_tree_rbn_set_color(node,  app_sys_tree_rbn_color_r);
-    app_sys_tree_rbn_set_parent(node, NULL);
     app_sys_tree_rbn_set_child(node,  NULL, app_sys_tree_rbn_side_l);
     app_sys_tree_rbn_set_child(node,  NULL, app_sys_tree_rbn_side_r);
+    app_sys_tree_rbn_set_parent(node, NULL);
     
     /* 2.如果是插入到根节点 */
     if (app_sys_tree_rbt_get_root(tree) == NULL) {
@@ -617,7 +617,7 @@ static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
             child_sibling_l = app_sys_tree_rbn_get_child(sibling, app_sys_tree_rbn_side_l);
             child_sibling_r = app_sys_tree_rbn_get_child(sibling, app_sys_tree_rbn_side_r);
         }
-            
+        
         child_red = NULL;
         /* 情况4.5:如果是对位分支,直接内部旋转 */
         /* 情况4.5.1:孩子节点是父左节点,兄弟的右孩子为红色 */
@@ -686,26 +686,6 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search(app_sys_tree_rbt_t *tree, app_sys_t
     return app_sys_tree_rbt_search_only(tree, node);
 }
 
-/*@brief     搜索函数(前驱节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
- */
-app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node)
-{
-    APP_SYS_TREE_RBT_CHECK_RETURN_NULL(node == NULL);
-    return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_l);
-}
-
-/*@brief     搜索函数(后继节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
- */
-app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node)
-{
-    APP_SYS_TREE_RBT_CHECK_RETURN_NULL(node == NULL);
-    return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_r);
-}
-
 /*@brief     搜索函数(最小节点)
  *@param[in] tree 红黑树实例
  *@retval    红黑节点实例
@@ -713,6 +693,7 @@ app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node)
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN_NULL(tree == NULL);
+    
     app_sys_tree_rbn_t *root = app_sys_tree_rbt_get_root(tree);
     return app_sys_tree_rbt_search_min_or_max(root, app_sys_tree_rbn_side_l);
 }
@@ -724,8 +705,31 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree)
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN_NULL(tree == NULL);
+    
     app_sys_tree_rbn_t *root = app_sys_tree_rbt_get_root(tree);
     return app_sys_tree_rbt_search_min_or_max(root, app_sys_tree_rbn_side_r);
+}
+
+/*@brief     搜索函数(前驱节点)
+ *@param[in] node 红黑节点实例
+ *@retval    红黑节点实例
+ */
+app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node)
+{
+    APP_SYS_TREE_RBT_CHECK_RETURN_NULL(node == NULL);
+    
+    return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_l);
+}
+
+/*@brief     搜索函数(后继节点)
+ *@param[in] node 红黑节点实例
+ *@retval    红黑节点实例
+ */
+app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node)
+{
+    APP_SYS_TREE_RBT_CHECK_RETURN_NULL(node == NULL);
+    
+    return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_r);
 }
 
 /*@brief     复位函数
@@ -734,6 +738,7 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree)
 void app_sys_tree_rbt_reset(app_sys_tree_rbt_t *tree)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
+    
     app_sys_tree_rbt_set_root(tree, NULL);
     app_sys_tree_rbt_set_compare(tree, NULL);
     app_sys_tree_rbt_set_confirm(tree, NULL);
@@ -759,7 +764,7 @@ void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node)
 void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm, app_sys_tree_rbt_visit_t visit)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
-    app_sys_tree_rbt_set_root(tree, NULL);
+    
     app_sys_tree_rbt_set_compare(tree, compare);
     app_sys_tree_rbt_set_confirm(tree, confirm);
     app_sys_tree_rbt_set_visit(tree, visit);
@@ -773,6 +778,7 @@ void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *nod
 {
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
     APP_SYS_TREE_RBT_CHECK_RETURN(node == NULL);
+    
     app_sys_tree_rbt_set_root(tree, node);
 }
 
