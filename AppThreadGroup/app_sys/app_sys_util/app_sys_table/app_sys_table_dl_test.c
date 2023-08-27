@@ -11,7 +11,7 @@
 
 /*@brief 摘要的来源网络的Hash散列函数
  */
-uint32_t app_sys_table_elf_hash(uint8_t *data, uint32_t length)
+static uint32_t app_sys_table_dl_test_hash(uint8_t *data, uint32_t length)
 {
     uint64_t h = 0, g = 0;
     
@@ -37,20 +37,20 @@ typedef struct {
     uint32_t adding;
 } app_sys_table_dl_test_t;
 
-uint32_t app_sys_table_dl_test_fd(app_sys_table_dln_t *target)
+static uint32_t app_sys_table_dl_test_fd(app_sys_table_dln_t *target)
 {
     app_sys_table_dl_test_t *test = app_sys_own_ofs(app_sys_table_dl_test_t, node, target);
-    return app_sys_table_elf_hash((uint8_t *)&test->key, sizeof(uint32_t));
+    return app_sys_table_dl_test_hash((uint8_t *)&test->key, sizeof(uint32_t));
 }
 
-bool app_sys_table_dl_test_fc(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2)
+static bool app_sys_table_dl_test_fc(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2)
 {
     app_sys_table_dl_test_t *test1 = app_sys_own_ofs(app_sys_table_dl_test_t, node, node1);
     app_sys_table_dl_test_t *test2 = app_sys_own_ofs(app_sys_table_dl_test_t, node, node2);
     return test1->key == test2->key;
 }
 
-void app_sys_table_dl_test_fv(app_sys_table_dln_t *target, uint32_t idx)
+static void app_sys_table_dl_test_fv(app_sys_table_dln_t *target, uint32_t idx)
 {
     app_sys_table_dl_test_t *test = app_sys_own_ofs(app_sys_table_dl_test_t, node, target);
     
@@ -86,6 +86,7 @@ void app_sys_table_dl_test(void)
     
     APP_SYS_LOG_INFO("insert:");
     app_sys_table_dlt_visit(&test_table);
+    APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     
     /* 随机移除一半的键值对 */
     for (uint32_t idx = 0; idx < 50; idx) {
@@ -101,4 +102,5 @@ void app_sys_table_dl_test(void)
     
     APP_SYS_LOG_INFO("remove:");
     app_sys_table_dlt_visit(&test_table);
+    APP_SYS_LOG_INFO_RAW(app_sys_log_line());
 }

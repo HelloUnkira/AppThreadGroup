@@ -407,7 +407,7 @@ static app_sys_tree_rbsn_t * app_sys_tree_rbst_iter_prev_or_next(app_sys_tree_rb
         if (iter_side[iter_top - 1] != side) {
             iter_top--;
             app_sys_tree_rbst_set_iter_top(tree, iter_top);
-            return iter_stack[iter_top - 1];
+            return iter_top == 0 ? NULL : iter_stack[iter_top - 1];
         }
         /* 沿着堆栈去找来时的路 */
         /* 向左方向,则来时的路是某一右节点,向右方向,则来时的路是某一左节点 */
@@ -521,7 +521,7 @@ static void app_sys_tree_rbst_insert_adjust(app_sys_tree_rbsn_t **stack, uint32_
         app_sys_tree_rbsn_status_t color_p = app_sys_tree_rbsn_get_color(parent);
         APP_SYS_TREE_RBST_CHECK_RETURN(color_p == app_sys_tree_rbsn_color_b);
         /* 红节点一定有父亲 */
-        APP_SYS_TREE_RBST_CHECK(size < 2, "lost parent");
+        APP_SYS_TREE_RBST_CHECK(size <= 2, "lost parent");
         /* 获取祖父节点 */
         app_sys_tree_rbsn_t *ancestor = stack[size - 3];
         /* 确认父亲与祖父的对位关系 */
@@ -1051,7 +1051,6 @@ void app_sys_tree_rbst_config(app_sys_tree_rbst_t *tree, app_sys_tree_rbst_compa
 void app_sys_tree_rbst_root_set(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node)
 {
     APP_SYS_TREE_RBST_CHECK_RETURN(tree == NULL);
-    APP_SYS_TREE_RBST_CHECK_RETURN(node == NULL);
     
     app_sys_tree_rbst_set_root(tree, node);
 }

@@ -1,5 +1,5 @@
-#ifndef APP_SYS_TABLE_H
-#define APP_SYS_TABLE_H
+#ifndef APP_SYS_TABLE_DL_H
+#define APP_SYS_TABLE_DL_H
 
 typedef app_sys_list_dn_t app_sys_table_dln_t;
 typedef app_sys_list_dl_t app_sys_table_dll_t;
@@ -35,7 +35,7 @@ void app_sys_table_dll_reset(app_sys_table_dll_t *list, uint32_t length);
  *@param[in] list    哈希表一级链表实例
  *@param[in] length  哈希表一级链表实例长度
  */
-void app_sys_table_dlt_reset(app_sys_table_dlt_t   *table, app_sys_table_dlt_fd_t digest, app_sys_table_dlt_fc_t confirm, app_sys_table_dlt_fv_t visit, app_sys_table_dll_t *list, uint32_t length);
+void app_sys_table_dlt_reset(app_sys_table_dlt_t *table, app_sys_table_dlt_fd_t digest, app_sys_table_dlt_fc_t confirm, app_sys_table_dlt_fv_t visit, app_sys_table_dll_t *list, uint32_t length);
 
 /*@brief     哈希表插入节点
  *@param[in] table 哈希表实例

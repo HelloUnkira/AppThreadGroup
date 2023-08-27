@@ -777,7 +777,6 @@ void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_
 void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
     APP_SYS_TREE_RBT_CHECK_RETURN(tree == NULL);
-    APP_SYS_TREE_RBT_CHECK_RETURN(node == NULL);
     
     app_sys_tree_rbt_set_root(tree, node);
 }

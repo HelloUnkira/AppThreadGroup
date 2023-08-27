@@ -1,7 +1,6 @@
 /*实现目标:
- *    侵入式迷你哈希表
- *    依赖侵入式链表,链地址法
- *    链表容器扩展的链地址法
+ *    侵入式哈希表
+ *    双链表容器扩展的链地址法
  *    从当前地址获得它的所有者地址(编译时解析)
  *    使用_offset或者container_of或者_owner
  */
@@ -35,7 +34,7 @@ void app_sys_table_dll_reset(app_sys_table_dll_t *list, uint32_t length)
  *@param[in] list    哈希表一级链表实例
  *@param[in] length  哈希表一级链表实例长度
  */
-void app_sys_table_dlt_reset(app_sys_table_dlt_t   *table, app_sys_table_dlt_fd_t digest, app_sys_table_dlt_fc_t confirm, app_sys_table_dlt_fv_t visit, app_sys_table_dll_t *list, uint32_t length)
+void app_sys_table_dlt_reset(app_sys_table_dlt_t *table, app_sys_table_dlt_fd_t digest, app_sys_table_dlt_fc_t confirm, app_sys_table_dlt_fv_t visit, app_sys_table_dll_t *list, uint32_t length)
 {
     table->digest  = digest;
     table->confirm = confirm;

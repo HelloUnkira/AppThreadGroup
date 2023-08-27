@@ -1,6 +1,11 @@
 #ifndef APP_SYS_EXT_MEM_CACHE_H
 #define APP_SYS_EXT_MEM_CACHE_H
 
+/* DL:      双链表容器为载体的散列表 */
+/* RBS:     红黑树容器为载体的散列表 */
+#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL      0
+#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS     1
+
 typedef enum {
     app_sys_ext_mem_cache_none = 0,
     app_sys_ext_mem_cache_overflow,     /* 获取的资源超出缓存单元门限 */
@@ -11,7 +16,13 @@ typedef enum {
 
 typedef struct {
     app_sys_list_dn_t dl_node;
+    #if 0
+    #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
     app_sys_table_dln_t ht_node;
+    #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS
+    app_sys_table_rbsn_t ht_node;
+    #else
+    #endif
     uintptr_t   offset;
     uint8_t    *buffer;
     uintptr_t   size;
@@ -23,8 +34,15 @@ typedef struct {
 typedef struct {
     app_mutex_t mutex;
     app_sys_list_dl_t dl_list;
+    #if 0
+    #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
     app_sys_table_dll_t *ht_list;
     app_sys_table_dlt_t  ht_table;
+    #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS
+    app_sys_table_rbsl_t *ht_list;
+    app_sys_table_rbst_t  ht_table;
+    #else
+    #endif
     uint32_t ht_list_num;
     const app_sys_ext_mem_t *ext_mem;
     uint32_t unit;      /* 缓存对内存资源使用单元门限 */

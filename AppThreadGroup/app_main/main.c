@@ -43,7 +43,9 @@ int main(int argc, char *argv[])
         app_sys_tree_fl_test();
         app_sys_tree_fw_test();
         void app_sys_table_dl_test(void);
+        void app_sys_table_rbs_test(void);
         app_sys_table_dl_test();
+        app_sys_table_rbs_test();
         void app_sys_map_dlm_test(void);
         app_sys_map_dlm_test();
         void app_sys_handle_test(void);

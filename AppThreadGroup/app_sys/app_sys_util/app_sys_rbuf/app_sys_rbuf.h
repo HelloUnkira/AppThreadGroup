@@ -26,7 +26,7 @@ void app_sys_rbuf_reset(app_sys_rbuf_t *rbuf);
  *@param[in]    rbuf 实例
  *@retval       是否为空
  */
-bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf);
+bool app_sys_rbuf_empty(app_sys_rbuf_t *rbuf);
 
 /*@brief        获取环形队列类型(中断环境下不可调用)
  *@param[in]    rbuf 实例

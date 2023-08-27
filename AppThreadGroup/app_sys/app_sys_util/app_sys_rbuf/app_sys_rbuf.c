@@ -36,7 +36,7 @@ void app_sys_rbuf_reset(app_sys_rbuf_t *rbuf)
  *@param[in]    rbuf 实例
  *@retval       是否为空
  */
-bool app_sys_rbuf_is_empty(app_sys_rbuf_t *rbuf)
+bool app_sys_rbuf_empty(app_sys_rbuf_t *rbuf)
 {
     return rbuf->head == rbuf->tail ? true : false;
 }
@@ -111,7 +111,7 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
     uint32_t *buffer4 = data;
     uint64_t *buffer8 = data;
     
-    if (app_sys_rbuf_is_empty(rbuf) ||
+    if (app_sys_rbuf_empty(rbuf) ||
         app_sys_rbuf_item(rbuf) < length)
         return -1;
     

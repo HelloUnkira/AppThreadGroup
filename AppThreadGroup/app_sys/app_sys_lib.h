@@ -14,6 +14,7 @@
 #include "app_sys_tree_rbs.h"
 #include "app_sys_tree_fd.h"
 #include "app_sys_table_dl.h"
+#include "app_sys_table_rbs.h"
 #include "app_sys_map_dl.h"
 #include "app_sys_rbuf.h"
 /*  */
