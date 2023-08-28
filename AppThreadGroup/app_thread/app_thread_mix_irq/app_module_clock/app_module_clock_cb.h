@@ -66,21 +66,11 @@ static const app_module_clock_cb2 app_module_clock_update_cb[] = {
 
 /* 其他类型有待补充... */
 
-static const uint32_t app_module_clock_second_cb_size = 
-               sizeof(app_module_clock_second_cb) /
-               sizeof(app_module_clock_second_cb[0]);
-static const uint32_t app_module_clock_minute_cb_size = 
-               sizeof(app_module_clock_minute_cb) /
-               sizeof(app_module_clock_minute_cb[0]);
-static const uint32_t app_module_clock_hour_cb_size = 
-               sizeof(app_module_clock_hour_cb) /
-               sizeof(app_module_clock_hour_cb[0]);
-static const uint32_t app_module_clock_day_cb_size = 
-               sizeof(app_module_clock_day_cb) /
-               sizeof(app_module_clock_day_cb[0]);
-static const uint32_t app_module_clock_update_cb_size = 
-               sizeof(app_module_clock_update_cb) /
-               sizeof(app_module_clock_update_cb[0]);
+static const uint32_t app_module_clock_second_cb_size = app_sys_arr_len(app_module_clock_second_cb);
+static const uint32_t app_module_clock_minute_cb_size = app_sys_arr_len(app_module_clock_minute_cb);
+static const uint32_t app_module_clock_hour_cb_size   = app_sys_arr_len(app_module_clock_hour_cb);
+static const uint32_t app_module_clock_day_cb_size    = app_sys_arr_len(app_module_clock_day_cb);
+static const uint32_t app_module_clock_update_cb_size = app_sys_arr_len(app_module_clock_update_cb);
 
 /*  */
 

@@ -31,8 +31,6 @@ static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Internal Test",       &app_lv_ui_test_list,},
 };
 
-static const uint32_t app_lv_ui_res_list_len = sizeof(app_lv_ui_res_list) / sizeof(app_lv_ui_res_list[0]);
-
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
 
 /*@brief 界面自定义事件回调
@@ -74,7 +72,7 @@ static void app_lv_ui_list_show(void *scene)
         lv_obj_set_style_pad_row(list, 10, 0);
         lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 为列表批量追加按钮 */
-        for (uint32_t idx = 0; idx < app_lv_ui_res_list_len; idx++) {
+        for (uint32_t idx = 0; idx < app_sys_arr_len(app_lv_ui_res_list); idx++) {
             lv_obj_t *btn = app_lv_style_btn(list);
             lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
             lv_obj_add_event_cb(btn, app_lv_ui_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_list[idx].scene);

@@ -70,9 +70,6 @@ const char *app_lv_ui_res_btnlist_str[] = {
     "atan2(,)", "exp()",    "pow(,)",
     "fmod(,)",  "ceil()",   "floor()",
 };
-
-static const uint8_t app_lv_ui_res_btnlist_str_size = sizeof(app_lv_ui_res_btnlist_str) /
-                                                      sizeof(app_lv_ui_res_btnlist_str[0]);
 #endif
 
 /*@brief 界面自定义事件回调
@@ -247,7 +244,7 @@ static void app_lv_ui_calculator_show(void *scene)
         lv_obj_set_style_anim_time(app_lv_ui_res_local->list_btn, 1000, LV_PART_SCROLLBAR);
         lv_obj_set_size(app_lv_ui_res_local->list_btn, LV_HOR_RES, app_lv_style_ver_pct(60));
         lv_obj_align_to(app_lv_ui_res_local->list_btn, app_lv_ui_res_local->expr, LV_ALIGN_OUT_BOTTOM_MID, 0, 10);
-        for (uint8_t idx = 0; idx < app_lv_ui_res_btnlist_str_size; idx++) {
+        for (uint8_t idx = 0; idx < app_sys_arr_len(app_lv_ui_res_btnlist_str); idx++) {
             lv_obj_t *btn = app_lv_style_btn(app_lv_ui_res_local->list_btn);
             lv_obj_set_size(btn, app_lv_style_hor_pct(25), app_lv_style_ver_pct(15));
             lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);

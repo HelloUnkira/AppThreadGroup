@@ -7,9 +7,9 @@
 #define APP_MODULE_REMIND_CALENDAR_DESCRIPT_MAX     (128)
 
 typedef struct {
-    uint8_t  title[APP_MODULE_REMIND_CALENDAR_TITLE_MAX];
-    uint8_t  locate[APP_MODULE_REMIND_CALENDAR_LOCATE_MAX];
-    uint8_t  descript[APP_MODULE_REMIND_CALENDAR_DESCRIPT_MAX];
+    uint8_t title[APP_MODULE_REMIND_CALENDAR_TITLE_MAX];
+    uint8_t locate[APP_MODULE_REMIND_CALENDAR_LOCATE_MAX];
+    uint8_t descript[APP_MODULE_REMIND_CALENDAR_DESCRIPT_MAX];
 } app_module_remind_calendar_info_t;
 
 /*@brief      提醒组是否为提醒日历组

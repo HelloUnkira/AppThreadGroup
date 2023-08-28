@@ -11,10 +11,6 @@
 #define   APP_MODULE_WORLD_TIME_TABLE_H
 #include "app_module_world_time_table.h"
 
-static const uint32_t app_module_world_time_table_size = 
-               sizeof(app_module_world_time_table) /
-               sizeof(app_module_world_time_table[0]);
-
 /*@brief     世界时间设置
  *@param[in] world_time 世界时间参数
  *@param[in] idx        世界时间索引
@@ -45,7 +41,7 @@ void app_module_world_time_get(app_module_world_time_t *world_time, uint8_t idx)
  */
 const app_module_world_time_t * app_module_world_time_get_by_index(uint16_t index)
 {
-    for (uint16_t idx = 0; idx < app_module_world_time_table_size; idx++)
+    for (uint16_t idx = 0; idx < app_sys_arr_len(app_module_world_time_table); idx++)
         if (app_module_world_time_table[idx].index == index)
             return &app_module_world_time_table[idx];
     return NULL;
@@ -57,7 +53,7 @@ const app_module_world_time_t * app_module_world_time_get_by_index(uint16_t inde
  */
 const app_module_world_time_t * app_module_world_time_get_by_name(char *city)
 {
-    for (uint16_t idx = 0; idx < app_module_world_time_table_size; idx++)
+    for (uint16_t idx = 0; idx < app_sys_arr_len(app_module_world_time_table); idx++)
         if (!strcmp(app_module_world_time_table[idx].city, city))
             return &app_module_world_time_table[idx];
     return NULL;

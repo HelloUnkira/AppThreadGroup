@@ -39,8 +39,7 @@ def encode_app_sys_ext_src_table_c(file, file_list, json_list):
     # 编写资源固化长度标签
     file.write('static const uint32_t app_sys_ext_src_set_size_table[] = {\n')
     for file_name in file_list:
-        file.write('\tsizeof(app_sys_ext_src_%s_table) /\n' % file_name)
-        file.write('\tsizeof(app_sys_ext_src_%s_table[0]),\n' % file_name)
+        file.write('\tapp_sys_arr_len(app_sys_ext_src_%s_table),\n' % file_name)
     file.write('};\n\n')
     # 生成字符串表
     file.write('static const char * app_sys_ext_src_string_table[] = {\n')

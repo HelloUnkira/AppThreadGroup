@@ -102,10 +102,8 @@ static const app_sys_ext_src_t * app_sys_ext_src_set_table[] = {
 };
 
 static const uint32_t app_sys_ext_src_set_size_table[] = {
-	sizeof(app_sys_ext_src_mix_chunk_large_table) /
-	sizeof(app_sys_ext_src_mix_chunk_large_table[0]),
-	sizeof(app_sys_ext_src_mix_chunk_small_table) /
-	sizeof(app_sys_ext_src_mix_chunk_small_table[0]),
+	app_sys_arr_len(app_sys_ext_src_mix_chunk_large_table),
+	app_sys_arr_len(app_sys_ext_src_mix_chunk_small_table),
 };
 
 static const char * app_sys_ext_src_string_table[] = {

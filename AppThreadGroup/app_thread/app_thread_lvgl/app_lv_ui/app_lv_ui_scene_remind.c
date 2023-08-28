@@ -19,10 +19,6 @@ static const app_lv_scene_t *app_lv_ui_scene_priority_table[] = {
     &app_lv_ui_remind_drink,
 };
 
-static const uint32_t app_lv_ui_scene_priority_table_size =
-               sizeof(app_lv_ui_scene_priority_table) /
-               sizeof(app_lv_ui_scene_priority_table[0]);
-
 /*@brief 特殊提醒场景优先级排序
  *       静止不高于当前提醒场景的新提醒场景打断
  */
@@ -36,12 +32,12 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
     APP_SYS_ASSERT(current_scene != NULL);
     /* 查找当前场景的优先级 */
     uint32_t priority1 = 0;
-    for (priority1 = 0; priority1 < app_lv_ui_scene_priority_table_size; priority1++)
+    for (priority1 = 0; priority1 < app_sys_arr_len(app_lv_ui_scene_priority_table); priority1++)
         if (app_lv_ui_scene_priority_table[priority1] == current_scene)
             break;
     /* 查找提醒场景的优先级 */
     uint32_t priority2 = 0;
-    for (priority2 = 0; priority2 < app_lv_ui_scene_priority_table_size; priority2++)
+    for (priority2 = 0; priority2 < app_sys_arr_len(app_lv_ui_scene_priority_table); priority2++)
         if (app_lv_ui_scene_priority_table[priority2] == remind_scene)
             break;
     /* 比较场景优先级 */

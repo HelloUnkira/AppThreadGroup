@@ -131,11 +131,9 @@ static const app_dev_battery_api_t app_dev_battery_api = {
 /* 动态的设备操作数据 */
 static app_dev_battery_data_t app_dev_battery_data = {
     .curve_charge           = app_dev_battery_hal_curve_charge,
-    .curve_charge_item      = sizeof(app_dev_battery_hal_curve_charge) /
-                              sizeof(app_dev_battery_hal_curve_charge[0]),
     .curve_discharge        = app_dev_battery_hal_curve_discharge,
-    .curve_discharge_item   = sizeof(app_dev_battery_hal_curve_discharge) /
-                              sizeof(app_dev_battery_hal_curve_discharge[0]),
+    .curve_charge_item      = sizeof(app_dev_battery_hal_curve_charge)    / sizeof(app_dev_battery_hal_curve_charge[0]),
+    .curve_discharge_item   = sizeof(app_dev_battery_hal_curve_discharge) / sizeof(app_dev_battery_hal_curve_discharge[0]),
     
     .charge_irq_cb          = NULL,
 };

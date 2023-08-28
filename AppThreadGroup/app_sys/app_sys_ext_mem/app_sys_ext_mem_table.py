@@ -42,17 +42,13 @@ def encode_app_sys_ext_mem_table_c(file, dir_list):
         file.write('\t\t.chunk_offset \t=  %s,\n' % hex(local_offset))
         file.write('\t},\n')
     file.write('};\n\n')
-    # 编写固化长度标签
-    file.write('static const uint32_t app_sys_ext_mem_table_size =\n')
-    file.write('               sizeof(app_sys_ext_mem_table) /\n')
-    file.write('               sizeof(app_sys_ext_mem_table[0]);\n\n')
     # 编写固化访问函数
     file.write('/*@brief通过名字索引chunk静态实例\n')
     file.write(' *@param[in] name名字\n')
     file.write(' *@retval    chunk静态实例\n */\n')
     file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name)\n')
     file.write('{\n')
-    file.write('\tfor (uint32_t idx = 0; idx < app_sys_ext_mem_table_size; idx++)\n')
+    file.write('\tfor (uint32_t idx = 0; idx < app_sys_arr_len(app_sys_ext_mem_table); idx++)\n')
     file.write('\t\tif (!strcmp(app_sys_ext_mem_table[idx].chunk_name, name))\n')
     file.write('\t\t\treturn &app_sys_ext_mem_table[idx];\n')
     file.write('\t\treturn NULL;\n')

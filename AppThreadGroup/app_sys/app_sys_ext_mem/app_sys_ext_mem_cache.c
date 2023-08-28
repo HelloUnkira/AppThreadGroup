@@ -44,6 +44,9 @@ static uint32_t app_sys_ext_mem_cache_hash(uint8_t *data, uint32_t length)
     return (uint32_t)(h >> salt);
 }
 
+#if 0
+#elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
+
 /*@brief 哈希散列函数,哈希摘要函数
  */
 static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_table_dln_t *node)
@@ -54,8 +57,6 @@ static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_table_dln_t *node)
     return app_sys_ext_mem_cache_hash((void *)&unit->offset, sizeof(uintptr_t));
 }
 
-#if 0
-#elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
 /*@brief 哈希比较函数
  */
 static bool app_sys_ext_mem_cache_fc_t(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2)
@@ -64,26 +65,6 @@ static bool app_sys_ext_mem_cache_fc_t(app_sys_table_dln_t *node1, app_sys_table
     app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
     return unit1->offset == unit2->offset;
 }
-#elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS
-/*@brief 哈希比较函数
- */
-static uint8_t app_sys_ext_mem_cache_fc1_t(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2)
-{
-    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
-    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
-    return unit1->offset < unit2->offset ? 1 : 0;
-}
-
-/*@brief 哈希比较函数
- */
-static uint8_t app_sys_ext_mem_cache_fc2_t(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2)
-{
-    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
-    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
-    return unit1->offset == unit2->offset ? 0 : 1;
-}
-#else
-#endif
 
 /*@brief 哈希访问函数
  */
@@ -94,6 +75,48 @@ static void app_sys_ext_mem_cache_fv_t(app_sys_table_dln_t *node,  uint32_t idx)
                       unit->offset, unit->size,  unit->buffer,
                       unit->count,  unit->dirty, unit->lock);
 }
+
+#elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS
+
+/*@brief 哈希散列函数,哈希摘要函数
+ */
+static uint32_t app_sys_ext_mem_cache_fd_t(app_sys_table_rbsn_t *node)
+{
+    app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
+    /* 摘要的来源网络的Hash散列函数 */
+    uint32_t app_sys_table_elf_hash(uint8_t *data, uint32_t length);
+    return app_sys_ext_mem_cache_hash((void *)&unit->offset, sizeof(uintptr_t));
+}
+/*@brief 哈希比较函数
+ */
+static uint8_t app_sys_ext_mem_cache_fc1_t(app_sys_table_rbsn_t *node1, app_sys_table_rbsn_t *node2)
+{
+    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
+    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
+    return unit1->offset < unit2->offset ? 1 : 0;
+}
+
+/*@brief 哈希比较函数
+ */
+static uint8_t app_sys_ext_mem_cache_fc2_t(app_sys_table_rbsn_t *node1, app_sys_table_rbsn_t *node2)
+{
+    app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node1);
+    app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node2);
+    return unit1->offset == unit2->offset ? 0 : 1;
+}
+
+/*@brief 哈希访问函数
+ */
+static void app_sys_ext_mem_cache_fv_t(app_sys_table_rbsn_t *node,  uint32_t idx)
+{
+    app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
+    APP_SYS_LOG_INFO("%u: <%x, %x, %p, %u, %u, %u>", idx,
+                      unit->offset, unit->size,  unit->buffer,
+                      unit->count,  unit->dirty, unit->lock);
+}
+
+#else
+#endif
 
 /*@brief     缓存就绪,配置参数
  *@param[in] cache 缓存实例

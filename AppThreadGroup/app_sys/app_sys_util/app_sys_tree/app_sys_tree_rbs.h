@@ -96,7 +96,7 @@ app_sys_tree_rbsn_t * app_sys_tree_rbst_search_max(app_sys_tree_rbst_t *tree);
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_min(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(最小节点)
+/*@brief     迭代函数(最大节点)
  *           连续使用prev或next前需要使用min或max重置迭代栈
  *@param[in] tree 红黑树实例
  *@retval    红黑节点实例
