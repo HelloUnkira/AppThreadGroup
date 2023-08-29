@@ -7,6 +7,7 @@
 
 import os
 import os.path
+import zipfile
 
 compile = r'.\nanopb_x86\generator-bin\protoc.exe '
 execute = r'--proto_path=.\nanopb_src --nanopb_out=.\nanopb_out '
@@ -25,5 +26,10 @@ def nanopb_recuse_build(path) -> None:
 
 
 if __name__ == '__main__':
+    if not os.path.exists(r'.\nanopb_x86'):
+        with zipfile.ZipFile('nanopb_x86.zip', 'r') as zip_src:
+            zip_src.extractall(r'.')
+    if not os.path.exists(r'.\nanopb_out'):
+        os.makedirs(r'.\nanopb_out')
     nanopb_recuse_build(r'.\nanopb_src')
     print('nanopb protoc recuse build finish')
