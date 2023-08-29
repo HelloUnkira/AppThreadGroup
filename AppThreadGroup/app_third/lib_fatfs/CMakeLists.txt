@@ -10,7 +10,4 @@ set (SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/lib_fatfs/source/ff.c
              ${CMAKE_CURRENT_SOURCE_DIR}/diskio.c
              ${CMAKE_CURRENT_SOURCE_DIR}/ffsystem.c
              ${CMAKE_CURRENT_SOURCE_DIR}/app_third_fatfs.c)
-add_library(app_fatfs STATIC ${SOURCES})
-set_target_properties(app_fatfs PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(app_fatfs PUBLIC app_ext)
-target_link_libraries(app_fatfs PUBLIC app_sys)
+target_sources(app_third PRIVATE ${SOURCES})
