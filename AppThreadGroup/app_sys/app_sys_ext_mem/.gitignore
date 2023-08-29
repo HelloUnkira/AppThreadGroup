@@ -1,0 +1,5 @@
+app_sys_ext_mem_table.c
+app_sys_ext_mem_table.h
+app_sys_ext_mem_src_table.c
+app_sys_ext_mem_src_table.h
+*.json
