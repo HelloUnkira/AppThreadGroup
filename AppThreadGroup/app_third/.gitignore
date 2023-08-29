@@ -4,4 +4,6 @@ lib_jerryscript/lib_jerryscript
 lib_lvgl/lib_lvgl
 lib_json/lib_json
 lib_nanopb/lib_nanopb
+lib_nanopb/nanopb_out
+lib_nanopb/nanopb_src
 lib_nanopb/nanopb_x86

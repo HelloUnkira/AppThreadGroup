@@ -26,6 +26,11 @@ target_link_libraries(app_thread PUBLIC jerry-core)
 target_link_libraries(app_thread PUBLIC lvgl)
 target_link_libraries(app_thread PUBLIC lvgl_examples)
 target_link_libraries(app_thread PUBLIC lvgl_demos)
+# 文件迁移到目标
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_sys/*")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_sys)
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_third/*")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_third)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_main)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_ext        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_ext)
