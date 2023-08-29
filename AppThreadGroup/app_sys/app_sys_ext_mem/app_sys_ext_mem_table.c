@@ -52,8 +52,8 @@ static const app_sys_ext_mem_t app_sys_ext_mem_table[] = {
 };
 
 /*@brief通过名字索引chunk静态实例
- *@param[in] name名字
- *@retval    chunk静态实例
+ *@param[in] name 名字
+ *@retval    静态实例
  */
 const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name)
 {
@@ -61,4 +61,15 @@ const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name)
 		if (!strcmp(app_sys_ext_mem_table[idx].chunk_name, name))
 			return &app_sys_ext_mem_table[idx];
 		return NULL;
+}
+
+/*@brief通过索引chunk静态实例
+ *@param[in] index 索引
+ *@retval    静态实例
+ */
+const app_sys_ext_mem_t * app_sys_ext_mem_find_by_index(uint32_t index)
+{
+	if (index < app_sys_arr_len(app_sys_ext_mem_table))
+		return &app_sys_ext_mem_table[index];
+	return NULL;
 }

@@ -25,8 +25,8 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
 {
     offset %= zone;
     /* 条目是一条条更新的,所以只要对其进行操作就一定要锁定整个动作 */
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name("mix_chunk_small", "trace log text");
     uintptr_t base = app_sys_log_text_size + ext_src->data_base;
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + sizeof(uintptr_t) < zone) {
@@ -76,8 +76,8 @@ static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset
 {
     offset %= zone;
     /* 条目是一条条更新的,所以只要对其进行操作就一定要锁定整个动作 */
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name("mix_chunk_small", "trace log text");
     uintptr_t base = app_sys_log_text_size + ext_src->data_base;
     /* 因为,我们需要考虑读写跨越了头尾,所以逻辑需要额外复杂点 */
     if (offset + sizeof(uintptr_t) < zone) {
@@ -168,8 +168,8 @@ static void app_sys_log_text_rewind(void)
  */
 static void app_sys_log_text_reflush(void)
 {
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name("mix_chunk_small", "trace log text");
     /* 记录点索引回退 */
     app_sys_log_text_rewind();
     /* 更新校验 */
@@ -190,8 +190,8 @@ static void app_sys_log_text_reflush(void)
  */
 void app_sys_log_text_reset(void)
 {
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name("mix_chunk_small", "trace log text");
     APP_SYS_ASSERT(app_sys_log_text_size < ext_src->data_size);
     /* 重置日志追踪队列结构 */
     app_sys_log_text_t trace_text;
@@ -213,8 +213,8 @@ void app_sys_log_text_reset(void)
 void app_sys_log_text_ready(void)
 {
     app_mutex_process(&app_sys_log_text_mutex, app_mutex_static);
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name("mix_chunk_small", "trace log text");
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name("mix_chunk_small");
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name("mix_chunk_small", "trace log text");
     APP_SYS_ASSERT(app_sys_log_text_size < ext_src->data_size);
     /* 读取外存的函数追踪队列结构 */
     app_sys_log_text_t trace_text;

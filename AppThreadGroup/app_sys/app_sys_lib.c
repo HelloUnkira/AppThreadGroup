@@ -12,6 +12,7 @@ void app_sys_ready(void)
     /* 就绪系统子模组 */
     app_sys_log_ready();
     app_sys_ext_mem_ready();
+    app_sys_ext_mem_layout();
     app_sys_log_text_ready();
     app_sys_pipe_src_ready();
     app_sys_timer_ready();

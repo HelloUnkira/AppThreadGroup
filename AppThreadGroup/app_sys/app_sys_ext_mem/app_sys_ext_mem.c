@@ -87,6 +87,39 @@ void app_sys_ext_mem_ready(void)
     APP_SYS_ASSERT(retval == 0);
 }
 
+/*@brief 输出原生外存布局
+ */
+void app_sys_ext_mem_layout(void)
+{
+    app_sys_ext_mem_t     *ext_mem = NULL;
+    app_sys_ext_mem_src_t *ext_src = NULL;
+    
+    for (uint32_t idx = 0; true; idx++) {
+        /* 读取一级分区 */
+        ext_mem = (void *)app_sys_ext_mem_find_by_index(idx);
+        if (ext_mem == NULL)
+            break;
+        if (idx == 0)
+        APP_SYS_LOG_WARN("ext mem table:");
+        APP_SYS_LOG_WARN("---base:%08x, size:%08x, offset:%08x, name:%s",
+                          ext_mem->chunk_base,
+                          ext_mem->chunk_size,
+                          ext_mem->chunk_offset,
+                          ext_mem->chunk_name);
+        for (uint32_t idx1 = 0; true; idx1++) {
+            ext_src = app_sys_ext_mem_src_find_by_index(ext_mem->chunk_name, idx1);
+            if (ext_src == NULL)
+                break;
+            if (idx1 == 0)
+            APP_SYS_LOG_WARN("\text mem src table:");
+            APP_SYS_LOG_WARN("\t---base:%08x, size:%08x, name:%s",
+                              ext_src->data_base,
+                              ext_src->data_size,
+                              ext_src->data_name);
+        }
+    }
+}
+
 /*@brief 生成物理外存映射,将其都刷为0xFF
  *       注意:仅在PC上构建
  */

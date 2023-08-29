@@ -2,8 +2,8 @@
 set(PYTHON "python.exe")
 execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem/app_sys_ext_mem_table.py
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem)
-execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_src/app_sys_ext_src_table.py
-                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_src)
+execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem/app_sys_ext_mem_src_table.py
+                WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem)
 execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_idx_str/app_sys_idx_str.py
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_idx_str)
 # 收集源,生成库,指定库的链接语言,添加库依赖

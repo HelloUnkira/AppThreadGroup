@@ -85,11 +85,11 @@ static void app_module_data_center_reset(void)
  *       执行时间(load -...-reset-...-dump)
  *       当数据load失败时会自动调用reset
  */
-static const app_sys_ext_src_t * app_module_data_center_find_ext_src_by_type(void)
+static const app_sys_ext_mem_src_t * app_module_data_center_find_ext_src_by_type(void)
 {
     for (uint32_t idx = 0; idx < app_sys_arr_len(app_module_data_center_type_table); idx++)
         if (app_module_data_center_type_table[idx].type == app_module_data_center_type)
-            return app_sys_ext_src_find_by_name("mix_chunk_small", app_module_data_center_type_table[idx].data_name);
+            return app_sys_ext_mem_src_find_by_name("mix_chunk_small", app_module_data_center_type_table[idx].data_name);
     APP_SYS_LOG_ERROR("data center catch unknown type:%u", app_module_data_center_type);
     APP_SYS_ASSERT(NULL != NULL);
     return NULL;
@@ -107,7 +107,7 @@ app_module_data_center_t * app_module_data_center_take(uint32_t type)
     app_module_data_center_type = type;
     
     APP_SYS_ASSERT(app_module_data_center_handle == NULL);
-    const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
+    const app_sys_ext_mem_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
     uintptr_t ofs  = app_sys_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_sys_ext_mem_cache_take(&app_module_data_center_cache, ext_src->data_base, size + ofs, &app_module_data_center_handle);
@@ -128,7 +128,7 @@ app_module_data_center_t * app_module_data_center_take(uint32_t type)
 void app_module_data_center_give(void)
 {
     APP_SYS_ASSERT(app_module_data_center_handle != NULL);
-    const app_sys_ext_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
+    const app_sys_ext_mem_src_t *ext_src = app_module_data_center_find_ext_src_by_type();
     uintptr_t ofs  = app_sys_own_ofs(app_module_data_center_t, offset, 0); ofs = -ofs;
     uintptr_t size = app_module_data_center_type_table[app_module_data_center_type - 1].data_size;
     app_module_data_center_handle->crc32 = app_sys_crc32(&app_module_data_center_handle->offset, size);

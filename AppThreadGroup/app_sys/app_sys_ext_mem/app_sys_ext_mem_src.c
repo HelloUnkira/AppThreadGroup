@@ -13,10 +13,10 @@
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-size_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
+size_t app_sys_ext_mem_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name(chunk_name, data_name);
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name(chunk_name, data_name);
     APP_SYS_ASSERT(ext_mem != NULL);
     APP_SYS_ASSERT(ext_src != NULL);
     APP_SYS_ASSERT(ext_src->data_size >= size);
@@ -30,10 +30,10 @@ size_t app_sys_ext_src_read(const char *chunk_name, const char *data_name, uint8
  *@param[in] size       数据大小
  *@retval    实际读写的数据长度
  */
-size_t app_sys_ext_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
+size_t app_sys_ext_mem_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {
-    const app_sys_ext_mem_t *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
-    const app_sys_ext_src_t *ext_src = app_sys_ext_src_find_by_name(chunk_name, data_name);
+    const app_sys_ext_mem_t     *ext_mem = app_sys_ext_mem_find_by_name(chunk_name);
+    const app_sys_ext_mem_src_t *ext_src = app_sys_ext_mem_src_find_by_name(chunk_name, data_name);
     APP_SYS_ASSERT(ext_mem != NULL);
     APP_SYS_ASSERT(ext_src != NULL);
     APP_SYS_ASSERT(ext_src->data_size >= size);

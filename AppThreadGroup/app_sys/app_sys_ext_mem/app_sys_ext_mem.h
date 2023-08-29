@@ -36,6 +36,10 @@ void app_sys_ext_mem_reflush(const app_sys_ext_mem_t *ext_mem, uint8_t value);
  */
 void app_sys_ext_mem_ready(void);
 
+/*@brief 输出原生外存布局
+ */
+void app_sys_ext_mem_layout(void);
+
 /*@brief 生成物理外存映射,将其都刷为0xFF
  *       注意:仅在PC上构建
  */

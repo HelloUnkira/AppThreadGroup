@@ -44,14 +44,23 @@ def encode_app_sys_ext_mem_table_c(file, dir_list):
     file.write('};\n\n')
     # 编写固化访问函数
     file.write('/*@brief通过名字索引chunk静态实例\n')
-    file.write(' *@param[in] name名字\n')
-    file.write(' *@retval    chunk静态实例\n */\n')
+    file.write(' *@param[in] name 名字\n')
+    file.write(' *@retval    静态实例\n */\n')
     file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name)\n')
     file.write('{\n')
     file.write('\tfor (uint32_t idx = 0; idx < app_sys_arr_len(app_sys_ext_mem_table); idx++)\n')
     file.write('\t\tif (!strcmp(app_sys_ext_mem_table[idx].chunk_name, name))\n')
     file.write('\t\t\treturn &app_sys_ext_mem_table[idx];\n')
     file.write('\t\treturn NULL;\n')
+    file.write('}\n\n')
+    file.write('/*@brief通过索引chunk静态实例\n')
+    file.write(' *@param[in] index 索引\n')
+    file.write(' *@retval    静态实例\n */\n')
+    file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_index(uint32_t index)\n')
+    file.write('{\n')
+    file.write('\tif (index < app_sys_arr_len(app_sys_ext_mem_table))\n')
+    file.write('\t\treturn &app_sys_ext_mem_table[index];\n')
+    file.write('\treturn NULL;\n')
     file.write('}\n')
 
 
@@ -65,9 +74,13 @@ def encode_app_sys_ext_mem_table_h(file):
     file.write(' *参考app_sys_ext_mem_table.json中的模式生成源\n */\n\n')
     # 编写固化访问函数接口
     file.write('/*@brief通过名字索引chunk静态实例\n')
-    file.write(' *@param[in] name名字\n')
-    file.write(' *@retval    chunk静态实例\n */\n')
-    file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name);\n')
+    file.write(' *@param[in] name 名字\n')
+    file.write(' *@retval    静态实例\n */\n')
+    file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name);\n\n')
+    file.write('/*@brief通过索引chunk静态实例\n')
+    file.write(' *@param[in] index 索引\n')
+    file.write(' *@retval    静态实例\n */\n')
+    file.write('const app_sys_ext_mem_t * app_sys_ext_mem_find_by_index(uint32_t index);\n')
     file.write('\n#endif\n')
     pass
 
