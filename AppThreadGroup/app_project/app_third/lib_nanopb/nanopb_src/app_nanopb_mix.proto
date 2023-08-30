@@ -4,7 +4,7 @@ option optimize_for = LITE_RUNTIME;
 option java_package = "com.message_mix.nanopb";
 option java_outer_classname = "AppPB_MsgMixProto";
 /* 依赖包 */
-import "nanopb/nanopb.proto";
+import "nanopb.proto";
 
 /* 系统时钟消息(日历时间) */
 message AppPB_SystemClock {

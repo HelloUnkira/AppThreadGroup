@@ -100,8 +100,8 @@ void app_sys_ext_mem_layout(void)
         if (ext_mem == NULL)
             break;
         if (idx == 0)
-        APP_SYS_LOG_WARN("ext mem table:");
-        APP_SYS_LOG_WARN("---base:%08x, size:%08x, offset:%08x, name:%s",
+        APP_SYS_LOG_INFO("ext mem table:");
+        APP_SYS_LOG_INFO("---base:%08x, size:%08x, offset:%08x, name:%s",
                           ext_mem->chunk_base,
                           ext_mem->chunk_size,
                           ext_mem->chunk_offset,
@@ -111,8 +111,8 @@ void app_sys_ext_mem_layout(void)
             if (ext_src == NULL)
                 break;
             if (idx1 == 0)
-            APP_SYS_LOG_WARN("\text mem src table:");
-            APP_SYS_LOG_WARN("\t---base:%08x, size:%08x, name:%s",
+            APP_SYS_LOG_INFO("\text mem src table:");
+            APP_SYS_LOG_INFO("\t---base:%08x, size:%08x, name:%s",
                               ext_src->data_base,
                               ext_src->data_size,
                               ext_src->data_name);

@@ -6,7 +6,7 @@ cmake_policy(SET CMP0079 NEW)
 project(app_thread_group C)
 # 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
 link_libraries(-lm -lpthread -lSDL2)
-# 导入文件搜索路径,编译参数
+# 编译参数设置,导入文件搜索路径
 include(${CMAKE_CURRENT_SOURCE_DIR}/compile.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/directory.cmake)
 # 添加生成库
@@ -29,14 +29,13 @@ target_link_libraries(app_thread PUBLIC lvgl_demos)
 # 文件迁移到目标
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_sys/*")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_sys)
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_third/*")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_third)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_main)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_ext        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_ext)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_third   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_third)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_third      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_third)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_thread)
 # 指定exe输出到app_exe
 set(EXECUTABLE_OUTPUT_PATH                   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
