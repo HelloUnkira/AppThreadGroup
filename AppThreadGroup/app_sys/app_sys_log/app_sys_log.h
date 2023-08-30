@@ -125,8 +125,7 @@ const char * app_sys_log_line(void);
 typedef struct {
     void (*message1)(const char *format, ...);
     void (*message2)(const char *format, va_list list);
-    void (*persistent)(const char  *text);
-    uint32_t persistent_limit;
+    void (*persistent)(const char *text);
 } app_sys_log_t;
 
 /*@brief 日志模组初始化

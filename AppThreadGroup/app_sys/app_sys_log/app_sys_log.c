@@ -41,10 +41,9 @@ const char * app_sys_log_line(void)
 void app_sys_log_ready(void)
 {
     app_mutex_process(&app_sys_log_mutex, app_mutex_static);
-    app_sys_log.message1         = (void *)app_dev_log_msg1;
-    app_sys_log.message2         = (void *)app_dev_log_msg2;
-    app_sys_log.persistent       = (void *)app_sys_log_text_persistent;
-    app_sys_log.persistent_limit = APP_SYS_LOG_TEXT_MAX;
+    app_sys_log.message1   = (void *)app_dev_log_msg1;
+    app_sys_log.message2   = (void *)app_dev_log_msg2;
+    app_sys_log.persistent = (void *)app_sys_log_text_persistent;
 }
 
 /*@brief     格式日志输出接口
@@ -75,20 +74,19 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
            app_sys_log.message1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
-            char *text = app_mem_alloc(app_sys_log.persistent_limit);
+            char text[APP_SYS_LOG_TEXT_MAX] = {0};
             /* 格式化选择,按需求选取即可 */
-               snprintf(text, app_sys_log.persistent_limit, "[%s][%u][%c]", func, line, flag);
-            // snprintf(text, app_sys_log.persistent_limit - 1, "[%s][%u][%c]", file, line, flag);
-            // snprintf(text, app_sys_log.persistent_limit - 1, "[%s][%s][%u][%c]", file, func, line, flag);
-            text[app_sys_log.persistent_limit - 1] = '\0';
+               snprintf(text, APP_SYS_LOG_TEXT_MAX, "[%s][%u][%c]", func, line, flag);
+            // snprintf(text, APP_SYS_LOG_TEXT_MAX - 1, "[%s][%u][%c]", file, line, flag);
+            // snprintf(text, APP_SYS_LOG_TEXT_MAX - 1, "[%s][%s][%u][%c]", file, func, line, flag);
+            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             app_sys_log.persistent(text);
-            vsnprintf(text, app_sys_log.persistent_limit, format, list);
-            text[app_sys_log.persistent_limit - 1] = '\0';
+            vsnprintf(text, APP_SYS_LOG_TEXT_MAX, format, list);
+            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             app_sys_log.persistent(text);
-            snprintf(text, app_sys_log.persistent_limit, app_sys_log_line());
-            text[app_sys_log.persistent_limit - 1] = '\0';
+            snprintf(text, APP_SYS_LOG_TEXT_MAX, app_sys_log_line());
+            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             app_sys_log.persistent(text);
-            app_mem_free(text);
         }
     } else {
         // app_sys_log.message1("");
@@ -96,18 +94,17 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
         // app_sys_log.message1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
-            char *text = app_mem_alloc(app_sys_log.persistent_limit);
+            char text[APP_SYS_LOG_TEXT_MAX] = {0};
             /* 格式化选择,按需求选取即可 */
-            // snprintf(text, app_sys_log.persistent_limit, "");
-            // text[app_sys_log.persistent_limit - 1] = '\0';
+            // snprintf(text, APP_SYS_LOG_TEXT_MAX, "");
+            // text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             // app_sys_log.persistent(text);
-            vsnprintf(text, app_sys_log.persistent_limit, format, list);
-            text[app_sys_log.persistent_limit - 1] = '\0';
+            vsnprintf(text, APP_SYS_LOG_TEXT_MAX, format, list);
+            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             app_sys_log.persistent(text);
-            // snprintf(text, app_sys_log.persistent_limit, app_sys_log_line());
-            // text[app_sys_log.persistent_limit - 1] = '\0';
+            // snprintf(text, APP_SYS_LOG_TEXT_MAX, app_sys_log_line());
+            // text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
             // app_sys_log.persistent(text);
-            app_mem_free(text);
         }
     }
     app_mutex_process(&app_sys_log_mutex, app_mutex_give);
