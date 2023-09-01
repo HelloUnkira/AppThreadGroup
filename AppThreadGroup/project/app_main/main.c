@@ -30,8 +30,10 @@ int main(int argc, char *argv[])
         app_sys_rbuf_test();
         void app_sys_list_dl_test(void);
         void app_sys_list_sl_test(void);
+        void app_sys_heap_g_test(void);
         app_sys_list_dl_test();
         app_sys_list_sl_test();
+        app_sys_heap_g_test();
         void app_sys_tree_s_test(void);
         void app_sys_tree_rb_test(void);
         void app_sys_tree_rbs_test(void);

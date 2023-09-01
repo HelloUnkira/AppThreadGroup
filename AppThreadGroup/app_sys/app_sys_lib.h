@@ -9,6 +9,7 @@
 #include "app_sys_log_text.h"
 /*  */
 #include "app_sys_list.h"
+#include "app_sys_heap_g.h"
 #include "app_sys_tree_s.h"
 #include "app_sys_tree_rb.h"
 #include "app_sys_tree_rbs.h"
