@@ -217,7 +217,7 @@ void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
             if (force)
                 break;
             if (unit->lock == 0)
-                 break;
+                break;
             unit = NULL;
         }
         if (unit == NULL)
@@ -318,7 +318,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
             app_sys_list_dl_ftra(&cache->dl_list, curr) {
                 unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
                 if (unit->lock == 0)
-                     break;
+                    break;
                 unit = NULL;
             }
             if (unit  == NULL) {

@@ -101,9 +101,10 @@ void app_third_fatfs_walk(char *path)
  */
 void app_third_fatfs_init(void)
 {
-    /* 挂载文件系统 */
-    FATFS fat_fs = {0};
     FRESULT retval = FR_OK;
+    
+    /* 挂载文件系统 */
+    static FATFS fat_fs = {0};
     if ((retval = f_mount(&fat_fs, "", 1)) != FR_OK)
         APP_SYS_LOG_WARN("f_mount fail:%d", retval);
     

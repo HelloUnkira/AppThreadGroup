@@ -88,10 +88,6 @@ static void app_lv_ui_btn_c_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_CLICKED: {
         
-        #include "app_third_fatfs.h"
-        app_third_fatfs_walk("");
-        break;
-        
         if (app_lv_ui_res_local->fs_info != NULL) {
             lv_mem_free(app_lv_ui_res_local->fs_info);
             app_lv_ui_res_local->fs_info_size = 0;
