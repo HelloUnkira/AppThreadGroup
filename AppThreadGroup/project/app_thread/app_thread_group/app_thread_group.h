@@ -72,4 +72,7 @@ void app_thread_slave_schedule(void);
 #include "app_thread_lvgl.h"
 #include "app_thread_jerryscript.h"
 
+/* 子线程模组 */
+#include "app_module_system.h"
+
 #endif

@@ -14,7 +14,4 @@ void app_thread_slave_process(uint32_t app_thread_id,
                               app_thread_slave_process_ready_cb   ready_cb,
                               app_thread_slave_process_package_cb package_cb);
 
-/* 子线程模组 */
-#include "app_module_system.h"
-
 #endif

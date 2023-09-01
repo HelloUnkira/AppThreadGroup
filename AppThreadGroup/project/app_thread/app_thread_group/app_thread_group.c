@@ -11,6 +11,30 @@
 
 static bool app_thread_group_status = false;
 
+/*@brief 子线程准备
+ */
+void app_thread_slave_prepare(void)
+{
+    /* 系统软件模组初始化 */
+    app_module_data_center_ready();
+    /*
+     *
+     */
+    /* 就绪线程公共子模组 */
+    app_module_system_ready();
+}
+
+/*@brief 子线程调度
+ */
+void app_thread_slave_schedule(void)
+{
+    app_thread_process(&app_thread_mix_irq,         app_thread_static);
+    app_thread_process(&app_thread_mix_custom,      app_thread_static);
+    app_thread_process(&app_thread_manage,          app_thread_static);
+    app_thread_process(&app_thread_lvgl,            app_thread_static);
+    app_thread_process(&app_thread_jerryscript,     app_thread_static);
+}
+
 /*@brief 线程组运行
  *       准备并启动所有线程及其附属资源
  */
