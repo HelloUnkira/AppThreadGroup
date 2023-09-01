@@ -1,30 +1,6 @@
 #ifndef APP_SYS_LOG_H
 #define APP_SYS_LOG_H
 
-/*
- * 配置项起始
- */
-
-/* 全局宏控开关(完全启用或禁用) */
-#define APP_SYS_LOG_GLOBAL_STATUS       1   /* 1:ENABLE,0:DISABLE */
-/* 全局宏控覆盖开关(覆盖本地宏控等级) */
-#define APP_SYS_LOG_GLOBAL_OVERLAY      0   /* 1:ENABLE,0:DISABLE */
-/* 全局宏控覆盖等级(全局宏控覆盖开关启用时有效, 覆盖本地宏控等级) */
-#define APP_SYS_LOG_GLOBAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
-/* 全局宏控本地持久化开关(受外部宏控管制, 需全局宏控覆盖才可完全使用) */
-#define APP_SYS_LOG_RECORD_STATUS       1   /* 1:ENABLE,0:DISABLE */
-/* 全局宏控本地持久化等级 */
-#define APP_SYS_LOG_RECORD_LEVEL        3   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
-
-/* 全局断言检查开关 */
-#define APP_SYS_ASSERT_STATUS           1   /* 1:ENABLE,0:DISABLE */
-/* 全局函数追踪检查开关 */
-#define APP_SYS_TRACE_STATUS            1   /* 1:ENABLE,0:DISABLE */
-
-/*
- * 配置项结束
- */
-
 /* 本地宏控(本文件被包含前配置) */
 #ifndef APP_SYS_LOG_LOCAL_STATUS
 #define APP_SYS_LOG_LOCAL_STATUS        0   /* 1:ENABLE,0:DISABLE */

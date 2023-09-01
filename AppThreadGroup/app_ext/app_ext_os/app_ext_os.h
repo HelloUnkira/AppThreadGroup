@@ -6,13 +6,7 @@
  *     对所有平台做一个全通配的最低配置
  */
 
-/* APP OS adaptor: */
-#define APP_OS_IS_WINDOWS   1
-#define APP_OS_IS_LINUX     0
-#define APP_OS_IS_ZEPHYR    0
-#define APP_OS_IS_FREERTOS  0
-
-/* OS custom adaptor */
+/* APP OS custom adaptor */
 #include "app_ext_os_windows.h"
 #include "app_ext_os_linux.h"
 #include "app_ext_os_zephyr.h"

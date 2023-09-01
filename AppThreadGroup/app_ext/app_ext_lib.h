@@ -14,6 +14,8 @@
 #include <stdio.h>
 #include <time.h>
 
+/* Project Config */
+#include "app_project_config.h"
 /* Arch lib hook */
 /* Dev lib hook */
 /* OS lib hook */
@@ -21,5 +23,6 @@
 #include "app_ext_dev.h"
 #include "app_ext_os.h"
 
+/* Keep Adding */
 
 #endif

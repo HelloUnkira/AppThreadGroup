@@ -1,9 +1,6 @@
 #ifndef APP_SYS_LOG_TEXT_H
 #define APP_SYS_LOG_TEXT_H
 
-/* 单次存储日志文本最大长度(包括字符串结尾'\0') */
-#define APP_SYS_LOG_TEXT_MAX  128
-
 typedef union {
     uint8_t buffer[0];
     struct {
