@@ -41,7 +41,7 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
     offset += sizeof(uintptr_t);
     offset %= zone;
     /* 日志数据紊乱,清除并投递警告 */
-    if (item->length > APP_SYS_LOG_TEXT_MAX + 1) {
+    if (item->length > APP_SYS_LOG_TEXT_LIMIT + 1) {
         APP_SYS_LOG_ERROR("trace log data invalid");
         return false;
     }
@@ -92,7 +92,7 @@ static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset
     offset += sizeof(uintptr_t);
     offset %= zone;
     /* 日志数据紊乱,清除并投递警告 */
-    if (item->length > APP_SYS_LOG_TEXT_MAX + 1) {
+    if (item->length > APP_SYS_LOG_TEXT_LIMIT + 1) {
         APP_SYS_LOG_ERROR("trace log data invalid");
         return false;
     }
@@ -242,12 +242,12 @@ void app_sys_log_text_ready(void)
  *                       或者可以加入新条目为止
  *@retval     成功或者失败
  */
-bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_MAX], bool need_cover)
+bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_LIMIT], bool need_cover)
 {
     bool retval = false;
     app_sys_log_item_t trace_item;
-    memcpy(trace_item.text, text, APP_SYS_LOG_TEXT_MAX);
-    trace_item.text[APP_SYS_LOG_TEXT_MAX] = '\0';
+    memcpy(trace_item.text, text, APP_SYS_LOG_TEXT_LIMIT);
+    trace_item.text[APP_SYS_LOG_TEXT_LIMIT] = '\0';
     trace_item.length = strlen(trace_item.text) + 1;
     /* 如果空间不够,则先丢弃式加载多条 */
     while (app_sys_log_text_space() < trace_item.length + sizeof(uint32_t)) {
@@ -298,7 +298,7 @@ bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_MAX], bool need_cover)
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_MAX])
+bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_LIMIT])
 {
     if (app_sys_log_text_used() == 0)
         return false;
@@ -317,7 +317,7 @@ bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_MAX])
         APP_SYS_LOG_ERROR("data is disorder, need reset now");
         return false;
     }
-    memcpy(text, trace_item.text, APP_SYS_LOG_TEXT_MAX);
+    memcpy(text, trace_item.text, APP_SYS_LOG_TEXT_LIMIT);
     app_sys_log_text_reflush();
     return true;
 }
@@ -326,7 +326,7 @@ bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_MAX])
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX])
+bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_LIMIT])
 {
     if (app_sys_log_text_used() == 0)
         return false;
@@ -362,7 +362,7 @@ bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX])
         APP_SYS_LOG_ERROR("data is disorder, need reset now");
         return false;
     }
-    memcpy(text, trace_item.text, APP_SYS_LOG_TEXT_MAX);
+    memcpy(text, trace_item.text, APP_SYS_LOG_TEXT_LIMIT);
     app_sys_log_text_reflush();
     return true;
 }
@@ -405,20 +405,20 @@ void app_sys_log_text_test(void)
             APP_SYS_LOG_WARN("log test count:%d", count);
         
         static uint32_t offset = 0;
-        uint8_t log_text_i[APP_SYS_LOG_TEXT_MAX * 2] = {0};
-        uint8_t log_text_o[APP_SYS_LOG_TEXT_MAX * 2] = {0};
+        uint8_t log_text_i[APP_SYS_LOG_TEXT_LIMIT * 2] = {0};
+        uint8_t log_text_o[APP_SYS_LOG_TEXT_LIMIT * 2] = {0};
         
-        for (uint32_t idx = 0; idx < APP_SYS_LOG_TEXT_MAX; idx++)
-            log_text_i[idx] = log_text_i[idx + APP_SYS_LOG_TEXT_MAX] = '0' + idx % 10;
+        for (uint32_t idx = 0; idx < APP_SYS_LOG_TEXT_LIMIT; idx++)
+            log_text_i[idx] = log_text_i[idx + APP_SYS_LOG_TEXT_LIMIT] = '0' + idx % 10;
         
         app_sys_log_text_dump(log_text_i + offset, true);
         app_sys_log_text_load(log_text_o);
         
-        if (memcmp(log_text_o, log_text_i + offset, APP_SYS_LOG_TEXT_MAX) != 0)
+        if (memcmp(log_text_o, log_text_i + offset, APP_SYS_LOG_TEXT_LIMIT) != 0)
             APP_SYS_LOG_ERROR("log error");
         
         offset += 1;
-        offset %= APP_SYS_LOG_TEXT_MAX;
+        offset %= APP_SYS_LOG_TEXT_LIMIT;
         
         app_delay_us(peroid);
     }

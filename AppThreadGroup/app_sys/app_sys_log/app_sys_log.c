@@ -74,18 +74,18 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
            app_sys_log.message1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
-            char text[APP_SYS_LOG_TEXT_MAX] = {0};
+            char text[APP_SYS_LOG_TEXT_LIMIT] = {0};
             /* 格式化选择,按需求选取即可 */
-               snprintf(text, APP_SYS_LOG_TEXT_MAX, "[%s][%u][%c]", func, line, flag);
-            // snprintf(text, APP_SYS_LOG_TEXT_MAX - 1, "[%s][%u][%c]", file, line, flag);
-            // snprintf(text, APP_SYS_LOG_TEXT_MAX - 1, "[%s][%s][%u][%c]", file, func, line, flag);
-            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+               snprintf(text, APP_SYS_LOG_TEXT_LIMIT, "[%s][%u][%c]", func, line, flag);
+            // snprintf(text, APP_SYS_LOG_TEXT_LIMIT - 1, "[%s][%u][%c]", file, line, flag);
+            // snprintf(text, APP_SYS_LOG_TEXT_LIMIT - 1, "[%s][%s][%u][%c]", file, func, line, flag);
+            text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             app_sys_log.persistent(text);
-            vsnprintf(text, APP_SYS_LOG_TEXT_MAX, format, list);
-            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+            vsnprintf(text, APP_SYS_LOG_TEXT_LIMIT, format, list);
+            text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             app_sys_log.persistent(text);
-            snprintf(text, APP_SYS_LOG_TEXT_MAX, app_sys_log_line());
-            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+            snprintf(text, APP_SYS_LOG_TEXT_LIMIT, app_sys_log_line());
+            text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             app_sys_log.persistent(text);
         }
     } else {
@@ -94,16 +94,16 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
         // app_sys_log.message1(app_sys_log_line());
         /* 格式化信息持久化 */
         if (record) {
-            char text[APP_SYS_LOG_TEXT_MAX] = {0};
+            char text[APP_SYS_LOG_TEXT_LIMIT] = {0};
             /* 格式化选择,按需求选取即可 */
-            // snprintf(text, APP_SYS_LOG_TEXT_MAX, "");
-            // text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+            // snprintf(text, APP_SYS_LOG_TEXT_LIMIT, "");
+            // text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             // app_sys_log.persistent(text);
-            vsnprintf(text, APP_SYS_LOG_TEXT_MAX, format, list);
-            text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+            vsnprintf(text, APP_SYS_LOG_TEXT_LIMIT, format, list);
+            text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             app_sys_log.persistent(text);
-            // snprintf(text, APP_SYS_LOG_TEXT_MAX, app_sys_log_line());
-            // text[APP_SYS_LOG_TEXT_MAX - 1] = '\0';
+            // snprintf(text, APP_SYS_LOG_TEXT_LIMIT, app_sys_log_line());
+            // text[APP_SYS_LOG_TEXT_LIMIT - 1] = '\0';
             // app_sys_log.persistent(text);
         }
     }

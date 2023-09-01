@@ -34,28 +34,6 @@ typedef enum {  /* 线程组模组 */
     app_thread_event_num,
 } app_thread_event_t;
 
-/* 主线程调度模式
- * 线程组以事件组优先级进行实时调度或分时调度
- * 实时调度会保证优先级高的事件被立即激活
- * 分时调度以指定时间片内收集的事件进行调度
- * 分时调度会降低部分并发性但能节约部分调度性能
- */
-#define APP_THREAD_MASTER_REALTIME      0
-#define APP_THREAD_MASTER_TIME_SLICE    10
-
-/* 子线程执行时间检查(ms) */
-#define APP_THREAD_SLAVE_EXECUTE_TIME             1
-/* 线程事件包执行时间检查(ms) */
-#define APP_THREAD_SLAVE_EXECUTE_TIME_CHECK       0
-#define APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS    10
-
-/* 线程组线程包裹接收最大警告线(警告) */
-#if     APP_THREAD_MASTER_REALTIME
-#define APP_THREAD_PACKAGE_MAX  20
-#else
-#define APP_THREAD_PACKAGE_MAX  100
-#endif
-
 #include "app_thread_adaptor.h"
 #include "app_thread_master.h"
 #include "app_thread_slave.h"

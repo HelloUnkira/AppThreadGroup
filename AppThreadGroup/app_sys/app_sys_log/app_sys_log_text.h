@@ -18,7 +18,7 @@ typedef union {
     uint8_t buffer[0];
     struct {
         uintptr_t length;
-        uint8_t   text[APP_SYS_LOG_TEXT_MAX + 1];
+        uint8_t   text[APP_SYS_LOG_TEXT_LIMIT + 1];
     };
 } app_sys_log_item_t;
 
@@ -38,19 +38,19 @@ void app_sys_log_text_ready(void);
  *                       或者可以加入新条目为止
  *@retval     成功或者失败
  */
-bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_MAX], bool need_cover);
+bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_LIMIT], bool need_cover);
 
 /*@brief      日志追踪队列头转出一段日志
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_MAX]);
+bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_LIMIT]);
 
 /*@brief      日志追踪队列窥探一段日志(自动迭代到下一段日志)
  *@param[out] text 日志文本
  *@retval     成功或者失败
  */
-bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_MAX]);
+bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_LIMIT]);
 
 /*@brief 日志追踪队列窥探指针重置
  */
