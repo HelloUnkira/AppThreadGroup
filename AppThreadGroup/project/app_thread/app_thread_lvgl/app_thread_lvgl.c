@@ -33,8 +33,7 @@ static void app_thread_lvgl_routine_ready_cb(void)
  */
 static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
 {
-    switch (package->module)
-    {
+    switch (package->module) {
     case app_thread_lvgl_sched: {
         /* lvgl时钟约减事件 */
         if (package->event == app_thread_lvgl_sched_inc) {

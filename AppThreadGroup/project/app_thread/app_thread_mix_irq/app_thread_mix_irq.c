@@ -39,8 +39,7 @@ static void app_thread_mix_irq_routine_ready_cb(void)
  */
 static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
 {
-    switch (package->module)
-    {
+    switch (package->module) {
     case app_thread_mix_irq_timer: {
         if (package->event == app_thread_mix_irq_timer_reduce_update)
             app_module_timer_reduce();
