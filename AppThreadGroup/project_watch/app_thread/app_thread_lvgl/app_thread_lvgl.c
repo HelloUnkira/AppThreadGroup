@@ -55,9 +55,9 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         if (package->event == app_thread_lvgl_sched_drv) {
             app_lv_driver_handler();
         }
-        /* lvgl场景处理事件 */
-        if (package->event == app_thread_lvgl_sched_scene) {
-            app_lv_scene_sched(package->data);
+        /* lvgl wheel更新事件 */
+        if (package->event == app_thread_lvgl_sched_wheel) {
+            app_lv_wheel_update_handle(package->data);
         }
         /* lvgl场景计时检查 */
         if (package->event == app_thread_lvgl_sched_check_time) {
@@ -89,7 +89,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         return true;
     }
-    case app_thread_lvgl_ui_scene: {
+    case app_thread_lvgl_sched_ui: {
         /* 测试模式拦截该模组全部事件 */
         #if APP_LV_UI_TEST_USE
         /* 禁用超时回退 */
@@ -99,10 +99,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         return true;
         #endif
         
-        /* UI场景轮盘配置 */
-        if (package->event == app_thread_lvgl_ui_scene_wheel) {
-            app_lv_ui_wheel_sched(package->data, package->size);
-        }
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
             app_lv_event_ui_default_config(NULL, true, NULL);

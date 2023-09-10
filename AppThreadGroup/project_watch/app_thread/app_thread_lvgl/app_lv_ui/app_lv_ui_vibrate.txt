@@ -1,0 +1,46 @@
+/* system */
+app_thread_lvgl_sched_ui_start,                 //250ms,1
+app_thread_lvgl_sched_ui_stop,                  //250ms,1
+app_thread_lvgl_sched_ui_shutdown,              //250ms,1
+app_thread_lvgl_sched_ui_adjust_vibrate,        //250ms,1
+app_thread_lvgl_sched_ui_power_charge,          //[250ms,750ms],2
+app_thread_lvgl_sched_ui_power_low,             //[250ms,750ms],2
+/* link */
+app_thread_lvgl_sched_ui_pair_confirm,          //250ms,1
+app_thread_lvgl_sched_ui_bind_succeed,          //[250ms,750ms],2
+app_thread_lvgl_sched_ui_bind_fail,             //[250ms,750ms],2
+app_thread_lvgl_sched_ui_connect_succeed,       //[250ms,750ms],2
+app_thread_lvgl_sched_ui_connect_fail,          //[250ms,750ms],2
+/* health */
+app_thread_lvgl_sched_ui_goal_finish,           //[250ms,750ms],2
+app_thread_lvgl_sched_ui_hr_low,                //[250ms,750ms],2
+app_thread_lvgl_sched_ui_hr_high,               //[250ms,750ms],2
+app_thread_lvgl_sched_ui_spo2_low,              //[250ms,750ms],2
+app_thread_lvgl_sched_ui_stress_high,           //[250ms,750ms],2
+app_thread_lvgl_sched_ui_hr_start,              //250ms,1
+app_thread_lvgl_sched_ui_hr_stop,               //250ms,1
+app_thread_lvgl_sched_ui_spo2_start,            //250ms,1
+app_thread_lvgl_sched_ui_spo2_stop,             //250ms,1
+app_thread_lvgl_sched_ui_stress_start,          //250ms,1
+app_thread_lvgl_sched_ui_stress_stop,           //250ms,1
+/* sport */
+app_thread_lvgl_sched_ui_sport_countdown,       //250ms,1
+app_thread_lvgl_sched_ui_sport_pause,           //250ms,1
+app_thread_lvgl_sched_ui_sport_resume,          //250ms,1
+app_thread_lvgl_sched_ui_sport_finish,          //[250ms,750ms],2
+app_thread_lvgl_sched_ui_sport_recognition,     //[250ms,750ms],2
+app_thread_lvgl_sched_ui_sport_goal,            //[250ms,750ms],2
+/* remind */
+app_thread_lvgl_sched_ui_drink,                 //[250ms,750ms],2
+app_thread_lvgl_sched_ui_sedentary,             //[250ms,750ms],2
+app_thread_lvgl_sched_ui_menstruation,          //[250ms,750ms],2
+app_thread_lvgl_sched_ui_countdown,             //[250ms,750ms],until 1 min
+app_thread_lvgl_sched_ui_alarm,                 //[250ms,750ms],until 1 min
+app_thread_lvgl_sched_ui_notify,                //250ms,1
+/* function */
+app_thread_lvgl_sched_ui_ota_update,            //250ms,1
+app_thread_lvgl_sched_ui_watchface_switch,      //250ms,1
+app_thread_lvgl_sched_ui_call,                  //[250ms,750ms],repeat until
+
+
+

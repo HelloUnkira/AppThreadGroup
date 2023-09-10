@@ -28,11 +28,11 @@ int main(int argc, char *argv[])
         /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
         void app_sys_rbuf_test(void);
         app_sys_rbuf_test();
-        void app_sys_list_dl_test(void);
-        void app_sys_list_sl_test(void);
+        void app_sys_list_dll_test(void);
+        void app_sys_list_sll_test(void);
         void app_sys_heap_g_test(void);
-        app_sys_list_dl_test();
-        app_sys_list_sl_test();
+        app_sys_list_dll_test();
+        app_sys_list_sll_test();
         app_sys_heap_g_test();
         void app_sys_tree_s_test(void);
         void app_sys_tree_rb_test(void);

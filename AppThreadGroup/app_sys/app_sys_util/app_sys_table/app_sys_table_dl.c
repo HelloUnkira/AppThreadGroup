@@ -13,7 +13,7 @@
  */
 void app_sys_table_dln_reset(app_sys_table_dln_t *node)
 {
-    app_sys_list_dn_reset(node);
+    app_sys_list_dln_reset(node);
 }
 
 /*@brief     重置哈希表一级链表
@@ -23,7 +23,7 @@ void app_sys_table_dln_reset(app_sys_table_dln_t *node)
 void app_sys_table_dll_reset(app_sys_table_dll_t *list, uint32_t length)
 {
     for (uint32_t idx = 0; idx < length; idx++)
-        app_sys_list_dl_reset(&list[idx]);
+        app_sys_list_dll_reset(&list[idx]);
 }
 
 /*@brief     重置哈希表
@@ -51,8 +51,8 @@ void app_sys_table_dlt_insert(app_sys_table_dlt_t *table, app_sys_table_dln_t *n
 {
     /* 散列,追加(对称语义,二选其一) */
     uint32_t idx = table->digest(node) % table->length;
-    // app_sys_list_dl_pinsert(&table->list[idx], NULL, node);
-       app_sys_list_dl_ainsert(&table->list[idx], NULL, node);
+    // app_sys_list_dll_pinsert(&table->list[idx], NULL, node);
+       app_sys_list_dll_ainsert(&table->list[idx], NULL, node);
 }
 
 /*@brief     哈希表移除节点
@@ -63,7 +63,7 @@ void app_sys_table_dlt_remove(app_sys_table_dlt_t *table, app_sys_table_dln_t *n
 {
     /* 散列,移除 */
     uint32_t idx = table->digest(node) % table->length;
-    app_sys_list_dl_remove(&table->list[idx], node);
+    app_sys_list_dll_remove(&table->list[idx], node);
 }
 
 /*@brief     哈希表匹配节点(查找)
@@ -76,8 +76,8 @@ app_sys_table_dln_t * app_sys_table_dlt_search(app_sys_table_dlt_t *table, app_s
     /* 散列,遍历 */
     uint32_t idx = table->digest(node) % table->length;
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&table->list[idx], curr)
-       app_sys_list_dl_btra(&table->list[idx], curr) {
+    // app_sys_list_dll_ftra(&table->list[idx], curr)
+       app_sys_list_dll_btra(&table->list[idx], curr) {
         if (table->confirm(curr, node) == true)
             return curr;
     }
@@ -91,8 +91,8 @@ void app_sys_table_dlt_visit(app_sys_table_dlt_t *table)
 {
     for (uint32_t idx = 0; idx < table->length; idx++) {
         /* 对称语义,二选其一 */
-        // app_sys_list_dl_ftra(&table->list[idx], curr)
-           app_sys_list_dl_btra(&table->list[idx], curr) {
+        // app_sys_list_dll_ftra(&table->list[idx], curr)
+           app_sys_list_dll_btra(&table->list[idx], curr) {
            table->visit(curr, idx);
         }
     }

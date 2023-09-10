@@ -14,9 +14,9 @@
  */
 void app_sys_map_dlv_reset(app_sys_map_dlv_t *v)
 {
-    app_sys_list_dn_reset(&v->buddy);
-    app_sys_list_dl_reset(&v->e_set_i);
-    app_sys_list_dl_reset(&v->e_set_o);
+    app_sys_list_dln_reset(&v->buddy);
+    app_sys_list_dll_reset(&v->e_set_i);
+    app_sys_list_dll_reset(&v->e_set_o);
 }
 
 /*@brief     图边重置
@@ -26,8 +26,8 @@ void app_sys_map_dle_reset(app_sys_map_dle_t *e)
 {
     e->v_i = NULL;
     e->v_o = NULL;
-    app_sys_list_dn_reset(&e->e_item_i);
-    app_sys_list_dn_reset(&e->e_item_o);
+    app_sys_list_dln_reset(&e->e_item_i);
+    app_sys_list_dln_reset(&e->e_item_o);
 }
 
 /*@brief     图重置
@@ -37,7 +37,7 @@ void app_sys_map_dlm_reset(app_sys_map_dlm_t *m)
 {
     m->confirm = NULL;
     m->visit   = NULL;
-    app_sys_list_dl_reset(&m->set);
+    app_sys_list_dll_reset(&m->set);
 }
 
 /*@brief     图边重置
@@ -49,8 +49,8 @@ void app_sys_map_dle_config(app_sys_map_dle_t *e, app_sys_map_dlv_t *v_i, app_sy
 {
     e->v_i = v_i;
     e->v_o = v_o;
-    app_sys_list_dn_reset(&e->e_item_i);
-    app_sys_list_dn_reset(&e->e_item_o);
+    app_sys_list_dln_reset(&e->e_item_i);
+    app_sys_list_dln_reset(&e->e_item_o);
 }
 
 /*@brief     图重置
@@ -88,7 +88,7 @@ app_sys_map_dlv_t * app_sys_map_dle_v_o(app_sys_map_dle_t *e)
  */
 app_sys_map_dlv_t * app_sys_map_dlm_head_v(app_sys_map_dlm_t *m)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_head(&m->set);
+    app_sys_list_dln_t *node = app_sys_list_dll_head(&m->set);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
@@ -98,7 +98,7 @@ app_sys_map_dlv_t * app_sys_map_dlm_head_v(app_sys_map_dlm_t *m)
  */
 app_sys_map_dlv_t * app_sys_map_dlm_tail_v(app_sys_map_dlm_t *m)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_tail(&m->set);
+    app_sys_list_dln_t *node = app_sys_list_dll_tail(&m->set);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
@@ -108,7 +108,7 @@ app_sys_map_dlv_t * app_sys_map_dlm_tail_v(app_sys_map_dlm_t *m)
  */
 app_sys_map_dlv_t * app_sys_map_dlm_prev_v(app_sys_map_dlv_t *v)
 {
-    app_sys_list_dn_t *node = app_sys_list_dn_prev(&v->buddy);
+    app_sys_list_dln_t *node = app_sys_list_dln_prev(&v->buddy);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
@@ -118,7 +118,7 @@ app_sys_map_dlv_t * app_sys_map_dlm_prev_v(app_sys_map_dlv_t *v)
  */
 app_sys_map_dlv_t * app_sys_map_dlm_next_v(app_sys_map_dlv_t *v)
 {
-    app_sys_list_dn_t *node = app_sys_list_dn_next(&v->buddy);
+    app_sys_list_dln_t *node = app_sys_list_dln_next(&v->buddy);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
@@ -128,7 +128,7 @@ app_sys_map_dlv_t * app_sys_map_dlm_next_v(app_sys_map_dlv_t *v)
  */
 app_sys_map_dle_t * app_sys_map_dlm_head_e(app_sys_map_dlv_t *v)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_head(&v->e_set_o);
+    app_sys_list_dln_t *node = app_sys_list_dll_head(&v->e_set_o);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
@@ -138,7 +138,7 @@ app_sys_map_dle_t * app_sys_map_dlm_head_e(app_sys_map_dlv_t *v)
  */
 app_sys_map_dle_t * app_sys_map_dlm_tail_e(app_sys_map_dlv_t *v)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_tail(&v->e_set_o);
+    app_sys_list_dln_t *node = app_sys_list_dll_tail(&v->e_set_o);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
@@ -148,7 +148,7 @@ app_sys_map_dle_t * app_sys_map_dlm_tail_e(app_sys_map_dlv_t *v)
  */
 app_sys_map_dle_t * app_sys_map_dlm_prev_e(app_sys_map_dle_t *e)
 {
-    app_sys_list_dn_t *node = app_sys_list_dn_prev(&e->e_item_o);
+    app_sys_list_dln_t *node = app_sys_list_dln_prev(&e->e_item_o);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
@@ -158,7 +158,7 @@ app_sys_map_dle_t * app_sys_map_dlm_prev_e(app_sys_map_dle_t *e)
  */
 app_sys_map_dle_t * app_sys_map_dlm_next_e(app_sys_map_dle_t *e)
 {
-    app_sys_list_dn_t *node = app_sys_list_dn_next(&e->e_item_o);
+    app_sys_list_dln_t *node = app_sys_list_dln_next(&e->e_item_o);
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
@@ -170,8 +170,8 @@ app_sys_map_dle_t * app_sys_map_dlm_next_e(app_sys_map_dle_t *e)
 app_sys_map_dlv_t * app_sys_map_dlm_search_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&m->set, curr)
-       app_sys_list_dl_btra(&m->set, curr) {
+    // app_sys_list_dll_ftra(&m->set, curr)
+       app_sys_list_dll_btra(&m->set, curr) {
         app_sys_map_dlv_t *target = app_sys_own_ofs(app_sys_map_dlv_t, buddy, curr);
         if (m->confirm(target, v))
             return target;
@@ -186,8 +186,8 @@ app_sys_map_dlv_t * app_sys_map_dlm_search_v(app_sys_map_dlm_t *m, app_sys_map_d
 void app_sys_map_dlm_insert_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_pinsert(&m->set, NULL, &v->buddy);
-       app_sys_list_dl_ainsert(&m->set, NULL, &v->buddy);
+    // app_sys_list_dll_pinsert(&m->set, NULL, &v->buddy);
+       app_sys_list_dll_ainsert(&m->set, NULL, &v->buddy);
 }
 
 /*@brief     删除图顶点
@@ -196,7 +196,7 @@ void app_sys_map_dlm_insert_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
  */
 void app_sys_map_dlm_remove_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
-    app_sys_list_dl_remove(&m->set, &v->buddy);
+    app_sys_list_dll_remove(&m->set, &v->buddy);
 }
 
 /*@brief     搜索图边
@@ -209,14 +209,14 @@ app_sys_map_dle_t * app_sys_map_dlm_search_e(app_sys_map_dlv_t *v_i, app_sys_map
     /* 对称语义,二选其一 */
     
     /* 这是从v_i的出度寻找的方式 */
-    app_sys_list_dl_ftra(&v_i->e_set_o, curr) {
+    app_sys_list_dll_ftra(&v_i->e_set_o, curr) {
         app_sys_map_dle_t *target = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
         if (target->v_o == v_o)
             return target;
     }
     return NULL;
     /* 这是从v_o的入度寻找的方式 */
-    app_sys_list_dl_ftra(&v_o->e_set_i, curr) {
+    app_sys_list_dll_ftra(&v_o->e_set_i, curr) {
         app_sys_map_dle_t *target = app_sys_own_ofs(app_sys_map_dle_t, e_item_i, curr);
         if (target->v_i == v_i)
             return target;
@@ -233,11 +233,11 @@ void app_sys_map_dlm_insert_e(app_sys_map_dle_t *e)
     if (e->v_i == e->v_o)
         return;
     /* 向弧添加(发起者的出度:尾部追加;接收者的入度:首项插入) */
-    app_sys_list_dl_ainsert(&e->v_i->e_set_o, NULL, &e->e_item_o);
-    app_sys_list_dl_pinsert(&e->v_o->e_set_i, NULL, &e->e_item_i);
+    app_sys_list_dll_ainsert(&e->v_i->e_set_o, NULL, &e->e_item_o);
+    app_sys_list_dll_pinsert(&e->v_o->e_set_i, NULL, &e->e_item_i);
     /* 向弧添加(发起者的出度:首项插入;接收者的入度:尾部追加) */
-    // app_sys_list_dl_pinsert(&e->v_i->e_set_o, NULL, &e->e_item_o);
-    // app_sys_list_dl_ainsert(&e->v_o->e_set_i, NULL, &e->e_item_i);
+    // app_sys_list_dll_pinsert(&e->v_i->e_set_o, NULL, &e->e_item_o);
+    // app_sys_list_dll_ainsert(&e->v_o->e_set_i, NULL, &e->e_item_i);
 }
 
 /*@brief     删除图边
@@ -247,8 +247,8 @@ void app_sys_map_dlm_remove_e(app_sys_map_dle_t *e)
 {
     /* 向弧的发起者移除出度 */
     /* 向弧的接受者移除入度 */
-    app_sys_list_dl_remove(&e->v_i->e_set_o, &e->e_item_o);
-    app_sys_list_dl_remove(&e->v_o->e_set_i, &e->e_item_i);
+    app_sys_list_dll_remove(&e->v_i->e_set_o, &e->e_item_o);
+    app_sys_list_dll_remove(&e->v_o->e_set_i, &e->e_item_i);
 }
 
 /*@brief     访问图所有顶点
@@ -259,8 +259,8 @@ void app_sys_map_dlm_visit_all(app_sys_map_dlm_t *m)
     /* 遍历检查顶点 */
     
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&m->set, cur0)
-       app_sys_list_dl_btra(&m->set, cur0) {
+    // app_sys_list_dll_ftra(&m->set, cur0)
+       app_sys_list_dll_btra(&m->set, cur0) {
        app_sys_map_dlv_t *v = app_sys_own_ofs(app_sys_map_dlv_t, buddy, cur0);
        m->visit(v, NULL, "v:");
        m->visit(NULL, NULL, app_sys_log_line());
@@ -268,8 +268,8 @@ void app_sys_map_dlm_visit_all(app_sys_map_dlm_t *m)
        m->visit(NULL, NULL, "e_set_o:");
        m->visit(NULL, NULL, app_sys_log_line());
        /* 对称语义,二选其一 */
-       // app_sys_list_dl_ftra(&v->e_set_o, cur1)
-          app_sys_list_dl_btra(&v->e_set_o, cur1) {
+       // app_sys_list_dll_ftra(&v->e_set_o, cur1)
+          app_sys_list_dll_btra(&v->e_set_o, cur1) {
           app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, cur1);
           m->visit(NULL, e, "\te:");
           m->visit(e->v_i, NULL, "\tv_i:");
@@ -280,8 +280,8 @@ void app_sys_map_dlm_visit_all(app_sys_map_dlm_t *m)
        m->visit(NULL, NULL, "e_set_i:");
        m->visit(NULL, NULL, app_sys_log_line());
        /* 对称语义,二选其一 */
-       // app_sys_list_dl_ftra(&v->e_set_i, cur1)
-          app_sys_list_dl_btra(&v->e_set_i, cur1) {
+       // app_sys_list_dll_ftra(&v->e_set_i, cur1)
+          app_sys_list_dll_btra(&v->e_set_i, cur1) {
           app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_i, cur1);
           m->visit(NULL, e, "\te:");
           m->visit(e->v_i, NULL, "\tv_i:");
@@ -301,8 +301,8 @@ uint32_t app_sys_map_dlm_idx_from_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
     uint32_t cnt = 0;
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&m->set, curr)
-       app_sys_list_dl_btra(&m->set, curr)
+    // app_sys_list_dll_ftra(&m->set, curr)
+       app_sys_list_dll_btra(&m->set, curr)
        if (&v->buddy == curr)
            return cnt;
        else
@@ -319,8 +319,8 @@ app_sys_map_dlv_t * app_sys_map_dlm_idx_to_v(app_sys_map_dlm_t *m, uint32_t idx)
 {
     uint32_t cnt = 0;
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&m->set, curr)
-       app_sys_list_dl_btra(&m->set, curr) {
+    // app_sys_list_dll_ftra(&m->set, curr)
+       app_sys_list_dll_btra(&m->set, curr) {
         if (cnt != idx) {
             cnt++;
             continue;
@@ -338,8 +338,8 @@ uint32_t app_sys_map_dlv_num(app_sys_map_dlm_t *m)
 {
     uint32_t cnt = 0;
     /* 对称语义,二选其一 */
-    // app_sys_list_dl_ftra(&m->set, curr)
-       app_sys_list_dl_btra(&m->set, curr) cnt++;
+    // app_sys_list_dll_ftra(&m->set, curr)
+       app_sys_list_dll_btra(&m->set, curr) cnt++;
     return cnt;
 }
 
@@ -376,8 +376,8 @@ bool app_sys_map_dlm_first_d(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys
         }
         /* 遍历该顶点所有边并为其添加,同时过滤掉已经访问过的点 */
         /* 对称语义,二选其一 */
-        // app_sys_list_dl_ftra(&target->e_set_o, curr)
-           app_sys_list_dl_btra(&target->e_set_o, curr) {
+        // app_sys_list_dll_ftra(&target->e_set_o, curr)
+           app_sys_list_dll_btra(&target->e_set_o, curr) {
             app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
             app_sys_map_dlv_t *tmp = app_sys_map_dle_v_o(e);
             /* 如果该顶点没有被访问,将其入栈 */
@@ -422,8 +422,8 @@ bool app_sys_map_dlm_first_b(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys
         }
         /* 遍历该顶点所有边并为其添加,同时过滤掉已经访问过的点 */
         /* 对称语义,二选其一 */
-        // app_sys_list_dl_ftra(&target->e_set_o, curr)
-           app_sys_list_dl_btra(&target->e_set_o, curr) {
+        // app_sys_list_dll_ftra(&target->e_set_o, curr)
+           app_sys_list_dll_btra(&target->e_set_o, curr) {
             app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
             app_sys_map_dlv_t *tmp = app_sys_map_dle_v_o(e);
             /* 如果该顶点没有被访问,将其入队列 */
@@ -491,8 +491,8 @@ void app_sys_map_dlm_dijkstra(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sy
         v = app_sys_map_dlm_idx_to_v(m, idx);
         /* 开始确定该顶点 */
         /* 对称语义,二选其一 */
-        // app_sys_list_dl_ftra(&v->e_set_o, curr)
-           app_sys_list_dl_btra(&v->e_set_o, curr) {
+        // app_sys_list_dll_ftra(&v->e_set_o, curr)
+           app_sys_list_dll_btra(&v->e_set_o, curr) {
             app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
             app_sys_map_dlv_t *tmp = app_sys_map_dle_v_o(e);
             /* 获得该边的权值 */
@@ -561,8 +561,8 @@ bool app_sys_map_dlm_bellmanford(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app
                 continue;
             /* 从idx_f到idx_t,遍历检查 */
             /* 对称语义,二选其一 */
-            // app_sys_list_dl_ftra(&v->e_set_o, curr)
-               app_sys_list_dl_btra(&v->e_set_o, curr) {
+            // app_sys_list_dll_ftra(&v->e_set_o, curr)
+               app_sys_list_dll_btra(&v->e_set_o, curr) {
                 app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
                 app_sys_map_dlv_t *tmp = app_sys_map_dle_v_o(e);
                 /* 获得该边的权值 */
@@ -601,8 +601,8 @@ bool app_sys_map_dlm_bellmanford(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app
             continue;
         /* 从idx_f到idx_t,遍历检查 */
         /* 对称语义,二选其一 */
-        // app_sys_list_dl_ftra(&v->e_set_o, curr)
-           app_sys_list_dl_btra(&v->e_set_o, curr) {
+        // app_sys_list_dll_ftra(&v->e_set_o, curr)
+           app_sys_list_dll_btra(&v->e_set_o, curr) {
             app_sys_map_dle_t *e = app_sys_own_ofs(app_sys_map_dle_t, e_item_o, curr);
             app_sys_map_dlv_t *tmp = app_sys_map_dle_v_o(e);
             /* 获得该边的权值 */

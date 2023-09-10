@@ -10,9 +10,40 @@
 #include "app_thread_group.h"
 #include "app_lv_lib.h"
 
+/*@brief    场景默认事件响应回调设置
+ *param[in] scene    事件捕获场景,为NULL默认为wheel
+ *param[in] enable   启用或者禁用
+ *param[in] redirect 场景默认事件重定向
+ */
+void app_lv_event_ui_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t redirect)
+{
+    static bool event_config = false;
+    
+    scene = scene == NULL ? app_lv_wheel_obj_inst() : scene;
+    redirect = redirect == NULL ? app_lv_event_ui_default_cb : redirect;
+    
+    if (enable) {
+        if (event_config)
+            return;
+        event_config = true;
+        lv_group_t *group = app_lv_driver_get_kb_group();
+        lv_obj_add_event_cb(scene, redirect, LV_EVENT_ALL, NULL);
+        lv_group_add_obj(group, scene);
+        lv_group_focus_freeze(group, true);
+    } else {
+        if (!event_config)
+            return;
+        event_config = false;
+        lv_group_t *group = app_lv_driver_get_kb_group();
+        lv_group_focus_freeze(group, false);
+        lv_group_remove_obj(scene);
+        lv_obj_remove_event_cb(scene, redirect);
+    }
+}
+
 /*@brief 界面默认事件响应回调
  */
-void app_lv_event_ui_default(lv_event_t *e)
+void app_lv_event_ui_default_cb(lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     
@@ -81,16 +112,16 @@ void app_lv_event_ui_default(lv_event_t *e)
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             
-            /* 场景栈手势被浮窗锁定 */
-            // if (app_lv_ui_float_cannot_gestrue(dir))
-            //     break;
+            /* 场景栈手势被轮盘锁定 */
+            if (app_lv_wheel_status(dir))
+                break;
             
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
             
-            /* 浮动子窗口复位(如果未复位的话) */
-            // if (app_lv_ui_float_reset())
-            //     break;
+            /* 轮盘复位(如果未复位的话) */
+            if (app_lv_wheel_rollback())
+                break;
             
             /* 左右滑动回到上一层 */
             if (app_lv_scene_get_nest() > 1) {
@@ -158,9 +189,9 @@ void app_lv_event_ui_default(lv_event_t *e)
                 }
                 /* 主界面进入下一层 */
                 if (app_lv_scene_get_nest() == 1) {
-                    /* 浮窗复位,如果可以,此时不做别的操作 */
-                    // if (app_lv_ui_float_reset())
-                    //     break;
+                    /* 轮盘复位(如果未复位的话) */
+                    if (app_lv_wheel_rollback())
+                        break;
                     app_lv_scene_add(&app_lv_ui_list, false);
                 }
             }
@@ -305,36 +336,6 @@ void app_lv_event_ui_default(lv_event_t *e)
         break;
     default:
         break;
-    }
-}
-
-/*@brief    场景默认事件响应回调设置
- *param[in] scene    事件捕获场景,为NULL默认为scr
- *param[in] enable   启用或者禁用
- *param[in] redirect 场景默认事件重定向
- */
-void app_lv_event_ui_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t redirect)
-{
-    scene = scene == NULL ? lv_scr_act() : scene;
-    redirect = redirect == NULL ? app_lv_event_ui_default : redirect;
-    
-    static bool event_config = false;
-    if (enable) {
-        if (event_config)
-            return;
-        event_config = true;
-        lv_group_t *group = app_lv_driver_get_kb_group();
-        lv_obj_add_event_cb(scene, redirect, LV_EVENT_ALL, NULL);
-        lv_group_add_obj(group, scene);
-        lv_group_focus_freeze(group, true);
-    } else {
-        if (!event_config)
-            return;
-        event_config = false;
-        lv_group_t *group = app_lv_driver_get_kb_group();
-        lv_group_focus_freeze(group, false);
-        lv_group_remove_obj(scene);
-        lv_obj_remove_event_cb(scene, redirect);
     }
 }
 
@@ -505,4 +506,3 @@ void app_lv_event_ui_chart_fade_cb(lv_event_t * e)
         break;
     }
 }
-

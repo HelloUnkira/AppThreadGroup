@@ -18,7 +18,7 @@
 
 /*@brief 缓存带计数优先级排序入队列比较回调
  */
-static bool app_sys_ext_mem_cache_sort(app_sys_list_dn_t *node1, app_sys_list_dn_t *node2)
+static bool app_sys_ext_mem_cache_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *node2)
 {
     app_sys_ext_mem_cache_unit_t *unit1 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node1);
     app_sys_ext_mem_cache_unit_t *unit2 = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node2);
@@ -129,7 +129,7 @@ void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_e
     APP_SYS_ASSERT(ext_mem != NULL);
     APP_SYS_ASSERT(unit < total);
     app_mutex_process(&cache->mutex, app_mutex_static);
-    app_sys_list_dl_reset(&cache->dl_list);
+    app_sys_list_dll_reset(&cache->dl_list);
     cache->ht_list_num = total / unit + 1;
     
     #if 0
@@ -178,7 +178,7 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache)
     /* 所有已解锁资源全部回收 */
     app_sys_ext_mem_cache_unit_t *unit = NULL;
     /* 前向遍历,针对所有资源 */
-    app_sys_list_dl_ftra(&cache->dl_list, curr) {
+    app_sys_list_dll_ftra(&cache->dl_list, curr) {
         unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
         /* 污染标记,数据回写 */
         if (unit->dirty) {
@@ -212,7 +212,7 @@ void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
     app_sys_ext_mem_cache_unit_t *unit = NULL;
     while (true) {
         /* 前向遍历,找已经解锁的资源 */
-        app_sys_list_dl_ftra(&cache->dl_list, curr) {
+        app_sys_list_dll_ftra(&cache->dl_list, curr) {
             unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
             if (force)
                 break;
@@ -222,7 +222,7 @@ void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
         }
         if (unit == NULL)
             goto over;
-        app_sys_list_dl_remove(&cache->dl_list, &unit->dl_node);
+        app_sys_list_dll_remove(&cache->dl_list, &unit->dl_node);
         
         #if 0
         #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
@@ -288,21 +288,21 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
             /* 重新带计数优先级加入 */
-            app_sys_list_dl_remove(&cache->dl_list, &unit->dl_node);
-            app_sys_queue_dpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
+            app_sys_list_dll_remove(&cache->dl_list, &unit->dl_node);
+            app_sys_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
         }
         cache->cnt_hit++;
         retval = app_sys_ext_mem_cache_hit;
         goto over;
     }
     /* 对缓存计数器进行一次重衰减(rewind),老化它 */
-    app_sys_list_dn_t *node = NULL;
-    if ((node = app_sys_list_dl_tail(&cache->dl_list)) != NULL) {
+    app_sys_list_dln_t *node = NULL;
+    if ((node = app_sys_list_dll_tail(&cache->dl_list)) != NULL) {
          unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, node);
          uint8_t count = unit->count;
          if (count != 0) {
-             // app_sys_list_dl_ftra(&cache->dl_list, curr)
-                app_sys_list_dl_btra(&cache->dl_list, curr) {
+             // app_sys_list_dll_ftra(&cache->dl_list, curr)
+                app_sys_list_dll_btra(&cache->dl_list, curr) {
                 unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
                 unit->count -= count;
              }
@@ -315,7 +315,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         /* 如果缓存空间不足时,老化资源回收 */
         while (cache->usage + size > cache->total) {
             /* 前向遍历,找已经解锁的资源 */
-            app_sys_list_dl_ftra(&cache->dl_list, curr) {
+            app_sys_list_dll_ftra(&cache->dl_list, curr) {
                 unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, dl_node, curr);
                 if (unit->lock == 0)
                     break;
@@ -327,7 +327,7 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
                 retval = app_sys_ext_mem_cache_overflow;
                 goto over;
             }
-            app_sys_list_dl_remove(&cache->dl_list, &unit->dl_node);
+            app_sys_list_dll_remove(&cache->dl_list, &unit->dl_node);
             
             #if 0
             #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
@@ -356,14 +356,14 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         unit->count   = 1;
         unit->dirty   = false;
         unit->lock    = 1;
-        app_sys_list_dn_reset(&unit->dl_node);
+        app_sys_list_dln_reset(&unit->dl_node);
         cache->usage += size;
        *buffer = unit->buffer;
         /* 数据读取 */
         if (!app_sys_ext_mem_read(cache->ext_mem, unit->offset, unit->buffer, unit->size))
              APP_SYS_LOG_ERROR("data read fail");
         /* 带计数优先级加入 */
-        app_sys_queue_dpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
+        app_sys_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
         
         #if 0
         #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL

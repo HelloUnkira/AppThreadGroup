@@ -45,18 +45,23 @@ void app_lv_drv_update(void)
     app_thread_package_notify(&package);
 }
 
-/*@brief lvgl 场景更新
+/*@brief     lvgl wheel更新
+ *@param[in] wheel 轮盘实例
+ *@param[in] size  轮盘实例大小
  */
-void app_lv_scene_update(void *scene)
+void app_lv_wheel_update(void *wheel, uint32_t size)
 {
+    APP_SYS_ASSERT(size == sizeof(app_lv_wheel_t));
+    void  *data = app_mem_alloc(size);
+    memcpy(data, wheel, size);
+    
     app_thread_package_t package = {
-        .thread   = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_sched,
-        .event    = app_thread_lvgl_sched_scene,
-        .priority = app_thread_package_priority_normal,
-        .dynamic  = false,
-        .size     = sizeof(void *),
-        .data     = scene,
+        .thread  = app_thread_id_lvgl,
+        .module  = app_thread_lvgl_sched,
+        .event   = app_thread_lvgl_sched_wheel,
+        .dynamic = true,
+        .data    = data,
+        .size    = size,
     };
     app_thread_package_notify(&package);
 }
@@ -68,7 +73,7 @@ void app_lv_scene_start(void)
     /* 向线程发送场景启动事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_ui_scene,
+        .module = app_thread_lvgl_sched_ui,
         .event  = app_thread_lvgl_ui_scene_start,
     };
     app_thread_package_notify(&package);
@@ -81,7 +86,7 @@ void app_lv_scene_stop(void)
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_ui_scene,
+        .module = app_thread_lvgl_sched_ui,
         .event  = app_thread_lvgl_ui_scene_stop,
     };
     app_thread_package_notify(&package);
@@ -110,10 +115,8 @@ void app_lv_scene_shutdown(void)
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_ui_scene,
+        .module = app_thread_lvgl_sched_ui,
         .event  = app_thread_lvgl_ui_scene_shutdown,
     };
     app_thread_package_notify(&package);
 }
-
-

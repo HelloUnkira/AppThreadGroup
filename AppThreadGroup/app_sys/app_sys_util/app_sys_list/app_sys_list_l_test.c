@@ -17,9 +17,9 @@ typedef struct {
     /* 为了简化将其合并书写 */
     union {
         /* 我们将双向链表侵入到该数据集合内部 */
-        app_sys_list_dn_t dl_node;
+        app_sys_list_dln_t dl_node;
         /* 我们将单向链表侵入到该数据集合内部 */
-        app_sys_list_sn_t sl_node;
+        app_sys_list_sln_t sl_node;
     };
     /*  */
     float    data_f;
@@ -53,15 +53,15 @@ void app_sys_list_test_data_check(app_sys_list_test_t *test)
 
 /*@brief 侵入式双链表测试
  */
-void app_sys_list_dl_test(void)
+void app_sys_list_dll_test(void)
 {
     uint32_t idx = 0;
     
-    app_sys_list_dn_t *target = NULL;
-    app_sys_list_dn_t *node = NULL;
-    app_sys_list_dl_t *dl_list = app_mem_alloc(sizeof(app_sys_list_dl_t));
+    app_sys_list_dln_t *target = NULL;
+    app_sys_list_dln_t *node = NULL;
+    app_sys_list_dll_t *dl_list = app_mem_alloc(sizeof(app_sys_list_dll_t));
     /* 初始化双向链表体 */
-    app_sys_list_dl_reset(dl_list);
+    app_sys_list_dll_reset(dl_list);
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 批量生成并追加节点 */
     for (idx = 0, target = NULL; idx < 10; idx++) {
@@ -69,32 +69,32 @@ void app_sys_list_dl_test(void)
         app_sys_list_test_t *test = app_mem_alloc(sizeof(app_sys_list_test_t));
         app_sys_list_test_data_reset(test, idx);
         node = &(test->dl_node);
-        app_sys_list_dn_reset(node);
-        app_sys_list_dl_ainsert(dl_list, target, node);
+        app_sys_list_dln_reset(node);
+        app_sys_list_dll_ainsert(dl_list, target, node);
         target = node;
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 正向迭代检查 */
-    app_sys_list_dl_btra(dl_list, node)
+    app_sys_list_dll_btra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 逆向迭代检查 */
-    app_sys_list_dl_ftra(dl_list, node)
+    app_sys_list_dll_ftra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (idx = 0; idx < 10; idx++) {
         /* 销毁所有节点并回收数据空间 */
-        node = app_sys_list_dl_head(dl_list);
-        app_sys_list_dl_remove(dl_list, node);
+        node = app_sys_list_dll_head(dl_list);
+        app_sys_list_dll_remove(dl_list, node);
         app_mem_free(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 正向迭代检查 */
-    app_sys_list_dl_btra(dl_list, node)
+    app_sys_list_dll_btra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 逆向迭代检查 */
-    app_sys_list_dl_ftra(dl_list, node)
+    app_sys_list_dll_ftra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 批量生成并追加节点 */
@@ -103,46 +103,46 @@ void app_sys_list_dl_test(void)
         app_sys_list_test_t *test = app_mem_alloc(sizeof(app_sys_list_test_t));
         app_sys_list_test_data_reset(test, idx);
         node = &(test->dl_node);
-        app_sys_list_dn_reset(node);
-        app_sys_list_dl_pinsert(dl_list, target, node);
+        app_sys_list_dln_reset(node);
+        app_sys_list_dll_pinsert(dl_list, target, node);
         target = node;
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 正向迭代检查 */
-    app_sys_list_dl_btra(dl_list, node)
+    app_sys_list_dll_btra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 逆向迭代检查 */
-    app_sys_list_dl_ftra(dl_list, node)
+    app_sys_list_dll_ftra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (idx = 0; idx < 10; idx++) {
         /* 销毁所有节点并回收数据空间 */
-        node = app_sys_list_dl_head(dl_list);
-        app_sys_list_dl_remove(dl_list, node);
+        node = app_sys_list_dll_head(dl_list);
+        app_sys_list_dll_remove(dl_list, node);
         app_mem_free(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 正向迭代检查 */
-    app_sys_list_dl_btra(dl_list, node)
+    app_sys_list_dll_btra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 逆向迭代检查 */
-    app_sys_list_dl_ftra(dl_list, node)
+    app_sys_list_dll_ftra(dl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, dl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
 }
 
 /*@brief 侵入式单链表测试
  */
-void app_sys_list_sl_test(void)
+void app_sys_list_sll_test(void)
 {
     uint32_t idx = 0;
     
-    app_sys_list_sn_t *node = NULL;
-    app_sys_list_sl_t *sl_list = app_mem_alloc(sizeof(app_sys_list_sl_t));
+    app_sys_list_sln_t *node = NULL;
+    app_sys_list_sll_t *sl_list = app_mem_alloc(sizeof(app_sys_list_sll_t));
     /* 初始化单向链表体 */
-    app_sys_list_sl_reset(sl_list);
+    app_sys_list_sll_reset(sl_list);
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 批量生成并追加节点 */
     for (idx = 0; idx < 10; idx++) {
@@ -150,23 +150,23 @@ void app_sys_list_sl_test(void)
         app_sys_list_test_t *test = app_mem_alloc(sizeof(app_sys_list_test_t));
         app_sys_list_test_data_reset(test, idx);
         node = &(test->sl_node);
-        app_sys_list_sn_reset(node);
-        app_sys_list_sl_pinsert(sl_list, node);
+        app_sys_list_sln_reset(node);
+        app_sys_list_sll_pinsert(sl_list, node);
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 迭代检查 */
-    app_sys_list_sl_tra(sl_list, node)
+    app_sys_list_sll_tra(sl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (idx = 0; idx < 10; idx++) {
         /* 销毁所有节点并回收数据空间 */
-        node = app_sys_list_sl_head(sl_list);
-        app_sys_list_sl_remove(sl_list, NULL, node);
+        node = app_sys_list_sll_head(sl_list);
+        app_sys_list_sll_remove(sl_list, NULL, node);
         app_mem_free(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 迭代检查 */
-    app_sys_list_sl_tra(sl_list, node)
+    app_sys_list_sll_tra(sl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 批量生成并追加节点 */
@@ -175,23 +175,23 @@ void app_sys_list_sl_test(void)
         app_sys_list_test_t *test = app_mem_alloc(sizeof(app_sys_list_test_t));
         app_sys_list_test_data_reset(test, idx);
         node = &(test->sl_node);
-        app_sys_list_sn_reset(node);
-        app_sys_list_sl_ainsert(sl_list, node);
+        app_sys_list_sln_reset(node);
+        app_sys_list_sll_ainsert(sl_list, node);
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 迭代检查 */
-    app_sys_list_sl_tra(sl_list, node)
+    app_sys_list_sll_tra(sl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     for (idx = 0; idx < 10; idx++) {
         /* 销毁所有节点并回收数据空间 */
-        node = app_sys_list_sl_head(sl_list);
-        app_sys_list_sl_remove(sl_list, NULL, node);
+        node = app_sys_list_sll_head(sl_list);
+        app_sys_list_sll_remove(sl_list, NULL, node);
         app_mem_free(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     }
     APP_SYS_LOG_INFO("------------------------------------------------------------");
     /* 迭代检查 */
-    app_sys_list_sl_tra(sl_list, node)
+    app_sys_list_sll_tra(sl_list, node)
     app_sys_list_test_data_check(app_sys_own_ofs(app_sys_list_test_t, sl_node, node));
     APP_SYS_LOG_INFO("------------------------------------------------------------");
 }

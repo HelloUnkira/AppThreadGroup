@@ -15,7 +15,7 @@ void app_sys_slab_ready(app_sys_slab_t *slab, uintptr_t size, uint32_t num, uint
 {
     APP_SYS_ASSERT(size > sizeof(uintptr_t));
     
-    app_sys_list_dl_reset(&slab->dl_list);
+    app_sys_list_dll_reset(&slab->dl_list);
     app_mutex_process(&slab->mutex, app_mutex_static);
     
     /* 计算分配器单元值 */
@@ -36,7 +36,7 @@ void * app_sys_slab_alloc(app_sys_slab_t *slab)
     app_mutex_process(&slab->mutex, app_mutex_take);
     /* 先检查分配器是否还有块 */
     app_sys_slab_item_t *item = NULL;
-    app_sys_list_dl_ftra(&slab->dl_list, node) {
+    app_sys_list_dll_ftra(&slab->dl_list, node) {
         item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
         if (item->blk_used < item->blk_num)
             break;
@@ -45,7 +45,7 @@ void * app_sys_slab_alloc(app_sys_slab_t *slab)
     /* 没有空闲分配器,生成一个新的分配器 */
     if (item == NULL) {
         item  = app_mem_alloc(sizeof(app_sys_slab_item_t));
-        app_sys_list_dn_reset(&item->dl_node);
+        app_sys_list_dln_reset(&item->dl_node);
         /* 加入一个抖动用于消抖 */
         uint32_t debounce = slab->debounce == 0 ? 0 : rand() % slab->debounce;
         /* 平台字节对齐,配置分配器 */
@@ -68,7 +68,7 @@ void * app_sys_slab_alloc(app_sys_slab_t *slab)
             ptr = item->blk_list;
         }
         /* 分配器加入到分配器链表 */
-        app_sys_list_dl_ainsert(&slab->dl_list, NULL, &item->dl_node);
+        app_sys_list_dll_ainsert(&slab->dl_list, NULL, &item->dl_node);
     }
     /* 从分配器获取首块,块索引移动到下一块,计数器加一 */
     ptr = item->blk_list;
@@ -87,7 +87,7 @@ void app_sys_slab_free(app_sys_slab_t *slab, void *ptr)
     app_mutex_process(&slab->mutex, app_mutex_take);
     /* 检查回收块是否落在此分配器内 */
     app_sys_slab_item_t *item = NULL;
-    app_sys_list_dl_ftra(&slab->dl_list, node) {
+    app_sys_list_dll_ftra(&slab->dl_list, node) {
         item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
         if (item->mem_s <= ptr && ptr < item->mem_e)
             break;
@@ -101,7 +101,7 @@ void app_sys_slab_free(app_sys_slab_t *slab, void *ptr)
         item->blk_used --;
         /* 检查回收此分配器 */
         if (item->blk_used == 0) {
-            app_sys_list_dl_remove(&slab->dl_list, &item->dl_node);
+            app_sys_list_dll_remove(&slab->dl_list, &item->dl_node);
             item->blk_list = item->mem_s;
             app_mem_free(item->blk_list);
             app_mem_free(item);

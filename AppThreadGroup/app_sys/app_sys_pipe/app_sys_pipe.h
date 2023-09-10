@@ -2,7 +2,7 @@
 #define APP_SYS_PIPE_H
 
 typedef struct {
-    app_sys_list_dn_t dl_node;
+    app_sys_list_dln_t dl_node;
     uint64_t thread:10;     /* 接收者线程 */
     uint64_t module:10;     /* 接收者线程模组 */
     uint64_t event:10;      /* 接收者线程模组事件 */
@@ -25,7 +25,7 @@ typedef struct {
 } app_sys_pipe_pkg_t;
 
 typedef struct {
-    app_sys_list_dl_t dl_list;
+    app_sys_list_dll_t dl_list;
     app_critical_t critical;    /* 管道资源临界区保护 */
     uint32_t       number;      /* 管道项数 */
 } app_sys_pipe_t;

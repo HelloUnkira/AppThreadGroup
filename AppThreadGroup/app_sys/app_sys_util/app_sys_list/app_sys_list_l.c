@@ -8,13 +8,13 @@
 #include "app_sys_lib.h"
 
 /*
- *双向链表
+ *双向链表(Double Linked List)
  */
 
 /*@brief     重置链表
  *@param[in] list 链表实例
  */
-void app_sys_list_dl_reset(app_sys_list_dl_t *list)
+void app_sys_list_dll_reset(app_sys_list_dll_t *list)
 {
     list->head = NULL;
     list->tail = NULL;
@@ -23,7 +23,7 @@ void app_sys_list_dl_reset(app_sys_list_dl_t *list)
 /*@brief     重置链表节点
  *@param[in] list 链表节点实例
  */
-void app_sys_list_dn_reset(app_sys_list_dn_t *node)
+void app_sys_list_dln_reset(app_sys_list_dln_t *node)
 {
     node->prev = NULL;
     node->next = NULL;
@@ -33,7 +33,7 @@ void app_sys_list_dn_reset(app_sys_list_dn_t *node)
  *@param[in] list 链表实例
  *@retval    头结点
  */
-app_sys_list_dn_t * app_sys_list_dl_head(app_sys_list_dl_t *list)
+app_sys_list_dln_t * app_sys_list_dll_head(app_sys_list_dll_t *list)
 {
     return list->head;
 }
@@ -42,7 +42,7 @@ app_sys_list_dn_t * app_sys_list_dl_head(app_sys_list_dl_t *list)
  *@param[in] list 链表实例
  *@retval    尾结点
  */
-app_sys_list_dn_t * app_sys_list_dl_tail(app_sys_list_dl_t *list)
+app_sys_list_dln_t * app_sys_list_dll_tail(app_sys_list_dll_t *list)
 {
     return list->tail;
 }
@@ -51,7 +51,7 @@ app_sys_list_dn_t * app_sys_list_dl_tail(app_sys_list_dl_t *list)
  *@param[in] list 链表实例
  *@retval    前向结点
  */
-app_sys_list_dn_t * app_sys_list_dn_prev(app_sys_list_dn_t *node)
+app_sys_list_dln_t * app_sys_list_dln_prev(app_sys_list_dln_t *node)
 {
     return node->prev;
 }
@@ -60,7 +60,7 @@ app_sys_list_dn_t * app_sys_list_dn_prev(app_sys_list_dn_t *node)
  *@param[in] list 链表实例
  *@retval    后向结点
  */
-app_sys_list_dn_t * app_sys_list_dn_next(app_sys_list_dn_t *node)
+app_sys_list_dln_t * app_sys_list_dln_next(app_sys_list_dln_t *node)
 {
     return node->next;
 }
@@ -71,7 +71,7 @@ app_sys_list_dn_t * app_sys_list_dn_next(app_sys_list_dn_t *node)
  *@param[in] target 链表节点实例(锚点)
  *@param[in] node   链表节点实例(带插入节点)
  */
-void app_sys_list_dl_pinsert(app_sys_list_dl_t *list, app_sys_list_dn_t *target, app_sys_list_dn_t *node)
+void app_sys_list_dll_pinsert(app_sys_list_dll_t *list, app_sys_list_dln_t *target, app_sys_list_dln_t *node)
 {
     if (target == NULL) {
         /* 更新插入节点 */
@@ -104,10 +104,10 @@ void app_sys_list_dl_pinsert(app_sys_list_dl_t *list, app_sys_list_dn_t *target,
  *@param[in] target 链表节点实例(锚点)
  *@param[in] node   链表节点实例(带插入节点)
  */
-void app_sys_list_dl_ainsert(app_sys_list_dl_t *list, app_sys_list_dn_t *target, app_sys_list_dn_t *node)
+void app_sys_list_dll_ainsert(app_sys_list_dll_t *list, app_sys_list_dln_t *target, app_sys_list_dln_t *node)
 {
     if (target == NULL) {
-        app_sys_list_dn_t *tail = app_sys_list_dl_tail(list);
+        app_sys_list_dln_t *tail = app_sys_list_dll_tail(list);
         /* 更新插入节点 */
         node->prev = list->tail;
         node->next = NULL;
@@ -136,10 +136,10 @@ void app_sys_list_dl_ainsert(app_sys_list_dl_t *list, app_sys_list_dn_t *target,
  *@param[in] list 链表实例
  *@param[in] node 链表节点实例(带移除节点)
  */
-void app_sys_list_dl_remove(app_sys_list_dl_t *list, app_sys_list_dn_t *node)
+void app_sys_list_dll_remove(app_sys_list_dll_t *list, app_sys_list_dln_t *node)
 {
-    app_sys_list_dn_t *prev = app_sys_list_dn_prev(node);
-    app_sys_list_dn_t *next = app_sys_list_dn_next(node);
+    app_sys_list_dln_t *prev = app_sys_list_dln_prev(node);
+    app_sys_list_dln_t *next = app_sys_list_dln_next(node);
     
     /* 链表头尾节点一并检查 */
     if (node->prev == NULL)
@@ -154,13 +154,13 @@ void app_sys_list_dl_remove(app_sys_list_dl_t *list, app_sys_list_dn_t *node)
 }
 
 /*
- *单向链表
+ *单向链表(Single Linked List)
  */
 
 /*@brief     重置链表
  *@param[in] list 链表实例
  */
-void app_sys_list_sl_reset(app_sys_list_sl_t *list)
+void app_sys_list_sll_reset(app_sys_list_sll_t *list)
 {
     list->head = NULL;
     list->tail = NULL;
@@ -169,7 +169,7 @@ void app_sys_list_sl_reset(app_sys_list_sl_t *list)
 /*@brief     重置链表节点
  *@param[in] list 链表节点实例
  */
-void app_sys_list_sn_reset(app_sys_list_sn_t *node)
+void app_sys_list_sln_reset(app_sys_list_sln_t *node)
 {
     node->buddy = NULL;
 }
@@ -178,7 +178,7 @@ void app_sys_list_sn_reset(app_sys_list_sn_t *node)
  *@param[in] list 链表实例
  *@retval    头结点
  */
-app_sys_list_sn_t * app_sys_list_sl_head(app_sys_list_sl_t *list)
+app_sys_list_sln_t * app_sys_list_sll_head(app_sys_list_sll_t *list)
 {
     return list->head;
 }
@@ -187,7 +187,7 @@ app_sys_list_sn_t * app_sys_list_sl_head(app_sys_list_sl_t *list)
  *@param[in] list 链表实例
  *@retval    尾结点
  */
-app_sys_list_sn_t * app_sys_list_sl_tail(app_sys_list_sl_t *list)
+app_sys_list_sln_t * app_sys_list_sll_tail(app_sys_list_sll_t *list)
 {
     return list->head;
 }
@@ -196,7 +196,7 @@ app_sys_list_sn_t * app_sys_list_sl_tail(app_sys_list_sl_t *list)
  *@param[in] list 链表实例
  *@retval    临近结点
  */
-app_sys_list_sn_t * app_sys_list_sn_buddy(app_sys_list_sn_t *node)
+app_sys_list_sln_t * app_sys_list_sln_buddy(app_sys_list_sln_t *node)
 {
     return node->buddy;
 }
@@ -205,7 +205,7 @@ app_sys_list_sn_t * app_sys_list_sn_buddy(app_sys_list_sn_t *node)
  *@param[in] list 链表实例
  *@param[in] node 链表节点实例(带插入节点)
  */
-void app_sys_list_sl_pinsert(app_sys_list_sl_t *list, app_sys_list_sn_t *node)
+void app_sys_list_sll_pinsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node)
 {
         node->buddy = list->head;
     if (list->head == NULL)
@@ -217,7 +217,7 @@ void app_sys_list_sl_pinsert(app_sys_list_sl_t *list, app_sys_list_sn_t *node)
  *@param[in] list 链表实例
  *@param[in] node 链表节点实例(带插入节点)
  */
-void app_sys_list_sl_ainsert(app_sys_list_sl_t *list, app_sys_list_sn_t *node)
+void app_sys_list_sll_ainsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node)
 {
         node->buddy = NULL;
     if (list->tail != NULL)
@@ -233,7 +233,7 @@ void app_sys_list_sl_ainsert(app_sys_list_sl_t *list, app_sys_list_sn_t *node)
  *@param[in] target 链表节点实例(锚点)
  *@param[in] node   链表节点实例(带插入节点)
  */
-void app_sys_list_sl_insert(app_sys_list_sl_t *list, app_sys_list_sn_t *target, app_sys_list_sn_t *node)
+void app_sys_list_sll_insert(app_sys_list_sll_t *list, app_sys_list_sln_t *target, app_sys_list_sln_t *node)
 {
     node->buddy = target->buddy;
     target->buddy = node;
@@ -247,7 +247,7 @@ void app_sys_list_sl_insert(app_sys_list_sl_t *list, app_sys_list_sn_t *target, 
  *@param[in] target 链表节点实例(锚点)
  *@param[in] node   链表节点实例(带插入节点)
  */
-void app_sys_list_sl_remove(app_sys_list_sl_t *list, app_sys_list_sn_t *target, app_sys_list_sn_t *node)
+void app_sys_list_sll_remove(app_sys_list_sll_t *list, app_sys_list_sln_t *target, app_sys_list_sln_t *node)
 {
     if (target != NULL)
         target->buddy = node->buddy;
@@ -267,10 +267,10 @@ void app_sys_list_sl_remove(app_sys_list_sl_t *list, app_sys_list_sn_t *target, 
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_sgn_t * app_sys_queue_sgq_dequeue(app_sys_queue_sgq_t *queue)
+app_sys_queue_sln_t * app_sys_queue_slq_dequeue(app_sys_queue_slq_t *queue)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head(queue);
-    app_sys_list_sl_remove(queue, NULL, node);
+    app_sys_list_sln_t *node = app_sys_list_sll_head(queue);
+    app_sys_list_sll_remove(queue, NULL, node);
     return node;
 }
 
@@ -278,19 +278,19 @@ app_sys_queue_sgn_t * app_sys_queue_sgq_dequeue(app_sys_queue_sgq_t *queue)
  *@param[in] queue 队列实例
  *@param[in] node  队列节点实例
  */
-void app_sys_queue_sgq_enqueue(app_sys_queue_sgq_t *queue, app_sys_queue_sgn_t *node)
+void app_sys_queue_slq_enqueue(app_sys_queue_slq_t *queue, app_sys_queue_sln_t *node)
 {
-    app_sys_list_sl_ainsert(queue, node);
+    app_sys_list_sll_ainsert(queue, node);
 }
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_dgn_t * app_sys_queue_dgq_dequeue(app_sys_queue_dgq_t *queue)
+app_sys_queue_dln_t * app_sys_queue_dlq_dequeue(app_sys_queue_dlq_t *queue)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_head(queue);
-    app_sys_list_dl_remove(queue, node);
+    app_sys_list_dln_t *node = app_sys_list_dll_head(queue);
+    app_sys_list_dll_remove(queue, node);
     return node;
 }
 
@@ -298,9 +298,9 @@ app_sys_queue_dgn_t * app_sys_queue_dgq_dequeue(app_sys_queue_dgq_t *queue)
  *@param[in] queue 队列实例
  *@param[in] node  队列节点实例
  */
-void app_sys_queue_dgq_enqueue(app_sys_queue_dgq_t *queue, app_sys_queue_dgn_t *node)
+void app_sys_queue_dlq_enqueue(app_sys_queue_dlq_t *queue, app_sys_queue_dln_t *node)
 {
-    app_sys_list_dl_ainsert(queue, NULL, node);
+    app_sys_list_dll_ainsert(queue, NULL, node);
 }
 
 /*
@@ -313,10 +313,10 @@ void app_sys_queue_dgq_enqueue(app_sys_queue_dgq_t *queue, app_sys_queue_dgn_t *
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_spn_t * app_sys_queue_spq_dequeue(app_sys_queue_spq_t *queue)
+app_sys_queue_slpn_t * app_sys_queue_slpq_dequeue(app_sys_queue_slpq_t *queue)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head(queue);
-    app_sys_list_sl_remove(queue, NULL, node);
+    app_sys_list_sln_t *node = app_sys_list_sll_head(queue);
+    app_sys_list_sll_remove(queue, NULL, node);
     return node;
 }
 
@@ -325,37 +325,37 @@ app_sys_queue_spn_t * app_sys_queue_spq_dequeue(app_sys_queue_spq_t *queue)
  *@param[in] node    队列节点实例
  *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
-void app_sys_queue_spq_enqueue(app_sys_queue_spq_t *queue, app_sys_queue_spn_t *node,
-                               bool (*compare)(app_sys_queue_spn_t *node1, app_sys_queue_spn_t *node2))
+void app_sys_queue_slpq_enqueue(app_sys_queue_slpq_t *queue, app_sys_queue_slpn_t *node,
+                               bool (*compare)(app_sys_queue_slpn_t *node1, app_sys_queue_slpn_t *node2))
 {
     if (compare != NULL) {
         /* 迭代所有元素 */
-        app_sys_list_sn_t *curr = NULL;
-        app_sys_list_sl_tra(queue, prev) {
+        app_sys_list_sln_t *curr = NULL;
+        app_sys_list_sll_tra(queue, prev) {
             /* 第一次:比较队列头 */
             if (curr == NULL && compare(node, prev)) {
-                app_sys_list_sl_pinsert(queue, node);
+                app_sys_list_sll_pinsert(queue, node);
                 return;
             }
             /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
             if (curr != NULL && compare(node, curr)) {
-                app_sys_list_sl_insert(queue, prev, node);
+                app_sys_list_sll_insert(queue, prev, node);
                 return;
             }
             curr = prev;
         }
     }
-    app_sys_list_sl_ainsert(queue, node);
+    app_sys_list_sll_ainsert(queue, node);
 }
 
 /*@brief     队列节点出队列
  *@param[in] queue 队列实例
  *@retval    队列节点实例
  */
-app_sys_queue_dpn_t * app_sys_queue_dpq_dequeue(app_sys_queue_dpq_t *queue)
+app_sys_queue_dlpn_t * app_sys_queue_dlpq_dequeue(app_sys_queue_dlpq_t *queue)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_head(queue);
-    app_sys_list_dl_remove(queue, node);
+    app_sys_list_dln_t *node = app_sys_list_dll_head(queue);
+    app_sys_list_dll_remove(queue, node);
     return node;
 }
 
@@ -364,27 +364,27 @@ app_sys_queue_dpn_t * app_sys_queue_dpq_dequeue(app_sys_queue_dpq_t *queue)
  *@param[in] node    队列节点实例
  *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
-void app_sys_queue_dpq_enqueue(app_sys_queue_dpq_t *queue, app_sys_queue_dpn_t *node,
-                               bool (*compare)(app_sys_queue_dpn_t *node1, app_sys_queue_dpn_t *node2))
+void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_t *node,
+                               bool (*compare)(app_sys_queue_dlpn_t *node1, app_sys_queue_dlpn_t *node2))
 {
     if (compare != NULL) {
         /* 迭代所有元素 */
-        app_sys_list_dn_t *curr = NULL;
-        app_sys_list_dl_btra(queue, prev) {
+        app_sys_list_dln_t *curr = NULL;
+        app_sys_list_dll_btra(queue, prev) {
             /* 第一次:比较队列头 */
             if (curr == NULL && compare(node, prev)) {
-                app_sys_list_dl_pinsert(queue, NULL, node);
+                app_sys_list_dll_pinsert(queue, NULL, node);
                 return;
             }
             /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
             if (curr != NULL && compare(node, curr)) {
-                app_sys_list_dl_ainsert(queue, prev, node);
+                app_sys_list_dll_ainsert(queue, prev, node);
                 return;
             }
             curr = prev;
         }
     }
-    app_sys_list_dl_ainsert(queue, NULL, node);
+    app_sys_list_dll_ainsert(queue, NULL, node);
 }
 
 /*
@@ -397,10 +397,10 @@ void app_sys_queue_dpq_enqueue(app_sys_queue_dpq_t *queue, app_sys_queue_dpn_t *
  *@param[in] stack 栈实例
  *@retval    栈节点实例
  */
-app_sys_stack_sgn_t * app_sys_stack_sgs_pop(app_sys_stack_sgs_t *stack)
+app_sys_stack_sln_t * app_sys_stack_sls_pop(app_sys_stack_sls_t *stack)
 {
-    app_sys_list_sn_t *node = app_sys_list_sl_head(stack);
-    app_sys_list_sl_remove(stack, NULL, node);
+    app_sys_list_sln_t *node = app_sys_list_sll_head(stack);
+    app_sys_list_sll_remove(stack, NULL, node);
     return node;
 }
 
@@ -408,19 +408,19 @@ app_sys_stack_sgn_t * app_sys_stack_sgs_pop(app_sys_stack_sgs_t *stack)
  *@param[in] stack 栈实例
  *@param[in] node  栈节点实例
  */
-void app_sys_stack_sgs_push(app_sys_stack_sgs_t *stack, app_sys_stack_sgn_t *node)
+void app_sys_stack_sls_push(app_sys_stack_sls_t *stack, app_sys_stack_sln_t *node)
 {
-    app_sys_list_sl_pinsert(stack, node);
+    app_sys_list_sll_pinsert(stack, node);
 }
 
 /*@brief     栈节点出栈
  *@param[in] stack 栈实例
  *@retval    栈节点实例
  */
-app_sys_stack_dgn_t * app_sys_stack_dgs_pop(app_sys_stack_dgs_t *stack)
+app_sys_stack_dln_t * app_sys_stack_dls_pop(app_sys_stack_dls_t *stack)
 {
-    app_sys_list_dn_t *node = app_sys_list_dl_head(stack);
-    app_sys_list_dl_remove(stack, node);
+    app_sys_list_dln_t *node = app_sys_list_dll_head(stack);
+    app_sys_list_dll_remove(stack, node);
     return node;
 }
 
@@ -428,9 +428,9 @@ app_sys_stack_dgn_t * app_sys_stack_dgs_pop(app_sys_stack_dgs_t *stack)
  *@param[in] stack 栈实例
  *@param[in] node  栈节点实例
  */
-void app_sys_stack_dgs_push(app_sys_stack_dgs_t *stack, app_sys_stack_dgn_t *node)
+void app_sys_stack_dls_push(app_sys_stack_dls_t *stack, app_sys_stack_dln_t *node)
 {
-    app_sys_list_dl_pinsert(stack, NULL, node);
+    app_sys_list_dll_pinsert(stack, NULL, node);
 }
 
 /*

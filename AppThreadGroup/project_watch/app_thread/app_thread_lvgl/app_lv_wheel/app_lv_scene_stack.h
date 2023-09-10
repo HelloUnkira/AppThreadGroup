@@ -1,0 +1,44 @@
+#ifndef APP_LV_SCENE_STACK_H
+#define APP_LV_SCENE_STACK_H
+
+/* 场景栈最大嵌套数量 */
+#define APP_LV_SCENE_NEST   10
+
+/*@brief  当前场景嵌套层级
+ *@retval 场景数量
+ */
+uint8_t app_lv_scene_get_nest(void);
+
+/*@brief      获取次上层显示场景
+ *@param[out] scene 场景(不可为空)
+ */
+void app_lv_scene_get_last(app_lv_scene_t **scene);
+
+/*@brief      获取最上层显示场景
+ *@param[out] scene 场景(不可为空)
+ */
+void app_lv_scene_get_top(app_lv_scene_t **scene);
+
+/*@brief     场景复位
+ *@param[in] scene 场景
+ *@param[in] reserve 保留当前场景
+ */
+void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve);
+
+/*@brief     场景覆盖显示场景
+ *@param[in] scene 场景(不可为空)
+ */
+void app_lv_scene_cover(app_lv_scene_t *scene);
+
+/*@brief     场景添加新场景
+ *@param[in] scene 场景
+ *@param[in] reserve 保留当前场景
+ */
+void app_lv_scene_add(app_lv_scene_t *scene, bool reserve);
+
+/*@brief      场景移除当前显示场景
+ *@param[out] scene 场景(不可为空)
+ */
+void app_lv_scene_del(app_lv_scene_t *scene);
+
+#endif

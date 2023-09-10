@@ -13,9 +13,11 @@ void app_lv_tick_exec_update(void);
  */
 void app_lv_drv_update(void);
 
-/*@brief lvgl 场景更新
+/*@brief     lvgl wheel更新
+ *@param[in] wheel 轮盘实例
+ *@param[in] size  轮盘实例大小
  */
-void app_lv_scene_update(void *scene);
+void app_lv_wheel_update(void *wheel, uint32_t size);
 
 /*@brief lvgl 场景启动
  */
@@ -34,4 +36,3 @@ void app_lv_scene_dlps(bool status);
 void app_lv_scene_shutdown(void);
 
 #endif
-

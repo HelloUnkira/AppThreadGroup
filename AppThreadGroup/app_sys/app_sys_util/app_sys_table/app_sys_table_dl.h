@@ -1,8 +1,8 @@
 #ifndef APP_SYS_TABLE_DL_H
 #define APP_SYS_TABLE_DL_H
 
-typedef app_sys_list_dn_t app_sys_table_dln_t;
-typedef app_sys_list_dl_t app_sys_table_dll_t;
+typedef app_sys_list_dln_t app_sys_table_dln_t;
+typedef app_sys_list_dll_t app_sys_table_dll_t;
 
 typedef uint32_t (*app_sys_table_dlt_fd_t)(app_sys_table_dln_t *node);
 typedef bool     (*app_sys_table_dlt_fc_t)(app_sys_table_dln_t *node1, app_sys_table_dln_t *node2);

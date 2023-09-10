@@ -15,7 +15,7 @@ typedef enum {
 } app_sys_ext_mem_cache_status_t;
 
 typedef struct {
-    app_sys_list_dn_t dl_node;
+    app_sys_list_dln_t dl_node;
     #if 0
     #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
     app_sys_table_dln_t ht_node;
@@ -33,7 +33,7 @@ typedef struct {
 
 typedef struct {
     app_mutex_t mutex;
-    app_sys_list_dl_t dl_list;
+    app_sys_list_dll_t dl_list;
     #if 0
     #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
     app_sys_table_dll_t *ht_list;

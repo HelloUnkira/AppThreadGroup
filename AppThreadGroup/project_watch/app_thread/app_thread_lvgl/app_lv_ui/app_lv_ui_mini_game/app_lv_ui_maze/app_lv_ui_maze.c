@@ -61,7 +61,7 @@ static void app_lv_event_ui_default_redirect(lv_event_t *e)
         return;
     }
     /* 其他事件不做重定向 */
-    app_lv_event_ui_default(e);
+    app_lv_event_ui_default_cb(e);
 }
 
 /*@brief 界面自定义事件回调

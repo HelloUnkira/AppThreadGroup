@@ -2,7 +2,7 @@
 #define APP_SYS_SLAB_H
 
 typedef struct {
-    app_sys_list_dn_t dl_node;
+    app_sys_list_dln_t dl_node;
     uint8_t *mem_s;     /* 管理区起始地址 */
     uint8_t *mem_e;     /* 管理区结束地址 */
     uint8_t *blk_list;  /* 空闲块链表集 */
@@ -12,7 +12,7 @@ typedef struct {
 } app_sys_slab_item_t;
 
 typedef struct {
-    app_sys_list_dl_t dl_list;
+    app_sys_list_dll_t dl_list;
     app_mutex_t mutex;
     uint32_t blk_size;
     uint32_t blk_num;
