@@ -125,7 +125,7 @@ void app_lv_event_ui_default_cb(lv_event_t *e)
             
             /* 左右滑动回到上一层 */
             if (app_lv_scene_get_nest() > 1) {
-                app_lv_scene_t scene = {0};
+                app_lv_scene_t *scene = NULL;
                 app_lv_scene_del(&scene);
             }
             break;
@@ -345,7 +345,7 @@ void app_lv_event_ui_backtrack_cb(lv_event_t *e)
 {
     switch (lv_event_get_code(e)) {
     case LV_EVENT_CLICKED: {
-        app_lv_scene_t scene = {0};
+        app_lv_scene_t *scene = NULL;
         app_lv_scene_del(&scene);
         break;
     }

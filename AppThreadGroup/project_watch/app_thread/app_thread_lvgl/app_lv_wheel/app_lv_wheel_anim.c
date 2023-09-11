@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -25,7 +25,6 @@ static void app_lv_wheel_opa_update(lv_obj_t *obj, uint8_t opa)
  */
 void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
 {
-    APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = var;
     app_lv_wheel_t *wheel = wheel_src->wheel;
     lv_obj_t  *obj_self = wheel->self->root;
@@ -74,6 +73,7 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
 {
     APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
+    APP_SYS_LOG_WARN("wheel prepare");
 }
 
 /*@brief 跟手动画结束回调
@@ -92,13 +92,31 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
         break;
     case app_lv_wheel_style_rotate:
         /* 覆盖标记位有效时 */
-        if (!wheel_src->cover)
-             break;
-        /* 滚动结束后需要刷新轮盘(中心窗口已经发生改变) */
-        app_lv_scene_cover(wheel->sibling[wheel_src->obj_idx]);
+         if (wheel_src->cover) {
+             wheel_src->cover = false;
+            APP_SYS_LOG_WARN("wheel update");
+            /* 滚动结束后需要刷新轮盘(中心窗口已经发生改变) */
+            app_lv_scene_t *parent  = NULL;
+            app_lv_scene_t *sibling = wheel->sibling[wheel_src->obj_idx];
+            app_lv_scene_get_last(&parent);
+            if (sibling != parent) {
+                app_lv_scene_t *scene = sibling;
+                app_lv_scene_cover(scene);
+            } else {
+                app_lv_scene_t *scene = NULL;
+                app_lv_scene_del(&scene);
+            }
+        }
         break;
     default:
         APP_SYS_ASSERT(true == false);
         break;
+    }
+    
+    /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
+    if (wheel_src->touch_over) {
+        wheel_src->touch_over = false;
+        wheel_src->scroll_way = LV_DIR_NONE;
+        APP_SYS_LOG_WARN("wheel finish");
     }
 }

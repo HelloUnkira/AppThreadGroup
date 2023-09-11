@@ -32,7 +32,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     if (value == 100) {
         /* 系统会自动退出,无需这边主动退出 */
         return;
-        app_lv_scene_t scene = {0};
+        app_lv_scene_t *scene = NULL;
         app_lv_scene_del(&scene);
     }
 }

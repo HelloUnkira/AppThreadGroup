@@ -45,7 +45,10 @@ lv_obj_t * app_lv_style_scene(void)
     lv_obj_remove_style_all(scene);
     app_lv_style_object(scene);
     lv_obj_clear_flag(scene, LV_OBJ_FLAG_SCROLLABLE);
+    /* 场景较为特殊:界面的承载体,这里还没有完成所有的事件,就地更新尺寸 */
+    lv_obj_set_pos(scene, 0, 0);
     lv_obj_set_size(scene, LV_HOR_RES, LV_VER_RES);
+    lv_obj_refr_size(scene);
     return scene;
 }
 

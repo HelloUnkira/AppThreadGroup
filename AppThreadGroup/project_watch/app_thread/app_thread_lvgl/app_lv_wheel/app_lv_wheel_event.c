@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -61,6 +61,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
         if (wheel_src->click_pos.x < point.x) {
             if (wheel->sibling[0] == NULL)
                 return 0;
+            if (wheel->sibling[0] == wheel->self)
+                return 0;
             if (!wheel_src->cover)
                  wheel_src->obj_idx = 0;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
@@ -73,6 +75,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
         /* Scroll From Right */
         if (wheel_src->click_pos.x > point.x) {
             if (wheel->sibling[1] == NULL)
+                return 0;
+            if (wheel->sibling[1] == wheel->self)
                 return 0;
             if (!wheel_src->cover)
                  wheel_src->obj_idx = 1;
@@ -90,6 +94,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
         if (wheel_src->click_pos.y < point.y) {
             if (wheel->sibling[2] == NULL)
                 return 0;
+            if (wheel->sibling[2] == wheel->self)
+                return 0;
             if (!wheel_src->cover)
                  wheel_src->obj_idx = 2;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
@@ -102,6 +108,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
         /* Scroll From Bottom */
         if (wheel_src->click_pos.y > point.y) {
             if (wheel->sibling[3] == NULL)
+                return 0;
+            if (wheel->sibling[3] == wheel->self)
                 return 0;
             if (!wheel_src->cover)
                  wheel_src->obj_idx = 3;
@@ -126,33 +134,49 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
  */
 void app_lv_wheel_event_cb(lv_event_t * e)
 {
-    APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = lv_event_get_user_data(e);
     app_lv_wheel_t *wheel = wheel_src->wheel;
     /* 获得落点 */
-    lv_point_t point = {0};
-    lv_indev_get_point(lv_indev_get_act(), &point);
+    lv_point_t  point = {0};
+    lv_indev_t *indev = lv_indev_get_act();
+    lv_indev_get_point(indev, &point);
+    /* 我们只需要响应pointer类型的事件 */
+    if (lv_indev_get_type(indev) != LV_INDEV_TYPE_POINTER)
+        return;
     /* 重做LV_INDEV_TYPE_POINTER类型事件 */
     switch(lv_event_get_code(e)) {
     /* 窗口内部产生的滚动,此周期内的滑动完全放弃(不响应) */
-    case LV_EVENT_SCROLL:
-    case LV_EVENT_SCROLL_BEGIN: {
-        wheel_src->scroll = true;
+    case LV_EVENT_SCROLL: {
         APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
+        wheel_src->scroll = true;
+        break;
+    }
+    case LV_EVENT_SCROLL_BEGIN: {
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
+        wheel_src->scroll = true;
         break;
     }
     case LV_EVENT_SCROLL_END: {
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
         wheel_src->scroll = false;
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
         break;
     }
     /* 按下时,记录按下点 */
     case LV_EVENT_PRESSED: {
-        wheel_src->click_pos = point;
+        /* 重复事件锁检查 */
+        if (wheel_src->event_lock)
+            break;
+        APP_SYS_LOG_INFO("LV_EVENT_PRESSED");
+        wheel_src->event_lock = true;
+        wheel_src->click_pos  = point;
+        wheel_src->touch_over = false;
         break;
     }
     /* lvgl会定期产生按压中事件,持续调整动画让它跟手走 */
     case LV_EVENT_PRESSING: {
+        /* 重复事件锁检查 */
+        if (!wheel_src->event_lock)
+             break;
         /* 子窗口滚动锁定 */
         if (wheel_src->scroll) {
             wheel_src->click_pos = point;
@@ -191,6 +215,11 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     }
     /* 抬起时,进行回弹动画 */
     case LV_EVENT_RELEASED: {
+        /* 重复事件锁检查 */
+        if (!wheel_src->event_lock)
+             break;
+        APP_SYS_LOG_INFO("LV_EVENT_RELEASED");
+        wheel_src->event_lock = false;
         /* 子窗口滚动锁定 */
         if (wheel_src->scroll) {
             wheel_src->click_pos = point;
@@ -224,7 +253,7 @@ void app_lv_wheel_event_cb(lv_event_t * e)
             }
         }
         lv_anim_start(&wheel_src->anim_follow);
-        wheel_src->scroll_way == LV_DIR_NONE;
+        wheel_src->touch_over = true;
         break;
     }
     /* ... */
@@ -268,8 +297,8 @@ bool app_lv_wheel_rollback(void)
         lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), target_y);
     }
     lv_anim_start(&wheel_src->anim_follow);
-    wheel_src->scroll_way = LV_DIR_NONE;
     wheel_src->cover = false;
+    wheel_src->touch_over = true;
     return true;
 }
 

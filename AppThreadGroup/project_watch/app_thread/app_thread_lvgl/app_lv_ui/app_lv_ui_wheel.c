@@ -26,14 +26,11 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
  */
 static void app_lv_ui_wheel_show(void *scene)
 {
-    APP_SYS_LOG_WARN("");
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
-        APP_SYS_LOG_WARN("w:%u", lv_obj_get_width(app_lv_ui_res_local->scene));
-        APP_SYS_LOG_WARN("h:%u", lv_obj_get_height(app_lv_ui_res_local->scene));
         /* 初始化居中标签 */
         app_lv_ui_res_local->label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);

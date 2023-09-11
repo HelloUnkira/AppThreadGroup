@@ -29,6 +29,10 @@ typedef struct {
     uint8_t    scroll_per;      // 移动百分比
     uint8_t    scroll:1;        // 窗口内部产生滚动,轮盘不响应
     uint8_t    cover:1;         // 覆盖标记
+    uint8_t    touch_over:1;    // 已经抬起,点击结束
+    uint8_t    event_lock:1;    // 按下抬起事件(按下和抬起事件互锁)
+                                // 因为轮盘事件是从所有事件中生成的汇总
+                                // 所以准备重复事件拦截锁,因为我们只会有一次互锁响应
     /*  */
 } app_lv_wheel_src_t;
 

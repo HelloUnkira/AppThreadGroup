@@ -84,7 +84,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             // app_lv_keyboard_dlps_exit();
             app_lv_display_dlps_exit();
             /* 退出dlps界面 */
-            app_lv_scene_t scene = {0};
+            app_lv_scene_t *scene = NULL;
             app_lv_scene_del(&scene);
         }
         return true;

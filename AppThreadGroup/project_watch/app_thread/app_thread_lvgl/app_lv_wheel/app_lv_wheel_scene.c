@@ -17,8 +17,8 @@ void app_lv_wheel_show(app_lv_wheel_t *wheel)
     /* 子场景要逆序显示,显示的子场景挂载到轮盘场景之下 */
     lv_obj_t *parent = app_lv_wheel_obj_inst();
     APP_SYS_ASSERT(parent != NULL);
-    /* 显示当前场景 */
-    if (wheel->self != NULL) {
+    /* 显示当前场景,防止场景重复被显示 */
+    if (wheel->self != NULL && wheel->self->root == NULL) {
         /* 调度子场景,目标对象挂载到轮盘对象之下 */
         app_lv_scene_sched_t sched = {
             .scene = wheel->self,
@@ -30,10 +30,10 @@ void app_lv_wheel_show(app_lv_wheel_t *wheel)
     }
     /* 显示兄弟场景 */
     for (uint8_t idx = 0; idx < app_sys_arr_len(wheel->sibling); idx++) {
-        if (wheel->sibling[idx] == NULL)
-            continue;
         /* 防止场景重复被显示,不应该存在俩个相同的兄弟场景 */
-        if (wheel->sibling[idx]->root != NULL)
+        if (wheel->sibling[idx] == NULL ||
+            wheel->sibling[idx] == wheel->self ||
+            wheel->sibling[idx]->root != NULL)
             continue;
         /* 调度子场景,目标对象挂载到轮盘对象之下 */
         app_lv_scene_sched_t sched = {
@@ -56,10 +56,10 @@ void app_lv_wheel_hide(app_lv_wheel_t *wheel)
     APP_SYS_ASSERT(parent != NULL);
     /* 隐藏兄弟场景 */
     for (uint8_t idx = 0; idx < app_sys_arr_len(wheel->sibling); idx++) {
-        if (wheel->sibling[idx] == NULL)
-            continue;
         /* 防止场景重复被隐藏,不应该存在俩个相同的兄弟场景 */
-        if (wheel->sibling[idx]->root == NULL)
+        if (wheel->sibling[idx] == NULL ||
+            wheel->sibling[idx] == wheel->self ||
+            wheel->sibling[idx]->root == NULL)
             continue;
         /* 调度子场景,目标对象挂载到根对象之下 */
         app_lv_scene_sched_t sched = {
@@ -70,8 +70,8 @@ void app_lv_wheel_hide(app_lv_wheel_t *wheel)
         lv_obj_set_parent(child, lv_scr_act());
         app_lv_scene_sched(&sched);
     }
-    /* 隐藏当前场景 */
-    if (wheel->self != NULL) {
+    /* 隐藏当前场景,防止场景重复被隐藏 */
+    if (wheel->self != NULL && wheel->self->root != NULL) {
         /* 调度子场景,目标对象挂载到根对象之下 */
         app_lv_scene_sched_t sched = {
             .scene = wheel->self,
@@ -91,9 +91,9 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
     app_lv_wheel_src_t *wheel_src = app_lv_wheel_src_inst();
     
     for (uint8_t idx = 0; idx < app_sys_arr_len(wheel->sibling); idx++) {
-        if (wheel->sibling[idx] == NULL)
-            continue;
-        if (wheel->sibling[idx]->root == NULL)
+        if (wheel->sibling[idx] == NULL ||
+            wheel->sibling[idx] == wheel->self ||
+            wheel->sibling[idx]->root == NULL)
             continue;
         lv_obj_t *obj = wheel->sibling[idx]->root;
         /* 目标移动到屏幕之外(当前场景附近(-w,-h)) */
@@ -104,9 +104,14 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
     /* 配置项更新 */
     wheel_src->scroll_way  = LV_DIR_NONE;
     wheel_src->threshold   = 30;
-    wheel_src->rollback_x  = 70;    // lv_obj_get_width(app_lv_wheel_obj_inst());
-    wheel_src->rollback_y  = 80;    // lv_obj_get_height(app_lv_wheel_obj_inst());
+    wheel_src->rollback_x  = lv_obj_get_width(app_lv_wheel_obj_inst()) / 3;
+    wheel_src->rollback_y  = lv_obj_get_height(app_lv_wheel_obj_inst()) / 3;
     wheel_src->anim_period = 500;
+    /* 状态项更新 */
+    wheel_src->obj_idx    = 4;
+    wheel_src->event_lock = false;
+    wheel_src->touch_over = true;
+    wheel_src->scroll     = false;
     /* 资源绑定 */
     wheel_src->wheel = wheel;
     /* 初始化并配置跟手特效动画 */
@@ -114,8 +119,8 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
     lv_anim_set_var(     &wheel_src->anim_follow, wheel_src);
     lv_anim_set_time(    &wheel_src->anim_follow, wheel_src->anim_period);
     lv_anim_set_exec_cb( &wheel_src->anim_follow, app_lv_wheel_anim_exec_cb);
-    lv_anim_set_start_cb(&wheel_src->anim_follow, app_lv_wheel_anim_ready_cb);
-    lv_anim_set_ready_cb(&wheel_src->anim_follow, app_lv_wheel_anim_start_cb);
+    lv_anim_set_start_cb(&wheel_src->anim_follow, app_lv_wheel_anim_start_cb);
+    lv_anim_set_ready_cb(&wheel_src->anim_follow, app_lv_wheel_anim_ready_cb);
     /* 为轮盘挂载事件回调 */
     lv_obj_add_event_cb(app_lv_wheel_obj_inst(), app_lv_wheel_event_cb, LV_EVENT_ALL, wheel_src);
 }

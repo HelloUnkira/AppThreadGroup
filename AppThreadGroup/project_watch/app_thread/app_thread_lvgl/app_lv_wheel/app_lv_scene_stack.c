@@ -10,7 +10,7 @@
 #include "app_lv_lib.h"
 
 static uint8_t app_lv_scene_num = 0;
-static app_lv_scene_t app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};
+static app_lv_scene_t *app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};
 
 /*@brief  当前场景嵌套层级
  *@retval 场景数量
@@ -28,7 +28,7 @@ void app_lv_scene_get_last(app_lv_scene_t **scene)
 {
     APP_SYS_ASSERT(scene != NULL);
     APP_SYS_ASSERT(app_lv_scene_num > 1);
-    *scene = &app_lv_ui_scene[app_lv_scene_num - 2];
+    *scene = app_lv_ui_scene[app_lv_scene_num - 2];
 }
 
 /*@brief      获取最上层显示场景
@@ -38,7 +38,7 @@ void app_lv_scene_get_top(app_lv_scene_t **scene)
 {
     APP_SYS_ASSERT(scene != NULL);
     APP_SYS_ASSERT(app_lv_scene_num != 0);
-    *scene = &app_lv_ui_scene[app_lv_scene_num - 1];
+    *scene = app_lv_ui_scene[app_lv_scene_num - 1];
 }
 
 /*@brief     场景复位
@@ -52,11 +52,11 @@ void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve)
         /* 当前场景保留则只插入新场景 */
         app_lv_scene_get_top(&current);
         app_lv_scene_num = 0;
-        app_lv_ui_scene[app_lv_scene_num++] = *scene;
-        app_lv_ui_scene[app_lv_scene_num++] = *current;
+        app_lv_ui_scene[app_lv_scene_num++] = scene;
+        app_lv_ui_scene[app_lv_scene_num++] = current;
     } else {
         app_lv_scene_num = 0;
-        app_lv_ui_scene[app_lv_scene_num++] = *scene;
+        app_lv_ui_scene[app_lv_scene_num++] = scene;
         app_lv_scene_get_top(&current);
         /* 存在自定义轮盘则使用自定义轮盘, 否则使用默认轮盘 */
         if (current->wheel != NULL)
@@ -80,7 +80,7 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
     app_lv_scene_t *current = NULL;
     app_lv_scene_t *parent  = NULL;
     
-    app_lv_ui_scene[app_lv_scene_num] = *scene;
+    app_lv_ui_scene[app_lv_scene_num - 1] = scene;
     app_lv_scene_get_top(&current);
     if (app_lv_scene_num > 1)
         app_lv_scene_get_last(&parent);
@@ -113,10 +113,10 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
         /* 当前场景保留则只插入新场景 */
         app_lv_scene_get_top(&current);
         app_lv_scene_num++;
-        app_lv_ui_scene[app_lv_scene_num - 2] = *scene;
-        app_lv_ui_scene[app_lv_scene_num - 1] = *current;
+        app_lv_ui_scene[app_lv_scene_num - 2] = scene;
+        app_lv_ui_scene[app_lv_scene_num - 1] = current;
     } else {
-        app_lv_ui_scene[app_lv_scene_num++] = *scene;
+        app_lv_ui_scene[app_lv_scene_num++] = scene;
         app_lv_scene_get_top(&current);
         if (app_lv_scene_num > 1)
             app_lv_scene_get_last(&parent);
@@ -139,7 +139,7 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
 /*@brief      场景移除当前显示场景
  *@param[out] scene 场景
  */
-void app_lv_scene_del(app_lv_scene_t *scene)
+void app_lv_scene_del(app_lv_scene_t **scene)
 {
     APP_SYS_ASSERT(scene != NULL);
     app_lv_scene_t *current = NULL;

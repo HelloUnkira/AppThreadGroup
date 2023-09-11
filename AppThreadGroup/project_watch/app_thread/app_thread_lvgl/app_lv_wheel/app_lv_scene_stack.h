@@ -39,6 +39,6 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve);
 /*@brief      场景移除当前显示场景
  *@param[out] scene 场景(不可为空)
  */
-void app_lv_scene_del(app_lv_scene_t *scene);
+void app_lv_scene_del(app_lv_scene_t **scene);
 
 #endif
