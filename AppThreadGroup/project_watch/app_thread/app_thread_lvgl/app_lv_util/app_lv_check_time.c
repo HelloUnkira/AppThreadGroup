@@ -61,7 +61,7 @@ void app_lv_check_time_update(void)
             if (app_lv_check_time.idle_time == 0) {
                 if (app_lv_check_time.back) {
                     app_lv_check_time.back = false;
-                    app_lv_scene_reset(&app_lv_ui_wheel, true);
+                    app_lv_scene_reset(&app_lv_ui_watch_face, true);
                     /* 关闭鼠标 */
                     app_lv_mouse_dlps_enter();
                     app_lv_check_time_exec(false);

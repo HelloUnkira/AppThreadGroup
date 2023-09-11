@@ -105,7 +105,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(true);
             APP_SYS_LOG_WARN("ui scene start");
-            app_lv_scene_reset(&app_lv_ui_wheel, false);
+            app_lv_scene_reset(&app_lv_ui_watch_face, false);
             app_lv_scene_add(&app_lv_ui_start, false);
             /* 更新lvgl设备 */
             app_lv_mouse_dlps_exit();
@@ -121,7 +121,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
             APP_SYS_LOG_WARN("ui scene stop");
-            app_lv_scene_reset(&app_lv_ui_wheel, false);
+            app_lv_scene_reset(&app_lv_ui_watch_face, false);
             app_lv_scene_add(&app_lv_ui_stop, false);
             /* 更新lvgl设备 */
             app_lv_display_dlps_enter();

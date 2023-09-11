@@ -58,7 +58,16 @@ static void app_lv_ui_watch_face_hide(void *scene)
     }
 }
 
+app_lv_wheel_t app_lv_ui_watch_face_wheel = {
+    .self       = &app_lv_ui_watch_face,
+    .sibling[2] = &app_lv_ui_clock,
+    .sibling[3] = &app_lv_ui_calendar,
+    .style[2]   = app_lv_wheel_style_float,
+    .style[3]   = app_lv_wheel_style_float,
+};
+
 app_lv_scene_t app_lv_ui_watch_face = {
-    .show = app_lv_ui_watch_face_show,
-    .hide = app_lv_ui_watch_face_hide,
+    .show  =  app_lv_ui_watch_face_show,
+    .hide  =  app_lv_ui_watch_face_hide,
+    .wheel = &app_lv_ui_watch_face_wheel,
 };

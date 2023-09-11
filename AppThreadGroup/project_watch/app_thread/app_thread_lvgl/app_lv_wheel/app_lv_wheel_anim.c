@@ -89,6 +89,13 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
     
     switch (wheel->style[wheel_src->obj_idx]) {
     case app_lv_wheel_style_float:
+        /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
+        if (wheel_src->touch_over) {
+            wheel_src->touch_over = false;
+            // if (!wheel_src->cover)
+                 wheel_src->scroll_way = LV_DIR_NONE;
+            APP_SYS_LOG_WARN("wheel finish");
+        }
         break;
     case app_lv_wheel_style_rotate:
         /* 覆盖标记位有效时 */
@@ -106,17 +113,16 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
                 app_lv_scene_t *scene = NULL;
                 app_lv_scene_del(&scene);
             }
+            /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
+            if (wheel_src->touch_over) {
+                wheel_src->touch_over = false;
+                wheel_src->scroll_way = LV_DIR_NONE;
+                APP_SYS_LOG_WARN("wheel finish");
+            }
         }
         break;
     default:
         APP_SYS_ASSERT(true == false);
         break;
-    }
-    
-    /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
-    if (wheel_src->touch_over) {
-        wheel_src->touch_over = false;
-        wheel_src->scroll_way = LV_DIR_NONE;
-        APP_SYS_LOG_WARN("wheel finish");
     }
 }

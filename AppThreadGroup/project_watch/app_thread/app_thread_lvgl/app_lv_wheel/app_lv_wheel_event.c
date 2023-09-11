@@ -63,8 +63,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[0] == wheel->self)
                 return 0;
-            if (!wheel_src->cover)
-                 wheel_src->obj_idx = 0;
+            if (wheel_src->cover && wheel_src->obj_idx != 1)
+                return 0;
+            wheel_src->obj_idx = 0;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
             /* 确定子窗口同时更新子窗口位置 */
@@ -78,8 +79,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[1] == wheel->self)
                 return 0;
-            if (!wheel_src->cover)
-                 wheel_src->obj_idx = 1;
+            if (wheel_src->cover && wheel_src->obj_idx != 0)
+                return 0;
+            wheel_src->obj_idx = 1;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
             /* 确定子窗口同时更新子窗口位置 */
@@ -96,8 +98,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[2] == wheel->self)
                 return 0;
-            if (!wheel_src->cover)
-                 wheel_src->obj_idx = 2;
+            if (wheel_src->cover && wheel_src->obj_idx != 3)
+                return 0;
+            wheel_src->obj_idx = 2;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
             /* 确定子窗口同时更新子窗口位置 */
@@ -111,8 +114,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[3] == wheel->self)
                 return 0;
-            if (!wheel_src->cover)
-                 wheel_src->obj_idx = 3;
+            if (wheel_src->cover && wheel_src->obj_idx != 2)
+                return 0;
+            wheel_src->obj_idx = 3;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
             /* 确定子窗口同时更新子窗口位置 */
