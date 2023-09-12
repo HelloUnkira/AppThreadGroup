@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -254,7 +254,7 @@ void app_lv_event_ui_default_cb(lv_event_t *e)
         break;
     }
     case LV_EVENT_PRESSING: {
-        APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
+        APP_SYS_LOG_DEBUG("LV_EVENT_PRESSING");
         break;
     }
     case LV_EVENT_PRESS_LOST: {
@@ -304,7 +304,7 @@ void app_lv_event_ui_default_cb(lv_event_t *e)
         break;
     }
     case LV_EVENT_SCROLL: {
-        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
+        APP_SYS_LOG_DEBUG("LV_EVENT_SCROLL");
         lv_obj_t *obj = lv_indev_get_scroll_obj(lv_indev_get_act());
         if (obj == NULL)
             break;

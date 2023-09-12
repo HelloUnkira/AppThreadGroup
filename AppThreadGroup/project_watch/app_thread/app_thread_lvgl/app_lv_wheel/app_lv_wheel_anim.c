@@ -73,7 +73,7 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
 {
     APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
-    APP_SYS_LOG_WARN("wheel prepare");
+    APP_SYS_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
 }
 
 /*@brief 跟手动画结束回调
@@ -92,8 +92,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
         /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
         if (wheel_src->touch_over) {
             wheel_src->touch_over = false;
-            // if (!wheel_src->cover)
-                 wheel_src->scroll_way = LV_DIR_NONE;
+            wheel_src->scroll_way = LV_DIR_NONE;
             APP_SYS_LOG_WARN("wheel finish");
         }
         break;

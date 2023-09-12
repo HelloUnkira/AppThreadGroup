@@ -16,11 +16,11 @@ typedef struct {
     /*  */
     uint8_t obj_idx;            // 操作对象索引
     app_lv_wheel_t *wheel;      // 轮盘实例
-    /*  */
-    lv_dir_t   scroll_way;      // 交互方向
-    lv_point_t scroll_pos;      // 位置记录:到达点
-    lv_point_t resume_pos;      // 位置记录:回弹点
     lv_point_t click_pos;       // 位置记录:按下点
+    lv_point_t resume_pos;      // 位置记录:回弹点
+    lv_point_t arrive_pos;      // 位置记录:到达点
+    lv_point_t scroll_pos;      // 位置记录:当前点
+    lv_dir_t   scroll_way;      // 交互方向
     lv_coord_t threshold;       // 检测门限,位移值(自设定,参考值:30)
     lv_coord_t rollback_x;      // 水平交互,回退值(自设定,参考值:width  / 3)
     lv_coord_t rollback_y;      // 垂直交互,回退值(自设定,参考值:height / 3)
