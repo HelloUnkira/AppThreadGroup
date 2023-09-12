@@ -211,7 +211,7 @@ void app_lv_event_ui_default_cb(lv_event_t *e)
                 /* 但是因为源码未提供相关接口,不能擅自添加接口,这里妥协为之 */
                 if (indev != NULL) {
                     indev->proc.types.pointer.gesture_dir = dir;
-                    lv_event_send(lv_scr_act(), LV_EVENT_GESTURE, indev);
+                    lv_event_send(app_lv_wheel_obj_inst(), LV_EVENT_GESTURE, indev);
                 }
             }
         }

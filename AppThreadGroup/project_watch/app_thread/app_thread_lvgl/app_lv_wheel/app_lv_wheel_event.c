@@ -290,6 +290,12 @@ bool app_lv_wheel_rollback(void)
     }
     /* 动画将剩下未走完的行程执行完毕 */
     lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
+    /* 手动添加方向 */
+    if (wheel_src->obj_idx == 0 || wheel_src->obj_idx == 1)
+        wheel_src->scroll_way = LV_DIR_HOR;
+    if (wheel_src->obj_idx == 2 || wheel_src->obj_idx == 3)
+        wheel_src->scroll_way = LV_DIR_VER;
+    /* 这里是回弹回去 */
     if (wheel_src->scroll_way == LV_DIR_HOR)
         lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->resume_pos.x);
     if (wheel_src->scroll_way == LV_DIR_VER)
