@@ -80,6 +80,10 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
     app_lv_scene_t *current = NULL;
     app_lv_scene_t *parent  = NULL;
     
+    /* 轮盘正在工作忽略此次调度 */
+    if (app_lv_wheel_status(LV_DIR_ALL))
+        return;
+    
     app_lv_ui_scene[app_lv_scene_num - 1] = scene;
     app_lv_scene_get_top(&current);
     if (app_lv_scene_num > 1)
@@ -108,6 +112,10 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
     APP_SYS_ASSERT(scene != NULL);
     app_lv_scene_t *current = NULL;
     app_lv_scene_t *parent  = NULL;
+    
+    /* 轮盘正在工作忽略此次调度 */
+    if (app_lv_wheel_status(LV_DIR_ALL))
+        return;
     
     if (reserve) {
         /* 当前场景保留则只插入新场景 */
@@ -142,10 +150,63 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
 void app_lv_scene_del(app_lv_scene_t **scene)
 {
     APP_SYS_ASSERT(scene != NULL);
+    APP_SYS_ASSERT(app_lv_scene_num != 0);
     app_lv_scene_t *current = NULL;
     app_lv_scene_t *parent  = NULL;
     
+    /* 轮盘正在工作忽略此次调度 */
+    if (app_lv_wheel_status(LV_DIR_ALL))
+        return;
+    
     *scene = app_lv_ui_scene[--app_lv_scene_num];
+    app_lv_scene_get_top(&current);
+    if (app_lv_scene_num > 1)
+        app_lv_scene_get_last(&parent);
+    /* 存在自定义轮盘则使用自定义轮盘, 否则使用默认轮盘 */
+    if (current->wheel != NULL)
+        app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
+    else {
+        app_lv_wheel_t wheel = {
+            .self       = current,
+            .sibling[0] = parent,
+            .sibling[1] = parent,
+            .style[0]   = app_lv_wheel_style_rotate,
+            .style[1]   = app_lv_wheel_style_rotate,
+        };
+        app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
+    }
+}
+
+/*@brief      场景为轮盘更新接口
+ *@param[out] scene 场景
+ *@param[in]  state 0:add;1:cover;2:del;
+ */
+void app_lv_scene_wheel_update(app_lv_scene_t **scene, int8_t state)
+{
+    APP_SYS_ASSERT(scene != NULL);
+    app_lv_scene_t *current = NULL;
+    app_lv_scene_t *parent  = NULL;
+    
+    switch (state) {
+    case 0: {
+        app_lv_ui_scene[app_lv_scene_num++] = scene;
+        break;
+    }
+    case 1: {
+        APP_SYS_ASSERT(app_lv_scene_num != 0);
+        app_lv_ui_scene[app_lv_scene_num - 1] = *scene;
+        break;
+    }
+    case 2: {
+        APP_SYS_ASSERT(app_lv_scene_num != 0);
+        *scene = app_lv_ui_scene[--app_lv_scene_num];
+        break;
+    }
+    default:
+        APP_SYS_ASSERT(true == false);
+        return;
+    }
+    
     app_lv_scene_get_top(&current);
     if (app_lv_scene_num > 1)
         app_lv_scene_get_last(&parent);

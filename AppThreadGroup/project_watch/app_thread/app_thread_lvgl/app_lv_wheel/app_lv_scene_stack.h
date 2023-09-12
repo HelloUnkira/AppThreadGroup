@@ -41,4 +41,10 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve);
  */
 void app_lv_scene_del(app_lv_scene_t **scene);
 
+/*@brief      场景为轮盘更新接口
+ *@param[out] scene 场景
+ *@param[in]  state 0:add;1:cover;2:del;
+ */
+void app_lv_scene_wheel_update(app_lv_scene_t **scene, int8_t state);
+
 #endif

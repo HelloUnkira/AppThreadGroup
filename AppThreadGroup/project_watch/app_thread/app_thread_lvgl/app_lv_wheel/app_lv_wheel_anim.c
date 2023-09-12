@@ -126,6 +126,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
             app_lv_scene_t *parent  = NULL;
             app_lv_scene_t *sibling = wheel->sibling[wheel_src->obj_idx];
             app_lv_scene_get_last(&parent);
+            #if 0
             if (sibling != parent) {
                 app_lv_scene_t *scene = sibling;
                 app_lv_scene_cover(scene);
@@ -133,6 +134,15 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
                 app_lv_scene_t *scene = NULL;
                 app_lv_scene_del(&scene);
             }
+            #else
+            if (sibling != parent) {
+                app_lv_scene_t *scene = sibling;
+                app_lv_scene_wheel_update(&scene, 1);
+            } else {
+                app_lv_scene_t *scene = NULL;
+                app_lv_scene_wheel_update(&scene, 2);
+            }
+            #endif
             /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
             if (wheel_src->touch_over) {
                 wheel_src->touch_over = false;

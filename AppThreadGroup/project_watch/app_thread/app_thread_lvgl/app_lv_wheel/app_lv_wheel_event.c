@@ -338,8 +338,8 @@ bool app_lv_wheel_status(lv_dir_t dir)
     if (wheel_src->scroll_way & dir)
         return true;
     
-    if (lv_anim_get_playtime(&wheel_src->anim_follow) <= wheel_src->anim_period - 1)
-        return true;
+    // if (lv_anim_get_playtime(&wheel_src->anim_follow) <= wheel_src->anim_period - 1)
+    //     return true;
     
     return false;
 }
