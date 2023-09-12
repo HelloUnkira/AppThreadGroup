@@ -26,7 +26,6 @@ typedef struct {
     lv_coord_t rollback_y;      // 垂直交互,回退值(自设定,参考值:height / 3)
     lv_anim_t  anim_follow;     // 动画特效(跟手)
     uint16_t   anim_period;     // 动画特效:周期(ms)(自设定)
-    uint8_t    scroll_per;      // 移动百分比
     uint8_t    scroll:1;        // 窗口内部产生滚动,轮盘不响应
     uint8_t    cover:1;         // 覆盖标记
     uint8_t    touch_over:1;    // 已经抬起,点击结束

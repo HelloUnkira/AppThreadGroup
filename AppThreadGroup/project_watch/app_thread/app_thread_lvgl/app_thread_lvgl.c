@@ -101,7 +101,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         
         /* 启动UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_start) {
-            app_lv_event_ui_default_config(NULL, true, NULL);
+            app_lv_event_default_config(NULL, true, NULL);
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(true);
             APP_SYS_LOG_WARN("ui scene start");
@@ -115,7 +115,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         /* 终止UI场景 */
         if (package->event == app_thread_lvgl_ui_scene_stop) {
-            app_lv_event_ui_default_config(NULL, false, NULL);
+            app_lv_event_default_config(NULL, false, NULL);
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(true);
         if (app_module_system_dlps_get())
@@ -132,7 +132,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         /* 进入UI场景(关机) */
         if (package->event == app_thread_lvgl_ui_scene_shutdown) {
             /* 禁用UI的一切交互,仅保留按压事件响应 */
-            app_lv_event_ui_default_config(NULL, true, NULL);
+            app_lv_event_default_config(NULL, true, NULL);
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(false);
             APP_SYS_LOG_WARN("ui scene shutdown");

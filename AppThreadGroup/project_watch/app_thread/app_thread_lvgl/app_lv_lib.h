@@ -8,6 +8,7 @@
 #include "app_lv_timer.h"
 #include "app_lv_event.h"
 #include "app_lv_event_ui.h"
+#include "app_lv_event_default.h"
 #include "app_lv_style.h"
 #include "app_lv_check_time.h"
 #include "app_lv_multi_font.h"

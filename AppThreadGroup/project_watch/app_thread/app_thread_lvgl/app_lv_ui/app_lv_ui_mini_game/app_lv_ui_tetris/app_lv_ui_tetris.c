@@ -54,7 +54,7 @@ static void app_lv_event_ui_default_redirect(lv_event_t *e)
         return;
     }
     /* 其他事件不做重定向 */
-    app_lv_event_ui_default_cb(e);
+    app_lv_event_default_cb(e);
 }
 
 /*@brief 界面自定义事件回调
@@ -222,8 +222,8 @@ static void app_lv_ui_tetris_show(void *scene)
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
         /* 禁用默认事件响应,事件重定向使用 */
-        app_lv_event_ui_default_config(NULL, false, NULL);
-        app_lv_event_ui_default_config(NULL, true,  app_lv_event_ui_default_redirect);
+        app_lv_event_default_config(NULL, false, NULL);
+        app_lv_event_default_config(NULL, true,  app_lv_event_ui_default_redirect);
         /* 界面常亮 */
         app_lv_check_time_exec(false);
         /* 默认顶部风格 */
@@ -317,8 +317,8 @@ static void app_lv_ui_tetris_hide(void *scene)
         /* 反初始化显示动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 启用默认事件响应,事件重定向取消 */
-        app_lv_event_ui_default_config(NULL, false, app_lv_event_ui_default_redirect);
-        app_lv_event_ui_default_config(NULL, true,  NULL);
+        app_lv_event_default_config(NULL, false, app_lv_event_ui_default_redirect);
+        app_lv_event_default_config(NULL, true,  NULL);
         /* 界面恢复 */
         app_lv_check_time_reset(0, 0);
         app_lv_check_time_exec(true);
