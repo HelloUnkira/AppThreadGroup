@@ -585,7 +585,7 @@
     #undef  LV_FS_STDIO_CACHE_SIZE
     /* redefine stdio fs configure */
     #define LV_FS_STDIO_LETTER      'S'
-    #define LV_FS_STDIO_PATH        "lvgl_ext_src\\"
+    #define LV_FS_STDIO_PATH        "lvgl\\"
     #define LV_FS_STDIO_CACHE_SIZE  0xFFFF
 #endif
 
