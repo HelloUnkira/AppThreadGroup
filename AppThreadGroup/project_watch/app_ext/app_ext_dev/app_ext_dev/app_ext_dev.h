@@ -13,9 +13,10 @@ extern const app_dev_t app_dev_empty;
 /* 设备抽象实例(peripheral) */
 extern const app_dev_t app_dev_rtc;
 extern const app_dev_t app_dev_watchdog;
-/* 设备抽象实例 */
+/* 设备抽象实例(common) */
 extern const app_dev_t app_dev_log;
 extern const app_dev_t app_dev_ext_mem;
+/* 设备抽象实例(custom) */
 extern const app_dev_t app_dev_battery;
 extern const app_dev_t app_dev_vibrate;
 extern const app_dev_t app_dev_backlight;
@@ -26,9 +27,10 @@ extern const app_dev_t app_dev_temperature;
 /* 设备抽象动作接口(peripheral) */
 #include "app_ext_dev_rtc.h"            /* rtc */
 #include "app_ext_dev_watchdog.h"       /* watchdog */
-/* 设备抽象动作接口 */
+/* 设备抽象动作接口(common) */
 #include "app_ext_dev_log.h"            /* log(common device) */
 #include "app_ext_dev_ext_mem.h"        /* ext_mem */
+/* 设备抽象动作接口(custom) */
 #include "app_ext_dev_battery.h"        /* battery */
 #include "app_ext_dev_vibrate.h"        /* vibrate */
 #include "app_ext_dev_backlight.h"      /* backlight */

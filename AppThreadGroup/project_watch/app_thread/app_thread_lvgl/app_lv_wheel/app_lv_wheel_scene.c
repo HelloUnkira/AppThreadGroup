@@ -89,7 +89,7 @@ void app_lv_wheel_hide(app_lv_wheel_t *wheel)
 void app_lv_wheel_reset(app_lv_wheel_t *wheel)
 {
     app_lv_wheel_src_t *wheel_src = app_lv_wheel_src_inst();
-    
+
     for (uint8_t idx = 0; idx < app_sys_arr_len(wheel->sibling); idx++) {
         if (wheel->sibling[idx] == NULL ||
             wheel->sibling[idx] == wheel->self ||
@@ -100,6 +100,11 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
         /* 动画会自动更新路径,这里将它移到屏幕显示区域外面即可 */
         lv_obj_set_x(obj, -lv_obj_get_width(obj));
         lv_obj_set_y(obj, -lv_obj_get_height(obj));
+    }
+    {
+        lv_obj_t *obj = wheel->self->root;
+        lv_obj_set_x(obj, 0);
+        lv_obj_set_y(obj, 0);
     }
     /* 配置项更新 */
     wheel_src->scroll_way  = LV_DIR_NONE;

@@ -48,14 +48,16 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
     /* 门限判别 */
     if (wheel_src->threshold > delta_x && wheel_src->threshold > delta_y)
         return 0;
-    /* 非指定类型的方向不响应 */
+    /* 浮动窗口方向滤除 */
     if (delta_x > delta_y) {
+        /* 非指定类型的方向不响应 */
         if (wheel->style[0] != app_lv_wheel_style_float ||
             wheel->style[1] != app_lv_wheel_style_float)
             /* 存在未回滚的子窗口 */
             if (wheel_src->cover)
                 return 0;
     } else {
+        /* 非指定类型的方向不响应 */
         if (wheel->style[2] != app_lv_wheel_style_float ||
             wheel->style[3] != app_lv_wheel_style_float)
             /* 存在未回滚的子窗口 */
@@ -75,6 +77,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[0] == wheel->self)
                 return 0;
+            if (wheel_src->cover && wheel_src->obj_idx == 1)
+                return 0;
             wheel_src->obj_idx = 0;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
@@ -89,6 +93,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
             if (wheel->sibling[1] == NULL)
                 return 0;
             if (wheel->sibling[1] == wheel->self)
+                return 0;
+            if (wheel_src->cover && wheel_src->obj_idx == 0)
                 return 0;
             wheel_src->obj_idx = 1;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
@@ -108,6 +114,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[2] == wheel->self)
                 return 0;
+            if (wheel_src->cover && wheel_src->obj_idx == 3)
+                return 0;
             wheel_src->obj_idx = 2;
             obj = wheel->sibling[wheel_src->obj_idx]->root;
             APP_SYS_ASSERT(obj != NULL);
@@ -122,6 +130,8 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
             if (wheel->sibling[3] == NULL)
                 return 0;
             if (wheel->sibling[3] == wheel->self)
+                return 0;
+            if (wheel_src->cover && wheel_src->obj_idx == 2)
                 return 0;
             wheel_src->obj_idx = 3;
             obj = wheel->sibling[wheel_src->obj_idx]->root;

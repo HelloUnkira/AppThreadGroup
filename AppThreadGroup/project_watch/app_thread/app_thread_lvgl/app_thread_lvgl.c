@@ -57,7 +57,16 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         /* lvgl wheel更新事件 */
         if (package->event == app_thread_lvgl_sched_wheel) {
+            /* 补充:如果调度主界面不是主界面,重定位它 */
+            if (app_lv_scene_get_nest() == 1) {
+                app_lv_wheel_t *wheel = package->data;
+                if (wheel->self != &app_lv_ui_watch_face)
+                   *wheel = *(app_lv_wheel_t *)app_lv_ui_watch_face.wheel;
+            }
             app_lv_wheel_update_handle(package->data);
+            /*  */
+            if (package->dynamic)
+                app_mem_free(package->data);
         }
         /* lvgl场景计时检查 */
         if (package->event == app_thread_lvgl_sched_check_time) {
@@ -95,7 +104,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         /* 禁用超时回退 */
         app_lv_check_time_reset(0, 0);
         app_lv_check_time_exec(false);
-        app_lv_scene_reset(&app_lv_ui_test, false);
+        app_lv_scene_reset(&app_lv_ui_watch_face, false);
+        app_lv_scene_add(&app_lv_ui_test, false);
         return true;
         #endif
         
@@ -136,7 +146,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(false);
             APP_SYS_LOG_WARN("ui scene shutdown");
-            app_lv_scene_reset(&app_lv_ui_dlps, false);
+            app_lv_scene_reset(&app_lv_ui_watch_face, false);
+            app_lv_scene_add(&app_lv_ui_dlps, false);
             /* 更新lvgl设备 */
             app_lv_display_dlps_enter();
             // app_lv_keyboard_dlps_enter();

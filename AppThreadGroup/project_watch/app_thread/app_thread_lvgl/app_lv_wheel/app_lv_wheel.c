@@ -23,8 +23,6 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
     app_lv_wheel = *wheel;
     app_lv_wheel_show(&app_lv_wheel);
     app_lv_wheel_reset(&app_lv_wheel);
-    /*  */
-    app_mem_free(wheel);
 }
 
 /*@brief  轮盘场景对象
