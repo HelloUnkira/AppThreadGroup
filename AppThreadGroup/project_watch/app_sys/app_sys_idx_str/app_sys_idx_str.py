@@ -2,7 +2,7 @@ import os
 import os.path
 import json
 import openpyxl
-
+import ctypes
 # -- coding: utf-8 --**
 
 
@@ -25,7 +25,11 @@ def encode_app_sys_idx_str_c(file, xlsx_sheet, sheet_row, sheet_col):
     for item in xlsx_sheet.rows:
         file.write('\t{')
         for data in item:
-            file.write('{0}'.format("\"%s\"," % data.value))    # 多国语这里不能很好的对齐,因为不同语言的空格宽度不一致
+            c_array = str([c for c in str(data.value).encode('utf-8')])
+            c_array = c_array.replace('[', '{')
+            c_array = c_array.replace(']', ', 0}')
+            c_array = c_array.replace('{', '(char []){')
+            file.write('{0}'.format("%s," % c_array))    # 多国语这里不能很好的对齐,因为不同语言的空格宽度不一致
         file.write('},\n')
     file.write('};\n\n')
     file.write('static uint32_t app_sys_idx_str_type = 0;\n\n')
@@ -51,7 +55,8 @@ def encode_app_sys_idx_str_h(file, xlsx_sheet, sheet_row, sheet_col):
     # 编写头部索引
     file.write('typedef enum {\n')
     for i, item in enumerate(xlsx_sheet.rows):
-        file.write('\tAPP_SYS_IDX_STR_0X%04x,\t/* %s */\n' % (i, item[0].value))
+        c_str = str(item[0].value).replace('\n', '\\n')
+        file.write('\tAPP_SYS_IDX_STR_0X%04x,\t/* %s */\n' % (i, c_str))
     file.write('\tAPP_SYS_IDX_STR_NUM,\n')
     file.write('} app_sys_idx_str_t;\n\n')
     # 编写固化访问函数接口
@@ -79,7 +84,7 @@ def encode_app_sys_idx_str():
     sheet_row = xlsx_sheet.max_row
     sheet_col = xlsx_sheet.max_column
     # 开启三个文件
-    file_encode = 'utf-16'
+    file_encode = 'utf-8'
     app_sys_idx_str_h = open('app_sys_idx_str.h', mode='w', encoding=file_encode)
     app_sys_idx_str_c = open('app_sys_idx_str.c', mode='w', encoding=file_encode)
     # 解析

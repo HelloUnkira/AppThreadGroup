@@ -16,6 +16,9 @@
 # LVGL库:
 # release/v8.2 https://github.com/lvgl/lvgl.git
 # AppThreadGroup/app_third/lib_lvgl/lib_lvgl
+# LVGL库(字库制作工具):
+# master https://github.com/lvgl/lv_font_conv.git
+# AppThreadGroup/app_third/lib_lvgl/lib_lvgl_font_conv
 #
 # cJSON库:
 # master https://github.com/DaveGamble/cJSON.git
@@ -24,7 +27,7 @@
 # nanopb库
 # master https://github.com/nanopb/nanopb.git
 # AppThreadGroup/app_third/lib_nanopb/lib_nanopb
-# 编译器:https://jpa.kapsi.fi/nanopb/download
+# nanopb库(编译器):https://jpa.kapsi.fi/nanopb/download
 #
 # tinycrypt库:
 # master https://github.com/intel/tinycrypt.git 

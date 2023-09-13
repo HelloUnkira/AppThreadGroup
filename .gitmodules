@@ -2,6 +2,10 @@
 	path = AppThreadGroup/app_third/lib_lvgl/lib_lvgl
 	url = https://github.com/lvgl/lvgl.git
 	branch = release/v8.2
+[submodule "AppThreadGroup/app_third/lib_lvgl/lib_lvgl_font_conv"]
+	path = AppThreadGroup/app_third/lib_lvgl/lib_lvgl_font_conv
+	url = https://github.com/lvgl/lv_font_conv.git
+	branch = master
 [submodule "AppThreadGroup/app_third/lib_json/lib_json"]
 	path = AppThreadGroup/app_third/lib_json/lib_json
 	url = https://github.com/DaveGamble/cJSON.git

@@ -35,6 +35,16 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
         lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Face");
         lv_obj_center(app_lv_ui_res_local->label);
+        
+        
+        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_set_style_text_color(label, lv_color_white(), 0);
+        app_sys_idx_str_set_type(0);
+        lv_obj_set_style_text_font(label, app_lv_multi_font(app_lv_multi_font_16), 0);
+        lv_label_set_text_static(label, app_sys_idx_str_get_str(APP_SYS_IDX_STR_0X0018));
+        lv_obj_align_to(label, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
+        
+        
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                 &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,

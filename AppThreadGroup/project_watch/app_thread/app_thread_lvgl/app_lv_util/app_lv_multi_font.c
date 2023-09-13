@@ -90,7 +90,7 @@ lv_font_t * app_lv_multi_font(uint32_t multi_font_size)
         switch (multi_font_size) {
         case app_lv_multi_font_16: {
             #if LV_FONT_MONTSERRAT_16
-            font = &lv_font_montserrat_16;
+            font = &lv_font_simsun_16_cjk;
             #endif
             break;
         }
