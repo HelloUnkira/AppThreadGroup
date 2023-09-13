@@ -23,6 +23,19 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
     app_lv_wheel = *wheel;
     app_lv_wheel_show(&app_lv_wheel);
     app_lv_wheel_reset(&app_lv_wheel);
+    /*  */
+    if (app_lv_wheel.self != NULL)
+    if (app_lv_wheel.self->root != NULL) {
+        APP_SYS_LOG_INFO("self x:%d", lv_obj_get_x(app_lv_wheel.self->root));
+        APP_SYS_LOG_INFO("self y:%d", lv_obj_get_y(app_lv_wheel.self->root));
+    }
+    for (uint8_t idx = 0; idx < 4; idx++) {
+        if (app_lv_wheel.sibling[idx] != NULL)
+        if (app_lv_wheel.sibling[idx]->root != NULL) {
+            APP_SYS_LOG_INFO("sibling[%d] x:%d", idx, lv_obj_get_x(app_lv_wheel.sibling[idx]->root));
+            APP_SYS_LOG_INFO("sibling[%d] y:%d", idx, lv_obj_get_y(app_lv_wheel.sibling[idx]->root));
+        }
+    }
 }
 
 /*@brief  轮盘场景对象

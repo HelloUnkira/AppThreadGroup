@@ -96,6 +96,7 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
     /* 这里应该中断吗??? */
     if (wheel_src->obj_idx >= 4)
         return;
+    APP_SYS_ASSERT(wheel_src->obj_idx < 4);
     
     
     APP_SYS_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
@@ -107,6 +108,9 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
 {
     APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
+    /* 这里应该中断吗??? */
+    if (wheel_src->obj_idx >= 4)
+        return;
     APP_SYS_ASSERT(wheel_src->obj_idx < 4);
     app_lv_wheel_t *wheel = wheel_src->wheel;
     lv_obj_t  *obj_self = wheel->self->root;
@@ -122,8 +126,8 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
         if (wheel_src->touch_over) {
             wheel_src->touch_over = false;
             wheel_src->scroll_way = LV_DIR_NONE;
-            if (wheel_src->cover)
-                wheel_src->obj_idx = 4;
+            if (!wheel_src->cover)
+                 wheel_src->obj_idx = 4;
             APP_SYS_LOG_WARN("wheel finish");
         }
         break;

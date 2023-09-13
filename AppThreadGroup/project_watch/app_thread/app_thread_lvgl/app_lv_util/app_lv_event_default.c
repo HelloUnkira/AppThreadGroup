@@ -38,7 +38,7 @@ static void app_lv_event_default_gesture_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_GESTURE: {
         lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_get_act());
-        APP_SYS_LOG_INFO("LV_EVENT_GESTURE:%x", dir);
+        APP_SYS_LOG_WARN("LV_EVENT_GESTURE:%x", dir);
         /* 左右滑动回到上一层 */
         if ((dir & LV_DIR_LEFT) || (dir & LV_DIR_RIGHT)) {
             

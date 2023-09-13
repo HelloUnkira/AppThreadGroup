@@ -28,7 +28,6 @@
 #include "app_lv_ui_test.h"
 #include "app_lv_ui_start.h"
 #include "app_lv_ui_stop.h"
-#include "app_lv_ui_wheel.h"
 #include "app_lv_ui_watch_face.h"
 
 #include "app_lv_ui_list.h"
