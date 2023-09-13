@@ -7,8 +7,11 @@
 #include "app_lv_lib.h"
 
 typedef struct {
-    lv_anim_t anim;
-    lv_obj_t *scene;
+    lv_anim_t  anim;
+    lv_obj_t  *scene;
+    lv_font_t *font_24;
+    lv_font_t *font_36;
+    /*  */
     lv_obj_t *time;
     lv_obj_t *arc_cal;
     lv_obj_t *arc_step;
@@ -46,9 +49,9 @@ static void app_lv_ui_local_style_span_data(lv_obj_t *spans, lv_span_t **cur, lv
     *cur  = lv_spangroup_new_span(spans);
     *tar  = lv_spangroup_new_span(spans);
     *unit = lv_spangroup_new_span(spans);
-    lv_style_set_text_font(&(*cur)->style,   app_lv_multi_font(app_lv_multi_font_28));
-    lv_style_set_text_font(&(*tar)->style,   app_lv_multi_font(app_lv_multi_font_24));
-    lv_style_set_text_font(&(*unit)->style,  app_lv_multi_font(app_lv_multi_font_20));
+    lv_style_set_text_font(&(*cur)->style,   app_lv_ui_res_local->font_36);
+    lv_style_set_text_font(&(*tar)->style,   app_lv_ui_res_local->font_24);
+    lv_style_set_text_font(&(*unit)->style,  app_lv_ui_res_local->font_24);
     lv_style_set_text_color(&(*cur)->style,  lv_palette_main(palette));
     lv_style_set_text_color(&(*tar)->style,  lv_palette_darken(palette, 4));
     lv_style_set_text_color(&(*unit)->style, lv_palette_darken(palette, 4));
@@ -138,6 +141,9 @@ static void app_lv_ui_data_daily_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
         app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        /* 加载目标字体 */
+        app_lv_ui_res_local->font_24 = app_lv_multi_font_load(app_lv_multi_font_size_24);
+        app_lv_ui_res_local->font_36 = app_lv_multi_font_load(app_lv_multi_font_size_36);
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
@@ -227,6 +233,9 @@ static void app_lv_ui_data_daily_hide(void *scene)
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         ((app_lv_scene_t *)scene)->root = NULL;
+        /* 卸载目标字体 */
+        app_lv_multi_font_free(app_lv_multi_font_size_24);
+        app_lv_multi_font_free(app_lv_multi_font_size_36);
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }

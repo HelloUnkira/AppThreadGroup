@@ -9,7 +9,6 @@
 typedef struct {
     lv_anim_t anim;
     lv_obj_t *scene;
-    lv_obj_t *label;
 } app_lv_ui_res_local_t;
 
 static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
@@ -30,20 +29,22 @@ static void app_lv_ui_watch_face_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
-        /* 初始化居中标签 */
-        app_lv_ui_res_local->label = app_lv_style_label_title(app_lv_ui_res_local->scene);
-        lv_obj_set_style_text_color(app_lv_ui_res_local->label, lv_palette_main(LV_PALETTE_BLUE), 0);
-        lv_label_set_text_static(app_lv_ui_res_local->label, "Watch Face");
-        lv_obj_center(app_lv_ui_res_local->label);
         
+        /* 测试 */
         
-        lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
+        lv_obj_t *text_box = lv_obj_create(app_lv_ui_res_local->scene);
+        app_lv_style_object(text_box);
+        lv_obj_set_style_bg_color(text_box, lv_color_black(), 0);
+        lv_obj_set_size(text_box, app_lv_style_hor_pct(90), app_lv_style_ver_pct(80));
+        lv_obj_refr_size(text_box);
+        lv_obj_center(text_box);
+        
+        lv_obj_t *label = app_lv_style_label_title(text_box);
+        lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
         lv_obj_set_style_text_color(label, lv_color_white(), 0);
-        app_sys_idx_str_set_type(0);
-        lv_obj_set_style_text_font(label, app_lv_multi_font(app_lv_multi_font_16), 0);
-        lv_label_set_text_static(label, app_sys_idx_str_get_str(APP_SYS_IDX_STR_0X0018));
-        lv_obj_align_to(label, app_lv_ui_res_local->label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
-        
+        lv_obj_set_style_text_font(label, app_lv_multi_font_load(app_lv_multi_font_size_36), 0);
+        lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
+        lv_label_set_text(label, app_sys_idx_str_get_str(APP_SYS_IDX_STR_0X0031));
         
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,

@@ -117,6 +117,9 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             APP_SYS_LOG_WARN("ui scene start");
             app_lv_scene_reset(&app_lv_ui_watch_face, false);
             app_lv_scene_add(&app_lv_ui_start, false);
+            /* 设置默认字体和默认尺寸 */
+            app_lv_multi_font_type_config(APP_LV_MULTI_FONT_TYPE_DEFAULT);
+            app_lv_multi_font_size_config(APP_LV_MULTI_FONT_SIZE_DEFAULT);
             /* 更新lvgl设备 */
             app_lv_mouse_dlps_exit();
             app_lv_mousewheel_dlps_exit();

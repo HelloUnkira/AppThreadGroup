@@ -5,57 +5,60 @@
 
 int main(int argc, char *argv[])
 {
+    #if 0
+    #elif 0
+    /* 生成物理外存映射,将其都刷为0xFF */
+    app_sys_ext_mem_remake();
+    #elif 0
+    /* test sys util plug */
+    /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
+    void app_sys_rbuf_test(void);
+    app_sys_rbuf_test();
+    void app_sys_list_dll_test(void);
+    void app_sys_list_sll_test(void);
+    void app_sys_heap_g_test(void);
+    app_sys_list_dll_test();
+    app_sys_list_sll_test();
+    app_sys_heap_g_test();
+    void app_sys_tree_s_test(void);
+    void app_sys_tree_rb_test(void);
+    void app_sys_tree_rbs_test(void);
+    void app_sys_tree_fl_test(void);
+    void app_sys_tree_fw_test(void);
+    app_sys_tree_s_test();
+    app_sys_tree_rb_test();
+    app_sys_tree_rbs_test();
+    app_sys_tree_fl_test();
+    app_sys_tree_fw_test();
+    void app_sys_table_dl_test(void);
+    void app_sys_table_rbs_test(void);
+    app_sys_table_dl_test();
+    app_sys_table_rbs_test();
+    void app_sys_map_dlm_test(void);
+    app_sys_map_dlm_test();
+    void app_sys_handle_test(void);
+    void app_sys_matrix_test(void);
+    void app_sys_fft_test(void);
+    app_sys_handle_test();
+    app_sys_matrix_test();
+    app_sys_fft_test();
+    #elif 1
     /* 启动APP调度策略 */
     app_thread_group_schedule();
-    
     /* 主线程滚动阻塞 */
     while (true) {
         #if 0
         #elif 0
-        /* 生成物理外存映射,将其都刷为0xFF */
-        app_sys_ext_mem_remake();
-        break;
-        #elif 0
         /* 通过文件系统将文件打包到外存映射中 */
-        app_third_fatfs_remake("lvgl_ext_src");
+        char *path[] = {
+            "lvgl_font",
+            "lvgl_pic",
+        };
+        app_third_fatfs_remake(path, 2);
         break;
         #elif 0
         /* 测试日志追踪 */
         app_sys_log_text_test();
-        break;
-        #elif 0
-        /* test sys util plug */
-        /* 测试接口有大量内存申请未释放的动作,所以仅仅测试使用 */
-        void app_sys_rbuf_test(void);
-        app_sys_rbuf_test();
-        void app_sys_list_dll_test(void);
-        void app_sys_list_sll_test(void);
-        void app_sys_heap_g_test(void);
-        app_sys_list_dll_test();
-        app_sys_list_sll_test();
-        app_sys_heap_g_test();
-        void app_sys_tree_s_test(void);
-        void app_sys_tree_rb_test(void);
-        void app_sys_tree_rbs_test(void);
-        void app_sys_tree_fl_test(void);
-        void app_sys_tree_fw_test(void);
-        app_sys_tree_s_test();
-        app_sys_tree_rb_test();
-        app_sys_tree_rbs_test();
-        app_sys_tree_fl_test();
-        app_sys_tree_fw_test();
-        void app_sys_table_dl_test(void);
-        void app_sys_table_rbs_test(void);
-        app_sys_table_dl_test();
-        app_sys_table_rbs_test();
-        void app_sys_map_dlm_test(void);
-        app_sys_map_dlm_test();
-        void app_sys_handle_test(void);
-        void app_sys_matrix_test(void);
-        void app_sys_fft_test(void);
-        app_sys_handle_test();
-        app_sys_matrix_test();
-        app_sys_fft_test();
         break;
         #elif 0
         /* test sys func */
@@ -113,5 +116,7 @@ int main(int argc, char *argv[])
         #endif
         #endif
     }
+    #else
+    #endif
     return 0;
 }

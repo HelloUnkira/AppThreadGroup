@@ -193,9 +193,10 @@ static void app_third_fatfs_remake_recursion(char *path)
 
 /*@brief     通过文件系统将文件打包到外存映射中
  *           注意:仅在PC上构建
- *@param[in] path 根路径
+ *@param[in] path 路径
+ *@param[in] num  路径数量
  */
-void app_third_fatfs_remake(char *path)
+void app_third_fatfs_remake(char *path[], int8_t num)
 {
     #if APP_ARCH_IS_PC && APP_OS_IS_WINDOWS
     
@@ -211,10 +212,12 @@ void app_third_fatfs_remake(char *path)
         APP_SYS_LOG_WARN("f_mount fail:%d", retval);
     
     /* 通过文件系统将文件打包到外存映射中 */
-    app_third_fatfs_remake_recursion(path);
+    for (int8_t idx = 0; idx < num; idx++)
+        app_third_fatfs_remake_recursion(path[idx]);
+    
     /* 输出文件系统基本信息 */
-    app_third_fatfs_info("");
     /* 递归遍历文件系统的文件列表 */
+    app_third_fatfs_info("");
     app_third_fatfs_walk("");
     
     if ((retval = f_unmount("")) != FR_OK)

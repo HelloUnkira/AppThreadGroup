@@ -1,0 +1,28 @@
+bin字体转换工具:
+https://github.com/lvgl/lv_font_conv
+子仓库已经引用在:
+lvgl_font_conv
+注意:在cmd中构建而不是PowerShell
+
+1.下载安装Node.js(可能需要配置环境变量Path)
+2.打开cmd(在lvgl_font_conv下)
+3.npm install
+4.npm install -g
+5.关闭cmd
+6.打开cmd(其他路径),执行lv_font_conv -h验证全局安装成功
+7.在任意地方cmd执行lv_font_conv命令生成资源:
+    命令见网址的介绍
+
+
+
+例子(直接一口气全粘贴到cmd就行了,自己会一条条跑):
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 24 --format lvgl --bpp 1 --no-compress -o ./font/font_en_24.c
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 36 --format lvgl --bpp 1 --no-compress -o ./font/font_en_36.c
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 24 --format bin  --bpp 1 --no-compress -o ./font/font_en_24.bin
+lv_font_conv --font font_en.ttf -r 0x00-0x7f --size 36 --format bin  --bpp 1 --no-compress -o ./font/font_en_36.bin
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 24 --format lvgl --bpp 1 --no-compress -o ./font/font_zh_24.c
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format lvgl --bpp 1 --no-compress -o ./font/font_zh_36.c
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 24 --format bin  --bpp 1 --no-compress -o ./font/font_zh_24.bin
+lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format bin  --bpp 1 --no-compress -o ./font/font_zh_36.bin
+
+

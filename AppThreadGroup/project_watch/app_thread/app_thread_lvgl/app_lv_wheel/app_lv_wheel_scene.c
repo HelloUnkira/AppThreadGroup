@@ -111,7 +111,7 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
     wheel_src->threshold   = 30;
     wheel_src->rollback_x  = lv_obj_get_width(app_lv_wheel_obj_inst()) / 3;
     wheel_src->rollback_y  = lv_obj_get_height(app_lv_wheel_obj_inst()) / 3;
-    wheel_src->anim_period = 500;
+    wheel_src->anim_period = 300;
     /* 状态项更新 */
     wheel_src->obj_idx    = 4;
     wheel_src->event_lock = false;

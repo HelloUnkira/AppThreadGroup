@@ -23,8 +23,9 @@ void app_third_fatfs_deinit(void);
 
 /*@brief     通过文件系统将文件打包到外存映射中
  *           注意:仅在PC上构建
- *@param[in] path 根路径
+ *@param[in] path 路径
+ *@param[in] num  路径数量
  */
-void app_third_fatfs_remake(char *path);
+void app_third_fatfs_remake(char *path[], int8_t num);
 
 #endif

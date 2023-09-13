@@ -26,6 +26,9 @@ static void app_lv_wheel_opa_update(lv_obj_t *obj, uint8_t opa)
 void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
 {
     app_lv_wheel_src_t *wheel_src = var;
+    /* 这里应该中断吗??? */
+    if (wheel_src->obj_idx >= 4)
+        return;
     APP_SYS_ASSERT(wheel_src->obj_idx < 4);
     app_lv_wheel_t *wheel = wheel_src->wheel;
     lv_obj_t  *obj_self = wheel->self->root;
@@ -90,6 +93,11 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
 {
     APP_SYS_LOG_INFO("");
     app_lv_wheel_src_t *wheel_src = a->var;
+    /* 这里应该中断吗??? */
+    if (wheel_src->obj_idx >= 4)
+        return;
+    
+    
     APP_SYS_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
 }
 
@@ -108,6 +116,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
     
     switch (wheel->style[wheel_src->obj_idx]) {
     case app_lv_wheel_style_float: {
+        /* 浮动结束后刷新轮盘 */
         app_lv_wheel_opa_update(obj_sib, 255);
         /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
         if (wheel_src->touch_over) {
@@ -120,30 +129,27 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
         break;
     }
     case app_lv_wheel_style_rotate: {
-        /* 覆盖标记位有效时 */
-         if (wheel_src->cover) {
-             wheel_src->cover = false;
-            APP_SYS_LOG_WARN("wheel update");
-            /* 滚动结束后需要刷新轮盘(中心窗口已经发生改变) */
-            app_lv_scene_t *parent  = NULL;
-            app_lv_scene_t *sibling = wheel->sibling[wheel_src->obj_idx];
-            if (app_lv_scene_get_nest() > 1)
-                app_lv_scene_get_last(&parent);
-            
+        /* 滚动结束后刷新轮盘 */
+        app_lv_scene_t *parent  = NULL;
+        app_lv_scene_t *sibling = wheel->sibling[wheel_src->obj_idx];
+        if (app_lv_scene_get_nest() > 1)
+            app_lv_scene_get_last(&parent);
+        /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
+        if (wheel_src->touch_over) {
+            wheel_src->touch_over = false;
+            wheel_src->scroll_way = LV_DIR_NONE;
+            wheel_src->obj_idx = 4;
+            APP_SYS_LOG_WARN("wheel finish");
+        }
+        /* 覆盖标记位有效时(中心窗口已经发生改变) */
+        if (wheel_src->cover) {
+            wheel_src->cover = false;
             if (sibling != parent || parent == NULL) {
                 app_lv_scene_t *scene = sibling;
                 app_lv_scene_wheel_update(&scene, 1);
             } else {
                 app_lv_scene_t *scene = NULL;
                 app_lv_scene_wheel_update(&scene, 2);
-            }
-            
-            /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
-            if (wheel_src->touch_over) {
-                wheel_src->touch_over = false;
-                wheel_src->scroll_way = LV_DIR_NONE;
-                wheel_src->obj_idx = 4;
-                APP_SYS_LOG_WARN("wheel finish");
             }
         }
         break;

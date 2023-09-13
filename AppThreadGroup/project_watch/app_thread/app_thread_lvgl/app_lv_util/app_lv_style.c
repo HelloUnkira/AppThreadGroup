@@ -292,7 +292,6 @@ lv_obj_t * app_lv_style_textarea(lv_obj_t *parent)
     lv_obj_set_style_border_side(textarea,LV_BORDER_SIDE_FULL, 0);
     lv_obj_set_style_border_width(textarea, 3, 0);
     lv_obj_set_style_border_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
-    lv_obj_set_style_text_font(textarea,  app_lv_multi_font(app_lv_multi_font_24), 0);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_BLUE), 0);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_GREY), LV_PART_TEXTAREA_PLACEHOLDER);
     lv_obj_set_style_text_color(textarea, lv_palette_main(LV_PALETTE_RED), LV_PART_CURSOR);
@@ -368,7 +367,6 @@ lv_obj_t * app_lv_style_label_title(lv_obj_t *parent)
 {
     lv_obj_t *label = app_lv_style_label(parent);
     lv_obj_set_size(label, app_lv_style_hor_pct(90), app_lv_style_ver_pct(8));
-    lv_obj_set_style_text_font(label, app_lv_multi_font(app_lv_multi_font_24), 0);
     return label;
 }
 
