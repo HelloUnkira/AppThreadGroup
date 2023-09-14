@@ -40,4 +40,8 @@
  */
 void app_sys_ready(void);
 
+/*@brief 系统组件库测试
+ */
+bool app_sys_test(void);
+
 #endif

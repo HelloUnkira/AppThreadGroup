@@ -39,15 +39,15 @@ static const app_sys_ext_mem_t app_sys_ext_mem_table[] = {
 		/* secure digital memory card: use fat file system */
 		.chunk_name 	= "fat_fs",
 		.chunk_base 	=  0x10000000,
-		.chunk_size 	=  1024 * 1024 * 16,
+		.chunk_size 	=  1024 * 1024 * 64,
 		.chunk_offset 	=  0x0,
 	},
 	{
 		/* secure digital memory card(reserve): suitable permanently data */
 		.chunk_name 	= "secure_digital_memory_card",
 		.chunk_base 	=  0x10000000,
-		.chunk_size 	=  1024 * 1024 * 16 - 1024 * 1024 * 16,
-		.chunk_offset 	=  0x1000000,
+		.chunk_size 	=  1024 * 1024 * 64 - 1024 * 1024 * 64,
+		.chunk_offset 	=  0x4000000,
 	},
 };
 

@@ -131,7 +131,7 @@ void app_sys_ext_mem_remake(void)
     for (uint32_t idx = 0; idx < 1024; buffer[idx] = 0xff, idx++);
     fclose(fopen("ext_mem_static",  "wb")); // 64K
     fclose(fopen("ext_mem_flash",   "wb")); // 8M
-    fclose(fopen("ext_mem_sd_card", "wb")); // 16M
+    fclose(fopen("ext_mem_sd_card", "wb")); // 64M
     FILE *file1 = fopen("ext_mem_static",  "rb+");
     FILE *file2 = fopen("ext_mem_flash",   "rb+");
     FILE *file3 = fopen("ext_mem_sd_card", "rb+");
@@ -142,7 +142,7 @@ void app_sys_ext_mem_remake(void)
         fwrite(buffer, 1024, 1, file1);
     for (uint32_t idx = 0; idx < 1024 * 8; idx++)
         fwrite(buffer, 1024, 1, file2);
-    for (uint32_t idx = 0; idx < 1024 * 16; idx++)
+    for (uint32_t idx = 0; idx < 1024 * 64; idx++)
         fwrite(buffer, 1024, 1, file3);
     fclose(file1);
     fclose(file2);

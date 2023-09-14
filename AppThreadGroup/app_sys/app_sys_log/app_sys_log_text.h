@@ -62,9 +62,4 @@ void app_sys_log_text_peek_reset(void);
  */
 void app_sys_log_text_persistent(char *text);
 
-/*@brief 日志追踪队列转储和加载测试
- *       此测试模式只能单独使用
- */
-void app_sys_log_text_test(void);
-
 #endif

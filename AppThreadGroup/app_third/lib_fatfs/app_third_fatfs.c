@@ -154,13 +154,13 @@ static void app_third_fatfs_remake_recursion(char *path)
         if (fdata.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
             char path_next[256] = {0};
             sprintf(path_next, "%s\\%s", path, fdata.cFileName);
-            APP_SYS_LOG_INFO("%s", path_next);
+            APP_SYS_LOG_INFO(path_next);
             app_third_fatfs_remake_recursion(path_next);
         } else {
             UINT file_old_size = 0;
             char path_file[256] = {0};
             sprintf(path_file, "%s\\%s", path, fdata.cFileName);
-            APP_SYS_LOG_INFO("%s", path_file);
+            APP_SYS_LOG_INFO(path_file);
             
             FILE *file_old = fopen(path_file, "rb+");
             fseek(file_old, 0, SEEK_END);
