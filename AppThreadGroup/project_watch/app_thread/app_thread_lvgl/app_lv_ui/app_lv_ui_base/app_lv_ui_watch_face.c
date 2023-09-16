@@ -39,11 +39,13 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_obj_refr_size(text_box);
         lv_obj_center(text_box);
         
+        app_lv_multi_font_type_config(app_lv_multi_font_type_english);
+        app_lv_multi_font_size_config(APP_LV_MULTI_FONT_SIZE_DEFAULT);
         lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_size(label, app_lv_style_hor_pct(90), app_lv_style_ver_pct(80));
         lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
         lv_obj_set_style_text_color(label, lv_color_white(), 0);
-        lv_obj_set_style_text_font(label, app_lv_multi_font_load(app_lv_multi_font_size_36), 0);
+        lv_obj_set_style_text_font(label, app_lv_multi_font_load(app_lv_multi_font_size_24), 0);
         lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
         lv_label_set_text(label, app_sys_idx_str_get_str(APP_SYS_IDX_STR_0X0031));
         lv_obj_center(label);

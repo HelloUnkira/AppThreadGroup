@@ -23,14 +23,29 @@ static uint32_t    app_lv_multi_font_size = 0;
 static uint32_t    app_lv_multi_font_type = 0;
 static lv_font_t * app_lv_multi_font_table[app_lv_multi_font_size_num] = {0};
 
+/*@brief     更新主题多字库
+ *@param[in] font 字库对象
+ */
+static void app_lv_multi_font_config_theme(lv_font_t *font)
+{
+    APP_SYS_ASSERT(font != NULL);
+    /* 获得默认显示器及其默认主题,更新它 */
+    lv_disp_t *disp = lv_disp_get_default();
+    lv_theme_t *theme = lv_disp_get_theme(disp);
+    /* 重置显示器主题(它会自动更新风格) */
+    lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE),
+                                lv_palette_main(LV_PALETTE_RED),
+                                LV_THEME_DEFAULT_DARK, font);
+    lv_disp_set_theme(disp, theme);
+}
+
 /*@brief     加载动态多字库表
  *@param[in] type 字库尺寸
  */
 static void app_lv_multi_font_obj_load(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num >= app_lv_multi_font_type);
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size);
-    
+    if (app_lv_multi_font_table[size] != NULL)
+        return;
     /*  */
     if (size == app_lv_multi_font_size_24) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
@@ -53,26 +68,21 @@ static void app_lv_multi_font_obj_load(uint32_t size)
  */
 static void app_lv_multi_font_obj_free(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num >= app_lv_multi_font_type);
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size);
-    
+    if (app_lv_multi_font_table[size] == NULL)
+        return;
     /*  */
     if (size == app_lv_multi_font_size_24) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            if (app_lv_multi_font_table[size] != NULL)
-                lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_table[size]);
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            if (app_lv_multi_font_table[size] != NULL)
-                lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_table[size]);
     }
     /*  */
     if (size == app_lv_multi_font_size_36) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            if (app_lv_multi_font_table[size] != NULL)
-                lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_table[size]);
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            if (app_lv_multi_font_table[size] != NULL)
-                lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_table[size]);
     }
     /*  */
 }
@@ -84,10 +94,16 @@ static void app_lv_multi_font_obj_free(uint32_t size)
  */
 void app_lv_multi_font_type_config(uint32_t type)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num >= type);
+    APP_SYS_ASSERT(app_lv_multi_font_type_num  >= type || 0 == type);
+    
+    if (app_lv_multi_font_type == type)
+        return;
+    
+    /* 先更新主题的字体为默认字体(解锁对原字体的使用) */
+    app_lv_multi_font_config_theme(LV_FONT_DEFAULT);
     for (uint8_t idx = 0; idx < app_lv_multi_font_size_num; idx++)
-        if (app_lv_multi_font_table[idx] != NULL)
-            app_lv_multi_font_obj_free(idx);
+         app_lv_multi_font_obj_free(idx);
+    /*  */
     app_lv_multi_font_type = type;
     /*  */
     switch (app_lv_multi_font_type)
@@ -101,6 +117,13 @@ void app_lv_multi_font_type_config(uint32_t type)
     default:
         break;
     }
+    
+    if (app_lv_multi_font_size < app_lv_multi_font_size_num &&
+        app_lv_multi_font_size > 0)
+    {
+        app_lv_multi_font_obj_load(app_lv_multi_font_size);
+        app_lv_multi_font_config_theme(app_lv_multi_font_table[app_lv_multi_font_size]);
+    }
 }
 
 /*@brief     配置指定类型的多字库表
@@ -110,21 +133,16 @@ void app_lv_multi_font_type_config(uint32_t type)
  */
 void app_lv_multi_font_size_config(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size);
-    if (app_lv_multi_font_cnt == 0)
-        app_lv_multi_font_obj_free(size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
+    
+    if (app_lv_multi_font_size == size)
+        return;
+    
+    app_lv_multi_font_obj_free(app_lv_multi_font_size);
     app_lv_multi_font_obj_load(size);
     app_lv_multi_font_size = size;
     
-    APP_SYS_ASSERT(app_lv_multi_font_table[size] != NULL);
-    /* 获得默认显示器及其默认主题,更新它 */
-    lv_disp_t *disp = lv_disp_get_default();
-    lv_theme_t *theme = lv_disp_get_theme(disp);
-    /* 重置显示器主题(它会自动更新风格) */
-    lv_theme_default_init(disp, lv_palette_main(LV_PALETTE_BLUE),
-                                lv_palette_main(LV_PALETTE_RED),
-                                LV_THEME_DEFAULT_DARK, app_lv_multi_font_table[size]);
-    lv_disp_set_theme(disp, theme);
+    app_lv_multi_font_config_theme(app_lv_multi_font_table[size]);
 }
 
 /*@brief     加载动态多字库表
@@ -132,8 +150,7 @@ void app_lv_multi_font_size_config(uint32_t size)
  */
 lv_font_t * app_lv_multi_font_load(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num >= app_lv_multi_font_type);
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
     
     app_lv_multi_font_obj_load(size);
     if (app_lv_multi_font_size == size)
@@ -147,8 +164,7 @@ lv_font_t * app_lv_multi_font_load(uint32_t size)
  */
 void app_lv_multi_font_free(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num >= app_lv_multi_font_type);
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
     
     if (app_lv_multi_font_size == size)
     if (app_lv_multi_font_cnt  != 0) {

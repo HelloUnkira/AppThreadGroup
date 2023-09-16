@@ -163,7 +163,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
                          app_module_system_dlps_set(true);
                     /* 返回上一层 */
                     if (app_lv_scene_get_nest() != 1) {
-                        app_lv_scene_t scene = {0};
+                        app_lv_scene_t *scene = NULL;
                         app_lv_scene_del(&scene);
                     }
                 }

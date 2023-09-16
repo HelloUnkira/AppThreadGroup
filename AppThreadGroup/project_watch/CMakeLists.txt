@@ -32,17 +32,34 @@ file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/../app_sys/app_sys_idx_str/*.py")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_idx_str)
 # 添加子目录
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_main)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_ext        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_ext)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_ext        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_ext)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_ext     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_ext)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_third   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_third)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_sys)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_third      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_third)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_project_thread)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_sys        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_sys)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_third      ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_third)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_thread     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_thread)
 # 指定exe输出到app_exe
 set(EXECUTABLE_OUTPUT_PATH                   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY           ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
+
+
+
+# 文件迁移到调试
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_main/app_source/*")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_font/*")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_font)
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_pic/*")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_pic)
+# 注意:  
+# 依赖资源文件:  
+# app_main/app_source  
+# 程序打包到依赖资源文件中的文件:  
+# app_thread/app_thread_lvgl/app_lv_res/lvgl_font  
+# app_thread/app_thread_lvgl/app_lv_res/lvgl_pic  
+# 上面的资源文件与可执行文件应该在同一文件夹下面  

@@ -2,19 +2,21 @@
 #define APP_LV_MULTI_FONT_H
 
 typedef enum {
+    app_lv_multi_font_type_none,
     app_lv_multi_font_type_chinese,
     app_lv_multi_font_type_english,
     app_lv_multi_font_type_num,
 } app_lv_multi_font_type_t;
     
 typedef enum {
+    app_lv_multi_font_size_none,
     app_lv_multi_font_size_24,
     app_lv_multi_font_size_36,
     app_lv_multi_font_size_num,
 } app_lv_multi_font_size_t;
 
 /* 默认多字库表标号 */
-#define APP_LV_MULTI_FONT_TYPE_DEFAULT  app_lv_multi_font_type_chinese
+#define APP_LV_MULTI_FONT_TYPE_DEFAULT  app_lv_multi_font_type_english
 #define APP_LV_MULTI_FONT_SIZE_DEFAULT  app_lv_multi_font_size_24
 
 /*@brief     配置指定类型的多字库表

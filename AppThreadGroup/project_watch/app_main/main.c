@@ -37,7 +37,7 @@ int main(int argc, char *argv[])
         
         /* 以下是功能测试 */
         #if 0
-        #elif 1
+        #elif 0
         /* test protocol(1s later) */
         if (count == 1000 * 1) {
             app_module_protocol_t protocol = {
