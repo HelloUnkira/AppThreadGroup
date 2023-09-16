@@ -109,10 +109,10 @@ void app_lv_multi_font_type_config(uint32_t type)
     switch (app_lv_multi_font_type)
     {
     case app_lv_multi_font_type_chinese:
-        app_sys_idx_str_set_type(0);
+        app_lv_lang_set_type(0);
         break;
     case app_lv_multi_font_type_english:
-        app_sys_idx_str_set_type(1);
+        app_lv_lang_set_type(1);
         break;
     default:
         break;

@@ -47,7 +47,7 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_obj_set_style_text_color(label, lv_color_white(), 0);
         lv_obj_set_style_text_font(label, app_lv_multi_font_load(app_lv_multi_font_size_24), 0);
         lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
-        lv_label_set_text(label, app_sys_idx_str_get_str(APP_SYS_IDX_STR_0X0031));
+        lv_label_set_text(label, app_lv_lang_get_str(APP_LV_LANG_0X0031));
         lv_obj_center(label);
         
         /* 初始化显示动画 */

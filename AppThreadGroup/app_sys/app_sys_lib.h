@@ -29,7 +29,6 @@
 #include "app_sys_ext_mem_src.h"
 #include "app_sys_ext_mem_src_table.h"
 /*  */
-#include "app_sys_idx_str.h"
 #include "app_sys_timer.h"
 #include "app_sys_slab.h"
 #include "app_sys_pipe.h"

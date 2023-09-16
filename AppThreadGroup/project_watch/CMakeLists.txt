@@ -29,8 +29,6 @@ target_link_libraries(app_thread PUBLIC lvgl_demos)
 # 文件迁移到目标
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/../app_sys/app_sys_ext_mem/*.py")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ext_mem)
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/../app_sys/app_sys_idx_str/*.py")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_idx_str)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_main       ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/app_ext        ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_ext)

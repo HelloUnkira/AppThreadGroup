@@ -12,6 +12,7 @@
 #include "app_lv_style.h"
 #include "app_lv_check_time.h"
 #include "app_lv_multi_font.h"
+#include "app_lv_lang.h"
 
 #include "app_lv_scene.h"
 #include "app_lv_wheel.h"

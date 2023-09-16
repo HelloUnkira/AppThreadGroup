@@ -1,0 +1,6 @@
+{
+    "type"   : "app_lv_lang",
+    "brief"  : "app_lv_lang: suggest：xlsx workbook and sheet",
+    "xlsx"   : "translate.xlsx",
+    "sheet"  : "translate"
+}
