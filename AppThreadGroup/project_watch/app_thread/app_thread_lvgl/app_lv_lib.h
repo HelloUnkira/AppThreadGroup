@@ -13,6 +13,7 @@
 #include "app_lv_check_time.h"
 #include "app_lv_multi_font.h"
 #include "app_lv_lang.h"
+#include "app_lv_pic.h"
 
 #include "app_lv_scene.h"
 #include "app_lv_wheel.h"
@@ -26,7 +27,6 @@
 
 #include "app_lv_ui_null.h"
 #include "app_lv_ui_dlps.h"
-#include "app_lv_ui_test.h"
 #include "app_lv_ui_start.h"
 #include "app_lv_ui_stop.h"
 #include "app_lv_ui_watch_face.h"

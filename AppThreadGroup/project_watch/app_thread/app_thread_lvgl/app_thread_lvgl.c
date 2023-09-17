@@ -100,7 +100,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
     }
     case app_thread_lvgl_sched_ui: {
         /* 测试模式拦截该模组全部事件 */
-        #if APP_LV_UI_TEST_USE
+        #if 0
         /* 禁用超时回退 */
         app_lv_check_time_reset(0, 0);
         app_lv_check_time_exec(false);
