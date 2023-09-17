@@ -31,6 +31,7 @@ static void app_lv_ui_watch_face_show(void *scene)
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
         
         /* 测试 */
+        app_lv_multi_font_type_config(app_lv_multi_font_type_chinese);
         
         lv_obj_t *text_box = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_style_object(text_box);
@@ -39,7 +40,6 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_obj_refr_size(text_box);
         lv_obj_center(text_box);
         
-        //app_lv_multi_font_type_config(app_lv_multi_font_type_chinese);
         lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_size(label, app_lv_style_hor_pct(90), app_lv_style_ver_pct(80));
         lv_obj_set_style_text_align(label, LV_TEXT_ALIGN_CENTER, 0);
@@ -47,6 +47,10 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_label_set_long_mode(label, LV_LABEL_LONG_WRAP);
         lv_label_set_text(label, app_lv_lang_str_find(APP_LV_LANG_0X0031));
         lv_obj_center(label);
+        
+        lv_obj_t *img = lv_img_create(app_lv_ui_res_local->scene);
+        lv_img_set_src(img, APP_LV_PIC_TEST1_TEST1_LVGL_JPG);
+        lv_obj_center(img);
         
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
@@ -62,7 +66,7 @@ static void app_lv_ui_watch_face_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         
-        //app_lv_multi_font_type_config(app_lv_multi_font_type_english);
+        app_lv_multi_font_type_config(APP_LV_MULTI_FONT_TYPE_DEFAULT);
         /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */

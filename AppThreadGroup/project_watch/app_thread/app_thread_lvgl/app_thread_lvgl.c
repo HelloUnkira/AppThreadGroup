@@ -17,6 +17,8 @@ static void app_thread_lvgl_routine_ready_cb(void)
 {
     /* 初始化文件系统 */
     app_third_fatfs_init();
+    /* 反初始化文件系统 */
+    // app_third_fatfs_deinit();
     /* 框架初始化 */
     lv_init();
     /* 初始化与lvgl绑定的驱动设备 */
@@ -156,8 +158,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             // app_lv_keyboard_dlps_enter();
             app_lv_mousewheel_dlps_enter();
             app_lv_mouse_dlps_enter();
-            /* 反初始化文件系统 */
-            app_third_fatfs_deinit();
         }
         
         /* 集成场景(开始) */
