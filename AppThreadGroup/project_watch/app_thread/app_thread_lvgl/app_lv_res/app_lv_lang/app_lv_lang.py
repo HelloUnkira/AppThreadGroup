@@ -15,9 +15,8 @@ import ctypes
 # 编写集成化源文件
 def encode_app_lv_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     # 写点简要的说明
-    file.write('/*一个代替注册的,脚本自动生成的,本地静态的字符串表\n')
-    file.write(' *通过app_lv_lang.py生成\n')
-    file.write(' *参考app_lv_lang.json中的模式生成源\n */\n\n')
+    file.write('/*本地静态的字符串表\n')
+    file.write(' *通过app_lv_lang.py生成\n */\n\n')
     file.write('#include "app_ext_lib.h"\n')
     file.write('#include "app_lv_lib.h"\n\n')
     # 提取所有外源依赖
@@ -53,9 +52,8 @@ def encode_app_lv_lang_h(file, xlsx_sheet, sheet_row, sheet_col):
     file.write('#ifndef APP_LV_LANG_H\n')
     file.write('#define APP_LV_LANG_H\n\n')
     # 写点简要的说明
-    file.write('/*一个代替注册的,脚本自动生成的,本地静态的字符串表\n')
-    file.write(' *通过app_lv_lang.py生成\n')
-    file.write(' *参考app_lv_lang.json中的模式生成源\n */\n\n')
+    file.write('/*本地静态的字符串表\n')
+    file.write(' *通过app_lv_lang.py生成\n */\n\n')
     # 编写头部索引
     file.write('typedef enum {\n')
     for i, item in enumerate(xlsx_sheet.rows):

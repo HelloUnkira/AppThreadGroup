@@ -1,6 +1,5 @@
-/*一个代替注册的,脚本自动生成的,本地静态的字符串表
+/*本地静态的字符串表
  *通过app_lv_lang.py生成
- *参考app_lv_lang.json中的模式生成源
  */
 
 #include "app_ext_lib.h"
