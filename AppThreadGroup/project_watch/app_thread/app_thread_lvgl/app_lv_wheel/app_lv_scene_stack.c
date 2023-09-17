@@ -12,6 +12,25 @@
 static uint8_t app_lv_scene_num = 0;
 static app_lv_scene_t *app_lv_ui_scene[APP_LV_SCENE_NEST] = {0};
 
+/*@brief     默认轮盘场景
+ *@param[in] current 轮盘场景
+ *@param[in] parent  轮盘场景
+ *@retval    轮盘场景
+ */
+app_lv_wheel_t app_lv_scene_wheel_def(app_lv_scene_t *current, app_lv_scene_t *parent)
+{
+    /* 左右滑动返回上一层 */
+    /* 所以将左右兄弟设置为父亲以回滚 */
+    app_lv_wheel_t wheel = {
+        .self       = current,
+        .sibling[0] = parent,
+        .sibling[1] = parent,
+        .style[0]   = app_lv_wheel_style_rotate,
+        .style[1]   = app_lv_wheel_style_rotate,
+    };
+    return wheel;
+}
+
 /*@brief  当前场景嵌套层级
  *@retval 场景数量
  */
@@ -62,9 +81,7 @@ void app_lv_scene_reset(app_lv_scene_t *scene, bool reserve)
         if (current->wheel != NULL)
             app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
         else {
-            app_lv_wheel_t wheel = {
-                .self = current,
-            };
+            app_lv_wheel_t wheel = app_lv_scene_wheel_def(current, NULL);
             app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
         }
     }
@@ -92,13 +109,7 @@ void app_lv_scene_cover(app_lv_scene_t *scene)
     if (current->wheel != NULL)
         app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
     else {
-        app_lv_wheel_t wheel = {
-            .self       = current,
-            .sibling[0] = parent,
-            .sibling[1] = parent,
-            .style[0]   = app_lv_wheel_style_rotate,
-            .style[1]   = app_lv_wheel_style_rotate,
-        };
+        app_lv_wheel_t wheel = app_lv_scene_wheel_def(current, parent);
         app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
     }
 }
@@ -132,13 +143,7 @@ void app_lv_scene_add(app_lv_scene_t *scene, bool reserve)
         if (current->wheel != NULL)
             app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
         else {
-            app_lv_wheel_t wheel = {
-                .self       = current,
-                .sibling[0] = parent,
-                .sibling[1] = parent,
-                .style[0]   = app_lv_wheel_style_rotate,
-                .style[1]   = app_lv_wheel_style_rotate,
-            };
+            app_lv_wheel_t wheel = app_lv_scene_wheel_def(current, parent);
             app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
         }
     }
@@ -166,13 +171,7 @@ void app_lv_scene_del(app_lv_scene_t **scene)
     if (current->wheel != NULL)
         app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
     else {
-        app_lv_wheel_t wheel = {
-            .self       = current,
-            .sibling[0] = parent,
-            .sibling[1] = parent,
-            .style[0]   = app_lv_wheel_style_rotate,
-            .style[1]   = app_lv_wheel_style_rotate,
-        };
+        app_lv_wheel_t wheel = app_lv_scene_wheel_def(current, parent);
         app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
     }
 }
@@ -214,13 +213,7 @@ void app_lv_scene_wheel_update(app_lv_scene_t **scene, int8_t state)
     if (current->wheel != NULL)
         app_lv_wheel_update(current->wheel, sizeof(app_lv_wheel_t));
     else {
-        app_lv_wheel_t wheel = {
-            .self       = current,
-            .sibling[0] = parent,
-            .sibling[1] = parent,
-            .style[0]   = app_lv_wheel_style_rotate,
-            .style[1]   = app_lv_wheel_style_rotate,
-        };
+        app_lv_wheel_t wheel = app_lv_scene_wheel_def(current, parent);
         app_lv_wheel_update(&wheel, sizeof(app_lv_wheel_t));
     }
 }

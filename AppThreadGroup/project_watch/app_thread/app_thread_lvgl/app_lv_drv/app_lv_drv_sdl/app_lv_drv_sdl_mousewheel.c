@@ -9,6 +9,7 @@
 static bool app_lv_mousewheel_status = false;
 static int16_t app_lv_mousewheel_enc_diff = 0;
 static lv_indev_state_t app_lv_mousewheel_state = LV_INDEV_STATE_RELEASED;
+static lv_key_t app_lv_mousewheel_key = 0;
 
 /*@brief lvgl 鼠标滑轮初始化
  */
@@ -42,6 +43,7 @@ void app_lv_mousewheel_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     /* 传递给lvgl的编码器事件 */
     data->state    = app_lv_mousewheel_state;
     data->enc_diff = app_lv_mousewheel_enc_diff;
+    data->key      = app_lv_mousewheel_key;
     app_lv_mousewheel_enc_diff = 0;
 }
 
@@ -60,6 +62,11 @@ void app_lv_mousewheel_handler(SDL_Event *event)
         if(event->wheel.y > 0) app_lv_mousewheel_enc_diff--;
     #else
         app_lv_mousewheel_enc_diff -= event->wheel.y;
+        app_lv_mousewheel_key = LV_KEY_ENTER;
+        if (app_lv_mousewheel_enc_diff > 0)
+            app_lv_mousewheel_key = LV_KEY_UP;
+        if (app_lv_mousewheel_enc_diff < 0)
+            app_lv_mousewheel_key = LV_KEY_DOWN;
     #endif
         break;
     /* 滚轮按下事件 */

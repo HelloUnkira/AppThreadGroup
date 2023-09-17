@@ -300,43 +300,114 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     }
 }
 
-/*@brief 轮盘跟手特效回滚(如果需要回滚)
+/*@brief     轮盘跟手特效回滚(如果需要回滚)
+ *@param[in] state 0:浮动模式检查;1:滚动模式检查
+ *@param[in] dir   滚动模式方向
+ *@retval    事件响应或忽略
  */
-bool app_lv_wheel_rollback(void)
+bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir)
 {
     app_lv_wheel_src_t *wheel_src = app_lv_wheel_src_inst();
-    
     app_lv_wheel_t *wheel = wheel_src->wheel;
-    /* 非指定类型的回滚不响应 */
-    switch (wheel->style[wheel_src->obj_idx]) {
-    case app_lv_wheel_style_float:
-        /* 存在未回滚的子窗口 */
-        if (wheel_src->cover)
-            break;
-        return false;
-    case app_lv_wheel_style_rotate:
-        return false;
-    default:
-        return false;
+    
+    /* 浮动模式回滚 */
+    if (state == 0) {
+        /* 非指定类型的回滚不响应 */
+        switch (wheel->style[wheel_src->obj_idx]) {
+        case app_lv_wheel_style_float:
+            /* 存在未回滚的子窗口 */
+            if (wheel_src->cover)
+                break;
+            return false;
+        default:
+            return false;
+        }
+        /* 动画将剩下未走完的行程执行完毕 */
+        lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
+        /* 提前解锁以放弃抬起事件 */
+        wheel_src->event_lock = false;
+        wheel_src->touch_over = true;
+        wheel_src->cover      = false;
+        /* 手动添加方向 */
+        if (wheel_src->obj_idx == 0 || wheel_src->obj_idx == 1)
+            wheel_src->scroll_way = LV_DIR_HOR;
+        if (wheel_src->obj_idx == 2 || wheel_src->obj_idx == 3)
+            wheel_src->scroll_way = LV_DIR_VER;
+        /* 这里是回弹回去 */
+        if (wheel_src->scroll_way == LV_DIR_HOR)
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->resume_pos.x);
+        if (wheel_src->scroll_way == LV_DIR_VER)
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->resume_pos.y);
+        lv_anim_start(&wheel_src->anim_follow);
+        return true;
     }
-    /* 动画将剩下未走完的行程执行完毕 */
-    lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
-    /* 提前解锁以放弃抬起事件 */
-    wheel_src->event_lock = false;
-    wheel_src->touch_over = true;
-    wheel_src->cover      = false;
-    /* 手动添加方向 */
-    if (wheel_src->obj_idx == 0 || wheel_src->obj_idx == 1)
-        wheel_src->scroll_way = LV_DIR_HOR;
-    if (wheel_src->obj_idx == 2 || wheel_src->obj_idx == 3)
-        wheel_src->scroll_way = LV_DIR_VER;
-    /* 这里是回弹回去 */
-    if (wheel_src->scroll_way == LV_DIR_HOR)
-        lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->resume_pos.x);
-    if (wheel_src->scroll_way == LV_DIR_VER)
-        lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->resume_pos.y);
-    lv_anim_start(&wheel_src->anim_follow);
-    return true;
+    /* 轮盘自带滚动,不需要额外的回滚 */
+    #if 0
+    /* 滚动模式回滚 */
+    if (state == 1) {
+        lv_coord_t wheel_w = lv_obj_get_width(app_lv_wheel_obj_inst());
+        lv_coord_t wheel_h = lv_obj_get_height(app_lv_wheel_obj_inst());
+        /* 非指定类型的回滚不响应 */
+        uint8_t obj_idx = 4;
+        switch (dir) {
+        case LV_DIR_LEFT:   obj_idx = 0; break;
+        case LV_DIR_RIGHT:  obj_idx = 1; break;
+        case LV_DIR_TOP:    obj_idx = 2; break;
+        case LV_DIR_BOTTOM: obj_idx = 3; break;
+        default: return false;
+        }
+        if (wheel->sibling[obj_idx] == NULL)
+            return false;
+        switch (wheel->style[obj_idx]) {
+        case app_lv_wheel_style_rotate:
+            break;
+        default:
+            return false;
+        }
+        wheel_src->obj_idx = obj_idx;
+        /* 动画将剩下未走完的行程执行完毕 */
+        lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
+        /* 更新回滚与前进方向 */
+        switch (wheel->style[wheel_src->obj_idx]) {
+        case 0: /* Scroll From Left */
+            wheel_src->resume_pos.x = wheel_src->cover ? 0 : -wheel_w;
+            wheel_src->arrive_pos.x = wheel_src->cover ? -wheel_w : 0;
+            break;
+        case 1: /* Scroll From Right */
+            wheel_src->resume_pos.x = wheel_src->cover ? 0 : +wheel_w;
+            wheel_src->arrive_pos.x = wheel_src->cover ? +wheel_w : 0;
+            break;
+        case 2: /* Scroll From Top */
+            wheel_src->resume_pos.y = wheel_src->cover ? 0 : -wheel_h;
+            wheel_src->arrive_pos.y = wheel_src->cover ? -wheel_h : 0;
+            break;
+        case 3: /* Scroll From Bottom */
+            wheel_src->resume_pos.y = wheel_src->cover ? 0 : +wheel_h;
+            wheel_src->arrive_pos.y = wheel_src->cover ? +wheel_h : 0;
+            break;
+        default:
+            return false;
+        }
+        /* 提前解锁以放弃抬起事件 */
+        wheel_src->event_lock = false;
+        wheel_src->touch_over = true;
+        wheel_src->cover      = false;
+        /* 手动添加方向 */
+        if (wheel_src->obj_idx == 0 || wheel_src->obj_idx == 1)
+            wheel_src->scroll_way = LV_DIR_HOR;
+        if (wheel_src->obj_idx == 2 || wheel_src->obj_idx == 3)
+            wheel_src->scroll_way = LV_DIR_VER;
+        /* 这里是前往兄弟 */
+        if (wheel_src->scroll_way == LV_DIR_HOR)
+            lv_anim_set_values(&wheel_src->anim_follow, wheel_src->resume_pos.x, wheel_src->arrive_pos.x);
+        if (wheel_src->scroll_way == LV_DIR_VER)
+            lv_anim_set_values(&wheel_src->anim_follow, wheel_src->resume_pos.y, wheel_src->arrive_pos.y);
+        lv_anim_start(&wheel_src->anim_follow);
+        return true;
+    }
+    #endif
+    /* 未识别模式 */
+    return false;
 }
 
 /*@brief 轮盘跟手特效工作状态

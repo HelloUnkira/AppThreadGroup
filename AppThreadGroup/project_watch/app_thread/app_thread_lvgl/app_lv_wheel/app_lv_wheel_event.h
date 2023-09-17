@@ -5,9 +5,12 @@
  */
 void app_lv_wheel_event_cb(lv_event_t * e);
 
-/*@brief 轮盘跟手特效回滚(如果需要回滚)
+/*@brief     轮盘跟手特效回滚(如果需要回滚)
+ *@param[in] state 0:浮动模式检查;1:滚动模式检查
+ *@param[in] dir   滚动模式方向
+ *@retval    事件响应或忽略
  */
-bool app_lv_wheel_rollback(void);
+bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir);
 
 /*@brief 轮盘跟手特效工作状态
  */

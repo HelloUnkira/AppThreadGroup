@@ -4,6 +4,13 @@
 /* 场景栈最大嵌套数量 */
 #define APP_LV_SCENE_NEST   10
 
+/*@brief     默认轮盘场景
+ *@param[in] current 轮盘场景
+ *@param[in] parent  轮盘场景
+ *@retval    轮盘场景
+ */
+app_lv_wheel_t app_lv_scene_wheel_def(app_lv_scene_t *current, app_lv_scene_t *parent);
+
 /*@brief  当前场景嵌套层级
  *@retval 场景数量
  */

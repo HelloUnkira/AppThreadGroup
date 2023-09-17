@@ -13,8 +13,7 @@
 #if APP_LV_DRV_USE_WIN
 
 static bool app_lv_driver_shutdown = false;
-static lv_group_t *app_lv_driver_kb_group = NULL;
-static lv_group_t *app_lv_driver_mw_group = NULL;
+static lv_group_t * app_lv_driver_group = NULL;
 
 /*@brief lvgl 输入设备回调接口
  *@brief lvgl 屏幕刷新回调接口
@@ -50,17 +49,9 @@ HRESULT CALLBACK app_lv_driver_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARA
 /*@brief lvgl输入设备组
  *retval 输入设备组
  */
-lv_group_t *app_lv_driver_get_kb_group(void)
+lv_group_t * app_lv_driver_get_group(void)
 {
-    return app_lv_driver_kb_group;
-}
-
-/*@brief lvgl输入设备组
- *retval 输入设备组
- */
-lv_group_t *app_lv_driver_get_mw_group(void)
-{
-    return app_lv_driver_mw_group;
+    return app_lv_driver_group;
 }
 
 /*@brief lvgl驱动设备开启
@@ -105,8 +96,7 @@ void app_lv_driver_ready(void)
                                   LV_THEME_DEFAULT_DARK,
                                   LV_FONT_DEFAULT));
     /* 创建输入设备组 */
-    app_lv_driver_kb_group = lv_group_create();
-    app_lv_driver_mw_group = lv_group_create();
+    app_lv_driver_group = lv_group_create();
     /* 注册输入设备:鼠标,键盘,鼠标滑轮 */
     static lv_indev_drv_t mo_dev;
     static lv_indev_drv_t kb_dev;
@@ -123,9 +113,9 @@ void app_lv_driver_ready(void)
     lv_indev_t *mo_indev = lv_indev_drv_register(&mo_dev);
     lv_indev_t *kb_indev = lv_indev_drv_register(&kb_dev);
     lv_indev_t *mw_indev = lv_indev_drv_register(&mw_dev);
-    lv_indev_set_group(kb_indev, app_lv_driver_kb_group);
-    lv_indev_set_group(mw_indev, app_lv_driver_mw_group);
-    lv_group_set_default(app_lv_driver_mw_group);
+    lv_indev_set_group(kb_indev, app_lv_driver_group);
+    lv_indev_set_group(mw_indev, app_lv_driver_group);
+    lv_group_set_default(app_lv_driver_group);
     /* 鼠标贴图:cursor */
     lv_obj_t *mo_cur = lv_img_create(lv_scr_act());
     lv_img_set_src(mo_cur, &app_lv_mouse_icon);

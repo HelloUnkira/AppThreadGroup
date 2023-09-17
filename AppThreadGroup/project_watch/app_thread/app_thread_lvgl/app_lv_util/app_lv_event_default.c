@@ -45,12 +45,12 @@ static void app_lv_event_default_gesture_cb(lv_event_t *e)
             /* 场景栈手势被轮盘锁定 */
             if (app_lv_wheel_status(dir))
                 break;
-            
             /* 忽略掉当次按下,剩下的所有事件 */
             lv_indev_wait_release(lv_event_get_indev(e));
             
             /* 轮盘复位(如果未复位的话) */
-            if (app_lv_wheel_rollback())
+            if (app_lv_wheel_rollback(0, LV_DIR_NONE) ||
+                app_lv_wheel_rollback(1, dir))
                 break;
             
             /* 左右滑动回到上一层 */
@@ -77,28 +77,28 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
     static uint8_t count_key_enter = 0;
     
     switch (lv_event_get_code(e)) {
-        case LV_EVENT_PRESSED:
-            count_key_enter = 0;
-            break;
-        case LV_EVENT_RELEASED:
-            count_key_enter = 0;
-            catch_key_enter = false;
-            break;
-        case LV_EVENT_KEY: {
-            uint32_t key = lv_indev_get_key(lv_indev_get_act());
-            catch_key_enter = (key == LV_KEY_ENTER ? true : false);
-            break;
-        }
-        case LV_EVENT_LONG_PRESSED:
-            count_key_enter += 4;
-            APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
-            break;
-        case LV_EVENT_LONG_PRESSED_REPEAT:
-            count_key_enter++;
-            APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT:%u %u", catch_key_enter, count_key_enter);
-            break;
-        default:
-            break;
+    case LV_EVENT_PRESSED:
+        count_key_enter = 0;
+        break;
+    case LV_EVENT_RELEASED:
+        count_key_enter = 0;
+        catch_key_enter = false;
+        break;
+    case LV_EVENT_KEY: {
+        uint32_t key = lv_indev_get_key(lv_indev_get_act());
+        catch_key_enter = (key == LV_KEY_ENTER ? true : false);
+        break;
+    }
+    case LV_EVENT_LONG_PRESSED:
+        count_key_enter += 4;
+        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
+        break;
+    case LV_EVENT_LONG_PRESSED_REPEAT:
+        count_key_enter++;
+        APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED_REPEAT:%u %u", catch_key_enter, count_key_enter);
+        break;
+    default:
+        break;
     }
     /* 同时抓获目标按键及其按压次数达标 */
     if (catch_key_enter && count_key_enter >= 3 * 10) {
@@ -137,123 +137,149 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
 static void app_lv_event_default_group_cb(lv_event_t *e)
 {
     switch (lv_event_get_code(e)) {
-        case LV_EVENT_KEY: {
-            uint32_t key = lv_indev_get_key(lv_indev_get_act());
-            APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
-            /* DLPS界面退出 */
-            if (app_module_system_dlps_get()) {
-                if (key == LV_KEY_ENTER)
-                    app_module_system_dlps_set(false);
-            } else {
+    case LV_EVENT_KEY: {
+        uint32_t key = lv_indev_get_key(lv_indev_get_act());
+        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
+        /* DLPS界面退出 */
+        if (app_module_system_dlps_get()) {
+            if (key == LV_KEY_ENTER)
+                app_module_system_dlps_set(false);
+        } else {
+            /* 回到主界面 */
+            if (key == LV_KEY_ESC) {
+                /* 主界面休眠 */
+                if (app_lv_scene_get_nest() == 1)
+                if (!app_module_system_dlps_get())
+                     app_module_system_dlps_set(true);
                 /* 回到主界面 */
-                if (key == LV_KEY_ESC) {
-                    /* 主界面休眠 */
-                    if (app_lv_scene_get_nest() == 1)
-                    if (!app_module_system_dlps_get())
-                         app_module_system_dlps_set(true);
-                    /* 回到主界面 */
-                    if (app_lv_scene_get_nest() != 1)
-                        app_lv_scene_reset(&app_lv_ui_watch_face, false);
-                }
+                if (app_lv_scene_get_nest() != 1)
+                    app_lv_scene_reset(&app_lv_ui_watch_face, false);
+            }
+            /* 返回上一层 */
+            if (key == LV_KEY_BACKSPACE) {
+                /* 主界面休眠 */
+                if (app_lv_scene_get_nest() == 1)
+                if (!app_module_system_dlps_get())
+                     app_module_system_dlps_set(true);
                 /* 返回上一层 */
-                if (key == LV_KEY_BACKSPACE) {
-                    /* 主界面休眠 */
-                    if (app_lv_scene_get_nest() == 1)
-                    if (!app_module_system_dlps_get())
-                         app_module_system_dlps_set(true);
-                    /* 返回上一层 */
-                    if (app_lv_scene_get_nest() != 1) {
-                        app_lv_scene_t *scene = NULL;
-                        app_lv_scene_del(&scene);
-                    }
+                if (app_lv_scene_get_nest() != 1) {
+                    app_lv_scene_t *scene = NULL;
+                    app_lv_scene_del(&scene);
                 }
-                /* 主界面进入下一层 */
-                if (key == LV_KEY_ENTER) {
-                    /* 非主界面响应焦点 */
-                    if (app_lv_scene_get_nest() != 1) {
-                        lv_group_t *kb_group = app_lv_driver_get_kb_group();
-                        lv_group_t *mw_group = app_lv_driver_get_mw_group();
-                        lv_obj_t *kb_focus_obj = lv_group_get_focused(kb_group);
-                        lv_obj_t *mw_focus_obj = lv_group_get_focused(mw_group);
-                        if (kb_focus_obj == NULL || mw_focus_obj == NULL)
-                            break;
-                        if (kb_focus_obj != mw_focus_obj) {
-                            /* 指定类型控件才可以进入编辑模式 */
-                            if (lv_obj_get_class(mw_focus_obj) == &lv_roller_class /* || 继续添加指定类型 */) {
-                                if (lv_group_get_editing(mw_group))
-                                    lv_group_set_editing(mw_group, false);
-                                else
-                                    lv_group_set_editing(mw_group, true);
-                            } else {
-                                /* 其他类型控件发送点击事件即可 */
-                                lv_event_send(mw_focus_obj, LV_EVENT_PRESSED,  lv_indev_get_act());
-                                lv_event_send(mw_focus_obj, LV_EVENT_RELEASED, lv_indev_get_act());
-                                lv_event_send(mw_focus_obj, LV_EVENT_CLICKED,  lv_indev_get_act());
-                            }
+            }
+            /* 主界面进入下一层 */
+            if (key == LV_KEY_ENTER) {
+                #if 1
+                /* 非主界面响应焦点 */
+                if (app_lv_scene_get_nest() != 1) {
+                    lv_group_t *group = app_lv_driver_get_group();
+                    lv_obj_t *focus_obj = lv_group_get_focused(group);
+                    if (focus_obj == NULL)
+                        break;
+                    if (focus_obj != NULL) {
+                        /* 指定类型控件才可以进入编辑模式 */
+                        if (lv_obj_get_class(focus_obj) == &lv_roller_class /* || 继续添加指定类型 */) {
+                            if (lv_group_get_editing(focus_obj))
+                                lv_group_set_editing(focus_obj, false);
+                            else
+                                lv_group_set_editing(focus_obj, true);
+                        } else {
+                            /* 其他类型控件发送点击事件即可 */
+                            lv_event_send(focus_obj, LV_EVENT_PRESSED,  lv_indev_get_act());
+                            lv_event_send(focus_obj, LV_EVENT_RELEASED, lv_indev_get_act());
+                            lv_event_send(focus_obj, LV_EVENT_CLICKED,  lv_indev_get_act());
                         }
                     }
-                    /* 主界面进入下一层 */
-                    if (app_lv_scene_get_nest() == 1) {
-                        /* 轮盘复位(如果未复位的话) */
-                        if (app_lv_wheel_rollback())
-                            break;
-                        app_lv_scene_add(&app_lv_ui_list, false);
-                    }
                 }
-                /* 模拟器上鼠标不太好通过滑动触发手势 */
-                /* 这里加四个扩充按键作为手势触发,这里直接发送到顶层即可 */
-                if (key == LV_KEY_UP || key == LV_KEY_DOWN || key == LV_KEY_LEFT || key == LV_KEY_RIGHT) {
-                    lv_dir_t dir = key == LV_KEY_UP    ? LV_DIR_TOP :
-                                   key == LV_KEY_DOWN  ? LV_DIR_BOTTOM :
-                                   key == LV_KEY_LEFT  ? LV_DIR_LEFT :
-                                   key == LV_KEY_RIGHT ? LV_DIR_RIGHT : LV_DIR_NONE;
-                    APP_SYS_ASSERT(dir != LV_DIR_NONE);
-                    app_lv_scene_t *scene = NULL;
-                    app_lv_scene_get_top(&scene);
-                    APP_SYS_ASSERT(scene != NULL);
-                    lv_indev_t *indev = lv_indev_get_act();
-                    /* 这样子并不好,破坏了OOP的语义,属性被暴露出来 */
-                    /* 但是因为源码未提供相关接口,不能擅自添加接口,这里妥协为之 */
-                    if (indev != NULL) {
-                        indev->proc.types.pointer.gesture_dir = dir;
-                        lv_event_send(app_lv_wheel_obj_inst(), LV_EVENT_GESTURE, indev);
-                    }
+                #endif
+                /* 主界面进入下一层 */
+                if (app_lv_scene_get_nest() == 1) {
+                    /* 轮盘复位(如果未复位的话) */
+                    if (app_lv_wheel_rollback(0, LV_DIR_NONE))
+                        break;
+                    app_lv_scene_add(&app_lv_ui_list, false);
                 }
             }
-            /* 添加其他事件 */
-            break;
-        }
-        case LV_EVENT_FOCUSED: {
-            APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
-            break;
-        }
-        case LV_EVENT_DEFOCUSED: {
-            APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
-            /* 更新焦点后及时退出编辑模式 */
-            lv_group_t *mw_group = app_lv_driver_get_mw_group();
-            lv_indev_t *defocus_indev = lv_event_get_param(e);
-            lv_obj_t *mw_focus_obj = lv_group_get_focused(mw_group);
-            if (defocus_indev == NULL)
-                break;
-            /* 编码器焦点切换事件到达 */
-            if (lv_indev_get_type(defocus_indev) == LV_INDEV_TYPE_ENCODER) {
-                /* 非指定类型控件则退出编辑模式 */
-                if (mw_focus_obj != NULL &&
-                    lv_obj_get_class(mw_focus_obj) != &lv_roller_class /* || 继续添加指定类型 */)
-                    /* 只有指定类型控件才可以保持编辑模式 */
-                    if (lv_group_get_editing(mw_group))
-                        lv_group_set_editing(mw_group, false);
+            /* 模拟器上鼠标不太好通过滑动触发手势 */
+            /* 这里加四个扩充按键作为手势触发,这里直接发送到顶层即可 */
+            if (key == LV_KEY_UP || key == LV_KEY_DOWN || key == LV_KEY_LEFT || key == LV_KEY_RIGHT) {
+                lv_dir_t dir = key == LV_KEY_UP    ? LV_DIR_TOP :
+                               key == LV_KEY_DOWN  ? LV_DIR_BOTTOM :
+                               key == LV_KEY_LEFT  ? LV_DIR_LEFT :
+                               key == LV_KEY_RIGHT ? LV_DIR_RIGHT : LV_DIR_NONE;
+                APP_SYS_ASSERT(dir != LV_DIR_NONE);
+                app_lv_scene_t *scene = NULL;
+                app_lv_scene_get_top(&scene);
+                APP_SYS_ASSERT(scene != NULL);
+                lv_indev_t *indev = lv_indev_get_act();
+                /* 这样子并不好,破坏了OOP的语义,属性被暴露出来 */
+                /* 但是因为源码未提供相关接口,不能擅自添加接口,这里妥协为之 */
+                if (indev != NULL) {
+                    indev->proc.types.pointer.gesture_dir = dir;
+                    lv_event_send(app_lv_wheel_obj_inst(), LV_EVENT_GESTURE, indev);
+                }
             }
+        }
+        /* 添加其他事件 */
+        break;
+    }
+    case LV_EVENT_FOCUSED: {
+        APP_SYS_LOG_INFO("LV_EVENT_FOCUSED");
+        break;
+    }
+    case LV_EVENT_DEFOCUSED: {
+        APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
+        /* 更新焦点后及时退出编辑模式 */
+        lv_group_t *group = app_lv_driver_get_group();
+        lv_indev_t *defocus_indev = lv_event_get_param(e);
+        lv_obj_t *focus_obj = lv_group_get_focused(group);
+        if (defocus_indev == NULL)
+            break;
+        /* 编码器焦点切换事件到达 */
+        if (lv_indev_get_type(defocus_indev) == LV_INDEV_TYPE_ENCODER) {
+            /* 非指定类型控件则退出编辑模式 */
+            if (focus_obj != NULL &&
+                lv_obj_get_class(focus_obj) != &lv_roller_class /* || 继续添加指定类型 */)
+                /* 只有指定类型控件才可以保持编辑模式 */
+                if (lv_group_get_editing(group))
+                    lv_group_set_editing(group, false);
+        }
+        break;
+    }
+    case LV_EVENT_CLICKED: {
+        APP_SYS_LOG_INFO("LV_EVENT_CLICKED");
+        /* DLPS界面退出 */
+        if (lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER)
+        if (app_module_system_dlps_get())
+            app_module_system_dlps_set(false);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+/*@brief 界面默认事件编码器转接响应回调
+ */
+static void app_lv_event_default_encode_cb(lv_event_t *e)
+{
+    switch (lv_event_get_code(e)) {
+    case LV_EVENT_KEY: {
+        uint32_t key = lv_indev_get_key(lv_indev_get_act());
+    
+        if (key == LV_KEY_DOWN || key == LV_KEY_LEFT) {
+            // 编码器向左或逆时针旋转
+            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode: down or left");
             break;
         }
-        case LV_EVENT_CLICKED: {
-            APP_SYS_LOG_INFO("LV_EVENT_CLICKED");
-            /* DLPS界面退出 */
-            if (lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER)
-            if (app_module_system_dlps_get())
-                app_module_system_dlps_set(false);
+        if (key == LV_KEY_UP || key == LV_KEY_RIGHT) {
+            // 编码器向右或顺时针旋转
+            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode: right or up");
             break;
         }
+    }
+    default:
+        break;
     }
 }
 
@@ -270,6 +296,23 @@ void app_lv_event_default_cb(lv_event_t *e)
         return;
     /* 界面默认事件组响应回调 */
     app_lv_event_default_group_cb(e);
+    /* 界面默认事件编码器转接响应回调 */
+    app_lv_event_default_encode_cb(e);
+    
+    
+    switch (lv_event_get_code(e)) {
+    case LV_EVENT_SCROLL_BEGIN:
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_BEGIN");
+        break;
+    case LV_EVENT_SCROLL:
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL");
+        break;
+    case LV_EVENT_SCROLL_END:
+        APP_SYS_LOG_INFO("LV_EVENT_SCROLL_END");
+        break;
+    default:
+        break;
+    }
 }
 
 /*@brief    场景默认事件响应回调设置
@@ -288,18 +331,21 @@ void app_lv_event_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t red
         if (event_config)
             return;
         event_config = true;
-        lv_group_t *group = app_lv_driver_get_kb_group();
+        
+        lv_group_t *group = app_lv_driver_get_group();
+        //lv_group_focus_freeze(group, true);
+        
         lv_obj_add_event_cb(scene, redirect, LV_EVENT_ALL, NULL);
         lv_group_add_obj(group, scene);
-        lv_group_focus_freeze(group, true);
     } else {
         if (!event_config)
-            return;
+             return;
         event_config = false;
-        lv_group_t *group = app_lv_driver_get_kb_group();
-        lv_group_focus_freeze(group, false);
+        
+        lv_group_t *group = app_lv_driver_get_group();
+        //lv_group_focus_freeze(group, false);
+        
         lv_group_remove_obj(scene);
         lv_obj_remove_event_cb(scene, redirect);
     }
 }
-
