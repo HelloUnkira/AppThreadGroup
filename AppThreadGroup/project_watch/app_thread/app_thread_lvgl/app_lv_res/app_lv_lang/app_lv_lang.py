@@ -36,11 +36,11 @@ def encode_app_lv_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     # 编写固化访问函数
     file.write('/*@brief设置搜索语言\n')
     file.write(' *@param[in] index语言编号(0~n-1)\n */\n')
-    file.write('void app_lv_lang_set_type(uint32_t type)\n')
+    file.write('void app_lv_lang_type_config(uint32_t type)\n')
     file.write('{\n\tapp_lv_lang_type = type;\n}\n\n')
     file.write('/*@brief获得多国语字符串\n')
     file.write(' *@param[in] index字符串编号(0~n-1)\n */\n')
-    file.write('const char * app_lv_lang_get_str(uint32_t index)\n')
+    file.write('const char * app_lv_lang_str_find(uint32_t index)\n')
     file.write('{\n\treturn app_lv_lang_table[index][app_lv_lang_type];\n}\n')
 
 
@@ -62,10 +62,10 @@ def encode_app_lv_lang_h(file, xlsx_sheet, sheet_row, sheet_col):
     # 编写固化访问函数接口
     file.write('/*@brief设置搜索语言\n')
     file.write(' *@param[in] index语言编号(0~n-1)\n */\n')
-    file.write('void app_lv_lang_set_type(uint32_t type);\n\n')
+    file.write('void app_lv_lang_type_config(uint32_t type);\n\n')
     file.write('/*@brief获得多国语字符串\n')
     file.write(' *@param[in] index字符串编号(0~n-1)\n */\n')
-    file.write('const char * app_lv_lang_get_str(uint32_t index);\n\n')
+    file.write('const char * app_lv_lang_str_find(uint32_t index);\n\n')
     file.write('#endif\n')
 
 

@@ -111,11 +111,11 @@ static uint8_t app_lv_ui_func_local_get_week(void)
 static uint8_t app_lv_ui_func_local_format_clock_1(char str[20])
 {
     sprintf(str, "%.2u:%.2u%s",
-                  app_lv_ui_func_local_get_hour(),
-                  app_lv_ui_func_local_get_minute(),
-                  app_lv_ui_func_local_is_24() ? "" :
-                  app_lv_ui_func_local_is_am() ? " AM" :
-                  app_lv_ui_func_local_is_pm() ? " PM" : "");
+            app_lv_ui_func_local_get_hour(),
+            app_lv_ui_func_local_get_minute(),
+            app_lv_ui_func_local_is_24() ? "" :
+            app_lv_ui_func_local_is_am() ? " AM" :
+            app_lv_ui_func_local_is_pm() ? " PM" : "");
 }
 
 app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {

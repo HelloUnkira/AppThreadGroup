@@ -8,4 +8,18 @@ typedef struct {
     uint16_t msec;       /* 毫秒 */
 } app_lv_ui_stopwatch_t;
 
+typedef struct {
+    void    (*get_tick_main)(app_lv_ui_stopwatch_t *stopwatch);
+    void    (*get_tick_list)(app_lv_ui_stopwatch_t **stopwatch);
+    uint8_t (*get_tick_num)(void);
+    void    (*refr_tick_list)(void);
+    void    (*clean_tick_list)(void);
+    bool    (*get_onoff)(void);
+    void    (*reset)(void);
+    void    (*start)(void);
+    void    (*stop)(void);
+} app_lv_ui_stopwatch_presenter_t;
+
+extern app_lv_ui_stopwatch_presenter_t app_lv_ui_stopwatch_presenter;
+
 #endif

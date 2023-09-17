@@ -33,6 +33,10 @@ void app_lv_multi_font_type_config(uint32_t type);
  */
 void app_lv_multi_font_size_config(uint32_t size);
 
+/*@brief 获得默认尺寸动态多字库表
+ */
+lv_font_t * app_lv_multi_font_def(void);
+
 /*@brief     加载动态多字库表
  *@param[in] type 字库尺寸
  */

@@ -18,10 +18,12 @@
 #include "app_lv_lib.h"
 
 /* 字体类型,所有尺寸,计数器用于检测如果非默认字体尺寸下何时卸载 */
-static uint32_t    app_lv_multi_font_cnt  = 0;
-static uint32_t    app_lv_multi_font_size = 0;
-static uint32_t    app_lv_multi_font_type = 0;
-static lv_font_t * app_lv_multi_font_table[app_lv_multi_font_size_num] = {0};
+static uint32_t   app_lv_multi_font_cnt  = 0;
+static uint32_t   app_lv_multi_font_size = 0;
+static uint32_t   app_lv_multi_font_type = 0;
+/* 地址绑定到inst而不是obj上,以达到动态切换的效果 */
+static lv_font_t *app_lv_multi_font_obj[app_lv_multi_font_size_num] = {0};
+static lv_font_t  app_lv_multi_font_inst[app_lv_multi_font_size_num] = {0};
 
 /*@brief     更新主题多字库
  *@param[in] font 字库对象
@@ -44,22 +46,23 @@ static void app_lv_multi_font_config_theme(lv_font_t *font)
  */
 static void app_lv_multi_font_obj_load(uint32_t size)
 {
-    if (app_lv_multi_font_table[size] != NULL)
+    if (app_lv_multi_font_obj[size] != NULL)
         return;
     /*  */
     if (size == app_lv_multi_font_size_24) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            app_lv_multi_font_table[size] = lv_font_load("S:lvgl_font/font_zh_24.bin");
+            app_lv_multi_font_obj[size] = lv_font_load("S:lvgl_font/font_zh_24.bin");
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            app_lv_multi_font_table[size] = lv_font_load("S:lvgl_font/font_en_24.bin");
+            app_lv_multi_font_obj[size] = lv_font_load("S:lvgl_font/font_en_24.bin");
     }
     /*  */
     if (size == app_lv_multi_font_size_36) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            app_lv_multi_font_table[size] = lv_font_load("S:lvgl_font/font_zh_36.bin");
+            app_lv_multi_font_obj[size] = lv_font_load("S:lvgl_font/font_zh_36.bin");
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            app_lv_multi_font_table[size] = lv_font_load("S:lvgl_font/font_en_36.bin");
+            app_lv_multi_font_obj[size] = lv_font_load("S:lvgl_font/font_en_36.bin");
     }
+    memcpy(&app_lv_multi_font_inst[size], app_lv_multi_font_obj[size], sizeof(lv_font_t));
     /*  */
 }
 
@@ -68,22 +71,24 @@ static void app_lv_multi_font_obj_load(uint32_t size)
  */
 static void app_lv_multi_font_obj_free(uint32_t size)
 {
-    if (app_lv_multi_font_table[size] == NULL)
+    if (app_lv_multi_font_obj[size] == NULL)
         return;
     /*  */
     if (size == app_lv_multi_font_size_24) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_obj[size]);
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_obj[size]);
     }
     /*  */
     if (size == app_lv_multi_font_size_36) {
         if (app_lv_multi_font_type == app_lv_multi_font_type_chinese)
-            lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_obj[size]);
         if (app_lv_multi_font_type == app_lv_multi_font_type_english)
-            lv_font_free(app_lv_multi_font_table[size]);
+            lv_font_free(app_lv_multi_font_obj[size]);
     }
+    memcpy(&app_lv_multi_font_inst[size], LV_FONT_DEFAULT, sizeof(lv_font_t));
+    app_lv_multi_font_obj[size] = NULL;
     /*  */
 }
 
@@ -94,7 +99,7 @@ static void app_lv_multi_font_obj_free(uint32_t size)
  */
 void app_lv_multi_font_type_config(uint32_t type)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_type_num  >= type || 0 == type);
+    APP_SYS_ASSERT(app_lv_multi_font_type_num >= type && 0 != type);
     
     if (app_lv_multi_font_type == type)
         return;
@@ -109,20 +114,19 @@ void app_lv_multi_font_type_config(uint32_t type)
     switch (app_lv_multi_font_type)
     {
     case app_lv_multi_font_type_chinese:
-        app_lv_lang_set_type(0);
+        app_lv_lang_type_config(0);
         break;
     case app_lv_multi_font_type_english:
-        app_lv_lang_set_type(1);
+        app_lv_lang_type_config(1);
         break;
     default:
         break;
     }
     
-    if (app_lv_multi_font_size < app_lv_multi_font_size_num &&
-        app_lv_multi_font_size > 0)
+    if (app_lv_multi_font_size_num >= app_lv_multi_font_size && 0 != app_lv_multi_font_size)
     {
         app_lv_multi_font_obj_load(app_lv_multi_font_size);
-        app_lv_multi_font_config_theme(app_lv_multi_font_table[app_lv_multi_font_size]);
+        app_lv_multi_font_config_theme(&app_lv_multi_font_inst[app_lv_multi_font_size]);
     }
 }
 
@@ -133,7 +137,7 @@ void app_lv_multi_font_type_config(uint32_t type)
  */
 void app_lv_multi_font_size_config(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size && 0 != size);
     
     if (app_lv_multi_font_size == size)
         return;
@@ -142,7 +146,15 @@ void app_lv_multi_font_size_config(uint32_t size)
     app_lv_multi_font_obj_load(size);
     app_lv_multi_font_size = size;
     
-    app_lv_multi_font_config_theme(app_lv_multi_font_table[size]);
+    app_lv_multi_font_config_theme(&app_lv_multi_font_inst[size]);
+}
+
+/*@brief 获得默认尺寸动态多字库表
+ */
+lv_font_t * app_lv_multi_font_def(void)
+{
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= app_lv_multi_font_size && 0 != app_lv_multi_font_size);
+    return &app_lv_multi_font_inst[app_lv_multi_font_size];
 }
 
 /*@brief     加载动态多字库表
@@ -150,13 +162,13 @@ void app_lv_multi_font_size_config(uint32_t size)
  */
 lv_font_t * app_lv_multi_font_load(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size && 0 != size);
     
     app_lv_multi_font_obj_load(size);
     if (app_lv_multi_font_size == size)
         app_lv_multi_font_cnt++;
     
-    return app_lv_multi_font_table[size];
+    return &app_lv_multi_font_inst[size];
 }
 
 /*@brief     卸载动态多字库表
@@ -164,7 +176,7 @@ lv_font_t * app_lv_multi_font_load(uint32_t size)
  */
 void app_lv_multi_font_free(uint32_t size)
 {
-    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size || 0 == size);
+    APP_SYS_ASSERT(app_lv_multi_font_size_num >= size && 0 != size);
     
     if (app_lv_multi_font_size == size)
     if (app_lv_multi_font_cnt  != 0) {

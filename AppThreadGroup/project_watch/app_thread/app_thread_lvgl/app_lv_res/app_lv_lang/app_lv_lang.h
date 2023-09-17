@@ -769,11 +769,11 @@ typedef enum {
 /*@brief设置搜索语言
  *@param[in] index语言编号(0~n-1)
  */
-void app_lv_lang_set_type(uint32_t type);
+void app_lv_lang_type_config(uint32_t type);
 
 /*@brief获得多国语字符串
  *@param[in] index字符串编号(0~n-1)
  */
-const char * app_lv_lang_get_str(uint32_t index);
+const char * app_lv_lang_str_find(uint32_t index);
 
 #endif
