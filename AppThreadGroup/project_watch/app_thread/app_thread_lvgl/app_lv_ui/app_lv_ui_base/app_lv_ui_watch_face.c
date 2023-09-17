@@ -49,7 +49,7 @@ static void app_lv_ui_watch_face_show(void *scene)
         lv_obj_center(label);
         
         lv_obj_t *img = lv_img_create(app_lv_ui_res_local->scene);
-        lv_img_set_src(img, APP_LV_PIC_TEST1_TEST1_LVGL_JPG);
+        lv_img_set_src(img, app_lv_pic_str_find(APP_LV_PIC_TEST1_TEST1_LVGL_JPG));
         lv_obj_center(img);
         
         /* 初始化显示动画 */

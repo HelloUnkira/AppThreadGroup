@@ -4,7 +4,7 @@
  */
 
 #include "app_ext_lib.h"
-#include "app_sys_lib.h"
+#include "app_lv_lib.h"
 
 static const char * app_lv_lang_table[756][2] = {
 	{(char []){230, 137, 171, 231, 160, 129, 228, 184, 139, 232, 189, 189, 65, 80, 80, 230, 136, 150, 230, 137, 171, 231, 160, 129, 233, 133, 141, 229, 175, 185, 0},(char []){83, 99, 97, 110, 32, 116, 111, 32, 100, 111, 119, 110, 108, 111, 97, 100, 32, 97, 112, 112, 32, 111, 114, 32, 112, 97, 105, 114, 32, 100, 101, 118, 105, 99, 101, 0},},
@@ -767,7 +767,7 @@ static const char * app_lv_lang_table[756][2] = {
 
 static uint32_t app_lv_lang_type = 0;
 
-/*@brief设置搜索语言
+/*@brief     设置搜索语言
  *@param[in] index语言编号(0~n-1)
  */
 void app_lv_lang_type_config(uint32_t type)
@@ -775,10 +775,11 @@ void app_lv_lang_type_config(uint32_t type)
 	app_lv_lang_type = type;
 }
 
-/*@brief获得多国语字符串
+/*@brief     获得多国语字符串
  *@param[in] index字符串编号(0~n-1)
  */
 const char * app_lv_lang_str_find(uint32_t index)
 {
-	return app_lv_lang_table[index][app_lv_lang_type];
+	if (index < APP_LV_LANG_NUM)
+		return app_lv_lang_table[index][app_lv_lang_type];	return NULL;
 }

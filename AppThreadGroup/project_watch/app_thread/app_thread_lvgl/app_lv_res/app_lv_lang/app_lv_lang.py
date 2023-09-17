@@ -19,7 +19,7 @@ def encode_app_lv_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     file.write(' *通过app_lv_lang.py生成\n')
     file.write(' *参考app_lv_lang.json中的模式生成源\n */\n\n')
     file.write('#include "app_ext_lib.h"\n')
-    file.write('#include "app_sys_lib.h"\n\n')
+    file.write('#include "app_lv_lib.h"\n\n')
     # 提取所有外源依赖
     file.write('static const char * app_lv_lang_table[%d][%d] = {\n' % (sheet_row, sheet_col))
     for item in xlsx_sheet.rows:
@@ -34,14 +34,18 @@ def encode_app_lv_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     file.write('};\n\n')
     file.write('static uint32_t app_lv_lang_type = 0;\n\n')
     # 编写固化访问函数
-    file.write('/*@brief设置搜索语言\n')
+    file.write('/*@brief     设置搜索语言\n')
     file.write(' *@param[in] index语言编号(0~n-1)\n */\n')
     file.write('void app_lv_lang_type_config(uint32_t type)\n')
     file.write('{\n\tapp_lv_lang_type = type;\n}\n\n')
-    file.write('/*@brief获得多国语字符串\n')
+    file.write('/*@brief     获得多国语字符串\n')
     file.write(' *@param[in] index字符串编号(0~n-1)\n */\n')
     file.write('const char * app_lv_lang_str_find(uint32_t index)\n')
-    file.write('{\n\treturn app_lv_lang_table[index][app_lv_lang_type];\n}\n')
+    file.write('{\n')
+    file.write('\tif (index < APP_LV_LANG_NUM)\n')
+    file.write('\t\treturn app_lv_lang_table[index][app_lv_lang_type];')
+    file.write('\treturn NULL;\n')
+    file.write('}\n')
 
 
 # 编写集成化头文件
@@ -60,10 +64,10 @@ def encode_app_lv_lang_h(file, xlsx_sheet, sheet_row, sheet_col):
     file.write('\tAPP_LV_LANG_NUM,\n')
     file.write('} app_lv_lang_t;\n\n')
     # 编写固化访问函数接口
-    file.write('/*@brief设置搜索语言\n')
+    file.write('/*@brief     设置搜索语言\n')
     file.write(' *@param[in] index语言编号(0~n-1)\n */\n')
     file.write('void app_lv_lang_type_config(uint32_t type);\n\n')
-    file.write('/*@brief获得多国语字符串\n')
+    file.write('/*@brief     获得多国语字符串\n')
     file.write(' *@param[in] index字符串编号(0~n-1)\n */\n')
     file.write('const char * app_lv_lang_str_find(uint32_t index);\n\n')
     file.write('#endif\n')

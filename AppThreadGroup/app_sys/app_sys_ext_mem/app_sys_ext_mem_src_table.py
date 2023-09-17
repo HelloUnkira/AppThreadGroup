@@ -49,7 +49,7 @@ def encode_app_sys_ext_mem_src_table_c(file, file_list, json_list):
     # 编写固化长度标签
     file.write('static const uint32_t app_sys_ext_mem_src_table_size = %s;\n\n' % str(len(json_list)))
     # 编写固化访问函数
-    file.write('/*@通过chunk名字以及data名字索引data静态实例\n')
+    file.write('/*@brief     通过chunk名字以及data名字索引data静态实例\n')
     file.write(' *@param[in] chunk_name 名字\n')
     file.write(' *@param[in] data_name  名字\n')
     file.write(' *@retval    静态实例\n */\n')
@@ -63,7 +63,7 @@ def encode_app_sys_ext_mem_src_table_c(file, file_list, json_list):
     file.write('\t\t\t\t\treturn &app_sys_ext_mem_src_set_table[idx][idx1];\n')
     file.write('\t\treturn NULL;\n')
     file.write('}\n')
-    file.write('/*@通过chunk名字以及索引data静态实例\n')
+    file.write('/*@brief     通过chunk名字以及索引data静态实例\n')
     file.write(' *@param[in] chunk_name 名字\n')
     file.write(' *@param[in] index      索引\n')
     file.write(' *@retval    静态实例\n */\n')
@@ -85,13 +85,13 @@ def encode_app_sys_ext_mem_src_table_h(file):
     file.write('#ifndef APP_SYS_EXT_MEM_SRC_TABLE_H\n')
     file.write('#define APP_SYS_EXT_MEM_SRC_TABLE_H\n\n')
     # 编写固化访问函数
-    file.write('/*@通过chunk名字以及data名字索引data静态实例\n')
+    file.write('/*@brief     通过chunk名字以及data名字索引data静态实例\n通过chunk名字以及data名字索引data静态实例\n')
     file.write(' *@param[in] chunk_name 名字\n')
     file.write(' *@param[in] data_name  名字\n')
     file.write(' *@retval    静态实例\n */\n')
     file.write('const app_sys_ext_mem_src_t * app_sys_ext_mem_src_find_by_name')
     file.write('(const char *chunk_name, const char *data_name);\n\n')
-    file.write('/*@通过chunk名字以及索引data静态实例\n')
+    file.write('/*@brief     通过chunk名字以及索引data静态实例\n')
     file.write(' *@param[in] chunk_name 名字\n')
     file.write(' *@param[in] index      索引\n')
     file.write(' *@retval    静态实例\n */\n')
