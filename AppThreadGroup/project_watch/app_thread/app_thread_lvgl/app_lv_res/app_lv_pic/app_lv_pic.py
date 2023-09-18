@@ -57,6 +57,7 @@ def encode_app_lv_pic_h(file, path):
                 path_file_part1 = 'S:lvgl_pic' + path_file_part1
                 path_file_part2 = path_file_part2.replace(r'/', r'_')
                 path_file_part2 = path_file_part2.replace(r'.', r'_')
+                path_file_part2 = path_file_part2.replace(r' ', r'_')
                 path_file_part2 = '\tAPP_LV_PIC' + path_file_part2.upper() + ','
                 path_file_part2 = '{0:<50}'.format(path_file_part2)
                 file.write(path_file_part2 + '// ' + path_file_part1 + '\n')

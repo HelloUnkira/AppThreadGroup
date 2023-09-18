@@ -148,9 +148,16 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
             /* 回到主界面 */
             if (key == LV_KEY_ESC) {
                 /* 主界面休眠 */
-                if (app_lv_scene_get_nest() == 1)
-                if (!app_module_system_dlps_get())
-                     app_module_system_dlps_set(true);
+                if (app_lv_scene_get_nest() == 1) {
+                    app_lv_scene_t *current = NULL;
+                    app_lv_scene_get_top(&current);
+                    /* 补充:如果调度主界面不是主界面,重定位它 */
+                    if (current != &app_lv_ui_watch_face)
+                        app_lv_scene_cover(&app_lv_ui_watch_face);
+                    else
+                    if (!app_module_system_dlps_get())
+                         app_module_system_dlps_set(true);
+                }
                 /* 回到主界面 */
                 if (app_lv_scene_get_nest() != 1)
                     app_lv_scene_reset(&app_lv_ui_watch_face, false);
@@ -158,13 +165,24 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
             /* 返回上一层 */
             if (key == LV_KEY_BACKSPACE) {
                 /* 主界面休眠 */
-                if (app_lv_scene_get_nest() == 1)
-                if (!app_module_system_dlps_get())
-                     app_module_system_dlps_set(true);
+                if (app_lv_scene_get_nest() == 1) {
+                    app_lv_scene_t *current = NULL;
+                    app_lv_scene_get_top(&current);
+                    if (current == &app_lv_ui_watch_face)
+                    if (!app_module_system_dlps_get())
+                         app_module_system_dlps_set(true);
+                }
                 /* 返回上一层 */
                 if (app_lv_scene_get_nest() != 1) {
                     app_lv_scene_t *scene = NULL;
                     app_lv_scene_del(&scene);
+                }
+                if (app_lv_scene_get_nest() == 1) {
+                    app_lv_scene_t *current = NULL;
+                    app_lv_scene_get_top(&current);
+                    /* 补充:如果调度主界面不是主界面,重定位它 */
+                    if (current != &app_lv_ui_watch_face)
+                        app_lv_scene_cover(&app_lv_ui_watch_face);
                 }
             }
             /* 主界面进入下一层 */

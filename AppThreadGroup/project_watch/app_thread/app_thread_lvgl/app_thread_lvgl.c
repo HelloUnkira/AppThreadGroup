@@ -59,13 +59,16 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         /* lvgl wheel更新事件 */
         if (package->event == app_thread_lvgl_sched_wheel) {
+            app_lv_wheel_update_handle(package->data);
+            #if 0
             /* 补充:如果调度主界面不是主界面,重定位它 */
             if (app_lv_scene_get_nest() == 1) {
-                app_lv_wheel_t *wheel = package->data;
-                if (wheel->self != &app_lv_ui_watch_face)
-                   *wheel = *(app_lv_wheel_t *)app_lv_ui_watch_face.wheel;
+                app_lv_scene_t *current = NULL;
+                app_lv_scene_get_top(&current);
+                if (current != &app_lv_ui_watch_face)
+                    app_lv_scene_cover(&app_lv_ui_watch_face);
             }
-            app_lv_wheel_update_handle(package->data);
+            #endif
             /*  */
             if (package->dynamic)
                 app_mem_free(package->data);
