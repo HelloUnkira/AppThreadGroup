@@ -1,6 +1,6 @@
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -111,7 +111,7 @@ void app_third_fatfs_init(void)
     /* 输出文件系统基本信息 */
     app_third_fatfs_info("");
     /* 递归遍历文件系统的文件列表 */
-    app_third_fatfs_walk("");
+    // app_third_fatfs_walk("");
     
     #if APP_THIRD_FATFS_USE_TEST_MODE
     for (uint32_t idx = 0; idx < 1000; idx++)

@@ -29,7 +29,7 @@ static void app_lv_ui_watch_face_show(void *scene)
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
         
         /* 测试 */
-        app_lv_multi_font_type_config(app_lv_multi_font_type_chinese);
+        //app_lv_multi_font_type_config(app_lv_multi_font_type_chinese);
         
         lv_obj_t *text_box = lv_obj_create(app_lv_ui_res_local->scene);
         app_lv_style_object(text_box);
@@ -64,7 +64,7 @@ static void app_lv_ui_watch_face_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
         
-        app_lv_multi_font_type_config(APP_LV_MULTI_FONT_TYPE_DEFAULT);
+        //app_lv_multi_font_type_config(APP_LV_MULTI_FONT_TYPE_DEFAULT);
         /* 反初始化动画 */
         lv_anim_del(app_lv_ui_res_local->scene, app_lv_ui_local_anim_handler);
         /* 反初始化场景 */

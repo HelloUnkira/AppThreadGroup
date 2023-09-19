@@ -8,8 +8,14 @@
 
 static struct {
     lv_obj_t *scene;
+    struct {
+        uint32_t        idx_str;
+        uint32_t        idx_pic;
+        app_lv_scene_t *scene;
+    } *list;
 } *app_lv_ui_res_local = NULL;
 
+#if 0
 typedef struct {
     const char     *name;
     app_lv_scene_t *scene;
@@ -30,6 +36,7 @@ static const app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_ui_null,},
     {"Internal Test",       &app_lv_ui_test_list,},
 };
+#endif
 
 /*@brief 界面自定义事件回调
  */
@@ -52,11 +59,62 @@ static void app_lv_ui_list_btn_cb(lv_event_t *e)
  */
 static void app_lv_ui_list_show(void *scene)
 {
+    /* 栈空间转移到堆空间,不做静态常驻 */
+    struct {
+        uint32_t        idx_str;
+        uint32_t        idx_pic;
+        app_lv_scene_t *scene;
+    } app_lv_ui_res_local_list[] = {
+        {APP_LV_LANG_0X0019, APP_LV_PIC_00_THEME_00_HEART_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X0040, APP_LV_PIC_00_THEME_01_SPO2_00_PNG,         &app_lv_ui_null,},
+        {APP_LV_LANG_0X00c7, APP_LV_PIC_00_THEME_02_MESSAGE_00_PNG,      &app_lv_ui_null,},
+        {APP_LV_LANG_0X007b, APP_LV_PIC_00_THEME_04_CALL_00_PNG,         &app_lv_ui_null,},
+        {APP_LV_LANG_0X01c5, APP_LV_PIC_00_THEME_05_SPORT_RECORD_00_PNG, &app_lv_ui_null,},
+        {APP_LV_LANG_0X0009, APP_LV_PIC_00_THEME_06_ACTIVITY_00_PNG,     &app_lv_ui_null,},
+        {APP_LV_LANG_0X0080, APP_LV_PIC_00_THEME_07_DIAL_00_PNG,         &app_lv_ui_null,},
+        {APP_LV_LANG_0X0133, APP_LV_PIC_00_THEME_09_FIND_PHONE_00_PNG,   &app_lv_ui_null,},
+        {APP_LV_LANG_0X0140, APP_LV_PIC_00_THEME_10_WORD_COLOCK_00_PNG,  &app_lv_ui_null,},
+        {APP_LV_LANG_0X0092, APP_LV_PIC_00_THEME_11_WEATHER_00_PNG,      &app_lv_ui_null,},
+        {APP_LV_LANG_0X010b, APP_LV_PIC_00_THEME_12_MUSIC_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X012a, APP_LV_PIC_00_THEME_13_ALTITUDE_00_PNG,     &app_lv_ui_null,},
+        {APP_LV_LANG_0X0151, APP_LV_PIC_00_THEME_14_SETTINGS_00_PNG,     &app_lv_ui_null,},
+        {APP_LV_LANG_0X0136, APP_LV_PIC_00_THEME_15_TAKE_PHOTO_00_PNG,   &app_lv_ui_null,},
+        {APP_LV_LANG_0X013f, APP_LV_PIC_00_THEME_16_STOPWATCH_00_PNG,    &app_lv_ui_null,},
+        {APP_LV_LANG_0X00e6, APP_LV_PIC_00_THEME_17_ALARMS_00_PNG,       &app_lv_ui_null,},
+        {APP_LV_LANG_0X0139, APP_LV_PIC_00_THEME_18_TIMER_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X012f, APP_LV_PIC_00_THEME_20_VOICE_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X0134, APP_LV_PIC_00_THEME_21_FLASHLIGHT_00_PNG,   &app_lv_ui_null,},
+        {APP_LV_LANG_0X0138, APP_LV_PIC_00_THEME_22_CALCULATOR_00_PNG,   &app_lv_ui_null,},
+        {APP_LV_LANG_0X011c, APP_LV_PIC_00_THEME_23_COMPASS_00_PNG,      &app_lv_ui_null,},
+        {APP_LV_LANG_0X0049, APP_LV_PIC_00_THEME_24_STRESS_00_PNG,       &app_lv_ui_null,},
+        {APP_LV_LANG_0X00fe, APP_LV_PIC_00_THEME_25_BREATHE_00_PNG,      &app_lv_ui_null,},
+        {APP_LV_LANG_0X01c5, APP_LV_PIC_00_THEME_26_SOPRT_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X004f, APP_LV_PIC_00_THEME_27_SLEEP_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X0110, APP_LV_PIC_00_THEME_28_PERIOD_00_PNG,       &app_lv_ui_null,},
+        {APP_LV_LANG_0X017c, APP_LV_PIC_00_THEME_29_DISCOVER_00_PNG,     &app_lv_ui_null,},
+        {APP_LV_LANG_0X0163, APP_LV_PIC_00_THEME_30_THEME_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X01a2, APP_LV_PIC_00_THEME_31_ABOUT_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X015d, APP_LV_PIC_00_THEME_32_BRIGHTNESS_00_PNG,   &app_lv_ui_null,},
+        {APP_LV_LANG_0X0185, APP_LV_PIC_00_THEME_33_PASSWOED_00_PNG,     &app_lv_ui_null,},
+        {APP_LV_LANG_0X016e, APP_LV_PIC_00_THEME_34_SOUND_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X02f0, APP_LV_PIC_00_THEME_35_TIME_00_PNG,         &app_lv_ui_null,},
+        {APP_LV_LANG_0X0177, APP_LV_PIC_00_THEME_37_DND_00_PNG,          &app_lv_ui_null,},
+        {APP_LV_LANG_0X0154, APP_LV_PIC_00_THEME_38_AOD_00_PNG,          &app_lv_ui_null,},
+        {APP_LV_LANG_0X019b, APP_LV_PIC_00_THEME_39_SYSTEM_00_PNG,       &app_lv_ui_null,},
+        {APP_LV_LANG_0X017a, APP_LV_PIC_00_THEME_40_DOWN_KEY_00_PNG,     &app_lv_ui_null,},
+    };
+    
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
+        app_lv_ui_res_local       = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
+        /* 静态资源构建 */
+        uint32_t size = sizeof(*app_lv_ui_res_local_list) * app_sys_arr_len(app_lv_ui_res_local_list);
+        app_lv_ui_res_local->list = lv_mem_alloc(size);
+        memcpy(app_lv_ui_res_local->list, app_lv_ui_res_local_list, size);
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
+
+
         /* 初始化标签,上中部 */
         lv_obj_t *label = app_lv_style_label_title(app_lv_ui_res_local->scene);
         lv_obj_set_style_text_color(label, lv_palette_main(LV_PALETTE_RED), 0);
@@ -70,14 +128,15 @@ static void app_lv_ui_list_show(void *scene)
         lv_obj_set_style_pad_row(list, 10, 0);
         lv_obj_align_to(list, label, LV_ALIGN_OUT_BOTTOM_MID, 0, 0);
         /* 为列表批量追加按钮 */
-        for (uint32_t idx = 0; idx < app_sys_arr_len(app_lv_ui_res_list); idx++) {
+        for (uint32_t idx = 0; idx < app_sys_arr_len(app_lv_ui_res_local_list); idx++) {
             lv_obj_t *btn = app_lv_style_btn(list);
             lv_obj_set_size(btn, LV_HOR_RES - 40, 30);
-            lv_obj_add_event_cb(btn, app_lv_ui_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_list[idx].scene);
+            lv_obj_add_event_cb(btn, app_lv_ui_list_btn_cb, LV_EVENT_CLICKED, app_lv_ui_res_local->list[idx].scene);
             lv_obj_t *lab = app_lv_style_label(btn);
-            lv_label_set_text(lab, app_lv_ui_res_list[idx].name);
+            lv_label_set_text(lab, app_lv_lang_str_find(app_lv_ui_res_local->list[idx].idx_str));
             lv_obj_align(lab, LV_ALIGN_LEFT_MID, 10, 0);
         }
+
     }
 }
 
@@ -90,6 +149,7 @@ static void app_lv_ui_list_hide(void *scene)
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         ((app_lv_scene_t *)scene)->root = NULL;
+        lv_mem_free(app_lv_ui_res_local->list);
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }
