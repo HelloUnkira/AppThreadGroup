@@ -6,9 +6,9 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-typedef struct {
+static struct {
     lv_obj_t *scene;
-} app_lv_ui_res_local_t;
+} *app_lv_ui_res_local = NULL;
 
 typedef struct {
     const char     *name;
@@ -32,8 +32,6 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_ui_null,},
 };
 
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
-
 /*@brief 界面自定义事件回调
  */
 static void app_lv_ui_test_list_btn_cb(lv_event_t *e)
@@ -56,7 +54,7 @@ static void app_lv_ui_test_list_btn_cb(lv_event_t *e)
 static void app_lv_ui_test_list_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;

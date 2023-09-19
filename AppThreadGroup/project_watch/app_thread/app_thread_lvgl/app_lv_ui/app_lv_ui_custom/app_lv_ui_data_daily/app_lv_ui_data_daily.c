@@ -6,7 +6,7 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-typedef struct {
+static struct {
     lv_anim_t  anim;
     lv_obj_t  *scene;
     lv_font_t *font_24;
@@ -40,9 +40,7 @@ typedef struct {
     lv_chart_series_t *chart_act_ser;
     lv_obj_t *chart_act_lb;
     lv_obj_t *chart_act_rb;
-} app_lv_ui_res_local_t;
-
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
+} *app_lv_ui_res_local = NULL;
 
 static void app_lv_ui_local_style_span_data(lv_obj_t *spans, lv_span_t **cur, lv_span_t **tar, lv_span_t **unit, lv_palette_t palette)
 {
@@ -140,7 +138,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_data_daily_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 加载目标字体 */
         app_lv_ui_res_local->font_24 = app_lv_multi_font_load(app_lv_multi_font_size_24);
         app_lv_ui_res_local->font_36 = app_lv_multi_font_load(app_lv_multi_font_size_36);

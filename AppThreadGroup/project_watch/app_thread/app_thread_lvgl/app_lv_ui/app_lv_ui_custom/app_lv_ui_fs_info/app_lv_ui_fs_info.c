@@ -6,15 +6,13 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-typedef struct {
+static struct {
     lv_anim_t anim;
     lv_obj_t *scene;
     lv_obj_t *text;
     char     *fs_info;
     uint32_t  fs_info_size;
-} app_lv_ui_res_local_t;
-
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
+} *app_lv_ui_res_local = NULL;
 
 /*@brief lvgl ui数据交互回调
  */
@@ -133,7 +131,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_fs_info_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;

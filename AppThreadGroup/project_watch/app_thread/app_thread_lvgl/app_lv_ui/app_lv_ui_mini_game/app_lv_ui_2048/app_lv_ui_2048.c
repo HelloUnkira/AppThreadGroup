@@ -6,7 +6,7 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-typedef struct {
+static struct {
     lv_anim_t  anim;
     lv_obj_t  *scene;
     lv_obj_t  *time;
@@ -15,10 +15,8 @@ typedef struct {
     lv_obj_t  *lbl_matrix[APP_LV_UI_2048_NUM][APP_LV_UI_2048_NUM];
     lv_coord_t btn_matrix_row_dsc[APP_LV_UI_2048_NUM + 1];
     lv_coord_t btn_matrix_col_dsc[APP_LV_UI_2048_NUM + 1];
-    bool      execute;
-} app_lv_ui_res_local_t;
-
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
+    bool       execute;
+} *app_lv_ui_res_local = NULL;
 
 /*@brief 界面默认事件响应回调(本地重定向)
  */
@@ -168,7 +166,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_2048_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;

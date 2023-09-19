@@ -9,7 +9,7 @@
 /* 根据实际情况使用,不一定要按键矩阵 */
 #define APP_LV_RES_USE_BTNMATRIX   0
 
-typedef struct {
+static struct {
     lv_anim_t anim;
     lv_obj_t *scene;
     lv_obj_t *time;
@@ -20,9 +20,7 @@ typedef struct {
 #if APP_LV_RES_USE_BTNMATRIX
     lv_obj_t *btnmatrix;
 #endif
-} app_lv_ui_res_local_t;
-
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
+} *app_lv_ui_res_local = NULL;
 
 #define APP_LV_UI_TEXT_MAX_LEN  127
 
@@ -185,7 +183,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_calculator_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;

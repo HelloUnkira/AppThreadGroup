@@ -6,16 +6,14 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-typedef struct {
+static struct {
     lv_anim_t anim;
     lv_obj_t *scene;
     lv_obj_t *label_dtime;
     lv_obj_t *roller_h;
     lv_obj_t *roller_m;
     lv_obj_t *roller_s;
-} app_lv_ui_res_local_t;
-
-static app_lv_ui_res_local_t *app_lv_ui_res_local = NULL;
+} *app_lv_ui_res_local = NULL;
 
 static const char  app_lv_ui_res_0_23[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23";
 static const char  app_lv_ui_res_0_59[] = "0\n1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12\n13\n14\n15\n16\n17\n18\n19\n20\n21\n22\n23\n24\n25\n26\n27\n28\n29\n30\n31\n32\n33\n34\n35\n36\n37\n38\n39\n40\n41\n42\n43\n44\n45\n46\n47\n48\n49\n50\n51\n52\n53\n54\n55\n56\n57\n58\n59";
@@ -71,7 +69,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 static void app_lv_ui_clock_show(void *scene)
 {
     if (app_lv_ui_res_local == NULL) {
-        app_lv_ui_res_local  = lv_mem_alloc(sizeof(app_lv_ui_res_local_t));
+        app_lv_ui_res_local  = lv_mem_alloc(sizeof(*app_lv_ui_res_local));
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;

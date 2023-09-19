@@ -53,6 +53,14 @@ lv_obj_t * app_lv_wheel_obj_inst(void)
     return app_lv_wheel_obj;
 }
 
+/*@brief  轮盘场景
+ *@retval 轮盘场景
+ */
+app_lv_wheel_t * app_lv_wheel_inst(void)
+{
+    return &app_lv_wheel;
+}
+
 /*@brief  轮盘场景资源
  *@retval 轮盘场景资源
  */
