@@ -8,6 +8,7 @@ typedef struct {
         app_lv_wheel_style_none,
         app_lv_wheel_style_float,       // 浮动交互(淡入淡出)
         app_lv_wheel_style_rotate,      // 滚动交互
+        app_lv_wheel_style_gesture,     // 手势交互(一次式滚动交互)
         app_lv_wheel_style_num,
     } style[4];
 } app_lv_wheel_t;

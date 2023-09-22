@@ -147,6 +147,11 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
         } else {
             /* 回到主界面 */
             if (key == LV_KEY_ESC) {
+                /* 轮盘复位(如果未复位的话) */
+                if (app_lv_wheel_rollback(0, LV_DIR_NONE)  ||
+                    app_lv_wheel_rollback(1, LV_DIR_RIGHT) ||
+                    app_lv_wheel_rollback(1, LV_DIR_LEFT))
+                    break;
                 /* 主界面休眠 */
                 if (app_lv_scene_get_nest() == 1) {
                     app_lv_scene_t *current = NULL;
@@ -164,6 +169,11 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
             }
             /* 返回上一层 */
             if (key == LV_KEY_BACKSPACE) {
+                /* 轮盘复位(如果未复位的话) */
+                if (app_lv_wheel_rollback(0, LV_DIR_NONE)  ||
+                    app_lv_wheel_rollback(1, LV_DIR_RIGHT) ||
+                    app_lv_wheel_rollback(1, LV_DIR_LEFT))
+                    break;
                 /* 主界面休眠 */
                 if (app_lv_scene_get_nest() == 1) {
                     app_lv_scene_t *current = NULL;

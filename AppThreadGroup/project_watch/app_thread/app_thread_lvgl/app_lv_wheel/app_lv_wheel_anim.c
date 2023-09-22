@@ -64,6 +64,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
         }
         break;
     }
+    case app_lv_wheel_style_gesture:
     case app_lv_wheel_style_rotate: {
         if (wheel_src->scroll_way == LV_DIR_HOR) {
             lv_obj_set_x(obj_sib, val);
@@ -132,6 +133,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
         }
         break;
     }
+    case app_lv_wheel_style_gesture:
     case app_lv_wheel_style_rotate: {
         /* 滚动结束后刷新轮盘 */
         app_lv_scene_t *parent  = NULL;

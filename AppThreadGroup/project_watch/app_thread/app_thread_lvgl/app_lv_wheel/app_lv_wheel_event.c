@@ -9,7 +9,7 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-/*@brief 轮盘跟手特效触发门限
+/*@brief 轮盘跟手特效触发门限后不断更新当前位置
  *       确定子窗口并更新它所在位置以及需要到达的位置
  */
 static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t point)
@@ -77,6 +77,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[0] == wheel->self)
                 return 0;
+            if (wheel->style[0] != app_lv_wheel_style_float &&
+                wheel->style[0] != app_lv_wheel_style_rotate)
+                return 0;
             if (wheel_src->cover && wheel_src->obj_idx == 1)
                 return 0;
             wheel_src->obj_idx = 0;
@@ -89,10 +92,13 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
         }
         /* Scroll From Right */
         if ((wheel_src->click_pos.x > point.x && !wheel_src->cover) ||
-            (wheel_src->click_pos.x < point.x &&  wheel_src->cover)){
+            (wheel_src->click_pos.x < point.x &&  wheel_src->cover)) {
             if (wheel->sibling[1] == NULL)
                 return 0;
             if (wheel->sibling[1] == wheel->self)
+                return 0;
+            if (wheel->style[1] != app_lv_wheel_style_float &&
+                wheel->style[1] != app_lv_wheel_style_rotate)
                 return 0;
             if (wheel_src->cover && wheel_src->obj_idx == 0)
                 return 0;
@@ -114,6 +120,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
                 return 0;
             if (wheel->sibling[2] == wheel->self)
                 return 0;
+            if (wheel->style[2] != app_lv_wheel_style_float &&
+                wheel->style[2] != app_lv_wheel_style_rotate)
+                return 0;
             if (wheel_src->cover && wheel_src->obj_idx == 3)
                 return 0;
             wheel_src->obj_idx = 2;
@@ -130,6 +139,9 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
             if (wheel->sibling[3] == NULL)
                 return 0;
             if (wheel->sibling[3] == wheel->self)
+                return 0;
+            if (wheel->style[3] != app_lv_wheel_style_float &&
+                wheel->style[3] != app_lv_wheel_style_rotate)
                 return 0;
             if (wheel_src->cover && wheel_src->obj_idx == 2)
                 return 0;
@@ -149,6 +161,73 @@ static int8_t app_lv_wheel_threshold(app_lv_wheel_src_t *wheel_src, lv_point_t p
     lv_obj_set_y(obj, wheel_src->resume_pos.y);
     /*  */
     return 1;
+}
+
+/*@brief 跟手特效按下事件响应
+ */
+static void app_lv_wheel_event_press(app_lv_wheel_src_t *wheel_src, lv_point_t point)
+{
+    app_lv_wheel_t *wheel = wheel_src->wheel;
+    /* 获得当前点作为滚动点 */
+    wheel_src->scroll_pos = point;
+    /* 捕获到滑动以后,跟手动画以current_pos为起点,不断地向point点靠近 */
+    int8_t state = app_lv_wheel_threshold(wheel_src, point);
+    /* 未抓获滑动 */
+    if (wheel_src->scroll_way == LV_DIR_NONE || state == 0)
+        return;
+    APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
+    lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
+    /* 设置动画迭代参数 */
+    if (wheel_src->scroll_way == LV_DIR_HOR)
+        lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj),
+                            wheel_src->scroll_pos.x);
+    if (wheel_src->scroll_way == LV_DIR_VER)
+        lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj),
+                            wheel_src->scroll_pos.y);
+    /* 跟手动画 */
+    if (state == 1)
+        lv_anim_start(&wheel_src->anim_follow);
+    else
+        /* 只有第一次跟手才需要启动动画播放,后面都使用本事件的定时器更新即可 */
+        /* 动画没跑完,上面已经更新周期,让它继续跑下去即可,动画跑完了,手动更新 */
+        if (lv_anim_get_playtime(&wheel_src->anim_follow) >= wheel_src->anim_period - 1) {
+            if (wheel_src->scroll_way == LV_DIR_HOR)
+                app_lv_wheel_anim_exec_cb(wheel_src, wheel_src->scroll_pos.x);
+            if (wheel_src->scroll_way == LV_DIR_VER)
+                app_lv_wheel_anim_exec_cb(wheel_src, wheel_src->scroll_pos.y);
+        }
+}
+
+/*@brief 跟手特效抬起事件响应
+ */
+static void app_lv_wheel_event_release(app_lv_wheel_src_t *wheel_src, lv_point_t point)
+{
+    app_lv_wheel_t *wheel = wheel_src->wheel;
+    /* 未抓获滚动方向 */
+    if (wheel_src->scroll_way == LV_DIR_NONE)
+        return;
+    lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
+    /* 动画将剩下未走完的行程执行完毕 */
+    if (wheel_src->scroll_way == LV_DIR_HOR) {
+        /*  回弹,前进 */
+        if (LV_ABS(point.x - wheel_src->click_pos.x) < wheel_src->rollback_x)
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->resume_pos.x);
+        else {
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->arrive_pos.x);
+            wheel_src->cover = wheel_src->cover ? false : true;
+        }
+    }
+    if (wheel_src->scroll_way == LV_DIR_VER) {
+        /*  回弹,前进 */
+        if (LV_ABS(point.y - wheel_src->click_pos.y) < wheel_src->rollback_y)
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->resume_pos.y);
+        else {
+            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->arrive_pos.y);
+            wheel_src->cover = wheel_src->cover ? false : true;
+        }
+    }
+    lv_anim_start(&wheel_src->anim_follow);
+    wheel_src->touch_over = true;
 }
 
 /*@brief 轮盘跟手特效回调
@@ -220,36 +299,8 @@ void app_lv_wheel_event_cb(lv_event_t * e)
             wheel_src->click_pos = point;
             break;
         }
-        /* 获得当前点作为滚动点 */
-        wheel_src->scroll_pos = point;
-        /* 捕获到滑动以后,跟手动画以current_pos为起点,不断地向point点靠近 */
-        int8_t state = app_lv_wheel_threshold(wheel_src, point);
-        if (state == 0)
-            break;
-        /* 未抓获滚动方向 */
-        if (wheel_src->scroll_way == LV_DIR_NONE)
-            break;
-        APP_SYS_LOG_INFO("LV_EVENT_PRESSING");
-        lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
-        /* 设置动画迭代参数 */
-        if (wheel_src->scroll_way == LV_DIR_HOR)
-            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj),
-                                wheel_src->scroll_pos.x);
-        if (wheel_src->scroll_way == LV_DIR_VER)
-            lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj),
-                                wheel_src->scroll_pos.y);
-        /* 跟手动画 */
-        if (state == 1)
-            lv_anim_start(&wheel_src->anim_follow);
-        else
-            /* 只有第一次跟手才需要启动动画播放,后面都使用本事件的定时器更新即可 */
-            /* 动画没跑完,上面已经更新周期,让它继续跑下去即可,动画跑完了,手动更新 */
-            if (lv_anim_get_playtime(&wheel_src->anim_follow) >= wheel_src->anim_period - 1) {
-                if (wheel_src->scroll_way == LV_DIR_HOR)
-                    app_lv_wheel_anim_exec_cb(wheel_src, wheel_src->scroll_pos.x);
-                if (wheel_src->scroll_way == LV_DIR_VER)
-                    app_lv_wheel_anim_exec_cb(wheel_src, wheel_src->scroll_pos.y);
-            }
+        /* 按下事件 */
+        app_lv_wheel_event_press(wheel_src, point);
         break;
     }
     /* 抬起时,进行回弹动画 */
@@ -260,38 +311,15 @@ void app_lv_wheel_event_cb(lv_event_t * e)
              break;
         if (wheel_src->touch_over)
             break;
-        APP_SYS_LOG_INFO("LV_EVENT_RELEASED");
         wheel_src->event_lock = false;
+        APP_SYS_LOG_INFO("LV_EVENT_RELEASED");
         /* 子窗口滚动锁定 */
         if (wheel_src->scroll) {
             wheel_src->click_pos = point;
             break;
         }
-        /* 未抓获滚动方向 */
-        if (wheel_src->scroll_way == LV_DIR_NONE)
-            break;
-        lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
-        /* 动画将剩下未走完的行程执行完毕 */
-        if (wheel_src->scroll_way == LV_DIR_HOR) {
-            /*  回弹,前进 */
-            if (LV_ABS(point.x - wheel_src->click_pos.x) < wheel_src->rollback_x)
-                lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->resume_pos.x);
-            else {
-                lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_x(obj), wheel_src->arrive_pos.x);
-                wheel_src->cover = wheel_src->cover ? false : true;
-            }
-        }
-        if (wheel_src->scroll_way == LV_DIR_VER) {
-            /*  回弹,前进 */
-            if (LV_ABS(point.y - wheel_src->click_pos.y) < wheel_src->rollback_y)
-                lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->resume_pos.y);
-            else {
-                lv_anim_set_values(&wheel_src->anim_follow, lv_obj_get_y(obj), wheel_src->arrive_pos.y);
-                wheel_src->cover = wheel_src->cover ? false : true;
-            }
-        }
-        lv_anim_start(&wheel_src->anim_follow);
-        wheel_src->touch_over = true;
+        /* 抬起事件 */
+        app_lv_wheel_event_release(wheel_src, point);
         break;
     }
     /* ... */
@@ -301,7 +329,7 @@ void app_lv_wheel_event_cb(lv_event_t * e)
 }
 
 /*@brief     轮盘跟手特效回滚(如果需要回滚)
- *@param[in] state 0:浮动模式检查;1:滚动模式检查
+ *@param[in] state 0:浮动模式检查;1:手势模式检查
  *@param[in] dir   滚动模式方向
  *@retval    事件响应或忽略
  */
@@ -341,24 +369,23 @@ bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir)
         lv_anim_start(&wheel_src->anim_follow);
         return true;
     }
-    /* 轮盘自带滚动,不需要额外的回滚 */
-    #if 0
-    /* 滚动模式回滚 */
+    /* 手势模式回滚 */
     if (state == 1) {
         lv_coord_t wheel_w = lv_obj_get_width(app_lv_wheel_obj_inst());
         lv_coord_t wheel_h = lv_obj_get_height(app_lv_wheel_obj_inst());
         /* 非指定类型的回滚不响应 */
         uint8_t obj_idx = 4;
         switch (dir) {
-        case LV_DIR_LEFT:   obj_idx = 0; break;
-        case LV_DIR_RIGHT:  obj_idx = 1; break;
-        case LV_DIR_TOP:    obj_idx = 2; break;
-        case LV_DIR_BOTTOM: obj_idx = 3; break;
+        case LV_DIR_LEFT:   obj_idx = 1; break;
+        case LV_DIR_RIGHT:  obj_idx = 0; break;
+        case LV_DIR_TOP:    obj_idx = 3; break;
+        case LV_DIR_BOTTOM: obj_idx = 2; break;
         default: return false;
         }
         if (wheel->sibling[obj_idx] == NULL)
             return false;
         switch (wheel->style[obj_idx]) {
+        case app_lv_wheel_style_gesture:
         case app_lv_wheel_style_rotate:
             break;
         default:
@@ -368,7 +395,7 @@ bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir)
         /* 动画将剩下未走完的行程执行完毕 */
         lv_obj_t *obj = wheel->sibling[wheel_src->obj_idx]->root;
         /* 更新回滚与前进方向 */
-        switch (wheel->style[wheel_src->obj_idx]) {
+        switch (wheel_src->obj_idx) {
         case 0: /* Scroll From Left */
             wheel_src->resume_pos.x = wheel_src->cover ? 0 : -wheel_w;
             wheel_src->arrive_pos.x = wheel_src->cover ? -wheel_w : 0;
@@ -388,10 +415,13 @@ bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir)
         default:
             return false;
         }
+        /* 起始位置在resume处 */
+        lv_obj_set_x(obj, wheel_src->resume_pos.x);
+        lv_obj_set_y(obj, wheel_src->resume_pos.y);
         /* 提前解锁以放弃抬起事件 */
         wheel_src->event_lock = false;
         wheel_src->touch_over = true;
-        wheel_src->cover      = false;
+        wheel_src->cover      = true;
         /* 手动添加方向 */
         if (wheel_src->obj_idx == 0 || wheel_src->obj_idx == 1)
             wheel_src->scroll_way = LV_DIR_HOR;
@@ -405,7 +435,6 @@ bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir)
         lv_anim_start(&wheel_src->anim_follow);
         return true;
     }
-    #endif
     /* 未识别模式 */
     return false;
 }
