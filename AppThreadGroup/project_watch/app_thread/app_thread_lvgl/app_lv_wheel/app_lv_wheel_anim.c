@@ -98,8 +98,8 @@ void app_lv_wheel_anim_start_cb(lv_anim_t *a)
     if (wheel_src->obj_idx >= 4)
         return;
     APP_SYS_ASSERT(wheel_src->obj_idx < 4);
-    
-    
+    /* 动画特效:撞墙动画 */
+    lv_anim_set_path_cb(a, lv_anim_path_bounce);
     APP_SYS_LOG_WARN("wheel prepare:<%u,%u>", wheel_src->obj_idx, wheel_src->scroll_way);
 }
 
