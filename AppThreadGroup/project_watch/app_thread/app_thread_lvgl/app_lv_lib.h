@@ -9,9 +9,9 @@
 #include "app_lv_event.h"
 #include "app_lv_event_ui.h"
 #include "app_lv_event_default.h"
-#include "app_lv_style.h"
 #include "app_lv_check_time.h"
 #include "app_lv_multi_font.h"
+#include "app_lv_style.h"
 #include "app_lv_lang.h"
 #include "app_lv_pic.h"
 
@@ -22,6 +22,7 @@
 #include "app_lv_wheel_scene.h"
 #include "app_lv_scene_stack.h"
 
+#include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 #include "app_lv_ui_scene_remind.h"
 

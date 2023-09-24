@@ -54,7 +54,9 @@ static void app_lv_event_default_gesture_cb(lv_event_t *e)
                 break;
             
             /* 左右滑动回到上一层 */
-            if (app_lv_scene_get_nest() > 1) {
+            if (app_lv_scene_get_nest() == 1)
+                app_lv_scene_cover(&app_lv_ui_watch_face);
+            if (app_lv_scene_get_nest() != 1) {
                 app_lv_scene_t *scene = NULL;
                 app_lv_scene_del(&scene);
             }

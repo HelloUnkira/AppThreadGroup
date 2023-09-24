@@ -36,26 +36,26 @@ void app_third_fatfs_info(char *path)
     APP_SYS_LOG_INFO("Free  space: %lu KB", free_sectors  / 2);
     APP_SYS_LOG_INFO("Total space: %lu KB", total_sectors / 2);
     
-    APP_SYS_LOG_INFO("");
-    APP_SYS_LOG_INFO("fs->fs_type:%s",      fs->fs_type == FS_FAT12 ? "FAT12" :
+    APP_SYS_LOG_DEBUG("");
+    APP_SYS_LOG_DEBUG("fs->fs_type:%s",     fs->fs_type == FS_FAT12 ? "FAT12" :
                                             fs->fs_type == FS_FAT16 ? "FAT16" :
                                             fs->fs_type == FS_FAT32 ? "FAT32" :
                                             fs->fs_type == FS_EXFAT ? "exFAT" : "N/A");
-    APP_SYS_LOG_INFO("fs->id: %x",          fs->id);
-    APP_SYS_LOG_INFO("fs->pdrv: %x",        fs->pdrv);
-    APP_SYS_LOG_INFO("fs->ldrv: %x",        fs->ldrv);
-    APP_SYS_LOG_INFO("fs->csize: %x",       fs->csize);
-    APP_SYS_LOG_INFO("fs->wflag: %x",       fs->wflag);
-    APP_SYS_LOG_INFO("fs->fsi_flag: %x",    fs->fsi_flag);
-    APP_SYS_LOG_INFO("fs->n_fats: %x",      fs->n_fats);
-    APP_SYS_LOG_INFO("fs->n_rootdir: %x",   fs->n_rootdir);
-    APP_SYS_LOG_INFO("fs->n_fatent: %x",    fs->n_fatent);
-    APP_SYS_LOG_INFO("fs->fsize: %x",       fs->fsize);
-    APP_SYS_LOG_INFO("fs->volbase: %x",     fs->volbase);
-    APP_SYS_LOG_INFO("fs->fatbase: %x",     fs->fatbase);
-    APP_SYS_LOG_INFO("fs->dirbase: %x",     fs->dirbase);
-    APP_SYS_LOG_INFO("fs->database: %x",    fs->database);
-    APP_SYS_LOG_INFO("");
+    APP_SYS_LOG_DEBUG("fs->id: %x",         fs->id);
+    APP_SYS_LOG_DEBUG("fs->pdrv: %x",       fs->pdrv);
+    APP_SYS_LOG_DEBUG("fs->ldrv: %x",       fs->ldrv);
+    APP_SYS_LOG_DEBUG("fs->csize: %x",      fs->csize);
+    APP_SYS_LOG_DEBUG("fs->wflag: %x",      fs->wflag);
+    APP_SYS_LOG_DEBUG("fs->fsi_flag: %x",   fs->fsi_flag);
+    APP_SYS_LOG_DEBUG("fs->n_fats: %x",     fs->n_fats);
+    APP_SYS_LOG_DEBUG("fs->n_rootdir: %x",  fs->n_rootdir);
+    APP_SYS_LOG_DEBUG("fs->n_fatent: %x",   fs->n_fatent);
+    APP_SYS_LOG_DEBUG("fs->fsize: %x",      fs->fsize);
+    APP_SYS_LOG_DEBUG("fs->volbase: %x",    fs->volbase);
+    APP_SYS_LOG_DEBUG("fs->fatbase: %x",    fs->fatbase);
+    APP_SYS_LOG_DEBUG("fs->dirbase: %x",    fs->dirbase);
+    APP_SYS_LOG_DEBUG("fs->database: %x",   fs->database);
+    APP_SYS_LOG_DEBUG("");
 }
 
 /*@brief     递归遍历文件系统的文件列表
