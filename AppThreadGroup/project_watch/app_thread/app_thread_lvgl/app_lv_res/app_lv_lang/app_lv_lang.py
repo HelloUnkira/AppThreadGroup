@@ -42,7 +42,7 @@ def encode_app_lv_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     file.write('const char * app_lv_lang_str_find(uint32_t index)\n')
     file.write('{\n')
     file.write('\tif (index < APP_LV_LANG_NUM)\n')
-    file.write('\t\treturn app_lv_lang_table[index][app_lv_lang_type];')
+    file.write('\t\treturn app_lv_lang_table[index][app_lv_lang_type];\n')
     file.write('\treturn NULL;\n')
     file.write('}\n')
 

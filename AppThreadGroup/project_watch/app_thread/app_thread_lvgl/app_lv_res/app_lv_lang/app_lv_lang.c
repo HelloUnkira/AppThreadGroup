@@ -780,5 +780,6 @@ void app_lv_lang_type_config(uint32_t type)
 const char * app_lv_lang_str_find(uint32_t index)
 {
 	if (index < APP_LV_LANG_NUM)
-		return app_lv_lang_table[index][app_lv_lang_type];	return NULL;
+		return app_lv_lang_table[index][app_lv_lang_type];
+	return NULL;
 }

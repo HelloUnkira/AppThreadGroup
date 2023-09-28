@@ -24,35 +24,9 @@
 
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
-#include "app_lv_ui_scene_remind.h"
 
-#include "app_lv_ui_null.h"
-#include "app_lv_ui_dlps.h"
-#include "app_lv_ui_start.h"
-#include "app_lv_ui_stop.h"
-#include "app_lv_ui_watch_face.h"
-
-#include "app_lv_ui_list.h"
-#include "app_lv_ui_test_list.h"
-
-#include "app_lv_ui_2048.h"
-#include "app_lv_ui_maze.h"
-#include "app_lv_ui_snake.h"
-#include "app_lv_ui_tetris.h"
-#include "app_lv_ui_calculator.h"
-
-#include "app_lv_ui_clock.h"
-#include "app_lv_ui_fs_info.h"
-#include "app_lv_ui_log_text.h"
-#include "app_lv_ui_qrcode.h"
-#include "app_lv_ui_countdown.h"
-#include "app_lv_ui_countdown_remind.h"
-#include "app_lv_ui_stopwatch.h"
-#include "app_lv_ui_data_daily.h"
-#include "app_lv_ui_temperature.h"
-
-#include "app_lv_ui_calendar.h"
-#include "app_lv_ui_remind_drink.h"
-#include "app_lv_ui_remind_sedentary.h"
+/* old scene, discard */
+#include "app_lv_ui_style_old.h"
+#include "app_lv_ui_scene_old.h"
 
 #endif

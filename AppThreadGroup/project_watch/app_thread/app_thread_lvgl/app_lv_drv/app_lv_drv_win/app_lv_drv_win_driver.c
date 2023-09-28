@@ -124,7 +124,7 @@ void app_lv_driver_ready(void)
     lv_obj_t *top = lv_layer_top();
     lv_obj_set_style_radius(top, 45, 0);
     lv_obj_set_style_border_width(top, 1, 0);
-    lv_obj_set_style_border_color(top, lv_palette_main(LV_PALETTE_BLUE), 0);
+    lv_obj_set_style_border_color(top, lv_palette_main(LV_PALETTE_GREY), 0);
 }
 
 /*@brief lvgl的驱动设备Win回调接口
