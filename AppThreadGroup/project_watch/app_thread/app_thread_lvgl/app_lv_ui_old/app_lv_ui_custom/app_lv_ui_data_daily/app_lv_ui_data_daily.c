@@ -61,7 +61,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 左上角系统时钟更新 */
     char format_clock_1[20] = {0};
-    app_lv_ui_clock_presenter.format_clock_1(format_clock_1);
+    app_lv_ui_presenter_clock.format_clock_1(format_clock_1);
     lv_label_set_text(app_lv_ui_res_local->time, format_clock_1);
     /* 数据资源刷新 */
     if (value == 0) {
@@ -117,12 +117,12 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         for (uint32_t idx = 0; idx < 24; idx++)
             lv_chart_set_next_value(app_lv_ui_res_local->chart_act, app_lv_ui_res_local->chart_act_ser, table[idx]);
         /* 三图表文本刷新 */
-        lv_label_set_text(app_lv_ui_res_local->chart_step_lb, app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
-        lv_label_set_text(app_lv_ui_res_local->chart_step_rb, app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
-        lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
-        lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
-        lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  app_lv_ui_clock_presenter.is_24() ? "00:00" : "12:00 AM");
-        lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  app_lv_ui_clock_presenter.is_24() ? "23:59" : "11:59 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_step_lb, app_lv_ui_presenter_clock.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_step_rb, app_lv_ui_presenter_clock.is_24() ? "23:59" : "11:59 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_cal_lb,  app_lv_ui_presenter_clock.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_cal_rb,  app_lv_ui_presenter_clock.is_24() ? "23:59" : "11:59 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_act_lb,  app_lv_ui_presenter_clock.is_24() ? "00:00" : "12:00 AM");
+        lv_label_set_text(app_lv_ui_res_local->chart_act_rb,  app_lv_ui_presenter_clock.is_24() ? "23:59" : "11:59 AM");
         lv_obj_align_to(app_lv_ui_res_local->chart_step_lb, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_BOTTOM_LEFT,  0, 5);
         lv_obj_align_to(app_lv_ui_res_local->chart_step_rb, app_lv_ui_res_local->chart_step, LV_ALIGN_OUT_BOTTOM_RIGHT, 0, 5);
         lv_obj_align_to(app_lv_ui_res_local->chart_cal_lb, app_lv_ui_res_local->chart_cal, LV_ALIGN_OUT_BOTTOM_LEFT,    0, 5);

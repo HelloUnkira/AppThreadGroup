@@ -54,18 +54,18 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     
     lv_label_set_text_fmt(app_lv_ui_res_local->label_dtime,
                           "#%s %u#-#%s %u#-#%s %u# #%s %u#:#%s %u#:#%s %u# #%s %s#",
-                          time_color_0x[0], app_lv_ui_clock_presenter.get_year(),
-                          time_color_0x[1], app_lv_ui_clock_presenter.get_month(),
-                          time_color_0x[2], app_lv_ui_clock_presenter.get_day(),
-                          time_color_0x[3], app_lv_ui_clock_presenter.get_hour(),
-                          time_color_0x[4], app_lv_ui_clock_presenter.get_minute(),
-                          time_color_0x[5], app_lv_ui_clock_presenter.get_second(),
-                          time_color_0x[6], app_lv_ui_res_week[app_lv_ui_clock_presenter.get_week()]);
+                          time_color_0x[0], app_lv_ui_presenter_clock.get_year(),
+                          time_color_0x[1], app_lv_ui_presenter_clock.get_month(),
+                          time_color_0x[2], app_lv_ui_presenter_clock.get_day(),
+                          time_color_0x[3], app_lv_ui_presenter_clock.get_hour(),
+                          time_color_0x[4], app_lv_ui_presenter_clock.get_minute(),
+                          time_color_0x[5], app_lv_ui_presenter_clock.get_second(),
+                          time_color_0x[6], app_lv_ui_res_week[app_lv_ui_presenter_clock.get_week()]);
     
 //    lv_calendar_date_t date = {
-//        .year  = app_lv_ui_clock_presenter.get_year(),
-//        .month = app_lv_ui_clock_presenter.get_month(),
-//        .day   = app_lv_ui_clock_presenter.get_day(),
+//        .year  = app_lv_ui_presenter_clock.get_year(),
+//        .month = app_lv_ui_presenter_clock.get_month(),
+//        .day   = app_lv_ui_presenter_clock.get_day(),
 //    };
 //    lv_calendar_set_showed_date(app_lv_ui_res_local->calendar, date.year, date.month);
 //    lv_calendar_set_today_date(app_lv_ui_res_local->calendar, date.year, date.month, date.day);

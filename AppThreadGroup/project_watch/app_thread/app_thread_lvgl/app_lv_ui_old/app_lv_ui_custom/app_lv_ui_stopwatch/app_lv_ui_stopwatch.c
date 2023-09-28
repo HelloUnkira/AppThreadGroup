@@ -134,7 +134,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     /* 左上角系统时钟更新 */
     char format_clock_1[20] = {0};
-    app_lv_ui_clock_presenter.format_clock_1(format_clock_1);
+    app_lv_ui_presenter_clock.format_clock_1(format_clock_1);
     lv_label_set_text(app_lv_ui_res_local->time, format_clock_1);
     /* 主题计数时钟更新 */
     app_lv_ui_stopwatch_t stopwatch = {0};

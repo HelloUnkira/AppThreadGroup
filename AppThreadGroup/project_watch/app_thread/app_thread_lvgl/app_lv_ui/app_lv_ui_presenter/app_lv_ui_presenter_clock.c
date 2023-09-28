@@ -118,7 +118,7 @@ static uint8_t app_lv_ui_func_local_format_clock_1(char str[20])
             app_lv_ui_func_local_is_pm() ? " PM" : "");
 }
 
-app_lv_ui_clock_presenter_t app_lv_ui_clock_presenter = {
+app_lv_ui_presenter_clock_t app_lv_ui_presenter_clock = {
     .is_am          = app_lv_ui_func_local_is_am,
     .is_pm          = app_lv_ui_func_local_is_pm,
     .is_24          = app_lv_ui_func_local_is_24,
