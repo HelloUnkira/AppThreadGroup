@@ -1,4 +1,0 @@
-#ifndef APP_LV_UI_COUNTDOWN_REMIND_H
-#define APP_LV_UI_COUNTDOWN_REMIND_H
-
-#endif

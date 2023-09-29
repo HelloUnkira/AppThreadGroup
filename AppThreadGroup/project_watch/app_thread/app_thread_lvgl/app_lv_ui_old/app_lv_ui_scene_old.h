@@ -13,8 +13,6 @@ extern app_lv_scene_t app_lv_ui_fs_info;
 extern app_lv_scene_t app_lv_ui_qrcode;
 extern app_lv_scene_t app_lv_ui_clock;
 extern app_lv_scene_t app_lv_ui_calendar;
-extern app_lv_scene_t app_lv_ui_countdown;
-extern app_lv_scene_t app_lv_ui_countdown_remind;
 extern app_lv_scene_t app_lv_ui_remind_sedentary;
 extern app_lv_scene_t app_lv_ui_remind_drink;
 extern app_lv_scene_t app_lv_ui_data_daily;
@@ -43,8 +41,6 @@ extern app_lv_scene_t app_lv_ui_snake;
 #include "app_lv_ui_fs_info.h"
 #include "app_lv_ui_log_text.h"
 #include "app_lv_ui_qrcode.h"
-#include "app_lv_ui_countdown.h"
-#include "app_lv_ui_countdown_remind.h"
 #include "app_lv_ui_data_daily.h"
 #include "app_lv_ui_temperature.h"
 

@@ -22,6 +22,9 @@
 #include "app_lv_wheel_scene.h"
 #include "app_lv_scene_stack.h"
 
+/* lvgl:developer model */
+#define APP_LV_DEVELOPER_MODEL  1
+
 #include "app_lv_ui_style.h"
 #include "app_lv_ui_scene.h"
 

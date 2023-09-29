@@ -63,7 +63,7 @@ static void app_lv_ui_list_show(void *scene)
         {APP_LV_LANG_0X0136, APP_LV_PIC_00_THEME_15_TAKE_PHOTO_00_PNG,   &app_lv_ui_null,},
         {APP_LV_LANG_0X013f, APP_LV_PIC_00_THEME_16_STOPWATCH_00_PNG,    &app_lv_ui_stopwatch,},
         {APP_LV_LANG_0X00e6, APP_LV_PIC_00_THEME_17_ALARMS_00_PNG,       &app_lv_ui_null,},
-        {APP_LV_LANG_0X0139, APP_LV_PIC_00_THEME_18_TIMER_00_PNG,        &app_lv_ui_null,},
+        {APP_LV_LANG_0X0139, APP_LV_PIC_00_THEME_18_TIMER_00_PNG,        &app_lv_ui_countdown,},
         {APP_LV_LANG_0X012f, APP_LV_PIC_00_THEME_20_VOICE_00_PNG,        &app_lv_ui_null,},
         {APP_LV_LANG_0X0134, APP_LV_PIC_00_THEME_21_FLASHLIGHT_00_PNG,   &app_lv_ui_null,},
         {APP_LV_LANG_0X0138, APP_LV_PIC_00_THEME_22_CALCULATOR_00_PNG,   &app_lv_ui_calculator,},

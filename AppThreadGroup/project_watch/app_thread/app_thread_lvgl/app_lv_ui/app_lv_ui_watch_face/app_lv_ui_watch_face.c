@@ -26,9 +26,15 @@ static struct {
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     #if APP_LV_UI_RES_USE_BASE
-    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_h, app_lv_ui_presenter_clock.get_hour());
-    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_m, app_lv_ui_presenter_clock.get_minute());
-    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_s, app_lv_ui_presenter_clock.get_second());
+    uint8_t hour = app_lv_ui_presenter_clock.get_hour();
+    uint8_t minute = app_lv_ui_presenter_clock.get_minute();
+    uint8_t second = app_lv_ui_presenter_clock.get_second();
+    if (app_lv_ui_presenter_clock.is_24())
+        hour = hour > 12 ? hour - 12 : hour == 0 ? 12 : hour;
+    
+    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_h, hour);
+    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_m, minute);
+    lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_s, second);
     #else
     #endif
 }

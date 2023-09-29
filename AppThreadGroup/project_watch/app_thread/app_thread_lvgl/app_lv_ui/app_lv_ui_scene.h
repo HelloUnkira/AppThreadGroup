@@ -11,6 +11,8 @@ extern app_lv_scene_t app_lv_ui_list;
 /* function */
 extern app_lv_scene_t app_lv_ui_calculator;
 extern app_lv_scene_t app_lv_ui_stopwatch;
+extern app_lv_scene_t app_lv_ui_countdown;
+extern app_lv_scene_t app_lv_ui_countdown_remind;
 
 /* base */
 #include "app_lv_ui_null.h"
@@ -22,10 +24,13 @@ extern app_lv_scene_t app_lv_ui_stopwatch;
 /* function */
 #include "app_lv_ui_calculator.h"
 #include "app_lv_ui_stopwatch.h"
+#include "app_lv_ui_countdown.h"
+#include "app_lv_ui_countdown_remind.h"
 
 /* presenter */
 #include "app_lv_ui_presenter_clock.h"
 #include "app_lv_ui_presenter_calculator.h"
 #include "app_lv_ui_presenter_stopwatch.h"
+#include "app_lv_ui_presenter_countdown.h"
 
 #endif

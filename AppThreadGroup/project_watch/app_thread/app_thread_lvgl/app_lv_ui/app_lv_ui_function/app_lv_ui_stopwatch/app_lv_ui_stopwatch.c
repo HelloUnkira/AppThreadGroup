@@ -146,7 +146,6 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         lv_obj_set_style_bg_color(app_lv_ui_res_local->btn_r, lv_palette_main(LV_PALETTE_GREY), 0);
         lv_img_set_src(app_lv_ui_res_local->img_l, app_lv_pic_str_find(APP_LV_PIC_01_STOPWATCH_CONTINUE_PNG));
         lv_img_set_src(app_lv_ui_res_local->img_r, app_lv_pic_str_find(APP_LV_PIC_01_STOPWATCH_RESET_PNG));
-        
     }
 }
 

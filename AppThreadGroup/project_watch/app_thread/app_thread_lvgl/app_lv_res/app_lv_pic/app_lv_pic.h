@@ -386,6 +386,11 @@ typedef enum {
 	APP_LV_PIC_01_STOPWATCH_RESET_PNG,               // S:lvgl_pic/01_stopwatch/reset.png
 	APP_LV_PIC_01_STOPWATCH_TICK_0_PNG,              // S:lvgl_pic/01_stopwatch/tick_0.png
 	APP_LV_PIC_01_STOPWATCH_TICK_1_PNG,              // S:lvgl_pic/01_stopwatch/tick_1.png
+	APP_LV_PIC_02_COUNTDOWN_CONTINUE_PNG,            // S:lvgl_pic/02_countdown/continue.png
+	APP_LV_PIC_02_COUNTDOWN_PAUSE_PNG,               // S:lvgl_pic/02_countdown/pause.png
+	APP_LV_PIC_02_COUNTDOWN_RESET_PNG,               // S:lvgl_pic/02_countdown/reset.png
+	APP_LV_PIC_02_COUNTDOWN_TICK_0_PNG,              // S:lvgl_pic/02_countdown/tick_0.png
+	APP_LV_PIC_02_COUNTDOWN_TICK_1_PNG,              // S:lvgl_pic/02_countdown/tick_1.png
 	APP_LV_PIC_LVGL_JPG,                             // S:lvgl_pic/LVGL.jpg
 	APP_LV_PIC_LVGL_PNG,                             // S:lvgl_pic/LVGL.png
 	APP_LV_PIC_NUM,

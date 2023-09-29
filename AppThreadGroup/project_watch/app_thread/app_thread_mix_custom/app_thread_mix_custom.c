@@ -36,7 +36,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         if (package->event == app_thread_mix_custom_stopwatch_msec_update)
             app_module_countdown_xmsec_update();
         /* 倒计时模组到期事件 */
-        #if 0
         if (package->event == app_thread_mix_custom_countdown_expired) {
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
@@ -45,7 +44,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             };
             app_thread_package_notify(&package);
         }
-        #endif
         return true;
     }
     case app_thread_mix_custom_remind_group: {
@@ -54,7 +52,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         }
         if (package->event == app_thread_mix_custom_remind_group_package) { 
             /* 提醒组事件分拣 */
-            #if 0
             app_module_remind_package_t *remind = package->data;
             /* 该提醒组事件来自提醒闹钟组: */
             if (app_module_remind_alarm_group_check(remind->remind_group)) {
@@ -64,7 +61,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
                 package->event  = app_thread_lvgl_ui_remind_alarm;
                 app_thread_package_notify(package);
             }
-            #endif
         }
         return true;
     }
@@ -74,7 +70,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         if (package->event == app_thread_mix_custom_remind_drink_update)
             app_module_remind_drink_xmin_update();
         /* 走动提醒模组到期事件 */
-        #if 0
         if (package->event == app_thread_mix_custom_remind_sedentary_interval) {
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
@@ -92,7 +87,6 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             };
             app_thread_package_notify(&package);
         }
-        #endif
         return true;
     }
     default:

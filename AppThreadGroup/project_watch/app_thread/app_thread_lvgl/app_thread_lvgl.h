@@ -36,7 +36,4 @@ typedef enum {  /* GUI场景事件 */
 /* lvgl:drv check */
 #define LV_SCHED_DRV_EVENT      5
 
-/* lvgl:developer model */
-#define APP_LV_DEVELOPER_MODEL  1
-
 #endif
