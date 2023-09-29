@@ -218,7 +218,7 @@ lv_obj_t * app_lv_style_roller(lv_obj_t *parent, lv_coord_t width, const char *o
     lv_obj_set_style_text_font(roller, app_lv_ui_font(32), 0);
     lv_obj_set_style_text_font(roller, app_lv_ui_font(48), LV_PART_SELECTED);
     lv_obj_set_style_text_align(roller, LV_TEXT_ALIGN_CENTER, 0);
-    lv_roller_set_options(roller, options, LV_ROLLER_MODE_NORMAL);//LV_ROLLER_MODE_INFINITE);///* 滚动模式显示异常 */
+    lv_roller_set_options(roller, options, LV_ROLLER_MODE_INFINITE);
     lv_roller_set_visible_row_count(roller, vis_row);
     lv_obj_align(roller, LV_ALIGN_CENTER, 0, 0);
     return roller;

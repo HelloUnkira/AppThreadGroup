@@ -184,6 +184,15 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_roller_set_options(app_lv_ui_res_local->rol_s, app_lv_ui_res_0_59, LV_ROLLER_MODE_INFINITE);
         lv_roller_set_visible_row_count(app_lv_ui_res_local->rol_s, 3);
         lv_obj_align_to(app_lv_ui_res_local->rol_s, app_lv_ui_res_local->rol_m, LV_ALIGN_OUT_RIGHT_MID, app_lv_style_hor_pct(5), 0);
+        /* 上个色 */
+        #if 0
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_h, lv_palette_main(LV_PALETTE_RED), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_h, lv_palette_main(LV_PALETTE_RED), LV_PART_SELECTED);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_m, lv_palette_main(LV_PALETTE_BLUE), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_m, lv_palette_main(LV_PALETTE_BLUE), LV_PART_SELECTED);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_s, lv_palette_main(LV_PALETTE_GREEN), 0);
+        lv_obj_set_style_text_color(app_lv_ui_res_local->rol_s, lv_palette_main(LV_PALETTE_GREEN), LV_PART_SELECTED);
+        #endif
         /* 底部双按钮组 */
         app_lv_ui_res_local->btn_l = lv_btn_create(app_lv_ui_res_local->scene);
         app_lv_style_object(app_lv_ui_res_local->btn_l);

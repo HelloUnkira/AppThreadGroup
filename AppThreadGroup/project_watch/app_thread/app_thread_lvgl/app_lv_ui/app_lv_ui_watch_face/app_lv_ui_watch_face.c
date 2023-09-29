@@ -13,6 +13,7 @@ static struct {
     lv_anim_t anim;
     lv_obj_t *scene;
     #if APP_LV_UI_RES_USE_BASE
+    lv_obj_t *dtime;
     lv_obj_t *meter;
     lv_meter_indicator_t *meter_indec_h;
     lv_meter_indicator_t *meter_indec_m;
@@ -21,16 +22,42 @@ static struct {
     #endif
 } *app_lv_ui_res_local = NULL;
 
+static const char *app_lv_ui_res_week[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
+
 /*@brief 界面动画定时器回调
  */
 static void app_lv_ui_local_anim_handler(void *para, int32_t value)
 {
     #if APP_LV_UI_RES_USE_BASE
+    lv_color_t time_color[7] = {
+        lv_palette_main(LV_PALETTE_RED),
+        lv_palette_main(LV_PALETTE_BLUE),
+        lv_palette_main(LV_PALETTE_GREEN),
+        lv_palette_main(LV_PALETTE_YELLOW),
+        lv_palette_main(LV_PALETTE_PINK),
+        lv_palette_main(LV_PALETTE_BROWN),
+        lv_palette_main(LV_PALETTE_ORANGE),
+    };
+    
+    char time_color_0x[7][20] = {0};
+    
+    for (uint8_t idx = 0; idx < 7; idx++)
+        sprintf(time_color_0x[idx], "%06x", (*(uint32_t *)(lv_color_t *)&time_color[idx]) % 0xFF000000);
+    
+    lv_label_set_text_fmt(app_lv_ui_res_local->dtime,
+                          "#%s %u#-#%s %u#-#%s %u# #%s %u#:#%s %u#:#%s %u# #%s %s#",
+                          time_color_0x[0], app_lv_ui_presenter_clock.get_year(),
+                          time_color_0x[1], app_lv_ui_presenter_clock.get_month(),
+                          time_color_0x[2], app_lv_ui_presenter_clock.get_day(),
+                          time_color_0x[3], app_lv_ui_presenter_clock.get_hour(),
+                          time_color_0x[4], app_lv_ui_presenter_clock.get_minute(),
+                          time_color_0x[5], app_lv_ui_presenter_clock.get_second(),
+                          time_color_0x[6], app_lv_ui_res_week[app_lv_ui_presenter_clock.get_week()]);
+    
     uint8_t hour = app_lv_ui_presenter_clock.get_hour();
     uint8_t minute = app_lv_ui_presenter_clock.get_minute();
     uint8_t second = app_lv_ui_presenter_clock.get_second();
-    if (app_lv_ui_presenter_clock.is_24())
-        hour = hour > 12 ? hour - 12 : hour == 0 ? 12 : hour;
+    hour = hour > 12 ? hour - 12 : hour == 0 ? 12 : hour;
     
     lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_h, hour);
     lv_meter_set_indicator_value(app_lv_ui_res_local->meter, app_lv_ui_res_local->meter_indec_m, minute);
@@ -51,11 +78,16 @@ static void app_lv_ui_watch_face_show(void *scene)
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
         /* 绘制时钟 */
         #if APP_LV_UI_RES_USE_BASE
+        app_lv_ui_res_local->dtime = lv_label_create(app_lv_ui_res_local->scene);
+        app_lv_style_object(app_lv_ui_res_local->dtime);
+        lv_obj_set_width(app_lv_ui_res_local->dtime, LV_HOR_RES);
+        lv_obj_align(app_lv_ui_res_local->dtime, LV_ALIGN_TOP_MID, 0, app_lv_style_ver_pct(5));
+        lv_label_set_recolor(app_lv_ui_res_local->dtime, true);
         /*  */
         app_lv_ui_res_local->meter = lv_meter_create(app_lv_ui_res_local->scene);
         app_lv_style_object(app_lv_ui_res_local->meter);
-        lv_obj_set_size(app_lv_ui_res_local->meter, 300, 300);
-        lv_obj_center(app_lv_ui_res_local->meter);
+        lv_obj_set_size(app_lv_ui_res_local->meter, 270, 270);
+        lv_obj_align_to(app_lv_ui_res_local->meter, app_lv_ui_res_local->dtime, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_style_ver_pct(5));
         /*  */
         lv_meter_scale_t *meter_scale_s = lv_meter_add_scale(app_lv_ui_res_local->meter);
         lv_meter_scale_t *meter_scale_m = lv_meter_add_scale(app_lv_ui_res_local->meter);
@@ -103,7 +135,7 @@ app_lv_wheel_t app_lv_ui_watch_face_wheel = {
     .style[0]   = app_lv_wheel_style_rotate,
     .style[1]   = app_lv_wheel_style_rotate,
     .sibling[2] = &app_lv_ui_qrcode,
-    .sibling[3] = &app_lv_ui_clock,
+    .sibling[3] = &app_lv_ui_calendar,
     .style[2]   = app_lv_wheel_style_float,
     .style[3]   = app_lv_wheel_style_float,
 };

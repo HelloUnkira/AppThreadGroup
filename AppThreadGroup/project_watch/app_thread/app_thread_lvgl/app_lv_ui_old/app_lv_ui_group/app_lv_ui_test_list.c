@@ -36,7 +36,6 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_ui_null,},
     {"Log Text",            &app_lv_ui_log_text,},
     {"FS Info",             &app_lv_ui_fs_info,},
-    {"System Clock",        &app_lv_ui_clock,},
     {"Calendar",            &app_lv_ui_calendar,},
     {"Remind Drink",        &app_lv_ui_remind_drink,},
     {"Countdown Remind",    &app_lv_ui_countdown_remind,},
