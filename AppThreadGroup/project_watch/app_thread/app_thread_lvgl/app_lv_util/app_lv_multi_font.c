@@ -154,6 +154,7 @@ void app_lv_multi_font_size_config(uint32_t size)
 lv_font_t * app_lv_multi_font_def(void)
 {
     APP_SYS_ASSERT(app_lv_multi_font_size_num >= app_lv_multi_font_size && 0 != app_lv_multi_font_size);
+    app_lv_multi_font_load(app_lv_multi_font_size);
     return &app_lv_multi_font_inst[app_lv_multi_font_size];
 }
 

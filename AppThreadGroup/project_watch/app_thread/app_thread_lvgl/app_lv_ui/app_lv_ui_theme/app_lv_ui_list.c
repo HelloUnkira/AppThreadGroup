@@ -4,6 +4,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_thread_group.h"
 #include "app_lv_lib.h"
 
 static struct {
@@ -43,6 +44,9 @@ static void app_lv_ui_list_show(void *scene)
         uint32_t        idx_pic;
         app_lv_scene_t *scene;
     } app_lv_ui_res_local_list[] = {
+        #if APP_LV_DEVELOPER_MODEL
+        {APP_LV_LANG_NUM, APP_LV_PIC_LVGL_PNG, &app_lv_ui_test_list,},
+        #endif
         {APP_LV_LANG_0X0019, APP_LV_PIC_00_THEME_00_HEART_00_PNG,        &app_lv_ui_null,},
         {APP_LV_LANG_0X0040, APP_LV_PIC_00_THEME_01_SPO2_00_PNG,         &app_lv_ui_null,},
         {APP_LV_LANG_0X00c7, APP_LV_PIC_00_THEME_02_MESSAGE_00_PNG,      &app_lv_ui_null,},
@@ -57,7 +61,7 @@ static void app_lv_ui_list_show(void *scene)
         {APP_LV_LANG_0X012a, APP_LV_PIC_00_THEME_13_ALTITUDE_00_PNG,     &app_lv_ui_null,},
         {APP_LV_LANG_0X0151, APP_LV_PIC_00_THEME_14_SETTINGS_00_PNG,     &app_lv_ui_null,},
         {APP_LV_LANG_0X0136, APP_LV_PIC_00_THEME_15_TAKE_PHOTO_00_PNG,   &app_lv_ui_null,},
-        {APP_LV_LANG_0X013f, APP_LV_PIC_00_THEME_16_STOPWATCH_00_PNG,    &app_lv_ui_null,},
+        {APP_LV_LANG_0X013f, APP_LV_PIC_00_THEME_16_STOPWATCH_00_PNG,    &app_lv_ui_stopwatch,},
         {APP_LV_LANG_0X00e6, APP_LV_PIC_00_THEME_17_ALARMS_00_PNG,       &app_lv_ui_null,},
         {APP_LV_LANG_0X0139, APP_LV_PIC_00_THEME_18_TIMER_00_PNG,        &app_lv_ui_null,},
         {APP_LV_LANG_0X012f, APP_LV_PIC_00_THEME_20_VOICE_00_PNG,        &app_lv_ui_null,},
@@ -125,7 +129,8 @@ static void app_lv_ui_list_show(void *scene)
                 /* 条目按钮添加图片 */
                 lv_obj_t *img = lv_img_create(btn);
                 app_lv_style_object(img);
-                lv_img_set_src(img, app_lv_pic_str_find(app_lv_ui_res_local->list[idx - 1].idx_pic + 5));
+                const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[idx - 1].idx_pic + 5);
+                lv_img_set_src(img, img_str != NULL ? img_str : app_lv_pic_str_find(app_lv_ui_res_local->list[idx - 1].idx_pic));
                 lv_obj_align(img, LV_ALIGN_LEFT_MID, 0, 0);
                 /* 条目按钮添加文本 */
                 lv_obj_t *lab = lv_label_create(btn);
@@ -134,7 +139,8 @@ static void app_lv_ui_list_show(void *scene)
                 lv_obj_set_style_text_align(lab, LV_TEXT_ALIGN_LEFT, 0);
                 lv_obj_set_width(lab, app_lv_style_hor_pct(65));
                 lv_label_set_long_mode(lab, LV_LABEL_LONG_SCROLL_CIRCULAR);
-                lv_label_set_text(lab, app_lv_lang_str_find(app_lv_ui_res_local->list[idx - 1].idx_str));
+                const char *lab_str = app_lv_lang_str_find(app_lv_ui_res_local->list[idx - 1].idx_str);
+                lv_label_set_text(lab, lab_str != NULL ? lab_str : "Internal Test");
                 lv_obj_align_to(lab, img, LV_ALIGN_OUT_RIGHT_MID, app_lv_style_hor_pct(1), 0);
             }
         }

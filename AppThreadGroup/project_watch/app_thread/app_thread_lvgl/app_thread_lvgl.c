@@ -51,7 +51,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
             /* 此处适应性降帧 */
             if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS)
-                *discard_count = ms / LV_SCHED_TICK_EXEC + 1;
+               *discard_count = ms / LV_SCHED_TICK_EXEC + 1;
         }
         /* lvgl驱动检查事件 */
         if (package->event == app_thread_lvgl_sched_drv) {
@@ -110,7 +110,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         app_lv_check_time_reset(0, 0);
         app_lv_check_time_exec(false);
         app_lv_scene_reset(&app_lv_ui_watch_face, false);
-        app_lv_scene_add(&app_lv_ui_test, false);
         return true;
         #endif
         

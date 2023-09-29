@@ -381,6 +381,11 @@ static const char * app_lv_pic_table[] = {
 	"S:lvgl_pic/00_theme/on.png",
 	"S:lvgl_pic/00_theme/ring.bmp",
 	"S:lvgl_pic/00_theme/under.png",
+	"S:lvgl_pic/01_stopwatch/continue.png",
+	"S:lvgl_pic/01_stopwatch/pause.png",
+	"S:lvgl_pic/01_stopwatch/reset.png",
+	"S:lvgl_pic/01_stopwatch/tick_0.png",
+	"S:lvgl_pic/01_stopwatch/tick_1.png",
 	"S:lvgl_pic/LVGL.jpg",
 	"S:lvgl_pic/LVGL.png",
 };

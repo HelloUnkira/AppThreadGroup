@@ -16,6 +16,10 @@ void app_lv_event_ui_backtrack_cb(lv_event_t *e)
 {
     switch (lv_event_get_code(e)) {
     case LV_EVENT_CLICKED: {
+        /* 轮盘复位 */
+        if (app_lv_wheel_rollback(1, LV_DIR_RIGHT) ||
+            app_lv_wheel_rollback(1, LV_DIR_LEFT))
+            break;
         app_lv_scene_t *scene = NULL;
         app_lv_scene_del(&scene);
         break;

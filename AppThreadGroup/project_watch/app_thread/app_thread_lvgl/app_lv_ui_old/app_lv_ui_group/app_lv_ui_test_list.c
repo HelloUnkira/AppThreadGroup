@@ -18,11 +18,11 @@ typedef struct {
 /* 不能直接通过跳转逻辑进入的界面加入到测试列表中 */
 static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     /*  */
-    {"Qrcode",              &app_lv_ui_qrcode,},
+    {"Dlps",                &app_lv_ui_dlps,},
     {"Null",                &app_lv_ui_null,},
+    /*  */
+    {"Qrcode",              &app_lv_ui_qrcode,},
     {"Data Daily",          &app_lv_ui_data_daily,},
-    {"Calculator",          &app_lv_ui_calculator,},
-    {"Stopwatch",           &app_lv_ui_stopwatch,},
     {"Countdown",           &app_lv_ui_countdown,},
     {"Null",                &app_lv_ui_null,},
     {"2048",                &app_lv_ui_2048,},
@@ -34,7 +34,6 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     /*  */
     {"Start",               &app_lv_ui_start,},
     {"Stop",                &app_lv_ui_stop,},
-    {"Dlps",                &app_lv_ui_dlps,},
     {"Null",                &app_lv_ui_null,},
     {"Log Text",            &app_lv_ui_log_text,},
     {"FS Info",             &app_lv_ui_fs_info,},

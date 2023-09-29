@@ -1,16 +1,31 @@
 #ifndef APP_LV_UI_SCENE_H
 #define APP_LV_UI_SCENE_H
 
+/* base */
+extern app_lv_scene_t app_lv_ui_null;
+extern app_lv_scene_t app_lv_ui_dlps;
 /* watch face */
 extern app_lv_scene_t app_lv_ui_watch_face;
 /* theme */
 extern app_lv_scene_t app_lv_ui_list;
+/* function */
+extern app_lv_scene_t app_lv_ui_calculator;
+extern app_lv_scene_t app_lv_ui_stopwatch;
 
-/*  */
+/* base */
+#include "app_lv_ui_null.h"
+#include "app_lv_ui_dlps.h"
+/* watch face */
 #include "app_lv_ui_watch_face.h"
-/*  */
+/* theme */
 #include "app_lv_ui_list.h"
+/* function */
+#include "app_lv_ui_calculator.h"
+#include "app_lv_ui_stopwatch.h"
+
 /* presenter */
 #include "app_lv_ui_presenter_clock.h"
+#include "app_lv_ui_presenter_calculator.h"
+#include "app_lv_ui_presenter_stopwatch.h"
 
 #endif

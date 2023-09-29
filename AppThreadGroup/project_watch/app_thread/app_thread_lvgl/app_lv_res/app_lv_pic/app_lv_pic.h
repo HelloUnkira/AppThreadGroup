@@ -381,6 +381,11 @@ typedef enum {
 	APP_LV_PIC_00_THEME_ON_PNG,                      // S:lvgl_pic/00_theme/on.png
 	APP_LV_PIC_00_THEME_RING_BMP,                    // S:lvgl_pic/00_theme/ring.bmp
 	APP_LV_PIC_00_THEME_UNDER_PNG,                   // S:lvgl_pic/00_theme/under.png
+	APP_LV_PIC_01_STOPWATCH_CONTINUE_PNG,            // S:lvgl_pic/01_stopwatch/continue.png
+	APP_LV_PIC_01_STOPWATCH_PAUSE_PNG,               // S:lvgl_pic/01_stopwatch/pause.png
+	APP_LV_PIC_01_STOPWATCH_RESET_PNG,               // S:lvgl_pic/01_stopwatch/reset.png
+	APP_LV_PIC_01_STOPWATCH_TICK_0_PNG,              // S:lvgl_pic/01_stopwatch/tick_0.png
+	APP_LV_PIC_01_STOPWATCH_TICK_1_PNG,              // S:lvgl_pic/01_stopwatch/tick_1.png
 	APP_LV_PIC_LVGL_JPG,                             // S:lvgl_pic/LVGL.jpg
 	APP_LV_PIC_LVGL_PNG,                             // S:lvgl_pic/LVGL.png
 	APP_LV_PIC_NUM,
