@@ -61,6 +61,7 @@ static void app_lv_ui_countdown_remind_show(void *scene)
         /* 下部按键 */
         lv_obj_t *btn_c = lv_btn_create(app_lv_ui_res_local->scene);
         app_lv_style_object(btn_c);
+        lv_obj_set_style_radius(btn_c, 45, 0);
         lv_obj_set_style_bg_color(btn_c, lv_palette_main(LV_PALETTE_YELLOW), 0);
         lv_obj_set_size(btn_c, app_lv_style_hor_pct(70), app_lv_style_ver_pct(20));
         lv_obj_add_event_cb(btn_c, app_lv_event_ui_backtrack_cb, LV_EVENT_CLICKED, NULL);

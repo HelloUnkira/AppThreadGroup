@@ -291,6 +291,7 @@ static void app_lv_ui_calculator_show(void *scene)
             lv_obj_t *btn = lv_btn_create(app_lv_ui_res_local->list_btn);
             app_lv_style_object(btn);
             lv_obj_add_event_cb(btn, app_lv_ui_res_btnlist_str_cb, LV_EVENT_CLICKED, (void *)app_lv_ui_res_btnlist_str[idx]);
+            lv_obj_set_style_radius(btn, 45, 0);
             lv_obj_set_style_bg_color(btn, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_bg_grad_color(btn, lv_palette_main(LV_PALETTE_GREEN), 0);
             lv_obj_set_style_bg_grad_dir(btn, LV_GRAD_DIR_VER, 0);

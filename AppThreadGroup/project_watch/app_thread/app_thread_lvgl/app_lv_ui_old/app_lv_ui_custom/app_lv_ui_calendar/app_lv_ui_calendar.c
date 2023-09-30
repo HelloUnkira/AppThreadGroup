@@ -12,6 +12,9 @@ static struct {
     lv_obj_t *label_dtime;
     lv_obj_t *calendar;
     lv_obj_t *btnmatrix;
+    uint16_t  btn_cnt;
+    uint16_t  btn_id_s;
+    uint16_t  btn_id_e;
 } *app_lv_ui_res_local = NULL;
 
 static const char *app_lv_ui_res_week[] = {"Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"};
@@ -29,7 +32,81 @@ static void app_lv_ui_calendar_cb(lv_event_t *e)
     }
     default:
         break;
-    break;
+    }
+}
+
+/*@brief 界面自定义事件回调
+ */
+static void app_lv_ui_btnmatrix_cb(lv_event_t *e)
+{
+    lv_obj_t *obj = lv_event_get_target(e);
+    lv_obj_draw_part_dsc_t *dsc = lv_event_get_param(e);
+    switch (lv_event_get_code(e)) {
+    case LV_EVENT_DRAW_PART_BEGIN: {
+        /* 目标绘制部 */
+        if (dsc->part != LV_PART_ITEMS) {
+            break;
+        }
+        #if 0
+        /* 标题显示灰色 */
+        if (dsc->id < 7)
+            dsc->label_dsc->color = lv_palette_main(LV_PALETTE_GREY);
+        /* 非本月的日期不显示内容和背景 */
+        if (dsc->id >= 7)
+        if (dsc->id <  app_lv_ui_res_local->btn_id_s ||
+            dsc->id >  app_lv_ui_res_local->btn_id_e)
+            dsc->label_dsc->color = lv_color_black();
+        #endif
+        /* 本月默认背景和颜色 */
+        if (dsc->id >= app_lv_ui_res_local->btn_id_s &&
+            dsc->id <= app_lv_ui_res_local->btn_id_e) {
+            /* 默认不显示边界 */
+            dsc->rect_dsc->border_opa = LV_OPA_TRANSP;
+            dsc->rect_dsc->border_width = 0;
+            /* 默认渐变底色 */
+            dsc->rect_dsc->bg_opa = LV_OPA_COVER;
+            dsc->rect_dsc->bg_color = lv_color_black();
+            dsc->rect_dsc->bg_grad.dir = LV_GRAD_DIR_VER;
+            dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_BLUE);
+            dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_GREEN);
+            dsc->rect_dsc->bg_grad.stops_count = 2;
+            /* 这里对每一个按钮做染色 */
+            uint16_t btn_ofs = app_lv_ui_res_local->btn_id_s;
+            /* 染色 */
+            if (dsc->id >= btn_ofs + 0 &&
+                dsc->id <= btn_ofs + 4) {
+                dsc->rect_dsc->bg_color = lv_palette_main(LV_PALETTE_RED);
+                dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_RED);
+                dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_RED);
+            }
+            /* 染色 */
+            if (dsc->id >= btn_ofs + 5 &&
+                dsc->id <= btn_ofs + 9) {
+                dsc->rect_dsc->bg_color = lv_palette_main(LV_PALETTE_BLUE);
+                dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_BLUE);
+                dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_BLUE);
+            }
+            /* 染色 */
+            if (dsc->id >= btn_ofs + 10 &&
+                dsc->id <= btn_ofs + 14) {
+                dsc->rect_dsc->bg_color = lv_palette_main(LV_PALETTE_GREEN);
+                dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_GREEN);
+                dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_GREEN);
+            }
+            /* 今天边框标记 */
+            if(lv_btnmatrix_has_btn_ctrl(obj, dsc->id, LV_BTNMATRIX_CTRL_CUSTOM_1)) {
+                dsc->rect_dsc->border_opa = LV_OPA_COVER;
+                dsc->rect_dsc->border_color = lv_palette_main(LV_PALETTE_YELLOW);
+                dsc->rect_dsc->border_width += 1;
+            }
+        }
+        break;
+    }
+    case LV_EVENT_DRAW_PART_END: {
+        break;
+    }
+    default:
+        break;
     }
 }
 
@@ -96,6 +173,40 @@ static void app_lv_ui_calendar_show(void *scene)
         lv_obj_add_event_cb(app_lv_ui_res_local->calendar, app_lv_ui_calendar_cb, LV_EVENT_ALL, NULL);
         lv_obj_align_to(app_lv_ui_res_local->calendar, app_lv_ui_res_local->label_dtime, LV_ALIGN_OUT_BOTTOM_MID, 0, app_lv_style_ver_pct(10));
         lv_obj_set_style_border_width(app_lv_ui_res_local->calendar, 0, 0);
+        /* 日历表是矩阵,为之自定义风格 */
+        app_lv_ui_res_local->btn_cnt   = 0;
+        app_lv_ui_res_local->btn_id_s  = 0;
+        app_lv_ui_res_local->btn_id_e  = 0;
+        app_lv_ui_res_local->btnmatrix = lv_calendar_get_btnmatrix(app_lv_ui_res_local->calendar);
+        lv_obj_set_style_radius(app_lv_ui_res_local->btnmatrix, 45, LV_PART_ITEMS);
+        lv_obj_set_style_text_font(app_lv_ui_res_local->btnmatrix, app_lv_ui_font(16), LV_PART_ITEMS);
+        lv_obj_add_event_cb(app_lv_ui_res_local->btnmatrix, app_lv_ui_btnmatrix_cb, LV_EVENT_ALL, NULL);
+        /* 日历的当月起始和结束 */
+        for (uint16_t btn_id = 0; true; btn_id++) {
+            const char *txt = lv_btnmatrix_get_btn_text(app_lv_ui_res_local->btnmatrix, btn_id);
+            if (txt == NULL)
+                break;
+            app_lv_ui_res_local->btn_cnt++;
+            if (strcmp(txt, "1") == 0) {
+                /* 第一个1是当月起始 */
+                if (app_lv_ui_res_local->btn_id_s == 0)
+                    app_lv_ui_res_local->btn_id_s  = btn_id;
+                else
+                /* 第二个1是下月起始 */
+                if (app_lv_ui_res_local->btn_id_e == 0)
+                    app_lv_ui_res_local->btn_id_e  = btn_id - 1;
+            }
+        }
+        app_lv_ui_res_local->btn_cnt -= 7;
+        
+        
+        
+        APP_SYS_LOG_INFO("btn_cnt  %d", app_lv_ui_res_local->btn_cnt);
+        APP_SYS_LOG_INFO("btn_id_s %d", app_lv_ui_res_local->btn_id_s);
+        APP_SYS_LOG_INFO("btn_id_e %d", app_lv_ui_res_local->btn_id_e);
+        
+        
+        
         /* 初始化显示动画 */
         app_lv_style_object_anim(app_lv_ui_res_local->scene,
                                 &app_lv_ui_res_local->anim, app_lv_ui_local_anim_handler,

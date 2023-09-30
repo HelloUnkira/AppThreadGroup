@@ -196,6 +196,7 @@ static void app_lv_ui_countdown_show(void *scene)
         /* 底部双按钮组 */
         app_lv_ui_res_local->btn_l = lv_btn_create(app_lv_ui_res_local->scene);
         app_lv_style_object(app_lv_ui_res_local->btn_l);
+        lv_obj_set_style_radius(app_lv_ui_res_local->btn_l, 45, 0);
         lv_obj_set_size(app_lv_ui_res_local->btn_l, app_lv_style_hor_pct(35), app_lv_style_ver_pct(20));
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_l, app_lv_ui_btn_l_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_align(app_lv_ui_res_local->btn_l, LV_ALIGN_BOTTOM_LEFT, app_lv_style_hor_pct(10), -app_lv_style_ver_pct(5));
@@ -205,6 +206,7 @@ static void app_lv_ui_countdown_show(void *scene)
         lv_obj_center(app_lv_ui_res_local->img_l);
         app_lv_ui_res_local->btn_r = lv_btn_create(app_lv_ui_res_local->scene);
         app_lv_style_object(app_lv_ui_res_local->btn_r);
+        lv_obj_set_style_radius(app_lv_ui_res_local->btn_r, 45, 0);
         lv_obj_set_size(app_lv_ui_res_local->btn_r, app_lv_style_hor_pct(35), app_lv_style_ver_pct(20));
         lv_obj_add_event_cb(app_lv_ui_res_local->btn_r, app_lv_ui_btn_r_cb, LV_EVENT_CLICKED, NULL);
         lv_obj_align(app_lv_ui_res_local->btn_r, LV_ALIGN_BOTTOM_RIGHT, -app_lv_style_hor_pct(10), -app_lv_style_ver_pct(5));

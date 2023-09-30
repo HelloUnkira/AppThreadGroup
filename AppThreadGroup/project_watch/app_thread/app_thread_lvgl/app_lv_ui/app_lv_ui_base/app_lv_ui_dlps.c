@@ -43,8 +43,13 @@ static void app_lv_ui_dlps_hide(void *scene)
     }
 }
 
+app_lv_wheel_t app_lv_ui_dlps_wheel = {
+    .self = &app_lv_ui_dlps,
+};
+
 app_lv_scene_t app_lv_ui_dlps = {
     /* 场景资源节点 */
-    .show = app_lv_ui_dlps_show,
-    .hide = app_lv_ui_dlps_hide,
+    .show  =  app_lv_ui_dlps_show,
+    .hide  =  app_lv_ui_dlps_hide,
+    .wheel = &app_lv_ui_dlps_wheel,
 };

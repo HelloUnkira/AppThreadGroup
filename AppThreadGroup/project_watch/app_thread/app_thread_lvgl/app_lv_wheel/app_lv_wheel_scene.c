@@ -102,6 +102,7 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
         lv_obj_set_y(obj, -lv_obj_get_height(obj));
         lv_obj_refr_pos(obj);
     }
+    APP_SYS_ASSERT(wheel->self != NULL);
     {
         lv_obj_t *obj = wheel->self->root;
         lv_obj_set_x(obj, 0);
@@ -119,6 +120,7 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
     wheel_src->event_lock = false;
     wheel_src->touch_over = true;
     wheel_src->scroll     = false;
+    wheel_src->cover      = false;
     /* 资源绑定 */
     wheel_src->wheel = wheel;
     /* 初始化并配置跟手特效动画 */

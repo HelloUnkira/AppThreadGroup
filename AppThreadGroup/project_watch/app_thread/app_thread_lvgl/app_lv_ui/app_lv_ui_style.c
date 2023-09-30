@@ -25,7 +25,7 @@ void app_lv_style_object(lv_obj_t *obj)
     lv_obj_set_style_bg_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_bg_color(obj, lv_color_black(), 0);
     /*  */
-    lv_obj_set_style_radius(obj, 45, 0);
+    lv_obj_set_style_radius(obj, 0, 0);
     /*  */
     lv_obj_set_style_border_opa(obj, LV_OPA_COVER, 0);
     lv_obj_set_style_border_side(obj, LV_BORDER_SIDE_FULL, 0);
