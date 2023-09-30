@@ -14,8 +14,10 @@
 # AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
 #
 # LVGL库:
+# release/v8.3 https://github.com/lvgl/lvgl.git
+# AppThreadGroup/app_third/lib_lvgl/lib_lvgl_8_3
 # release/v8.2 https://github.com/lvgl/lvgl.git
-# AppThreadGroup/app_third/lib_lvgl/lib_lvgl
+# AppThreadGroup/app_third/lib_lvgl/lib_lvgl_8_2
 # LVGL库(字库制作工具):
 # master https://github.com/lvgl/lv_font_conv.git
 # AppThreadGroup/app_third/lib_lvgl/lib_lvgl_font_conv

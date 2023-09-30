@@ -1,7 +1,8 @@
 lib_self/StudyRecord
 lib_fatfs/lib_fatfs
 lib_jerryscript/lib_jerryscript
-lib_lvgl/lib_lvgl
+lib_lvgl/lib_lvgl_8_2
+lib_lvgl/lib_lvgl_8_3
 lib_lvgl/lib_lvgl_font_conv
 lib_json/lib_json
 lib_nanopb/lib_nanopb
