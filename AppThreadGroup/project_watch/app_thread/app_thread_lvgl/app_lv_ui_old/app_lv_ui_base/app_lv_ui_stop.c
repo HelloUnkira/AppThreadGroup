@@ -83,8 +83,13 @@ static void app_lv_ui_stop_hide(void *scene)
     }
 }
 
+app_lv_wheel_t app_lv_ui_stop_wheel = {
+    .self = &app_lv_ui_stop,
+};
+
 app_lv_scene_t app_lv_ui_stop = {
     /* 场景资源节点 */
-    .show = app_lv_ui_stop_show,
-    .hide = app_lv_ui_stop_hide,
+    .show  =  app_lv_ui_stop_show,
+    .hide  =  app_lv_ui_stop_hide,
+    .wheel = &app_lv_ui_stop_wheel,
 };

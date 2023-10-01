@@ -102,12 +102,12 @@ void app_lv_wheel_reset(app_lv_wheel_t *wheel)
         lv_obj_set_y(obj, -lv_obj_get_height(obj));
         lv_obj_refr_pos(obj);
     }
-    APP_SYS_ASSERT(wheel->self != NULL);
-    {
+    if (wheel->self != NULL && wheel->self->root != NULL) {
         lv_obj_t *obj = wheel->self->root;
         lv_obj_set_x(obj, 0);
         lv_obj_set_y(obj, 0);
         lv_obj_refr_pos(obj);
+        lv_obj_move_to_index(obj, 0);
     }
     /* 配置项更新 */
     wheel_src->scroll_way  = LV_DIR_NONE;

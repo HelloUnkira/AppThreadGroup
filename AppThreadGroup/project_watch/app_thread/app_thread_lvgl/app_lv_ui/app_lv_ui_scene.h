@@ -9,7 +9,7 @@ extern app_lv_scene_t app_lv_ui_dlps;
 /* watch face */
 extern app_lv_scene_t app_lv_ui_watch_face;
 /* theme */
-extern app_lv_scene_t app_lv_ui_list;
+extern app_lv_scene_t app_lv_ui_theme;
 /* function */
 extern app_lv_scene_t app_lv_ui_calculator;
 extern app_lv_scene_t app_lv_ui_stopwatch;
@@ -27,6 +27,7 @@ extern app_lv_scene_t app_lv_ui_women_health;
 /* watch face */
 #include "app_lv_ui_watch_face.h"
 /* theme */
+#include "app_lv_ui_theme.h"
 #include "app_lv_ui_list.h"
 /* function */
 #include "app_lv_ui_calculator.h"

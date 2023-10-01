@@ -135,7 +135,7 @@ app_lv_wheel_t app_lv_ui_watch_face_wheel = {
     .style[0]   = app_lv_wheel_style_rotate,
     .style[1]   = app_lv_wheel_style_rotate,
     .sibling[2] = &app_lv_ui_qrcode,
-    .sibling[3] = &app_lv_ui_calendar,
+    .sibling[3] = &app_lv_ui_null,
     .style[2]   = app_lv_wheel_style_float,
     .style[3]   = app_lv_wheel_style_float,
 };

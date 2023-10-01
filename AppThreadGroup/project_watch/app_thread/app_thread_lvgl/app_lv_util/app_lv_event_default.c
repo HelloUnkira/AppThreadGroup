@@ -227,7 +227,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
                     /* 轮盘复位(如果未复位的话) */
                     if (app_lv_wheel_rollback(0, LV_DIR_NONE))
                         break;
-                    app_lv_scene_add(&app_lv_ui_list, false);
+                    app_lv_scene_add(&app_lv_ui_theme, false);
                 }
             }
             /* 模拟器上鼠标不太好通过滑动触发手势 */
