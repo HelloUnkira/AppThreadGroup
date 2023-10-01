@@ -72,7 +72,7 @@ static void app_lv_ui_list_show(void *scene)
         {APP_LV_LANG_0X00fe, APP_LV_PIC_00_THEME_25_BREATHE_00_PNG,      &app_lv_ui_null,},
         {APP_LV_LANG_0X01c5, APP_LV_PIC_00_THEME_26_SOPRT_00_PNG,        &app_lv_ui_null,},
         {APP_LV_LANG_0X004f, APP_LV_PIC_00_THEME_27_SLEEP_00_PNG,        &app_lv_ui_null,},
-        {APP_LV_LANG_0X0110, APP_LV_PIC_00_THEME_28_PERIOD_00_PNG,       &app_lv_ui_null,},
+        {APP_LV_LANG_0X0110, APP_LV_PIC_00_THEME_28_PERIOD_00_PNG,       &app_lv_ui_women_health,},
         {APP_LV_LANG_0X017c, APP_LV_PIC_00_THEME_29_DISCOVER_00_PNG,     &app_lv_ui_null,},
         {APP_LV_LANG_0X0163, APP_LV_PIC_00_THEME_30_THEME_00_PNG,        &app_lv_ui_null,},
         {APP_LV_LANG_0X01a2, APP_LV_PIC_00_THEME_31_ABOUT_00_PNG,        &app_lv_ui_null,},

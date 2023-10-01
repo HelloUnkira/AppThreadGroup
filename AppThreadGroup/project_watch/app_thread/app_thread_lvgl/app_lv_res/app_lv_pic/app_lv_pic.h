@@ -391,6 +391,7 @@ typedef enum {
 	APP_LV_PIC_02_COUNTDOWN_RESET_PNG,               // S:lvgl_pic/02_countdown/reset.png
 	APP_LV_PIC_02_COUNTDOWN_TICK_0_PNG,              // S:lvgl_pic/02_countdown/tick_0.png
 	APP_LV_PIC_02_COUNTDOWN_TICK_1_PNG,              // S:lvgl_pic/02_countdown/tick_1.png
+	APP_LV_PIC_03_WOMEN_HEALTH_FLOWER_PNG,           // S:lvgl_pic/03_women_health/flower.png
 	APP_LV_PIC_LVGL_JPG,                             // S:lvgl_pic/LVGL.jpg
 	APP_LV_PIC_LVGL_PNG,                             // S:lvgl_pic/LVGL.png
 	APP_LV_PIC_NUM,

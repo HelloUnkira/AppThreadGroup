@@ -391,6 +391,7 @@ static const char * app_lv_pic_table[] = {
 	"S:lvgl_pic/02_countdown/reset.png",
 	"S:lvgl_pic/02_countdown/tick_0.png",
 	"S:lvgl_pic/02_countdown/tick_1.png",
+	"S:lvgl_pic/03_women_health/flower.png",
 	"S:lvgl_pic/LVGL.jpg",
 	"S:lvgl_pic/LVGL.png",
 };
