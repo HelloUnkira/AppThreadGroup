@@ -34,7 +34,7 @@ static void app_lv_ui_btnmatrix_cb(lv_event_t *e)
             break;
         }
         /* 染色 */
-        uint8_t day_s = 0, day_e = 0;
+        uint8_t day_s = 0, day_e = 0, day_c = 0;
         uint16_t btn_ofs = app_lv_ui_res_local->btn_id_s;
         /* 默认不显示边界 */
         dsc->rect_dsc->border_opa = LV_OPA_TRANSP;
@@ -48,20 +48,29 @@ static void app_lv_ui_btnmatrix_cb(lv_event_t *e)
         dsc->rect_dsc->bg_grad.stops_count = 2;
         /* 月经期 */
         app_lv_ui_presenter_women_health.get_menstrual(&day_s, &day_e);
-        if (dsc->id >= btn_ofs + day_s && dsc->id <= btn_ofs + day_e) {
+        app_lv_ui_presenter_women_health.get_menstrual_day(&day_c);
+        if (dsc->id == btn_ofs + day_c) {
             dsc->rect_dsc->bg_opa = LV_OPA_COVER;
             dsc->rect_dsc->bg_color = lv_palette_main(LV_PALETTE_PINK);
             dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_PINK);
             dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_PINK);
         }
+        else
+        if (dsc->id >= btn_ofs + day_s && dsc->id <= btn_ofs + day_e)
+            dsc->label_dsc->color = lv_palette_main(LV_PALETTE_PINK);
         /* 易孕期 */
         app_lv_ui_presenter_women_health.get_pregnancy(&day_s, &day_e);
-        if (dsc->id >= btn_ofs + day_s && dsc->id <= btn_ofs + day_e) {
+        app_lv_ui_presenter_women_health.get_pregnancy_day(&day_c);
+        if (dsc->id == btn_ofs + day_c) {
             dsc->rect_dsc->bg_opa = LV_OPA_COVER;
             dsc->rect_dsc->bg_color = lv_palette_main(LV_PALETTE_PURPLE);
             dsc->rect_dsc->bg_grad.stops[0].color = lv_palette_main(LV_PALETTE_PURPLE);
             dsc->rect_dsc->bg_grad.stops[1].color = lv_palette_main(LV_PALETTE_PURPLE);
         }
+        else
+        if (dsc->id >= btn_ofs + day_s && dsc->id <= btn_ofs + day_e)
+            dsc->label_dsc->color = lv_palette_main(LV_PALETTE_PURPLE);
+        /*  */
         uint16_t t_year = 0;
         uint8_t t_month = 0;
         app_lv_ui_presenter_women_health.get_dtime(&t_year, &t_month);

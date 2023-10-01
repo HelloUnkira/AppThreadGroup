@@ -50,9 +50,31 @@ static void app_lv_ui_func_local_get_pregnancy(uint8_t *day_s, uint8_t *day_e)
     #endif
 }
 
+/*@brief lvgl ui数据交互回调
+ */
+static void app_lv_ui_func_local_get_menstrual_day(uint8_t *day)
+{
+    #if APP_LV_DEVELOPER_MODEL
+    *day = 11;
+    #else
+    #endif
+}
+
+/*@brief lvgl ui数据交互回调
+ */
+static void app_lv_ui_func_local_get_pregnancy_day(uint8_t *day)
+{
+    #if APP_LV_DEVELOPER_MODEL
+    *day = 19;
+    #else
+    #endif
+}
+
 app_lv_ui_presenter_women_health_t app_lv_ui_presenter_women_health = {
     .is_valid           = app_lv_ui_func_local_is_valid,
     .get_dtime          = app_lv_ui_func_local_get_dtime,
     .get_menstrual      = app_lv_ui_func_local_get_menstrual,
     .get_pregnancy      = app_lv_ui_func_local_get_pregnancy,
+    .get_menstrual_day  = app_lv_ui_func_local_get_menstrual_day,
+    .get_pregnancy_day  = app_lv_ui_func_local_get_pregnancy_day,
 };
