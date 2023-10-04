@@ -9,18 +9,6 @@
 #include "app_sys_lib.h"
 #include "app_lv_lib.h"
 
-/*@brief 浮动子窗口透明度递归改变回调
- */
-static void app_lv_wheel_opa_update(lv_obj_t *obj, uint8_t opa)
-{
-    lv_obj_set_style_opa(obj, opa, 0);
-    /* 需要递归??? */
-    // return;
-    
-    for (uint32_t idx = 0; idx < lv_obj_get_child_cnt(obj); idx++)
-         app_lv_wheel_opa_update(lv_obj_get_child(obj, idx), opa);
-}
-
 /*@brief 跟手动画迭代回调
  */
 void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
@@ -48,7 +36,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
                 scroll_dis = wheel_w - val;
             lv_coord_t opa = scroll_dis * 255 / wheel_w;
             APP_SYS_LOG_DEBUG("scroll_dis:%u opa:%u", scroll_dis, opa);
-            app_lv_wheel_opa_update(obj_sib, opa);
+            app_lv_style_opa_update(obj_sib, opa);
         }
         if (wheel_src->scroll_way == LV_DIR_VER) {
             lv_obj_set_y(obj_sib, val);
@@ -60,7 +48,7 @@ void app_lv_wheel_anim_exec_cb(void *var, int32_t val)
                 scroll_dis = wheel_h - val;
             lv_coord_t opa = scroll_dis * 255 / wheel_h;
             APP_SYS_LOG_DEBUG("scroll_dis:%u opa:%u", scroll_dis, opa);
-            app_lv_wheel_opa_update(obj_sib, opa);
+            app_lv_style_opa_update(obj_sib, opa);
         }
         break;
     }
@@ -122,7 +110,7 @@ void app_lv_wheel_anim_ready_cb(lv_anim_t *a)
     switch (wheel->style[wheel_src->obj_idx]) {
     case app_lv_wheel_style_float: {
         /* 浮动结束后刷新轮盘 */
-        app_lv_wheel_opa_update(obj_sib, 255);
+        app_lv_style_opa_update(obj_sib, 255);
         /* 触摸结束的最后一个抬起动画结束后清除捕获标记 */
         if (wheel_src->touch_over) {
             wheel_src->touch_over = false;

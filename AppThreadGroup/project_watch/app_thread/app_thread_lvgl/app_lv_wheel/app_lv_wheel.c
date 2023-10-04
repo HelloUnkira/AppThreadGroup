@@ -19,6 +19,7 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
 {
     APP_SYS_ASSERT(wheel != NULL);
     /* 场景去重(遇到重复场景不重走hide和show) */
+    #if 0
     {
         for (uint8_t idx_old = 0; idx_old < 4; idx_old++) {
         for (uint8_t idx_new = 0; idx_new < 4; idx_new++) {
@@ -35,6 +36,7 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
             if (app_lv_wheel.self == wheel->self)
                 app_lv_wheel.self  = NULL;
     }
+    #endif
     /* 隐藏旧轮盘,更新轮盘,显示新轮盘,轮盘复位 */
     app_lv_wheel_hide(&app_lv_wheel);
     app_lv_wheel = *wheel;

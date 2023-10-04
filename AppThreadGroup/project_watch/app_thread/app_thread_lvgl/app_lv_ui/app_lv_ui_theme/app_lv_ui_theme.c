@@ -12,7 +12,9 @@
 static void app_lv_ui_theme_show(void *scene)
 {
     /* 常规列表 */
-    app_lv_ui_list_show(scene);
+    // app_lv_ui_list_show(scene);
+    /* 弧形列表 */
+    app_lv_ui_list_arc_show(scene);
 }
 
 /*@brief     界面隐藏
@@ -21,7 +23,9 @@ static void app_lv_ui_theme_show(void *scene)
 static void app_lv_ui_theme_hide(void *scene)
 {
     /* 常规列表 */
-    app_lv_ui_list_hide(scene);
+    // app_lv_ui_list_hide(scene);
+    /* 弧形列表 */
+    app_lv_ui_list_arc_hide(scene);
 }
 
 app_lv_scene_t app_lv_ui_theme = {
