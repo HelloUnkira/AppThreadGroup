@@ -58,8 +58,15 @@ static inline void app_dev_log_msg2(const char *format, va_list list)
 
 /*@brief 本层级模组使用的宏
  */
-#define APP_DEV_LOG_MSG_FMT     app_dev_log_msg1
-#define APP_DEV_LOG_MSG_LST     app_dev_log_msg2
 #define APP_DEV_LOG_MSG_LINE    "\r\n"
+#if     APP_DEV_LOG_MSG_USE == 1
+#define APP_DEV_LOG_MSG_FMT(...)    app_dev_log_msg1(__VA_ARGS__)
+#define APP_DEV_LOG_MSG_LST(...)    app_dev_log_msg2(__VA_ARGS__)
+#define APP_DEV_LOG_MSG_COM(...)    APP_DEV_LOG_MSG_FMT("[%s][%d]%s", __func__, __LINE__, __VA_ARGS__)
+#else
+#define APP_DEV_LOG_MSG_FMT(...)
+#define APP_DEV_LOG_MSG_LST(...)
+#define APP_DEV_LOG_MSG_COM(...)
+#endif
 
 #endif

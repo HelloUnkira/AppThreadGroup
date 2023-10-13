@@ -8,14 +8,16 @@ typedef struct {
     void *data;         /* 设备操作数据 */
 } app_dev_t;
 
+/* 外设设备入app_ext库 */
+/* 定制设备入app_dev库 */
+
 /* 设备抽象实例(template,不做实际的使用,只做编码结构参考) */
 extern const app_dev_t app_dev_empty;
 /* 设备抽象实例(peripheral) */
-extern const app_dev_t app_dev_rtc;
-extern const app_dev_t app_dev_watchdog;
-/* 设备抽象实例(common) */
 extern const app_dev_t app_dev_log;
 extern const app_dev_t app_dev_ext_mem;
+extern const app_dev_t app_dev_rtc;
+extern const app_dev_t app_dev_watchdog;
 /* 设备抽象实例(custom) */
 extern const app_dev_t app_dev_battery;
 extern const app_dev_t app_dev_vibrate;
@@ -25,11 +27,10 @@ extern const app_dev_t app_dev_temperature;
 /* 设备抽象动作接口(template,不做实际的使用,只做编码结构参考) */
 #include "app_ext_dev_empty.h"          /* empty */
 /* 设备抽象动作接口(peripheral) */
+#include "app_ext_dev_log.h"            /* log */
+#include "app_ext_dev_ext_mem.h"        /* ext_mem */
 #include "app_ext_dev_rtc.h"            /* rtc */
 #include "app_ext_dev_watchdog.h"       /* watchdog */
-/* 设备抽象动作接口(common) */
-#include "app_ext_dev_log.h"            /* log(common device) */
-#include "app_ext_dev_ext_mem.h"        /* ext_mem */
 /* 设备抽象动作接口(custom) */
 #include "app_ext_dev_battery.h"        /* battery */
 #include "app_ext_dev_vibrate.h"        /* vibrate */

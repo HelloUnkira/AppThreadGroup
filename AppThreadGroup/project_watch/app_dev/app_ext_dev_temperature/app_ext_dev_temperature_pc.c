@@ -2,7 +2,11 @@
  *     模拟温度计
  */
 
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+
 #include "app_ext_lib.h"
+#include "app_sys_lib.h"
 
 #if APP_ARCH_IS_PC
 
@@ -25,42 +29,26 @@ static float app_dev_temperature_hal_get_value(app_dev_t *driver)
 
 /*@brief     temperature设备进入dlps模式
  *@param[in] driver 设备实例
+ *@param[in] mode   other:正常模式;1:低电量模式;2:关机模式
  */
-static void app_dev_temperature_hal_dlps_enter(app_dev_t *driver)
+static void app_dev_temperature_hal_dlps_enter(app_dev_t *driver, uint8_t mode)
 {
     const app_dev_temperature_cfg_t *cfg = driver->cfg;
     app_dev_temperature_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
+    APP_SYS_LOG_INFO("dlps enter:%d", mode);
 }
 
 /*@brief     temperature设备退出dlps模式
  *@param[in] driver 设备实例
+ *@param[in] mode   other:正常模式;1:低电量模式;2:关机模式
  */
-static void app_dev_temperature_hal_dlps_exit(app_dev_t *driver)
+static void app_dev_temperature_hal_dlps_exit(app_dev_t *driver, uint8_t mode)
 {
     const app_dev_temperature_cfg_t *cfg = driver->cfg;
     app_dev_temperature_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
-}
-
-/*@brief     temperature设备进入shutdown模式
- *@param[in] driver 设备实例
- */
-static void app_dev_temperature_hal_shutdown_enter(app_dev_t *driver)
-{
-    const app_dev_temperature_cfg_t *cfg = driver->cfg;
-    app_dev_temperature_data_t *data = driver->data;
-    /* 填充目标平台下的动作 */
-}
-
-/*@brief     temperature设备退出shutdown模式
- *@param[in] driver 设备实例
- */
-static void app_dev_temperature_hal_shutdown_exit(app_dev_t *driver)
-{
-    const app_dev_temperature_cfg_t *cfg = driver->cfg;
-    app_dev_temperature_data_t *data = driver->data;
-    /* 填充目标平台下的动作 */
+    APP_SYS_LOG_INFO("dlps exit:%d", mode);
 }
 
 /* 静态配置的设备操作参数 */
@@ -73,8 +61,6 @@ static const app_dev_temperature_api_t app_dev_temperature_api = {
     .get_value      = app_dev_temperature_hal_get_value,
     .dlps_enter     = app_dev_temperature_hal_dlps_enter,
     .dlps_exit      = app_dev_temperature_hal_dlps_exit,
-    .shutdown_enter = app_dev_temperature_hal_shutdown_enter,
-    .shutdown_exit  = app_dev_temperature_hal_shutdown_exit,
 };
 
 /* 动态的设备操作数据 */

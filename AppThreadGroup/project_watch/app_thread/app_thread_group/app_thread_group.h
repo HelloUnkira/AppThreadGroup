@@ -22,8 +22,8 @@ typedef enum {
     app_thread_id_s_e,              /* 静态线程配置结束(static end) */
     /* 动态线程id号 */
     /* 备注:不使用动态线程时缩小该范围节约空间 */
-    app_thread_id_d_s = 0x80,       /* 静态线程配置开始(dynamic start) */
-    app_thread_id_d_e = 0x90,       /* 静态线程配置结束(dynamic end) */
+    app_thread_id_d_s = 0x80,       /* 动态线程配置开始(dynamic start) */
+    app_thread_id_d_e = 0x90,       /* 动态线程配置结束(dynamic end) */
 } app_thread_id_t;
 
 /* 子线程组公共事件 */
