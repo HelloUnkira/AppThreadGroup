@@ -103,14 +103,14 @@ static void app_dev_battery_hal_curve_discharge_table(app_dev_t *driver, void **
 }
 
 /* 充电曲线表 */
-static const APP_ARCH_BATTERY_CURVE_DATA app_dev_battery_hal_curve_charge[] = {
+static const APP_DEV_BATTERY_CURVE_DATA app_dev_battery_hal_curve_charge[] = {
     {3600,   0},
     {4200, 100},
     {0, 0},
 };
 
 /* 放电曲线表 */
-static const APP_ARCH_BATTERY_CURVE_DATA app_dev_battery_hal_curve_discharge[] = {
+static const APP_DEV_BATTERY_CURVE_DATA app_dev_battery_hal_curve_discharge[] = {
     {3600,   0},
     {4200, 100},
     {0, 0},

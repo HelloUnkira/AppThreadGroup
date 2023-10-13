@@ -169,7 +169,7 @@ void app_module_battery_voltage_xms_update(void)
     uint32_t voltage_sample = app_dev_battery_voltage_measure(&app_dev_battery);
     battery->voltage_sample = voltage_sample;
     /* 读取充放电曲线表 */
-    APP_ARCH_BATTERY_CURVE_DATA *table = NULL; uint32_t table_item = 0;
+    APP_DEV_BATTERY_CURVE_DATA *table = NULL; uint32_t table_item = 0;
     if (battery->charge_status == 1)
         app_dev_battery_curve_charge_table(&app_dev_battery, &table, &table_item);
     if (battery->charge_status == 0)

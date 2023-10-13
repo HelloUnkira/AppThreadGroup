@@ -35,21 +35,16 @@ static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
     app_dev_ext_mem_data_t *data = driver->data;
     
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
-        APP_DEV_LOG_MSG_FMT("data->rw_args.buffer:%p"   APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.size:%x"     APP_DEV_LOG_MSG_LINE,
-                            data->rw_args.buffer,
-                            data->rw_args.size);
+        APP_DEV_LOG_MSG_COM("data->rw_args.buffer:%p", data->rw_args.buffer);
+        APP_DEV_LOG_MSG_COM("data->rw_args.size:%x",   data->rw_args.size);
         return -1;
     }
     
     /* 检查溢出 */
     if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size) {
-        APP_DEV_LOG_MSG_FMT("data->ext_mem.chunk_size:%x" APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.offset:%x"     APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.size:%x"       APP_DEV_LOG_MSG_LINE,
-                             data->ext_mem.chunk_size,
-                             data->rw_args.offset,
-                             data->rw_args.size);
+        APP_DEV_LOG_MSG_COM("data->ext_mem.chunk_size:%x", data->ext_mem.chunk_size);
+        APP_DEV_LOG_MSG_COM("data->rw_args.offset:%x",     data->rw_args.offset);
+        APP_DEV_LOG_MSG_COM("data->rw_args.size:%x",       data->rw_args.size);
         return -2;
     }
     
@@ -90,21 +85,16 @@ static int32_t app_dev_ext_mem_hal_write(app_dev_t *driver)
     app_dev_ext_mem_data_t *data = driver->data;
     
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
-        APP_DEV_LOG_MSG_FMT("data->rw_args.buffer:%p"   APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.size:%x"     APP_DEV_LOG_MSG_LINE,
-                            data->rw_args.buffer,
-                            data->rw_args.size);
+        APP_DEV_LOG_MSG_COM("data->rw_args.buffer:%p", data->rw_args.buffer);
+        APP_DEV_LOG_MSG_COM("data->rw_args.size:%x",   data->rw_args.size);
         return -1;
     }
     
     /* 检查溢出 */
     if (data->rw_args.offset + data->rw_args.size > data->ext_mem.chunk_size) {
-        APP_DEV_LOG_MSG_FMT("data->ext_mem.chunk_size:%x" APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.offset:%x"     APP_DEV_LOG_MSG_LINE
-                            "data->rw_args.size:%x"       APP_DEV_LOG_MSG_LINE,
-                             data->ext_mem.chunk_size,
-                             data->rw_args.offset,
-                             data->rw_args.size);
+        APP_DEV_LOG_MSG_COM("data->ext_mem.chunk_size:%x", data->ext_mem.chunk_size);
+        APP_DEV_LOG_MSG_COM("data->rw_args.offset:%x",     data->rw_args.offset);
+        APP_DEV_LOG_MSG_COM("data->rw_args.size:%x",       data->rw_args.size);
         return -2;
     }
     

@@ -14,7 +14,7 @@ typedef struct {
 
 /* 设备battery抽象操作数据 */
 typedef struct {
-#define APP_ARCH_BATTERY_CURVE_DATA         \
+#define APP_DEV_BATTERY_CURVE_DATA          \
         struct {                            \
             uint32_t voltage;               \
             uint8_t  percent;               \
@@ -92,7 +92,7 @@ static inline uint32_t app_dev_battery_voltage_measure(app_dev_t *driver)
 
 /*@brief     battery设备充电曲线表
  *@param[in] driver 设备实例
- *@param[in] table  曲线表(APP_ARCH_BATTERY_CURVE_DATA类型)
+ *@param[in] table  曲线表(APP_DEV_BATTERY_CURVE_DATA类型)
  *@param[in] item   元素个数
  */
 static inline void app_dev_battery_curve_charge_table(app_dev_t *driver, void **table, uint32_t *item)
@@ -105,7 +105,7 @@ static inline void app_dev_battery_curve_charge_table(app_dev_t *driver, void **
 
 /*@brief     battery设备放电曲线表
  *@param[in] driver 设备实例
- *@param[in] table  曲线表(APP_ARCH_BATTERY_CURVE_DATA类型)
+ *@param[in] table  曲线表(APP_DEV_BATTERY_CURVE_DATA类型)
  *@param[in] item   元素个数
  */
 static inline void app_dev_battery_curve_discharge_table(app_dev_t *driver, void **table, uint32_t *item)
