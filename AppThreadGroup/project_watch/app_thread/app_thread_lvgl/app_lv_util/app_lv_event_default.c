@@ -89,10 +89,11 @@ static bool app_lv_event_default_key_long_cb(lv_event_t *e)
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
         catch_key_enter = (key == LV_KEY_ENTER ? true : false);
+        APP_SYS_LOG_INFO("LV_EVENT_KEY:%u", key);
         break;
     }
     case LV_EVENT_LONG_PRESSED:
-        count_key_enter += 4;
+        count_key_enter++;
         APP_SYS_LOG_INFO("LV_EVENT_LONG_PRESSED:%u %u", catch_key_enter, count_key_enter);
         break;
     case LV_EVENT_LONG_PRESSED_REPEAT:

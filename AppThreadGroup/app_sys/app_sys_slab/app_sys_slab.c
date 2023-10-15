@@ -21,7 +21,7 @@ void app_sys_slab_ready(app_sys_slab_t *slab, uintptr_t size, uint32_t num, uint
     /* 计算分配器单元值 */
     slab->blk_size  = size;
     slab->blk_size -= size % sizeof(uintptr_t);
-    slab->blk_size += sizeof(uintptr_t);
+    slab->blk_size += size % sizeof(uintptr_t) == 0 ? 0 : sizeof(uintptr_t);
     slab->blk_num   = num;
     slab->debounce  = debounce;
 }

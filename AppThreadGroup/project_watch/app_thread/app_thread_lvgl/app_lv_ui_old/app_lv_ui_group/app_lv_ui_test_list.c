@@ -22,7 +22,6 @@ static app_lv_ui_res_list_t app_lv_ui_res_list[] = {
     {"Null",                &app_lv_ui_null,},
     /*  */
     {"Qrcode",              &app_lv_ui_qrcode,},
-    {"Data Daily",          &app_lv_ui_data_daily,},
     {"Null",                &app_lv_ui_null,},
     {"2048",                &app_lv_ui_2048,},
     {"Tetris",              &app_lv_ui_tetris,},

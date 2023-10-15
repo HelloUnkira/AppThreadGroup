@@ -139,7 +139,7 @@ static uint8_t app_lv_ui_func_local_get_o2_max(void)
     return 13;
 }
 
-app_lv_ui_data_daily_presenter_t app_lv_ui_data_daily_presenter = {
+app_lv_ui_presenter_data_daily_t app_lv_ui_presenter_data_daily = {
     .get_tar_cal        = app_lv_ui_func_local_get_tar_cal,
     .get_cur_cal        = app_lv_ui_func_local_get_cur_cal,
     .get_tar_step       = app_lv_ui_func_local_get_tar_step,

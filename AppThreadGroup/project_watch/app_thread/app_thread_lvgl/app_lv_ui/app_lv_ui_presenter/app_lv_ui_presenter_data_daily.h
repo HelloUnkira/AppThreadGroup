@@ -1,5 +1,5 @@
-#ifndef APP_LV_UI_DATA_DAILY_H
-#define APP_LV_UI_DATA_DAILY_H
+#ifndef APP_LV_UI_PRESENTER_DATA_DAILY_H
+#define APP_LV_UI_PRESENTER_DATA_DAILY_H
 
 typedef struct {
     /* 今日三环目标 */
@@ -25,8 +25,8 @@ typedef struct {
     /* 最大摄氧量 */
     uint8_t  (*get_o2_max)(void);
     /* 继续补充... */
-} app_lv_ui_data_daily_presenter_t;
+} app_lv_ui_presenter_data_daily_t;
 
-extern app_lv_ui_data_daily_presenter_t app_lv_ui_data_daily_presenter;
+extern app_lv_ui_presenter_data_daily_t app_lv_ui_presenter_data_daily;
 
 #endif

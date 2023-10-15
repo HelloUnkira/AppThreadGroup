@@ -130,12 +130,12 @@ static void app_lv_ui_watch_face_hide(void *scene)
 
 app_lv_wheel_t app_lv_ui_watch_face_wheel = {
     .self       = &app_lv_ui_watch_face,
-    .sibling[0] = &app_lv_ui_log_text,
-    .sibling[1] = &app_lv_ui_fs_info,
+    .sibling[0] = &app_lv_ui_null,
+    .sibling[1] = &app_lv_ui_data_daily,
     .style[0]   = app_lv_wheel_style_rotate,
     .style[1]   = app_lv_wheel_style_rotate,
     .sibling[2] = &app_lv_ui_qrcode,
-    .sibling[3] = &app_lv_ui_null,
+    .sibling[3] = &app_lv_ui_fs_info,
     .style[2]   = app_lv_wheel_style_float,
     .style[3]   = app_lv_wheel_style_float,
 };
