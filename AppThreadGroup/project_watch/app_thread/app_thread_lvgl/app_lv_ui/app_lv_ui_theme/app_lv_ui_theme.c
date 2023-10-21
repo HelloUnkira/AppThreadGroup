@@ -15,6 +15,8 @@ static void app_lv_ui_theme_show(void *scene)
     app_lv_ui_list_show(scene);
     /* 弧形列表 */
     // app_lv_ui_list_arc_show(scene);
+    /* 九宫格 */
+    // app_lv_ui_sudoku_show(scene);
     /* 星轨,拨轮 */
     // app_lv_ui_star_robit_show(scene);
     // app_lv_ui_thumb_wheel_show(scene);
@@ -31,6 +33,8 @@ static void app_lv_ui_theme_hide(void *scene)
     app_lv_ui_list_hide(scene);
     /* 弧形列表 */
     // app_lv_ui_list_arc_hide(scene);
+    /* 九宫格 */
+    // app_lv_ui_sudoku_hide(scene);
     /* 星轨,拨轮 */
     // app_lv_ui_star_robit_hide(scene);
     // app_lv_ui_thumb_wheel_hide(scene);
