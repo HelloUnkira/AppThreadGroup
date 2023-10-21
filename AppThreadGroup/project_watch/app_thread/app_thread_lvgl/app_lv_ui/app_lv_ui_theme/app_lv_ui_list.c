@@ -39,9 +39,9 @@ void app_lv_ui_list_show(void *scene)
         /* 初始化场景 */
         app_lv_ui_res_local->scene = app_lv_style_scene();
         ((app_lv_scene_t *)scene)->root = app_lv_ui_res_local->scene;
+        app_lv_ui_theme_list_alloc(&app_lv_ui_res_local->list, &app_lv_ui_res_local->list_num);
         /* 获取字体 */
         app_lv_ui_res_local->font36 = app_lv_multi_font_load(app_lv_multi_font_size_36);
-        app_lv_ui_theme_list_alloc(&app_lv_ui_res_local->list, &app_lv_ui_res_local->list_num);
         /* 初始化列表 */
         lv_obj_t *list = lv_list_create(app_lv_ui_res_local->scene);
         app_lv_style_object(list);

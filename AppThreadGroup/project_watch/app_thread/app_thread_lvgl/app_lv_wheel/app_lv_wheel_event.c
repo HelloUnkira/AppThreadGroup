@@ -278,6 +278,9 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     }
     /* 按下时,记录按下点 */
     case LV_EVENT_PRESSED: {
+        /* 轮盘是否工作 */
+        if (!wheel_src->onoff)
+             break;
         /* 重复事件锁检查 */
         if (wheel_src->event_lock)
             break;
@@ -289,6 +292,9 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     }
     /* lvgl会定期产生按压中事件,持续调整动画让它跟手走 */
     case LV_EVENT_PRESSING: {
+        /* 轮盘是否工作 */
+        if (!wheel_src->onoff)
+             break;
         /* 重复事件锁检查 */
         if (!wheel_src->event_lock)
              break;
@@ -306,6 +312,9 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     /* 抬起时,进行回弹动画 */
     case LV_EVENT_PRESS_LOST:
     case LV_EVENT_RELEASED: {
+        /* 轮盘是否工作 */
+        if (!wheel_src->onoff)
+             break;
         /* 重复事件锁检查 */
         if (!wheel_src->event_lock)
              break;
@@ -326,6 +335,15 @@ void app_lv_wheel_event_cb(lv_event_t * e)
     default:
         break;
     }
+}
+
+/*@brief     轮盘跟手特效回调启停
+ *@param[in] onoff 开启或关闭
+ */
+void app_lv_wheel_event_onoff(bool onoff)
+{
+    app_lv_wheel_src_t *wheel_src = app_lv_wheel_src_inst();
+    wheel_src->onoff = onoff;
 }
 
 /*@brief     轮盘跟手特效回滚(如果需要回滚)

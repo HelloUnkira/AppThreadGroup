@@ -227,6 +227,7 @@ static inline uint8_t app_sys_char_alnum_to_hex(char C) {return app_sys_char_is_
 #define app_sys_min(x, y)       ((x) < (y) ? (x) : (y))
 #define app_sys_max(x, y)       ((x) > (y) ? (x) : (y))
 #define app_sys_dist(x, y)      ((x) > (y) ? (x) - (y) : (y) - (x))
+#define app_sys_mod_abs(x, m)   (((x) % (m) + (m)) % (m))
 
 /*@brief 区间映射
  */

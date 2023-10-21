@@ -37,6 +37,8 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
                 app_lv_wheel.self  = NULL;
     }
     #endif
+    /* 轮盘跟手特效(默认开启) */
+    app_lv_wheel_event_onoff(true);
     /* 隐藏旧轮盘,更新轮盘,显示新轮盘,轮盘复位 */
     app_lv_wheel_hide(&app_lv_wheel);
     app_lv_wheel = *wheel;
