@@ -15,10 +15,11 @@ static void app_lv_ui_theme_show(void *scene)
     app_lv_ui_list_show(scene);
     /* 弧形列表 */
     // app_lv_ui_list_arc_show(scene);
-    /* 星轨 */
+    /* 星轨,拨轮 */
     // app_lv_ui_star_robit_show(scene);
-    /* 波轮 */
     // app_lv_ui_thumb_wheel_show(scene);
+    /* 光环 */
+    // app_lv_ui_halo_show(scene);
 }
 
 /*@brief     界面隐藏
@@ -30,10 +31,11 @@ static void app_lv_ui_theme_hide(void *scene)
     app_lv_ui_list_hide(scene);
     /* 弧形列表 */
     // app_lv_ui_list_arc_hide(scene);
-    /* 星轨 */
+    /* 星轨,拨轮 */
     // app_lv_ui_star_robit_hide(scene);
-    /* 波轮 */
     // app_lv_ui_thumb_wheel_hide(scene);
+    /* 光环 */
+    // app_lv_ui_halo_hide(scene);
 }
 
 app_lv_scene_t app_lv_ui_theme = {

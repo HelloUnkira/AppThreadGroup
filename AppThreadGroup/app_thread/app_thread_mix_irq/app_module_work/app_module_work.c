@@ -34,8 +34,8 @@ app_module_work_t * app_module_work_make(uint32_t number, ...)
     uint32_t work_zone = sizeof(app_module_work_t) + sizeof(uint32_t) + sizeof(void *) * 2 * number;
     app_module_work_t * work = app_mem_alloc(work_zone);
     for (uint32_t idx = 0; idx < (work->number = number); idx++) {
-        work->array[idx].routine  = va_arg(list, void *);
-        work->array[idx].argument = va_arg(list, void *);
+        work->array[idx].routine  = (void (*)(void *))  (va_arg(list, void *));
+        work->array[idx].argument = (void *)            (va_arg(list, void *));
     }
     
     va_end(list);

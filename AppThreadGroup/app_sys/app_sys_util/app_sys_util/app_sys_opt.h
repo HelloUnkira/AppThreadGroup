@@ -93,9 +93,9 @@ static inline void app_sys_mem_rev_b8(void *addr)
  *           app_sys_bit_ext_set(arr, 53, 32);  //设置第53个bit位(操作arr[1]的53-32位)
  *           app_sys_bit_ext_rst(arr, 53, 32);  //清除第53个bit位(操作arr[1]的53-32位)
  */
-#define app_sys_bit_ext_get(addr, pos, type) app_sys_bit_get(&((addr)[(pos) / type]), (pos) % type, type)
-#define app_sys_bit_ext_set(addr, pos, type) app_sys_bit_set(&((addr)[(pos) / type]), (pos) % type, type)
-#define app_sys_bit_ext_rst(addr, pos, type) app_sys_bit_rst(&((addr)[(pos) / type]), (pos) % type, type)
+#define app_sys_bit_ext_get(addr, pos, type) app_sys_bit_get((&(addr)[(pos) / type]), (pos) % type, type)
+#define app_sys_bit_ext_set(addr, pos, type) app_sys_bit_set((&(addr)[(pos) / type]), (pos) % type, type)
+#define app_sys_bit_ext_rst(addr, pos, type) app_sys_bit_rst((&(addr)[(pos) / type]), (pos) % type, type)
 
 /*@brief 大小端序(接口使用需与平台字节对齐)(默认小端序)
  *       一般好的业务流程并不需要使用大小端序通配接口
@@ -231,7 +231,7 @@ static inline uint8_t app_sys_char_alnum_to_hex(char C) {return app_sys_char_is_
 
 /*@brief 区间映射
  */
-#define app_sys_map(x, l_i, r_i, l_o, r_o)  (((x) - (l_i)) * (((r_o) - (l_o)) / ((r_i) - (l_i))) + (l_o))
+#define app_sys_map(x, l_i, r_i, l_o, r_o)  (((x) - (l_i)) * ((r_o) - (l_o)) / ((r_i) - (l_i)) + (l_o))
 
 /*@brief 前导bit0数量
  */

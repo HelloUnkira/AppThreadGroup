@@ -41,9 +41,9 @@ const char * app_sys_log_line(void)
 void app_sys_log_ready(void)
 {
     app_mutex_process(&app_sys_log_mutex, app_mutex_static);
-    app_sys_log.message1   = (void *)app_dev_log_msg1;
-    app_sys_log.message2   = (void *)app_dev_log_msg2;
-    app_sys_log.persistent = (void *)app_sys_log_text_persistent;
+    app_sys_log.message1   = (void (*)(const char *, ...))      app_dev_log_msg1;
+    app_sys_log.message2   = (void (*)(const char *, va_list))  app_dev_log_msg2;
+    app_sys_log.persistent = (void (*)(const char *))           app_sys_log_text_persistent;
 }
 
 /*@brief     格式日志输出接口

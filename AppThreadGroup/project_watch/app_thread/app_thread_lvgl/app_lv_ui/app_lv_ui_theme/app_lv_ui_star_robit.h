@@ -6,11 +6,11 @@
 /* 星轨的单位旋转度(一圈图片显示数量 * 本数值 == 360(必须相等)) */
 /* 星轨的外部边界 */
 /* 星轨的拨正单位旋转度 */
-#define APP_LV_UI_STAR_ROBIT_CEN       7
-#define APP_LV_UI_STAR_ROBIT_OFS       4
-#define APP_LV_UI_STAR_ROBIT_UNIT      30
-#define APP_LV_UI_STAR_ROBIT_SPAN      5
-#define APP_LV_UI_STAR_ROBIT_RECTIFY   5
+#define APP_LV_UI_STAR_ROBIT_CEN        7
+#define APP_LV_UI_STAR_ROBIT_OFS        4
+#define APP_LV_UI_STAR_ROBIT_UNIT       30
+#define APP_LV_UI_STAR_ROBIT_SPAN       5
+#define APP_LV_UI_STAR_ROBIT_RECTIFY    5
 
 /*@brief     界面显示
  *@param[in] scene 场景

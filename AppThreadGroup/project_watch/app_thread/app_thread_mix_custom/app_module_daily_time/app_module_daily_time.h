@@ -19,7 +19,7 @@ static bool func(type_t *inst)                                  \
     static uint64_t utc = -1;                                   \
     static bool  status = false;                                \
     app_module_clock_t clock = {0};                             \
-    app_module_clock_get_system_clock(&clock);                  \
+    app_module_clock_get_system_clock((&(clock)));              \
     if (utc == clock.utc)   /* 单个秒内的多发访问 */            \
         return status;                                          \
         utc  = clock.utc;                                       \
