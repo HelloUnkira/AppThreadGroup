@@ -297,17 +297,17 @@ static void app_lv_event_default_encode_cb(lv_event_t *e)
     switch (lv_event_get_code(e)) {
     case LV_EVENT_KEY: {
         uint32_t key = lv_indev_get_key(lv_indev_get_act());
-    
-        if (key == LV_KEY_DOWN || key == LV_KEY_LEFT) {
-            // 编码器向左或逆时针旋转
-            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode: down or left");
-            break;
-        }
-        if (key == LV_KEY_UP || key == LV_KEY_RIGHT) {
-            // 编码器向右或顺时针旋转
-            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode: right or up");
-            break;
-        }
+        /* LVGL原生的编码器事件不适合这里使用,则本地定义的编码器事件使用按键做转接 */
+        /* 使用键盘的使用-描述ANTICLOCKWISE;使用+描述CLOCKWISE; */
+        /* 则正式平台只需要将编码器事件转化为按键事件,在驱动层,即可 */
+        
+        // 编码器逆时针旋转一个单位
+        // 编码器顺时针旋转一个单位
+        if (key == APP_LV_EVENT_CLOCKWISE ||
+            key == APP_LV_EVENT_CLOCKWISE_ANTI)
+            APP_SYS_LOG_INFO("LV_EVENT_KEY: redirect to encode:%d", key);
+        
+        break;
     }
     default:
         break;
@@ -329,6 +329,7 @@ void app_lv_event_default_cb(lv_event_t *e)
     app_lv_event_default_group_cb(e);
     /* 界面默认事件编码器转接响应回调 */
     app_lv_event_default_encode_cb(e);
+    
     
     
     switch (lv_event_get_code(e)) {

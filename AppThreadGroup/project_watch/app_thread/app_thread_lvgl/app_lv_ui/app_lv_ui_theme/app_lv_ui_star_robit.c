@@ -148,17 +148,8 @@ static void app_lv_ui_event_img_move_cb(lv_event_t *e)
         app_lv_wheel_event_onoff(true);
         break;
     }
-    /* 编码器事件(暂存档): */
-    /* CLOCKWISE:
-     * app_lv_ui_res_local->iter_angle += 1;
-     * app_lv_ui_res_local->iter_way    = +1;
-     * ANTICLOCKWISE:
-     * app_lv_ui_res_local->iter_angle -= 1;
-     * app_lv_ui_res_local->iter_way    = -1;
-     */
     default:
         break;
-    break;
     }
 }
 
@@ -184,10 +175,31 @@ static void app_lv_ui_event_img_center_cb(lv_event_t *e)
  */
 static void app_lv_ui_event_default_redirect(lv_event_t *e)
 {
-    lv_event_code_t code = lv_event_get_code(e);
-    /* 手势事件重定向为空 */
-    if (code == LV_EVENT_GESTURE) {
+    switch (lv_event_get_code(e)) {
+    /* 手势事件重定向 */
+    case LV_EVENT_GESTURE: {
         return;
+    }
+    /* 编码器事件: */
+    case LV_EVENT_KEY: {
+        uint32_t key = lv_indev_get_key(lv_indev_get_act());
+        
+        if (key == APP_LV_EVENT_CLOCKWISE) {
+            app_lv_ui_res_local->iter_angle += 1;
+            app_lv_ui_res_local->iter_way    = +1;
+            /* 手动刷新动画 */
+            app_lv_ui_local_anim_handler(NULL, 0);
+        }
+        if (key == APP_LV_EVENT_CLOCKWISE_ANTI) {
+            app_lv_ui_res_local->iter_angle -= 1;
+            app_lv_ui_res_local->iter_way    = -1;
+            /* 手动刷新动画 */
+            app_lv_ui_local_anim_handler(NULL, 0);
+        }
+        break;
+    }
+    default:
+        break;
     }
     /* 其他事件不做重定向 */
     app_lv_event_default_cb(e);
@@ -256,13 +268,13 @@ void app_lv_ui_star_robit_hide(void *scene)
         /* 启用默认事件响应,事件重定向取消 */
         app_lv_event_default_config(NULL, false, app_lv_ui_event_default_redirect);
         app_lv_event_default_config(NULL, true,  NULL);
-        /* 反初始化场景 */
-        lv_obj_del(app_lv_ui_res_local->scene);
-        ((app_lv_scene_t *)scene)->root = NULL;
         #if APP_LV_DEVELOPER_MODEL
         app_lv_ui_res_local->list--;
         #endif
         app_lv_ui_theme_list_free(app_lv_ui_res_local->list);
+        /* 反初始化场景 */
+        lv_obj_del(app_lv_ui_res_local->scene);
+        ((app_lv_scene_t *)scene)->root = NULL;
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }

@@ -11,17 +11,27 @@
  */
 static void app_lv_ui_theme_show(void *scene)
 {
+    #if 1
     /* 常规列表 */
     app_lv_ui_list_show(scene);
+    #elif 0
     /* 弧形列表 */
-    // app_lv_ui_list_arc_show(scene);
+    app_lv_ui_list_arc_show(scene);
+    #elif 0
     /* 九宫格 */
-    // app_lv_ui_sudoku_show(scene);
-    /* 星轨,拨轮 */
-    // app_lv_ui_star_robit_show(scene);
-    // app_lv_ui_thumb_wheel_show(scene);
+    app_lv_ui_sudoku_show(scene);
+    #elif 0
+    /* 星轨 */
+    app_lv_ui_star_robit_show(scene);
+    #elif 0
+    /* 拨轮 */
+    app_lv_ui_thumb_wheel_show(scene);
+    #elif 0
     /* 光环 */
-    // app_lv_ui_halo_show(scene);
+    app_lv_ui_halo_show(scene);
+    #else
+    #error "unknown list theme"
+    #endif
 }
 
 /*@brief     界面隐藏
@@ -29,17 +39,27 @@ static void app_lv_ui_theme_show(void *scene)
  */
 static void app_lv_ui_theme_hide(void *scene)
 {
+    #if 1
     /* 常规列表 */
     app_lv_ui_list_hide(scene);
+    #elif 0
     /* 弧形列表 */
-    // app_lv_ui_list_arc_hide(scene);
+    app_lv_ui_list_arc_hide(scene);
+    #elif 0
     /* 九宫格 */
-    // app_lv_ui_sudoku_hide(scene);
-    /* 星轨,拨轮 */
-    // app_lv_ui_star_robit_hide(scene);
-    // app_lv_ui_thumb_wheel_hide(scene);
+    app_lv_ui_sudoku_hide(scene);
+    #elif 0
+    /* 星轨 */
+    app_lv_ui_star_robit_hide(scene);
+    #elif 0
+    /* 拨轮 */
+    app_lv_ui_thumb_wheel_hide(scene);
+    #elif 0
     /* 光环 */
-    // app_lv_ui_halo_hide(scene);
+    app_lv_ui_halo_hide(scene);
+    #else
+    #error "unknown list theme"
+    #endif
 }
 
 app_lv_scene_t app_lv_ui_theme = {

@@ -98,11 +98,11 @@ void app_lv_ui_list_show(void *scene)
 void app_lv_ui_list_hide(void *scene)
 {
     if (app_lv_ui_res_local != NULL) {
+        app_lv_multi_font_free(app_lv_multi_font_size_36);
+        app_lv_ui_theme_list_free(app_lv_ui_res_local->list);
         /* 反初始化场景 */
         lv_obj_del(app_lv_ui_res_local->scene);
         ((app_lv_scene_t *)scene)->root = NULL;
-        app_lv_ui_theme_list_free(app_lv_ui_res_local->list);
-        app_lv_multi_font_free(app_lv_multi_font_size_36);
         lv_mem_free(app_lv_ui_res_local);
         app_lv_ui_res_local = NULL;
     }

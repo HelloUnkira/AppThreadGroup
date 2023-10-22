@@ -66,9 +66,9 @@ HRESULT CALLBACK app_lv_mousewheel_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, L
         app_lv_mousewheel_enc_diff = -(GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA);
         app_lv_mousewheel_key = LV_KEY_ENTER;
         if (app_lv_mousewheel_enc_diff > 0)
-            app_lv_mousewheel_key = LV_KEY_UP;
+            app_lv_mousewheel_key = LV_KEY_LEFT;
         if (app_lv_mousewheel_enc_diff < 0)
-            app_lv_mousewheel_key = LV_KEY_DOWN;
+            app_lv_mousewheel_key = LV_KEY_RIGHT;
         return TRUE;
     }
     return 0;
