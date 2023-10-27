@@ -75,7 +75,7 @@ void app_thread_group_schedule(void)
     /*
      * 调度
      */
-    APP_SYS_LOG_INFO("app thread group schedule");
+    APP_SYS_LOG_INFO("");
     app_os_schedule();
 }
 

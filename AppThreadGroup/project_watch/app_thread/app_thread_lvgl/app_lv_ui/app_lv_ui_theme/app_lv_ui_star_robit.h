@@ -23,4 +23,3 @@ void app_lv_ui_star_robit_show(void *scene);
 void app_lv_ui_star_robit_hide(void *scene);
 
 #endif
-

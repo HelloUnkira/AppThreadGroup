@@ -12,4 +12,3 @@ void app_lv_ui_list_arc_show(void *scene);
 void app_lv_ui_list_arc_hide(void *scene);
 
 #endif
-

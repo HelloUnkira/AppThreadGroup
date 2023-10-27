@@ -7,7 +7,7 @@ typedef enum {
     app_lv_multi_font_type_english,
     app_lv_multi_font_type_num,
 } app_lv_multi_font_type_t;
-    
+
 typedef enum {
     app_lv_multi_font_size_none,
     app_lv_multi_font_size_24,

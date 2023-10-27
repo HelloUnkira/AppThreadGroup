@@ -35,6 +35,7 @@ extern app_lv_scene_t app_lv_ui_women_health;
 #include "app_lv_ui_star_robit.h"
 #include "app_lv_ui_thumb_wheel.h"
 #include "app_lv_ui_halo.h"
+#include "app_lv_ui_waterfall.h"
 /* function */
 #include "app_lv_ui_calculator.h"
 #include "app_lv_ui_stopwatch.h"

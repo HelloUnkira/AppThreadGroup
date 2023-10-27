@@ -29,6 +29,9 @@ static void app_lv_ui_theme_show(void *scene)
     #elif 0
     /* 光环 */
     app_lv_ui_halo_show(scene);
+    #elif 0
+    /* 瀑布 */
+    app_lv_ui_waterfall_show(scene);
     #else
     #error "unknown list theme"
     #endif
@@ -57,6 +60,9 @@ static void app_lv_ui_theme_hide(void *scene)
     #elif 0
     /* 光环 */
     app_lv_ui_halo_hide(scene);
+    #elif 0
+    /* 瀑布 */
+    app_lv_ui_waterfall_hide(scene);
     #else
     #error "unknown list theme"
     #endif

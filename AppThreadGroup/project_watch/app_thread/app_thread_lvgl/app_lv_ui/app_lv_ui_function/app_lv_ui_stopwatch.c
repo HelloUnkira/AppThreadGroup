@@ -52,6 +52,7 @@ static void app_lv_ui_local_tick_list_set(bool refr)
             /* 左边标号 */
             lv_obj_t *lab_1 = lv_label_create(box);
             app_lv_style_object(lab_1);
+            lv_obj_set_style_text_font(lab_1, app_lv_ui_font(24), 0);
             lv_obj_set_style_text_color(lab_1, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_text_align(lab_1, LV_TEXT_ALIGN_RIGHT, 0);
             lv_label_set_text_fmt(lab_1, "%02u", tick_num - idx);
@@ -59,6 +60,7 @@ static void app_lv_ui_local_tick_list_set(bool refr)
             /* 右边数字 */
             lv_obj_t *lab_2 = lv_label_create(box);
             app_lv_style_object(lab_2);
+            lv_obj_set_style_text_font(lab_2, app_lv_ui_font(24), 0);
             lv_obj_set_style_text_color(lab_2, lv_palette_main(LV_PALETTE_BLUE), 0);
             lv_obj_set_style_text_align(lab_2, LV_TEXT_ALIGN_RIGHT, 0);
             lv_label_set_text_fmt(lab_2, "%.2u:%.2u:%.2u.%.3u",
