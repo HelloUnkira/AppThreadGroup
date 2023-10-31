@@ -1,0 +1,22 @@
+{
+    "type"  : "mix_chunk_small",
+    "brief" : "mix_chunk_small: suggest：user_data and chunk user_size",
+    "data_group" :
+    [
+        {
+            "data_brief" : "trace log text",
+            "data_name"  : "trace log text",
+            "data_size"  : "4096 * 1"
+        },
+        {
+            "data_brief" : "module source",
+            "data_name"  : "module source",
+            "data_size"  : "512 * 1"
+        },
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "512 * 1"
+        }
+    ]
+}
