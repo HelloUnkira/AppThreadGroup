@@ -32,7 +32,6 @@ void app_thread_slave_schedule(void)
     app_thread_process(&app_thread_mix_custom,      app_thread_static);
     app_thread_process(&app_thread_manage,          app_thread_static);
     app_thread_process(&app_thread_lvgl,            app_thread_static);
-    app_thread_process(&app_thread_jerryscript,     app_thread_static);
 }
 
 /*@brief 线程组运行

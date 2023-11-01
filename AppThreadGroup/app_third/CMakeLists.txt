@@ -9,10 +9,6 @@
 # master https://github.com/abbrev/fatfs.git
 # AppThreadGroup/app_third/lib_fatfs/lib_fatfs
 #
-# JerryScript库(JS):
-# master https://github.com/jerryscript-project/jerryscript.git
-# AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
-#
 # LVGL库:
 # release/v8.3 https://github.com/lvgl/lvgl.git
 # AppThreadGroup/app_third/lib_lvgl/lib_lvgl_8_3
@@ -43,11 +39,10 @@
 # master https://github.com/simondlevy/TinyEKF.git
 # AppThreadGroup/app_third/lib_TinyEKF/lib_TinyEKF
 #
+# JerryScript库(JS):
+# master https://github.com/jerryscript-project/jerryscript.git
+# AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
+#
 
-# 载入第三方库
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_self)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_fatfs)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_jerryscript)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_nanopb)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json)
-add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lvgl)
+# 本地不额外载入第三方库
+# 该动作针对于每一个需要的目标进行

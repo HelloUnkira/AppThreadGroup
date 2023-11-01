@@ -25,6 +25,9 @@ static  StackType_t app_thread_mix_custom_stack[APP_THREAD_MIX_CUSTOM_STACK_SIZE
 #define APP_THREAD_MANAGE_STACK_SIZE   (1024)
 static  StackType_t app_thread_manage_stack[APP_THREAD_MANAGE_STACK_SIZE];
 
+#define APP_THREAD_JERRYSCRIPT_STACK_SIZE  (1024)
+static  StackType_t app_thread_jerryscript_stack[APP_THREAD_JERRYSCRIPT_STACK_SIZE];
+
 /* @线程体栈信息<End> */
 
 /* @线程体<Start> */
@@ -59,6 +62,14 @@ app_thread_t app_thread_manage = {
     .priority   = 5,
     .task       = app_thread_manage_routine,
     .name       = "app_thread_manage",
+};
+
+app_thread_t app_thread_jerryscript = {
+    .stack      = app_thread_jerryscript_stack,
+    .stack_size = APP_THREAD_JERRYSCRIPT_STACK_SIZE,
+    .priority   = 3,
+    .task       = app_thread_jerryscript_routine,
+    .name       = "app_thread_jerryscript",
 };
 
 /* @线程体<End> */

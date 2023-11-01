@@ -21,6 +21,10 @@ int main(int argc, char *argv[])
     if (app_sys_test())
         return 0;
     
+    /* 本地组件库测试 */ {
+        
+    }
+    
     /* 主线程滚动阻塞 */
     for (uint32_t count = 0; true; count++) {
         

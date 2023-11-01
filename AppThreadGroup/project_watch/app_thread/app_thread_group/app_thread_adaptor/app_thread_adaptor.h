@@ -41,7 +41,6 @@ APP_THREAD_GROUP_HANDLER(app_thread_mix_irq_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_mix_custom_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_manage_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_lvgl_routine);
-APP_THREAD_GROUP_HANDLER(app_thread_jerryscript_routine);
 
 /* 静态线程信息声明 */
 extern app_thread_t app_thread_master;
@@ -49,7 +48,6 @@ extern app_thread_t app_thread_mix_irq;
 extern app_thread_t app_thread_mix_custom;
 extern app_thread_t app_thread_manage;
 extern app_thread_t app_thread_lvgl;
-extern app_thread_t app_thread_jerryscript;
 
 /*@brief     生成新的线程信息通过旧的线程信息
  *           旧线程的基本信息全部被新线程基础,除去执行回调

@@ -17,6 +17,7 @@ typedef enum {
     app_thread_id_mix_irq,          /* 混合中断线程(priority:2) */
     app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
     app_thread_id_manage,           /* 数据管理线程(priority:5) */
+    app_thread_id_jerryscript,      /* jerryscript线程(priority:5) */
     app_thread_id_s_e,              /* 静态线程配置结束(static end) */
     /* 动态线程id号 */
     /* 备注:不使用动态线程时缩小该范围节约空间 */
@@ -45,5 +46,6 @@ void app_thread_slave_schedule(void);
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"
 #include "app_thread_manage.h"
+#include "app_thread_jerryscript.h"
 
 #endif

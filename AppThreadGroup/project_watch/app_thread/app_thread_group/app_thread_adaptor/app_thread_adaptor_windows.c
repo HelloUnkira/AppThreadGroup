@@ -43,12 +43,6 @@ app_thread_t app_thread_lvgl = {
    .args     = NULL,
 };
 
-app_thread_t app_thread_jerryscript = {
-   .priority = THREAD_PRIORITY_BELOW_NORMAL,
-   .routine  = app_thread_jerryscript_routine,
-   .args     = NULL,
-};
-
 /* @线程体<End> */
 
 /*@brief     生成新的线程信息通过旧的线程信息
