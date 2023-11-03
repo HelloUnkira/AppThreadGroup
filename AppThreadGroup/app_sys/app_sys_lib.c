@@ -41,6 +41,8 @@ bool app_sys_test(void)
          app_sys_tree_rb_test();
     void app_sys_tree_rbs_test(void);
          app_sys_tree_rbs_test();
+    void app_sys_tree_bs_test(void);
+         app_sys_tree_bs_test();
     void app_sys_tree_fl_test(void);
          app_sys_tree_fl_test();
     void app_sys_tree_fw_test(void);

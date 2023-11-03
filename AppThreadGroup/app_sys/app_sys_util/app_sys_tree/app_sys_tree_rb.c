@@ -338,7 +338,7 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
             /* 左孩子不为空继续迭代,左孩子为空插入 */
             if (insert_node_l != NULL) {
                 insert_node    = insert_node_l;
-                continue; 
+                continue;
             }
             app_sys_tree_rbn_set_child(insert_node, node, app_sys_tree_rbn_side_l);
             app_sys_tree_rbn_set_parent(node, insert_node);
@@ -669,7 +669,7 @@ void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
     
     app_sys_tree_rbn_status_t side = app_sys_tree_rbn_error;
     
-    app_sys_tree_rbt_remove_only(tree,   node, &side);  
+    app_sys_tree_rbt_remove_only(tree,   node, &side);
     app_sys_tree_rbt_remove_adjust(tree, node,  side);
 }
 

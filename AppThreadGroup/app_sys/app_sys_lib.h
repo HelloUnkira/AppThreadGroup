@@ -13,6 +13,7 @@
 #include "app_sys_tree_s.h"
 #include "app_sys_tree_rb.h"
 #include "app_sys_tree_rbs.h"
+#include "app_sys_tree_bs.h"
 #include "app_sys_tree_fd.h"
 #include "app_sys_table_dl.h"
 #include "app_sys_table_rbs.h"
