@@ -30,6 +30,7 @@ void app_module_world_time_set(app_module_world_time_t *world_time, uint8_t idx)
 void app_module_world_time_get(app_module_world_time_t *world_time, uint8_t idx)
 {
     /* 提取数据中心资源 */
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_world_time);
     memcpy(world_time, &data_center_src->module_world_time.world_time[idx], sizeof(app_module_world_time_t));
     app_module_data_center_give();
 }
