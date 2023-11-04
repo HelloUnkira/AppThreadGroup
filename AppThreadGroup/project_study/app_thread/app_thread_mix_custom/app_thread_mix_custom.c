@@ -21,6 +21,16 @@ static void app_thread_mix_custom_routine_ready_cb(void)
 static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
 {
     switch (package->module) {
+    case app_thread_mix_custom_data_dump: {
+        /* 将系统敏感的资源转储到外存 */
+        app_module_data_dump_process();
+        return true;
+    }
+    case app_thread_mix_custom_data_load: {
+        /* 将系统敏感的资源加载到内存 */
+        app_module_data_load_process();
+        return true;
+    }
     default:
         break;
     }

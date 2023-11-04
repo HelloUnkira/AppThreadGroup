@@ -20,8 +20,8 @@ static app_sys_timer_t app_module_countdown_timer = {0};
 void app_module_countdown_set(app_module_countdown_t *countdown)
 {
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.countdown, countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.countdown, countdown, sizeof(app_module_countdown_t));
     app_module_data_center_give();
 }
 
@@ -31,8 +31,8 @@ void app_module_countdown_set(app_module_countdown_t *countdown)
 void app_module_countdown_get(app_module_countdown_t *countdown)
 {
     /* 提取数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(countdown, &data_center->module_source.countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(countdown, &data_center_src->module_source.countdown, sizeof(app_module_countdown_t));
     app_module_data_center_give();
 }
 
@@ -42,8 +42,8 @@ void app_module_countdown_reset(void)
 {
     /* 更新数据中心资源 */
     app_module_countdown_t countdown = {0};
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.countdown, &countdown, sizeof(app_module_countdown_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.countdown, &countdown, sizeof(app_module_countdown_t));
     app_module_data_center_give();
 }
 

@@ -20,8 +20,8 @@ static app_sys_timer_t app_module_stopwatch_timer = {0};
 void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
 {
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.stopwatch, stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.stopwatch, stopwatch, sizeof(app_module_stopwatch_t));
     app_module_data_center_give();
 }
 
@@ -31,8 +31,8 @@ void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
 void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch)
 {
     /* 提取数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(stopwatch, &data_center->module_source.stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(stopwatch, &data_center_src->module_source.stopwatch, sizeof(app_module_stopwatch_t));
     app_module_data_center_give();
 }
 
@@ -42,8 +42,8 @@ void app_module_stopwatch_reset(void)
 {
     /* 更新数据中心资源 */
     app_module_stopwatch_t stopwatch = {0};
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.stopwatch, &stopwatch, sizeof(app_module_stopwatch_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.stopwatch, &stopwatch, sizeof(app_module_stopwatch_t));
     app_module_data_center_give();
 }
 

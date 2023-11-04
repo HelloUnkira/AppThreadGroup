@@ -31,12 +31,6 @@ app_thread_t app_thread_mix_custom = {
    .args     = NULL,
 };
 
-app_thread_t app_thread_manage = {
-   .priority = THREAD_PRIORITY_BELOW_NORMAL,
-   .routine  = app_thread_manage_routine,
-   .args     = NULL,
-};
-
 app_thread_t app_thread_jerryscript = {
    .priority = THREAD_PRIORITY_NORMAL,
    .routine  = app_thread_jerryscript_routine,

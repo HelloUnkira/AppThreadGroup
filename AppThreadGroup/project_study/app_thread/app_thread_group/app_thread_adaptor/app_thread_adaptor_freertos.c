@@ -22,9 +22,6 @@ static  StackType_t app_thread_mix_irq_stack[APP_THREAD_MIX_IRQ_STACK_SIZE];
 #define APP_THREAD_MIX_CUSTOM_STACK_SIZE  (1024)
 static  StackType_t app_thread_mix_custom_stack[APP_THREAD_MIX_CUSTOM_STACK_SIZE];
 
-#define APP_THREAD_MANAGE_STACK_SIZE   (1024)
-static  StackType_t app_thread_manage_stack[APP_THREAD_MANAGE_STACK_SIZE];
-
 #define APP_THREAD_JERRYSCRIPT_STACK_SIZE  (1024)
 static  StackType_t app_thread_jerryscript_stack[APP_THREAD_JERRYSCRIPT_STACK_SIZE];
 
@@ -54,14 +51,6 @@ app_thread_t app_thread_mix_custom = {
     .priority   = 3,
     .task       = app_thread_mix_custom_routine,
     .name       = "app_thread_mix_custom",
-};
-
-app_thread_t app_thread_manage = {
-    .stack      = app_thread_manage_stack,
-    .stack_size = APP_THREAD_MANAGE_STACK_SIZE,
-    .priority   = 5,
-    .task       = app_thread_manage_routine,
-    .name       = "app_thread_manage",
 };
 
 app_thread_t app_thread_jerryscript = {

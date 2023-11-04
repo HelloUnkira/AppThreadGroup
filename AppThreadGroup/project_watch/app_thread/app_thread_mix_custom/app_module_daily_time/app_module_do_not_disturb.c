@@ -18,8 +18,8 @@ APP_MODULE_DAILY_TIME_F(app_module_daily_time_do_not_disturb_t, app_module_daily
 void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
 {
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.do_not_disturb, do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.do_not_disturb, do_not_disturb, sizeof(app_module_do_not_disturb_t));
     app_module_data_center_give();
 }
 
@@ -29,8 +29,8 @@ void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
 {
     /* 提取数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(do_not_disturb, &data_center->module_source.do_not_disturb, sizeof(app_module_do_not_disturb_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(do_not_disturb, &data_center_src->module_source.do_not_disturb, sizeof(app_module_do_not_disturb_t));
     app_module_data_center_give();
 }
 

@@ -260,8 +260,8 @@ void app_module_clock_local_update(void)
     /* 更新数据中心资源 */
     app_module_clock_t local_clock = {0};
     app_module_clock_get_system_clock(&local_clock);
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.clock, &local_clock, sizeof(app_module_clock_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.clock, &local_clock, sizeof(app_module_clock_t));
     app_module_data_center_give();
 }
 
@@ -312,8 +312,8 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     /* 更新数据中心资源 */
     app_module_clock_t local_clock = {0};
     app_module_clock_get_system_clock(&local_clock);
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.clock, &local_clock, sizeof(app_module_clock_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.clock, &local_clock, sizeof(app_module_clock_t));
     app_module_data_center_give();
 }
 
@@ -360,8 +360,8 @@ void app_module_clock_ready(void)
     app_sys_timer_start(&app_module_clock_timer);
     /* 提取数据中心资源 */
     app_module_clock_t clock = {0};
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&clock, &data_center->module_source.clock, sizeof(app_module_clock_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&clock, &data_center_src->module_source.clock, sizeof(app_module_clock_t));
     app_module_clock_set_system_clock(&clock);
     app_module_data_center_give();
 }

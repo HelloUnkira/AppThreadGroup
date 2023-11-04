@@ -16,8 +16,8 @@
 void app_module_weather_set(app_module_weather_t *weather, uint8_t idx)
 {
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_weather);
-    memcpy(&data_center->module_weather.weather[idx], weather, sizeof(app_module_weather_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_weather);
+    memcpy(&data_center_src->module_weather.weather[idx], weather, sizeof(app_module_weather_t));
     app_module_data_center_give();
 }
 
@@ -28,7 +28,7 @@ void app_module_weather_set(app_module_weather_t *weather, uint8_t idx)
 void app_module_weather_get(app_module_weather_t *weather, uint8_t idx)
 {
     /* 提取数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_weather);
-    memcpy(weather, &data_center->module_weather.weather[idx], sizeof(app_module_weather_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_weather);
+    memcpy(weather, &data_center_src->module_weather.weather[idx], sizeof(app_module_weather_t));
     app_module_data_center_give();
 }

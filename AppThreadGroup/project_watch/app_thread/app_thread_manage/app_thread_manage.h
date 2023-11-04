@@ -3,8 +3,6 @@
 
 typedef enum {  /* 线程模组 */
     app_thread_manage_none = 0,    /* 系统模组,占位符(线程组公共事件) */
-    app_thread_manage_data_dump,   /* 资源转储模组 */
-    app_thread_manage_data_load,   /* 资源加载模组 */
     app_thread_manage_protocol,    /* 协议传输模组 */
     app_thread_manage_transfer,    /* 协议传输模组 */
 } app_thread_manage_module_t;
@@ -28,9 +26,5 @@ typedef enum {  /* 协议传输模组事件 */
 /* 子线程模组 */
 #include "app_module_transfer.h"
 #include "app_module_protocol.h"
-#include "app_module_data_center_type.h"
-#include "app_module_data_center.h"
-#include "app_module_data_load.h"
-#include "app_module_data_dump.h"
 
 #endif

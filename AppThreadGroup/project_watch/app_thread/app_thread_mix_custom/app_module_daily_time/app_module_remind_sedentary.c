@@ -18,8 +18,8 @@ APP_MODULE_DAILY_TIME_F(app_module_daily_time_remind_sedentary_t, app_module_dai
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary)
 {
     /* 更新数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(&data_center->module_source.remind_sedentary, remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(&data_center_src->module_source.remind_sedentary, remind_sedentary, sizeof(app_module_remind_sedentary_t));
     app_module_data_center_give();
 }
 
@@ -29,8 +29,8 @@ void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_seden
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary)
 {
     /* 提取数据中心资源 */
-    app_module_data_center_t *data_center = app_module_data_center_take(app_module_data_center_module_source);
-    memcpy(remind_sedentary, &data_center->module_source.remind_sedentary, sizeof(app_module_remind_sedentary_t));
+    app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
+    memcpy(remind_sedentary, &data_center_src->module_source.remind_sedentary, sizeof(app_module_remind_sedentary_t));
     app_module_data_center_give();
 }
 
