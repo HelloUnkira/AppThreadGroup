@@ -23,7 +23,7 @@ static void app_dev_rtc_hal_ready(app_dev_t *driver)
 
 /*@brief     rtc设备事件通报回调注册
  *@param[in] driver 设备实例
- *@param[in] cb     充电事件通报回调
+ *@param[in] cb     事件通报回调
  */
 static void app_dev_rtc_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
@@ -33,10 +33,11 @@ static void app_dev_rtc_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
     data->irq_cb = cb;
 }
 
-/*@brief     rtc设备运行
+/*@brief     rtc设备事件通报开关
  *@param[in] driver 设备实例
+ *@param[in] flag   true:开启事件通报;false:关闭事件通报
  */
-static void app_dev_rtc_hal_execute(app_dev_t *driver)
+static void app_dev_rtc_hal_irq_switch(app_dev_t *driver, bool flag)
 {
     const app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
@@ -74,7 +75,7 @@ static const app_dev_rtc_cfg_t app_dev_rtc_cfg = {
 static const app_dev_rtc_api_t app_dev_rtc_api = {
     .ready      = app_dev_rtc_hal_ready,
     .irq_cb_reg = app_dev_rtc_hal_irq_cb_reg,
-    .execute    = app_dev_rtc_hal_execute,
+    .irq_switch = app_dev_rtc_hal_irq_switch,
     .get_utc    = app_dev_rtc_hal_get_utc,
     .set_utc    = app_dev_rtc_hal_set_utc,
 };

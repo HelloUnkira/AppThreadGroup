@@ -62,6 +62,18 @@ static void app_dev_battery_hal_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(v
     data->charge_irq_cb = cb;
 }
 
+/*@brief     battery设备事件通报开关
+ *@param[in] driver 设备实例
+ *@param[in] flag   true:开启事件通报;false:关闭事件通报
+ */
+static void app_dev_battery_hal_charge_irq_switch(app_dev_t *driver, bool flag)
+{
+    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_data_t *data = driver->data;
+    /* 填充目标平台下的动作 */
+    APP_SYS_LOG_WARN("irq_switch:%d", flag);
+}
+
 /*@brief     battery设备电池电压(mV)
  *@param[in] driver 设备实例
  *@retval    电池电压
@@ -127,6 +139,7 @@ static const app_dev_battery_api_t app_dev_battery_api = {
     .charge_full            = app_dev_battery_hal_charge_full,
     .charge_status          = app_dev_battery_hal_charge_status,
     .charge_irq_cb_reg      = app_dev_battery_hal_charge_irq_cb_reg,
+    .charge_irq_switch      = app_dev_battery_hal_charge_irq_switch,
     .voltage_measure        = app_dev_battery_hal_voltage_measure,
     .curve_charge_table     = app_dev_battery_hal_curve_charge_table,
     .curve_discharge_table  = app_dev_battery_hal_curve_discharge_table,

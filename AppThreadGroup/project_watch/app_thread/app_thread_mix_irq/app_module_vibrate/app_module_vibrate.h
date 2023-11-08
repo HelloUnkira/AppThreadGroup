@@ -2,19 +2,22 @@
 #define APP_MODULE_VIBRATE_H
 
 /*@brief 震动节拍回调
+ *@param[in] vibrate 震动实例
  *@param[in] current 周期内的到达点,进度
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
  */
-typedef uint8_t (*app_module_vibrate_melody_t)(uint16_t current, uint16_t period);
+typedef uint8_t (*app_module_vibrate_melody_t)(void *vibrate, uint32_t current, uint32_t period);
 
 typedef struct {
     app_module_vibrate_melody_t melody; /* 震动节拍回调 */
-    uint16_t tick;      /* 震动周期记录(内部使用) */
-    uint16_t count;     /* 震动次数记录(内部使用) */
-    uint16_t period;    /* 震动周期 */
-    uint16_t repeat;    /* 震动次数 */
-    bool onoff;         /* 启停状态 */
+    uint64_t tick:10;       /* 震动周期记录(内部使用) */
+    uint64_t count:10;      /* 震动次数记录(内部使用) */
+    uint64_t pwm_max:7;     /* 振幅,最大振幅[0,100] */
+    uint64_t pwm_min:7;     /* 振幅,最小振幅[0,100] */
+    uint64_t period:10;     /* 震动周期 */
+    uint64_t repeat:10;     /* 震动次数 */
+    uint64_t onoff:1;       /* 启停状态(内部使用) */
 } app_module_vibrate_t;
 
 /*@brief        设置震动模组
@@ -50,7 +53,7 @@ void app_module_vibrate_ready(void);
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
  */
-uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period);
+uint8_t app_module_vibrate_melody_default_1(void *instance, uint32_t current, uint32_t period);
 
 /*@brief 震动节拍默认回调2
  *       先升后降,波峰波谷式震动
@@ -58,6 +61,6 @@ uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period);
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
  */
-uint8_t app_module_vibrate_melody_default_2(uint16_t current, uint16_t period);
+uint8_t app_module_vibrate_melody_default_2(void *instance, uint32_t current, uint32_t period);
 
 #endif

@@ -24,6 +24,9 @@ static bool app_module_vibrate_invalid(void)
         invalid_check = true;
     if (app_module_vibrate.melody == NULL)
         invalid_check = true;
+    if (app_module_vibrate.pwm_max <
+        app_module_vibrate.pwm_min)
+        invalid_check = true;
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     return invalid_check;
 }
@@ -88,7 +91,7 @@ void app_module_vibrate_msec_update(void)
         return;
     /* 所有周期结束,关闭震动模组 */
     if (vibrate.period == vibrate.tick &&
-        vibrate.repeat == vibrate.count &&
+        vibrate.repeat >= vibrate.count &&
         vibrate.repeat != -1) {
         app_module_vibrate_stop();
         return;
@@ -98,7 +101,7 @@ void app_module_vibrate_msec_update(void)
     /* 更新震动节拍 */
     static uint8_t melody_last = 0;
     static uint8_t melody_curr = 0;
-    melody_curr = vibrate.melody(vibrate.tick, vibrate.period);
+    melody_curr = vibrate.melody(&vibrate, vibrate.tick, vibrate.period);
     if (vibrate.tick == 0)
         APP_SYS_LOG_INFO_RAW("melody:");
     if (melody_last != melody_curr) {
@@ -145,12 +148,14 @@ void app_module_vibrate_ready(void)
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
  */
-uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period)
+uint8_t app_module_vibrate_melody_default_1(void *instance, uint32_t current, uint32_t period)
 {
+    app_module_vibrate_t *vibrate = instance;
+    
     if (current <= period / 2)
-        return 100;
+        return vibrate->pwm_max;
     else
-        return 0;
+        return vibrate->pwm_min;
 }
 
 /*@brief 震动节拍默认回调2
@@ -159,10 +164,12 @@ uint8_t app_module_vibrate_melody_default_1(uint16_t current, uint16_t period)
  *@param[in] period  设置的周期
  *@retval    百分比振幅[0,100]
  */
-uint8_t app_module_vibrate_melody_default_2(uint16_t current, uint16_t period)
+uint8_t app_module_vibrate_melody_default_2(void *instance, uint32_t current, uint32_t period)
 {
+    app_module_vibrate_t *vibrate = instance;
+    
     if (current * 2 <= period)
-        return (uint32_t)current * 2 * 100 / period;
+        return vibrate->pwm_min + (vibrate->pwm_max - vibrate->pwm_min) * (current * 2) / period;
     else
-        return 100 - ((uint32_t)current * 2 - period) * 100 / period;
+        return vibrate->pwm_max - (vibrate->pwm_max - vibrate->pwm_min) * (current * 2 - period) / period;
 }

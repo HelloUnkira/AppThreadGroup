@@ -7,6 +7,7 @@ typedef enum {  /* 线程模组 */
     app_thread_mix_irq_clock,           /* 时钟模组 */
     app_thread_mix_irq_battery,         /* 电池模组 */
     app_thread_mix_irq_vibrate,         /* 震动模组 */
+    app_thread_mix_irq_gesture,         /* 手势模组 */
     app_thread_mix_irq_temperature,     /* 温度模组 */
 } app_thread_mix_irq_module_t;
 
@@ -32,6 +33,11 @@ typedef enum {  /* 震动模组事件 */
     app_thread_mix_irq_vibrate_msec_update,
 } app_thread_mix_irq_vibrate_event_t;
 
+typedef enum {  /* 手势模组事件 */
+    app_thread_mix_irq_gesture_event,
+    app_thread_mix_irq_gesture_xmsec_update,
+} app_thread_mix_irq_gesture_event_t;
+
 typedef enum {  /* 温度模组事件 */
     app_thread_mix_irq_temperature_xms_update,
     app_thread_mix_irq_temperature_xs_update,
@@ -45,6 +51,7 @@ typedef enum {  /* 温度模组事件 */
 #include "app_module_watchdog.h"
 #include "app_module_battery.h"
 #include "app_module_vibrate.h"
+#include "app_module_gesture.h"
 #include "app_module_backlight.h"
 #include "app_module_temperature.h"
 

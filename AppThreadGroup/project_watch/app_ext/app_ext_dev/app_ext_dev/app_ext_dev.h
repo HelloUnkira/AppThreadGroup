@@ -21,6 +21,7 @@ extern const app_dev_t app_dev_watchdog;
 /* 设备抽象实例(custom) */
 extern const app_dev_t app_dev_battery;
 extern const app_dev_t app_dev_vibrate;
+extern const app_dev_t app_dev_gesture;
 extern const app_dev_t app_dev_backlight;
 extern const app_dev_t app_dev_temperature;
 
@@ -36,9 +37,25 @@ extern const app_dev_t app_dev_temperature;
 #include "app_ext_dev_vibrate.h"        /* vibrate */
 #include "app_ext_dev_backlight.h"      /* backlight */
 #include "app_ext_dev_temperature.h"    /* temperature */
+#include "app_ext_dev_gesture.h"        /* gesture */
 
 /*****************************************************************************/
-/*扩展指导1:
+/*说明:
+ *    何为低功耗方案:
+ *        低功耗芯片+低功耗设备控制策略
+ *    何为低功耗芯片:
+ *        持续一直工作时芯片本身的功耗并不高
+ *    何为低功耗设备控制策略:
+ *        处于低功耗或者关机流程
+ *        部分设备以及其外设因为其特性,不能够直接关闭
+ *        因为它需要持续不断地监控一些特殊事件
+ *        此时设备需要工作在低功耗模式以节约功耗
+ *        常规模式下,设备处于不稳定活跃态,也即它可能持续不断的工作或断续工作
+ *        而相反的低功耗模式下,设备大部分时间处于休眠状态,但会监控一些特殊事件
+ *        这些事件是不可被忽视的,一旦产生则设备需要立刻唤醒系统退出低功耗模式
+ *        并为到达的该事件触发处理流程并重新评估当前环境是否进入低功耗
+ *        通常来说代表的事件是硬件中断的产生
+ *扩展指导1:
  *    如果需要实现多设备挂载同一总线上使用
  *    例如: app_dev_1和app_dev_2同时使用MCU上的IIC总线1时
  *          那么此时则需要再构建一个app_dev_iic1虚拟设备

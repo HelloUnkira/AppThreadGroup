@@ -7,6 +7,7 @@ typedef struct {
     uint8_t  (*charge_full)(app_dev_t *driver);
     uint8_t  (*charge_status)(app_dev_t *driver);
     void     (*charge_irq_cb_reg)(app_dev_t *driver, void(*cb)(void));
+    void     (*charge_irq_switch)(app_dev_t *driver, bool flag);
     uint32_t (*voltage_measure)(app_dev_t *driver);
     void     (*curve_charge_table)(app_dev_t *driver, void **table, uint32_t *item);
     void     (*curve_discharge_table)(app_dev_t *driver, void **table, uint32_t *item);
@@ -74,6 +75,18 @@ static inline void app_dev_battery_charge_irq_cb_reg(app_dev_t *driver, void(*cb
     if (driver != NULL && driver->api != NULL) {
         const app_dev_battery_api_t *api = driver->api;
         api->charge_irq_cb_reg(driver, cb);
+    }
+}
+
+/*@brief     battery设备事件通报开关
+ *@param[in] driver 设备实例
+ *@param[in] flag   true:开启事件通报;false:关闭事件通报
+ */
+static inline void app_dev_battery_charge_irq_switch(app_dev_t *driver, bool flag)
+{
+    if (driver != NULL && driver->api != NULL) {
+        const app_dev_battery_api_t *api = driver->api;
+        api->charge_irq_switch(driver, flag);
     }
 }
 

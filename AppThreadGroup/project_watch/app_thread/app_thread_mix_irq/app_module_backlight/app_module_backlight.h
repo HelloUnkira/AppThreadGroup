@@ -15,6 +15,14 @@ void app_module_backlight_set(app_module_backlight_t *backlight);
  */
 void app_module_backlight_get(app_module_backlight_t *backlight);
 
+/*@brief 背光模组开启
+ */
+void app_module_backlight_open(void);
+
+/*@brief 背光模组关闭
+ */
+void app_module_backlight_close(void);
+
 /*@brief 背光模组初始化
  */
 void app_module_backlight_ready(void);

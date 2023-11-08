@@ -20,6 +20,7 @@ set_target_properties(app_thread PROPERTIES LINKER_LANGUAGE C)
 # 这里存在库的交叉依赖,因为日志模组希望做成全局化
 target_link_libraries(app_sys    PUBLIC app_ext)
 target_link_libraries(app_thread PUBLIC app_sys)
+target_link_libraries(app_thread PUBLIC jerry-core)
 # 文件迁移到目标
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/../app_sys/app_sys_ext_mem/*.py")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ext_mem)

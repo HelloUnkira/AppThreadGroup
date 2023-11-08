@@ -3,7 +3,8 @@
 
 /* 设备backlight抽象操作接口 */
 typedef struct {
-    void (*ready)(app_dev_t *driver);
+    void (*open)(app_dev_t *driver);
+    void (*close)(app_dev_t *driver);
     void (*update)(app_dev_t *driver, uint8_t duty_cycle);
 } app_dev_backlight_api_t;
 
@@ -12,14 +13,25 @@ typedef struct {
     void *data;
 } app_dev_backlight_data_t;
 
-/*@brief     backlight设备初始化
+/*@brief     backlight设备打开
  *@param[in] driver 设备实例
  */
-static inline void app_dev_backlight_ready(app_dev_t *driver)
+static inline void app_dev_backlight_open(app_dev_t *driver)
 {
     if (driver != NULL && driver->api != NULL) {
         const app_dev_backlight_api_t *api = driver->api;
-        api->ready(driver);
+        api->open(driver);
+    }
+}
+
+/*@brief     backlight设备关闭
+ *@param[in] driver 设备实例
+ */
+static inline void app_dev_backlight_close(app_dev_t *driver)
+{
+    if (driver != NULL && driver->api != NULL) {
+        const app_dev_backlight_api_t *api = driver->api;
+        api->close(driver);
     }
 }
 

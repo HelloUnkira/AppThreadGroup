@@ -22,13 +22,14 @@ static void app_thread_jerryscript_routine_ready_cb(void)
     
     #include "app_js_test_stream.txt"
     
+    APP_SYS_LOG_WARN("");
     //jerry_parse断言错误???
     //PARSER_TRY (context_p->try_buffer)
     //执行后context_p->error篡改为PARSER_ERR_EMPTY ???
-    jerry_value_t parse_result = jerry_parse(acJavaScript, sizeof (acJavaScript), NULL);
-    jerry_value_t run_result = jerry_run(parse_result);
-    jerry_value_free (run_result);
-    jerry_value_free (parse_result);
+    jerry_value_t retval_p = jerry_parse(acJavaScript, sizeof (acJavaScript), NULL);
+    jerry_value_t result_r = jerry_run(retval_p);
+    jerry_value_free(result_r);
+    jerry_value_free(retval_p);
     
     jerry_cleanup();
     #endif

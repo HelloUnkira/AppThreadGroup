@@ -50,9 +50,11 @@ bool app_lv_ui_scene_remind(app_lv_scene_t *remind_scene)
     if (true/* 开启震动 */) {
         /* 根据不同的场景配置不同的震动旋律 */
         app_module_vibrate_t vibrate = {
-            .melody = app_module_vibrate_melody_default_1,
-            .period = 500,
-            .repeat = 2,
+            .melody  = app_module_vibrate_melody_default_1,
+            .pwm_max = 100,
+            .pwm_min = 0,
+            .period  = 500,
+            .repeat  = 2,
         };
         /* 可以先获取震动状态考虑是否需要打断,这里默认打断 */
         app_module_vibrate_stop();

@@ -25,3 +25,9 @@ bool app_js_log_object_count_cb(const jerry_value_t property_name, const jerry_v
     return true;
 }
 
+bool jmem_is_heap_pointer(const void *pointer)
+{
+    APP_SYS_LOG_WARN("");
+    JERRY_UNUSED(pointer);
+    return true;
+}

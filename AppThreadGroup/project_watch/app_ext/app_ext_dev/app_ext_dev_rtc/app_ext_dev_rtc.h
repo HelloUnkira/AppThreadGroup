@@ -5,7 +5,7 @@
 typedef struct {
     void (*ready)(app_dev_t *driver);
     void (*irq_cb_reg)(app_dev_t *driver, void(*cb)(void));
-    void (*execute)(app_dev_t *driver);
+    void (*irq_switch)(app_dev_t *driver, bool flag);
     void (*get_utc)(app_dev_t *driver, uint64_t *utc);
     void (*set_utc)(app_dev_t *driver, uint64_t *utc);
 } app_dev_rtc_api_t;
@@ -30,7 +30,7 @@ static inline void app_dev_rtc_ready(app_dev_t *driver)
 
 /*@brief     rtc设备事件通报回调注册
  *@param[in] driver 设备实例
- *@param[in] cb     充电事件通报回调
+ *@param[in] cb     事件通报回调
  */
 static inline void app_dev_rtc_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
@@ -40,14 +40,15 @@ static inline void app_dev_rtc_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
     }
 }
 
-/*@brief     rtc设备运行
+/*@brief     rtc设备事件通报开关
  *@param[in] driver 设备实例
+ *@param[in] flag   true:开启事件通报;false:关闭事件通报
  */
-static inline void app_dev_rtc_execute(app_dev_t *driver)
+static inline void app_dev_rtc_irq_switch(app_dev_t *driver, bool flag)
 {
     if (driver != NULL && driver->api != NULL) {
         const app_dev_rtc_api_t *api = driver->api;
-        api->execute(driver);
+        api->irq_switch(driver, flag);
     }
 }
 

@@ -33,10 +33,23 @@ void app_module_backlight_get(app_module_backlight_t *backlight)
     app_mutex_process(&app_module_backlight_mutex, app_mutex_give);
 }
 
+/*@brief 背光模组开启
+ */
+void app_module_backlight_open(void)
+{
+    app_dev_backlight_open(&app_dev_backlight);
+}
+
+/*@brief 背光模组关闭
+ */
+void app_module_backlight_close(void)
+{
+    app_dev_backlight_close(&app_dev_backlight);
+}
+
 /*@brief 背光模组初始化
  */
 void app_module_backlight_ready(void)
 {
     app_mutex_process(&app_module_backlight_mutex, app_mutex_static);
-    app_dev_backlight_ready(&app_dev_backlight);
 }

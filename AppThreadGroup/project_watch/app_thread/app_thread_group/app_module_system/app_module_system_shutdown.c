@@ -22,9 +22,10 @@ bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_modul
         // 关机前的最后所需要转储的日志信息
         void app_module_system_message_shutdown(void);
         app_module_system_message_shutdown();
-        /* 重置系统一般最简单的就是系统复位,程序重开始 */
-        /* 否则需要手动对所有的状态和流程进行适配 */
-        // app_arch_reset();
+        /* 设备模组关闭 */
+        app_module_gesture_stop();
+        app_dev_gesture_dlps_exec(&app_dev_gesture, true, 1);
+        app_dev_gesture_irq_switch(&app_dev_gesture, false);
     }
     /* 系统工作中... */
     if (system->valid)

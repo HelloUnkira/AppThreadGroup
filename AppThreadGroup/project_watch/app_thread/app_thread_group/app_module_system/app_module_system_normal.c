@@ -33,24 +33,36 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         /* 进入dlps */
         if (system->dlps_status) {
             APP_SYS_LOG_WARN("dlps enter");
+            app_module_gesture_stop();
+            app_dev_gesture_dlps_exec(&app_dev_gesture, true, 0);
+            app_dev_gesture_irq_switch(&app_dev_gesture, true);
         }
         /* 退出dlps */
         if (!system->dlps_status) {
             APP_SYS_LOG_WARN("dlps exit");
+            app_module_gesture_start();
+            app_dev_gesture_dlps_exec(&app_dev_gesture, false, 0);
+            app_dev_gesture_irq_switch(&app_dev_gesture, false);
         }
     }
-    /* 执行场景加载 */
+    /* 执行场景加载,设备模组启动 */
     if (system->ctrl.normal.not_start_yet) {
         system->ctrl.normal.not_start_yet = false;
         app_lv_scene_start();
+        app_module_gesture_start();
+        app_dev_gesture_dlps_exec(&app_dev_gesture, false, 0);
+        app_dev_gesture_irq_switch(&app_dev_gesture, false);
     }
     /* 系统工作中... */
     if (system->valid)
         return true;
-    /* 执行场景转储 */
+    /* 执行场景转储,设备模组关闭 */
     if (system->ctrl.normal.not_stop_yet) {
         system->ctrl.normal.not_stop_yet = false;
         app_lv_scene_stop();
+        app_module_gesture_stop();
+        app_dev_gesture_dlps_exec(&app_dev_gesture, true, 0);
+        app_dev_gesture_irq_switch(&app_dev_gesture, true);
     }
     /* 系统关机转储流程 */
     if (system->ctrl.normal.not_dump_yet) {
@@ -61,5 +73,8 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         return true;
     
     /* normal模式结束,进行系统模式切换 */
+    /* 重置系统一般最简单的就是系统复位,程序重开始 */
+    /* 否则需要手动对所有的状态和流程进行适配 */
+    // app_arch_reset();
     return false;
 }
