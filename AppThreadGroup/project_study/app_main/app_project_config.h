@@ -10,8 +10,6 @@
 /* APP OS adaptor: */
 #define APP_OS_IS_WINDOWS   1
 #define APP_OS_IS_LINUX     0
-#define APP_OS_IS_ZEPHYR    0
-#define APP_OS_IS_FREERTOS  0
 /* APP arch adaptor: */
 #define APP_ARCH_IS_PC      1
 /* APP dev config */
