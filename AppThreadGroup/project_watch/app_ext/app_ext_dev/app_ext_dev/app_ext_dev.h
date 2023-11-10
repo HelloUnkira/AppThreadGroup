@@ -11,8 +11,6 @@ typedef struct {
 /* 外设设备入app_ext库 */
 /* 定制设备入app_dev库 */
 
-/* 设备抽象实例(template,不做实际的使用,只做编码结构参考) */
-extern const app_dev_t app_dev_empty;
 /* 设备抽象实例(peripheral) */
 extern const app_dev_t app_dev_log;
 extern const app_dev_t app_dev_ext_mem;
