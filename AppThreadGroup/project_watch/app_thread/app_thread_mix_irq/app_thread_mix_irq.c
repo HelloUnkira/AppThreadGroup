@@ -34,6 +34,7 @@ static void app_thread_mix_irq_routine_ready_cb(void)
     app_module_gesture_ready();
     app_module_backlight_ready();
     app_module_temperature_ready();
+    app_module_fusion_analysis_ready();
 }
 
 /*@brief 子线程服务例程处理部
@@ -73,18 +74,16 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
             app_module_vibrate_msec_update();
         return true;
     }
-    case app_thread_mix_irq_gesture: {
-        if (package->event == app_thread_mix_irq_gesture_event)
-            app_module_gesture_event_update();
-        if (package->event == app_thread_mix_irq_gesture_xmsec_update)
-            app_module_gesture_xmsec_update();
-        return true;
-    }
     case app_thread_mix_irq_temperature: {
         if (package->event == app_thread_mix_irq_temperature_xms_update)
             app_module_temperature_xms_update();
         if (package->event == app_thread_mix_irq_temperature_xs_update)
             app_module_temperature_xs_update();
+        return true;
+    }
+    case app_thread_mix_irq_fusion_analysis: {
+        if (package->event == app_thread_mix_irq_fusion_analysis_xmsec_update)
+            app_module_fusion_analysis_xmsec_update();
         return true;
     }
     default:

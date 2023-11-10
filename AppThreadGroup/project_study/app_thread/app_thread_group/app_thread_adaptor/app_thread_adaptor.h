@@ -22,14 +22,6 @@ typedef DWORD (WINAPI *app_thread_handler)(LPVOID lpParam);
 #define APP_THREAD_GROUP_HANDLER(app_thread_handler)    \
         void *   app_thread_handler (void *args)
 typedef void * (*app_thread_handler)(void *args);
-#elif APP_OS_IS_FREERTOS
-#define APP_THREAD_GROUP_HANDLER(app_thread_handler)    \
-        void *   app_thread_handler (void *pvParameters)
-typedef void * (*app_thread_handler)(void *pvParameters);
-#elif APP_OS_IS_ZEPHYR
-#define APP_THREAD_GROUP_HANDLER(app_thread_handler)    \
-        void *   app_thread_handler (void *args1, void *args2, void *args3)
-typedef void * (*app_thread_handler)(void *args1, void *args2, void *args3);
 #else
 #error "unknown os type"
 #endif
