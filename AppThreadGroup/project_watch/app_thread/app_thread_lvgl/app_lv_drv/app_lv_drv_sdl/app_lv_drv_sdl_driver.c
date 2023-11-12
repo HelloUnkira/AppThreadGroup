@@ -121,9 +121,8 @@ void app_lv_driver_handler(void)
         app_lv_driver_shutdown = true;
         /* 重启系统 */
         APP_SYS_LOG_WARN("");
-        if (app_module_system_dlps_get())
-            app_module_system_dlps_set(false);
-            app_module_system_valid_set(false);
+        app_module_system_dlps_set(false);
+        app_module_system_valid_set(false);
         if (app_module_system_mode_get() != app_module_data_center_system_mode_shutdown)
             app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
         else

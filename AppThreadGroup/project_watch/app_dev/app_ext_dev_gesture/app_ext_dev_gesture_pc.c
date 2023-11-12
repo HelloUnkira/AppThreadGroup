@@ -55,7 +55,7 @@ static inline void app_dev_gesture_hal_irq_switch(app_dev_t *driver, bool flag)
  *@param[in] frame  帧数据
  *@param[in] length 帧数据实际数量
  */
-static inline void app_dev_gesture_hal_get_frame(app_dev_t *driver, int32_t frame[][3], uint8_t *length)
+static inline void app_dev_gesture_hal_get_frame(app_dev_t *driver, int32_t frame[APP_EXT_DEV_GESTURE_FRAME_LIMIT][3], uint8_t *length)
 {
     const app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;

@@ -73,7 +73,7 @@ void app_lv_scene_start(void)
     /* 向线程发送场景启动事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_sched_ui,
+        .module = app_thread_lvgl_ui,
         .event  = app_thread_lvgl_ui_scene_start,
     };
     app_thread_package_notify(&package);
@@ -86,7 +86,7 @@ void app_lv_scene_stop(void)
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_sched_ui,
+        .module = app_thread_lvgl_ui,
         .event  = app_thread_lvgl_ui_scene_stop,
     };
     app_thread_package_notify(&package);
@@ -115,7 +115,7 @@ void app_lv_scene_shutdown(void)
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {
         .thread = app_thread_id_lvgl,
-        .module = app_thread_lvgl_sched_ui,
+        .module = app_thread_lvgl_ui,
         .event  = app_thread_lvgl_ui_scene_shutdown,
     };
     app_thread_package_notify(&package);

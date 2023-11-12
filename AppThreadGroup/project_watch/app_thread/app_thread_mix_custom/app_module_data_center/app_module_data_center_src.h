@@ -61,21 +61,21 @@ typedef struct {
         struct {
             app_module_remind_item_t       alarm_item[APP_MODULE_REMIND_ALARM_MAX];
             app_module_remind_alarm_info_t alarm_info[APP_MODULE_REMIND_ALARM_MAX];
-        } remind_alarm;
+        } module_remind_alarm;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(remind calendar) */
         /* 模组专用字段,模组内部使用:静止访问该字段 */
         struct {
             app_module_remind_item_t          calendar_item[APP_MODULE_REMIND_CALENDAR_MAX];
             app_module_remind_calendar_info_t calendar_info[APP_MODULE_REMIND_CALENDAR_MAX];
-        } remind_calendar;
+        } module_remind_calendar;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(remind matter) */
         /* 模组专用字段,模组内部使用:静止访问该字段 */
         struct {
             app_module_remind_item_t        matter_item[APP_MODULE_REMIND_MATTER_MAX];
             app_module_remind_matter_info_t matter_info[APP_MODULE_REMIND_MATTER_MAX];
-        } remind_matter;
+        } module_remind_matter;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(system profile) */
         struct {
@@ -168,34 +168,30 @@ typedef struct {
             uint8_t stride;             // stride cm
             uint8_t stride_run;         // stride run cm
             uint8_t stride_walk;        // stride walk cm
-            uint8_t gender:1;           // 0 as boy
-                                        // 1 as girl
-            uint8_t metric:1;           // 0 as km
-                                        // 1 as mi
-            uint8_t mode_time:1;        // 0 as 24 mode
-                                        // 1 as 12 mode
-            uint8_t mode_temp:1;        // 0 as C" mode
-                                        // 1 as F" mode
-            uint8_t mode_voice:1;       // 0 as disable voice
-                                        // 1 as enabble voice
-            uint8_t mode_vibrate:1;     // 0 as disable vibrate
-                                        // 1 as enabble vibrate
-            uint8_t state_bind:1;       // 0 as unbind state
-                                        // 1 as bind   state
-            uint8_t state_hand:1;       // 0 as left   hand
-                                        // 1 as right  hand
+            uint8_t gender:1;           // 0 as boy, 1 as girl
+            uint8_t metric:1;           // 0 as km, 1 as mi
+            uint8_t mode_time:1;        // 0 as 24 mode, 1 as 12 mode
+            uint8_t mode_temp:1;        // 0 as C" mode, 1 as F" mode
+            uint8_t mode_voice:1;       // 1 as open, 0 as close
+            uint8_t mode_vibrate:1;     // 1 as open, 0 as close
+            uint8_t state_bind:1;       // 0 as unbind, 1 as bind
+            uint8_t state_hand:1;       // 0 as left, 1 as right
             uint8_t state_week:2;       // 0 as start in monday
                                         // 1 as start in sunday
                                         // 2 as start in saturday
             uint8_t phone_type:2;       // 0 as Android
                                         // 1 as IOS
                                         // 2 as Harmony
-            uint8_t find_phone:1;       // 1 as open
-                                        // 0 as close
-            uint8_t find_band:1;        // 1 as open
-                                        // 0 as close
-            /* user profile: language */
-            uint8_t lang;
+            uint8_t find_phone:1;       // 1 as open, 0 as close
+            uint8_t find_band:1;        // 1 as open, 0 as close
+            uint8_t lang;               // language
+            /* user profile: user gesture */
+            struct {
+                uint8_t shake:1;        // shake
+                uint8_t wrist:1;        // wrist
+                uint8_t time_s[2];      // wrist:监控起始[时,分]
+                uint8_t time_e[2];      // wrist:监控结束[时,分]
+            } gesture;
             /* user profile: user goal */
             struct {
                 uint64_t step:32;               // 步数
@@ -207,8 +203,7 @@ typedef struct {
                 uint64_t time_walk:8;           // 走动时长(hour)
                 uint64_t time_sleep:16;         // 睡眠时长(min)
                 uint64_t time_duration:32;      // 中高时长(min)
-                uint64_t onoff:1;               // 1 as open
-                                                // 0 as close
+                uint64_t onoff:1;               // 1 as open,0 as close
             } goal;
             /* user profile: user volume */
             struct {
@@ -231,47 +226,39 @@ typedef struct {
                                                 // 1 as mute
                                                 // 2 as allow
                                                 // 3 as disallow
-                uint8_t onoff:1;                // 1 as open
-                                                // 0 as close
+                uint8_t onoff:1;                // 1 as open,0 as close
             } fitness;
             /* user profile: user noise monitor */
             struct {
                 uint8_t time_s[2];              // 监控起始[时,分]
                 uint8_t time_e[2];              // 监控结束[时,分]
                 uint8_t value;                  // 阈值
-                uint8_t onoff:1;                // 1 as open
-                                                // 0 as close
-                uint8_t onoff_noise:1;          // 1 as open
-                                                // 0 as close
+                uint8_t onoff:1;                // 1 as open,0 as close
+                uint8_t onoff_noise:1;          // 1 as open,0 as close
             } noise;
             /* user profile: user temperature monitor */
             struct {
                 uint8_t time_s[2];              // 监控起始[时,分]
                 uint8_t time_e[2];              // 监控结束[时,分]
-                uint8_t onoff:1;                // 1 as open
-                                                // 0 as close
+                uint8_t onoff:1;                // 1 as open,0 as close
             } temperature;
-            /* user profile: user motion recognition */
-            struct {
-                /* 添加各个模式的开关... */
-                uint8_t onoff:1;                // 1 as open
-                                                // 0 as close
-            } motion_recognition;
-            /* user profile: aod watchface */
-            struct {
-                uint8_t time_s[2];              // 提醒起始[时,分]
-                uint8_t time_e[2];              // 提醒结束[时,分]
-                uint8_t index:8;                // 表盘索引号
-                uint8_t onoff:1;                // 1 as open
-                                                // 0 as close
-            } aod_watchface;
-            /* user profile: ui theme level2 */
-            uint8_t ui_theme_level2;
             /* keep adding */
         } user_profile;
         /* --------------------------------------------------------------------- */
         /* 数据中心管理资源(user data) */
         struct {
+            /* user data: ui args */
+            struct {
+                /* user data: aod watchface */
+                struct {
+                    uint8_t time_s[2];              // 提醒起始[时,分]
+                    uint8_t time_e[2];              // 提醒结束[时,分]
+                    uint8_t index:8;                // 表盘索引号
+                    uint8_t onoff:1;                // 1 as open,0 as close
+                } aod_watchface;
+                /* user data: theme */
+                uint8_t theme;
+            } ui_args;
             /* user data: function usage statistics(buried data) */
             struct {
                 uint8_t  usage_type;

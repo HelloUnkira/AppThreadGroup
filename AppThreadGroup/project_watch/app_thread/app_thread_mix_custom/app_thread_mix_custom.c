@@ -49,7 +49,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         if (package->event == app_thread_mix_custom_countdown_expired) {
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
-                .module  = app_thread_lvgl_sched_ui,
+                .module  = app_thread_lvgl_ui,
                 .event   = app_thread_lvgl_ui_countdown_remind,
             };
             app_thread_package_notify(&package);
@@ -67,7 +67,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             if (app_module_remind_alarm_group_check(remind->remind_group)) {
                 /* 发送闹钟事件(直接转发) */
                 package->thread = app_thread_id_lvgl;
-                package->module = app_thread_lvgl_sched_ui;
+                package->module = app_thread_lvgl_ui;
                 package->event  = app_thread_lvgl_ui_remind_alarm;
                 app_thread_package_notify(package);
             }
@@ -83,7 +83,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         if (package->event == app_thread_mix_custom_remind_sedentary_interval) {
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
-                .module  = app_thread_lvgl_sched_ui,
+                .module  = app_thread_lvgl_ui,
                 .event   = app_thread_lvgl_ui_remind_sedentary,
             };
             app_thread_package_notify(&package);
@@ -92,7 +92,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         if (package->event == app_thread_mix_custom_remind_drink_interval) {
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
-                .module  = app_thread_lvgl_sched_ui,
+                .module  = app_thread_lvgl_ui,
                 .event   = app_thread_lvgl_ui_remind_drink,
             };
             app_thread_package_notify(&package);

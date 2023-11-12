@@ -50,8 +50,7 @@ void app_lv_check_time_update(void)
     if (app_lv_check_time.over_time == 0) {
         if (app_lv_check_time.dlps) {
             app_lv_check_time.dlps = false;
-            if (!app_module_system_dlps_get())
-                 app_module_system_dlps_set(true);
+            app_module_system_dlps_set(true);
         } else {
             /* 约减空闲等待 */
             if (app_lv_check_time.idle_time != 0 &&

@@ -1,7 +1,7 @@
 #ifndef APP_THREAD_MASTER_H
 #define APP_THREAD_MASTER_H
 
-typedef   app_sys_pipe_pkg_t app_thread_package_t;
+typedef app_sys_pipe_pkg_t app_thread_package_t;
 
 /* 事件包裹推荐优先级 */
 /* 归0初始化事件包默认为最低优先级 */

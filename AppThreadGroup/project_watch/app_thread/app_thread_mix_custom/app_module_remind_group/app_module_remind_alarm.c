@@ -68,8 +68,8 @@ void app_module_remind_alarm_dump(void)
     /* 更新数据中心资源 */
     app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
     app_module_remind_alarm_array_lock();
-    memcpy(&data_center_src->remind_alarm.alarm_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
-    memcpy(&data_center_src->remind_alarm.alarm_info, app_module_remind_alarm_info, sizeof(app_module_remind_alarm_info));
+    memcpy(&data_center_src->module_remind_alarm.alarm_item, app_module_remind_alarm_item, sizeof(app_module_remind_alarm_item));
+    memcpy(&data_center_src->module_remind_alarm.alarm_info, app_module_remind_alarm_info, sizeof(app_module_remind_alarm_info));
     app_module_remind_alarm_array_unlock();
     app_module_data_center_give();
 }
@@ -81,8 +81,8 @@ void app_module_remind_alarm_load(void)
     /* 更新数据中心资源 */
     app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_module_source);
     app_module_remind_alarm_array_lock();
-    memcpy(app_module_remind_alarm_item, &data_center_src->remind_alarm.alarm_item, sizeof(app_module_remind_alarm_item));
-    memcpy(app_module_remind_alarm_info, &data_center_src->remind_alarm.alarm_info, sizeof(app_module_remind_alarm_info));
+    memcpy(app_module_remind_alarm_item, &data_center_src->module_remind_alarm.alarm_item, sizeof(app_module_remind_alarm_item));
+    memcpy(app_module_remind_alarm_info, &data_center_src->module_remind_alarm.alarm_info, sizeof(app_module_remind_alarm_info));
     app_module_remind_alarm_array_unlock();
     app_module_data_center_give();
 }

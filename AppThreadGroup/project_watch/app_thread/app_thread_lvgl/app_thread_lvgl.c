@@ -103,7 +103,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
         }
         return true;
     }
-    case app_thread_lvgl_sched_ui: {
+    case app_thread_lvgl_ui: {
         /* 测试模式拦截该模组全部事件 */
         #if 0
         /* 禁用超时回退 */
@@ -135,8 +135,7 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             app_lv_event_default_config(NULL, false, NULL);
             app_lv_check_time_reset(0, 0);
             app_lv_check_time_exec(true);
-            if (app_module_system_dlps_get())
-                app_module_system_dlps_set(false);
+            app_module_system_dlps_set(false);
             APP_SYS_LOG_WARN("ui scene stop");
             app_lv_scene_reset(&app_lv_ui_watch_face, false);
             app_lv_scene_add(&app_lv_ui_stop, false);

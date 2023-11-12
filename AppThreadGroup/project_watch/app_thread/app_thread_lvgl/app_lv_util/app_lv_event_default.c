@@ -163,8 +163,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
                     if (current != &app_lv_ui_watch_face)
                         app_lv_scene_cover(&app_lv_ui_watch_face);
                     else
-                    if (!app_module_system_dlps_get())
-                         app_module_system_dlps_set(true);
+                        app_module_system_dlps_set(true);
                 }
                 /* 回到主界面 */
                 if (app_lv_scene_get_nest() != 1)
@@ -182,8 +181,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
                     app_lv_scene_t *current = NULL;
                     app_lv_scene_get_top(&current);
                     if (current == &app_lv_ui_watch_face)
-                    if (!app_module_system_dlps_get())
-                         app_module_system_dlps_set(true);
+                        app_module_system_dlps_set(true);
                 }
                 /* 返回上一层 */
                 if (app_lv_scene_get_nest() != 1) {
@@ -281,7 +279,6 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
         APP_SYS_LOG_INFO("LV_EVENT_CLICKED");
         /* DLPS界面退出 */
         if (lv_indev_get_type(lv_indev_get_act()) == LV_INDEV_TYPE_POINTER)
-        if (app_module_system_dlps_get())
             app_module_system_dlps_set(false);
         break;
     }

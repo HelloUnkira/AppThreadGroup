@@ -13,9 +13,8 @@ typedef struct {
 
 /* 设备gesture抽象操作数据 */
 typedef struct {
-#define APP_EXT_DEV_GESTURE_FRAME_MAX   (8)
-#define APP_EXT_DEV_GESTURE_FRAME_COF   (1024)      //小数化整,数据放大COF倍,例:G:9.8==>10035
-    int32_t frame[APP_EXT_DEV_GESTURE_FRAME_MAX][3];
+#define APP_EXT_DEV_GESTURE_FRAME_LIMIT     (8)
+    int32_t frame[APP_EXT_DEV_GESTURE_FRAME_LIMIT][3];  //小数化整,单位为mg/(s^2)
     /* GESTURE事件通报回调 */
     void (*irq_cb)(void);
 } app_dev_gesture_data_t;
@@ -61,7 +60,7 @@ static inline void app_dev_gesture_irq_switch(app_dev_t *driver, bool flag)
  *@param[in] frame  帧数据
  *@param[in] length 帧数据实际数量
  */
-static inline void app_dev_gesture_get_frame(app_dev_t *driver, int32_t frame[][3], uint8_t *length)
+static inline void app_dev_gesture_get_frame(app_dev_t *driver, int32_t frame[APP_EXT_DEV_GESTURE_FRAME_LIMIT][3], uint8_t *length)
 {
     if (driver != NULL && driver->api != NULL) {
         const app_dev_gesture_api_t *api = driver->api;

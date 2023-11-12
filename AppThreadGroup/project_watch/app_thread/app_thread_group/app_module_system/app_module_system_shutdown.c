@@ -23,7 +23,7 @@ bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_modul
         void app_module_system_message_shutdown(void);
         app_module_system_message_shutdown();
         /* 设备模组关闭 */
-        app_module_fusion_analysis_stop();
+        app_module_gesture_stop();
         app_dev_gesture_dlps_exec(&app_dev_gesture, true, 1);
         app_dev_gesture_irq_switch(&app_dev_gesture, false);
     }

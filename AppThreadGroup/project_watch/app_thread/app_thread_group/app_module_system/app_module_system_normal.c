@@ -33,14 +33,14 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         /* 进入dlps */
         if (system->dlps_status) {
             APP_SYS_LOG_WARN("dlps enter");
-            app_module_fusion_analysis_stop();
+            app_module_gesture_stop();
             app_dev_gesture_dlps_exec(&app_dev_gesture, true, 0);
             app_dev_gesture_irq_switch(&app_dev_gesture, true);
         }
         /* 退出dlps */
         if (!system->dlps_status) {
             APP_SYS_LOG_WARN("dlps exit");
-            app_module_fusion_analysis_start();
+            app_module_gesture_start();
             app_dev_gesture_dlps_exec(&app_dev_gesture, false, 0);
             app_dev_gesture_irq_switch(&app_dev_gesture, false);
         }
@@ -49,7 +49,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     if (system->ctrl.normal.not_start_yet) {
         system->ctrl.normal.not_start_yet = false;
         app_lv_scene_start();
-        app_module_fusion_analysis_start();
+        app_module_gesture_start();
         app_dev_gesture_dlps_exec(&app_dev_gesture, false, 0);
         app_dev_gesture_irq_switch(&app_dev_gesture, false);
     }
@@ -60,7 +60,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     if (system->ctrl.normal.not_stop_yet) {
         system->ctrl.normal.not_stop_yet = false;
         app_lv_scene_stop();
-        app_module_fusion_analysis_stop();
+        app_module_gesture_stop();
         app_dev_gesture_dlps_exec(&app_dev_gesture, true, 0);
         app_dev_gesture_irq_switch(&app_dev_gesture, true);
     }
