@@ -48,7 +48,7 @@ void app_module_rtc_1ms_cb(void)
     app_critical_process(&critical, app_critical_destroy);
     /* 心跳是生命之源 */
     if (count % 1000 == 0)
-        APP_SYS_LOG_INFO('1s handler');
+        APP_SYS_LOG_INFO("1s handler");
 }
 
 /*@brief 初始化RTC模组

@@ -8,6 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
+#include "app_arithmetic_lib.h"
 
 /*@brief     平滑滤波器重置
  *@param[in] smooth 实例

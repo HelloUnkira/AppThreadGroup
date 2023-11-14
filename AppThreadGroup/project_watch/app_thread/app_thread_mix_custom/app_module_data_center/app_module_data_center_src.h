@@ -203,7 +203,7 @@ typedef struct {
                 uint64_t time_walk:8;           // 走动时长(hour)
                 uint64_t time_sleep:16;         // 睡眠时长(min)
                 uint64_t time_duration:32;      // 中高时长(min)
-                uint64_t onoff:1;               // 1 as open,0 as close
+                uint64_t onoff:1;               // 1 as open, 0 as close
             } goal;
             /* user profile: user volume */
             struct {
@@ -226,21 +226,21 @@ typedef struct {
                                                 // 1 as mute
                                                 // 2 as allow
                                                 // 3 as disallow
-                uint8_t onoff:1;                // 1 as open,0 as close
+                uint8_t onoff:1;                // 1 as open, 0 as close
             } fitness;
             /* user profile: user noise monitor */
             struct {
                 uint8_t time_s[2];              // 监控起始[时,分]
                 uint8_t time_e[2];              // 监控结束[时,分]
                 uint8_t value;                  // 阈值
-                uint8_t onoff:1;                // 1 as open,0 as close
-                uint8_t onoff_noise:1;          // 1 as open,0 as close
+                uint8_t onoff:1;                // 1 as open, 0 as close
+                uint8_t onoff_noise:1;          // 1 as open, 0 as close
             } noise;
             /* user profile: user temperature monitor */
             struct {
                 uint8_t time_s[2];              // 监控起始[时,分]
                 uint8_t time_e[2];              // 监控结束[时,分]
-                uint8_t onoff:1;                // 1 as open,0 as close
+                uint8_t onoff:1;                // 1 as open, 0 as close
             } temperature;
             /* keep adding */
         } user_profile;
@@ -254,7 +254,7 @@ typedef struct {
                     uint8_t time_s[2];              // 提醒起始[时,分]
                     uint8_t time_e[2];              // 提醒结束[时,分]
                     uint8_t index:8;                // 表盘索引号
-                    uint8_t onoff:1;                // 1 as open,0 as close
+                    uint8_t onoff:1;                // 1 as open, 0 as close
                 } aod_watchface;
                 /* user data: theme */
                 uint8_t theme;

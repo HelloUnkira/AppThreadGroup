@@ -78,11 +78,7 @@
 #endif
 
 /* 断言:条件为真继续执行,为假时中断系统 */
-#if     APP_SYS_ASSERT_STATUS
 #define APP_SYS_ASSERT(cond)    (app_sys_assert(__FILE__, __func__, __LINE__, cond))
-#else
-#define APP_SYS_ASSERT(cond)
-#endif
 
 /* 追踪执行:标明执行到函数的哪一个步骤 */
 #if     APP_SYS_TRACE_STATUS

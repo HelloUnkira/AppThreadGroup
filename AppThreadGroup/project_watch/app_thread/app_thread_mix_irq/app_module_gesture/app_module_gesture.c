@@ -9,11 +9,12 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
+#include "app_arithmetic_lib.h"
 
 static app_mutex_t app_module_gesture_mutex = {0};
 static app_sys_timer_t app_module_gesture_timer = {0};
@@ -44,6 +45,8 @@ static void app_module_gesture_proc_exec(void)
     app_dev_gesture_get_frame(&app_dev_gesture, gesture_frame, &gesture_length);
     if (APP_EXT_DEV_GESTURE_FRAME_LIMIT > gesture_length)
         APP_SYS_LOG_INFO("frame is incomplete");
+    if (gesture_length == 0)
+        return;
         APP_SYS_LOG_DEBUG_RAW("frame<%d><x,y,z>:", gesture_length);
     for (uint8_t idx = 0; idx < gesture_length; idx++)
         APP_SYS_LOG_DEBUG_RAW("<0x%x,0x%x,0x%x>", gesture_frame[idx][0], gesture_frame[idx][1], gesture_frame[idx][2]);
@@ -51,17 +54,19 @@ static void app_module_gesture_proc_exec(void)
     /* 手势数据方向归一化 */
     for (uint8_t idx = 0; idx < gesture_length; idx++)
         app_module_gesture_adjust_dir(gesture_frame[idx]);
+    /*  */
     /*
      *算法处理:
      */
-    /* 运动方向数据统计 */
-    static app_arithmetic_sport_dir_t sport_dir;
-    app_arithmetic_sport_dir_proc(&sport_dir, gesture_frame, gesture_length);
-    
-    
+    /* 运动算法 */
+    static app_arithmetic_sport_t sport = {0};
+    app_arithmetic_sport_proc(&sport, gesture_frame, gesture_length);
     /* 其余手势算法 */
     app_arithmetic_gesture_wrist(gesture_frame, gesture_length);
     app_arithmetic_gesture_shake(gesture_frame, gesture_length);
+    /* 睡眠算法 */
+    
+    /* 其他需要使用本传感器的算法,帧数据同步 */
 }
 
 /*@brief 启动手势

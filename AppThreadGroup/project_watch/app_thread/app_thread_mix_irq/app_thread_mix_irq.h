@@ -61,9 +61,5 @@ typedef enum {
 #include "app_module_gesture.h"
 #include "app_module_backlight.h"
 #include "app_module_temperature.h"
-/* 子线程模组 */
-#include "app_arithmetic_gesture.h"
-#include "app_arithmetic_smooth.h"
-#include "app_arithmetic_sport.h"
 
 #endif

@@ -8,6 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
+#include "app_arithmetic_lib.h"
 
 /*@brief     抬手亮屏,放下息屏等
  *@param[in] frame  帧数据
