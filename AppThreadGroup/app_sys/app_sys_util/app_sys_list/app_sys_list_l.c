@@ -369,19 +369,19 @@ void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_
 {
     if (compare != NULL) {
         /* 迭代所有元素 */
-        app_sys_list_dln_t *curr = NULL;
-        app_sys_list_dll_btra(queue, prev) {
+        app_sys_list_dln_t *prev = NULL;
+        app_sys_list_dll_btra(queue, curr) {
             /* 第一次:比较队列头 */
-            if (curr == NULL && compare(node, prev)) {
+            if (prev == NULL && compare(node, curr)) {
                 app_sys_list_dll_pinsert(queue, NULL, node);
                 return;
             }
             /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
-            if (curr != NULL && compare(node, curr)) {
+            if (prev != NULL && compare(node, curr)) {
                 app_sys_list_dll_ainsert(queue, prev, node);
                 return;
             }
-            curr = prev;
+            prev = curr;
         }
     }
     app_sys_list_dll_ainsert(queue, NULL, node);

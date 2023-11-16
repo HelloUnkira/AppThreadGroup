@@ -274,6 +274,26 @@ static inline uint8_t app_sys_char_alnum_to_hex(char C) {return app_sys_char_is_
  */
 #define app_sys_cnt_o(type, data)   (sizeof(type) - app_sys_cnt_z(type, data))
 
+/*@brief 判断x是否等于2**x
+ */
+#define app_sys_pow2check(x)    ((x) != 0 && ((x) & ((x) - 1)) == 0)
+
+/*@brief 求size最近2**k
+ */
+static inline uintptr_t app_sys_pow2near(uintptr_t size)
+{
+    /* 求size最近2**x */
+    uint64_t pow2 = (uint64_t)size - 1;
+    pow2 |= pow2 >> 1;
+    pow2 |= pow2 >> 2;
+    pow2 |= pow2 >> 4;
+    pow2 |= pow2 >> 8;
+    pow2 |= pow2 >> 16;
+    pow2 |= pow2 >> 32;
+    pow2  = pow2 < (uint64_t)size ? pow2 << 1 : pow2;
+    return (uintptr_t)pow2;
+}
+
 /*@brief keep add...
  */
 

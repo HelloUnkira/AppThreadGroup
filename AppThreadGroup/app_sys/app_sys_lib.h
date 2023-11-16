@@ -24,6 +24,9 @@
 #include "app_sys_matrix.h"
 #include "app_sys_fft.h"
 /*  */
+#include "app_sys_slab.h"
+#include "app_sys_heap_dir.h"
+/*  */
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_cache.h"
 #include "app_sys_ext_mem_table.h"
@@ -31,7 +34,6 @@
 #include "app_sys_ext_mem_src_table.h"
 /*  */
 #include "app_sys_timer.h"
-#include "app_sys_slab.h"
 #include "app_sys_pipe.h"
 #include "app_sys_misc.h"
 #include "app_sys_util.h"

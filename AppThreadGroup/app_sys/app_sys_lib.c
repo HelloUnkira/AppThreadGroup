@@ -27,8 +27,6 @@ bool app_sys_test(void)
     #elif 0
     /* 系统组件插件测试,仅独立测试使用 */
     /* 测试接口有大量内存申请未释放的动作 */
-    void app_sys_rbuf_test(void);
-         app_sys_rbuf_test();
     void app_sys_list_dll_test(void);
          app_sys_list_dll_test();
     void app_sys_list_sll_test(void);
@@ -53,8 +51,18 @@ bool app_sys_test(void)
          app_sys_table_rbs_test();
     void app_sys_map_dlm_test(void);
          app_sys_map_dlm_test();
+    void app_sys_rbuf_test(void);
+         app_sys_rbuf_test();
     void app_sys_handle_test(void);
          app_sys_handle_test();
+    /*  */
+    return true;
+    #elif 0
+    void app_sys_heap_dir_test(void);
+    app_sys_heap_dir_test();
+    /*  */
+    return true;
+    #elif 0
     void app_sys_matrix_test(void);
          app_sys_matrix_test();
     void app_sys_fft_test(void);
