@@ -88,10 +88,10 @@ static inline void app_sys_mem_rev_b8(void *addr)
 #define app_sys_bit_rst(addr, pos, type) (app_sys_mem_w(addr, app_sys_mem_r(addr, uint##type##_t) & (~(1 << (pos % type))), uint##type##_t))
 
 /*@brief bit位操作(获取,设置,清除)(扩展到任意类型数据流)
- *       例: uint32_t arr[6] = {0}; //数据流
- *           app_sys_bit_ext_get(arr, 53, 32);  //获取第53个bit位(操作arr[1]的53-32位)
- *           app_sys_bit_ext_set(arr, 53, 32);  //设置第53个bit位(操作arr[1]的53-32位)
- *           app_sys_bit_ext_rst(arr, 53, 32);  //清除第53个bit位(操作arr[1]的53-32位)
+ *       例: uint32_t arr[6] = {0};             // 数据流
+ *           app_sys_bit_ext_get(arr, 53, 32);  // 获取第53个bit位(操作arr[1]的53-32位)
+ *           app_sys_bit_ext_set(arr, 53, 32);  // 设置第53个bit位(操作arr[1]的53-32位)
+ *           app_sys_bit_ext_rst(arr, 53, 32);  // 清除第53个bit位(操作arr[1]的53-32位)
  */
 #define app_sys_bit_ext_get(addr, pos, type) app_sys_bit_get((&(addr)[(pos) / type]), (pos) % type, type)
 #define app_sys_bit_ext_set(addr, pos, type) app_sys_bit_set((&(addr)[(pos) / type]), (pos) % type, type)
@@ -122,13 +122,9 @@ static inline void app_sys_to_be_b8(void *addr) {app_sys_mem_rev_b8(addr);}
 
 /*@brief 字节对齐
  */
-static inline uintptr_t app_sys_align_val(void)         {return sizeof(uintptr_t);}
-static inline uintptr_t app_sys_align_none(void *addr)  {return (uintptr_t)(addr);}
-static inline uintptr_t app_sys_align_off(void *addr)   {return app_sys_align_none(addr) % app_sys_align_val();}
-static inline uintptr_t app_sys_align_base(void *addr)  {return app_sys_align_none(addr) - app_sys_align_off(addr);}
-static inline uintptr_t app_sys_align_low(void *addr)   {return app_sys_align_base(addr);}
-static inline uintptr_t app_sys_align_high(void *addr)  {return app_sys_align_base(addr) + app_sys_align_val();}
-static inline bool      app_sys_align_check(void *addr) {return app_sys_align_off(addr) == 0;}
+static inline uintptr_t app_sys_align_low(  void *addr, uintptr_t align) {return ((uintptr_t)addr - (uintptr_t)addr % align);}
+static inline uintptr_t app_sys_align_high( void *addr, uintptr_t align) {return ((uintptr_t)addr - (uintptr_t)addr % align + align);}
+static inline bool      app_sys_align_check(void *addr, uintptr_t align) {return ((uintptr_t)addr % align) == 0;}
 
 /*@brief 字符字节简化操作
  */

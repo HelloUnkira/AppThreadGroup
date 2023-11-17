@@ -27,8 +27,8 @@ static bool app_sys_heap_dir_sort(app_sys_queue_dlpn_t * node1, app_sys_queue_dl
  */
 void app_sys_heap_dir_ready(app_sys_heap_dir_t *heap_dir, uintptr_t addr, uintptr_t size)
 {
-    APP_SYS_ASSERT(app_sys_align_check((void *)addr));
     APP_SYS_ASSERT(size > sizeof(app_sys_heap_dir_item_t));
+    APP_SYS_ASSERT(app_sys_align_check((void *)addr, sizeof(uintptr_t)));
     app_mutex_process(&heap_dir->mutex, app_mutex_static);
     app_sys_list_dll_reset(&heap_dir->dl_list_alloc);
     app_sys_list_dll_reset(&heap_dir->dl_list_free);
@@ -193,18 +193,17 @@ void * app_sys_heap_dir_alloc_align(app_sys_heap_dir_t *heap_dir, uintptr_t size
          APP_SYS_LOG_WARN("align size fail:%d", align);
          return NULL;
     }
+    void *pointer_raw = NULL;
+    void *pointer_ofs = NULL;
     size += align * 2;
-    void *pointer = app_sys_heap_dir_alloc_raw(heap_dir, size, way);
-    if (pointer == NULL)
-        return pointer;
-    uintptr_t align_ofs = (uintptr_t)pointer % align;
-    pointer = (void *)((uintptr_t)pointer - align_ofs + align);
-    align_ofs = align - align_ofs + align - sizeof(uintptr_t);
-    pointer = (void *)((uintptr_t)pointer + align - sizeof(uintptr_t));
-    *(uintptr_t *)pointer = align_ofs;
-    pointer = (void *)((uintptr_t)pointer + sizeof(uintptr_t));
-    APP_SYS_LOG_DEBUG("pointer:%p, align:%d, size:%d", pointer, align_ofs, size);
-    return pointer;
+    if ((pointer_raw = app_sys_heap_dir_alloc_raw(heap_dir, size, way)) == NULL)
+         return NULL;
+    /*  */
+    pointer_ofs = (void *)(app_sys_align_high(pointer_raw, align) + align);
+    *(uintptr_t *)((uintptr_t)pointer_ofs - sizeof(uintptr_t)) = (uintptr_t)pointer_ofs - (uintptr_t)pointer_raw;
+    APP_SYS_LOG_DEBUG("pointer_ofs:%p, pointer_raw:%p, align:%d",
+                       pointer_ofs,    pointer_raw,   (uintptr_t)pointer_ofs - (uintptr_t)pointer_raw);
+    return pointer_ofs;
 }
 
 /*@brief         双端分配堆获取内存
@@ -226,10 +225,8 @@ void app_sys_heap_dir_free(app_sys_heap_dir_t *heap_dir, void *pointer)
 {
     if (pointer == NULL)
         return;
-    pointer = (void *)((uintptr_t)pointer - sizeof(uintptr_t));
-    uintptr_t align_ofs = *(uintptr_t *)pointer;
-    pointer = (void *)((uintptr_t)pointer - align_ofs);
-    APP_SYS_LOG_DEBUG("pointer:%p, align:%d", pointer, align_ofs);
+    pointer = (void *)((uintptr_t)pointer - *(uintptr_t *)((uintptr_t)pointer - sizeof(uintptr_t)));
+    APP_SYS_LOG_DEBUG("pointer:%p", pointer);
     app_sys_heap_dir_free_raw(heap_dir, pointer);
 }
 

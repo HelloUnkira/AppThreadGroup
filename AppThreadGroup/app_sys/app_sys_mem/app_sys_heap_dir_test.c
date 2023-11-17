@@ -40,7 +40,7 @@ void app_sys_heap_dir_test(void)
                  size_block -= rand() % (APP_SYS_HEAP_DIR_BASE / 2);
              list[pos] = app_sys_heap_dir_alloc(&heap_dir, size_block, rand() % 2);
              /* 首地址对齐检查 */
-             APP_SYS_ASSERT(app_sys_align_off(list[pos]) == 0);
+             APP_SYS_ASSERT(app_sys_align_check(list[pos], sizeof(uintptr_t)));
          }
     }
     app_sys_heap_dir_check(&heap_dir);
@@ -72,7 +72,7 @@ void app_sys_heap_dir_test(void)
              uint32_t size_align = rand() % 3;
              list[pos] = app_sys_heap_dir_alloc_align(&heap_dir, size_block, align[size_align], rand() % 2);
              /* 首地址对齐检查 */
-             APP_SYS_ASSERT((uintptr_t)list[pos] % align[size_align] == 0);
+             APP_SYS_ASSERT(app_sys_align_check(list[pos], align[size_align]));
          }
     }
     app_sys_heap_dir_check(&heap_dir);
