@@ -199,7 +199,7 @@ void * app_sys_heap_dir_alloc_align(app_sys_heap_dir_t *heap_dir, uintptr_t size
     if ((pointer_raw = app_sys_heap_dir_alloc_raw(heap_dir, size, way)) == NULL)
          return NULL;
     /*  */
-    pointer_ofs = (void *)(app_sys_align_high(pointer_raw, align) + align);
+    pointer_ofs = (void *)((uintptr_t)app_sys_align_high(pointer_raw, align) + align);
     *(uintptr_t *)((uintptr_t)pointer_ofs - sizeof(uintptr_t)) = (uintptr_t)pointer_ofs - (uintptr_t)pointer_raw;
     APP_SYS_LOG_DEBUG("pointer_ofs:%p, pointer_raw:%p, align:%d",
                        pointer_ofs,    pointer_raw,   (uintptr_t)pointer_ofs - (uintptr_t)pointer_raw);

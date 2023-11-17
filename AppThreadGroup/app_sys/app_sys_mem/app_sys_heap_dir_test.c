@@ -20,7 +20,7 @@ void app_sys_heap_dir_test(void)
     void     *list[APP_SYS_HEAP_DIR_COUNT] = {0};
     
     app_sys_heap_dir_t heap_dir = {0};
-    app_sys_heap_dir_ready(&heap_dir, buffer, size);
+    app_sys_heap_dir_ready(&heap_dir, (uintptr_t)buffer, size);
     
     /* 将内存尽可能的榨干 */
     for (uint32_t idx = 0; idx < APP_SYS_HEAP_DIR_COUNT; idx++) {
