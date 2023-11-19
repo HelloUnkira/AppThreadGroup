@@ -60,6 +60,8 @@ bool app_sys_test(void)
     #elif 0
     void app_sys_heap_dir_test(void);
     app_sys_heap_dir_test();
+    void app_sys_heap_olsf_test(void);
+    app_sys_heap_olsf_test();
     /*  */
     return true;
     #elif 0

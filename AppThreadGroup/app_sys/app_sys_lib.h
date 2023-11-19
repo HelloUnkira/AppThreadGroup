@@ -26,6 +26,7 @@
 /*  */
 #include "app_sys_slab.h"
 #include "app_sys_heap_dir.h"
+#include "app_sys_heap_olsf.h"
 /*  */
 #include "app_sys_ext_mem.h"
 #include "app_sys_ext_mem_cache.h"

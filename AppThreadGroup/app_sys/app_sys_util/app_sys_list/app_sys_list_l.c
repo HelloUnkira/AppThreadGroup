@@ -330,15 +330,15 @@ void app_sys_queue_slpq_enqueue(app_sys_queue_slpq_t *queue, app_sys_queue_slpn_
 {
     if (compare != NULL) {
         /* 迭代所有元素 */
-        app_sys_list_sln_t *curr = NULL;
-        app_sys_list_sll_tra(queue, prev) {
+        app_sys_list_sln_t *prev = NULL;
+        app_sys_list_sll_tra(queue, curr) {
             /* 第一次:比较队列头 */
-            if (curr == NULL && compare(node, prev)) {
+            if (prev == NULL && compare(node, curr)) {
                 app_sys_list_sll_pinsert(queue, node);
                 return;
             }
             /* 比较当前节点,如果命中则加入到当前节点前一节点之后*/
-            if (curr != NULL && compare(node, curr)) {
+            if (prev != NULL && compare(node, curr)) {
                 app_sys_list_sll_insert(queue, prev, node);
                 return;
             }
