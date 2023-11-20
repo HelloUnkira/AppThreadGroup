@@ -122,9 +122,9 @@ static inline void app_sys_to_be_b8(void *addr) {app_sys_mem_rev_b8(addr);}
 
 /*@brief 字节对齐
  */
-static inline void * app_sys_align_low(  void *addr, uintptr_t align) {return (void *)((uintptr_t)addr - (uintptr_t)addr % align);}
-static inline void * app_sys_align_high( void *addr, uintptr_t align) {return (void *)((uintptr_t)addr - (uintptr_t)addr % align + align);}
-static inline bool   app_sys_align_check(void *addr, uintptr_t align) {return ((uintptr_t)addr % align) == 0;}
+static inline void * app_sys_align_low(  void *addr, uintptr_t align) {return (void *)(((uintptr_t)addr + (        0)) & ~(align - 1));}
+static inline void * app_sys_align_high( void *addr, uintptr_t align) {return (void *)(((uintptr_t)addr + (align - 1)) & ~(align - 1));}
+static inline bool   app_sys_align_check(void *addr, uintptr_t align) {return (bool  )(((uintptr_t)addr % (align)) == 0);}
 
 /*@brief 字符字节简化操作
  */

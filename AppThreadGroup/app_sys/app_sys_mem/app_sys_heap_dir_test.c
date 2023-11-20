@@ -14,7 +14,7 @@ void app_sys_heap_dir_test(void)
     #define APP_SYS_HEAP_DIR_COUNT      (1024)
     #define APP_SYS_HEAP_DIR_BASE       (512)
 
-    uintptr_t align[] = {sizeof(uintptr_t), sizeof(uintptr_t) * 2, sizeof(uintptr_t) * 4, };
+    uintptr_t align[] = {sizeof(uintptr_t), sizeof(uintptr_t) * 2, sizeof(uintptr_t) * 4,};
     uintptr_t size = APP_SYS_HEAP_DIR_COUNT * APP_SYS_HEAP_DIR_BASE;
     uint8_t  *buffer = app_mem_alloc(size);
     void     *list[APP_SYS_HEAP_DIR_COUNT] = {0};

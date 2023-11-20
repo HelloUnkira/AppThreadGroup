@@ -2,7 +2,7 @@
 #define APP_SYS_HEAP_OLSF_H
 
 /*
- *(动态内存管理)一级隔离策略分配器(One Level Segregated Fit)
+ *(动态内存管理)一级隔离策略分配堆(One Level Segregated Fit)
  *该实现参考于zephyr\lib\os\heap
  *该分配实现主要以去除首地址偏移
  *将数据按小的单元切分成块
@@ -47,6 +47,8 @@ typedef struct {
     uintptr_t addr_end;
     uintptr_t size_old;
     uintptr_t size_new;
+    uintptr_t chunk_hdr;
+    uintptr_t chunk_end;
     uintptr_t number;       /* 单元块数量 */
     uintptr_t bitmap;       /* 块空闲链表标记位图 */
     uintptr_t bucket[0];    /* 块空闲链表(以2的指数次方分割) */
@@ -55,28 +57,40 @@ typedef struct {
 /* chunk的单元类型固定为uintptr_t */
 #define app_sys_heap_olsf_loops     3
 
-/*@brief     释放内存
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆释放内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] pointer   内存地址
  */
 void app_sys_heap_olsf_free(app_sys_heap_olsf_t *heap_olsf, void *pointer);
 
-/*@brief     申请内存
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆申请内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] size      字节大小
  */
 void * app_sys_heap_olsf_alloc(app_sys_heap_olsf_t *heap_olsf, uintptr_t size);
 
-/*@brief     分配器实例初始化
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆申请内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
+ *@param[in] size      字节大小
+ *@param[in] align     指定字节对齐(不小于平台字节对齐, 2的指数)
+ */
+void * app_sys_heap_olsf_alloc_align(app_sys_heap_olsf_t *heap_olsf, uintptr_t size, uintptr_t align);
+
+/*@brief         一级隔离策略分配堆重获取内存
+ *               realloc语义不提供,应该规避这种情况的使用
+ *               它存在造成内存封装过大的情况,使用应该规避掉对这种逻辑的产生
+ */
+
+/*@brief     一级隔离策略分配堆实例初始化
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] addr      内存地址
  *@param[in] size      字节大小
  *@retval    返回分配器(分配器在内存头部)
  */
 app_sys_heap_olsf_t * app_sys_heap_olsf_ready(void *addr, uintptr_t size);
 
-/*@brief     分配器内存布局使用
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆内存布局使用
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  */
 void app_sys_heap_olsf_check(app_sys_heap_olsf_t *heap_olsf);
 

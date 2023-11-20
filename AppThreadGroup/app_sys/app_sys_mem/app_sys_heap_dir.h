@@ -63,6 +63,11 @@ void * app_sys_heap_dir_alloc_align(app_sys_heap_dir_t *heap_dir, uintptr_t size
  */
 void * app_sys_heap_dir_alloc(app_sys_heap_dir_t *heap_dir, uintptr_t size, bool way);
 
+/*@brief         双端分配堆重获取内存
+ *               realloc语义不提供,应该规避这种情况的使用
+ *               它存在造成内存封装过大的情况,使用应该规避掉对这种逻辑的产生
+ */
+
 /*@brief         双端分配堆归还内存
  *@param[in,out] heap_dir 双端分配堆实例
  *@param[in]     pointer  内存地址

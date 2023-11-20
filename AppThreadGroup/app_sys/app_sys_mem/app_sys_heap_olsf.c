@@ -1,5 +1,5 @@
 /*实现目标:
- *    heap分配器(一级隔离策略分配器)
+ *    heap分配器(一级隔离策略分配堆)
  */
 
 #define APP_SYS_LOG_RECORD_LIMIT     1
@@ -10,7 +10,7 @@
 #include "app_sys_lib.h"
 
 /*@brief     计算field的域数据占用
- *@param[in] heap_olsf   分配器实例
+ *@param[in] heap_olsf   一级隔离策略分配堆实例
  *@param[in] chunk_align 块单元对齐(默认字节对齐,实际大小)
  *@retval    域数据占用长度
  */
@@ -37,17 +37,17 @@ static inline uintptr_t app_sys_heap_olsf_field_size(app_sys_heap_olsf_t *heap_o
 
 /*@brief     偏移到chunk的第0个块头
  *           此时索引是类似于chunk size的chunk unit类型数组
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@retval    返回chunk 0的地址
  */
-static inline uintptr_t * app_sys_heap_olsf_chunk_0(app_sys_heap_olsf_t *heap_olsf)
+static inline uintptr_t * app_sys_heap_olsf_chunk_zero(app_sys_heap_olsf_t *heap_olsf)
 {
     /* 通过内存布局规则,偏移到第0个chunk,它刚好就是chunk field的起始位置 */
     return (uintptr_t *)((uintptr_t)heap_olsf - app_sys_heap_olsf_field_size(heap_olsf, true));
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] type      指定chunk的type
  *@param[in] value     指定chunk的value
@@ -57,7 +57,7 @@ static inline void app_sys_heap_olsf_field_set(app_sys_heap_olsf_t *heap_olsf,
                                                uintptr_t chunk, uintptr_t value)
 {
     APP_SYS_ASSERT(chunk <= heap_olsf->number);
-    uintptr_t *chunk_x = &app_sys_heap_olsf_chunk_0(heap_olsf)[chunk];
+    uintptr_t *chunk_x = &app_sys_heap_olsf_chunk_zero(heap_olsf)[chunk];
     app_sys_heap_olsf_field_8_t  *chunk_x_8  = (void *)chunk_x;
     app_sys_heap_olsf_field_16_t *chunk_x_16 = (void *)chunk_x;
     app_sys_heap_olsf_field_32_t *chunk_x_32 = (void *)chunk_x;
@@ -78,7 +78,7 @@ static inline void app_sys_heap_olsf_field_set(app_sys_heap_olsf_t *heap_olsf,
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] type      指定chunk的type
  *retval     指定chunk的value
@@ -88,7 +88,7 @@ static inline uintptr_t app_sys_heap_olsf_field_get(app_sys_heap_olsf_t *heap_ol
                                                     uintptr_t chunk)
 {
     APP_SYS_ASSERT(chunk <= heap_olsf->number);
-    uintptr_t *chunk_x = &app_sys_heap_olsf_chunk_0(heap_olsf)[chunk];
+    uintptr_t *chunk_x = &app_sys_heap_olsf_chunk_zero(heap_olsf)[chunk];
     app_sys_heap_olsf_field_8_t  *chunk_x_8  = (void *)chunk_x;
     app_sys_heap_olsf_field_16_t *chunk_x_16 = (void *)chunk_x;
     app_sys_heap_olsf_field_32_t *chunk_x_32 = (void *)chunk_x;
@@ -105,7 +105,7 @@ static inline uintptr_t app_sys_heap_olsf_field_get(app_sys_heap_olsf_t *heap_ol
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] value     指定chunk的value
  */
@@ -118,7 +118,7 @@ static inline void app_sys_heap_olsf_size_set(app_sys_heap_olsf_t *heap_olsf, ui
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] value     指定chunk的value
  */
@@ -129,7 +129,7 @@ static inline void app_sys_heap_olsf_used_set(app_sys_heap_olsf_t *heap_olsf, ui
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] value     指定chunk的value
  */
@@ -139,7 +139,7 @@ static inline void app_sys_heap_olsf_free_prev_set(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] value     指定chunk的value
  */
@@ -149,7 +149,7 @@ static inline void app_sys_heap_olsf_free_next_set(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     设置chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] value     指定chunk的value
  */
@@ -159,7 +159,7 @@ static inline void app_sys_heap_olsf_size_near_set(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的value
  */
@@ -169,7 +169,7 @@ static inline uintptr_t app_sys_heap_olsf_size_get(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的value
  */
@@ -179,7 +179,7 @@ static inline uintptr_t app_sys_heap_olsf_used_get(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的value
  */
@@ -189,7 +189,7 @@ static inline uintptr_t app_sys_heap_olsf_free_prev_get(app_sys_heap_olsf_t *hea
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的value
  */
@@ -199,7 +199,7 @@ static inline uintptr_t app_sys_heap_olsf_free_next_get(app_sys_heap_olsf_t *hea
 }
 
 /*@brief     获得chunk field字段值
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的value
  */
@@ -209,7 +209,7 @@ static inline uintptr_t app_sys_heap_olsf_size_near_get(app_sys_heap_olsf_t *hea
 }
 
 /*@brief     获得临近chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的左临近chunk
  */
@@ -219,7 +219,7 @@ static inline uintptr_t app_sys_heap_olsf_chunk_left(app_sys_heap_olsf_t *heap_o
 }
 
 /*@brief     获得临近chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *retval     指定chunk的右临近chunk
  */
@@ -242,7 +242,7 @@ static inline uintptr_t app_sys_heap_olsf_calc_bkt_idx(uintptr_t size)
 }
 
 /*@brief     空闲链表移除chunk,从指定index的bucket中
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] index     指定bucket的index
  */
@@ -268,7 +268,7 @@ static void app_sys_heap_olsf_free_list_del_bkt_idx(app_sys_heap_olsf_t *heap_ol
 }
 
 /*@brief     空闲链表添加chunk,从指定index的bucket中
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] index     指定bucket的index
  */
@@ -294,7 +294,7 @@ static void app_sys_heap_olsf_free_list_add_bkt_idx(app_sys_heap_olsf_t *heap_ol
 }
 
 /*@brief     空闲链表移除指定chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] index     指定bucket的index
  */
@@ -306,7 +306,7 @@ static inline void app_sys_heap_olsf_free_list_del(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     空闲链表添加指定chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@param[in] index     指定bucket的index
  */
@@ -318,7 +318,7 @@ static inline void app_sys_heap_olsf_free_list_add(app_sys_heap_olsf_t *heap_ols
 }
 
 /*@brief     将chunk1分裂为chunk2和chunk3
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk1    指定chunk
  *@param[in] chunk2    指定chunk
  */
@@ -341,7 +341,7 @@ static void app_sys_heap_olsf_chunk_split(app_sys_heap_olsf_t *heap_olsf, uintpt
 }
 
 /*@brief     将chunk1和chunk2合并为chunk1
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk1    指定chunk
  *@param[in] chunk2    指定chunk
  */
@@ -357,7 +357,7 @@ static void app_sys_heap_olsf_chunk_merge(app_sys_heap_olsf_t *heap_olsf, uintpt
 }
 
 /*@brief     释放一个chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  */
 static void app_sys_heap_olsf_chunk_free(app_sys_heap_olsf_t *heap_olsf, uintptr_t chunk)
@@ -380,7 +380,7 @@ static void app_sys_heap_olsf_chunk_free(app_sys_heap_olsf_t *heap_olsf, uintptr
 }
 
 /*@brief     申请一个chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] size      字节大小
  *@retval    指定chunk
  */
@@ -426,33 +426,33 @@ static uintptr_t app_sys_heap_olsf_chunk_alloc(app_sys_heap_olsf_t *heap_olsf, u
 }
 
 /*@brief     addr转为chunk
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] addr      相对内存地址
  *@retval    指定chunk
  */
 static uintptr_t app_sys_heap_olsf_addr_to_chunk(app_sys_heap_olsf_t *heap_olsf, uintptr_t addr)
 {
-    uintptr_t chunk = addr - (uintptr_t)app_sys_heap_olsf_chunk_0(heap_olsf);
+    uintptr_t chunk = addr - (uintptr_t)app_sys_heap_olsf_chunk_zero(heap_olsf);
     chunk -= app_sys_heap_olsf_field_size(heap_olsf, true);
     chunk /= sizeof(uintptr_t);
     return chunk;
 }
 
 /*@brief     chunk转为addr
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] chunk     指定chunk
  *@retval    相对内存地址
  */
 static uintptr_t app_sys_heap_olsf_chunk_to_addr(app_sys_heap_olsf_t *heap_olsf, uintptr_t chunk)
 {
-    uintptr_t addr = &app_sys_heap_olsf_chunk_0(heap_olsf)[chunk];
+    uintptr_t addr = &app_sys_heap_olsf_chunk_zero(heap_olsf)[chunk];
     addr += app_sys_heap_olsf_field_size(heap_olsf, true);
     APP_SYS_ASSERT(app_sys_align_check((void *)addr, sizeof(uintptr_t)));
     return addr;
 }
 
 /*@brief     对齐size到uintptr_t且加上field对齐的size
- *@param[in] heap_olsf 分配器实例
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] size      字节大小
  *@retval    chunk
  */
@@ -464,8 +464,8 @@ static uintptr_t app_sys_heap_olsf_calc_size(app_sys_heap_olsf_t *heap_olsf, uin
     return size / sizeof(uintptr_t);
 }
 
-/*@brief     释放内存
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆释放内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] pointer   内存地址
  */
 void app_sys_heap_olsf_free(app_sys_heap_olsf_t *heap_olsf, void *pointer)
@@ -486,12 +486,13 @@ void app_sys_heap_olsf_free(app_sys_heap_olsf_t *heap_olsf, void *pointer)
     app_sys_heap_olsf_chunk_free(heap_olsf, chunk);
 }
 
-/*@brief     申请内存
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆申请内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] size      字节大小
  */
 void * app_sys_heap_olsf_alloc(app_sys_heap_olsf_t *heap_olsf, uintptr_t size)
 {
+    void *pointer = NULL;
     /* 分配长度容错检查 */
     if (size == 0 || size / sizeof(uintptr_t) >= heap_olsf->number)
         return NULL;
@@ -507,11 +508,69 @@ void * app_sys_heap_olsf_alloc(app_sys_heap_olsf_t *heap_olsf, uintptr_t size)
         app_sys_heap_olsf_free_list_add(heap_olsf, chunk + size);
     }
     app_sys_heap_olsf_used_set(heap_olsf, chunk, true);
-    return app_sys_heap_olsf_chunk_to_addr(heap_olsf, chunk);
+    pointer = (void *)app_sys_heap_olsf_chunk_to_addr(heap_olsf, chunk);
+    return pointer;
 }
 
-/*@brief     分配器实例初始化
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆申请内存
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
+ *@param[in] size      字节大小
+ *@param[in] align     指定字节对齐(不小于平台字节对齐, 2的指数)
+ */
+void * app_sys_heap_olsf_alloc_align(app_sys_heap_olsf_t *heap_olsf, uintptr_t size, uintptr_t align)
+{
+    void *pointer = NULL;
+    /* 分配长度容错检查 */
+    if (size == 0 || size / sizeof(uintptr_t) >= heap_olsf->number)
+        return NULL;
+    /* 对齐尺寸检查 */
+    if (!app_sys_pow2check(align) || align < sizeof(uintptr_t)) {
+         APP_SYS_LOG_WARN("align size fail:%d", align);
+         return NULL;
+    }
+     if (align == sizeof(uintptr_t))
+         return app_sys_heap_olsf_alloc(heap_olsf, size);
+    /*默认平台字节对齐:
+     *为了实现更高粒度的对齐效果
+     *在分配空间时额外多申请一个小块
+     *在对齐后切碎前面的小块并将其还回
+     *此时获得的地址为目标对齐的
+     */
+    size = app_sys_heap_olsf_calc_size(heap_olsf, size);
+    uintptr_t size_pad = app_sys_heap_olsf_calc_size(heap_olsf, align);
+    uintptr_t chunk1 = app_sys_heap_olsf_chunk_alloc(heap_olsf, size + size_pad);
+    uintptr_t chunk = chunk1;
+    if (chunk1 == 0)
+        return NULL;
+    /* 转为地址,然后向上对齐 */
+    void *addr = (void *)app_sys_heap_olsf_chunk_to_addr(heap_olsf, chunk1);
+    /* 如果已经对齐了,不需要额外的对齐了 */
+    if (addr != app_sys_align_high(addr, align)) {
+        addr  = (void *)((uintptr_t)addr + app_sys_heap_olsf_field_size(heap_olsf, true));
+        addr  = app_sys_align_high(addr, align);
+        chunk = app_sys_heap_olsf_addr_to_chunk(heap_olsf, (uintptr_t)addr);
+        APP_SYS_ASSERT(app_sys_heap_olsf_field_size(heap_olsf, true) <= (chunk - chunk1) * sizeof(uintptr_t));
+    }
+    APP_SYS_ASSERT(chunk1 <= chunk);
+    /* 分裂chunk */
+    if (chunk1 < chunk) {
+        app_sys_heap_olsf_chunk_split(heap_olsf, chunk1, chunk);
+        app_sys_heap_olsf_free_list_add(heap_olsf, chunk1);
+    }
+    /* 将剩余的部分切开(保证剩下的空间至少成一个头) */
+    if (app_sys_heap_olsf_size_get(heap_olsf, chunk) >
+        app_sys_heap_olsf_field_size(heap_olsf, true) + size) {
+        app_sys_heap_olsf_chunk_split(heap_olsf, chunk, chunk + size);
+        app_sys_heap_olsf_free_list_add(heap_olsf, chunk + size);
+    }
+    app_sys_heap_olsf_used_set(heap_olsf, chunk, true);
+    pointer = (void *)app_sys_heap_olsf_chunk_to_addr(heap_olsf, chunk);
+    APP_SYS_ASSERT(app_sys_align_check(pointer, align));
+    return pointer;
+}
+
+/*@brief     一级隔离策略分配堆实例初始化
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  *@param[in] addr      内存地址
  *@param[in] size      字节大小
  *@retval    返回分配器(分配器在内存头部)
@@ -559,6 +618,9 @@ app_sys_heap_olsf_t * app_sys_heap_olsf_ready(void *addr, uintptr_t size)
     uintptr_t size_1 = (size_old - size_0) - size_field / sizeof(uintptr_t);
     uintptr_t chunk2 = (chunk1 + size_1);
     uintptr_t size_2 = (size_field / sizeof(uintptr_t));
+    /* 记录内部维护块 */
+    heap_olsf->chunk_hdr = chunk0;
+    heap_olsf->chunk_end = chunk2;
     /* 初始化第一个chunk: */
     app_sys_heap_olsf_free_prev_set(heap_olsf, chunk0, chunk0);
     app_sys_heap_olsf_free_next_set(heap_olsf, chunk0, chunk0);
@@ -587,8 +649,8 @@ app_sys_heap_olsf_t * app_sys_heap_olsf_ready(void *addr, uintptr_t size)
     return heap_olsf;
 }
 
-/*@brief     分配器内存布局使用
- *@param[in] heap_olsf 分配器实例
+/*@brief     一级隔离策略分配堆内存布局使用
+ *@param[in] heap_olsf 一级隔离策略分配堆实例
  */
 void app_sys_heap_olsf_check(app_sys_heap_olsf_t *heap_olsf)
 {
@@ -605,15 +667,15 @@ void app_sys_heap_olsf_check(app_sys_heap_olsf_t *heap_olsf)
     APP_SYS_LOG_INFO("number:%u",       heap_olsf->number);
     APP_SYS_LOG_INFO("bitmap:0x%x:",    heap_olsf->bitmap);
     
-    APP_SYS_LOG_INFO_RAW("chunk \t size \t used \t near \t next \t prev \t left \t right");
+    APP_SYS_LOG_INFO_RAW("chunk \t size \t used \t near \t prev \t next \t left \t right");
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     for (uintptr_t chunk = 0; chunk < heap_olsf->number; ) {
         APP_SYS_LOG_INFO_RAW("%u \t ", chunk);
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_size_get(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_used_get(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_size_near_get(heap_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_free_next_get(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_free_prev_get(heap_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_free_next_get(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_chunk_left(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_heap_olsf_chunk_right(heap_olsf, chunk));
         APP_SYS_LOG_INFO_RAW(app_sys_log_line());
