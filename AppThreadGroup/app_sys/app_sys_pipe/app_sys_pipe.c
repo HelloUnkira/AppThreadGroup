@@ -18,7 +18,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-static app_sys_slab_t app_sys_pipe_slab = {0};
+static app_sys_mem_slab_t app_sys_pipe_mem_slab = {0};
 
 /*@brief 优先级排序入队列比较函数
  */
@@ -42,7 +42,7 @@ static bool app_sys_pipe_confirm(app_sys_list_dln_t *node1, app_sys_list_dln_t *
  */
 void app_sys_pipe_src_ready(void)
 {
-    app_sys_slab_ready(&app_sys_pipe_slab, sizeof(app_sys_pipe_pkg_t), 50, 10);
+    app_sys_mem_slab_ready(&app_sys_pipe_mem_slab, sizeof(app_sys_pipe_pkg_t), 50, 10);
 }
 
 /*@brief     初始化管道
@@ -79,7 +79,7 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
     app_sys_pipe_pkg_t *nonius = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
-    package_new = app_sys_slab_alloc(&app_sys_pipe_slab);
+    package_new = app_sys_mem_slab_alloc(&app_sys_pipe_mem_slab);
     memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
     app_sys_list_dln_reset(&package_new->dl_node);
     app_critical_process(&pipe->critical, app_critical_enter);
@@ -125,5 +125,5 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
     if (package_new == NULL)
         return;
     memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
-    app_sys_slab_free(&app_sys_pipe_slab, package_new);
+    app_sys_mem_slab_free(&app_sys_pipe_mem_slab, package_new);
 }

@@ -10,52 +10,52 @@
 #include "app_sys_lib.h"
 
 /*@brief     初始化slab分配器
- *@param[in] slab     slab分配器实例
+ *@param[in] mem_slab slab分配器实例
  *@param[in] size     分配单元块大小
  *@param[in] num      分配单元块数量
  *@param[in] debounce 分配单元块数量抖动
  */
-void app_sys_slab_ready(app_sys_slab_t *slab, uintptr_t size, uint32_t num, uint32_t debounce)
+void app_sys_mem_slab_ready(app_sys_mem_slab_t *mem_slab, uintptr_t size, uint32_t num, uint32_t debounce)
 {
     APP_SYS_ASSERT(size > sizeof(uintptr_t));
     
-    app_sys_list_dll_reset(&slab->dl_list);
-    app_mutex_process(&slab->mutex, app_mutex_static);
+    app_sys_list_dll_reset(&mem_slab->dl_list);
+    app_mutex_process(&mem_slab->mutex, app_mutex_static);
     
     /* 计算分配器单元值 */
-    slab->blk_size  = size;
-    slab->blk_size -= size % sizeof(uintptr_t);
-    slab->blk_size += size % sizeof(uintptr_t) == 0 ? 0 : sizeof(uintptr_t);
-    slab->blk_num   = num;
-    slab->debounce  = debounce;
+    mem_slab->blk_size  = size;
+    mem_slab->blk_size -= size % sizeof(uintptr_t);
+    mem_slab->blk_size += size % sizeof(uintptr_t) == 0 ? 0 : sizeof(uintptr_t);
+    mem_slab->blk_num   = num;
+    mem_slab->debounce  = debounce;
 }
 
 /*@brief     向slab分配器获取一个块
- *@param[in] slab slab分配器实例
+ *@param[in] mem_slab slab分配器实例
  *@retval    新的块
  */
-void * app_sys_slab_alloc(app_sys_slab_t *slab)
+void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab)
 {
     uint8_t *ptr = NULL;
-    app_mutex_process(&slab->mutex, app_mutex_take);
+    app_mutex_process(&mem_slab->mutex, app_mutex_take);
     /* 先检查分配器是否还有块 */
-    app_sys_slab_item_t *item = NULL;
-    app_sys_list_dll_ftra(&slab->dl_list, node) {
-        item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
+    app_sys_mem_slab_item_t *item = NULL;
+    app_sys_list_dll_ftra(&mem_slab->dl_list, node) {
+        item = app_sys_own_ofs(app_sys_mem_slab_item_t, dl_node, node);
         if (item->blk_used < item->blk_num)
             break;
         item = NULL;
     }
     /* 没有空闲分配器,生成一个新的分配器 */
     if (item == NULL) {
-        item  = app_mem_alloc(sizeof(app_sys_slab_item_t));
+        item  = app_mem_alloc(sizeof(app_sys_mem_slab_item_t));
         app_sys_list_dln_reset(&item->dl_node);
         /* 加入一个抖动用于消抖 */
-        uint32_t debounce = slab->debounce == 0 ? 0 : rand() % slab->debounce;
+        uint32_t debounce = mem_slab->debounce == 0 ? 0 : rand() % mem_slab->debounce;
         /* 平台字节对齐,配置分配器 */
-        item->blk_num  = slab->blk_num;
+        item->blk_num  = mem_slab->blk_num;
         item->blk_num  = debounce % 2 == 0 ? item->blk_num + debounce : item->blk_num - debounce;
-        item->blk_size = slab->blk_size;
+        item->blk_size = mem_slab->blk_size;
         item->blk_list = app_mem_alloc(item->blk_size * item->blk_num);
         item->blk_used = 0;
         item->mem_s = item->blk_list;
@@ -72,27 +72,27 @@ void * app_sys_slab_alloc(app_sys_slab_t *slab)
             ptr = item->blk_list;
         }
         /* 分配器加入到分配器链表 */
-        app_sys_list_dll_ainsert(&slab->dl_list, NULL, &item->dl_node);
+        app_sys_list_dll_ainsert(&mem_slab->dl_list, NULL, &item->dl_node);
     }
     /* 从分配器获取首块,块索引移动到下一块,计数器加一 */
     ptr = item->blk_list;
     item->blk_list = *((uint8_t **)ptr);
     item->blk_used++;
     /*  */
-    app_mutex_process(&slab->mutex, app_mutex_give);
+    app_mutex_process(&mem_slab->mutex, app_mutex_give);
     return ptr;
 }
 
 /*@brief     向slab分配器归还一个块
  *@param[in] ptr 旧的块
  */
-void app_sys_slab_free(app_sys_slab_t *slab, void *ptr)
+void app_sys_mem_slab_free(app_sys_mem_slab_t *mem_slab, void *ptr)
 {
-    app_mutex_process(&slab->mutex, app_mutex_take);
+    app_mutex_process(&mem_slab->mutex, app_mutex_take);
     /* 检查回收块是否落在此分配器内 */
-    app_sys_slab_item_t *item = NULL;
-    app_sys_list_dll_ftra(&slab->dl_list, node) {
-        item = app_sys_own_ofs(app_sys_slab_item_t, dl_node, node);
+    app_sys_mem_slab_item_t *item = NULL;
+    app_sys_list_dll_ftra(&mem_slab->dl_list, node) {
+        item = app_sys_own_ofs(app_sys_mem_slab_item_t, dl_node, node);
         if (item->mem_s <= ptr && ptr < item->mem_e)
             break;
         item = NULL;
@@ -105,11 +105,11 @@ void app_sys_slab_free(app_sys_slab_t *slab, void *ptr)
         item->blk_used --;
         /* 检查回收此分配器 */
         if (item->blk_used == 0) {
-            app_sys_list_dll_remove(&slab->dl_list, &item->dl_node);
+            app_sys_list_dll_remove(&mem_slab->dl_list, &item->dl_node);
             item->blk_list = item->mem_s;
             app_mem_free(item->blk_list);
             app_mem_free(item);
         }
     }
-    app_mutex_process(&slab->mutex, app_mutex_give);
+    app_mutex_process(&mem_slab->mutex, app_mutex_give);
 }

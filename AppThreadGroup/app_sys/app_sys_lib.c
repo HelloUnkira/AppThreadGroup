@@ -51,17 +51,17 @@ bool app_sys_test(void)
          app_sys_table_rbs_test();
     void app_sys_map_dlm_test(void);
          app_sys_map_dlm_test();
-    void app_sys_rbuf_test(void);
-         app_sys_rbuf_test();
     void app_sys_handle_test(void);
          app_sys_handle_test();
+    void app_sys_rbuf_test(void);
+         app_sys_rbuf_test();
     /*  */
     return true;
     #elif 0
-    void app_sys_heap_dir_test(void);
-    app_sys_heap_dir_test();
-    void app_sys_heap_olsf_test(void);
-    app_sys_heap_olsf_test();
+    void app_sys_mem_dir_test(void);
+    app_sys_mem_dir_test();
+    void app_sys_mem_olsf_test(void);
+    app_sys_mem_olsf_test();
     /*  */
     return true;
     #elif 0
