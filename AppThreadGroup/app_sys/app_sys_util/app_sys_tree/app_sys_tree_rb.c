@@ -193,10 +193,10 @@ static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side_other(app_sys_
 #define APP_SYS_TREE_RBT_CHECK_RETURN(expr)         if (expr) return;
 #define APP_SYS_TREE_RBT_CHECK_RETURN_NULL(expr)    if (expr) return NULL;
 
-/*@brief         红黑树核心动作:交换(左右旋转)
- *@param[in,out] tree   红黑树实例
- *@param[in,out] child  红黑节点实例
- *@param[in,out] parent 红黑节点实例
+/*@brief     红黑树核心动作:交换(左右旋转)
+ *@param[in] tree   红黑树实例
+ *@param[in] child  红黑节点实例
+ *@param[in] parent 红黑节点实例
  */
 static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *child, app_sys_tree_rbn_t *parent)
 {
@@ -226,10 +226,10 @@ static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t
     }
 }
 
-/*@brief         搜索函数(大小元)
- *@param[in,out] node 红黑节点实例
- *@param[in]     side 红黑节点方向
- *@retval        红黑节点实例
+/*@brief     搜索函数(大小元)
+ *@param[in] node 红黑节点实例
+ *@param[in] side 红黑节点方向
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -242,10 +242,10 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_
     return node;
 }
 
-/*@brief         搜索函数(前驱和后继)
- *@param[in,out] node 红黑节点实例
- *@param[in]     side 红黑节点方向
- *@retval        红黑节点实例
+/*@brief     搜索函数(前驱和后继)
+ *@param[in] node 红黑节点实例
+ *@param[in] side 红黑节点方向
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -273,10 +273,10 @@ static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rb
     return NULL;
 }
 
-/*@brief         查找函数
- *@param[in,out] tree   红黑树实例
- *@param[in]     target 红黑节点实例
- *@retval        红黑节点实例
+/*@brief     查找函数
+ *@param[in] tree   红黑树实例
+ *@param[in] target 红黑节点实例
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *target)
 {
@@ -304,9 +304,9 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tre
     return NULL;
 }
 
-/*@brief         单次插入函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     单次插入函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -360,9 +360,9 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
     }
 }
 
-/*@brief         插入调整函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     插入调整函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -431,10 +431,10 @@ static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     } while (1);
 }
 
-/*@brief         单次删除函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
- *@param[out]    side 红黑节点方向
+/*@brief      单次删除函数
+ *@param[in]  tree 红黑树实例
+ *@param[in]  node 红黑节点实例
+ *@param[out] side 红黑节点方向
  */
 static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t *side)
 {
@@ -526,10 +526,10 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
         app_sys_tree_rbn_set_parent(child, parent);
 }
 
-/*@brief         删除调整函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
- *@param[out]    side 红黑节点方向
+/*@brief      删除调整函数
+ *@param[in]  tree 红黑树实例
+ *@param[in]  node 红黑节点实例
+ *@param[out] side 红黑节点方向
  */
 static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -645,9 +645,9 @@ static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     } while (1);
 }
 
-/*@brief         插入函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     插入函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -658,9 +658,9 @@ void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
     app_sys_tree_rbt_insert_adjust(tree, node);
 }
 
-/*@brief         删除函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     删除函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {

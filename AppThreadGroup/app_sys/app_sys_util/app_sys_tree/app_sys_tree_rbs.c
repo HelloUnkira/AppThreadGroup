@@ -249,9 +249,9 @@ static inline app_sys_tree_rbsn_status_t app_sys_tree_rbsn_get_side_other(app_sy
 #define APP_SYS_TREE_RBST_CHECK_RETURN(expr)         if (expr) return;
 #define APP_SYS_TREE_RBST_CHECK_RETURN_NULL(expr)    if (expr) return NULL;
 
-/*@brief         红黑树核心动作:交换(左右旋转)
- *@param[in,out] stack 红黑节点栈
- *@param[in,out] size  红黑节点栈顶
+/*@brief     红黑树核心动作:交换(左右旋转)
+ *@param[in] stack 红黑节点栈
+ *@param[in] size  红黑节点栈顶
  */
 static void app_sys_tree_rbst_rotate(app_sys_tree_rbsn_t **stack, uint32_t size)
 {
@@ -287,10 +287,10 @@ static void app_sys_tree_rbst_rotate(app_sys_tree_rbsn_t **stack, uint32_t size)
     stack[size - 1] = parent;
 }
 
-/*@brief         搜索函数(大小元)
- *@param[in,out] node 红黑节点实例
- *@param[in]     side 红黑节点方向
- *@retval        红黑节点实例
+/*@brief     搜索函数(大小元)
+ *@param[in] node 红黑节点实例
+ *@param[in] side 红黑节点方向
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbsn_t * app_sys_tree_rbst_search_min_or_max(app_sys_tree_rbsn_t *node, app_sys_tree_rbsn_status_t side)
 {
@@ -303,9 +303,9 @@ static app_sys_tree_rbsn_t * app_sys_tree_rbst_search_min_or_max(app_sys_tree_rb
     return node;
 }
 
-/*@brief         从栈顶按指定方向节点入迭代栈
- *@param[in,out] tree 红黑树实例
- *@param[in]     side 红黑节点方向
+/*@brief     从栈顶按指定方向节点入迭代栈
+ *@param[in] tree 红黑树实例
+ *@param[in] side 红黑节点方向
  */
 static uint32_t app_sys_tree_rbst_iter_limb(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_status_t side)
 {
@@ -330,10 +330,10 @@ static uint32_t app_sys_tree_rbst_iter_limb(app_sys_tree_rbst_t *tree, app_sys_t
     return iter_top;
 }
 
-/*@brief         迭代栈就绪并更新到大小元,或者回收
- *@param[in,out] tree 红黑树实例
- *@param[in]     side 红黑节点方向
- *@param[in]     used 红黑节点栈不使用
+/*@brief     迭代栈就绪并更新到大小元,或者回收
+ *@param[in] tree 红黑树实例
+ *@param[in] side 红黑节点方向
+ *@param[in] used 红黑节点栈不使用
  */
 static app_sys_tree_rbsn_t * app_sys_tree_rbsn_iter_min_or_max_used(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_status_t side, bool used)
 {
@@ -373,10 +373,10 @@ static app_sys_tree_rbsn_t * app_sys_tree_rbsn_iter_min_or_max_used(app_sys_tree
     }
 }
 
-/*@brief         搜索函数(前驱和后继)
- *@param[in,out] tree 红黑树实例
- *@param[in]     side 红黑节点方向
- *@retval        红黑节点实例
+/*@brief     搜索函数(前驱和后继)
+ *@param[in] tree 红黑树实例
+ *@param[in] side 红黑节点方向
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbsn_t * app_sys_tree_rbst_iter_prev_or_next(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_status_t side)
 {
@@ -419,10 +419,10 @@ static app_sys_tree_rbsn_t * app_sys_tree_rbst_iter_prev_or_next(app_sys_tree_rb
     return NULL;
 }
 
-/*@brief         查找函数
- *@param[in,out] tree   红黑树实例
- *@param[in,out] target 红黑节点实例
- *@retval        红黑节点实例
+/*@brief     查找函数
+ *@param[in] tree   红黑树实例
+ *@param[in] target 红黑节点实例
+ *@retval    红黑节点实例
  */
 static app_sys_tree_rbsn_t * app_sys_tree_rbst_search_only(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *target)
 {
@@ -451,12 +451,12 @@ static app_sys_tree_rbsn_t * app_sys_tree_rbst_search_only(app_sys_tree_rbst_t *
     return NULL;
 }
 
-/*@brief         插入和删除的准备函数(节点入栈)
- *@param[in,out] tree   红黑树实例
- *@param[in,out] node   红黑节点实例
- *@param[in,out] stack  红黑节点栈
- *@param[in,out] size   红黑节点栈顶
- *@param[in,out] remove 删除节点的准备
+/*@brief     插入和删除的准备函数(节点入栈)
+ *@param[in] tree   红黑树实例
+ *@param[in] node   红黑节点实例
+ *@param[in] stack  红黑节点栈
+ *@param[in] size   红黑节点栈顶
+ *@param[in] remove 删除节点的准备
  */
 static void app_sys_tree_rbst_get_stack_prepare(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node, app_sys_tree_rbsn_t **stack, uint32_t *size, bool remove)
 {
@@ -495,9 +495,9 @@ static void app_sys_tree_rbst_get_stack_prepare(app_sys_tree_rbst_t *tree, app_s
     } while (1);
 }
 
-/*@brief         插入调整函数
- *@param[in,out] stack 红黑节点栈
- *@param[in,out] size  红黑节点栈顶
+/*@brief     插入调整函数
+ *@param[in] stack 红黑节点栈
+ *@param[in] size  红黑节点栈顶
  */
 static void app_sys_tree_rbst_insert_adjust(app_sys_tree_rbsn_t **stack, uint32_t size)
 {
@@ -566,10 +566,10 @@ static void app_sys_tree_rbst_insert_adjust(app_sys_tree_rbsn_t **stack, uint32_
     app_sys_tree_rbsn_set_color(stack[0], app_sys_tree_rbsn_color_b);
 }
 
-/*@brief         删除调整函数
- *@param[in,out] stack 红黑节点栈
- *@param[in,out] size  红黑节点栈顶
- *@param[in,out] none  红黑节点(假节点)
+/*@brief     删除调整函数
+ *@param[in] stack 红黑节点栈
+ *@param[in] size  红黑节点栈顶
+ *@param[in] none  红黑节点(假节点)
  */
 static void app_sys_tree_rbst_remove_adjust(app_sys_tree_rbsn_t **stack, uint32_t size, app_sys_tree_rbsn_t *none)
 {
@@ -681,9 +681,9 @@ static void app_sys_tree_rbst_remove_adjust(app_sys_tree_rbsn_t **stack, uint32_
     }
 }
 
-/*@brief         插入函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     插入函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 static void app_sys_tree_rbst_insert_node(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node)
 {
@@ -729,9 +729,9 @@ static void app_sys_tree_rbst_insert_node(app_sys_tree_rbst_t *tree, app_sys_tre
     APP_SYS_TREE_RBST_CHECK(color != app_sys_tree_rbsn_color_b, "root");
 }
 
-/*@brief         删除函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     删除函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 static void app_sys_tree_rbst_remove_node(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node)
 {
@@ -864,9 +864,9 @@ static void app_sys_tree_rbst_remove_node(app_sys_tree_rbst_t *tree, app_sys_tre
     app_sys_tree_rbst_set_root(tree, stack[0]);
 }
 
-/*@brief         插入函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     插入函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbst_insert(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node)
 {
@@ -880,9 +880,9 @@ void app_sys_tree_rbst_insert(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *no
     app_mem_free(stack);
 }
 
-/*@brief         删除函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     删除函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbst_remove(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node)
 {

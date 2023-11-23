@@ -338,7 +338,7 @@ static void app_sys_tree_bst_destroy_node(app_sys_tree_bsn_t *node)
  *@param[in]  key     关键字集
  *@param[in]  edge    边界亲和度(0:(l,r];1:[l,r);)
  *@param[out] left    匹配左边界
- *@param[out] left    匹配右边界
+ *@param[out] right   匹配右边界
  */
 static void app_sys_tree_bst_binary(uint32_t key_val, uint32_t *key, uint32_t edge, int32_t *left, int32_t *right)
 {
@@ -370,10 +370,10 @@ static void app_sys_tree_bst_binary(uint32_t key_val, uint32_t *key, uint32_t ed
     /* 不检查左右边界溢出(调用者需要自己检查) */
 }
 
-/*@brief         迭代更新从指定节点到根节点的关键字(辅助功能)
- *@param[in,out] node        B*节点实例
- *@param[in]     key_val_new 新关键字
- *@param[in]     key_val_old 旧关键字
+/*@brief     迭代更新从指定节点到根节点的关键字(辅助功能)
+ *@param[in] node        B*节点实例
+ *@param[in] key_val_new 新关键字
+ *@param[in] key_val_old 旧关键字
  */
 static void app_sys_tree_bst_key_update(app_sys_tree_bsn_t *node, uint32_t key_val_new, uint32_t key_val_old)
 {
@@ -402,12 +402,12 @@ static void app_sys_tree_bst_key_update(app_sys_tree_bsn_t *node, uint32_t key_v
     }
 }
 
-/*@brief         从指定节点迁移批量数据到另一节点(辅助功能)
- *@param[in]     tree   B*树实例
- *@param[in,out] node1  B*节点实例
- *@param[in,out] node2  B*节点实例
- *@param[in]     number 迁移数据量
- *@param[in]     state  迁移节点状态
+/*@brief     从指定节点迁移批量数据到另一节点(辅助功能)
+ *@param[in] tree   B*树实例
+ *@param[in] node1  B*节点实例
+ *@param[in] node2  B*节点实例
+ *@param[in] number 迁移数据量
+ *@param[in] state  迁移节点状态
  */
 static void app_sys_tree_bst_migrate(app_sys_tree_bst_t *tree,
                                      app_sys_tree_bsn_t *node1,
@@ -502,12 +502,12 @@ static void app_sys_tree_bst_search_node_only(app_sys_tree_bst_t  *tree,
     *node = root;
 }
 
-/*@brief         在一个指定节点中插入一个项(辅助功能)
- *@param[in,out] node    B*节点实例
- *@param[in,out] state   节点状态
- *@param[in]     idx     插入索引
- *@param[in]     key_val 关键字
- *@param[in]     data    数据项
+/*@brief     在一个指定节点中插入一个项(辅助功能)
+ *@param[in] node    B*节点实例
+ *@param[in] state   节点状态
+ *@param[in] idx     插入索引
+ *@param[in] key_val 关键字
+ *@param[in] data    数据项
  */
 static void app_sys_tree_bst_insert_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -536,12 +536,12 @@ static void app_sys_tree_bst_insert_data_only(app_sys_tree_bsn_t *node,
     app_sys_tree_bsn_set_number(node, number + 1);
 }
 
-/*@brief         从一个指定节点中移除一个项(辅助功能)
- *@param[in,out] node    B*节点实例
- *@param[in,out] state   节点状态
- *@param[in]     idx     插入索引
- *@param[in]     key_val 关键字
- *@param[in]     data    数据项
+/*@brief     从一个指定节点中移除一个项(辅助功能)
+ *@param[in] node    B*节点实例
+ *@param[in] state   节点状态
+ *@param[in] idx     插入索引
+ *@param[in] key_val 关键字
+ *@param[in] data    数据项
  */
 static void app_sys_tree_bst_remove_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -573,12 +573,12 @@ static void app_sys_tree_bst_remove_data_only(app_sys_tree_bsn_t *node,
     app_sys_tree_bsn_set_number(node, number - 1);
 }
 
-/*@brief         从一个指定节点中搜索一个项(辅助功能)
- *@param[in,out] node    B*节点实例
- *@param[in,out] state   节点状态
- *@param[in]     idx     插入索引
- *@param[in]     key_val 关键字
- *@param[in]     data    数据项
+/*@brief     从一个指定节点中搜索一个项(辅助功能)
+ *@param[in] node    B*节点实例
+ *@param[in] state   节点状态
+ *@param[in] idx     插入索引
+ *@param[in] key_val 关键字
+ *@param[in] data    数据项
  */
 static void app_sys_tree_bst_search_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -602,10 +602,10 @@ static void app_sys_tree_bst_search_data_only(app_sys_tree_bsn_t *node,
     *data = child[*idx];
 }
 
-/*@brief         单次插入函数
- *@param[in,out] tree B*树实例
- *@param[in,out] node B*节点实例
- *@param[in]     data 数据项
+/*@brief     单次插入函数
+ *@param[in] tree B*树实例
+ *@param[in] node B*节点实例
+ *@param[in] data 数据项
  */
 static void app_sys_tree_bst_insert_only(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t **node, void *data)
 {
@@ -633,9 +633,9 @@ static void app_sys_tree_bst_insert_only(app_sys_tree_bst_t *tree, app_sys_tree_
     }
 }
 
-/*@brief         插入调整函数
- *@param[in,out] tree B*树实例
- *@param[in,out] node B*节点实例
+/*@brief     插入调整函数
+ *@param[in] tree B*树实例
+ *@param[in] node B*节点实例
  */
 static void app_sys_tree_bst_insert_adjust(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t *node)
 {
@@ -757,11 +757,11 @@ static void app_sys_tree_bst_insert_adjust(app_sys_tree_bst_t *tree, app_sys_tre
     }
 }
 
-/*@brief         单次删除函数
- *@param[in,out] tree    B*树实例
- *@param[in,out] node    B*节点实例
- *@param[in]     key_val 关键字
- *@param[in]     data    数据项
+/*@brief     单次删除函数
+ *@param[in] tree    B*树实例
+ *@param[in] node    B*节点实例
+ *@param[in] key_val 关键字
+ *@param[in] data    数据项
  */
 static void app_sys_tree_bst_remove_only(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t **node, uint32_t key_val, void **data)
 {
@@ -781,9 +781,9 @@ static void app_sys_tree_bst_remove_only(app_sys_tree_bst_t *tree, app_sys_tree_
     app_sys_tree_bst_key_update(*node, key[0], key_val);
 }
 
-/*@brief         删除调整函数
- *@param[in,out] tree B*树实例
- *@param[in,out] node B*节点实例
+/*@brief     删除调整函数
+ *@param[in] tree B*树实例
+ *@param[in] node B*节点实例
  */
 static void app_sys_tree_bst_remove_adjust(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t *node)
 {
@@ -946,10 +946,10 @@ static void app_sys_tree_bst_remove_adjust(app_sys_tree_bst_t *tree, app_sys_tre
     }
 }
 
-/*@brief         单次查找函数
- *@param[in,out] tree    B*树实例
- *@param[in]     key_val 关键字
- *@param[in]     data    数据项
+/*@brief     单次查找函数
+ *@param[in] tree    B*树实例
+ *@param[in] key_val 关键字
+ *@param[in] data    数据项
  */
 static void app_sys_tree_bst_search_only(app_sys_tree_bst_t *tree, uint32_t key_val, void **data)
 {
@@ -966,9 +966,9 @@ static void app_sys_tree_bst_search_only(app_sys_tree_bst_t *tree, uint32_t key_
     app_sys_tree_bst_search_data_only(node, 0, &idx, key_val, data);
 }
 
-/*@brief         插入函数
- *@param[in,out] tree B*树实例
- *@param[in]     data 数据项
+/*@brief     插入函数
+ *@param[in] tree B*树实例
+ *@param[in] data 数据项
  */
 void app_sys_tree_bst_insert(app_sys_tree_bst_t *tree, void *data)
 {
@@ -978,10 +978,10 @@ void app_sys_tree_bst_insert(app_sys_tree_bst_t *tree, void *data)
     app_sys_tree_bst_set_number(tree, app_sys_tree_bst_get_number(tree) + 1);
 }
 
-/*@brief         删除函数
- *@param[in,out] tree    B*树实例
- *@param[out]    data    数据项
- *@param[in]     key_val 关键字
+/*@brief      删除函数
+ *@param[in]  tree    B*树实例
+ *@param[out] data    数据项
+ *@param[in]  key_val 关键字
  */
 void app_sys_tree_bst_remove(app_sys_tree_bst_t *tree, void **data, uint32_t key_val)
 {
@@ -992,21 +992,21 @@ void app_sys_tree_bst_remove(app_sys_tree_bst_t *tree, void **data, uint32_t key
     app_sys_tree_bst_set_number(tree, app_sys_tree_bst_get_number(tree) - 1);
 }
 
-/*@brief         查找函数
- *@param[in,out] tree    B*树实例
- *@param[out]    data    数据项
- *@param[in]     key_val 关键字
+/*@brief      查找函数
+ *@param[in]  tree    B*树实例
+ *@param[out] data    数据项
+ *@param[in]  key_val 关键字
  */
 void app_sys_tree_bst_search(app_sys_tree_bst_t *tree, void **data, uint32_t key_val)
 {
     app_sys_tree_bst_search_only(tree, key_val, data);
 }
 
-/*@brief         配置函数
- *@param[in,out] tree    B*树实例
- *@param[out]    length 数据项
- *@param[in]     key    关键字获取语义
- *@param[in]     visit  节点访问语义
+/*@brief      配置函数
+ *@param[in]  tree    B*树实例
+ *@param[out] length 数据项
+ *@param[in]  key    关键字获取语义
+ *@param[in]  visit  节点访问语义
  */
 void app_sys_tree_bst_config(app_sys_tree_bst_t *tree, uint32_t length, app_sys_tree_bst_key_t key, app_sys_tree_bst_visit_t visit)
 {

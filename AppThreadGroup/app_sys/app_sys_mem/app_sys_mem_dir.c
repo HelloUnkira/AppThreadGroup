@@ -20,10 +20,10 @@ static bool app_sys_mem_dir_sort(app_sys_queue_dlpn_t * node1, app_sys_queue_dlp
     return addr1 <= addr2;
 }
 
-/*@brief         初始化双端分配堆
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     addr    内存地址(平台字节对齐)
- *@param[in]     size    内存大小(字节)
+/*@brief     初始化双端分配堆
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] addr    内存地址(平台字节对齐)
+ *@param[in] size    内存大小(字节)
  */
 void app_sys_mem_dir_ready(app_sys_mem_dir_t *mem_dir, uintptr_t addr, uintptr_t size)
 {
@@ -43,11 +43,11 @@ void app_sys_mem_dir_ready(app_sys_mem_dir_t *mem_dir, uintptr_t addr, uintptr_t
     app_sys_list_dll_ainsert(&mem_dir->dl_list_free, NULL, &mem_dir_item->dl_node);
 }
 
-/*@brief         双端分配堆获取内存
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     size    内存大小
- *@param[in]     way     分配方向(true:正向;false:逆向)
- *@retval        内存地址
+/*@brief     双端分配堆获取内存
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] size    内存大小
+ *@param[in] way     分配方向(true:正向;false:逆向)
+ *@retval    内存地址
  */
 static void * app_sys_mem_dir_alloc_raw(app_sys_mem_dir_t *mem_dir, uintptr_t size, bool way)
 {
@@ -118,9 +118,9 @@ static void * app_sys_mem_dir_alloc_raw(app_sys_mem_dir_t *mem_dir, uintptr_t si
     return pointer;
 }
 
-/*@brief         双端分配堆归还内存
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     pointer 内存地址
+/*@brief     双端分配堆归还内存
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] pointer 内存地址
  */
 static void app_sys_mem_dir_free_raw(app_sys_mem_dir_t *mem_dir, void *pointer)
 {
@@ -180,12 +180,12 @@ static void app_sys_mem_dir_free_raw(app_sys_mem_dir_t *mem_dir, void *pointer)
     app_mutex_process(&mem_dir->mutex, app_mutex_give);
 }
 
-/*@brief         双端分配堆获取内存
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     size    内存大小
- *@param[in]     align   指定字节对齐(不小于平台字节对齐, 2的指数)
- *@param[in]     way     分配方向(true:正向;false:逆向)
- *@retval        内存地址
+/*@brief     双端分配堆获取内存
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] size    内存大小
+ *@param[in] align   指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@param[in] way     分配方向(true:正向;false:逆向)
+ *@retval    内存地址
  */
 void * app_sys_mem_dir_alloc_align(app_sys_mem_dir_t *mem_dir, uintptr_t size, uintptr_t align, bool way)
 {
@@ -206,20 +206,20 @@ void * app_sys_mem_dir_alloc_align(app_sys_mem_dir_t *mem_dir, uintptr_t size, u
     return pointer_ofs;
 }
 
-/*@brief         双端分配堆获取内存
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     size    内存大小
- *@param[in]     way     分配方向(true:正向;false:逆向)
- *@retval        内存地址
+/*@brief     双端分配堆获取内存
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] size    内存大小
+ *@param[in] way     分配方向(true:正向;false:逆向)
+ *@retval    内存地址
  */
 void * app_sys_mem_dir_alloc(app_sys_mem_dir_t *mem_dir, uintptr_t size, bool way)
 {
     return app_sys_mem_dir_alloc_align(mem_dir, size, sizeof(uintptr_t), way);
 }
 
-/*@brief         双端分配堆归还内存
- *@param[in,out] mem_dir 双端分配堆实例
- *@param[in]     pointer 内存地址
+/*@brief     双端分配堆归还内存
+ *@param[in] mem_dir 双端分配堆实例
+ *@param[in] pointer 内存地址
  */
 void app_sys_mem_dir_free(app_sys_mem_dir_t *mem_dir, void *pointer)
 {
@@ -230,8 +230,8 @@ void app_sys_mem_dir_free(app_sys_mem_dir_t *mem_dir, void *pointer)
     app_sys_mem_dir_free_raw(mem_dir, pointer);
 }
 
-/*@brief         双端分配堆获取内存
- *@param[in,out] mem_dir 双端分配堆实例
+/*@brief     双端分配堆获取内存
+ *@param[in] mem_dir 双端分配堆实例
  */
 bool app_sys_mem_dir_check(app_sys_mem_dir_t *mem_dir)
 {

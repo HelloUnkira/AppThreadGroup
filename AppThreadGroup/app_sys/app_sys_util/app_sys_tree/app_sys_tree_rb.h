@@ -52,15 +52,15 @@ typedef struct {
     app_sys_tree_rbt_visit_t   visit;
 } app_sys_tree_rbt_t;
 
-/*@brief         插入函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     插入函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief         删除函数
- *@param[in,out] tree 红黑树实例
- *@param[in,out] node 红黑节点实例
+/*@brief     删除函数
+ *@param[in] tree 红黑树实例
+ *@param[in] node 红黑节点实例
  */
 void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 

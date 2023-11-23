@@ -34,15 +34,15 @@ typedef struct {
     app_sys_tree_st_visit_t   visit;
 } app_sys_tree_st_t;
 
-/*@brief         插入函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     插入函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 void app_sys_tree_st_insert(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief         删除函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     删除函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 void app_sys_tree_st_remove(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 

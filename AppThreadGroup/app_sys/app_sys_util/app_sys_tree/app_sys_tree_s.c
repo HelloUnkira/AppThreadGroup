@@ -153,10 +153,10 @@ static inline app_sys_tree_sn_status_t app_sys_tree_sn_get_side_other(app_sys_tr
 #define APP_SYS_TREE_ST_CHECK_RETURN(target) if (target) return;
 #define APP_SYS_TREE_ST_CHECK_RETURN_NULL(target)  if (target) return NULL;
 
-/*@brief         伸展树核心动作:交换(左右旋转)
- *@param[in,out] tree   伸展树实例
- *@param[in,out] child  伸展节点实例
- *@param[in,out] parent 伸展节点实例
+/*@brief     伸展树核心动作:交换(左右旋转)
+ *@param[in] tree   伸展树实例
+ *@param[in] child  伸展节点实例
+ *@param[in] parent 伸展节点实例
  */
 static void app_sys_tree_st_rotate(app_sys_tree_st_t *tree, app_sys_tree_sn_t *child, app_sys_tree_sn_t *parent)
 {
@@ -186,9 +186,9 @@ static void app_sys_tree_st_rotate(app_sys_tree_st_t *tree, app_sys_tree_sn_t *c
     }
 }
 
-/*@brief         伸展树核心动作:伸展(Zig,Zag,ZigZig,ZagZag,ZigZag,ZagZig)
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     伸展树核心动作:伸展(Zig,Zag,ZigZig,ZagZag,ZigZag,ZagZig)
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 static void app_sys_tree_st_splay(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
 {
@@ -198,10 +198,10 @@ static void app_sys_tree_st_splay(app_sys_tree_st_t *tree, app_sys_tree_sn_t *no
         app_sys_tree_st_rotate(tree, node, app_sys_tree_sn_get_parent(node));
 }
 
-/*@brief         搜索函数(大小元)
- *@param[in,out] node 伸展节点实例
- *@param[in]     side 伸展节点方向
- *@retval        伸展节点实例
+/*@brief     搜索函数(大小元)
+ *@param[in] node 伸展节点实例
+ *@param[in] side 伸展节点方向
+ *@retval    伸展节点实例
  */
 static app_sys_tree_sn_t * app_sys_tree_st_search_min_or_max(app_sys_tree_sn_t *node, app_sys_tree_sn_status_t side)
 {
@@ -214,10 +214,10 @@ static app_sys_tree_sn_t * app_sys_tree_st_search_min_or_max(app_sys_tree_sn_t *
     return node;
 }
 
-/*@brief         搜索函数(前驱和后继)
- *@param[in,out] node 伸展节点实例
- *@param[in]     side 伸展节点方向
- *@retval        伸展节点实例
+/*@brief     搜索函数(前驱和后继)
+ *@param[in] node 伸展节点实例
+ *@param[in] side 伸展节点方向
+ *@retval    伸展节点实例
  */
 static app_sys_tree_sn_t * app_sys_tree_sn_search_prev_or_next(app_sys_tree_sn_t *node, app_sys_tree_sn_status_t side)
 {
@@ -245,10 +245,10 @@ static app_sys_tree_sn_t * app_sys_tree_sn_search_prev_or_next(app_sys_tree_sn_t
     return NULL;
 }
 
-/*@brief         查找函数
- *@param[in,out] tree   伸展树实例
- *@param[in]     target 伸展节点实例
- *@retval        伸展节点实例
+/*@brief     查找函数
+ *@param[in] tree   伸展树实例
+ *@param[in] target 伸展节点实例
+ *@retval    伸展节点实例
  */
 static app_sys_tree_sn_t * app_sys_tree_st_search_only(app_sys_tree_st_t *tree, app_sys_tree_sn_t *target)
 {
@@ -276,9 +276,9 @@ static app_sys_tree_sn_t * app_sys_tree_st_search_only(app_sys_tree_st_t *tree, 
     return NULL;
 }
 
-/*@brief         单次插入函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     单次插入函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 static void app_sys_tree_st_insert_only(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
 {
@@ -331,9 +331,9 @@ static void app_sys_tree_st_insert_only(app_sys_tree_st_t *tree, app_sys_tree_sn
     }
 }
 
-/*@brief         单次删除函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     单次删除函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 static void app_sys_tree_st_remove_only(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
 {
@@ -420,9 +420,9 @@ static void app_sys_tree_st_remove_only(app_sys_tree_st_t *tree, app_sys_tree_sn
         app_sys_tree_sn_set_parent(child, parent);
 }
 
-/*@brief         插入函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     插入函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 void app_sys_tree_st_insert(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
 {
@@ -433,9 +433,9 @@ void app_sys_tree_st_insert(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
     app_sys_tree_st_splay(tree, node);
 }
 
-/*@brief         删除函数
- *@param[in,out] tree 伸展树实例
- *@param[in,out] node 伸展节点实例
+/*@brief     删除函数
+ *@param[in] tree 伸展树实例
+ *@param[in] node 伸展节点实例
  */
 void app_sys_tree_st_remove(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node)
 {

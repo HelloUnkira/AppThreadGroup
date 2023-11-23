@@ -10,11 +10,11 @@
 //child_r:  ((Index * 2 + 2))
 //parent: ((Index - 1) / 2)
 
-/*@brief         重置一个堆
- *@param[in,out] heap    堆实例
- *@param[in]     arr     堆空间
- *@param[in]     len     堆空间大小
- *@param[in]     compare 比较语义
+/*@brief     重置一个堆
+ *@param[in] heap    堆实例
+ *@param[in] arr     堆空间
+ *@param[in] len     堆空间大小
+ *@param[in] compare 比较语义
  */
 void app_sys_heap_g_reset(app_sys_heap_g_t   *heap, void **arr, uint32_t len,
                           app_sys_heap_g_fc_t compare)
@@ -25,10 +25,10 @@ void app_sys_heap_g_reset(app_sys_heap_g_t   *heap, void **arr, uint32_t len,
     heap->compare = compare;
 }
 
-/*@brief         节点入堆
- *@param[in,out] heap 堆实例
- *@param[in]     ptr  堆节点地址
- *@retval        成功或失败
+/*@brief     节点入堆
+ *@param[in] heap 堆实例
+ *@param[in] ptr  堆节点地址
+ *@retval    成功或失败
  */
 bool app_sys_heap_g_push(app_sys_heap_g_t *heap, void *ptr)
 {
@@ -57,10 +57,10 @@ bool app_sys_heap_g_push(app_sys_heap_g_t *heap, void *ptr)
     return true;
 }
 
-/*@brief         节点出堆
- *@param[in,out] heap 堆实例
- *@param[out]    ptr  堆节点地址
- *@retval        成功或失败
+/*@brief      节点出堆
+ *@param[in]  heap 堆实例
+ *@param[out] ptr  堆节点地址
+ *@retval     成功或失败
  */
 bool app_sys_heap_g_pop(app_sys_heap_g_t *heap, void **ptr)
 {
