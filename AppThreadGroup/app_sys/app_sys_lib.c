@@ -62,6 +62,8 @@ bool app_sys_test(void)
     app_sys_mem_dir_test();
     void app_sys_mem_olsf_test(void);
     app_sys_mem_olsf_test();
+    void app_sys_mem_tlsf_test(void);
+    app_sys_mem_tlsf_test();
     /*  */
     return true;
     #elif 0

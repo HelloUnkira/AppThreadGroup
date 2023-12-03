@@ -485,6 +485,7 @@ void app_sys_mem_olsf_free(app_sys_mem_olsf_t *mem_olsf, void *pointer)
 /*@brief     一级隔离策略分配堆申请内存
  *@param[in] mem_olsf 一级隔离策略分配堆实例
  *@param[in] size     字节大小
+ *@retval    内存地址
  */
 void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size)
 {
@@ -512,6 +513,7 @@ void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size)
  *@param[in] mem_olsf 一级隔离策略分配堆实例
  *@param[in] size     字节大小
  *@param[in] align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@retval    内存地址
  */
 void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size, uintptr_t align)
 {
@@ -524,8 +526,8 @@ void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size
          APP_SYS_LOG_WARN("align size fail:%d", align);
          return NULL;
     }
-     if (align == sizeof(uintptr_t))
-         return app_sys_mem_olsf_alloc(mem_olsf, size);
+    if (align == sizeof(uintptr_t))
+        return app_sys_mem_olsf_alloc(mem_olsf, size);
     /*默认平台字节对齐:
      *为了实现更高粒度的对齐效果
      *在分配空间时额外多申请一个小块
@@ -566,9 +568,8 @@ void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size
 }
 
 /*@brief     一级隔离策略分配堆实例初始化
- *@param[in] mem_olsf 一级隔离策略分配堆实例
- *@param[in] addr     内存地址
- *@param[in] size     字节大小
+ *@param[in] addr 内存地址
+ *@param[in] size 字节大小
  *@retval    返回分配器(分配器在内存头部)
  */
 app_sys_mem_olsf_t * app_sys_mem_olsf_ready(void *addr, uintptr_t size)

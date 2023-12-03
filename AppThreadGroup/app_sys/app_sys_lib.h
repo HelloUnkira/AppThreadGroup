@@ -23,6 +23,7 @@
 /*  */
 #include "app_sys_mem_dir.h"
 #include "app_sys_mem_olsf.h"
+#include "app_sys_mem_tlsf.h"
 #include "app_sys_mem_slab.h"
 /*  */
 #include "app_sys_matrix.h"

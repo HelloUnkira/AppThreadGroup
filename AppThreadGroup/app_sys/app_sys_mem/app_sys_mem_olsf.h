@@ -67,6 +67,7 @@ void app_sys_mem_olsf_free(app_sys_mem_olsf_t *mem_olsf, void *pointer);
 /*@brief     一级隔离策略分配堆申请内存
  *@param[in] mem_olsf 一级隔离策略分配堆实例
  *@param[in] size     字节大小
+ *@retval    内存地址
  */
 void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size);
 
@@ -74,18 +75,18 @@ void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size);
  *@param[in] mem_olsf 一级隔离策略分配堆实例
  *@param[in] size     字节大小
  *@param[in] align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@retval    内存地址
  */
 void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size, uintptr_t align);
 
 /*@brief 一级隔离策略分配堆重获取内存
  *       realloc语义不提供,应该规避这种情况的使用
- *       它存在造成内存封装过大的情况,使用应该规避掉对这种逻辑的产生
+ *       它存在造成内存峰值过大的情况,使用应该规避掉对这种逻辑的产生
  */
 
 /*@brief     一级隔离策略分配堆实例初始化
- *@param[in] mem_olsf 一级隔离策略分配堆实例
- *@param[in] addr     内存地址
- *@param[in] size     字节大小
+ *@param[in] addr 内存地址
+ *@param[in] size 字节大小
  *@retval    返回分配器(分配器在内存头部)
  */
 app_sys_mem_olsf_t * app_sys_mem_olsf_ready(void *addr, uintptr_t size);
