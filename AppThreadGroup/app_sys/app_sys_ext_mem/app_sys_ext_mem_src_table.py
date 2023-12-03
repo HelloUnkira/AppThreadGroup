@@ -72,7 +72,7 @@ def encode_app_sys_ext_mem_src_table_c(file, file_list, json_list):
     file.write('{\n')
     file.write('\tfor (uint32_t idx = 0; idx < app_sys_ext_mem_src_table_size; idx++)\n')
     file.write('\t\tif (!strcmp(app_sys_ext_mem_src_string_table[idx], chunk_name))\n')
-    file.write('\t\t\tif (index < app_sys_ext_mem_src_set_size_table[index])\n')
+    file.write('\t\t\tif (index < app_sys_ext_mem_src_set_size_table[idx])\n')
     file.write('\t\t\t\treturn &app_sys_ext_mem_src_set_table[idx][index];\n')
     file.write('\t\t\telse\n')
     file.write('\t\t\t\treturn NULL;\n')
