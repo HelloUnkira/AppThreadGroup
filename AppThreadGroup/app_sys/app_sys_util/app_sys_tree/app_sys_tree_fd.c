@@ -6,9 +6,9 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     每修改tree->leave[idx]的值都需要执行下面的动作
- *@param[in] tree  树实例
- *@param[in] idx 索引
+/*@brief 每修改tree->leave[idx]的值都需要执行下面的动作
+ *@param tree  树实例
+ *@param idx 索引
  */
 void app_sys_tree_fl_adjust(app_sys_tree_fl_t *tree, int32_t idx)
 {
@@ -22,8 +22,8 @@ void app_sys_tree_fl_adjust(app_sys_tree_fl_t *tree, int32_t idx)
     tree->node[0] = idx;
 }
 
-/*@brief     当tree->leave[X]被批量更新时执行该动作刷新
- *@param[in] tree 树实例
+/*@brief 当tree->leave[X]被批量更新时执行该动作刷新
+ *@param tree 树实例
  */
 void app_sys_tree_fl_reflush(app_sys_tree_fl_t *tree)
 {
@@ -33,9 +33,9 @@ void app_sys_tree_fl_reflush(app_sys_tree_fl_t *tree)
         app_sys_tree_fl_adjust(tree, idx);
 }
 
-/*@brief     每修改tree->leave[idx]的值都需要执行下面的动作
- *@param[in] tree  树实例
- *@param[in] idx 索引
+/*@brief 每修改tree->leave[idx]的值都需要执行下面的动作
+ *@param tree  树实例
+ *@param idx 索引
  */
 static void app_sys_tree_fw_adjust_one(app_sys_tree_fw_t *tree, int32_t idx)
 {
@@ -49,9 +49,9 @@ static void app_sys_tree_fw_adjust_one(app_sys_tree_fw_t *tree, int32_t idx)
     tree->node[idx] = tree->leave[child_l] <= tree->leave[child_r] ? child_l : child_r;
 }
 
-/*@brief     每修改tree->leave[idx]的值都需要执行下面的动作
- *@param[in] tree  树实例
- *@param[in] idx 索引
+/*@brief 每修改tree->leave[idx]的值都需要执行下面的动作
+ *@param tree  树实例
+ *@param idx 索引
  */
 void app_sys_tree_fw_adjust(app_sys_tree_fw_t *tree, int32_t idx)
 {
@@ -60,8 +60,8 @@ void app_sys_tree_fw_adjust(app_sys_tree_fw_t *tree, int32_t idx)
         app_sys_tree_fw_adjust_one(tree, parent);
 }
 
-/*@brief     当tree->leave[X]被批量更新时执行该动作刷新
- *@param[in] tree 树实例
+/*@brief 当tree->leave[X]被批量更新时执行该动作刷新
+ *@param tree 树实例
  */
 void app_sys_tree_fw_reflush(app_sys_tree_fw_t *tree)
 {

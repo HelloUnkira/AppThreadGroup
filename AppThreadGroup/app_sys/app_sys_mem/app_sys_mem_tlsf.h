@@ -52,24 +52,24 @@ typedef struct {
 
 typedef app_sys_mem_tlsf_control_t app_sys_mem_tlsf_t;
 
-/*@brief     二级隔离策略分配堆释放内存
- *@param[in] mem_tlsf 二级隔离策略分配堆实例
- *@param[in] pointer  内存地址
+/*@brief 二级隔离策略分配堆释放内存
+ *@param mem_tlsf 二级隔离策略分配堆实例
+ *@param pointer  内存地址
  */
 void app_sys_mem_tlsf_free(app_sys_mem_tlsf_t *mem_tlsf, void *pointer);
 
-/*@brief     二级隔离策略分配堆申请内存
- *@param[in] mem_tlsf 二级隔离策略分配堆实例
- *@param[in] size     字节大小
- *@retval    内存地址
+/*@brief 二级隔离策略分配堆申请内存
+ *@param mem_tlsf 二级隔离策略分配堆实例
+ *@param size     字节大小
+ *@retval 内存地址
  */
 void * app_sys_mem_tlsf_alloc(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size);
 
-/*@brief     二级隔离策略分配堆申请内存
- *@param[in] mem_olsf 一级隔离策略分配堆实例
- *@param[in] size     字节大小
- *@param[in] align    指定字节对齐(不小于平台字节对齐, 2的指数)
- *@retval    内存地址
+/*@brief 二级隔离策略分配堆申请内存
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param size     字节大小
+ *@param align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@retval 内存地址
  */
 void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size, uintptr_t align);
 
@@ -78,15 +78,15 @@ void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size
  *       它存在造成内存峰值过大的情况,使用应该规避掉对这种逻辑的产生
  */
 
-/*@brief     二级隔离策略分配堆实例初始化
- *@param[in] addr     内存地址
- *@param[in] size     字节大小
- *@retval    返回分配器(分配器在内存头部)
+/*@brief 二级隔离策略分配堆实例初始化
+ *@param addr     内存地址
+ *@param size     字节大小
+ *@retval 返回分配器(分配器在内存头部)
  */
 app_sys_mem_tlsf_t * app_sys_mem_tlsf_ready(void *addr, uintptr_t size);
 
-/*@brief     二级隔离策略分配堆内存布局使用
- *@param[in] mem_olsf 二级隔离策略分配堆实例
+/*@brief 二级隔离策略分配堆内存布局使用
+ *@param mem_olsf 二级隔离策略分配堆实例
  */
 void app_sys_mem_tlsf_check(app_sys_mem_tlsf_t *mem_tlsf);
 

@@ -34,63 +34,63 @@ typedef struct {
     app_sys_tree_st_visit_t   visit;
 } app_sys_tree_st_t;
 
-/*@brief     插入函数
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
+/*@brief 插入函数
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
  */
 void app_sys_tree_st_insert(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief     删除函数
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
+/*@brief 删除函数
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
  */
 void app_sys_tree_st_remove(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief     搜索函数
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
- *@retval    伸展节点实例
+/*@brief 搜索函数
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
+ *@retval 伸展节点实例
  */
 app_sys_tree_sn_t * app_sys_tree_st_search(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief     搜索函数(前驱节点)
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
- *@retval    伸展节点实例
+/*@brief 搜索函数(前驱节点)
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
+ *@retval 伸展节点实例
  */
 app_sys_tree_sn_t * app_sys_tree_st_search_prev(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief     搜索函数(后继节点)
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
- *@retval    伸展节点实例
+/*@brief 搜索函数(后继节点)
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
+ *@retval 伸展节点实例
  */
 app_sys_tree_sn_t * app_sys_tree_st_search_next(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief     搜索函数(最小节点)
- *@param[in] tree 伸展树实例
- *@retval    伸展节点实例
+/*@brief 搜索函数(最小节点)
+ *@param tree 伸展树实例
+ *@retval 伸展节点实例
  */
 app_sys_tree_sn_t * app_sys_tree_st_search_min(app_sys_tree_st_t *tree);
 
-/*@brief     搜索函数(最大节点)
- *@param[in] tree 伸展树实例
- *@retval    伸展节点实例
+/*@brief 搜索函数(最大节点)
+ *@param tree 伸展树实例
+ *@retval 伸展节点实例
  */
 app_sys_tree_sn_t * app_sys_tree_st_search_max(app_sys_tree_st_t *tree);
 
-/*@brief      伸展树合并
- *@param[out] tree  伸展树实例
- *@param[in]  tree1 伸展树实例
- *@param[in]  tree2 伸展树实例
+/*@brief 伸展树合并
+ *@param tree  伸展树实例
+ *@param tree1 伸展树实例
+ *@param tree2 伸展树实例
  */
 void app_sys_tree_st_join(app_sys_tree_st_t *tree, app_sys_tree_st_t *tree1, app_sys_tree_st_t *tree2);
 
-/*@brief      伸展树分裂
- *@param[out] tree  伸展树实例
- *@param[in]  node  伸展节点实例
- *@param[in]  tree1 伸展树实例
- *@param[in]  tree2 伸展树实例
+/*@brief 伸展树分裂
+ *@param tree  伸展树实例
+ *@param node  伸展节点实例
+ *@param tree1 伸展树实例
+ *@param tree2 伸展树实例
  */
 void app_sys_tree_st_split(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node, app_sys_tree_st_t *tree1, app_sys_tree_st_t *tree2);
 
@@ -101,33 +101,33 @@ void app_sys_tree_st_split(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node, app
 #define app_sys_tree_st_ftra(tree, node)    \
     for (app_sys_tree_sn_t *node = app_sys_tree_st_search_max(tree); node != NULL; node = app_sys_tree_st_search_prev(node))
 
-/*@brief     复位函数
- *@param[in] tree 伸展树实例
+/*@brief 复位函数
+ *@param tree 伸展树实例
  */
 void app_sys_tree_st_reset(app_sys_tree_st_t *tree);
 
-/*@brief     复位函数
- *@param[in] node 伸展节点实例
+/*@brief 复位函数
+ *@param node 伸展节点实例
  */
 void app_sys_tree_sn_reset(app_sys_tree_sn_t *node);
 
-/*@brief     配置函数
- *@param[in] tree 伸展树实例
- *@param[in] compare 伸展树比较语义
- *@param[in] confirm 伸展树确认语义
- *@param[in] visit   伸展树访问语义
+/*@brief 配置函数
+ *@param tree 伸展树实例
+ *@param compare 伸展树比较语义
+ *@param confirm 伸展树确认语义
+ *@param visit   伸展树访问语义
  */
 void app_sys_tree_st_config(app_sys_tree_st_t *tree, app_sys_tree_st_compare_t compare, app_sys_tree_st_confirm_t confirm, app_sys_tree_st_visit_t visit);
 
-/*@brief     根切换函数
- *@param[in] tree 伸展树实例
- *@param[in] node 伸展节点实例
+/*@brief 根切换函数
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
  */
 void app_sys_tree_st_root_set(app_sys_tree_st_t *tree, app_sys_tree_sn_t *node);
 
-/*@brief      根切换函数
- *@param[in]  tree 伸展树实例
- *@param[out] node 伸展节点实例
+/*@brief 根切换函数
+ *@param tree 伸展树实例
+ *@param node 伸展节点实例
  */
 void app_sys_tree_st_root_get(app_sys_tree_st_t *tree, app_sys_tree_sn_t **node);
 
@@ -136,10 +136,10 @@ void app_sys_tree_st_root_get(app_sys_tree_st_t *tree, app_sys_tree_sn_t **node)
  *迭代过程不可以做修改动作,因为队列或栈状态不一致
  */
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree  伸展树实例
- *@param[in] queue 伸展树节点实例队列数组
- *@param[in] len   伸展树节点实例队列数组长度
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree  伸展树实例
+ *@param queue 伸展树节点实例队列数组
+ *@param len   伸展树节点实例队列数组长度
  */
 void app_sys_tree_st_seq_tra(app_sys_tree_st_t *tree, app_sys_tree_sn_t **queue, int32_t len);
 

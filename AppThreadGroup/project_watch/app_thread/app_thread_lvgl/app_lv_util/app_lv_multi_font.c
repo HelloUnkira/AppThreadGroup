@@ -25,8 +25,8 @@ static uint32_t   app_lv_multi_font_type = 0;
 static lv_font_t *app_lv_multi_font_obj[app_lv_multi_font_size_num] = {0};
 static lv_font_t  app_lv_multi_font_inst[app_lv_multi_font_size_num] = {0};
 
-/*@brief     更新主题多字库
- *@param[in] font 字库对象
+/*@brief 更新主题多字库
+ *@param font 字库对象
  */
 static void app_lv_multi_font_config_theme(lv_font_t *font)
 {
@@ -41,8 +41,8 @@ static void app_lv_multi_font_config_theme(lv_font_t *font)
     lv_disp_set_theme(disp, theme);
 }
 
-/*@brief     加载动态多字库表
- *@param[in] type 字库尺寸
+/*@brief 加载动态多字库表
+ *@param type 字库尺寸
  */
 static void app_lv_multi_font_obj_load(uint32_t size)
 {
@@ -66,8 +66,8 @@ static void app_lv_multi_font_obj_load(uint32_t size)
     /*  */
 }
 
-/*@brief     卸载动态多字库表
- *@param[in] type 字库尺寸
+/*@brief 卸载动态多字库表
+ *@param type 字库尺寸
  */
 static void app_lv_multi_font_obj_free(uint32_t size)
 {
@@ -92,10 +92,10 @@ static void app_lv_multi_font_obj_free(uint32_t size)
     /*  */
 }
 
-/*@brief     配置指定类型的多字库表
+/*@brief 配置指定类型的多字库表
  *           会先卸载之前指定类型的所有尺寸字库
  *           但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
- *@param[in] type 字库类型
+ *@param type 字库类型
  */
 void app_lv_multi_font_type_config(uint32_t type)
 {
@@ -130,10 +130,10 @@ void app_lv_multi_font_type_config(uint32_t type)
     }
 }
 
-/*@brief     配置指定类型的多字库表
+/*@brief 配置指定类型的多字库表
  *           会先卸载之前指定类型的所有尺寸字库
  *           但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
- *@param[in] type 字库类型
+ *@param type 字库类型
  */
 void app_lv_multi_font_size_config(uint32_t size)
 {
@@ -158,8 +158,8 @@ lv_font_t * app_lv_multi_font_def(void)
     return &app_lv_multi_font_inst[app_lv_multi_font_size];
 }
 
-/*@brief     加载动态多字库表
- *@param[in] type 字库尺寸
+/*@brief 加载动态多字库表
+ *@param type 字库尺寸
  */
 lv_font_t * app_lv_multi_font_load(uint32_t size)
 {
@@ -172,8 +172,8 @@ lv_font_t * app_lv_multi_font_load(uint32_t size)
     return &app_lv_multi_font_inst[size];
 }
 
-/*@brief     卸载动态多字库表
- *@param[in] type 字库尺寸
+/*@brief 卸载动态多字库表
+ *@param type 字库尺寸
  */
 void app_lv_multi_font_free(uint32_t size)
 {
@@ -189,8 +189,8 @@ void app_lv_multi_font_free(uint32_t size)
     app_lv_multi_font_obj_free(size);
 }
 
-/*@brief     获取内部静态字库
- *@param[in] font_size 字库尺寸
+/*@brief 获取内部静态字库
+ *@param font_size 字库尺寸
  */
 lv_font_t * app_lv_ui_font(uint32_t size)
 {

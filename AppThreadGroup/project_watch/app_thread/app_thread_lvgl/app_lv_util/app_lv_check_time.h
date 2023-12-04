@@ -35,8 +35,8 @@ void app_lv_check_time_ready(void);
  */
 void app_lv_check_time_update(void);
 
-/*@brief     界面状态检查功能启停
- *@param[in] status(true:启动界面状态检查,false:关闭界面状态检查)
+/*@brief 界面状态检查功能启停
+ *@param status(true:启动界面状态检查,false:关闭界面状态检查)
  */
 void app_lv_check_time_exec(bool status);
 

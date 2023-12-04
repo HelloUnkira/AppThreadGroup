@@ -13,9 +13,9 @@ void app_lv_tick_exec_update(void);
  */
 void app_lv_drv_update(void);
 
-/*@brief     lvgl wheel更新
- *@param[in] wheel 轮盘实例
- *@param[in] size  轮盘实例大小
+/*@brief lvgl wheel更新
+ *@param wheel 轮盘实例
+ *@param size  轮盘实例大小
  */
 void app_lv_wheel_update(void *wheel, uint32_t size);
 

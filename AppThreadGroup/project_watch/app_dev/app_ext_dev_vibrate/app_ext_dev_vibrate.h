@@ -13,8 +13,8 @@ typedef struct {
     void *data;
 } app_dev_vibrate_data_t;
 
-/*@brief     vibrate设备打开
- *@param[in] driver 设备实例
+/*@brief vibrate设备打开
+ *@param driver 设备实例
  */
 static inline void app_dev_vibrate_open(app_dev_t *driver)
 {
@@ -24,8 +24,8 @@ static inline void app_dev_vibrate_open(app_dev_t *driver)
     }
 }
 
-/*@brief     vibrate设备关闭
- *@param[in] driver 设备实例
+/*@brief vibrate设备关闭
+ *@param driver 设备实例
  */
 static inline void app_dev_vibrate_close(app_dev_t *driver)
 {
@@ -35,9 +35,9 @@ static inline void app_dev_vibrate_close(app_dev_t *driver)
     }
 }
 
-/*@brief     vibrate设备更新占空比
- *@param[in] driver 设备实例
- *@param[in] duty_ratio 百分比振幅[0,100]
+/*@brief vibrate设备更新占空比
+ *@param driver 设备实例
+ *@param duty_ratio 百分比振幅[0,100]
  */
 static inline void app_dev_vibrate_update(app_dev_t *driver, uint8_t duty_ratio)
 {

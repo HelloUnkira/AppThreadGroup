@@ -52,46 +52,46 @@ typedef struct {
     app_sys_tree_rbt_visit_t   visit;
 } app_sys_tree_rbt_t;
 
-/*@brief     插入函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 插入函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief     删除函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 删除函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief     搜索函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief     搜索函数(最小节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最小节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree);
 
-/*@brief     搜索函数(最大节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最大节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree);
 
-/*@brief     搜索函数(前驱节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(前驱节点)
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node);
 
-/*@brief     搜索函数(后继节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(后继节点)
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node);
 
@@ -102,33 +102,33 @@ app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node);
 #define app_sys_tree_rbt_ftra(tree, node)    \
     for (app_sys_tree_rbn_t *node = app_sys_tree_rbt_search_max(tree); node != NULL; node = app_sys_tree_rbn_search_prev(node))
 
-/*@brief     复位函数
- *@param[in] tree 红黑树实例
+/*@brief 复位函数
+ *@param tree 红黑树实例
  */
 void app_sys_tree_rbt_reset(app_sys_tree_rbt_t *tree);
 
-/*@brief     复位函数
- *@param[in] node 红黑节点实例
+/*@brief 复位函数
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node);
 
-/*@brief     配置函数
- *@param[in] tree 红黑树实例
- *@param[in] compare 红黑树比较语义
- *@param[in] confirm 红黑树确认语义
- *@param[in] visit   红黑树访问语义
+/*@brief 配置函数
+ *@param tree 红黑树实例
+ *@param compare 红黑树比较语义
+ *@param confirm 红黑树确认语义
+ *@param visit   红黑树访问语义
  */
 void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm, app_sys_tree_rbt_visit_t visit);
 
-/*@brief     根切换函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node);
 
-/*@brief      根切换函数
- *@param[in]  tree 红黑树实例
- *@param[out] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **node);
 
@@ -137,19 +137,19 @@ void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **no
  *迭代过程不可以做修改动作,因为队列或栈状态不一致
  */
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree  红黑树实例
- *@param[in] queue 红黑树节点实例队列数组
- *@param[in] len   红黑树节点实例队列数组长度
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree  红黑树实例
+ *@param queue 红黑树节点实例队列数组
+ *@param len   红黑树节点实例队列数组长度
  */
 void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **queue, int32_t len);
 
-/*@brief     验证一棵树是否为红黑树(内部检查)
- *@param[in] tree  红黑树实例
- *@param[in] stack 红黑树节点实例栈数组
- *@param[in] flags 红黑树节点实例栈数组
- *@param[in] len   红黑树节点实例栈数组长度
- *@retval    0:失败;1:成功
+/*@brief 验证一棵树是否为红黑树(内部检查)
+ *@param tree  红黑树实例
+ *@param stack 红黑树节点实例栈数组
+ *@param flags 红黑树节点实例栈数组
+ *@param len   红黑树节点实例栈数组长度
+ *@retval 0:失败;1:成功
  */
 uint8_t app_sys_tree_rbt_check_valid(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **stack, int32_t *flags, int32_t len);
 

@@ -10,15 +10,15 @@ typedef struct {
     uint32_t reload:1;                  /* 是否自重载 */
 } app_sys_timer_t;
 
-/*@brief     停止,中止,终止软件定时器(中断环境下不可调用)
- *@param[in] timer 定时器实例
- *@retval    执行是否有效
+/*@brief 停止,中止,终止软件定时器(中断环境下不可调用)
+ *@param timer 定时器实例
+ *@retval 执行是否有效
  */
 bool app_sys_timer_stop(app_sys_timer_t *timer);
 
-/*@brief     启动软件定时器(中断环境下不可调用)
- *@param[in] timer 定时器实例
- *@retval    执行是否有效
+/*@brief 启动软件定时器(中断环境下不可调用)
+ *@param timer 定时器实例
+ *@retval 执行是否有效
  */
 bool app_sys_timer_start(app_sys_timer_t *timer);
 

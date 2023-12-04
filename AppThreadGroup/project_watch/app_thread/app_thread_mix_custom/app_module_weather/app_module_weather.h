@@ -116,15 +116,15 @@ typedef struct {
     uint8_t city[APP_MODULE_WEATHER_CITY_MAX];
 } app_module_weather_t;
 
-/*@brief     天气设置
- *@param[in] weather 天气参数
- *@param[in] idx     天气索引
+/*@brief 天气设置
+ *@param weather 天气参数
+ *@param idx     天气索引
  */
 void app_module_weather_set(app_module_weather_t *weather, uint8_t idx);
 
-/*@brief      天气获取
- *@param[out] weather 天气参数
- *@param[in]  idx     天气索引
+/*@brief 天气获取
+ *@param weather 天气参数
+ *@param idx     天气索引
  */
 void app_module_weather_get(app_module_weather_t *weather, uint8_t idx);
 

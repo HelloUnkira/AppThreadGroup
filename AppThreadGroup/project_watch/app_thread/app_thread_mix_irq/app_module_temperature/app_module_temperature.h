@@ -27,17 +27,17 @@ typedef struct {
     uint16_t measure_result:1;
 } app_module_temperature_t;
 
-/*@brief  温度模组测量状态
+/*@brief 温度模组测量状态
  *@retval 是否在测量之中
  */
 bool app_module_temperature_measure_status(void);
 
-/*@brief  温度模组测量结果
+/*@brief 温度模组测量结果
  *@retval 是否有测量结果
  */
 bool app_module_temperature_measure_result(void);
 
-/*@brief  温度模组测量结果
+/*@brief 温度模组测量结果
  *@retval 测量结果
  */
 float app_module_temperature_measure_value(void);
@@ -46,8 +46,8 @@ float app_module_temperature_measure_value(void);
  */
 void app_module_temperature_measure(void);
 
-/*@brief     温度模组启动测量
- *@param[in] run 是否启动
+/*@brief 温度模组启动测量
+ *@param run 是否启动
  */
 void app_module_temperature_measure_auto(bool run);
 

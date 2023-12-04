@@ -1,9 +1,9 @@
 #ifndef APP_MODULE_DATA_CENTER_H
 #define APP_MODULE_DATA_CENTER_H
 
-/*@brief    更换目标数据类型并锁定数据中心
- *param[in] type 数据中心类型(app_module_data_center_src_t(type))
- *@retval   数据中心的缓存地址
+/*@brief 更换目标数据类型并锁定数据中心
+ *@param type 数据中心类型(app_module_data_center_src_t(type))
+ *@retval 数据中心的缓存地址
  */
 app_module_data_center_src_t * app_module_data_center_take(uint32_t type);
 
@@ -15,8 +15,8 @@ void app_module_data_center_give(void);
  */
 void app_module_data_center_reflush(void);
 
-/*@brief     回收数据中心资源
- *@param[in] force 强制回收数据中心资源(不建议使用)
+/*@brief 回收数据中心资源
+ *@param force 强制回收数据中心资源(不建议使用)
  *           不建议使用,这会导致非正常的逻辑
  */
 void app_module_data_center_recycle(bool force);

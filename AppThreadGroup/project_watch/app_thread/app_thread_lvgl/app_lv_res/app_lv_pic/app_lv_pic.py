@@ -27,8 +27,8 @@ def encode_app_lv_pic_c(file, path):
     encode_app_lv_pic_c_rec(path, path)
     file.write('};\n\n')
     # 编写固化访问函数
-    file.write('/*@brief     获得图片资源字符串\n')
-    file.write(' *@param[in] index图片资源索引(0~n-1)\n */\n')
+    file.write('/*@brief 获得图片资源字符串\n')
+    file.write(' *@param index图片资源索引(0~n-1)\n */\n')
     file.write('const char * app_lv_pic_str_find(uint32_t index)\n')
     file.write('{\n')
     file.write('\tif (index < APP_LV_PIC_NUM)\n')
@@ -67,8 +67,8 @@ def encode_app_lv_pic_h(file, path):
     file.write('\tAPP_LV_PIC_NUM,\n')
     file.write('} app_lv_pic_t;\n\n')
     # 编写固化访问函数
-    file.write('/*@brief     获得图片资源字符串\n')
-    file.write(' *@param[in] index图片资源索引(0~n-1)\n */\n')
+    file.write('/*@brief 获得图片资源字符串\n')
+    file.write(' *@param index图片资源索引(0~n-1)\n */\n')
     file.write('const char * app_lv_pic_str_find(uint32_t index);\n\n')
     file.write('#endif\n')
 

@@ -34,9 +34,9 @@ typedef struct {
     
 } app_module_remind_menstruation_info_t;
 
-/*@brief      提醒组是否为提醒女性健康组
- *@param[out] remind_group 提醒组
- *@retval     是否为女性健康组
+/*@brief 提醒组是否为提醒女性健康组
+ *@param remind_group 提醒组
+ *@retval 是否为女性健康组
  */
 bool app_module_remind_menstruation_group_check(uint32_t remind_group);
 
@@ -52,9 +52,9 @@ void app_module_remind_menstruation_array_lock(void);
  */
 void app_module_remind_menstruation_array_unlock(void);
 
-/*@brief      提醒女性健康列表
- *@param[out] menstruation_item 提醒女性健康列表
- *@param[out] menstruation_info 提醒女性健康信息列表
+/*@brief 提醒女性健康列表
+ *@param menstruation_item 提醒女性健康列表
+ *@param menstruation_info 提醒女性健康信息列表
  */
 void app_module_remind_menstruation_array(app_module_remind_item_t **menstruation_item, app_module_remind_menstruation_info_t **menstruation_info);
 

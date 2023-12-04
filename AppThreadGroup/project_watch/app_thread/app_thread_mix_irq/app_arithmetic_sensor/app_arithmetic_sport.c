@@ -16,10 +16,10 @@ void app_arithmetic_sport_step_proc(app_arithmetic_sport_t *sport, int32_t frame
 void app_arithmetic_sport_run_stop(app_arithmetic_sport_t *sport);
 void app_arithmetic_sport_run_proc(app_arithmetic_sport_t *sport, int32_t frame[][3], uint8_t length);
 
-/*@brief      运动流程处理
- *@param[out] sport  运动数据
- *@param[in]  frame  帧数据
- *@param[in]  length 帧数据实际数量
+/*@brief 运动流程处理
+ *@param sport  运动数据
+ *@param frame  帧数据
+ *@param length 帧数据实际数量
  */
 void app_arithmetic_sport_proc(app_arithmetic_sport_t *sport, int32_t frame[][3], uint8_t length)
 {
@@ -134,8 +134,8 @@ typedef struct {
 
 
 
-/*@brief     用户信息默认参数更新
- *@param[in] data 算法数据实例
+/*@brief 用户信息默认参数更新
+ *@param data 算法数据实例
  */
 void app_arithmetic_data_update_user_info(app_arithmetic_data_t *data)
 {
@@ -166,9 +166,9 @@ void app_arithmetic_data_update_user_info(app_arithmetic_data_t *data)
     }
 }
 
-/*@brief     使用步数更新运动数据
- *@param[in] data 算法数据实例
- *@param[in] step 步数
+/*@brief 使用步数更新运动数据
+ *@param data 算法数据实例
+ *@param step 步数
  */
 void app_arithmetic_data_update_step_sport_info(app_arithmetic_data_t *data, uint32_t step)
 {

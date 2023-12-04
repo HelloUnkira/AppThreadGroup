@@ -16,144 +16,144 @@
 #define APP_SYS_TREE_BST_ALLOC  app_mem_alloc
 #define APP_SYS_TREE_BST_FREE   app_mem_free
 
-/*@brief     B*树(设置语义)
- *@param[in] tree B*树实例
- *@param[in] root B*树根
+/*@brief B*树(设置语义)
+ *@param tree B*树实例
+ *@param root B*树根
  */
 static inline void app_sys_tree_bst_set_root(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t *root)
 {
     tree->root = root;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree B*树实例
- *@param[in] key  B*树关键字获取语义
+/*@brief B*树(设置语义)
+ *@param tree B*树实例
+ *@param key  B*树关键字获取语义
  */
 static inline void app_sys_tree_bst_set_key(app_sys_tree_bst_t *tree, app_sys_tree_bst_key_t key)
 {
     tree->key = key;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree  B*树实例
- *@param[in] visit B*树节点访问语义
+/*@brief B*树(设置语义)
+ *@param tree  B*树实例
+ *@param visit B*树节点访问语义
  */
 static inline void app_sys_tree_bst_set_visit(app_sys_tree_bst_t *tree, app_sys_tree_bst_visit_t visit)
 {
     tree->visit = visit;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree   B*树实例
- *@param[in] length B*树节点最大负载
+/*@brief B*树(设置语义)
+ *@param tree   B*树实例
+ *@param length B*树节点最大负载
  */
 static inline void app_sys_tree_bst_set_length(app_sys_tree_bst_t *tree, uint32_t length)
 {
     tree->length = length;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree   B*树实例
- *@param[in] criter B*树节点分裂值
+/*@brief B*树(设置语义)
+ *@param tree   B*树实例
+ *@param criter B*树节点分裂值
  */
 static inline void app_sys_tree_bst_set_criter(app_sys_tree_bst_t *tree, uint32_t criter)
 {
     tree->criter = criter;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree   B*树实例
- *@param[in] number B*树节点当前值
+/*@brief B*树(设置语义)
+ *@param tree   B*树实例
+ *@param number B*树节点当前值
  */
 static inline void app_sys_tree_bst_set_number(app_sys_tree_bst_t *tree, uint32_t number)
 {
     tree->number = number;
 }
 
-/*@brief     B*树(获取语义)
- *@param[in] tree B*树实例
- *@retval    B*树根
+/*@brief B*树(获取语义)
+ *@param tree B*树实例
+ *@retval B*树根
  */
 static inline app_sys_tree_bsn_t * app_sys_tree_bst_get_root(app_sys_tree_bst_t *tree)
 {
     return tree->root;
 }
 
-/*@brief     B*树(获取语义)
- *@param[in] tree B*树实例
- *@retval    B*树关键字获取语义
+/*@brief B*树(获取语义)
+ *@param tree B*树实例
+ *@retval B*树关键字获取语义
  */
 static inline app_sys_tree_bst_key_t app_sys_tree_bst_get_key(app_sys_tree_bst_t *tree)
 {
     return tree->key;
 }
 
-/*@brief     B*树(设置语义)
- *@param[in] tree  B*树实例
- *@retval    B*树节点访问语义
+/*@brief B*树(设置语义)
+ *@param tree  B*树实例
+ *@retval B*树节点访问语义
  */
 static inline app_sys_tree_bst_visit_t app_sys_tree_bst_get_visit(app_sys_tree_bst_t *tree)
 {
     return tree->visit;
 }
 
-/*@brief     B*树(获取语义)
- *@param[in] tree B*树实例
- *@retval    B*树节点最大负载
+/*@brief B*树(获取语义)
+ *@param tree B*树实例
+ *@retval B*树节点最大负载
  */
 static inline uint32_t app_sys_tree_bst_get_length(app_sys_tree_bst_t *tree)
 {
     return tree->length;
 }
 
-/*@brief     B*树(获取语义)
- *@param[in] tree B*树实例
- *@retval    B*树节点分裂值
+/*@brief B*树(获取语义)
+ *@param tree B*树实例
+ *@retval B*树节点分裂值
  */
 static inline uint32_t app_sys_tree_bst_get_criter(app_sys_tree_bst_t *tree)
 {
     return tree->criter;
 }
 
-/*@brief     B*树(获取语义)
- *@param[in] tree B*树实例
- *@retval    B*树节点当前值
+/*@brief B*树(获取语义)
+ *@param tree B*树实例
+ *@retval B*树节点当前值
  */
 static inline uint32_t app_sys_tree_bst_get_number(app_sys_tree_bst_t *tree)
 {
     return tree->number;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node   B*节点实例
- *@param[in] parent B*节点实例
+/*@brief B*节点(设置语义)
+ *@param node   B*节点实例
+ *@param parent B*节点实例
  */
 static inline void app_sys_tree_bsn_set_parent(app_sys_tree_bsn_t *node, app_sys_tree_bsn_t *parent)
 {
     node->parent = parent;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node    B*节点实例
- *@param[in] brother B*节点实例
+/*@brief B*节点(设置语义)
+ *@param node    B*节点实例
+ *@param brother B*节点实例
  */
 static inline void app_sys_tree_bsn_set_brother_l(app_sys_tree_bsn_t *node, app_sys_tree_bsn_t *brother)
 {
     node->brother_l = brother;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node    B*节点实例
- *@param[in] brother B*节点实例
+/*@brief B*节点(设置语义)
+ *@param node    B*节点实例
+ *@param brother B*节点实例
  */
 static inline void app_sys_tree_bsn_set_brother_r(app_sys_tree_bsn_t *node, app_sys_tree_bsn_t *brother)
 {
     node->brother_r = brother;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node       B*节点实例
- *@param[in] child_data 数据元集或节点集
+/*@brief B*节点(设置语义)
+ *@param node       B*节点实例
+ *@param child_data 数据元集或节点集
  */
 static inline void app_sys_tree_bsn_set_child_data(app_sys_tree_bsn_t *node, void **child_data)
 {
@@ -166,9 +166,9 @@ static inline void app_sys_tree_bsn_set_child_data(app_sys_tree_bsn_t *node, voi
     node->child_data_state = (void *)retval;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node  B*节点实例
- *@param[in] state B*节点状态
+/*@brief B*节点(设置语义)
+ *@param node  B*节点实例
+ *@param state B*节点状态
  */
 static inline void app_sys_tree_bsn_set_state(app_sys_tree_bsn_t *node, app_sys_tree_bsn_status_t state)
 {
@@ -185,54 +185,54 @@ static inline void app_sys_tree_bsn_set_state(app_sys_tree_bsn_t *node, app_sys_
     node->child_data_state = (void *)retval;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node B*节点实例
- *@param[in] key  关键字集
+/*@brief B*节点(设置语义)
+ *@param node B*节点实例
+ *@param key  关键字集
  */
 static inline void app_sys_tree_bsn_set_key(app_sys_tree_bsn_t *node, uint32_t *key)
 {
     node->key = key;
 }
 
-/*@brief     B*节点(设置语义)
- *@param[in] node   B*节点实例
- *@param[in] number 节点数量
+/*@brief B*节点(设置语义)
+ *@param node   B*节点实例
+ *@param number 节点数量
  */
 static inline void app_sys_tree_bsn_set_number(app_sys_tree_bsn_t *node, uint32_t number)
 {
     node->number = number;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    B*节点实例
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval B*节点实例
  */
 static inline app_sys_tree_bsn_t * app_sys_tree_bsn_get_parent(app_sys_tree_bsn_t *node)
 {
     return node->parent;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    B*节点实例
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval B*节点实例
  */
 static inline app_sys_tree_bsn_t * app_sys_tree_bsn_get_brother_l(app_sys_tree_bsn_t *node)
 {
     return node->brother_l;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    B*节点实例
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval B*节点实例
  */
 static inline app_sys_tree_bsn_t * app_sys_tree_bsn_get_brother_r(app_sys_tree_bsn_t *node)
 {
     return node->brother_r;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    数据元集或节点集
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval 数据元集或节点集
  */
 static inline void ** app_sys_tree_bsn_get_child_data(app_sys_tree_bsn_t *node)
 {
@@ -244,9 +244,9 @@ static inline void ** app_sys_tree_bsn_get_child_data(app_sys_tree_bsn_t *node)
     return (void **)retval;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    B*节点状态
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval B*节点状态
  */
 static inline app_sys_tree_bsn_status_t app_sys_tree_bsn_get_state(app_sys_tree_bsn_t *node)
 {
@@ -263,18 +263,18 @@ static inline app_sys_tree_bsn_status_t app_sys_tree_bsn_get_state(app_sys_tree_
     return app_sys_tree_bsn_error;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    关键字集
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval 关键字集
  */
 static inline uint32_t * app_sys_tree_bsn_get_key(app_sys_tree_bsn_t *node)
 {
     return node->key;
 }
 
-/*@brief     B*节点(获取语义)
- *@param[in] node B*节点实例
- *@retval    节点数量
+/*@brief B*节点(获取语义)
+ *@param node B*节点实例
+ *@retval 节点数量
  */
 static inline uint32_t app_sys_tree_bsn_get_number(app_sys_tree_bsn_t *node)
 {
@@ -286,10 +286,10 @@ static inline uint32_t app_sys_tree_bsn_get_number(app_sys_tree_bsn_t *node)
 #define APP_SYS_TREE_RBT_CHECK_RETURN_ZERO(expr)    if (expr) return 0;
 #define APP_SYS_TREE_RBT_CHECK_RETURN_NULL(expr)    if (expr) return NULL;
 
-/*@brief     创建一个B*节点实例(辅助功能)
- *@param[in] tree  B*树实例
- *@param[in] state B*节点状态
- *@retval    B*节点实例
+/*@brief 创建一个B*节点实例(辅助功能)
+ *@param tree  B*树实例
+ *@param state B*节点状态
+ *@retval B*节点实例
  */
 static app_sys_tree_bsn_t * app_sys_tree_bst_create_node(app_sys_tree_bst_t *tree, app_sys_tree_bsn_status_t state)
 {
@@ -323,8 +323,8 @@ static app_sys_tree_bsn_t * app_sys_tree_bst_create_node(app_sys_tree_bst_t *tre
     return node;
 }
 
-/*@brief     销毁一个B*节点实例(辅助功能)
- *@param[in] node B*节点实例
+/*@brief 销毁一个B*节点实例(辅助功能)
+ *@param node B*节点实例
  */
 static void app_sys_tree_bst_destroy_node(app_sys_tree_bsn_t *node)
 {
@@ -333,12 +333,12 @@ static void app_sys_tree_bst_destroy_node(app_sys_tree_bsn_t *node)
     APP_SYS_TREE_BST_FREE(node);
 }
 
-/*@brief      二分搜索(辅助功能)
- *@param[in]  key_val 目标关键字
- *@param[in]  key     关键字集
- *@param[in]  edge    边界亲和度(0:(l,r];1:[l,r);)
- *@param[out] left    匹配左边界
- *@param[out] right   匹配右边界
+/*@brief 二分搜索(辅助功能)
+ *@param key_val 目标关键字
+ *@param key     关键字集
+ *@param edge    边界亲和度(0:(l,r];1:[l,r);)
+ *@param left    匹配左边界
+ *@param right   匹配右边界
  */
 static void app_sys_tree_bst_binary(uint32_t key_val, uint32_t *key, uint32_t edge, int32_t *left, int32_t *right)
 {
@@ -370,10 +370,10 @@ static void app_sys_tree_bst_binary(uint32_t key_val, uint32_t *key, uint32_t ed
     /* 不检查左右边界溢出(调用者需要自己检查) */
 }
 
-/*@brief     迭代更新从指定节点到根节点的关键字(辅助功能)
- *@param[in] node        B*节点实例
- *@param[in] key_val_new 新关键字
- *@param[in] key_val_old 旧关键字
+/*@brief 迭代更新从指定节点到根节点的关键字(辅助功能)
+ *@param node        B*节点实例
+ *@param key_val_new 新关键字
+ *@param key_val_old 旧关键字
  */
 static void app_sys_tree_bst_key_update(app_sys_tree_bsn_t *node, uint32_t key_val_new, uint32_t key_val_old)
 {
@@ -402,12 +402,12 @@ static void app_sys_tree_bst_key_update(app_sys_tree_bsn_t *node, uint32_t key_v
     }
 }
 
-/*@brief     从指定节点迁移批量数据到另一节点(辅助功能)
- *@param[in] tree   B*树实例
- *@param[in] node1  B*节点实例
- *@param[in] node2  B*节点实例
- *@param[in] number 迁移数据量
- *@param[in] state  迁移节点状态
+/*@brief 从指定节点迁移批量数据到另一节点(辅助功能)
+ *@param tree   B*树实例
+ *@param node1  B*节点实例
+ *@param node2  B*节点实例
+ *@param number 迁移数据量
+ *@param state  迁移节点状态
  */
 static void app_sys_tree_bst_migrate(app_sys_tree_bst_t *tree,
                                      app_sys_tree_bsn_t *node1,
@@ -474,10 +474,10 @@ static void app_sys_tree_bst_migrate(app_sys_tree_bst_t *tree,
     app_sys_tree_bsn_set_number(node2, number2 + number);
 }
 
-/*@brief      根据关键字迭代搜索到叶节点(辅助功能)
- *@param[in]  tree    B*树实例
- *@param[out] node    B*节点实例
- *@param[in]  key_val 关键字
+/*@brief 根据关键字迭代搜索到叶节点(辅助功能)
+ *@param tree    B*树实例
+ *@param node    B*节点实例
+ *@param key_val 关键字
  */
 static void app_sys_tree_bst_search_node_only(app_sys_tree_bst_t  *tree,
                                               app_sys_tree_bsn_t **node, uint32_t key_val)
@@ -502,12 +502,12 @@ static void app_sys_tree_bst_search_node_only(app_sys_tree_bst_t  *tree,
     *node = root;
 }
 
-/*@brief     在一个指定节点中插入一个项(辅助功能)
- *@param[in] node    B*节点实例
- *@param[in] state   节点状态
- *@param[in] idx     插入索引
- *@param[in] key_val 关键字
- *@param[in] data    数据项
+/*@brief 在一个指定节点中插入一个项(辅助功能)
+ *@param node    B*节点实例
+ *@param state   节点状态
+ *@param idx     插入索引
+ *@param key_val 关键字
+ *@param data    数据项
  */
 static void app_sys_tree_bst_insert_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -536,12 +536,12 @@ static void app_sys_tree_bst_insert_data_only(app_sys_tree_bsn_t *node,
     app_sys_tree_bsn_set_number(node, number + 1);
 }
 
-/*@brief     从一个指定节点中移除一个项(辅助功能)
- *@param[in] node    B*节点实例
- *@param[in] state   节点状态
- *@param[in] idx     插入索引
- *@param[in] key_val 关键字
- *@param[in] data    数据项
+/*@brief 从一个指定节点中移除一个项(辅助功能)
+ *@param node    B*节点实例
+ *@param state   节点状态
+ *@param idx     插入索引
+ *@param key_val 关键字
+ *@param data    数据项
  */
 static void app_sys_tree_bst_remove_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -573,12 +573,12 @@ static void app_sys_tree_bst_remove_data_only(app_sys_tree_bsn_t *node,
     app_sys_tree_bsn_set_number(node, number - 1);
 }
 
-/*@brief     从一个指定节点中搜索一个项(辅助功能)
- *@param[in] node    B*节点实例
- *@param[in] state   节点状态
- *@param[in] idx     插入索引
- *@param[in] key_val 关键字
- *@param[in] data    数据项
+/*@brief 从一个指定节点中搜索一个项(辅助功能)
+ *@param node    B*节点实例
+ *@param state   节点状态
+ *@param idx     插入索引
+ *@param key_val 关键字
+ *@param data    数据项
  */
 static void app_sys_tree_bst_search_data_only(app_sys_tree_bsn_t *node,
                                               app_sys_tree_bsn_status_t state,
@@ -602,10 +602,10 @@ static void app_sys_tree_bst_search_data_only(app_sys_tree_bsn_t *node,
     *data = child[*idx];
 }
 
-/*@brief     单次插入函数
- *@param[in] tree B*树实例
- *@param[in] node B*节点实例
- *@param[in] data 数据项
+/*@brief 单次插入函数
+ *@param tree B*树实例
+ *@param node B*节点实例
+ *@param data 数据项
  */
 static void app_sys_tree_bst_insert_only(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t **node, void *data)
 {
@@ -633,9 +633,9 @@ static void app_sys_tree_bst_insert_only(app_sys_tree_bst_t *tree, app_sys_tree_
     }
 }
 
-/*@brief     插入调整函数
- *@param[in] tree B*树实例
- *@param[in] node B*节点实例
+/*@brief 插入调整函数
+ *@param tree B*树实例
+ *@param node B*节点实例
  */
 static void app_sys_tree_bst_insert_adjust(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t *node)
 {
@@ -757,11 +757,11 @@ static void app_sys_tree_bst_insert_adjust(app_sys_tree_bst_t *tree, app_sys_tre
     }
 }
 
-/*@brief     单次删除函数
- *@param[in] tree    B*树实例
- *@param[in] node    B*节点实例
- *@param[in] key_val 关键字
- *@param[in] data    数据项
+/*@brief 单次删除函数
+ *@param tree    B*树实例
+ *@param node    B*节点实例
+ *@param key_val 关键字
+ *@param data    数据项
  */
 static void app_sys_tree_bst_remove_only(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t **node, uint32_t key_val, void **data)
 {
@@ -781,9 +781,9 @@ static void app_sys_tree_bst_remove_only(app_sys_tree_bst_t *tree, app_sys_tree_
     app_sys_tree_bst_key_update(*node, key[0], key_val);
 }
 
-/*@brief     删除调整函数
- *@param[in] tree B*树实例
- *@param[in] node B*节点实例
+/*@brief 删除调整函数
+ *@param tree B*树实例
+ *@param node B*节点实例
  */
 static void app_sys_tree_bst_remove_adjust(app_sys_tree_bst_t *tree, app_sys_tree_bsn_t *node)
 {
@@ -946,10 +946,10 @@ static void app_sys_tree_bst_remove_adjust(app_sys_tree_bst_t *tree, app_sys_tre
     }
 }
 
-/*@brief     单次查找函数
- *@param[in] tree    B*树实例
- *@param[in] key_val 关键字
- *@param[in] data    数据项
+/*@brief 单次查找函数
+ *@param tree    B*树实例
+ *@param key_val 关键字
+ *@param data    数据项
  */
 static void app_sys_tree_bst_search_only(app_sys_tree_bst_t *tree, uint32_t key_val, void **data)
 {
@@ -966,9 +966,9 @@ static void app_sys_tree_bst_search_only(app_sys_tree_bst_t *tree, uint32_t key_
     app_sys_tree_bst_search_data_only(node, 0, &idx, key_val, data);
 }
 
-/*@brief     插入函数
- *@param[in] tree B*树实例
- *@param[in] data 数据项
+/*@brief 插入函数
+ *@param tree B*树实例
+ *@param data 数据项
  */
 void app_sys_tree_bst_insert(app_sys_tree_bst_t *tree, void *data)
 {
@@ -978,10 +978,10 @@ void app_sys_tree_bst_insert(app_sys_tree_bst_t *tree, void *data)
     app_sys_tree_bst_set_number(tree, app_sys_tree_bst_get_number(tree) + 1);
 }
 
-/*@brief      删除函数
- *@param[in]  tree    B*树实例
- *@param[out] data    数据项
- *@param[in]  key_val 关键字
+/*@brief 删除函数
+ *@param tree    B*树实例
+ *@param data    数据项
+ *@param key_val 关键字
  */
 void app_sys_tree_bst_remove(app_sys_tree_bst_t *tree, void **data, uint32_t key_val)
 {
@@ -992,21 +992,21 @@ void app_sys_tree_bst_remove(app_sys_tree_bst_t *tree, void **data, uint32_t key
     app_sys_tree_bst_set_number(tree, app_sys_tree_bst_get_number(tree) - 1);
 }
 
-/*@brief      查找函数
- *@param[in]  tree    B*树实例
- *@param[out] data    数据项
- *@param[in]  key_val 关键字
+/*@brief 查找函数
+ *@param tree    B*树实例
+ *@param data    数据项
+ *@param key_val 关键字
  */
 void app_sys_tree_bst_search(app_sys_tree_bst_t *tree, void **data, uint32_t key_val)
 {
     app_sys_tree_bst_search_only(tree, key_val, data);
 }
 
-/*@brief      配置函数
- *@param[in]  tree    B*树实例
- *@param[out] length 数据项
- *@param[in]  key    关键字获取语义
- *@param[in]  visit  节点访问语义
+/*@brief 配置函数
+ *@param tree    B*树实例
+ *@param length 数据项
+ *@param key    关键字获取语义
+ *@param visit  节点访问语义
  */
 void app_sys_tree_bst_config(app_sys_tree_bst_t *tree, uint32_t length, app_sys_tree_bst_key_t key, app_sys_tree_bst_visit_t visit)
 {
@@ -1022,9 +1022,9 @@ void app_sys_tree_bst_config(app_sys_tree_bst_t *tree, uint32_t length, app_sys_
     app_sys_tree_bst_set_number(tree, 0);
 }
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree    B*树实例
- *@param[in] destroy 是否销毁
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree    B*树实例
+ *@param destroy 是否销毁
  */
 uint32_t app_sys_tree_bst_seq_tra(app_sys_tree_bst_t *tree, bool destroy)
 {

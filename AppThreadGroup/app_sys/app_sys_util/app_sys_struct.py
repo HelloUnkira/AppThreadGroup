@@ -40,10 +40,10 @@ def app_sys_struct():
     # set method
     for dic in member:
         file_out.write('\n')
-        file_out.write('/*@brief\n')
-        file_out.write(' *@param[in]\n')
-        file_out.write(' *@param[out]\n')
-        file_out.write(' *@retval\n')
+        file_out.write('/*@brief \n')
+        file_out.write(' *@param \n')
+        file_out.write(' *@param \n')
+        file_out.write(' *@retval \n')
         file_out.write(' */\n')
         file_out.write('static inline void ' + typedef + '_set_' + dic['name'])
         file_out.write('(' + typedef + '_t *instance, ' + dic['type'] + ' ' + dic['name'] + ')')
@@ -51,10 +51,10 @@ def app_sys_struct():
     # get method
     for dic in member:
         file_out.write('\n')
-        file_out.write('/*@brief\n')
-        file_out.write(' *@param[in]\n')
-        file_out.write(' *@param[out]\n')
-        file_out.write(' *@retval\n')
+        file_out.write('/*@brief \n')
+        file_out.write(' *@param \n')
+        file_out.write(' *@param \n')
+        file_out.write(' *@retval \n')
         file_out.write(' */\n')
         file_out.write('static inline ' + dic['type'] + ' ' + typedef + '_get_' + dic['name'])
         file_out.write('(' + typedef + '_t *instance' + ')')

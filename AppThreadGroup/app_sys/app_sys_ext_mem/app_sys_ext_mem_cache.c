@@ -118,11 +118,11 @@ static void app_sys_ext_mem_cache_fv_t(app_sys_table_rbsn_t *node,  uint32_t idx
 #else
 #endif
 
-/*@brief     缓存就绪,配置参数
- *@param[in] cache 缓存实例
- *@param[in] ext_mem 外存静态实例
- *@param[in] unit  缓存单元门限
- *@param[in] total 缓存总门限
+/*@brief 缓存就绪,配置参数
+ *@param cache 缓存实例
+ *@param ext_mem 外存静态实例
+ *@param unit  缓存单元门限
+ *@param total 缓存总门限
  */
 void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_ext_mem_t *ext_mem, uint32_t unit, uint32_t total)
 {
@@ -159,8 +159,8 @@ void app_sys_ext_mem_cache_ready(app_sys_ext_mem_cache_t *cache, const app_sys_e
     cache->cnt_unhit = 0;
 }
 
-/*@brief     缓存刷新
- *@param[in] cache 缓存实例
+/*@brief 缓存刷新
+ *@param cache 缓存实例
  */
 void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache)
 {
@@ -191,9 +191,9 @@ void app_sys_ext_mem_cache_reflush(app_sys_ext_mem_cache_t *cache)
     app_mutex_process(&cache->mutex, app_mutex_give);
 }
 
-/*@brief     缓存回收(清理内存)
- *@param[in] cache 缓存实例
- *@param[in] force 强制回收模式(仅在完全不使用它时使用)
+/*@brief 缓存回收(清理内存)
+ *@param cache 缓存实例
+ *@param force 强制回收模式(仅在完全不使用它时使用)
  */
 void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
 {
@@ -247,12 +247,12 @@ void app_sys_ext_mem_cache_recycle(app_sys_ext_mem_cache_t *cache, bool force)
     app_mutex_process(&cache->mutex, app_mutex_give);
 }
 
-/*@brief      缓存资源获取
- *@param[in]  cache  缓存实例
- *@param[in]  offset 外存数据偏移
- *@param[in]  size   外存数据大小
- *@param[out] buffer 内存数据地址
- *@retval     操作结果
+/*@brief 缓存资源获取
+ *@param cache  缓存实例
+ *@param offset 外存数据偏移
+ *@param size   外存数据大小
+ *@param buffer 内存数据地址
+ *@retval 操作结果
  */
 uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t offset, uintptr_t size, uint8_t **buffer)
 {
@@ -382,12 +382,12 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
     return retval;
 }
 
-/*@brief     缓存资源获取
- *@param[in] cache  缓存实例
- *@param[in] offset 外存数据偏移
- *@param[in] buffer 内存数据地址
- *@param[in] dirty  内存数据是否修改
- *@retval    操作结果
+/*@brief 缓存资源获取
+ *@param cache  缓存实例
+ *@param offset 外存数据偏移
+ *@param buffer 内存数据地址
+ *@param dirty  内存数据是否修改
+ *@retval 操作结果
  */
 uint32_t app_sys_ext_mem_cache_give(app_sys_ext_mem_cache_t *cache, uintptr_t offset, uint8_t *buffer, bool dirty)
 {

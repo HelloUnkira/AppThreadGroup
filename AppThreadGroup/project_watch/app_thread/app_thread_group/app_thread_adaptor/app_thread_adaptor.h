@@ -49,18 +49,18 @@ extern app_thread_t app_thread_mix_custom;
 extern app_thread_t app_thread_manage;
 extern app_thread_t app_thread_lvgl;
 
-/*@brief     生成新的线程信息通过旧的线程信息
+/*@brief 生成新的线程信息通过旧的线程信息
  *           旧线程的基本信息全部被新线程基础,除去执行回调
- *@param[in] thread_old 旧线程的基本信息
- *@param[in] thread_new 新线程的基本信息
- *@param[in] handler    新线程的线程体
+ *@param thread_old 旧线程的基本信息
+ *@param thread_new 新线程的基本信息
+ *@param handler    新线程的线程体
  */
 void app_thread_group_create(app_thread_t *thread_old,
                              app_thread_t *thread_new,
                              app_thread_handler handler);
 
-/*@brief     销毁新的线程信息
- *@param[in] thread_new 新线程的基本信息
+/*@brief 销毁新的线程信息
+ *@param thread_new 新线程的基本信息
  */
 void app_thread_group_destroy(app_thread_t *thread_new);
 

@@ -10,18 +10,18 @@ typedef struct {
     uint32_t interval;  /* 提醒间隔(秒) */
 }app_module_remind_drink_t;
 
-/*@brief     喝水提醒设置
- *@param[in] remind_drink 喝水提醒参数
+/*@brief 喝水提醒设置
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink);
 
-/*@brief      喝水提醒获取
- *@param[out] remind_drink 喝水提醒参数
+/*@brief 喝水提醒获取
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink);
 
-/*@brief      喝水提醒默认设置
- *@param[out] remind_drink 喝水提醒参数
+/*@brief 喝水提醒默认设置
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_reset(app_module_remind_drink_t *remind_drink);
 

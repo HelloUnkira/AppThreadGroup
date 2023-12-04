@@ -29,8 +29,8 @@ static void app_lv_ui_list_btn_cb(lv_event_t *e)
     }
 }
 
-/*@brief     界面显示
- *@param[in] scene 场景
+/*@brief 界面显示
+ *@param scene 场景
  */
 void app_lv_ui_sudoku_show(void *scene)
 {
@@ -95,8 +95,8 @@ void app_lv_ui_sudoku_show(void *scene)
     }
 }
 
-/*@brief     界面隐藏
- *@param[in] scene 场景
+/*@brief 界面隐藏
+ *@param scene 场景
  */
 void app_lv_ui_sudoku_hide(void *scene)
 {

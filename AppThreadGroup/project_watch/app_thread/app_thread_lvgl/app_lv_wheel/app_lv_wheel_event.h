@@ -5,15 +5,15 @@
  */
 void app_lv_wheel_event_cb(lv_event_t * e);
 
-/*@brief     轮盘跟手特效回调启停
- *@param[in] onoff 开启或关闭
+/*@brief 轮盘跟手特效回调启停
+ *@param onoff 开启或关闭
  */
 void app_lv_wheel_event_onoff(bool onoff);
 
-/*@brief     轮盘跟手特效回滚(如果需要回滚)
- *@param[in] state 0:浮动模式检查;1:滚动模式检查
- *@param[in] dir   滚动模式方向
- *@retval    事件响应或忽略
+/*@brief 轮盘跟手特效回滚(如果需要回滚)
+ *@param state 0:浮动模式检查;1:滚动模式检查
+ *@param dir   滚动模式方向
+ *@retval 事件响应或忽略
  */
 bool app_lv_wheel_rollback(uint8_t state, lv_dir_t dir);
 

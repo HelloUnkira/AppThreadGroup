@@ -9,7 +9,7 @@
 static bool app_lv_keyboard_state = false;
 static WPARAM app_lv_keyboard_key;
 
-/*@brief  SDL键盘事件转lvgl按键事件组
+/*@brief SDL键盘事件转lvgl按键事件组
  *@retval 返回lvgl按键事件
  */
 static uint32_t app_lv_keyboard_lvgl_key(void)

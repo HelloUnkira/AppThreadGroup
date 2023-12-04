@@ -10,9 +10,9 @@ typedef struct {
     uint8_t name[APP_MODULE_REMIND_ALARM_NAME_MAX];
 } app_module_remind_alarm_info_t;
 
-/*@brief      提醒组是否为提醒闹钟组
- *@param[out] remind_group 提醒组
- *@retval     是否为闹钟组
+/*@brief 提醒组是否为提醒闹钟组
+ *@param remind_group 提醒组
+ *@retval 是否为闹钟组
  */
 bool app_module_remind_alarm_group_check(uint32_t remind_group);
 
@@ -28,9 +28,9 @@ void app_module_remind_alarm_array_lock(void);
  */
 void app_module_remind_alarm_array_unlock(void);
 
-/*@brief      提醒闹钟列表
- *@param[out] alarm_item 提醒闹钟列表
- *@param[out] alarm_info 提醒闹钟信息列表
+/*@brief 提醒闹钟列表
+ *@param alarm_item 提醒闹钟列表
+ *@param alarm_info 提醒闹钟信息列表
  */
 void app_module_remind_alarm_array(app_module_remind_item_t **alarm_item, app_module_remind_alarm_info_t **alarm_info);
 

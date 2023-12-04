@@ -12,8 +12,8 @@
 /* 时间表检查函数:app_module_daily_time_do_not_disturb_f */
 APP_MODULE_DAILY_TIME_F(app_module_daily_time_do_not_disturb_t, app_module_daily_time_do_not_disturb_f, 2);
 
-/*@brief     勿扰模式设置
- *@param[in] do_not_disturb 勿扰模式参数
+/*@brief 勿扰模式设置
+ *@param do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
 {
@@ -23,8 +23,8 @@ void app_module_do_not_disturb_set(app_module_do_not_disturb_t *do_not_disturb)
     app_module_data_center_give();
 }
 
-/*@brief      勿扰模式获取
- *@param[out] do_not_disturb 勿扰模式参数
+/*@brief 勿扰模式获取
+ *@param do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
 {
@@ -34,7 +34,7 @@ void app_module_do_not_disturb_get(app_module_do_not_disturb_t *do_not_disturb)
     app_module_data_center_give();
 }
 
-/*@brief  勿扰模式状态检查
+/*@brief 勿扰模式状态检查
  *@retval 是否为勿扰态
  */
 bool app_module_do_not_disturb_status(void)
@@ -44,8 +44,8 @@ bool app_module_do_not_disturb_status(void)
     return app_module_daily_time_do_not_disturb_f(&do_not_disturb.daily_time);
 }
 
-/*@brief      勿扰模式默认设置
- *@param[out] do_not_disturb 勿扰模式参数
+/*@brief 勿扰模式默认设置
+ *@param do_not_disturb 勿扰模式参数
  */
 void app_module_do_not_disturb_reset(app_module_do_not_disturb_t *do_not_disturb)
 {

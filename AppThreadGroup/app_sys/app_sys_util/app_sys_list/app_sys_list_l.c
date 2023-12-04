@@ -11,8 +11,8 @@
  *双向链表(Double Linked List)
  */
 
-/*@brief     重置链表
- *@param[in] list 链表实例
+/*@brief 重置链表
+ *@param list 链表实例
  */
 void app_sys_list_dll_reset(app_sys_list_dll_t *list)
 {
@@ -20,8 +20,8 @@ void app_sys_list_dll_reset(app_sys_list_dll_t *list)
     list->tail = NULL;
 }
 
-/*@brief     重置链表节点
- *@param[in] list 链表节点实例
+/*@brief 重置链表节点
+ *@param list 链表节点实例
  */
 void app_sys_list_dln_reset(app_sys_list_dln_t *node)
 {
@@ -29,47 +29,47 @@ void app_sys_list_dln_reset(app_sys_list_dln_t *node)
     node->next = NULL;
 }
 
-/*@brief     链表头结点
- *@param[in] list 链表实例
- *@retval    头结点
+/*@brief 链表头结点
+ *@param list 链表实例
+ *@retval 头结点
  */
 app_sys_list_dln_t * app_sys_list_dll_head(app_sys_list_dll_t *list)
 {
     return list->head;
 }
 
-/*@brief     链表尾结点
- *@param[in] list 链表实例
- *@retval    尾结点
+/*@brief 链表尾结点
+ *@param list 链表实例
+ *@retval 尾结点
  */
 app_sys_list_dln_t * app_sys_list_dll_tail(app_sys_list_dll_t *list)
 {
     return list->tail;
 }
 
-/*@brief     链表前向结点
- *@param[in] list 链表实例
- *@retval    前向结点
+/*@brief 链表前向结点
+ *@param list 链表实例
+ *@retval 前向结点
  */
 app_sys_list_dln_t * app_sys_list_dln_prev(app_sys_list_dln_t *node)
 {
     return node->prev;
 }
 
-/*@brief     链表后向结点
- *@param[in] list 链表实例
- *@retval    后向结点
+/*@brief 链表后向结点
+ *@param list 链表实例
+ *@retval 后向结点
  */
 app_sys_list_dln_t * app_sys_list_dln_next(app_sys_list_dln_t *node)
 {
     return node->next;
 }
 
-/*@brief     节点前插入(prepend)
+/*@brief 节点前插入(prepend)
  *           节点target为NULL时为头部插入
- *@param[in] list   链表实例
- *@param[in] target 链表节点实例(锚点)
- *@param[in] node   链表节点实例(带插入节点)
+ *@param list   链表实例
+ *@param target 链表节点实例(锚点)
+ *@param node   链表节点实例(带插入节点)
  */
 void app_sys_list_dll_pinsert(app_sys_list_dll_t *list, app_sys_list_dln_t *target, app_sys_list_dln_t *node)
 {
@@ -98,11 +98,11 @@ void app_sys_list_dll_pinsert(app_sys_list_dll_t *list, app_sys_list_dln_t *targ
     }
 }
 
-/*@brief     节点后插入(append)
+/*@brief 节点后插入(append)
  *           节点target为NULL时为尾部插入
- *@param[in] list   链表实例
- *@param[in] target 链表节点实例(锚点)
- *@param[in] node   链表节点实例(带插入节点)
+ *@param list   链表实例
+ *@param target 链表节点实例(锚点)
+ *@param node   链表节点实例(带插入节点)
  */
 void app_sys_list_dll_ainsert(app_sys_list_dll_t *list, app_sys_list_dln_t *target, app_sys_list_dln_t *node)
 {
@@ -132,9 +132,9 @@ void app_sys_list_dll_ainsert(app_sys_list_dll_t *list, app_sys_list_dln_t *targ
     }
 }
 
-/*@brief     节点移除
- *@param[in] list 链表实例
- *@param[in] node 链表节点实例(带移除节点)
+/*@brief 节点移除
+ *@param list 链表实例
+ *@param node 链表节点实例(带移除节点)
  */
 void app_sys_list_dll_remove(app_sys_list_dll_t *list, app_sys_list_dln_t *node)
 {
@@ -157,8 +157,8 @@ void app_sys_list_dll_remove(app_sys_list_dll_t *list, app_sys_list_dln_t *node)
  *单向链表(Single Linked List)
  */
 
-/*@brief     重置链表
- *@param[in] list 链表实例
+/*@brief 重置链表
+ *@param list 链表实例
  */
 void app_sys_list_sll_reset(app_sys_list_sll_t *list)
 {
@@ -166,44 +166,44 @@ void app_sys_list_sll_reset(app_sys_list_sll_t *list)
     list->tail = NULL;
 }
 
-/*@brief     重置链表节点
- *@param[in] list 链表节点实例
+/*@brief 重置链表节点
+ *@param list 链表节点实例
  */
 void app_sys_list_sln_reset(app_sys_list_sln_t *node)
 {
     node->buddy = NULL;
 }
 
-/*@brief     链表头结点
- *@param[in] list 链表实例
- *@retval    头结点
+/*@brief 链表头结点
+ *@param list 链表实例
+ *@retval 头结点
  */
 app_sys_list_sln_t * app_sys_list_sll_head(app_sys_list_sll_t *list)
 {
     return list->head;
 }
 
-/*@brief     链表尾结点
- *@param[in] list 链表实例
- *@retval    尾结点
+/*@brief 链表尾结点
+ *@param list 链表实例
+ *@retval 尾结点
  */
 app_sys_list_sln_t * app_sys_list_sll_tail(app_sys_list_sll_t *list)
 {
     return list->head;
 }
 
-/*@brief     链表临近结点
- *@param[in] list 链表实例
- *@retval    临近结点
+/*@brief 链表临近结点
+ *@param list 链表实例
+ *@retval 临近结点
  */
 app_sys_list_sln_t * app_sys_list_sln_buddy(app_sys_list_sln_t *node)
 {
     return node->buddy;
 }
 
-/*@brief     节点头前插入
- *@param[in] list 链表实例
- *@param[in] node 链表节点实例(带插入节点)
+/*@brief 节点头前插入
+ *@param list 链表实例
+ *@param node 链表节点实例(带插入节点)
  */
 void app_sys_list_sll_pinsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node)
 {
@@ -213,9 +213,9 @@ void app_sys_list_sll_pinsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node
         list->head  = node;
 }
 
-/*@brief     节点尾后插入
- *@param[in] list 链表实例
- *@param[in] node 链表节点实例(带插入节点)
+/*@brief 节点尾后插入
+ *@param list 链表实例
+ *@param node 链表节点实例(带插入节点)
  */
 void app_sys_list_sll_ainsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node)
 {
@@ -227,11 +227,11 @@ void app_sys_list_sll_ainsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node
         list->tail  = node;
 }
 
-/*@brief     节点插入
+/*@brief 节点插入
  *           单链表插入需要指定目标节点,target不为NULL
- *@param[in] list   链表实例
- *@param[in] target 链表节点实例(锚点)
- *@param[in] node   链表节点实例(带插入节点)
+ *@param list   链表实例
+ *@param target 链表节点实例(锚点)
+ *@param node   链表节点实例(带插入节点)
  */
 void app_sys_list_sll_insert(app_sys_list_sll_t *list, app_sys_list_sln_t *target, app_sys_list_sln_t *node)
 {
@@ -241,11 +241,11 @@ void app_sys_list_sll_insert(app_sys_list_sll_t *list, app_sys_list_sln_t *targe
         list->tail  = node;
 }
 
-/*@brief     节点插入
+/*@brief 节点插入
  *           单链表删除需要指定目标节点
- *@param[in] list   链表实例
- *@param[in] target 链表节点实例(锚点)
- *@param[in] node   链表节点实例(带插入节点)
+ *@param list   链表实例
+ *@param target 链表节点实例(锚点)
+ *@param node   链表节点实例(带插入节点)
  */
 void app_sys_list_sll_remove(app_sys_list_sll_t *list, app_sys_list_sln_t *target, app_sys_list_sln_t *node)
 {
@@ -263,9 +263,9 @@ void app_sys_list_sll_remove(app_sys_list_sll_t *list, app_sys_list_sln_t *targe
  *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
  */
 
-/*@brief     队列节点出队列
- *@param[in] queue 队列实例
- *@retval    队列节点实例
+/*@brief 队列节点出队列
+ *@param queue 队列实例
+ *@retval 队列节点实例
  */
 app_sys_queue_sln_t * app_sys_queue_slq_dequeue(app_sys_queue_slq_t *queue)
 {
@@ -274,18 +274,18 @@ app_sys_queue_sln_t * app_sys_queue_slq_dequeue(app_sys_queue_slq_t *queue)
     return node;
 }
 
-/*@brief     队列节点入队列
- *@param[in] queue 队列实例
- *@param[in] node  队列节点实例
+/*@brief 队列节点入队列
+ *@param queue 队列实例
+ *@param node  队列节点实例
  */
 void app_sys_queue_slq_enqueue(app_sys_queue_slq_t *queue, app_sys_queue_sln_t *node)
 {
     app_sys_list_sll_ainsert(queue, node);
 }
 
-/*@brief     队列节点出队列
- *@param[in] queue 队列实例
- *@retval    队列节点实例
+/*@brief 队列节点出队列
+ *@param queue 队列实例
+ *@retval 队列节点实例
  */
 app_sys_queue_dln_t * app_sys_queue_dlq_dequeue(app_sys_queue_dlq_t *queue)
 {
@@ -294,9 +294,9 @@ app_sys_queue_dln_t * app_sys_queue_dlq_dequeue(app_sys_queue_dlq_t *queue)
     return node;
 }
 
-/*@brief     队列节点入队列
- *@param[in] queue 队列实例
- *@param[in] node  队列节点实例
+/*@brief 队列节点入队列
+ *@param queue 队列实例
+ *@param node  队列节点实例
  */
 void app_sys_queue_dlq_enqueue(app_sys_queue_dlq_t *queue, app_sys_queue_dln_t *node)
 {
@@ -309,9 +309,9 @@ void app_sys_queue_dlq_enqueue(app_sys_queue_dlq_t *queue, app_sys_queue_dln_t *
  *所以保留了链表的基本操作,队列头即链表头,队列尾即链表尾
  */
 
-/*@brief     队列节点出队列
- *@param[in] queue 队列实例
- *@retval    队列节点实例
+/*@brief 队列节点出队列
+ *@param queue 队列实例
+ *@retval 队列节点实例
  */
 app_sys_queue_slpn_t * app_sys_queue_slpq_dequeue(app_sys_queue_slpq_t *queue)
 {
@@ -320,10 +320,10 @@ app_sys_queue_slpn_t * app_sys_queue_slpq_dequeue(app_sys_queue_slpq_t *queue)
     return node;
 }
 
-/*@brief     队列节点入队列
- *@param[in] queue   队列实例
- *@param[in] node    队列节点实例
- *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+/*@brief 队列节点入队列
+ *@param queue   队列实例
+ *@param node    队列节点实例
+ *@param compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
 void app_sys_queue_slpq_enqueue(app_sys_queue_slpq_t *queue, app_sys_queue_slpn_t *node,
                                bool (*compare)(app_sys_queue_slpn_t *node1, app_sys_queue_slpn_t *node2))
@@ -348,9 +348,9 @@ void app_sys_queue_slpq_enqueue(app_sys_queue_slpq_t *queue, app_sys_queue_slpn_
     app_sys_list_sll_ainsert(queue, node);
 }
 
-/*@brief     队列节点出队列
- *@param[in] queue 队列实例
- *@retval    队列节点实例
+/*@brief 队列节点出队列
+ *@param queue 队列实例
+ *@retval 队列节点实例
  */
 app_sys_queue_dlpn_t * app_sys_queue_dlpq_dequeue(app_sys_queue_dlpq_t *queue)
 {
@@ -359,10 +359,10 @@ app_sys_queue_dlpn_t * app_sys_queue_dlpq_dequeue(app_sys_queue_dlpq_t *queue)
     return node;
 }
 
-/*@brief     队列节点入队列
- *@param[in] queue   队列实例
- *@param[in] node    队列节点实例
- *@param[in] compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+/*@brief 队列节点入队列
+ *@param queue   队列实例
+ *@param node    队列节点实例
+ *@param compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
  */
 void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_t *node,
                                bool (*compare)(app_sys_queue_dlpn_t *node1, app_sys_queue_dlpn_t *node2))
@@ -393,9 +393,9 @@ void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_
  *所以保留了链表的基本操作,栈顶即链表头
  */
 
-/*@brief     栈节点出栈
- *@param[in] stack 栈实例
- *@retval    栈节点实例
+/*@brief 栈节点出栈
+ *@param stack 栈实例
+ *@retval 栈节点实例
  */
 app_sys_stack_sln_t * app_sys_stack_sls_pop(app_sys_stack_sls_t *stack)
 {
@@ -404,18 +404,18 @@ app_sys_stack_sln_t * app_sys_stack_sls_pop(app_sys_stack_sls_t *stack)
     return node;
 }
 
-/*@brief     栈节点入栈
- *@param[in] stack 栈实例
- *@param[in] node  栈节点实例
+/*@brief 栈节点入栈
+ *@param stack 栈实例
+ *@param node  栈节点实例
  */
 void app_sys_stack_sls_push(app_sys_stack_sls_t *stack, app_sys_stack_sln_t *node)
 {
     app_sys_list_sll_pinsert(stack, node);
 }
 
-/*@brief     栈节点出栈
- *@param[in] stack 栈实例
- *@retval    栈节点实例
+/*@brief 栈节点出栈
+ *@param stack 栈实例
+ *@retval 栈节点实例
  */
 app_sys_stack_dln_t * app_sys_stack_dls_pop(app_sys_stack_dls_t *stack)
 {
@@ -424,9 +424,9 @@ app_sys_stack_dln_t * app_sys_stack_dls_pop(app_sys_stack_dls_t *stack)
     return node;
 }
 
-/*@brief     栈节点入栈
- *@param[in] stack 栈实例
- *@param[in] node  栈节点实例
+/*@brief 栈节点入栈
+ *@param stack 栈实例
+ *@param node  栈节点实例
  */
 void app_sys_stack_dls_push(app_sys_stack_dls_t *stack, app_sys_stack_dln_t *node)
 {

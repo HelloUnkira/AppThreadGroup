@@ -10,18 +10,18 @@ typedef struct {
     uint32_t interval;  /* 提醒间隔(秒) */
 } app_module_remind_sedentary_t;
 
-/*@brief     走动提醒设置
- *@param[in] remind_sedentary 走动提醒参数
+/*@brief 走动提醒设置
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary);
 
-/*@brief      走动提醒获取
- *@param[out] remind_sedentary 走动提醒参数
+/*@brief 走动提醒获取
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary);
 
-/*@brief      走动提醒默认设置
- *@param[out] remind_sedentary 走动提醒参数
+/*@brief 走动提醒默认设置
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_reset(app_module_remind_sedentary_t *remind_sedentary);
 

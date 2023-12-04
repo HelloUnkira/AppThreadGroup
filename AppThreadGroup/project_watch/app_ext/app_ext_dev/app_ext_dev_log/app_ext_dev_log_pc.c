@@ -11,8 +11,8 @@ typedef struct {
     void *args;
 } app_dev_log_cfg_t;
 
-/*@brief     log设备就绪
- *@param[in] driver 设备实例
+/*@brief log设备就绪
+ *@param driver 设备实例
  */
 static void app_dev_log_hal_ready(app_dev_t *driver)
 {
@@ -21,10 +21,10 @@ static void app_dev_log_hal_ready(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     log设备输出
- *@param[in] driver 设备实例
- *@param[in] format 输出变参格式化字符串
- *@param[in] list   输出变参列表
+/*@brief log设备输出
+ *@param driver 设备实例
+ *@param format 输出变参格式化字符串
+ *@param list   输出变参列表
  */
 static void app_dev_log_hal_msg(app_dev_t *driver, const char *format, va_list list)
 {

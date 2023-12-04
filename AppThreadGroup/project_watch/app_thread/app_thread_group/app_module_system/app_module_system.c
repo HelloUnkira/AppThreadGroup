@@ -16,8 +16,8 @@
 static app_module_system_t app_module_system = {0};
 static app_mutex_t app_module_system_mutex = {0};
 
-/*@brief     系统进出DLPS
- *@param[in] dlps true:进入dlps;false:退出dlps
+/*@brief 系统进出DLPS
+ *@param dlps true:进入dlps;false:退出dlps
  */
 void app_module_system_dlps_set(bool dlps)
 {
@@ -31,7 +31,7 @@ void app_module_system_dlps_set(bool dlps)
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
-/*@brief  系统进出DLPS
+/*@brief 系统进出DLPS
  *@retval true:进入dlps;false:退出dlps
  */
 bool app_module_system_dlps_get(void)
@@ -42,8 +42,8 @@ bool app_module_system_dlps_get(void)
     return dlps;
 }
 
-/*@brief     设置系统运行状态
- *@param[in] valid 系统运行
+/*@brief 设置系统运行状态
+ *@param valid 系统运行
  */
 void app_module_system_valid_set(bool valid)
 {
@@ -52,7 +52,7 @@ void app_module_system_valid_set(bool valid)
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
 }
 
-/*@brief  获取系统运行状态
+/*@brief 获取系统运行状态
  *@retval 系统运行
  */
 bool app_module_system_valid_get(void)
@@ -63,8 +63,8 @@ bool app_module_system_valid_get(void)
     return valid;
 }
 
-/*@brief     设置系统工作模式
- *@param[in] mode 系统工作模式枚举量
+/*@brief 设置系统工作模式
+ *@param mode 系统工作模式枚举量
  */
 void app_module_system_mode_set(uint8_t mode)
 {
@@ -82,7 +82,7 @@ void app_module_system_mode_set(uint8_t mode)
     app_module_data_center_give();
 }
 
-/*@brief  获取系统工作模式
+/*@brief 获取系统工作模式
  *@retval 系统工作模式枚举量
  */
 uint8_t app_module_system_mode_get(void)
@@ -93,8 +93,8 @@ uint8_t app_module_system_mode_get(void)
     return mode;
 }
 
-/*@brief     系统状态控制更新
- *@param[in] clock 时钟实例
+/*@brief 系统状态控制更新
+ *@param clock 时钟实例
  */
 void app_module_system_ctrl_check(app_module_clock_t clock[1])
 {

@@ -58,71 +58,71 @@ typedef struct {
     uint32_t                    iter_top;
 } app_sys_tree_rbst_t;
 
-/*@brief     插入函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 插入函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbst_insert(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node);
 
-/*@brief     删除函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 删除函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbst_remove(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node);
 
-/*@brief     搜索函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbsn_t * app_sys_tree_rbst_search(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node);
 
-/*@brief     搜索函数(最小节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最小节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbsn_t * app_sys_tree_rbst_search_min(app_sys_tree_rbst_t *tree);
 
-/*@brief     搜索函数(最大节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最大节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbsn_t * app_sys_tree_rbst_search_max(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(最小节点)
+/*@brief 迭代函数(最小节点)
  *           连续使用prev或next前需要使用min或max重置迭代栈
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_min(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(最大节点)
+/*@brief 迭代函数(最大节点)
  *           连续使用prev或next前需要使用min或max重置迭代栈
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_max(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(前驱节点)
+/*@brief 迭代函数(前驱节点)
  *           连续使用它前需要迭代到min或max
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_prev(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(后继节点)
+/*@brief 迭代函数(后继节点)
  *           连续使用它前需要迭代到min或max
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_next(app_sys_tree_rbst_t *tree);
 
-/*@brief     迭代函数(终止迭代)
+/*@brief 迭代函数(终止迭代)
  *           不使用迭代函数时使用该函数回收内部资源
- *@param[in] tree 红黑树实例
- *@param[in] used 为true时检查迭代器是否还存在
+ *@param tree 红黑树实例
+ *@param used 为true时检查迭代器是否还存在
                   为false时终止迭代
- *@retval    used 为true时返回迭代器状态
+ *@retval used 为true时返回迭代器状态
  *                为false时返回false以用于迭代退出
  */
 bool app_sys_tree_rbst_iter_used(app_sys_tree_rbst_t *tree, bool used);
@@ -134,49 +134,49 @@ bool app_sys_tree_rbst_iter_used(app_sys_tree_rbst_t *tree, bool used);
 #define app_sys_tree_rbst_iter_ftra(tree, node)   \
     for (app_sys_tree_rbsn_t *node = app_sys_tree_rbst_iter_max(tree); node != NULL || app_sys_tree_rbst_iter_used(tree, false); node = app_sys_tree_rbst_iter_prev(tree))
 
-/*@brief     复位函数
- *@param[in] tree 红黑树实例
+/*@brief 复位函数
+ *@param tree 红黑树实例
  */
 void app_sys_tree_rbst_reset(app_sys_tree_rbst_t *tree);
 
-/*@brief     复位函数
- *@param[in] node 红黑节点实例
+/*@brief 复位函数
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbsn_reset(app_sys_tree_rbsn_t *node);
 
-/*@brief     配置函数
- *@param[in] tree 红黑树实例
- *@param[in] compare 红黑树比较语义
- *@param[in] confirm 红黑树确认语义
- *@param[in] visit   红黑树访问语义
+/*@brief 配置函数
+ *@param tree 红黑树实例
+ *@param compare 红黑树比较语义
+ *@param confirm 红黑树确认语义
+ *@param visit   红黑树访问语义
  */
 void app_sys_tree_rbst_config(app_sys_tree_rbst_t *tree, app_sys_tree_rbst_compare_t compare, app_sys_tree_rbst_confirm_t confirm, app_sys_tree_rbst_visit_t visit);
 
-/*@brief     根切换函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbst_root_set(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t *node);
 
-/*@brief      根切换函数
- *@param[in]  tree 红黑树实例
- *@param[out] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbst_root_get(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t **node);
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree  红黑树实例
- *@param[in] queue 红黑树节点实例队列数组
- *@param[in] len   红黑树节点实例队列数组长度
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree  红黑树实例
+ *@param queue 红黑树节点实例队列数组
+ *@param len   红黑树节点实例队列数组长度
  */
 void app_sys_tree_rbst_seq_tra(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t **queue, int32_t len);
 
-/*@brief     验证一棵树是否为红黑树(内部检查)
- *@param[in] tree  红黑树实例
- *@param[in] stack 红黑树节点实例栈数组
- *@param[in] flags 红黑树节点实例栈数组
- *@param[in] len   红黑树节点实例栈数组长度
- *@retval    0:失败;1:成功
+/*@brief 验证一棵树是否为红黑树(内部检查)
+ *@param tree  红黑树实例
+ *@param stack 红黑树节点实例栈数组
+ *@param flags 红黑树节点实例栈数组
+ *@param len   红黑树节点实例栈数组长度
+ *@retval 0:失败;1:成功
  */
 uint8_t app_sys_tree_rbst_check_valid(app_sys_tree_rbst_t *tree, app_sys_tree_rbsn_t **stack, int32_t *flags, int32_t len);
 

@@ -16,21 +16,21 @@ typedef struct {
 } app_module_work_delay_t;
 
 /*@brief 处理一份工作清单
- *@param[in] works 工作实例
+ *@param works 工作实例
  */
 void app_module_work_execute(app_module_work_t *works);
 
 /*@brief 生成一份工作清单
- *@param[in] number    工作数量
- *@param[in] argv[0,1] 工作回调1, 工作回调1参数
- *@param[in] argv[2,3] 工作回调2, 工作回调2参数...依此类推
+ *@param number    工作数量
+ *@param argv[0,1] 工作回调1, 工作回调1参数
+ *@param argv[2,3] 工作回调2, 工作回调2参数...依此类推
  */
 app_module_work_t * app_module_work_make(uint32_t num, ...);
 
-/*@brief     迟延工作清单提交
- *@param[in] work       一份工作清单(app_module_work_make生成)
- *@param[in] delay_ms   延迟时间
- *@param[in] thread     目标线程
+/*@brief 迟延工作清单提交
+ *@param work       一份工作清单(app_module_work_make生成)
+ *@param delay_ms   延迟时间
+ *@param thread     目标线程
  */
 void app_module_work_delay_submit(app_module_work_t *work, uint32_t delay_ms, uint32_t thread);
 

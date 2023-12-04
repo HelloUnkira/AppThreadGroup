@@ -23,9 +23,9 @@ static void app_module_battery_voltage_algorithm(app_module_battery_t *battery)
     //生成battery->voltage_filter以及battery->percent_filter
 }
 
-/*@brief     电池电量百分比转等级
- *@param[in] percent 电量百分比
- *@param[in] level   电量等级
+/*@brief 电池电量百分比转等级
+ *@param percent 电量百分比
+ *@param level   电量等级
  */
 uint8_t app_module_battery_level(uint8_t percent, uint8_t level)
 {
@@ -35,7 +35,7 @@ uint8_t app_module_battery_level(uint8_t percent, uint8_t level)
             return 0;
 }
 
-/*@brief  电池模组充电状态检查
+/*@brief 电池模组充电状态检查
  *@retval 0:未充电; 1:充电中;
  */
 uint8_t app_module_battery_charge_status(void)
@@ -46,7 +46,7 @@ uint8_t app_module_battery_charge_status(void)
     return charge_status;
 }
 
-/*@brief  电池模组充电满检查
+/*@brief 电池模组充电满检查
  *@retval 0:未充满; 1:已充满; -1:不支持;
  */
 uint8_t app_module_battery_charge_full(void)
@@ -57,7 +57,7 @@ uint8_t app_module_battery_charge_full(void)
     return charge_full;
 }
 
-/*@brief  电池模组电压获取
+/*@brief 电池模组电压获取
  *@retval 电压(mV)
  */
 uint32_t app_module_battery_voltage(void)
@@ -68,7 +68,7 @@ uint32_t app_module_battery_voltage(void)
     return voltage;
 }
 
-/*@brief  电池模组电量获取
+/*@brief 电池模组电量获取
  *@retval 电量百分比[0, 100]
  */
 uint32_t app_module_battery_percent(void)

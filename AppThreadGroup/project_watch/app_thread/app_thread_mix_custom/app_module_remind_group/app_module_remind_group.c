@@ -12,8 +12,8 @@
 static app_mutex_t app_module_remind_group_mutex = {0};
 static app_module_remind_group_t app_module_remind_group[app_module_remind_group_number] = {0};
 
-/*@brief     更新提醒组事件
- *@param[in] clock 时钟实例
+/*@brief 更新提醒组事件
+ *@param clock 时钟实例
  */
 void app_module_remind_group_update(app_module_clock_t clock[1])
 {
@@ -144,10 +144,10 @@ void app_module_remind_group_reflush(void)
     app_mutex_process(&app_module_remind_group_mutex, app_mutex_give);
 }
 
-/*@brief     添加提醒组
- *@param[in] array  提醒数组
- *@param[in] number 提醒数量
- *@retval    提醒组id
+/*@brief 添加提醒组
+ *@param array  提醒数组
+ *@param number 提醒数量
+ *@retval 提醒组id
  */
 uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t number)
 {
@@ -164,8 +164,8 @@ uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t n
     return remind_group_id;
 }
 
-/*@brief     移除提醒组
- *@param[in] remind_group_id 提醒组id
+/*@brief 移除提醒组
+ *@param remind_group_id 提醒组id
  */
 void app_module_remind_group_del(uint32_t remind_group_id)
 {

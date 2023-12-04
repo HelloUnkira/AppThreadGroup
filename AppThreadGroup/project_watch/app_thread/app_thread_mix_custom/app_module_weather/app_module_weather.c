@@ -9,9 +9,9 @@
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
 
-/*@brief     天气设置
- *@param[in] weather 天气参数
- *@param[in] idx     天气索引
+/*@brief 天气设置
+ *@param weather 天气参数
+ *@param idx     天气索引
  */
 void app_module_weather_set(app_module_weather_t *weather, uint8_t idx)
 {
@@ -21,9 +21,9 @@ void app_module_weather_set(app_module_weather_t *weather, uint8_t idx)
     app_module_data_center_give();
 }
 
-/*@brief      天气获取
- *@param[out] weather 天气参数
- *@param[in]  idx     天气索引
+/*@brief 天气获取
+ *@param weather 天气参数
+ *@param idx     天气索引
  */
 void app_module_weather_get(app_module_weather_t *weather, uint8_t idx)
 {

@@ -15,9 +15,9 @@ typedef struct {
     void *args;
 } app_dev_battery_cfg_t;
 
-/*@brief     battery设备初始化
- *@param[in] driver 设备实例
- *@retval    当前温度值
+/*@brief battery设备初始化
+ *@param driver 设备实例
+ *@retval 当前温度值
  */
 static void app_dev_battery_hal_ready(app_dev_t *driver)
 {
@@ -26,9 +26,9 @@ static void app_dev_battery_hal_ready(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     battery设备充电满检查
- *@param[in] driver 设备实例
- *@retval    0:未充满; 1:已充满; -1:不支持;
+/*@brief battery设备充电满检查
+ *@param driver 设备实例
+ *@retval 0:未充满; 1:已充满; -1:不支持;
  */
 static uint8_t app_dev_battery_hal_charge_full(app_dev_t *driver)
 {
@@ -38,9 +38,9 @@ static uint8_t app_dev_battery_hal_charge_full(app_dev_t *driver)
     return -1;
 }
 
-/*@brief     battery设备充电状态检查
- *@param[in] driver 设备实例
- *@retval    0:未充电; 1:充电中;
+/*@brief battery设备充电状态检查
+ *@param driver 设备实例
+ *@retval 0:未充电; 1:充电中;
  */
 static uint8_t app_dev_battery_hal_charge_status(app_dev_t *driver)
 {
@@ -50,9 +50,9 @@ static uint8_t app_dev_battery_hal_charge_status(app_dev_t *driver)
     return 0;
 }
 
-/*@brief     battery设备充电事件通报回调注册
- *@param[in] driver 设备实例
- *@param[in] cb     充电事件通报回调
+/*@brief battery设备充电事件通报回调注册
+ *@param driver 设备实例
+ *@param cb     充电事件通报回调
  */
 static void app_dev_battery_hal_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
@@ -62,9 +62,9 @@ static void app_dev_battery_hal_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(v
     data->charge_irq_cb = cb;
 }
 
-/*@brief     battery设备事件通报开关
- *@param[in] driver 设备实例
- *@param[in] flag   true:开启事件通报;false:关闭事件通报
+/*@brief battery设备事件通报开关
+ *@param driver 设备实例
+ *@param flag   true:开启事件通报;false:关闭事件通报
  */
 static void app_dev_battery_hal_charge_irq_switch(app_dev_t *driver, bool flag)
 {
@@ -74,9 +74,9 @@ static void app_dev_battery_hal_charge_irq_switch(app_dev_t *driver, bool flag)
     APP_SYS_LOG_WARN("irq_switch:%d", flag);
 }
 
-/*@brief     battery设备电池电压(mV)
- *@param[in] driver 设备实例
- *@retval    电池电压
+/*@brief battery设备电池电压(mV)
+ *@param driver 设备实例
+ *@retval 电池电压
  */
 static uint32_t app_dev_battery_hal_voltage_measure(app_dev_t *driver)
 {
@@ -86,10 +86,10 @@ static uint32_t app_dev_battery_hal_voltage_measure(app_dev_t *driver)
     return 3850;
 }
 
-/*@brief     battery设备充电曲线表
- *@param[in] driver 设备实例
- *@param[in] table  曲线表
- *@param[in] item   元素个数
+/*@brief battery设备充电曲线表
+ *@param driver 设备实例
+ *@param table  曲线表
+ *@param item   元素个数
  */
 static void app_dev_battery_hal_curve_charge_table(app_dev_t *driver, void **table, uint32_t *item)
 {
@@ -100,10 +100,10 @@ static void app_dev_battery_hal_curve_charge_table(app_dev_t *driver, void **tab
     *item  = data->curve_charge_item;
 }
 
-/*@brief     battery设备放电曲线表
- *@param[in] driver 设备实例
- *@param[in] table  曲线表
- *@param[in] item   元素个数
+/*@brief battery设备放电曲线表
+ *@param driver 设备实例
+ *@param table  曲线表
+ *@param item   元素个数
  */
 static void app_dev_battery_hal_curve_discharge_table(app_dev_t *driver, void **table, uint32_t *item)
 {

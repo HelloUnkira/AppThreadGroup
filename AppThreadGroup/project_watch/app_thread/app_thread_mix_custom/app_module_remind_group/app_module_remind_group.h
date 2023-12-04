@@ -60,15 +60,15 @@ typedef struct {
  *     为了使访问的准确性,对其修改严格遵守组使用流程
  */
 
-/*@brief     添加提醒组
- *@param[in] array  提醒数组
- *@param[in] number 提醒数量
- *@retval    提醒组id(错误为-1)
+/*@brief 添加提醒组
+ *@param array  提醒数组
+ *@param number 提醒数量
+ *@retval 提醒组id(错误为-1)
  */
 uint32_t app_module_remind_group_add(app_module_remind_item_t *array, uint32_t number);
 
-/*@brief     移除提醒组
- *@param[in] remind_group_id 提醒组id
+/*@brief 移除提醒组
+ *@param remind_group_id 提醒组id
  */
 void app_module_remind_group_del(uint32_t remind_group_id);
 

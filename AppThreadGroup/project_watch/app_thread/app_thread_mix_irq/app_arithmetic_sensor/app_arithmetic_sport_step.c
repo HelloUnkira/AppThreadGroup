@@ -10,8 +10,8 @@
 #include "app_thread_group.h"
 #include "app_arithmetic_lib.h"
 
-/*@brief      计步参数配置
- *@param[out] sport_step 运动数据实例
+/*@brief 计步参数配置
+ *@param sport_step 运动数据实例
  */
 static void app_arithmetic_sport_step_cfgs(app_arithmetic_sport_step_t *sport_step)
 {
@@ -43,10 +43,10 @@ static void app_arithmetic_sport_step_cfgs(app_arithmetic_sport_step_t *sport_st
     /*  */
 }
 
-/*@brief      计步计数
- *@param[in]  sport_step  运动数据实例
- *@param[in]  value 步数值
- *@param[out] sport_step  运动数据实例
+/*@brief 计步计数
+ *@param sport_step  运动数据实例
+ *@param value 步数值
+ *@param sport_step  运动数据实例
  */
 static void app_arithmetic_sport_step_val(app_arithmetic_sport_step_t *sport_step, int32_t value)
 {

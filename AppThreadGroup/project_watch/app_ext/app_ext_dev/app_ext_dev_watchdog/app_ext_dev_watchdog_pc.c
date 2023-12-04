@@ -11,8 +11,8 @@ typedef struct {
     void *args;
 } app_dev_watchdog_cfg_t;
 
-/*@brief     watchdog设备打开
- *@param[in] driver 设备实例
+/*@brief watchdog设备打开
+ *@param driver 设备实例
  */
 static void app_dev_watchdog_hal_ready(app_dev_t *driver)
 {
@@ -21,8 +21,8 @@ static void app_dev_watchdog_hal_ready(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     watchdog设备关闭
- *@param[in] driver 设备实例
+/*@brief watchdog设备关闭
+ *@param driver 设备实例
  */
 static void app_dev_watchdog_hal_feed(app_dev_t *driver)
 {

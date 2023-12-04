@@ -12,8 +12,8 @@ typedef struct {
     void *data;
 } app_dev_watchdog_data_t;
 
-/*@brief     watchdog设备就绪
- *@param[in] driver 设备实例
+/*@brief watchdog设备就绪
+ *@param driver 设备实例
  */
 static inline void app_dev_watchdog_ready(app_dev_t *driver)
 {
@@ -23,8 +23,8 @@ static inline void app_dev_watchdog_ready(app_dev_t *driver)
     }
 }
 
-/*@brief     watchdog设备喂狗
- *@param[in] driver 设备实例
+/*@brief watchdog设备喂狗
+ *@param driver 设备实例
  */
 static inline void app_dev_watchdog_feed(app_dev_t *driver)
 {

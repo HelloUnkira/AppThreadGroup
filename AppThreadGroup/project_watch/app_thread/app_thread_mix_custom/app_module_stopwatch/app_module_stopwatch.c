@@ -14,8 +14,8 @@
 
 static app_sys_timer_t app_module_stopwatch_timer = {0};
 
-/*@brief        设置秒表
- *@param[out]   stopwatch 秒表实例
+/*@brief 设置秒表
+ *@param stopwatch 秒表实例
  */
 void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
 {
@@ -25,8 +25,8 @@ void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch)
     app_module_data_center_give();
 }
 
-/*@brief        获取秒表
- *@param[out]   stopwatch 秒表实例
+/*@brief 获取秒表
+ *@param stopwatch 秒表实例
  */
 void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch)
 {

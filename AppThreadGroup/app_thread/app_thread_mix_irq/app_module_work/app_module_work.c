@@ -11,7 +11,7 @@
 #include "app_thread_group.h"
 
 /*@brief 处理一份工作清单
- *@param[in] work 工作实例
+ *@param work 工作实例
  */
 void app_module_work_execute(app_module_work_t *work)
 {
@@ -22,9 +22,9 @@ void app_module_work_execute(app_module_work_t *work)
 }
 
 /*@brief 生成一份工作清单
- *@param[in] number    工作数量
- *@param[in] argv[0,1] 工作回调1, 工作回调1参数
- *@param[in] argv[2,3] 工作回调2, 工作回调2参数...依此类推
+ *@param number    工作数量
+ *@param argv[0,1] 工作回调1, 工作回调1参数
+ *@param argv[2,3] 工作回调2, 工作回调2参数...依此类推
  */
 app_module_work_t * app_module_work_make(uint32_t number, ...)
 {
@@ -75,10 +75,10 @@ static void app_module_work_delay_timer_handler(void *timer)
     }
 }
 
-/*@brief     迟延工作提交
- *@param[in] work       一份工作(生成)
- *@param[in] delay_ms   延迟时间
- *@param[in] thread     目标线程
+/*@brief 迟延工作提交
+ *@param work       一份工作(生成)
+ *@param delay_ms   延迟时间
+ *@param thread     目标线程
  */
 void app_module_work_delay_submit(app_module_work_t *work, uint32_t delay_ms, uint32_t thread)
 {

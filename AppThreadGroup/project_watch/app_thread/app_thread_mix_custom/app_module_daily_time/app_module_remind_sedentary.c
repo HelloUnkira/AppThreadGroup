@@ -12,8 +12,8 @@
 /* 时间表检查函数:app_module_daily_time_remind_sedentary_f */
 APP_MODULE_DAILY_TIME_F(app_module_daily_time_remind_sedentary_t, app_module_daily_time_remind_sedentary_f, 2);
 
-/*@brief     走动提醒设置
- *@param[in] remind_sedentary 走动提醒参数
+/*@brief 走动提醒设置
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_sedentary)
 {
@@ -23,8 +23,8 @@ void app_module_remind_sedentary_set(app_module_remind_sedentary_t *remind_seden
     app_module_data_center_give();
 }
 
-/*@brief      走动提醒获取
- *@param[out] remind_sedentary 走动提醒参数
+/*@brief 走动提醒获取
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_sedentary)
 {
@@ -34,8 +34,8 @@ void app_module_remind_sedentary_get(app_module_remind_sedentary_t *remind_seden
     app_module_data_center_give();
 }
 
-/*@brief      走动提醒默认设置
- *@param[out] remind_sedentary 走动提醒参数
+/*@brief 走动提醒默认设置
+ *@param remind_sedentary 走动提醒参数
  */
 void app_module_remind_sedentary_reset(app_module_remind_sedentary_t *remind_sedentary)
 {
@@ -106,8 +106,8 @@ void app_module_remind_sedentary_xmin_update(void)
     }
 }
 
-/*@brief     系统状态控制更新
- *@param[in] clock 时钟实例
+/*@brief 系统状态控制更新
+ *@param clock 时钟实例
  */
 void app_module_remind_sedentary_update(app_module_clock_t clock[1])
 {

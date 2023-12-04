@@ -14,9 +14,9 @@ static app_mutex_t                       app_module_remind_calendar_mutex = {0};
 static app_module_remind_item_t          app_module_remind_calendar_item[APP_MODULE_REMIND_CALENDAR_MAX] = {0};
 static app_module_remind_calendar_info_t app_module_remind_calendar_info[APP_MODULE_REMIND_CALENDAR_MAX] = {0};
 
-/*@brief      提醒组是否为提醒日历组
- *@param[out] remind_group 提醒组
- *@retval     是否为日历组
+/*@brief 提醒组是否为提醒日历组
+ *@param remind_group 提醒组
+ *@retval 是否为日历组
  */
 bool app_module_remind_calendar_group_check(uint32_t remind_group)
 {
@@ -51,9 +51,9 @@ void app_module_remind_calendar_array_unlock(void)
     app_mutex_process(&app_module_remind_calendar_mutex, app_mutex_give);
 }
 
-/*@brief      提醒日历列表
- *@param[out] calendar_item 提醒日历列表
- *@param[out] calendar_info 提醒日历信息列表
+/*@brief 提醒日历列表
+ *@param calendar_item 提醒日历列表
+ *@param calendar_info 提醒日历信息列表
  */
 void app_module_remind_calendar_array(app_module_remind_item_t **calendar_item, app_module_remind_calendar_info_t **calendar_info)
 {

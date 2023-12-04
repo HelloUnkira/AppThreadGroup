@@ -27,7 +27,7 @@ static void app_module_transfer_respond_timeout_timer_handler(void *timer)
     app_module_transfer_respond(&transfer_none);
 }
 
-/*@brief  传输分包包大小
+/*@brief 传输分包包大小
  *        保证底层至少能刚好接收该包并打包发送
  *@retval 传输分包包大小最大值
  */
@@ -39,10 +39,10 @@ static inline uint32_t app_module_transfer_max_size(app_module_transfer_chan_t c
         return 255;
 }
 
-/*@brief     接收协议数据并拆包发送
- *@param[in] chan 传输信道
- *@param[in] data 编码数据流
- *@param[in] size 编码数据流大小
+/*@brief 接收协议数据并拆包发送
+ *@param chan 传输信道
+ *@param data 编码数据流
+ *@param size 编码数据流大小
  */
 bool app_module_transfer_notify(app_module_transfer_chan_t channel, uint8_t *data, uint32_t size)
 {
@@ -101,9 +101,9 @@ bool app_module_transfer_notify(app_module_transfer_chan_t channel, uint8_t *dat
     return true;
 }
 
-/*@brief     接收协议数据并组包解析
- *@param[in] data 编码数据流
- *@param[in] size 编码数据流大小
+/*@brief 接收协议数据并组包解析
+ *@param data 编码数据流
+ *@param size 编码数据流大小
  */
 void app_module_transfer_respond(app_module_transfer_t *transfer)
 {

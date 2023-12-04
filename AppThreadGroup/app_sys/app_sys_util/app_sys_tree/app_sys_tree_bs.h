@@ -43,37 +43,37 @@ typedef struct {
     uint32_t number;  /* 节点当前值 */
 } app_sys_tree_bst_t;
 
-/*@brief     插入函数
- *@param[in] tree B*树实例
- *@param[in] data 数据项
+/*@brief 插入函数
+ *@param tree B*树实例
+ *@param data 数据项
  */
 void app_sys_tree_bst_insert(app_sys_tree_bst_t *tree, void *data);
 
-/*@brief      删除函数
- *@param[in]  tree    B*树实例
- *@param[out] data    数据项
- *@param[in]  key_val 关键字
+/*@brief 删除函数
+ *@param tree    B*树实例
+ *@param data    数据项
+ *@param key_val 关键字
  */
 void app_sys_tree_bst_remove(app_sys_tree_bst_t *tree, void **data, uint32_t key_val);
 
-/*@brief      查找函数
- *@param[in]  tree    B*树实例
- *@param[out] data    数据项
- *@param[in]  key_val 关键字
+/*@brief 查找函数
+ *@param tree    B*树实例
+ *@param data    数据项
+ *@param key_val 关键字
  */
 void app_sys_tree_bst_search(app_sys_tree_bst_t *tree, void **data, uint32_t key_val);
 
-/*@brief      配置函数
- *@param[in]  tree    B*树实例
- *@param[out] length 数据项
- *@param[in]  key    关键字获取语义
- *@param[in]  visit  节点访问语义
+/*@brief 配置函数
+ *@param tree    B*树实例
+ *@param length 数据项
+ *@param key    关键字获取语义
+ *@param visit  节点访问语义
  */
 void app_sys_tree_bst_config(app_sys_tree_bst_t *tree, uint32_t length, app_sys_tree_bst_key_t key, app_sys_tree_bst_visit_t visit);
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree    B*树实例
- *@param[in] destroy 是否销毁
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree    B*树实例
+ *@param destroy 是否销毁
  */
 uint32_t app_sys_tree_bst_seq_tra(app_sys_tree_bst_t *tree, bool destroy);
 

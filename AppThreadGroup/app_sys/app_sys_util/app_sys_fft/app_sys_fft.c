@@ -5,8 +5,8 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     快速傅里叶变换
- *@param[in] fft 傅里叶变换数据实例
+/*@brief 快速傅里叶变换
+ *@param fft 傅里叶变换数据实例
  */
 void app_sys_fft_run(app_sys_fft_t *fft)
 {

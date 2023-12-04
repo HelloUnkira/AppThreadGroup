@@ -11,9 +11,9 @@ static app_lv_wheel_t     app_lv_wheel = {0};
 static app_lv_wheel_src_t app_lv_wheel_src = {0};
 static lv_obj_t          *app_lv_wheel_obj = NULL;
 
-/*@brief     lvgl wheel更新事件回调
+/*@brief lvgl wheel更新事件回调
  *           内部使用: 被lvgl线程使用
- *@param[in] wheel 轮盘实例
+ *@param wheel 轮盘实例
  */
 void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
 {
@@ -59,7 +59,7 @@ void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)
     }
 }
 
-/*@brief  轮盘场景对象
+/*@brief 轮盘场景对象
  *@retval 轮盘场景对象
  */
 lv_obj_t * app_lv_wheel_obj_inst(void)
@@ -74,7 +74,7 @@ lv_obj_t * app_lv_wheel_obj_inst(void)
     return app_lv_wheel_obj;
 }
 
-/*@brief  轮盘场景
+/*@brief 轮盘场景
  *@retval 轮盘场景
  */
 app_lv_wheel_t * app_lv_wheel_inst(void)
@@ -82,7 +82,7 @@ app_lv_wheel_t * app_lv_wheel_inst(void)
     return &app_lv_wheel;
 }
 
-/*@brief  轮盘场景资源
+/*@brief 轮盘场景资源
  *@retval 轮盘场景资源
  */
 app_lv_wheel_src_t * app_lv_wheel_src_inst(void)

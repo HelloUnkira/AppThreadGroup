@@ -42,9 +42,9 @@ bool app_os_not_in_irq(void)
 #endif
 }
 
-/*@brief        线程操作流程集合
- *@param[in]    thread 实例
- *@param[in]    option 实例动作
+/*@brief 线程操作流程集合
+ *@param thread 实例
+ *@param option 实例动作
  */
 void app_thread_process(app_thread_t *thread, app_thread_option_t option)
 {
@@ -65,9 +65,9 @@ void app_thread_process(app_thread_t *thread, app_thread_option_t option)
     }
 }
 
-/*@brief        信号量操作流程集合
- *@param[in]    sem    实例
- *@param[in]    option 实例动作
+/*@brief 信号量操作流程集合
+ *@param sem    实例
+ *@param option 实例动作
  */
 void app_sem_process(app_sem_t *sem, app_sem_option_t option)
 {
@@ -97,9 +97,9 @@ void app_sem_process(app_sem_t *sem, app_sem_option_t option)
     }
 }
 
-/*@brief        互斥锁操作流程集合
- *@param[in]    mutex  实例
- *@param[in]    option 实例动作
+/*@brief 互斥锁操作流程集合
+ *@param mutex  实例
+ *@param option 实例动作
  */
 void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
 {
@@ -125,9 +125,9 @@ void app_mutex_process(app_mutex_t *mutex, app_mutex_option_t option)
     }
 }
 
-/*@brief        临界区操作流程集合
- *@param[in]    critical 实例
- *@param[in]    option   实例动作
+/*@brief 临界区操作流程集合
+ *@param critical 实例
+ *@param option   实例动作
  */
 void app_critical_process(app_critical_t *critical, app_critical_option_t option)
 {
@@ -147,19 +147,19 @@ void app_critical_process(app_critical_t *critical, app_critical_option_t option
     }
 }
 
-/*@brief        内存分配
- *@param[in]    size 分配空间字节大小
- *@retval       分配空间,失败为NULL
+/*@brief 内存分配
+ *@param size 分配空间字节大小
+ *@retval 分配空间,失败为NULL
  */
 void * app_mem_alloc(uint32_t size)
 {
     return pvPortMalloc(size);
 }
 
-/*@brief        内存分配
- *@param[in]    pointer 分配空间回收
- *@param[in]    size    分配空间字节大小
- *@retval       分配空间,失败为NULL
+/*@brief 内存分配
+ *@param pointer 分配空间回收
+ *@param size    分配空间字节大小
+ *@retval 分配空间,失败为NULL
  */
 void * app_mem_realloc(void *pointer, uint32_t size)
 {
@@ -167,8 +167,8 @@ void * app_mem_realloc(void *pointer, uint32_t size)
     return NULL;
 }
 
-/*@brief        内存释放
- *@param[in]    pointer 分配空间
+/*@brief 内存释放
+ *@param pointer 分配空间
  */
 void app_mem_free(void *pointer)
 {

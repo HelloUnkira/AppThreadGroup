@@ -37,23 +37,23 @@ typedef struct {
     /*  */
 } app_lv_wheel_src_t;
 
-/*@brief     lvgl wheel更新事件回调
+/*@brief lvgl wheel更新事件回调
  *           内部使用: 被lvgl线程使用
- *@param[in] wheel 轮盘实例
+ *@param wheel 轮盘实例
  */
 void app_lv_wheel_update_handle(app_lv_wheel_t *wheel);
 
-/*@brief  轮盘场景对象
+/*@brief 轮盘场景对象
  *@retval 轮盘场景对象
  */
 lv_obj_t * app_lv_wheel_obj_inst(void);
 
-/*@brief  轮盘场景
+/*@brief 轮盘场景
  *@retval 轮盘场景
  */
 app_lv_wheel_t * app_lv_wheel_inst(void);
 
-/*@brief  轮盘场景资源
+/*@brief 轮盘场景资源
  *@retval 轮盘场景资源
  */
 app_lv_wheel_src_t * app_lv_wheel_src_inst(void);

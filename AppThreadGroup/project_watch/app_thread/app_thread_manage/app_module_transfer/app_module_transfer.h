@@ -26,16 +26,16 @@ typedef struct {
 #pragma pack(pop)
 
 
-/*@brief     接收协议数据并拆包发送
- *@param[in] chan 传输信道
- *@param[in] data 编码数据流
- *@param[in] size 编码数据流大小
+/*@brief 接收协议数据并拆包发送
+ *@param chan 传输信道
+ *@param data 编码数据流
+ *@param size 编码数据流大小
  */
 bool app_module_transfer_notify(app_module_transfer_chan_t channel, uint8_t *data, uint32_t size);
 
-/*@brief     接收协议数据并组包解析
- *@param[in] data 编码数据流
- *@param[in] size 编码数据流大小
+/*@brief 接收协议数据并组包解析
+ *@param data 编码数据流
+ *@param size 编码数据流大小
  */
 void app_module_transfer_respond(app_module_transfer_t *transfer);
 

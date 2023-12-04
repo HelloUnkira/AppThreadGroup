@@ -11,8 +11,8 @@
 #include "app_thread_group.h"
 #include "app_protocol_lib.h"
 
-/*@brief     传输协议
- *@param[in] protocol 传输协议包(栈资源,非堆资源或静态资源)
+/*@brief 传输协议
+ *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
  */
 void app_module_protocol_notify(app_module_protocol_t *protocol)
 {
@@ -30,8 +30,8 @@ void app_module_protocol_notify(app_module_protocol_t *protocol)
     app_thread_package_notify(&package);
 }
 
-/*@brief     传输协议
- *@param[in] protocol 传输协议包(栈资源,非堆资源或静态资源)
+/*@brief 传输协议
+ *@param protocol 传输协议包(栈资源,非堆资源或静态资源)
  */
 void app_module_protocol_respond(app_module_protocol_t *protocol)
 {
@@ -49,9 +49,9 @@ void app_module_protocol_respond(app_module_protocol_t *protocol)
     app_thread_package_notify(&package);
 }
 
-/*@brief     传输协议
- *@param[in] data 传输数据
- *@param[in] size 传输数据大小
+/*@brief 传输协议
+ *@param data 传输数据
+ *@param size 传输数据大小
  */
 void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
 {
@@ -93,9 +93,9 @@ void app_module_protocol_notify_handler(uint8_t *data, uint32_t size)
     #endif
 }
 
-/*@brief     传输协议
- *@param[in] data 传输数据
- *@param[in] size 传输数据大小
+/*@brief 传输协议
+ *@param data 传输数据
+ *@param size 传输数据大小
  */
 void app_module_protocol_respond_handler(uint8_t *data, uint32_t size)
 {

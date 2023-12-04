@@ -36,10 +36,10 @@ static double app_thread_execute_us_s[app_thread_id_s_e - app_thread_id_s_s - 1]
 static double app_thread_execute_us_d[app_thread_id_d_e - app_thread_id_d_s - 1] = {0};
 #endif
 
-/*@brief        设置子线程执行时间
+/*@brief 设置子线程执行时间
  *              注意:这里的时间设置为累加设置
- *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(us)
+ *@param uint32_t thread 线程ID
+ *@param 子线程执行时间(us)
  */
 #if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_set(uint32_t thread, double *execute_us)
@@ -55,9 +55,9 @@ void app_thread_execute_us_set(uint32_t thread, double *execute_us)
 }
 #endif
 
-/*@brief        获得子线程执行时间
- *@param[in]    uint32_t thread 线程ID
- *@param[out]   子线程执行时间(us)
+/*@brief 获得子线程执行时间
+ *@param uint32_t thread 线程ID
+ *@param 子线程执行时间(us)
  */
 #if APP_THREAD_SLAVE_EXECUTE_TIME
 void app_thread_execute_us_get(uint32_t thread, double *execute_us)
@@ -72,9 +72,9 @@ void app_thread_execute_us_get(uint32_t thread, double *execute_us)
 }
 #endif
 
-/*@brief     判断一个动态子线程id号是否合法
- *@param[in] thread 动态子线程id号
- *@retval    动态子线程id号是否合法
+/*@brief 判断一个动态子线程id号是否合法
+ *@param thread 动态子线程id号
+ *@retval 动态子线程id号是否合法
  */
 bool app_thread_id_is_valid(uint32_t thread)
 {
@@ -87,7 +87,7 @@ bool app_thread_id_is_valid(uint32_t thread)
     return valid;
 }
 
-/*@brief  获得一个动态子线程id号
+/*@brief 获得一个动态子线程id号
  *        子线程获得id号之后就获得了主从线程组的调度规则
  *        否则子线程就只能向普通子线程一样工作
  *@retval 动态子线程id号
@@ -109,9 +109,9 @@ uint32_t app_thread_id_alloc(void)
     return thread;
 }
 
-/*@brief     回收一个动态子线程id号
- *@param[in] thread 动态子线程id号
- *@param[in] burn   动态子线程指定的回收流程,快速批量处理不再响应的事件包
+/*@brief 回收一个动态子线程id号
+ *@param thread 动态子线程id号
+ *@param burn   动态子线程指定的回收流程,快速批量处理不再响应的事件包
  */
 void app_thread_id_free(uint32_t thread, void (*burn)(app_thread_package_t *package))
 {
@@ -144,9 +144,9 @@ void app_thread_id_free(uint32_t thread, void (*burn)(app_thread_package_t *pack
     app_mutex_process(&app_thread_mutex, app_mutex_give);
 }
 
-/*@brief        通过从线程ID获得管道同步资源
- *@param[in]    thread 线程ID
- *@param[out]   sem 线程信号量
+/*@brief 通过从线程ID获得管道同步资源
+ *@param thread 线程ID
+ *@param sem 线程信号量
  */
 void app_thread_src_sem(uint32_t thread, app_sem_t **sem)
 {
@@ -159,9 +159,9 @@ void app_thread_src_sem(uint32_t thread, app_sem_t **sem)
         *sem = &app_thread_sem_dst_d[thread - app_thread_id_d_s - 1];
 }
 
-/*@brief        通过从线程ID获得与主线程的交互管道
- *@param[in]    thread 线程ID
- *@param[out]   pipe 管道
+/*@brief 通过从线程ID获得与主线程的交互管道
+ *@param thread 线程ID
+ *@param pipe 管道
  */
 void app_thread_src_pipe(uint32_t thread, app_sys_pipe_t **pipe)
 {
@@ -237,10 +237,10 @@ APP_THREAD_GROUP_HANDLER(app_thread_master_routine)
     }
 }
 
-/*@brief        线程组接收一个事件包
- *@param[in]    thread_id 线程ID
- *@param[in]    package   事件包
- #@retval       失败表明线程组中止,不接收新的事件包
+/*@brief 线程组接收一个事件包
+ *@param thread_id 线程ID
+ *@param package   事件包
+ #@retval 失败表明线程组中止,不接收新的事件包
  */
 bool app_thread_package_notify(app_thread_package_t *package)
 {

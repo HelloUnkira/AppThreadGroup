@@ -8,31 +8,31 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     重置哈希表二级节点
- *@param[in] node 哈希表二级节点实例
+/*@brief 重置哈希表二级节点
+ *@param node 哈希表二级节点实例
  */
 void app_sys_table_rbsn_reset(app_sys_table_rbsn_t *node)
 {
     app_sys_tree_rbsn_reset(node);
 }
 
-/*@brief     重置哈希表一级链表
- *@param[in] list   哈希表一级链表实例
- *@param[in] length 哈希表一级链表实例长度
+/*@brief 重置哈希表一级链表
+ *@param list   哈希表一级链表实例
+ *@param length 哈希表一级链表实例长度
  */
 void app_sys_table_rbsl_reset(app_sys_table_rbsl_t *list, uint32_t length)
 {
     for (uint32_t idx = 0; idx < length; list[idx] = NULL, idx++);
 }
 
-/*@brief     重置哈希表
- *@param[in] table   哈希表实例
- *@param[in] digest  哈希散列函数,哈希摘要函数
- *@param[in] compare 哈希比较函数
- *@param[in] confirm 哈希比较函数
- *@param[in] visit   哈希访问函数
- *@param[in] list    哈希表一级链表实例
- *@param[in] length  哈希表一级链表实例长度
+/*@brief 重置哈希表
+ *@param table   哈希表实例
+ *@param digest  哈希散列函数,哈希摘要函数
+ *@param compare 哈希比较函数
+ *@param confirm 哈希比较函数
+ *@param visit   哈希访问函数
+ *@param list    哈希表一级链表实例
+ *@param length  哈希表一级链表实例长度
  */
 void app_sys_table_rbst_reset(app_sys_table_rbst_t *table, app_sys_table_rbst_fd_t digest, app_sys_table_rbst_fc_t compare, app_sys_table_rbst_fc_t confirm, app_sys_table_rbst_fv_t visit, app_sys_table_rbsl_t *list, uint32_t length)
 {
@@ -47,9 +47,9 @@ void app_sys_table_rbst_reset(app_sys_table_rbst_t *table, app_sys_table_rbst_fd
     /* 我们不使用visit语义,因为我们不使用层级遍历接口:app_sys_tree_rbst_seq_tra */
 }
 
-/*@brief     哈希表插入节点
- *@param[in] table 哈希表实例
- *@param[in] node  哈希表二级节点实例
+/*@brief 哈希表插入节点
+ *@param table 哈希表实例
+ *@param node  哈希表二级节点实例
  */
 void app_sys_table_rbst_insert(app_sys_table_rbst_t *table, app_sys_table_rbsn_t *node)
 {
@@ -62,9 +62,9 @@ void app_sys_table_rbst_insert(app_sys_table_rbst_t *table, app_sys_table_rbsn_t
     table->list[idx] = root;
 }
 
-/*@brief     哈希表移除节点
- *@param[in] table 哈希表实例
- *@param[in] node  哈希表二级节点实例
+/*@brief 哈希表移除节点
+ *@param table 哈希表实例
+ *@param node  哈希表二级节点实例
  */
 void app_sys_table_rbst_remove(app_sys_table_rbst_t *table, app_sys_table_rbsn_t *node)
 {
@@ -77,10 +77,10 @@ void app_sys_table_rbst_remove(app_sys_table_rbst_t *table, app_sys_table_rbsn_t
     table->list[idx] = root;
 }
 
-/*@brief     哈希表匹配节点(查找)
- *@param[in] table 哈希表实例
- *@param[in] node  哈希表二级节点实例(假,伪造)
- *@retval    哈希表二级节点实例(真)
+/*@brief 哈希表匹配节点(查找)
+ *@param table 哈希表实例
+ *@param node  哈希表二级节点实例(假,伪造)
+ *@retval 哈希表二级节点实例(真)
  */
 app_sys_table_rbsn_t * app_sys_table_rbst_search(app_sys_table_rbst_t *table, app_sys_table_rbsn_t *node)
 {
@@ -95,8 +95,8 @@ app_sys_table_rbsn_t * app_sys_table_rbst_search(app_sys_table_rbst_t *table, ap
     return target;
 }
 
-/*@brief     哈希表访问所有节点
- *@param[in] table 哈希表实例
+/*@brief 哈希表访问所有节点
+ *@param table 哈希表实例
  */
 void app_sys_table_rbst_visit(app_sys_table_rbst_t *table)
 {

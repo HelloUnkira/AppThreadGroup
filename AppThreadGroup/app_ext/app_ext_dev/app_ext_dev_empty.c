@@ -10,9 +10,9 @@ typedef struct {
     void *args;
 } app_dev_empty_cfg_t;
 
-/*@brief     空设备初始化
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备初始化
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_init(app_dev_t *driver)
 {
@@ -21,9 +21,9 @@ static int64_t app_dev_empty_hal_init(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备反初始化
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备反初始化
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_deinit(app_dev_t *driver)
 {
@@ -32,9 +32,9 @@ static int64_t app_dev_empty_hal_deinit(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备打开
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备打开
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_open(app_dev_t *driver)
 {
@@ -43,9 +43,9 @@ static int64_t app_dev_empty_hal_open(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备关闭
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备关闭
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_close(app_dev_t *driver)
 {
@@ -54,9 +54,9 @@ static int64_t app_dev_empty_hal_close(app_dev_t *driver)
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备读取
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备读取
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_read(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
@@ -65,9 +65,9 @@ static int64_t app_dev_empty_hal_read(app_dev_t *driver, uint8_t *buf, uint32_t 
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备写入
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备写入
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_write(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
@@ -76,9 +76,9 @@ static int64_t app_dev_empty_hal_write(app_dev_t *driver, uint8_t *buf, uint32_t
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备I/O流处理
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备I/O流处理
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static int64_t app_dev_empty_hal_ioctl(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
@@ -87,9 +87,9 @@ static int64_t app_dev_empty_hal_ioctl(app_dev_t *driver, uint8_t *buf, uint32_t
     /* 填充目标平台下的动作 */
 }
 
-/*@brief     空设备数据流地址映射
- *@param[in] driver 设备实例
- *@retval    返回值
+/*@brief 空设备数据流地址映射
+ *@param driver 设备实例
+ *@retval 返回值
  */
 static inline void * app_dev_empty_hal_data_addr(app_dev_t *driver)
 {

@@ -11,13 +11,13 @@ typedef struct {
 
 #define APP_MODULE_STOPWATCH_MSEC   99
 
-/*@brief        设置秒表
- *@param[out]   stopwatch 秒表实例
+/*@brief 设置秒表
+ *@param stopwatch 秒表实例
  */
 void app_module_stopwatch_set(app_module_stopwatch_t *stopwatch);
 
-/*@brief        获取秒表
- *@param[out]   stopwatch 秒表实例
+/*@brief 获取秒表
+ *@param stopwatch 秒表实例
  */
 void app_module_stopwatch_get(app_module_stopwatch_t *stopwatch);
 

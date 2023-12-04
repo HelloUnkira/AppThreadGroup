@@ -23,9 +23,9 @@ typedef struct {
     } rw_args;
 } app_dev_ext_mem_data_t;
 
-/*@brief     ext_mem设备初始化
- *@param[in] driver 设备实例
- *@retval    失败返回负数
+/*@brief ext_mem设备初始化
+ *@param driver 设备实例
+ *@retval 失败返回负数
  */
 static inline int32_t app_dev_ext_mem_ready(app_dev_t *driver)
 {
@@ -36,9 +36,9 @@ static inline int32_t app_dev_ext_mem_ready(app_dev_t *driver)
     return -1;
 }
 
-/*@brief     ext_mem设备读取
- *@param[in] driver 设备实例
- *@retval    失败返回负数
+/*@brief ext_mem设备读取
+ *@param driver 设备实例
+ *@retval 失败返回负数
  */
 static inline int32_t app_dev_ext_mem_read(app_dev_t *driver)
 {
@@ -49,9 +49,9 @@ static inline int32_t app_dev_ext_mem_read(app_dev_t *driver)
     return -1;
 }
 
-/*@brief     ext_mem设备写入
- *@param[in] driver 设备实例
- *@retval    失败返回负数
+/*@brief ext_mem设备写入
+ *@param driver 设备实例
+ *@retval 失败返回负数
  */
 static inline int32_t app_dev_ext_mem_write(app_dev_t *driver)
 {
@@ -62,9 +62,9 @@ static inline int32_t app_dev_ext_mem_write(app_dev_t *driver)
     return -1;
 }
 
-/*@brief     ext_mem设备数据流地址映射
- *@param[in] driver 设备实例
- *@retval    返回值(app_dev_ext_mem_data_t *)类型地址
+/*@brief ext_mem设备数据流地址映射
+ *@param driver 设备实例
+ *@retval 返回值(app_dev_ext_mem_data_t *)类型地址
  */
 static inline void * app_dev_ext_mem_data_addr(app_dev_t *driver)
 {

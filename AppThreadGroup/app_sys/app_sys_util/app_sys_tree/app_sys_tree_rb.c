@@ -14,81 +14,81 @@
 /* 条件检查语义 */
 #define APP_SYS_TREE_RBT_CHECK(cond, str)   if (cond) APP_SYS_LOG_ERROR(str)
 
-/*@brief     红黑树(设置语义)
- *@param[in] tree 红黑树实例
- *@param[in] root 红黑树根
+/*@brief 红黑树(设置语义)
+ *@param tree 红黑树实例
+ *@param root 红黑树根
  */
 static inline void app_sys_tree_rbt_set_root(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *root)
 {
     tree->root = root;
 }
 
-/*@brief     红黑树(设置语义)
- *@param[in] tree    红黑树实例
- *@param[in] compare 红黑树比较语义
+/*@brief 红黑树(设置语义)
+ *@param tree    红黑树实例
+ *@param compare 红黑树比较语义
  */
 static inline void app_sys_tree_rbt_set_compare(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare)
 {
     tree->compare = compare;
 }
 
-/*@brief     红黑树(设置语义)
- *@param[in] tree    红黑树实例
- *@param[in] compare 红黑树确认语义
+/*@brief 红黑树(设置语义)
+ *@param tree    红黑树实例
+ *@param compare 红黑树确认语义
  */
 static inline void app_sys_tree_rbt_set_confirm(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_confirm_t confirm)
 {
     tree->confirm = confirm;
 }
 
-/*@brief     红黑树(设置语义)
- *@param[in] tree    红黑树实例
- *@param[in] compare 红黑树访问语义
+/*@brief 红黑树(设置语义)
+ *@param tree    红黑树实例
+ *@param compare 红黑树访问语义
  */
 static inline void app_sys_tree_rbt_set_visit(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_visit_t visit)
 {
     tree->visit = visit;
 }
 
-/*@brief     红黑树(获取语义)
- *@param[in] tree 红黑树实例
- *@retval    红黑树根
+/*@brief 红黑树(获取语义)
+ *@param tree 红黑树实例
+ *@retval 红黑树根
  */
 static inline app_sys_tree_rbn_t * app_sys_tree_rbt_get_root(app_sys_tree_rbt_t *tree)
 {
     return tree->root;
 }
 
-/*@brief     红黑树(获取语义)
- *@param[in] tree 红黑树实例
- *@retval    红黑树比较语义
+/*@brief 红黑树(获取语义)
+ *@param tree 红黑树实例
+ *@retval 红黑树比较语义
  */
 static inline app_sys_tree_rbt_compare_t app_sys_tree_rbt_get_compare(app_sys_tree_rbt_t *tree)
 {
     return tree->compare;
 }
 
-/*@brief     红黑树(获取语义)
- *@param[in] tree 红黑树实例
- *@retval    红黑树确认语义
+/*@brief 红黑树(获取语义)
+ *@param tree 红黑树实例
+ *@retval 红黑树确认语义
  */
 static inline app_sys_tree_rbt_confirm_t app_sys_tree_rbt_get_confirm(app_sys_tree_rbt_t *tree)
 {
     return tree->confirm;
 }
 
-/*@brief     红黑树(获取语义)
- *@param[in] tree 红黑树实例
- *@retval    红黑树访问语义
+/*@brief 红黑树(获取语义)
+ *@param tree 红黑树实例
+ *@retval 红黑树访问语义
  */
 static inline app_sys_tree_rbt_visit_t app_sys_tree_rbt_get_visit(app_sys_tree_rbt_t *tree)
 {
     return tree->visit;
 }
 
-/*@brief     红黑节点(设置语义)
- *@param[in] node  红黑节点实例
- *@param[in] color 红黑节点颜色
+/*@brief 红黑节点(设置语义)
+ *@param node  红黑节点实例
+ *@param color 红黑节点颜色
  */
 static inline void app_sys_tree_rbn_set_color(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t color)
 {
@@ -101,9 +101,9 @@ static inline void app_sys_tree_rbn_set_color(app_sys_tree_rbn_t *node, app_sys_
     node->parent_color = (app_sys_tree_rbn_t *)(retval);
 }
 
-/*@brief     红黑节点(设置语义)
- *@param[in] node   红黑节点实例
- *@param[in] parent 红黑节点实例
+/*@brief 红黑节点(设置语义)
+ *@param node   红黑节点实例
+ *@param parent 红黑节点实例
  */
 static inline void app_sys_tree_rbn_set_parent(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *parent)
 {
@@ -116,10 +116,10 @@ static inline void app_sys_tree_rbn_set_parent(app_sys_tree_rbn_t *node, app_sys
     node->parent_color = (app_sys_tree_rbn_t *)(retval);
 }
 
-/*@brief     红黑节点(设置语义)
- *@param[in] node  红黑节点实例
- *@param[in] child 红黑节点实例
- *@param[in] side  红黑节点方向
+/*@brief 红黑节点(设置语义)
+ *@param node  红黑节点实例
+ *@param child 红黑节点实例
+ *@param side  红黑节点方向
  */
 static inline void app_sys_tree_rbn_set_child(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *child, app_sys_tree_rbn_status_t side)
 {
@@ -129,9 +129,9 @@ static inline void app_sys_tree_rbn_set_child(app_sys_tree_rbn_t *node, app_sys_
         node->child_r = child;
 }
 
-/*@brief     红黑节点(获取语义)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点颜色
+/*@brief 红黑节点(获取语义)
+ *@param node 红黑节点实例
+ *@retval 红黑节点颜色
  */
 static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_color(app_sys_tree_rbn_t *node)
 {
@@ -143,9 +143,9 @@ static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_color(app_sys_tree_
     return (app_sys_tree_rbn_status_t)retval;
 }
 
-/*@brief     红黑节点(获取语义)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 红黑节点(获取语义)
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_parent(app_sys_tree_rbn_t *node)
 {
@@ -157,10 +157,10 @@ static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_parent(app_sys_tree_rbn_
     return (app_sys_tree_rbn_t *)retval;
 }
 
-/*@brief     红黑节点(获取语义)
- *@param[in] node 红黑节点实例
- *@param[in] side 红黑节点方向
- *@retval    红黑节点实例
+/*@brief 红黑节点(获取语义)
+ *@param node 红黑节点实例
+ *@param side 红黑节点方向
+ *@retval 红黑节点实例
  */
 static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_child(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -168,10 +168,10 @@ static inline app_sys_tree_rbn_t * app_sys_tree_rbn_get_child(app_sys_tree_rbn_t
            side == app_sys_tree_rbn_side_r ? node->child_r : NULL;
 }
 
-/*@brief     红黑节点(获取语义)
- *@param[in] node   红黑节点实例
- *@param[in] parent 红黑节点实例
- *@retval    红黑节点方向
+/*@brief 红黑节点(获取语义)
+ *@param node   红黑节点实例
+ *@param parent 红黑节点实例
+ *@retval 红黑节点方向
  */
 static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side(app_sys_tree_rbn_t *node, app_sys_tree_rbn_t *parent)
 {
@@ -179,9 +179,9 @@ static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side(app_sys_tree_r
            node == parent->child_r ? app_sys_tree_rbn_side_r : app_sys_tree_rbn_error;
 }
 
-/*@brief     红黑节点(获取语义)
- *@param[in] side 红黑节点方向
- *@retval    红黑节点方向
+/*@brief 红黑节点(获取语义)
+ *@param side 红黑节点方向
+ *@retval 红黑节点方向
  */
 static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side_other(app_sys_tree_rbn_status_t side)
 {
@@ -193,10 +193,10 @@ static inline app_sys_tree_rbn_status_t app_sys_tree_rbn_get_side_other(app_sys_
 #define APP_SYS_TREE_RBT_CHECK_RETURN(expr)         if (expr) return;
 #define APP_SYS_TREE_RBT_CHECK_RETURN_NULL(expr)    if (expr) return NULL;
 
-/*@brief     红黑树核心动作:交换(左右旋转)
- *@param[in] tree   红黑树实例
- *@param[in] child  红黑节点实例
- *@param[in] parent 红黑节点实例
+/*@brief 红黑树核心动作:交换(左右旋转)
+ *@param tree   红黑树实例
+ *@param child  红黑节点实例
+ *@param parent 红黑节点实例
  */
 static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *child, app_sys_tree_rbn_t *parent)
 {
@@ -226,10 +226,10 @@ static void app_sys_tree_rbt_rotate(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t
     }
 }
 
-/*@brief     搜索函数(大小元)
- *@param[in] node 红黑节点实例
- *@param[in] side 红黑节点方向
- *@retval    红黑节点实例
+/*@brief 搜索函数(大小元)
+ *@param node 红黑节点实例
+ *@param side 红黑节点方向
+ *@retval 红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -242,10 +242,10 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_min_or_max(app_sys_tree_rbn_
     return node;
 }
 
-/*@brief     搜索函数(前驱和后继)
- *@param[in] node 红黑节点实例
- *@param[in] side 红黑节点方向
- *@retval    红黑节点实例
+/*@brief 搜索函数(前驱和后继)
+ *@param node 红黑节点实例
+ *@param side 红黑节点方向
+ *@retval 红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -273,10 +273,10 @@ static app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev_or_next(app_sys_tree_rb
     return NULL;
 }
 
-/*@brief     查找函数
- *@param[in] tree   红黑树实例
- *@param[in] target 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 查找函数
+ *@param tree   红黑树实例
+ *@param target 红黑节点实例
+ *@retval 红黑节点实例
  */
 static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *target)
 {
@@ -304,9 +304,9 @@ static app_sys_tree_rbn_t * app_sys_tree_rbt_search_only(app_sys_tree_rbt_t *tre
     return NULL;
 }
 
-/*@brief     单次插入函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 单次插入函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -360,9 +360,9 @@ static void app_sys_tree_rbt_insert_only(app_sys_tree_rbt_t *tree, app_sys_tree_
     }
 }
 
-/*@brief     插入调整函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 插入调整函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -431,10 +431,10 @@ static void app_sys_tree_rbt_insert_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     } while (1);
 }
 
-/*@brief      单次删除函数
- *@param[in]  tree 红黑树实例
- *@param[in]  node 红黑节点实例
- *@param[out] side 红黑节点方向
+/*@brief 单次删除函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
+ *@param side 红黑节点方向
  */
 static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t *side)
 {
@@ -526,10 +526,10 @@ static void app_sys_tree_rbt_remove_only(app_sys_tree_rbt_t *tree, app_sys_tree_
         app_sys_tree_rbn_set_parent(child, parent);
 }
 
-/*@brief      删除调整函数
- *@param[in]  tree 红黑树实例
- *@param[in]  node 红黑节点实例
- *@param[out] side 红黑节点方向
+/*@brief 删除调整函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
+ *@param side 红黑节点方向
  */
 static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node, app_sys_tree_rbn_status_t side)
 {
@@ -645,9 +645,9 @@ static void app_sys_tree_rbt_remove_adjust(app_sys_tree_rbt_t *tree, app_sys_tre
     } while (1);
 }
 
-/*@brief     插入函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 插入函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -658,9 +658,9 @@ void app_sys_tree_rbt_insert(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
     app_sys_tree_rbt_insert_adjust(tree, node);
 }
 
-/*@brief     删除函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 删除函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -673,10 +673,10 @@ void app_sys_tree_rbt_remove(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
     app_sys_tree_rbt_remove_adjust(tree, node,  side);
 }
 
-/*@brief     搜索函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -686,9 +686,9 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search(app_sys_tree_rbt_t *tree, app_sys_t
     return app_sys_tree_rbt_search_only(tree, node);
 }
 
-/*@brief     搜索函数(最小节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最小节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree)
 {
@@ -698,9 +698,9 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search_min(app_sys_tree_rbt_t *tree)
     return app_sys_tree_rbt_search_min_or_max(root, app_sys_tree_rbn_side_l);
 }
 
-/*@brief     搜索函数(最大节点)
- *@param[in] tree 红黑树实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(最大节点)
+ *@param tree 红黑树实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree)
 {
@@ -710,9 +710,9 @@ app_sys_tree_rbn_t * app_sys_tree_rbt_search_max(app_sys_tree_rbt_t *tree)
     return app_sys_tree_rbt_search_min_or_max(root, app_sys_tree_rbn_side_r);
 }
 
-/*@brief     搜索函数(前驱节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(前驱节点)
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node)
 {
@@ -721,9 +721,9 @@ app_sys_tree_rbn_t * app_sys_tree_rbn_search_prev(app_sys_tree_rbn_t *node)
     return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_l);
 }
 
-/*@brief     搜索函数(后继节点)
- *@param[in] node 红黑节点实例
- *@retval    红黑节点实例
+/*@brief 搜索函数(后继节点)
+ *@param node 红黑节点实例
+ *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node)
 {
@@ -732,8 +732,8 @@ app_sys_tree_rbn_t * app_sys_tree_rbn_search_next(app_sys_tree_rbn_t *node)
     return app_sys_tree_rbn_search_prev_or_next(node, app_sys_tree_rbn_side_r);
 }
 
-/*@brief     复位函数
- *@param[in] tree 红黑树实例
+/*@brief 复位函数
+ *@param tree 红黑树实例
  */
 void app_sys_tree_rbt_reset(app_sys_tree_rbt_t *tree)
 {
@@ -745,8 +745,8 @@ void app_sys_tree_rbt_reset(app_sys_tree_rbt_t *tree)
     app_sys_tree_rbt_set_visit(tree, NULL);
 }
 
-/*@brief     复位函数
- *@param[in] node 红黑节点实例
+/*@brief 复位函数
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node)
 {
@@ -755,11 +755,11 @@ void app_sys_tree_rbn_reset(app_sys_tree_rbn_t *node)
     app_sys_tree_rbn_set_child(node, NULL, app_sys_tree_rbn_side_r);
 }
 
-/*@brief     配置函数
- *@param[in] tree 红黑树实例
- *@param[in] compare 红黑树比较语义
- *@param[in] confirm 红黑树确认语义
- *@param[in] visit   红黑树访问语义
+/*@brief 配置函数
+ *@param tree 红黑树实例
+ *@param compare 红黑树比较语义
+ *@param confirm 红黑树确认语义
+ *@param visit   红黑树访问语义
  */
 void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_t compare, app_sys_tree_rbt_confirm_t confirm, app_sys_tree_rbt_visit_t visit)
 {
@@ -770,9 +770,9 @@ void app_sys_tree_rbt_config(app_sys_tree_rbt_t *tree, app_sys_tree_rbt_compare_
     app_sys_tree_rbt_set_visit(tree, visit);
 }
 
-/*@brief     根切换函数
- *@param[in] tree 红黑树实例
- *@param[in] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *node)
 {
@@ -781,19 +781,19 @@ void app_sys_tree_rbt_root_set(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t *nod
     app_sys_tree_rbt_set_root(tree, node);
 }
 
-/*@brief      根切换函数
- *@param[in]  tree 红黑树实例
- *@param[out] node 红黑节点实例
+/*@brief 根切换函数
+ *@param tree 红黑树实例
+ *@param node 红黑节点实例
  */
 void app_sys_tree_rbt_root_get(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **node)
 {
     *node = app_sys_tree_rbt_get_root(tree);
 }
 
-/*@brief     数据的层序遍历并访问(窥探)
- *@param[in] tree  红黑树实例
- *@param[in] queue 红黑树节点实例队列数组
- *@param[in] len   红黑树节点实例队列数组长度
+/*@brief 数据的层序遍历并访问(窥探)
+ *@param tree  红黑树实例
+ *@param queue 红黑树节点实例队列数组
+ *@param len   红黑树节点实例队列数组长度
  */
 void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **queue, int32_t len)
 {
@@ -839,12 +839,12 @@ void app_sys_tree_rbt_seq_tra(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **que
     } while (node_num > 0);
 }
 
-/*@brief     验证一棵树是否为红黑树(内部检查)
- *@param[in] tree  红黑树实例
- *@param[in] stack 红黑树节点实例栈数组
- *@param[in] flags 红黑树节点实例栈数组
- *@param[in] len   红黑树节点实例栈数组长度
- *@retval    0:失败;1:成功
+/*@brief 验证一棵树是否为红黑树(内部检查)
+ *@param tree  红黑树实例
+ *@param stack 红黑树节点实例栈数组
+ *@param flags 红黑树节点实例栈数组
+ *@param len   红黑树节点实例栈数组长度
+ *@retval 0:失败;1:成功
  */
 uint8_t app_sys_tree_rbt_check_valid(app_sys_tree_rbt_t *tree, app_sys_tree_rbn_t **stack, int32_t *flags, int32_t len)
 {

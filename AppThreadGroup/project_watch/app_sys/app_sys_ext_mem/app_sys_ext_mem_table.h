@@ -6,15 +6,15 @@
  *参考app_sys_ext_mem_table.json中的模式生成源
  */
 
-/*@brief     通过名字索引chunk静态实例
- *@param[in] name 名字
- *@retval    静态实例
+/*@brief 通过名字索引chunk静态实例
+ *@param name 名字
+ *@retval 静态实例
  */
 const app_sys_ext_mem_t * app_sys_ext_mem_find_by_name(const char *name);
 
-/*@brief     通过索引chunk静态实例
- *@param[in] index 索引
- *@retval    静态实例
+/*@brief 通过索引chunk静态实例
+ *@param index 索引
+ *@retval 静态实例
  */
 const app_sys_ext_mem_t * app_sys_ext_mem_find_by_index(uint32_t index);
 

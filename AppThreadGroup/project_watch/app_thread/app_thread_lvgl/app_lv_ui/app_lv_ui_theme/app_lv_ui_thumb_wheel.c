@@ -209,8 +209,8 @@ static void app_lv_ui_event_default_redirect(lv_event_t *e)
     app_lv_event_default_cb(e);
 }
 
-/*@brief     界面显示
- *@param[in] scene 场景
+/*@brief 界面显示
+ *@param scene 场景
  */
 void app_lv_ui_thumb_wheel_show(void *scene)
 {
@@ -263,8 +263,8 @@ void app_lv_ui_thumb_wheel_show(void *scene)
     app_lv_ui_local_anim_handler(NULL, 0);
 }
 
-/*@brief     界面隐藏
- *@param[in] scene 场景
+/*@brief 界面隐藏
+ *@param scene 场景
  */
 void app_lv_ui_thumb_wheel_hide(void *scene)
 {

@@ -25,9 +25,9 @@
 #define JERRY_UNUSED(x) ((void)(x))
 #endif
 
-/*@brief     对象数量计数回调
- *           搭配jerry_object_foreach使用
- *@prarm[in] user_data_p 一个对象数量计数器地址(jerry_size_t类型)
+/*@brief 对象数量计数回调
+ *       搭配jerry_object_foreach使用
+ *@prarm user_data_p 一个对象数量计数器地址(jerry_size_t类型)
  */
 bool app_js_log_object_count_cb(const jerry_value_t property_name, const jerry_value_t property_value, void *user_data_p);
 

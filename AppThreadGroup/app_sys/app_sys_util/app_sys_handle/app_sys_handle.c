@@ -14,8 +14,8 @@
 /* 句柄管理集合 */
 static app_sys_handle_t app_sys_handle = {0};
 
-/*@brief     释放一个句柄
- *@param[in] handle 句柄
+/*@brief 释放一个句柄
+ *@param handle 句柄
  */
 void app_sys_handle_give(uint32_t handle)
 {
@@ -73,8 +73,8 @@ void app_sys_handle_give(uint32_t handle)
     }
 }
 
-/*@brief      获取一个句柄
- *@param[out] handle 句柄
+/*@brief 获取一个句柄
+ *@param handle 句柄
  */
 void app_sys_handle_take(uint32_t *handle)
 {
@@ -140,9 +140,9 @@ void app_sys_handle_take(uint32_t *handle)
     }
 }
 
-/*@brief     句柄绑定或更新资源
- *@param[in] handle 句柄
- *@param[in] src 资源
+/*@brief 句柄绑定或更新资源
+ *@param handle 句柄
+ *@param src 资源
  */
 void app_sys_handle_src_set(uint32_t handle, void *src)
 {
@@ -153,9 +153,9 @@ void app_sys_handle_src_set(uint32_t handle, void *src)
         app_sys_handle.unit[idx1].src[idx2] = src;
 }
 
-/*@brief      句柄获取资源
- *@param[in]  handle 句柄
- *@param[out] src 资源
+/*@brief 句柄获取资源
+ *@param handle 句柄
+ *@param src 资源
  */
 void app_sys_handle_src_get(uint32_t handle, void **src)
 {

@@ -209,8 +209,8 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     lv_label_set_text_fmt(app_lv_ui_res_local->erase_line, "Erase Line:%d", erase_line);
 }
 
-/*@brief     界面显示
- *@param[in] scene 场景
+/*@brief 界面显示
+ *@param scene 场景
  */
 static void app_lv_ui_tetris_show(void *scene)
 {
@@ -306,8 +306,8 @@ static void app_lv_ui_tetris_show(void *scene)
     }
 }
 
-/*@brief     界面隐藏
- *@param[in] scene 场景
+/*@brief 界面隐藏
+ *@param scene 场景
  */
 static void app_lv_ui_tetris_hide(void *scene)
 {

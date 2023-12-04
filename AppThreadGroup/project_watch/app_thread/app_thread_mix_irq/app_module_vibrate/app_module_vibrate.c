@@ -13,7 +13,7 @@ static app_mutex_t app_module_vibrate_mutex = {0};
 static app_sys_timer_t app_module_vibrate_timer = {0};
 static app_module_vibrate_t app_module_vibrate  = {0};
 
-/*@brief  震动模组工作有效性检查
+/*@brief 震动模组工作有效性检查
  *@retval 模组是否有效
  */
 static bool app_module_vibrate_invalid(void)
@@ -31,8 +31,8 @@ static bool app_module_vibrate_invalid(void)
     return invalid_check;
 }
 
-/*@brief        设置震动模组
- *@param[out]   vibrate 震动实例
+/*@brief 设置震动模组
+ *@param vibrate 震动实例
  */
 void app_module_vibrate_set(app_module_vibrate_t *vibrate)
 {
@@ -41,8 +41,8 @@ void app_module_vibrate_set(app_module_vibrate_t *vibrate)
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
 }
 
-/*@brief        获取震动模组
- *@param[out]   vibrate 震动实例
+/*@brief 获取震动模组
+ *@param vibrate 震动实例
  */
 void app_module_vibrate_get(app_module_vibrate_t *vibrate)
 {
@@ -144,9 +144,9 @@ void app_module_vibrate_ready(void)
 
 /*@brief 震动节拍默认回调1
 *       周期内前半部分震动后半部分不震动
- *@param[in] current 周期内的到达点,进度
- *@param[in] period  设置的周期
- *@retval    百分比振幅[0,100]
+ *@param current 周期内的到达点,进度
+ *@param period  设置的周期
+ *@retval 百分比振幅[0,100]
  */
 uint8_t app_module_vibrate_melody_default_1(void *instance, uint32_t current, uint32_t period)
 {
@@ -160,9 +160,9 @@ uint8_t app_module_vibrate_melody_default_1(void *instance, uint32_t current, ui
 
 /*@brief 震动节拍默认回调2
  *       先升后降,波峰波谷式震动
- *@param[in] current 周期内的到达点,进度
- *@param[in] period  设置的周期
- *@retval    百分比振幅[0,100]
+ *@param current 周期内的到达点,进度
+ *@param period  设置的周期
+ *@retval 百分比振幅[0,100]
  */
 uint8_t app_module_vibrate_melody_default_2(void *instance, uint32_t current, uint32_t period)
 {

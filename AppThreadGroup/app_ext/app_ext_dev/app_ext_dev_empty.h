@@ -18,7 +18,7 @@ typedef struct {
     void *data;
 } app_dev_empty_data_t;
 
-/*@brief     空设备初始化
+/*@brief 空设备初始化
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -30,7 +30,7 @@ static inline int64_t app_dev_empty_init(app_dev_t *driver)
     }
 }
 
-/*@brief     空设备反初始化
+/*@brief 空设备反初始化
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -42,7 +42,7 @@ static inline int64_t app_dev_empty_deinit(app_dev_t *driver)
     }
 }
 
-/*@brief     空设备打开
+/*@brief 空设备打开
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -54,7 +54,7 @@ static inline int64_t app_dev_empty_open(app_dev_t *driver)
     }
 }
 
-/*@brief     空设备关闭
+/*@brief 空设备关闭
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -66,7 +66,7 @@ static inline int64_t app_dev_empty_close(app_dev_t *driver)
     }
 }
 
-/*@brief     空设备读取
+/*@brief 空设备读取
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -78,7 +78,7 @@ static inline int64_t app_dev_empty_read(app_dev_t *driver, uint8_t *buf, uint32
     }
 }
 
-/*@brief     空设备写入
+/*@brief 空设备写入
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -90,7 +90,7 @@ static inline int64_t app_dev_empty_write(app_dev_t *driver, uint8_t *buf, uint3
     }
 }
 
-/*@brief     空设备I/O流处理
+/*@brief 空设备I/O流处理
  *@param[in] driver 设备实例
  *@retval    返回值
  */
@@ -102,7 +102,7 @@ static inline int64_t app_dev_empty_ioctl(app_dev_t *driver, uint8_t *buf, uint3
     }
 }
 
-/*@brief     空设备数据流地址映射
+/*@brief 空设备数据流地址映射
  *@param[in] driver 设备实例
  *@retval    返回值
  */

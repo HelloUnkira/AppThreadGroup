@@ -11,18 +11,18 @@
 #define   APP_MODULE_CLOCK_CB_H
 #include "app_module_clock_cb.h"
 
-/*@brief     闰年判断
- *@param[in] clock 时钟实例{.year,}
- *@retval    是否为闰年
+/*@brief 闰年判断
+ *@param clock 时钟实例{.year,}
+ *@retval 是否为闰年
  */
 bool app_module_clock_is_leap_year(app_module_clock_t *clock)
 {
     return (clock->year % 4 == 0 && clock->year % 100 != 0) || (clock->year % 400 == 0);
 }
 
-/*@brief     下一闰年
- *@param[in] clock 时钟实例{.year,}
- *@param[in] leap_clock 下一闰年时钟实例{.year,}
+/*@brief 下一闰年
+ *@param clock 时钟实例{.year,}
+ *@param leap_clock 下一闰年时钟实例{.year,}
  */
 void app_module_clock_next_leap_year(app_module_clock_t *clock, app_module_clock_t *leap_clock)
 {
@@ -35,9 +35,9 @@ void app_module_clock_next_leap_year(app_module_clock_t *clock, app_module_clock
     }
 }
 
-/*@brief     一个月有多少天
- *@param[in] clock 时钟实例{.year,.month,}
- *@retval    天数
+/*@brief 一个月有多少天
+ *@param clock 时钟实例{.year,.month,}
+ *@retval 天数
  */
 uint32_t app_module_clock_month_days(app_module_clock_t *clock)
 {
@@ -47,9 +47,9 @@ uint32_t app_module_clock_month_days(app_module_clock_t *clock)
            clock->month == 7 ? 31 : clock->month % 7 % 2 == 0 ? 30 : 31;
 }
 
-/*@brief     一年过了多少天
- *@param[in] clock 时钟实例{.year,.month,.day,}
- *@retval    天数
+/*@brief 一年过了多少天
+ *@param clock 时钟实例{.year,.month,.day,}
+ *@retval 天数
  */
 uint32_t app_module_clock_year_days(app_module_clock_t *clock)
 {
@@ -62,10 +62,10 @@ uint32_t app_module_clock_year_days(app_module_clock_t *clock)
     return days - 1;
 }
 
-/*@brief     俩个日期间的天数
- *@param[in] clock1 时钟实例{.year,.month,.day,}
- *@param[in] clock2 时钟实例{.year,.month,.day,}
- *@retval    天数
+/*@brief 俩个日期间的天数
+ *@param clock1 时钟实例{.year,.month,.day,}
+ *@param clock2 时钟实例{.year,.month,.day,}
+ *@retval 天数
  */
 uint32_t app_module_clock_how_many_days(app_module_clock_t *clock1, app_module_clock_t *clock2)
 {
@@ -85,9 +85,9 @@ uint32_t app_module_clock_how_many_days(app_module_clock_t *clock1, app_module_c
     return days;
 }
 
-/*@brief      星期转化(蔡勒公式)
- *@param[in]  clock 时钟实例{.year,.month,.day,}
- *@param[out] clock 时钟实例{.week,}
+/*@brief 星期转化(蔡勒公式)
+ *@param clock 时钟实例{.year,.month,.day,}
+ *@param clock 时钟实例{.week,}
  */
 void app_module_clock_to_week(app_module_clock_t *clock)
 {
@@ -103,9 +103,9 @@ void app_module_clock_to_week(app_module_clock_t *clock)
     clock->week = (y + y / 4 + c / 4 - 2 * c + 13 * (m + 1) / 5 + d - 1) % 7;
 }
 
-/*@brief      日期转化为utc
- *@param[in]  clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
- *@param[out] clock 时钟实例{.utc,}
+/*@brief 日期转化为utc
+ *@param clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
+ *@param clock 时钟实例{.utc,}
  */
 void app_module_clock_to_utc(app_module_clock_t *clock)
 {
@@ -122,13 +122,13 @@ void app_module_clock_to_utc(app_module_clock_t *clock)
     clock->utc -= bclock.second;
 }
 
-/*@brief      utc转化为日期
- *@param[in]  clock 时钟实例{.utc,}
- *@param[out] clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
+/*@brief utc转化为日期
+ *@param clock 时钟实例{.utc,}
+ *@param clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
  */
 void app_module_clock_to_dtime(app_module_clock_t *clock)
 {
-	/* 代码逻辑来源于liunx\..\kdb_gmtime(...), 有效期:1970-2099 */
+    /* 代码逻辑来源于liunx\..\kdb_gmtime(...), 有效期:1970-2099 */
     uint32_t leap_month[] = { 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
     uint32_t seconds = clock->utc % (24 * 60 * 60);
     uint32_t days    = clock->utc / (24 * 60 * 60) + (2 * 365 + 1);
@@ -139,15 +139,15 @@ void app_module_clock_to_dtime(app_module_clock_t *clock)
     clock->year   = 1968 + 4 * (days / (4 * 365 + 1));
     clock->month  = 1;
     days %= (4 * 365 + 1);
-	while (days >= leap_month[clock->month - 1]) {
-		   days -= leap_month[clock->month - 1];
+    while (days >= leap_month[clock->month - 1]) {
+           days -= leap_month[clock->month - 1];
             clock->month++;
         if (clock->month == 13) {
-			clock->month  = 1;
-			clock->year++;
-			leap_month[1] = 28;
-		}
-	}
+            clock->month  = 1;
+            clock->year++;
+            leap_month[1] = 28;
+        }
+    }
     clock->day = days + 1;
 }
 
@@ -157,8 +157,8 @@ static app_mutex_t app_module_clock_mutex = {0};
 static app_sys_timer_t app_module_clock_timer = {0};
 static app_module_clock_t app_module_clock[2] = {0};
 
-/*@brief     获得系统开机时间(中断环境下不可调用)
- *@param[in] clock 时钟实例
+/*@brief 获得系统开机时间(中断环境下不可调用)
+ *@param clock 时钟实例
  */
 uint64_t app_module_clock_get_sec_tick(void)
 {
@@ -168,8 +168,8 @@ uint64_t app_module_clock_get_sec_tick(void)
     return retval;
 }
 
-/*@brief     设置时区偏移(中断环境下不可调用)
- *@param[in] zone_sec 时区偏移(秒)
+/*@brief 设置时区偏移(中断环境下不可调用)
+ *@param zone_sec 时区偏移(秒)
  */
 void app_module_clock_set_system_clock_zone(int32_t zone_sec)
 {
@@ -179,8 +179,8 @@ void app_module_clock_set_system_clock_zone(int32_t zone_sec)
     app_mutex_process(&app_module_clock_mutex, app_mutex_give);
 }
 
-/*@brief     设置时区偏移(中断环境下不可调用)
- *@param[in] is_24 时区偏移(秒)
+/*@brief 设置时区偏移(中断环境下不可调用)
+ *@param is_24 时区偏移(秒)
  */
 void app_module_clock_set_system_clock_mode(bool is_24)
 {
@@ -190,8 +190,8 @@ void app_module_clock_set_system_clock_mode(bool is_24)
     app_mutex_process(&app_module_clock_mutex, app_mutex_give);
 }
 
-/*@brief     获得系统时间(中断环境下不可调用)
- *@param[in] clock 时钟实例
+/*@brief 获得系统时间(中断环境下不可调用)
+ *@param clock 时钟实例
  */
 void app_module_clock_get_system_clock(app_module_clock_t *clock)
 {
@@ -216,8 +216,8 @@ void app_module_clock_get_system_clock(app_module_clock_t *clock)
     }
 }
 
-/*@brief     设置系统时间(中断环境下不可调用)
- *@param[in] clock 时钟实例
+/*@brief 设置系统时间(中断环境下不可调用)
+ *@param clock 时钟实例
  */
 void app_module_clock_set_system_clock(app_module_clock_t *clock)
 {
@@ -265,9 +265,9 @@ void app_module_clock_local_update(void)
     app_module_data_center_give();
 }
 
-/*@brief     系统时间戳更新回调
+/*@brief 系统时间戳更新回调
  *           内部使用: 被mix irq线程使用
- *@param[in] utc_new 硬件定时器派发给mix_irq包裹中携带的新utc信息
+ *@param utc_new 硬件定时器派发给mix_irq包裹中携带的新utc信息
  */
 void app_module_clock_timestamp_update(uint64_t utc_new)
 {
@@ -317,8 +317,8 @@ void app_module_clock_timestamp_update(uint64_t utc_new)
     app_module_data_center_give();
 }
 
-/*@brief      系统时钟复位清除
- *@param[out] clock 时钟实例
+/*@brief 系统时钟复位清除
+ *@param clock 时钟实例
  */
 void app_module_clock_reset(app_module_clock_t *clock)
 {

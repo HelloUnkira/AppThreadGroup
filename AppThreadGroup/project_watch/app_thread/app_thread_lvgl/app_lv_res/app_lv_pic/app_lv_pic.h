@@ -397,8 +397,8 @@ typedef enum {
 	APP_LV_PIC_NUM,
 } app_lv_pic_t;
 
-/*@brief     获得图片资源字符串
- *@param[in] index图片资源索引(0~n-1)
+/*@brief 获得图片资源字符串
+ *@param index图片资源索引(0~n-1)
  */
 const char * app_lv_pic_str_find(uint32_t index);
 

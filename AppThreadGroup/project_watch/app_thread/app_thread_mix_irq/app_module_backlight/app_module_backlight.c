@@ -12,8 +12,8 @@
 static app_mutex_t app_module_backlight_mutex = {0};
 static app_module_backlight_t app_module_backlight = {0};
 
-/*@brief        设置背光模组
- *@param[out]   backlight 背光实例
+/*@brief 设置背光模组
+ *@param backlight 背光实例
  */
 void app_module_backlight_set(app_module_backlight_t *backlight)
 {
@@ -23,8 +23,8 @@ void app_module_backlight_set(app_module_backlight_t *backlight)
     app_dev_backlight_update(&app_dev_backlight, backlight->duty_cycle);
 }
 
-/*@brief        获取背光模组
- *@param[out]   backlight 背光实例
+/*@brief 获取背光模组
+ *@param backlight 背光实例
  */
 void app_module_backlight_get(app_module_backlight_t *backlight)
 {

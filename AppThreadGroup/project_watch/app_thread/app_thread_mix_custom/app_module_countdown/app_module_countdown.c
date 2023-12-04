@@ -14,8 +14,8 @@
 
 static app_sys_timer_t app_module_countdown_timer = {0};
 
-/*@brief        设置倒计时
- *@param[in]    countdown 倒计时实例
+/*@brief 设置倒计时
+ *@param countdown 倒计时实例
  */
 void app_module_countdown_set(app_module_countdown_t *countdown)
 {
@@ -25,8 +25,8 @@ void app_module_countdown_set(app_module_countdown_t *countdown)
     app_module_data_center_give();
 }
 
-/*@brief        获取倒计时
- *@param[out]   countdown 倒计时实例
+/*@brief 获取倒计时
+ *@param countdown 倒计时实例
  */
 void app_module_countdown_get(app_module_countdown_t *countdown)
 {

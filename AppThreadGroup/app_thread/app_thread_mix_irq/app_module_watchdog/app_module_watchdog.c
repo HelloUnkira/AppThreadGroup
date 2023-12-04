@@ -12,8 +12,8 @@
 static app_mutex_t app_module_watchdog_mutex = {0};
 static app_module_watchdog_t app_module_watchdog = {0};
 
-/*@brief     软件看门狗喂狗
- *@param[in] thread_id 线程编号
+/*@brief 软件看门狗喂狗
+ *@param thread_id 线程编号
  */
 static void app_module_watchdog_feed_work(void *argument)
 {
@@ -34,8 +34,8 @@ static void app_module_watchdog_feed_work(void *argument)
     }
 }
 
-/*@brief     软件看门狗控制更新
- *@param[in] clock 时钟实例
+/*@brief 软件看门狗控制更新
+ *@param clock 时钟实例
  */
 void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 {

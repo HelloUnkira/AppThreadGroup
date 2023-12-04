@@ -9,8 +9,8 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     图顶点重置
- *@param[in] v 图顶点实例
+/*@brief 图顶点重置
+ *@param v 图顶点实例
  */
 void app_sys_map_dlv_reset(app_sys_map_dlv_t *v)
 {
@@ -19,8 +19,8 @@ void app_sys_map_dlv_reset(app_sys_map_dlv_t *v)
     app_sys_list_dll_reset(&v->e_set_o);
 }
 
-/*@brief     图边重置
- *@param[in] e 图边实例
+/*@brief 图边重置
+ *@param e 图边实例
  */
 void app_sys_map_dle_reset(app_sys_map_dle_t *e)
 {
@@ -30,8 +30,8 @@ void app_sys_map_dle_reset(app_sys_map_dle_t *e)
     app_sys_list_dln_reset(&e->e_item_o);
 }
 
-/*@brief     图重置
- *@param[in] m 图实例
+/*@brief 图重置
+ *@param m 图实例
  */
 void app_sys_map_dlm_reset(app_sys_map_dlm_t *m)
 {
@@ -40,10 +40,10 @@ void app_sys_map_dlm_reset(app_sys_map_dlm_t *m)
     app_sys_list_dll_reset(&m->set);
 }
 
-/*@brief     图边重置
- *@param[in] e   图边实例
- *@param[in] v_i 图顶点实例
- *@param[in] v_o 图顶点实例
+/*@brief 图边重置
+ *@param e   图边实例
+ *@param v_i 图顶点实例
+ *@param v_o 图顶点实例
  */
 void app_sys_map_dle_config(app_sys_map_dle_t *e, app_sys_map_dlv_t *v_i, app_sys_map_dlv_t *v_o)
 {
@@ -53,10 +53,10 @@ void app_sys_map_dle_config(app_sys_map_dle_t *e, app_sys_map_dlv_t *v_i, app_sy
     app_sys_list_dln_reset(&e->e_item_o);
 }
 
-/*@brief     图重置
- *@param[in] m       图实例
- *@param[in] confirm 图比较函数
- *@param[in] visit   图访问函数
+/*@brief 图重置
+ *@param m       图实例
+ *@param confirm 图比较函数
+ *@param visit   图访问函数
  */
 void app_sys_map_dlm_config(app_sys_map_dlm_t *m, app_sys_map_dlm_fc_t confirm, app_sys_map_dlm_fv_t visit)
 {
@@ -64,27 +64,27 @@ void app_sys_map_dlm_config(app_sys_map_dlm_t *m, app_sys_map_dlm_fc_t confirm, 
     m->visit   = visit;
 }
 
-/*@brief     从图边获得图顶点
- *@param[in] e 图边实例
- *@retval    图顶点实例
+/*@brief 从图边获得图顶点
+ *@param e 图边实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dle_v_i(app_sys_map_dle_t *e)
 {
     return e->v_i;
 }
 
-/*@brief     从图边获得图顶点
- *@param[in] e 图边实例
- *@retval    图顶点实例
+/*@brief 从图边获得图顶点
+ *@param e 图边实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dle_v_o(app_sys_map_dle_t *e)
 {
     return e->v_o;
 }
 
-/*@brief     获得图起始顶点
- *@param[in] m 图实例
- *@retval    图顶点实例
+/*@brief 获得图起始顶点
+ *@param m 图实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_head_v(app_sys_map_dlm_t *m)
 {
@@ -92,9 +92,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_head_v(app_sys_map_dlm_t *m)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
-/*@brief     获得图末尾顶点
- *@param[in] m 图实例
- *@retval    图顶点实例
+/*@brief 获得图末尾顶点
+ *@param m 图实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_tail_v(app_sys_map_dlm_t *m)
 {
@@ -102,9 +102,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_tail_v(app_sys_map_dlm_t *m)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
-/*@brief     获得图顶点前一顶点
- *@param[in] m 图实例
- *@retval    图顶点实例
+/*@brief 获得图顶点前一顶点
+ *@param m 图实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_prev_v(app_sys_map_dlv_t *v)
 {
@@ -112,9 +112,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_prev_v(app_sys_map_dlv_t *v)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
-/*@brief     获得图顶点后一顶点
- *@param[in] m 图实例
- *@retval    图顶点实例
+/*@brief 获得图顶点后一顶点
+ *@param m 图实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_next_v(app_sys_map_dlv_t *v)
 {
@@ -122,9 +122,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_next_v(app_sys_map_dlv_t *v)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dlv_t, buddy, node);
 }
 
-/*@brief     获得图顶点起始边
- *@param[in] v 图顶点实例
- *@retval    图边实例
+/*@brief 获得图顶点起始边
+ *@param v 图顶点实例
+ *@retval 图边实例
  */
 app_sys_map_dle_t * app_sys_map_dlm_head_e(app_sys_map_dlv_t *v)
 {
@@ -132,9 +132,9 @@ app_sys_map_dle_t * app_sys_map_dlm_head_e(app_sys_map_dlv_t *v)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
-/*@brief     获得图顶点末尾边
- *@param[in] v 图顶点实例
- *@retval    图边实例
+/*@brief 获得图顶点末尾边
+ *@param v 图顶点实例
+ *@retval 图边实例
  */
 app_sys_map_dle_t * app_sys_map_dlm_tail_e(app_sys_map_dlv_t *v)
 {
@@ -142,9 +142,9 @@ app_sys_map_dle_t * app_sys_map_dlm_tail_e(app_sys_map_dlv_t *v)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
-/*@brief     获得图边前一边
- *@param[in] e 图边实例
- *@retval    图边实例
+/*@brief 获得图边前一边
+ *@param e 图边实例
+ *@retval 图边实例
  */
 app_sys_map_dle_t * app_sys_map_dlm_prev_e(app_sys_map_dle_t *e)
 {
@@ -152,9 +152,9 @@ app_sys_map_dle_t * app_sys_map_dlm_prev_e(app_sys_map_dle_t *e)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
-/*@brief     获得图边后一边
- *@param[in] e 图边实例
- *@retval    图边实例
+/*@brief 获得图边后一边
+ *@param e 图边实例
+ *@retval 图边实例
  */
 app_sys_map_dle_t * app_sys_map_dlm_next_e(app_sys_map_dle_t *e)
 {
@@ -162,10 +162,10 @@ app_sys_map_dle_t * app_sys_map_dlm_next_e(app_sys_map_dle_t *e)
     return node == NULL ? NULL : app_sys_own_ofs(app_sys_map_dle_t, e_item_o, node);
 }
 
-/*@brief     搜索图顶点
- *@param[in] m 图实例
- *@param[in] v 图顶点实例
- *@retval    图顶点实例
+/*@brief 搜索图顶点
+ *@param m 图实例
+ *@param v 图顶点实例
+ *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_search_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
@@ -179,9 +179,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_search_v(app_sys_map_dlm_t *m, app_sys_map_d
     return NULL;
 }
 
-/*@brief     插入图顶点
- *@param[in] m 图实例
- *@param[in] v 图顶点实例
+/*@brief 插入图顶点
+ *@param m 图实例
+ *@param v 图顶点实例
  */
 void app_sys_map_dlm_insert_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
@@ -190,19 +190,19 @@ void app_sys_map_dlm_insert_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
        app_sys_list_dll_ainsert(&m->set, NULL, &v->buddy);
 }
 
-/*@brief     删除图顶点
- *@param[in] m 图实例
- *@param[in] v 图顶点实例
+/*@brief 删除图顶点
+ *@param m 图实例
+ *@param v 图顶点实例
  */
 void app_sys_map_dlm_remove_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
 {
     app_sys_list_dll_remove(&m->set, &v->buddy);
 }
 
-/*@brief     搜索图边
- *@param[in] v_i 图顶点实例
- *@param[in] v_o 图顶点实例
- *@retval    图边实例
+/*@brief 搜索图边
+ *@param v_i 图顶点实例
+ *@param v_o 图顶点实例
+ *@retval 图边实例
  */
 app_sys_map_dle_t * app_sys_map_dlm_search_e(app_sys_map_dlv_t *v_i, app_sys_map_dlv_t *v_o)
 {
@@ -224,8 +224,8 @@ app_sys_map_dle_t * app_sys_map_dlm_search_e(app_sys_map_dlv_t *v_i, app_sys_map
     return NULL;
 }
 
-/*@brief     插入图边
- *@param[in] e 图边实例
+/*@brief 插入图边
+ *@param e 图边实例
  */
 void app_sys_map_dlm_insert_e(app_sys_map_dle_t *e)
 {
@@ -240,8 +240,8 @@ void app_sys_map_dlm_insert_e(app_sys_map_dle_t *e)
     // app_sys_list_dll_ainsert(&e->v_o->e_set_i, NULL, &e->e_item_i);
 }
 
-/*@brief     删除图边
- *@param[in] e 图顶点实例
+/*@brief 删除图边
+ *@param e 图顶点实例
  */
 void app_sys_map_dlm_remove_e(app_sys_map_dle_t *e)
 {
@@ -251,8 +251,8 @@ void app_sys_map_dlm_remove_e(app_sys_map_dle_t *e)
     app_sys_list_dll_remove(&e->v_o->e_set_i, &e->e_item_i);
 }
 
-/*@brief     访问图所有顶点
- *paramm[in] m 图实例
+/*@brief 访问图所有顶点
+ *@param m 图实例
  */
 void app_sys_map_dlm_visit_all(app_sys_map_dlm_t *m)
 {
@@ -292,9 +292,9 @@ void app_sys_map_dlm_visit_all(app_sys_map_dlm_t *m)
     m->visit(NULL, NULL, app_sys_log_line());
 }
 
-/*@brief  获得图顶点实例索引
- *@param[in] m 图实例
- *@param[in] v 图顶点实例
+/*@brief 获得图顶点实例索引
+ *@param m 图实例
+ *@param v 图顶点实例
  *@retval 图顶点实例索引
  */
 uint32_t app_sys_map_dlm_idx_from_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
@@ -310,9 +310,9 @@ uint32_t app_sys_map_dlm_idx_from_v(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v)
     return cnt;
 }
 
-/*@brief  获得图顶点实例
- *@param[in] m   图实例
- *@param[in] idx 图顶点实例索引
+/*@brief 获得图顶点实例
+ *@param m   图实例
+ *@param idx 图顶点实例索引
  *@retval 图顶点实例
  */
 app_sys_map_dlv_t * app_sys_map_dlm_idx_to_v(app_sys_map_dlm_t *m, uint32_t idx)
@@ -330,9 +330,9 @@ app_sys_map_dlv_t * app_sys_map_dlm_idx_to_v(app_sys_map_dlm_t *m, uint32_t idx)
     return NULL;
 }
 
-/*@brief     获得图顶点实例数量
- *@param[in] m 图实例
- *@retval    图顶点实例数量
+/*@brief 获得图顶点实例数量
+ *@param m 图实例
+ *@retval 图顶点实例数量
  */
 uint32_t app_sys_map_dlv_num(app_sys_map_dlm_t *m)
 {
@@ -345,10 +345,10 @@ uint32_t app_sys_map_dlv_num(app_sys_map_dlm_t *m)
 
 /* 基本图论扩展 */
 
-/*@brief     深度优先搜索
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .stack, .record)
+/*@brief 深度优先搜索
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .stack, .record)
  */
 bool app_sys_map_dlm_first_d(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys_map_dlm_args_t *args)
 {
@@ -393,10 +393,10 @@ bool app_sys_map_dlm_first_d(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys
     return true;
 }
 
-/*@brief     广度优先搜索
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .queue, .record)
+/*@brief 广度优先搜索
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .queue, .record)
  */
 bool app_sys_map_dlm_first_b(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys_map_dlm_args_t *args)
 {
@@ -439,10 +439,10 @@ bool app_sys_map_dlm_first_b(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys
     return true;
 }
 
-/*@brief     迪杰斯特拉最短路径搜索
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .v_path, .record, .e_w_ary, .e_w_max, .e_w_cb)
+/*@brief 迪杰斯特拉最短路径搜索
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .v_path, .record, .e_w_ary, .e_w_max, .e_w_cb)
  */
 void app_sys_map_dlm_dijkstra(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys_map_dlm_args_t *args)
 {
@@ -524,10 +524,10 @@ void app_sys_map_dlm_dijkstra(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sy
     }
 }
 
-/*@brief     贝尔曼弗德最短路径搜索
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .v_path, .e_w_ary, .e_w_max, .e_w_cb)
+/*@brief 贝尔曼弗德最短路径搜索
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .v_path, .e_w_ary, .e_w_max, .e_w_cb)
  */
 bool app_sys_map_dlm_bellmanford(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app_sys_map_dlm_args_t *args)
 {
@@ -617,9 +617,9 @@ bool app_sys_map_dlm_bellmanford(app_sys_map_dlm_t *m, app_sys_map_dlv_t *v, app
     return true;
 }
 
-/*@brief     弗洛伊德最短路径搜索
- *@param[in] m 图实例
- *@param[in] args(.v_cnt, .w_path, .e_w_max, .e_w_mat, .e_w_cb)
+/*@brief 弗洛伊德最短路径搜索
+ *@param m 图实例
+ *@param args(.v_cnt, .w_path, .e_w_max, .e_w_mat, .e_w_cb)
  */
 void app_sys_map_dlm_floyd(app_sys_map_dlm_t *m, app_sys_map_dlm_args_t *args)
 {
@@ -673,10 +673,10 @@ void app_sys_map_dlm_floyd(app_sys_map_dlm_t *m, app_sys_map_dlm_args_t *args)
     }
 }
 
-/*@brief     普利姆最小生成树
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .record, .e_w_max, .e_w_mat_t, .e_w_mat, .e_w_cb)
+/*@brief 普利姆最小生成树
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .record, .e_w_max, .e_w_mat_t, .e_w_mat, .e_w_cb)
  */
 void app_sys_map_dlm_prim(app_sys_map_dlm_t *m, app_sys_map_dlm_args_t *args)
 {
@@ -754,10 +754,10 @@ void app_sys_map_dlm_prim(app_sys_map_dlm_t *m, app_sys_map_dlm_args_t *args)
     }
 }
 
-/*@brief     凯斯特拉最小生成树
- *@param[in] m 图实例
- *@param[in] v 起始图顶点实例
- *@param[in] args(.v_cnt, .record, .e_w_max, .e_w_mat_t, .e_w_mat, .set_s, .set_p, .e_w_cb)
+/*@brief 凯斯特拉最小生成树
+ *@param m 图实例
+ *@param v 起始图顶点实例
+ *@param args(.v_cnt, .record, .e_w_max, .e_w_mat_t, .e_w_mat, .set_s, .set_p, .e_w_cb)
  */
 void app_sys_map_dlm_kruskal(app_sys_map_dlm_t *m, app_sys_map_dlm_args_t *args)
 {

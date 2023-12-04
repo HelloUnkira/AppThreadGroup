@@ -14,9 +14,9 @@ static app_mutex_t                     app_module_remind_matter_mutex = {0};
 static app_module_remind_item_t        app_module_remind_matter_item[APP_MODULE_REMIND_MATTER_MAX] = {0};
 static app_module_remind_matter_info_t app_module_remind_matter_info[APP_MODULE_REMIND_MATTER_MAX] = {0};
 
-/*@brief      提醒组是否为提醒事项组
- *@param[out] remind_group 提醒组
- *@retval     是否为事项组
+/*@brief 提醒组是否为提醒事项组
+ *@param remind_group 提醒组
+ *@retval 是否为事项组
  */
 bool app_module_remind_matter_group_check(uint32_t remind_group)
 {
@@ -51,9 +51,9 @@ void app_module_remind_matter_array_unlock(void)
     app_mutex_process(&app_module_remind_matter_mutex, app_mutex_give);
 }
 
-/*@brief      提醒事项列表
- *@param[out] matter_item 提醒事项列表
- *@param[out] matter_info 提醒事项信息列表
+/*@brief 提醒事项列表
+ *@param matter_item 提醒事项列表
+ *@param matter_info 提醒事项信息列表
  */
 void app_module_remind_matter_array(app_module_remind_item_t **matter_item, app_module_remind_matter_info_t **matter_info)
 {

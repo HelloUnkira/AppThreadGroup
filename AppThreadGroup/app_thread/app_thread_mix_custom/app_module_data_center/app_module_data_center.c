@@ -42,9 +42,9 @@ static const app_sys_ext_mem_src_t * app_module_data_center_find_ext_src_by_type
     return NULL;
 }
 
-/*@brief    更换目标数据类型并锁定数据中心
- *param[in] type 数据中心类型(app_module_data_center_src_t(type))
- *@retval   数据中心的缓存地址
+/*@brief 更换目标数据类型并锁定数据中心
+ *@param type 数据中心类型(app_module_data_center_src_t(type))
+ *@retval 数据中心的缓存地址
  */
 app_module_data_center_src_t * app_module_data_center_take(uint32_t type)
 {
@@ -100,8 +100,8 @@ void app_module_data_center_reflush(void)
     APP_SYS_LOG_INFO("data center cache unhit:%d", app_module_data_center_cache.cnt_unhit);
 }
 
-/*@brief     回收数据中心资源
- *@param[in] force 强制回收数据中心资源(不建议使用)
+/*@brief 回收数据中心资源
+ *@param force 强制回收数据中心资源(不建议使用)
  *           不建议使用,这会导致非正常的逻辑
  */
 void app_module_data_center_recycle(bool force)

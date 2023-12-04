@@ -74,17 +74,17 @@ static const uint32_t app_module_clock_update_cb_size = app_sys_arr_len(app_modu
 
 /*  */
 
-/*@brief     一类时钟空回调(占位回调,防止优化禁用)
- *@param[in] clock 时钟实例
+/*@brief 一类时钟空回调(占位回调,防止优化禁用)
+ *@param clock 时钟实例
  */
 void app_module_clock_cb1_empty(app_module_clock_t clock[1])
 {
 }
 
-/*@brief     二类时钟空回调(占位回调,防止优化禁用)
- *@param[in] last_clock 时钟实例
- *@param[in] last_clock 时钟实例
- *@param[in] event      时钟事件
+/*@brief 二类时钟空回调(占位回调,防止优化禁用)
+ *@param last_clock 时钟实例
+ *@param last_clock 时钟实例
+ *@param event      时钟事件
  */
 void app_module_clock_cb2_empty(app_module_clock_t clock[2], uint32_t event)
 {

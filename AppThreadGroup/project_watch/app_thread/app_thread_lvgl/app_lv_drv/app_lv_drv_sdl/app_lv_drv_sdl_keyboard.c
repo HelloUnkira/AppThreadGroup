@@ -9,7 +9,7 @@
 static uint32_t app_lv_keyboard_key;
 static lv_indev_state_t app_lv_keyboard_state;
 
-/*@brief  SDL键盘事件转lvgl按键事件组
+/*@brief SDL键盘事件转lvgl按键事件组
  *@retval 返回lvgl按键事件
  */
 static uint32_t app_lv_keyboard_lvgl_key(void)

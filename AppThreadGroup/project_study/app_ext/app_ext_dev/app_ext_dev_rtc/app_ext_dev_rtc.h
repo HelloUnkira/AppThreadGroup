@@ -17,8 +17,8 @@ typedef struct {
     void (*irq_cb)(void);
 } app_dev_rtc_data_t;
 
-/*@brief     rtc设备就绪
- *@param[in] driver 设备实例
+/*@brief rtc设备就绪
+ *@param driver 设备实例
  */
 static inline void app_dev_rtc_ready(app_dev_t *driver)
 {
@@ -28,9 +28,9 @@ static inline void app_dev_rtc_ready(app_dev_t *driver)
     }
 }
 
-/*@brief     rtc设备事件通报回调注册
- *@param[in] driver 设备实例
- *@param[in] cb     事件通报回调
+/*@brief rtc设备事件通报回调注册
+ *@param driver 设备实例
+ *@param cb     事件通报回调
  */
 static inline void app_dev_rtc_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
@@ -40,9 +40,9 @@ static inline void app_dev_rtc_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
     }
 }
 
-/*@brief     rtc设备事件通报开关
- *@param[in] driver 设备实例
- *@param[in] flag   true:开启事件通报;false:关闭事件通报
+/*@brief rtc设备事件通报开关
+ *@param driver 设备实例
+ *@param flag   true:开启事件通报;false:关闭事件通报
  */
 static inline void app_dev_rtc_irq_switch(app_dev_t *driver, bool flag)
 {
@@ -52,8 +52,8 @@ static inline void app_dev_rtc_irq_switch(app_dev_t *driver, bool flag)
     }
 }
 
-/*@brief     rtc设备获取utc
- *@param[in] driver 设备实例
+/*@brief rtc设备获取utc
+ *@param driver 设备实例
  */
 static inline void app_dev_rtc_get_utc(app_dev_t *driver, uint64_t *utc)
 {
@@ -63,8 +63,8 @@ static inline void app_dev_rtc_get_utc(app_dev_t *driver, uint64_t *utc)
     }
 }
 
-/*@brief     rtc设备设置utc
- *@param[in] driver 设备实例
+/*@brief rtc设备设置utc
+ *@param driver 设备实例
  */
 static inline void app_dev_rtc_set_utc(app_dev_t *driver, uint64_t *utc)
 {

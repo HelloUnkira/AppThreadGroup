@@ -18,8 +18,8 @@ static const uintptr_t app_sys_mem_tlsf_blk_hrd = (uintptr_t)(sizeof(uintptr_t))
 /*@breif     类似内置功能(__bulitin_ffs)
  *           __bulitin_ffs:从低位起,第一个1的索引+1,为0则返回0
  *           此处的语义有变化,因为明确参数不为0,这里索引不+1
- *@param[in] val 解算值
- *@retval    解算值
+ *@param val 解算值
+ *@retval 解算值
  */
 static inline uintptr_t app_sys_mem_tlsf_ffs(uintptr_t val)
 {
@@ -34,8 +34,8 @@ static inline uintptr_t app_sys_mem_tlsf_ffs(uintptr_t val)
 /*@breif     类似内置功能(__bulitin_fls)
  *           __bulitin_fls:从高位起,第一个1的位置+1,为0则返回0
  *           此处的语义有变化,因为明确参数不为0,这里索引不+1
- *@param[in] val 解算值
- *@retval    解算值
+ *@param val 解算值
+ *@retval 解算值
  */
 static inline uintptr_t app_sys_mem_tlsf_fls(uintptr_t val)
 {
@@ -48,9 +48,9 @@ static inline uintptr_t app_sys_mem_tlsf_fls(uintptr_t val)
     APP_SYS_ASSERT(false);
 }
 
-/*@brief     设置block字段
- *@param[in] block 块实例
- *@param[in] value block字段
+/*@brief 设置block字段
+ *@param block 块实例
+ *@param value block字段
  */
 static inline void app_sys_mem_tlsf_block_size_set(app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -60,9 +60,9 @@ static inline void app_sys_mem_tlsf_block_size_set(app_sys_mem_tlsf_block_t *blo
     block->size_free = (block->size_free & mask_free) | (mask_size & size);
 }
 
-/*@brief     设置block字段
- *@param[in] block 块实例
- *@param[in] value block字段
+/*@brief 设置block字段
+ *@param block 块实例
+ *@param value block字段
  */
 static inline void app_sys_mem_tlsf_block_free_curr_set(app_sys_mem_tlsf_block_t *block, uintptr_t free)
 {
@@ -71,9 +71,9 @@ static inline void app_sys_mem_tlsf_block_free_curr_set(app_sys_mem_tlsf_block_t
     block->size_free = free ? (block->size_free | mask_free) : (block->size_free & ~mask_free);
 }
 
-/*@brief     设置block字段
- *@param[in] block 块实例
- *@param[in] value block字段
+/*@brief 设置block字段
+ *@param block 块实例
+ *@param value block字段
  */
 static inline void app_sys_mem_tlsf_block_free_prev_set(app_sys_mem_tlsf_block_t *block, uintptr_t free)
 {
@@ -82,9 +82,9 @@ static inline void app_sys_mem_tlsf_block_free_prev_set(app_sys_mem_tlsf_block_t
     block->size_free = free ? (block->size_free | mask_free) : (block->size_free & ~mask_free);
 }
 
-/*@brief     设置block字段
- *@param[in] block 二级隔离策略分配堆块实例
- *@retval    block字段
+/*@brief 设置block字段
+ *@param block 二级隔离策略分配堆块实例
+ *@retval block字段
  */
 static inline uintptr_t app_sys_mem_tlsf_block_size_get(app_sys_mem_tlsf_block_t *block)
 {
@@ -93,9 +93,9 @@ static inline uintptr_t app_sys_mem_tlsf_block_size_get(app_sys_mem_tlsf_block_t
     return (block->size_free & mask_size);
 }
 
-/*@brief     设置block字段
- *@param[in] block 二级隔离策略分配堆块实例
- *@retval    block字段
+/*@brief 设置block字段
+ *@param block 二级隔离策略分配堆块实例
+ *@retval block字段
  */
 static inline uintptr_t app_sys_mem_tlsf_block_free_curr_get(app_sys_mem_tlsf_block_t *block)
 {
@@ -103,9 +103,9 @@ static inline uintptr_t app_sys_mem_tlsf_block_free_curr_get(app_sys_mem_tlsf_bl
     return (block->size_free & mask_free) != 0;
 }
 
-/*@brief     设置block字段
- *@param[in] block 二级隔离策略分配堆块实例
- *@retval    block字段
+/*@brief 设置block字段
+ *@param block 二级隔离策略分配堆块实例
+ *@retval block字段
  */
 static inline uintptr_t app_sys_mem_tlsf_block_free_prev_get(app_sys_mem_tlsf_block_t *block)
 {
@@ -113,37 +113,37 @@ static inline uintptr_t app_sys_mem_tlsf_block_free_prev_get(app_sys_mem_tlsf_bl
     return (block->size_free & mask_free) != 0;
 }
 
-/*@brief     地址转换block到addr
- *@param[in] block 块实例
- *@retval    内存地址
+/*@brief 地址转换block到addr
+ *@param block 块实例
+ *@retval 内存地址
  */
 static inline void * app_sys_mem_tlsf_block_to_ptr(app_sys_mem_tlsf_block_t *block)
 {
     return (void *)((uintptr_t)block + app_sys_mem_tlsf_blk_ofs);
 }
 
-/*@brief     地址转换addr到block
- *@param[in] ptr 内存地址
- *@retval    块实例
+/*@brief 地址转换addr到block
+ *@param ptr 内存地址
+ *@retval 块实例
  */
 static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_ptr_to_block(void *ptr)
 {
     return (app_sys_mem_tlsf_block_t *)((uintptr_t)ptr - app_sys_mem_tlsf_blk_ofs);
 }
 
-/*@brief     地址转换addr到block(带区域大小)
- *@param[in] ptr  内存地址
- *@param[in] size 带区域大小
- *@retval    块实例
+/*@brief 地址转换addr到block(带区域大小)
+ *@param ptr  内存地址
+ *@param size 带区域大小
+ *@retval 块实例
  */
 static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_ptr_to_block_with_size(void *ptr, uintptr_t size)
 {
     return (app_sys_mem_tlsf_block_t *)((uintptr_t)ptr + size);
 }
 
-/*@brief     获得前一块
- *@param[in] block 块实例
- *@retval    块实例
+/*@brief 获得前一块
+ *@param block 块实例
+ *@retval 块实例
  */
 static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_prev_get(app_sys_mem_tlsf_block_t *block)
 {
@@ -151,9 +151,9 @@ static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_prev_get(app_sys
     return block->prev_tail;
 }
 
-/*@brief     获得后一块
- *@param[in] block 块实例
- *@retval    块实例
+/*@brief 获得后一块
+ *@param block 块实例
+ *@retval 块实例
  */
 static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_next_get(app_sys_mem_tlsf_block_t *block)
 {
@@ -166,9 +166,9 @@ static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_next_get(app_sys
     return app_sys_mem_tlsf_ptr_to_block_with_size(ptr, size - app_sys_mem_tlsf_blk_hrd);
 }
 
-/*@brief     块关联下一个块
- *@param[in] block 块实例
- *@retval    块实例
+/*@brief 块关联下一个块
+ *@param block 块实例
+ *@retval 块实例
  */
 static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_link_next(app_sys_mem_tlsf_block_t *block)
 {
@@ -177,10 +177,10 @@ static inline app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_link_next(app_sy
     return next;
 }
 
-/*@brief     标记块空闲或者使用状态
- *@param[in] block 块实例
- *@param[in] value block字段
- *@retval    块实例
+/*@brief 标记块空闲或者使用状态
+ *@param block 块实例
+ *@param value block字段
+ *@retval 块实例
  */
 static inline void app_sys_mem_tlsf_block_mark(app_sys_mem_tlsf_block_t *block, uintptr_t free)
 {
@@ -191,10 +191,10 @@ static inline void app_sys_mem_tlsf_block_mark(app_sys_mem_tlsf_block_t *block, 
     app_sys_mem_tlsf_block_free_curr_set(block, free);
 }
 
-/*@brief     调整分配大小使之与字大小一致,不能更小于内部最小值
- *@param[in] size  字节
- *@param[in] align 对齐
- *@retval    字对齐
+/*@brief 调整分配大小使之与字大小一致,不能更小于内部最小值
+ *@param size  字节
+ *@param align 对齐
+ *@retval 字对齐
  */
 static inline uintptr_t app_sys_mem_tlsf_block_size_align(uintptr_t size, uintptr_t align)
 {
@@ -205,10 +205,10 @@ static inline uintptr_t app_sys_mem_tlsf_block_size_align(uintptr_t size, uintpt
     return size_align;
 }
 
-/*@brief     计算大小的映射值
- *@param[in] size 字节
- *@param[in] fl_i 一级索引
- *@param[in] sl_i 二级索引
+/*@brief 计算大小的映射值
+ *@param size 字节
+ *@param fl_i 一级索引
+ *@param sl_i 二级索引
  */
 static void app_sys_mem_tlsf_map(uintptr_t size, uintptr_t *fl_i, uintptr_t *sl_i)
 {
@@ -229,10 +229,10 @@ static void app_sys_mem_tlsf_map(uintptr_t size, uintptr_t *fl_i, uintptr_t *sl_
     APP_SYS_LOG_DEBUG("size:%d, fl:%d, sl:%d", size, fl, sl);
 }
 
-/*@brief     计算大小的映射值
- *@param[in] size 字节
- *@param[in] fl_i 一级索引
- *@param[in] sl_i 二级索引
+/*@brief 计算大小的映射值
+ *@param size 字节
+ *@param fl_i 一级索引
+ *@param sl_i 二级索引
  */
 static void app_sys_mem_tlsf_map_find(uintptr_t size, uintptr_t *fl_i, uintptr_t *sl_i)
 {
@@ -241,11 +241,11 @@ static void app_sys_mem_tlsf_map_find(uintptr_t size, uintptr_t *fl_i, uintptr_t
     app_sys_mem_tlsf_map(size, fl_i, sl_i);
 }
 
-/*@brief     查找到合适块
- *@param[in] control 控制块
- *@param[in] fl_i    一级索引
- *@param[in] sl_i    二级索引
- *@retval    块地址
+/*@brief 查找到合适块
+ *@param control 控制块
+ *@param fl_i    一级索引
+ *@param sl_i    二级索引
+ *@retval 块地址
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_find(app_sys_mem_tlsf_control_t *control, uintptr_t *fl_i, uintptr_t *sl_i)
 {
@@ -272,11 +272,11 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_find(app_sys_mem_tlsf_c
     return control->block[fl][sl];
 }
 
-/*@brief     移除块
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] fl      一级索引
- *@param[in] sl      二级索引
+/*@brief 移除块
+ *@param control 控制块
+ *@param block   块
+ *@param fl      一级索引
+ *@param sl      二级索引
  */
 static void app_sys_mem_tlsf_block_del_free(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t fl, uintptr_t sl)
 {
@@ -297,11 +297,11 @@ static void app_sys_mem_tlsf_block_del_free(app_sys_mem_tlsf_control_t *control,
     }
 }
 
-/*@brief     添加块
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] fl      一级索引
- *@param[in] sl      二级索引
+/*@brief 添加块
+ *@param control 控制块
+ *@param block   块
+ *@param fl      一级索引
+ *@param sl      二级索引
  */
 static void app_sys_mem_tlsf_block_add_free(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t fl, uintptr_t sl)
 {
@@ -320,9 +320,9 @@ static void app_sys_mem_tlsf_block_add_free(app_sys_mem_tlsf_control_t *control,
     control->bitmap_fl |= (uintptr_t)1 << fl;
 }
 
-/*@brief     移除块
- *@param[in] control 控制块
- *@param[in] block   块
+/*@brief 移除块
+ *@param control 控制块
+ *@param block   块
  */
 static void app_sys_mem_tlsf_block_del(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block)
 {
@@ -331,9 +331,9 @@ static void app_sys_mem_tlsf_block_del(app_sys_mem_tlsf_control_t *control, app_
     app_sys_mem_tlsf_block_del_free(control, block, fl, sl);
 }
 
-/*@brief     添加块
- *@param[in] control 控制块
- *@param[in] block   块
+/*@brief 添加块
+ *@param control 控制块
+ *@param block   块
  */
 static void app_sys_mem_tlsf_block_add(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block)
 {
@@ -342,19 +342,19 @@ static void app_sys_mem_tlsf_block_add(app_sys_mem_tlsf_control_t *control, app_
     app_sys_mem_tlsf_block_add_free(control, block, fl, sl);
 }
 
-/*@brief     检查块是否可分裂
- *@param[in] block 块
- *@param[in] size  尺寸
+/*@brief 检查块是否可分裂
+ *@param block 块
+ *@param size  尺寸
  */
 static bool app_sys_mem_tlsf_block_split_check(app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
     return app_sys_mem_tlsf_block_size_get(block) > sizeof(app_sys_mem_tlsf_block_t) + size;
 }
 
-/*@brief     块分裂
- *@param[in] block 块
- *@param[in] size  尺寸
- *@retval    新的块
+/*@brief 块分裂
+ *@param block 块
+ *@param size  尺寸
+ *@retval 新的块
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_split(app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -377,10 +377,10 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_split(app_sys_mem_tlsf_
     return block_remain;
 }
 
-/*@brief     前一块吸收目标块
- *@param[in] block_prev 前一块
- *@param[in] block      块
- *@retval    新的块
+/*@brief 前一块吸收目标块
+ *@param block_prev 前一块
+ *@param block      块
+ *@retval 新的块
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_absorb(app_sys_mem_tlsf_block_t *block_prev, app_sys_mem_tlsf_block_t *block)
 {
@@ -393,10 +393,10 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_absorb(app_sys_mem_tlsf
     return block_prev;
 }
 
-/*@brief     合并前一块
- *@param[in] control 控制块
- *@param[in] block   块
- *@retval    新的块
+/*@brief 合并前一块
+ *@param control 控制块
+ *@param block   块
+ *@retval 新的块
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_merge_prev(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block)
 {
@@ -410,10 +410,10 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_merge_prev(app_sys_mem_
     return block;
 }
 
-/*@brief     合并后一块
- *@param[in] control 控制块
- *@param[in] block   块
- *@retval    新的块
+/*@brief 合并后一块
+ *@param control 控制块
+ *@param block   块
+ *@retval 新的块
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_merge_next(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block)
 {
@@ -428,10 +428,10 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_merge_next(app_sys_mem_
     return block;
 }
 
-/*@brief     块裁剪并标记空闲
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] size    尺寸
+/*@brief 块裁剪并标记空闲
+ *@param control 控制块
+ *@param block   块
+ *@param size    尺寸
  */
 static void app_sys_mem_tlsf_block_trim_free(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -446,10 +446,10 @@ static void app_sys_mem_tlsf_block_trim_free(app_sys_mem_tlsf_control_t *control
     }
 }
 
-/*@brief     块裁剪并标记使用
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] size    尺寸
+/*@brief 块裁剪并标记使用
+ *@param control 控制块
+ *@param block   块
+ *@param size    尺寸
  */
 static void app_sys_mem_tlsf_block_trim_used(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -464,10 +464,10 @@ static void app_sys_mem_tlsf_block_trim_used(app_sys_mem_tlsf_control_t *control
     }
 }
 
-/*@brief     块裁剪并标记空闲
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] size    尺寸
+/*@brief 块裁剪并标记空闲
+ *@param control 控制块
+ *@param block   块
+ *@param size    尺寸
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_trim_free_lead(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -483,10 +483,10 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_trim_free_lead(app_sys_
     return block_remain;
 }
 
-/*@brief     定位空闲块
- *@param[in] control 控制块
- *@param[in] size    尺寸
- *@retval    新的块
+/*@brief 定位空闲块
+ *@param control 控制块
+ *@param size    尺寸
+ *@retval 新的块
  */
 static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_free_locate(app_sys_mem_tlsf_control_t *control, uintptr_t size)
 {
@@ -508,11 +508,11 @@ static app_sys_mem_tlsf_block_t * app_sys_mem_tlsf_block_free_locate(app_sys_mem
     return block;
 }
 
-/*@brief     转化空闲块
- *@param[in] control 控制块
- *@param[in] block   块
- *@param[in] size    尺寸
- *@retval    内存地址
+/*@brief 转化空闲块
+ *@param control 控制块
+ *@param block   块
+ *@param size    尺寸
+ *@retval 内存地址
  */
 static void * app_sys_mem_tlsf_block_free_convert(app_sys_mem_tlsf_control_t *control, app_sys_mem_tlsf_block_t *block, uintptr_t size)
 {
@@ -529,8 +529,8 @@ static void * app_sys_mem_tlsf_block_free_convert(app_sys_mem_tlsf_control_t *co
     return ptr;
 }
 
-/*@brief     就绪控制块
- *@param[in] control 控制块
+/*@brief 就绪控制块
+ *@param control 控制块
  */
 static void app_sys_mem_tlsf_control_ready(app_sys_mem_tlsf_control_t *control)
 {
@@ -546,9 +546,9 @@ static void app_sys_mem_tlsf_control_ready(app_sys_mem_tlsf_control_t *control)
          control->block[idx1][idx2] = &control->block_none;
 }
 
-/*@brief     二级隔离策略分配堆释放内存
- *@param[in] mem_tlsf 二级隔离策略分配堆实例
- *@param[in] pointer  内存地址
+/*@brief 二级隔离策略分配堆释放内存
+ *@param mem_tlsf 二级隔离策略分配堆实例
+ *@param pointer  内存地址
  */
 void app_sys_mem_tlsf_free(app_sys_mem_tlsf_t *mem_tlsf, void *pointer)
 {
@@ -570,10 +570,10 @@ void app_sys_mem_tlsf_free(app_sys_mem_tlsf_t *mem_tlsf, void *pointer)
     app_sys_mem_tlsf_block_add(control, block);
 }
 
-/*@brief     二级隔离策略分配堆申请内存
- *@param[in] mem_tlsf 二级隔离策略分配堆实例
- *@param[in] size     字节大小
- *@retval    内存地址
+/*@brief 二级隔离策略分配堆申请内存
+ *@param mem_tlsf 二级隔离策略分配堆实例
+ *@param size     字节大小
+ *@retval 内存地址
  */
 void * app_sys_mem_tlsf_alloc(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size)
 {
@@ -597,11 +597,11 @@ void * app_sys_mem_tlsf_alloc(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size)
     return pointer;
 }
 
-/*@brief     二级隔离策略分配堆申请内存
- *@param[in] mem_olsf 一级隔离策略分配堆实例
- *@param[in] size     字节大小
- *@param[in] align    指定字节对齐(不小于平台字节对齐, 2的指数)
- *@retval    内存地址
+/*@brief 二级隔离策略分配堆申请内存
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param size     字节大小
+ *@param align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@retval 内存地址
  */
 void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size, uintptr_t align)
 {
@@ -657,10 +657,10 @@ void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size
     return pointer;
 }
 
-/*@brief     二级隔离策略分配堆实例初始化
- *@param[in] addr     内存地址
- *@param[in] size     字节大小
- *@retval    返回分配器(分配器在内存头部)
+/*@brief 二级隔离策略分配堆实例初始化
+ *@param addr     内存地址
+ *@param size     字节大小
+ *@retval 返回分配器(分配器在内存头部)
  */
 app_sys_mem_tlsf_t * app_sys_mem_tlsf_ready(void *addr, uintptr_t size)
 {
@@ -707,8 +707,8 @@ app_sys_mem_tlsf_t * app_sys_mem_tlsf_ready(void *addr, uintptr_t size)
     return control;
 }
 
-/*@brief     二级隔离策略分配堆内存布局使用
- *@param[in] mem_olsf 二级隔离策略分配堆实例
+/*@brief 二级隔离策略分配堆内存布局使用
+ *@param mem_olsf 二级隔离策略分配堆实例
  */
 void app_sys_mem_tlsf_check(app_sys_mem_tlsf_t *mem_tlsf)
 {

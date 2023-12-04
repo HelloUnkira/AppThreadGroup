@@ -9,11 +9,11 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     初始化slab分配器
- *@param[in] mem_slab slab分配器实例
- *@param[in] size     分配单元块大小
- *@param[in] num      分配单元块数量
- *@param[in] debounce 分配单元块数量抖动
+/*@brief 初始化slab分配器
+ *@param mem_slab slab分配器实例
+ *@param size     分配单元块大小
+ *@param num      分配单元块数量
+ *@param debounce 分配单元块数量抖动
  */
 void app_sys_mem_slab_ready(app_sys_mem_slab_t *mem_slab, uintptr_t size, uint32_t num, uint32_t debounce)
 {
@@ -30,9 +30,9 @@ void app_sys_mem_slab_ready(app_sys_mem_slab_t *mem_slab, uintptr_t size, uint32
     mem_slab->debounce  = debounce;
 }
 
-/*@brief     向slab分配器获取一个块
- *@param[in] mem_slab slab分配器实例
- *@retval    新的块
+/*@brief 向slab分配器获取一个块
+ *@param mem_slab slab分配器实例
+ *@retval 新的块
  */
 void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab)
 {
@@ -83,8 +83,8 @@ void * app_sys_mem_slab_alloc(app_sys_mem_slab_t *mem_slab)
     return ptr;
 }
 
-/*@brief     向slab分配器归还一个块
- *@param[in] ptr 旧的块
+/*@brief 向slab分配器归还一个块
+ *@param ptr 旧的块
  */
 void app_sys_mem_slab_free(app_sys_mem_slab_t *mem_slab, void *ptr)
 {

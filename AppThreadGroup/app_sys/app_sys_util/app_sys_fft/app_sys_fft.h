@@ -9,8 +9,8 @@ typedef struct {
     int8_t    flag;     //+1:fft,-1:ifft
 } app_sys_fft_t;
 
-/*@brief     快速傅里叶变换
- *@param[in] fft 傅里叶变换数据实例
+/*@brief 快速傅里叶变换
+ *@param fft 傅里叶变换数据实例
  */
 void app_sys_fft_run(app_sys_fft_t *fft);
 

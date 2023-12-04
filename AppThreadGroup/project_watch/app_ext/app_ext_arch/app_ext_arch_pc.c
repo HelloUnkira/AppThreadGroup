@@ -26,8 +26,8 @@ void app_arch_reset(void)
     while (true);
 }
 
-/*@brief     重启平台
- *@param[in] ms 延时时间(ms)
+/*@brief 重启平台
+ *@param ms 延时时间(ms)
  */
 void app_arch_reset_delay_ms(uint32_t ms)
 {

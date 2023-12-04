@@ -11,9 +11,9 @@
 #define   APP_MODULE_WORLD_TIME_TABLE_H
 #include "app_module_world_time_table.h"
 
-/*@brief     世界时间设置
- *@param[in] world_time 世界时间参数
- *@param[in] idx        世界时间索引
+/*@brief 世界时间设置
+ *@param world_time 世界时间参数
+ *@param idx        世界时间索引
  */
 void app_module_world_time_set(app_module_world_time_t *world_time, uint8_t idx)
 {
@@ -23,9 +23,9 @@ void app_module_world_time_set(app_module_world_time_t *world_time, uint8_t idx)
     app_module_data_center_give();
 }
 
-/*@brief      世界时间获取
- *@param[out] world_time 世界时间参数
- *@param[in]  idx        世界时间索引
+/*@brief 世界时间获取
+ *@param world_time 世界时间参数
+ *@param idx        世界时间索引
  */
 void app_module_world_time_get(app_module_world_time_t *world_time, uint8_t idx)
 {
@@ -35,9 +35,9 @@ void app_module_world_time_get(app_module_world_time_t *world_time, uint8_t idx)
     app_module_data_center_give();
 }
 
-/*@brief     获得时区通过城市索引号
- *@param[in] index 城市索引号
- *@retval    时区静态实例
+/*@brief 获得时区通过城市索引号
+ *@param index 城市索引号
+ *@retval 时区静态实例
  */
 const app_module_world_time_t * app_module_world_time_get_by_index(uint16_t index)
 {
@@ -47,9 +47,9 @@ const app_module_world_time_t * app_module_world_time_get_by_index(uint16_t inde
     return NULL;
 }
 
-/*@brief     获得时区通过城市代号
- *@param[in] city 城市代号
- *@retval    时区静态实例
+/*@brief 获得时区通过城市代号
+ *@param city 城市代号
+ *@retval 时区静态实例
  */
 const app_module_world_time_t * app_module_world_time_get_by_name(char *city)
 {
@@ -59,10 +59,10 @@ const app_module_world_time_t * app_module_world_time_get_by_name(char *city)
     return NULL;
 }
 
-/*@brief      转化世界协调时UTC到对应城市时间
- *@param[in]  world_time 时区静态实例
- *@param[in]  clock      时钟实例{.utc,}
- *@param[out] clock      时钟实例{...}
+/*@brief 转化世界协调时UTC到对应城市时间
+ *@param world_time 时区静态实例
+ *@param clock      时钟实例{.utc,}
+ *@param clock      时钟实例{...}
  */
 void app_module_world_time_change(app_module_clock_t *clock, const
                                   app_module_world_time_t *world_time)

@@ -12,9 +12,9 @@ typedef struct {
     uint8_t descript[APP_MODULE_REMIND_CALENDAR_DESCRIPT_MAX];
 } app_module_remind_calendar_info_t;
 
-/*@brief      提醒组是否为提醒日历组
- *@param[out] remind_group 提醒组
- *@retval     是否为日历组
+/*@brief 提醒组是否为提醒日历组
+ *@param remind_group 提醒组
+ *@retval 是否为日历组
  */
 bool app_module_remind_calendar_group_check(uint32_t remind_group);
 
@@ -30,9 +30,9 @@ void app_module_remind_calendar_array_lock(void);
  */
 void app_module_remind_calendar_array_unlock(void);
 
-/*@brief      提醒日历列表
- *@param[out] calendar_item 提醒日历列表
- *@param[out] calendar_info 提醒日历信息列表
+/*@brief 提醒日历列表
+ *@param calendar_item 提醒日历列表
+ *@param calendar_info 提醒日历信息列表
  */
 void app_module_remind_calendar_array(app_module_remind_item_t **calendar_item, app_module_remind_calendar_info_t **calendar_info);
 

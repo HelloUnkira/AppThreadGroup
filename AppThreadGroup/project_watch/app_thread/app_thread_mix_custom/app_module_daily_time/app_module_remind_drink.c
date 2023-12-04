@@ -12,8 +12,8 @@
 /* 时间表检查函数:app_module_daily_time_remind_drink_f */
 APP_MODULE_DAILY_TIME_F(app_module_daily_time_remind_drink_t, app_module_daily_time_remind_drink_f, 2);
 
-/*@brief     喝水提醒设置
- *@param[in] remind_drink 喝水提醒参数
+/*@brief 喝水提醒设置
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
 {
@@ -23,8 +23,8 @@ void app_module_remind_drink_set(app_module_remind_drink_t *remind_drink)
     app_module_data_center_give();
 }
 
-/*@brief      喝水提醒获取
- *@param[out] remind_drink 喝水提醒参数
+/*@brief 喝水提醒获取
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
 {
@@ -34,8 +34,8 @@ void app_module_remind_drink_get(app_module_remind_drink_t *remind_drink)
     app_module_data_center_give();
 }
 
-/*@brief      喝水提醒默认设置
- *@param[out] remind_drink 喝水提醒参数
+/*@brief 喝水提醒默认设置
+ *@param remind_drink 喝水提醒参数
  */
 void app_module_remind_drink_reset(app_module_remind_drink_t *remind_drink)
 {
@@ -93,8 +93,8 @@ void app_module_remind_drink_xmin_update(void)
     }
 }
 
-/*@brief     系统状态控制更新
- *@param[in] clock 时钟实例
+/*@brief 系统状态控制更新
+ *@param clock 时钟实例
  */
 void app_module_remind_drink_update(app_module_clock_t clock[1])
 {

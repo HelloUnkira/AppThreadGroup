@@ -15,11 +15,11 @@ static const uintptr_t app_sys_log_text_size = sizeof(app_sys_log_text);
 static const uintptr_t app_sys_log_info_size = sizeof(app_sys_log_text.info);
 
 /*@brief 加载一条日志(无锁,本地使用)
- *@param[in]  offset 偏移值
- *@param[in]  zone   日志总空间
- *@param[out] item   日志条目
- *@param[out] offset_new 更新后的偏移值
- *@retval     日志信息紊乱,需复位
+ *@param offset 偏移值
+ *@param zone   日志总空间
+ *@param item   日志条目
+ *@param offset_new 更新后的偏移值
+ *@retval 日志信息紊乱,需复位
  */
 static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset, uintptr_t zone, uintptr_t *offset_new)
 {
@@ -66,11 +66,11 @@ static bool app_sys_log_text_load_one(app_sys_log_item_t *item, uintptr_t offset
 }
 
 /*@brief 转储一条日志(无锁,本地使用)
- *@param[in]  offset 偏移值
- *@param[in]  zone   日志总空间
- *@param[in]  item   日志条目
- *@param[out] offset_new 更新后的偏移值
- *@retval     日志信息紊乱,需复位
+ *@param offset 偏移值
+ *@param zone   日志总空间
+ *@param item   日志条目
+ *@param offset_new 更新后的偏移值
+ *@retval 日志信息紊乱,需复位
  */
 static bool app_sys_log_text_dump_one(app_sys_log_item_t *item, uintptr_t offset, uintptr_t zone, uintptr_t *offset_new)
 {
@@ -234,13 +234,13 @@ void app_sys_log_text_ready(void)
         app_sys_log_text_reset();
 }
 
-/*@brief      日志追踪队列尾转入一段日志
- *@param[in]  text       日志文本
- *@param[in]  need_cover 覆盖式加入日志
+/*@brief 日志追踪队列尾转入一段日志
+ *@param text       日志文本
+ *@param need_cover 覆盖式加入日志
  *                       如果空间不足则会不断丢弃最旧的数据
  *                       直到空间完全释放也不能加入
  *                       或者可以加入新条目为止
- *@retval     成功或者失败
+ *@retval 成功或者失败
  */
 bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_LIMIT], bool need_cover)
 {
@@ -294,9 +294,9 @@ bool app_sys_log_text_dump(char text[APP_SYS_LOG_TEXT_LIMIT], bool need_cover)
     return true;
 }
 
-/*@brief      日志追踪队列头转出一段日志
- *@param[out] text 日志文本
- *@retval     成功或者失败
+/*@brief 日志追踪队列头转出一段日志
+ *@param text 日志文本
+ *@retval 成功或者失败
  */
 bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_LIMIT])
 {
@@ -322,9 +322,9 @@ bool app_sys_log_text_load(char text[APP_SYS_LOG_TEXT_LIMIT])
     return true;
 }
 
-/*@brief      日志追踪队列窥探一段日志(自动迭代到下一段日志)
- *@param[out] text 日志文本
- *@retval     成功或者失败
+/*@brief 日志追踪队列窥探一段日志(自动迭代到下一段日志)
+ *@param text 日志文本
+ *@retval 成功或者失败
  */
 bool app_sys_log_text_peek(char text[APP_SYS_LOG_TEXT_LIMIT])
 {
@@ -376,9 +376,9 @@ void app_sys_log_text_peek_reset(void)
     app_mutex_process(&app_sys_log_text_mutex, app_mutex_give);
 }
 
-/*@brief     日志持久化转接口
+/*@brief 日志持久化转接口
  *           这只是一个转接口,外界不可使用
- *@param[in] text 日志文本
+ *@param text 日志文本
  */
 void app_sys_log_text_persistent(char *text)
 {

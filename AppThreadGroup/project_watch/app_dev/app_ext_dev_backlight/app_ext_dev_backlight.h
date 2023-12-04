@@ -13,8 +13,8 @@ typedef struct {
     void *data;
 } app_dev_backlight_data_t;
 
-/*@brief     backlight设备打开
- *@param[in] driver 设备实例
+/*@brief backlight设备打开
+ *@param driver 设备实例
  */
 static inline void app_dev_backlight_open(app_dev_t *driver)
 {
@@ -24,8 +24,8 @@ static inline void app_dev_backlight_open(app_dev_t *driver)
     }
 }
 
-/*@brief     backlight设备关闭
- *@param[in] driver 设备实例
+/*@brief backlight设备关闭
+ *@param driver 设备实例
  */
 static inline void app_dev_backlight_close(app_dev_t *driver)
 {
@@ -35,9 +35,9 @@ static inline void app_dev_backlight_close(app_dev_t *driver)
     }
 }
 
-/*@brief     backlight设备更新占空比
- *@param[in] driver 设备实例
- *@param[in] duty_cycle 百分比振幅[0,100]
+/*@brief backlight设备更新占空比
+ *@param driver 设备实例
+ *@param duty_cycle 百分比振幅[0,100]
  */
 static inline void app_dev_backlight_update(app_dev_t *driver, uint8_t duty_cycle)
 {

@@ -23,10 +23,10 @@ typedef struct {
     /*  */
 } app_arithmetic_sport_t;
 
-/*@brief      运动流程处理
- *@param[out] sport  运动数据
- *@param[in]  frame  帧数据
- *@param[in]  length 帧数据实际数量
+/*@brief 运动流程处理
+ *@param sport  运动数据
+ *@param frame  帧数据
+ *@param length 帧数据实际数量
  */
 void app_arithmetic_sport_proc(app_arithmetic_sport_t *sport, int32_t frame[][3], uint8_t length);
 

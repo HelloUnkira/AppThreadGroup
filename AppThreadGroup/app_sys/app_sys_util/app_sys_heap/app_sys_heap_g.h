@@ -11,26 +11,26 @@ typedef struct {
     app_sys_heap_g_fc_t compare;
 } app_sys_heap_g_t;
 
-/*@brief     重置一个堆
- *@param[in] heap    堆实例
- *@param[in] arr     堆空间
- *@param[in] len     堆空间大小
- *@param[in] compare 比较语义
+/*@brief 重置一个堆
+ *@param heap    堆实例
+ *@param arr     堆空间
+ *@param len     堆空间大小
+ *@param compare 比较语义
  */
 void app_sys_heap_g_reset(app_sys_heap_g_t   *heap, void **arr, uint32_t len,
                           app_sys_heap_g_fc_t compare);
 
-/*@brief     节点入堆
- *@param[in] heap 堆实例
- *@param[in] ptr  堆节点地址
- *@retval    成功或失败
+/*@brief 节点入堆
+ *@param heap 堆实例
+ *@param ptr  堆节点地址
+ *@retval 成功或失败
  */
 bool app_sys_heap_g_push(app_sys_heap_g_t *heap, void *ptr);
 
-/*@brief      节点出堆
- *@param[in]  heap 堆实例
- *@param[out] ptr  堆节点地址
- *@retval     成功或失败
+/*@brief 节点出堆
+ *@param heap 堆实例
+ *@param ptr  堆节点地址
+ *@retval 成功或失败
  */
 bool app_sys_heap_g_pop(app_sys_heap_g_t *heap, void **ptr);
 

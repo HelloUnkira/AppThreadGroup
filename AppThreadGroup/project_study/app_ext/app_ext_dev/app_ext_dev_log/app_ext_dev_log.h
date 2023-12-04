@@ -12,8 +12,8 @@ typedef struct {
     void *data;
 } app_dev_log_data_t;
 
-/*@brief     log设备就绪
- *@param[in] driver 设备实例
+/*@brief log设备就绪
+ *@param driver 设备实例
  */
 static inline void app_dev_log_ready(app_dev_t *driver)
 {
@@ -23,10 +23,10 @@ static inline void app_dev_log_ready(app_dev_t *driver)
     }
 }
 
-/*@brief     log设备输出
- *@param[in] driver 设备实例
- *@param[in] format 输出变参格式化字符串
- *@param[in] list   输出变参列表
+/*@brief log设备输出
+ *@param driver 设备实例
+ *@param format 输出变参格式化字符串
+ *@param list   输出变参列表
  */
 static inline void app_dev_log_msg(app_dev_t *driver, const char *format, va_list list)
 {
@@ -36,8 +36,8 @@ static inline void app_dev_log_msg(app_dev_t *driver, const char *format, va_lis
     }
 }
 
-/*@brief     变参函数式LOG输出接口(扩展封装)
- *@param[in] format 格式化字符串
+/*@brief 变参函数式LOG输出接口(扩展封装)
+ *@param format 格式化字符串
  */
 static inline void app_dev_log_msg1(const char *format, ...)
 {
@@ -47,9 +47,9 @@ static inline void app_dev_log_msg1(const char *format, ...)
     va_end(list);
 }
 
-/*@brief     变参列表式LOG输出接口(扩展封装)
- *@param[in] format 格式化字符串
- *@param[in] list   变参列表
+/*@brief 变参列表式LOG输出接口(扩展封装)
+ *@param format 格式化字符串
+ *@param list   变参列表
  */
 static inline void app_dev_log_msg2(const char *format, va_list list)
 {

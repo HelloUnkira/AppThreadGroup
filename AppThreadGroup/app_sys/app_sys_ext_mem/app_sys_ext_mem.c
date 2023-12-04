@@ -12,12 +12,12 @@
 
 static app_mutex_t app_sys_ext_mem_mutex = {0};
 
-/*@brief             读取数据从指定的文件中
- *@param[in] ext_mem chunk静态实例
- *@param[in] offset  数据偏移
- *@param[in] buffer  数据缓存
- *@param[in] size    数据缓存大小
- *@retval            成功或者失败
+/*@brief 读取数据从指定的文件中
+ *@param ext_mem chunk静态实例
+ *@param offset  数据偏移
+ *@param buffer  数据缓存
+ *@param size    数据缓存大小
+ *@retval 成功或者失败
  */
 bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
@@ -38,12 +38,12 @@ bool app_sys_ext_mem_read(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, ui
     return retval == 0;
 }
 
-/*@brief             写入数据到指定的文件中
- *@param[in] ext_mem chunk静态实例
- *@param[in] offset  数据偏移
- *@param[in] buffer  数据缓存
- *@param[in] size    数据缓存大小
- *@retval            成功或者失败
+/*@brief 写入数据到指定的文件中
+ *@param ext_mem chunk静态实例
+ *@param offset  数据偏移
+ *@param buffer  数据缓存
+ *@param size    数据缓存大小
+ *@retval 成功或者失败
  */
 bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, uint8_t *buffer, uintptr_t size)
 {
@@ -64,9 +64,9 @@ bool app_sys_ext_mem_write(const app_sys_ext_mem_t *ext_mem, uintptr_t offset, u
     return retval == 0;
 }
 
-/*@brief     使用数据元刷新文件
- *@param[in] ext_mem chunk静态实例
- *@param[in] value   指定数据元
+/*@brief 使用数据元刷新文件
+ *@param ext_mem chunk静态实例
+ *@param value   指定数据元
  */
 void app_sys_ext_mem_reflush(const app_sys_ext_mem_t *ext_mem, uint8_t value)
 {

@@ -8,9 +8,9 @@
 static app_mutex_t app_sys_log_mutex = {0};
 static app_sys_log_t app_sys_log = {0};
 
-/*@brief     日志模组输出文件名去除路径
- *@param[in] file 带路径的文件名称
- *@retval    去除路径后的文件名
+/*@brief 日志模组输出文件名去除路径
+ *@param file 带路径的文件名称
+ *@retval 去除路径后的文件名
  */
 static const char * app_sys_log_file(const char *file)
 {
@@ -27,7 +27,7 @@ static const char * app_sys_log_file(const char *file)
     return file;
 }
 
-/*@brief  换行字符串
+/*@brief 换行字符串
  *@retval 返回换行字符串
  */
 const char * app_sys_log_line(void)
@@ -46,17 +46,17 @@ void app_sys_log_ready(void)
     app_sys_log.persistent = (void (*)(const char *))           app_sys_log_text_persistent;
 }
 
-/*@brief     格式日志输出接口
+/*@brief 格式日志输出接口
  *           无格式打印:{内容}
  *           带格式打印:[文件名][行数][级别]{内容}[换行]
- *@param[in] status 日志信息是否带格式
- *@param[in] record 日志信息是否需记录
- *@param[in] file   日志信息输出文件名
- *@param[in] line   日志信息输出文件内行数
- *@param[in] func   日志信息输出文件内函数名
- *@param[in] flag   日志信息重要性级别
- *@param[in] format 日志信息格式化信息
- *@param[in] ...    日志信息信息变参
+ *@param status 日志信息是否带格式
+ *@param record 日志信息是否需记录
+ *@param file   日志信息输出文件名
+ *@param line   日志信息输出文件内行数
+ *@param func   日志信息输出文件内函数名
+ *@param flag   日志信息重要性级别
+ *@param format 日志信息格式化信息
+ *@param ...    日志信息信息变参
  */
 void app_sys_log_msg(bool status, bool record, char flag, const char *file, const char *func, uint32_t line, const char *format, ...)
 {
@@ -112,11 +112,11 @@ void app_sys_log_msg(bool status, bool record, char flag, const char *file, cons
     va_end(list);
 }
 
-/*@brief     断言
- *@param[in] file 文件名
- *@param[in] func 函数名
- *@param[in] line 文件行数
- *@param[in] cond 断言条件
+/*@brief 断言
+ *@param file 文件名
+ *@param func 函数名
+ *@param line 文件行数
+ *@param cond 断言条件
  */
 void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond)
 {
@@ -136,11 +136,11 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
     #endif
 }
 
-/*@brief     函数执行追踪
- *@param[in] file 文件名
- *@param[in] func 函数名
- *@param[in] line 文件行数
- *@param[in] step 执行编号
+/*@brief 函数执行追踪
+ *@param file 文件名
+ *@param func 函数名
+ *@param line 文件行数
+ *@param step 执行编号
  */
 void app_sys_trace(const char *file, const char *func, uint32_t line, uint32_t step)
 {

@@ -6,12 +6,12 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-/*@brief     读取资源从指定chunk的指定data段
- *@param[in] chunk_name chunk名字
- *@param[in] data_name  chunk内data名字
- *@param[in] buffer     数据空间
- *@param[in] size       数据大小
- *@retval    实际读写的数据长度
+/*@brief 读取资源从指定chunk的指定data段
+ *@param chunk_name chunk名字
+ *@param data_name  chunk内data名字
+ *@param buffer     数据空间
+ *@param size       数据大小
+ *@retval 实际读写的数据长度
  */
 size_t app_sys_ext_mem_src_read(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {
@@ -23,12 +23,12 @@ size_t app_sys_ext_mem_src_read(const char *chunk_name, const char *data_name, u
     return app_sys_ext_mem_read(ext_mem, ext_src->data_base, buffer, size);
 }
 
-/*@brief     写入资源到指定chunk的指定data段
- *@param[in] chunk_name chunk名字
- *@param[in] data_name  chunk内data名字
- *@param[in] buffer     数据空间
- *@param[in] size       数据大小
- *@retval    实际读写的数据长度
+/*@brief 写入资源到指定chunk的指定data段
+ *@param chunk_name chunk名字
+ *@param data_name  chunk内data名字
+ *@param buffer     数据空间
+ *@param size       数据大小
+ *@retval 实际读写的数据长度
  */
 size_t app_sys_ext_mem_src_write(const char *chunk_name, const char *data_name, uint8_t *buffer, size_t size)
 {

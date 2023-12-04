@@ -766,16 +766,16 @@ static const char * app_lv_lang_table[756][2] = {
 
 static uint32_t app_lv_lang_type = 0;
 
-/*@brief     设置搜索语言
- *@param[in] index语言编号(0~n-1)
+/*@brief 设置搜索语言
+ *@param index语言编号(0~n-1)
  */
 void app_lv_lang_type_config(uint32_t type)
 {
 	app_lv_lang_type = type;
 }
 
-/*@brief     获得多国语字符串
- *@param[in] index字符串编号(0~n-1)
+/*@brief 获得多国语字符串
+ *@param index字符串编号(0~n-1)
  */
 const char * app_lv_lang_str_find(uint32_t index)
 {
