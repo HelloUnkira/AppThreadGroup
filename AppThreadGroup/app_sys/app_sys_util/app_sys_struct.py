@@ -6,8 +6,8 @@ import json
 
 def app_sys_struct():
     # file operation
-    file_in = open('app_sys_struct.json', 'r')
-    file_out = open('app_sys_struct.h', 'w')
+    file_in = open('app_sys_struct.json', 'r', encoding = 'utf-8')
+    file_out = open('app_sys_struct.h', mode = 'w', encoding = 'utf-8')
     file_in_str = file_in.read()
     file_in_dic = json.loads(file_in_str)
     print('-----parser start------')
@@ -40,10 +40,8 @@ def app_sys_struct():
     # set method
     for dic in member:
         file_out.write('\n')
-        file_out.write('/*@brief \n')
-        file_out.write(' *@param \n')
-        file_out.write(' *@param \n')
-        file_out.write(' *@retval \n')
+        file_out.write('/*@brief %s\n' % ('设置语义'))
+        file_out.write(' *@param %s\n' % ('设置 ' + dic['name']))
         file_out.write(' */\n')
         file_out.write('static inline void ' + typedef + '_set_' + dic['name'])
         file_out.write('(' + typedef + '_t *instance, ' + dic['type'] + ' ' + dic['name'] + ')')
@@ -51,10 +49,8 @@ def app_sys_struct():
     # get method
     for dic in member:
         file_out.write('\n')
-        file_out.write('/*@brief \n')
-        file_out.write(' *@param \n')
-        file_out.write(' *@param \n')
-        file_out.write(' *@retval \n')
+        file_out.write('/*@brief  %s\n' % ('获取语义'))
+        file_out.write(' *@retval %s\n' % ('获取 ' + dic['name']))
         file_out.write(' */\n')
         file_out.write('static inline ' + dic['type'] + ' ' + typedef + '_get_' + dic['name'])
         file_out.write('(' + typedef + '_t *instance' + ')')
