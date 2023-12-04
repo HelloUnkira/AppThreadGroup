@@ -38,12 +38,13 @@ static void app_thread_mix_irq_routine_ready_cb(void)
 
 /*@brief 子线程服务例程处理部
  */
-static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
+static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count, bool *record)
 {
     switch (package->module) {
     case app_thread_mix_irq_timer: {
         if (package->event == app_thread_mix_irq_timer_reduce_update)
             app_module_timer_reduce();
+       *record = false;
         return true;
     }
     case app_thread_mix_irq_clock: {
@@ -62,10 +63,14 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
             app_module_battery_charge_check();
         if (package->event == app_thread_mix_irq_battery_voltage_check)
             app_module_battery_voltage_check();
-        if (package->event == app_thread_mix_irq_battery_charge_xms_update)
+        if (package->event == app_thread_mix_irq_battery_charge_xms_update) {
             app_module_battery_charge_xms_update();
-        if (package->event == app_thread_mix_irq_battery_voltage_xms_update)
+            *record = false;
+        }
+        if (package->event == app_thread_mix_irq_battery_voltage_xms_update) {
             app_module_battery_voltage_xms_update();
+            *record = false;
+        }
         return true;
     }
     case app_thread_mix_irq_vibrate: {
@@ -76,8 +81,10 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
     case app_thread_mix_irq_gesture: {
         if (package->event == app_thread_mix_irq_gesture_event_update)
             app_module_gesture_xmsec_update();
-        if (package->event == app_thread_mix_irq_gesture_xmsec_update)
+        if (package->event == app_thread_mix_irq_gesture_xmsec_update) {
             app_module_gesture_event_update();
+            *record = false;
+        }
         return true;
     }
     case app_thread_mix_irq_temperature: {

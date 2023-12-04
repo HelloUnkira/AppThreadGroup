@@ -54,6 +54,8 @@
  */
 #define APP_THREAD_MASTER_REALTIME      0
 #define APP_THREAD_MASTER_TIME_SLICE    10
+/* 线程事件包执行记录 */
+#define APP_THREAD_PACKAGE_RECORD_CNT   50
 /* 线程组线程包裹接收最大警告线(警告) */
 #if     APP_THREAD_MASTER_REALTIME
 #define APP_THREAD_PACKAGE_MAX          20

@@ -52,8 +52,14 @@ void app_thread_slave_process(uint32_t app_thread_id,
             app_execute_us(&execute_us, true);
             #endif
             /* 处理子线程自定义包裹 */
-            uint32_t discard_count = 0;
-            if (package_cb(&package, &discard_count)) {
+            uint32_t discard_count = 0; bool record = true;
+            if (package_cb(&package, &discard_count, &record)) {
+                /* 线程组记录事件包 */
+                if (record) {
+                    #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+                    app_thread_package_record(&package, true);
+                    #endif
+                }
                 /* 系统对于此事件包的处理负载过大,主动丢弃一部分相同的事件包 */
                 /* 这是无奈之举,应该避免事件包的丢弃,这会对事件系统产生危害 */
                 for (uint32_t idx = 0; idx < discard_count; idx++)
@@ -74,6 +80,7 @@ void app_thread_slave_process(uint32_t app_thread_id,
                 case 0: {
                     if (package.event == app_thread_event_work)
                         app_module_work_execute((void *)package.data);
+                    
                     break;
                 }
                 default: {

@@ -35,6 +35,12 @@ static uint8_t app_thread_used_d[(app_thread_id_d_e - app_thread_id_d_s - 1) / 8
 static double app_thread_execute_us_s[app_thread_id_s_e - app_thread_id_s_s - 1] = {0};
 static double app_thread_execute_us_d[app_thread_id_d_e - app_thread_id_d_s - 1] = {0};
 #endif
+/* 记录线程包的执行序列 */
+#if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+#define APP_THREAD_PACKAGE_RECORD_SIZE (APP_THREAD_PACKAGE_RECORD_CNT * sizeof(app_thread_package_t))
+static uint8_t app_thread_record_buffer[APP_THREAD_PACKAGE_RECORD_SIZE] = {0};
+static app_sys_rbuf_t app_thread_record_rbuf = {0};
+#endif
 
 /*@brief 设置子线程执行时间
  *              注意:这里的时间设置为累加设置
@@ -192,6 +198,10 @@ void app_thread_master_prepare(void)
         app_sys_pipe_ready(&app_thread_pipe_dst_s[idx - app_thread_id_s_s - 1]);
     for (uint32_t idx = app_thread_id_d_s + 1; idx <= app_thread_id_d_e - 1; idx++)
         app_sys_pipe_ready(&app_thread_pipe_dst_d[idx - app_thread_id_d_s - 1]);
+    /* 记录线程包的执行序列 */
+    #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+    app_sys_rbuf_ready(&app_thread_record_rbuf, 1, app_thread_record_buffer, APP_THREAD_PACKAGE_RECORD_SIZE);
+    #endif
 }
 
 /*@brief 主线程调度
@@ -238,9 +248,8 @@ APP_THREAD_GROUP_HANDLER(app_thread_master_routine)
 }
 
 /*@brief 线程组接收一个事件包
- *@param thread_id 线程ID
- *@param package   事件包
- #@retval 失败表明线程组中止,不接收新的事件包
+ *@param package 事件包
+ *@retval 失败表明线程组中止,不接收新的事件包
  */
 bool app_thread_package_notify(app_thread_package_t *package)
 {
@@ -255,3 +264,32 @@ bool app_thread_package_notify(app_thread_package_t *package)
     #endif
     return true;
 }
+
+/*@brief 线程组记录事件包
+ *       事件包以实际执行时间顺序
+ *@param package 事件包
+ *@param record  true记录;false读取
+ */
+#if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+void app_thread_package_record(app_thread_package_t *package, bool record)
+{
+    if (app_sys_rbuf_space(&app_thread_record_rbuf) == 0 || !record) {
+        APP_SYS_LOG_INFO("package record");
+        for (uint32_t idx = 0; !app_sys_rbuf_empty(&app_thread_record_rbuf); idx++) {
+            app_thread_package_t package_old = {0};
+            APP_SYS_RBUF_GETS_FIXED(&app_thread_record_rbuf, &package_old, app_thread_package_t);
+            APP_SYS_LOG_INFO_RAW("package:");
+            APP_SYS_LOG_INFO_RAW("< idx:%d, ",    idx);
+            APP_SYS_LOG_INFO_RAW("- thread:%u, ", package_old.thread);
+            APP_SYS_LOG_INFO_RAW("- module:%u, ", package_old.module);
+            APP_SYS_LOG_INFO_RAW("- event:%u, ",  package_old.event);
+            APP_SYS_LOG_INFO_RAW("- data:%p, ",   package_old.data);
+            APP_SYS_LOG_INFO_RAW("- size:%u >",   package_old.size);
+            APP_SYS_LOG_INFO_RAW(app_sys_log_line());
+        }
+    }
+    if (record) {
+        APP_SYS_RBUF_PUTS_FIXED(&app_thread_record_rbuf, package, app_thread_package_t);
+    }
+}
+#endif

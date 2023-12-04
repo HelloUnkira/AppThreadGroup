@@ -19,7 +19,7 @@ static void app_thread_manage_routine_ready_cb(void)
 
 /*@brief 子线程服务例程处理部
  */
-static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
+static bool app_thread_manage_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count, bool *record)
 {
     switch (package->module) {
     case app_thread_manage_protocol: {

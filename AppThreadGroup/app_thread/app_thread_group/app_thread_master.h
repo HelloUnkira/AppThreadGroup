@@ -64,10 +64,18 @@ void app_thread_src_sem(uint32_t thread, app_sem_t **sem);
 void app_thread_src_pipe(uint32_t thread, app_sys_pipe_t **pipe);
 
 /*@brief 线程组接收一个事件包
- *@param thread_id 线程ID
- *@param package   事件包
- #@retval 失败表明线程组中止,不接收新的事件包
+ *@param package 事件包
+ *@retval 失败表明线程组中止,不接收新的事件包
  */
 bool app_thread_package_notify(app_thread_package_t *package);
+
+/*@brief 线程组记录事件包
+ *       事件包以实际执行时间顺序
+ *@param package 事件包
+ *@param record  true记录;false读取
+ */
+#if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+void app_thread_package_record(app_thread_package_t *package, bool record);
+#endif
 
 #endif

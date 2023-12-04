@@ -1,4 +1,3 @@
-
 {
     "type"  : "app_sys_ext_mem_table",
     "brief" : "app_sys_ext_mem_table: chunk_offset field will be adjusted automatically",

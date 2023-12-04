@@ -2,7 +2,7 @@
 #define APP_THREAD_SLAVE_H
 
 typedef void (*app_thread_slave_process_ready_cb)(void);
-typedef bool (*app_thread_slave_process_package_cb)(app_thread_package_t *package, uint32_t *discard_count);
+typedef bool (*app_thread_slave_process_package_cb)(app_thread_package_t *package, uint32_t *discard_count, bool *record);
 
 /*@brief 从线程服务例程结构模板
  *           这是通用化的结构模板,每个子线程均使用它

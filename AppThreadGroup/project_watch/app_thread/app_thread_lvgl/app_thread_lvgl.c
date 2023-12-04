@@ -33,13 +33,14 @@ static void app_thread_lvgl_routine_ready_cb(void)
 
 /*@brief 子线程服务例程处理部
  */
-static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count)
+static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count, bool *record)
 {
     switch (package->module) {
     case app_thread_lvgl_sched: {
         /* lvgl时钟约减事件 */
         if (package->event == app_thread_lvgl_sched_inc) {
             lv_tick_inc(LV_SCHED_TICK_INC);
+            *record = false;
         }
         /* lvgl时钟调度事件 */
         if (package->event == app_thread_lvgl_sched_exec) {
@@ -52,10 +53,12 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, ui
             /* 此处适应性降帧 */
             if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS)
                *discard_count = ms / LV_SCHED_TICK_EXEC + 1;
+            *record = false;
         }
         /* lvgl驱动检查事件 */
         if (package->event == app_thread_lvgl_sched_drv) {
             app_lv_driver_handler();
+            *record = false;
         }
         /* lvgl wheel更新事件 */
         if (package->event == app_thread_lvgl_sched_wheel) {
