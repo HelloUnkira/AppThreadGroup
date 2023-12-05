@@ -48,7 +48,7 @@ void app_module_vibrate_msec_update(void);
 void app_module_vibrate_ready(void);
 
 /*@brief 震动节拍默认回调1
-*        周期内前半部分震动后半部分不震动
+ *       周期内前半部分震动后半部分不震动
  *@param current 周期内的到达点,进度
  *@param period  设置的周期
  *@retval 百分比振幅[0,100]

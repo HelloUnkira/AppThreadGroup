@@ -10,7 +10,7 @@
 #include "app_lv_lib.h"
 
 /*@brief 水平像素转换(未使用)
- *           将x/100像素点放大到指定显示器像素
+ *       将x/100像素点放大到指定显示器像素
  *@param x 水平像素
  *@retval 转换后的像素
  */
@@ -20,7 +20,7 @@ lv_coord_t app_lv_style_zoom_x(lv_coord_t x)
 }
 
 /*@brief 垂直像素转换(未使用)
- *           将y/100像素点放大到指定显示器像素
+ *       将y/100像素点放大到指定显示器像素
  *@param y 垂直像素
  *@retval 转换后的像素
  */

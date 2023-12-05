@@ -38,7 +38,7 @@ typedef struct {
 } app_lv_wheel_src_t;
 
 /*@brief lvgl wheel更新事件回调
- *           内部使用: 被lvgl线程使用
+ *       内部使用: 被lvgl线程使用
  *@param wheel 轮盘实例
  */
 void app_lv_wheel_update_handle(app_lv_wheel_t *wheel);

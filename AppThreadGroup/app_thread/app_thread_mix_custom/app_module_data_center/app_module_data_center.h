@@ -17,7 +17,7 @@ void app_module_data_center_reflush(void);
 
 /*@brief 回收数据中心资源
  *@param force 强制回收数据中心资源(不建议使用)
- *           不建议使用,这会导致非正常的逻辑
+ *       不建议使用,这会导致非正常的逻辑
  */
 void app_module_data_center_recycle(bool force);
 

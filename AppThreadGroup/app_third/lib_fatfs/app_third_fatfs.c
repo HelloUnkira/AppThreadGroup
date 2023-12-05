@@ -130,7 +130,7 @@ void app_third_fatfs_deinit(void)
 }
 
 /*@brief 通过文件系统将文件打包到外存映射中
- *           注意:仅在PC上构建
+ *       注意:仅在PC上构建
  *@param path 根路径
  */
 static void app_third_fatfs_remake_recursion(char *path)
@@ -192,7 +192,7 @@ static void app_third_fatfs_remake_recursion(char *path)
 }
 
 /*@brief 通过文件系统将文件打包到外存映射中
- *           注意:仅在PC上构建
+ *       注意:仅在PC上构建
  *@param path 路径
  *@param num  路径数量
  */

@@ -2,7 +2,7 @@
 #define APP_LV_UI_STYLE_H
 
 /*@brief 默认控件风格
- *          黑色背景,无边框,无阴影,无间隙,无外部线
+ *       黑色背景,无边框,无阴影,无间隙,无外部线
  *@param obj 控件
  */
 void app_lv_style_object(lv_obj_t *obj);

@@ -40,14 +40,14 @@ static bool app_lv_ui_snake_map_1[APP_LV_UI_SNAKE_LINE][APP_LV_UI_SNAKE_ELEMENT]
  */
 void app_lv_ui_func_local_create(uint32_t size, void **pointer)
 {
-    *pointer = malloc(size);
+    *pointer = app_mem_alloc(size);
 }
 
 /*@brief lvgl ui数据交互回调
  */
 void app_lv_ui_func_local_destroy(void *pointer)
 {
-    free(pointer);
+    app_mem_free(pointer);
 }
 
 /*@brief lvgl ui数据交互回调

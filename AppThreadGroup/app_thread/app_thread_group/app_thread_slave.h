@@ -5,7 +5,7 @@ typedef void (*app_thread_slave_process_ready_cb)(void);
 typedef bool (*app_thread_slave_process_package_cb)(app_thread_package_t *package, uint32_t *discard_count, bool *record);
 
 /*@brief 从线程服务例程结构模板
- *           这是通用化的结构模板,每个子线程均使用它
+ *       这是通用化的结构模板,每个子线程均使用它
  *@param app_thread_id 子线程ID号
  *@param ready_cb      子线程服务例程就绪部
  *@param package_cb    子线程服务例程处理部

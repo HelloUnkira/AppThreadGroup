@@ -10,7 +10,7 @@
 #include "app_thread_group.h"
 
 /*@brief 从线程服务例程结构模板
- *           这是通用化的结构模板,每个子线程均使用它
+ *       这是通用化的结构模板,每个子线程均使用它
  *@param app_thread_id 子线程ID号
  *@param ready_cb      子线程服务例程就绪部
  *@param package_cb    子线程服务例程处理部

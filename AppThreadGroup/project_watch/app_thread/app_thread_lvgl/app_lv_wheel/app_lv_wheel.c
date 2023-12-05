@@ -12,7 +12,7 @@ static app_lv_wheel_src_t app_lv_wheel_src = {0};
 static lv_obj_t          *app_lv_wheel_obj = NULL;
 
 /*@brief lvgl wheel更新事件回调
- *           内部使用: 被lvgl线程使用
+ *       内部使用: 被lvgl线程使用
  *@param wheel 轮盘实例
  */
 void app_lv_wheel_update_handle(app_lv_wheel_t *wheel)

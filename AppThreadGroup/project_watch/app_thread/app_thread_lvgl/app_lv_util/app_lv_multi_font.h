@@ -20,15 +20,15 @@ typedef enum {
 #define APP_LV_MULTI_FONT_SIZE_DEFAULT  app_lv_multi_font_size_24
 
 /*@brief 配置指定类型的多字库表
- *           会先卸载之前指定类型的所有尺寸字库
- *           但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
+ *       会先卸载之前指定类型的所有尺寸字库
+ *       但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
  *@param type 字库类型
  */
 void app_lv_multi_font_type_config(uint32_t type);
 
 /*@brief 配置指定类型的多字库表
- *           会先卸载之前指定类型的所有尺寸字库
- *           但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
+ *       会先卸载之前指定类型的所有尺寸字库
+ *       但不会批量加载本类型的所有尺寸字库(迟延到获取时加载)
  *@param type 字库类型
  */
 void app_lv_multi_font_size_config(uint32_t size);

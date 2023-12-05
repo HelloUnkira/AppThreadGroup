@@ -22,7 +22,7 @@ void app_third_fatfs_init(void);
 void app_third_fatfs_deinit(void);
 
 /*@brief 通过文件系统将文件打包到外存映射中
- *           注意:仅在PC上构建
+ *       注意:仅在PC上构建
  *@param path 路径
  *@param num  路径数量
  */

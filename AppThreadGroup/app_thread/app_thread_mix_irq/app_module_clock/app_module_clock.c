@@ -266,7 +266,7 @@ void app_module_clock_local_update(void)
 }
 
 /*@brief 系统时间戳更新回调
- *           内部使用: 被mix irq线程使用
+ *       内部使用: 被mix irq线程使用
  *@param utc_new 硬件定时器派发给mix_irq包裹中携带的新utc信息
  */
 void app_module_clock_timestamp_update(uint64_t utc_new)

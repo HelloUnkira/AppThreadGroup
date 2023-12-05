@@ -36,7 +36,7 @@ static inline uintptr_t app_sys_mem_olsf_field_size(app_sys_mem_olsf_t *mem_olsf
 }
 
 /*@brief 偏移到chunk的第0个块头
- *           此时索引是类似于chunk size的chunk unit类型数组
+ *       此时索引是类似于chunk size的chunk unit类型数组
  *@param mem_olsf 一级隔离策略分配堆实例
  *@retval 返回chunk 0的地址
  */
@@ -79,7 +79,7 @@ static inline void app_sys_mem_olsf_field_set(app_sys_mem_olsf_t *mem_olsf, app_
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
  *@param type     指定chunk的type
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_field_get(app_sys_mem_olsf_t *mem_olsf, app_sys_mem_olsf_type_t type, uintptr_t chunk)
 {
@@ -157,7 +157,7 @@ static inline void app_sys_mem_olsf_size_near_set(app_sys_mem_olsf_t *mem_olsf, 
 /*@brief 获得chunk field字段值
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_size_get(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -167,7 +167,7 @@ static inline uintptr_t app_sys_mem_olsf_size_get(app_sys_mem_olsf_t *mem_olsf, 
 /*@brief 获得chunk field字段值
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_used_get(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -177,7 +177,7 @@ static inline uintptr_t app_sys_mem_olsf_used_get(app_sys_mem_olsf_t *mem_olsf, 
 /*@brief 获得chunk field字段值
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_free_prev_get(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -187,7 +187,7 @@ static inline uintptr_t app_sys_mem_olsf_free_prev_get(app_sys_mem_olsf_t *mem_o
 /*@brief 获得chunk field字段值
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_free_next_get(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -197,7 +197,7 @@ static inline uintptr_t app_sys_mem_olsf_free_next_get(app_sys_mem_olsf_t *mem_o
 /*@brief 获得chunk field字段值
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的value
+ *@retval 指定chunk的value
  */
 static inline uintptr_t app_sys_mem_olsf_size_near_get(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -207,7 +207,7 @@ static inline uintptr_t app_sys_mem_olsf_size_near_get(app_sys_mem_olsf_t *mem_o
 /*@brief 获得临近chunk
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的左临近chunk
+ *@retval 指定chunk的左临近chunk
  */
 static inline uintptr_t app_sys_mem_olsf_chunk_left(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {
@@ -217,7 +217,7 @@ static inline uintptr_t app_sys_mem_olsf_chunk_left(app_sys_mem_olsf_t *mem_olsf
 /*@brief 获得临近chunk
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param chunk    指定chunk
- *retval     指定chunk的右临近chunk
+ *@retval 指定chunk的右临近chunk
  */
 static inline uintptr_t app_sys_mem_olsf_chunk_right(app_sys_mem_olsf_t *mem_olsf, uintptr_t chunk)
 {

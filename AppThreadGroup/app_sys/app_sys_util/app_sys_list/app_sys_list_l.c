@@ -66,7 +66,7 @@ app_sys_list_dln_t * app_sys_list_dln_next(app_sys_list_dln_t *node)
 }
 
 /*@brief 节点前插入(prepend)
- *           节点target为NULL时为头部插入
+ *       节点target为NULL时为头部插入
  *@param list   链表实例
  *@param target 链表节点实例(锚点)
  *@param node   链表节点实例(带插入节点)
@@ -99,7 +99,7 @@ void app_sys_list_dll_pinsert(app_sys_list_dll_t *list, app_sys_list_dln_t *targ
 }
 
 /*@brief 节点后插入(append)
- *           节点target为NULL时为尾部插入
+ *       节点target为NULL时为尾部插入
  *@param list   链表实例
  *@param target 链表节点实例(锚点)
  *@param node   链表节点实例(带插入节点)
@@ -228,7 +228,7 @@ void app_sys_list_sll_ainsert(app_sys_list_sll_t *list, app_sys_list_sln_t *node
 }
 
 /*@brief 节点插入
- *           单链表插入需要指定目标节点,target不为NULL
+ *       单链表插入需要指定目标节点,target不为NULL
  *@param list   链表实例
  *@param target 链表节点实例(锚点)
  *@param node   链表节点实例(带插入节点)
@@ -242,7 +242,7 @@ void app_sys_list_sll_insert(app_sys_list_sll_t *list, app_sys_list_sln_t *targe
 }
 
 /*@brief 节点插入
- *           单链表删除需要指定目标节点
+ *       单链表删除需要指定目标节点
  *@param list   链表实例
  *@param target 链表节点实例(锚点)
  *@param node   链表节点实例(带插入节点)

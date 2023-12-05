@@ -598,7 +598,7 @@ void * app_sys_mem_tlsf_alloc(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size)
 }
 
 /*@brief 二级隔离策略分配堆申请内存
- *@param mem_olsf 一级隔离策略分配堆实例
+ *@param mem_tlsf 一级隔离策略分配堆实例
  *@param size     字节大小
  *@param align    指定字节对齐(不小于平台字节对齐, 2的指数)
  *@retval 内存地址
@@ -616,7 +616,7 @@ void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size
          return NULL;
     }
     if (align == sizeof(uintptr_t))
-        return app_sys_mem_olsf_alloc(mem_tlsf, size);
+        return app_sys_mem_tlsf_alloc(mem_tlsf, size);
     
     if (size <= sizeof(uintptr_t))
         size  = sizeof(uintptr_t);
@@ -708,7 +708,7 @@ app_sys_mem_tlsf_t * app_sys_mem_tlsf_ready(void *addr, uintptr_t size)
 }
 
 /*@brief 二级隔离策略分配堆内存布局使用
- *@param mem_olsf 二级隔离策略分配堆实例
+ *@param mem_tlsf 二级隔离策略分配堆实例
  */
 void app_sys_mem_tlsf_check(app_sys_mem_tlsf_t *mem_tlsf)
 {

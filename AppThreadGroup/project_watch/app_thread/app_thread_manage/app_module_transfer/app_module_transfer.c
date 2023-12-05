@@ -28,7 +28,7 @@ static void app_module_transfer_respond_timeout_timer_handler(void *timer)
 }
 
 /*@brief 传输分包包大小
- *        保证底层至少能刚好接收该包并打包发送
+ *       保证底层至少能刚好接收该包并打包发送
  *@retval 传输分包包大小最大值
  */
 static inline uint32_t app_module_transfer_max_size(app_module_transfer_chan_t channel)

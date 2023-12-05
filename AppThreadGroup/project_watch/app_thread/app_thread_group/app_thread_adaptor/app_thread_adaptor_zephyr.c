@@ -70,7 +70,7 @@ app_thread_t app_thread_lvgl = {
 /* @线程体<End> */
 
 /*@brief 生成新的线程信息通过旧的线程信息
- *           旧线程的基本信息全部被新线程基础,除去执行回调
+ *       旧线程的基本信息全部被新线程基础,除去执行回调
  *@param thread_old 旧线程的基本信息
  *@param thread_new 新线程的基本信息
  *@param handler    新线程的线程体

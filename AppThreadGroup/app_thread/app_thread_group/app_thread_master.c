@@ -43,7 +43,7 @@ static app_sys_rbuf_t app_thread_record_rbuf = {0};
 #endif
 
 /*@brief 设置子线程执行时间
- *              注意:这里的时间设置为累加设置
+ *       注意:这里的时间设置为累加设置
  *@param uint32_t thread 线程ID
  *@param 子线程执行时间(us)
  */
@@ -94,8 +94,8 @@ bool app_thread_id_is_valid(uint32_t thread)
 }
 
 /*@brief 获得一个动态子线程id号
- *        子线程获得id号之后就获得了主从线程组的调度规则
- *        否则子线程就只能向普通子线程一样工作
+ *       子线程获得id号之后就获得了主从线程组的调度规则
+ *       否则子线程就只能向普通子线程一样工作
  *@retval 动态子线程id号
  */
 uint32_t app_thread_id_alloc(void)

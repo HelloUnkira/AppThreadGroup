@@ -21,7 +21,7 @@ typedef struct {
 } app_lv_scene_sched_t;
 
 /*@brief 场景调度
- *           内部使用: 被中心轮盘调度使用
+ *       内部使用: 被中心轮盘调度使用
  *@param sched 场景调度实例
  */
 void app_lv_scene_sched(app_lv_scene_sched_t *sched);

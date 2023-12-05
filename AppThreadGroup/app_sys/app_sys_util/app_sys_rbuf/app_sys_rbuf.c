@@ -101,8 +101,8 @@ void app_sys_rbuf_ready(app_sys_rbuf_t *rbuf, uint8_t type, void *buffer, uint32
  *@param rbuf   实例
  *@param data   指定对齐类型数据的存储地址(非对齐可能会导致截断的情况)
  *@param length 所需获取数据长度
- *@retval -1     数据不足
- *@retval -2     实例类型错误
+ *@retval -1: 数据不足
+ *@retval -2: 实例类型错误
  */
 int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
 {
@@ -156,7 +156,8 @@ int32_t app_sys_rbuf_gets(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
  *@param rbuf   实例
  *@param data   指定对齐类型数据的存储地址(非对齐可能会导致截断的情况)
  *@param length 所需推送数据长度
- *@retval -1:    空间不足
+ *@retval -1: 空间不足
+ *@retval -2: 实例类型错误
  */
 int32_t app_sys_rbuf_puts(app_sys_rbuf_t *rbuf, void *data, uint32_t length)
 {
