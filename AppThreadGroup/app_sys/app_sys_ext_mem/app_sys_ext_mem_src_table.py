@@ -1,6 +1,6 @@
 import os
-import os.path
 import json
+
 
 # -- coding: utf-8 --**
 

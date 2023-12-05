@@ -7,8 +7,8 @@ typedef struct {                                    \
     uint8_t week:7;                                 \
     uint8_t bits:num;                               \
     struct {                                        \
-        uint8_t time_s[3];  /* 开始[时,分,秒] */    \
-        uint8_t time_e[3];  /* 结束[时,分,秒] */    \
+        uint8_t time_s[3];  /* 开始[时,分,秒] */         \
+        uint8_t time_e[3];  /* 结束[时,分,秒] */         \
     } table[num];                                   \
 } type_t;                                           \
 
@@ -20,10 +20,10 @@ static bool func(type_t *inst)                                  \
     static bool  status = false;                                \
     app_module_clock_t clock = {0};                             \
     app_module_clock_get_system_clock((&(clock)));              \
-    if (utc == clock.utc)   /* 单个秒内的多发访问 */            \
+    if (utc == clock.utc)   /* 单个秒内的多发访问 */                     \
         return status;                                          \
         utc  = clock.utc;                                       \
-    if (inst->week & (1 << clock.week) == 0)                    \
+    if ((inst->week & (1 << clock.week)) == 0)                  \
         return status = false;                                  \
     uint16_t secs_s = 0;                                        \
     uint16_t secs_e = 0;                                        \
@@ -31,7 +31,7 @@ static bool func(type_t *inst)                                  \
                       clock.minute * 60 +                       \
                       clock.second;                             \
     for (uint32_t idx = 0; idx < num; idx++)                    \
-        if (inst->bits & (1 << idx) != 0) {                     \
+        if ((inst->bits & (1 << idx)) != 0) {                   \
             secs_s  = 0;                                        \
             secs_s += inst->table[idx].time_s[0] * 60 * 60;     \
             secs_s += inst->table[idx].time_s[1] * 60;          \

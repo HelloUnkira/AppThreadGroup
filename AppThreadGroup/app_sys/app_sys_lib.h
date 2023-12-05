@@ -2,8 +2,8 @@
 #define APP_SYS_LIB_H
 
 /*  */
+#include "app_sys_misc.h"
 #include "app_sys_opt.h"
-#include "app_sys_err_code.h"
 /*  */
 #include "app_sys_log.h"
 #include "app_sys_log_text.h"
@@ -37,8 +37,6 @@
 /*  */
 #include "app_sys_timer.h"
 #include "app_sys_pipe.h"
-#include "app_sys_misc.h"
-#include "app_sys_util.h"
 
 /*@brief 初始化系统
  */
