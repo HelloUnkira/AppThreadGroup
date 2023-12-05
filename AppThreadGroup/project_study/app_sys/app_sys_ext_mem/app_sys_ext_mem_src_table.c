@@ -82,7 +82,7 @@ const app_sys_ext_mem_src_t * app_sys_ext_mem_src_find_by_index(const char *chun
 {
 	for (uint32_t idx = 0; idx < app_sys_ext_mem_src_table_size; idx++)
 		if (!strcmp(app_sys_ext_mem_src_string_table[idx], chunk_name))
-			if (index < app_sys_ext_mem_src_set_size_table[index])
+			if (index < app_sys_ext_mem_src_set_size_table[idx])
 				return &app_sys_ext_mem_src_set_table[idx][index];
 			else
 				return NULL;

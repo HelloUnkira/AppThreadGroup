@@ -42,15 +42,15 @@ void app_sys_mem_rev_b8(void *addr)
 
 /*@brief 字节对齐
  */
-inline void * app_sys_align_low(void *addr, uintptr_t align)
+void * app_sys_align_low(void *addr, uintptr_t align)
 {
     return (void *)(((uintptr_t)addr + (0)) & ~(align - 1));
 }
-inline void * app_sys_align_high(void *addr, uintptr_t align)
+void * app_sys_align_high(void *addr, uintptr_t align)
 {
     return (void *)(((uintptr_t)addr + (align - 1)) & ~(align - 1));
 }
-inline bool app_sys_align_check(void *addr, uintptr_t align)
+bool app_sys_align_check(void *addr, uintptr_t align)
 {
     return (bool  )(((uintptr_t)addr % (align)) == 0);
 }
