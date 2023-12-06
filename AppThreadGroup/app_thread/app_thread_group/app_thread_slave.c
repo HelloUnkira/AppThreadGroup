@@ -52,14 +52,15 @@ void app_thread_slave_process(uint32_t app_thread_id,
             app_execute_us(&execute_us, true);
             #endif
             /* 处理子线程自定义包裹 */
-            uint32_t discard_count = 0; bool record = true;
-            if (package_cb(&package, &discard_count, &record)) {
+            bool record = true;
+            if (package_cb(&package, &record)) {
                 /* 线程组记录事件包 */
                 if (record) {
                     #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
                     app_thread_package_record(&package, true);
                     #endif
                 }
+                #if 0
                 /* 系统对于此事件包的处理负载过大,主动丢弃一部分相同的事件包 */
                 /* 这是无奈之举,应该避免事件包的丢弃,这会对事件系统产生危害 */
                 for (uint32_t idx = 0; idx < discard_count; idx++)
@@ -74,6 +75,7 @@ void app_thread_slave_process(uint32_t app_thread_id,
                     execute_us_remind = false;
                     #endif
                 }
+                #endif
             } else {
                 /* 处理系统包裹,或者未知包裹 */
                 switch (package.module) {

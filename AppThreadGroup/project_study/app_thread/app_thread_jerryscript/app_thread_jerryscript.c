@@ -37,7 +37,7 @@ static void app_thread_jerryscript_routine_ready_cb(void)
 
 /*@brief 子线程服务例程处理部
  */
-static bool app_thread_jerryscript_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count, bool *record)
+static bool app_thread_jerryscript_routine_package_cb(app_thread_package_t *package, bool *record)
 {
     switch (package->module) {
     case app_thread_jerryscript_sched:

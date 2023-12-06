@@ -33,28 +33,30 @@ static void app_thread_lvgl_routine_ready_cb(void)
 
 /*@brief 子线程服务例程处理部
  */
-static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, uint32_t *discard_count, bool *record)
+static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bool *record)
 {
     switch (package->module) {
     case app_thread_lvgl_sched: {
         /* lvgl时钟约减事件 */
         if (package->event == app_thread_lvgl_sched_inc) {
-            for (uint64_t cnt = 0; cnt < package->byte_fixed; cnt++)
-                lv_tick_inc(LV_SCHED_TICK_INC);
+            lv_tick_inc(LV_SCHED_TICK_INC * package->byte_fixed);
             *record = false;
         }
         /* lvgl时钟调度事件 */
         if (package->event == app_thread_lvgl_sched_exec) {
             /* 计算事件处理时间(开始) */
-            app_execute_us_t execute_us = {0};
-            app_execute_us(&execute_us, true);
+            // app_execute_us_t execute_us = {0};
+            // app_execute_us(&execute_us, true);
             lv_timer_handler();
             /* 计算事件处理时间(结束) */
-            uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
+            // uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
+            // APP_SYS_LOG_INFO("exec ms:%d", ms);
+            #if 0
             /* 此处适应性降帧 */
             if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS)
                *discard_count = ms / LV_SCHED_TICK_EXEC + 1;
             *record = false;
+            #endif
         }
         /* lvgl驱动检查事件 */
         if (package->event == app_thread_lvgl_sched_drv) {

@@ -29,6 +29,13 @@ void app_lv_tick_inc_update(void)
     app_thread_package_notify(&package);
 }
 
+/*@brief tick执行 事件包吸收
+ */
+static void app_lv_tick_exec_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+{
+    /* 多的直接丢弃即可,这里为空 */
+}
+
 /*@brief lvgl tick执行
  */
 void app_lv_tick_exec_update(void)
@@ -37,6 +44,7 @@ void app_lv_tick_exec_update(void)
         .thread = app_thread_id_lvgl,
         .module = app_thread_lvgl_sched,
         .event  = app_thread_lvgl_sched_exec,
+        .absorb = app_lv_tick_exec_package_absorb,
     };
     app_thread_package_notify(&package);
 }
