@@ -43,7 +43,7 @@ static bool app_thread_mix_irq_routine_package_cb(app_thread_package_t *package,
     switch (package->module) {
     case app_thread_mix_irq_timer: {
         if (package->event == app_thread_mix_irq_timer_reduce_update)
-            app_module_timer_reduce();
+            app_module_timer_reduce(package->byte_fixed);
        *record = false;
         return true;
     }

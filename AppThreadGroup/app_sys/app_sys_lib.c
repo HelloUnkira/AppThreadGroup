@@ -14,7 +14,6 @@ void app_sys_ready(void)
     app_sys_ext_mem_ready();
     app_sys_ext_mem_layout();
     app_sys_log_text_ready();
-    app_sys_pipe_src_ready();
     app_sys_timer_ready();
     app_sys_build_time();
 }

@@ -40,8 +40,8 @@ void app_thread_slave_process(uint32_t app_thread_id,
         #endif
         /* 线程包数量警告检查 */
         uint32_t pkg_num = app_sys_pipe_num(pipe);
-        if (APP_THREAD_PACKAGE_MAX <= pkg_num)
-            APP_SYS_LOG_WARN("thread %u recv too much package:%u", app_thread_id, pkg_num);
+        if (APP_THREAD_PACKAGE_SLAVE_MAX <= pkg_num)
+            APP_SYS_LOG_ERROR("thread %u recv too much package:%u", app_thread_id, pkg_num);
         /* 指定子线程处理主线程派发包 */
         while (app_sys_pipe_num(pipe) != 0) {
             app_sys_pipe_take(pipe, &package, false);

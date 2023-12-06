@@ -18,8 +18,6 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-static app_sys_mem_slab_t app_sys_pipe_mem_slab = {0};
-
 /*@brief 优先级排序入队列比较函数
  */
 static bool app_sys_pipe_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *node2)
@@ -35,22 +33,18 @@ static bool app_sys_pipe_confirm(app_sys_list_dln_t *node1, app_sys_list_dln_t *
 {
     app_sys_pipe_pkg_t *pkg1 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
     app_sys_pipe_pkg_t *pkg2 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
-    return pkg1->thread == pkg2->thread && pkg1->module == pkg2->module && pkg1->event  == pkg2->event;
-}
-
-/*@brief 初始化管道资源
- */
-void app_sys_pipe_src_ready(void)
-{
-    app_sys_mem_slab_ready(&app_sys_pipe_mem_slab, sizeof(app_sys_pipe_pkg_t), 50, 10);
+    return pkg1->thread == pkg2->thread && pkg1->module == pkg2->module && pkg1->event == pkg2->event;
 }
 
 /*@brief 初始化管道
  *@param pipe 管道实例
+ *@param addr 内存地址(内存自备)
+ *@param size 内存大小(字节)(num * sizeof(app_sys_pipe_pkg_t))
  */
-void app_sys_pipe_ready(app_sys_pipe_t *pipe)
+void app_sys_pipe_ready(app_sys_pipe_t *pipe, uintptr_t addr, uintptr_t size)
 {
     app_sys_list_dll_reset(&pipe->dl_list);
+    app_sys_mem_slab_ready(&pipe->mem_slab, addr, size, sizeof(app_sys_pipe_pkg_t));
     app_critical_process(&pipe->critical, app_critical_static);
     pipe->number = 0;
 }
@@ -70,26 +64,51 @@ uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe)
 }
 
 /*@brief 交付一个包给管道
- *@param pipe    管道实例
- *@param package 事件资源包(栈资源,非堆资源或静态资源)
- *@param normal  不使用优先级
+ *@param pipe     管道实例
+ *@param package  事件资源包(栈资源,非堆资源或静态资源)
+ *@param normal   不使用优先级
+ *@param merge    事件包合并回调,为空无效
+ *                它只会作用到最新来的相同事件上去
+ *@retval  0:     正常接收
+ *        +1:     事件被合并
+ *        -1:     内存块不足,失败
  */
-void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal)
+int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal)
 {
-    app_sys_pipe_pkg_t *nonius = NULL;
+    int8_t retval = 0;
+    bool merge_flag = false;
+    app_sys_pipe_pkg_t *package_old = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
-    package_new = app_sys_mem_slab_alloc(&app_sys_pipe_mem_slab);
-    memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
-    app_sys_list_dln_reset(&package_new->dl_node);
     app_critical_process(&pipe->critical, app_critical_enter);
-    /* 资源包加入到管道(优先队列) */
-    if (normal)
-        app_sys_list_dll_ainsert(&pipe->dl_list, NULL, &package_new->dl_node);
-    else
-        app_sys_queue_dlpq_enqueue(&pipe->dl_list, &package_new->dl_node, app_sys_pipe_sort);
-    pipe->number++;
+    /* 事件包合并检查,如果合并回调不为空且查找到旧事件,合并它 */
+    if (package->absorb != NULL) {
+        app_sys_list_dll_ftra(&pipe->dl_list, node)
+        if (app_sys_pipe_confirm(&package->dl_node, node)) {
+            package_old = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+            package->absorb(package_old, package);
+            merge_flag = true;
+            retval = +1;
+            break;
+        }
+    }
+    if (!merge_flag) {
+        package_new = app_sys_mem_slab_alloc(&pipe->mem_slab);
+        if (package_new == NULL)
+            retval = -1;
+        if (package_new != NULL) {
+            memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
+            app_sys_list_dln_reset(&package_new->dl_node);
+            /* 资源包加入到管道(优先队列) */
+            if (normal)
+                app_sys_list_dll_ainsert(&pipe->dl_list, NULL, &package_new->dl_node);
+            else
+                app_sys_queue_dlpq_enqueue(&pipe->dl_list, &package_new->dl_node, app_sys_pipe_sort);
+            pipe->number++;
+        }
+    }
     app_critical_process(&pipe->critical, app_critical_exit);
+    return retval;
 }
 
 /*@brief 从管道提取一个包
@@ -99,7 +118,6 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
  */
 void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool hit)
 {
-    app_sys_pipe_pkg_t *nonius = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     app_critical_process(&pipe->critical, app_critical_enter);
     /* 资源包提取出管道 */
@@ -107,10 +125,10 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
         /* 需要命中指定资源包 */
         if (hit) {
             app_sys_list_dll_btra(&pipe->dl_list, node)
-                if (app_sys_pipe_confirm(&package->dl_node, node)) {
-                    package_new = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
-                    break;
-                }
+            if (app_sys_pipe_confirm(&package->dl_node, node)) {
+                package_new = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+                break;
+            }
         } else {
             app_sys_list_dln_t *node = app_sys_list_dll_head(&pipe->dl_list);
             package_new = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
@@ -120,10 +138,27 @@ void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool h
             pipe->number--;
         }
     }
-    app_critical_process(&pipe->critical, app_critical_exit);
     /* 转储消息资源资源, 销毁资源包 */
-    if (package_new == NULL)
-        return;
-    memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
-    app_sys_mem_slab_free(&app_sys_pipe_mem_slab, package_new);
+    if (package_new != NULL) {
+        memcpy(package, package_new, sizeof(app_sys_pipe_pkg_t));
+        app_sys_mem_slab_free(&pipe->mem_slab, package_new);
+    }
+    app_critical_process(&pipe->critical, app_critical_exit);
+}
+
+/*@brief 迭代整个管道,访问所有事件包
+ *@param pipe  管道实例
+ *@param visit 事件包访问回调
+ */
+void app_sys_pipe_walk(app_sys_pipe_t *pipe, void (*visit)(app_sys_pipe_pkg_t *package))
+{
+    app_sys_pipe_pkg_t *package = NULL;
+    app_critical_process(&pipe->critical, app_critical_enter);
+    if (visit != NULL) {
+        app_sys_list_dll_btra(&pipe->dl_list, node) {
+            package = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
+            visit(package);
+        }
+    }
+    app_critical_process(&pipe->critical, app_critical_exit);
 }

@@ -7,15 +7,24 @@
 #include "app_thread_group.h"
 #include "app_lv_lib.h"
 
+/*@brief tick更新 事件包吸收
+ */
+static void app_lv_tick_inc_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+{
+    package_old->byte_fixed += package_new->byte_fixed;
+}
+
 /*@brief lvgl tick更新
  */
 void app_lv_tick_inc_update(void)
 {
     app_thread_package_t package = {
-        .thread   = app_thread_id_lvgl,
-        .module   = app_thread_lvgl_sched,
-        .event    = app_thread_lvgl_sched_inc,
-        .priority = app_thread_package_priority_highest,
+        .thread     = app_thread_id_lvgl,
+        .module     = app_thread_lvgl_sched,
+        .event      = app_thread_lvgl_sched_inc,
+        .priority   = app_thread_package_priority_highest,
+        .byte_fixed = 1,
+        .absorb = app_lv_tick_inc_package_absorb,
     };
     app_thread_package_notify(&package);
 }
@@ -32,6 +41,13 @@ void app_lv_tick_exec_update(void)
     app_thread_package_notify(&package);
 }
 
+/*@brief tick更新 事件包吸收
+ */
+static void app_lv_tick_drv_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+{
+    /* 多的直接丢弃即可,这里为空 */
+}
+
 /*@brief lvgl drv更新
  */
 void app_lv_drv_update(void)
@@ -41,6 +57,7 @@ void app_lv_drv_update(void)
         .module   = app_thread_lvgl_sched,
         .event    = app_thread_lvgl_sched_drv,
         .priority = app_thread_package_priority_normal_above,
+        .absorb   = app_lv_tick_drv_package_absorb,
     };
     app_thread_package_notify(&package);
 }

@@ -138,7 +138,7 @@ void app_module_vibrate_ready(void)
 {
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_static);
     app_module_vibrate_timer.expired = app_module_vibrate_timer_handler;
-    app_module_vibrate_timer.peroid  = 1;
+    app_module_vibrate_timer.peroid  = APP_MODULE_VIBRATE_XMS;
     app_module_vibrate_timer.reload  = true;
 }
 

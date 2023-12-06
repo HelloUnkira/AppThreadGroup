@@ -19,6 +19,9 @@
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
 
+#define APP_THREAD_PIPE_MEM_MASTER_SIZE     ((APP_THREAD_PACKAGE_MASTER_MAX + 3) * sizeof(app_sys_pipe_pkg_t))
+#define APP_THREAD_PIPE_MEM_SLAVE_SIZE      ((APP_THREAD_PACKAGE_SLAVE_MAX  + 3) * sizeof(app_sys_pipe_pkg_t))
+
 /* 信号量,控制线程组的进动 */
 /* 管道集合,控制线程组的事件包传递 */
 static app_mutex_t app_thread_mutex = {0};
@@ -28,6 +31,9 @@ static app_sem_t app_thread_sem_dst_d[app_thread_id_d_e - app_thread_id_d_s - 1]
 static app_sys_pipe_t app_thread_pipe_src = {0};
 static app_sys_pipe_t app_thread_pipe_dst_s[app_thread_id_s_e - app_thread_id_s_s - 1] = {0};
 static app_sys_pipe_t app_thread_pipe_dst_d[app_thread_id_d_e - app_thread_id_d_s - 1] = {0};
+static uint8_t app_thread_pipe_src_mem[APP_THREAD_PIPE_MEM_MASTER_SIZE] = {0};
+static uint8_t app_thread_pipe_dst_mem_s[app_thread_id_s_e - app_thread_id_s_s - 1][APP_THREAD_PIPE_MEM_SLAVE_SIZE] = {0};
+static uint8_t app_thread_pipe_dst_mem_d[app_thread_id_d_e - app_thread_id_d_s - 1][APP_THREAD_PIPE_MEM_SLAVE_SIZE] = {0};
 static uint8_t app_thread_used_s[(app_thread_id_s_e - app_thread_id_s_s - 1) / 8 + 1] = {0};
 static uint8_t app_thread_used_d[(app_thread_id_d_e - app_thread_id_d_s - 1) / 8 + 1] = {0};
 /* 计算子线程工作时间(us) */
@@ -41,6 +47,22 @@ static double app_thread_execute_us_d[app_thread_id_d_e - app_thread_id_d_s - 1]
 static uint8_t app_thread_record_buffer[APP_THREAD_PACKAGE_RECORD_SIZE] = {0};
 static app_sys_rbuf_t app_thread_record_rbuf = {0};
 #endif
+
+/*@brief 访问线程事件包
+ *@param package 事件包
+ */
+static void app_thread_package_visit(app_thread_package_t *package)
+{
+    APP_SYS_LOG_ERROR_RAW("package:");
+    APP_SYS_LOG_ERROR_RAW("< thread:%u, ",      package->thread);
+    APP_SYS_LOG_ERROR_RAW("- module:%u, ",      package->module);
+    APP_SYS_LOG_ERROR_RAW("- event:%u, ",       package->event);
+    APP_SYS_LOG_ERROR_RAW("- data:%p, ",        package->data);
+    APP_SYS_LOG_ERROR_RAW("- size:%u, ",        package->size);
+    APP_SYS_LOG_ERROR_RAW("- byte_align:%u, ",  package->byte_align);
+    APP_SYS_LOG_ERROR_RAW("- byte_fixed:%u >",  package->byte_fixed);
+    APP_SYS_LOG_ERROR_RAW(app_sys_log_line());
+}
 
 /*@brief 设置子线程执行时间
  *       注意:这里的时间设置为累加设置
@@ -137,7 +159,11 @@ void app_thread_id_free(uint32_t thread, void (*burn)(app_thread_package_t *pack
             burn(&package);
             continue;
         }
-        app_sys_pipe_give(pipe, &package, false);
+        if (app_sys_pipe_give(pipe, &package, false) == -1) {
+            app_sys_pipe_walk(pipe, app_thread_package_visit);
+            APP_SYS_LOG_ERROR("thread pipe recv too much package");
+            APP_SYS_ASSERT(false);
+        }
     }
     /* 从指定动态子线程提取线程的事件包,并使用对应的处理流程回收 */
     app_thread_src_pipe(thread, &pipe);
@@ -193,11 +219,13 @@ void app_thread_master_prepare(void)
     for (uint32_t idx = app_thread_id_d_s + 1; idx <= app_thread_id_d_e - 1; idx++)
         app_sem_process(&app_thread_sem_dst_d[idx - app_thread_id_d_s - 1], app_sem_static);
     /* 准备管道资源 */
-    app_sys_pipe_ready(&app_thread_pipe_src);
+    app_sys_pipe_ready(&app_thread_pipe_src, (uintptr_t)app_thread_pipe_src_mem, APP_THREAD_PIPE_MEM_MASTER_SIZE);
     for (uint32_t idx = app_thread_id_s_s + 1; idx <= app_thread_id_s_e - 1; idx++)
-        app_sys_pipe_ready(&app_thread_pipe_dst_s[idx - app_thread_id_s_s - 1]);
+        app_sys_pipe_ready(&app_thread_pipe_dst_s[idx - app_thread_id_s_s - 1],
+                 (uintptr_t)app_thread_pipe_dst_mem_s[idx - app_thread_id_s_s - 1], APP_THREAD_PIPE_MEM_SLAVE_SIZE);
     for (uint32_t idx = app_thread_id_d_s + 1; idx <= app_thread_id_d_e - 1; idx++)
-        app_sys_pipe_ready(&app_thread_pipe_dst_d[idx - app_thread_id_d_s - 1]);
+        app_sys_pipe_ready(&app_thread_pipe_dst_d[idx - app_thread_id_d_s - 1],
+                 (uintptr_t)app_thread_pipe_dst_mem_d[idx - app_thread_id_d_s - 1], APP_THREAD_PIPE_MEM_SLAVE_SIZE);
     /* 记录线程包的执行序列 */
     #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
     app_sys_rbuf_ready(&app_thread_record_rbuf, 1, app_thread_record_buffer, APP_THREAD_PACKAGE_RECORD_SIZE);
@@ -233,14 +261,19 @@ APP_THREAD_GROUP_HANDLER(app_thread_master_routine)
         app_mutex_process(&app_thread_mutex, app_mutex_take);
         /* 线程包数量警告检查 */
         uint32_t pkg_num = app_sys_pipe_num(send_pipe);
-        if (APP_THREAD_PACKAGE_MAX <= pkg_num)
-            APP_SYS_LOG_WARN("thread master recv too much package:%u", pkg_num);
+        if (APP_THREAD_PACKAGE_MASTER_MAX <= pkg_num)
+            APP_SYS_LOG_ERROR("thread master recv too much package:%u", pkg_num);
         /* 主线程派发包到指定子线程 */
         while (app_sys_pipe_num(send_pipe) != 0) {
             app_sys_pipe_take(send_pipe, &package, false);
             app_thread_src_sem(package.thread, &recv_sem);
             app_thread_src_pipe(package.thread, &recv_pipe);
-            app_sys_pipe_give(recv_pipe, &package, false);
+            /* 分拣派发无需再做额外的事件合并了 */
+            if (app_sys_pipe_give(recv_pipe, &package, false) == -1) {
+                app_sys_pipe_walk(recv_pipe, app_thread_package_visit);
+                APP_SYS_LOG_ERROR("thread pipe recv too much package");
+                APP_SYS_ASSERT(false);
+            }
             app_sem_process(recv_sem, app_sem_give);
         }
         app_mutex_process(&app_thread_mutex, app_mutex_give);
@@ -257,7 +290,11 @@ bool app_thread_package_notify(app_thread_package_t *package)
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
     app_mutex_process(&app_thread_mutex, app_mutex_take);
-    app_sys_pipe_give(send_pipe, (app_sys_pipe_pkg_t *)package, true);
+    if (app_sys_pipe_give(send_pipe, package, true) == -1) {
+        app_sys_pipe_walk(send_pipe, app_thread_package_visit);
+        APP_SYS_LOG_ERROR("thread pipe recv too much package");
+        APP_SYS_ASSERT(false);
+    }
     app_mutex_process(&app_thread_mutex, app_mutex_give);
     #if APP_THREAD_MASTER_REALTIME
     app_sem_process(send_sem, app_sem_give);

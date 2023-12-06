@@ -3,6 +3,11 @@
 
 typedef struct {
     app_sys_list_dln_t dl_node;
+    /* 事件包吸收回调: */
+    /* 如果手动交付该回调,则使用事件包吸收功能 */
+    /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
+    void (*absorb)(void *pkg_old, void *pkg_new);
+    /* 基本字段:系统必备 */
     uint64_t thread:10;     /* 接收者线程 */
     uint64_t module:10;     /* 接收者线程模组 */
     uint64_t event:10;      /* 接收者线程模组事件 */
@@ -26,18 +31,17 @@ typedef struct {
 
 typedef struct {
     app_sys_list_dll_t dl_list;
+    app_sys_mem_slab_t mem_slab;
     app_critical_t critical;    /* 管道资源临界区保护 */
     uint32_t       number;      /* 管道项数 */
 } app_sys_pipe_t;
 
-/*@brief 初始化管道资源
- */
-void app_sys_pipe_src_ready(void);
-
 /*@brief 初始化管道
  *@param pipe 管道实例
+ *@param addr 内存地址(内存自备)
+ *@param size 内存大小(字节)(num * sizeof(app_sys_pipe_pkg_t))
  */
-void app_sys_pipe_ready(app_sys_pipe_t *pipe);
+void app_sys_pipe_ready(app_sys_pipe_t *pipe, uintptr_t addr, uintptr_t size);
 
 /*@brief 获取管道资源包数量
  *@param pipe 管道实例
@@ -49,8 +53,11 @@ uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe);
  *@param pipe     管道实例
  *@param package  事件资源包(栈资源,非堆资源或静态资源)
  *@param normal   不使用优先级
+ *@retval  0:     正常接收
+ *        +1:     事件被吸收
+ *        -1:     内存块不足,失败
  */
-void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal);
+int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal);
 
 /*@brief 从管道提取一个包
  *@param pipe     管道实例
@@ -58,5 +65,11 @@ void app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool n
  *@param hit      对指定事件资源包进行命中
  */
 void app_sys_pipe_take(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool hit);
+
+/*@brief 迭代整个管道,访问所有事件包
+ *@param pipe  管道实例
+ *@param visit 事件包访问回调
+ */
+void app_sys_pipe_walk(app_sys_pipe_t *pipe, void (*visit)(app_sys_pipe_pkg_t *package));
 
 #endif

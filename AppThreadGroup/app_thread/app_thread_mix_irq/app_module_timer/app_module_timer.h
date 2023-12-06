@@ -3,8 +3,9 @@
 
 /*@brief 约减软件定时器
  *       内部使用: 被mix irq线程使用
+ *@param ms 约减毫秒数
  */
-void app_module_timer_reduce(void);
+void app_module_timer_reduce(uint64_t ms);
 
 /*@brief 软件定时器模组更新
  */

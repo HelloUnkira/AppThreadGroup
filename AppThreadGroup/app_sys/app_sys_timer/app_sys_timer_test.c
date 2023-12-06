@@ -32,17 +32,20 @@ void app_sys_timer_test(void)
         .expired   = app_sys_timer_test_callback,
         .user_data = &label_1,
         .peroid    = 1000,
-        .reload    = true};
+        .reload    = true,
+    };
     static app_sys_timer_t timer2 = {
         .expired   = app_sys_timer_test_callback,
         .user_data = &label_2,
         .peroid    = 2000,
-        .reload    = true};
+        .reload    = true,
+    };
     static app_sys_timer_t timer3 = {
         .expired   = app_sys_timer_test_callback,
         .user_data = &label_3,
         .peroid    = 3000,
-        .reload    = true};
+        .reload    = true,
+    };
     
     app_sys_timer_start(&timer1);
     app_sys_timer_start(&timer2);

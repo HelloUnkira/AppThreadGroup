@@ -58,9 +58,11 @@
 #define APP_THREAD_PACKAGE_RECORD_CNT   50
 /* 线程组线程包裹接收最大警告线(警告) */
 #if     APP_THREAD_MASTER_REALTIME
-#define APP_THREAD_PACKAGE_MAX          20
+#define APP_THREAD_PACKAGE_MASTER_MAX   20
+#define APP_THREAD_PACKAGE_SLAVE_MAX    20
 #else
-#define APP_THREAD_PACKAGE_MAX          100
+#define APP_THREAD_PACKAGE_MASTER_MAX   100
+#define APP_THREAD_PACKAGE_SLAVE_MAX    50
 #endif
 /* 子线程执行时间检查(ms) */
 #define APP_THREAD_SLAVE_EXECUTE_TIME             1
