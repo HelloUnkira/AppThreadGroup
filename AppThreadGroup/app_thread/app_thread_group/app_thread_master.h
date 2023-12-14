@@ -78,4 +78,8 @@ bool app_thread_package_notify(app_thread_package_t *package);
 void app_thread_package_record(app_thread_package_t *package, bool record);
 #endif
 
+/*@brief 线程组断言通知
+ */
+void app_thread_assert_notify(void);
+
 #endif

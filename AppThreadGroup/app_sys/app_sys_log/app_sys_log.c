@@ -37,13 +37,12 @@ const char * app_sys_log_line(void)
 
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
+ *@param log 配置实例
  */
-void app_sys_log_ready(void)
+void app_sys_log_ready(app_sys_log_t *log)
 {
     app_mutex_process(&app_sys_log_mutex, app_mutex_static);
-    app_sys_log.message1   = (void (*)(const char *, ...))      app_dev_log_msg1;
-    app_sys_log.message2   = (void (*)(const char *, va_list))  app_dev_log_msg2;
-    app_sys_log.persistent = (void (*)(const char *))           app_sys_log_text_persistent;
+    app_sys_log = *log;
 }
 
 /*@brief 格式日志输出接口
@@ -122,6 +121,9 @@ void app_sys_assert(const char *file, const char *func, uint32_t line, bool cond
 {
     if (cond)
         return;
+    
+    if (app_sys_log.notify_assert != NULL)
+        app_sys_log.notify_assert();
     
     file = app_sys_log_file(file);
     /* 输出错误信息 */

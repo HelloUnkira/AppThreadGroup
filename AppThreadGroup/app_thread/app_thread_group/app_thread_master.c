@@ -330,3 +330,13 @@ void app_thread_package_record(app_thread_package_t *package, bool record)
     }
 }
 #endif
+
+/*@brief 线程组断言通知
+ */
+void app_thread_assert_notify(void)
+{
+    /* 提取最近事件包 */
+    #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+    app_thread_package_record(NULL, false);
+    #endif
+}

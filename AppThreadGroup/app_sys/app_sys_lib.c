@@ -6,11 +6,12 @@
 #include "app_sys_lib.h"
 
 /*@brief 初始化系统
+ *@param cfg 配置参数
  */
-void app_sys_ready(void)
+void app_sys_ready(app_sys_cfg_t *cfg)
 {
     /* 就绪系统子模组 */
-    app_sys_log_ready();
+    app_sys_log_ready(&cfg->log);
     app_sys_ext_mem_ready();
     app_sys_ext_mem_layout();
     app_sys_log_text_ready();

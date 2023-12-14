@@ -38,9 +38,14 @@
 #include "app_sys_timer.h"
 #include "app_sys_pipe.h"
 
+typedef struct {
+    app_sys_log_t log;
+} app_sys_cfg_t;
+
 /*@brief 初始化系统
+ *@param cfg 配置参数
  */
-void app_sys_ready(void);
+void app_sys_ready(app_sys_cfg_t *cfg);
 
 /*@brief 系统组件库测试
  */

@@ -98,12 +98,14 @@ typedef struct {
     void (*message1)(const char *format, ...);
     void (*message2)(const char *format, va_list list);
     void (*persistent)(const char *text);
+    void (*notify_assert)(void);
 } app_sys_log_t;
 
 /*@brief 日志模组初始化
  *       内部使用: 被线程使用
+ *@param log 配置实例
  */
-void app_sys_log_ready(void);
+void app_sys_log_ready(app_sys_log_t *log);
 
 /*@brief 格式日志输出接口
  *       内部使用: 被宏函数使用

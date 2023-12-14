@@ -54,7 +54,15 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app sys层
      */
-    app_sys_ready();
+    app_sys_cfg_t sys_cfg = {
+        .log = {
+            .message1       = (void *)app_dev_log_msg1,
+            .message2       = (void *)app_dev_log_msg2,
+            .persistent     = (void *)app_sys_log_text_persistent,
+            .notify_assert  = (void *)app_thread_assert_notify,
+        },
+    };
+    app_sys_ready(&sys_cfg);
     /*
      *!!!就绪app thread层
      */
