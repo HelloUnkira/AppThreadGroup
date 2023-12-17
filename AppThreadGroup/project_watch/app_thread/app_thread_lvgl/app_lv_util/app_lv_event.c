@@ -7,28 +7,6 @@
 #include "app_thread_group.h"
 #include "app_lv_lib.h"
 
-/*@brief tick更新 事件包吸收
- */
-static void app_lv_tick_inc_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
-{
-    package_old->byte_fixed += package_new->byte_fixed;
-}
-
-/*@brief lvgl tick更新
- */
-void app_lv_tick_inc_update(void)
-{
-    app_thread_package_t package = {
-        .thread     = app_thread_id_lvgl,
-        .module     = app_thread_lvgl_sched,
-        .event      = app_thread_lvgl_sched_inc,
-        .priority   = app_thread_package_priority_highest,
-        .byte_fixed = 1,
-        .absorb = app_lv_tick_inc_package_absorb,
-    };
-    app_thread_package_notify(&package);
-}
-
 /*@brief tick执行 事件包吸收
  */
 static void app_lv_tick_exec_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)

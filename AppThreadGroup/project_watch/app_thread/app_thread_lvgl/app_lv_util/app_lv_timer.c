@@ -32,11 +32,14 @@ static void app_lv_timer_handler(void *timer)
 {
     static uint8_t count = 0;
     count++;
-    /* lvgl tick source */
+    
+    /* lvgl时钟约减事件(跨线程就地更新) */
     if (count % LV_SCHED_TICK_INC == 0)
-        app_lv_tick_inc_update();
+        lv_tick_inc(LV_SCHED_TICK_INC);
+    /* lvgl时钟调度事件 */
     if (count % LV_SCHED_TICK_EXEC == 0)
         app_lv_tick_exec_update();
+    /* lvgl驱动检查事件 */
     if (count % LV_SCHED_DRV_EVENT == 0)
         app_lv_drv_update();
 }

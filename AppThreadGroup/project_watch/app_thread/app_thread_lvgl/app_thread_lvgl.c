@@ -41,11 +41,6 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
 {
     switch (package->module) {
     case app_thread_lvgl_sched: {
-        /* lvgl时钟约减事件 */
-        if (package->event == app_thread_lvgl_sched_inc) {
-            lv_tick_inc(LV_SCHED_TICK_INC * package->byte_fixed);
-            *record = false;
-        }
         /* lvgl时钟调度事件 */
         if (package->event == app_thread_lvgl_sched_exec) {
             /* 计算事件处理时间(开始) */

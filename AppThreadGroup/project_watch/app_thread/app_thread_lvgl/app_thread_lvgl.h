@@ -12,7 +12,6 @@ typedef enum {
 typedef enum {
     /* GUI事件调度模组事件 */
     app_thread_lvgl_sched_s = 0,
-    app_thread_lvgl_sched_inc,          /* lvgl时钟约减事件 */
     app_thread_lvgl_sched_exec,         /* lvgl时钟调度事件 */
     app_thread_lvgl_sched_drv,          /* lvgl驱动检查事件 */
     app_thread_lvgl_sched_wheel,        /* lvgl wheel更新事件 */
