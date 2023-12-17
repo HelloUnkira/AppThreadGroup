@@ -17,11 +17,10 @@ typedef struct {
 
 /*@brief gesture设备初始化
  *@param driver 设备实例
- *@retval 当前温度值
  */
 static inline void app_dev_gesture_hal_ready(app_dev_t *driver)
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -32,7 +31,7 @@ static inline void app_dev_gesture_hal_ready(app_dev_t *driver)
  */
 static inline void app_dev_gesture_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     data->irq_cb = cb;
@@ -44,7 +43,7 @@ static inline void app_dev_gesture_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(v
  */
 static inline void app_dev_gesture_hal_irq_switch(app_dev_t *driver, bool flag)
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     APP_SYS_LOG_WARN("irq_switch:%d", flag);
@@ -57,7 +56,7 @@ static inline void app_dev_gesture_hal_irq_switch(app_dev_t *driver, bool flag)
  */
 static inline void app_dev_gesture_hal_get_frame(app_dev_t *driver, int32_t frame[APP_EXT_DEV_GESTURE_FRAME_LIMIT][3], uint8_t *length)
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -67,7 +66,7 @@ static inline void app_dev_gesture_hal_get_frame(app_dev_t *driver, int32_t fram
  */
 static inline void app_dev_gesture_hal_proc_exec(app_dev_t *driver)
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -79,13 +78,13 @@ static inline void app_dev_gesture_hal_proc_exec(app_dev_t *driver)
  */
 static inline void app_dev_gesture_hal_dlps_exec(app_dev_t *driver, bool dlps, uint8_t mode)
 {
-    const app_dev_gesture_cfg_t *cfg = driver->cfg;
+    app_dev_gesture_cfg_t *cfg = driver->cfg;
     app_dev_gesture_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_gesture_cfg_t app_dev_gesture_cfg = {
+static app_dev_gesture_cfg_t app_dev_gesture_cfg = {
     .args = NULL,
 };
 

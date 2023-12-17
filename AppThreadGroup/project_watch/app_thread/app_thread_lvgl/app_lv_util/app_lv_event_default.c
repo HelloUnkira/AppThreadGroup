@@ -201,7 +201,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
                 #if 1
                 /* 非主界面响应焦点 */
                 if (app_lv_scene_get_nest() != 1) {
-                    lv_group_t *group = app_lv_driver_get_group();
+                    lv_group_t *group = app_dev_gui_drv_group_inst(&app_dev_gui_drv);
                     lv_obj_t *focus_obj = lv_group_get_focused(group);
                     if (focus_obj == NULL)
                         break;
@@ -259,7 +259,7 @@ static void app_lv_event_default_group_cb(lv_event_t *e)
     case LV_EVENT_DEFOCUSED: {
         APP_SYS_LOG_INFO("LV_EVENT_DEFOCUSED");
         /* 更新焦点后及时退出编辑模式 */
-        lv_group_t *group = app_lv_driver_get_group();
+        lv_group_t *group = app_dev_gui_drv_group_inst(&app_dev_gui_drv);
         lv_indev_t *defocus_indev = lv_event_get_param(e);
         lv_obj_t *focus_obj = lv_group_get_focused(group);
         if (defocus_indev == NULL)
@@ -361,7 +361,7 @@ void app_lv_event_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t red
             return;
         event_config = true;
         
-        lv_group_t *group = app_lv_driver_get_group();
+        lv_group_t *group = app_dev_gui_drv_group_inst(&app_dev_gui_drv);
         //lv_group_focus_freeze(group, true);
         
         lv_obj_add_event_cb(scene, redirect, LV_EVENT_ALL, NULL);
@@ -371,7 +371,7 @@ void app_lv_event_default_config(lv_obj_t *scene, bool enable, lv_event_cb_t red
              return;
         event_config = false;
         
-        lv_group_t *group = app_lv_driver_get_group();
+        lv_group_t *group = app_dev_gui_drv_group_inst(&app_dev_gui_drv);
         //lv_group_focus_freeze(group, false);
         
         lv_group_remove_obj(scene);

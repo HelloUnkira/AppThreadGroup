@@ -21,7 +21,7 @@ typedef struct {
  */
 static float app_dev_temperature_hal_get_value(app_dev_t *driver)
 {
-    const app_dev_temperature_cfg_t *cfg = driver->cfg;
+    app_dev_temperature_cfg_t *cfg = driver->cfg;
     app_dev_temperature_data_t *data = driver->data;
     /* 这里伪造一下数据即可,因为是模拟 */
     return 36.0 + rand() % 6000 * 1.0e-3;
@@ -34,14 +34,14 @@ static float app_dev_temperature_hal_get_value(app_dev_t *driver)
  */
 static void app_dev_temperature_hal_dlps_exec(app_dev_t *driver, bool dlps, uint8_t mode)
 {
-    const app_dev_temperature_cfg_t *cfg = driver->cfg;
+    app_dev_temperature_cfg_t *cfg = driver->cfg;
     app_dev_temperature_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     APP_SYS_LOG_INFO("dlps enter exit:%d:%d", dlps, mode);
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_temperature_cfg_t app_dev_temperature_cfg = {
+static app_dev_temperature_cfg_t app_dev_temperature_cfg = {
     .args = NULL,
 };
 

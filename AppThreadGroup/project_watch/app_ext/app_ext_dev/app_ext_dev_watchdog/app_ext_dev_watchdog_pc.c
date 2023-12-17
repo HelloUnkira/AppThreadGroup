@@ -16,7 +16,7 @@ typedef struct {
  */
 static void app_dev_watchdog_hal_ready(app_dev_t *driver)
 {
-    const app_dev_watchdog_cfg_t *cfg = driver->cfg;
+    app_dev_watchdog_cfg_t *cfg = driver->cfg;
     app_dev_watchdog_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -26,13 +26,13 @@ static void app_dev_watchdog_hal_ready(app_dev_t *driver)
  */
 static void app_dev_watchdog_hal_feed(app_dev_t *driver)
 {
-    const app_dev_watchdog_cfg_t *cfg = driver->cfg;
+    app_dev_watchdog_cfg_t *cfg = driver->cfg;
     app_dev_watchdog_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_watchdog_cfg_t app_dev_watchdog_cfg = {
+static app_dev_watchdog_cfg_t app_dev_watchdog_cfg = {
     .args = NULL,
 };
 

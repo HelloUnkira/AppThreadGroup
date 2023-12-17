@@ -16,7 +16,7 @@ typedef struct {
  */
 static int64_t app_dev_empty_hal_init(app_dev_t *driver)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -27,7 +27,7 @@ static int64_t app_dev_empty_hal_init(app_dev_t *driver)
  */
 static int64_t app_dev_empty_hal_deinit(app_dev_t *driver)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -38,7 +38,7 @@ static int64_t app_dev_empty_hal_deinit(app_dev_t *driver)
  */
 static int64_t app_dev_empty_hal_open(app_dev_t *driver)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -49,7 +49,7 @@ static int64_t app_dev_empty_hal_open(app_dev_t *driver)
  */
 static int64_t app_dev_empty_hal_close(app_dev_t *driver)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -60,7 +60,7 @@ static int64_t app_dev_empty_hal_close(app_dev_t *driver)
  */
 static int64_t app_dev_empty_hal_read(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -71,7 +71,7 @@ static int64_t app_dev_empty_hal_read(app_dev_t *driver, uint8_t *buf, uint32_t 
  */
 static int64_t app_dev_empty_hal_write(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -82,7 +82,7 @@ static int64_t app_dev_empty_hal_write(app_dev_t *driver, uint8_t *buf, uint32_t
  */
 static int64_t app_dev_empty_hal_ioctl(app_dev_t *driver, uint8_t *buf, uint32_t len)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -93,13 +93,13 @@ static int64_t app_dev_empty_hal_ioctl(app_dev_t *driver, uint8_t *buf, uint32_t
  */
 static inline void * app_dev_empty_hal_data_addr(app_dev_t *driver)
 {
-    const app_dev_empty_cfg_t *cfg = driver->cfg;
+    app_dev_empty_cfg_t *cfg = driver->cfg;
     app_dev_empty_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_empty_cfg_t app_dev_empty_cfg = {
+static app_dev_empty_cfg_t app_dev_empty_cfg = {
     .args = NULL,
 };
 

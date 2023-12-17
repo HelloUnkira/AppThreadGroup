@@ -1,160 +1,57 @@
-/*实现目标:
- *    lv适配Win模拟器
+/* 实现目标:
+ *     gui驱动
  */
 
-#include "app_lv_lib.h"
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#if APP_LV_DRV_USE_WIN
+#include "app_ext_lib.h"
+#include "app_sys_lib.h"
 
-static bool app_lv_mouse_status = false;
-static bool app_lv_mouse_left_status   = false;
-static bool app_lv_mouse_right_status  = false;
-static bool app_lv_mouse_middle_status = false;
-static LPARAM  app_lv_mouse_value = 0;
+#if APP_EXT_DEV_GUI_USE_SDL
 
-/*@brief lvgl 鼠标初始化
+/* 设备gui_ptr抽象操作参数 */
+typedef struct {
+    /*  */
+    bool    status;
+    bool    left_status;
+    bool    right_status;
+    int16_t pos_x;
+    int16_t pos_y;
+    /*  */
+} app_dev_gui_ptr_cfg_t;
+
+/*@brief 设备适配简易转接层
  */
-void app_lv_mouse_ready(void)
+static inline app_dev_t * app_dev_gui_ptr_inst(void)
 {
-    app_lv_mouse_status = true;
+    return &app_dev_gui_ptr;
 }
 
-/*@brief lvgl 鼠标进入低功耗
- */
-void app_lv_mouse_dlps_enter(void)
-{
-    app_lv_mouse_status = false;
-}
-
-/*@brief lvgl 鼠标退出低功耗
- */
-void app_lv_mouse_dlps_exit(void)
-{
-    app_lv_mouse_status = true;
-}
-
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
 /*@brief lvgl输入设备回调接口
  */
-void app_lv_mouse_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
+void app_dev_gui_ptr_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev_data)
 {
-    if (!app_lv_mouse_status)
+    app_dev_t *driver = app_dev_gui_ptr_inst();
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    
+    if (!cfg->status)
         return;
 
     (void)indev_drv;
-    
-    UINT app_lv_display_get_dpi(bool is_def);
     /* 传递给lvgl的touch事件 */
-    data->point.x = MulDiv(GET_X_LPARAM(app_lv_mouse_value),
-        app_lv_display_get_dpi(true), LV_DRV_ZOOM * app_lv_display_get_dpi(false));
-    data->point.y = MulDiv(GET_Y_LPARAM(app_lv_mouse_value),
-        app_lv_display_get_dpi(true), LV_DRV_ZOOM * app_lv_display_get_dpi(false));
+    indev_data->point.x = cfg->pos_x;
+    indev_data->point.y = cfg->pos_y;
     /* 我们只用到了鼠标左键的适配功能 */
-    data->state   = app_lv_mouse_left_status ?
-                    LV_INDEV_STATE_PRESSED :
-                    LV_INDEV_STATE_RELEASED;
-    /* 整理坐标范围 */
-    if (data->point.x < 0)
-        data->point.x = 0;
-    if (data->point.x > LV_DRV_HOR_RES - 1)
-        data->point.x = LV_DRV_HOR_RES - 1;
-    if (data->point.y < 0)
-        data->point.y = 0;
-    if (data->point.y > LV_DRV_VER_RES - 1)
-        data->point.y = LV_DRV_VER_RES - 1;
+    indev_data->state   = cfg->left_status ?
+                          LV_INDEV_STATE_PRESSED :
+                          LV_INDEV_STATE_RELEASED;
 }
 
-/*@brief Win 输入设备接口
- */
-static BOOL app_lv_mouse_get_info(HTOUCHINPUT hTouchInput, UINT cInputs, PTOUCHINPUT pInputs, int cbSize)
-{
-    HMODULE moudle_handle = GetModuleHandleW(L"user32.dll");
-    if (!moudle_handle)
-        return FALSE;
-    
-    typedef BOOL(WINAPI* function_t)(HTOUCHINPUT, UINT, PTOUCHINPUT, int);
-    
-    function_t function = (function_t)(GetProcAddress(moudle_handle, "GetTouchInputInfo"));
-    if (!function)
-        return FALSE;
-    
-    return function(hTouchInput, cInputs, pInputs, cbSize);
-}
-
-/*@brief Win 输入设备接口
- */
-static BOOL app_lv_mouse_close(HTOUCHINPUT hTouchInput)
-{
-    HMODULE moudle_handle = GetModuleHandleW(L"user32.dll");
-    if (!moudle_handle)
-        return FALSE;
-
-    typedef BOOL(WINAPI* function_t)(HTOUCHINPUT);
-
-    function_t function = (function_t)(GetProcAddress(moudle_handle, "CloseTouchInputHandle"));
-    if (!function)
-        return FALSE;
-
-    return function(hTouchInput);
-}
-
-/*@brief Win 输入设备回调接口
- */
-HRESULT CALLBACK app_lv_mouse_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
-{
-    if (!app_lv_mouse_status)
-        return 0;
-    
-    switch (uMsg)
-    {
-    case WM_MOUSEMOVE:
-    case WM_LBUTTONDOWN:
-    case WM_LBUTTONUP:
-    case WM_MBUTTONDOWN:
-    case WM_MBUTTONUP:
-    case WM_RBUTTONDOWN:
-    case WM_RBUTTONUP:
-        app_lv_mouse_value = lParam;
-        /* 鼠标左键按下抬起 */
-        if (uMsg == WM_LBUTTONDOWN || uMsg == WM_LBUTTONUP)
-            app_lv_mouse_left_status = (uMsg == WM_LBUTTONDOWN);
-        /* 鼠标右键按下抬起 */
-        if (uMsg == WM_RBUTTONDOWN || uMsg == WM_RBUTTONUP)
-            app_lv_mouse_right_status = (uMsg == WM_RBUTTONDOWN);
-        /* 鼠标中键按下抬起 */
-        if (uMsg == WM_MBUTTONDOWN || uMsg == WM_MBUTTONUP)
-            app_lv_mouse_middle_status = (uMsg == WM_MBUTTONDOWN);
-        return TRUE;
-    case WM_TOUCH: {
-        UINT touch_size = LOWORD(wParam);
-        HTOUCHINPUT touch_handle = (HTOUCHINPUT)(lParam);
-        PTOUCHINPUT touch_handle_t = app_mem_alloc(touch_size * sizeof(TOUCHINPUT));
-        if (!touch_handle_t)
-            break;
-        POINT point = {0};
-        if (app_lv_mouse_get_info(touch_handle, touch_size, touch_handle_t, sizeof(TOUCHINPUT)))
-            for (UINT idx = 0; idx < touch_size; idx++) {
-                point.x = TOUCH_COORD_TO_PIXEL(touch_handle_t[idx].x);
-                point.y = TOUCH_COORD_TO_PIXEL(touch_handle_t[idx].y);
-                if (!ScreenToClient(hWnd, &point))
-                    continue;
-                uint16_t x = (uint16_t)(point.x & 0xffff);
-                uint16_t y = (uint16_t)(point.y & 0xffff);
-
-                DWORD MousePressedMask = TOUCHEVENTF_MOVE | TOUCHEVENTF_DOWN;
-
-                app_lv_mouse_value = (y << 16) | x;
-                app_lv_mouse_left_status  = (touch_handle_t[idx].dwFlags & MousePressedMask);
-                app_lv_mouse_right_status = (touch_handle_t[idx].dwFlags & MousePressedMask);
-            }
-        app_mem_free(touch_handle_t);
-        app_lv_mouse_close(touch_handle);
-        return TRUE;
-    }
-    }
-    return 0;
-}
-
-static const uint8_t app_lv_mouse_icon_pic[] = {
+static const uint8_t app_dev_gui_ptr_icon_pic[] = {
 #if LV_COLOR_DEPTH == 1 || LV_COLOR_DEPTH == 8
     /*Pixel format: Alpha 8 bit, Red: 3 bit, Green: 3 bit, Blue: 2 bit*/
     0x24, 0xb8, 0x24, 0xc8, 0x00, 0x13, 0x00, 0x00, 0x00, 0x03, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -248,13 +145,142 @@ static const uint8_t app_lv_mouse_icon_pic[] = {
 #endif
 };
 
-lv_img_dsc_t app_lv_mouse_icon = {
+lv_img_dsc_t app_dev_gui_ptr_icon = {
     .header.always_zero = 0,
     .header.w  = 14,
     .header.h  = 20,
     .data_size = LV_IMG_PX_SIZE_ALPHA_BYTE  * 280,
     .header.cf = LV_IMG_CF_TRUE_COLOR_ALPHA,
-    .data = app_lv_mouse_icon_pic,
+    .data = app_dev_gui_ptr_icon_pic,
+};
+
+#else
+#endif
+
+
+/*@brief SDL 输入设备回调接口
+ */
+void app_dev_gui_ptr_msg_cb(SDL_Event *event)
+{
+    app_dev_t *driver = app_dev_gui_ptr_inst();
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    
+    if (!cfg->status)
+        return;
+    
+    switch (event->type) {
+    /* 鼠标抬起事件 */
+    case SDL_MOUSEBUTTONUP:
+        if(event->button.button == SDL_BUTTON_LEFT)
+            cfg->left_status = false;
+        break;
+        if(event->button.button == SDL_BUTTON_RIGHT)
+            cfg->right_status = false;
+        break;
+    /* 鼠标按下事件 */
+    case SDL_MOUSEBUTTONDOWN:
+        if(event->button.button == SDL_BUTTON_LEFT) {
+            cfg->left_status = true;
+            cfg->pos_x = event->motion.x / LV_DRV_ZOOM;
+            cfg->pos_y = event->motion.y / LV_DRV_ZOOM;
+        }
+        if(event->button.button == SDL_BUTTON_RIGHT) {
+            cfg->right_status = true;
+            cfg->pos_x = event->motion.x / LV_DRV_ZOOM;
+            cfg->pos_y = event->motion.y / LV_DRV_ZOOM;
+        }
+        break;
+    /* 鼠标位置移动事件 */
+    case SDL_MOUSEMOTION:
+        cfg->pos_x = event->motion.x / LV_DRV_ZOOM;
+        cfg->pos_y = event->motion.y / LV_DRV_ZOOM;
+        break;
+    /* 手指抬起事件 */
+    case SDL_FINGERUP:
+        cfg->left_status  = false;
+        cfg->right_status = false;
+        cfg->pos_x = LV_HOR_RES * event->tfinger.x / LV_DRV_ZOOM;
+        cfg->pos_y = LV_VER_RES * event->tfinger.y / LV_DRV_ZOOM;
+        break;
+    /* 手指按下事件 */
+    case SDL_FINGERDOWN:
+        cfg->left_status  = true;
+        cfg->right_status = true;
+        cfg->pos_x = LV_HOR_RES * event->tfinger.x / LV_DRV_ZOOM;
+        cfg->pos_y = LV_VER_RES * event->tfinger.y / LV_DRV_ZOOM;
+        break;
+    /* 手指位置移动事件 */
+    case SDL_FINGERMOTION:
+        cfg->pos_x = LV_HOR_RES * event->tfinger.x / LV_DRV_ZOOM;
+        cfg->pos_y = LV_VER_RES * event->tfinger.y / LV_DRV_ZOOM;
+        break;
+    }
+}
+
+/*@brief gui_ptr设备初始化
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_ptr_hal_ready(app_dev_t *driver)
+{
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    /*  */
+    cfg->status = true;
+}
+
+/*@brief gui_ptr设备进入dlps
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_ptr_hal_dlps_enter(app_dev_t *driver)
+{
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    /*  */
+    cfg->status = false;
+}
+
+/*@brief gui_ptr设备退出dlps
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_ptr_hal_dlps_exit(app_dev_t *driver)
+{
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    /*  */
+    cfg->status = true;
+}
+
+/* 静态配置的设备操作参数 */
+static app_dev_gui_ptr_cfg_t app_dev_gui_ptr_cfg = {
+    /*  */
+    .status = false,
+    .left_status = false,
+    .right_status = false,
+    . pos_x = 0,
+    . pos_y = 0,
+    /*  */
+};
+
+/* 静态配置的设备操作集合 */
+static const app_dev_gui_ptr_api_t app_dev_gui_ptr_api = {
+    .ready          = app_dev_gui_ptr_hal_ready,
+    .dlps_enter     = app_dev_gui_ptr_hal_dlps_enter,
+    .dlps_exit      = app_dev_gui_ptr_hal_dlps_exit,
+};
+
+/* 动态的设备操作数据 */
+static app_dev_gui_ptr_data_t app_dev_gui_ptr_data = {
+    .args = NULL,
+};
+
+/* 静态配置的设备实例 */
+const app_dev_t app_dev_gui_ptr = {
+    .name = "app_dev_gui_ptr",
+    .cfg  = &app_dev_gui_ptr_cfg,
+    .api  = &app_dev_gui_ptr_api,
+    .data = &app_dev_gui_ptr_data,
 };
 
 #endif
+

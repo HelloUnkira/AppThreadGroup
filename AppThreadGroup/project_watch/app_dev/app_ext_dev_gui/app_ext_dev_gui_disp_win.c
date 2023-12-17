@@ -1,15 +1,21 @@
-/*实现目标:
- *    lv适配Win模拟器
+/* 实现目标:
+ *     gui驱动
  */
 
-#include "app_lv_lib.h"
+#define APP_SYS_LOG_LOCAL_STATUS     1
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#if APP_LV_DRV_USE_WIN
+#include "app_ext_lib.h"
+#include "app_sys_lib.h"
 
+#if APP_EXT_DEV_GUI_USE_WIN
+
+/*  */
 #define APP_LV_DISPLAY_STY      (WS_OVERLAPPEDWINDOW & ~(WS_SIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME))
 #define APP_LV_DISPLAY_STY_EX   (WS_EX_CLIENTEDGE)
 #define APP_LV_DISPLAY_DPI_DEF  (96)
 
+/*  */
 typedef struct {
     WNDCLASSEXW     window_class;
     HINSTANCE       instance;
@@ -19,34 +25,161 @@ typedef struct {
     UINT32         *pixel_buf;
     SIZE_T          pixel_buf_size;
     int             dpi_value;
-} app_lv_display_t;
+} app_dev_gui_disp_t;
 
-static bool app_lv_display_quit = false;
-static app_lv_display_t app_lv_display_screen = {0};
+/* 设备gui_disp抽象操作参数 */
+typedef struct {
+    app_dev_gui_disp_t display;
+    /*  */
+    bool quit;
+    /*  */
+} app_dev_gui_disp_cfg_t;
+
+/*@brief 设备适配简易转接层
+ */
+static inline app_dev_t * app_dev_gui_disp_inst(void)
+{
+    return &app_dev_gui_disp;
+}
+
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
+
+/*@brief lvgl 屏幕接口
+ */
+void app_dev_gui_disp_flush_manual(lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_coord_t h)
+{
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    RECT rect;
+    
+    rect.top    = MulDiv(y * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
+    rect.left   = MulDiv(x * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
+    rect.right  = MulDiv(w * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.left;
+    rect.bottom = MulDiv(h * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.top;
+    
+    #if 0
+    HDC win_hdc = GetDC(g_window_handle);
+    if (win_hdc) {
+        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
+        
+        StretchBlt(win_hdc, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
+                   cfg->display.window, x, y, w, h, SRCCOPY);
+        
+        SetStretchBltMode(win_hdc, prev_mode);
+        ReleaseDC(cfg->display.window, win_hdc);
+    }
+    #else
+    InvalidateRect(cfg->display.window, &rect, false);
+    UpdateWindow(cfg->display.window);
+    #endif
+}
+
+/*@brief lvgl 屏幕刷新回调接口
+ */
+void app_dev_gui_disp_lv_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
+{
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    #if 0
+    #elif (LV_COLOR_DEPTH == 32) || \
+          (LV_COLOR_DEPTH == 16 && LV_COLOR_16_SWAP == 0) || \
+          (LV_COLOR_DEPTH == 8)  || \
+          (LV_COLOR_DEPTH == 1)
+        (void)area;
+        memcpy(cfg->display.pixel_buf, color_p,
+               cfg->display.pixel_buf_size);
+    #elif (LV_COLOR_DEPTH == 16 && LV_COLOR_16_SWAP != 0)
+    UINT16  current  = 0;
+    SIZE_T  data_cnt = cfg->display.pixel_buf_size / sizeof(UINT16);
+    PUINT16 data_src = (PUINT16)color_p;
+    PUINT16 data_dst = (PUINT16)cfg->display.pixel_buf;
+    for (SIZE_T idx = 0; idx < data_cnt; idx++) {
+         current  = *data_src;
+        *data_dst = (LOBYTE(current) << 8) | HIBYTE(current);
+        data_src++;
+        data_dst++;
+    }
+    #else
+    for (int y = area->y1; y <= area->y2; ++y)
+    for (int x = area->x1; x <= area->x2; ++x) {
+        cfg->display.pixel_buf[y * disp_drv->hor_res + x] = lv_color_to32(*color_p);
+        color_p++;
+    }
+    #endif
+    
+    HDC win_hdc = GetDC(cfg->display.window);
+    if (win_hdc) {
+        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
+        
+        StretchBlt(win_hdc, 0, 0,
+            MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF),
+            MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF),
+            cfg->display.buf_hdc, 0, 0, LV_DRV_HOR_RES, LV_DRV_VER_RES, SRCCOPY);
+        
+        SetStretchBltMode(win_hdc, prev_mode);
+        ReleaseDC(cfg->display.window, win_hdc);
+    }
+    
+    lv_disp_flush_ready(disp_drv);
+}
+
+/*@brief lvgl 屏幕刷新回调接口
+ */
+void app_dev_gui_disp_lv_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
+{
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    area->x1 = 0;
+    area->y1 = 0;
+    area->x2 = LV_DRV_HOR_RES - 1;
+    area->y2 = LV_DRV_VER_RES - 1;
+}
+
+#else
+#endif
 
 /*@brief Win 屏幕接口(内部扩展)
  */
-UINT app_lv_display_get_dpi(bool is_def)
+UINT app_dev_gui_disp_get_dpi(bool is_def)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     if (is_def)
         return APP_LV_DISPLAY_DPI_DEF;
-    if (app_lv_display_screen.dpi_value != 0)
-        return app_lv_display_screen.dpi_value;
+    if (cfg->display.dpi_value != 0)
+        return cfg->display.dpi_value;
     else
         return APP_LV_DISPLAY_DPI_DEF;
 }
 
 /*@brief Win 屏幕接口(内部扩展)
  */
-HWND app_lv_display_get_window(void)
+HWND app_dev_gui_disp_get_window(void)
 {
-    return app_lv_display_screen.window;
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    return cfg->display.window;
 }
 
 /*@brief Win 屏幕接口
  */
-static UINT app_lv_display_get_dpi_for_window(_In_ HWND WindowHandle)
+static UINT app_dev_gui_disp_get_dpi_for_window(_In_ HWND WindowHandle)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     typedef enum {
         MDT_EFFECTIVE_DPI   = 0,
         MDT_ANGULAR_DPI     = 1,
@@ -90,8 +223,12 @@ static UINT app_lv_display_get_dpi_for_window(_In_ HWND WindowHandle)
 
 /*@brief Win 屏幕接口
  */
-static BOOL app_lv_display_reg_touch_window(HWND hWnd,ULONG ulFlags)
+static BOOL app_dev_gui_disp_reg_touch_window(HWND hWnd,ULONG ulFlags)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     HMODULE module_handle = GetModuleHandleW(L"user32.dll");
     if (!module_handle)
         return FALSE;
@@ -107,8 +244,12 @@ static BOOL app_lv_display_reg_touch_window(HWND hWnd,ULONG ulFlags)
 
 /*@brief Win 屏幕接口
  */
-static BOOL app_lv_display_enable_child_win_dpi_msg(HWND WindowHandle)
+static BOOL app_dev_gui_disp_enable_child_win_dpi_msg(HWND WindowHandle)
 { 
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     // This hack is only for Windows 10 TH1/TH2 only.
     // We don't need this hack if the Per Monitor Aware V2 is existed.
     OSVERSIONINFOEXW os_version_info_ex     = { 0 };
@@ -144,8 +285,12 @@ static BOOL app_lv_display_enable_child_win_dpi_msg(HWND WindowHandle)
 
 /*@brief Win 屏幕接口
  */
-static HDC app_lv_display_frame_buffer(HWND WindowHandle, LONG Width, LONG Height, UINT32** PixelBuffer, SIZE_T* PixelBufferSize)
+static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Height, UINT32** PixelBuffer, SIZE_T* PixelBufferSize)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     HDC win_frame_buf_hdc = NULL;
 
     if (PixelBuffer && PixelBufferSize) {
@@ -261,16 +406,20 @@ static HDC app_lv_display_frame_buffer(HWND WindowHandle, LONG Width, LONG Heigh
 
 /*@brief 创建屏幕
  */
-static void app_lv_display_create(app_lv_display_t *disp)
+static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     int retval = 0;
-    HRESULT CALLBACK app_lv_driver_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+    HRESULT CALLBACK app_ext_dev_drv_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     
     disp->instance = GetModuleHandleW(NULL);
     /* 1.初始化屏幕类 */
     disp->window_class.style        = 0;
     disp->window_class.cbSize       = sizeof(WNDCLASSEX);
-    disp->window_class.lpfnWndProc  = app_lv_driver_msg_cb;
+    disp->window_class.lpfnWndProc  = app_ext_dev_drv_msg_cb;
     disp->window_class.cbClsExtra   = 0;
     disp->window_class.cbWndExtra   = 0;
     disp->window_class.hInstance        = disp->instance;
@@ -292,7 +441,7 @@ static void app_lv_display_create(app_lv_display_t *disp)
                                    NULL, NULL, disp->instance, NULL);
     // APP_SYS_ASSERT(disp->window != 0);
     /* 3.更新DPI */
-    disp->dpi_value = app_lv_display_get_dpi_for_window(disp->window);
+    disp->dpi_value = app_dev_gui_disp_get_dpi_for_window(disp->window);
     /* 4.更新屏幕域 */
     RECT win_size;
     win_size.top    = 0;
@@ -304,10 +453,10 @@ static void app_lv_display_create(app_lv_display_t *disp)
     SetWindowPos(disp->window, NULL, 0, 0, win_size.right, win_size.bottom,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
     /* 5.触摸使能 */
-    app_lv_display_reg_touch_window(disp->window, 0);
-    app_lv_display_enable_child_win_dpi_msg(disp->window);
+    app_dev_gui_disp_reg_touch_window(disp->window, 0);
+    app_dev_gui_disp_enable_child_win_dpi_msg(disp->window);
     /* 6.创建帧缓冲区 */
-    HDC frame_buf_hdc = app_lv_display_frame_buffer(disp->window, LV_DRV_HOR_RES, LV_DRV_VER_RES,
+    HDC frame_buf_hdc = app_dev_gui_disp_frame_buffer(disp->window, LV_DRV_HOR_RES, LV_DRV_VER_RES,
                                                    &disp->pixel_buf,
                                                    &disp->pixel_buf_size);
     DeleteDC(disp->buf_hdc);
@@ -319,142 +468,36 @@ static void app_lv_display_create(app_lv_display_t *disp)
 
 /*@brief 更新屏幕
  */
-static void app_lv_display_update(app_lv_display_t *disp)
+static void app_dev_gui_disp_update(app_dev_gui_disp_t *disp)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
 }
 
 /*@brief 销毁屏幕
  */
-static void app_lv_display_destroy(app_lv_display_t *disp)
+static void app_dev_gui_disp_destroy(app_dev_gui_disp_t *disp)
 {
-}
-
-/*@brief Win 屏幕接口
- */
-void app_lv_display_flush_manual(lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_coord_t h)
-{
-    RECT rect;
-    
-    rect.top    = MulDiv(y * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    rect.left   = MulDiv(x * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    rect.right  = MulDiv(w * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.left;
-    rect.bottom = MulDiv(h * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.top;
-    
-    #if 0
-    HDC win_hdc = GetDC(g_window_handle);
-    if (win_hdc) {
-        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
-        
-        StretchBlt(win_hdc, rect.left, rect.top, rect.right - rect.left, rect.bottom - rect.top,
-                   app_lv_display_screen.window, x, y, w, h, SRCCOPY);
-        
-        SetStretchBltMode(win_hdc, prev_mode);
-        ReleaseDC(app_lv_display_screen.window, win_hdc);
-    }
-    #else
-    InvalidateRect(app_lv_display_screen.window, &rect, false);
-    UpdateWindow(app_lv_display_screen.window);
-    #endif
-}
-
-/*@brief lvgl 屏幕初始化
- */
-void app_lv_display_ready(void)
-{
-    /* 初始化SDL */
-    if (true) {
-        app_lv_display_create(&app_lv_display_screen);
-    }
-    
-    /* 反初始化SDL屏幕(不需要) */
-    if (false) {
-        app_lv_display_destroy(&app_lv_display_screen);
-    }
-}
-
-/*@brief lvgl 屏幕进入低功耗
- */
-void app_lv_display_dlps_enter(void)
-{
-    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
-    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
-}
-
-/*@brief lvgl 屏幕退出低功耗
- */
-void app_lv_display_dlps_exit(void)
-{
-    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
-    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
-}
-
-/*@brief lvgl 屏幕刷新回调接口
- */
-void app_lv_display_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
-{
-    #if 0
-    #elif (LV_COLOR_DEPTH == 32) || \
-          (LV_COLOR_DEPTH == 16 && LV_COLOR_16_SWAP == 0) || \
-          (LV_COLOR_DEPTH == 8)  || \
-          (LV_COLOR_DEPTH == 1)
-        (void)area;
-        memcpy(app_lv_display_screen.pixel_buf, color_p,
-               app_lv_display_screen.pixel_buf_size);
-    #elif (LV_COLOR_DEPTH == 16 && LV_COLOR_16_SWAP != 0)
-    UINT16  current  = 0;
-    SIZE_T  data_cnt = app_lv_display_screen.pixel_buf_size / sizeof(UINT16);
-    PUINT16 data_src = (PUINT16)color_p;
-    PUINT16 data_dst = (PUINT16)app_lv_display_screen.pixel_buf;
-    for (SIZE_T idx = 0; idx < data_cnt; idx++) {
-         current  = *data_src;
-        *data_dst = (LOBYTE(current) << 8) | HIBYTE(current);
-        data_src++;
-        data_dst++;
-    }
-    #else
-    for (int y = area->y1; y <= area->y2; ++y)
-    for (int x = area->x1; x <= area->x2; ++x) {
-        app_lv_display_screen.pixel_buf[y * disp_drv->hor_res + x] = lv_color_to32(*color_p);
-        color_p++;
-    }
-    #endif
-    
-    HDC win_hdc = GetDC(app_lv_display_screen.window);
-    if (win_hdc) {
-        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
-        
-        StretchBlt(win_hdc, 0, 0,
-            MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF),
-            MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF),
-            app_lv_display_screen.buf_hdc, 0, 0, LV_DRV_HOR_RES, LV_DRV_VER_RES, SRCCOPY);
-        
-        SetStretchBltMode(win_hdc, prev_mode);
-        ReleaseDC(app_lv_display_screen.window, win_hdc);
-    }
-    
-    lv_disp_flush_ready(disp_drv);
-}
-
-/*@brief lvgl 屏幕刷新回调接口
- */
-void app_lv_display_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
-{
-    area->x1 = 0;
-    area->y1 = 0;
-    area->x2 = LV_DRV_HOR_RES - 1;
-    area->y2 = LV_DRV_VER_RES - 1;
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
 }
 
 /*@brief Win屏幕消息回调事件
  */
-HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
+HRESULT CALLBACK app_dev_gui_disp_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
     switch (uMsg)
     {
     case WM_DPICHANGED: {
         RECT c_rect;
         LPRECT s_rect = (LPRECT)lParam;
-        app_lv_display_screen.dpi_value = HIWORD(wParam);
+        cfg->display.dpi_value = HIWORD(wParam);
         
         SetWindowPos(hWnd, NULL, s_rect->left,
                                  s_rect->top,
@@ -463,8 +506,8 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         
         GetClientRect(hWnd, &c_rect);
         
-        int win_hor = MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-        int win_ver = MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, app_lv_display_screen.dpi_value, APP_LV_DISPLAY_DPI_DEF);
+        int win_hor = MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
+        int win_ver = MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
         
         SetWindowPos(hWnd, NULL,
             s_rect->left,
@@ -479,10 +522,10 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         PAINTSTRUCT ps;
         HDC win_dc = BeginPaint(hWnd, &ps);
         if (win_dc) {
-            rect.top    = MulDiv(ps.rcPaint.top,    APP_LV_DISPLAY_DPI_DEF, app_lv_display_screen.dpi_value);
-            rect.left   = MulDiv(ps.rcPaint.left,   APP_LV_DISPLAY_DPI_DEF, app_lv_display_screen.dpi_value);
-            rect.right  = MulDiv(ps.rcPaint.right,  APP_LV_DISPLAY_DPI_DEF, app_lv_display_screen.dpi_value);
-            rect.bottom = MulDiv(ps.rcPaint.bottom, APP_LV_DISPLAY_DPI_DEF, app_lv_display_screen.dpi_value);
+            rect.top    = MulDiv(ps.rcPaint.top,    APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
+            rect.left   = MulDiv(ps.rcPaint.left,   APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
+            rect.right  = MulDiv(ps.rcPaint.right,  APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
+            rect.bottom = MulDiv(ps.rcPaint.bottom, APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
             
             int prev_mode = SetStretchBltMode(win_dc, HALFTONE);
             
@@ -491,7 +534,7 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
                        ps.rcPaint.top,
                        ps.rcPaint.right  - ps.rcPaint.left,
                        ps.rcPaint.bottom - ps.rcPaint.top,
-                       app_lv_display_screen.buf_hdc,
+                       cfg->display.buf_hdc,
                        rect.left,
                        rect.top,
                        rect.right  - rect.left,
@@ -504,7 +547,7 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
         return TRUE;
     }
     case WM_DESTROY:
-        app_lv_display_quit = true;
+        cfg->quit = true;
         /* 让主流程直接接收进程 */
         /* 该动作交付系统完成 */
         /* 因为还有一段显示内容 */
@@ -513,20 +556,91 @@ HRESULT CALLBACK app_lv_display_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
     case WM_CLOSE:
         /* 点击窗口右上角关闭会产生该事件 */
         /* 我们在此处拦截它,不让它进一步传入默认处理流程 */
-        app_lv_display_quit = true;
+        cfg->quit = true;
         return TRUE;
     case WM_QUIT:
-        app_lv_display_quit = true;
+        cfg->quit = true;
         return TRUE;
     }
     return 0;
 }
 
-/*@brief lvgl 屏幕需要关机
+/*@brief Win 屏幕需要关机
  */
-bool app_lv_display_shutdown(void)
+bool app_dev_gui_disp_shutdown(void)
 {
-    return app_lv_display_quit;
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    return cfg->quit;
 }
+
+/*@brief gui_disp设备初始化
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_disp_hal_ready(app_dev_t *driver)
+{
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    /* 初始化SDL */
+    if (true) {
+        app_dev_gui_disp_create(&cfg->display);
+    }
+    
+    /* 反初始化SDL屏幕(不需要) */
+    if (false) {
+        app_dev_gui_disp_destroy(&cfg->display);
+    }
+}
+
+/*@brief gui_disp设备进入dlps
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_disp_hal_dlps_enter(app_dev_t *driver)
+{
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
+    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
+}
+
+/*@brief gui_disp设备退出dlps
+ *@param driver 设备实例
+ */
+static inline void app_dev_gui_disp_hal_dlps_exit(app_dev_t *driver)
+{
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    /* 无事可做,不能关闭屏幕,键盘事件来源于屏幕 */
+    /* 不能关闭屏幕,否则SDL抓不到键盘事件了,让黑屏代替关闭 */
+}
+
+/* 静态配置的设备操作参数 */
+static app_dev_gui_disp_cfg_t app_dev_gui_disp_cfg = {
+    .display = {0},
+    .quit = false,
+};
+
+/* 静态配置的设备操作集合 */
+static const app_dev_gui_disp_api_t app_dev_gui_disp_api = {
+    .ready          = app_dev_gui_disp_hal_ready,
+    .dlps_enter     = app_dev_gui_disp_hal_dlps_enter,
+    .dlps_exit      = app_dev_gui_disp_hal_dlps_exit,
+};
+
+/* 动态的设备操作数据 */
+static app_dev_gui_disp_data_t app_dev_gui_disp_data = {
+    .args = NULL,
+};
+
+/* 静态配置的设备实例 */
+const app_dev_t app_dev_gui_disp = {
+    .name = "app_dev_gui_disp",
+    .cfg  = &app_dev_gui_disp_cfg,
+    .api  = &app_dev_gui_disp_api,
+    .data = &app_dev_gui_disp_data,
+};
 
 #endif

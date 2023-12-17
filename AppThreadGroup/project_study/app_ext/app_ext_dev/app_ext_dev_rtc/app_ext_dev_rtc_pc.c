@@ -16,7 +16,7 @@ typedef struct {
  */
 static void app_dev_rtc_hal_ready(app_dev_t *driver)
 {
-    const app_dev_rtc_cfg_t *cfg = driver->cfg;
+    app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -27,7 +27,7 @@ static void app_dev_rtc_hal_ready(app_dev_t *driver)
  */
 static void app_dev_rtc_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
-    const app_dev_rtc_cfg_t *cfg = driver->cfg;
+    app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     data->irq_cb = cb;
@@ -39,7 +39,7 @@ static void app_dev_rtc_hal_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
  */
 static void app_dev_rtc_hal_irq_switch(app_dev_t *driver, bool flag)
 {
-    const app_dev_rtc_cfg_t *cfg = driver->cfg;
+    app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -49,7 +49,7 @@ static void app_dev_rtc_hal_irq_switch(app_dev_t *driver, bool flag)
  */
 static void app_dev_rtc_hal_get_utc(app_dev_t *driver, uint64_t *utc)
 {
-    const app_dev_rtc_cfg_t *cfg = driver->cfg;
+    app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     *utc = data->utc;
@@ -60,14 +60,14 @@ static void app_dev_rtc_hal_get_utc(app_dev_t *driver, uint64_t *utc)
  */
 static void app_dev_rtc_hal_set_utc(app_dev_t *driver, uint64_t *utc)
 {
-    const app_dev_rtc_cfg_t *cfg = driver->cfg;
+    app_dev_rtc_cfg_t *cfg = driver->cfg;
     app_dev_rtc_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     data->utc = *utc;
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_rtc_cfg_t app_dev_rtc_cfg = {
+static app_dev_rtc_cfg_t app_dev_rtc_cfg = {
     .args = NULL,
 };
 

@@ -18,7 +18,7 @@ typedef struct {
  */
 static int32_t app_dev_ext_mem_hal_ready(app_dev_t *driver)
 {
-    const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
+    app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
     memset(data, 0, sizeof(app_dev_ext_mem_data_t));
@@ -31,7 +31,7 @@ static int32_t app_dev_ext_mem_hal_ready(app_dev_t *driver)
  */
 static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
 {
-    const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
+    app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
@@ -81,7 +81,7 @@ static int32_t app_dev_ext_mem_hal_read(app_dev_t *driver)
  */
 static int32_t app_dev_ext_mem_hal_write(app_dev_t *driver)
 {
-    const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
+    app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
     if (data->rw_args.buffer == NULL || data->rw_args.size == 0) {
@@ -131,14 +131,14 @@ static int32_t app_dev_ext_mem_hal_write(app_dev_t *driver)
  */
 static void * app_dev_ext_mem_hal_data_addr(app_dev_t *driver)
 {
-    const app_dev_ext_mem_cfg_t *cfg = driver->cfg;
+    app_dev_ext_mem_cfg_t *cfg = driver->cfg;
     app_dev_ext_mem_data_t *data = driver->data;
     
     return data;
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_ext_mem_cfg_t app_dev_ext_mem_cfg = {
+static app_dev_ext_mem_cfg_t app_dev_ext_mem_cfg = {
     .args = NULL,
 };
 

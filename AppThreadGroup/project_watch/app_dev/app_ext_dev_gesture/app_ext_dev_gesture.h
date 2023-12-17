@@ -21,7 +21,6 @@ typedef struct {
 
 /*@brief gesture设备初始化
  *@param driver 设备实例
- *@retval 当前温度值
  */
 static inline void app_dev_gesture_ready(app_dev_t *driver)
 {

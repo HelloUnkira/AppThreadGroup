@@ -16,7 +16,7 @@ typedef struct {
  */
 static void app_dev_log_hal_ready(app_dev_t *driver)
 {
-    const app_dev_log_cfg_t *cfg = driver->cfg;
+    app_dev_log_cfg_t *cfg = driver->cfg;
     app_dev_log_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -28,14 +28,14 @@ static void app_dev_log_hal_ready(app_dev_t *driver)
  */
 static void app_dev_log_hal_msg(app_dev_t *driver, const char *format, va_list list)
 {
-    const app_dev_log_cfg_t *cfg = driver->cfg;
+    app_dev_log_cfg_t *cfg = driver->cfg;
     app_dev_log_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     vprintf(format, list);
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_log_cfg_t app_dev_log_cfg = {
+static app_dev_log_cfg_t app_dev_log_cfg = {
     .args = NULL,
 };
 

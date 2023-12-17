@@ -3,9 +3,9 @@
 
 typedef struct {
     const char *name;   /* 设备名字 */
-    const void *cfg;    /* 设备操作参数 */
-    const void *api;    /* 设备操作集合 */
-    void *data;         /* 设备操作数据 */
+    const void *api;    /* 设备操作参数 */
+    void *cfg;          /* 设备操作参数(内部数据) */
+    void *data;         /* 设备操作数据(对外数据) */
 } app_dev_t;
 
 /* 外设设备入app_ext库 */
