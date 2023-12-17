@@ -60,7 +60,10 @@
     #endif
 
 #else       /*LV_MEM_CUSTOM*/
-    #define LV_MEM_CUSTOM_INCLUDE "app_ext_os.h"    /*Header for the dynamic memory function*/
+    #define LV_MEM_CUSTOM_INCLUDE "stdlib.h"    /*Header for the dynamic memory function*/
+    void * app_mem_alloc(uint32_t size);
+    void * app_mem_realloc(void *pointer, uint32_t size);
+    void app_mem_free(void *pointer);
     #define LV_MEM_CUSTOM_ALLOC    app_mem_alloc
     #define LV_MEM_CUSTOM_FREE     app_mem_free
     #define LV_MEM_CUSTOM_REALLOC  app_mem_realloc
@@ -235,7 +238,8 @@
 #define LV_USE_ASSERT_OBJ           1   /*Check the object's type and existence (e.g. not deleted). (Slow)*/
 
 /*Add a custom handler when assert happens e.g. to restart the MCU*/
-#define LV_ASSERT_HANDLER_INCLUDE   "app_ext_arch.h"
+#define LV_ASSERT_HANDLER_INCLUDE   "stdlib.h"
+void app_arch_reset(void);
 #define LV_ASSERT_HANDLER            app_arch_reset();   /*Halt by default*/
 
 /*-------------
