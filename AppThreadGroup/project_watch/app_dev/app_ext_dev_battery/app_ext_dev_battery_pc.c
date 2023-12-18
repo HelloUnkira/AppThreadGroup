@@ -21,7 +21,7 @@ typedef struct {
  */
 static void app_dev_battery_hal_ready(app_dev_t *driver)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
@@ -32,7 +32,7 @@ static void app_dev_battery_hal_ready(app_dev_t *driver)
  */
 static uint8_t app_dev_battery_hal_charge_full(app_dev_t *driver)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     return -1;
@@ -44,7 +44,7 @@ static uint8_t app_dev_battery_hal_charge_full(app_dev_t *driver)
  */
 static uint8_t app_dev_battery_hal_charge_status(app_dev_t *driver)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     return 0;
@@ -56,7 +56,7 @@ static uint8_t app_dev_battery_hal_charge_status(app_dev_t *driver)
  */
 static void app_dev_battery_hal_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(void))
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     data->charge_irq_cb = cb;
@@ -68,7 +68,7 @@ static void app_dev_battery_hal_charge_irq_cb_reg(app_dev_t *driver, void(*cb)(v
  */
 static void app_dev_battery_hal_charge_irq_switch(app_dev_t *driver, bool flag)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     APP_SYS_LOG_WARN("irq_switch:%d", flag);
@@ -80,7 +80,7 @@ static void app_dev_battery_hal_charge_irq_switch(app_dev_t *driver, bool flag)
  */
 static uint32_t app_dev_battery_hal_voltage_measure(app_dev_t *driver)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     return 3850;
@@ -93,7 +93,7 @@ static uint32_t app_dev_battery_hal_voltage_measure(app_dev_t *driver)
  */
 static void app_dev_battery_hal_curve_charge_table(app_dev_t *driver, void **table, uint32_t *item)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     *table = data->curve_charge;
@@ -107,7 +107,7 @@ static void app_dev_battery_hal_curve_charge_table(app_dev_t *driver, void **tab
  */
 static void app_dev_battery_hal_curve_discharge_table(app_dev_t *driver, void **table, uint32_t *item)
 {
-    const app_dev_battery_cfg_t *cfg = driver->cfg;
+    app_dev_battery_cfg_t *cfg = driver->cfg;
     app_dev_battery_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     *table = data->curve_discharge;
@@ -129,7 +129,7 @@ static const APP_DEV_BATTERY_CURVE_DATA app_dev_battery_hal_curve_discharge[] = 
 };
 
 /* 静态配置的设备操作参数 */
-static const app_dev_battery_cfg_t app_dev_battery_cfg = {
+static app_dev_battery_cfg_t app_dev_battery_cfg = {
     .args = NULL,
 };
 

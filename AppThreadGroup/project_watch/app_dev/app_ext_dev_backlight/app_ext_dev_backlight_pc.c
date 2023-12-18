@@ -20,7 +20,7 @@ typedef struct {
  */
 static void app_dev_backlight_hal_open(app_dev_t *driver)
 {
-    const app_dev_backlight_cfg_t *cfg = driver->cfg;
+    app_dev_backlight_cfg_t *cfg = driver->cfg;
     app_dev_backlight_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     APP_SYS_LOG_INFO("open");
@@ -31,7 +31,7 @@ static void app_dev_backlight_hal_open(app_dev_t *driver)
  */
 static void app_dev_backlight_hal_close(app_dev_t *driver)
 {
-    const app_dev_backlight_cfg_t *cfg = driver->cfg;
+    app_dev_backlight_cfg_t *cfg = driver->cfg;
     app_dev_backlight_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     APP_SYS_LOG_INFO("close");
@@ -43,13 +43,13 @@ static void app_dev_backlight_hal_close(app_dev_t *driver)
  */
 static void app_dev_backlight_hal_update(app_dev_t *driver, uint8_t duty_cycle)
 {
-    const app_dev_backlight_cfg_t *cfg = driver->cfg;
+    app_dev_backlight_cfg_t *cfg = driver->cfg;
     app_dev_backlight_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
 }
 
 /* 静态配置的设备操作参数 */
-static const app_dev_backlight_cfg_t app_dev_backlight_cfg = {
+static app_dev_backlight_cfg_t app_dev_backlight_cfg = {
     .args = NULL,
 };
 
