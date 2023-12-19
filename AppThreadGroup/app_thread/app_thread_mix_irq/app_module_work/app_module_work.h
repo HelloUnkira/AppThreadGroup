@@ -27,6 +27,12 @@ void app_module_work_execute(app_module_work_t *works);
  */
 app_module_work_t * app_module_work_make(uint32_t num, ...);
 
+/*@brief 工作清单提交
+ *@param work   一份工作清单(app_module_work_make生成)
+ *@param thread 目标线程
+ */
+void app_module_work_submit(app_module_work_t *work, uint32_t thread);
+
 /*@brief 迟延工作清单提交
  *@param work       一份工作清单(app_module_work_make生成)
  *@param delay_ms   延迟时间

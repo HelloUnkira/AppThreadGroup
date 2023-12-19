@@ -44,13 +44,9 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
     /* 批量向其他子线程递进软件看门狗的喂狗任务 */
     for (uint32_t idx = app_thread_id_s_s + 1; idx <= app_thread_id_s_e - 1; idx++) {
         /* 每隔1s发送一次软件看门狗喂狗事件 */
-        app_thread_package_t package = {
-            .thread  = idx,
-            .module  = 0,                       /* 线程组系统模组 */
-            .event   = app_thread_event_work,   /* 线程组工作事件 */
-            .data    = app_module_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
-        };
-        app_thread_package_notify(&package);
+        app_module_work_t *work = NULL;
+        work = app_module_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx);
+        app_module_work_submit(work, idx);
         /* 如果超出最大时限,出错断言 */
         app_mutex_process(&app_module_watchdog_mutex, app_mutex_take);
         if (app_module_watchdog.count_sw_s[idx - app_thread_id_s_s - 1]++ > APP_MODULE_WATCHDOG_XS) {
@@ -64,13 +60,9 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         if (!app_thread_id_is_valid(idx))
              continue;
         /* 每隔1s发送一次软件看门狗喂狗事件 */
-        app_thread_package_t package = {
-            .thread  = idx,
-            .module  = 0,                       /* 线程组系统模组 */
-            .event   = app_thread_event_work,   /* 线程组工作事件 */
-            .data    = app_module_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx),
-        };
-        app_thread_package_notify(&package);
+        app_module_work_t *work = NULL;
+        work = app_module_work_make(1, app_module_watchdog_feed_work, (void *)(uintptr_t)idx);
+        app_module_work_submit(work, idx);
         /* 如果超出最大时限,出错断言 */
         app_mutex_process(&app_module_watchdog_mutex, app_mutex_take);
         if (app_module_watchdog.count_sw_d[idx - app_thread_id_d_s - 1]++ > APP_MODULE_WATCHDOG_XS) {

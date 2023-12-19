@@ -75,6 +75,21 @@ static void app_module_work_delay_timer_handler(void *timer)
     }
 }
 
+/*@brief 工作清单提交
+ *@param work   一份工作清单(app_module_work_make生成)
+ *@param thread 目标线程
+ */
+void app_module_work_submit(app_module_work_t *work, uint32_t thread)
+{
+    app_thread_package_t package = {
+        .thread  = thread,
+        .module  = 0,                       /* 线程组系统模组 */
+        .event   = app_thread_event_work,   /* 线程组工作事件 */
+        .data    = work,
+    };
+    app_thread_package_notify(&package);
+}
+
 /*@brief 迟延工作提交
  *@param work       一份工作(生成)
  *@param delay_ms   延迟时间
