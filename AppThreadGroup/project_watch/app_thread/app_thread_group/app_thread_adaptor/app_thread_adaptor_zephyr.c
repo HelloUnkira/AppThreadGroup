@@ -28,6 +28,9 @@ static  K_THREAD_STACK_DEFINE(app_thread_manage_stack, APP_THREAD_MANAGE_STACK_S
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_lvgl_stack, APP_THREAD_LVGL_STACK_SIZE);
 
+#define APP_THREAD_SCUI_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_scui_stack, APP_THREAD_SCUI_STACK_SIZE);
+
 /* @线程体栈信息<End> */
 
 /* @线程体<Start> */
@@ -65,6 +68,13 @@ app_thread_t app_thread_lvgl = {
     .stack_size = APP_THREAD_LVGL_STACK_SIZE,
     .priority   = 4,
     .entry      = app_thread_lvgl_routine,
+};
+
+app_thread_t app_thread_scui = {
+    .stack      = app_thread_scui_stack,
+    .stack_size = APP_THREAD_SCUI_STACK_SIZE,
+    .priority   = 4,
+    .entry      = app_thread_scui_routine,
 };
 
 /* @线程体<End> */
