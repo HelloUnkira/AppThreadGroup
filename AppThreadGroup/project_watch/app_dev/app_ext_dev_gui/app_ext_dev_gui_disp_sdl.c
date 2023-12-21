@@ -10,12 +10,29 @@
 
 #if APP_EXT_DEV_GUI_USE_SDL
 
+// 在更新过程中该分支未持续更新
+// 需要重新适配SDL模式下的驱动
+#error "not adaptor finish yet"
+
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
+#define APP_DEV_GUI_DRV_HOR_RES     LV_DRV_HOR_RES
+#define APP_DEV_GUI_DRV_VER_RES     LV_DRV_VER_RES
+#define APP_DEV_GUI_DRV_ZOOM        LV_DRV_ZOOM
+#define APP_DEV_GUI_DRV_DBUF        LV_DRV_DBUFFER
+#elif APP_EXT_DEV_GUI_IS_SCUI
+#define APP_DEV_GUI_DRV_HOR_RES     SCUI_DRV_HOR_RES
+#define APP_DEV_GUI_DRV_VER_RES     SCUI_DRV_VER_RES
+#define APP_DEV_GUI_DRV_ZOOM        1
+#define APP_DEV_GUI_DRV_DBUF        SCUI_DRV_DBUFFER
+#endif
+
 typedef struct {
     SDL_Window   *window;
     SDL_Renderer *renderer;
     SDL_Texture  *texture;
     volatile bool sdl_refr_qry;
-    #if LV_DRV_DBUFFER
+    #if APP_DEV_GUI_DRV_DBUF
     uint32_t *tft_fb_act;
     #else
     uint32_t *tft_fb;
@@ -58,9 +75,9 @@ void app_dev_gui_disp_lv_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area,
         return;
     }
     
-    #if LV_DRV_DBUFFER
+    #if APP_DEV_GUI_DRV_DBUF
     // cfg->display.tft_fb_act = (uint32_t *)color_p;
-    memcpy(cfg->display.tft_fb_act, color_p, LV_DRV_HOR_RES * LV_DRV_VER_RES * sizeof(uint32_t));
+    memcpy(cfg->display.tft_fb_act, color_p, APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
     #else
     /* 32有效但也支持24向后兼容 */
     #if LV_COLOR_DEPTH != 24 && LV_COLOR_DEPTH != 32
@@ -72,7 +89,7 @@ void app_dev_gui_disp_lv_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area,
     #else
     uint32_t w = lv_area_get_width(area);
     for(int32_t y = area->y1; y <= area->y2 && y < disp_drv->ver_res; y++) {
-        memcpy(&cfg->display.tft_fb[y * LV_DRV_HOR_RES + area->x1], color_p, w * sizeof(lv_color_t));
+        memcpy(&cfg->display.tft_fb[y * APP_DEV_GUI_DRV_HOR_RES + area->x1], color_p, w * sizeof(lv_color_t));
         color_p += w;
     }
     #endif
@@ -101,8 +118,8 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     disp->window = SDL_CreateWindow("Watch Simulator",
                                     SDL_WINDOWPOS_UNDEFINED,
                                     SDL_WINDOWPOS_UNDEFINED,
-                                    LV_DRV_HOR_RES * LV_DRV_ZOOM,
-                                    LV_DRV_VER_RES * LV_DRV_ZOOM,
+                                    APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM,
+                                    APP_DEV_GUI_DRV_VER_RES * APP_DEV_GUI_DRV_ZOOM,
                                     0);   //SDL_WINDOW_BORDERLESS);
                                     /* 隐藏边界 */  
     /* 设置屏幕渲染规则 */
@@ -111,18 +128,18 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     disp->texture  = SDL_CreateTexture(disp->renderer,
                                        SDL_PIXELFORMAT_ARGB8888,
                                        SDL_TEXTUREACCESS_STATIC,
-                                       LV_DRV_HOR_RES,
-                                       LV_DRV_VER_RES);
+                                       APP_DEV_GUI_DRV_HOR_RES,
+                                       APP_DEV_GUI_DRV_VER_RES);
     /* 设置屏幕文本混合规则 */
     SDL_SetTextureBlendMode(disp->texture, SDL_BLENDMODE_BLEND);
     /* 初始化帧缓冲区为灰色(77是一个经验值) */
-#if LV_DRV_DBUFFER
-    // SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act, LV_DRV_HOR_RES * sizeof(uint32_t));
-    disp->tft_fb_act = malloc(LV_DRV_HOR_RES * LV_DRV_VER_RES * sizeof(uint32_t));
-    memset(disp->tft_fb_act, 0x44, LV_DRV_HOR_RES * LV_DRV_VER_RES * sizeof(uint32_t));
+#if APP_DEV_GUI_DRV_DBUF
+    // SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act, APP_DEV_GUI_DRV_HOR_RES * sizeof(uint32_t));
+    disp->tft_fb_act = malloc(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
+    memset(disp->tft_fb_act, 0x44, APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
 #else
-    disp->tft_fb = malloc(LV_DRV_HOR_RES * LV_DRV_VER_RES * sizeof(uint32_t));
-    memset(disp->tft_fb, 0x44, LV_DRV_HOR_RES * LV_DRV_VER_RES * sizeof(uint32_t));
+    disp->tft_fb = malloc(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
+    memset(disp->tft_fb, 0x44, APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
 #endif
     disp->sdl_refr_qry = true;
 }
@@ -141,20 +158,20 @@ static void app_dev_gui_disp_update(app_dev_gui_disp_t *disp)
         return;
     
     /* 刷新数据资源 */
-    #if LV_DRV_DBUFFER
+    #if APP_DEV_GUI_DRV_DBUF
     if (disp->tft_fb_act == NULL)
         return;
     SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act,
-                      LV_DRV_HOR_RES * sizeof(uint32_t));
+                      APP_DEV_GUI_DRV_HOR_RES * sizeof(uint32_t));
     #else
     SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb,
-                      LV_DRV_HOR_RES * sizeof(uint32_t));
+                      APP_DEV_GUI_DRV_HOR_RES * sizeof(uint32_t));
     #endif
     
     /* 清除渲染器 */
     SDL_RenderClear(disp->renderer);
     #if LV_COLOR_SCREEN_TRANSP
-    SDL_Rect rect = {.x = 0, .y = 0, .w = LV_DRV_HOR_RES, .h = LV_DRV_VER_RES};
+    SDL_Rect rect = {.x = 0, .y = 0, .w = APP_DEV_GUI_DRV_HOR_RES, .h = APP_DEV_GUI_DRV_VER_RES};
     SDL_SetRenderDrawColor(disp->renderer, 0xff, 0, 0, 0xff);
     SDL_RenderDrawRect(disp->renderer, &rect);
     #endif
@@ -171,7 +188,7 @@ static void app_dev_gui_disp_destroy(app_dev_gui_disp_t *disp)
     app_dev_gui_disp_cfg_t *cfg = driver->cfg;
     app_dev_gui_disp_data_t *data = driver->data;
     
-    #if LV_DRV_DBUFFER
+    #if APP_DEV_GUI_DRV_DBUF
         free(disp->tft_fb_act);
     #else
         free(disp->tft_fb);

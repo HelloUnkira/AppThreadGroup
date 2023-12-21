@@ -31,7 +31,13 @@ void app_thread_slave_schedule(void)
     app_thread_process(&app_thread_mix_irq,         app_thread_static);
     app_thread_process(&app_thread_mix_custom,      app_thread_static);
     app_thread_process(&app_thread_manage,          app_thread_static);
+    #if 0
+    #elif APP_EXT_DEV_GUI_IS_LVGL
     app_thread_process(&app_thread_lvgl,            app_thread_static);
+    #elif APP_EXT_DEV_GUI_IS_SCUI
+    #else
+    #error "gui framework is unsupport"
+    #endif
 }
 
 /*@brief 线程组运行

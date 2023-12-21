@@ -18,7 +18,13 @@ bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_modul
     /* 执行场景关机 */
     if (system->ctrl.shutdown.not_shutdown_yet) {
         system->ctrl.shutdown.not_shutdown_yet = false;
+        
+        #if 0
+        #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_shutdown();
+        #else
+        #endif
+        
         // 关机前的最后所需要转储的日志信息
         void app_module_system_message_shutdown(void);
         app_module_system_message_shutdown();

@@ -12,11 +12,4 @@
 /*         插个眼:现在多缓冲区有渲染问题,显示错误 */
 #define LV_DRV_DBUFFER      1
 
-/* mouse:鼠标 */
-#define LV_DRV_MOUSE            1
-/* mousewheel:鼠标滚轮 */
-#define LV_DRV_MOUSEWHEEL       1
-/* keyboard:键盘 */
-#define LV_DRV_KEYBOARD         1
-
 #endif

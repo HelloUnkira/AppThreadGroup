@@ -25,7 +25,11 @@ void app_module_system_dlps_set(bool dlps)
     if (app_module_system.dlps_status != dlps) {
         app_module_system.dlps_exec = true;
         
+        #if 0
+        #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_dlps(dlps);
+        #else
+        #endif
     }
     app_module_system.dlps_status = dlps;
     app_mutex_process(&app_module_system_mutex, app_mutex_give);

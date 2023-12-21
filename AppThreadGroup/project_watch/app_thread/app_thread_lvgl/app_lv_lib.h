@@ -1,6 +1,10 @@
 #ifndef APP_LV_LIB_H
 #define APP_LV_LIB_H
 
+#include "lvgl.h"
+#include "lv_conf.h"
+#include "lv_drv_conf.h"
+
 #include "app_lv_timer.h"
 #include "app_lv_event.h"
 #include "app_lv_event_ui.h"

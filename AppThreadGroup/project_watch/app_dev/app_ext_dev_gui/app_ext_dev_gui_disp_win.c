@@ -11,9 +11,23 @@
 #if APP_EXT_DEV_GUI_USE_WIN
 
 /*  */
-#define APP_LV_DISPLAY_STY      (WS_OVERLAPPEDWINDOW & ~(WS_SIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME))
-#define APP_LV_DISPLAY_STY_EX   (WS_EX_CLIENTEDGE)
-#define APP_LV_DISPLAY_DPI_DEF  (96)
+#define APP_DEV_GUI_DISP_STY      (WS_OVERLAPPEDWINDOW & ~(WS_SIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME))
+#define APP_DEV_GUI_DISP_STY_EX   (WS_EX_CLIENTEDGE)
+#define APP_DEV_GUI_DISP_DPI_DEF  (96)
+
+/*  */
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
+#define APP_DEV_GUI_DRV_HOR_RES     LV_DRV_HOR_RES
+#define APP_DEV_GUI_DRV_VER_RES     LV_DRV_VER_RES
+#define APP_DEV_GUI_DRV_ZOOM        LV_DRV_ZOOM
+#define APP_DEV_GUI_DRV_DBUF        LV_DRV_DBUFFER
+#elif APP_EXT_DEV_GUI_IS_SCUI
+#define APP_DEV_GUI_DRV_HOR_RES     SCUI_DRV_HOR_RES
+#define APP_DEV_GUI_DRV_VER_RES     SCUI_DRV_VER_RES
+#define APP_DEV_GUI_DRV_ZOOM        1
+#define APP_DEV_GUI_DRV_DBUF        SCUI_DRV_DBUFFER
+#endif
 
 /*  */
 typedef struct {
@@ -55,10 +69,10 @@ void app_dev_gui_disp_flush_manual(lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_
     
     RECT rect;
     
-    rect.top    = MulDiv(y * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    rect.left   = MulDiv(x * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    rect.right  = MulDiv(w * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.left;
-    rect.bottom = MulDiv(h * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF) + rect.top;
+    rect.top    = MulDiv(y * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
+    rect.left   = MulDiv(x * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
+    rect.right  = MulDiv(w * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF) + rect.left;
+    rect.bottom = MulDiv(h * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF) + rect.top;
     
     #if 0
     HDC win_hdc = GetDC(g_window_handle);
@@ -117,9 +131,9 @@ void app_dev_gui_disp_lv_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area,
         int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
         
         StretchBlt(win_hdc, 0, 0,
-            MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF),
-            MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF),
-            cfg->display.buf_hdc, 0, 0, LV_DRV_HOR_RES, LV_DRV_VER_RES, SRCCOPY);
+            MulDiv(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF),
+            MulDiv(APP_DEV_GUI_DRV_VER_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF),
+            cfg->display.buf_hdc, 0, 0, APP_DEV_GUI_DRV_HOR_RES, APP_DEV_GUI_DRV_VER_RES, SRCCOPY);
         
         SetStretchBltMode(win_hdc, prev_mode);
         ReleaseDC(cfg->display.window, win_hdc);
@@ -138,10 +152,11 @@ void app_dev_gui_disp_lv_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
     
     area->x1 = 0;
     area->y1 = 0;
-    area->x2 = LV_DRV_HOR_RES - 1;
-    area->y2 = LV_DRV_VER_RES - 1;
+    area->x2 = APP_DEV_GUI_DRV_HOR_RES - 1;
+    area->y2 = APP_DEV_GUI_DRV_VER_RES - 1;
 }
 
+#elif APP_EXT_DEV_GUI_IS_SCUI
 #else
 #endif
 
@@ -154,11 +169,11 @@ UINT app_dev_gui_disp_get_dpi(bool is_def)
     app_dev_gui_disp_data_t *data = driver->data;
     
     if (is_def)
-        return APP_LV_DISPLAY_DPI_DEF;
+        return APP_DEV_GUI_DISP_DPI_DEF;
     if (cfg->display.dpi_value != 0)
         return cfg->display.dpi_value;
     else
-        return APP_LV_DISPLAY_DPI_DEF;
+        return APP_DEV_GUI_DISP_DPI_DEF;
 }
 
 /*@brief Win 屏幕接口(内部扩展)
@@ -216,7 +231,7 @@ static UINT app_dev_gui_disp_get_dpi_for_window(_In_ HWND WindowHandle)
     }
 
     if (retval == (UINT)(-1))
-        retval  = APP_LV_DISPLAY_DPI_DEF;
+        retval  = APP_DEV_GUI_DISP_DPI_DEF;
 
     return retval;
 }
@@ -432,10 +447,16 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     retval = RegisterClassExW(&disp->window_class);
     // APP_SYS_ASSERT(retval != 0);
     /* 2.创建屏幕 */
-    disp->window = CreateWindowExW(APP_LV_DISPLAY_STY_EX,
+    disp->window = CreateWindowExW(APP_DEV_GUI_DISP_STY_EX,
                                    L"Watch Simulator",
+                                   #if 0
+                                   #elif APP_EXT_DEV_GUI_IS_LVGL
                                    L"App Thread Group LVGL Watch",
-                                   APP_LV_DISPLAY_STY,
+                                   #elif APP_EXT_DEV_GUI_IS_SCUI
+                                   L"App Thread Group SCUI Watch",
+                                   #else
+                                   #endif
+                                   APP_DEV_GUI_DISP_STY,
                                    CW_USEDEFAULT, 0,
                                    CW_USEDEFAULT, 0,
                                    NULL, NULL, disp->instance, NULL);
@@ -446,9 +467,9 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     RECT win_size;
     win_size.top    = 0;
     win_size.left   = 0;
-    win_size.right  = MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, disp->dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    win_size.bottom = MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, disp->dpi_value, APP_LV_DISPLAY_DPI_DEF);
-    AdjustWindowRectEx(&win_size, APP_LV_DISPLAY_STY, FALSE, APP_LV_DISPLAY_STY_EX);
+    win_size.right  = MulDiv(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM, disp->dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
+    win_size.bottom = MulDiv(APP_DEV_GUI_DRV_VER_RES * APP_DEV_GUI_DRV_ZOOM, disp->dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
+    AdjustWindowRectEx(&win_size, APP_DEV_GUI_DISP_STY, FALSE, APP_DEV_GUI_DISP_STY_EX);
     OffsetRect(&win_size, -win_size.left, -win_size.top);
     SetWindowPos(disp->window, NULL, 0, 0, win_size.right, win_size.bottom,
                  SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOMOVE);
@@ -456,7 +477,7 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     app_dev_gui_disp_reg_touch_window(disp->window, 0);
     app_dev_gui_disp_enable_child_win_dpi_msg(disp->window);
     /* 6.创建帧缓冲区 */
-    HDC frame_buf_hdc = app_dev_gui_disp_frame_buffer(disp->window, LV_DRV_HOR_RES, LV_DRV_VER_RES,
+    HDC frame_buf_hdc = app_dev_gui_disp_frame_buffer(disp->window, APP_DEV_GUI_DRV_HOR_RES, APP_DEV_GUI_DRV_VER_RES,
                                                    &disp->pixel_buf,
                                                    &disp->pixel_buf_size);
     DeleteDC(disp->buf_hdc);
@@ -506,8 +527,8 @@ HRESULT CALLBACK app_dev_gui_disp_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LP
         
         GetClientRect(hWnd, &c_rect);
         
-        int win_hor = MulDiv(LV_DRV_HOR_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
-        int win_ver = MulDiv(LV_DRV_VER_RES * LV_DRV_ZOOM, cfg->display.dpi_value, APP_LV_DISPLAY_DPI_DEF);
+        int win_hor = MulDiv(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
+        int win_ver = MulDiv(APP_DEV_GUI_DRV_VER_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF);
         
         SetWindowPos(hWnd, NULL,
             s_rect->left,
@@ -522,10 +543,10 @@ HRESULT CALLBACK app_dev_gui_disp_msg_cb(HWND hWnd, UINT uMsg, WPARAM wParam, LP
         PAINTSTRUCT ps;
         HDC win_dc = BeginPaint(hWnd, &ps);
         if (win_dc) {
-            rect.top    = MulDiv(ps.rcPaint.top,    APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
-            rect.left   = MulDiv(ps.rcPaint.left,   APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
-            rect.right  = MulDiv(ps.rcPaint.right,  APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
-            rect.bottom = MulDiv(ps.rcPaint.bottom, APP_LV_DISPLAY_DPI_DEF, cfg->display.dpi_value);
+            rect.top    = MulDiv(ps.rcPaint.top,    APP_DEV_GUI_DISP_DPI_DEF, cfg->display.dpi_value);
+            rect.left   = MulDiv(ps.rcPaint.left,   APP_DEV_GUI_DISP_DPI_DEF, cfg->display.dpi_value);
+            rect.right  = MulDiv(ps.rcPaint.right,  APP_DEV_GUI_DISP_DPI_DEF, cfg->display.dpi_value);
+            rect.bottom = MulDiv(ps.rcPaint.bottom, APP_DEV_GUI_DISP_DPI_DEF, cfg->display.dpi_value);
             
             int prev_mode = SetStretchBltMode(win_dc, HALFTONE);
             

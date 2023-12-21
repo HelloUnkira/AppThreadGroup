@@ -48,7 +48,13 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     /* 执行场景加载,设备模组启动 */
     if (system->ctrl.normal.not_start_yet) {
         system->ctrl.normal.not_start_yet = false;
+        
+        #if 0
+        #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_start();
+        #else
+        #endif
+        
         app_module_gesture_start();
         app_dev_gesture_dlps_exec(&app_dev_gesture, false, 0);
         app_dev_gesture_irq_switch(&app_dev_gesture, false);
@@ -59,7 +65,13 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
     /* 执行场景转储,设备模组关闭 */
     if (system->ctrl.normal.not_stop_yet) {
         system->ctrl.normal.not_stop_yet = false;
+        
+        #if 0
+        #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_stop();
+        #else
+        #endif
+        
         app_module_gesture_stop();
         app_dev_gesture_dlps_exec(&app_dev_gesture, true, 0);
         app_dev_gesture_irq_switch(&app_dev_gesture, true);

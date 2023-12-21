@@ -33,6 +33,9 @@
 #ifndef APP_EXT_DEV_GUI_IS_LVGL
 #define APP_EXT_DEV_GUI_IS_LVGL     0
 #endif
+#ifndef APP_EXT_DEV_GUI_IS_SCUI
+#define APP_EXT_DEV_GUI_IS_SCUI     0
+#endif
 /*@brief gui framework<s>
  */
 #if 0
@@ -41,6 +44,9 @@
 #include "lvgl.h"
 #include "lv_conf.h"
 #include "lv_drv_conf.h"
+#elif APP_EXT_DEV_GUI_IS_SCUI
+/* dependency */
+#include "scui_drv_conf.h"
 #else
 #error "unknown framework"
 #endif
