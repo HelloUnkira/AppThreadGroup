@@ -27,9 +27,10 @@ static void app_thread_lvgl_routine_ready_cb(void)
     app_dev_gui_enc_ready(&app_dev_gui_enc);
     app_dev_gui_key_ready(&app_dev_gui_key);
     app_dev_gui_drv_ready(&app_dev_gui_drv);
+    /* lvgl初始化 */
+    app_lv_ready();
     /* 模组初始化 */
     app_lv_timer_ready();
-    /* 模组初始化 */
     app_lv_check_time_ready();
     /* 初始化启动lvgl调度定时器 */
     app_lv_timer_start();

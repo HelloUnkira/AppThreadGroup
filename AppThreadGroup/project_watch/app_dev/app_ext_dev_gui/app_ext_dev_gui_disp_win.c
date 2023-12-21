@@ -315,27 +315,35 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
             win_frame_buf_hdc = CreateCompatibleDC(win_hdc);
             ReleaseDC(WindowHandle, win_hdc);
         }
-
+        
+        #if 0
+        #elif APP_EXT_DEV_GUI_IS_LVGL
+        #define APP_EXT_DEV_GUI_COLOR_DEPTH     LV_COLOR_DEPTH
+        #elif APP_EXT_DEV_GUI_IS_SCUI
+        #define APP_EXT_DEV_GUI_COLOR_DEPTH     16
+        #else
+        #endif
+        
         if (win_frame_buf_hdc)
         {
             #if 0
-            #elif LV_COLOR_DEPTH == 32
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 32
             BITMAPINFO bitmap_info = { 0 };
-            #elif LV_COLOR_DEPTH == 16
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 16
             typedef struct {
                 BITMAPINFOHEADER bmiHeader;
                 DWORD bmiColorMask[3];
             } BITMAPINFO_16BPP, *PBITMAPINFO_16BPP;
 
             BITMAPINFO_16BPP bitmap_info = { 0 };
-            #elif LV_COLOR_DEPTH == 8
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 8
             typedef struct {
                 BITMAPINFOHEADER bmiHeader;
                 RGBQUAD bmiColors[256];
             } BITMAPINFO_8BPP, *PBITMAPINFO_8BPP;
 
             BITMAPINFO_8BPP bitmap_info = { 0 };
-            #elif LV_COLOR_DEPTH == 1
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 1
             typedef struct {
                 BITMAPINFOHEADER bmiHeader;
                 RGBQUAD bmiColors[2];
@@ -351,16 +359,16 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
             bitmap_info.bmiHeader.biHeight  = -Height;
             bitmap_info.bmiHeader.biPlanes  = 1;
             #if 0
-            #elif LV_COLOR_DEPTH == 32
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 32
             bitmap_info.bmiHeader.biBitCount        = 32;
             bitmap_info.bmiHeader.biCompression     = BI_RGB;
-            #elif LV_COLOR_DEPTH == 16
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 16
             bitmap_info.bmiHeader.biBitCount        = 16;
             bitmap_info.bmiHeader.biCompression     = BI_BITFIELDS;
             bitmap_info.bmiColorMask[0] = 0xF800;
             bitmap_info.bmiColorMask[1] = 0x07E0;
             bitmap_info.bmiColorMask[2] = 0x001F;
-            #elif LV_COLOR_DEPTH == 8
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 8
             bitmap_info.bmiHeader.biBitCount        = 8;
             bitmap_info.bmiHeader.biCompression     = BI_RGB;
             for (size_t idx = 0; idx < 256; idx++) {
@@ -371,7 +379,7 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
                 bitmap_info.bmiColors[idx].rgbBlue = LV_COLOR_GET_B(color) * 85;
                 bitmap_info.bmiColors[idx].rgbReserved = 0xFF;
             }
-            #elif LV_COLOR_DEPTH == 1
+            #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 1
             bitmap_info.bmiHeader.biBitCount        = 8;
             bitmap_info.bmiHeader.biCompression     = BI_RGB;
             bitmap_info.bmiHeader.biClrUsed         = 2;
@@ -394,13 +402,13 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
                                                      DIB_RGB_COLORS, (void**)PixelBuffer, NULL,0);
             if (bitmap_handle) {
                 #if 0
-                #elif LV_COLOR_DEPTH == 32
+                #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 32
                 *PixelBufferSize = Width * Height * sizeof(UINT32);
-                #elif LV_COLOR_DEPTH == 16
+                #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 16
                 *PixelBufferSize = Width * Height * sizeof(UINT16);
-                #elif LV_COLOR_DEPTH == 8
+                #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 8
                 *PixelBufferSize = Width * Height * sizeof(UINT8);
-                #elif LV_COLOR_DEPTH == 1
+                #elif APP_EXT_DEV_GUI_COLOR_DEPTH == 1
                 *PixelBufferSize = Width * Height * sizeof(UINT8);
                 #else
                 *PixelBufferSize = Width * Height * sizeof(UINT32);

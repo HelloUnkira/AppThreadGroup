@@ -47,7 +47,9 @@ void app_dev_gui_enc_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
     if (cfg->enc_diff < 0)
         key = LV_KEY_RIGHT;
     /* 传递给lvgl的编码器事件 */
-    indev_data->state    = cfg->state;
+    indev_data->state    = cfg->state ?
+                           LV_INDEV_STATE_PRESSED :
+                           LV_INDEV_STATE_RELEASED;
     indev_data->enc_diff = cfg->enc_diff;
     indev_data->key      = key;
     cfg->enc_diff = 0;
@@ -79,12 +81,12 @@ void app_dev_gui_enc_msg_cb(SDL_Event *event)
     /* 滚轮按下事件 */
     case SDL_MOUSEBUTTONDOWN:
         if(event->button.button == SDL_BUTTON_MIDDLE)
-            cfg->state = LV_INDEV_STATE_PRESSED;
+            cfg->state = true;
         break;
     /* 滚轮抬起事件 */
     case SDL_MOUSEBUTTONUP:
         if(event->button.button == SDL_BUTTON_MIDDLE)
-            cfg->state = LV_INDEV_STATE_RELEASED;
+            cfg->state = false;
         break;
     default:
         break;

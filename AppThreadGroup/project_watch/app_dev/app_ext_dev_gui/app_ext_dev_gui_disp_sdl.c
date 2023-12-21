@@ -103,6 +103,20 @@ void app_dev_gui_disp_lv_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area,
     lv_disp_flush_ready(disp_drv);
 }
 
+/*@brief lvgl 屏幕刷新回调接口
+ */
+void app_dev_gui_disp_lv_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
+{
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    area->x1 = 0;
+    area->y1 = 0;
+    area->x2 = APP_DEV_GUI_DRV_HOR_RES - 1;
+    area->y2 = APP_DEV_GUI_DRV_VER_RES - 1;
+}
+
 #else
 #endif
 
@@ -133,14 +147,14 @@ static void app_dev_gui_disp_create(app_dev_gui_disp_t *disp)
     /* 设置屏幕文本混合规则 */
     SDL_SetTextureBlendMode(disp->texture, SDL_BLENDMODE_BLEND);
     /* 初始化帧缓冲区为灰色(77是一个经验值) */
-#if APP_DEV_GUI_DRV_DBUF
+    #if APP_DEV_GUI_DRV_DBUF
     // SDL_UpdateTexture(disp->texture, NULL, disp->tft_fb_act, APP_DEV_GUI_DRV_HOR_RES * sizeof(uint32_t));
     disp->tft_fb_act = malloc(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
     memset(disp->tft_fb_act, 0x44, APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
-#else
+    #else
     disp->tft_fb = malloc(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
     memset(disp->tft_fb, 0x44, APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_VER_RES * sizeof(uint32_t));
-#endif
+    #endif
     disp->sdl_refr_qry = true;
 }
 
@@ -170,11 +184,15 @@ static void app_dev_gui_disp_update(app_dev_gui_disp_t *disp)
     
     /* 清除渲染器 */
     SDL_RenderClear(disp->renderer);
+    
+    #if APP_EXT_DEV_GUI_IS_LVGL
     #if LV_COLOR_SCREEN_TRANSP
     SDL_Rect rect = {.x = 0, .y = 0, .w = APP_DEV_GUI_DRV_HOR_RES, .h = APP_DEV_GUI_DRV_VER_RES};
     SDL_SetRenderDrawColor(disp->renderer, 0xff, 0, 0, 0xff);
     SDL_RenderDrawRect(disp->renderer, &rect);
     #endif
+    #endif
+    
     /* 用包含渲染图像的纹理更新渲染器 */
     SDL_RenderCopy(disp->renderer, disp->texture, NULL, NULL);
     SDL_RenderPresent(disp->renderer);

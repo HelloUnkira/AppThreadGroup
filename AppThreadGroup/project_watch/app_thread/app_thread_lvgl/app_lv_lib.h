@@ -32,4 +32,12 @@
 #include "app_lv_ui_style_old.h"
 #include "app_lv_ui_scene_old.h"
 
+/*@brief lvgl组实例
+ */
+lv_group_t *app_lv_group_inst(void);
+
+/*@brief 初始化lvgl
+ */
+void app_lv_ready(void);
+
 #endif

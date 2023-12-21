@@ -13,13 +13,14 @@ bool app_thread_group_run_status(void);
 /* 子线程组编号 */
 typedef enum {
     /* 静态线程id号 */
-    app_thread_id_s_s = 0x00,       /* 静态线程配置开始(static start) */
-    app_thread_id_mix_irq,          /* 混合中断线程(priority:2) */
-    app_thread_id_mix_custom,       /* 混合常规线程(priority:3) */
-    app_thread_id_manage,           /* 数据管理线程(priority:5) */
-    app_thread_id_lvgl,             /* lvgl线程(priority:4) */
-    app_thread_id_scui,             /* scui线程(priority:4) */
-    app_thread_id_s_e,              /* 静态线程配置结束(static end) */
+    app_thread_id_s_s = 0x00,               /* 静态线程配置开始(static start) */
+    app_thread_id_mix_irq,                  /* 混合中断线程(priority:2) */
+    app_thread_id_mix_custom,               /* 混合常规线程(priority:3) */
+    app_thread_id_manage,                   /* 数据管理线程(priority:5) */
+    app_thread_id_gui,                      /* gui线程(priority:4) */
+    app_thread_id_lvgl = app_thread_id_gui, /* lvgl线程(priority:4) */
+    app_thread_id_scui = app_thread_id_gui, /* scui线程(priority:4) */
+    app_thread_id_s_e,                      /* 静态线程配置结束(static end) */
     /* 动态线程id号 */
     /* 备注:不使用动态线程时缩小该范围节约空间 */
     app_thread_id_d_s = 0x80,       /* 动态线程配置开始(dynamic start) */

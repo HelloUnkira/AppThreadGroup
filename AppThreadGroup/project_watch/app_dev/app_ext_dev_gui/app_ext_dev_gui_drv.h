@@ -7,16 +7,8 @@ typedef struct {
     void (*timer_handler)(app_dev_t *driver);
     /*  */
     #if 0
-    #elif APP_EXT_DEV_GUI_USE_WIN
+    #elif APP_EXT_DEV_GUI_USE_WIN || APP_EXT_DEV_GUI_USE_SDL
     bool (*shutdown)(app_dev_t *driver);
-    #elif APP_EXT_DEV_GUI_USE_SDL
-    bool (*shutdown)(app_dev_t *driver);
-    #else
-    #endif
-    /*  */
-    #if 0
-    #elif APP_EXT_DEV_GUI_IS_LVGL
-    lv_group_t * (*group_inst)(app_dev_t *driver);
     #else
     #endif
     /*  */
@@ -26,16 +18,8 @@ typedef struct {
 typedef struct {
     /*  */
     #if 0
-    #elif APP_EXT_DEV_GUI_USE_WIN
+    #elif APP_EXT_DEV_GUI_USE_WIN || APP_EXT_DEV_GUI_USE_SDL
     bool shutdown;
-    #elif APP_EXT_DEV_GUI_USE_SDL
-    bool shutdown;
-    #else
-    #endif
-    /*  */
-    #if 0
-    #elif APP_EXT_DEV_GUI_IS_LVGL
-    lv_group_t * group;
     #else
     #endif
     /*  */
@@ -64,7 +48,7 @@ static inline void app_dev_gui_drv_timer_handler(app_dev_t *driver)
 }
 
 #if 0
-#elif APP_EXT_DEV_GUI_USE_WIN
+#elif APP_EXT_DEV_GUI_USE_WIN || APP_EXT_DEV_GUI_USE_SDL
 /*@brief 设备组终止
  *@param driver 设备实例
  *@retval true:终止;false:继续;
@@ -76,36 +60,6 @@ static inline bool app_dev_gui_drv_shutdown(app_dev_t *driver)
         return api->shutdown(driver);
     }
     return false;
-}
-#elif APP_EXT_DEV_GUI_USE_SDL
-/*@brief 设备组终止
- *@param driver 设备实例
- *@retval true:终止;false:继续;
- */
-static inline bool app_dev_gui_drv_shutdown(app_dev_t *driver)
-{
-    if (driver != NULL && driver->api != NULL) {
-        const app_dev_gui_drv_api_t *api = driver->api;
-        return api->shutdown(driver);
-    }
-    return false;
-}
-#else
-#endif
-
-#if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
-/*@brief lvgl 设备组实例
- *@param driver 设备实例
- *@retval lvgl组
- */
-static inline lv_group_t * app_dev_gui_drv_group_inst(app_dev_t *driver)
-{
-    if (driver != NULL && driver->api != NULL) {
-        const app_dev_gui_drv_api_t *api = driver->api;
-        return api->group_inst(driver);
-    }
-    return NULL;
 }
 #else
 #endif
