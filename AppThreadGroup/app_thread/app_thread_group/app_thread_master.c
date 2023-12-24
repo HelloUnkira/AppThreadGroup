@@ -159,7 +159,7 @@ void app_thread_id_free(uint32_t thread, void (*burn)(app_thread_package_t *pack
             burn(&package);
             continue;
         }
-        if (app_sys_pipe_give(pipe, &package, false) == -1) {
+        if (app_sys_pipe_give(pipe, &package) == -1) {
             app_sys_pipe_walk(pipe, app_thread_package_visit);
             APP_SYS_LOG_ERROR("thread pipe recv too much package");
             APP_SYS_ASSERT(false);
@@ -269,7 +269,7 @@ APP_THREAD_GROUP_HANDLER(app_thread_master_routine)
             app_thread_src_sem(package.thread, &recv_sem);
             app_thread_src_pipe(package.thread, &recv_pipe);
             /* 分拣派发无需再做额外的事件合并了 */
-            if (app_sys_pipe_give(recv_pipe, &package, false) == -1) {
+            if (app_sys_pipe_give(recv_pipe, &package) == -1) {
                 app_sys_pipe_walk(recv_pipe, app_thread_package_visit);
                 APP_SYS_LOG_ERROR("thread pipe recv too much package");
                 APP_SYS_ASSERT(false);
@@ -290,7 +290,7 @@ bool app_thread_package_notify(app_thread_package_t *package)
     app_sem_t *send_sem = &app_thread_sem_src;
     app_sys_pipe_t *send_pipe = &app_thread_pipe_src;
     app_mutex_process(&app_thread_mutex, app_mutex_take);
-    if (app_sys_pipe_give(send_pipe, package, true) == -1) {
+    if (app_sys_pipe_give(send_pipe, package) == -1) {
         app_sys_pipe_walk(send_pipe, app_thread_package_visit);
         APP_SYS_LOG_ERROR("thread pipe recv too much package");
         APP_SYS_ASSERT(false);

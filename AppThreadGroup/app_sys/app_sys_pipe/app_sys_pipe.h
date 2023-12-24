@@ -52,12 +52,11 @@ uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe);
 /*@brief 交付一个包给管道
  *@param pipe     管道实例
  *@param package  事件资源包(栈资源,非堆资源或静态资源)
- *@param normal   不使用优先级
  *@retval  0:     正常接收
  *        +1:     事件被吸收
  *        -1:     内存块不足,失败
  */
-int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal);
+int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package);
 
 /*@brief 从管道提取一个包
  *@param pipe     管道实例

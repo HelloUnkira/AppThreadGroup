@@ -68,7 +68,7 @@ static bool app_sys_ext_mem_cache_fc_t(app_sys_table_dln_t *node1, app_sys_table
 
 /*@brief 哈希访问函数
  */
-static void app_sys_ext_mem_cache_fv_t(app_sys_table_dln_t *node,  uint32_t idx)
+static void app_sys_ext_mem_cache_fv_t(app_sys_table_dln_t *node, uint32_t idx)
 {
     app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     APP_SYS_LOG_INFO("%u: <%x, %x, %p, %u, %u, %u>", idx,
@@ -107,7 +107,7 @@ static uint8_t app_sys_ext_mem_cache_fc2_t(app_sys_table_rbsn_t *node1, app_sys_
 
 /*@brief 哈希访问函数
  */
-static void app_sys_ext_mem_cache_fv_t(app_sys_table_rbsn_t *node,  uint32_t idx)
+static void app_sys_ext_mem_cache_fv_t(app_sys_table_rbsn_t *node, uint32_t idx)
 {
     app_sys_ext_mem_cache_unit_t *unit = app_sys_own_ofs(app_sys_ext_mem_cache_unit_t, ht_node, node);
     APP_SYS_LOG_INFO("%u: <%x, %x, %p, %u, %u, %u>", idx,
@@ -356,19 +356,21 @@ uint32_t app_sys_ext_mem_cache_take(app_sys_ext_mem_cache_t *cache, uintptr_t of
         unit->count   = 1;
         unit->dirty   = false;
         unit->lock    = 1;
-        app_sys_list_dln_reset(&unit->dl_node);
         cache->usage += size;
        *buffer = unit->buffer;
         /* 数据读取 */
         if (!app_sys_ext_mem_read(cache->ext_mem, unit->offset, unit->buffer, unit->size))
              APP_SYS_LOG_ERROR("data read fail");
         /* 带计数优先级加入 */
+        app_sys_list_dln_reset(&unit->dl_node);
         app_sys_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, app_sys_ext_mem_cache_sort);
         
         #if 0
         #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL
+        app_sys_list_dln_reset(&unit->ht_node);
         app_sys_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         #elif APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS
+        app_sys_table_rbsn_reset(&unit->ht_node);
         app_sys_table_rbst_insert(&cache->ht_table, &unit->ht_node);
         #else
         #endif

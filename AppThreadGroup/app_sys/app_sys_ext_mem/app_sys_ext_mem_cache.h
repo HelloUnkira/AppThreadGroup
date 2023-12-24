@@ -26,9 +26,9 @@ typedef struct {
     uintptr_t   offset;
     uint8_t    *buffer;
     uintptr_t   size;
-    uint8_t     count:7;
-    uint8_t     dirty:1;
-    uint8_t     lock:7;
+    uint16_t    count:7;
+    uint16_t    dirty:1;
+    uint16_t    lock:7;
 } app_sys_ext_mem_cache_unit_t;
 
 typedef struct {

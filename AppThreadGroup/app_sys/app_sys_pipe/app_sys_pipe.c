@@ -24,7 +24,7 @@ static bool app_sys_pipe_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *nod
 {
     app_sys_pipe_pkg_t *pkg1 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
     app_sys_pipe_pkg_t *pkg2 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
-    return pkg1->priority > pkg2->priority;
+    return pkg1->priority >= pkg2->priority;
 }
 
 /*@brief 事件包匹配函数
@@ -66,17 +66,14 @@ uint32_t app_sys_pipe_num(app_sys_pipe_t *pipe)
 /*@brief 交付一个包给管道
  *@param pipe     管道实例
  *@param package  事件资源包(栈资源,非堆资源或静态资源)
- *@param normal   不使用优先级
- *@param merge    事件包合并回调,为空无效
- *                它只会作用到最新来的相同事件上去
  *@retval  0:     正常接收
- *        +1:     事件被合并
+ *        +1:     事件被吸收
  *        -1:     内存块不足,失败
  */
-int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool normal)
+int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
 {
     int8_t retval = 0;
-    bool merge_flag = false;
+    bool absorb_flag = false;
     app_sys_pipe_pkg_t *package_old = NULL;
     app_sys_pipe_pkg_t *package_new = NULL;
     /* 生成资源包, 转储消息资源资源 */
@@ -87,12 +84,12 @@ int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool
         if (app_sys_pipe_confirm(&package->dl_node, node)) {
             package_old = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
             package->absorb(package_old, package);
-            merge_flag = true;
+            absorb_flag = true;
             retval = +1;
             break;
         }
     }
-    if (!merge_flag) {
+    if (!absorb_flag) {
         package_new = app_sys_mem_slab_alloc(&pipe->mem_slab);
         if (package_new == NULL)
             retval = -1;
@@ -100,7 +97,7 @@ int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package, bool
             memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
             app_sys_list_dln_reset(&package_new->dl_node);
             /* 资源包加入到管道(优先队列) */
-            if (normal)
+            if (package_new->priority == 0)
                 app_sys_list_dll_ainsert(&pipe->dl_list, NULL, &package_new->dl_node);
             else
                 app_sys_queue_dlpq_enqueue(&pipe->dl_list, &package_new->dl_node, app_sys_pipe_sort);
