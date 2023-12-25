@@ -20,6 +20,25 @@ static bool scui_image_cache_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t 
     return unit1->count >= unit2->count;
 }
 
+/*@brief 摘要的来源网络的Hash散列函数
+ */
+static uint32_t scui_image_cache_hash(uint8_t *data, uint32_t length)
+{
+    uint64_t h = 0, g = 0;
+    
+    for (uint32_t idx = 0; idx < length; idx++) {
+        h = (h << 4) + data[idx];
+        if (g = h & 0xf0000000)
+            h ^= g >> 24;
+        h &= ~g;
+    }
+    
+    /* 散列不均匀时需要适当加点盐 */
+    const uint32_t salt = 13;
+    
+    return (uint32_t)(h >> salt);
+}
+
 /*@brief 哈希散列函数,哈希摘要函数
  */
 static uint32_t scui_image_cache_fd_t(app_sys_table_rbsn_t *node)
@@ -27,7 +46,7 @@ static uint32_t scui_image_cache_fd_t(app_sys_table_rbsn_t *node)
     scui_image_unit_t *unit = app_sys_own_ofs(scui_image_unit_t, ht_node, node);
     /* 摘要的来源网络的Hash散列函数 */
     uint32_t app_sys_table_elf_hash(uint8_t *data, uint32_t length);
-    return scui_image_hash((void *)&unit->image.pixel.data, sizeof(uintptr_t));
+    return scui_image_cache_hash((void *)&unit->image.pixel.data, sizeof(uintptr_t));
 }
 
 /*@brief 哈希比较函数
@@ -130,7 +149,7 @@ void scui_image_cache_unload(scui_image_t *image, bool unload)
         return;
     }
     
-    scui_image_unit_t *unit;
+    scui_image_unit_t *unit = NULL;
     app_sys_table_dln_t *node_match = NULL;
     scui_image_unit_t unit_match = {.image = *image,};
     

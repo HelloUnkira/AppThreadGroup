@@ -10,13 +10,13 @@ void scui_widget_gc_reset(scui_widget_t *widget);
  *@param  widget 控件实例
  *@retval 画布句柄
  */
-scui_handle_t scui_widget_gc_canvas_get(scui_widget_t *widget);
+scui_handle_t scui_widget_gc_surface_get(scui_widget_t *widget);
 
 /*@brief 控件gc设置画布
  *@param widget 控件实例
- *@param canvas 画布句柄
+ *@param surface 画布句柄
  */
-void scui_widget_gc_canvas_set(scui_widget_t *widget, scui_handle_t canvas);
+void scui_widget_gc_surface_set(scui_widget_t *widget, scui_handle_t surface);
 
 /*@brief 控件gc获取剪切域
  *@param widget 控件实例
@@ -41,6 +41,12 @@ void scui_widget_gc_clip_merge(scui_widget_t *widget, scui_area_t *clip);
  *@param clip   剪切域
  */
 void scui_widget_gc_clip_clear(scui_widget_t *widget);
+
+/*@brief 控件gc剪切域为空检查
+ *@param widget 控件实例
+ *@retval 剪切域为空
+ */
+bool scui_widget_gc_clip_empty(scui_widget_t *widget);
 
 /*@brief 控件gc更新画布alpha
  *@param widget 控件实例

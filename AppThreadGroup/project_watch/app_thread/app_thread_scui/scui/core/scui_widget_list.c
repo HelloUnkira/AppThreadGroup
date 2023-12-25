@@ -132,11 +132,9 @@ void scui_widget_list_clip_merge(scui_widget_t *widget, scui_area_t *clip, scui_
             continue;
         scui_handle_t handle = widget->list.child_list[ofs];
         scui_widget_t *child = scui_handle_get(handle);
-        /*  */
-        #if 0
-        if (!scui_widget_show(child))
+        /* 不显示的子控件不添加剪切域 */
+        if (!scui_widget_status_is_show(handle))
              continue;
-        #endif
         /* 换算成子控件相对坐标 */
         clip_child.w = child->clip.w;
         clip_child.h = child->clip.h;
@@ -149,7 +147,7 @@ void scui_widget_list_clip_merge(scui_widget_t *widget, scui_area_t *clip, scui_
         }
         /* 计算子控件与父容器交集 */
         scui_area_t clip_child_out = {0};
-        if (!scui_area_intersect(&clip_child, &clip_child_in, &clip_child_out))
+        if (!scui_area_inter(&clip_child, &clip_child_in, &clip_child_out))
              scui_widget_gc_clip_merge(child, &clip_child_out);
     }
 }

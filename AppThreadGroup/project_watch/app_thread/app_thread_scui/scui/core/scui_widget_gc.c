@@ -15,25 +15,25 @@
 inline void scui_widget_gc_reset(scui_widget_t *widget)
 {
     memset(&widget->gc.clip, 0, sizeof(scui_area_t));
-    widget->gc.canvas = SCUI_HANDLE_INVALID;
+    widget->gc.surface = SCUI_HANDLE_INVALID;
 }
 
 /*@brief  控件gc获取画布
  *@param  widget 控件实例
  *@retval 画布句柄
  */
-inline scui_handle_t scui_widget_gc_canvas_get(scui_widget_t *widget)
+inline scui_handle_t scui_widget_gc_surface_get(scui_widget_t *widget)
 {
-    return widget->gc.canvas;
+    return widget->gc.surface;
 }
 
 /*@brief 控件gc设置画布
  *@param widget 控件实例
- *@param canvas 画布句柄
+ *@param surface 画布句柄
  */
-inline void scui_widget_gc_canvas_set(scui_widget_t *widget, scui_handle_t canvas)
+inline void scui_widget_gc_surface_set(scui_widget_t *widget, scui_handle_t surface)
 {
-    widget->gc.canvas = canvas;
+    widget->gc.surface = surface;
 }
 
 /*@brief 控件gc获取剪切域
@@ -73,13 +73,26 @@ inline void scui_widget_gc_clip_clear(scui_widget_t *widget)
     widget->gc.clip.h = 0;
 }
 
+/*@brief 控件gc剪切域为空检查
+ *@param widget 控件实例
+ *@retval 剪切域为空
+ */
+inline bool scui_widget_gc_clip_empty(scui_widget_t *widget)
+{
+    #if 0
+    /* wait adapte */
+    #endif
+}
+
 /*@brief 控件gc更新画布alpha
  *@param widget 控件实例
  *@param alpha  画布alpha
  */
 inline void scui_widget_gc_alpha_update(scui_widget_t *widget, uint8_t alpha)
 {
+    #if 0
     /* wait adapte */
+    #endif
 }
 
 

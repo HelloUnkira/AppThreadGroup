@@ -23,10 +23,10 @@ static uint32_t scui_image_layout_num = 0;
 
 /* 控件组织表 */
 static const scui_widget_ogz_t scui_widget_ogz[scui_widget_type_num] = {
-    [scui_widget_type_custom].paint   = NULL,   // scui_custom_paint
+    [scui_widget_type_custom].event   = NULL,   // scui_custom_event
     [scui_widget_type_custom].create  = NULL,   // scui_custom_create_by_layout
     [scui_widget_type_custom].destroy = NULL,   // scui_custom_destroy
-    [scui_widget_type_window].paint   = NULL,
+    [scui_widget_type_window].event   = NULL,
     [scui_widget_type_window].create  = NULL,
     [scui_widget_type_window].destroy = NULL,
 };
@@ -37,6 +37,17 @@ static const uint32_t scui_widget_ogz_size[scui_widget_type_num] = {
     // sizeof(scui_window_t),
     0,
 };
+
+/*@brief 控件函数映射表
+ *@param type 控件类型
+ *@retval 控件函数映射表
+ */
+scui_widget_ogz_t * scui_widget_ogz_func(uint32_t type)
+{
+    #if 0
+    /* wait adaptor */
+    #endif
+}
 
 uint32_t scui_widget_ogz_create_by_layout(scui_handle_t handle, uint32_t *offset)
 {

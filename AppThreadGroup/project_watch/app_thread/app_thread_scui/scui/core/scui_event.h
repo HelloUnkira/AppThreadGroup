@@ -1,6 +1,59 @@
 #ifndef SCUI_EVENT_H
 #define SCUI_EVENT_H
 
+/* 系统事件表: */
+typedef enum {
+    scui_event_none = 0,
+    scui_event_invalid = scui_event_none,
+    
+    /* 调度事件<s> */
+    scui_event_show,
+    scui_event_hide,
+    scui_event_refr,
+    scui_event_paint,
+    scui_event_paint_overlay,
+    scui_event_scene_focus_get,
+    scui_event_scene_focus_lost,
+    scui_event_scene_res_load,
+    scui_event_scene_res_unload,
+    scui_event_language_change,
+    /* 调度事件<e> */
+    
+    /* 输入设备事件<ptr,s>: */
+    scui_event_ptr_s,
+    scui_event_ptr_cover,   /* 覆盖事件<>: */
+    scui_event_ptr_down,    /* 按下事件<point>: */
+    scui_event_ptr_single,  /* 单击事件<point>: */
+    scui_event_ptr_double,  /* 双击事件<point>: */
+    scui_event_ptr_fling,   /* 轻扫事件<pos_s, pos_e>: */
+    scui_event_ptr_move,    /* 移动事件<pos_s, pos_e>: */
+    scui_event_ptr_long,    /* 长按事件<point>: */
+    scui_event_ptr_hold,    /* 持续事件<point>: */
+    scui_event_ptr_up,      /* 抬起事件<point>: */
+    scui_event_ptr_e,
+    /* 输入设备事件<ptr,e>: */
+    
+    /* 输入设备事件<enc,s> */
+    scui_event_enc_s,
+    scui_event_enc_clockwise,       /* 正转<coord> */
+    scui_event_enc_clockwise_anti,  /* 反转<coord> */
+    scui_event_enc_e,
+    /* 输入设备事件<enc,e> */
+    
+    /* 输入设备事件<key,s> */
+    scui_event_key_s,
+    scui_event_key_down,    /* 按下事件<coord> */
+    scui_event_key_single,  /* 单击事件<coord> */
+    scui_event_key_double,  /* 双击事件<coord> */
+    scui_event_key_hold,    /* 持续事件<coord> */
+    scui_event_key_long,    /* 长按事件<coord> */
+    scui_event_key_up,      /* 抬起事件<coord> */
+    scui_event_key_e,
+    /* 输入设备事件<key,e> */
+    
+    scui_event_sys_num,
+} scui_event_sys_t;
+
 typedef struct {
     app_sys_list_dln_t dl_node;
     /* 事件包吸收回调: */
@@ -15,6 +68,7 @@ typedef struct {
     union {                 /* 事件参数 */
         scui_area_t  area;
         scui_point_t point;
+        scui_coord_t coord;
         struct {
         scui_point_t pos_s;
         scui_point_t pos_e;
@@ -23,21 +77,21 @@ typedef struct {
 } scui_event_t;
 
 typedef struct {
+    scui_sem_t sem;
+    scui_mutex_t mutex;
     app_sys_list_dll_t dl_list;
     uint32_t list_num;
 } scui_event_queue_t;
 
 /* 事件响应回调 */
 typedef uint32_t (*scui_event_cb_t)(scui_event_t *event);
+/* 事件响应回调返回值 */
+#define SCUI_EVENT_BREAK        0   /* 终止事件冒泡 */
+#define SCUI_EVENT_CONTINUE     1   /* 继续事件冒泡 */
 
-/*@brief 事件队列同步原语
- *@param lock   同步原语:上锁
- *@param unlock 同步原语:解锁
- *@param wait   同步原语:等待
- *@param notify 同步原语:通报
+/*@brief 事件队列初始化
  */
-void scui_event_sync_ready(void (*lock)(void), void (*unlock)(void),
-                           void (*wait)(void), void (*notify)(void));
+void scui_event_ready(void);
 
 /*@brief 事件同步等待
  */

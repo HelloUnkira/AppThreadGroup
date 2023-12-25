@@ -1,8 +1,8 @@
-#ifndef SCUI_POINT_H
-#define SCUI_POINT_H
+#ifndef SCUI_COORD_H
+#define SCUI_COORD_H
 
 /*@brief 坐标点,范围:[-32768, +32767]
- *       通常来说不需要支持更大类型的坐标点
+ *       通常来说不需要支持更大范围的坐标点
  */
 typedef int16_t scui_coord_t;
 
@@ -54,7 +54,7 @@ bool scui_area_empty(scui_area_t *area);
  *@param area2 区域
  *@retval 为空false,不为空true
  */
-bool scui_area_intersect(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
+bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
 
 /*@brief 求区域并集(area = area1 | area2)
  *@param area  区域
@@ -75,6 +75,6 @@ bool scui_area_inside(scui_area_t *area1, scui_area_t *area2);
  *@param point 坐标
  *@retval 包含true,不包含false
  */
-bool scui_area_inside_point(scui_area_t *area, scui_point_t point);
+bool scui_area_inside_point(scui_area_t *area, scui_point_t *point);
 
 #endif

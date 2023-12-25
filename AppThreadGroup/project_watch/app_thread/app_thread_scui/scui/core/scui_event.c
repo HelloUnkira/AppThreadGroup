@@ -9,36 +9,23 @@
 #include "app_sys_lib.h"
 #include "scui.h"
 
-/* 同步原语:上锁,解锁 */
-void (*scui_event_sync_lock_cb)(void)   = NULL;
-void (*scui_event_sync_unlock_cb)(void) = NULL;
-/* 同步原语:等待,通报 */
-void (*scui_event_sync_wait_cb)(void)   = NULL;
-void (*scui_event_sync_notify_cb)(void) = NULL;
 /* 事件队列 */
 static scui_event_queue_t scui_event_queue = {0};
 
-/*@brief 事件队列同步原语
- *@param lock   同步原语:上锁
- *@param unlock 同步原语:解锁
- *@param wait   同步原语:等待
- *@param notify 同步原语:通报
+/*@brief 事件队列初始化
  */
-void scui_event_sync_ready(void (*lock)(void), void (*unlock)(void),
-                           void (*wait)(void), void (*notify)(void))
+void scui_event_ready(void)
 {
-    scui_event_sync_lock_cb   = lock;
-    scui_event_sync_unlock_cb = unlock;
-    scui_event_sync_wait_cb   = wait;
-    scui_event_sync_notify_cb = notify;
+    scui_sem_process(&scui_event_queue.sem, scui_sem_static);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_static);
+    app_sys_list_dll_reset(&scui_event_queue.dl_list);
 }
 
 /*@brief 事件同步等待
  */
 void scui_event_sync_wait(void)
 {
-    if (scui_event_sync_wait_cb != NULL)
-        scui_event_sync_wait_cb();
+    scui_sem_process(&scui_event_queue.sem, scui_sem_take);
 }
 
 /*@brief 事件队列事件数量
@@ -82,8 +69,7 @@ void scui_event_enqueue(scui_event_t *event)
     }
     
     /* 同步原语:上锁 */
-    if (scui_event_sync_lock_cb == NULL)
-        scui_event_sync_lock_cb();
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
     
     /* 事件包合并检查,如果合并回调不为空且查找到旧事件,合并它 */
     if (event->absorb != NULL) {
@@ -111,11 +97,9 @@ void scui_event_enqueue(scui_event_t *event)
     }
     
     /* 同步原语:解锁 */
-    if (scui_event_sync_unlock_cb == NULL)
-        scui_event_sync_unlock_cb();
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     /* 同步原语:通报 */
-    if (scui_event_sync_notify_cb == NULL)
-        scui_event_sync_notify_cb();
+    scui_sem_process(&scui_event_queue.sem, scui_sem_give);
 }
 
 /*@brief 事件包匹配函数
@@ -133,8 +117,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     }
     
     /* 同步原语:上锁 */
-    if (scui_event_sync_lock_cb == NULL)
-        scui_event_sync_lock_cb();
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
     
     /* 资源包提取出管道 */
     if (scui_event_queue.list_num != 0) {
@@ -162,8 +145,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     }
     
     /* 同步原语:解锁 */
-    if (scui_event_sync_unlock_cb == NULL)
-        scui_event_sync_unlock_cb();
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     
     return retval;
 }

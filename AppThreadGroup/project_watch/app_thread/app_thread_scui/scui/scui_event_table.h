@@ -3,28 +3,14 @@
 
 /* 事件表: */
 typedef enum {
-    /* 系统事件 */
-    scui_event_none = 0,
-    scui_event_show,
-    scui_event_hide,
-    scui_event_refr,
-    scui_event_paint,
-    scui_event_paint_overlay,
-    scui_event_scene_focus_get,
-    scui_event_scene_focus_lost,
-    scui_event_scene_res_load,
-    scui_event_scene_res_unload,
+    scui_event_custom_s = scui_event_sys_num,
     
+    /* 自定义事件<s> */
     
-    /* 自定义事件<起始> */
+    /* 自定义事件<e> */
     
-    /* 自定义事件<结束> */
+    scui_event_custom_e,
     
-    scui_event_invalid = 0xFFFF,
-} scui_event_table_t;
-
-
-
-
+} scui_event_custom_t;
 
 #endif

@@ -50,7 +50,7 @@ inline bool scui_area_empty(scui_area_t *area)
  *@param area2 区域
  *@retval 为空false,不为空true
  */
-inline bool scui_area_intersect(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
+inline bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     scui_area_m_to_s(area1);
     scui_area_m_to_s(area2);
@@ -101,10 +101,10 @@ inline bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
  *@param point 坐标
  *@retval 包含true,不包含false
  */
-inline bool scui_area_inside_point(scui_area_t *area, scui_point_t point)
+inline bool scui_area_inside_point(scui_area_t *area, scui_point_t *point)
 {
-    if (point.x >= area->x && point.x <= area->x + area->w &&
-        point.y >= area->y && point.y <= area->y + area->h)
+    if (point->x >= area->x && point->x <= area->x + area->w &&
+        point->y >= area->y && point->y <= area->y + area->h)
         return true;
     return false;
 }
