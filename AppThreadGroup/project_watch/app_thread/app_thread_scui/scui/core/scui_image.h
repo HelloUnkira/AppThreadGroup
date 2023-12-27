@@ -7,9 +7,9 @@
 /* 图片像素格式: */
 /* 枚举值为(byte << 8) | index */
 typedef enum {
-    scui_image_format_bmp565  = 0x200,
-    scui_image_format_png8565 = 0x310,
-    scui_image_format_png6666 = 0x311,
+    scui_image_format_a4      = 0x0000,
+    scui_image_format_bmp565  = 0x0200,
+    scui_image_format_png8565 = 0x0310,
 } scui_image_format_t;
 
 /* 图片像素数据: */

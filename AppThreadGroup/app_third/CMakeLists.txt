@@ -35,6 +35,10 @@
 # master https://github.com/Mbed-TLS/mbedtls.git
 # AppThreadGroup/app_third/lib_mbedtls/lib_mbedtls
 #
+# LZ4库:
+# dev https://github.com/lz4/lz4.git
+# AppThreadGroup/app_third/lib_lz4/lib_lz4
+#
 # TinyEKF库(Extend Kalman Filter):
 # master https://github.com/simondlevy/TinyEKF.git
 # AppThreadGroup/app_third/lib_TinyEKF/lib_TinyEKF
@@ -42,6 +46,15 @@
 # JerryScript库(JS):
 # master https://github.com/jerryscript-project/jerryscript.git
 # AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
+#
+
+#
+# MinGW-W64:
+# Windows下的GCC编译器
+# 可用于制作C的dll文件以便Python进行使用
+# https://github.com/nixman/mingw-builds-binaries
+# gcc -shared -o lz4hc.dll lz4hc.c lz4.c
+# gcc -shared -o lz4.dll lz4.c
 #
 
 # 本地不额外载入第三方库

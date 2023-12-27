@@ -30,3 +30,7 @@
 	path = AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
 	url = https://github.com/jerryscript-project/jerryscript.git
 	branch = master
+[submodule "AppThreadGroup/app_third/lib_lz4/lib_lz4"]
+	path = AppThreadGroup/app_third/lib_lz4/lib_lz4
+	url = https://github.com/lz4/lz4.git
+	branch = dev
