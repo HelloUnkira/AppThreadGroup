@@ -23,7 +23,7 @@
 #define APP_EXT_DEV_GUI_USE_WIN     1
 #define APP_EXT_DEV_GUI_USE_SDL     0
 /* gui framework: */
-#define APP_EXT_DEV_GUI_IS_LVGL     1
+#define APP_EXT_DEV_GUI_IS_LVGL     0
 #define APP_EXT_DEV_GUI_IS_SCUI     1
 /*************************************************************************************************/
 /*************************************************************************************************/

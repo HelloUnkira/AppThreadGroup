@@ -16,7 +16,8 @@ static app_sys_timer_t scui_tick_timer = {0};
 static void scui_tick_timer_handler(void *timer)
 {
     /* 更新动画即可,动画更新了自己会产生事件调度 */
-    // scui_msg_notify(scui_msg_system_tick);
+    if (scui_engine_execute_status_get())
+        scui_anima_elapse_update(1);
 }
 
 /*@brief 毫秒级系统滴答初始化

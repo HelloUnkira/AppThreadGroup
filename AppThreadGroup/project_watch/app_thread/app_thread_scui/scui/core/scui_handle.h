@@ -5,26 +5,35 @@
  */
 typedef uint32_t scui_handle_t;
 
+/*@brief 句柄表
+ */
+typedef struct {
+    void        **source;
+    scui_handle_t number;
+    scui_handle_t offset;
+} scui_handle_table_t;
+
 /*@brief 句柄偏移量,非法句柄,系统句柄
  *       0号句柄为非法句柄
  */
-#define SCUI_HANDLE_OFFSET_S    (1)
-#define SCUI_HANDLE_OFFSET_D    (0xFFFF)
 #define SCUI_HANDLE_INVALID     (0)
 #define SCUI_HANDLE_SYSTEM      (~(scui_handle_t)0)
 
+/*@brief 句柄表注册
+ *@param table 句柄表
+ */
+void scui_handle_table_register(scui_handle_table_t *table);
+
 /*@brief 生成一个句柄
- *@param dynamic 动态句柄,静态句柄
  *@retval 句柄
  */
-scui_handle_t scui_handle_new(bool dynamic);
+scui_handle_t scui_handle_new(void);
 
 /*@brief 销毁一个句柄
- *@param dynamic 动态句柄,静态句柄
  *@param handle 句柄
  *@retval 成功失败
  */
-bool scui_handle_del(bool dynamic, scui_handle_t handle);
+bool scui_handle_del(scui_handle_t handle);
 
 /*@brief 句柄获得资源
  *@param handle 句柄

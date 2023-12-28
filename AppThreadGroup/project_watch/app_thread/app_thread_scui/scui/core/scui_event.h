@@ -7,6 +7,8 @@ typedef enum {
     scui_event_invalid = scui_event_none,
     
     /* 调度事件<s> */
+    scui_event_sched_s,
+    scui_event_anima_elapse,
     scui_event_show,
     scui_event_hide,
     scui_event_refr,
@@ -17,6 +19,7 @@ typedef enum {
     scui_event_scene_res_load,
     scui_event_scene_res_unload,
     scui_event_language_change,
+    scui_event_sched_e,
     /* 调度事件<e> */
     
     /* 输入设备事件<ptr,s>: */
@@ -54,6 +57,11 @@ typedef enum {
     scui_event_sys_num,
 } scui_event_sys_t;
 
+typedef enum {
+    scui_event_style_async,     /* 常规异步调度 */
+    scui_event_style_sync,      /* 就地同步调度 */
+} scui_event_style_t;
+
 typedef struct {
     app_sys_list_dln_t dl_node;
     /* 事件包吸收回调: */
@@ -66,6 +74,7 @@ typedef struct {
     uint64_t style:8;       /* 事件风格 */
     uint64_t priority:8;    /* 事件优先级(数字越大优先级越高) */
     union {                 /* 事件参数 */
+        /* scui定制化事件数据: */
         scui_area_t  area;
         scui_point_t point;
         scui_coord_t coord;
@@ -73,12 +82,21 @@ typedef struct {
         scui_point_t pos_s;
         scui_point_t pos_e;
         };
+        /* 通用结构信息(数据量不定,支持任意类型和种类的数据): */
+        struct {
+            uint64_t dynamic:1;     /* 协议数据流是动态生成,使用完毕要回收 */
+            uint64_t size:24;       /* 协议数据流大小(16M) */
+            void    *data;          /* 协议数据流(浅拷贝) */
+        };
+        /* 扩展迷你信息(数据量极少,通常表示状态类数据): */
+        uintptr_t byte_align;
+        uint64_t  byte_fixed;
     };
 } scui_event_t;
 
 typedef struct {
-    scui_sem_t sem;
-    scui_mutex_t mutex;
+    app_sem_t sem;
+    app_mutex_t mutex;
     app_sys_list_dll_t dl_list;
     uint32_t list_num;
 } scui_event_queue_t;
@@ -86,8 +104,9 @@ typedef struct {
 /* 事件响应回调 */
 typedef uint32_t (*scui_event_cb_t)(scui_event_t *event);
 /* 事件响应回调返回值 */
-#define SCUI_EVENT_BREAK        0   /* 终止事件冒泡 */
-#define SCUI_EVENT_CONTINUE     1   /* 继续事件冒泡 */
+#define SCUI_EVENT_DEFAULT      0   /* 无效值 */
+#define SCUI_EVENT_BREAK        1   /* 终止事件冒泡 */
+#define SCUI_EVENT_CONTINUE     2   /* 继续事件冒泡 */
 
 /*@brief 事件队列初始化
  */

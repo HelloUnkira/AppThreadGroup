@@ -5,10 +5,10 @@
 // 帧缓冲区是1或2个画布的集合
 typedef struct {
     scui_surface_t surface[SCUI_SURFACE_FB_LIMIT];
-    scui_sem_t sem_draw;
-    scui_sem_t sem_refr;
+    app_sem_t sem_draw;
+    app_sem_t sem_refr;
     #if SCUI_SURFACE_FB_LIMIT == 2
-    scui_mutex_t mutex;
+    app_mutex_t mutex;
     uint8_t refr_hold:2;
     uint8_t draw_idx:1;
     #endif

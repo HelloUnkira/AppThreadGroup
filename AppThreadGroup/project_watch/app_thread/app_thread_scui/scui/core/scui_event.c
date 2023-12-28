@@ -16,8 +16,8 @@ static scui_event_queue_t scui_event_queue = {0};
  */
 void scui_event_ready(void)
 {
-    scui_sem_process(&scui_event_queue.sem, scui_sem_static);
-    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_static);
+    app_sem_process(&scui_event_queue.sem, app_sem_static);
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_static);
     app_sys_list_dll_reset(&scui_event_queue.dl_list);
 }
 
@@ -25,7 +25,7 @@ void scui_event_ready(void)
  */
 void scui_event_sync_wait(void)
 {
-    scui_sem_process(&scui_event_queue.sem, scui_sem_take);
+    app_sem_process(&scui_event_queue.sem, app_sem_take);
 }
 
 /*@brief 事件队列事件数量
@@ -69,7 +69,7 @@ void scui_event_enqueue(scui_event_t *event)
     }
     
     /* 同步原语:上锁 */
-    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
     
     /* 事件包合并检查,如果合并回调不为空且查找到旧事件,合并它 */
     if (event->absorb != NULL) {
@@ -97,9 +97,10 @@ void scui_event_enqueue(scui_event_t *event)
     }
     
     /* 同步原语:解锁 */
-    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
     /* 同步原语:通报 */
-    scui_sem_process(&scui_event_queue.sem, scui_sem_give);
+    if (!absorb_flag)
+        app_sem_process(&scui_event_queue.sem, app_sem_give);
 }
 
 /*@brief 事件包匹配函数
@@ -117,7 +118,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     }
     
     /* 同步原语:上锁 */
-    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
     
     /* 资源包提取出管道 */
     if (scui_event_queue.list_num != 0) {
@@ -145,7 +146,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     }
     
     /* 同步原语:解锁 */
-    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
     
     return retval;
 }

@@ -131,7 +131,7 @@ void scui_image_cache_clear(void)
         /* 约减使用率 */
         cache->usage -= unit->image.pixel.size_mem;
         /* 回收数据区 */
-        scui_handle_del(true, unit->image.handle);
+        scui_handle_del(unit->image.handle);
         SCUI_MEM_FREE((void *)unit->image.data);
         SCUI_MEM_FREE(unit);
         unit = NULL;
@@ -237,7 +237,7 @@ void scui_image_cache_load(scui_image_t *image, bool load)
             /* 约减使用率 */
             cache->usage -= unit->image.pixel.size_mem;
             /* 回收数据区 */
-            scui_handle_del(true, unit->image.handle);
+            scui_handle_del(unit->image.handle);
             SCUI_MEM_FREE((void *)unit->image.data);
             SCUI_MEM_FREE(unit);
             unit = NULL;
@@ -247,7 +247,7 @@ void scui_image_cache_load(scui_image_t *image, bool load)
         unit->image   = *image;
         unit->count   = 1;
         unit->lock    = 1;
-        unit->image.handle = scui_handle_new(true);
+        unit->image.handle = scui_handle_new();
         scui_handle_set(unit->image.handle, &unit->image);
         cache->usage += unit->image.pixel.size_mem;
         /* 图片资源加载 */
@@ -273,8 +273,7 @@ bool scui_image_check(scui_image_t *image)
     bool check = true;
     
     if (image->format != scui_image_format_bmp565  &&
-        image->format != scui_image_format_png8565 &&
-        image->format != scui_image_format_png6666)
+        image->format != scui_image_format_png8565)
         check = false;
     if (image->status > scui_image_status_num)
         check = false;

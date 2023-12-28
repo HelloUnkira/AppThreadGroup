@@ -7,7 +7,6 @@
 /* config: */
 #include "scui_config.h"
 /* arch: */
-#include "scui_sync.h"
 #include "scui_tick.h"
 #include "scui_util.h"
 #include "scui_mem.h"
@@ -17,6 +16,8 @@
 #include "scui_handle.h"        /* 泛用句柄 */
 #include "scui_anima.h"         /* 简易动画 */
 #include "scui_event.h"         /* 事件队列 */
+#include "scui_event_mgr.h"     /* 事件管理器 */
+#include "scui_engine.h"        /* 引擎 */
 #include "scui_image.h"         /* 图像 */
 /* misc */
 #include "scui_math.h"
@@ -34,7 +35,9 @@
 
 
 /* 自定义事件表 */
-#include "scui_event_table.h"
+#include "scui_event_custom.h"
+/* 静态图形索引表 */
+#include "scui_image_combine.h"
 
 
 

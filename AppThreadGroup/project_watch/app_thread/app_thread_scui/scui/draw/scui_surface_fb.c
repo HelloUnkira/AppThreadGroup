@@ -21,9 +21,9 @@ void scui_surface_fb_switch(void)
 {
     /* 切换上一刷新块,它将成为新的绘制块 */
     #if SCUI_SURFACE_FB_LIMIT == 2
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
     scui_surface_fb.draw_idx = 1 - scui_surface_fb.draw_idx;
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
     #endif
 }
 
@@ -34,9 +34,9 @@ void scui_surface_fb_switch(void)
 void scui_surface_fb_refr_lock(void)
 {
     #if SCUI_SURFACE_FB_LIMIT == 2
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
     scui_surface_fb.refr_hold |= (1 < scui_surface_fb.draw_idx);
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
     #endif
 }
 
@@ -45,9 +45,9 @@ void scui_surface_fb_refr_lock(void)
 void scui_surface_fb_refr_unlock(void)
 {
     #if SCUI_SURFACE_FB_LIMIT == 2
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
     scui_surface_fb.refr_hold &= ~(1 < (1 - scui_surface_fb.draw_idx));
-    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
+    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
     #endif
 }
 
@@ -55,28 +55,28 @@ void scui_surface_fb_refr_unlock(void)
  */
 void scui_surface_fb_refr_wait(void)
 {
-    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_take);
+    app_sem_process(&scui_surface_fb.sem_refr, app_sem_take);
 }
 
 /*@brief 产生刷新信号
  */
 void scui_surface_fb_refr_notify(void)
 {
-    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_give);
+    app_sem_process(&scui_surface_fb.sem_refr, app_sem_give);
 }
 
 /*@brief 等待绘制信号
  */
 void scui_surface_fb_draw_wait(void)
 {
-    scui_sem_process(&scui_surface_fb.sem_draw, scui_sem_take);
+    app_sem_process(&scui_surface_fb.sem_draw, app_sem_take);
 }
 
 /*@brief 产生绘制信号
  */
 void scui_surface_fb_draw_notify(void)
 {
-    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_give);
+    app_sem_process(&scui_surface_fb.sem_refr, app_sem_give);
 }
 
 /*@brief 画布帧缓冲区刷新画布实例
@@ -107,10 +107,10 @@ scui_surface_t * scui_surface_fb_draw(void)
  */
 void scui_surface_fb_ready(void)
 {
-    app_sem_process(&scui_surface_fb.sem_draw, scui_sem_static);
-    app_sem_process(&scui_surface_fb.sem_refr, scui_sem_static);
+    app_sem_process(&scui_surface_fb.sem_draw, app_sem_static);
+    app_sem_process(&scui_surface_fb.sem_refr, app_sem_static);
     #if SCUI_SURFACE_FB_LIMIT == 2
-    app_mutex_process(&scui_surface_fb.mutex,  scui_mutex_static);
+    app_mutex_process(&scui_surface_fb.mutex,  app_mutex_static);
     #endif
     
     /* 让draw流程变得可触发,之后循环互锁 */

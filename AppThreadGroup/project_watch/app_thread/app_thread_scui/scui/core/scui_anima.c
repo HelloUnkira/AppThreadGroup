@@ -18,6 +18,13 @@ static scui_anima_list_t scui_anima_list = {0};
 void scui_anima_elapse_update(uint32_t elapse)
 {
     scui_anima_list.elapse += elapse;
+    
+    if (scui_anima_list.elapse >= SCUI_ANIMA_TICK) {
+        scui_event_t event = {
+            .type = scui_event_anima_elapse,
+        };
+        scui_event_notify(&event);
+    }
 }
 
 /*@brief 更新动画
@@ -85,7 +92,7 @@ void scui_anima_update(void)
         
         /* 重加载 */
         if (reload) {
-            scui_anima_list.list[idx] = scui_handle_new(true);
+            scui_anima_list.list[idx] = scui_handle_new();
             scui_handle_set(scui_anima_list.list[idx], anima);
             continue;
         }
@@ -102,7 +109,7 @@ void scui_anima_update(void)
             continue;
         }
         /* 回收节点 */
-        scui_handle_del(true, scui_anima_list.list[idx]);
+        scui_handle_del(scui_anima_list.list[idx]);
         scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
         SCUI_MEM_FREE(anima);
     }
@@ -123,7 +130,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
-        scui_anima_list.list[idx]  = scui_handle_new(true);
+        scui_anima_list.list[idx]  = scui_handle_new();
         anima = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_anima_t));
         scui_handle_set(scui_anima_list.list[idx], anima);
        *handle = scui_anima_list.list[idx];
@@ -169,7 +176,7 @@ void scui_anima_destroy(scui_handle_t handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
-            scui_handle_del(true, scui_anima_list.list[idx]);
+            scui_handle_del(scui_anima_list.list[idx]);
             scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
             SCUI_MEM_FREE(anima);
             return;

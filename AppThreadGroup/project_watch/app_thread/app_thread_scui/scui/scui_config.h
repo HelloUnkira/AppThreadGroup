@@ -16,9 +16,15 @@
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT       (2)
 
-/* 静态句柄,动态句柄--最大限制 */
-#define SCUI_HANDLE_LIMIT_S         (2048)
-#define SCUI_HANDLE_LIMIT_D         (1024)
+/* 句柄表数量,共享句柄数量--最大限制 */
+#define SCUI_HANDLE_TABLE_LIMIT     (5)
+#define SCUI_HANDLE_SHARE_LIMIT     (1024)
+#define SCUI_HANDLE_SHARE_OFFSET    (0x9FFFF)
+
+#define SCUI_HANDLE_OFFSET_WIDGET   (0x00001)   /* 句柄表偏移:控件 */
+#define SCUI_HANDLE_OFFSET_IMAGE    (0x10000)   /* 句柄表偏移:图片描述 */
+#define SCUI_HANDLE_OFFSET_FONT     (0x20000)   /* 句柄表偏移:字库描述 */
+#define SCUI_HANDLE_OFFSET_LANG     (0x30000)   /* 句柄表偏移:多语言表 */
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK             (16)
@@ -27,7 +33,6 @@
 /* 内存图片散列值,内存图片缓存最大限制 */
 #define SCUI_IMAGE_LIMIT_HASH       (100)
 #define SCUI_IMAGE_LIMIT_TOTAL      (1024 * 1024 * 1)
-
 
 
 #endif
