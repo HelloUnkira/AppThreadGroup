@@ -46,6 +46,28 @@ void scui_handle_table_register(scui_handle_table_t *table)
             scui_handle_table[ofs] = *table;
 }
 
+/*@brief 通过句柄判断属于哪一个偏移
+ *       通过这种方式可以确认句柄所在类型
+ *@param handle 句柄
+ */
+scui_handle_t scui_handle_check(scui_handle_t handle)
+{
+    if (handle == SCUI_HANDLE_INVALID)
+        return SCUI_HANDLE_INVALID;
+    /* 检查是否是动态句柄中的句柄 */
+    if (handle - SCUI_HANDLE_SHARE_OFFSET < SCUI_HANDLE_SHARE_LIMIT) {
+        return SCUI_HANDLE_SHARE_OFFSET;
+    }
+    /* 检查是否是静态句柄表中的句柄 */
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
+        if (scui_handle_table[ofs].source != NULL)
+        if (handle - scui_handle_table[ofs].offset < scui_handle_table[ofs].number) {
+            return scui_handle_table[ofs].offset;
+        }
+    APP_SYS_LOG_ERROR("handle %u is unknown", handle);
+    return SCUI_HANDLE_INVALID;
+}
+
 /*@brief 生成一个句柄
  *@retval 句柄
  */

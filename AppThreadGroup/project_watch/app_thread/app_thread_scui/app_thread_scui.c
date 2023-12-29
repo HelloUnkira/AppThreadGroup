@@ -8,11 +8,14 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
+#include "scui_lib.h"
 
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_scui_routine_ready_cb(void)
 {
+    scui_engine_ready();
+    scui_engine_execute_status_set(true);
 }
 
 /*@brief 子线程服务例程处理部

@@ -21,6 +21,7 @@ void scui_engine_ready(void)
     scui_event_register_before(scui_event_before);
     scui_event_register_after(scui_event_after);
     scui_event_register_custom(scui_event_custom);
+    scui_image_cache_ready();
     
     scui_handle_table_t table = {0};
     /* 句柄表(image) */
@@ -28,6 +29,7 @@ void scui_engine_ready(void)
     table.source = scui_image_combine_table;
     table.number = app_sys_arr_len(scui_image_combine_table);
     scui_handle_table_register(&table);
+    
 }
 
 /*@brief 引擎执行
@@ -41,7 +43,7 @@ void scui_engine_execute(void)
 /*@biref 设置引擎执行状态
  *@param 引擎是否执行
  */
-bool scui_engine_execute_status_set(bool execute)
+void scui_engine_execute_status_set(bool execute)
 {
     scui_engine_execute_status = execute;
 }

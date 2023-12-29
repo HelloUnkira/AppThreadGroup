@@ -102,10 +102,21 @@ typedef enum {
 #error "pixel format unknown"
 #endif
 
-/*@brief 像素点作用Alpha通道值
+/*@brief 像素点作用透明度
  *@param pixel 像素点
- *@param alpha alpha值
+ *@param alpha 透明度
+ *@retval 像素点
  */
-void scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha);
+SCUI_PIXEL_TYPE scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha);
+
+/*@brief 像素点混合(同步作用透明度)
+ *@param pixel_fg 像素点(fg)
+ *@param alpha_fg 透明度(fg)
+ *@param pixel_bg 像素点(bg)
+ *@param alpha_bg 透明度(bg)
+ *@retval 像素点
+ */
+SCUI_PIXEL_TYPE scui_pixel_blend_with_alpha(SCUI_PIXEL_TYPE *pixel_fg, scui_alpha_t alpha_fg,
+                                            SCUI_PIXEL_TYPE *pixel_bg, scui_alpha_t alpha_bg);
 
 #endif

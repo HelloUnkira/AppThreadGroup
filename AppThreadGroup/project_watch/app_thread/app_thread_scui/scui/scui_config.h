@@ -34,5 +34,4 @@
 #define SCUI_IMAGE_LIMIT_HASH       (100)
 #define SCUI_IMAGE_LIMIT_TOTAL      (1024 * 1024 * 1)
 
-
 #endif

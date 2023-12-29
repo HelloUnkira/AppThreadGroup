@@ -765,12 +765,12 @@ static const char * scui_multi_lang_table[756][2] = {
 	{(char []){232, 175, 183, 229, 137, 141, 229, 190, 128, 65, 80, 80, 230, 137, 147, 229, 188, 128, 231, 155, 184, 230, 156, 186, 0},(char []){80, 108, 101, 97, 115, 101, 32, 103, 111, 32, 116, 111, 32, 116, 104, 101, 32, 65, 112, 112, 32, 116, 111, 32, 111, 112, 101, 110, 32, 116, 104, 101, 32, 99, 97, 109, 101, 114, 97, 0},},
 };
 
-static uint32_t scui_multi_lang_type = 0;
+static scui_handle_t scui_multi_lang_type = 0;
 
 /*@brief 设置搜索语言
  *@param index语言编号(0~n-1)
  */
-void scui_multi_lang_type_config(uint32_t type)
+void scui_multi_lang_type_config(scui_handle_t type)
 {
 	scui_multi_lang_type = type;
 }
@@ -778,9 +778,9 @@ void scui_multi_lang_type_config(uint32_t type)
 /*@brief 获得多国语字符串
  *@param index字符串编号(0~n-1)
  */
-const char * scui_multi_lang_str_find(uint32_t index)
+const char * scui_multi_lang_str_find(scui_handle_t index)
 {
-	if (index < SCUI_MULTI_LANG_NUM)
-		return scui_multi_lang_table[index][scui_multi_lang_type];
+	if (index != SCUI_MULTI_LANG_NONE && index - 1 < SCUI_MULTI_LANG_NUM)
+		return scui_multi_lang_table[index - 1][scui_multi_lang_type];
 	return NULL;
 }

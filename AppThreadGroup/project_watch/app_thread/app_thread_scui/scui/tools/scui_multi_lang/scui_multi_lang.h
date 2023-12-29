@@ -6,6 +6,7 @@
  */
 
 typedef enum {
+	SCUI_MULTI_LANG_NONE = 0,
 	SCUI_MULTI_LANG_0X0000,	/* 扫码下载APP或扫码配对 */
 	SCUI_MULTI_LANG_0X0001,	/* 是否绑定？ */
 	SCUI_MULTI_LANG_0X0002,	/* 绑定成功 */
@@ -768,11 +769,11 @@ typedef enum {
 /*@brief 设置搜索语言
  *@param index语言编号(0~n-1)
  */
-void scui_multi_lang_type_config(uint32_t type);
+void scui_multi_lang_type_config(scui_handle_t type);
 
 /*@brief 获得多国语字符串
  *@param index字符串编号(0~n-1)
  */
-const char * scui_multi_lang_str_find(uint32_t index);
+const char * scui_multi_lang_str_find(scui_handle_t index);
 
 #endif

@@ -19,10 +19,13 @@
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_engine.h"        /* 引擎 */
 #include "scui_image.h"         /* 图像 */
+#include "scui_image_cache.h"   /* 图像缓存 */
 /* misc */
 #include "scui_math.h"
 /* draw */
 #include "scui_surface_fb.h"
+/* arch: */
+#include "scui_image_src.h"
 
 
 
@@ -38,6 +41,8 @@
 #include "scui_event_custom.h"
 /* 静态图形索引表 */
 #include "scui_image_combine.h"
+/* 多国语字符串表 */
+#include "scui_multi_lang.h"
 
 
 

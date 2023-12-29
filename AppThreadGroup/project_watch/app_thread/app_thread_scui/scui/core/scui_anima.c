@@ -12,6 +12,13 @@
 /* 动画实例句柄列表 */
 static scui_anima_list_t scui_anima_list = {0};
 
+/*@brief 事件吸收
+ */
+void scui_anima_elapse_absorb(void *event_old, void *event_new)
+{
+    /* 什么都不需要做 */
+}
+
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
@@ -21,7 +28,8 @@ void scui_anima_elapse_update(uint32_t elapse)
     
     if (scui_anima_list.elapse >= SCUI_ANIMA_TICK) {
         scui_event_t event = {
-            .type = scui_event_anima_elapse,
+            .absorb = scui_anima_elapse_absorb,
+            .type   = scui_event_anima_elapse,
         };
         scui_event_notify(&event);
     }

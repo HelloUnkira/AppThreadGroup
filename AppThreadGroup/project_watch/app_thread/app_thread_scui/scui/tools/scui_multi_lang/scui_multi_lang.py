@@ -32,18 +32,18 @@ def encode_scui_multi_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
             file.write('{0}'.format("%s," % c_array))    # 多国语这里不能很好的对齐,因为不同语言的空格宽度不一致
         file.write('},\n')
     file.write('};\n\n')
-    file.write('static uint32_t scui_multi_lang_type = 0;\n\n')
+    file.write('static scui_handle_t scui_multi_lang_type = 0;\n\n')
     # 编写固化访问函数
     file.write('/*@brief 设置搜索语言\n')
     file.write(' *@param index语言编号(0~n-1)\n */\n')
-    file.write('void scui_multi_lang_type_config(uint32_t type)\n')
+    file.write('void scui_multi_lang_type_config(scui_handle_t type)\n')
     file.write('{\n\tscui_multi_lang_type = type;\n}\n\n')
     file.write('/*@brief 获得多国语字符串\n')
     file.write(' *@param index字符串编号(0~n-1)\n */\n')
-    file.write('const char * scui_multi_lang_str_find(uint32_t index)\n')
+    file.write('const char * scui_multi_lang_str_find(scui_handle_t index)\n')
     file.write('{\n')
-    file.write('\tif (index < SCUI_MULTI_LANG_NUM)\n')
-    file.write('\t\treturn scui_multi_lang_table[index][scui_multi_lang_type];\n')
+    file.write('\tif (index != SCUI_MULTI_LANG_NONE && index - 1 < SCUI_MULTI_LANG_NUM)\n')
+    file.write('\t\treturn scui_multi_lang_table[index - 1][scui_multi_lang_type];\n')
     file.write('\treturn NULL;\n')
     file.write('}\n')
 
@@ -57,6 +57,7 @@ def encode_scui_multi_lang_h(file, xlsx_sheet, sheet_row, sheet_col):
     file.write(' *通过scui_multi_lang.py生成\n */\n\n')
     # 编写头部索引
     file.write('typedef enum {\n')
+    file.write('\tSCUI_MULTI_LANG_NONE = 0,\n')
     for i, item in enumerate(xlsx_sheet.rows):
         c_str = str(item[0].value).replace('\n', '\\n')
         file.write('\tSCUI_MULTI_LANG_0X%04x,\t/* %s */\n' % (i, c_str))
@@ -65,10 +66,10 @@ def encode_scui_multi_lang_h(file, xlsx_sheet, sheet_row, sheet_col):
     # 编写固化访问函数接口
     file.write('/*@brief 设置搜索语言\n')
     file.write(' *@param index语言编号(0~n-1)\n */\n')
-    file.write('void scui_multi_lang_type_config(uint32_t type);\n\n')
+    file.write('void scui_multi_lang_type_config(scui_handle_t type);\n\n')
     file.write('/*@brief 获得多国语字符串\n')
     file.write(' *@param index字符串编号(0~n-1)\n */\n')
-    file.write('const char * scui_multi_lang_str_find(uint32_t index);\n\n')
+    file.write('const char * scui_multi_lang_str_find(scui_handle_t index);\n\n')
     file.write('#endif\n')
 
 
