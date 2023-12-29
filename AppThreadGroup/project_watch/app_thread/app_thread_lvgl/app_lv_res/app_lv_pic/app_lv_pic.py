@@ -18,7 +18,7 @@ def encode_app_lv_pic_c(file, path):
     # 编写递归化文件遍历流程
     def encode_app_lv_pic_c_rec(path_curr, path_root):
         for name_curr in os.listdir(path_curr):
-            path_file_abs = path_curr + '\\' + name_curr
+            path_file_abs = os.path.join(path_curr, name_curr)
             if os.path.isfile(path_file_abs):
                 path_file_part1 = path_file_abs.replace(path_root, '')
                 path_file_part1 = path_file_part1.replace('\\', r'/')
