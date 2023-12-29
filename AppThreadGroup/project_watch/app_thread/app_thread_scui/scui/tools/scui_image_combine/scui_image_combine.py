@@ -34,7 +34,7 @@ def scui_image_pixel_bmp565(r8, g8, b8) -> tuple:
     # return int(bgr % 256), int(bgr / 256)   # bgr swap
 
 
-# lz4压缩解压缩
+# lz4压缩
 def scui_image_lz4_compress(pixel_bytes_in) -> bytearray:
     pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
     # lz4hc = ctypes.cdll.LoadLibrary(r".\lz4hc.dll")
@@ -42,6 +42,7 @@ def scui_image_lz4_compress(pixel_bytes_in) -> bytearray:
     return pixel_bytes_out
 
 
+# lz4解压缩
 def scui_image_lz4_decompress(pixel_bytes_in) -> bytearray:
     pixel_bytes_out = lz4.frame.decompress(pixel_bytes_in)
     return pixel_bytes_out
@@ -74,8 +75,12 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     # 对目标图片集合进行流式处理,提取数据内容
     for file in file_path_list:
         # 取出图片转为RGBA并获得各个通道的数据值并且转化为二维像素矩阵
-        image_raw = PIL.Image.open(file)
-        image_std = PIL.Image.open(file).convert('RGBA')
+        try:
+            image_raw = PIL.Image.open(file)
+            image_std = PIL.Image.open(file).convert('RGBA')
+        except Exception as e:
+            print("image parse fail :", e)
+            continue
         # print(image_raw.size)       # 图片尺寸
         # print(image_raw.mode)       # 图片模式
         # print(image_raw.getbands())
@@ -144,7 +149,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         scui_image_combine_c.write('\t.pixel.width\t = %s,\n' % hex(image_std.size[0]))
         scui_image_combine_c.write('\t.pixel.height\t = %s,\n' % hex(image_std.size[1]))
         scui_image_combine_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
-        print(' lz4:' + scui_image_tag)
+        print('lz4:' + scui_image_tag)
         pixel_bytes = bytearray(pixel_stream)
         pixel_bytes_lz4_com = scui_image_lz4_compress(pixel_bytes)
         pixel_bytes_lz4_decom = scui_image_lz4_decompress(pixel_bytes_lz4_com)
@@ -186,11 +191,31 @@ def scui_image_collect(file_path_list, file_ext_list, path):
     if os.path.isdir(path):
         for item in os.listdir(path):
             # 规定如果目标文件或所在路径存在特殊屏蔽标记#,忽略它
-            if not re.findall(r'#', path + '\\' + item):
-                scui_image_collect(file_path_list, file_ext_list, path + '\\' + item)
+            if not re.findall(r'#', os.path.join(path, item)):
+                scui_image_collect(file_path_list, file_ext_list, os.path.join(path, item))
 
 
+# 打印重定向到文件
+class ScuiRedirectPrint(object):
+    def __init__(self, stream=sys.stdout, path='.', file='log.txt'):
+        if not os.path.exists(path):
+            os.makedirs(path)
+        self.log = open(os.path.join(path, file), mode='w+', encoding='utf-8')
+        self.terminal = stream
+    
+    def write(self, message):
+        self.log.write(message)
+        self.terminal.write(message)
+    
+    def flush(self):
+        pass
+
+
+# 主流程
 def scui_image_combine():
+    # print重定向
+    sys.stdout = ScuiRedirectPrint(sys.stdout, file='scui_image_combine.out')  # redirect print
+    sys.stderr = ScuiRedirectPrint(sys.stderr)  # redirect print
     # 解析支持检查
     if scui_pixel_format_0 != r'a4':
         print('unsupport pixel format yet:', scui_pixel_format_0)
