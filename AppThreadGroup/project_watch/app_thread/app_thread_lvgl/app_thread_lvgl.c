@@ -94,9 +94,8 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
                 app_mem_free(package->data);
         }
         /* lvgl场景计时检查 */
-        if (package->event == app_thread_lvgl_sched_check_time) {
+        if (package->event == app_thread_lvgl_sched_check_time)
             app_lv_check_time_update();
-        }
         /* 与lvgl绑定的驱动设备进入DLPS */
         if (package->event == app_thread_lvgl_sched_dlps_enter) {
             /* 进入dlps界面 */

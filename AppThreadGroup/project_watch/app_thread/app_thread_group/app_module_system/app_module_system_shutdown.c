@@ -22,6 +22,8 @@ bool app_module_system_mode_shutdown_ctrl(app_module_clock_t clock[1], app_modul
         #if 0
         #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_shutdown();
+        #elif APP_EXT_DEV_GUI_IS_SCUI
+        app_scui_scene_shutdown();
         #else
         #endif
         
