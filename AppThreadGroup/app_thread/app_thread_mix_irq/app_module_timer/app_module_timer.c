@@ -11,9 +11,13 @@
 
 /*@brief 软件定时器事件包吸收
  */
-static void app_module_timer_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+static bool app_module_timer_package_absorb(void *pkg_old, void *pkg_new)
 {
+    app_thread_package_t *package_old = pkg_old;
+    app_thread_package_t *package_new = pkg_new;
+    
     package_old->byte_fixed += package_new->byte_fixed;
+    return true;
 }
 
 /*@brief 约减软件定时器

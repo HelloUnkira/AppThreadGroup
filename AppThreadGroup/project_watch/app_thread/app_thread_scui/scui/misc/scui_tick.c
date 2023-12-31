@@ -1,5 +1,5 @@
 /*实现目标:
- *    毫秒系统滴答更新
+ *    系统滴答器
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
@@ -9,11 +9,23 @@
 #include "app_sys_lib.h"
 #include "scui.h"
 
-/*@brief 软件定时器回调
+static uint64_t scui_tick_elapse_cnt = 0;
+
+/*@brief 滴答器回调(建议1ms一调)
+ *@param ms 过去时间
  */
-void scui_tick_reduce(void)
+void scui_tick_elapse(uint32_t ms)
 {
+    scui_tick_elapse_cnt += ms;
     /* 更新动画即可,动画更新了自己会产生事件调度 */
     if (scui_engine_execute_status_get())
-        scui_anima_elapse_update(1);
+        scui_anima_elapse(ms);
+}
+
+/*@brief 滴答器当前计数
+ *@retval 当前计数值
+ */
+uint64_t scui_tick_cnt(void)
+{
+    return scui_tick_elapse_cnt;
 }

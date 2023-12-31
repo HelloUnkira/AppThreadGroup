@@ -3,7 +3,7 @@
  */
 
 #define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -74,15 +74,15 @@ void scui_event_dispatch(void)
  */
 uint32_t scui_event_respond(scui_event_t *event)
 {
-    uint32_t retval = SCUI_EVENT_CONTINUE;
-    uint32_t retval_b = SCUI_EVENT_CONTINUE;
-    uint32_t retval_r = SCUI_EVENT_CONTINUE;
+    scui_event_retval_t retval   = scui_event_retval_continue;
+    scui_event_retval_t retval_b = scui_event_retval_continue;
+    scui_event_retval_t retval_r = scui_event_retval_continue;
     
     /* 事件前响应回调 */
     if (scui_event_cb_before != NULL) {
         retval_b = scui_event_cb_before(event);
-        if (retval_b == SCUI_EVENT_BREAK)
-            return SCUI_EVENT_BREAK;
+        if (retval_b == scui_event_retval_break)
+            return scui_event_retval_break;
     }
     
     /* 调度事件响应 */
@@ -106,17 +106,17 @@ uint32_t scui_event_respond(scui_event_t *event)
         event->type < scui_event_custom_e)
         retval = scui_event_respond_custom(event);
     
-    if (retval == SCUI_EVENT_BREAK)
-        return SCUI_EVENT_BREAK;
+    if (retval == scui_event_retval_break)
+        return scui_event_retval_break;
     
     /* 事件后响应回调 */
     if (scui_event_cb_after != NULL) {
         retval_r = scui_event_cb_after(event);
-        if (retval_r == SCUI_EVENT_BREAK)
-            return SCUI_EVENT_BREAK;
+        if (retval_r == scui_event_retval_break)
+            return scui_event_retval_break;
     }
     
-    if (retval != SCUI_EVENT_DEFAULT)
+    if (retval != scui_event_retval_default)
         return retval;
     
     /* 参考事件区间 */
@@ -136,7 +136,7 @@ uint32_t scui_event_respond(scui_event_t *event)
     APP_SYS_LOG_ERROR("event->style:%u",    event->style);
     APP_SYS_LOG_ERROR("event->object:%u",   event->object);
     APP_SYS_LOG_ERROR("event->priority:%u", event->priority);
-    return SCUI_EVENT_BREAK;
+    return scui_event_retval_break;
 }
 
 /*@brief 事件响应(sched)
@@ -148,10 +148,10 @@ uint32_t scui_event_respond_sched(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         scui_anima_update();
-        return SCUI_EVENT_BREAK;
+        return scui_event_retval_break;
     
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -161,9 +161,19 @@ uint32_t scui_event_respond_sched(scui_event_t *event)
  */
 uint32_t scui_event_respond_ptr(scui_event_t *event)
 {
+    if (event->type > scui_event_ptr_s &&
+        event->type < scui_event_ptr_e) {
+        APP_SYS_LOG_DEBUG("scui event ptr:");
+        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+        return scui_event_retval_break;
+    }
+    
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -173,9 +183,20 @@ uint32_t scui_event_respond_ptr(scui_event_t *event)
  */
 uint32_t scui_event_respond_enc(scui_event_t *event)
 {
+    if (event->type > scui_event_enc_s &&
+        event->type < scui_event_enc_e) {
+        APP_SYS_LOG_DEBUG("scui event enc:");
+        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+        APP_SYS_LOG_DEBUG("event->enc_diff:%d",  event->enc_diff);
+        return scui_event_retval_break;
+    }
+    
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -185,9 +206,23 @@ uint32_t scui_event_respond_enc(scui_event_t *event)
  */
 uint32_t scui_event_respond_key(scui_event_t *event)
 {
+    if (event->type > scui_event_key_s &&
+        event->type < scui_event_key_e) {
+        APP_SYS_LOG_DEBUG("scui event key:");
+        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+        APP_SYS_LOG_DEBUG("event->key_id:%d",    event->key_id);
+        APP_SYS_LOG_DEBUG("event->key_val:%d",   event->key_val);
+        APP_SYS_LOG_DEBUG("event->key_cnt:%d",   event->key_cnt);
+        APP_SYS_LOG_DEBUG("event->key_tick:%d",  event->key_tick);
+        return scui_event_retval_break;
+    }
+    
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -199,5 +234,5 @@ uint32_t scui_event_respond_custom(scui_event_t *event)
 {
     if (scui_event_cb_custom != NULL)
         return scui_event_cb_custom(event);
-    return SCUI_EVENT_DEFAULT;
+    return scui_event_retval_default;
 }

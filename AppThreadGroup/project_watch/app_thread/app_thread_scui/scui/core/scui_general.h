@@ -9,7 +9,8 @@ typedef union {
         uint8_t g:6;
         uint8_t r:5;
     } ch;
-    uint8_t byte[2];
+    uint8_t  byte[2];
+    uint16_t full;
 } scui_color565_t;
 #pragma pack()
 
@@ -21,7 +22,8 @@ typedef union {
         uint8_t g:8;
         uint8_t r:8;
     } ch;
-    uint8_t byte[3];
+    uint8_t  byte[3];
+    uint32_t full;
 } scui_color888_t;
 #pragma pack()
 
@@ -34,7 +36,8 @@ typedef union {
         uint8_t r:6;
         uint8_t a:6;
     } ch;
-    uint8_t byte[3];
+    uint8_t  byte[3];
+    uint32_t full;
 } scui_color6666_t;
 #pragma pack()
 
@@ -47,7 +50,8 @@ typedef union {
         uint8_t r:8;
         uint8_t a:8;
     } ch;
-    uint8_t byte[4];
+    uint8_t  byte[4];
+    uint32_t full;
 } scui_color8888_t;
 #pragma pack()
 

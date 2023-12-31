@@ -5,6 +5,7 @@
 typedef enum {
     scui_event_none = 0,
     scui_event_invalid = scui_event_none,
+    scui_event_system,
     
     /* 调度事件<s> */
     scui_event_sched_s,
@@ -24,15 +25,13 @@ typedef enum {
     
     /* 输入设备事件<ptr,s>: */
     scui_event_ptr_s,
-    scui_event_ptr_cover,   /* 覆盖事件<>: */
-    scui_event_ptr_down,    /* 按下事件<point>: */
-    scui_event_ptr_single,  /* 单击事件<point>: */
-    scui_event_ptr_double,  /* 双击事件<point>: */
-    scui_event_ptr_fling,   /* 轻扫事件<pos_s, pos_e>: */
-    scui_event_ptr_move,    /* 移动事件<pos_s, pos_e>: */
-    scui_event_ptr_long,    /* 长按事件<point>: */
-    scui_event_ptr_hold,    /* 持续事件<point>: */
-    scui_event_ptr_up,      /* 抬起事件<point>: */
+    scui_event_ptr_cover,   /* 覆盖事件<> */
+    scui_event_ptr_down,    /* 按下事件<point> */
+    scui_event_ptr_click,   /* 点击事件<point>:通过参数通报点击次数 */
+    scui_event_ptr_hold,    /* 持续事件<point>:通过参数通报持续时间 */
+    scui_event_ptr_fling,   /* 轻扫事件<pos_s, pos_e> */
+    scui_event_ptr_move,    /* 移动事件<pos_s, pos_e> */
+    scui_event_ptr_up,      /* 抬起事件<point> */
     scui_event_ptr_e,
     /* 输入设备事件<ptr,e>: */
     
@@ -46,10 +45,8 @@ typedef enum {
     /* 输入设备事件<key,s> */
     scui_event_key_s,
     scui_event_key_down,    /* 按下事件<coord> */
-    scui_event_key_single,  /* 单击事件<coord> */
-    scui_event_key_double,  /* 双击事件<coord> */
-    scui_event_key_hold,    /* 持续事件<coord> */
-    scui_event_key_long,    /* 长按事件<coord> */
+    scui_event_key_click,   /* 单击事件<coord>:通过参数通报点击次数 */
+    scui_event_key_hold,    /* 持续事件<coord>:通过参数通报持续时间 */
     scui_event_key_up,      /* 抬起事件<coord> */
     scui_event_key_e,
     /* 输入设备事件<key,e> */
@@ -64,24 +61,42 @@ typedef enum {
 
 typedef struct {
     app_sys_list_dln_t dl_node;
-    /* 事件包吸收回调: */
-    /* 如果手动交付该回调,则使用事件包吸收功能 */
-    /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
-    void (*absorb)(void *event_old, void *event_new);
-    /*  */
+    /* 系统基本字段 */
     scui_handle_t object;   /* 事件对象 */
     uint64_t type:32;       /* 事件类型 */
     uint64_t style:8;       /* 事件风格 */
     uint64_t priority:8;    /* 事件优先级(数字越大优先级越高) */
-    union {                 /* 事件参数 */
+    /* 事件包吸收回调: */
+    /* 如果手动交付该回调,则使用事件包吸收功能 */
+    /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
+    void (*absorb)(void *evt_old, void *evt_new);
+    /* 扩展字段 */
+    union {
+        /* 输入设备数据<ptr> */
+        struct {
+            scui_point_t ptr_c;
+            scui_coord_t ptr_cnt;
+            scui_coord_t ptr_tick;
+        };
+        struct {
+            scui_point_t ptr_s;
+            scui_point_t ptr_e;
+        };
+        /* 输入设备数据<enc> */
+        struct {
+            scui_coord_t enc_diff;
+        };
+        /* 输入设备数据<key> */
+        struct {
+            scui_coord_t key_id;
+            scui_coord_t key_val;
+            scui_coord_t key_cnt;
+            scui_coord_t key_tick;
+        };
         /* scui定制化事件数据: */
         scui_area_t  area;
         scui_point_t point;
         scui_coord_t coord;
-        struct {
-        scui_point_t pos_s;
-        scui_point_t pos_e;
-        };
         /* 通用结构信息(数据量不定,支持任意类型和种类的数据): */
         struct {
             uint64_t dynamic:1;     /* 协议数据流是动态生成,使用完毕要回收 */
@@ -101,12 +116,15 @@ typedef struct {
     uint32_t list_num;
 } scui_event_queue_t;
 
-/* 事件响应回调 */
-typedef uint32_t (*scui_event_cb_t)(scui_event_t *event);
 /* 事件响应回调返回值 */
-#define SCUI_EVENT_DEFAULT      0   /* 无效值 */
-#define SCUI_EVENT_BREAK        1   /* 终止事件冒泡 */
-#define SCUI_EVENT_CONTINUE     2   /* 继续事件冒泡 */
+typedef enum {
+    scui_event_retval_default = 0,      /* 无效值 */
+    scui_event_retval_continue,         /* 继续事件冒泡 */
+    scui_event_retval_break,            /* 终止事件冒泡 */
+} scui_event_retval_t;
+/* 事件响应回调 */
+typedef scui_event_retval_t (*scui_event_cb_t)(scui_event_t *event);
+
 
 /*@brief 事件队列初始化
  */
@@ -121,12 +139,12 @@ void scui_event_sync_wait(void);
  */
 uint32_t scui_event_num(void);
 
-/*@brief 事件包匹配函数
+/*@brief 事件包入列函数
  *@param event 事件包
  */
 void scui_event_enqueue(scui_event_t *event);
 
-/*@brief 事件包匹配函数
+/*@brief 事件包出列函数
  *@param event 事件包
  *@retval 提取到有效事件包
  */

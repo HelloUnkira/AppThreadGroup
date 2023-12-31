@@ -54,6 +54,25 @@ void app_dev_gui_enc_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
     indev_data->key      = key;
     cfg->enc_diff = 0;
 }
+#elif APP_EXT_DEV_GUI_IS_SCUI
+/*@brief scui 输入设备回调接口
+ */
+void app_dev_gui_enc_scui_read(scui_indev_data_t *indev_data)
+{
+    app_dev_t *driver = app_dev_gui_enc_inst();
+    app_dev_gui_enc_cfg_t *cfg = driver->cfg;
+    app_dev_gui_enc_data_t *data = driver->data;
+    
+    if (!cfg->status)
+        return;
+    
+    indev_data->type  = scui_indev_type_enc;
+    indev_data->state = cfg->state ?
+                        scui_indev_state_press :
+                        scui_indev_state_release;
+    indev_data->enc.enc_diff = cfg->enc_diff;
+    cfg->enc_diff = 0;
+}
 #else
 #endif
 

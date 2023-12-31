@@ -16,6 +16,8 @@ static bool scui_engine_execute_status = false;
 void scui_engine_ready(void)
 {
     scui_mem_ready();
+    scui_indev_ready();
+    
     scui_event_ready();
     scui_event_register_before(scui_event_before);
     scui_event_register_after(scui_event_after);
@@ -37,6 +39,7 @@ void scui_engine_execute(void)
 {
     scui_event_sync_wait();
     scui_event_dispatch();
+    scui_anima_update();
 }
 
 /*@biref 设置引擎执行状态

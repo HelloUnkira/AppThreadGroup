@@ -50,7 +50,7 @@ typedef struct {
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
-void scui_anima_elapse_update(uint32_t elapse);
+void scui_anima_elapse(uint32_t elapse);
 
 /*@brief 更新动画
  */

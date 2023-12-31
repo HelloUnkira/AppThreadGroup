@@ -9,7 +9,13 @@
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
 
-#include "app_lv_event.h"
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
+#include "app_lv_lib.h"
+#elif APP_EXT_DEV_GUI_IS_SCUI
+#include "app_scui_lib.h"
+#else
+#endif
 
 /*@brief 正常工作模式节拍调度
  */

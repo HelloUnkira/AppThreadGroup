@@ -8,7 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "scui_lib.h"
+#include "app_scui_lib.h"
 
 static app_mutex_t app_scui_check_time_mutex = {0};
 static app_sys_timer_t app_scui_check_time_timer = {0};

@@ -17,7 +17,7 @@ uint32_t scui_event_before(scui_event_t *event)
 {
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -29,7 +29,7 @@ uint32_t scui_event_after(scui_event_t *event)
 {
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }
 
@@ -41,6 +41,6 @@ uint32_t scui_event_custom(scui_event_t *event)
 {
     switch (event->type) {
     default:
-        return SCUI_EVENT_DEFAULT;
+        return scui_event_retval_default;
     }
 }

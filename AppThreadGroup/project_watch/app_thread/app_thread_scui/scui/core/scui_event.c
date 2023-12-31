@@ -54,7 +54,7 @@ static bool scui_event_confirm(app_sys_list_dln_t *node1, app_sys_list_dln_t *no
     return event1->object == event2->object && event1->type == event2->type;
 }
 
-/*@brief 事件包匹配函数
+/*@brief 事件包入列函数
  *@param event 事件包
  */
 void scui_event_enqueue(scui_event_t *event)
@@ -103,7 +103,7 @@ void scui_event_enqueue(scui_event_t *event)
         app_sem_process(&scui_event_queue.sem, app_sem_give);
 }
 
-/*@brief 事件包匹配函数
+/*@brief 事件包出列函数
  *@param event 事件包
  *@retval 提取到有效事件包
  */

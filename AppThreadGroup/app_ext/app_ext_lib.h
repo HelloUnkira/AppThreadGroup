@@ -17,11 +17,11 @@
 /* Project Config */
 #include "app_project_config.h"
 /* Arch lib hook */
-/* Dev lib hook */
-/* OS lib hook */
 #include "app_ext_arch.h"
-#include "app_ext_dev.h"
+/* OS lib hook */
 #include "app_ext_os.h"
+/* Dev lib hook */
+#include "app_ext_dev.h"
 
 /* Keep Adding */
 

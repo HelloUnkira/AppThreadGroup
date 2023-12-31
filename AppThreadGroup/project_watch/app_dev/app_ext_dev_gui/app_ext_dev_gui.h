@@ -47,6 +47,7 @@
 #elif APP_EXT_DEV_GUI_IS_SCUI
 /* dependency */
 #include "scui_drv_conf.h"
+#include "scui.h"
 #else
 #error "unknown framework"
 #endif

@@ -8,7 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "scui_lib.h"
+#include "app_scui_lib.h"
 
 /*@brief 子线程服务例程就绪部
  */
@@ -16,6 +16,12 @@ static void app_thread_scui_routine_ready_cb(void)
 {
     scui_engine_ready();
     scui_engine_execute_status_set(true);
+    /* 初始化与scui绑定的驱动设备 */
+    app_dev_gui_disp_ready(&app_dev_gui_disp);
+    app_dev_gui_ptr_ready(&app_dev_gui_ptr);
+    app_dev_gui_enc_ready(&app_dev_gui_enc);
+    app_dev_gui_key_ready(&app_dev_gui_key);
+    app_dev_gui_drv_ready(&app_dev_gui_drv);
     /* 模组初始化 */
     app_scui_timer_ready();
     app_scui_check_time_ready();
@@ -32,6 +38,40 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
         /* scui时钟调度事件 */
         if (package->event == app_thread_scui_sched_exec)
             scui_engine_execute();
+        /* lvgl驱动检查事件 */
+        if (package->event == app_thread_scui_sched_drv) {
+            app_dev_gui_drv_timer_handler(&app_dev_gui_drv);
+            /*@brief scui 输入设备回调接口
+             */
+            void app_dev_gui_ptr_scui_read(scui_indev_data_t *indev_data);
+            void app_dev_gui_enc_scui_read(scui_indev_data_t *indev_data);
+            void app_dev_gui_key_scui_read(scui_indev_data_t *indev_data);
+            /*  */
+            scui_indev_data_t indev_data;
+            /* 事件派发 */
+            app_dev_gui_ptr_scui_read(&indev_data);
+            scui_indev_data_notify(&indev_data);
+            app_dev_gui_enc_scui_read(&indev_data);
+            scui_indev_data_notify(&indev_data);
+            app_dev_gui_key_scui_read(&indev_data);
+            scui_indev_data_notify(&indev_data);
+            /*  */
+            if (app_dev_gui_drv_shutdown(&app_dev_gui_drv)) {
+                static bool execute = true;
+                if (execute) {
+                    execute = false;
+                    /* 重启系统 */
+                    APP_SYS_LOG_WARN("");
+                    app_module_system_dlps_set(false);
+                    app_module_system_valid_set(false);
+                    if (app_module_system_mode_get() != app_module_data_center_system_mode_shutdown)
+                        app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
+                    else
+                        app_arch_reset();
+                }
+            }
+            *record = false;
+        }
         /* scui场景计时检查 */
         if (package->event == app_thread_scui_sched_check_time)
             app_scui_check_time_update();
@@ -62,7 +102,7 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
     }
     case app_thread_scui_ui: {
         /* 测试模式拦截该模组全部事件 */
-        #if 0
+        #if 1
         /* 禁用超时回退 */
         app_scui_check_time_reset(0, 0);
         app_scui_check_time_exec(false);

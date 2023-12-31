@@ -83,10 +83,11 @@ int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
         app_sys_list_dll_ftra(&pipe->dl_list, node)
         if (app_sys_pipe_confirm(&package->dl_node, node)) {
             package_old = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node);
-            package->absorb(package_old, package);
-            absorb_flag = true;
-            retval = +1;
-            break;
+            absorb_flag = package->absorb(package_old, package);
+            if (absorb_flag) {
+                retval = +1;
+                break;
+            }
         }
     }
     if (!absorb_flag) {

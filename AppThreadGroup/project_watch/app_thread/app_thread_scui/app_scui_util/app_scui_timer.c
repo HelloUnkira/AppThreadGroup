@@ -8,7 +8,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "scui_lib.h"
+#include "app_scui_lib.h"
 
 static app_sys_timer_t app_scui_timer = {0};
 
@@ -35,7 +35,7 @@ static void app_scui_timer_handler(void *timer)
     
     /* scui时钟约减事件(跨线程就地更新) */
     if (count % SCUI_SCHED_TICK_INC == 0)
-        scui_tick_reduce();
+        scui_tick_elapse(SCUI_SCHED_TICK_INC);
     /* scui时钟调度事件 */
     if (count % SCUI_SCHED_TICK_EXEC == 0)
         app_scui_tick_exec_update();

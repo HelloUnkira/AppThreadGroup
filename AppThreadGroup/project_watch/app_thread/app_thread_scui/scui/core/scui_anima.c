@@ -14,22 +14,26 @@ static scui_anima_list_t scui_anima_list = {0};
 
 /*@brief 事件吸收
  */
-void scui_anima_elapse_absorb(void *event_old, void *event_new)
+static bool scui_anima_elapse_absorb(void *evt_old, void *evt_new)
 {
+    scui_event_t *event_old = evt_old;
+    scui_event_t *event_new = evt_new;
+    
     /* 什么都不需要做 */
+    return true;
 }
 
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
-void scui_anima_elapse_update(uint32_t elapse)
+void scui_anima_elapse(uint32_t elapse)
 {
     scui_anima_list.elapse += elapse;
     
     if (scui_anima_list.elapse >= SCUI_ANIMA_TICK) {
         scui_event_t event = {
-            .absorb = scui_anima_elapse_absorb,
             .type   = scui_event_anima_elapse,
+            .absorb = scui_anima_elapse_absorb,
         };
         scui_event_notify(&event);
     }

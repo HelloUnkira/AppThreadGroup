@@ -5,13 +5,17 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
-#include "scui_lib.h"
+#include "app_scui_lib.h"
 
 /*@brief tick执行 事件包吸收
  */
-static void app_scui_tick_exec_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+static bool app_scui_tick_exec_package_absorb(void *pkg_old, void *pkg_new)
 {
+    app_thread_package_t *package_old = pkg_old;
+    app_thread_package_t *package_new = pkg_new;
+    
     /* 多的直接丢弃即可,这里为空 */
+    return true;
 }
 
 /*@brief scui tick执行
@@ -29,9 +33,13 @@ void app_scui_tick_exec_update(void)
 
 /*@brief tick更新 事件包吸收
  */
-static void app_scui_tick_drv_package_absorb(app_thread_package_t *package_old, app_thread_package_t *package_new)
+static bool app_scui_tick_drv_package_absorb(void *pkg_old, void *pkg_new)
 {
+    app_thread_package_t *package_old = pkg_old;
+    app_thread_package_t *package_new = pkg_new;
+    
     /* 多的直接丢弃即可,这里为空 */
+    return true;
 }
 
 /*@brief scui drv更新

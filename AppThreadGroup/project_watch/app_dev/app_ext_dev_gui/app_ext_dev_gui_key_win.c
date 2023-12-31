@@ -38,30 +38,18 @@ static uint32_t app_dev_gui_key_lv_key(void)
     
     /* 重新映射一些key到LV_KEY_…管理组 */
     switch (cfg->key) {
-    case VK_UP:
-        return LV_KEY_UP;
-    case VK_DOWN:
-        return LV_KEY_DOWN;
-    case VK_LEFT:
-        return LV_KEY_LEFT;
-    case VK_RIGHT:
-        return LV_KEY_RIGHT;
-    case VK_ESCAPE:
-        return LV_KEY_ESC;
-    case VK_DELETE:
-        return LV_KEY_DEL;
-    case VK_BACK:
-        return LV_KEY_BACKSPACE;
-    case VK_RETURN:
-        return LV_KEY_ENTER;
-    case VK_NEXT:
-        return LV_KEY_NEXT;
-    case VK_PRIOR:
-        return LV_KEY_PREV;
-    case VK_HOME:
-        return LV_KEY_HOME;
-    case VK_END:
-        return LV_KEY_END;
+    case VK_UP:     return LV_KEY_UP;
+    case VK_DOWN:   return LV_KEY_DOWN;
+    case VK_LEFT:   return LV_KEY_LEFT;
+    case VK_RIGHT:  return LV_KEY_RIGHT;
+    case VK_ESCAPE: return LV_KEY_ESC;
+    case VK_DELETE: return LV_KEY_DEL;
+    case VK_BACK:   return LV_KEY_BACKSPACE;
+    case VK_RETURN: return LV_KEY_ENTER;
+    case VK_NEXT:   return LV_KEY_NEXT;
+    case VK_PRIOR:  return LV_KEY_PREV;
+    case VK_HOME:   return LV_KEY_HOME;
+    case VK_END:    return LV_KEY_END;
     default:
         if (cfg->key >= 'A' && cfg->key <= 'Z')
             return cfg->key + 20;
@@ -84,6 +72,55 @@ void app_dev_gui_key_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
                         LV_INDEV_STATE_PRESSED :
                         LV_INDEV_STATE_RELEASED;
     indev_data->key   = app_dev_gui_key_lv_key();
+}
+#elif APP_EXT_DEV_GUI_IS_SCUI
+/*@brief WIN键盘事件转lvgl按键事件组
+ *@retval 返回lvgl按键事件
+ */
+static uint32_t app_dev_gui_key_scui_key(void)
+{
+    app_dev_t *driver = app_dev_gui_key_inst();
+    app_dev_gui_key_cfg_t *cfg = driver->cfg;
+    app_dev_gui_key_data_t *data = driver->data;
+    
+    /* 重新映射一些key到scui_event_key_val_t…管理组 */
+    switch (cfg->key) {
+    case VK_UP:     return scui_event_key_val_up;
+    case VK_DOWN:   return scui_event_key_val_down;
+    case VK_LEFT:   return scui_event_key_val_left;
+    case VK_RIGHT:  return scui_event_key_val_right;
+    case VK_ESCAPE: return scui_event_key_val_esc;
+    case VK_DELETE: return scui_event_key_val_del;
+    case VK_BACK:   return scui_event_key_val_backspace;
+    case VK_RETURN: return scui_event_key_val_enter;
+    case VK_NEXT:   return scui_event_key_val_next;
+    case VK_PRIOR:  return scui_event_key_val_prev;
+    case VK_HOME:   return scui_event_key_val_home;
+    case VK_END:    return scui_event_key_val_end;
+    default:
+            return -1;
+    }
+}
+
+/*@brief scui 输入设备回调接口
+ */
+void app_dev_gui_key_scui_read(scui_indev_data_t *indev_data)
+{
+    app_dev_t *driver = app_dev_gui_key_inst();
+    app_dev_gui_key_cfg_t *cfg = driver->cfg;
+    app_dev_gui_key_data_t *data = driver->data;
+    
+    indev_data->type    = scui_indev_type_key;
+    /* 传递给scui的key事件 */
+    indev_data->state = cfg->state ?
+                        scui_indev_state_press :
+                        scui_indev_state_release;
+    /*  */
+    indev_data->key.key_id  = app_dev_gui_key_scui_key();
+    indev_data->key.key_val = 0;
+    /*  */
+    if (cfg->state == scui_indev_state_release)
+        cfg->key = -1;
 }
 #else
 #endif

@@ -30,7 +30,7 @@ static inline app_dev_t * app_dev_gui_ptr_inst(void)
 
 #if 0
 #elif APP_EXT_DEV_GUI_IS_LVGL
-/*@brief lvgl输入设备回调接口
+/*@brief lvgl 输入设备回调接口
  */
 void app_dev_gui_ptr_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev_data)
 {
@@ -40,7 +40,7 @@ void app_dev_gui_ptr_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
     
     if (!cfg->status)
         return;
-
+    
     (void)indev_drv;
     
     UINT app_dev_gui_disp_get_dpi(bool is_def);
@@ -63,7 +63,40 @@ void app_dev_gui_ptr_lv_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * indev
     if (indev_data->point.y > LV_DRV_VER_RES - 1)
         indev_data->point.y = LV_DRV_VER_RES - 1;
 }
-
+#elif APP_EXT_DEV_GUI_IS_SCUI
+/*@brief scui 输入设备回调接口
+ */
+void app_dev_gui_ptr_scui_read(scui_indev_data_t *indev_data)
+{
+    app_dev_t *driver = app_dev_gui_ptr_inst();
+    app_dev_gui_ptr_cfg_t *cfg = driver->cfg;
+    app_dev_gui_ptr_data_t *data = driver->data;
+    
+    if (!cfg->status)
+        return;
+    
+    UINT app_dev_gui_disp_get_dpi(bool is_def);
+    /* 传递给lvgl的touch事件 */
+    indev_data->ptr.ptr_pos.x = MulDiv(GET_X_LPARAM(cfg->value),
+        app_dev_gui_disp_get_dpi(true), app_dev_gui_disp_get_dpi(false));
+    indev_data->ptr.ptr_pos.y = MulDiv(GET_Y_LPARAM(cfg->value),
+        app_dev_gui_disp_get_dpi(true), app_dev_gui_disp_get_dpi(false));
+    
+    indev_data->type    = scui_indev_type_ptr;
+    /* 我们只用到了鼠标左键的适配功能 */
+    indev_data->state   = cfg->left_status ?
+                          scui_indev_state_press :
+                          scui_indev_state_release;
+    /* 整理坐标范围 */
+    if (indev_data->ptr.ptr_pos.x < 0)
+        indev_data->ptr.ptr_pos.x = 0;
+    if (indev_data->ptr.ptr_pos.x > SCUI_DRV_HOR_RES - 1)
+        indev_data->ptr.ptr_pos.x = SCUI_DRV_HOR_RES - 1;
+    if (indev_data->ptr.ptr_pos.y < 0)
+        indev_data->ptr.ptr_pos.y = 0;
+    if (indev_data->ptr.ptr_pos.y > SCUI_DRV_VER_RES - 1)
+        indev_data->ptr.ptr_pos.y = SCUI_DRV_VER_RES - 1;
+}
 #else
 #endif
 

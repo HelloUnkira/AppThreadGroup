@@ -3,16 +3,16 @@
 
 typedef struct {
     app_sys_list_dln_t dl_node;
-    /* 事件包吸收回调: */
-    /* 如果手动交付该回调,则使用事件包吸收功能 */
-    /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
-    void (*absorb)(void *pkg_old, void *pkg_new);
     /* 基本字段:系统必备 */
     uint64_t thread:10;     /* 接收者线程 */
     uint64_t module:10;     /* 接收者线程模组 */
     uint64_t event:10;      /* 接收者线程模组事件 */
     uint64_t priority:8;    /* 接收者线程模组事件优先级(数字越大优先级越高) */
     uint64_t ticks:20;      /* 事件包生成时的Tick,与处理时获取的Tick核对确认迟延数 */
+    /* 事件包吸收回调: */
+    /* 如果手动交付该回调,则使用事件包吸收功能 */
+    /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
+    bool (*absorb)(void *pkg_old, void *pkg_new);
     /* 扩展字段:用户自定义追加: */
     /* 事件可以携带通用结构信息 */
     union {

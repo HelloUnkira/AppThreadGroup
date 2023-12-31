@@ -67,7 +67,7 @@ uint32_t scui_widget_event_paint(scui_handle_t handle)
     
     /* 控件默认绘制只处理背景皮肤 */
     if (widget->style & scui_widget_style_is_transparent)
-        return SCUI_EVENT_CONTINUE;
+        return scui_event_retval_continue;
     
     /* 源数据区剪切域 */
     /* 目标数据区剪切域 */
@@ -95,9 +95,9 @@ uint32_t scui_widget_event_proc(scui_handle_t handle, scui_event_t *event)
     
     /* 绘制事件没有剪切域,忽略 */
     if (event->type == scui_event_paint && scui_widget_gc_clip_empty(widget))
-        return SCUI_EVENT_CONTINUE;
+        return scui_event_retval_continue;
     
-    uint32_t ret = SCUI_EVENT_CONTINUE;
+    uint32_t ret = scui_event_retval_continue;
     scui_event_t event_new = *event;
     event_new.object = widget->handle;
     scui_widget_event_reg_t event_reg = {.event = event->type,};
@@ -108,8 +108,8 @@ uint32_t scui_widget_event_proc(scui_handle_t handle, scui_event_t *event)
     if (event_reg.event_cb != NULL)
         ret = event_reg.event_cb(&event_new);
     
-    if (ret == SCUI_EVENT_BREAK)
-        return SCUI_EVENT_BREAK;
+    if (ret == scui_event_retval_break)
+        return scui_event_retval_break;
     
     switch (event->type) {
     case scui_event_paint: {
@@ -127,8 +127,8 @@ uint32_t scui_widget_event_proc(scui_handle_t handle, scui_event_t *event)
         break;
     }
     
-    if (ret == SCUI_EVENT_BREAK)
-        return SCUI_EVENT_BREAK;
+    if (ret == scui_event_retval_break)
+        return scui_event_retval_break;
     
     /* 事件后响应回调 */
     event_reg.order = scui_widget_order_after,
