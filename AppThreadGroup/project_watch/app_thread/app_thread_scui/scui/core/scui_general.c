@@ -86,6 +86,30 @@ scui_alpha_t scui_alpha_by_percent(uint8_t percent)
     return (scui_alpha_t)app_sys_map((uint16_t)percent, 0, 100, 0x00, 0xFF);
 }
 
+/*@brief 上层颜色值转为设备颜色值
+ *       只用于scui_color_gradient_t类型的内部元素转换使用
+ *@param color 颜色值
+ *@retval 颜色值
+ */
+SCUI_PIXEL_TYPE scui_pixel_by_color(scui_color8888_t color)
+{
+    #if 0
+    #elif SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565
+    return (SCUI_PIXEL_TYPE){
+        .ch.r = (uint8_t)color.ch.r >> 3,
+        .ch.g = (uint8_t)color.ch.g >> 2,
+        .ch.b = (uint8_t)color.ch.b >> 3,
+    };
+    #elif SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888
+    return (SCUI_PIXEL_TYPE){
+        .ch.r = (uint8_t)color.ch.r,
+        .ch.g = (uint8_t)color.ch.g,
+        .ch.b = (uint8_t)color.ch.b,
+    };
+    #else
+    #endif
+}
+
 /*@brief 像素点作用透明度
  *@param pixel 像素点
  *@param alpha 透明度
@@ -99,6 +123,26 @@ SCUI_PIXEL_TYPE scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha
         .ch.b = (uint8_t)((uint16_t)pixel->ch.b * alpha / 0xFF),
     };
 }
+
+/*@brief 像素点融合(同步作用透明度)
+ *@param pixel_fg 像素点(fg)
+ *@param alpha_fg 透明度(fg)
+ *@param pixel_bg 像素点(bg)
+ *@param alpha_bg 透明度(bg)
+ *@retval 像素点
+ */
+SCUI_PIXEL_TYPE scui_pixel_mix_with_alpha(SCUI_PIXEL_TYPE *pixel_1, scui_alpha_t alpha_1,
+                                          SCUI_PIXEL_TYPE *pixel_2, scui_alpha_t alpha_2)
+{
+    APP_SYS_ASSERT(alpha_1 + alpha_2 == 0xFF);
+    
+    return (SCUI_PIXEL_TYPE){
+        .ch.r = ((uint16_t)pixel_1->ch.r * alpha_1 + (uint16_t)pixel_2->ch.r * alpha_2) / 0xFF,
+        .ch.g = ((uint16_t)pixel_1->ch.g * alpha_1 + (uint16_t)pixel_2->ch.g * alpha_2) / 0xFF,
+        .ch.b = ((uint16_t)pixel_1->ch.b * alpha_1 + (uint16_t)pixel_2->ch.b * alpha_2) / 0xFF,
+    };
+}
+
 
 /*@brief 像素点混合(同步作用透明度)
  *@param pixel_fg 像素点(fg)

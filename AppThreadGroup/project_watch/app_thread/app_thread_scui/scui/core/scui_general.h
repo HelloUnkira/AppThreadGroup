@@ -63,6 +63,19 @@ typedef enum {
     scui_color_format_argb8888,
 }  scui_color_format_t;
 
+/*@brief: 过度色, 固定此格式主要上层通用性
+ */
+typedef struct {
+    union {
+        scui_color8888_t color;         // 主色调
+        scui_color8888_t color_s;       // 起始色调
+    };
+    union {
+        scui_color8888_t color_render;  // 过度色调
+        scui_color8888_t color_e;       // 结束色调
+    };
+} scui_color_gradient_t;
+
 /*@brief: 设备透明度格式:
  *        固定到[0x00, 0xFF]
  */
@@ -134,12 +147,29 @@ scui_color888_t scui_color_rgb565_to_rgb888_rev(scui_color565_t color565);
  */
 scui_alpha_t scui_alpha_by_percent(uint8_t percent);
 
+/*@brief 上层颜色值转为设备颜色值
+ *       只用于scui_color_gradient_t类型的内部元素转换使用
+ *@param color 颜色值
+ *@retval 颜色值
+ */
+SCUI_PIXEL_TYPE scui_pixel_by_color(scui_color8888_t color);
+
 /*@brief 像素点作用透明度
  *@param pixel 像素点
  *@param alpha 透明度
  *@retval 像素点
  */
 SCUI_PIXEL_TYPE scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha);
+
+/*@brief 像素点融合(同步作用透明度)
+ *@param pixel_fg 像素点(fg)
+ *@param alpha_fg 透明度(fg)
+ *@param pixel_bg 像素点(bg)
+ *@param alpha_bg 透明度(bg)
+ *@retval 像素点
+ */
+SCUI_PIXEL_TYPE scui_pixel_mix_with_alpha(SCUI_PIXEL_TYPE *pixel_1, scui_alpha_t alpha_1,
+                                          SCUI_PIXEL_TYPE *pixel_2, scui_alpha_t alpha_2);
 
 /*@brief 像素点混合(同步作用透明度)
  *@param pixel_fg 像素点(fg)

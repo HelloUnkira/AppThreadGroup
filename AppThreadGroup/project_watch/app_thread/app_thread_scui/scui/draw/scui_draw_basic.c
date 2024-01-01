@@ -95,7 +95,13 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     APP_SYS_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     APP_SYS_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     
+    if (src_surface->alpha == 0x0)
+        return;
     /* 全覆盖混合:直接copy */
+    if (dst_surface->alpha == 0x0) {
+        scui_draw_area_copy(dst_surface, dst_clip, src_surface, src_clip);
+        return;
+    }
     if (dst_surface->alpha == 0xFF && src_surface->alpha == 0xFF) {
         scui_draw_area_copy(dst_surface, dst_clip, src_surface, src_clip);
         return;

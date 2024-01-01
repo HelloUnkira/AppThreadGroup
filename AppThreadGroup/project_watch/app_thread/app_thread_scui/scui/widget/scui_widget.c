@@ -71,18 +71,17 @@ uint32_t scui_widget_event_paint(scui_handle_t handle)
     
     /* 源数据区剪切域 */
     /* 目标数据区剪切域 */
-    scui_area_t clip_src = {0};
-    scui_area_t clip_dst = {.w = widget->clip.w, .h = widget->clip.h,};
     
-    #if 0
+    /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
+    
     /* 有背景图片则优先绘制背景 */
-    if (widget->bg_image != SCUI_HANDLE_INVALID) {
-        /* 如果背景图片和设备FB类型一致则可直达,否则就不直达 */
-        return scui_widget_gc_draw_bg_image(widget, widget->bg_image, NULL, &clip_dst, widget->bg_color);
-    }
     /* 没有背景图片则绘制纯色背景 */
-    return scui_widget_gc_fill_color(widget, widget->bg_color, &clip_dst);
-    #endif
+    if (widget->image.handle != SCUI_HANDLE_INVALID)
+        scui_widget_gc_draw_image(widget, NULL, widget->image.handle, NULL, widget->color);
+    else
+        scui_widget_gc_draw_color(widget, NULL, widget->color);
+    
+    return scui_event_retval_continue;
 }
 
 /*@brief 控件默认事件处理回调

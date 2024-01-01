@@ -58,4 +58,22 @@ void scui_widget_gc_alpha_update(scui_widget_t *widget, uint8_t alpha);
 
 
 
+
+/*@brief 控件gc在画布绘制纯色区域
+ *@param widget   控件实例
+ *@param dst_clip 控件绘制区域
+ *@param color    源色调
+ */
+void scui_widget_gc_draw_color(scui_widget_t *widget, scui_area_t *dst_clip, scui_color_gradient_t color);
+
+/*@brief 控件gc在画布绘制图像
+ *@param widget   控件实例
+ *@param dst_clip 控件绘制区域
+ *@param handle   图像句柄
+ *@param src_clip 图像源绘制区域
+ *@param color    图像源色调(调色板使用)
+ */
+void scui_widget_gc_draw_image(scui_widget_t *widget, scui_area_t *dst_clip,
+                               scui_handle_t  handle, scui_area_t *src_clip, scui_color_gradient_t color);
+
 #endif
