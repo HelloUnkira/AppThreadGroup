@@ -11,7 +11,7 @@
 
 /*@breif 转化区域描述方式(主->从)
  */
-inline void scui_area_m_to_s(scui_area_t *area)
+void scui_area_m_to_s(scui_area_t *area)
 {
     scui_coord_t x1 = area->x, x2 = area->x + area->w - 1;
     scui_coord_t y1 = area->y, y2 = area->y + area->h - 1;
@@ -24,7 +24,7 @@ inline void scui_area_m_to_s(scui_area_t *area)
 
 /*@breif 转化区域描述方式(从->主)
  */
-inline void scui_area_s_to_m(scui_area_t *area)
+void scui_area_s_to_m(scui_area_t *area)
 {
     scui_coord_t x = area->x1, w = area->x2 - area->x1 + 1;
     scui_coord_t y = area->y1, h = area->y2 - area->y1 + 1;
@@ -39,7 +39,7 @@ inline void scui_area_s_to_m(scui_area_t *area)
  *@param area 区域
  *@retval 为空true,不为空false
  */
-inline bool scui_area_empty(scui_area_t *area)
+bool scui_area_empty(scui_area_t *area)
 {
     return (area->w <= 0 || area->h <= 0);
 }
@@ -50,7 +50,7 @@ inline bool scui_area_empty(scui_area_t *area)
  *@param area2 区域
  *@retval 为空false,不为空true
  */
-inline bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
+bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     scui_area_m_to_s(area1);
     scui_area_m_to_s(area2);
@@ -70,7 +70,7 @@ inline bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *
  *@param area1 区域
  *@param area2 区域
  */
-inline void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
+void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     scui_area_m_to_s(area1);
     scui_area_m_to_s(area2);
@@ -88,7 +88,7 @@ inline void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *
  *@param area2 区域
  *@retval 包含true,不包含false
  */
-inline bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
+bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
 {
     if (area1->x < area2->x || area1->x + area1->w > area2->x + area2->w ||
         area1->y < area2->y || area1->y + area1->h > area2->y + area2->h)
@@ -101,7 +101,7 @@ inline bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
  *@param point 坐标
  *@retval 包含true,不包含false
  */
-inline bool scui_area_inside_point(scui_area_t *area, scui_point_t *point)
+bool scui_area_inside_point(scui_area_t *area, scui_point_t *point)
 {
     if (point->x >= area->x && point->x <= area->x + area->w &&
         point->y >= area->y && point->y <= area->y + area->h)

@@ -17,8 +17,9 @@ bool scui_image_check(scui_image_t *image)
 {
     bool check = true;
     
-    if (image->format != scui_image_format_bmp565  &&
-        image->format != scui_image_format_png8565)
+    if (image->format != scui_image_format_p4 &&
+        image->format != scui_image_format_rgb565 &&
+        image->format != scui_image_format_argb8565)
         check = false;
     if (image->status > scui_image_status_num)
         check = false;
@@ -26,8 +27,8 @@ bool scui_image_check(scui_image_t *image)
         check = false;
     
     /* 图片不在内存中,做一次检查 */
-    if (image->from != scui_image_from_mem) {
-        check = scui_image_src_check(image);
+    if (check == true && image->from != scui_image_from_mem) {
+        check  = scui_image_src_check(image);
     }
     
     if (!check) {

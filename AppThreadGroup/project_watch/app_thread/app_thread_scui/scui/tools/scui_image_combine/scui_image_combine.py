@@ -6,17 +6,17 @@ import PIL.Image
 import lz4.frame
 
 # 设备像素格式
-scui_pixel_format_0 = r'a4'
-scui_pixel_format_1 = r'bmp565'
-scui_pixel_format_2 = r'png8565'
+scui_pixel_format_0 = r'p4'
+scui_pixel_format_1 = r'rgb565'
+scui_pixel_format_2 = r'argb8565'
 # 可支持转化的像素格式表
-scui_pixel_format_list_0 = ['a4', 'a8']  # 纯色图,只有透明度(位深<=8)
+scui_pixel_format_list_0 = ['p4', 'p8']  # 纯色图,只有透明度(位深<=8)
 scui_pixel_format_list_1 = ['rgb565', 'rgb888']  # 色彩图,无透明度()
 scui_pixel_format_list_2 = ['argb8565', 'argb8888']  # 色彩图,有透明度
 
 
-# 生成pixel a4
-def scui_image_pixel_a4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
+# 生成pixel p4(palette)
+def scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
     rgb_0 = (r8_0 + g8_0 + b8_0) / 3
     rgb_1 = (r8_1 + g8_1 + b8_1) / 3
     return int(rgb_0 / 16) + (int(rgb_1 / 16) << 4)
@@ -98,20 +98,20 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         pixel_stream = []
         # 迭代每一个像素点
         if image_raw.mode == 'P':
-            if scui_pixel_format_0 == r'a4':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_a4')
+            if scui_pixel_format_0 == r'p4':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
                 for i in range(image_std.size[0]):
                     for j in range(0, image_std.size[1], 2):
                         r8_0, r8_1 = pixel_matrix[i, j + 0][0], pixel_matrix[i, j + 1][0]
                         g8_0, g8_1 = pixel_matrix[i, j + 0][1], pixel_matrix[i, j + 1][1]
                         b8_0, b8_1 = pixel_matrix[i, j + 0][2], pixel_matrix[i, j + 1][2]
-                        rgb8 = scui_image_pixel_a4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1)
+                        rgb8 = scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1)
                         pixel_stream.append(rgb8)
                 # for line in pixel_stream:
                 #     print(line)
         if image_raw.mode == 'RGB':
-            if scui_pixel_format_1 == r'bmp565':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_bmp565')
+            if scui_pixel_format_1 == r'rgb565':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_rgb565')
                 for i in range(image_std.size[0]):
                     for j in range(0, image_std.size[1]):
                         r8 = pixel_matrix[i, j][0]
@@ -123,8 +123,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                 # for line in pixel_stream:
                 #     print(line)
         if image_raw.mode == 'RGBA':
-            if scui_pixel_format_2 == r'png8565':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_png8565')
+            if scui_pixel_format_2 == r'argb8565':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_argb8565')
                 for i in range(image_std.size[0]):
                     for j in range(0, image_std.size[1]):
                         r8 = pixel_matrix[i, j][0]
@@ -217,13 +217,13 @@ def scui_image_combine():
     sys.stdout = ScuiRedirectPrint(sys.stdout, file='scui_image_combine.out')  # redirect print
     sys.stderr = ScuiRedirectPrint(sys.stderr)  # redirect print
     # 解析支持检查
-    if scui_pixel_format_0 != r'a4':
+    if scui_pixel_format_0 != r'p4':
         print('unsupport pixel format yet:', scui_pixel_format_0)
         return
-    if scui_pixel_format_1 != r'bmp565':
+    if scui_pixel_format_1 != r'rgb565':
         print('unsupport pixel format yet:', scui_pixel_format_1)
         return
-    if scui_pixel_format_2 != r'png8565':
+    if scui_pixel_format_2 != r'argb8565':
         print('unsupport pixel format yet:', scui_pixel_format_2)
         return
     # 参数列表:文件根目录, 设备pixel格式(不带alpha通道, 带alpha通道), 项目名称

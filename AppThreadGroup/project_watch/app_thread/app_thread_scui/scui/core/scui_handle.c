@@ -44,6 +44,11 @@ void scui_handle_table_register(scui_handle_table_t *table)
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
         if (scui_handle_table[ofs].source == NULL)
             scui_handle_table[ofs] = *table;
+    
+    APP_SYS_LOG_INFO("handle table register:");
+    APP_SYS_LOG_INFO("handle table source:%p", table->source);
+    APP_SYS_LOG_INFO("handle table number:%u", table->number);
+    APP_SYS_LOG_INFO("handle table offset:%u", table->offset);
 }
 
 /*@brief 通过句柄判断属于哪一个偏移

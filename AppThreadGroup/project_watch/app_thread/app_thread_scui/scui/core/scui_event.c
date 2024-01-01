@@ -23,17 +23,9 @@ void scui_event_ready(void)
 
 /*@brief 事件同步等待
  */
-void scui_event_sync_wait(void)
+void scui_event_wait(void)
 {
     app_sem_process(&scui_event_queue.sem, app_sem_take);
-}
-
-/*@brief 事件队列事件数量
- *@retval 事件数量
- */
-uint32_t scui_event_num(void)
-{
-    return scui_event_queue.list_num;
 }
 
 /*@brief 优先级排序入队列比较函数
@@ -149,4 +141,15 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
     
     return retval;
+}
+
+/*@brief 事件队列事件数量
+ *@retval 事件数量
+ */
+uint32_t scui_event_num(void)
+{
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
+    uint32_t list_num = scui_event_queue.list_num;
+    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
+    return list_num;
 }

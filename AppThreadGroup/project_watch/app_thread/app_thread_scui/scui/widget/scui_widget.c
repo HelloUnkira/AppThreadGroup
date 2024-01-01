@@ -13,7 +13,7 @@
  *@param handle 控件句柄
  *@param event  自定义控件回调
  */
-void scui_widget_event_set(scui_handle_t handle, scui_widget_event_reg_t *event)
+void scui_widget_event_cb_set(scui_handle_t handle, scui_widget_event_reg_t *event)
 {
     APP_SYS_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -40,7 +40,7 @@ void scui_widget_event_set(scui_handle_t handle, scui_widget_event_reg_t *event)
  *@param handle 控件句柄
  *@param event  自定义控件回调
  */
-void scui_widget_event_get(scui_handle_t handle, scui_widget_event_reg_t *event)
+void scui_widget_event_cb_get(scui_handle_t handle, scui_widget_event_reg_t *event)
 {
     APP_SYS_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -104,7 +104,7 @@ uint32_t scui_widget_event_proc(scui_handle_t handle, scui_event_t *event)
     
     /* 事件前响应回调 */
     event_reg.order = scui_widget_order_before,
-    scui_widget_event_get(widget->handle, &event_reg);
+    scui_widget_event_cb_get(widget->handle, &event_reg);
     if (event_reg.event_cb != NULL)
         ret = event_reg.event_cb(&event_new);
     
@@ -132,7 +132,7 @@ uint32_t scui_widget_event_proc(scui_handle_t handle, scui_event_t *event)
     
     /* 事件后响应回调 */
     event_reg.order = scui_widget_order_after,
-    scui_widget_event_get(widget->handle, &event_reg);
+    scui_widget_event_cb_get(widget->handle, &event_reg);
     if (event_reg.event_cb != NULL)
         ret = event_reg.event_cb(&event_new);
     

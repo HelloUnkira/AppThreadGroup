@@ -132,12 +132,7 @@ void scui_event_ready(void);
 
 /*@brief 事件同步等待
  */
-void scui_event_sync_wait(void);
-
-/*@brief 事件队列事件数量
- *@retval 事件数量
- */
-uint32_t scui_event_num(void);
+void scui_event_wait(void);
 
 /*@brief 事件包入列函数
  *@param event 事件包
@@ -149,5 +144,10 @@ void scui_event_enqueue(scui_event_t *event);
  *@retval 提取到有效事件包
  */
 bool scui_event_dequeue(scui_event_t *event, bool hit);
+
+/*@brief 事件队列事件数量
+ *@retval 事件数量
+ */
+uint32_t scui_event_num(void);
 
 #endif

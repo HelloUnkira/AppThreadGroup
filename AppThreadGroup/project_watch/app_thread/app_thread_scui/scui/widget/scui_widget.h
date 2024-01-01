@@ -87,13 +87,13 @@ typedef struct {
  *@param handle 控件句柄
  *@param event  自定义控件回调
  */
-void scui_widget_event_set(scui_handle_t handle, scui_widget_event_reg_t *event);
+void scui_widget_event_cb_set(scui_handle_t handle, scui_widget_event_reg_t *event);
 
 /*@brief 获取事件的自定义回调
  *@param handle 控件句柄
  *@param event  自定义控件回调
  */
-void scui_widget_event_get(scui_handle_t handle, scui_widget_event_reg_t *event);
+void scui_widget_event_cb_get(scui_handle_t handle, scui_widget_event_reg_t *event);
 
 /*@brief 控件默认事件处理回调
  *@param handle 控件句柄

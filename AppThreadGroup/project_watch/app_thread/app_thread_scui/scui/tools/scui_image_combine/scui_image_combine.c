@@ -6,7 +6,7 @@
 #include "scui.h"
 
 static const scui_image_t test___image_src_repeat_01_bluetooth_bmp = {
-	.format			 = scui_image_format_bmp565,
+	.format			 = scui_image_format_rgb565,
 	.pixel.data		 = 0x0,
 	.pixel.width	 = 0xd2,
 	.pixel.height	 = 0xd2,
@@ -17,7 +17,7 @@ static const scui_image_t test___image_src_repeat_01_bluetooth_bmp = {
 };
 
 static const scui_image_t test___image_src_repeat_02_window_png = {
-	.format			 = scui_image_format_png8565,
+	.format			 = scui_image_format_argb8565,
 	.pixel.data		 = 0xfe9,
 	.pixel.width	 = 0x146,
 	.pixel.height	 = 0x7c,
@@ -28,7 +28,7 @@ static const scui_image_t test___image_src_repeat_02_window_png = {
 };
 
 static const scui_image_t test___image_src_repeat_03_bar_bmp = {
-	.format			 = scui_image_format_a4,
+	.format			 = scui_image_format_p4,
 	.pixel.data		 = 0x287b,
 	.pixel.width	 = 0x6,
 	.pixel.height	 = 0x98,
@@ -39,7 +39,7 @@ static const scui_image_t test___image_src_repeat_03_bar_bmp = {
 };
 
 static const scui_image_t test___image_src_repeat_04_bar_bmp = {
-	.format			 = scui_image_format_a4,
+	.format			 = scui_image_format_p4,
 	.pixel.data		 = 0x28ba,
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x90,
@@ -50,7 +50,7 @@ static const scui_image_t test___image_src_repeat_04_bar_bmp = {
 };
 
 static const scui_image_t test___image_src_repeat_05_dot_bmp = {
-	.format			 = scui_image_format_a4,
+	.format			 = scui_image_format_p4,
 	.pixel.data		 = 0x2910,
 	.pixel.width	 = 0x6,
 	.pixel.height	 = 0x6,

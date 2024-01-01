@@ -12,7 +12,7 @@
 /*@brief 控件gc重置
  *@param widget 控件实例
  */
-inline void scui_widget_gc_reset(scui_widget_t *widget)
+void scui_widget_gc_reset(scui_widget_t *widget)
 {
     memset(&widget->gc.clip, 0, sizeof(scui_area_t));
     widget->gc.surface = SCUI_HANDLE_INVALID;
@@ -22,7 +22,7 @@ inline void scui_widget_gc_reset(scui_widget_t *widget)
  *@param  widget 控件实例
  *@retval 画布句柄
  */
-inline scui_handle_t scui_widget_gc_surface_get(scui_widget_t *widget)
+scui_handle_t scui_widget_gc_surface_get(scui_widget_t *widget)
 {
     return widget->gc.surface;
 }
@@ -31,7 +31,7 @@ inline scui_handle_t scui_widget_gc_surface_get(scui_widget_t *widget)
  *@param widget 控件实例
  *@param surface 画布句柄
  */
-inline void scui_widget_gc_surface_set(scui_widget_t *widget, scui_handle_t surface)
+void scui_widget_gc_surface_set(scui_widget_t *widget, scui_handle_t surface)
 {
     widget->gc.surface = surface;
 }
@@ -40,7 +40,7 @@ inline void scui_widget_gc_surface_set(scui_widget_t *widget, scui_handle_t surf
  *@param widget 控件实例
  *@param clip   剪切域
  */
-inline void scui_widget_gc_clip_get(scui_widget_t *widget, scui_area_t *clip)
+void scui_widget_gc_clip_get(scui_widget_t *widget, scui_area_t *clip)
 {
     *clip = widget->gc.clip;
 }
@@ -49,7 +49,7 @@ inline void scui_widget_gc_clip_get(scui_widget_t *widget, scui_area_t *clip)
  *@param widget 控件实例
  *@param clip   剪切域
  */
-inline void scui_widget_gc_clip_set(scui_widget_t *widget, scui_area_t *clip)
+void scui_widget_gc_clip_set(scui_widget_t *widget, scui_area_t *clip)
 {
     widget->gc.clip = *clip;
 }
@@ -58,7 +58,7 @@ inline void scui_widget_gc_clip_set(scui_widget_t *widget, scui_area_t *clip)
  *@param widget 控件实例
  *@param clip   剪切域
  */
-inline void scui_widget_gc_clip_merge(scui_widget_t *widget, scui_area_t *clip)
+void scui_widget_gc_clip_merge(scui_widget_t *widget, scui_area_t *clip)
 {
     scui_area_merge(&widget->gc.clip, &widget->gc.clip, clip);
 }
@@ -67,7 +67,7 @@ inline void scui_widget_gc_clip_merge(scui_widget_t *widget, scui_area_t *clip)
  *@param widget 控件实例
  *@param clip   剪切域
  */
-inline void scui_widget_gc_clip_clear(scui_widget_t *widget)
+void scui_widget_gc_clip_clear(scui_widget_t *widget)
 {
     widget->gc.clip.w = 0;
     widget->gc.clip.h = 0;
@@ -77,7 +77,7 @@ inline void scui_widget_gc_clip_clear(scui_widget_t *widget)
  *@param widget 控件实例
  *@retval 剪切域为空
  */
-inline bool scui_widget_gc_clip_empty(scui_widget_t *widget)
+bool scui_widget_gc_clip_empty(scui_widget_t *widget)
 {
     #if 0
     /* wait adapte */
@@ -88,7 +88,7 @@ inline bool scui_widget_gc_clip_empty(scui_widget_t *widget)
  *@param widget 控件实例
  *@param alpha  画布alpha
  */
-inline void scui_widget_gc_alpha_update(scui_widget_t *widget, uint8_t alpha)
+void scui_widget_gc_alpha_update(scui_widget_t *widget, uint8_t alpha)
 {
     #if 0
     /* wait adapte */

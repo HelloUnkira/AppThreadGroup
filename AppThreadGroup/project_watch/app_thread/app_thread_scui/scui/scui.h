@@ -18,6 +18,11 @@
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_image.h"         /* 图像 */
 #include "scui_image_cache.h"   /* 图像缓存 */
+#include "scui_surface.h"       /* 画布 */
+#include "scui_surface_fb.h"    /* 画布帧缓冲 */
+/* draw */
+#include "scui_draw_basic.h"
+#include "scui_draw_image.h"
 /* misc */
 #include "scui_math.h"          /* 数学库 */
 #include "scui_engine.h"        /* 引擎 */
@@ -27,30 +32,14 @@
 #include "scui_indev_ptr.h"
 #include "scui_indev_enc.h"
 #include "scui_indev_key.h"
-/* draw */
-#include "scui_surface_fb.h"
 /* arch: */
 #include "scui_image_src.h"
-
-
-
+/* source */
+#include "scui_source.h"
 /* widget: */
 #include "scui_widget.h"
 #include "scui_widget_ogz.h"
 #include "scui_widget_list.h"
 #include "scui_widget_gc.h"
-
-
-
-/* 输入设备事件表 */
-#include "scui_event_indev.h"
-/* 自定义事件表 */
-#include "scui_event_custom.h"
-/* 静态图形索引表 */
-#include "scui_image_combine.h"
-/* 多国语字符串表 */
-#include "scui_multi_lang.h"
-
-
 
 #endif

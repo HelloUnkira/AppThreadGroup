@@ -27,19 +27,22 @@ void scui_indev_key_notify(scui_indev_data_t *data)
     
     bool key_id_not_find = true;
     for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
-        if (scui_indev_key.item[idx].key_id == data->key.key_id)
-            key_id_not_find = false;
+        if (scui_indev_key.item[idx].key_id == data->key.key_id) {
+            key_id_not_find = false;
+            break;
+        }
     if (key_id_not_find)
     for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         if (scui_indev_key.item[idx].key_id == -1) {
             scui_indev_key.item[idx].key_id  = data->key.key_id;
             key_id_not_find = false;
+            break;
         }
     if (key_id_not_find) {
         APP_SYS_LOG_ERROR("key id is too much:");
+        APP_SYS_LOG_ERROR("key_id:%d", data->key.key_id);
         for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
             APP_SYS_LOG_ERROR("key_id:%d", scui_indev_key.item[idx].key_id);
-            APP_SYS_LOG_ERROR("key_id:%d", data->key.key_id);
         APP_SYS_ASSERT(false);
     }
     

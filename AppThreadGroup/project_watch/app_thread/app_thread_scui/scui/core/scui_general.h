@@ -27,18 +27,18 @@ typedef union {
 } scui_color888_t;
 #pragma pack()
 
-/* ARGB6666: */
+/* ARGB8565: */
 #pragma pack(1)
 typedef union {
     struct {
-        uint8_t b:6;
+        uint8_t b:5;
         uint8_t g:6;
-        uint8_t r:6;
-        uint8_t a:6;
+        uint8_t r:5;
+        uint8_t a:8;
     } ch;
     uint8_t  byte[3];
     uint32_t full;
-} scui_color6666_t;
+} scui_color8565_t;
 #pragma pack()
 
 /* ARGB8888: */
@@ -55,22 +55,18 @@ typedef union {
 } scui_color8888_t;
 #pragma pack()
 
-/* 几个不同像素格式转化(EX指字节逆序) */
-#define SCUI_RGB888_TO_565(x)        ((((x) >> 19 & 0x1F) << 11) | (((x) >> 10 & 0x3F) << 5) | (((x) >> 3 & 0x1F) <<  0))
-#define SCUI_RGB888_TO_565_EX(x)     ((((x) >> 19 & 0x1F) <<  0) | (((x) >> 10 & 0x38) << 5) | (((x) >> 3 & 0x1F) << 11) | (((x) >> 10 & 0x07) << 8))
-#define SCUI_RGB666_TO_565(x)        ((((x) >> 13 & 0x1F) << 11) | (((x) >>  6 & 0x3F) << 5) | (((x) >> 1 & 0x1F) <<  0))
-#define SCUI_RGB666_TO_565_EX(x)     ((((x) >> 13 & 0x1F) <<  0) | (((x) >>  6 & 0x38) << 5) | (((x) >> 1 & 0x1F) << 11) | (((x) >>  6 & 0x07) << 8))
+/* color format */
+typedef enum {
+    scui_color_format_rgb565,
+    scui_color_format_rgb888,
+    scui_color_format_argb8565,
+    scui_color_format_argb8888,
+}  scui_color_format_t;
 
-/* alpha: */
+/*@brief: 设备透明度格式:
+ *        固定到[0x00, 0xFF]
+ */
 typedef uint8_t scui_alpha_t;
-
-// 绘制实体抽象:画布
-// 画布是一整块区域或不存在(共用画布)
-typedef struct {
-    uint8_t     *pixel;     // 画布像素流地址
-    scui_area_t  clip;      // 画布空间剪切域
-    scui_alpha_t alpha;     // 画布区域透明度
-} scui_surface_t;
 
 /*@brief: 设备像素点格式:
  *        设备像素点格式是直达显示器的帧缓冲或画布
@@ -80,7 +76,9 @@ typedef struct {
 typedef enum {
     scui_pixel_format_rgb565,
     scui_pixel_format_rgb888,
-} scui_pixel_format_type_t;
+    scui_pixel_format_argb8565,
+    scui_pixel_format_argb8888,
+} scui_pixel_format_t;
 
 /*@brief: 字节配置,元素提取,像素点逆序(慎用)
  *        最上层使用的color统一为ARGB8888类型
@@ -105,6 +103,36 @@ typedef enum {
 #else
 #error "pixel format unknown"
 #endif
+
+/*@brief 颜色值格式转换
+ *@param color888 颜色值
+ *@retval 颜色值
+ */
+scui_color565_t scui_color_rgb888_to_rgb565(scui_color888_t color888);
+
+/*@brief 颜色值格式转换(字节逆序)
+ *@param color888 颜色值
+ *@retval 颜色值
+ */
+scui_color565_t scui_color_rgb888_to_rgb565_rev(scui_color888_t color888);
+
+/*@brief 颜色值格式转换
+ *@param color565 颜色值
+ *@retval 颜色值
+ */
+scui_color888_t scui_color_rgb565_to_rgb888(scui_color565_t color565);
+
+/*@brief 颜色值格式转换(字节逆序)
+ *@param color565 颜色值
+ *@retval 颜色值
+ */
+scui_color888_t scui_color_rgb565_to_rgb888_rev(scui_color565_t color565);
+
+/*@brief 计算透明度通过百分比值
+ *@param percent 透明度百分比值[0, 100]
+ *@retval 透明度
+ */
+scui_alpha_t scui_alpha_by_percent(uint8_t percent);
 
 /*@brief 像素点作用透明度
  *@param pixel 像素点
