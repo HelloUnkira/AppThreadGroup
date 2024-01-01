@@ -55,36 +55,43 @@ void scui_indev_key_notify(scui_indev_data_t *data)
             };
             /* 当前状态为release */
             if (data->state == scui_indev_state_release) {
-                scui_indev_key.item[idx].state   = data->state;
-                scui_indev_key.item[idx].key_cnt++;
-                /* 检查事件是否是点击 */
-                if (scui_tick_cnt() < scui_indev_key.item[idx].cnt_tick + SCUI_INDEV_KEY_CLICK) {
-                    event.type    = scui_event_key_click;
+                /* 上一状态为release */
+                if (scui_indev_key.item[idx].state == scui_indev_state_release)
+                    return;
+                /* 上一状态为press */
+                if (scui_indev_key.item[idx].state == scui_indev_state_press) {
+                    scui_indev_key.item[idx].state  = data->state;
+                    scui_indev_key.item[idx].key_cnt++;
+                    scui_coord_t elapse = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
+                    /* 检查事件是否是点击 */
+                    if (elapse < SCUI_INDEV_KEY_CLICK) {
+                        event.type    = scui_event_key_click;
+                        event.key_cnt = scui_indev_key.item[idx].key_cnt;
+                        APP_SYS_LOG_INFO("scui_event_key_click:%d", event.key_cnt);
+                        scui_event_notify(&event);
+                    }
+                    scui_indev_key.item[idx].cnt_tick = scui_tick_cnt();
+                    /* 发送抬起事件 */
+                    event.type    = scui_event_key_up;
                     event.key_cnt = scui_indev_key.item[idx].key_cnt;
-                    APP_SYS_LOG_INFO("scui_event_key_click:%d", event.key_cnt);
+                    APP_SYS_LOG_INFO("scui_event_key_up:%d", event.key_cnt);
                     scui_event_notify(&event);
+                    return;
                 }
-                scui_indev_key.item[idx].cnt_tick = scui_tick_cnt();
-                scui_indev_key.item[idx].wait_release = false;
-                /* 发送抬起事件 */
-                event.type    = scui_event_key_up;
-                event.key_cnt = scui_indev_key.item[idx].key_cnt;
-                APP_SYS_LOG_INFO("scui_event_key_up:%d", event.key_cnt);
-                scui_event_notify(&event);
-                return;
             }
             /* 当前状态为press */
             if (data->state == scui_indev_state_press) {
                 /* 上一状态为release */
                 if (scui_indev_key.item[idx].state == scui_indev_state_release) {
                     scui_indev_key.item[idx].state  = data->state;
+                    scui_coord_t elapse = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
+                    scui_indev_key.item[idx].cnt_tick = scui_tick_cnt();
                     /* 检查点击是否连续 */
-                    if (scui_tick_cnt() >= scui_indev_key.item[idx].cnt_tick + SCUI_INDEV_KEY_CLICK_SPAN)
+                    if (elapse >= SCUI_INDEV_KEY_CLICK_SPAN)
                         scui_indev_key.item[idx].key_cnt  = 0;
-                        scui_indev_key.item[idx].cnt_tick = scui_tick_cnt();
                     /* 发送按下事件 */
                     event.type     = scui_event_key_down;
-                    event.key_tick = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
+                    event.key_tick = elapse;
                     APP_SYS_LOG_INFO("scui_event_key_down:%d", event.key_tick);
                     scui_event_notify(&event);
                     return;
@@ -92,9 +99,10 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                 /* 上一状态为press */
                 if (scui_indev_key.item[idx].state == scui_indev_state_press) {
                     scui_indev_key.item[idx].state  = data->state;
+                    scui_coord_t elapse = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
                     /* 发送按下事件 */
                     event.type     = scui_event_key_hold,
-                    event.key_tick = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick,
+                    event.key_tick = elapse,
                     APP_SYS_LOG_INFO("scui_event_key_hold:%d", event.key_tick);
                     scui_event_notify(&event);
                     return;
@@ -102,16 +110,6 @@ void scui_indev_key_notify(scui_indev_data_t *data)
             }
             return;
         }
-}
-
-/*@brief 输入设备等待抬起
- *@param key_id 关键字
- */
-void scui_indev_key_wait_release(scui_coord_t key_id)
-{
-    for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
-        if (scui_indev_key.item[idx].key_id = key_id)
-            scui_indev_key.item[idx].wait_release = true;
 }
 
 /*@brief 输入设备初始化

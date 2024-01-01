@@ -22,6 +22,7 @@
 #include "scui_math.h"          /* 数学库 */
 #include "scui_engine.h"        /* 引擎 */
 #include "scui_tick.h"          /* 滴答器 */
+#include "scui_disp.h"          /* 显示器 */
 #include "scui_indev.h"         /* 输入设备 */
 #include "scui_indev_ptr.h"
 #include "scui_indev_enc.h"

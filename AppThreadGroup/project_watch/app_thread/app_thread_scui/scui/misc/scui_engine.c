@@ -15,14 +15,18 @@ static bool scui_engine_execute_status = false;
  */
 void scui_engine_ready(void)
 {
-    scui_mem_ready();
+    scui_disp_set_hor_res(SCUI_DRV_HOR_RES);
+    scui_disp_set_ver_res(SCUI_DRV_VER_RES);
+    scui_disp_ready();
     scui_indev_ready();
     
+    scui_mem_ready();
     scui_event_ready();
+    scui_image_cache_ready();
+    
     scui_event_register_before(scui_event_before);
     scui_event_register_after(scui_event_after);
     scui_event_register_custom(scui_event_custom);
-    scui_image_cache_ready();
     
     scui_handle_table_t table = {0};
     /* 句柄表(image) */

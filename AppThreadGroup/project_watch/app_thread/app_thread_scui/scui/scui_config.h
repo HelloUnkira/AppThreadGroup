@@ -35,8 +35,9 @@
 #define SCUI_IMAGE_LIMIT_TOTAL      (1024 * 1024 * 1)
 
 /* 输入设备:ptr */
-#define SCUI_INDEV_PTR_CLICK        (200)
+#define SCUI_INDEV_PTR_CLICK        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN   (300)   /* 连续点击最大间隔 */
+#define SCUI_INDEV_PTR_FLING_SPAN   (20)    /* fling检测(数字越小越敏感):time / distance < span */
 
 /* 输入设备:key */
 #define SCUI_INDEV_KEY_LIMIT        (10)
