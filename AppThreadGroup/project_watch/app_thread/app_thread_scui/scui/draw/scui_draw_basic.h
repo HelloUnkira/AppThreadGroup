@@ -11,9 +11,11 @@ void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len);
 /*@brief 区域填充像素点(可以使用DMA-fill加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
- *@param pixel       设备像素点
+ *@param src_pixel   像素点
+ *@param alpha       像素点透明度
  */
-void scui_draw_area_fill(scui_surface_t *dst_surface, scui_area_t *dst_clip, SCUI_PIXEL_TYPE *pixel);
+void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
+                         SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t alpha);
 
 /*@brief 区域拷贝(可以使用DMA-copy加速优化)
  *@param dst_surface 画布实例

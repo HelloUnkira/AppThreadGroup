@@ -114,7 +114,7 @@ void scui_widget_gc_draw_color(scui_widget_t *widget, scui_area_t *dst_clip, scu
         dst_clip  = &dst_surface->clip;
     
     SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
-    scui_draw_area_fill(dst_surface, dst_clip, &pixel);
+    scui_draw_area_fill(dst_surface, dst_clip, &pixel, widget->alpha);
 }
 
 
@@ -144,6 +144,6 @@ void scui_widget_gc_draw_image(scui_widget_t *widget, scui_area_t *dst_clip,
     
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
-    scui_draw_image(dst_surface, dst_clip, &image_unit, src_clip, color);
+    scui_draw_image(dst_surface, dst_clip, &image_unit, src_clip, color, widget->alpha);
     scui_image_cache_unload(&image_unit);
 }
