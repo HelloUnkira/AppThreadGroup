@@ -77,6 +77,18 @@ typedef struct {
     scui_alpha_t            alpha;      // 控件透明度
 } scui_widget_t;
 
+/*@brief剪切域说明:
+ *      scui_widget_t->clip:    "控件在父控件的恒定剪切域"
+ *      scui_widget_t->gc.clip: "控件在当次绘制时的剪切域"
+ *      scui_widget_t->gc.surface:
+ *      scui_surface_t->surface:"在画布中的剪切域"
+ *      画布不是完全都存在独立资源空间
+ *      只有一个独立场景可能存在资源空间
+ *      其他控件的画布可能都只是相对独立场景资源空间的一个映射
+ *      如果一个独立场景都不存在资源空间(映射到绘制画布资源空间)
+ *      那么它们都会是相对绘制画布资源空间的一个映射
+ */
+
 /*@brief 设置事件的自定义回调
  *@param handle 控件句柄
  *@param event  自定义控件回调

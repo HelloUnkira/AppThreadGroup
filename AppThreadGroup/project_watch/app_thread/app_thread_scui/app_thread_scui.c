@@ -10,6 +10,68 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
+static app_thread_t app_thread_scui_refr = {0};
+
+#if 0   /* draw 测试 */
+
+static app_sys_timer_t app_thread_scui_draw_test_timer = {0};
+
+static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
+{
+    static uint8_t color = 0;
+    static uint8_t alpha = 0;
+    
+    SCUI_PIXEL_TYPE pixel = scui_pixel_by_color((scui_color8888_t){.full = 0xFFFFFFFF});
+    scui_draw_area_fill(surface, &surface->clip, &pixel, surface->alpha);
+    
+    pixel = (SCUI_PIXEL_TYPE){0};
+    // pixel.ch.r = color >> 3;
+    pixel.ch.g = color >> 2;
+    // pixel.ch.b = color >> 3;
+    scui_draw_area_fill(surface, &surface->clip, &pixel, alpha);
+    
+    color += 1;
+    alpha += 1;
+}
+
+static void app_thread_scui_draw_test_timer_handler(void *timer)
+{
+    scui_surface_draw_routine(app_thread_scui_draw_test_routine);
+
+    static uint8_t cnt = 0;
+    cnt++;
+
+    if (cnt >= 0xFF)
+        app_sys_timer_stop(&app_thread_scui_draw_test_timer);
+}
+
+static void app_thread_scui_draw_test(void)
+{
+    app_thread_scui_draw_test_timer.expired = app_thread_scui_draw_test_timer_handler;
+    app_thread_scui_draw_test_timer.peroid  = 10;
+    app_thread_scui_draw_test_timer.reload  = true;
+    app_sys_timer_start(&app_thread_scui_draw_test_timer);
+}
+
+#endif
+
+/*@brief scui refr子线程
+ */
+static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
+{
+    #if 0
+    app_thread_scui_draw_test();
+    #endif
+    
+    while (true) {
+        
+        /*@brief scui 屏幕刷新回调接口
+         */
+        void app_dev_gui_disp_scui_flush(scui_surface_t *suface);
+        scui_surface_refr_routine(app_dev_gui_disp_scui_flush);
+    }
+}
+
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_scui_routine_ready_cb(void)
@@ -25,8 +87,12 @@ static void app_thread_scui_routine_ready_cb(void)
     /* 模组初始化 */
     app_scui_timer_ready();
     app_scui_check_time_ready();
-    /* 初始化启动lvgl调度定时器 */
+    /* 初始化启动scui调度定时器 */
     app_scui_timer_start();
+    
+    /* 创建refr子线程 */
+    app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
+    app_thread_process(&app_thread_scui_refr, app_thread_static);
 }
 
 /*@brief 子线程服务例程处理部

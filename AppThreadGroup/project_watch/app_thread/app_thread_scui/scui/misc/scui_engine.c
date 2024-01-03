@@ -26,12 +26,14 @@ void scui_engine_ready(void)
     
     scui_surface_fb_ready();
     
+    APP_SYS_ASSERT(SCUI_PIXEL_COND);
+    APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
     /* frame buffer: */
     SCUI_PIXEL_TYPE pixel = {0};
     scui_surface_t *surface_fb = NULL;
-    const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES;
+    const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * SCUI_PIXEL_SIZE;
     surface_fb = scui_surface_fb_draw();
-    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size * SCUI_PIXEL_SIZE);
+    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size);
     surface_fb->alpha  = scui_alpha_by_percent(100);
     surface_fb->clip.x = 0;
     surface_fb->clip.y = 0;
@@ -40,7 +42,7 @@ void scui_engine_ready(void)
     scui_draw_area_fill(surface_fb, &surface_fb->clip, &pixel, surface_fb->alpha);
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
-    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size * SCUI_PIXEL_SIZE);
+    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size);
     surface_fb->alpha  = scui_alpha_by_percent(100);
     surface_fb->clip.x = 0;
     surface_fb->clip.y = 0;

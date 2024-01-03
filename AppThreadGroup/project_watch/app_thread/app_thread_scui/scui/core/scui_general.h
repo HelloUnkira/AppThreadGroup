@@ -5,9 +5,9 @@
 #pragma pack(1)
 typedef union {
     struct {
-        uint8_t b:5;
-        uint8_t g:6;
-        uint8_t r:5;
+        uint16_t b:5;
+        uint16_t g:6;
+        uint16_t r:5;
     } ch;
     uint8_t  byte[2];
     uint16_t full;
@@ -18,9 +18,9 @@ typedef union {
 #pragma pack(1)
 typedef union {
     struct {
-        uint8_t b:8;
-        uint8_t g:8;
-        uint8_t r:8;
+        uint32_t b:8;
+        uint32_t g:8;
+        uint32_t r:8;
     } ch;
     uint8_t  byte[3];
     uint32_t full;
@@ -31,10 +31,10 @@ typedef union {
 #pragma pack(1)
 typedef union {
     struct {
-        uint8_t b:5;
-        uint8_t g:6;
-        uint8_t r:5;
-        uint8_t a:8;
+        uint32_t b:5;
+        uint32_t g:6;
+        uint32_t r:5;
+        uint32_t a:8;
     } ch;
     uint8_t  byte[3];
     uint32_t full;
@@ -45,10 +45,10 @@ typedef union {
 #pragma pack(1)
 typedef union {
     struct {
-        uint8_t b:8;
-        uint8_t g:8;
-        uint8_t r:8;
-        uint8_t a:8;
+        uint32_t b:8;
+        uint32_t g:8;
+        uint32_t r:8;
+        uint32_t a:8;
     } ch;
     uint8_t  byte[4];
     uint32_t full;
@@ -101,14 +101,16 @@ typedef enum {
 #if 0
 #elif SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565
 #define SCUI_PIXEL_TYPE         scui_color565_t
-#define SCUI_PIXEL_SIZE         sizeof(scui_color565_t)
+#define SCUI_PIXEL_SIZE         sizeof(SCUI_PIXEL_TYPE)
+#define SCUI_PIXEL_COND         SCUI_PIXEL_SIZE == 2
 #define SCUI_PIXEL_R(color)     (((color) & 0xF800) >> 8)   // max-255
 #define SCUI_PIXEL_G(color)     (((color) >> 3) & 0x00FC)   // max-255
 #define SCUI_PIXEL_B(color)     (((color) << 3) & 0x00F8)   // max-255
 #define SCUI_PIXEL_REV(pixel)   ((((pixel) & 0xFF) << 8) & (((pixel) & 0xFF00) >> 8))
 #elif SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888
 #define SCUI_PIXEL_TYPE         scui_color888_t
-#define SCUI_PIXEL_SIZE         sizeof(scui_color888_t)
+#define SCUI_PIXEL_SIZE         sizeof(SCUI_PIXEL_TYPE)
+#define SCUI_PIXEL_COND         SCUI_PIXEL_SIZE == 3
 #define SCUI_PIXEL_R(color)     (((color) >> 16) & 0xFF)    // max-255
 #define SCUI_PIXEL_G(color)     (((color) >>  8) & 0xFF)    // max-255
 #define SCUI_PIXEL_B(color)     (((color) >>  0) & 0xFF)    // max-255

@@ -6,7 +6,7 @@ typedef struct {
     scui_point_t ptr_last;
     scui_coord_t ptr_cnt;
     uint64_t cnt_tick;
-    bool move_flag;
+    uint32_t move_cnt;
 } scui_indev_ptr_t;
 
 typedef enum {

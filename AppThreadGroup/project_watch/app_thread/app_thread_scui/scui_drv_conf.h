@@ -8,4 +8,6 @@
 /*         插个眼:现在多缓冲区有渲染问题,显示错误 */
 #define SCUI_DRV_DBUFFER    1
 
+#define SCUI_DRV_PIXEL_DEPTH    16
+
 #endif

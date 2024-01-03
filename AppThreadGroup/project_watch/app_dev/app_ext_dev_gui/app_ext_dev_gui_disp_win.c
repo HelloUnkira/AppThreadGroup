@@ -58,7 +58,6 @@ static inline app_dev_t * app_dev_gui_disp_inst(void)
 
 #if 0
 #elif APP_EXT_DEV_GUI_IS_LVGL
-
 /*@brief lvgl 屏幕接口
  */
 void app_dev_gui_disp_flush_manual(lv_coord_t x, lv_coord_t y, lv_coord_t w, lv_coord_t h)
@@ -155,8 +154,33 @@ void app_dev_gui_disp_lv_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
     area->x2 = APP_DEV_GUI_DRV_HOR_RES - 1;
     area->y2 = APP_DEV_GUI_DRV_VER_RES - 1;
 }
-
 #elif APP_EXT_DEV_GUI_IS_SCUI
+/*@brief scui 屏幕刷新回调接口
+ */
+void app_dev_gui_disp_scui_flush(scui_surface_t *surface)
+{
+    app_dev_t *driver = app_dev_gui_disp_inst();
+    app_dev_gui_disp_cfg_t *cfg = driver->cfg;
+    app_dev_gui_disp_data_t *data = driver->data;
+    
+    APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
+    APP_SYS_ASSERT(surface->clip.w * surface->clip.h * SCUI_PIXEL_SIZE == cfg->display.pixel_buf_size);
+    
+    memcpy(cfg->display.pixel_buf, surface->pixel, cfg->display.pixel_buf_size);
+    
+    HDC win_hdc = GetDC(cfg->display.window);
+    if (win_hdc) {
+        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
+        
+        StretchBlt(win_hdc, 0, 0,
+            MulDiv(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF),
+            MulDiv(APP_DEV_GUI_DRV_VER_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF),
+            cfg->display.buf_hdc, 0, 0, APP_DEV_GUI_DRV_HOR_RES, APP_DEV_GUI_DRV_VER_RES, SRCCOPY);
+        
+        SetStretchBltMode(win_hdc, prev_mode);
+        ReleaseDC(cfg->display.window, win_hdc);
+    }
+}
 #else
 #endif
 
@@ -320,7 +344,7 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
         #elif APP_EXT_DEV_GUI_IS_LVGL
         #define APP_EXT_DEV_GUI_COLOR_DEPTH     LV_COLOR_DEPTH
         #elif APP_EXT_DEV_GUI_IS_SCUI
-        #define APP_EXT_DEV_GUI_COLOR_DEPTH     16
+        #define APP_EXT_DEV_GUI_COLOR_DEPTH     SCUI_DRV_PIXEL_DEPTH
         #else
         #endif
         

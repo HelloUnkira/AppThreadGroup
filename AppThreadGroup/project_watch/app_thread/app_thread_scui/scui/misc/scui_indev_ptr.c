@@ -48,7 +48,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_event_notify(&event);
             } else
             /* 检查事件是否是fling */
-            if (!scui_indev_ptr.move_flag &&
+            if (scui_indev_ptr.move_cnt < SCUI_INDEV_PTR_FLING_CNT &&
                (dist_r != 0 && elapse / dist_r < SCUI_INDEV_PTR_FLING_SPAN)) {
                 event.type  = scui_event_ptr_fling;
                 event.ptr_s = scui_indev_ptr.ptr_last;
@@ -79,8 +79,8 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
         /* 上一状态为release */
         if (scui_indev_ptr.state == scui_indev_state_release) {
             scui_indev_ptr.state  = data->state;
-            scui_indev_ptr.ptr_last  = point;
-            scui_indev_ptr.move_flag = false;
+            scui_indev_ptr.ptr_last = point;
+            scui_indev_ptr.move_cnt = 0;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
             scui_indev_ptr.cnt_tick  = scui_tick_cnt();
             /* 检查点击是否连续 */
@@ -99,10 +99,11 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_coord_t dist_x = app_sys_dist(scui_indev_ptr.ptr_last.x, point.x);
             scui_coord_t dist_y = app_sys_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t dist_r = app_sys_max(app_sys_abs(dist_x), app_sys_abs(dist_y));
-            /* 当次位移距离不满足fling条件,转为move */
-            if (scui_indev_ptr.move_flag ||
-               (dist_r != 0 && elapse / dist_r >= SCUI_INDEV_PTR_FLING_SPAN * 2)) {
-                scui_indev_ptr.move_flag = true;
+            /* 移动总速度不满足fling条件,转为move */
+            if (dist_r != 0 && elapse / dist_r >= SCUI_INDEV_PTR_FLING_SPAN)
+            if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)
+                scui_indev_ptr.move_cnt++;
+            if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT) {
                 event.type  = scui_event_ptr_move;
                 event.ptr_s = scui_indev_ptr.ptr_last;
                 event.ptr_e = point;

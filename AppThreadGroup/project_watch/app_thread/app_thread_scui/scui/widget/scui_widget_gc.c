@@ -79,9 +79,7 @@ void scui_widget_gc_clip_clear(scui_widget_t *widget)
  */
 bool scui_widget_gc_clip_empty(scui_widget_t *widget)
 {
-    #if 0
-    /* wait adapte */
-    #endif
+    return scui_area_empty(&widget->gc.clip);
 }
 
 /*@brief 控件gc更新画布alpha
@@ -90,9 +88,9 @@ bool scui_widget_gc_clip_empty(scui_widget_t *widget)
  */
 void scui_widget_gc_alpha_update(scui_widget_t *widget, uint8_t alpha)
 {
-    #if 0
-    /* wait adapte */
-    #endif
+    scui_surface_t *surface = scui_handle_get(widget->gc.surface);
+    APP_SYS_ASSERT(surface != NULL);
+    surface->alpha = alpha;
 }
 
 
@@ -116,7 +114,6 @@ void scui_widget_gc_draw_color(scui_widget_t *widget, scui_area_t *dst_clip, scu
     SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
     scui_draw_area_fill(dst_surface, dst_clip, &pixel, widget->alpha);
 }
-
 
 /*@brief 控件gc在画布绘制图像
  *@param widget   控件实例

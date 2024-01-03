@@ -58,33 +58,14 @@ scui_surface_t * scui_surface_fb_draw(void);
  */
 void scui_surface_fb_ready(void);
 
-/*例:
- *      draw线程:
- *      #if SCUI_SURFACE_FB_LIMIT == 1
- *      scui_surface_fb_draw_wait();
- *      #endif
- *      
- *      scui_surface_t *suface = scui_surface_fb_draw();
- *      // draw surface...
- *      
- *      #if SCUI_SURFACE_FB_LIMIT == 2
- *      scui_surface_fb_draw_wait();
- *      #endif
- *      
- *      scui_surface_fb_refr_lock();
- *      scui_surface_fb_refr_notify();
- *      scui_surface_fb_switch();
- *      
- *      
- *      
- *      refr异步工作:
- *      scui_surface_fb_refr_wait();
- *      scui_surface_t *suface = scui_surface_fb_refr();
- *      // refr surface...
- *      // 如果是DMA加速,此处额外等待一个信号量
- *      // 注意:这部分不能死等待,需要有一个超时机制
- *      scui_surface_fb_draw_notify();
- *      scui_surface_fb_refr_unlock();
+/*@brief 绘制画布例程(例)
+ *@param draw 绘制流程
  */
+void scui_surface_draw_routine(void (*draw)(scui_surface_t *surface));
+
+/*@brief 刷新画布例程(例)
+ *@param refr 刷新流程
+ */
+void scui_surface_refr_routine(void (*refr)(scui_surface_t *surface));
 
 #endif
