@@ -100,11 +100,11 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         if image_raw.mode == 'P':
             if scui_pixel_format_0 == r'p4':
                 scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
-                for i in range(image_std.size[0]):
-                    for j in range(0, image_std.size[1], 2):
-                        r8_0, r8_1 = pixel_matrix[i, j + 0][0], pixel_matrix[i, j + 1][0]
-                        g8_0, g8_1 = pixel_matrix[i, j + 0][1], pixel_matrix[i, j + 1][1]
-                        b8_0, b8_1 = pixel_matrix[i, j + 0][2], pixel_matrix[i, j + 1][2]
+                for j in range(image_std.size[1]):
+                    for i in range(0, image_std.size[0], 2):
+                        r8_0, r8_1 = pixel_matrix[i + 0, j][0], pixel_matrix[i + 1, j][0]
+                        g8_0, g8_1 = pixel_matrix[i + 0, j][1], pixel_matrix[i + 1, j][1]
+                        b8_0, b8_1 = pixel_matrix[i + 0, j][2], pixel_matrix[i + 1, j][2]
                         rgb8 = scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1)
                         pixel_stream.append(rgb8)
                 # for line in pixel_stream:
@@ -112,8 +112,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         if image_raw.mode == 'RGB':
             if scui_pixel_format_1 == r'rgb565':
                 scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_rgb565')
-                for i in range(image_std.size[0]):
-                    for j in range(0, image_std.size[1]):
+                for j in range(image_std.size[1]):
+                    for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
                         g8 = pixel_matrix[i, j][1]
                         b8 = pixel_matrix[i, j][2]
@@ -125,8 +125,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         if image_raw.mode == 'RGBA':
             if scui_pixel_format_2 == r'argb8565':
                 scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_argb8565')
-                for i in range(image_std.size[0]):
-                    for j in range(0, image_std.size[1]):
+                for j in range(image_std.size[1]):
+                    for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
                         g8 = pixel_matrix[i, j][1]
                         b8 = pixel_matrix[i, j][2]
