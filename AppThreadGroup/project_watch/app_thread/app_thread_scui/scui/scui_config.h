@@ -13,6 +13,7 @@
 
 /* 设备基础像素格式: */
 #define SCUI_PIXEL_FORMAT           scui_pixel_format_rgb565
+
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT       (2)
 

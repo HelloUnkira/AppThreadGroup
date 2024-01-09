@@ -89,25 +89,27 @@ void scui_anima_update(void)
             }
         }
         
-        bool reload = false;
         /* 当次轮转未结束 */
         if (anima->reduce < anima->peroid)
-            reload = true;
+            continue;
+        
+        bool reload = false;
+        /* 当次轮转未结束 */
+        if (anima->reduce >= anima->peroid)
+            anima->value_c = 0;
         /* 常加载轮转 */
         if (anima->reload == SCUI_ANIMA_INFINITE)
             reload = true;
         /* 递减周期 */
-        if (anima->reload != 0)
+        if (anima->reload != SCUI_ANIMA_INFINITE &&
+            anima->reload != 0)
             anima->reload--;
         if (anima->reload != 0)
             reload = true;
         
         /* 重加载 */
-        if (reload) {
-            scui_anima_list.list[idx] = scui_handle_new();
-            scui_handle_set(scui_anima_list.list[idx], anima);
+        if (reload)
             continue;
-        }
         
         /* 结束调 */
         if (anima->ready)
@@ -125,6 +127,8 @@ void scui_anima_update(void)
         scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
         SCUI_MEM_FREE(anima);
     }
+    /* 当次流逝已处理完毕,归零 */
+    scui_anima_list.elapse = 0;
 }
 
 /*@brief 创建动画
@@ -150,7 +154,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
         anima->running = false;
         anima->reduce  = 0;
         anima->value_c = 0;
-        anima->first   = 0;
+        anima->first   = true;
         /* 默认使用线性回调 */
         if (anima->path == NULL)
             anima->path  = scui_anima_path_linear;
@@ -211,7 +215,8 @@ void scui_anima_start(scui_handle_t handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
-            anima->running = false;
+            anima->running = true;
+            anima->first   = true;
             return;
         }
     
@@ -232,7 +237,7 @@ void scui_anima_stop(scui_handle_t handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
-            anima->running = true;
+            anima->running = false;
             return;
         }
     

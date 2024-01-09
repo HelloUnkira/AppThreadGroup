@@ -88,9 +88,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         if (image_raw.size[0] % 2) != 0:
             print('image %s width is odd:' % file)
             return
-        # 写入结构
-        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
-        scui_image_combine_c.write('static const scui_image_t %s = {\n' % scui_image_tag)
+        # ...
         # 现在我们将所有图片都转为RGBA格式的了:image_std
         # 我们需要根据原格式提取目标数据存储到缓存中
         # 这一步骤不进行本地持久化的操作
@@ -99,7 +97,6 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         # 迭代每一个像素点
         if image_raw.mode == 'P':
             if scui_pixel_format_0 == r'p4':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
                 for j in range(image_std.size[1]):
                     for i in range(0, image_std.size[0], 2):
                         r8_0, r8_1 = pixel_matrix[i + 0, j][0], pixel_matrix[i + 1, j][0]
@@ -111,7 +108,6 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                 #     print(line)
         if image_raw.mode == 'RGB':
             if scui_pixel_format_1 == r'rgb565':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_rgb565')
                 for j in range(image_std.size[1]):
                     for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
@@ -124,7 +120,6 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                 #     print(line)
         if image_raw.mode == 'RGBA':
             if scui_pixel_format_2 == r'argb8565':
-                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_argb8565')
                 for j in range(image_std.size[1]):
                     for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
@@ -143,12 +138,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
             continue
         # 计算本帧数据长度
         pixel_mem_len = len(pixel_stream)
-        # ......
-        # 写入结构
-        scui_image_combine_c.write('\t.pixel.data\t\t = %s,\n' % hex(pixel_offset))
-        scui_image_combine_c.write('\t.pixel.width\t = %s,\n' % hex(image_std.size[0]))
-        scui_image_combine_c.write('\t.pixel.height\t = %s,\n' % hex(image_std.size[1]))
-        scui_image_combine_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
+        # lz4压缩, 生成pixel_raw_len
+        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
         print('lz4:' + scui_image_tag)
         pixel_bytes = bytearray(pixel_stream)
         pixel_bytes_lz4_com = scui_image_lz4_compress(pixel_bytes)
@@ -158,13 +149,39 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
             continue
         scui_image_combine_bin.write(pixel_bytes_lz4_com)
         pixel_raw_len = len(pixel_bytes_lz4_com)
+        # 信息记录
+        scui_image_combine_c.write('#if SCUI_IMAGE_COMBINE_ROM\n')
+        scui_image_combine_c.write('static const uint8_t %s[%s] = {\n\t' % (scui_image_tag + '_array', hex(pixel_raw_len)))
+        for byte in pixel_bytes_lz4_com:
+            scui_image_combine_c.write('0x{:02x},'.format(byte))
+        scui_image_combine_c.write('\n};\n')
+        scui_image_combine_c.write('#endif\n')
+        # 写入结构
+        scui_image_combine_c.write('static const scui_image_t %s = {\n' % scui_image_tag)
+        scui_image_combine_c.write('\t#if SCUI_IMAGE_COMBINE_ROM\n')
+        scui_image_combine_c.write('\t.pixel.data\t\t = (uintptr_t)%s,\n' % (scui_image_tag + '_array'))
+        scui_image_combine_c.write('\t#else\n')
+        scui_image_combine_c.write('\t.pixel.data\t\t = %s,\n' % hex(pixel_offset))
+        scui_image_combine_c.write('\t#endif\n')
+        # 写入结构
+        scui_image_combine_c.write('\t.pixel.width\t = %s,\n' % hex(image_std.size[0]))
+        scui_image_combine_c.write('\t.pixel.height\t = %s,\n' % hex(image_std.size[1]))
+        scui_image_combine_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
         # lz4压缩, 更新pixel_length
         scui_image_combine_c.write('\t.pixel.size_raw\t = %s,\n' % hex(pixel_raw_len))
         scui_image_combine_c.write('\t.status\t\t\t = %s,\n' % 'scui_image_status_lz4')
         scui_image_combine_c.write('\t.from\t\t\t = %s,\n' % 'scui_image_from_ext')
+        if image_raw.mode == 'P':
+            if scui_pixel_format_0 == r'p4':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
+        if image_raw.mode == 'RGB':
+            if scui_pixel_format_1 == r'rgb565':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_rgb565')
+        if image_raw.mode == 'RGBA':
+            if scui_pixel_format_2 == r'argb8565':
+                scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_argb8565')
         scui_image_combine_c.write('};\n\n')
         # 信息记录
-        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
         scui_image_combine_h.write('//<%10s,%10s,%10s,%10s,%12.2f> scui_image_%s\n' %
                                    (hex(image_std.size[0]), hex(image_std.size[1]), pixel_raw_len,
                                     hex(pixel_mem_len), float(pixel_raw_len) / float(pixel_mem_len),
@@ -177,7 +194,6 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
         scui_image_combine_c.write('\t(void *)&%s,\n' % scui_image_tag)
     scui_image_combine_c.write('};\n')
-    pass
 
 
 # 遍历整个文件夹,提取目标文件
@@ -253,7 +269,6 @@ def scui_image_combine():
     scui_image_combine_h.close()
     scui_image_combine_c.close()
     scui_image_combine_bin.close()
-
 
 if __name__ == '__main__':
     try:

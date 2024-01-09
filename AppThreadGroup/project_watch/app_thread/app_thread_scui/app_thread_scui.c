@@ -10,11 +10,7 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-static app_thread_t app_thread_scui_refr = {0};
-
 #if 0   /* draw 测试 */
-
-static app_sys_timer_t app_thread_scui_draw_test_timer = {0};
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
@@ -34,23 +30,40 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     alpha += 1;
 }
 
-static void app_thread_scui_draw_test_timer_handler(void *timer)
+static void app_thread_scui_draw_test_anima_start(void *anima)
+{
+    APP_SYS_LOG_WARN("");
+}
+
+static void app_thread_scui_draw_test_anima_ready(void *anima)
+{
+    APP_SYS_LOG_WARN("");
+}
+
+static void app_thread_scui_draw_test_anima_expired(void *anima)
 {
     scui_surface_draw_routine(app_thread_scui_draw_test_routine);
-
-    static uint8_t cnt = 0;
-    cnt++;
-
-    if (cnt >= 0xFF)
-        app_sys_timer_stop(&app_thread_scui_draw_test_timer);
+    // APP_SYS_LOG_WARN("");
 }
 
 static void app_thread_scui_draw_test(void)
 {
-    app_thread_scui_draw_test_timer.expired = app_thread_scui_draw_test_timer_handler;
-    app_thread_scui_draw_test_timer.peroid  = 10;
-    app_thread_scui_draw_test_timer.reload  = true;
-    app_sys_timer_start(&app_thread_scui_draw_test_timer);
+    scui_anima_t anima = {
+        .start   = app_thread_scui_draw_test_anima_start,
+        .ready   = app_thread_scui_draw_test_anima_ready,
+        .expired = app_thread_scui_draw_test_anima_expired,
+        .reload  = 0xFF,
+        .peroid  = SCUI_ANIMA_TICK,
+    };
+    static scui_handle_t anima_handle = SCUI_HANDLE_INVALID;
+    scui_anima_create(&anima, &anima_handle);
+    scui_anima_start(anima_handle);
+}
+
+#else
+
+static void app_thread_scui_draw_test(void)
+{
 }
 
 #endif
@@ -59,9 +72,7 @@ static void app_thread_scui_draw_test(void)
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
 {
-    #if 0
     app_thread_scui_draw_test();
-    #endif
     
     while (true) {
         
@@ -69,6 +80,7 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
          */
         void app_dev_gui_disp_scui_flush(scui_surface_t *suface);
         scui_surface_refr_routine(app_dev_gui_disp_scui_flush);
+        app_delay_ms(10);   // 等待刷新完毕
     }
 }
 
@@ -91,6 +103,7 @@ static void app_thread_scui_routine_ready_cb(void)
     app_scui_timer_start();
     
     /* 创建refr子线程 */
+    static app_thread_t app_thread_scui_refr = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
     app_thread_process(&app_thread_scui_refr, app_thread_static);
 }

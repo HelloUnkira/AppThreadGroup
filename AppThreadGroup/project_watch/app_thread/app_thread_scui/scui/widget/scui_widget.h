@@ -3,11 +3,20 @@
 
 /* 控件类型: */
 typedef enum {
+    /* 基础控件 */
     scui_widget_type_window,    /* 窗口控件(根控件) */
     scui_widget_type_custom,    /* 自定义控件(绘制图形) */
-    scui_widget_type_image,     /* 图片控件 */
-    scui_widget_type_text,      /* 文本控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
+    scui_widget_type_button,    /* 按钮控件 */
+    scui_widget_type_image,     /* 图片控件 */
+    scui_widget_type_label,     /* 文本控件 */
+    /* 扩展控件 */
+    scui_widget_type_ring,          /* 圆环控件 */
+    scui_widget_type_line_chart,    /* 线性图控件 */
+    scui_widget_type_stock_figure,  /* 股价图控件 */
+    scui_widget_type_digit_picker,  /* 数字滚轮控件 */
+    scui_widget_type_histogram,     /* 柱状图控件 */
+    scui_widget_type_indicator,     /* 导航点控件 */
     scui_widget_type_num,
 } scui_widget_type_t;
 
@@ -58,7 +67,6 @@ typedef struct {
     scui_handle_t handle;
 } scui_widget_image_t;
 
-/* 控件 */
 /* 控件基础信息: */
 /* 控件只处理最基础绘制: */
 typedef struct {
@@ -77,11 +85,22 @@ typedef struct {
     scui_alpha_t            alpha;      // 控件透明度
 } scui_widget_t;
 
+/* 控件静态布局资料 */
+typedef struct {
+    scui_widget_type_t      type;       // 控件类型
+    scui_widget_style_t     style;      // 控件风格
+    scui_area_t             clip;       // 控件所在父容器区域
+    scui_handle_t           parent;     // 控件关联属性:父容器
+    scui_widget_image_t     image;      // 如果有背景图片,绘制背景图片
+    scui_color_gradient_t   color;      // 如果没有图片,则绘制纯色背景
+    scui_alpha_t            alpha;      // 控件透明度
+} scui_widget_layout_t;
+
 /*@brief剪切域说明:
- *      scui_widget_t->clip:    "控件在父控件的恒定剪切域"
- *      scui_widget_t->gc.clip: "控件在当次绘制时的剪切域"
+ *      scui_widget_t->clip:        "控件在父控件的恒定剪切域"
+ *      scui_widget_t->gc.clip:     "控件在当次绘制时的剪切域"
  *      scui_widget_t->gc.surface:
- *      scui_surface_t->surface:"在画布中的剪切域"
+ *      scui_surface_t->surface:    "在画布中的剪切域"
  *      画布不是完全都存在独立资源空间
  *      只有一个独立场景可能存在资源空间
  *      其他控件的画布可能都只是相对独立场景资源空间的一个映射
