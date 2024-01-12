@@ -23,23 +23,20 @@ bool scui_image_check(scui_image_t *image)
         check = false;
     if (image->status > scui_image_status_num)
         check = false;
-    if (image->from > scui_image_from_num)
-        check = false;
     
     /* 图片不在内存中,做一次检查 */
-    if (check == true && image->from != scui_image_from_mem) {
-        check  = scui_image_src_check(image);
-    }
+    check  = check && scui_image_src_check(image);
     
     if (!check) {
         APP_SYS_LOG_ERROR("image info check error:");
-        APP_SYS_LOG_ERROR_RAW("< format:%x",    image->format);
-        APP_SYS_LOG_ERROR_RAW("- status:%x",    image->status);
-        APP_SYS_LOG_ERROR_RAW("- height:%x",    image->pixel.height);
-        APP_SYS_LOG_ERROR_RAW("- width:%x",     image->pixel.width);
-        APP_SYS_LOG_ERROR_RAW("- size_raw:%x",  image->pixel.size_raw);
-        APP_SYS_LOG_ERROR_RAW("- size_mem:%x",  image->pixel.size_mem);
-        APP_SYS_LOG_ERROR_RAW("- from:%x >",    image->from);
+        APP_SYS_LOG_ERROR_RAW("< format:%x",        image->format);
+        APP_SYS_LOG_ERROR_RAW("- status:%x",        image->status);
+        APP_SYS_LOG_ERROR_RAW("- width:%x",         image->pixel.width);
+        APP_SYS_LOG_ERROR_RAW("- height:%x",        image->pixel.height);
+        APP_SYS_LOG_ERROR_RAW("- data_raw:%x",      image->pixel.data_raw);
+        APP_SYS_LOG_ERROR_RAW("- data_mem:%x",      image->pixel.data_mem);
+        APP_SYS_LOG_ERROR_RAW("- size_raw:%x",      image->pixel.size_raw);
+        APP_SYS_LOG_ERROR_RAW("- size_mem:%x >",    image->pixel.size_mem);
     }
     return check;
 }

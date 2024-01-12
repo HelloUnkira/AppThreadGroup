@@ -3,7 +3,7 @@ import re
 import os
 import sys
 import PIL.Image
-import lz4.frame
+import lz4.block
 
 # 设备像素格式
 scui_pixel_format_0 = r'p4'
@@ -36,15 +36,17 @@ def scui_image_pixel_bmp565(r8, g8, b8) -> tuple:
 
 # lz4压缩
 def scui_image_lz4_compress(pixel_bytes_in) -> bytearray:
-    pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
     # lz4hc = ctypes.cdll.LoadLibrary(r".\lz4hc.dll")
     # lz4hc.LZ4_compress_HC(pixel_bytes_in, pixel_bytes_out, pixel_bytes_size, pixel_bytes_size, 12)
+    # pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
+    pixel_bytes_out = lz4.block.compress(pixel_bytes_in, mode='high_compression', compression=12, return_bytearray=True)
     return pixel_bytes_out
 
 
 # lz4解压缩
 def scui_image_lz4_decompress(pixel_bytes_in) -> bytearray:
-    pixel_bytes_out = lz4.frame.decompress(pixel_bytes_in)
+    # pixel_bytes_out = lz4.frame.decompress(pixel_bytes_in)
+    pixel_bytes_out = lz4.block.decompress(pixel_bytes_in, return_bytearray=True)
     return pixel_bytes_out
 
 
@@ -54,6 +56,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     scui_image_combine_h = scui_image_combine_list[0]
     scui_image_combine_c = scui_image_combine_list[1]
     scui_image_combine_bin = scui_image_combine_list[2]
+    scui_image_combine_raw = scui_image_combine_list[3]
+    scui_image_combine_mem = scui_image_combine_list[4]
     # 头文件添加前缀, 源文件添加前缀
     scui_image_combine_h.write('#ifndef SCUI_IMAGE_COMBINE_H\n')
     scui_image_combine_h.write('#define SCUI_IMAGE_COMBINE_H\n\n')
@@ -63,7 +67,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     scui_image_combine_c.write('#include \"app_sys_lib.h\"\n')
     scui_image_combine_c.write('#include \"scui.h\"\n\n')
     # offset
-    pixel_offset = 0
+    pixel_ofs_raw = 0
+    pixel_ofs_mem = 0
     # 填充数据表
     scui_image_combine_h.write('typedef enum {\n')
     for file in file_path_list:
@@ -138,7 +143,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
             continue
         # 计算本帧数据长度
         pixel_mem_len = len(pixel_stream)
-        # lz4压缩, 生成pixel_raw_len
+        # lz4压缩, 生成 pixel_raw_len
         scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
         print('lz4:' + scui_image_tag)
         pixel_bytes = bytearray(pixel_stream)
@@ -149,28 +154,23 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
             continue
         scui_image_combine_bin.write(pixel_bytes_lz4_com)
         pixel_raw_len = len(pixel_bytes_lz4_com)
-        # 信息记录
-        scui_image_combine_c.write('#if SCUI_IMAGE_COMBINE_ROM\n')
-        scui_image_combine_c.write('static const uint8_t %s[%s] = {\n\t' % (scui_image_tag + '_array', hex(pixel_raw_len)))
-        for byte in pixel_bytes_lz4_com:
-            scui_image_combine_c.write('0x{:02x},'.format(byte))
-        scui_image_combine_c.write('\n};\n')
-        scui_image_combine_c.write('#endif\n')
-        # 写入结构
+        # 俩个调试源文件
+        scui_image_combine_mem.write(pixel_bytes)
+        scui_image_combine_raw.write(pixel_bytes_lz4_com)
+        # 变为C数组的字节流是不可行的,文件太大了以至于不能内联编译
+        # for byte in pixel_bytes:
+        #     scui_image_combine_mem.write('0x{:02x},'.format(byte).encode())
+        # for byte in pixel_bytes_lz4_com:
+        #     scui_image_combine_raw.write('0x{:02x},'.format(byte).encode())
+        # 写入结构, lz4压缩, 更新pixel_offset
         scui_image_combine_c.write('static const scui_image_t %s = {\n' % scui_image_tag)
-        scui_image_combine_c.write('\t#if SCUI_IMAGE_COMBINE_ROM\n')
-        scui_image_combine_c.write('\t.pixel.data\t\t = (uintptr_t)%s,\n' % (scui_image_tag + '_array'))
-        scui_image_combine_c.write('\t#else\n')
-        scui_image_combine_c.write('\t.pixel.data\t\t = %s,\n' % hex(pixel_offset))
-        scui_image_combine_c.write('\t#endif\n')
-        # 写入结构
         scui_image_combine_c.write('\t.pixel.width\t = %s,\n' % hex(image_std.size[0]))
         scui_image_combine_c.write('\t.pixel.height\t = %s,\n' % hex(image_std.size[1]))
-        scui_image_combine_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
-        # lz4压缩, 更新pixel_length
+        scui_image_combine_c.write('\t.pixel.data_raw\t = %s,\n' % hex(pixel_ofs_raw))
+        scui_image_combine_c.write('\t.pixel.data_mem\t = %s,\n' % hex(pixel_ofs_mem))
         scui_image_combine_c.write('\t.pixel.size_raw\t = %s,\n' % hex(pixel_raw_len))
+        scui_image_combine_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
         scui_image_combine_c.write('\t.status\t\t\t = %s,\n' % 'scui_image_status_lz4')
-        scui_image_combine_c.write('\t.from\t\t\t = %s,\n' % 'scui_image_from_ext')
         if image_raw.mode == 'P':
             if scui_pixel_format_0 == r'p4':
                 scui_image_combine_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
@@ -186,7 +186,8 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                                    (hex(image_std.size[0]), hex(image_std.size[1]), pixel_raw_len,
                                     hex(pixel_mem_len), float(pixel_raw_len) / float(pixel_mem_len),
                                     scui_image_tag))
-        pixel_offset += pixel_raw_len
+        pixel_ofs_raw += pixel_raw_len
+        pixel_ofs_mem += pixel_mem_len
     scui_image_combine_h.write('\n#endif\n')
     # 填充数据表
     scui_image_combine_c.write('const void * scui_image_combine_table[%d] = {\n' % len(file_path_list))
@@ -264,11 +265,21 @@ def scui_image_combine():
     scui_image_combine_h = open('scui_image_combine.h', mode='w', encoding='utf-8')
     scui_image_combine_c = open('scui_image_combine.c', mode='w', encoding='utf-8')
     scui_image_combine_bin = open('scui_image_combine.bin', mode='wb')
-    scui_image_combine_list = [scui_image_combine_h, scui_image_combine_c, scui_image_combine_bin]
+    scui_image_combine_raw = open('scui_image_combine.raw', mode='wb')
+    scui_image_combine_mem = open('scui_image_combine.mem', mode='wb')
+    scui_image_combine_list = [
+        scui_image_combine_h,
+        scui_image_combine_c,
+        scui_image_combine_bin,
+        scui_image_combine_raw,
+        scui_image_combine_mem]
     scui_image_parse(file_path_list, scui_image_combine_list, project_name)
     scui_image_combine_h.close()
     scui_image_combine_c.close()
     scui_image_combine_bin.close()
+    scui_image_combine_raw.close()
+    scui_image_combine_mem.close()
+
 
 if __name__ == '__main__':
     try:

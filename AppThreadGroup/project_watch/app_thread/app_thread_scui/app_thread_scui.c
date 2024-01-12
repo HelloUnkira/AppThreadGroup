@@ -10,10 +10,11 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 0   /* draw 测试 */
+#if 1   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
+    #if 0
     static uint8_t color = 0;
     static uint8_t alpha = 0;
     
@@ -28,6 +29,26 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     
     color += 1;
     alpha += 1;
+    #else
+    scui_image_unit_t image_unit = {0};
+    image_unit.image = scui_handle_get(SCUI_HANDLE_OFFSET_IMAGE + scui_image_prjimage_src_00_theme_01_on_png);
+    scui_area_t src_clip = {
+        .w = image_unit.image->pixel.width,
+        .h = image_unit.image->pixel.height,
+    };
+    scui_area_t dst_clip = {
+        .x = (surface->clip.w - src_clip.w) / 2,
+        .y = (surface->clip.h - src_clip.h) / 2,
+        .w = src_clip.w,
+        .h = src_clip.h,
+    };
+    scui_color_gradient_t color = {0};
+    scui_alpha_t alpha = 0xFF;
+    
+    scui_image_cache_load(&image_unit);
+    scui_draw_image(surface, &dst_clip, &image_unit, &src_clip, color, alpha);
+    scui_image_cache_unload(&image_unit);
+    #endif
 }
 
 static void app_thread_scui_draw_test_anima_start(void *anima)

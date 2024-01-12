@@ -56,6 +56,12 @@ file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_font)
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_pic/*")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_pic)
+# 文件迁移到调试
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui/tools/scui_image_combine/scui_image_combine.mem"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui/tools/scui_image_combine/scui_image_combine.raw"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui/tools/scui_image_combine/scui_image_combine.bin")
+file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
+
 # 注意:  
 # 依赖资源文件:  
 # app_main/app_source  

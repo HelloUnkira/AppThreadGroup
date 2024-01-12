@@ -46,7 +46,7 @@ static uint32_t scui_image_cache_fd_t(app_sys_table_rbsn_t *node)
     scui_image_unit_t *unit = app_sys_own_ofs(scui_image_unit_t, ht_node, node);
     /* 摘要的来源网络的Hash散列函数 */
     uint32_t app_sys_table_elf_hash(uint8_t *data, uint32_t length);
-    return scui_image_cache_hash((void *)&unit->image->pixel.data, sizeof(uintptr_t));
+    return scui_image_cache_hash((void *)&unit->image->pixel.data_mem, sizeof(uintptr_t));
 }
 
 /*@brief 哈希比较函数
@@ -55,7 +55,7 @@ static uint8_t scui_image_cache_fc1_t(app_sys_table_rbsn_t *node1, app_sys_table
 {
     scui_image_unit_t *unit1 = app_sys_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = app_sys_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data < unit2->image->pixel.data ? 1 : 0;
+    return unit1->image->pixel.data_mem < unit2->image->pixel.data_mem ? 1 : 0;
 }
 
 /*@brief 哈希比较函数
@@ -64,7 +64,7 @@ static uint8_t scui_image_cache_fc2_t(app_sys_table_rbsn_t *node1, app_sys_table
 {
     scui_image_unit_t *unit1 = app_sys_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = app_sys_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data == unit2->image->pixel.data ? 0 : 1;
+    return unit1->image->pixel.data_mem == unit2->image->pixel.data_mem ? 0 : 1;
 }
 
 /*@brief 哈希访问函数
@@ -73,14 +73,14 @@ static void scui_image_cache_fv_t(app_sys_table_rbsn_t *node, uint32_t idx)
 {
     scui_image_unit_t *unit = app_sys_own_ofs(scui_image_unit_t, ht_node, node);
     
-    APP_SYS_LOG_INFO_RAW("< format:%x",         unit->image->format);
-    APP_SYS_LOG_INFO_RAW("- status:%x",         unit->image->status);
-    APP_SYS_LOG_INFO_RAW("- height:%x",         unit->image->pixel.height);
     APP_SYS_LOG_INFO_RAW("- width:%x",          unit->image->pixel.width);
+    APP_SYS_LOG_INFO_RAW("- height:%x",         unit->image->pixel.height);
     APP_SYS_LOG_INFO_RAW("- size_raw<src>:%x",  unit->image->pixel.size_raw);
     APP_SYS_LOG_INFO_RAW("- size_mem<src>:%x",  unit->image->pixel.size_mem);
-    APP_SYS_LOG_INFO_RAW("- data<src>:%x",      unit->image->pixel.data);
-    APP_SYS_LOG_INFO_RAW("- from:%x >",         unit->image->from);
+    APP_SYS_LOG_INFO_RAW("- data_raw<src>:%x",  unit->image->pixel.data_raw);
+    APP_SYS_LOG_INFO_RAW("- data_mem<src>:%x",  unit->image->pixel.data_mem);
+    APP_SYS_LOG_INFO_RAW("- status:%x",         unit->image->status);
+    APP_SYS_LOG_INFO_RAW("< format:%x",         unit->image->format);
 }
 
 /*@brief 图片初始化

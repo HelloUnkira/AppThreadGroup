@@ -1,8 +1,7 @@
 #ifndef SCUI_SOURCE_H
 #define SCUI_SOURCE_H
 
-/* 图片资源是否在代码空间中 */
-#define SCUI_IMAGE_COMBINE_ROM      1
+#include "lz4.h"
 
 /* 输入设备事件表 */
 #include "scui_event_indev.h"
