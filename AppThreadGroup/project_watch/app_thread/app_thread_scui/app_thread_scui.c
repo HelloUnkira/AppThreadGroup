@@ -10,11 +10,11 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 1   /* draw 测试 */
+#if 0   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
-    #if 0
+    #if 1
     static uint8_t color = 0;
     static uint8_t alpha = 0;
     

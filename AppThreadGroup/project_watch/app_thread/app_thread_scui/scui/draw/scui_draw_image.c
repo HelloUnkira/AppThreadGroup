@@ -40,16 +40,37 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_rgb565)) {
         /* 这个很慢很慢, 除非硬件支持, 建议对齐平台支持 */
         APP_SYS_LOG_WARN("image pixel copy too slow");
-        #if 0 /* 不应该支持这种条件,有损性能 */
-        #endif
+        /* 不应该支持这种条件,有损性能 */
+        return;
     }
+    /* image blend: */
+    if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_argb8888) ||
+        (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_argb8565)) {
+        /* 这个很慢很慢, 除非硬件支持, 建议对齐平台支持 */
+        APP_SYS_LOG_WARN("image pixel copy too slow");
+        /* 不应该支持这种条件,有损性能 */
+        return;
+    }
+    /* image cover:(调色板) */
+    if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_p8) ||
+        (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_p4)) {
+        /* 这个很慢很慢, 除非硬件支持, 建议对齐平台支持 */
+        APP_SYS_LOG_WARN("image pixel copy too slow");
+        /* 不应该支持这种条件,有损性能 */
+        return;
+    }
+    
     /* image blend: */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_rgb565) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_rgb888)) {
         scui_draw_area_blend(dst_surface, dst_clip, &image_surface, src_clip);
         APP_SYS_LOG_INFO("image pixel blend");
+        /* 不应该支持这种条件,有损性能 */
         return;
     }
+    
+    SCUI_PIXEL_TYPE pixel = {0};
+    scui_surface_t *src_surface = &image_surface;
     
     scui_area_t *dst_area = &dst_surface->clip;
     scui_area_t *src_area = &image_clip;
@@ -58,36 +79,27 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     scui_area_inter(&dst_clip_v, dst_area, dst_clip);
     scui_area_inter(&src_clip_v, src_area, src_clip);
     
-    scui_area_t draw_area = {0};
-    draw_area.w = app_sys_min(dst_clip_v.w, src_clip_v.w);
-    draw_area.h = app_sys_min(dst_clip_v.h, src_clip_v.h);
+    scui_area_t draw_area = {
+        .w = app_sys_min(dst_clip_v.w, src_clip_v.w),
+        .h = app_sys_min(dst_clip_v.h, src_clip_v.h),
+    };
     
     if (scui_area_empty(&draw_area))
         return;
     
-    scui_surface_t *src_surface = &image_surface;
-    SCUI_PIXEL_TYPE *dst_addr = (void *)(dst_surface->pixel + (dst_clip_v.x) * SCUI_PIXEL_SIZE);
-    scui_coord_t dst_line = dst_surface->clip.w;
-    scui_coord_t src_line = src_surface->clip.w;
-    SCUI_PIXEL_TYPE pixel = {0};
+    scui_coord_t dst_ofs = dst_clip_v.y * dst_surface->clip.w + dst_clip_v.x;
+    scui_coord_t src_ofs = src_clip_v.y * src_surface->clip.w + src_clip_v.x;
+    SCUI_PIXEL_TYPE *dst_addr = (SCUI_PIXEL_TYPE *)dst_surface->pixel + dst_ofs;
     
-    /* image blend: */
-    if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_argb8888) ||
-        (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_argb8565)) {
-        /* 这个很慢很慢, 除非硬件支持, 建议对齐平台支持 */
-        APP_SYS_LOG_WARN("image pixel copy too slow");
-        #if 0 /* 不应该支持这种条件,有损性能 */
-        #endif
-    }
     /* image blend: */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_argb8565) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_argb8888)) {
         if (image_unit->image->format == scui_image_format_argb8565) {
-            scui_color8565_t *src_addr = (void *)(src_surface->pixel + (src_clip_v.x) * sizeof(scui_color8565_t));
+            scui_color8565_t *src_addr = (scui_color8565_t *)src_surface->pixel + src_ofs;
             for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
             for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                scui_color8565_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                scui_color8565_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                 alpha = (scui_alpha_t)src_addr_ofs->ch.a * (uint16_t)src_surface->alpha / 0xFF;
                 pixel = *(SCUI_PIXEL_TYPE *)&src_addr_ofs->ch;
                 pixel = scui_pixel_mix_with_alpha(&pixel, alpha, dst_addr_ofs, 0xFF - alpha);
@@ -97,11 +109,11 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             return;
         }
         if (image_unit->image->format == scui_image_format_argb8888) {
-            scui_color8888_t *src_addr = (void *)(src_surface->pixel + (src_clip_v.x) * sizeof(scui_color8888_t));
+            scui_color8888_t *src_addr = (scui_color8888_t *)src_surface->pixel + src_ofs;
             for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
             for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                scui_color8888_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                scui_color8888_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                 alpha = (scui_alpha_t)src_addr_ofs->ch.a * (uint16_t)src_surface->alpha / 0xFF;
                 pixel = *(SCUI_PIXEL_TYPE *)&src_addr_ofs->ch;
                 pixel = scui_pixel_mix_with_alpha(&pixel, alpha, dst_addr_ofs, 0xFF - alpha);
@@ -113,18 +125,10 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     }
     
     /* image cover:(调色板) */
-    if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_p8) ||
-        (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_p4)) {
-        /* 这个很慢很慢, 除非硬件支持, 建议对齐平台支持 */
-        APP_SYS_LOG_WARN("image pixel copy too slow");
-        #if 0 /* 不应该支持这种条件,有损性能 */
-        #endif
-    }
-    /* image cover:(调色板) */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_p4) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_p8)) {
-         uint8_t *src_addr = (void *)(src_surface->pixel + (src_clip_v.x));
-         scui_coord_t src_line = draw_area.w * 8 / (image_unit->image->format >> 8);
+         uint8_t *src_addr = src_surface->pixel + src_ofs;
+         scui_coord_t src_line = src_surface->clip.w * 8 / (image_unit->image->format >> 8);
          
          if (image_unit->image->format == scui_image_format_p4) {
              /* 调色板数组(为空时计算,有时直接取): */
@@ -138,8 +142,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              if (palette_table[0].full == palette_table[palette_len - 1].full) {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    SCUI_PIXEL_TYPE *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                    uint8_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                    SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                    uint8_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                     uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
                     alpha = (uint32_t)src_surface->alpha * palette * 0x11 / 0xFF;
                     pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, 0xFF - alpha);
@@ -149,8 +153,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              } else {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    SCUI_PIXEL_TYPE *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                    uint8_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                    SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                    uint8_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                     uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
                     if (palette != 0 && palette != 0xF)
                     if (palette_table[palette].full == 0x00) {
@@ -178,8 +182,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              if (palette_table[0].full == palette_table[palette_len - 1].full) {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    SCUI_PIXEL_TYPE *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                    uint8_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                    SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                    uint8_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                     uint8_t palette = *src_addr_ofs;
                     alpha = (uint32_t)src_surface->alpha * palette / 0xFF;
                     pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, 0xFF - alpha);
@@ -189,8 +193,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              } else {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    SCUI_PIXEL_TYPE *dst_addr_ofs = dst_addr + (idx_line + dst_clip_v.y) * dst_line + idx_item;
-                    uint8_t *src_addr_ofs = src_addr + (idx_line + src_clip_v.y) * src_line + idx_item;
+                    SCUI_PIXEL_TYPE  *dst_addr_ofs = dst_addr + (idx_line * dst_surface->clip.w + idx_item);
+                    uint8_t *src_addr_ofs = src_addr + (idx_line * src_surface->clip.w + idx_item);
                     uint8_t palette = *src_addr_ofs;
                     if (palette != 0 && palette != 0xFF)
                     if (palette_table[palette].full == 0x00) {
