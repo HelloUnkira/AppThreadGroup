@@ -97,6 +97,14 @@ void scui_widget_list_clip_clear(scui_widget_t *widget)
         }
 }
 
+
+
+
+
+
+
+
+
 /*@brief 控件列表为指定子控件(及其覆盖它的子控件)追加剪切域
  *@param widget     控件实例
  *@param clip       剪切域
@@ -133,7 +141,7 @@ void scui_widget_list_clip_merge(scui_widget_t *widget, scui_area_t *clip, scui_
         scui_handle_t handle = widget->list.child_list[ofs];
         scui_widget_t *child = scui_handle_get(handle);
         /* 不显示的子控件不添加剪切域 */
-        if (!scui_widget_status_is_show(handle))
+        if (!scui_widget_style_is_show(handle))
              continue;
         /* 换算成子控件相对坐标 */
         clip_child.w = child->clip.w;

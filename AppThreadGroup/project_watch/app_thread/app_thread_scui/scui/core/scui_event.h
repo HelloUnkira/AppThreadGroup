@@ -122,8 +122,10 @@ typedef enum {
     scui_event_retval_continue,         /* 继续事件冒泡 */
     scui_event_retval_break,            /* 终止事件冒泡 */
 } scui_event_retval_t;
+
 /* 事件响应回调 */
 typedef scui_event_retval_t (*scui_event_cb_t)(scui_event_t *event);
+
 
 
 /*@brief 事件队列初始化

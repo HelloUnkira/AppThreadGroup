@@ -10,7 +10,7 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 0   /* draw 测试 */
+#if 1   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
@@ -30,6 +30,9 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     color += 1;
     alpha += 1;
     #else
+    
+    static uint8_t count = 0;
+    
     scui_image_unit_t image_unit = {0};
     image_unit.image = scui_handle_get(SCUI_HANDLE_OFFSET_IMAGE + scui_image_prjimage_src_00_theme_01_on_png);
     scui_area_t src_clip = {

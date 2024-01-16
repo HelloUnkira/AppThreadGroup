@@ -21,6 +21,7 @@
 #include "scui_surface.h"       /* 画布 */
 #include "scui_surface_fb.h"    /* 画布帧缓冲 */
 /* draw */
+#include "scui_draw_graph.h"
 #include "scui_draw_basic.h"
 #include "scui_draw_image.h"
 /* misc */
@@ -38,8 +39,13 @@
 #include "scui_source.h"
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_ogz.h"
 #include "scui_widget_list.h"
+#include "scui_widget_event.h"
+#include "scui_widget_ogz.h"
 #include "scui_widget_gc.h"
+/* widget: */
+#include "scui_window.h"
+
+
 
 #endif

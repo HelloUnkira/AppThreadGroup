@@ -76,7 +76,24 @@ typedef struct {
     };
 } scui_color_gradient_t;
 
+typedef enum {
+    scui_alpha_pct0   = 0,
+    scui_alpha_pct10  = 25,
+    scui_alpha_pct20  = 51,
+    scui_alpha_pct30  = 76,
+    scui_alpha_pct40  = 102,
+    scui_alpha_pct50  = 127,
+    scui_alpha_pct60  = 153,
+    scui_alpha_pct70  = 178,
+    scui_alpha_pct80  = 204,
+    scui_alpha_pct90  = 229,
+    scui_alpha_pct100 = 255,
+    scui_alpha_trans  = scui_alpha_pct0,
+    scui_alpha_cover  = scui_alpha_pct100,
+} scui_alpha_val_t;
+
 /*@brief: 设备透明度格式:
+ *        可选值scui_alpha_val_t
  *        固定到[0x00, 0xFF]
  */
 typedef uint8_t scui_alpha_t;

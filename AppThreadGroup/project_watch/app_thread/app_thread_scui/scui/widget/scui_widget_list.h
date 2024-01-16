@@ -29,6 +29,14 @@ void scui_widget_list_child_del(scui_widget_t *widget, scui_handle_t handle);
  */
 void scui_widget_list_clip_clear(scui_widget_t *widget);
 
+
+
+
+
+
+
+
+
 /*@brief 控件列表为指定子控件追加剪切域
  *@param widget     控件实例
  *@param clip       剪切域

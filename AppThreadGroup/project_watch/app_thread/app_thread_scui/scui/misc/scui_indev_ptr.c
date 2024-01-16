@@ -82,7 +82,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_indev_ptr.ptr_last = point;
             scui_indev_ptr.move_cnt = 0;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
-            scui_indev_ptr.cnt_tick  = scui_tick_cnt();
+            scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 检查点击是否连续 */
             if (elapse > SCUI_INDEV_PTR_CLICK_SPAN)
                 scui_indev_ptr.ptr_cnt = 0;
@@ -103,7 +103,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             if (dist_r != 0 && elapse / dist_r >= SCUI_INDEV_PTR_FLING_SPAN)
             if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)
                 scui_indev_ptr.move_cnt++;
-            if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT) {
+            if (dist_r != 0 && scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT) {
                 event.type  = scui_event_ptr_move;
                 event.ptr_s = scui_indev_ptr.ptr_last;
                 event.ptr_e = point;
