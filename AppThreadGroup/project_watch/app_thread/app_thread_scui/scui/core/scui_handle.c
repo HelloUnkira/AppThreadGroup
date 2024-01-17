@@ -64,11 +64,13 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
         return SCUI_HANDLE_SHARE_OFFSET;
     }
     /* 检查是否是静态句柄表中的句柄 */
-    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
-        if (scui_handle_table[ofs].source != NULL)
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+        if (scui_handle_table[ofs].source == NULL)
+            continue;
         if (handle - scui_handle_table[ofs].offset < scui_handle_table[ofs].number) {
             return scui_handle_table[ofs].offset;
         }
+    }
     APP_SYS_LOG_ERROR("handle %u is unknown", handle);
     return SCUI_HANDLE_INVALID;
 }
@@ -121,13 +123,20 @@ void * scui_handle_get(scui_handle_t handle)
             return NULL;
     }
     /* 检查是否是静态句柄表中的句柄 */
-    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
-        if (scui_handle_table[ofs].source != NULL)
-        if (handle - scui_handle_table[ofs].offset < scui_handle_table[ofs].number) {
-            uint32_t idx = handle - scui_handle_table[ofs].offset;
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+        if (scui_handle_table[ofs].source == NULL)
+            continue;
+        uint32_t idx = handle - scui_handle_table[ofs].offset;
+        if (idx < scui_handle_table[ofs].number) {
+            /* 优先进行重映射,如果存在重映射的话 */
+            if (scui_handle_table[ofs].source_remap != NULL)
+            if (scui_handle_table[ofs].source_remap[idx] != NULL)
+                return scui_handle_table[ofs].source_remap[idx];
+            /* 映射到原来的位置,如果需要 */
             APP_SYS_ASSERT(scui_handle_table[ofs].source[idx] != NULL);
             return scui_handle_table[ofs].source[idx];
         }
+    }
     APP_SYS_LOG_ERROR("handle %u is unknown", handle);
     return NULL;
 }
@@ -147,6 +156,40 @@ bool scui_handle_set(scui_handle_t handle, void *source)
         scui_handle_table_share[idx] = source;
         return true;
     }
+    /* 检查是否是静态句柄表中的句柄 */
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+        if (scui_handle_table[ofs].source == NULL)
+            continue;
+        uint32_t idx = handle - scui_handle_table[ofs].offset;
+        if (idx < scui_handle_table[ofs].number) {
+            /* 优先进行重映射,如果存在重映射的话 */
+            if (scui_handle_table[ofs].source_remap != NULL) {
+                scui_handle_table[ofs].source_remap[idx] = source;
+                return true;
+            }
+        }
+    }
     APP_SYS_LOG_ERROR("handle %u is unknown", handle);
+    return false;
+}
+
+/*@brief 句柄是否重映射
+ *@param handle 句柄
+ *@retval 是否重映射
+ */
+bool scui_handle_remap(scui_handle_t handle)
+{
+    /* 检查是否是静态句柄表中的句柄 */
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+        if (scui_handle_table[ofs].source == NULL)
+            continue;
+        uint32_t idx = handle - scui_handle_table[ofs].offset;
+        if (idx < scui_handle_table[ofs].number) {
+            /* 如果存在重映射的话 */
+            if (scui_handle_table[ofs].source_remap != NULL)
+            if (scui_handle_table[ofs].source_remap[idx] != NULL)
+                return true;
+        }
+    }
     return false;
 }

@@ -11,6 +11,18 @@
 
 static scui_indev_key_t scui_indev_key = {.item = {0}};
 
+/*@brief 编码器事件吸收回调
+ */
+static bool scui_event_key_hold_absorb(void *evt_old, void *evt_new)
+{
+    scui_event_t *event_old = evt_old;
+    scui_event_t *event_new = evt_new;
+    
+    /* 将key值转移到它上面: */
+    event_old->key_tick = event_new->key_tick;
+    return true;
+}
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -105,6 +117,7 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                     scui_coord_t elapse = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
                     /* 发送按下事件 */
                     event.type     = scui_event_key_hold,
+                    event.absorb   = scui_event_key_hold_absorb,
                     event.key_tick = elapse,
                     APP_SYS_LOG_INFO("scui_event_key_hold:%d", event.key_tick);
                     scui_event_notify(&event);

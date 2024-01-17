@@ -39,10 +39,9 @@
 #include "scui_source.h"
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_list.h"
 #include "scui_widget_event.h"
+#include "scui_widget_surface.h"
 #include "scui_widget_ogz.h"
-#include "scui_widget_gc.h"
 /* widget: */
 #include "scui_window.h"
 

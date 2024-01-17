@@ -6,11 +6,16 @@
 typedef uint32_t scui_handle_t;
 
 /*@brief 句柄表
+ *       句柄资源重映射表:可选项
+ *       它是一个资源数组,用于承装资源的动态重映射
+ *       如果重映射表存在,句柄优先映射到重映射表之上
+ *       如果重映射表资源为空,再映射到原资源表上
  */
 typedef struct {
-    void        **source;
-    scui_handle_t number;
-    scui_handle_t offset;
+    void        **source;           /* 句柄资源表 */
+    void        **source_remap;     /* 句柄资源重映射表 */
+    scui_handle_t number;           /* 句柄资源表数量 */
+    scui_handle_t offset;           /* 句柄资源表偏移 */
 } scui_handle_table_t;
 
 /*@brief 句柄偏移量,非法句柄,系统句柄
@@ -53,5 +58,11 @@ void * scui_handle_get(scui_handle_t handle);
  *@retval 成功失败
  */
 bool scui_handle_set(scui_handle_t handle, void *source);
+
+/*@brief 句柄是否重映射
+ *@param handle 句柄
+ *@retval 是否重映射
+ */
+bool scui_handle_remap(scui_handle_t handle);
 
 #endif

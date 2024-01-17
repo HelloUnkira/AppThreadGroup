@@ -16,9 +16,13 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
+    if (!layout)
+        *handle = scui_handle_new();
+    
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_window_t));
+    scui_handle_set(*handle, window);
     /* 创建实例 */
-    // scui_widget_create(&window->widget, &maker->widget, layout);
+    scui_widget_create(&window->widget, &maker->widget, *handle);
     /* 窗口创建 */
 }
 

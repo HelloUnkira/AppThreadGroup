@@ -11,6 +11,30 @@
 
 static scui_indev_ptr_t scui_indev_ptr = {0};
 
+/*@brief 编码器事件吸收回调
+ */
+static bool scui_event_ptr_hold_absorb(void *evt_old, void *evt_new)
+{
+    scui_event_t *event_old = evt_old;
+    scui_event_t *event_new = evt_new;
+    
+    /* 将ptr值转移到它上面: */
+    event_old->ptr_tick = event_new->ptr_tick;
+    return true;
+}
+
+/*@brief 编码器事件吸收回调
+ */
+static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
+{
+    scui_event_t *event_old = evt_old;
+    scui_event_t *event_new = evt_new;
+    
+    /* 将key值转移到它上面: */
+    event_old->ptr_e = event_new->ptr_e;
+    return true;
+}
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -104,15 +128,17 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)
                 scui_indev_ptr.move_cnt++;
             if (dist_r != 0 && scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT) {
-                event.type  = scui_event_ptr_move;
-                event.ptr_s = scui_indev_ptr.ptr_last;
-                event.ptr_e = point;
+                event.type   = scui_event_ptr_move;
+                event.absorb = scui_event_ptr_move_absorb,
+                event.ptr_s  = scui_indev_ptr.ptr_last;
+                event.ptr_e  = point;
                 APP_SYS_LOG_INFO("scui_event_ptr_move:%d", dist_r);
                 scui_event_notify(&event);
                 scui_indev_ptr.ptr_last = point;
             }
             /* 发送按下事件 */
             event.type     = scui_event_ptr_hold,
+            event.absorb   = scui_event_ptr_hold_absorb,
             event.ptr_tick = elapse,
             APP_SYS_LOG_INFO("scui_event_ptr_hold:%d", event.ptr_tick);
             scui_event_notify(&event);

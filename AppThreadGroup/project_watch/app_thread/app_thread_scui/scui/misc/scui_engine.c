@@ -57,11 +57,13 @@ void scui_engine_ready(void)
     scui_event_register_custom(scui_event_custom);
     
     scui_handle_table_t table = {0};
+    table.source_remap = NULL;
     /* 句柄表(image) */
     table.offset = SCUI_HANDLE_OFFSET_IMAGE;
     table.source = scui_image_combine_table;
     table.number = app_sys_arr_len(scui_image_combine_table);
     scui_handle_table_register(&table);
+    table.source_remap = NULL;
     
 }
 
