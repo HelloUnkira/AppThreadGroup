@@ -146,6 +146,12 @@ uint32_t scui_event_respond(scui_event_t *event)
 uint32_t scui_event_respond_sched(scui_event_t *event)
 {
     switch (event->type) {
+    case scui_event_draw:
+    case scui_event_refr:
+        scui_widget_event_dispatch(event);
+        APP_SYS_LOG_INFO("");
+        return scui_event_retval_break;
+    
     case scui_event_anima_elapse:
         scui_anima_update();
         return scui_event_retval_break;

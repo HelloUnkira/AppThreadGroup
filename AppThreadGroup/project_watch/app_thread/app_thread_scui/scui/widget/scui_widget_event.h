@@ -35,7 +35,7 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event);
  *@param event 事件
  *@retval 事件状态
  */
-scui_event_retval_t scui_widget_event_paint(scui_event_t *event);
+scui_event_retval_t scui_widget_event_draw(scui_event_t *event);
 
 /*@brief 控件默认事件处理回调
  *@param event 事件

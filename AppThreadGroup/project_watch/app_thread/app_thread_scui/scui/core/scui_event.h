@@ -9,12 +9,11 @@ typedef enum {
     
     /* 调度事件<s> */
     scui_event_sched_s,
-    scui_event_anima_elapse,
+    scui_event_draw,
+    scui_event_refr,
     scui_event_show,
     scui_event_hide,
-    scui_event_refr,
-    scui_event_paint,
-    scui_event_paint_overlay,
+    scui_event_anima_elapse,
     scui_event_scene_focus_get,
     scui_event_scene_focus_lost,
     scui_event_scene_res_load,

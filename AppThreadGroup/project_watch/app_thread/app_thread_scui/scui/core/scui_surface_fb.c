@@ -171,9 +171,9 @@ void scui_surface_draw_routine(void (*draw)(scui_surface_t *surface))
     APP_SYS_LOG_DEBUG("");
     scui_surface_fb_refr_lock();
     APP_SYS_LOG_DEBUG("");
-    scui_surface_fb_refr_notify();
-    APP_SYS_LOG_DEBUG("");
     scui_surface_fb_switch();
+    APP_SYS_LOG_DEBUG("");
+    scui_surface_fb_refr_notify();
 }
 
 /*@brief 刷新画布例程(例)

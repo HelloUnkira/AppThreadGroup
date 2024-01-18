@@ -9,6 +9,39 @@
 #include "app_sys_lib.h"
 #include "scui.h"
 
+/*@brief 控件画布为独立画布
+ *@param widget 控件实例
+ */
+bool scui_widget_surface_only(scui_widget_t *widget)
+{
+    if (widget->surface.pixel == NULL ||
+        widget->surface.pixel == scui_surface_fb_draw()->pixel ||
+        widget->surface.pixel == scui_surface_fb_refr()->pixel)
+        return false;
+    
+    return true;
+}
+
+/*@brief 控件画布为独立画布
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_change(scui_widget_t *widget, scui_surface_t *surface)
+{
+    widget->surface.pixel = surface->pixel;
+    
+    for (uint32_t idx = 0; idx < widget->child_num; idx++)
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
+            scui_handle_t handle = widget->child_list[idx];
+            scui_widget_t *child = scui_handle_get(handle);
+            scui_widget_surface_change(child, surface);
+        }
+}
+
+/*-------------------------------------------------*
+ *separator----------------------------------------*
+ *-------------------------------------------------*/
+
 /*@brief 控件画布在画布绘制纯色区域
  *@param widget   控件实例
  *@param dst_clip 控件绘制区域
@@ -22,7 +55,7 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *dst_clip
         dst_clip  = &dst_surface->clip;
     
     SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
-    scui_draw_area_fill(dst_surface, dst_clip, &pixel, widget->alpha);
+    scui_draw_area_fill(dst_surface, dst_clip, &pixel, widget->surface.alpha);
 }
 
 /*@brief 控件画布在画布绘制图像
@@ -51,6 +84,6 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *dst_clip
     
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
-    scui_draw_image(dst_surface, dst_clip, &image_unit, src_clip, color, widget->alpha);
+    scui_draw_image(dst_surface, dst_clip, &image_unit, src_clip, color, widget->surface.alpha);
     scui_image_cache_unload(&image_unit);
 }

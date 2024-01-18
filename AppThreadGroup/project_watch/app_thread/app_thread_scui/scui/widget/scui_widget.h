@@ -66,7 +66,6 @@ typedef struct {
     uint32_t                child_num;      /* 控件关联属性:子控件数量 */
     scui_area_t             surface_clip;   /* 控件画布(图形上下文):画布剪切域 */
     scui_surface_t          surface;        /* 控件画布(图形上下文):画布实例 */
-    scui_alpha_t            alpha;          /* 控件透明度(默认为全覆盖,填充绘制) */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_t;
@@ -78,7 +77,6 @@ typedef struct {
     scui_area_t             clip;           /* 控件所在父控件区域 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     uint32_t                child_num;      /* 控件关联属性:子控件数量 */
-    scui_alpha_t            alpha;          /* 控件透明度(默认为全覆盖,填充绘制) */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_maker_t;
@@ -96,27 +94,51 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
  */
 void scui_widget_destroy(scui_widget_t *widget, bool parent_way);
 
-
-
-
-
-
-/*@brief 控件列表为指定子控件追加剪切域
- *@param widget     控件实例
- *@param clip       剪切域
- *@param widget_sub 子控件
+/*@brief 控件透明度获取
+ *@param handle 控件句柄
+ *@param alpha  控件透明度
  */
-void scui_widget_clip_merge(scui_widget_t *widget, scui_area_t *clip, scui_widget_t *widget_sub);
+scui_alpha_t scui_widget_alpha_get(scui_handle_t handle);
+
+/*@brief 控件透明度设置
+ *@param handle 控件句柄
+ *@param alpha  控件透明度
+ */
+void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha);
+
+/*@brief 控件图片获取
+ *@param handle 控件句柄
+ *@retval 图片句柄
+ */
+scui_handle_t scui_widget_image_get(scui_handle_t handle);
+
+/*@brief 控件图片设置
+ *@param handle 控件句柄
+ *@param image  图片句柄
+ */
+void scui_widget_image_set(scui_handle_t handle, scui_handle_t image);
+
+/*@brief 控件颜色获取
+ *@param handle 控件句柄
+ *@retval 颜色
+ */
+scui_color_gradient_t scui_widget_color_get(scui_handle_t handle);
+
+/*@brief 控件颜色设置
+ *@param handle 控件句柄
+ *@param color  颜色
+ */
+void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color);
 
 /*@brief 控件清除剪切域
  *@param widget 控件实例
  */
 void scui_widget_clip_clear(scui_widget_t *widget);
 
-
-
-
-
+/*@brief 控件还原剪切域
+ *@param widget 控件实例
+ */
+void scui_widget_clip_reset(scui_widget_t *widget);
 
 /*@brief 控件添加子控件
  *@param handle 控件实例
@@ -130,26 +152,28 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child);
  */
 void scui_widget_child_del(scui_handle_t handle, scui_handle_t child);
 
+/*@brief 绘制控件
+ *@param handle 控件句柄
+ *@param sync   同步绘制
+ */
+void scui_widget_draw(scui_handle_t handle, bool sync);
+
+/*@brief 刷新控件
+ *@param handle 控件句柄
+ *@param sync   同步刷新
+ */
+void scui_widget_refr(scui_handle_t handle, bool sync);
+
 /*@brief 控件树的根控件
  *@param handle 控件句柄
  *@retval 根控件句柄
  */
 scui_handle_t scui_widget_root(scui_handle_t handle);
 
-/*@brief 控件透明度获取
+/*@brief 控件移动到目标坐标
  *@param handle 控件句柄
- *@param alpha  控件透明度
  */
-scui_alpha_t scui_widget_alpha_get(scui_handle_t handle);
-
-/*@brief 控件透明度设置
- *@param handle    控件句柄
- *@param alpha     控件透明度
- *@param recursion 递归
- */
-void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recursion);
-
-
+void scui_widget_move(scui_handle_t handle, scui_point_t *point);
 
 /*@brief 控件显示状态获取
  *@param handle 控件句柄
@@ -157,6 +181,10 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurs
  */
 bool scui_widget_style_is_show(scui_handle_t handle);
 
-
+/*@brief 控件隐藏状态获取
+ *@param handle 控件句柄
+ *@retval 是否隐藏
+ */
+bool scui_widget_style_is_hide(scui_handle_t handle);
 
 #endif
