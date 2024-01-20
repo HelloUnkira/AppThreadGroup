@@ -32,6 +32,7 @@ void scui_anima_elapse(uint32_t elapse)
     
     if (scui_anima_list.elapse >= SCUI_ANIMA_TICK) {
         scui_event_t event = {
+            .object = SCUI_HANDLE_SYSTEM,
             .type   = scui_event_anima_elapse,
             .absorb = scui_anima_elapse_absorb,
         };

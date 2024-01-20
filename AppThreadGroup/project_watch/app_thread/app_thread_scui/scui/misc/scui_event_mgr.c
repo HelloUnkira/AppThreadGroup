@@ -74,13 +74,17 @@ void scui_event_dispatch(void)
  */
 uint32_t scui_event_respond(scui_event_t *event)
 {
-    scui_event_retval_t retval   = scui_event_retval_continue;
-    scui_event_retval_t retval_b = scui_event_retval_continue;
-    scui_event_retval_t retval_r = scui_event_retval_continue;
+    scui_event_retval_t retval = scui_event_retval_continue;
+    
+    APP_SYS_ASSERT(event->object != SCUI_HANDLE_INVALID);
+    
+    /* 系统事件只发给活跃场景 */
+    if (event->object == SCUI_HANDLE_SYSTEM)
+        event->object  = scui_scene_mgr_active_get();
     
     /* 事件前响应回调 */
     if (scui_event_cb_before != NULL) {
-        retval_b = scui_event_cb_before(event);
+        scui_event_retval_t retval_b = scui_event_cb_before(event);
         if (retval_b == scui_event_retval_break)
             return scui_event_retval_break;
     }
@@ -111,7 +115,7 @@ uint32_t scui_event_respond(scui_event_t *event)
     
     /* 事件后响应回调 */
     if (scui_event_cb_after != NULL) {
-        retval_r = scui_event_cb_after(event);
+        scui_event_retval_t retval_r = scui_event_cb_after(event);
         if (retval_r == scui_event_retval_break)
             return scui_event_retval_break;
     }
@@ -146,19 +150,17 @@ uint32_t scui_event_respond(scui_event_t *event)
 uint32_t scui_event_respond_sched(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_draw:
-    case scui_event_refr:
-        scui_widget_event_dispatch(event);
-        APP_SYS_LOG_INFO("");
-        return scui_event_retval_break;
-    
     case scui_event_anima_elapse:
         scui_anima_update();
         return scui_event_retval_break;
-    
     default:
-        return scui_event_retval_default;
+        break;
     }
+    
+    if (scui_widget_event_dispatch(event) == scui_event_retval_break)
+        return scui_event_retval_break;
+    
+    return scui_scene_mgr_event_dispatch(event);
 }
 
 /*@brief 事件响应(ptr)
@@ -167,20 +169,23 @@ uint32_t scui_event_respond_sched(scui_event_t *event)
  */
 uint32_t scui_event_respond_ptr(scui_event_t *event)
 {
-    if (event->type > scui_event_ptr_s &&
-        event->type < scui_event_ptr_e) {
-        APP_SYS_LOG_DEBUG("scui event ptr:");
-        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
-        return scui_event_retval_break;
-    }
+    APP_SYS_LOG_DEBUG("scui event ptr:");
+    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+    return scui_event_retval_break;
     
-    switch (event->type) {
-    default:
-        return scui_event_retval_default;
-    }
+    bool event_filter = false;
+    /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器 */
+    event_filter = event_filter || event->type == scui_event_ptr_hold;
+    event_filter = event_filter || event->type == scui_event_ptr_move;
+    event_filter = event_filter || event->type == scui_event_ptr_fling;
+    
+    if (scui_widget_event_dispatch(event) == scui_event_retval_break && event_filter)
+        return scui_event_retval_break;
+    
+    return scui_scene_mgr_event_dispatch(event);
 }
 
 /*@brief 事件响应(enc)
@@ -189,21 +194,21 @@ uint32_t scui_event_respond_ptr(scui_event_t *event)
  */
 uint32_t scui_event_respond_enc(scui_event_t *event)
 {
-    if (event->type > scui_event_enc_s &&
-        event->type < scui_event_enc_e) {
-        APP_SYS_LOG_DEBUG("scui event enc:");
-        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
-        APP_SYS_LOG_DEBUG("event->enc_diff:%d",  event->enc_diff);
-        return scui_event_retval_break;
-    }
+    APP_SYS_LOG_DEBUG("scui event enc:");
+    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+    APP_SYS_LOG_DEBUG("event->enc_diff:%d",  event->enc_diff);
+    return scui_event_retval_break;
     
-    switch (event->type) {
-    default:
-        return scui_event_retval_default;
-    }
+    bool event_filter = false;
+    /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器 */
+    
+    if (scui_widget_event_dispatch(event) == scui_event_retval_break && event_filter)
+        return scui_event_retval_break;
+    
+    return scui_scene_mgr_event_dispatch(event);
 }
 
 /*@brief 事件响应(key)
@@ -212,24 +217,26 @@ uint32_t scui_event_respond_enc(scui_event_t *event)
  */
 uint32_t scui_event_respond_key(scui_event_t *event)
 {
-    if (event->type > scui_event_key_s &&
-        event->type < scui_event_key_e) {
-        APP_SYS_LOG_DEBUG("scui event key:");
-        APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-        APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-        APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-        APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
-        APP_SYS_LOG_DEBUG("event->key_id:%d",    event->key_id);
-        APP_SYS_LOG_DEBUG("event->key_val:%d",   event->key_val);
-        APP_SYS_LOG_DEBUG("event->key_cnt:%d",   event->key_cnt);
-        APP_SYS_LOG_DEBUG("event->key_tick:%d",  event->key_tick);
-        return scui_event_retval_break;
-    }
+    APP_SYS_LOG_DEBUG("scui event key:");
+    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
+    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
+    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
+    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+    APP_SYS_LOG_DEBUG("event->key_id:%d",    event->key_id);
+    APP_SYS_LOG_DEBUG("event->key_val:%d",   event->key_val);
+    APP_SYS_LOG_DEBUG("event->key_cnt:%d",   event->key_cnt);
+    APP_SYS_LOG_DEBUG("event->key_tick:%d",  event->key_tick);
+    return scui_event_retval_break;
     
-    switch (event->type) {
-    default:
-        return scui_event_retval_default;
-    }
+    bool event_filter = false;
+    /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器 */
+    event_filter = event_filter || event->type == scui_event_key_hold;
+    event_filter = event_filter || event->type == scui_event_key_click;
+    
+    if (scui_widget_event_dispatch(event) == scui_event_retval_break && event_filter)
+        return scui_event_retval_break;
+    
+    return scui_scene_mgr_event_dispatch(event);
 }
 
 /*@brief 事件响应(custom)
@@ -238,7 +245,6 @@ uint32_t scui_event_respond_key(scui_event_t *event)
  */
 uint32_t scui_event_respond_custom(scui_event_t *event)
 {
-    if (scui_event_cb_custom != NULL)
-        return scui_event_cb_custom(event);
-    return scui_event_retval_default;
+    APP_SYS_ASSERT(scui_event_cb_custom != NULL);
+    return scui_event_cb_custom(event);
 }

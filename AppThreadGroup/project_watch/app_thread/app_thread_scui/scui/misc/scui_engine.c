@@ -73,7 +73,6 @@ void scui_engine_execute(void)
 {
     scui_event_wait();
     scui_event_dispatch();
-    scui_anima_update();
 }
 
 /*@biref 设置引擎执行状态

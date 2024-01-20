@@ -96,3 +96,28 @@ void scui_scene_mgr_mix_surface(void)
         scui_widget_draw(handle, true);
     }
 }
+
+/*@brief 场景管理器获得活跃场景句柄
+ *@retval 场景句柄
+ */
+scui_handle_t scui_scene_mgr_active_get(void)
+{
+    return scui_scene_mgr.scene_active;
+}
+
+/*@brief 场景管理器设置活跃场景句柄
+ *@param handle 场景句柄
+ */
+void scui_scene_mgr_active_set(scui_handle_t handle)
+{
+    scui_scene_mgr.scene_active = handle;
+}
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_scene_mgr_event_dispatch(scui_event_t *event)
+{
+    return scui_event_retval_default;
+}

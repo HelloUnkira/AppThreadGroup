@@ -4,6 +4,7 @@
 /* 事件表: */
 typedef enum {
     scui_event_custom_s = scui_event_sys_num,
+    scui_event_custom_all,
     
     /* 自定义事件<s> */
     

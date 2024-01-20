@@ -19,8 +19,9 @@ void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
     scui_widget_t *widget = scui_handle_get(handle);
     APP_SYS_ASSERT(widget != NULL);
     
-    /* 一个事件至多一个响应回调 */
     scui_widget_event_t *event_old = NULL;
+    
+    /* 一个事件至多一个响应回调, 优先匹配对应事件 */
     app_sys_list_dll_ftra(&widget->dl_list, node) {
         event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
         if (event->event == event_old->event &&
@@ -29,6 +30,32 @@ void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
             return;
         }
     }
+    
+    bool event_sched = event->event > scui_event_sched_s &&
+                       event->event < scui_event_sched_e;
+    bool event_ptr = event->event > scui_event_ptr_s &&
+                     event->event < scui_event_ptr_e;
+    bool event_enc = event->event > scui_event_enc_s &&
+                     event->event < scui_event_enc_e;
+    bool event_key = event->event > scui_event_key_s &&
+                     event->event < scui_event_key_e;
+    bool event_custom = event->event > scui_event_custom_s &&
+                        event->event < scui_event_custom_e;
+    
+    /* 一个事件至多一个响应回调, 其次匹配集成事件 */
+    app_sys_list_dll_ftra(&widget->dl_list, node) {
+        event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        if (event->order == event_old->order &&
+           ((event_old->event == scui_event_sched_all && event_sched) ||
+            (event_old->event == scui_event_key_all && event_ptr) ||
+            (event_old->event == scui_event_enc_all && event_enc) ||
+            (event_old->event == scui_event_key_all && event_key) ||
+            (event_old->event == scui_event_custom_all && event_custom))) {
+            event->event_cb = event_old->event_cb;
+            return;
+        }
+    }
+    
     event->event_cb = NULL;
 }
 
@@ -106,8 +133,6 @@ void scui_widget_event_clear(scui_handle_t handle)
     }
 }
 
-
-
 /*@brief 控件默认事件处理回调
  *@param event 事件
  *@retval 事件状态
@@ -125,7 +150,6 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
     scui_widget_event_find(widget->myself, &event_match);
     if (event_match.event_cb != NULL)
         ret = event_match.event_cb(event);
-    
     if (ret == scui_event_retval_break)
         return scui_event_retval_break;
     
@@ -145,76 +169,8 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
     scui_widget_event_find(widget->myself, &event_match);
     if (event_match.event_cb != NULL)
         ret = event_match.event_cb(event);
-    
     if (ret == scui_event_retval_break)
         return scui_event_retval_break;
-    
-    return ret;
-}
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- *@retval 事件状态
- */
-scui_event_retval_t scui_widget_event_draw(scui_event_t *event)
-{
-    scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
-    
-    /* 控件默认绘制只处理背景皮肤 */
-    if (widget->style.trans)
-        return scui_event_retval_continue;
-    
-    /* 有背景图片则优先绘制背景 */
-    /* 没有背景图片则绘制纯色背景 */
-    if (widget->image != SCUI_HANDLE_INVALID)
-        /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
-        scui_widget_surface_draw_image(widget, &widget->surface_clip, widget->image, NULL, widget->color);
-    else
-        scui_widget_surface_draw_color(widget, &widget->surface_clip, widget->color);
-    
-    return scui_event_retval_continue;
-}
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- *@retval 事件状态
- */
-scui_event_retval_t scui_widget_event_default(scui_event_t *event)
-{
-    uint32_t ret = scui_event_retval_continue;
-    scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
-    scui_widget_ogz_t *widget_ogz = scui_widget_ogz_func(widget->type);
-    
-    switch (event->type) {
-    case scui_event_draw: {
-        /* 绘制事件不能被控件响应 */
-        if (!scui_widget_style_is_show(widget->myself))
-            return scui_event_retval_break;
-        /* 绘制事件没有剪切域,忽略 */
-        if (scui_area_empty(&widget->surface_clip))
-            return scui_event_retval_break;
-        
-        if (widget_ogz->event != NULL)
-            ret = widget_ogz->event(event);
-        else
-            ret = scui_widget_event_draw(event);
-        /* 绘制结束后清除剪切域 */
-        scui_widget_clip_clear(widget);
-        break;
-    }
-    case scui_event_language_change: {
-        #if 0
-        /* wait adaptor */
-        #endif
-        break;
-    }
-    default:
-        if (widget_ogz->event != NULL)
-            ret = widget_ogz->event(event);
-        break;
-    }
     
     return ret;
 }
@@ -330,7 +286,74 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         return ret;
     }
     
+    return ret;
+}
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_widget_event_default(scui_event_t *event)
+{
+    uint32_t ret = scui_event_retval_continue;
+    scui_widget_t *widget = scui_handle_get(event->object);
+    APP_SYS_ASSERT(widget != NULL);
     
+    scui_widget_cb_t *widget_cb = scui_widget_cb_link(widget->type);
+    
+    switch (event->type) {
+    case scui_event_draw: {
+        /* 绘制事件不能被控件响应 */
+        if (scui_widget_style_is_hide(widget->myself))
+            return scui_event_retval_break;
+        /* 绘制事件没有剪切域,忽略 */
+        if (scui_area_empty(&widget->surface_clip))
+            return scui_event_retval_break;
+        
+        if (widget_cb->event != NULL)
+            ret = widget_cb->event(event);
+        else
+            ret = scui_widget_event_draw(event);
+        
+        scui_widget_clip_clear(widget);
+        break;
+    }
+    case scui_event_lang_change: {
+        #if 0
+        /* wait adaptor */
+        #endif
+        break;
+    }
+    default:
+        if (widget_cb->event != NULL)
+            ret = widget_cb->event(event);
+        
+        break;
+    }
     
     return ret;
+}
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_widget_event_draw(scui_event_t *event)
+{
+    scui_widget_t *widget = scui_handle_get(event->object);
+    APP_SYS_ASSERT(widget != NULL);
+    
+    /* 控件默认绘制只处理背景皮肤 */
+    if (widget->style.trans)
+        return scui_event_retval_continue;
+    
+    /* 有背景图片则优先绘制背景 */
+    /* 没有背景图片则绘制纯色背景 */
+    if (widget->image != SCUI_HANDLE_INVALID)
+        /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
+        scui_widget_surface_draw_image(widget, &widget->surface_clip, widget->image, NULL, widget->color);
+    else
+        scui_widget_surface_draw_color(widget, &widget->surface_clip, widget->color);
+    
+    return scui_event_retval_continue;
 }

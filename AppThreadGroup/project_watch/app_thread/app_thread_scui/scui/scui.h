@@ -25,10 +25,12 @@
 #include "scui_draw_image.h"
 /* widget: */
 #include "scui_widget.h"
+#include "scui_widget_cb.h"
 #include "scui_widget_event.h"
 #include "scui_widget_surface.h"
-#include "scui_widget_ogz.h"
 #include "scui_window.h"
+#include "scui_custom.h"
+#include "scui_scroll.h"
 /* misc */
 #include "scui_math.h"          /* 数学库 */
 #include "scui_indev.h"         /* 输入设备 */

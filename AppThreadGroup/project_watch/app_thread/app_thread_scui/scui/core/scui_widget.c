@@ -13,10 +13,21 @@
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
+ *@param layout 通过布局
  */
-void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t handle)
+void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    APP_SYS_ASSERT(widget != NULL && maker != NULL && handle != SCUI_HANDLE_INVALID);
+    APP_SYS_ASSERT(widget != NULL && maker != NULL && *handle != SCUI_HANDLE_INVALID);
+    
+    APP_SYS_ASSERT(maker->clip.w != 0);
+    APP_SYS_ASSERT(maker->clip.h != 0);
+    
+    /* 非布局则句柄为动态创建 */
+    if (!layout)
+        *handle = scui_handle_new();
+    
+    /* 为句柄设置映射 */
+    scui_handle_set(*handle, widget);
     
     /* 控件使用maker构造 */
     if (maker->parent != SCUI_HANDLE_INVALID)
@@ -27,7 +38,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     widget->type   = maker->type;
     widget->style  = maker->style;
     widget->clip   = maker->clip;
-    widget->myself = handle;
+    widget->myself = *handle;
     widget->parent = maker->parent;
     
     /* 子控件的坐标区域是相对父控件 */
@@ -54,7 +65,11 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
             widget->child_list[idx] = SCUI_HANDLE_INVALID;
     }
     
-    /* 控件默认为完全不透明 */
+    scui_widget_t *widget_root = NULL;
+    scui_handle_t  handle_root = scui_widget_root(widget->myself);
+    widget_root = scui_handle_get(handle_root);
+    /* 画布的映射是根控件, 控件画布默认为完全不透明 */
+    widget->surface.pixel = widget_root->surface.pixel;
     widget->surface.alpha = scui_alpha_cover;
     widget->surface_clip = (scui_area_t){0};
     widget->surface.clip = (scui_area_t){0};

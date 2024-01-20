@@ -137,9 +137,9 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_indev_ptr.ptr_last = point;
             }
             /* 发送按下事件 */
-            event.type     = scui_event_ptr_hold,
-            event.absorb   = scui_event_ptr_hold_absorb,
-            event.ptr_tick = elapse,
+            event.type     = scui_event_ptr_hold;
+            event.absorb   = scui_event_ptr_hold_absorb;
+            event.ptr_tick = elapse;
             APP_SYS_LOG_INFO("scui_event_ptr_hold:%d", event.ptr_tick);
             scui_event_notify(&event);
             return;

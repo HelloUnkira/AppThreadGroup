@@ -40,7 +40,7 @@ void scui_indev_key_notify(scui_indev_data_t *data)
     bool key_id_not_find = true;
     for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         if (scui_indev_key.item[idx].key_id == data->key.key_id) {
-            key_id_not_find = false;
+            key_id_not_find = false;
             break;
         }
     if (key_id_not_find)
@@ -116,9 +116,9 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                     scui_indev_key.item[idx].state  = data->state;
                     scui_coord_t elapse = scui_tick_cnt() - scui_indev_key.item[idx].cnt_tick;
                     /* 发送按下事件 */
-                    event.type     = scui_event_key_hold,
-                    event.absorb   = scui_event_key_hold_absorb,
-                    event.key_tick = elapse,
+                    event.type     = scui_event_key_hold;
+                    event.absorb   = scui_event_key_hold_absorb;
+                    event.key_tick = elapse;
                     APP_SYS_LOG_INFO("scui_event_key_hold:%d", event.key_tick);
                     scui_event_notify(&event);
                     return;

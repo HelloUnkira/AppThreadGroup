@@ -3,13 +3,12 @@
 
 /* 控件类型: */
 typedef enum {
-    /* 基础控件 */
-    scui_widget_type_window,    /* 窗口控件(根控件) */
-    scui_widget_type_custom,    /* 自定义控件(绘制图形) */
+    scui_widget_type_window,    /* 窗口控件(仅根控件) */
     scui_widget_type_scroll,    /* 可滚动控件 */
+    scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_image,     /* 图片控件 */
     scui_widget_type_label,     /* 文本控件 */
-    /* 扩展控件 */
+    /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;
 
@@ -85,8 +84,9 @@ typedef struct {
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
+ *@param layout 通过布局
  */
-void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t handle);
+void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 控件销毁
  *@param widget     控件实例
