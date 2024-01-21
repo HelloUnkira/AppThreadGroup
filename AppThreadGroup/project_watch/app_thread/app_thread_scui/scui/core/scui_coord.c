@@ -2,11 +2,9 @@
  *    坐标点运算
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@breif 转化区域描述方式(主->从)
@@ -54,10 +52,10 @@ bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     scui_area_m_to_s(area1);
     scui_area_m_to_s(area2);
-    area->x1 = app_sys_max(area1->x1, area2->x1);
-    area->y1 = app_sys_max(area1->y1, area2->y1);
-    area->x2 = app_sys_min(area1->x2, area2->x2);
-    area->y2 = app_sys_min(area1->y2, area2->y2);
+    area->x1 = scui_max(area1->x1, area2->x1);
+    area->y1 = scui_max(area1->y1, area2->y1);
+    area->x2 = scui_min(area1->x2, area2->x2);
+    area->y2 = scui_min(area1->y2, area2->y2);
     scui_area_s_to_m(area2);
     scui_area_s_to_m(area1);
     scui_area_s_to_m(area);
@@ -74,10 +72,10 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     scui_area_m_to_s(area1);
     scui_area_m_to_s(area2);
-    area->x1 = app_sys_min(area1->x1, area2->x1);
-    area->y1 = app_sys_min(area1->y1, area2->y1);
-    area->x2 = app_sys_max(area1->x2, area2->x2);
-    area->y2 = app_sys_max(area1->y2, area2->y2);
+    area->x1 = scui_min(area1->x1, area2->x1);
+    area->y1 = scui_min(area1->y1, area2->y1);
+    area->x2 = scui_max(area1->x2, area2->x2);
+    area->y2 = scui_max(area1->y2, area2->y2);
     scui_area_s_to_m(area2);
     scui_area_s_to_m(area1);
     scui_area_s_to_m(area);

@@ -2,11 +2,9 @@
  *    事件管理器
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /* 引擎有一个全局默认的先响应和后响应回调 */
@@ -63,7 +61,7 @@ void scui_event_dispatch(void)
     while (scui_event_num() != 0) {
         /* 按顺序提取出一个事件 */
         retval = scui_event_dequeue(&event, false);
-        APP_SYS_ASSERT(retval);
+        SCUI_ASSERT(retval);
         scui_event_respond(&event);
     }
 }
@@ -76,7 +74,7 @@ uint32_t scui_event_respond(scui_event_t *event)
 {
     scui_event_retval_t retval = scui_event_retval_continue;
     
-    APP_SYS_ASSERT(event->object != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     
     /* 系统事件只发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
@@ -124,22 +122,22 @@ uint32_t scui_event_respond(scui_event_t *event)
         return retval;
     
     /* 参考事件区间 */
-    APP_SYS_LOG_ERROR("scui_event_sched_s:%u", scui_event_sched_s);
-    APP_SYS_LOG_ERROR("scui_event_sched_e:%u", scui_event_sched_e);
-    APP_SYS_LOG_ERROR("scui_event_ptr_s:%u", scui_event_ptr_s);
-    APP_SYS_LOG_ERROR("scui_event_ptr_e:%u", scui_event_ptr_e);
-    APP_SYS_LOG_ERROR("scui_event_enc_s:%u", scui_event_enc_s);
-    APP_SYS_LOG_ERROR("scui_event_enc_e:%u", scui_event_enc_e);
-    APP_SYS_LOG_ERROR("scui_event_key_s:%u", scui_event_key_s);
-    APP_SYS_LOG_ERROR("scui_event_key_e:%u", scui_event_key_e);
-    APP_SYS_LOG_ERROR("scui_event_custom_s:%u", scui_event_custom_s);
-    APP_SYS_LOG_ERROR("scui_event_custom_e:%u", scui_event_custom_e);
+    SCUI_LOG_ERROR("scui_event_sched_s:%u", scui_event_sched_s);
+    SCUI_LOG_ERROR("scui_event_sched_e:%u", scui_event_sched_e);
+    SCUI_LOG_ERROR("scui_event_ptr_s:%u", scui_event_ptr_s);
+    SCUI_LOG_ERROR("scui_event_ptr_e:%u", scui_event_ptr_e);
+    SCUI_LOG_ERROR("scui_event_enc_s:%u", scui_event_enc_s);
+    SCUI_LOG_ERROR("scui_event_enc_e:%u", scui_event_enc_e);
+    SCUI_LOG_ERROR("scui_event_key_s:%u", scui_event_key_s);
+    SCUI_LOG_ERROR("scui_event_key_e:%u", scui_event_key_e);
+    SCUI_LOG_ERROR("scui_event_custom_s:%u", scui_event_custom_s);
+    SCUI_LOG_ERROR("scui_event_custom_e:%u", scui_event_custom_e);
     /* 未定义事件响应 */
-    APP_SYS_LOG_ERROR("catch unknown event:");
-    APP_SYS_LOG_ERROR("event->type:%u",     event->type);
-    APP_SYS_LOG_ERROR("event->style:%u",    event->style);
-    APP_SYS_LOG_ERROR("event->object:%u",   event->object);
-    APP_SYS_LOG_ERROR("event->priority:%u", event->priority);
+    SCUI_LOG_ERROR("catch unknown event:");
+    SCUI_LOG_ERROR("event->type:%u",     event->type);
+    SCUI_LOG_ERROR("event->style:%u",    event->style);
+    SCUI_LOG_ERROR("event->object:%u",   event->object);
+    SCUI_LOG_ERROR("event->priority:%u", event->priority);
     return scui_event_retval_break;
 }
 
@@ -169,11 +167,11 @@ uint32_t scui_event_respond_sched(scui_event_t *event)
  */
 uint32_t scui_event_respond_ptr(scui_event_t *event)
 {
-    APP_SYS_LOG_DEBUG("scui event ptr:");
-    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
+    SCUI_LOG_DEBUG("scui event ptr:");
+    SCUI_LOG_DEBUG("event->object:%d",    event->object);
+    SCUI_LOG_DEBUG("event->type:%d",      event->type);
+    SCUI_LOG_DEBUG("event->style:%d",     event->style);
+    SCUI_LOG_DEBUG("event->priority:%d",  event->priority);
     return scui_event_retval_break;
     
     bool event_filter = false;
@@ -194,12 +192,12 @@ uint32_t scui_event_respond_ptr(scui_event_t *event)
  */
 uint32_t scui_event_respond_enc(scui_event_t *event)
 {
-    APP_SYS_LOG_DEBUG("scui event enc:");
-    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
-    APP_SYS_LOG_DEBUG("event->enc_diff:%d",  event->enc_diff);
+    SCUI_LOG_DEBUG("scui event enc:");
+    SCUI_LOG_DEBUG("event->object:%d",    event->object);
+    SCUI_LOG_DEBUG("event->type:%d",      event->type);
+    SCUI_LOG_DEBUG("event->style:%d",     event->style);
+    SCUI_LOG_DEBUG("event->priority:%d",  event->priority);
+    SCUI_LOG_DEBUG("event->enc_diff:%d",  event->enc_diff);
     return scui_event_retval_break;
     
     bool event_filter = false;
@@ -217,15 +215,15 @@ uint32_t scui_event_respond_enc(scui_event_t *event)
  */
 uint32_t scui_event_respond_key(scui_event_t *event)
 {
-    APP_SYS_LOG_DEBUG("scui event key:");
-    APP_SYS_LOG_DEBUG("event->object:%d",    event->object);
-    APP_SYS_LOG_DEBUG("event->type:%d",      event->type);
-    APP_SYS_LOG_DEBUG("event->style:%d",     event->style);
-    APP_SYS_LOG_DEBUG("event->priority:%d",  event->priority);
-    APP_SYS_LOG_DEBUG("event->key_id:%d",    event->key_id);
-    APP_SYS_LOG_DEBUG("event->key_val:%d",   event->key_val);
-    APP_SYS_LOG_DEBUG("event->key_cnt:%d",   event->key_cnt);
-    APP_SYS_LOG_DEBUG("event->key_tick:%d",  event->key_tick);
+    SCUI_LOG_DEBUG("scui event key:");
+    SCUI_LOG_DEBUG("event->object:%d",    event->object);
+    SCUI_LOG_DEBUG("event->type:%d",      event->type);
+    SCUI_LOG_DEBUG("event->style:%d",     event->style);
+    SCUI_LOG_DEBUG("event->priority:%d",  event->priority);
+    SCUI_LOG_DEBUG("event->key_id:%d",    event->key_id);
+    SCUI_LOG_DEBUG("event->key_val:%d",   event->key_val);
+    SCUI_LOG_DEBUG("event->key_cnt:%d",   event->key_cnt);
+    SCUI_LOG_DEBUG("event->key_tick:%d",  event->key_tick);
     return scui_event_retval_break;
     
     bool event_filter = false;
@@ -245,6 +243,6 @@ uint32_t scui_event_respond_key(scui_event_t *event)
  */
 uint32_t scui_event_respond_custom(scui_event_t *event)
 {
-    APP_SYS_ASSERT(scui_event_cb_custom != NULL);
+    SCUI_ASSERT(scui_event_cb_custom != NULL);
     return scui_event_cb_custom(event);
 }

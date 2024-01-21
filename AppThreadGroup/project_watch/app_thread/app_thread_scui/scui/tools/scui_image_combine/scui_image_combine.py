@@ -63,8 +63,6 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     scui_image_combine_h.write('#define SCUI_IMAGE_COMBINE_H\n\n')
     scui_image_combine_h.write('/*一个通过scui_image_combine脚本生成的image表\n */\n\n')
     scui_image_combine_c.write('/*一个通过scui_image_combine脚本生成的image表\n */\n\n')
-    scui_image_combine_c.write('#include \"app_ext_lib.h\"\n')
-    scui_image_combine_c.write('#include \"app_sys_lib.h\"\n')
     scui_image_combine_c.write('#include \"scui.h\"\n\n')
     # offset
     pixel_ofs_raw = 0

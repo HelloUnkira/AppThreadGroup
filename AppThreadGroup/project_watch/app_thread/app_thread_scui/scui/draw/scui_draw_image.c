@@ -2,11 +2,9 @@
  *    图像绘制
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 区域图像绘制(可以使用DMA2D-blend加速优化)
@@ -21,8 +19,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                      scui_image_unit_t *image_unit,  scui_area_t *src_clip,
                      scui_color_gradient_t color,    scui_alpha_t alpha)
 {
-    APP_SYS_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    APP_SYS_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);
     
     scui_area_t image_clip = {
         .x = 0, .w = image_unit->image->pixel.width,
@@ -46,8 +44,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     scui_area_inter(&src_clip_v, src_area, src_clip);
     
     scui_area_t draw_area = {
-        .w = app_sys_min(dst_clip_v.w, src_clip_v.w),
-        .h = app_sys_min(dst_clip_v.h, src_clip_v.h),
+        .w = scui_min(dst_clip_v.w, src_clip_v.w),
+        .h = scui_min(dst_clip_v.h, src_clip_v.h),
     };
     
     if (scui_area_empty(&draw_area))
@@ -72,10 +70,10 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                 pixel = *(SCUI_PIXEL_TYPE *)&src_addr_ofs->ch;
                 pixel = scui_pixel_mix_with_alpha(&pixel, alpha, dst_addr_ofs, scui_alpha_cover - alpha);
                 // pixel = scui_pixel_blend_with_alpha(&pixel, alpha, dst_addr_ofs, dst_surface->alpha);
-                app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                 // 断言检查,正常不使用
-                APP_SYS_ASSERT(dst_ofs >= dst_addr && dst_ofs - dst_addr <= dst_surface->clip.w * dst_surface->clip.h * SCUI_PIXEL_SIZE);
-                APP_SYS_ASSERT(src_ofs >= src_addr && src_ofs - src_addr <= src_surface->clip.w * src_surface->clip.h * 3);
+                SCUI_ASSERT(dst_ofs >= dst_addr && dst_ofs - dst_addr <= dst_surface->clip.w * dst_surface->clip.h * SCUI_PIXEL_SIZE);
+                SCUI_ASSERT(src_ofs >= src_addr && src_ofs - src_addr <= src_surface->clip.w * src_surface->clip.h * 3);
             }
             return;
         }
@@ -92,10 +90,10 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                 pixel = *(SCUI_PIXEL_TYPE *)&src_addr_ofs->ch;
                 pixel = scui_pixel_mix_with_alpha(&pixel, alpha, dst_addr_ofs, scui_alpha_cover - alpha);
                 // pixel = scui_pixel_blend_with_alpha(&pixel, alpha, dst_addr_ofs, dst_surface->alpha);
-                app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                 // 断言检查,正常不使用
-                APP_SYS_ASSERT(dst_ofs >= dst_addr && dst_ofs - dst_addr <= dst_surface->clip.w * dst_surface->clip.h * SCUI_PIXEL_SIZE);
-                APP_SYS_ASSERT(src_ofs >= src_addr && src_ofs - src_addr <= src_surface->clip.w * src_surface->clip.h * 4);
+                SCUI_ASSERT(dst_ofs >= dst_addr && dst_ofs - dst_addr <= dst_surface->clip.w * dst_surface->clip.h * SCUI_PIXEL_SIZE);
+                SCUI_ASSERT(src_ofs >= src_addr && src_ofs - src_addr <= src_surface->clip.w * src_surface->clip.h * 4);
             }
             return;
         }
@@ -125,7 +123,7 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                     alpha = (uint32_t)src_surface->alpha * palette * 0x11 / scui_alpha_cover;
                     pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
                     // pixel = scui_pixel_blend_with_alpha(&palette_table[0], alpha, dst_addr_ofs, dst_surface->alpha);
-                    app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                    scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                  }
              } else {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -145,7 +143,7 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                     }
                     pixel = scui_pixel_mix_with_alpha(&palette_table[palette], src_surface->alpha, dst_addr_ofs, scui_alpha_cover - src_surface->alpha);
                     // pixel = scui_pixel_blend_with_alpha(&palette_table[palette], src_surface->alpha, dst_addr_ofs, dst_surface->alpha);
-                    app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                    scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                  }
              }
          }
@@ -170,7 +168,7 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                     alpha = (uint32_t)src_surface->alpha * palette / scui_alpha_cover;
                     pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
                     // pixel = scui_pixel_blend_with_alpha(&palette_table[0], alpha, dst_addr_ofs, dst_surface->alpha);
-                    app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                    scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                  }
              } else {
                  for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -190,7 +188,7 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                     }
                     pixel = scui_pixel_mix_with_alpha(&palette_table[palette], src_surface->alpha, dst_addr_ofs, scui_alpha_cover - src_surface->alpha);
                     // pixel = scui_pixel_blend_with_alpha(&palette_table[palette], src_surface->alpha, dst_addr_ofs, dst_surface->alpha);
-                    app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+                    scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                  }
              }
          }
@@ -200,7 +198,7 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_rgb565) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_rgb888)) {
         scui_draw_area_blend(dst_surface, dst_clip, &image_surface, src_clip);
-        APP_SYS_LOG_INFO("image pixel blend");
+        SCUI_LOG_INFO("image pixel blend");
         /* 不应该支持这种条件,有损性能 */
         return;
     }
@@ -209,23 +207,23 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     /* 这个很慢很慢(不应该支持这种条件,有损性能), 除非硬件支持, 建议对齐平台支持 */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_rgb888) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_rgb565))
-        APP_SYS_LOG_WARN("image pixel copy too slow");
+        SCUI_LOG_WARN("image pixel copy too slow");
     
     /* image blend: */
     /* 这个很慢很慢(不应该支持这种条件,有损性能), 除非硬件支持, 建议对齐平台支持 */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_argb8888) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_argb8565))
-        APP_SYS_LOG_WARN("image pixel copy too slow");
+        SCUI_LOG_WARN("image pixel copy too slow");
     
     /* image cover:(调色板) */
     /* 这个很慢很慢(不应该支持这种条件,有损性能), 除非硬件支持, 建议对齐平台支持 */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_p8) ||
         (SCUI_PIXEL_FORMAT == scui_pixel_format_rgb888 && image_unit->image->format == scui_image_format_p4))
-        APP_SYS_LOG_WARN("image pixel copy too slow");
+        SCUI_LOG_WARN("image pixel copy too slow");
     
-    APP_SYS_LOG_ERROR("image can't support");
-    APP_SYS_LOG_ERROR("pixel format:%d", SCUI_PIXEL_FORMAT);
-    APP_SYS_LOG_ERROR("image format:%d", image_unit->image->format);
+    SCUI_LOG_ERROR("image can't support");
+    SCUI_LOG_ERROR("pixel format:%d", SCUI_PIXEL_FORMAT);
+    SCUI_LOG_ERROR("image format:%d", image_unit->image->format);
 }
 
 /*@brief 区域图像缩放(可以使用DMA2D加速优化)

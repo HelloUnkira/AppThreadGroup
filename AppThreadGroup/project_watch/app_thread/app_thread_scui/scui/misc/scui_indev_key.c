@@ -2,11 +2,9 @@
  *    输入设备事件
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 static scui_indev_key_t scui_indev_key = {.item = {0}};
@@ -31,11 +29,11 @@ void scui_indev_key_notify(scui_indev_data_t *data)
     if (data->key.key_id == -1)
         return;
     
-    APP_SYS_LOG_DEBUG("tick:%u", scui_tick_cnt());
-    APP_SYS_LOG_DEBUG("type:%d",     data->type);
-    APP_SYS_LOG_DEBUG("state:%d",    data->state);
-    APP_SYS_LOG_DEBUG("key_id:%d",   data->key.key_id);
-    APP_SYS_LOG_DEBUG("key_val:%d",  data->key.key_val);
+    SCUI_LOG_DEBUG("tick:%u", scui_tick_cnt());
+    SCUI_LOG_DEBUG("type:%d",     data->type);
+    SCUI_LOG_DEBUG("state:%d",    data->state);
+    SCUI_LOG_DEBUG("key_id:%d",   data->key.key_id);
+    SCUI_LOG_DEBUG("key_val:%d",  data->key.key_val);
     
     bool key_id_not_find = true;
     for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
@@ -51,11 +49,11 @@ void scui_indev_key_notify(scui_indev_data_t *data)
             break;
         }
     if (key_id_not_find) {
-        APP_SYS_LOG_ERROR("key id is too much:");
-        APP_SYS_LOG_ERROR("key_id:%d", data->key.key_id);
+        SCUI_LOG_ERROR("key id is too much:");
+        SCUI_LOG_ERROR("key_id:%d", data->key.key_id);
         for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
-            APP_SYS_LOG_ERROR("key_id:%d", scui_indev_key.item[idx].key_id);
-        APP_SYS_ASSERT(false);
+            SCUI_LOG_ERROR("key_id:%d", scui_indev_key.item[idx].key_id);
+        SCUI_ASSERT(false);
     }
     
     /* 如果命中按键号,直接处理 */
@@ -82,14 +80,14 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                     if (elapse < SCUI_INDEV_KEY_CLICK) {
                         event.type    = scui_event_key_click;
                         event.key_cnt = scui_indev_key.item[idx].key_cnt;
-                        APP_SYS_LOG_INFO("scui_event_key_click:%d", event.key_cnt);
+                        SCUI_LOG_INFO("scui_event_key_click:%d", event.key_cnt);
                         scui_event_notify(&event);
                     }
                     scui_indev_key.item[idx].cnt_tick = scui_tick_cnt();
                     /* 发送抬起事件 */
                     event.type    = scui_event_key_up;
                     event.key_cnt = scui_indev_key.item[idx].key_cnt;
-                    APP_SYS_LOG_INFO("scui_event_key_up:%d", event.key_cnt);
+                    SCUI_LOG_INFO("scui_event_key_up:%d", event.key_cnt);
                     scui_event_notify(&event);
                     return;
                 }
@@ -107,7 +105,7 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                     /* 发送按下事件 */
                     event.type     = scui_event_key_down;
                     event.key_tick = elapse;
-                    APP_SYS_LOG_INFO("scui_event_key_down:%d", event.key_tick);
+                    SCUI_LOG_INFO("scui_event_key_down:%d", event.key_tick);
                     scui_event_notify(&event);
                     return;
                 }
@@ -119,7 +117,7 @@ void scui_indev_key_notify(scui_indev_data_t *data)
                     event.type     = scui_event_key_hold;
                     event.absorb   = scui_event_key_hold_absorb;
                     event.key_tick = elapse;
-                    APP_SYS_LOG_INFO("scui_event_key_hold:%d", event.key_tick);
+                    SCUI_LOG_INFO("scui_event_key_hold:%d", event.key_tick);
                     scui_event_notify(&event);
                     return;
                 }

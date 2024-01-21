@@ -2,11 +2,9 @@
  *    图像源
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /* 图片资源在代码空间中,一般调试使用 */
@@ -44,11 +42,11 @@ void scui_image_src_load(scui_image_unit_t *image_unit)
                                   image_unit->image->pixel.size_raw,
                                   image_unit->image->pixel.size_mem);
     
-    APP_SYS_ASSERT(ret == image_unit->image->pixel.size_mem);
+    SCUI_ASSERT(ret == image_unit->image->pixel.size_mem);
     #endif
     
     #else
-    APP_SYS_ASSERT(false);
+    SCUI_ASSERT(false);
     #endif
 }
 

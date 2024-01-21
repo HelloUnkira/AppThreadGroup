@@ -3,11 +3,9 @@
  *    颜色,透明度,像素,画布
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 颜色值格式转换
@@ -83,7 +81,7 @@ scui_alpha_t scui_alpha_by_percent(uint8_t percent)
     if (percent >= 100)
         return 0xFF;
     
-    return (scui_alpha_t)app_sys_map((uint16_t)percent, 0, 100, 0x00, 0xFF);
+    return (scui_alpha_t)scui_map((uint16_t)percent, 0, 100, 0x00, 0xFF);
 }
 
 /*@brief 上层颜色值转为设备颜色值
@@ -134,7 +132,7 @@ SCUI_PIXEL_TYPE scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha
 SCUI_PIXEL_TYPE scui_pixel_mix_with_alpha(SCUI_PIXEL_TYPE *pixel_1, scui_alpha_t alpha_1,
                                           SCUI_PIXEL_TYPE *pixel_2, scui_alpha_t alpha_2)
 {
-    APP_SYS_ASSERT(alpha_1 + alpha_2 == 0xFF);
+    SCUI_ASSERT(alpha_1 + alpha_2 == 0xFF);
     
     return (SCUI_PIXEL_TYPE){
         .ch.r = ((uint16_t)pixel_1->ch.r * alpha_1 + (uint16_t)pixel_2->ch.r * alpha_2) / 0xFF,

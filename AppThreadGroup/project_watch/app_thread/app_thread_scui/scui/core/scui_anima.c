@@ -2,11 +2,9 @@
  *    简易动画
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /* 动画实例句柄列表 */
@@ -139,7 +137,7 @@ void scui_anima_update(void)
 void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
 {
     if (anima == NULL || handle == NULL) {
-        APP_SYS_LOG_ERROR("invalid args");
+        SCUI_LOG_ERROR("invalid args");
         return;
     }
     
@@ -171,11 +169,11 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     }
     
     /* 动画实例过多 */
-    APP_SYS_LOG_ERROR("anima too much:");
+    SCUI_LOG_ERROR("anima too much:");
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID) {
             anima = scui_handle_get(scui_anima_list.list[idx]);
-            APP_SYS_LOG_ERROR("expired:%p, peroid:%u, reload:%u",
+            SCUI_LOG_ERROR("expired:%p, peroid:%u, reload:%u",
                               anima->expired, anima->peroid, anima->reload);
         }
 }
@@ -186,7 +184,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
 void scui_anima_destroy(scui_handle_t handle)
 {
     if (handle == SCUI_HANDLE_INVALID) {
-        APP_SYS_LOG_ERROR("invalid args");
+        SCUI_LOG_ERROR("invalid args");
         return;
     }
     
@@ -200,7 +198,7 @@ void scui_anima_destroy(scui_handle_t handle)
         }
     
     /* 句柄实例错误 */
-    APP_SYS_ASSERT(false);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 开始动画
@@ -209,7 +207,7 @@ void scui_anima_destroy(scui_handle_t handle)
 void scui_anima_start(scui_handle_t handle)
 {
     if (handle == SCUI_HANDLE_INVALID) {
-        APP_SYS_LOG_ERROR("invalid args");
+        SCUI_LOG_ERROR("invalid args");
         return;
     }
     
@@ -222,7 +220,7 @@ void scui_anima_start(scui_handle_t handle)
         }
     
     /* 句柄实例错误 */
-    APP_SYS_ASSERT(false);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 结束动画
@@ -231,7 +229,7 @@ void scui_anima_start(scui_handle_t handle)
 void scui_anima_stop(scui_handle_t handle)
 {
     if (handle == SCUI_HANDLE_INVALID) {
-        APP_SYS_LOG_ERROR("invalid args");
+        SCUI_LOG_ERROR("invalid args");
         return;
     }
     
@@ -243,7 +241,7 @@ void scui_anima_stop(scui_handle_t handle)
         }
     
     /* 句柄实例错误 */
-    APP_SYS_ASSERT(false);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 动画是否运行
@@ -253,7 +251,7 @@ void scui_anima_stop(scui_handle_t handle)
 bool scui_anima_running(scui_handle_t handle)
 {
     if (handle == SCUI_HANDLE_INVALID) {
-        APP_SYS_LOG_ERROR("invalid args");
+        SCUI_LOG_ERROR("invalid args");
         return false;
     }
     
@@ -264,7 +262,7 @@ bool scui_anima_running(scui_handle_t handle)
         }
     
     /* 句柄实例错误 */
-    APP_SYS_ASSERT(false);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 动画行程回调
@@ -290,7 +288,7 @@ uint32_t scui_anima_path_linear(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_ANIMA_RES_COF] */
-    uint32_t step = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_ANIMA_RES_COF);
+    uint32_t step = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_ANIMA_RES_COF);
     
     uint32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
@@ -308,7 +306,7 @@ uint32_t scui_anima_path_ease_in(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
     uint32_t step = scui_bezier3(time, 0, 50, 100, SCUI_BEZIER_VAL_MAX);
     
     uint32_t value_c = 0;
@@ -327,7 +325,7 @@ uint32_t scui_anima_path_ease_out(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
     uint32_t step = scui_bezier3(time, 0, 900, 950, SCUI_BEZIER_VAL_MAX);
     
     uint32_t value_c = 0;
@@ -346,7 +344,7 @@ uint32_t scui_anima_path_ease_in_out(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
     uint32_t step = scui_bezier3(time, 0, 50, 952, SCUI_BEZIER_VAL_MAX);
     
     uint32_t value_c = 0;
@@ -365,7 +363,7 @@ uint32_t scui_anima_path_overshoot(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
     uint32_t step = scui_bezier3(time, 0, 1000, 1300, SCUI_BEZIER_VAL_MAX);
     
     uint32_t value_c = 0;
@@ -384,7 +382,7 @@ uint32_t scui_anima_path_bounce(void *instance)
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = app_sys_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
     uint32_t diff = anima->value_e - anima->value_s;
     
     /* 3反弹有5个部分:3个向下和2个向上,一部分是t/5长 */

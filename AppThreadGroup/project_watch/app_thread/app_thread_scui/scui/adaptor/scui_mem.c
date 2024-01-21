@@ -2,11 +2,9 @@
  *    简要的内存分配适配模组
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 #if SCUI_MEM_RECORD_CHECK
@@ -41,7 +39,7 @@ static bool scui_mem_record_item_add(scui_mem_record_item_t item)
  */
 static bool scui_mem_record_item_del(scui_mem_record_item_t item)
 {
-    for (uint32_t idx0 = 0; idx0 < app_sys_arr_len(scui_mem_record_list); idx0++)
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++)
     for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++)
         if (scui_mem_record_list[idx0][idx1].ptr == item.ptr) {
             /* 整理:让后面的向前移动一个位置,最后一个位置填充空位 */
@@ -60,13 +58,13 @@ static bool scui_mem_record_item_del(scui_mem_record_item_t item)
  */
 void scui_mem_record_check(void)
 {
-    APP_SYS_LOG_INFO("scui mem record:");
-    APP_SYS_LOG_INFO("<file,func,line,type,ptr,size>:");
-    for (uint32_t idx0 = 0; idx0 < app_sys_arr_len(scui_mem_record_list); idx0++)
+    SCUI_LOG_INFO("scui mem record:");
+    SCUI_LOG_INFO("<file,func,line,type,ptr,size>:");
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++)
     for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++) {
         if (scui_mem_record_list[idx0][idx1].ptr == NULL)
             continue;
-        APP_SYS_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
+        SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
                          scui_mem_record_list[idx0][idx1].file,
                          scui_mem_record_list[idx0][idx1].func,
                          scui_mem_record_list[idx0][idx1].line,
@@ -106,7 +104,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     if (!scui_mem_record_item_add((scui_mem_record_item_t){
         .file = file, .func = func, .line = line,
         .type = type, .ptr  = ptr,  .size = size,})) {
-         APP_SYS_LOG_WARN("record queue is full, item will be discard");
+         SCUI_LOG_WARN("record queue is full, item will be discard");
          scui_mem_record_check();
     }
     #endif
@@ -133,7 +131,7 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     
     #if SCUI_MEM_RECORD_CHECK
     if (!scui_mem_record_item_del((scui_mem_record_item_t){.ptr = ptr,}))
-         APP_SYS_LOG_WARN("record queue is not find, maybe discard");
+         SCUI_LOG_WARN("record queue is not find, maybe discard");
     #endif
 }
 

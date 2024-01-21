@@ -2,11 +2,9 @@
  *    控件事件操作
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 获取事件的自定义回调
@@ -15,15 +13,15 @@
  */
 void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
 {
-    APP_SYS_ASSERT(event != NULL);
+    SCUI_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     scui_widget_event_t *event_old = NULL;
     
     /* 一个事件至多一个响应回调, 优先匹配对应事件 */
     app_sys_list_dll_ftra(&widget->dl_list, node) {
-        event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        event_old = scui_own_ofs(scui_widget_event_t, dl_node, node);
         if (event->event == event_old->event &&
             event->order == event_old->order) {
             event->event_cb = event_old->event_cb;
@@ -44,7 +42,7 @@ void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
     
     /* 一个事件至多一个响应回调, 其次匹配集成事件 */
     app_sys_list_dll_ftra(&widget->dl_list, node) {
-        event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        event_old = scui_own_ofs(scui_widget_event_t, dl_node, node);
         if (event->order == event_old->order &&
            ((event_old->event == scui_event_sched_all && event_sched) ||
             (event_old->event == scui_event_key_all && event_ptr) ||
@@ -65,14 +63,14 @@ void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
  */
 void scui_widget_event_add(scui_handle_t handle, scui_widget_event_t *event)
 {
-    APP_SYS_ASSERT(event != NULL);
+    SCUI_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 一个事件至多一个响应回调,新的替换旧的 */
     scui_widget_event_t *event_old = NULL;
     app_sys_list_dll_btra(&widget->dl_list, node) {
-        event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        event_old = scui_own_ofs(scui_widget_event_t, dl_node, node);
         if (event_old->event == event->event &&
             event_old->order == event->order) {
             event_old->event_cb = event->event_cb;
@@ -94,14 +92,14 @@ void scui_widget_event_add(scui_handle_t handle, scui_widget_event_t *event)
  */
 void scui_widget_event_del(scui_handle_t handle, scui_widget_event_t *event)
 {
-    APP_SYS_ASSERT(event != NULL);
+    SCUI_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 一个事件至多一个响应回调 */
     scui_widget_event_t *event_old = NULL;
     app_sys_list_dll_btra(&widget->dl_list, node) {
-        event_old = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        event_old = scui_own_ofs(scui_widget_event_t, dl_node, node);
         if (event_old->event == event->event &&
             event_old->order == event->order)
             break;
@@ -122,11 +120,11 @@ void scui_widget_event_del(scui_handle_t handle, scui_widget_event_t *event)
 void scui_widget_event_clear(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     app_sys_list_dln_t *node = NULL;
     while ((node = app_sys_list_dll_head(&widget->dl_list)) != NULL) {
-        scui_widget_event_t *event = app_sys_own_ofs(scui_widget_event_t, dl_node, node);
+        scui_widget_event_t *event = scui_own_ofs(scui_widget_event_t, dl_node, node);
         /* 抓取事件,移除它 */
         app_sys_list_dll_remove(&widget->dl_list, &event->dl_node);
         SCUI_MEM_FREE(event);
@@ -143,7 +141,7 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
     uint32_t ret = scui_event_retval_continue;
     scui_widget_event_t event_match = {.event = event->type,};
     scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 事件前响应回调 */
     event_match.order = scui_widget_order_before,
@@ -184,7 +182,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     uint32_t ret = scui_event_retval_continue;
     scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 刷新事件:就地处理 */
     if (event->type == scui_event_refr) {
@@ -297,7 +295,7 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
 {
     uint32_t ret = scui_event_retval_continue;
     scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     scui_widget_cb_t *widget_cb = scui_widget_cb_link(widget->type);
     
@@ -341,7 +339,7 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
 scui_event_retval_t scui_widget_event_draw(scui_event_t *event)
 {
     scui_widget_t *widget = scui_handle_get(event->object);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 控件默认绘制只处理背景皮肤 */
     if (widget->style.trans)

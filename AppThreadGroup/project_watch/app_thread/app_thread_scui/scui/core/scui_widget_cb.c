@@ -2,11 +2,9 @@
  *    控件组织
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /* 控件组织表 */
@@ -22,6 +20,6 @@ static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
  */
 scui_widget_cb_t * scui_widget_cb_link(uint32_t type)
 {
-    APP_SYS_ASSERT(type < scui_widget_type_num);
+    SCUI_ASSERT(type < scui_widget_type_num);
     return &scui_widget_cb[type];
 }

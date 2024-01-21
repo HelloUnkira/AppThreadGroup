@@ -2,11 +2,9 @@
  *    帧缓冲管理
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 static scui_surface_fb_t scui_surface_fb = {0};
@@ -19,12 +17,12 @@ static scui_surface_fb_t scui_surface_fb = {0};
  */
 void scui_surface_fb_switch(void)
 {
-    APP_SYS_LOG_INFO("");
+    SCUI_LOG_INFO("");
     /* 切换上一刷新块,它将成为新的绘制块 */
     #if SCUI_SURFACE_FB_LIMIT == 2
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
     scui_surface_fb.draw_idx = 1 - scui_surface_fb.draw_idx;
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
     #endif
 }
 
@@ -34,11 +32,11 @@ void scui_surface_fb_switch(void)
  */
 void scui_surface_fb_refr_lock(void)
 {
-    APP_SYS_LOG_INFO("");
+    SCUI_LOG_INFO("");
     #if SCUI_SURFACE_FB_LIMIT == 2
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
     scui_surface_fb.refr_hold |= (1 < scui_surface_fb.draw_idx);
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
     #endif
 }
 
@@ -46,11 +44,11 @@ void scui_surface_fb_refr_lock(void)
  */
 void scui_surface_fb_refr_unlock(void)
 {
-    APP_SYS_LOG_INFO("");
+    SCUI_LOG_INFO("");
     #if SCUI_SURFACE_FB_LIMIT == 2
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_take);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_take);
     scui_surface_fb.refr_hold &= ~(1 < (1 - scui_surface_fb.draw_idx));
-    app_mutex_process(&scui_surface_fb.mutex, app_mutex_give);
+    scui_mutex_process(&scui_surface_fb.mutex, scui_mutex_give);
     #endif
 }
 
@@ -58,32 +56,32 @@ void scui_surface_fb_refr_unlock(void)
  */
 void scui_surface_fb_refr_wait(void)
 {
-    APP_SYS_LOG_INFO("");
-    app_sem_process(&scui_surface_fb.sem_refr, app_sem_take);
+    SCUI_LOG_INFO("");
+    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_take);
 }
 
 /*@brief 产生刷新信号
  */
 void scui_surface_fb_refr_notify(void)
 {
-    APP_SYS_LOG_INFO("");
-    app_sem_process(&scui_surface_fb.sem_refr, app_sem_give);
+    SCUI_LOG_INFO("");
+    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_give);
 }
 
 /*@brief 等待绘制信号
  */
 void scui_surface_fb_draw_wait(void)
 {
-    APP_SYS_LOG_INFO("");
-    app_sem_process(&scui_surface_fb.sem_draw, app_sem_take);
+    SCUI_LOG_INFO("");
+    scui_sem_process(&scui_surface_fb.sem_draw, scui_sem_take);
 }
 
 /*@brief 产生绘制信号
  */
 void scui_surface_fb_draw_notify(void)
 {
-    APP_SYS_LOG_INFO("");
-    app_sem_process(&scui_surface_fb.sem_draw, app_sem_give);
+    SCUI_LOG_INFO("");
+    scui_sem_process(&scui_surface_fb.sem_draw, scui_sem_give);
 }
 
 /*@brief 画布帧缓冲区刷新画布实例
@@ -91,7 +89,7 @@ void scui_surface_fb_draw_notify(void)
  */
 scui_surface_t * scui_surface_fb_refr(void)
 {
-    APP_SYS_LOG_INFO("");
+    SCUI_LOG_INFO("");
     #if SCUI_SURFACE_FB_LIMIT == 2
     return &scui_surface_fb.surface[1 - scui_surface_fb.draw_idx];
     #else
@@ -104,7 +102,7 @@ scui_surface_t * scui_surface_fb_refr(void)
  */
 scui_surface_t * scui_surface_fb_draw(void)
 {
-    APP_SYS_LOG_INFO("");
+    SCUI_LOG_INFO("");
     #if SCUI_SURFACE_FB_LIMIT == 2
     return &scui_surface_fb.surface[scui_surface_fb.draw_idx];
     #else
@@ -116,10 +114,10 @@ scui_surface_t * scui_surface_fb_draw(void)
  */
 void scui_surface_fb_ready(void)
 {
-    app_sem_process(&scui_surface_fb.sem_draw, app_sem_static);
-    app_sem_process(&scui_surface_fb.sem_refr, app_sem_static);
+    scui_sem_process(&scui_surface_fb.sem_draw, scui_sem_static);
+    scui_sem_process(&scui_surface_fb.sem_refr, scui_sem_static);
     #if SCUI_SURFACE_FB_LIMIT == 2
-    app_mutex_process(&scui_surface_fb.mutex,  app_mutex_static);
+    scui_mutex_process(&scui_surface_fb.mutex,  scui_mutex_static);
     #endif
     
     /* 让draw流程变得可触发,之后循环互锁 */
@@ -151,28 +149,28 @@ void scui_surface_draw_routine(void (*draw)(scui_surface_t *surface))
      */
     
     #if SCUI_SURFACE_FB_LIMIT == 1
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_draw_wait();
     #endif
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_t *surface = scui_surface_fb_draw();
-    APP_SYS_ASSERT(surface != NULL && surface->pixel != NULL);
+    SCUI_ASSERT(surface != NULL && surface->pixel != NULL);
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     if (draw)
         draw(surface);
     
     #if SCUI_SURFACE_FB_LIMIT == 2
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_draw_wait();
     #endif
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_refr_lock();
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_switch();
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_refr_notify();
 }
 
@@ -192,18 +190,18 @@ void scui_surface_refr_routine(void (*refr)(scui_surface_t *surface))
      *      scui_surface_fb_draw_notify();
      */
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_refr_wait();
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_t *surface = scui_surface_fb_refr();
-    APP_SYS_ASSERT(surface != NULL && surface->pixel != NULL);
+    SCUI_ASSERT(surface != NULL && surface->pixel != NULL);
     
     if (refr)
         refr(surface);
     
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_refr_unlock();
-    APP_SYS_LOG_DEBUG("");
+    SCUI_LOG_DEBUG("");
     scui_surface_fb_draw_notify();
 }

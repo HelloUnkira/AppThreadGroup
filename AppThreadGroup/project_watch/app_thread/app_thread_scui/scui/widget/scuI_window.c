@@ -2,11 +2,9 @@
  *    控件
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 窗口控件创建
@@ -16,7 +14,7 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    APP_SYS_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建窗口控件实例 */
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_window_t));
@@ -63,7 +61,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
 void scui_window_destroy(scui_handle_t handle, bool parent_way)
 {
     scui_window_t *window = scui_handle_get(handle);
-    APP_SYS_ASSERT(window != NULL);
+    SCUI_ASSERT(window != NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&window->widget, parent_way);

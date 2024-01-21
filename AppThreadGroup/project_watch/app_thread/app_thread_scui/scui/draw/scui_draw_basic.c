@@ -2,11 +2,9 @@
  *    基础图元绘制
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 行拷贝(可以使用DMA-copy加速优化)
@@ -28,7 +26,7 @@ void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len)
 void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
                          SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t alpha)
 {
-    APP_SYS_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
     scui_area_t *dst_area = &dst_surface->clip;
     
@@ -48,7 +46,7 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     if (alpha == 0xFF) {
         /* 先填充第一行像素点 */
         for (scui_coord_t idx = 0; idx < draw_area.w; idx++)
-            app_sys_mem_w(dst_addr + idx * SCUI_PIXEL_SIZE, *src_pixel, SCUI_PIXEL_TYPE);
+            scui_mem_w(dst_addr + idx * SCUI_PIXEL_SIZE, *src_pixel, SCUI_PIXEL_TYPE);
         /* 后使用第一行像素点填充其他行像素点 */
         for (scui_coord_t idx = 1; idx < draw_area.h; idx++)
             scui_draw_line_copy(dst_addr + idx * dst_line, dst_addr, dst_line);
@@ -60,7 +58,7 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
             SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
             // pixel = scui_pixel_blend_with_alpha(src_pixel, alpha, dst_addr_ofs, dst_surface->alpha);
             pixel = scui_pixel_mix_with_alpha(src_pixel, alpha, dst_addr_ofs, scui_alpha_cover - alpha);
-            app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+            scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
         }
     }
 }
@@ -74,8 +72,8 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
 void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                          scui_surface_t *src_surface, scui_area_t *src_clip)
 {
-    APP_SYS_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    APP_SYS_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     
     scui_area_t *dst_area = &dst_surface->clip;
     scui_area_t *src_area = &src_surface->clip;
@@ -85,13 +83,13 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_inter(&src_clip_v, src_area, src_clip);
     
     scui_area_t draw_area = {0};
-    draw_area.w = app_sys_min(dst_clip_v.w, src_clip_v.w);
-    draw_area.h = app_sys_min(dst_clip_v.h, src_clip_v.h);
+    draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
     
     if (scui_area_empty(&draw_area))
         return;
     
-    APP_SYS_ASSERT(dst_surface->alpha == 0xFF && src_surface->alpha == 0xFF);
+    SCUI_ASSERT(dst_surface->alpha == 0xFF && src_surface->alpha == 0xFF);
     /* 在dst_surface.clip中的dst_clip_v中拷贝到src_surface.clip中的src_clip_v中 */
     scui_coord_t dst_line = dst_surface->clip.w * SCUI_PIXEL_SIZE;
     scui_coord_t src_line = src_surface->clip.w * SCUI_PIXEL_SIZE;
@@ -112,8 +110,8 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
 void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                           scui_surface_t *src_surface, scui_area_t *src_clip)
 {
-    APP_SYS_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
-    APP_SYS_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     
     if (src_surface->alpha == 0x0)
         return;
@@ -131,8 +129,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_inter(&src_clip_v, src_area, src_clip);
     
     scui_area_t draw_area = {0};
-    draw_area.w = app_sys_min(dst_clip_v.w, src_clip_v.w);
-    draw_area.h = app_sys_min(dst_clip_v.h, src_clip_v.h);
+    draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
     
     if (scui_area_empty(&draw_area))
         return;
@@ -153,6 +151,6 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         SCUI_PIXEL_TYPE *src_addr_ofs = (void *)src_ofs;
         pixel = scui_pixel_mix_with_alpha(src_addr_ofs, src_surface->alpha, dst_addr_ofs, scui_alpha_cover - src_surface->alpha);
         // pixel = scui_pixel_blend_with_alpha(src_addr_ofs, src_surface->alpha, dst_addr_ofs, dst_surface->alpha);
-        app_sys_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+        scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
     }
 }

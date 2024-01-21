@@ -1,6 +1,10 @@
 #ifndef SCUI_H
 #define SCUI_H
 
+/* adaptor */
+#include "scui_os.h"
+#include "scui_log.h"
+#include "scui_macro.h"
 /* AppThreadGroup */
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"

@@ -113,8 +113,8 @@ typedef struct {
 } scui_event_t;
 
 typedef struct {
-    app_sem_t sem;
-    app_mutex_t mutex;
+    scui_sem_t sem;
+    scui_mutex_t mutex;
     app_sys_list_dll_t dl_list;
     uint32_t list_num;
 } scui_event_queue_t;

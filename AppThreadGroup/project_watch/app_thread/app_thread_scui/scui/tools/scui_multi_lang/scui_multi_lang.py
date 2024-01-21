@@ -17,8 +17,6 @@ def encode_scui_multi_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     # 写点简要的说明
     file.write('/*本地静态的字符串表\n')
     file.write(' *通过scui_multi_lang.py生成\n */\n\n')
-    file.write('#include "app_ext_lib.h"\n')
-    file.write('#include "app_sys_lib.h"\n')
     file.write('#include "scui.h"\n\n')
     # 提取所有外源依赖
     file.write('static const char * scui_multi_lang_table[%d][%d] = {\n' % (sheet_row, sheet_col))

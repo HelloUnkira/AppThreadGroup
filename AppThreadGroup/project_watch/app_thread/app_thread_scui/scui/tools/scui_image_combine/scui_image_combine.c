@@ -1,8 +1,6 @@
 /*一个通过scui_image_combine脚本生成的image表
  */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 static const scui_image_t prjimage_src_00_theme_01_on_png = {

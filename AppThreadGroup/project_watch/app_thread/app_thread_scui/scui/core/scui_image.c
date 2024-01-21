@@ -2,11 +2,9 @@
  *    图像处理
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 图片合法性检查
@@ -28,15 +26,15 @@ bool scui_image_check(scui_image_t *image)
     check  = check && scui_image_src_check(image);
     
     if (!check) {
-        APP_SYS_LOG_ERROR("image info check error:");
-        APP_SYS_LOG_ERROR_RAW("< format:%x",        image->format);
-        APP_SYS_LOG_ERROR_RAW("- status:%x",        image->status);
-        APP_SYS_LOG_ERROR_RAW("- width:%x",         image->pixel.width);
-        APP_SYS_LOG_ERROR_RAW("- height:%x",        image->pixel.height);
-        APP_SYS_LOG_ERROR_RAW("- data_raw:%x",      image->pixel.data_raw);
-        APP_SYS_LOG_ERROR_RAW("- data_mem:%x",      image->pixel.data_mem);
-        APP_SYS_LOG_ERROR_RAW("- size_raw:%x",      image->pixel.size_raw);
-        APP_SYS_LOG_ERROR_RAW("- size_mem:%x >",    image->pixel.size_mem);
+        SCUI_LOG_ERROR("image info check error:");
+        SCUI_LOG_ERROR_RAW("< format:%x",        image->format);
+        SCUI_LOG_ERROR_RAW("- status:%x",        image->status);
+        SCUI_LOG_ERROR_RAW("- width:%x",         image->pixel.width);
+        SCUI_LOG_ERROR_RAW("- height:%x",        image->pixel.height);
+        SCUI_LOG_ERROR_RAW("- data_raw:%x",      image->pixel.data_raw);
+        SCUI_LOG_ERROR_RAW("- data_mem:%x",      image->pixel.data_mem);
+        SCUI_LOG_ERROR_RAW("- size_raw:%x",      image->pixel.size_raw);
+        SCUI_LOG_ERROR_RAW("- size_mem:%x >",    image->pixel.size_mem);
     }
     return check;
 }

@@ -2,11 +2,9 @@
  *    控件
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 控件创建
@@ -17,10 +15,10 @@
  */
 void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    APP_SYS_ASSERT(widget != NULL && maker != NULL && *handle != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget != NULL && maker != NULL && *handle != SCUI_HANDLE_INVALID);
     
-    APP_SYS_ASSERT(maker->clip.w != 0);
-    APP_SYS_ASSERT(maker->clip.h != 0);
+    SCUI_ASSERT(maker->clip.w != 0);
+    SCUI_ASSERT(maker->clip.h != 0);
     
     /* 非布局则句柄为动态创建 */
     if (!layout)
@@ -31,7 +29,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     
     /* 控件使用maker构造 */
     if (maker->parent != SCUI_HANDLE_INVALID)
-        APP_SYS_ASSERT(scui_handle_remap(maker->parent));
+        SCUI_ASSERT(scui_handle_remap(maker->parent));
     
     app_sys_list_dll_reset(&widget->dl_list);
     
@@ -128,7 +126,7 @@ void scui_widget_destroy(scui_widget_t *widget, bool parent_way)
 scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     return widget->surface.alpha;
 }
 
@@ -139,7 +137,7 @@ scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
 void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     widget->surface.alpha = alpha;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
@@ -155,7 +153,7 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
 scui_handle_t scui_widget_image_get(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     return widget->image;
 }
 
@@ -166,7 +164,7 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle)
 void scui_widget_image_set(scui_handle_t handle, scui_handle_t image)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     widget->image = image;
 }
 
@@ -177,7 +175,7 @@ void scui_widget_image_set(scui_handle_t handle, scui_handle_t image)
 scui_color_gradient_t scui_widget_color_get(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     return widget->color;
 }
 
@@ -188,7 +186,7 @@ scui_color_gradient_t scui_widget_color_get(scui_handle_t handle)
 void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     widget->color = color;
 }
 
@@ -229,14 +227,14 @@ void scui_widget_clip_reset(scui_widget_t *widget)
 void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     for (uint32_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
             widget->child_list[idx]  = child;
             return;
         }
-    APP_SYS_LOG_ERROR("child add fail:%u", child);
+    SCUI_LOG_ERROR("child add fail:%u", child);
 }
 
 /*@brief 控件移除子控件
@@ -246,14 +244,14 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
 void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     for (uint32_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == child) {
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
             return;
         }
-    APP_SYS_LOG_ERROR("child del fail:%u", child);
+    SCUI_LOG_ERROR("child del fail:%u", child);
 }
 
 /*@brief 事件吸收
@@ -271,7 +269,7 @@ static bool scui_widget_draw_absorb(void *evt_old, void *evt_new)
 void scui_widget_draw(scui_handle_t handle, bool sync)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 只为当前控件及其子控件添加剪切域,但是绘制是从窗口开始的 */
     scui_widget_clip_reset(widget);
@@ -301,7 +299,7 @@ static bool scui_widget_refr_absorb(void *evt_old, void *evt_new)
 void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     scui_event_t event = {
         .type   = scui_event_refr,
@@ -320,7 +318,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 scui_handle_t scui_widget_root(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     if (widget->parent != SCUI_HANDLE_INVALID)
         return scui_widget_root(widget->parent);
     return handle;
@@ -332,7 +330,7 @@ scui_handle_t scui_widget_root(scui_handle_t handle)
 void scui_widget_move(scui_handle_t handle, scui_point_t *point)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     if (widget->clip.x == point->x && widget->clip.y == point->y)
         return;
@@ -386,7 +384,7 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
 bool scui_widget_style_is_show(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    APP_SYS_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget != NULL);
     
     /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID)

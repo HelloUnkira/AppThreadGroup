@@ -2,11 +2,9 @@
  *    引擎
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 static bool scui_engine_execute_status = false;
@@ -26,8 +24,8 @@ void scui_engine_ready(void)
     
     scui_surface_fb_ready();
     
-    APP_SYS_ASSERT(SCUI_PIXEL_COND);
-    APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
+    SCUI_ASSERT(SCUI_PIXEL_COND);
+    SCUI_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
     /* frame buffer: */
     SCUI_PIXEL_TYPE pixel = {0};
     scui_surface_t *surface_fb = NULL;
@@ -61,7 +59,7 @@ void scui_engine_ready(void)
     /* 句柄表(image) */
     table.offset = SCUI_HANDLE_OFFSET_IMAGE;
     table.source = scui_image_combine_table;
-    table.number = app_sys_arr_len(scui_image_combine_table);
+    table.number = scui_arr_len(scui_image_combine_table);
     scui_handle_table_register(&table);
     table.source_remap = NULL;
     

@@ -2,8 +2,6 @@
  *通过scui_multi_lang.py生成
  */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 static const char * scui_multi_lang_table[756][2] = {

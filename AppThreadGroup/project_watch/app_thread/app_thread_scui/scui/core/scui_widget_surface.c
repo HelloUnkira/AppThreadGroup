@@ -2,11 +2,9 @@
  *    控件画布(图形上下文(Graphic Context))
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /*@brief 控件画布为独立画布
@@ -70,7 +68,7 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *dst_clip
 {
     scui_surface_t *dst_surface = &widget->surface;
     scui_image_t *image = scui_handle_get(handle);
-    APP_SYS_ASSERT(image != NULL);
+    SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
         .x = 0, .w = image->pixel.width,

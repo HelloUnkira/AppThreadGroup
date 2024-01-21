@@ -2,11 +2,9 @@
  *    事件队列
  */
 
-#define APP_SYS_LOG_LOCAL_STATUS     1
-#define APP_SYS_LOG_LOCAL_LEVEL      0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_STATUS        1
+#define SCUI_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
-#include "app_ext_lib.h"
-#include "app_sys_lib.h"
 #include "scui.h"
 
 /* 事件队列 */
@@ -16,8 +14,8 @@ static scui_event_queue_t scui_event_queue = {0};
  */
 void scui_event_ready(void)
 {
-    app_sem_process(&scui_event_queue.sem, app_sem_static);
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_static);
+    scui_sem_process(&scui_event_queue.sem, scui_sem_static);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_static);
     app_sys_list_dll_reset(&scui_event_queue.dl_list);
 }
 
@@ -25,15 +23,15 @@ void scui_event_ready(void)
  */
 void scui_event_wait(void)
 {
-    app_sem_process(&scui_event_queue.sem, app_sem_take);
+    scui_sem_process(&scui_event_queue.sem, scui_sem_take);
 }
 
 /*@brief 优先级排序入队列比较函数
  */
 static bool scui_event_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *node2)
 {
-    scui_event_t *event1 = app_sys_own_ofs(scui_event_t, dl_node, node1);
-    scui_event_t *event2 = app_sys_own_ofs(scui_event_t, dl_node, node2);
+    scui_event_t *event1 = scui_own_ofs(scui_event_t, dl_node, node1);
+    scui_event_t *event2 = scui_own_ofs(scui_event_t, dl_node, node2);
     return event1->priority >= event2->priority;
 }
 
@@ -41,8 +39,8 @@ static bool scui_event_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *node2
  */
 static bool scui_event_confirm(app_sys_list_dln_t *node1, app_sys_list_dln_t *node2)
 {
-    scui_event_t *event1 = app_sys_own_ofs(scui_event_t, dl_node, node1);
-    scui_event_t *event2 = app_sys_own_ofs(scui_event_t, dl_node, node2);
+    scui_event_t *event1 = scui_own_ofs(scui_event_t, dl_node, node1);
+    scui_event_t *event2 = scui_own_ofs(scui_event_t, dl_node, node2);
     return event1->object == event2->object && event1->type == event2->type;
 }
 
@@ -56,18 +54,18 @@ void scui_event_enqueue(scui_event_t *event)
     scui_event_t *event_new = NULL;
     
     if (event == NULL) {
-        APP_SYS_LOG_ERROR("error args");
+        SCUI_LOG_ERROR("error args");
         return;
     }
     
     /* 同步原语:上锁 */
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
     
     /* 事件包合并检查,如果合并回调不为空且查找到旧事件,合并它 */
     if (event->absorb != NULL) {
         app_sys_list_dll_ftra(&scui_event_queue.dl_list, node)
         if (scui_event_confirm(&event->dl_node, node)) {
-            event_old = app_sys_own_ofs(scui_event_t, dl_node, node);
+            event_old = scui_own_ofs(scui_event_t, dl_node, node);
             event->absorb(event_old, event);
             absorb_flag = true;
             break;
@@ -89,10 +87,10 @@ void scui_event_enqueue(scui_event_t *event)
     }
     
     /* 同步原语:解锁 */
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     /* 同步原语:通报 */
     if (!absorb_flag)
-        app_sem_process(&scui_event_queue.sem, app_sem_give);
+        scui_sem_process(&scui_event_queue.sem, scui_sem_give);
 }
 
 /*@brief 事件包出列函数
@@ -105,12 +103,12 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     scui_event_t *event_new = NULL;
     
     if (event == NULL) {
-        APP_SYS_LOG_ERROR("error args");
+        SCUI_LOG_ERROR("error args");
         return retval;
     }
     
     /* 同步原语:上锁 */
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
     
     /* 资源包提取出管道 */
     if (scui_event_queue.list_num != 0) {
@@ -118,12 +116,12 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
         if (hit) {
             app_sys_list_dll_btra(&scui_event_queue.dl_list, node)
             if (scui_event_confirm(&event->dl_node, node)) {
-                event_new = app_sys_own_ofs(scui_event_t, dl_node, node);
+                event_new = scui_own_ofs(scui_event_t, dl_node, node);
                 break;
             }
         } else {
             app_sys_list_dln_t *node = app_sys_list_dll_head(&scui_event_queue.dl_list);
-            event_new = app_sys_own_ofs(scui_event_t, dl_node, node);
+            event_new = scui_own_ofs(scui_event_t, dl_node, node);
         }
         if (event_new != NULL) {
             app_sys_list_dll_remove(&scui_event_queue.dl_list, &event_new->dl_node);
@@ -138,7 +136,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     }
     
     /* 同步原语:解锁 */
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     
     return retval;
 }
@@ -148,8 +146,8 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
  */
 uint32_t scui_event_num(void)
 {
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_take);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_take);
     uint32_t list_num = scui_event_queue.list_num;
-    app_mutex_process(&scui_event_queue.mutex, app_mutex_give);
+    scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     return list_num;
 }
