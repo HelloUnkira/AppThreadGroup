@@ -153,11 +153,11 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             scui_indev_data_t indev_data;
             /* 事件派发 */
             app_dev_gui_ptr_scui_read(&indev_data);
-            scui_indev_data_notify(&indev_data);
+            scui_indev_notify(&indev_data);
             app_dev_gui_enc_scui_read(&indev_data);
-            scui_indev_data_notify(&indev_data);
+            scui_indev_notify(&indev_data);
             app_dev_gui_key_scui_read(&indev_data);
-            scui_indev_data_notify(&indev_data);
+            scui_indev_notify(&indev_data);
             /*  */
             if (app_dev_gui_drv_shutdown(&app_dev_gui_drv)) {
                 static bool execute = true;
