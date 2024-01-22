@@ -7,12 +7,14 @@ typedef app_sys_pipe_pkg_t app_thread_package_t;
 /* 归0初始化事件包默认为最低优先级 */
 /* 实时优先级专用于密集化时间敏感事件 */
 typedef enum {
-    app_thread_package_priority_lowest = 0,
-    app_thread_package_priority_normal_below,
-    app_thread_package_priority_normal,
-    app_thread_package_priority_normal_above,
-    app_thread_package_priority_highest,
-    app_thread_package_priority_real_time,
+    app_thread_package_priority_none            = 0x00,
+    app_thread_package_priority_default         = app_thread_package_priority_none,
+    app_thread_package_priority_lowest          = 0x00,
+    app_thread_package_priority_normal_below    = 0x0F,
+    app_thread_package_priority_normal          = 0x8F,
+    app_thread_package_priority_normal_above    = 0xF0,
+    app_thread_package_priority_highest         = 0xFF,
+    app_thread_package_priority_real_time       = 0xFF,
 } app_thread_package_priority_t;
 
 /*@brief 设置子线程执行时间

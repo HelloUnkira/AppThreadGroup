@@ -4,7 +4,7 @@
 /* 缩放系数(Coefficient),为2的指数倍 */
 #define SCUI_ANIMA_RES_COF      (1024)
 #define SCUI_ANIMA_RES_SHIFT    (10)
-/* 动画论调:常循环 */
+/* 动画轮调:常循环 */
 #define SCUI_ANIMA_INFINITE     (0xFFFF)
 
 /* 动画的运动状态 */

@@ -25,8 +25,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
 
 /*@brief 窗口控件销毁
  *@param handle 窗口控件句柄
- *@param parent_way 来自父控件的销毁
  */
-void scui_window_destroy(scui_handle_t handle, bool from_parent);
+void scui_window_destroy(scui_handle_t handle);
 
 #endif

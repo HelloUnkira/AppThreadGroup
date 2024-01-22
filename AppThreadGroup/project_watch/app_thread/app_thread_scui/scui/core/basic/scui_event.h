@@ -12,10 +12,10 @@ typedef enum {
     scui_event_sched_all,
     scui_event_draw,
     scui_event_refr,
+    scui_event_show,
+    scui_event_hide,
     scui_event_lang_change,
     scui_event_anima_elapse,
-    scui_event_scene_show,
-    scui_event_scene_hide,
     scui_event_scene_focus_get,
     scui_event_scene_focus_lost,
     scui_event_scene_res_load,
@@ -57,18 +57,34 @@ typedef enum {
     scui_event_sys_num,
 } scui_event_sys_t;
 
+/* 事件类型 */
+typedef uint32_t scui_event_type_t;
+
+/* 事件风格 */
 typedef enum {
     scui_event_style_async,     /* 常规异步调度 */
     scui_event_style_sync,      /* 就地同步调度 */
 } scui_event_style_t;
 
+/* 事件优先级(数字越大优先级越高) */
+typedef enum {
+    scui_event_priority_none            = 0x00,
+    scui_event_priority_default         = scui_event_priority_none,
+    scui_event_priority_lowest          = 0x00,
+    scui_event_priority_normal_below    = 0x0F,
+    scui_event_priority_normal          = 0x8F,
+    scui_event_priority_normal_above    = 0xF0,
+    scui_event_priority_highest         = 0xFF,
+    scui_event_priority_real_time       = 0xFF,
+} scui_event_priority_t;
+
 typedef struct {
     app_sys_list_dln_t dl_node;
     /* 系统基本字段 */
     scui_handle_t object;   /* 事件对象 */
-    uint64_t type:32;       /* 事件类型 */
-    uint64_t style:8;       /* 事件风格 */
-    uint64_t priority:8;    /* 事件优先级(数字越大优先级越高) */
+    uint32_t type:20;       /* 事件类型 */
+    uint32_t style:1;       /* 事件风格 */
+    uint32_t priority:8;    /* 事件优先级(数字越大优先级越高) */
     /* 事件包吸收回调: */
     /* 如果手动交付该回调,则使用事件包吸收功能 */
     /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */

@@ -26,6 +26,7 @@ bool scui_widget_surface_only(scui_widget_t *widget)
  */
 void scui_widget_surface_change(scui_widget_t *widget, scui_surface_t *surface)
 {
+    SCUI_LOG_INFO("widget %u", widget->myself);
     widget->surface.pixel = surface->pixel;
     
     for (uint32_t idx = 0; idx < widget->child_num; idx++)
@@ -47,6 +48,7 @@ void scui_widget_surface_change(scui_widget_t *widget, scui_surface_t *surface)
  */
 void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *dst_clip, scui_color_gradient_t color)
 {
+    SCUI_LOG_INFO("widget %u", widget->myself);
     scui_surface_t *dst_surface = &widget->surface;
     
     if (dst_clip == NULL);
@@ -66,6 +68,7 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *dst_clip
 void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *dst_clip,
                                     scui_handle_t  handle, scui_area_t *src_clip, scui_color_gradient_t color)
 {
+    SCUI_LOG_INFO("widget %u", widget->myself);
     scui_surface_t *dst_surface = &widget->surface;
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);

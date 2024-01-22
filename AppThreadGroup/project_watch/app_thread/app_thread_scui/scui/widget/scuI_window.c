@@ -36,9 +36,9 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     event.order    = scui_widget_order_current;
     event.event_cb = maker->event_cb;
     
-    event.event = scui_event_scene_show;
+    event.event = scui_event_show;
     scui_widget_event_add(*handle, &event);
-    event.event = scui_event_scene_hide;
+    event.event = scui_event_hide;
     scui_widget_event_add(*handle, &event);
     event.event = scui_event_scene_focus_get;
     scui_widget_event_add(*handle, &event);
@@ -56,15 +56,14 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
 
 /*@brief 窗口控件销毁
  *@param handle 窗口控件句柄
- *@param parent_way 来自父控件的销毁
  */
-void scui_window_destroy(scui_handle_t handle, bool parent_way)
+void scui_window_destroy(scui_handle_t handle)
 {
     scui_window_t *window = scui_handle_get(handle);
     SCUI_ASSERT(window != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&window->widget, parent_way);
+    scui_widget_destroy(&window->widget);
     
     /* 回收surface */
     if (scui_widget_surface_only(&window->widget.surface)) {
