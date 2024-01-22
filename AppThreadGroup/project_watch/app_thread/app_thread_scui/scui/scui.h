@@ -10,7 +10,7 @@
 #include "app_sys_lib.h"
 /* config: */
 #include "scui_config.h"
-/* arch: */
+/* adaptor: */
 #include "scui_util.h"
 #include "scui_mem.h"
 /* core: */
@@ -32,6 +32,7 @@
 #include "scui_widget_cb.h"
 #include "scui_widget_event.h"
 #include "scui_widget_surface.h"
+#include "scui_widget_scene.h"
 #include "scui_window.h"
 #include "scui_custom.h"
 #include "scui_scroll.h"

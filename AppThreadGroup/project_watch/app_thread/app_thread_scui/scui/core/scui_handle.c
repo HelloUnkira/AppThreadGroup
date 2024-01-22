@@ -10,6 +10,23 @@
 static scui_handle_table_t scui_handle_table[SCUI_HANDLE_TABLE_LIMIT] = {0};
 static void * scui_handle_table_share[SCUI_HANDLE_SHARE_LIMIT] = {NULL};
 
+/*@brief 句柄表获取
+ *@param handle 句柄
+ *@retval 句柄表
+ */
+scui_handle_table_t * scui_handle_table_find(scui_handle_t handle)
+{
+    for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+        if (scui_handle_table[ofs].source == NULL)
+            continue;
+        uint32_t idx = handle - scui_handle_table[ofs].offset;
+        if (idx < scui_handle_table[ofs].number)
+            return &scui_handle_table[ofs];
+    }
+    SCUI_LOG_ERROR("handle %u is unknown", handle);
+    return NULL;
+}
+
 /*@brief 句柄表注册
  *@param table 句柄表
  */

@@ -24,6 +24,12 @@ typedef struct {
 #define SCUI_HANDLE_INVALID     (0)
 #define SCUI_HANDLE_SYSTEM      (~(scui_handle_t)0)
 
+/*@brief 句柄表获取
+ *@param handle 句柄
+ *@retval 句柄表
+ */
+scui_handle_table_t * scui_handle_table_find(scui_handle_t handle);
+
 /*@brief 句柄表注册
  *@param table 句柄表
  */
