@@ -14,11 +14,13 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
     
     /* 创建窗口控件实例 */
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
+    
+    window->level = maker->level;
     
     /* 是否需要创建自己的surface */
     if (maker->buffer) {
@@ -31,7 +33,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&window->widget, &maker->widget, handle, layout);
     
-    /* 为窗口添加指定的事件回调 */
+    /* 为窗口控件添加指定的事件回调 */
     scui_widget_event_t event = {0};
     event.order    = scui_widget_order_current;
     event.event_cb = maker->event_cb;

@@ -5,14 +5,12 @@ typedef struct {
     scui_widget_t widget;
     scui_handle_t sibling[4];   /* 0:上;1:下;2:左;3:右; */
     uint8_t level:6;            /* 窗口所在层级(数字越大越高) */
-    uint8_t resident:1;         /* 窗口是否常驻 */
 } scui_window_t;
 
 typedef struct {
     scui_widget_maker_t widget;
-    scui_event_cb_t     event_cb;   /* 事件响应回调: */
+    scui_event_cb_t     event_cb;   /* 事件响应回调 */
     uint8_t level:6;                /* 窗口所在层级(数字越大越高) */
-    uint8_t resident:1;             /* 窗口是否常驻 */
     uint8_t buffer:1;               /* 窗口是否使用独立画布 */
 } scui_window_maker_t;
 

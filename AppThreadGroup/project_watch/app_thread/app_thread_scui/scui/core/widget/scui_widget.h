@@ -4,8 +4,8 @@
 /* 控件类型: */
 typedef enum {
     scui_widget_type_window,    /* 窗口控件(仅根控件) */
-    scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_custom,    /* 自定义控件 */
+    scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_image,     /* 图片控件 */
     scui_widget_type_label,     /* 文本控件 */
     /* 继续补充... */
@@ -15,7 +15,6 @@ typedef enum {
 /* 控件状态风格: */
 typedef struct {
     uint8_t trans:1;        /* 背景透明 */
-    uint8_t cover:1;        /* 覆盖更新 */
     uint8_t state:1;        /* 控件隐藏:0;控件显示:1; */
     uint8_t indev_ptr:1;    /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;    /* 输入事件响应标记:enc */
