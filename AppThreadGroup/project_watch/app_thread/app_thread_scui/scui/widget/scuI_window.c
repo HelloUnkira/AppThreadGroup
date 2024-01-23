@@ -14,6 +14,7 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
+    SCUI_ASSERT(maker->widget.type == scui_widget_type_window);
     SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
     
     /* 创建窗口控件实例 */
@@ -61,8 +62,10 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
  */
 void scui_window_destroy(scui_handle_t handle)
 {
-    scui_window_t *window = scui_handle_get(handle);
-    SCUI_ASSERT(window != NULL);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_window);
+    scui_window_t *window = (void *)widget;
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&window->widget);

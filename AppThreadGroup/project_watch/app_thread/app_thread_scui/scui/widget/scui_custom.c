@@ -14,6 +14,7 @@
  */
 void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout)
 {
+    SCUI_ASSERT(maker->widget.type == scui_widget_type_custom);
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建自定义控件实例 */
@@ -45,7 +46,10 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
  */
 void scui_custom_destroy(scui_handle_t handle, bool parent_way)
 {
-    scui_custom_t *custom = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_custom);
+    scui_custom_t *custom = (void *)widget;
     SCUI_ASSERT(custom != NULL);
     
     /* 销毁基础控件实例 */

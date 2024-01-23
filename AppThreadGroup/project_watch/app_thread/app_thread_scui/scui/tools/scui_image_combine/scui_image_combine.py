@@ -70,7 +70,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     # 填充数据表
     scui_image_combine_h.write('typedef enum {\n')
     for file in file_path_list:
-        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
+        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         scui_image_combine_h.write('\tscui_image_%s,\n' % scui_image_tag)
     scui_image_combine_h.write('} scui_image_combine_handle_t;\n\n')
     scui_image_combine_h.write('extern const void * scui_image_combine_table[%d];\n\n' % len(file_path_list))
@@ -142,7 +142,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
         # 计算本帧数据长度
         pixel_mem_len = len(pixel_stream)
         # lz4压缩, 生成 pixel_raw_len
-        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
+        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         print('lz4:' + scui_image_tag)
         pixel_bytes = bytearray(pixel_stream)
         pixel_bytes_lz4_com = scui_image_lz4_compress(pixel_bytes)
@@ -190,7 +190,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     # 填充数据表
     scui_image_combine_c.write('const void * scui_image_combine_table[%d] = {\n' % len(file_path_list))
     for file in file_path_list:
-        scui_image_tag = project_name + file.replace('.', '_').replace('\\', '_')
+        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         scui_image_combine_c.write('\t(void *)&%s,\n' % scui_image_tag)
     scui_image_combine_c.write('};\n')
 
@@ -228,9 +228,6 @@ class ScuiRedirectPrint(object):
 
 # 主流程
 def scui_image_combine():
-    # print重定向
-    sys.stdout = ScuiRedirectPrint(sys.stdout, file='scui_image_combine.out')  # redirect print
-    sys.stderr = ScuiRedirectPrint(sys.stderr)  # redirect print
     # 解析支持检查
     if scui_pixel_format_0 != r'p4':
         print('unsupport pixel format yet:', scui_pixel_format_0)
@@ -241,30 +238,39 @@ def scui_image_combine():
     if scui_pixel_format_2 != r'argb8565':
         print('unsupport pixel format yet:', scui_pixel_format_2)
         return
-    # 参数列表:文件根目录, 设备pixel格式(不带alpha通道, 带alpha通道), 项目名称
-    if len(sys.argv) != 3:
+    # 参数列表:src相对路径 dst相对路径 项目名称
+    if len(sys.argv) != 4:
         print('argv list not match')
         return
-    root_path = sys.argv[1]
-    project_name = sys.argv[2]
-    # 获得文件处理根路径
-    if not os.path.exists(root_path):
-        print('path is not exist')
+    src_path = sys.argv[1]
+    dst_path = sys.argv[2]
+    project_name = sys.argv[3]
+    # 获得文件处理src相对路径
+    if not os.path.exists(src_path):
+        print('src path is not exist')
         return
-    print('path:', root_path)
+    # 获得文件处理dst相对路径
+    if not os.path.exists(dst_path):
+        print('dst path is not exist')
+        return
+    # print重定向
+    sys.stdout = ScuiRedirectPrint(sys.stdout, file=os.path.join(dst_path, 'scui_image_combine.out'))   # redirect print
+    sys.stderr = ScuiRedirectPrint(sys.stderr, file=os.path.join(dst_path, 'scui_image_combine.err'))  # redirect print
+    print('path:', src_path)
+    print('path:', dst_path)
     # 遍历整个文件夹,获取指定扩展名的文件
     file_ext_list = ['.bmp', '.png']
     file_path_list = []
-    scui_image_collect(file_path_list, file_ext_list, root_path)
+    scui_image_collect(file_path_list, file_ext_list, src_path)
     # check:
     # for item in file_path_list:
     #     print(item)
     # 核查文件支持
-    scui_image_combine_h = open('scui_image_combine.h', mode='w', encoding='utf-8')
-    scui_image_combine_c = open('scui_image_combine.c', mode='w', encoding='utf-8')
-    scui_image_combine_bin = open('scui_image_combine.bin', mode='wb')
-    scui_image_combine_raw = open('scui_image_combine.raw', mode='wb')
-    scui_image_combine_mem = open('scui_image_combine.mem', mode='wb')
+    scui_image_combine_h = open(os.path.join(dst_path, 'scui_image_combine.h'), mode='w', encoding='utf-8')
+    scui_image_combine_c = open(os.path.join(dst_path, 'scui_image_combine.c'), mode='w', encoding='utf-8')
+    scui_image_combine_bin = open(os.path.join(dst_path, 'scui_image_combine.bin'), mode='wb')
+    scui_image_combine_raw = open(os.path.join(dst_path, 'scui_image_combine.raw'), mode='wb')
+    scui_image_combine_mem = open(os.path.join(dst_path, 'scui_image_combine.mem'), mode='wb')
     scui_image_combine_list = [
         scui_image_combine_h,
         scui_image_combine_c,
