@@ -27,7 +27,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     /* 为自定义控件添加指定的事件回调 */
     scui_widget_event_t event = {0};
     event.order    = scui_widget_order_current;
-    event.event_cb = maker->event_cb;
+    event.event_cb = maker->widget.event_cb;
     
     /* 事件默认全局接收 */
     event.event = scui_event_sched_all;

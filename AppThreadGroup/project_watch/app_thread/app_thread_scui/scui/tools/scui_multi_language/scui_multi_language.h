@@ -2,7 +2,7 @@
 #define SCUI_MULTI_LANG_H
 
 /*本地静态的字符串表
- *通过scui_multi_lang.py生成
+ *通过scui_multi_language.py生成
  */
 
 typedef enum {
@@ -764,16 +764,16 @@ typedef enum {
 	SCUI_MULTI_LANG_0X02f2,	/* 请系紧佩戴，确保手表背面紧贴手腕。 */
 	SCUI_MULTI_LANG_0X02f3,	/* 请前往APP打开相机 */
 	SCUI_MULTI_LANG_NUM,
-} scui_multi_lang_t;
+} scui_multi_language_t;
 
 /*@brief 设置搜索语言
  *@param index语言编号(0~n-1)
  */
-void scui_multi_lang_type_config(scui_handle_t type);
+void scui_multi_language_type_config(scui_handle_t type);
 
 /*@brief 获得多国语字符串
  *@param index字符串编号(0~n-1)
  */
-const char * scui_multi_lang_str_find(scui_handle_t index);
+const char * scui_multi_language_str_find(scui_handle_t index);
 
 #endif

@@ -58,8 +58,8 @@ typedef struct {
     scui_widget_style_t     style;          /* 控件状态风格 */
     app_sys_list_dll_t      dl_list;        /* 控件事件回调列表 */
     scui_area_t             clip;           /* 控件所在父控件区域 */
-    scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
+    scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
     uint32_t                child_num;      /* 控件关联属性:子控件数量 */
     scui_area_t             surface_clip;   /* 控件画布(图形上下文):画布剪切域 */
@@ -74,9 +74,11 @@ typedef struct {
     scui_widget_style_t     style;          /* 控件状态风格 */
     scui_area_t             clip;           /* 控件所在父控件区域 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
+    scui_handle_t           myself;         /* 控件关联属性:自己 */
     uint32_t                child_num;      /* 控件关联属性:子控件数量 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
+    scui_event_cb_t         event_cb;       /* 事件响应回调(可选字段,非控件自身字段) */
 } scui_widget_maker_t;
 
 /*@brief 控件创建

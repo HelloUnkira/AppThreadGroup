@@ -15,13 +15,12 @@
  */
 void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(widget != NULL && maker != NULL && *handle != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL && *handle != SCUI_HANDLE_INVALID);
     SCUI_ASSERT(maker->clip.w != 0);
     SCUI_ASSERT(maker->clip.h != 0);
     
     /* 非布局则句柄为动态创建 */
-    if (!layout)
-        *handle = scui_handle_new();
+    *handle = layout ? maker->myself : scui_handle_new();
     
     SCUI_LOG_DEBUG("");
     /* 为句柄设置映射 */
@@ -37,8 +36,8 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     widget->type   = maker->type;
     widget->style  = maker->style;
     widget->clip   = maker->clip;
-    widget->myself = *handle;
     widget->parent = maker->parent;
+    widget->myself = *handle;
     
     SCUI_LOG_DEBUG("");
     /* 子控件的坐标区域是相对父控件 */

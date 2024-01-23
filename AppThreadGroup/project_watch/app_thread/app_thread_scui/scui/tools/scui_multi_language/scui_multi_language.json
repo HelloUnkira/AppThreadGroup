@@ -1,0 +1,6 @@
+{
+    "type"   : "scui_multi_language",
+    "brief"  : "scui_multi_language: suggest：xlsx workbook and sheet",
+    "xlsx"   : "translate.xlsx",
+    "sheet"  : "translate"
+}

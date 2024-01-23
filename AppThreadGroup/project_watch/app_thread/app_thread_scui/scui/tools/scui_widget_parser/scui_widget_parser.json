@@ -1,0 +1,43 @@
+{
+    "type": "scui widget parser table",
+    "anno": "所有的未书写字段默认为0",
+    "widget": [
+        {
+            "class": "widget",
+            "maker": "scui_widget_maker_t: you can't use this",
+            "field": {
+                "widget.type":                  "控件类型",
+                "widget.style.trans":           "控件状态风格(背景透明)",
+                "widget.style.indev_ptr":       "控件状态风格(输入事件响应标记:ptr)",
+                "widget.style.indev_enc":       "控件状态风格(输入事件响应标记:enc)",
+                "widget.style.indev_key":       "控件状态风格(输入事件响应标记:key)",
+                "widget.clip.x":                "控件所在父控件区域(x)",
+                "widget.clip.y":                "控件所在父控件区域(y)",
+                "widget.clip.w":                "控件所在父控件区域(w)",
+                "widget.clip.h":                "控件所在父控件区域(h)",
+                "widget.myself":                "控件关联属性:自己",
+                "widget.parent":                "控件关联属性:父控件",
+                "widget.child_num":             "控件关联属性:子控件数量",
+                "widget.image":                 "背景图片(如果有背景图片,优先绘制)",
+                "widget.color.color":           "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_render":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.event_cb":              "事件响应回调(可选字段,非控件自身字段)"
+            }
+        },
+        {
+            "class": "scui_widget_type_window",
+            "maker": "scui_window_maker_t",
+            "field": {
+                "level":    "窗口所在层级(数字越大越高)",
+                "buffer":   "窗口是否使用独立画布"
+            }
+        },
+        {
+            "class": "scui_widget_type_custom",
+            "maker": "scui_custom_maker_t",
+            "field": {
+                "empty":    "自定义是custom的别名,它不存在别的字段"
+            }
+        }
+    ]
+}

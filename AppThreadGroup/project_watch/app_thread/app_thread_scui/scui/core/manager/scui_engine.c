@@ -55,6 +55,13 @@ void scui_engine_ready(void)
     
     scui_handle_table_t table = {0};
     table.source_remap = NULL;
+    /* 句柄表(widget) */
+    static void *widget_remap[scui_widget_parser_handle_num] = {0};
+    table.offset = SCUI_HANDLE_OFFSET_WIDGET;
+    table.source = scui_widget_parser_table;
+    table.number = scui_widget_parser_handle_num;
+    table.source_remap = widget_remap;
+    scui_handle_table_register(&table);
     /* 句柄表(image) */
     table.offset = SCUI_HANDLE_OFFSET_IMAGE;
     table.source = scui_image_combine_table;

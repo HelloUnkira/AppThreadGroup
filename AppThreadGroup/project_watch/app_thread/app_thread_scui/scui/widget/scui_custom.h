@@ -7,7 +7,6 @@ typedef struct {
 
 typedef struct {
     scui_widget_maker_t widget;
-    scui_event_cb_t     event_cb;   /* 事件响应回调 */
 } scui_custom_maker_t;
 
 /*@brief 自定义控件创建

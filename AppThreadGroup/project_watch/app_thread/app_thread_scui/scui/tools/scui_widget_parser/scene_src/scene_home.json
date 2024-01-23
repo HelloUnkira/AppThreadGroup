@@ -1,0 +1,34 @@
+{
+    "type": "scene",
+    "widget": [
+        {
+            "widget.type":                  "scui_widget_type_window",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_enc":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.x":                "0",
+            "widget.clip.y":                "0",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_HOME",
+            "widget.event_cb":              "scui_ui_scene_home_event_proc",
+            "level":                        "0",
+            "buffer":                       "true"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_enc":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.x":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.y":                "SCUI_DRV_VER_RES / 4",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 2",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 2",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_CENTER",
+            "widget.parent":                "SCUI_UI_SCENE_HOME",
+            "widget.color.color":           "0xFFFFFFFF",
+            "widget.color.color_render":    "0xFFFFFFFF",
+            "widget.event_cb":              "scui_ui_scene_home_center_event_proc"
+        }
+    ]
+}

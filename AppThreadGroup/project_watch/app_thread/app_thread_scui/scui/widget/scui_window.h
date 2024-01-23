@@ -9,9 +9,8 @@ typedef struct {
 
 typedef struct {
     scui_widget_maker_t widget;
-    scui_event_cb_t     event_cb;   /* 事件响应回调 */
-    uint8_t level:6;                /* 窗口所在层级(数字越大越高) */
-    uint8_t buffer:1;               /* 窗口是否使用独立画布 */
+    uint8_t level:6;            /* 窗口所在层级(数字越大越高) */
+    uint8_t buffer:1;           /* 窗口是否使用独立画布 */
 } scui_window_maker_t;
 
 /*@brief 窗口控件创建

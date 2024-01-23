@@ -24,8 +24,8 @@
 
 #define SCUI_HANDLE_OFFSET_WIDGET   (0x10000)   /* 句柄表偏移:控件 */
 #define SCUI_HANDLE_OFFSET_IMAGE    (0x20000)   /* 句柄表偏移:图片描述 */
-#define SCUI_HANDLE_OFFSET_FONT     (0x30000)   /* 句柄表偏移:字库描述 */
-#define SCUI_HANDLE_OFFSET_LANG     (0x40000)   /* 句柄表偏移:多语言表 */
+#define SCUI_HANDLE_OFFSET_LANG     (0x30000)   /* 句柄表偏移:多语言表 */
+#define SCUI_HANDLE_OFFSET_FONT     (0x40000)   /* 句柄表偏移:字库描述 */
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK             (16)
@@ -48,5 +48,8 @@
 
 /* 场景管理数量限制 */
 #define SCUI_SCENE_MGR_LIMIT        (10)
+
+/* 空回调,测试控件使用 */
+#define SCUI_WIDGET_EVENT_USE_EMPTY     (1)
 
 #endif
