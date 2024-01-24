@@ -3,6 +3,7 @@
 
 /* 控件类型: */
 typedef enum {
+    scui_widget_type_unknown,   /* 未知控件 */
     scui_widget_type_window,    /* 窗口控件(仅根控件) */
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
@@ -69,6 +70,7 @@ typedef struct {
 } scui_widget_t;
 
 /* 控件布局资料: */
+#pragma pack(push, 1)
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
@@ -80,6 +82,7 @@ typedef struct {
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
     scui_event_cb_t         event_cb;       /* 事件响应回调(可选字段,非控件自身字段) */
 } scui_widget_maker_t;
+#pragma pack(pop)
 
 /*@brief 控件创建
  *@param widget 控件实例

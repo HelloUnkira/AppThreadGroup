@@ -15,6 +15,7 @@
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
     #if 1
+    
     static uint8_t color = 0;
     static uint8_t alpha = 0;
     
@@ -29,12 +30,14 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     
     color += 1;
     alpha += 1;
+    
     #else
     
     static uint8_t count = 0;
     
     scui_image_unit_t image_unit = {0};
-    image_unit.image = scui_handle_get(SCUI_HANDLE_OFFSET_IMAGE + scui_image_prjimage_src_00_theme_01_on_png);
+    scui_handle_t handle = scui_image_prjimage_src_00_theme_01_on_png;
+    image_unit.image = scui_handle_get(handle);
     scui_area_t src_clip = {
         .w = image_unit.image->pixel.width,
         .h = image_unit.image->pixel.height,
@@ -51,6 +54,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     scui_image_cache_load(&image_unit);
     scui_draw_image(surface, &dst_clip, &image_unit, &src_clip, color, alpha);
     scui_image_cache_unload(&image_unit);
+    
     #endif
 }
 
@@ -82,6 +86,9 @@ static void app_thread_scui_draw_test(void)
     static scui_handle_t anima_handle = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &anima_handle);
     scui_anima_start(anima_handle);
+    
+    scui_handle_t handle = SCUI_UI_SCENE_HOME;
+    scui_widget_show(handle);
 }
 
 #else

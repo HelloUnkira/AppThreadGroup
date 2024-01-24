@@ -139,6 +139,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
+	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
 };
@@ -249,7 +250,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[scui_widget_parser_handle_num] = {
+const void * scui_widget_parser_table[12] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_3,

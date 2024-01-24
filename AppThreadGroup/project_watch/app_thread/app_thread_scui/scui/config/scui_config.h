@@ -19,13 +19,13 @@
 
 /* 句柄表数量,共享句柄数量--最大限制 */
 #define SCUI_HANDLE_TABLE_LIMIT     (5)
-#define SCUI_HANDLE_SHARE_LIMIT     (512)
-#define SCUI_HANDLE_SHARE_OFFSET    (0x9FFFF)
+#define SCUI_HANDLE_SHARE_LIMIT     ((scui_handle_t)512)
+#define SCUI_HANDLE_SHARE_OFFSET    ((scui_handle_t)0x9FFF)
 
-#define SCUI_HANDLE_OFFSET_WIDGET   (0x10000)   /* 句柄表偏移:控件 */
-#define SCUI_HANDLE_OFFSET_IMAGE    (0x20000)   /* 句柄表偏移:图片描述 */
-#define SCUI_HANDLE_OFFSET_LANG     (0x30000)   /* 句柄表偏移:多语言表 */
-#define SCUI_HANDLE_OFFSET_FONT     (0x40000)   /* 句柄表偏移:字库描述 */
+// #define SCUI_HANDLE_OFFSET_WIDGET   (0x1000)    /* 句柄表偏移:控件 */
+// #define SCUI_HANDLE_OFFSET_IMAGE    (0x2000)    /* 句柄表偏移:图片描述 */
+// #define SCUI_HANDLE_OFFSET_LANG     (0x3000)    /* 句柄表偏移:多语言表 */
+// #define SCUI_HANDLE_OFFSET_FONT     (0x4000)    /* 句柄表偏移:字库描述 */
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK             (16)

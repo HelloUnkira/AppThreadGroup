@@ -113,6 +113,13 @@ do {                                                    \
 #define app_sys_dist(x, y)      ((x) > (y) ? (x) - (y) : (y) - (x))
 #define app_sys_mod_abs(x, m)   (((x) % (m) + (m)) % (m))
 
+/*@brief 包含关系
+ */
+#define app_sys_betw_xx(x, l, r)    ((x) >  (l) && (x) <  (r))
+#define app_sys_betw_lx(x, l, r)    ((x) >= (l) && (x) <  (r))
+#define app_sys_betw_xr(x, l, r)    ((x) >  (l) && (x) <= (r))
+#define app_sys_betw_lr(x, l, r)    ((x) >= (l) && (x) <= (r))
+
 /*@brief 区间映射
  */
 #define app_sys_map(x, l_i, r_i, l_o, r_o)  (((x) - (l_i)) * ((r_o) - (l_o)) / ((r_i) - (l_i)) + (l_o))

@@ -1,6 +1,11 @@
 {
     "type": "scui widget parser table",
+    "anno": "child_num指的是动态子控件数量",
+    "anno": "在布局界面的静态子控件数量会自动计算并累加",
     "anno": "所有的未书写字段默认为0",
+    "anno": "句柄表偏移:控件",
+    "offset_name":  "SCUI_HANDLE_OFFSET_WIDGET",
+    "offset_value": "0x1000 - 1",
     "widget": [
         {
             "class": "widget",

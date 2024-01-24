@@ -5,9 +5,11 @@ typedef struct {
     scui_widget_t widget;
 } scui_custom_t;
 
+#pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
 } scui_custom_maker_t;
+#pragma pack(pop)
 
 /*@brief 自定义控件创建
  *@param maker  自定义控件创建参数

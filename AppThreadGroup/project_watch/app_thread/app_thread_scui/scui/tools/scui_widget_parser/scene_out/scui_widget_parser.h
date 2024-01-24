@@ -5,6 +5,7 @@
  */
 
 typedef enum {
+	SCUI_HANDLE_OFFSET_WIDGET = 0x1000 - 1,
 	SCUI_UI_SCENE_FLOAT_1,
 	SCUI_UI_SCENE_FLOAT_2,
 	SCUI_UI_SCENE_FLOAT_3,
@@ -17,9 +18,8 @@ typedef enum {
 	SCUI_UI_SCENE_4,
 	SCUI_UI_SCENE_5,
 	SCUI_UI_SCENE_6,
-	scui_widget_parser_handle_num,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[scui_widget_parser_handle_num];
+extern const void * scui_widget_parser_table[12];
 
 #endif

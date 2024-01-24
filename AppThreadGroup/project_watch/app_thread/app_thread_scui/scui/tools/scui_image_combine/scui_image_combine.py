@@ -13,6 +13,9 @@ scui_pixel_format_2 = r'argb8565'
 scui_pixel_format_list_0 = ['p4', 'p8']  # 纯色图,只有透明度(位深<=8)
 scui_pixel_format_list_1 = ['rgb565', 'rgb888']  # 色彩图,无透明度()
 scui_pixel_format_list_2 = ['argb8565', 'argb8888']  # 色彩图,有透明度
+# 句柄表偏移:图片描述
+scui_image_offset_name = 'SCUI_HANDLE_OFFSET_IMAGE'
+scui_image_offset_value = '0x2000 - 1'
 
 
 # 生成pixel p4(palette)
@@ -36,7 +39,7 @@ def scui_image_pixel_bmp565(r8, g8, b8) -> tuple:
 
 # lz4压缩
 def scui_image_lz4_compress(pixel_bytes_in) -> bytearray:
-    # lz4hc = ctypes.cdll.LoadLibrary(r".\lz4hc.dll")
+    # lz4hc = ctypes.cdll.LoadLibrary(r'.\lz4hc.dll')
     # lz4hc.LZ4_compress_HC(pixel_bytes_in, pixel_bytes_out, pixel_bytes_size, pixel_bytes_size, 12)
     # pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
     pixel_bytes_out = lz4.block.compress(pixel_bytes_in, mode='high_compression', compression=12, return_bytearray=True)
@@ -68,7 +71,10 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
     pixel_ofs_raw = 0
     pixel_ofs_mem = 0
     # 填充数据表
+    offset_name = scui_image_offset_name
+    offset_value = scui_image_offset_value
     scui_image_combine_h.write('typedef enum {\n')
+    scui_image_combine_h.write('\t%s = %s,\n' % (offset_name, offset_value))
     for file in file_path_list:
         scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
         scui_image_combine_h.write('\tscui_image_%s,\n' % scui_image_tag)
@@ -82,7 +88,7 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
             image_raw = PIL.Image.open(file)
             image_std = PIL.Image.open(file).convert('RGBA')
         except Exception as e:
-            print("image parse fail :", e)
+            print('image parse fail :', e)
             continue
         # print(image_raw.size)       # 图片尺寸
         # print(image_raw.mode)       # 图片模式

@@ -19,8 +19,9 @@ scui_handle_table_t * scui_handle_table_find(scui_handle_t handle)
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
-        uint32_t idx = handle - scui_handle_table[ofs].offset;
-        if (idx < scui_handle_table[ofs].number)
+        scui_handle_t betw_l = scui_handle_table[ofs].offset;
+        scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+        if (scui_betw_lx(handle, betw_l, betw_r))
             return &scui_handle_table[ofs];
     }
     SCUI_LOG_ERROR("handle %u is unknown", handle);
@@ -43,8 +44,9 @@ void scui_handle_table_register(scui_handle_table_t *table)
                 SCUI_LOG_ERROR("duplicate list");
                 SCUI_ASSERT(false);
             }
-            if (!(table->offset >= scui_handle_table[ofs].offset + scui_handle_table[ofs].number ||
-                  table->offset + table->number <= scui_handle_table[ofs].offset)) {
+            scui_handle_t betw_l = scui_handle_table[ofs].offset;
+            scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+            if (!(table->offset >= betw_r || table->offset + table->number <= betw_l)) {
                   SCUI_LOG_ERROR("overlay list");
                   SCUI_ASSERT(false);
             }
@@ -75,16 +77,18 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
     if (handle == SCUI_HANDLE_INVALID)
         return SCUI_HANDLE_INVALID;
     /* 检查是否是动态句柄中的句柄 */
-    if (handle - SCUI_HANDLE_SHARE_OFFSET < SCUI_HANDLE_SHARE_LIMIT) {
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (scui_betw_lx(handle, betw_l, betw_r))
         return SCUI_HANDLE_SHARE_OFFSET;
-    }
     /* 检查是否是静态句柄表中的句柄 */
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
-        if (handle - scui_handle_table[ofs].offset < scui_handle_table[ofs].number) {
+        scui_handle_t betw_l = scui_handle_table[ofs].offset;
+        scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+        if (scui_betw_lx(handle, betw_l, betw_r))
             return scui_handle_table[ofs].offset;
-        }
     }
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return SCUI_HANDLE_INVALID;
@@ -95,9 +99,9 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
  */
 scui_handle_t scui_handle_new(void)
 {
-    for (uint32_t idx = 0; idx < SCUI_HANDLE_SHARE_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_HANDLE_SHARE_LIMIT; idx++)
         if (scui_handle_table_share[idx] == NULL) {
-            scui_handle_table_share[idx]  = (void *)(~(uintptr_t)0);
+            scui_handle_table_share[idx]  = (void *)(~(uintptr_t)NULL);
             return SCUI_HANDLE_SHARE_OFFSET + idx;
         }
     /* 句柄实例不足 */
@@ -113,8 +117,10 @@ bool scui_handle_del(scui_handle_t handle)
 {
     if (handle == SCUI_HANDLE_INVALID)
         return false;
-    if (handle - SCUI_HANDLE_SHARE_OFFSET < SCUI_HANDLE_SHARE_LIMIT) {
-        uint32_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (scui_betw_lx(handle, betw_l, betw_r)) {
+        scui_handle_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
         scui_handle_table_share[idx] = NULL;
         return true;
     }
@@ -131,9 +137,11 @@ void * scui_handle_get(scui_handle_t handle)
     if (handle == SCUI_HANDLE_INVALID)
         return NULL;
     /* 检查是否是动态句柄中的句柄 */
-    if (handle - SCUI_HANDLE_SHARE_OFFSET < SCUI_HANDLE_SHARE_LIMIT) {
-        uint32_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
-        if (scui_handle_table_share[idx] != (void *)(~(uintptr_t)0))
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (scui_betw_lx(handle, betw_l, betw_r)) {
+        scui_handle_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
+        if (scui_handle_table_share[idx] != (void *)(~(uintptr_t)NULL))
             return scui_handle_table_share[idx];
             return NULL;
     }
@@ -141,8 +149,10 @@ void * scui_handle_get(scui_handle_t handle)
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
-        uint32_t idx = handle - scui_handle_table[ofs].offset;
-        if (idx < scui_handle_table[ofs].number) {
+        scui_handle_t betw_l = scui_handle_table[ofs].offset;
+        scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+        if (scui_betw_lx(handle, betw_l, betw_r)) {
+            scui_handle_t idx = handle - scui_handle_table[ofs].offset;
             /* 优先进行重映射,如果存在重映射的话 */
             if (scui_handle_table[ofs].source_remap != NULL)
             if (scui_handle_table[ofs].source_remap[idx] != NULL)
@@ -166,8 +176,10 @@ bool scui_handle_set(scui_handle_t handle, void *source)
     if (handle == SCUI_HANDLE_INVALID)
         return false;
     /* 检查是否是动态句柄中的句柄 */
-    if (handle - SCUI_HANDLE_SHARE_OFFSET < SCUI_HANDLE_SHARE_LIMIT) {
-        uint32_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (scui_betw_lx(handle, betw_l, betw_r)) {
+        scui_handle_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
         scui_handle_table_share[idx] = source;
         return true;
     }
@@ -175,8 +187,10 @@ bool scui_handle_set(scui_handle_t handle, void *source)
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
-        uint32_t idx = handle - scui_handle_table[ofs].offset;
-        if (idx < scui_handle_table[ofs].number) {
+        scui_handle_t betw_l = scui_handle_table[ofs].offset;
+        scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+        if (scui_betw_lx(handle, betw_l, betw_r)) {
+            scui_handle_t idx = handle - scui_handle_table[ofs].offset;
             /* 优先进行重映射,如果存在重映射的话 */
             if (scui_handle_table[ofs].source_remap != NULL) {
                 scui_handle_table[ofs].source_remap[idx] = source;
@@ -198,8 +212,10 @@ bool scui_handle_remap(scui_handle_t handle)
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
-        uint32_t idx = handle - scui_handle_table[ofs].offset;
-        if (idx < scui_handle_table[ofs].number) {
+        scui_handle_t betw_l = scui_handle_table[ofs].offset;
+        scui_handle_t betw_r = scui_handle_table[ofs].offset + scui_handle_table[ofs].number;
+        if (scui_betw_lx(handle, betw_l, betw_r)) {
+            scui_handle_t idx = handle - scui_handle_table[ofs].offset;
             /* 如果存在重映射的话 */
             if (scui_handle_table[ofs].source_remap != NULL)
             if (scui_handle_table[ofs].source_remap[idx] != NULL)

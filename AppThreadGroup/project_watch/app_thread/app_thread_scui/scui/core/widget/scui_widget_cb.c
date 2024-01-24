@@ -18,6 +18,10 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
         [scui_widget_type_window].event   = (scui_widget_cb_event_t)    NULL,
         [scui_widget_type_window].create  = (scui_widget_cb_create_t)   scui_window_create,
         [scui_widget_type_window].destroy = (scui_widget_cb_destroy_t)  scui_window_destroy,
+        [scui_widget_type_custom].event   = (scui_widget_cb_event_t)    NULL,
+        [scui_widget_type_custom].create  = (scui_widget_cb_create_t)   scui_custom_create,
+        [scui_widget_type_custom].destroy = (scui_widget_cb_destroy_t)  scui_custom_destroy,
+        
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
@@ -37,7 +41,7 @@ void scui_widget_cb_create(scui_handle_t handle)
     maker = scui_handle_get(handle);
     SCUI_ASSERT(maker != NULL);
     scui_widget_cb_t *widget_cb = scui_widget_cb_find(maker->type);
-    widget_cb->create(&maker, &handle, true);
+    widget_cb->create(maker, &handle, true);
 }
 
 /*@brief 通过映射表调用销毁一个控件

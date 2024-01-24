@@ -7,11 +7,13 @@ typedef struct {
     uint8_t level:6;            /* 窗口所在层级(数字越大越高) */
 } scui_window_t;
 
+#pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
     uint8_t level:6;            /* 窗口所在层级(数字越大越高) */
     uint8_t buffer:1;           /* 窗口是否使用独立画布 */
 } scui_window_maker_t;
+#pragma pack(pop)
 
 /*@brief 窗口控件创建
  *@param maker  窗口控件创建参数

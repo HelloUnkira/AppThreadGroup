@@ -5,6 +5,7 @@
  */
 
 typedef enum {
+	SCUI_HANDLE_OFFSET_IMAGE = 0x2000 - 1,
 	scui_image_prj_image_src_00_theme_01_onpng,
 	scui_image_prj_image_src_00_theme_02_ringbmp,
 	scui_image_prj_image_src_00_theme_03_underpng,

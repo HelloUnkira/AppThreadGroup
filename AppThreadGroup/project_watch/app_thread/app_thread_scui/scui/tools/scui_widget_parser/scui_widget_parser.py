@@ -17,18 +17,22 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
     scui_widget_parser_c.write('#include \"scui_drv_conf.h\"\n')
     scui_widget_parser_c.write('#include \"scui.h\"\n\n')
     # 填充数据表
+    offset_name = scui_widget_parser_table['offset_name']
+    offset_value = scui_widget_parser_table['offset_value']
     scui_widget_parser_h.write('typedef enum {\n')
+    scui_widget_parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
+    scui_widget_parser_handle_num = 0
     for scene in scene_list:
         for widget in scene['widget']:
             try:
-                scui_widget_parser_h.write('\t%s,\n' % widget["widget.myself"])
+                scui_widget_parser_handle_num += 1
+                scui_widget_parser_h.write('\t%s,\n' % widget['widget.myself'])
             except Exception as e:
                 print(widget)
                 print(e)
                 return
-    scui_widget_parser_h.write('\tscui_widget_parser_handle_num,\n')
     scui_widget_parser_h.write('} scui_widget_parser_handle_t;\n\n')
-    scui_widget_parser_h.write('extern const void * scui_widget_parser_table[scui_widget_parser_handle_num];\n\n')
+    scui_widget_parser_h.write('extern const void * scui_widget_parser_table[%s];\n\n' % scui_widget_parser_handle_num)
     scui_widget_parser_h.write('#endif\n')
     # 填充函数定义或者声明
     scui_widget_parser_c.write('#if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1\n')
@@ -36,7 +40,7 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
         for widget in scene['widget']:
             try:
                 scui_event_cb = 'static scui_event_retval_t %s(scui_event_t *event)'
-                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget["widget.event_cb"])
+                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
                 scui_widget_parser_c.write('{\n\treturn scui_event_retval_default;\n}\n')
             except Exception as e:
                 pass
@@ -45,20 +49,20 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
         for widget in scene['widget']:
             try:
                 scui_event_cb = 'extern scui_event_retval_t %s(scui_event_t *event);'
-                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget["widget.event_cb"])
+                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
             except Exception as e:
                 pass
     scui_widget_parser_c.write('#endif\n\n')
     # 对目标控件集合进行流式处理,提取数据内容
     for scene in scene_list:
         for widget in scene['widget']:
-            print(widget["widget.myself"])
+            print(widget['widget.myself'])
             # 写入结构
-            scui_widget_tag = 'scui_widget_' + widget["widget.myself"]
+            scui_widget_tag = 'scui_widget_' + widget['widget.myself']
             scui_widget_type_unknown = True
             for widget_maker in scui_widget_parser_table['widget']:
-                if widget['widget.type'] == widget_maker["class"]:
-                    scui_widget_parser_c.write('static const %s %s = {\n' % (widget_maker["maker"], scui_widget_tag))
+                if widget['widget.type'] == widget_maker['class']:
+                    scui_widget_parser_c.write('static const %s %s = {\n' % (widget_maker['maker'], scui_widget_tag))
                     scui_widget_type_unknown = False
                     break
             # 未知类型
@@ -67,25 +71,38 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                 print(widget)
                 continue
             # 填充基础数据目标
+            scui_widget_field_child_num = 0
             for field in widget:
                 for widget_maker in scui_widget_parser_table['widget']:
-                    if widget_maker["class"] == "widget":
-                        if field in widget_maker["field"]:
+                    if widget_maker['class'] == 'widget':
+                        # 存在子控件字段,单独计算
+                        if field == 'widget.child_num':
+                            scui_widget_field_child_num = eval(widget[field])
+                        elif field in widget_maker['field']:
                             scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
                         break
+            # 统计本控件有多少布局孩子
+            for target in scene['widget']:
+                try:
+                    if widget['widget.myself'] == target['widget.parent']:
+                        scui_widget_field_child_num += 1
+                except Exception as e:
+                    pass
+            if scui_widget_field_child_num != 0:
+                scui_widget_parser_c.write('\t.%-30s = %s,\n' % ("widget.child_num", str(scui_widget_field_child_num)))
             # 填充指定数据目标
             for field in widget:
                 for widget_maker in scui_widget_parser_table['widget']:
-                    if widget_maker["class"] == widget['widget.type']:
-                        if field in widget_maker["field"]:
+                    if widget_maker['class'] == widget['widget.type']:
+                        if field in widget_maker['field']:
                             scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
                         break
             scui_widget_parser_c.write('};\n\n')
     # 填充数据表
-    scui_widget_parser_c.write('const void * scui_widget_parser_table[scui_widget_parser_handle_num] = {\n')
+    scui_widget_parser_c.write('const void * scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)
     for scene in scene_list:
         for widget in scene['widget']:
-            scui_widget_tag = 'scui_widget_' + widget["widget.myself"]
+            scui_widget_tag = 'scui_widget_' + widget['widget.myself']
             scui_widget_parser_c.write('\t(void *)&%s,\n' % scui_widget_tag)
     scui_widget_parser_c.write('};\n')
     pass

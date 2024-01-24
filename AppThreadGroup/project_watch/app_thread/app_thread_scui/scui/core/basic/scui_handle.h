@@ -3,7 +3,7 @@
 
 /*@brief 句柄
  */
-typedef uint32_t scui_handle_t;
+typedef uint16_t scui_handle_t;
 
 /*@brief 句柄表
  *       句柄资源重映射表:可选项
