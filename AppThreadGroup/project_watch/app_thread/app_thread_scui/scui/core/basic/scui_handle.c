@@ -52,8 +52,9 @@ void scui_handle_table_register(scui_handle_table_t *table)
             }
         }
     /* 检查当前表不在动态句柄范围内 */
-    if (!(table->offset >= SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT ||
-          table->offset + table->number <= SCUI_HANDLE_SHARE_OFFSET)) {
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (!(table->offset >= betw_r || table->offset + table->number <= betw_l)) {
           SCUI_LOG_ERROR("overlay list");
           SCUI_ASSERT(false);
     }

@@ -120,7 +120,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     SCUI_LOG_INFO("widget parent %u",       widget->parent);
     SCUI_LOG_INFO("widget child_num %u",    widget->child_num);
     SCUI_LOG_INFO("widget image %u",        widget->image);
-    SCUI_LOG_INFO("widget color %u",        widget->color.color.full);
+    SCUI_LOG_INFO("widget color %08x",      widget->color.color.full);
 }
 
 /*@brief 控件销毁

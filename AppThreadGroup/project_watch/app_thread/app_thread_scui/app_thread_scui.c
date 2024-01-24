@@ -89,6 +89,7 @@ static void app_thread_scui_draw_test(void)
     
     scui_handle_t handle = SCUI_UI_SCENE_HOME;
     scui_widget_show(handle);
+    scui_widget_hide(handle);
 }
 
 #else

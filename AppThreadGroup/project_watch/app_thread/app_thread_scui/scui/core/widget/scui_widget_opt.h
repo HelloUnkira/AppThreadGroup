@@ -36,4 +36,14 @@ scui_handle_t scui_widget_root(scui_handle_t handle);
  */
 void scui_widget_move(scui_handle_t handle, scui_point_t *point);
 
+/*@brief 控件显示
+ *@param handle 控件句柄
+ */
+void scui_widget_show(scui_handle_t handle);
+
+/*@brief 控件显示
+ *@param handle 控件句柄
+ */
+void scui_widget_hide(scui_handle_t handle);
+
 #endif

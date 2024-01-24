@@ -229,5 +229,6 @@ void scui_widget_hide(scui_handle_t handle)
     scui_event_notify(&event);
     
     /* 通知父窗口重绘 */
-    scui_widget_draw(widget->parent, false);
+    if (widget->parent != SCUI_HANDLE_INVALID)
+        scui_widget_draw(widget->parent, false);
 }
