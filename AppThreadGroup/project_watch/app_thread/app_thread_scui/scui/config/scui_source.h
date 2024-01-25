@@ -9,4 +9,7 @@
 #include "scui_image_combine.h"     /* 静态图形索引表 */
 #include "scui_multi_language.h"    /* 多国语字符串表 */
 
+/* 空回调,测试控件使用 */
+#define SCUI_WIDGET_EVENT_USE_EMPTY     (0)
+
 #endif

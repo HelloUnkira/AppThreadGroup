@@ -61,6 +61,8 @@ void scui_scene_mgr_mix_surface(void)
     
     /* 第一轮混合:处理所有独立画布 */
     for (uint32_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+        if (scui_scene_mgr.scene[idx] == SCUI_HANDLE_INVALID)
+            continue;
         scui_handle_t  handle = scui_scene_mgr.scene[idx];
         scui_widget_t *widget = scui_handle_get(handle);
         SCUI_ASSERT(scui_handle_remap(handle));
@@ -75,6 +77,8 @@ void scui_scene_mgr_mix_surface(void)
     
     /* 第二轮混合:处理所有独立画布 */
     for (uint32_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+        if (scui_scene_mgr.scene[idx] == SCUI_HANDLE_INVALID)
+            continue;
         scui_handle_t  handle = scui_scene_mgr.scene[idx];
         scui_widget_t *widget = scui_handle_get(handle);
         SCUI_ASSERT(scui_handle_remap(handle));
@@ -117,5 +121,5 @@ void scui_scene_mgr_active_set(scui_handle_t handle)
  */
 scui_event_retval_t scui_scene_mgr_event_dispatch(scui_event_t *event)
 {
-    return scui_event_retval_default;
+    return scui_event_retval_quit;
 }

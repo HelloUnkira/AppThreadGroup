@@ -49,7 +49,4 @@
 /* 场景管理数量限制 */
 #define SCUI_SCENE_MGR_LIMIT        (10)
 
-/* 空回调,测试控件使用 */
-#define SCUI_WIDGET_EVENT_USE_EMPTY     (1)
-
 #endif

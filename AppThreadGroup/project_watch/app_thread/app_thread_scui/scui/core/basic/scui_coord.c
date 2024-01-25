@@ -50,15 +50,19 @@ bool scui_area_empty(scui_area_t *area)
  */
 bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
-    scui_area_m_to_s(area1);
-    scui_area_m_to_s(area2);
-    area->x1 = scui_max(area1->x1, area2->x1);
-    area->y1 = scui_max(area1->y1, area2->y1);
-    area->x2 = scui_min(area1->x2, area2->x2);
-    area->y2 = scui_min(area1->y2, area2->y2);
-    scui_area_s_to_m(area2);
-    scui_area_s_to_m(area1);
-    scui_area_s_to_m(area);
+    if (area1 == area2) {
+        *area = *area1;
+    } else {
+        scui_area_m_to_s(area1);
+        scui_area_m_to_s(area2);
+        area->x1 = scui_max(area1->x1, area2->x1);
+        area->y1 = scui_max(area1->y1, area2->y1);
+        area->x2 = scui_min(area1->x2, area2->x2);
+        area->y2 = scui_min(area1->y2, area2->y2);
+        scui_area_s_to_m(area2);
+        scui_area_s_to_m(area1);
+        scui_area_s_to_m(area);
+    }
     
     return !scui_area_empty(area);
 }
@@ -70,15 +74,19 @@ bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
  */
 void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
-    scui_area_m_to_s(area1);
-    scui_area_m_to_s(area2);
-    area->x1 = scui_min(area1->x1, area2->x1);
-    area->y1 = scui_min(area1->y1, area2->y1);
-    area->x2 = scui_max(area1->x2, area2->x2);
-    area->y2 = scui_max(area1->y2, area2->y2);
-    scui_area_s_to_m(area2);
-    scui_area_s_to_m(area1);
-    scui_area_s_to_m(area);
+    if (area1 == area2) {
+        *area = *area1;
+    } else {
+        scui_area_m_to_s(area1);
+        scui_area_m_to_s(area2);
+        area->x1 = scui_min(area1->x1, area2->x1);
+        area->y1 = scui_min(area1->y1, area2->y1);
+        area->x2 = scui_max(area1->x2, area2->x2);
+        area->y2 = scui_max(area1->y2, area2->y2);
+        scui_area_s_to_m(area2);
+        scui_area_s_to_m(area1);
+        scui_area_s_to_m(area);
+    }
 }
 
 /*@brief 检查区域包含区域(area2包含area1)
@@ -88,6 +96,8 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
  */
 bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
 {
+    if (area1 == area2)
+        return true;
     if (area1->x < area2->x || area1->x + area1->w > area2->x + area2->w ||
         area1->y < area2->y || area1->y + area1->h > area2->y + area2->h)
         return false;

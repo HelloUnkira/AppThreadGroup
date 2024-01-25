@@ -198,9 +198,7 @@ void scui_widget_show(scui_handle_t handle)
     };
     scui_event_notify(&event);
     
-    if (widget->parent == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_WARN("...");
-    }
+    scui_widget_draw(widget->myself, false);
 }
 
 /*@brief 控件显示

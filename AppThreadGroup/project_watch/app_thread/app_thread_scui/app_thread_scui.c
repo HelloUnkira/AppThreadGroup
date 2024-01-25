@@ -10,7 +10,7 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 1   /* draw 测试 */
+#if 0   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
@@ -86,16 +86,16 @@ static void app_thread_scui_draw_test(void)
     static scui_handle_t anima_handle = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &anima_handle);
     scui_anima_start(anima_handle);
-    
-    scui_handle_t handle = SCUI_UI_SCENE_HOME;
-    scui_widget_show(handle);
-    scui_widget_hide(handle);
 }
 
 #else
 
 static void app_thread_scui_draw_test(void)
 {
+    scui_handle_t handle = SCUI_UI_SCENE_HOME;
+    scui_widget_show(handle);
+    // scui_widget_hide(handle);
+    scui_scene_mgr_active_set(handle);
 }
 
 #endif

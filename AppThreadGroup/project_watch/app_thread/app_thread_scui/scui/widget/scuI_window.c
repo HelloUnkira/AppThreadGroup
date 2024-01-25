@@ -26,7 +26,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     /* 是否需要创建自己的surface */
     if (maker->buffer) {
         scui_coord_t hor_res = scui_disp_get_hor_res();
-        scui_coord_t ver_res = scui_disp_get_hor_res();
+        scui_coord_t ver_res = scui_disp_get_ver_res();
         uint32_t surface_res = hor_res * ver_res * SCUI_PIXEL_SIZE;
         window->widget.surface.pixel = SCUI_MEM_ALLOC(scui_mem_is_image, surface_res);
     }
@@ -39,16 +39,9 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     event.order    = scui_widget_order_current;
     event.event_cb = maker->widget.event_cb;
     
-    event.event = scui_event_show;
+    /* 事件默认全局接收 */
+    event.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &event);
-    event.event = scui_event_hide;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_scene_focus_get;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_scene_focus_lost;
-    scui_widget_event_add(*handle, &event);
-    
-    /* 输入事件默认全局接收 */
     event.event = scui_event_ptr_all;
     scui_widget_event_add(*handle, &event);
     event.event = scui_event_enc_all;

@@ -10,16 +10,16 @@ typedef enum {
     /* 调度事件<s> */
     scui_event_sched_s,
     scui_event_sched_all,
-    scui_event_draw,
-    scui_event_refr,
-    scui_event_show,
-    scui_event_hide,
-    scui_event_lang_change,
-    scui_event_anima_elapse,
-    scui_event_scene_focus_get,
-    scui_event_scene_focus_lost,
-    scui_event_scene_res_load,
-    scui_event_scene_res_unload,
+    scui_event_anima_elapse,    /* 动画轮转调度 */
+    scui_event_draw,            /* 场景绘制事件 */
+    scui_event_refr,            /* 场景刷新事件 */
+    scui_event_show,            /* 场景显示事件 */
+    scui_event_hide,            /* 场景隐藏事件 */
+    scui_event_focus_get,       /* 场景焦点获取事件 */
+    scui_event_focus_lost,      /* 场景焦点失去事件 */
+    scui_event_res_load,        /* 场景资源加载事件 */
+    scui_event_res_unload,      /* 场景资源卸载事件 */
+    scui_event_lang_change,     /* 系统语言切换事件 */
     scui_event_sched_e,
     /* 调度事件<e> */
     
@@ -137,9 +137,10 @@ typedef struct {
 
 /* 事件响应回调返回值 */
 typedef enum {
-    scui_event_retval_default = 0,      /* 无效值 */
-    scui_event_retval_continue,         /* 继续事件冒泡 */
-    scui_event_retval_break,            /* 终止事件冒泡 */
+    scui_event_retval_none = 0,     /* 无效值:占位符 */
+    scui_event_retval_quit,         /* 未处理:继续事件响应 */
+    scui_event_retval_keep,         /* 已问询:继续事件响应 */
+    scui_event_retval_over,         /* 已吸收:终止事件响应 */
 } scui_event_retval_t;
 
 /* 事件响应回调 */

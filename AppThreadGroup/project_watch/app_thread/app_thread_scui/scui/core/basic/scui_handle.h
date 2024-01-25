@@ -21,8 +21,8 @@ typedef struct {
 /*@brief 句柄偏移量,非法句柄,系统句柄
  *       0号句柄为非法句柄
  */
-#define SCUI_HANDLE_INVALID     (0)
-#define SCUI_HANDLE_SYSTEM      (~(scui_handle_t)0)
+#define SCUI_HANDLE_INVALID     ((scui_handle_t)(0))
+#define SCUI_HANDLE_SYSTEM      ((scui_handle_t)(~(scui_handle_t)0))
 
 /*@brief 句柄表获取
  *@param handle 句柄
