@@ -127,7 +127,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.event_cb                = scui_ui_scene_float_1_event_proc,
-	.level                          = 0,
+	.level                          = 1,
 	.buffer                         = true,
 };
 
@@ -142,7 +142,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.event_cb                = scui_ui_scene_float_2_event_proc,
-	.level                          = 0,
+	.level                          = 1,
 	.buffer                         = true,
 };
 
@@ -157,7 +157,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_3,
 	.widget.event_cb                = scui_ui_scene_float_3_event_proc,
-	.level                          = 0,
+	.level                          = 1,
 	.buffer                         = true,
 };
 
@@ -172,7 +172,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_4,
 	.widget.event_cb                = scui_ui_scene_float_4_event_proc,
-	.level                          = 0,
+	.level                          = 1,
 	.buffer                         = true,
 };
 
@@ -188,6 +188,14 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
 	.widget.child_num               = 1,
+	.style[0].style_float           = true,
+	.style[1].style_float           = true,
+	.style[2].style_float           = true,
+	.style[3].style_float           = true,
+	.sibling[0]                     = SCUI_UI_SCENE_FLOAT_1,
+	.sibling[1]                     = SCUI_UI_SCENE_FLOAT_2,
+	.sibling[2]                     = SCUI_UI_SCENE_FLOAT_3,
+	.sibling[3]                     = SCUI_UI_SCENE_FLOAT_4,
 	.level                          = 0,
 	.buffer                         = true,
 };

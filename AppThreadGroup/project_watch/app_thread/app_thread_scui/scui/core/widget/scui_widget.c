@@ -50,7 +50,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
         widget->clip.y += widget_parent->clip.y;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_merge = {0};
-        scui_area_merge(&clip_merge, &widget->clip, &widget_parent->clip);
+        scui_area_inter(&clip_merge, &widget->clip, &widget_parent->clip);
         widget->clip = clip_merge;
     }
     
@@ -61,7 +61,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     if (widget->child_num != 0) {
         uint32_t child_list_size = widget->child_num * sizeof(scui_handle_t);
         widget->child_list = SCUI_MEM_ALLOC(scui_mem_is_part, child_list_size);
-        for (uint32_t idx = 0; idx < widget->child_num; idx++)
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             widget->child_list[idx] = SCUI_HANDLE_INVALID;
     }
     
@@ -91,7 +91,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
         widget->surface.clip.y += widget_parent->surface.clip.y;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_merge = {0};
-        scui_area_merge(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);
+        scui_area_inter(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);
         widget->surface.clip = clip_merge;
     }
     
@@ -134,7 +134,7 @@ void scui_widget_destroy(scui_widget_t *widget)
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
     /* 先递归销毁自己的孩子列表 */
-    for (uint32_t idx = 0; idx < widget->child_num; idx++) {
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
             continue;
         scui_widget_cb_destroy(widget->child_list[idx]);

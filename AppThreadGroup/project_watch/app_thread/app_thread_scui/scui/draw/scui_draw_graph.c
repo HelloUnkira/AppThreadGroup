@@ -24,7 +24,8 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                     scui_draw_dsc_line_t *dsc)
 {
     /* @等待适配,要用的时候再去实现 */
-
+    SCUI_LOG_ERROR("not finish yet");
+    
     /* 在画布指定区域绘制线条 */
     /* 线条有一个被允许的绘制区域 */
     /* 线条实际绘制需要在绘制区域内 */

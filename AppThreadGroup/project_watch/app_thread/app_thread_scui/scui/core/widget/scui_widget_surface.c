@@ -29,7 +29,7 @@ void scui_widget_surface_change(scui_widget_t *widget, scui_surface_t *surface)
     SCUI_LOG_INFO("widget %u", widget->myself);
     widget->surface.pixel = surface->pixel;
     
-    for (uint32_t idx = 0; idx < widget->child_num; idx++)
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
             scui_handle_t handle = widget->child_list[idx];
             scui_widget_t *child = scui_handle_get(handle);

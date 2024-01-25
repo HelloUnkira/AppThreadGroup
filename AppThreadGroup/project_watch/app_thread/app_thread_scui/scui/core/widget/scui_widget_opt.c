@@ -7,34 +7,13 @@
 
 #include "scui.h"
 
-/*@brief 控件显示状态获取
+/*@brief 回收控件(销毁回收,主动调用)
  *@param handle 控件句柄
- *@retval 是否显示
  */
-bool scui_widget_style_is_show(scui_handle_t handle)
+void scui_widget_recycle(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-    if (!scui_widget_style_is_show(widget->parent))
-         return false;
-    
-    /* 它自己的显示状态 */
-    if (widget->style.state)
-        return true;
-    
-    return false;
-}
-
-/*@brief 控件隐藏状态获取
- *@param handle 控件句柄
- *@retval 是否隐藏
- */
-bool scui_widget_style_is_hide(scui_handle_t handle)
-{
-    return !scui_widget_style_is_show(handle);
+    scui_widget_hide(handle);
+    scui_widget_cb_destroy(handle);
 }
 
 /*@brief 事件吸收
@@ -96,19 +75,6 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
     scui_event_notify(&event);
 }
 
-/*@brief 控件树的根控件
- *@param handle 控件句柄
- *@retval 根控件句柄
- */
-scui_handle_t scui_widget_root(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        return scui_widget_root(widget->parent);
-    return handle;
-}
-
 /*@brief 控件移动到目标坐标
  *@param handle 控件句柄
  */
@@ -149,7 +115,7 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
     
     SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
-    for (uint32_t idx = 0; idx < widget->child_num; idx++)
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
             scui_handle_t handle = widget->child_list[idx];
             scui_widget_t *child = scui_handle_get(handle);
@@ -229,4 +195,30 @@ void scui_widget_hide(scui_handle_t handle)
     /* 通知父窗口重绘 */
     if (widget->parent != SCUI_HANDLE_INVALID)
         scui_widget_draw(widget->parent, false);
+}
+
+/*@brief 控件树镜像(相对父控件)
+ *@param handle 控件句柄
+ */
+void scui_widget_mirror(scui_handle_t handle)
+{
+    SCUI_LOG_INFO("");
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    /* @等待适配,要用的时候再去实现 */
+    SCUI_LOG_ERROR("not finish yet");
+    return;
+    
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
+        if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        scui_handle_t  handle_child = widget->child_list[idx];
+        scui_widget_t *widget_child = scui_handle_get(handle);
+        scui_point_t    point_child = {0};
+        
+        point_child.x = widget->clip.w - widget_child->clip.x - widget_child->clip.w;
+        point_child.y = widget_child->clip.y;
+        scui_widget_move(handle_child, &point_child);
+    }
 }

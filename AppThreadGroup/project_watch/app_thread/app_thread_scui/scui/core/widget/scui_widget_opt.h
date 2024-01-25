@@ -1,17 +1,10 @@
 #ifndef SCUI_WIDGET_OPT_H
 #define SCUI_WIDGET_OPT_H
 
-/*@brief 控件显示状态获取
+/*@brief 回收控件(销毁回收,主动调用)
  *@param handle 控件句柄
- *@retval 是否显示
  */
-bool scui_widget_style_is_show(scui_handle_t handle);
-
-/*@brief 控件隐藏状态获取
- *@param handle 控件句柄
- *@retval 是否隐藏
- */
-bool scui_widget_style_is_hide(scui_handle_t handle);
+void scui_widget_recycle(scui_handle_t handle);
 
 /*@brief 绘制控件
  *@param handle 控件句柄
@@ -24,12 +17,6 @@ void scui_widget_draw(scui_handle_t handle, bool sync);
  *@param sync   同步刷新
  */
 void scui_widget_refr(scui_handle_t handle, bool sync);
-
-/*@brief 控件树的根控件
- *@param handle 控件句柄
- *@retval 根控件句柄
- */
-scui_handle_t scui_widget_root(scui_handle_t handle);
 
 /*@brief 控件移动到目标坐标
  *@param handle 控件句柄
@@ -45,5 +32,10 @@ void scui_widget_show(scui_handle_t handle);
  *@param handle 控件句柄
  */
 void scui_widget_hide(scui_handle_t handle);
+
+/*@brief 控件树镜像(相对父控件)
+ *@param handle 控件句柄
+ */
+void scui_widget_mirror(scui_handle_t handle);
 
 #endif

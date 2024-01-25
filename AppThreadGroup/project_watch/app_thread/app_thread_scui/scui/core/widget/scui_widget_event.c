@@ -200,7 +200,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         /* 先冒泡自己 */
         scui_widget_event_proc(event);
         /* 继续冒泡,继续下沉 */
-        for (uint32_t idx = 0; idx < widget->child_num; idx++)
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[idx];
                 scui_widget_event_dispatch(event);
@@ -242,7 +242,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         /* 先冒泡自己 */
         scui_widget_event_proc(event);
         /* 如果需要继续冒泡,则继续下沉 */
-        for (uint32_t idx = 0; idx < widget->child_num; idx++)
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[idx];
                 scui_widget_event_dispatch(event);
@@ -257,8 +257,8 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
         /* 如果需要继续冒泡,则继续下沉 */
-        uint32_t child_num = widget->child_num;
-        for (uint32_t idx = 0; idx < child_num; idx++)
+        scui_handle_t child_num = widget->child_num;
+        for (scui_handle_t idx = 0; idx < child_num; idx++)
             if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[child_num - 1 - idx];
                 /* 事件如果被吸收,终止派发 */
@@ -291,8 +291,8 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
         /* 如果需要继续冒泡,则继续下沉 */
-        uint32_t child_num = widget->child_num;
-        for (uint32_t idx = 0; idx < child_num; idx++)
+        scui_handle_t child_num = widget->child_num;
+        for (scui_handle_t idx = 0; idx < child_num; idx++)
             if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[child_num - 1 - idx];
                 /* 事件如果被吸收,终止派发 */
@@ -311,8 +311,8 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
         /* 如果需要继续冒泡,则继续下沉 */
-        uint32_t child_num = widget->child_num;
-        for (uint32_t idx = 0; idx < child_num; idx++)
+        scui_handle_t child_num = widget->child_num;
+        for (scui_handle_t idx = 0; idx < child_num; idx++)
             if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[child_num - 1 - idx];
                 /* 事件如果被吸收,终止派发 */
