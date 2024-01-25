@@ -24,8 +24,8 @@
 
 // #define SCUI_HANDLE_OFFSET_WIDGET   (0x1000)    /* 句柄表偏移:控件 */
 // #define SCUI_HANDLE_OFFSET_IMAGE    (0x2000)    /* 句柄表偏移:图片描述 */
-// #define SCUI_HANDLE_OFFSET_LANG     (0x3000)    /* 句柄表偏移:多语言表 */
-// #define SCUI_HANDLE_OFFSET_FONT     (0x4000)    /* 句柄表偏移:字库描述 */
+// #define SCUI_HANDLE_OFFSET_FONT     (0x3000)    /* 句柄表偏移:字库描述 */
+// #define SCUI_HANDLE_OFFSET_LANG     (0x4000)    /* 句柄表偏移:多语言表 */
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK             (16)

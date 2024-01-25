@@ -54,21 +54,24 @@ void scui_engine_ready(void)
     scui_event_register_after(scui_event_after);
     
     scui_handle_table_t table = {0};
-    table.source_remap = NULL;
     /* 句柄表(widget) */
     static void *widget_remap[scui_arr_len(scui_widget_parser_table)] = {0};
+    table.source_remap = widget_remap;
     table.offset = SCUI_HANDLE_OFFSET_WIDGET + 1;
     table.source = scui_widget_parser_table;
     table.number = scui_arr_len(scui_widget_parser_table);
-    table.source_remap = widget_remap;
     scui_handle_table_register(&table);
+    table.source_remap = NULL;
     /* 句柄表(image) */
     table.offset = SCUI_HANDLE_OFFSET_IMAGE + 1;
     table.source = scui_image_combine_table;
     table.number = scui_arr_len(scui_image_combine_table);
     scui_handle_table_register(&table);
-    table.source_remap = NULL;
-    
+    /* 句柄表(multi language) */
+    table.offset = SCUI_HANDLE_OFFSET_LANG + 1;
+    table.source = scui_multi_language_table;
+    table.number = SCUI_MULTI_LANGUAGE_NUM_STR * SCUI_MULTI_LANGUAGE_NUM_TYPE;
+    scui_handle_table_register(&table);
 }
 
 /*@brief 引擎执行

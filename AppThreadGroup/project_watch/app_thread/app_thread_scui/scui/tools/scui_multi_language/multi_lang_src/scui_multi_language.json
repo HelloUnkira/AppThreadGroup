@@ -1,0 +1,14 @@
+{
+    "type":  "scui_multi_language",
+    "anno":  "多语言表:使用xlsx工作簿(workbook)和工作表(sheet)完整描述",
+    "anno":  "工作表的语言类型与下面language字段中的枚举顺序一一对应",
+    "xlsx":  "translate.xlsx",
+    "sheet": "translate",
+    "anno":  "句柄表偏移:多语言表",
+    "offset_name":  "SCUI_HANDLE_OFFSET_LANG",
+    "offset_value": "0x4000 - 1",
+    "language" : [
+        "scui_multi_language_type_zh",
+        "scui_multi_language_type_en"
+    ]
+}
