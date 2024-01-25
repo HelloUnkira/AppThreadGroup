@@ -30,7 +30,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     if (maker->parent != SCUI_HANDLE_INVALID)
         SCUI_ASSERT(scui_handle_remap(maker->parent));
     
-    app_sys_list_dll_reset(&widget->dl_list);
+    scui_list_dll_reset(&widget->dl_list);
     
     SCUI_LOG_DEBUG("");
     widget->type   = maker->type;

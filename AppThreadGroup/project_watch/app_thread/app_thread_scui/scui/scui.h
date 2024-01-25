@@ -5,21 +5,14 @@
 #include "scui_os.h"
 #include "scui_log.h"
 #include "scui_macro.h"
-
+#include "scui_list_l.h"        // 侵入式容器:单链表双链表以及为载体的队列,优先队列,栈
+#include "scui_table_rbs.h"     // 侵入式容器:红黑树为载体的哈希表
 /* AppThreadGroup */
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-
-
 /* config: */
 #include "scui_config.h"
-/* linker: */
-#include "scui_util.h"
-#include "scui_mem.h"
-
-
-
 /* core:basic */
 #include "scui_coord.h"         /* 坐标区域 */
 #include "scui_general.h"       /* 基础图元 */
@@ -49,26 +42,18 @@
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_scene_mgr.h"     /* 场景管理器 */
 #include "scui_engine.h"        /* 引擎 */
-
-
-
 /* draw */
 #include "scui_draw_graph.h"
 #include "scui_draw_basic.h"
 #include "scui_draw_image.h"
-
-
-
 /* widget: */
 #include "scui_window.h"
 #include "scui_custom.h"
 #include "scui_scroll.h"
 
-
-
 /* linker: */
+#include "scui_mem.h"
 #include "scui_image_src.h"     /* 图像资源加载卸载 */
-
 /* config: */
 #include "scui_source.h"
 

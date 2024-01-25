@@ -79,7 +79,7 @@ typedef enum {
 } scui_event_priority_t;
 
 typedef struct {
-    app_sys_list_dln_t dl_node;
+    scui_list_dln_t dl_node;
     /* 系统基本字段 */
     scui_handle_t object;   /* 事件对象 */
     uint32_t type:20;       /* 事件类型 */
@@ -131,7 +131,7 @@ typedef struct {
 typedef struct {
     scui_sem_t sem;
     scui_mutex_t mutex;
-    app_sys_list_dll_t dl_list;
+    scui_list_dll_t dl_list;
     uint32_t list_num;
 } scui_event_queue_t;
 

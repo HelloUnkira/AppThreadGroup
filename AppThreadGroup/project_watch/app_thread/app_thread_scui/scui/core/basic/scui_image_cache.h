@@ -3,19 +3,19 @@
 
 /* 内存图片节点信息项: */
 typedef struct {
-    app_sys_list_dln_t dl_node;     // 优先队列节点
-    app_sys_table_rbsn_t ht_node;   // 哈希表节点
-    scui_image_t *image;            // 图片数据
-    uint8_t *data;                  // 图片数据源(内存地址)
-    uint16_t count:7;
-    uint16_t lock:7;
+    scui_list_dln_t   dl_node;
+    scui_table_rbsn_t ht_node;
+    scui_image_t *image;        // 图片数据
+    uint8_t *data;              // 图片数据源(内存地址)
+    uint16_t count:7;           // 衰减计数器
+    uint16_t lock:7;            // 嵌套锁计数器
 } scui_image_unit_t;
 
 /* 内存图片节点信息表: */
 typedef struct {
-    app_sys_list_dll_t dl_list;
-    app_sys_table_rbsl_t ht_list[SCUI_IMAGE_LIMIT_HASH];
-    app_sys_table_rbst_t ht_table;
+    scui_list_dll_t   dl_list;
+    scui_table_rbsl_t ht_list[SCUI_IMAGE_LIMIT_HASH];
+    scui_table_rbst_t ht_table;
     uint32_t usage;     /* 缓存对内存资源占用情况 */
     uint32_t total;     /* 缓存对内存资源占用总门限 */
     uint32_t cnt_hit;   /* 命中次数 */
