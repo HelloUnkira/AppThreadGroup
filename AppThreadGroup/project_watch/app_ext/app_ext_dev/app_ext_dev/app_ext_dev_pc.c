@@ -8,9 +8,9 @@
 
 #if APP_ARCH_IS_PC
 
-/*@brief 初始化设备
+/*@brief 初始化设备1
  */
-void app_dev_ready(void)
+void app_dev_1_ready(void)
 {
     app_dev_log_ready(&app_dev_log);
 }

@@ -2,7 +2,7 @@
 #define SCUI_CONFIG_H
 
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_CHECK       1
+#define SCUI_MEM_RECORD_CHECK       0
 #define SCUI_MEM_RECORD_ITEM_PART   128
 #define SCUI_MEM_RECORD_ITEM_FONT   256
 #define SCUI_MEM_RECORD_ITEM_IMAGE  64
@@ -18,7 +18,7 @@
 #define SCUI_SURFACE_FB_LIMIT       (2)
 
 /* 句柄表数量,共享句柄数量--最大限制 */
-#define SCUI_HANDLE_TABLE_LIMIT     (5)
+#define SCUI_HANDLE_TABLE_LIMIT     ((scui_handle_t)5)
 #define SCUI_HANDLE_SHARE_LIMIT     ((scui_handle_t)512)
 #define SCUI_HANDLE_SHARE_OFFSET    ((scui_handle_t)0x9FFF)
 

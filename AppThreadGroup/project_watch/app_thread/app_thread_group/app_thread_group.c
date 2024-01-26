@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 #include "app_thread_group.h"
 
 static bool app_thread_group_status = false;
@@ -57,7 +58,7 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app ext(dev)层
      */
-    app_dev_ready();
+    app_dev_1_ready();
     /*
      *!!!就绪app sys层
      */
@@ -70,6 +71,10 @@ void app_thread_group_schedule(void)
         },
     };
     app_sys_ready(&sys_cfg);
+    /*
+     *!!!就绪app dev层
+     */
+    app_dev_2_ready();
     /*
      *!!!就绪app thread层
      */

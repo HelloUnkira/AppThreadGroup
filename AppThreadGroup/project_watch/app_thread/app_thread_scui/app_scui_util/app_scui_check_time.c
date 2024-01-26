@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 

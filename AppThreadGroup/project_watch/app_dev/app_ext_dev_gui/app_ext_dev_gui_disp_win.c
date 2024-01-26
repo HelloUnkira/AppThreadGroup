@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 
 #if APP_EXT_DEV_GUI_USE_WIN
 

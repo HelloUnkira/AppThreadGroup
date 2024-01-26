@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 #include "app_thread_group.h"
 
 static app_mutex_t app_module_backlight_mutex = {0};
