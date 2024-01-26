@@ -1,7 +1,8 @@
 #ifndef SCUI_INDEV_H
 #define SCUI_INDEV_H
 
-/* 输入设备类型: */
+/*@brief 输入设备类型
+ */
 typedef enum {
     scui_indev_type_none,
     scui_indev_type_ptr,
@@ -9,13 +10,15 @@ typedef enum {
     scui_indev_type_key,
 } scui_indev_type_t;
 
-/* 按压状态: */
+/*@brief 按压状态
+ */
 typedef enum {
     scui_indev_state_release = 0,
     scui_indev_state_press,
 } scui_indev_state_t;
 
-/* 输入设备数据 */
+/*@brief 输入设备数据
+ */
 typedef struct {
     scui_indev_type_t  type;    /* 设备类型 */
     scui_indev_state_t state;   /* 设备状态 */

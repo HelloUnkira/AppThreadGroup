@@ -9,14 +9,6 @@ typedef struct {
     uint32_t move_cnt;
 } scui_indev_ptr_t;
 
-typedef enum {
-    scui_indev_ptr_way_none,
-    scui_indev_ptr_way_up,
-    scui_indev_ptr_way_down,
-    scui_indev_ptr_way_left,
-    scui_indev_ptr_way_right,
-} scui_indev_ptr_way_t;
-
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -30,6 +22,6 @@ void scui_indev_ptr_ready(void);
  *@param event 输入设备事件
  *@retval 手势方向
  */
-scui_indev_ptr_way_t scui_indev_ptr_way_calc(scui_event_t *event);
+scui_event_dir_t scui_indev_ptr_dir(scui_event_t *event);
 
 #endif

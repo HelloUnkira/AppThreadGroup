@@ -1,30 +1,41 @@
 #ifndef SCUI_ANIMA_H
 #define SCUI_ANIMA_H
 
-/* 缩放系数(Coefficient),为2的指数倍 */
+/*@brief 缩放系数(Coefficient),为2的指数倍
+ */
 #define SCUI_ANIMA_RES_COF      (1024)
 #define SCUI_ANIMA_RES_SHIFT    (10)
-/* 动画轮调:常循环 */
+
+/*@brief 动画轮调:常循环
+ */
 #define SCUI_ANIMA_INFINITE     (0xFFFF)
 
-/* 动画的运动状态 */
+/*@brief 动画的运动状态
+ */
 typedef enum {
     scui_anima_status_idle = 0,
     scui_anima_status_run,
     scui_anima_status_break,
 } scui_anima_status_t;
 
-/* 动画行程回调 */
+/*@brief 动画行程回调
+ */
 typedef uint32_t (*scui_anima_path_t)(void *anima);
 
-/* 动画开始回调(第一次执行开始之前的回调) */
+/*@brief 动画开始回调(第一次执行开始之前的回调)
+ */
 typedef void (*scui_anima_start_t)(void *anima);
-/* 动画就绪回调(最后一次执行完毕之后的回调) */
+
+/*@brief 动画就绪回调(最后一次执行完之后的回调)
+ */
 typedef void (*scui_anima_ready_t)(void *anima);
-/* 动画过期回调 */
+
+/*@brief 动画过期回调
+ */
 typedef void (*scui_anima_expired_t)(void *anima);
 
-/* 动画 */
+/*@brief 动画
+ */
 typedef struct {
     scui_anima_path_t    path;      /* 动画行程回调 */
     scui_anima_start_t   start;     /* 动画开始回调 */
@@ -41,6 +52,8 @@ typedef struct {
     uint32_t first:1;               /* 内部使用:第一次结束 */
 } scui_anima_t;
 
+/*@brief 动画列表
+ */
 typedef struct {
     bool run_status;
     uint32_t elapse;

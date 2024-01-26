@@ -1,8 +1,9 @@
 #ifndef SCUI_SURFACE_FB_H
 #define SCUI_SURFACE_FB_H
 
-// 帧缓冲区:
-// 帧缓冲区是1或2个画布的集合
+/*@brief 画布帧缓冲区
+ *       帧缓冲区是1或2个画布的集合
+ */
 typedef struct {
     scui_surface_t surface[SCUI_SURFACE_FB_LIMIT];
     scui_sem_t sem_draw;

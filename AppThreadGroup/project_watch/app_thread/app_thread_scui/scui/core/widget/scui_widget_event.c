@@ -395,7 +395,6 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
     default:
         if (widget_cb->event != NULL)
             ret = widget_cb->event(event);
-        
         break;
     }
     

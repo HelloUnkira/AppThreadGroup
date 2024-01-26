@@ -1,7 +1,8 @@
 #ifndef SCUI_EVENT_H
 #define SCUI_EVENT_H
 
-/* 系统事件表: */
+/*@brief 系统事件表
+ */
 typedef enum {
     scui_event_none = 0,
     scui_event_invalid = scui_event_none,
@@ -28,8 +29,8 @@ typedef enum {
     scui_event_ptr_all,
     scui_event_ptr_cover,   /* 覆盖事件<> */
     scui_event_ptr_down,    /* 按下事件<point> */
-    scui_event_ptr_click,   /* 点击事件<point>:通过参数通报点击次数 */
     scui_event_ptr_hold,    /* 持续事件<point>:通过参数通报持续时间 */
+    scui_event_ptr_click,   /* 点击事件<point>:通过参数通报点击次数 */
     scui_event_ptr_fling,   /* 轻扫事件<pos_s, pos_e> */
     scui_event_ptr_move,    /* 移动事件<pos_s, pos_e> */
     scui_event_ptr_up,      /* 抬起事件<point> */
@@ -48,8 +49,8 @@ typedef enum {
     scui_event_key_s,
     scui_event_key_all,
     scui_event_key_down,    /* 按下事件<coord> */
-    scui_event_key_click,   /* 单击事件<coord>:通过参数通报点击次数 */
     scui_event_key_hold,    /* 持续事件<coord>:通过参数通报持续时间 */
+    scui_event_key_click,   /* 单击事件<coord>:通过参数通报点击次数 */
     scui_event_key_up,      /* 抬起事件<coord> */
     scui_event_key_e,
     /* 输入设备事件<key,e> */
@@ -57,16 +58,19 @@ typedef enum {
     scui_event_sys_num,
 } scui_event_sys_t;
 
-/* 事件类型 */
+/*@brief 事件类型
+ */
 typedef uint32_t scui_event_type_t;
 
-/* 事件风格 */
+/*@brief 事件风格
+ */
 typedef enum {
     scui_event_style_async,     /* 常规异步调度 */
     scui_event_style_sync,      /* 就地同步调度 */
 } scui_event_style_t;
 
-/* 事件优先级(数字越大优先级越高) */
+/*@brief 事件优先级(数字越大优先级越高)
+ */
 typedef enum {
     scui_event_priority_none            = 0x00,
     scui_event_priority_default         = scui_event_priority_none,
@@ -78,6 +82,8 @@ typedef enum {
     scui_event_priority_real_time       = 0xFF,
 } scui_event_priority_t;
 
+/*@brief 事件
+ */
 typedef struct {
     scui_list_dln_t dl_node;
     /* 系统基本字段 */
@@ -128,6 +134,8 @@ typedef struct {
     };
 } scui_event_t;
 
+/*@brief 事件队列
+ */
 typedef struct {
     scui_sem_t sem;
     scui_mutex_t mutex;
@@ -135,7 +143,8 @@ typedef struct {
     uint32_t list_num;
 } scui_event_queue_t;
 
-/* 事件响应回调返回值 */
+/*@brief 事件响应回调返回值
+ */
 typedef enum {
     scui_event_retval_none = 0,     /* 无效值:占位符 */
     scui_event_retval_quit,         /* 未处理:继续事件响应 */
@@ -143,10 +152,22 @@ typedef enum {
     scui_event_retval_over,         /* 已吸收:终止事件响应 */
 } scui_event_retval_t;
 
-/* 事件响应回调 */
+/*@brief 事件响应回调
+ */
 typedef scui_event_retval_t (*scui_event_cb_t)(scui_event_t *event);
 
-
+/*@brief 事件操作方向
+ */
+typedef enum {
+    scui_event_dir_none = (0x00),
+    scui_event_dir_to_u = (1 << 0),   // 向up
+    scui_event_dir_to_d = (1 << 1),   // 向down
+    scui_event_dir_to_l = (1 << 2),   // 向left
+    scui_event_dir_to_r = (1 << 3),   // 向right
+    scui_event_dir_ver  = (scui_event_dir_to_u | scui_event_dir_to_d),
+    scui_event_dir_hor  = (scui_event_dir_to_l | scui_event_dir_to_r),
+    scui_event_dir_all  = (scui_event_dir_ver  | scui_event_dir_hor ),
+} scui_event_dir_t;
 
 /*@brief 事件队列初始化
  */

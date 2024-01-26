@@ -4,8 +4,9 @@
 /* 图片像素字节占用偏移 */
 #define SCUI_IMAGE_PIXEL_OFFSET     (8)
 
-/* 图片像素格式: */
-/* 枚举值为(bits << 8) | index */
+/*@brief 图片像素格式
+ *       枚举值为(bits << 8) | index
+ */
 typedef enum {
     scui_image_format_p4        = 0x0400,
     scui_image_format_p8        = 0x0800,
@@ -15,14 +16,16 @@ typedef enum {
     scui_image_format_argb8888  = 0x3201,
 } scui_image_format_t;
 
-/* 图片状态: */
+/*@brief 图片状态
+ */
 typedef enum {
     scui_image_status_none = 0,     // 默认图片
     scui_image_status_lz4,          // 压缩图片
     scui_image_status_num,
 } scui_image_status_t;
 
-/* 图片像素数据: */
+/*@brief 图片像素数据
+ */
 typedef struct {
     uintptr_t width;        // 图片宽
     uintptr_t height;       // 图片高
@@ -32,7 +35,8 @@ typedef struct {
     uintptr_t size_mem;     // 图片数据源(内存源大小)
 } scui_image_pixel_t;
 
-/* 图片数据: */
+/*@brief 图片数据
+ */
 typedef struct {
     scui_image_format_t format;     // 图片格式
     scui_image_status_t status;     // 图片状态

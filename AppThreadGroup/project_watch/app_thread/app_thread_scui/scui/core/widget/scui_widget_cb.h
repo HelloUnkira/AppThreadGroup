@@ -1,16 +1,20 @@
 #ifndef SCUI_WIDGET_CB_H
 #define SCUI_WIDGET_CB_H
 
-/* 控件事件回调 */
+/*@brief 控件事件回调
+ */
 typedef scui_event_cb_t scui_widget_cb_event_t;
 
-/* 控件创建回调 */
+/*@brief 控件创建回调
+ */
 typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
 
-/* 控件销毁回调 */
+/*@brief 控件销毁回调
+ */
 typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
 
-/* 控件处理函数映射表 */
+/*@brief 控件处理函数映射表
+ */
 typedef struct {
     scui_widget_cb_event_t   event;
     scui_widget_cb_create_t  create;

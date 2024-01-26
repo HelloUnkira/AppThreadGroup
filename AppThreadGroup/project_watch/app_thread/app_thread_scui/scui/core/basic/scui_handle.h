@@ -18,7 +18,7 @@ typedef struct {
     scui_handle_t offset;           /* 句柄资源表偏移 */
 } scui_handle_table_t;
 
-/*@brief 句柄偏移量,非法句柄,系统句柄
+/*@brief 非法句柄,系统句柄
  *       0号句柄为非法句柄
  */
 #define SCUI_HANDLE_INVALID     ((scui_handle_t)(0))

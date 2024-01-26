@@ -66,6 +66,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             if (elapse < SCUI_INDEV_PTR_CLICK) {
                 event.type    = scui_event_ptr_click;
                 event.ptr_cnt = scui_indev_ptr.ptr_cnt;
+                event.ptr_c   = point;
                 SCUI_LOG_INFO("scui_event_ptr_click:%d", event.ptr_cnt);
                 scui_event_notify(&event);
             } else
@@ -110,6 +111,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_indev_ptr.ptr_cnt = 0;
             /* 发送按下事件 */
             event.type     = scui_event_ptr_down;
+            event.ptr_c    = point;
             event.ptr_tick = elapse;
             SCUI_LOG_INFO("scui_event_ptr_down:%d", event.ptr_tick);
             return;
@@ -137,6 +139,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             /* 发送按下事件 */
             event.type     = scui_event_ptr_hold;
             event.absorb   = scui_event_ptr_hold_absorb;
+            event.ptr_c    = point;
             event.ptr_tick = elapse;
             SCUI_LOG_INFO("scui_event_ptr_hold:%d", event.ptr_tick);
             scui_event_notify(&event);
@@ -156,7 +159,7 @@ void scui_indev_ptr_ready(void)
  *@param event 输入设备事件
  *@retval 手势方向
  */
-scui_indev_ptr_way_t scui_indev_ptr_way_calc(scui_event_t *event)
+scui_event_dir_t scui_indev_ptr_dir(scui_event_t *event)
 {
     if (event->type > scui_event_ptr_s && event->type < scui_event_ptr_e) {
         scui_coord_t dist_x = scui_dist(event->ptr_s.x, event->ptr_e.x);
@@ -164,16 +167,16 @@ scui_indev_ptr_way_t scui_indev_ptr_way_calc(scui_event_t *event)
         
         if (dist_x >= dist_y) {
             if (event->ptr_s.x >= event->ptr_e.x)
-                return scui_indev_ptr_way_left;
+                return scui_event_dir_to_l;
             if (event->ptr_s.x <= event->ptr_e.x)
-                return scui_indev_ptr_way_right;
+                return scui_event_dir_to_r;
         }
         if (dist_x <= dist_y) {
             if (event->ptr_s.y >= event->ptr_e.y)
-                return scui_indev_ptr_way_up;
+                return scui_event_dir_to_u;
             if (event->ptr_s.y <= event->ptr_e.y)
-                return scui_indev_ptr_way_down;
+                return scui_event_dir_to_d;
         }
     }
-    return scui_indev_ptr_way_none;
+    return scui_event_dir_none;
 }

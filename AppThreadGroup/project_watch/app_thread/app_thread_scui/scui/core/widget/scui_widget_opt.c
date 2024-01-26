@@ -128,10 +128,8 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
     
     SCUI_LOG_DEBUG("");
     /* 重新追加剪切域 */
-    if (!scui_area_empty(&widget->surface_clip)) {
-         widget->surface_clip = (scui_area_t){0};
-         scui_widget_clip_reset(widget);
-    }
+    if (!scui_area_empty(&widget->surface_clip))
+         widget->surface_clip = widget->clip;
 }
 
 /*@brief 控件显示
@@ -217,8 +215,11 @@ void scui_widget_mirror(scui_handle_t handle)
         scui_widget_t *widget_child = scui_handle_get(handle);
         scui_point_t    point_child = {0};
         
-        point_child.x = widget->clip.w - widget_child->clip.x - widget_child->clip.w;
-        point_child.y = widget_child->clip.y;
+        point_child.x -= widget->clip.x;
+        point_child.y -= widget->clip.y;
+        
+        /// ...
+        
         scui_widget_move(handle_child, &point_child);
     }
 }

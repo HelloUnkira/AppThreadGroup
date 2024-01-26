@@ -76,6 +76,8 @@ typedef struct {
     };
 } scui_color_gradient_t;
 
+/*@brief: 透明度枚举值
+ */
 typedef enum {
     scui_alpha_pct0   = 0,
     scui_alpha_pct10  = 25,

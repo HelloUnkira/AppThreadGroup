@@ -1,7 +1,8 @@
 #ifndef SCUI_WIDGET_H
 #define SCUI_WIDGET_H
 
-/* 控件类型: */
+/*@brief 控件类型
+ */
 typedef enum {
     scui_widget_type_unknown,   /* 未知控件 */
     scui_widget_type_window,    /* 窗口控件(仅根控件) */
@@ -13,7 +14,8 @@ typedef enum {
     scui_widget_type_num,
 } scui_widget_type_t;
 
-/* 控件状态风格: */
+/*@brief 控件状态风格
+ */
 typedef struct {
     uint8_t trans:1;        /* 背景透明 */
     uint8_t state:1;        /* 控件隐藏:0;控件显示:1; */
@@ -33,7 +35,8 @@ typedef enum {
     scui_widget_order_after,    /* 主事件处理后回调 */
 } scui_widget_order_t;
 
-/* 控件事件回调: */
+/*@brief 控件事件回调
+ */
 typedef struct {
     scui_list_dln_t         dl_node;    /* 控件事件回调列表 */
     scui_event_cb_t         event_cb;   /* 控件事件回调 */
@@ -69,7 +72,8 @@ typedef struct {
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_t;
 
-/* 控件布局资料: */
+/*@brief 控件布局资料
+ */
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */

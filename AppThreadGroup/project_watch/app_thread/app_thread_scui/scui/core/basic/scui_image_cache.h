@@ -1,7 +1,8 @@
 #ifndef SCUI_IMAGE_CACHE_H
 #define SCUI_IMAGE_CACHE_H
 
-/* 内存图片节点信息项: */
+/*@brief 内存图片节点信息项
+ */
 typedef struct {
     scui_list_dln_t   dl_node;
     scui_table_rbsn_t ht_node;
@@ -11,7 +12,8 @@ typedef struct {
     uint16_t lock:7;            // 嵌套锁计数器
 } scui_image_unit_t;
 
-/* 内存图片节点信息表: */
+/*@brief 内存图片节点信息表
+ */
 typedef struct {
     scui_list_dll_t   dl_list;
     scui_table_rbsl_t ht_list[SCUI_IMAGE_LIMIT_HASH];
