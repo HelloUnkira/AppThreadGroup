@@ -77,7 +77,7 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     
     /* 系统事件只发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
-        event->object  = scui_scene_mgr_active_get();
+        event->object  = scui_scene_active_curr();
     
     /* 本事件无活跃场景接收 */
     if (!scui_handle_remap(event->object)) {
@@ -162,7 +162,7 @@ scui_event_retval_t scui_event_respond_sched(scui_event_t *event)
     scui_event_retval_t ret_1 = scui_widget_event_dispatch(event);
     if (ret_1 == scui_event_retval_over)
         return scui_event_retval_over;
-    scui_event_retval_t ret_2 = scui_scene_mgr_event_dispatch(event);
+    scui_event_retval_t ret_2 = scui_scene_event_dispatch(event);
     return ret_2 != scui_event_retval_quit ? ret_2 : ret_1;
 }
 
@@ -188,7 +188,7 @@ scui_event_retval_t scui_event_respond_ptr(scui_event_t *event)
     scui_event_retval_t ret_1 = scui_widget_event_dispatch(event);
     if (ret_1 == scui_event_retval_over && event_filter)
         return scui_event_retval_over;
-    scui_event_retval_t ret_2 = scui_scene_mgr_event_dispatch(event);
+    scui_event_retval_t ret_2 = scui_scene_event_dispatch(event);
     return ret_2 != scui_event_retval_quit ? ret_2 : ret_1;
 }
 
@@ -212,7 +212,7 @@ scui_event_retval_t scui_event_respond_enc(scui_event_t *event)
     scui_event_retval_t ret_1 = scui_widget_event_dispatch(event);
     if (ret_1 == scui_event_retval_over && event_filter)
         return scui_event_retval_over;
-    scui_event_retval_t ret_2 = scui_scene_mgr_event_dispatch(event);
+    scui_event_retval_t ret_2 = scui_scene_event_dispatch(event);
     return ret_2 != scui_event_retval_quit ? ret_2 : ret_1;
 }
 
@@ -241,7 +241,7 @@ scui_event_retval_t scui_event_respond_key(scui_event_t *event)
     scui_event_retval_t ret_1 = scui_widget_event_dispatch(event);
     if (ret_1 == scui_event_retval_over && event_filter)
         return scui_event_retval_over;
-    scui_event_retval_t ret_2 = scui_scene_mgr_event_dispatch(event);
+    scui_event_retval_t ret_2 = scui_scene_event_dispatch(event);
     return ret_2 != scui_event_retval_quit ? ret_2 : ret_1;
 }
 

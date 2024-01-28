@@ -28,10 +28,16 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point);
  */
 void scui_widget_show(scui_handle_t handle);
 
-/*@brief 控件显示
+/*@brief 控件隐藏
  *@param handle 控件句柄
  */
 void scui_widget_hide(scui_handle_t handle);
+
+/*@brief 控件隐藏
+ *@param handle 控件句柄
+ *@param child  子控件句柄
+ */
+void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child);
 
 /*@brief 控件树镜像(相对父控件)
  *@param handle 控件句柄

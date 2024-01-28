@@ -48,5 +48,7 @@
 
 /* 场景管理数量限制 */
 #define SCUI_SCENE_MGR_LIMIT        (10)
+#define SCUI_SCENE_SWITCH_MS        (300)
+
 
 #endif

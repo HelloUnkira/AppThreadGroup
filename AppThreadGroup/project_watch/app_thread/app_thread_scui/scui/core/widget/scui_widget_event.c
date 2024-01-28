@@ -212,7 +212,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 刷新事件:就地处理**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_refr) {
-        scui_scene_mgr_mix_surface();
+        scui_scene_mix_surface();
         /* 混合绘制刷新流程结束 */
         /* 使用假绘制启动正式的刷新流程 */
         scui_surface_draw_routine(NULL);

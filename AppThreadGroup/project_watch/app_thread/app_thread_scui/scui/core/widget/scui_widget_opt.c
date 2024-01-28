@@ -136,7 +136,7 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
  *@param handle 控件句柄
  */
 void scui_widget_show(scui_handle_t handle)
-{
+{
     SCUI_LOG_INFO("");
     /* 资源还未加载时,加载该资源 */
     if (!scui_handle_remap(handle)) {
@@ -163,13 +163,17 @@ void scui_widget_show(scui_handle_t handle)
     scui_event_notify(&event);
     
     scui_widget_draw(widget->myself, false);
+    
+    /* 将该显示窗口加入到场景管理器中 */
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_scene_list_add(widget->myself);
 }
 
-/*@brief 控件显示
+/*@brief 控件隐藏
  *@param handle 控件句柄
  */
 void scui_widget_hide(scui_handle_t handle)
-{
+{
     SCUI_LOG_INFO("");
     
     SCUI_LOG_DEBUG("");
@@ -193,6 +197,30 @@ void scui_widget_hide(scui_handle_t handle)
     /* 通知父窗口重绘 */
     if (widget->parent != SCUI_HANDLE_INVALID)
         scui_widget_draw(widget->parent, false);
+    
+    /* 将该显示窗口移除出场景管理器中 */
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_scene_list_del(widget->myself);
+}
+
+/*@brief 控件隐藏
+ *@param handle 控件句柄
+ *@param child  子控件句柄
+ */
+void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
+{
+    SCUI_LOG_INFO("");
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
+        if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        if (widget->child_list[idx] == child)
+            scui_widget_show(widget->child_list[idx]);
+        else
+            scui_widget_hide(widget->child_list[idx]);
+    }
 }
 
 /*@brief 控件树镜像(相对父控件)

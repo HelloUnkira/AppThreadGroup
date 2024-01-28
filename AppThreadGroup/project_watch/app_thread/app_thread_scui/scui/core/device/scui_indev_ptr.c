@@ -114,6 +114,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             event.ptr_c    = point;
             event.ptr_tick = elapse;
             SCUI_LOG_INFO("scui_event_ptr_down:%d", event.ptr_tick);
+            scui_event_notify(&event);
             return;
         }
         /* 上一状态为press */

@@ -75,6 +75,15 @@
 #define APP_SYS_LOG_ERROR_RAW(...)
 #endif
 /* NONE */
+#else
+#define APP_SYS_LOG_DEBUG(...)
+#define APP_SYS_LOG_DEBUG_RAW(...)
+#define APP_SYS_LOG_INFO(...)
+#define APP_SYS_LOG_INFO_RAW(...)
+#define APP_SYS_LOG_WARN(...)
+#define APP_SYS_LOG_WARN_RAW(...)
+#define APP_SYS_LOG_ERROR(...)
+#define APP_SYS_LOG_ERROR_RAW(...)
 #endif
 
 /* 断言:条件为真继续执行,为假时中断系统 */

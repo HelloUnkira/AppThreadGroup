@@ -7,7 +7,24 @@
 
 #include "scui.h"
 
-static scui_scene_mgr_t scui_scene_mgr = {0};
+scui_scene_mgr_t scui_scene_mgr = {0};
+
+/*@brief 场景切换风格(配置)
+ *@param switch_type 场景切换风格
+ */
+void scui_scene_switch_type_cfg(scui_scene_switch_type_t switch_type)
+{
+    SCUI_ASSERT(switch_type != scui_scene_switch_auto);
+    scui_scene_mgr.switch_type_cfg = switch_type;
+}
+
+/*@brief 场景切换方向(配置)
+ *@param switch_dir 场景切换方向
+ */
+void scui_scene_switch_dir_cfg(scui_event_dir_t switch_dir)
+{
+    scui_scene_mgr.switch_dir_cfg = switch_dir;
+}
 
 /*@brief 场景管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上
@@ -16,7 +33,7 @@ static scui_scene_mgr_t scui_scene_mgr = {0};
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_scene_mgr_mix_list(scui_widget_t **list, uint32_t num)
+void scui_scene_mix_list(scui_widget_t **list, scui_handle_t num)
 {
     /*  */
 }
@@ -25,11 +42,11 @@ void scui_scene_mgr_mix_list(scui_widget_t **list, uint32_t num)
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_scene_mgr_sort_list(scui_widget_t **list, uint32_t num)
+void scui_scene_sort_list(scui_widget_t **list, scui_handle_t num)
 {
     /* 要用稳定排序,这里使用冒泡排序 */
-    for (uint32_t idx_i = 0; idx_i < num; idx_i++)
-    for (uint32_t idx_j = 0; idx_j + 1 < num - idx_i; idx_j++) {
+    for (scui_handle_t idx_i = 0; idx_i < num; idx_i++)
+    for (scui_handle_t idx_j = 0; idx_j + 1 < num - idx_i; idx_j++) {
         scui_widget_t *widget_1 = list[idx_j];
         scui_widget_t *widget_2 = list[idx_j + 1];
         SCUI_ASSERT(widget_1->parent == SCUI_HANDLE_INVALID);
@@ -54,72 +71,47 @@ void scui_scene_mgr_sort_list(scui_widget_t **list, uint32_t num)
  *       将所有独立画布混合到绘制画布上
  *       将所有无独立画布就地渲染
  */
-void scui_scene_mgr_mix_surface(void)
+void scui_scene_mix_surface(void)
 {
-    uint32_t scene_list_num = 0;
-    scui_widget_t *scene_list[SCUI_SCENE_MGR_LIMIT] = {0};
+    scui_handle_t list_num = 0;
+    scui_widget_t *list[SCUI_SCENE_MGR_LIMIT] = {0};
     
     /* 第一轮混合:处理所有独立画布 */
-    for (uint32_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
-        if (scui_scene_mgr.scene[idx] == SCUI_HANDLE_INVALID)
+    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+        if (scui_scene_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
-        scui_handle_t  handle = scui_scene_mgr.scene[idx];
+        scui_handle_t  handle = scui_scene_mgr.list[idx];
         scui_widget_t *widget = scui_handle_get(handle);
         SCUI_ASSERT(scui_handle_remap(handle));
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
         if (scui_widget_surface_only(widget))
-            scene_list[scene_list_num++] = widget;
+            list[list_num++] = widget;
     }
-    scui_scene_mgr_sort_list(scene_list, scene_list_num);
-    scui_scene_mgr_mix_list(scene_list, scene_list_num);
-    scene_list_num = 0;
+    scui_scene_sort_list(list, list_num);
+    scui_scene_mix_list(list, list_num);
+    list_num = 0;
     
     /* 第二轮混合:处理所有独立画布 */
-    for (uint32_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
-        if (scui_scene_mgr.scene[idx] == SCUI_HANDLE_INVALID)
+    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+        if (scui_scene_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
-        scui_handle_t  handle = scui_scene_mgr.scene[idx];
+        scui_handle_t  handle = scui_scene_mgr.list[idx];
         scui_widget_t *widget = scui_handle_get(handle);
         SCUI_ASSERT(scui_handle_remap(handle));
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
         if (!scui_widget_surface_only(widget))
-             scene_list[scene_list_num++] = widget;
+             list[list_num++] = widget;
     }
-    scui_scene_mgr_sort_list(scene_list, scene_list_num);
+    scui_scene_sort_list(list, list_num);
     
-    for (uint32_t idx = 0; idx < scene_list_num; idx++) {
-        scui_widget_t *widget = scene_list[idx];
+    for (scui_handle_t idx = 0; idx < list_num; idx++) {
+        scui_widget_t *widget = list[idx];
         scui_handle_t  handle = widget->myself;
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         SCUI_ASSERT(scui_handle_remap(handle));
         
         scui_widget_draw(handle, true);
     }
-}
-
-/*@brief 场景管理器获得活跃场景句柄
- *@retval 场景句柄
- */
-scui_handle_t scui_scene_mgr_active_get(void)
-{
-    return scui_scene_mgr.scene_active;
-}
-
-/*@brief 场景管理器设置活跃场景句柄
- *@param handle 场景句柄
- */
-void scui_scene_mgr_active_set(scui_handle_t handle)
-{
-    scui_scene_mgr.scene_active = handle;
-}
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- *@retval 事件状态
- */
-scui_event_retval_t scui_scene_mgr_event_dispatch(scui_event_t *event)
-{
-    return scui_event_retval_quit;
 }

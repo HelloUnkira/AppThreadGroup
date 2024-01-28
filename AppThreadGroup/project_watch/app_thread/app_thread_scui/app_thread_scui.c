@@ -93,10 +93,12 @@ static void app_thread_scui_draw_test(void)
 
 static void app_thread_scui_draw_test(void)
 {
+    scui_scene_switch_type_cfg(scui_scene_switch_none);
+    
     scui_handle_t handle = SCUI_UI_SCENE_HOME;
     scui_widget_show(handle);
+    scui_scene_active(handle);
     // scui_widget_hide(handle);
-    scui_scene_mgr_active_set(handle);
 }
 
 #endif

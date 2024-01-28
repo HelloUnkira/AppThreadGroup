@@ -42,6 +42,7 @@
 /* core:manager: */
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_scene_mgr.h"     /* 场景管理器 */
+#include "scui_scene_opt.h"     /* 场景管理器 */
 #include "scui_engine.h"        /* 引擎 */
 /* draw */
 #include "scui_draw_graph.h"
