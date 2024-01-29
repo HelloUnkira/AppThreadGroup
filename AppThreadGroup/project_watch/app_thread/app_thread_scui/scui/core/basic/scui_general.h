@@ -2,7 +2,7 @@
 #define SCUI_GENERAL_H
 
 /* RGB565: */
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef union {
     struct {
         uint16_t b:5;
@@ -12,10 +12,10 @@ typedef union {
     uint8_t  byte[2];
     uint16_t full;
 } scui_color565_t;
-#pragma pack()
+#pragma pack(pop)
 
 /* RGB888: */
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef union {
     struct {
         uint32_t b:8;
@@ -25,10 +25,10 @@ typedef union {
     uint8_t  byte[3];
     uint32_t full;
 } scui_color888_t;
-#pragma pack()
+#pragma pack(pop)
 
 /* ARGB8565: */
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef union {
     struct {
         uint32_t b:5;
@@ -39,10 +39,10 @@ typedef union {
     uint8_t  byte[3];
     uint32_t full;
 } scui_color8565_t;
-#pragma pack()
+#pragma pack(pop)
 
 /* ARGB8888: */
-#pragma pack(1)
+#pragma pack(push, 1)
 typedef union {
     struct {
         uint32_t b:8;
@@ -53,7 +53,7 @@ typedef union {
     uint8_t  byte[4];
     uint32_t full;
 } scui_color8888_t;
-#pragma pack()
+#pragma pack(pop)
 
 /* color format */
 typedef enum {
@@ -65,6 +65,7 @@ typedef enum {
 
 /*@brief: 过度色, 固定此格式主要上层通用性
  */
+#pragma pack(push, 1)
 typedef struct {
     union {
         scui_color8888_t color;         // 主色调
@@ -75,6 +76,7 @@ typedef struct {
         scui_color8888_t color_e;       // 结束色调
     };
 } scui_color_gradient_t;
+#pragma pack(pop)
 
 /*@brief: 透明度枚举值
  */

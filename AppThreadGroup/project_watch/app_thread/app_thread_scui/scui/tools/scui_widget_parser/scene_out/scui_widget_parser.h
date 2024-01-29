@@ -12,6 +12,10 @@ typedef enum {
 	SCUI_UI_SCENE_FLOAT_4,
 	SCUI_UI_SCENE_HOME,
 	SCUI_UI_SCENE_HOME_CENTER,
+	SCUI_UI_SCENE_HOME_UP,
+	SCUI_UI_SCENE_HOME_DOWN,
+	SCUI_UI_SCENE_HOME_LEFT,
+	SCUI_UI_SCENE_HOME_RIGHT,
 	SCUI_UI_SCENE_1,
 	SCUI_UI_SCENE_2,
 	SCUI_UI_SCENE_3,
@@ -20,6 +24,6 @@ typedef enum {
 	SCUI_UI_SCENE_6,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[12];
+extern const void * scui_widget_parser_table[16];
 
 #endif

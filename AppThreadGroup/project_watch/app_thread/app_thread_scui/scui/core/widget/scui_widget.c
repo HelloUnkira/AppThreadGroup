@@ -73,12 +73,8 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     /* 画布的映射是根控件, 控件画布默认为完全不透明 */
     widget->surface.pixel = widget_root->surface.pixel;
     widget->surface.alpha = scui_alpha_cover;
-    widget->surface_clip = (scui_area_t){0};
-    widget->surface.clip = (scui_area_t){0};
-    widget->surface_clip.x = widget->clip.x;
-    widget->surface_clip.y = widget->clip.y;
-    widget->surface.clip.w = widget->clip.w;
-    widget->surface.clip.h = widget->clip.h;
+    widget->surface_clip  = (scui_area_t){0};
+    widget->surface.clip  = widget->clip;
     
     SCUI_LOG_DEBUG("");
     /* 画布的坐标区域是相对父控件 */
@@ -87,6 +83,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
         scui_handle_t  handle_parent = widget->parent;
         widget_parent = scui_handle_get(handle_parent);
         handle_parent = widget_parent->parent;
+        widget->surface.line    = widget_parent->surface.line;
         widget->surface.clip.x += widget_parent->surface.clip.x;
         widget->surface.clip.y += widget_parent->surface.clip.y;
         /* 子控件的坐标区域是父控件坐标区域的子集 */

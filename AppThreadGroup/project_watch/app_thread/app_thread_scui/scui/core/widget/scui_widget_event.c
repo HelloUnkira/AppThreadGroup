@@ -145,6 +145,7 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
     uint32_t ret = scui_event_retval_keep;
     scui_widget_event_t event_match = {.event = event->type,};
     scui_widget_t *widget = scui_handle_get(event->object);
+    SCUI_ASSERT(scui_handle_remap(event->object));
     SCUI_ASSERT(widget != NULL);
     
     /*************************************************************************/

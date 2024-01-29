@@ -29,6 +29,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         scui_coord_t ver_res = scui_disp_get_ver_res();
         uint32_t surface_res = hor_res * ver_res * SCUI_PIXEL_SIZE;
         window->widget.surface.pixel = SCUI_MEM_ALLOC(scui_mem_is_image, surface_res);
+        window->widget.surface.line  = hor_res;
     }
     
     /* 创建基础控件实例 */

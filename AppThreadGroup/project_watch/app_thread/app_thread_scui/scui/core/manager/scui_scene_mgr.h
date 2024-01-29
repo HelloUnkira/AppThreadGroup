@@ -29,36 +29,17 @@ typedef struct {
     /*  */
 } scui_scene_mgr_t;
 
-/*@brief 场景切换风格(配置)
- *@param switch_type 场景切换风格
- */
-void scui_scene_switch_type_cfg(scui_scene_switch_type_t switch_type);
-
-/*@brief 场景切换方向(配置)
- *@param switch_dir 场景切换方向
- */
-void scui_scene_switch_dir_cfg(scui_event_dir_t switch_dir);
-
-/*@brief 场景管理器混合根控件列表
- *       将所有根控件画布混合到绘制画布上
- *       场景管理器会有特殊的处理
- *       用于处理画布级别特效流程
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_scene_mix_list(scui_widget_t **list, scui_handle_t num);
-
-/*@brief 场景管理器排序根控件列表
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_scene_sort_list(scui_widget_t **list, scui_handle_t num);
-
 /*@brief 场景管理器混合画布
  *       将所有独立画布混合到绘制画布上
  *       将所有无独立画布就地渲染
  *       将绘制画布生成刷新事件
  */
 void scui_scene_mix_surface(void);
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_scene_event_dispatch(scui_event_t *event);
 
 #endif

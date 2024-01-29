@@ -13,6 +13,7 @@
  */
 typedef struct {
     uint8_t     *pixel;     // 画布像素流地址
+    scui_coord_t line;      // 画布像素行宽度
     scui_area_t  clip;      // 画布空间剪切域
     scui_alpha_t alpha;     // 画布空间透明度
 } scui_surface_t;
