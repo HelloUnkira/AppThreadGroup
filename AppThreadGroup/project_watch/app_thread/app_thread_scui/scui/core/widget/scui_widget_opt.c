@@ -110,8 +110,20 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
     /* 移动自己 */
     widget->clip.x = point->x;
     widget->clip.y = point->y;
-    widget->surface.clip.x = point->x;
-    widget->surface.clip.y = point->y;
+    /* 更新画布剪切域 */
+    widget->surface.clip = widget->clip;
+    
+    SCUI_LOG_DEBUG("");
+    /* 画布的坐标区域是相对父控件 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_parent = NULL;
+        scui_handle_t  handle_parent = widget->parent;
+        widget_parent = scui_handle_get(handle_parent);
+        /* 子控件的坐标区域是父控件坐标区域的子集 */
+        scui_area_t clip_merge = {0};
+        scui_area_inter(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);
+        widget->surface.clip = clip_merge;
+    }
     
     SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */

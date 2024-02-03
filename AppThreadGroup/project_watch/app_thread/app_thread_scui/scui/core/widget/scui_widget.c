@@ -42,16 +42,9 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     SCUI_LOG_DEBUG("");
     /* 子控件的坐标区域是相对父控件 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = NULL;
-        scui_handle_t  handle_parent = widget->parent;
-        widget_parent = scui_handle_get(handle_parent);
-        handle_parent = widget_parent->parent;
+        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
         widget->clip.x += widget_parent->clip.x;
         widget->clip.y += widget_parent->clip.y;
-        /* 子控件的坐标区域是父控件坐标区域的子集 */
-        scui_area_t clip_merge = {0};
-        scui_area_inter(&clip_merge, &widget->clip, &widget_parent->clip);
-        widget->clip = clip_merge;
     }
     
     SCUI_LOG_DEBUG("");
@@ -79,13 +72,8 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     SCUI_LOG_DEBUG("");
     /* 画布的坐标区域是相对父控件 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = NULL;
-        scui_handle_t  handle_parent = widget->parent;
-        widget_parent = scui_handle_get(handle_parent);
-        handle_parent = widget_parent->parent;
-        widget->surface.line    = widget_parent->surface.line;
-        widget->surface.clip.x += widget_parent->surface.clip.x;
-        widget->surface.clip.y += widget_parent->surface.clip.y;
+        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        widget->surface.line = widget_parent->surface.line;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_merge = {0};
         scui_area_inter(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);

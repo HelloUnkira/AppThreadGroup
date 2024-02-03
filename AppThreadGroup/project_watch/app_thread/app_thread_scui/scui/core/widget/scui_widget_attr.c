@@ -252,6 +252,14 @@ void scui_widget_clip_reset(scui_widget_t *widget)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
     widget->surface_clip = widget->clip;
+    /* 相对父控件 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        /* 子控件的坐标区域是父控件坐标区域的子集 */
+        scui_area_t clip_merge = {0};
+        scui_area_inter(&clip_merge, &widget->surface_clip, &widget_parent->surface_clip);
+        widget->surface_clip = clip_merge;
+    }
     
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {

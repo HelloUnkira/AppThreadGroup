@@ -9,11 +9,92 @@
 #include "app_sys_lib.h"
 #include "app_thread_group.h"
 
+static bool app_thread_task_test_flag = true;
+static app_sys_timer_t app_thread_task_test_timer = {0};
+static app_thread_task_queue_t *app_thread_task_test_queue = NULL;
+static app_thread_task_t *app_thread_task_test1 = NULL;
+static app_thread_task_t *app_thread_task_test2 = NULL;
+static app_thread_task_t *app_thread_task_test3 = NULL;
+
+/*@brief mix custom test子线程 子任务
+ */
+static void app_thread_mix_custom_test_task1_routine(void)
+{
+    APP_SYS_LOG_INFO("");
+}
+
+/*@brief mix custom test子线程 子任务
+ */
+static void app_thread_mix_custom_test_task2_routine(void)
+{
+    APP_SYS_LOG_INFO("");
+}
+
+/*@brief mix custom test子线程 子任务
+ */
+static void app_thread_mix_custom_test_task3_routine(void)
+{
+    APP_SYS_LOG_INFO("");
+}
+
+/*@brief mix custom test子线程 子任务 触发源
+ */
+static void app_thread_task_test_timer_handler(void *timer)
+{
+    APP_SYS_LOG_INFO("");
+    static uint32_t count = 0;
+    count++;
+    
+    if (count % 1 == 0)
+        app_thread_task_toggle(app_thread_task_test_queue, app_thread_task_test1);
+    if (count % 2 == 0)
+        app_thread_task_toggle(app_thread_task_test_queue, app_thread_task_test2);
+    if (count % 3 == 0)
+        app_thread_task_toggle(app_thread_task_test_queue, app_thread_task_test3);
+    
+    if (count >= 10) {
+        app_thread_task_test_flag = false;
+        app_thread_task_queue_notify(app_thread_task_test_queue);
+    }
+}
+
+/*@brief mix custom test子线程
+ */
+static APP_THREAD_GROUP_HANDLER(app_thread_mix_custom_test_routine)
+{
+    app_thread_task_test_queue = app_thread_task_queue_create();
+    app_thread_task_test1 = app_thread_task_commit(app_thread_task_test_queue, app_thread_mix_custom_test_task1_routine, 1);
+    app_thread_task_test2 = app_thread_task_commit(app_thread_task_test_queue, app_thread_mix_custom_test_task2_routine, 2);
+    app_thread_task_test3 = app_thread_task_commit(app_thread_task_test_queue, app_thread_mix_custom_test_task3_routine, 3);
+    
+    app_thread_task_test_timer.expired = app_thread_task_test_timer_handler;
+    app_thread_task_test_timer.peroid  = 1000;
+    app_thread_task_test_timer.reload  = true;
+    app_sys_timer_start(&app_thread_task_test_timer);
+    
+    #if 1
+    while (app_thread_task_test_flag) {
+        app_thread_task_queue_wait(app_thread_task_test_queue);
+        app_thread_task_queue_schedule(app_thread_task_test_queue, false);
+    }
+    #else
+    app_thread_task_queue_schedule(app_thread_task_test_queue, true);
+    #endif
+    
+    app_thread_task_queue_destroy(app_thread_task_test_queue);
+    app_sys_timer_stop(&app_thread_task_test_timer);
+}
+
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_mix_custom_routine_ready_cb(void)
 {
     /* 相关模组初始化 */
+    
+    /* 创建test子线程 */
+    static app_thread_t app_thread_mix_custom_test = {0};
+    app_thread_group_create(&app_thread_mix_custom, &app_thread_mix_custom_test, app_thread_mix_custom_test_routine);
+    app_thread_process(&app_thread_mix_custom_test, app_thread_static);
 }
 
 /*@brief 子线程服务例程处理部

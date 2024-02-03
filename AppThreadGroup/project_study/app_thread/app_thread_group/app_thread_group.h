@@ -35,6 +35,7 @@ typedef enum {  /* 线程组模组 */
 #include "app_thread_adaptor.h"
 #include "app_thread_master.h"
 #include "app_thread_slave.h"
+#include "app_thread_task.h"
 
 void app_thread_master_prepare(void);
 void app_thread_master_schedule(void);
