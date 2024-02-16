@@ -2,13 +2,19 @@
 #define APP_SYS_TIMER_H
 
 typedef struct {
-    void    *buddy;                     /* 内部使用:下一节点 */
+    app_sys_list_sln_t sl_node;         /* 内部使用:链表 */
     void   (*expired)(void *timer);     /* 到期回调 */
     void    *user_data;                 /* 用户挂载数据 */
     uint32_t reduce;                    /* 内部使用:约减数 */
     uint32_t peroid;                    /* 回调周期 */
     uint32_t reload:1;                  /* 是否自重载 */
 } app_sys_timer_t;
+
+typedef struct {
+    app_mutex_t mutex;
+    app_sys_list_sll_t sl_list;
+    uint32_t number;
+} app_sys_timer_list_t;
 
 /*@brief 停止,中止,终止软件定时器(中断环境下不可调用)
  *@param timer 定时器实例

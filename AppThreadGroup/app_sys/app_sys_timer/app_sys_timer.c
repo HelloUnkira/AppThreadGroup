@@ -7,8 +7,7 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 
-static app_mutex_t app_sys_timer_mutex = {0};
-static app_sys_timer_t *app_sys_timer_list = NULL;
+static app_sys_timer_list_t app_sys_timer_list = {0};
 
 /*@brief 停止,中止,终止软件定时器(中断环境下不可调用)
  *@param timer 定时器实例
@@ -18,35 +17,27 @@ bool app_sys_timer_stop(app_sys_timer_t *timer)
 {
     bool retval = false;
     app_sys_timer_t *current = NULL;
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
     /* 检查等待者队列 */
-    if (app_sys_timer_list != NULL) {
-        /* 检查第一个等待者 */
-        if (app_sys_timer_list == timer) {
-            app_sys_timer_list  = timer->buddy;
-            /* 如果后面还有等待者,需要将约减值累加到后面 */
-            if (app_sys_timer_list != NULL)
-                app_sys_timer_list->reduce += timer->reduce;
-            retval = true;
-        } else {
-            current = app_sys_timer_list;
-            /* 遍历等待者队列 */
-            while (current->buddy != NULL) {
-                /* 如果下一等待着是目标 */
-                if (current->buddy == timer) {
-                    current->buddy  = timer->buddy;
-                    /* 如果后面还有等待者,需要将约减值累加到后面 */
-                    if (current->buddy != NULL)
-                        ((app_sys_timer_t *)current->buddy)->reduce += timer->reduce;
-                    retval = true;
-                    break;
+    if (app_sys_timer_list.number != 0) {
+        app_sys_list_sln_t *prev = NULL;
+        app_sys_list_sll_tra(&app_sys_timer_list.sl_list, node) {
+            current = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+            if (current == timer) {
+                app_sys_list_sll_remove(&app_sys_timer_list.sl_list, prev, &timer->sl_node);
+                app_sys_timer_list.number--;
+                /* 如果后面还有等待者,需要将约减值累加到后面 */
+                if ((node = app_sys_list_sln_buddy(node)) != NULL) {
+                    current = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+                    current->reduce += timer->reduce;
                 }
-                /* 检查下一个等待者 */
-                current = current->buddy;
+                retval = true;
+                break;
             }
+            prev = node;
         }
     }
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_give);
     return retval;
 }
 
@@ -61,64 +52,53 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
     if (timer->expired == NULL || timer->peroid == 0)
         return false;
     /* 初始化软件定时器 */
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
     /* 预检查:不要出现相同参数的软件定时器 */
     if (status) {
-        current = app_sys_timer_list;
-        /* 遍历等待者队列 */
-        while (current != NULL) {
-            /* 如果某一等待者与目标参数相同 */
+        app_sys_list_sll_tra(&app_sys_timer_list.sl_list, node) {
+            current = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
             if (current == timer) {
                 status = false;
                 break;
             }
-            /* 检查下一个等待者 */
-            current = current->buddy;
         }
     }
     /* 检查等待者队列 */
     if (status) {
-        timer->buddy = NULL;
+        app_sys_list_sln_reset(&timer->sl_node);
         timer->reduce = timer->peroid;
-        if (app_sys_timer_list == NULL) {
-            app_sys_timer_list  = timer;
+        if (app_sys_timer_list.number == 0) {
+            app_sys_list_sll_pinsert(&app_sys_timer_list.sl_list, &timer->sl_node);
+            app_sys_timer_list.number++;
             status = false;
         }
-    }
-    /* 比较第一个等待者 */
-    if (status)
-    if (app_sys_timer_list->reduce >= timer->reduce) {
-        app_sys_timer_list->reduce -= timer->reduce;
-        timer->buddy = app_sys_timer_list;
-        app_sys_timer_list = timer;
-        status = false;
     }
     /* 遍历等待者队列 */
     if (status) {
-        current = app_sys_timer_list;
-        timer->reduce -= current->reduce;
-        /* 遍历等待者队列 */
-        while (current->buddy != NULL) {
-            /* 如果下一等待着不是目标 */
-            if (timer->reduce >= ((app_sys_timer_t *)current->buddy)->reduce) {
-                timer->reduce -= ((app_sys_timer_t *)current->buddy)->reduce;
-                /* 检查下一个等待者 */
-                current = current->buddy;
-                continue;
+        app_sys_list_sln_t *prev = NULL;
+        app_sys_list_sll_tra(&app_sys_timer_list.sl_list, node) {
+            current = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+            if (timer->reduce >= current->reduce)
+                timer->reduce -= current->reduce;
+            else {
+                current->reduce -= timer->reduce;
+                if (prev == NULL)
+                    app_sys_list_sll_pinsert(&app_sys_timer_list.sl_list, &timer->sl_node);
+                else
+                    app_sys_list_sll_insert(&app_sys_timer_list.sl_list, prev, &timer->sl_node);
+                app_sys_timer_list.number++;
+                status = false;
             }
-            /* 如果下一等待着是目标 */
-            ((app_sys_timer_t *)current->buddy)->reduce -= timer->reduce;
-            timer->buddy = current->buddy;
-            current->buddy = timer;
-            status = false;
-            break;
+            prev = node;
         }
     }
     /* 添加到末尾 */
-    if (status)
-        current->buddy = timer;
+    if (status) {
+        app_sys_list_sll_ainsert(&app_sys_timer_list.sl_list, &timer->sl_node);
+        app_sys_timer_list.number++;
+    }
     /*  */
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_give);
     /*  */
     return true;
 }
@@ -130,29 +110,30 @@ void app_sys_timer_reduce(void)
 {
     bool loop = true;
     while (loop) {
-        bool status = true;
-        app_sys_timer_t *timer = NULL;
         loop = false;
-        app_mutex_process(&app_sys_timer_mutex, app_mutex_take);
-        /* 检查等待者队列 */
-        if (status)
-        if (app_sys_timer_list == NULL)
-            status = false;
+        app_sys_timer_t *timer = NULL;
+        app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
         /* 约减首项等待者 */
-        if (status)
-        if (app_sys_timer_list->reduce != 0)
-            app_sys_timer_list->reduce--;
-        /* 约减首项等待者 */
-        if (status)
-        if (app_sys_timer_list->reduce == 0) {
-            timer = app_sys_timer_list;
-            app_sys_timer_list = timer->buddy;
-            /* 如果还能继续约减 */
-            if (app_sys_timer_list != NULL)
-            if (app_sys_timer_list->reduce == 0)
-                loop = true;
+        if (app_sys_timer_list.number != 0) {
+            app_sys_list_sln_t *node = app_sys_list_sll_head(&app_sys_timer_list.sl_list);
+            timer = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+            if (timer->reduce != 0)
+                timer->reduce--;
+            /* 约减命中 */
+            if (timer->reduce != 0)
+                timer = NULL;
+            else {
+                app_sys_list_sll_remove(&app_sys_timer_list.sl_list, NULL, node);
+                app_sys_timer_list.number--;
+                /* 如果还能继续约减 */
+                if ((node = app_sys_list_sln_buddy(node)) != NULL) {
+                    app_sys_timer_t *timer_zero = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+                    if (timer_zero->reduce == 0)
+                        loop = true;
+                }
+            }
         }
-        app_mutex_process(&app_sys_timer_mutex, app_mutex_give);
+        app_mutex_process(&app_sys_timer_list.mutex, app_mutex_give);
         /* 处理该约减者 */
         if (timer != NULL) {
             /* 检查是否需要重加载 */
@@ -169,5 +150,6 @@ void app_sys_timer_reduce(void)
  */
 void app_sys_timer_ready(void)
 {
-    app_mutex_process(&app_sys_timer_mutex, app_mutex_static);
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_static);
+    app_sys_list_sll_reset(&app_sys_timer_list.sl_list);
 }
