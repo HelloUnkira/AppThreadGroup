@@ -6,7 +6,7 @@ typedef struct {
     struct {
         uint8_t preload:1;              /* 是否预加载,默认预加载 */
         uint8_t floating:1;             /* 跟手(或事件)浮动交互 */
-    } sibling_attr;
+    } sibling_attr[6];
 } scui_window_cfg_t;
 
 typedef struct {
@@ -35,6 +35,12 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
  *@param handle 窗口控件句柄
  */
 void scui_window_destroy(scui_handle_t handle);
+
+/*@brief 窗口配置参数默认
+ *@param handle 窗口控件句柄
+ *@param cfg    配置参数
+ */
+void scui_window_cfg_def(scui_window_cfg_t *cfg);
 
 /*@brief 窗口配置参数获取
  *@param handle 窗口控件句柄

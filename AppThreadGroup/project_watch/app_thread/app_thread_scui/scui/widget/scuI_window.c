@@ -21,6 +21,8 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
+    scui_window_cfg_def(&window->cfg);
+    
     window->level  = maker->level;
     window->buffer = maker->buffer;
     
@@ -75,6 +77,19 @@ void scui_window_destroy(scui_handle_t handle)
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);
+}
+
+/*@brief 窗口配置参数默认
+ *@param handle 窗口控件句柄
+ *@param cfg    配置参数
+ */
+void scui_window_cfg_def(scui_window_cfg_t *cfg)
+{
+    for (uint8_t idx = 0; idx < 6; idx++) {
+        cfg->sibling[idx] = SCUI_HANDLE_INVALID;
+        cfg->sibling_attr[idx].floating = false;
+        cfg->sibling_attr[idx].preload = true;
+    }
 }
 
 /*@brief 窗口配置参数获取
