@@ -58,7 +58,7 @@ void app_scui_drv_update(void)
 
 /*@brief scui 场景启动
  */
-void app_scui_scene_start(void)
+void app_scui_window_start(void)
 {
     /* 向线程发送场景启动事件 */
     app_thread_package_t package = {
@@ -71,7 +71,7 @@ void app_scui_scene_start(void)
 
 /*@brief scui 场景停止
  */
-void app_scui_scene_stop(void)
+void app_scui_window_stop(void)
 {
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {
@@ -84,7 +84,7 @@ void app_scui_scene_stop(void)
 
 /*@brief scui 场景低功耗
  */
-void app_scui_scene_dlps(bool status)
+void app_scui_window_dlps(bool status)
 {
     /* 向线程发送场景休眠唤醒事件 */
     app_thread_package_t package = {
@@ -100,7 +100,7 @@ void app_scui_scene_dlps(bool status)
 
 /*@brief scui 场景停止
  */
-void app_scui_scene_shutdown(void)
+void app_scui_window_shutdown(void)
 {
     /* 向线程发送场景停止事件 */
     app_thread_package_t package = {

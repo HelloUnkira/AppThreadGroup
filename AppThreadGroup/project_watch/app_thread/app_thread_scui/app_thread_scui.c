@@ -11,7 +11,7 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 1   /* draw 测试 */
+#if 0   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
@@ -105,11 +105,11 @@ static void app_thread_scui_draw_test(void)
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
 {
-    scui_scene_switch_type_cfg(scui_scene_switch_none);
+    scui_window_switch_type_cfg(scui_window_switch_none);
     
     scui_handle_t handle = SCUI_UI_SCENE_HOME;
     scui_widget_show(handle);
-    scui_scene_active(handle);
+    scui_window_active(handle);
     // scui_widget_hide(handle);
     
     app_thread_scui_draw_test();

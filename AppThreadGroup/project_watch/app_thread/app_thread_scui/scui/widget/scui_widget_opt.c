@@ -178,7 +178,7 @@ void scui_widget_show(scui_handle_t handle)
     
     /* 将该显示窗口加入到场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)
-        scui_scene_list_add(widget->myself);
+        scui_window_list_add(widget->myself);
 }
 
 /*@brief 控件隐藏
@@ -212,7 +212,7 @@ void scui_widget_hide(scui_handle_t handle)
     
     /* 将该显示窗口移除出场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)
-        scui_scene_list_del(widget->myself);
+        scui_window_list_del(widget->myself);
 }
 
 /*@brief 控件隐藏

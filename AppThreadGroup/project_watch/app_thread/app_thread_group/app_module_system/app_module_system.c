@@ -35,7 +35,7 @@ void app_module_system_dlps_set(bool dlps)
         #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_dlps(dlps);
         #elif APP_EXT_DEV_GUI_IS_SCUI
-        app_scui_scene_dlps(dlps);
+        app_scui_window_dlps(dlps);
         #else
         #endif
     }

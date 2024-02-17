@@ -39,14 +39,6 @@
             "class": "scui_widget_type_window",
             "maker": "scui_window_maker_t",
             "field": {
-                "style[0].style_float":         "交互风格",
-                "style[1].style_float":         "交互风格",
-                "style[2].style_float":         "交互风格",
-                "style[3].style_float":         "交互风格",
-                "sibling[0]":                   "兄弟(上)",
-                "sibling[1]":                   "兄弟(下)",
-                "sibling[2]":                   "兄弟(左)",
-                "sibling[3]":                   "兄弟(右)",
                 "level":                        "窗口所在层级(数字越大越高)",
                 "buffer":                       "窗口是否使用独立画布"
             }

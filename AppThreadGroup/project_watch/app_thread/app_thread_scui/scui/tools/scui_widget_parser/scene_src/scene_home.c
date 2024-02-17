@@ -19,6 +19,12 @@ scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event)
         return scui_event_retval_keep;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
+        
+        /* 窗口属性参数配置 */
+        scui_window_cfg_t window_cfg = {0};
+        scui_window_cfg_get(event->object, &window_cfg);
+        scui_window_cfg_set(event->object, &window_cfg);
+        
         return scui_event_retval_keep;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");

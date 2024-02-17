@@ -21,12 +21,16 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
-    window->level = maker->level;
+    window->level  = maker->level;
+    window->buffer = maker->buffer;
     
     /* 是否需要创建自己的surface */
     if (maker->buffer) {
         scui_coord_t hor_res = scui_disp_get_hor_res();
         scui_coord_t ver_res = scui_disp_get_ver_res();
+        /* 窗口是全屏的绘制区域 */
+        SCUI_ASSERT(hor_res == maker->widget.clip.w);
+        SCUI_ASSERT(ver_res == maker->widget.clip.h);
         uint32_t surface_res = hor_res * ver_res * SCUI_PIXEL_SIZE;
         window->widget.surface.pixel = SCUI_MEM_ALLOC(scui_mem_is_image, surface_res);
         window->widget.surface.line  = hor_res;
@@ -71,4 +75,32 @@ void scui_window_destroy(scui_handle_t handle)
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);
+}
+
+/*@brief 窗口配置参数获取
+ *@param handle 窗口控件句柄
+ *@param cfg    配置参数
+ */
+void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_window);
+    scui_window_t *window = (void *)widget;
+    
+    *cfg = window->cfg;
+}
+
+/*@brief 窗口配置参数设置
+ *@param handle 窗口控件句柄
+ *@param cfg    配置参数
+ */
+void scui_window_cfg_set(scui_handle_t handle, scui_window_cfg_t *cfg)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_window);
+    scui_window_t *window = (void *)widget;
+    
+    window->cfg = *cfg;
 }

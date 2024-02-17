@@ -60,7 +60,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_start();
         #elif APP_EXT_DEV_GUI_IS_SCUI
-        app_scui_scene_start();
+        app_scui_window_start();
         #else
         #endif
         
@@ -79,7 +79,7 @@ bool app_module_system_mode_normal_ctrl(app_module_clock_t clock[1], app_module_
         #elif APP_EXT_DEV_GUI_IS_LVGL
         app_lv_scene_stop();
         #elif APP_EXT_DEV_GUI_IS_SCUI
-        app_scui_scene_stop();
+        app_scui_window_stop();
         #else
         #endif
         
