@@ -11,11 +11,11 @@
 #include "app_thread_group.h"
 #include "app_scui_lib.h"
 
-#if 0   /* draw 测试 */
+#if 1   /* draw 测试 */
 
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
-    #if 1
+    #if 0
     
     static uint8_t color = 0;
     static uint8_t alpha = 0;
@@ -37,7 +37,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     static uint8_t count = 0;
     
     scui_image_unit_t image_unit = {0};
-    scui_handle_t handle = scui_image_prjimage_src_00_theme_01_on_png;
+    scui_handle_t handle = scui_image_prj_image_src_00_theme_02_ringbmp;
     image_unit.image = scui_handle_get(handle);
     scui_area_t src_clip = {
         .w = image_unit.image->pixel.width,
@@ -51,6 +51,10 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     };
     scui_color_gradient_t color = {0};
     scui_alpha_t alpha = 0xFF;
+    
+    /* 注意:半透明效果会反复叠加,先全屏刷新保持帧缓冲一致性 */
+    SCUI_PIXEL_TYPE pixel = scui_pixel_by_color((scui_color8888_t){.full = 0xFFFFFFFF});
+    scui_draw_area_fill(surface, &surface->clip, &pixel, surface->alpha);
     
     scui_image_cache_load(&image_unit);
     scui_draw_image(surface, &dst_clip, &image_unit, &src_clip, color, alpha);
@@ -93,12 +97,6 @@ static void app_thread_scui_draw_test(void)
 
 static void app_thread_scui_draw_test(void)
 {
-    scui_scene_switch_type_cfg(scui_scene_switch_none);
-    
-    scui_handle_t handle = SCUI_UI_SCENE_HOME;
-    scui_widget_show(handle);
-    scui_scene_active(handle);
-    // scui_widget_hide(handle);
 }
 
 #endif
@@ -107,6 +105,13 @@ static void app_thread_scui_draw_test(void)
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
 {
+    scui_scene_switch_type_cfg(scui_scene_switch_none);
+    
+    scui_handle_t handle = SCUI_UI_SCENE_HOME;
+    scui_widget_show(handle);
+    scui_scene_active(handle);
+    // scui_widget_hide(handle);
+    
     app_thread_scui_draw_test();
     
     while (true) {

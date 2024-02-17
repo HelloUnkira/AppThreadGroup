@@ -25,14 +25,17 @@ def scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
     return int(rgb_0 / 16) + (int(rgb_1 / 16) << 4)
 
 
-# 生成pixel bmp565
-def scui_image_pixel_bmp565(r8, g8, b8) -> tuple:
+# 生成pixel rgb565
+def scui_image_pixel_rgb565(r8, g8, b8) -> tuple:
+    r5 = (r8 >> 3) & 0x1F
+    g6 = (g8 >> 2) & 0x3F
+    b5 = (b8 >> 3) & 0x1F
     # rgb
-    rgb = (r8 << 8) | (g8 << 3) | (b8 >> 3)
-    return int(rgb / 256), int(rgb % 256)   # rgb raw
-    # return int(rgb % 256, int(rgb / 256)    # rgb swap
+    rgb = (r5 << 11) | (g6 << 5) | (b5 << 0)
+    # return int(rgb / 256), int(rgb % 256)   # rgb raw
+    return int(rgb % 256), int(rgb / 256)    # rgb swap
     # bgr
-    # bgr = (b8 << 8) | (g8 << 3) | (r8 >> 3)
+    # bgr = (b5 << 11) | (g6 << 5) | (r5 << 0)
     # return int(bgr / 256), int(bgr % 256)   # rgb raw
     # return int(bgr % 256), int(bgr / 256)   # bgr swap
 
@@ -122,9 +125,9 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                         r8 = pixel_matrix[i, j][0]
                         g8 = pixel_matrix[i, j][1]
                         b8 = pixel_matrix[i, j][2]
-                        bmp16 = scui_image_pixel_bmp565(r8, g8, b8)
-                        pixel_stream.append(bmp16[0])
-                        pixel_stream.append(bmp16[1])
+                        rgb16 = scui_image_pixel_rgb565(r8, g8, b8)
+                        pixel_stream.append(rgb16[0])
+                        pixel_stream.append(rgb16[1])
                 # for line in pixel_stream:
                 #     print(line)
         if image_raw.mode == 'RGBA':
@@ -135,9 +138,9 @@ def scui_image_parse(file_path_list, scui_image_combine_list, project_name):
                         g8 = pixel_matrix[i, j][1]
                         b8 = pixel_matrix[i, j][2]
                         a8 = pixel_matrix[i, j][3]
-                        bmp16 = scui_image_pixel_bmp565(r8, g8, b8)
-                        pixel_stream.append(bmp16[0])
-                        pixel_stream.append(bmp16[1])
+                        rgb16 = scui_image_pixel_rgb565(r8, g8, b8)
+                        pixel_stream.append(rgb16[0])
+                        pixel_stream.append(rgb16[1])
                         pixel_stream.append(a8)
                 # for line in pixel_stream:
                 #     print(line)

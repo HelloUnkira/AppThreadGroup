@@ -32,9 +32,9 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     
     scui_area_t draw_area = {0};
     scui_area_inter(&draw_area, dst_area, dst_clip);
-    /* 绘制起点从0,0开始,所以实际绘制扣除1 */
-    draw_area.w -= 1;
-    draw_area.h -= 1;
+    
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
     
     if (scui_area_empty(&draw_area))
         return;
@@ -43,20 +43,21 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     
     /* 在src_surface.clip中的draw_area中填满pixel */
     SCUI_PIXEL_TYPE pixel = {0};
-    scui_coord_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
-    uint8_t *dst_addr = dst_surface->pixel + draw_area.y * dst_line + draw_area.x * SCUI_PIXEL_SIZE;
+    scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t dis_line = draw_area.w * SCUI_PIXEL_SIZE;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * SCUI_PIXEL_SIZE;
     
     if (alpha == 0xFF) {
         /* 先填充第一行像素点 */
-        for (scui_coord_t idx = 0; idx < draw_area.w; idx++)
+        for (scui_multi_t idx = 0; idx < draw_area.w; idx++)
             scui_mem_w(dst_addr + idx * SCUI_PIXEL_SIZE, *src_pixel, SCUI_PIXEL_TYPE);
         /* 后使用第一行像素点填充其他行像素点 */
-        for (scui_coord_t idx = 1; idx < draw_area.h; idx++)
-            scui_draw_line_copy(dst_addr + idx * dst_line, dst_addr, dst_line);
+        for (scui_multi_t idx = 1; idx < draw_area.h; idx++)
+            scui_draw_line_copy(dst_addr + idx * dst_line, dst_addr, dis_line);
     } else {
         /* 注意区域对齐坐标 */
-        for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
-        for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+        for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
             SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
             // pixel = scui_pixel_blend_with_alpha(src_pixel, alpha, dst_addr_ofs, dst_surface->alpha);
@@ -88,22 +89,22 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    /* 绘制起点从0,0开始,所以实际绘制扣除1 */
-    draw_area.w -= 1;
-    draw_area.h -= 1;
+    
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
     
     if (scui_area_empty(&draw_area))
         return;
     
     SCUI_ASSERT(dst_surface->alpha == 0xFF && src_surface->alpha == 0xFF);
     /* 在dst_surface.clip中的dst_clip_v中拷贝到src_surface.clip中的src_clip_v中 */
-    scui_coord_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
-    scui_coord_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
-    scui_coord_t dis_line = draw_area.w * SCUI_PIXEL_SIZE;
+    scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t dis_line = draw_area.w * SCUI_PIXEL_SIZE;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
     /* 注意区域对齐坐标 */
-    for (scui_coord_t idx = 0; idx < draw_area.h; idx++)
+    for (scui_multi_t idx = 0; idx < draw_area.h; idx++)
         scui_draw_line_copy(dst_addr + idx * dst_line, src_addr + idx * src_line, dis_line);
 }
 
@@ -137,23 +138,23 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    /* 绘制起点从0,0开始,所以实际绘制扣除1 */
-    draw_area.w -= 1;
-    draw_area.h -= 1;
+    
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
     
     if (scui_area_empty(&draw_area))
         return;
     
     SCUI_PIXEL_TYPE pixel = {0};
     /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
-    scui_coord_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
-    scui_coord_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
     
     /* 注意区域对齐坐标 */
-    for (scui_coord_t idx_line = 0; idx_line < draw_area.h; idx_line++)
-    for (scui_coord_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
         uint8_t *src_ofs = src_addr + idx_line * src_line + idx_item * SCUI_PIXEL_SIZE;
         SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;

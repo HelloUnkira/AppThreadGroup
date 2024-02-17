@@ -60,8 +60,10 @@ void scui_handle_table_register(scui_handle_table_t *table)
     }
     /* 注册句柄: */
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
-        if (scui_handle_table[ofs].source == NULL)
+        if (scui_handle_table[ofs].source == NULL) {
             scui_handle_table[ofs] = *table;
+            break;
+        }
     
     SCUI_LOG_INFO("handle table register:");
     SCUI_LOG_INFO("handle table source:%p", table->source);

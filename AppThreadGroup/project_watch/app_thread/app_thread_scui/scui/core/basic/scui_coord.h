@@ -6,6 +6,11 @@
  */
 typedef int16_t scui_coord_t;
 
+/*@brief 坐标点运算量
+ *       坐标点运算可能产生溢出
+ */
+typedef int32_t scui_multi_t;
+
 /*@brief 坐标
  */
 typedef struct {

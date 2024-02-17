@@ -32,65 +32,65 @@
             "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_HOME_CENTER",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_C",
             "widget.parent":                "SCUI_UI_SCENE_HOME",
             "widget.color.color.ch.a":      "0xFF",
             "widget.color.color.ch.g":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_home_center_event_proc"
+            "widget.event_cb":              "scui_ui_scene_home_c_event_proc"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
-            "widget.clip.x":                "SCUI_DRV_HOR_RES / 3",
+            "widget.clip.x":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_HOME_UP",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_LU",
             "widget.parent":                "SCUI_UI_SCENE_HOME",
             "widget.color.color.ch.a":      "0xFF",
             "widget.color.color.ch.r":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_home_up_event_proc"
+            "widget.event_cb":              "scui_ui_scene_home_lu_event_proc"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
-            "widget.clip.x":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES * 2 / 3",
+            "widget.clip.x":                "SCUI_DRV_VER_RES * 2 / 3",
+            "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_HOME_DOWN",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_RU",
             "widget.parent":                "SCUI_UI_SCENE_HOME",
             "widget.color.color.ch.a":      "0xFF",
             "widget.color.color.ch.r":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_home_down_event_proc"
+            "widget.event_cb":              "scui_ui_scene_home_ru_event_proc"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 0 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
+            "widget.clip.y":                "SCUI_DRV_VER_RES * 2 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_HOME_LEFT",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_LD",
             "widget.parent":                "SCUI_UI_SCENE_HOME",
             "widget.color.color.ch.a":      "0xFF",
             "widget.color.color.ch.b":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_home_left_event_proc"
+            "widget.event_cb":              "scui_ui_scene_home_ld_event_proc"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 2 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
+            "widget.clip.y":                "SCUI_DRV_VER_RES * 2 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_HOME_RIGHT",
+            "widget.myself":                "SCUI_UI_SCENE_HOME_RD",
             "widget.parent":                "SCUI_UI_SCENE_HOME",
             "widget.color.color.ch.a":      "0xFF",
             "widget.color.color.ch.b":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_home_right_event_proc"
+            "widget.event_cb":              "scui_ui_scene_home_rd_event_proc"
         }
     ]
 }

@@ -39,7 +39,7 @@ scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event)
  *@param event 事件
  *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_center_event_proc(scui_event_t *event)
+scui_event_retval_t scui_ui_scene_home_c_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -55,7 +55,7 @@ scui_event_retval_t scui_ui_scene_home_center_event_proc(scui_event_t *event)
  *@param event 事件
  *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_left_event_proc(scui_event_t *event)
+scui_event_retval_t scui_ui_scene_home_lu_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -71,7 +71,7 @@ scui_event_retval_t scui_ui_scene_home_left_event_proc(scui_event_t *event)
  *@param event 事件
  *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_right_event_proc(scui_event_t *event)
+scui_event_retval_t scui_ui_scene_home_ru_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -87,7 +87,7 @@ scui_event_retval_t scui_ui_scene_home_right_event_proc(scui_event_t *event)
  *@param event 事件
  *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_up_event_proc(scui_event_t *event)
+scui_event_retval_t scui_ui_scene_home_ld_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -103,7 +103,7 @@ scui_event_retval_t scui_ui_scene_home_up_event_proc(scui_event_t *event)
  *@param event 事件
  *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_down_event_proc(scui_event_t *event)
+scui_event_retval_t scui_ui_scene_home_rd_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
