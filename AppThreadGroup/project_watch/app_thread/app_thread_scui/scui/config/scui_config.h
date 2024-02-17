@@ -3,9 +3,9 @@
 
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_CHECK       0
-#define SCUI_MEM_RECORD_ITEM_PART   128
-#define SCUI_MEM_RECORD_ITEM_FONT   256
-#define SCUI_MEM_RECORD_ITEM_IMAGE  64
+#define SCUI_MEM_RECORD_ITEM_DEF    128
+#define SCUI_MEM_RECORD_ITEM_TEXT   256
+#define SCUI_MEM_RECORD_ITEM_GRAPH  64
 
 /* 缩放系数(Coefficient),为2的指数倍 */
 #define SCUI_ZOOM_COF               (1024)

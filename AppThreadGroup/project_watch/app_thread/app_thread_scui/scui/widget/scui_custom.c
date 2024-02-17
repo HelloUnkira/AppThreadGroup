@@ -18,7 +18,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建自定义控件实例 */
-    scui_custom_t *custom = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_custom_t));
+    scui_custom_t *custom = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_custom_t));
     memset(custom, 0, sizeof(scui_custom_t));
     
     /* 创建基础控件实例 */

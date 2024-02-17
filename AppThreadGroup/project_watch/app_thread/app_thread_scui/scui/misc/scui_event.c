@@ -73,7 +73,7 @@ void scui_event_enqueue(scui_event_t *event)
     }
     /* 生成资源包, 转储消息资源资源 */
     if (!absorb_flag) {
-        event_new = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_event_t));
+        event_new = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_event_t));
         if (event_new != NULL) {
             memcpy(event_new, event, sizeof(scui_event_t));
             scui_list_dln_reset(&event_new->dl_node);

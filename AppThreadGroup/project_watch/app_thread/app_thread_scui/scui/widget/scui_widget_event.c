@@ -81,7 +81,7 @@ void scui_widget_event_add(scui_handle_t handle, scui_widget_event_t *event)
     
     /* 初始化节点然后入列 */
     scui_widget_event_t *event_new = NULL;
-     event_new = SCUI_MEM_ALLOC(scui_mem_is_part, sizeof(scui_widget_event_t));
+     event_new = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_widget_event_t));
     *event_new = *event;
     scui_list_dln_reset(&event_new->dl_node);
     scui_list_dll_ainsert(&widget->dl_list, NULL, &event_new->dl_node);

@@ -8,19 +8,19 @@
 #include "scui.h"
 
 #if SCUI_MEM_RECORD_CHECK
-static scui_mem_record_item_t scui_mem_record_part[ SCUI_MEM_RECORD_ITEM_PART]  = {0};
-static scui_mem_record_item_t scui_mem_record_font[ SCUI_MEM_RECORD_ITEM_FONT]  = {0};
-static scui_mem_record_item_t scui_mem_record_image[SCUI_MEM_RECORD_ITEM_IMAGE] = {0};
+static scui_mem_record_item_t scui_mem_record_def[  SCUI_MEM_RECORD_ITEM_DEF]   = {0};
+static scui_mem_record_item_t scui_mem_record_text[ SCUI_MEM_RECORD_ITEM_TEXT]  = {0};
+static scui_mem_record_item_t scui_mem_record_graph[SCUI_MEM_RECORD_ITEM_GRAPH] = {0};
 
 static scui_mem_record_item_t * const scui_mem_record_list[] = {
-    scui_mem_record_part,
-    scui_mem_record_font,
-    scui_mem_record_image,
+    scui_mem_record_def,
+    scui_mem_record_text,
+    scui_mem_record_graph,
 };
 static uint32_t const scui_mem_record_list_num[] = {
-    SCUI_MEM_RECORD_ITEM_PART,
-    SCUI_MEM_RECORD_ITEM_FONT,
-    SCUI_MEM_RECORD_ITEM_IMAGE,
+    SCUI_MEM_RECORD_ITEM_DEF,
+    SCUI_MEM_RECORD_ITEM_TEXT,
+    SCUI_MEM_RECORD_ITEM_GRAPH,
 };
 
 /*@brief 内存记录
@@ -65,12 +65,12 @@ void scui_mem_record_check(void)
         if (scui_mem_record_list[idx0][idx1].ptr == NULL)
             continue;
         SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
-                         scui_mem_record_list[idx0][idx1].file,
-                         scui_mem_record_list[idx0][idx1].func,
-                         scui_mem_record_list[idx0][idx1].line,
-                         scui_mem_record_list[idx0][idx1].type,
-                         scui_mem_record_list[idx0][idx1].ptr,
-                         scui_mem_record_list[idx0][idx1].size);
+                     scui_mem_record_list[idx0][idx1].file,
+                     scui_mem_record_list[idx0][idx1].func,
+                     scui_mem_record_list[idx0][idx1].line,
+                     scui_mem_record_list[idx0][idx1].type,
+                     scui_mem_record_list[idx0][idx1].ptr,
+                     scui_mem_record_list[idx0][idx1].size);
     }
 }
 

@@ -14,10 +14,10 @@
  * 建议:单独为其开设分配器,唯一化分配
  */
 typedef enum {
-    scui_mem_is_none = 0,
-    scui_mem_is_part = scui_mem_is_none,
-    scui_mem_is_font,
-    scui_mem_is_image,
+    scui_mem_type_none = 0,
+    scui_mem_type_def  = scui_mem_type_none,
+    scui_mem_type_text,
+    scui_mem_type_graph,
     scui_mem_num,
 } scui_mem_type_t;
 

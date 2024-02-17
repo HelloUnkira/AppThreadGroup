@@ -30,7 +30,7 @@ void scui_engine_ready(void)
     scui_surface_t *surface_fb = NULL;
     const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * SCUI_PIXEL_SIZE * 10;
     surface_fb = scui_surface_fb_draw();
-    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size);
+    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->line   = SCUI_DRV_HOR_RES;
     surface_fb->alpha  = scui_alpha_cover;
     surface_fb->clip.x = 0;
@@ -40,7 +40,7 @@ void scui_engine_ready(void)
     scui_draw_area_fill(surface_fb, &surface_fb->clip, &pixel, surface_fb->alpha);
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
-    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_is_image, surface_fb_size);
+    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->line   = SCUI_DRV_HOR_RES;
     surface_fb->alpha  = scui_alpha_cover;
     surface_fb->clip.x = 0;

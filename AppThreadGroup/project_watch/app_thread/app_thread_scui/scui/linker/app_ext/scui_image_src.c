@@ -25,7 +25,7 @@ void scui_image_src_unload(scui_image_unit_t *image_unit)
  */
 void scui_image_src_load(scui_image_unit_t *image_unit)
 {
-    image_unit->data = SCUI_MEM_ALLOC(scui_mem_is_image, image_unit->image->pixel.size_mem);
+    image_unit->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
     // 使用image_uint->image生成==>image_unit->data
     
     #if SCUI_IMAGE_COMBINE_USE_ROM
