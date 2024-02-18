@@ -145,9 +145,15 @@ void scui_window_active(scui_handle_t handle)
  */
 void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_event_dir_t dir)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    if (scui_handle_remap(handle)) {
+        scui_widget_t *widget = scui_handle_get(handle);
+        SCUI_ASSERT(widget != NULL);
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    } else {
+        scui_widget_maker_t *maker = scui_handle_get(handle);
+        SCUI_ASSERT(maker != NULL);
+        SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
+    }
     
     if (scui_window_mgr.switch_args.lock) {
         SCUI_LOG_WARN("scene is switching");
@@ -177,6 +183,8 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
     for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
         scui_window_mgr.switch_args.list[idx] = SCUI_HANDLE_INVALID;
+        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
         if (scui_window_mgr.list[idx] != scui_window_mgr.active_curr &&
             scui_window_mgr.list[idx] != handle) {
             scui_widget_hide(scui_window_mgr.list[idx]);
@@ -193,8 +201,10 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_mgr.switch_args.lock = false;
         return;
     } else {
-        scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_last;
-        scui_window_mgr.switch_args.list[1] = scui_window_mgr.active_curr;
+        scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
+        scui_window_mgr.switch_args.list[1] = handle;
+        scui_widget_show(scui_window_mgr.switch_args.list[0]);
+        scui_widget_show(scui_window_mgr.switch_args.list[1]);
         /* 其他切换效果都需要动画完成 */
         scui_anima_t switch_anima = {0};
         switch_anima.path    = scui_anima_path_bounce;

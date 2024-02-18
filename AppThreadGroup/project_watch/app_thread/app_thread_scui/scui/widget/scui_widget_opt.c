@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -80,7 +80,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
  */
 void scui_widget_move(scui_handle_t handle, scui_point_t *point)
 {
-    SCUI_LOG_INFO("");
+    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
@@ -96,6 +96,7 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
         widget->surface.clip.y = point->y;
         /* 移动要清除剪切域 */
         widget->surface_clip = (scui_area_t){0};
+        SCUI_LOG_DEBUG("<x:%d, y:%d>", point->x, point->y);
         return;
     }
     
@@ -149,16 +150,17 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
  */
 void scui_widget_show(scui_handle_t handle)
 {
-    SCUI_LOG_INFO("");
+    SCUI_LOG_DEBUG("");
+    
     /* 资源还未加载时,加载该资源 */
     if (!scui_handle_remap(handle)) {
-         SCUI_LOG_INFO("not load yet");
+         SCUI_LOG_DEBUG("not load yet");
          scui_widget_cb_load(handle);
     }
     
     SCUI_LOG_DEBUG("");
     if (scui_widget_style_is_show(handle)) {
-        SCUI_LOG_INFO("is show");
+        SCUI_LOG_DEBUG("is show");
         return;
     }
     scui_widget_t *widget = scui_handle_get(handle);
@@ -186,11 +188,10 @@ void scui_widget_show(scui_handle_t handle)
  */
 void scui_widget_hide(scui_handle_t handle)
 {
-    SCUI_LOG_INFO("");
-    
     SCUI_LOG_DEBUG("");
+    
     if (scui_widget_style_is_hide(handle)) {
-        SCUI_LOG_INFO("is hide");
+        SCUI_LOG_DEBUG("is hide");
         return;
     }
     scui_widget_t *widget = scui_handle_get(handle);
@@ -221,7 +222,7 @@ void scui_widget_hide(scui_handle_t handle)
  */
 void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
 {
-    SCUI_LOG_INFO("");
+    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
@@ -240,7 +241,7 @@ void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
  */
 void scui_widget_mirror(scui_handle_t handle)
 {
-    SCUI_LOG_INFO("");
+    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     

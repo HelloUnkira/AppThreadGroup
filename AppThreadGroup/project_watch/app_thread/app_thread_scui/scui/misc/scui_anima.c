@@ -410,6 +410,8 @@ uint32_t scui_anima_path_bounce(void *instance)
         diff /= 40;
     }
     
+    if (time < 0)
+        time = 0;
     if (time > SCUI_BEZIER_VAL_MAX)
         time = SCUI_BEZIER_VAL_MAX;
     
@@ -418,6 +420,6 @@ uint32_t scui_anima_path_bounce(void *instance)
     uint32_t value_c = 0;
     value_c   = step * diff;
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
-    value_c  += anima->value_s;
+    value_c   = anima->value_e - value_c;
     return value_c;
 }

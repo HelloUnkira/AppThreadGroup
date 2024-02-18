@@ -47,6 +47,9 @@ scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         return scui_event_retval_keep;
+    case scui_event_key_click:
+        scui_window_jump(SCUI_UI_SCENE_1, scui_window_switch_normal, scui_event_dir_to_d);
+        return scui_event_retval_over;
     default:
         SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
         return scui_event_retval_quit;

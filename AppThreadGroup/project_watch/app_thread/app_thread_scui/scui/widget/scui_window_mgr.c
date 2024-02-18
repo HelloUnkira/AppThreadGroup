@@ -110,6 +110,9 @@ void scui_window_jump_anima_start(void *instance)
         SCUI_LOG_ERROR("error switch tyoe 0x%08x", scui_window_mgr.switch_args.type_cur);
         break;
     }
+    
+    /* 窗口发生改变,刷新 */
+    scui_widget_refr(scui_window_mgr.active_curr, true);
 }
 
 /*@brief 窗口跳转动画回调
@@ -155,14 +158,17 @@ void scui_window_jump_anima_expired(void *instance)
     SCUI_LOG_INFO("");
     scui_anima_t *anima = instance;
     
-    if ((scui_window_mgr.switch_args.dir_cur | scui_event_dir_ver) != 0)
-         scui_window_mgr.switch_args.ofs = scui_disp_get_ver_res();
-    if ((scui_window_mgr.switch_args.dir_cur | scui_event_dir_hor) != 0)
-         scui_window_mgr.switch_args.ofs = scui_disp_get_hor_res();
+    scui_multi_t ofs = 0;
+    if ((scui_window_mgr.switch_args.dir_cur & scui_event_dir_ver) != 0)
+         ofs = scui_disp_get_ver_res();
+    if ((scui_window_mgr.switch_args.dir_cur & scui_event_dir_hor) != 0)
+         ofs = scui_disp_get_hor_res();
     
-    scui_window_mgr.switch_args.pct  = anima->value_c;
-    scui_window_mgr.switch_args.ofs *= anima->value_c;
-    scui_window_mgr.switch_args.ofs /= 100;
+    ofs *= anima->value_c;
+    ofs /= 100;
+    
+    scui_window_mgr.switch_args.pct = anima->value_c;
+    scui_window_mgr.switch_args.ofs = ofs;
     
     scui_point_t point = (scui_point_t){0};
     switch (scui_window_mgr.switch_args.type_cur) {
@@ -216,11 +222,15 @@ void scui_window_jump_anima_expired(void *instance)
             SCUI_LOG_ERROR("error switch dir 0x%08x", scui_window_mgr.switch_args.dir_cur);
             break;
         }
-    }
-    default:
-        SCUI_LOG_ERROR("error switch tyoe 0x%08x", scui_window_mgr.switch_args.type_cur);
         break;
     }
+    default:
+        SCUI_LOG_ERROR("error switch type 0x%08x", scui_window_mgr.switch_args.type_cur);
+        break;
+    }
+    
+    /* 窗口发生改变,刷新 */
+    scui_widget_refr(scui_window_mgr.active_curr, true);
 }
 
 /*@brief 窗口管理器混合根控件列表
@@ -237,15 +247,35 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         case scui_window_switch_center_in:
         case scui_window_switch_center_out:
         case scui_window_switch_normal: {
-                scui_surface_t *dst_surface = scui_surface_fb_draw();
+            scui_surface_t *dst_surface = scui_surface_fb_draw();
+            for (scui_handle_t idx = 0; idx < num; idx++) {
                 scui_area_t dst_clip = {
                     .w = scui_disp_get_hor_res(),
                     .h = scui_disp_get_ver_res(),
                 };
-            for (scui_handle_t idx = 0; idx < num; idx++) {
                 scui_surface_t *src_surface = &list[idx]->surface;
                 scui_area_t src_clip = src_surface->clip;
+                scui_area_t rcd_clip = src_surface->clip;
+                /* 与显示区域做一次交集运算 */
+                scui_area_t out_clip = {0};
+                if (!scui_area_inter(&out_clip, &dst_clip, &src_clip))
+                     continue;
+                dst_clip = out_clip;
+                if (src_clip.x > 0 || src_clip.y > 0) {
+                    src_surface->clip.x = 0;
+                    src_surface->clip.y = 0;
+                    src_surface->clip.w -= src_clip.x;
+                    src_surface->clip.h -= src_clip.y;
+                }
+                if (src_clip.x < 0 || src_clip.y < 0) {
+                    src_surface->clip.x = -src_clip.x;
+                    src_surface->clip.y = -src_clip.y;
+                    src_surface->clip.w += src_clip.x;
+                    src_surface->clip.h += src_clip.y;
+                }
+                src_clip = src_surface->clip;
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip);
+                src_surface->clip = rcd_clip;
             }
             break;
         }
