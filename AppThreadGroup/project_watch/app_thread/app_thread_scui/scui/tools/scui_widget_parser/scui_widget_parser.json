@@ -13,6 +13,7 @@
             "field": {
                 "widget.type":                      "控件类型",
                 "widget.style.trans":               "控件状态风格(背景透明)",
+                "widget.style.anima_sched":         "控件状态风格(控件调度动画标记)",
                 "widget.style.indev_ptr":           "控件状态风格(输入事件响应标记:ptr)",
                 "widget.style.indev_enc":           "控件状态风格(输入事件响应标记:enc)",
                 "widget.style.indev_key":           "控件状态风格(输入事件响应标记:key)",

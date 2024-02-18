@@ -6,7 +6,7 @@
 typedef enum {
     scui_event_none = 0,
     scui_event_invalid = scui_event_none,
-    scui_event_system,
+    scui_event_sys_s,
     
     /* 调度事件<s> */
     scui_event_sched_s,
@@ -55,6 +55,7 @@ typedef enum {
     scui_event_key_e,
     /* 输入设备事件<key,e> */
     
+    scui_event_sys_e,
     scui_event_sys_num,
 } scui_event_sys_t;
 

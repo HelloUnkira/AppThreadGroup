@@ -198,8 +198,12 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
+        /* 先处理总动画事件调度,在最开始之前 */
+        if (widget->parent == SCUI_HANDLE_INVALID)
+            scui_anima_update();
         /* 先冒泡自己 */
-        scui_widget_event_proc(event);
+        if (widget->style.anima_sched)
+            scui_widget_event_proc(event);
         /* 继续冒泡,继续下沉 */
         for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
