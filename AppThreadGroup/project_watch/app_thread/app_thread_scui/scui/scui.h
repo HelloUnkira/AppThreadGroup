@@ -20,6 +20,7 @@
 #include "scui_handle.h"        /* 泛用句柄 */
 #include "scui_anima.h"         /* 简易动画 */
 #include "scui_event.h"         /* 事件队列 */
+#include "scui_event_sys.h"     /* 事件系统表 */
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_image.h"         /* 图像 */
 #include "scui_image_cache.h"   /* 图像缓存 */
@@ -42,8 +43,10 @@
 #include "scui_widget_event.h"
 #include "scui_widget_surface.h"
 #include "scui_window.h"
-#include "scui_window_mgr.h"    /* 窗口管理器 */
-#include "scui_window_opt.h"    /* 窗口管理器 */
+#include "scui_window_mgr.h"        /* 窗口管理器 */
+#include "scui_window_opt.h"        /* 窗口管理器 */
+#include "scui_window_jump.h"       /* 窗口管理器 */
+#include "scui_window_switch.h"     /* 窗口管理器 */
 #include "scui_custom.h"
 #include "scui_scroll.h"
 /* draw */

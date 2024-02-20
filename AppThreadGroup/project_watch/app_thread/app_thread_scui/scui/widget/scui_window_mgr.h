@@ -2,13 +2,14 @@
 #define SCUI_SCENE_MGR_H
 
 typedef enum {
-    scui_window_switch_none,         /* 无切换 */
-    scui_window_switch_auto,         /* 自适应(适应部分特效) */
-    scui_window_switch_normal,       /* 常规切换 */
-    scui_window_switch_center_in,    /* 中心淡入 */
-    scui_window_switch_center_out,   /* 中心淡出 */
-    scui_window_switch_zoom1,        /* 单边缩放 */
-    scui_window_switch_zoom2,        /* 双边缩放 */
+    scui_window_switch_none,            /* 无切换 */
+    scui_window_switch_auto,            /* 自适应(适应部分特效) */
+    scui_window_switch_float,           /* 透明浮动 */
+    scui_window_switch_normal,          /* 常规切换 */
+    scui_window_switch_center_in,       /* 中心淡入 */
+    scui_window_switch_center_out,      /* 中心淡出 */
+    scui_window_switch_zoom1,           /* 单边缩放 */
+    scui_window_switch_zoom2,           /* 双边缩放 */
 } scui_window_switch_type_t;
 
 typedef struct {
@@ -32,24 +33,6 @@ typedef struct {
     scui_window_switch_attr_t switch_args;
     /*  */
 } scui_window_mgr_t;
-
-/*@brief 窗口切换风格自动更新
- *@param switch_type 窗口切换风格
- *@param switch_dir  窗口切换方向
- */
-void scui_window_jump_auto_update(scui_window_switch_type_t type, scui_event_dir_t dir);
-
-/*@brief 窗口跳转动画回调
- */
-void scui_window_jump_anima_start(void *instance);
-
-/*@brief 窗口跳转动画回调
- */
-void scui_window_jump_anima_ready(void *instance);
-
-/*@brief 窗口跳转动画回调
- */
-void scui_window_jump_anima_expired(void *instance);
 
 /*@brief 窗口管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上

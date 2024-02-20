@@ -66,7 +66,7 @@ void scui_widget_event_add(scui_handle_t handle, scui_widget_event_t *event)
     SCUI_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    SCUI_LOG_INFO("widget %u", handle);
+    SCUI_LOG_DEBUG("widget %u", handle);
     
     /* 一个事件至多一个响应回调,新的替换旧的 */
     scui_widget_event_t *event_old = NULL;
@@ -96,7 +96,7 @@ void scui_widget_event_del(scui_handle_t handle, scui_widget_event_t *event)
     SCUI_ASSERT(event != NULL);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    SCUI_LOG_INFO("widget %u", handle);
+    SCUI_LOG_DEBUG("widget %u", handle);
     
     /* 一个事件至多一个响应回调 */
     scui_widget_event_t *event_old = NULL;
@@ -121,7 +121,7 @@ void scui_widget_event_del(scui_handle_t handle, scui_widget_event_t *event)
  */
 void scui_widget_event_clear(scui_handle_t handle)
 {
-    SCUI_LOG_INFO("widget %u", handle);
+    SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
@@ -140,9 +140,9 @@ void scui_widget_event_clear(scui_handle_t handle)
  */
 scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u", event->type);
+    SCUI_LOG_DEBUG("event %u", event->type);
     /* 准备抓取控件事件响应回调 */
-    uint32_t ret = scui_event_retval_keep;
+    scui_event_retval_t ret = scui_event_retval_keep;
     scui_widget_event_t event_match = {.event = event->type,};
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(scui_handle_remap(event->object));
@@ -188,9 +188,9 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
  */
 scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u", event->type);
+    SCUI_LOG_DEBUG("event %u", event->type);
     /* 不同的事件处理流程有不同的递归冒泡规则 */
-    uint32_t ret = scui_event_retval_keep;
+    scui_event_retval_t ret = scui_event_retval_keep;
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
     
@@ -221,7 +221,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         /* 混合绘制刷新流程结束 */
         /* 使用假绘制启动正式的刷新流程 */
         scui_surface_draw_routine(NULL);
-        return scui_event_retval_keep;
+        return ret;
     }
     /*************************************************************************/
     /* 绘制事件:顺向递归**************************************************** */
@@ -365,8 +365,8 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
  */
 scui_event_retval_t scui_widget_event_default(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u", event->type);
-    uint32_t ret = scui_event_retval_keep;
+    SCUI_LOG_DEBUG("event %u", event->type);
+    scui_event_retval_t ret = scui_event_retval_keep;
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
     
@@ -412,7 +412,7 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
  */
 scui_event_retval_t scui_widget_event_draw(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u", event->type);
+    SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
     
