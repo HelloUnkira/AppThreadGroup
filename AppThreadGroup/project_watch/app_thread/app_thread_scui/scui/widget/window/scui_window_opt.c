@@ -68,12 +68,19 @@ void scui_window_list_del(scui_handle_t handle)
 
 /*@brief 窗口隐藏
  *@param handle 窗口句柄
+ *@param any    所有或者仅含有资源的窗口
  */
-void scui_window_hide_without(scui_handle_t handle)
+void scui_window_hide_without(scui_handle_t handle, bool any)
 {
     for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
-        if (scui_window_mgr.list[idx] != handle)
-            scui_widget_hide(scui_window_mgr.list[idx]);
+        if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
+            scui_window_mgr.list[idx] != handle) {
+            scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
+            SCUI_ASSERT(widget != NULL);
+            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            if (any || scui_widget_surface_only(widget))
+                scui_widget_hide(scui_window_mgr.list[idx]);
+        }
 }
 
 /*@brief 获得活跃窗口句柄
@@ -92,6 +99,22 @@ scui_handle_t scui_window_active_curr(void)
 {
     SCUI_ASSERT(scui_handle_remap(scui_window_mgr.active_curr));
     return scui_window_mgr.active_curr;
+}
+
+/*@brief 获取滚动目标窗口
+ *@retval 窗口句柄
+ */
+scui_handle_t scui_window_scroll_tar(void)
+{
+    return scui_window_mgr.scroll_tar;
+}
+
+/*@brief 设置滚动目标窗口
+ *@param handle 窗口句柄
+ */
+void scui_window_scroll_tar_update(scui_handle_t handle)
+{
+    scui_window_mgr.scroll_tar = handle;
 }
 
 /*@brief 窗口激活

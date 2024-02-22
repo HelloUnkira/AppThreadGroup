@@ -15,6 +15,8 @@
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     SCUI_ASSERT(maker->widget.type == scui_widget_type_window);
+    
+    /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
     SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
     
     /* 创建窗口控件实例 */
@@ -30,10 +32,10 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     if (maker->buffer) {
         scui_coord_t hor_res = scui_disp_get_hor_res();
         scui_coord_t ver_res = scui_disp_get_ver_res();
-        /* 窗口是全屏的绘制区域 */
-        SCUI_ASSERT(hor_res == maker->widget.clip.w);
-        SCUI_ASSERT(ver_res == maker->widget.clip.h);
         uint32_t surface_res = hor_res * ver_res * SCUI_PIXEL_SIZE;
+        /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
+        SCUI_ASSERT(maker->widget.clip.x == 0 && maker->widget.clip.w == hor_res);
+        SCUI_ASSERT(maker->widget.clip.y == 0 && maker->widget.clip.h == ver_res);
         window->widget.surface.pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
         window->widget.surface.line  = hor_res;
     }
@@ -87,7 +89,6 @@ void scui_window_cfg_def(scui_window_cfg_t *cfg)
 {
     for (uint8_t idx = 0; idx < 6; idx++) {
         cfg->sibling[idx] = SCUI_HANDLE_INVALID;
-        cfg->sibling_attr[idx].floating = false;
         cfg->sibling_attr[idx].preload = true;
     }
 }

@@ -20,7 +20,7 @@ typedef enum {
 
 /*@brief 动画行程回调
  */
-typedef uint32_t (*scui_anima_path_t)(void *anima);
+typedef int32_t (*scui_anima_path_t)(void *anima);
 
 /*@brief 动画开始回调(第一次执行开始之前的回调)
  */
@@ -44,9 +44,9 @@ typedef struct {
     void  *used_data;               /* 用户挂载数据 */
     uint32_t reload;                /* 重加载次数(0==1) */
     uint32_t peroid;                /* 回调周期 */
-    uint32_t value_s;               /* 起始值(默认0) */
-    uint32_t value_e;               /* 结束值(默认100) */
-    uint32_t value_c;               /* 当前值(回调使用) */
+    int32_t  value_s;               /* 起始值(默认0) */
+    int32_t  value_e;               /* 结束值(默认100) */
+    int32_t  value_c;               /* 当前值(回调使用) */
     uint32_t reduce;                /* 内部使用:约减数 */
     uint32_t running:1;             /* 内部使用:动画状态 */
     uint32_t first:1;               /* 内部使用:第一次结束 */
@@ -100,42 +100,42 @@ bool scui_anima_running(scui_handle_t handle);
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_step(void *instance);
+int32_t scui_anima_path_step(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_linear(void *instance);
+int32_t scui_anima_path_linear(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_in(void *instance);
+int32_t scui_anima_path_ease_in(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_out(void *instance);
+int32_t scui_anima_path_ease_out(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_in_out(void *instance);
+int32_t scui_anima_path_ease_in_out(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_overshoot(void *instance);
+int32_t scui_anima_path_overshoot(void *instance);
 
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_bounce(void *instance);
+int32_t scui_anima_path_bounce(void *instance);
 
 #endif

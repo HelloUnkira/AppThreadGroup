@@ -71,7 +71,7 @@ void scui_anima_update(void)
         if (anima->reduce > anima->peroid)
             anima->reduce = anima->peroid;
         
-        uint32_t value_c = anima->path(anima);
+        int32_t value_c = anima->path(anima);
         /* 更新value */
         if (anima->value_c != value_c) {
             anima->value_c  = value_c;
@@ -152,7 +152,6 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
        *anima = *item;
         anima->running = false;
         anima->reduce  = 0;
-        anima->value_c = 0;
         anima->first   = true;
         /* 默认使用线性回调 */
         if (anima->path == NULL)
@@ -165,6 +164,8 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
             anima->value_e  = 100;
             anima->value_s  = 0;
         }
+        anima->value_c = scui_min(anima->value_s, anima->value_e) - 1;
+        anima->value_c = scui_max(anima->value_s, anima->value_e) + 1;
         return;
     }
     
@@ -269,7 +270,7 @@ bool scui_anima_running(scui_handle_t handle)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_step(void *instance)
+int32_t scui_anima_path_step(void *instance)
 {
     scui_anima_t *anima = instance;
     
@@ -283,14 +284,14 @@ uint32_t scui_anima_path_step(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_linear(void *instance)
+int32_t scui_anima_path_linear(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_ANIMA_RES_COF] */
-    uint32_t step = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_ANIMA_RES_COF);
+    int32_t step = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_ANIMA_RES_COF);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
     value_c >>= SCUI_ANIMA_RES_SHIFT;
     value_c  += anima->value_s;
@@ -301,15 +302,15 @@ uint32_t scui_anima_path_linear(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_in(void *instance)
+int32_t scui_anima_path_ease_in(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
-    uint32_t step = scui_bezier3(time, 0, 50, 100, SCUI_BEZIER_VAL_MAX);
+    int32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    int32_t step = scui_bezier3(time, 0, 50, 100, SCUI_BEZIER_VAL_MAX);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
     value_c  += anima->value_s;
@@ -320,15 +321,15 @@ uint32_t scui_anima_path_ease_in(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_out(void *instance)
+int32_t scui_anima_path_ease_out(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
-    uint32_t step = scui_bezier3(time, 0, 900, 950, SCUI_BEZIER_VAL_MAX);
+    int32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    int32_t step = scui_bezier3(time, 0, 900, 950, SCUI_BEZIER_VAL_MAX);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
     value_c  += anima->value_s;
@@ -339,15 +340,15 @@ uint32_t scui_anima_path_ease_out(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_ease_in_out(void *instance)
+int32_t scui_anima_path_ease_in_out(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
-    uint32_t step = scui_bezier3(time, 0, 50, 952, SCUI_BEZIER_VAL_MAX);
+    int32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    int32_t step = scui_bezier3(time, 0, 50, 952, SCUI_BEZIER_VAL_MAX);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
     value_c  += anima->value_s;
@@ -358,15 +359,15 @@ uint32_t scui_anima_path_ease_in_out(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_overshoot(void *instance)
+int32_t scui_anima_path_overshoot(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
-    uint32_t step = scui_bezier3(time, 0, 1000, 1300, SCUI_BEZIER_VAL_MAX);
+    int32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    int32_t step = scui_bezier3(time, 0, 1000, 1300, SCUI_BEZIER_VAL_MAX);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * (anima->value_e - anima->value_s);
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
     value_c  += anima->value_s;
@@ -377,13 +378,13 @@ uint32_t scui_anima_path_overshoot(void *instance)
  *@param instance 动画实例
  *@retval 动画进度值
  */
-uint32_t scui_anima_path_bounce(void *instance)
+int32_t scui_anima_path_bounce(void *instance)
 {
     scui_anima_t *anima = instance;
     
     /* 将当前时间进度映射到[0, SCUI_BEZIER_VAL_MAX] */
-    uint32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
-    uint32_t diff = anima->value_e - anima->value_s;
+    int32_t time = scui_map(anima->reduce, 0, anima->peroid, 0, SCUI_BEZIER_VAL_MAX);
+    int32_t diff = anima->value_e - anima->value_s;
     
     /* 3反弹有5个部分:3个向下和2个向上,一部分是t/5长 */
     
@@ -415,9 +416,9 @@ uint32_t scui_anima_path_bounce(void *instance)
     if (time > SCUI_BEZIER_VAL_MAX)
         time = SCUI_BEZIER_VAL_MAX;
     
-    uint32_t step = scui_bezier3(time, SCUI_BEZIER_VAL_MAX, 800, 500, 0);
+    int32_t step = scui_bezier3(time, SCUI_BEZIER_VAL_MAX, 800, 500, 0);
     
-    uint32_t value_c = 0;
+    int32_t value_c = 0;
     value_c   = step * diff;
     value_c >>= SCUI_BEZIER_VAL_SHIFT;
     value_c   = anima->value_e - value_c;

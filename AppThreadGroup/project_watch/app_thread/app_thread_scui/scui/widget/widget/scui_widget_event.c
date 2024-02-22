@@ -284,7 +284,8 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
             clip.y += root->clip.y;
         }
         /* 产生交集,事件可能被吸收(冒泡自己) */
-        if (scui_area_inside_point(&clip, &event->ptr_c) ||
+        if (widget->parent == SCUI_HANDLE_INVALID ||
+            scui_area_inside_point(&clip, &event->ptr_c) ||
            (scui_area_inside_point(&clip, &event->ptr_s) &&
             scui_area_inside_point(&clip, &event->ptr_e)))
             ret = scui_widget_event_proc(event);

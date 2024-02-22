@@ -107,11 +107,11 @@ do {                                                    \
 /*@brief 大小比较,绝对值,绝对距离
  *       泛化封装:(不建议直接使用)
  */
+#define app_sys_mod_abs(x, m)   (((x) % (m) + (m)) % (m))
 #define app_sys_abs(x)          ((x) <  0 ? -(x) : (x))
 #define app_sys_min(x, y)       ((x) < (y) ? (x) : (y))
 #define app_sys_max(x, y)       ((x) > (y) ? (x) : (y))
 #define app_sys_dist(x, y)      ((x) > (y) ? (x) - (y) : (y) - (x))
-#define app_sys_mod_abs(x, m)   (((x) % (m) + (m)) % (m))
 
 /*@brief 包含关系
  */

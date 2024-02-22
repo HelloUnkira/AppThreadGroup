@@ -6,6 +6,7 @@
 
 #define scui_mem_r      app_sys_mem_r
 #define scui_mem_w      app_sys_mem_w
+#define scui_mod_abs    app_sys_mod_abs
 #define scui_abs        app_sys_abs
 #define scui_max        app_sys_max
 #define scui_min        app_sys_min

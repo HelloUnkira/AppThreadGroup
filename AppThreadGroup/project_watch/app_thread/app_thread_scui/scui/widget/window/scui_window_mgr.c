@@ -88,6 +88,14 @@ void scui_window_sort_list(scui_widget_t **list, scui_handle_t num)
             list[idx_j + 1] = widget_t;
         }
     }
+    
+    // 输出排序好的窗口信息
+    SCUI_LOG_INFO("window list:");
+    for (scui_handle_t idx = 0; idx < num; idx++) {
+        scui_widget_t *widget = list[idx];
+        SCUI_LOG_INFO("object:%u<x:%d,y:%d,w:%d,h:%d>", widget->myself,
+                      widget->clip.x, widget->clip.y, widget->clip.w, widget->clip.h);
+    }
 }
 
 /*@brief 窗口管理器混合画布

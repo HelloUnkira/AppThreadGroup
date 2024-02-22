@@ -54,8 +54,20 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *dst_clip
     if (dst_clip == NULL);
         dst_clip  = &dst_surface->clip;
     
+    scui_point_t point = {
+        .x = dst_surface->clip.x,
+        .y = dst_surface->clip.y,
+    };
+    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
+        dst_surface->clip.x = 0;
+        dst_surface->clip.y = 0;
+    }
+    
     SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
     scui_draw_area_fill(dst_surface, dst_clip, &pixel, widget->surface.alpha);
+    
+    dst_surface->clip.x = point.x;
+    dst_surface->clip.y = point.y;
 }
 
 /*@brief 控件画布在画布绘制图像
@@ -83,8 +95,20 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *dst_clip
     if (src_clip == NULL)
         src_clip  = &image_clip;
     
+    scui_point_t point = {
+        .x = dst_surface->clip.x,
+        .y = dst_surface->clip.y,
+    };
+    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
+        dst_surface->clip.x = 0;
+        dst_surface->clip.y = 0;
+    }
+    
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
     scui_draw_image(dst_surface, dst_clip, &image_unit, src_clip, color, widget->surface.alpha);
     scui_image_cache_unload(&image_unit);
+    
+    dst_surface->clip.x = point.x;
+    dst_surface->clip.y = point.y;
 }

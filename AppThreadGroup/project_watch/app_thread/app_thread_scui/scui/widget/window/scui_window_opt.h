@@ -24,7 +24,7 @@ void scui_window_list_del(scui_handle_t handle);
 /*@brief 窗口隐藏
  *@param handle 窗口句柄
  */
-void scui_window_hide_without(scui_handle_t handle);
+void scui_window_hide_without(scui_handle_t handle, bool any);
 
 /*@brief 获得活跃窗口句柄
  *@retval 窗口句柄
@@ -35,6 +35,16 @@ scui_handle_t scui_window_active_last(void);
  *@retval 窗口句柄
  */
 scui_handle_t scui_window_active_curr(void);
+
+/*@brief 获取滚动目标窗口
+ *@retval 窗口句柄
+ */
+scui_handle_t scui_window_scroll_tar(void);
+
+/*@brief 设置滚动目标窗口
+ *@param handle 窗口句柄
+ */
+void scui_window_scroll_tar_update(scui_handle_t handle);
 
 /*@brief 窗口激活
  *@param handle 窗口句柄

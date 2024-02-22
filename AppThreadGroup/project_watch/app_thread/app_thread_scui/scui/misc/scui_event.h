@@ -112,6 +112,17 @@ typedef enum {
     scui_event_dir_all  = (scui_event_dir_ver  | scui_event_dir_hor ),
 } scui_event_dir_t;
 
+/*@brief 事件操作位置
+ *       与事件操作方向单向透明切换
+ */
+typedef enum {
+    scui_event_pos_none = scui_event_dir_none,
+    scui_event_pos_u    = scui_event_dir_to_d,
+    scui_event_pos_d    = scui_event_dir_to_u,
+    scui_event_pos_l    = scui_event_dir_to_r,
+    scui_event_pos_r    = scui_event_dir_to_l,
+} scui_event_pos_t;
+
 /*@brief 事件队列初始化
  */
 void scui_event_ready(void);

@@ -66,6 +66,7 @@ void scui_widget_cb_destroy(scui_handle_t handle)
  */
 void scui_widget_cb_load(scui_handle_t handle)
 {
+    scui_widget_t *widget = NULL;
     scui_widget_maker_t *maker = NULL;
     maker = scui_handle_get(handle);
     SCUI_ASSERT(maker != NULL);
@@ -80,12 +81,14 @@ void scui_widget_cb_load(scui_handle_t handle)
         scui_widget_cb_create(handle);
         /* 迭代到下一个句柄 */
         handle++;
-        maker = scui_handle_get(handle);
+        widget = maker = scui_handle_get(handle);
         SCUI_ASSERT(maker != NULL);
-        SCUI_ASSERT(!scui_handle_remap(handle));
         /* 一直迭代到下一个根控件句柄前停下 */
         if (maker->parent == SCUI_HANDLE_INVALID)
             break;
+        if (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID)
+            break;
+        SCUI_ASSERT(!scui_handle_remap(handle));
     } while (handle < handle_table->offset + handle_table->number);
 }
 

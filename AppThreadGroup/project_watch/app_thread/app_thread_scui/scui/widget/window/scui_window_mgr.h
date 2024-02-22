@@ -29,6 +29,7 @@ typedef struct {
     scui_handle_t list[SCUI_SCENE_MGR_LIMIT];
     scui_handle_t active_curr;  /* 当前活跃窗口 */
     scui_handle_t active_last;  /* 上一活跃窗口 */
+    scui_handle_t scroll_tar;   /* 正在活动窗口 */
     /* 窗口切换信息 */
     scui_window_switch_attr_t switch_args;
     /*  */
