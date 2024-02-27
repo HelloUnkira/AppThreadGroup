@@ -121,10 +121,8 @@ void scui_anima_update(void)
             idx--;
             continue;
         }
-        /* 回收节点 */
-        scui_handle_del(scui_anima_list.list[idx]);
-        scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
-        SCUI_MEM_FREE(anima);
+        /* 关闭动画 */
+        anima->running = false;
     }
     /* 当次流逝已处理完毕,归零 */
     scui_anima_list.elapse = 0;

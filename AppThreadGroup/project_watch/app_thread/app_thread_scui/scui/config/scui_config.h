@@ -47,8 +47,6 @@
 #define SCUI_INDEV_KEY_CLICK_SPAN   (300)   /* 连续点击最大间隔 */
 
 /* 场景管理数量限制 */
-#define SCUI_SCENE_MGR_LIMIT        (10)
-#define SCUI_SCENE_SWITCH_MS        (500)
-
+#define SCUI_WINDOW_MGR_LIMIT       (10)
 
 #endif

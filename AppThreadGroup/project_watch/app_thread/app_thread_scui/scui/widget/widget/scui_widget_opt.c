@@ -176,7 +176,8 @@ void scui_widget_show(scui_handle_t handle)
     };
     scui_event_notify(&event);
     
-    scui_widget_draw(widget->myself, false);
+    bool only = scui_widget_surface_only(widget);
+    scui_widget_draw(widget->myself, only);
     
     /* 将该显示窗口加入到场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)
@@ -208,8 +209,10 @@ void scui_widget_hide(scui_handle_t handle)
     scui_event_notify(&event);
     
     /* 通知父窗口重绘 */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        scui_widget_draw(widget->parent, false);
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        bool only = scui_widget_surface_only(widget);
+        scui_widget_draw(widget->parent, only);
+    }
     
     /* 将该显示窗口移除出场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)

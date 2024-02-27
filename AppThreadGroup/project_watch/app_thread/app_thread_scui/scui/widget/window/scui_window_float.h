@@ -14,6 +14,7 @@ typedef struct {
     scui_handle_t               list[4];    /* 0:临近上;1:临近下;2:临近左;3:临近右; */
     scui_handle_t               main;       /* 主窗口 */
     scui_handle_t               target;     /* 目标浮窗 */
+    scui_handle_t               record;     /* 记录浮窗 */
     scui_event_dir_t            dir;        /* 交互方向 */
     scui_event_pos_t            pos;        /* 相对位置 */
     scui_window_float_state_t   state;      /* 交互状态 */

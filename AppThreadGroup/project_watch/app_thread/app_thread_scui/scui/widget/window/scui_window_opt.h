@@ -1,5 +1,5 @@
-#ifndef SCUI_SCENE_OPT_H
-#define SCUI_SCENE_OPT_H
+#ifndef SCUI_WINDOW_OPT_H
+#define SCUI_WINDOW_OPT_H
 
 /*@brief 窗口切换风格(配置)
  *@param switch_type 窗口切换风格
@@ -35,16 +35,6 @@ scui_handle_t scui_window_active_last(void);
  *@retval 窗口句柄
  */
 scui_handle_t scui_window_active_curr(void);
-
-/*@brief 获取滚动目标窗口
- *@retval 窗口句柄
- */
-scui_handle_t scui_window_scroll_tar(void);
-
-/*@brief 设置滚动目标窗口
- *@param handle 窗口句柄
- */
-void scui_window_scroll_tar_update(scui_handle_t handle);
 
 /*@brief 窗口激活
  *@param handle 窗口句柄

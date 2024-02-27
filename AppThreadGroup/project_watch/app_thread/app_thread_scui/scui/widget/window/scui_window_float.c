@@ -81,21 +81,21 @@ void scui_window_float_anima_ready(void *instance)
     
     if (scui_window_float.state == scui_window_float_state_force_over) {
         scui_widget_hide(handle);
-        scui_window_scroll_tar_update(SCUI_HANDLE_INVALID);
+        scui_window_float.record = SCUI_HANDLE_INVALID;;
         return;
     }
     
     if (scui_window_float.state == scui_window_float_state_move_auto) {
         scui_window_float.state  = scui_window_float_state_cover;
         /* 默认已经覆盖,如果位置不对则已经回退 */
-        if ((scui_window_float.dir == scui_event_dir_to_r && point.x < 0) ||
-            (scui_window_float.dir == scui_event_dir_to_d && point.y < 0) ||
-            (scui_window_float.dir == scui_event_dir_to_l && point.x >= hor_res) ||
-            (scui_window_float.dir == scui_event_dir_to_u && point.y >= ver_res)) {
+        if ((scui_window_float.pos == scui_event_pos_l && point.x < 0) ||
+            (scui_window_float.pos == scui_event_pos_u && point.y < 0) ||
+            (scui_window_float.pos == scui_event_pos_r && point.x >= hor_res) ||
+            (scui_window_float.pos == scui_event_pos_d && point.y >= ver_res)) {
              scui_window_float.state = scui_window_float_state_idle;
              scui_widget_hide(handle);
         }
-        scui_window_scroll_tar_update(SCUI_HANDLE_INVALID);
+        scui_window_float.record = SCUI_HANDLE_INVALID;;
     }
     
     /* 结束后自动回收,清空它 */
@@ -186,7 +186,7 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
     if (value_s == value_e) {
         if (!inout)
             scui_widget_hide(handle);
-        scui_window_scroll_tar_update(SCUI_HANDLE_INVALID);
+        scui_window_float.record = SCUI_HANDLE_INVALID;;
         return;
     }
     
@@ -217,7 +217,7 @@ scui_event_retval_t scui_window_float_event_grasp_hide(scui_event_t *event)
         scui_widget_hide(scui_window_float.main);
     if (scui_window_active_curr() == scui_window_float.target)
         scui_window_active(scui_window_float.main);
-    scui_window_scroll_tar_update(SCUI_HANDLE_INVALID);
+    scui_window_float.record = SCUI_HANDLE_INVALID;;
     return scui_event_retval_keep;
 }
 
@@ -261,8 +261,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
-        if (scui_window_scroll_tar() != SCUI_HANDLE_INVALID &&
-            scui_window_scroll_tar() != scui_window_float.target) {
+        if (scui_window_float.record != SCUI_HANDLE_INVALID &&
+            scui_window_float.record != scui_window_float.target) {
             ret = scui_event_retval_quit;
             break;
         }
@@ -287,21 +287,21 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                 break;
         }
         scui_window_float_anima_auto(value_s, value_e, 0);
-        scui_window_scroll_tar_update(scui_window_float.target);
+        scui_window_float.record = scui_window_float.target;
         ret = scui_event_retval_over;
         break;
     }
     case scui_event_ptr_fling: {
-        if (scui_window_scroll_tar() != SCUI_HANDLE_INVALID &&
-            scui_window_scroll_tar() != scui_window_float.target) {
+        if (scui_window_float.record != SCUI_HANDLE_INVALID &&
+            scui_window_float.record != scui_window_float.target) {
             ret = scui_event_retval_quit;
             break;
         }
         break;
     }
     case scui_event_ptr_up: {
-        if (scui_window_scroll_tar() != SCUI_HANDLE_INVALID &&
-            scui_window_scroll_tar() != scui_window_float.target) {
+        if (scui_window_float.record != SCUI_HANDLE_INVALID &&
+            scui_window_float.record != scui_window_float.target) {
             ret = scui_event_retval_quit;
             break;
         }
@@ -364,8 +364,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
         break;
     }
     default:
-        if (scui_window_scroll_tar() != SCUI_HANDLE_INVALID &&
-            scui_window_scroll_tar() != scui_window_float.target) {
+        if (scui_window_float.record != SCUI_HANDLE_INVALID &&
+            scui_window_float.record != scui_window_float.target) {
             ret = scui_event_retval_quit;
             break;
         }
@@ -399,43 +399,42 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
         scui_window_float.pos = scui_event_pos_none;
         /* 水平位置先检测 */
         if (event->ptr_c.x <= clip.w * 1 / 3)
-            scui_window_float.pos = scui_event_pos_l;
+            scui_window_float.pos |= scui_event_pos_l;
         if (event->ptr_c.x >= clip.w * 2 / 3)
-            scui_window_float.pos = scui_event_pos_r;
+            scui_window_float.pos |= scui_event_pos_r;
         /* 垂直位置后检测,并且吸收水平位置检测结果 */
         if (event->ptr_c.y <= clip.h * 1 / 3)
-            scui_window_float.pos = scui_event_pos_u;
+            scui_window_float.pos |= scui_event_pos_u;
         if (event->ptr_c.y >= clip.h * 2 / 3)
-            scui_window_float.pos = scui_event_pos_d;
+            scui_window_float.pos |= scui_event_pos_d;
         break;
     }
-    case scui_event_ptr_move:
-    case scui_event_ptr_fling: {
+    case scui_event_ptr_move: {
         if (scui_window_float.pos == scui_event_pos_none)
             break;
         scui_event_dir_t event_dir = scui_indev_ptr_dir(event);
         scui_point_t point = {0};
         /* 方向检测与条件加载 */
         if (event_dir == scui_event_dir_to_r &&
-            scui_window_float.pos == scui_event_pos_l &&
+           (scui_window_float.pos & scui_event_pos_l) != 0 &&
             scui_window_float.list[2] != SCUI_HANDLE_INVALID) { /* 左浮窗:方向向右 */
             scui_window_float.target = scui_window_float.list[2];
             point.x = -clip.w;
         }
         if (event_dir == scui_event_dir_to_l &&
-            scui_window_float.pos == scui_event_pos_r &&
+           (scui_window_float.pos & scui_event_pos_r) != 0 &&
             scui_window_float.list[3] != SCUI_HANDLE_INVALID) { /* 右浮窗:方向向左 */
             scui_window_float.target = scui_window_float.list[3];
             point.x = +clip.w;
         }
         if (event_dir == scui_event_dir_to_d &&
-            scui_window_float.pos == scui_event_pos_u &&
+           (scui_window_float.pos & scui_event_pos_u) != 0 &&
             scui_window_float.list[0] != SCUI_HANDLE_INVALID) { /* 上浮窗:方向向下 */
             scui_window_float.target = scui_window_float.list[0];
             point.y = -clip.h;
         }
         if (event_dir == scui_event_dir_to_u &&
-            scui_window_float.pos == scui_event_pos_d &&
+           (scui_window_float.pos & scui_event_pos_d) != 0 &&
             scui_window_float.list[1] != SCUI_HANDLE_INVALID) { /* 下浮窗:方向向上 */
             scui_window_float.target = scui_window_float.list[1];
             point.y = +clip.h;
@@ -448,17 +447,16 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
             scui_window_active(scui_window_float.target);
             /* 移动到所在边界然后真实重绘 */
             scui_window_float_move_with_alpha(scui_window_float.target, &point);
-            scui_widget_draw(scui_window_float.target, true);
-            /* 如果是快滑则需要触发流程 */
-            if (event->type == scui_event_ptr_fling)
-                scui_window_float_anima_inout(handle, true);
-            ret = scui_event_retval_over;
             scui_window_float.state = scui_window_float_state_move_in;
             scui_window_float.main  = handle;
             scui_window_float.dir   = event_dir;
+            scui_window_float.pos   = event_dir;
+            ret = scui_event_retval_over;
         }
         break;
     }
+    case scui_event_ptr_fling:
+        break;
     case scui_event_ptr_up:
         break;
     default:

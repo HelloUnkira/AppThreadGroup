@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -13,10 +13,10 @@ void scui_ui_scene_home_window_float_cfg(void)
     scui_window_float_t float_cfg = {0};
     scui_window_float_cfg_get(&float_cfg);
     float_cfg.main = SCUI_UI_SCENE_HOME;
-    float_cfg.list[0] = SCUI_UI_SCENE_FLOAT_1;
-    float_cfg.list[1] = SCUI_UI_SCENE_FLOAT_2;
-    float_cfg.list[2] = SCUI_UI_SCENE_FLOAT_3;
-    float_cfg.list[3] = SCUI_UI_SCENE_FLOAT_4;
+    // float_cfg.list[0] = SCUI_UI_SCENE_FLOAT_1;
+    // float_cfg.list[1] = SCUI_UI_SCENE_FLOAT_2;
+    // float_cfg.list[2] = SCUI_UI_SCENE_FLOAT_3;
+    // float_cfg.list[3] = SCUI_UI_SCENE_FLOAT_4;
     scui_window_float_cfg_set(&float_cfg);
 }
 

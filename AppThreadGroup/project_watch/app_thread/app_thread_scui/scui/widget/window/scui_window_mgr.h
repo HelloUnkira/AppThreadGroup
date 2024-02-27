@@ -1,5 +1,5 @@
-#ifndef SCUI_SCENE_MGR_H
-#define SCUI_SCENE_MGR_H
+#ifndef SCUI_WINDOW_MGR_H
+#define SCUI_WINDOW_MGR_H
 
 typedef enum {
     scui_window_switch_none,            /* 无切换 */
@@ -13,7 +13,7 @@ typedef enum {
 } scui_window_switch_type_t;
 
 typedef struct {
-    scui_handle_t             list[SCUI_SCENE_MGR_LIMIT];
+    scui_handle_t             list[SCUI_WINDOW_MGR_LIMIT];
     scui_window_switch_type_t type_cfg;  /* 窗口切换风格(配置) */
     scui_window_switch_type_t type_cur;  /* 窗口切换风格(当前) */
     scui_event_dir_t          dir_cfg;   /* 窗口切换方向(配置) */
@@ -26,10 +26,9 @@ typedef struct {
 
 typedef struct {
     scui_handle_t list_num;
-    scui_handle_t list[SCUI_SCENE_MGR_LIMIT];
+    scui_handle_t list[SCUI_WINDOW_MGR_LIMIT];
     scui_handle_t active_curr;  /* 当前活跃窗口 */
     scui_handle_t active_last;  /* 上一活跃窗口 */
-    scui_handle_t scroll_tar;   /* 正在活动窗口 */
     /* 窗口切换信息 */
     scui_window_switch_attr_t switch_args;
     /*  */

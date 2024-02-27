@@ -105,10 +105,10 @@ void scui_window_sort_list(scui_widget_t **list, scui_handle_t num)
 void scui_window_mix_surface(void)
 {
     scui_handle_t list_num = 0;
-    scui_widget_t *list[SCUI_SCENE_MGR_LIMIT] = {0};
+    scui_widget_t *list[SCUI_WINDOW_MGR_LIMIT] = {0};
     
     /* 第一轮混合:处理所有独立画布 */
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         scui_handle_t  handle = scui_window_mgr.list[idx];
@@ -124,7 +124,7 @@ void scui_window_mix_surface(void)
     list_num = 0;
     
     /* 第二轮混合:处理所有独立画布 */
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         scui_handle_t  handle = scui_window_mgr.list[idx];

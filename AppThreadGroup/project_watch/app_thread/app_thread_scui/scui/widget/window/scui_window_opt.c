@@ -32,12 +32,12 @@ void scui_window_switch_dir_cfg(scui_event_dir_t switch_dir)
  */
 void scui_window_list_add(scui_handle_t handle)
 {
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             SCUI_LOG_INFO("redundant operation");
             return;
         }
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID) {
             scui_window_mgr.list[idx]  = handle;
             scui_window_mgr.list_num++;
@@ -57,7 +57,7 @@ void scui_window_list_del(scui_handle_t handle)
         scui_window_mgr.active_last  = SCUI_HANDLE_INVALID;
     }
     
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             scui_window_mgr.list[idx]  = SCUI_HANDLE_INVALID;
             scui_window_mgr.list_num--;
@@ -72,7 +72,7 @@ void scui_window_list_del(scui_handle_t handle)
  */
 void scui_window_hide_without(scui_handle_t handle, bool any)
 {
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
             scui_window_mgr.list[idx] != handle) {
             scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
@@ -101,22 +101,6 @@ scui_handle_t scui_window_active_curr(void)
     return scui_window_mgr.active_curr;
 }
 
-/*@brief 获取滚动目标窗口
- *@retval 窗口句柄
- */
-scui_handle_t scui_window_scroll_tar(void)
-{
-    return scui_window_mgr.scroll_tar;
-}
-
-/*@brief 设置滚动目标窗口
- *@param handle 窗口句柄
- */
-void scui_window_scroll_tar_update(scui_handle_t handle)
-{
-    scui_window_mgr.scroll_tar = handle;
-}
-
 /*@brief 窗口激活
  *@param handle 窗口句柄
  */
@@ -134,7 +118,7 @@ void scui_window_active(scui_handle_t handle)
     
     /* 焦点必须在窗口列表中 */
     bool not_match_yet = true;
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             not_match_yet = false;
             break;
@@ -204,7 +188,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     scui_window_jump_auto_update(type, dir);
     
     /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
-    for (scui_handle_t idx = 0; idx < SCUI_SCENE_MGR_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
         scui_window_mgr.switch_args.list[idx] = SCUI_HANDLE_INVALID;
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
@@ -218,6 +202,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     /* 无切换效果 */
     if (scui_window_mgr.switch_args.type_cur == scui_window_switch_none) {
+        scui_window_hide_without(scui_window_mgr.active_curr, false);
         scui_widget_hide(scui_window_mgr.active_last);
         scui_widget_show(scui_window_mgr.active_curr);
         scui_window_active(scui_window_mgr.active_curr);
@@ -226,15 +211,19 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     } else {
         scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
         scui_window_mgr.switch_args.list[1] = handle;
-        scui_widget_show(scui_window_mgr.switch_args.list[0]);
-        scui_widget_show(scui_window_mgr.switch_args.list[1]);
+        scui_window_hide_without(scui_window_mgr.active_curr, false);
+        scui_widget_show(scui_window_mgr.active_curr);
+        scui_widget_show(handle);
         /* 其他切换效果都需要动画完成 */
+        uint32_t peroid = (dir & scui_event_dir_hor) != 0 ? scui_disp_get_hor_res() :
+                          (dir & scui_event_dir_ver) != 0 ? scui_disp_get_ver_res() : 0;
+        SCUI_ASSERT(peroid != 0);
         scui_anima_t switch_anima = {0};
         switch_anima.path    = scui_anima_path_bounce;
         switch_anima.start   = scui_window_jump_anima_start;
         switch_anima.ready   = scui_window_jump_anima_ready;
         switch_anima.expired = scui_window_jump_anima_expired;
-        switch_anima.peroid  = SCUI_SCENE_SWITCH_MS;
+        switch_anima.peroid  = peroid;
         scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);
     }
