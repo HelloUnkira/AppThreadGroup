@@ -37,6 +37,38 @@ void scui_event_register_custom(scui_event_cb_t event_cb)
     scui_event_cb_custom = event_cb;
 }
 
+/*@brief 事件回调全局响应权限检查
+ *       before和after的响应权限检查
+ *@param event 事件包
+ *@retval 允许该事件
+ */
+bool scui_event_cb_check(scui_event_t *event)
+{
+    /* 自定义事件一律允许响应before和after */
+    if (event->type > scui_event_custom_s &&
+        event->type < scui_event_custom_e)
+        return true;
+    
+    /* 大部分系统事件不需要响应before和after */
+    /* 系统事件中必须该表中事件才响应before和after */
+    static const uint32_t event_table[] = {
+        scui_event_ptr_hold,
+        scui_event_ptr_click,
+        scui_event_ptr_fling,
+        scui_event_ptr_move,
+        scui_event_enc_clockwise,
+        scui_event_enc_clockwise_anti,
+        scui_event_key_hold,
+        scui_event_key_click,
+    };
+    
+    for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)
+        if (event->type == event_table[idx])
+            return true;
+    
+    return false;
+}
+
 /*@brief 事件通报
  *@param event 事件包
  */
@@ -75,26 +107,31 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     scui_event_retval_t retval = scui_event_retval_keep;
     SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     
+    SCUI_ASSERT(scui_event_cb_before != NULL);
+    SCUI_ASSERT(scui_event_cb_after  != NULL);
+    SCUI_ASSERT(scui_event_cb_custom != NULL);
+    
     /* 系统事件只发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
         event->object  = scui_window_active_curr();
     
     /* 本事件无活跃场景接收 */
-    if (!scui_handle_remap(event->object)) {
-         SCUI_LOG_WARN("unknown widget %u %u", event->object, SCUI_HANDLE_SYSTEM);
-         return scui_event_retval_quit;
+    if (scui_handle_unmap(event->object)) {
+        SCUI_LOG_WARN("unknown widget %u %u", event->object, SCUI_HANDLE_SYSTEM);
+        return scui_event_retval_quit;
     }
     
     /* 事件前响应回调 */
-    if (scui_event_cb_before != NULL &&
+    if (scui_event_cb_check(event) &&
         scui_event_cb_before(event) == scui_event_retval_over)
         return scui_event_retval_over;
     
     /* 系统事件响应 */
-    if (event->type > scui_event_sys_s &&
-        event->type < scui_event_sys_e) {
+    if (event->type > scui_event_sys_s && event->type < scui_event_sys_e) {
         
         bool event_filter = false;
+        /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
+        event_filter = event_filter || event->type == scui_event_anima_elapse;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(ptr) */
         event_filter = event_filter || event->type == scui_event_ptr_hold;
         event_filter = event_filter || event->type == scui_event_ptr_move;
@@ -113,14 +150,12 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     }
     
     /* 自定义事件响应<custom> */
-    if (event->type > scui_event_custom_s &&
-        event->type < scui_event_custom_e)
-    if (scui_event_cb_custom != NULL &&
-        scui_event_cb_custom(event) == scui_event_retval_over)
+    if (event->type > scui_event_custom_s && event->type < scui_event_custom_e)
+    if (scui_event_cb_custom(event) == scui_event_retval_over)
         return scui_event_retval_over;
     
     /* 事件后响应回调 */
-    if (scui_event_cb_after != NULL &&
+    if (scui_event_cb_check(event) &&
         scui_event_cb_after(event) == scui_event_retval_over)
         return scui_event_retval_over;
     

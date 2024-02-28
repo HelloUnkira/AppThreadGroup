@@ -97,10 +97,10 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
     return SCUI_HANDLE_INVALID;
 }
 
-/*@brief 生成一个句柄
+/*@brief 寻找一个动态句柄
  *@retval 句柄
  */
-scui_handle_t scui_handle_new(void)
+scui_handle_t scui_handle_find(void)
 {
     for (scui_handle_t idx = 0; idx < SCUI_HANDLE_SHARE_LIMIT; idx++)
         if (scui_handle_table_share[idx] == NULL) {
@@ -110,25 +110,6 @@ scui_handle_t scui_handle_new(void)
     /* 句柄实例不足 */
     SCUI_ASSERT(false);
     return SCUI_HANDLE_INVALID;
-}
-
-/*@brief 销毁一个句柄
- *@param handle 句柄
- *@retval 成功失败
- */
-bool scui_handle_del(scui_handle_t handle)
-{
-    if (handle == SCUI_HANDLE_INVALID)
-        return false;
-    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
-    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
-    if (scui_betw_lx(handle, betw_l, betw_r)) {
-        scui_handle_t idx = handle - SCUI_HANDLE_SHARE_OFFSET;
-        scui_handle_table_share[idx] = NULL;
-        return true;
-    }
-    SCUI_LOG_ERROR("handle %u is unknown", handle);
-    return false;
 }
 
 /*@brief 句柄获得资源
@@ -226,4 +207,13 @@ bool scui_handle_remap(scui_handle_t handle)
         }
     }
     return false;
+}
+
+/*@brief 句柄是否重映射
+ *@param handle 句柄
+ *@retval 是否重映射
+ */
+bool scui_handle_unmap(scui_handle_t handle)
+{
+    return !scui_handle_remap(handle);
 }

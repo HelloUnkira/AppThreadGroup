@@ -28,47 +28,18 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
     return &scui_widget_cb[type];
 }
 
-/*@brief 通过映射表调用创建一个控件
+/*@brief 通过映射表调用创建一个控件树
+ *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
  *@param handle 控件句柄
  */
 void scui_widget_cb_create(scui_handle_t handle)
 {
-    /* 重复的创建过滤 */
     if (scui_handle_remap(handle))
         return;
     
-    scui_widget_maker_t *maker = NULL;
-    maker = scui_handle_get(handle);
-    SCUI_ASSERT(maker != NULL);
-    scui_widget_cb_t *widget_cb = scui_widget_cb_find(maker->type);
-    widget_cb->create(maker, &handle, true);
-}
-
-/*@brief 通过映射表调用销毁一个控件
- *@param handle 控件句柄
- */
-void scui_widget_cb_destroy(scui_handle_t handle)
-{
-    /* 重复的销毁过滤 */
-    if (!scui_handle_remap(handle));
-         return;
-    
-    scui_widget_t *widget = NULL;
-    widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    scui_widget_cb_t *widget_cb = scui_widget_cb_find(widget->type);
-    widget_cb->destroy(handle);
-}
-
-/*@brief 通过映射表调用加载一个控件树
- *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
- *@param handle 根控件句柄
- */
-void scui_widget_cb_load(scui_handle_t handle)
-{
     scui_widget_t *widget = NULL;
     scui_widget_maker_t *maker = NULL;
-    maker = scui_handle_get(handle);
+    widget = maker = scui_handle_get(handle);
     SCUI_ASSERT(maker != NULL);
     SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
     
@@ -78,29 +49,33 @@ void scui_widget_cb_load(scui_handle_t handle)
     do {
         /* 先创建根控件,然后延续依次创建剩下的控件 */
         /* 静态控件规则为,一个场景为一段连续句柄,父控件在前子控件在后 */
-        scui_widget_cb_create(handle);
+        scui_widget_cb_t *widget_cb = scui_widget_cb_find(maker->type);
+        widget_cb->create(maker, &handle, true);
         /* 迭代到下一个句柄 */
         handle++;
         widget = maker = scui_handle_get(handle);
         SCUI_ASSERT(maker != NULL);
         /* 一直迭代到下一个根控件句柄前停下 */
-        if (maker->parent == SCUI_HANDLE_INVALID)
+        if (scui_handle_unmap(handle) && maker->parent == SCUI_HANDLE_INVALID)
             break;
         if (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID)
             break;
-        SCUI_ASSERT(!scui_handle_remap(handle));
     } while (handle < handle_table->offset + handle_table->number);
 }
 
-/*@brief 通过映射表调用卸载一个控件树
- *       从根控件开始到它的所有子控件
- *@param handle 根控件句柄
+/*@brief 卸载一个控件树
+ *       从指定控件开始到它的所有子控件
+ *@param handle 控件句柄
  */
-void scui_widget_cb_unload(scui_handle_t handle)
+void scui_widget_cb_destroy(scui_handle_t handle)
 {
+    /* 重复的销毁过滤 */
+    if (scui_handle_unmap(handle))
+        return;
+    
     scui_widget_t *widget = NULL;
     widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-    scui_widget_cb_destroy(handle);
+    scui_widget_cb_t *widget_cb = scui_widget_cb_find(widget->type);
+    widget_cb->destroy(handle);
 }

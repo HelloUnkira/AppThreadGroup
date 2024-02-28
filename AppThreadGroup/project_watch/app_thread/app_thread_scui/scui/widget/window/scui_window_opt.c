@@ -16,7 +16,7 @@ extern scui_window_mgr_t scui_window_mgr;
 void scui_window_switch_type_cfg(scui_window_switch_type_t switch_type)
 {
     SCUI_ASSERT(switch_type != scui_window_switch_auto);
-    scui_window_mgr.switch_args.type_cfg = switch_type;
+    scui_window_mgr.switch_args.cfg_type = switch_type;
 }
 
 /*@brief 窗口切换方向(配置)
@@ -24,7 +24,7 @@ void scui_window_switch_type_cfg(scui_window_switch_type_t switch_type)
  */
 void scui_window_switch_dir_cfg(scui_event_dir_t switch_dir)
 {
-    scui_window_mgr.switch_args.dir_cfg = switch_dir;
+    scui_window_mgr.switch_args.cfg_dir = switch_dir;
 }
 
 /*@brief 窗口列表添加窗口
@@ -182,10 +182,10 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     /* 先上锁 */
     scui_window_mgr.switch_args.lock = true;
-    scui_window_mgr.switch_args.type_cur = type;
-    scui_window_mgr.switch_args.dir_cur  = dir;
+    scui_window_mgr.switch_args.type = type;
+    scui_window_mgr.switch_args.dir  = dir;
     /* 自适应需要更新窗口切换状态 */
-    scui_window_jump_auto_update(type, dir);
+    scui_window_switch_type_update(type, dir);
     
     /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
@@ -201,7 +201,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     /* 无切换效果 */
-    if (scui_window_mgr.switch_args.type_cur == scui_window_switch_none) {
+    if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
         scui_window_hide_without(scui_window_mgr.active_curr, false);
         scui_widget_hide(scui_window_mgr.active_last);
         scui_widget_show(scui_window_mgr.active_curr);

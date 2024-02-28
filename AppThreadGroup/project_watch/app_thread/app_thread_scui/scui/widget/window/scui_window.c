@@ -73,9 +73,8 @@ void scui_window_destroy(scui_handle_t handle)
     scui_widget_destroy(&window->widget);
     
     /* 回收surface */
-    if (scui_widget_surface_only(&window->widget.surface)) {
+    if (scui_widget_surface_only(widget))
         SCUI_MEM_FREE(window->widget.surface.pixel);
-    }
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);

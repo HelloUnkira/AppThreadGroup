@@ -18,7 +18,7 @@ scui_window_mgr_t scui_window_mgr = {0};
  */
 void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
 {
-    switch (scui_window_mgr.switch_args.type_cfg) {
+    switch (scui_window_mgr.switch_args.cfg_type) {
         case scui_window_switch_none:
         case scui_window_switch_center_in:
         case scui_window_switch_center_out:

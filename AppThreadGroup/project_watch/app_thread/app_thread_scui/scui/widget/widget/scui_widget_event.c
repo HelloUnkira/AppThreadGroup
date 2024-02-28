@@ -158,7 +158,7 @@ scui_event_retval_t scui_widget_event_proc(scui_event_t *event)
     if (ret == scui_event_retval_over)
         return scui_event_retval_over;
     /*************************************************************************/
-    /* 事件处理中响应回调 *************************************************** */
+    /* 事件处理中响应回调 ************************************************** */
     /*************************************************************************/
     event_match.order = scui_widget_order_current,
     scui_widget_event_find(widget->myself, &event_match);
@@ -198,9 +198,14 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
+        ret = scui_event_retval_over;
         /* 先处理总动画事件调度,在最开始之前 */
-        if (widget->parent == SCUI_HANDLE_INVALID)
+        if (widget->parent == SCUI_HANDLE_INVALID) {
             scui_anima_update();
+            /* 可能目标已经回收,此时不能继续 */
+            if (scui_handle_unmap(event->object))
+                return ret;
+        }
         /* 先冒泡自己 */
         if (widget->style.anima_sched)
             scui_widget_event_proc(event);
@@ -266,8 +271,13 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         for (scui_handle_t idx = 0; idx < child_num; idx++)
             if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
                 event->object = widget->child_list[child_num - 1 - idx];
+                /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
+                bool event_filter = true;
+                event_filter = event_filter || event->type != scui_event_ptr_hold;
+                event_filter = event_filter || event->type != scui_event_ptr_down;
+                event_filter = event_filter || event->type != scui_event_ptr_up;
                 /* 事件如果被吸收,终止派发 */
-                if ((ret = scui_widget_event_dispatch(event)) == scui_event_retval_over)
+                if ((ret = scui_widget_event_dispatch(event)) == scui_event_retval_over && event_filter)
                     return scui_event_retval_over;
             }
         event->object = widget->myself;
@@ -333,27 +343,36 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         return ret;
     }
     /*************************************************************************/
-    /*其余事件:流程派发 **************************************************** */
+    /*显示事件:单次派发 **************************************************** */
+    /*************************************************************************/
+    if (event->type == scui_event_show) {
+        scui_widget_event_proc(event);
+        return ret;
+    }
+    /*************************************************************************/
+    /*隐藏事件:流程派发 **************************************************** */
+    /*************************************************************************/
+    if (event->type == scui_event_hide) {
+        /* 如果需要继续冒泡,则继续下沉 */
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
+                event->object = widget->child_list[idx];
+                scui_widget_event_dispatch(event);
+            }
+        event->object = widget->myself;
+        /* 是否自己吸收处理(冒泡自己) */
+        scui_widget_event_proc(event);
+        return ret;
+    }
+    /*************************************************************************/
+    /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
     switch (event->type) {
-    /* 显示事件:单次派发 */
-    /* 隐藏事件:单次派发 */
-    /* 焦点更新事件:单次派发 */
-    /* 资源管理事件:单次派发 */
-    case scui_event_show:
-    case scui_event_hide:
-    case scui_event_focus_get:
-    case scui_event_focus_lost:
-    case scui_event_res_load:
-    case scui_event_res_unload: {
+    default:
+        /* 其他未列举事件走默认派发流程,单次派发 */
         event->object = scui_widget_root(widget->myself);
         ret = scui_widget_event_proc(event);
         event->object = widget->myself;
-        break;
-    }
-    default:
-        /* 其他未列举事件走默认派发流程,单次派发 */
-        ret = scui_widget_event_proc(event);
         break;
     }
     

@@ -143,7 +143,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
-        scui_anima_list.list[idx]  = scui_handle_new();
+        scui_anima_list.list[idx] = scui_handle_find();
         anima = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_anima_t));
         scui_handle_set(scui_anima_list.list[idx], anima);
        *handle = scui_anima_list.list[idx];
@@ -190,7 +190,7 @@ void scui_anima_destroy(scui_handle_t handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
-            scui_handle_del(scui_anima_list.list[idx]);
+            scui_handle_set(scui_anima_list.list[idx], NULL);
             scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
             SCUI_MEM_FREE(anima);
             return;

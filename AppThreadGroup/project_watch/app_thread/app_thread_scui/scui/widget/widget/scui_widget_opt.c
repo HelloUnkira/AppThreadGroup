@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -151,14 +151,8 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
 void scui_widget_show(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
+    scui_widget_cb_create(handle);
     
-    /* 资源还未加载时,加载该资源 */
-    if (!scui_handle_remap(handle)) {
-         SCUI_LOG_DEBUG("not load yet");
-         scui_widget_cb_load(handle);
-    }
-    
-    SCUI_LOG_DEBUG("");
     if (scui_widget_style_is_show(handle)) {
         SCUI_LOG_DEBUG("is show");
         return;
@@ -191,6 +185,9 @@ void scui_widget_hide(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
+    if (scui_handle_unmap(handle))
+        return;
+    
     if (scui_widget_style_is_hide(handle)) {
         SCUI_LOG_DEBUG("is hide");
         return;
@@ -217,6 +214,8 @@ void scui_widget_hide(scui_handle_t handle)
     /* 将该显示窗口移除出场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)
         scui_window_list_del(widget->myself);
+    
+    scui_widget_cb_destroy(widget->myself);
 }
 
 /*@brief 控件隐藏

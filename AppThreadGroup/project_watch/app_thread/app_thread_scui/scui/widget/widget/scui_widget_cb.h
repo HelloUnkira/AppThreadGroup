@@ -27,26 +27,16 @@ typedef struct {
  */
 scui_widget_cb_t * scui_widget_cb_find(uint32_t type);
 
-/*@brief 通过映射表调用创建一个控件
+/*@brief 通过映射表调用创建一个控件树
+ *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
  *@param handle 控件句柄
  */
 void scui_widget_cb_create(scui_handle_t handle);
 
-/*@brief 通过映射表调用销毁一个控件
+/*@brief 卸载一个控件树
+ *       从指定控件开始到它的所有子控件
  *@param handle 控件句柄
  */
 void scui_widget_cb_destroy(scui_handle_t handle);
-
-/*@brief 通过映射表调用加载一个控件树
- *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
- *@param handle 根控件句柄
- */
-void scui_widget_cb_load(scui_handle_t handle);
-
-/*@brief 通过映射表调用卸载一个控件树
- *       从根控件开始到它的所有子控件
- *@param handle 根控件句柄
- */
-void scui_widget_cb_unload(scui_handle_t handle);
 
 #endif

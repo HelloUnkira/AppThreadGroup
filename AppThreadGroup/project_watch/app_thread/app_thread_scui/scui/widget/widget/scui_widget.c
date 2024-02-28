@@ -20,7 +20,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     SCUI_ASSERT(maker->clip.h != 0);
     
     /* 非布局则句柄为动态创建 */
-    *handle = layout ? maker->myself : scui_handle_new();
+    *handle = layout ? maker->myself : scui_handle_find();
     
     SCUI_LOG_DEBUG("");
     /* 为句柄设置映射 */
@@ -90,10 +90,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     
     SCUI_LOG_DEBUG("");
     /* 非根控件要设置为显示,否则为隐藏 */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        widget->style.state = true;
-    if (widget->parent == SCUI_HANDLE_INVALID)
-        widget->style.state = false;
+    widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
     
     SCUI_LOG_INFO("widget type %u",         widget->type);
     SCUI_LOG_INFO("widget style %x",        widget->style);
@@ -113,17 +110,15 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
  */
 void scui_widget_destroy(scui_widget_t *widget)
 {
-    if (!scui_handle_remap(widget->myself)) {
-         SCUI_LOG_INFO("widget %u not load", widget->myself);
-         return;
+    if (scui_handle_unmap(widget->myself)) {
+        SCUI_LOG_INFO("widget %u not load", widget->myself);
+        return;
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
     /* 先递归销毁自己的孩子列表 */
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
-        if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        scui_widget_cb_destroy(widget->child_list[idx]);
-    }
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)
+            scui_widget_cb_destroy(widget->child_list[idx]);
     /* 再从父控件的孩子列表移除自己 */
     if (widget->parent != SCUI_HANDLE_INVALID)
         scui_widget_child_del(widget->parent, widget->myself);
@@ -132,4 +127,6 @@ void scui_widget_destroy(scui_widget_t *widget)
     widget->child_list = NULL;
     /* 清空事件列表 */
     scui_widget_event_clear(widget->myself);
+    /* 回收句柄 */
+    scui_handle_set(widget->myself, NULL);
 }

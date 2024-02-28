@@ -21,6 +21,7 @@ typedef struct {
     scui_handle_t               anima;      /* 交互动画 */
     uint8_t execute:1;
     uint8_t cover:1;
+    uint8_t hold:1;
     uint8_t lock:1;
 } scui_window_float_t;
 
@@ -35,6 +36,11 @@ void scui_window_float_cfg_get(scui_window_float_t *cfg);
  *@param cfg    配置参数
  */
 void scui_window_float_cfg_set(scui_window_float_t *cfg);
+
+/*@brief 窗口工作状态
+ *@retval 工作状态
+ */
+bool scui_window_float_status(void);
 
 /*@brief 窗口移动伴随透明度更新
  *@param handle 窗口控件句柄

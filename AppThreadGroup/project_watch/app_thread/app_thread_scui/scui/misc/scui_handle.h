@@ -41,16 +41,10 @@ void scui_handle_table_register(scui_handle_table_t *table);
  */
 scui_handle_t scui_handle_check(scui_handle_t handle);
 
-/*@brief 生成一个句柄
+/*@brief 寻找一个动态句柄
  *@retval 句柄
  */
-scui_handle_t scui_handle_new(void);
-
-/*@brief 销毁一个句柄
- *@param handle 句柄
- *@retval 成功失败
- */
-bool scui_handle_del(scui_handle_t handle);
+scui_handle_t scui_handle_find(void);
 
 /*@brief 句柄获得资源
  *@param handle 句柄
@@ -70,5 +64,11 @@ bool scui_handle_set(scui_handle_t handle, void *source);
  *@retval 是否重映射
  */
 bool scui_handle_remap(scui_handle_t handle);
+
+/*@brief 句柄是否重映射
+ *@param handle 句柄
+ *@retval 是否重映射
+ */
+bool scui_handle_unmap(scui_handle_t handle);
 
 #endif

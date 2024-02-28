@@ -16,6 +16,13 @@ void scui_event_register_after(scui_event_cb_t event_cb);
  */
 void scui_event_register_custom(scui_event_cb_t event_cb);
 
+/*@brief 事件回调全局响应权限检查
+ *       before和after的响应权限检查
+ *@param event 事件包
+ *@retval 允许该事件
+ */
+bool scui_event_cb_check(scui_event_t *event);
+
 /*@brief 事件通报
  *@param event 事件包
  */
@@ -31,33 +38,5 @@ void scui_event_dispatch(void);
  *@retval 事件响应回调返回值
  */
 uint32_t scui_event_respond(scui_event_t *event);
-
-/*@brief 事件响应(sched)
- *@retval 事件响应回调返回值
- */
-uint32_t scui_event_respond_sched(scui_event_t *event);
-
-/*@brief 事件响应(ptr)
- *@retval 事件响应回调返回值
- */
-uint32_t scui_event_respond_ptr(scui_event_t *event);
-
-/*@brief 事件响应(enc)
- *@param event 事件包
- *@retval 事件响应回调返回值
- */
-uint32_t scui_event_respond_enc(scui_event_t *event);
-
-/*@brief 事件响应(key)
- *@param event 事件包
- *@retval 事件响应回调返回值
- */
-uint32_t scui_event_respond_key(scui_event_t *event);
-
-/*@brief 事件响应(custom)
- *@param event 事件包
- *@retval 事件响应回调返回值
- */
-uint32_t scui_event_respond_custom(scui_event_t *event);
 
 #endif

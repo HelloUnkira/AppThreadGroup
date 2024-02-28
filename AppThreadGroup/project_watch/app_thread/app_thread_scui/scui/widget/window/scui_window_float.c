@@ -27,6 +27,14 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     scui_window_float = *cfg;
 }
 
+/*@brief 窗口工作状态
+ *@retval 工作状态
+ */
+bool scui_window_float_status(void)
+{
+    return scui_window_float.lock;
+}
+
 /*@brief 窗口移动伴随透明度更新
  *@param handle 窗口控件句柄
  *@param point  窗口移动坐标
@@ -81,7 +89,7 @@ void scui_window_float_anima_ready(void *instance)
     
     if (scui_window_float.state == scui_window_float_state_force_over) {
         scui_widget_hide(handle);
-        scui_window_float.record = SCUI_HANDLE_INVALID;;
+        scui_window_float.record = SCUI_HANDLE_INVALID;
         return;
     }
     
@@ -95,11 +103,15 @@ void scui_window_float_anima_ready(void *instance)
              scui_window_float.state = scui_window_float_state_idle;
              scui_widget_hide(handle);
         }
-        scui_window_float.record = SCUI_HANDLE_INVALID;;
+        scui_window_float.record = SCUI_HANDLE_INVALID;
     }
     
-    /* 结束后自动回收,清空它 */
+    SCUI_ASSERT(scui_window_float.anima != SCUI_HANDLE_INVALID);
+    scui_anima_destroy(scui_window_float.anima);
     scui_window_float.anima = SCUI_HANDLE_INVALID;
+    
+    if (!scui_window_float.hold)
+         scui_window_float.lock = false;
 }
 
 /*@brief 窗口浮动动画回调
@@ -141,9 +153,10 @@ void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t per
         scui_anima_stop(scui_window_float.anima);
         scui_anima_destroy(scui_window_float.anima);
         scui_window_float.anima = SCUI_HANDLE_INVALID;
-        if (value_s == value_e)
-            return;
     }
+    if (value_s == value_e)
+        return;
+    
     scui_anima_create(&anima, &scui_window_float.anima);
     scui_anima_start(scui_window_float.anima);
 }
@@ -309,12 +322,16 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
             if (scui_mod_abs(clip.x, clip.w) < clip.w * 1 / 3 &&
                 scui_mod_abs(clip.y, clip.h) < clip.h * 1 / 3) {
                 if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l)
+                    scui_window_float.pos == scui_event_pos_l) {
                     scui_window_float_anima_inout(handle, false);
+                    SCUI_LOG_DEBUG("");
+                }
             } else {
                 if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l)
+                    scui_window_float.pos == scui_event_pos_l) {
                     scui_window_float_anima_inout(handle, true);
+                    SCUI_LOG_DEBUG("");
+                }
             }
             if (scui_mod_abs(clip.x, clip.w) < clip.w * 2 / 3 &&
                 scui_mod_abs(clip.y, clip.h) < clip.h * 2 / 3) {
@@ -361,6 +378,7 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                 }
             }
         }
+        scui_window_float.hold = false;
         break;
     }
     default:
@@ -412,30 +430,27 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
     case scui_event_ptr_move: {
         if (scui_window_float.pos == scui_event_pos_none)
             break;
-        scui_event_dir_t event_dir = scui_indev_ptr_dir(event);
         scui_point_t point = {0};
+        scui_event_dir_t event_dir = scui_indev_ptr_dir(event);
+        scui_window_float.target = SCUI_HANDLE_INVALID;
         /* 方向检测与条件加载 */
         if (event_dir == scui_event_dir_to_r &&
-           (scui_window_float.pos & scui_event_pos_l) != 0 &&
-            scui_window_float.list[2] != SCUI_HANDLE_INVALID) { /* 左浮窗:方向向右 */
+           (scui_window_float.pos & scui_event_pos_l) != 0) { /* 左浮窗:方向向右 */
             scui_window_float.target = scui_window_float.list[2];
             point.x = -clip.w;
         }
         if (event_dir == scui_event_dir_to_l &&
-           (scui_window_float.pos & scui_event_pos_r) != 0 &&
-            scui_window_float.list[3] != SCUI_HANDLE_INVALID) { /* 右浮窗:方向向左 */
+           (scui_window_float.pos & scui_event_pos_r) != 0) { /* 右浮窗:方向向左 */
             scui_window_float.target = scui_window_float.list[3];
             point.x = +clip.w;
         }
         if (event_dir == scui_event_dir_to_d &&
-           (scui_window_float.pos & scui_event_pos_u) != 0 &&
-            scui_window_float.list[0] != SCUI_HANDLE_INVALID) { /* 上浮窗:方向向下 */
+           (scui_window_float.pos & scui_event_pos_u) != 0) { /* 上浮窗:方向向下 */
             scui_window_float.target = scui_window_float.list[0];
             point.y = -clip.h;
         }
         if (event_dir == scui_event_dir_to_u &&
-           (scui_window_float.pos & scui_event_pos_d) != 0 &&
-            scui_window_float.list[1] != SCUI_HANDLE_INVALID) { /* 下浮窗:方向向上 */
+           (scui_window_float.pos & scui_event_pos_d) != 0) { /* 下浮窗:方向向上 */
             scui_window_float.target = scui_window_float.list[1];
             point.y = +clip.h;
         }
@@ -451,6 +466,8 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
             scui_window_float.main  = handle;
             scui_window_float.dir   = event_dir;
             scui_window_float.pos   = event_dir;
+            scui_window_float.hold  = true;
+            scui_window_float.lock  = true;
             ret = scui_event_retval_over;
         }
         break;
