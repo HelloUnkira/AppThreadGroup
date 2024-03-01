@@ -101,6 +101,22 @@ void scui_image_cache_ready(void)
     cache->cnt_unhit = 0;
 }
 
+/*@brief 图片资源重校正
+ *       将计数器重衰减到0以刷新权重
+ */
+void scui_image_cache_rectify(void)
+{
+    scui_image_cache_t *cache = &scui_image_record_cache;
+    
+    scui_image_unit_t *unit = NULL;
+    
+    /* 所有资源全部重衰减 */
+    scui_list_dll_ftra(&cache->dl_list, curr) {
+        unit = scui_own_ofs(scui_image_unit_t, dl_node, curr);
+        unit->count = 0;
+    }
+}
+
 /*@brief 图片资源清除
  */
 void scui_image_cache_clear(void)

@@ -1,11 +1,6 @@
 #ifndef SCUI_WIDGET_OPT_H
 #define SCUI_WIDGET_OPT_H
 
-/*@brief 回收控件(销毁回收,主动调用)
- *@param handle 控件句柄
- */
-void scui_widget_recycle(scui_handle_t handle);
-
 /*@brief 绘制控件
  *@param handle 控件句柄
  *@param sync   同步绘制
@@ -18,10 +13,18 @@ void scui_widget_draw(scui_handle_t handle, bool sync);
  */
 void scui_widget_refr(scui_handle_t handle, bool sync);
 
-/*@brief 控件移动到目标坐标
+/*@brief 控件坐标更新
  *@param handle 控件句柄
+ *@param point  坐标点
  */
-void scui_widget_move(scui_handle_t handle, scui_point_t *point);
+void scui_widget_repos(scui_handle_t handle, scui_point_t *point);
+
+/*@brief 控件尺寸更新
+ *@param handle 控件句柄
+ *@param width  宽度
+ *@param height 高度
+ */
+void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
 
 /*@brief 控件显示
  *@param handle 控件句柄

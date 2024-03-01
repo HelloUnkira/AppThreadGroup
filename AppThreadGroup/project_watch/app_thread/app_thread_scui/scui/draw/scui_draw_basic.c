@@ -28,6 +28,9 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
+    if (alpha == scui_alpha_trans)
+        return;
+    
     scui_area_t *dst_area = &dst_surface->clip;
     
     scui_area_t draw_area = {0};
@@ -37,8 +40,6 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
     
     if (scui_area_empty(&draw_area))
-        return;
-    if (alpha == 0x00)
         return;
     
     /* 在src_surface.clip中的draw_area中填满pixel */
@@ -78,6 +79,8 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
+    SCUI_ASSERT(dst_surface->alpha == scui_alpha_cover);
+    SCUI_ASSERT(src_surface->alpha == scui_alpha_cover);
     
     scui_area_t *dst_area = &dst_surface->clip;
     scui_area_t *src_area = &src_surface->clip;
@@ -96,7 +99,6 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     if (scui_area_empty(&draw_area))
         return;
     
-    SCUI_ASSERT(dst_surface->alpha == 0xFF && src_surface->alpha == 0xFF);
     /* 在dst_surface.clip中的dst_clip_v中拷贝到src_surface.clip中的src_clip_v中 */
     scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
     scui_multi_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
@@ -120,10 +122,10 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     
-    if (src_surface->alpha == 0x0)
+    if (src_surface->alpha == scui_alpha_trans)
         return;
     /* 全覆盖混合:直接copy */
-    if (src_surface->alpha == 0xFF) {
+    if (src_surface->alpha == scui_alpha_cover) {
         scui_draw_area_copy(dst_surface, dst_clip, src_surface, src_clip);
         return;
     }

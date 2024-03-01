@@ -40,11 +40,14 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     widget->myself = *handle;
     
     SCUI_LOG_DEBUG("");
-    /* 子控件的坐标区域是相对父控件 */
+    /* 子控件的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_widget_t *widget_parent = scui_handle_get(widget->parent);
-        widget->clip.x += widget_parent->clip.x;
-        widget->clip.y += widget_parent->clip.y;
+        /* 父控件不能是根控件,统一相对偏移 */
+        if (widget_parent->parent != SCUI_HANDLE_INVALID) {
+            widget->clip.x += widget_parent->clip.x;
+            widget->clip.y += widget_parent->clip.y;
+        }
     }
     
     SCUI_LOG_DEBUG("");
@@ -64,21 +67,16 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     widget_root = scui_handle_get(handle_root);
     
     /* 画布的映射是根控件, 控件画布默认为完全不透明 */
-    widget->surface.pixel = widget_root->surface.pixel;
     widget->surface.alpha = scui_alpha_cover;
-    widget->surface_clip  = (scui_area_t){0};
-    widget->surface.clip  = widget->clip;
+    widget->surface.pixel = widget_root->surface.pixel;
+    widget->surface.line  = widget_root->surface.line;
     
-    SCUI_LOG_DEBUG("");
-    /* 画布的坐标区域是相对父控件 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
-        widget->surface.line = widget_parent->surface.line;
-        /* 子控件的坐标区域是父控件坐标区域的子集 */
-        scui_area_t clip_merge = {0};
-        scui_area_inter(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);
-        widget->surface.clip = clip_merge;
-    }
+    /* 更新画布剪切域 */
+    scui_widget_surface_refr(widget, false);
+    
+    /* 画布剪切域更新,主域配置为空 */
+    scui_list_dll_reset(&widget->clip_set.dl_list);
+    widget->clip_set.clip = (scui_area_t){0};
     
     widget->image = maker->image;
     widget->color = maker->color;

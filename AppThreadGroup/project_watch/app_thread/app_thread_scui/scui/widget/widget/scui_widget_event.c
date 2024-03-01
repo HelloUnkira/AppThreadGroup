@@ -295,9 +295,9 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         }
         /* 产生交集,事件可能被吸收(冒泡自己) */
         if (widget->parent == SCUI_HANDLE_INVALID ||
-            scui_area_inside_point(&clip, &event->ptr_c) ||
-           (scui_area_inside_point(&clip, &event->ptr_s) &&
-            scui_area_inside_point(&clip, &event->ptr_e)))
+            scui_area_point(&clip, &event->ptr_c) ||
+           (scui_area_point(&clip, &event->ptr_s) &&
+            scui_area_point(&clip, &event->ptr_e)))
             ret = scui_widget_event_proc(event);
         
         return ret;
@@ -400,7 +400,7 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
             return scui_event_retval_keep;
         }
         /* 绘制事件没有剪切域,忽略 */
-        if (scui_area_empty(&widget->surface_clip)) {
+        if (scui_clip_empty(&widget->clip_set)) {
             SCUI_LOG_INFO("widget clip is empty");
             return scui_event_retval_keep;
         }
@@ -413,8 +413,8 @@ scui_event_retval_t scui_widget_event_default(scui_event_t *event)
         if (ret == scui_event_retval_quit)
             ret  = scui_widget_event_draw(event);
         
-        /* 去除自己的gc剪切域,因为已经绘制完毕 */
-        widget->surface_clip = (scui_area_t){0};
+        /* 去除surface剪切域,因为已经绘制完毕 */
+        scui_widget_clip_reset(widget, false);
         break;
     }
     default:
@@ -444,9 +444,9 @@ scui_event_retval_t scui_widget_event_draw(scui_event_t *event)
     /* 没有背景图片则绘制纯色背景 */
     if (widget->image != SCUI_HANDLE_INVALID)
         /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
-        scui_widget_surface_draw_image(widget, &widget->surface_clip, widget->image, NULL, widget->color);
+        scui_widget_surface_draw_image(widget, widget->image, NULL, widget->color);
     else
-        scui_widget_surface_draw_color(widget, &widget->surface_clip, widget->color);
+        scui_widget_surface_draw_color(widget, widget->color);
     
     return scui_event_retval_keep;
 }

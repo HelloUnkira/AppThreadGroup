@@ -104,8 +104,14 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color);
 void scui_widget_clip_clear(scui_widget_t *widget);
 
 /*@brief 控件还原剪切域
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_clip_reset(scui_widget_t *widget, bool recurse);
+
+/*@brief 控件更新剪切域
  *@param widget 控件实例
  */
-void scui_widget_clip_reset(scui_widget_t *widget);
+void scui_widget_clip_update(scui_widget_t *widget);
 
 #endif

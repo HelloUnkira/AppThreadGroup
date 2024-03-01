@@ -105,13 +105,6 @@ static void app_thread_scui_draw_test(void)
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
 {
-    scui_window_switch_type_cfg(scui_window_switch_normal);
-    
-    scui_handle_t handle = SCUI_UI_SCENE_HOME;
-    scui_widget_show(handle);
-    scui_window_active(handle);
-    // scui_widget_hide(handle);
-    
     app_thread_scui_draw_test();
     
     while (true) {
@@ -146,6 +139,16 @@ static void app_thread_scui_routine_ready_cb(void)
     static app_thread_t app_thread_scui_refr = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
     app_thread_process(&app_thread_scui_refr, app_thread_static);
+    
+    /* 窗口交互风格 */
+    scui_window_switch_type_cfg(scui_window_switch_normal);
+    
+    /* 初始窗口 */
+    scui_handle_t handle = SCUI_UI_SCENE_HOME;
+    scui_widget_show(handle);
+    scui_window_active(handle);
+    // scui_widget_hide(handle);
+    
 }
 
 /*@brief 子线程服务例程处理部

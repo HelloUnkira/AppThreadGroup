@@ -28,6 +28,11 @@ typedef struct {
  */
 void scui_image_cache_ready(void);
 
+/*@brief 图片资源重校正
+ *       将计数器重衰减到0以刷新权重
+ */
+void scui_image_cache_rectify(void);
+
 /*@brief 图片资源缓存清除
  */
 void scui_image_cache_clear(void);

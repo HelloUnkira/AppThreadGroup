@@ -7,15 +7,6 @@
 
 #include "scui.h"
 
-/*@brief 回收控件(销毁回收,主动调用)
- *@param handle 控件句柄
- */
-void scui_widget_recycle(scui_handle_t handle)
-{
-    scui_widget_hide(handle);
-    scui_widget_cb_destroy(handle);
-}
-
 /*@brief 事件吸收
  */
 static bool scui_widget_draw_absorb(void *evt_old, void *evt_new)
@@ -35,7 +26,8 @@ void scui_widget_draw(scui_handle_t handle, bool sync)
     SCUI_ASSERT(widget != NULL);
     
     /* 只为当前控件及其子控件添加剪切域,但是绘制是从窗口开始的 */
-    scui_widget_clip_reset(widget);
+    scui_widget_clip_reset(widget, true);
+    scui_widget_clip_update(widget);
     
     scui_event_t event = {
         .type   = scui_event_draw,
@@ -75,10 +67,11 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
     scui_event_notify(&event);
 }
 
-/*@brief 控件移动到目标坐标
+/*@brief 控件坐标更新
  *@param handle 控件句柄
+ *@param point  坐标点
  */
-void scui_widget_move(scui_handle_t handle, scui_point_t *point)
+void scui_widget_repos(scui_handle_t handle, scui_point_t *point)
 {
     SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
@@ -94,8 +87,6 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
         widget->clip.y = point->y;
         widget->surface.clip.x = point->x;
         widget->surface.clip.y = point->y;
-        /* 移动要清除剪切域 */
-        widget->surface_clip = (scui_area_t){0};
         SCUI_LOG_DEBUG("<x:%d, y:%d>", point->x, point->y);
         return;
     }
@@ -108,23 +99,14 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
     };
     
     SCUI_LOG_DEBUG("");
+    
     /* 移动自己 */
     widget->clip.x = point->x;
     widget->clip.y = point->y;
-    /* 更新画布剪切域 */
-    widget->surface.clip = widget->clip;
     
     SCUI_LOG_DEBUG("");
-    /* 画布的坐标区域是相对父控件 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = NULL;
-        scui_handle_t  handle_parent = widget->parent;
-        widget_parent = scui_handle_get(handle_parent);
-        /* 子控件的坐标区域是父控件坐标区域的子集 */
-        scui_area_t clip_merge = {0};
-        scui_area_inter(&clip_merge, &widget->surface.clip, &widget_parent->surface.clip);
-        widget->surface.clip = clip_merge;
-    }
+    /* 更新画布剪切域 */
+    scui_widget_surface_refr(widget, false);
     
     SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
@@ -136,13 +118,32 @@ void scui_widget_move(scui_handle_t handle, scui_point_t *point)
                 .x = offset.x + child->clip.x,
                 .y = offset.y + child->clip.y,
             };
-            scui_widget_move(handle, &point);
+            scui_widget_repos(handle, &point);
         }
-    
+}
+
+/*@brief 控件尺寸更新
+ *@param handle 控件句柄
+ *@param width  宽度
+ *@param height 高度
+ */
+void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height)
+{
     SCUI_LOG_DEBUG("");
-    /* 重新追加剪切域 */
-    if (!scui_area_empty(&widget->surface_clip))
-         widget->surface_clip = widget->clip;
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(width  >= 0);
+    SCUI_ASSERT(height >= 0);
+    
+    if (widget->parent == SCUI_HANDLE_INVALID) {
+        SCUI_LOG_ERROR("unsupport");
+        return;
+    }
+    
+    widget->clip.w = width;
+    widget->clip.h = height;
+    /* 更新画布剪切域 */
+    scui_widget_surface_refr(widget, false);
 }
 
 /*@brief 控件显示
@@ -228,14 +229,10 @@ void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
-        if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        if (widget->child_list[idx] == child)
-            scui_widget_show(widget->child_list[idx]);
-        else
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID &&
+            widget->child_list[idx] != child)
             scui_widget_hide(widget->child_list[idx]);
-    }
 }
 
 /*@brief 控件树镜像(相对父控件)
@@ -263,6 +260,6 @@ void scui_widget_mirror(scui_handle_t handle)
         
         /// ...
         
-        scui_widget_move(handle_child, &point_child);
+        scui_widget_repos(handle_child, &point_child);
     }
 }

@@ -22,6 +22,9 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);
     
+    if (alpha == scui_alpha_trans)
+        return;
+    
     scui_area_t image_clip = {
         .x = 0, .w = image_unit->image->pixel.width,
         .y = 0, .h = image_unit->image->pixel.height,

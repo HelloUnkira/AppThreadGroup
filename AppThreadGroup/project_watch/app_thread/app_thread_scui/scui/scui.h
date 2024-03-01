@@ -16,6 +16,7 @@
 #include "scui_config.h"
 /* misc */
 #include "scui_coord.h"         /* 坐标区域 */
+#include "scui_clip.h"          /* 复合剪切域 */
 #include "scui_general.h"       /* 基础图元 */
 #include "scui_handle.h"        /* 泛用句柄 */
 #include "scui_anima.h"         /* 简易动画 */
