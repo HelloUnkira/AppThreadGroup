@@ -1,5 +1,5 @@
-#ifndef SCUI_H
-#define SCUI_H
+#ifndef SCUI_CORE_H
+#define SCUI_CORE_H
 
 /* linker */
 #include "scui_os.h"
@@ -12,8 +12,6 @@
 #include "app_sys_lib.h"
 #include "app_dev_lib.h"
 
-/* config: */
-#include "scui_config.h"
 /* misc */
 #include "scui_coord.h"         /* 坐标区域 */
 #include "scui_clip.h"          /* 复合剪切域 */
@@ -56,7 +54,5 @@
 /* linker: */
 #include "scui_mem.h"
 #include "scui_image_src.h"     /* 图像资源加载卸载 */
-/* config: */
-#include "scui_source.h"
 
 #endif

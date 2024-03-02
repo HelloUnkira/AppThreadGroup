@@ -108,7 +108,6 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
     app_thread_scui_draw_test();
     
     while (true) {
-        
         /*@brief scui 屏幕刷新回调接口
          */
         void app_dev_gui_disp_scui_flush(scui_surface_t *suface);
@@ -121,8 +120,6 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
  */
 static void app_thread_scui_routine_ready_cb(void)
 {
-    scui_engine_ready();
-    scui_engine_execute_status_set(true);
     /* 初始化与scui绑定的驱动设备 */
     app_dev_gui_disp_ready(&app_dev_gui_disp);
     app_dev_gui_ptr_ready(&app_dev_gui_ptr);
@@ -132,23 +129,14 @@ static void app_thread_scui_routine_ready_cb(void)
     /* 模组初始化 */
     app_scui_timer_ready();
     app_scui_check_time_ready();
+    /* 初始化scui */
+    scui_ready();
     /* 初始化启动scui调度定时器 */
     app_scui_timer_start();
-    
     /* 创建refr子线程 */
     static app_thread_t app_thread_scui_refr = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
     app_thread_process(&app_thread_scui_refr, app_thread_static);
-    
-    /* 窗口交互风格 */
-    scui_window_switch_type_cfg(scui_window_switch_normal);
-    
-    /* 初始窗口 */
-    scui_handle_t handle = SCUI_UI_SCENE_HOME;
-    scui_widget_show(handle);
-    scui_window_active(handle);
-    // scui_widget_hide(handle);
-    
 }
 
 /*@brief 子线程服务例程处理部

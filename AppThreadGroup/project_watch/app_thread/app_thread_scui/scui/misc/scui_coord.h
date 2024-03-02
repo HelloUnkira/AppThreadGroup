@@ -92,7 +92,7 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
 bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
 
 /*@brief 求区域求差(area = area1 - area2)
- *       求差要求:必须存在交集
+ *       求差要求:必须存在交集,area2是area1的子集
  *@param area  区域
  *@param num   区域数量
  *@param area1 区域

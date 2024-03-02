@@ -180,7 +180,7 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 }
 
 /*@brief 求区域求差(area = area1 - area2)
- *       求差要求:必须存在交集
+ *       求差要求:必须存在交集,area2是area1的子集
  *@param area  区域
  *@param num   区域数量
  *@param area1 区域
@@ -195,14 +195,14 @@ void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
     /* 裁剪多余上部 */
     if (area1->y1 < area2->y1) {
         area[*num].x1 = area1->x1;
-        area[*num].x2 = area1->x2 - 1;
+        area[*num].x2 = area1->x2;
         area[*num].y1 = area1->y1;
         area[*num].y2 = area2->y1 - 1;
         (*num)++;
     }
     /* 裁剪多余下部 */
     if (area1->y2 > area2->y2) {
-        area[*num].x1 = area1->x1 + 1;
+        area[*num].x1 = area1->x1;
         area[*num].x2 = area1->x2;
         area[*num].y1 = area2->y2 + 1;
         area[*num].y2 = area1->y2;
@@ -211,14 +211,14 @@ void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
     /* 裁剪多余左部 */
     if (area1->x1 < area2->x1) {
         area[*num].y1 = area1->y1;
-        area[*num].y2 = area1->y2 - 1;
+        area[*num].y2 = area1->y2;
         area[*num].x1 = area1->x1;
         area[*num].x2 = area2->x1 - 1;
         (*num)++;
     }
     /* 裁剪主域多余右部 */
     if (area1->x2 > area2->x2) {
-        area[*num].y1 = area1->y1 + 1;
+        area[*num].y1 = area1->y1;
         area[*num].y2 = area1->y2;
         area[*num].x1 = area2->x2 + 1;
         area[*num].x2 = area1->x2;

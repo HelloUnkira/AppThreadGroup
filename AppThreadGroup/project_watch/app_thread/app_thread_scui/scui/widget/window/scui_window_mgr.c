@@ -25,10 +25,6 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         case scui_window_switch_normal: {
             scui_surface_t *dst_surface = scui_surface_fb_draw();
             for (scui_handle_t idx = 0; idx < num; idx++) {
-                scui_area_t dst_clip = {
-                    .w = scui_disp_get_hor_res(),
-                    .h = scui_disp_get_ver_res(),
-                };
                 scui_widget_t *widget = list[idx];
                 scui_surface_t src_surface = widget->surface;
                 /* 独立画布将窗口偏移补充到画布上 */
@@ -39,6 +35,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                     src_surface.clip.x = widget->clip.x;
                     src_surface.clip.y = widget->clip.y;
                 }
+                scui_area_t dst_clip = dst_surface->clip;
                 scui_area_t src_clip = src_surface.clip;
                 /* 与显示区域做一次交集运算 */
                 scui_area_t out_clip = {0};
