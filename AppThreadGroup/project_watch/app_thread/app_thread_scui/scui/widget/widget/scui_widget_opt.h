@@ -1,50 +1,89 @@
 #ifndef SCUI_WIDGET_OPT_H
 #define SCUI_WIDGET_OPT_H
 
-/*@brief 绘制控件
+/*@brief 控件树的根控件
  *@param handle 控件句柄
- *@param sync   同步绘制
+ *@retval 根控件句柄
  */
-void scui_widget_draw(scui_handle_t handle, bool sync);
+scui_handle_t scui_widget_root(scui_handle_t handle);
 
-/*@brief 刷新控件
+/*@brief 控件的父控件
  *@param handle 控件句柄
- *@param sync   同步刷新
+ *@retval 父控件
  */
-void scui_widget_refr(scui_handle_t handle, bool sync);
+scui_handle_t scui_widget_parent(scui_handle_t handle);
 
-/*@brief 控件坐标更新
+/*@brief 子控件总数量
  *@param handle 控件句柄
- *@param point  坐标点
+ *@retval 子控件数量
  */
-void scui_widget_repos(scui_handle_t handle, scui_point_t *point);
+scui_handle_t scui_widget_child_num(scui_handle_t handle);
 
-/*@brief 控件尺寸更新
+/*@brief 指定位置子控件
  *@param handle 控件句柄
- *@param width  宽度
- *@param height 高度
+ *@param index  子控件位置
+ *@retval 子控件句柄
  */
-void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
+scui_handle_t scui_widget_child_index(scui_handle_t handle, scui_handle_t index);
 
-/*@brief 控件显示
+/*@brief 控件类型
  *@param handle 控件句柄
+ *@retval 控件类型
  */
-void scui_widget_show(scui_handle_t handle);
+scui_widget_type_t scui_widget_attr_type(scui_handle_t handle);
 
-/*@brief 控件隐藏
+/*@brief 控件剪切域
  *@param handle 控件句柄
+ *@retval 控件剪切域
  */
-void scui_widget_hide(scui_handle_t handle);
+scui_area_t scui_widget_attr_clip(scui_handle_t handle);
 
-/*@brief 控件隐藏
+/*@brief 控件显示状态获取
  *@param handle 控件句柄
- *@param child  子控件句柄
+ *@retval 是否显示
  */
-void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child);
+bool scui_widget_style_is_show(scui_handle_t handle);
 
-/*@brief 控件树镜像(相对父控件)
+/*@brief 控件隐藏状态获取
  *@param handle 控件句柄
+ *@retval 是否隐藏
  */
-void scui_widget_mirror(scui_handle_t handle);
+bool scui_widget_style_is_hide(scui_handle_t handle);
+
+/*@brief 控件透明度获取
+ *@param handle 控件句柄
+ *@retval 控件透明度
+ */
+scui_alpha_t scui_widget_alpha_get(scui_handle_t handle);
+
+/*@brief 控件图片获取
+ *@param handle 控件句柄
+ *@retval 图片句柄
+ */
+scui_handle_t scui_widget_image_get(scui_handle_t handle);
+
+/*@brief 控件颜色获取
+ *@param handle 控件句柄
+ *@retval 颜色
+ */
+scui_color_gradient_t scui_widget_color_get(scui_handle_t handle);
+
+/*@brief 控件透明度设置
+ *@param handle 控件句柄
+ *@param alpha  控件透明度
+ */
+void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha);
+
+/*@brief 控件图片设置
+ *@param handle 控件句柄
+ *@param image  图片句柄
+ */
+void scui_widget_image_set(scui_handle_t handle, scui_handle_t image);
+
+/*@brief 控件颜色设置
+ *@param handle 控件句柄
+ *@param color  颜色
+ */
+void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color);
 
 #endif

@@ -89,6 +89,32 @@ typedef struct {
 } scui_widget_maker_t;
 #pragma pack(pop)
 
+/*@brief 控件事件回调
+ */
+typedef scui_event_cb_t scui_widget_cb_event_t;
+
+/*@brief 控件创建回调
+ */
+typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
+
+/*@brief 控件销毁回调
+ */
+typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
+
+/*@brief 控件处理函数映射表
+ */
+typedef struct {
+    scui_widget_cb_event_t   event;
+    scui_widget_cb_create_t  create;
+    scui_widget_cb_destroy_t destroy;
+} scui_widget_cb_t;
+
+/*@brief 查找控件映射表
+ *@param type 控件类型
+ *@retval 控件映射表
+ */
+scui_widget_cb_t * scui_widget_cb_find(uint32_t type);
+
 /*@brief 控件创建
  *@param widget 控件实例
  *@param maker  控件实例构造参数
@@ -101,5 +127,59 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
  *@param widget 控件实例
  */
 void scui_widget_destroy(scui_widget_t *widget);
+
+/*@brief 通过映射表调用创建一个控件树
+ *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
+ *@param handle 控件句柄
+ */
+void scui_widget_cb_create(scui_handle_t handle);
+
+/*@brief 卸载一个控件树
+ *       从指定控件开始到它的所有子控件
+ *@param handle 控件句柄
+ */
+void scui_widget_cb_destroy(scui_handle_t handle);
+
+/*@brief 控件添加子控件
+ *@param handle 控件句柄
+ *@param child  控件子控件句柄
+ */
+void scui_widget_child_add(scui_handle_t handle, scui_handle_t child);
+
+/*@brief 控件移除子控件
+ *@param handle 控件句柄
+ *@param child  控件子控件句柄
+ */
+void scui_widget_child_del(scui_handle_t handle, scui_handle_t child);
+
+/*@brief 控件清除剪切域
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_clip_clear(scui_widget_t *widget, bool recurse);
+
+/*@brief 控件还原剪切域
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_clip_reset(scui_widget_t *widget, bool recurse);
+
+/*@brief 控件更新剪切域
+ *@param widget 控件实例
+ */
+void scui_widget_clip_update(scui_widget_t *widget);
+
+/*@brief 控件坐标更新
+ *@param handle 控件句柄
+ *@param point  坐标点
+ */
+void scui_widget_repos(scui_handle_t handle, scui_point_t *point);
+
+/*@brief 控件尺寸更新
+ *@param handle 控件句柄
+ *@param width  宽度
+ *@param height 高度
+ */
+void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
 
 #endif

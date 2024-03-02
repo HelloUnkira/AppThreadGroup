@@ -29,29 +29,36 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                     .w = scui_disp_get_hor_res(),
                     .h = scui_disp_get_ver_res(),
                 };
-                scui_surface_t *src_surface = &list[idx]->surface;
-                scui_area_t src_clip = src_surface->clip;
-                scui_area_t rcd_clip = src_surface->clip;
+                scui_widget_t *widget = list[idx];
+                scui_surface_t src_surface = widget->surface;
+                /* 独立画布将窗口偏移补充到画布上 */
+                if (scui_widget_surface_only(widget)) {
+                    SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+                    SCUI_ASSERT(src_surface.clip.x == 0);
+                    SCUI_ASSERT(src_surface.clip.y == 0);
+                    src_surface.clip.x = widget->clip.x;
+                    src_surface.clip.y = widget->clip.y;
+                }
+                scui_area_t src_clip = src_surface.clip;
                 /* 与显示区域做一次交集运算 */
                 scui_area_t out_clip = {0};
                 if (!scui_area_inter(&out_clip, &dst_clip, &src_clip))
                      continue;
-                dst_clip = out_clip;
                 if (src_clip.x > 0 || src_clip.y > 0) {
-                    src_surface->clip.x = 0;
-                    src_surface->clip.y = 0;
-                    src_surface->clip.w -= src_clip.x;
-                    src_surface->clip.h -= src_clip.y;
+                    src_surface.clip.x = 0;
+                    src_surface.clip.y = 0;
+                    src_surface.clip.w -= src_clip.x;
+                    src_surface.clip.h -= src_clip.y;
                 }
                 if (src_clip.x < 0 || src_clip.y < 0) {
-                    src_surface->clip.x = -src_clip.x;
-                    src_surface->clip.y = -src_clip.y;
-                    src_surface->clip.w += src_clip.x;
-                    src_surface->clip.h += src_clip.y;
+                    src_surface.clip.x = -src_clip.x;
+                    src_surface.clip.y = -src_clip.y;
+                    src_surface.clip.w += src_clip.x;
+                    src_surface.clip.h += src_clip.y;
                 }
-                src_clip = src_surface->clip;
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip);
-                src_surface->clip = rcd_clip;
+                dst_clip = out_clip;
+                src_clip = src_surface.clip;
+                scui_draw_area_blend(dst_surface, &dst_clip, &src_surface, &src_clip);
             }
             break;
         }
@@ -104,7 +111,7 @@ void scui_window_sort_list(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_mix_surface(void)
 {
-    scui_handle_t list_num = 0;
+    scui_handle_t  list_num = 0;
     scui_widget_t *list[SCUI_WINDOW_MGR_LIMIT] = {0};
     
     /* 第一轮混合:处理所有独立画布 */

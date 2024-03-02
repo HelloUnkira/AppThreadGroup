@@ -15,6 +15,12 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     widget->surface.clip = widget->clip;
+    /* 有独立画布的根控件不记录原点偏移,控件树永远相对独立画布移动 */
+    /* 没有独立画布的根控件保留原点偏移,控件树永远相对绘制画布移动 */
+    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
+        widget->surface.clip.x = 0;
+        widget->surface.clip.y = 0;
+    }
     
     /* 画布的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -78,25 +84,14 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_gradient_t
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     scui_surface_t *dst_surface = &widget->surface;
-    scui_point_t    point = {0};
-
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
-        point.x = dst_surface->clip.x;
-        point.y = dst_surface->clip.y;
-        dst_surface->clip.x = 0;
-        dst_surface->clip.y = 0;
-    }
+    scui_area_t     dst_clip    = {0};
     
+    scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        scui_area_t dst_clip = unit->clip;
+        unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        dst_clip = unit->clip;
         SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
         scui_draw_area_fill(dst_surface, &dst_clip, &pixel, widget->surface.alpha);
-    }
-    
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
-        dst_surface->clip.x = point.x;
-        dst_surface->clip.y = point.y;
     }
 }
 
@@ -111,14 +106,7 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t  handle
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     scui_surface_t *dst_surface = &widget->surface;
-    scui_point_t    point = {0};
-
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
-        point.x = dst_surface->clip.x;
-        point.y = dst_surface->clip.y;
-        dst_surface->clip.x = 0;
-        dst_surface->clip.y = 0;
-    }
+    scui_area_t     dst_clip    = {0};
     
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);
@@ -131,24 +119,15 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t  handle
     if (src_clip == NULL)
         src_clip  = &image_clip;
     
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
-        dst_surface->clip.x = 0;
-        dst_surface->clip.y = 0;
-    }
-    
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
     
+    scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        scui_area_t dst_clip = unit->clip;
+        unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        dst_clip = unit->clip;
         scui_draw_image(dst_surface, &dst_clip, &image_unit, src_clip, color, widget->surface.alpha);
     }
     
     scui_image_cache_unload(&image_unit);
-    
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
-        dst_surface->clip.x = point.x;
-        dst_surface->clip.y = point.y;
-    }
 }

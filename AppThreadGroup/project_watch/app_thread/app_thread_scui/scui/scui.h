@@ -38,11 +38,9 @@
 #include "scui_disp.h"          /* 显示器 */
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_cb.h"
-#include "scui_widget_opt.h"
-#include "scui_widget_attr.h"
 #include "scui_widget_event.h"
 #include "scui_widget_surface.h"
+#include "scui_widget_opt.h"
 #include "scui_window.h"
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_opt.h"        /* 窗口管理器 */
