@@ -14,7 +14,6 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
     scui_widget_parser_h.write('#define SCUI_WIDGET_PARSER_H\n\n')
     scui_widget_parser_h.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
     scui_widget_parser_c.write('/*一个通过scui_widget_parser脚本生成的widget表\n */\n\n')
-    scui_widget_parser_c.write('#include \"scui_drv_conf.h\"\n')
     scui_widget_parser_c.write('#include \"scui.h\"\n\n')
     # 填充数据表
     offset_name = scui_widget_parser_table['offset_name']

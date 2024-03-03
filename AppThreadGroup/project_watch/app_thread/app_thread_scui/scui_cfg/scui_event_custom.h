@@ -14,6 +14,12 @@ typedef enum {
     
 } scui_event_custom_t;
 
+/*@brief 事件响应(custom)
+ *@param event 事件包
+ *@retval 事件响应回调返回值
+ */
+scui_event_retval_t scui_event_custom(scui_event_t *event);
+
 /*@brief 事件响应(before)
  *@param event 事件包
  *@retval 事件响应回调返回值
@@ -25,11 +31,5 @@ scui_event_retval_t scui_event_before(scui_event_t *event);
  *@retval 事件响应回调返回值
  */
 scui_event_retval_t scui_event_after(scui_event_t *event);
-
-/*@brief 事件响应(custom)
-*@param event 事件包
-*@retval 事件响应回调返回值
-*/
-scui_event_retval_t scui_event_custom(scui_event_t *event);
 
 #endif

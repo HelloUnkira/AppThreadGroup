@@ -126,7 +126,9 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t  handle
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         dst_clip = unit->clip;
-        scui_draw_image(dst_surface, &dst_clip, &image_unit, src_clip, color, widget->surface.alpha);
+        scui_area_t src_area = {0};
+        scui_area_inter(&src_area, src_clip, &unit->clip);
+        scui_draw_image(dst_surface, &dst_clip, &image_unit, &src_area, color, widget->surface.alpha);
     }
     
     scui_image_cache_unload(&image_unit);

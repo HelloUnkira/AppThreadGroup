@@ -178,7 +178,8 @@ void scui_widget_cb_create(scui_handle_t handle)
         /* 迭代到下一个句柄 */
         handle++;
         widget = maker = scui_handle_get(handle);
-        SCUI_ASSERT(maker != NULL);
+        if (maker == NULL)
+            break;
         /* 一直迭代到下一个根控件句柄前停下 */
         if (scui_handle_unmap(handle) && maker->parent == SCUI_HANDLE_INVALID)
             break;

@@ -92,7 +92,7 @@ static uint32_t app_dev_gui_key_scui_key(void)
     case VK_RIGHT:  return scui_event_key_val_right;
     case VK_ESCAPE: return scui_event_key_val_esc;
     case VK_DELETE: return scui_event_key_val_del;
-    case VK_BACK:   return scui_event_key_val_backspace;
+    case VK_BACK:   return scui_event_key_val_back;
     case VK_RETURN: return scui_event_key_val_enter;
     case VK_NEXT:   return scui_event_key_val_next;
     case VK_PRIOR:  return scui_event_key_val_prev;

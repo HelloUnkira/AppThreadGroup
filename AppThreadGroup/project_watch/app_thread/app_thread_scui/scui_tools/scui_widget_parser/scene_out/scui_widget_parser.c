@@ -1,7 +1,6 @@
 /*一个通过scui_widget_parser脚本生成的widget表
  */
 
-#include "scui_drv_conf.h"
 #include "scui.h"
 
 #if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1
@@ -963,6 +962,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1051,6 +1051,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_1,
 	.widget.event_cb                = scui_ui_scene_1_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10598001_bg_01_1bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1139,6 +1140,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_2,
 	.widget.event_cb                = scui_ui_scene_2_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10599001_bg_01_1bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1227,6 +1229,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_3,
 	.widget.event_cb                = scui_ui_scene_3_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10600001_bg_01_00bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1315,6 +1318,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_4 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_4,
 	.widget.event_cb                = scui_ui_scene_4_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10601001_bg_01_00bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1403,6 +1407,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_5 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_5,
 	.widget.event_cb                = scui_ui_scene_5_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10602001_bg_01_00bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1491,6 +1496,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_6,
 	.widget.event_cb                = scui_ui_scene_6_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10603001_bg_01_00bmp,
 	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
