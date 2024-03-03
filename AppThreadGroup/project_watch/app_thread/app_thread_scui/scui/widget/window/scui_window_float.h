@@ -1,23 +1,12 @@
 #ifndef SCUI_WINDOW_FLOAT_H
 #define SCUI_WINDOW_FLOAT_H
 
-typedef enum {
-    scui_window_float_state_idle = 0,
-    scui_window_float_state_move_in,        // 浮窗在进入循环中
-    scui_window_float_state_move_out,       // 浮窗在退出循环中
-    scui_window_float_state_move_auto,      // 浮窗切换到动画移动
-    scui_window_float_state_cover,          // 浮窗已经覆盖显示
-    scui_window_float_state_force_over,     // 按键触发强制退出
-} scui_window_float_state_t;
-
 typedef struct {
     scui_handle_t               list[4];    /* 0:临近上;1:临近下;2:临近左;3:临近右; */
     scui_handle_t               main;       /* 主窗口 */
     scui_handle_t               target;     /* 目标浮窗 */
-    scui_handle_t               record;     /* 记录浮窗 */
     scui_event_dir_t            dir;        /* 交互方向 */
     scui_event_pos_t            pos;        /* 相对位置 */
-    scui_window_float_state_t   state;      /* 交互状态 */
     scui_handle_t               anima;      /* 交互动画 */
     uint8_t execute:1;
     uint8_t cover:1;

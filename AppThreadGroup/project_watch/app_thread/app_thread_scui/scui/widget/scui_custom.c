@@ -24,19 +24,13 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&custom->widget, &maker->widget, handle, layout);
     
-    /* 为自定义控件添加指定的事件回调 */
+    /* 为窗口控件添加指定的事件回调 */
     scui_widget_event_t event = {0};
     event.order    = scui_widget_order_current;
     event.event_cb = maker->widget.event_cb;
     
     /* 事件默认全局接收 */
-    event.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_ptr_all;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_enc_all;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_key_all;
+    event.event = scui_event_draw;
     scui_widget_event_add(*handle, &event);
 }
 
@@ -44,7 +38,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
  *@param handle 自定义控件句柄
  *@param parent_way 来自父控件的销毁
  */
-void scui_custom_destroy(scui_handle_t handle, bool parent_way)
+void scui_custom_destroy(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);

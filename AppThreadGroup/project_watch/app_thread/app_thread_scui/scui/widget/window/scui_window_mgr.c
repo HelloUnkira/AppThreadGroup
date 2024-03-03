@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -94,7 +94,8 @@ void scui_window_sort_list(scui_widget_t **list, scui_handle_t num)
     }
     
     // 输出排序好的窗口信息
-    SCUI_LOG_INFO("window list:");
+    if (num != 0)
+        SCUI_LOG_INFO("window list:");
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t *widget = list[idx];
         SCUI_LOG_INFO("object:%u<x:%d,y:%d,w:%d,h:%d>", widget->myself,

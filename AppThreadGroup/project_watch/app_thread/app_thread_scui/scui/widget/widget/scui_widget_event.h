@@ -23,6 +23,16 @@ void scui_widget_show(scui_handle_t handle);
  */
 void scui_widget_hide(scui_handle_t handle);
 
+/*@brief 控件显示(时序异步)
+ *@param handle 控件句柄
+ */
+void scui_widget_show_async(scui_handle_t handle);
+
+/*@brief 控件隐藏(时序异步)
+ *@param handle 控件句柄
+ */
+void scui_widget_hide_async(scui_handle_t handle);
+
 /*@brief 控件隐藏
  *@param handle 控件句柄
  *@param child  子控件句柄
@@ -75,11 +85,5 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event);
  *@retval 事件状态
  */
 scui_event_retval_t scui_widget_event_draw(scui_event_t *event);
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- *@retval 事件状态
- */
-scui_event_retval_t scui_widget_event_default(scui_event_t *event);
 
 #endif

@@ -117,7 +117,7 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
-        SCUI_LOG_WARN("unknown widget %u %u", event->object, SCUI_HANDLE_SYSTEM);
+        SCUI_LOG_WARN("unknown widget %u %u", event->object, event->type);
         return scui_event_retval_quit;
     }
     

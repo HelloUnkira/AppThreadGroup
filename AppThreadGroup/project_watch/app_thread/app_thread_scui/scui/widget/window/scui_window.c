@@ -49,13 +49,13 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     event.event_cb = maker->widget.event_cb;
     
     /* 事件默认全局接收 */
-    event.event = scui_event_sched_all;
+    event.event = scui_event_show;
     scui_widget_event_add(*handle, &event);
-    event.event = scui_event_ptr_all;
+    event.event = scui_event_hide;
     scui_widget_event_add(*handle, &event);
-    event.event = scui_event_enc_all;
+    event.event = scui_event_focus_get;
     scui_widget_event_add(*handle, &event);
-    event.event = scui_event_key_all;
+    event.event = scui_event_focus_lost;
     scui_widget_event_add(*handle, &event);
 }
 

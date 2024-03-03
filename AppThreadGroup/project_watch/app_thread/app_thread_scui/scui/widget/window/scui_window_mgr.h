@@ -24,6 +24,7 @@ typedef struct {
     scui_coord_t              ofs;          /* 窗口切换偏移(像素点) */
     uint32_t                  lock:1;       /* 窗口切换全局锁 */
     uint32_t                  lock_move:1;  /* 窗口切换锁 */
+    uint32_t                  flag_fling:1; /* 窗口切换锁 */
     uint8_t                   hold_move:1;  /* 窗口使用锁 */
 } scui_window_switch_t;
 

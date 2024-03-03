@@ -92,6 +92,28 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     /* 非根控件要设置为显示,否则为隐藏 */
     widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
     
+    /* 配置控件事件响应 */
+    scui_widget_event_t event = {0};
+    event.order    = scui_widget_order_current;
+    event.event_cb = maker->event_cb;
+    
+    if (widget->style.anima_sched) {
+        event.event = scui_event_anima_elapse;
+        scui_widget_event_add(*handle, &event);
+    }
+    if (widget->style.indev_ptr) {
+        event.event = scui_event_ptr_all;
+        scui_widget_event_add(*handle, &event);
+    }
+    if (widget->style.indev_enc) {
+        event.event = scui_event_enc_all;
+        scui_widget_event_add(*handle, &event);
+    }
+    if (widget->style.indev_key) {
+        event.event = scui_event_key_all;
+        scui_widget_event_add(*handle, &event);
+    }
+    
     SCUI_LOG_INFO("widget type %u",         widget->type);
     SCUI_LOG_INFO("widget style %x",        widget->style);
     SCUI_LOG_INFO("widget clip.x %d",       widget->clip.x);

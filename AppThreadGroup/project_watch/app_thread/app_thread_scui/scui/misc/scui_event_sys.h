@@ -12,15 +12,14 @@ typedef enum {
     scui_event_sched_s,
     scui_event_sched_all,
     scui_event_anima_elapse,    /* 动画轮转调度 */
-    scui_event_draw,            /* 场景绘制事件 */
-    scui_event_refr,            /* 场景刷新事件 */
-    scui_event_show,            /* 场景显示事件 */
-    scui_event_hide,            /* 场景隐藏事件 */
-    scui_event_focus_get,       /* 场景焦点获取事件 */
-    scui_event_focus_lost,      /* 场景焦点失去事件 */
-    scui_event_res_load,        /* 场景资源加载事件 */
-    scui_event_res_unload,      /* 场景资源卸载事件 */
-    scui_event_lang_change,     /* 系统语言切换事件 */
+    scui_event_focus_get,       /* 窗口焦点获取事件 */
+    scui_event_focus_lost,      /* 窗口焦点失去事件 */
+    scui_event_show,            /* 窗口显示事件 */
+    scui_event_show_async,      /* 窗口显示事件(重异步) */
+    scui_event_hide,            /* 窗口隐藏事件 */
+    scui_event_hide_async,      /* 窗口隐藏事件(重异步) */
+    scui_event_draw,            /* 控件绘制事件 */
+    scui_event_refr,            /* 界面刷新事件 */
     scui_event_sched_e,
     /* 调度事件<e> */
     
