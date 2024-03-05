@@ -121,6 +121,7 @@ typedef enum {
     scui_event_pos_d    = scui_event_dir_to_u,
     scui_event_pos_l    = scui_event_dir_to_r,
     scui_event_pos_r    = scui_event_dir_to_l,
+    scui_event_pos_c    = scui_event_dir_all,
 } scui_event_pos_t;
 
 /*@brief 事件队列初始化

@@ -41,10 +41,9 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
 void scui_custom_destroy(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_custom_t *custom = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_custom);
-    scui_custom_t *custom = (void *)widget;
-    SCUI_ASSERT(custom != NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&custom->widget);

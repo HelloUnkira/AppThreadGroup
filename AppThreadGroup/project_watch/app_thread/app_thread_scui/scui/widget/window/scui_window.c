@@ -23,11 +23,6 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
-    scui_window_cfg_def(&window->cfg);
-    
-    window->level  = maker->level;
-    window->buffer = maker->buffer;
-    
     /* 是否需要创建自己的surface */
     if (maker->buffer) {
         scui_coord_t hor_res = scui_disp_get_hor_res();
@@ -42,6 +37,11 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建基础控件实例 */
     scui_widget_create(&window->widget, &maker->widget, handle, layout);
+    
+    scui_window_cfg_def(&window->cfg);
+    
+    window->level  = maker->level;
+    window->buffer = maker->buffer;
     
     /* 为窗口控件添加指定的事件回调 */
     scui_widget_event_t event = {0};
@@ -65,9 +65,9 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
 void scui_window_destroy(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_window);
-    scui_window_t *window = (void *)widget;
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&window->widget);
@@ -99,9 +99,9 @@ void scui_window_cfg_def(scui_window_cfg_t *cfg)
 void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_window);
-    scui_window_t *window = (void *)widget;
     
     *cfg = window->cfg;
 }
@@ -113,9 +113,9 @@ void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
 void scui_window_cfg_set(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_window);
-    scui_window_t *window = (void *)widget;
     
     window->cfg = *cfg;
 }

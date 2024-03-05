@@ -420,6 +420,9 @@ void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t h
         return;
     }
     
+    if (widget->clip.w == width && widget->clip.h == height)
+        return;
+    
     widget->clip.w = width;
     widget->clip.h = height;
     /* 更新画布剪切域 */

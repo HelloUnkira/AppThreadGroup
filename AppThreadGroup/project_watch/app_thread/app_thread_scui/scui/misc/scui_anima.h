@@ -41,7 +41,6 @@ typedef struct {
     scui_anima_start_t   start;     /* 动画开始回调 */
     scui_anima_ready_t   ready;     /* 动画就绪回调 */
     scui_anima_expired_t expired;   /* 动画过期回调 */
-    void  *used_data;               /* 用户挂载数据 */
     uint32_t reload;                /* 重加载次数(0==1) */
     uint32_t peroid;                /* 回调周期 */
     int32_t  value_s;               /* 起始值(默认0) */
@@ -50,6 +49,8 @@ typedef struct {
     uint32_t reduce;                /* 内部使用:约减数 */
     uint32_t running:1;             /* 内部使用:动画状态 */
     uint32_t first:1;               /* 内部使用:第一次结束 */
+    /* scui定制化动画数据: */
+    scui_handle_t handle;
 } scui_anima_t;
 
 /*@brief 动画列表

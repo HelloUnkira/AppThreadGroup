@@ -9,10 +9,11 @@ typedef struct {
 } scui_window_cfg_t;
 
 typedef struct {
-    scui_widget_t     widget;
-    scui_window_cfg_t cfg;              /* 窗口配置属性 */
-    uint8_t           level:6;          /* 窗口所在层级(数字越大越高) */
-    uint8_t           buffer:1;         /* 窗口是否使用独立画布 */
+    scui_widget_t       widget;
+    uint8_t             level:6;        /* 窗口所在层级(数字越大越高) */
+    uint8_t             buffer:1;       /* 窗口是否使用独立画布 */
+    /* 内部域: */
+    scui_window_cfg_t   cfg;            /* 窗口配置属性 */
 } scui_window_t;
 
 #pragma pack(push, 1)
