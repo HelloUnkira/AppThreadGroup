@@ -36,4 +36,10 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
  */
 void scui_scroll_destroy(scui_handle_t handle);
 
+/*@brief 可滚动控件事件处理回调
+ *@param event 事件
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_scroll_event(scui_event_t *event);
+
 #endif

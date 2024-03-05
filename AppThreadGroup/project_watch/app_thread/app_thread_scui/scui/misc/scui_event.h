@@ -90,10 +90,9 @@ typedef struct {
 /*@brief 事件响应回调返回值
  */
 typedef enum {
-    scui_event_retval_none = 0,     /* 无效值:占位符 */
-    scui_event_retval_quit,         /* 未处理:继续事件响应 */
-    scui_event_retval_keep,         /* 已问询:继续事件响应 */
-    scui_event_retval_over,         /* 已吸收:终止事件响应 */
+    scui_event_retval_quit = 0x00,      /* 未处理:继续事件响应 */
+    scui_event_retval_keep = 0x01,      /* 已问询:继续事件响应 */
+    scui_event_retval_over = 0x10,      /* 已吸收:终止事件响应 */
 } scui_event_retval_t;
 
 /*@brief 事件响应回调

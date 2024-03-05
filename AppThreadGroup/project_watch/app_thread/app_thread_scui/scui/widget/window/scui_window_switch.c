@@ -426,7 +426,7 @@ scui_event_retval_t scui_window_switch_event(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down:
-        ret = scui_event_retval_keep;
+        ret |= scui_event_retval_keep;
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_mgr.switch_args.pos = scui_event_pos_none;
         /* 水平位置先检测 */
@@ -442,7 +442,7 @@ scui_event_retval_t scui_window_switch_event(scui_event_t *event)
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling:
-        ret = scui_event_retval_over;
+        ret |= scui_event_retval_over;
         /* 场景正在切换时,中止更新切换目标 */
         if (scui_window_mgr.switch_args.lock_move) {
             SCUI_LOG_INFO("");
@@ -515,7 +515,7 @@ scui_event_retval_t scui_window_switch_event(scui_event_t *event)
         }
         break;
     case scui_event_ptr_up:
-        ret = scui_event_retval_keep;
+        ret |= scui_event_retval_keep;
         if (scui_window_mgr.switch_args.lock_move) {
             scui_window_mgr.switch_args.hold_move = false;
             if (scui_window_mgr.switch_args.flag_fling) {

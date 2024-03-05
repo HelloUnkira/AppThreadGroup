@@ -161,13 +161,12 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
 {
     /* 控件组织表 */
     static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
-        [scui_widget_type_window].event   = (scui_widget_cb_event_t)    NULL,
         [scui_widget_type_window].create  = (scui_widget_cb_create_t)   scui_window_create,
         [scui_widget_type_window].destroy = (scui_widget_cb_destroy_t)  scui_window_destroy,
-        [scui_widget_type_custom].event   = (scui_widget_cb_event_t)    NULL,
         [scui_widget_type_custom].create  = (scui_widget_cb_create_t)   scui_custom_create,
         [scui_widget_type_custom].destroy = (scui_widget_cb_destroy_t)  scui_custom_destroy,
-        
+        [scui_widget_type_scroll].create  = (scui_widget_cb_create_t)   scui_scroll_create,
+        [scui_widget_type_scroll].destroy = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);

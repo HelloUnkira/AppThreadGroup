@@ -104,7 +104,7 @@ void scui_event_dispatch(void)
  */
 scui_event_retval_t scui_event_respond(scui_event_t *event)
 {
-    scui_event_retval_t retval = scui_event_retval_keep;
+    scui_event_retval_t ret = scui_event_retval_quit;
     SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     
     SCUI_ASSERT(scui_event_cb_before != NULL);
@@ -120,10 +120,12 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
         break;
     case scui_event_show_delay:
         scui_widget_show(event->handle);
-        return;
+        ret |= scui_event_retval_over;
+        return ret;
     case scui_event_hide_delay:
         scui_widget_hide(event->handle);
-        return;
+        ret |= scui_event_retval_over;
+        return ret;
     default:
         break;
     }
@@ -135,12 +137,14 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
         SCUI_LOG_WARN("unknown widget %u %u", event->object, event->type);
-        return scui_event_retval_quit;
+        return ret;
     }
     
     /* 事件前响应回调 */
-    if (scui_event_cb_check(event) && scui_event_cb_before(event) == scui_event_retval_over)
-        return scui_event_retval_over;
+    if (scui_event_cb_check(event))
+        ret |= scui_event_cb_before(event);
+    if ((ret & scui_event_retval_over) != 0)
+        return ret;
     
     /* 系统事件响应 */
     if (event->type > scui_event_sys_s && event->type < scui_event_sys_e) {
@@ -156,26 +160,29 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_hold;
         event_filter = event_filter || event->type == scui_event_key_click;
         
-        scui_event_retval_t ret_1 = scui_widget_event_dispatch(event);
-        if (ret_1 == scui_event_retval_over && event_filter)
-            retval = scui_event_retval_over;
-        else {
-            scui_event_retval_t ret_2 = scui_window_event_dispatch(event);
-            retval = ret_2 != scui_event_retval_quit ? ret_2 : ret_1;
-        }
+        ret |= scui_widget_event_dispatch(event);
+        if ((ret & scui_event_retval_over) != 0 && event_filter)
+            return ret;
+        ret |= scui_window_event_dispatch(event);
+        if ((ret & scui_event_retval_over) != 0)
+            return ret;
     }
     
     /* 自定义事件响应<custom> */
-    if (event->type > scui_event_custom_s && event->type < scui_event_custom_e)
-    if (scui_event_cb_custom(event) == scui_event_retval_over)
-        return scui_event_retval_over;
+    if (event->type > scui_event_custom_s &&
+        event->type < scui_event_custom_e)
+        ret |= scui_event_cb_custom(event);
+    if ((ret & scui_event_retval_over) != 0)
+        return ret;
     
     /* 事件后响应回调 */
-    if (scui_event_cb_check(event) && scui_event_cb_after(event) == scui_event_retval_over)
-        return scui_event_retval_over;
+    if (scui_event_cb_check(event))
+        ret |= scui_event_cb_after(event);
+    if ((ret & scui_event_retval_over) != 0)
+        return ret;
     
-    if (retval != scui_event_retval_quit)
-        return retval;
+    if (ret != scui_event_retval_quit)
+        return ret;
     
     /* 参考事件区间 */
     SCUI_LOG_ERROR("scui_event_sched_s:%u", scui_event_sched_s);
