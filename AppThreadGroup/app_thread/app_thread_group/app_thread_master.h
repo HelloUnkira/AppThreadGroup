@@ -9,11 +9,11 @@ typedef app_sys_pipe_pkg_t app_thread_package_t;
 typedef enum {
     app_thread_package_priority_none            = 0x00,
     app_thread_package_priority_default         = app_thread_package_priority_none,
-    app_thread_package_priority_lowest          = 0x00,
-    app_thread_package_priority_normal_below    = 0x0F,
-    app_thread_package_priority_normal          = 0x8F,
-    app_thread_package_priority_normal_above    = 0xF0,
-    app_thread_package_priority_highest         = 0xFF,
+    app_thread_package_priority_lowest          = 0x01,
+    app_thread_package_priority_highest         = 0xFE,
+    app_thread_package_priority_normal          = 0xFF / 2,
+    app_thread_package_priority_normal_below    = app_thread_package_priority_normal - 0x0F,
+    app_thread_package_priority_normal_above    = app_thread_package_priority_normal + 0x0F,
     app_thread_package_priority_real_time       = 0xFF,
 } app_thread_package_priority_t;
 

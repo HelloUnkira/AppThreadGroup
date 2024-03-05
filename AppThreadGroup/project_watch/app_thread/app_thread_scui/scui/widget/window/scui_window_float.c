@@ -93,7 +93,7 @@ void scui_window_float_anima_ready(void *instance)
         (scui_window_float.pos == scui_event_pos_r && point.x == +clip.w) ||
         (scui_window_float.pos == scui_event_pos_d && point.y == +clip.h)) {
          scui_window_active(scui_window_float.main);
-         scui_widget_hide_async(handle);
+         scui_widget_hide_delay(handle);
     }
     
     if (scui_window_float.anima != SCUI_HANDLE_INVALID) {
@@ -357,6 +357,7 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_event_retval_t ret = scui_event_retval_quit;
+    
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);

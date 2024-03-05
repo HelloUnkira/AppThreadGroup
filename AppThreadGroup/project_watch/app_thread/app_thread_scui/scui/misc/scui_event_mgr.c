@@ -111,6 +111,23 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     SCUI_ASSERT(scui_event_cb_after  != NULL);
     SCUI_ASSERT(scui_event_cb_custom != NULL);
     
+    /* 特殊系统事件处理 */
+    /* 部分内部事件不允许正常控件监督流程 */
+    /* 优先则走系统调度管理流程 */
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        scui_anima_update();
+        break;
+    case scui_event_show_delay:
+        scui_widget_show(event->handle);
+        return;
+    case scui_event_hide_delay:
+        scui_widget_hide(event->handle);
+        return;
+    default:
+        break;
+    }
+    
     /* 系统事件只发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
         event->object  = scui_window_active_curr();
@@ -122,8 +139,7 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     }
     
     /* 事件前响应回调 */
-    if (scui_event_cb_check(event) &&
-        scui_event_cb_before(event) == scui_event_retval_over)
+    if (scui_event_cb_check(event) && scui_event_cb_before(event) == scui_event_retval_over)
         return scui_event_retval_over;
     
     /* 系统事件响应 */
@@ -155,8 +171,7 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
         return scui_event_retval_over;
     
     /* 事件后响应回调 */
-    if (scui_event_cb_check(event) &&
-        scui_event_cb_after(event) == scui_event_retval_over)
+    if (scui_event_cb_check(event) && scui_event_cb_after(event) == scui_event_retval_over)
         return scui_event_retval_over;
     
     if (retval != scui_event_retval_quit)

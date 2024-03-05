@@ -32,7 +32,7 @@ static bool scui_event_sort(scui_list_dln_t *node1, scui_list_dln_t *node2)
 {
     scui_event_t *event1 = scui_own_ofs(scui_event_t, dl_node, node1);
     scui_event_t *event2 = scui_own_ofs(scui_event_t, dl_node, node2);
-    return event1->priority >= event2->priority;
+    return event1->priority > event2->priority;
 }
 
 /*@brief 事件包匹配函数
@@ -77,6 +77,9 @@ void scui_event_enqueue(scui_event_t *event)
         if (event_new != NULL) {
             memcpy(event_new, event, sizeof(scui_event_t));
             scui_list_dln_reset(&event_new->dl_node);
+            /* 优先级调整到中间,为常规优先级 */
+            if (event_new->priority == 0)
+                event_new->priority  = 0xFF / 2;
             /* 资源包加入到管道(优先队列) */
             if (event_new->priority == 0)
                 scui_list_dll_ainsert(&scui_event_queue.dl_list, NULL, &event_new->dl_node);

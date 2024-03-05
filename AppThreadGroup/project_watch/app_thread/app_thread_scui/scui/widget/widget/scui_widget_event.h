@@ -26,12 +26,12 @@ void scui_widget_hide(scui_handle_t handle);
 /*@brief 控件显示(时序异步)
  *@param handle 控件句柄
  */
-void scui_widget_show_async(scui_handle_t handle);
+void scui_widget_show_delay(scui_handle_t handle);
 
 /*@brief 控件隐藏(时序异步)
  *@param handle 控件句柄
  */
-void scui_widget_hide_async(scui_handle_t handle);
+void scui_widget_hide_delay(scui_handle_t handle);
 
 /*@brief 控件隐藏
  *@param handle 控件句柄

@@ -24,7 +24,7 @@ static bool app_sys_pipe_sort(app_sys_list_dln_t *node1, app_sys_list_dln_t *nod
 {
     app_sys_pipe_pkg_t *pkg1 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node1);
     app_sys_pipe_pkg_t *pkg2 = app_sys_own_ofs(app_sys_pipe_pkg_t, dl_node, node2);
-    return pkg1->priority >= pkg2->priority;
+    return pkg1->priority > pkg2->priority;
 }
 
 /*@brief 事件包匹配函数
@@ -97,6 +97,9 @@ int8_t app_sys_pipe_give(app_sys_pipe_t *pipe, app_sys_pipe_pkg_t *package)
         if (package_new != NULL) {
             memcpy(package_new, package, sizeof(app_sys_pipe_pkg_t));
             app_sys_list_dln_reset(&package_new->dl_node);
+            /* 优先级调整到中间,为常规优先级 */
+            if (package_new->priority == 0)
+                package_new->priority  = 0xFF / 2;
             /* 资源包加入到管道(优先队列) */
             if (package_new->priority == 0)
                 app_sys_list_dll_ainsert(&pipe->dl_list, NULL, &package_new->dl_node);

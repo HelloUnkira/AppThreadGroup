@@ -81,9 +81,10 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             } else
             /* 事件是move */
             if (dist_r != 0) {
-                event.type  = scui_event_ptr_move;
-                event.ptr_s = scui_indev_ptr.ptr_last;
-                event.ptr_e = point;
+                event.type   = scui_event_ptr_move;
+                event.absorb = scui_event_ptr_move_absorb,
+                event.ptr_s  = scui_indev_ptr.ptr_last;
+                event.ptr_e  = point;
                 SCUI_LOG_INFO("scui_event_ptr_move:%d", dist_r);
                 scui_event_notify(&event);
             }

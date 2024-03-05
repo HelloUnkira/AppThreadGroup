@@ -15,9 +15,9 @@ typedef enum {
     scui_event_focus_get,       /* 窗口焦点获取事件 */
     scui_event_focus_lost,      /* 窗口焦点失去事件 */
     scui_event_show,            /* 窗口显示事件 */
-    scui_event_show_async,      /* 窗口显示事件(重异步) */
     scui_event_hide,            /* 窗口隐藏事件 */
-    scui_event_hide_async,      /* 窗口隐藏事件(重异步) */
+    scui_event_show_delay,      /* 窗口显示事件(迟延到下一系统调度) */
+    scui_event_hide_delay,      /* 窗口隐藏事件(迟延到下一系统调度) */
     scui_event_draw,            /* 控件绘制事件 */
     scui_event_refr,            /* 界面刷新事件 */
     scui_event_sched_e,

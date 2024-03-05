@@ -143,12 +143,13 @@ void scui_widget_hide(scui_handle_t handle)
 /*@brief 控件显示(时序异步)
  *@param handle 控件句柄
  */
-void scui_widget_show_async(scui_handle_t handle)
+void scui_widget_show_delay(scui_handle_t handle)
 {
     scui_event_t event = {
-        .object = SCUI_HANDLE_SYSTEM,
-        .handle = scui_widget_root(handle),
-        .type   = scui_event_show_async,
+        .object   = SCUI_HANDLE_SYSTEM,
+        .type     = scui_event_show_delay,
+        //.priority = scui_event_priority_real_time,
+        .handle   = scui_widget_root(handle),
     };
     scui_event_notify(&event);
 }
@@ -156,12 +157,13 @@ void scui_widget_show_async(scui_handle_t handle)
 /*@brief 控件隐藏(时序异步)
  *@param handle 控件句柄
  */
-void scui_widget_hide_async(scui_handle_t handle)
+void scui_widget_hide_delay(scui_handle_t handle)
 {
     scui_event_t event = {
-        .object = SCUI_HANDLE_SYSTEM,
-        .handle = scui_widget_root(handle),
-        .type   = scui_event_hide_async,
+        .object   = SCUI_HANDLE_SYSTEM,
+        .type     = scui_event_hide_delay,
+        //.priority = scui_event_priority_real_time,
+        .handle   = scui_widget_root(handle),
     };
     scui_event_notify(&event);
 }
@@ -402,16 +404,6 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
-        /* 先处理总动画事件调度,在最开始之前 */
-        if (widget->parent == SCUI_HANDLE_INVALID) {
-            scui_anima_update();
-            /* 可能目标已经回收,此时不能继续 */
-            if (scui_handle_unmap(event->object))
-                return scui_event_retval_over;
-        }
-        /* 先冒泡自己 */
-        if (widget->style.anima_sched)
-            scui_widget_event_proc(event);
         /* 继续冒泡,继续下沉 */
         for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
@@ -419,6 +411,9 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_event_dispatch(event);
             }
         event->object = widget->myself;
+        /* 冒泡自己 */
+        if (widget->style.anima_sched)
+            scui_widget_event_proc(event);
         return scui_event_retval_over;
     }
     /*************************************************************************/
@@ -481,6 +476,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件ptr:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
+        SCUI_LOG_INFO("event %u", event->type);
         scui_event_retval_t ret = scui_event_retval_quit;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_handle_t child_num = widget->child_num;
@@ -523,6 +519,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件enc:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
+        SCUI_LOG_INFO("event %u", event->type);
         scui_event_retval_t ret = scui_event_retval_quit;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_handle_t child_num = widget->child_num;
@@ -545,6 +542,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件key:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
+        SCUI_LOG_INFO("event %u", event->type);
         scui_event_retval_t ret = scui_event_retval_quit;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_handle_t child_num = widget->child_num;
@@ -583,23 +581,6 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         event->object = widget->myself;
         /* 是否自己吸收处理(冒泡自己) */
         scui_widget_event_proc(event);
-        return scui_event_retval_keep;
-    }
-    /*************************************************************************/
-    /*异步调度:单次派发 **************************************************** */
-    /*************************************************************************/
-    if (event->type == scui_event_show_async) {
-        if (event->object != event->handle)
-            scui_widget_show(event->handle);
-        else
-            scui_widget_show_async(event->handle);
-        return scui_event_retval_keep;
-    }
-    if (event->type == scui_event_hide_async) {
-        if (event->object != event->handle)
-            scui_widget_hide(event->handle);
-        else
-            scui_widget_hide_async(event->handle);
         return scui_event_retval_keep;
     }
     /*************************************************************************/

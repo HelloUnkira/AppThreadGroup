@@ -17,11 +17,11 @@ typedef enum {
 typedef enum {
     scui_event_priority_none            = 0x00,
     scui_event_priority_default         = scui_event_priority_none,
-    scui_event_priority_lowest          = 0x00,
-    scui_event_priority_normal_below    = 0x0F,
-    scui_event_priority_normal          = 0x8F,
-    scui_event_priority_normal_above    = 0xF0,
-    scui_event_priority_highest         = 0xFF,
+    scui_event_priority_lowest          = 0x01,
+    scui_event_priority_highest         = 0xFE,
+    scui_event_priority_normal          = 0xFF / 2,
+    scui_event_priority_normal_below    = scui_event_priority_normal - 0x0F,
+    scui_event_priority_normal_above    = scui_event_priority_normal + 0x0F,
     scui_event_priority_real_time       = 0xFF,
 } scui_event_priority_t;
 
