@@ -148,7 +148,7 @@ void scui_window_mix_surface(void)
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         SCUI_ASSERT(scui_handle_remap(handle));
         
-        scui_widget_draw(handle, true);
+        scui_widget_draw(handle, NULL, true);
     }
 }
 

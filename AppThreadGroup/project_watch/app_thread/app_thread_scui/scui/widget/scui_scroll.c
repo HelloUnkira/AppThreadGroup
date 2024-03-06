@@ -75,7 +75,7 @@ void scui_scroll_layout(scui_handle_t handle)
     SCUI_ASSERT(widget->type == scui_widget_type_scroll);
     
     scroll->layout = true;
-    scui_widget_draw(handle, false);
+    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 滚动控件子控件位置调整

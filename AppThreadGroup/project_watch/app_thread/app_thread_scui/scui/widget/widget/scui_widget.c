@@ -285,12 +285,17 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 
 /*@brief 控件还原剪切域
  *@param widget  控件实例
+ *@param clip    剪切域
  *@param recurse 递归处理
  */
-void scui_widget_clip_reset(scui_widget_t *widget, bool recurse)
+void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
-    widget->clip_set.clip = widget->surface.clip;
+    
+    if (clip == NULL)
+        widget->clip_set.clip = widget->surface.clip;
+    else
+        scui_area_inter(&widget->clip_set.clip, &widget->surface.clip, clip);
     
     if (!recurse)
          return;
@@ -299,7 +304,7 @@ void scui_widget_clip_reset(scui_widget_t *widget, bool recurse)
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
             scui_handle_t handle = widget->child_list[idx];
             scui_widget_t *child = scui_handle_get(handle);
-            scui_widget_clip_reset(child, recurse);
+            scui_widget_clip_reset(child, clip, recurse);
         }
 }
 

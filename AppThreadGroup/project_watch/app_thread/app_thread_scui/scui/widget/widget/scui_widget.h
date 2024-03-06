@@ -155,9 +155,10 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse);
 
 /*@brief 控件还原剪切域
  *@param widget  控件实例
+ *@param clip    剪切域
  *@param recurse 递归处理
  */
-void scui_widget_clip_reset(scui_widget_t *widget, bool recurse);
+void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse);
 
 /*@brief 控件更新剪切域
  *@param widget 控件实例

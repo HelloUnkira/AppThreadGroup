@@ -64,7 +64,7 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     if (scui_widget_surface_only(widget))
         scui_widget_refr(handle, true);
     else
-        scui_widget_draw(handle, true);
+        scui_widget_draw(handle, NULL, true);
 }
 
 /*@brief 窗口浮动动画回调

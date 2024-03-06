@@ -89,7 +89,7 @@ void scui_window_jump_anima_start(void *instance)
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, true);
     else
-        scui_widget_draw(widget->myself, true);
+        scui_widget_draw(widget->myself, NULL, true);
 }
 
 /*@brief 窗口跳转动画回调
@@ -214,7 +214,7 @@ void scui_window_jump_anima_expired(void *instance)
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, true);
     else
-        scui_widget_draw(widget->myself, true);
+        scui_widget_draw(widget->myself, NULL, true);
 }
 
 /*@brief 窗口移动动画回调
@@ -340,7 +340,7 @@ void scui_window_move_anima_expired(void *instance)
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, true);
     else
-        scui_widget_draw(widget->myself, true);
+        scui_widget_draw(widget->myself, NULL, true);
 }
 
 /*@brief 窗口移动动画自动化

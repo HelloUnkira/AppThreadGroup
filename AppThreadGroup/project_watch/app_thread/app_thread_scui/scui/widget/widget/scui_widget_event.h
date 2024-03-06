@@ -3,9 +3,10 @@
 
 /*@brief 绘制控件
  *@param handle 控件句柄
+ *@param clip   剪切域
  *@param sync   同步绘制
  */
-void scui_widget_draw(scui_handle_t handle, bool sync);
+void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync);
 
 /*@brief 刷新控件
  *@param handle 控件句柄

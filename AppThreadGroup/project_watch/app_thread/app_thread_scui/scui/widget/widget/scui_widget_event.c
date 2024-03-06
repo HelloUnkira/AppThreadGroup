@@ -17,16 +17,34 @@ static bool scui_widget_draw_absorb(void *evt_old, void *evt_new)
 
 /*@brief 绘制控件
  *@param handle 控件句柄
+ *@param clip   剪切域
  *@param sync   同步绘制
  */
-void scui_widget_draw(scui_handle_t handle, bool sync)
+void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    scui_area_t clip_valid = widget->clip;
+    
+    if (clip != NULL) {
+        scui_area_t clip_adjust = *clip;
+        if (widget->parent != SCUI_HANDLE_INVALID &&
+            scui_widget_surface_only(widget)) {
+            scui_handle_t  handle_root = scui_widget_root(handle);
+            scui_widget_t *widget_root = scui_handle_get(handle_root);
+            SCUI_ASSERT(widget_root != NULL);
+            clip_adjust.x -= widget_root->clip.x;
+            clip_adjust.y -= widget_root->clip.y;
+        }
+        scui_area_t clip_inter = {0};
+        scui_area_inter(&clip_inter, &widget->clip, &clip_adjust);
+        clip_valid = clip_inter;
+    }
+    
     /* 只为当前控件及其子控件添加剪切域,但是绘制是从窗口开始的 */
-    scui_widget_clip_reset(widget, true);
+    scui_widget_clip_reset(widget, &clip_valid, true);
     scui_widget_clip_update(widget);
     
     scui_event_t event = {
@@ -93,7 +111,7 @@ void scui_widget_show(scui_handle_t handle)
     scui_event_notify(&event);
     
     bool only = scui_widget_surface_only(widget);
-    scui_widget_draw(widget->myself, only);
+    scui_widget_draw(widget->myself, NULL, only);
     
     /* 将该显示窗口加入到场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID)
@@ -130,7 +148,7 @@ void scui_widget_hide(scui_handle_t handle)
     /* 通知父窗口重绘 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         bool only = scui_widget_surface_only(widget);
-        scui_widget_draw(widget->parent, only);
+        scui_widget_draw(widget->parent, NULL, only);
     }
     
     /* 将该显示窗口移除出场景管理器中 */
@@ -458,7 +476,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
             ret |= scui_widget_event_draw(event);
             ret |= scui_widget_event_proc(event);
             /* 去除surface剪切域,因为已经绘制完毕 */
-            scui_widget_clip_reset(widget, false);
+            scui_widget_clip_clear(widget, false);
         }
         /* 如果需要继续冒泡,则继续下沉 */
         for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
