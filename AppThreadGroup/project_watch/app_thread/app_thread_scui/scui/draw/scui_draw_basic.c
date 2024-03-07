@@ -34,7 +34,8 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     scui_area_t *dst_area = &dst_surface->clip;
     
     scui_area_t draw_area = {0};
-    scui_area_inter(&draw_area, dst_area, dst_clip);
+    if (!scui_area_inter(&draw_area, dst_area, dst_clip))
+         return;
     
     SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
     SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
@@ -83,11 +84,14 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     SCUI_ASSERT(src_surface->alpha == scui_alpha_cover);
     
     scui_area_t *dst_area = &dst_surface->clip;
+    scui_area_t  dst_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&dst_clip_v, dst_area, dst_clip))
+         return;
+    
     scui_area_t *src_area = &src_surface->clip;
-    scui_area_t dst_clip_v = {0};   // v:vaild
-    scui_area_t src_clip_v = {0};   // v:vaild
-    scui_area_inter(&dst_clip_v, dst_area, dst_clip);
-    scui_area_inter(&src_clip_v, src_area, src_clip);
+    scui_area_t  src_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&src_clip_v, src_area, src_clip))
+         return;
     
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
@@ -131,11 +135,14 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     }
     /* 按俩个画布的透明度进行像素点混合 */
     scui_area_t *dst_area = &dst_surface->clip;
+    scui_area_t  dst_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&dst_clip_v, dst_area, dst_clip))
+         return;
+    
     scui_area_t *src_area = &src_surface->clip;
-    scui_area_t dst_clip_v = {0};   // v:vaild
-    scui_area_t src_clip_v = {0};   // v:vaild
-    scui_area_inter(&dst_clip_v, dst_area, dst_clip);
-    scui_area_inter(&src_clip_v, src_area, src_clip);
+    scui_area_t  src_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&src_clip_v, src_area, src_clip))
+         return;
     
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);

@@ -27,3 +27,12 @@ uint64_t scui_tick_cnt(void)
 {
     return scui_tick_elapse_cnt;
 }
+
+/*@brief 滴答器标记
+ *       标记程序某一个位置,差则为流逝滴答数,以us为单位
+ *@retval 标记值
+ */
+uint64_t scui_tick_mark(void)
+{
+    return 0;
+}

@@ -15,73 +15,82 @@
             "buffer":                       "true"
         },
         {
-            "widget.type":                  "scui_widget_type_custom",
+            "widget.type":                  "scui_widget_type_scroll",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
-            "widget.clip.x":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_1_C",
+            "widget.clip.x":                "SCUI_DRV_HOR_RES / 6",
+            "widget.clip.y":                "SCUI_DRV_VER_RES / 6",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES * 4 / 6",
+            "widget.clip.h":                "SCUI_DRV_VER_RES * 4 / 6",
+            "widget.myself":                "SCUI_UI_SCENE_1_SCROLL",
             "widget.parent":                "SCUI_UI_SCENE_1",
-            "widget.color.color.ch.a":      "0xFF",
+            "dir":                          "scui_event_dir_ver",
+            "pos":                          "scui_event_pos_c",
+            "space":                        "SCUI_DRV_VER_RES / 12",
+            "springback":                   "SCUI_DRV_VER_RES / 6",
+            "loop":                         "false"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_R",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
+            "widget.color.color.ch.r":      "0xFF"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_G",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
+            "widget.color.color.ch.g":      "0xFF"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_B",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
+            "widget.color.color.ch.b":      "0xFF"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_RG",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
+            "widget.color.color.ch.r":      "0xFF",
+            "widget.color.color.ch.g":      "0xFF"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_RB",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
+            "widget.color.color.ch.r":      "0xFF",
+            "widget.color.color.ch.b":      "0xFF"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_GB",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
             "widget.color.color.ch.g":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_1_c_event_proc"
+            "widget.color.color.ch.b":      "0xFF"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
-            "widget.clip.x":                "SCUI_DRV_VER_RES * 0 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_1_LU",
-            "widget.parent":                "SCUI_UI_SCENE_1",
-            "widget.color.color.ch.a":      "0xFF",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES / 4",
+            "widget.clip.h":                "SCUI_DRV_VER_RES / 4",
+            "widget.myself":                "SCUI_UI_SCENE_1_RGB",
+            "widget.parent":                "SCUI_UI_SCENE_1_SCROLL",
             "widget.color.color.ch.r":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_1_lu_event_proc"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
-            "widget.clip.x":                "SCUI_DRV_VER_RES * 2 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_1_RU",
-            "widget.parent":                "SCUI_UI_SCENE_1",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.r":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_1_ru_event_proc"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.x":                "SCUI_DRV_HOR_RES * 0 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES * 2 / 3",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_1_LD",
-            "widget.parent":                "SCUI_UI_SCENE_1",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_1_ld_event_proc"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.x":                "SCUI_DRV_HOR_RES * 2 / 3",
-            "widget.clip.y":                "SCUI_DRV_VER_RES * 2 / 3",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
-            "widget.myself":                "SCUI_UI_SCENE_1_RD",
-            "widget.parent":                "SCUI_UI_SCENE_1",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
-            "widget.event_cb":              "scui_ui_scene_1_rd_event_proc"
+            "widget.color.color.ch.g":      "0xFF",
+            "widget.color.color.ch.b":      "0xFF"
         }
     ]
 }

@@ -51,6 +51,17 @@
                 "anno":                         "custom是widget的别名",
                 "anno":                         "它不存在别的字段"
             }
+        },
+        {
+            "class": "scui_widget_type_scroll",
+            "maker": "scui_scroll_maker_t",
+            "field": {
+                "dir":                          "滚动方向",
+                "pos":                          "滚动停留",
+                "space":                        "控件间隙",
+                "springback":                   "回弹效果",
+                "loop":                         "滚动循环"
+            }
         }
     ]
 }

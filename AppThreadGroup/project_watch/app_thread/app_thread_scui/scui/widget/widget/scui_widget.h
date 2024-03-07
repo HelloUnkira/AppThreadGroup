@@ -147,6 +147,12 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child);
  */
 void scui_widget_child_del(scui_handle_t handle, scui_handle_t child);
 
+/*@brief 控件检查剪切域
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_clip_check(scui_widget_t *widget, bool recurse);
+
 /*@brief 控件清除剪切域
  *@param widget  控件实例
  *@param recurse 递归处理

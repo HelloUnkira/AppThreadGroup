@@ -86,6 +86,22 @@ bool scui_area_empty(scui_area_t *area)
     return (area->w <= 0 || area->h <= 0);
 }
 
+/*@brief 区域相等检查(area1 == area2)
+ *@param area1 区域
+ *@param area2 区域
+ *@retval 是否相等
+ */
+bool scui_area_equal(scui_area_t *area1, scui_area_t *area2)
+{
+    if (area1->x == area2->x &&
+        area1->y == area2->y &&
+        area1->w == area2->w &&
+        area1->h == area2->h)
+        return true;
+    
+    return false;
+}
+
 /*@brief 求区域交集(area = area1 & area2)
  *@param area  区域
  *@param area1 区域
@@ -185,8 +201,9 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
  *@param num   区域数量
  *@param area1 区域
  *@param area2 区域
+ *@retval 不为空
  */
-void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2)
+bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2)
 {
     *num = 0;
     scui_area_m_to_s(area1);
@@ -210,16 +227,16 @@ void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
     }
     /* 裁剪多余左部 */
     if (area1->x1 < area2->x1) {
-        area[*num].y1 = area1->y1;
-        area[*num].y2 = area1->y2;
+        area[*num].y1 = area2->y1;
+        area[*num].y2 = area2->y2;
         area[*num].x1 = area1->x1;
         area[*num].x2 = area2->x1 - 1;
         (*num)++;
     }
     /* 裁剪主域多余右部 */
     if (area1->x2 > area2->x2) {
-        area[*num].y1 = area1->y1;
-        area[*num].y2 = area1->y2;
+        area[*num].y1 = area2->y1;
+        area[*num].y2 = area2->y2;
         area[*num].x1 = area2->x2 + 1;
         area[*num].x2 = area1->x2;
         (*num)++;
@@ -230,6 +247,8 @@ void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
     
     for (uint8_t idx = 0; idx < *num; idx++)
         scui_area_s_to_m(&area[idx]);
+    
+    return *num != 0;
 }
 
 /*@brief 检查区域包含区域(area2包含area1)

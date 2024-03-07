@@ -41,11 +41,14 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     scui_surface_t *src_surface = &image_surface;
     
     scui_area_t *dst_area = &dst_surface->clip;
+    scui_area_t  dst_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&dst_clip_v, dst_area, dst_clip))
+         return;
+    
     scui_area_t *src_area = &image_clip;
-    scui_area_t dst_clip_v = {0};   // v:vaild
-    scui_area_t src_clip_v = {0};   // v:vaild
-    scui_area_inter(&dst_clip_v, dst_area, dst_clip);
-    scui_area_inter(&src_clip_v, src_area, src_clip);
+    scui_area_t  src_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&src_clip_v, src_area, src_clip))
+         return;
     
     scui_area_t draw_area = {
         .w = scui_min(dst_clip_v.w, src_clip_v.w),

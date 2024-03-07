@@ -27,8 +27,8 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
         scui_widget_t *widget_parent = scui_handle_get(widget->parent);
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_inter = {0};
-        scui_area_inter(&clip_inter, &widget->surface.clip, &widget_parent->surface.clip);
-        widget->surface.clip = clip_inter;
+        if (scui_area_inter(&clip_inter, &widget->surface.clip, &widget_parent->surface.clip))
+            widget->surface.clip = clip_inter;
     }
     
     if (!recurse)
@@ -86,6 +86,9 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_gradient_t
     scui_surface_t *dst_surface = &widget->surface;
     scui_area_t     dst_clip    = {0};
     
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
     scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -119,6 +122,9 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t  handle
     if (src_clip == NULL)
         src_clip  = &image_clip;
     
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
     
@@ -127,7 +133,8 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t  handle
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         dst_clip = unit->clip;
         scui_area_t src_area = {0};
-        scui_area_inter(&src_area, src_clip, &unit->clip);
+        if (!scui_area_inter(&src_area, src_clip, &unit->clip))
+             continue;
         scui_draw_image(dst_surface, &dst_clip, &image_unit, &src_area, color, widget->surface.alpha);
     }
     

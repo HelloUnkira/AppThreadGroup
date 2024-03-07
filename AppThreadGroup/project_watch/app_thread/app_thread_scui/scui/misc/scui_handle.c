@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -24,6 +24,7 @@ scui_handle_table_t * scui_handle_table_find(scui_handle_t handle)
         if (scui_betw_lx(handle, betw_l, betw_r))
             return &scui_handle_table[ofs];
     }
+    
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return NULL;
 }
@@ -93,6 +94,7 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
         if (scui_betw_lx(handle, betw_l, betw_r))
             return scui_handle_table[ofs].offset;
     }
+    
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return SCUI_HANDLE_INVALID;
 }
@@ -107,6 +109,7 @@ scui_handle_t scui_handle_find(void)
             scui_handle_table_share[idx]  = (void *)(~(uintptr_t)NULL);
             return SCUI_HANDLE_SHARE_OFFSET + idx;
         }
+    
     /* 句柄实例不足 */
     SCUI_ASSERT(false);
     return SCUI_HANDLE_INVALID;
@@ -146,6 +149,7 @@ void * scui_handle_get(scui_handle_t handle)
             return scui_handle_table[ofs].source[idx];
         }
     }
+    
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return NULL;
 }
@@ -182,6 +186,7 @@ bool scui_handle_set(scui_handle_t handle, void *source)
             }
         }
     }
+    
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return false;
 }
@@ -204,8 +209,18 @@ bool scui_handle_remap(scui_handle_t handle)
             if (scui_handle_table[ofs].source_remap != NULL)
             if (scui_handle_table[ofs].source_remap[idx] != NULL)
                 return true;
+            return false;
         }
     }
+    /* 检查是否是动态句柄中的句柄 */
+    scui_handle_t betw_l = SCUI_HANDLE_SHARE_OFFSET;
+    scui_handle_t betw_r = SCUI_HANDLE_SHARE_OFFSET + SCUI_HANDLE_SHARE_LIMIT;
+    if (scui_betw_lx(handle, betw_l, betw_r))
+        return true;
+    
+    if (handle == SCUI_HANDLE_INVALID)
+        return false;
+    SCUI_LOG_ERROR("handle %u is unknown", handle);
     return false;
 }
 

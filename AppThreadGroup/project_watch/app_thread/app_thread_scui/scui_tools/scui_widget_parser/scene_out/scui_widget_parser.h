@@ -37,11 +37,14 @@ typedef enum {
 	SCUI_UI_SCENE_HOME_LD,
 	SCUI_UI_SCENE_HOME_RD,
 	SCUI_UI_SCENE_1,
-	SCUI_UI_SCENE_1_C,
-	SCUI_UI_SCENE_1_LU,
-	SCUI_UI_SCENE_1_RU,
-	SCUI_UI_SCENE_1_LD,
-	SCUI_UI_SCENE_1_RD,
+	SCUI_UI_SCENE_1_SCROLL,
+	SCUI_UI_SCENE_1_R,
+	SCUI_UI_SCENE_1_G,
+	SCUI_UI_SCENE_1_B,
+	SCUI_UI_SCENE_1_RG,
+	SCUI_UI_SCENE_1_RB,
+	SCUI_UI_SCENE_1_GB,
+	SCUI_UI_SCENE_1_RGB,
 	SCUI_UI_SCENE_2,
 	SCUI_UI_SCENE_2_C,
 	SCUI_UI_SCENE_2_LU,
@@ -74,6 +77,6 @@ typedef enum {
 	SCUI_UI_SCENE_6_RD,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[66];
+extern const void * scui_widget_parser_table[69];
 
 #endif

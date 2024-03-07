@@ -24,36 +24,32 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_handle_t  handle_root = scui_widget_root(handle);
+    scui_widget_t *widget_root = scui_handle_get(handle_root);
     SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget_root != NULL);
     
     scui_area_t clip_valid = widget->clip;
     
     if (clip != NULL) {
-        scui_area_t clip_adjust = *clip;
-        if (widget->parent != SCUI_HANDLE_INVALID &&
-            scui_widget_surface_only(widget)) {
-            scui_handle_t  handle_root = scui_widget_root(handle);
-            scui_widget_t *widget_root = scui_handle_get(handle_root);
-            SCUI_ASSERT(widget_root != NULL);
-            clip_adjust.x -= widget_root->clip.x;
-            clip_adjust.y -= widget_root->clip.y;
-        }
         scui_area_t clip_inter = {0};
-        scui_area_inter(&clip_inter, &widget->clip, &clip_adjust);
-        clip_valid = clip_inter;
+        if (scui_area_inter(&clip_inter, &widget->clip, clip))
+            clip_valid = clip_inter;
     }
     
-    /* 只为当前控件及其子控件添加剪切域,但是绘制是从窗口开始的 */
-    scui_widget_clip_reset(widget, &clip_valid, true);
-    scui_widget_clip_update(widget);
+    /* 为所有控件及其子控件添加指定剪切域 */
+    // scui_widget_clip_check(widget_root, true);
+    scui_widget_clip_reset(widget_root, &clip_valid, true);
+    // scui_widget_clip_check(widget_root, true);
+    scui_widget_clip_update(widget_root);
+    // scui_widget_clip_check(widget_root, true);
     
     scui_event_t event = {
+        .object = handle_root,
         .type   = scui_event_draw,
-        .object = scui_widget_root(widget->myself),
         .absorb = scui_widget_draw_absorb,
+        .style  = sync ? scui_event_style_sync : 0,
     };
-    if (sync)
-        event.style = scui_event_style_sync;
     scui_event_notify(&event);
 }
 
@@ -73,15 +69,17 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
+    scui_handle_t  handle_root = scui_widget_root(handle);
+    scui_widget_t *widget_root = scui_handle_get(handle_root);
     SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget_root != NULL);
     
     scui_event_t event = {
+        .object = handle_root,
         .type   = scui_event_refr,
-        .object = scui_widget_root(widget->myself),
         .absorb = scui_widget_refr_absorb,
+        .style  = sync ? scui_event_style_sync : 0,
     };
-    if (sync)
-        event.style = scui_event_style_sync;
     scui_event_notify(&event);
 }
 
@@ -91,16 +89,23 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 void scui_widget_show(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
-    scui_widget_cb_create(handle);
     
-    if (scui_widget_style_is_show(handle)) {
+    if (scui_handle_remap(handle) &&
+        scui_widget_style_is_show(handle)) {
         SCUI_LOG_DEBUG("is show");
         return;
     }
+    
+    scui_widget_cb_create(handle);
+    
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     /* 设置控件状态为显示 */
     widget->style.state = true;
+    
+    /* 将该显示窗口加入到场景管理器中 */
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_window_list_add(widget->myself);
     
     SCUI_LOG_DEBUG("");
     scui_event_t event = {
@@ -112,10 +117,6 @@ void scui_widget_show(scui_handle_t handle)
     
     bool only = scui_widget_surface_only(widget);
     scui_widget_draw(widget->myself, NULL, only);
-    
-    /* 将该显示窗口加入到场景管理器中 */
-    if (widget->parent == SCUI_HANDLE_INVALID)
-        scui_window_list_add(widget->myself);
 }
 
 /*@brief 控件隐藏
@@ -125,10 +126,8 @@ void scui_widget_hide(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
-    if (scui_handle_unmap(handle))
-        return;
-    
-    if (scui_widget_style_is_hide(handle)) {
+    if (scui_handle_unmap(handle) ||
+        scui_widget_style_is_hide(handle)) {
         SCUI_LOG_DEBUG("is hide");
         return;
     }
@@ -166,7 +165,7 @@ void scui_widget_show_delay(scui_handle_t handle)
     scui_event_t event = {
         .object   = SCUI_HANDLE_SYSTEM,
         .type     = scui_event_show_delay,
-        //.priority = scui_event_priority_real_time,
+        .priority = scui_event_priority_real_time,
         .handle   = scui_widget_root(handle),
     };
     scui_event_notify(&event);
@@ -180,7 +179,7 @@ void scui_widget_hide_delay(scui_handle_t handle)
     scui_event_t event = {
         .object   = SCUI_HANDLE_SYSTEM,
         .type     = scui_event_hide_delay,
-        //.priority = scui_event_priority_real_time,
+        .priority = scui_event_priority_real_time,
         .handle   = scui_widget_root(handle),
     };
     scui_event_notify(&event);
@@ -269,7 +268,7 @@ void scui_widget_event_find(scui_handle_t handle, scui_widget_event_t *event)
         event_old = scui_own_ofs(scui_widget_event_t, dl_node, node);
         if (event->order == event_old->order &&
            ((event_old->event == scui_event_sched_all && event_sched) ||
-            (event_old->event == scui_event_key_all && event_ptr) ||
+            (event_old->event == scui_event_ptr_all && event_ptr) ||
             (event_old->event == scui_event_enc_all && event_enc) ||
             (event_old->event == scui_event_key_all && event_key) ||
             (event_old->event == scui_event_custom_all && event_custom))) {
@@ -582,14 +581,25 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     /*显示事件:单次派发 **************************************************** */
     /*************************************************************************/
-    if (event->type == scui_event_show) {
-        scui_widget_event_proc(event);
-        return scui_event_retval_keep;
+    if (event->type == scui_event_focus_get ||
+        event->type == scui_event_show) {
+        /* 是否自己吸收处理(冒泡自己) */
+        ret |=scui_widget_event_proc(event);
+        /* 如果需要继续冒泡,则继续下沉 */
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
+                event->object = widget->child_list[idx];
+                scui_widget_event_dispatch(event);
+            }
+        event->object = widget->myself;
+        ret |= scui_event_retval_keep;
+        return ret;
     }
     /*************************************************************************/
     /*隐藏事件:流程派发 **************************************************** */
     /*************************************************************************/
-    if (event->type == scui_event_hide) {
+    if (event->type == scui_event_focus_lost ||
+        event->type == scui_event_hide) {
         /* 如果需要继续冒泡,则继续下沉 */
         for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
@@ -606,6 +616,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
     /* 其他未列举事件走默认派发流程,单次派发 */
+    SCUI_LOG_WARN("unknown dispatch");
     event->object = scui_widget_root(widget->myself);
     ret |= scui_widget_event_proc(event);
     event->object = widget->myself;

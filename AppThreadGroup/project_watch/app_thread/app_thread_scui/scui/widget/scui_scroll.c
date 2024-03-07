@@ -21,6 +21,10 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_scroll_t));
     memset(scroll, 0, sizeof(scui_scroll_t));
     
+    /* 滚动控件必须设置事件响应标记 */
+    SCUI_ASSERT(maker->widget.style.indev_ptr);
+    SCUI_ASSERT(maker->widget.style.indev_enc);
+    
     /* 创建基础控件实例 */
     scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
     
@@ -181,11 +185,6 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
 {
     scui_event_retval_t ret = scui_event_retval_quit;
     
-    /* 仅指定事件可触发布局更新 */
-    if (event->type != scui_event_draw ||
-        event->type != scui_event_focus_get)
-        return ret;
-    
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
     scui_scroll_t *scroll = (void *)widget;
@@ -193,6 +192,8 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
     
     /* 仅标记布局触发布局更新 */
     if (scroll->layout)
+        scroll->layout = false;
+    else
         return ret;
     
     /* 计算布局内容 */
@@ -217,7 +218,8 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
                     clip_child.y -= widget->clip.y;
                 }
                 scui_area_t clip_inter = {0};
-                scui_area_inter(&clip_inter, &clip_child, &clip);
+                scui_area_merge(&clip_inter, &clip_child, &clip);
+                clip = clip_inter;
             }
         scroll->clip = clip;
         return ret;
@@ -248,10 +250,13 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
             scui_widget_repos(handle, &pos);
             /* 迭代到下一子控件 */
             if (scroll->dir == scui_event_dir_hor)
-                pos.x += widget->clip.w + scroll->space;
+                pos.x += child->clip.w + scroll->space;
             if (scroll->dir == scui_event_dir_ver)
-                pos.y += widget->clip.y + scroll->space;
+                pos.y += child->clip.h + scroll->space;
         }
+    
+    if (scui_widget_style_is_show(handle))
+        scui_widget_draw(handle, NULL, false);
     
     return ret;
 }
@@ -266,7 +271,7 @@ scui_event_retval_t scui_scroll_event(scui_event_t *event)
     scui_event_retval_t ret = scui_event_retval_quit;
     
     switch (event->type) {
-    case scui_event_draw:
+    case scui_event_show:
         ret |= scui_scroll_update_layout(event);
         break;
     case scui_event_focus_get:

@@ -4,7 +4,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -26,6 +26,22 @@ bool scui_clip_empty(scui_clip_set_t *clip_set)
     return false;
 }
 
+/*@brief 检查剪切域
+ *@param clip_set 剪切域集合
+ */
+void scui_clip_check(scui_clip_set_t *clip_set)
+{
+    scui_clip_set_t  *set  = clip_set;
+    scui_clip_unit_t *unit = NULL;
+    
+    scui_list_dll_btra(&set->dl_list, node) {
+        unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        SCUI_LOG_WARN("<%d, %d, %d, %d>",
+                      unit->clip.x, unit->clip.y,
+                      unit->clip.w, unit->clip.h);
+    }
+}
+
 /*@brief 清空剪切域
  *@param clip_set 剪切域集合
  */
@@ -44,8 +60,8 @@ void scui_clip_clear(scui_clip_set_t *clip_set)
         if (unit != NULL) {
             scui_list_dll_remove(&set->dl_list, &unit->dl_node);
             SCUI_MEM_FREE(unit);
-            unit = NULL;
         }
+        unit = NULL;
     }
 }
 
@@ -55,14 +71,19 @@ void scui_clip_clear(scui_clip_set_t *clip_set)
  */
 bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
 {
-    SCUI_ASSERT(!scui_area_empty(&clip_set->clip));
-    scui_clip_set_t  *set  = clip_set;
+    scui_clip_set_t   *set = clip_set;
     scui_clip_unit_t *unit = NULL;
-    
     scui_area_t clip_valid = {0};
-    scui_area_inter(&clip_valid, &clip_set->clip, clip);
-    if (scui_area_empty(&clip_valid))
+    
+    if (scui_area_empty(&clip_set->clip))
         return false;
+    if (scui_area_empty(clip))
+        return false;
+    
+    SCUI_LOG_DEBUG("<%d, %d, %d, %d>", clip->x, clip->y, clip->w, clip->h);
+    
+    if (!scui_area_inter(&clip_valid, &clip_set->clip, clip))
+         return false;
     
     while (true) {
         /* 如果剪切域可以合并, 合并后的剪切域要继续检查 */
@@ -98,16 +119,21 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
  */
 bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
 {
-    SCUI_ASSERT(!scui_area_empty(&clip_set->clip));
-    scui_clip_set_t  *set  = clip_set;
+    scui_clip_set_t   *set = clip_set;
     scui_clip_unit_t *unit = NULL;
+    scui_area_t clip_valid = {0};
     scui_area_t clip4[4] = {0};
     uint8_t clip4_num = 0;
     
-    scui_area_t clip_valid = {0};
-    scui_area_inter(&clip_valid, &clip_set->clip, clip);
-    if (scui_area_empty(&clip_valid))
+    if (scui_area_empty(&clip_set->clip))
         return false;
+    if (scui_area_empty(clip))
+        return false;
+    
+    SCUI_LOG_DEBUG("<%d, %d, %d, %d>", clip->x, clip->y, clip->w, clip->h);
+    
+    if (!scui_area_inter(&clip_valid, &clip_set->clip, clip))
+         return false;
     
     while (true) {
         /* 如果剪切域可以合并, 合并后的剪切域要继续检查 */
@@ -117,6 +143,9 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
             scui_area_t clip_inter = {0};
             if (scui_area_inter(&clip_inter, &unit->clip, &clip_valid)) {
                 scui_area_differ(clip4, &clip4_num, &unit->clip, &clip_inter);
+                /* 如果求不到余集,那就是全子集 */
+                SCUI_ASSERT(clip4_num != 0 || (clip4_num == 0 &&
+                            scui_area_equal(&unit->clip, &clip_inter)));
                 break;
             }
             unit = NULL;
@@ -124,7 +153,6 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
         if (unit == NULL)
             break;
         if (unit != NULL) {
-            SCUI_ASSERT(clip4_num != 0);
             scui_list_dll_remove(&set->dl_list, &unit->dl_node);
             SCUI_MEM_FREE(unit);
             unit = NULL;

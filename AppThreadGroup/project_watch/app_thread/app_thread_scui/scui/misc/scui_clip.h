@@ -17,6 +17,11 @@ typedef struct {
  */
 bool scui_clip_empty(scui_clip_set_t *clip_set);
 
+/*@brief 检查剪切域
+ *@param clip_set 剪切域集合
+ */
+void scui_clip_check(scui_clip_set_t *clip_set);
+
 /*@brief 清空剪切域
  *@param clip_set 剪切域集合
  */

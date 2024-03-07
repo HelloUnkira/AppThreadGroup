@@ -67,6 +67,13 @@ inline void scui_area_s_to_m(scui_area_t *area);
  */
 bool scui_area_empty(scui_area_t *area);
 
+/*@brief 区域相等检查(area1 == area2)
+ *@param area1 区域
+ *@param area2 区域
+ *@retval 是否相等
+ */
+bool scui_area_equal(scui_area_t *area1, scui_area_t *area2);
+
 /*@brief 求区域交集(area = area1 & area2)
  *@param area  区域
  *@param area1 区域
@@ -97,8 +104,9 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
  *@param num   区域数量
  *@param area1 区域
  *@param area2 区域
+ *@retval 不为空
  */
-void scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2);
+bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2);
 
 /*@brief 检查区域包含区域(area2包含area1)
  *@param area1 区域

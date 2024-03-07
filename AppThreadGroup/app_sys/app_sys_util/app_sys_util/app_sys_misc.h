@@ -59,13 +59,35 @@ bool   app_sys_align_check(void *addr, uintptr_t align);
  */
 #define app_sys_arr_len(arr)    (sizeof(arr) / sizeof((arr)[0]))
 
+/*@brief 数组成员最小值
+ */
+#define app_sys_arr_min(arr, len, min)          \
+do {                                            \
+    min = arr[0];                               \
+    for (uint32_t idx = 0; idx < len; idx++)    \
+        if (min > arr[idx])                     \
+            min = arr[idx];                     \
+} while (0)                                     \
+
+/*@brief 数组成员最大值
+ */
+#define app_sys_arr_max(arr, len, max)          \
+do {                                            \
+    max = arr[0];                               \
+    for (uint32_t idx = 0; idx < len; idx++)    \
+        if (max < arr[idx])                     \
+            max = arr[idx];                     \
+} while (0)                                     \
+
 /*@brief 数组拷贝
- *       在C中的数组是二等公民
- *       通过结构体包装就可以获得一等公民的效果
  */
 #define app_sys_arr_cpy(arr1, arr2, len)    \
     for (uint32_t idx = 0; idx < len; arr1[idx] = arr2[idx], idx++)
 
+/*@brief 数组拷贝
+ *       在C中的数组是二等公民
+ *       通过结构体包装就可以获得一等公民的效果
+ */
 #define app_sys_arr_cpy_s(type, len, arr1, arr2)        \
 do {                                                    \
     typedef struct {type arr[len];} arr_t;              \
