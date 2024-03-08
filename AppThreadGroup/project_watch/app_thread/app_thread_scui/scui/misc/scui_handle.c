@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        3   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -150,7 +150,7 @@ void * scui_handle_get(scui_handle_t handle)
         }
     }
     
-    SCUI_LOG_ERROR("handle %u is unknown", handle);
+    SCUI_LOG_WARN("handle %u is unknown", handle);
     return NULL;
 }
 
@@ -187,7 +187,7 @@ bool scui_handle_set(scui_handle_t handle, void *source)
         }
     }
     
-    SCUI_LOG_ERROR("handle %u is unknown", handle);
+    SCUI_LOG_WARN("handle %u is unknown", handle);
     return false;
 }
 
@@ -197,6 +197,8 @@ bool scui_handle_set(scui_handle_t handle, void *source)
  */
 bool scui_handle_remap(scui_handle_t handle)
 {
+    if (handle == SCUI_HANDLE_INVALID)
+        return false;
     /* 检查是否是静态句柄表中的句柄 */
     for (uint32_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
@@ -218,8 +220,6 @@ bool scui_handle_remap(scui_handle_t handle)
     if (scui_betw_lx(handle, betw_l, betw_r))
         return true;
     
-    if (handle == SCUI_HANDLE_INVALID)
-        return false;
     SCUI_LOG_ERROR("handle %u is unknown", handle);
     return false;
 }

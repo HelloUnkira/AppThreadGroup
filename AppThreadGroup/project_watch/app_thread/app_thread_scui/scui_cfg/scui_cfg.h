@@ -38,8 +38,9 @@
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN   (300)   /* 连续点击最大间隔 */
-#define SCUI_INDEV_PTR_FLING_SPAN   (2)     /* fling检测(数字越小越敏感):time / distance < span */
-#define SCUI_INDEV_PTR_FLING_CNT    (8)     /* 开始可能超出fling检测 */
+#define SCUI_INDEV_PTR_FLING_DIST   (1024)  /* fling检测: 放大系数 */
+#define SCUI_INDEV_PTR_FLING_RATE   (256)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
+#define SCUI_INDEV_PTR_FLING_CNT    (3)     /* fling检测: 敏感度调整(允许掠过部分move) */
 
 /* 输入设备:key */
 #define SCUI_INDEV_KEY_LIMIT        (10)

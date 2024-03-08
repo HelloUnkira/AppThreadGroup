@@ -30,8 +30,8 @@ typedef enum {
 /* scui:tick */
 #define SCUI_SCHED_TICK_INC     1
 /* scui:exec */
-#define SCUI_SCHED_TICK_EXEC    (1000 / 60)     //60HZ
+#define SCUI_SCHED_TICK_EXEC    (1000 / 60)     // 60HZ
 /* scui:drv check */
-#define SCUI_SCHED_DRV_EVENT    5
+#define SCUI_SCHED_DRV_EVENT    (1000 / 60)     // 60HZ
 
 #endif
