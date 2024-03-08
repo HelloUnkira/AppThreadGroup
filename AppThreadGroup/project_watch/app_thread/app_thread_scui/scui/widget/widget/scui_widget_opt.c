@@ -161,10 +161,12 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
     SCUI_ASSERT(widget != NULL);
     
     widget->surface.alpha = alpha;
+    
+    /* 待定中 */
+    return;
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)
-            scui_widget_alpha_set(widget->child_list[idx], alpha);
+    scui_widget_child_list_btra(widget, idx)
+        scui_widget_alpha_set(widget->child_list[idx], alpha);
 }
 
 /*@brief 控件图片设置

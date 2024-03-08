@@ -45,6 +45,19 @@ typedef struct {
     scui_widget_order_t     order;      /* 控件事件回调响应优先级 */
 } scui_widget_event_t;
 
+/*@brief 控件创建回调
+ *@brief 控件销毁回调
+ */
+typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
+typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
+
+/*@brief 控件处理函数映射表
+ */
+typedef struct {
+    scui_widget_cb_create_t  create;
+    scui_widget_cb_destroy_t destroy;
+} scui_widget_cb_t;
+
 /*@brief 控件基础信息:
  *       控件只处理最基础绘制(背景)
  *剪切域:
@@ -89,20 +102,15 @@ typedef struct {
 } scui_widget_maker_t;
 #pragma pack(pop)
 
-/*@brief 控件创建回调
- */
-typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
+/* 控件孩子列表宏迭代器(略过无效控件)(backward traverse) */
+#define scui_widget_child_list_btra(widget, idx)                            \
+    for (int32_t idx = 0; idx < (int32_t)widget->child_num; idx++)          \
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
-/*@brief 控件销毁回调
- */
-typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
-
-/*@brief 控件处理函数映射表
- */
-typedef struct {
-    scui_widget_cb_create_t  create;
-    scui_widget_cb_destroy_t destroy;
-} scui_widget_cb_t;
+/* 控件孩子列表宏迭代器(略过无效控件)(forward traverse) */
+#define scui_widget_child_list_ftra(widget, idx)                            \
+    for (int32_t idx = (int32_t)widget->child_num - 1; idx > 0; idx--)      \
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
 /*@brief 查找控件映射表
  *@param type 控件类型
@@ -171,17 +179,23 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
  */
 void scui_widget_clip_update(scui_widget_t *widget);
 
-/*@brief 控件坐标更新
- *@param handle 控件句柄
- *@param point  坐标点
- */
-void scui_widget_repos(scui_handle_t handle, scui_point_t *point);
-
 /*@brief 控件尺寸更新
  *@param handle 控件句柄
  *@param width  宽度
  *@param height 高度
  */
 void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
+
+/*@brief 控件坐标更新
+ *@param handle 控件句柄
+ *@param point  坐标点
+ */
+void scui_widget_repos(scui_handle_t handle, scui_point_t *point);
+
+/*@brief 控件移动子控件
+ *@param handle 控件句柄
+ *@param child  控件子控件句柄
+ */
+void scui_widget_reofs_children(scui_handle_t handle, scui_point_t *offset);
 
 #endif

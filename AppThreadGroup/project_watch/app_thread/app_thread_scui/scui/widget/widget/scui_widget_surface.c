@@ -34,12 +34,11 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     if (!recurse)
          return;
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
-            scui_handle_t handle = widget->child_list[idx];
-            scui_widget_t *child = scui_handle_get(handle);
-            scui_widget_surface_refr(child, recurse);
-        }
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_surface_refr(child, recurse);
+    }
 }
 
 /*@brief 控件画布为独立画布
@@ -64,12 +63,11 @@ void scui_widget_surface_change(scui_widget_t *widget, scui_surface_t *surface)
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     widget->surface.pixel = surface->pixel;
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
-            scui_handle_t handle = widget->child_list[idx];
-            scui_widget_t *child = scui_handle_get(handle);
-            scui_widget_surface_change(child, surface);
-        }
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_surface_change(child, surface);
+    }
 }
 
 /*-------------------------------------------------*

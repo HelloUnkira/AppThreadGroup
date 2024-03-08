@@ -109,7 +109,7 @@ void scui_widget_show(scui_handle_t handle)
     
     SCUI_LOG_DEBUG("");
     scui_event_t event = {
-        .object = scui_widget_root(widget->myself),
+        .object = widget->myself,
         .type   = scui_event_show,
         .style  = scui_event_style_sync,
     };
@@ -138,7 +138,7 @@ void scui_widget_hide(scui_handle_t handle)
     
     SCUI_LOG_DEBUG("");
     scui_event_t event = {
-        .object = scui_widget_root(widget->myself),
+        .object = widget->myself,
         .type   = scui_event_hide,
         .style  = scui_event_style_sync,
     };
@@ -195,9 +195,8 @@ void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID &&
-            widget->child_list[idx] != child)
+    scui_widget_child_list_btra(widget, idx)
+        if (widget->child_list[idx] != child)
             scui_widget_hide(widget->child_list[idx]);
 }
 
@@ -214,9 +213,8 @@ void scui_widget_mirror(scui_handle_t handle)
     SCUI_LOG_ERROR("not finish yet");
     return;
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
-        if (widget->child_list[idx] == SCUI_HANDLE_INVALID)
-            continue;
+    scui_widget_child_list_btra(widget, idx) {
+        
         scui_handle_t  handle_child = widget->child_list[idx];
         scui_widget_t *widget_child = scui_handle_get(handle);
         scui_point_t    point_child = {0};
@@ -418,11 +416,10 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
         /* 继续冒泡,继续下沉 */
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
-                event->object = widget->child_list[idx];
-                ret |= scui_widget_event_dispatch(event);
-            }
+        scui_widget_child_list_btra(widget, idx) {
+            event->object = widget->child_list[idx];
+            ret |= scui_widget_event_dispatch(event);
+        }
         event->object = widget->myself;
         ret |= scui_event_retval_keep;
         /* 冒泡自己 */
@@ -478,11 +475,10 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_clip_clear(widget, false);
         }
         /* 如果需要继续冒泡,则继续下沉 */
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
-                event->object = widget->child_list[idx];
-                scui_widget_event_dispatch(event);
-            }
+        scui_widget_child_list_btra(widget, idx) {
+            event->object = widget->child_list[idx];
+            scui_widget_event_dispatch(event);
+        }
         event->object = widget->myself;
         ret |= scui_event_retval_keep;
         /* 绘制结束产生一次异步刷新 */
@@ -495,20 +491,18 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
         SCUI_LOG_INFO("event %u", event->type);
         /* 如果需要继续冒泡,则继续下沉 */
-        scui_handle_t child_num = widget->child_num;
-        for (scui_handle_t idx = 0; idx < child_num; idx++)
-            if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
-                event->object = widget->child_list[child_num - 1 - idx];
-                /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
-                bool event_filter = true;
-                event_filter = event_filter || event->type != scui_event_ptr_hold;
-                event_filter = event_filter || event->type != scui_event_ptr_down;
-                event_filter = event_filter || event->type != scui_event_ptr_up;
-                /* 事件如果被吸收,终止派发 */
-                ret |= scui_widget_event_dispatch(event);
-                if ((ret & scui_event_retval_over) != 0 && event_filter)
-                    return scui_event_retval_over;
-            }
+        scui_widget_child_list_ftra(widget, idx) {
+            event->object = widget->child_list[idx];
+            /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
+            bool event_filter = true;
+            event_filter = event_filter || event->type != scui_event_ptr_hold;
+            event_filter = event_filter || event->type != scui_event_ptr_down;
+            event_filter = event_filter || event->type != scui_event_ptr_up;
+            /* 事件如果被吸收,终止派发 */
+            ret |= scui_widget_event_dispatch(event);
+            if ((ret & scui_event_retval_over) != 0 && event_filter)
+                return scui_event_retval_over;
+        }
         event->object = widget->myself;
         ret |= scui_event_retval_keep;
         /* 是否自己吸收处理 */
@@ -538,15 +532,13 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
         SCUI_LOG_INFO("event %u", event->type);
         /* 如果需要继续冒泡,则继续下沉 */
-        scui_handle_t child_num = widget->child_num;
-        for (scui_handle_t idx = 0; idx < child_num; idx++)
-            if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
-                event->object = widget->child_list[child_num - 1 - idx];
-                /* 事件如果被吸收,终止派发 */
-                ret |= scui_widget_event_dispatch(event);
-                if ((ret & scui_event_retval_over) != 0)
-                    return scui_event_retval_over;
-            }
+        scui_widget_child_list_ftra(widget, idx) {
+            event->object = widget->child_list[idx];
+            /* 事件如果被吸收,终止派发 */
+            ret |= scui_widget_event_dispatch(event);
+            if ((ret & scui_event_retval_over) != 0)
+                return scui_event_retval_over;
+        }
         event->object = widget->myself;
         ret |= scui_event_retval_keep;
         /* 是否自己吸收处理(冒泡自己) */
@@ -561,15 +553,13 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
         SCUI_LOG_INFO("event %u", event->type);
         /* 如果需要继续冒泡,则继续下沉 */
-        scui_handle_t child_num = widget->child_num;
-        for (scui_handle_t idx = 0; idx < child_num; idx++)
-            if (widget->child_list[child_num - 1 - idx] != SCUI_HANDLE_INVALID) {
-                event->object = widget->child_list[child_num - 1 - idx];
-                /* 事件如果被吸收,终止派发 */
-                ret |= scui_widget_event_dispatch(event);
-                if ((ret & scui_event_retval_over) != 0)
-                    return scui_event_retval_over;
-            }
+        scui_widget_child_list_ftra(widget, idx) {
+            event->object = widget->child_list[idx];
+            /* 事件如果被吸收,终止派发 */
+            ret |= scui_widget_event_dispatch(event);
+            if ((ret & scui_event_retval_over) != 0)
+                return scui_event_retval_over;
+        }
         event->object = widget->myself;
         ret |= scui_event_retval_keep;
         /* 是否自己吸收处理(冒泡自己) */
@@ -579,15 +569,14 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         return ret;
     }
     /*************************************************************************/
-    /*显示事件:单次派发 **************************************************** */
+    /*显示事件:流程派发 **************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_focus_get ||
         event->type == scui_event_show) {
         /* 是否自己吸收处理(冒泡自己) */
         ret |=scui_widget_event_proc(event);
         /* 如果需要继续冒泡,则继续下沉 */
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
+        scui_widget_child_list_btra(widget, idx) {
                 event->object = widget->child_list[idx];
                 scui_widget_event_dispatch(event);
             }
@@ -601,8 +590,7 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     if (event->type == scui_event_focus_lost ||
         event->type == scui_event_hide) {
         /* 如果需要继续冒泡,则继续下沉 */
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            if (widget->child_list[idx] != SCUI_HANDLE_INVALID) {
+        scui_widget_child_list_btra(widget, idx) {
                 event->object = widget->child_list[idx];
                 scui_widget_event_dispatch(event);
             }
