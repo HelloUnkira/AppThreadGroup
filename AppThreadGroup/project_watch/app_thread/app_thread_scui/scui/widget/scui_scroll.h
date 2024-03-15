@@ -18,7 +18,14 @@ typedef struct {
     scui_point_t        point_s;        /* 移动动画起始点 */
     scui_point_t        point_c;        /* 移动动画当前点 */
     scui_point_t        point_e;        /* 移动动画结束点 */
-    scui_area_t         clip;           /* 滚动区域 */
+    /* 无方向布局(自由布局) */
+    scui_point_t        ofs_cur;        /* 当前偏移点 */
+    scui_point_t        ofs_min;        /* 最小偏移点 */
+    scui_point_t        ofs_max;        /* 最大偏移点 */
+    /* 方向布局(水平布局,垂直布局) */
+    scui_point_t        dist_ofs;       /* 移动偏移线 */
+    scui_coord_t        dist_map;       /* 移动映射线 */
+    
     uint8_t             layout:1;       /* 布局更新标记 */
 } scui_scroll_t;
 
@@ -42,6 +49,8 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
  *@param handle 可滚动控件句柄
  */
 void scui_scroll_destroy(scui_handle_t handle);
+
+#if 0
 
 /*@brief 滚动控件布局更新
  *@param handle 可滚动控件句柄
@@ -69,6 +78,8 @@ void scui_scroll_anima_expired(void *instance);
 /*@brief 滚动控件动画自动化
  */
 void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid);
+
+#endif
 
 /*@brief 滚动控件更新布局回调
  *@param event 事件

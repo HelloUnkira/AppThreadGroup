@@ -185,10 +185,10 @@ SCUI_PIXEL_TYPE scui_pixel_by_color(scui_color8888_t color);
 SCUI_PIXEL_TYPE scui_pixel_with_alpha(SCUI_PIXEL_TYPE *pixel, scui_alpha_t alpha);
 
 /*@brief 像素点融合(同步作用透明度)
- *@param pixel_fg 像素点(fg)
- *@param alpha_fg 透明度(fg)
- *@param pixel_bg 像素点(bg)
- *@param alpha_bg 透明度(bg)
+ *@param pixel_1 像素点
+ *@param alpha_1 透明度
+ *@param pixel_2 像素点
+ *@param alpha_2 透明度
  *@retval 像素点
  */
 SCUI_PIXEL_TYPE scui_pixel_mix_with_alpha(SCUI_PIXEL_TYPE *pixel_1, scui_alpha_t alpha_1,
