@@ -74,9 +74,9 @@ void scui_ready(void)
     scui_window_switch_type_cfg(scui_window_switch_normal);
     /* 初始窗口 */
     scui_handle_t handle = SCUI_UI_SCENE_1;
-    scui_widget_show(handle);
+    scui_widget_show(handle, false);
     scui_window_active(handle);
-    // scui_widget_hide(handle);
+    // scui_widget_hide(handle, false);
     
     scui_engine_execute_status_set(true);
 }

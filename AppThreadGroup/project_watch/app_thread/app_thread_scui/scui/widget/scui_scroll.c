@@ -141,7 +141,7 @@ void scui_scroll_anima_expired(void *instance)
         scroll->ofs_cur.y += offset.y;
         
         /* 偏移所有子控件 */
-        scui_widget_reofs_children(widget->myself, &offset);
+        scui_widget_refr_ofs_child_list(widget->myself, &offset);
         break;
     }
     default:
@@ -218,7 +218,7 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
             scroll->ofs_cur.x = -scroll->ofs_cur.x;
             scroll->ofs_cur.y = -scroll->ofs_cur.y;
             /* 偏移所有子控件 */
-            scui_widget_reofs_children(widget->myself, &scroll->ofs_cur);
+            scui_widget_refr_ofs_child_list(widget->myself, &scroll->ofs_cur);
             scroll->ofs_cur.x = 0;
             scroll->ofs_cur.y = 0;
         }
@@ -261,11 +261,11 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
         
         /* 更新子控件尺寸 */
         if (scroll->dir == scui_event_dir_hor)
-            scui_widget_resize(handle, child->clip.w, widget->clip.h);
+            scui_widget_refr_size(handle, child->clip.w, widget->clip.h);
         if (scroll->dir == scui_event_dir_ver)
-            scui_widget_resize(handle, widget->clip.w, child->clip.h);
+            scui_widget_refr_size(handle, widget->clip.w, child->clip.h);
         /* 更新子控件位置 */
-        scui_widget_repos(handle, &pos);
+        scui_widget_refr_pos(handle, &pos);
         /* 迭代到下一子控件 */
         if (scroll->dir == scui_event_dir_hor)
             pos.x += child->clip.w + scroll->space;

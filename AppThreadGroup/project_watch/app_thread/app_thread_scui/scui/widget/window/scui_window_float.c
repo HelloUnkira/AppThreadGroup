@@ -45,7 +45,7 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* 移动窗口 */
-    scui_widget_repos(handle, point);
+    scui_widget_refr_pos(handle, point);
     /* 获得窗口宽高 */
     scui_area_t clip = scui_widget_attr_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
@@ -93,7 +93,7 @@ void scui_window_float_anima_ready(void *instance)
         (scui_window_float.pos == scui_event_pos_r && point.x == +clip.w) ||
         (scui_window_float.pos == scui_event_pos_d && point.y == +clip.h)) {
          scui_window_active(scui_window_float.main);
-         scui_widget_hide_delay(handle);
+         scui_widget_hide(handle, true);
     }
     
     if (scui_window_float.anima != SCUI_HANDLE_INVALID) {
@@ -197,7 +197,7 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
  */
 scui_event_retval_t scui_window_float_event_grasp_show(scui_event_t *event)
 {
-    scui_widget_show(scui_window_float.main);
+    scui_widget_show(scui_window_float.main, false);
     return scui_event_retval_keep;
 }
 
@@ -413,7 +413,7 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
         if (scui_window_float.target != SCUI_HANDLE_INVALID) {
             /* 先释放其他窗口资源 */
             scui_window_hide_without(handle, false);
-            scui_widget_show(scui_window_float.target);
+            scui_widget_show(scui_window_float.target, false);
             scui_window_active(scui_window_float.target);
             /* 移动到所在边界然后真实重绘 */
             scui_window_float_move_with_alpha(scui_window_float.target, &point);

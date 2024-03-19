@@ -16,34 +16,15 @@ void scui_widget_refr(scui_handle_t handle, bool sync);
 
 /*@brief 控件显示
  *@param handle 控件句柄
+ *@param delay  迟延调度
  */
-void scui_widget_show(scui_handle_t handle);
+void scui_widget_show(scui_handle_t handle, bool delay);
 
 /*@brief 控件隐藏
  *@param handle 控件句柄
+ *@param delay  迟延调度
  */
-void scui_widget_hide(scui_handle_t handle);
-
-/*@brief 控件显示(时序异步)
- *@param handle 控件句柄
- */
-void scui_widget_show_delay(scui_handle_t handle);
-
-/*@brief 控件隐藏(时序异步)
- *@param handle 控件句柄
- */
-void scui_widget_hide_delay(scui_handle_t handle);
-
-/*@brief 控件隐藏
- *@param handle 控件句柄
- *@param child  子控件句柄
- */
-void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child);
-
-/*@brief 控件树镜像(相对父控件)
- *@param handle 控件句柄
- */
-void scui_widget_mirror(scui_handle_t handle);
+void scui_widget_hide(scui_handle_t handle, bool delay);
 
 /*@brief 获取事件的自定义回调
  *@param handle 控件句柄

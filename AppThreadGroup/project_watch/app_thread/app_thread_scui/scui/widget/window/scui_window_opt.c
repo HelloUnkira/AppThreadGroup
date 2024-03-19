@@ -79,7 +79,7 @@ void scui_window_hide_without(scui_handle_t handle, bool any)
             SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
             if (any || scui_widget_surface_only(widget))
-                scui_widget_hide(scui_window_mgr.list[idx]);
+                scui_widget_hide(scui_window_mgr.list[idx], false);
         }
 }
 
@@ -174,8 +174,8 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     /* 新窗口已经是焦点窗口 */
     if (scui_window_mgr.active_curr == handle) {
         scui_point_t point = (scui_point_t){0};
-        scui_widget_show(scui_window_mgr.active_curr);
-        scui_widget_repos(scui_window_mgr.active_curr, &point);
+        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_widget_refr_pos(scui_window_mgr.active_curr, &point);
         scui_window_active(scui_window_mgr.active_curr);
         return;
     }
@@ -194,7 +194,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
             continue;
         if (scui_window_mgr.list[idx] != scui_window_mgr.active_curr &&
             scui_window_mgr.list[idx] != handle) {
-            scui_widget_hide(scui_window_mgr.list[idx]);
+            scui_widget_hide(scui_window_mgr.list[idx], false);
             SCUI_ASSERT(scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID);
             continue;
         }
@@ -203,8 +203,8 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     /* 无切换效果 */
     if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
         scui_window_hide_without(scui_window_mgr.active_curr, false);
-        scui_widget_hide(scui_window_mgr.active_last);
-        scui_widget_show(scui_window_mgr.active_curr);
+        scui_widget_hide(scui_window_mgr.active_last, false);
+        scui_widget_show(scui_window_mgr.active_curr, false);
         scui_window_active(scui_window_mgr.active_curr);
         scui_window_mgr.switch_args.lock = false;
         return;
@@ -212,8 +212,8 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
         scui_window_mgr.switch_args.list[1] = handle;
         scui_window_hide_without(scui_window_mgr.active_curr, false);
-        scui_widget_show(scui_window_mgr.active_curr);
-        scui_widget_show(handle);
+        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_widget_show(handle, false);
         /* 其他切换效果都需要动画完成 */
         uint32_t peroid = (dir & scui_event_dir_hor) != 0 ? scui_disp_get_hor_res() :
                           (dir & scui_event_dir_ver) != 0 ? scui_disp_get_ver_res() : 0;

@@ -264,6 +264,20 @@ bool scui_anima_running(scui_handle_t handle)
     SCUI_ASSERT(false);
 }
 
+/*@brief 动画周期计算
+ *@param speed_ms 速度(dist/ms)
+ *@param dist_s   起始距离
+ *@param dist_e   结束距离
+ *@retval 周期
+ */
+uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_e)
+{
+    uint32_t dist = scui_dist(dist_s, dist_e);
+    uint32_t peroid = dist * 1000 / speed_ms;
+    
+    return peroid;
+}
+
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值

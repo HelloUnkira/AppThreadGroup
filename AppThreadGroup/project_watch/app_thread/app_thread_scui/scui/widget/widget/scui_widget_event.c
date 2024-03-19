@@ -86,7 +86,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 /*@brief 控件显示
  *@param handle 控件句柄
  */
-void scui_widget_show(scui_handle_t handle)
+static void scui_widget_show_delay(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
@@ -119,10 +119,30 @@ void scui_widget_show(scui_handle_t handle)
     scui_widget_draw(widget->myself, NULL, only);
 }
 
+/*@brief 控件显示
+ *@param handle 控件句柄
+ *@param delay  迟延调度
+ */
+void scui_widget_show(scui_handle_t handle, bool delay)
+{
+    if (delay) {
+        scui_event_t event = {
+            .object   = SCUI_HANDLE_SYSTEM,
+            .type     = scui_event_sched_delay,
+            .priority = scui_event_priority_real_time,
+            .sched    = scui_widget_show_delay,
+            .handle   = handle,
+        };
+        scui_event_notify(&event);
+        return;
+    }
+    scui_widget_show_delay(handle);
+}
+
 /*@brief 控件隐藏
  *@param handle 控件句柄
  */
-void scui_widget_hide(scui_handle_t handle)
+static void scui_widget_hide_delay(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
@@ -157,75 +177,24 @@ void scui_widget_hide(scui_handle_t handle)
     scui_widget_cb_destroy(widget->myself);
 }
 
-/*@brief 控件显示(时序异步)
- *@param handle 控件句柄
- */
-void scui_widget_show_delay(scui_handle_t handle)
-{
-    scui_event_t event = {
-        .object   = SCUI_HANDLE_SYSTEM,
-        .type     = scui_event_show_delay,
-        .priority = scui_event_priority_real_time,
-        .handle   = scui_widget_root(handle),
-    };
-    scui_event_notify(&event);
-}
-
-/*@brief 控件隐藏(时序异步)
- *@param handle 控件句柄
- */
-void scui_widget_hide_delay(scui_handle_t handle)
-{
-    scui_event_t event = {
-        .object   = SCUI_HANDLE_SYSTEM,
-        .type     = scui_event_hide_delay,
-        .priority = scui_event_priority_real_time,
-        .handle   = scui_widget_root(handle),
-    };
-    scui_event_notify(&event);
-}
-
 /*@brief 控件隐藏
  *@param handle 控件句柄
- *@param child  子控件句柄
+ *@param delay  迟延调度
  */
-void scui_widget_hide_without(scui_handle_t handle, scui_handle_t child)
+void scui_widget_hide(scui_handle_t handle, bool delay)
 {
-    SCUI_LOG_DEBUG("");
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    scui_widget_child_list_btra(widget, idx)
-        if (widget->child_list[idx] != child)
-            scui_widget_hide(widget->child_list[idx]);
-}
-
-/*@brief 控件树镜像(相对父控件)
- *@param handle 控件句柄
- */
-void scui_widget_mirror(scui_handle_t handle)
-{
-    SCUI_LOG_DEBUG("");
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    /* @等待适配,要用的时候再去实现 */
-    SCUI_LOG_ERROR("not finish yet");
-    return;
-    
-    scui_widget_child_list_btra(widget, idx) {
-        
-        scui_handle_t  handle_child = widget->child_list[idx];
-        scui_widget_t *widget_child = scui_handle_get(handle);
-        scui_point_t    point_child = {0};
-        
-        point_child.x -= widget->clip.x;
-        point_child.y -= widget->clip.y;
-        
-        /// ...
-        
-        scui_widget_repos(handle_child, &point_child);
+    if (delay) {
+        scui_event_t event = {
+            .object   = SCUI_HANDLE_SYSTEM,
+            .type     = scui_event_sched_delay,
+            .priority = scui_event_priority_real_time,
+            .sched    = scui_widget_hide_delay,
+            .handle   = handle,
+        };
+        scui_event_notify(&event);
+        return;
     }
+    scui_widget_hide_delay(handle);
 }
 
 /*@brief 获取事件的自定义回调

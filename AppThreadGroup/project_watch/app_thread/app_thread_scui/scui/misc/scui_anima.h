@@ -97,6 +97,14 @@ void scui_anima_stop(scui_handle_t handle);
  */
 bool scui_anima_running(scui_handle_t handle);
 
+/*@brief 动画周期计算
+ *@param speed_ms 速度(dist/ms)
+ *@param dist_s   起始距离
+ *@param dist_e   结束距离
+ *@retval 周期
+ */
+uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_e);
+
 /*@brief 动画行程回调
  *@param instance 动画实例
  *@retval 动画进度值

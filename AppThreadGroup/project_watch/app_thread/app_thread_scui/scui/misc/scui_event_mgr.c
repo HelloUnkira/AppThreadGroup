@@ -115,17 +115,14 @@ scui_event_retval_t scui_event_respond(scui_event_t *event)
     /* 部分内部事件不允许正常控件监督流程 */
     /* 优先则走系统调度管理流程 */
     switch (event->type) {
+    case scui_event_sched_delay:
+        event->sched(event->handle);
+        ret |= scui_event_retval_over;
+        return ret;
+        break;
     case scui_event_anima_elapse:
         scui_anima_update();
         break;
-    case scui_event_show_delay:
-        scui_widget_show(event->handle);
-        ret |= scui_event_retval_over;
-        return ret;
-    case scui_event_hide_delay:
-        scui_widget_hide(event->handle);
-        ret |= scui_event_retval_over;
-        return ret;
     default:
         break;
     }

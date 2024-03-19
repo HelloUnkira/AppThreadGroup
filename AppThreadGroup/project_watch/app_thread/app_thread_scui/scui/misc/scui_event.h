@@ -62,10 +62,14 @@ typedef struct {
             scui_coord_t key_tick;
         };
         /* scui定制化事件数据: */
-        scui_area_t   area;
-        scui_point_t  point;
-        scui_coord_t  coord;
-        scui_handle_t handle;
+        scui_area_t  area;
+        scui_point_t point;
+        scui_coord_t coord;
+        /* scui定制调度事件数据: */
+        struct {
+            void (*sched)(scui_handle_t handle);
+            scui_handle_t handle;
+        };
         /* 通用结构信息(数据量不定,支持任意类型和种类的数据): */
         struct {
             uint64_t dynamic:1;     /* 协议数据流是动态生成,使用完毕要回收 */

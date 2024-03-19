@@ -379,7 +379,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
  *@param width  宽度
  *@param height 高度
  */
-void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t height)
+void scui_widget_refr_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height)
 {
     SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
@@ -406,7 +406,7 @@ void scui_widget_resize(scui_handle_t handle, scui_coord_t width, scui_coord_t h
  *@param handle 控件句柄
  *@param point  坐标点
  */
-void scui_widget_repos(scui_handle_t handle, scui_point_t *point)
+void scui_widget_refr_pos(scui_handle_t handle, scui_point_t *point)
 {
     SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
@@ -455,7 +455,7 @@ void scui_widget_repos(scui_handle_t handle, scui_point_t *point)
             .x = offset.x + child->clip.x,
             .y = offset.y + child->clip.y,
         };
-        scui_widget_repos(handle, &point);
+        scui_widget_refr_pos(handle, &point);
     }
 }
 
@@ -463,7 +463,7 @@ void scui_widget_repos(scui_handle_t handle, scui_point_t *point)
  *@param handle 控件句柄
  *@param child  控件子控件句柄
  */
-void scui_widget_reofs_children(scui_handle_t handle, scui_point_t *offset)
+void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -475,6 +475,6 @@ void scui_widget_reofs_children(scui_handle_t handle, scui_point_t *offset)
         scui_area_t clip_child = child->clip;
         clip_child.x += offset->x;
         clip_child.y += offset->y;
-        scui_widget_repos(handle, &clip_child);
+        scui_widget_refr_pos(handle, &clip_child);
     }
 }
