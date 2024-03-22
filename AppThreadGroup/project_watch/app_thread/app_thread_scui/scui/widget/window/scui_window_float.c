@@ -277,8 +277,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
         if (scui_window_float.target != handle)
             break;
         if (scui_window_float.cover) {
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 2 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 2 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
                 if (scui_window_float.pos == scui_event_pos_u ||
                     scui_window_float.pos == scui_event_pos_l) {
                     scui_window_float_anima_inout(handle, false);
@@ -291,8 +291,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                     SCUI_LOG_DEBUG("");
                 }
             }
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 1 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 1 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
                 if (scui_window_float.pos == scui_event_pos_d ||
                     scui_window_float.pos == scui_event_pos_r) {
                     scui_window_float_anima_inout(handle, true);
@@ -306,8 +306,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                 }
             }
         } else {
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 1 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 1 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
                 if (scui_window_float.pos == scui_event_pos_u ||
                     scui_window_float.pos == scui_event_pos_l) {
                     scui_window_float_anima_inout(handle, false);
@@ -320,8 +320,8 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                     SCUI_LOG_DEBUG("");
                 }
             }
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 2 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 2 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
                 if (scui_window_float.pos == scui_event_pos_d ||
                     scui_window_float.pos == scui_event_pos_r) {
                     scui_window_float_anima_inout(handle, true);

@@ -59,7 +59,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
     APP_SYS_LOG_INFO("iter_skew:%d",  app_lv_ui_res_local->iter_skew);
     APP_SYS_LOG_INFO("iter_route:%d", app_lv_ui_res_local->iter_route);
     /* 根据起始结束之间的位移计算图片映射,确认每隔多少个单位图片变化一次 */
-    lv_coord_t ring_ofs_skew = app_sys_mod_abs(app_lv_ui_res_local->iter_skew, ring_dis_max - ring_dis_min);
+    lv_coord_t ring_ofs_skew = app_sys_mabs(app_lv_ui_res_local->iter_skew, ring_dis_max - ring_dis_min);
     lv_coord_t ring_dis_span = app_lv_ui_res_local->iter_route / (APP_LV_UI_HALO_OFS_MAX - APP_LV_UI_HALO_OFS_MIN);
     APP_SYS_LOG_INFO("ring_dis_span:%d", ring_dis_span);
     /* 当次的skew需要选择的图片尺寸以及对应尺寸的直径 */
@@ -123,7 +123,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         
         int16_t idx = angle / APP_LV_UI_HALO_UNIT;
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? 0 : (360 / APP_LV_UI_HALO_UNIT);
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
         APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + pic_ofs_max);
         lv_img_set_src(app_lv_ui_res_local->img_list_max[idx], img_str);
@@ -141,7 +141,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         
         int16_t idx = angle / APP_LV_UI_HALO_UNIT;
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? (360 / APP_LV_UI_HALO_UNIT) : 0;
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
         APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + pic_ofs_min);
         lv_img_set_src(app_lv_ui_res_local->img_list_min[idx], img_str);
@@ -160,7 +160,7 @@ static void app_lv_ui_anim_rectify_handler(void *para, int32_t value)
         return;
     /* 角度跳跃式(调整优化) */
     lv_coord_t skew_jump = app_sys_map(APP_LV_UI_HALO_UNIT / APP_LV_UI_HALO_RECTIFY, 0, APP_LV_UI_HALO_UNIT, 0, app_lv_ui_res_local->iter_route);
-    lv_coord_t skew_abs  = app_sys_mod_abs(app_lv_ui_res_local->iter_skew, app_lv_ui_res_local->iter_route);
+    lv_coord_t skew_abs  = app_sys_mabs(app_lv_ui_res_local->iter_skew, app_lv_ui_res_local->iter_route);
     lv_coord_t skew_ofs  = app_lv_ui_res_local->iter_way > 0 ? app_lv_ui_res_local->iter_route - skew_abs : skew_abs;
     skew_ofs %= skew_jump;
     skew_ofs  = skew_ofs != 0 ? skew_ofs : skew_jump;
@@ -204,7 +204,7 @@ static void app_lv_ui_event_img_list_max_cb(lv_event_t *e)
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? 0 : (360 / APP_LV_UI_HALO_UNIT);
         int16_t skew_bse  = (int16_t)LV_ABS(app_lv_ui_res_local->iter_skew) / (int16_t)app_lv_ui_res_local->iter_route;
         int16_t angle_bse = skew_bse * (360 / APP_LV_UI_HALO_UNIT);
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
         app_lv_scene_add(app_lv_ui_res_local->list[pic_ofs].scene, false);
         break;
     }
@@ -224,7 +224,7 @@ static void app_lv_ui_event_img_list_min_cb(lv_event_t *e)
         int16_t ofs = app_lv_ui_res_local->iter_skew >= 0 ? (360 / APP_LV_UI_HALO_UNIT) : 0;
         int16_t skew_bse  = (int16_t)LV_ABS(app_lv_ui_res_local->iter_skew) / (int16_t)app_lv_ui_res_local->iter_route;
         int16_t angle_bse = skew_bse * (360 / APP_LV_UI_HALO_UNIT);
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse - ofs, (int16_t)app_lv_ui_res_local->list_num);
         app_lv_scene_add(app_lv_ui_res_local->list[pic_ofs].scene, false);
         break;
     }

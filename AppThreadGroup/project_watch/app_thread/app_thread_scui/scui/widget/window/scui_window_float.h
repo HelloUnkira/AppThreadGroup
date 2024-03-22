@@ -10,8 +10,8 @@ typedef struct {
     scui_handle_t               anima;      /* 交互动画 */
     uint8_t execute:1;
     uint8_t cover:1;
-    uint8_t hold:1;
     uint8_t lock:1;
+    uint8_t hold:1;
 } scui_window_float_t;
 
 /*@brief 窗口配置参数获取

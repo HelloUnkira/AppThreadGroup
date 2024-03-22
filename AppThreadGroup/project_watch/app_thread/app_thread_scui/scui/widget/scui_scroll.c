@@ -68,8 +68,6 @@ void scui_scroll_destroy(scui_handle_t handle)
     SCUI_MEM_FREE(scroll);
 }
 
-#if 0
-
 /*@brief 滚动控件布局更新
  *@param handle 可滚动控件句柄
  */
@@ -96,6 +94,9 @@ void scui_scroll_anima_start(void *instance)
 void scui_scroll_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
+    
+    /* 这里需要考虑回弹效果,包括回弹点,边界对齐 */
+    
 }
 
 /*@brief 滚动控件动画回调
@@ -111,6 +112,7 @@ void scui_scroll_anima_expired(void *instance)
     
     switch (scroll->dir) {
     case scui_event_dir_none: {
+        /* 无方向移动,统一偏移量,限制到回弹点 */
         int32_t value_s = anima->value_s;
         int32_t value_e = anima->value_e;
         int32_t value_c = anima->value_c;
@@ -126,15 +128,11 @@ void scui_scroll_anima_expired(void *instance)
         offset.x -= scroll->ofs_cur.x;
         offset.y -= scroll->ofs_cur.y;
         
-        /* 使用偏移范围限制offset */
-        if (offset.x < scroll->ofs_min.x - scroll->springback)
-            offset.x = scroll->ofs_min.x - scroll->springback;
-        if (offset.y < scroll->ofs_min.y - scroll->springback)
-            offset.y = scroll->ofs_min.y - scroll->springback;
-        if (offset.x > scroll->ofs_max.x - scroll->springback)
-            offset.x = scroll->ofs_max.x - scroll->springback;
-        if (offset.y > scroll->ofs_max.y - scroll->springback)
-            offset.y = scroll->ofs_max.y - scroll->springback;
+        /* 使用偏移范围限制offset,最多允许偏移到回弹点 */
+        offset.x = scui_max(offset.x, scroll->ofs_min.x - scroll->springback);
+        offset.x = scui_min(offset.x, scroll->ofs_max.x + scroll->springback);
+        offset.y = scui_max(offset.y, scroll->ofs_min.y - scroll->springback);
+        offset.y = scui_min(offset.y, scroll->ofs_max.y + scroll->springback);
         
         /* 更新偏移记录 */
         scroll->ofs_cur.x += offset.x;
@@ -142,6 +140,40 @@ void scui_scroll_anima_expired(void *instance)
         
         /* 偏移所有子控件 */
         scui_widget_refr_ofs_child_list(widget->myself, &offset);
+        scui_widget_draw(widget->myself, NULL, false);
+        break;
+    }
+    case scui_event_dir_hor:
+    case scui_event_dir_ver: {
+        int32_t value_s = anima->value_s;
+        int32_t value_e = anima->value_e;
+        int32_t value_c = anima->value_c;
+        if (scroll->loop) {
+            /* 方向移动,循环,忽略回弹点,重映射坐标区域 */
+        } else {
+            /* 方向移动,非循环,统一偏移量,限制到回弹点 */
+            scui_coord_t delta = 0;
+            delta = scui_map(value_c, value_s, value_e, 0, scroll->dis_lim);
+            
+            /* 在当前点偏移,现在去除该偏移 */
+            delta -= scroll->dis_cur;
+            
+            /* 使用偏移范围限制offset,最多允许偏移到回弹点 */
+            delta = scui_max(delta, 0 - scroll->springback);
+            delta = scui_min(delta, scroll->dis_lim + scroll->springback);
+            /* 更新偏移记录 */
+            scroll->dis_cur += delta;
+            
+            scui_point_t offset = {0};
+            if (scroll->dir == scui_event_dir_hor)
+                offset.x = delta;
+            if (scroll->dir == scui_event_dir_ver)
+                offset.y = delta;
+            
+            /* 偏移所有子控件 */
+            scui_widget_refr_ofs_child_list(widget->myself, &offset);
+            scui_widget_draw(widget->myself, NULL, false);
+        }
         break;
     }
     default:
@@ -183,8 +215,6 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     scui_anima_create(&anima, &scroll->anima);
     scui_anima_start(scroll->anima);
 }
-
-#endif
 
 /*@brief 滚动控件更新布局回调
  *@param event 事件
@@ -244,6 +274,10 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
         return ret;
     }
     
+    /* 只支持水平自动布局与垂直自动布局 */
+    SCUI_ASSERT(scroll->dir == scui_event_dir_hor ||
+                scroll->dir == scui_event_dir_ver);
+    
     // 水平自动布局会调整所有子控件的(x,y,h)
     // 垂直自动布局会调整所有子控件的(x,y,w)
     scui_point_t pos = {
@@ -273,6 +307,24 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
             pos.y += child->clip.h + scroll->space;
     }
     
+    /* 空隙只夹杂在控件中 */
+    if (scroll->dir == scui_event_dir_hor)
+        pos.x -= scroll->space;
+    if (scroll->dir == scui_event_dir_ver)
+        pos.y -= scroll->space;
+    
+    /* 不同模式设置不同参数 */
+    if (scroll->loop) {
+    } else {
+        scroll->dis_cur = 0;
+        scroll->dis_lim = 0;
+        if (scroll->dir == scui_event_dir_hor)
+            scroll->dis_lim = pos.x - widget->clip.x;
+        if (scroll->dir == scui_event_dir_ver)
+            scroll->dis_lim = pos.y - widget->clip.y;
+        SCUI_ASSERT(scroll->dis_lim != 0);
+    }
+    
     if (scui_widget_style_is_show(handle))
         scui_widget_draw(handle, NULL, false);
     
@@ -287,6 +339,10 @@ scui_event_retval_t scui_scroll_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_event_retval_t ret = scui_event_retval_quit;
+    scui_handle_t  handle = event->object;
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
     case scui_event_show:
@@ -294,6 +350,14 @@ scui_event_retval_t scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_focus_get:
         ret |= scui_scroll_update_layout(event);
+        break;
+    case scui_event_ptr_down:
+        break;
+    case scui_event_ptr_move:
+        break;
+    case scui_event_ptr_fling:
+        break;
+    case scui_event_ptr_up:
         break;
     default:
         break;

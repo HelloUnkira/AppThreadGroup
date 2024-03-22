@@ -47,13 +47,16 @@ scui_handle_t scui_widget_child_num(scui_handle_t handle)
 
 /*@brief 指定位置子控件
  *@param handle 控件句柄
- *@param index  子控件位置
+ *@param index  子控件位置(映射点)
  *@retval 子控件句柄
  */
 scui_handle_t scui_widget_child_index(scui_handle_t handle, scui_handle_t index)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
+    
+    /* 其他范围映射到取值范围[0:num) */
+    index = scui_mabs(index, widget->child_num);
     
     if (index < widget->child_num)
         return widget->child_list[index];

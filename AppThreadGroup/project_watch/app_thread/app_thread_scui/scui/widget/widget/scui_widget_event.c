@@ -324,6 +324,40 @@ void scui_widget_event_clear(scui_handle_t handle)
     }
 }
 
+/*@brief 控件事件冒泡
+ *       亦可用于控件迭代等其他动作
+ *@param event    事件(可以是假事件)
+ *@param event_cb 事件回调(可以是假事件回调)
+ *@param first    优先冒泡自己
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
+{
+    scui_event_retval_t ret = scui_event_retval_quit;
+    scui_widget_t *widget = scui_handle_get(event->object);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (first)
+    if (((ret |= event_cb(event)) & scui_event_retval_over) != 0)
+        return ret;
+    
+    scui_widget_child_list_btra(widget, idx) {
+        event->object = widget->child_list[idx];
+        ret |= scui_widget_event_bubble(event, event_cb, first);
+        if ((ret & scui_event_retval_over) != 0)
+            return ret;
+    }
+    event->object = widget->myself;
+    if ((ret & scui_event_retval_over) != 0)
+        return ret;
+    
+    if (!first)
+    if (((ret |= event_cb(event)) & scui_event_retval_over) != 0)
+        return ret;
+    
+    return ret;
+}
+
 /*@brief 控件默认事件处理回调
  *@param event 事件
  *@retval 事件状态
@@ -459,14 +493,14 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
         SCUI_LOG_INFO("event %u", event->type);
+        /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
+        bool event_filter = true;
+        event_filter = event_filter || event->type != scui_event_ptr_hold;
+        event_filter = event_filter || event->type != scui_event_ptr_down;
+        event_filter = event_filter || event->type != scui_event_ptr_up;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
-            /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
-            bool event_filter = true;
-            event_filter = event_filter || event->type != scui_event_ptr_hold;
-            event_filter = event_filter || event->type != scui_event_ptr_down;
-            event_filter = event_filter || event->type != scui_event_ptr_up;
             /* 事件如果被吸收,终止派发 */
             ret |= scui_widget_event_dispatch(event);
             if ((ret & scui_event_retval_over) != 0 && event_filter)
@@ -477,21 +511,28 @@ scui_event_retval_t scui_widget_event_dispatch(scui_event_t *event)
         /* 是否自己吸收处理 */
         if (!widget->style.indev_ptr)
              return ret;
-        scui_widget_t *root = scui_handle_get(scui_widget_root(widget->myself));
-        /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
-        /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
-        /* 窗口子控件相对窗口也有偏移 */
-        scui_area_t clip = widget->clip;
-        if (widget != root) {
-            clip.x += root->clip.x;
-            clip.y += root->clip.y;
-        }
-        /* 产生交集,事件可能被吸收(冒泡自己) */
-        if (widget->parent == SCUI_HANDLE_INVALID ||
-            scui_area_point(&clip, &event->ptr_c) ||
-           (scui_area_point(&clip, &event->ptr_s) &&
-            scui_area_point(&clip, &event->ptr_e)))
+        /* 有些事件涉及到全局状态维护,需要同步传递 */
+        if (!event_filter)
             ret |= scui_widget_event_proc(event);
+        /* 有些事件可能被吸收,选择传递 */
+        if (event_filter) {
+            scui_handle_t handle = scui_widget_root(widget->myself);
+            scui_widget_t  *root = scui_handle_get(handle);
+            /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
+            /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
+            /* 窗口子控件相对窗口也有偏移 */
+            scui_area_t clip = widget->clip;
+            if (widget != root) {
+                clip.x += root->clip.x;
+                clip.y += root->clip.y;
+            }
+            /* 产生交集,事件可能被吸收(冒泡自己) */
+            if (widget->parent == SCUI_HANDLE_INVALID ||
+                scui_area_point(&clip, &event->ptr_c) ||
+               (scui_area_point(&clip, &event->ptr_s) &&
+                scui_area_point(&clip, &event->ptr_e)))
+                ret |= scui_widget_event_proc(event);
+        }
         
         return ret;
     }

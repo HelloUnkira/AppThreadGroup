@@ -61,7 +61,7 @@ static void app_lv_ui_local_anim_handler(void *para, int32_t value)
         APP_SYS_LOG_DEBUG("<pic_pos_x,pic_pos_y><%d,%d>", pic_pos_x, pic_pos_y);
         
         int16_t idx = angle / APP_LV_UI_STAR_ROBIT_UNIT;
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse, (int16_t)app_lv_ui_res_local->list_num);
         APP_SYS_LOG_DEBUG("<idx, pic_ofs><%d, %d>", idx, pic_ofs);
         const char *img_str = app_lv_pic_str_find(app_lv_ui_res_local->list[pic_ofs].idx_pic + APP_LV_UI_STAR_ROBIT_OFS);
         lv_img_set_src(app_lv_ui_res_local->img_list[idx], img_str);
@@ -86,7 +86,7 @@ static void app_lv_ui_anim_rectify_handler(void *para, int32_t value)
         return;
     /* 角度跳跃式(调整优化) */
     lv_coord_t angle_jump = APP_LV_UI_STAR_ROBIT_UNIT / APP_LV_UI_STAR_ROBIT_RECTIFY;
-    lv_coord_t angle_abs  = app_sys_mod_abs(app_lv_ui_res_local->iter_angle, APP_LV_UI_STAR_ROBIT_UNIT);
+    lv_coord_t angle_abs  = app_sys_mabs(app_lv_ui_res_local->iter_angle, APP_LV_UI_STAR_ROBIT_UNIT);
     lv_coord_t angle_ofs  = app_lv_ui_res_local->iter_way > 0 ? APP_LV_UI_STAR_ROBIT_UNIT - angle_abs : angle_abs;
     angle_ofs %= angle_jump;
     angle_ofs  = angle_ofs != 0 ? angle_ofs : angle_jump;
@@ -161,7 +161,7 @@ static void app_lv_ui_event_img_center_cb(lv_event_t *e)
     case LV_EVENT_CLICKED: {
         int16_t angle_bse = app_lv_ui_res_local->iter_angle / APP_LV_UI_STAR_ROBIT_UNIT;
         int16_t idx = 270 / APP_LV_UI_STAR_ROBIT_UNIT;
-        int16_t pic_ofs = app_sys_mod_abs(idx - angle_bse, (int16_t)app_lv_ui_res_local->list_num);
+        int16_t pic_ofs = app_sys_mabs(idx - angle_bse, (int16_t)app_lv_ui_res_local->list_num);
         app_lv_scene_add(app_lv_ui_res_local->list[pic_ofs].scene, false);
         break;
     }

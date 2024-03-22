@@ -50,6 +50,15 @@ void scui_widget_event_del(scui_handle_t handle, scui_widget_event_t *event);
  */
 void scui_widget_event_clear(scui_handle_t handle);
 
+/*@brief 控件事件冒泡
+ *       亦可用于控件迭代等其他动作
+ *@param event    事件(可以是假事件)
+ *@param event_cb 事件回调(可以是假事件回调)
+ *@param first    优先冒泡自己
+ *@retval 事件状态
+ */
+scui_event_retval_t scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first);
+
 /*@brief 控件默认事件处理回调
  *@param event 事件
  *@retval 事件状态

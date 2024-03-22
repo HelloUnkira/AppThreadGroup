@@ -523,8 +523,8 @@ scui_event_retval_t scui_window_switch_event(scui_event_t *event)
                 scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
                 break;
             }
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 1 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 1 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
                 if (scui_window_mgr.switch_args.pos == scui_event_pos_u ||
                     scui_window_mgr.switch_args.pos == scui_event_pos_l) {
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], true);
@@ -537,8 +537,8 @@ scui_event_retval_t scui_window_switch_event(scui_event_t *event)
                     SCUI_LOG_DEBUG("");
                 }
             }
-            if (scui_mod_abs(clip.x, clip.w) < clip.w * 2 / 3 &&
-                scui_mod_abs(clip.y, clip.h) < clip.h * 2 / 3) {
+            if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
+                scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
                 if (scui_window_mgr.switch_args.pos == scui_event_pos_d ||
                     scui_window_mgr.switch_args.pos == scui_event_pos_r) {
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
