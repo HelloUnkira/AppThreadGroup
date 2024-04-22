@@ -303,7 +303,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_dispatch(event);
         }
         event->object = widget->myself;
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         /* 冒泡自己 */
         if (widget->style.anima_sched)
             scui_widget_event_proc(event);
@@ -317,7 +317,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         /* 混合绘制刷新流程结束 */
         /* 使用假绘制启动正式的刷新流程 */
         scui_surface_draw_routine(NULL);
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         return;
     }
     /*************************************************************************/
@@ -337,7 +337,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                     }
                 } else {
                     scui_widget_refr(widget->myself, true);
-                    event->style.result |= 0x01;
+                    scui_widget_event_mask_keep(event);
                     return;
                 }
             }
@@ -361,7 +361,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_dispatch(event);
         }
         event->object = widget->myself;
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         /* 绘制结束产生一次异步刷新 */
         scui_widget_refr(widget->myself, false);
         return;
@@ -381,12 +381,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if ((event->style.result & 0x02) != 0)
+            if (scui_widget_event_check_over(event))
                  break;
         }
         event->object = widget->myself;
-        event->style.result |= 0x01;
-        if ((event->style.result & 0x02) != 0 && event_filter)
+        scui_widget_event_mask_keep(event);
+        if (scui_widget_event_check_over(event) && event_filter)
              return;
         /* 是否自己吸收处理 */
         if (!widget->style.indev_ptr)
@@ -426,12 +426,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if ((event->style.result & 0x02) != 0)
+            if (scui_widget_event_check_over(event))
                  break;
         }
         event->object = widget->myself;
-        event->style.result |= 0x01;
-        if ((event->style.result & 0x02) != 0)
+        scui_widget_event_mask_keep(event);
+        if (scui_widget_event_check_over(event))
              return;
         /* 是否自己吸收处理(冒泡自己) */
         if (!widget->style.indev_enc)
@@ -449,12 +449,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if ((event->style.result & 0x02) != 0)
+            if (scui_widget_event_check_over(event))
                  break;
         }
         event->object = widget->myself;
-        event->style.result |= 0x01;
-        if ((event->style.result & 0x02) != 0)
+        scui_widget_event_mask_keep(event);
+        if (scui_widget_event_check_over(event))
              return;
         /* 是否自己吸收处理(冒泡自己) */
         if (!widget->style.indev_key)
@@ -475,7 +475,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_event_dispatch(event);
             }
         event->object = widget->myself;
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         return;
     }
     /*************************************************************************/
@@ -489,7 +489,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_event_dispatch(event);
             }
         event->object = widget->myself;
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         /* 是否自己吸收处理(冒泡自己) */
         scui_widget_event_proc(event);
         return;
@@ -519,23 +519,23 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
     
     if (first) {
         event_cb(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
     
     scui_widget_child_list_btra(widget, idx) {
         event->object = widget->child_list[idx];
         scui_widget_event_bubble(event, event_cb, first);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             break;
     }
     event->object = widget->myself;
-    if ((event->style.result & 0x02) != 0)
+    if (scui_widget_event_check_over(event))
         return;
     
     if (!first) {
         event_cb(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
 }
@@ -561,5 +561,5 @@ void scui_widget_event_draw(scui_event_t *event)
     else
         scui_widget_surface_draw_color(widget, widget->color);
     
-    event->style.result |= 0x01;
+    scui_widget_event_mask_keep(event);
 }

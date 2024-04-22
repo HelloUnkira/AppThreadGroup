@@ -131,7 +131,7 @@ void scui_event_respond(scui_event_t *event)
     switch (event->type) {
     case scui_event_sched_delay:
         event->sched(event->handle);
-        event->style.result |= 0x02;
+        scui_widget_event_mask_over(event);
         return;
     case scui_event_anima_elapse:
         scui_anima_update();
@@ -153,7 +153,7 @@ void scui_event_respond(scui_event_t *event)
     /* 事件响应回调 */
     if (scui_event_cb_check(event)) {
         scui_event_cb_prepare(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
     
@@ -172,10 +172,10 @@ void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_click;
         
         scui_widget_event_dispatch(event);
-        if ((event->style.result & 0x02) != 0 && event_filter)
+        if (scui_widget_event_check_over(event) && event_filter)
             return;
         scui_window_event_dispatch(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
     
@@ -183,14 +183,14 @@ void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_custom_s &&
         event->type <= scui_event_custom_e) {
         scui_event_cb_custom(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
     
     /* 事件响应回调 */
     if (scui_event_cb_check(event)) {
         scui_event_cb_finish(event);
-        if ((event->style.result & 0x02) != 0)
+        if (scui_widget_event_check_over(event))
             return;
     }
     

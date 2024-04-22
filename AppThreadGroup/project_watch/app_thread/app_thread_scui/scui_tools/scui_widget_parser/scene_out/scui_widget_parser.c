@@ -9,7 +9,7 @@ static void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -18,7 +18,7 @@ static void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -27,7 +27,7 @@ static void scui_ui_scene_float_1_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -36,7 +36,7 @@ static void scui_ui_scene_float_1_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -45,7 +45,7 @@ static void scui_ui_scene_float_1_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -54,7 +54,7 @@ static void scui_ui_scene_float_1_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -63,7 +63,7 @@ static void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -72,7 +72,7 @@ static void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -81,7 +81,7 @@ static void scui_ui_scene_float_2_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -90,7 +90,7 @@ static void scui_ui_scene_float_2_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -99,7 +99,7 @@ static void scui_ui_scene_float_2_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -108,7 +108,7 @@ static void scui_ui_scene_float_2_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -117,7 +117,7 @@ static void scui_ui_scene_float_3_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -126,7 +126,7 @@ static void scui_ui_scene_float_3_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -135,7 +135,7 @@ static void scui_ui_scene_float_3_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -144,7 +144,7 @@ static void scui_ui_scene_float_3_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -153,7 +153,7 @@ static void scui_ui_scene_float_3_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -162,7 +162,7 @@ static void scui_ui_scene_float_3_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -171,7 +171,7 @@ static void scui_ui_scene_float_4_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -180,7 +180,7 @@ static void scui_ui_scene_float_4_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -189,7 +189,7 @@ static void scui_ui_scene_float_4_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -198,7 +198,7 @@ static void scui_ui_scene_float_4_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -207,7 +207,7 @@ static void scui_ui_scene_float_4_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -216,7 +216,7 @@ static void scui_ui_scene_float_4_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -225,7 +225,7 @@ static void scui_ui_scene_home_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -234,7 +234,7 @@ static void scui_ui_scene_home_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -243,7 +243,7 @@ static void scui_ui_scene_home_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -252,7 +252,7 @@ static void scui_ui_scene_home_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -261,7 +261,7 @@ static void scui_ui_scene_home_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -270,7 +270,7 @@ static void scui_ui_scene_home_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -279,7 +279,7 @@ static void scui_ui_scene_1_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -288,7 +288,7 @@ static void scui_ui_scene_2_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -297,7 +297,7 @@ static void scui_ui_scene_2_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -306,7 +306,7 @@ static void scui_ui_scene_2_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -315,7 +315,7 @@ static void scui_ui_scene_2_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -324,7 +324,7 @@ static void scui_ui_scene_2_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -333,7 +333,7 @@ static void scui_ui_scene_2_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -342,7 +342,7 @@ static void scui_ui_scene_3_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -351,7 +351,7 @@ static void scui_ui_scene_3_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -360,7 +360,7 @@ static void scui_ui_scene_3_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -369,7 +369,7 @@ static void scui_ui_scene_3_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -378,7 +378,7 @@ static void scui_ui_scene_3_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -387,7 +387,7 @@ static void scui_ui_scene_3_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -396,7 +396,7 @@ static void scui_ui_scene_4_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -405,7 +405,7 @@ static void scui_ui_scene_4_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -414,7 +414,7 @@ static void scui_ui_scene_4_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -423,7 +423,7 @@ static void scui_ui_scene_4_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -432,7 +432,7 @@ static void scui_ui_scene_4_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -441,7 +441,7 @@ static void scui_ui_scene_4_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -450,7 +450,7 @@ static void scui_ui_scene_5_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -459,7 +459,7 @@ static void scui_ui_scene_5_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -468,7 +468,7 @@ static void scui_ui_scene_5_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -477,7 +477,7 @@ static void scui_ui_scene_5_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -486,7 +486,7 @@ static void scui_ui_scene_5_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -495,7 +495,7 @@ static void scui_ui_scene_5_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -504,7 +504,7 @@ static void scui_ui_scene_6_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -513,7 +513,7 @@ static void scui_ui_scene_6_c_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -522,7 +522,7 @@ static void scui_ui_scene_6_lu_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -531,7 +531,7 @@ static void scui_ui_scene_6_ru_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -540,7 +540,7 @@ static void scui_ui_scene_6_ld_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }
@@ -549,7 +549,7 @@ static void scui_ui_scene_6_rd_event_proc(scui_event_t *event)
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		event->style.result |= 0x01;
+		scui_widget_event_mask_keep(event);
 		break;
 	}
 }

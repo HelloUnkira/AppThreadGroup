@@ -26,6 +26,14 @@ void scui_widget_show(scui_handle_t handle, bool delay);
  */
 void scui_widget_hide(scui_handle_t handle, bool delay);
 
+#define scui_widget_event_mask_quit(event)      ((event))
+#define scui_widget_event_mask_keep(event)      ((event)->style.result |= 0x01)
+#define scui_widget_event_mask_over(event)      ((event)->style.result |= 0x02)
+
+#define scui_widget_event_check_quit(event)     ((event)->style.result == 0x00)
+#define scui_widget_event_check_keep(event)     (((event)->style.result & 0x01) != 0)
+#define scui_widget_event_check_over(event)     (((event)->style.result & 0x02) != 0)
+
 /*@brief 清除事件的所有自定义回调
  *@param handle 控件句柄
  */

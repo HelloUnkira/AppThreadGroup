@@ -16,7 +16,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -28,11 +28,11 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
@@ -52,7 +52,7 @@ void scui_ui_scene_float_4_c_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
@@ -68,7 +68,7 @@ void scui_ui_scene_float_4_lu_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
@@ -84,7 +84,7 @@ void scui_ui_scene_float_4_ru_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
@@ -100,7 +100,7 @@ void scui_ui_scene_float_4_ld_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
@@ -116,7 +116,7 @@ void scui_ui_scene_float_4_rd_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);

@@ -233,12 +233,12 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         scui_window_float.cover = true;
         break;
     }
     case scui_event_ptr_move: {
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
         int32_t value_s = 0;
@@ -258,13 +258,13 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
                 value_e = event->ptr_e.x;
         }
         scui_window_float_anima_auto(value_s, value_e, 0);
-        event->style.result |= 0x02;
+        scui_widget_event_mask_over(event);
         break;
     }
     case scui_event_ptr_fling:
         break;
     case scui_event_ptr_up: {
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
         if (scui_window_float.cover) {
@@ -352,7 +352,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         scui_window_float.cover = false;
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_float.pos = scui_event_pos_none;
@@ -369,7 +369,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         if (scui_window_float.pos == scui_event_pos_none)
             break;
         scui_point_t point = {0};
@@ -428,7 +428,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
                     value_e = event->ptr_e.x;
             }
             scui_window_float_anima_auto(value_s, value_e, 0);
-            event->style.result |= 0x02;
+            scui_widget_event_mask_over(event);
         }
         break;
     }

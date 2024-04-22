@@ -41,28 +41,28 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
         scui_ui_scene_window_float_cfg();
         scui_ui_scene_window_list_cfg();
         SCUI_LOG_INFO("scui_event_focus_get");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        event->style.result |= 0x01;
+        scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        event->style.result |= 0x02;
+        scui_widget_event_mask_over(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
