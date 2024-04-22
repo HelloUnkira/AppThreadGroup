@@ -197,4 +197,3 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color)
     
     widget->color = color;
 }
-

@@ -46,9 +46,9 @@ void scui_ready(void)
     #endif
     
     /* event register: */
+    scui_event_register_prepare(scui_event_custom_prepare);
+    scui_event_register_finish(scui_event_custom_finish);
     scui_event_register_custom(scui_event_custom);
-    scui_event_register_before(scui_event_before);
-    scui_event_register_after(scui_event_after);
     
     scui_handle_table_t table = {0};
     /* 句柄表(widget) */

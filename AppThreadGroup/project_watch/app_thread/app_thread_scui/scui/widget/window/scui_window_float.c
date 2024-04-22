@@ -193,43 +193,34 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_show(scui_event_t *event)
+void scui_window_float_event_grasp_show(scui_event_t *event)
 {
     scui_widget_show(scui_window_float.main, false);
-    return scui_event_retval_keep;
 }
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_hide(scui_event_t *event)
+void scui_window_float_event_grasp_hide(scui_event_t *event)
 {
-    return scui_event_retval_keep;
 }
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_key(scui_event_t *event)
+void scui_window_float_event_grasp_key(scui_event_t *event)
 {
-    if (event->type == scui_event_key_click) {
+    if (event->type == scui_event_key_click)
         scui_window_float_anima_inout(event->object, false);
-        return scui_event_retval_over;
-    }
 }
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
+void scui_window_float_event_grasp_ptr(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_event_retval_t ret = scui_event_retval_quit;
     
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -242,12 +233,12 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        ret |= scui_event_retval_keep;
+        event->style.result |= 0x01;
         scui_window_float.cover = true;
         break;
     }
     case scui_event_ptr_move: {
-        ret |= scui_event_retval_keep;
+        event->style.result |= 0x01;
         if (scui_window_float.target != handle)
             break;
         int32_t value_s = 0;
@@ -267,13 +258,13 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
                 value_e = event->ptr_e.x;
         }
         scui_window_float_anima_auto(value_s, value_e, 0);
-        ret |= scui_event_retval_over;
+        event->style.result |= 0x02;
         break;
     }
     case scui_event_ptr_fling:
         break;
     case scui_event_ptr_up: {
-        ret |= scui_event_retval_keep;
+        event->style.result |= 0x01;
         if (scui_window_float.target != handle)
             break;
         if (scui_window_float.cover) {
@@ -341,18 +332,14 @@ scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event)
     default:
         break;
     }
-    
-    return ret;
 }
 
 /*@brief 窗口浮动事件检查回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
+void scui_window_float_event_check_ptr(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_event_retval_t ret = scui_event_retval_quit;
     
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -365,7 +352,7 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        ret |= scui_event_retval_keep;
+        event->style.result |= 0x01;
         scui_window_float.cover = false;
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_float.pos = scui_event_pos_none;
@@ -382,7 +369,7 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
-        ret |= scui_event_retval_keep;
+        event->style.result |= 0x01;
         if (scui_window_float.pos == scui_event_pos_none)
             break;
         scui_point_t point = {0};
@@ -441,7 +428,7 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
                     value_e = event->ptr_e.x;
             }
             scui_window_float_anima_auto(value_s, value_e, 0);
-            ret |= scui_event_retval_over;
+            event->style.result |= 0x02;
         }
         break;
     }
@@ -452,6 +439,4 @@ scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event)
     default:
         break;
     }
-    
-    return ret;
 }

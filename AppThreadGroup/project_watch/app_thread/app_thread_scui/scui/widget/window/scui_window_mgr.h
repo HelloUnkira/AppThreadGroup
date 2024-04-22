@@ -61,8 +61,7 @@ void scui_window_mix_surface(void);
 
 /*@brief 控件默认事件处理回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_event_dispatch(scui_event_t *event);
+void scui_window_event_dispatch(scui_event_t *event);
 
 #endif

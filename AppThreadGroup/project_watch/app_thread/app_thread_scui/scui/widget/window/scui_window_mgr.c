@@ -154,15 +154,10 @@ void scui_window_mix_surface(void)
 
 /*@brief 控件默认事件处理回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_event_dispatch(scui_event_t *event)
+void scui_window_event_dispatch(scui_event_t *event)
 {
     SCUI_LOG_DEBUG("event %u", event->type);
     /* 不同的事件处理流程有不同的递归冒泡规则 */
-    scui_event_retval_t ret = scui_event_retval_quit;
-    
-    ret |= scui_window_switch_event(event);
-    
-    return ret;
+    scui_window_switch_event(event);
 }

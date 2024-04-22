@@ -9,39 +9,60 @@
 
 /*@brief 事件响应(custom)
  *@param event 事件包
- *@retval 事件响应回调返回值
  */
-scui_event_retval_t scui_event_custom(scui_event_t *event)
+void scui_event_custom(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     default:
-        return scui_event_retval_quit;
+        break;
     }
 }
 
-/*@brief 事件响应(before)
- *@param event 事件包
- *@retval 事件响应回调返回值
+/*@brief 事件类型转为字符串
+ *@param 事件
+ *@retval 字符串
  */
-scui_event_retval_t scui_event_before(scui_event_t *event)
+const char * scui_event_custom_to_str(scui_event_type_t type)
+{
+    const struct {
+        uint32_t    type;
+        const char *str;
+    } to_str_list[] = {
+        {.type = scui_event_invalid,                .str = "scui_event_invalid",},
+        
+        {.type = scui_event_custom_all,             .str = "scui_event_custom_all",},
+        
+        
+    };
+    
+    for (uint32_t idx = 0; idx < scui_arr_len(to_str_list); idx++)
+        if (to_str_list[idx].type == type)
+            return to_str_list[idx].str;
+    
+    return to_str_list[scui_event_invalid].str;
+}
+
+/*@brief 事件响应
+ *@param event 事件包
+ */
+void scui_event_custom_prepare(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     default:
-        return scui_event_retval_quit;
+        break;
     }
 }
 
-/*@brief 事件响应(after)
+/*@brief 事件响应
  *@param event 事件包
- *@retval 事件响应回调返回值
  */
-scui_event_retval_t scui_event_after(scui_event_t *event)
+void scui_event_custom_finish(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     default:
-        return scui_event_retval_quit;
+        break;
     }
 }

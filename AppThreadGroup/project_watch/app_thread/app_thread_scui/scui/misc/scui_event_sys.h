@@ -13,10 +13,10 @@ typedef enum {
     scui_event_sched_all,
     scui_event_sched_delay,     /* 迟延调度(异步到新事件) */
     scui_event_anima_elapse,    /* 动画轮转调度 */
-    scui_event_focus_get,       /* 窗口焦点获取事件 */
     scui_event_focus_lost,      /* 窗口焦点失去事件 */
-    scui_event_show,            /* 窗口显示事件 */
+    scui_event_focus_get,       /* 窗口焦点获取事件 */
     scui_event_hide,            /* 窗口隐藏事件 */
+    scui_event_show,            /* 窗口显示事件 */
     scui_event_draw,            /* 控件绘制事件 */
     scui_event_refr,            /* 界面刷新事件 */
     scui_event_sched_e,
@@ -56,5 +56,11 @@ typedef enum {
     scui_event_sys_e,
     scui_event_sys_num,
 } scui_event_sys_t;
+
+/*@brief 事件类型转为字符串
+ *@param 事件
+ *@retval 字符串
+ */
+const char * scui_event_sys_to_str(scui_event_type_t type);
 
 #endif

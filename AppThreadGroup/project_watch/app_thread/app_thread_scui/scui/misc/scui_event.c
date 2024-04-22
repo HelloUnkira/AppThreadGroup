@@ -32,7 +32,7 @@ static bool scui_event_sort(scui_list_dln_t *node1, scui_list_dln_t *node2)
 {
     scui_event_t *event1 = scui_own_ofs(scui_event_t, dl_node, node1);
     scui_event_t *event2 = scui_own_ofs(scui_event_t, dl_node, node2);
-    return event1->priority > event2->priority;
+    return event1->style.priority > event2->style.priority;
 }
 
 /*@brief 事件包匹配函数
@@ -78,10 +78,10 @@ void scui_event_enqueue(scui_event_t *event)
             memcpy(event_new, event, sizeof(scui_event_t));
             scui_list_dln_reset(&event_new->dl_node);
             /* 优先级调整到中间,为常规优先级 */
-            if (event_new->priority == 0)
-                event_new->priority  = 0xFF / 2;
+            if (event_new->style.priority == 0)
+                event_new->style.priority  = 0xFF / 2;
             /* 资源包加入到管道(优先队列) */
-            if (event_new->priority == 0)
+            if (event_new->style.priority == 0)
                 scui_list_dll_ainsert(&scui_event_queue.dl_list, NULL, &event_new->dl_node);
             else
                 scui_queue_dlpq_enqueue(&scui_event_queue.dl_list, &event_new->dl_node, scui_event_sort);
@@ -153,4 +153,132 @@ uint32_t scui_event_num(void)
     uint32_t list_num = scui_event_queue.list_num;
     scui_mutex_process(&scui_event_queue.mutex, scui_mutex_give);
     return list_num;
+}
+
+/*@brief 事件回调列表事件准备
+ *@param cb_list 事件回调列表
+ */
+void scui_event_cb_ready(scui_event_cb_list_t *cb_list)
+{
+    SCUI_ASSERT(cb_list != NULL);
+    
+    scui_list_dll_reset(&cb_list->dl_list);
+}
+
+/*@brief 事件回调列表事件清空
+ *@param cb_list 事件回调列表
+ */
+void scui_event_cb_clear(scui_event_cb_list_t *cb_list)
+{
+    SCUI_ASSERT(cb_list != NULL);
+    
+    scui_list_dln_t *node = NULL;
+    while ((node = scui_list_dll_head(&cb_list->dl_list)) != NULL) {
+        scui_event_cb_node_t *cb_node = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
+        /* 抓取事件,移除它 */
+        scui_list_dll_remove(&cb_list->dl_list, &cb_node->dl_node);
+        SCUI_MEM_FREE(cb_node);
+    }
+}
+
+/*@brief 事件回调列表事件查找
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node)
+{
+    SCUI_ASSERT(cb_list != NULL);
+    SCUI_ASSERT(cb_node != NULL);
+    
+    scui_event_cb_node_t *cb_node_inner = NULL;
+    
+    /* 一个事件至多一个响应回调, 优先匹配对应事件 */
+    scui_list_dll_ftra(&cb_list->dl_list, node) {
+        cb_node_inner = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
+        if (cb_node->event == cb_node_inner->event) {
+            cb_node->event_cb = cb_node_inner->event_cb;
+            return;
+        }
+    }
+    
+    bool event_sched = cb_node->event >= scui_event_sched_s &&
+                       cb_node->event <= scui_event_sched_e;
+    bool event_ptr = cb_node->event >= scui_event_ptr_s &&
+                     cb_node->event <= scui_event_ptr_e;
+    bool event_enc = cb_node->event >= scui_event_enc_s &&
+                     cb_node->event <= scui_event_enc_e;
+    bool event_key = cb_node->event >= scui_event_key_s &&
+                     cb_node->event <= scui_event_key_e;
+    bool event_custom = cb_node->event >= scui_event_custom_s &&
+                        cb_node->event <= scui_event_custom_e;
+    
+    /* 一个事件至多一个响应回调, 其次匹配集成事件 */
+    scui_list_dll_ftra(&cb_list->dl_list, node) {
+        cb_node_inner = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
+        if ((cb_node_inner->event == scui_event_sched_all && event_sched) ||
+            (cb_node_inner->event == scui_event_ptr_all && event_ptr) ||
+            (cb_node_inner->event == scui_event_enc_all && event_enc) ||
+            (cb_node_inner->event == scui_event_key_all && event_key) ||
+            (cb_node_inner->event == scui_event_custom_all && event_custom)) {
+             cb_node->event_cb = cb_node_inner->event_cb;
+             return;
+        }
+    }
+    
+    cb_node->event_cb = NULL;
+}
+
+/*@brief 事件回调列表事件添加
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_add(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node)
+{
+    SCUI_ASSERT(cb_list != NULL);
+    SCUI_ASSERT(cb_node != NULL);
+    
+    if (cb_node->event_cb == NULL)
+        return;
+    
+    /* 一个事件至多一个响应回调,新的替换旧的 */
+    scui_event_cb_node_t *cb_node_old = NULL;
+    scui_list_dll_btra(&cb_list->dl_list, node) {
+        cb_node_old = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
+        if (cb_node_old->event == cb_node->event) {
+            cb_node_old->event_cb = cb_node->event_cb;
+            return;
+        }
+    }
+    
+    /* 初始化节点然后入列 */
+    scui_event_cb_node_t *cb_node_new = NULL;
+     cb_node_new = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_event_cb_node_t));
+    *cb_node_new = *cb_node;
+    scui_list_dln_reset(&cb_node_new->dl_node);
+    scui_list_dll_ainsert(&cb_list->dl_list, NULL, &cb_node_new->dl_node);
+}
+
+/*@brief 事件回调列表事件移除
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_del(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node)
+{
+    SCUI_ASSERT(cb_list != NULL);
+    SCUI_ASSERT(cb_node != NULL);
+    
+    /* 一个事件至多一个响应回调 */
+    scui_event_cb_node_t *cb_node_old = NULL;
+    scui_list_dll_btra(&cb_list->dl_list, node) {
+        cb_node_old = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
+        if (cb_node_old->event == cb_node->event)
+            break;
+        cb_node_old = NULL;
+    }
+    
+    if (cb_node_old == NULL)
+        return;
+    /* 抓取到目标事件,移除它 */
+    scui_list_dll_remove(&cb_list->dl_list, &cb_node_old->dl_node);
+    SCUI_MEM_FREE(cb_node_old);
 }

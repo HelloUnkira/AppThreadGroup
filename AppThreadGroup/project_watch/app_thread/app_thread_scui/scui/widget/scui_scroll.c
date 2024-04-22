@@ -38,17 +38,15 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scroll->layout = true;
     
     /* 为滚动控件添加指定的事件回调 */
-    scui_widget_event_t event = {0};
-    event.order    = scui_widget_order_current;
-    event.event_cb = scui_scroll_event;
+    scui_event_cb_node_t cb_node = {.event_cb = scui_scroll_event,};
     
     /* 事件默认全局接收 */
-    event.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_ptr_all;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_enc_all;
-    scui_widget_event_add(*handle, &event);
+    cb_node.event = scui_event_sched_all;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_ptr_all;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_enc_all;
+    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 滚动控件销毁
@@ -207,9 +205,9 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_window_float_anima_start(&anima);
-        scui_window_float_anima_expired(&anima);
-        scui_window_float_anima_ready(&anima);
+        scui_scroll_anima_start(&anima);
+        scui_scroll_anima_expired(&anima);
+        scui_scroll_anima_ready(&anima);
         return;
     }
     scui_anima_create(&anima, &scroll->anima);
@@ -218,12 +216,9 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
 
 /*@brief 滚动控件更新布局回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
+void scui_scroll_update_layout(scui_event_t *event)
 {
-    scui_event_retval_t ret = scui_event_retval_quit;
-    
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
     scui_scroll_t *scroll = (void *)widget;
@@ -233,10 +228,10 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
     if (scroll->layout)
         scroll->layout = false;
     else
-        return ret;
+        return;
     
     if (widget->child_num == 0)
-        return ret;
+        return;
     
     /* 仅指定布局触发布局更新 */
     /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
@@ -271,7 +266,7 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
         scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1);
         scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2);
         scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2);
-        return ret;
+        return;
     }
     
     /* 只支持水平自动布局与垂直自动布局 */
@@ -327,18 +322,14 @@ scui_event_retval_t scui_scroll_update_layout(scui_event_t *event)
     
     if (scui_widget_style_is_show(handle))
         scui_widget_draw(handle, NULL, false);
-    
-    return ret;
 }
 
 /*@brief 滚动控件事件处理回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_scroll_event(scui_event_t *event)
+void scui_scroll_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_event_retval_t ret = scui_event_retval_quit;
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
     scui_scroll_t *scroll = (void *)widget;
@@ -346,10 +337,10 @@ scui_event_retval_t scui_scroll_event(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_show:
-        ret |= scui_scroll_update_layout(event);
+        scui_scroll_update_layout(event);
         break;
     case scui_event_focus_get:
-        ret |= scui_scroll_update_layout(event);
+        scui_scroll_update_layout(event);
         break;
     case scui_event_ptr_down:
         break;
@@ -362,6 +353,4 @@ scui_event_retval_t scui_scroll_event(scui_event_t *event)
     default:
         break;
     }
-    
-    return ret;
 }

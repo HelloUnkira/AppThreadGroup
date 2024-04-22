@@ -38,18 +38,18 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
     for scene in scene_list:
         for widget in scene['widget']:
             try:
-                scui_event_cb = 'static scui_event_retval_t %s(scui_event_t *event)'
+                scui_event_cb = 'static void %s(scui_event_t *event)'
                 scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
                 scui_widget_parser_c.write('{\n\tSCUI_LOG_INFO("event %u widget %u", event->type, event->object);\n')
                 scui_widget_parser_c.write('\tswitch (event->type) {\n\tdefault:\n')
-                scui_widget_parser_c.write('\t\treturn scui_event_retval_quit;\n\t}\n}\n')
+                scui_widget_parser_c.write('\t\tevent->style.result |= 0x01;\n\t\tbreak;\n\t}\n}\n')
             except Exception as e:
                 pass
     scui_widget_parser_c.write('#else\n')
     for scene in scene_list:
         for widget in scene['widget']:
             try:
-                scui_event_cb = 'extern scui_event_retval_t %s(scui_event_t *event);'
+                scui_event_cb = 'extern void %s(scui_event_t *event);'
                 scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
             except Exception as e:
                 pass

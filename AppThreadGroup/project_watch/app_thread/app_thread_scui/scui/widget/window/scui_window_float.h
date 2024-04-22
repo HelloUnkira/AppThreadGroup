@@ -61,32 +61,27 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout);
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_show(scui_event_t *event);
+void scui_window_float_event_grasp_show(scui_event_t *event);
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_hide(scui_event_t *event);
+void scui_window_float_event_grasp_hide(scui_event_t *event);
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_key(scui_event_t *event);
+void scui_window_float_event_grasp_key(scui_event_t *event);
 
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_grasp_ptr(scui_event_t *event);
+void scui_window_float_event_grasp_ptr(scui_event_t *event);
 
 /*@brief 窗口浮动事件检查回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_float_event_check_ptr(scui_event_t *event);
+void scui_window_float_event_check_ptr(scui_event_t *event);
 
 #endif

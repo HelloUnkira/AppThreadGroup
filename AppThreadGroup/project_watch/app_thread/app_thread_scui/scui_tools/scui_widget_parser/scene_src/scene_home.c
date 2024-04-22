@@ -34,115 +34,120 @@ static inline void scui_ui_scene_window_list_cfg(void)
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event)
+void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     case scui_event_focus_get:
         scui_ui_scene_window_float_cfg();
         scui_ui_scene_window_list_cfg();
         SCUI_LOG_INFO("scui_event_focus_get");
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     case scui_event_key_click:
         scui_window_jump(SCUI_UI_SCENE_1, scui_window_switch_normal, scui_event_dir_to_d);
-        return scui_event_retval_over;
+        event->style.result |= 0x02;
+        break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
-            return scui_window_float_event_check_ptr(event);
+            scui_window_float_event_check_ptr(event);
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_c_event_proc(scui_event_t *event)
+void scui_ui_scene_home_c_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_lu_event_proc(scui_event_t *event)
+void scui_ui_scene_home_lu_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_ru_event_proc(scui_event_t *event)
+void scui_ui_scene_home_ru_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_ld_event_proc(scui_event_t *event)
+void scui_ui_scene_home_ld_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
- *@retval 事件响应状态
  */
-scui_event_retval_t scui_ui_scene_home_rd_event_proc(scui_event_t *event)
+void scui_ui_scene_home_rd_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        return scui_event_retval_keep;
+        event->style.result |= 0x01;
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        return scui_event_retval_quit;
+        break;
     }
 }

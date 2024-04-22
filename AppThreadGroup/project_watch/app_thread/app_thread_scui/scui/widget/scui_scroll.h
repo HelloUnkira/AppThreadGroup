@@ -91,14 +91,12 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
 
 /*@brief 滚动控件更新布局回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_scroll_update_layout(scui_event_t *event);
+void scui_scroll_update_layout(scui_event_t *event);
 
 /*@brief 滚动控件事件处理回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_scroll_event(scui_event_t *event);
+void scui_scroll_event(scui_event_t *event);
 
 #endif

@@ -44,19 +44,17 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     window->buffer = maker->buffer;
     
     /* 为窗口控件添加指定的事件回调 */
-    scui_widget_event_t event = {0};
-    event.order    = scui_widget_order_current;
-    event.event_cb = maker->widget.event_cb;
+    scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
     
     /* 事件默认全局接收 */
-    event.event = scui_event_show;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_hide;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_focus_get;
-    scui_widget_event_add(*handle, &event);
-    event.event = scui_event_focus_lost;
-    scui_widget_event_add(*handle, &event);
+    cb_node.event = scui_event_show;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_hide;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_focus_get;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_focus_lost;
+    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 窗口控件销毁

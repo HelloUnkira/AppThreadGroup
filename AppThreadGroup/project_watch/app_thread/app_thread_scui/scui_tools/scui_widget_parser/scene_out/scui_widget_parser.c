@@ -4,556 +4,617 @@
 #include "scui.h"
 
 #if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1
-static scui_event_retval_t scui_ui_scene_float_1_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_1_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_1_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_1_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_1_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_2_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_2_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_3_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_3_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_float_4_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_4_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_home_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_home_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_1_event_proc(scui_event_t *event)
+static void scui_ui_scene_1_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_2_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_2_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_3_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_3_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_4_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_4_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_5_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_5_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_c_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_lu_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_lu_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_ru_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_ru_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_ld_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_ld_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
-static scui_event_retval_t scui_ui_scene_6_rd_event_proc(scui_event_t *event)
+static void scui_ui_scene_6_rd_event_proc(scui_event_t *event)
 {
 	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
 	switch (event->type) {
 	default:
-		return scui_event_retval_quit;
+		event->style.result |= 0x01;
+		break;
 	}
 }
 #else
-extern scui_event_retval_t scui_ui_scene_float_1_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_1_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_1_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_1_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_1_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_1_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_2_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_3_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_float_4_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_home_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_1_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_2_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_3_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_4_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_5_rd_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_c_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_lu_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_ru_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_ld_event_proc(scui_event_t *event);
-extern scui_event_retval_t scui_ui_scene_6_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_3_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_4_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_1_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_2_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_4_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_5_rd_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_lu_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_ru_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_ld_event_proc(scui_event_t *event);
+extern void scui_ui_scene_6_rd_event_proc(scui_event_t *event);
 #endif
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {

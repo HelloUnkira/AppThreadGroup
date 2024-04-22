@@ -25,13 +25,11 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     scui_widget_create(&custom->widget, &maker->widget, handle, layout);
     
     /* 为窗口控件添加指定的事件回调 */
-    scui_widget_event_t event = {0};
-    event.order    = scui_widget_order_current;
-    event.event_cb = maker->widget.event_cb;
+    scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
     
     /* 事件默认全局接收 */
-    event.event = scui_event_draw;
-    scui_widget_event_add(*handle, &event);
+    cb_node.event = scui_event_draw;
+    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 自定义控件销毁

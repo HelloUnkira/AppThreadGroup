@@ -3,14 +3,7 @@
 
 /*@brief 事件类型
  */
-typedef uint32_t scui_event_type_t;
-
-/*@brief 事件风格
- */
-typedef enum {
-    scui_event_style_async,     /* 常规异步调度 */
-    scui_event_style_sync,      /* 就地同步调度 */
-} scui_event_style_t;
+typedef uint16_t scui_event_type_t;
 
 /*@brief 事件优先级(数字越大优先级越高)
  */
@@ -25,15 +18,23 @@ typedef enum {
     scui_event_priority_real_time       = 0xFF,
 } scui_event_priority_t;
 
+/*@brief 事件状态风格
+ */
+typedef struct {
+    uint64_t sync:1;            /* 事件响应调度: 同步调度,异步调度 */
+    uint64_t order:2;           /* 事件响应顺序: 0x00:准备步; 0x01:处理步; 0x02:完成步; */
+    uint64_t result:2;          /* 事件响应结果: 0x00:未处理; 0x01:已问询; 0x02:已吸收; */
+    uint64_t priority:8;        /* 事件优先级别: 数字越大优先级越高 */
+} scui_event_style_t;
+
 /*@brief 事件
  */
 typedef struct {
     scui_list_dln_t dl_node;
     /* 系统基本字段 */
-    scui_handle_t object;   /* 事件对象 */
-    uint32_t type:20;       /* 事件类型 */
-    uint32_t style:1;       /* 事件风格 */
-    uint32_t priority:8;    /* 事件优先级(数字越大优先级越高) */
+    scui_handle_t      object;  /* 事件对象 */
+    scui_event_style_t style;   /* 事件状态风格 */
+    scui_event_type_t  type;    /* 事件类型 */
     /* 事件包吸收回调: */
     /* 如果手动交付该回调,则使用事件包吸收功能 */
     /* 新的事件包根据回调作用到旧有的一个上去,且丢弃本事件 */
@@ -91,17 +92,23 @@ typedef struct {
     uint32_t list_num;
 } scui_event_queue_t;
 
-/*@brief 事件响应回调返回值
- */
-typedef enum {
-    scui_event_retval_quit = 0x00,      /* 未处理:继续事件响应 */
-    scui_event_retval_keep = 0x01,      /* 已问询:继续事件响应 */
-    scui_event_retval_over = 0x10,      /* 已吸收:终止事件响应 */
-} scui_event_retval_t;
-
 /*@brief 事件响应回调
  */
-typedef scui_event_retval_t (*scui_event_cb_t)(scui_event_t *event);
+typedef void (*scui_event_cb_t)(scui_event_t *event);
+
+/*@brief 事件回调列表
+ */
+typedef struct {
+    scui_list_dll_t   dl_list;      /* 事件回调列表 */
+} scui_event_cb_list_t;
+
+/*@brief 事件回调节点
+ */
+typedef struct {
+    scui_list_dln_t   dl_node;      /* 事件回调节点 */
+    scui_event_cb_t   event_cb;     /* 事件回调 */
+    scui_event_type_t event;        /* 事件 */
+} scui_event_cb_node_t;
 
 /*@brief 事件操作方向
  */
@@ -151,5 +158,33 @@ bool scui_event_dequeue(scui_event_t *event, bool hit);
  *@retval 事件数量
  */
 uint32_t scui_event_num(void);
+
+/*@brief 事件回调列表事件准备
+ *@param cb_list 事件回调列表
+ */
+void scui_event_cb_ready(scui_event_cb_list_t *cb_list);
+
+/*@brief 事件回调列表事件清空
+ *@param cb_list 事件回调列表
+ */
+void scui_event_cb_clear(scui_event_cb_list_t *cb_list);
+
+/*@brief 事件回调列表事件查找
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node);
+
+/*@brief 事件回调列表事件添加
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_add(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node);
+
+/*@brief 事件回调列表事件移除
+ *@param cb_list 事件回调列表
+ *@param cb_node 事件回调节点
+ */
+void scui_event_cb_del(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_node);
 
 #endif

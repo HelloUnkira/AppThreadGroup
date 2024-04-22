@@ -17,33 +17,16 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    uint8_t trans:1;        /* 背景透明 */
-    uint8_t state:1;        /* 控件隐藏:0;控件显示:1; */
-    uint8_t anima_sched:1;  /* 控件调度动画标记 */
-    uint8_t indev_ptr:1;    /* 输入事件响应标记:ptr */
-    uint8_t indev_enc:1;    /* 输入事件响应标记:enc */
-    uint8_t indev_key:1;    /* 输入事件响应标记:key */
+    uint8_t trans:1;            /* 背景透明 */
+    uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
+    uint8_t anima_sched:1;      /* 控件调度动画标记 */
+    uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
+    uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
+    uint8_t indev_key:1;        /* 输入事件响应标记:key */
+    uint8_t order_prepare:1;    /* 事件响应顺序 */
+    uint8_t order_execute:1;    /* 事件响应顺序 */
+    uint8_t order_finish:1;     /* 事件响应顺序 */
 } scui_widget_style_t;
-
-/*@brief 控件事件回调响应优先级
- *       任何传递给控件的事件都会尝试性的经过该三步流程进行响应
- *       如果三步处理均不能完全吸收则事件继续向兄弟传递或者冒泡上去
- *       处理中回调如果由外界提供则不走默认处理流程,否则响应默认控件事件传导
- */
-typedef enum {
-    scui_widget_order_before,   /* 主事件处理前回调 */
-    scui_widget_order_current,  /* 主事件处理中回调 */
-    scui_widget_order_after,    /* 主事件处理后回调 */
-} scui_widget_order_t;
-
-/*@brief 控件事件回调
- */
-typedef struct {
-    scui_list_dln_t         dl_node;    /* 控件事件回调列表 */
-    scui_event_cb_t         event_cb;   /* 控件事件回调 */
-    scui_event_type_t       event;      /* 控件事件 */
-    scui_widget_order_t     order;      /* 控件事件回调响应优先级 */
-} scui_widget_event_t;
 
 /*@brief 控件创建回调
  *@brief 控件销毁回调
@@ -74,7 +57,7 @@ typedef struct {
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
-    scui_list_dll_t         dl_list;        /* 控件事件回调列表 */
+    scui_event_cb_list_t    list;           /* 控件事件回调列表 */
     scui_area_t             clip;           /* 控件所在父控件区域 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
@@ -109,7 +92,7 @@ typedef struct {
 
 /* 控件孩子列表宏迭代器(略过无效控件)(forward traverse) */
 #define scui_widget_child_list_ftra(widget, idx)                            \
-    for (int32_t idx = (int32_t)widget->child_num - 1; idx > 0; idx--)      \
+    for (int32_t idx = (int32_t)widget->child_num - 1; idx >= 0; idx--)     \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
 /*@brief 查找控件映射表

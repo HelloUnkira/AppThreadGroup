@@ -32,7 +32,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     if (maker->parent != SCUI_HANDLE_INVALID)
         SCUI_ASSERT(scui_handle_remap(maker->parent));
     
-    scui_list_dll_reset(&widget->dl_list);
+    scui_event_cb_ready(&widget->list);
     
     SCUI_LOG_DEBUG("");
     widget->type   = maker->type;
@@ -92,27 +92,30 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     /* 非根控件要设置为显示,否则为隐藏 */
     widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
     
+    if (!maker->style.order_prepare &&
+        !maker->style.order_finish)
+        widget->style.order_execute = true;
+    
     /* 配置控件事件响应 */
     if (maker->event_cb != NULL) {
-        scui_widget_event_t event = {0};
-        event.order    = scui_widget_order_current;
-        event.event_cb = maker->event_cb;
+        scui_event_cb_node_t cb_node = {0};
+        cb_node.event_cb = maker->event_cb;
         
         if (widget->style.anima_sched) {
-            event.event = scui_event_anima_elapse;
-            scui_widget_event_add(*handle, &event);
+            cb_node.event = scui_event_anima_elapse;
+            scui_widget_event_add(*handle, &cb_node);
         }
         if (widget->style.indev_ptr) {
-            event.event = scui_event_ptr_all;
-            scui_widget_event_add(*handle, &event);
+            cb_node.event = scui_event_ptr_all;
+            scui_widget_event_add(*handle, &cb_node);
         }
         if (widget->style.indev_enc) {
-            event.event = scui_event_enc_all;
-            scui_widget_event_add(*handle, &event);
+            cb_node.event = scui_event_enc_all;
+            scui_widget_event_add(*handle, &cb_node);
         }
         if (widget->style.indev_key) {
-            event.event = scui_event_key_all;
-            scui_widget_event_add(*handle, &event);
+            cb_node.event = scui_event_key_all;
+            scui_widget_event_add(*handle, &cb_node);
         }
     }
     
@@ -203,9 +206,8 @@ void scui_widget_cb_create(scui_handle_t handle)
         if (maker == NULL)
             break;
         /* 一直迭代到下一个根控件句柄前停下 */
-        if (scui_handle_unmap(handle) && maker->parent == SCUI_HANDLE_INVALID)
-            break;
-        if (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID)
+        if ((scui_handle_unmap(handle) && maker->parent == SCUI_HANDLE_INVALID) ||
+            (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID))
             break;
     } while (handle < handle_table->offset + handle_table->number);
 }

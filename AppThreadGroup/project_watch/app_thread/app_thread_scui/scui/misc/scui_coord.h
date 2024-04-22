@@ -55,11 +55,11 @@ bool scui_line_cross(scui_line_t *line1, scui_line_t *line2);
 
 /*@breif 转化区域描述方式(主->从)
  */
-inline void scui_area_m_to_s(scui_area_t *area);
+void scui_area_m_to_s(scui_area_t *area);
 
 /*@breif 转化区域描述方式(从->主)
  */
-inline void scui_area_s_to_m(scui_area_t *area);
+void scui_area_s_to_m(scui_area_t *area);
 
 /*@brief 区域为空检查
  *@param area 区域

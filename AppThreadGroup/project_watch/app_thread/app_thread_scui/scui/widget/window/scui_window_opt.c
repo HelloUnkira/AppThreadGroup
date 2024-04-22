@@ -112,6 +112,7 @@ void scui_window_active(scui_handle_t handle)
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     
     if (scui_window_mgr.active_curr == handle) {
+        scui_widget_draw(handle, NULL, false);
         SCUI_LOG_WARN("redundant operation");
         return;
     }
@@ -128,7 +129,7 @@ void scui_window_active(scui_handle_t handle)
         return;
     }
     
-    scui_event_t event = {.style = scui_event_style_sync,};
+    scui_event_t event = {.style.sync = true,};
     scui_window_mgr.active_last = scui_window_mgr.active_curr;
     scui_window_mgr.active_curr = handle;
     

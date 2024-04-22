@@ -37,8 +37,7 @@ void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32_t pero
 
 /*@brief 窗口切换事件处理回调
  *@param event 事件
- *@retval 事件状态
  */
-scui_event_retval_t scui_window_switch_event(scui_event_t *event);
+void scui_window_switch_event(scui_event_t *event);
 
 #endif
