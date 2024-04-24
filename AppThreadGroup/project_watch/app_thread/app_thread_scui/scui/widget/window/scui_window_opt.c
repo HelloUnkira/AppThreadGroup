@@ -163,9 +163,9 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
     }
     
-    if (scui_window_mgr.switch_args.lock) {
-        SCUI_LOG_WARN("scene is switching");
-        return;
+    if (scui_window_mgr.switch_args.lock_jump) {
+         SCUI_LOG_WARN("scene is switching");
+         return;
     }
     if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
         SCUI_LOG_WARN("scene is switching");
@@ -182,9 +182,12 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     /* 先上锁 */
-    scui_window_mgr.switch_args.lock = true;
-    scui_window_mgr.switch_args.type = type;
-    scui_window_mgr.switch_args.dir  = dir;
+    if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
+         return;
+    
+    scui_window_mgr.switch_args.lock_jump = true;
+    scui_window_mgr.switch_args.type      = type;
+    scui_window_mgr.switch_args.dir       = dir;
     /* 自适应需要更新窗口切换状态 */
     scui_window_switch_type_update(type, dir);
     
@@ -207,8 +210,8 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_hide(scui_window_mgr.active_last, false);
         scui_widget_show(scui_window_mgr.active_curr, false);
         scui_window_active(scui_window_mgr.active_curr);
-        scui_window_mgr.switch_args.lock = false;
-        return;
+        scui_window_mgr.switch_args.lock_jump = false;
+        scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
     } else {
         scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
         scui_window_mgr.switch_args.list[1] = handle;

@@ -27,14 +27,6 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     scui_window_float = *cfg;
 }
 
-/*@brief 窗口工作状态
- *@retval 工作状态
- */
-bool scui_window_float_status(void)
-{
-    return scui_window_float.lock;
-}
-
 /*@brief 窗口移动伴随透明度更新
  *@param handle 窗口控件句柄
  *@param point  窗口移动坐标
@@ -103,7 +95,7 @@ void scui_window_float_anima_ready(void *instance)
     }
     
     if (!scui_window_float.hold)
-         scui_window_float.lock = false;
+         scui_widget_event_scroll_flag(0x01, &scui_window_float.key);
 }
 
 /*@brief 窗口浮动动画回调
@@ -238,6 +230,9 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
+        /* 全局滚动锁定 */
+        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+             break;
         scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
@@ -264,6 +259,9 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     case scui_event_ptr_fling:
         break;
     case scui_event_ptr_up: {
+        /* 全局滚动锁定 */
+        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+             break;
         scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
@@ -398,6 +396,9 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         }
         /* 抓获到运动的目标 */
         if (scui_window_float.target != SCUI_HANDLE_INVALID) {
+            /* 全局滚动锁定 */
+            if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+                 break;
             /* 先释放其他窗口资源 */
             scui_window_hide_without(handle, false);
             scui_widget_show(scui_window_float.target, false);
@@ -407,9 +408,8 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             scui_window_float.main  = handle;
             scui_window_float.dir   = event_dir;
             scui_window_float.pos   = event_dir;
-            scui_window_float.hold  = true;
-            scui_window_float.lock  = true;
             scui_window_float.cover = false;
+            scui_window_float.hold  = true;
             /* 初始默认启动一次,等待动画被打断 */
             int32_t value_s = 0;
             int32_t value_e = 0;

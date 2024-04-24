@@ -553,6 +553,8 @@ void scui_widget_event_draw(scui_event_t *event)
     if (widget->style.trans)
         return;
     
+    scui_widget_event_mask_keep(event);
+    
     /* 有背景图片则优先绘制背景 */
     /* 没有背景图片则绘制纯色背景 */
     if (widget->image != SCUI_HANDLE_INVALID)
@@ -560,6 +562,48 @@ void scui_widget_event_draw(scui_event_t *event)
         scui_widget_surface_draw_image(widget, widget->image, NULL, widget->color);
     else
         scui_widget_surface_draw_color(widget, widget->color);
+}
+
+/*@prief 事件滚动状态检查更新
+ *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
+ *@param key  锁定标记句柄(浮动校验密钥)
+ */
+bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
+{
+    static struct {
+        bool lock;
+        scui_handle_t key;
+    } scroll_flag = {0};
     
-    scui_widget_event_mask_keep(event);
+    switch (state) {
+    case 0x00:
+        if (scroll_flag.lock && scroll_flag.key == *key)
+            return true;
+        if (scroll_flag.lock && scroll_flag.key != *key) {
+            *key = SCUI_HANDLE_INVALID;
+            return false;
+        }
+        scroll_flag.key  = scui_handle_find();
+        scroll_flag.lock = true;
+        *key = scroll_flag.key;
+        return true;
+    case 0x01:
+        if (scroll_flag.lock && scroll_flag.key == *key) {
+            scui_handle_set(scroll_flag.key, NULL);
+            scroll_flag.key  = SCUI_HANDLE_INVALID;
+            scroll_flag.lock = false;
+            *key = SCUI_HANDLE_INVALID;
+             return true;
+        }
+        *key = SCUI_HANDLE_INVALID;
+        return false;
+    case 0x02:
+        if (scroll_flag.lock && scroll_flag.key == *key)
+            return false;
+        *key = SCUI_HANDLE_INVALID;
+        return true;
+    default:
+        SCUI_LOG_ERROR("unknown state");
+        return false;
+    }
 }
