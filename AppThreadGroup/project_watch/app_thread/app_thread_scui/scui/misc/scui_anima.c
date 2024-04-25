@@ -61,7 +61,8 @@ void scui_anima_update(void)
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         /* 回调中销毁了动画实例,并且生成了新的动画 */
-        if (anima != scui_handle_get(scui_anima_list.list[idx])) {
+        if (scui_anima_list.refr_sched) {
+            scui_anima_list.refr_sched = false;
             idx--;
             continue;
         }
@@ -82,7 +83,8 @@ void scui_anima_update(void)
             if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
                 continue;
             /* 回调中销毁了动画实例,并且生成了新的动画 */
-            if (anima != scui_handle_get(scui_anima_list.list[idx])) {
+            if (scui_anima_list.refr_sched) {
+                scui_anima_list.refr_sched = false;
                 idx--;
                 continue;
             }
@@ -117,7 +119,8 @@ void scui_anima_update(void)
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         /* 回调中销毁了动画实例,并且生成了新的动画 */
-        if (anima != scui_handle_get(scui_anima_list.list[idx])) {
+        if (scui_anima_list.refr_sched) {
+            scui_anima_list.refr_sched = false;
             idx--;
             continue;
         }
@@ -192,7 +195,9 @@ void scui_anima_destroy(scui_handle_t handle)
             scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
             scui_handle_set(scui_anima_list.list[idx], NULL);
             scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
+            scui_anima_list.refr_sched = true;
             SCUI_MEM_FREE(anima);
+            
             return;
         }
     
@@ -241,6 +246,29 @@ void scui_anima_stop(scui_handle_t handle)
     
     /* 句柄实例错误 */
     SCUI_ASSERT(false);
+}
+
+/*@brief 动画实例
+ *@param handle 动画句柄
+ *@param anima  动画实例
+ *@retval 动画实例有效性
+ */
+bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima)
+{
+    if (handle == SCUI_HANDLE_INVALID || anima == NULL) {
+        SCUI_LOG_ERROR("invalid args");
+        return false;
+    }
+    
+    *anima = NULL;
+    
+    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+        if (scui_anima_list.list[idx] == handle) {
+            *anima = scui_handle_get(scui_anima_list.list[idx]);
+            return true;
+        }
+    
+    return false;
 }
 
 /*@brief 动画是否运行

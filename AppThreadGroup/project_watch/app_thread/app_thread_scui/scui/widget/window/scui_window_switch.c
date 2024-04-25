@@ -441,13 +441,10 @@ void scui_window_switch_event(scui_event_t *event)
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling:
-        scui_widget_event_mask_over(event);
         /* 场景正在切换时,中止更新切换目标 */
         if (scui_window_mgr.switch_args.lock_move) {
+            scui_widget_event_mask_over(event);
             SCUI_LOG_INFO("");
-            /* 全局滚动锁定检查 */
-            if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key))
-                break;
             if (scui_window_mgr.switch_args.pos == scui_event_pos_l)
                 scui_window_move_anima_auto(clip.x, event->ptr_e.x, 0);
             if (scui_window_mgr.switch_args.pos == scui_event_pos_r)
@@ -506,22 +503,20 @@ void scui_window_switch_event(scui_event_t *event)
                 if (event->type == scui_event_ptr_fling)
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
                 else {
-                if (scui_window_mgr.switch_args.pos == scui_event_pos_l)
-                    scui_window_move_anima_auto(clip.x, event->ptr_e.x, 0);
-                if (scui_window_mgr.switch_args.pos == scui_event_pos_r)
-                    scui_window_move_anima_auto(clip.x, event->ptr_e.x - clip.w, 0);
-                if (scui_window_mgr.switch_args.pos == scui_event_pos_u)
-                    scui_window_move_anima_auto(clip.y, event->ptr_e.y, 0);
-                if (scui_window_mgr.switch_args.pos == scui_event_pos_d)
-                    scui_window_move_anima_auto(clip.y, event->ptr_e.y - clip.h, 0);
+                    if (scui_window_mgr.switch_args.pos == scui_event_pos_l)
+                        scui_window_move_anima_auto(clip.x, event->ptr_e.x, 0);
+                    if (scui_window_mgr.switch_args.pos == scui_event_pos_r)
+                        scui_window_move_anima_auto(clip.x, event->ptr_e.x - clip.w, 0);
+                    if (scui_window_mgr.switch_args.pos == scui_event_pos_u)
+                        scui_window_move_anima_auto(clip.y, event->ptr_e.y, 0);
+                    if (scui_window_mgr.switch_args.pos == scui_event_pos_d)
+                        scui_window_move_anima_auto(clip.y, event->ptr_e.y - clip.h, 0);
                 }
+                scui_widget_event_mask_over(event);
             }
         }
         break;
     case scui_event_ptr_up:
-        /* 全局滚动锁定检查 */
-        if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key))
-            break;
         scui_widget_event_mask_keep(event);
         if (scui_window_mgr.switch_args.lock_move) {
             scui_window_mgr.switch_args.hold_move = false;

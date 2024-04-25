@@ -471,6 +471,9 @@ void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    if (offset->x == 0 && offset->y == 0)
+        return;
+    
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_get(handle);

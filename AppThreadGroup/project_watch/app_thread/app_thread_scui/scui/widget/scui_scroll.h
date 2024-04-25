@@ -15,11 +15,15 @@ typedef struct {
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t       anima;          /* 移动动画 */
-    scui_point_t        point_s;        /* 移动动画起始点 */
-    scui_point_t        point_c;        /* 移动动画当前点 */
-    scui_point_t        point_e;        /* 移动动画结束点 */
+    scui_handle_t       key;            /* 全局滚动锁定 */
+    scui_point_t        point_s;        /* 移动动画起始 */
+    scui_point_t        point_c;        /* 移动动画当前 */
+    scui_point_t        point_e;        /* 移动动画结束 */
     uint8_t             layout:1;       /* 布局更新标记 */
     uint8_t             hold:1;         /* 滚动长留锁 */
+    uint8_t             lock_move:1;    /* 滚动长留锁 */
+    uint8_t             hold_move:1;    /* 滚动长留锁 */
+    uint8_t             mask_fling:1;   /* 滚动长留锁 */
     /* 内部域(模式): */
     union {
         /* 无方向布局(自由布局) */
@@ -30,7 +34,8 @@ typedef struct {
         };
         /* 方向布局(水平布局,垂直布局,非循环) */
         struct {
-            scui_coord_t    dis_cur;    /* 移动记录线 */
+            scui_coord_t    dis_sum;    /* 移动记录线 */
+            scui_coord_t    dis_ofs;    /* 移动记录线 */
             scui_coord_t    dis_lim;    /* 移动限制线[0,range] */
         };
         /* 方向布局(水平布局,垂直布局,循环) */

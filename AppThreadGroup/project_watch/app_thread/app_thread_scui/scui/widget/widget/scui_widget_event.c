@@ -373,9 +373,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         SCUI_LOG_INFO("event %u", event->type);
         /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
         bool event_filter = true;
-        event_filter = event_filter || event->type != scui_event_ptr_hold;
-        event_filter = event_filter || event->type != scui_event_ptr_down;
-        event_filter = event_filter || event->type != scui_event_ptr_up;
+        event_filter = event_filter && event->type != scui_event_ptr_hold;
+        event_filter = event_filter && event->type != scui_event_ptr_down;
+        event_filter = event_filter && event->type != scui_event_ptr_up;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];

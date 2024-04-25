@@ -56,6 +56,7 @@ typedef struct {
 /*@brief 动画列表
  */
 typedef struct {
+    bool refr_sched;
     bool run_status;
     uint32_t elapse;
     scui_handle_t list[SCUI_ANIMA_LIMIT];
@@ -90,6 +91,13 @@ void scui_anima_start(scui_handle_t handle);
  *@param handle 动画句柄
  */
 void scui_anima_stop(scui_handle_t handle);
+
+/*@brief 动画实例
+ *@param handle 动画句柄
+ *@param anima  动画实例
+ *@retval 动画实例有效性
+ */
+bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima);
 
 /*@brief 动画是否运行
  *@param handle 动画句柄

@@ -259,9 +259,6 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     case scui_event_ptr_fling:
         break;
     case scui_event_ptr_up: {
-        /* 全局滚动锁定 */
-        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
-             break;
         scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
