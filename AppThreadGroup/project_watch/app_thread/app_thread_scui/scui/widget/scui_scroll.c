@@ -514,6 +514,7 @@ void scui_scroll_event(scui_event_t *event)
                 scroll->lock_move = true;
                 scroll->hold_move = true;
                 
+                scroll->dis_ofs += scroll->dis_sum;
                 scroll->dis_sum = 0;
                 scroll->point_s = (scui_point_t){0};
                 scroll->point_c = (scui_point_t){0};
