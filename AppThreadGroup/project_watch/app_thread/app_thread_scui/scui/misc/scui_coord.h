@@ -1,6 +1,11 @@
 #ifndef SCUI_COORD_H
 #define SCUI_COORD_H
 
+#define scui_coord_max      (0x7fff)
+#define scui_coord_min      (0x8000)
+#define scui_multi_max      (0x7fffffff)
+#define scui_multi_min      (0x80000000)
+
 /*@brief 坐标点,范围:[-32768, +32767]
  *       通常来说不需要支持更大范围的坐标点
  */

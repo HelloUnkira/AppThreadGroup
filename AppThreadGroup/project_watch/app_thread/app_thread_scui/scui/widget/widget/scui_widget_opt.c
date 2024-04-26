@@ -197,3 +197,101 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_gradient_t color)
     
     widget->color = color;
 }
+
+/*@brief 控件对齐子控件计算
+ *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
+ *       边界对齐:则边界中心点与子控件中心点偏移量(最小)
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param pos    对齐目标
+ */
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_point_t *offset, scui_event_pos_t pos)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->child_num == 0)
+        return false;
+    
+    scui_point_t point_c = {0};
+    scui_point_t point_child_c = {0};
+    /* 中心对齐:则控件中心点与子控件中心点偏移量(最小) */
+    if (pos == scui_event_pos_c) {
+        point_c.x = widget->clip.x + widget->clip.w / 2;
+        point_c.y = widget->clip.y + widget->clip.h / 2;
+    }
+    
+    if (pos == scui_event_pos_u) {
+        point_c.x = widget->clip.x + widget->clip.w / 2;
+        point_c.y = widget->clip.y;
+    }
+    if (pos == scui_event_pos_d) {
+        point_c.x = widget->clip.x + widget->clip.w / 2;
+        point_c.y = widget->clip.y + widget->clip.h;
+    }
+    
+    if (pos == scui_event_pos_l) {
+        point_c.x = widget->clip.x;
+        point_c.y = widget->clip.y + widget->clip.h / 2;
+    }
+    if (pos == scui_event_pos_r) {
+        point_c.x = widget->clip.x + widget->clip.w;
+        point_c.y = widget->clip.y + widget->clip.h / 2;
+    }
+    
+    if (point_c.x == 0 && point_c.y == 0)
+        return;
+    
+    scui_handle_t handle_tar = SCUI_HANDLE_INVALID;
+    scui_multi_t  dist_tar_a = scui_coord_max;
+    scui_coord_t  dist_tar_x = 0;
+    scui_coord_t  dist_tar_y = 0;
+    
+    /* 迭代计算每一个子控件,找到最小偏移量 */
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_get(handle);
+        
+        if (pos == scui_event_pos_c) {
+            point_child_c.x = child->clip.x + child->clip.w / 2;
+            point_child_c.y = child->clip.y + child->clip.h / 2;
+        }
+        
+        if (pos == scui_event_pos_u) {
+            point_child_c.x = child->clip.x + child->clip.w / 2;
+            point_child_c.y = child->clip.y;
+        }
+        if (pos == scui_event_pos_d) {
+            point_child_c.x = child->clip.x + child->clip.w / 2;
+            point_child_c.y = child->clip.y + child->clip.h;
+        }
+        
+        if (pos == scui_event_pos_l) {
+            point_child_c.x = child->clip.x;
+            point_child_c.y = child->clip.y + child->clip.h / 2;
+        }
+        if (pos == scui_event_pos_r) {
+            point_child_c.x = child->clip.x + child->clip.w;
+            point_child_c.y = child->clip.y + child->clip.h / 2;
+        }
+        
+        scui_coord_t dist_x = point_child_c.x - point_c.x;
+        scui_coord_t dist_y = point_child_c.y - point_c.y;
+        scui_multi_t dist_a = dist_x * dist_x + dist_y * dist_y;
+        
+        if (dist_tar_a > dist_a) {
+            dist_tar_a = dist_a;
+            dist_tar_x = dist_x;
+            dist_tar_y = dist_y;
+            handle_tar = child->myself;
+        }
+    }
+    
+    if (handle_tar == SCUI_HANDLE_INVALID)
+        return false;
+    
+    offset->x = -dist_tar_x;
+    offset->y = -dist_tar_y;
+    return true;
+}

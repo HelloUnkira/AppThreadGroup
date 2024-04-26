@@ -30,15 +30,18 @@ typedef struct {
 
 /*@brief 控件创建回调
  *@brief 控件销毁回调
+ *@brief 控件布局更新回调
  */
 typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
 typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
+typedef void (*scui_widget_cb_layout_t)(scui_handle_t handle);
 
 /*@brief 控件处理函数映射表
  */
 typedef struct {
     scui_widget_cb_create_t  create;
     scui_widget_cb_destroy_t destroy;
+    scui_widget_cb_layout_t  layout;
 } scui_widget_cb_t;
 
 /*@brief 控件基础信息:
@@ -120,11 +123,15 @@ void scui_widget_destroy(scui_widget_t *widget);
  */
 void scui_widget_cb_create(scui_handle_t handle);
 
-/*@brief 卸载一个控件树
- *       从指定控件开始到它的所有子控件
+/*@brief 卸载一个控件
  *@param handle 控件句柄
  */
 void scui_widget_cb_destroy(scui_handle_t handle);
+
+/*@brief 更新一个控件布局
+ *@param handle 控件句柄
+ */
+void scui_widget_cb_layout(scui_handle_t handle);
 
 /*@brief 控件添加子控件
  *@param handle 控件句柄

@@ -32,6 +32,18 @@ static void app_dev_log_hal_msg(app_dev_t *driver, const char *format, va_list l
     app_dev_log_data_t *data = driver->data;
     /* 填充目标平台下的动作 */
     vprintf(format, list);
+    
+    static bool not_ready = true;
+    /* 将日志转存到文件中,方便回溯 */
+    if (not_ready) {
+        not_ready = false;
+        FILE *file = fopen("app_thread_group(log).txt", "w");
+        fclose(file);
+    }
+    
+    FILE *file = fopen("app_thread_group(log).txt", "a+");
+    vfprintf(file, format, list);
+    fclose(file);
 }
 
 /* 静态配置的设备操作参数 */

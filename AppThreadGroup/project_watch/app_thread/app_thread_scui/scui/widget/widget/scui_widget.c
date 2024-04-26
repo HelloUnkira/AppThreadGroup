@@ -167,10 +167,13 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
     static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
         [scui_widget_type_window].create  = (scui_widget_cb_create_t)   scui_window_create,
         [scui_widget_type_window].destroy = (scui_widget_cb_destroy_t)  scui_window_destroy,
+        [scui_widget_type_window].layout  = (scui_widget_cb_layout_t)   NULL,
         [scui_widget_type_custom].create  = (scui_widget_cb_create_t)   scui_custom_create,
         [scui_widget_type_custom].destroy = (scui_widget_cb_destroy_t)  scui_custom_destroy,
+        [scui_widget_type_custom].layout  = (scui_widget_cb_layout_t)   NULL,
         [scui_widget_type_scroll].create  = (scui_widget_cb_create_t)   scui_scroll_create,
         [scui_widget_type_scroll].destroy = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
+        [scui_widget_type_scroll].layout  = (scui_widget_cb_layout_t)   scui_scroll_layout,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
@@ -212,8 +215,7 @@ void scui_widget_cb_create(scui_handle_t handle)
     } while (handle < handle_table->offset + handle_table->number);
 }
 
-/*@brief 卸载一个控件树
- *       从指定控件开始到它的所有子控件
+/*@brief 卸载一个控件
  *@param handle 控件句柄
  */
 void scui_widget_cb_destroy(scui_handle_t handle)
@@ -229,6 +231,22 @@ void scui_widget_cb_destroy(scui_handle_t handle)
     widget_cb->destroy(handle);
 }
 
+/*@brief 更新一个控件布局
+ *@param handle 控件句柄
+ */
+void scui_widget_cb_layout(scui_handle_t handle)
+{
+    if (scui_handle_unmap(handle))
+        return;
+    
+    scui_widget_t *widget = NULL;
+    widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    scui_widget_cb_t *widget_cb = scui_widget_cb_find(widget->type);
+    if (widget_cb->layout != NULL)
+        widget_cb->layout(handle);
+}
+
 /*@brief 控件添加子控件
  *@param handle 控件句柄
  *@param child  控件子控件句柄
@@ -242,6 +260,8 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
             widget->child_list[idx]  = child;
+            /* 子控件列表更新,布局更新 */
+            scui_widget_cb_layout(handle);
             return;
         }
     SCUI_LOG_WARN("widget %u add child %u fail", handle, child);
@@ -260,6 +280,8 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == child) {
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
+            /* 子控件列表更新,布局更新 */
+            scui_widget_cb_layout(handle);
             return;
         }
     SCUI_LOG_WARN("widget %u del child %u fail", handle, child);

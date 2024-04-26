@@ -14,16 +14,17 @@ typedef struct {
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
-    scui_handle_t       anima;          /* 移动动画 */
-    scui_handle_t       key;            /* 全局滚动锁定 */
-    scui_point_t        point_s;        /* 移动动画起始 */
-    scui_point_t        point_c;        /* 移动动画当前 */
-    scui_point_t        point_e;        /* 移动动画结束 */
-    uint8_t             layout:1;       /* 布局更新标记 */
-    uint8_t             hold:1;         /* 滚动长留锁 */
-    uint8_t             lock_move:1;    /* 滚动长留锁 */
-    uint8_t             hold_move:1;    /* 滚动长留锁 */
-    uint8_t             mask_fling:1;   /* 滚动长留锁 */
+    scui_handle_t       anima;              /* 移动动画 */
+    scui_handle_t       key;                /* 全局滚动锁定 */
+    scui_point_t        point_s;            /* 移动动画起始 */
+    scui_point_t        point_c;            /* 移动动画当前 */
+    scui_point_t        point_e;            /* 移动动画结束 */
+    uint8_t             layout:1;           /* 布局更新标记 */
+    uint8_t             hold:1;             /* 滚动长留锁 */
+    uint8_t             lock_move:1;        /* 滚动长留锁 */
+    uint8_t             hold_move:1;        /* 滚动长留锁 */
+    uint8_t             mask_fling:1;       /* 滚动长留锁 */
+    uint8_t             mask_springback:1;  /* 回弹暂留锁 */
     /* 内部域(模式): */
     union {
         /* 无方向布局(自由布局) */
@@ -72,12 +73,6 @@ void scui_scroll_destroy(scui_handle_t handle);
  */
 void scui_scroll_layout(scui_handle_t handle);
 
-/*@brief 滚动控件子控件位置调整
- *@param handle 窗口控件句柄
- *@param point  窗口移动坐标
- */
-void scui_scroll_adjust_offset(scui_handle_t handle, scui_point_t *offset);
-
 /*@brief 滚动控件动画回调
  */
 void scui_scroll_anima_start(void *instance);
@@ -98,6 +93,9 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
  *@param event 事件
  */
 void scui_scroll_update_layout(scui_event_t *event);
+
+
+void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
 
 /*@brief 滚动控件事件处理回调
  *@param event 事件
