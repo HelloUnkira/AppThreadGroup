@@ -41,22 +41,6 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     
     scroll->layout = true;
     
-    #if 1   /* just for test */
-    
-    scroll->loop = true;
-    scroll->fling_page = 5;
-    
-    // scroll->dir = scui_event_dir_hor;
-    scroll->dir = scui_event_dir_ver;
-    
-    scroll->pos = scui_event_pos_c;
-    // scroll->pos = scui_event_pos_l;
-    // scroll->pos = scui_event_pos_r;
-    // scroll->pos = scui_event_pos_u;
-    // scroll->pos = scui_event_pos_d;
-    
-    #endif
-    
     /* 为滚动控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = scui_scroll_event,};
     
@@ -688,6 +672,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
  */
 void scui_scroll_event(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);

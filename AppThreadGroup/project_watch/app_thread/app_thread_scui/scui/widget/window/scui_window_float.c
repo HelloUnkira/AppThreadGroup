@@ -212,6 +212,8 @@ void scui_window_float_event_grasp_key(scui_event_t *event)
  */
 void scui_window_float_event_grasp_ptr(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;
@@ -334,6 +336,8 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
  */
 void scui_window_float_event_check_ptr(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;

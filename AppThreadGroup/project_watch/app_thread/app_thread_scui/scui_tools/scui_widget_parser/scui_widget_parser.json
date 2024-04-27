@@ -23,7 +23,7 @@
                 "widget.clip.h":                    "控件所在父控件区域(h)",
                 "widget.myself":                    "控件关联属性:自己",
                 "widget.parent":                    "控件关联属性:父控件",
-                "widget.child_num":                 "控件关联属性:子控件数量",
+                "widget.child_num":                 "控件关联属性:子控件数量(动态创建)",
                 "widget.image":                     "背景图片(如果有背景图片,优先绘制)",
                 "widget.color.color.ch.a":          "纯色背景(如果没背景图片,颜色绘制)",
                 "widget.color.color.ch.r":          "纯色背景(如果没背景图片,颜色绘制)",

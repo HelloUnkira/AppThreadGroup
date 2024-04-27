@@ -7,8 +7,11 @@
 
 #include "scui.h"
 
-static inline void scui_ui_scene_window_float_cfg(void)
+static inline void scui_ui_scene_window_float_cfg(scui_event_t *event)
 {
+    if (!scui_widget_event_check_prepare(event))
+         return;
+    
     /* 窗口属性参数配置 */
     scui_window_float_t float_cfg = {0};
     scui_window_float_cfg_get(&float_cfg);
@@ -20,8 +23,11 @@ static inline void scui_ui_scene_window_float_cfg(void)
     scui_window_float_cfg_set(&float_cfg);
 }
 
-static inline void scui_ui_scene_window_list_cfg(void)
+static inline void scui_ui_scene_window_list_cfg(scui_event_t *event)
 {
+    if (!scui_widget_event_check_prepare(event))
+         return;
+    
     /* 窗口属性参数配置 */
     scui_window_cfg_t window_cfg = {0};
     scui_window_cfg_get(SCUI_UI_SCENE_3, &window_cfg);
@@ -52,8 +58,8 @@ void scui_ui_scene_3_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
-        scui_ui_scene_window_float_cfg();
-        scui_ui_scene_window_list_cfg();
+        scui_ui_scene_window_float_cfg(event);
+        scui_ui_scene_window_list_cfg(event);
         SCUI_LOG_INFO("scui_event_focus_get");
         scui_widget_event_mask_keep(event);
         break;

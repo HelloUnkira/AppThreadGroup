@@ -414,6 +414,9 @@ void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
  */
 void scui_window_switch_event(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
     scui_widget_t *widget = scui_handle_get(event->object);
     scui_window_t *window = widget;
     SCUI_ASSERT(widget != NULL);

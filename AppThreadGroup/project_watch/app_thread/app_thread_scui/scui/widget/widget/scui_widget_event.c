@@ -274,20 +274,12 @@ void scui_widget_event_proc(scui_event_t *event)
     if (cb_node.event_cb == NULL)
         return;
     
-    if (widget->style.order_prepare) {
-        event->style.order = 0x00;
-        cb_node.event_cb(event);
-    }
-    
-    if (widget->style.order_execute) {
-        event->style.order = 0x01;
-        cb_node.event_cb(event);
-    }
-    
-    if (widget->style.order_finish) {
-        event->style.order = 0x02;
-        cb_node.event_cb(event);
-    }
+    scui_widget_event_mask_prepare(event);
+    cb_node.event_cb(event);
+    scui_widget_event_mask_execute(event);
+    cb_node.event_cb(event);
+    scui_widget_event_mask_finish(event);
+    cb_node.event_cb(event);
 }
 
 /*@brief 控件默认事件处理回调

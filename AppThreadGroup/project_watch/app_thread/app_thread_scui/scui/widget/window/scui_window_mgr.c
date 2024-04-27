@@ -158,6 +158,8 @@ void scui_window_mix_surface(void)
 void scui_window_event_dispatch(scui_event_t *event)
 {
     SCUI_LOG_DEBUG("event %u", event->type);
+    
     /* 不同的事件处理流程有不同的递归冒泡规则 */
+    scui_widget_event_mask_execute(event);
     scui_window_switch_event(event);
 }

@@ -23,9 +23,6 @@ typedef struct {
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
     uint8_t indev_key:1;        /* 输入事件响应标记:key */
-    uint8_t order_prepare:1;    /* 事件响应顺序 */
-    uint8_t order_execute:1;    /* 事件响应顺序 */
-    uint8_t order_finish:1;     /* 事件响应顺序 */
 } scui_widget_style_t;
 
 /*@brief 控件创建回调

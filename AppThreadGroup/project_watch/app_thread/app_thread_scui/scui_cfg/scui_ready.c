@@ -73,7 +73,7 @@ void scui_ready(void)
     /* 窗口交互风格 */
     scui_window_switch_type_cfg(scui_window_switch_normal);
     /* 初始窗口 */
-    scui_handle_t handle = SCUI_UI_SCENE_1;
+    scui_handle_t handle = SCUI_UI_SCENE_TEST;
     scui_widget_show(handle, false);
     scui_window_active(handle);
     // scui_widget_hide(handle, false);

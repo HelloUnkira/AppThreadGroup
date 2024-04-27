@@ -17,7 +17,7 @@
  */
 void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL && *handle != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL);
     SCUI_ASSERT(maker->clip.w != 0);
     SCUI_ASSERT(maker->clip.h != 0);
     
@@ -91,10 +91,6 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     SCUI_LOG_DEBUG("");
     /* 非根控件要设置为显示,否则为隐藏 */
     widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
-    
-    if (!maker->style.order_prepare &&
-        !maker->style.order_finish)
-        widget->style.order_execute = true;
     
     /* 配置控件事件响应 */
     if (maker->event_cb != NULL) {

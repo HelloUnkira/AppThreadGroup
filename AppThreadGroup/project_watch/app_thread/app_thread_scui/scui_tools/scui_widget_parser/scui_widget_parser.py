@@ -40,9 +40,18 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
             try:
                 scui_event_cb = 'static void %s(scui_event_t *event)'
                 scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
-                scui_widget_parser_c.write('{\n\tSCUI_LOG_INFO("event %u widget %u", event->type, event->object);\n')
-                scui_widget_parser_c.write('\tswitch (event->type) {\n\tdefault:\n')
-                scui_widget_parser_c.write('\t\tscui_widget_event_mask_keep(event);\n\t\tbreak;\n\t}\n}\n')
+                scui_widget_parser_c.write('{\n')
+                scui_widget_parser_c.write('\tif (!scui_widget_event_check_prepare(event))\n')
+                scui_widget_parser_c.write('\t\treturn;\n')
+                scui_widget_parser_c.write('\t\n')
+                scui_widget_parser_c.write('\tSCUI_LOG_INFO("event %u widget %u", event->type, event->object);\n')
+                scui_widget_parser_c.write('\t\n')
+                scui_widget_parser_c.write('\tswitch (event->type) {\n')
+                scui_widget_parser_c.write('\tdefault:\n')
+                scui_widget_parser_c.write('\t\tscui_widget_event_mask_keep(event);\n')
+                scui_widget_parser_c.write('\t\tbreak;\n')
+                scui_widget_parser_c.write('\t}\n')
+                scui_widget_parser_c.write('}\n')
             except Exception as e:
                 pass
     scui_widget_parser_c.write('#else\n')
