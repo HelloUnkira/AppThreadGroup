@@ -184,8 +184,15 @@ void scui_widget_refr_pos(scui_handle_t handle, scui_point_t *point);
 
 /*@brief 控件移动子控件
  *@param handle 控件句柄
- *@param child  控件子控件句柄
+ *@param offset 偏移量
  */
 void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset);
+
+/*@brief 控件移动子控件(循环模式)
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param range  偏移量限制
+ */
+void scui_widget_refr_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
 
 #endif

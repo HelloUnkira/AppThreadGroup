@@ -11,8 +11,8 @@ typedef struct {
     scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
-    scui_coord_t        springback;     /* 回弹效果 */
     scui_coord_t        fling_page;     /* 翻页数量 */
+    scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t       anima;              /* 移动动画 */
@@ -32,16 +32,11 @@ typedef struct {
             scui_point_t    ofs_min;    /* 最小偏移点 */
             scui_point_t    ofs_max;    /* 最大偏移点 */
         };
-        /* 方向布局(水平布局,垂直布局,非循环) */
+        /* 方向布局(水平布局,垂直布局,非循环,循环) */
         struct {
             scui_coord_t    dis_sum;    /* 移动记录线 */
             scui_coord_t    dis_ofs;    /* 移动记录线 */
             scui_coord_t    dis_lim;    /* 移动限制线[0,range] */
-        };
-        /* 方向布局(水平布局,垂直布局,循环) */
-        struct {
-            scui_point_t    dist_ofs;   /* 移动映射线 */
-            scui_coord_t    dist_map;   /* 移动映射线 */
         };
     };
 } scui_scroll_t;
@@ -51,8 +46,8 @@ typedef struct {
     scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
-    scui_coord_t        springback;     /* 回弹效果 */
     scui_coord_t        fling_page;     /* 翻页数量 */
+    scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
 

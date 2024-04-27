@@ -485,7 +485,7 @@ void scui_widget_refr_pos(scui_handle_t handle, scui_point_t *point)
 
 /*@brief 控件移动子控件
  *@param handle 控件句柄
- *@param child  控件子控件句柄
+ *@param offset 偏移量
  */
 void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
 {
@@ -502,6 +502,59 @@ void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
         scui_area_t clip_child = child->clip;
         clip_child.x += offset->x;
         clip_child.y += offset->y;
+        scui_widget_refr_pos(handle, &clip_child);
+    }
+}
+
+/*@brief 控件移动子控件(循环模式)
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param range  偏移量限制
+ */
+void scui_widget_refr_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range)
+{
+    SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (offset->x == 0 && offset->y == 0)
+        return;
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_get(handle);
+        scui_area_t clip_child = child->clip;
+        scui_area_t clip_inter = {0};
+        clip_child.x += offset->x;
+        clip_child.y += offset->y;
+        
+        /* 计算是否与父控件存在交集 */
+        if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
+            scui_widget_refr_pos(handle, &clip_child);
+            continue;
+        }
+        
+        /* 偏回一个range,计算是否与父控件存在交集 */
+        clip_child.x -= range->x;
+        clip_child.y -= range->y;
+        if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
+            scui_widget_refr_pos(handle, &clip_child);
+            continue;
+        }
+        clip_child.x += range->x;
+        clip_child.y += range->y;
+        
+        /* 偏去一个range,计算是否与父控件存在交集 */
+        clip_child.x += range->x;
+        clip_child.y += range->y;
+        if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
+            scui_widget_refr_pos(handle, &clip_child);
+            continue;
+        }
+        clip_child.x -= range->x;
+        clip_child.y -= range->y;
+        
+        /* 正常继续偏转 */
         scui_widget_refr_pos(handle, &clip_child);
     }
 }
