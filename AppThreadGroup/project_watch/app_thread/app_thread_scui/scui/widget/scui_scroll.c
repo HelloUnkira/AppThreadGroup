@@ -33,13 +33,26 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scroll->pos         = maker->pos;
     scroll->space       = maker->space;
     scroll->springback  = maker->springback;
+    scroll->fling_page  = maker->fling_page;
     scroll->loop        = maker->loop;
+    
+    if (scroll->fling_page <= 0)
+        scroll->fling_page  = 1;
     
     scroll->layout = true;
     
     #if 1   /* just for test */
-    // scroll->pos = scui_event_pos_c;
-    scroll->pos = scui_event_pos_u;
+    scroll->fling_page = 5;
+    
+    // scroll->dir = scui_event_dir_hor;
+    scroll->dir = scui_event_dir_ver;
+    
+    scroll->pos = scui_event_pos_c;
+    // scroll->pos = scui_event_pos_l;
+    // scroll->pos = scui_event_pos_r;
+    // scroll->pos = scui_event_pos_u;
+    // scroll->pos = scui_event_pos_d;
+    
     #endif
     
     /* 为滚动控件添加指定的事件回调 */
@@ -93,6 +106,25 @@ void scui_scroll_layout(scui_handle_t handle)
     scui_widget_draw(handle, NULL, false);
 }
 
+/*@brief 滚动控件翻页数更新
+ *@param handle 可滚动控件句柄
+ *@param fling_page 翻页数
+ */
+void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    scroll->fling_page = fling_page;
+    
+    if (scroll->fling_page <= 0)
+        scroll->fling_page  = 1;
+}
+
 /*@brief 滚动控件动画回调
  */
 void scui_scroll_anima_start(void *instance)
@@ -128,8 +160,8 @@ void scui_scroll_anima_ready(void *instance)
         }
         
         /* 自动布局,非循环 */
-        SCUI_LOG_INFO("dis_ofs:%d", scroll->dis_ofs);
-        SCUI_LOG_INFO("dis_sum:%d", scroll->dis_sum);
+        SCUI_LOG_DEBUG("dis_ofs:%d", scroll->dis_ofs);
+        SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
         scui_scroll_event_auto_merge(&event, 0x01);
         
         if (!scroll->hold_move) {
@@ -145,14 +177,15 @@ void scui_scroll_anima_ready(void *instance)
                 break;
             }
             
-            if (scroll->dis_lim == 0)
-                break;
-            
-            /* 回弹结束不再做校正 */
+            /* 进行回弹则不再校正 */
             if (scroll->mask_springback)
                 break;
             
-            // scui_scroll_event_auto_merge(&event, 0xAA);
+            if (scroll->dis_lim == 0)
+                break;
+            
+            /* 未回弹则需要校正 */
+            scui_scroll_event_auto_merge(&event, 0xAA);
         }
         break;
     }
@@ -237,9 +270,9 @@ void scui_scroll_anima_expired(void *instance)
             delta = scroll->point_c.y - scroll->point_s.y - scroll->dis_sum;
         }
         
-        SCUI_LOG_INFO("dis_ofs:%d", scroll->dis_ofs);
-        SCUI_LOG_INFO("dis_sum:%d", scroll->dis_sum);
-        SCUI_LOG_INFO("delta:%d", delta);
+        SCUI_LOG_DEBUG("dis_ofs:%d", scroll->dis_ofs);
+        SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
+        SCUI_LOG_DEBUG("delta:%d", delta);
         
         scui_coord_t springback_min = +(scroll->springback);
         scui_coord_t springback_max = -(scroll->springback + scroll->dis_lim);
@@ -247,19 +280,27 @@ void scui_scroll_anima_expired(void *instance)
         /* 使用偏移范围限制offset,最多允许偏移到回弹点 */
         scui_coord_t dis_ofs_sum = scroll->dis_ofs + scroll->dis_sum + delta;
         if (dis_ofs_sum > springback_min) {
-            delta = 0;
             if (scroll->dis_ofs + scroll->dis_sum < springback_min)
                 delta = springback_min - (scroll->dis_ofs + scroll->dis_sum);
+            else {
+                delta = 0;
+                /* 最后一帧了,可以结束了 */
+                anima->reduce = anima->peroid;
+            }
         }
         if (dis_ofs_sum < springback_max) {
-            delta = 0;
             if (scroll->dis_ofs + scroll->dis_sum > springback_max)
                 delta = springback_max - (scroll->dis_ofs + scroll->dis_sum);
+            else {
+                delta = 0;
+                /* 最后一帧了,可以结束了 */
+                anima->reduce = anima->peroid;
+            }
         }
         
         scroll->dis_sum += delta;
         SCUI_LOG_DEBUG("dis_ofs_sum:%d", dis_ofs_sum);
-        SCUI_LOG_INFO("delta:%d", delta);
+        SCUI_LOG_DEBUG("delta:%d", delta);
         
         scui_point_t offset = {0};
         if (scroll->dir == scui_event_dir_hor)
@@ -267,7 +308,7 @@ void scui_scroll_anima_expired(void *instance)
         if (scroll->dir == scui_event_dir_ver)
             offset.y = delta;
         
-        SCUI_LOG_INFO("<x:%d,y:%d>", offset.x, offset.y);
+        SCUI_LOG_DEBUG("<x:%d,y:%d>", offset.x, offset.y);
         /* 偏移所有子控件 */
         scui_widget_refr_ofs_child_list(widget->myself, &offset);
         scui_widget_draw(widget->myself, NULL, false);
@@ -332,6 +373,8 @@ void scui_scroll_update_layout(scui_event_t *event)
     
     if (widget->child_num == 0)
         return;
+    
+    SCUI_LOG_WARN("widget: %u", widget->myself);
     
     /* 仅指定布局触发布局更新 */
     /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
@@ -457,6 +500,8 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         if (event->type == scui_event_ptr_fling) {
             delta_x = delta_x > 0 ? widget->clip.w : -widget->clip.w;
             delta_y = delta_y > 0 ? widget->clip.h : -widget->clip.h;
+            delta_x *= scroll->fling_page;
+            delta_y *= scroll->fling_page;
         }
         
         scroll->dis_ofs += scroll->dis_sum;
@@ -540,7 +585,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 
                 /* 已经校正完毕,不再校正 */
                 if (offset.x == 0 && offset.y == 0)
-                    return;
+                    break;
                 
                 SCUI_ASSERT((scroll->dir == scui_event_dir_hor && offset.x != 0) ||
                             (scroll->dir == scui_event_dir_ver && offset.y != 0));
@@ -568,18 +613,18 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             
             if ((scroll->pos & scui_event_pos_u) != 0)
                 retval = retval && scui_widget_align_pos_calc(handle, &offset1, scui_event_pos_u);
-            if ((scroll->pos & scui_event_pos_r) != 0)
+            if ((scroll->pos & scui_event_pos_d) != 0)
                 retval = retval && scui_widget_align_pos_calc(handle, &offset2, scui_event_pos_d);
             
             if (retval) {
                 /* 取最小偏移量 */
                 if ((((scroll->pos & scui_event_pos_l) != 0) || ((scroll->pos & scui_event_pos_u) != 0)))
                       offset = offset1;
-                if ((((scroll->pos & scui_event_pos_r) != 0) || ((scroll->pos & scui_event_pos_r) != 0)))
+                if ((((scroll->pos & scui_event_pos_r) != 0) || ((scroll->pos & scui_event_pos_d) != 0)))
                       offset = offset2;
                 
                 if ((((scroll->pos & scui_event_pos_l) != 0) && ((scroll->pos & scui_event_pos_r) != 0)) ||
-                     ((scroll->pos & scui_event_pos_u) != 0) && ((scroll->pos & scui_event_pos_r) != 0))
+                     ((scroll->pos & scui_event_pos_u) != 0) && ((scroll->pos & scui_event_pos_d) != 0))
                        offset = (offset1.x * offset1.x + offset1.y * offset1.y <
                                  offset2.x * offset2.x + offset2.y * offset2.y) ? offset1 : offset2;
                 
@@ -587,7 +632,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 
                 /* 已经校正完毕,不再校正 */
                 if (offset.x == 0 && offset.y == 0)
-                    return;
+                    break;
                 
                 SCUI_ASSERT((scroll->dir == scui_event_dir_hor && offset.x != 0) ||
                             (scroll->dir == scui_event_dir_ver && offset.y != 0));
@@ -622,7 +667,7 @@ void scui_scroll_event(scui_event_t *event)
     case scui_event_hide:
     case scui_event_focus_get:
     case scui_event_focus_lost:
-        scroll->layout = true;
+        scui_scroll_layout(handle);
         break;
     case scui_event_draw:
         scui_scroll_update_layout(event);

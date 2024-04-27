@@ -62,7 +62,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_coord_t dist_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
             scui_coord_t dist_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t dist_r = scui_max(scui_abs(dist_x), scui_abs(dist_y));
-            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_ZOOM_COF * dist_r / elapse);
+            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_INDEV_PTR_FLING_COF * dist_r / elapse);
             /* 检查事件是否是点击 */
             if (elapse < SCUI_INDEV_PTR_CLICK) {
                 event.type    = scui_event_ptr_click;
@@ -127,7 +127,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_coord_t dist_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
             scui_coord_t dist_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t dist_r = scui_max(scui_abs(dist_x), scui_abs(dist_y));
-            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_ZOOM_COF * dist_r / elapse);
+            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_INDEV_PTR_FLING_COF * dist_r / elapse);
             /* 移动总速度不满足fling条件,转为move */
             if (rate_d < SCUI_INDEV_PTR_FLING_RATE)
             if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)

@@ -241,7 +241,7 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_point_t *offset, scui
     }
     
     if (point_c.x == 0 && point_c.y == 0)
-        return;
+        return false;
     
     scui_handle_t handle_tar = SCUI_HANDLE_INVALID;
     scui_multi_t  dist_tar_a = scui_coord_max;

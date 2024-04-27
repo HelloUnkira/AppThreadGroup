@@ -1,6 +1,12 @@
 #ifndef SCUI_MEM_H
 #define SCUI_MEM_H
 
+/* 内存使用记录监控: */
+#define SCUI_MEM_RECORD_CHECK       (0)
+#define SCUI_MEM_RECORD_ITEM_DEF    (128)
+#define SCUI_MEM_RECORD_ITEM_TEXT   (256)
+#define SCUI_MEM_RECORD_ITEM_GRAPH  (64)
+
 /* 内存分配类型:
  * 1.默认类型
  * 特点:碎片化,不稳定生存期,大小不定

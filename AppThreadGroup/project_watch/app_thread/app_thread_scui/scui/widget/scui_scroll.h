@@ -12,6 +12,7 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        springback;     /* 回弹效果 */
+    scui_coord_t        fling_page;     /* 翻页数量 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t       anima;              /* 移动动画 */
@@ -20,10 +21,8 @@ typedef struct {
     scui_point_t        point_c;            /* 移动动画当前 */
     scui_point_t        point_e;            /* 移动动画结束 */
     uint8_t             layout:1;           /* 布局更新标记 */
-    uint8_t             hold:1;             /* 滚动长留锁 */
     uint8_t             lock_move:1;        /* 滚动长留锁 */
     uint8_t             hold_move:1;        /* 滚动长留锁 */
-    uint8_t             mask_fling:1;       /* 滚动长留锁 */
     uint8_t             mask_springback:1;  /* 回弹暂留锁 */
     /* 内部域(模式): */
     union {
@@ -53,6 +52,7 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        springback;     /* 回弹效果 */
+    scui_coord_t        fling_page;     /* 翻页数量 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
 
@@ -72,6 +72,12 @@ void scui_scroll_destroy(scui_handle_t handle);
  *@param handle 可滚动控件句柄
  */
 void scui_scroll_layout(scui_handle_t handle);
+
+/*@brief 滚动控件翻页数更新
+ *@param handle 可滚动控件句柄
+ *@param fling_page 翻页数
+ */
+void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
 
 /*@brief 滚动控件动画回调
  */

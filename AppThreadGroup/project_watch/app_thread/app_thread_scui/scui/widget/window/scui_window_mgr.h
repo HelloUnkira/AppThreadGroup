@@ -1,6 +1,9 @@
 #ifndef SCUI_WINDOW_MGR_H
 #define SCUI_WINDOW_MGR_H
 
+/* 场景管理数量限制 */
+#define SCUI_WINDOW_MGR_LIMIT   (5)
+
 typedef enum {
     scui_window_switch_none,            /* 无切换 */
     scui_window_switch_auto,            /* 自适应(适应部分特效) */

@@ -1,6 +1,11 @@
 #ifndef SCUI_ANIMA_H
 #define SCUI_ANIMA_H
 
+/*@brief 动画更新频率,动画最大数量
+ */
+#define SCUI_ANIMA_TICK         (1000 / 60)
+#define SCUI_ANIMA_LIMIT        (10)
+
 /*@brief 缩放系数(Coefficient),为2的指数倍
  */
 #define SCUI_ANIMA_RES_COF      (1024)
