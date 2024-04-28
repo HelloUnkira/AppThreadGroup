@@ -17,9 +17,8 @@ typedef struct {
     /* 内部域: */
     scui_handle_t       anima;              /* 移动动画 */
     scui_handle_t       key;                /* 全局滚动锁定 */
-    scui_point_t        point_s;            /* 移动动画起始 */
-    scui_point_t        point_c;            /* 移动动画当前 */
-    scui_point_t        point_e;            /* 移动动画结束 */
+    scui_point_t        point_cur;          /* 移动动画当前 */
+    scui_point_t        point_ofs;          /* 移动动画总计 */
     uint8_t             layout:1;           /* 布局更新标记 */
     uint8_t             lock_move:1;        /* 滚动长留锁 */
     uint8_t             hold_move:1;        /* 滚动长留锁 */
@@ -28,6 +27,7 @@ typedef struct {
     union {
         /* 无方向布局(自由布局) */
         struct {
+            scui_point_t    ofs_sum;    /* 记录偏移点 */
             scui_point_t    ofs_cur;    /* 当前偏移点 */
             scui_point_t    ofs_min;    /* 最小偏移点 */
             scui_point_t    ofs_max;    /* 最大偏移点 */

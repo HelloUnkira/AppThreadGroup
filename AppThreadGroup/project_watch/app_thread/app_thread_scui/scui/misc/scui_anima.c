@@ -47,6 +47,7 @@ void scui_anima_update(void)
             continue;
         
         scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
+        scui_anima_list.refr_sched = false;
         
         /* 动画未运行 */
         if (!anima->running)
