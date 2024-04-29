@@ -42,6 +42,14 @@ void scui_clip_check(scui_clip_set_t *clip_set)
     }
 }
 
+/*@brief 就绪剪切域
+ *@param clip_set 剪切域集合
+ */
+void scui_clip_ready(scui_clip_set_t *clip_set)
+{
+    scui_list_dll_reset(&clip_set->dl_list);
+}
+
 /*@brief 清空剪切域
  *@param clip_set 剪切域集合
  */

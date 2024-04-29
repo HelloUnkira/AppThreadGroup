@@ -47,6 +47,7 @@ static void scui_scene_test_show(scui_event_t *event)
         
         #if 0
         #elif 1 /* test scroll widget */
+        #define SCUI_SCROLL_LAYOUT_AUTO     1
         scui_scroll_maker_t scroll_maker = {0};
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
         scroll_maker.widget.type = scui_widget_type_scroll;
@@ -58,63 +59,62 @@ static void scui_scene_test_show(scui_event_t *event)
         scroll_maker.widget.clip.w = SCUI_DRV_HOR_RES * 4 / 6;
         scroll_maker.widget.clip.h = SCUI_DRV_HOR_RES * 4 / 6;
         scroll_maker.widget.parent = SCUI_UI_SCENE_TEST;
-        scroll_maker.widget.child_num = 10;
+        scroll_maker.widget.child_num = 50;
         scroll_maker.widget.color.color.full = 0xFF4F4F4F;
         scroll_maker.springback = 70;
         scroll_maker.space = 50;
-        #if 1   /* just for test */
         scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
-        scroll_maker.dir = scui_event_dir_none;
-        // scroll_maker.dir = scui_event_dir_hor;
-        // scroll_maker.dir = scui_event_dir_ver;
         
+        #if SCUI_SCROLL_LAYOUT_AUTO
+        // scroll_maker.dir = scui_event_dir_hor;
+        scroll_maker.dir = scui_event_dir_ver;
+        scroll_maker.pos = scui_event_pos_c;
+        // scroll_maker.pos = scui_event_dir_hor;
+        // scroll_maker.pos = scui_event_dis_ver;
+        #else
+        scroll_maker.dir = scui_event_dir_none;
+        scroll_maker.pos = scui_event_pos_c;
         // scroll_maker.pos = scui_event_pos_l;
         // scroll_maker.pos = scui_event_pos_r;
         // scroll_maker.pos = scui_event_pos_u;
         // scroll_maker.pos = scui_event_pos_d;
-        scroll_maker.pos = scui_event_pos_c;
         #endif
         scui_scroll_create(&scroll_maker, &scroll_handle, false);
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.type   = scui_widget_type_custom;
-        custom_maker.widget.clip.w = SCUI_DRV_HOR_RES / 4;
-        custom_maker.widget.clip.h = SCUI_DRV_HOR_RES / 4;
+        custom_maker.widget.clip.w = SCUI_DRV_HOR_RES / 8;
+        custom_maker.widget.clip.h = SCUI_DRV_HOR_RES / 8;
         custom_maker.widget.parent = scroll_handle;
         
         scui_coord_t scroll_x = scroll_maker.widget.clip.x;
         scui_coord_t scroll_y = scroll_maker.widget.clip.y;
         scui_coord_t scroll_w = scroll_maker.widget.clip.w;
         scui_coord_t scroll_h = scroll_maker.widget.clip.h;
-        scui_coord_t custom_w_d2 = custom_maker.widget.clip.w / 2;
-        scui_coord_t custom_h_d2 = custom_maker.widget.clip.h / 2;
+        scui_coord_t custom_w = custom_maker.widget.clip.w;
+        scui_coord_t custom_h = custom_maker.widget.clip.h;
         
-        uint32_t bg_color_list[] = {0xFF0000FF, 0xFF00FF00, 0xFFFF0000, 0xFF00FFFF, 0xFFFFFF00, 0xFFFF00FF, 0xFFFFFFFF, 0xFF888888, 0xFF666666};
-        scui_point_t clip_list[] = {
-            {.x = - custom_w_d2, .y = - custom_h_d2, },
-            {.x = - custom_w_d2, .y = scroll_h - custom_h_d2, },
-            {.x = scroll_w - custom_w_d2, .y = - custom_h_d2, },
-            {.x = scroll_w - custom_w_d2, .y = scroll_h - custom_h_d2, },
-            
-            {.x = scroll_w / 2 - custom_w_d2, .y = - custom_h_d2, },
-            {.x = - custom_w_d2, .y = scroll_h / 2 - custom_h_d2, },
-            {.x = scroll_w / 2 - custom_w_d2, .y = scroll_h - custom_h_d2, },
-            {.x = scroll_w - custom_w_d2, .y = scroll_h / 2 - custom_h_d2, },
-            
-            {.x = scroll_w / 2 - custom_w_d2, .y = scroll_h / 2 - custom_h_d2, },
-        };
-        #if 0   // 自动布局模式
-        for (uint8_t idx = 0; idx < scui_arr_len(bg_color_list); idx++) {
-            custom_maker.widget.color.color.full = bg_color_list[idx];
+        #if SCUI_SCROLL_LAYOUT_AUTO
+        // 自动布局模式
+        for (uint8_t idx = 0; idx < 10; idx++) {
+            custom_maker.widget.color.color.ch.a = 0xFF;
+            custom_maker.widget.color.color.ch.r = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.color.color.ch.g = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.color.color.ch.b = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
             scui_custom_create(&custom_maker, &custom_handle, false);
         }
-        #else   // 自由布局模式
-        for (uint8_t idx = 0; idx < scui_arr_len(bg_color_list); idx++) {
-            custom_maker.widget.clip.x = clip_list[idx].x;
-            custom_maker.widget.clip.y = clip_list[idx].y;
-            custom_maker.widget.color.color.full = bg_color_list[idx];
+        #else
+        // 自由布局模式
+        for (uint8_t idx = 0; idx < 25; idx++) {
+            custom_maker.widget.clip.x = scui_map(idx % 5, 0, 5, - custom_w, scroll_w + custom_w);
+            custom_maker.widget.clip.y = scui_map(idx / 5, 0, 5, - custom_h, scroll_h + custom_h);
+            SCUI_LOG_DEBUG("<x:%d,y:%d>", custom_maker.widget.clip.x, custom_maker.widget.clip.y);
+            custom_maker.widget.color.color.ch.a = 0xFF;
+            custom_maker.widget.color.color.ch.r = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.color.color.ch.g = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.color.color.ch.b = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
             scui_custom_create(&custom_maker, &custom_handle, false);
         }
         #endif

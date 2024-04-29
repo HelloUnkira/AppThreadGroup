@@ -8,8 +8,7 @@ typedef enum {
     scui_widget_type_window,    /* 窗口控件(仅根控件) */
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
-    scui_widget_type_image,     /* 图片控件 */
-    scui_widget_type_label,     /* 文本控件 */
+    scui_widget_type_string,    /* 文本控件 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

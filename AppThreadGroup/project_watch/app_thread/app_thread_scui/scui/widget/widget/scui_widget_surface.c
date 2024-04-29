@@ -29,6 +29,8 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
         scui_area_t clip_inter = {0};
         if (scui_area_inter(&clip_inter, &widget->surface.clip, &widget_parent->surface.clip))
             widget->surface.clip = clip_inter;
+        else
+            widget->surface.clip = (scui_area_t){0};
     }
     
     if (!recurse)

@@ -1929,6 +1929,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_TEST,
 	.widget.event_cb                = scui_ui_scene_test_event_proc,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.widget.child_num               = 10,
 	.level                          = 0,
 	.buffer                         = true,

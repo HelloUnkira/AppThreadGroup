@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -140,7 +140,6 @@ void scui_scroll_anima_ready(void *instance)
     
     switch (scroll->dir) {
     case scui_event_dir_none: {
-        #if 0
         /* 自由布局 */
         SCUI_LOG_DEBUG("ofs_cur:<%d,%d>", scroll->ofs_cur.x, scroll->ofs_cur.y);
         SCUI_LOG_DEBUG("ofs_sum:<%d,%d>", scroll->ofs_sum.x, scroll->ofs_sum.y);
@@ -151,14 +150,21 @@ void scui_scroll_anima_ready(void *instance)
         if (!scroll->hold_move) {
             
             /* 到达回弹点,则开始回弹 */
-            if ((scroll->ofs_cur.x > -scroll->ofs_min.x  ||
-                 scroll->ofs_cur.y > -scroll->ofs_min.y) ||
-                (scroll->ofs_cur.x < -scroll->ofs_max.x  ||
-                 scroll->ofs_cur.y < -scroll->ofs_max.y)) {
+            if (scroll->ofs_cur.x > -scroll->ofs_min.x ||
+                scroll->ofs_cur.y > -scroll->ofs_min.y ||
+                scroll->ofs_cur.x < -scroll->ofs_max.x ||
+                scroll->ofs_cur.y < -scroll->ofs_max.y) {
                  scroll->mask_springback = true;
+                 
+                if (scroll->ofs_cur.x > -scroll->ofs_min.x)
+                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_min.x);
+                if (scroll->ofs_cur.y > -scroll->ofs_min.y)
+                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_min.y);
                 
-                scroll->point_ofs.x = -scroll->ofs_cur.x;
-                scroll->point_ofs.y = -scroll->ofs_cur.y;
+                if (scroll->ofs_cur.x < -scroll->ofs_max.x)
+                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_max.x);
+                if (scroll->ofs_cur.y < -scroll->ofs_max.y)
+                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_max.y);
                 
                 scui_multi_t dist = 0;
                 scui_point_t offset = {
@@ -180,7 +186,6 @@ void scui_scroll_anima_ready(void *instance)
             /* 未回弹则需要校正 */
             scui_scroll_event_auto_merge(&event, 0xAA);
         }
-        #endif
         break;
         }
     case scui_event_dir_hor:
@@ -255,8 +260,8 @@ void scui_scroll_anima_expired(void *instance)
             scroll->point_cur.y = scui_map(value_c, value_s, value_e, 0, scroll->point_ofs.y);
         
         scui_point_t delta = {
-            .x = scroll->point_cur.x - scroll->ofs_cur.x,
-            .y = scroll->point_cur.y - scroll->ofs_cur.y,
+            .x = scroll->point_cur.x - scroll->ofs_sum.x,
+            .y = scroll->point_cur.y - scroll->ofs_sum.y,
         };
         
         SCUI_LOG_DEBUG("ofs_cur:<%d,%d>", scroll->ofs_cur.x, scroll->ofs_cur.y);
@@ -565,7 +570,7 @@ void scui_scroll_update_layout(scui_event_t *event)
     SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
     
     if (scui_widget_style_is_show(handle))
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(handle, NULL, true);
 }
 
 /*@brief 滚动控件事件流程合并
@@ -813,8 +818,6 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         if (scroll->pos == scui_event_pos_c) {
             retval = scui_widget_align_pos_calc(handle, &offset, scui_event_pos_c);
             if (retval) {
-                SCUI_ASSERT(!(offset.x != 0 && offset.y != 0));
-                
                 /* 已经校正完毕,不再校正 */
                 if (offset.x == 0 && offset.y == 0)
                     break;
@@ -829,6 +832,8 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                     scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
                     scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
                 } else {
+                    SCUI_ASSERT(!(offset.x != 0 && offset.y != 0));
+                    
                     SCUI_ASSERT((scroll->dir == scui_event_dir_hor && offset.x != 0) ||
                                 (scroll->dir == scui_event_dir_ver && offset.y != 0));
                     

@@ -77,7 +77,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     scui_widget_surface_refr(widget, false);
     
     /* 画布剪切域更新,主域配置为空 */
-    scui_list_dll_reset(&widget->clip_set.dl_list);
+    scui_clip_ready(&widget->clip_set);
     widget->clip_set.clip = (scui_area_t){0};
     
     widget->image = maker->image;
@@ -138,6 +138,8 @@ void scui_widget_destroy(scui_widget_t *widget)
         return;
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
+    /* 画布剪切域清除 */
+    scui_clip_clear(&widget->clip_set);
     /* 先递归销毁自己的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
         scui_widget_cb_destroy(widget->child_list[idx]);
@@ -290,6 +292,12 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
 void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
 {
     SCUI_LOG_WARN("widget: %u", widget->myself);
+    SCUI_LOG_INFO("<%d, %d, %d, %d>",
+                  widget->clip.x, widget->clip.y,
+                  widget->clip.w, widget->clip.h);
+    SCUI_LOG_INFO("<%d, %d, %d, %d>",
+                  widget->surface.clip.x, widget->surface.clip.y,
+                  widget->surface.clip.w, widget->surface.clip.h);
     scui_clip_check(&widget->clip_set);
     
     if (!recurse)
@@ -309,7 +317,7 @@ void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
 void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
-    widget->clip_set.clip = (scui_area_t){0};
+    widget->clip_set.clip = widget->surface.clip;
     scui_clip_clear(&widget->clip_set);
     
     if (!recurse)
@@ -331,9 +339,6 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
     
-    widget->clip_set.clip = widget->surface.clip;
-    scui_clip_add(&widget->clip_set, &widget->clip_set.clip);
-    
     if (clip != NULL) {
         widget->clip_set.clip.w = 0;
         widget->clip_set.clip.h = 0;
@@ -342,6 +347,8 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
         if (scui_area_inter(&clip_inter, &widget->surface.clip, clip))
             widget->clip_set.clip = clip_inter;
     }
+    scui_clip_clear(&widget->clip_set);
+    scui_clip_add(&widget->clip_set, &widget->clip_set.clip);
     
     if (!recurse)
          return;
@@ -418,8 +425,8 @@ void scui_widget_refr_size(scui_handle_t handle, scui_coord_t width, scui_coord_
     widget->clip.w = width;
     widget->clip.h = height;
     /* 更新画布剪切域 */
-    scui_widget_surface_refr(widget, false);
-    scui_widget_clip_clear(widget, false);
+    scui_widget_surface_refr(widget, true);
+    scui_widget_clip_clear(widget, true);
 }
 
 /*@brief 控件坐标更新
