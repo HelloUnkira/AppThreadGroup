@@ -29,13 +29,16 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
     
     /* 状态初始化 */
-    scroll->dir             = maker->dir;
-    scroll->pos             = maker->pos;
-    scroll->space           = maker->space;
-    scroll->springback      = maker->springback;
-    scroll->fling_page      = maker->fling_page;
-    scroll->route_encode    = maker->route_encode;
-    scroll->loop            = maker->loop;
+    scroll->dir         = maker->dir;
+    scroll->pos         = maker->pos;
+    scroll->space       = maker->space;
+    scroll->springback  = maker->springback;
+    scroll->fling_page  = maker->fling_page;
+    scroll->route_enc   = maker->route_enc;
+    scroll->route_key   = maker->route_key;
+    scroll->keyid_fdir  = maker->keyid_fdir;
+    scroll->keyid_bdir  = maker->keyid_bdir;
+    scroll->loop        = maker->loop;
     
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
@@ -62,6 +65,12 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 特殊事件按需求添加 */
     cb_node.event = scui_event_enc_all;
+    scui_widget_event_del(*handle, &cb_node);
+    if (maker->widget.style.indev_ptr)
+        scui_widget_event_add(*handle, &cb_node);
+    
+    /* 特殊事件按需求添加 */
+    cb_node.event = scui_event_key_all;
     scui_widget_event_del(*handle, &cb_node);
     if (maker->widget.style.indev_ptr)
         scui_widget_event_add(*handle, &cb_node);
@@ -101,6 +110,9 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     SCUI_ASSERT(widget != NULL);
     
     if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    if (offset->x == 0 && offset->y == 0)
         return;
     
     /* 复用动画即可 */
@@ -1061,8 +1073,8 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        if (scroll->route_encode == 0) {
-            SCUI_LOG_ERROR("encode route is zero");
+        if (scroll->route_enc == 0) {
+            SCUI_LOG_ERROR("route encode is zero");
             break;
         }
         if (scroll->dir == scui_event_dir_none) {
@@ -1078,9 +1090,35 @@ void scui_scroll_event(scui_event_t *event)
         
         scui_point_t offset = {0};
         if (scroll->dir == scui_event_dir_hor)
-            offset.x = way * scroll->route_encode * event->enc_diff;
+            offset.x = way * scroll->route_enc * event->enc_diff;
         if (scroll->dir == scui_event_dir_ver)
-            offset.y = way * scroll->route_encode * event->enc_diff;
+            offset.y = way * scroll->route_enc * event->enc_diff;
+        
+        scui_scroll_offset(handle, &offset);
+        scui_widget_event_mask_over(event);
+        break;
+    }
+    case scui_event_key_click: {
+        if (scroll->route_enc == 0) {
+            SCUI_LOG_ERROR("route key is zero");
+            break;
+        }
+        if (scroll->dir == scui_event_dir_none) {
+            SCUI_LOG_ERROR("free layout is unsupport encode");
+            break;
+        }
+        
+        scui_coord_t way = 0;
+        if (event->key_id == scroll->keyid_fdir)
+            way = +1;
+        if (event->key_id == scroll->keyid_bdir)
+            way = -1;
+        
+        scui_point_t offset = {0};
+        if (scroll->dir == scui_event_dir_hor)
+            offset.x = way * scroll->route_key;
+        if (scroll->dir == scui_event_dir_ver)
+            offset.y = way * scroll->route_key;
         
         scui_scroll_offset(handle, &offset);
         scui_widget_event_mask_over(event);

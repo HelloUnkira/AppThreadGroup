@@ -65,14 +65,17 @@ static void scui_scene_test_show(scui_event_t *event)
         scroll_maker.space = 50;
         scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
-        scroll_maker.route_encode = 100;
+        scroll_maker.route_enc = 117;
+        scroll_maker.route_key = 117;
+        scroll_maker.keyid_fdir = scui_event_key_val_down;
+        scroll_maker.keyid_bdir = scui_event_key_val_up;
         
         #if SCUI_SCROLL_LAYOUT_AUTO
         // scroll_maker.dir = scui_event_dir_hor;
         scroll_maker.dir = scui_event_dir_ver;
         scroll_maker.pos = scui_event_pos_c;
         // scroll_maker.pos = scui_event_dir_hor;
-        // scroll_maker.pos = scui_event_dis_ver;
+        // scroll_maker.pos = scui_event_dir_ver;
         #else
         scroll_maker.dir = scui_event_dir_none;
         scroll_maker.pos = scui_event_pos_c;

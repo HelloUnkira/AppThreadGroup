@@ -12,7 +12,10 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
-    scui_coord_t        route_encode;   /* 编码器行程 */
+    scui_coord_t        route_enc;      /* 编码器行程 */
+    scui_coord_t        route_key;      /* 按键行程 */
+    scui_coord_t        keyid_fdir;     /* 按键id,对应编码器事件(clockwise) */
+    scui_coord_t        keyid_bdir;     /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
@@ -48,7 +51,10 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
-    scui_coord_t        route_encode;   /* 编码器行程 */
+    scui_coord_t        route_enc;      /* 编码器行程 */
+    scui_coord_t        route_key;      /* 按键行程 */
+    scui_coord_t        keyid_fdir;     /* 按键id,对应编码器事件(clockwise) */
+    scui_coord_t        keyid_bdir;     /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
