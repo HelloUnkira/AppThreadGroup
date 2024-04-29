@@ -176,7 +176,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     if (scui_window_mgr.active_curr == handle) {
         scui_point_t point = (scui_point_t){0};
         scui_widget_show(scui_window_mgr.active_curr, false);
-        scui_widget_refr_pos(scui_window_mgr.active_curr, &point);
+        scui_widget_move_pos(scui_window_mgr.active_curr, &point);
         scui_window_active(scui_window_mgr.active_curr);
         return;
     }

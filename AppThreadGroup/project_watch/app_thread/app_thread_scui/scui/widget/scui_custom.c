@@ -24,7 +24,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&custom->widget, &maker->widget, handle, layout);
     
-    /* 为窗口控件添加指定的事件回调 */
+    /* 为自定义控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
     
     /* 事件默认全局接收 */

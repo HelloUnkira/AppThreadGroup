@@ -165,18 +165,25 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
  */
 void scui_widget_clip_update(scui_widget_t *widget);
 
+/*@brief 控件坐标更新
+ *@param handle 控件句柄
+ *@param point  坐标点
+ */
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
+
+/*@brief 子控件坐标镜像
+ *@param handle  控件句柄
+ *@param dir     水平镜像或垂直镜像
+ *@param recurse 递归处理
+ */
+void scui_widget_mirror_pos(scui_handle_t handle, scui_event_dir_t dir, bool recurse);
+
 /*@brief 控件尺寸更新
  *@param handle 控件句柄
  *@param width  宽度
  *@param height 高度
  */
-void scui_widget_refr_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
-
-/*@brief 控件坐标更新
- *@param handle 控件句柄
- *@param point  坐标点
- */
-void scui_widget_refr_pos(scui_handle_t handle, scui_point_t *point);
+void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
 
 /*@brief 控件移动子控件
  *@param handle 控件句柄

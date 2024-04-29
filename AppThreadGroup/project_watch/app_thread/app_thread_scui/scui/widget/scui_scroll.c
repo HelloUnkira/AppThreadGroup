@@ -520,11 +520,11 @@ void scui_scroll_update_layout(scui_event_t *event)
         
         /* 更新子控件尺寸 */
         if (scroll->dir == scui_event_dir_hor)
-            scui_widget_refr_size(handle, child->clip.w, widget->clip.h);
+            scui_widget_adjust_size(handle, child->clip.w, widget->clip.h);
         if (scroll->dir == scui_event_dir_ver)
-            scui_widget_refr_size(handle, widget->clip.w, child->clip.h);
+            scui_widget_adjust_size(handle, widget->clip.w, child->clip.h);
         /* 更新子控件位置 */
-        scui_widget_refr_pos(handle, &pos);
+        scui_widget_move_pos(handle, &pos);
         /* 迭代到下一子控件 */
         if (scroll->dir == scui_event_dir_hor)
             pos.x += child->clip.w + scroll->space;
