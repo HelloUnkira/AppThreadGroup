@@ -173,10 +173,11 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
 
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄
- *@param dir     水平镜像或垂直镜像
- *@param recurse 递归处理
+ *@param child   控件子控件句柄(为空则镜像所有子控件)
+ *@param dir     镜像方向(水平镜像或垂直镜像)
+ *@param recurse 递归处理(全局镜像有效)
  */
-void scui_widget_mirror_pos(scui_handle_t handle, scui_event_dir_t dir, bool recurse);
+void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_event_dir_t dir, bool recurse);
 
 /*@brief 控件尺寸更新
  *@param handle 控件句柄

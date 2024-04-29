@@ -8,8 +8,8 @@
 #include "scui.h"
 
 /*@brief 滚动控件创建
- *@param maker  可滚动控件创建参数
- *@param handle 可滚动控件句柄
+ *@param maker  滚动控件创建参数
+ *@param handle 滚动控件句柄
  *@param layout 通过布局创建
  */
 void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout)
@@ -29,12 +29,13 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
     
     /* 状态初始化 */
-    scroll->dir         = maker->dir;
-    scroll->pos         = maker->pos;
-    scroll->space       = maker->space;
-    scroll->springback  = maker->springback;
-    scroll->fling_page  = maker->fling_page;
-    scroll->loop        = maker->loop;
+    scroll->dir             = maker->dir;
+    scroll->pos             = maker->pos;
+    scroll->space           = maker->space;
+    scroll->springback      = maker->springback;
+    scroll->fling_page      = maker->fling_page;
+    scroll->route_encode    = maker->route_encode;
+    scroll->loop            = maker->loop;
     
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
@@ -52,14 +53,22 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     /* 事件默认全局接收 */
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
+    
+    /* 特殊事件按需求添加 */
     cb_node.event = scui_event_ptr_all;
-    scui_widget_event_add(*handle, &cb_node);
+    scui_widget_event_del(*handle, &cb_node);
+    if (maker->widget.style.indev_ptr)
+        scui_widget_event_add(*handle, &cb_node);
+    
+    /* 特殊事件按需求添加 */
     cb_node.event = scui_event_enc_all;
-    scui_widget_event_add(*handle, &cb_node);
+    scui_widget_event_del(*handle, &cb_node);
+    if (maker->widget.style.indev_ptr)
+        scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 滚动控件销毁
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  */
 void scui_scroll_destroy(scui_handle_t handle)
 {
@@ -81,8 +90,40 @@ void scui_scroll_destroy(scui_handle_t handle)
     SCUI_MEM_FREE(scroll);
 }
 
+/*@brief 滚动控件设置偏移量
+ *@param handle 滚动控件句柄
+ *@param offset 偏移量
+ */
+void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    /* 复用动画即可 */
+    scui_event_t event = {0};
+    event.object = handle;
+    event.type = scui_event_ptr_move;
+    event.ptr_e.x = offset->x;
+    event.ptr_e.y = offset->y;
+    
+    /* 自由布局 */
+    if (scroll->dir == scui_event_dir_none) {
+        scui_scroll_event_auto_merge(&event, 0x10);
+        // scui_scroll_event_auto_merge(&event, 0x12);
+        return;
+    }
+    
+    /* 自动布局,非循环,循环 */
+    scui_scroll_event_auto_merge(&event, 0x00);
+    // scui_scroll_event_auto_merge(&event, 0x02);
+}
+
 /*@brief 滚动控件布局更新
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  */
 void scui_scroll_layout(scui_handle_t handle)
 {
@@ -98,7 +139,7 @@ void scui_scroll_layout(scui_handle_t handle)
 }
 
 /*@brief 滚动控件翻页数更新
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  *@param fling_page 翻页数
  */
 void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
@@ -1018,6 +1059,33 @@ void scui_scroll_event(scui_event_t *event)
             scui_scroll_event_auto_merge(event, 0x02);
         }
         break;
+    case scui_event_enc_clockwise:
+    case scui_event_enc_clockwise_anti: {
+        if (scroll->route_encode == 0) {
+            SCUI_LOG_ERROR("encode route is zero");
+            break;
+        }
+        if (scroll->dir == scui_event_dir_none) {
+            SCUI_LOG_ERROR("free layout is unsupport encode");
+            break;
+        }
+        
+        scui_coord_t way = 0;
+        if (event->type == scui_event_enc_clockwise)
+            way = +1;
+        if (event->type == scui_event_enc_clockwise_anti)
+            way = -1;
+        
+        scui_point_t offset = {0};
+        if (scroll->dir == scui_event_dir_hor)
+            offset.x = way * scroll->route_encode * event->enc_diff;
+        if (scroll->dir == scui_event_dir_ver)
+            offset.y = way * scroll->route_encode * event->enc_diff;
+        
+        scui_scroll_offset(handle, &offset);
+        scui_widget_event_mask_over(event);
+        break;
+    }
     default:
         break;
     }

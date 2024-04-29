@@ -460,12 +460,14 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
 
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄
- *@param dir     水平镜像或垂直镜像
- *@param recurse 递归处理
+ *@param child   控件子控件句柄(为空则镜像所有子控件)
+ *@param dir     镜像方向(水平镜像或垂直镜像)
+ *@param recurse 递归处理(全局镜像有效)
  */
-void scui_widget_mirror_pos(scui_handle_t handle, scui_event_dir_t dir, bool recurse)
+void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_event_dir_t dir, bool recurse)
 {
     SCUI_LOG_DEBUG("");
+    scui_handle_t  handle_child = child;
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
@@ -478,6 +480,10 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_event_dir_t dir, bool rec
         scui_widget_t *child = scui_handle_get(handle);
         scui_point_t   point = {.x = child->clip.x, .y = child->clip.y,};
         
+        /* 存在指定子控件时, 只镜像子控件 */
+        if (handle_child != SCUI_HANDLE_INVALID && handle_child != handle)
+            continue;
+        
         if (dir == scui_event_dir_hor)
             point.x = widget->clip.w - child->clip.w - child->clip.x;
         if (dir == scui_event_dir_ver)
@@ -485,10 +491,19 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_event_dir_t dir, bool rec
         
         scui_widget_move_pos(handle, &point);
         
+        /* 存在指定子控件时, 只镜像子控件, 且不再递归 */
+        if (handle_child != SCUI_HANDLE_INVALID)
+            return;
+        
         if (!recurse)
              continue;
-        scui_widget_mirror_pos(handle, dir, recurse);
+        
+        /* 递归镜像 */
+        scui_widget_mirror_pos(handle, handle_child, dir, recurse);
     }
+    
+    if (handle_child != SCUI_HANDLE_INVALID)
+        SCUI_LOG_ERROR("widget %u have not child widget %u", handle, child);
 }
 
 /*@brief 控件尺寸更新

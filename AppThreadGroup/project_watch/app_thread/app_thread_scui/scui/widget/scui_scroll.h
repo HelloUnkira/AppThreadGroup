@@ -12,6 +12,7 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
+    scui_coord_t        route_encode;   /* 编码器行程 */
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
@@ -47,29 +48,36 @@ typedef struct {
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
+    scui_coord_t        route_encode;   /* 编码器行程 */
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
 
 /*@brief 滚动控件创建
- *@param maker  可滚动控件创建参数
- *@param handle 可滚动控件句柄
+ *@param maker  滚动控件创建参数
+ *@param handle 滚动控件句柄
  *@param layout 通过布局创建
  */
 void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 滚动控件销毁
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  */
 void scui_scroll_destroy(scui_handle_t handle);
 
+/*@brief 滚动控件设置偏移量
+ *@param handle 滚动控件句柄
+ *@param offset 偏移量
+ */
+void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset);
+
 /*@brief 滚动控件布局更新
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  */
 void scui_scroll_layout(scui_handle_t handle);
 
 /*@brief 滚动控件翻页数更新
- *@param handle 可滚动控件句柄
+ *@param handle 滚动控件句柄
  *@param fling_page 翻页数
  */
 void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
@@ -95,7 +103,17 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
  */
 void scui_scroll_update_layout(scui_event_t *event);
 
-
+/*@brief 滚动控件事件流程合并
+ *@param event 事件
+ *@param type  自动事件类型
+ *             0x00 动画打断事件(自动布局, 非循环, 循环)
+ *             0x01 动画重置事件(自动布局, 非循环, 循环)
+ *             0x02 动画重置事件(自动布局, 非循环, 循环)
+ *             0x10 动画打断事件(自由布局)
+ *             0x11 动画重置事件(自由布局)
+ *             0x12 动画重置事件(自由布局)
+ *             0xAA 动画回弹事件(自动布局, 自由布局, 非循环, 循环)
+ */
 void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
 
 /*@brief 滚动控件事件处理回调

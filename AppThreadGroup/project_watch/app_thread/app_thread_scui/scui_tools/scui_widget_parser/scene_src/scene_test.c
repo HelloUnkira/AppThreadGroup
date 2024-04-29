@@ -65,6 +65,7 @@ static void scui_scene_test_show(scui_event_t *event)
         scroll_maker.space = 50;
         scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
+        scroll_maker.route_encode = 100;
         
         #if SCUI_SCROLL_LAYOUT_AUTO
         // scroll_maker.dir = scui_event_dir_hor;
