@@ -10,17 +10,6 @@
 /* 动画实例句柄列表 */
 static scui_anima_list_t scui_anima_list = {0};
 
-/*@brief 事件吸收
- */
-static bool scui_anima_elapse_absorb(void *evt_old, void *evt_new)
-{
-    scui_event_t *event_old = evt_old;
-    scui_event_t *event_new = evt_new;
-    
-    /* 什么都不需要做 */
-    return true;
-}
-
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
@@ -32,7 +21,7 @@ void scui_anima_elapse(uint32_t elapse)
         scui_event_t event = {
             .object = SCUI_HANDLE_SYSTEM,
             .type   = scui_event_anima_elapse,
-            .absorb = scui_anima_elapse_absorb,
+            .absorb = scui_event_absorb_none,
         };
         scui_event_notify(&event);
     }
@@ -113,6 +102,8 @@ void scui_anima_update(void)
         if (reload)
             continue;
         
+        /* 关闭动画 */
+        anima->running = false;
         /* 结束调 */
         if (anima->ready)
             anima->ready(anima);
@@ -125,8 +116,6 @@ void scui_anima_update(void)
             idx--;
             continue;
         }
-        /* 关闭动画 */
-        anima->running = false;
     }
     /* 当次流逝已处理完毕,归零 */
     scui_anima_list.elapse = 0;

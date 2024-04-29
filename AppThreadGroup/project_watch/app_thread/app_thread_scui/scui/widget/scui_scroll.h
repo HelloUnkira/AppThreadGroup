@@ -24,6 +24,7 @@ typedef struct {
     scui_point_t        point_cur;          /* 移动动画当前 */
     scui_point_t        point_ofs;          /* 移动动画总计 */
     uint8_t             layout:1;           /* 布局更新标记 */
+    uint8_t             over_scroll;        /* 滚动迭代状态 */
     uint8_t             lock_move:1;        /* 滚动长留锁 */
     uint8_t             hold_move:1;        /* 滚动长留锁 */
     uint8_t             mask_springback:1;  /* 回弹暂留锁 */
@@ -121,6 +122,15 @@ void scui_scroll_update_layout(scui_event_t *event);
  *             0xAA 动画回弹事件(自动布局, 自由布局, 非循环, 循环)
  */
 void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
+
+/*@brief 滚动控件事件处理回调
+ *@param event 事件
+ *@param type  事件类型
+ *       0x00  滚动开始事件
+ *       0x01  滚动结束事件
+ *       0x02  滚动进行事件
+ */
+void scui_scroll_event_notify(scui_event_t *event, uint8_t type);
 
 /*@brief 滚动控件事件处理回调
  *@param event 事件

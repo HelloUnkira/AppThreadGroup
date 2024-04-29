@@ -135,6 +135,12 @@ typedef enum {
     scui_event_pos_c    = scui_event_dir_all,
 } scui_event_pos_t;
 
+/*@brief 事件吸收回调(空吸收)
+ *@param evt_old 旧事件
+ *@param evt_new 新事件
+ */
+void scui_event_absorb_none(void *evt_old, void *evt_new);
+
 /*@brief 事件队列初始化
  */
 void scui_event_ready(void);

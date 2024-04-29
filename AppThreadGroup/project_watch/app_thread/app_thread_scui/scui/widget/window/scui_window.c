@@ -47,13 +47,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_show;
-    scui_widget_event_add(*handle, &cb_node);
-    cb_node.event = scui_event_hide;
-    scui_widget_event_add(*handle, &cb_node);
-    cb_node.event = scui_event_focus_get;
-    scui_widget_event_add(*handle, &cb_node);
-    cb_node.event = scui_event_focus_lost;
+    cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
 }
 

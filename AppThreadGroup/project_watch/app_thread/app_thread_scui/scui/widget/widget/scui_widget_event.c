@@ -7,14 +7,6 @@
 
 #include "scui.h"
 
-/*@brief 事件吸收
- */
-static bool scui_widget_draw_absorb(void *evt_old, void *evt_new)
-{
-    /* 什么都不需要做 */
-    return true;
-}
-
 /*@brief 绘制控件
  *@param handle 控件句柄
  *@param clip   剪切域
@@ -48,17 +40,9 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
         .object     = handle_root,
         .style.sync = sync,
         .type       = scui_event_draw,
-        .absorb     = scui_widget_draw_absorb,
+        .absorb     = scui_event_absorb_none,
     };
     scui_event_notify(&event);
-}
-
-/*@brief 事件吸收
- */
-static bool scui_widget_refr_absorb(void *evt_old, void *evt_new)
-{
-    /* 什么都不需要做 */
-    return true;
 }
 
 /*@brief 刷新控件
@@ -78,7 +62,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
         .object     = handle_root,
         .style.sync = sync,
         .type       = scui_event_refr,
-        .absorb     = scui_widget_refr_absorb,
+        .absorb     = scui_event_absorb_none,
     };
     scui_event_notify(&event);
 }
@@ -497,7 +481,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
     /* 其他未列举事件走默认派发流程,单次派发 */
-    SCUI_LOG_WARN("unknown dispatch");
+    // SCUI_LOG_WARN("unknown dispatch");
     event->object = scui_widget_root(widget->myself);
     scui_widget_event_proc(event);
     event->object = widget->myself;

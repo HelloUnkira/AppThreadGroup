@@ -39,6 +39,7 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scroll->keyid_fdir  = maker->keyid_fdir;
     scroll->keyid_bdir  = maker->keyid_bdir;
     scroll->loop        = maker->loop;
+    scroll->over_scroll = true;
     
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
@@ -283,6 +284,17 @@ void scui_scroll_anima_ready(void *instance)
     if (!scroll->hold_move) {
          scroll->lock_move = false;
          scui_widget_event_scroll_flag(0x01, &scroll->key);
+        
+        if (!scui_anima_running(scroll->anima)) {
+             scui_event_t event = {.object = widget->myself};
+             scui_scroll_event_notify(&event, 0x01);
+            
+            if (scroll->anima != SCUI_HANDLE_INVALID) {
+                scui_anima_stop(scroll->anima);
+                scui_anima_destroy(scroll->anima);
+                scroll->anima = SCUI_HANDLE_INVALID;
+            }
+        }
     }
 }
 
@@ -373,6 +385,8 @@ void scui_scroll_anima_expired(void *instance)
         SCUI_LOG_DEBUG("offset:<x:%d,y:%d>", offset.x, offset.y);
         
         /* 偏移所有子控件 */
+        scui_event_t event = {.object = widget->myself};
+        scui_scroll_event_notify(&event, 0x02);
         scui_widget_refr_ofs_child_list(widget->myself, &offset);
         scui_widget_draw(widget->myself, NULL, false);
         break;
@@ -437,6 +451,8 @@ void scui_scroll_anima_expired(void *instance)
         /* 偏移所有子控件 */
         if (!scroll->loop) {
             
+            scui_event_t event = {.object = widget->myself};
+            scui_scroll_event_notify(&event, 0x02);
             scui_widget_refr_ofs_child_list(widget->myself, &offset);
         }
         if (scroll->loop) {
@@ -445,6 +461,9 @@ void scui_scroll_anima_expired(void *instance)
                 range.x = scroll->dis_lim;
             if (scroll->dir == scui_event_dir_ver)
                 range.y = scroll->dis_lim;
+            
+            scui_event_t event = {.object = widget->myself};
+            scui_scroll_event_notify(&event, 0x02);
             scui_widget_refr_ofs_child_list_loop(widget->myself, &offset, &range);
         }
         
@@ -475,6 +494,11 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     SCUI_ASSERT(widget != NULL);
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
+    
+    if (scroll->anima == SCUI_HANDLE_INVALID) {
+         scui_event_t event = {.object = handle};
+        scui_scroll_event_notify(&event, 0x00);
+    }
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -983,6 +1007,60 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         SCUI_LOG_ERROR("unknown type: %x", type);
         break;
     }
+}
+
+/*@brief 滚动控件事件处理回调
+ *@param event 事件
+ *@param type  事件类型
+ *       0x00  滚动开始事件
+ *       0x01  滚动结束事件
+ *       0x02  滚动进行事件
+ */
+void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
+{
+    scui_handle_t  handle = event->object;
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    switch (type) {
+    case 0x00: {
+        /* 上一次滚动已经结束才可产生下一次滚动开始事件 */
+        /* 否则为滚动被打断,此时应该吸收中间的事件 */
+        if (!scroll->over_scroll)
+             break;
+        scroll->over_scroll = false;
+        scui_event_t event = {
+            .object = scui_widget_root(handle),
+            .type   = scui_event_widget_scroll_s,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    case 0x01: {
+        if (scroll->over_scroll)
+            break;
+        scroll->over_scroll = true;
+        scui_event_t event = {
+            .object = scui_widget_root(handle),
+            .type   = scui_event_widget_scroll_e,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    case 0x02: {
+        scui_event_t event = {
+            .object = scui_widget_root(handle),
+            .type   = scui_event_widget_scroll_c,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    default:
+        SCUI_LOG_ERROR("unknown type: %x", type);
+        break;
+    }
+    
 }
 
 /*@brief 滚动控件事件处理回调

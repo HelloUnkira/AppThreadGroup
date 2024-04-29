@@ -10,6 +10,15 @@
 /* 事件队列 */
 static scui_event_queue_t scui_event_queue = {0};
 
+/*@brief 事件吸收回调(空吸收)
+ *@param evt_old 旧事件
+ *@param evt_new 新事件
+ */
+void scui_event_absorb_none(void *evt_old, void *evt_new)
+{
+    /* 什么都不需要做 */
+}
+
 /*@brief 事件队列初始化
  */
 void scui_event_ready(void)

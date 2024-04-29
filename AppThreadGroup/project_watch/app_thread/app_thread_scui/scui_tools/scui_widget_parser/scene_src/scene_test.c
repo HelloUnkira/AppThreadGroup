@@ -172,6 +172,24 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     case scui_event_key_click:
         scui_widget_event_mask_keep(event);
         break;
+    case scui_event_widget_scroll_s:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_WARN("scui_event_widget_scroll_s");
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_widget_scroll_c:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_WARN("scui_event_widget_scroll_c");
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_widget_scroll_e:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_WARN("scui_event_widget_scroll_e");
+        scui_widget_event_mask_keep(event);
+        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;

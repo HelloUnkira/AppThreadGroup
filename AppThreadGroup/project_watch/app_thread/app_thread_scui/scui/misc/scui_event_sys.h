@@ -11,14 +11,17 @@ typedef enum {
     /* 调度事件<s> */
     scui_event_sched_s,
     scui_event_sched_all,
-    scui_event_sched_delay,     /* 迟延调度(异步到新事件) */
-    scui_event_anima_elapse,    /* 动画轮转调度 */
-    scui_event_focus_lost,      /* 窗口焦点失去事件 */
-    scui_event_focus_get,       /* 窗口焦点获取事件 */
-    scui_event_hide,            /* 窗口隐藏事件 */
-    scui_event_show,            /* 窗口显示事件 */
-    scui_event_draw,            /* 控件绘制事件 */
-    scui_event_refr,            /* 界面刷新事件 */
+    scui_event_sched_delay,         /* 迟延调度(异步到新事件) */
+    scui_event_anima_elapse,        /* 动画轮转调度 */
+    scui_event_focus_lost,          /* 窗口焦点失去事件 */
+    scui_event_focus_get,           /* 窗口焦点获取事件 */
+    scui_event_hide,                /* 窗口隐藏事件 */
+    scui_event_show,                /* 窗口显示事件 */
+    scui_event_draw,                /* 控件绘制事件 */
+    scui_event_refr,                /* 界面刷新事件 */
+    scui_event_widget_scroll_s,     /* 滚动控件:滚动开始 */
+    scui_event_widget_scroll_c,     /* 滚动控件:滚动进行 */
+    scui_event_widget_scroll_e,     /* 滚动控件:滚动结束 */
     scui_event_sched_e,
     /* 调度事件<e> */
     

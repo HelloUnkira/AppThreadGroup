@@ -27,6 +27,9 @@ const char * scui_event_sys_to_str(scui_event_type_t type)
         {.type = scui_event_show,                   .str = "scui_event_show",},
         {.type = scui_event_draw,                   .str = "scui_event_draw",},
         {.type = scui_event_refr,                   .str = "scui_event_refr",},
+        {.type = scui_event_widget_scroll_s,        .str = "scui_event_widget_scroll_s",},
+        {.type = scui_event_widget_scroll_c,        .str = "scui_event_widget_scroll_c",},
+        {.type = scui_event_widget_scroll_e,        .str = "scui_event_widget_scroll_e",},
         
         {.type = scui_event_ptr_all,                .str = "scui_event_ptr_all",},
         {.type = scui_event_ptr_cover,              .str = "scui_event_ptr_cover",},
