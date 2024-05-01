@@ -41,6 +41,22 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scroll->loop        = maker->loop;
     scroll->over_scroll = true;
     
+    /* 默认保持一个翻页 */
+    if (scroll->route_enc == 0) {
+        if (scroll->dir == scui_event_dir_hor)
+            scroll->route_enc = scroll->widget.clip.w;
+        if (scroll->dir == scui_event_dir_ver)
+            scroll->route_enc = scroll->widget.clip.h;
+    }
+    
+    /* 默认保持一个翻页 */
+    if (scroll->route_key == 0) {
+        if (scroll->dir == scui_event_dir_hor)
+            scroll->route_key = scroll->widget.clip.w;
+        if (scroll->dir == scui_event_dir_ver)
+            scroll->route_key = scroll->widget.clip.h;
+    }
+    
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
         scroll->fling_page  = 1;

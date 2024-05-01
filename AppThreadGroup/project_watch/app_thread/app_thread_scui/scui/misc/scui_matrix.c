@@ -1,94 +1,38 @@
 /*实现目标:
  *    矩阵运算
+ *备注:
+ *    (A1 * A2 ... An)^(-1) = An^(-1) ... A2^(-1) * A1^(-1)
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
-/*@brief 矩阵坐标转换(pox->point)
- *@param pox    矩阵坐标
- *@param point  坐标
- */
-void scui_matrix_pox_to_point(scui_matrix_pox_t *pox, scui_point_t *point)
-{
-    point->x = (scui_coord_t)(pox->x / pox->z);
-    point->y = (scui_coord_t)(pox->y / pox->z);
-}
-
-/*@brief 矩阵坐标转换(point->pox)
- *@param pox    矩阵坐标
- *@param point  坐标
- */
-void scui_matrix_pox_by_point(scui_matrix_pox_t *pox, scui_point_t *point)
-{
-    pox->x = (float)point->x;
-    pox->y = (float)point->y;
-    pox->z = 1.0f;
-}
-
-/*@brief 矩阵坐标变换
+/*@brief 矩阵输出
  *@param matrix 矩阵实例
- *@param pox    矩阵坐标
  */
-void scui_matrix_pox_transfer(scui_matrix_t *matrix, scui_matrix_pox_t *pox)
+void scui_matrix_check(scui_matrix_t *matrix)
 {
-    scui_matrix_pox_t pox_t;
-    
-    for (uint8_t row = 0; row < 3; row++)
-        pox_t.meta[row] = matrix->meta[row][0] * pox->x +
-                          matrix->meta[row][1] * pox->y +
-                          matrix->meta[row][2] * pox->z;
-    
-    *pox = pox_t;
-}
-
-/*@brief 矩阵区域变换
- *@param matrix 矩阵实例
- *@param src    矩阵区域
- *@param dst    矩阵区域
- */
-void scui_matrix_pox4_transfer(scui_matrix_t *matrix, scui_matrix_pox4_t *src, scui_matrix_pox4_t *dst)
-{
-    scui_matrix_pox_t pox = {0};
-    
-    pox = src->pox[0];
-    scui_matrix_pox_transfer(matrix, &pox);
-    dst->pox[0] = pox;
-    
-    pox = src->pox[1];
-    scui_matrix_pox_transfer(matrix, &pox);
-    dst->pox[1] = pox;
-    
-    pox = src->pox[2];
-    scui_matrix_pox_transfer(matrix, &pox);
-    dst->pox[2] = pox;
-    
-    pox = src->pox[3];
-    scui_matrix_pox_transfer(matrix, &pox);
-    dst->pox[3] = pox;
+    SCUI_LOG_DEBUG("matrix:");
+    SCUI_LOG_DEBUG("[%f,%f,%f]", matrix->meta[0][0], matrix->meta[0][1], matrix->meta[0][2]);
+    SCUI_LOG_DEBUG("[%f,%f,%f]", matrix->meta[1][0], matrix->meta[1][1], matrix->meta[1][2]);
+    SCUI_LOG_DEBUG("[%f,%f,%f]", matrix->meta[2][0], matrix->meta[2][1], matrix->meta[2][2]);
 }
 
 /*@brief 矩阵生成
- *@param matrix 矩阵实例
- *@param src    平面区域
- *@param dst    平面区域
+ *@param matrix    矩阵实例
+ *@param face2_src 平面
+ *@param face2_dst 平面
  *@retval 成功或失败
  */
-bool scui_matrix_by_area(scui_matrix_t *matrix, scui_area_t *src, scui_area_t *dst)
+bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face2_t *face2_dst)
 {
-    scui_area_m_to_s(src);
-    scui_area_m_to_s(dst);
-    
-    /* 时钟旋转四点 */
-    float src_x[4] = {src->x1, src->x2, src->x2, src->x1,};
-    float src_y[4] = {src->y1, src->y1, src->y2, src->y2,};
-    float dst_x[4] = {dst->x1, dst->x2, dst->x2, dst->x1,};
-    float dst_y[4] = {dst->y1, dst->y1, dst->y2, dst->y2,};
-    
-    scui_area_s_to_m(src);
-    scui_area_s_to_m(dst);
+    /* 四点变换 */
+    float src_x[4] = {face2_src->point2[0].x, face2_src->point2[1].x, face2_src->point2[2].x, face2_src->point2[3].x,};
+    float src_y[4] = {face2_src->point2[0].y, face2_src->point2[1].y, face2_src->point2[2].y, face2_src->point2[3].y,};
+    float dst_x[4] = {face2_dst->point2[0].x, face2_dst->point2[1].x, face2_dst->point2[2].x, face2_dst->point2[3].x,};
+    float dst_y[4] = {face2_dst->point2[0].y, face2_dst->point2[1].y, face2_dst->point2[2].y, face2_dst->point2[3].y,};
     
     const float eps = 1.1920929e-7f;
     
@@ -294,16 +238,31 @@ void scui_matrix_identity(scui_matrix_t *matrix)
 
 /*@brief 矩阵平移
  *@param matrix 矩阵实例
- *@param ofs_x  水平偏移值
- *@param ofs_y  垂直偏移值
+ *@param offset 偏移值
  */
-void scui_matrix_translate(scui_matrix_t *matrix, float ofs_x, float ofs_y)
+void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset)
 {
     scui_matrix_t matrix_t = {
         .meta = {
-            {1.0f, 0.0f, ofs_x},
-            {0.0f, 1.0f, ofs_y},
-            {0.0f, 0.0f,  1.0f},
+            {1.0f, 0.0f, offset->x},
+            {0.0f, 1.0f, offset->y},
+            {0.0f, 0.0f,      1.0f},
+        },
+    };
+    scui_matrix_multiply(matrix, &matrix_t);
+}
+
+/*@brief 矩阵透视
+ *@param matrix 矩阵实例
+ *@param view   透视点
+ */
+void scui_matrix_perspective(scui_matrix_t *matrix, scui_point2_t *view)
+{
+    scui_matrix_t matrix_t = {
+        .meta = {
+            {   1.0f,    0.0f, 0.0f},
+            {   0.0f,    1.0f, 0.0f},
+            {view->x, view->y, 1.0f},
         },
     };
     scui_matrix_multiply(matrix, &matrix_t);
@@ -311,16 +270,15 @@ void scui_matrix_translate(scui_matrix_t *matrix, float ofs_x, float ofs_y)
 
 /*@brief 矩阵缩放
  *@param matrix 矩阵实例
- *@param ofs_x  水平缩放比(1.0为基准线)
- *@param ofs_y  垂直缩放比(1.0为基准线)
+ *@param offset 缩放比(1.0为基准线)
  */
-void scui_matrix_scale(scui_matrix_t *matrix, float ofs_x, float ofs_y)
+void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale)
 {
     scui_matrix_t matrix_t = {
         .meta = {
-            {ofs_x,  0.0f, 0.0f},
-            { 0.0f, ofs_y, 0.0f},
-            { 0.0f,  0.0f, 1.0f},
+            {scale->x,     0.0f, 0.0f},
+            {    0.0f, scale->y, 0.0f},
+            {    0.0f,     0.0f, 1.0f},
         },
     };
     scui_matrix_multiply(matrix, &matrix_t);
@@ -329,35 +287,199 @@ void scui_matrix_scale(scui_matrix_t *matrix, float ofs_x, float ofs_y)
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
  *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
  */
-void scui_matrix_rotate(scui_matrix_t *matrix, int32_t angle)
+void scui_matrix_rotate(scui_matrix_t *matrix, float angle, uint8_t axis)
 {
-    float sin_a = scui_sin4096(angle) / 4096.0f;
-    float cos_a = scui_cos4096(angle) / 4096.0f;
+    float sin_a = scui_sin4096((int32_t)angle) / 4096.0f;
+    float cos_a = scui_cos4096((int32_t)angle) / 4096.0f;
+    scui_matrix_t matrix_t = {0};
     
-    scui_matrix_t matrix_t = {
-        .meta = {
-            {cos_a, -sin_a, 0.0f},
-            {sin_a,  cos_a, 0.0f},
-            { 0.0f,   0.0f, 1.0f},
-        },
-    };
+    /*X轴向:
+     *     [  1    0        0     ]
+     *     [  0  cos(rx) -sin(rx) ]
+     *     [  0  sin(rx)  cos(rx) ]
+     *Y轴向:
+     *     [  cos(ry)  0  sin(ry) ]
+     *     [    0      1    0     ]
+     *     [ -sin(ry)  0  cos(ry) ]
+     *Z轴向:
+     *     [  cos(rz) -sin(rz)  0 ]
+     *     [  sin(rz)  cos(rz)  0 ]
+     *     [    0        0      1 ]
+     */
+    
+    switch (axis) {
+    case 0x00: {      /* Z轴向 */
+        matrix_t = (scui_matrix_t){
+            .meta = {
+                {cos_a, -sin_a, 0.0f},
+                {sin_a,  cos_a, 0.0f},
+                { 0.0f,   0.0f, 1.0f},
+            },
+        };
+        break;
+    }
+    case 0x01: {    /* X轴向 */
+        matrix_t = (scui_matrix_t){
+            .meta = {
+                { 1.0f,  0.0f,   0.0f},
+                { 0.0f, cos_a, -sin_a},
+                { 0.0f, sin_a,  cos_a},
+            },
+        };
+        break;
+    }
+    case 0x02: {    /* Y轴向 */
+        matrix_t = (scui_matrix_t){
+            .meta = {
+                { cos_a, 0.0f, sin_a},
+                {  0.0f, 1.0f,  0.0f},
+                {-sin_a, 0.0f, cos_a},
+            },
+        };
+        break;
+    }
+    default:
+        SCUI_LOG_ERROR("unknown axis:%x", axis);
+        break;
+    }
+    
     scui_matrix_multiply(matrix, &matrix_t);
 }
 
-/*@brief 矩阵透视
+/*@brief 矩阵旋转
  *@param matrix 矩阵实例
- *@param pos_x  水平透视点
- *@param pos_y  垂直透视点
+ *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
  */
-void scui_matrix_perspective(scui_matrix_t *matrix, float pos_x, float pos_y)
+void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis)
 {
+    float sin_rx = scui_sin4096(angle->x) / 4096.0f;
+    float cos_rx = scui_cos4096(angle->x) / 4096.0f;
+    float sin_ry = scui_sin4096(angle->y) / 4096.0f;
+    float cos_ry = scui_cos4096(angle->y) / 4096.0f;
+    float sin_rz = scui_sin4096(angle->z) / 4096.0f;
+    float cos_rz = scui_cos4096(angle->z) / 4096.0f;
+    
+    switch(axis) {
+    case 0x00:
+        /* rz * ry * rx */
+        matrix->meta[0][0] = cos_rz * cos_ry;
+        matrix->meta[0][1] = cos_rz * sin_ry * sin_rx - sin_rz * cos_rx;
+        matrix->meta[0][2] = cos_rz * sin_ry * cos_rx + sin_rz * sin_rx;
+        matrix->meta[1][0] = sin_rz * cos_ry;
+        matrix->meta[1][1] = sin_rz * sin_ry * sin_rx + cos_rz * cos_rx;
+        matrix->meta[1][2] = sin_rz * sin_ry * cos_rx - cos_rz * sin_rx;
+        matrix->meta[2][0] = -sin_ry;
+        matrix->meta[2][1] = cos_ry * sin_rx;
+        matrix->meta[2][2] = cos_ry * cos_rx;   
+        break;
+    case 0x01:
+        /* rz * rx * ry */
+        matrix->meta[0][0] = cos_rz * cos_ry - sin_rz * sin_rx * sin_ry;
+        matrix->meta[0][1] = -sin_rz * cos_rx;
+        matrix->meta[0][2] = cos_rz * sin_ry + sin_rz * sin_rx * cos_ry;
+        matrix->meta[1][0] = sin_rz * cos_ry + cos_rz * sin_rx * sin_ry;
+        matrix->meta[1][1] = cos_rz * cos_rx;
+        matrix->meta[1][2] = sin_rz * sin_ry - cos_rz * sin_rx * cos_ry;
+        matrix->meta[2][0] = -cos_rx * sin_ry;
+        matrix->meta[2][1] = sin_rx;
+        matrix->meta[2][2] = cos_rx * cos_ry;
+        break;
+    case 0x02:
+        /* ry * rz * rx */
+        matrix->meta[0][0] = cos_ry * cos_rz;
+        matrix->meta[0][1] = -cos_ry * sin_rz * cos_rx + sin_ry * sin_rx;
+        matrix->meta[0][2] = cos_ry * sin_rz * sin_rx + sin_ry * cos_rx;
+        matrix->meta[1][0] = sin_rz;
+        matrix->meta[1][1] = cos_rz * cos_rx;
+        matrix->meta[1][2] = -cos_rz * sin_rx;
+        matrix->meta[2][0] = -sin_ry * cos_rz;
+        matrix->meta[2][1] = sin_ry * sin_rz * cos_rx + cos_ry * sin_rx;
+        matrix->meta[2][2] = -sin_ry * sin_rz * sin_rx + cos_ry * cos_rx;
+        break;
+    case 0x03:
+        /* ry * rx * rz */
+        matrix->meta[0][0] = cos_ry * cos_rz + sin_ry * sin_rx * sin_rz;
+        matrix->meta[0][1] = -cos_ry * sin_rz + sin_ry * sin_rx * cos_rz;
+        matrix->meta[0][2] = sin_ry * cos_rx;
+        matrix->meta[1][0] = cos_rx * sin_rz;
+        matrix->meta[1][1] = cos_rx * cos_rz;
+        matrix->meta[1][2] = -sin_rx;
+        matrix->meta[2][0] = -sin_ry * cos_rz + cos_ry * sin_rx * sin_rz;
+        matrix->meta[2][1] = sin_ry * sin_rz + cos_ry * sin_rx * cos_rz;
+        matrix->meta[2][2] = cos_ry * cos_rx;
+        break;
+    case 0x04:
+        /* rx * ry * rz */
+        matrix->meta[0][0] = cos_ry * cos_rz;
+        matrix->meta[0][1] = -cos_ry * sin_rz;
+        matrix->meta[0][2] = sin_ry;
+        matrix->meta[1][0] = cos_rx * sin_rz + sin_rx * sin_ry * cos_rz;
+        matrix->meta[1][1] = cos_rx * cos_rz - sin_rx * sin_ry * sin_rz;
+        matrix->meta[1][2] = -sin_rx * cos_ry;
+        matrix->meta[2][0] = sin_rx * sin_rz - cos_rx * sin_ry * cos_rz;
+        matrix->meta[2][1] = sin_rx * cos_rz + cos_rx * sin_ry * sin_rz;
+        matrix->meta[2][2] = cos_rx * cos_ry;
+        break;
+    case 0x05:
+        /* rx * rz * ry */
+        matrix->meta[0][0] = cos_rz * cos_ry;
+        matrix->meta[0][1] = -sin_rz;
+        matrix->meta[0][2] = cos_rz * sin_ry;
+        matrix->meta[1][0] = cos_rx * sin_rz * cos_ry + sin_rx * sin_ry;
+        matrix->meta[1][1] = cos_rx * cos_rz;
+        matrix->meta[1][2] = cos_rx * sin_rz * sin_ry - sin_rx * cos_ry;
+        matrix->meta[2][0] = sin_rx * sin_rz * cos_ry - cos_rx * sin_ry;
+        matrix->meta[2][1] = sin_rx * cos_rz;
+        matrix->meta[2][2] = sin_rx * sin_rz * sin_ry + cos_rx * cos_ry;
+        break;
+    default:
+        SCUI_LOG_ERROR("unknown axis:%x", axis);
+    }
+}
+
+/*@brief 矩阵仿射(blit)
+ *@param matrix 矩阵实例
+ *@param width  宽(src)
+ *@param height 高(src)
+ *@param face   面(dst)
+ */
+void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face)
+{
+    /* 仿射参考来源: From 6.5.2 of OpenVG1.1 Spec */
+    
+    float sx  = (face->point3[1].x - face->point3[0].x) / width;
+    float sy  = (face->point3[3].y - face->point3[0].y) / height;
+    float shx = (face->point3[3].x - face->point3[0].x) / height;
+    float shy = (face->point3[1].y - face->point3[0].y) / width;
+    float tx  = (face->point3[0].x);
+    float ty  = (face->point3[0].y);
+    
     scui_matrix_t matrix_t = {
         .meta = {
-            { 1.0f,  0.0f, 0.0f},
-            { 0.0f,  1.0f, 0.0f},
-            {pos_x, pos_y, 1.0f},
+            {  sx,  shx,   tx},
+            { shy,   sy,   ty},
+            {0.0f, 0.0f, 1.0f},
         },
     };
-    scui_matrix_multiply(matrix, &matrix_t);
+    *matrix = matrix_t;
+}
+
+/*@brief 矩阵投影(blit)
+ *@param matrix 矩阵实例
+ *@param width  宽(src)
+ *@param height 高(src)
+ *@param face   面(dst)
+ */
+bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face)
+{
+    scui_face2_t face2_src = {.point2 = {{0,0},{width,0},{width,height},{0,height},}};
+    scui_face2_t face2_dst = {.point2 = {
+        {face->point3[0].x, face->point3[0].y,}, {face->point3[1].x, face->point3[1].y,},
+        {face->point3[2].x, face->point3[2].y,}, {face->point3[3].x, face->point3[3].y,},
+    }};
+    
+    return scui_matrix_by_face2(matrix, &face2_src, &face2_dst);
 }

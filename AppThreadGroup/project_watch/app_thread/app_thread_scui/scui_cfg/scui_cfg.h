@@ -23,4 +23,8 @@
 #define SCUI_INDEV_KEY_CLICK        (200)
 #define SCUI_INDEV_KEY_CLICK_SPAN   (300)   /* 连续点击最大间隔 */
 
+/* 基础图元使用矩阵变换 */
+#define SCUI_DRAW_MISC_USE_SOFTWARE     0
+#define SCUI_DRAW_MISC_USE_MATRIX       1
+
 #endif

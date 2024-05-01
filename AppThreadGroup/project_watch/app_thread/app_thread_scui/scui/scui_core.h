@@ -26,6 +26,7 @@
 #include "scui_surface.h"       /* 画布 */
 #include "scui_surface_fb.h"    /* 画布帧缓冲 */
 #include "scui_math.h"          /* 数学库 */
+#include "scui_axis3.h"         /* 三维图元 */
 #include "scui_matrix.h"        /* 矩阵库 */
 #include "scui_engine.h"        /* 引擎 */
 /* device */

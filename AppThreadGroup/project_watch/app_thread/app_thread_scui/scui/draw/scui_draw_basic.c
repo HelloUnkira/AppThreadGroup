@@ -173,3 +173,70 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
     }
 }
+
+/*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ *@param src_surface 画布实例
+ *@param src_clip    画布绘制区域
+ *@param inv_matrix  变换矩阵的逆矩阵
+ */
+void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst_clip,
+                                   scui_surface_t *src_surface, scui_area_t *src_clip,
+                                   scui_matrix_t  *inv_matrix)
+{
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
+    SCUI_ASSERT(inv_matrix  != NULL);
+    
+    /* 按俩个画布的透明度进行像素点混合 */
+    scui_area_t *dst_area = &dst_surface->clip;
+    scui_area_t  dst_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&dst_clip_v, dst_area, dst_clip))
+         return;
+    
+    scui_area_t *src_area = &src_surface->clip;
+    scui_area_t  src_clip_v = {0};   // v:vaild
+    if (!scui_area_inter(&src_clip_v, src_area, src_clip))
+         return;
+    
+    SCUI_PIXEL_TYPE pixel = {0};
+    /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
+    scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
+    scui_multi_t src_line = src_surface->line * SCUI_PIXEL_SIZE;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
+    uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
+    
+    /* 注意区域对齐坐标 */
+    for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
+        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
+        uint8_t *src_ofs = src_addr;
+        scui_point_t  point  = {0};
+        scui_point3_t point3 = {0};
+        point.y = idx_line;
+        point.x = idx_item;
+        point.y += src_clip_v.y;
+        point.x += src_clip_v.x;
+        /* 反扫描结果坐标对每一个坐标进行逆变换 */
+        scui_point3_by_point(&point3, &point);
+        scui_point3_transform_by_matrix(&point3, inv_matrix);
+        scui_point3_to_point(&point3, &point);
+        
+        /* 逆变换的结果落在的源区域, 取样上色 */
+        if (scui_area_point(&src_clip_v, &point)) {
+            src_ofs = src_surface->pixel + point.y * src_line + point.x * SCUI_PIXEL_SIZE;
+            SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
+            SCUI_PIXEL_TYPE *src_addr_ofs = (void *)src_ofs;
+            
+            if (src_surface->alpha != scui_alpha_cover) {
+                pixel = scui_pixel_mix_with_alpha(src_addr_ofs, src_surface->alpha, dst_addr_ofs, scui_alpha_cover - src_surface->alpha);
+                // pixel = scui_pixel_blend_with_alpha(src_addr_ofs, src_surface->alpha, dst_addr_ofs, dst_surface->alpha);
+                scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+            } else {
+                pixel = scui_mem_r(src_addr_ofs, SCUI_PIXEL_TYPE);
+                scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+            }
+        }
+    }
+}

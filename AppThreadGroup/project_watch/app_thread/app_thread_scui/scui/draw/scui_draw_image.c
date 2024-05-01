@@ -240,7 +240,15 @@ void scui_draw_image_zoom(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                           scui_image_unit_t *image_unit,  scui_area_t *src_clip,
                           scui_alpha_t       alpha,       scui_coord_t zoom)
 {
+    #if 0
+    #elif SCUI_DRAW_MISC_USE_SOFTWARE
     /* @等待适配,要用的时候再去实现 */
+    #elif SCUI_DRAW_MISC_USE_MATRIX
+    
+    
+    
+    #else
+    #endif
 }
 
 /*@brief 区域图像旋转(可以使用DMA2D加速优化)
@@ -256,5 +264,13 @@ void scui_draw_image_rotate(scui_surface_t    *dst_surface, scui_area_t *dst_cli
                             scui_image_unit_t *image_unit,  scui_area_t *src_clip,
                             scui_alpha_t       alpha,       scui_coord_t angle)
 {
+    #if 0
+    #elif SCUI_DRAW_MISC_USE_SOFTWARE
     /* @等待适配,要用的时候再去实现 */
+    #elif SCUI_DRAW_MISC_USE_MATRIX
+    
+    
+    
+    #else
+    #endif
 }

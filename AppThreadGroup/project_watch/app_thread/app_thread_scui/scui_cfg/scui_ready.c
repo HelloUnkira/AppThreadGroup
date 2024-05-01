@@ -72,6 +72,7 @@ void scui_ready(void)
     
     /* 窗口交互风格 */
     scui_window_switch_type_cfg(scui_window_switch_normal);
+    scui_window_switch_type_cfg(scui_window_switch_zoom2);
     /* 初始窗口 */
     scui_handle_t handle = SCUI_UI_SCENE_TEST;
     scui_widget_show(handle, false);

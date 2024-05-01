@@ -22,7 +22,9 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         case scui_window_switch_none:
         case scui_window_switch_center_in:
         case scui_window_switch_center_out:
-        case scui_window_switch_normal: {
+        case scui_window_switch_normal:
+        case scui_window_switch_zoom1:
+        case scui_window_switch_zoom2: {
             scui_surface_t *dst_surface = scui_surface_fb_draw();
             for (scui_handle_t idx = 0; idx < num; idx++) {
                 scui_widget_t *widget = list[idx];
@@ -55,13 +57,39 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                 }
                 dst_clip = out_clip;
                 src_clip = src_surface.clip;
+                
+                /* 如果底图透明度更新, 则清空底色防止错误混合 */
+                if (src_surface.alpha != scui_alpha_cover) {
+                    SCUI_PIXEL_TYPE dst_pixel = {0};
+                    scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
+                }
+                
+                if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1) {
+                    if (widget->myself == scui_window_active_curr()) {
+                        scui_draw_area_blend(dst_surface, &dst_clip, &src_surface, &src_clip);
+                        continue;
+                    }
+                }
+                
+                if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1 ||
+                    scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom2) {
+                    float scale_d = scui_map(src_clip.w, 0, dst_surface->clip.w, 50, 100) / 100.0f;
+                    SCUI_LOG_WARN("scale_d:%f", scale_d);
+                    scui_matrix_t inv_matrix = {0};
+                    scui_matrix_identity(&inv_matrix);
+                    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_surface->clip.w / 2,.y = +dst_surface->clip.h / 2,});
+                    scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
+                    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -dst_surface->clip.w / 2,.y = -dst_surface->clip.h / 2,});
+                    // scui_matrix_check(&inv_matrix);
+                    scui_matrix_inverse(&inv_matrix);
+                    scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, &src_surface, &src_clip, &inv_matrix);
+                    continue;
+                }
+                
                 scui_draw_area_blend(dst_surface, &dst_clip, &src_surface, &src_clip);
             }
             break;
         }
-        case scui_window_switch_zoom1:
-        case scui_window_switch_zoom2:
-            break;
     }
 }
 

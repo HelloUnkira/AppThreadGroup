@@ -1,60 +1,18 @@
 #ifndef SCUI_MATRIX_H
 #define SCUI_MATRIX_H
 
-typedef union {
-    struct {
-        float x;
-        float y;
-        float z;
-    };
-    float meta[3];
-} scui_matrix_pox_t;
-
-typedef struct {
-    /* 逆时针:0:lu;1:ru;2:dr;3:du; */
-    scui_matrix_pox_t pox[4];
-} scui_matrix_pox4_t;
-
-typedef struct {
-    float meta[3][3];
-} scui_matrix_t;
-
-/*备注:矩阵特性
- *    (A1 * A2 ... An)^(-1) = An^(-1) ... A2^(-1) * A1^(-1)
- */
-
-/*@brief 矩阵坐标转换(pox->point)
- *@param pox    矩阵坐标
- *@param point  坐标
- */
-void scui_matrix_pox_to_point(scui_matrix_pox_t *pox, scui_point_t *point);
-
-/*@brief 矩阵坐标转换(point->pox)
- *@param pox    矩阵坐标
- *@param point  坐标
- */
-void scui_matrix_pox_by_point(scui_matrix_pox_t *pox, scui_point_t *point);
-
-/*@brief 矩阵坐标变换
+/*@brief 矩阵输出
  *@param matrix 矩阵实例
- *@param pox    矩阵坐标
  */
-void scui_matrix_pox_transfer(scui_matrix_t *matrix, scui_matrix_pox_t *pox);
-
-/*@brief 矩阵区域变换
- *@param matrix 矩阵实例
- *@param src    矩阵区域
- *@param dst    矩阵区域
- */
-void scui_matrix_pox4_transfer(scui_matrix_t *matrix, scui_matrix_pox4_t *src, scui_matrix_pox4_t *dst);
+void scui_matrix_check(scui_matrix_t *matrix);
 
 /*@brief 矩阵生成
- *@param matrix 矩阵实例
- *@param src    平面区域
- *@param dst    平面区域
+ *@param matrix    矩阵实例
+ *@param face2_src 平面
+ *@param face2_dst 平面
  *@retval 成功或失败
  */
-bool scui_matrix_by_area(scui_matrix_t *matrix, scui_area_t *src, scui_area_t *dst);
+bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face2_t *face2_dst);
 
 /*@brief 矩阵乘法可逆检查
  *@param matrix 矩阵实例
@@ -79,29 +37,50 @@ void scui_matrix_identity(scui_matrix_t *matrix);
 
 /*@brief 矩阵平移
  *@param matrix 矩阵实例
- *@param ofs_x  水平偏移值
- *@param ofs_y  垂直偏移值
+ *@param offset 偏移值
  */
-void scui_matrix_translate(scui_matrix_t *matrix, float ofs_x, float ofs_y);
+void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset);
+
+/*@brief 矩阵透视
+ *@param matrix 矩阵实例
+ *@param view   透视点
+ */
+void scui_matrix_perspective(scui_matrix_t *matrix, scui_point2_t *view);
 
 /*@brief 矩阵缩放
  *@param matrix 矩阵实例
- *@param ofs_x  水平缩放比(1.0为基准线)
- *@param ofs_y  垂直缩放比(1.0为基准线)
+ *@param offset 缩放比(1.0为基准线)
  */
-void scui_matrix_scale(scui_matrix_t *matrix, float ofs_x, float ofs_y);
+void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale);
 
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
  *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
  */
-void scui_matrix_rotate(scui_matrix_t *matrix, int32_t angle);
+void scui_matrix_rotate(scui_matrix_t *matrix, float angle, uint8_t axis);
 
-/*@brief 矩阵透视
+/*@brief 矩阵旋转
  *@param matrix 矩阵实例
- *@param pos_x  水平透视点
- *@param pos_y  垂直透视点
+ *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
  */
-void scui_matrix_perspective(scui_matrix_t *matrix, float pos_x, float pos_y);
+void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis);
+
+/*@brief 矩阵仿射(blit)
+ *@param matrix 矩阵实例
+ *@param width  宽(src)
+ *@param height 高(src)
+ *@param face   面(dst)
+ */
+void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face);
+
+/*@brief 矩阵投影(blit)
+ *@param matrix 矩阵实例
+ *@param width  宽(src)
+ *@param height 高(src)
+ *@param face   面(dst)
+ */
+bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face);
 
 #endif

@@ -100,7 +100,14 @@ void scui_window_jump_anima_ready(void *instance)
     
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
-    case scui_window_switch_center_out:
+    case scui_window_switch_center_out: {
+        scui_widget_t *widget = NULL;
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
+        widget->surface.alpha = scui_alpha_pct0;
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
+        widget->surface.alpha = scui_alpha_pct100;
+        break;
+    }
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2: {
         scui_widget_t *widget = NULL;
