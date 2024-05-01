@@ -200,6 +200,16 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     if (!scui_area_inter(&src_clip_v, src_area, src_clip))
          return;
     
+    scui_area_t draw_area = {0};
+    draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
+    
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
+    
+    if (scui_area_empty(&draw_area))
+        return;
+    
     SCUI_PIXEL_TYPE pixel = {0};
     /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
     scui_multi_t dst_line = dst_surface->line * SCUI_PIXEL_SIZE;
@@ -208,24 +218,20 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
     
     /* 注意区域对齐坐标 */
-    for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
-    for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
-        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
-        uint8_t *src_ofs = src_addr;
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
         scui_point_t  point  = {0};
         scui_point3_t point3 = {0};
-        point.y = idx_line;
-        point.x = idx_item;
-        point.y += src_clip_v.y;
-        point.x += src_clip_v.x;
+        point.y = src_clip_v.y + idx_line;
+        point.x = src_clip_v.x + idx_item;
         /* 反扫描结果坐标对每一个坐标进行逆变换 */
         scui_point3_by_point(&point3, &point);
         scui_point3_transform_by_matrix(&point3, inv_matrix);
         scui_point3_to_point(&point3, &point);
-        
         /* 逆变换的结果落在的源区域, 取样上色 */
         if (scui_area_point(&src_clip_v, &point)) {
-            src_ofs = src_surface->pixel + point.y * src_line + point.x * SCUI_PIXEL_SIZE;
+            uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
+            uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * SCUI_PIXEL_SIZE;
             SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
             SCUI_PIXEL_TYPE *src_addr_ofs = (void *)src_ofs;
             
