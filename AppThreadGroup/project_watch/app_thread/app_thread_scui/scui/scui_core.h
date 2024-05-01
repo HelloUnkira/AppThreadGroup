@@ -48,6 +48,7 @@
 #include "scui_window_float.h"      /* 窗口管理器 */
 #include "scui_custom.h"
 #include "scui_scroll.h"
+#include "scui_watch.h"
 /* draw */
 #include "scui_draw_graph.h"
 #include "scui_draw_basic.h"

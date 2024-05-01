@@ -248,6 +248,7 @@ void scui_draw_image_zoom(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     
     
     #else
+    #error "unsupported graphic interface"
     #endif
 }
 
@@ -272,5 +273,6 @@ void scui_draw_image_rotate(scui_surface_t    *dst_surface, scui_area_t *dst_cli
     
     
     #else
+    #error "unsupported graphic interface"
     #endif
 }

@@ -9,6 +9,8 @@ typedef enum {
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_string,    /* 文本控件 */
+    /* 扩展控件 */
+    scui_widget_type_watch,     /* 表盘指针 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

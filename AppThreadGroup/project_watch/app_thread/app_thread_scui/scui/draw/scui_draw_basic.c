@@ -185,6 +185,10 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
                                    scui_surface_t *src_surface, scui_area_t *src_clip,
                                    scui_matrix_t  *inv_matrix)
 {
+    #if 0
+    #elif SCUI_DRAW_MISC_USE_SOFTWARE
+    /* @等待适配,要用的时候再去实现 */
+    #elif SCUI_DRAW_MISC_USE_MATRIX
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     SCUI_ASSERT(inv_matrix  != NULL);
@@ -245,4 +249,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
             }
         }
     }
+    #else
+    #error "unsupported graphic interface"
+    #endif
 }
