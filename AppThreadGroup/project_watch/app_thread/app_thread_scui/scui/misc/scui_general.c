@@ -8,6 +8,17 @@
 
 #include "scui.h"
 
+/*@brief 画布有效区域
+ *@retval 区域
+ */
+scui_area_t scui_surface_area(scui_surface_t *surface)
+{
+    return (scui_area_t){
+        .w = surface->hor_res,
+        .h = surface->ver_res,
+    };
+}
+
 /*@brief 颜色值格式转换
  *@param color888 颜色值
  *@retval 颜色值

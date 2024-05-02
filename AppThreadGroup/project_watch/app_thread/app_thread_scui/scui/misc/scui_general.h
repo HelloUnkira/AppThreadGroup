@@ -112,6 +112,8 @@ typedef enum {
     scui_pixel_format_rgb888,
     scui_pixel_format_argb8565,
     scui_pixel_format_argb8888,
+    scui_pixel_format_p4,
+    scui_pixel_format_p8,
 } scui_pixel_format_t;
 
 /*@brief 实体抽象:画布
@@ -150,6 +152,11 @@ typedef struct {
 #else
 #error "pixel format unknown"
 #endif
+
+/*@brief 画布有效区域
+ *@retval 区域
+ */
+scui_area_t scui_surface_area(scui_surface_t *surface);
 
 /*@brief 颜色值格式转换
  *@param color888 颜色值

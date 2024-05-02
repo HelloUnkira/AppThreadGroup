@@ -31,9 +31,11 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param dst_clip    画布绘制区域
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
+ *@param color       图像源色调(调色板格式使用)
  */
 void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                          scui_surface_t *src_surface, scui_area_t *src_clip);
+                          scui_surface_t *src_surface, scui_area_t *src_clip,
+                          scui_color_gradient_t color);
 
 /*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
  *@param dst_surface 画布实例

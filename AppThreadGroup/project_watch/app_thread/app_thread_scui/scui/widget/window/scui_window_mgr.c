@@ -25,6 +25,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         case scui_window_switch_normal:
         case scui_window_switch_zoom1:
         case scui_window_switch_zoom2: {
+            scui_color_gradient_t color = {0};
             scui_surface_t *dst_surface = scui_surface_fb_draw();
             for (scui_handle_t idx = 0; idx < num; idx++) {
                 scui_widget_t  *widget = list[idx];
@@ -70,7 +71,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                 
                 if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1) {
                     if (widget->myself == scui_window_active_curr()) {
-                        scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip);
+                        scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
                         continue;
                     }
                 }
@@ -78,7 +79,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                 if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1 ||
                     scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom2) {
                     float scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
-                    SCUI_LOG_WARN("scale_d:%f", scale_d);
+                    SCUI_LOG_INFO("scale_d:%f", scale_d);
                     scui_matrix_t inv_matrix = {0};
                     scui_matrix_identity(&inv_matrix);
                     scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
@@ -90,7 +91,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                     continue;
                 }
                 
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
             }
             break;
         }
