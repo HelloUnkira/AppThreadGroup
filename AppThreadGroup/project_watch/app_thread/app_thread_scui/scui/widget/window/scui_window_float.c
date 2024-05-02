@@ -51,7 +51,7 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
         scui_window_float.pos == scui_event_pos_d)
         alpha -= scui_abs(clip.y) * (scui_coord_t)scui_alpha_pct100 / clip.h;
     /* 更新透明度 */
-    widget->surface.alpha = alpha;
+    widget->surface->alpha = alpha;
     /* 有自己的独立buffer,直接refr */
     if (scui_widget_surface_only(widget))
         scui_widget_refr(handle, true);

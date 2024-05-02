@@ -18,7 +18,7 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    uint8_t trans:1;            /* 背景透明 */
+    uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
     uint8_t anima_sched:1;      /* 控件调度动画标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
@@ -44,28 +44,19 @@ typedef struct {
 
 /*@brief 控件基础信息:
  *       控件只处理最基础绘制(背景)
- *剪切域:
- *     scui_widget_t->clip:         控件在父控件的恒定剪切域
- *     scui_widget_t->surface_clip: 控件在当次绘制时的剪切域
- *     scui_widget_t->surface.clip: 控件在画布中的剪切域(画布相对窗口,控件相对画布)
- *画布:
- *     画布不是完全都存在独立资源空间
- *     只有一个独立场景可能存在资源空间
- *     其他控件的画布可能都只是相对独立场景资源空间的一个映射
- *     如果一个独立场景都不存在资源空间(映射到绘制画布资源空间)
- *     那么它们都会是相对绘制画布资源空间的一个映射
  */
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
     scui_event_cb_list_t    list;           /* 控件事件回调列表 */
     scui_area_t             clip;           /* 控件所在父控件区域 */
-    scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
+    scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
+    scui_surface_t         *surface;        /* 控件画布(图形上下文):画布实例 */
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
-    scui_surface_t          surface;        /* 控件画布(图形上下文):画布实例 */
+    scui_alpha_t            alpha;          /* 控件透明度 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_t;
@@ -76,13 +67,13 @@ typedef struct {
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
+    scui_event_cb_t         event_cb;       /* 事件响应回调(可选字段,非控件自身字段) */
     scui_area_t             clip;           /* 控件所在父控件区域 */
-    scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
+    scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
-    scui_event_cb_t         event_cb;       /* 事件响应回调(可选字段,非控件自身字段) */
 } scui_widget_maker_t;
 #pragma pack(pop)
 

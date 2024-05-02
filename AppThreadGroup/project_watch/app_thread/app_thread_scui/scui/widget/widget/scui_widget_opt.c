@@ -126,7 +126,7 @@ scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    return widget->surface.alpha;
+    return widget->alpha;
 }
 
 /*@brief 控件图片获取
@@ -163,10 +163,11 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    widget->surface.alpha = alpha;
+    widget->alpha = alpha;
     
     /* 待定中 */
     return;
+    
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
         scui_widget_alpha_set(widget->child_list[idx], alpha);

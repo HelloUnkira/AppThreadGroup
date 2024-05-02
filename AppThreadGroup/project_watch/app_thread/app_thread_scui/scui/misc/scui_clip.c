@@ -47,6 +47,7 @@ void scui_clip_check(scui_clip_set_t *clip_set)
  */
 void scui_clip_ready(scui_clip_set_t *clip_set)
 {
+    clip_set->clip = (scui_area_t){0};
     scui_list_dll_reset(&clip_set->dl_list);
 }
 

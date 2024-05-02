@@ -45,3 +45,31 @@ void scui_watch_destroy(scui_handle_t handle)
     /* 销毁表盘指针控件实例 */
     SCUI_MEM_FREE(watch);
 }
+
+/*@brief 表盘指针控件事件处理回调
+ *@param event 事件
+ */
+void scui_watch_event(scui_event_t *event)
+{
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
+    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_handle_t  handle = event->object;
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_watch_t   *watch = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    switch (event->type) {
+    case scui_event_draw: {
+        scui_widget_event_mask_keep(event);
+        
+        
+        
+        
+        break;
+    }
+    default:
+        break;
+    }
+}

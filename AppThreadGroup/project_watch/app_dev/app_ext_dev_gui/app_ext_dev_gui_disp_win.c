@@ -165,7 +165,7 @@ void app_dev_gui_disp_scui_flush(scui_surface_t *surface)
     app_dev_gui_disp_data_t *data = driver->data;
     
     APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
-    APP_SYS_ASSERT(surface->clip.w * surface->clip.h * SCUI_PIXEL_SIZE == cfg->display.pixel_buf_size);
+    APP_SYS_ASSERT(surface->hor_res * surface->ver_res * SCUI_PIXEL_SIZE == cfg->display.pixel_buf_size);
     
     memcpy(cfg->display.pixel_buf, surface->pixel, cfg->display.pixel_buf_size);
     

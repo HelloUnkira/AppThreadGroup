@@ -39,9 +39,9 @@ void scui_window_jump_anima_start(void *instance)
     case scui_window_switch_center_out: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_pct100;
+        widget->surface->alpha = scui_alpha_pct100;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_pct0;
+        widget->surface->alpha = scui_alpha_pct0;
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
@@ -50,9 +50,9 @@ void scui_window_jump_anima_start(void *instance)
     case scui_window_switch_zoom2: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_pct100;
+        widget->surface->alpha = scui_alpha_pct100;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_pct0;
+        widget->surface->alpha = scui_alpha_pct0;
     }
     case scui_window_switch_normal: {
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
@@ -103,18 +103,18 @@ void scui_window_jump_anima_ready(void *instance)
     case scui_window_switch_center_out: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_pct0;
+        widget->surface->alpha = scui_alpha_pct0;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_pct100;
+        widget->surface->alpha = scui_alpha_pct100;
         break;
     }
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_pct0;
+        widget->surface->alpha = scui_alpha_pct0;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_pct100;
+        widget->surface->alpha = scui_alpha_pct100;
     }
     case scui_window_switch_normal: {
         scui_window_mgr.switch_args.pct = 100;
@@ -162,9 +162,9 @@ void scui_window_jump_anima_expired(void *instance)
     case scui_window_switch_center_out: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
@@ -173,9 +173,9 @@ void scui_window_jump_anima_expired(void *instance)
     case scui_window_switch_zoom2: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
     }
     case scui_window_switch_normal: {
         scui_point_t point = (scui_point_t){0};
@@ -297,9 +297,9 @@ void scui_window_move_anima_expired(void *instance)
     case scui_window_switch_center_out: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
         scui_point_t point = (scui_point_t){0};
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
@@ -309,9 +309,9 @@ void scui_window_move_anima_expired(void *instance)
     case scui_window_switch_zoom2: {
         scui_widget_t *widget = NULL;
         widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface.alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface.alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
+        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
     }
     case scui_window_switch_normal: {
         scui_handle_t handle = scui_window_mgr.switch_args.list[0];

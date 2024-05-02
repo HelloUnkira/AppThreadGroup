@@ -14,7 +14,6 @@
 
 /* misc */
 #include "scui_coord.h"         /* 坐标区域 */
-#include "scui_clip.h"          /* 复合剪切域 */
 #include "scui_general.h"       /* 基础图元 */
 #include "scui_handle.h"        /* 泛用句柄 */
 #include "scui_anima.h"         /* 简易动画 */
@@ -23,8 +22,8 @@
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_image.h"         /* 图像 */
 #include "scui_image_cache.h"   /* 图像缓存 */
-#include "scui_surface.h"       /* 画布 */
 #include "scui_surface_fb.h"    /* 画布帧缓冲 */
+#include "scui_clip.h"          /* 画布剪切域 */
 #include "scui_math.h"          /* 数学库 */
 #include "scui_axis3.h"         /* 三维图元 */
 #include "scui_matrix.h"        /* 矩阵库 */

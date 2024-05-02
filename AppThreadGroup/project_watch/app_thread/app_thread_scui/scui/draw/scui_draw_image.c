@@ -25,29 +25,49 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     if (alpha == scui_alpha_trans)
         return;
     
-    scui_area_t image_clip = {
-        .x = 0, .w = image_unit->image->pixel.width,
-        .y = 0, .h = image_unit->image->pixel.height,
+    scui_surface_t image_surface = {
+        .pixel   = image_unit->data,
+        .hor_res = image_unit->image->pixel.width,
+        .ver_res = image_unit->image->pixel.height,
+        .alpha   = alpha,
     };
     
-    scui_surface_t image_surface = {
-        .pixel = image_unit->data,
-        .line  = image_clip.w,
-        .clip  = image_clip,
-        .alpha = alpha,
-    };
+    switch (image_unit->image->format) {
+    case scui_image_format_rgb565:
+        image_surface.format = scui_pixel_format_rgb565;
+        break;
+    case scui_image_format_rgb888:
+        image_surface.format = scui_pixel_format_rgb888;
+        break;
+    case scui_image_format_argb8565:
+        image_surface.format = scui_pixel_format_argb8565;
+        break;
+    case scui_image_format_argb8888:
+        image_surface.format = scui_pixel_format_argb8888;
+        break;
+    default:
+        SCUI_LOG_ERROR("unsupported image pixel");
+        return;
+    }
+    
     
     SCUI_PIXEL_TYPE pixel = {0};
     scui_surface_t *src_surface = &image_surface;
-    
-    scui_area_t *dst_area = &dst_surface->clip;
+
+    scui_area_t dst_area = {
+        .w = dst_surface->hor_res,
+        .h = dst_surface->ver_res,
+    };
     scui_area_t  dst_clip_v = {0};   // v:vaild
-    if (!scui_area_inter(&dst_clip_v, dst_area, dst_clip))
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
          return;
     
-    scui_area_t *src_area = &image_clip;
+    scui_area_t src_area = {
+        .w = src_surface->hor_res,
+        .h = src_surface->ver_res,
+    };
     scui_area_t  src_clip_v = {0};   // v:vaild
-    if (!scui_area_inter(&src_clip_v, src_area, src_clip))
+    if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     
     scui_area_t draw_area = {
@@ -58,8 +78,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     if (scui_area_empty(&draw_area))
         return;
     
-    scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->line + dst_clip_v.x;
-    scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->line + src_clip_v.x;
+    scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
+    scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
     
     /* image blend: */
     if ((SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565 && image_unit->image->format == scui_image_format_argb8565) ||
@@ -69,8 +89,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * 3;
             for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
             for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) * 3;
+                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 3;
                 SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                 scui_color8565_t *src_addr_ofs = (void *)src_ofs;
                 alpha = (scui_alpha_t)src_addr_ofs->ch.a * (uint16_t)src_surface->alpha / scui_alpha_cover;
@@ -86,8 +106,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * 4;
             for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
             for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) * 4;
+                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 4;
                 SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                 scui_color8888_t *src_addr_ofs = (void *)src_ofs;
                 alpha = (scui_alpha_t)src_addr_ofs->ch.a * (uint16_t)src_surface->alpha / scui_alpha_cover;
@@ -116,8 +136,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              if (palette_table[0].full == palette_table[palette_len - 1].full) {
                  for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) / 2;
+                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) / 2;
                     SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                     uint8_t *src_addr_ofs = (void *)src_ofs;
                     uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
@@ -129,8 +149,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              } else {
                  for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) / 2;
+                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) / 2;
                     SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                     uint8_t *src_addr_ofs = (void *)src_ofs;
                     uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
@@ -161,8 +181,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              if (palette_table[0].full == palette_table[palette_len - 1].full) {
                  for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) * 1;
+                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 1;
                     SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
                     uint8_t *src_addr_ofs = (void *)src_ofs;
                     uint8_t palette = *src_addr_ofs;
@@ -174,8 +194,8 @@ void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
              } else {
                  for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
                  for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->line + idx_item) * SCUI_PIXEL_SIZE;
-                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->line + idx_item) * 1;
+                    uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+                    uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 1;
                     SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
                     uint8_t *src_addr_ofs = (void *)src_ofs;
                     uint8_t palette = *src_addr_ofs;
@@ -263,15 +283,41 @@ void scui_draw_image_zoom(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
  */
 void scui_draw_image_rotate(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                             scui_image_unit_t *image_unit,  scui_area_t *src_clip,
-                            scui_alpha_t       alpha,       scui_coord_t angle)
+                            scui_alpha_t       alpha,       scui_coord_t angle,
+                            scui_point_t       anchor,      scui_point_t center)
 {
     #if 0
     #elif SCUI_DRAW_MISC_USE_SOFTWARE
     /* @等待适配,要用的时候再去实现 */
     #elif SCUI_DRAW_MISC_USE_MATRIX
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);
     
+    if (alpha == scui_alpha_trans)
+        return;
     
+    scui_surface_t image_surface = {
+        .pixel   = image_unit->data,
+        .hor_res = image_unit->image->pixel.width,
+        .ver_res = image_unit->image->pixel.height,
+        .alpha   = alpha,
+    };
     
+    scui_surface_t *src_surface = &image_surface;
+    
+    scui_matrix_t inv_matrix = {0};
+    scui_matrix_identity(&inv_matrix);
+    scui_matrix_translate(&inv_matrix, &(scui_point2_t){
+        .x = + anchor.x + center.x,
+        .y = + anchor.y + center.y,
+    });
+    scui_matrix_rotate(&inv_matrix, (float)angle, 0x00);
+    scui_matrix_translate(&inv_matrix, &(scui_point2_t){
+        .x = - center.x,
+        .y = - center.y,
+    });
+    scui_matrix_inverse(&inv_matrix);
+    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, src_surface, src_clip, &inv_matrix);
     #else
     #error "unsupported graphic interface"
     #endif

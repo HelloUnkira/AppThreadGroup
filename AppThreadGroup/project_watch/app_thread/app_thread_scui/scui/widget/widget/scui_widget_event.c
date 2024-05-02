@@ -316,7 +316,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                     /* 将整个控件树重定向到绘制画布上面去 */
                     if (widget->parent == SCUI_HANDLE_INVALID) {
                         scui_surface_t *surface = scui_surface_fb_draw();
-                        scui_widget_surface_change(widget, surface);
+                        scui_widget_surface_remap(widget, surface);
                     }
                 } else {
                     scui_widget_refr(widget->myself, true);

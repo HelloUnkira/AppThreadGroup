@@ -64,22 +64,19 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     }
     
     SCUI_LOG_DEBUG("");
-    scui_widget_t *widget_root = NULL;
-    scui_handle_t  handle_root = scui_widget_root(widget->myself);
-    widget_root = scui_handle_get(handle_root);
-    
-    /* 画布的映射是根控件, 控件画布默认为完全不透明 */
-    widget->surface.alpha = scui_alpha_cover;
-    widget->surface.pixel = widget_root->surface.pixel;
-    widget->surface.line  = widget_root->surface.line;
-    
-    /* 更新画布剪切域 */
+    /* 画布的映射是根控件 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_root = NULL;
+        scui_handle_t  handle_root = scui_widget_root(widget->myself);
+        widget_root = scui_handle_get(handle_root);
+        widget->surface = widget_root->surface;
+    }
+    /* 画布剪切域重置 */
+    scui_clip_ready(&widget->clip_set);
+    /* 画布剪切域更新 */
     scui_widget_surface_refr(widget, false);
     
-    /* 画布剪切域更新,主域配置为空 */
-    scui_clip_ready(&widget->clip_set);
-    widget->clip_set.clip = (scui_area_t){0};
-    
+    widget->alpha = scui_alpha_cover;
     widget->image = maker->image;
     widget->color = maker->color;
     
@@ -299,9 +296,6 @@ void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
     SCUI_LOG_INFO("<%d, %d, %d, %d>",
                   widget->clip.x, widget->clip.y,
                   widget->clip.w, widget->clip.h);
-    SCUI_LOG_INFO("<%d, %d, %d, %d>",
-                  widget->surface.clip.x, widget->surface.clip.y,
-                  widget->surface.clip.w, widget->surface.clip.h);
     scui_clip_check(&widget->clip_set);
     
     if (!recurse)
@@ -321,7 +315,6 @@ void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
 void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
-    widget->clip_set.clip = widget->surface.clip;
     scui_clip_clear(&widget->clip_set);
     
     if (!recurse)
@@ -342,17 +335,15 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
+    scui_area_t widget_clip = widget->clip_set.clip;
     
     if (clip != NULL) {
-        widget->clip_set.clip.w = 0;
-        widget->clip_set.clip.h = 0;
-        
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->surface.clip, clip))
-            widget->clip_set.clip = clip_inter;
+        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+            widget_clip = clip_inter;
     }
     scui_clip_clear(&widget->clip_set);
-    scui_clip_add(&widget->clip_set, &widget->clip_set.clip);
+    scui_clip_add(&widget->clip_set, &widget_clip);
     
     if (!recurse)
          return;
@@ -376,7 +367,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_get(handle);
         /* 只有子控件显示,不透明,完全覆盖才能移除 */
-        bool ignore = !(child->style.state && !child->style.trans && child->surface.alpha == scui_alpha_cover);
+        bool ignore = !(child->style.state && !child->style.trans && child->surface->alpha == scui_alpha_cover);
         if (!ignore)
              scui_clip_del(&widget->clip_set, &child->clip_set.clip);
         scui_widget_clip_update(child);
@@ -394,7 +385,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
                 scui_handle_t handle = widget_parent->child_list[idx];
                 scui_widget_t *buddy = scui_handle_get(handle);
                 /* 只有兄弟控件显示,不透明,完全覆盖才能移除 */
-                bool ignore = !(buddy->style.state && !buddy->style.trans && buddy->surface.alpha == scui_alpha_cover);
+                bool ignore = !(buddy->style.state && !buddy->style.trans && buddy->surface->alpha == scui_alpha_cover);
                 if (!ignore)
                      scui_clip_del(&widget->clip_set, &buddy->clip_set.clip);
             }
@@ -415,7 +406,8 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    if (widget->clip.x == point->x && widget->clip.y == point->y)
+    if (widget->clip.x == point->x &&
+        widget->clip.y == point->y)
         return;
     
     SCUI_LOG_DEBUG("");
@@ -423,10 +415,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     if (widget->parent == SCUI_HANDLE_INVALID) {
         widget->clip.x = point->x;
         widget->clip.y = point->y;
-        if (!scui_widget_surface_only(widget)) {
-             scui_widget_surface_refr(widget, true);
-             scui_widget_clip_clear(widget, false);
-        }
+        scui_widget_refr(widget->myself, false);
         SCUI_LOG_DEBUG("<x:%d, y:%d>", point->x, point->y);
         return;
     }
@@ -528,7 +517,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         return;
     }
     
-    if (widget->clip.w == width && widget->clip.h == height)
+    if (widget->clip.w == width &&
+        widget->clip.h == height)
         return;
     
     widget->clip.w = width;

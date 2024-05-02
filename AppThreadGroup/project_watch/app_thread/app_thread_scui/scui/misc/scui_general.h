@@ -114,6 +114,17 @@ typedef enum {
     scui_pixel_format_argb8888,
 } scui_pixel_format_t;
 
+/*@brief 实体抽象:画布
+ *       画布是块独立缓冲区或共享绘制画布的缓冲区
+ */
+typedef struct {
+    uint8_t            *pixel;      // 画布像素流地址
+    scui_pixel_format_t format;     // 画布像素流类型(默认:SCUI_PIXEL_FORMAT)
+    scui_coord_t        hor_res;    // 画布像素流宽度
+    scui_coord_t        ver_res;    // 画布像素流高度
+    scui_alpha_t        alpha;      // 画布全局透明度
+} scui_surface_t;
+
 /*@brief: 字节配置,元素提取,像素点逆序(慎用)
  *        最上层使用的color统一为ARGB8888类型
  *        而设备大多时候使用RGB565格式

@@ -31,8 +31,12 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
         SCUI_ASSERT(maker->widget.clip.x == 0 && maker->widget.clip.w == hor_res);
         SCUI_ASSERT(maker->widget.clip.y == 0 && maker->widget.clip.h == ver_res);
-        window->widget.surface.pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-        window->widget.surface.line  = hor_res;
+        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_def,   sizeof(scui_surface_t));
+        window->widget.surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
+        window->widget.surface->format  = SCUI_PIXEL_FORMAT;
+        window->widget.surface->hor_res = hor_res;
+        window->widget.surface->ver_res = ver_res;
+        window->widget.surface->alpha   = scui_alpha_cover;
     }
     
     /* 创建基础控件实例 */
@@ -65,8 +69,10 @@ void scui_window_destroy(scui_handle_t handle)
     scui_widget_destroy(&window->widget);
     
     /* 回收surface */
-    if (scui_widget_surface_only(widget))
-        SCUI_MEM_FREE(window->widget.surface.pixel);
+    if (scui_widget_surface_only(widget)) {
+        SCUI_MEM_FREE(window->widget.surface->pixel);
+        SCUI_MEM_FREE(window->widget.surface);
+    }
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);
