@@ -13,6 +13,8 @@ typedef struct {
     scui_point_t  center_m;     /* 图片旋转中心 */
     scui_point_t  anchor_s;     /* 图片旋转围绕轴心 */
     scui_point_t  center_s;     /* 图片旋转中心 */
+    /* 内部域: */
+    uint8_t fake_ms;
 } scui_watch_t;
 
 #pragma pack(push, 1)
@@ -41,5 +43,10 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
  *@param handle 表盘指针控件句柄
  */
 void scui_watch_destroy(scui_handle_t handle);
+
+/*@brief 表盘指针控件事件处理回调
+ *@param event 事件
+ */
+void scui_watch_event(scui_event_t *event);
 
 #endif

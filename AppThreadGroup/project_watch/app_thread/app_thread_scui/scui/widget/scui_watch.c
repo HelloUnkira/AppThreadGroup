@@ -24,8 +24,22 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     /* 创建基础控件实例 */
     scui_widget_create(&watch->widget, &maker->widget, handle, layout);
     
+    watch->image_h  = maker->image_h;
+    watch->image_m  = maker->image_m;
+    watch->image_s  = maker->image_s;
+    watch->anchor_h = maker->anchor_h;
+    watch->center_h = maker->center_h;
+    watch->anchor_m = maker->anchor_m;
+    watch->center_m = maker->center_m;
+    watch->anchor_s = maker->anchor_s;
+    watch->center_s = maker->center_s;
+    
     /* 为表盘指针控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
+    scui_event_cb_node_t cb_node = {.event_cb = scui_watch_event,};
+    
+    /* 事件默认全局接收 */
+    cb_node.event = scui_event_sched_all;
+    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 表盘指针控件销毁
@@ -61,11 +75,38 @@ void scui_watch_event(scui_event_t *event)
     SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        
+        watch->fake_ms += SCUI_ANIMA_TICK;
+        
+        if (watch->fake_ms >= 1000) {   // 是否需要一秒一跳接口?
+            watch->fake_ms -= 1000;
+            scui_widget_draw(handle, NULL, false);
+        }
+        break;
+    }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         
+        scui_indev_data_set_t *data_set = NULL;
+        scui_indev_data_set(&data_set);
         
+        /* hour: */
+        scui_coord_t angle_h = data_set->sys_time_h * (360 / 24);
+        scui_widget_surface_draw_image_rotate(widget, watch->image_h, NULL, scui_alpha_cover,
+            angle_h, &watch->anchor_h, &watch->center_h);
         
+        /* minute: */
+        scui_coord_t angle_m = data_set->sys_time_m * (360 / 60);
+        scui_widget_surface_draw_image_rotate(widget, watch->image_m, NULL, scui_alpha_cover,
+            angle_m, &watch->anchor_m, &watch->center_m);
+        
+        /* second: */
+        scui_coord_t angle_s = data_set->sys_time_s * (360 / 60);
+        scui_widget_surface_draw_image_rotate(widget, watch->image_s, NULL, scui_alpha_cover,
+            angle_s, &watch->anchor_s, &watch->center_s);
         
         break;
     }

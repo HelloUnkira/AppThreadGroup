@@ -104,7 +104,7 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_gradient_t
  *@param src_clip 图像源绘制区域
  *@param color    图像源色调(调色板使用)
  */
-void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t         handle,
+void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
                                     scui_area_t *src_clip, scui_color_gradient_t color)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
@@ -141,14 +141,49 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t        
     scui_image_cache_unload(&image_unit);
 }
 
-
 /*@brief 控件画布在画布绘制图像
  *@param widget   控件实例
  *@param handle   图像句柄
  *@param src_clip 图像源绘制区域
- *@param color    图像源色调(调色板使用)
+ *@param alpha    图像透明度(非图像自带透明度)
+ *@param angle    图像旋转角度(顺时针旋转:+,逆时针旋转:-)
+ *@param anchor   图像旋转轴心
+ *@param center   图像旋转中心
  */
-void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t  handle,
-                                           scui_area_t *src_clip, scui_color_gradient_t color)
+void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t handle,
+                                           scui_area_t *src_clip, scui_alpha_t  alpha, scui_coord_t angle,
+                                           scui_point_t  *anchor, scui_point_t *center)
 {
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    scui_surface_t *dst_surface = widget->surface;
+    scui_area_t     dst_clip    = {0};
+    
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_area_t image_clip = {
+        .x = 0, .w = image->pixel.width,
+        .y = 0, .h = image->pixel.height,
+    };
+    
+    if (src_clip == NULL)
+        src_clip  = &image_clip;
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    scui_image_unit_t image_unit = {.image = image,};
+    scui_image_cache_load(&image_unit);
+    
+    scui_clip_unit_t *unit = NULL;
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        dst_clip = unit->clip;
+        scui_area_t src_area = {0};
+        if (!scui_area_inter(&src_area, src_clip, &unit->clip))
+             continue;
+        scui_draw_image_rotate(dst_surface, &dst_clip, &image_unit, &src_area, alpha, angle, &anchor, &center);
+    }
+    
+    scui_image_cache_unload(&image_unit);
 }

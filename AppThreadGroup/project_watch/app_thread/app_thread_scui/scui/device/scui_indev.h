@@ -39,6 +39,14 @@ typedef struct {
     };
 } scui_indev_data_t;
 
+/*@brief 输入设备数据集
+ */
+typedef struct {
+    uint8_t sys_time_h;
+    uint8_t sys_time_m;
+    uint8_t sys_time_s;
+} scui_indev_data_set_t;
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -47,5 +55,15 @@ void scui_indev_notify(scui_indev_data_t *data);
 /*@brief 输入设备初始化
  */
 void scui_indev_ready(void);
+
+/*@brief 输入设备注册数据集合实例回调
+ *@param cb 回调
+ */
+void scui_indev_data_set_register(scui_indev_data_set_t * (*cb)(void));
+
+/*@brief 输入设备获取数据集合实例
+ *@param 数据集合实例
+ */
+void scui_indev_data_set(scui_indev_data_set_t **data_set);
 
 #endif

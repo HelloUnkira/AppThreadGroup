@@ -7,6 +7,8 @@
 
 #include "scui.h"
 
+static scui_indev_data_set_t * (*scui_indev_data_set_cb)(void) = NULL;
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -27,4 +29,20 @@ void scui_indev_ready(void)
     scui_indev_ptr_ready();
     scui_indev_enc_ready();
     scui_indev_key_ready();
+}
+
+/*@brief 输入设备注册数据集合实例回调
+ *@param cb 回调
+ */
+void scui_indev_data_set_register(scui_indev_data_set_t * (*cb)(void))
+{
+    scui_indev_data_set_cb = cb;
+}
+
+/*@brief 输入设备获取数据集合实例
+ *@param 数据集合实例
+ */
+void scui_indev_data_set(scui_indev_data_set_t **data_set)
+{
+    *data_set = scui_indev_data_set_cb();
 }
