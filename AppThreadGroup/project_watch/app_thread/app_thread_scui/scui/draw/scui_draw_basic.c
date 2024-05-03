@@ -83,7 +83,6 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
-    SCUI_ASSERT(dst_surface->alpha == scui_alpha_cover);
     SCUI_ASSERT(src_surface->alpha == scui_alpha_cover);
     
     if (dst_surface->format != SCUI_PIXEL_FORMAT ||
@@ -389,8 +388,8 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
         return;
     
     /* 注意区域对齐坐标 */
-    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
-    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+    for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
         scui_point_t  point  = {0};
         scui_point3_t point3 = {0};
         point.y = src_clip_v.y + idx_line;

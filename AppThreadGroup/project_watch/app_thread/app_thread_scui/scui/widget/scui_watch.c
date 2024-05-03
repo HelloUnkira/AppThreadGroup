@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -24,15 +24,16 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     /* 创建基础控件实例 */
     scui_widget_create(&watch->widget, &maker->widget, handle, layout);
     
-    watch->image_h  = maker->image_h;
-    watch->image_m  = maker->image_m;
-    watch->image_s  = maker->image_s;
-    watch->anchor_h = maker->anchor_h;
-    watch->center_h = maker->center_h;
-    watch->anchor_m = maker->anchor_m;
-    watch->center_m = maker->center_m;
-    watch->anchor_s = maker->anchor_s;
-    watch->center_s = maker->center_s;
+    watch->image_h   = maker->image_h;
+    watch->image_m   = maker->image_m;
+    watch->image_s   = maker->image_s;
+    watch->anchor_h  = maker->anchor_h;
+    watch->center_h  = maker->center_h;
+    watch->anchor_m  = maker->anchor_m;
+    watch->center_m  = maker->center_m;
+    watch->anchor_s  = maker->anchor_s;
+    watch->center_s  = maker->center_s;
+    watch->tick_mode = maker->tick_mode;
     
     /* 为表盘指针控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = scui_watch_event,};
@@ -40,6 +41,11 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     /* 事件默认全局接收 */
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
+    
+    /* 创建时刷新一次 */
+    scui_event_t event = {.object = *handle, .type = scui_event_anima_elapse,};
+    scui_widget_event_mask_execute(&event);
+    scui_watch_event(&event);
 }
 
 /*@brief 表盘指针控件销毁
@@ -58,6 +64,23 @@ void scui_watch_destroy(scui_handle_t handle)
     
     /* 销毁表盘指针控件实例 */
     SCUI_MEM_FREE(watch);
+}
+
+/*@brief 表盘指针跳动模式
+ *@param handle 滚动控件句柄
+ *@param tick_mode 一度一跳:1;一秒一跳:0;
+ */
+void scui_watch_tick_mode(scui_handle_t handle, bool tick_mode)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_watch_t   *watch = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->type != scui_widget_type_watch)
+        return;
+    
+    watch->tick_mode = tick_mode;
+    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 表盘指针控件事件处理回调
@@ -79,32 +102,48 @@ void scui_watch_event(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         
-        watch->fake_ms += SCUI_ANIMA_TICK;
+        scui_indev_data_set_t *data_set = NULL;
+        scui_indev_data_set(&data_set);
         
-        if (watch->fake_ms >= 1000) {   // 是否需要一秒一跳接口?
-            watch->fake_ms -= 1000;
+        watch->tick_ms += SCUI_ANIMA_TICK;
+        
+        if (watch->tick_h != data_set->sys_time_h ||
+            watch->tick_m != data_set->sys_time_m ||
+            watch->tick_s != data_set->sys_time_s) {
+            watch->tick_h  = data_set->sys_time_h;
+            watch->tick_m  = data_set->sys_time_m;
+            watch->tick_s  = data_set->sys_time_s;
+            watch->tick_ms     = 0;
+            watch->tick_ms_rcd = 0;
             scui_widget_draw(handle, NULL, false);
+            break;
+        }
+        
+        if (watch->tick_mode) {
+            /* 一度一跳时 */
+            if (scui_dist(watch->tick_ms, watch->tick_ms_rcd) >= (1000 / 6)) {
+                watch->tick_ms_rcd = watch->tick_ms;
+                scui_widget_draw(handle, NULL, false);
+                break;
+            }
         }
         break;
     }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         
-        scui_indev_data_set_t *data_set = NULL;
-        scui_indev_data_set(&data_set);
-        
         /* hour: */
-        scui_coord_t angle_h = data_set->sys_time_h * (360 / 24);
+        scui_coord_t angle_h = watch->tick_h * (360 / 24) + watch->tick_m * (360 / 60) * 6 / 360;
         scui_widget_surface_draw_image_rotate(widget, watch->image_h, NULL, scui_alpha_cover,
             angle_h, &watch->anchor_h, &watch->center_h);
         
         /* minute: */
-        scui_coord_t angle_m = data_set->sys_time_m * (360 / 60);
+        scui_coord_t angle_m = watch->tick_m * (360 / 60) + watch->tick_s * (360 / 60) * 6 / 360;
         scui_widget_surface_draw_image_rotate(widget, watch->image_m, NULL, scui_alpha_cover,
             angle_m, &watch->anchor_m, &watch->center_m);
         
         /* second: */
-        scui_coord_t angle_s = data_set->sys_time_s * (360 / 60);
+        scui_coord_t angle_s = watch->tick_s * (360 / 60) + watch->tick_ms * 6 / 1000;
         scui_widget_surface_draw_image_rotate(widget, watch->image_s, NULL, scui_alpha_cover,
             angle_s, &watch->anchor_s, &watch->center_s);
         

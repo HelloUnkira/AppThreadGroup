@@ -182,7 +182,8 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
         scui_area_t src_area = {0};
         if (!scui_area_inter(&src_area, src_clip, &unit->clip))
              continue;
-        scui_draw_image_rotate(dst_surface, &dst_clip, &image_unit, &src_area, alpha, angle, &anchor, &center);
+        scui_draw_image_rotate(dst_surface, &dst_clip, &image_unit, &src_area,
+                               alpha, angle, anchor, center);
     }
     
     scui_image_cache_unload(&image_unit);

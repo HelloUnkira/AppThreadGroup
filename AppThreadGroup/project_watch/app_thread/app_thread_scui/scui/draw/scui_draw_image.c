@@ -90,7 +90,6 @@ void scui_draw_image_rotate(scui_surface_t    *dst_surface, scui_area_t  *dst_cl
                             scui_image_unit_t *image_unit,  scui_area_t  *src_clip,
                             scui_alpha_t       alpha,       scui_coord_t  angle,
                             scui_point_t      *anchor,      scui_point_t *center)
-
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);
@@ -133,15 +132,9 @@ void scui_draw_image_rotate(scui_surface_t    *dst_surface, scui_area_t  *dst_cl
     
     scui_matrix_t inv_matrix = {0};
     scui_matrix_identity(&inv_matrix);
-    scui_matrix_translate(&inv_matrix, &(scui_point2_t){
-        .x = + anchor->x + center->x,
-        .y = + anchor->y + center->y,
-    });
+    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +anchor->x, .y = +anchor->y,});
     scui_matrix_rotate(&inv_matrix, (float)angle, 0x00);
-    scui_matrix_translate(&inv_matrix, &(scui_point2_t){
-        .x = - center->x,
-        .y = - center->y,
-    });
+    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -center->x, .y = -center->y,});
     scui_matrix_inverse(&inv_matrix);
     scui_draw_area_blit_by_matrix(dst_surface, dst_clip, src_surface, src_clip, &inv_matrix);
 }
