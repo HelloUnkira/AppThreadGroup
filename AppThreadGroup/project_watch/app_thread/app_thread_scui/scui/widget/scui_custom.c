@@ -28,7 +28,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_draw;
+    cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
 }
 

@@ -38,6 +38,8 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     /* 为表盘指针控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = scui_watch_event,};
     
+    watch->widget.style.sched_anima = true;
+    
     /* 事件默认全局接收 */
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
@@ -55,7 +57,7 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
 void scui_watch_destroy(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
-    scui_watch_t *watch = (void *)widget;
+    scui_watch_t  *watch  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_watch);
     

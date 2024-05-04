@@ -74,23 +74,18 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
     
-    /* 特殊事件按需求添加 */
-    cb_node.event = scui_event_ptr_all;
-    scui_widget_event_del(*handle, &cb_node);
-    if (maker->widget.style.indev_ptr)
+    if (scroll->widget.style.indev_ptr) {
+        cb_node.event = scui_event_ptr_all;
         scui_widget_event_add(*handle, &cb_node);
-    
-    /* 特殊事件按需求添加 */
-    cb_node.event = scui_event_enc_all;
-    scui_widget_event_del(*handle, &cb_node);
-    if (maker->widget.style.indev_ptr)
+    }
+    if (scroll->widget.style.indev_enc) {
+        cb_node.event = scui_event_enc_all;
         scui_widget_event_add(*handle, &cb_node);
-    
-    /* 特殊事件按需求添加 */
-    cb_node.event = scui_event_key_all;
-    scui_widget_event_del(*handle, &cb_node);
-    if (maker->widget.style.indev_ptr)
+    }
+    if (scroll->widget.style.indev_key) {
+        cb_node.event = scui_event_key_all;
         scui_widget_event_add(*handle, &cb_node);
+    }
 }
 
 /*@brief 滚动控件销毁
@@ -403,7 +398,7 @@ void scui_scroll_anima_expired(void *instance)
         /* 偏移所有子控件 */
         scui_event_t event = {.object = widget->myself};
         scui_scroll_event_notify(&event, 0x02);
-        scui_widget_refr_ofs_child_list(widget->myself, &offset);
+        scui_widget_move_ofs_child_list(widget->myself, &offset);
         scui_widget_draw(widget->myself, NULL, false);
         break;
     }
@@ -469,7 +464,7 @@ void scui_scroll_anima_expired(void *instance)
             
             scui_event_t event = {.object = widget->myself};
             scui_scroll_event_notify(&event, 0x02);
-            scui_widget_refr_ofs_child_list(widget->myself, &offset);
+            scui_widget_move_ofs_child_list(widget->myself, &offset);
         }
         if (scroll->loop) {
             scui_point_t range = {0};
@@ -480,7 +475,7 @@ void scui_scroll_anima_expired(void *instance)
             
             scui_event_t event = {.object = widget->myself};
             scui_scroll_event_notify(&event, 0x02);
-            scui_widget_refr_ofs_child_list_loop(widget->myself, &offset, &range);
+            scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range);
         }
         
         scui_widget_draw(widget->myself, NULL, false);
@@ -564,7 +559,7 @@ void scui_scroll_update_layout(scui_event_t *event)
             scroll->ofs_cur.x = -scroll->ofs_cur.x;
             scroll->ofs_cur.y = -scroll->ofs_cur.y;
             /* 偏移所有子控件 */
-            scui_widget_refr_ofs_child_list(widget->myself, &scroll->ofs_cur);
+            scui_widget_move_ofs_child_list(widget->myself, &scroll->ofs_cur);
             scroll->ofs_cur.x = 0;
             scroll->ofs_cur.y = 0;
         }

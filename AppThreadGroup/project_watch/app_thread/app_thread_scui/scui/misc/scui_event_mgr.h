@@ -1,6 +1,10 @@
 #ifndef SCUI_EVENT_MGR_H
 #define SCUI_EVENT_MGR_H
 
+/* 检查事件调度耗时:以ms计 */
+#define SCUI_EVENT_MGR_TICK_CHECK       1
+#define SCUI_EVENT_MGR_TICK_FILTER      100
+
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
  */

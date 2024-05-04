@@ -27,7 +27,7 @@ void scui_ready(void)
     };
     SCUI_PIXEL_TYPE pixel = {0};
     scui_surface_t *surface_fb = NULL;
-    const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * SCUI_PIXEL_SIZE * 10;
+    const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * SCUI_PIXEL_SIZE;
     surface_fb = scui_surface_fb_draw();
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->format  = SCUI_PIXEL_FORMAT;

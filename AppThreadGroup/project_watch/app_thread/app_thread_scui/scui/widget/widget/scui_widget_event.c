@@ -280,27 +280,20 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
+        /* 全局滚动检查 */
+        scui_widget_event_mask_keep(event);
+        scui_handle_t handle = SCUI_HANDLE_INVALID;
+        if (scui_widget_event_scroll_flag(0x02, &handle))
+            return;
         /* 继续冒泡,继续下沉 */
         scui_widget_child_list_btra(widget, idx) {
             event->object = widget->child_list[idx];
             scui_widget_event_dispatch(event);
         }
         event->object = widget->myself;
-        scui_widget_event_mask_keep(event);
         /* 冒泡自己 */
-        if (widget->style.anima_sched)
+        if (widget->style.sched_anima)
             scui_widget_event_proc(event);
-        return;
-    }
-    /*************************************************************************/
-    /* 刷新事件:就地处理**************************************************** */
-    /*************************************************************************/
-    if (event->type == scui_event_refr) {
-        scui_window_mix_surface();
-        /* 混合绘制刷新流程结束 */
-        /* 使用假绘制启动正式的刷新流程 */
-        scui_surface_draw_routine(NULL);
-        scui_widget_event_mask_keep(event);
         return;
     }
     /*************************************************************************/
@@ -584,7 +577,7 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
         if (scroll_flag.lock && scroll_flag.key == *key)
             return false;
         *key = SCUI_HANDLE_INVALID;
-        return true;
+        return scroll_flag.lock;
     default:
         SCUI_LOG_ERROR("unknown state");
         return false;

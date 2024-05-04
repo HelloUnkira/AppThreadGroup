@@ -10,7 +10,8 @@ typedef enum {
     scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_string,    /* 文本控件 */
     /* 扩展控件 */
-    scui_widget_type_watch,     /* 表盘指针 */
+    scui_widget_type_watch,     /* 表盘指针控件 */
+    scui_widget_type_chart,     /* 图表控件 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;
@@ -20,7 +21,7 @@ typedef enum {
 typedef struct {
     uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
-    uint8_t anima_sched:1;      /* 控件调度动画标记 */
+    uint8_t sched_anima:1;      /* 控件调度动画标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
     uint8_t indev_key:1;        /* 输入事件响应标记:key */
@@ -58,7 +59,7 @@ typedef struct {
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
     scui_alpha_t            alpha;          /* 控件透明度 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
-    scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
+    scui_color_mix_t        color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_t;
 
 /*@brief 控件布局资料
@@ -73,7 +74,7 @@ typedef struct {
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
-    scui_color_gradient_t   color;          /* 纯色背景(如果没背景图片,颜色绘制) */
+    scui_color_mix_t        color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_maker_t;
 #pragma pack(pop)
 
@@ -183,13 +184,13 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
  *@param handle 控件句柄
  *@param offset 偏移量
  */
-void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset);
+void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset);
 
 /*@brief 控件移动子控件(循环模式)
  *@param handle 控件句柄
  *@param offset 偏移量
  *@param range  偏移量限制
  */
-void scui_widget_refr_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
+void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
 
 #endif

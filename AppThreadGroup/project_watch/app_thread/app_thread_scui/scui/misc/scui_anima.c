@@ -28,11 +28,17 @@ void scui_anima_elapse(uint32_t elapse)
 }
 
 /*@brief 更新动画
+ *@param handle 动画句柄
  */
-void scui_anima_update(void)
+void scui_anima_update(scui_handle_t handle)
 {
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        /* 如果指定动画句柄则只调度目标动画,否则调度所有动画 */
+        if (handle != SCUI_HANDLE_INVALID &&
+            handle != scui_anima_list.list[idx])
             continue;
         
         scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);

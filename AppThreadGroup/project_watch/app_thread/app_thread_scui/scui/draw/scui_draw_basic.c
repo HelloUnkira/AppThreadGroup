@@ -130,7 +130,7 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  */
 void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                           scui_surface_t *src_surface, scui_area_t *src_clip,
-                          scui_color_gradient_t color)
+                          scui_color_mix_t color)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);

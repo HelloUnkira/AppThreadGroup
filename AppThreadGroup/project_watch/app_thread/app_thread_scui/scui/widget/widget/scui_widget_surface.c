@@ -80,7 +80,7 @@ void scui_widget_surface_remap(scui_widget_t *widget, scui_surface_t *surface)
  *@param widget 控件实例
  *@param color  源色调
  */
-void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_gradient_t color)
+void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_mix_t color)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     scui_surface_t *dst_surface = widget->surface;
@@ -105,7 +105,7 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_gradient_t
  *@param color    图像源色调(调色板使用)
  */
 void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
-                                    scui_area_t *src_clip, scui_color_gradient_t color)
+                                    scui_area_t *src_clip, scui_color_mix_t color)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     scui_surface_t *dst_surface = widget->surface;

@@ -11,7 +11,7 @@
  */
 void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                      scui_image_unit_t *image_unit,  scui_area_t *src_clip,
-                     scui_color_gradient_t color,    scui_alpha_t alpha);
+                     scui_color_mix_t color,    scui_alpha_t alpha);
 
 /*@brief 区域图像缩放(可以使用DMA2D加速优化)
  *       以图形源绘制区域中心以放大缩小指定比例

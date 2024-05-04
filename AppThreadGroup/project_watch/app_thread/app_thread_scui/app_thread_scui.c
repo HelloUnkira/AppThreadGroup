@@ -49,7 +49,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
         .w = src_clip.w,
         .h = src_clip.h,
     };
-    scui_color_gradient_t color = {0};
+    scui_color_mix_t color = {0};
     scui_alpha_t alpha = 0xFF;
     
     /* 注意:半透明效果会反复叠加,先全屏刷新保持帧缓冲一致性 */
@@ -116,6 +116,14 @@ static scui_indev_data_set_t * scui_indev_data_set_cb(void)
     return &scui_indev_data_set;
 }
 
+/*@brief scui 耗时策略
+ */
+static uint64_t scui_tick_elapse_us_cb(bool run)
+{
+    static app_execute_us_t execute_us = {0};
+    return app_execute_us(&execute_us, run);
+}
+
 /*@brief scui refr子线程
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
@@ -147,8 +155,9 @@ static void app_thread_scui_routine_ready_cb(void)
     app_scui_timer_ready();
     app_scui_check_time_ready();
     /* 初始化scui */
-    scui_ready();
+    scui_tick_elapse_us_register(scui_tick_elapse_us_cb);
     scui_indev_data_set_register(scui_indev_data_set_cb);
+    scui_ready();
     /* 初始化启动scui调度定时器 */
     app_scui_timer_start();
     /* 创建refr子线程 */

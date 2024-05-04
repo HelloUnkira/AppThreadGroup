@@ -3,7 +3,6 @@
 
 typedef struct {
     scui_widget_t widget;
-    /* 内部域: */
     scui_handle_t image_h;      /* 图片句柄(hour) */
     scui_handle_t image_m;      /* 图片句柄(minute) */
     scui_handle_t image_s;      /* 图片句柄(second) */

@@ -73,8 +73,9 @@ typedef struct {
 void scui_anima_elapse(uint32_t elapse);
 
 /*@brief 更新动画
+ *@param handle 动画句柄
  */
-void scui_anima_update(void);
+void scui_anima_update(scui_handle_t handle);
 
 /*@brief 创建动画
  *@param anima  动画实例

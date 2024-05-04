@@ -25,7 +25,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         case scui_window_switch_normal:
         case scui_window_switch_zoom1:
         case scui_window_switch_zoom2: {
-            scui_color_gradient_t color = {0};
+            scui_color_mix_t color = {0};
             scui_surface_t *dst_surface = scui_surface_fb_draw();
             for (scui_handle_t idx = 0; idx < num; idx++) {
                 scui_widget_t  *widget = list[idx];

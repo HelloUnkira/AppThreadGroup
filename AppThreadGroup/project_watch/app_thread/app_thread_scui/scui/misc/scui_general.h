@@ -68,14 +68,19 @@ typedef enum {
 #pragma pack(push, 1)
 typedef struct {
     union {
-        scui_color8888_t color;         // 主色调
-        scui_color8888_t color_s;       // 起始色调
+        scui_color8888_t color;             // 单色调
+        scui_color8888_t color_field_1;     // 位域1色调
+        scui_color8888_t color_default;     // 主色调
+        scui_color8888_t color_lighten;     // 亮色调
+        scui_color8888_t color_s;           // 始色调
     };
     union {
-        scui_color8888_t color_render;  // 过度色调
-        scui_color8888_t color_e;       // 结束色调
+        scui_color8888_t color_field_2;     // 位域2色调
+        scui_color8888_t color_gradient;    // 过度色调
+        scui_color8888_t color_darken;      // 暗色调
+        scui_color8888_t color_e;           // 终色调
     };
-} scui_color_gradient_t;
+} scui_color_mix_t;
 #pragma pack(pop)
 
 /*@brief: 透明度枚举值

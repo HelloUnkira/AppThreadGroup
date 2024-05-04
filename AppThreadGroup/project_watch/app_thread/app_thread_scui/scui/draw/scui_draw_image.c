@@ -17,7 +17,7 @@
  */
 void scui_draw_image(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                      scui_image_unit_t *image_unit,  scui_area_t *src_clip,
-                     scui_color_gradient_t color,    scui_alpha_t alpha)
+                     scui_color_mix_t color,    scui_alpha_t alpha)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(image_unit != NULL && image_unit->image != NULL && image_unit->data != NULL);

@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -92,10 +92,23 @@ void scui_event_notify(scui_event_t *event)
     /* 同步事件就地响应 */
     /* 异步事件入调度队列 */
     
-    if (event->style.sync)
+    if (event->style.sync) {
+        
+        #if SCUI_EVENT_MGR_TICK_CHECK
+        scui_tick_elapse_us(true);
+        #endif
+        
         scui_event_respond(event);
-    else
-        scui_event_enqueue(event);
+        
+        #if SCUI_EVENT_MGR_TICK_CHECK
+        uint64_t tick_us = scui_tick_elapse_us(false);
+        if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
+            SCUI_LOG_INFO("event %u expend:%u.%u", event->type, tick_us / 1000, tick_us % 1000);
+        #endif
+        
+        return;
+    }
+    scui_event_enqueue(event);
 }
 
 /*@brief 事件派发
@@ -108,7 +121,18 @@ void scui_event_dispatch(void)
     while (scui_event_num() != 0) {
         retval = scui_event_dequeue(&event, false);
         SCUI_ASSERT(retval);
+        
+        #if SCUI_EVENT_MGR_TICK_CHECK
+        scui_tick_elapse_us(true);
+        #endif
+        
         scui_event_respond(&event);
+        
+        #if SCUI_EVENT_MGR_TICK_CHECK
+        uint64_t tick_us = scui_tick_elapse_us(false);
+        if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
+            SCUI_LOG_INFO("event %u expend:%u.%u", event.type, tick_us / 1000, tick_us % 1000);
+        #endif
     }
 }
 
@@ -134,8 +158,15 @@ void scui_event_respond(scui_event_t *event)
         scui_widget_event_mask_over(event);
         return;
     case scui_event_anima_elapse:
-        scui_anima_update();
+        scui_anima_update(SCUI_HANDLE_INVALID);
         break;
+    case scui_event_refr:
+        scui_window_mix_surface();
+        scui_widget_event_mask_over(event);
+        /* 混合绘制刷新流程结束 */
+        /* 使用假绘制启动正式的刷新流程 */
+        scui_surface_draw_routine(NULL);
+        return;
     default:
         break;
     }

@@ -1334,7 +1334,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 static const scui_watch_maker_t scui_widget_SCUI_UI_SCENE_1_PTR = {
 	.widget.type                    = scui_widget_type_watch,
 	.widget.style.trans             = true,
-	.widget.style.anima_sched       = true,
 	.widget.clip.x                  = 0,
 	.widget.clip.y                  = 0,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,

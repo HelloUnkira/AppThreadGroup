@@ -94,10 +94,11 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
         scui_event_cb_node_t cb_node = {0};
         cb_node.event_cb = maker->event_cb;
         
-        if (widget->style.anima_sched) {
+        if (widget->style.sched_anima) {
             cb_node.event = scui_event_anima_elapse;
             scui_widget_event_add(*handle, &cb_node);
         }
+        
         if (widget->style.indev_ptr) {
             cb_node.event = scui_event_ptr_all;
             scui_widget_event_add(*handle, &cb_node);
@@ -160,19 +161,22 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
 {
     /* 控件组织表 */
     static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
-        [scui_widget_type_window].create  = (scui_widget_cb_create_t)   scui_window_create,
-        [scui_widget_type_window].destroy = (scui_widget_cb_destroy_t)  scui_window_destroy,
-        [scui_widget_type_window].layout  = (scui_widget_cb_layout_t)   NULL,
-        [scui_widget_type_custom].create  = (scui_widget_cb_create_t)   scui_custom_create,
-        [scui_widget_type_custom].destroy = (scui_widget_cb_destroy_t)  scui_custom_destroy,
-        [scui_widget_type_custom].layout  = (scui_widget_cb_layout_t)   NULL,
-        [scui_widget_type_scroll].create  = (scui_widget_cb_create_t)   scui_scroll_create,
-        [scui_widget_type_scroll].destroy = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
-        [scui_widget_type_scroll].layout  = (scui_widget_cb_layout_t)   scui_scroll_layout,
+        [scui_widget_type_window].create    = (scui_widget_cb_create_t)   scui_window_create,
+        [scui_widget_type_window].destroy   = (scui_widget_cb_destroy_t)  scui_window_destroy,
+        [scui_widget_type_window].layout    = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_custom].create    = (scui_widget_cb_create_t)   scui_custom_create,
+        [scui_widget_type_custom].destroy   = (scui_widget_cb_destroy_t)  scui_custom_destroy,
+        [scui_widget_type_custom].layout    = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_scroll].create    = (scui_widget_cb_create_t)   scui_scroll_create,
+        [scui_widget_type_scroll].destroy   = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
+        [scui_widget_type_scroll].layout    = (scui_widget_cb_layout_t)   scui_scroll_layout,
         /* 扩展控件 */
-        [scui_widget_type_watch].create   = (scui_widget_cb_create_t)   scui_watch_create,
-        [scui_widget_type_watch].destroy  = (scui_widget_cb_destroy_t)  scui_watch_destroy,
-        [scui_widget_type_watch].layout   = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_watch].create     = (scui_widget_cb_create_t)   scui_watch_create,
+        [scui_widget_type_watch].destroy    = (scui_widget_cb_destroy_t)  scui_watch_destroy,
+        [scui_widget_type_watch].layout     = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_chart].create     = (scui_widget_cb_create_t)   scui_chart_create,
+        [scui_widget_type_chart].destroy    = (scui_widget_cb_destroy_t)  scui_chart_destroy,
+        [scui_widget_type_chart].layout     = (scui_widget_cb_layout_t)   NULL,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
@@ -532,7 +536,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
  *@param handle 控件句柄
  *@param offset 偏移量
  */
-void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
+void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -556,7 +560,7 @@ void scui_widget_refr_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
  *@param offset 偏移量
  *@param range  偏移量限制
  */
-void scui_widget_refr_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range)
+void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_get(handle);
