@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -66,7 +66,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                     scale_d = scui_map(pct, 100, 0,  50, 100) / 100.0f;
                 if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_out)
                     scale_d = scui_map(pct, 100, 0, 150, 100) / 100.0f;
-                SCUI_LOG_WARN("pct:%d, scale_d:%f", pct, scale_d);
+                SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
                 scui_matrix_t inv_matrix = {0};
                 scui_matrix_identity(&inv_matrix);
                 scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});

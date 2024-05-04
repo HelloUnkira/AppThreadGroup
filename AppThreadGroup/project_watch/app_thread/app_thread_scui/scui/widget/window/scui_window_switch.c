@@ -32,28 +32,36 @@ void scui_window_jump_anima_start(void *instance)
     SCUI_LOG_INFO("");
     scui_window_mgr.switch_args.pct = 0;
     scui_window_mgr.switch_args.ofs = 0;
+    scui_point_t   point  = {0};
+    scui_widget_t *widget = NULL;
     
-    scui_point_t point = (scui_point_t){0};
+    /* 更新pct: */
+    switch (scui_window_mgr.switch_args.type) {
+    case scui_window_switch_zoom1:
+    case scui_window_switch_zoom2: {
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
+        widget->surface->alpha = scui_alpha_pct0;
+    }
+    case scui_window_switch_center_in:
+    case scui_window_switch_center_out: {
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
+        widget->surface->alpha = scui_alpha_pct100;
+        break;
+    }
+    default:
+        break;
+    }
+    
+    /* 更新point: */
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
     case scui_window_switch_center_out: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_pct100;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_pct0;
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
     }
     case scui_window_switch_zoom1:
-    case scui_window_switch_zoom2: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_pct100;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_pct0;
-    }
+    case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         switch (scui_window_mgr.switch_args.dir) {
@@ -82,7 +90,7 @@ void scui_window_jump_anima_start(void *instance)
     }
     
     /* 有自己的独立buffer,直接refr */
-    scui_widget_t *widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
+    widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     
@@ -97,32 +105,23 @@ void scui_window_jump_anima_start(void *instance)
 void scui_window_jump_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
+    scui_point_t   point  = {0};
+    scui_widget_t *widget = NULL;
     
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
-    case scui_window_switch_center_out: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_pct0;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_pct100;
-        break;
-    }
+    case scui_window_switch_center_out:
     case scui_window_switch_zoom1:
-    case scui_window_switch_zoom2: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_pct0;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_pct100;
-    }
+    case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
-        scui_window_mgr.switch_args.pct = 100;
-        scui_point_t point = (scui_point_t){0};
-        scui_window_active(scui_window_mgr.switch_args.list[1]);
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
-        scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
-        scui_widget_refr(scui_window_mgr.switch_args.list[1], true);
+        if (scui_window_mgr.switch_args.pct == 0) {
+            scui_window_active(scui_window_mgr.switch_args.list[0]);
+            scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
+        }
+        if (scui_window_mgr.switch_args.pct == 100) {
+            scui_window_active(scui_window_mgr.switch_args.list[1]);
+            scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
+        }
         break;
     }
     default:
@@ -130,9 +129,12 @@ void scui_window_jump_anima_ready(void *instance)
         break;
     }
     
-    SCUI_ASSERT(scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID);
-    scui_anima_destroy(scui_window_mgr.switch_args.anima);
-    scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
+    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+        scui_anima_stop(scui_window_mgr.switch_args.anima);
+        scui_anima_destroy(scui_window_mgr.switch_args.anima);
+        scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
+    }
+    
     scui_window_mgr.switch_args.lock_jump = false;
     scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
@@ -142,7 +144,9 @@ void scui_window_jump_anima_ready(void *instance)
 void scui_window_jump_anima_expired(void *instance)
 {
     SCUI_LOG_DEBUG("");
-    scui_anima_t *anima = instance;
+    scui_anima_t  *anima  = instance;
+    scui_point_t   point  = {0};
+    scui_widget_t *widget = NULL;
     
     scui_multi_t ofs = 0;
     if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
@@ -156,29 +160,33 @@ void scui_window_jump_anima_expired(void *instance)
     scui_window_mgr.switch_args.pct = anima->value_c;
     scui_window_mgr.switch_args.ofs = ofs;
     
-    scui_point_t point = (scui_point_t){0};
+    /* 更新pct: */
+    switch (scui_window_mgr.switch_args.type) {
+    case scui_window_switch_zoom1:
+    case scui_window_switch_zoom2: {
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
+        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
+    }
+    case scui_window_switch_center_in:
+    case scui_window_switch_center_out: {
+        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
+        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
+        break;
+    }
+    default:
+        break;
+    }
+    
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
     case scui_window_switch_center_out: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
     }
     case scui_window_switch_zoom1:
-    case scui_window_switch_zoom2: {
-        scui_widget_t *widget = NULL;
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-        widget->surface->alpha = scui_alpha_by_percent(100 - scui_window_mgr.switch_args.pct);
-        widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
-        widget->surface->alpha = scui_alpha_by_percent(scui_window_mgr.switch_args.pct);
-    }
+    case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
-        scui_point_t point = (scui_point_t){0};
         switch (scui_window_mgr.switch_args.dir) {
         case scui_event_dir_to_u:
             point.y = -scui_window_mgr.switch_args.ofs;
@@ -216,7 +224,7 @@ void scui_window_jump_anima_expired(void *instance)
     }
     
     /* 有自己的独立buffer,直接refr */
-    scui_widget_t *widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
+    widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     if (scui_widget_surface_only(widget))
@@ -340,6 +348,7 @@ void scui_window_move_anima_expired(void *instance)
         break;
     }
     default:
+        SCUI_LOG_ERROR("error switch type 0x%08x", scui_window_mgr.switch_args.type);
         break;
     }
     
