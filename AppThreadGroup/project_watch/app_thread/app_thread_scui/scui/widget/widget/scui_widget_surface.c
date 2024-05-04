@@ -89,6 +89,10 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_mix_t colo
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
     scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -96,6 +100,12 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_mix_t colo
         SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
         scui_draw_area_fill(dst_surface, &dst_clip, &pixel, widget->alpha);
     }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
 }
 
 /*@brief 控件画布在画布绘制图像
@@ -128,6 +138,10 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
     
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
     scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -137,6 +151,12 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
              continue;
         scui_draw_image(dst_surface, &dst_clip, &image_unit, &src_area, color, widget->alpha);
     }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
     
     scui_image_cache_unload(&image_unit);
 }
@@ -175,6 +195,10 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
     scui_image_unit_t image_unit = {.image = image,};
     scui_image_cache_load(&image_unit);
     
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
     scui_clip_unit_t *unit = NULL;
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -185,6 +209,12 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
         scui_draw_image_rotate(dst_surface, &dst_clip, &image_unit, &src_area,
                                alpha, angle, anchor, center);
     }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
     
     scui_image_cache_unload(&image_unit);
 }

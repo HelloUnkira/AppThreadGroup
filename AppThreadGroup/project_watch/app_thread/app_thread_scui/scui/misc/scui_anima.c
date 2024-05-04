@@ -161,8 +161,10 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
             anima->value_e  = 100;
             anima->value_s  = 0;
         }
-        anima->value_c = scui_min(anima->value_s, anima->value_e) - 1;
-        anima->value_c = scui_max(anima->value_s, anima->value_e) + 1;
+        if (anima->value_s < anima->value_e)
+            anima->value_c = anima->value_s - 1;
+        if (anima->value_s > anima->value_e)
+            anima->value_c = anima->value_s + 1;
         return;
     }
     

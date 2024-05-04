@@ -22,11 +22,17 @@ void scui_engine_ready(void)
     scui_surface_fb_ready();
 }
 
+/*@brief 引擎等待
+ */
+void scui_engine_wait(void)
+{
+    scui_event_wait();
+}
+
 /*@brief 引擎执行
  */
 void scui_engine_execute(void)
 {
-    scui_event_wait();
     scui_event_dispatch();
 }
 

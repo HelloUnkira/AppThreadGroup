@@ -9,7 +9,7 @@
 
 typedef struct {
     scui_area_t clip;               // 绘制区域(相对画布坐标)
-    scui_color_mix_t color;    // 颜色(主色调和渐变色调)
+    scui_color_mix_t color;         // 颜色(主色调和渐变色调)
     scui_point_t pos_s;             // 起始点(相对画布坐标)
     scui_point_t pos_e;             // 结束点(相对画布坐标)
     scui_coord_t width;             // 宽度

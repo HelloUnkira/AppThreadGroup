@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -103,7 +103,7 @@ void scui_event_notify(scui_event_t *event)
         #if SCUI_EVENT_MGR_TICK_CHECK
         uint64_t tick_us = scui_tick_elapse_us(false);
         if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
-            SCUI_LOG_INFO("event %u expend:%u.%u", event->type, tick_us / 1000, tick_us % 1000);
+            SCUI_LOG_WARN("event %u expend:%u.%u", event->type, tick_us / 1000, tick_us % 1000);
         #endif
         
         return;
@@ -131,7 +131,7 @@ void scui_event_dispatch(void)
         #if SCUI_EVENT_MGR_TICK_CHECK
         uint64_t tick_us = scui_tick_elapse_us(false);
         if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
-            SCUI_LOG_INFO("event %u expend:%u.%u", event.type, tick_us / 1000, tick_us % 1000);
+            SCUI_LOG_WARN("event %u expend:%u.%u", event.type, tick_us / 1000, tick_us % 1000);
         #endif
     }
 }

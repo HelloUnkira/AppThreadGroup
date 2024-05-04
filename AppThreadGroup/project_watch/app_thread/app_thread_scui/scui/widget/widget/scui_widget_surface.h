@@ -1,6 +1,10 @@
 #ifndef SCUI_WIDGET_SURFACE_H
 #define SCUI_WIDGET_SURFACE_H
 
+/* 检查事件调度耗时:以ms计 */
+#define SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK     0
+#define SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER    1000
+
 /*@brief 控件画布为独立画布
  *@param widget 控件实例
  */

@@ -141,6 +141,16 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
     }
 }
 
+/*@brief scui draw子线程
+ */
+static APP_THREAD_GROUP_HANDLER(app_thread_scui_draw_routine)
+{
+    while (true) {
+        scui_engine_wait();
+        scui_engine_execute();
+    }
+}
+
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_scui_routine_ready_cb(void)
@@ -164,6 +174,10 @@ static void app_thread_scui_routine_ready_cb(void)
     static app_thread_t app_thread_scui_refr = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
     app_thread_process(&app_thread_scui_refr, app_thread_static);
+    /* 创建draw子线程 */
+    static app_thread_t app_thread_scui_draw = {0};
+    app_thread_group_create(&app_thread_scui, &app_thread_scui_draw, app_thread_scui_draw_routine);
+    app_thread_process(&app_thread_scui_draw, app_thread_static);
 }
 
 /*@brief 子线程服务例程处理部
@@ -173,8 +187,10 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
     switch (package->module) {
     case app_thread_scui_sched: {
         /* scui时钟调度事件 */
-        if (package->event == app_thread_scui_sched_exec)
-            scui_engine_execute();
+        if (package->event == app_thread_scui_sched_exec) {
+            /* scui默认是事件调度,而不是时钟调度 */
+            // scui_engine_execute();
+        }
         /* lvgl驱动检查事件 */
         if (package->event == app_thread_scui_sched_drv) {
             app_dev_gui_drv_timer_handler(&app_dev_gui_drv);
