@@ -26,6 +26,11 @@ void scui_window_float_cfg_get(scui_window_float_t *cfg);
  */
 void scui_window_float_cfg_set(scui_window_float_t *cfg);
 
+/*@brief 窗口正在工作中
+ *@retval 正在工作中
+ */
+bool scui_window_float_running(void);
+
 /*@brief 窗口移动伴随透明度更新
  *@param handle 窗口控件句柄
  *@param point  窗口移动坐标

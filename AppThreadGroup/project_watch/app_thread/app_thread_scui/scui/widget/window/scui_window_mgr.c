@@ -56,6 +56,18 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
         dst_clip = out_clip;
         src_clip = tmp_clip;
         
+        /* 多窗口叠加不应用特效渲染 */
+        if (scui_window_float_running()) {
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            continue;
+        }
+        
+        /* 仅窗口切换时才应用特效渲染 */
+        if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            continue;
+        }
+        
         if (num > 1)
         if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_in ||
             scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_out) {

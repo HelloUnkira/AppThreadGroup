@@ -554,7 +554,7 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
     switch (state) {
     case 0x00:
         if (scroll_flag.lock && scroll_flag.key == *key)
-            return false;
+            return true;
         if (scroll_flag.lock && scroll_flag.key != *key) {
             *key = SCUI_HANDLE_INVALID;
             return false;

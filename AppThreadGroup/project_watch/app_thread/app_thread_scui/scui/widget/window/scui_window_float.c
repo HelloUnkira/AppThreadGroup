@@ -27,6 +27,15 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     scui_window_float = *cfg;
 }
 
+/*@brief 窗口正在工作中
+ *@retval 正在工作中
+ */
+bool scui_window_float_running(void)
+{
+    return scui_window_float.cover ||
+          !scui_widget_event_scroll_flag(0x02, &scui_window_float.key);
+}
+
 /*@brief 窗口移动伴随透明度更新
  *@param handle 窗口控件句柄
  *@param point  窗口移动坐标
@@ -258,8 +267,6 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         scui_widget_event_mask_over(event);
         break;
     }
-    case scui_event_ptr_fling:
-        break;
     case scui_event_ptr_up: {
         scui_widget_event_mask_keep(event);
         if (scui_window_float.target != handle)
