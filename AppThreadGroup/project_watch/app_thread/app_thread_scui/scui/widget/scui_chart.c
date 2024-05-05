@@ -30,6 +30,9 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     /* 事件默认全局接收 */
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
+    
+    /* 该控件未开发 */
+    SCUI_ASSERT(false);
 }
 
 /*@brief 图表控件销毁

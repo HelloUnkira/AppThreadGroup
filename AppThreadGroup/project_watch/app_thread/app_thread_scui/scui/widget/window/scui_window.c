@@ -23,7 +23,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
-    /* 是否需要创建自己的surface */
+    /* 创建surface */
     if (maker->buffer) {
         scui_coord_t hor_res = scui_disp_get_hor_res();
         scui_coord_t ver_res = scui_disp_get_ver_res();

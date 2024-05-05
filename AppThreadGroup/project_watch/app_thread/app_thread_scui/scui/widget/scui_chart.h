@@ -10,8 +10,10 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t   widget;
-    uint8_t               type;             /* 0x00:柱状图,股价图; */
+    uint8_t               type;             /* 0x00:柱状图,股价图;0x01:折线图; */
     /* 柱状图,股价图: */
+    #if 0
+    union {
     struct {
         scui_handle_t         edge;         /* 边界点 */
         scui_coord_t          value_min;    /* 最小取值 */
@@ -23,6 +25,10 @@ typedef struct {
         scui_point_t          offset;       /* 条目起始偏移 */
         scui_color_mix_t      color;        /* 颜色(亮色调与暗色调) */
     } field_0x00;                           /* 0x00:柱状图,股价图; */
+    struct {
+    } field_0x01;                           /* 0x00:折现图; */
+    };
+    #endif
     /* 继续补充... */
 } scui_chart_maker_t;
 #pragma pack(pop)

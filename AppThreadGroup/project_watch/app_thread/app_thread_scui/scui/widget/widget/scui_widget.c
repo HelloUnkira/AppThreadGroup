@@ -170,6 +170,9 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
         [scui_widget_type_scroll].create    = (scui_widget_cb_create_t)   scui_scroll_create,
         [scui_widget_type_scroll].destroy   = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
         [scui_widget_type_scroll].layout    = (scui_widget_cb_layout_t)   scui_scroll_layout,
+        [scui_widget_type_string].create    = (scui_widget_cb_create_t)   scui_string_create,
+        [scui_widget_type_string].destroy   = (scui_widget_cb_destroy_t)  scui_string_destroy,
+        [scui_widget_type_string].layout    = (scui_widget_cb_layout_t)   NULL,
         /* 扩展控件 */
         [scui_widget_type_watch].create     = (scui_widget_cb_create_t)   scui_watch_create,
         [scui_widget_type_watch].destroy    = (scui_widget_cb_destroy_t)  scui_watch_destroy,
@@ -177,6 +180,9 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
         [scui_widget_type_chart].create     = (scui_widget_cb_create_t)   scui_chart_create,
         [scui_widget_type_chart].destroy    = (scui_widget_cb_destroy_t)  scui_chart_destroy,
         [scui_widget_type_chart].layout     = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_ring].create      = (scui_widget_cb_create_t)   scui_ring_create,
+        [scui_widget_type_ring].destroy     = (scui_widget_cb_destroy_t)  scui_ring_destroy,
+        [scui_widget_type_ring].layout      = (scui_widget_cb_layout_t)   NULL,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
