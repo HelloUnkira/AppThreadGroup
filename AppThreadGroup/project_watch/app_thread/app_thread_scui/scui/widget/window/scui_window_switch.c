@@ -60,6 +60,8 @@ void scui_window_jump_anima_start(void *instance)
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
     }
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
@@ -111,6 +113,8 @@ void scui_window_jump_anima_ready(void *instance)
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
     case scui_window_switch_center_out:
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
@@ -184,6 +188,8 @@ void scui_window_jump_anima_expired(void *instance)
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
     }
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
@@ -253,6 +259,8 @@ void scui_window_move_anima_ready(void *instance)
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_center_in:
     case scui_window_switch_center_out:
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
     case scui_window_switch_normal: {
@@ -330,6 +338,8 @@ void scui_window_move_anima_expired(void *instance)
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         break;
     }
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
     case scui_window_switch_normal: {

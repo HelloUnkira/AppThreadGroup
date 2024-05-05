@@ -373,7 +373,7 @@ void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t ax
         matrix->meta[1][2] = sin_rz * sin_ry * cos_rx - cos_rz * sin_rx;
         matrix->meta[2][0] = -sin_ry;
         matrix->meta[2][1] = cos_ry * sin_rx;
-        matrix->meta[2][2] = cos_ry * cos_rx;   
+        matrix->meta[2][2] = cos_ry * cos_rx;
         break;
     case 0x01:
         /* rz * rx * ry */

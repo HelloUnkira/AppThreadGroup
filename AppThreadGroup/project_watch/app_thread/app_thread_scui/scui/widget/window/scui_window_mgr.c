@@ -68,15 +68,19 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
-        if (num > 1)
-        if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_in ||
-            scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_out) {
+        if (num == 1) {
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            continue;
+        }
+        
+        if (scui_window_mgr.switch_args.type == scui_window_switch_center_in ||
+            scui_window_mgr.switch_args.type == scui_window_switch_center_out) {
             if (widget->myself == scui_window_active_curr()) {
                 scui_coord_t pct = scui_window_mgr.switch_args.pct;
                 float scale_d = 0;
-                if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_in)
+                if (scui_window_mgr.switch_args.type == scui_window_switch_center_in)
                     scale_d = scui_map(pct, 100, 0,  50, 100) / 100.0f;
-                if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_center_out)
+                if (scui_window_mgr.switch_args.type == scui_window_switch_center_out)
                     scale_d = scui_map(pct, 100, 0, 150, 100) / 100.0f;
                 SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
                 scui_matrix_t inv_matrix = {0};
@@ -91,21 +95,25 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             }
         }
         
-        if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1) {
+        if (scui_window_mgr.switch_args.type == scui_window_switch_zoom1) {
             if (widget->myself == scui_window_active_curr()) {
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
                 continue;
             }
         }
         
-        if (scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom1 ||
-            scui_window_mgr.switch_args.cfg_type == scui_window_switch_zoom2) {
+        if (scui_window_mgr.switch_args.type == scui_window_switch_zoom1 ||
+            scui_window_mgr.switch_args.type == scui_window_switch_zoom2) {
             /* 如果底图透明度更新, 则清空底色防止错误混合 */
             if (src_surface->alpha != scui_alpha_cover) {
                 SCUI_PIXEL_TYPE dst_pixel = {0};
                 scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
             }
-            float scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
+            float scale_d = 0;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                scale_d = scui_map(src_clip.h, 0, src_surface->ver_res, 50, 100) / 100.0f;
             SCUI_LOG_INFO("scale_d:%f", scale_d);
             scui_matrix_t inv_matrix = {0};
             scui_matrix_identity(&inv_matrix);
@@ -115,6 +123,92 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             // scui_matrix_check(&inv_matrix);
             scui_matrix_inverse(&inv_matrix);
             scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+            continue;
+        }
+        
+        if (scui_window_mgr.switch_args.type == scui_window_switch_flip) {
+            
+            /* 小于一半跳过绘制, 因为会被覆盖 */
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+                if (src_clip.w <  src_surface->hor_res / 2)
+                    continue;
+                if (src_clip.w == src_surface->hor_res / 2)
+                if (widget->myself != scui_window_active_curr())
+                    continue;
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+                if (src_clip.h <  src_surface->ver_res / 2)
+                    continue;
+                if (src_clip.h == src_surface->ver_res / 2)
+                if (widget->myself != scui_window_active_curr())
+                    continue;
+            }
+            /* 如果底图透明度更新, 则清空底色防止错误混合 */
+            SCUI_PIXEL_TYPE dst_pixel = {0};
+            dst_clip = (scui_area_t){
+                .w = dst_surface->hor_res,
+                .h = dst_surface->ver_res,
+            };
+            scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
+            
+            float angle = 0;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                angle = scui_map(src_clip.w - src_surface->hor_res / 2, 0, src_surface->hor_res / 2, 90, 0);
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                angle = scui_map(src_clip.h - src_surface->ver_res / 2, 0, src_surface->ver_res / 2, 90, 0);
+            SCUI_LOG_INFO("angle:%f", angle);
+            
+            scui_matrix_t r_matrix = {0};
+            scui_matrix_identity(&r_matrix);
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                scui_matrix_rotate(&r_matrix, angle, 0x02);
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                scui_matrix_rotate(&r_matrix, angle, 0x01);
+            // scui_matrix_check(&r_matrix);
+            scui_face3_t face = {.point3 = {{0},
+                {.x = src_surface->hor_res - 1},
+                {.x = src_surface->hor_res - 1, .y = src_surface->ver_res - 1},
+                {.y = src_surface->ver_res - 1},
+            }};
+            scui_point3_transform_by_matrix(&face.point3[0], &r_matrix);
+            scui_point3_transform_by_matrix(&face.point3[1], &r_matrix);
+            scui_point3_transform_by_matrix(&face.point3[2], &r_matrix);
+            scui_point3_transform_by_matrix(&face.point3[3], &r_matrix);
+            
+            float offset = 0;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                offset = (src_surface->hor_res - scui_dist(face.point3[0].x, face.point3[1].x)) / 2;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                offset = (src_surface->ver_res - scui_dist(face.point3[0].y, face.point3[2].y)) / 2;
+            
+            SCUI_LOG_INFO("offset:%f", offset);
+            for (uint8_t idx_v = 0; idx_v < 4; idx_v++) {
+                if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                    face.point3[idx_v].x += offset;
+                if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                    face.point3[idx_v].y += offset;
+            }
+            
+            scui_matrix_t inv_matrix = {0};
+            scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
+            // scui_matrix_check(&inv_matrix);
+            scui_matrix_inverse(&inv_matrix);
+            dst_clip = (scui_area_t){
+                .w = dst_surface->hor_res,
+                .h = dst_surface->ver_res,
+            };
+            src_clip = (scui_area_t){
+                .w = src_surface->hor_res,
+                .h = src_surface->ver_res,
+            };
+            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+            continue;
+        }
+        
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cube) {
+            
+            /* 想想看怎么写 */
+            
             continue;
         }
         
