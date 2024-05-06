@@ -67,7 +67,6 @@
                 "loop":                         "滚动循环"
             }
         },
-        
         {
             "class": "scui_widget_type_watch",
             "maker": "scui_watch_maker_t",

@@ -7,13 +7,15 @@
 typedef enum {
     scui_window_switch_none,            /* 无切换 */
     scui_window_switch_auto,            /* 自适应(适应部分特效) */
-    scui_window_switch_normal,          /* 常规切换 */
+    
+    scui_window_switch_normal,          /* 常规效果 */
     scui_window_switch_center_in,       /* 中心淡入 */
     scui_window_switch_center_out,      /* 中心淡出 */
     scui_window_switch_zoom1,           /* 单边缩放 */
     scui_window_switch_zoom2,           /* 双边缩放 */
     scui_window_switch_flip,            /* 中心翻页(2.5D) */
     scui_window_switch_cube,            /* 正方体旋转(2.5D) */
+    
 } scui_window_switch_type_t;
 
 typedef struct {

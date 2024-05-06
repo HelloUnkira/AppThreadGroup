@@ -23,6 +23,7 @@ void scui_window_switch_type_update(scui_window_switch_type_t type, scui_event_d
         scui_window_mgr.switch_args.dir  = scui_window_mgr.switch_args.cfg_dir;
         scui_window_mgr.switch_args.type = scui_window_mgr.switch_args.cfg_type;
     }
+    
 }
 
 /*@brief 窗口跳转动画回调
@@ -37,6 +38,8 @@ void scui_window_jump_anima_start(void *instance)
     
     /* 更新pct: */
     switch (scui_window_mgr.switch_args.type) {
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2: {
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
@@ -166,6 +169,8 @@ void scui_window_jump_anima_expired(void *instance)
     
     /* 更新pct: */
     switch (scui_window_mgr.switch_args.type) {
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2: {
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);
@@ -309,6 +314,8 @@ void scui_window_move_anima_expired(void *instance)
     
     /* 更新pct */
     switch (scui_window_mgr.switch_args.type) {
+    case scui_window_switch_cube:
+    case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
         widget = scui_handle_get(scui_window_mgr.switch_args.list[1]);

@@ -33,6 +33,9 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 该控件未开发 */
     SCUI_ASSERT(false);
+    
+    /* 文字和字库这一步较为独立 */
+    /* 后续可能考虑裁剪移植其他开源框架资源, 规避重复且无意义开发 */
 }
 
 /*@brief 字符串控件销毁

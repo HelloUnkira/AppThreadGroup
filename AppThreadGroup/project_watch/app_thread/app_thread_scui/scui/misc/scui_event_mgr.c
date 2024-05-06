@@ -147,8 +147,6 @@ void scui_event_respond(scui_event_t *event)
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
     SCUI_ASSERT(scui_event_cb_custom != NULL);
     
-    event->style.result = 0x00;
-    
     /* 特殊系统事件处理 */
     /* 部分内部事件不允许正常控件监督流程 */
     /* 优先则走系统调度管理流程 */
@@ -181,6 +179,8 @@ void scui_event_respond(scui_event_t *event)
         return;
     }
     
+    event->style.result = 0x00;
+    
     /* 事件响应回调 */
     if (scui_event_cb_check(event)) {
         scui_event_cb_prepare(event);
@@ -189,7 +189,8 @@ void scui_event_respond(scui_event_t *event)
     }
     
     /* 系统事件响应 */
-    if (event->type >= scui_event_sys_s && event->type <= scui_event_sys_e) {
+    if (event->type >= scui_event_sys_s &&
+        event->type <= scui_event_sys_e) {
         
         bool event_filter = false;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
@@ -202,9 +203,32 @@ void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_hold;
         event_filter = event_filter || event->type == scui_event_key_click;
         
+        scui_widget_event_mask_prepare(event);
         scui_widget_event_dispatch(event);
         if (scui_widget_event_check_over(event) && event_filter)
             return;
+        
+        scui_widget_event_mask_execute(event);
+        scui_widget_event_dispatch(event);
+        if (scui_widget_event_check_over(event) && event_filter)
+            return;
+        
+        scui_widget_event_mask_finish(event);
+        scui_widget_event_dispatch(event);
+        if (scui_widget_event_check_over(event) && event_filter)
+            return;
+        
+        scui_widget_event_mask_prepare(event);
+        scui_window_event_dispatch(event);
+        if (scui_widget_event_check_over(event))
+            return;
+        
+        scui_widget_event_mask_execute(event);
+        scui_window_event_dispatch(event);
+        if (scui_widget_event_check_over(event))
+            return;
+        
+        scui_widget_event_mask_finish(event);
         scui_window_event_dispatch(event);
         if (scui_widget_event_check_over(event))
             return;
@@ -213,6 +237,18 @@ void scui_event_respond(scui_event_t *event)
     /* 自定义事件响应<custom> */
     if (event->type >= scui_event_custom_s &&
         event->type <= scui_event_custom_e) {
+        
+        scui_widget_event_mask_prepare(event);
+        scui_event_cb_custom(event);
+        if (scui_widget_event_check_over(event))
+            return;
+        
+        scui_widget_event_mask_execute(event);
+        scui_event_cb_custom(event);
+        if (scui_widget_event_check_over(event))
+            return;
+        
+        scui_widget_event_mask_finish(event);
         scui_event_cb_custom(event);
         if (scui_widget_event_check_over(event))
             return;
