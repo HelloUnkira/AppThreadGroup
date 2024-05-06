@@ -51,6 +51,12 @@ void scui_point3_to_point(scui_point3_t *point3, scui_point_t *point);
  */
 void scui_point3_by_point(scui_point3_t *point3, scui_point_t *point);
 
+/*@brief 坐标偏移
+ *@param point3 坐标
+ *@param point2 坐标
+ */
+void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *point2);
+
 /*@brief 坐标透视
  *@param point3 坐标
  *@param view3  视点坐标(.z: 视点距离)

@@ -323,7 +323,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_draw(event);
             scui_widget_event_proc(event);
             /* 去除surface剪切域,因为已经绘制完毕 */
-            scui_widget_clip_clear(widget, false);
+            if (scui_widget_event_check_execute(event))
+                scui_widget_clip_clear(widget, false);
         }
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_btra(widget, idx) {
@@ -515,6 +516,9 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
  */
 void scui_widget_event_draw(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
     SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);

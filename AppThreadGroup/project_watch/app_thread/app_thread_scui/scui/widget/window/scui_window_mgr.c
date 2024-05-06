@@ -175,19 +175,15 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             scui_point3_transform_by_matrix(&face.point3[2], &r_matrix);
             scui_point3_transform_by_matrix(&face.point3[3], &r_matrix);
             
-            float offset = 0;
+            scui_point2_t offset = {0};
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
-                offset = (src_surface->hor_res - scui_dist(face.point3[0].x, face.point3[1].x)) / 2;
+                offset.x = (src_surface->hor_res - scui_dist(face.point3[0].x, face.point3[1].x)) / 2;
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
-                offset = (src_surface->ver_res - scui_dist(face.point3[0].y, face.point3[2].y)) / 2;
+                offset.y = (src_surface->ver_res - scui_dist(face.point3[0].y, face.point3[2].y)) / 2;
             
             SCUI_LOG_INFO("offset:%f", offset);
-            for (uint8_t idx_v = 0; idx_v < 4; idx_v++) {
-                if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
-                    face.point3[idx_v].x += offset;
-                if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
-                    face.point3[idx_v].y += offset;
-            }
+            for (uint8_t idx_v = 0; idx_v < 4; idx_v++)
+                scui_point3_offset_xy(&face.point3[idx_v], &offset);
             
             scui_matrix_t inv_matrix = {0};
             scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
