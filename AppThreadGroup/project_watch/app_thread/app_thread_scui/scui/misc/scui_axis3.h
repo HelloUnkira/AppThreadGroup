@@ -88,4 +88,10 @@ void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *point2);
  */
 void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix);
 
+/*@brief 区域透视
+ *@param area3 区域
+ *@param view3 视点坐标(.z: 视点距离)
+ */
+void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3);
+
 #endif

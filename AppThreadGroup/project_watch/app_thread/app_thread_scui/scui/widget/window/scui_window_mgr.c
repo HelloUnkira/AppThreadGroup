@@ -9,6 +9,79 @@
 
 scui_window_mgr_t scui_window_mgr = {0};
 
+/*@brief 窗口管理器排序根控件列表
+ *@param list 根控件列表
+ *@param num  根控件数量
+ */
+void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
+{
+    /* 要用稳定排序,这里使用冒泡排序 */
+    for (scui_handle_t idx_i = 0; idx_i < num; idx_i++)
+    for (scui_handle_t idx_j = 0; idx_j + 1 < num - idx_i; idx_j++) {
+        scui_widget_t *widget_1 = list[idx_j];
+        scui_widget_t *widget_2 = list[idx_j + 1];
+        SCUI_ASSERT(widget_1->parent == SCUI_HANDLE_INVALID);
+        SCUI_ASSERT(widget_2->parent == SCUI_HANDLE_INVALID);
+        SCUI_ASSERT(scui_handle_remap(widget_1->myself));
+        SCUI_ASSERT(scui_handle_remap(widget_2->myself));
+        
+        SCUI_ASSERT(widget_1->type == scui_widget_type_window);
+        SCUI_ASSERT(widget_2->type == scui_widget_type_window);
+        scui_window_t *window_1 = (scui_window_t *)widget_1;
+        scui_window_t *window_2 = (scui_window_t *)widget_2;
+        
+        if (window_1->level > window_2->level) {
+            scui_widget_t *widget_t = list[idx_j];
+            list[idx_j] = list[idx_j + 1];
+            list[idx_j + 1] = widget_t;
+        }
+    }
+    
+    /* 将焦点窗口移到同级的最后面 */
+    scui_handle_t idx_t = num;
+    for (scui_handle_t idx = 0; idx < num; idx++) {
+        scui_widget_t *widget = list[idx];
+        if (widget->myself == scui_window_active_curr()) {
+            idx_t = idx;
+        }
+    }
+    
+    if (idx_t < num) {
+        for (scui_handle_t idx = idx_t; idx + 1 < num; idx++) {
+            scui_widget_t *widget_1 = list[idx];
+            scui_widget_t *widget_2 = list[idx + 1];
+            SCUI_ASSERT(widget_1->parent == SCUI_HANDLE_INVALID);
+            SCUI_ASSERT(widget_2->parent == SCUI_HANDLE_INVALID);
+            SCUI_ASSERT(scui_handle_remap(widget_1->myself));
+            SCUI_ASSERT(scui_handle_remap(widget_2->myself));
+            
+            SCUI_ASSERT(widget_1->type == scui_widget_type_window);
+            SCUI_ASSERT(widget_2->type == scui_widget_type_window);
+            scui_window_t *window_1 = (scui_window_t *)widget_1;
+            scui_window_t *window_2 = (scui_window_t *)widget_2;
+            
+            if (window_1->level >= window_2->level) {
+                scui_widget_t *widget_t = list[idx];
+                list[idx] = list[idx + 1];
+                list[idx + 1] = widget_t;
+                continue;
+            }
+            break;
+        }
+    }
+    
+    // 输出排序好的窗口信息
+    if (num != 0)
+        SCUI_LOG_INFO("window list:");
+    
+    for (scui_handle_t idx = 0; idx < num; idx++) {
+        scui_widget_t *widget = list[idx];
+        SCUI_LOG_INFO("object:%u<x:%d,y:%d,w:%d,h:%d><active:%d>", widget->myself,
+                      widget->clip.x, widget->clip.y, widget->clip.w, widget->clip.h,
+                      widget->myself == scui_window_active_curr());
+    }
+}
+
 /*@brief 窗口管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上
  *       窗口管理器会有特殊的处理
@@ -16,7 +89,7 @@ scui_window_mgr_t scui_window_mgr = {0};
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
+void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
     scui_color_mix_t color = {0};
     scui_surface_t *dst_surface = scui_surface_fb_draw();
@@ -272,6 +345,7 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
                 else
                     face = face3[4];
             }
+            
             scui_area3_transform_by_matrix(&face, &r_matrix);
             scui_area3_offset_xy(&face, &(scui_point2_t){.x = x_res, .y = y_res,});
             
@@ -295,84 +369,11 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
     }
 }
 
-/*@brief 窗口管理器排序根控件列表
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_window_sort_list(scui_widget_t **list, scui_handle_t num)
-{
-    /* 要用稳定排序,这里使用冒泡排序 */
-    for (scui_handle_t idx_i = 0; idx_i < num; idx_i++)
-    for (scui_handle_t idx_j = 0; idx_j + 1 < num - idx_i; idx_j++) {
-        scui_widget_t *widget_1 = list[idx_j];
-        scui_widget_t *widget_2 = list[idx_j + 1];
-        SCUI_ASSERT(widget_1->parent == SCUI_HANDLE_INVALID);
-        SCUI_ASSERT(widget_2->parent == SCUI_HANDLE_INVALID);
-        SCUI_ASSERT(scui_handle_remap(widget_1->myself));
-        SCUI_ASSERT(scui_handle_remap(widget_2->myself));
-        
-        SCUI_ASSERT(widget_1->type == scui_widget_type_window);
-        SCUI_ASSERT(widget_2->type == scui_widget_type_window);
-        scui_window_t *window_1 = (scui_window_t *)widget_1;
-        scui_window_t *window_2 = (scui_window_t *)widget_2;
-        
-        if (window_1->level > window_2->level) {
-            scui_widget_t *widget_t = list[idx_j];
-            list[idx_j] = list[idx_j + 1];
-            list[idx_j + 1] = widget_t;
-        }
-    }
-    
-    /* 将焦点窗口移到同级的最后面 */
-    scui_handle_t idx_t = num;
-    for (scui_handle_t idx = 0; idx < num; idx++) {
-        scui_widget_t *widget = list[idx];
-        if (widget->myself == scui_window_active_curr()) {
-            idx_t = idx;
-        }
-    }
-    
-    if (idx_t < num) {
-        for (scui_handle_t idx = idx_t; idx + 1 < num; idx++) {
-            scui_widget_t *widget_1 = list[idx];
-            scui_widget_t *widget_2 = list[idx + 1];
-            SCUI_ASSERT(widget_1->parent == SCUI_HANDLE_INVALID);
-            SCUI_ASSERT(widget_2->parent == SCUI_HANDLE_INVALID);
-            SCUI_ASSERT(scui_handle_remap(widget_1->myself));
-            SCUI_ASSERT(scui_handle_remap(widget_2->myself));
-            
-            SCUI_ASSERT(widget_1->type == scui_widget_type_window);
-            SCUI_ASSERT(widget_2->type == scui_widget_type_window);
-            scui_window_t *window_1 = (scui_window_t *)widget_1;
-            scui_window_t *window_2 = (scui_window_t *)widget_2;
-            
-            if (window_1->level >= window_2->level) {
-                scui_widget_t *widget_t = list[idx];
-                list[idx] = list[idx + 1];
-                list[idx + 1] = widget_t;
-                continue;
-            }
-            break;
-        }
-    }
-    
-    // 输出排序好的窗口信息
-    if (num != 0)
-        SCUI_LOG_INFO("window list:");
-    
-    for (scui_handle_t idx = 0; idx < num; idx++) {
-        scui_widget_t *widget = list[idx];
-        SCUI_LOG_INFO("object:%u<x:%d,y:%d,w:%d,h:%d><active:%d>", widget->myself,
-                      widget->clip.x, widget->clip.y, widget->clip.w, widget->clip.h,
-                      widget->myself == scui_window_active_curr());
-    }
-}
-
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上
  *       将所有无独立画布就地渲染
  */
-void scui_window_mix_surface(void)
+void scui_window_surface_blend(void)
 {
     scui_handle_t  list_num = 0;
     scui_widget_t *list[SCUI_WINDOW_MGR_LIMIT] = {0};
@@ -389,8 +390,8 @@ void scui_window_mix_surface(void)
         if (scui_widget_surface_only(widget))
             list[list_num++] = widget;
     }
-    scui_window_sort_list(list, list_num);
-    scui_window_mix_list(list, list_num);
+    scui_window_list_sort(list, list_num);
+    scui_window_list_blend(list, list_num);
     list_num = 0;
     
     /* 第二轮混合:处理所有独立画布 */
@@ -405,7 +406,7 @@ void scui_window_mix_surface(void)
         if (!scui_widget_surface_only(widget))
              list[list_num++] = widget;
     }
-    scui_window_sort_list(list, list_num);
+    scui_window_list_sort(list, list_num);
     
     for (scui_handle_t idx = 0; idx < list_num; idx++) {
         scui_widget_t *widget = list[idx];

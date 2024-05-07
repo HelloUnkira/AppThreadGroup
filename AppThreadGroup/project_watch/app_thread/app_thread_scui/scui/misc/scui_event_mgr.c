@@ -159,7 +159,7 @@ void scui_event_respond(scui_event_t *event)
         scui_anima_update(SCUI_HANDLE_INVALID);
         break;
     case scui_event_refr:
-        scui_window_mix_surface();
+        scui_window_surface_blend();
         scui_widget_event_mask_over(event);
         /* 混合绘制刷新流程结束 */
         /* 使用假绘制启动正式的刷新流程 */

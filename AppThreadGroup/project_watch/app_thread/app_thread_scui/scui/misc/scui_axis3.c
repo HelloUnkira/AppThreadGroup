@@ -125,3 +125,28 @@ void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix)
     scui_point3_transform_by_matrix(&point3, matrix);
     area3->point3[3] = point3;
 }
+
+/*@brief 区域透视
+ *@param area3 区域
+ *@param view3 视点坐标(.z: 视点距离)
+ */
+void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3)
+{
+    scui_point3_t point3 = {0};
+    
+    point3 = area3->point3[0];
+    scui_point3_perspective(&point3, view3);
+    area3->point3[0] = point3;
+    
+    point3 = area3->point3[1];
+    scui_point3_perspective(&point3, view3);
+    area3->point3[1] = point3;
+    
+    point3 = area3->point3[2];
+    scui_point3_perspective(&point3, view3);
+    area3->point3[2] = point3;
+    
+    point3 = area3->point3[3];
+    scui_point3_perspective(&point3, view3);
+    area3->point3[3] = point3;
+}

@@ -45,6 +45,12 @@ typedef struct {
     /*  */
 } scui_window_mgr_t;
 
+/*@brief 窗口管理器排序根控件列表
+ *@param list 根控件列表
+ *@param num  根控件数量
+ */
+void scui_window_list_sort(scui_widget_t **list, scui_handle_t num);
+
 /*@brief 窗口管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上
  *       窗口管理器会有特殊的处理
@@ -52,20 +58,14 @@ typedef struct {
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_mix_list(scui_widget_t **list, scui_handle_t num);
-
-/*@brief 窗口管理器排序根控件列表
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_window_sort_list(scui_widget_t **list, scui_handle_t num);
+void scui_window_list_blend(scui_widget_t **list, scui_handle_t num);
 
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上
  *       将所有无独立画布就地渲染
  *       将绘制画布生成刷新事件
  */
-void scui_window_mix_surface(void);
+void scui_window_surface_blend(void);
 
 /*@brief 控件默认事件处理回调
  *@param event 事件

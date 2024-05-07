@@ -131,14 +131,21 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         if (scui_ui_res_local->move_lock)
             break;
         
-        static int16_t rotate_way  = 1;
         static int32_t rotate_step = 0;
+        static int16_t rotate_way  = 1;
         rotate_step += 1 * rotate_way;
         if (!scui_betw_lr(rotate_step, -360, +360))
              rotate_way = -rotate_way;
         
+        static int32_t resize_step = 0;
+        static int16_t resize_way  = 1;
+        resize_step += 1 * resize_way;
+        if (!scui_betw_lr(resize_step, 0, 118))
+             resize_way = -resize_way;
+        
         scui_ui_res_local->rotate.y += 1.0f * rotate_way;
         scui_ui_res_local->rotate.x -= 1.0f * rotate_way;
+        scui_ui_res_local->size += 1 * resize_way;
         scui_widget_draw(handle, NULL, false);
         break;
     case scui_event_draw:
