@@ -44,6 +44,7 @@ static struct {
     scui_matrix_t matrix[6];    // 仿射矩阵
     scui_point3_t rotate;       // 三轴偏移旋转
     float         normal_z[6];  // 面法线(0321,4567,1265,0473,2376,0154)
+    bool          move_lock;    // 移动锁
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -78,6 +79,9 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
             scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_10_09bmp;
             scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_10_09bmp;
             scui_ui_res_local->size = 118;
+            
+            scui_ui_res_local->rotate.x = 45.0f;
+            scui_ui_res_local->rotate.y = 45.0f;
         }
         break;
     case scui_event_hide:
@@ -123,6 +127,19 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        
+        if (scui_ui_res_local->move_lock)
+            break;
+        
+        static int16_t rotate_way  = 1;
+        static int32_t rotate_step = 0;
+        rotate_step += 1 * rotate_way;
+        if (!scui_betw_lr(rotate_step, -360, +360))
+             rotate_way = -rotate_way;
+        
+        scui_ui_res_local->rotate.y += 1.0f * rotate_way;
+        scui_ui_res_local->rotate.x -= 1.0f * rotate_way;
+        scui_widget_draw(handle, NULL, false);
         break;
     case scui_event_draw:
         scui_widget_event_mask_keep(event);
@@ -131,11 +148,8 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_ui_res_local->rotate.x = 45.0f;
-            scui_ui_res_local->rotate.y = 45.0f;
-            
             /* 8个顶点 */
-            float size = scui_ui_res_local->size;
+            float size = scui_ui_res_local->size / 2;
             scui_vertex3_t vertex3_0 = {-1.0f * size, -1.0f * size, -1.0f * size,};
             scui_vertex3_t vertex3_1 = {+1.0f * size, -1.0f * size, -1.0f * size,};
             scui_vertex3_t vertex3_2 = {+1.0f * size, +1.0f * size, -1.0f * size,};
@@ -144,6 +158,24 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             scui_vertex3_t vertex3_5 = {+1.0f * size, -1.0f * size, +1.0f * size,};
             scui_vertex3_t vertex3_6 = {+1.0f * size, +1.0f * size, +1.0f * size,};
             scui_vertex3_t vertex3_7 = {-1.0f * size, +1.0f * size, +1.0f * size,};
+            
+            scui_face3_t face3[6] = {
+                {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},},
+                {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},},
+                {.point3 = {vertex3_1, vertex3_2, vertex3_6, vertex3_5,},},
+                {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},},
+                {.point3 = {vertex3_2, vertex3_3, vertex3_7, vertex3_6,},},
+                {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},},
+            };
+            
+            scui_normal3_t normal3[6] = {
+                {+0.0f, +0.0f, -1.0f},  // 0321
+                {+0.0f, +0.0f, +1.0f},  // 4567
+                {+1.0f, +0.0f, +0.0f},  // 1265
+                {-1.0f, +0.0f, +0.0f},  // 0473
+                {+0.0f, +1.0f, +0.0f},  // 2376
+                {+0.0f, -1.0f, +0.0f},  // 0154
+            };
             
             /* 居中偏移 */
             scui_point2_t offset = {
@@ -156,45 +188,10 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             scui_point3_t angle = scui_ui_res_local->rotate;
             scui_matrix_rotate3(&r_matrix, &angle, 0x00);
             
-            /* 旋转顶点 */
-            scui_point3_transform_by_matrix(&vertex3_0, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_1, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_2, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_3, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_4, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_5, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_6, &r_matrix);
-            scui_point3_transform_by_matrix(&vertex3_7, &r_matrix);
-            
-            /* 偏移顶点 */
-            scui_point3_offset_xy(&vertex3_0, &offset);
-            scui_point3_offset_xy(&vertex3_1, &offset);
-            scui_point3_offset_xy(&vertex3_2, &offset);
-            scui_point3_offset_xy(&vertex3_3, &offset);
-            scui_point3_offset_xy(&vertex3_4, &offset);
-            scui_point3_offset_xy(&vertex3_5, &offset);
-            scui_point3_offset_xy(&vertex3_6, &offset);
-            scui_point3_offset_xy(&vertex3_7, &offset);
-            
-            scui_normal3_t normal3[6] = {
-                {+0.0f, +0.0f, -1.0f},  // 0321
-                {+0.0f, +0.0f, +1.0f},  // 4567
-                {+1.0f, +0.0f, +0.0f},  // 1265
-                {-1.0f, +0.0f, +0.0f},  // 0473
-                {+0.0f, +1.0f, +0.0f},  // 2376
-                {+0.0f, -1.0f, +0.0f},  // 0154
-            };
-            
-            scui_face3_t face3[6] = {
-                {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},},
-                {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},},
-                {.point3 = {vertex3_1, vertex3_2, vertex3_6, vertex3_5,},},
-                {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},},
-                {.point3 = {vertex3_2, vertex3_3, vertex3_7, vertex3_6,},},
-                {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},},
-            };
-            
             for (uint8_t idx = 0; idx < 6; idx++) {
+                /* 旋转面,移动面 */
+                scui_area3_transform_by_matrix(&face3[idx], &r_matrix);
+                scui_area3_offset_xy(&face3[idx], &offset);
                 /* 计算法线z轴 */
                 float *normal_z = scui_ui_res_local->normal_z;
                 scui_mormal3_z_by_matrix(&normal3[idx], &normal_z[idx], &r_matrix);
@@ -215,7 +212,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             scui_surface_t *dst_surface = widget->surface;
-            scui_area_t dst_clip = (scui_area_t){
+            scui_area_t dst_clip = {
                 .w = dst_surface->hor_res,
                 .h = dst_surface->ver_res,
             };
@@ -239,8 +236,8 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                     .alpha   = scui_alpha_cover,
                 };
                 scui_area_t image_clip = {
-                    .x = 0, .w = image->pixel.width,
-                    .y = 0, .h = image->pixel.height,
+                    .w = image->pixel.width,
+                    .h = image->pixel.height,
                 };
                 
                 scui_surface_t *src_surface = &image_surface;
@@ -252,8 +249,21 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 scui_image_cache_unload(&image_unit);
             }
         }
-        
         break;
+    case scui_event_ptr_move:
+        scui_widget_event_mask_over(event);
+        /* y轴旋转是x的移动偏移量 */
+        /* x轴旋转是y的移动偏移量 */
+        scui_ui_res_local->move_lock = true;
+        scui_ui_res_local->rotate.y += event->ptr_e.x - event->ptr_s.x;
+        scui_ui_res_local->rotate.x += event->ptr_s.y - event->ptr_e.y;     // y轴方向是反的
+        scui_widget_draw(handle, NULL, false);
+        break;
+    case scui_event_ptr_down:
+    case scui_event_ptr_up:
+        scui_ui_res_local->move_lock = false;
+        break;
+    break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;

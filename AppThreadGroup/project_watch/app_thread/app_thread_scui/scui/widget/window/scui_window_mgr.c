@@ -130,25 +130,25 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             
             /* 小于一半跳过绘制, 因为会被覆盖 */
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
-                if (src_clip.w <  src_surface->hor_res / 2)
+                if (src_clip.w < src_surface->hor_res / 2)
                     continue;
                 if (src_clip.w == src_surface->hor_res / 2)
                 if (widget->myself != scui_window_active_curr())
                     continue;
             }
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
-                if (src_clip.h <  src_surface->ver_res / 2)
+                if (src_clip.h < src_surface->ver_res / 2)
                     continue;
                 if (src_clip.h == src_surface->ver_res / 2)
                 if (widget->myself != scui_window_active_curr())
                     continue;
             }
-            /* 如果底图透明度更新, 则清空底色防止错误混合 */
+            /* 清空底色防止错误混合 */
             SCUI_PIXEL_TYPE dst_pixel = {0};
-            dst_clip = (scui_area_t){
-                .w = dst_surface->hor_res,
-                .h = dst_surface->ver_res,
-            };
+            dst_clip.x = 0;
+            dst_clip.y = 0;
+            dst_clip.w = dst_surface->hor_res;
+            dst_clip.h = dst_surface->ver_res;
             scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
             
             float angle = 0;
@@ -165,15 +165,13 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
                 scui_matrix_rotate(&r_matrix, angle, 0x01);
             // scui_matrix_check(&r_matrix);
-            scui_face3_t face = {.point3 = {{0},
-                {.x = src_surface->hor_res - 1},
-                {.x = src_surface->hor_res - 1, .y = src_surface->ver_res - 1},
-                {.y = src_surface->ver_res - 1},
-            }};
-            scui_point3_transform_by_matrix(&face.point3[0], &r_matrix);
-            scui_point3_transform_by_matrix(&face.point3[1], &r_matrix);
-            scui_point3_transform_by_matrix(&face.point3[2], &r_matrix);
-            scui_point3_transform_by_matrix(&face.point3[3], &r_matrix);
+            scui_face3_t face = {
+                .point3[1].x = src_surface->hor_res - 1,
+                .point3[2].x = src_surface->hor_res - 1,
+                .point3[2].y = src_surface->ver_res - 1,
+                .point3[3].y = src_surface->ver_res - 1,
+            };
+            scui_area3_transform_by_matrix(&face, &r_matrix);
             
             scui_point2_t offset = {0};
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
@@ -189,22 +187,107 @@ void scui_window_mix_list(scui_widget_t **list, scui_handle_t num)
             scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
             // scui_matrix_check(&inv_matrix);
             scui_matrix_inverse(&inv_matrix);
-            dst_clip = (scui_area_t){
-                .w = dst_surface->hor_res,
-                .h = dst_surface->ver_res,
-            };
-            src_clip = (scui_area_t){
-                .w = src_surface->hor_res,
-                .h = src_surface->ver_res,
-            };
+            dst_clip.x = 0;
+            dst_clip.y = 0;
+            dst_clip.w = dst_surface->hor_res;
+            dst_clip.h = dst_surface->ver_res;
+            src_clip.x = 0;
+            src_clip.y = 0;
+            src_clip.w = src_surface->hor_res;
+            src_clip.h = src_surface->ver_res;
             scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
             continue;
         }
         
         if (scui_window_mgr.switch_args.type == scui_window_switch_cube) {
             
-            /* 想想看怎么写 */
+            /* 清空底色防止错误混合 */
+            if (idx == 0) {
+                SCUI_PIXEL_TYPE dst_pixel = {0};
+                dst_clip.x = 0;
+                dst_clip.y = 0;
+                dst_clip.w = dst_surface->hor_res;
+                dst_clip.h = dst_surface->ver_res;
+                scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
+            }
             
+            float angle = 0;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+                angle = scui_map(src_clip.w, 0, src_surface->hor_res, 90, 0);
+                if (src_clip.x == 0)
+                    angle = 90 - angle;
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+                angle = scui_map(src_clip.h, 0, src_surface->ver_res, 90, 0);
+                if (src_clip.y == 0)
+                    angle = 90 - angle;
+                angle = -angle;
+            }
+            SCUI_LOG_INFO("angle:%f", angle);
+            
+            scui_matrix_t r_matrix = {0};
+            scui_matrix_identity(&r_matrix);
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                scui_matrix_rotate(&r_matrix, angle, 0x02);
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                scui_matrix_rotate(&r_matrix, angle, 0x01);
+            // scui_matrix_check(&r_matrix);
+            
+            scui_coord_t x_res = src_surface->hor_res / 2;
+            scui_coord_t y_res = src_surface->ver_res / 2;
+            scui_coord_t z_res = 0;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                z_res = src_surface->hor_res / 2;
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                z_res = src_surface->ver_res / 2;
+            
+            scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
+            scui_vertex3_t vertex3_1 = {+1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
+            scui_vertex3_t vertex3_2 = {+1.0f * x_res, +1.0f * y_res, -1.0f * z_res,};
+            scui_vertex3_t vertex3_3 = {-1.0f * x_res, +1.0f * y_res, -1.0f * z_res,};
+            scui_vertex3_t vertex3_4 = {-1.0f * x_res, -1.0f * y_res, +1.0f * z_res,};
+            scui_vertex3_t vertex3_5 = {+1.0f * x_res, -1.0f * y_res, +1.0f * z_res,};
+            scui_vertex3_t vertex3_6 = {+1.0f * x_res, +1.0f * y_res, +1.0f * z_res,};
+            scui_vertex3_t vertex3_7 = {-1.0f * x_res, +1.0f * y_res, +1.0f * z_res,};
+            
+            scui_face3_t face3[6] = {
+                {.point3 = {vertex3_0, vertex3_1, vertex3_2, vertex3_3,},}, // 0321
+                {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, // 4567
+                {.point3 = {vertex3_1, vertex3_5, vertex3_6, vertex3_2,},}, // 1265
+                {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, // 0473
+                {.point3 = {vertex3_3, vertex3_2, vertex3_6, vertex3_7,},}, // 2376
+                {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, // 0154
+            };
+            
+            scui_face3_t face = {0};
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+                if (src_clip.x > 0)
+                    face = face3[0];
+                else
+                    face = face3[2];
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+                if (src_clip.y > 0)
+                    face = face3[0];
+                else
+                    face = face3[4];
+            }
+            scui_area3_transform_by_matrix(&face, &r_matrix);
+            scui_area3_offset_xy(&face, &(scui_point2_t){.x = x_res, .y = y_res,});
+            
+            scui_matrix_t inv_matrix = {0};
+            scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
+            // scui_matrix_check(&inv_matrix);
+            scui_matrix_inverse(&inv_matrix);
+            dst_clip.x = 0;
+            dst_clip.y = 0;
+            dst_clip.w = dst_surface->hor_res;
+            dst_clip.h = dst_surface->ver_res;
+            src_clip.x = 0;
+            src_clip.y = 0;
+            src_clip.w = src_surface->hor_res;
+            src_clip.h = src_surface->ver_res;
+            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
             continue;
         }
         

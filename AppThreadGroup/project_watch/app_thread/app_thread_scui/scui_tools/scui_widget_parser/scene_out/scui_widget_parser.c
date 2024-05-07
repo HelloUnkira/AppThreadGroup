@@ -927,10 +927,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_CUBE_CUSTOM,
 	.widget.parent                  = SCUI_UI_SCENE_CUBE,
-	.widget.color.color.ch.a        = 0xFF,
-	.widget.color.color.ch.r        = 0xFF,
-	.widget.color.color.ch.g        = 0xFF,
-	.widget.color.color.ch.b        = 0xFF,
 	.widget.event_cb                = scui_ui_scene_cube_custom_event_proc,
 };
 

@@ -125,8 +125,8 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
     SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
-        .x = 0, .w = image->pixel.width,
-        .y = 0, .h = image->pixel.height,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
     };
     
     if (src_clip == NULL)
@@ -182,8 +182,8 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
     SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
-        .x = 0, .w = image->pixel.width,
-        .y = 0, .h = image->pixel.height,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
     };
     
     if (src_clip == NULL)

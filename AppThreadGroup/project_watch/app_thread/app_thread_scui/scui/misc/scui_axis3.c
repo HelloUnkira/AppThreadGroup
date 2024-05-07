@@ -38,16 +38,6 @@ void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *point2)
     point3->y += point2->y;
 }
 
-/*@brief 坐标透视
- *@param point3 坐标
- *@param view3  视点坐标(.z: 视点距离)
- */
-void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
-{
-    point3->x = view3->x + (point3->x - view3->x) * view3->z / (view3->z + point3->z);
-    point3->y = view3->y + (point3->y - view3->y) * view3->z / (view3->z + point3->z);
-}
-
 /*@brief 坐标变换(矩阵)
  *@param point3 坐标
  *@param matrix 矩阵实例
@@ -64,6 +54,16 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
     *point3 = point3_t;
 }
 
+/*@brief 坐标透视
+ *@param point3 坐标
+ *@param view3  视点坐标(.z: 视点距离)
+ */
+void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
+{
+    point3->x = view3->x + (point3->x - view3->x) * view3->z / (view3->z + point3->z);
+    point3->y = view3->y + (point3->y - view3->y) * view3->z / (view3->z + point3->z);
+}
+
 /*@brief 矩阵计算旋转法线z轴
  *@param matrix   矩阵实例
  *@param normal3  法线
@@ -76,32 +76,52 @@ void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, float *normal_z, scui_mat
                 matrix->meta[2][2] * normal3->z;
 }
 
-/*@brief 区域变换(矩阵)
- *@param src_area3 区域
- *@param dst_area3 区域
- *@param matrix    矩阵实例
+/*@brief 区域偏移
+ *@param area3  区域
+ *@param point2 坐标
  */
-void scui_area3_transform_by_matrix(scui_area3_t *src_area3, scui_area3_t *dst_area3, scui_matrix_t *matrix)
+void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *point2)
 {
     scui_point3_t point3 = {0};
     
-    point3 = src_area3->point3[0];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    dst_area3->point3[0] = point3;
+    point3 = area3->point3[0];
+    scui_point3_offset_xy(&point3, point2);
+    area3->point3[0] = point3;
     
-    point3 = src_area3->point3[1];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    dst_area3->point3[1] = point3;
+    point3 = area3->point3[1];
+    scui_point3_offset_xy(&point3, point2);
+    area3->point3[1] = point3;
     
-    point3 = src_area3->point3[2];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    dst_area3->point3[2] = point3;
+    point3 = area3->point3[2];
+    scui_point3_offset_xy(&point3, point2);
+    area3->point3[2] = point3;
     
-    point3 = src_area3->point3[3];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    dst_area3->point3[3] = point3;
+    point3 = area3->point3[3];
+    scui_point3_offset_xy(&point3, point2);
+    area3->point3[3] = point3;
 }
 
-
-
-
+/*@brief 区域变换(矩阵)
+ *@param area3  区域
+ *@param matrix 矩阵实例
+ */
+void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix)
+{
+    scui_point3_t point3 = {0};
+    
+    point3 = area3->point3[0];
+    scui_point3_transform_by_matrix(&point3, matrix);
+    area3->point3[0] = point3;
+    
+    point3 = area3->point3[1];
+    scui_point3_transform_by_matrix(&point3, matrix);
+    area3->point3[1] = point3;
+    
+    point3 = area3->point3[2];
+    scui_point3_transform_by_matrix(&point3, matrix);
+    area3->point3[2] = point3;
+    
+    point3 = area3->point3[3];
+    scui_point3_transform_by_matrix(&point3, matrix);
+    area3->point3[3] = point3;
+}
