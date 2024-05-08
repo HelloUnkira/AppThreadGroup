@@ -164,6 +164,14 @@ void scui_event_respond(scui_event_t *event)
         /* 混合绘制刷新流程结束 */
         /* 使用假绘制启动正式的刷新流程 */
         scui_surface_draw_routine(NULL);
+        /* 开始refr的switch模式同步 */
+        scui_widget_t *widget = NULL;
+        if (scui_window_surface_switch(0x02, &widget)) {
+            SCUI_ASSERT(widget != NULL);
+            SCUI_LOG_INFO("switch mode sync");
+            scui_surface_t *surface_fb = scui_surface_fb_refr();
+            scui_widget_surface_sync(widget, surface_fb);
+        }
         return;
     default:
         break;

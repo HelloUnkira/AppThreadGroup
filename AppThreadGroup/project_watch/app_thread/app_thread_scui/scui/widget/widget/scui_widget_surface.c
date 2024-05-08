@@ -20,6 +20,22 @@ bool scui_widget_surface_only(scui_widget_t *widget)
     return true;
 }
 
+/*@brief 控件画布更新
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
+    SCUI_ASSERT(widget->surface->pixel != surface->pixel);
+    
+    /* 直接交换实例最简单 */
+    uint8_t *pixel = widget->surface->pixel;
+    widget->surface->pixel = surface->pixel;
+    surface->pixel = pixel;
+}
+
 /*@brief 控件画布剪切域刷新
  *@param widget  控件实例
  *@param recurse 递归处理
@@ -75,6 +91,30 @@ void scui_widget_surface_remap(scui_widget_t *widget, scui_surface_t *surface)
 /*-------------------------------------------------*
  *separator----------------------------------------*
  *-------------------------------------------------*/
+
+/*@brief 控件画布同步
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
+    SCUI_ASSERT(widget->surface->pixel != surface->pixel);
+    
+    scui_surface_t *dst_surface = widget->surface;
+    scui_surface_t *src_surface = surface;
+    scui_area_t dst_clip = {
+        .w = dst_surface->hor_res,
+        .h = dst_surface->ver_res,
+    };
+    scui_area_t src_clip = {
+        .w = src_surface->hor_res,
+        .h = src_surface->ver_res,
+    };
+    
+    scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
+}
 
 /*@brief 控件画布在画布绘制纯色区域
  *@param widget 控件实例

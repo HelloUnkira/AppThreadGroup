@@ -10,6 +10,12 @@
  */
 bool scui_widget_surface_only(scui_widget_t *widget);
 
+/*@brief 控件画布更新
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
+
 /*@brief 控件画布剪切域刷新
  *@param widget  控件实例
  *@param recurse 递归处理
@@ -25,6 +31,12 @@ void scui_widget_surface_remap(scui_widget_t *widget, scui_surface_t *surface);
 /*-------------------------------------------------*
  *separator----------------------------------------*
  *-------------------------------------------------*/
+
+/*@brief 控件画布同步
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件画布在画布绘制纯色区域
  *@param widget   控件实例

@@ -82,6 +82,28 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
     }
 }
 
+/*@brief 窗口管理器过滤根控件列表
+ *@param list 根控件列表
+ *@param num  根控件数量
+ *@param ofs  根控件偏移
+ */
+void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
+{
+    int32_t idx = (int32_t)num - 1;
+    for (idx = (int32_t)num - 1; idx >= 0; idx--) {
+        scui_widget_t *widget = list[idx];
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+        SCUI_ASSERT(scui_handle_remap(widget->myself));
+        
+        /* 完全覆盖,此时跳过 */
+        if (widget->clip.x == 0 && widget->clip.y == 0 &&
+            widget->surface->alpha == scui_alpha_cover)
+            break;
+    }
+    
+    *ofs = idx < 0 ? 0 : idx;
+}
+
 /*@brief 窗口管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上
  *       窗口管理器会有特殊的处理
@@ -369,16 +391,41 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     }
 }
 
+/*@brief 窗口管理器混合画布模式检查
+ *@param state  状态(0x00:设置标记;0x01:清除标记;0x02:检查标记;)
+ *@param widget 控件实例地址
+ */
+bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
+{
+    switch (state) {
+    case 0x00:
+        scui_window_mgr.refr_switch = true;
+        scui_window_mgr.refr_widget = *widget;
+        return scui_window_mgr.refr_switch;
+    case 0x01:
+        scui_window_mgr.refr_switch = false;
+        scui_window_mgr.refr_widget = *widget;
+        return scui_window_mgr.refr_switch;
+    case 0x02:
+        *widget = scui_window_mgr.refr_widget;
+        return scui_window_mgr.refr_switch;
+    default:
+        SCUI_LOG_ERROR("unknown state");
+        return false;
+    }
+}
+
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上
  *       将所有无独立画布就地渲染
  */
 void scui_window_surface_blend(void)
 {
-    scui_handle_t  list_num = 0;
-    scui_widget_t *list[SCUI_WINDOW_MGR_LIMIT] = {0};
+    scui_handle_t  list_lvl_0_num = 0;
+    scui_handle_t  list_lvl_1_num = 0;
+    scui_widget_t *list_lvl_0[SCUI_WINDOW_MGR_LIMIT] = {0};
+    scui_widget_t *list_lvl_1[SCUI_WINDOW_MGR_LIMIT] = {0};
     
-    /* 第一轮混合:处理所有独立画布 */
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
@@ -388,28 +435,41 @@ void scui_window_surface_blend(void)
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
         if (scui_widget_surface_only(widget))
-            list[list_num++] = widget;
+            list_lvl_0[list_lvl_0_num++] = widget;
+        else
+            list_lvl_1[list_lvl_1_num++] = widget;
     }
-    scui_window_list_sort(list, list_num);
-    scui_window_list_blend(list, list_num);
-    list_num = 0;
+    
+    /* 依照窗口层级进行排序 */
+    scui_window_list_sort(list_lvl_0, list_lvl_0_num);
+    scui_window_list_sort(list_lvl_1, list_lvl_1_num);
+    
+    /* 过滤掉被覆盖的绘制界面 */
+    scui_handle_t ofs_idx = 0;
+    scui_window_list_filter(list_lvl_0, list_lvl_0_num, &ofs_idx);
+    list_lvl_0_num -= ofs_idx;
+    
+    /* 切换switch模式? */
+    /* 如果送显数据刚好为完整的一个surface */
+    /* 此时则使用switch模式直接交换surface快速进入refr异步 */
+    /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
+    scui_widget_t *widget_only = NULL;
+    scui_window_surface_switch(0x01, &widget_only);
+    if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
+        widget_only = list_lvl_0[ofs_idx];
+        scui_window_surface_switch(0x00, &widget_only);
+        scui_surface_t *surface_fb = scui_surface_fb_draw();
+        scui_widget_surface_swap(list_lvl_0[ofs_idx], surface_fb);
+        SCUI_LOG_WARN("blend to switch mode");
+        return;
+    }
+    
+    /* 第一轮混合:处理所有独立画布 */
+    scui_window_list_blend(&list_lvl_0[ofs_idx], list_lvl_0_num);
     
     /* 第二轮混合:处理所有独立画布 */
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
-        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        scui_handle_t  handle = scui_window_mgr.list[idx];
-        scui_widget_t *widget = scui_handle_get(handle);
-        SCUI_ASSERT(scui_handle_remap(handle));
-        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-        
-        if (!scui_widget_surface_only(widget))
-             list[list_num++] = widget;
-    }
-    scui_window_list_sort(list, list_num);
-    
-    for (scui_handle_t idx = 0; idx < list_num; idx++) {
-        scui_widget_t *widget = list[idx];
+    for (scui_handle_t idx = 0; idx < list_lvl_1_num; idx++) {
+        scui_widget_t *widget = list_lvl_1[idx];
         scui_handle_t  handle = widget->myself;
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         SCUI_ASSERT(scui_handle_remap(handle));

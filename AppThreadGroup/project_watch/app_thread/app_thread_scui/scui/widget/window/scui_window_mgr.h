@@ -39,9 +39,11 @@ typedef struct {
 typedef struct {
     scui_handle_t        list_num;                      /* 窗口列表数量 */
     scui_handle_t        list[SCUI_WINDOW_MGR_LIMIT];   /* 窗口管理列表 */
+    scui_window_switch_t switch_args;                   /* 窗口切换信息 */
     scui_handle_t        active_curr;                   /* 当前活跃窗口 */
     scui_handle_t        active_last;                   /* 上一活跃窗口 */
-    scui_window_switch_t switch_args;                   /* 窗口切换信息 */
+    scui_widget_t       *refr_widget;                   /* 窗口送显模式控件实例地址 */
+    uint32_t             refr_switch:1;                 /* 窗口送显模式标记 */
     /*  */
 } scui_window_mgr_t;
 
@@ -51,6 +53,13 @@ typedef struct {
  */
 void scui_window_list_sort(scui_widget_t **list, scui_handle_t num);
 
+/*@brief 窗口管理器过滤根控件列表
+ *@param list 根控件列表
+ *@param num  根控件数量
+ *@param ofs  根控件偏移
+ */
+void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs);
+
 /*@brief 窗口管理器混合根控件列表
  *       将所有根控件画布混合到绘制画布上
  *       窗口管理器会有特殊的处理
@@ -59,6 +68,12 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num);
  *@param num  根控件数量
  */
 void scui_window_list_blend(scui_widget_t **list, scui_handle_t num);
+
+/*@brief 窗口管理器混合画布模式检查
+ *@param state  状态(0x00:设置标记;0x01:清除标记;0x02:检查标记;)
+ *@param widget 控件实例地址
+ */
+bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget);
 
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上
