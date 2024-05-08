@@ -81,7 +81,7 @@ void scui_ready(void)
     scui_window_switch_type_cfg(scui_window_switch_cube);
     
     /* 初始窗口 */
-    scui_handle_t handle = SCUI_UI_SCENE_TEST;
+    scui_handle_t handle = SCUI_UI_SCENE_1;
     scui_widget_show(handle, false);
     scui_window_active(handle);
     // scui_widget_hide(handle, false);

@@ -460,7 +460,7 @@ void scui_window_surface_blend(void)
         scui_window_surface_switch(0x00, &widget_only);
         scui_surface_t *surface_fb = scui_surface_fb_draw();
         scui_widget_surface_swap(list_lvl_0[ofs_idx], surface_fb);
-        SCUI_LOG_WARN("blend to switch mode");
+        SCUI_LOG_INFO("blend to switch mode");
         return;
     }
     

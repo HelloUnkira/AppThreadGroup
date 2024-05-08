@@ -31,10 +31,10 @@ static inline void scui_ui_scene_window_list_cfg(scui_event_t *event)
     /* 窗口属性参数配置 */
     scui_window_cfg_t window_cfg = {0};
     scui_window_cfg_get(SCUI_UI_SCENE_CUBE, &window_cfg);
-    window_cfg.sibling[0] = SCUI_HANDLE_INVALID;
+    window_cfg.sibling[0] = SCUI_UI_SCENE_1;
     window_cfg.sibling[1] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[2] = SCUI_UI_SCENE_HOME;
-    window_cfg.sibling[3] = SCUI_UI_SCENE_TEST;
+    window_cfg.sibling[2] = SCUI_HANDLE_INVALID;
+    window_cfg.sibling[3] = SCUI_HANDLE_INVALID;
     scui_window_cfg_set(SCUI_UI_SCENE_CUBE, &window_cfg);
 }
 
@@ -268,6 +268,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:
+        scui_widget_event_mask_keep(event);
         scui_ui_res_local->move_lock = false;
         break;
     break;

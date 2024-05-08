@@ -28,6 +28,30 @@ void scui_matrix_check(scui_matrix_t *matrix)
  */
 bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face2_t *face2_dst)
 {
+    /* 计算将(xi,yi)映射到(ui,vi)的矩阵变换系数(i=1,2,3,4):
+     *
+     *      c00*xi + c01*yi + c02
+     * ui = ---------------------
+     *      c20*xi + c21*yi + c22
+     *
+     *      c10*xi + c11*yi + c12
+     * vi = ---------------------
+     *      c20*xi + c21*yi + c22
+     *
+     * 通过求解线性方程组计算系数:
+     * / x0 y0  1  0  0  0 -x0*u0 -y0*u0 \ /c00\ /u0\
+     * | x1 y1  1  0  0  0 -x1*u1 -y1*u1 | |c01| |u1|
+     * | x2 y2  1  0  0  0 -x2*u2 -y2*u2 | |c02| |u2|
+     * | x3 y3  1  0  0  0 -x3*u3 -y3*u3 |.|c10|=|u3|,
+     * |  0  0  0 x0 y0  1 -x0*v0 -y0*v0 | |c11| |v0|
+     * |  0  0  0 x1 y1  1 -x1*v1 -y1*v1 | |c12| |v1|
+     * |  0  0  0 x2 y2  1 -x2*v2 -y2*v2 | |c20| |v2|
+     * \  0  0  0 x3 y3  1 -x3*v3 -y3*v3 / \c21/ \v3/
+     *
+     * where:
+     *   cij - 矩阵系数, c22 = 1
+     */
+    
     /* 四点变换 */
     float src_x[4] = {face2_src->point2[0].x, face2_src->point2[1].x, face2_src->point2[2].x, face2_src->point2[3].x,};
     float src_y[4] = {face2_src->point2[0].y, face2_src->point2[1].y, face2_src->point2[2].y, face2_src->point2[3].y,};
@@ -36,19 +60,19 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
     
     const float eps = 1.1920929e-7f;
     
-    const uint8_t M = 8, step_a = 8;
-    const uint8_t N = 1, step_b = 1;
+    const uint8_t M = 8;
+    const uint8_t N = 1;
     
-    float matrix_a[8 * 8] = {
-        src_x[0], src_x[0], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[0] * dst_x[0], -src_y[0] * dst_x[0],
-        src_x[1], src_x[1], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[1] * dst_x[1], -src_y[1] * dst_x[1],
-        src_x[2], src_x[2], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[2] * dst_x[2], -src_y[2] * dst_x[2],
-        src_x[3], src_x[3], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[3] * dst_x[3], -src_y[3] * dst_x[3],
+    float matrix_a[8][8] = {
+        src_x[0], src_y[0], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[0] * dst_x[0], -src_y[0] * dst_x[0],
+        src_x[1], src_y[1], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[1] * dst_x[1], -src_y[1] * dst_x[1],
+        src_x[2], src_y[2], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[2] * dst_x[2], -src_y[2] * dst_x[2],
+        src_x[3], src_y[3], 1.0f, 0.0f, 0.0f, 0.0f, -src_x[3] * dst_x[3], -src_y[3] * dst_x[3],
         
-        0.0f, 0.0f, 0.0f, src_x[0], src_x[0], 1.0f, -src_x[0] * dst_y[0], -src_y[0] * dst_y[0],
-        0.0f, 0.0f, 0.0f, src_x[1], src_x[1], 1.0f, -src_x[1] * dst_y[1], -src_y[1] * dst_y[1],
-        0.0f, 0.0f, 0.0f, src_x[2], src_x[2], 1.0f, -src_x[2] * dst_y[2], -src_y[2] * dst_y[2],
-        0.0f, 0.0f, 0.0f, src_x[3], src_x[3], 1.0f, -src_x[3] * dst_y[3], -src_y[3] * dst_y[3],
+        0.0f, 0.0f, 0.0f, src_x[0], src_y[0], 1.0f, -src_x[0] * dst_y[0], -src_y[0] * dst_y[0],
+        0.0f, 0.0f, 0.0f, src_x[1], src_y[1], 1.0f, -src_x[1] * dst_y[1], -src_y[1] * dst_y[1],
+        0.0f, 0.0f, 0.0f, src_x[2], src_y[2], 1.0f, -src_x[2] * dst_y[2], -src_y[2] * dst_y[2],
+        0.0f, 0.0f, 0.0f, src_x[3], src_y[3], 1.0f, -src_x[3] * dst_y[3], -src_y[3] * dst_y[3],
     };
     
     float matrix_b[9] = {    // 齐次矩阵
@@ -65,40 +89,42 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
         int8_t k = i;
         
         for (int8_t j = i + 1; j < M; j++)
-            if (scui_abs(matrix_a[j * step_a + i]) >
-                scui_abs(matrix_a[k * step_a + i]))
+            if (scui_abs(matrix_a[j][i]) >
+                scui_abs(matrix_a[k][i]))
                 k = j;
         /* 只要遇到主元为0, 终止并退出 */
-        if (scui_abs(matrix_a[k * step_a + i] < eps))
+        if (scui_abs(matrix_a[k][i]) < eps) {
+            SCUI_LOG_ERROR("gauss transform failure");
             return false;
+        }
         
         /* 2.将主元行交换到对角线当前列所在行 */
         /*   只从i列开始以后的列进行行交换, 前面的已经处理完了 */
         if (k != i) {
             for (int8_t j = i; j < M; j++) {
-                float var_t1 = matrix_a[i * step_a + j];
-                float var_t2 = matrix_a[k * step_a + j];
-                matrix_a[i * step_a + j] = var_t2;
-                matrix_a[k * step_a + j] = var_t1;
+                float var_t1 = matrix_a[i][j];
+                float var_t2 = matrix_a[k][j];
+                matrix_a[i][j] = var_t2;
+                matrix_a[k][j] = var_t1;
             }
             for (int8_t j = 0; j < N; j++) {
-                float var_t1 = matrix_b[i * step_b + j];
-                float var_t2 = matrix_b[k * step_b + j];
-                matrix_b[i * step_b + j] = var_t2;
-                matrix_b[k * step_b + j] = var_t1;
+                float var_t1 = matrix_b[i + j];
+                float var_t2 = matrix_b[k + j];
+                matrix_b[i + j] = var_t2;
+                matrix_b[k + j] = var_t1;
             }
         }
         
-        float cof = -1 / matrix_a[i * step_a + i];
+        float cof = -1.0f / matrix_a[i][i];
         /* 3.通过反主元系数, 清0从主元开始列下面的所有列 */
         for (int8_t j = i + 1; j < M; j++) {
-            float delta = matrix_a[j * step_a + i] * cof;
+            float delta = matrix_a[j][i] * cof;
             
             for (int8_t k = i + 1; k < M; k++)
-                matrix_a[j * step_a + k] += matrix_a[i * step_a + k];
+                matrix_a[j][k] += matrix_a[i][k] * delta;
             
             for (int8_t k = 0; k < N; k++)
-                matrix_b[j * step_b + k] += matrix_b[i * step_b + k];
+                matrix_b[j + k] += matrix_b[i + k] * delta;
         }
     }
     
@@ -124,15 +150,15 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
     /* 每一个方程的参数abcdefgh都是不一样的数值, 所以每一步都要迭代计算 */
     
     for (int8_t i = M - 1; i >= 0; i--)
-    for (int8_t j = 0;     j < N;  j++) {
+    for (int8_t j = 0;     j <  N; j++) {
         
-        float delta = matrix_b[i * step_b + j];
+        float delta = matrix_b[i + j];
         /* 从下往上, 不断地迭代减去非主对角线的贡献度 */
         for (int8_t k = i + 1; k < M; k++)
-            delta -= matrix_a[i * step_a + k] * matrix_b[k * step_b + j];
+            delta -= matrix_a[i][k] * matrix_b[k + j];
         
         /* 最后只剩下主对角线的贡献度, 计算出M */
-        matrix_b[i * step_b + j] = delta / matrix_a[i * step_a + i];
+        matrix_b[i + j] = delta / matrix_a[i][i];
     }
     
     matrix_b[8] = 1.0f;
@@ -472,6 +498,7 @@ void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coo
  *@param width  宽(src)
  *@param height 高(src)
  *@param face   面(dst)
+ *@retval 成功或失败
  */
 bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face)
 {
@@ -482,4 +509,20 @@ bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scu
     }};
     
     return scui_matrix_by_face2(matrix, &face2_src, &face2_dst);
+}
+
+/*@brief 矩阵投影(blit)
+ *@param matrix 矩阵实例
+ *@param width  宽(src)
+ *@param height 高(src)
+ *@param face   面(dst)
+ *@param view   视点
+ *@retval 成功或失败
+ */
+bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face, scui_view3_t *view)
+{
+    scui_face3_t face3_view = *face;
+    scui_area3_perspective(&face3_view, view);
+    
+    return scui_matrix_perspective_blit(matrix, width, height, &face3_view);
 }

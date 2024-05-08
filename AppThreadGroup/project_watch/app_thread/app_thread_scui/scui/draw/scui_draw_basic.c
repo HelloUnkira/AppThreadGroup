@@ -342,7 +342,7 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
 }
 
-/*@brief 图形变换迁移(可以使用DMA2D-blend加速优化)
+/*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
  *@param src_surface 画布实例

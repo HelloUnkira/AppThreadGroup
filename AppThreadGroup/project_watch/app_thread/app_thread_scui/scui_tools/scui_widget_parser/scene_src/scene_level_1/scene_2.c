@@ -31,7 +31,7 @@ static inline void scui_ui_scene_window_list_cfg(scui_event_t *event)
     /* 窗口属性参数配置 */
     scui_window_cfg_t window_cfg = {0};
     scui_window_cfg_get(SCUI_UI_SCENE_2, &window_cfg);
-    window_cfg.sibling[0] = SCUI_HANDLE_INVALID;
+    window_cfg.sibling[0] = SCUI_UI_SCENE_LANTERN;
     window_cfg.sibling[1] = SCUI_HANDLE_INVALID;
     window_cfg.sibling[2] = SCUI_UI_SCENE_1;
     window_cfg.sibling[3] = SCUI_UI_SCENE_3;

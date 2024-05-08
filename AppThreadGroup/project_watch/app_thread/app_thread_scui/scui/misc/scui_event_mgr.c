@@ -213,31 +213,21 @@ void scui_event_respond(scui_event_t *event)
         
         scui_widget_event_mask_prepare(event);
         scui_widget_event_dispatch(event);
-        if (scui_widget_event_check_over(event) && event_filter)
-            return;
-        
         scui_widget_event_mask_execute(event);
         scui_widget_event_dispatch(event);
-        if (scui_widget_event_check_over(event) && event_filter)
-            return;
-        
         scui_widget_event_mask_finish(event);
         scui_widget_event_dispatch(event);
+        
         if (scui_widget_event_check_over(event) && event_filter)
             return;
         
         scui_widget_event_mask_prepare(event);
         scui_window_event_dispatch(event);
-        if (scui_widget_event_check_over(event))
-            return;
-        
         scui_widget_event_mask_execute(event);
         scui_window_event_dispatch(event);
-        if (scui_widget_event_check_over(event))
-            return;
-        
         scui_widget_event_mask_finish(event);
         scui_window_event_dispatch(event);
+        
         if (scui_widget_event_check_over(event))
             return;
     }
@@ -248,16 +238,11 @@ void scui_event_respond(scui_event_t *event)
         
         scui_widget_event_mask_prepare(event);
         scui_event_cb_custom(event);
-        if (scui_widget_event_check_over(event))
-            return;
-        
         scui_widget_event_mask_execute(event);
         scui_event_cb_custom(event);
-        if (scui_widget_event_check_over(event))
-            return;
-        
         scui_widget_event_mask_finish(event);
         scui_event_cb_custom(event);
+        
         if (scui_widget_event_check_over(event))
             return;
     }
