@@ -104,11 +104,13 @@ void scui_watch_event(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         
+        watch->tick_ms += SCUI_ANIMA_TICK;
+        if (watch->tick_ms >= 1000)
+            watch->tick_ms  = 1000;
+        
         scui_indev_data_set_t *data_set = NULL;
         scui_indev_data_set(&data_set);
-        
-        watch->tick_ms += SCUI_ANIMA_TICK;
-        
+                
         if (watch->tick_h != data_set->sys_time_h ||
             watch->tick_m != data_set->sys_time_m ||
             watch->tick_s != data_set->sys_time_s) {

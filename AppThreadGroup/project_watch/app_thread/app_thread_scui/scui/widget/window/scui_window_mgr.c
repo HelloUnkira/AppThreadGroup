@@ -221,6 +221,74 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
+        if (scui_window_mgr.switch_args.type == scui_window_switch_grid) {
+            if (widget->myself != scui_window_active_curr()) {
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+                continue;
+            }
+        }
+        
+        if (scui_window_mgr.switch_args.type == scui_window_switch_grid) {
+            /* 这里偷个懒不做额外参数配给了 */
+            #define SCUI_WINDOW_SWITCH_GRID_W_SEG   4
+            #define SCUI_WINDOW_SWITCH_GRID_H_SEG   4
+            
+            scui_area_t clip_seg
+            [SCUI_WINDOW_SWITCH_GRID_W_SEG]
+            [SCUI_WINDOW_SWITCH_GRID_H_SEG] = {0};
+            
+            scui_coord_t w_num = SCUI_WINDOW_SWITCH_GRID_W_SEG;
+            scui_coord_t h_num = SCUI_WINDOW_SWITCH_GRID_H_SEG;
+            scui_coord_t w_res = src_surface->hor_res;
+            scui_coord_t h_res = src_surface->ver_res;
+            scui_coord_t w_seg = w_res / w_num;
+            scui_coord_t h_seg = h_res / h_num;
+            scui_coord_t w_mod = w_res % w_num / 2;
+            scui_coord_t h_mod = h_res % h_num / 2;
+            SCUI_ASSERT(w_res % w_num % 2 == 0);
+            SCUI_ASSERT(h_res % h_num % 2 == 0);
+            
+            scui_coord_t scale_d = scui_window_mgr.switch_args.pct;
+            SCUI_LOG_INFO("scale_d:%d", scale_d);
+            
+            for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
+            for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+                clip_seg[idx_j][idx_i].w = w_seg;
+                clip_seg[idx_j][idx_i].h = h_seg;
+                
+                if (idx_i == w_num / 2 - 1 || idx_i == w_num / 2)
+                    clip_seg[idx_j][idx_i].w += w_mod;
+                if (idx_j == h_num / 2 - 1 || idx_j == h_num / 2)
+                    clip_seg[idx_j][idx_i].h += h_mod;
+                
+                if (idx_i != 0) {
+                    clip_seg[idx_j][idx_i].x += clip_seg[idx_j][idx_i - 1].x;
+                    clip_seg[idx_j][idx_i].x += clip_seg[idx_j][idx_i - 1].w;
+                }
+                
+                if (idx_j != 0) {
+                    clip_seg[idx_j][idx_i].y += clip_seg[idx_j - 1][idx_i].y;
+                    clip_seg[idx_j][idx_i].y += clip_seg[idx_j - 1][idx_i].h;
+                }
+            }
+            
+            for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
+            for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+                scui_coord_t scale_w = scui_map(scale_d, 0, 100, 0, clip_seg[idx_j][idx_i].w);
+                scui_coord_t scale_h = scui_map(scale_d, 0, 100, 0, clip_seg[idx_j][idx_i].h);
+                
+                clip_seg[idx_j][idx_i].x += scale_w / 2 + scale_w % 2;
+                clip_seg[idx_j][idx_i].y += scale_h / 2 + scale_h % 2;
+                clip_seg[idx_j][idx_i].w -= scale_w;
+                clip_seg[idx_j][idx_i].h -= scale_h;
+                
+                dst_clip = clip_seg[idx_j][idx_i];
+                src_clip = clip_seg[idx_j][idx_i];
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            }
+            continue;
+        }
+        
         if (scui_window_mgr.switch_args.type == scui_window_switch_flip) {
             
             /* 小于一半跳过绘制, 因为会被覆盖 */
@@ -444,10 +512,13 @@ void scui_window_surface_blend(void)
     scui_window_list_sort(list_lvl_0, list_lvl_0_num);
     scui_window_list_sort(list_lvl_1, list_lvl_1_num);
     
-    /* 过滤掉被覆盖的绘制界面 */
     scui_handle_t ofs_idx = 0;
-    scui_window_list_filter(list_lvl_0, list_lvl_0_num, &ofs_idx);
-    list_lvl_0_num -= ofs_idx;
+    /* 仅窗口切换时才应用特效渲染 */
+    if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
+        /* 过滤掉被覆盖的绘制界面 */
+        scui_window_list_filter(list_lvl_0, list_lvl_0_num, &ofs_idx);
+        list_lvl_0_num -= ofs_idx;
+    }
     
     /* 切换switch模式? */
     /* 如果送显数据刚好为完整的一个surface */

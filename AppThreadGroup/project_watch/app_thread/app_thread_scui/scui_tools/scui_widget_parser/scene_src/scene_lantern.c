@@ -256,38 +256,11 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_surface_t *dst_surface = widget->surface;
-            scui_area_t dst_clip = {
-                .w = dst_surface->hor_res,
-                .h = dst_surface->ver_res,
-            };
-            
-            for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
+            for (uint8_t idx = 0; idx < 6; idx++) {
                 
-                scui_image_t *image = scui_handle_get(scui_ui_res_local->image_s[idx]);
-                SCUI_ASSERT(image != NULL);
-                
-                scui_image_unit_t image_unit = {.image = image,};
-                scui_image_cache_load(&image_unit);
-                
-                scui_surface_t image_surface = {
-                    .pixel   = image_unit.data,
-                    .hor_res = image_unit.image->pixel.width,
-                    .ver_res = image_unit.image->pixel.height,
-                    .alpha   = scui_alpha_cover,
-                };
-                scui_area_t image_clip = {
-                    .w = image->pixel.width,
-                    .h = image->pixel.height,
-                };
-                
-                scui_surface_t *src_surface = &image_surface;
-                scui_area_t *src_clip = &image_clip;
-                
+                scui_handle_t *image  = scui_ui_res_local->image_s;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix_s;
-                scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, src_clip, &matrix[idx]);
-                
-                scui_image_cache_unload(&image_unit);
+                scui_widget_surface_draw_image_by_matrix(widget, image[idx], NULL, &matrix[idx]);
             }
         }
         break;

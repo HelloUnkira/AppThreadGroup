@@ -65,4 +65,13 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
                                            scui_area_t *src_clip, scui_coord_t  angle,
                                            scui_point_t  *anchor, scui_point_t *center);
 
+/*@brief 控件画布在画布绘制图像
+ *@param widget   控件实例
+ *@param handle   图像句柄
+ *@param src_clip 图像源绘制区域
+ *@param matrix   变换矩阵
+ */
+void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_handle_t  handle,
+                                              scui_area_t *src_clip, scui_matrix_t *matrix);
+
 #endif

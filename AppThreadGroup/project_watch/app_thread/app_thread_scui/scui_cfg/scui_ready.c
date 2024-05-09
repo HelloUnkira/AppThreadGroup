@@ -74,8 +74,10 @@ void scui_ready(void)
     scui_window_switch_type_cfg(scui_window_switch_normal);
     scui_window_switch_type_cfg(scui_window_switch_zoom1);
     scui_window_switch_type_cfg(scui_window_switch_zoom2);
-    scui_window_switch_type_cfg(scui_window_switch_center_out);
+    
     scui_window_switch_type_cfg(scui_window_switch_center_in);
+    scui_window_switch_type_cfg(scui_window_switch_center_out);
+    scui_window_switch_type_cfg(scui_window_switch_grid);
     
     scui_window_switch_type_cfg(scui_window_switch_flip);
     scui_window_switch_type_cfg(scui_window_switch_cube);

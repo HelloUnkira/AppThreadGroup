@@ -54,9 +54,9 @@ static bool scui_mem_record_item_del(scui_mem_record_item_t item)
     return false;
 }
 
-/*@brief 内存记录检查
+/*@brief 内存记录分析
  */
-void scui_mem_record_check(void)
+void scui_mem_record_analysis(void)
 {
     SCUI_LOG_INFO("scui mem record:");
     SCUI_LOG_INFO("<file,func,line,type,ptr,size>:");
@@ -65,12 +65,29 @@ void scui_mem_record_check(void)
         if (scui_mem_record_list[idx0][idx1].ptr == NULL)
             continue;
         SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
-                     scui_mem_record_list[idx0][idx1].file,
-                     scui_mem_record_list[idx0][idx1].func,
-                     scui_mem_record_list[idx0][idx1].line,
-                     scui_mem_record_list[idx0][idx1].type,
-                     scui_mem_record_list[idx0][idx1].ptr,
-                     scui_mem_record_list[idx0][idx1].size);
+             scui_mem_record_list[idx0][idx1].file,
+             scui_mem_record_list[idx0][idx1].func,
+             scui_mem_record_list[idx0][idx1].line,
+             scui_mem_record_list[idx0][idx1].type,
+             scui_mem_record_list[idx0][idx1].ptr,
+             scui_mem_record_list[idx0][idx1].size);
+    }
+}
+
+/*@brief 内存记录统计
+ */
+void scui_mem_record_statistic(void)
+{
+    SCUI_LOG_INFO("scui mem record:");
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++) {
+        
+        uint32_t size = 0;
+        
+        for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++)
+           if (scui_mem_record_list[idx0][idx1].ptr != NULL)
+               size += scui_mem_record_list[idx0][idx1].size;
+        
+        SCUI_LOG_INFO("<type:%d, total size:%u>", idx0, size);
     }
 }
 
@@ -99,13 +116,13 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     
     #if SCUI_MEM_RECORD_CHECK
     if (ptr == NULL)
-        scui_mem_record_check();
+        scui_mem_record_statistic();
     else
-    if (!scui_mem_record_item_add((scui_mem_record_item_t){
+    if (!scui_mem_record_item_add((scui_mem_record_item_t) {
         .file = file, .func = func, .line = line,
         .type = type, .ptr  = ptr,  .size = size,})) {
          SCUI_LOG_WARN("record queue is full, item will be discard");
-         scui_mem_record_check();
+         scui_mem_record_statistic();
     }
     #endif
     

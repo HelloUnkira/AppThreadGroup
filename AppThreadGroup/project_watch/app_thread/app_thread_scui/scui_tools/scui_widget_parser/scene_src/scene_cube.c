@@ -72,13 +72,13 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_10_09bmp;
-            scui_ui_res_local->image[1] = scui_image_prj_image_src_00_theme_icon_01_spo2_10_09bmp;
-            scui_ui_res_local->image[2] = scui_image_prj_image_src_00_theme_icon_02_message_10_09bmp;
-            scui_ui_res_local->image[3] = scui_image_prj_image_src_00_theme_icon_04_call_10_09bmp;
-            scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_10_09bmp;
-            scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_10_09bmp;
-            scui_ui_res_local->size = 118;
+            scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_09_08png;
+            scui_ui_res_local->image[1] = scui_image_prj_image_src_00_theme_icon_01_spo2_09_08png;
+            scui_ui_res_local->image[2] = scui_image_prj_image_src_00_theme_icon_02_message_09_08png;
+            scui_ui_res_local->image[3] = scui_image_prj_image_src_00_theme_icon_04_call_09_08png;
+            scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_09_08png;
+            scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_09_08png;
+            scui_ui_res_local->size = 102;
             
             scui_ui_res_local->rotate.x = 45.0f;
             scui_ui_res_local->rotate.y = 45.0f;
@@ -140,7 +140,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         static int32_t resize_step = 0;
         static int16_t resize_way  = 1;
         resize_step += 1 * resize_way;
-        if (!scui_betw_lr(resize_step, 0, 118))
+        if (!scui_betw_lr(resize_step, 0, scui_ui_res_local->size / 2))
              resize_way = -resize_way;
         
         scui_ui_res_local->rotate.y += 1.0f * rotate_way;
@@ -218,42 +218,15 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_surface_t *dst_surface = widget->surface;
-            scui_area_t dst_clip = {
-                .w = dst_surface->hor_res,
-                .h = dst_surface->ver_res,
-            };
-            
             for (uint8_t idx = 0; idx < 6; idx++) {
                 
                 float *normal_z = scui_ui_res_local->normal_z;
                 if (normal_z[idx] <= 0.0f)
                     continue;
                 
-                scui_image_t *image = scui_handle_get(scui_ui_res_local->image[idx]);
-                SCUI_ASSERT(image != NULL);
-                
-                scui_image_unit_t image_unit = {.image = image,};
-                scui_image_cache_load(&image_unit);
-                
-                scui_surface_t image_surface = {
-                    .pixel   = image_unit.data,
-                    .hor_res = image_unit.image->pixel.width,
-                    .ver_res = image_unit.image->pixel.height,
-                    .alpha   = scui_alpha_cover,
-                };
-                scui_area_t image_clip = {
-                    .w = image->pixel.width,
-                    .h = image->pixel.height,
-                };
-                
-                scui_surface_t *src_surface = &image_surface;
-                scui_area_t *src_clip = &image_clip;
-                
+                scui_handle_t *image  = scui_ui_res_local->image;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, src_clip, &matrix[idx]);
-                
-                scui_image_cache_unload(&image_unit);
+                scui_widget_surface_draw_image_by_matrix(widget, image[idx], NULL, &matrix[idx]);
             }
         }
         break;

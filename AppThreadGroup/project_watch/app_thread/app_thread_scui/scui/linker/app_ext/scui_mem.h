@@ -65,9 +65,13 @@ typedef struct {
     void *ptr;
 } scui_mem_record_item_t;
 
-/*@brief 内存记录检查
+/*@brief 内存记录分析
  */
-void scui_mem_record_check(void);
+void scui_mem_record_analysis(void);
+
+/*@brief 内存记录统计
+ */
+void scui_mem_record_statistic(void);
 
 #endif
 

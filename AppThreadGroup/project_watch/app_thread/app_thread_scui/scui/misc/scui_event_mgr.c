@@ -147,6 +147,11 @@ void scui_event_respond(scui_event_t *event)
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
     SCUI_ASSERT(scui_event_cb_custom != NULL);
     
+    /* 内存监控 */
+    #if SCUI_MEM_RECORD_CHECK
+    scui_mem_record_statistic();
+    #endif
+    
     /* 特殊系统事件处理 */
     /* 部分内部事件不允许正常控件监督流程 */
     /* 优先则走系统调度管理流程 */
