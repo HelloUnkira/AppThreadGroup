@@ -365,6 +365,34 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
     }
 }
 
+/*@brief 控件全覆盖剪切域检查
+ *@param widget 控件实例
+ */
+bool scui_widget_clip_cover(scui_widget_t *widget)
+{
+    /* 控件需要显示 */
+    if (scui_widget_style_is_show(widget->myself)) {
+        /* 控件不透明 */
+        if (widget->alpha != scui_alpha_trans) {
+            /* 控件背景不透明且全覆盖 */
+            if (!widget->style.trans) {
+                /* 纯色背景,全覆盖 */
+                if (widget->image == SCUI_HANDLE_INVALID)
+                    return true;
+                /* 图片背景,看是否自带透明度 */
+                scui_image_t *image = scui_handle_get(widget->image);
+                SCUI_ASSERT(image != NULL);
+                if (image->format == scui_image_format_rgb565 ||
+                    image->format == scui_image_format_rgb888)
+                    return true;
+            }
+        }
+    }
+    
+    /* 默认不覆盖 */
+    return false;
+}
+
 /*@brief 控件更新剪切域
  *@param widget 控件实例
  */
@@ -376,10 +404,12 @@ void scui_widget_clip_update(scui_widget_t *widget)
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_get(handle);
-        /* 只有子控件显示,不透明,完全覆盖才能移除 */
-        bool ignore = !(child->style.state && !child->style.trans && child->surface->alpha == scui_alpha_cover);
-        if (!ignore)
-             scui_clip_del(&widget->clip_set, &child->clip_set.clip);
+        /* 控件隐藏则跳过 */
+        if (scui_widget_style_is_hide(handle))
+            continue;
+        /* 控件满足完全覆盖的条件 */
+        if (scui_widget_clip_cover(child))
+            scui_clip_del(&widget->clip_set, &child->clip_set.clip);
         scui_widget_clip_update(child);
     }
     
@@ -394,10 +424,12 @@ void scui_widget_clip_update(scui_widget_t *widget)
                     continue;
                 scui_handle_t handle = widget_parent->child_list[idx];
                 scui_widget_t *buddy = scui_handle_get(handle);
-                /* 只有兄弟控件显示,不透明,完全覆盖才能移除 */
-                bool ignore = !(buddy->style.state && !buddy->style.trans && buddy->surface->alpha == scui_alpha_cover);
-                if (!ignore)
-                     scui_clip_del(&widget->clip_set, &buddy->clip_set.clip);
+                /* 控件隐藏则跳过 */
+                if (scui_widget_style_is_hide(handle))
+                    continue;
+                /* 控件满足完全覆盖的条件 */
+                if (scui_widget_clip_cover(buddy))
+                    scui_clip_del(&widget->clip_set, &buddy->clip_set.clip);
             }
             if (widget_parent->child_list[idx] == widget->myself)
                 not_match = false;

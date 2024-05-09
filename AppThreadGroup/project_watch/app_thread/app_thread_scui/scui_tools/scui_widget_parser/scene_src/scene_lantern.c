@@ -95,9 +95,9 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
             scui_ui_res_local->image[4] = scui_image_prj_image_src_home_watch_D10602001_preview_01_1bmp;
             scui_ui_res_local->image[5] = scui_image_prj_image_src_home_watch_D10603001_preview_01_1bmp;
             
-            scui_ui_res_local->w_res = 300;
-            scui_ui_res_local->h_res = 300;
-            scui_ui_res_local->y_ofs = 50;
+            scui_ui_res_local->w_res = 382;
+            scui_ui_res_local->h_res = 298;
+            scui_ui_res_local->y_ofs = 100;
             scui_ui_res_local->x_span = 0;
             scui_ui_res_local->scale_c = 1024;
         }

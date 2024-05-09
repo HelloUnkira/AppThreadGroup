@@ -319,6 +319,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         /* 先冒泡自己,绘制事件没有剪切域,忽略 */
         if (scui_clip_empty(&widget->clip_set))
             SCUI_LOG_INFO("widget clip is empty");
+        /* 先走控件绘制流程,再进行自定义绘制流程 */
         else {
             scui_widget_event_draw(event);
             scui_widget_event_proc(event);
@@ -523,12 +524,11 @@ void scui_widget_event_draw(scui_event_t *event)
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
     
-    /* 控件默认绘制只处理背景皮肤 */
+    /* 控件透明则不绘制 */
     if (widget->style.trans)
         return;
     
     scui_widget_event_mask_keep(event);
-    
     /* 有背景图片则优先绘制背景 */
     /* 没有背景图片则绘制纯色背景 */
     if (widget->image != SCUI_HANDLE_INVALID)
