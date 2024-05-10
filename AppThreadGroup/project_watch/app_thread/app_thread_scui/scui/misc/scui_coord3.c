@@ -1,5 +1,5 @@
 /*实现目标:
- *    三维组件
+ *    坐标点运算
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -53,7 +53,7 @@ void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix)
  *@param normal3  法线
  *@param normal_z 法线z轴
  */
-void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, float *normal_z, scui_matrix_t *matrix)
+void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, scui_matrix_t *matrix)
 {
     *normal_z = matrix->meta[2][0] * normal3->x +
                 matrix->meta[2][1] * normal3->y +
@@ -76,8 +76,8 @@ void scui_point3_to_point(scui_point3_t *point3, scui_point_t *point)
  */
 void scui_point3_by_point(scui_point3_t *point3, scui_point_t *point)
 {
-    point3->x = (float)point->x;
-    point3->y = (float)point->y;
+    point3->x = (scui_coord3_t)point->x;
+    point3->y = (scui_coord3_t)point->y;
     point3->z = 1.0f;
 }
 

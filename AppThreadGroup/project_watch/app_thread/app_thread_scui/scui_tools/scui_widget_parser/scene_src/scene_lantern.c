@@ -170,11 +170,11 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            float w_res   = scui_ui_res_local->w_res;
-            float h_res   = scui_ui_res_local->h_res;
-            float z_res   = w_res * scui_sin4096(scui_ui_res_local->angle_a) / 4096.0f;
-            float x_span  = scui_ui_res_local->x_span;
-            float scale_c = scui_ui_res_local->scale_c / 1024.0f;
+            scui_coord3_t w_res   = scui_ui_res_local->w_res;
+            scui_coord3_t h_res   = scui_ui_res_local->h_res;
+            scui_coord3_t z_res   = w_res * scui_sin4096(scui_ui_res_local->angle_a) / 4096.0f;
+            scui_coord3_t x_span  = scui_ui_res_local->x_span;
+            scui_coord3_t scale_c = scui_ui_res_local->scale_c / 1024.0f;
             
             scui_point3_t offset = {
                 .x = widget->clip.x + widget->clip.w / 2,
@@ -189,7 +189,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 
-                float rotate_y = scui_ui_res_local->rotate_y + idx * scui_ui_res_local->angle_a;
+                scui_coord3_t rotate_y = scui_ui_res_local->rotate_y + idx * scui_ui_res_local->angle_a;
                 scui_matrix_t r_matrix = {0};
                 scui_matrix_identity(&r_matrix);
                 scui_matrix_rotate(&r_matrix, rotate_y, 0x02);

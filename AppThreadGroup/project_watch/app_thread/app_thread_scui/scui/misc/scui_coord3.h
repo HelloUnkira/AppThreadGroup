@@ -1,35 +1,49 @@
-#ifndef SCUI_AXIS3_H
-#define SCUI_AXIS3_H
+#ifndef SCUI_COORD3_H
+#define SCUI_COORD3_H
 
+/*@brief 坐标点
+ */
+typedef float scui_coord3_t;
+
+/*@brief 坐标
+ */
 typedef union {
     struct {
-        float x;
-        float y;
+        scui_coord3_t x;
+        scui_coord3_t y;
     };
-    float meta[2];
+    scui_coord3_t meta[2];
 } scui_point2_t;
 
+/*@brief 坐标
+ */
 typedef union {
     struct {
-        float x;
-        float y;
-        float z;
+        scui_coord3_t x;
+        scui_coord3_t y;
+        scui_coord3_t z;
     };
-    float meta[3];
+    scui_coord3_t meta[3];
 } scui_point3_t;
 
+/*@brief 区域
+ */
 typedef struct {
     /* 逆时针:0:lu;1:ru;2:dr;3:du; */
     scui_point2_t point2[4];
 } scui_area2_t;
 
+/*@brief 区域
+ */
 typedef struct {
     /* 逆时针:0:lu;1:ru;2:dr;3:du; */
     scui_point3_t point3[4];
 } scui_area3_t;
 
+/*@brief 矩阵
+ */
 typedef struct {
-    float meta[3][3];
+    scui_coord3_t meta[3][3];
 } scui_matrix_t;
 
 typedef scui_point3_t scui_axis3_t;     // 轴
@@ -56,7 +70,7 @@ void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix);
  *@param normal3  法线
  *@param normal_z 法线z轴
  */
-void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, float *normal_z, scui_matrix_t *matrix);
+void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, scui_matrix_t *matrix);
 
 /*@brief 坐标转换(pox->point)
  *@param point3 坐标

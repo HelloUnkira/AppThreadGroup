@@ -43,7 +43,7 @@ static struct {
     scui_handle_t image[6];     // 面图标
     scui_matrix_t matrix[6];    // 仿射矩阵
     scui_point3_t rotate;       // 三轴偏移旋转
-    float         normal_z[6];  // 面法线(0321,4567,1265,0473,2376,0154)
+    scui_coord3_t normal_z[6];  // 面法线(0321,4567,1265,0473,2376,0154)
     bool          move_lock;    // 移动锁
 } * scui_ui_res_local = NULL;
 
@@ -156,7 +156,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             /* 8个顶点 */
-            float size = scui_ui_res_local->size / 2;
+            scui_coord3_t size = scui_ui_res_local->size / 2;
             scui_vertex3_t vertex3_0 = {-1.0f * size, -1.0f * size, -1.0f * size,};
             scui_vertex3_t vertex3_1 = {+1.0f * size, -1.0f * size, -1.0f * size,};
             scui_vertex3_t vertex3_2 = {+1.0f * size, +1.0f * size, -1.0f * size,};
@@ -200,7 +200,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 scui_area3_transform_by_matrix(&face3[idx], &r_matrix);
                 scui_area3_offset_xy(&face3[idx], &offset);
                 /* 计算法线z轴 */
-                float *normal_z = scui_ui_res_local->normal_z;
+                scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
                 scui_mormal3_z_by_matrix(&normal3[idx], &normal_z[idx], &r_matrix);
                 if (normal_z[idx] <= 0.0f)
                     continue;
@@ -220,7 +220,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < 6; idx++) {
                 
-                float *normal_z = scui_ui_res_local->normal_z;
+                scui_coord3_t *normal_z = scui_ui_res_local->normal_z;
                 if (normal_z[idx] <= 0.0f)
                     continue;
                 

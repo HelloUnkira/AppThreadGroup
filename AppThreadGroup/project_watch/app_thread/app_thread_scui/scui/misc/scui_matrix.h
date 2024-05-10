@@ -58,7 +58,7 @@ void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale);
  *@param angle  旋转角度
  *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
  */
-void scui_matrix_rotate(scui_matrix_t *matrix, float angle, uint8_t axis);
+void scui_matrix_rotate(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis);
 
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
