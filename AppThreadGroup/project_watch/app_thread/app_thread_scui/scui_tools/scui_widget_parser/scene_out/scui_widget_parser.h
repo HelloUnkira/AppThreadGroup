@@ -72,9 +72,11 @@ typedef enum {
 	SCUI_UI_SCENE_6_RU,
 	SCUI_UI_SCENE_6_LD,
 	SCUI_UI_SCENE_6_RD,
+	SCUI_UI_SCENE_SOCCER,
+	SCUI_UI_SCENE_SOCCER_CUSTOM,
 	SCUI_UI_SCENE_TEST,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[67];
+extern const void * scui_widget_parser_table[69];
 
 #endif

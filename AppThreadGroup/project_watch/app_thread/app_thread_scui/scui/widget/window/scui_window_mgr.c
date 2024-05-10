@@ -423,18 +423,10 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             };
             
             scui_face3_t face = {0};
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
-                if (src_clip.x > 0)
-                    face = face3[0];
-                else
-                    face = face3[2];
-            }
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
-                if (src_clip.y > 0)
-                    face = face3[0];
-                else
-                    face = face3[4];
-            }
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+                face = src_clip.x > 0 ? face3[0] : face3[2];
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+                face = src_clip.y > 0 ? face3[0] : face3[4];
             
             scui_area3_transform_by_matrix(&face, &r_matrix);
             scui_area3_offset_xy(&face, &(scui_point2_t){.x = x_res, .y = y_res,});

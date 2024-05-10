@@ -222,7 +222,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                     image->pixel.width, image->pixel.height, &face3, &view3);
             }
             
-            /* 通过逆矩阵的y平移参数进行排序 */
+            /* 通过矩阵的y平移参数进行排序 */
             scui_handle_t *image    = scui_ui_res_local->image;
             scui_matrix_t *matrix   = scui_ui_res_local->matrix;
             scui_handle_t *image_s  = scui_ui_res_local->image_s;
