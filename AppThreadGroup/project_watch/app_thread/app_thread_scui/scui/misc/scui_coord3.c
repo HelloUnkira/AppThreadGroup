@@ -66,8 +66,8 @@ void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, 
  */
 void scui_point3_to_point(scui_point3_t *point3, scui_point_t *point)
 {
-    point->x = (scui_coord_t)(point3->x / point3->z);
-    point->y = (scui_coord_t)(point3->y / point3->z);
+    point->x = (scui_coord_t)(point3->x / point3->z + 0.1f);
+    point->y = (scui_coord_t)(point3->y / point3->z + 0.1f);
 }
 
 /*@brief 坐标转换(point->point3)

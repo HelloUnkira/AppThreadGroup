@@ -7,9 +7,54 @@
 
 #include "scui.h"
 
+/*@brief 弧度角度转换
+ *@param angle 角度
+ *@retval 弧度
+ */
+double scui_radian_by_angle(double angle)
+{
+    return angle * 3.141592654f / 180.0f;
+}
+
+/*@brief 弧度角度转换
+ *@param radian 弧度
+ *@retval 角度
+ */
+double scui_radian_to_angle(double radian)
+{
+    return radian * 180.0f / 3.141592654f;
+}
+
+/*@brief 三角函数(sin)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_sin(double radian)
+{
+    return sin(radian);
+}
+
+/*@brief 三角函数(cos)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_cos(double radian)
+{
+    return cos(radian);
+}
+
+/*@brief 三角函数(tan)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_tan(double radian)
+{
+    return tan(radian);
+}
+
 /*@brief 三角函数(sin),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_sin4096(int32_t angle)
 {
@@ -40,7 +85,7 @@ int32_t scui_sin4096(int32_t angle)
 
 /*@brief 三角函数(cos),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_cos4096(int32_t angle)
 {
@@ -49,7 +94,7 @@ int32_t scui_cos4096(int32_t angle)
 
 /*@brief 三角函数(tan),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_tan4096(int32_t angle)
 {

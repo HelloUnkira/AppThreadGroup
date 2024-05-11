@@ -1,21 +1,51 @@
 #ifndef SCUI_MATH_H
 #define SCUI_MATH_H
 
+/*@brief 弧度角度转换
+ *@param angle 角度
+ *@retval 弧度
+ */
+double scui_radian_by_angle(double angle);
+
+/*@brief 弧度角度转换
+ *@param radian 弧度
+ *@retval 角度
+ */
+double scui_radian_to_angle(double radian);
+
+/*@brief 三角函数(sin)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_sin(double radian);
+
+/*@brief 三角函数(cos)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_cos(double radian);
+
+/*@brief 三角函数(tan)
+ *@param angle 弧度
+ *@retval 三角函数值
+ */
+double scui_tan(double radian);
+
 /*@brief 三角函数(sin),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_sin4096(int32_t angle);
 
 /*@brief 三角函数(cos),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_cos4096(int32_t angle);
 
 /*@brief 三角函数(tan),放大4096倍
  *@param angle 角度
- *@retval 三级函数值
+ *@retval 三角函数值
  */
 int32_t scui_tan4096(int32_t angle);
 
