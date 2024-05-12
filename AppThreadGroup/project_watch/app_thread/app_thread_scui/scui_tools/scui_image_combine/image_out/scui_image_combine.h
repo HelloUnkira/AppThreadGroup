@@ -6,6 +6,88 @@
 
 typedef enum {
 	SCUI_HANDLE_OFFSET_IMAGE = 0x2000 - 1,
+	scui_image_prj_image_src_00_3d_AnalogClock_00png,
+	scui_image_prj_image_src_00_3d_AnalogClock_01png,
+	scui_image_prj_image_src_00_3d_AnalogClock_02png,
+	scui_image_prj_image_src_00_3d_AnalogClock_03png,
+	scui_image_prj_image_src_00_3d_AnalogClock_04png,
+	scui_image_prj_image_src_00_3d_AnalogClock_05png,
+	scui_image_prj_image_src_00_3d_AnalogClock_06png,
+	scui_image_prj_image_src_00_3d_AnalogClock_07png,
+	scui_image_prj_image_src_00_3d_AnalogClock_08png,
+	scui_image_prj_image_src_00_3d_AnalogClock_09png,
+	scui_image_prj_image_src_00_3d_AnalogClock_1png,
+	scui_image_prj_image_src_00_3d_AnalogClock_10png,
+	scui_image_prj_image_src_00_3d_AnalogClock_11png,
+	scui_image_prj_image_src_00_3d_AnalogClock_12png,
+	scui_image_prj_image_src_00_3d_AnalogClock_13png,
+	scui_image_prj_image_src_00_3d_AnalogClock_14png,
+	scui_image_prj_image_src_00_3d_AnalogClock_2png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_01png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_02png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_03png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_04png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_05png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_06png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_07png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_08png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_09png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_10png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_11png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_12png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_13png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_14png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_15png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_16png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_17png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_18png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_19png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_20png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_21png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_22png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_23png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_24png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_25png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_26png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_27png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_28png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_29png,
+	scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_30png,
+	scui_image_prj_image_src_00_3d_Butterfly_Antennapng,
+	scui_image_prj_image_src_00_3d_Butterfly_BodyHalfpng,
+	scui_image_prj_image_src_00_3d_Butterfly_dot0png,
+	scui_image_prj_image_src_00_3d_Butterfly_dot1png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingDown0png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingDown1png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingDown2png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingDown3png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingUp0png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingUp1png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingUp2png,
+	scui_image_prj_image_src_00_3d_Butterfly_SwingUp3png,
+	scui_image_prj_image_src_00_3d_Soccer_activitiesbmp,
+	scui_image_prj_image_src_00_3d_Soccer_alarmbmp,
+	scui_image_prj_image_src_00_3d_Soccer_backgroundpng,
+	scui_image_prj_image_src_00_3d_Soccer_boardpng,
+	scui_image_prj_image_src_00_3d_Soccer_breathebmp,
+	scui_image_prj_image_src_00_3d_Soccer_callbmp,
+	scui_image_prj_image_src_00_3d_Soccer_corecdbmp,
+	scui_image_prj_image_src_00_3d_Soccer_heartratebmp,
+	scui_image_prj_image_src_00_3d_Soccer_homebmp,
+	scui_image_prj_image_src_00_3d_Soccer_measurebmp,
+	scui_image_prj_image_src_00_3d_Soccer_moodbmp,
+	scui_image_prj_image_src_00_3d_Soccer_morebmp,
+	scui_image_prj_image_src_00_3d_Soccer_musicbmp,
+	scui_image_prj_image_src_00_3d_Soccer_notificationbmp,
+	scui_image_prj_image_src_00_3d_Soccer_periodbmp,
+	scui_image_prj_image_src_00_3d_Soccer_settingsbmp,
+	scui_image_prj_image_src_00_3d_Soccer_sleepbmp,
+	scui_image_prj_image_src_00_3d_Soccer_spo2bmp,
+	scui_image_prj_image_src_00_3d_Soccer_sportsbmp,
+	scui_image_prj_image_src_00_3d_Soccer_starpng,
+	scui_image_prj_image_src_00_3d_Soccer_stressbmp,
+	scui_image_prj_image_src_00_3d_Soccer_voicebmp,
+	scui_image_prj_image_src_00_3d_Soccer_weatherbmp,
 	scui_image_prj_image_src_00_theme_01_onpng,
 	scui_image_prj_image_src_00_theme_02_ringbmp,
 	scui_image_prj_image_src_00_theme_03_underpng,
@@ -3241,29 +3323,6 @@ typedef enum {
 	scui_image_prj_image_src_repeat_switch_05_offpng,
 	scui_image_prj_image_src_repeat_switch_06_sleeppng,
 	scui_image_prj_image_src_repeat_switch_07_sport_settingspng,
-	scui_image_prj_image_src_Soccer_activitiesbmp,
-	scui_image_prj_image_src_Soccer_alarmbmp,
-	scui_image_prj_image_src_Soccer_backgroundpng,
-	scui_image_prj_image_src_Soccer_boardpng,
-	scui_image_prj_image_src_Soccer_breathebmp,
-	scui_image_prj_image_src_Soccer_callbmp,
-	scui_image_prj_image_src_Soccer_corecdbmp,
-	scui_image_prj_image_src_Soccer_heartratebmp,
-	scui_image_prj_image_src_Soccer_homebmp,
-	scui_image_prj_image_src_Soccer_measurebmp,
-	scui_image_prj_image_src_Soccer_moodbmp,
-	scui_image_prj_image_src_Soccer_morebmp,
-	scui_image_prj_image_src_Soccer_musicbmp,
-	scui_image_prj_image_src_Soccer_notificationbmp,
-	scui_image_prj_image_src_Soccer_periodbmp,
-	scui_image_prj_image_src_Soccer_settingsbmp,
-	scui_image_prj_image_src_Soccer_sleepbmp,
-	scui_image_prj_image_src_Soccer_spo2bmp,
-	scui_image_prj_image_src_Soccer_sportsbmp,
-	scui_image_prj_image_src_Soccer_starpng,
-	scui_image_prj_image_src_Soccer_stressbmp,
-	scui_image_prj_image_src_Soccer_voicebmp,
-	scui_image_prj_image_src_Soccer_weatherbmp,
 	scui_image_prj_image_src_standby_watch_D10597001_standby_watch_D10597001_dot_46x46_x210_y210png,
 	scui_image_prj_image_src_standby_watch_D10598001_standby_watch_D10598001_dot_26x26_x220_y220png,
 	scui_image_prj_image_src_standby_watch_D10599001_standby_watch_D10599001_dot_22x22_x222_y222png,
@@ -3301,9 +3360,91 @@ typedef enum {
 	scui_image_prj_image_src_system_03_restartpng,
 } scui_image_combine_handle_t;
 
-extern const void * scui_image_combine_table[3293];
+extern const void * scui_image_combine_table[3352];
 
 //<         w,         h,  size_raw,  size_mem,     lz4_pct> handle
+//<      0x18,      0xeb,      2343,    0x4218,        0.14> scui_image_prj_image_src_00_3d_AnalogClock_00png
+//<      0x18,      0xeb,      3649,    0x4218,        0.22> scui_image_prj_image_src_00_3d_AnalogClock_01png
+//<      0x24,      0xb5,      2505,    0x4c5c,        0.13> scui_image_prj_image_src_00_3d_AnalogClock_02png
+//<      0x24,      0xb5,      3749,    0x4c5c,        0.19> scui_image_prj_image_src_00_3d_AnalogClock_03png
+//<      0x24,      0x8b,      2595,    0x3aa4,        0.17> scui_image_prj_image_src_00_3d_AnalogClock_04png
+//<      0x24,      0x8b,      3952,    0x3aa4,        0.26> scui_image_prj_image_src_00_3d_AnalogClock_05png
+//<      0x52,      0x52,      7774,    0x4ecc,        0.39> scui_image_prj_image_src_00_3d_AnalogClock_06png
+//<      0x2a,      0x2a,      2487,    0x14ac,        0.47> scui_image_prj_image_src_00_3d_AnalogClock_07png
+//<      0x52,      0x52,      6174,    0x4ecc,        0.31> scui_image_prj_image_src_00_3d_AnalogClock_08png
+//<      0x6c,      0x6c,     11571,    0x88b0,        0.33> scui_image_prj_image_src_00_3d_AnalogClock_09png
+//<     0x120,     0x120,     91762,   0x3cc00,        0.37> scui_image_prj_image_src_00_3d_AnalogClock_1png
+//<      0x6c,      0x6c,     10846,    0x88b0,        0.31> scui_image_prj_image_src_00_3d_AnalogClock_10png
+//<      0x40,      0x40,      4624,    0x3000,        0.38> scui_image_prj_image_src_00_3d_AnalogClock_11png
+//<      0x3e,      0x3e,      4401,    0x2d0c,        0.38> scui_image_prj_image_src_00_3d_AnalogClock_12png
+//<      0x8c,      0x8c,      3515,    0xe5b0,        0.06> scui_image_prj_image_src_00_3d_AnalogClock_13png
+//<      0x8c,      0x8c,      1267,    0xe5b0,        0.02> scui_image_prj_image_src_00_3d_AnalogClock_14png
+//<       0x2,       0x2,        17,       0xc,        1.42> scui_image_prj_image_src_00_3d_AnalogClock_2png
+//<      0xa0,      0xa0,     32390,   0x12c00,        0.42> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_01png
+//<      0xa0,      0xa0,     36895,   0x12c00,        0.48> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_02png
+//<      0xa0,      0xa0,     38568,   0x12c00,        0.50> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_03png
+//<      0xa0,      0xa0,     38229,   0x12c00,        0.50> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_04png
+//<      0xa0,      0xa0,     36774,   0x12c00,        0.48> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_05png
+//<      0xa0,      0xa0,     35142,   0x12c00,        0.46> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_06png
+//<      0xa0,      0xa0,     34656,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_07png
+//<      0xa0,      0xa0,     33878,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_08png
+//<      0xa0,      0xa0,     34276,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_09png
+//<      0xa0,      0xa0,     33870,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_10png
+//<      0xa0,      0xa0,     33988,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_11png
+//<      0xa0,      0xa0,     34452,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_12png
+//<      0xa0,      0xa0,     34597,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_13png
+//<      0xa0,      0xa0,     35617,   0x12c00,        0.46> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_14png
+//<      0xa0,      0xa0,     34026,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_15png
+//<      0xa0,      0xa0,     31957,   0x12c00,        0.42> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_16png
+//<      0xa0,      0xa0,     37333,   0x12c00,        0.49> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_17png
+//<      0xa0,      0xa0,     37064,   0x12c00,        0.48> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_18png
+//<      0xa0,      0xa0,     37354,   0x12c00,        0.49> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_19png
+//<      0xa0,      0xa0,     35959,   0x12c00,        0.47> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_20png
+//<      0xa0,      0xa0,     34490,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_21png
+//<      0xa0,      0xa0,     33820,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_22png
+//<      0xa0,      0xa0,     33707,   0x12c00,        0.44> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_23png
+//<      0xa0,      0xa0,     34408,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_24png
+//<      0xa0,      0xa0,     34550,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_25png
+//<      0xa0,      0xa0,     34500,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_26png
+//<      0xa0,      0xa0,     34796,   0x12c00,        0.45> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_27png
+//<      0xa0,      0xa0,     35787,   0x12c00,        0.47> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_28png
+//<      0xa0,      0xa0,     36106,   0x12c00,        0.47> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_29png
+//<      0xa0,      0xa0,     36427,   0x12c00,        0.47> scui_image_prj_image_src_00_3d_AnalogClock_Tourbillon_30png
+//<       0xc,      0x40,       721,     0x900,        0.31> scui_image_prj_image_src_00_3d_Butterfly_Antennapng
+//<       0xc,      0x6a,      1950,     0xee8,        0.51> scui_image_prj_image_src_00_3d_Butterfly_BodyHalfpng
+//<      0x40,      0x40,      2036,    0x3000,        0.17> scui_image_prj_image_src_00_3d_Butterfly_dot0png
+//<      0x40,      0x40,      1156,    0x3000,        0.09> scui_image_prj_image_src_00_3d_Butterfly_dot1png
+//<      0x80,      0x60,     15404,    0x9000,        0.42> scui_image_prj_image_src_00_3d_Butterfly_SwingDown0png
+//<      0x80,      0x60,     15365,    0x9000,        0.42> scui_image_prj_image_src_00_3d_Butterfly_SwingDown1png
+//<      0x80,      0x60,     20419,    0x9000,        0.55> scui_image_prj_image_src_00_3d_Butterfly_SwingDown2png
+//<      0x80,      0x60,     15616,    0x9000,        0.42> scui_image_prj_image_src_00_3d_Butterfly_SwingDown3png
+//<      0x80,      0x60,     17035,    0x9000,        0.46> scui_image_prj_image_src_00_3d_Butterfly_SwingUp0png
+//<      0x80,      0x60,     17894,    0x9000,        0.49> scui_image_prj_image_src_00_3d_Butterfly_SwingUp1png
+//<      0x80,      0x60,     17479,    0x9000,        0.47> scui_image_prj_image_src_00_3d_Butterfly_SwingUp2png
+//<      0x80,      0x60,     22154,    0x9000,        0.60> scui_image_prj_image_src_00_3d_Butterfly_SwingUp3png
+//<      0x50,      0x50,      5303,    0x3200,        0.41> scui_image_prj_image_src_00_3d_Soccer_activitiesbmp
+//<      0x50,      0x50,      6180,    0x3200,        0.48> scui_image_prj_image_src_00_3d_Soccer_alarmbmp
+//<      0x80,      0x80,      3832,    0xc000,        0.08> scui_image_prj_image_src_00_3d_Soccer_backgroundpng
+//<      0x80,      0x80,     12547,    0xc000,        0.26> scui_image_prj_image_src_00_3d_Soccer_boardpng
+//<      0x50,      0x50,      5575,    0x3200,        0.44> scui_image_prj_image_src_00_3d_Soccer_breathebmp
+//<      0x50,      0x50,      5890,    0x3200,        0.46> scui_image_prj_image_src_00_3d_Soccer_callbmp
+//<      0x50,      0x50,      6001,    0x3200,        0.47> scui_image_prj_image_src_00_3d_Soccer_corecdbmp
+//<      0x50,      0x50,      6042,    0x3200,        0.47> scui_image_prj_image_src_00_3d_Soccer_heartratebmp
+//<      0x50,      0x50,      6251,    0x3200,        0.49> scui_image_prj_image_src_00_3d_Soccer_homebmp
+//<      0x50,      0x50,      6161,    0x3200,        0.48> scui_image_prj_image_src_00_3d_Soccer_measurebmp
+//<      0x50,      0x50,      6269,    0x3200,        0.49> scui_image_prj_image_src_00_3d_Soccer_moodbmp
+//<      0x50,      0x50,      5437,    0x3200,        0.42> scui_image_prj_image_src_00_3d_Soccer_morebmp
+//<      0x50,      0x50,      6074,    0x3200,        0.47> scui_image_prj_image_src_00_3d_Soccer_musicbmp
+//<      0x50,      0x50,      5647,    0x3200,        0.44> scui_image_prj_image_src_00_3d_Soccer_notificationbmp
+//<      0x50,      0x50,      6405,    0x3200,        0.50> scui_image_prj_image_src_00_3d_Soccer_periodbmp
+//<      0x50,      0x50,      6150,    0x3200,        0.48> scui_image_prj_image_src_00_3d_Soccer_settingsbmp
+//<      0x50,      0x50,      6120,    0x3200,        0.48> scui_image_prj_image_src_00_3d_Soccer_sleepbmp
+//<      0x50,      0x50,      6246,    0x3200,        0.49> scui_image_prj_image_src_00_3d_Soccer_spo2bmp
+//<      0x50,      0x50,      6460,    0x3200,        0.50> scui_image_prj_image_src_00_3d_Soccer_sportsbmp
+//<      0x40,      0x40,      2634,    0x3000,        0.21> scui_image_prj_image_src_00_3d_Soccer_starpng
+//<      0x50,      0x50,      6410,    0x3200,        0.50> scui_image_prj_image_src_00_3d_Soccer_stressbmp
+//<      0x50,      0x50,      6027,    0x3200,        0.47> scui_image_prj_image_src_00_3d_Soccer_voicebmp
+//<      0x50,      0x50,      6228,    0x3200,        0.49> scui_image_prj_image_src_00_3d_Soccer_weatherbmp
 //<     0x15e,      0x4f,      2289,   0x14406,        0.03> scui_image_prj_image_src_00_theme_01_onpng
 //<      0x4e,      0x4e,      1909,    0x2f88,        0.16> scui_image_prj_image_src_00_theme_02_ringbmp
 //<     0x15e,      0x50,      2444,   0x14820,        0.03> scui_image_prj_image_src_00_theme_03_underpng
@@ -6539,29 +6680,6 @@ extern const void * scui_image_combine_table[3293];
 //<      0x46,      0x2a,       418,    0x2274,        0.05> scui_image_prj_image_src_repeat_switch_05_offpng
 //<      0x46,      0x2a,       421,    0x2274,        0.05> scui_image_prj_image_src_repeat_switch_06_sleeppng
 //<      0x46,      0x2a,       423,    0x2274,        0.05> scui_image_prj_image_src_repeat_switch_07_sport_settingspng
-//<      0x50,      0x50,      5303,    0x3200,        0.41> scui_image_prj_image_src_Soccer_activitiesbmp
-//<      0x50,      0x50,      6180,    0x3200,        0.48> scui_image_prj_image_src_Soccer_alarmbmp
-//<      0x80,      0x80,      3832,    0xc000,        0.08> scui_image_prj_image_src_Soccer_backgroundpng
-//<      0x80,      0x80,     12547,    0xc000,        0.26> scui_image_prj_image_src_Soccer_boardpng
-//<      0x50,      0x50,      5575,    0x3200,        0.44> scui_image_prj_image_src_Soccer_breathebmp
-//<      0x50,      0x50,      5890,    0x3200,        0.46> scui_image_prj_image_src_Soccer_callbmp
-//<      0x50,      0x50,      6001,    0x3200,        0.47> scui_image_prj_image_src_Soccer_corecdbmp
-//<      0x50,      0x50,      6042,    0x3200,        0.47> scui_image_prj_image_src_Soccer_heartratebmp
-//<      0x50,      0x50,      6251,    0x3200,        0.49> scui_image_prj_image_src_Soccer_homebmp
-//<      0x50,      0x50,      6161,    0x3200,        0.48> scui_image_prj_image_src_Soccer_measurebmp
-//<      0x50,      0x50,      6269,    0x3200,        0.49> scui_image_prj_image_src_Soccer_moodbmp
-//<      0x50,      0x50,      5437,    0x3200,        0.42> scui_image_prj_image_src_Soccer_morebmp
-//<      0x50,      0x50,      6074,    0x3200,        0.47> scui_image_prj_image_src_Soccer_musicbmp
-//<      0x50,      0x50,      5647,    0x3200,        0.44> scui_image_prj_image_src_Soccer_notificationbmp
-//<      0x50,      0x50,      6405,    0x3200,        0.50> scui_image_prj_image_src_Soccer_periodbmp
-//<      0x50,      0x50,      6150,    0x3200,        0.48> scui_image_prj_image_src_Soccer_settingsbmp
-//<      0x50,      0x50,      6120,    0x3200,        0.48> scui_image_prj_image_src_Soccer_sleepbmp
-//<      0x50,      0x50,      6246,    0x3200,        0.49> scui_image_prj_image_src_Soccer_spo2bmp
-//<      0x50,      0x50,      6460,    0x3200,        0.50> scui_image_prj_image_src_Soccer_sportsbmp
-//<      0x40,      0x40,      2634,    0x3000,        0.21> scui_image_prj_image_src_Soccer_starpng
-//<      0x50,      0x50,      6410,    0x3200,        0.50> scui_image_prj_image_src_Soccer_stressbmp
-//<      0x50,      0x50,      6027,    0x3200,        0.47> scui_image_prj_image_src_Soccer_voicebmp
-//<      0x50,      0x50,      6228,    0x3200,        0.49> scui_image_prj_image_src_Soccer_weatherbmp
 //<      0x2e,      0x2e,      1598,    0x18cc,        0.25> scui_image_prj_image_src_standby_watch_D10597001_standby_watch_D10597001_dot_46x46_x210_y210png
 //<      0x1a,      0x1a,       521,     0x7ec,        0.26> scui_image_prj_image_src_standby_watch_D10598001_standby_watch_D10598001_dot_26x26_x220_y220png
 //<      0x16,      0x16,       397,     0x5ac,        0.27> scui_image_prj_image_src_standby_watch_D10599001_standby_watch_D10599001_dot_22x22_x222_y222png

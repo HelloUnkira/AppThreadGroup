@@ -23,7 +23,6 @@ void scui_window_switch_type_update(scui_window_switch_type_t type, scui_event_d
         scui_window_mgr.switch_args.dir  = scui_window_mgr.switch_args.cfg_dir;
         scui_window_mgr.switch_args.type = scui_window_mgr.switch_args.cfg_type;
     }
-    
 }
 
 /*@brief 窗口跳转动画回调
