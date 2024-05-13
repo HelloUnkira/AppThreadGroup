@@ -217,7 +217,8 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                 scui_image_t *image = scui_handle_get(scui_ui_res_local->image[idx]);
                 SCUI_ASSERT(image != NULL);
                 
-                scui_matrix_perspective_view_blit(&matrix[idx], image->pixel.width, image->pixel.height, &face3, &view3);
+                scui_size2_t size2 = {.w = image->pixel.width,.h = image->pixel.height,};
+                scui_matrix_perspective_view_blit(&matrix[idx], &size2, &face3, &view3);
             }
             
             /* 通过矩阵的y平移参数进行排序 */

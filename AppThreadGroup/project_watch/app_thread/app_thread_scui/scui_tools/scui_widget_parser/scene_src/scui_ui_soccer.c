@@ -292,12 +292,14 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 if (normal_z_bg[idx_j][idx_i] > 0.0f) {
                     /* 仿射变换矩阵 */
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], image_bg_w, image_bg_h, &face3_bg);
+                    scui_size2_t size2_bg = {.w = image_bg_w,.h = image_bg_h,};
+                    scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], &size2_bg, &face3_bg);
                     scui_matrix_inverse(&matrix_bg[idx_j][idx_i]);
                 }
                 if (normal_z_fg[idx_j][idx_i] > 0.0f) {
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], image_fg_w, image_fg_h, &face3_fg);
+                    scui_size2_t size2_fg = {.w = image_fg_w,.h = image_fg_h,};
+                    scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], &size2_fg, &face3_fg);
                     scui_matrix_inverse(&matrix_fg[idx_j][idx_i]);
                 }
             }

@@ -347,7 +347,8 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 scui_point3_offset_xy(&face.point3[idx_v], &offset);
             
             scui_matrix_t inv_matrix = {0};
-            scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
+            scui_size2_t size2 = {.w = src_surface->hor_res,.h = src_surface->ver_res,};
+            scui_matrix_affine_blit(&inv_matrix, &size2, &face);
             // scui_matrix_check(&inv_matrix);
             scui_matrix_inverse(&inv_matrix);
             dst_clip.x = 0;
@@ -432,7 +433,8 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_area3_offset_xy(&face, &(scui_point2_t){.x = x_res, .y = y_res,});
             
             scui_matrix_t inv_matrix = {0};
-            scui_matrix_affine_blit(&inv_matrix, src_surface->hor_res, src_surface->ver_res, &face);
+            scui_size2_t size2 = {.w = src_surface->hor_res,.h = src_surface->ver_res,};
+            scui_matrix_affine_blit(&inv_matrix, &size2, &face);
             // scui_matrix_check(&inv_matrix);
             scui_matrix_inverse(&inv_matrix);
             dst_clip.x = 0;

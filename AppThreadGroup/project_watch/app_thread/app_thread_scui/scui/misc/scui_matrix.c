@@ -468,18 +468,17 @@ void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t ax
 
 /*@brief 矩阵仿射(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  */
-void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face)
+void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face)
 {
     /* 仿射参考来源: From 6.5.2 of OpenVG1.1 Spec */
     
-    scui_coord3_t sx  = (face->point3[1].x - face->point3[0].x) / width;
-    scui_coord3_t sy  = (face->point3[3].y - face->point3[0].y) / height;
-    scui_coord3_t shx = (face->point3[3].x - face->point3[0].x) / height;
-    scui_coord3_t shy = (face->point3[1].y - face->point3[0].y) / width;
+    scui_coord3_t sx  = (face->point3[1].x - face->point3[0].x) / size->w;
+    scui_coord3_t sy  = (face->point3[3].y - face->point3[0].y) / size->h;
+    scui_coord3_t shx = (face->point3[3].x - face->point3[0].x) / size->h;
+    scui_coord3_t shy = (face->point3[1].y - face->point3[0].y) / size->w;
     scui_coord3_t tx  = (face->point3[0].x);
     scui_coord3_t ty  = (face->point3[0].y);
     
@@ -495,14 +494,13 @@ void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coo
 
 /*@brief 矩阵投影(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  *@retval 成功或失败
  */
-bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face)
+bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face)
 {
-    scui_face2_t face2_src = {.point2 = {{0,0},{width,0},{width,height},{0,height},}};
+    scui_face2_t face2_src = {.point2 = {{0,0},{size->w,0},{size->w,size->h},{0,size->h},}};
     scui_face2_t face2_dst = {.point2 = {
         {face->point3[0].x, face->point3[0].y,}, {face->point3[1].x, face->point3[1].y,},
         {face->point3[2].x, face->point3[2].y,}, {face->point3[3].x, face->point3[3].y,},
@@ -513,16 +511,15 @@ bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scu
 
 /*@brief 矩阵投影(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  *@param view   视点
  *@retval 成功或失败
  */
-bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face, scui_view3_t *view)
+bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face, scui_view3_t *view)
 {
     scui_face3_t face3_view = *face;
     scui_area3_perspective(&face3_view, view);
     
-    return scui_matrix_perspective_blit(matrix, width, height, &face3_view);
+    return scui_matrix_perspective_blit(matrix, size, &face3_view);
 }

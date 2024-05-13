@@ -12,6 +12,10 @@ typedef union {
         scui_coord3_t x;
         scui_coord3_t y;
     };
+    struct {
+        scui_coord3_t w;
+        scui_coord3_t h;
+    };
     scui_coord3_t meta[2];
 } scui_point2_t;
 
@@ -46,6 +50,7 @@ typedef struct {
     scui_coord3_t meta[3][3];
 } scui_matrix_t;
 
+typedef scui_point2_t scui_size2_t;     // 尺寸
 typedef scui_point3_t scui_axis3_t;     // 轴
 typedef scui_point3_t scui_view3_t;     // 视点
 typedef scui_point3_t scui_normal3_t;   // 法线

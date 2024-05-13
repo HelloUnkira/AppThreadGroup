@@ -69,29 +69,26 @@ void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t ax
 
 /*@brief 矩阵仿射(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  */
-void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face);
+void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face);
 
 /*@brief 矩阵投影(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  *@retval 成功或失败
  */
-bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face);
+bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face);
 
 /*@brief 矩阵投影(blit)
  *@param matrix 矩阵实例
- *@param width  宽(src)
- *@param height 高(src)
+ *@param size   尺寸(src)
  *@param face   面(dst)
  *@param view   视点
  *@retval 成功或失败
  */
-bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_coord_t width, scui_coord_t height, scui_face3_t *face, scui_view3_t *view);
+bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face, scui_view3_t *view);
 
 #endif
