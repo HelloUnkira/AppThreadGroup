@@ -47,7 +47,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY           ${CMAKE_CURRENT_SOURCE_DIR}/app_!cm
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 
-
+# 注意:  
+# 依赖资源文件:  
+# app_main/app_source  
+# 程序打包到依赖资源文件中的文件:  
+# app_thread/app_thread_lvgl/app_lv_res/lvgl_font  
+# app_thread/app_thread_lvgl/app_lv_res/lvgl_pic  
+# 上面的资源文件与可执行文件应该在同一文件夹下面  
 
 # 文件迁移到调试
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_main/app_source/*")
@@ -57,15 +63,8 @@ file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/proj
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_pic/*")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_pic)
 # 文件迁移到调试
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_tools/scui_image_combine/image_out/scui_image_combine.mem"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_tools/scui_image_combine/image_out/scui_image_combine.raw"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_tools/scui_image_combine/image_out/scui_image_combine.bin")
+file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/font_out/*"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.mem"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.raw"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.bin")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
-
-# 注意:  
-# 依赖资源文件:  
-# app_main/app_source  
-# 程序打包到依赖资源文件中的文件:  
-# app_thread/app_thread_lvgl/app_lv_res/lvgl_font  
-# app_thread/app_thread_lvgl/app_lv_res/lvgl_pic  
-# 上面的资源文件与可执行文件应该在同一文件夹下面  

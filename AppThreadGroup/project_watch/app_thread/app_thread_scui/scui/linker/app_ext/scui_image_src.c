@@ -8,7 +8,7 @@
 #include "scui.h"
 
 /* 图片资源在代码空间中,一般调试使用 */
-#define SCUI_IMAGE_COMBINE_USE_ROM      1
+#define SCUI_IMAGE_PARSER_USE_ROM      1
 
 /*@brief 图片资源卸载
  *@param image_unit 图片资源缓存节点
@@ -28,10 +28,10 @@ void scui_image_src_load(scui_image_unit_t *image_unit)
     image_unit->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
     // 使用image_uint->image生成==>image_unit->data
     
-    #if SCUI_IMAGE_COMBINE_USE_ROM
+    #if SCUI_IMAGE_PARSER_USE_ROM
     
     size_t retval = -1;
-    FILE *file = fopen("scui_image_combine.mem", "rb+");
+    FILE *file = fopen("scui_image_parser.mem", "rb+");
     fseek(file, image_unit->image->pixel.data_mem, SEEK_SET);
     retval = fread(image_unit->data, image_unit->image->pixel.size_mem, 1, file);
     fclose(file);
