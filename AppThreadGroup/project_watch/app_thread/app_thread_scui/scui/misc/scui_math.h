@@ -84,4 +84,15 @@ int64_t scui_pow(int64_t x, int8_t e);
  */
 int64_t scui_rand(int64_t min, int64_t max);
 
+/*@brief 有序序列二分搜索
+ *@param arr  元素数组
+ *@param len  元素个数
+ *@param size 元素大小
+ *@param key  关键字
+ *@param cmp  比较语义回调(似memcmp语义)
+ *@retval 返回目标或空
+ */
+void * scui_binary_search(void *arr, uint32_t len, uint32_t size, void *key,
+                          int8_t (*cmp)(void *key, void *tar));
+
 #endif

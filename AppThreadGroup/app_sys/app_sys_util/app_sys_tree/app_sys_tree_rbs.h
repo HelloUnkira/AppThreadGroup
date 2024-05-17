@@ -90,40 +90,40 @@ app_sys_tree_rbsn_t * app_sys_tree_rbst_search_min(app_sys_tree_rbst_t *tree);
 app_sys_tree_rbsn_t * app_sys_tree_rbst_search_max(app_sys_tree_rbst_t *tree);
 
 /*@brief 迭代函数(最小节点)
- *           连续使用prev或next前需要使用min或max重置迭代栈
+ *       连续使用prev或next前需要使用min或max重置迭代栈
  *@param tree 红黑树实例
  *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_min(app_sys_tree_rbst_t *tree);
 
 /*@brief 迭代函数(最大节点)
- *           连续使用prev或next前需要使用min或max重置迭代栈
+ *       连续使用prev或next前需要使用min或max重置迭代栈
  *@param tree 红黑树实例
  *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_max(app_sys_tree_rbst_t *tree);
 
 /*@brief 迭代函数(前驱节点)
- *           连续使用它前需要迭代到min或max
+ *       连续使用它前需要迭代到min或max
  *@param tree 红黑树实例
  *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_prev(app_sys_tree_rbst_t *tree);
 
 /*@brief 迭代函数(后继节点)
- *           连续使用它前需要迭代到min或max
+ *       连续使用它前需要迭代到min或max
  *@param tree 红黑树实例
  *@retval 红黑节点实例
  */
 app_sys_tree_rbn_t * app_sys_tree_rbst_iter_next(app_sys_tree_rbst_t *tree);
 
 /*@brief 迭代函数(终止迭代)
- *           不使用迭代函数时使用该函数回收内部资源
+ *       不使用迭代函数时使用该函数回收内部资源
  *@param tree 红黑树实例
  *@param used 为true时检查迭代器是否还存在
-                  为false时终止迭代
- *@retval used 为true时返回迭代器状态
- *                为false时返回false以用于迭代退出
+              为false时终止迭代
+ *@retval 为true时返回迭代器状态
+ *        为false时返回false以用于迭代退出
  */
 bool app_sys_tree_rbst_iter_used(app_sys_tree_rbst_t *tree, bool used);
 
