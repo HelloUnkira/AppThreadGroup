@@ -58,7 +58,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_
     widget->child_list = NULL;
     if (widget->child_num != 0) {
         uint32_t child_list_size = widget->child_num * sizeof(scui_handle_t);
-        widget->child_list = SCUI_MEM_ALLOC(scui_mem_type_def, child_list_size);
+        widget->child_list = SCUI_MEM_ALLOC(scui_mem_type_none, child_list_size);
         for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
             widget->child_list[idx] = SCUI_HANDLE_INVALID;
     }

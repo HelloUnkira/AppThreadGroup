@@ -143,7 +143,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
         scui_anima_list.list[idx] = scui_handle_find();
-        anima = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_anima_t));
+        anima = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_anima_t));
         scui_handle_set(scui_anima_list.list[idx], anima);
        *handle = scui_anima_list.list[idx];
        *anima = *item;

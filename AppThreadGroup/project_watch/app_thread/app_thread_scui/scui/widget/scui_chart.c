@@ -18,7 +18,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建图表控件实例 */
-    scui_chart_t *chart = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_chart_t));
+    scui_chart_t *chart = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_chart_t));
     memset(chart, 0, sizeof(scui_chart_t));
     
     /* 创建基础控件实例 */

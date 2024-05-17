@@ -8,18 +8,18 @@
 #include "scui.h"
 
 #if SCUI_MEM_RECORD_CHECK
-static scui_mem_record_item_t scui_mem_record_def[  SCUI_MEM_RECORD_ITEM_DEF]   = {0};
-static scui_mem_record_item_t scui_mem_record_text[ SCUI_MEM_RECORD_ITEM_TEXT]  = {0};
+static scui_mem_record_item_t scui_mem_record_none[ SCUI_MEM_RECORD_ITEM_NONE]  = {0};
+static scui_mem_record_item_t scui_mem_record_font[ SCUI_MEM_RECORD_ITEM_FONT]  = {0};
 static scui_mem_record_item_t scui_mem_record_graph[SCUI_MEM_RECORD_ITEM_GRAPH] = {0};
 
 static scui_mem_record_item_t * const scui_mem_record_list[] = {
-    scui_mem_record_def,
-    scui_mem_record_text,
+    scui_mem_record_none,
+    scui_mem_record_font,
     scui_mem_record_graph,
 };
 static uint32_t const scui_mem_record_list_num[] = {
-    SCUI_MEM_RECORD_ITEM_DEF,
-    SCUI_MEM_RECORD_ITEM_TEXT,
+    SCUI_MEM_RECORD_ITEM_NONE,
+    SCUI_MEM_RECORD_ITEM_FONT,
     SCUI_MEM_RECORD_ITEM_GRAPH,
 };
 

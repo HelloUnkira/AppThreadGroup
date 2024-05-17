@@ -18,7 +18,7 @@ void scui_ring_create(scui_ring_maker_t *maker, scui_handle_t *handle, bool layo
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建圆环控件实例 */
-    scui_ring_t *ring = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_ring_t));
+    scui_ring_t *ring = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_ring_t));
     memset(ring, 0, sizeof(scui_ring_t));
     
     /* 创建基础控件实例 */

@@ -18,7 +18,7 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建自定义控件实例 */
-    scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_def, sizeof(scui_scroll_t));
+    scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_scroll_t));
     memset(scroll, 0, sizeof(scui_scroll_t));
     
     /* 滚动控件必须设置事件响应标记 */
