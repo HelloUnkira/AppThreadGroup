@@ -8,47 +8,67 @@
 #include "scui.h"
 
 #if SCUI_MEM_RECORD_CHECK
-static scui_mem_record_item_t scui_mem_record_none[ SCUI_MEM_RECORD_ITEM_NONE]  = {0};
-static scui_mem_record_item_t scui_mem_record_font[ SCUI_MEM_RECORD_ITEM_FONT]  = {0};
-static scui_mem_record_item_t scui_mem_record_graph[SCUI_MEM_RECORD_ITEM_GRAPH] = {0};
 
-static scui_mem_record_item_t * const scui_mem_record_list[] = {
-    scui_mem_record_none,
-    scui_mem_record_font,
-    scui_mem_record_graph,
-};
-static uint32_t const scui_mem_record_list_num[] = {
-    SCUI_MEM_RECORD_ITEM_NONE,
-    SCUI_MEM_RECORD_ITEM_FONT,
-    SCUI_MEM_RECORD_ITEM_GRAPH,
+#if SCUI_MEM_RECORD_CHECK_NONE
+static scui_mem_record_item_t scui_mem_record_none[ SCUI_MEM_RECORD_ITEM_NONE]  = {0};
+#endif
+#if SCUI_MEM_RECORD_CHECK_FONT
+static scui_mem_record_item_t scui_mem_record_font[ SCUI_MEM_RECORD_ITEM_FONT]  = {0};
+#endif
+#if SCUI_MEM_RECORD_CHECK_GRAPH
+static scui_mem_record_item_t scui_mem_record_graph[SCUI_MEM_RECORD_ITEM_GRAPH] = {0};
+#endif
+
+static struct {
+    scui_mem_record_item_t *item;
+    scui_mem_type_t         type;
+    uint32_t                num;
+    bool                    update;
+} scui_mem_record[] = {
+    #if SCUI_MEM_RECORD_CHECK_NONE
+    {scui_mem_record_none,  scui_mem_type_none,  SCUI_MEM_RECORD_ITEM_NONE,  false,},
+    #endif
+    #if SCUI_MEM_RECORD_CHECK_FONT
+    {scui_mem_record_font,  scui_mem_type_font,  SCUI_MEM_RECORD_ITEM_NONE,  false,},
+    #endif
+    #if SCUI_MEM_RECORD_CHECK_GRAPH
+    {scui_mem_record_graph, scui_mem_type_graph, SCUI_MEM_RECORD_ITEM_GRAPH, false,},
+    #endif
 };
 
 /*@brief 内存记录
  */
 static bool scui_mem_record_item_add(scui_mem_record_item_t item)
 {
-    for (uint32_t idx = 0; idx < scui_mem_record_list_num[item.type]; idx++)
-        if (scui_mem_record_list[item.type][idx].ptr == NULL) {
-            scui_mem_record_list[item.type][idx] = item;
-            return true;
-        }
-    return false;
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++) {
+        if (scui_mem_record[idx0].type != item.type)
+            continue;
+        for (uint32_t idx1 = 0; idx1 < scui_mem_record[idx0].num; idx1++)
+            if (scui_mem_record[idx0].item[idx1].ptr == NULL) {
+                scui_mem_record[idx0].item[idx1] = item;
+                scui_mem_record[idx0].update = true;
+                return true;
+            }
+        return false;
+    }
+    return true;
 }
 
 /*@brief 内存记录
  */
 static bool scui_mem_record_item_del(scui_mem_record_item_t item)
 {
-    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++)
-    for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++)
-        if (scui_mem_record_list[idx0][idx1].ptr == item.ptr) {
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++)
+    for (uint32_t idx1 = 0; idx1 < scui_mem_record[idx0].num; idx1++)
+        if (scui_mem_record[idx0].item[idx1].ptr == item.ptr) {
+            scui_mem_record[idx0].update = true;
             /* 整理:让后面的向前移动一个位置,最后一个位置填充空位 */
-            for (idx1 = idx1; idx1 + 1 < scui_mem_record_list_num[idx0]; idx1++) {
-                scui_mem_record_list[idx0][idx1] = scui_mem_record_list[idx0][idx1 + 1];
-                if (scui_mem_record_list[idx0][idx1 + 1].ptr == NULL)
+            for (idx1 = idx1; idx1 + 1 < scui_mem_record[idx0].num; idx1++) {
+                scui_mem_record[idx0].item[idx1] = scui_mem_record[idx0].item[idx1 + 1];
+                if (scui_mem_record[idx0].item[idx1 + 1].ptr == NULL)
                     return true;
             }
-            scui_mem_record_list[idx0][idx1] = (scui_mem_record_item_t){0};
+            scui_mem_record[idx0].item[idx1 + 1] = (scui_mem_record_item_t){0};
             return true;
         }
     return false;
@@ -58,19 +78,28 @@ static bool scui_mem_record_item_del(scui_mem_record_item_t item)
  */
 void scui_mem_record_analysis(void)
 {
-    SCUI_LOG_INFO("scui mem record:");
-    SCUI_LOG_INFO("<file,func,line,type,ptr,size>:");
-    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++)
-    for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++) {
-        if (scui_mem_record_list[idx0][idx1].ptr == NULL)
-            continue;
-        SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
-             scui_mem_record_list[idx0][idx1].file,
-             scui_mem_record_list[idx0][idx1].func,
-             scui_mem_record_list[idx0][idx1].line,
-             scui_mem_record_list[idx0][idx1].type,
-             scui_mem_record_list[idx0][idx1].ptr,
-             scui_mem_record_list[idx0][idx1].size);
+    bool update = false;
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++)
+         update = update || scui_mem_record[idx0].update;
+    if (!update)
+         return;
+    
+    SCUI_LOG_INFO("scui mem record: --- <file,func,line,type,ptr,size>:");
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++) {
+        if (!scui_mem_record[idx0].update)
+             continue;
+             scui_mem_record[idx0].update = false;
+        for (uint32_t idx1 = 0; idx1 < scui_mem_record[idx0].num; idx1++) {
+            if (scui_mem_record[idx0].item[idx1].ptr == NULL)
+                continue;
+            SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
+                 scui_mem_record[idx0].item[idx1].file,
+                 scui_mem_record[idx0].item[idx1].func,
+                 scui_mem_record[idx0].item[idx1].line,
+                 scui_mem_record[idx0].item[idx1].type,
+                 scui_mem_record[idx0].item[idx1].ptr,
+                 scui_mem_record[idx0].item[idx1].size);
+        }
     }
 }
 
@@ -78,17 +107,44 @@ void scui_mem_record_analysis(void)
  */
 void scui_mem_record_statistic(void)
 {
+    bool update = false;
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++)
+         update = update || scui_mem_record[idx0].update;
+    if (!update)
+         return;
+    
     SCUI_LOG_INFO("scui mem record:");
-    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record_list); idx0++) {
+    for (uint32_t idx0 = 0; idx0 < scui_arr_len(scui_mem_record); idx0++) {
+        if (!scui_mem_record[idx0].update)
+             continue;
+             scui_mem_record[idx0].update = false;
         
         uint32_t size = 0;
+        for (uint32_t idx1 = 0; idx1 < scui_mem_record[idx0].num; idx1++)
+               if (scui_mem_record[idx0].item[idx1].ptr != NULL)
+                   size += scui_mem_record[idx0].item[idx1].size;
         
-        for (uint32_t idx1 = 0; idx1 < scui_mem_record_list_num[idx0]; idx1++)
-           if (scui_mem_record_list[idx0][idx1].ptr != NULL)
-               size += scui_mem_record_list[idx0][idx1].size;
-        
-        SCUI_LOG_INFO("<type:%d, total size:%u>", idx0, size);
+        SCUI_LOG_INFO("<type:%d, total size:%u>", scui_mem_record[idx0].type, size);
     }
+}
+
+/*@brief 文件名去除路径
+ *@param file 带路径的文件名称
+ *@retval 去除路径后的文件名
+ */
+static const char * scui_mem_record_file_remove_path(const char *file)
+{
+    /* 文件名跳过路径,不需要使用时屏蔽即可 */
+    /* 这里可以让编译器自优化 */
+    int32_t separator = 0;
+    int32_t file_len  = strlen(file);
+    for (separator = file_len - 1; separator >= 0; separator--)
+        if (file[separator] == '/' || file[separator] == '\\') {
+            if (separator < file_len)
+                file += separator + 1;
+            break;
+        }
+    return file;
 }
 
 #endif
@@ -115,6 +171,8 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     #endif
     
     #if SCUI_MEM_RECORD_CHECK
+    file = scui_mem_record_file_remove_path(file);
+    
     if (ptr == NULL)
         scui_mem_record_statistic();
     else
@@ -147,8 +205,8 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     #endif
     
     #if SCUI_MEM_RECORD_CHECK
-    if (!scui_mem_record_item_del((scui_mem_record_item_t){.ptr = ptr,}))
-         SCUI_LOG_WARN("record queue is not find, maybe discard");
+    if (!scui_mem_record_item_del((scui_mem_record_item_t){.ptr = ptr,}));
+        // SCUI_LOG_WARN("record queue is not find, maybe discard");
     #endif
 }
 

@@ -88,5 +88,10 @@ void scui_ready(void)
     scui_window_active(handle);
     // scui_widget_hide(handle, false);
     
+    /* 加载默认字库 */
+    scui_handle_t font_handle = SCUI_HANDLE_INVALID;
+    scui_font_load("font_en_24.bin", &font_handle);
+    // scui_font_free(font_handle);
+    
     scui_engine_execute_status_set(true);
 }

@@ -2,10 +2,14 @@
 #define SCUI_MEM_H
 
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_CHECK       (0)
-#define SCUI_MEM_RECORD_ITEM_NONE   (128)
-#define SCUI_MEM_RECORD_ITEM_FONT   (256)
-#define SCUI_MEM_RECORD_ITEM_GRAPH  (64)
+#define SCUI_MEM_RECORD_CHECK           (1)
+#define SCUI_MEM_RECORD_CHECK_NONE      (0)
+#define SCUI_MEM_RECORD_CHECK_FONT      (1)
+#define SCUI_MEM_RECORD_CHECK_GRAPH     (1)
+/* 内存使用记录监控: */
+#define SCUI_MEM_RECORD_ITEM_NONE       (128)
+#define SCUI_MEM_RECORD_ITEM_FONT       (256)
+#define SCUI_MEM_RECORD_ITEM_GRAPH      (64)
 
 /* 内存分配类型:
  * 1.默认类型
@@ -23,7 +27,7 @@ typedef enum {
     scui_mem_type_none = 0,
     scui_mem_type_font,
     scui_mem_type_graph,
-    scui_mem_num,
+    scui_mem_type_num,
 } scui_mem_type_t;
 
 /* 宏转接,外部使用接口 */

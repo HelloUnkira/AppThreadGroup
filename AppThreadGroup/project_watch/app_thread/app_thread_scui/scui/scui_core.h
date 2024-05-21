@@ -35,6 +35,8 @@
 #include "scui_indev_key.h"     /* 输入设备:key */
 #include "scui_tick.h"          /* 滴答器 */
 #include "scui_disp.h"          /* 显示器 */
+/* font */
+#include "scui_font.h"
 /* widget: */
 #include "scui_widget.h"
 #include "scui_widget_event.h"
@@ -60,5 +62,6 @@
 /* linker: */
 #include "scui_mem.h"
 #include "scui_image_src.h"     /* 图像资源加载卸载 */
+#include "scui_font_src.h"      /* 字体资源获取 */
 
 #endif
