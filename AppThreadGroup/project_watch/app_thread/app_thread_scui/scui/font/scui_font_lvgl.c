@@ -9,12 +9,6 @@
 
 #if 1 // bin field
 
-typedef struct {
-    char *name;
-    int8_t bit_pos;
-    uint8_t byte_value;
-} bit_iterator_t;
-
 #pragma pack(push, 1)
 typedef struct font_header_bin {
     uint32_t version;
@@ -284,49 +278,454 @@ typedef struct _lv_font_t {
     font_header_bin_t bin_head;
     uintptr_t bin_glyph_offset;
     uint32_t  loca_count;
-    uint32_t *glyph_offset;
-    
+    // uint32_t *glyph_offset;
+
+    /* font fs扩展字段 */
+    scui_font_src_t font_src;
 
 } lv_font_t;
 
-#if 0   // iter
+#if 1   // iter
 
-static bit_iterator_t init_bit_iterator(lv_fs_file_t * fp)
+typedef struct {
+    lv_font_t *font;
+    uintptr_t  ofs;
+    
+    int8_t bit_pos;
+    uint8_t byte_value;
+} bit_iterator_t;
+
+static bit_iterator_t init_bit_iterator(lv_font_t *font, uintptr_t ofs)
 {
     bit_iterator_t it;
-    it.fp = fp;
+    
+    it.font = font;
+    
     it.bit_pos = -1;
     it.byte_value = 0;
     return it;
 }
 
-static unsigned int read_bits(bit_iterator_t * it, int n_bits, lv_fs_res_t * res)
+static unsigned int read_bits(bit_iterator_t * it, int n_bits)
 {
     unsigned int value = 0;
-    while(n_bits--) {
+    while (n_bits--) {
         it->byte_value = it->byte_value << 1;
         it->bit_pos--;
-
-        if(it->bit_pos < 0) {
+        
+        if (it->bit_pos < 0) {
             it->bit_pos = 7;
-            *res = lv_fs_read(it->fp, &(it->byte_value), 1, NULL);
-            if(*res != LV_FS_RES_OK) {
-                return 0;
-            }
+            scui_font_src_read(&it->font->font_src, &it->byte_value, 1);
         }
         int8_t bit = (it->byte_value & 0x80) ? 1 : 0;
-
+        
         value |= (bit << n_bits);
     }
-    *res = LV_FS_RES_OK;
     return value;
 }
 
-static int read_bits_signed(bit_iterator_t * it, int n_bits, lv_fs_res_t * res)
+static int read_bits_signed(bit_iterator_t * it, int n_bits)
 {
-    unsigned int value = read_bits(it, n_bits, res);
-    if(value & (1 << (n_bits - 1))) {
+    unsigned int value = read_bits(it, n_bits);
+    
+    if (value & (1 << (n_bits - 1)))
         value |= ~0u << n_bits;
+    
+    return value;
+}
+
+#endif
+
+#if 1   // bsearch compare cb
+
+static int32_t unicode_list_compare(const void * ref, const void * element)
+{
+    return ((int32_t)(*(uint16_t *)ref)) - ((int32_t)(*(uint16_t *)element));
+}
+
+static int32_t kern_pair_8_compare(const void * ref, const void * element)
+{
+    const uint8_t * ref8_p = ref;
+    const uint8_t * element8_p = element;
+
+    /*If the MSB is different it will matter. If not return the diff. of the LSB*/
+    if(ref8_p[0] != element8_p[0]) return (int32_t)ref8_p[0] - element8_p[0];
+    else return (int32_t) ref8_p[1] - element8_p[1];
+
+}
+
+static int32_t kern_pair_16_compare(const void * ref, const void * element)
+{
+    const uint16_t * ref16_p = ref;
+    const uint16_t * element16_p = element;
+
+    /*If the MSB is different it will matter. If not return the diff. of the LSB*/
+    if(ref16_p[0] != element16_p[0]) return (int32_t)ref16_p[0] - element16_p[0];
+    else return (int32_t) ref16_p[1] - element16_p[1];
+}
+
+#endif
+
+#if LV_USE_FONT_COMPRESSED
+
+typedef enum
+{
+    RLE_STATE_SINGLE = 0,
+    RLE_STATE_REPEATE,
+    RLE_STATE_COUNTER,
+} rle_state_t;
+
+static uint32_t rle_rdp;
+static const uint8_t * rle_in;
+static uint8_t rle_bpp;
+static uint8_t rle_prev_v;
+static uint8_t rle_cnt;
+static rle_state_t rle_state;
+
+/**
+ * The compress a glyph's bitmap
+ * @param in the compressed bitmap
+ * @param out buffer to store the result
+ * @param px_num number of pixels in the glyph (width * height)
+ * @param bpp bit per pixel (bpp = 3 will be converted to bpp = 4)
+ * @param prefilter true: the lines are XORed
+ */
+static void decompress(const uint8_t * in, uint8_t * out, scui_coord_t w, scui_coord_t h, uint8_t bpp, bool prefilter)
+{
+    uint32_t wrp = 0;
+    uint8_t wr_size = bpp;
+    if(bpp == 3) wr_size = 4;
+
+    rle_init(in, bpp);
+
+    uint8_t * line_buf1 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+    uint8_t * line_buf2 = NULL;
+
+    if(prefilter) {
+        line_buf2 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+    }
+
+    decompress_line(line_buf1, w);
+
+    scui_coord_t y;
+    scui_coord_t x;
+
+    for(x = 0; x < w; x++) {
+        bits_write(out, wrp, line_buf1[x], bpp);
+        wrp += wr_size;
+    }
+
+    for(y = 1; y < h; y++) {
+        if(prefilter) {
+            decompress_line(line_buf2, w);
+
+            for(x = 0; x < w; x++) {
+                line_buf1[x] = line_buf2[x] ^ line_buf1[x];
+                bits_write(out, wrp, line_buf1[x], bpp);
+                wrp += wr_size;
+            }
+        }
+        else {
+            decompress_line(line_buf1, w);
+
+            for(x = 0; x < w; x++) {
+                bits_write(out, wrp, line_buf1[x], bpp);
+                wrp += wr_size;
+            }
+        }
+    }
+
+    SCUI_MEM_FREE(line_buf1);
+    SCUI_MEM_FREE(line_buf2);
+}
+
+/**
+ * Decompress one line. Store one pixel per byte
+ * @param out output buffer
+ * @param w width of the line in pixel count
+ */
+static inline void decompress_line(uint8_t * out, scui_coord_t w)
+{
+    scui_coord_t i;
+    for(i = 0; i < w; i++) {
+        out[i] = rle_next();
+    }
+}
+
+/**
+ * Read bits from an input buffer. The read can cross byte boundary.
+ * @param in the input buffer to read from.
+ * @param bit_pos index of the first bit to read.
+ * @param len number of bits to read (must be <= 8).
+ * @return the read bits
+ */
+static inline uint8_t get_bits(const uint8_t * in, uint32_t bit_pos, uint8_t len)
+{
+    uint8_t bit_mask;
+    switch(len) {
+        case 1:
+            bit_mask = 0x1;
+            break;
+        case 2:
+            bit_mask = 0x3;
+            break;
+        case 3:
+            bit_mask = 0x7;
+            break;
+        case 4:
+            bit_mask = 0xF;
+            break;
+        case 8:
+            bit_mask = 0xFF;
+            break;
+        default:
+            bit_mask = (uint16_t)((uint16_t) 1 << len) - 1;
+    }
+
+    uint32_t byte_pos = bit_pos >> 3;
+    bit_pos = bit_pos & 0x7;
+
+    if(bit_pos + len >= 8) {
+        uint16_t in16 = (in[byte_pos] << 8) + in[byte_pos + 1];
+        return (in16 >> (16 - bit_pos - len)) & bit_mask;
+    }
+    else {
+        return (in[byte_pos] >> (8 - bit_pos - len)) & bit_mask;
+    }
+}
+
+/**
+ * Write `val` data to `bit_pos` position of `out`. The write can NOT cross byte boundary.
+ * @param out buffer where to write
+ * @param bit_pos bit index to write
+ * @param val value to write
+ * @param len length of bits to write from `val`. (Counted from the LSB).
+ * @note `len == 3` will be converted to `len = 4` and `val` will be upscaled too
+ */
+static inline void bits_write(uint8_t * out, uint32_t bit_pos, uint8_t val, uint8_t len)
+{
+    if(len == 3) {
+        len = 4;
+        switch(val) {
+            case 0:
+                val = 0;
+                break;
+            case 1:
+                val = 2;
+                break;
+            case 2:
+                val = 4;
+                break;
+            case 3:
+                val = 6;
+                break;
+            case 4:
+                val = 9;
+                break;
+            case 5:
+                val = 11;
+                break;
+            case 6:
+                val = 13;
+                break;
+            case 7:
+                val = 15;
+                break;
+        }
+    }
+
+    uint16_t byte_pos = bit_pos >> 3;
+    bit_pos = bit_pos & 0x7;
+    bit_pos = 8 - bit_pos - len;
+
+    uint8_t bit_mask = (uint16_t)((uint16_t) 1 << len) - 1;
+    out[byte_pos] &= ((~bit_mask) << bit_pos);
+    out[byte_pos] |= (val << bit_pos);
+}
+
+static inline void rle_init(const uint8_t * in,  uint8_t bpp)
+{
+    rle_in = in;
+    rle_bpp = bpp;
+    rle_state = RLE_STATE_SINGLE;
+    rle_rdp = 0;
+    rle_prev_v = 0;
+    rle_cnt = 0;
+}
+
+static inline uint8_t rle_next(void)
+{
+    uint8_t v = 0;
+    uint8_t ret = 0;
+
+    if(rle_state == RLE_STATE_SINGLE) {
+        ret = get_bits(rle_in, rle_rdp, rle_bpp);
+        if(rle_rdp != 0 && rle_prev_v == ret) {
+            rle_cnt = 0;
+            rle_state = RLE_STATE_REPEATE;
+        }
+
+        rle_prev_v = ret;
+        rle_rdp += rle_bpp;
+    }
+    else if(rle_state == RLE_STATE_REPEATE) {
+        v = get_bits(rle_in, rle_rdp, 1);
+        rle_cnt++;
+        rle_rdp += 1;
+        if(v == 1) {
+            ret = rle_prev_v;
+            if(rle_cnt == 11) {
+                rle_cnt = get_bits(rle_in, rle_rdp, 6);
+                rle_rdp += 6;
+                if(rle_cnt != 0) {
+                    rle_state = RLE_STATE_COUNTER;
+                }
+                else {
+                    ret = get_bits(rle_in, rle_rdp, rle_bpp);
+                    rle_prev_v = ret;
+                    rle_rdp += rle_bpp;
+                    rle_state = RLE_STATE_SINGLE;
+                }
+            }
+        }
+        else {
+            ret = get_bits(rle_in, rle_rdp, rle_bpp);
+            rle_prev_v = ret;
+            rle_rdp += rle_bpp;
+            rle_state = RLE_STATE_SINGLE;
+        }
+
+    }
+    else if(rle_state == RLE_STATE_COUNTER) {
+        ret = rle_prev_v;
+        rle_cnt--;
+        if(rle_cnt == 0) {
+            ret = get_bits(rle_in, rle_rdp, rle_bpp);
+            rle_prev_v = ret;
+            rle_rdp += rle_bpp;
+            rle_state = RLE_STATE_SINGLE;
+        }
+    }
+
+    return ret;
+}
+
+#endif
+
+#if 1
+
+static uint32_t get_glyph_dsc_id(const lv_font_t *font, uint32_t letter)
+{
+    if(letter == '\0') return 0;
+
+    lv_font_fmt_txt_dsc_t * fdsc = (lv_font_fmt_txt_dsc_t *)font->dsc;
+
+    /*Check the cache first*/
+    if(fdsc->cache && letter == fdsc->cache->last_letter) return fdsc->cache->last_glyph_id;
+
+    uint16_t i;
+    for(i = 0; i < fdsc->cmap_num; i++) {
+
+        /*Relative code point*/
+        uint32_t rcp = letter - fdsc->cmaps[i].range_start;
+        if(rcp > fdsc->cmaps[i].range_length) continue;
+        uint32_t glyph_id = 0;
+        if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_FORMAT0_TINY) {
+            glyph_id = fdsc->cmaps[i].glyph_id_start + rcp;
+        }
+        else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL) {
+            const uint8_t * gid_ofs_8 = fdsc->cmaps[i].glyph_id_ofs_list;
+            glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_8[rcp];
+        }
+        else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_TINY) {
+            uint16_t key = rcp;
+            uint16_t * p = scui_binary_search(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
+
+            if(p) {
+                uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
+                glyph_id = fdsc->cmaps[i].glyph_id_start + ofs;
+            }
+        }
+        else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
+            uint16_t key = rcp;
+            uint16_t * p = scui_binary_search(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
+
+            if(p) {
+                uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
+                const uint16_t * gid_ofs_16 = fdsc->cmaps[i].glyph_id_ofs_list;
+                glyph_id = fdsc->cmaps[i].glyph_id_start + gid_ofs_16[ofs];
+            }
+        }
+
+        /*Update the cache*/
+        if(fdsc->cache) {
+            fdsc->cache->last_letter = letter;
+            fdsc->cache->last_glyph_id = glyph_id;
+        }
+        return glyph_id;
+    }
+
+    if(fdsc->cache) {
+        fdsc->cache->last_letter = letter;
+        fdsc->cache->last_glyph_id = 0;
+    }
+    return 0;
+}
+
+static int8_t get_kern_value(const lv_font_t *font, uint32_t gid_left, uint32_t gid_right)
+{
+    lv_font_fmt_txt_dsc_t * fdsc = (lv_font_fmt_txt_dsc_t *)font->dsc;
+
+    int8_t value = 0;
+
+    if(fdsc->kern_classes == 0) {
+        /*Kern pairs*/
+        const lv_font_fmt_txt_kern_pair_t * kdsc = fdsc->kern_dsc;
+        if(kdsc->glyph_ids_size == 0) {
+            /*Use binary search to find the kern value.
+             *The pairs are ordered left_id first, then right_id secondly.*/
+            const uint16_t * g_ids = kdsc->glyph_ids;
+            uint16_t g_id_both = (gid_right << 8) + gid_left; /*Create one number from the ids*/
+            uint16_t * kid_p = scui_binary_search(&g_id_both, g_ids, kdsc->pair_cnt, 2, kern_pair_8_compare);
+
+            /*If the `g_id_both` were found get its index from the pointer*/
+            if(kid_p) {
+                uintptr_t ofs = kid_p - g_ids;
+                value = kdsc->values[ofs];
+            }
+        }
+        else if(kdsc->glyph_ids_size == 1) {
+            /*Use binary search to find the kern value.
+             *The pairs are ordered left_id first, then right_id secondly.*/
+            const uint32_t * g_ids = kdsc->glyph_ids;
+            uint32_t g_id_both = (gid_right << 16) + gid_left; /*Create one number from the ids*/
+            uint32_t * kid_p = scui_binary_search(&g_id_both, g_ids, kdsc->pair_cnt, 4, kern_pair_16_compare);
+
+            /*If the `g_id_both` were found get its index from the pointer*/
+            if(kid_p) {
+                uintptr_t ofs = kid_p - g_ids;
+                value = kdsc->values[ofs];
+            }
+
+        }
+        else {
+            /*Invalid value*/
+        }
+    }
+    else {
+        /*Kern classes*/
+        const lv_font_fmt_txt_kern_classes_t * kdsc = fdsc->kern_dsc;
+        uint8_t left_class = kdsc->left_class_mapping[gid_left];
+        uint8_t right_class = kdsc->right_class_mapping[gid_right];
+
+        /*If class = 0, kerning not exist for that glyph
+         *else got the value form `class_pair_values` 2D array*/
+        if(left_class > 0 && right_class > 0) {
+            value = kdsc->class_pair_values[(left_class - 1) * kdsc->right_class_cnt + (right_class - 1)];
+        }
+
     }
     return value;
 }
@@ -335,17 +734,19 @@ static int read_bits_signed(bit_iterator_t * it, int n_bits, lv_fs_res_t * res)
 
 /*@brief lvgl 读取标签
  */
-static uint32_t read_label(char *name, uintptr_t offset, char *label)
+static uint32_t read_label(lv_font_t *font, uintptr_t offset, char *label)
 {
     /* 从bin文件布局角度
      * 每一个标签由 标签总长度(4字节) + 标签名称(4字节) + 标签内容(总长度 - 8)字节表示
      */
     
     uint32_t length = 0;
-    scui_font_src_read(name, offset + 0, (uint8_t *)&length, 4);
+    scui_font_src_seek(&font->font_src, offset + 0);
+    scui_font_src_read(&font->font_src, &length, 4);
     
     char label_4[5] = {0};
-    scui_font_src_read(name, offset + 4, (uint8_t *)label_4, 4);
+    scui_font_src_seek(&font->font_src, offset + 4);
+    scui_font_src_read(&font->font_src, label_4, 4);
     SCUI_ASSERT(strcmp(label_4, label) == 0);
     
     return length;
@@ -353,13 +754,14 @@ static uint32_t read_label(char *name, uintptr_t offset, char *label)
 
 /*@brief lvgl 加载标签(cmap)
  */
-static uint32_t load_cmaps(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * font_dsc)
+static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc_t * font_dsc)
 {
-    uint32_t cmaps_length = read_label(name, offset, "cmap");
+    uint32_t cmaps_length = read_label(font, offset, "cmap");
     SCUI_ASSERT(cmaps_length > 0);
     
     uint32_t cmaps_subtables_count = 0;
-    scui_font_src_read(name, offset + 8, (uint8_t *)&cmaps_subtables_count, 4);
+    scui_font_src_seek(&font->font_src, offset + 8);
+    scui_font_src_read(&font->font_src, &cmaps_subtables_count, 4);
     SCUI_ASSERT(cmaps_subtables_count > 0);
     
     uint32_t cmaps_subtables_size = cmaps_subtables_count * sizeof(lv_font_fmt_txt_cmap_t);
@@ -371,7 +773,8 @@ static uint32_t load_cmaps(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t *
     
     uint32_t cmaps_tables_size = sizeof(cmap_table_bin_t) * font_dsc->cmap_num;
     cmap_table_bin_t * cmaps_tables = SCUI_MEM_ALLOC(scui_mem_type_font, cmaps_tables_size);
-    scui_font_src_read(name, offset + 12, (uint8_t *)cmaps_tables, cmaps_tables_size);
+    scui_font_src_seek(&font->font_src, offset + 12);
+    scui_font_src_read(&font->font_src, cmaps_tables, cmaps_tables_size);
     
     /* 加载每一个子标签(原型为load_cmaps_tables, 这里整理到内部) */
     for(uint32_t idx = 0; idx < font_dsc->cmap_num; idx++) {
@@ -388,7 +791,8 @@ static uint32_t load_cmaps(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t *
             case LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL: {
                     uint8_t ids_size = sizeof(uint8_t) * cmaps_tables[idx].data_entries_count;
                     cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, ids_size);
-                    scui_font_src_read(name, ofs, (uint8_t *)cmap->glyph_id_ofs_list, ids_size);
+                    scui_font_src_seek(&font->font_src, ofs);
+                    scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, ids_size);
                     cmap->list_length = cmap->range_length;
                     break;
                 }
@@ -399,11 +803,13 @@ static uint32_t load_cmaps(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t *
                     uint32_t list_size = sizeof(uint16_t) * cmaps_tables[idx].data_entries_count;
                     cmap->unicode_list = SCUI_MEM_ALLOC(scui_mem_type_font, list_size);
                     cmap->list_length = cmaps_tables[idx].data_entries_count;
-                    scui_font_src_read(name, ofs, (uint8_t *)cmap->unicode_list, list_size);
+                    scui_font_src_seek(&font->font_src, ofs);
+                    scui_font_src_read(&font->font_src, cmap->unicode_list, list_size);
                     
                     if(cmaps_tables[idx].format_type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
                         cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, cmap->list_length);
-                        scui_font_src_read(name, ofs, (uint8_t *)cmap->glyph_id_ofs_list, sizeof(uint16_t) * cmap->list_length);
+                        scui_font_src_seek(&font->font_src, ofs);
+                        scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, sizeof(uint16_t) * cmap->list_length);
                     }
                     break;
                 }
@@ -422,15 +828,17 @@ static uint32_t load_cmaps(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t *
  * 而是根据字的使用情况去动态加载
  */
 
-static uint32_t load_kern(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * font_dsc, uint8_t format)
+static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc_t * font_dsc, uint8_t format)
 {
-    uint32_t kern_length = read_label(name, offset, "kern");
+    uint32_t kern_length = read_label(font, offset, "kern");
     SCUI_ASSERT(kern_length > 0);
     
     uint8_t kern_format_type;
     uint32_t padding;
-    scui_font_src_read(name, offset + 8, (uint8_t *)&kern_format_type, 1);
-    scui_font_src_read(name, offset + 9, (uint8_t *)&padding, 3);
+    scui_font_src_seek(&font->font_src, offset + 8);
+    scui_font_src_read(&font->font_src, &kern_format_type, 1);
+    scui_font_src_seek(&font->font_src, offset + 9);
+    scui_font_src_read(&font->font_src, &padding, 3);
     
     if(0 == kern_format_type) { /*sorted pairs*/
         lv_font_fmt_txt_kern_pair_t * kern_pair = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_pair_t));
@@ -440,7 +848,8 @@ static uint32_t load_kern(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * 
         font_dsc->kern_classes = 0;
         
         uint32_t glyph_entries;
-        scui_font_src_read(name, offset + 12, (uint8_t *)&glyph_entries, 4);
+        scui_font_src_seek(&font->font_src, offset + 12);
+        scui_font_src_read(&font->font_src, &glyph_entries, 4);
         
         uint32_t ids_size = format == 0 ? sizeof(int8_t) * 2 * glyph_entries : sizeof(int16_t) * 2 * glyph_entries;
         
@@ -452,8 +861,10 @@ static uint32_t load_kern(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * 
         kern_pair->glyph_ids = glyph_ids;
         kern_pair->values = values;
         
-        scui_font_src_read(name, offset + 16, (uint8_t *)glyph_ids, ids_size);
-        scui_font_src_read(name, offset + 16 + ids_size, (uint8_t *)values, glyph_entries);
+        scui_font_src_seek(&font->font_src, offset + 16);
+        scui_font_src_read(&font->font_src, glyph_ids, ids_size);
+        scui_font_src_seek(&font->font_src, offset + 16 + ids_size);
+        scui_font_src_read(&font->font_src, values, glyph_entries);
     }
     else if(3 == kern_format_type) { /*array M*N of classes*/
         lv_font_fmt_txt_kern_classes_t * kern_classes = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_classes_t));
@@ -466,9 +877,12 @@ static uint32_t load_kern(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * 
         uint8_t kern_table_rows;
         uint8_t kern_table_cols;
         
-        scui_font_src_read(name, offset + 12 + 0, (uint8_t *)&kern_class_mapping_length, 2);
-        scui_font_src_read(name, offset + 12 + 2, (uint8_t *)&kern_table_rows, 1);
-        scui_font_src_read(name, offset + 12 + 3, (uint8_t *)&kern_table_cols, 1);
+        scui_font_src_seek(&font->font_src, offset + 12 + 0);
+        scui_font_src_read(&font->font_src, &kern_class_mapping_length, 2);
+        scui_font_src_seek(&font->font_src, offset + 12 + 2);
+        scui_font_src_read(&font->font_src, &kern_table_rows, 1);
+        scui_font_src_seek(&font->font_src, offset + 12 + 3);
+        scui_font_src_read(&font->font_src, &kern_table_cols, 1);
         
         uint32_t kern_values_length = sizeof(int8_t) * kern_table_rows * kern_table_cols;
         
@@ -486,9 +900,12 @@ static uint32_t load_kern(char *name, uintptr_t offset, lv_font_fmt_txt_dsc_t * 
         uintptr_t ofs_r = kern_class_mapping_length;
         uintptr_t ofs_v = kern_class_mapping_length * 2;
         
-        scui_font_src_read(name, offset + 16 + ofs_l, (uint8_t *)kern_left, kern_class_mapping_length);
-        scui_font_src_read(name, offset + 16 + ofs_r, (uint8_t *)kern_right, kern_class_mapping_length);
-        scui_font_src_read(name, offset + 16 + ofs_v, (uint8_t *)kern_values, kern_values_length);
+        scui_font_src_seek(&font->font_src, offset + 16 + ofs_l);
+        scui_font_src_read(&font->font_src, kern_left, kern_class_mapping_length);
+        scui_font_src_seek(&font->font_src, offset + 16 + ofs_r);
+        scui_font_src_read(&font->font_src, kern_right, kern_class_mapping_length);
+        scui_font_src_seek(&font->font_src, offset + 16 + ofs_v);
+        scui_font_src_read(&font->font_src, kern_values, kern_values_length);
     }
     else {
         
@@ -502,16 +919,18 @@ static lv_font_t * lv_font_load(char *name)
 {
     lv_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_t));
     memset(font, 0, sizeof(lv_font_t));
+    scui_font_src_open(&font->font_src, name);
     
     lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
     memset(font_dsc, 0, sizeof(lv_font_fmt_txt_dsc_t));
     font->dsc = font_dsc;
     
     /* bin[head] */
-    uint32_t header_length = read_label(name, 0, "head");
+    uint32_t header_length = read_label(font, 0, "head");
     SCUI_ASSERT(header_length > 0);
     font_header_bin_t font_header;
-    scui_font_src_read(name, 0 + 8, (uint8_t *)&font_header, sizeof(font_header_bin_t));
+    scui_font_src_seek(&font->font_src, 0 + 8);
+    scui_font_src_read(&font->font_src, &font_header, sizeof(font_header_bin_t));
     
     font->base_line = -font_header.descent;
     font->line_height = font_header.ascent - font_header.descent;
@@ -528,44 +947,52 @@ static lv_font_t * lv_font_load(char *name)
     
     /* bin[cmap] */
     uint32_t cmaps_offset = header_length;
-    uint32_t cmaps_length = load_cmaps(name, cmaps_offset, font_dsc);
+    uint32_t cmaps_length = load_cmaps(font, cmaps_offset, font_dsc);
     
     /* bin[loca] */
     uint32_t loca_offset = cmaps_offset + cmaps_length;
-    uint32_t loca_length = read_label(name, loca_offset, "loca");
+    uint32_t loca_length = read_label(font, loca_offset, "loca");
     
     uint32_t loca_count;
-    scui_font_src_read(name, loca_offset + 8, (uint8_t *)&loca_count, 4);
+    scui_font_src_seek(&font->font_src, loca_offset + 8);
+    scui_font_src_read(&font->font_src, &loca_count, 4);
     
+    #if 0   // 不需要使用此字段信息
     uint32_t *glyph_offset = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (loca_count + 1));
     
     if (font_header.index_to_loc_format == 0) {
         for(uint32_t i = 0; i < loca_count; ++i) {
             uint16_t offset;
-            scui_font_src_read(name, loca_offset + 12 + i * 2, (uint8_t *)&offset, 2);
+            scui_font_src_seek(&font->font_src, loca_offset + 12 + i * 2);
+            scui_font_src_read(&font->font_src, &offset, 2);
             glyph_offset[i] = offset;
         }
     }
     if (font_header.index_to_loc_format == 1) {
-            scui_font_src_read(name, loca_offset + 12, (uint8_t *)&glyph_offset, loca_count * 4);
+            scui_font_src_seek(&font->font_src, loca_offset + 12);
+            scui_font_src_read(&font->font_src, &glyph_offset, loca_count * 4);
     }
+    #endif
     
     /* bin[glyph](外部扩充,该字段不加载,保存需要加载该字段的所有参数信息,转为动态加载) */
     uint32_t bin_glyph_offset = loca_offset + loca_length;
-    uint32_t bin_glyph_langth = read_label(name, bin_glyph_offset, "glyf");
+    uint32_t bin_glyph_langth = read_label(font, bin_glyph_offset, "glyf");
     
     font->bin_head = font_header;
     font->bin_glyph_offset = bin_glyph_offset;
-    font->glyph_offset = glyph_offset;
+    // font->glyph_offset = glyph_offset;
     font->loca_count = loca_count;
     
     /* bin[kern] */
     if(font_header.tables_count >= 4) {
         
+        #if 0   // 不需要使用此字段信息
         uint32_t kern_offset = bin_glyph_offset + bin_glyph_langth;
-        uint32_t kern_length = load_kern(name, kern_offset, font_dsc, font_header.glyph_id_format);
+        uint32_t kern_length = load_kern(font, kern_offset, font_dsc, font_header.glyph_id_format);
+        #endif
     }
     
+    scui_font_src_close(&font->font_src);
     return font;
 }
 
@@ -573,8 +1000,10 @@ static void lv_font_free(lv_font_t * font)
 {
     if(NULL != font) {
         
+        #if 0   // 不需要使用此字段信息
         if (font->glyph_offset != NULL)
             SCUI_MEM_FREE(font->glyph_offset);
+        #endif
         
         lv_font_fmt_txt_dsc_t * dsc = (lv_font_fmt_txt_dsc_t *)font->dsc;
         

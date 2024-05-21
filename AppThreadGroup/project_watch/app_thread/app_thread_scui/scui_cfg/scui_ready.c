@@ -90,7 +90,7 @@ void scui_ready(void)
     
     /* 加载默认字库 */
     scui_handle_t font_handle = SCUI_HANDLE_INVALID;
-    scui_font_load("font_en_24.bin", &font_handle);
+    scui_font_load("font_zh_24.bin", &font_handle);
     // scui_font_free(font_handle);
     
     scui_engine_execute_status_set(true);

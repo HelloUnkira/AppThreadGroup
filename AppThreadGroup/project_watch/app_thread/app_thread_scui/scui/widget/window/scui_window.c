@@ -37,6 +37,16 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         window->widget.surface->hor_res = hor_res;
         window->widget.surface->ver_res = ver_res;
         window->widget.surface->alpha   = scui_alpha_cover;
+        
+        /* 添加一个检测机制,如果surface不可创建时,清空image内存重新创建 */
+        if (window->widget.surface->pixel == NULL) {
+            SCUI_LOG_WARN("memory deficit was caught");
+            scui_image_cache_clear();
+        }
+        if (window->widget.surface->pixel == NULL) {
+            window->widget.surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
+            SCUI_ASSERT(window->widget.surface->pixel != NULL);
+        }
     }
     
     /* 创建基础控件实例 */
