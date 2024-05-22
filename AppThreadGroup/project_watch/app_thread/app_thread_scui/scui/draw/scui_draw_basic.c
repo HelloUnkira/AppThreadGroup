@@ -21,14 +21,14 @@ void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
  *@param src_pixel   像素点
- *@param alpha       像素点透明度
+ *@param src_alpha   像素点透明度
  */
 void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
-                         SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t alpha)
+                         SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t src_alpha)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
-    if (alpha == scui_alpha_trans)
+    if (src_alpha == scui_alpha_trans)
         return;
     
     scui_area_t dst_area = {
@@ -52,7 +52,7 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     scui_multi_t dis_line = draw_area.w * SCUI_PIXEL_SIZE;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * SCUI_PIXEL_SIZE;
     
-    if (alpha == scui_alpha_cover) {
+    if (src_alpha == scui_alpha_cover) {
         /* 先填充第一行像素点 */
         for (scui_multi_t idx = 0; idx < draw_area.w; idx++)
             scui_mem_w(dst_addr + idx * SCUI_PIXEL_SIZE, *src_pixel, SCUI_PIXEL_TYPE);
@@ -65,8 +65,8 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
             SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
-            // pixel = scui_pixel_blend_with_alpha(src_pixel, alpha, dst_addr_ofs, dst_surface->alpha);
-            pixel = scui_pixel_mix_with_alpha(src_pixel, alpha, dst_addr_ofs, scui_alpha_cover - alpha);
+            // pixel = scui_pixel_blend_with_alpha(src_pixel, src_alpha, dst_addr_ofs, dst_surface->alpha);
+            pixel = scui_pixel_mix_with_alpha(src_pixel, src_alpha, dst_addr_ofs, scui_alpha_cover - src_alpha);
             scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
         }
     }

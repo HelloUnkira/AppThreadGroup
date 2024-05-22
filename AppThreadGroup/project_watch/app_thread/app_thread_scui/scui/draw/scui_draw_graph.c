@@ -7,27 +7,25 @@
 
 #include "scui.h"
 
-typedef struct {
-    scui_area_t clip;               // 绘制区域(相对画布坐标)
-    scui_color_mix_t color;         // 颜色(主色调和渐变色调)
-    scui_point_t pos_s;             // 起始点(相对画布坐标)
-    scui_point_t pos_e;             // 结束点(相对画布坐标)
-    scui_coord_t width;             // 宽度
-} scui_draw_dsc_line_t;
-
-/*@brief 线条绘制
+/*@brief 区域填充像素点
  *@param dst_surface 画布实例
- *@param dst_clip    画布绘制区域
- *@param dsc         线条绘制描述(参数集合)
+ *@param dst_point   画布坐标
+ *@param src_pixel   像素点
+ *@param src_alpha   像素点透明度
  */
-void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                    scui_draw_dsc_line_t *dsc)
+void scui_draw_pixel(scui_surface_t  *dst_surface, scui_point_t *dst_point,
+                     SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t  src_alpha)
 {
-    /* @等待适配,要用的时候再去实现 */
-    SCUI_LOG_ERROR("not finish yet");
+    scui_area_t dst_area = {
+        .w = dst_surface->hor_res,
+        .h = dst_surface->ver_res,
+    };
     
-    /* 在画布指定区域绘制线条 */
-    /* 线条有一个被允许的绘制区域 */
-    /* 线条实际绘制需要在绘制区域内 */
-    /* 注意:抗锯齿,带灰阶,透明到底图 */
+    if (scui_area_point(&dst_area, dst_point)) {
+        SCUI_PIXEL_TYPE  pixel = {0};
+        SCUI_PIXEL_TYPE *dst_addr_ofs = dst_surface->pixel + dst_point->y * SCUI_PIXEL_SIZE + dst_point->x;
+        // pixel = scui_pixel_blend_with_alpha(src_pixel, src_alpha, dst_addr_ofs, dst_surface->alpha);
+        pixel = scui_pixel_mix_with_alpha(src_pixel, src_alpha, dst_addr_ofs, scui_alpha_cover - src_alpha);
+        scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+    }
 }

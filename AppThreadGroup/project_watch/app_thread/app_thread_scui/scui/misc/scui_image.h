@@ -40,4 +40,11 @@ typedef struct {
     scui_image_pixel_t  pixel;      // 图片色彩数据
 } scui_image_t;
 
+/*@brief 图像格式转换
+ *@param image_format 图像格式
+ *@param pixel_format 像素格式
+ */
+void scui_image_format_to_pixel_format(scui_image_format_t *image_format,
+                                       scui_pixel_format_t *pixel_format);
+
 #endif
