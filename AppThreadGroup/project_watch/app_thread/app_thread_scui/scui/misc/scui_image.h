@@ -1,9 +1,6 @@
 #ifndef SCUI_IMAGE_H
 #define SCUI_IMAGE_H
 
-/* 图片像素字节占用偏移 */
-#define SCUI_IMAGE_PIXEL_OFFSET     (8)
-
 /*@brief 图片像素格式
  *       枚举值为(bits << 8) | index
  */
@@ -42,11 +39,5 @@ typedef struct {
     scui_image_status_t status;     // 图片状态
     scui_image_pixel_t  pixel;      // 图片色彩数据
 } scui_image_t;
-
-/*@brief 图片合法性检查
- *@param image 图片信息
- *@retval 合法或不合法
- */
-bool scui_image_check(scui_image_t *image);
 
 #endif

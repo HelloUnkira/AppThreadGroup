@@ -17,8 +17,8 @@ void scui_engine_ready(void)
     scui_disp_ready();
     scui_indev_ready();
     scui_event_ready();
-    scui_image_cache_ready();
     
+    scui_image_cache_ready();
     scui_surface_fb_ready();
 }
 

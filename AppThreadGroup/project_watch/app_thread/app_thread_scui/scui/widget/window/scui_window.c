@@ -20,7 +20,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
     
     /* 创建窗口控件实例 */
-    scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_window_t));
+    scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
     /* 创建surface */
@@ -31,7 +31,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
         SCUI_ASSERT(maker->widget.clip.x == 0 && maker->widget.clip.w == hor_res);
         SCUI_ASSERT(maker->widget.clip.y == 0 && maker->widget.clip.h == ver_res);
-        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_none,  sizeof(scui_surface_t));
+        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_mix,  sizeof(scui_surface_t));
         window->widget.surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
         window->widget.surface->format  = SCUI_PIXEL_FORMAT;
         window->widget.surface->hor_res = hor_res;
@@ -45,7 +45,10 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         }
         if (window->widget.surface->pixel == NULL) {
             window->widget.surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-            SCUI_ASSERT(window->widget.surface->pixel != NULL);
+            if (window->widget.surface->pixel == NULL) {
+                scui_image_cache_visit();
+                SCUI_ASSERT(false);
+            }
         }
     }
     

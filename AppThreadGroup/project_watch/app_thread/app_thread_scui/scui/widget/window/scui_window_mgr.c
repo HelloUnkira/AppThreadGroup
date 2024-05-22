@@ -518,6 +518,7 @@ void scui_window_surface_blend(void)
     /* 如果送显数据刚好为完整的一个surface */
     /* 此时则使用switch模式直接交换surface快速进入refr异步 */
     /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
+    #if SCUI_WINDOW_MGR_SWITCH_MODE
     scui_widget_t *widget_only = NULL;
     scui_window_surface_switch(0x01, &widget_only);
     if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
@@ -528,6 +529,7 @@ void scui_window_surface_blend(void)
         SCUI_LOG_INFO("blend to switch mode");
         return;
     }
+    #endif
     
     /* 第一轮混合:处理所有独立画布 */
     scui_window_list_blend(&list_lvl_0[ofs_idx], list_lvl_0_num);

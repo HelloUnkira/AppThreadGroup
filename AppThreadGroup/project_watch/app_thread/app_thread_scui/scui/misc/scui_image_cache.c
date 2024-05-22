@@ -71,14 +71,14 @@ static void scui_image_cache_fv_t(scui_table_rbsn_t *node, uint32_t idx)
 {
     scui_image_unit_t *unit = scui_own_ofs(scui_image_unit_t, ht_node, node);
     
-    SCUI_LOG_INFO_RAW("- width:%x",          unit->image->pixel.width);
-    SCUI_LOG_INFO_RAW("- height:%x",         unit->image->pixel.height);
-    SCUI_LOG_INFO_RAW("- size_raw<src>:%x",  unit->image->pixel.size_raw);
-    SCUI_LOG_INFO_RAW("- size_mem<src>:%x",  unit->image->pixel.size_mem);
-    SCUI_LOG_INFO_RAW("- data_raw<src>:%x",  unit->image->pixel.data_raw);
-    SCUI_LOG_INFO_RAW("- data_mem<src>:%x",  unit->image->pixel.data_mem);
-    SCUI_LOG_INFO_RAW("- status:%x",         unit->image->status);
-    SCUI_LOG_INFO_RAW("< format:%x",         unit->image->format);
+    SCUI_LOG_INFO("- width:%x",          unit->image->pixel.width);
+    SCUI_LOG_INFO("- height:%x",         unit->image->pixel.height);
+    SCUI_LOG_INFO("- size_raw<src>:%x",  unit->image->pixel.size_raw);
+    SCUI_LOG_INFO("- size_mem<src>:%x",  unit->image->pixel.size_mem);
+    SCUI_LOG_INFO("- data_raw<src>:%x",  unit->image->pixel.data_raw);
+    SCUI_LOG_INFO("- data_mem<src>:%x",  unit->image->pixel.data_mem);
+    SCUI_LOG_INFO("- status:%x",         unit->image->status);
+    SCUI_LOG_INFO("- format:%x",         unit->image->format);
 }
 
 /*@brief 图片初始化
@@ -117,13 +117,21 @@ void scui_image_cache_rectify(void)
     }
 }
 
+/*@brief 图片资源检查
+ */
+void scui_image_cache_visit(void)
+{
+    scui_image_cache_t *cache = &scui_image_record_cache;
+    
+    SCUI_LOG_WARN("usage:%u", cache->usage);
+    scui_table_rbst_visit(&cache->ht_table);
+}
+
 /*@brief 图片资源清除
  */
 void scui_image_cache_clear(void)
 {
     scui_image_cache_t *cache = &scui_image_record_cache;
-    
-    scui_table_rbst_visit(&cache->ht_table);
     
     scui_image_unit_t *unit = NULL;
     
@@ -144,7 +152,7 @@ void scui_image_cache_clear(void)
         /* 约减使用率 */
         cache->usage -= unit->image->pixel.size_mem;
         /* 卸载图像资源 */
-        scui_image_src_unload(unit);
+        SCUI_MEM_FREE(unit->data);
         SCUI_MEM_FREE(unit);
         unit = NULL;
     }
@@ -240,18 +248,28 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
             /* 约减使用率 */
             cache->usage -= unit->image->pixel.size_mem;
             /* 卸载图像资源 */
-            scui_image_src_unload(unit);
+            SCUI_MEM_FREE(unit->data);
             SCUI_MEM_FREE(unit);
             unit = NULL;
         }
         /* 为数据区申请新资源 */
-        unit = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_image_unit_t));
+        unit = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_unit_t));
         unit->image   = image_unit->image;
+        unit->data    = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
         unit->count   = 1;
         unit->lock    = 1;
         cache->usage += unit->image->pixel.size_mem;
+        /* 如果出现碎片化图形资源,做一次清空整合 */
+        if (unit->data == NULL) {
+            scui_image_cache_clear();
+            unit->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
+            if (unit->data == NULL) {
+                scui_image_cache_visit();
+                SCUI_ASSERT(false);
+            }
+        }
         /* 图片资源加载 */
-        scui_image_src_load(unit);
+        scui_image_src_read(unit->image, unit->data);
         *image_unit = *unit;
         /* 带计数优先级加入 */
         scui_list_dln_reset(&unit->dl_node);

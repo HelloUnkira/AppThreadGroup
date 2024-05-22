@@ -54,8 +54,9 @@ typedef struct cmap_table_bin {
 
 #if 1
 
-#define LV_FONT_FMT_TXT_LARGE   0
-#define LV_USE_USER_DATA        0
+#define LV_FONT_FMT_TXT_LARGE       0
+#define LV_USE_USER_DATA            0
+#define LV_USE_FONT_COMPRESSED      1
 
 /** This describes a glyph.*/
 typedef struct {
@@ -274,14 +275,19 @@ typedef struct _lv_font_t {
     void * user_data;               /**< Custom user data for font.*/
 #endif
 
+    
     /* bin[glyph]:扩充字段 */
     font_header_bin_t bin_head;
+    
     uintptr_t bin_glyph_offset;
+    uintptr_t bin_loca_offset;
+    uint32_t  loca_length;
     uint32_t  loca_count;
     // uint32_t *glyph_offset;
-
+    
     /* font fs扩展字段 */
     scui_font_src_t font_src;
+    char name[128];
 
 } lv_font_t;
 
@@ -381,76 +387,6 @@ static uint8_t rle_bpp;
 static uint8_t rle_prev_v;
 static uint8_t rle_cnt;
 static rle_state_t rle_state;
-
-/**
- * The compress a glyph's bitmap
- * @param in the compressed bitmap
- * @param out buffer to store the result
- * @param px_num number of pixels in the glyph (width * height)
- * @param bpp bit per pixel (bpp = 3 will be converted to bpp = 4)
- * @param prefilter true: the lines are XORed
- */
-static void decompress(const uint8_t * in, uint8_t * out, scui_coord_t w, scui_coord_t h, uint8_t bpp, bool prefilter)
-{
-    uint32_t wrp = 0;
-    uint8_t wr_size = bpp;
-    if(bpp == 3) wr_size = 4;
-
-    rle_init(in, bpp);
-
-    uint8_t * line_buf1 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
-    uint8_t * line_buf2 = NULL;
-
-    if(prefilter) {
-        line_buf2 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
-    }
-
-    decompress_line(line_buf1, w);
-
-    scui_coord_t y;
-    scui_coord_t x;
-
-    for(x = 0; x < w; x++) {
-        bits_write(out, wrp, line_buf1[x], bpp);
-        wrp += wr_size;
-    }
-
-    for(y = 1; y < h; y++) {
-        if(prefilter) {
-            decompress_line(line_buf2, w);
-
-            for(x = 0; x < w; x++) {
-                line_buf1[x] = line_buf2[x] ^ line_buf1[x];
-                bits_write(out, wrp, line_buf1[x], bpp);
-                wrp += wr_size;
-            }
-        }
-        else {
-            decompress_line(line_buf1, w);
-
-            for(x = 0; x < w; x++) {
-                bits_write(out, wrp, line_buf1[x], bpp);
-                wrp += wr_size;
-            }
-        }
-    }
-
-    SCUI_MEM_FREE(line_buf1);
-    SCUI_MEM_FREE(line_buf2);
-}
-
-/**
- * Decompress one line. Store one pixel per byte
- * @param out output buffer
- * @param w width of the line in pixel count
- */
-static inline void decompress_line(uint8_t * out, scui_coord_t w)
-{
-    scui_coord_t i;
-    for(i = 0; i < w; i++) {
-        out[i] = rle_next();
-    }
-}
 
 /**
  * Read bits from an input buffer. The read can cross byte boundary.
@@ -610,6 +546,76 @@ static inline uint8_t rle_next(void)
     return ret;
 }
 
+/**
+ * Decompress one line. Store one pixel per byte
+ * @param out output buffer
+ * @param w width of the line in pixel count
+ */
+static inline void decompress_line(uint8_t * out, scui_coord_t w)
+{
+    scui_coord_t i;
+    for(i = 0; i < w; i++) {
+        out[i] = rle_next();
+    }
+}
+
+/**
+ * The compress a glyph's bitmap
+ * @param in the compressed bitmap
+ * @param out buffer to store the result
+ * @param px_num number of pixels in the glyph (width * height)
+ * @param bpp bit per pixel (bpp = 3 will be converted to bpp = 4)
+ * @param prefilter true: the lines are XORed
+ */
+static void decompress(const uint8_t * in, uint8_t * out, scui_coord_t w, scui_coord_t h, uint8_t bpp, bool prefilter)
+{
+    uint32_t wrp = 0;
+    uint8_t wr_size = bpp;
+    if(bpp == 3) wr_size = 4;
+
+    rle_init(in, bpp);
+
+    uint8_t * line_buf1 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+    uint8_t * line_buf2 = NULL;
+
+    if(prefilter) {
+        line_buf2 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+    }
+
+    decompress_line(line_buf1, w);
+
+    scui_coord_t y;
+    scui_coord_t x;
+
+    for(x = 0; x < w; x++) {
+        bits_write(out, wrp, line_buf1[x], bpp);
+        wrp += wr_size;
+    }
+
+    for(y = 1; y < h; y++) {
+        if(prefilter) {
+            decompress_line(line_buf2, w);
+
+            for(x = 0; x < w; x++) {
+                line_buf1[x] = line_buf2[x] ^ line_buf1[x];
+                bits_write(out, wrp, line_buf1[x], bpp);
+                wrp += wr_size;
+            }
+        }
+        else {
+            decompress_line(line_buf1, w);
+
+            for(x = 0; x < w; x++) {
+                bits_write(out, wrp, line_buf1[x], bpp);
+                wrp += wr_size;
+            }
+        }
+    }
+
+    SCUI_MEM_FREE(line_buf1);
+    SCUI_MEM_FREE(line_buf2);
+}
+
 #endif
 
 #if 1
@@ -639,8 +645,9 @@ static uint32_t get_glyph_dsc_id(const lv_font_t *font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_TINY) {
             uint16_t key = rcp;
-            uint16_t * p = scui_binary_search(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
-                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
+            uint16_t * p = scui_binary_search(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                              sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
+                                              unicode_list_compare);
 
             if(p) {
                 uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
@@ -649,8 +656,9 @@ static uint32_t get_glyph_dsc_id(const lv_font_t *font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
             uint16_t key = rcp;
-            uint16_t * p = scui_binary_search(&key, fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
-                                             sizeof(fdsc->cmaps[i].unicode_list[0]), unicode_list_compare);
+            uint16_t * p = scui_binary_search(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                              sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
+                                              unicode_list_compare);
 
             if(p) {
                 uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
@@ -688,7 +696,7 @@ static int8_t get_kern_value(const lv_font_t *font, uint32_t gid_left, uint32_t 
              *The pairs are ordered left_id first, then right_id secondly.*/
             const uint16_t * g_ids = kdsc->glyph_ids;
             uint16_t g_id_both = (gid_right << 8) + gid_left; /*Create one number from the ids*/
-            uint16_t * kid_p = scui_binary_search(&g_id_both, g_ids, kdsc->pair_cnt, 2, kern_pair_8_compare);
+            uint16_t * kid_p = scui_binary_search(g_ids, kdsc->pair_cnt, 2, &g_id_both, kern_pair_8_compare);
 
             /*If the `g_id_both` were found get its index from the pointer*/
             if(kid_p) {
@@ -701,7 +709,7 @@ static int8_t get_kern_value(const lv_font_t *font, uint32_t gid_left, uint32_t 
              *The pairs are ordered left_id first, then right_id secondly.*/
             const uint32_t * g_ids = kdsc->glyph_ids;
             uint32_t g_id_both = (gid_right << 16) + gid_left; /*Create one number from the ids*/
-            uint32_t * kid_p = scui_binary_search(&g_id_both, g_ids, kdsc->pair_cnt, 4, kern_pair_16_compare);
+            uint32_t * kid_p = scui_binary_search(g_ids, kdsc->pair_cnt, 4, &g_id_both, kern_pair_16_compare);
 
             /*If the `g_id_both` were found get its index from the pointer*/
             if(kid_p) {
@@ -919,7 +927,8 @@ static lv_font_t * lv_font_load(char *name)
 {
     lv_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_t));
     memset(font, 0, sizeof(lv_font_t));
-    scui_font_src_open(&font->font_src, name);
+    strcpy(font->name, name);
+    scui_font_src_open(&font->font_src, font->name);
     
     lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
     memset(font_dsc, 0, sizeof(lv_font_fmt_txt_dsc_t));
@@ -961,27 +970,31 @@ static lv_font_t * lv_font_load(char *name)
     uint32_t *glyph_offset = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (loca_count + 1));
     
     if (font_header.index_to_loc_format == 0) {
+        uint16_t offset;
         for(uint32_t i = 0; i < loca_count; ++i) {
-            uint16_t offset;
             scui_font_src_seek(&font->font_src, loca_offset + 12 + i * 2);
             scui_font_src_read(&font->font_src, &offset, 2);
             glyph_offset[i] = offset;
         }
     }
     if (font_header.index_to_loc_format == 1) {
-            scui_font_src_seek(&font->font_src, loca_offset + 12);
-            scui_font_src_read(&font->font_src, &glyph_offset, loca_count * 4);
+        scui_font_src_seek(&font->font_src, loca_offset + 12);
+        scui_font_src_read(&font->font_src, &glyph_offset, loca_count * 4);
     }
     #endif
     
     /* bin[glyph](外部扩充,该字段不加载,保存需要加载该字段的所有参数信息,转为动态加载) */
     uint32_t bin_glyph_offset = loca_offset + loca_length;
     uint32_t bin_glyph_langth = read_label(font, bin_glyph_offset, "glyf");
+    // font->dsc.glyph_bitmap
+    // font->dsc.glyph_src
     
     font->bin_head = font_header;
     font->bin_glyph_offset = bin_glyph_offset;
-    // font->glyph_offset = glyph_offset;
+    font->bin_loca_offset = loca_offset;
+    font->loca_length = loca_length;
     font->loca_count = loca_count;
+    // font->glyph_offset = glyph_offset;
     
     /* bin[kern] */
     if(font_header.tables_count >= 4) {
@@ -1068,6 +1081,158 @@ static void lv_font_free(lv_font_t * font)
     }
 }
 
+// lv_font_get_bitmap_fmt_txt
+// lv_font_get_glyph_dsc_fmt_txt
+// 原型改造,修订到可以直接动态获取字形和字体信息
+
+static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
+{
+    uint32_t unicode_letter      = glyph->unicode_letter;
+    uint32_t unicode_letter_next = glyph->unicode_letter_next;
+    
+    bool is_tab = false;
+    if (unicode_letter == '\t') {
+        unicode_letter  = ' ';
+        is_tab = true;
+    }
+    lv_font_fmt_txt_dsc_t * fdsc = (lv_font_fmt_txt_dsc_t *)font->dsc;
+    uint32_t gid = get_glyph_dsc_id(font, unicode_letter);
+    if (gid == 0)
+        return;
+    
+    int8_t kvalue = 0;
+    if(fdsc->kern_dsc) {
+        uint32_t gid_next = get_glyph_dsc_id(font, unicode_letter_next);
+        if(gid_next) {
+            kvalue = get_kern_value(font, gid, gid_next);
+        }
+    }
+    
+    #if 1   // glyph_offset不存在,这里动态加载指定letter的偏移量
+    
+    font_header_bin_t *font_header = &font->bin_head;
+    uintptr_t glyph_offset = font->bin_glyph_offset;
+    uintptr_t loca_offset  = font->bin_loca_offset;
+    uint32_t  loca_length  = font->loca_length;
+    uint32_t  loca_count   = font->loca_count;
+    uint32_t  offset1 = 0;
+    uint32_t  offset2 = 0;
+    
+    if (font_header->index_to_loc_format == 0) {
+        uint16_t offset_2[2];
+        scui_font_src_seek(&font->font_src, loca_offset + 12 + gid * 2);
+        scui_font_src_read(&font->font_src, offset_2, 2 * 2);
+        offset1 = offset_2[0];
+        offset2 = offset_2[1];
+    }
+    if (font_header->index_to_loc_format == 1) {
+        uint32_t offset_2[2];
+        scui_font_src_seek(&font->font_src, loca_offset + 12 + gid * 4);
+        scui_font_src_read(&font->font_src, offset_2, 4 * 2);
+        offset1 = offset_2[0];
+        offset2 = offset_2[1];
+    }
+    
+    /* glyph_src */
+    /* glyph_bitmap */
+    uint32_t glyph_length = read_label(font, glyph_offset, "glyf");
+    
+    /* 偏移到目标字符处 */
+    scui_font_src_seek(&font->font_src, glyph_offset + offset1);
+    
+    bit_iterator_t bit_it = init_bit_iterator(font, 0);
+    
+    if (font_header->advance_width_bits == 0)
+        glyph->adv_w = font_header->default_advance_width;
+    else
+        glyph->adv_w = read_bits(&bit_it, font_header->advance_width_bits);
+    
+    if (font_header->advance_width_format == 0)
+        glyph->adv_w *= 16;
+    
+    glyph->ofs_x = read_bits_signed(&bit_it, font_header->xy_bits);
+    glyph->ofs_y = read_bits_signed(&bit_it, font_header->xy_bits);
+    glyph->box_w = read_bits(&bit_it, font_header->wh_bits);
+    glyph->box_h = read_bits(&bit_it, font_header->wh_bits);
+    SCUI_ASSERT(glyph->ofs_x <= 128 && glyph->box_w < 63 && glyph->box_w != 0);
+    SCUI_ASSERT(glyph->ofs_y <= 128 && glyph->box_h < 63 && glyph->box_h != 0);
+    
+    uint32_t nbits = font_header->advance_width_bits + 2 * font_header->xy_bits + 2 * font_header->wh_bits;
+    uint32_t next_offset = (gid < loca_count - 1) ? offset2 : glyph_length;
+    uint32_t bitmap_size = next_offset - offset1 - nbits / 8;
+    SCUI_ASSERT(bitmap_size > 0 && bitmap_size < 1024 * 1024);
+    if (gid == 0) {
+        glyph->adv_w = 0;
+        glyph->box_w = 0;
+        glyph->box_h = 0;
+        glyph->ofs_x = 0;
+        glyph->ofs_y = 0;
+    }
+    
+    //空格字符是合法字符
+    if (glyph->box_w != 0 && glyph->box_h != 0) {
+        
+        /* 偏移到目标字符处 */
+        scui_font_src_seek(&font->font_src, glyph_offset + offset1);
+        read_bits(&bit_it, nbits);
+        
+        /* 生成内存并加载bitmap */
+        glyph->bitmap = SCUI_MEM_ALLOC(scui_mem_type_font, bitmap_size);
+        glyph->bitmap_size = bitmap_size;
+        
+        /* byte级 */
+        if (nbits % 8 == 0)
+            scui_font_src_read(&font->font_src, glyph->bitmap, bitmap_size);
+        else {
+            scui_font_src_read(&font->font_src, glyph->bitmap, bitmap_size - 1);
+            /* The last fragment should be on the MSB but read_bits() will place it to the LSB */
+            glyph->bitmap[bitmap_size - 1] = read_bits(&bit_it, 8 - nbits % 8);
+            glyph->bitmap[bitmap_size - 1] = glyph->bitmap[bitmap_size - 1] << (nbits % 8);
+        }
+        
+        /* 行程码压缩,使用bitmap源生成解压缩后的bitmap然后替换 */
+        if (font_header->compression_id != LV_FONT_FMT_TXT_PLAIN) {
+            uint32_t glyph_size = glyph->box_w * glyph->box_h;
+            uint32_t decompress_size = glyph_size;
+            
+            /* Compute memory size needed to hold decompressed glyph, rounding up */
+            switch (font_header->bits_per_pixel) {
+                case 1: decompress_size = (glyph_size + 7) >> 3;   break;
+                case 2: decompress_size = (glyph_size + 3) >> 2;   break;
+                case 3: decompress_size = (glyph_size + 1) >> 1;   break;
+                case 4: decompress_size = (glyph_size + 1) >> 1;   break;
+            }
+            
+            uint8_t *compress_bitmap   = glyph->bitmap;
+            uint8_t *decompress_bitmap = SCUI_MEM_ALLOC(scui_mem_type_font, decompress_size);
+            bool prefilter = font_header->compression_id == LV_FONT_FMT_TXT_COMPRESSED ? true : false;
+            
+            /* 行程码解压缩 */
+            decompress(compress_bitmap, decompress_bitmap, glyph->box_w, glyph->box_h, font_header->bits_per_pixel, prefilter);
+            SCUI_MEM_FREE(compress_bitmap);
+            glyph->bitmap = decompress_bitmap;
+            glyph->bitmap_size = decompress_size;
+        }
+    }
+    #endif
+    
+    /* Put together a glyph dsc */
+    int32_t kv = ((int32_t)((int32_t)kvalue * fdsc->kern_scale) >> 4);
+    uint32_t adv_w = glyph->adv_w;
+    if (is_tab)
+        adv_w *= 2;
+    adv_w += kv;
+    adv_w = (adv_w + (1 << 3)) >> 4;
+
+    glyph->adv_w = adv_w * 16;
+    glyph->bpp = (uint8_t)fdsc->bpp;
+    if (is_tab)
+        glyph->box_w = glyph->box_w * 2;
+    
+    if (fdsc->glyph_dsc != NULL)
+        SCUI_MEM_FREE(fdsc->glyph_dsc);
+}
+
 #endif
 
 /*@brief 字库加载
@@ -1084,10 +1249,49 @@ void scui_font_load(char *name, scui_handle_t *handle)
 /*@brief 字库卸载
  *@param handle 字库句柄
  */
-void scui_font_free(scui_handle_t handle)
+void scui_font_unload(scui_handle_t handle)
 {
     lv_font_t *font = scui_handle_get(handle);
     SCUI_ASSERT(font != NULL);
     lv_font_free(font);
     scui_handle_set(handle, NULL);
+}
+
+/*@brief 字型加载
+ *@param handle 字库句柄
+ *@param glyph  字形信息
+ */
+void scui_font_glyph_load(scui_handle_t handle, scui_font_glyph_t *glyph)
+{
+    lv_font_t *font = scui_handle_get(handle);
+    SCUI_ASSERT(font != NULL);
+    SCUI_ASSERT(glyph != NULL);
+    SCUI_ASSERT(glyph->bitmap == NULL);
+    
+    if (glyph->unicode_letter < 0x20)
+        return;
+    
+    if (glyph->unicode_letter == 0x20 || glyph->unicode_letter == 0x202A || glyph->unicode_letter == 0x200E ||
+        glyph->unicode_letter == 0xA0 || glyph->unicode_letter == 0x202C || glyph->unicode_letter == 0x202B) {
+        
+        if (glyph->space_width != 0) {
+            glyph->ofs_x = 0;
+            glyph->box_h = glyph->space_width;
+            glyph->adv_w = glyph->space_width << 4;
+            glyph->box_w = glyph->space_width;
+        }
+        return;
+    }
+    
+    scui_font_src_open(&font->font_src, font->name);
+    lvgl_font_glpyh_load(font, glyph);
+    scui_font_src_close(&font->font_src);
+}
+
+/*@brief 字型卸载
+ *@param glyph 字形信息
+ */
+void scui_font_glyph_unload(scui_font_glyph_t *glyph)
+{
+    SCUI_MEM_FREE(glyph->bitmap);
 }

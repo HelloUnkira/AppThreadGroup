@@ -33,6 +33,10 @@ void scui_image_cache_ready(void);
  */
 void scui_image_cache_rectify(void);
 
+/*@brief 图片资源检查
+ */
+void scui_image_cache_visit(void);
+
 /*@brief 图片资源缓存清除
  */
 void scui_image_cache_clear(void);

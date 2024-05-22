@@ -34,6 +34,7 @@ void scui_ready(void)
     surface_fb->hor_res = SCUI_DRV_HOR_RES;
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
+    SCUI_ASSERT(surface_fb->pixel != NULL);
     scui_draw_area_fill(surface_fb, &clip, &pixel, surface_fb->alpha);
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
@@ -42,6 +43,7 @@ void scui_ready(void)
     surface_fb->hor_res = SCUI_DRV_HOR_RES;
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
+    SCUI_ASSERT(surface_fb->pixel != NULL);
     scui_draw_area_fill(surface_fb, &clip, &pixel, surface_fb->alpha);
     #endif
     

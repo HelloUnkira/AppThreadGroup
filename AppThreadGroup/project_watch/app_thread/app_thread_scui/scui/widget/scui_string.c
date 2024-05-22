@@ -18,7 +18,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建字符串控件实例 */
-    scui_string_t *string = SCUI_MEM_ALLOC(scui_mem_type_none, sizeof(scui_string_t));
+    scui_string_t *string = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_t));
     memset(string, 0, sizeof(scui_string_t));
     
     /* 创建基础控件实例 */

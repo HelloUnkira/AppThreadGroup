@@ -26,6 +26,7 @@
 #define SCUI_LOG_WARN_RAW   APP_SYS_LOG_WARN_RAW
 #define SCUI_LOG_ERROR      APP_SYS_LOG_ERROR
 #define SCUI_LOG_ERROR_RAW  APP_SYS_LOG_ERROR_RAW
+#define SCUI_LOG_LINE       app_sys_log_line()
 #define SCUI_ASSERT         APP_SYS_ASSERT
 
 #endif

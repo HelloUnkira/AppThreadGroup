@@ -149,8 +149,13 @@ void scui_event_respond(scui_event_t *event)
     
     /* 内存监控 */
     #if SCUI_MEM_RECORD_CHECK
-    // scui_mem_record_analysis();
-    scui_mem_record_statistic();
+    scui_mem_check();
+    #if SCUI_MEM_RECORD_STATISTIC
+    scui_mem_record_statistic(false);
+    #endif
+    #if SCUI_MEM_RECORD_ANALYSIS
+    scui_mem_record_analysis(false);
+    #endif
     #endif
     
     /* 特殊系统事件处理 */

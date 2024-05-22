@@ -1,16 +1,6 @@
 #ifndef SCUI_HANDLE_H
 #define SCUI_HANDLE_H
 
-/* 句柄表数量,共享句柄数量--最大限制 */
-#define SCUI_HANDLE_TABLE_LIMIT     ((scui_handle_t)5)
-#define SCUI_HANDLE_SHARE_LIMIT     ((scui_handle_t)128)
-#define SCUI_HANDLE_SHARE_OFFSET    ((scui_handle_t)0x9FFF)
-
-// #define SCUI_HANDLE_OFFSET_WIDGET   (0x1000)    /* 句柄表偏移:控件 */
-// #define SCUI_HANDLE_OFFSET_IMAGE    (0x2000)    /* 句柄表偏移:图片描述 */
-// #define SCUI_HANDLE_OFFSET_FONT     (0x3000)    /* 句柄表偏移:字库描述 */
-// #define SCUI_HANDLE_OFFSET_LANG     (0x4000)    /* 句柄表偏移:多语言表 */
-
 /*@brief 句柄
  */
 typedef uint16_t scui_handle_t;
