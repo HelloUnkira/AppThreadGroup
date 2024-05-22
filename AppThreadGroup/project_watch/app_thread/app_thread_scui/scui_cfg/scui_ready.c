@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -90,10 +90,27 @@ void scui_ready(void)
     scui_window_active(handle);
     // scui_widget_hide(handle, false);
     
+    #if 1   // test
     /* 加载默认字库 */
     scui_handle_t font_handle = SCUI_HANDLE_INVALID;
     scui_font_load("font_zh_24.bin", &font_handle);
     // scui_font_free(font_handle);
+    
+    scui_font_glyph_t glyph = {
+        .unicode_letter = ':',
+    };
+    scui_font_glyph_load(font_handle, &glyph);
+    
+    #if 0
+    // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
+    for (uint32_t idx = 0; idx < glyph.bitmap_size; idx++) {
+         if (idx % 8 == 0)
+             SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+         SCUI_LOG_INFO_RAW("0x%02x ", glyph.bitmap[idx]);
+    }
+    #endif
+    
+    #endif
     
     scui_engine_execute_status_set(true);
 }

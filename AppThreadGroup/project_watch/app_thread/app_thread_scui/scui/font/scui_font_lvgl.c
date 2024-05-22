@@ -1081,6 +1081,23 @@ static void lv_font_free(lv_font_t * font)
     }
 }
 
+/*@brief 这里补充一个2进制流左移位接口
+ *       只支持小于一字节的比特移位
+ */
+static void lv_font_util_shift_left2(uint8_t *operand, uint32_t length, uint64_t bits2)
+{
+    SCUI_ASSERT(bits2 != 0 && bits2 < 8);
+    
+    /* 只去高位移低位,最后一个字节不管(反正要丢弃) */
+    for (uint32_t idx = 0; idx + 1 < length; idx++) {
+         uint8_t bits_1 = operand[idx];
+         uint8_t bits_2 = operand[idx + 1];
+         uint8_t bits_low  = bits_1 << bits2;
+         uint8_t bits_high = bits_2 >> (8 - bits2);
+         operand[idx] = bits_low | bits_high;
+    }
+}
+
 // lv_font_get_bitmap_fmt_txt
 // lv_font_get_glyph_dsc_fmt_txt
 // 原型改造,修订到可以直接动态获取字形和字体信息
@@ -1172,22 +1189,36 @@ static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
     //空格字符是合法字符
     if (glyph->box_w != 0 && glyph->box_h != 0) {
         
-        /* 偏移到目标字符处 */
-        scui_font_src_seek(&font->font_src, glyph_offset + offset1);
-        read_bits(&bit_it, nbits);
-        
         /* 生成内存并加载bitmap */
         glyph->bitmap = SCUI_MEM_ALLOC(scui_mem_type_font, bitmap_size);
         glyph->bitmap_size = bitmap_size;
         
         /* byte级 */
-        if (nbits % 8 == 0)
+        if (nbits % 8 == 0) {
+            scui_font_src_seek(&font->font_src, glyph_offset + offset1 + nbits / 8);
             scui_font_src_read(&font->font_src, glyph->bitmap, bitmap_size);
-        else {
-            scui_font_src_read(&font->font_src, glyph->bitmap, bitmap_size - 1);
-            /* The last fragment should be on the MSB but read_bits() will place it to the LSB */
+        } else {
+            scui_font_src_seek(&font->font_src, glyph_offset + offset1 + nbits / 8);
+            #if 0
+            bit_it = init_bit_iterator(font, 0);
+            read_bits(&bit_it, nbits % 8);
+            /* 偏移到目标字符处 */
+            // 这里不能直接读前一段,因为数据源不是byte对齐的地址,且双方的对齐无法同步
+            for (uint32_t k = 0; k < bitmap_size - 1; k++)
+                 glyph->bitmap[k] = read_bits(&bit_it, 8);
             glyph->bitmap[bitmap_size - 1] = read_bits(&bit_it, 8 - nbits % 8);
+            /* The last fragment should be on the MSB but read_bits() will place it to the LSB */
             glyph->bitmap[bitmap_size - 1] = glyph->bitmap[bitmap_size - 1] << (nbits % 8);
+            #else
+            // 是否考虑先批量读完,然后再移位丢弃掉前面多余的部分
+            uint8_t *bitmap_plus = SCUI_MEM_ALLOC(scui_mem_type_font, bitmap_size + 1);
+            scui_font_src_read(&font->font_src, bitmap_plus, bitmap_size + 1);
+            lv_font_util_shift_left2(bitmap_plus, bitmap_size + 1, nbits % 8);
+            memcpy(glyph->bitmap, bitmap_plus, bitmap_size);
+            /* The last fragment should be on the MSB but read_bits() will place it to the LSB */
+            glyph->bitmap[bitmap_size - 1] = glyph->bitmap[bitmap_size - 1] << (nbits % 8);
+            SCUI_MEM_FREE(bitmap_plus);
+            #endif
         }
         
         /* 行程码压缩,使用bitmap源生成解压缩后的bitmap然后替换 */
