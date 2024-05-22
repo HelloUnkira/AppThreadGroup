@@ -97,7 +97,7 @@ void scui_ready(void)
     // scui_font_free(font_handle);
     
     scui_font_glyph_t glyph = {
-        .unicode_letter = ':',
+        .unicode_letter = '@',
     };
     scui_font_glyph_load(font_handle, &glyph);
     
