@@ -6,10 +6,11 @@
 typedef struct {
     scui_list_dln_t   dl_node;
     scui_table_rbsn_t ht_node;
-    scui_image_t *image;        // 图片数据
-    uint8_t *data;              // 图片数据源(内存地址)
     uint16_t count:7;           // 衰减计数器
     uint16_t lock:7;            // 嵌套锁计数器
+    /* LRU缓存数据: */
+    scui_image_t *image;        // 图片数据
+    uint8_t *data;              // 图片数据源(内存地址)
 } scui_image_unit_t;
 
 /*@brief 内存图片节点信息表

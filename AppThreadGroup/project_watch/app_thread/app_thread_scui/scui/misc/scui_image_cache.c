@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-static scui_image_cache_t scui_image_record_cache = {0};
+static scui_image_cache_t scui_image_cache = {0};
 
 /*@brief 缓存带计数优先级排序入队列比较回调
  */
@@ -85,7 +85,7 @@ static void scui_image_cache_fv_t(scui_table_rbsn_t *node, uint32_t idx)
  */
 void scui_image_cache_ready(void)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     scui_list_dll_reset(&cache->dl_list);
     scui_table_rbst_fd_t digest  = scui_image_cache_fd_t;
@@ -106,7 +106,7 @@ void scui_image_cache_ready(void)
  */
 void scui_image_cache_rectify(void)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     scui_image_unit_t *unit = NULL;
     
@@ -121,7 +121,7 @@ void scui_image_cache_rectify(void)
  */
 void scui_image_cache_visit(void)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     SCUI_LOG_WARN("usage:%u", cache->usage);
     scui_table_rbst_visit(&cache->ht_table);
@@ -131,7 +131,7 @@ void scui_image_cache_visit(void)
  */
 void scui_image_cache_clear(void)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     scui_image_unit_t *unit = NULL;
     
@@ -162,7 +162,7 @@ void scui_image_cache_clear(void)
  */
 void scui_image_cache_unload(scui_image_unit_t *image_unit)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     if (image_unit == NULL) {
         SCUI_LOG_WARN("image unit is empty");
@@ -184,7 +184,7 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
  */
 void scui_image_cache_load(scui_image_unit_t *image_unit)
 {
-    scui_image_cache_t *cache = &scui_image_record_cache;
+    scui_image_cache_t *cache = &scui_image_cache;
     
     if (image_unit == NULL) {
         SCUI_LOG_WARN("image info is empty");

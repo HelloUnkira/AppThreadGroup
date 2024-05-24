@@ -31,17 +31,10 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_area_t dst_area = {
-        .w = dst_surface->hor_res,
-        .h = dst_surface->ver_res,
-    };
-    
     scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
     if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
          return;
-    
-    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
-    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
     
     if (scui_area_empty(&draw_area))
         return;
@@ -104,8 +97,8 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
-    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     
     if (scui_area_empty(&draw_area))
         return;
@@ -126,11 +119,11 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param dst_clip    画布绘制区域
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
- *@param color       图像源色调(调色板格式使用)
+ *@param src_color   图像源色调(调色板格式使用)
  */
-void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                          scui_surface_t *src_surface, scui_area_t *src_clip,
-                          scui_color_mix_t color)
+void scui_draw_area_blend(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
+                          scui_surface_t  *src_surface, scui_area_t *src_clip,
+                          scui_color_mix_t src_color)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
@@ -165,8 +158,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    SCUI_ASSERT(dst_clip->x + draw_area.w <= scui_disp_get_hor_res());
-    SCUI_ASSERT(dst_clip->y + draw_area.h <= scui_disp_get_ver_res());
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     
     if (scui_area_empty(&draw_area))
         return;
@@ -250,8 +243,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             scui_multi_t palette_len = 1 << (0x08 >> 8);
             SCUI_PIXEL_TYPE palette_table[1 << (0x08 >> 8)] = {0};
             /* 起始色调和结束色调固定 */
-            palette_table[0] = scui_pixel_by_color(color.color_s);
-            palette_table[palette_len - 1] = scui_pixel_by_color(color.color_e);
+            palette_table[0] = scui_pixel_by_color(src_color.color_s);
+            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
             /* 无渐变时: */
             if (palette_table[0].full == palette_table[palette_len - 1].full) {
                 for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -296,8 +289,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             scui_multi_t palette_len = 1 << (0x16 >> 8);
             SCUI_PIXEL_TYPE palette_table[1 << (0x16 >> 8)] = {0};
             /* 起始色调和结束色调固定 */
-            palette_table[0] = scui_pixel_by_color(color.color_s);
-            palette_table[palette_len - 1] = scui_pixel_by_color(color.color_e);
+            palette_table[0] = scui_pixel_by_color(src_color.color_s);
+            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
             /* 无渐变时: */
             if (palette_table[0].full == palette_table[palette_len - 1].full) {
                 for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)

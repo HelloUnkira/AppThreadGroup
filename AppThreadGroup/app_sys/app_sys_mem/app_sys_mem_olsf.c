@@ -522,7 +522,7 @@ void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size
     if (size == 0 || size / sizeof(uintptr_t) >= mem_olsf->number)
         return NULL;
     /* 对齐尺寸检查 */
-    if (!app_sys_pow2check(align) || align < sizeof(uintptr_t)) {
+    if (!app_sys_pow2_check(align) || align < sizeof(uintptr_t)) {
          APP_SYS_LOG_WARN("align size fail:%d", align);
          return NULL;
     }

@@ -27,6 +27,12 @@
 /* 内存图片散列值,内存图片缓存最大限制 */
 #define SCUI_IMAGE_LIMIT_HASH                       (100)
 #define SCUI_IMAGE_LIMIT_TOTAL                      (1024 * 1024 * 1)
+/* 内存文字散列值,内存文字缓存最大限制 */
+#define SCUI_FONT_LIMIT_HASH                        (5)
+#define SCUI_FONT_LIMIT_TOTAL                       (1024 * 50)
+/* 内存文字散列值,内存文字缓存最大限制 */
+#define SCUI_FONT_GLYPH_LIMIT_HASH                  (100)
+#define SCUI_FONT_GLYPH_LIMIT_TOTAL                 (1024 * 100)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)

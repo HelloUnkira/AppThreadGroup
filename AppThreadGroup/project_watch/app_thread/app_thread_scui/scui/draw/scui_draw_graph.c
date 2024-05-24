@@ -16,6 +16,11 @@
 void scui_draw_pixel(scui_surface_t  *dst_surface, scui_point_t *dst_point,
                      SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t  src_alpha)
 {
+    SCUI_ASSERT(dst_surface != NULL && dst_point != NULL && src_pixel != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
     scui_area_t dst_area = {
         .w = dst_surface->hor_res,
         .h = dst_surface->ver_res,

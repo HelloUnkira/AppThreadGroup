@@ -37,6 +37,8 @@
 #include "scui_disp.h"          /* 显示器 */
 /* font */
 #include "scui_font.h"
+#include "scui_font_cache.h"
+#include "scui_font_glyph_cache.h"
 /* widget: */
 #include "scui_widget.h"
 #include "scui_widget_event.h"
@@ -54,10 +56,12 @@
 #include "scui_watch.h"
 #include "scui_chart.h"
 #include "scui_ring.h"
+
 /* draw */
 #include "scui_draw_graph.h"
 #include "scui_draw_basic.h"
 #include "scui_draw_image.h"
+#include "scui_draw_letter.h"
 
 /* linker: */
 #include "scui_mem.h"

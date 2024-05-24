@@ -287,6 +287,7 @@ typedef struct _lv_font_t {
     
     /* font fs扩展字段 */
     scui_font_src_t font_src;
+    uint32_t size;
     char name[128];
 
 } lv_font_t;
@@ -774,6 +775,7 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
     
     uint32_t cmaps_subtables_size = cmaps_subtables_count * sizeof(lv_font_fmt_txt_cmap_t);
     lv_font_fmt_txt_cmap_t * cmaps = SCUI_MEM_ALLOC(scui_mem_type_font, cmaps_subtables_size);
+    font->size += cmaps_subtables_size;
     memset(cmaps, 0, cmaps_subtables_size);
     
     font_dsc->cmaps = cmaps;
@@ -781,6 +783,8 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
     
     uint32_t cmaps_tables_size = sizeof(cmap_table_bin_t) * font_dsc->cmap_num;
     cmap_table_bin_t * cmaps_tables = SCUI_MEM_ALLOC(scui_mem_type_font, cmaps_tables_size);
+    font->size += cmaps_tables_size;
+    
     scui_font_src_seek(&font->font_src, offset + 12);
     scui_font_src_read(&font->font_src, cmaps_tables, cmaps_tables_size);
     
@@ -799,6 +803,7 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
             case LV_FONT_FMT_TXT_CMAP_FORMAT0_FULL: {
                     uint8_t ids_size = sizeof(uint8_t) * cmaps_tables[idx].data_entries_count;
                     cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, ids_size);
+                    font->size += ids_size;
                     scui_font_src_seek(&font->font_src, ofs);
                     scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, ids_size);
                     cmap->list_length = cmap->range_length;
@@ -810,12 +815,14 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
             case LV_FONT_FMT_TXT_CMAP_SPARSE_TINY: {
                     uint32_t list_size = sizeof(uint16_t) * cmaps_tables[idx].data_entries_count;
                     cmap->unicode_list = SCUI_MEM_ALLOC(scui_mem_type_font, list_size);
+                    font->size += list_size;
                     cmap->list_length = cmaps_tables[idx].data_entries_count;
                     scui_font_src_seek(&font->font_src, ofs);
                     scui_font_src_read(&font->font_src, cmap->unicode_list, list_size);
                     
                     if(cmaps_tables[idx].format_type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
                         cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, cmap->list_length);
+                        font->size += cmap->list_length;
                         scui_font_src_seek(&font->font_src, ofs);
                         scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, sizeof(uint16_t) * cmap->list_length);
                     }
@@ -850,6 +857,7 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
     
     if(0 == kern_format_type) { /*sorted pairs*/
         lv_font_fmt_txt_kern_pair_t * kern_pair = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_pair_t));
+        font->size += sizeof(lv_font_fmt_txt_kern_pair_t);
         memset(kern_pair, 0, sizeof(lv_font_fmt_txt_kern_pair_t));
         
         font_dsc->kern_dsc = kern_pair;
@@ -863,6 +871,8 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
         
         uint8_t * glyph_ids = SCUI_MEM_ALLOC(scui_mem_type_font, ids_size);
         int8_t * values = SCUI_MEM_ALLOC(scui_mem_type_font, glyph_entries);
+        font->size += ids_size;
+        font->size += glyph_entries;
         
         kern_pair->glyph_ids_size = format;
         kern_pair->pair_cnt = glyph_entries;
@@ -876,6 +886,7 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
     }
     else if(3 == kern_format_type) { /*array M*N of classes*/
         lv_font_fmt_txt_kern_classes_t * kern_classes = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_classes_t));
+        font->size += sizeof(lv_font_fmt_txt_kern_classes_t);
         memset(kern_classes, 0, sizeof(lv_font_fmt_txt_kern_classes_t));
         
         font_dsc->kern_dsc = kern_classes;
@@ -897,6 +908,9 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
         uint8_t * kern_left = SCUI_MEM_ALLOC(scui_mem_type_font, kern_class_mapping_length);
         uint8_t * kern_right = SCUI_MEM_ALLOC(scui_mem_type_font, kern_class_mapping_length);
         int8_t * kern_values = SCUI_MEM_ALLOC(scui_mem_type_font, kern_values_length);
+        font->size += kern_class_mapping_length;
+        font->size += kern_class_mapping_length;
+        font->size += kern_values_length;
         
         kern_classes->left_class_mapping  = kern_left;
         kern_classes->right_class_mapping = kern_right;
@@ -927,10 +941,13 @@ static lv_font_t * lv_font_load(char *name)
 {
     lv_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_t));
     memset(font, 0, sizeof(lv_font_t));
+    font->size += sizeof(lv_font_t);
+    
     strcpy(font->name, name);
     scui_font_src_open(&font->font_src, font->name);
     
     lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
+    font->size += sizeof(lv_font_fmt_txt_dsc_t);
     memset(font_dsc, 0, sizeof(lv_font_fmt_txt_dsc_t));
     font->dsc = font_dsc;
     
@@ -1199,7 +1216,7 @@ static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
             scui_font_src_read(&font->font_src, glyph->bitmap, bitmap_size);
         } else {
             scui_font_src_seek(&font->font_src, glyph_offset + offset1 + nbits / 8);
-            #if 0
+            #if 1
             bit_it = init_bit_iterator(font, 0);
             read_bits(&bit_it, nbits % 8);
             /* 偏移到目标字符处 */
@@ -1275,6 +1292,10 @@ void scui_font_load(char *name, scui_handle_t *handle)
     *handle = scui_handle_find();
     lv_font_t *font = lv_font_load(name);
     scui_handle_set(*handle, font);
+    
+    /* 只去支持1,2,4,8的bpp */
+    uint8_t bpp = font->bin_head.bits_per_pixel;
+    SCUI_ASSERT(scui_pow2_check(bpp));
 }
 
 /*@brief 字库卸载
@@ -1288,22 +1309,36 @@ void scui_font_unload(scui_handle_t handle)
     scui_handle_set(handle, NULL);
 }
 
-/*@brief 字型加载
+/*@brief 字库大小
  *@param handle 字库句柄
- *@param glyph  字形信息
+ *@retval 字库大小
  */
-void scui_font_glyph_load(scui_handle_t handle, scui_font_glyph_t *glyph)
+uint32_t scui_font_size(scui_handle_t handle)
 {
     lv_font_t *font = scui_handle_get(handle);
     SCUI_ASSERT(font != NULL);
+    
+    return font->size;
+}
+
+/*@brief 字型加载
+ *@param glyph 字形信息
+ */
+void scui_font_glyph_load(scui_font_glyph_t *glyph)
+{
     SCUI_ASSERT(glyph != NULL);
     SCUI_ASSERT(glyph->bitmap == NULL);
+    lv_font_t *font = scui_handle_get(glyph->handle);
+    SCUI_ASSERT(font != NULL);
     
-    if (glyph->unicode_letter < 0x20)
-        return;
+    /* 只去支持1,2,4,8的bpp */
+    uint8_t bpp = font->bin_head.bits_per_pixel;
+    SCUI_ASSERT(scui_pow2_check(bpp));
     
-    if (glyph->unicode_letter == 0x20 || glyph->unicode_letter == 0x202A || glyph->unicode_letter == 0x200E ||
-        glyph->unicode_letter == 0xA0 || glyph->unicode_letter == 0x202C || glyph->unicode_letter == 0x202B) {
+    if (glyph->unicode_letter  < 0x20   ||
+        glyph->unicode_letter == 0x20   || glyph->unicode_letter == 0xA0   ||
+        glyph->unicode_letter == 0x200E || glyph->unicode_letter == 0x202A ||
+        glyph->unicode_letter == 0x202C || glyph->unicode_letter == 0x202B) {
         
         if (glyph->space_width != 0) {
             glyph->ofs_x = 0;
@@ -1317,6 +1352,16 @@ void scui_font_glyph_load(scui_handle_t handle, scui_font_glyph_t *glyph)
     scui_font_src_open(&font->font_src, font->name);
     lvgl_font_glpyh_load(font, glyph);
     scui_font_src_close(&font->font_src);
+    
+    if (glyph->bitmap == NULL) {
+        
+        if (glyph->space_width != 0) {
+            glyph->ofs_x = 0;
+            glyph->box_h = glyph->space_width;
+            glyph->adv_w = glyph->space_width << 4;
+            glyph->box_w = glyph->space_width;
+        }
+    }
 }
 
 /*@brief 字型卸载

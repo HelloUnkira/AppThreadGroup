@@ -31,18 +31,18 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param dst_clip    画布绘制区域
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
- *@param color       图像源色调(调色板格式使用)
+ *@param src_color   图像源色调(调色板格式使用)
  */
-void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                          scui_surface_t *src_surface, scui_area_t *src_clip,
-                          scui_color_mix_t color);
+void scui_draw_area_blend(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
+                          scui_surface_t  *src_surface, scui_area_t *src_clip,
+                          scui_color_mix_t src_color);
 
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
- *@param matrix      变换矩阵的逆矩阵
+ *@param inv_matrix  变换矩阵的逆矩阵
  */
 void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                                    scui_surface_t *src_surface, scui_area_t *src_clip,

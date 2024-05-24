@@ -66,6 +66,11 @@ void scui_ready(void)
     table.source = scui_image_parser_table;
     table.number = scui_arr_len(scui_image_parser_table);
     scui_handle_table_register(&table);
+    /* 句柄表(font) */
+    table.offset = SCUI_HANDLE_OFFSET_FONT + 1;
+    table.source = scui_font_type_table;
+    table.number = scui_arr_len(scui_font_type_table);
+    scui_handle_table_register(&table);
     /* 句柄表(multi language) */
     table.offset = SCUI_HANDLE_OFFSET_LANG + 1;
     table.source = scui_multi_lang_table;
@@ -90,26 +95,27 @@ void scui_ready(void)
     scui_window_active(handle);
     // scui_widget_hide(handle, false);
     
-    #if 1   // test
+    #if 0   // test
     /* 加载默认字库 */
     scui_handle_t font_handle = SCUI_HANDLE_INVALID;
     scui_font_load("font_zh_24.bin", &font_handle);
-    // scui_font_free(font_handle);
     
     scui_font_glyph_t glyph = {
-        .unicode_letter = '@',
+        .unicode_letter = '!',
+        .handle = font_handle,
     };
-    scui_font_glyph_load(font_handle, &glyph);
+    scui_font_glyph_load(&glyph);
     
-    #if 0
     // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
     for (uint32_t idx = 0; idx < glyph.bitmap_size; idx++) {
          if (idx % 8 == 0)
              SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
          SCUI_LOG_INFO_RAW("0x%02x ", glyph.bitmap[idx]);
     }
-    #endif
+    SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
     
+    scui_font_glyph_unload(&glyph);
+    scui_font_unload(font_handle);
     #endif
     
     scui_engine_execute_status_set(true);

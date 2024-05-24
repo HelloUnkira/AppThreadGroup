@@ -45,8 +45,11 @@ static void scui_scene_test_show(scui_event_t *event)
     
     if (event->type == scui_event_show) {
         
+        /* 设置背景 */
+        scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp);
+        
         #if 0
-        #elif 1 /* test scroll widget */
+        #elif 0 /* test scroll widget */
         #define SCUI_SCROLL_LAYOUT_AUTO     1
         scui_scroll_maker_t scroll_maker = {0};
         scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
@@ -55,9 +58,9 @@ static void scui_scene_test_show(scui_event_t *event)
         scroll_maker.widget.style.indev_enc = true;
         scroll_maker.widget.style.indev_key = true;
         scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES / 6;
-        scroll_maker.widget.clip.y = SCUI_DRV_HOR_RES / 6;
+        scroll_maker.widget.clip.y = SCUI_DRV_VER_RES / 6;
         scroll_maker.widget.clip.w = SCUI_DRV_HOR_RES * 4 / 6;
-        scroll_maker.widget.clip.h = SCUI_DRV_HOR_RES * 4 / 6;
+        scroll_maker.widget.clip.h = SCUI_DRV_VER_RES * 4 / 6;
         scroll_maker.widget.parent = SCUI_UI_SCENE_TEST;
         scroll_maker.widget.child_num = 50;
         scroll_maker.widget.color.color.full = 0xFF4F4F4F;
@@ -90,7 +93,7 @@ static void scui_scene_test_show(scui_event_t *event)
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.type   = scui_widget_type_custom;
         custom_maker.widget.clip.w = SCUI_DRV_HOR_RES / 8;
-        custom_maker.widget.clip.h = SCUI_DRV_HOR_RES / 8;
+        custom_maker.widget.clip.h = SCUI_DRV_VER_RES / 8;
         custom_maker.widget.parent = scroll_handle;
         
         scui_coord_t scroll_x = scroll_maker.widget.clip.x;
@@ -122,6 +125,25 @@ static void scui_scene_test_show(scui_event_t *event)
             scui_custom_create(&custom_maker, &custom_handle, false);
         }
         #endif
+        
+        #elif 1 /* test string widget */
+        scui_string_maker_t string_maker = {0};
+        scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+        string_maker.widget.type = scui_widget_type_string;
+        string_maker.widget.style.indev_ptr = true;
+        string_maker.widget.style.indev_enc = true;
+        string_maker.widget.style.indev_key = true;
+        string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
+        string_maker.widget.clip.y = SCUI_DRV_VER_RES / 4;
+        string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+        string_maker.widget.clip.h = SCUI_DRV_VER_RES / 2;
+        string_maker.widget.parent = SCUI_UI_SCENE_TEST;
+        string_maker.align = scui_string_align_lu;
+        string_maker.mode  = scui_string_mode_dot;
+        string_maker.dir   = scui_event_dir_hor;
+        string_maker.font  = SCUI_FONT_TYPE_24_EN;
+        string_maker.text  = SCUI_MULTI_LANG_0X0000;
+        scui_string_create(&string_maker, &string_handle, false);
         
         #else
         #endif
