@@ -189,7 +189,7 @@ static void app_sys_mem_dir_free_raw(app_sys_mem_dir_t *mem_dir, void *pointer)
  */
 void * app_sys_mem_dir_alloc_align(app_sys_mem_dir_t *mem_dir, uintptr_t size, uintptr_t align, bool way)
 {
-    if (!app_sys_pow2check(align) || align < sizeof(uintptr_t)) {
+    if (!app_sys_pow2_check(align) || align < sizeof(uintptr_t)) {
          APP_SYS_LOG_WARN("align size fail:%d", align);
          return NULL;
     }

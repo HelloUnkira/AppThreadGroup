@@ -611,7 +611,7 @@ void * app_sys_mem_tlsf_alloc_align(app_sys_mem_tlsf_t *mem_tlsf, uintptr_t size
     if (size == 0)
         return NULL;
     /* 对齐尺寸检查 */
-    if (!app_sys_pow2check(align) || align < sizeof(uintptr_t)) {
+    if (!app_sys_pow2_check(align) || align < sizeof(uintptr_t)) {
          APP_SYS_LOG_WARN("align size fail:%d", align);
          return NULL;
     }

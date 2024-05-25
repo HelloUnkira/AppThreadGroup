@@ -50,6 +50,12 @@ void scui_font_unload(scui_handle_t handle);
  */
 uint32_t scui_font_size(scui_handle_t handle);
 
+/*@brief 字型高度
+ *@param handle 字库句柄
+ *@retval 字型高度
+ */
+scui_coord_t scui_font_glyph_height(scui_handle_t handle);
+
 /*@brief 字型加载
  *@param glyph 字形信息
  */

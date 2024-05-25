@@ -33,8 +33,10 @@
 /* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_FONT_GLYPH_LIMIT_HASH                  (100)
 #define SCUI_FONT_GLYPH_LIMIT_TOTAL                 (1024 * 100)
-/* 内存文字宽度 */
-#define SCUI_FONT_GLYPH_SPACE_WIDTH                 (8)
+
+/* 内存文字宽度,文字边距: */
+#define SCUI_STRING_SPACE_WIDTH                     (8)
+#define SCUI_STRING_MARGIN                          (5)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)

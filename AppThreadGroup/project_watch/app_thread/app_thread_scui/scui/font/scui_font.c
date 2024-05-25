@@ -63,7 +63,7 @@ static inline uint8_t scui_font_bpp_8_palette(uint8_t bitmap, uint8_t bpp_x)
 uint8_t scui_font_bpp_palette(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 {
     /* 只支持1,2,4,8的bpp, 在字库加载时检查 */
-    SCUI_ASSERT(bpp > bpp_x);
+    SCUI_ASSERT(bpp * bpp_x < 8);
     
     switch (bpp) {
     /* 高位在前,地位在后 */

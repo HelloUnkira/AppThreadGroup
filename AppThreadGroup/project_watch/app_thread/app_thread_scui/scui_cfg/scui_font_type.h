@@ -3,9 +3,9 @@
 
 typedef enum {
 	SCUI_HANDLE_OFFSET_FONT = 0x3000 - 1,
-    SCUI_FONT_TYPE_24_EN,
+    SCUI_FONT_TYPE_32_EN,
     SCUI_FONT_TYPE_36_EN,
-    SCUI_FONT_TYPE_24_ZH,
+    SCUI_FONT_TYPE_32_ZH,
     SCUI_FONT_TYPE_36_ZH,
     SCUI_FONT_TYPE_NUM,
 } scui_font_type_table_t;

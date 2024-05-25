@@ -1321,6 +1321,18 @@ uint32_t scui_font_size(scui_handle_t handle)
     return font->size;
 }
 
+/*@brief 字型高度
+ *@param handle 字库句柄
+ *@retval 字型高度
+ */
+scui_coord_t scui_font_glyph_height(scui_handle_t handle)
+{
+    lv_font_t *font = scui_handle_get(handle);
+    SCUI_ASSERT(font != NULL);
+    
+    return font->line_height;
+}
+
 /*@brief 字型加载
  *@param glyph 字形信息
  */

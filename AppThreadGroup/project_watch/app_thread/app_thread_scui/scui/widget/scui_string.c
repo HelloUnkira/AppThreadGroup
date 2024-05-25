@@ -24,13 +24,15 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
-    string->align   = maker->align;
-    string->mode    = maker->mode;
-    string->dir     = maker->dir;
-    string->font    = maker->font;
-    string->text    = maker->text;
-    string->color   = maker->color;
-    string->filter  = maker->filter;
+    string->align       = maker->align;
+    string->mode        = maker->mode;
+    string->dir         = maker->dir;
+    string->font        = maker->font;
+    string->text        = maker->text;
+    string->color       = maker->color;
+    string->filter      = maker->filter;
+    string->margin      = maker->margin;
+    string->space       = maker->space;
     
     /* 目前只支持水平书写 */
     SCUI_ASSERT(string->dir == scui_event_dir_hor);
@@ -140,7 +142,7 @@ void scui_string_event(scui_event_t *event)
             scui_font_glyph_unit_t glyph_unit = {
                 .name = string->font,
                 .glyph.unicode_letter = 'B',
-                .glyph.space_width = SCUI_FONT_GLYPH_SPACE_WIDTH,
+                .glyph.space_width = SCUI_STRING_SPACE_WIDTH,
             };
             scui_font_glyph_cache_load(&glyph_unit);
             

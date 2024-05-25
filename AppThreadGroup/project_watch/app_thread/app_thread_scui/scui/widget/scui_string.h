@@ -19,13 +19,15 @@ typedef enum {
 
 typedef struct {
     scui_widget_t       widget;
-    scui_string_align_t align;      // 字符串书写对齐
-    scui_string_mode_t  mode;       // 字符串模式
-    scui_event_dir_t    dir;        // 字符串书写方向(暂支持水平书写)
-    scui_handle_t       font;       // 字库
-    scui_handle_t       text;       // 字符串
-    scui_color_mix_t    color;      // 字符串颜色
-    scui_color_mix_t    filter;     // 去底色
+    scui_string_align_t align;          // 字符串书写对齐
+    scui_string_mode_t  mode;           // 字符串模式
+    scui_event_dir_t    dir;            // 字符串书写方向(暂支持水平书写)
+    scui_handle_t       font;           // 字库
+    scui_handle_t       text;           // 字符串
+    scui_color_mix_t    color;          // 字符串颜色
+    scui_color_mix_t    filter;         // 去底色
+    scui_coord_t        margin;         // 边距
+    scui_coord_t        space;          // 空格字符宽度
     /* 内部域: */
     uint8_t *str;   // 字符串
 } scui_string_t;
@@ -33,13 +35,15 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
-    scui_string_align_t align;      // 字符串书写对齐
-    scui_string_mode_t  mode;       // 字符串模式
-    scui_event_dir_t    dir;        // 字符串书写方向(暂支持水平书写)
-    scui_handle_t       font;       // 字库
-    scui_handle_t       text;       // 字符串
-    scui_color_mix_t    color;      // 字符串颜色
-    scui_color_mix_t    filter;     // 去底色
+    scui_string_align_t align;          // 字符串书写对齐
+    scui_string_mode_t  mode;           // 字符串模式
+    scui_event_dir_t    dir;            // 字符串书写方向(暂支持水平书写)
+    scui_handle_t       font;           // 字库
+    scui_handle_t       text;           // 字符串
+    scui_color_mix_t    color;          // 字符串颜色
+    scui_color_mix_t    filter;         // 去底色
+    scui_coord_t        margin;         // 边距
+    scui_coord_t        space;          // 空格字符宽度
 } scui_string_maker_t;
 #pragma pack(pop)
 
