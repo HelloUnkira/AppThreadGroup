@@ -159,13 +159,12 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_image_unit_t image_unit = {.image = scui_handle_get(handle),};
-    SCUI_ASSERT(image_unit.image != NULL);
-    scui_image_cache_load(&image_unit);
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
-        .w = image_unit.image->pixel.width,
-        .h = image_unit.image->pixel.height,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
     };
     
     if (src_clip == NULL)
@@ -180,7 +179,7 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
         scui_area_t src_area = {0};
         if (!scui_area_inter(&src_area, src_clip, &unit->clip))
              continue;
-        scui_draw_image(widget->surface, &unit->clip, &image_unit, &src_area,
+        scui_draw_image(widget->surface, &unit->clip, image, &src_area,
                         widget->alpha, color);
     }
     
@@ -189,8 +188,6 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_handle_t handle,
     if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
         SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     #endif
-    
-    scui_image_cache_unload(&image_unit);
 }
 
 /*@brief 控件画布在画布绘制图像
@@ -210,13 +207,12 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_image_unit_t image_unit = {.image = scui_handle_get(handle),};
-    SCUI_ASSERT(image_unit.image != NULL);
-    scui_image_cache_load(&image_unit);
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
-        .w = image_unit.image->pixel.width,
-        .h = image_unit.image->pixel.height,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
     };
     
     if (src_clip == NULL)
@@ -231,7 +227,7 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
         scui_area_t src_area = {0};
         if (!scui_area_inter(&src_area, src_clip, &unit->clip))
              continue;
-        scui_draw_image_rotate(widget->surface, &unit->clip, &image_unit, &src_area,
+        scui_draw_image_rotate(widget->surface, &unit->clip, image, &src_area,
                                widget->alpha, angle, anchor, center);
     }
     
@@ -240,8 +236,6 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_handle_t 
     if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
         SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     #endif
-    
-    scui_image_cache_unload(&image_unit);
 }
 
 /*@brief 控件画布在画布绘制图像
@@ -258,13 +252,12 @@ void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_handle
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_image_unit_t image_unit = {.image = scui_handle_get(handle),};
-    SCUI_ASSERT(image_unit.image != NULL);
-    scui_image_cache_load(&image_unit);
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {
-        .w = image_unit.image->pixel.width,
-        .h = image_unit.image->pixel.height,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
     };
     
     if (src_clip == NULL)
@@ -279,7 +272,7 @@ void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_handle
         scui_area_t src_area = {0};
         if (!scui_area_inter(&src_area, src_clip, &unit->clip))
              continue;
-       scui_draw_image_blit_by_matrix(widget->surface, &unit->clip, &image_unit, &src_area,
+       scui_draw_image_blit_by_matrix(widget->surface, &unit->clip, image, &src_area,
                                       widget->alpha, matrix);
     }
     
@@ -288,6 +281,4 @@ void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_handle
     if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     #endif
-
-    scui_image_cache_unload(&image_unit);
 }

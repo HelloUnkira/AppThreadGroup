@@ -67,9 +67,9 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text);
 
 /*@brief 字符串控件更新文本
  *@param handle 字符串控件句柄
- *@param text   字符串句柄
+ *@param str    字符串(utf8)
  */
-void scui_string_update_str(scui_handle_t handle, char *str);
+void scui_string_update_str(scui_handle_t handle, uint8_t *str);
 
 /*@brief 字符串控件事件处理回调
  *@param event 事件

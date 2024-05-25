@@ -1,5 +1,5 @@
 /*实现目标:
- *    基础图元绘制
+ *    字符串绘制
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

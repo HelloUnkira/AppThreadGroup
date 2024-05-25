@@ -85,17 +85,19 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     
     if (string->text != SCUI_HANDLE_INVALID) {
         scui_multi_lang_type_t type = scui_font_type_switch(string->font);
-        char *str = scui_handle_get(scui_multi_lang_switch(type, string->text));
-        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(str) + 1);
-        strcpy(string->str, str);
+        uint8_t *str = scui_handle_get(scui_multi_lang_switch(type, string->text));
+        uint32_t str_bytes = scui_font_utf8_str_bytes(str);
+        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        memcpy(string->str, str, str_bytes);
+        string->str[str_bytes] = '\0';
     }
 }
 
 /*@brief 字符串控件更新文本
  *@param handle 字符串控件句柄
- *@param text   字符串句柄
+ *@param str    字符串(utf8)
  */
-void scui_string_update_str(scui_handle_t handle, char *str)
+void scui_string_update_str(scui_handle_t handle, uint8_t *str)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
@@ -106,8 +108,10 @@ void scui_string_update_str(scui_handle_t handle, char *str)
         SCUI_MEM_FREE(string->str);
     
     if (str != NULL) {
-        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(str) + 1);
-        strcpy(string->str, str);
+        uint32_t str_bytes = scui_font_utf8_str_bytes(str);
+        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        memcpy(string->str, str, str_bytes);
+        string->str[str_bytes] = '\0';
     }
 }
 

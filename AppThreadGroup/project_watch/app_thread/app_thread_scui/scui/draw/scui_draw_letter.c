@@ -121,4 +121,3 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t     *dst_clip,
     
     SCUI_MEM_FREE(palette_table);
 }
-
