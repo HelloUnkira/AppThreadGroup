@@ -9,7 +9,7 @@
 
 /* 内存使用占用 */
 #define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 50)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 200)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 256)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 2 + 1024 * 256)
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_CHECK                       (1)
@@ -29,10 +29,12 @@
 #define SCUI_IMAGE_LIMIT_TOTAL                      (1024 * 1024 * 1)
 /* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_FONT_LIMIT_HASH                        (5)
-#define SCUI_FONT_LIMIT_TOTAL                       (1024 * 50)
+#define SCUI_FONT_LIMIT_TOTAL                       (1024 * 75)
 /* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_FONT_GLYPH_LIMIT_HASH                  (100)
 #define SCUI_FONT_GLYPH_LIMIT_TOTAL                 (1024 * 100)
+/* 内存文字宽度 */
+#define SCUI_FONT_GLYPH_SPACE_WIDTH                 (8)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)

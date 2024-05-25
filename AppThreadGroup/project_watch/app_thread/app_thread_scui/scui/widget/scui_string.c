@@ -29,6 +29,8 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->dir     = maker->dir;
     string->font    = maker->font;
     string->text    = maker->text;
+    string->color   = maker->color;
+    string->filter  = maker->filter;
     
     /* 目前只支持水平书写 */
     SCUI_ASSERT(string->dir == scui_event_dir_hor);
@@ -134,6 +136,50 @@ void scui_string_event(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         
         if (string->str != NULL) {
+            #if 1   // test
+            scui_font_glyph_unit_t glyph_unit = {
+                .name = string->font,
+                .glyph.unicode_letter = 'B',
+                .glyph.space_width = SCUI_FONT_GLYPH_SPACE_WIDTH,
+            };
+            scui_font_glyph_cache_load(&glyph_unit);
+            
+            scui_draw_letter(widget->surface, &widget->clip_set.clip, &glyph_unit.glyph,
+                             string->color, widget->alpha, string->filter, true);
+            
+            #if 0   // test
+            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
+            for (uint32_t idx = 0; idx < glyph_unit.glyph.bitmap_size; idx++) {
+                 if (idx % 8 == 0)
+                     SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+                     SCUI_LOG_INFO_RAW("0x%02x ", glyph_unit.glyph.bitmap[idx]);
+            }
+            SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+            #endif
+            
+            #if 0   // test
+             uint32_t idx_ofs = 0;
+            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
+            for (scui_multi_t idx_line = 0; idx_line < glyph_unit.glyph.box_h; idx_line++) {
+            for (scui_multi_t idx_item = 0; idx_item < glyph_unit.glyph.box_w; idx_item++) {
+                 uint32_t idx = idx_line * glyph_unit.glyph.box_w + idx_item;
+                 
+                 uint8_t palette = scui_font_bpp_palette(
+                         glyph_unit.glyph.bitmap[idx / (8 / glyph_unit.glyph.bpp)],
+                         glyph_unit.glyph.bpp, idx_ofs % (8 / glyph_unit.glyph.bpp));
+                 
+                 idx_ofs++;
+                 if (palette != 0x00)
+                     SCUI_LOG_INFO_RAW("%02x ", palette);
+                 else
+                     SCUI_LOG_INFO_RAW("   ");
+                }
+                SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+            }
+            #endif
+            
+            scui_font_glyph_cache_unload(&glyph_unit);
+            #endif
             
         }
         break;

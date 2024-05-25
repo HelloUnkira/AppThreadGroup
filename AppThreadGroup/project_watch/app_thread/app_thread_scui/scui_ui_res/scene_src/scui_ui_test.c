@@ -141,8 +141,10 @@ static void scui_scene_test_show(scui_event_t *event)
         string_maker.align = scui_string_align_lu;
         string_maker.mode  = scui_string_mode_dot;
         string_maker.dir   = scui_event_dir_hor;
-        string_maker.font  = SCUI_FONT_TYPE_24_EN;
+        string_maker.font  = SCUI_FONT_TYPE_24_ZH;
         string_maker.text  = SCUI_MULTI_LANG_0X0000;
+        string_maker.color.color_s.full = 0xFFFFFFFF;
+        string_maker.color.color_e.full = 0xFFFFFFFF;
         scui_string_create(&string_maker, &string_handle, false);
         
         #else

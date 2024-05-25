@@ -19,6 +19,10 @@ void scui_engine_ready(void)
     scui_event_ready();
     
     scui_image_cache_ready();
+    
+    scui_font_cache_ready();
+    scui_font_glyph_cache_ready();
+    
     scui_surface_fb_ready();
 }
 

@@ -24,6 +24,8 @@ typedef struct {
     scui_event_dir_t    dir;        // 字符串书写方向(暂支持水平书写)
     scui_handle_t       font;       // 字库
     scui_handle_t       text;       // 字符串
+    scui_color_mix_t    color;      // 字符串颜色
+    scui_color_mix_t    filter;     // 去底色
     /* 内部域: */
     uint8_t *str;   // 字符串
 } scui_string_t;
@@ -36,6 +38,8 @@ typedef struct {
     scui_event_dir_t    dir;        // 字符串书写方向(暂支持水平书写)
     scui_handle_t       font;       // 字库
     scui_handle_t       text;       // 字符串
+    scui_color_mix_t    color;      // 字符串颜色
+    scui_color_mix_t    filter;     // 去底色
 } scui_string_maker_t;
 #pragma pack(pop)
 
