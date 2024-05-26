@@ -84,6 +84,7 @@ void scui_ready(void)
     
     scui_window_switch_type_cfg(scui_window_switch_center_in);
     scui_window_switch_type_cfg(scui_window_switch_center_out);
+    scui_window_switch_type_cfg(scui_window_switch_circle);
     scui_window_switch_type_cfg(scui_window_switch_grid);
     
     scui_window_switch_type_cfg(scui_window_switch_flip);

@@ -11,6 +11,7 @@ typedef enum {
     
     scui_window_switch_center_in,       /* 中心淡入 */
     scui_window_switch_center_out,      /* 中心淡出 */
+    scui_window_switch_circle,          /* 圈格缩放 */
     scui_window_switch_grid,            /* 网格缩放 */
     
     scui_window_switch_flip,            /* 中心轴翻页(2.5D) */

@@ -3,6 +3,8 @@
 
 typedef struct {
     void *none;
+    
+    
 } scui_string_layout_t;
 
 #endif

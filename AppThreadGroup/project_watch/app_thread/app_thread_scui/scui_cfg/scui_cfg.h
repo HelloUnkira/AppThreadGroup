@@ -35,6 +35,7 @@
 #define SCUI_FONT_GLYPH_LIMIT_TOTAL                 (1024 * 100)
 
 /* 内存文字宽度,文字边距: */
+#define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_SPACE_WIDTH                     (8)
 #define SCUI_STRING_MARGIN                          (5)
 

@@ -57,6 +57,7 @@ void scui_window_jump_anima_start(void *instance)
     /* 更新point: */
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_grid:
+    case scui_window_switch_circle:
     case scui_window_switch_center_in:
     case scui_window_switch_center_out: {
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
@@ -115,6 +116,7 @@ void scui_window_jump_anima_ready(void *instance)
     
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_grid:
+    case scui_window_switch_circle:
     case scui_window_switch_center_in:
     case scui_window_switch_center_out:
     case scui_window_switch_cube:
@@ -189,6 +191,7 @@ void scui_window_jump_anima_expired(void *instance)
     
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_grid:
+    case scui_window_switch_circle:
     case scui_window_switch_center_in:
     case scui_window_switch_center_out: {
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
@@ -265,6 +268,7 @@ void scui_window_move_anima_ready(void *instance)
     
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_grid:
+    case scui_window_switch_circle:
     case scui_window_switch_center_in:
     case scui_window_switch_center_out:
     case scui_window_switch_cube:
@@ -342,6 +346,7 @@ void scui_window_move_anima_expired(void *instance)
     /* 更新point */
     switch (scui_window_mgr.switch_args.type) {
     case scui_window_switch_grid:
+    case scui_window_switch_circle:
     case scui_window_switch_center_in:
     case scui_window_switch_center_out: {
         point = (scui_point_t){0};
