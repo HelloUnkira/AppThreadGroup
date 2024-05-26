@@ -150,8 +150,15 @@ void scui_string_event(scui_event_t *event)
             };
             scui_font_glyph_cache_load(&glyph_unit);
             
-            scui_draw_letter(widget->surface, &widget->clip_set.clip, &glyph_unit.glyph,
-                             string->color, widget->alpha, string->filter, true);
+            scui_area_t glyph_clip = {
+                .w = glyph_unit.glyph.box_w,
+                .h = glyph_unit.glyph.box_h,
+            };
+            
+            scui_draw_letter(widget->surface,  &widget->clip_set.clip,
+                            &glyph_unit.glyph, &glyph_clip,
+                             widget->alpha,     string->color,
+                             true,              string->filter);
             
             #if 0   // test
             // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性

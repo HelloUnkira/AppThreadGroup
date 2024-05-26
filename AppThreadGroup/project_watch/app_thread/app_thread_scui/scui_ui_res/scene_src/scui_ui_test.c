@@ -139,7 +139,6 @@ static void scui_scene_test_show(scui_event_t *event)
         string_maker.widget.clip.h = SCUI_DRV_VER_RES / 2;
         string_maker.widget.parent = SCUI_UI_SCENE_TEST;
         string_maker.align  = scui_string_align_lu;
-        string_maker.mode   = scui_string_mode_dot;
         string_maker.dir    = scui_event_dir_hor;
         string_maker.font   = SCUI_FONT_TYPE_32_EN;
         string_maker.text   = SCUI_MULTI_LANG_0X0000;

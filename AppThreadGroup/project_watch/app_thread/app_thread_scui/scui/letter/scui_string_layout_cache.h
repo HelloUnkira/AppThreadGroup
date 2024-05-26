@@ -1,0 +1,6 @@
+#ifndef SCUI_STRING_LAYOUT_CACHE_H
+#define SCUI_STRING_LAYOUT_CACHE_H
+
+
+
+#endif

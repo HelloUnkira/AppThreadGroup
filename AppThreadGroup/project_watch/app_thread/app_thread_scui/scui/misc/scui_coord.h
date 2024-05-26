@@ -103,6 +103,15 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
  */
 bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
 
+/*@brief 剪切域偏移调整
+ *       先调整剪切域偏移
+ *       后与原剪切域交集运算
+ *@param clip   剪切域
+ *@param offset 偏移量
+ *@retval 为空false,不为空true
+ */
+bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
+
 /*@brief 求区域求差(area = area1 - area2)
  *       求差要求:必须存在交集,area2是area1的子集
  *@param area  区域

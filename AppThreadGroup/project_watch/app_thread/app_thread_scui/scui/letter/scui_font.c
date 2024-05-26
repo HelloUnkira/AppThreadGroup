@@ -76,7 +76,7 @@ uint8_t scui_font_bpp_palette(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 }
 
 /*****************************************************************************/
-/* utf-8 unicode tools<s>:************************************************** */
+/* utf-8 unicode tools<part>:*********************************************** */
 /*****************************************************************************/
 
 /*@brief utf8字符转unicode字符
@@ -170,6 +170,26 @@ uint32_t scui_font_utf8_str_bytes(uint8_t *utf8)
     return str_bytes;
 }
 
+/*@brief 后缀匹配
+ *@param str    utf8字符串
+ *@param suffix utf8字符串
+ */
+bool scui_font_utf8_str_match_suffix(uint8_t *str, uint8_t *suffix)
+{
+    uint32_t bytes_str    = scui_font_utf8_str_bytes(str);
+    uint32_t bytes_suffix = scui_font_utf8_str_bytes(suffix);
+    uint32_t bytes_offset = bytes_str - bytes_suffix;
+    
+    if (bytes_str < bytes_suffix)
+        return false;
+    
+    for (uint32_t idx = 0; idx < bytes_suffix; idx++)
+        if (str[bytes_offset + idx] != suffix[idx])
+            return false;
+    
+    return true;
+}
+
 /*@brief utf8字符串构造生成unicode字符串
  *@param unicode unicode字符串
  *@param utf8    utf8字符串
@@ -196,6 +216,6 @@ uint32_t scui_font_unicode_by_utf8_str(uint32_t **unicode, uint8_t *utf8)
 }
 
 /*****************************************************************************/
-/* utf-8 unicode tools<e>:************************************************** */
+/* tools end:*************************************************************** */
 /*****************************************************************************/
 

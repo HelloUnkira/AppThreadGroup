@@ -2,7 +2,6 @@
 #define SCUI_STRING_H
 
 typedef enum {
-    scui_string_mode_dot,       // 画不完打点
     scui_string_mode_rewind,    // 回退滚动
     scui_string_mode_circular,  // 循环滚动
 } scui_string_mode_t;

@@ -7,11 +7,11 @@
  *@param src_image    图像源
  *@param src_clip     图像源绘制区域
  *@param src_alpha    图像透明度(非图像自带透明度)
- *@param color        图像源色调(调色板使用)
+ *@param srccolor     图像源色调(调色板使用)
  */
 void scui_draw_image(scui_surface_t *dst_surface, scui_area_t     *dst_clip,
                      scui_image_t   *src_image,   scui_area_t     *src_clip,
-                     scui_alpha_t    src_alpha,   scui_color_mix_t color);
+                     scui_alpha_t    src_alpha,   scui_color_mix_t src_color);
 
 /*@brief 区域图像缩放(可以使用DMA2D加速优化)
  *       以图形源绘制区域中心以放大缩小指定比例

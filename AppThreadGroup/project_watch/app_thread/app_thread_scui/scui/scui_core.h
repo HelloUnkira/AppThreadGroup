@@ -11,6 +11,8 @@
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
 #include "app_dev_lib.h"
+/* linker */
+#include "scui_mem.h"
 
 /* misc */
 #include "scui_coord.h"         /* 坐标区域 */
@@ -39,6 +41,9 @@
 #include "scui_font.h"
 #include "scui_font_cache.h"
 #include "scui_font_glyph_cache.h"
+#include "scui_string_layout.h"
+#include "scui_string_layout_cache.h"
+
 /* widget: */
 #include "scui_widget.h"
 #include "scui_widget_event.h"
@@ -62,9 +67,9 @@
 #include "scui_draw_basic.h"
 #include "scui_draw_image.h"
 #include "scui_draw_letter.h"
+#include "scui_draw_string.h"
 
 /* linker: */
-#include "scui_mem.h"
 #include "scui_image_src.h"     /* 图像资源加载卸载 */
 #include "scui_font_src.h"      /* 字体资源获取 */
 

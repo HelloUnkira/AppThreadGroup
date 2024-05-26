@@ -646,9 +646,9 @@ static uint32_t get_glyph_dsc_id(const lv_font_t *font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_TINY) {
             uint16_t key = rcp;
-            uint16_t * p = scui_binary_search(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
-                                              sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
-                                              unicode_list_compare);
+            uint16_t * p = scui_bsearch(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                        sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
+                                        unicode_list_compare);
 
             if(p) {
                 uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
@@ -657,9 +657,9 @@ static uint32_t get_glyph_dsc_id(const lv_font_t *font, uint32_t letter)
         }
         else if(fdsc->cmaps[i].type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
             uint16_t key = rcp;
-            uint16_t * p = scui_binary_search(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
-                                              sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
-                                              unicode_list_compare);
+            uint16_t * p = scui_bsearch(fdsc->cmaps[i].unicode_list, fdsc->cmaps[i].list_length,
+                                        sizeof(fdsc->cmaps[i].unicode_list[0]), &key,
+                                        unicode_list_compare);
 
             if(p) {
                 uintptr_t ofs = p - fdsc->cmaps[i].unicode_list;
@@ -697,7 +697,7 @@ static int8_t get_kern_value(const lv_font_t *font, uint32_t gid_left, uint32_t 
              *The pairs are ordered left_id first, then right_id secondly.*/
             const uint16_t * g_ids = kdsc->glyph_ids;
             uint16_t g_id_both = (gid_right << 8) + gid_left; /*Create one number from the ids*/
-            uint16_t * kid_p = scui_binary_search(g_ids, kdsc->pair_cnt, 2, &g_id_both, kern_pair_8_compare);
+            uint16_t * kid_p = scui_bsearch(g_ids, kdsc->pair_cnt, 2, &g_id_both, kern_pair_8_compare);
 
             /*If the `g_id_both` were found get its index from the pointer*/
             if(kid_p) {
@@ -710,7 +710,7 @@ static int8_t get_kern_value(const lv_font_t *font, uint32_t gid_left, uint32_t 
              *The pairs are ordered left_id first, then right_id secondly.*/
             const uint32_t * g_ids = kdsc->glyph_ids;
             uint32_t g_id_both = (gid_right << 16) + gid_left; /*Create one number from the ids*/
-            uint32_t * kid_p = scui_binary_search(g_ids, kdsc->pair_cnt, 4, &g_id_both, kern_pair_16_compare);
+            uint32_t * kid_p = scui_bsearch(g_ids, kdsc->pair_cnt, 4, &g_id_both, kern_pair_16_compare);
 
             /*If the `g_id_both` were found get its index from the pointer*/
             if(kid_p) {

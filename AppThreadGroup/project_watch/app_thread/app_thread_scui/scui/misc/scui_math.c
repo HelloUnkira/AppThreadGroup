@@ -194,8 +194,8 @@ int64_t scui_rand(int64_t min, int64_t max)
  *@param cmp  比较语义回调(似memcmp语义)
  *@retval 返回目标或空
  */
-void *scui_binary_search(void *arr, uint32_t len, uint32_t size, void *key,
-                         int8_t (*cmp)(void *key, void *tar))
+void *scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key,
+                   int8_t (*cmp)(void *key, void *tar))
 {
     uint8_t *mid = arr;
     
