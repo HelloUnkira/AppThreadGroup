@@ -151,6 +151,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     if (size == 0)
         return NULL;
     
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
     ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
     
@@ -171,6 +172,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     
     #endif
     
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
     return ptr;
 }
 
@@ -185,6 +187,7 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     if (ptr == NULL)
         return;
     
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
     scui_mem_type_t type = scui_mem_type_none;
     scui_mem_type(ptr, &type);
     
@@ -198,6 +201,8 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
          SCUI_LOG_WARN("record queue is not find, maybe discard");
     
     #endif
+    
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
 }
 
 /*@brief 内存类型检查
@@ -230,6 +235,7 @@ void scui_mem_check(void)
  */
 void scui_mem_ready(void)
 {
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_static);
     /* 这里使用自定义内存分配器, 用于查内存越界问题 */
     
     static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX]   = {0};

@@ -57,6 +57,8 @@ void scui_mem_record_statistic(bool force);
 #endif
 
 typedef struct {
+    scui_mutex_t mutex;
+    
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     #if SCUI_MEM_RECORD_CHECK
     scui_mem_record_t   record[scui_mem_type_num];

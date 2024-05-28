@@ -191,6 +191,11 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         }
         
         if (scui_window_mgr.switch_args.type == scui_window_switch_zoom1) {
+            /* 如果底图透明度更新, 则清空底色防止错误混合 */
+            if (src_surface->alpha != scui_alpha_cover) {
+                SCUI_PIXEL_TYPE dst_pixel = {0};
+                scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
+            }
             if (widget->myself == scui_window_active_curr()) {
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
                 continue;
