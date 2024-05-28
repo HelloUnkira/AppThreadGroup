@@ -90,7 +90,7 @@ void scui_draw_area_copy(scui_surface_t *dst_surface, scui_area_t *dst_clip,
          return;
     
     scui_area_t src_clip_v = {0};   // v:vaild
-    scui_area_t src_area = scui_surface_area(dst_surface);
+    scui_area_t src_area = scui_surface_area(src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     

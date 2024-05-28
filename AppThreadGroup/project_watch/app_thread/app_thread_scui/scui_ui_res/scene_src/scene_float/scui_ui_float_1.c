@@ -54,70 +54,22 @@ void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_1_lu_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
+    case scui_event_draw: {
+        
+        char *url = "https://github.com/HelloUnkira/AppThreadGroup.git";
+        scui_color_mix_t color = {
+            .color_lighten.full = 0xFFFFFFFF,
+        };
+        scui_area_t clip = scui_widget_draw_clip(event->object);
+        clip.x += clip.w / 6;
+        clip.y += clip.h / 6;
+        clip.w -= clip.w / 3;
+        clip.h -= clip.h / 3;
+        scui_custom_draw_qrcord(event->object, &clip, color, false, url, strlen(url));
+        
         scui_widget_event_mask_keep(event);
         break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
     }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_1_ru_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_1_ld_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_1_rd_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;

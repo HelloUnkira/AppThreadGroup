@@ -41,6 +41,7 @@
 #include "scui_font.h"
 #include "scui_font_cache.h"
 #include "scui_font_glyph_cache.h"
+#include "scui_letter.h"
 #include "scui_string_layout.h"
 #include "scui_string_layout_cache.h"
 

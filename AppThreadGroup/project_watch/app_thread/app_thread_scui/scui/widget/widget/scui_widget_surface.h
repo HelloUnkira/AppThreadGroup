@@ -36,9 +36,22 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件画布在画布绘制纯色区域
  *@param widget   控件实例
+ *@param src_clip 绘制区域
  *@param color    源色调
  */
-void scui_widget_surface_draw_color(scui_widget_t *widget, scui_color_mix_t color);
+void scui_widget_surface_draw_color(scui_widget_t *widget,
+                                    scui_area_t *src_clip, scui_color_mix_t color);
+
+/*@brief 控件画布在画布绘制图像
+ *@param widget      控件实例
+ *@param dst_clip    控件剪切域
+ *@param src_surface 画布实例
+ *@param src_clip    画布绘制区域
+ *@param src_color   图像源色调(调色板使用)
+ */
+void scui_widget_surface_draw_pattern(scui_widget_t   *widget,      scui_area_t *dst_clip,
+                                      scui_surface_t  *src_surface, scui_area_t *src_clip,
+                                      scui_color_mix_t src_color);
 
 /*@brief 控件画布在画布绘制图像
  *@param widget   控件实例

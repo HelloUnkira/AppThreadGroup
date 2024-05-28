@@ -8,10 +8,6 @@ typedef enum {
 	SCUI_HANDLE_OFFSET_WIDGET = 0x1000 - 1,
 	SCUI_UI_SCENE_FLOAT_1,
 	SCUI_UI_SCENE_FLOAT_1_C,
-	SCUI_UI_SCENE_FLOAT_1_LU,
-	SCUI_UI_SCENE_FLOAT_1_RU,
-	SCUI_UI_SCENE_FLOAT_1_LD,
-	SCUI_UI_SCENE_FLOAT_1_RD,
 	SCUI_UI_SCENE_FLOAT_2,
 	SCUI_UI_SCENE_FLOAT_2_C,
 	SCUI_UI_SCENE_FLOAT_2_LU,
@@ -79,6 +75,6 @@ typedef enum {
 	SCUI_UI_SCENE_TEST,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[71];
+extern const void * scui_widget_parser_table[67];
 
 #endif

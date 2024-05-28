@@ -25,7 +25,8 @@ typedef struct {
     scui_handle_t       text;           // 字符串
     scui_color_mix_t    color;          // 字符串颜色
     scui_color_mix_t    filter;         // 去底色
-    scui_coord_t        margin;         // 边距
+    scui_coord_t        margin_edge;    // 边距
+    scui_coord_t        margin_mid;     // 间距
     scui_coord_t        space;          // 空格字符宽度
     /* 内部域: */
     uint8_t *str;   // 字符串
@@ -41,7 +42,8 @@ typedef struct {
     scui_handle_t       text;           // 字符串
     scui_color_mix_t    color;          // 字符串颜色
     scui_color_mix_t    filter;         // 去底色
-    scui_coord_t        margin;         // 边距
+    scui_coord_t        margin_edge;    // 边距
+    scui_coord_t        margin_mid;     // 间距
     scui_coord_t        space;          // 空格字符宽度
 } scui_string_maker_t;
 #pragma pack(pop)

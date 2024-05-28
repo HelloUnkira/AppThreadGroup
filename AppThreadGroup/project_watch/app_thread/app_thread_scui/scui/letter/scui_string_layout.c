@@ -7,3 +7,13 @@
 
 #include "scui.h"
 
+/*@brief 字符串布局
+ *@param layout  布局信息
+ *@param unicode unicode字符串
+ *@param num     字符串数
+ */
+void scui_string_layout(scui_string_layout_t *layout, scui_area_t *clip,
+                        uint32_t *unicode, uint32_t num)
+{
+
+}

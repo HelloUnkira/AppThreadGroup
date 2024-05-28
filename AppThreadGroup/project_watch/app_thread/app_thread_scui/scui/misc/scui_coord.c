@@ -204,6 +204,9 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
  */
 bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset)
 {
+    if (offset->x == 0 && offset->y == 0)
+        return true;
+    
     scui_area_t clip_offset = *clip;
     clip_offset.x += offset->x;
     clip_offset.y += offset->y;

@@ -24,15 +24,16 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
-    string->align       = maker->align;
-    string->mode        = maker->mode;
-    string->dir         = maker->dir;
-    string->font        = maker->font;
-    string->text        = maker->text;
-    string->color       = maker->color;
-    string->filter      = maker->filter;
-    string->margin      = maker->margin;
-    string->space       = maker->space;
+    string->align           = maker->align;
+    string->mode            = maker->mode;
+    string->dir             = maker->dir;
+    string->font            = maker->font;
+    string->text            = maker->text;
+    string->color           = maker->color;
+    string->filter          = maker->filter;
+    string->margin_edge     = maker->margin_edge;
+    string->margin_mid      = maker->margin_mid;
+    string->space           = maker->space;
     
     /* 目前只支持水平书写 */
     SCUI_ASSERT(string->dir == scui_event_dir_hor);
@@ -86,7 +87,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     if (string->text != SCUI_HANDLE_INVALID) {
         scui_multi_lang_type_t type = scui_font_type_switch(string->font);
         uint8_t *str = scui_handle_get(scui_multi_lang_switch(type, string->text));
-        uint32_t str_bytes = scui_font_utf8_str_bytes(str);
+        uint32_t str_bytes = scui_utf8_str_bytes(str);
         string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
         memcpy(string->str, str, str_bytes);
         string->str[str_bytes] = '\0';
@@ -108,7 +109,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str)
         SCUI_MEM_FREE(string->str);
     
     if (str != NULL) {
-        uint32_t str_bytes = scui_font_utf8_str_bytes(str);
+        uint32_t str_bytes = scui_utf8_str_bytes(str);
         string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
         memcpy(string->str, str, str_bytes);
         string->str[str_bytes] = '\0';

@@ -71,9 +71,9 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
 void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix);
 
 /*@brief 矩阵计算旋转法线z轴
- *@param matrix   矩阵实例
  *@param normal3  法线
  *@param normal_z 法线z轴
+ *@param matrix   矩阵实例
  */
 void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, scui_matrix_t *matrix);
 

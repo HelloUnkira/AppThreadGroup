@@ -77,7 +77,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t     *dst_clip,
             uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item + src_pixel_ofs) / (8 / src_glyph->bpp);
             SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
             uint8_t *src_addr_ofs = (void *)src_ofs;
-            uint8_t  palette = scui_font_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
+            uint8_t  palette = scui_letter_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
             idx_ofs++;
             
             /* 过滤色调,去色 */
@@ -96,7 +96,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t     *dst_clip,
             uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item + src_pixel_ofs) / (8 / src_glyph->bpp);
             SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
             uint8_t *src_addr_ofs = (void *)src_ofs;
-            uint8_t  palette = scui_font_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
+            uint8_t  palette = scui_letter_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
             idx_ofs++;
             
             if (palette != 0 && palette != palette_len - 1)
