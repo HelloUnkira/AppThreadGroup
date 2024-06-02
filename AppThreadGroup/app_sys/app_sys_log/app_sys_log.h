@@ -6,7 +6,7 @@
 #define APP_SYS_LOG_LOCAL_STATUS        0   /* 1:ENABLE,0:DISABLE */
 #endif
 #ifndef APP_SYS_LOG_LOCAL_LEVEL
-#define APP_SYS_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL         0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 #endif
 
 /* 全局宏控覆盖(覆盖所有本地宏控) */

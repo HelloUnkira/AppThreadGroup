@@ -790,7 +790,7 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
     
     /* 加载每一个子标签(原型为load_cmaps_tables, 这里整理到内部) */
     for(uint32_t idx = 0; idx < font_dsc->cmap_num; idx++) {
-        uint32_t ofs = offset + 12 + cmaps_tables_size + cmaps_tables[idx].data_offset;
+        uint32_t ofs = offset + cmaps_tables[idx].data_offset;
         
         lv_font_fmt_txt_cmap_t *cmap = (lv_font_fmt_txt_cmap_t *)&font_dsc->cmaps[idx];
         
@@ -821,10 +821,10 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
                     scui_font_src_read(&font->font_src, cmap->unicode_list, list_size);
                     
                     if(cmaps_tables[idx].format_type == LV_FONT_FMT_TXT_CMAP_SPARSE_FULL) {
-                        cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, cmap->list_length);
-                        font->size += cmap->list_length;
-                        scui_font_src_seek(&font->font_src, ofs);
-                        scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, sizeof(uint16_t) * cmap->list_length);
+                        cmap->glyph_id_ofs_list = SCUI_MEM_ALLOC(scui_mem_type_font, list_size);
+                        font->size += list_size;
+                        scui_font_src_seek(&font->font_src, ofs + list_size);
+                        scui_font_src_read(&font->font_src, cmap->glyph_id_ofs_list, list_size);
                     }
                     break;
                 }
@@ -1321,11 +1321,23 @@ uint32_t scui_font_size(scui_handle_t handle)
     return font->size;
 }
 
-/*@brief 字型高度
+/*@brief 字库参数信息
  *@param handle 字库句柄
- *@retval 字型高度
+ *@retval 字库参数信息
  */
-scui_coord_t scui_font_glyph_height(scui_handle_t handle)
+scui_coord_t scui_font_base_line(scui_handle_t handle)
+{
+    lv_font_t *font = scui_handle_get(handle);
+    SCUI_ASSERT(font != NULL);
+    
+    return font->base_line;
+}
+
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_line_height(scui_handle_t handle)
 {
     lv_font_t *font = scui_handle_get(handle);
     SCUI_ASSERT(font != NULL);

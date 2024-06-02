@@ -76,7 +76,7 @@ uint8_t scui_letter_bpp_palette(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 }
 
 /*****************************************************************************/
-/* utf-8 tools<part>:******************************************************* */
+/* utf-8 unicode tools<s>:************************************************** */
 /*****************************************************************************/
 
 /*@brief utf8字符转unicode字符
@@ -177,7 +177,22 @@ uint32_t scui_utf8_str_bytes(uint8_t *utf8)
     return str_bytes;
 }
 
-/*@brief 后缀匹配
+/*@brief utf8字符串转为unicode字符串
+ *@param unicode  unicode字符串
+ *@param utf8     utf8字符串
+ *@param utf8_num utf8字符数
+ */
+void scui_utf8_str_to_unicode(uint8_t *utf8, uint32_t utf8_num, uint32_t *unicode)
+{
+    uint8_t *utf8_ptr = utf8;
+    for (uint32_t idx = 0; idx < utf8_num; idx++) {
+         uint8_t utf8_len = scui_utf8_to_unicode(utf8_ptr, &unicode[idx]);
+         SCUI_ASSERT(utf8_len != 0);
+         utf8_ptr += utf8_len;
+    }
+}
+
+/*@brief utf8字符串后缀匹配
  *@param str    utf8字符串
  *@param suffix utf8字符串
  */
@@ -198,33 +213,6 @@ bool scui_utf8_str_match_suffix(uint8_t *str, uint8_t *suffix)
 }
 
 /*****************************************************************************/
-/* unicode tools<part>:***************************************************** */
+/* utf-8 unicode tools<e>:************************************************** */
 /*****************************************************************************/
 
-/*@brief utf8字符串构造生成unicode字符串
- *@param unicode unicode字符串
- *@param utf8    utf8字符串
- *@retval 字符数量
- */
-uint32_t scui_unicode_str_by_utf8(uint32_t **unicode, uint8_t *utf8)
-{
-    /* 统计字符数量 */
-    uint32_t utf8_num = scui_utf8_str_num(utf8);
-    *unicode = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (utf8_num + 1));
-    memset(*unicode, 0, 4 * (utf8_num + 1));
-    
-    uint8_t *utf8_ptr = utf8;
-    for (uint32_t idx = 0; idx < utf8_num; idx++) {
-         uint8_t utf8_len = scui_utf8_to_unicode(utf8_ptr, &(*unicode)[idx]);
-         SCUI_ASSERT(utf8_len != 0);
-         utf8_ptr += utf8_len;
-    }
-    
-    return utf8_num;
-}
-
-
-
-/*****************************************************************************/
-/* tools end:*************************************************************** */
-/*****************************************************************************/

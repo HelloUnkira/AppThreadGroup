@@ -37,13 +37,6 @@
 #include "scui_indev_key.h"     /* 输入设备:key */
 #include "scui_tick.h"          /* 滴答器 */
 #include "scui_disp.h"          /* 显示器 */
-/* font */
-#include "scui_font.h"
-#include "scui_font_cache.h"
-#include "scui_font_glyph_cache.h"
-#include "scui_letter.h"
-#include "scui_string_layout.h"
-#include "scui_string_layout_cache.h"
 
 /* widget: */
 #include "scui_widget.h"
@@ -62,6 +55,13 @@
 #include "scui_watch.h"
 #include "scui_chart.h"
 #include "scui_ring.h"
+
+/* font */
+#include "scui_font.h"
+#include "scui_font_cache.h"
+#include "scui_font_glyph_cache.h"
+#include "scui_letter.h"
+#include "scui_string_args.h"
 
 /* draw */
 #include "scui_draw_graph.h"

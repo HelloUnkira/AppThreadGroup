@@ -93,6 +93,6 @@ int64_t scui_rand(int64_t min, int64_t max);
  *@retval 返回目标或空
  */
 void * scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key,
-                    int8_t (*cmp)(void *key, void *tar));
+                    int32_t (*cmp)(void *key, void *tar));
 
 #endif

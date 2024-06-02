@@ -195,14 +195,14 @@ int64_t scui_rand(int64_t min, int64_t max)
  *@retval 返回目标或空
  */
 void *scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key,
-                   int8_t (*cmp)(void *key, void *tar))
+                   int32_t (*cmp)(void *key, void *tar))
 {
     uint8_t *mid = arr;
     
     while(len != 0) {
         
         mid += (len / 2) * size;
-        int8_t ret = cmp(key, mid);
+        int32_t ret = cmp(key, mid);
         
         if (ret > 0) {
             len = (len / 2) - ((len & 1) == 0);

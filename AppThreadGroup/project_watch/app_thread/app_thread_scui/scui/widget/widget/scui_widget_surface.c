@@ -116,49 +116,6 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
     scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
 }
 
-/*@brief 控件画布在画布绘制纯色区域
- *@param widget   控件实例
- *@param src_clip 绘制区域
- *@param color    源色调
- */
-void scui_widget_surface_draw_color(scui_widget_t *widget,
-                                    scui_area_t *src_clip, scui_color_mix_t color)
-{
-    SCUI_LOG_DEBUG("widget %u", widget->myself);
-    
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    
-    scui_area_t color_clip = widget->clip_set.clip;
-    
-    if (src_clip == NULL)
-        src_clip  = &color_clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
-    
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_area = *src_clip;
-        if (!scui_area_limit_offset(&src_area, &offset))
-             continue;
-        scui_draw_area_fill(widget->surface, &src_area, &pixel, widget->alpha);
-    }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
-}
-
 /*@brief 控件画布在画布绘制图像
  *@param widget      控件实例
  *@param dst_clip    控件剪切域
@@ -203,6 +160,97 @@ void scui_widget_surface_draw_pattern(scui_widget_t   *widget,      scui_area_t 
         if (!scui_area_limit_offset(&src_area, &offset))
              continue;
         scui_draw_area_blend(widget->surface, &dst_clip, src_surface, &src_area, src_color);
+    }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
+}
+
+/*@brief 控件画布在画布绘制纯色区域
+ *@param widget   控件实例
+ *@param src_clip 绘制区域
+ *@param color    源色调
+ */
+void scui_widget_surface_draw_color(scui_widget_t *widget,
+                                    scui_area_t *src_clip, scui_color_mix_t color)
+{
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    scui_area_t color_clip = widget->clip_set.clip;
+    
+    if (src_clip == NULL)
+        src_clip  = &color_clip;
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t offset = {
+            .x = unit->clip.x - widget->clip_set.clip.x,
+            .y = unit->clip.y - widget->clip_set.clip.y,
+        };
+        scui_area_t src_area = *src_clip;
+        if (!scui_area_limit_offset(&src_area, &offset))
+             continue;
+        scui_draw_area_fill(widget->surface, &src_area, &pixel, widget->alpha);
+    }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
+}
+
+/*@brief 控件画布在画布绘制字符串
+ *@param widget   控件实例
+ *@param src_args 字符串绘制参数(scui_string_args_t)
+ *@param src_name 字库名字句柄
+ *@param src_utf8 字符串(utf8)
+ */
+void scui_widget_surface_draw_string(scui_widget_t *widget,   void    *src_args,
+                                     scui_handle_t  src_name, uint8_t *src_utf8)
+{
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    
+    /* 当前本接口作为控件专用绘制接口: */
+    SCUI_ASSERT(widget->type == scui_widget_type_string);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    scui_area_t string_clip = {
+        .w = widget->clip_set.clip.w,
+        .h = widget->clip_set.clip.h,
+    };
+    scui_area_t *src_clip = &string_clip;
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t offset = {
+            .x = unit->clip.x - widget->clip_set.clip.x,
+            .y = unit->clip.y - widget->clip_set.clip.y,
+        };
+        scui_area_t src_area = *src_clip;
+        if (!scui_area_limit_offset(&src_area, &offset))
+             continue;
+        scui_draw_string(widget->surface, &unit->clip, src_args, &src_area,
+                         src_name, widget->alpha, src_utf8);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

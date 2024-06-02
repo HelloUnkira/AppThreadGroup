@@ -43,11 +43,17 @@ void scui_font_unload(scui_handle_t handle);
  */
 uint32_t scui_font_size(scui_handle_t handle);
 
-/*@brief 字型高度
+/*@brief 字库参数信息
  *@param handle 字库句柄
- *@retval 字型高度
+ *@retval 字库参数信息
  */
-scui_coord_t scui_font_glyph_height(scui_handle_t handle);
+scui_coord_t scui_font_base_line(scui_handle_t handle);
+
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_line_height(scui_handle_t handle);
 
 /*@brief 字型加载
  *@param glyph 字形信息

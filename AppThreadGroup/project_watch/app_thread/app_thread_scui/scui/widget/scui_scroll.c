@@ -1188,7 +1188,7 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_key_click: {
-        if (scroll->route_enc == 0) {
+        if (scroll->route_key == 0) {
             SCUI_LOG_ERROR("route key is zero");
             break;
         }

@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -24,19 +24,11 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
-    string->align           = maker->align;
-    string->mode            = maker->mode;
-    string->dir             = maker->dir;
-    string->font            = maker->font;
-    string->text            = maker->text;
-    string->color           = maker->color;
-    string->filter          = maker->filter;
-    string->margin_edge     = maker->margin_edge;
-    string->margin_mid      = maker->margin_mid;
-    string->space           = maker->space;
+    string->name    = maker->name;
+    string->text    = maker->text;
+    string->args    = maker->args;
     
-    /* 目前只支持水平书写 */
-    SCUI_ASSERT(string->dir == scui_event_dir_hor);
+    /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, string->text);
     
     /* 为字符串控件添加指定的事件回调 */
@@ -61,6 +53,7 @@ void scui_string_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_string);
     
+    scui_string_args_clear(&string->args);
     scui_string_update_text(handle, SCUI_HANDLE_INVALID);
     
     /* 销毁基础控件实例 */
@@ -81,38 +74,38 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     
     string->text = text;
     
-    if (string->str != NULL)
-        SCUI_MEM_FREE(string->str);
+    if (string->str_utf8 != NULL)
+        SCUI_MEM_FREE(string->str_utf8);
     
     if (string->text != SCUI_HANDLE_INVALID) {
-        scui_multi_lang_type_t type = scui_font_type_switch(string->font);
-        uint8_t *str = scui_handle_get(scui_multi_lang_switch(type, string->text));
-        uint32_t str_bytes = scui_utf8_str_bytes(str);
-        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
-        memcpy(string->str, str, str_bytes);
-        string->str[str_bytes] = '\0';
+        scui_multi_lang_type_t type = scui_font_type_switch(string->name);
+        uint8_t *str_utf8  = scui_handle_get(scui_multi_lang_switch(type, string->text));
+        uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
+        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        memcpy(string->str_utf8, str_utf8, str_bytes);
+        string->str_utf8[str_bytes] = '\0';
     }
 }
 
 /*@brief 字符串控件更新文本
- *@param handle 字符串控件句柄
- *@param str    字符串(utf8)
+ *@param handle   字符串控件句柄
+ *@param str_utf8 字符串(utf8)
  */
-void scui_string_update_str(scui_handle_t handle, uint8_t *str)
+void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
     string->text = SCUI_HANDLE_INVALID;
     
-    if (string->str != NULL)
-        SCUI_MEM_FREE(string->str);
+    if (string->str_utf8 != NULL)
+        SCUI_MEM_FREE(string->str_utf8);
     
-    if (str != NULL) {
-        uint32_t str_bytes = scui_utf8_str_bytes(str);
-        string->str = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
-        memcpy(string->str, str, str_bytes);
-        string->str[str_bytes] = '\0';
+    if (str_utf8 != NULL) {
+        uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
+        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        memcpy(string->str_utf8, str_utf8, str_bytes);
+        string->str_utf8[str_bytes] = '\0';
     }
 }
 
@@ -135,67 +128,14 @@ void scui_string_event(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         
-        
-        
         break;
     }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         
-        if (string->str != NULL) {
-            #if 1   // test
-            scui_font_glyph_unit_t glyph_unit = {
-                .name = string->font,
-                .glyph.unicode_letter = 'B',
-                .glyph.space_width = SCUI_STRING_SPACE_WIDTH,
-            };
-            scui_font_glyph_cache_load(&glyph_unit);
-            
-            scui_area_t glyph_clip = {
-                .w = glyph_unit.glyph.box_w,
-                .h = glyph_unit.glyph.box_h,
-            };
-            
-            scui_draw_letter(widget->surface,  &widget->clip_set.clip,
-                            &glyph_unit.glyph, &glyph_clip,
-                             widget->alpha,     string->color,
-                             true,              string->filter);
-            
-            #if 0   // test
-            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
-            for (uint32_t idx = 0; idx < glyph_unit.glyph.bitmap_size; idx++) {
-                 if (idx % 8 == 0)
-                     SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-                     SCUI_LOG_INFO_RAW("0x%02x ", glyph_unit.glyph.bitmap[idx]);
-            }
-            SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-            #endif
-            
-            #if 0   // test
-             uint32_t idx_ofs = 0;
-            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
-            for (scui_multi_t idx_line = 0; idx_line < glyph_unit.glyph.box_h; idx_line++) {
-            for (scui_multi_t idx_item = 0; idx_item < glyph_unit.glyph.box_w; idx_item++) {
-                 uint32_t idx = idx_line * glyph_unit.glyph.box_w + idx_item;
-                 
-                 uint8_t palette = scui_font_bpp_palette(
-                         glyph_unit.glyph.bitmap[idx / (8 / glyph_unit.glyph.bpp)],
-                         glyph_unit.glyph.bpp, idx_ofs % (8 / glyph_unit.glyph.bpp));
-                 
-                 idx_ofs++;
-                 if (palette != 0x00)
-                     SCUI_LOG_INFO_RAW("%02x ", palette);
-                 else
-                     SCUI_LOG_INFO_RAW("   ");
-                }
-                SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-            }
-            #endif
-            
-            scui_font_glyph_cache_unload(&glyph_unit);
-            #endif
-            
-        }
+        if (string->str_utf8 != NULL)
+            scui_widget_surface_draw_string(widget, &string->args, string->name, string->str_utf8);
+        
         break;
     }
     default:
