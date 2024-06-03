@@ -18,7 +18,11 @@ void scui_string_args_offset(scui_string_args_t *args, scui_font_glyph_t *glyph,
         if (args->line_way)
             offset->y += glyph->box_h + args->gap_item;
         else
+            #if 0
             offset->x += glyph->box_w + args->gap_item;
+            #else
+            offset->x += glyph->ofs_x + glyph->box_w + args->gap_item;
+            #endif
     } else {
         if (args->line_way)
             offset->y += args->gap_none + args->gap_item;
@@ -75,6 +79,13 @@ void scui_string_args_process(scui_string_args_t *args)
     memset(args->unicode, 0, 4 * (args->number + 1));
     /* 将utf8转为unicode */
     scui_utf8_str_to_unicode(args->utf8, args->number, args->unicode);
+    
+    /* 从字库中提取一些信息 */
+    scui_font_unit_t font_unit = {.name = args->name,};
+    scui_font_cache_load(&font_unit);
+    scui_font_cache_unload(&font_unit);
+    scui_coord_t base_line   = scui_font_base_line(font_unit.font);
+    scui_coord_t line_height = scui_font_line_height(font_unit.font);
     
     /* 特定字体进行文字变形 */
     /* ... */
@@ -142,16 +153,18 @@ void scui_string_args_process(scui_string_args_t *args)
         
         if (args->line_multi) {
             if (args->line_way) {
-                if (offset.y + glyph_clip.h + args->gap_item > src_clip_v.h ||
-                    glyph_unit.glyph.unicode_letter == '\n') {
+                if (offset.y + glyph_clip.h + args->gap_item > src_clip_v.h) {
                     offset.y  = 0;
                     offset.x += args->width  + args->gap_line;
                 }
             } else {
-                if (offset.x + glyph_clip.w + args->gap_item > src_clip_v.w ||
-                    glyph_unit.glyph.unicode_letter == '\n') {
+                if (offset.x + glyph_clip.w + args->gap_item > src_clip_v.w) {
                     offset.x  = 0;
+                    #if 0
                     offset.y += args->height + args->gap_line;
+                    #else
+                    offset.y += line_height + args->gap_line;
+                    #endif
                 }
             }
         }
@@ -159,7 +172,7 @@ void scui_string_args_process(scui_string_args_t *args)
         if (args->line_way)
             args->height += glyph_unit.glyph.box_h + args->gap_item;
         else
-            args->width  += glyph_unit.glyph.box_w + args->gap_item;
+            args->width  += glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w + args->gap_item;
         
         scui_string_args_offset(args, &glyph_unit.glyph, &offset);
     }
@@ -169,7 +182,11 @@ void scui_string_args_process(scui_string_args_t *args)
             offset.x   += args->width;
             args->limit = offset.x - src_clip_v.w;
         } else {
+            #if 0
             offset.y   += args->height;
+            #else
+            offset.y   += line_height;
+            #endif
             args->limit = offset.y - src_clip_v.h;
         }
     } else {

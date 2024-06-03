@@ -7,6 +7,8 @@
 
 #include "scui.h"
 
+#if 1
+
 #if 1 // bin field
 
 #pragma pack(push, 1)
@@ -1395,3 +1397,67 @@ void scui_font_glyph_unload(scui_font_glyph_t *glyph)
 {
     SCUI_MEM_FREE(glyph->bitmap);
 }
+
+#else
+
+/*@brief 字库加载
+ *@param name   字库名称
+ *@param handle 字库句柄
+ */
+void scui_font_load(char *name, scui_handle_t *handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字库卸载
+ *@param handle 字库句柄
+ */
+void scui_font_unload(scui_handle_t handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字库大小
+ *@param handle 字库句柄
+ *@retval 字库大小
+ */
+uint32_t scui_font_size(scui_handle_t handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_base_line(scui_handle_t handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_line_height(scui_handle_t handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字型加载
+ *@param glyph 字形信息
+ */
+void scui_font_glyph_load(scui_font_glyph_t *glyph)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字型卸载
+ *@param glyph 字形信息
+ */
+void scui_font_glyph_unload(scui_font_glyph_t *glyph)
+{
+    SCUI_ASSERT(false);
+}
+
+#endif

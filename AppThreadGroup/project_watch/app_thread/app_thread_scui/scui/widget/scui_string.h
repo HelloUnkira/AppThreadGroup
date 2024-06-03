@@ -11,7 +11,7 @@ typedef struct {
     uint64_t            mode:2;         // 绘制模式(0:回退滚动;1:循环滚动)
     uint64_t            align_hor:2;    // 书写对齐(0:左对齐;1:右对齐;2:中心对齐)
     uint64_t            align_ver:2;    // 书写对齐(0:上对齐;1:下对齐;2:中心对齐)
-    uint64_t            line_way:1;     // 书写方向(0:水平书写;1:垂直书写)
+    uint64_t            line_way:1;     // 书写方向(0:水平书写;1:垂直书写(未支持))
     uint64_t            line_multi:1;   // 多行模式(非默认)
     uint64_t            line_stand:1;   // 标准字符(非默认)
     uint64_t            line_ltr:1;     // 绘制方向

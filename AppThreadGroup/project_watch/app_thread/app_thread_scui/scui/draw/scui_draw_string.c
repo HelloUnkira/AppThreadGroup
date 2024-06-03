@@ -76,16 +76,18 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
         
         if (src_args->line_multi) {
             if (src_args->line_way) {
-                if (offset.y + glyph_clip.h + src_args->gap_item > src_clip_v.h ||
-                    glyph_unit.glyph.unicode_letter == '\n') {
+                if (offset.y + glyph_clip.h + src_args->gap_item > src_clip_v.h) {
                     offset.y  = 0;
                     offset.x += src_args->width  + src_args->gap_line;
                 }
             } else {
-                if (offset.x + glyph_clip.w + src_args->gap_item > src_clip_v.w ||
-                    glyph_unit.glyph.unicode_letter == '\n') {
+                if (offset.x + glyph_clip.w + src_args->gap_item > src_clip_v.w) {
                     offset.x  = 0;
+                    #if 0
                     offset.y += src_args->height + src_args->gap_line;
+                    #else
+                    offset.y += line_height + src_args->gap_line;
+                    #endif
                 }
             }
         }
@@ -99,7 +101,13 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
             else
                 letter_offset.y += src_args->offset;
         } else {
+            #if 0
             letter_offset.y += (src_args->height - glyph_unit.glyph.box_h) / 2; // 行内居中对齐
+            #else
+            // 抄录自:lv_draw_sw_letter
+            letter_offset.x += glyph_unit.glyph.ofs_x;
+            letter_offset.y += (line_height - base_line) - glyph_unit.glyph.box_h - glyph_unit.glyph.ofs_y;
+            #endif
             if (src_args->line_multi)
                 letter_offset.y += src_args->offset;
             else
