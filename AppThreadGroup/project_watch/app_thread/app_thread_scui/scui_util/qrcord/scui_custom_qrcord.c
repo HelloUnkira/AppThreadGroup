@@ -1,5 +1,5 @@
 /*实现目标:
- *    显示设备事件
+ *    自定义插件
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

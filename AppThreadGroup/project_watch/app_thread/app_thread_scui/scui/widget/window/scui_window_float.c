@@ -94,6 +94,7 @@ void scui_window_float_anima_ready(void *instance)
         (scui_window_float.pos == scui_event_pos_r && point.x == +clip.w) ||
         (scui_window_float.pos == scui_event_pos_d && point.y == +clip.h)) {
          scui_window_active(scui_window_float.main);
+         scui_window_stack_cover(scui_window_float.main);
          scui_widget_hide(handle, true);
     }
     
@@ -411,6 +412,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             scui_window_hide_without(handle, false);
             scui_widget_show(scui_window_float.target, false);
             scui_window_active(scui_window_float.target);
+            scui_window_stack_cover(scui_window_float.target);
             /* 移动到所在边界然后真实重绘 */
             scui_window_float_move_with_alpha(scui_window_float.target, &point);
             scui_window_float.main  = handle;

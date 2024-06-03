@@ -126,10 +126,12 @@ void scui_window_jump_anima_ready(void *instance)
     case scui_window_switch_normal: {
         if (scui_window_mgr.switch_args.pct == 0) {
             scui_window_active(scui_window_mgr.switch_args.list[0]);
+            scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
             scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
         }
         if (scui_window_mgr.switch_args.pct == 100) {
             scui_window_active(scui_window_mgr.switch_args.list[1]);
+            scui_window_stack_cover(scui_window_mgr.switch_args.list[1]);
             scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
         }
         break;
@@ -278,10 +280,12 @@ void scui_window_move_anima_ready(void *instance)
     case scui_window_switch_normal: {
         if (scui_window_mgr.switch_args.pct == 0) {
             scui_window_active(scui_window_mgr.switch_args.list[0]);
+            scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
             scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
         }
         if (scui_window_mgr.switch_args.pct == 100) {
             scui_window_active(scui_window_mgr.switch_args.list[1]);
+            scui_window_stack_cover(scui_window_mgr.switch_args.list[1]);
             scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
         }
         break;

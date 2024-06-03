@@ -67,7 +67,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_window_jump(SCUI_UI_SCENE_1, scui_window_switch_normal, scui_event_dir_to_d);
+        scui_window_stack_add(SCUI_UI_SCENE_1, false);
         scui_widget_event_mask_over(event);
         break;
     default:

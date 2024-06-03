@@ -167,6 +167,24 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     case scui_event_key_click:
         scui_widget_event_mask_keep(event);
         break;
+    case scui_event_widget_scroll_s:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_INFO("scui_event_widget_scroll_s");
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_widget_scroll_c:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_INFO("scui_event_widget_scroll_c");
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_widget_scroll_e:
+        if (!scui_widget_event_check_execute(event))
+             break;
+        SCUI_LOG_INFO("scui_event_widget_scroll_e");
+        scui_widget_event_mask_keep(event);
+        break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);

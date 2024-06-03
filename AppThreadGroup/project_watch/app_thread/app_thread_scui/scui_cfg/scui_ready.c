@@ -78,6 +78,8 @@ void scui_ready(void)
     scui_handle_table_register(&table);
     
     /* 窗口交互风格 */
+    scui_window_switch_dir_cfg(SCUI_WINDOW_JUMP_DIR);
+    /* 窗口交互风格 */
     scui_window_switch_type_cfg(scui_window_switch_normal);
     scui_window_switch_type_cfg(scui_window_switch_zoom1);
     scui_window_switch_type_cfg(scui_window_switch_zoom2);
@@ -91,10 +93,7 @@ void scui_ready(void)
     scui_window_switch_type_cfg(scui_window_switch_cube);
     
     /* 初始窗口 */
-    scui_handle_t handle = SCUI_UI_SCENE_1;
-    scui_widget_show(handle, false);
-    scui_window_active(handle);
-    // scui_widget_hide(handle, false);
+    scui_window_stack_reset(SCUI_UI_SCENE_1, false);
     
     scui_engine_execute_status_set(true);
 }

@@ -186,10 +186,13 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
          return;
     
     scui_window_mgr.switch_args.lock_jump = true;
-    scui_window_mgr.switch_args.type      = type;
-    scui_window_mgr.switch_args.dir       = dir;
+    
     /* 自适应需要更新窗口切换状态 */
+    scui_window_mgr.switch_args.type = type;
+    scui_window_mgr.switch_args.dir  = dir;
     scui_window_switch_type_update(type, dir);
+    type = scui_window_mgr.switch_args.type;
+    dir  = scui_window_mgr.switch_args.dir;
     
     /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {

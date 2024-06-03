@@ -47,6 +47,7 @@
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_opt.h"        /* 窗口管理器 */
 #include "scui_window_switch.h"     /* 窗口管理器 */
+#include "scui_window_stack.h"      /* 窗口管理器 */
 #include "scui_window_float.h"      /* 窗口管理器 */
 #include "scui_custom.h"
 #include "scui_scroll.h"

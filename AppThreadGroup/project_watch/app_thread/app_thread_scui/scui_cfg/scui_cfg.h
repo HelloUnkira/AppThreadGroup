@@ -78,9 +78,15 @@
 #define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
 #define SCUI_WIDGET_STRING_UNIT_DX                  (3)
 
-/* 场景管理数量限制 */
+/* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
+
+/* 窗口管理栈数量限制 */
+#define SCUI_WINDOW_STACK_NEST                      (10)
+
+/* 窗口交互方向 */
+#define SCUI_WINDOW_JUMP_DIR                        (scui_event_dir_to_l)
 
 /* 基础图元使用矩阵变换 */
 #define SCUI_DRAW_MISC_USE_SOFTWARE                 (0)
