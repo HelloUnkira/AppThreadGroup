@@ -69,10 +69,10 @@ static uint8_t scui_font_cache_fc2_t(scui_table_rbsn_t *node1, scui_table_rbsn_t
     scui_font_unit_t *unit1 = scui_own_ofs(scui_font_unit_t, ht_node, node1);
     scui_font_unit_t *unit2 = scui_own_ofs(scui_font_unit_t, ht_node, node2);
     
-    char *name1 = scui_handle_get(unit1->name);
-    char *name2 = scui_handle_get(unit2->name);
+    scui_handle_t name1 = unit1->name;
+    scui_handle_t name2 = unit2->name;
     
-    return strcmp(name1, name2) == 0 ? 0 : 1;
+    return name1 == name2 ? 0 : 1;
 }
 
 /*@brief 哈希访问函数

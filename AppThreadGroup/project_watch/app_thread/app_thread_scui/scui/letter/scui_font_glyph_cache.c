@@ -70,12 +70,12 @@ static uint8_t scui_font_glyph_cache_fc2_t(scui_table_rbsn_t *node1, scui_table_
     scui_font_glyph_unit_t *unit1 = scui_own_ofs(scui_font_glyph_unit_t, ht_node, node1);
     scui_font_glyph_unit_t *unit2 = scui_own_ofs(scui_font_glyph_unit_t, ht_node, node2);
     
-    scui_handle_t font1 = unit1->font;
-    scui_handle_t font2 = unit2->font;
+    scui_handle_t name1 = unit1->name;
+    scui_handle_t name2 = unit2->name;
     uint32_t letter1 = unit1->glyph.unicode_letter;
     uint32_t letter2 = unit2->glyph.unicode_letter;
     
-    return font1 == font2 && letter1 == letter2 ? 0 : 1;
+    return name1 == name2 && letter1 == letter2 ? 0 : 1;
 }
 
 /*@brief 哈希访问函数
@@ -84,7 +84,7 @@ static void scui_font_glyph_cache_fv_t(scui_table_rbsn_t *node, uint32_t idx)
 {
     scui_font_glyph_unit_t *unit = scui_own_ofs(scui_font_glyph_unit_t, ht_node, node);
     
-    SCUI_LOG_INFO("- name:%x",   scui_handle_get(unit->font));
+    SCUI_LOG_INFO("- name:%s",   scui_handle_get(unit->name));
     SCUI_LOG_INFO("- letter:%x", unit->glyph.unicode_letter);
 }
 
@@ -237,10 +237,8 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
     /* 如果缓存未命中时 */
     if (unit == NULL) {
         /* 先加载字库 */
-        scui_font_unit_t font_unit = {
-            .name = glyph_unit->name,
-            .font = glyph_unit->font,
-        };
+        scui_font_unit_t font_unit = {0};
+        font_unit.name = glyph_unit->name;
         scui_font_cache_load(&font_unit);
         glyph_unit->font = font_unit.font;
         glyph_unit->glyph.handle = font_unit.font;

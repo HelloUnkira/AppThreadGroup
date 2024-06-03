@@ -25,13 +25,13 @@
 #define SCUI_MEM_RECORD_ITEM_GRAPH                  (64)
 
 /* 内存图片散列值,内存图片缓存最大限制 */
-#define SCUI_IMAGE_LIMIT_HASH                       (100)
+#define SCUI_IMAGE_LIMIT_HASH                       (15)
 #define SCUI_IMAGE_LIMIT_TOTAL                      (1024 * 1024 * 1)
 /* 内存文字散列值,内存文字缓存最大限制 */
-#define SCUI_FONT_LIMIT_HASH                        (5)
+#define SCUI_FONT_LIMIT_HASH                        (3)
 #define SCUI_FONT_LIMIT_TOTAL                       (1024 * 75)
 /* 内存文字散列值,内存文字缓存最大限制 */
-#define SCUI_FONT_GLYPH_LIMIT_HASH                  (100)
+#define SCUI_FONT_GLYPH_LIMIT_HASH                  (20)
 #define SCUI_FONT_GLYPH_LIMIT_TOTAL                 (1024 * 100)
 
 /* 内存文字宽度,文字边距: */
@@ -73,6 +73,10 @@
 /* 检查事件调度耗时:以ms计 */
 #define SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK         (0)
 #define SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER        (1000)
+
+/* 文本滚动时间与距离 */
+#define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
+#define SCUI_WIDGET_STRING_UNIT_DX                  (3)
 
 /* 场景管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)

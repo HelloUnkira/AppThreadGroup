@@ -45,6 +45,12 @@ void scui_widget_surface_draw_pattern(scui_widget_t   *widget,      scui_area_t 
                                       scui_surface_t  *src_surface, scui_area_t *src_clip,
                                       scui_color_mix_t src_color);
 
+/*@brief 控件画布在画布绘制字符串
+ *@param widget   控件实例
+ *@param src_args 字符串绘制参数(scui_string_args_t)
+ */
+void scui_widget_surface_draw_string(scui_widget_t *widget, void *src_args);
+
 /*@brief 控件画布在画布绘制纯色区域
  *@param widget   控件实例
  *@param src_clip 绘制区域
@@ -52,15 +58,6 @@ void scui_widget_surface_draw_pattern(scui_widget_t   *widget,      scui_area_t 
  */
 void scui_widget_surface_draw_color(scui_widget_t *widget,
                                     scui_area_t *src_clip, scui_color_mix_t color);
-
-/*@brief 控件画布在画布绘制字符串
- *@param widget   控件实例
- *@param src_args 字符串绘制参数(scui_string_args_t)
- *@param src_name 字库名字句柄
- *@param src_utf8 字符串(utf8)
- */
-void scui_widget_surface_draw_string(scui_widget_t *widget,   void    *src_args,
-                                     scui_handle_t  src_name, uint8_t *src_utf8);
 
 /*@brief 控件画布在画布绘制图像
  *@param widget   控件实例

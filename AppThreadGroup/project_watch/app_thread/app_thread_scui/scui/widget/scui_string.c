@@ -24,9 +24,13 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
-    string->name    = maker->name;
-    string->text    = maker->text;
-    string->args    = maker->args;
+    string->name        = maker->name;
+    string->text        = maker->text;
+    string->args        = maker->args;
+    string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
+    string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
+    
+    string->unit_way    = 1;
     
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, string->text);
@@ -40,6 +44,13 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 事件默认全局接收 */
     cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
+    
+    /* 更新一次字符串绘制参数 */
+    string->args.update = true;
+    string->args.name   = string->name;
+    string->args.utf8   = string->str_utf8;
+    string->args.clip   = scui_widget_draw_clip(*handle);
+    scui_string_args_process(&string->args);
 }
 
 /*@brief 字符串控件销毁
@@ -53,7 +64,10 @@ void scui_string_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_string);
     
-    scui_string_args_clear(&string->args);
+    string->args.update = true;
+    string->args.name   = SCUI_HANDLE_INVALID;
+    string->args.utf8   = NULL;
+    scui_string_args_process(&string->args);
     scui_string_update_text(handle, SCUI_HANDLE_INVALID);
     
     /* 销毁基础控件实例 */
@@ -128,13 +142,45 @@ void scui_string_event(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         
+        string->rcd_ms += scui_event_anima_elapse;
+        if (string->rcd_ms < string->unit_ms)
+            break;
+        string->rcd_ms -= string->unit_ms;
+        
+        if (string->args.limit <= 0)
+            break;
+        scui_string_args_process(&string->args);
+        string->args.offset -= string->unit_dx * string->unit_way;
+        
+        if (string->args.offset > 0) {
+            string->args.offset = 0;
+            string->unit_way = -string->unit_way;
+        }
+        if (string->args.offset < -string->args.limit) {
+            string->args.offset = -string->args.limit;
+            string->unit_way = -string->unit_way;
+        }
+        
+        scui_widget_draw(handle, NULL, false);
         break;
     }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         
-        if (string->str_utf8 != NULL)
-            scui_widget_surface_draw_string(widget, &string->args, string->name, string->str_utf8);
+        if (string->str_utf8 != NULL) {
+            
+            bool update = false;
+            update = update || (string->args.number == 0);
+            update = update || (string->args.name != string->name);
+            update = update || (memcmp(string->args.utf8, string->str_utf8, string->args.number) != 0);
+            
+            string->args.update = update;
+            string->args.name   = string->name;
+            string->args.utf8   = string->str_utf8;
+            string->args.clip   = scui_widget_draw_clip(handle);
+            scui_string_args_process(&string->args);
+            scui_widget_surface_draw_string(widget, &string->args);
+        }
         
         break;
     }

@@ -5,7 +5,8 @@ typedef struct {
     scui_color_mix_t    color;          // 字符串颜色
     scui_color_mix_t    filter;         // 去底色
     scui_coord_t        margin;         // 边距
-    scui_coord_t        gap_line;       // 间距
+    scui_coord_t        gap_line;       // 行间距
+    scui_coord_t        gap_item;       // 字间距
     scui_coord_t        gap_none;       // 间距:空字符
     uint64_t            mode:2;         // 绘制模式(0:回退滚动;1:循环滚动)
     uint64_t            align_hor:2;    // 书写对齐(0:左对齐;1:右对齐;2:中心对齐)
@@ -15,11 +16,18 @@ typedef struct {
     uint64_t            line_stand:1;   // 标准字符(非默认)
     uint64_t            line_ltr:1;     // 绘制方向
     uint64_t            cover:1;        // 保留底色
+    /* 外部域转内部域: */
+    scui_area_t         clip;           // 绘制剪切域
+    scui_handle_t       name;           // 字库文字句柄
+    uint8_t            *utf8;           // 字符串(utf8)
     /* 内部域: */
+    scui_coord_t        width;          // 单行模式宽度
+    scui_coord_t        height;         // 多行模式高度
+    scui_coord_t        limit;
+    scui_coord_t        offset;
     uint32_t            number;         // 字符数量
     uint32_t           *unicode;        // 字符串(unicode)
     void               *layout;         // 布局资源
-    scui_coord_t        offset;
     uint64_t            update:1;       // 更新标记
 } scui_string_args_t;
 
@@ -28,7 +36,11 @@ typedef struct {
     scui_handle_t       name;           // 字库名字
     scui_handle_t       text;           // 字符串
     scui_string_args_t  args;           // 字符串绘制参数
+    scui_coord_t        unit_ms;        // 滚动单元时间
+    scui_coord_t        unit_dx;        // 滚动单元距离
     /* 内部域: */
+    scui_coord_t        unit_way;       // 滚动单元方向
+    scui_coord_t        rcd_ms;
     uint8_t *str_utf8;  // 字符串(utf8)
 } scui_string_t;
 
@@ -38,6 +50,8 @@ typedef struct {
     scui_handle_t       name;           // 字库名字
     scui_handle_t       text;           // 字符串
     scui_string_args_t  args;           // 字符串绘制参数
+    scui_coord_t        unit_ms;        // 滚动单元时间
+    scui_coord_t        unit_dx;        // 滚动单元距离
 } scui_string_maker_t;
 #pragma pack(pop)
 

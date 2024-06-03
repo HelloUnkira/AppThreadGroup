@@ -51,23 +51,32 @@ static void scui_scene_test_show(scui_event_t *event)
         #if 1 /* test string widget */
         scui_string_maker_t string_maker = {0};
         scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-        string_maker.widget.type = scui_widget_type_string;
-        string_maker.widget.style.indev_ptr = true;
-        string_maker.widget.style.indev_enc = true;
-        string_maker.widget.style.indev_key = true;
-        string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-        string_maker.widget.clip.y = SCUI_DRV_VER_RES / 4;
-        string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
-        string_maker.widget.clip.h = SCUI_DRV_VER_RES / 2;
-        string_maker.widget.parent = SCUI_UI_SCENE_TEST;
-        string_maker.name          = SCUI_FONT_TYPE_32_ZH,
-        string_maker.text          = SCUI_MULTI_LANG_0X0000;
-        
+        string_maker.widget.type    = scui_widget_type_string;
+        string_maker.widget.parent  = SCUI_UI_SCENE_TEST;
+        string_maker.name           = SCUI_FONT_TYPE_32_ZH,
         string_maker.args.margin   = SCUI_STRING_MARGIN;
         string_maker.args.gap_none = SCUI_STRING_SPACE_WIDTH;
         string_maker.args.color.color_s.full = 0xFFFFFFFF;
         string_maker.args.color.color_e.full = 0xFFFFFFFF;
         
+        string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+        string_maker.widget.clip.y = 25;
+        string_maker.widget.clip.h = 40;
+        string_maker.text          = SCUI_MULTI_LANG_0X0000;
+        scui_string_create(&string_maker, &string_handle, false);
+        string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+        string_maker.widget.clip.y = 75;
+        string_maker.widget.clip.h = 40;
+        string_maker.text          = SCUI_MULTI_LANG_0X0025;
+        scui_string_create(&string_maker, &string_handle, false);
+        string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+        string_maker.widget.clip.y = 125;
+        string_maker.widget.clip.h = SCUI_DRV_VER_RES / 2;
+        string_maker.text          = SCUI_MULTI_LANG_0X0025;
+        string_maker.args.line_multi = true;
         scui_string_create(&string_maker, &string_handle, false);
         #endif
     }
