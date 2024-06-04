@@ -148,6 +148,11 @@ SCUI_PIXEL_TYPE scui_pixel_mix_with_alpha(SCUI_PIXEL_TYPE *pixel_1, scui_alpha_t
     /* 这俩个像素点为融合后的像素点稳定的贡献全部的颜色 */
     SCUI_ASSERT(alpha_1 + alpha_2 == scui_alpha_cover);
     
+    if (alpha_1 == scui_alpha_cover)
+        return *pixel_1;
+    if (alpha_2 == scui_alpha_cover)
+        return *pixel_2;
+    
     #if SCUI_PIXEL_FORMAT == scui_pixel_format_rgb565
     // Alpha converted from [0..255] to [0..31]
     // Converts  0000000000000000rrrrrggggggbbbbb
@@ -188,6 +193,11 @@ SCUI_PIXEL_TYPE scui_pixel_blend_with_alpha(SCUI_PIXEL_TYPE *pixel_fg, scui_alph
     /* 前景色像素点所占权重越多背景色像素点占用则越少 */
     /* 同样的透明度权重总和越小混合出的色调越暗淡 */
     /* 它一般用于中间过程的像素点使用而不是最后 */
+    
+    if (alpha_fg == scui_alpha_cover)
+        return *pixel_fg;
+    if (alpha_bg == scui_alpha_cover)
+        return *pixel_bg;
     
     //R=(R1 x A1+R2 x A2 x(1-A1))/(A1+A2 x(1-A1))
     //G=(G1 x A1+G2 x A2 x(1-A1))/(A1+A2 x(1-Al))

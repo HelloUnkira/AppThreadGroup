@@ -9,25 +9,29 @@
 #include "qrcodegen_lvgl.h"
 
 /*@brief 自定义控件:插件:二维码生成器
- *@param handle 自定义控件
- *@param clip   剪切域(绘制区域)
- *@param color  亮色与暗色
- *@param data   url网址链接字符串
- *@param size   字符串长度
- *@param cover  背景覆盖
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param color 颜色(.color_lighten,.color_darken,)
+ *@param data  url网址链接字符串
+ *@param size  字符串长度
+ *@param cover 背景覆盖
  */
-void scui_custom_draw_qrcord(scui_handle_t handle, scui_area_t *clip,
-                             scui_color_mix_t color, bool cover,
+void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
+                             scui_color_t  color, bool cover,
                              uint8_t *data, uint32_t size)
 {
     SCUI_LOG_DEBUG("");
+    
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
+    scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
-    scui_custom_t *custom = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_custom);
     
     if (cover) {
-        scui_color_mix_t bg_color = {.color = color.color_darken};
+        scui_color_t bg_color = {.color = color.color_darken};
         scui_widget_surface_draw_color(widget, clip, bg_color);
     }
     
@@ -104,14 +108,16 @@ void scui_custom_draw_qrcord(scui_handle_t handle, scui_area_t *clip,
         .alpha   = widget->alpha,
     };
     
-    scui_color_mix_t color_none = {0};
     scui_point_t offset = {.x = margin, .y =  margin,};
     scui_area_t dst_clip = scui_widget_draw_clip(handle);
     scui_area_t dst_area = {0};
-    
     if (scui_area_inter(&dst_area, &dst_clip, clip))
-    if (scui_area_limit_offset(&dst_area, &offset))
-        scui_widget_surface_draw_pattern(widget, &dst_area, &pattern, NULL, color_none);
+    if (scui_area_limit_offset(&dst_area, &offset)) {
+        offset.x = dst_area.x;
+        offset.y = dst_area.y;
+        scui_color_t color_none = {0};
+        scui_widget_surface_draw_pattern(widget, &offset, &pattern, NULL, color_none);
+    }
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(data_t);

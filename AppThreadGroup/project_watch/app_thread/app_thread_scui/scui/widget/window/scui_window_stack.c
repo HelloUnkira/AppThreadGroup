@@ -9,6 +9,16 @@
 
 static scui_window_stack_t scui_window_stack = {0};
 
+/*@brief 窗口栈深度
+ *@param top 栈深
+ */
+void scui_window_stack_nest(scui_handle_t *top)
+{
+    SCUI_ASSERT(scui_window_stack.top > 0);
+    SCUI_ASSERT(scui_window_stack.top < SCUI_WINDOW_STACK_NEST);
+    *top = scui_window_stack.top;
+}
+
 /*@brief 获得次级显示窗口
  *@param handle 窗口句柄
  */

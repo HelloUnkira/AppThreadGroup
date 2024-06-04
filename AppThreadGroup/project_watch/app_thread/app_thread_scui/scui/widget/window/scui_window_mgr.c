@@ -113,7 +113,7 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
  */
 void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
-    scui_color_mix_t color = {0};
+    scui_color_t color = {0};
     scui_surface_t *dst_surface = scui_surface_fb_draw();
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t  *widget = list[idx];

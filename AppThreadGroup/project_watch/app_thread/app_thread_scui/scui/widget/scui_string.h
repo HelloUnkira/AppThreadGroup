@@ -2,8 +2,8 @@
 #define SCUI_STRING_H
 
 typedef struct {
-    scui_color_mix_t    color;          // 字符串颜色
-    scui_color_mix_t    filter;         // 去底色
+    scui_color_t        color;          // 字符串颜色
+    scui_color_t        filter;         // 去底色
     scui_coord_t        margin;         // 边距
     scui_coord_t        gap_line;       // 行间距
     scui_coord_t        gap_item;       // 字间距

@@ -49,7 +49,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
         .w = src_clip.w,
         .h = src_clip.h,
     };
-    scui_color_mix_t color = {0};
+    scui_color_t color = {0};
     scui_alpha_t alpha = 0xFF;
     
     /* 注意:半透明效果会反复叠加,先全屏刷新保持帧缓冲一致性 */

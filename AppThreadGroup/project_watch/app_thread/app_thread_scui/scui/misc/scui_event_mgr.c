@@ -145,7 +145,7 @@ void scui_event_respond(scui_event_t *event)
     
     SCUI_ASSERT(scui_event_cb_prepare != NULL);
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
-    SCUI_ASSERT(scui_event_cb_custom != NULL);
+    SCUI_ASSERT(scui_event_cb_custom  != NULL);
     
     /* 内存监控 */
     #if SCUI_MEM_RECORD_CHECK

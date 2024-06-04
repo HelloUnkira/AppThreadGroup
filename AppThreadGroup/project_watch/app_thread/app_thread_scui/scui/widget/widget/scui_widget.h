@@ -60,7 +60,7 @@ typedef struct {
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
     scui_alpha_t            alpha;          /* 控件透明度 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
-    scui_color_mix_t        color;          /* 纯色背景(如果没背景图片,颜色绘制) */
+    scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_t;
 
 /*@brief 控件布局资料
@@ -75,7 +75,7 @@ typedef struct {
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
-    scui_color_mix_t        color;          /* 纯色背景(如果没背景图片,颜色绘制) */
+    scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_maker_t;
 #pragma pack(pop)
 

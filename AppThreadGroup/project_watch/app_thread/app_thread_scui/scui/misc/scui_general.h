@@ -80,7 +80,7 @@ typedef struct {
         scui_color8888_t color_darken;      // 暗色调
         scui_color8888_t color_e;           // 终色调
     };
-} scui_color_mix_t;
+} scui_color_t;
 #pragma pack(pop)
 
 /*@brief: 透明度枚举值

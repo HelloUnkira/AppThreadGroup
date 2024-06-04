@@ -157,7 +157,7 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle)
  *@param handle 控件句柄
  *@retval 颜色
  */
-scui_color_mix_t scui_widget_color_get(scui_handle_t handle)
+scui_color_t scui_widget_color_get(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -202,7 +202,7 @@ void scui_widget_image_set(scui_handle_t handle, scui_handle_t image)
  *@param handle 控件句柄
  *@param color  颜色
  */
-void scui_widget_color_set(scui_handle_t handle, scui_color_mix_t color)
+void scui_widget_color_set(scui_handle_t handle, scui_color_t color)
 {
     SCUI_LOG_INFO("widget %u color %x set", handle, color.color.full);
     scui_widget_t *widget = scui_handle_get(handle);

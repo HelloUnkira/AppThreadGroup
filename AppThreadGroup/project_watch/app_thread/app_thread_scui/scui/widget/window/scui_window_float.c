@@ -45,6 +45,9 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    /* ??? */
+    if (scui_handle_unmap(handle))
+        return;
     /* 移动窗口 */
     scui_widget_move_pos(handle, point);
     /* 获得窗口宽高 */

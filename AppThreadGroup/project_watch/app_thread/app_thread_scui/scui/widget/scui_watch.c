@@ -139,13 +139,13 @@ void scui_watch_event(scui_event_t *event)
         
         /* hour: */
         scui_coord_t angle_h = watch->tick_h * (360 / 24) + watch->tick_m * (360 / 60) * 6 / 360;
-        scui_widget_surface_draw_image_rotate(widget, watch->image_h, NULL, angle_h, &watch->anchor_h, &watch->center_h);
+        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_h, NULL, &watch->anchor_h, &watch->center_h, angle_h);
         /* minute: */
         scui_coord_t angle_m = watch->tick_m * (360 / 60) + watch->tick_s * (360 / 60) * 6 / 360;
-        scui_widget_surface_draw_image_rotate(widget, watch->image_m, NULL, angle_m, &watch->anchor_m, &watch->center_m);
+        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_m, NULL, &watch->anchor_m, &watch->center_m, angle_m);
         /* second: */
         scui_coord_t angle_s = watch->tick_s * (360 / 60) + watch->tick_ms * 6 / 1000;
-        scui_widget_surface_draw_image_rotate(widget, watch->image_s, NULL, angle_s, &watch->anchor_s, &watch->center_s);
+        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_s, NULL, &watch->anchor_s, &watch->center_s, angle_s);
         
         break;
     }

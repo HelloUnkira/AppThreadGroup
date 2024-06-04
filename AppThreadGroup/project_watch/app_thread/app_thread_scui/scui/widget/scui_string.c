@@ -179,7 +179,7 @@ void scui_string_event(scui_event_t *event)
             string->args.utf8   = string->str_utf8;
             string->args.clip   = scui_widget_draw_clip(handle);
             scui_string_args_process(&string->args);
-            scui_widget_surface_draw_string(widget, &string->args);
+            scui_widget_surface_draw_string(widget, NULL, &string->args);
         }
         
         break;

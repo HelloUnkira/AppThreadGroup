@@ -23,7 +23,7 @@ typedef struct {
         scui_coord_t          height;       /* 条目高度 */
         scui_coord_t          number;       /* 条目数量 */
         scui_point_t          offset;       /* 条目起始偏移 */
-        scui_color_mix_t      color;        /* 颜色(亮色调与暗色调) */
+        scui_color_t      color;        /* 颜色(亮色调与暗色调) */
     } field_0x00;                           /* 0x00:柱状图,股价图; */
     struct {
     } field_0x01;                           /* 0x00:折现图; */

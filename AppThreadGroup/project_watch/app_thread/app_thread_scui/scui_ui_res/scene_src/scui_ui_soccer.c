@@ -317,12 +317,12 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 if (normal_z_bg[idx_j][idx_i] > 0.0f) {
                     scui_handle_t   image_bg = scui_ui_res_local->image_bg;
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_widget_surface_draw_image_by_matrix(widget, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
+                    scui_widget_surface_draw_image_by_matrix(widget, NULL, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
                 }
                 if (normal_z_fg[idx_j][idx_i] > 0.0f) {
                     scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_widget_surface_draw_image_by_matrix(widget, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);
+                    scui_widget_surface_draw_image_by_matrix(widget, NULL, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);
                 }
             }
         }

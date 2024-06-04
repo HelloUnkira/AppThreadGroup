@@ -72,7 +72,7 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle);
  *@param handle 控件句柄
  *@retval 颜色
  */
-scui_color_mix_t scui_widget_color_get(scui_handle_t handle);
+scui_color_t scui_widget_color_get(scui_handle_t handle);
 
 /*@brief 控件透明度设置
  *@param handle 控件句柄
@@ -90,7 +90,7 @@ void scui_widget_image_set(scui_handle_t handle, scui_handle_t image);
  *@param handle 控件句柄
  *@param color  颜色
  */
-void scui_widget_color_set(scui_handle_t handle, scui_color_mix_t color);
+void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 
 /*@brief 控件对齐子控件计算
  *       中心对齐:则控件中心点与子控件中心点偏移量(最小)

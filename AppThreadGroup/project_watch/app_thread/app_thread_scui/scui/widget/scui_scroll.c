@@ -1197,6 +1197,10 @@ void scui_scroll_event(scui_event_t *event)
             break;
         }
         
+        if (event->key_id != scroll->keyid_fdir &&
+            event->key_id != scroll->keyid_bdir)
+            break;
+        
         scui_coord_t way = 0;
         if (event->key_id == scroll->keyid_fdir)
             way = +1;
