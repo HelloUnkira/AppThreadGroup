@@ -87,18 +87,6 @@ scui_area_t scui_widget_attr_clip(scui_handle_t handle)
     return widget->clip;
 }
 
-/*@brief 控件剪切域(绘制)
- *@param handle 控件句柄
- *@retval 控件剪切域
- */
-scui_area_t scui_widget_draw_clip(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    return widget->clip_set.clip;
-}
-
 /*@brief 控件显示状态获取
  *@param handle 控件句柄
  *@retval 是否显示

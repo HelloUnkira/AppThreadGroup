@@ -76,16 +76,15 @@ void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_surface_t *src_surface = &image_surface;
     scui_image_format_to_pixel_format(&image_unit.image->format, &image_surface.format);
     
-    scui_point_t center = {
-        .x = dst_clip->w / 2 - src_clip->w / 2,
-        .y = dst_clip->h / 2 - src_clip->h / 2,
-    };
+    /* 这里是绘制中心缩放 */
+    scui_point_t src_center = {.x = src_clip->w / 2,.y = src_clip->h / 2,};
+    scui_point_t dst_center = {.x = dst_clip->w / 2,.y = dst_clip->h / 2,};
     
     scui_matrix_t matrix = {0};
     scui_matrix_identity(&matrix);
-    // scui_matrix_translate(&matrix, &(scui_point2_t){.x = -center.x, .y = -center.y,});
+    scui_matrix_translate(&matrix, &(scui_point2_t){.x = +dst_center.x, .y = +dst_center.y,});
     scui_matrix_scale(&matrix, &(scui_point2_t){.x = scale.x / 1024.0f, .y = scale.y / 1024.0f,});
-    // scui_matrix_translate(&matrix, &(scui_point2_t){.x = +center.x, .y = +center.y,});
+    scui_matrix_translate(&matrix, &(scui_point2_t){.x = -src_center.x, .y = -src_center.y,});
     scui_matrix_inverse(&matrix);
     scui_draw_area_blit_by_matrix(dst_surface, dst_clip, src_surface, src_clip, &matrix);
     

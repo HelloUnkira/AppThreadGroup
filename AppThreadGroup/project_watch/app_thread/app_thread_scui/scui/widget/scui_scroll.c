@@ -21,9 +21,11 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_scroll_t));
     memset(scroll, 0, sizeof(scui_scroll_t));
     
+    /* 滚动控件不响应外部事件 */
+    SCUI_ASSERT(maker->widget.event_cb == NULL);
+    
     /* 滚动控件必须设置事件响应标记 */
     SCUI_ASSERT(maker->widget.style.indev_ptr);
-    SCUI_ASSERT(maker->widget.style.indev_enc);
     
     /* 创建基础控件实例 */
     scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
@@ -1071,7 +1073,6 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         SCUI_LOG_ERROR("unknown type: %x", type);
         break;
     }
-    
 }
 
 /*@brief 滚动控件事件处理回调

@@ -42,7 +42,9 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     watch->widget.style.sched_anima = true;
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
+    cb_node.event = scui_event_anima_elapse;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_draw;
     scui_widget_event_add(*handle, &cb_node);
     
     /* 创建时刷新一次 */
@@ -139,13 +141,13 @@ void scui_watch_event(scui_event_t *event)
         
         /* hour: */
         scui_coord_t angle_h = watch->tick_h * (360 / 24) + watch->tick_m * (360 / 60) * 6 / 360;
-        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_h, NULL, &watch->anchor_h, &watch->center_h, angle_h);
+        scui_widget_surface_draw_image_rotate(handle, NULL, watch->image_h, NULL, &watch->anchor_h, &watch->center_h, angle_h);
         /* minute: */
         scui_coord_t angle_m = watch->tick_m * (360 / 60) + watch->tick_s * (360 / 60) * 6 / 360;
-        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_m, NULL, &watch->anchor_m, &watch->center_m, angle_m);
+        scui_widget_surface_draw_image_rotate(handle, NULL, watch->image_m, NULL, &watch->anchor_m, &watch->center_m, angle_m);
         /* second: */
         scui_coord_t angle_s = watch->tick_s * (360 / 60) + watch->tick_ms * 6 / 1000;
-        scui_widget_surface_draw_image_rotate(widget, NULL, watch->image_s, NULL, &watch->anchor_s, &watch->center_s, angle_s);
+        scui_widget_surface_draw_image_rotate(handle, NULL, watch->image_s, NULL, &watch->anchor_s, &watch->center_s, angle_s);
         
         break;
     }

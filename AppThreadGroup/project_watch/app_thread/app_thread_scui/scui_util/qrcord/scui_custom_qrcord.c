@@ -25,14 +25,9 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
     if (!scui_widget_event_check_execute(event))
          return;
     
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_custom);
-    
     if (cover) {
         scui_color_t bg_color = {.color = color.color_darken};
-        scui_widget_surface_draw_color(widget, clip, bg_color);
+        scui_widget_surface_draw_color(event->object, clip, bg_color);
     }
     
     if (size >= qrcodegen_lvgl_BUFFER_LEN_MAX) {
@@ -105,15 +100,15 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
         .format  = SCUI_PIXEL_FORMAT,
         .hor_res = scaled,
         .ver_res = scaled,
-        .alpha   = widget->alpha,
+        .alpha   = scui_widget_alpha_get(event->object),
     };
     
     scui_point_t offset = {.x = margin, .y =  margin,};
     scui_area_t dst_clip = {0};
-    scui_area_t dst_area = scui_widget_draw_clip(handle);
+    scui_area_t dst_area = scui_widget_surface_clip(event->object);
     if (scui_area_inter(&dst_clip, &dst_area, clip))
     if (scui_area_limit_offset(&dst_clip, &offset))
-        scui_widget_surface_draw_pattern(widget, &dst_clip, &pattern, NULL, (scui_color_t){0});
+        scui_widget_surface_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(data_t);

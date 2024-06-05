@@ -385,12 +385,15 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
         scui_point_t  point  = {0};
         scui_point3_t point3 = {0};
-        point.y = src_clip_v.y + idx_line;
-        point.x = src_clip_v.x + idx_item;
+        point.y = idx_line;
+        point.x = idx_item;
         /* 反扫描结果坐标对每一个坐标进行逆变换 */
         scui_point3_by_point(&point3, &point);
         scui_point3_transform_by_matrix(&point3, inv_matrix);
         scui_point3_to_point(&point3, &point);
+        point.y += src_clip_v.y;
+        point.x += src_clip_v.x;
+        
         /* 逆变换的结果落在的源区域, 取样上色 */
         if (scui_area_point(&src_area, &point)) {
             /* 像素格式不带透明度(仅全局透明度混合) */

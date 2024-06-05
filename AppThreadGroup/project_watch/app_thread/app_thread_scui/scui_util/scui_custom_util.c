@@ -24,10 +24,6 @@ void scui_custom_draw_image_ring(scui_event_t *event,  scui_point_t *center,
     if (!scui_widget_event_check_execute(event))
          return;
     
-    scui_widget_t *widget = scui_handle_get(event->object);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_custom);
-    
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);
     
@@ -40,7 +36,7 @@ void scui_custom_draw_image_ring(scui_event_t *event,  scui_point_t *center,
         .w = image->pixel.width,
         .h = image->pixel.height,
     };
-    scui_widget_surface_draw_image(widget, &clip, handle, NULL, color);
+    scui_widget_surface_draw_image(event->object, &clip, handle, NULL, color);
 }
 
 /*@brief 自定义控件:插件:区域绘制
@@ -58,14 +54,9 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     if (!scui_widget_event_check_execute(event))
          return;
     
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_custom);
-    
     /* 常规填色 */
     if (mix == 0) {
-        scui_widget_surface_draw_color(widget, clip, color);
+        scui_widget_surface_draw_color(event->object, clip, color);
         return;
     }
     
@@ -73,7 +64,7 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     if (mix == 1) {
         /* 无渐变填色 */
         if (color.color_s.full == color.color_e.full) {
-            scui_widget_surface_draw_color(widget, clip, color);
+            scui_widget_surface_draw_color(event->object, clip, color);
             return;
         }
         
@@ -124,13 +115,13 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
             .format  = SCUI_PIXEL_FORMAT,
             .hor_res = clip->w,
             .ver_res = clip->h,
-            .alpha   = widget->alpha,
+            .alpha   = scui_widget_alpha_get(event->object),
         };
         
         scui_area_t dst_clip = {0};
-        scui_area_t dst_area = scui_widget_draw_clip(handle);
+        scui_area_t dst_area = scui_widget_surface_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
-            scui_widget_surface_draw_pattern(widget, &dst_clip, &pattern, NULL, (scui_color_t){0});
+            scui_widget_surface_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
         
         SCUI_MEM_FREE(pixel);
         return;
@@ -139,26 +130,21 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     SCUI_ASSERT(false);
 }
 
-/*@brief 自定义控件:插件:画线
- *@param event 自定义控件事件
- *@param color 颜色(.color,)
- *@param width 线条宽
- *@param pos_1 位置1
- *@param pos_2 位置2
+/*@brief 自定义控件:插件:调色板圆环
+ *@param event      自定义控件事件
+ *@param color      图像源色调(调色板使用)
+ *@param image_ring 图像句柄(调色板)
+ *@param angle_s    圆环起始角度
+ *@param image_edge 图像句柄(边界点)
+ *@param angle_e    圆环结束角度
+ *@param angle_pct  圆环进度(百分比)
  */
-void scui_custom_draw_line(scui_event_t *event, scui_coord_t width,
-                           scui_point_t  pos_1, scui_point_t pos_2,
-                           scui_color_t  color)
+void scui_custom_draw_ring(scui_event_t *event,      scui_color_t color,
+                           scui_handle_t image_ring, scui_coord_t angle_s,
+                           scui_handle_t image_edge, scui_coord_t angle_e,
+                           scui_coord_t  angle_pct)
 {
-    SCUI_LOG_DEBUG("");
     
-    if (!scui_widget_event_check_execute(event))
-         return;
     
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_custom);
     
-    scui_widget_surface_draw_line(widget, width, pos_1, pos_2, color);
 }

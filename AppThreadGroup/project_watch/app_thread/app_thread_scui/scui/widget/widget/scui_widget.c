@@ -180,9 +180,6 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
         [scui_widget_type_chart].create     = (scui_widget_cb_create_t)   scui_chart_create,
         [scui_widget_type_chart].destroy    = (scui_widget_cb_destroy_t)  scui_chart_destroy,
         [scui_widget_type_chart].layout     = (scui_widget_cb_layout_t)   NULL,
-        [scui_widget_type_ring].create      = (scui_widget_cb_create_t)   scui_ring_create,
-        [scui_widget_type_ring].destroy     = (scui_widget_cb_destroy_t)  scui_ring_destroy,
-        [scui_widget_type_ring].layout      = (scui_widget_cb_layout_t)   NULL,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);

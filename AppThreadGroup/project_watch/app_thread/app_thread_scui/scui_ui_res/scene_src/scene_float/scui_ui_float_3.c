@@ -47,77 +47,24 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_float_3_c_event_proc(scui_event_t *event)
+void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+    case scui_event_draw: {
+        
+        /* 绘制圆环背景图: */
+        scui_handle_t image_ring_bg = scui_image_prj_image_src_03_activity_ring_big_max_01_bjbmp;
+        scui_widget_surface_draw_image(event->object, NULL, image_ring_bg, NULL, (scui_color_t){0});
+        
+        
+        
+        scui_widget_event_mask_keep(event);
         break;
     }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_3_lu_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_3_ru_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_3_ld_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_3_rd_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
-        break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;

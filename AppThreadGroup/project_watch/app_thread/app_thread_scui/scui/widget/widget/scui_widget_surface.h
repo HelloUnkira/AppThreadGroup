@@ -24,98 +24,104 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse);
  */
 void scui_widget_surface_remap(scui_widget_t *widget, scui_surface_t *surface);
 
-/*-------------------------------------------------*
- *separator----------------------------------------*
- *-------------------------------------------------*/
-
 /*@brief 控件画布同步
  *@param widget  控件实例
  *@param surface 画布实例
  */
 void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
+/*-------------------------------------------------*
+ *separator----------------------------------------*
+ *-------------------------------------------------*/
+
+/*@brief 控件剪切域(绘制)
+ *@param handle 控件句柄
+ *@retval 控件剪切域
+ */
+scui_area_t scui_widget_surface_clip(scui_handle_t handle);
+
 /*@brief 控件画布在画布绘制图像
- *@param widget  控件实例
+ *@param handle  控件句柄
  *@param target  控件绘制区域
  *@param surface 画布实例
  *@param clip    画布绘制区域
  *@param color   图像源色调(调色板使用)
  */
-void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_area_t *target,
+void scui_widget_surface_draw_pattern(scui_handle_t   handle,  scui_area_t *target,
                                       scui_surface_t *surface, scui_area_t *clip,
                                       scui_color_t    color);
 
 /*@brief 控件画布在画布绘制字符串
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param target 控件绘制区域
  *@param args   字符串绘制参数(scui_string_args_t)
  */
-void scui_widget_surface_draw_string(scui_widget_t *widget, scui_area_t *target, void *args);
+void scui_widget_surface_draw_string(scui_handle_t handle, scui_area_t *target, void *args);
 
 /*@brief 控件画布在画布绘制纯色区域
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param clip   绘制区域
  *@param color  源色调
  */
-void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *clip,
-                                    scui_color_t   color);
+void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
+                                    scui_color_t  color);
 
 /*@brief 控件画布在画布绘制图像
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param target 控件绘制区域
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param color  图像源色调(调色板使用)
  */
-void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *target,
-                                    scui_handle_t  handle, scui_area_t *clip,
-                                    scui_color_t   color);
+void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
+                                    scui_handle_t image,  scui_area_t *clip,
+                                    scui_color_t  color);
 
 /*@brief 控件画布在画布绘制图像
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param target 控件绘制区域
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param scale  图形缩放比例(1024为放大系数)
  */
-void scui_widget_surface_draw_image_scale(scui_widget_t *widget, scui_area_t *target,
-                                          scui_handle_t  handle, scui_area_t *clip,
-                                          scui_point_t   scale);
+void scui_widget_surface_draw_image_scale(scui_handle_t handle, scui_area_t *target,
+                                          scui_handle_t image,  scui_area_t *clip,
+                                          scui_point_t  scale);
 
 /*@brief 控件画布在画布绘制图像
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param target 控件绘制区域
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param anchor 图像旋转轴心
  *@param center 图像旋转中心
  *@param angle  图像旋转角度(顺时针旋转:+,逆时针旋转:-)
  */
-void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_area_t  *target,
-                                           scui_handle_t  handle, scui_area_t  *clip,
-                                           scui_point_t  *anchor, scui_point_t *center,
-                                           scui_coord_t   angle);
+void scui_widget_surface_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
+                                           scui_handle_t image,  scui_area_t  *clip,
+                                           scui_point_t *anchor, scui_point_t *center,
+                                           scui_coord_t  angle);
 
 /*@brief 控件画布在画布绘制图像
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param target 控件绘制区域
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param matrix 变换矩阵
  */
-void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_area_t *target,
-                                              scui_handle_t  handle, scui_area_t *clip,
+void scui_widget_surface_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target,
+                                              scui_handle_t  image,  scui_area_t *clip,
                                               scui_matrix_t *matrix);
 
 /*@brief 控件画布在画布绘制线条
- *@param widget 控件实例
+ *@param handle 控件句柄
  *@param width  线条宽
  *@param pos_1  位置1
  *@param pos_2  位置2
  *@param color  源色调
  */
-void scui_widget_surface_draw_line(scui_widget_t *widget, scui_coord_t width,
-                                   scui_point_t   pos_1,  scui_point_t pos_2,
-                                   scui_color_t   color);
+void scui_widget_surface_draw_line(scui_handle_t handle, scui_coord_t width,
+                                   scui_point_t  pos_1,  scui_point_t pos_2,
+                                   scui_color_t  color);
 
 #endif

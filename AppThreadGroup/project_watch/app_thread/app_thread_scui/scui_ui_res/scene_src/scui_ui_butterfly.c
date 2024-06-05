@@ -76,14 +76,11 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_handle_t  handle = event->object;
-            scui_widget_t *widget = scui_handle_get(handle);
-            SCUI_ASSERT(widget != NULL);
-            
+            scui_area_t clip = scui_widget_surface_clip(event->object);
             /* 居中偏移 */
-            scui_point2_t offset = {
-                .x = widget->clip.x + widget->clip.w / 2,
-                .y = widget->clip.y + widget->clip.h / 2,
+            scui_point3_t offset = {
+                .x = clip.x + clip.w / 2,
+                .y = clip.y + clip.h / 2,
             };
             
             /* 初始视点在屏幕中间 */
@@ -118,7 +115,7 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -128,10 +125,6 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
 {
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -229,10 +222,11 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             scui_matrix_t *matrix_trunk   = scui_ui_res_local->matrix_trunk;
             scui_matrix_t *matrix_wing    = scui_ui_res_local->matrix_wing;
             
+            scui_area_t clip = scui_widget_surface_clip(event->object);
             /* 居中偏移 */
             scui_point3_t offset = {
-                .x = +(widget->clip.x + widget->clip.w / 2),
-                .y = +(widget->clip.y + widget->clip.h / 2),
+                .x = clip.x + clip.w / 2,
+                .y = clip.y + clip.h / 2,
             };
             
             /* 触角矩阵 */
@@ -307,22 +301,22 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             /* 翅膀 */
             scui_handle_t *image_wing  = scui_ui_res_local->image_wing;
             scui_matrix_t *matrix_wing = scui_ui_res_local->matrix_wing;
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_wing[1], NULL, &matrix_wing[2]);
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_wing[1], NULL, &matrix_wing[3]);
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_wing[0], NULL, &matrix_wing[0]);
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_wing[0], NULL, &matrix_wing[1]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_wing[1], NULL, &matrix_wing[2]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_wing[1], NULL, &matrix_wing[3]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_wing[0], NULL, &matrix_wing[0]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_wing[0], NULL, &matrix_wing[1]);
             
             /* 触角 */
             scui_handle_t  image_antenna  = scui_ui_res_local->image_antenna;
             scui_matrix_t *matrix_antenna = scui_ui_res_local->matrix_antenna;
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_antenna, NULL, &matrix_antenna[0]);
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_antenna, NULL, &matrix_antenna[1]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_antenna, NULL, &matrix_antenna[0]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_antenna, NULL, &matrix_antenna[1]);
             
             /* 躯干 */
             scui_handle_t  image_trunk  = scui_ui_res_local->image_trunk;
             scui_matrix_t *matrix_trunk = scui_ui_res_local->matrix_trunk;
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_trunk, NULL, &matrix_trunk[0]);
-            scui_widget_surface_draw_image_by_matrix(widget, NULL, image_trunk, NULL, &matrix_trunk[1]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_trunk, NULL, &matrix_trunk[0]);
+            scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_trunk, NULL, &matrix_trunk[1]);
         }
         break;
     case scui_event_ptr_move:
@@ -335,7 +329,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

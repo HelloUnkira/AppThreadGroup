@@ -55,7 +55,6 @@
 /* widget: */
 #include "scui_watch.h"
 #include "scui_chart.h"
-#include "scui_ring.h"
 
 /* font */
 #include "scui_font.h"

@@ -38,12 +38,6 @@ scui_widget_type_t scui_widget_attr_type(scui_handle_t handle);
  */
 scui_area_t scui_widget_attr_clip(scui_handle_t handle);
 
-/*@brief 控件剪切域(绘制)
- *@param handle 控件句柄
- *@retval 控件剪切域
- */
-scui_area_t scui_widget_draw_clip(scui_handle_t handle);
-
 /*@brief 控件显示状态获取
  *@param handle 控件句柄
  *@retval 是否显示

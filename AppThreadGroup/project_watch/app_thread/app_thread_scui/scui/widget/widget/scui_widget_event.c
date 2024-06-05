@@ -533,9 +533,9 @@ void scui_widget_event_draw(scui_event_t *event)
     /* 没有背景图片则绘制纯色背景 */
     if (widget->image != SCUI_HANDLE_INVALID)
         /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
-        scui_widget_surface_draw_image(widget, NULL, widget->image, NULL, widget->color);
+        scui_widget_surface_draw_image(event->object, NULL, widget->image, NULL, widget->color);
     else
-        scui_widget_surface_draw_color(widget, NULL, widget->color);
+        scui_widget_surface_draw_color(event->object, NULL, widget->color);
 }
 
 /*@prief 事件滚动状态检查更新

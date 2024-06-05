@@ -42,14 +42,16 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->widget.style.sched_anima = true;
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
+    cb_node.event = scui_event_anima_elapse;
+    scui_widget_event_add(*handle, &cb_node);
+    cb_node.event = scui_event_draw;
     scui_widget_event_add(*handle, &cb_node);
     
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
     string->args.name   = string->name;
     string->args.utf8   = string->str_utf8;
-    string->args.clip   = scui_widget_draw_clip(*handle);
+    string->args.clip   = scui_widget_surface_clip(*handle);
     scui_string_args_process(&string->args);
 }
 
@@ -177,9 +179,9 @@ void scui_string_event(scui_event_t *event)
             string->args.update = update;
             string->args.name   = string->name;
             string->args.utf8   = string->str_utf8;
-            string->args.clip   = scui_widget_draw_clip(handle);
+            string->args.clip   = scui_widget_surface_clip(handle);
             scui_string_args_process(&string->args);
-            scui_widget_surface_draw_string(widget, NULL, &string->args);
+            scui_widget_surface_draw_string(handle, NULL, &string->args);
         }
         
         break;

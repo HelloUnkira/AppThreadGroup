@@ -66,14 +66,14 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
             .color_e.full = 0xFF0000FF,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_custom_draw_area(event, &clip, color_black, false, false);
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 15;
         clip.y += 15;
         clip.w -= 15 * 2;
@@ -82,7 +82,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h -= 5;
         scui_custom_draw_area(event, &clip, color_mix, true, false);
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 15;
         clip.y += 15;
         clip.w -= 15 * 2;
@@ -122,7 +122,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
             .color.full = 0xFF00FF00,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -139,34 +139,34 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         pos_s.y = clip.y1 + 5;
         pos_e.x = pos_s.x;
         pos_e.y = clip.y2 - 10;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
         pos_e.y = pos_s.y;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = pos_s.x + del_x / 2;
         pos_e.y = clip.y2 - 10;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
         pos_e.y = pos_s.y + del_y / 2;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         
         pos_s.x = clip.x2 - 10;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x1 + 5 + del_x / 2;
         pos_e.y = clip.y2 - 10;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y2 - 10;
         pos_e.x = clip.x2 - 10;
         pos_e.y = clip.y1 + 5 + del_y / 2;
-        scui_custom_draw_line(event, 2, pos_s, pos_e, color_mix);
+        scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         
         scui_widget_event_mask_keep(event);
         break;
@@ -204,7 +204,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
             .color.full = 0xFF00FF00,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -235,7 +235,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
 void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
 {
     static scui_multi_t image_pct = 0;
-    static scui_point_t image_scale = {0};
+    static scui_point_t image_scale = {.x = 1024,.y = 1024,};
     
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -259,22 +259,19 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         scui_area_t clip = {0};
         scui_color_t color_black = {0};
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_surface_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_custom_draw_area(event, &clip, color_black, false, false);
         
-        scui_widget_t *widget = scui_handle_get(event->object);
-        SCUI_ASSERT(widget != NULL);
-        
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
         scui_image_t *image = scui_handle_get(image_handle);
         SCUI_ASSERT(image != NULL);
         
         scui_point_t scale = image_scale;
-        scui_widget_surface_draw_image_scale(widget, &clip, image_handle, NULL, scale);
+        scui_widget_surface_draw_image_scale(event->object, &clip, image_handle, NULL, scale);
         
         scui_widget_event_mask_keep(event);
         break;
@@ -284,4 +281,3 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         break;
     }
 }
-

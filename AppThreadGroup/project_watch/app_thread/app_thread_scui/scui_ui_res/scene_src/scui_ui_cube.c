@@ -109,7 +109,7 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -119,10 +119,6 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
 {
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -146,7 +142,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->rotate.y += 1.0f * rotate_way;
         scui_ui_res_local->rotate.x -= 1.0f * rotate_way;
         scui_ui_res_local->size += 1 * resize_way;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw:
         scui_widget_event_mask_keep(event);
@@ -184,10 +180,11 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 {+0.0f, -1.0f, +0.0f},  // 0154
             };
             
+            scui_area_t clip = scui_widget_surface_clip(event->object);
             /* 居中偏移 */
-            scui_point2_t offset = {
-                .x = widget->clip.x + widget->clip.w / 2,
-                .y = widget->clip.y + widget->clip.h / 2,
+            scui_point3_t offset = {
+                .x = clip.x + clip.w / 2,
+                .y = clip.y + clip.h / 2,
             };
             
             /* 三轴旋转矩阵 */
@@ -230,7 +227,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 
                 scui_handle_t *image  = scui_ui_res_local->image;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_widget_surface_draw_image_by_matrix(widget, NULL, image[idx], NULL, &matrix[idx]);
+                scui_widget_surface_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
             }
         }
         break;
@@ -241,7 +238,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->move_lock = true;
         scui_ui_res_local->rotate.y += event->ptr_e.x - event->ptr_s.x;
         scui_ui_res_local->rotate.x += event->ptr_s.y - event->ptr_e.y;     // y轴方向是反的
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:
@@ -250,7 +247,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

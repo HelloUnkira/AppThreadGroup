@@ -23,15 +23,4 @@ void scui_custom_draw_image_ring(scui_event_t *event,  scui_point_t *center,
 void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
                            scui_color_t  color, uint8_t mix, bool way);
 
-/*@brief 自定义控件:插件:画线
- *@param event 自定义控件事件
- *@param color 颜色(.color,)
- *@param width 线条宽
- *@param pos_1 位置1
- *@param pos_2 位置2
- */
-void scui_custom_draw_line(scui_event_t *event, scui_coord_t width,
-                           scui_point_t  pos_1, scui_point_t pos_2,
-                           scui_color_t  color);
-
 #endif

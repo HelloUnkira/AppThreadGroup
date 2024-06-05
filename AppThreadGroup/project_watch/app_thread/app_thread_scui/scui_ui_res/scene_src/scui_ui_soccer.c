@@ -144,7 +144,7 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -154,10 +154,6 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
 {
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -167,7 +163,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             break;
         
         scui_ui_res_local->rotate.y += 1.0f;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw:
         scui_widget_event_mask_keep(event);
@@ -201,10 +197,11 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             scui_coord3_t sin_66 = scui_sin(scui_radian_by_angle(angle_66));
             scui_coord3_t cos_66 = scui_cos(scui_radian_by_angle(angle_66));
             
+            scui_area_t clip = scui_widget_surface_clip(event->object);
             /* 居中偏移 */
-            scui_point2_t offset = {
-                .x = widget->clip.x + widget->clip.w / 2,
-                .y = widget->clip.y + widget->clip.h / 2,
+            scui_point3_t offset = {
+                .x = clip.x + clip.w / 2,
+                .y = clip.y + clip.h / 2,
             };
             
             scui_coord3_t angle_x[4] = {angle_56, angle_66, - angle_66, - angle_56,};
@@ -317,12 +314,12 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 if (normal_z_bg[idx_j][idx_i] > 0.0f) {
                     scui_handle_t   image_bg = scui_ui_res_local->image_bg;
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
-                    scui_widget_surface_draw_image_by_matrix(widget, NULL, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
+                    scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
                 }
                 if (normal_z_fg[idx_j][idx_i] > 0.0f) {
                     scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
-                    scui_widget_surface_draw_image_by_matrix(widget, NULL, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);
+                    scui_widget_surface_draw_image_by_matrix(event->object, NULL, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);
                 }
             }
         }
@@ -335,7 +332,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         scui_ui_res_local->move_lock = true;
         scui_ui_res_local->rotate.y += event->ptr_e.x - event->ptr_s.x;
         scui_ui_res_local->rotate.x += event->ptr_s.y - event->ptr_e.y;     // y轴方向是反的
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:
@@ -345,7 +342,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
