@@ -269,6 +269,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         }
         scui_window_float_anima_auto(value_s, value_e, 0);
         scui_widget_event_mask_over(event);
+        scui_window_float.hold = true;
         break;
     }
     case scui_event_ptr_up: {

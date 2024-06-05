@@ -118,13 +118,13 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
 
 /*@brief 控件画布在画布绘制图像
  *@param widget  控件实例
- *@param offset  控件剪切域偏移
+ *@param target  控件绘制区域
  *@param surface 画布实例
  *@param clip    画布绘制区域
  *@param color   图像源色调(调色板使用)
  */
-void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_point_t *offset,
-                                      scui_surface_t *surface, scui_area_t  *clip,
+void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_area_t *target,
+                                      scui_surface_t *surface, scui_area_t *clip,
                                       scui_color_t    color)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
@@ -132,14 +132,11 @@ void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_point_t *off
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_point_t dst_offset = {
-        .x = widget->clip_set.clip.x,
-        .y = widget->clip_set.clip.y,
-    };
+    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t surface_clip = scui_surface_area(surface);
     
-    if (offset == NULL)
-        offset  = &dst_offset;
+    if (target == NULL)
+        target  = &widget_clip;
     
     if (clip == NULL)
         clip  = &surface_clip;
@@ -152,11 +149,14 @@ void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_point_t *off
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         /* 子剪切域要相对同步偏移 */
         scui_point_t dst_offset = {
-            .x = offset->x - widget->clip_set.clip.x,
-            .y = offset->y - widget->clip_set.clip.y,
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
         };
-        scui_area_t dst_clip = unit->clip;
-        if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
              continue;
         /* 子剪切域要相对同步偏移 */
         scui_point_t src_offset = {
@@ -178,10 +178,10 @@ void scui_widget_surface_draw_pattern(scui_widget_t  *widget,  scui_point_t *off
 
 /*@brief 控件画布在画布绘制字符串
  *@param widget 控件实例
- *@param offset 控件剪切域偏移
+ *@param target 控件绘制区域
  *@param args   字符串绘制参数(scui_string_args_t)
  */
-void scui_widget_surface_draw_string(scui_widget_t *widget, scui_point_t *offset, void *args)
+void scui_widget_surface_draw_string(scui_widget_t *widget, scui_area_t *target, void *args)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     
@@ -191,18 +191,14 @@ void scui_widget_surface_draw_string(scui_widget_t *widget, scui_point_t *offset
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_point_t dst_offset = {
-        .x = widget->clip_set.clip.x,
-        .y = widget->clip_set.clip.y,
-    };
-    
+    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t string_clip = {
         .w = widget->clip_set.clip.w,
         .h = widget->clip_set.clip.h,
     };
     
-    if (offset == NULL)
-        offset  = &dst_offset;
+    if (target == NULL)
+        target  = &widget_clip;
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
     scui_tick_elapse_us(true);
@@ -212,11 +208,14 @@ void scui_widget_surface_draw_string(scui_widget_t *widget, scui_point_t *offset
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         /* 子剪切域要相对同步偏移 */
         scui_point_t dst_offset = {
-            .x = offset->x - widget->clip_set.clip.x,
-            .y = offset->y - widget->clip_set.clip.y,
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
         };
-        scui_area_t dst_clip = unit->clip;
-        if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
              continue;
         /* 子剪切域要相对同步偏移 */
         scui_point_t src_offset = {
@@ -249,10 +248,10 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *clip,
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_area_t color_clip = widget->clip_set.clip;
+    scui_area_t widget_clip = widget->clip_set.clip;
     
     if (clip == NULL)
-        clip  = &color_clip;
+        clip  = &widget_clip;
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
     scui_tick_elapse_us(true);
@@ -281,13 +280,13 @@ void scui_widget_surface_draw_color(scui_widget_t *widget, scui_area_t *clip,
 
 /*@brief 控件画布在画布绘制图像
  *@param widget 控件实例
- *@param offset 控件剪切域偏移
+ *@param target 控件绘制区域
  *@param handle 图像句柄
  *@param clip   图像源绘制区域
  *@param color  图像源色调(调色板使用)
  */
-void scui_widget_surface_draw_image(scui_widget_t *widget, scui_point_t *offset,
-                                    scui_handle_t  handle, scui_area_t  *clip,
+void scui_widget_surface_draw_image(scui_widget_t *widget, scui_area_t *target,
+                                    scui_handle_t  handle, scui_area_t *clip,
                                     scui_color_t   color)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
@@ -298,17 +297,14 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_point_t *offset,
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);
     
-    scui_point_t dst_offset = {
-        .x = widget->clip_set.clip.x,
-        .y = widget->clip_set.clip.y,
-    };
+    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image->pixel.width,
         .h = image->pixel.height,
     };
     
-    if (offset == NULL)
-        offset  = &dst_offset;
+    if (target == NULL)
+        target  = &widget_clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -321,11 +317,14 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_point_t *offset,
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         /* 子剪切域要相对同步偏移 */
         scui_point_t dst_offset = {
-            .x = offset->x - widget->clip_set.clip.x,
-            .y = offset->y - widget->clip_set.clip.y,
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
         };
-        scui_area_t dst_clip = unit->clip;
-        if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
              continue;
         /* 子剪切域要相对同步偏移 */
         scui_point_t offset = {
@@ -348,14 +347,81 @@ void scui_widget_surface_draw_image(scui_widget_t *widget, scui_point_t *offset,
 
 /*@brief 控件画布在画布绘制图像
  *@param widget 控件实例
- *@param offset 控件剪切域偏移
+ *@param target 控件绘制区域
+ *@param handle 图像句柄
+ *@param clip   图像源绘制区域
+ *@param scale  图形缩放比例(1024为放大系数)
+ */
+void scui_widget_surface_draw_image_scale(scui_widget_t *widget, scui_area_t *target,
+                                          scui_handle_t  handle, scui_area_t *clip,
+                                          scui_point_t   scale)
+{
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_area_t widget_clip = widget->clip_set.clip;
+    scui_area_t image_clip = {
+        .w = image->pixel.width,
+        .h = image->pixel.height,
+    };
+    
+    if (target == NULL)
+        target  = &widget_clip;
+    
+    if (clip == NULL)
+        clip  = &image_clip;
+    
+#if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+#endif
+    
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t dst_offset = {
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
+        };
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
+             continue;
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t src_offset = {
+            .x = unit->clip.x - widget->clip_set.clip.x,
+            .y = unit->clip.y - widget->clip_set.clip.y,
+        };
+        scui_area_t src_clip = *clip;
+        if (!scui_area_limit_offset(&src_clip, &src_offset))
+             continue;
+        scui_draw_image_scale(widget->surface, &dst_clip, image, &src_clip,
+                              widget->alpha, scale);
+    }
+    
+#if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+#endif
+}
+
+/*@brief 控件画布在画布绘制图像
+ *@param widget 控件实例
+ *@param target 控件绘制区域
  *@param handle 图像句柄
  *@param clip   图像源绘制区域
  *@param anchor 图像旋转轴心
  *@param center 图像旋转中心
  *@param angle  图像旋转角度(顺时针旋转:+,逆时针旋转:-)
  */
-void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_point_t *offset,
+void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_area_t  *target,
                                            scui_handle_t  handle, scui_area_t  *clip,
                                            scui_point_t  *anchor, scui_point_t *center,
                                            scui_coord_t   angle)
@@ -368,17 +434,14 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_point_t *
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);
     
-    scui_point_t dst_offset = {
-        .x = widget->clip_set.clip.x,
-        .y = widget->clip_set.clip.y,
-    };
+    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image->pixel.width,
         .h = image->pixel.height,
     };
     
-    if (offset == NULL)
-        offset  = &dst_offset;
+    if (target == NULL)
+        target  = &widget_clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -391,11 +454,14 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_point_t *
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         /* 子剪切域要相对同步偏移 */
         scui_point_t dst_offset = {
-            .x = offset->x - widget->clip_set.clip.x,
-            .y = offset->y - widget->clip_set.clip.y,
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
         };
-        scui_area_t dst_clip = unit->clip;
-        if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
              continue;
         /* 子剪切域要相对同步偏移 */
         scui_point_t src_offset = {
@@ -418,13 +484,13 @@ void scui_widget_surface_draw_image_rotate(scui_widget_t *widget, scui_point_t *
 
 /*@brief 控件画布在画布绘制图像
  *@param widget 控件实例
- *@param offset 控件剪切域偏移
+ *@param target 控件绘制区域
  *@param handle 图像句柄
  *@param clip   图像源绘制区域
  *@param matrix 变换矩阵
  */
-void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_point_t *offset,
-                                              scui_handle_t  handle, scui_area_t  *clip,
+void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_area_t *target,
+                                              scui_handle_t  handle, scui_area_t *clip,
                                               scui_matrix_t *matrix)
 {
     SCUI_LOG_DEBUG("widget %u", widget->myself);
@@ -435,17 +501,14 @@ void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_point_
     scui_image_t *image = scui_handle_get(handle);
     SCUI_ASSERT(image != NULL);
     
-    scui_point_t dst_offset = {
-        .x = widget->clip_set.clip.x,
-        .y = widget->clip_set.clip.y,
-    };
+    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image->pixel.width,
         .h = image->pixel.height,
     };
     
-    if (offset == NULL)
-        offset  = &dst_offset;
+    if (target == NULL)
+        target  = &widget_clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -458,11 +521,14 @@ void scui_widget_surface_draw_image_by_matrix(scui_widget_t *widget, scui_point_
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         /* 子剪切域要相对同步偏移 */
         scui_point_t dst_offset = {
-            .x = offset->x - widget->clip_set.clip.x,
-            .y = offset->y - widget->clip_set.clip.y,
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
         };
-        scui_area_t dst_clip = unit->clip;
-        if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
              continue;
         /* 子剪切域要相对同步偏移 */
         scui_point_t src_offset = {

@@ -82,6 +82,19 @@ static void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
 		break;
 	}
 }
+static void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
 static void scui_ui_scene_float_3_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
@@ -778,6 +791,7 @@ extern void scui_ui_scene_float_2_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_1_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_2_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_3_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_2_4_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_3_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_3_c_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_3_lu_event_proc(scui_event_t *event);
@@ -849,9 +863,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_C = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES / 4,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 4,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 2,
@@ -874,16 +885,13 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.event_cb                = scui_ui_scene_float_2_event_proc,
-	.widget.child_num               = 3,
+	.widget.child_num               = 4,
 	.level                          = 1,
 	.buffer                         = true,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -899,9 +907,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_2 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -917,9 +922,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_3 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -931,6 +934,22 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_3 = {
 	.widget.color.color.ch.g        = 0xFF,
 	.widget.color.color.ch.b        = 0xFF,
 	.widget.event_cb                = scui_ui_scene_float_2_3_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_4 = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
+	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
+	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
+	.widget.clip.h                  = SCUI_DRV_VER_RES * 3 / 13,
+	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2_4,
+	.widget.parent                  = SCUI_UI_SCENE_FLOAT_2,
+	.widget.color.color.ch.a        = 0xFF,
+	.widget.color.color.ch.r        = 0xFF,
+	.widget.color.color.ch.g        = 0xFF,
+	.widget.color.color.ch.b        = 0xFF,
+	.widget.event_cb                = scui_ui_scene_float_2_4_event_proc,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
@@ -949,9 +968,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_C = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -965,9 +981,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_C = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_LU = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -981,9 +994,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_LU = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RU = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_VER_RES * 2 / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -1037,9 +1047,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4_C = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -1053,9 +1060,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4_C = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4_LU = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -1069,9 +1073,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4_LU = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4_RU = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
 	.widget.clip.x                  = SCUI_DRV_VER_RES * 2 / 3,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 0 / 3,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 3,
@@ -1737,13 +1738,14 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[60] = {
+const void * scui_widget_parser_table[61] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_C,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_3,
+	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_4,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_3,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_3_C,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_3_LU,

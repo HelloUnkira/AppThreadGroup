@@ -182,8 +182,72 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
 {
+    static scui_coord_t image_ring_angle = 0;
+    
     switch (event->type) {
     case scui_event_anima_elapse:
+        
+        image_ring_angle += 1;
+        scui_widget_draw(event->object, NULL, false);
+        
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_draw: {
+        
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t clip = {0};
+        scui_color_t color_black = {0};
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        
+        clip = scui_widget_draw_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
+        scui_custom_draw_area(event, &clip, color_black, false, false);
+        
+        scui_point_t center = {
+            .x = clip.x + clip.w / 2,
+            .y = clip.y + clip.h / 2,
+        };
+        scui_coord_t  radius = clip.w / 2 - 20;
+        scui_coord_t  angle  = image_ring_angle;
+        scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
+        scui_custom_draw_image_ring(event, &center, image_handle, color_mix, radius, angle);
+        
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
+{
+    static scui_multi_t image_pct = 0;
+    static scui_point_t image_scale = {0};
+    
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        
+        image_pct++;
+        if (image_pct > 100)
+            image_pct = 0;
+        
+        image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
+        image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
+        scui_widget_draw(event->object, NULL, false);
+        
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         break;
@@ -202,7 +266,15 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         clip.h -= 10 * 2;
         scui_custom_draw_area(event, &clip, color_black, false, false);
         
+        scui_widget_t *widget = scui_handle_get(event->object);
+        SCUI_ASSERT(widget != NULL);
         
+        scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
+        scui_image_t *image = scui_handle_get(image_handle);
+        SCUI_ASSERT(image != NULL);
+        
+        scui_point_t scale = image_scale;
+        scui_widget_surface_draw_image_scale(widget, &clip, image_handle, NULL, scale);
         
         scui_widget_event_mask_keep(event);
         break;
@@ -212,3 +284,4 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         break;
     }
 }
+

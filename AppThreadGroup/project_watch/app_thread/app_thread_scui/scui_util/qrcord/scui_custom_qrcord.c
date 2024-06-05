@@ -109,15 +109,11 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
     };
     
     scui_point_t offset = {.x = margin, .y =  margin,};
-    scui_area_t dst_clip = scui_widget_draw_clip(handle);
-    scui_area_t dst_area = {0};
-    if (scui_area_inter(&dst_area, &dst_clip, clip))
-    if (scui_area_limit_offset(&dst_area, &offset)) {
-        offset.x = dst_area.x;
-        offset.y = dst_area.y;
-        scui_color_t color_none = {0};
-        scui_widget_surface_draw_pattern(widget, &offset, &pattern, NULL, color_none);
-    }
+    scui_area_t dst_clip = {0};
+    scui_area_t dst_area = scui_widget_draw_clip(handle);
+    if (scui_area_inter(&dst_clip, &dst_area, clip))
+    if (scui_area_limit_offset(&dst_clip, &offset))
+        scui_widget_surface_draw_pattern(widget, &dst_clip, &pattern, NULL, (scui_color_t){0});
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(data_t);

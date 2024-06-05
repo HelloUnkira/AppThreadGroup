@@ -7,6 +7,42 @@
 
 #include "scui.h"
 
+/*@brief 自定义控件:插件:绕圆旋转图像
+ *@param event  自定义控件事件
+ *@param center 旋转中心
+ *@param handle 图像句柄
+ *@param color  图像源色调(调色板使用)
+ *@param radius 旋转半径
+ *@param angle  旋转角度(顺时针旋转:+,逆时针旋转:-)
+ */
+void scui_custom_draw_image_ring(scui_event_t *event,  scui_point_t *center,
+                                 scui_handle_t handle, scui_color_t  color,
+                                 scui_coord_t  radius, scui_coord_t  angle)
+{
+    SCUI_LOG_DEBUG("");
+    
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
+    scui_widget_t *widget = scui_handle_get(event->object);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_custom);
+    
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
+    scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
+    
+    scui_area_t clip = {
+        .x = center->x + point_x - image->pixel.width  / 2,
+        .y = center->y + point_y - image->pixel.height / 2,
+        .w = image->pixel.width,
+        .h = image->pixel.height,
+    };
+    scui_widget_surface_draw_image(widget, &clip, handle, NULL, color);
+}
+
 /*@brief 自定义控件:插件:区域绘制
  *@param event 自定义控件事件
  *@param clip  剪切域(绘制区域)
@@ -91,15 +127,10 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
             .alpha   = widget->alpha,
         };
         
-        scui_point_t offset = {0};
-        scui_area_t dst_clip = scui_widget_draw_clip(handle);
-        scui_area_t dst_area = {0};
-        if (scui_area_inter(&dst_area, &dst_clip, clip)) {
-            offset.x = dst_area.x;
-            offset.y = dst_area.y;
-            scui_color_t color_none = {0};
-            scui_widget_surface_draw_pattern(widget, &offset, &pattern, NULL, color_none);
-        }
+        scui_area_t dst_clip = {0};
+        scui_area_t dst_area = scui_widget_draw_clip(handle);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+            scui_widget_surface_draw_pattern(widget, &dst_clip, &pattern, NULL, (scui_color_t){0});
         
         SCUI_MEM_FREE(pixel);
         return;

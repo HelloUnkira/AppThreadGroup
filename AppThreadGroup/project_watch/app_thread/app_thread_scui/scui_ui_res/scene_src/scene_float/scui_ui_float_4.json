@@ -15,9 +15,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
@@ -30,9 +27,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
@@ -45,9 +39,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_VER_RES * 2 / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",

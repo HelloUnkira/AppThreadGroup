@@ -240,11 +240,11 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * SCUI_PIXEL_SIZE;
             uint8_t *src_addr = src_surface->pixel + src_pixel_ofs / 2;
             /* 调色板数组(为空时计算,有时直接取): */
-            scui_multi_t palette_len = 1 << (0x08 >> 8);
-            SCUI_PIXEL_TYPE palette_table[1 << (0x08 >> 8)] = {0};
+            scui_multi_t palette_len = 1 << 4;
+            SCUI_PIXEL_TYPE palette_table[1 << 4] = {0};
             /* 起始色调和结束色调固定 */
-            palette_table[0] = scui_pixel_by_color(src_color.color_s);
-            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
+            palette_table[0] = scui_pixel_by_color(src_color.color_e);
+            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_s);
             /* 无渐变时: */
             if (palette_table[0].full == palette_table[palette_len - 1].full) {
                 for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -286,11 +286,11 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * SCUI_PIXEL_SIZE;
             uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * 1;
             /* 调色板数组(为空时计算,有时直接取): */
-            scui_multi_t palette_len = 1 << (0x16 >> 8);
-            SCUI_PIXEL_TYPE palette_table[1 << (0x16 >> 8)] = {0};
+            scui_multi_t palette_len = 1 << 8;
+            SCUI_PIXEL_TYPE palette_table[1 << 8] = {0};
             /* 起始色调和结束色调固定 */
-            palette_table[0] = scui_pixel_by_color(src_color.color_s);
-            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
+            palette_table[0] = scui_pixel_by_color(src_color.color_e);
+            palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_s);
             /* 无渐变时: */
             if (palette_table[0].full == palette_table[palette_len - 1].full) {
                 for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)

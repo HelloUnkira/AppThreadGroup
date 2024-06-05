@@ -15,9 +15,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES / 4",
             "widget.clip.y":                "SCUI_DRV_VER_RES / 4",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 2",
