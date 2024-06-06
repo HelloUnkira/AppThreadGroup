@@ -69,6 +69,7 @@
 #include "scui_draw_image.h"
 #include "scui_draw_letter.h"
 #include "scui_draw_string.h"
+#include "scui_draw_ring.h"
 
 /* linker: */
 #include "scui_image_src.h"     /* 图像资源加载卸载 */

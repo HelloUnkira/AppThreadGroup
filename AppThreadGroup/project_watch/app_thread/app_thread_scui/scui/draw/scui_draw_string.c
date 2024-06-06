@@ -139,10 +139,7 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
         
         if (glyph_unit.glyph.bitmap != NULL) {
             letter_clip = clip_inter;
-            scui_draw_letter(dst_surface,      &letter_clip,
-                            &glyph_unit.glyph, &glyph_clip,
-                             src_alpha,         src_args->color,
-                            !src_args->cover,   src_args->filter);
+            scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
         }
         
         scui_string_args_offset(src_args, &glyph_unit.glyph, &offset);

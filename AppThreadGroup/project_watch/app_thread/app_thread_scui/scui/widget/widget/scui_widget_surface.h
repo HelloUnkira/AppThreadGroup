@@ -45,7 +45,7 @@ scui_area_t scui_widget_surface_clip(scui_handle_t handle);
  *@param target  控件绘制区域
  *@param surface 画布实例
  *@param clip    画布绘制区域
- *@param color   图像源色调(调色板使用)
+ *@param color   图像源色调(调色板)
  */
 void scui_widget_surface_draw_pattern(scui_handle_t   handle,  scui_area_t *target,
                                       scui_surface_t *surface, scui_area_t *clip,
@@ -71,7 +71,7 @@ void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
  *@param target 控件绘制区域
  *@param image  图像句柄
  *@param clip   图像源绘制区域
- *@param color  图像源色调(调色板使用)
+ *@param color  图像源色调(调色板)
  */
 void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
                                     scui_handle_t image,  scui_area_t *clip,
@@ -112,6 +112,23 @@ void scui_widget_surface_draw_image_rotate(scui_handle_t handle, scui_area_t  *t
 void scui_widget_surface_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target,
                                               scui_handle_t  image,  scui_area_t *clip,
                                               scui_matrix_t *matrix);
+
+/*@brief 控件画布在画布绘制圆环
+ *@param handle  控件句柄
+ *@param target  控件绘制区域
+ *@param image   图像句柄
+ *@param clip    图像源绘制区域
+ *@param angle_s 起始角度
+ *@param color   源色调
+ *@param angle_s 起始角度
+ *@param percent 圆环进度(百分比)
+ *@param image_e 控件句柄
+ */
+void scui_widget_surface_draw_ring(scui_handle_t handle,  scui_area_t *target,
+                                   scui_handle_t image,   scui_area_t *clip,
+                                   scui_coord_t  angle_s, scui_color_t color,
+                                   scui_coord_t  angle_e, scui_coord_t percent,
+                                   scui_handle_t image_e);
 
 /*@brief 控件画布在画布绘制线条
  *@param handle 控件句柄

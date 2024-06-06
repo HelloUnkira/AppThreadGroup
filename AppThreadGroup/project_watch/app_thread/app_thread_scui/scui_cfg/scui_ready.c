@@ -93,7 +93,7 @@ void scui_ready(void)
     scui_window_switch_type_cfg(scui_window_switch_cube);
     
     /* 初始窗口 */
-    scui_window_stack_reset(SCUI_UI_SCENE_1, false);
+    scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
     
     scui_engine_execute_status_set(true);
 }

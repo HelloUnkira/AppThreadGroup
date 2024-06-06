@@ -30,28 +30,28 @@ typedef union {
 /* ARGB8565: */
 #pragma pack(push, 1)
 typedef union {
+    uint32_t full;
+    uint8_t  byte[3];
     struct {
         uint32_t b:5;
         uint32_t g:6;
         uint32_t r:5;
         uint32_t a:8;
     } ch;
-    uint8_t  byte[3];
-    uint32_t full;
 } scui_color8565_t;
 #pragma pack(pop)
 
 /* ARGB8888: */
 #pragma pack(push, 1)
 typedef union {
+    uint32_t full;
+    uint8_t  byte[4];
     struct {
         uint32_t b:8;
         uint32_t g:8;
         uint32_t r:8;
         uint32_t a:8;
     } ch;
-    uint8_t  byte[4];
-    uint32_t full;
 } scui_color8888_t;
 #pragma pack(pop)
 
@@ -67,18 +67,18 @@ typedef enum {
  */
 #pragma pack(push, 1)
 typedef struct {
+    uint8_t filter:1;   // 过滤色调标记
     union {
-        scui_color8888_t color;             // 单色调
-        scui_color8888_t color_field_1;     // 位域1色调
-        scui_color8888_t color_default;     // 主色调
-        scui_color8888_t color_lighten;     // 亮色调
-        scui_color8888_t color_s;           // 始色调
+        scui_color8888_t color;     // 主色调
+        scui_color8888_t color_s;   // 始色调
+        scui_color8888_t color_l;   // 亮色调
     };
     union {
-        scui_color8888_t color_field_2;     // 位域2色调
-        scui_color8888_t color_gradient;    // 过度色调
-        scui_color8888_t color_darken;      // 暗色调
-        scui_color8888_t color_e;           // 终色调
+        scui_color8888_t color_e;   // 终色调
+        scui_color8888_t color_d;   // 暗色调
+    };
+    union {
+        scui_color8888_t color_f;   // 过滤色调
     };
 } scui_color_t;
 #pragma pack(pop)

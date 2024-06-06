@@ -113,7 +113,6 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
  */
 void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
-    scui_color_t color = {0};
     scui_surface_t *dst_surface = scui_surface_fb_draw();
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t  *widget = list[idx];
@@ -153,18 +152,18 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         
         /* 多窗口叠加不应用特效渲染 */
         if (scui_window_float_running()) {
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
             continue;
         }
         
         /* 仅窗口切换时才应用特效渲染 */
         if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
             continue;
         }
         
         if (num == 1) {
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
             continue;
         }
         
@@ -197,7 +196,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 scui_draw_area_fill(dst_surface, &dst_clip, &dst_pixel, scui_alpha_cover);
             }
             if (widget->myself == scui_window_active_curr()) {
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
                 continue;
             }
         }
@@ -229,7 +228,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         if (scui_window_mgr.switch_args.type == scui_window_switch_circle ||
             scui_window_mgr.switch_args.type == scui_window_switch_grid) {
             if (widget->myself != scui_window_active_curr()) {
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
                 continue;
             }
         }
@@ -296,7 +295,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 
                 dst_clip = clip_seg[idx_j][idx_i];
                 src_clip = clip_seg[idx_j][idx_i];
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
             }
             continue;
         }
@@ -355,7 +354,8 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 clip_seg[idx_j][idx_i].h -= scale_h;
                 dst_clip = clip_seg[idx_j][idx_i];
                 src_clip = clip_seg[idx_j][idx_i];
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+                scui_color_t color = {0};
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
             }
             continue;
         }
@@ -520,7 +520,8 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
-        scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, color);
+        scui_color_t color = {0};
+        scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
     }
 }
 

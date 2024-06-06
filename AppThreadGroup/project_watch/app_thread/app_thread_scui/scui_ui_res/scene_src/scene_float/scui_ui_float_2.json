@@ -21,10 +21,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES * 3 / 13",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_2_1",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_2",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.r":      "0xFF",
-            "widget.color.color.ch.g":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
+            "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_2_1_event_proc"
         },
         {
@@ -35,10 +32,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES * 3 / 13",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_2_2",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_2",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.r":      "0xFF",
-            "widget.color.color.ch.g":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
+            "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_2_2_event_proc"
         },
         {
@@ -50,10 +44,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES * 3 / 13",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_2_3",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_2",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.r":      "0xFF",
-            "widget.color.color.ch.g":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
+            "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_2_3_event_proc"
         },
         {
@@ -65,10 +56,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES * 3 / 13",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_2_4",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_2",
-            "widget.color.color.ch.a":      "0xFF",
-            "widget.color.color.ch.r":      "0xFF",
-            "widget.color.color.ch.g":      "0xFF",
-            "widget.color.color.ch.b":      "0xFF",
+            "widget.color.color.full":      "0xFFFFFFFF",
             "widget.event_cb":              "scui_ui_scene_float_2_4_event_proc"
         }
     ]

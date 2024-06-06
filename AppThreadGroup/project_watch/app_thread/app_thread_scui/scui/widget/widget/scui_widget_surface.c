@@ -133,7 +133,7 @@ scui_area_t scui_widget_surface_clip(scui_handle_t handle)
  *@param target  控件绘制区域
  *@param surface 画布实例
  *@param clip    画布绘制区域
- *@param color   图像源色调(调色板使用)
+ *@param color   图像源色调(调色板)
  */
 void scui_widget_surface_draw_pattern(scui_handle_t   handle,  scui_area_t *target,
                                       scui_surface_t *surface, scui_area_t *clip,
@@ -301,7 +301,7 @@ void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
  *@param target 控件绘制区域
  *@param image  图像句柄
  *@param clip   图像源绘制区域
- *@param color  图像源色调(调色板使用)
+ *@param color  图像源色调(调色板)
  */
 void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
                                     scui_handle_t image,  scui_area_t *clip,
@@ -572,6 +572,97 @@ void scui_widget_surface_draw_image_by_matrix(scui_handle_t  handle, scui_area_t
     uint64_t tick_us = scui_tick_elapse_us(false);
     if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
+}
+
+/*@brief 控件画布在画布绘制圆环
+ *@param handle  控件句柄
+ *@param target  控件绘制区域
+ *@param image   图像句柄
+ *@param clip    图像源绘制区域
+ *@param angle_s 起始角度
+ *@param color   源色调
+ *@param angle_s 起始角度
+ *@param percent 圆环进度(百分比)
+ *@param image_e 控件句柄
+ */
+void scui_widget_surface_draw_ring(scui_handle_t handle,  scui_area_t *target,
+                                   scui_handle_t image,   scui_area_t *clip,
+                                   scui_coord_t  angle_s, scui_color_t color,
+                                   scui_coord_t  angle_e, scui_coord_t percent,
+                                   scui_handle_t image_e)
+{
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    /* 参数检查: */
+    SCUI_ASSERT(0 <= percent && percent <= 100);
+    /* 调整(adjust): */
+    scui_coord_t angle_as = angle_s;
+    scui_coord_t angle_ae = scui_map(percent, 0, 100, angle_s, angle_e);
+    
+    if (percent == 0)
+        return;
+    if (angle_s == angle_e) {
+        SCUI_LOG_WARN("ring angle is zero");
+        return;
+    }
+    
+    scui_image_t *image_inst = scui_handle_get(image);
+    scui_image_t *image_e_inst = scui_handle_get(image_e);
+    SCUI_ASSERT(image_inst != NULL);
+    SCUI_ASSERT(image_e_inst != NULL);
+    
+    scui_area_t widget_clip = widget->clip_set.clip;
+    scui_area_t image_clip = {
+        .w = image_inst->pixel.width,
+        .h = image_inst->pixel.height,
+    };
+    
+    if (target == NULL)
+        target  = &widget_clip;
+    
+    if (clip == NULL)
+        clip  = &image_clip;
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t dst_offset = {
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
+        };
+        scui_area_t dst_area = unit->clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             continue;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, target))
+             continue;
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t src_offset = {
+            .x = unit->clip.x - widget->clip_set.clip.x,
+            .y = unit->clip.y - widget->clip_set.clip.y,
+        };
+        scui_area_t src_clip = *clip;
+        if (!scui_area_limit_offset(&src_clip, &src_offset))
+             continue;
+        
+        scui_draw_ring(widget->surface, &dst_clip, image_inst, &src_clip,
+                       angle_as, widget->alpha, angle_ae, color, image_e_inst);
+    }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     #endif
 }
 

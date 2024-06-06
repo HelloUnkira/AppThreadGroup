@@ -165,7 +165,7 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
     
     widget->alpha = alpha;
     
-    /* 待定中 */
+    /* 待定中,子控件透明度如何处理??? */
     return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */

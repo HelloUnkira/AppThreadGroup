@@ -71,8 +71,8 @@ void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
         
         char *url = "https://github.com/HelloUnkira/AppThreadGroup.git";
         scui_color_t color = {
-            .color_lighten.full = 0xFF00FF00,
-            .color_darken.full  = 0xFF0000FF,
+            .color_l.full = 0xFF00FF00,
+            .color_d.full = 0xFF0000FF,
         };
         clip = scui_widget_surface_clip(event->object);
         clip.x += clip.w / 6;

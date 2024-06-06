@@ -57,6 +57,7 @@ static void scui_scene_test_show(scui_event_t *event)
         string_maker.args.gap_none = SCUI_STRING_SPACE_WIDTH;
         string_maker.args.color.color_s.full = 0xFFFFFFFF;
         string_maker.args.color.color_e.full = 0xFFFFFFFF;
+        string_maker.args.color.filter = true;
         
         string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
         string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;

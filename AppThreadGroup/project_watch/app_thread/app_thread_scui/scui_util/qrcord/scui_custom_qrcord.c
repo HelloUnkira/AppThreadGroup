@@ -26,7 +26,7 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
          return;
     
     if (cover) {
-        scui_color_t bg_color = {.color = color.color_darken};
+        scui_color_t bg_color = {.color = color.color_d};
         scui_widget_surface_draw_color(event->object, clip, bg_color);
     }
     
@@ -74,8 +74,8 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
     uintptr_t pixel_size = SCUI_PIXEL_SIZE * scaled * scaled;
     /* 为了加快绘制速度,这里使用SCUI_PIXEL_TYPE格式快速上色 */
     SCUI_PIXEL_TYPE *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-    SCUI_PIXEL_TYPE  lighten = scui_pixel_by_color(color.color_lighten);
-    SCUI_PIXEL_TYPE  darken  = scui_pixel_by_color(color.color_darken);
+    SCUI_PIXEL_TYPE  pixel_l = scui_pixel_by_color(color.color_l);
+    SCUI_PIXEL_TYPE  pixel_d = scui_pixel_by_color(color.color_d);
     
     if (pixel == NULL) {
         SCUI_LOG_WARN("memory deficit was caught");
@@ -92,7 +92,7 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
     for (int y = 0; y < scaled; y++)
     for (int x = 0; x < scaled; x++) {
          bool bit = qrcodegen_lvgl_getModule(qrcode, x / scale, y / scale);
-         pixel[y * scaled + x] = bit ? lighten : darken;
+         pixel[y * scaled + x] = bit ? pixel_l : pixel_d;
     }
     
     scui_surface_t pattern = {

@@ -129,22 +129,3 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     
     SCUI_ASSERT(false);
 }
-
-/*@brief 自定义控件:插件:调色板圆环
- *@param event      自定义控件事件
- *@param color      图像源色调(调色板使用)
- *@param image_ring 图像句柄(调色板)
- *@param angle_s    圆环起始角度
- *@param image_edge 图像句柄(边界点)
- *@param angle_e    圆环结束角度
- *@param angle_pct  圆环进度(百分比)
- */
-void scui_custom_draw_ring(scui_event_t *event,      scui_color_t color,
-                           scui_handle_t image_ring, scui_coord_t angle_s,
-                           scui_handle_t image_edge, scui_coord_t angle_e,
-                           scui_coord_t  angle_pct)
-{
-    
-    
-    
-}

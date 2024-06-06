@@ -3,7 +3,6 @@
 
 typedef struct {
     scui_color_t        color;          // 字符串颜色
-    scui_color_t        filter;         // 去底色
     scui_coord_t        margin;         // 边距
     scui_coord_t        gap_line;       // 行间距
     scui_coord_t        gap_item;       // 字间距
@@ -15,7 +14,6 @@ typedef struct {
     uint64_t            line_multi:1;   // 多行模式(非默认)
     uint64_t            line_stand:1;   // 标准字符(非默认)
     uint64_t            line_ltr:1;     // 绘制方向
-    uint64_t            cover:1;        // 保留底色
     /* 外部域转内部域: */
     scui_area_t         clip;           // 绘制剪切域
     scui_handle_t       name;           // 字库文字句柄

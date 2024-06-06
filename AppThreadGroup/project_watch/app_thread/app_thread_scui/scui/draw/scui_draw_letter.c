@@ -14,13 +14,10 @@
  *@param src_clip    字符源绘制区域
  *@param src_alpha   字符透明度
  *@param src_color   字符色调
- *@param src_trans   字符滤色使能
- *@param src_filter  字符滤色
  */
 void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                       scui_font_glyph_t *src_glyph,   scui_area_t *src_clip,
-                      scui_alpha_t       src_alpha,   scui_color_t src_color,
-                      bool               src_trans,   scui_color_t src_filter)
+                      scui_alpha_t       src_alpha,   scui_color_t src_color)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_glyph != NULL && src_clip != NULL);
@@ -66,7 +63,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     /* 起始色调和结束色调固定 */
     palette_table[0] = scui_pixel_by_color(src_color.color_s);
     palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
-    SCUI_PIXEL_TYPE filter = scui_pixel_by_color(src_filter.color);
+    SCUI_PIXEL_TYPE filter = scui_pixel_by_color(src_color.color_f);
     
     /* 无渐变时: */
     if (palette_table[0].full == palette_table[palette_len - 1].full) {
@@ -80,7 +77,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             uint8_t  palette = scui_letter_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
             
             /* 过滤色调,去色 */
-            if (src_trans && scui_pixel_with_alpha(&palette_table[0], palette).full == filter.full)
+            if (src_color.filter && scui_pixel_with_alpha(&palette_table[0], palette).full == filter.full)
                 continue;
             
             alpha = (uint32_t)dst_surface->alpha * palette / scui_alpha_cover;
@@ -108,7 +105,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             }
             
             /* 过滤色调,去色 */
-            if (src_trans && scui_pixel_with_alpha(&palette_table[palette], palette).full == filter.full)
+            if (src_color.filter && scui_pixel_with_alpha(&palette_table[palette], palette).full == filter.full)
                 continue;
             
             alpha = (uint32_t)dst_surface->alpha * palette / scui_alpha_cover;

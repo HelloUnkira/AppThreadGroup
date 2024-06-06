@@ -46,6 +46,7 @@ typedef struct {
     };
 } scui_scroll_t;
 
+#pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
     scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
@@ -59,6 +60,7 @@ typedef struct {
     scui_coord_t        springback;     /* 回弹效果 */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
+#pragma pack(pop)
 
 /*@brief 滚动控件创建
  *@param maker  滚动控件创建参数
