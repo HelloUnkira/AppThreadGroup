@@ -19,11 +19,11 @@
 #define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 256)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 2 + 1024 * 256)
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_CHECK                       (1)
+#define SCUI_MEM_RECORD_CHECK                       (0)
 #define SCUI_MEM_RECORD_ANALYSIS                    (1)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
-#define SCUI_MEM_RECORD_CHECK_MIX                   (0)
+#define SCUI_MEM_RECORD_CHECK_MIX                   (1)
 #define SCUI_MEM_RECORD_CHECK_FONT                  (1)
 #define SCUI_MEM_RECORD_CHECK_GRAPH                 (1)
 /* 内存使用记录监控: */

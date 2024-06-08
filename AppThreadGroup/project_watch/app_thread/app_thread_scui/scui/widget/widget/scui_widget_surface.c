@@ -112,6 +112,57 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
     scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
 }
 
+/*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
+ *@param 形如scui_widget_surface_draw_xxx的接口使用
+ */
+bool scui_widget_surface_clip_unit_calc(scui_widget_t *widget,   scui_area_t *unit_clip,
+                                        scui_area_t   *target,   scui_area_t *clip,
+                                        scui_area_t   *dst_clip, scui_area_t *src_clip,
+                                        bool           target_empty)
+{
+    *dst_clip = (scui_area_t){0};
+    *src_clip = *clip;
+    /* 是否有目标区域决定区域计算与偏移不一致 */
+    if (target_empty) {
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t dst_offset = {
+            .x = target->x - widget->clip_set.clip.x,
+            .y = target->y - widget->clip_set.clip.y,
+        };
+        scui_area_t dst_area = *unit_clip;
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             return false;
+        if (!scui_area_inter(dst_clip, &dst_area, target))
+             return false;
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t offset = {
+            .x = unit_clip->x - widget->clip_set.clip.x,
+            .y = unit_clip->y - widget->clip_set.clip.y,
+        };
+        if (!scui_area_limit_offset(src_clip, &offset))
+             return false;
+    } else {
+        /* 子剪切域要相对同步偏移 */
+        scui_area_t  dst_area = *unit_clip;
+        scui_point_t dst_offset = {
+            .x = target->x - dst_area.x,
+            .y = target->y - dst_area.y,
+        };
+        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+             return false;
+        if (!scui_area_inter(dst_clip, &dst_area, target))
+             return false;
+        /* 子剪切域要相对同步偏移 */
+        scui_point_t offset = {
+            .x = dst_clip->x - target->x,
+            .y = dst_clip->y - target->y,
+        };
+        if (!scui_area_limit_offset(src_clip, &offset))
+             return false;
+    }
+    return true;
+}
+
 /*-------------------------------------------------*
  *separator----------------------------------------*
  *-------------------------------------------------*/
@@ -149,8 +200,11 @@ void scui_widget_surface_draw_pattern(scui_handle_t   handle,  scui_area_t *targ
     scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t surface_clip = scui_surface_area(surface);
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     if (clip == NULL)
         clip  = &surface_clip;
@@ -161,26 +215,12 @@ void scui_widget_surface_draw_pattern(scui_handle_t   handle,  scui_area_t *targ
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-             continue;
-        scui_draw_area_blend(widget->surface, &dst_clip, surface, &src_clip, color);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_area_blend(widget->surface, &dst_clip, surface, &src_clip, color);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -213,8 +253,11 @@ void scui_widget_surface_draw_string(scui_handle_t handle, scui_area_t *target, 
         .h = widget->clip_set.clip.h,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
     scui_tick_elapse_us(true);
@@ -222,26 +265,12 @@ void scui_widget_surface_draw_string(scui_handle_t handle, scui_area_t *target, 
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = string_clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-             continue;
-        scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, &string_clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -279,14 +308,11 @@ void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
         /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = *clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
+        scui_area_t dst_area = unit->clip;
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &dst_area, clip))
              continue;
-        scui_draw_area_fill(widget->surface, &dst_area, &pixel, widget->alpha);
+        scui_draw_area_fill(widget->surface, &dst_clip, &pixel, widget->alpha);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -323,8 +349,11 @@ void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
         .h = image_inst->pixel.height,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -335,27 +364,13 @@ void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &offset))
-             continue;
-        scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
-                        widget->alpha, color);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
+                            widget->alpha, color);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -392,8 +407,11 @@ void scui_widget_surface_draw_image_scale(scui_handle_t handle, scui_area_t *tar
         .h = image_inst->pixel.height,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -404,27 +422,13 @@ void scui_widget_surface_draw_image_scale(scui_handle_t handle, scui_area_t *tar
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-             continue;
-        scui_draw_image_scale(widget->surface, &dst_clip, image_inst, &src_clip,
-                              widget->alpha, scale);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_image_scale(widget->surface, &dst_clip, image_inst, &src_clip,
+                                  widget->alpha, scale);
     }
     
 #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -464,8 +468,11 @@ void scui_widget_surface_draw_image_rotate(scui_handle_t handle, scui_area_t  *t
         .h = image_inst->pixel.height,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -476,27 +483,13 @@ void scui_widget_surface_draw_image_rotate(scui_handle_t handle, scui_area_t  *t
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-             continue;
-        scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, &src_clip,
-                               widget->alpha, angle, anchor, center);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, &src_clip,
+                                   widget->alpha, angle, anchor, center);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -533,9 +526,11 @@ void scui_widget_surface_draw_image_by_matrix(scui_handle_t  handle, scui_area_t
         .h = image_inst->pixel.height,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
-    
+        target_empty = true;
+    }
     if (clip == NULL)
         clip  = &image_clip;
     
@@ -545,27 +540,13 @@ void scui_widget_surface_draw_image_by_matrix(scui_handle_t  handle, scui_area_t
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
+        
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-            continue;
-        scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, &src_clip,
-                                       widget->alpha, matrix);
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, &src_clip,
+                                           widget->alpha, matrix);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -623,8 +604,11 @@ void scui_widget_surface_draw_ring(scui_handle_t handle,  scui_area_t *target,
         .h = image_inst->pixel.height,
     };
     
-    if (target == NULL)
+    bool target_empty = false;
+    if (target == NULL) {
         target  = &widget_clip;
+        target_empty = true;
+    }
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -635,28 +619,13 @@ void scui_widget_surface_draw_ring(scui_handle_t handle,  scui_area_t *target,
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t dst_offset = {
-            .x = target->x - widget->clip_set.clip.x,
-            .y = target->y - widget->clip_set.clip.y,
-        };
-        scui_area_t dst_area = unit->clip;
-        if (!scui_area_limit_offset(&dst_area, &dst_offset))
-             continue;
-        scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, target))
-             continue;
-        /* 子剪切域要相对同步偏移 */
-        scui_point_t src_offset = {
-            .x = unit->clip.x - widget->clip_set.clip.x,
-            .y = unit->clip.y - widget->clip_set.clip.y,
-        };
-        scui_area_t src_clip = *clip;
-        if (!scui_area_limit_offset(&src_clip, &src_offset))
-             continue;
         
-        scui_draw_ring(widget->surface, &dst_clip, image_inst, &src_clip,
-                       angle_as, widget->alpha, angle_ae, color, image_e_inst);
+        scui_area_t dst_clip = {0};
+        scui_area_t src_clip = {0};
+        if (scui_widget_surface_clip_unit_calc(widget, &unit->clip,
+            target, clip, &dst_clip, &src_clip, target_empty))
+            scui_draw_ring(widget->surface, &dst_clip, image_inst, &src_clip,
+                           angle_as, widget->alpha, angle_ae, color, image_e_inst);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

@@ -34,11 +34,70 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         scui_widget_event_mask_keep(event);
         break;
+    case scui_event_draw:
+        SCUI_LOG_INFO("scui_event_draw");
+        // scui_widget_clip_check(event->object, true);
+        scui_widget_event_mask_keep(event);
+        break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_grasp_ptr(event);
         if (event->type >= scui_event_key_s && event->type <= scui_event_key_e)
             scui_window_float_event_grasp_key(event);
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
+{
+    static scui_coord_t indicator_index = 0;
+    
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        
+        static uint8_t cnt = 0;
+        cnt++;
+        
+        if (cnt % 10 == 0) {
+            indicator_index++;
+            if (indicator_index >= 5)
+                indicator_index  = 0;
+            scui_widget_draw(event->object, NULL, false);
+        }
+        
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    case scui_event_draw: {
+        
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_color_t color_black = {0};
+        scui_handle_t wait  = scui_image_prj_image_src_repeat_dot_01_greybmp;
+        scui_handle_t focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
+        
+        scui_point_t offset_hor = {.x = 15, .y = SCUI_DRV_VER_RES - 30};
+        scui_area_t clip_hor = scui_widget_surface_clip(event->object);
+        if (scui_area_limit_offset(&clip_hor, &offset_hor))
+            scui_custom_draw_image_indicator(event, &clip_hor, wait, color_black, focus, color_black,
+                                             5, indicator_index, 6, true);
+        
+        scui_point_t offset_ver = {.x = 15, .y = SCUI_DRV_VER_RES - 150};
+        scui_area_t clip_ver = scui_widget_surface_clip(event->object);
+        if (scui_area_limit_offset(&clip_ver, &offset_ver))
+            scui_custom_draw_image_indicator(event, &clip_ver, wait, color_black, focus, color_black,
+                                             5, indicator_index, 6, false);
+        
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
@@ -59,7 +118,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t clip = {0};
+        scui_area_t  clip = {0};
         scui_color_t color_black = {0};
         scui_color_t color_mix = {
             .color_s.full = 0xFF00FF00,
@@ -218,7 +277,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         scui_coord_t  radius = clip.w / 2 - 20;
         scui_coord_t  angle  = image_ring_angle;
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
-        scui_custom_draw_image_ring(event, &center, image_handle, color_mix, radius, angle);
+        scui_custom_draw_image_circle_rotate(event, &center, image_handle, color_mix, radius, angle);
         
         scui_widget_event_mask_keep(event);
         break;

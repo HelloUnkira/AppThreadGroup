@@ -30,11 +30,11 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     }
     
     /* 为所有控件及其子控件添加指定剪切域 */
-    // scui_widget_clip_check(widget_root, true);
+    // scui_widget_clip_check(handle_root, true);
     scui_widget_clip_reset(widget_root, &clip_valid, true);
-    // scui_widget_clip_check(widget_root, true);
+    // scui_widget_clip_check(handle_root, true);
     scui_widget_clip_update(widget_root);
-    // scui_widget_clip_check(widget_root, true);
+    // scui_widget_clip_check(handle_root, true);
     
     scui_event_t event = {
         .object     = handle_root,
@@ -324,7 +324,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_draw(event);
             scui_widget_event_proc(event);
             /* 去除surface剪切域,因为已经绘制完毕 */
-            if (scui_widget_event_check_execute(event))
+            if (scui_widget_event_check_finish(event))
                 scui_widget_clip_clear(widget, false);
         }
         /* 如果需要继续冒泡,则继续下沉 */

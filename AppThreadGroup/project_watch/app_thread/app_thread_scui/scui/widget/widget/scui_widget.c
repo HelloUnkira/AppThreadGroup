@@ -294,13 +294,15 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
 }
 
 /*@brief 控件检查剪切域
- *@param widget  控件实例
+ *@param handle  控件句柄
  *@param recurse 递归处理
  */
-void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
+void scui_widget_clip_check(scui_handle_t handle, bool recurse)
 {
-    SCUI_LOG_WARN("widget: %u", widget->myself);
-    SCUI_LOG_INFO("<%d, %d, %d, %d>",
+    SCUI_LOG_WARN("widget: %u", handle);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    SCUI_LOG_WARN("<%d, %d, %d, %d>",
                   widget->clip.x, widget->clip.y,
                   widget->clip.w, widget->clip.h);
     scui_clip_check(&widget->clip_set);
@@ -310,8 +312,7 @@ void scui_widget_clip_check(scui_widget_t *widget, bool recurse)
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
-        scui_widget_clip_check(child, recurse);
+        scui_widget_clip_check(handle, recurse);
     }
 }
 
@@ -346,10 +347,9 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
     
     if (clip != NULL) {
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+        if (scui_area_inter(&clip_inter, &widget_clip, clip))
             widget_clip = clip_inter;
     }
-    scui_clip_clear(&widget->clip_set);
     scui_clip_add(&widget->clip_set, &widget_clip);
     
     if (!recurse)
