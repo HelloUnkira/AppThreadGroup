@@ -35,6 +35,9 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
         SCUI_ASSERT(chart->histogram.value_min <
                     chart->histogram.value_max);
         /* 限制 */
+        if (chart->histogram.space <= 0)
+            chart->histogram.space  = 1;
+        /* 限制 */
         scui_coord_t height = scui_widget_surface_clip(*handle).h;
         if (chart->histogram.height > height + chart->histogram.offset.y)
             chart->histogram.height = height - chart->histogram.offset.y;
@@ -46,6 +49,29 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
             chart->histogram_data.vlist_min[idx] = chart->histogram.value_min;
             chart->histogram_data.vlist_max[idx] = chart->histogram.value_min;
         }
+        break;
+    }
+    case scui_chart_type_line : {
+        chart->line = maker->line;
+        /* 这里加点断言判断参数的有效性 */
+        SCUI_ASSERT(chart->line.number != 0);
+        SCUI_ASSERT(chart->line.height != 0);
+        SCUI_ASSERT(chart->line.value_min <
+                    chart->line.value_max);
+        /* 限制 */
+        if (chart->line.width <= 0)
+            chart->line.width  = 1;
+        if (chart->line.space <= 0)
+            chart->line.space  = 1;
+        /* 限制 */
+        scui_coord_t height = scui_widget_surface_clip(*handle).h;
+        if (chart->line.height > height + chart->line.offset.y)
+            chart->line.height = height - chart->line.offset.y;
+        /* 创建数据存储空间 */
+        uint32_t data_size = chart->line.number * sizeof(scui_coord_t);
+        chart->line_data.vlist = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        for (scui_coord_t idx = 0; idx < chart->line.number; idx++)
+            chart->line_data.vlist[idx] = chart->line.value_min;
         break;
     }
     default:
@@ -76,6 +102,10 @@ void scui_chart_destroy(scui_handle_t handle)
     case scui_chart_type_histogram: {
         SCUI_MEM_FREE(chart->histogram_data.vlist_min);
         SCUI_MEM_FREE(chart->histogram_data.vlist_max);
+        break;
+    }
+    case scui_chart_type_line: {
+        SCUI_MEM_FREE(chart->line_data.vlist);
         break;
     }
     default:
@@ -120,6 +150,30 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
         }
         chart->histogram_data.vlist_min[idx] = min;
         chart->histogram_data.vlist_max[idx] = max;
+    }
+}
+
+/*@brief 图表控件数据列表更新(折线图)
+ *@param handle 图表控件句柄
+ *@param vlist  数据列表
+ */
+void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_chart_t  *chart  = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_chart);
+    
+    if (chart->type != scui_chart_type_line) {
+        SCUI_LOG_ERROR("chart type unmatch");
+        return;
+    }
+    
+    scui_coord_t value_min = chart->line.value_min;
+    scui_coord_t value_max = chart->line.value_max;
+    for (scui_coord_t idx = 0; idx < chart->line.number; idx++) {
+        scui_coord_t val = scui_min(value_max, scui_max(value_min, vlist[idx]));
+        chart->line_data.vlist[idx] = val;
     }
 }
 
@@ -191,6 +245,28 @@ void scui_chart_event(scui_event_t *event)
                 scui_widget_surface_draw_color(handle, &area, color);
                 
                 offset.x += image_inst->pixel.width + space;
+            }
+            
+            break;
+        }
+        case scui_chart_type_line: {
+            scui_color_t  color     = chart->line.color;
+            scui_coord_t  space     = chart->line.space;
+            scui_coord_t  width     = chart->line.width;
+            scui_point_t  offset    = chart->line.offset;
+            scui_coord_t  height    = chart->line.height;
+            scui_coord_t  value_min = chart->line.value_min;
+            scui_coord_t  value_max = chart->line.value_max;
+            scui_coord_t *vlist     = chart->line_data.vlist;
+            
+            for (scui_coord_t idx = 0; idx + 1 < chart->line.number; idx++) {
+                scui_area_t  dst_clip  = scui_widget_surface_clip(handle);
+                scui_coord_t offset_1y = scui_map(vlist[idx + 0], value_min, value_max, height, 0);
+                scui_coord_t offset_2y = scui_map(vlist[idx + 1], value_min, value_max, height, 0);
+                scui_point_t offset_1 = {.x = dst_clip.x + offset.x, .y = dst_clip.y + offset.y + offset_1y};
+                scui_point_t offset_2 = {.x = dst_clip.x + offset.x + space, .y = dst_clip.y + offset.y + offset_2y};
+                scui_widget_surface_draw_line(handle, width, offset_1, offset_2, color);
+                offset.x += space;
             }
             
             break;
