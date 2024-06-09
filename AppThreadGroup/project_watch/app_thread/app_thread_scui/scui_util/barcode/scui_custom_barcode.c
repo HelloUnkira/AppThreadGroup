@@ -6,9 +6,9 @@
 #define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
-#include "qrcodegen_lvgl.h"
+#include "barcodegen_lvgl.h"
 
-/*@brief 自定义控件:插件:二维码生成器
+/*@brief 自定义控件:插件:条形码生成器
  *@param event 自定义控件事件
  *@param clip  剪切域(绘制区域)
  *@param color 颜色(.color_lighten,.color_darken,)
@@ -16,9 +16,9 @@
  *@param size  字符串长度
  *@param cover 背景覆盖
  */
-void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
-                             scui_color_t  color, bool cover,
-                             uint8_t *data, uint32_t size)
+void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
+                              scui_color_t  color, bool cover,
+                              uint8_t *data, uint32_t size)
 {
     SCUI_LOG_DEBUG("");
     
@@ -30,45 +30,27 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
         scui_widget_surface_draw_color(event->object, clip, bg_color);
     }
     
-    if (size >= qrcodegen_lvgl_BUFFER_LEN_MAX) {
-        SCUI_LOG_ERROR("error");
-        return;
-    }
-    int qr_version  = qrcodegen_lvgl_getMinFitVersion(qrcodegen_lvgl_Ecc_MEDIUM, size);
-    int qr_size     = qrcodegen_lvgl_version2size(qr_version);
-    if (qr_version <= 0) {
-        SCUI_LOG_ERROR("error");
-        return;
-    }
-    if (qr_size <= 0) {
+    if (size >= barcodegen_lvgl_BUFFER_LEN_MAX) {
         SCUI_LOG_ERROR("error");
         return;
     }
     
-    int scale  = clip->w / qr_size;
-    int remain = clip->w % qr_size;
-    
-    uint32_t version_extend = remain / (scale << 2);
-    if (version_extend != 0 && qr_version < qrcodegen_lvgl_VERSION_MAX)
-        qr_version = scui_min(qr_version + version_extend, qrcodegen_lvgl_VERSION_MAX);
-    
-    uint32_t qr_version_len = qrcodegen_lvgl_BUFFER_LEN_FOR_VERSION(qr_version);
-    uint8_t *qrcode = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
-    uint8_t *data_t = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
+    uint8_t *barcode = SCUI_MEM_ALLOC(scui_mem_type_mix, barcodegen_lvgl_BUFFER_LEN_MAX);
+    uint8_t *data_t  = SCUI_MEM_ALLOC(scui_mem_type_mix, barcodegen_lvgl_DATA_LEN_MAX);
     memcpy(data_t, data, size);
     
-    enum qrcodegen_lvgl_Ecc  ecc  = qrcodegen_lvgl_Ecc_MEDIUM;
-    enum qrcodegen_lvgl_Mask mask = qrcodegen_lvgl_Mask_AUTO;
-    if (!qrcodegen_lvgl_encodeBinary(data_t, size, qrcode, ecc, qr_version, qr_version, mask, true)) {
+    size_t bitsLen = 0;
+    enum barcodegen_lvgl_Type type = barcodegen_lvgl_128C;
+    if (!barcodegen_lvgl_encodeBinary(data_t, size, (uint8_t*)barcode, type, &bitsLen)) {
          SCUI_LOG_ERROR("error");
          SCUI_MEM_FREE(data_t);
-         SCUI_MEM_FREE(qrcode);
+         SCUI_MEM_FREE(barcode);
          return;
     }
     
-    qr_size = qrcodegen_lvgl_getSize(qrcode);
-    scale   = clip->w / qr_size;
-    int scaled = (qr_size * scale);
+    int scale  = clip->w / bitsLen;
+    int remain = clip->w % bitsLen;
+    int scaled = (bitsLen * scale);
     int margin = (clip->w - scaled) / 2;
     
     uintptr_t pixel_size = SCUI_PIXEL_SIZE * scaled * scaled;
@@ -89,11 +71,15 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
         }
     }
     
-    for (int y = 0; y < scaled; y++)
-    for (int x = 0; x < scaled; x++) {
-         bool bit = qrcodegen_lvgl_getModule(qrcode, x / scale, y / scale);
-         pixel[y * scaled + x] = bit ? pixel_l : pixel_d;
+    for (int i = 0; i < bitsLen; i++) {
+         bool bit = barcodegen_lvgl_getModule(barcode, i);
+        for (int x = 0; x < scale; x++) {
+             pixel[0 * scaled + x] = bit ? pixel_l : pixel_d;
+        }
     }
+    
+    for (int y = 1; y < scaled; y++)
+        scui_draw_line_copy(&pixel[y * scaled + 0], &pixel[0 * scaled + 0], SCUI_PIXEL_SIZE * scaled);
     
     scui_surface_t pattern = {
         .pixel   = pixel,
@@ -112,5 +98,5 @@ void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(data_t);
-    SCUI_MEM_FREE(qrcode);
+    SCUI_MEM_FREE(barcode);
 }

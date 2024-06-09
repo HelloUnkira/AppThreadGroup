@@ -55,6 +55,8 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
 {
     static scui_coord_t indicator_index = 0;
+    static scui_coord_t progressbar_s = 0;
+    static scui_coord_t progressbar_e = 0;
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -66,6 +68,8 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
             indicator_index++;
             if (indicator_index >= 5)
                 indicator_index  = 0;
+            progressbar_s = (uint32_t)scui_rand(0, 100) % 45;
+            progressbar_e = 100 - (uint32_t)scui_rand(0, 100) % 45;
             scui_widget_draw(event->object, NULL, false);
         }
         
@@ -78,21 +82,47 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
+        scui_area_t clip_hor     = {0};
+        scui_area_t clip_ver     = {0};
+        scui_point_t offset_hor  = {0};
+        scui_point_t offset_ver  = {0};
         scui_color_t color_black = {0};
+        
         scui_handle_t wait  = scui_image_prj_image_src_repeat_dot_01_greybmp;
         scui_handle_t focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
         
-        scui_point_t offset_hor = {.x = 15, .y = SCUI_DRV_VER_RES - 30};
-        scui_area_t clip_hor = scui_widget_surface_clip(event->object);
+        offset_hor.x = 15;
+        offset_hor.y = SCUI_DRV_VER_RES - 30;
+        clip_hor = scui_widget_surface_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
             scui_custom_draw_image_indicator(event, &clip_hor, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, true);
         
-        scui_point_t offset_ver = {.x = 15, .y = SCUI_DRV_VER_RES - 150};
-        scui_area_t clip_ver = scui_widget_surface_clip(event->object);
+        offset_ver.x = 15;
+        offset_ver.y = SCUI_DRV_VER_RES - 150;
+        clip_ver = scui_widget_surface_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_image_indicator(event, &clip_ver, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, false);
+        
+        scui_handle_t bar  = scui_image_prj_image_src_repeat_03_barbmp;
+        scui_handle_t edge = scui_image_prj_image_src_repeat_05_dotbmp;
+        scui_color_t color_bar  = {.color.full = 0xFF4F4F4F,};
+        scui_color_t color_edge = {.color.full = 0xFFFFFFFF,};
+        
+        #if 0   // 没有水平滚动条背景
+        offset_hor.x = 15;
+        offset_hor.y = SCUI_DRV_VER_RES - 40;
+        clip_hor = scui_widget_surface_clip(event->object);
+        if (scui_area_limit_offset(&clip_hor, &offset_hor))
+            scui_custom_draw_image_progressbar(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
+        #endif
+        
+        offset_ver.x = 5;
+        offset_ver.y = SCUI_DRV_VER_RES - 160;
+        clip_ver = scui_widget_surface_clip(event->object);
+        if (scui_area_limit_offset(&clip_ver, &offset_ver))
+            scui_custom_draw_image_progressbar(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
         
         scui_widget_event_mask_keep(event);
         break;

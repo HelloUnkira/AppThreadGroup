@@ -24,15 +24,41 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     /* 创建基础控件实例 */
     scui_widget_create(&chart->widget, &maker->widget, handle, layout);
     
+    chart->type = maker->type;
+    
+    switch (chart->type) {
+    case scui_chart_type_histogram: {
+        chart->histogram = maker->histogram;
+        /* 这里加点断言判断参数的有效性 */
+        SCUI_ASSERT(chart->histogram.number != 0);
+        SCUI_ASSERT(chart->histogram.height != 0);
+        SCUI_ASSERT(chart->histogram.value_min <
+                    chart->histogram.value_max);
+        /* 限制 */
+        scui_coord_t height = scui_widget_surface_clip(*handle).h;
+        if (chart->histogram.height > height + chart->histogram.offset.y)
+            chart->histogram.height = height - chart->histogram.offset.y;
+        /* 创建数据存储空间 */
+        uint32_t data_size = chart->histogram.number * sizeof(scui_coord_t);
+        chart->histogram_data.vlist_min = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        chart->histogram_data.vlist_max = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
+            chart->histogram_data.vlist_min[idx] = chart->histogram.value_min;
+            chart->histogram_data.vlist_max[idx] = chart->histogram.value_min;
+        }
+        break;
+    }
+    default:
+        SCUI_LOG_ERROR("unknown type:%u", chart->type);
+        SCUI_ASSERT(false);
+    }
+    
     /* 为图表控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = scui_chart_event,};
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
+    cb_node.event = scui_event_draw;
     scui_widget_event_add(*handle, &cb_node);
-    
-    /* 该控件未开发 */
-    SCUI_ASSERT(false);
 }
 
 /*@brief 图表控件销毁
@@ -46,11 +72,55 @@ void scui_chart_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_chart);
     
+    switch (chart->type) {
+    case scui_chart_type_histogram: {
+        SCUI_MEM_FREE(chart->histogram_data.vlist_min);
+        SCUI_MEM_FREE(chart->histogram_data.vlist_max);
+        break;
+    }
+    default:
+        SCUI_LOG_ERROR("unknown type:%u", chart->type);
+        SCUI_ASSERT(false);
+    }
+    
     /* 销毁基础控件实例 */
     scui_widget_destroy(&chart->widget);
     
     /* 销毁图表控件实例 */
     SCUI_MEM_FREE(chart);
+}
+
+/*@brief 图表控件数据列表更新(柱状图)
+ *@param handle 图表控件句柄
+ *@param vlist_min 数据列表
+ *@param vlist_max 数据列表
+ */
+void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_chart_t  *chart  = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    SCUI_ASSERT(widget->type == scui_widget_type_chart);
+    
+    if (chart->type != scui_chart_type_histogram) {
+        SCUI_LOG_ERROR("chart type unmatch");
+        return;
+    }
+    
+    scui_coord_t value_min = chart->histogram.value_min;
+    scui_coord_t value_max = chart->histogram.value_max;
+    for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
+        scui_coord_t min = scui_min(value_max, scui_max(value_min, vlist_min[idx]));
+        scui_coord_t max = scui_max(value_min, scui_min(value_max, vlist_max[idx]));
+        if (min > max) {
+            scui_coord_t tmp = 0;
+            tmp = min;
+            min = max;
+            max = tmp;
+        }
+        chart->histogram_data.vlist_min[idx] = min;
+        chart->histogram_data.vlist_max[idx] = max;
+    }
 }
 
 /*@brief 图表控件事件处理回调
@@ -71,10 +141,68 @@ void scui_chart_event(scui_event_t *event)
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         
+        switch (chart->type) {
+        case scui_chart_type_histogram: {
+            scui_color_t  color     = chart->histogram.color;
+            scui_coord_t  space     = chart->histogram.space;
+            scui_point_t  offset    = chart->histogram.offset;
+            scui_coord_t  height    = chart->histogram.height;
+            scui_coord_t  value_min = chart->histogram.value_min;
+            scui_coord_t  value_max = chart->histogram.value_max;
+            scui_coord_t *vlist_min = chart->histogram_data.vlist_min;
+            scui_coord_t *vlist_max = chart->histogram_data.vlist_max;
+            
+            scui_handle_t image = chart->histogram.edge;
+            scui_image_t *image_inst = scui_handle_get(image);
+            SCUI_ASSERT(image_inst != NULL);
+            
+            scui_area_t dst_clip  = {0};
+            scui_area_t src_clip = {
+                .w = image_inst->pixel.width,
+                .h = image_inst->pixel.height / 2,
+            };
+            
+            for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
+                scui_coord_t offset_1y = scui_map(vlist_min[idx], value_min, value_max, height - src_clip.h * 2, 0);
+                scui_coord_t offset_2y = scui_map(vlist_max[idx], value_min, value_max, height - src_clip.h * 2, 0);
+                scui_point_t offset_1  = {.x = offset.x, .y = offset.y + offset_1y};
+                scui_point_t offset_2  = {.x = offset.x, .y = offset.y + offset_2y - src_clip.h};
+                
+                /* 绘制俩个edge */
+                src_clip.x = 0;
+                src_clip.y = 0;
+                dst_clip = scui_widget_surface_clip(handle);
+                if (scui_area_limit_offset(&dst_clip, &offset_2))
+                    scui_widget_surface_draw_image(handle, &dst_clip, image, &src_clip, color);
+                
+                src_clip.x = 0;
+                src_clip.y = src_clip.h;
+                dst_clip = scui_widget_surface_clip(handle);
+                if (scui_area_limit_offset(&dst_clip, &offset_1))
+                    scui_widget_surface_draw_image(handle, &dst_clip, image, &src_clip, color);
+                /* 填充这块区域 */
+                dst_clip = scui_widget_surface_clip(handle);
+                scui_area_t area = {
+                    .x = dst_clip.x + offset.x,
+                    .w = src_clip.w,
+                    .y = dst_clip.y + offset_2.y + src_clip.h,
+                    .h = offset_1.y - offset_2.y - src_clip.h,
+                };
+                scui_widget_surface_draw_color(handle, &area, color);
+                
+                offset.x += image_inst->pixel.width + space;
+            }
+            
+            break;
+        }
+        default:
+            SCUI_LOG_ERROR("unknown type:%u", chart->type);
+            SCUI_ASSERT(false);
+        }
+        
         break;
     }
     default:
         break;
     }
 }
-

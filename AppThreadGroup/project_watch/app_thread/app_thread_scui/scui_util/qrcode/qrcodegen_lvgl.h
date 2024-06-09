@@ -28,7 +28,7 @@
 #include <stdint.h>
 
 /*备注:
- *    这里将所有的qrcordgen修改成qrcordgen_lvgl
+ *    这里将所有的qrcodegen修改成qrcodegen_lvgl
  */
 #ifdef QRCODEGEN_TEST
 #undef QRCODEGEN_TEST

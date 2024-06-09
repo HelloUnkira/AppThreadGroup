@@ -11,7 +11,7 @@ typedef enum {
     scui_widget_type_string,    /* 字符串控件 */
     /* 扩展控件(按需补充) */
     scui_widget_type_watch,     /* 表盘指针控件 */
-    scui_widget_type_chart,     /* 图表控件(未计划,未开发) */
+    scui_widget_type_chart,     /* 图表控件 */
     /* 继续补充... */
     scui_widget_type_num,
 } scui_widget_type_t;

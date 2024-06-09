@@ -10,7 +10,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_4",
             "widget.event_cb":              "scui_ui_scene_float_4_event_proc",
-            "widget.color.color.full":      "0xFFFFFFFF",
+            "widget.child_num":             "5",
             "level":                        "1",
             "buffer":                       "true"
         }

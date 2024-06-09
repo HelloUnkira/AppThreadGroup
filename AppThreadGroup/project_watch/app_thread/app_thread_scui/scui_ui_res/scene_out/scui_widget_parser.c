@@ -17,7 +17,20 @@ static void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 		break;
 	}
 }
-static void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
+static void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
 		return;
@@ -422,7 +435,8 @@ static void scui_ui_scene_test_event_proc(scui_event_t *event)
 }
 #else
 extern void scui_ui_scene_float_1_event_proc(scui_event_t *event);
-extern void scui_ui_scene_float_1_c_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_1_event_proc(scui_event_t *event);
+extern void scui_ui_scene_float_1_2_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_c_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_2_1_event_proc(scui_event_t *event);
@@ -464,21 +478,33 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.event_cb                = scui_ui_scene_float_1_event_proc,
-	.widget.child_num               = 1,
+	.widget.child_num               = 2,
 	.level                          = 1,
 	.buffer                         = true,
 };
 
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_C = {
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
 	.widget.type                    = scui_widget_type_custom,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES / 4,
-	.widget.clip.y                  = SCUI_DRV_VER_RES / 4,
+	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 8,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES / 2,
 	.widget.clip.h                  = SCUI_DRV_VER_RES / 2,
-	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1_C,
+	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1_1,
 	.widget.parent                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.color.color.full        = 0xFFFFFFFF,
-	.widget.event_cb                = scui_ui_scene_float_1_c_event_proc,
+	.widget.event_cb                = scui_ui_scene_float_1_1_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.x                  = SCUI_DRV_HOR_RES / 4,
+	.widget.clip.y                  = SCUI_DRV_VER_RES * 11 / 16,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES / 2,
+	.widget.clip.h                  = SCUI_DRV_VER_RES / 4,
+	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1_2,
+	.widget.parent                  = SCUI_UI_SCENE_FLOAT_1,
+	.widget.color.color.full        = 0xFFFFFFFF,
+	.widget.event_cb                = scui_ui_scene_float_1_2_event_proc,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
@@ -590,7 +616,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_4,
 	.widget.event_cb                = scui_ui_scene_float_4_event_proc,
-	.widget.color.color.full        = 0xFFFFFFFF,
+	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
 };
@@ -915,9 +941,10 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[33] = {
+const void * scui_widget_parser_table[34] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
-	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_C,
+	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_1,
+	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_C,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_2_1,

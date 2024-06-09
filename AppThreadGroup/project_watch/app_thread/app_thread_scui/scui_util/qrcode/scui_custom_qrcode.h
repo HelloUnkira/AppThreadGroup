@@ -1,5 +1,5 @@
-#ifndef SCUI_CUSTOM_QRCORD_H
-#define SCUI_CUSTOM_QRCORD_H
+#ifndef SCUI_CUSTOM_QRCODE_H
+#define SCUI_CUSTOM_QRCODE_H
 
 /*@brief 自定义控件:插件:二维码生成器
  *@param event 自定义控件事件
@@ -9,7 +9,7 @@
  *@param size  字符串长度
  *@param cover 背景覆盖
  */
-void scui_custom_draw_qrcord(scui_event_t *event, scui_area_t *clip,
+void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
                              scui_color_t  color, bool cover,
                              uint8_t *data, uint32_t size);
 

@@ -47,7 +47,7 @@ void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
+void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -79,7 +79,57 @@ void scui_ui_scene_float_1_c_event_proc(scui_event_t *event)
         clip.y += clip.h / 6;
         clip.w -= clip.w / 6 * 2;
         clip.h -= clip.h / 6 * 2;
-        scui_custom_draw_qrcord(event, &clip, color, false, url, strlen(url));
+        scui_custom_draw_qrcode(event, &clip, color, false, url, strlen(url));
+        
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_draw: {
+        
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        /*@brief 这个库有问题,暂时屏蔽掉它
+         */
+        break;
+        
+        scui_area_t clip = {0};
+        
+        clip = scui_widget_surface_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
+        scui_color_t color_black = {0};
+        scui_custom_draw_area(event, &clip, color_black, false, false);
+        
+        char *url = "https://github.com/HelloUnkira/AppThreadGroup.git";
+        scui_color_t color = {
+            .color_l.full = 0xFF00FF00,
+            .color_d.full = 0xFF0000FF,
+        };
+        clip = scui_widget_surface_clip(event->object);
+        clip.x += clip.w / 6;
+        clip.y += clip.h / 12;
+        clip.w -= clip.w / 6  * 2;
+        clip.h -= clip.h / 12 * 2;
+        scui_custom_draw_barcode(event, &clip, color, false, url, strlen(url));
         
         scui_widget_event_mask_keep(event);
         break;

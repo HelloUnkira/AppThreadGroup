@@ -1,6 +1,27 @@
 #ifndef SCUI_CUSTOM_UTIL_H
 #define SCUI_CUSTOM_UTIL_H
 
+/*@brief 自定义控件:插件:进度条
+ *@param event      自定义控件事件
+ *@param clip       剪切域(绘制区域)
+ *@param bar        图像句柄(背景图)
+ *@param color_bar  图像源色调(调色板使用)
+ *@param edge       图像句柄(边界点)
+ *@param color_edge 图像源色调(调色板使用)
+ *@param vmin       最小值(默认可为百分比:0)
+ *@param vmax       最大值(默认可为百分比:100)
+ *@param cmin       当前最小值
+ *@param cmax       当前最大值
+ *@param dist       宽度或高度
+ *@param way        方向(0:水平方向;1:垂直方向)
+ */
+void scui_custom_draw_image_progressbar(scui_event_t *event, scui_area_t  *clip,
+                                        scui_handle_t bar,   scui_color_t  color_bar,
+                                        scui_handle_t edge,  scui_color_t  color_edge,
+                                        scui_coord_t  vmin,  scui_coord_t  vmax,
+                                        scui_coord_t  cmin,  scui_coord_t  cmax,
+                                        scui_handle_t dist,  bool way);
+
 /*@brief 自定义控件:插件:导航点
  *@param event       自定义控件事件
  *@param clip        剪切域(绘制区域)

@@ -7,6 +7,126 @@
 
 #include "scui.h"
 
+/*@brief 自定义控件:插件:进度条
+ *@param event      自定义控件事件
+ *@param clip       剪切域(绘制区域)
+ *@param bar        图像句柄(背景图)
+ *@param color_bar  图像源色调(调色板使用)
+ *@param edge       图像句柄(边界点)
+ *@param color_edge 图像源色调(调色板使用)
+ *@param vmin       最小值(默认可为百分比:0)
+ *@param vmax       最大值(默认可为百分比:100)
+ *@param cmin       当前最小值
+ *@param cmax       当前最大值
+ *@param dist       宽度或高度
+ *@param way        方向(0:水平方向;1:垂直方向)
+ */
+void scui_custom_draw_image_progressbar(scui_event_t *event, scui_area_t  *clip,
+                                        scui_handle_t bar,   scui_color_t  color_bar,
+                                        scui_handle_t edge,  scui_color_t  color_edge,
+                                        scui_coord_t  vmin,  scui_coord_t  vmax,
+                                        scui_coord_t  cmin,  scui_coord_t  cmax,
+                                        scui_handle_t dist,  bool way)
+{
+    SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
+    
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
+    /* 绘制背景进度条 */
+    scui_widget_surface_draw_image(event->object, clip, bar, NULL, color_bar);
+    
+    cmin = scui_min(vmax, scui_max(vmin, cmin));
+    cmax = scui_max(vmin, scui_min(vmax, cmax));
+    if (cmin > cmax) {
+        scui_coord_t temp = 0;
+        temp = cmin;
+        cmin = cmax;
+        cmax = temp;
+    }
+    
+    scui_image_t *image_inst = scui_handle_get(edge);
+    SCUI_ASSERT(image_inst != NULL);
+    
+    scui_area_t  dst_area = {0};
+    scui_area_t  dst_clip = *clip;
+    scui_area_t  src_clip = {
+        .w = image_inst->pixel.width,
+        .h = image_inst->pixel.height,
+    };
+    
+    if (way) {
+        scui_coord_t offset_d1 = scui_map(cmin, vmin, vmax, dist - src_clip.w, 0);
+        scui_coord_t offset_d2 = scui_map(cmax, vmin, vmax, dist - src_clip.w, 0);
+        scui_point_t offset_1 = {.x = offset_d1};
+        scui_point_t offset_2 = {.x = offset_d2};
+        
+        src_clip.w /= 2;
+        /* 绘制俩个edge */
+        src_clip.x = 0;
+        src_clip.y = 0;
+        dst_area = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+        if (scui_area_limit_offset(&dst_clip, &offset_2))
+            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+        
+        src_clip.x = src_clip.w;
+        src_clip.y = 0;
+        dst_area = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+        if (scui_area_limit_offset(&dst_clip, &offset_1))
+            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+        
+        /* 填充这块区域 */
+        scui_area_t area = {
+            .x = clip->x + offset_2.x + src_clip.h,
+            .w = offset_1.x - offset_2.x - src_clip.w,
+            .h = src_clip.h,
+            .y = clip->y,
+        };
+        dst_clip = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_area, &dst_clip, clip))
+        if (scui_area_inter(&dst_clip, &dst_area, &area))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color_edge);
+        
+    } else {
+        scui_coord_t offset_d1 = scui_map(cmin, vmin, vmax, dist - src_clip.h, 0);
+        scui_coord_t offset_d2 = scui_map(cmax, vmin, vmax, dist - src_clip.h, 0);
+        scui_point_t offset_1 = {.y = offset_d1};
+        scui_point_t offset_2 = {.y = offset_d2};
+        
+        src_clip.h /= 2;
+        /* 绘制俩个edge */
+        src_clip.x = 0;
+        src_clip.y = 0;
+        dst_area = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+        if (scui_area_limit_offset(&dst_clip, &offset_2))
+            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+        
+        src_clip.x = 0;
+        src_clip.y = src_clip.h / 2;
+        dst_area = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+        if (scui_area_limit_offset(&dst_clip, &offset_1))
+            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+        
+        /* 填充这块区域 */
+        scui_area_t area = {
+            .x = clip->x,
+            .w = src_clip.w,
+            .y = clip->y + offset_2.y + src_clip.h,
+            .h = offset_1.y - offset_2.y - src_clip.h,
+        };
+        dst_clip = scui_widget_surface_clip(event->object);
+        if (scui_area_inter(&dst_area, &dst_clip, clip))
+        if (scui_area_inter(&dst_clip, &dst_area, &area))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color_edge);
+        
+    }
+}
+
 /*@brief 自定义控件:插件:导航点
  *@param event       自定义控件事件
  *@param clip        剪切域(绘制区域)
@@ -26,13 +146,14 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
                                       scui_handle_t span,  bool          dir_hor)
 {
     SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
     
     if (!scui_widget_event_check_execute(event))
          return;
     
     scui_image_t *image_wait  = scui_handle_get(wait);
     scui_image_t *image_focus = scui_handle_get(focus);
-    SCUI_ASSERT(image_wait != NULL);
+    SCUI_ASSERT(image_wait  != NULL);
     SCUI_ASSERT(image_focus != NULL);
     
     scui_point_t offset = {0};
@@ -100,6 +221,7 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
                            scui_color_t  color, uint8_t mix, bool way)
 {
     SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
     
     if (!scui_widget_event_check_execute(event))
          return;
