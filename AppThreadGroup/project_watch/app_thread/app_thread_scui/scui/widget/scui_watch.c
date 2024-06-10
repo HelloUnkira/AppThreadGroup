@@ -113,7 +113,7 @@ void scui_watch_event(scui_event_t *event)
         
         scui_indev_data_set_t *data_set = NULL;
         scui_indev_data_set(&data_set);
-                
+        
         if (watch->tick_h != data_set->sys_time_h ||
             watch->tick_m != data_set->sys_time_m ||
             watch->tick_s != data_set->sys_time_s) {

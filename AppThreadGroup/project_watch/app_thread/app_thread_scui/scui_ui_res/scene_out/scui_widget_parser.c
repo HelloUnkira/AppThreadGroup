@@ -368,6 +368,19 @@ static void scui_ui_scene_home_event_proc(scui_event_t *event)
 		break;
 	}
 }
+static void scui_ui_scene_home_c_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
 static void scui_ui_scene_lantern_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
@@ -462,6 +475,7 @@ extern void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_cube_event_proc(scui_event_t *event);
 extern void scui_ui_scene_cube_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_home_event_proc(scui_event_t *event);
+extern void scui_ui_scene_home_c_event_proc(scui_event_t *event);
 extern void scui_ui_scene_lantern_event_proc(scui_event_t *event);
 extern void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_soccer_event_proc(scui_event_t *event);
@@ -869,8 +883,20 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
 	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
+	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_HOME_C = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.style.sched_anima       = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_HOME_C,
+	.widget.parent                  = SCUI_UI_SCENE_HOME,
+	.widget.event_cb                = scui_ui_scene_home_c_event_proc,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
@@ -941,7 +967,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[34] = {
+const void * scui_widget_parser_table[35] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_2,
@@ -971,6 +997,7 @@ const void * scui_widget_parser_table[34] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_HOME,
+	(void *)&scui_widget_SCUI_UI_SCENE_HOME_C,
 	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN,
 	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER,

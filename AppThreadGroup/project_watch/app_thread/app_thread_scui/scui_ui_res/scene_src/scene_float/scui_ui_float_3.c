@@ -72,6 +72,9 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         break;
     case scui_event_draw: {
         
+        if (!scui_widget_event_check_execute(event))
+             return;
+        
         scui_handle_t image_bg   = scui_image_prj_image_src_03_activity_ring_big_max_01_bjbmp;
         scui_handle_t image_edge = scui_image_prj_image_src_03_activity_ring_big_max_02_bj_00bmp;
         scui_handle_t image_ring = scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp;
@@ -124,6 +127,44 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  -81, color_r,  +22, pct, image_edge);
         scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  +39, color_g, +141, pct, image_edge);
         scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, +158, color_b, +262, pct, image_edge);
+        
+        scui_area_t   btn_clip = {0};
+        scui_color_t  btn_color_full = {0};
+        scui_handle_t btn_image_full[4] = {0};
+        
+        btn_clip.w = 72 * 2;
+        btn_clip.h = 72;
+        btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
+        btn_clip.y = SCUI_DRV_VER_RES / 4 - btn_clip.h / 2;
+        btn_image_full[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+        btn_image_full[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+        btn_image_full[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+        btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        btn_color_full.color.full = 0xFF282828;
+        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        
+        btn_clip.w = 72 * 2 + 20;
+        btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
+        btn_clip.y = btn_clip.y + btn_clip.h + 15;
+        btn_clip.h = 72 + 20;
+        btn_image_full[0] = scui_image_prj_image_src_repeat_box_sleep_breathe_02_left_upbmp;
+        btn_image_full[1] = scui_image_prj_image_src_repeat_box_sleep_breathe_04_right_upbmp;
+        btn_image_full[2] = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
+        btn_image_full[3] = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
+        btn_color_full.color.full = 0xFF00F6EB;
+        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 4);
+        
+        btn_clip.w = 72 * 2;
+        btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
+        btn_clip.y = btn_clip.y + 5;
+        btn_clip.h = 72 + 10;
+        btn_image_full[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+        btn_image_full[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+        btn_image_full[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+        btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        btn_color_full.color.full = 0xFF282828;
+        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 0);
+        
         
         scui_widget_event_mask_keep(event);
         break;

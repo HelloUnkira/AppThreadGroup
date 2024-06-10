@@ -339,6 +339,7 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     SCUI_LOG_ERROR("unsupported blend:");
     SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
     SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
@@ -353,7 +354,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
                                    scui_matrix_t  *inv_matrix)
 {
     #if SCUI_DRAW_MISC_USE_MATRIX == 0
-    #error "do something"
+    SCUI_ASSERT(false);
     #endif
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -386,31 +387,31 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     if (scui_area_empty(&draw_area))
         return;
     
-    /* 注意区域对齐坐标 */
-    for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
-    for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
-        scui_point_t  point  = {0};
-        scui_point3_t point3 = {0};
-        point.y = idx_line;
-        point.x = idx_item;
-        /* 反扫描结果坐标对每一个坐标进行逆变换 */
-        scui_point3_by_point(&point3, &point);
-        scui_point3_transform_by_matrix(&point3, inv_matrix);
-        scui_point3_to_point(&point3, &point);
-        point.y += src_clip_v.y;
-        point.x += src_clip_v.x;
+    /* 像素格式不带透明度(仅全局透明度混合) */
+    if ((dst_surface->format == scui_pixel_format_rgb565 && src_surface->format == scui_pixel_format_rgb565) ||
+        (dst_surface->format == scui_pixel_format_rgb888 && src_surface->format == scui_pixel_format_rgb888)) {
         
-        /* 逆变换的结果落在的源区域, 取样上色 */
-        if (scui_area_point(&src_area, &point)) {
-            /* 像素格式不带透明度(仅全局透明度混合) */
-            if ((dst_surface->format == scui_pixel_format_rgb565 && src_surface->format == scui_pixel_format_rgb565) ||
-                (dst_surface->format == scui_pixel_format_rgb888 && src_surface->format == scui_pixel_format_rgb888)) {
-                
-                scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
-                scui_multi_t src_line = src_surface->hor_res * SCUI_PIXEL_SIZE;
-                uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
-                uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
-                
+        scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
+        scui_multi_t src_line = src_surface->hor_res * SCUI_PIXEL_SIZE;
+        uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
+        uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * SCUI_PIXEL_SIZE;
+        
+        /* 注意区域对齐坐标 */
+        for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
+        for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
+            scui_point_t  point  = {0};
+            scui_point3_t point3 = {0};
+            point.y = idx_line;
+            point.x = idx_item;
+            /* 反扫描结果坐标对每一个坐标进行逆变换 */
+            scui_point3_by_point(&point3, &point);
+            scui_point3_transform_by_matrix(&point3, inv_matrix);
+            scui_point3_to_point(&point3, &point);
+            point.y += src_clip_v.y;
+            point.x += src_clip_v.x;
+            
+            /* 逆变换的结果落在的源区域, 取样上色 */
+            if (scui_area_point(&src_area, &point)) {
                 uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
                 uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * SCUI_PIXEL_SIZE;
                 SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
@@ -426,19 +427,37 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
                 }
                 continue;
             }
+        }
+        return;
+    }
+    /* 像素格式带透明度(多透明度混合) */
+    if ((dst_surface->format == scui_pixel_format_rgb565 && src_surface->format == scui_pixel_format_argb8565) ||
+        (dst_surface->format == scui_pixel_format_rgb888 && src_surface->format == scui_pixel_format_argb8888)) {
+        
+        if (src_surface->format == scui_pixel_format_argb8565) {
             
-            /* 像素格式带透明度(多透明度混合) */
-            if ((dst_surface->format == scui_pixel_format_rgb565 && src_surface->format == scui_pixel_format_argb8565) ||
-                (dst_surface->format == scui_pixel_format_rgb888 && src_surface->format == scui_pixel_format_argb8888)) {
+            scui_alpha_t alpha = 0;
+            scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
+            scui_multi_t src_line = src_surface->hor_res * 3;
+            uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
+            uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * 3;
+            
+            /* 注意区域对齐坐标 */
+            for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
+            for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
+                scui_point_t  point  = {0};
+                scui_point3_t point3 = {0};
+                point.y = idx_line;
+                point.x = idx_item;
+                /* 反扫描结果坐标对每一个坐标进行逆变换 */
+                scui_point3_by_point(&point3, &point);
+                scui_point3_transform_by_matrix(&point3, inv_matrix);
+                scui_point3_to_point(&point3, &point);
+                point.y += src_clip_v.y;
+                point.x += src_clip_v.x;
                 
-                if (src_surface->format == scui_pixel_format_argb8565) {
-                    
-                    scui_alpha_t alpha = 0;
-                    scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
-                    scui_multi_t src_line = src_surface->hor_res * 3;
-                    uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
-                    uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * 3;
-                    
+                /* 逆变换的结果落在的源区域, 取样上色 */
+                if (scui_area_point(&src_area, &point)) {
                     uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
                     uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * 3;
                     SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
@@ -451,14 +470,33 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
                     scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
                     continue;
                 }
-                if (src_surface->format == scui_pixel_format_argb8888) {
-                    
-                    scui_alpha_t alpha = 0;
-                    scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
-                    scui_multi_t src_line = src_surface->hor_res * 4;
-                    uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
-                    uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * 4;
-                    
+            }
+            return;
+        }
+        if (src_surface->format == scui_pixel_format_argb8888) {
+            
+            scui_alpha_t alpha = 0;
+            scui_multi_t dst_line = dst_surface->hor_res * SCUI_PIXEL_SIZE;
+            scui_multi_t src_line = src_surface->hor_res * 4;
+            uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * SCUI_PIXEL_SIZE;
+            uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * 4;
+            
+            /* 注意区域对齐坐标 */
+            for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
+            for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
+                scui_point_t  point  = {0};
+                scui_point3_t point3 = {0};
+                point.y = idx_line;
+                point.x = idx_item;
+                /* 反扫描结果坐标对每一个坐标进行逆变换 */
+                scui_point3_by_point(&point3, &point);
+                scui_point3_transform_by_matrix(&point3, inv_matrix);
+                scui_point3_to_point(&point3, &point);
+                point.y += src_clip_v.y;
+                point.x += src_clip_v.x;
+                
+                /* 逆变换的结果落在的源区域, 取样上色 */
+                if (scui_area_point(&src_area, &point)) {
                     uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * SCUI_PIXEL_SIZE;
                     uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * 4;
                     SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
@@ -473,11 +511,12 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
                 }
                 continue;
             }
-            
-            SCUI_LOG_ERROR("unsupported blit:");
-            SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
-            SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
             return;
         }
     }
+    
+    SCUI_LOG_ERROR("unsupported blit:");
+    SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
+    SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
+    SCUI_ASSERT(false);
 }

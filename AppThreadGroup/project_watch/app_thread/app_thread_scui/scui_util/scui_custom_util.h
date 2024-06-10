@@ -1,7 +1,7 @@
 #ifndef SCUI_CUSTOM_UTIL_H
 #define SCUI_CUSTOM_UTIL_H
 
-/*@brief 自定义控件:插件:进度条
+/*@brief 自定义控件:插件:进度条,滚动条
  *@param event      自定义控件事件
  *@param clip       剪切域(绘制区域)
  *@param bar        图像句柄(背景图)
@@ -15,12 +15,12 @@
  *@param dist       宽度或高度
  *@param way        方向(0:水平方向;1:垂直方向)
  */
-void scui_custom_draw_image_progressbar(scui_event_t *event, scui_area_t  *clip,
-                                        scui_handle_t bar,   scui_color_t  color_bar,
-                                        scui_handle_t edge,  scui_color_t  color_edge,
-                                        scui_coord_t  vmin,  scui_coord_t  vmax,
-                                        scui_coord_t  cmin,  scui_coord_t  cmax,
-                                        scui_handle_t dist,  bool way);
+void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
+                                   scui_handle_t bar,   scui_color_t  color_bar,
+                                   scui_handle_t edge,  scui_color_t  color_edge,
+                                   scui_coord_t  vmin,  scui_coord_t  vmax,
+                                   scui_coord_t  cmin,  scui_coord_t  cmax,
+                                   scui_handle_t dist,  bool way);
 
 /*@brief 自定义控件:插件:导航点
  *@param event       自定义控件事件
@@ -43,14 +43,40 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
 /*@brief 自定义控件:插件:绕圆旋转图像
  *@param event  自定义控件事件
  *@param center 旋转中心
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param color  图像源色调(调色板使用)
  *@param radius 旋转半径
  *@param angle  旋转角度(顺时针旋转:+,逆时针旋转:-)
  */
 void scui_custom_draw_image_circle_rotate(scui_event_t *event,  scui_point_t *center,
-                                          scui_handle_t handle, scui_color_t  color,
+                                          scui_handle_t image,  scui_color_t  color,
                                           scui_coord_t  radius, scui_coord_t  angle);
+
+/*@brief 自定义控件:插件:图像连续绘制
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param image 图像句柄(背景图)
+ *@param color 图像源色调(调色板使用)
+ *@param span  图像间隙
+ *@param num   图像数量
+ *@param way   方向(0:水平方向;1:垂直方向)
+ */
+void scui_custom_draw_image_keep(scui_event_t  *event, scui_area_t *clip,
+                                 scui_handle_t *image, scui_color_t color,
+                                 scui_coord_t   span,  scui_coord_t num,
+                                 bool way);
+
+/*@brief 自定义控件:插件:区域绘制(四个角使用图像绘制)
+ *       一般主要用于绘制纯色圆角矩形
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param image 图像句柄(左上角,右上角,左下角,右下角)
+ *@param color 图像源色调
+ *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
+ */
+void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
+                                  scui_handle_t image[4], scui_color_t color,
+                                  scui_coord_t  delta);
 
 /*@brief 自定义控件:插件:区域绘制
  *@param event 自定义控件事件

@@ -115,14 +115,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         offset_hor.y = SCUI_DRV_VER_RES - 40;
         clip_hor = scui_widget_surface_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_image_progressbar(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
+            scui_custom_draw_image_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
         #endif
         
         offset_ver.x = 5;
         offset_ver.y = SCUI_DRV_VER_RES - 160;
         clip_ver = scui_widget_surface_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_image_progressbar(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
+            scui_custom_draw_image_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
         
         scui_widget_event_mask_keep(event);
         break;

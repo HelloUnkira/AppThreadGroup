@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-/*@brief 自定义控件:插件:进度条
+/*@brief 自定义控件:插件:进度条,滚动条
  *@param event      自定义控件事件
  *@param clip       剪切域(绘制区域)
  *@param bar        图像句柄(背景图)
@@ -21,18 +21,15 @@
  *@param dist       宽度或高度
  *@param way        方向(0:水平方向;1:垂直方向)
  */
-void scui_custom_draw_image_progressbar(scui_event_t *event, scui_area_t  *clip,
-                                        scui_handle_t bar,   scui_color_t  color_bar,
-                                        scui_handle_t edge,  scui_color_t  color_edge,
-                                        scui_coord_t  vmin,  scui_coord_t  vmax,
-                                        scui_coord_t  cmin,  scui_coord_t  cmax,
-                                        scui_handle_t dist,  bool way)
+void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
+                                   scui_handle_t bar,   scui_color_t  color_bar,
+                                   scui_handle_t edge,  scui_color_t  color_edge,
+                                   scui_coord_t  vmin,  scui_coord_t  vmax,
+                                   scui_coord_t  cmin,  scui_coord_t  cmax,
+                                   scui_handle_t dist,  bool way)
 {
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
-    
-    if (!scui_widget_event_check_execute(event))
-         return;
     
     /* 绘制背景进度条 */
     scui_widget_surface_draw_image(event->object, clip, bar, NULL, color_bar);
@@ -148,9 +145,6 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     scui_image_t *image_wait  = scui_handle_get(wait);
     scui_image_t *image_focus = scui_handle_get(focus);
     SCUI_ASSERT(image_wait  != NULL);
@@ -181,33 +175,208 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
 /*@brief 自定义控件:插件:绕圆旋转图像
  *@param event  自定义控件事件
  *@param center 旋转中心
- *@param handle 图像句柄
+ *@param image  图像句柄
  *@param color  图像源色调(调色板使用)
  *@param radius 旋转半径
  *@param angle  旋转角度(顺时针旋转:+,逆时针旋转:-)
  */
 void scui_custom_draw_image_circle_rotate(scui_event_t *event,  scui_point_t *center,
-                                          scui_handle_t handle, scui_color_t  color,
+                                          scui_handle_t image,  scui_color_t  color,
                                           scui_coord_t  radius, scui_coord_t  angle)
 {
     SCUI_LOG_DEBUG("");
     
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
-    scui_image_t *image = scui_handle_get(handle);
-    SCUI_ASSERT(image != NULL);
+    scui_image_t *image_inst = scui_handle_get(image);
+    SCUI_ASSERT(image_inst != NULL);
     
     scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
     scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
     
     scui_area_t clip = {
-        .x = center->x + point_x - image->pixel.width  / 2,
-        .y = center->y + point_y - image->pixel.height / 2,
-        .w = image->pixel.width,
-        .h = image->pixel.height,
+        .x = center->x + point_x - image_inst->pixel.width  / 2,
+        .y = center->y + point_y - image_inst->pixel.height / 2,
+        .w = image_inst->pixel.width,
+        .h = image_inst->pixel.height,
     };
-    scui_widget_surface_draw_image(event->object, &clip, handle, NULL, color);
+    scui_widget_surface_draw_image(event->object, &clip, image, NULL, color);
+}
+
+/*@brief 自定义控件:插件:图像连续绘制
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param image 图像句柄(背景图)
+ *@param color 图像源色调(调色板使用)
+ *@param span  图像间隙
+ *@param num   图像数量
+ *@param way   方向(0:水平方向;1:垂直方向)
+ */
+void scui_custom_draw_image_keep(scui_event_t  *event, scui_area_t *clip,
+                                 scui_handle_t *image, scui_color_t color,
+                                 scui_coord_t   span,  scui_coord_t num,
+                                 bool way)
+{
+    SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_point_t offset = {0};
+    for (scui_handle_t idx = 0; idx < num; idx++) {
+        if (image[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        scui_image_t *image_inst = scui_handle_get(image[idx]);
+        SCUI_ASSERT(image_inst != NULL);
+        
+        scui_area_t dst_clip = *clip;
+        if (scui_area_limit_offset(&dst_clip, &offset))
+            scui_widget_surface_draw_image(event->object, &dst_clip, image[idx], NULL, color);
+        
+        if (way)
+            offset.y += span + image_inst->pixel.height;
+        else
+            offset.x += span + image_inst->pixel.width;
+    }
+}
+
+/*@brief 自定义控件:插件:区域绘制(四个角使用图像绘制)
+ *       一般主要用于绘制纯色圆角矩形
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param image 图像句柄(左上角,右上角,左下角,右下角)
+ *@param color 图像源色调
+ *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
+ */
+void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
+                                  scui_handle_t image[4], scui_color_t color,
+                                  scui_coord_t  delta)
+{
+    SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_area_t image_clip = {.w = -1, .h = -1,};
+    scui_image_t *image_inst[4] = {0};
+    for (uint8_t idx = 0; idx < 4; idx++) {
+        if (image[idx] != SCUI_HANDLE_INVALID) {
+            image_inst[idx] = scui_handle_get(image[idx]);
+            SCUI_ASSERT(image_inst[idx] != NULL);
+            /* 断言检查,所有有效图片应该保持同一宽与高 */
+            SCUI_ASSERT(image_clip.w == -1 || image_clip.w == image_inst[idx]->pixel.width);
+            SCUI_ASSERT(image_clip.h == -1 || image_clip.h == image_inst[idx]->pixel.height);
+            
+            if (image_clip.w == -1)
+                image_clip.w  = image_inst[idx]->pixel.width;
+            if (image_clip.h == -1)
+                image_clip.h  = image_inst[idx]->pixel.height;
+        }
+    }
+    scui_area_t clip_f = {0};
+    scui_area_t clip_a = {0};
+    /* 无图片,全填充或者不填充 */
+    if (image_clip.w == -1 || image_clip.h == -1) {
+        if (delta == -1) {
+            scui_widget_surface_draw_color(event->object, clip, color);
+            return;
+        }
+        clip_a.w = delta;
+        clip_a.h = delta;
+    } else {
+        clip_a.w = image_clip.w;
+        clip_a.h = image_clip.h;
+    }
+    
+    scui_coord_t delta_w = clip->w - clip_a.w;
+    scui_coord_t delta_h = clip->h - clip_a.h;
+    /* 画俩个填充矩形(填充),画四个填充矩形(空心) */
+    if (delta != 0) {
+        if (delta_w > 0) {
+            clip_f.w = delta_w;
+            clip_f.h = delta != -1 ? delta : clip->h;
+            /* 画第一个矩形 */
+            clip_f.x = clip->x + clip_a.w;
+            clip_f.y = clip->y;
+            scui_area_t dst_clip = {0};
+            if (scui_area_inter(&dst_clip, clip, &clip_f))
+                scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            /* 画第二个矩形 */
+            if (delta != -1) {
+                clip_f.x = clip->x + clip_a.w;
+                clip_f.y = clip->y + clip->h - delta;
+                scui_area_t dst_clip = {0};
+                if (scui_area_inter(&dst_clip, clip, &clip_f))
+                    scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            }
+        }
+        if (delta_h > 0) {
+            clip_f.w = delta != -1 ? delta : clip->w;
+            clip_f.h = delta_h;
+            /* 画第一个矩形 */
+            clip_f.x = clip->x;
+            clip_f.y = clip->y + clip_a.h;
+            scui_area_t dst_clip = {0};
+            if (scui_area_inter(&dst_clip, clip, &clip_f))
+                scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            /* 画第二个矩形 */
+            if (delta != -1) {
+                clip_f.x = clip->x + clip->w - delta;
+                clip_f.y = clip->y + clip_a.h;
+                scui_area_t dst_clip = {0};
+                if (scui_area_inter(&dst_clip, clip, &clip_f))
+                    scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            }
+        }
+    }
+    /* 无图片 */
+    if (image_clip.w == -1 || image_clip.h == -1)
+        return;
+    /* 画一个角 */
+    clip_a.x = clip->x;
+    clip_a.y = clip->y;
+    if (image[0] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_image(event->object, &dst_clip, image[0], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x + clip->w - clip_a.w;
+    clip_a.y = clip->y;
+    if (image[1] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_image(event->object, &dst_clip, image[1], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x;
+    clip_a.y = clip->y + clip->h - clip_a.h;
+    if (image[2] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_image(event->object, &dst_clip, image[2], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x + clip->w - clip_a.w;
+    clip_a.y = clip->y + clip->h - clip_a.h;
+    if (image[3] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_surface_draw_image(event->object, &dst_clip, image[3], NULL, color);
+    }
+    /* ... */
 }
 
 /*@brief 自定义控件:插件:区域绘制
@@ -222,9 +391,6 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
 {
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
-    
-    if (!scui_widget_event_check_execute(event))
-         return;
     
     /* 常规填色 */
     if (mix == 0) {

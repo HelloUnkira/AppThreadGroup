@@ -22,9 +22,6 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
 {
     SCUI_LOG_DEBUG("");
     
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     if (cover) {
         scui_color_t bg_color = {.color = color.color_d};
         scui_widget_surface_draw_color(event->object, clip, bg_color);

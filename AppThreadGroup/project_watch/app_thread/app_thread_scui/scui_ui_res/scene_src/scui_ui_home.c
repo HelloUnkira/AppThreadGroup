@@ -77,3 +77,66 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     }
 }
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_home_c_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        
+        static uint8_t cnt = 0;
+        cnt++;
+        
+        if (cnt % (100 / SCUI_ANIMA_TICK) == 0)
+            scui_widget_draw(event->object, NULL, false);
+        
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_draw: {
+        
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_indev_data_set_t *data_set = NULL;
+        scui_indev_data_set(&data_set);
+        
+        scui_area_t   clip = scui_widget_surface_clip(event->object);
+        scui_coord_t  span = 0;
+        scui_handle_t image[5] = {
+            scui_image_prj_image_src_num_102_white_56x76_04_03png + data_set->sys_time_h / 10,
+            scui_image_prj_image_src_num_102_white_56x76_04_03png + data_set->sys_time_h % 10,
+            scui_image_prj_image_src_num_102_white_56x76_14_13png,
+            scui_image_prj_image_src_num_102_white_56x76_04_03png + data_set->sys_time_m / 10,
+            scui_image_prj_image_src_num_102_white_56x76_04_03png + data_set->sys_time_m % 10,
+        };
+        scui_coord_t width  = span * 4;
+        scui_coord_t height = span * 4;
+        scui_color_t color  = {.color.full = 0xFFFFFFFF};
+        scui_image_list_calc(image, 5, &width, false);
+        scui_image_list_calc(image, 5, &height, true);
+        
+        clip.x = (SCUI_DRV_HOR_RES - width) / 2;
+        clip.y = (SCUI_DRV_VER_RES) / 8;
+        clip.w =  width;
+        clip.h =  76;
+        scui_custom_draw_image_keep(event, &clip, image, color, span, 5, false);
+        
+        #if 0   // 仅仅测试,不美观
+        clip.x = (SCUI_DRV_HOR_RES) / 12;
+        clip.y = (SCUI_DRV_VER_RES - height) / 2;
+        clip.w =  56;
+        clip.h =  height;
+        scui_custom_draw_image_keep(event, &clip, image, color, span, 5, true);
+        #endif
+        
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
