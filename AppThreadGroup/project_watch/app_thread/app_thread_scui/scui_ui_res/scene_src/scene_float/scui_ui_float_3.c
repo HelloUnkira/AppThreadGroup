@@ -121,6 +121,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10 + 180, 100, image_edge);
         #endif
         
+        #if 1
         scui_color_t color_r = {.filter = true,.color.ch.r = 0xFF,};
         scui_color_t color_g = {.filter = true,.color.ch.g = 0xFF,};
         scui_color_t color_b = {.filter = true,.color.ch.b = 0xFF,};
@@ -164,6 +165,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         btn_color_full.color.full = 0xFF282828;
         scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 0);
+        #endif
         
         
         scui_widget_event_mask_keep(event);

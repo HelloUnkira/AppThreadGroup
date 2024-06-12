@@ -38,6 +38,11 @@ static inline void scui_ui_scene_window_list_cfg(scui_event_t *event)
     scui_window_cfg_set(SCUI_UI_SCENE_2, &window_cfg);
 }
 
+static struct {
+    scui_handle_t scroll;       // 滚动控件
+    scui_coord_t  scroll_pct;   // 滚动偏移量
+} * scui_ui_res_local = NULL;
+
 static void scui_scene_2_show(scui_event_t *event)
 {
     if (!scui_widget_event_check_prepare(event))
@@ -61,7 +66,7 @@ static void scui_scene_2_show(scui_event_t *event)
         scroll_maker.widget.color.color.full = 0xFF4F4F4F;
         scroll_maker.springback = 70;
         scroll_maker.space = 50;
-        scroll_maker.loop = true;
+        // scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
         scroll_maker.route_enc = 117;
         scroll_maker.route_key = 117;
@@ -83,6 +88,7 @@ static void scui_scene_2_show(scui_event_t *event)
         // scroll_maker.pos = scui_event_pos_d;
         #endif
         scui_scroll_create(&scroll_maker, &scroll_handle, false);
+        scui_ui_res_local->scroll = scroll_handle;
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
@@ -146,12 +152,28 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
+        
+        /* 界面数据加载准备 */
+        if (scui_widget_event_check_prepare(event)) {
+            SCUI_ASSERT(scui_ui_res_local == NULL);
+            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
+            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
+        }
         scui_scene_2_show(event);
+        
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
+        
         scui_scene_2_hide(event);
+        /* 界面数据转存回收 */
+        if (scui_widget_event_check_finish(event)) {
+            SCUI_ASSERT(scui_ui_res_local != NULL);
+            SCUI_MEM_FREE(scui_ui_res_local);
+            scui_ui_res_local = NULL;
+        }
+        
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
@@ -171,23 +193,90 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         SCUI_LOG_INFO("scui_event_widget_scroll_s");
+        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
+        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
+        scui_widget_draw(SCUI_UI_SCENE_2, NULL, false);
+        // scui_widget_clip_check(event->object, true);
+        
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_c:
         if (!scui_widget_event_check_execute(event))
              break;
         SCUI_LOG_INFO("scui_event_widget_scroll_c");
+        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
+        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
+        scui_widget_draw(SCUI_UI_SCENE_2, NULL, false);
+        // scui_widget_clip_check(event->object, true);
+        
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_e:
         if (!scui_widget_event_check_execute(event))
              break;
         SCUI_LOG_INFO("scui_event_widget_scroll_e");
+        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
+        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
+        scui_widget_draw(SCUI_UI_SCENE_2, NULL, false);
+        // scui_widget_clip_check(event->object, true);
+        
         scui_widget_event_mask_keep(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
+{
+    static scui_coord_t pct = 0;
+    static scui_coord_t way = +1;
+    
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        break;
+    case scui_event_draw: {
+        
+        // if (!scui_widget_event_check_execute(event))
+        //      return;
+        
+        scui_area_t   clip = {0};
+        scui_color_t  color_black = {0};
+        scui_color_t  color_white = {.filter = true,.color.full = 0xFFFFFFFF,};
+        scui_handle_t image_bg   = scui_image_prj_image_src_repeat_slider_04_bgpng;     // 44 * 236
+        scui_handle_t image_ring = scui_image_prj_image_src_repeat_slider_03_ringbmp;
+        scui_handle_t image_edge = scui_image_prj_image_src_repeat_slider_02_dotbmp;
+        
+        clip.x = (SCUI_DRV_HOR_RES - 44);
+        clip.y = (SCUI_DRV_VER_RES - 236) / 2;
+        clip.w =  44;
+        clip.h = 236;
+        scui_widget_surface_draw_image(event->object, &clip, image_bg, NULL, color_black);
+        
+        clip.x = (466 - 462) / 2;
+        clip.y = (466 - 462) / 2;
+        clip.w = 462;
+        clip.h = 462;
+        
+        scui_coord_t angle_d = 29;
+        scui_coord_t angle_s = -29 + scui_ui_res_local->scroll_pct * (angle_d) / 100;
+        scui_coord_t angle_e = angle_s + angle_d;
+        SCUI_LOG_INFO("angle:<s:%d,e:%d>", angle_s, angle_e);
+        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, angle_s, color_white, angle_e, 100, image_edge);
+        
+        scui_widget_event_mask_keep(event);
+        break;
+    }
+    default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }

@@ -79,6 +79,8 @@ static void scui_image_cache_fv_t(scui_table_rbsn_t *node, uint32_t idx)
     SCUI_LOG_INFO("- data_mem<src>:%x",  unit->image->pixel.data_mem);
     SCUI_LOG_INFO("- status:%x",         unit->image->status);
     SCUI_LOG_INFO("- format:%x",         unit->image->format);
+    SCUI_LOG_INFO("- count:%x",          unit->count);
+    SCUI_LOG_INFO("- lock:%x",           unit->lock);
 }
 
 /*@brief 图片初始化

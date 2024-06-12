@@ -113,6 +113,66 @@ void scui_scroll_destroy(scui_handle_t handle)
     SCUI_MEM_FREE(scroll);
 }
 
+/*@brief 滚动控件获取偏移量百分比(自动布局)
+ *@param handle 滚动控件句柄
+ *@param percent 偏移量
+ */
+void scui_scroll_auto_percent_get(scui_handle_t handle, scui_coord_t *percent)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_ASSERT(percent != NULL);
+    *percent = 0;
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    if (scroll->dir != scui_event_dir_none) {
+        scui_coord_t ofs = -(scroll->dis_ofs + scroll->dis_sum);
+        if (ofs <= 0) {
+           *percent = 0;
+            return;
+        }
+        if (ofs >= scroll->dis_lim) {
+           *percent = 100;
+            return;
+        }
+       *percent = scui_map(ofs, 0, scroll->dis_lim, 0, 100);
+    }
+}
+
+/*@brief 滚动控件获取偏移量(自动布局)
+ *@param handle 滚动控件句柄
+ *@param offset 偏移量
+ */
+void scui_scroll_auto_offset_get(scui_handle_t handle, scui_coord_t *offset)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_ASSERT(offset != NULL);
+    *offset = 0;
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    if (scroll->dir != scui_event_dir_none) {
+        scui_coord_t ofs = -(scroll->dis_ofs + scroll->dis_sum);
+        if (ofs <= 0) {
+            *offset = 0;
+             return;
+        }
+        if (ofs >= scroll->dis_lim) {
+           *offset = scroll->dis_lim;
+            return;
+        }
+       *offset = ofs;
+    }
+}
+
 /*@brief 滚动控件设置偏移量
  *@param handle 滚动控件句柄
  *@param offset 偏移量

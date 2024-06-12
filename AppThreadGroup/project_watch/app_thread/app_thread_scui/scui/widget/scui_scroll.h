@@ -74,6 +74,18 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
  */
 void scui_scroll_destroy(scui_handle_t handle);
 
+/*@brief 滚动控件获取偏移量百分比(自动布局)
+ *@param handle 滚动控件句柄
+ *@param percent 偏移量
+ */
+void scui_scroll_auto_percent_get(scui_handle_t handle, scui_coord_t *percent);
+
+/*@brief 滚动控件获取偏移量(自动布局)
+ *@param handle 滚动控件句柄
+ *@param offset 偏移量
+ */
+void scui_scroll_auto_offset_get(scui_handle_t handle, scui_coord_t *offset);
+
 /*@brief 滚动控件设置偏移量
  *@param handle 滚动控件句柄
  *@param offset 偏移量

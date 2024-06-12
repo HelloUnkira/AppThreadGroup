@@ -21,6 +21,7 @@ typedef enum {
 	SCUI_UI_SCENE_1,
 	SCUI_UI_SCENE_1_PTR,
 	SCUI_UI_SCENE_2,
+	SCUI_UI_SCENE_2_RING,
 	SCUI_UI_SCENE_3,
 	SCUI_UI_SCENE_4,
 	SCUI_UI_SCENE_5,
@@ -43,6 +44,6 @@ typedef enum {
 	SCUI_UI_SCENE_TEST,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[35];
+extern const void * scui_widget_parser_table[36];
 
 #endif

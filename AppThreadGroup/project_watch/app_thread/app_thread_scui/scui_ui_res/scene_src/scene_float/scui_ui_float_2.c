@@ -36,7 +36,6 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         break;
     case scui_event_draw:
         SCUI_LOG_INFO("scui_event_draw");
-        // scui_widget_clip_check(event->object, true);
         scui_widget_event_mask_keep(event);
         break;
     default:

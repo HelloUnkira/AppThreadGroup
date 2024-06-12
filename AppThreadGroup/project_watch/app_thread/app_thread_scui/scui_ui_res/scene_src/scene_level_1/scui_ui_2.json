@@ -14,6 +14,15 @@
             "widget.child_num":             "5",
             "level":                        "0",
             "buffer":                       "true"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_2_RING",
+            "widget.parent":                "SCUI_UI_SCENE_2",
+            "widget.event_cb":              "scui_ui_scene_2_ring_event_proc"
         }
     ]
 }
