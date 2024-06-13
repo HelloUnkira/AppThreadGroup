@@ -33,10 +33,9 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 /*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
  *@param 形如scui_widget_surface_draw_xxx的接口使用
  */
-bool scui_widget_surface_clip_unit_calc(scui_widget_t *widget,   scui_area_t *uint_clip,
-                                        scui_area_t   *target,   scui_area_t *clip,
-                                        scui_area_t   *dst_clip, scui_area_t *src_clip,
-                                        bool           target_empty);
+bool scui_widget_surface_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
+                                     scui_area_t   *target,   scui_area_t *clip,
+                                     scui_area_t   *dst_clip, scui_area_t *src_clip);
 
 /*-------------------------------------------------*
  *separator----------------------------------------*

@@ -1,5 +1,5 @@
-#ifndef SCUI_CONFIG_H
-#define SCUI_CONFIG_H
+#ifndef SCUI_CFG_H
+#define SCUI_CFG_H
 
 /* display:屏幕尺寸,宽与高 */
 /* display:多缓冲区(插个眼:现在多缓冲区有渲染问题,显示错误) */

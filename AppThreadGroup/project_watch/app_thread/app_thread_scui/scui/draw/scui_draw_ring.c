@@ -292,8 +292,6 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
-    draw_area.x = src_clip_v.w - draw_area.w;
-    draw_area.y = src_clip_v.h - draw_area.h;
     SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
     SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     
@@ -308,8 +306,8 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
     #endif
     
     scui_alpha_t alpha = 0;
-    scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
-    scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
+    scui_multi_t dst_pixel_ofs = dst_offset.y * dst_surface->hor_res + dst_offset.x;
+    scui_multi_t src_pixel_ofs = 0;
     
     if (src_surface->format == scui_pixel_format_p4) {
         uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * SCUI_PIXEL_SIZE;
@@ -325,20 +323,25 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
         if (palette_table[0].full == palette_table[palette_len - 1].full) {
             if (src_color.filter && palette_table[0].full == filter.full)
                 goto over;
-            for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+            
             #if 1
+            for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+                /* 扫描区不在src_clip_v中,跳过它 */
+                if (src_area.y + idx_line < src_clip_v.y ||
+                    src_area.y + idx_line > src_clip_v.y + draw_area.h)
+                    continue;
                 /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
-                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&draw_area,
+                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&src_area,
                                             idx_line, idx, angle_tan0_4096, angle_tan1_4096);
-                scui_multi_t draw_area_xl = draw_area_x.x;
-                scui_multi_t draw_area_xr = draw_area_x.y;
+                /* 扫描区不在src_clip_v中,跳过它 */
+                scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+                scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
-            #else
-            for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             #endif
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) / 2;
+            
+                uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) / 2;
                 SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                 uint8_t *src_addr_ofs = (void *)src_ofs;
                 uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
@@ -349,20 +352,25 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
             }
             }
         } else {
-            for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+            
             #if 1
+            for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+                /* 扫描区不在src_clip_v中,跳过它 */
+                if (src_area.y + idx_line < src_clip_v.y ||
+                    src_area.y + idx_line > src_clip_v.y + draw_area.h)
+                    continue;
                 /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
-                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&draw_area,
+                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&src_area,
                                             idx_line, idx, angle_tan0_4096, angle_tan1_4096);
-                scui_multi_t draw_area_xl = draw_area_x.x;
-                scui_multi_t draw_area_xr = draw_area_x.y;
+                /* 扫描区不在src_clip_v中,跳过它 */
+                scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+                scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
-            #else
-            for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             #endif
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) / 2;
+            
+                uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) / 2;
                 SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
                 uint8_t *src_addr_ofs = (void *)src_ofs;
                 uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
@@ -398,20 +406,25 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
         if (palette_table[0].full == palette_table[palette_len - 1].full) {
             if (src_color.filter && palette_table[0].full == filter.full)
                 goto over;
-            for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+            
             #if 1
+            for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+                /* 扫描区不在src_clip_v中,跳过它 */
+                if (src_area.y + idx_line < src_clip_v.y ||
+                    src_area.y + idx_line > src_clip_v.y + draw_area.h)
+                    continue;
                 /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
-                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&draw_area,
+                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&src_area,
                                             idx_line, idx, angle_tan0_4096, angle_tan1_4096);
-                scui_multi_t draw_area_xl = draw_area_x.x;
-                scui_multi_t draw_area_xr = draw_area_x.y;
+                /* 扫描区不在src_clip_v中,跳过它 */
+                scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+                scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
-            #else
-            for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             #endif
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 1;
+            
+                uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) * 1;
                 SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
                 uint8_t *src_addr_ofs = (void *)src_ofs;
                 uint8_t palette = *src_addr_ofs;
@@ -422,21 +435,25 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
             }
             }
         } else {
-            for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+            
             #if 1
+            for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+                /* 扫描区不在src_clip_v中,跳过它 */
+                if (src_area.y + idx_line < src_clip_v.y ||
+                    src_area.y + idx_line > src_clip_v.y + draw_area.h)
+                    continue;
                 /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
-                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&draw_area,
+                scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&src_area,
                                             idx_line, idx, angle_tan0_4096, angle_tan1_4096);
-                scui_multi_t draw_area_xl = draw_area_x.x;
-                scui_multi_t draw_area_xr = draw_area_x.y;
+                /* 扫描区不在src_clip_v中,跳过它 */
+                scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+                scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
-                
-            #else
-            for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             #endif
-                uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
-                uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item) * 1;
+            
+                uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * SCUI_PIXEL_SIZE;
+                uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) * 1;
                 SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
                 uint8_t *src_addr_ofs = (void *)src_ofs;
                 uint8_t palette = *src_addr_ofs;

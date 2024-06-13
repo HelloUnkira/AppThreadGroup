@@ -11,6 +11,13 @@
 #include "scui_font_type.h"         /* 字库类型表 */
 
 /* 空回调,测试控件使用 */
-#define SCUI_WIDGET_EVENT_USE_EMPTY     (0)
+#define SCUI_WIDGET_EVENT_USE_EMPTY                 (0)
+
+/*****************************************************************************/
+/* ui的一些配置参数 */
+#define SCUI_UI_SCROLL_BAR_STOP_TIME                (2000)
+#define SCUI_UI_SCROLL_BAR_FADE_TIME                (2000)
+
+/*****************************************************************************/
 
 #endif
