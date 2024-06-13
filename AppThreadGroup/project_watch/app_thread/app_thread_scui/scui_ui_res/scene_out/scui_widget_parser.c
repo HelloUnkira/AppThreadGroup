@@ -4,6 +4,136 @@
 #include "scui.h"
 
 #if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1
+static void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_cube_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_lantern_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_soccer_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_popup_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
+static void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
+{
+	if (!scui_widget_event_check_prepare(event))
+		return;
+	
+	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+	
+	switch (event->type) {
+	default:
+		scui_widget_event_mask_keep(event);
+		break;
+	}
+}
 static void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
@@ -316,58 +446,6 @@ static void scui_ui_scene_6_rd_event_proc(scui_event_t *event)
 		break;
 	}
 }
-static void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_cube_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
 static void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
@@ -394,84 +472,6 @@ static void scui_ui_scene_home_c_event_proc(scui_event_t *event)
 		break;
 	}
 }
-static void scui_ui_scene_lantern_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_popup_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_soccer_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
-static void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
-{
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
-}
 static void scui_ui_scene_test_event_proc(scui_event_t *event)
 {
 	if (!scui_widget_event_check_prepare(event))
@@ -486,6 +486,16 @@ static void scui_ui_scene_test_event_proc(scui_event_t *event)
 	}
 }
 #else
+extern void scui_ui_scene_butterfly_event_proc(scui_event_t *event);
+extern void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event);
+extern void scui_ui_scene_cube_event_proc(scui_event_t *event);
+extern void scui_ui_scene_cube_custom_event_proc(scui_event_t *event);
+extern void scui_ui_scene_lantern_event_proc(scui_event_t *event);
+extern void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event);
+extern void scui_ui_scene_soccer_event_proc(scui_event_t *event);
+extern void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event);
+extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
+extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_1_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_1_1_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_1_2_event_proc(scui_event_t *event);
@@ -510,20 +520,145 @@ extern void scui_ui_scene_6_lu_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_ru_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_ld_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_rd_event_proc(scui_event_t *event);
-extern void scui_ui_scene_butterfly_event_proc(scui_event_t *event);
-extern void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event);
-extern void scui_ui_scene_cube_event_proc(scui_event_t *event);
-extern void scui_ui_scene_cube_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_home_event_proc(scui_event_t *event);
 extern void scui_ui_scene_home_c_event_proc(scui_event_t *event);
-extern void scui_ui_scene_lantern_event_proc(scui_event_t *event);
-extern void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event);
-extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
-extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
-extern void scui_ui_scene_soccer_event_proc(scui_event_t *event);
-extern void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_test_event_proc(scui_event_t *event);
 #endif
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
+	.widget.event_cb                = scui_ui_scene_butterfly_event_proc,
+	.widget.child_num               = 11,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
+	.widget.parent                  = SCUI_UI_SCENE_BUTTERFLY,
+	.widget.color.color.full        = 0xFFFFFFFF,
+	.widget.event_cb                = scui_ui_scene_butterfly_custom_event_proc,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_CUBE,
+	.widget.event_cb                = scui_ui_scene_cube_event_proc,
+	.widget.child_num               = 11,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_CUBE_CUSTOM,
+	.widget.parent                  = SCUI_UI_SCENE_CUBE,
+	.widget.event_cb                = scui_ui_scene_cube_custom_event_proc,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
+	.widget.event_cb                = scui_ui_scene_lantern_event_proc,
+	.widget.child_num               = 11,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LANTERN_CUSTOM,
+	.widget.parent                  = SCUI_UI_SCENE_LANTERN,
+	.widget.event_cb                = scui_ui_scene_lantern_custom_event_proc,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
+	.widget.event_cb                = scui_ui_scene_soccer_event_proc,
+	.widget.child_num               = 11,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_SOCCER_CUSTOM,
+	.widget.parent                  = SCUI_UI_SCENE_SOCCER,
+	.widget.event_cb                = scui_ui_scene_soccer_custom_event_proc,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
+	.widget.style.sched_anima       = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_POPUP,
+	.widget.event_cb                = scui_ui_scene_popup_event_proc,
+	.widget.child_num               = 6,
+	.level                          = 0,
+	.buffer                         = false,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.clip.x                  = 58,
+	.widget.clip.y                  = 60,
+	.widget.clip.w                  = 350,
+	.widget.clip.h                  = 100,
+	.widget.myself                  = SCUI_UI_SCENE_POPUP_BG,
+	.widget.parent                  = SCUI_UI_SCENE_POPUP,
+	.widget.event_cb                = scui_ui_scene_popup_bg_event_proc,
+	.widget.child_num               = 5,
+};
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.type                    = scui_widget_type_window,
@@ -871,61 +1006,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_RD = {
 	.widget.event_cb                = scui_ui_scene_6_rd_event_proc,
 };
 
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
-	.widget.event_cb                = scui_ui_scene_butterfly_event_proc,
-	.widget.child_num               = 11,
-	.level                          = 0,
-	.buffer                         = true,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.sched_anima       = true,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
-	.widget.parent                  = SCUI_UI_SCENE_BUTTERFLY,
-	.widget.color.color.full        = 0xFFFFFFFF,
-	.widget.event_cb                = scui_ui_scene_butterfly_custom_event_proc,
-};
-
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_CUBE,
-	.widget.event_cb                = scui_ui_scene_cube_event_proc,
-	.widget.child_num               = 11,
-	.level                          = 0,
-	.buffer                         = true,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.sched_anima       = true,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_CUBE_CUSTOM,
-	.widget.parent                  = SCUI_UI_SCENE_CUBE,
-	.widget.event_cb                = scui_ui_scene_cube_custom_event_proc,
-};
-
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.style.indev_ptr         = true,
@@ -952,86 +1032,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_HOME_C = {
 	.widget.event_cb                = scui_ui_scene_home_c_event_proc,
 };
 
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
-	.widget.event_cb                = scui_ui_scene_lantern_event_proc,
-	.widget.child_num               = 11,
-	.level                          = 0,
-	.buffer                         = true,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.sched_anima       = true,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_LANTERN_CUSTOM,
-	.widget.parent                  = SCUI_UI_SCENE_LANTERN,
-	.widget.event_cb                = scui_ui_scene_lantern_custom_event_proc,
-};
-
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.trans             = true,
-	.widget.style.sched_anima       = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_POPUP,
-	.widget.event_cb                = scui_ui_scene_popup_event_proc,
-	.widget.child_num               = 6,
-	.level                          = 0,
-	.buffer                         = false,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.trans             = true,
-	.widget.clip.x                  = 58,
-	.widget.clip.y                  = 60,
-	.widget.clip.w                  = 350,
-	.widget.clip.h                  = 100,
-	.widget.myself                  = SCUI_UI_SCENE_POPUP_BG,
-	.widget.parent                  = SCUI_UI_SCENE_POPUP,
-	.widget.event_cb                = scui_ui_scene_popup_bg_event_proc,
-	.widget.child_num               = 5,
-};
-
-static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
-	.widget.type                    = scui_widget_type_window,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
-	.widget.event_cb                = scui_ui_scene_soccer_event_proc,
-	.widget.child_num               = 11,
-	.level                          = 0,
-	.buffer                         = true,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.sched_anima       = true,
-	.widget.style.indev_ptr         = true,
-	.widget.style.indev_enc         = true,
-	.widget.style.indev_key         = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_SOCCER_CUSTOM,
-	.widget.parent                  = SCUI_UI_SCENE_SOCCER,
-	.widget.event_cb                = scui_ui_scene_soccer_custom_event_proc,
-};
-
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.style.indev_ptr         = true,
@@ -1047,6 +1047,16 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 };
 
 const void * scui_widget_parser_table[38] = {
+	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
+	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
+	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
+	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM,
+	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN,
+	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM,
+	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER,
+	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM,
+	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
+	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_2,
@@ -1072,17 +1082,7 @@ const void * scui_widget_parser_table[38] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_6_RU,
 	(void *)&scui_widget_SCUI_UI_SCENE_6_LD,
 	(void *)&scui_widget_SCUI_UI_SCENE_6_RD,
-	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
-	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
-	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
-	(void *)&scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_HOME,
 	(void *)&scui_widget_SCUI_UI_SCENE_HOME_C,
-	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN,
-	(void *)&scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM,
-	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
-	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,
-	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER,
-	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_TEST,
 };
