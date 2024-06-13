@@ -47,6 +47,10 @@ static struct {
     scui_matrix_t matrix_trunk[2];      // 躯干矩阵
     scui_matrix_t matrix_wing[4];       // 翅膀矩阵(左前;左后;右前;右后;)
     
+    scui_coord_t  angle_limit;
+    scui_coord_t  angle_wing;
+    scui_coord_t  angle_way;
+    
     scui_view3_t  view;                 // 视点移动
     
 } * scui_ui_res_local = NULL;
@@ -86,8 +90,10 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
             /* 初始视点在屏幕中间 */
             scui_ui_res_local->view.x = +offset.x;
             scui_ui_res_local->view.y = +offset.y;
-            scui_ui_res_local->view.z = +offset.x;
+            scui_ui_res_local->view.z = -offset.x;
             
+            scui_ui_res_local->angle_limit = 45;
+            scui_ui_res_local->angle_way   = +5;
         }
         break;
     case scui_event_hide:
@@ -129,6 +135,21 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        if (scui_ui_res_local->angle_wing < -scui_ui_res_local->angle_limit ||
+            scui_ui_res_local->angle_wing > +scui_ui_res_local->angle_limit)
+            scui_ui_res_local->angle_way  = -scui_ui_res_local->angle_way;
+        
+        scui_ui_res_local->angle_wing += scui_ui_res_local->angle_way;
+        
+        // scui_ui_res_local->view.x += 25;
+        // scui_ui_res_local->view.y += 25;
+        // scui_ui_res_local->view.z += 25;
+        
+        scui_widget_draw(event->object, NULL, false);
+        
         break;
     case scui_event_draw:
         scui_widget_event_mask_keep(event);
@@ -262,6 +283,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             
             /* 翅膀矩阵(左上右上) */
             scui_matrix_identity(&matrix_wing[0]);
+            scui_matrix_rotate(&matrix_wing[0], +scui_ui_res_local->angle_wing, 0x02);
             scui_area3_transform_by_matrix(&face3_wing_0, &matrix_wing[0]);
             scui_area3_offset(&face3_wing_0, &offset);
             scui_size2_t size2_wing_0 = {.w = image_wing0->pixel.width,.h = image_wing0->pixel.height,};
@@ -270,6 +292,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             
             scui_matrix_identity(&matrix_wing[1]);
             scui_matrix_rotate(&matrix_wing[1], 180.0f, 0x02);
+            scui_matrix_rotate(&matrix_wing[1], -scui_ui_res_local->angle_wing, 0x02);
             scui_area3_transform_by_matrix(&face3_wing_1, &matrix_wing[1]);
             scui_area3_offset(&face3_wing_1, &offset);
             scui_size2_t size2_wing_1 = {.w = image_wing0->pixel.width,.h = image_wing0->pixel.height,};
@@ -278,6 +301,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             
             /* 翅膀矩阵(左下右下) */
             scui_matrix_identity(&matrix_wing[2]);
+            scui_matrix_rotate(&matrix_wing[2], +scui_ui_res_local->angle_wing, 0x02);
             scui_area3_transform_by_matrix(&face3_wing_2, &matrix_wing[2]);
             scui_area3_offset(&face3_wing_2, &offset);
             scui_size2_t size2_wing_2 = {.w = image_wing1->pixel.width,.h = image_wing1->pixel.height,};
@@ -286,6 +310,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             
             scui_matrix_identity(&matrix_wing[3]);
             scui_matrix_rotate(&matrix_wing[3], 180.0f, 0x02);
+            scui_matrix_rotate(&matrix_wing[3], -scui_ui_res_local->angle_wing, 0x02);
             scui_area3_transform_by_matrix(&face3_wing_3, &matrix_wing[3]);
             scui_area3_offset(&face3_wing_3, &offset);
             scui_size2_t size2_wing_3 = {.w = image_wing1->pixel.width,.h = image_wing1->pixel.height,};

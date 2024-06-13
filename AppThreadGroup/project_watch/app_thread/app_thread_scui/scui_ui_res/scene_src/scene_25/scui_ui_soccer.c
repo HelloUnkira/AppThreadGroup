@@ -164,7 +164,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         if (scui_ui_res_local->move_lock)
             break;
         
-        scui_ui_res_local->rotate.y += 1.0f;
+        scui_ui_res_local->rotate.y += 7.5f;
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw:

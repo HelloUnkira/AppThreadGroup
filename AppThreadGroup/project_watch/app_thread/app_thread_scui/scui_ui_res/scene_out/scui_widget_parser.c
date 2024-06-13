@@ -549,7 +549,6 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	.widget.parent                  = SCUI_UI_SCENE_BUTTERFLY,
-	.widget.color.color.full        = 0xFFFFFFFF,
 	.widget.event_cb                = scui_ui_scene_butterfly_custom_event_proc,
 };
 
