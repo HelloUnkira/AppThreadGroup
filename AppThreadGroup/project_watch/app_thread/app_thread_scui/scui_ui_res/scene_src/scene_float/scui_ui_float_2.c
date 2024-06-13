@@ -59,6 +59,10 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         static uint8_t cnt = 0;
         cnt++;
@@ -71,9 +75,6 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
             progressbar_e = 100 - (uint32_t)scui_rand(0, 100) % 45;
             scui_widget_draw(event->object, NULL, false);
         }
-        
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     }
     case scui_event_draw: {
@@ -274,12 +275,13 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         image_ring_angle += 1;
         scui_widget_draw(event->object, NULL, false);
-        
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
         
@@ -327,6 +329,10 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         image_pct++;
         if (image_pct > 100)
@@ -335,9 +341,6 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
         image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
         scui_widget_draw(event->object, NULL, false);
-        
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
         

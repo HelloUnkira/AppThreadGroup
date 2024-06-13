@@ -145,6 +145,8 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         if (scui_ui_res_local->move_lock)
             break;

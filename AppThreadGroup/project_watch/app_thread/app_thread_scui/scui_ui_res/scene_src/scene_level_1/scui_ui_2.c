@@ -53,6 +53,10 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         if (scui_ui_res_local->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
             scui_ui_res_local->bar_wait += SCUI_ANIMA_TICK;
@@ -64,12 +68,9 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             else
                 scui_ui_res_local->bar_alpha  = 0;
             
-            scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha);
+            scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
             scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         }
-        
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -195,7 +196,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_widget_scroll_s");
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha);
+        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
         scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
@@ -209,7 +210,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_widget_scroll_c");
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha);
+        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
         scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
@@ -223,7 +224,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_widget_scroll_e");
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha);
+        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
         scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
@@ -255,8 +256,8 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
         break;
     case scui_event_draw: {
         
-        // if (!scui_widget_event_check_execute(event))
-        //      return;
+        if (!scui_widget_event_check_execute(event))
+             return;
         
         scui_area_t   clip = {0};
         scui_color_t  color_black = {0};

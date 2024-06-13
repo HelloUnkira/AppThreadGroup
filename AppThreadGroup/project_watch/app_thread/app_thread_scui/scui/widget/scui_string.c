@@ -130,9 +130,6 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
  */
 void scui_string_event(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -143,6 +140,8 @@ void scui_string_event(scui_event_t *event)
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
         
         string->rcd_ms += scui_event_anima_elapse;
         if (string->rcd_ms < string->unit_ms)
@@ -168,6 +167,8 @@ void scui_string_event(scui_event_t *event)
     }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
         
         if (string->str_utf8 != NULL) {
             

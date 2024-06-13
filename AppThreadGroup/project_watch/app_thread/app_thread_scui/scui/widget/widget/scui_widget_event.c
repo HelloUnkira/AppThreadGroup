@@ -294,9 +294,10 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 绘制事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_draw) {
+        bool surface_only = scui_widget_surface_only(widget);
         /* 无独立画布时不在draw绘制,转为到refr后绘制 */
-        if (widget->parent == SCUI_HANDLE_INVALID)
-            if (!scui_widget_surface_only(widget)) {
+        if (widget->parent == SCUI_HANDLE_INVALID) {
+            if (!surface_only) {
                 /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
                 if (event->style.sync) {
                     /* 只需要根控件时执行一次即可 */
@@ -311,6 +312,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                     return;
                 }
             }
+        }
         /* 绘制事件不能被控件响应 */
         if (scui_widget_style_is_hide(widget->myself)) {
             SCUI_LOG_INFO("widget is hide");
@@ -335,7 +337,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
         event->object = widget->myself;
         scui_widget_event_mask_keep(event);
         /* 绘制结束产生一次异步刷新 */
-        scui_widget_refr(widget->myself, false);
+        if (surface_only)
+            scui_widget_refr(widget->myself, false);
         return;
     }
     /*************************************************************************/

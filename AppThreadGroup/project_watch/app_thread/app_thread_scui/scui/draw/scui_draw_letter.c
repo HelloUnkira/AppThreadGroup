@@ -80,7 +80,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             if (src_color.filter && scui_pixel_with_alpha(&palette_table[0], palette).full == filter.full)
                 continue;
             
-            alpha = (uint32_t)dst_surface->alpha * palette / scui_alpha_cover;
+            alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
             pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
             // pixel = scui_pixel_blend_with_alpha(&palette_table[0], alpha, dst_addr_ofs, dst_surface->alpha);
             scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
@@ -108,7 +108,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             if (src_color.filter && scui_pixel_with_alpha(&palette_table[palette], palette).full == filter.full)
                 continue;
             
-            alpha = (uint32_t)dst_surface->alpha * palette / scui_alpha_cover;
+            alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
             pixel = scui_pixel_mix_with_alpha(&palette_table[palette], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
             // pixel = scui_pixel_blend_with_alpha(&palette_table[palette], alpha, dst_addr_ofs, dst_surface->alpha);
             scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);

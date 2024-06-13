@@ -167,7 +167,8 @@ void scui_event_respond(scui_event_t *event)
         scui_widget_event_mask_over(event);
         return;
     case scui_event_anima_elapse:
-        scui_anima_update(SCUI_HANDLE_INVALID);
+        if (event->object == SCUI_HANDLE_SYSTEM)
+            scui_anima_update(SCUI_HANDLE_INVALID);
         break;
     case scui_event_refr:
         scui_window_surface_blend();
@@ -188,9 +189,39 @@ void scui_event_respond(scui_event_t *event)
         break;
     }
     
-    /* 系统事件只发给活跃场景 */
-    if (event->object == SCUI_HANDLE_SYSTEM)
-        event->object  = scui_window_active_curr();
+    if (event->object == SCUI_HANDLE_SYSTEM) {
+        
+        /* 系统事件发给浮动场景 */
+        scui_handle_t *window_list = NULL;
+        scui_window_list(&window_list);
+        for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
+            if (window_list[idx] == SCUI_HANDLE_INVALID)
+                continue;
+            scui_widget_t *widget = scui_handle_get(window_list[idx]);
+            SCUI_ASSERT(widget != NULL);
+            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            if (scui_widget_surface_only(widget))
+                continue;
+            
+            switch (event->type) {
+            case scui_event_anima_elapse: {
+                /* 全局滚动检查 */
+                scui_handle_t handle = SCUI_HANDLE_INVALID;
+                if (scui_widget_event_scroll_flag(0x02, &handle))
+                    continue;
+                event->object = widget->myself;
+                scui_event_respond(event);
+                event->object = SCUI_HANDLE_SYSTEM;
+                break;
+            }
+            default:
+                break;
+            }
+        }
+        
+        /* 系统事件发给活跃场景 */
+        event->object = scui_window_active_curr();
+    }
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {

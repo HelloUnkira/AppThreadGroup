@@ -129,7 +129,6 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
-        
         break;
     case scui_event_draw:
         scui_widget_event_mask_keep(event);

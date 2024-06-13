@@ -69,10 +69,11 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle);
 scui_color_t scui_widget_color_get(scui_handle_t handle);
 
 /*@brief 控件透明度设置
- *@param handle 控件句柄
- *@param alpha  控件透明度
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
  */
-void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha);
+void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
 
 /*@brief 控件图片设置
  *@param handle 控件句柄

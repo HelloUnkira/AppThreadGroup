@@ -95,5 +95,12 @@ void scui_ready(void)
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
     
+    #if 0
+    scui_widget_show(SCUI_UI_SCENE_POPUP, false);
+    scui_ui_scene_popup_text(SCUI_MULTI_LANG_0X002f, NULL);
+    scui_ui_scene_popup_exec();
+    scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct0, true);
+    #endif
+    
     scui_engine_execute_status_set(true);
 }

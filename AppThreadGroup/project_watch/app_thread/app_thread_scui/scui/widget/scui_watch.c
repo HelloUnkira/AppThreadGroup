@@ -93,9 +93,6 @@ void scui_watch_tick_mode(scui_handle_t handle, bool tick_mode)
  */
 void scui_watch_event(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -106,6 +103,8 @@ void scui_watch_event(scui_event_t *event)
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
         
         watch->tick_ms += SCUI_ANIMA_TICK;
         if (watch->tick_ms >= 1000)
@@ -138,6 +137,8 @@ void scui_watch_event(scui_event_t *event)
     }
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
         
         /* hour: */
         scui_coord_t angle_h = watch->tick_h * (360 / 24) + watch->tick_m * (360 / 60) * 6 / 360;

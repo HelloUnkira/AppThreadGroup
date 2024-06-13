@@ -12,7 +12,8 @@
  */
 bool scui_widget_surface_only(scui_widget_t *widget)
 {
-    if (widget->surface->pixel == NULL ||
+    if (widget->surface == NULL ||
+        widget->surface->pixel == NULL ||
         widget->surface->pixel == scui_surface_fb_draw()->pixel ||
         widget->surface->pixel == scui_surface_fb_refr()->pixel)
         return false;

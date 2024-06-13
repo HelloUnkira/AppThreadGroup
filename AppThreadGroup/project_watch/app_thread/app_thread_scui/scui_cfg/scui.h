@@ -6,5 +6,6 @@
 #include "scui_util.h"      /* util */
 #include "scui_source.h"    /* source */
 #include "scui_ready.h"     /* ready */
+#include "scui_ui.h"        /* ui */
 
 #endif

@@ -9,6 +9,14 @@
 
 scui_window_mgr_t scui_window_mgr = {0};
 
+/*@brief 窗口管理器根控件列表
+ *@param list 根控件列表
+ */
+void scui_window_list(scui_handle_t **list)
+{
+    *list = scui_window_mgr.list;
+}
+
 /*@brief 窗口管理器排序根控件列表
  *@param list 根控件列表
  *@param num  根控件数量

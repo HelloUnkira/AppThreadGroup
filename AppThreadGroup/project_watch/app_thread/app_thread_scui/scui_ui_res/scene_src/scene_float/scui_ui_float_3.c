@@ -54,21 +54,16 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        
-        static uint32_t cnt = 0;
-        cnt++;
-        
-        if (cnt % 10 == 0) {
-            pct += way;
-            
-            if (pct == 100 || pct == 0)
-                way = -way;
-            
-            scui_widget_draw(event->object, NULL, false);
-        }
-        
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        pct += way;
+        if (pct == 100 || pct == 0)
+            way = -way;
+        
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
         
@@ -89,7 +84,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         clip.w = 458;
         clip.h = 458;
         
-        //scui_widget_alpha_set(event->object, scui_alpha_pct50);
+        //scui_widget_alpha_set(event->object, scui_alpha_pct50, false);
         scui_color_t color = {.filter = true,.color.full = 0xFFFFFFFF,};
         // scui_widget_surface_draw_image(event->object, &clip, image_ring, NULL, color);
         

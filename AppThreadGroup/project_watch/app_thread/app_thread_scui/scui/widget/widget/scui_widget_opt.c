@@ -154,10 +154,11 @@ scui_color_t scui_widget_color_get(scui_handle_t handle)
 }
 
 /*@brief 控件透明度设置
- *@param handle 控件句柄
- *@param alpha  控件透明度
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
  */
-void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
+void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurse)
 {
     SCUI_LOG_INFO("widget %u alpha %u set", handle, alpha);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -165,12 +166,12 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha)
     
     widget->alpha = alpha;
     
-    /* 待定中,子控件透明度如何处理??? */
-    return;
+    if (!recurse)
+         return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
-        scui_widget_alpha_set(widget->child_list[idx], alpha);
+        scui_widget_alpha_set(widget->child_list[idx], alpha, recurse);
 }
 
 /*@brief 控件图片设置
