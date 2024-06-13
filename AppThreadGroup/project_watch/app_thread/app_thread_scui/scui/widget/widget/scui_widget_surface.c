@@ -278,9 +278,8 @@ void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
         /* 子剪切域要相对同步偏移 */
         scui_area_t dst_area = unit->clip;
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &dst_area, clip))
-             continue;
-        scui_draw_area_fill(widget->surface, &dst_clip, &pixel, widget->alpha);
+        if (scui_area_inter(&dst_clip, &dst_area, clip))
+            scui_draw_area_fill(widget->surface, &dst_clip, &pixel, widget->alpha);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
