@@ -105,10 +105,6 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        /*@brief 这个库有问题,暂时屏蔽掉它
-         */
-        break;
-        
         scui_area_t clip = {0};
         
         clip = scui_widget_surface_clip(event->object);
@@ -119,17 +115,17 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         scui_color_t color_black = {0};
         scui_custom_draw_area(event, &clip, color_black, false, false);
         
-        char *url = "https://github.com/HelloUnkira/AppThreadGroup.git";
-        scui_color_t color = {
-            .color_l.full = 0xFF00FF00,
-            .color_d.full = 0xFF0000FF,
+        char *url = "https://github.com/HelloUnkira";
+        scui_color_t color_xxx = {
+            .color_l.full = 0xFF000000,
+            .color_d.full = 0xFFFFFFFF,
         };
         clip = scui_widget_surface_clip(event->object);
-        clip.x += clip.w / 6;
-        clip.y += clip.h / 12;
-        clip.w -= clip.w / 6  * 2;
-        clip.h -= clip.h / 12 * 2;
-        scui_custom_draw_barcode(event, &clip, color, false, url, strlen(url));
+        clip.x += 10;
+        clip.y += 10 + 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2 + 10 * 2;
+        scui_custom_draw_barcode(event, &clip, color_xxx, false, url, strlen(url));
         
         scui_widget_event_mask_keep(event);
         break;

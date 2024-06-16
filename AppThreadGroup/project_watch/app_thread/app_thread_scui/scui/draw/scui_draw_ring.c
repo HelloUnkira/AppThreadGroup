@@ -328,7 +328,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
         if (palette_table[0] == palette_table[palette_len - 1]) {
             if (src_color.filter && palette_table[0] == filter)
                 goto over;
-            
+                
             #if 1
             for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
                 /* 扫描区不在src_clip_v中,跳过它 */
@@ -341,7 +341,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
                 /* 扫描区不在src_clip_v中,跳过它 */
                 scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
                 scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
-                /* 更新原扫描行到新的限制扫描行即可 */
+            /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
             #endif
                 
@@ -356,7 +356,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
             }
             }
         } else {
-            
+                
             #if 1
             for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
                 /* 扫描区不在src_clip_v中,跳过它 */
@@ -372,7 +372,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
             #endif
-            
+                
                 uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
                 uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) / 2;
                 
@@ -412,7 +412,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
         if (palette_table[0] == palette_table[palette_len - 1]) {
             if (src_color.filter && palette_table[0] == filter)
                 goto over;
-            
+                
             #if 1
             for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
                 /* 扫描区不在src_clip_v中,跳过它 */
@@ -428,7 +428,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
             #endif
-            
+                
                 uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
                 uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) * 1;
                 
@@ -456,7 +456,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
                 /* 更新原扫描行到新的限制扫描行即可 */
             for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
             #endif
-            
+                
                 uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
                 uint8_t *src_ofs = src_addr + ((src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item)) * 1;
                 

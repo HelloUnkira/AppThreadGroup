@@ -6,7 +6,7 @@
 #define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
-#include "barcodegen_lvgl.h"
+#include "code128_lvgl.h"
 
 /*@brief 自定义控件:插件:条形码生成器
  *@param event 自定义控件事件
@@ -27,33 +27,28 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
         scui_widget_surface_draw_color(event->object, clip, bg_color);
     }
     
-    if (size >= barcodegen_lvgl_BUFFER_LEN_MAX) {
-        SCUI_LOG_ERROR("error");
+    if (data == NULL || size == 0) {
+        SCUI_LOG_ERROR("args invalid");
         return;
     }
     
-    uint8_t *barcode = SCUI_MEM_ALLOC(scui_mem_type_mix, barcodegen_lvgl_BUFFER_LEN_MAX);
-    uint8_t *data_t  = SCUI_MEM_ALLOC(scui_mem_type_mix, barcodegen_lvgl_DATA_LEN_MAX);
-    memcpy(data_t, data, size);
+    size_t len = code128_lvglestimate_len(data);
+    uint8_t *out_buf = SCUI_MEM_ALLOC(scui_mem_type_mix, len);
+    size_t barcode_w = code128_lvglencode_gs1(data, out_buf, len);
     
-    size_t bitsLen = 0;
-    enum barcodegen_lvgl_Type type = barcodegen_lvgl_128C;
-    if (!barcodegen_lvgl_encodeBinary(data_t, size, (uint8_t*)barcode, type, &bitsLen)) {
-         SCUI_LOG_ERROR("error");
-         SCUI_MEM_FREE(data_t);
-         SCUI_MEM_FREE(barcode);
-         return;
+    if (barcode_w > clip->w) {
+        SCUI_LOG_ERROR("clip too small:%d - %d", barcode_w , clip->w);
+        return;
     }
     
-    int scale  = clip->w / bitsLen;
-    int remain = clip->w % bitsLen;
-    int scaled = (bitsLen * scale);
+    int scale  = clip->w / barcode_w;
+    int scaled = (barcode_w * scale);
     int margin = (clip->w - scaled) / 2;
     
     scui_widget_t  *widget  = scui_handle_get(event->object);
     scui_surface_t *surface = widget->surface;
     uint32_t  pixel_byte = scui_pixel_bits(surface->format) / 8;
-    uintptr_t pixel_size = pixel_byte * scaled * scaled;
+    uintptr_t pixel_size = pixel_byte * scaled * clip->h;
     /* 为了加快绘制速度,这里使用SCUI_PIXEL_TYPE格式快速上色 */
     uint8_t *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
     uint32_t pixel_l = 0;
@@ -71,13 +66,15 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
     }
     }
     
-    for (int i = 0; i < bitsLen; i++) {
-         bool bit = barcodegen_lvgl_getModule(barcode, i);
-        for (int x = 0; x < scale; x++)
-            scui_pixel_by_cf(surface->format, &pixel[(0 * scaled + x) * pixel_byte], bit ? &pixel_l : &pixel_d);
+    for (int i = 0; i < barcode_w; i++) {
+         bool bit = out_buf[i];
+         SCUI_LOG_DEBUG_RAW("%1d", bit);
+         for (int x = 0; x < scale; x++)
+              scui_pixel_by_cf(surface->format, &pixel[(i * scale + x) * pixel_byte],
+                               bit ? &pixel_l : &pixel_d);
     }
     
-    for (int y = 1; y < scaled; y++)
+    for (int y = 1; y < clip->h; y++)
         scui_draw_line_copy(&pixel[(y * scaled + 0) * pixel_byte],
                             &pixel[(0 * scaled + 0) * pixel_byte], pixel_byte * scaled);
     
@@ -85,11 +82,11 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
         .pixel   = pixel,
         .format  = surface->format,
         .hor_res = scaled,
-        .ver_res = scaled,
+        .ver_res = clip->h,
         .alpha   = scui_widget_alpha_get(event->object),
     };
     
-    scui_point_t offset = {.x = margin, .y =  margin,};
+    scui_point_t offset = {.x = margin,};
     scui_area_t dst_clip = {0};
     scui_area_t dst_area = scui_widget_surface_clip(event->object);
     if (scui_area_inter(&dst_clip, &dst_area, clip))
@@ -97,6 +94,5 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
         scui_widget_surface_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
     
     SCUI_MEM_FREE(pixel);
-    SCUI_MEM_FREE(data_t);
-    SCUI_MEM_FREE(barcode);
+    SCUI_MEM_FREE(out_buf);
 }
