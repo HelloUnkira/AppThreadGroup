@@ -40,7 +40,6 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     
-    SCUI_PIXEL_TYPE pixel = {0};
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
@@ -54,64 +53,71 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
     scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
     
-    uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * SCUI_PIXEL_SIZE;
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
     uint8_t *src_addr = src_surface->pixel;
     /* 调色板数组(为空时计算,有时直接取): */
     scui_multi_t palette_len = 1 << src_glyph->bpp;
-    SCUI_PIXEL_TYPE *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * SCUI_PIXEL_SIZE);
-    memset(palette_table, 0, palette_len * SCUI_PIXEL_SIZE);
+    uint32_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * sizeof(uint32_t));
+    uint32_t filter = 0;
+    memset(palette_table, 0, palette_len * dst_byte);
     /* 起始色调和结束色调固定 */
-    palette_table[0] = scui_pixel_by_color(src_color.color_s);
-    palette_table[palette_len - 1] = scui_pixel_by_color(src_color.color_e);
-    SCUI_PIXEL_TYPE filter = scui_pixel_by_color(src_color.color_f);
+    scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
+    scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
+    scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
     
     /* 无渐变时: */
-    if (palette_table[0].full == palette_table[palette_len - 1].full) {
+    if (palette_table[0] == palette_table[palette_len - 1]) {
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-            uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+            uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * dst_byte;
             uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item + src_pixel_ofs) / (8 / src_glyph->bpp);
-            SCUI_PIXEL_TYPE *dst_addr_ofs = (void *)dst_ofs;
+
             uint8_t *src_addr_ofs = (void *)src_ofs;
             uint32_t idx_ofs = (src_clip_v.y + idx_line) * src_surface->hor_res + src_clip_v.x + idx_item;
             uint8_t  palette = scui_letter_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
             
+            uint32_t palette_color = palette_table[0];
+            scui_pixel_mix_alpha(dst_surface->format, &palette_color, palette);
             /* 过滤色调,去色 */
-            if (src_color.filter && scui_pixel_with_alpha(&palette_table[0], palette).full == filter.full)
+            if (src_color.filter && palette_color == filter)
                 continue;
             
             alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
-            pixel = scui_pixel_mix_with_alpha(&palette_table[0], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
-            // pixel = scui_pixel_blend_with_alpha(&palette_table[0], alpha, dst_addr_ofs, dst_surface->alpha);
-            scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
+                                dst_surface->format, &palette_table[0], alpha);
         }
     } else {
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-            uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * SCUI_PIXEL_SIZE;
+            uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * dst_byte;
             uint8_t *src_ofs = src_addr + (idx_line * src_surface->hor_res + idx_item + src_pixel_ofs) / (8 / src_glyph->bpp);
-            SCUI_PIXEL_TYPE  *dst_addr_ofs = (void *)dst_ofs;
+            
             uint8_t *src_addr_ofs = (void *)src_ofs;
             uint32_t idx_ofs = (src_clip_v.y + idx_line) * src_surface->hor_res + src_clip_v.x + idx_item;
             uint8_t  palette = scui_letter_bpp_palette(*src_addr_ofs, src_glyph->bpp, idx_ofs % (8 / src_glyph->bpp));
             
             if (palette != 0 && palette != palette_len - 1)
-            if (palette_table[palette].full == 0x00) {
-                SCUI_PIXEL_TYPE *pixel_1 = &palette_table[0];
-                SCUI_PIXEL_TYPE *pixel_2 = &palette_table[palette_len - 1];
+            if (palette_table[palette] == 0x00) {
+                uint32_t *pixel_1 = &palette_table[0];
+                uint32_t *pixel_2 = &palette_table[palette_len - 1];
                 scui_alpha_t alpha_1 = palette * (scui_alpha_cover / ((1 << src_glyph->bpp) - 1));
                 scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
-                palette_table[palette] = scui_pixel_mix_with_alpha(pixel_1, alpha_1, pixel_2, alpha_2);
+                
+                palette_table[palette] = palette_table[0];
+                scui_pixel_mix_with(dst_surface->format, &palette_table[palette], alpha_1,
+                                    dst_surface->format, &palette_table[palette_len - 1], alpha_2);
             }
             
+            uint32_t palette_color = palette_table[palette];
+            scui_pixel_mix_alpha(dst_surface->format, &palette_color, palette);
             /* 过滤色调,去色 */
-            if (src_color.filter && scui_pixel_with_alpha(&palette_table[palette], palette).full == filter.full)
+            if (src_color.filter && palette_color == filter)
                 continue;
             
             alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
-            pixel = scui_pixel_mix_with_alpha(&palette_table[palette], alpha, dst_addr_ofs, scui_alpha_cover - alpha);
-            // pixel = scui_pixel_blend_with_alpha(&palette_table[palette], alpha, dst_addr_ofs, dst_surface->alpha);
-            scui_mem_w(dst_addr_ofs, pixel, SCUI_PIXEL_TYPE);
+            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
+                                dst_surface->format, &palette_table[palette], alpha);
         }
     }
     

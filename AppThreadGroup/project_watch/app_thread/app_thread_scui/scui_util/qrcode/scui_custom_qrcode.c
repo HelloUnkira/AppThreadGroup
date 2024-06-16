@@ -68,33 +68,36 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     int scaled = (qr_size * scale);
     int margin = (clip->w - scaled) / 2;
     
-    uintptr_t pixel_size = SCUI_PIXEL_SIZE * scaled * scaled;
+    scui_widget_t  *widget  = scui_handle_get(event->object);
+    scui_surface_t *surface = widget->surface;
+    uint32_t  pixel_byte = scui_pixel_bits(surface->format) / 8;
+    uintptr_t pixel_size = pixel_byte * scaled * scaled;
     /* 为了加快绘制速度,这里使用SCUI_PIXEL_TYPE格式快速上色 */
-    SCUI_PIXEL_TYPE *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-    SCUI_PIXEL_TYPE  pixel_l = scui_pixel_by_color(color.color_l);
-    SCUI_PIXEL_TYPE  pixel_d = scui_pixel_by_color(color.color_d);
+    uint8_t *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
+    uint32_t pixel_l = 0;
+    uint32_t pixel_d = 0;
+    scui_pixel_by_color(surface->format, &pixel_l, color.color_l);
+    scui_pixel_by_color(surface->format, &pixel_d, color.color_d);
     
     if (pixel == NULL) {
         SCUI_LOG_WARN("memory deficit was caught");
         scui_image_cache_clear();
-    }
-    if (pixel == NULL) {
         pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-        if (pixel == NULL) {
-            scui_image_cache_visit();
-            SCUI_ASSERT(false);
-        }
+    if (pixel == NULL) {
+        scui_image_cache_visit();
+        SCUI_ASSERT(false);
+    }
     }
     
     for (int y = 0; y < scaled; y++)
     for (int x = 0; x < scaled; x++) {
          bool bit = qrcodegen_lvgl_getModule(qrcode, x / scale, y / scale);
-         pixel[y * scaled + x] = bit ? pixel_l : pixel_d;
+         scui_pixel_by_cf(surface->format, &pixel[(y * scaled + x) * pixel_byte], bit ? &pixel_l : &pixel_d);
     }
     
     scui_surface_t pattern = {
         .pixel   = pixel,
-        .format  = SCUI_PIXEL_FORMAT,
+        .format  = surface->format,
         .hor_res = scaled,
         .ver_res = scaled,
         .alpha   = scui_widget_alpha_get(event->object),

@@ -14,4 +14,3 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
                               uint8_t *data, uint32_t size);
 
 #endif
-

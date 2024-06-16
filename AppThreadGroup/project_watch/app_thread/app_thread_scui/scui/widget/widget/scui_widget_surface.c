@@ -47,7 +47,8 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     widget->clip_set.clip = widget->clip;
     /* 有独立画布的根控件不记录原点偏移,控件树永远相对独立画布移动 */
     /* 没有独立画布的根控件保留原点偏移,控件树永远相对绘制画布移动 */
-    if (widget->parent == SCUI_HANDLE_INVALID && scui_widget_surface_only(widget)) {
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
         widget->clip_set.clip.x = 0;
         widget->clip_set.clip.y = 0;
     }
@@ -55,9 +56,11 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     /* 画布的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        scui_area_t widget_clip = widget->clip_set.clip;
+        scui_area_t parent_clip = widget_parent->clip_set.clip;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip_set.clip, &widget_parent->clip_set.clip))
+        if (scui_area_inter(&clip_inter, &widget_clip, &parent_clip))
             widget->clip_set.clip = clip_inter;
         else
             widget->clip_set.clip = (scui_area_t){0};
@@ -275,12 +278,11 @@ void scui_widget_surface_draw_color(scui_handle_t handle, scui_area_t *clip,
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        SCUI_PIXEL_TYPE pixel = scui_pixel_by_color(color.color);
         /* 子剪切域要相对同步偏移 */
         scui_area_t dst_area = unit->clip;
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, &dst_area, clip))
-            scui_draw_area_fill(widget->surface, &dst_clip, &pixel, widget->alpha);
+            scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

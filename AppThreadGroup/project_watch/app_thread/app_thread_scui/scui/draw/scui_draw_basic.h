@@ -15,7 +15,7 @@ void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len);
  *@param src_alpha   像素点透明度
  */
 void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
-                         SCUI_PIXEL_TYPE *src_pixel,   scui_alpha_t src_alpha);
+                         scui_color_t     src_color,   scui_alpha_t src_alpha);
 
 /*@brief 区域拷贝(可以使用DMA-copy加速优化)
  *@param dst_surface 画布实例

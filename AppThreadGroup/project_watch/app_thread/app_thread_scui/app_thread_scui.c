@@ -20,13 +20,13 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     static uint8_t color = 0;
     static uint8_t alpha = 0;
     
-    SCUI_PIXEL_TYPE pixel = scui_pixel_by_color((scui_color8888_t){.full = 0xFFFFFFFF});
+    scui_color_t pixel = {.full = 0xFFFFFFFF};
     scui_draw_area_fill(surface, &surface->clip, &pixel, surface->alpha);
     
     pixel = (SCUI_PIXEL_TYPE){0};
-    // pixel.ch.r = color >> 3;
-    pixel.ch.g = color >> 2;
-    // pixel.ch.b = color >> 3;
+    // pixel.ch.r = color;
+    pixel.ch.g = color;
+    // pixel.ch.b = color;
     scui_draw_area_fill(surface, &surface->clip, &pixel, alpha);
     
     color += 1;
@@ -53,7 +53,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     scui_alpha_t alpha = 0xFF;
     
     /* 注意:半透明效果会反复叠加,先全屏刷新保持帧缓冲一致性 */
-    SCUI_PIXEL_TYPE pixel = scui_pixel_by_color((scui_color8888_t){.full = 0xFFFFFFFF});
+    scui_color_t pixel = {.full = 0xFFFFFFFF};
     scui_draw_area_fill(surface, &surface->clip, &pixel, surface->alpha);
     
     scui_image_cache_load(&image_unit);

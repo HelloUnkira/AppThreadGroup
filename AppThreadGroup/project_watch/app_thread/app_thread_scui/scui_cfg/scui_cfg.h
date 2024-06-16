@@ -8,9 +8,6 @@
 #define SCUI_DRV_DBUFFER                            (1)
 #define SCUI_DRV_PIXEL_DEPTH                        (16)
 
-/* 设备基础像素格式: */
-#define SCUI_PIXEL_FORMAT                           (scui_pixel_format_rgb565)
-
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT                       (2)
 

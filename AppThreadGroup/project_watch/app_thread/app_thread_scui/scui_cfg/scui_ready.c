@@ -11,8 +11,6 @@
  */
 void scui_ready(void)
 {
-    SCUI_ASSERT(SCUI_PIXEL_COND);
-    SCUI_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == SCUI_PIXEL_SIZE);
     /* 配置屏参 */
     scui_disp_set_hor_res(SCUI_DRV_HOR_RES);
     scui_disp_set_ver_res(SCUI_DRV_VER_RES);
@@ -25,26 +23,32 @@ void scui_ready(void)
         .w = SCUI_DRV_HOR_RES,
         .w = SCUI_DRV_VER_RES,
     };
-    SCUI_PIXEL_TYPE pixel = {0};
+    scui_color_t pixel = {0};
     scui_surface_t *surface_fb = NULL;
-    const uint32_t  surface_fb_size = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * SCUI_PIXEL_SIZE;
+    scui_coord_t surface_fb_byte = 0;
+    uint32_t surface_fb_size = 0;
+    
     surface_fb = scui_surface_fb_draw();
+    surface_fb->format  = scui_pixel_cf_bmp565;
+    surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
+    surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte;
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
-    surface_fb->format  = SCUI_PIXEL_FORMAT;
     surface_fb->hor_res = SCUI_DRV_HOR_RES;
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
     SCUI_ASSERT(surface_fb->pixel != NULL);
-    scui_draw_area_fill(surface_fb, &clip, &pixel, surface_fb->alpha);
+    scui_draw_area_fill(surface_fb, &clip, pixel, surface_fb->alpha);
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
-    surface_fb->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
-    surface_fb->format  = SCUI_PIXEL_FORMAT;
+    surface_fb->format  = scui_pixel_cf_bmp565;
+    surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
+    surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte;
+    surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->hor_res = SCUI_DRV_HOR_RES;
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
     SCUI_ASSERT(surface_fb->pixel != NULL);
-    scui_draw_area_fill(surface_fb, &clip, &pixel, surface_fb->alpha);
+    scui_draw_area_fill(surface_fb, &clip, pixel, surface_fb->alpha);
     #endif
     
     /* event register: */

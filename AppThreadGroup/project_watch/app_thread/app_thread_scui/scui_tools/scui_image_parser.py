@@ -6,13 +6,13 @@ import PIL.Image
 import lz4.block
 
 # 设备像素格式
-scui_pixel_format_0 = r'p4'
-scui_pixel_format_1 = r'rgb565'
-scui_pixel_format_2 = r'argb8565'
+scui_pixel_cf_0 = r'p4'
+scui_pixel_cf_1 = r'rgb565'
+scui_pixel_cf_2 = r'argb8565'
 # 可支持转化的像素格式表
-scui_pixel_format_list_0 = ['p4', 'p8']  # 纯色图,只有透明度(位深<=8)
-scui_pixel_format_list_1 = ['rgb565', 'rgb888']  # 色彩图,无透明度()
-scui_pixel_format_list_2 = ['argb8565', 'argb8888']  # 色彩图,有透明度
+scui_pixel_cf_list_0 = ['p4', 'p8']  # 纯色图,只有透明度(位深<=8)
+scui_pixel_cf_list_1 = ['rgb565', 'rgb888']  # 色彩图,无透明度()
+scui_pixel_cf_list_2 = ['argb8565', 'argb8888']  # 色彩图,有透明度
 # 句柄表偏移:图片描述
 scui_image_offset_name = 'SCUI_HANDLE_OFFSET_IMAGE'
 scui_image_offset_value = '0x2000 - 1'
@@ -108,7 +108,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
         pixel_stream = []
         # 迭代每一个像素点
         if image_raw.mode == 'P':
-            if scui_pixel_format_0 == r'p4':
+            if scui_pixel_cf_0 == r'p4':
                 for j in range(image_std.size[1]):
                     for i in range(0, image_std.size[0], 2):
                         r8_0, r8_1 = pixel_matrix[i + 0, j][0], pixel_matrix[i + 1, j][0]
@@ -119,7 +119,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
                 # for line in pixel_stream:
                 #     print(line)
         if image_raw.mode == 'RGB':
-            if scui_pixel_format_1 == r'rgb565':
+            if scui_pixel_cf_1 == r'rgb565':
                 for j in range(image_std.size[1]):
                     for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
@@ -131,7 +131,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
                 # for line in pixel_stream:
                 #     print(line)
         if image_raw.mode == 'RGBA':
-            if scui_pixel_format_2 == r'argb8565':
+            if scui_pixel_cf_2 == r'argb8565':
                 for j in range(image_std.size[1]):
                     for i in range(image_std.size[0]):
                         r8 = pixel_matrix[i, j][0]
@@ -179,13 +179,13 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
         scui_image_parser_c.write('\t.pixel.size_mem\t = %s,\n' % hex(pixel_mem_len))
         scui_image_parser_c.write('\t.status\t\t\t = %s,\n' % 'scui_image_status_lz4')
         if image_raw.mode == 'P':
-            if scui_pixel_format_0 == r'p4':
+            if scui_pixel_cf_0 == r'p4':
                 scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_p4')
         if image_raw.mode == 'RGB':
-            if scui_pixel_format_1 == r'rgb565':
+            if scui_pixel_cf_1 == r'rgb565':
                 scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_rgb565')
         if image_raw.mode == 'RGBA':
-            if scui_pixel_format_2 == r'argb8565':
+            if scui_pixel_cf_2 == r'argb8565':
                 scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_argb8565')
         scui_image_parser_c.write('};\n\n')
         # 信息记录
@@ -238,14 +238,14 @@ class ScuiRedirectPrint(object):
 # 主流程
 def scui_image_parser():
     # 解析支持检查
-    if scui_pixel_format_0 != r'p4':
-        print('unsupport pixel format yet:', scui_pixel_format_0)
+    if scui_pixel_cf_0 != r'p4':
+        print('unsupport pixel format yet:', scui_pixel_cf_0)
         return
-    if scui_pixel_format_1 != r'rgb565':
-        print('unsupport pixel format yet:', scui_pixel_format_1)
+    if scui_pixel_cf_1 != r'rgb565':
+        print('unsupport pixel format yet:', scui_pixel_cf_1)
         return
-    if scui_pixel_format_2 != r'argb8565':
-        print('unsupport pixel format yet:', scui_pixel_format_2)
+    if scui_pixel_cf_2 != r'argb8565':
+        print('unsupport pixel format yet:', scui_pixel_cf_2)
         return
     # 参数列表:src相对路径 dst相对路径 项目名称
     if len(sys.argv) != 4:

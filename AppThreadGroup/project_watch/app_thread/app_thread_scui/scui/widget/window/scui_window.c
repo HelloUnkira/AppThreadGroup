@@ -14,10 +14,9 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_window);
-    
     /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
     SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(maker->widget.type == scui_widget_type_window);
     
     /* 创建窗口控件实例 */
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
@@ -25,15 +24,14 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建surface */
     if (maker->buffer) {
-        scui_coord_t hor_res = scui_disp_get_hor_res();
-        scui_coord_t ver_res = scui_disp_get_ver_res();
-        uint32_t surface_res = hor_res * ver_res * SCUI_PIXEL_SIZE;
+        scui_coord_t hor_res = maker->widget.clip.w;
+        scui_coord_t ver_res = maker->widget.clip.h;
+        scui_coord_t src_byte = scui_pixel_bits(scui_pixel_cf_bmp565) / 8;
+        uint32_t surface_res = hor_res * ver_res * src_byte;
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
-        SCUI_ASSERT(maker->widget.clip.x == 0 && maker->widget.clip.w == hor_res);
-        SCUI_ASSERT(maker->widget.clip.y == 0 && maker->widget.clip.h == ver_res);
-        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_mix,  sizeof(scui_surface_t));
+        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_surface_t));
         window->widget.surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-        window->widget.surface->format  = SCUI_PIXEL_FORMAT;
+        window->widget.surface->format  = scui_pixel_cf_bmp565;
         window->widget.surface->hor_res = hor_res;
         window->widget.surface->ver_res = ver_res;
         window->widget.surface->alpha   = scui_alpha_cover;
@@ -42,13 +40,11 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         if (window->widget.surface->pixel == NULL) {
             SCUI_LOG_WARN("memory deficit was caught");
             scui_image_cache_clear();
-        }
-        if (window->widget.surface->pixel == NULL) {
             window->widget.surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-            if (window->widget.surface->pixel == NULL) {
-                scui_image_cache_visit();
-                SCUI_ASSERT(false);
-            }
+        if (window->widget.surface->pixel == NULL) {
+            scui_image_cache_visit();
+            SCUI_ASSERT(false);
+        }
         }
     }
     

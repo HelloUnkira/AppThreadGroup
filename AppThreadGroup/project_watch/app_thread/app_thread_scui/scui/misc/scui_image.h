@@ -45,7 +45,7 @@ typedef struct {
  *@param pixel_format 像素格式
  */
 void scui_image_format_to_pixel_format(scui_image_format_t *image_format,
-                                       scui_pixel_format_t *pixel_format);
+                                       scui_pixel_cf_t *pixel_format);
 
 /*@brief 统计图像列表排列尺寸
  *       统计图像按水平或垂直排列时的宽度或高度

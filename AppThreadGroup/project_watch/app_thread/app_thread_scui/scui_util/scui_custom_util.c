@@ -406,51 +406,56 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
             return;
         }
         
-        uintptr_t pixel_size = SCUI_PIXEL_SIZE * clip->w * clip->h;
-        SCUI_PIXEL_TYPE *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-        SCUI_PIXEL_TYPE  color_s = scui_pixel_by_color(color.color_s);
-        SCUI_PIXEL_TYPE  color_e = scui_pixel_by_color(color.color_e);
-        SCUI_PIXEL_TYPE  pixel_a = {0};
+        scui_widget_t  *widget  = scui_handle_get(event->object);
+        scui_surface_t *surface = widget->surface;
+        uint32_t  pixel_byte = scui_pixel_bits(surface->format) / 8;
+        uintptr_t pixel_size = pixel_byte * clip->w * clip->h;
+        uint8_t  *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
+        uint32_t  color_s = 0;
+        uint32_t  color_e = 0;
+        uint32_t  pixel_a = 0;
+        scui_pixel_by_color(surface->format, &color_s, color.color_s);
+        scui_pixel_by_color(surface->format, &color_e, color.color_e);
         
         if (pixel == NULL) {
             SCUI_LOG_WARN("memory deficit was caught");
             scui_image_cache_clear();
-        }
-        if (pixel == NULL) {
             pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-            if (pixel == NULL) {
-                scui_image_cache_visit();
-                SCUI_ASSERT(false);
-            }
+        if (pixel == NULL) {
+            scui_image_cache_visit();
+            SCUI_ASSERT(false);
+        }
         }
         
         if (way) {
             /* 垂直渐变 */
             for (scui_coord_t y = 0; y < clip->h; y++) {
                 uint8_t percent = (scui_multi_t)y * 100 / clip->h;
-                scui_alpha_t alpha_1 = scui_alpha_by_percent(100 - percent);
+                scui_alpha_t alpha_1 = scui_alpha_pct(100 - percent);
                 scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
-                pixel_a = scui_pixel_mix_with_alpha(&color_s, alpha_1, &color_e, alpha_2);
-            for (scui_coord_t x = 0; x < clip->w; x++) {
-                pixel[y * clip->w + x] = pixel_a;
-            }
+                pixel_a = color_s;
+                scui_pixel_mix_with(surface->format, &pixel_a, alpha_1,
+                                    surface->format, &color_e, alpha_2);
+            for (scui_coord_t x = 0; x < clip->w; x++)
+                scui_pixel_by_cf(surface->format, &pixel[(y * clip->w + x) * pixel_byte], &pixel_a);
             }
         } else {
             /* 水平渐变 */
             for (scui_coord_t x = 0; x < clip->w; x++) {
                 uint8_t percent = (scui_multi_t)x * 100 / clip->w;
-                scui_alpha_t alpha_1 = scui_alpha_by_percent(100 - percent);
+                scui_alpha_t alpha_1 = scui_alpha_pct(100 - percent);
                 scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
-                pixel_a = scui_pixel_mix_with_alpha(&color_s, alpha_1, &color_e, alpha_2);
-            for (scui_coord_t y = 0; y < clip->h; y++) {
-                pixel[y * clip->w + x] = pixel_a;
-            }
+                pixel_a = color_s;
+                scui_pixel_mix_with(surface->format, &pixel_a, alpha_1,
+                                    surface->format, &color_e, alpha_2);
+            for (scui_coord_t y = 0; y < clip->h; y++)
+                scui_pixel_by_cf(surface->format, &pixel[(y * clip->w + x) * pixel_byte], &pixel_a);
             }
         }
         
         scui_surface_t pattern = {
             .pixel   = pixel,
-            .format  = SCUI_PIXEL_FORMAT,
+            .format  = surface->format,
             .hor_res = clip->w,
             .ver_res = clip->h,
             .alpha   = scui_widget_alpha_get(event->object),
