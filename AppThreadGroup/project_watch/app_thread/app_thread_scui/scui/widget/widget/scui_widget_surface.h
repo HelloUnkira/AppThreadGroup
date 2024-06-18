@@ -1,6 +1,20 @@
 #ifndef SCUI_WIDGET_SURFACE_H
 #define SCUI_WIDGET_SURFACE_H
 
+/*@brief 控件画布创建
+ *@param widget  控件实例
+ *@param format  画布格式
+ *@param hor_res 画布水平尺寸
+ *@param ver_res 画布垂直尺寸
+ */
+void scui_widget_surface_create(scui_widget_t *widget,  scui_pixel_cf_t format,
+                                scui_coord_t   hor_res, scui_coord_t    ver_res);
+
+/*@brief 控件画布销毁
+ *@param widget 控件实例
+ */
+void scui_widget_surface_destroy(scui_widget_t *widget);
+
 /*@brief 控件画布为独立画布
  *@param widget 控件实例
  */

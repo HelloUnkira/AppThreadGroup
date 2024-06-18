@@ -93,7 +93,7 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
         static uint8_t cnt = 0;
         cnt++;
         
-        if (cnt % (100 / SCUI_ANIMA_TICK) == 0)
+        if (cnt % (1000 / SCUI_ANIMA_TICK) == 0)
             scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {

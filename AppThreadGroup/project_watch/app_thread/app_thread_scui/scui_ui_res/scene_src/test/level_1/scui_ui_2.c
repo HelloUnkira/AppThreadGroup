@@ -3,7 +3,7 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2    /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
 
@@ -161,7 +161,10 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             }
             #endif
         }
+        
+        scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
+        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
         
         scui_widget_event_mask_keep(event);
         break;

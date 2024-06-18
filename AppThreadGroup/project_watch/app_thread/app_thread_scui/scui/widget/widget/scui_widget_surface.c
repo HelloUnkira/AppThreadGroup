@@ -7,6 +7,53 @@
 
 #include "scui.h"
 
+/*@brief 控件画布创建
+ *@param widget  控件实例
+ *@param format  画布格式
+ *@param hor_res 画布水平尺寸
+ *@param ver_res 画布垂直尺寸
+ */
+void scui_widget_surface_create(scui_widget_t *widget,  scui_pixel_cf_t format,
+                                scui_coord_t   hor_res, scui_coord_t    ver_res)
+{
+    SCUI_ASSERT(widget->surface == NULL && hor_res != 0 && ver_res != 0);
+    widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
+    memset(widget->surface, 0, sizeof(scui_surface_t));
+    widget->surface->format  = format;
+    widget->surface->hor_res = hor_res;
+    widget->surface->ver_res = ver_res;
+    widget->surface->alpha   = scui_alpha_cover;
+    
+    if (widget->surface->format == scui_pixel_cf_def)
+        widget->surface->format  = SCUI_PIXEL_CF_DEF;
+    
+    scui_coord_t src_byte    = scui_pixel_bits(widget->surface->format) / 8;
+    scui_coord_t src_remain  = sizeof(scui_color_limit_t) - src_byte;
+    scui_multi_t res_surface = hor_res * ver_res * src_byte + src_remain;
+    
+    widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
+    /* 添加一个检测机制,如果surface不可创建时,清空image内存重新创建 */
+    if (widget->surface->pixel == NULL) {
+        SCUI_LOG_WARN("memory deficit was caught");
+        scui_image_cache_clear();
+        widget->surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
+    if (widget->surface->pixel == NULL) {
+        scui_image_cache_visit();
+        SCUI_ASSERT(false);
+    }
+    }
+}
+
+/*@brief 控件画布销毁
+ *@param widget 控件实例
+ */
+void scui_widget_surface_destroy(scui_widget_t *widget)
+{
+    SCUI_MEM_FREE(widget->surface->pixel);
+    SCUI_MEM_FREE(widget->surface);
+    widget->surface = NULL;
+}
+
 /*@brief 控件画布为独立画布
  *@param widget 控件实例
  */
@@ -329,6 +376,7 @@ void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_tick_elapse_us(true);
     #endif
     
+    #if 1
     /* 这里有一个优化点(主要用于全局背景绘制) */
     /* 条件达到时,将资源直接加载到绘制画布上即可 */
     if ((widget->surface->format == scui_pixel_cf_bmp565 ||
@@ -337,8 +385,19 @@ void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
          widget->clip_set.clip.h == scui_disp_get_ver_res() &&
          scui_area_equal(&widget->clip_set.clip, clip)) {
          scui_image_src_read(image_inst, widget->surface->pixel);
+         #if 1
+         /* 上面默认使用的全局截切域 */
+         /* 所以可能存在覆盖,为所有子控件补充剪切域 */
+         scui_widget_child_list_btra(widget, idx) {
+             scui_handle_t handle = widget->child_list[idx];
+             scui_widget_t *child = scui_handle_get(handle);
+             scui_widget_clip_reset(child, &widget->clip_set.clip, true);
+             scui_widget_clip_update(child);
+         }
+         #endif
          return;
     }
+    #endif
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);

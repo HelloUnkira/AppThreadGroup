@@ -720,7 +720,7 @@ void scui_scroll_update_layout(scui_event_t *event)
     SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
     
     if (scui_widget_style_is_show(handle))
-        scui_widget_draw(handle, NULL, true);
+        scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 滚动控件事件流程合并

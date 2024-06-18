@@ -24,33 +24,11 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建surface */
     if (maker->buffer) {
+        /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
+        scui_pixel_cf_t p_cf = maker->format;
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;
-        scui_pixel_cf_t p_cf = maker->format;
-        if (p_cf == scui_pixel_cf_def)
-            p_cf  = SCUI_PIXEL_CF_DEF;
-        
-        scui_coord_t src_byte = scui_pixel_bits(p_cf) / 8;
-        scui_coord_t src_byte_remain = sizeof(scui_color_limit_t) - src_byte;
-        uint32_t surface_res = hor_res * ver_res * src_byte + src_byte_remain;
-        /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
-        window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_surface_t));
-        window->widget.surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-        window->widget.surface->format  = p_cf;
-        window->widget.surface->hor_res = hor_res;
-        window->widget.surface->ver_res = ver_res;
-        window->widget.surface->alpha   = scui_alpha_cover;
-        
-        /* 添加一个检测机制,如果surface不可创建时,清空image内存重新创建 */
-        if (window->widget.surface->pixel == NULL) {
-            SCUI_LOG_WARN("memory deficit was caught");
-            scui_image_cache_clear();
-            window->widget.surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-        if (window->widget.surface->pixel == NULL) {
-            scui_image_cache_visit();
-            SCUI_ASSERT(false);
-        }
-        }
+        scui_widget_surface_create(&window->widget, p_cf, hor_res, ver_res);
     }
     
     /* 创建基础控件实例 */
@@ -86,10 +64,8 @@ void scui_window_destroy(scui_handle_t handle)
     scui_widget_destroy(&window->widget);
     
     /* 回收surface */
-    if (scui_widget_surface_only(widget)) {
-        SCUI_MEM_FREE(window->widget.surface->pixel);
-        SCUI_MEM_FREE(window->widget.surface);
-    }
+    if (scui_widget_surface_only(widget))
+        scui_widget_surface_destroy(widget);
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);

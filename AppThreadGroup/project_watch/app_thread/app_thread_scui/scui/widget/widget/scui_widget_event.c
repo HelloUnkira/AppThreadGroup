@@ -294,6 +294,10 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 绘制事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_draw) {
+        
+        if (scui_widget_event_check_execute(event))
+            SCUI_LOG_INFO("widget:%d", widget->myself);
+        
         bool surface_only = scui_widget_surface_only(widget);
         /* 无独立画布时不在draw绘制,转为到refr后绘制 */
         if (widget->parent == SCUI_HANDLE_INVALID) {

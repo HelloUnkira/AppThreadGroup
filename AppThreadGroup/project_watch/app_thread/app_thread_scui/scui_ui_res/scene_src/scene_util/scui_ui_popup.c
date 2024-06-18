@@ -48,7 +48,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
                 else
                     popup_alpha  = 0;
                 
-                SCUI_LOG_WARN("popup alpha:%d", popup_alpha);
+                SCUI_LOG_INFO("popup alpha:%d", popup_alpha);
                 scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
             }
