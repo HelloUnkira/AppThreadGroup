@@ -91,9 +91,11 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
  *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
  *       边界对齐:则边界中心点与子控件中心点偏移量(最小)
  *@param handle 控件句柄
+ *@param target 控件句柄(目标控件)
  *@param offset 偏移量
  *@param pos    对齐目标
  */
-bool scui_widget_align_pos_calc(scui_handle_t handle, scui_point_t *offset, scui_event_pos_t pos);
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
+                                scui_point_t *offset, scui_event_pos_t pos);
 
 #endif

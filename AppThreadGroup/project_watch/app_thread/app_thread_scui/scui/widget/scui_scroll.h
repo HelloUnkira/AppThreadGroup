@@ -103,6 +103,12 @@ void scui_scroll_layout(scui_handle_t handle);
  */
 void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
 
+/*@brief 滚动控件中心对齐子控件
+ *@param handle 滚动控件句柄
+ *@param target 中心对齐子控件
+ */
+void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target);
+
 /*@brief 滚动控件动画回调
  */
 void scui_scroll_anima_start(void *instance);

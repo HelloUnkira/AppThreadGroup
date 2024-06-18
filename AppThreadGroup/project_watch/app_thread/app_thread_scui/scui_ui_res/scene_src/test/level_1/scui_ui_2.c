@@ -52,11 +52,21 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
-    case scui_event_anima_elapse:
+    case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
+        
+        /* 滚动中心子控件 */
+        scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
+        static scui_handle_t handle_scroll_rcd = SCUI_HANDLE_INVALID;
+        scui_scroll_center_target(scui_ui_res_local->scroll, &handle_scroll);
+        if (handle_scroll_rcd != handle_scroll) {
+            handle_scroll_rcd  = handle_scroll;
+            if (handle_scroll != SCUI_HANDLE_INVALID)
+                SCUI_LOG_WARN("widget center:%d", handle_scroll);
+        }
         
         if (scui_ui_res_local->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
             scui_ui_res_local->bar_wait += SCUI_ANIMA_TICK;
@@ -72,6 +82,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         }
         break;
+    }
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         

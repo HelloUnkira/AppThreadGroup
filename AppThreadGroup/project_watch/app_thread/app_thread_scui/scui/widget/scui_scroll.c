@@ -243,6 +243,31 @@ void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
         scroll->fling_page  = 1;
 }
 
+/*@brief 滚动控件中心对齐子控件
+ *@param handle 滚动控件句柄
+ *@param target 中心对齐子控件
+ */
+void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    SCUI_ASSERT(scroll->pos == scui_event_pos_c);
+    SCUI_ASSERT(target != NULL);
+    *target = SCUI_HANDLE_INVALID;
+    
+    scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
+    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
+        return;
+    
+    scui_point_t offset = {0};
+    scui_widget_align_pos_calc(handle, target, &offset, scui_event_pos_c);
+}
+
 /*@brief 滚动控件动画回调
  */
 void scui_scroll_anima_start(void *instance)
@@ -966,7 +991,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         scui_point_t offset  = {0};
         /* 中心点对齐,开始校正 */
         if (scroll->pos == scui_event_pos_c) {
-            retval = scui_widget_align_pos_calc(handle, &offset, scui_event_pos_c);
+            retval = scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_c);
             if (retval) {
                 /* 已经校正完毕,不再校正 */
                 if (offset.x == 0 && offset.y == 0)
@@ -1002,19 +1027,19 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         offset.y = scui_coord_max;
         
         if ((scroll->pos & scui_event_pos_l) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, &offset, scui_event_pos_l);
+            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_l);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_event_pos_r) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, &offset, scui_event_pos_r);
+            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_r);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_event_pos_u) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, &offset, scui_event_pos_u);
+            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_u);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_event_pos_d) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, &offset, scui_event_pos_d);
+            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_d);
             offset4[offset_num++] = offset;
         }
             
