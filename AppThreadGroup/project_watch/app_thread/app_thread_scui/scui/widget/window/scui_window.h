@@ -12,6 +12,9 @@ typedef struct {
     scui_widget_t       widget;
     uint8_t             level:6;        /* 窗口所在层级(数字越大越高) */
     uint8_t             buffer:1;       /* 窗口是否使用独立画布 */
+    uint8_t             resident:1;     /* 窗口常驻标记(特殊使用) */
+    uint8_t             hang_only:1;    /* 窗口悬挂标记(特殊使用) */
+    scui_pixel_cf_t     format;         /* 窗口独立画布基础像素格式 */
     /* 内部域: */
     scui_window_cfg_t   cfg;            /* 窗口配置属性 */
 } scui_window_t;
@@ -21,6 +24,9 @@ typedef struct {
     scui_widget_maker_t widget;
     uint8_t             level:6;        /* 窗口所在层级(数字越大越高) */
     uint8_t             buffer:1;       /* 窗口是否使用独立画布 */
+    uint8_t             resident:1;     /* 窗口常驻标记(特殊使用) */
+    uint8_t             hang_only:1;    /* 窗口悬挂标记(特殊使用) */
+    scui_pixel_cf_t     format;         /* 窗口窗口独立画布基础像素格式 */
 } scui_window_maker_t;
 #pragma pack(pop)
 

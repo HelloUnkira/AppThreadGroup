@@ -635,22 +635,24 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.trans             = true,
 	.widget.style.sched_anima       = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.clip.x                  = 58,
+	.widget.clip.y                  = 60,
+	.widget.clip.w                  = 350,
+	.widget.clip.h                  = 100,
 	.widget.myself                  = SCUI_UI_SCENE_POPUP,
 	.widget.event_cb                = scui_ui_scene_popup_event_proc,
 	.widget.child_num               = 6,
-	.level                          = 0,
-	.buffer                         = false,
+	.level                          = 10,
+	.buffer                         = true,
+	.resident                       = true,
+	.hang_only                      = true,
+	.format                         = scui_pixel_cf_bmp8565,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 	.widget.type                    = scui_widget_type_custom,
 	.widget.style.trans             = true,
-	.widget.clip.x                  = 58,
-	.widget.clip.y                  = 60,
 	.widget.clip.w                  = 350,
 	.widget.clip.h                  = 100,
 	.widget.myself                  = SCUI_UI_SCENE_POPUP_BG,

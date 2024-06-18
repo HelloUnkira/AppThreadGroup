@@ -15,12 +15,12 @@ void scui_image_format_to_pixel_format(scui_image_format_t *image_format,
                                        scui_pixel_cf_t *pixel_format)
 {
     switch (*image_format) {
-    case scui_image_format_rgb565:      *pixel_format = scui_pixel_cf_bmp565;           break;
-    case scui_image_format_rgb888:      *pixel_format = scui_pixel_cf_bmp888;           break;
-    case scui_image_format_argb8565:    *pixel_format = scui_pixel_cf_bmp8565;          break;
-    case scui_image_format_argb8888:    *pixel_format = scui_pixel_cf_bmp8888;          break;
-    case scui_image_format_p4:          *pixel_format = scui_pixel_cf_palette4;         break;
-    case scui_image_format_p8:          *pixel_format = scui_pixel_cf_palette8;         break;
+    case scui_image_format_palette4:    *pixel_format = scui_pixel_cf_palette4;         break;
+    case scui_image_format_palette8:    *pixel_format = scui_pixel_cf_palette8;         break;
+    case scui_image_format_bmp565:      *pixel_format = scui_pixel_cf_bmp565;           break;
+    case scui_image_format_bmp888:      *pixel_format = scui_pixel_cf_bmp888;           break;
+    case scui_image_format_bmp8565:     *pixel_format = scui_pixel_cf_bmp8565;          break;
+    case scui_image_format_bmp8888:     *pixel_format = scui_pixel_cf_bmp8888;          break;
     default:                            SCUI_LOG_ERROR("unsupported image pixel");      break;
     }
 }

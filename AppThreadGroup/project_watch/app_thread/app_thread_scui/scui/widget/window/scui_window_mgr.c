@@ -124,6 +124,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     scui_surface_t *dst_surface = scui_surface_fb_draw();
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t  *widget = list[idx];
+        scui_window_t  *window = (void *)widget;
         scui_surface_t *src_surface = widget->surface;
         scui_area_t src_clip = widget->clip_set.clip;
         /* 独立画布将窗口偏移补充到画布上 */
@@ -158,6 +159,28 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         dst_clip = out_clip;
         src_clip = tmp_clip;
         
+        /* 当前窗口独立于管理之外时,直接渲染 */
+        if (window->hang_only) {
+            scui_point_t dst_offset = {
+                .x = src_clip.x,
+                .y = src_clip.y,
+            };
+            if (!scui_area_limit_offset(&dst_clip, &dst_offset))
+                 continue;
+            src_clip.x = 0;
+            src_clip.y = 0;
+            src_clip.w = src_surface->hor_res,
+            src_clip.h = src_surface->ver_res,
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+            continue;
+        }
+        
+        /* 单一窗口直接渲染 */
+        if (num == 1) {
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+            continue;
+        }
+        
         /* 多窗口叠加不应用特效渲染 */
         if (scui_window_float_running()) {
             scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
@@ -170,10 +193,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             continue;
         }
         
-        if (num == 1) {
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
-            continue;
-        }
+        /* 场景切换满足全局目标 */
+        SCUI_ASSERT(src_surface->hor_res == scui_disp_get_hor_res());
+        SCUI_ASSERT(src_surface->ver_res == scui_disp_get_ver_res());
         
         if (scui_window_mgr.switch_args.type == scui_window_switch_center_in ||
             scui_window_mgr.switch_args.type == scui_window_switch_center_out) {

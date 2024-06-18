@@ -39,7 +39,7 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     if (scui_area_empty(&draw_area))
         return;
     
-    uint32_t src_pixel = 0;
+    scui_color_limit_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     /* 在src_surface.clip中的draw_area中填满pixel */
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
@@ -176,10 +176,12 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     
     /* 像素格式不带透明度, 像素格式带透明度 */
-    if ((dst_surface->format == scui_pixel_cf_bmp565 && src_surface->format == scui_pixel_cf_bmp565)  ||
-        (dst_surface->format == scui_pixel_cf_bmp888 && src_surface->format == scui_pixel_cf_bmp888)  ||
-        (dst_surface->format == scui_pixel_cf_bmp565 && src_surface->format == scui_pixel_cf_bmp8565) ||
-        (dst_surface->format == scui_pixel_cf_bmp888 && src_surface->format == scui_pixel_cf_bmp8888)) {
+    if ((dst_surface->format == scui_pixel_cf_bmp565  && src_surface->format == scui_pixel_cf_bmp565)  ||
+        (dst_surface->format == scui_pixel_cf_bmp888  && src_surface->format == scui_pixel_cf_bmp888)  ||
+        (dst_surface->format == scui_pixel_cf_bmp565  && src_surface->format == scui_pixel_cf_bmp8565) ||
+        (dst_surface->format == scui_pixel_cf_bmp888  && src_surface->format == scui_pixel_cf_bmp8888) ||
+        (dst_surface->format == scui_pixel_cf_bmp8565 && src_surface->format == scui_pixel_cf_bmp8565) ||
+        (dst_surface->format == scui_pixel_cf_bmp8888 && src_surface->format == scui_pixel_cf_bmp8888)) {
         
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -203,8 +205,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     if (src_surface->format == scui_pixel_cf_palette4) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 4;
-        uint32_t palette_table[1 << 4] = {0};
-        uint32_t filter = 0;
+        scui_color_limit_t palette_table[1 << 4] = {0};
+        scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
@@ -255,8 +257,8 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     if (src_surface->format == scui_pixel_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 8;
-        uint32_t palette_table[1 << 8] = {0};
-        uint32_t filter = 0;
+        scui_color_limit_t palette_table[1 << 8] = {0};
+        scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);

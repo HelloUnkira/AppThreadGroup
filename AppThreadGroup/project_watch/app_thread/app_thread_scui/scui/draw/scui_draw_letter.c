@@ -24,6 +24,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     
     scui_surface_t glyph_surface = {
         .pixel   = src_glyph->bitmap,
+        .format  = SCUI_PIXEL_CF_DEF,
         .hor_res = src_glyph->box_w,
         .ver_res = src_glyph->box_h,
     };
@@ -58,8 +59,8 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     uint8_t *src_addr = src_surface->pixel;
     /* 调色板数组(为空时计算,有时直接取): */
     scui_multi_t palette_len = 1 << src_glyph->bpp;
-    uint32_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * sizeof(uint32_t));
-    uint32_t filter = 0;
+    scui_color_limit_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * sizeof(scui_color_limit_t));
+    scui_color_limit_t  filter = 0;
     memset(palette_table, 0, palette_len * dst_byte);
     /* 起始色调和结束色调固定 */
     scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
@@ -85,7 +86,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             
             alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
             scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                dst_surface->format, &palette_table[0], alpha);
+                                src_surface->format, &palette_table[0], alpha);
         }
     } else {
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -106,7 +107,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
                 
                 palette_table[palette] = palette_table[0];
                 scui_pixel_mix_with(dst_surface->format, &palette_table[palette], alpha_1,
-                                    dst_surface->format, &palette_table[palette_len - 1], alpha_2);
+                                    src_surface->format, &palette_table[palette_len - 1], alpha_2);
             }
             
             uint32_t palette_color = palette_table[palette];
@@ -117,7 +118,7 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
             
             alpha = (uint32_t)src_alpha * palette / scui_alpha_cover;
             scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                dst_surface->format, &palette_table[palette], alpha);
+                                src_surface->format, &palette_table[palette], alpha);
         }
     }
     

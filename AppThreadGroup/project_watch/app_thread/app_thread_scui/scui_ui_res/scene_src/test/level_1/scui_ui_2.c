@@ -191,9 +191,11 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_s:
+        SCUI_LOG_INFO("scui_event_widget_scroll_s");
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
-        SCUI_LOG_INFO("scui_event_widget_scroll_s");
+        
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
         scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
@@ -201,13 +203,13 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         // scui_widget_clip_check(event->object, true);
-        
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_c:
+        SCUI_LOG_INFO("scui_event_widget_scroll_c");
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
-        SCUI_LOG_INFO("scui_event_widget_scroll_c");
+        
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
         scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
@@ -215,13 +217,13 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         // scui_widget_clip_check(event->object, true);
-        
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_e:
+        SCUI_LOG_INFO("scui_event_widget_scroll_e");
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
-        SCUI_LOG_INFO("scui_event_widget_scroll_e");
+        
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
         scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
@@ -229,8 +231,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
         scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         // scui_widget_clip_check(event->object, true);
-        
-        scui_widget_event_mask_keep(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
@@ -255,9 +255,9 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
-             return;
+             break;
         
         scui_area_t   clip = {0};
         scui_color_t  color_black = {0};
@@ -282,8 +282,6 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
         scui_coord_t angle_e = angle_s + angle_d;
         SCUI_LOG_INFO("angle:<s:%d,e:%d>", angle_s, angle_e);
         scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, angle_s, color_white, angle_e, 100, image_edge);
-        
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:

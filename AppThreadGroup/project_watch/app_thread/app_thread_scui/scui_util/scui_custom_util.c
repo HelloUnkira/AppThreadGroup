@@ -411,9 +411,9 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
         uint32_t  pixel_byte = scui_pixel_bits(surface->format) / 8;
         uintptr_t pixel_size = pixel_byte * clip->w * clip->h;
         uint8_t  *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-        uint32_t  color_s = 0;
-        uint32_t  color_e = 0;
-        uint32_t  pixel_a = 0;
+        scui_color_limit_t color_s = 0;
+        scui_color_limit_t color_e = 0;
+        scui_color_limit_t pixel_a = 0;
         scui_pixel_by_color(surface->format, &color_s, color.color_s);
         scui_pixel_by_color(surface->format, &color_e, color.color_e);
         

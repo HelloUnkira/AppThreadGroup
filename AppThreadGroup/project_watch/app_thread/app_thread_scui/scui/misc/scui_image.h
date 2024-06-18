@@ -5,12 +5,12 @@
  *       枚举值为(bits << 8) | index
  */
 typedef enum {
-    scui_image_format_p4        = 0x0400,
-    scui_image_format_p8        = 0x0800,
-    scui_image_format_rgb565    = 0x1600,
-    scui_image_format_rgb888    = 0x2401,
-    scui_image_format_argb8565  = 0x2400,
-    scui_image_format_argb8888  = 0x3201,
+    scui_image_format_palette4,
+    scui_image_format_palette8,
+    scui_image_format_bmp565,
+    scui_image_format_bmp888,
+    scui_image_format_bmp8565,
+    scui_image_format_bmp8888,
 } scui_image_format_t;
 
 /*@brief 图片状态

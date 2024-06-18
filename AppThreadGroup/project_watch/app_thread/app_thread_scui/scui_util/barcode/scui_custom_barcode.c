@@ -51,8 +51,8 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
     uintptr_t pixel_size = pixel_byte * scaled * clip->h;
     /* 为了加快绘制速度,这里使用SCUI_PIXEL_TYPE格式快速上色 */
     uint8_t *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-    uint32_t pixel_l = 0;
-    uint32_t pixel_d = 0;
+    scui_color_limit_t pixel_l = 0;
+    scui_color_limit_t pixel_d = 0;
     scui_pixel_by_color(surface->format, &pixel_l, color.color_l);
     scui_pixel_by_color(surface->format, &pixel_d, color.color_d);
     

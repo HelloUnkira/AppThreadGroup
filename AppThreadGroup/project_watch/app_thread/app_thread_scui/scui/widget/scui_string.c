@@ -29,7 +29,9 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->args        = maker->args;
     string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
     string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
+    string->unit_s      = maker->unit_s;
     
+    string->unit_over   = false;
     string->unit_way    = 1;
     
     /* 尝试初始更新字符串文本信息 */
@@ -125,6 +127,18 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     }
 }
 
+/*@brief 字符串控件滚动结束(单次滚动)
+ *@param handle   字符串控件句柄
+ *@retval 是否结束
+ */
+bool scui_string_scroll_over(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_string_t *string = (void *)widget;
+    
+    return string->unit_over;
+}
+
 /*@brief 字符串控件事件处理回调
  *@param event 事件
  */
@@ -141,25 +155,39 @@ void scui_string_event(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
-             return;
+             break;
+        
+        if (string->unit_over)
+            break;
+        
+        if (string->args.limit <= 0) {
+            /* 单次滚动结束标记 */
+            if (string->unit_s)
+                string->unit_over = true;
+            break;
+        }
         
         string->rcd_ms += scui_event_anima_elapse;
         if (string->rcd_ms < string->unit_ms)
             break;
         string->rcd_ms -= string->unit_ms;
         
-        if (string->args.limit <= 0)
-            break;
         scui_string_args_process(&string->args);
         string->args.offset -= string->unit_dx * string->unit_way;
         
         if (string->args.offset > 0) {
             string->args.offset = 0;
             string->unit_way = -string->unit_way;
+            /* 单次滚动结束标记 */
+            if (string->unit_s)
+                string->unit_over = true;
         }
         if (string->args.offset < -string->args.limit) {
             string->args.offset = -string->args.limit;
             string->unit_way = -string->unit_way;
+            /* 单次滚动结束标记 */
+            if (string->unit_s)
+                string->unit_over = true;
         }
         
         scui_widget_draw(handle, NULL, false);
@@ -168,7 +196,7 @@ void scui_string_event(scui_event_t *event)
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
-             return;
+             break;
         
         if (string->str_utf8 != NULL) {
             

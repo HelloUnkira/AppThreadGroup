@@ -7,29 +7,21 @@
 
 #include "scui.h"
 
-static scui_coord_t  popup_wait   = 0;                      // 暂停时间
 static scui_alpha_t  popup_alpha  = scui_alpha_cover;       // 淡出透明度
 static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 
-void scui_ui_scene_popup_text(scui_handle_t text, uint8_t *string)
+void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 {
-    if (text != SCUI_HANDLE_INVALID) {
-        scui_string_update_text(popup_string, text);
-        return;
-    }
-    if (string != NULL) {
-        scui_string_update_str(popup_string, string);
-        return;
-    }
-    SCUI_ASSERT(false);
-}
-
-void scui_ui_scene_popup_exec(void)
-{
-    popup_wait  = 0;
     popup_alpha = scui_alpha_cover;
+    scui_widget_show(SCUI_UI_SCENE_POPUP, false);
     scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
     scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+    
+    if (text != SCUI_HANDLE_INVALID)
+        scui_string_update_text(popup_string, text);
+    else if (string != NULL)
+        scui_string_update_str(popup_string, string);
+    
 }
 
 /*@brief 控件事件响应回调
@@ -44,19 +36,22 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        if (popup_wait  < SCUI_UI_POPUP_STOP_TIME)
-            popup_wait += SCUI_ANIMA_TICK;
-        else
-        if (popup_alpha > 0) {
-            scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_POPUP_FADE_TIME / SCUI_ANIMA_TICK);
-            if (popup_alpha  > tick)
-                popup_alpha -= tick;
-            else
-                popup_alpha  = 0;
+        if (scui_string_scroll_over(popup_string)) {
+            /* 完全隐藏则回收控件 */
+            if (popup_alpha == 0)
+                scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
             
-            SCUI_LOG_WARN("popup alpha:%d", popup_alpha);
-            scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
-            scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+            if (popup_alpha > 0) {
+                scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_POPUP_FADE_TIME / SCUI_ANIMA_TICK);
+                if (popup_alpha  > tick)
+                    popup_alpha -= tick;
+                else
+                    popup_alpha  = 0;
+                
+                SCUI_LOG_WARN("popup alpha:%d", popup_alpha);
+                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
+                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+            }
         }
         break;
     case scui_event_show:
@@ -73,19 +68,20 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             string_maker.widget.clip.y      = 30;
             string_maker.widget.clip.w      = 330;
             string_maker.widget.clip.h      = 40;
-            string_maker.name               = SCUI_FONT_TYPE_32_ZH,
+            string_maker.name               = SCUI_FONT_TYPE_32_EN,
             string_maker.args.margin        = SCUI_STRING_MARGIN;
             string_maker.args.gap_none      = SCUI_STRING_SPACE_WIDTH;
             string_maker.args.color.color_s.full = 0xFFFFFFFF;
             string_maker.args.color.color_e.full = 0xFFFFFFFF;
+            string_maker.unit_s             = true;     //单次滚动,结束标记
             scui_string_create(&string_maker, &popup_string, false);
         }
         
+        scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         scui_widget_event_mask_keep(event);
-        
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
@@ -95,6 +91,18 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         scui_widget_event_mask_keep(event);
         break;
+    case scui_event_draw: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t  clip  = scui_widget_surface_clip(event->object);
+        scui_color_t color = {0};
+        scui_widget_alpha_set(event->object, scui_alpha_cover, false);
+        scui_widget_surface_draw_color(event->object, &clip, color);
+        
+        break;
+    }
     default:
         SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
@@ -116,7 +124,7 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t   clip = scui_widget_surface_clip(event->object);
+        scui_area_t   clip  = scui_widget_surface_clip(event->object);
         scui_color_t  color = {0};
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
         scui_widget_surface_draw_image(event->object, &clip, image, NULL, color);

@@ -68,7 +68,8 @@ void scui_ui_scene_3_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_widget_event_mask_keep(event);
+        scui_widget_event_mask_over(event);
+        scui_ui_scene_popup_exec(SCUI_MULTI_LANG_0X002f, NULL);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)

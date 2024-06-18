@@ -61,6 +61,9 @@ typedef enum {
     scui_color_format_argb8888,
 }  scui_color_format_t;
 
+/* color limit */
+typedef uint32_t scui_color_limit_t;
+
 /*@brief: 过度色, 固定此格式主要上层通用性
  */
 #pragma pack(push, 1)
@@ -112,6 +115,8 @@ typedef enum {
  *      后8字节表明数据尺寸
  */
 typedef enum {
+    scui_pixel_cf_def       = 0,
+    scui_pixel_cf_none      = 0,
     scui_pixel_cf_type_mask = 0xFF00,
     scui_pixel_cf_bits_mask = 0x00FF,
     scui_pixel_cf_palette4  = 0x0100 + 1 * 8 / 2,   // palette

@@ -39,7 +39,10 @@
             "maker": "scui_window_maker_t",
             "field": {
                 "level":                        "窗口所在层级(数字越大越高)",
-                "buffer":                       "窗口是否使用独立画布"
+                "buffer":                       "窗口是否使用独立画布",
+                "resident":                     "窗口常驻标记(特殊使用)",
+                "hang_only":                    "窗口悬挂标记(特殊使用)",
+                "format":                       "窗口独立画布基础像素格式"
             }
         },
         {

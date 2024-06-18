@@ -21,7 +21,7 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget_root != NULL);
     
-    scui_area_t clip_valid = widget->clip;
+    scui_area_t clip_valid = widget->clip_set.clip;
     
     if (clip != NULL) {
         scui_area_t clip_inter = {0};

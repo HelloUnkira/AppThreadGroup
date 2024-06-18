@@ -32,7 +32,7 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     uint8_t *dst_addr  = dst_surface->pixel;
-    uint32_t src_pixel = 0;
+    scui_color_limit_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
     /* 这里变成了一个区域, 直接填色 */

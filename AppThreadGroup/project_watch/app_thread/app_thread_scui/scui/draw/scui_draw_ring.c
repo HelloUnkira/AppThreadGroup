@@ -318,8 +318,8 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
     if (src_surface->format == scui_pixel_cf_palette4) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 4;
-        uint32_t palette_table[1 << 4] = {0};
-        uint32_t filter = 0;
+        scui_color_limit_t palette_table[1 << 4] = {0};
+        scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
@@ -402,8 +402,8 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
     if (src_surface->format == scui_pixel_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 8;
-        uint32_t palette_table[1 << 8] = {0};
-        uint32_t filter = 0;
+        scui_color_limit_t palette_table[1 << 8] = {0};
+        scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
@@ -512,10 +512,10 @@ void scui_draw_ring(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
     /* 限制要求,只支持调色板位图 */
-    SCUI_ASSERT(src_image->format == scui_image_format_p4 ||
-                src_image->format == scui_image_format_p8);
-    SCUI_ASSERT(src_image_e->format == scui_image_format_p4 ||
-                src_image_e->format == scui_image_format_p8);
+    SCUI_ASSERT(src_image->format == scui_image_format_palette4 ||
+                src_image->format == scui_image_format_palette8);
+    SCUI_ASSERT(src_image_e->format == scui_image_format_palette4 ||
+                src_image_e->format == scui_image_format_palette8);
     
     /* 限制要求,调色板位图为正方形图像 */
     SCUI_ASSERT(src_image->pixel.width == src_image->pixel.height);

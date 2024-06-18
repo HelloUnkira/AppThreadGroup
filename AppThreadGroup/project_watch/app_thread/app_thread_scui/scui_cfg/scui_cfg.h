@@ -20,8 +20,8 @@
 #define SCUI_MEM_RECORD_ANALYSIS                    (1)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
-#define SCUI_MEM_RECORD_CHECK_MIX                   (1)
-#define SCUI_MEM_RECORD_CHECK_FONT                  (1)
+#define SCUI_MEM_RECORD_CHECK_MIX                   (0)
+#define SCUI_MEM_RECORD_CHECK_FONT                  (0)
 #define SCUI_MEM_RECORD_CHECK_GRAPH                 (1)
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_ITEM_MIX                    (128)
@@ -91,6 +91,9 @@
 
 /* 窗口交互方向 */
 #define SCUI_WINDOW_JUMP_DIR                        (scui_event_dir_to_l)
+
+/* 设备像素格式(默认) */
+#define SCUI_PIXEL_CF_DEF                           (scui_pixel_cf_bmp565)
 
 /* 基础图元使用矩阵变换 */
 #define SCUI_DRAW_MISC_USE_SOFTWARE                 (0)

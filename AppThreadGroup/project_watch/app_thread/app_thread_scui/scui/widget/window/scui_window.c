@@ -26,12 +26,17 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     if (maker->buffer) {
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;
-        scui_coord_t src_byte = scui_pixel_bits(scui_pixel_cf_bmp565) / 8;
-        uint32_t surface_res = hor_res * ver_res * src_byte;
+        scui_pixel_cf_t p_cf = maker->format;
+        if (p_cf == scui_pixel_cf_def)
+            p_cf  = SCUI_PIXEL_CF_DEF;
+        
+        scui_coord_t src_byte = scui_pixel_bits(p_cf) / 8;
+        scui_coord_t src_byte_remain = sizeof(scui_color_limit_t) - src_byte;
+        uint32_t surface_res = hor_res * ver_res * src_byte + src_byte_remain;
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
         window->widget.surface          = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_surface_t));
         window->widget.surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_res);
-        window->widget.surface->format  = scui_pixel_cf_bmp565;
+        window->widget.surface->format  = p_cf;
         window->widget.surface->hor_res = hor_res;
         window->widget.surface->ver_res = ver_res;
         window->widget.surface->alpha   = scui_alpha_cover;
@@ -53,8 +58,11 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     scui_window_cfg_def(&window->cfg);
     
-    window->level  = maker->level;
-    window->buffer = maker->buffer;
+    window->level       = maker->level;
+    window->buffer      = maker->buffer;
+    window->resident    = maker->resident;
+    window->hang_only   = maker->hang_only;
+    window->format      = maker->format;
     
     /* 为窗口控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};

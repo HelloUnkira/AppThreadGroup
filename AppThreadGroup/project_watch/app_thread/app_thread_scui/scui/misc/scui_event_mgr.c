@@ -198,9 +198,10 @@ void scui_event_respond(scui_event_t *event)
             if (window_list[idx] == SCUI_HANDLE_INVALID)
                 continue;
             scui_widget_t *widget = scui_handle_get(window_list[idx]);
+            scui_window_t *window = (void *)widget;
             SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-            if (scui_widget_surface_only(widget))
+            if (scui_widget_surface_only(widget) && !window->hang_only)
                 continue;
             
             switch (event->type) {

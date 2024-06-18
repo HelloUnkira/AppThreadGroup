@@ -329,6 +329,17 @@ void scui_widget_surface_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_tick_elapse_us(true);
     #endif
     
+    /* 这里有一个优化点(主要用于全局背景绘制) */
+    /* 条件达到时,将资源直接加载到绘制画布上即可 */
+    if ((widget->surface->format == scui_pixel_cf_bmp565 ||
+         widget->surface->format == scui_pixel_cf_bmp888)   &&
+         widget->clip_set.clip.w == scui_disp_get_hor_res() &&
+         widget->clip_set.clip.h == scui_disp_get_ver_res() &&
+         scui_area_equal(&widget->clip_set.clip, clip)) {
+         scui_image_src_read(image_inst, widget->surface->pixel);
+         return;
+    }
+    
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         

@@ -29,7 +29,7 @@ void scui_ready(void)
     uint32_t surface_fb_size = 0;
     
     surface_fb = scui_surface_fb_draw();
-    surface_fb->format  = scui_pixel_cf_bmp565;
+    surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte;
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
@@ -40,7 +40,7 @@ void scui_ready(void)
     scui_draw_area_fill(surface_fb, &clip, pixel, surface_fb->alpha);
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
-    surface_fb->format  = scui_pixel_cf_bmp565;
+    surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte;
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
@@ -98,13 +98,5 @@ void scui_ready(void)
     
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
-    
-    #if 0
-    scui_widget_show(SCUI_UI_SCENE_POPUP, false);
-    scui_ui_scene_popup_text(SCUI_MULTI_LANG_0X002f, NULL);
-    scui_ui_scene_popup_exec();
-    scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct0, true);
-    #endif
-    
     scui_engine_execute_status_set(true);
 }

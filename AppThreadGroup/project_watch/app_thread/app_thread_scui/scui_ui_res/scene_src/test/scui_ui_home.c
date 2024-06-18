@@ -97,7 +97,7 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
             scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -133,7 +133,6 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
         scui_custom_draw_image_keep(event, &clip, image, color, span, 5, true);
         #endif
         
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:

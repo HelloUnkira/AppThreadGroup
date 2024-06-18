@@ -76,9 +76,10 @@ void scui_window_hide_without(scui_handle_t handle, bool any)
         if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
             scui_window_mgr.list[idx] != handle) {
             scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
+            scui_window_t *window = (void *)widget;
             SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-            if (any || scui_widget_surface_only(widget))
+            if (any || (scui_widget_surface_only(widget) && !window->resident))
                 scui_widget_hide(scui_window_mgr.list[idx], false);
         }
 }

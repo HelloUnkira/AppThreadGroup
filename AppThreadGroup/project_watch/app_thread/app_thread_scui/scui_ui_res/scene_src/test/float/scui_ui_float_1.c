@@ -53,9 +53,11 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -80,8 +82,6 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         clip.w -= clip.w / 6 * 2;
         clip.h -= clip.h / 6 * 2;
         scui_custom_draw_qrcode(event, &clip, color, false, url, strlen(url));
-        
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
@@ -99,9 +99,11 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         scui_widget_event_mask_keep(event);
+        
+        scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -126,8 +128,6 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         clip.w -= 10 * 2;
         clip.h -= 10 * 2 + 10 * 2;
         scui_custom_draw_barcode(event, &clip, color_xxx, false, url, strlen(url));
-        
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:

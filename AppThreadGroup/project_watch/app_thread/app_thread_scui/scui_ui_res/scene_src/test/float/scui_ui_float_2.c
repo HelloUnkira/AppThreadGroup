@@ -78,7 +78,7 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -123,8 +123,6 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         clip_ver = scui_widget_surface_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_image_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
-        
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
@@ -144,7 +142,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -181,7 +179,6 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h -= 5;
         scui_custom_draw_area(event, &clip, color_mix, true, true);
         
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
@@ -201,7 +198,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -257,7 +254,6 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         pos_e.y = clip.y1 + 5 + del_y / 2;
         scui_widget_surface_draw_line(event->object, 2, pos_s, pos_e, color_mix);
         
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
@@ -284,7 +280,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -310,7 +306,6 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
         scui_custom_draw_image_circle_rotate(event, &center, image_handle, color_mix, radius, angle);
         
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
@@ -343,7 +338,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -364,7 +359,6 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         scui_point_t scale = image_scale;
         scui_widget_surface_draw_image_scale(event->object, &clip, image_handle, NULL, scale);
         
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:

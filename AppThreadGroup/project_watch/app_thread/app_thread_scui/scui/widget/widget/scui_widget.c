@@ -370,7 +370,9 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
     /* 控件需要显示 */
     if (scui_widget_style_is_show(widget->myself)) {
         /* 控件不透明 */
-        if (widget->alpha != scui_alpha_trans) {
+        if (widget->alpha != scui_alpha_trans &&
+           (widget->surface->format == scui_image_format_bmp565 ||
+            widget->surface->format == scui_image_format_bmp888)) {
             /* 控件背景不透明且全覆盖 */
             if (!widget->style.trans) {
                 /* 纯色背景,全覆盖 */
@@ -379,8 +381,8 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
                 /* 图片背景,看是否自带透明度 */
                 scui_image_t *image = scui_handle_get(widget->image);
                 SCUI_ASSERT(image != NULL);
-                if (image->format == scui_image_format_rgb565 ||
-                    image->format == scui_image_format_rgb888)
+                if (image->format == scui_image_format_bmp565 ||
+                    image->format == scui_image_format_bmp888)
                     return true;
             }
         }

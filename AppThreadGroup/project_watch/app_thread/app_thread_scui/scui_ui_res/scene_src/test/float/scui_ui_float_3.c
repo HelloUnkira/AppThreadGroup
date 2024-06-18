@@ -66,7 +66,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        
+        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              return;
         
@@ -162,8 +162,6 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 0);
         #endif
         
-        
-        scui_widget_event_mask_keep(event);
         break;
     }
     default:
