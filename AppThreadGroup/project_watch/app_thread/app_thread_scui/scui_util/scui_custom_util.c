@@ -32,7 +32,7 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
     SCUI_ASSERT(clip != NULL);
     
     /* 绘制背景进度条 */
-    scui_widget_surface_draw_image(event->object, clip, bar, NULL, color_bar);
+    scui_widget_draw_image(event->object, clip, bar, NULL, color_bar);
     
     cmin = scui_min(vmax, scui_max(vmin, cmin));
     cmax = scui_max(vmin, scui_min(vmax, cmax));
@@ -63,17 +63,17 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
         /* 绘制俩个edge */
         src_clip.x = 0;
         src_clip.y = 0;
-        dst_area = scui_widget_surface_clip(event->object);
+        dst_area = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
-            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         src_clip.x = src_clip.w;
         src_clip.y = 0;
-        dst_area = scui_widget_surface_clip(event->object);
+        dst_area = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
-            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         /* 填充这块区域 */
         scui_area_t area = {
@@ -82,10 +82,10 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
             .h = src_clip.h,
             .y = clip->y,
         };
-        dst_clip = scui_widget_surface_clip(event->object);
+        dst_clip = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color_edge);
+            scui_widget_draw_color(event->object, &dst_clip, color_edge);
         
     } else {
         scui_coord_t offset_d1 = scui_map(cmin, vmin, vmax, dist - src_clip.h, 0);
@@ -97,17 +97,17 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
         /* 绘制俩个edge */
         src_clip.x = 0;
         src_clip.y = 0;
-        dst_area = scui_widget_surface_clip(event->object);
+        dst_area = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
-            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         src_clip.x = 0;
         src_clip.y = src_clip.h / 2;
-        dst_area = scui_widget_surface_clip(event->object);
+        dst_area = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
-            scui_widget_surface_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
+            scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         /* 填充这块区域 */
         scui_area_t area = {
@@ -116,10 +116,10 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
             .y = clip->y + offset_2.y + src_clip.h,
             .h = offset_1.y - offset_2.y - src_clip.h,
         };
-        dst_clip = scui_widget_surface_clip(event->object);
+        dst_clip = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color_edge);
+            scui_widget_draw_color(event->object, &dst_clip, color_edge);
         
     }
 }
@@ -155,7 +155,7 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
         if (idx == index) {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_surface_draw_image(event->object, &dst_clip, focus, NULL, color_focus);
+                scui_widget_draw_image(event->object, &dst_clip, focus, NULL, color_focus);
             if (dir_hor)
                 offset.x += image_focus->pixel.width  + span;
             else
@@ -163,7 +163,7 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
         } else {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
-                scui_widget_surface_draw_image(event->object, &dst_clip, wait, NULL, color_wait);
+                scui_widget_draw_image(event->object, &dst_clip, wait, NULL, color_wait);
             if (dir_hor)
                 offset.x += image_wait->pixel.width  + span;
             else
@@ -198,7 +198,7 @@ void scui_custom_draw_image_circle_rotate(scui_event_t *event,  scui_point_t *ce
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
-    scui_widget_surface_draw_image(event->object, &clip, image, NULL, color);
+    scui_widget_draw_image(event->object, &clip, image, NULL, color);
 }
 
 /*@brief 自定义控件:插件:图像连续绘制
@@ -228,7 +228,7 @@ void scui_custom_draw_image_keep(scui_event_t  *event, scui_area_t *clip,
         
         scui_area_t dst_clip = *clip;
         if (scui_area_limit_offset(&dst_clip, &offset))
-            scui_widget_surface_draw_image(event->object, &dst_clip, image[idx], NULL, color);
+            scui_widget_draw_image(event->object, &dst_clip, image[idx], NULL, color);
         
         if (way)
             offset.y += span + image_inst->pixel.height;
@@ -274,7 +274,7 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
     /* 无图片,全填充或者不填充 */
     if (image_clip.w == -1 || image_clip.h == -1) {
         if (delta == -1) {
-            scui_widget_surface_draw_color(event->object, clip, color);
+            scui_widget_draw_color(event->object, clip, color);
             return;
         }
         clip_a.w = delta;
@@ -296,14 +296,14 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
             clip_f.y = clip->y;
             scui_area_t dst_clip = {0};
             if (scui_area_inter(&dst_clip, clip, &clip_f))
-                scui_widget_surface_draw_color(event->object, &dst_clip, color);
+                scui_widget_draw_color(event->object, &dst_clip, color);
             /* 画第二个矩形 */
             if (delta != -1) {
                 clip_f.x = clip->x + clip_a.w;
                 clip_f.y = clip->y + clip->h - delta;
                 scui_area_t dst_clip = {0};
                 if (scui_area_inter(&dst_clip, clip, &clip_f))
-                    scui_widget_surface_draw_color(event->object, &dst_clip, color);
+                    scui_widget_draw_color(event->object, &dst_clip, color);
             }
         }
         if (delta_h > 0) {
@@ -314,14 +314,14 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
             clip_f.y = clip->y + clip_a.h;
             scui_area_t dst_clip = {0};
             if (scui_area_inter(&dst_clip, clip, &clip_f))
-                scui_widget_surface_draw_color(event->object, &dst_clip, color);
+                scui_widget_draw_color(event->object, &dst_clip, color);
             /* 画第二个矩形 */
             if (delta != -1) {
                 clip_f.x = clip->x + clip->w - delta;
                 clip_f.y = clip->y + clip_a.h;
                 scui_area_t dst_clip = {0};
                 if (scui_area_inter(&dst_clip, clip, &clip_f))
-                    scui_widget_surface_draw_color(event->object, &dst_clip, color);
+                    scui_widget_draw_color(event->object, &dst_clip, color);
             }
         }
     }
@@ -334,11 +334,11 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
     if (image[0] == SCUI_HANDLE_INVALID) {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            scui_widget_draw_color(event->object, &dst_clip, color);
     } else {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_image(event->object, &dst_clip, image[0], NULL, color);
+            scui_widget_draw_image(event->object, &dst_clip, image[0], NULL, color);
     }
     /* 画一个角 */
     clip_a.x = clip->x + clip->w - clip_a.w;
@@ -346,11 +346,11 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
     if (image[1] == SCUI_HANDLE_INVALID) {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            scui_widget_draw_color(event->object, &dst_clip, color);
     } else {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_image(event->object, &dst_clip, image[1], NULL, color);
+            scui_widget_draw_image(event->object, &dst_clip, image[1], NULL, color);
     }
     /* 画一个角 */
     clip_a.x = clip->x;
@@ -358,11 +358,11 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
     if (image[2] == SCUI_HANDLE_INVALID) {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            scui_widget_draw_color(event->object, &dst_clip, color);
     } else {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_image(event->object, &dst_clip, image[2], NULL, color);
+            scui_widget_draw_image(event->object, &dst_clip, image[2], NULL, color);
     }
     /* 画一个角 */
     clip_a.x = clip->x + clip->w - clip_a.w;
@@ -370,11 +370,11 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
     if (image[3] == SCUI_HANDLE_INVALID) {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_color(event->object, &dst_clip, color);
+            scui_widget_draw_color(event->object, &dst_clip, color);
     } else {
         scui_area_t dst_clip = {0};
         if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_surface_draw_image(event->object, &dst_clip, image[3], NULL, color);
+            scui_widget_draw_image(event->object, &dst_clip, image[3], NULL, color);
     }
     /* ... */
 }
@@ -394,7 +394,7 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     
     /* 常规填色 */
     if (mix == 0) {
-        scui_widget_surface_draw_color(event->object, clip, color);
+        scui_widget_draw_color(event->object, clip, color);
         return;
     }
     
@@ -402,7 +402,7 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
     if (mix == 1) {
         /* 无渐变填色 */
         if (color.color_s.full == color.color_e.full) {
-            scui_widget_surface_draw_color(event->object, clip, color);
+            scui_widget_draw_color(event->object, clip, color);
             return;
         }
         
@@ -462,9 +462,9 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
         };
         
         scui_area_t dst_clip = {0};
-        scui_area_t dst_area = scui_widget_surface_clip(event->object);
+        scui_area_t dst_area = scui_widget_draw_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
-            scui_widget_surface_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
+            scui_widget_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
         
         SCUI_MEM_FREE(pixel);
         return;

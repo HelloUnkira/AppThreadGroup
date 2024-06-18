@@ -96,10 +96,10 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t  clip  = scui_widget_surface_clip(event->object);
+        scui_area_t  clip  = scui_widget_draw_clip(event->object);
         scui_color_t color = {0};
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
-        scui_widget_surface_draw_color(event->object, &clip, color);
+        scui_widget_draw_color(event->object, &clip, color);
         
         break;
     }
@@ -124,10 +124,10 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t   clip  = scui_widget_surface_clip(event->object);
+        scui_area_t   clip  = scui_widget_draw_clip(event->object);
         scui_color_t  color = {0};
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
-        scui_widget_surface_draw_image(event->object, &clip, image, NULL, color);
+        scui_widget_draw_image(event->object, &clip, image, NULL, color);
         
         break;
     }

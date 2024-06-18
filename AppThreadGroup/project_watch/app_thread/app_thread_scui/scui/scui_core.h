@@ -42,6 +42,7 @@
 #include "scui_widget.h"
 #include "scui_widget_event.h"
 #include "scui_widget_surface.h"
+#include "scui_widget_draw.h"
 #include "scui_widget_opt.h"
 #include "scui_window.h"
 #include "scui_window_mgr.h"        /* 窗口管理器 */

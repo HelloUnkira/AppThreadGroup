@@ -75,10 +75,10 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         scui_handle_t image_ring = scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp;
         
         /* 绘制圆环背景图: */
-        // scui_widget_surface_draw_color(event->object, NULL, (scui_color_t){.color.full = 0xFFFFFFFF,});
-        scui_widget_surface_draw_image(event->object, NULL, image_bg, NULL, (scui_color_t){0});
+        // scui_widget_draw_color(event->object, NULL, (scui_color_t){.color.full = 0xFFFFFFFF,});
+        scui_widget_draw_image(event->object, NULL, image_bg, NULL, (scui_color_t){0});
         
-        scui_area_t clip = scui_widget_surface_clip(event->object);
+        scui_area_t clip = scui_widget_draw_clip(event->object);
         clip.x += (466 - 458) / 2;
         clip.y += (466 - 458) / 2;
         clip.w = 458;
@@ -86,43 +86,43 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         
         //scui_widget_alpha_set(event->object, scui_alpha_pct50, false);
         scui_color_t color = {.filter = true,.color.full = 0xFFFFFFFF,};
-        // scui_widget_surface_draw_image(event->object, &clip, image_ring, NULL, color);
+        // scui_widget_draw_image(event->object, &clip, image_ring, NULL, color);
         
         #if 0   // 单象限(测试)
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 30,       color, 45,       100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 30 +  90, color, 45 +  90, 100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 30 + 180, color, 45 + 180, 100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 30 + 270, color, 45 + 270, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 30,       color, 45,       100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 30 +  90, color, 45 +  90, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 30 + 180, color, 45 + 180, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 30 + 270, color, 45 + 270, 100, image_edge);
         #endif
         
         #if 0   // 二象限(测试)
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10, 100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10, 100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10, 100, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10, 100, image_edge);
         #endif
         
         #if 0   // 三象限(测试)
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10 + 90, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10 + 90, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10 + 90, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10 + 90, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10 + 90, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10 + 90, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10 + 90, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10 + 90, 100, image_edge);
         #endif
         
         #if 0   // 四象限(测试)
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10 + 180, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10 + 180, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10 + 180, 100, image_edge);
-        // scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10 + 180, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  60, color, 120 + 10 + 180, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 150, color, 210 + 10 + 180, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, 240, color, 300 + 10 + 180, 100, image_edge);
+        // scui_widget_draw_ring(event->object, &clip, image_ring, NULL, -30, color,  30 + 10 + 180, 100, image_edge);
         #endif
         
         #if 1
         scui_color_t color_r = {.filter = true,.color.ch.r = 0xFF,};
         scui_color_t color_g = {.filter = true,.color.ch.g = 0xFF,};
         scui_color_t color_b = {.filter = true,.color.ch.b = 0xFF,};
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  -81, color_r,  +22, pct, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL,  +39, color_g, +141, pct, image_edge);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, +158, color_b, +262, pct, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  -81, color_r,  +22, pct, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  +39, color_g, +141, pct, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, +158, color_b, +262, pct, image_edge);
         
         scui_area_t   btn_clip = {0};
         scui_color_t  btn_color_full = {0};

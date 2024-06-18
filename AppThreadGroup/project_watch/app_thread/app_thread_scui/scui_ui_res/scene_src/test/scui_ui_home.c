@@ -104,7 +104,7 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
         scui_indev_data_set_t *data_set = NULL;
         scui_indev_data_set(&data_set);
         
-        scui_area_t   clip = scui_widget_surface_clip(event->object);
+        scui_area_t   clip = scui_widget_draw_clip(event->object);
         scui_coord_t  span = 0;
         scui_handle_t image[5] = {
             scui_image_prj_image_src_num_102_white_56x76_04_03png + data_set->sys_time_h / 10,

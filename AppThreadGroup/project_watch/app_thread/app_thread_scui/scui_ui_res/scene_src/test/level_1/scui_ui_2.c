@@ -284,7 +284,7 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
         clip.y = (SCUI_DRV_VER_RES - 236) / 2;
         clip.w =  44;
         clip.h = 236;
-        scui_widget_surface_draw_image(event->object, &clip, image_bg, NULL, color_black);
+        scui_widget_draw_image(event->object, &clip, image_bg, NULL, color_black);
         
         clip.x = (466 - 462) / 2;
         clip.y = (466 - 462) / 2;
@@ -295,7 +295,7 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
         scui_coord_t angle_s = -29 + scui_ui_res_local->scroll_pct * (angle_d) / 100;
         scui_coord_t angle_e = angle_s + angle_d;
         SCUI_LOG_INFO("angle:<s:%d,e:%d>", angle_s, angle_e);
-        scui_widget_surface_draw_ring(event->object, &clip, image_ring, NULL, angle_s, color_white, angle_e, 100, image_edge);
+        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, angle_s, color_white, angle_e, 100, image_edge);
         break;
     }
     default:

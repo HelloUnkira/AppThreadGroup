@@ -174,7 +174,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             scui_coord3_t x_span  = scui_ui_res_local->x_span;
             scui_coord3_t scale_c = scui_ui_res_local->scale_c / 1024.0f;
             
-            scui_area_t clip = scui_widget_surface_clip(event->object);
+            scui_area_t clip = scui_widget_draw_clip(event->object);
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,
                 .y = clip.y + clip.h / 2 + scui_ui_res_local->y_ofs,
@@ -258,7 +258,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                 
                 scui_handle_t *image  = scui_ui_res_local->image_s;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix_s;
-                scui_widget_surface_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
+                scui_widget_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
             }
         }
         break;

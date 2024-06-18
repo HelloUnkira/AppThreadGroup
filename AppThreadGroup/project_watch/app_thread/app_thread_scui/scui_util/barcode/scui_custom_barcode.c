@@ -24,7 +24,7 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
     
     if (cover) {
         scui_color_t bg_color = {.color = color.color_d};
-        scui_widget_surface_draw_color(event->object, clip, bg_color);
+        scui_widget_draw_color(event->object, clip, bg_color);
     }
     
     if (data == NULL || size == 0) {
@@ -88,10 +88,10 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
     
     scui_point_t offset = {.x = margin,};
     scui_area_t dst_clip = {0};
-    scui_area_t dst_area = scui_widget_surface_clip(event->object);
+    scui_area_t dst_area = scui_widget_draw_clip(event->object);
     if (scui_area_inter(&dst_clip, &dst_area, clip))
     if (scui_area_limit_offset(&dst_clip, &offset))
-        scui_widget_surface_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
+        scui_widget_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(out_buf);
