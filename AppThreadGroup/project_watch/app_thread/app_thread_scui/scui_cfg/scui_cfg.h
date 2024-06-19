@@ -5,8 +5,8 @@
 /* display:多缓冲区(插个眼:现在多缓冲区有渲染问题,显示错误) */
 #define SCUI_DRV_HOR_RES                            (466)
 #define SCUI_DRV_VER_RES                            (466)
-#define SCUI_DRV_DBUFFER                            (1)
 #define SCUI_DRV_PIXEL_DEPTH                        (16)
+#define SCUI_DRV_DBUFFER                            (1)
 
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT                       (2)
@@ -47,7 +47,7 @@
 #define SCUI_INDEV_PTR_CLICK                        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN                   (300)   /* 连续点击最大间隔 */
 #define SCUI_INDEV_PTR_FLING_COF                    (1024)  /* fling检测: 放大系数 */
-#define SCUI_INDEV_PTR_FLING_RATE                   (512)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
+#define SCUI_INDEV_PTR_FLING_RATE                   (448)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
 #define SCUI_INDEV_PTR_FLING_CNT                    (6)     /* fling检测: 敏感度调整(允许掠过部分move) */
 
 /* 输入设备:key */

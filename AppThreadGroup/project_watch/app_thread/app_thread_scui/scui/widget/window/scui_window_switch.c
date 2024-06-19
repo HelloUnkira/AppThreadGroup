@@ -459,7 +459,7 @@ void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
 /*@brief 窗口切换事件处理回调
  *@param event 事件
  */
-void scui_window_switch_event(scui_event_t *event)
+void scui_window_event_switch(scui_event_t *event)
 {
     if (!scui_widget_event_check_execute(event))
          return;
@@ -547,7 +547,7 @@ void scui_window_switch_event(scui_event_t *event)
                 scui_window_mgr.switch_args.list[0] = widget->myself;
                 scui_window_mgr.switch_args.list[1] = target;
                 /* 先释放其他窗口资源 */
-                scui_window_hide_without(scui_window_mgr.switch_args.list[0], false);
+                scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
                 scui_widget_show(scui_window_mgr.switch_args.list[1], false);
                 scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
                 /* 额外做一次校正,应该没意义 */
@@ -612,5 +612,106 @@ void scui_window_switch_event(scui_event_t *event)
         break;
     default:
         break;
+    }
+}
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ */
+void scui_window_event_dispatch(scui_event_t *event)
+{
+    SCUI_LOG_DEBUG("event %u", event->type);
+    
+    /* 不同的事件处理流程有不同的递归冒泡规则 */
+    scui_window_event_switch(event);
+}
+
+/*@brief 窗口跳转
+ *@param handle 窗口句柄
+ *@param type   窗口切换风格
+ *@param dir    窗口切换方向
+ */
+void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_event_dir_t dir)
+{
+    if (scui_handle_remap(handle)) {
+        scui_widget_t *widget = scui_handle_get(handle);
+        SCUI_ASSERT(widget != NULL);
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    } else {
+        scui_widget_maker_t *maker = scui_handle_get(handle);
+        SCUI_ASSERT(maker != NULL);
+        SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
+    }
+    
+    if (scui_window_mgr.switch_args.lock_jump) {
+         SCUI_LOG_WARN("scene is switching");
+         return;
+    }
+    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+        SCUI_LOG_WARN("scene is switching");
+        return;
+    }
+    
+    /* 新窗口已经是焦点窗口 */
+    if (scui_window_mgr.active_curr == handle) {
+        scui_point_t point = (scui_point_t){0};
+        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_widget_move_pos(scui_window_mgr.active_curr, &point);
+        scui_window_active(scui_window_mgr.active_curr);
+        return;
+    }
+    
+    /* 先上锁 */
+    if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
+         return;
+    
+    scui_window_mgr.switch_args.lock_jump = true;
+    
+    /* 自适应需要更新窗口切换状态 */
+    scui_window_mgr.switch_args.type = type;
+    scui_window_mgr.switch_args.dir  = dir;
+    scui_window_switch_type_update(type, dir);
+    type = scui_window_mgr.switch_args.type;
+    dir  = scui_window_mgr.switch_args.dir;
+    
+    /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
+        scui_window_mgr.switch_args.list[idx] = SCUI_HANDLE_INVALID;
+        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        if (scui_window_mgr.list[idx] != scui_window_mgr.active_curr &&
+            scui_window_mgr.list[idx] != handle) {
+            scui_widget_hide(scui_window_mgr.list[idx], false);
+            SCUI_ASSERT(scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID);
+            continue;
+        }
+    }
+    
+    /* 无切换效果 */
+    if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
+        scui_window_list_hide_without(scui_window_mgr.active_curr, false);
+        scui_widget_hide(scui_window_mgr.active_last, false);
+        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_window_active(scui_window_mgr.active_curr);
+        scui_window_mgr.switch_args.lock_jump = false;
+        scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    } else {
+        scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
+        scui_window_mgr.switch_args.list[1] = handle;
+        scui_window_list_hide_without(scui_window_mgr.active_curr, false);
+        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_widget_show(handle, false);
+        /* 其他切换效果都需要动画完成 */
+        uint32_t peroid = (dir & scui_event_dir_hor) != 0 ? scui_disp_get_hor_res() :
+                          (dir & scui_event_dir_ver) != 0 ? scui_disp_get_ver_res() : 0;
+        SCUI_ASSERT(peroid != 0);
+        scui_anima_t switch_anima = {0};
+        switch_anima.path    = scui_anima_path_bounce;
+        switch_anima.start   = scui_window_jump_anima_start;
+        switch_anima.ready   = scui_window_jump_anima_ready;
+        switch_anima.expired = scui_window_jump_anima_expired;
+        switch_anima.peroid  = peroid;
+        scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
+        scui_anima_start(scui_window_mgr.switch_args.anima);
     }
 }

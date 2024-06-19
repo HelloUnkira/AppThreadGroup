@@ -36,6 +36,7 @@ typedef struct {
 typedef struct {
     scui_mem_record_item_t *item;
     uint32_t                num;
+    uint32_t                size;
     bool                    update;
 } scui_mem_record_t;
 

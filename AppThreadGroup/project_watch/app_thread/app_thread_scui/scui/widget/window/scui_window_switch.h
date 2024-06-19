@@ -38,6 +38,18 @@ void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32_t pero
 /*@brief 窗口切换事件处理回调
  *@param event 事件
  */
-void scui_window_switch_event(scui_event_t *event);
+void scui_window_event_switch(scui_event_t *event);
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ */
+void scui_window_event_dispatch(scui_event_t *event);
+
+/*@brief 窗口跳转
+ *@param handle 窗口句柄
+ *@param type   窗口切换风格
+ *@param dir    窗口切换方向
+ */
+void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_event_dir_t dir);
 
 #endif

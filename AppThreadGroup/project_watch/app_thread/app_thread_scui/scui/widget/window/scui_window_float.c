@@ -413,7 +413,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
                  break;
             /* 先释放其他窗口资源 */
-            scui_window_hide_without(handle, false);
+            scui_window_list_hide_without(handle, false);
             scui_widget_show(scui_window_float.target, false);
             scui_window_active(scui_window_float.target);
             scui_window_stack_cover(scui_window_float.target);
