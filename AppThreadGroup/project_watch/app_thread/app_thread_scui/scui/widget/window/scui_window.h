@@ -2,10 +2,8 @@
 #define SCUI_WINDOW_H
 
 typedef struct {
-    scui_handle_t sibling[6];           /* 0:临近上;1:临近下;2:临近左;3:临近右;4:上一层;5:下一层; */
-    struct {
-        uint8_t preload:1;              /* 是否预加载,默认预加载 */
-    } sibling_attr[6];
+    scui_handle_t sibling[4];           /* 0:临近上;1:临近下;2:临近左;3:临近右; */
+    bool          preload[4];           /* 是否预加载,默认不加载 */
 } scui_window_cfg_t;
 
 typedef struct {

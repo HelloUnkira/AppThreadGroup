@@ -1,0 +1,44 @@
+{
+    "type": "scene",
+    "widget": [
+        {
+            "widget.type":                  "scui_widget_type_window",
+            "widget.style.sched_anima":     "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE",
+            "widget.event_cb":              "scui_ui_scene_list_scale_event_proc",
+            "level":                        "0",
+            "buffer":                       "true"
+        },
+        {
+            "widget.type":                  "scui_widget_type_scroll",
+            "widget.style.trans":           "true",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_enc":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_SCROLL",
+            "widget.parent":                "SCUI_UI_SCENE_LIST_SCALE",
+            "widget.child_num":             "50",
+            "dir":                          "scui_event_dir_ver",
+            "pos":                          "scui_event_pos_c",
+            "space":                        "10",
+            "route_enc":                    "117",
+            "route_key":                    "117",
+            "keyid_fdir":                   "scui_event_key_val_down",
+            "keyid_bdir":                   "scui_event_key_val_up",
+            "springback":                   "70"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_RING",
+            "widget.parent":                "SCUI_UI_SCENE_LIST_SCALE",
+            "widget.event_cb":              "scui_ui_scene_list_scale_ring_event_proc"
+        }
+    ]
+}

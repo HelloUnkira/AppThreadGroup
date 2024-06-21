@@ -25,6 +25,43 @@ void scui_window_float_cfg_get(scui_window_float_t *cfg)
 void scui_window_float_cfg_set(scui_window_float_t *cfg)
 {
     scui_window_float = *cfg;
+    
+    bool float_flag = false;
+    /* 断言检查: */
+    for (uint8_t idx = 0; idx < 4; idx++) {
+        scui_handle_t handle = scui_window_float.list[idx];
+        if (handle != SCUI_HANDLE_INVALID) {
+            scui_widget_t *widget = scui_handle_get(handle);
+            scui_widget_maker_t *maker = (void *)widget;
+            SCUI_ASSERT(widget != NULL);
+            
+            /* 窗口至少要给定ptr事件响应标记 */
+            if (scui_handle_remap(handle)) {
+                SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+                SCUI_ASSERT(widget->style.indev_ptr);
+            } else {
+                SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
+                SCUI_ASSERT(maker->style.indev_ptr);
+            }
+            float_flag = true;
+        }
+    }
+    if (float_flag) {
+        scui_handle_t handle = scui_window_float.main;
+        SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+        scui_widget_t *widget = scui_handle_get(handle);
+        scui_widget_maker_t *maker = (void *)widget;
+        SCUI_ASSERT(widget != NULL);
+        
+        /* 窗口至少要给定ptr事件响应标记 */
+        if (scui_handle_remap(handle)) {
+            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            SCUI_ASSERT(widget->style.indev_ptr);
+        } else {
+            SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
+            SCUI_ASSERT(maker->style.indev_ptr);
+        }
+    }
 }
 
 /*@brief 窗口正在工作中
@@ -216,8 +253,13 @@ void scui_window_float_event_grasp_hide(scui_event_t *event)
  */
 void scui_window_float_event_grasp_key(scui_event_t *event)
 {
-    if (event->type == scui_event_key_click)
+    if (event->type == scui_event_key_click) {
+        /* 全局滚动锁定 */
+        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+             return;
         scui_window_float_anima_inout(event->object, false);
+        scui_widget_event_mask_over(event);
+    }
 }
 
 /*@brief 窗口浮动事件抓取回调

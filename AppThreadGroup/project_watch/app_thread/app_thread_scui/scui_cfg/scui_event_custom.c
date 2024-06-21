@@ -63,7 +63,7 @@ void scui_event_custom_finish(scui_event_t *event)
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     case scui_event_key_click: {
-
+        
         scui_handle_t stack_top = {0};
         scui_window_stack_nest(&stack_top);
         if (stack_top > 1) {
@@ -73,6 +73,7 @@ void scui_event_custom_finish(scui_event_t *event)
             // 回到主界面
             scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
         }
+        
         scui_widget_event_mask_over(event);
         break;
     }

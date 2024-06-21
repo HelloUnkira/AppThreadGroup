@@ -77,9 +77,9 @@ void scui_window_destroy(scui_handle_t handle)
  */
 void scui_window_cfg_def(scui_window_cfg_t *cfg)
 {
-    for (uint8_t idx = 0; idx < 6; idx++) {
+    for (uint8_t idx = 0; idx < 4; idx++) {
         cfg->sibling[idx] = SCUI_HANDLE_INVALID;
-        cfg->sibling_attr[idx].preload = true;
+        cfg->preload[idx] = false;
     }
 }
 

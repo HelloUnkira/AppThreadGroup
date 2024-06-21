@@ -77,17 +77,17 @@ void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix);
  */
 void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, scui_matrix_t *matrix);
 
-/*@brief 坐标转换(pox->point)
+/*@brief 坐标转换(point3->point2)
  *@param point3 坐标
- *@param point  坐标
+ *@param point2 坐标
  */
-void scui_point3_to_point(scui_point3_t *point3, scui_point_t *point);
+void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2);
 
-/*@brief 坐标转换(point->pox)
+/*@brief 坐标转换(point2->point3)
  *@param point3 坐标
- *@param point  坐标
+ *@param point2  坐标
  */
-void scui_point3_by_point(scui_point3_t *point3, scui_point_t *point);
+void scui_point3_by_point2(scui_point3_t *point3, scui_point2_t *point2);
 
 /*@brief 坐标偏移
  *@param point3 坐标

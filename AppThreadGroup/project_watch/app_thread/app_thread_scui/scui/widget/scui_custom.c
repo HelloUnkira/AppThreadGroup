@@ -15,7 +15,8 @@
 void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     SCUI_ASSERT(maker->widget.type == scui_widget_type_custom);
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
+    // 自定义控件既可以是根控件(子画布控件树),也可以是非根控件
+    // SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
     
     /* 创建自定义控件实例 */
     scui_custom_t *custom = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_custom_t));

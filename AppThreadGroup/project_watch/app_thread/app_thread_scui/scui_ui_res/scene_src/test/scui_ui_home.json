@@ -4,7 +4,6 @@
         {
             "widget.type":                  "scui_widget_type_window",
             "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES",

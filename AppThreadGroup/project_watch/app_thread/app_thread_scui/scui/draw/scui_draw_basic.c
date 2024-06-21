@@ -371,24 +371,44 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
         for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
             scui_point_t  point  = {0};
+            scui_point2_t point2 = {0};
             scui_point3_t point3 = {0};
-            point.y = idx_line;
-            point.x = idx_item;
+            point2.y = idx_line;
+            point2.x = idx_item;
             /* 反扫描结果坐标对每一个坐标进行逆变换 */
-            scui_point3_by_point(&point3, &point);
+            scui_point3_by_point2(&point3, &point2);
             scui_point3_transform_by_matrix(&point3, inv_matrix);
-            scui_point3_to_point(&point3, &point);
-            point.y += src_clip_v.y;
-            point.x += src_clip_v.x;
+            scui_point3_to_point2(&point3, &point2);
+            point2.y += src_clip_v.y;
+            point2.x += src_clip_v.x;
+            point.y = (scui_coord_t)point2.y;
+            point.x = (scui_coord_t)point2.x;
             
+            /* 这里使用点对点上色 */
             /* 逆变换的结果落在的源区域, 取样上色 */
-            if (scui_area_point(&src_area, &point)) {
-                uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-                uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * src_byte;
-                
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                    src_surface->format, src_ofs, src_surface->alpha);
+            bool hit = scui_area_point(&src_area, &point);
+            /* 检测周围距中心临近点是否在有效区域,重新取值上色 */
+            if (!hit) {
+                #if 0
+                if (point.x < src_area.x)
+                    point.x++;
+                if (point.y < src_area.y)
+                    point.y++;
+                if (point.x > src_area.x + src_area.w)
+                    point.x--;
+                if (point.y > src_area.y + src_area.h)
+                    point.y--;
+                hit = scui_area_point(&src_area, &point);
+                #endif
             }
+            if (!hit)
+                continue;
+            
+            uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+            uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * src_byte;
+            
+            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
+                                src_surface->format, src_ofs, src_surface->alpha);
         }
         return;
     }

@@ -40,6 +40,8 @@ void scui_window_list(scui_handle_t **list)
  */
 void scui_window_list_hide_without(scui_handle_t handle, bool any)
 {
+    SCUI_LOG_INFO("");
+    
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
             scui_window_mgr.list[idx] != handle) {
@@ -77,10 +79,10 @@ void scui_window_list_add(scui_handle_t handle)
 void scui_window_list_del(scui_handle_t handle)
 {
     /* 如果移除的是焦点,记得清空 */
-    if (scui_window_mgr.active_curr == handle) {
+    if (scui_window_mgr.active_curr == handle)
         scui_window_mgr.active_curr  = SCUI_HANDLE_INVALID;
+    if (scui_window_mgr.active_last == handle)
         scui_window_mgr.active_last  = SCUI_HANDLE_INVALID;
-    }
     
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
@@ -733,7 +735,7 @@ void scui_window_active(scui_handle_t handle)
     
     if (scui_window_mgr.active_curr == handle) {
         scui_widget_draw(handle, NULL, false);
-        SCUI_LOG_WARN("redundant operation");
+        SCUI_LOG_INFO("redundant operation");
         return;
     }
     
@@ -745,7 +747,7 @@ void scui_window_active(scui_handle_t handle)
             break;
         }
     if (not_match_yet) {
-        SCUI_LOG_WARN("unknown scene %u", handle);
+        SCUI_LOG_INFO("unknown scene %u", handle);
         return;
     }
     

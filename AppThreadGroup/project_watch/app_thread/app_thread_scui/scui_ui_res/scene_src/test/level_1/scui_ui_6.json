@@ -3,9 +3,6 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_6",
@@ -16,45 +13,33 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
             "widget.myself":                "SCUI_UI_SCENE_6_C",
             "widget.parent":                "SCUI_UI_SCENE_6",
-            "widget.color.color.full":      "0xFF00FF00",
-            "widget.event_cb":              "scui_ui_scene_6_c_event_proc"
+            "widget.color.color.full":      "0xFF00FF00"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
             "widget.myself":                "SCUI_UI_SCENE_6_LU",
             "widget.parent":                "SCUI_UI_SCENE_6",
-            "widget.color.color.full":      "0xFFFF0000",
-            "widget.event_cb":              "scui_ui_scene_6_lu_event_proc"
+            "widget.color.color.full":      "0xFFFF0000"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.indev_ptr":       "true",
-            "widget.style.indev_enc":       "true",
-            "widget.style.indev_key":       "true",
             "widget.clip.x":                "SCUI_DRV_VER_RES * 2 / 3",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 0 / 3",
             "widget.clip.w":                "SCUI_DRV_HOR_RES / 3",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
             "widget.myself":                "SCUI_UI_SCENE_6_RU",
             "widget.parent":                "SCUI_UI_SCENE_6",
-            "widget.color.color.full":      "0xFFFF0000",
-            "widget.event_cb":              "scui_ui_scene_6_ru_event_proc"
+            "widget.color.color.full":      "0xFFFF0000"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
@@ -64,8 +49,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
             "widget.myself":                "SCUI_UI_SCENE_6_LD",
             "widget.parent":                "SCUI_UI_SCENE_6",
-            "widget.color.color.full":      "0xFF0000FF",
-            "widget.event_cb":              "scui_ui_scene_6_ld_event_proc"
+            "widget.color.color.full":      "0xFF0000FF"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
@@ -75,8 +59,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES / 3",
             "widget.myself":                "SCUI_UI_SCENE_6_RD",
             "widget.parent":                "SCUI_UI_SCENE_6",
-            "widget.color.color.full":      "0xFF0000FF",
-            "widget.event_cb":              "scui_ui_scene_6_rd_event_proc"
+            "widget.color.color.full":      "0xFF0000FF"
         }
     ]
 }

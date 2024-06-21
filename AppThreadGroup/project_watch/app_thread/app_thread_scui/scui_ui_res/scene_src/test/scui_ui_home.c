@@ -51,10 +51,16 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         scui_widget_event_mask_keep(event);
+        
+        if (scui_widget_event_check_prepare(event))
+            SCUI_LOG_WARN("scui_event_show");
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         scui_widget_event_mask_keep(event);
+        
+        if (scui_widget_event_check_finish(event))
+            SCUI_LOG_WARN("scui_event_hide");
         break;
     case scui_event_focus_get:
         scui_ui_scene_window_float_cfg(event);
@@ -67,7 +73,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_window_stack_add(SCUI_UI_SCENE_2, false);
+        scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
         scui_widget_event_mask_over(event);
         break;
     default:

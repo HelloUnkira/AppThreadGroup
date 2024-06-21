@@ -88,24 +88,25 @@ typedef struct {
     for (int32_t idx = (int32_t)widget->child_num - 1; idx >= 0; idx--)     \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
-/*@brief 查找控件映射表
- *@param type 控件类型
- *@retval 控件映射表
- */
-scui_widget_cb_t * scui_widget_cb_find(uint32_t type);
-
 /*@brief 控件创建
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
  *@param layout 通过布局
  */
-void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
+                        scui_handle_t *handle, bool layout);
 
 /*@brief 控件销毁
  *@param widget 控件实例
  */
 void scui_widget_destroy(scui_widget_t *widget);
+
+/*@brief 查找控件映射表
+ *@param type 控件类型
+ *@retval 控件映射表
+ */
+scui_widget_cb_t * scui_widget_cb_find(uint32_t type);
 
 /*@brief 通过映射表调用创建一个控件树
  *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
@@ -206,7 +207,8 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
  *@param offset 偏移量
  *@param pos    对齐目标
  */
-bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scui_point_t *offset, scui_event_pos_t pos);
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
+                                scui_point_t *offset, scui_event_pos_t pos);
 
 /*@brief 控件树的根控件
  *@param handle 控件句柄

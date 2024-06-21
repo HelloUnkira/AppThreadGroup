@@ -15,7 +15,8 @@
  *@param handle 控件句柄
  *@param layout 通过布局
  */
-void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
+                        scui_handle_t *handle, bool layout)
 {
     SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL);
     SCUI_ASSERT(maker->clip.w != 0);
@@ -653,7 +654,8 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
  *@param offset 偏移量
  *@param pos    对齐目标
  */
-bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scui_point_t *offset, scui_event_pos_t pos)
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
+                                scui_point_t *offset, scui_event_pos_t pos)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_scroll_t *scroll = (void *)widget;

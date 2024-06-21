@@ -62,9 +62,7 @@ void scui_window_stack_reset(scui_handle_t handle, bool reserve)
     }
     
     scui_window_stack_top(&handle_top);
-    scui_window_list_hide_without(SCUI_HANDLE_INVALID, false);
-    scui_widget_show(handle_top, false);
-    scui_window_active(handle_top);
+    scui_window_jump(handle_top, scui_window_switch_auto, scui_event_dir_none);
 }
 
 /*@brief 窗口栈覆盖

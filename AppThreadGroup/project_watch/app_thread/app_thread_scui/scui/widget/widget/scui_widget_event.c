@@ -88,7 +88,8 @@ static void scui_widget_show_delay(scui_handle_t handle)
     widget->style.state = true;
     
     /* 将该显示窗口加入到场景管理器中 */
-    if (widget->parent == SCUI_HANDLE_INVALID)
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        widget->type   == scui_widget_type_window)
         scui_window_list_add(widget->myself);
     
     SCUI_LOG_DEBUG("");
@@ -161,7 +162,8 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     scui_widget_cb_layout(widget->parent);
     
     /* 将该显示窗口移除出场景管理器中 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        widget->type   == scui_widget_type_window) {
         scui_window_list_del(widget->myself);
         /* 只有销毁窗口时才做整体销毁 */
         scui_widget_cb_destroy(widget->myself);
