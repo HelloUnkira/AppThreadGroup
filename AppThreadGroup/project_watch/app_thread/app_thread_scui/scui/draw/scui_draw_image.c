@@ -36,7 +36,7 @@ void scui_draw_image(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         .alpha   = src_alpha,
     };
     
-    scui_image_format_to_pixel_format(&image.image->format, &image_surface.format);
+    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_draw_area_blend(dst_surface, dst_clip, &image_surface, src_clip, src_color);
     
     scui_image_cache_unload(&image);
@@ -83,7 +83,7 @@ void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = -src_center.x, .y = -src_center.y,});
     scui_matrix_inverse(&matrix);
     
-    scui_image_format_to_pixel_format(&image.image->format, &image_surface.format);
+    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &matrix);
     
     scui_image_cache_unload(&image);
@@ -129,7 +129,7 @@ void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = -center->x, .y = -center->y,});
     scui_matrix_inverse(&matrix);
     
-    scui_image_format_to_pixel_format(&image.image->format, &image_surface.format);
+    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &matrix);
     
     scui_image_cache_unload(&image);
@@ -165,7 +165,7 @@ void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *
         .alpha   = src_alpha,
     };
     
-    scui_image_format_to_pixel_format(&image.image->format, &image_surface.format);
+    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, matrix);
     
     scui_image_cache_unload(&image);

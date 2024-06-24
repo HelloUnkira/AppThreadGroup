@@ -8,20 +8,36 @@
 #include "scui.h"
 
 /*@brief 图像格式转换
- *@param image_format 图像格式
- *@param pixel_format 像素格式
+ *@param image_cf 图像格式
+ *@param pixel_cf 像素格式
  */
-void scui_image_format_to_pixel_format(scui_image_format_t *image_format,
-                                       scui_pixel_cf_t *pixel_format)
+void scui_image_cf_by_pixel_cf(scui_image_cf_t *image_cf, scui_pixel_cf_t *pixel_cf)
 {
-    switch (*image_format) {
-    case scui_image_format_palette4:    *pixel_format = scui_pixel_cf_palette4;         break;
-    case scui_image_format_palette8:    *pixel_format = scui_pixel_cf_palette8;         break;
-    case scui_image_format_bmp565:      *pixel_format = scui_pixel_cf_bmp565;           break;
-    case scui_image_format_bmp888:      *pixel_format = scui_pixel_cf_bmp888;           break;
-    case scui_image_format_bmp8565:     *pixel_format = scui_pixel_cf_bmp8565;          break;
-    case scui_image_format_bmp8888:     *pixel_format = scui_pixel_cf_bmp8888;          break;
-    default:                            SCUI_LOG_ERROR("unsupported image pixel");      break;
+    switch (*pixel_cf) {
+    case scui_pixel_cf_palette4:    *image_cf = scui_image_cf_palette4;         break;
+    case scui_pixel_cf_palette8:    *image_cf = scui_image_cf_palette8;         break;
+    case scui_pixel_cf_bmp565:      *image_cf = scui_image_cf_bmp565;           break;
+    case scui_pixel_cf_bmp888:      *image_cf = scui_image_cf_bmp888;           break;
+    case scui_pixel_cf_bmp8565:     *image_cf = scui_image_cf_bmp8565;          break;
+    case scui_pixel_cf_bmp8888:     *image_cf = scui_image_cf_bmp8888;          break;
+    default: SCUI_LOG_ERROR("unsupported image pixel");                         break;
+    }
+}
+
+/*@brief 图像格式转换
+ *@param image_cf 图像格式
+ *@param pixel_cf 像素格式
+ */
+void scui_image_cf_to_pixel_cf(scui_image_cf_t *image_cf, scui_pixel_cf_t *pixel_cf)
+{
+    switch (*image_cf) {
+    case scui_image_cf_palette4:    *pixel_cf = scui_pixel_cf_palette4;         break;
+    case scui_image_cf_palette8:    *pixel_cf = scui_pixel_cf_palette8;         break;
+    case scui_image_cf_bmp565:      *pixel_cf = scui_pixel_cf_bmp565;           break;
+    case scui_image_cf_bmp888:      *pixel_cf = scui_pixel_cf_bmp888;           break;
+    case scui_image_cf_bmp8565:     *pixel_cf = scui_pixel_cf_bmp8565;          break;
+    case scui_image_cf_bmp8888:     *pixel_cf = scui_pixel_cf_bmp8888;          break;
+    default: SCUI_LOG_ERROR("unsupported image pixel");                         break;
     }
 }
 

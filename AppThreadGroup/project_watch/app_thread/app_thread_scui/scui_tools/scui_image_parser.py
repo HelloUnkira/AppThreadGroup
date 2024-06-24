@@ -180,13 +180,13 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
         scui_image_parser_c.write('\t.status\t\t\t = %s,\n' % 'scui_image_status_lz4')
         if image_raw.mode == 'P':
             if scui_pixel_cf_0 == r'palette4':
-                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_palette4')
+                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_cf_palette4')
         if image_raw.mode == 'RGB':
             if scui_pixel_cf_1 == r'bmp565':
-                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_bmp565')
+                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_cf_bmp565')
         if image_raw.mode == 'RGBA':
             if scui_pixel_cf_2 == r'bmp8565':
-                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_format_bmp8565')
+                scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % 'scui_image_cf_bmp8565')
         scui_image_parser_c.write('};\n\n')
         # 信息记录
         scui_image_parser_h.write('//<%10s,%10s,%10s,%10s,%12.2f> scui_image_%s\n' %

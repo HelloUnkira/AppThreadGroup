@@ -453,18 +453,22 @@ void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
             }
         }
         
-        scui_surface_t pattern = {
-            .pixel   = pixel,
-            .format  = surface->format,
-            .hor_res = clip->w,
-            .ver_res = clip->h,
-            .alpha   = scui_widget_alpha_get(event->object),
-        };
-        
         scui_area_t dst_clip = {0};
         scui_area_t dst_area = scui_widget_draw_clip(event->object);
-        if (scui_area_inter(&dst_clip, &dst_area, clip))
-            scui_widget_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
+        if (scui_area_inter(&dst_clip, &dst_area, clip)) {
+            
+            scui_image_t image_inst = {
+                .status         = scui_image_status_mem,
+                .pixel.width    = clip->w,
+                .pixel.height   = clip->h,
+                .pixel.data_mem = pixel,
+            };
+            scui_image_cf_by_pixel_cf(&image_inst.format, &surface->format);
+            scui_handle_t image = scui_handle_find();
+            scui_handle_set(image, &image_inst);
+            scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
+            scui_handle_set(image, NULL);
+        }
         
         SCUI_MEM_FREE(pixel);
         return;

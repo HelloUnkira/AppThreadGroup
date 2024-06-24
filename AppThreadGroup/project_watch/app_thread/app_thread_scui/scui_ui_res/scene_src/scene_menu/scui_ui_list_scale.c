@@ -7,36 +7,10 @@
 
 #include "scui.h"
 
-static inline void scui_ui_scene_window_float_cfg(scui_event_t *event)
-{
-    if (!scui_widget_event_check_prepare(event))
-         return;
-    
-    /* 窗口属性参数配置 */
-    scui_window_float_t float_cfg = {0};
-    scui_window_float_cfg_get(&float_cfg);
-    float_cfg.main = SCUI_UI_SCENE_LIST_SCALE;
-    float_cfg.list[0] = SCUI_HANDLE_INVALID;
-    float_cfg.list[1] = SCUI_HANDLE_INVALID;
-    float_cfg.list[2] = SCUI_HANDLE_INVALID;
-    float_cfg.list[3] = SCUI_HANDLE_INVALID;
-    scui_window_float_cfg_set(&float_cfg);
-}
-
-static inline void scui_ui_scene_window_list_cfg(scui_event_t *event)
-{
-    if (!scui_widget_event_check_prepare(event))
-         return;
-    
-    /* 窗口属性参数配置 */
-    scui_window_cfg_t window_cfg = {0};
-    scui_window_cfg_get(SCUI_UI_SCENE_LIST_SCALE, &window_cfg);
-    window_cfg.sibling[0] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[1] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[2] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[3] = SCUI_HANDLE_INVALID;
-    scui_window_cfg_set(SCUI_UI_SCENE_LIST_SCALE, &window_cfg);
-}
+static scui_handle_t  list_num   = 0;
+static scui_handle_t *list_image = NULL;
+static scui_handle_t *list_text  = NULL;
+static scui_handle_t *list_jump  = NULL;
 
 static struct {
     scui_coord_t  scroll_pct;       // 滚动偏移量
@@ -49,7 +23,8 @@ static struct {
  */
 void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+    scui_ui_scene_link_cfg(event);
+    
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -98,17 +73,13 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type   = scui_widget_type_custom;
-            custom_maker.widget.clip.w = SCUI_DRV_HOR_RES / 8;
-            custom_maker.widget.clip.h = SCUI_DRV_VER_RES / 8;
-            custom_maker.widget.parent = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
+            custom_maker.widget.type        = scui_widget_type_custom;
+            custom_maker.widget.style.trans = true;
+            custom_maker.widget.clip.h      = SCUI_DRV_VER_RES / 8;
+            custom_maker.widget.parent      = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
             
             // 自动布局模式
             for (uint8_t idx = 0; idx < 10; idx++) {
-                custom_maker.widget.color.color.ch.a = 0xFF;
-                custom_maker.widget.color.color.ch.r = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.g = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.b = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
                 scui_custom_create(&custom_maker, &custom_handle, false);
             }
         }
@@ -134,8 +105,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
-        scui_ui_scene_window_float_cfg(event);
-        scui_ui_scene_window_list_cfg(event);
         SCUI_LOG_INFO("scui_event_focus_get");
         scui_widget_event_mask_keep(event);
         break;

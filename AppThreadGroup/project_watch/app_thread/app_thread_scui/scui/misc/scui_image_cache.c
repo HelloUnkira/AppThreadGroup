@@ -171,6 +171,10 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
         return;
     }
     
+    // 内存图片直达即可(不走缓存管理)
+    if (image_unit->image->status == scui_image_status_mem)
+        return;
+    
     scui_image_unit_t *unit = NULL;
     scui_table_rbsn_t *unit_node = NULL;
     
@@ -190,6 +194,12 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     
     if (image_unit == NULL) {
         SCUI_LOG_WARN("image info is empty");
+        return;
+    }
+    
+    // 内存图片直达即可(不走缓存管理)
+    if (image_unit->image->status == scui_image_status_mem) {
+        image_unit->data = image_unit->image->pixel.data_mem;
         return;
     }
     

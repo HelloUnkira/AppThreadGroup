@@ -78,20 +78,24 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
         scui_draw_line_copy(&pixel[(y * scaled + 0) * pixel_byte],
                             &pixel[(0 * scaled + 0) * pixel_byte], pixel_byte * scaled);
     
-    scui_surface_t pattern = {
-        .pixel   = pixel,
-        .format  = surface->format,
-        .hor_res = scaled,
-        .ver_res = clip->h,
-        .alpha   = scui_widget_alpha_get(event->object),
-    };
-    
     scui_point_t offset = {.x = margin,};
     scui_area_t dst_clip = {0};
     scui_area_t dst_area = scui_widget_draw_clip(event->object);
     if (scui_area_inter(&dst_clip, &dst_area, clip))
-    if (scui_area_limit_offset(&dst_clip, &offset))
-        scui_widget_draw_pattern(event->object, &dst_clip, &pattern, NULL, (scui_color_t){0});
+    if (scui_area_limit_offset(&dst_clip, &offset)) {
+        
+        scui_image_t image_inst = {
+            .status         = scui_image_status_mem,
+            .pixel.width    = scaled,
+            .pixel.height   = clip->h,
+            .pixel.data_mem = pixel,
+        };
+        scui_image_cf_by_pixel_cf(&image_inst.format, &surface->format);
+        scui_handle_t image = scui_handle_find();
+        scui_handle_set(image, &image_inst);
+        scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
+        scui_handle_set(image, NULL);
+    }
     
     SCUI_MEM_FREE(pixel);
     SCUI_MEM_FREE(out_buf);

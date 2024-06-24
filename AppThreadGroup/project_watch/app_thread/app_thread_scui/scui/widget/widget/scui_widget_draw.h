@@ -14,17 +14,6 @@ bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_cli
                                   scui_area_t   *target,   scui_area_t *clip,
                                   scui_area_t   *dst_clip, scui_area_t *src_clip);
 
-/*@brief 控件在画布绘制图像
- *@param handle  控件句柄
- *@param target  控件绘制区域
- *@param surface 画布实例
- *@param clip    画布绘制区域
- *@param color   图像源色调(调色板)
- */
-void scui_widget_draw_pattern(scui_handle_t   handle,  scui_area_t *target,
-                              scui_surface_t *surface, scui_area_t *clip,
-                              scui_color_t    color);
-
 /*@brief 控件在画布绘制字符串
  *@param handle 控件句柄
  *@param target 控件绘制区域

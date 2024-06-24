@@ -261,7 +261,7 @@ void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_cl
         .alpha   = src_alpha,
     };
     
-    scui_image_format_to_pixel_format(&image.image->format, &image_surface.format);
+    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_surface_t *src_surface = &image_surface;
     
     scui_point_t dst_offset = {
@@ -512,10 +512,10 @@ void scui_draw_ring(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
     /* 限制要求,只支持调色板位图 */
-    SCUI_ASSERT(src_image->format == scui_image_format_palette4 ||
-                src_image->format == scui_image_format_palette8);
-    SCUI_ASSERT(src_image_e->format == scui_image_format_palette4 ||
-                src_image_e->format == scui_image_format_palette8);
+    SCUI_ASSERT(src_image->format == scui_image_cf_palette4 ||
+                src_image->format == scui_image_cf_palette8);
+    SCUI_ASSERT(src_image_e->format == scui_image_cf_palette4 ||
+                src_image_e->format == scui_image_cf_palette8);
     
     /* 限制要求,调色板位图为正方形图像 */
     SCUI_ASSERT(src_image->pixel.width == src_image->pixel.height);
