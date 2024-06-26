@@ -150,7 +150,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
         scui_handle_t  custom = scui_ui_res_local->list_widget[index];
         scui_widget_t *widget = NULL;
-        SCUI_LOG_WARN("list_idx:%d", index);
+        SCUI_LOG_INFO("list_idx:%d", index);
         
         scui_ui_res_local->list_idx = index;
         widget = scui_handle_get(event->object);
@@ -245,7 +245,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         if (handle_scroll_rcd != handle_scroll) {
             handle_scroll_rcd  = handle_scroll;
             if (handle_scroll != SCUI_HANDLE_INVALID)
-                SCUI_LOG_WARN("widget center:%d", handle_scroll);
+                SCUI_LOG_INFO("widget center:%d", handle_scroll);
         }
         
         if (scui_ui_res_local->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
