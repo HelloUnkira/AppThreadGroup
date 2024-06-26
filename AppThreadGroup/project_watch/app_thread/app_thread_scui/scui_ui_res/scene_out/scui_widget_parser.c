@@ -485,6 +485,7 @@ extern void scui_ui_scene_test_event_proc(scui_event_t *event);
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
@@ -509,6 +510,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_CUBE,
@@ -533,6 +535,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
@@ -557,6 +560,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
@@ -581,7 +585,9 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.style.sched_anima       = true,
+	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LIST_SCALE,
@@ -593,7 +599,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 
 static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_SCROLL = {
 	.widget.type                    = scui_widget_type_scroll,
-	.widget.style.trans             = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
@@ -636,7 +641,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.buffer                         = true,
 	.resident                       = true,
 	.hang_only                      = true,
-	.format                         = scui_pixel_cf_bmp8565,
+	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
@@ -866,6 +871,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_2_RING = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_3,

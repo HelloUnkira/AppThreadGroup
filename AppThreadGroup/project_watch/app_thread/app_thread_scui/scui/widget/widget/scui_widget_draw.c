@@ -7,6 +7,34 @@
 
 #include "scui.h"
 
+/*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
+ *@param 形如scui_widget_surface_draw_xxx的接口使用
+ */
+static bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
+                                         scui_area_t   *target,   scui_area_t *clip,
+                                         scui_area_t   *dst_clip, scui_area_t *src_clip)
+{
+    *dst_clip = (scui_area_t){0};
+    *src_clip = *clip;
+    
+    /* 子剪切域要相对同步偏移 */
+    if (!scui_area_inter(dst_clip, unit_clip, target))
+         return false;
+    /* 子剪切域要相对同步偏移 */
+    scui_point_t widget_offset = {
+        .x = widget->clip_set.clip.x - widget->clip.x,
+        .y = widget->clip_set.clip.y - widget->clip.y,
+    };
+    scui_point_t offset = {
+        .x = dst_clip->x - target->x + widget_offset.x,
+        .y = dst_clip->y - target->y + widget_offset.y,
+    };
+    if (!scui_area_limit_offset(src_clip, &offset))
+         return false;
+    
+    return true;
+}
+
 /*@brief 控件剪切域(绘制)
  *@param handle 控件句柄
  *@retval 控件剪切域
@@ -17,31 +45,6 @@ scui_area_t scui_widget_draw_clip(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     return widget->clip_set.clip;
-}
-
-/*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
- *@param 形如scui_widget_surface_draw_xxx的接口使用
- */
-bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
-                                  scui_area_t   *target,   scui_area_t *clip,
-                                  scui_area_t   *dst_clip, scui_area_t *src_clip)
-{
-    *dst_clip = (scui_area_t){0};
-    *src_clip = *clip;
-    
-    /* 子剪切域要相对同步偏移 */
-    scui_area_t dst_area = *unit_clip;
-    if (!scui_area_inter(dst_clip, &dst_area, target))
-         return false;
-    /* 子剪切域要相对同步偏移 */
-    scui_point_t offset = {
-        .x = dst_clip->x - target->x,
-        .y = dst_clip->y - target->y,
-    };
-    if (!scui_area_limit_offset(src_clip, &offset))
-         return false;
-    
-    return true;
 }
 
 /*@brief 控件在画布绘制字符串
@@ -215,10 +218,11 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
  *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param scale  图形缩放比例(1024为放大系数)
+ *@param type   缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
  */
 void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
                                   scui_handle_t image,  scui_area_t *clip,
-                                  scui_point_t  scale)
+                                  scui_point_t  scale,  uint8_t      type)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -254,7 +258,7 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
         if (scui_widget_draw_clip_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_image_scale(widget->surface, &dst_clip, image_inst, &src_clip,
-                                  widget->alpha, scale);
+                                  widget->alpha, scale, type);
     }
     
 #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

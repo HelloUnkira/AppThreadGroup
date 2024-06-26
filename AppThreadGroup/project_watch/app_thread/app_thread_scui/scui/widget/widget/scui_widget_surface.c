@@ -49,6 +49,9 @@ void scui_widget_surface_create(scui_widget_t *widget,  scui_pixel_cf_t format,
  */
 void scui_widget_surface_destroy(scui_widget_t *widget)
 {
+    if (widget->surface == NULL)
+        return;
+    
     SCUI_MEM_FREE(widget->surface->pixel);
     SCUI_MEM_FREE(widget->surface);
     widget->surface = NULL;

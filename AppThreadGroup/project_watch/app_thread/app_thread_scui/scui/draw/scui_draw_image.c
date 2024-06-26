@@ -50,10 +50,12 @@ void scui_draw_image(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param src_clip    图像源绘制区域
  *@param src_alpha   图像透明度(非图像自带透明度)
  *@param scale       图形缩放比例(1024为放大系数)
+ *@param type        缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
  */
 void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                            scui_image_t   *src_image,   scui_area_t *src_clip,
-                           scui_alpha_t    src_alpha,   scui_point_t scale)
+                           scui_alpha_t    src_alpha,   scui_point_t scale,
+                           uint8_t         type)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
@@ -72,9 +74,28 @@ void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         .alpha   = src_alpha,
     };
     
-    /* 这里是绘制中心缩放 */
-    scui_point_t src_center = {.x = src_clip->w / 2,.y = src_clip->h / 2,};
-    scui_point_t dst_center = {.x = dst_clip->w / 2,.y = dst_clip->h / 2,};
+    scui_point_t src_center = {0};
+    scui_point_t dst_center = {0};
+    
+    /* 中心缩放 */
+    if (type == 0) {
+        src_center.x = src_clip->w / 2;
+        src_center.y = src_clip->h / 2;
+        dst_center.x = dst_clip->w / 2;
+        dst_center.y = dst_clip->h / 2;
+    }
+    
+    /* 水平缩放 */
+    if (type == 1) {
+        src_center.x = src_clip->w / 2;
+        dst_center.x = dst_clip->w / 2;
+    }
+    
+    /* 垂直缩放 */
+    if (type == 2) {
+        src_center.y = src_clip->h / 2;
+        dst_center.y = dst_clip->h / 2;
+    }
     
     scui_matrix_t matrix = {0};
     scui_matrix_identity(&matrix);

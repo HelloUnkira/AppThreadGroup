@@ -17,7 +17,7 @@
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 2 + 1024 * 256)
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_CHECK                       (0)
-#define SCUI_MEM_RECORD_ANALYSIS                    (1)
+#define SCUI_MEM_RECORD_ANALYSIS                    (0)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
 #define SCUI_MEM_RECORD_CHECK_MIX                   (0)
@@ -94,6 +94,7 @@
 
 /* 设备像素格式(默认) */
 #define SCUI_PIXEL_CF_DEF                           (scui_pixel_cf_bmp565)
+#define SCUI_PIXEL_CF_DEF_A                         (scui_pixel_cf_bmp8565)
 
 /* 基础图元使用矩阵变换 */
 #define SCUI_DRAW_MISC_USE_SOFTWARE                 (0)

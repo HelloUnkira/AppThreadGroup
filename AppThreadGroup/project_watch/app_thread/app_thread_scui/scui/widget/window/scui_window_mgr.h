@@ -51,14 +51,24 @@ typedef struct {
 } scui_window_mgr_t;
 
 /*@brief 窗口切换风格(配置)
+ *@retval 窗口切换风格
+ */
+scui_window_switch_type_t scui_window_switch_type_cfg_get(void);
+
+/*@brief 窗口切换方向(配置)
+ *@retval 窗口切换方向
+ */
+scui_event_dir_t scui_window_switch_dir_cfg_get(void);
+
+/*@brief 窗口切换风格(配置)
  *@param switch_type 窗口切换风格
  */
-void scui_window_switch_type_cfg(scui_window_switch_type_t switch_type);
+void scui_window_switch_type_cfg_set(scui_window_switch_type_t switch_type);
 
 /*@brief 窗口切换方向(配置)
  *@param switch_dir 窗口切换方向
  */
-void scui_window_switch_dir_cfg(scui_event_dir_t switch_dir);
+void scui_window_switch_dir_cfg_set(scui_event_dir_t switch_dir);
 
 /*@brief 窗口管理器根控件列表
  *@param list 根控件列表

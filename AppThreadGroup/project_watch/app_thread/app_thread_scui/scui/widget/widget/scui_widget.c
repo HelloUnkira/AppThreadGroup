@@ -303,9 +303,14 @@ void scui_widget_clip_check(scui_handle_t handle, bool recurse)
     SCUI_LOG_WARN("widget: %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    SCUI_LOG_WARN("<%d, %d, %d, %d>",
+    
+    SCUI_LOG_WARN("widget_clip:<%d, %d, %d, %d>",
                   widget->clip.x, widget->clip.y,
                   widget->clip.w, widget->clip.h);
+    SCUI_LOG_WARN("surface_clip:<%d, %d, %d, %d>",
+                  widget->clip_set.clip.x, widget->clip_set.clip.y,
+                  widget->clip_set.clip.w, widget->clip_set.clip.h);
+    
     scui_clip_check(&widget->clip_set);
     
     if (!recurse)
@@ -344,14 +349,11 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
 void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recurse)
 {
     SCUI_LOG_DEBUG("widget: %u", widget->myself);
-    scui_area_t widget_clip = widget->clip_set.clip;
+    SCUI_ASSERT(clip != NULL);
     
-    if (clip != NULL) {
-        scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget_clip, clip))
-            widget_clip = clip_inter;
-    }
-    scui_clip_add(&widget->clip_set, &widget_clip);
+    scui_area_t clip_inter = {0};
+    if (scui_area_inter(&clip_inter, &widget->clip_set.clip, clip))
+        scui_clip_add(&widget->clip_set, &clip_inter);
     
     if (!recurse)
          return;
@@ -791,7 +793,7 @@ scui_handle_t scui_widget_child_num(scui_handle_t handle)
  *@param index  子控件位置(映射点)
  *@retval 子控件句柄
  */
-scui_handle_t scui_widget_child_index(scui_handle_t handle, scui_handle_t index)
+scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -802,6 +804,24 @@ scui_handle_t scui_widget_child_index(scui_handle_t handle, scui_handle_t index)
     if (index < widget->child_num)
         return widget->child_list[index];
     return SCUI_HANDLE_INVALID;
+}
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件句柄
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    scui_widget_child_list_btra(widget, idx)
+        if (child == widget->child_list[idx])
+            return idx;
+    
+    SCUI_ASSERT(false);
+    return -1;
 }
 
 /*@brief 控件类型

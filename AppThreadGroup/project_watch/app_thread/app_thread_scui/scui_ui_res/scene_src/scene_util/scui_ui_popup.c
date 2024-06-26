@@ -12,6 +12,9 @@ static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 {
+    if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
+        return;
+    
     popup_alpha = scui_alpha_cover;
     scui_widget_show(SCUI_UI_SCENE_POPUP, false);
     scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);

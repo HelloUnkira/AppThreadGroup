@@ -20,10 +20,12 @@ void scui_ui_scene_float_1_event_proc(scui_event_t *event)
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
+        scui_widget_event_mask_keep(event);
         scui_window_float_event_grasp_show(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
+        scui_widget_event_mask_keep(event);
         scui_window_float_event_grasp_hide(event);
         break;
     case scui_event_focus_get:

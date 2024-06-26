@@ -35,10 +35,15 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         scui_widget_event_mask_keep(event);
         break;
-    case scui_event_key_click:
+    case scui_event_key_click: {
+        scui_ui_scene_list_cfg(0);
+        scui_window_switch_type_t type = scui_window_switch_type_cfg_get();
+        scui_window_switch_type_cfg_set(scui_window_switch_none);
         scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
+        scui_window_switch_type_cfg_set(type);
         scui_widget_event_mask_over(event);
         break;
+    }
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);

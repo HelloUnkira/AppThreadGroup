@@ -1,6 +1,13 @@
 #ifndef SCUI_UI_H
 #define SCUI_UI_H
 
+/* 应用列表,设置列表等使用 */
+extern scui_handle_t  scui_ui_scene_list_num;
+extern scui_handle_t *scui_ui_scene_list_image;
+extern scui_handle_t *scui_ui_scene_list_text;
+extern scui_handle_t *scui_ui_scene_list_jump;
+void scui_ui_scene_list_cfg(uint8_t type);
+
 /*@brief 窗口关联配置
  *@param event 事件
  */

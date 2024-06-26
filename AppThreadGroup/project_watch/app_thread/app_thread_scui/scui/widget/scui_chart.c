@@ -182,9 +182,6 @@ void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
  */
 void scui_chart_event(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -194,6 +191,8 @@ void scui_chart_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw: {
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         
         switch (chart->type) {
         case scui_chart_type_histogram: {

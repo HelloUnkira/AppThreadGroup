@@ -21,6 +21,17 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget_root != NULL);
     
+    // 额外补充,如果该控件没有目标画布
+    // 直接走单一事件,因为需要重定向
+    if (widget->surface == NULL) {
+        scui_event_t event = {
+            .object = handle,
+            .type   = scui_event_draw,
+        };
+        scui_widget_event_proc(&event);
+        return;
+    }
+    
     scui_area_t clip_valid = widget->clip_set.clip;
     
     if (clip != NULL) {
@@ -271,6 +282,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
+    
+    if (scui_handle_unmap(widget->myself))
+        return;
     
     /*************************************************************************/
     /* 动画事件:顺向递归**************************************************** */

@@ -176,12 +176,10 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     
     /* 像素格式不带透明度, 像素格式带透明度 */
-    if ((dst_surface->format == scui_pixel_cf_bmp565  && src_surface->format == scui_pixel_cf_bmp565)  ||
-        (dst_surface->format == scui_pixel_cf_bmp888  && src_surface->format == scui_pixel_cf_bmp888)  ||
-        (dst_surface->format == scui_pixel_cf_bmp565  && src_surface->format == scui_pixel_cf_bmp8565) ||
-        (dst_surface->format == scui_pixel_cf_bmp888  && src_surface->format == scui_pixel_cf_bmp8888) ||
-        (dst_surface->format == scui_pixel_cf_bmp8565 && src_surface->format == scui_pixel_cf_bmp8565) ||
-        (dst_surface->format == scui_pixel_cf_bmp8888 && src_surface->format == scui_pixel_cf_bmp8888)) {
+    if ((dst_surface->format == scui_pixel_cf_bmp565 || dst_surface->format == scui_pixel_cf_bmp8565  ||
+         dst_surface->format == scui_pixel_cf_bmp888 || dst_surface->format == scui_pixel_cf_bmp8888) &&
+        (src_surface->format == scui_pixel_cf_bmp565 || src_surface->format == scui_pixel_cf_bmp8565  ||
+         src_surface->format == scui_pixel_cf_bmp888 || src_surface->format == scui_pixel_cf_bmp8888)) {
         
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -361,11 +359,11 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * dst_byte;
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     
-    /* 像素格式不带透明度,像素格式带透明度 */
-    if ((dst_surface->format == scui_pixel_cf_bmp565 && src_surface->format == scui_pixel_cf_bmp565)  ||
-        (dst_surface->format == scui_pixel_cf_bmp888 && src_surface->format == scui_pixel_cf_bmp888)  ||
-        (dst_surface->format == scui_pixel_cf_bmp565 && src_surface->format == scui_pixel_cf_bmp8565) ||
-        (dst_surface->format == scui_pixel_cf_bmp888 && src_surface->format == scui_pixel_cf_bmp8888)) {
+    /* 像素格式不带透明度, 像素格式带透明度 */
+    if ((dst_surface->format == scui_pixel_cf_bmp565 || dst_surface->format == scui_pixel_cf_bmp8565  ||
+         dst_surface->format == scui_pixel_cf_bmp888 || dst_surface->format == scui_pixel_cf_bmp8888) &&
+        (src_surface->format == scui_pixel_cf_bmp565 || src_surface->format == scui_pixel_cf_bmp8565  ||
+         src_surface->format == scui_pixel_cf_bmp888 || src_surface->format == scui_pixel_cf_bmp8888)) {
         
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)

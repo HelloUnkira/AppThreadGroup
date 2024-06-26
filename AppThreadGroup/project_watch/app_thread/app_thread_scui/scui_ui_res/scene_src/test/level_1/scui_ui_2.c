@@ -55,6 +55,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     }
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
+        scui_widget_event_mask_keep(event);
         
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -143,11 +144,10 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scui_ui_res_local->bar_wait  = 0;
         scui_ui_res_local->bar_alpha = scui_alpha_cover;
         scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
-        
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
+        scui_widget_event_mask_keep(event);
         
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
@@ -155,8 +155,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;
         }
-        
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");

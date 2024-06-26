@@ -7,13 +7,6 @@
  */
 scui_area_t scui_widget_draw_clip(scui_handle_t handle);
 
-/*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
- *@param 形如scui_widget_surface_draw_xxx的接口使用
- */
-bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
-                                  scui_area_t   *target,   scui_area_t *clip,
-                                  scui_area_t   *dst_clip, scui_area_t *src_clip);
-
 /*@brief 控件在画布绘制字符串
  *@param handle 控件句柄
  *@param target 控件绘制区域
@@ -46,10 +39,11 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
  *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param scale  图形缩放比例(1024为放大系数)
+ *@param type   缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
  */
 void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
                                   scui_handle_t image,  scui_area_t *clip,
-                                  scui_point_t  scale);
+                                  scui_point_t  scale,  uint8_t      type);
 
 /*@brief 控件在画布绘制图像
  *@param handle 控件句柄

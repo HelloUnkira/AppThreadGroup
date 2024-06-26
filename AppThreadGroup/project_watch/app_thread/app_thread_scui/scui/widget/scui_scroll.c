@@ -633,7 +633,7 @@ void scui_scroll_update_layout(scui_event_t *event)
     if (widget->child_num == 0)
         return;
     
-    SCUI_LOG_WARN("widget: %u", widget->myself);
+    SCUI_LOG_INFO("widget: %u", widget->myself);
     
     /* 仅指定布局触发布局更新 */
     /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
@@ -1165,9 +1165,6 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
  */
 void scui_scroll_event(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
-         return;
-    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -1179,16 +1176,24 @@ void scui_scroll_event(scui_event_t *event)
     case scui_event_hide:
     case scui_event_focus_get:
     case scui_event_focus_lost:
-        scui_scroll_layout(handle);
+        if (scui_widget_event_check_prepare(event))
+            scroll->layout = true;
         break;
     case scui_event_draw:
-        scui_scroll_update_layout(event);
+        if (scui_widget_event_check_prepare(event))
+            scui_scroll_update_layout(event);
         break;
     case scui_event_ptr_down:
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
         scui_event_dir_t event_dir = scui_indev_ptr_dir(event);
         SCUI_LOG_INFO("dir:%u", event_dir);
         
@@ -1232,6 +1237,9 @@ void scui_scroll_event(scui_event_t *event)
     }
     case scui_event_ptr_up:
         scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
         if (scroll->hold_move) {
             scroll->hold_move = false;
             scroll->mask_springback = false;
@@ -1248,6 +1256,10 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
         if (scroll->route_enc == 0) {
             SCUI_LOG_ERROR("route encode is zero");
             break;
@@ -1274,6 +1286,10 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_key_click: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
         if (scroll->route_key == 0) {
             SCUI_LOG_ERROR("route key is zero");
             break;

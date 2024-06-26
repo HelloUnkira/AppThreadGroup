@@ -82,19 +82,19 @@ void scui_ready(void)
     scui_handle_table_register(&table);
     
     /* 窗口交互风格 */
-    scui_window_switch_dir_cfg(SCUI_WINDOW_JUMP_DIR);
+    scui_window_switch_dir_cfg_set(SCUI_WINDOW_JUMP_DIR);
     /* 窗口交互风格 */
-    scui_window_switch_type_cfg(scui_window_switch_normal);
-    scui_window_switch_type_cfg(scui_window_switch_zoom1);
-    scui_window_switch_type_cfg(scui_window_switch_zoom2);
+    scui_window_switch_type_cfg_set(scui_window_switch_normal);
+    scui_window_switch_type_cfg_set(scui_window_switch_zoom1);
+    scui_window_switch_type_cfg_set(scui_window_switch_zoom2);
     
-    scui_window_switch_type_cfg(scui_window_switch_center_in);
-    scui_window_switch_type_cfg(scui_window_switch_center_out);
-    scui_window_switch_type_cfg(scui_window_switch_circle);
-    scui_window_switch_type_cfg(scui_window_switch_grid);
+    scui_window_switch_type_cfg_set(scui_window_switch_center_in);
+    scui_window_switch_type_cfg_set(scui_window_switch_center_out);
+    scui_window_switch_type_cfg_set(scui_window_switch_circle);
+    scui_window_switch_type_cfg_set(scui_window_switch_grid);
     
-    scui_window_switch_type_cfg(scui_window_switch_flip);
-    scui_window_switch_type_cfg(scui_window_switch_cube);
+    scui_window_switch_type_cfg_set(scui_window_switch_flip);
+    scui_window_switch_type_cfg_set(scui_window_switch_cube);
     
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);

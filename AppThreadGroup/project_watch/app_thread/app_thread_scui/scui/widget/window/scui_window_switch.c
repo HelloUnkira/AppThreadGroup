@@ -701,6 +701,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     /* 无切换效果 */
     if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
+        scui_widget_hide(scui_window_mgr.active_curr, false);
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;

@@ -15,7 +15,7 @@
             "buffer":                       "true",
             "resident":                     "true",
             "hang_only":                    "true",
-            "format":                       "scui_pixel_cf_bmp8565"
+            "format":                       "SCUI_PIXEL_CF_DEF_A"
         },
         {
             "widget.type":                  "scui_widget_type_custom",

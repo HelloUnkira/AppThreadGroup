@@ -7,6 +7,72 @@
 
 #include "scui.h"
 
+/*****************************************************************************/
+/* 应用列表,设置列表等使用 */
+scui_handle_t  scui_ui_scene_list_num   = 0;
+scui_handle_t *scui_ui_scene_list_image = NULL;
+scui_handle_t *scui_ui_scene_list_text  = NULL;
+scui_handle_t *scui_ui_scene_list_jump  = NULL;
+
+void scui_ui_scene_list_cfg(uint8_t type)
+{
+    switch (type) {
+    case 0x00: {
+        
+        static scui_handle_t list_image[] = {
+            scui_image_prj_image_src_00_theme_icon_01_spo2_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
+            scui_image_prj_image_src_00_theme_icon_01_spo2_03_02png,
+        };
+        static scui_handle_t list_text[] = {
+            SCUI_MULTI_LANG_0X002f,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X0030,
+            SCUI_MULTI_LANG_0X002f,
+        };
+        static scui_handle_t list_jump[] = {
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+            SCUI_UI_SCENE_6,
+        };
+        scui_ui_scene_list_num   = scui_arr_len(list_image);
+        scui_ui_scene_list_image = list_image;
+        scui_ui_scene_list_text  = list_text;
+        scui_ui_scene_list_jump  = list_jump;
+        SCUI_ASSERT(scui_arr_len(list_image) == scui_arr_len(list_text));
+        SCUI_ASSERT(scui_arr_len(list_image) == scui_arr_len(list_jump));
+        break;
+    }
+    default:
+        SCUI_ASSERT(false);
+        break;
+    }
+}
+
+/*****************************************************************************/
 /*@brief 窗口关联配置
  *@param event 事件
  */
@@ -102,5 +168,6 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         break;
     }
     scui_window_cfg_set(event->object, &window_cfg);
-    
 }
+
+/*****************************************************************************/

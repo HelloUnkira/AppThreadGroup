@@ -49,7 +49,7 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         SCUI_ASSERT(switch_type > scui_window_switch_single_s);
         SCUI_ASSERT(switch_type < scui_window_switch_single_e);
         
-        scui_window_switch_type_cfg(switch_type);
+        scui_window_switch_type_cfg_set(switch_type);
         break;
     }
     default:
