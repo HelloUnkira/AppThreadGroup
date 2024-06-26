@@ -68,7 +68,7 @@ static void scui_ui_scene_string_draw_proc(scui_event_t *event)
         for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
             if (scui_ui_res_local->list_widget[idx] != handle)
                 continue;
-            handle = scui_widget_child_by_index(SCUI_UI_SCENE_LIST_SCALE_SCROLL, idx);
+            handle = scui_widget_child_by_index(SCUI_UI_SCENE_LIST_SCALE_SCROLL, idx + 1);
             // scui_widget_clip_check(scui_widget_root(handle), true);
             scui_widget_draw(handle, NULL, false);
             // scui_widget_clip_check(scui_widget_root(handle), true);
@@ -146,19 +146,19 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_handle_t parent = scui_widget_parent(event->object);
-        scui_ui_res_local->list_idx = scui_widget_child_to_index(parent, event->object);
-        scui_handle_t  index  = scui_ui_res_local->list_idx;
+        scui_handle_t  parent = scui_widget_parent(event->object);
+        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
         scui_handle_t  custom = scui_ui_res_local->list_widget[index];
         scui_widget_t *widget = NULL;
+        SCUI_LOG_WARN("list_idx:%d", index);
         
+        scui_ui_res_local->list_idx = index;
         widget = scui_handle_get(event->object);
         SCUI_ASSERT(widget != NULL);
         /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
         if (scui_clip_empty(&widget->clip_set))
             break;
         
-        SCUI_LOG_INFO("list_idx:%d", index);
         widget = scui_handle_get(custom);
         SCUI_ASSERT(widget != NULL);
         
@@ -306,13 +306,22 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.type        = scui_widget_type_custom;
             custom_maker.widget.style.trans = true;
             custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
-            custom_maker.widget.clip.h      = 72;
             custom_maker.widget.parent      = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
-            custom_maker.widget.event_cb    = scui_ui_scene_item_scale_event_proc;
             
+            custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
+            custom_maker.widget.event_cb = NULL;
+            scui_custom_create(&custom_maker, &custom_handle, false);
+            
+            custom_maker.widget.clip.h   = 72;
+            custom_maker.widget.event_cb = scui_ui_scene_item_scale_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++)
                 scui_custom_create(&custom_maker, &custom_handle, false);
             
+            custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
+            custom_maker.widget.event_cb = NULL;
+            scui_custom_create(&custom_maker, &custom_handle, false);
+            
+            custom_maker.widget.clip.h   = 72;
             scui_area_t clip = custom_maker.widget.clip;
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
                 

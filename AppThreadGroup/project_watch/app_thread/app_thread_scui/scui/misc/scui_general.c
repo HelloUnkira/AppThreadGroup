@@ -145,9 +145,13 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color8565_t *c_2 = pixel_2;
         scui_color_limit_t a2 = (uint16_t)c_2->ch.a * alpha_2 / 0xFF;
         scui_color_limit_t a1 = 0xFF - a2;
+        scui_color_limit_t as = a2 + a1 * alpha_1 / 0xFF;
         scui_color_limit_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
         scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
+        
+        if (alpha_1 == 0xFF || a1 == 0xFF)
+            return;
         
         scui_color565_t color565 = {
             .ch.r = r,
@@ -171,7 +175,7 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
         
-        if (alpha_1 == 0xFF)
+        if (alpha_1 == 0xFF || a2 == 0x00)
             return;
         
         scui_color8565_t color8565 = {
@@ -192,12 +196,14 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color8565_t *c_2 = pixel_2;
         scui_color_limit_t a2 = (uint16_t)c_2->ch.a * alpha_2 / 0xFF;
         scui_color_limit_t a1 = (uint16_t)c_1->ch.a * alpha_1 / 0xFF;
-        scui_color_limit_t as = (a1 * alpha_1 + a2 * alpha_2) / 0xFF;
-        scui_color_limit_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
-        scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
-        scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
         
-        if (alpha_1 == 0xFF)
+        scui_color_limit_t as = 0xFF - (0xFF - a2) * (0xFF - a1) / 0xFF;
+        scui_color_limit_t r  = ((uint16_t)c_1->ch.r * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.r * a2) / 0xFF;
+        scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.g * a2) / 0xFF;
+        scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.b * a2) / 0xFF;
+        
+        //去黑
+        if (alpha_1 == 0xFF || a2 == 0x00)
             return;
         
         scui_color8565_t color8565 = {
