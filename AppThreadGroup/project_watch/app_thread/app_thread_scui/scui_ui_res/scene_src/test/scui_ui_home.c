@@ -97,14 +97,14 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
         clip.y = (SCUI_DRV_VER_RES) / 8;
         clip.w =  width;
         clip.h =  76;
-        scui_custom_draw_image_keep(event, &clip, image, color, span, 5, false);
+        scui_custom_draw_text(event, &clip, image, color, span, 5, false);
         
         #if 0   // 仅仅测试,不美观
         clip.x = (SCUI_DRV_HOR_RES) / 12;
         clip.y = (SCUI_DRV_VER_RES - height) / 2;
         clip.w =  56;
         clip.h =  height;
-        scui_custom_draw_image_keep(event, &clip, image, color, span, 5, true);
+        scui_custom_draw_text(event, &clip, image, color, span, 5, true);
         #endif
         
         break;

@@ -54,6 +54,12 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
     static scui_coord_t pct = 0;
     static scui_coord_t way = +1;
     
+    static scui_coord_t btn_lim = 90;
+    static scui_coord_t btn_way = -1;
+    static scui_coord_t btn_pct = 90;
+    static scui_coord_t btn_hold = false;
+    static scui_area_t  btn_area = {0};
+    
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -64,6 +70,16 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         pct += way;
         if (pct == 100 || pct == 0)
             way = -way;
+        
+        if (!(btn_pct <= btn_lim && btn_way == -1)) {
+            if (!btn_hold && (btn_pct == 100 || btn_pct == btn_lim))
+                btn_way = -btn_way;
+            if ((btn_pct  < 100 && btn_pct > btn_lim) ||
+                (btn_pct == 100 && btn_way == -1) ||
+                (btn_pct == btn_lim && btn_way == +1))
+                btn_pct += btn_way;
+            SCUI_LOG_WARN("<%d, %d>", btn_pct, btn_way);
+        }
         
         scui_widget_draw(event->object, NULL, false);
         break;
@@ -139,7 +155,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         btn_image_full[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
         btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         btn_color_full.color.full = 0xFF282828;
-        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
         
         btn_clip.w = 72 * 2 + 20;
         btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
@@ -150,7 +166,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         btn_image_full[2] = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
         btn_image_full[3] = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
         btn_color_full.color.full = 0xFF00F6EB;
-        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 4);
+        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, 4);
         
         btn_clip.w = 72 * 2;
         btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
@@ -161,8 +177,73 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         btn_image_full[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
         btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         btn_color_full.color.full = 0xFF282828;
-        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, 0);
+        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, 0);
+        
+        // scale btn
+        btn_clip.w = 72 * 2;
+        btn_clip.x = SCUI_DRV_HOR_RES / 2 - btn_clip.w / 2;
+        btn_clip.y = btn_clip.y + btn_clip.h + 15;
+        btn_clip.h = 72 + 15;
+        
+        btn_area = btn_clip;
+        SCUI_ASSERT(btn_pct >= btn_lim && btn_pct <= 100);
+        scui_area_t scale_btn_clip = btn_clip;
+        scui_multi_t scale_btn_x = btn_clip.w * (100 - btn_pct) / 100 / 2;
+        scui_multi_t scale_btn_y = btn_clip.h * (100 - btn_pct) / 100 / 2;
+        scale_btn_clip.x += scale_btn_x;
+        scale_btn_clip.y += scale_btn_y;
+        scale_btn_clip.w -= scale_btn_x * 2;
+        scale_btn_clip.h -= scale_btn_y * 2;
+        
+        btn_image_full[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+        btn_image_full[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+        btn_image_full[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+        btn_image_full[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+        btn_color_full.color.full = 0xFF282828;
+        scui_custom_draw_rect4(event, &scale_btn_clip, btn_image_full, btn_color_full, -1);
         #endif
+        
+        break;
+    }
+    case scui_event_ptr_down: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
+        
+        if (scui_area_point(&btn_area, &event->ptr_c)) {
+            scui_widget_event_mask_over(event);
+            SCUI_LOG_WARN("");
+            btn_hold = true;
+            btn_pct  = btn_lim;
+            btn_way  = +1;
+            break;
+        }
+        break;
+    }
+    case scui_event_ptr_up: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
+        
+        if (scui_area_point(&btn_area, &event->ptr_c)) {
+            scui_widget_event_mask_over(event);
+            SCUI_LOG_WARN("");
+            btn_hold = false;
+            break;
+        }
+        break;
+    }
+    case scui_event_ptr_click: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
+        
+        if (scui_area_point(&btn_area, &event->ptr_c)) {
+            scui_widget_event_mask_over(event);
+            SCUI_LOG_WARN("");
+            btn_hold = true;
+            break;
+        }
         
         break;
     }

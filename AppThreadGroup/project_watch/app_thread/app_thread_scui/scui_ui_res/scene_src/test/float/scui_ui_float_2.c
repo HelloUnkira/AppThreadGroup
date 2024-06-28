@@ -97,14 +97,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         offset_hor.y = SCUI_DRV_VER_RES - 30;
         clip_hor = scui_widget_draw_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_image_indicator(event, &clip_hor, wait, color_black, focus, color_black,
+            scui_custom_draw_indicator(event, &clip_hor, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, true);
         
         offset_ver.x = 15;
         offset_ver.y = SCUI_DRV_VER_RES - 150;
         clip_ver = scui_widget_draw_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_image_indicator(event, &clip_ver, wait, color_black, focus, color_black,
+            scui_custom_draw_indicator(event, &clip_ver, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, false);
         
         scui_handle_t bar  = scui_image_prj_image_src_repeat_03_barbmp;
@@ -117,14 +117,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         offset_hor.y = SCUI_DRV_VER_RES - 40;
         clip_hor = scui_widget_draw_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_image_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
+            scui_custom_draw_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
         #endif
         
         offset_ver.x = 5;
         offset_ver.y = SCUI_DRV_VER_RES - 160;
         clip_ver = scui_widget_draw_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_image_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
+            scui_custom_draw_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
         break;
     }
     default:
@@ -160,7 +160,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         clip = scui_widget_draw_clip(event->object);
         clip.x += 15;
@@ -169,7 +169,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h -= 15 * 2;
         clip.h /= 2;
         clip.h -= 5;
-        scui_custom_draw_area(event, &clip, color_mix, true, false);
+        scui_custom_draw_rect(event, &clip, color_mix, true, false);
         
         clip = scui_widget_draw_clip(event->object);
         clip.x += 15;
@@ -179,7 +179,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h /= 2;
         clip.y += clip.h + 5;
         clip.h -= 5;
-        scui_custom_draw_area(event, &clip, color_mix, true, true);
+        scui_custom_draw_rect(event, &clip, color_mix, true, true);
         
         break;
     }
@@ -215,7 +215,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         scui_coord_t del_x = clip.w - 10;
         scui_coord_t del_y = clip.h - 10;
@@ -297,7 +297,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         scui_point_t center = {
             .x = clip.x + clip.w / 2,
@@ -306,7 +306,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         scui_coord_t  radius = clip.w / 2 - 20;
         scui_coord_t  angle  = image_ring_angle;
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
-        scui_custom_draw_image_circle_rotate(event, &center, image_handle, color_mix, radius, angle);
+        scui_custom_draw_ring_edge(event, &center, image_handle, color_mix, radius, angle);
         
         break;
     }
@@ -352,7 +352,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
         scui_image_t *image = scui_handle_get(image_handle);

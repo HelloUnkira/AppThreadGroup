@@ -71,7 +71,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_color_t color_black = {0};
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         char *url = "https://github.com/HelloUnkira/AppThreadGroup.git";
         scui_color_t color = {
@@ -117,7 +117,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_color_t color_black = {0};
-        scui_custom_draw_area(event, &clip, color_black, false, false);
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
         
         char *url = "https://github.com/HelloUnkira";
         scui_color_t color_xxx = {

@@ -786,6 +786,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING = {
 	.widget.type                    = scui_widget_type_custom,
 	.widget.style.trans             = true,
 	.widget.style.sched_anima       = true,
+	.widget.style.indev_ptr         = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_3_RING,

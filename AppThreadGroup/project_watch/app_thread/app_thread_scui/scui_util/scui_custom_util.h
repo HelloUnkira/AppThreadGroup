@@ -15,12 +15,12 @@
  *@param dist       宽度或高度
  *@param way        方向(0:水平方向;1:垂直方向)
  */
-void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
-                                   scui_handle_t bar,   scui_color_t  color_bar,
-                                   scui_handle_t edge,  scui_color_t  color_edge,
-                                   scui_coord_t  vmin,  scui_coord_t  vmax,
-                                   scui_coord_t  cmin,  scui_coord_t  cmax,
-                                   scui_handle_t dist,  bool way);
+void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
+                             scui_handle_t bar,   scui_color_t  color_bar,
+                             scui_handle_t edge,  scui_color_t  color_edge,
+                             scui_coord_t  vmin,  scui_coord_t  vmax,
+                             scui_coord_t  cmin,  scui_coord_t  cmax,
+                             scui_handle_t dist,  bool way);
 
 /*@brief 自定义控件:插件:导航点
  *@param event       自定义控件事件
@@ -34,11 +34,11 @@ void scui_custom_draw_image_slider(scui_event_t *event, scui_area_t  *clip,
  *@param span        间隙
  *@param dir_hor     水平方向
  */
-void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
-                                      scui_handle_t wait,  scui_color_t  color_wait,
-                                      scui_handle_t focus, scui_color_t  color_focus,
-                                      scui_handle_t count, scui_handle_t index,
-                                      scui_handle_t span,  bool          dir_hor);
+void scui_custom_draw_indicator(scui_event_t *event, scui_area_t  *clip,
+                                scui_handle_t wait,  scui_color_t  color_wait,
+                                scui_handle_t focus, scui_color_t  color_focus,
+                                scui_handle_t count, scui_handle_t index,
+                                scui_handle_t span,  bool          dir_hor);
 
 /*@brief 自定义控件:插件:绕圆旋转图像
  *@param event  自定义控件事件
@@ -48,11 +48,12 @@ void scui_custom_draw_image_indicator(scui_event_t *event, scui_area_t  *clip,
  *@param radius 旋转半径
  *@param angle  旋转角度(顺时针旋转:+,逆时针旋转:-)
  */
-void scui_custom_draw_image_circle_rotate(scui_event_t *event,  scui_point_t *center,
-                                          scui_handle_t image,  scui_color_t  color,
-                                          scui_coord_t  radius, scui_coord_t  angle);
+void scui_custom_draw_ring_edge(scui_event_t *event,  scui_point_t *center,
+                                scui_handle_t image,  scui_color_t  color,
+                                scui_coord_t  radius, scui_coord_t  angle);
 
 /*@brief 自定义控件:插件:图像连续绘制
+ *       一般主要用于绘制连续数字符号图片
  *@param event 自定义控件事件
  *@param clip  剪切域(绘制区域)
  *@param image 图像句柄(背景图)
@@ -61,10 +62,10 @@ void scui_custom_draw_image_circle_rotate(scui_event_t *event,  scui_point_t *ce
  *@param num   图像数量
  *@param way   方向(0:水平方向;1:垂直方向)
  */
-void scui_custom_draw_image_keep(scui_event_t  *event, scui_area_t *clip,
-                                 scui_handle_t *image, scui_color_t color,
-                                 scui_coord_t   span,  scui_coord_t num,
-                                 bool way);
+void scui_custom_draw_text(scui_event_t  *event, scui_area_t *clip,
+                           scui_handle_t *image, scui_color_t color,
+                           scui_coord_t   span,  scui_coord_t num,
+                           bool way);
 
 /*@brief 自定义控件:插件:区域绘制(四个角使用图像绘制)
  *       一般主要用于绘制纯色圆角矩形
@@ -74,9 +75,9 @@ void scui_custom_draw_image_keep(scui_event_t  *event, scui_area_t *clip,
  *@param color 图像源色调
  *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
  */
-void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
-                                  scui_handle_t image[4], scui_color_t color,
-                                  scui_coord_t  delta);
+void scui_custom_draw_rect4(scui_event_t *event,    scui_area_t *clip,
+                            scui_handle_t image[4], scui_color_t color,
+                            scui_coord_t  delta);
 
 /*@brief 自定义控件:插件:区域绘制
  *@param event 自定义控件事件
@@ -85,7 +86,7 @@ void scui_custom_draw_area_image4(scui_event_t *event,    scui_area_t *clip,
  *@param mix   绘制模式(0:常规绘制;1:渐变绘制;)
  *@param way   绘制方向(渐变绘制)(0:水平渐变;1:垂直渐变;)
  */
-void scui_custom_draw_area(scui_event_t *event, scui_area_t *clip,
+void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
                            scui_color_t  color, uint8_t mix, bool way);
 
 #endif

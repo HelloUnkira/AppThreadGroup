@@ -35,10 +35,8 @@ static void scui_ui_scene_scroll_draw_proc(scui_event_t *event)
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
     
-    if (scui_widget_event_check_finish(event))
-        ;// scui_widget_clip_check(scui_widget_root(event->object), true);
-    
     if (scui_widget_event_check_finish(event)) {
+        // scui_widget_clip_check(scui_widget_root(event->object), true);
         for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
             if (scui_ui_res_local->list_draw[idx]) {
                 scui_ui_res_local->list_draw[idx] = false;
@@ -113,7 +111,7 @@ static void scui_ui_scene_item_event_proc(scui_event_t *event)
             scui_image_prj_image_src_repeat_card_06_r36_3bmp,
             scui_image_prj_image_src_repeat_card_07_r36_4bmp,
         };
-        scui_custom_draw_area_image4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
         
         scui_area_t   image_clip = scui_widget_draw_clip(event->object);
         scui_handle_t image_icon = scui_ui_res_local->list_image[scui_ui_res_local->list_idx];

@@ -319,6 +319,10 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         if (scui_window_float.target != handle)
             break;
         if (scui_window_float.cover) {
+            // 没有移动时,不做回弹
+            if (!scui_window_float.hold)
+                 break;
+            
             if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
                 if (scui_window_float.pos == scui_event_pos_u ||

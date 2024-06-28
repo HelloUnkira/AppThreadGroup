@@ -495,6 +495,55 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     }
 }
 
+/*@brief 子控件坐标对齐
+ *@param handle  控件句柄
+ *@param handle  控件句柄(目标控件,不存在则相对父控件)
+ *@param pos     对齐方向
+ *@param offset  偏移量
+ */
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_event_pos_t pos, scui_point_t *offset)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    scui_point_t point = {
+        .x = widget->clip.x,
+        .y = widget->clip.y,
+    };
+    
+    if (target != SCUI_HANDLE_INVALID || widget->parent != SCUI_HANDLE_INVALID) {
+        scui_handle_t  handle_target = target != SCUI_HANDLE_INVALID ? target : widget->parent;
+        scui_widget_t *widget_target = scui_handle_get(handle_target);
+        SCUI_ASSERT(widget_target != NULL);
+        
+        point.x = widget->clip.x;
+        // 水平左对齐
+        if ((pos & scui_event_pos_l) != 0)
+            point.x = (widget_target->clip.x);
+        // 水平右对齐
+        if ((pos & scui_event_pos_r) != 0)
+            point.x = (widget_target->clip.x + widget_target->clip.w - widget->clip.w);
+        // 水平中心对齐
+        if ((pos & scui_event_dir_hor) != 0)
+            point.x /= 2;
+        
+        point.y = widget->clip.y;
+        // 垂直上对齐
+        if ((pos & scui_event_pos_u) != 0)
+            point.y = (widget_target->clip.y);
+        // 垂直下对齐
+        if ((pos & scui_event_pos_d) != 0)
+            point.y = (widget_target->clip.y + widget_target->clip.h - widget->clip.h);
+        // 垂直中心对齐
+        if ((pos & scui_event_dir_ver) != 0)
+            point.y /= 2;
+    }
+    
+    point.x += offset->x;
+    point.y += offset->y;
+    scui_widget_move_pos(handle, &point);
+}
+
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄
  *@param child   控件子控件句柄(为空则镜像所有子控件)
@@ -528,15 +577,11 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_even
         
         scui_widget_move_pos(handle, &point);
         
-        /* 存在指定子控件时, 只镜像子控件, 且不再递归 */
-        if (handle_child != SCUI_HANDLE_INVALID)
-            return;
-        
         if (!recurse)
              continue;
         
         /* 递归镜像 */
-        scui_widget_mirror_pos(handle, handle_child, dir, recurse);
+        scui_widget_mirror_pos(handle, SCUI_HANDLE_INVALID, dir, recurse);
     }
     
     if (handle_child != SCUI_HANDLE_INVALID)
