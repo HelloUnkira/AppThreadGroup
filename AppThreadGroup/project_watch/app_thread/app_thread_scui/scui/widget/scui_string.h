@@ -31,13 +31,14 @@ typedef struct {
 
 typedef struct {
     scui_widget_t       widget;
-    scui_handle_t       name;           // 字库名字
+    scui_handle_t       font_idx;       // 字库尺寸
     scui_handle_t       text;           // 字符串
     scui_string_args_t  args;           // 字符串绘制参数
     scui_coord_t        unit_ms;        // 滚动单元时间
     scui_coord_t        unit_dx;        // 滚动单元距离
     uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
     /* 内部域: */
+    scui_handle_t       name;           // 字库名字
     uint64_t            unit_over:1;    // 滚动结束
     scui_coord_t        unit_way;       // 滚动单元方向
     scui_coord_t        rcd_ms;
@@ -47,7 +48,7 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
-    scui_handle_t       name;           // 字库名字
+    scui_handle_t       font_idx;       // 字库尺寸
     scui_handle_t       text;           // 字符串
     scui_string_args_t  args;           // 字符串绘制参数
     scui_coord_t        unit_ms;        // 滚动单元时间

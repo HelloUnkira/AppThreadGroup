@@ -35,11 +35,9 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -92,7 +90,6 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
@@ -103,14 +100,11 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_widget_event_mask_keep(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
@@ -126,7 +120,6 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -137,7 +130,6 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw:
-        scui_widget_event_mask_keep(event);
         
         /* 绘制流程准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -307,7 +299,6 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         break;
     case scui_event_ptr_down:
     case scui_event_ptr_up:
-        scui_widget_event_mask_keep(event);
         scui_ui_res_local->move_lock = false;
         
         break;

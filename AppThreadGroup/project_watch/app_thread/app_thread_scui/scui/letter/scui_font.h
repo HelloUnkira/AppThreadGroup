@@ -65,4 +65,15 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph);
  */
 void scui_font_glyph_unload(scui_font_glyph_t *glyph);
 
+/*@brief 字库名称设置
+ *@param name 字库名称句柄
+ */
+void scui_font_name_set(scui_handle_t name);
+
+/*@brief 字库名称获取
+ *@param font_idx 字库名称句柄偏移索引
+ *@retval 字库名称句柄
+ */
+scui_handle_t scui_font_name_get(scui_handle_t font_idx);
+
 #endif

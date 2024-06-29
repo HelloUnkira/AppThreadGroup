@@ -16,25 +16,20 @@ void scui_ui_scene_float_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         scui_window_float_event_grasp_show(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         scui_window_float_event_grasp_hide(event);
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
@@ -54,12 +49,10 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -100,12 +93,10 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

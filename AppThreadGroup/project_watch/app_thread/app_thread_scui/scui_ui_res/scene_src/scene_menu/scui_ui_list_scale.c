@@ -88,18 +88,14 @@ static void scui_ui_scene_item_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -137,10 +133,8 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -232,7 +226,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         }
         event->object = handle;
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -263,7 +256,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
     }
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -348,7 +340,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.widget.clip.w  = SCUI_DRV_HOR_RES - 150;
                 string_maker.widget.clip.y  = (clip.h - 40) / 2;
                 string_maker.widget.clip.h  = 40;
-                string_maker.name           = SCUI_FONT_TYPE_32_EN,
+                string_maker.font_idx       = 0,
                 string_maker.text           = scui_ui_res_local->list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
                 
@@ -371,7 +363,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         
         if (scui_widget_event_check_finish(event)) {
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
@@ -399,11 +390,9 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
         
@@ -421,7 +410,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_widget_scroll_s:
         SCUI_LOG_INFO("scui_event_widget_scroll_s");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -435,7 +423,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_widget_scroll_c:
         SCUI_LOG_INFO("scui_event_widget_scroll_c");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -448,7 +435,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_widget_scroll_e:
         SCUI_LOG_INFO("scui_event_widget_scroll_e");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -478,10 +464,8 @@ void scui_ui_scene_list_scale_ring_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

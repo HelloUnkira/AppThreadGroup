@@ -17,11 +17,9 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         
         if (scui_widget_event_check_prepare(event)) {
         
@@ -43,14 +41,14 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
             string_maker.widget.clip.y = 25;
             string_maker.widget.clip.h = 40;
-            string_maker.name          = SCUI_FONT_TYPE_32_ZH,
+            string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0000;
             scui_string_create(&string_maker, &string_handle, false);
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
             string_maker.widget.clip.y = 75;
             string_maker.widget.clip.h = 40;
-            string_maker.name          = SCUI_FONT_TYPE_32_EN,
+            string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0025;
             scui_string_create(&string_maker, &string_handle, false);
             
@@ -58,7 +56,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
             string_maker.widget.clip.y = 125;
             string_maker.widget.clip.h = SCUI_DRV_VER_RES / 4;
-            string_maker.name          = SCUI_FONT_TYPE_32_ZH,
+            string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0031;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
@@ -66,7 +64,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
             string_maker.widget.clip.y = 245;
             string_maker.widget.clip.h = SCUI_DRV_VER_RES / 4;
-            string_maker.name          = SCUI_FONT_TYPE_32_EN,
+            string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0031;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
@@ -75,18 +73,27 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             return;
+        scui_widget_event_mask_over(event);
+        
+        static uint8_t font_name_table_idx = 0;
+        static const scui_handle_t font_name_table[] = {
+            SCUI_FONT_TYPE_EN,
+            SCUI_FONT_TYPE_ZH,
+        };
+        font_name_table_idx++;
+        font_name_table_idx %= scui_arr_len(font_name_table);
+        scui_font_name_set(font_name_table[font_name_table_idx]);
+        
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);

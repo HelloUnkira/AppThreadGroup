@@ -185,6 +185,23 @@ void scui_event_respond(scui_event_t *event)
             scui_widget_surface_sync(widget, surface_fb);
         }
         return;
+    case scui_event_font_change: {
+        
+        if (event->object == SCUI_HANDLE_SYSTEM) {
+            /* 系统事件发给所有场景 */
+            scui_handle_t *window_list = NULL;
+            scui_window_list(&window_list);
+            for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+                if (window_list[idx] != SCUI_HANDLE_INVALID) {
+                    event->object = window_list[idx];
+                    scui_event_respond(event);
+                }
+            
+            event->object = SCUI_HANDLE_SYSTEM;
+            return;
+        }
+        break;
+    }
     default:
         break;
     }

@@ -35,7 +35,6 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -59,7 +58,6 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         
         if (scui_widget_event_check_prepare(event)) {
             
@@ -71,7 +69,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             string_maker.widget.clip.y      = 30;
             string_maker.widget.clip.w      = 330;
             string_maker.widget.clip.h      = 40;
-            string_maker.name               = SCUI_FONT_TYPE_32_EN,
+            string_maker.font_idx           = 0,
             string_maker.args.margin        = SCUI_STRING_MARGIN;
             string_maker.args.gap_none      = SCUI_STRING_SPACE_WIDTH;
             string_maker.args.color.color_s.full = 0xFFFFFFFF;
@@ -84,18 +82,14 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -120,10 +114,8 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

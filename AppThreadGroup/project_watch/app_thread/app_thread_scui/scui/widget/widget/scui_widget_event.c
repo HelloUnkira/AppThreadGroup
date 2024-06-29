@@ -458,35 +458,32 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     }
     /*************************************************************************/
-    /*显示事件:流程派发 **************************************************** */
+    /*流程派发 ************************************************************* */
     /*************************************************************************/
-    if (event->type == scui_event_focus_get ||
-        event->type == scui_event_show) {
-        /* 是否自己吸收处理(冒泡自己) */
-        scui_widget_event_proc(event);
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_btra(widget, idx) {
-                event->object = widget->child_list[idx];
-                scui_widget_event_dispatch(event);
-            }
-        event->object = widget->myself;
+    if (event->type == scui_event_widget_scroll_c   ||
+        event->type == scui_event_widget_scroll_s   ||
+        event->type == scui_event_widget_scroll_e   ||
+        event->type == scui_event_font_change) {
         scui_widget_event_mask_keep(event);
+        scui_widget_event_bubble(event, NULL, true);
         return;
     }
     /*************************************************************************/
-    /*隐藏事件:流程派发 **************************************************** */
+    /*流程派发 ************************************************************* */
+    /*************************************************************************/
+    if (event->type == scui_event_focus_get ||
+        event->type == scui_event_show) {
+        scui_widget_event_mask_keep(event);
+        scui_widget_event_bubble(event, NULL, true);
+        return;
+    }
+    /*************************************************************************/
+    /*流程派发 ************************************************************* */
     /*************************************************************************/
     if (event->type == scui_event_focus_lost ||
         event->type == scui_event_hide) {
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_btra(widget, idx) {
-                event->object = widget->child_list[idx];
-                scui_widget_event_dispatch(event);
-            }
-        event->object = widget->myself;
         scui_widget_event_mask_keep(event);
-        /* 是否自己吸收处理(冒泡自己) */
-        scui_widget_event_proc(event);
+        scui_widget_event_bubble(event, NULL, false);
         return;
     }
     /*************************************************************************/
@@ -513,7 +510,10 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
     SCUI_ASSERT(widget != NULL);
     
     if (first) {
-        event_cb(event);
+        if (event_cb != NULL)
+            event_cb(event);
+        else
+            scui_widget_event_proc(event);
         if (scui_widget_event_check_over(event))
             return;
     }
@@ -529,7 +529,10 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
         return;
     
     if (!first) {
-        event_cb(event);
+        if (event_cb != NULL)
+            event_cb(event);
+        else
+            scui_widget_event_proc(event);
         if (scui_widget_event_check_over(event))
             return;
     }

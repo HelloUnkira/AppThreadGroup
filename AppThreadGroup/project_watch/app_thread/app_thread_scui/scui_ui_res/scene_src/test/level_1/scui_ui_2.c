@@ -24,7 +24,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -55,7 +54,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     }
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        scui_widget_event_mask_keep(event);
         
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -147,7 +145,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        scui_widget_event_mask_keep(event);
         
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
@@ -158,18 +155,14 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_key_click:
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_widget_scroll_s:
         SCUI_LOG_INFO("scui_event_widget_scroll_s");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -183,7 +176,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_widget_scroll_c:
         SCUI_LOG_INFO("scui_event_widget_scroll_c");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -197,7 +189,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         break;
     case scui_event_widget_scroll_e:
         SCUI_LOG_INFO("scui_event_widget_scroll_e");
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -228,10 +219,8 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         break;
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

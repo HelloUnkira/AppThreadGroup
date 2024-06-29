@@ -81,6 +81,9 @@ void scui_ready(void)
     table.number = SCUI_MULTI_LANG_NUM_STR * SCUI_MULTI_LANG_NUM_TYPE;
     scui_handle_table_register(&table);
     
+    /* 字库配置 */
+    scui_font_name_set(SCUI_FONT_TYPE_EN);
+    
     /* 窗口交互风格 */
     scui_window_switch_dir_cfg_set(SCUI_WINDOW_JUMP_DIR);
     /* 窗口交互风格 */

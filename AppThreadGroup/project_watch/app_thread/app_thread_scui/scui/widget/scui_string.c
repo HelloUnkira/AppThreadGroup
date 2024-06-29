@@ -24,13 +24,14 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
-    string->name        = maker->name;
+    string->font_idx    = maker->font_idx;
     string->text        = maker->text;
     string->args        = maker->args;
     string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
     string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
     string->unit_s      = maker->unit_s;
     
+    string->name        = scui_font_name_get(string->font_idx);
     string->unit_over   = false;
     string->unit_way    = 1;
     
@@ -44,9 +45,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->widget.style.sched_anima = true;
     
     /* 事件默认全局接收 */
-    cb_node.event = scui_event_anima_elapse;
-    scui_widget_event_add(*handle, &cb_node);
-    cb_node.event = scui_event_draw;
+    cb_node.event = scui_event_sched_all;
     scui_widget_event_add(*handle, &cb_node);
     
     /* 更新一次字符串绘制参数 */
@@ -92,8 +91,10 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     
     string->text = text;
     
-    if (string->str_utf8 != NULL)
+    if (string->str_utf8 != NULL) {
         SCUI_MEM_FREE(string->str_utf8);
+        string->str_utf8 = NULL;
+    }
     
     if (string->text != SCUI_HANDLE_INVALID) {
         scui_multi_lang_type_t type = scui_font_type_switch(string->name);
@@ -103,6 +104,8 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
     }
+    
+    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 字符串控件更新文本
@@ -116,8 +119,10 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     
     string->text = SCUI_HANDLE_INVALID;
     
-    if (string->str_utf8 != NULL)
+    if (string->str_utf8 != NULL) {
         SCUI_MEM_FREE(string->str_utf8);
+        string->str_utf8 = NULL;
+    }
     
     if (str_utf8 != NULL) {
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
@@ -125,6 +130,8 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
     }
+    
+    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 字符串控件滚动结束(单次滚动)
@@ -213,6 +220,22 @@ void scui_string_event(scui_event_t *event)
             scui_widget_draw_string(handle, NULL, &string->args);
         }
         
+        break;
+    }
+    case scui_event_font_change: {
+        scui_widget_event_mask_keep(event);
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        if (string->text != SCUI_HANDLE_INVALID) {
+            scui_handle_t text = string->text;
+            scui_string_update_text(handle, SCUI_HANDLE_INVALID);
+            string->name = scui_font_name_get(string->font_idx);
+            scui_string_update_text(handle, text);
+            string->args.offset = 0;
+            string->unit_over   = false;
+            string->unit_way    = 1;
+        }
         break;
     }
     default:
