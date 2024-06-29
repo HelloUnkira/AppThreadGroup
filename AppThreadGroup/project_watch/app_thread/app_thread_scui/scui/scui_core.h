@@ -18,7 +18,7 @@
 #include "scui_coord.h"         /* 坐标区域 */
 #include "scui_general.h"       /* 基础图元 */
 #include "scui_handle.h"        /* 泛用句柄 */
-#include "scui_anima.h"         /* 简易动画 */
+#include "scui_anima.h"         /* 路径动画 */
 #include "scui_event.h"         /* 事件队列 */
 #include "scui_event_sys.h"     /* 事件系统表 */
 #include "scui_event_mgr.h"     /* 事件管理器 */
@@ -40,14 +40,14 @@
 
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_event.h"
-#include "scui_widget_surface.h"
 #include "scui_widget_draw.h"
-#include "scui_window.h"
+#include "scui_widget_event.h"
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_switch.h"     /* 窗口管理器 */
-#include "scui_window_stack.h"      /* 窗口管理器 */
 #include "scui_window_float.h"      /* 窗口管理器 */
+#include "scui_window_stack.h"      /* 窗口管理器 */
+/* widget: */
+#include "scui_window.h"
 #include "scui_custom.h"
 #include "scui_scroll.h"
 #include "scui_string.h"

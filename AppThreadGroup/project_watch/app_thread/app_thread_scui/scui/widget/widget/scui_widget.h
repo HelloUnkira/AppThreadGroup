@@ -124,6 +124,24 @@ void scui_widget_cb_destroy(scui_handle_t handle);
  */
 void scui_widget_cb_layout(scui_handle_t handle);
 
+/*@brief 控件树的根控件
+ *@param handle 控件句柄
+ *@retval 根控件句柄
+ */
+scui_handle_t scui_widget_root(scui_handle_t handle);
+
+/*@brief 控件的父控件
+ *@param handle 控件句柄
+ *@retval 父控件
+ */
+scui_handle_t scui_widget_parent(scui_handle_t handle);
+
+/*@brief 子控件总数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_num(scui_handle_t handle);
+
 /*@brief 控件添加子控件
  *@param handle 控件句柄
  *@param child  控件子控件句柄
@@ -135,6 +153,20 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child);
  *@param child  控件子控件句柄
  */
 void scui_widget_child_del(scui_handle_t handle, scui_handle_t child);
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件位置(映射点)
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index);
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件句柄
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
 
 /*@brief 控件检查剪切域
  *@param handle  控件句柄
@@ -164,6 +196,55 @@ bool scui_widget_clip_cover(scui_widget_t *widget);
  *@param widget 控件实例
  */
 void scui_widget_clip_update(scui_widget_t *widget);
+
+/*@brief 控件画布
+ *@param handle 控件句柄
+ *@retval 控件画布
+ */
+scui_surface_t * scui_widget_surface(scui_handle_t handle);
+
+/*@brief 控件画布创建
+ *@param handle  控件句柄
+ *@param format  画布格式
+ *@param hor_res 画布水平尺寸
+ *@param ver_res 画布垂直尺寸
+ */
+void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
+                                scui_coord_t  hor_res, scui_coord_t    ver_res);
+
+/*@brief 控件画布销毁
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_destroy(scui_handle_t handle);
+
+/*@brief 控件画布重映射
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface);
+
+/*@brief 控件画布为独立画布
+ *@param widget 控件实例
+ */
+bool scui_widget_surface_only(scui_widget_t *widget);
+
+/*@brief 控件画布剪切域刷新
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_surface_refr(scui_widget_t *widget, bool recurse);
+
+/*@brief 控件画布更新
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
+
+/*@brief 控件画布同步
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件坐标更新
  *@param handle 控件句柄
@@ -218,49 +299,17 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
 bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
                                 scui_point_t *offset, scui_event_pos_t pos);
 
-/*@brief 控件树的根控件
- *@param handle 控件句柄
- *@retval 根控件句柄
- */
-scui_handle_t scui_widget_root(scui_handle_t handle);
-
-/*@brief 控件的父控件
- *@param handle 控件句柄
- *@retval 父控件
- */
-scui_handle_t scui_widget_parent(scui_handle_t handle);
-
-/*@brief 子控件总数量
- *@param handle 控件句柄
- *@retval 子控件数量
- */
-scui_handle_t scui_widget_child_num(scui_handle_t handle);
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件位置(映射点)
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index);
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件句柄
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
-
 /*@brief 控件类型
  *@param handle 控件句柄
  *@retval 控件类型
  */
-scui_widget_type_t scui_widget_attr_type(scui_handle_t handle);
+scui_widget_type_t scui_widget_type(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_attr_clip(scui_handle_t handle);
+scui_area_t scui_widget_clip(scui_handle_t handle);
 
 /*@brief 控件显示状态获取
  *@param handle 控件句柄

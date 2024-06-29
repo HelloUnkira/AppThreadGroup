@@ -162,33 +162,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     case scui_event_key_click:
         break;
     case scui_event_widget_scroll_s:
-        SCUI_LOG_INFO("scui_event_widget_scroll_s");
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_ui_res_local->bar_wait  = 0;
-        scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
-        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
-        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
-        scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
-        // scui_widget_clip_check(event->object, true);
-        break;
     case scui_event_widget_scroll_c:
-        SCUI_LOG_INFO("scui_event_widget_scroll_c");
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_ui_res_local->bar_wait  = 0;
-        scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
-        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
-        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
-        scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
-        // scui_widget_clip_check(event->object, true);
-        break;
     case scui_event_widget_scroll_e:
-        SCUI_LOG_INFO("scui_event_widget_scroll_e");
         if (!scui_widget_event_check_execute(event))
              break;
         

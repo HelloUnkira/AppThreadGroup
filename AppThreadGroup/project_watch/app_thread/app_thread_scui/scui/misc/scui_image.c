@@ -41,6 +41,30 @@ void scui_image_cf_to_pixel_cf(scui_image_cf_t *image_cf, scui_pixel_cf_t *pixel
     }
 }
 
+/*@brief 图像宽
+ *@param handle 图像句柄
+ *@retval 图像宽
+ */
+scui_coord_t scui_image_w(scui_handle_t handle)
+{
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
+    
+    return image->pixel.width;
+}
+
+/*@brief 图像高
+ *@param handle 图像句柄
+ *@retval 图像高
+ */
+scui_coord_t scui_image_h(scui_handle_t handle)
+{
+    scui_image_t *image = scui_handle_get(handle);
+    SCUI_ASSERT(image != NULL);
+    
+    return image->pixel.height;
+}
+
 /*@brief 统计图像列表排列尺寸
  *       统计图像按水平或垂直排列时的宽度或高度
  *@param image 图像列表

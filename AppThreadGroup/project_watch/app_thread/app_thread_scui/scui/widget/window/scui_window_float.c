@@ -88,7 +88,7 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     /* 移动窗口 */
     scui_widget_move_pos(handle, point);
     /* 获得窗口宽高 */
-    scui_area_t clip = scui_widget_attr_clip(handle);
+    scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     /* 根据动作方向确定透明度 */
@@ -125,7 +125,7 @@ void scui_window_float_anima_ready(void *instance)
     scui_coord_t hor_res = scui_disp_get_hor_res();
     scui_coord_t ver_res = scui_disp_get_ver_res();
     
-    scui_area_t   clip = scui_widget_attr_clip(handle);
+    scui_area_t   clip = scui_widget_clip(handle);
     scui_point_t point = {.x = clip.x,.y = clip.y,};
     
     /* 默认已经覆盖,如果位置不对则已经回退 */
@@ -155,7 +155,7 @@ void scui_window_float_anima_expired(void *instance)
     SCUI_LOG_INFO("");
     scui_anima_t *anima  = instance;
     scui_handle_t handle = scui_window_float.target;
-    scui_area_t   clip   = scui_widget_attr_clip(handle);
+    scui_area_t   clip   = scui_widget_clip(handle);
     
     scui_point_t point = {.x = clip.x,.y = clip.y,};
     if ((scui_window_float.dir & scui_event_dir_hor) != 0)
@@ -206,7 +206,7 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
 {
     scui_coord_t hor_res = scui_disp_get_hor_res();
     scui_coord_t ver_res = scui_disp_get_ver_res();
-    scui_area_t clip = scui_widget_attr_clip(handle);
+    scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     
@@ -276,7 +276,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* 获得窗口宽高 */
-    scui_area_t clip = scui_widget_attr_clip(handle);
+    scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     
@@ -403,7 +403,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* 获得窗口宽高 */
-    scui_area_t clip = scui_widget_attr_clip(handle);
+    scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     

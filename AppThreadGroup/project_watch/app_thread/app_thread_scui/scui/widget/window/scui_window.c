@@ -22,17 +22,17 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
+    /* 创建基础控件实例 */
+    scui_widget_create(&window->widget, &maker->widget, handle, layout);
+    
     /* 创建surface */
     if (maker->buffer) {
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
         scui_pixel_cf_t p_cf = maker->format;
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;
-        scui_widget_surface_create(&window->widget, p_cf, hor_res, ver_res);
+        scui_widget_surface_create(*handle, p_cf, hor_res, ver_res);
     }
-    
-    /* 创建基础控件实例 */
-    scui_widget_create(&window->widget, &maker->widget, handle, layout);
     
     scui_window_cfg_def(&window->cfg);
     
@@ -60,12 +60,12 @@ void scui_window_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->type == scui_widget_type_window);
     
-    /* 销毁基础控件实例 */
-    scui_widget_destroy(&window->widget);
-    
     /* 回收surface */
     if (scui_widget_surface_only(widget))
-        scui_widget_surface_destroy(widget);
+        scui_widget_surface_destroy(widget->myself);
+    
+    /* 销毁基础控件实例 */
+    scui_widget_destroy(&window->widget);
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);

@@ -254,6 +254,44 @@ void scui_widget_cb_layout(scui_handle_t handle)
         widget_cb->layout(handle);
 }
 
+/*@brief 控件树的根控件
+ *@param handle 控件句柄
+ *@retval 根控件句柄
+ */
+scui_handle_t scui_widget_root(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->parent != SCUI_HANDLE_INVALID)
+        return scui_widget_root(widget->parent);
+    return handle;
+}
+
+/*@brief 控件的父控件
+ *@param handle 控件句柄
+ *@retval 父控件
+ */
+scui_handle_t scui_widget_parent(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    return widget->parent;
+}
+
+/*@brief 子控件总数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_num(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    return widget->child_num;
+}
+
 /*@brief 控件添加子控件
  *@param handle 控件句柄
  *@param child  控件子控件句柄
@@ -292,6 +330,42 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
             return;
         }
     SCUI_LOG_WARN("widget %u del child %u fail", handle, child);
+}
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件位置(映射点)
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    /* 其他范围映射到取值范围[0:num) */
+    index = scui_mabs(index, widget->child_num);
+    
+    if (index < widget->child_num)
+        return widget->child_list[index];
+    return SCUI_HANDLE_INVALID;
+}
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件句柄
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    scui_widget_child_list_btra(widget, idx)
+        if (child == widget->child_list[idx])
+            return idx;
+    
+    SCUI_ASSERT(false);
+    return -1;
 }
 
 /*@brief 控件检查剪切域
@@ -438,6 +512,187 @@ void scui_widget_clip_update(scui_widget_t *widget)
         }
         SCUI_ASSERT(!not_match);
     }
+}
+
+/*@brief 控件画布
+ *@param handle 控件句柄
+ *@retval 控件画布
+ */
+scui_surface_t * scui_widget_surface(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    return widget->surface;
+}
+
+/*@brief 控件画布创建
+ *@param handle  控件句柄
+ *@param format  画布格式
+ *@param hor_res 画布水平尺寸
+ *@param ver_res 画布垂直尺寸
+ */
+void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
+                                scui_coord_t  hor_res, scui_coord_t    ver_res)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_ASSERT(widget->surface == NULL && hor_res != 0 && ver_res != 0);
+    widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
+    memset(widget->surface, 0, sizeof(scui_surface_t));
+    widget->surface->format  = format;
+    widget->surface->hor_res = hor_res;
+    widget->surface->ver_res = ver_res;
+    widget->surface->alpha   = scui_alpha_cover;
+    
+    if (widget->surface->format == scui_pixel_cf_def)
+        widget->surface->format  = SCUI_PIXEL_CF_DEF;
+    
+    scui_coord_t src_byte    = scui_pixel_bits(widget->surface->format) / 8;
+    scui_coord_t src_remain  = sizeof(scui_color_limit_t) - src_byte;
+    scui_multi_t res_surface = hor_res * ver_res * src_byte + src_remain;
+    
+    widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
+    /* 添加一个检测机制,如果surface不可创建时,清空image内存重新创建 */
+    if (widget->surface->pixel == NULL) {
+        SCUI_LOG_WARN("memory deficit was caught");
+        scui_image_cache_clear();
+        widget->surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
+    if (widget->surface->pixel == NULL) {
+        scui_image_cache_visit();
+        SCUI_ASSERT(false);
+    }
+    }
+}
+
+/*@brief 控件画布销毁
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_destroy(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->surface == NULL)
+        return;
+    
+    SCUI_MEM_FREE(widget->surface->pixel);
+    SCUI_MEM_FREE(widget->surface);
+    widget->surface = NULL;
+}
+
+/*@brief 控件画布重映射
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    widget->surface = surface;
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_surface_remap(handle, surface);
+    }
+}
+
+/*@brief 控件画布为独立画布
+ *@param widget 控件实例
+ */
+bool scui_widget_surface_only(scui_widget_t *widget)
+{
+    if (widget->surface == NULL ||
+        widget->surface->pixel == NULL ||
+        widget->surface->pixel == scui_surface_fb_draw()->pixel ||
+        widget->surface->pixel == scui_surface_fb_refr()->pixel)
+        return false;
+    
+    return true;
+}
+
+/*@brief 控件画布剪切域刷新
+ *@param widget  控件实例
+ *@param recurse 递归处理
+ */
+void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
+{
+    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    widget->clip_set.clip = widget->clip;
+    /* 有独立画布的根控件不记录原点偏移,控件树永远相对独立画布移动 */
+    /* 没有独立画布的根控件保留原点偏移,控件树永远相对绘制画布移动 */
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget->clip_set.clip.x = 0;
+        widget->clip_set.clip.y = 0;
+    }
+    
+    /* 画布的坐标区域是相对根控件(递归语义) */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        scui_area_t widget_clip = widget->clip_set.clip;
+        scui_area_t parent_clip = widget_parent->clip_set.clip;
+        /* 子控件的坐标区域是父控件坐标区域的子集 */
+        scui_area_t clip_inter = {0};
+        if (scui_area_inter(&clip_inter, &widget_clip, &parent_clip))
+            widget->clip_set.clip = clip_inter;
+        else
+            widget->clip_set.clip = (scui_area_t){0};
+    }
+    
+    if (!recurse)
+         return;
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_surface_refr(child, recurse);
+    }
+}
+
+/*@brief 控件画布更新
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface->format  == surface->format);
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
+    
+    /* 直接交换实例最简单 */
+    uint8_t *pixel = widget->surface->pixel;
+    widget->surface->pixel = surface->pixel;
+    surface->pixel = pixel;
+}
+
+/*@brief 控件画布同步
+ *@param widget  控件实例
+ *@param surface 画布实例
+ */
+void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
+{
+    SCUI_ASSERT(widget->surface->pixel   != surface->pixel);
+    SCUI_ASSERT(widget->surface->format  == surface->format);
+    SCUI_ASSERT(widget->surface->hor_res == surface->hor_res);
+    SCUI_ASSERT(widget->surface->ver_res == surface->ver_res);
+    
+    scui_surface_t *dst_surface = widget->surface;
+    scui_surface_t *src_surface = surface;
+    scui_area_t dst_clip = {
+        .w = dst_surface->hor_res,
+        .h = dst_surface->ver_res,
+    };
+    scui_area_t src_clip = {
+        .w = src_surface->hor_res,
+        .h = src_surface->ver_res,
+    };
+    
+    scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
 }
 
 /*@brief 控件坐标更新
@@ -795,85 +1050,11 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
     return true;
 }
 
-/*@brief 控件树的根控件
- *@param handle 控件句柄
- *@retval 根控件句柄
- */
-scui_handle_t scui_widget_root(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        return scui_widget_root(widget->parent);
-    return handle;
-}
-
-/*@brief 控件的父控件
- *@param handle 控件句柄
- *@retval 父控件
- */
-scui_handle_t scui_widget_parent(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    return widget->parent;
-}
-
-/*@brief 子控件总数量
- *@param handle 控件句柄
- *@retval 子控件数量
- */
-scui_handle_t scui_widget_child_num(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    return widget->child_num;
-}
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件位置(映射点)
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    /* 其他范围映射到取值范围[0:num) */
-    index = scui_mabs(index, widget->child_num);
-    
-    if (index < widget->child_num)
-        return widget->child_list[index];
-    return SCUI_HANDLE_INVALID;
-}
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件句柄
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    scui_widget_child_list_btra(widget, idx)
-        if (child == widget->child_list[idx])
-            return idx;
-    
-    SCUI_ASSERT(false);
-    return -1;
-}
-
 /*@brief 控件类型
  *@param handle 控件句柄
  *@retval 控件类型
  */
-scui_widget_type_t scui_widget_attr_type(scui_handle_t handle)
+scui_widget_type_t scui_widget_type(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -885,7 +1066,7 @@ scui_widget_type_t scui_widget_attr_type(scui_handle_t handle)
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
-scui_area_t scui_widget_attr_clip(scui_handle_t handle)
+scui_area_t scui_widget_clip(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);

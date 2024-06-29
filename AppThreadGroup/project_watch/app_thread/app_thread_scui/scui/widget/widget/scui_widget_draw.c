@@ -47,6 +47,18 @@ scui_area_t scui_widget_draw_clip(scui_handle_t handle)
     return widget->clip_set.clip;
 }
 
+/*@brief 控件剪切域为空(绘制)
+ *@param handle 控件句柄
+ *@retval 控件剪切域为空
+ */
+bool scui_widget_draw_empty(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    return scui_clip_empty(&widget->clip_set);
+}
+
 /*@brief 控件在画布绘制字符串
  *@param handle 控件句柄
  *@param target 控件绘制区域
