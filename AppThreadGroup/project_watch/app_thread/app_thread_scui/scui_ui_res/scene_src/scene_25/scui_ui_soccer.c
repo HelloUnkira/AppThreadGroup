@@ -160,7 +160,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             scui_coord3_t sin_66 = scui_sin(scui_radian_by_angle(angle_66));
             scui_coord3_t cos_66 = scui_cos(scui_radian_by_angle(angle_66));
             
-            scui_area_t clip = scui_widget_draw_clip(event->object);
+            scui_area_t clip = scui_widget_clip(event->object);
             /* 居中偏移 */
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,

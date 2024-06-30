@@ -58,7 +58,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         
         scui_area_t clip = {0};
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -71,7 +71,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
             .color_l.full = 0xFF00FF00,
             .color_d.full = 0xFF0000FF,
         };
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += clip.w / 6;
         clip.y += clip.h / 6;
         clip.w -= clip.w / 6 * 2;
@@ -102,7 +102,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         
         scui_area_t clip = {0};
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -115,7 +115,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
             .color_l.full = 0xFF000000,
             .color_d.full = 0xFFFFFFFF,
         };
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10 + 10;
         clip.w -= 10 * 2;

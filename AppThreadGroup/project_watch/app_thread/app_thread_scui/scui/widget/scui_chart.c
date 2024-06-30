@@ -38,7 +38,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
         if (chart->histogram.space <= 0)
             chart->histogram.space  = 1;
         /* 限制 */
-        scui_coord_t height = scui_widget_draw_clip(*handle).h;
+        scui_coord_t height = scui_widget_clip(*handle).h;
         if (chart->histogram.height > height + chart->histogram.offset.y)
             chart->histogram.height = height - chart->histogram.offset.y;
         /* 创建数据存储空间 */
@@ -64,7 +64,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
         if (chart->line.space <= 0)
             chart->line.space  = 1;
         /* 限制 */
-        scui_coord_t height = scui_widget_draw_clip(*handle).h;
+        scui_coord_t height = scui_widget_clip(*handle).h;
         if (chart->line.height > height + chart->line.offset.y)
             chart->line.height = height - chart->line.offset.y;
         /* 创建数据存储空间 */
@@ -224,17 +224,17 @@ void scui_chart_event(scui_event_t *event)
                 /* 绘制俩个edge */
                 src_clip.x = 0;
                 src_clip.y = 0;
-                dst_clip = scui_widget_draw_clip(handle);
+                dst_clip = scui_widget_clip(handle);
                 if (scui_area_limit_offset(&dst_clip, &offset_2))
                     scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color);
                 
                 src_clip.x = 0;
                 src_clip.y = src_clip.h;
-                dst_clip = scui_widget_draw_clip(handle);
+                dst_clip = scui_widget_clip(handle);
                 if (scui_area_limit_offset(&dst_clip, &offset_1))
                     scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color);
                 /* 填充这块区域 */
-                dst_clip = scui_widget_draw_clip(handle);
+                dst_clip = scui_widget_clip(handle);
                 scui_area_t area = {
                     .x = dst_clip.x + offset.x,
                     .w = src_clip.w,
@@ -259,7 +259,7 @@ void scui_chart_event(scui_event_t *event)
             scui_coord_t *vlist     = chart->line_data.vlist;
             
             for (scui_coord_t idx = 0; idx + 1 < chart->line.number; idx++) {
-                scui_area_t  dst_clip  = scui_widget_draw_clip(handle);
+                scui_area_t  dst_clip  = scui_widget_clip(handle);
                 scui_coord_t offset_1y = scui_map(vlist[idx + 0], value_min, value_max, height, 0);
                 scui_coord_t offset_2y = scui_map(vlist[idx + 1], value_min, value_max, height, 0);
                 scui_point_t offset_1 = {.x = dst_clip.x + offset.x, .y = dst_clip.y + offset.y + offset_1y};

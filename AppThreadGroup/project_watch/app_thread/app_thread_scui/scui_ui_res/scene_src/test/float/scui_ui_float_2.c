@@ -87,14 +87,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         
         offset_hor.x = 15;
         offset_hor.y = SCUI_DRV_VER_RES - 30;
-        clip_hor = scui_widget_draw_clip(event->object);
+        clip_hor = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
             scui_custom_draw_indicator(event, &clip_hor, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, true);
         
         offset_ver.x = 15;
         offset_ver.y = SCUI_DRV_VER_RES - 150;
-        clip_ver = scui_widget_draw_clip(event->object);
+        clip_ver = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_indicator(event, &clip_ver, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, false);
@@ -107,14 +107,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         #if 0   // 没有水平滚动条背景
         offset_hor.x = 15;
         offset_hor.y = SCUI_DRV_VER_RES - 40;
-        clip_hor = scui_widget_draw_clip(event->object);
+        clip_hor = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
             scui_custom_draw_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
         #endif
         
         offset_ver.x = 5;
         offset_ver.y = SCUI_DRV_VER_RES - 160;
-        clip_ver = scui_widget_draw_clip(event->object);
+        clip_ver = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
         break;
@@ -145,14 +145,14 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
             .color_e.full = 0xFF0000FF,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_custom_draw_rect(event, &clip, color_black, false, false);
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 15;
         clip.y += 15;
         clip.w -= 15 * 2;
@@ -161,7 +161,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h -= 5;
         scui_custom_draw_rect(event, &clip, color_mix, true, false);
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 15;
         clip.y += 15;
         clip.w -= 15 * 2;
@@ -198,7 +198,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
             .color.full = 0xFF00FF00,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -278,7 +278,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
             .color.full = 0xFF00FF00,
         };
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -331,7 +331,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         scui_area_t clip = {0};
         scui_color_t color_black = {0};
         
-        clip = scui_widget_draw_clip(event->object);
+        clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10;
         clip.w -= 10 * 2;
@@ -343,7 +343,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         SCUI_ASSERT(image != NULL);
         
         scui_point_t scale = image_scale;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, 0);
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_event_pos_c);
         
         break;
     }

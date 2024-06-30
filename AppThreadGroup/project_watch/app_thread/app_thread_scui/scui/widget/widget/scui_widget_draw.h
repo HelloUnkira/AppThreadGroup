@@ -1,12 +1,6 @@
 #ifndef SCUI_WIDGET_DRAW_H
 #define SCUI_WIDGET_DRAW_H
 
-/*@brief 控件剪切域(绘制)
- *@param handle 控件句柄
- *@retval 控件剪切域
- */
-scui_area_t scui_widget_draw_clip(scui_handle_t handle);
-
 /*@brief 控件剪切域为空(绘制)
  *@param handle 控件句柄
  *@retval 控件剪切域为空
@@ -45,11 +39,11 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
  *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param scale  图形缩放比例(1024为放大系数)
- *@param type   缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
+ *@param pos    缩放锚点
  */
-void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
-                                  scui_handle_t image,  scui_area_t *clip,
-                                  scui_point_t  scale,  uint8_t      type);
+void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t     *target,
+                                  scui_handle_t image,  scui_area_t     *clip,
+                                  scui_point_t  scale,  scui_event_pos_t pos);
 
 /*@brief 控件在画布绘制图像
  *@param handle 控件句柄

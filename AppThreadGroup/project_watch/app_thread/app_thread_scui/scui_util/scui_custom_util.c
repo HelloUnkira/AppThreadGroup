@@ -63,14 +63,14 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
         /* 绘制俩个edge */
         src_clip.x = 0;
         src_clip.y = 0;
-        dst_area = scui_widget_draw_clip(event->object);
+        dst_area = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
             scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         src_clip.x = src_clip.w;
         src_clip.y = 0;
-        dst_area = scui_widget_draw_clip(event->object);
+        dst_area = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
             scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
@@ -82,7 +82,7 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
             .h = src_clip.h,
             .y = clip->y,
         };
-        dst_clip = scui_widget_draw_clip(event->object);
+        dst_clip = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
             scui_widget_draw_color(event->object, &dst_clip, color_edge);
@@ -97,14 +97,14 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
         /* 绘制俩个edge */
         src_clip.x = 0;
         src_clip.y = 0;
-        dst_area = scui_widget_draw_clip(event->object);
+        dst_area = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_2))
             scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
         
         src_clip.x = 0;
         src_clip.y = src_clip.h / 2;
-        dst_area = scui_widget_draw_clip(event->object);
+        dst_area = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip))
         if (scui_area_limit_offset(&dst_clip, &offset_1))
             scui_widget_draw_image(event->object, &dst_clip, edge, &src_clip, color_edge);
@@ -116,7 +116,7 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
             .y = clip->y + offset_2.y + src_clip.h,
             .h = offset_1.y - offset_2.y - src_clip.h,
         };
-        dst_clip = scui_widget_draw_clip(event->object);
+        dst_clip = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_area, &dst_clip, clip))
         if (scui_area_inter(&dst_clip, &dst_area, &area))
             scui_widget_draw_color(event->object, &dst_clip, color_edge);
@@ -455,7 +455,7 @@ void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
         }
         
         scui_area_t dst_clip = {0};
-        scui_area_t dst_area = scui_widget_draw_clip(event->object);
+        scui_area_t dst_area = scui_widget_clip(event->object);
         if (scui_area_inter(&dst_clip, &dst_area, clip)) {
             
             scui_image_t image_inst = {

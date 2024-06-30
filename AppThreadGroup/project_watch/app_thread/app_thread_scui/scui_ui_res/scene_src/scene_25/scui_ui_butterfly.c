@@ -49,7 +49,7 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_area_t clip = scui_widget_draw_clip(event->object);
+            scui_area_t clip = scui_widget_clip(event->object);
             /* 居中偏移 */
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,
@@ -203,7 +203,7 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
             scui_matrix_t *matrix_trunk   = scui_ui_res_local->matrix_trunk;
             scui_matrix_t *matrix_wing    = scui_ui_res_local->matrix_wing;
             
-            scui_area_t clip = scui_widget_draw_clip(event->object);
+            scui_area_t clip = scui_widget_clip(event->object);
             /* 居中偏移 */
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,

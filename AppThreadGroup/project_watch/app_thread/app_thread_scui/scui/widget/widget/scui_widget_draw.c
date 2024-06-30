@@ -21,30 +21,14 @@ static bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *u
     if (!scui_area_inter(dst_clip, unit_clip, target))
          return false;
     /* 子剪切域要相对同步偏移 */
-    scui_point_t widget_offset = {
-        .x = widget->clip_set.clip.x - widget->clip.x,
-        .y = widget->clip_set.clip.y - widget->clip.y,
-    };
     scui_point_t offset = {
-        .x = dst_clip->x - target->x + widget_offset.x,
-        .y = dst_clip->y - target->y + widget_offset.y,
+        .x = dst_clip->x - target->x,
+        .y = dst_clip->y - target->y,
     };
     if (!scui_area_limit_offset(src_clip, &offset))
          return false;
     
     return true;
-}
-
-/*@brief 控件剪切域(绘制)
- *@param handle 控件句柄
- *@retval 控件剪切域
- */
-scui_area_t scui_widget_draw_clip(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    return widget->clip_set.clip;
 }
 
 /*@brief 控件剪切域为空(绘制)
@@ -56,7 +40,12 @@ bool scui_widget_draw_empty(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    return scui_clip_empty(&widget->clip_set);
+    if (scui_area_empty(&widget->clip_set.clip))
+        return true;
+    if (scui_clip_empty(&widget->clip_set))
+        return true;
+    
+    return false;
 }
 
 /*@brief 控件在画布绘制字符串
@@ -76,14 +65,13 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t string_clip = {
         .w = widget->clip_set.clip.w,
         .h = widget->clip_set.clip.h,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
     scui_tick_elapse_us(true);
@@ -121,10 +109,8 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_area_t widget_clip = widget->clip_set.clip;
-    
     if (clip == NULL)
-        clip  = &widget_clip;
+        clip  = &widget->clip;
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
     scui_tick_elapse_us(true);
@@ -132,10 +118,11 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        /* 子剪切域要相对同步偏移 */
-        scui_area_t dst_area = unit->clip;
+        
         scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, &dst_area, clip))
+        scui_area_t src_clip = {0};
+        if (scui_widget_draw_clip_adjust(widget,
+            &unit->clip, clip, clip, &dst_clip, &src_clip))
             scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
     }
     
@@ -167,14 +154,13 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_image_t *image_inst = scui_handle_get(image);
     SCUI_ASSERT(image_inst != NULL);
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -230,11 +216,11 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
  *@param image  图像句柄
  *@param clip   图像源绘制区域
  *@param scale  图形缩放比例(1024为放大系数)
- *@param type   缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
+ *@param pos    缩放锚点
  */
-void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
-                                  scui_handle_t image,  scui_area_t *clip,
-                                  scui_point_t  scale,  uint8_t      type)
+void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t     *target,
+                                  scui_handle_t image,  scui_area_t     *clip,
+                                  scui_point_t  scale,  scui_event_pos_t pos)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -246,14 +232,13 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
     scui_image_t *image_inst = scui_handle_get(image);
     SCUI_ASSERT(image_inst != NULL);
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -262,15 +247,40 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t *target,
     scui_tick_elapse_us(true);
 #endif
     
+    scui_point_t src_offset = {0};
+    scui_point_t dst_offset = {0};
+    
+    if ((pos & scui_event_pos_hor) != 0) {
+        src_offset.x = clip->w / 2;
+        dst_offset.x = target->w / 2;
+    } else if ((pos & scui_event_pos_l) != 0) {
+    } else if ((pos & scui_event_pos_r) != 0) {
+        src_offset.x = clip->w;
+        dst_offset.x = target->w;
+    }
+    
+    if ((pos & scui_event_pos_ver) != 0) {
+        src_offset.y = clip->h / 2;
+        dst_offset.y = target->h / 2;
+    } else if ((pos & scui_event_pos_u) != 0) {
+    } else if ((pos & scui_event_pos_d) != 0) {
+        src_offset.y = clip->h;
+        dst_offset.y = target->h;
+    }
+    
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
         if (scui_widget_draw_clip_adjust(widget,
-            &unit->clip, target, clip, &dst_clip, &src_clip))
+            &unit->clip, target, clip, &dst_clip, &src_clip)) {
+            
+            src_offset.x += +(dst_clip.x - target->x);
+            src_offset.y += +(dst_clip.y - target->y);
             scui_draw_image_scale(widget->surface, &dst_clip, image_inst, &src_clip,
-                                  widget->alpha, scale, type);
+                                  widget->alpha, scale, dst_offset, src_offset);
+        }
     }
     
 #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
@@ -304,14 +314,13 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
     scui_image_t *image_inst = scui_handle_get(image);
     SCUI_ASSERT(image_inst != NULL);
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -359,14 +368,13 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
     scui_image_t *image_inst = scui_handle_get(image);
     SCUI_ASSERT(image_inst != NULL);
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -435,14 +443,13 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     SCUI_ASSERT(image_inst != NULL);
     SCUI_ASSERT(image_e_inst != NULL);
     
-    scui_area_t widget_clip = widget->clip_set.clip;
     scui_area_t image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
     
     if (target == NULL)
-        target  = &widget_clip;
+        target  = &widget->clip;
     
     if (clip == NULL)
         clip  = &image_clip;
@@ -452,8 +459,8 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     #endif
     
     scui_point_t dst_center = {
-        .x = target->x - widget_clip.x + image_inst->pixel.width  / 2,
-        .y = target->y - widget_clip.y + image_inst->pixel.height / 2,
+        .x = target->x - widget->clip.x + image_inst->pixel.width  / 2,
+        .y = target->y - widget->clip.y + image_inst->pixel.height / 2,
     };
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
@@ -510,4 +517,3 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
         SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     #endif
 }
-

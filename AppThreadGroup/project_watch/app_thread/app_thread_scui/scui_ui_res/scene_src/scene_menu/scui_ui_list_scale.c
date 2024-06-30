@@ -28,13 +28,26 @@ static struct {
 static void scui_ui_scene_scroll_draw_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_draw:
+    case scui_event_draw: {
         
         if (scui_widget_event_check_finish(event)) {
+            
+            uintptr_t surface_nums = 0;
+            uintptr_t surface_bytes = 0;
+            
             // scui_widget_clip_check(scui_widget_root(event->object), true);
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
                 if (scui_ui_res_local->list_draw[idx]) {
                     scui_ui_res_local->list_draw[idx] = false;
+                    
+                    // 统计画布的内存占用
+                    scui_surface_t *surface = scui_ui_res_local->list_surface[idx];
+                    if (surface != NULL) {
+                        SCUI_LOG_DEBUG("surface index:%x", idx);
+                        uintptr_t cf_byte = scui_pixel_bits(surface->format) / 8;
+                        surface_bytes += surface->hor_res * surface->ver_res * cf_byte;
+                        surface_nums++;
+                    }
                     continue;
                 }
                 
@@ -45,8 +58,11 @@ static void scui_ui_scene_scroll_draw_proc(scui_event_t *event)
                 scui_handle_set(handle_t, NULL);
                 scui_ui_res_local->list_surface[idx] = NULL;
             }
+            
+            SCUI_LOG_INFO("surface num:%u, total bytes:%x", surface_nums, surface_bytes);
         }
         break;
+    }
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
@@ -106,23 +122,23 @@ static void scui_ui_scene_item_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t   btn_clip = scui_widget_draw_clip(event->object);
-        scui_color_t  btn_color_full = {.color.full = 0xFF282828,};
-        scui_handle_t btn_image_full[4] = {
-            scui_image_prj_image_src_repeat_card_04_r36_1bmp,
-            scui_image_prj_image_src_repeat_card_05_r36_2bmp,
-            scui_image_prj_image_src_repeat_card_06_r36_3bmp,
-            scui_image_prj_image_src_repeat_card_07_r36_4bmp,
-        };
-        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        scui_color_t  btn_color_full = {.color.full = 0x00282828,};
+        scui_widget_draw_color(event->object, NULL, btn_color_full);
         
-        scui_area_t   image_clip = scui_widget_draw_clip(event->object);
-        scui_handle_t image_icon = scui_ui_res_local->list_image[scui_ui_res_local->list_idx];
-        scui_image_t *image_inst = scui_handle_get(image_icon);
-        SCUI_ASSERT(image_inst != NULL);
-        image_clip.x += 30;
-        image_clip.y += (image_clip.h - image_inst->pixel.height) / 2;
+        scui_area_t   image_clip = scui_widget_clip(event->object);
+        scui_handle_t image_icon = scui_ui_res_local->list_image[scui_ui_res_local->list_idx] + 3;
+        image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
+        image_clip.h -= (image_clip.h - scui_image_h(image_icon));
         scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, (scui_color_t){0});
+        
+        image_clip = scui_widget_clip(event->object);
+        image_icon = scui_image_prj_image_src_repeat_arrow_06_backbmp;
+        image_clip.x = image_clip.w - scui_image_w(image_icon);
+        image_clip.w = scui_image_w(image_icon);
+        image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
+        image_clip.h -= (image_clip.h - scui_image_h(image_icon));
+        scui_color_t color_white = {.filter = true,.color.full = 0xFFFFFFFF,};
+        scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, color_white);
         
         break;
     }
@@ -152,8 +168,19 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         
         scui_ui_res_local->list_idx = index;
         /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
-        if (scui_widget_draw_empty(event->object))
+        if (scui_widget_draw_empty(event->object)) {
+            scui_ui_res_local->list_draw[index] = false;
+            
+            if (scui_ui_res_local->list_surface[index] != NULL) {
+                scui_widget_t widget_t = {.surface = scui_ui_res_local->list_surface[index],};
+                scui_handle_t handle_t = scui_handle_find();
+                scui_handle_set(handle_t, &widget_t);
+                scui_widget_surface_destroy(handle_t);
+                scui_handle_set(handle_t, NULL);
+                scui_ui_res_local->list_surface[index] = NULL;
+            }
             break;
+        }
         
         // 创建一个独立临时的子画布,将目标绘制到一个独立子画布中
         if (scui_ui_res_local->list_surface[index] == NULL) {
@@ -173,6 +200,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
+        scui_event_pos_t pos = scui_event_pos_c;
         {   // 计算当前控件中心到父控件中心距离
             scui_area_t clip_p = scui_widget_clip(SCUI_UI_SCENE_LIST_SCALE);
             scui_area_t clip_w = scui_widget_clip(event->object);
@@ -184,11 +212,26 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         }
         
         scui_area_t  src_clip  = scui_widget_clip(custom);
-        scui_area_t  dst_clip  = scui_widget_draw_clip(event->object);
+        scui_area_t  dst_clip  = scui_widget_clip(event->object);
         scui_point_t img_scale = {
-            .x = 1024 * (100 - percent) / 100,
-            .y = 1024, // * (100 - percent) / 100,
+            .x = 1024 * (scui_multi_t)(100 - percent) / 100,
+            .y = 1024 * (scui_multi_t)(100 - percent) / 100,
         };
+        
+        scui_area_t   btn_clip = dst_clip;
+        scui_color_t  btn_color_full = {.color.full = 0xFF282828,};
+        scui_handle_t btn_image_full[4] = {
+            scui_image_prj_image_src_repeat_card_04_r36_1bmp,
+            scui_image_prj_image_src_repeat_card_05_r36_2bmp,
+            scui_image_prj_image_src_repeat_card_06_r36_3bmp,
+            scui_image_prj_image_src_repeat_card_07_r36_4bmp,
+        };
+        
+        scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
+        btn_clip.x += btn_scale_x / 2;
+        btn_clip.w -= btn_scale_x;
+        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        
         scui_image_t img_inst  = {
             .status         = scui_image_status_mem,
             .pixel.width    = src_clip.w,
@@ -196,9 +239,17 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
             .pixel.data_mem = scui_widget_surface(custom)->pixel,
         };
         scui_image_cf_by_pixel_cf(&img_inst.format, &scui_widget_surface(custom)->format);
+        
+        scui_coord_t offset_x = (dst_clip.w - src_clip.w);
+        scui_coord_t offset_y = (dst_clip.h - src_clip.h);
+        dst_clip.x  = btn_clip.x;
+        dst_clip.w  = btn_clip.w;
+        dst_clip.y += offset_y / 2;
+        dst_clip.h -= offset_y;
+        
         scui_handle_t image = scui_handle_find();
         scui_handle_set(image, &img_inst);
-        scui_widget_draw_image_scale(event->object, &dst_clip, image, NULL, img_scale, 1);
+        scui_widget_draw_image_scale(event->object, &dst_clip, image, NULL, img_scale, pos);
         // scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
         scui_handle_set(image, NULL);
         
@@ -287,16 +338,14 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.event_cb = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
             
-            custom_maker.widget.clip.h   = 72;
-            scui_area_t clip = custom_maker.widget.clip;
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
                 
                 scui_custom_maker_t custom_maker = {0};
                 scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
                 custom_maker.widget.type        = scui_widget_type_custom;
                 custom_maker.widget.style.trans = true;
-                custom_maker.widget.clip.w      = clip.w;
-                custom_maker.widget.clip.h      = clip.h;
+                custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES - 20 - 10;
+                custom_maker.widget.clip.h      = 60;
                 custom_maker.widget.child_num   = 2;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_event_proc;
                 scui_custom_create(&custom_maker, &custom_handle, false);
@@ -312,11 +361,11 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_maker.args.color.color_e.full = 0xFFFFFFFF;
                 string_maker.args.color.filter = true;
-                string_maker.widget.clip.x  = 100;
-                string_maker.widget.clip.w  = SCUI_DRV_HOR_RES - 150;
-                string_maker.widget.clip.y  = (clip.h - 40) / 2;
-                string_maker.widget.clip.h  = 40;
-                string_maker.font_idx       = 0,
+                string_maker.widget.clip.x  = 52 + 8;
+                string_maker.widget.clip.w  = custom_maker.widget.clip.w - (52 + 16 + 8 * 2);
+                string_maker.widget.clip.h  = 58;
+                string_maker.widget.clip.y  = (60 - 58) / 2;
+                string_maker.font_idx       = 1,
                 string_maker.text           = scui_ui_res_local->list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
                 
@@ -415,7 +464,7 @@ void scui_ui_scene_list_scale_mask_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw: {
         // 额外绘制一个全局遮罩
-        scui_area_t clip = scui_widget_draw_clip(event->object);
+        scui_area_t clip = scui_widget_clip(event->object);
         clip.x = (466 - 398) / 2;
         scui_handle_t image_mask = scui_image_prj_image_src_repeat_mask_12_all_maskpng;
         // scui_widget_draw_image(event->object, &clip, image_mask, NULL, (scui_color_t){0});

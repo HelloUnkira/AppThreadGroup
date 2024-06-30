@@ -21,12 +21,13 @@ void scui_draw_image(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param src_clip    图像源绘制区域
  *@param src_alpha   图像透明度(非图像自带透明度)
  *@param scale       图形缩放比例(1024为放大系数)
- *@param type        缩放类型(0:中心缩放;1:水平缩放;2:垂直缩放;)
+ *@param dst_offset  缩放锚点
+ *@param src_offset  缩放锚点
  */
 void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
                            scui_image_t   *src_image,   scui_area_t *src_clip,
                            scui_alpha_t    src_alpha,   scui_point_t scale,
-                           uint8_t         type);
+                           scui_point_t    dst_offset,  scui_point_t src_offset);
 
 /*@brief 区域图像旋转(可以使用DMA2D加速优化)
  *       以图形源绘制区域中心以指定方向旋转指定角度

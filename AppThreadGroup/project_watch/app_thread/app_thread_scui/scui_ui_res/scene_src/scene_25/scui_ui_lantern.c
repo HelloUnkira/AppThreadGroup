@@ -135,7 +135,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             scui_coord3_t x_span  = scui_ui_res_local->x_span;
             scui_coord3_t scale_c = scui_ui_res_local->scale_c / 1024.0f;
             
-            scui_area_t clip = scui_widget_draw_clip(event->object);
+            scui_area_t clip = scui_widget_clip(event->object);
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,
                 .y = clip.y + clip.h / 2 + scui_ui_res_local->y_ofs,

@@ -20,17 +20,17 @@ void scui_ui_scene_list_cfg(uint8_t type)
     case 0x00: {
         
         static scui_handle_t list_image[] = {
-            scui_image_prj_image_src_00_theme_icon_01_spo2_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_00_heart_03_02png,
-            scui_image_prj_image_src_00_theme_icon_01_spo2_03_02png,
+            scui_image_prj_image_src_00_theme_icon_01_spo2_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+            scui_image_prj_image_src_00_theme_icon_01_spo2_01_00png,
         };
         static scui_handle_t list_text[] = {
             SCUI_MULTI_LANG_0X002f,

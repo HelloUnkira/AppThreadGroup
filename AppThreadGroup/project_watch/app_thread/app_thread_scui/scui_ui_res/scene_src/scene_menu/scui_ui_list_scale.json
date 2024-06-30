@@ -25,7 +25,7 @@
             "widget.child_num":             "50",
             "dir":                          "scui_event_dir_ver",
             "pos":                          "scui_event_pos_c",
-            "space":                        "10",
+            "space":                        "3",
             "route_enc":                    "117",
             "route_key":                    "117",
             "keyid_fdir":                   "scui_event_key_val_down",

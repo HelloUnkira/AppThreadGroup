@@ -89,7 +89,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         // scui_widget_draw_color(event->object, NULL, (scui_color_t){.color.full = 0xFFFFFFFF,});
         scui_widget_draw_image(event->object, NULL, image_bg, NULL, (scui_color_t){0});
         
-        scui_area_t clip = scui_widget_draw_clip(event->object);
+        scui_area_t clip = scui_widget_clip(event->object);
         clip.x += (466 - 458) / 2;
         clip.y += (466 - 458) / 2;
         clip.w = 458;

@@ -97,7 +97,7 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     
     scui_point_t offset = {.x = margin, .y =  margin,};
     scui_area_t dst_clip = {0};
-    scui_area_t dst_area = scui_widget_draw_clip(event->object);
+    scui_area_t dst_area = scui_widget_clip(event->object);
     if (scui_area_inter(&dst_clip, &dst_area, clip))
     if (scui_area_limit_offset(&dst_clip, &offset)) {
         
