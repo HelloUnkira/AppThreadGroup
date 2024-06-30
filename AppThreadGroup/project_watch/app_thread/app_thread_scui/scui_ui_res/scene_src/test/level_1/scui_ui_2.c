@@ -8,10 +8,7 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t scroll;           // 滚动控件
-    scui_coord_t  scroll_pct;       // 滚动偏移量
-    scui_coord_t  bar_wait;         // 暂停时间
-    scui_alpha_t  bar_alpha;        // 淡出透明度
+    scui_handle_t scroll;       // 滚动控件
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -35,20 +32,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             handle_scroll_rcd  = handle_scroll;
             if (handle_scroll != SCUI_HANDLE_INVALID)
                 SCUI_LOG_WARN("widget center:%d", handle_scroll);
-        }
-        
-        if (scui_ui_res_local->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
-            scui_ui_res_local->bar_wait += SCUI_ANIMA_TICK;
-        else
-        if (scui_ui_res_local->bar_alpha > 0) {
-            scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_SCROLL_BAR_FADE_TIME / SCUI_ANIMA_TICK);
-            if (scui_ui_res_local->bar_alpha  > tick)
-                scui_ui_res_local->bar_alpha -= tick;
-            else
-                scui_ui_res_local->bar_alpha  = 0;
-            
-            scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
-            scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
         }
         break;
     }
@@ -139,9 +122,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             #endif
         }
         
-        scui_ui_res_local->bar_wait  = 0;
-        scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
+        scui_ui_bar_arc_reset(SCUI_UI_SCENE_2_RING);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
@@ -167,64 +148,15 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_ui_res_local->bar_wait  = 0;
-        scui_ui_res_local->bar_alpha = scui_alpha_cover;
-        scui_widget_alpha_set(SCUI_UI_SCENE_2_RING, scui_ui_res_local->bar_alpha, false);
-        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scui_ui_res_local->scroll_pct);
-        SCUI_LOG_INFO("pct:%d", scui_ui_res_local->scroll_pct);
-        scui_widget_draw(SCUI_UI_SCENE_2_RING, NULL, false);
-        // scui_widget_clip_check(event->object, true);
+        scui_coord_t scroll_pct = 0;
+        scui_scroll_auto_percent_get(scui_ui_res_local->scroll, &scroll_pct);
+        SCUI_LOG_INFO("pct:%d", scroll_pct);
+        scui_ui_bar_arc_pct(scroll_pct);
+        scui_ui_bar_arc_reset(SCUI_UI_SCENE_2_RING);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
-{
-    static scui_coord_t pct = 0;
-    static scui_coord_t way = +1;
-    
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        break;
-    case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_area_t   clip = {0};
-        scui_color_t  color_black = {0};
-        scui_color_t  color_white = {.filter = true,.color.full = 0xFFFFFFFF,};
-        scui_handle_t image_bg   = scui_image_prj_image_src_repeat_slider_04_bgpng;     // 44 * 236
-        scui_handle_t image_ring = scui_image_prj_image_src_repeat_slider_03_ringbmp;
-        scui_handle_t image_edge = scui_image_prj_image_src_repeat_slider_02_dotbmp;
-        
-        clip.x = (SCUI_DRV_HOR_RES - 44);
-        clip.y = (SCUI_DRV_VER_RES - 236) / 2;
-        clip.w =  44;
-        clip.h = 236;
-        scui_widget_draw_image(event->object, &clip, image_bg, NULL, color_black);
-        
-        clip.x = (466 - 462) / 2;
-        clip.y = (466 - 462) / 2;
-        clip.w = 462;
-        clip.h = 462;
-        
-        scui_coord_t angle_d = 29;
-        scui_coord_t angle_s = -29 + scui_ui_res_local->scroll_pct * (angle_d) / 100;
-        scui_coord_t angle_e = angle_s + angle_d;
-        SCUI_LOG_INFO("angle:<s:%d,e:%d>", angle_s, angle_e);
-        scui_widget_draw_ring(event->object, &clip, image_ring, NULL, angle_s, color_white, angle_e, 100, image_edge);
-        break;
-    }
-    default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }

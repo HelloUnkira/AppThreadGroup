@@ -72,10 +72,9 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
         widget_root = scui_handle_get(handle_root);
         widget->surface = widget_root->surface;
     }
-    /* 画布剪切域重置 */
+    /* 画布剪切域重置更新 */
     scui_clip_ready(&widget->clip_set);
-    /* 画布剪切域更新 */
-    scui_widget_surface_refr(widget, false);
+    scui_widget_surface_refr(widget->myself, false);
     
     widget->alpha = scui_alpha_cover;
     widget->image = maker->image;
@@ -583,7 +582,7 @@ void scui_widget_surface_destroy(scui_handle_t handle)
 }
 
 /*@brief 控件画布重映射
- *@param widget  控件实例
+ *@param handle  控件句柄
  *@param surface 画布实例
  */
 void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
@@ -600,26 +599,15 @@ void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
     }
 }
 
-/*@brief 控件画布为独立画布
- *@param widget 控件实例
- */
-bool scui_widget_surface_only(scui_widget_t *widget)
-{
-    if (widget->surface == NULL ||
-        widget->surface->pixel == NULL ||
-        widget->surface->pixel == scui_surface_fb_draw()->pixel ||
-        widget->surface->pixel == scui_surface_fb_refr()->pixel)
-        return false;
-    
-    return true;
-}
-
 /*@brief 控件画布剪切域刷新
- *@param widget  控件实例
+ *@param handle  控件句柄
  *@param recurse 递归处理
  */
-void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
+void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
 {
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     widget->clip_set.clip = widget->clip;
     /* 有独立画布的根控件不记录原点偏移,控件树永远相对独立画布移动 */
@@ -648,9 +636,22 @@ void scui_widget_surface_refr(scui_widget_t *widget, bool recurse)
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
-        scui_widget_surface_refr(child, recurse);
+        scui_widget_surface_refr(handle, recurse);
     }
+}
+
+/*@brief 控件画布为独立画布
+ *@param widget 控件实例
+ */
+bool scui_widget_surface_only(scui_widget_t *widget)
+{
+    if (widget->surface == NULL ||
+        widget->surface->pixel == NULL ||
+        widget->surface->pixel == scui_surface_fb_draw()->pixel ||
+        widget->surface->pixel == scui_surface_fb_refr()->pixel)
+        return false;
+    
+    return true;
 }
 
 /*@brief 控件画布更新
@@ -734,8 +735,8 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     
     SCUI_LOG_DEBUG("");
     /* 更新画布剪切域 */
-    scui_widget_surface_refr(widget, false);
     scui_widget_clip_clear(widget, false);
+    scui_widget_surface_refr(widget->myself, false);
     
     SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
@@ -868,8 +869,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     widget->clip.w = width;
     widget->clip.h = height;
     /* 更新画布剪切域 */
-    scui_widget_surface_refr(widget, true);
     scui_widget_clip_clear(widget, true);
+    scui_widget_surface_refr(widget->myself, true);
 }
 
 /*@brief 控件移动子控件

@@ -218,21 +218,21 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
 void scui_widget_surface_destroy(scui_handle_t handle);
 
 /*@brief 控件画布重映射
- *@param widget  控件实例
+ *@param handle  控件句柄
  *@param surface 画布实例
  */
 void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface);
+
+/*@brief 控件画布剪切域刷新
+ *@param handle  控件句柄
+ *@param recurse 递归处理
+ */
+void scui_widget_surface_refr(scui_handle_t handle, bool recurse);
 
 /*@brief 控件画布为独立画布
  *@param widget 控件实例
  */
 bool scui_widget_surface_only(scui_widget_t *widget);
-
-/*@brief 控件画布剪切域刷新
- *@param widget  控件实例
- *@param recurse 递归处理
- */
-void scui_widget_surface_refr(scui_widget_t *widget, bool recurse);
 
 /*@brief 控件画布更新
  *@param widget  控件实例

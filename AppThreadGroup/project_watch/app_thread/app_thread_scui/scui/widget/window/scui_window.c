@@ -31,7 +31,9 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
         scui_pixel_cf_t p_cf = maker->format;
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;
+        scui_widget_clip_clear(&window->widget, true);
         scui_widget_surface_create(*handle, p_cf, hor_res, ver_res);
+        scui_widget_surface_refr(*handle, true);
     }
     
     scui_window_cfg_def(&window->cfg);
