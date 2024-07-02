@@ -12,7 +12,7 @@
 #define SCUI_SURFACE_FB_LIMIT                       (2)
 
 /* 内存使用占用 */
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 50)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 64)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 256)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 2 + 1024 * 256)
 /* 内存使用记录监控: */
@@ -22,7 +22,7 @@
 /* 内存使用记录监控(子类型): */
 #define SCUI_MEM_RECORD_CHECK_MIX                   (0)
 #define SCUI_MEM_RECORD_CHECK_FONT                  (0)
-#define SCUI_MEM_RECORD_CHECK_GRAPH                 (1)
+#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0)
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_ITEM_MIX                    (128)
 #define SCUI_MEM_RECORD_ITEM_FONT                   (256)

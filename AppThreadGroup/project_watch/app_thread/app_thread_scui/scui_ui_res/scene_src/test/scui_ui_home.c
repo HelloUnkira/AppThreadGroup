@@ -31,11 +31,17 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click: {
+        #if 0
+        #elif 1 // 缩放列表
         scui_ui_scene_list_cfg(0);
         scui_window_switch_type_t type = scui_window_switch_type_cfg_get();
         scui_window_switch_type_cfg_set(scui_window_switch_none);
         scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
         scui_window_switch_type_cfg_set(type);
+        #elif 1 // 蜂窝
+        scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
+        #else
+        #endif
         scui_widget_event_mask_over(event);
         break;
     }

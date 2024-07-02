@@ -122,7 +122,7 @@ bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
  */
 bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2);
 
-/*@brief 检查区域包含区域(area2包含area1)
+/*@brief 检查区域包含区域(area1包含area2)
  *@param area1 区域
  *@param area2 区域
  *@retval 包含true,不包含false
@@ -136,7 +136,7 @@ bool scui_area_inside(scui_area_t *area1, scui_area_t *area2);
  */
 bool scui_area_point(scui_area_t *area, scui_point_t *point);
 
-/*@brief 检查区域包含线(area包含point)
+/*@brief 检查区域包含线(area包含line)
  *@param area   区域
  *@param p1 坐标端点
  *@param p2 坐标端点

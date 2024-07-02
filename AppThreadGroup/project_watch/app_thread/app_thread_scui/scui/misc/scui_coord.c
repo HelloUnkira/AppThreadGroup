@@ -275,7 +275,7 @@ bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
     return *num != 0;
 }
 
-/*@brief 检查区域包含区域(area2包含area1)
+/*@brief 检查区域包含区域(area1包含area2)
  *@param area1 区域
  *@param area2 区域
  *@retval 包含true,不包含false
@@ -284,10 +284,11 @@ bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
 {
     if (area1 == area2)
         return true;
-    if (area1->x < area2->x || area1->x + area1->w > area2->x + area2->w ||
-        area1->y < area2->y || area1->y + area1->h > area2->y + area2->h)
-        return false;
-    return true;
+    if (area1->x <= area2->x && area1->x + area1->w >= area2->x + area2->w &&
+        area1->y <= area2->y && area1->y + area1->h >= area2->y + area2->h)
+        return true;
+    
+    return false;
 }
 
 /*@brief 检查区域包含坐标(area包含point)
@@ -303,7 +304,7 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point)
     return false;
 }
 
-/*@brief 检查区域包含线(area包含point)
+/*@brief 检查区域包含线(area包含line)
  *@param area   区域
  *@param p1 坐标端点
  *@param p2 坐标端点

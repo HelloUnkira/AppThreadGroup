@@ -133,6 +133,8 @@ void scui_image_cache_visit(void)
  */
 void scui_image_cache_clear(void)
 {
+    // SCUI_LOG_WARN("");
+    
     scui_image_cache_t *cache = &scui_image_cache;
     
     scui_image_unit_t *unit = NULL;

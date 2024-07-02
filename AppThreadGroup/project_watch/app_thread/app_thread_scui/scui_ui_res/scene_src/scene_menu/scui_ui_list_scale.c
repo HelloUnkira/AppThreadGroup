@@ -12,7 +12,6 @@ static struct {
     scui_handle_t   *list_image;
     scui_handle_t   *list_text;
     scui_handle_t   *list_jump;
-    uint8_t        **list_pixel;    // 绘制画布列表
     
     scui_handle_t    list_idx;
     scui_handle_t   *list_widget;
@@ -256,6 +255,17 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         scui_widget_surface_remap(custom, NULL);
         break;
     }
+    case scui_event_ptr_click: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_widget_event_mask_over(event);
+        scui_handle_t  parent = scui_widget_parent(event->object);
+        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
+        scui_handle_t  custom = scui_ui_res_local->list_widget[index];
+        SCUI_LOG_WARN("click idx:%d", index);
+        break;
+    }
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
@@ -297,13 +307,11 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             scui_ui_res_local->list_jump    = scui_ui_scene_list_jump;
             scui_handle_t list_num = scui_ui_res_local->list_num;
             
-            scui_ui_res_local->list_pixel   = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(uint8_t *));
             scui_ui_res_local->list_widget  = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(scui_handle_t));
             scui_ui_res_local->list_surface = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(scui_surface_t *));
             scui_ui_res_local->list_refr    = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(bool));
             scui_ui_res_local->list_draw    = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(bool));
             
-            memset(scui_ui_res_local->list_pixel,   0, list_num * sizeof(uint8_t *));
             memset(scui_ui_res_local->list_widget,  0, list_num * sizeof(scui_handle_t));
             memset(scui_ui_res_local->list_surface, 0, list_num * sizeof(scui_surface_t *));
             memset(scui_ui_res_local->list_refr,    0, list_num * sizeof(bool));
@@ -325,15 +333,18 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
             custom_maker.widget.parent      = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
             
+            custom_maker.widget.style.indev_ptr = false;
             custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
             custom_maker.widget.event_cb = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
             
+            custom_maker.widget.style.indev_ptr = true;
             custom_maker.widget.clip.h   = 72;
             custom_maker.widget.event_cb = scui_ui_scene_item_scale_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++)
                 scui_custom_create(&custom_maker, &custom_handle, false);
             
+            custom_maker.widget.style.indev_ptr = false;
             custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
             custom_maker.widget.event_cb = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
@@ -407,7 +418,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             SCUI_MEM_FREE(scui_ui_res_local->list_refr);
             SCUI_MEM_FREE(scui_ui_res_local->list_surface);
             SCUI_MEM_FREE(scui_ui_res_local->list_widget);
-            SCUI_MEM_FREE(scui_ui_res_local->list_pixel);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;
         }
@@ -464,10 +474,23 @@ void scui_ui_scene_list_scale_mask_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw: {
         // 额外绘制一个全局遮罩
-        scui_area_t clip = scui_widget_clip(event->object);
-        clip.x = (466 - 398) / 2;
-        scui_handle_t image_mask = scui_image_prj_image_src_repeat_mask_12_all_maskpng;
-        // scui_widget_draw_image(event->object, &clip, image_mask, NULL, (scui_color_t){0});
+        scui_area_t clip = {0};
+        
+        // 内存真的不够绘制遮罩
+        
+        scui_handle_t image_mask_u = scui_image_prj_image_src_repeat_mask_06_big_uppng;
+        clip.w = scui_image_w(image_mask_u);
+        clip.h = scui_image_h(image_mask_u);
+        clip.x = (466 - clip.w) / 2;
+        clip.y = 0;
+        // scui_widget_draw_image(event->object, &clip, image_mask_u, NULL, (scui_color_t){0});
+        
+        scui_handle_t image_mask_d = scui_image_prj_image_src_repeat_mask_05_big_downpng;
+        clip.w = scui_image_w(image_mask_d);
+        clip.h = scui_image_h(image_mask_d);
+        clip.x = (466 - clip.w) / 2;
+        clip.y = (466 - clip.h);
+        // scui_widget_draw_image(event->object, &clip, image_mask_d, NULL, (scui_color_t){0});
         break;
     }
     default:

@@ -635,10 +635,18 @@ void scui_scroll_update_layout(scui_event_t *event)
     
     SCUI_LOG_INFO("widget: %u", widget->myself);
     
+    // 状态量还原
+    scroll->point_cur = (scui_point_t){0};
+    scroll->point_ofs = (scui_point_t){0};
+    
     /* 仅指定布局触发布局更新 */
     /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
     if (scroll->dir == scui_event_dir_none) {
         scroll->loop = false;
+        
+        #if 1
+        /* 好像无需还原,重做布局是重新开始 */
+        #else
         /* 还原布局内容 */
         if (scroll->ofs_cur.x != 0 ||
             scroll->ofs_cur.y != 0) {
@@ -650,6 +658,7 @@ void scui_scroll_update_layout(scui_event_t *event)
             scroll->ofs_cur.x = 0;
             scroll->ofs_cur.y = 0;
         }
+        #endif
         
         /* 计算布局内容 */
         scui_area_t clip = widget->clip;
@@ -671,7 +680,11 @@ void scui_scroll_update_layout(scui_event_t *event)
         scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2);
         SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
         SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
-        return;
+        
+        // 状态量还原
+        scroll->ofs_cur = (scui_point_t){0};
+        scroll->ofs_sum = (scui_point_t){0};
+        goto layout_over;
     }
     
     /* 只支持水平自动布局与垂直自动布局 */
@@ -707,6 +720,8 @@ void scui_scroll_update_layout(scui_event_t *event)
             pos.y += child->clip.h + scroll->space;
     }
     
+    // 状态量还原
+    scroll->dis_sum = 0;
     scroll->dis_ofs = 0;
     scroll->dis_lim = 0;
     
@@ -744,6 +759,7 @@ void scui_scroll_update_layout(scui_event_t *event)
     }
     SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
     
+    layout_over:
     if (scui_widget_style_is_show(handle))
         scui_widget_draw(handle, NULL, false);
 }

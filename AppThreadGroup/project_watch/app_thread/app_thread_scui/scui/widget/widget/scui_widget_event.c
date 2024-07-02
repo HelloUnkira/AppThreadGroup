@@ -290,6 +290,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
+        // 全局帧动画不分三步调度
+        if (!scui_widget_event_check_execute(event))
+             return;
         /* 全局滚动检查 */
         scui_widget_event_mask_keep(event);
         scui_handle_t handle = SCUI_HANDLE_INVALID;
@@ -365,6 +368,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件ptr:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
+        // 输入事件不分三步调度
+        if (!scui_widget_event_check_execute(event))
+             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
         bool event_filter = true;
@@ -415,6 +421,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件enc:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
+        // 输入事件不分三步调度
+        if (!scui_widget_event_check_execute(event))
+             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
@@ -438,6 +447,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件key:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
+        // 输入事件不分三步调度
+        if (!scui_widget_event_check_execute(event))
+             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
@@ -464,6 +476,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         event->type == scui_event_widget_scroll_s   ||
         event->type == scui_event_widget_scroll_e   ||
         event->type == scui_event_font_change) {
+        // 控件事件不分三步调度
+        if (!scui_widget_event_check_execute(event))
+             return;
         scui_widget_event_mask_keep(event);
         scui_widget_event_bubble(event, NULL, true);
         return;
