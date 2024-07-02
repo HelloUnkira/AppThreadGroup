@@ -1,6 +1,7 @@
 #ifndef SCUI_UI_H
 #define SCUI_UI_H
 
+/*****************************************************************************/
 /* 主题:蜂窝(所有图标为正方形图标) */
 #define SCUI_UI_HONEYCOMB_EDGE_MODE             (0)     // 边界模式(0:圆屏; 1:方屏)
 #define SCUI_UI_HONEYCOMB_LIST_NUM              (37)    // 图标数量
@@ -8,17 +9,28 @@
 #define SCUI_UI_HONEYCOMB_OFS_MIN               (0)     // 最小缩小图标尺寸偏移
 #define SCUI_UI_HONEYCOMB_OFS_MAX               (8)     // 最大放大图标尺寸偏移
 #define SCUI_UI_HONEYCOMB_SPACE                 (8)     // 图标间隙
-
-// 蜂窝初始布局构建参数
+/* 主题:蜂窝 初始布局构建参数 */
 scui_coord_t scui_ui_honeycomb_dif_x(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_dif_y(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_mid_x(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_mid_y(scui_handle_t ofs_cur);
-
-// 蜂窝信息,蜂窝初始布局
+/* 主题:蜂窝 蜂窝信息,蜂窝初始布局 */
 extern const scui_handle_t scui_ui_honeycomb_list_image[SCUI_UI_HONEYCOMB_LIST_NUM];
 extern const scui_handle_t scui_ui_honeycomb_list_jump[SCUI_UI_HONEYCOMB_LIST_NUM];
 void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_cur);
+/*****************************************************************************/
+
+/*****************************************************************************/
+/* 主题:瀑布(所有图标为正方形图标) */
+#define SCUI_UI_WATERFALL_LIST_NUM              (37)    // 图标数量
+#define SCUI_UI_WATERFALL_OFS_MIN               (2)     // 最小缩小图标尺寸偏移
+#define SCUI_UI_WATERFALL_OFS_MAX               (6)     // 最大放大图标尺寸偏移
+#define SCUI_UI_WATERFALL_LINE_SPACE            (8)     // 图标垂直间隙
+/* 主题:瀑布 瀑布信息 */
+extern const scui_handle_t scui_ui_waterfall_list_image[SCUI_UI_WATERFALL_LIST_NUM];
+extern const scui_handle_t scui_ui_waterfall_list_jump[SCUI_UI_WATERFALL_LIST_NUM];
+/*****************************************************************************/
+
 
 
 

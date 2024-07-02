@@ -383,15 +383,16 @@ void scui_scroll_anima_ready(void *instance)
          scroll->lock_move = false;
          scui_widget_event_scroll_flag(0x01, &scroll->key);
         
+        if (scroll->anima != SCUI_HANDLE_INVALID)
         if (!scui_anima_running(scroll->anima)) {
              scui_event_t event = {.object = widget->myself};
              scui_scroll_event_notify(&event, 0x01);
-            
-            if (scroll->anima != SCUI_HANDLE_INVALID) {
-                scui_anima_stop(scroll->anima);
-                scui_anima_destroy(scroll->anima);
-                scroll->anima = SCUI_HANDLE_INVALID;
-            }
+             
+             if (scroll->anima != SCUI_HANDLE_INVALID) {
+                 scui_anima_stop(scroll->anima);
+                 scui_anima_destroy(scroll->anima);
+                 scroll->anima = SCUI_HANDLE_INVALID;
+             }
         }
     }
 }
@@ -1058,9 +1059,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_event_pos_d);
             offset4[offset_num++] = offset;
         }
-            
+        
         /* 边界对齐,开始校正 */
-        if (scroll->dir == scui_event_dir_none && (scroll->pos & scui_event_dir_none) != 0) {
+        if (scroll->dir == scui_event_dir_none && scroll->pos != scui_event_dir_none) {
             
             if (retval) {
                 /* 取最小偏移量 */

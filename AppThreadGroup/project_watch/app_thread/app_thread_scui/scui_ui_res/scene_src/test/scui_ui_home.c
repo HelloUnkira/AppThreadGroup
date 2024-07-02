@@ -38,8 +38,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_window_switch_type_cfg_set(scui_window_switch_none);
         scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
         scui_window_switch_type_cfg_set(type);
-        #elif 1 // 蜂窝
+        #elif 0 // 蜂窝
         scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
+        #elif 0 // 瀑布
+        scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
         #else
         #endif
         scui_widget_event_mask_over(event);

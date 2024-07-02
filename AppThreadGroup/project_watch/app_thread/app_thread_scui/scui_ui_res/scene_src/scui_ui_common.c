@@ -157,6 +157,93 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_
     memcpy(list_layout, hb_layout, size);
 }
 
+
+/*****************************************************************************/
+/* 主题:瀑布使用 */
+
+const scui_handle_t scui_ui_waterfall_list_image[SCUI_UI_WATERFALL_LIST_NUM] = {
+    scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
+    scui_image_prj_image_src_00_theme_icon_01_spo2_01_00png,
+    scui_image_prj_image_src_00_theme_icon_02_message_01_00png,
+    scui_image_prj_image_src_00_theme_icon_04_call_01_00png,
+    scui_image_prj_image_src_00_theme_icon_05_sport_record_01_00png,
+    scui_image_prj_image_src_00_theme_icon_06_activity_01_00png,
+    scui_image_prj_image_src_00_theme_icon_07_dial_01_00png,
+    scui_image_prj_image_src_00_theme_icon_09_find_phone_01_00png,
+    scui_image_prj_image_src_00_theme_icon_10_word_colock_01_00png,
+    scui_image_prj_image_src_00_theme_icon_11_weather_01_00png,
+    scui_image_prj_image_src_00_theme_icon_12_music_01_00png,
+    scui_image_prj_image_src_00_theme_icon_13_altitude_01_00png,
+    scui_image_prj_image_src_00_theme_icon_14_settings_01_00png,
+    scui_image_prj_image_src_00_theme_icon_15_take_photo_01_00png,
+    scui_image_prj_image_src_00_theme_icon_16_stopwatch_01_00png,
+    scui_image_prj_image_src_00_theme_icon_17_alarms_01_00png,
+    scui_image_prj_image_src_00_theme_icon_18_timer_01_00png,
+    scui_image_prj_image_src_00_theme_icon_20_voice_01_00png,
+    scui_image_prj_image_src_00_theme_icon_21_flashlight_01_00png,
+    scui_image_prj_image_src_00_theme_icon_22_calculator_01_00png,
+    scui_image_prj_image_src_00_theme_icon_23_compass_01_00png,
+    scui_image_prj_image_src_00_theme_icon_24_stress_01_00png,
+    scui_image_prj_image_src_00_theme_icon_25_breathe_01_00png,
+    scui_image_prj_image_src_00_theme_icon_26_soprt_01_00png,
+    scui_image_prj_image_src_00_theme_icon_27_sleep_01_00png,
+    scui_image_prj_image_src_00_theme_icon_28_period_01_00png,
+    scui_image_prj_image_src_00_theme_icon_29_discover_01_00png,
+    scui_image_prj_image_src_00_theme_icon_30_theme_01_00png,
+    scui_image_prj_image_src_00_theme_icon_31_about_01_00png,
+    scui_image_prj_image_src_00_theme_icon_32_brightness_01_00png,
+    scui_image_prj_image_src_00_theme_icon_33_passwoed_01_00png,
+    scui_image_prj_image_src_00_theme_icon_34_sound_01_00png,
+    scui_image_prj_image_src_00_theme_icon_35_time_01_00png,
+    scui_image_prj_image_src_00_theme_icon_37_dnd_01_00png,
+    scui_image_prj_image_src_00_theme_icon_38_aod_01_00png,
+    scui_image_prj_image_src_00_theme_icon_39_system_01_00png,
+    scui_image_prj_image_src_00_theme_icon_40_down_key_01_00png,
+    // scui_image_prj_image_src_00_theme_icon_41_blood_pressure_01_00png,
+    // scui_image_prj_image_src_00_theme_icon_42_measurement_01_00png,
+};
+
+const scui_handle_t scui_ui_waterfall_list_jump[SCUI_UI_WATERFALL_LIST_NUM] = {
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+    SCUI_UI_SCENE_6,
+};
+
+
 /*****************************************************************************/
 /* 应用列表,设置列表等使用 */
 scui_handle_t  scui_ui_scene_list_num   = 0;
