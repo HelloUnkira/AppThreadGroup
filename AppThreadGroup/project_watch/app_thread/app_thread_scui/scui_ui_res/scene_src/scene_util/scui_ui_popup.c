@@ -40,8 +40,9 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         
         if (scui_string_scroll_over(popup_string)) {
             /* 完全隐藏则回收控件 */
-            if (popup_alpha == 0)
+            if (popup_alpha == 0) {
                 scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
+            }
             
             if (popup_alpha > 0) {
                 scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_POPUP_FADE_TIME / SCUI_ANIMA_TICK);
@@ -119,10 +120,14 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t   clip  = scui_widget_clip(event->object);
-        scui_color_t  color = {0};
+        // 这里需要填完全覆盖的纯透明色调
+        scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+        scui_widget_alpha_set(event->object, scui_alpha_cover, false);
+        scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
+        scui_widget_alpha_set(event->object, alpha, false);
+        
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
-        scui_widget_draw_image(event->object, &clip, image, NULL, color);
+        scui_widget_draw_image(event->object, NULL, image, NULL, (scui_color_t){0});
         
         break;
     }

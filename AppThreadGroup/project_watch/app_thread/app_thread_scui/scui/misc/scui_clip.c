@@ -36,7 +36,7 @@ void scui_clip_check(scui_clip_set_t *clip_set)
     
     scui_list_dll_btra(&set->dl_list, node) {
         unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
-        SCUI_LOG_INFO("<%d, %d, %d, %d>",
+        SCUI_LOG_WARN("<%d, %d, %d, %d>",
                       unit->clip.x, unit->clip.y,
                       unit->clip.w, unit->clip.h);
     }

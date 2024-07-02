@@ -36,8 +36,11 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     
     if (clip != NULL) {
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget->clip, clip))
+        if (scui_area_inter(&clip_inter, &widget->clip, clip)) {
             clip_valid = clip_inter;
+            clip_valid.x -= widget->clip.x - widget->clip_set.clip.x;
+            clip_valid.y -= widget->clip.y - widget->clip_set.clip.y;
+        }
     }
     
     /* 为所有控件及其子控件添加指定剪切域 */
@@ -179,6 +182,9 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         /* 只有销毁窗口时才做整体销毁 */
         scui_widget_cb_destroy(widget->myself);
     }
+    
+    // 重新刷新窗口列表
+    scui_widget_refr(scui_window_active_curr(), false);
 }
 
 /*@brief 控件隐藏
