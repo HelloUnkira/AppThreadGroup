@@ -6,497 +6,123 @@
 #if defined(SCUI_WIDGET_EVENT_USE_EMPTY) && SCUI_WIDGET_EVENT_USE_EMPTY == 1
 static void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_cube_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_lantern_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_soccer_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
+}
+static void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event)
+{
 }
 static void scui_ui_bar_arc_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_list_scale_mask_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
+}
+static void scui_ui_scene_waterfall_scroll_notify_event(scui_event_t *event)
+{
 }
 static void scui_ui_bar_arc_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_popup_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_3_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_float_4_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_1_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_2_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_bar_arc_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_3_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_4_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_5_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_6_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_home_c_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 static void scui_ui_scene_test_event_proc(scui_event_t *event)
 {
-	if (!scui_widget_event_check_prepare(event))
-		return;
-	
-	SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-	
-	switch (event->type) {
-	default:
-		scui_widget_event_mask_keep(event);
-		break;
-	}
 }
 #else
 extern void scui_ui_scene_butterfly_event_proc(scui_event_t *event);
@@ -509,9 +135,11 @@ extern void scui_ui_scene_soccer_event_proc(scui_event_t *event);
 extern void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_honeycomb_event_proc(scui_event_t *event);
 extern void scui_ui_scene_list_scale_event_proc(scui_event_t *event);
+extern void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event);
 extern void scui_ui_bar_arc_event_proc(scui_event_t *event);
 extern void scui_ui_scene_list_scale_mask_event_proc(scui_event_t *event);
 extern void scui_ui_scene_waterfall_event_proc(scui_event_t *event);
+extern void scui_ui_scene_waterfall_scroll_notify_event(scui_event_t *event);
 extern void scui_ui_bar_arc_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
@@ -691,6 +319,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_SCROLL = {
 	.widget.myself                  = SCUI_UI_SCENE_LIST_SCALE_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_LIST_SCALE,
 	.widget.child_num               = 50,
+	.notify_cb                      = scui_ui_scene_list_scale_scroll_notify_event,
 	.dir                            = scui_event_dir_ver,
 	.pos                            = scui_event_pos_c,
 	.space                          = 3,
@@ -748,6 +377,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
 	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_WATERFALL,
 	.widget.child_num               = 3,
+	.notify_cb                      = scui_ui_scene_waterfall_scroll_notify_event,
 	.dir                            = scui_event_dir_ver,
 	.pos                            = scui_event_pos_none,
 	.route_enc                      = 117,
@@ -943,7 +573,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_3,
 	.widget.event_cb                = scui_ui_scene_float_3_event_proc,
-	.widget.child_num               = 1,
+	.widget.child_num               = 11,
 	.level                          = 1,
 	.buffer                         = true,
 };

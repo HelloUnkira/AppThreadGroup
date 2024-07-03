@@ -10,6 +10,7 @@ typedef enum {
     scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
     /* 扩展控件(按需补充) */
+    scui_widget_type_button,    /* 纯色按钮 */
     scui_widget_type_watch,     /* 表盘指针控件 */
     scui_widget_type_chart,     /* 图表控件 */
     /* 继续补充... */

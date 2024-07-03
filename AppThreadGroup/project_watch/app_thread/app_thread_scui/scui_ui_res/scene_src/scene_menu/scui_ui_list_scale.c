@@ -229,7 +229,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         scui_coord_t  btn_scale_x = (scui_multi_t)btn_clip.w * (1024 - img_scale.x) / 1024;
         btn_clip.x += btn_scale_x / 2;
         btn_clip.w -= btn_scale_x;
-        scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
+        scui_button_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
         
         scui_image_t img_inst  = {
             .status         = scui_image_status_mem,
@@ -445,19 +445,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         scui_window_switch_type_cfg_set(type);
         scui_widget_event_mask_over(event);
         break;
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_c:
-    case scui_event_widget_scroll_e:
-        SCUI_LOG_INFO("scui_event_widget_scroll");
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_coord_t scroll_pct = 0;
-        scui_scroll_auto_percent_get(SCUI_UI_SCENE_LIST_SCALE_SCROLL, &scroll_pct);
-        SCUI_LOG_INFO("pct:%d", scroll_pct);
-        scui_ui_bar_arc_pct(scroll_pct);
-        scui_ui_bar_arc_reset(SCUI_UI_SCENE_LIST_SCALE_RING);
-        break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);
@@ -497,4 +484,16 @@ void scui_ui_scene_list_scale_mask_event_proc(scui_event_t *event)
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event)
+{
+    scui_coord_t scroll_pct = 0;
+    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    SCUI_LOG_INFO("pct:%d", scroll_pct);
+    scui_ui_bar_arc_pct(scroll_pct);
+    scui_ui_bar_arc_reset(SCUI_UI_SCENE_LIST_SCALE_RING);
 }

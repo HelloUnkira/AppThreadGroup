@@ -31,6 +31,7 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
     
     /* 状态初始化 */
+    scroll->notify_cb   = maker->notify_cb;
     scroll->dir         = maker->dir;
     scroll->pos         = maker->pos;
     scroll->space       = maker->space;
@@ -1145,30 +1146,36 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         if (!scroll->over_scroll)
              break;
         scroll->over_scroll = false;
-        scui_event_t event = {
-            .object = scui_widget_root(handle),
-            .type   = scui_event_widget_scroll_s,
-        };
-        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL) {
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_widget_scroll_s,
+            };
+            scroll->notify_cb(&event);
+        }
         break;
     }
     case 0x01: {
         if (scroll->over_scroll)
             break;
         scroll->over_scroll = true;
-        scui_event_t event = {
-            .object = scui_widget_root(handle),
-            .type   = scui_event_widget_scroll_e,
-        };
-        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL) {
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_widget_scroll_e,
+            };
+            scroll->notify_cb(&event);
+        }
         break;
     }
     case 0x02: {
-        scui_event_t event = {
-            .object = scui_widget_root(handle),
-            .type   = scui_event_widget_scroll_c,
-        };
-        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL) {
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_widget_scroll_c,
+            };
+            scroll->notify_cb(&event);
+        }
         break;
     }
     default:
@@ -1201,13 +1208,11 @@ void scui_scroll_event(scui_event_t *event)
             scui_scroll_update_layout(event);
         break;
     case scui_event_ptr_down:
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -1253,7 +1258,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_up:
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -1273,7 +1277,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -1303,7 +1306,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_key_click: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

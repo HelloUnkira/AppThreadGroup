@@ -160,7 +160,6 @@ void scui_string_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -201,7 +200,6 @@ void scui_string_event(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         
@@ -223,7 +221,6 @@ void scui_string_event(scui_event_t *event)
         break;
     }
     case scui_event_font_change: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

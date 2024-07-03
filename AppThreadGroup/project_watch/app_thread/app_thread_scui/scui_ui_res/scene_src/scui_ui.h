@@ -53,6 +53,11 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string);
 void scui_ui_bar_arc_pct(scui_handle_t pct);
 void scui_ui_bar_arc_reset(scui_handle_t handle);
 
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_bar_arc_scroll_event_proc(scui_event_t *event);
+
 /*@全局弧形滚动条: 控件事件响应回调
  *@param event 事件
  */

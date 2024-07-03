@@ -10,6 +10,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_3",
             "widget.event_cb":              "scui_ui_scene_float_3_event_proc",
+            "widget.child_num":             "10",
             "level":                        "1",
             "buffer":                       "true"
         },

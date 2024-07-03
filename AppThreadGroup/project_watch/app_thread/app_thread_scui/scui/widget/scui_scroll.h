@@ -8,6 +8,7 @@
 
 typedef struct {
     scui_widget_t       widget;
+    scui_event_cb_t     notify_cb;      /* 专属事件通知 */
     scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
@@ -49,6 +50,7 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_maker_t widget;
+    scui_event_cb_t     notify_cb;      /* 专属事件通知 */
     scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */

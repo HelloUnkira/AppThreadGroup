@@ -37,21 +37,6 @@ void scui_event_register_custom(scui_event_cb_t event_cb)
     scui_event_cb_custom = event_cb;
 }
 
-/*@brief 事件类型转为字符串
- *@param 事件
- *@retval 字符串
- */
-const char * scui_event_to_str(scui_event_type_t type)
-{
-    if (type >= scui_event_sys_s && type <= scui_event_sys_e)
-        return scui_event_sys_to_str(type);
-    
-    if (type >= scui_event_custom_s && type <= scui_event_custom_e)
-        return scui_event_custom_to_str(type);
-    
-    return "unknown event";
-}
-
 /*@brief 事件回调全局响应权限检查
  *       before和after的响应权限检查
  *@param event 事件包

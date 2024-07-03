@@ -19,30 +19,6 @@ void scui_event_custom(scui_event_t *event)
     }
 }
 
-/*@brief 事件类型转为字符串
- *@param 事件
- *@retval 字符串
- */
-const char * scui_event_custom_to_str(scui_event_type_t type)
-{
-    const struct {
-        uint32_t    type;
-        const char *str;
-    } to_str_list[] = {
-        {.type = scui_event_invalid,                .str = "scui_event_invalid",},
-        
-        {.type = scui_event_custom_all,             .str = "scui_event_custom_all",},
-        
-        
-    };
-    
-    for (uint32_t idx = 0; idx < scui_arr_len(to_str_list); idx++)
-        if (to_str_list[idx].type == type)
-            return to_str_list[idx].str;
-    
-    return to_str_list[scui_event_invalid].str;
-}
-
 /*@brief 事件响应
  *@param event 事件包
  */

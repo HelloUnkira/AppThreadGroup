@@ -174,6 +174,9 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
         [scui_widget_type_string].destroy   = (scui_widget_cb_destroy_t)  scui_string_destroy,
         [scui_widget_type_string].layout    = (scui_widget_cb_layout_t)   NULL,
         /* 扩展控件 */
+        [scui_widget_type_button].create    = (scui_widget_cb_create_t)   scui_button_create,
+        [scui_widget_type_button].destroy   = (scui_widget_cb_destroy_t)  scui_button_destroy,
+        [scui_widget_type_button].layout    = (scui_widget_cb_layout_t)   NULL,
         [scui_widget_type_watch].create     = (scui_widget_cb_create_t)   scui_watch_create,
         [scui_widget_type_watch].destroy    = (scui_widget_cb_destroy_t)  scui_watch_destroy,
         [scui_widget_type_watch].layout     = (scui_widget_cb_layout_t)   NULL,

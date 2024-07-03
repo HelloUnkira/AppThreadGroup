@@ -82,6 +82,9 @@
 #define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
 #define SCUI_WIDGET_STRING_UNIT_DX                  (3)
 
+/* 按钮1缩放限制百分比 */
+#define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
+
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)

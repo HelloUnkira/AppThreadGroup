@@ -175,6 +175,9 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     /* 布局更新 */
     scui_widget_cb_layout(widget->parent);
     
+    // 重新刷新窗口列表
+    scui_widget_refr(widget->myself, false);
+    
     /* 将该显示窗口移除出场景管理器中 */
     if (widget->parent == SCUI_HANDLE_INVALID &&
         widget->type   == scui_widget_type_window) {
@@ -182,9 +185,6 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         /* 只有销毁窗口时才做整体销毁 */
         scui_widget_cb_destroy(widget->myself);
     }
-    
-    // 重新刷新窗口列表
-    scui_widget_refr(scui_window_active_curr(), false);
 }
 
 /*@brief 控件隐藏
@@ -478,10 +478,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     /*流程派发 ************************************************************* */
     /*************************************************************************/
-    if (event->type == scui_event_widget_scroll_c   ||
-        event->type == scui_event_widget_scroll_s   ||
-        event->type == scui_event_widget_scroll_e   ||
-        event->type == scui_event_font_change) {
+    if (event->type == scui_event_font_change) {
         // 控件事件不分三步调度
         if (!scui_widget_event_check_execute(event))
              return;

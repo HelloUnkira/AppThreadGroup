@@ -16,12 +16,6 @@ void scui_event_register_finish(scui_event_cb_t event_cb);
  */
 void scui_event_register_custom(scui_event_cb_t event_cb);
 
-/*@brief 事件类型转为字符串
- *@param 事件
- *@retval 字符串
- */
-const char * scui_event_to_str(scui_event_type_t type);
-
 /*@brief 事件回调全局响应权限检查
  *       before和after的响应权限检查
  *@param event 事件包

@@ -52,6 +52,7 @@
 #include "scui_scroll.h"
 #include "scui_string.h"
 /* widget: */
+#include "scui_button.h"
 #include "scui_watch.h"
 #include "scui_chart.h"
 

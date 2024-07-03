@@ -190,7 +190,6 @@ void scui_chart_event(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
         if (!scui_widget_event_check_execute(event))
              break;
         

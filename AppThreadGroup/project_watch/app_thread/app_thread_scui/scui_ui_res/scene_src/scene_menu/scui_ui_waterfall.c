@@ -220,23 +220,22 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_c:
-    case scui_event_widget_scroll_e:
-        SCUI_LOG_INFO("scui_event_widget_scroll");
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_coord_t scroll_pct = 0;
-        scui_scroll_auto_percent_get(SCUI_UI_SCENE_WATERFALL_SCROLL, &scroll_pct);
-        SCUI_LOG_INFO("pct:%d", scroll_pct);
-        scui_ui_bar_arc_pct(scroll_pct);
-        scui_ui_bar_arc_reset(SCUI_UI_SCENE_WATERFALL_RING);
-        break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
             scui_window_float_event_check_ptr(event);
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_waterfall_scroll_notify_event(scui_event_t *event)
+{
+    scui_coord_t scroll_pct = 0;
+    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    SCUI_LOG_INFO("pct:%d", scroll_pct);
+    scui_ui_bar_arc_pct(scroll_pct);
+    scui_ui_bar_arc_reset(SCUI_UI_SCENE_WATERFALL_RING);
 }

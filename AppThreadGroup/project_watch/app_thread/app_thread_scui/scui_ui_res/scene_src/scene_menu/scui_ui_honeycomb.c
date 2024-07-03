@@ -105,6 +105,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             
             scui_area_t scale_clip = icon_clip;
             
+            #if 1
             // 水平缩放
             if (hor_dir == scui_event_dir_none)
                 scale_clip.x += (icon_clip.w - image_clip_w) / 2;
@@ -118,6 +119,11 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             if (ver_dir == scui_event_dir_to_u);
             if (ver_dir == scui_event_dir_to_d)
                 scale_clip.y += (icon_clip.h - image_clip_h);
+            #else
+            // 图标居中对齐
+            scale_clip.x += (icon_clip.w - image_clip_w) / 2;
+            scale_clip.y += (icon_clip.h - image_clip_h) / 2;
+            #endif
             
             scale_clip.w = image_clip_w;
             scale_clip.h = image_clip_h;
