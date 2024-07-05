@@ -14,41 +14,58 @@ scui_coord_t scui_ui_honeycomb_dif_x(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_dif_y(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_mid_x(scui_handle_t ofs_cur);
 scui_coord_t scui_ui_honeycomb_mid_y(scui_handle_t ofs_cur);
-/* 主题:蜂窝 蜂窝信息,蜂窝初始布局 */
-extern const scui_handle_t scui_ui_honeycomb_list_image[SCUI_UI_HONEYCOMB_LIST_NUM];
-extern const scui_handle_t scui_ui_honeycomb_list_jump[SCUI_UI_HONEYCOMB_LIST_NUM];
+/* 主题:蜂窝初始布局 */
 void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_cur);
 /*****************************************************************************/
-
-/*****************************************************************************/
 /* 主题:瀑布(所有图标为正方形图标) */
-#define SCUI_UI_WATERFALL_LIST_NUM              (37)    // 图标数量
 #define SCUI_UI_WATERFALL_OFS_MIN               (2)     // 最小缩小图标尺寸偏移
 #define SCUI_UI_WATERFALL_OFS_MAX               (6)     // 最大放大图标尺寸偏移
 #define SCUI_UI_WATERFALL_LINE_SPACE            (8)     // 图标垂直间隙
-/* 主题:瀑布 瀑布信息 */
-extern const scui_handle_t scui_ui_waterfall_list_image[SCUI_UI_WATERFALL_LIST_NUM];
-extern const scui_handle_t scui_ui_waterfall_list_jump[SCUI_UI_WATERFALL_LIST_NUM];
 /*****************************************************************************/
+/* 主题:波轮(所有图标为正方形图标) */
+#define SCUI_UI_THEMEWHEEL_OFS                  (4)     // 图标尺寸偏移
+#define SCUI_UI_THEMEWHEEL_ANGLE_UNIT           (30)    // 一圈数量 == 360 / angle_unit
+#define SCUI_UI_THEMEWHEEL_ANGLE_CELL           (6)     // 动画颗粒度,一般不改
+#define SCUI_UI_THEMEWHEEL_IMAGE_ARROW          (scui_image_prj_image_src_repeat_arrow_05_backbmp)
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
+typedef enum {
+    scui_ui_scene_list_type_list_scale,
+    scui_ui_scene_list_type_honeycomb,
+    scui_ui_scene_list_type_waterfall,
+    scui_ui_scene_list_type_themewheel,
+} scui_ui_scene_list_type_t;
 
-
-
-
-/* 应用列表,设置列表等使用 */
+/* 应用列表,设置列表,主题等使用 */
 extern scui_handle_t  scui_ui_scene_list_num;
 extern scui_handle_t *scui_ui_scene_list_image;
 extern scui_handle_t *scui_ui_scene_list_text;
 extern scui_handle_t *scui_ui_scene_list_jump;
-void scui_ui_scene_list_cfg(uint8_t type);
-
+void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type);
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
 /*@brief 窗口关联配置
  *@param event 事件
  */
 void scui_ui_scene_link_cfg(scui_event_t *event);
-
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
 /* 全局弹窗效果 */
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string);
-
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
 /* 全局弧形滚动条效果 */
 void scui_ui_bar_arc_pct(scui_handle_t pct);
 void scui_ui_bar_arc_reset(scui_handle_t handle);
@@ -56,11 +73,7 @@ void scui_ui_bar_arc_reset(scui_handle_t handle);
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_bar_arc_scroll_event_proc(scui_event_t *event);
-
-/*@全局弧形滚动条: 控件事件响应回调
- *@param event 事件
- */
 void scui_ui_bar_arc_event_proc(scui_event_t *event);
+/*****************************************************************************/
 
 #endif

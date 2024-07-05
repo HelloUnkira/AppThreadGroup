@@ -1,0 +1,29 @@
+{
+    "type": "scene",
+    "widget": [
+        {
+            "widget.type":                  "scui_widget_type_window",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_THUMBWHEEL",
+            "widget.event_cb":              "scui_ui_scene_thumbwheel_event_proc",
+            "level":                        "0",
+            "buffer":                       "true"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_enc":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.x":                "30",
+            "widget.clip.y":                "30",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES - 30 * 2",
+            "widget.clip.h":                "SCUI_DRV_VER_RES - 30 * 2",
+            "widget.myself":                "SCUI_UI_SCENE_THUMBWHEEL_CUSTOM",
+            "widget.parent":                "SCUI_UI_SCENE_THUMBWHEEL",
+            "widget.child_num":             "3",
+            "widget.event_cb":              "scui_ui_scene_thumbwheel_custom_event_proc"
+        }
+    ]
+}

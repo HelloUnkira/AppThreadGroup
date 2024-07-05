@@ -31,19 +31,42 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click: {
-        #if 0
-        #elif 1 // 缩放列表
-        scui_ui_scene_list_cfg(0);
-        scui_window_switch_type_t type = scui_window_switch_type_cfg_get();
-        scui_window_switch_type_cfg_set(scui_window_switch_none);
-        scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
-        scui_window_switch_type_cfg_set(type);
-        #elif 0 // 蜂窝
-        scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
-        #elif 0 // 瀑布
-        scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
-        #else
-        #endif
+        
+        scui_window_switch_type_t switch_type = 0;
+        switch_type = scui_window_switch_type_cfg_get();
+        
+        scui_ui_scene_list_type_t type = 0;
+        type = scui_ui_scene_list_type_list_scale;
+        // type = scui_ui_scene_list_type_honeycomb;
+        // type = scui_ui_scene_list_type_waterfall;
+        // type = scui_ui_scene_list_type_themewheel;
+        
+        
+        
+        switch (type) {
+        case scui_ui_scene_list_type_list_scale: { // 缩放列表
+            scui_ui_scene_list_cfg(type);
+            scui_window_switch_type_cfg_set(scui_window_switch_none);
+            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
+            scui_window_switch_type_cfg_set(switch_type);
+            break;
+        }
+        case scui_ui_scene_list_type_honeycomb: // 蜂窝
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
+            break;
+        case scui_ui_scene_list_type_waterfall: // 瀑布
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
+            break;
+        case scui_ui_scene_list_type_themewheel: // 波轮
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_THUMBWHEEL, false);
+            break;
+        default:
+            break;
+        }
+        
         scui_widget_event_mask_over(event);
         break;
     }

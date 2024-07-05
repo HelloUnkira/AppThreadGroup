@@ -23,7 +23,7 @@ static struct {
 // 图标间隔水平宽度
 scui_coord_t scui_ui_honeycomb_dif_x(scui_handle_t ofs_cur)
 {
-    scui_handle_t image = scui_ui_honeycomb_list_image[0] + ofs_cur;
+    scui_handle_t image = scui_ui_scene_list_image[0] + ofs_cur;
     // 图片宽度 + 左右俩个间隙(控件:scroll.space属性, 同步修改)
     return scui_image_w(image) + SCUI_UI_HONEYCOMB_SPACE;
 }
@@ -38,14 +38,14 @@ scui_coord_t scui_ui_honeycomb_dif_y(scui_handle_t ofs_cur)
 // 中心图标水平偏移(原点(左上角))
 scui_coord_t scui_ui_honeycomb_mid_x(scui_handle_t ofs_cur)
 {
-    scui_handle_t image = scui_ui_honeycomb_list_image[0] + ofs_cur;
+    scui_handle_t image = scui_ui_scene_list_image[0] + ofs_cur;
     return (scui_ui_res_local->scroll_width - scui_image_w(image)) / 2;
 }
 
 // 中心图标垂直偏移(原点(左上角))
 scui_coord_t scui_ui_honeycomb_mid_y(scui_handle_t ofs_cur)
 {
-    scui_handle_t image = scui_ui_honeycomb_list_image[0] + ofs_cur;
+    scui_handle_t image = scui_ui_scene_list_image[0] + ofs_cur;
     return (scui_ui_res_local->scroll_height - scui_image_h(image)) / 2;
 }
 
@@ -70,7 +70,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
         SCUI_LOG_INFO("list_idx:%d", index);
         
-        scui_handle_t image   = scui_ui_honeycomb_list_image[index];
+        scui_handle_t image   = scui_ui_scene_list_image[index];
         scui_handle_t ofs_cur = scui_ui_res_local->ofs_cur;
         
         scui_area_t edge_clip = scui_widget_clip(parent);
@@ -205,7 +205,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_ui_res_local->ofs_cur       = SCUI_UI_HONEYCOMB_OFS_DEF;
             
             // 取一张图(随便, 反正所有图都一样)
-            scui_handle_t icon = scui_ui_honeycomb_list_image[0];
+            scui_handle_t icon = scui_ui_scene_list_image[0];
             icon += scui_ui_res_local->ofs_cur;
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
@@ -273,7 +273,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         
         if (relayout) {
             // 取一张图(随便, 反正所有图都一样)
-            scui_handle_t icon = scui_ui_honeycomb_list_image[0];
+            scui_handle_t icon = scui_ui_scene_list_image[0];
             icon += scui_ui_res_local->ofs_cur;
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);

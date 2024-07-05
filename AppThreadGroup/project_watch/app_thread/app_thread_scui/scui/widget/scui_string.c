@@ -25,7 +25,6 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     scui_widget_create(&string->widget, &maker->widget, handle, layout);
     
     string->font_idx    = maker->font_idx;
-    string->text        = maker->text;
     string->args        = maker->args;
     string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
     string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
@@ -36,7 +35,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->unit_way    = 1;
     
     /* 尝试初始更新字符串文本信息 */
-    scui_string_update_text(*handle, string->text);
+    scui_string_update_text(*handle, maker->text);
     
     /* 为字符串控件添加指定的事件回调 */
     scui_event_cb_node_t cb_node = {.event_cb = scui_string_event,};
@@ -71,7 +70,7 @@ void scui_string_destroy(scui_handle_t handle)
     string->args.name   = SCUI_HANDLE_INVALID;
     string->args.utf8   = NULL;
     scui_string_args_process(&string->args);
-    scui_string_update_text(handle, SCUI_HANDLE_INVALID);
+    scui_string_update_str(handle, NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&string->widget);
@@ -89,6 +88,9 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
+    if (string->text == text)
+        return;
+    
     string->text = text;
     
     if (string->str_utf8 != NULL) {
@@ -105,6 +107,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         string->str_utf8[str_bytes] = '\0';
     }
     
+    string->args.update = true;
     scui_widget_draw(handle, NULL, false);
 }
 
@@ -205,7 +208,7 @@ void scui_string_event(scui_event_t *event)
         
         if (string->str_utf8 != NULL) {
             
-            bool update = false;
+            bool update = string->args.update;
             update = update || (string->args.number == 0);
             update = update || (string->args.name != string->name);
             update = update || (memcmp(string->args.utf8, string->str_utf8, string->args.number) != 0);

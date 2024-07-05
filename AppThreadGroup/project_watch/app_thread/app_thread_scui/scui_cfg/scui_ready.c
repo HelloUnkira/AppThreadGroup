@@ -82,7 +82,7 @@ void scui_ready(void)
     scui_handle_table_register(&table);
     
     /* 字库配置 */
-    scui_font_name_set(SCUI_FONT_TYPE_EN);
+    scui_font_name_set(SCUI_FONT_TYPE_ZH);
     
     /* 窗口交互风格 */
     scui_window_switch_dir_cfg_set(SCUI_WINDOW_JUMP_DIR);

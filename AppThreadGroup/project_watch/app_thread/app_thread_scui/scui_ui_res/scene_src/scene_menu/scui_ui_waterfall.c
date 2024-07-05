@@ -20,6 +20,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
+    case scui_event_ptr_click:
     case scui_event_draw: {
         if (!scui_widget_event_check_execute(event))
              break;
@@ -34,15 +35,15 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         if (index % 3 == 1) type = 1;
         if (index % 3 == 2) type = 2;
         
-        if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 1 &&
-            index == SCUI_UI_WATERFALL_LIST_NUM - 1) type = 1;
-        if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 2 &&
-            index == SCUI_UI_WATERFALL_LIST_NUM - 2) type = 0;
-        if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 2 &&
-            index == SCUI_UI_WATERFALL_LIST_NUM - 1) type = 2;
+        if (scui_ui_scene_list_num % 3 == 1 &&
+            index == scui_ui_scene_list_num - 1) type = 1;
+        if (scui_ui_scene_list_num % 3 == 2 &&
+            index == scui_ui_scene_list_num - 2) type = 0;
+        if (scui_ui_scene_list_num % 3 == 2 &&
+            index == scui_ui_scene_list_num - 1) type = 2;
         
         scui_handle_t ofs         = SCUI_UI_WATERFALL_OFS_MAX;
-        scui_handle_t image       = scui_ui_waterfall_list_image[index];
+        scui_handle_t image       = scui_ui_scene_list_image[index];
         scui_area_t   scroll_clip = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
         scui_area_t   icon_clip   = scui_widget_clip(event->object);
         
@@ -76,18 +77,15 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         if (type == 2 && dist_y <= dist_c)
             icon_clip.x += scui_map(dist_y, 0, dist_c, dist_x, 0);
         
-        scui_widget_draw_image(event->object, &icon_clip, image, NULL, (scui_color_t){0});
-        break;
-    }
-    case scui_event_ptr_click: {
-        if (!scui_widget_event_check_execute(event))
-             break;
+        if (event->type == scui_event_draw)
+            scui_widget_draw_image(event->object, &icon_clip, image, NULL, (scui_color_t){0});
         
-        scui_widget_event_mask_over(event);
-        scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
-        SCUI_LOG_WARN("click idx:%d", index);
-        
+        if (event->type == scui_event_ptr_click) {
+            if (scui_area_point(&icon_clip, &event->ptr_c)) {
+                SCUI_LOG_WARN("click idx:%d", index);
+                break;
+            }
+        }
         break;
     }
     default:
@@ -124,7 +122,7 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             scui_coord_t set_width = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SET).w;
             
             // 取一张图(随便, 反正所有图都一样)
-            scui_handle_t icon = scui_ui_waterfall_list_image[0];
+            scui_handle_t icon = scui_ui_scene_list_image[0];
             icon += SCUI_UI_WATERFALL_OFS_MAX;
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
@@ -145,25 +143,25 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             custom_maker.widget.parent          = SCUI_UI_SCENE_WATERFALL_SET;
             custom_maker.widget.event_cb        = scui_ui_scene_waterfall_icon_event_proc;
             
-            for (uint8_t idx = 0; idx < SCUI_UI_WATERFALL_LIST_NUM; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 // 余下一个,填中间
-                if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 1 &&
-                    idx == SCUI_UI_WATERFALL_LIST_NUM - 1) {
+                if (scui_ui_scene_list_num % 3 == 1 &&
+                    idx == scui_ui_scene_list_num - 1) {
                     custom_maker.widget.clip = clip_m;
                     scui_custom_create(&custom_maker, &custom_handle, false);
                     clip_m.y += clip_m.h + SCUI_UI_WATERFALL_LINE_SPACE;
                     continue;
                 }
                 // 余下俩个,填俩边
-                if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 2 &&
-                    idx == SCUI_UI_WATERFALL_LIST_NUM - 2) {
+                if (scui_ui_scene_list_num % 3 == 2 &&
+                    idx == scui_ui_scene_list_num - 2) {
                     custom_maker.widget.clip = clip_l;
                     scui_custom_create(&custom_maker, &custom_handle, false);
                     clip_l.y += clip_l.h + SCUI_UI_WATERFALL_LINE_SPACE;
                     continue;
                 }
-                if (SCUI_UI_WATERFALL_LIST_NUM % 3 == 2 &&
-                    idx == SCUI_UI_WATERFALL_LIST_NUM - 1) {
+                if (scui_ui_scene_list_num % 3 == 2 &&
+                    idx == scui_ui_scene_list_num - 1) {
                     custom_maker.widget.clip = clip_r;
                     scui_custom_create(&custom_maker, &custom_handle, false);
                     clip_r.y += clip_r.h + SCUI_UI_WATERFALL_LINE_SPACE;
