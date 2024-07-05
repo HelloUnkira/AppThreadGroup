@@ -28,6 +28,17 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_
 #define SCUI_UI_THEMEWHEEL_ANGLE_CELL           (6)     // 动画颗粒度,一般不改
 #define SCUI_UI_THEMEWHEEL_IMAGE_ARROW          (scui_image_prj_image_src_repeat_arrow_05_backbmp)
 /*****************************************************************************/
+/* 主题:扩散(所有图标为正方形图标) */
+#define SCUI_UI_SPREAD_OFS_MIN                  (0)     // 图标尺寸偏移
+#define SCUI_UI_SPREAD_OFS_MAX                  (6)     // 图标尺寸偏移
+#define SCUI_UI_SPREAD_ANGLE_UNIT               (45)    // 一圈数量 == 360 / angle_unit
+#define SCUI_UI_SPREAD_ANGLE_CELL               (8)     // 动画颗粒度,一般不改
+#define SCUI_UI_SPREAD_RAD_FADE                 (5)     // 消失圆半径
+#define SCUI_UI_SPREAD_RAD_MIN                  ((SCUI_DRV_HOR_RES - 10 * 2) / 2 / 4)   /* 小圈圆半径(静止时) */
+#define SCUI_UI_SPREAD_DIS_MAX                  ((SCUI_DRV_HOR_RES - 10 * 2) / 2 / 2)   /* 小圈圆到大圈圆距离(静止时) */
+#define SCUI_UI_SPREAD_FLING_MODE               (1)     // 0:normal;1:circle;
+#define SCUI_UI_SPREAD_FLING_WAY                (0)     // 0:any;1:hori;2:vert;
+/*****************************************************************************/
 //
 //
 //
@@ -37,6 +48,7 @@ typedef enum {
     scui_ui_scene_list_type_honeycomb,
     scui_ui_scene_list_type_waterfall,
     scui_ui_scene_list_type_themewheel,
+    scui_ui_scene_list_type_spread,
 } scui_ui_scene_list_type_t;
 
 /* 应用列表,设置列表,主题等使用 */

@@ -40,7 +40,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         // type = scui_ui_scene_list_type_honeycomb;
         // type = scui_ui_scene_list_type_waterfall;
         // type = scui_ui_scene_list_type_themewheel;
-        
+        type = scui_ui_scene_list_type_spread;
         
         
         switch (type) {
@@ -62,6 +62,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         case scui_ui_scene_list_type_themewheel: // 波轮
             scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_THUMBWHEEL, false);
+            break;
+        case scui_ui_scene_list_type_spread: // 扩散
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_SPREAD, false);
             break;
         default:
             break;

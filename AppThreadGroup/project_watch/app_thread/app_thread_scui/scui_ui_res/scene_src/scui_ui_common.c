@@ -87,7 +87,8 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
     switch (type) {
     case scui_ui_scene_list_type_list_scale:
     case scui_ui_scene_list_type_waterfall:
-    case scui_ui_scene_list_type_themewheel: {
+    case scui_ui_scene_list_type_themewheel:
+    case scui_ui_scene_list_type_spread: {
         
         static const scui_handle_t list_image[] = {
             scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,

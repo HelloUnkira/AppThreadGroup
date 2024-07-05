@@ -9,8 +9,8 @@
 
 static struct {
     scui_handle_t string;
-    scui_coord_t  angle;
     scui_multi_t  way;
+    scui_coord_t  angle;
     uint8_t       anima:1;
 } * scui_ui_res_local = NULL;
 
