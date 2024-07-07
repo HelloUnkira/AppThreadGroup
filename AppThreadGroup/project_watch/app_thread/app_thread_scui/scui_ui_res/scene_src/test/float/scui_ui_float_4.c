@@ -7,6 +7,11 @@
 
 #include "scui.h"
 
+static struct {
+    scui_handle_t scroll_1;     // 滚动控件
+    scui_handle_t scroll_2;     // 滚动控件
+} * scui_ui_res_local = NULL;
+
 /*@brief 控件事件响应回调
  *@param event 事件
  */
@@ -20,6 +25,13 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
+        /* 界面数据加载准备 */
+        if (scui_widget_event_check_prepare(event)) {
+            SCUI_ASSERT(scui_ui_res_local == NULL);
+            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
+            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
+        }
+        
         if (scui_widget_event_check_prepare(event)) {
             
             scui_coord_t vlist[20] = {0};
@@ -31,6 +43,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
                 vlist[idx] = 60 + (uint32_t)scui_rand(0, 0xFF) % ((220 - 60) / 3);
             }
             
+            // chart histogram
             scui_chart_maker_t chart1_maker = {0};
             scui_handle_t chart1_handle = SCUI_HANDLE_INVALID;
             chart1_maker.widget.type = scui_widget_type_chart;
@@ -56,6 +69,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             scui_chart_create(&chart1_maker, &chart1_handle, false);
             scui_chart_histogram_data(chart1_handle, vlist_min, vlist_max);
             
+            // chart line
             scui_chart_maker_t chart2_maker = {0};
             scui_handle_t chart2_handle = SCUI_HANDLE_INVALID;
             chart2_maker.widget.type = scui_widget_type_chart;
@@ -80,11 +94,62 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart2_maker.line.color.color.full = 0xFFFF0000;
             scui_chart_create(&chart2_maker, &chart2_handle, false);
             scui_chart_line_data(chart2_handle, vlist);
+            
+            // digit picker == scroll + string * num
+            scui_scroll_maker_t scroll_maker = {0};
+            scroll_maker.widget.type = scui_widget_type_scroll;
+            scroll_maker.widget.style.indev_ptr = true;
+            scroll_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
+            scroll_maker.widget.child_num = 60;
+            scroll_maker.dir  = scui_event_dir_ver;
+            scroll_maker.pos  = scui_event_pos_c;
+            scroll_maker.loop = true;
+            
+            scui_string_maker_t string_maker = {0};
+            scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+            string_maker.widget.type    = scui_widget_type_string;
+            string_maker.widget.style.trans = true;
+            string_maker.args.gap_none  = SCUI_STRING_SPACE_WIDTH;
+            string_maker.args.color.color_s.full = 0xFF0000FF;
+            string_maker.args.color.color_e.full = 0xFF0000FF;
+            string_maker.args.color.filter = true;
+            string_maker.widget.clip.x  = 0;
+            string_maker.widget.clip.w  = -1;
+            string_maker.widget.clip.h  = 60;
+            string_maker.widget.clip.y  = 0;
+            string_maker.font_idx       = 1;
+            
+            // 24
+            scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
+            scroll_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
+            scroll_maker.widget.clip.w = SCUI_DRV_HOR_RES * 11 / 25;
+            scroll_maker.widget.clip.h = SCUI_DRV_VER_RES * 11 / 25;
+            scui_scroll_create(&scroll_maker, &scui_ui_res_local->scroll_1, false);
+            string_maker.widget.parent  = scui_ui_res_local->scroll_1;
+            
+            for (uint8_t idx = 0; idx < 24; idx++) {
+                scui_string_create(&string_maker, &string_handle, false);
+                uint8_t str_utf8[10] = {0};
+                snprintf(str_utf8, sizeof(str_utf8), "%02d", idx);
+                scui_string_update_str(string_handle, str_utf8);
+            }
+            
+            
+            
         }
+        
         scui_window_float_event_grasp_show(event);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
+        
+        /* 界面数据转存回收 */
+        if (scui_widget_event_check_finish(event)) {
+            SCUI_ASSERT(scui_ui_res_local != NULL);
+            SCUI_MEM_FREE(scui_ui_res_local);
+            scui_ui_res_local = NULL;
+        }
+        
         scui_window_float_event_grasp_hide(event);
         break;
     case scui_event_focus_get:

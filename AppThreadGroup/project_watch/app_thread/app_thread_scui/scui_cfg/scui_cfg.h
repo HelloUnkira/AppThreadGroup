@@ -41,7 +41,6 @@
 /* 内存文字宽度,文字边距: */
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_SPACE_WIDTH                     (8)
-#define SCUI_STRING_MARGIN                          (5)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)
@@ -59,11 +58,6 @@
 #define SCUI_HANDLE_TABLE_LIMIT                     ((scui_handle_t)5)
 #define SCUI_HANDLE_SHARE_LIMIT                     ((scui_handle_t)128)
 #define SCUI_HANDLE_SHARE_OFFSET                    ((scui_handle_t)0x9FFF)
-
-// #define SCUI_HANDLE_OFFSET_WIDGET                   ((scui_handle_t)0x1000)    /* 句柄表偏移:控件 */
-// #define SCUI_HANDLE_OFFSET_IMAGE                    ((scui_handle_t)0x2000)    /* 句柄表偏移:图片描述 */
-// #define SCUI_HANDLE_OFFSET_FONT                     ((scui_handle_t)0x3000)    /* 句柄表偏移:字库描述 */
-// #define SCUI_HANDLE_OFFSET_LANG                     ((scui_handle_t)0x4000)    /* 句柄表偏移:多语言表 */
 
 /*@brief 动画更新频率,动画最大数量
  */

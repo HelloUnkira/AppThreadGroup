@@ -25,13 +25,22 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
     
-    scui_area_t dst_clip_v  = *dst_clip;
-    scui_area_t src_clip_v  = *src_clip;
-    /* 边距融合 */
-    src_clip_v.x += src_args->margin;
-    src_clip_v.y += src_args->margin;
-    src_clip_v.w -= src_args->margin * 2;
-    src_clip_v.h -= src_args->margin * 2;
+    scui_area_t dst_clip_v = *dst_clip;   // v:vaild
+    scui_area_t src_clip_v = *src_clip;   // v:vaild
+    
+    if (scui_area_empty(&dst_clip_v))
+        return;
+    if (scui_area_empty(&src_clip_v))
+        return;
+    
+    scui_area_t draw_area = {0};
+    draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
+    draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
+    
+    if (scui_area_empty(&draw_area))
+        return;
     
     if (src_args->layout) {
         /* 单行模式不需要排版布局,绘制时手动计算偏移 */
@@ -41,7 +50,7 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
     }
     
     /* 无布局的时候,简单排版绘制 */
-    scui_point_t offset = {0};
+    scui_point_t offset = {.x = src_clip_v.x,.y = src_clip_v.y,};
     
     for (uint32_t idx = 0; idx < src_args->number; idx++) {
         
@@ -63,16 +72,11 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
         SCUI_LOG_INFO("ofs_x:%d", glyph_unit.glyph.ofs_x);
         SCUI_LOG_INFO("ofs_y:%d", glyph_unit.glyph.ofs_y);
         
+        scui_area_t letter_clip = dst_clip_v;
         scui_area_t glyph_clip = {
             .w = glyph_unit.glyph.box_w,
             .h = glyph_unit.glyph.box_h,
         };
-        
-        scui_area_t  letter_clip = {0};
-        
-        letter_clip = src_clip_v;
-        letter_clip.x += dst_clip_v.x;
-        letter_clip.y += dst_clip_v.y;
         
         if (src_args->line_multi) {
             if (src_args->line_way) {
@@ -110,8 +114,11 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
             #endif
             if (src_args->line_multi)
                 letter_offset.y += src_args->offset;
-            else
+            else {
                 letter_offset.x += src_args->offset;
+                // 单行模式垂直居中绘制
+                letter_offset.y += (src_clip_v.h - (line_height - base_line)) / 2;
+            }
         }
         
         SCUI_LOG_INFO("offset:%d", src_args->offset);

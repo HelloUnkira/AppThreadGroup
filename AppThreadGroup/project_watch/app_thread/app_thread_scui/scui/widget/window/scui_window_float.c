@@ -238,6 +238,9 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
  */
 void scui_window_float_event_grasp_show(scui_event_t *event)
 {
+    if (!scui_widget_event_check_prepare(event))
+         return;
+    
     scui_widget_show(scui_window_float.main, false);
 }
 
@@ -246,6 +249,9 @@ void scui_window_float_event_grasp_show(scui_event_t *event)
  */
 void scui_window_float_event_grasp_hide(scui_event_t *event)
 {
+    if (!scui_widget_event_check_finish(event))
+         return;
+    
 }
 
 /*@brief 窗口浮动事件抓取回调
@@ -253,6 +259,9 @@ void scui_window_float_event_grasp_hide(scui_event_t *event)
  */
 void scui_window_float_event_grasp_key(scui_event_t *event)
 {
+    if (!scui_widget_event_check_execute(event))
+         return;
+    
     if (event->type == scui_event_key_click) {
         /* 全局滚动锁定 */
         if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))

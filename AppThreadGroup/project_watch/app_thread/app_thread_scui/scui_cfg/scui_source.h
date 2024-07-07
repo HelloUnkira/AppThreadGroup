@@ -11,15 +11,11 @@
 #include "scui_font_type.h"         /* 字库类型表 */
 
 /* 空回调,测试控件使用 */
-#define SCUI_WIDGET_EVENT_USE_EMPTY                 (0)
+#define SCUI_WIDGET_EVENT_USE_EMPTY     (0)
 
-/*****************************************************************************/
-/* ui的一些配置参数 */
-#define SCUI_UI_SCROLL_BAR_STOP_TIME                (750)
-#define SCUI_UI_SCROLL_BAR_FADE_TIME                (750)
-#define SCUI_UI_POPUP_STOP_TIME                     (1000)
-#define SCUI_UI_POPUP_FADE_TIME                     (750)
-
-/*****************************************************************************/
+// #define SCUI_HANDLE_OFFSET_WIDGET    ((scui_handle_t)0x1000)    /* 句柄表偏移:控件 */
+// #define SCUI_HANDLE_OFFSET_IMAGE     ((scui_handle_t)0x2000)    /* 句柄表偏移:图片描述 */
+// #define SCUI_HANDLE_OFFSET_FONT      ((scui_handle_t)0x3000)    /* 句柄表偏移:字库描述 */
+// #define SCUI_HANDLE_OFFSET_LANG      ((scui_handle_t)0x4000)    /* 句柄表偏移:多语言表 */
 
 #endif

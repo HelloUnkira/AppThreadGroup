@@ -125,11 +125,6 @@ void scui_string_args_process(scui_string_args_t *args)
     
     scui_point_t offset = {0};
     scui_area_t  src_clip_v  = args->clip;
-    /* 边距融合 */
-    src_clip_v.x += args->margin;
-    src_clip_v.y += args->margin;
-    src_clip_v.w -= args->margin * 2;
-    src_clip_v.h -= args->margin * 2;
     
     for (uint32_t idx = 0; idx < args->number; idx++) {
         

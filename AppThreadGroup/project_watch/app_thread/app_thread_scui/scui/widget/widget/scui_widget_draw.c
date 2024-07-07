@@ -65,9 +65,9 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    scui_area_t string_clip = {
-        .w = widget->clip_set.clip.w,
-        .h = widget->clip_set.clip.h,
+    scui_area_t  string_clip = {
+        .w = widget->clip.w,
+        .h = widget->clip.h,
     };
     
     if (target == NULL)
@@ -83,8 +83,15 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
         if (scui_widget_draw_clip_adjust(widget,
-            &unit->clip, target, &string_clip, &dst_clip, &src_clip))
+            &unit->clip, target, &string_clip, &dst_clip, &src_clip)) {
+            
+            // src_clip使用原始偏移坐标,非调整后的偏移坐标
+            src_clip.x = -(string_clip.w - src_clip.w);
+            src_clip.y = -(string_clip.h - src_clip.h);
+            src_clip.w =  (string_clip.w);
+            src_clip.h =  (string_clip.h);
             scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
+        }
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

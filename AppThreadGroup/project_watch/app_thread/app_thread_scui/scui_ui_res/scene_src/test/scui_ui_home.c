@@ -40,7 +40,8 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         // type = scui_ui_scene_list_type_honeycomb;
         // type = scui_ui_scene_list_type_waterfall;
         // type = scui_ui_scene_list_type_themewheel;
-        type = scui_ui_scene_list_type_spread;
+        // type = scui_ui_scene_list_type_spread;
+        
         
         
         switch (type) {

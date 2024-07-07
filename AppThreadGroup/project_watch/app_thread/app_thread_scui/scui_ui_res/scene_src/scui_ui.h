@@ -2,6 +2,16 @@
 #define SCUI_UI_H
 
 /*****************************************************************************/
+/* ui的一些配置参数 */
+#define SCUI_UI_SCROLL_BAR_STOP_TIME            (750)
+#define SCUI_UI_SCROLL_BAR_FADE_TIME            (750)
+#define SCUI_UI_POPUP_STOP_TIME                 (1000)
+#define SCUI_UI_POPUP_FADE_TIME                 (750)
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
 /* 主题:蜂窝(所有图标为正方形图标) */
 #define SCUI_UI_HONEYCOMB_EDGE_MODE             (0)     // 边界模式(0:圆屏; 1:方屏)
 #define SCUI_UI_HONEYCOMB_LIST_NUM              (37)    // 图标数量
