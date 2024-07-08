@@ -55,6 +55,7 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_
 /*****************************************************************************/
 typedef enum {
     scui_ui_scene_list_type_list_scale,
+    scui_ui_scene_list_type_list_arc,
     scui_ui_scene_list_type_honeycomb,
     scui_ui_scene_list_type_waterfall,
     scui_ui_scene_list_type_themewheel,

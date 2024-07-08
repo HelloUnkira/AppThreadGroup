@@ -106,7 +106,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         scui_multi_lang_type_t type = scui_font_type_switch(string->name);
         uint8_t *str_utf8  = scui_handle_get(scui_multi_lang_switch(type, string->text));
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
-        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
     }
@@ -133,7 +133,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     
     if (str_utf8 != NULL) {
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
-        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 1);
+        string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
     }

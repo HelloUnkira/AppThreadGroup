@@ -8,11 +8,6 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t    list_num;
-    scui_handle_t   *list_image;
-    scui_handle_t   *list_text;
-    scui_handle_t   *list_jump;
-    
     scui_handle_t    list_idx;
     scui_handle_t   *list_widget;
     scui_surface_t **list_surface;
@@ -35,7 +30,7 @@ static void scui_ui_scene_scroll_draw_proc(scui_event_t *event)
             uintptr_t surface_bytes = 0;
             
             // scui_widget_clip_check(scui_widget_root(event->object), true);
-            for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 if (scui_ui_res_local->list_draw[idx]) {
                     scui_ui_res_local->list_draw[idx] = false;
                     
@@ -80,7 +75,7 @@ static void scui_ui_scene_string_draw_proc(scui_event_t *event)
         
         if (scui_widget_surface(event->object) == NULL) {
             scui_handle_t handle = scui_widget_root(event->object);
-            for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 if (scui_ui_res_local->list_widget[idx] != handle)
                     continue;
                 handle = scui_widget_child_by_index(SCUI_UI_SCENE_LIST_SCALE_SCROLL, idx + 1);
@@ -125,7 +120,7 @@ static void scui_ui_scene_item_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, NULL, btn_color_full);
         
         scui_area_t   image_clip = scui_widget_clip(event->object);
-        scui_handle_t image_icon = scui_ui_res_local->list_image[scui_ui_res_local->list_idx] + 3;
+        scui_handle_t image_icon = scui_ui_scene_list_image[scui_ui_res_local->list_idx] + 3;
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
         image_clip.h -= (image_clip.h - scui_image_h(image_icon));
         scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, (scui_color_t){0});
@@ -283,7 +278,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
     case scui_event_anima_elapse: {
         
         scui_handle_t handle = event->object;
-        for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+        for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
             event->object = scui_ui_res_local->list_widget[idx];
             scui_widget_event_dispatch(event);
         }
@@ -301,12 +296,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
             SCUI_ASSERT(scui_ui_scene_list_num != 0);
-            scui_ui_res_local->list_num     = scui_ui_scene_list_num;
-            scui_ui_res_local->list_image   = scui_ui_scene_list_image;
-            scui_ui_res_local->list_text    = scui_ui_scene_list_text;
-            scui_ui_res_local->list_jump    = scui_ui_scene_list_jump;
-            scui_handle_t list_num = scui_ui_res_local->list_num;
-            
+            scui_handle_t list_num = scui_ui_scene_list_num;
             scui_ui_res_local->list_widget  = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(scui_handle_t));
             scui_ui_res_local->list_surface = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(scui_surface_t *));
             scui_ui_res_local->list_refr    = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(bool));
@@ -341,7 +331,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.style.indev_ptr = true;
             custom_maker.widget.clip.h   = 72;
             custom_maker.widget.event_cb = scui_ui_scene_item_scale_event_proc;
-            for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++)
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++)
                 scui_custom_create(&custom_maker, &custom_handle, false);
             
             custom_maker.widget.style.indev_ptr = false;
@@ -349,7 +339,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.event_cb = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
             
-            for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 
                 scui_custom_maker_t custom_maker = {0};
                 scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
@@ -376,7 +366,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.widget.clip.h              = 58;
                 string_maker.widget.clip.y              = (60 - 58) / 2;
                 string_maker.font_idx                   = 1;
-                string_maker.text                       = scui_ui_res_local->list_text[idx];
+                string_maker.text                       = scui_ui_scene_list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
                 
                 scui_event_cb_node_t event_cb_node = {
@@ -396,7 +386,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         if (scui_widget_event_check_finish(event)) {
-            for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_widget_hide(scui_ui_res_local->list_widget[idx], false);
                 scui_ui_res_local->list_widget[idx] = SCUI_HANDLE_INVALID;
                 
@@ -429,7 +419,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_key_click:
         
-        for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
+        for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
             scui_widget_t widget_t = {.surface = scui_ui_res_local->list_surface[idx],};
             scui_handle_t handle_t = scui_handle_find();
             scui_handle_set(handle_t, &widget_t);

@@ -29,7 +29,7 @@ typedef struct {
     const char *file;
     const char *func;
     uint32_t    line;
-    uint32_t size;
+    uint32_t    size;
     void *ptr;
 } scui_mem_record_item_t;
 
@@ -95,8 +95,9 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
 void scui_mem_type(void *ptr, scui_mem_type_t *type);
 
 /*@brief 内存模组检查
+ *@param type 内存类型
  */
-void scui_mem_check(void);
+void scui_mem_check(scui_mem_type_t type);
 
 /*@brief 内存模组就绪
  */

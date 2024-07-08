@@ -15,6 +15,11 @@
 void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
+    
+    // 不要给已经销毁的目标添加剪切域
+    if (scui_handle_unmap(handle))
+        return;
+    
     scui_widget_t *widget = scui_handle_get(handle);
     scui_handle_t  handle_root = scui_widget_root(handle);
     scui_widget_t *widget_root = scui_handle_get(handle_root);
@@ -88,31 +93,25 @@ static void scui_widget_show_delay(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
-    if (scui_handle_unmap(handle))
+    if (scui_handle_unmap(handle)) {
         scui_widget_cb_create(handle);
-    
-    if (scui_widget_style_is_show(handle)) {
-        SCUI_LOG_DEBUG("is show");
-        return;
+        
+        SCUI_LOG_DEBUG("");
+        scui_event_t event = {
+            .object     = handle,
+            .type       = scui_event_show,
+            .style.sync = true,
+        };
+        scui_event_notify(&event);
     }
     
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    /* 设置控件状态为显示 */
     widget->style.state = true;
     
     /* 将该显示窗口加入到场景管理器中 */
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        widget->type   == scui_widget_type_window)
+    if (widget->type == scui_widget_type_window)
         scui_window_list_add(widget->myself);
-    
-    SCUI_LOG_DEBUG("");
-    scui_event_t event = {
-        .object     = widget->myself,
-        .type       = scui_event_show,
-        .style.sync = true,
-    };
-    scui_event_notify(&event);
     
     /* 布局更新 */
     scui_widget_cb_layout(widget->myself);
@@ -148,23 +147,13 @@ static void scui_widget_hide_delay(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("");
     
-    if (scui_handle_unmap(handle) ||
-        scui_widget_style_is_hide(handle)) {
-        SCUI_LOG_DEBUG("is hide");
+    if (scui_handle_unmap(handle))
         return;
-    }
+    
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     /* 设置控件状态为隐藏 */
     widget->style.state = false;
-    
-    SCUI_LOG_DEBUG("");
-    scui_event_t event = {
-        .object     = widget->myself,
-        .type       = scui_event_hide,
-        .style.sync = true,
-    };
-    scui_event_notify(&event);
     
     /* 通知父窗口重绘 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -179,11 +168,27 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     scui_widget_refr(widget->myself, false);
     
     /* 将该显示窗口移除出场景管理器中 */
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        widget->type   == scui_widget_type_window) {
+    if (widget->type == scui_widget_type_window)
         scui_window_list_del(widget->myself);
-        /* 只有销毁窗口时才做整体销毁 */
+    
+    /* 只有销毁窗口时才做整体销毁 */
+    if (widget->parent == SCUI_HANDLE_INVALID) {
+        
+        SCUI_LOG_DEBUG("");
+        scui_event_t event = {
+            .object     = widget->myself,
+            .type       = scui_event_hide,
+            .style.sync = true,
+        };
+        scui_event_notify(&event);
+        
+        scui_widget_clip_clear(widget, true);
         scui_widget_cb_destroy(widget->myself);
+        
+        // 窗口已销毁,移除掉跟本窗口相关的所有绘制事件
+        event.object = widget->myself;
+        event.type = scui_event_draw;
+        while (scui_event_dequeue(&event, true));
     }
 }
 
@@ -204,6 +209,7 @@ void scui_widget_hide(scui_handle_t handle, bool delay)
         scui_event_notify(&event);
         return;
     }
+    
     scui_widget_hide_delay(handle);
 }
 

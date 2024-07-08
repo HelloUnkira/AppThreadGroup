@@ -98,6 +98,14 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
         /* 如果剪切域可以合并, 合并后的剪切域要继续检查 */
         scui_list_dll_btra(&set->dl_list, node) {
             unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+            /* 剪切域是否真包含 */
+            if (scui_area_inside(&clip_valid, &unit->clip))
+                break;
+            if (scui_area_inside(&unit->clip, &clip_valid)) {
+                clip_valid = unit->clip;
+                break;
+            }
+            /* 剪切域是否可以并列 */
             scui_area_t clip_union = {0};
             if (scui_area_union(&clip_union, &unit->clip, &clip_valid)) {
                 clip_valid = clip_union;

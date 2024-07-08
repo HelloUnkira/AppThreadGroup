@@ -151,6 +151,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
  *       0x00  滚动开始事件
  *       0x01  滚动结束事件
  *       0x02  滚动进行事件
+ *       0xAA  滚动布局更新事件
  */
 void scui_scroll_event_notify(scui_event_t *event, uint8_t type);
 

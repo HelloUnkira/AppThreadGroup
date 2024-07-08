@@ -20,11 +20,11 @@
 #define SCUI_MEM_RECORD_ANALYSIS                    (0)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
-#define SCUI_MEM_RECORD_CHECK_MIX                   (0)
+#define SCUI_MEM_RECORD_CHECK_MIX                   (1)
 #define SCUI_MEM_RECORD_CHECK_FONT                  (0)
 #define SCUI_MEM_RECORD_CHECK_GRAPH                 (0)
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_ITEM_MIX                    (128)
+#define SCUI_MEM_RECORD_ITEM_MIX                    (1024)
 #define SCUI_MEM_RECORD_ITEM_FONT                   (256)
 #define SCUI_MEM_RECORD_ITEM_GRAPH                  (64)
 
@@ -56,7 +56,7 @@
 
 /* 句柄表数量,共享句柄数量--最大限制 */
 #define SCUI_HANDLE_TABLE_LIMIT                     ((scui_handle_t)5)
-#define SCUI_HANDLE_SHARE_LIMIT                     ((scui_handle_t)128)
+#define SCUI_HANDLE_SHARE_LIMIT                     ((scui_handle_t)512)
 #define SCUI_HANDLE_SHARE_OFFSET                    ((scui_handle_t)0x9FFF)
 
 /*@brief 动画更新频率,动画最大数量

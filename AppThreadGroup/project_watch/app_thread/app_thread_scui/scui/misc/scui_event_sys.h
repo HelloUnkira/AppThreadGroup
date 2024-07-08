@@ -23,6 +23,7 @@ typedef enum {
     scui_event_widget_scroll_s,         /* 滚动控件:滚动开始 */
     scui_event_widget_scroll_c,         /* 滚动控件:滚动进行 */
     scui_event_widget_scroll_e,         /* 滚动控件:滚动结束 */
+    scui_event_widget_scroll_layout,    /* 滚动控件:布局更新 */
     scui_event_widget_button_click,     /* 按钮控件:指针点击 */
     scui_event_sched_e,
     /* 调度事件<e> */

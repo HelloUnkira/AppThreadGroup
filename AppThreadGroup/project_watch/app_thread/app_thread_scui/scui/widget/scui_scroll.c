@@ -190,6 +190,13 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     if (offset->x == 0 && offset->y == 0)
         return;
     
+    /* 全局滚动锁定 */
+    if (!scui_widget_event_scroll_flag(0x00, &scroll->key))
+         return;
+    scroll->lock_move = true;
+    scroll->hold_move = false;
+    scroll->mask_springback = false;
+    
     /* 复用动画即可 */
     scui_event_t event = {0};
     event.object = handle;
@@ -486,8 +493,8 @@ void scui_scroll_anima_expired(void *instance)
         
         /* 偏移所有子控件 */
         scui_event_t event = {.object = widget->myself};
-        scui_scroll_event_notify(&event, 0x02);
         scui_widget_move_ofs_child_list(widget->myself, &offset);
+        scui_scroll_event_notify(&event, 0x02);
         scui_widget_draw(widget->myself, NULL, false);
         break;
     }
@@ -552,8 +559,8 @@ void scui_scroll_anima_expired(void *instance)
         if (!scroll->loop) {
             
             scui_event_t event = {.object = widget->myself};
-            scui_scroll_event_notify(&event, 0x02);
             scui_widget_move_ofs_child_list(widget->myself, &offset);
+            scui_scroll_event_notify(&event, 0x02);
         }
         if (scroll->loop) {
             scui_point_t range = {0};
@@ -563,8 +570,8 @@ void scui_scroll_anima_expired(void *instance)
                 range.y = scroll->dis_lim;
             
             scui_event_t event = {.object = widget->myself};
-            scui_scroll_event_notify(&event, 0x02);
             scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range);
+            scui_scroll_event_notify(&event, 0x02);
         }
         
         scui_widget_draw(widget->myself, NULL, false);
@@ -1131,6 +1138,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
  *       0x00  滚动开始事件
  *       0x01  滚动结束事件
  *       0x02  滚动进行事件
+ *       0xAA  滚动布局更新事件
  */
 void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
 {
@@ -1178,6 +1186,16 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         }
         break;
     }
+    case 0xAA: {
+            if (scroll->notify_cb != NULL) {
+                scui_event_t event = {
+                    .object = widget->myself,
+                    .type   = scui_event_widget_scroll_layout,
+                };
+                scroll->notify_cb(&event);
+            }
+            break;
+    }
     default:
         SCUI_LOG_ERROR("unknown type: %x", type);
         break;
@@ -1203,10 +1221,17 @@ void scui_scroll_event(scui_event_t *event)
         if (scui_widget_event_check_prepare(event))
             scroll->layout = true;
         break;
-    case scui_event_draw:
-        if (scui_widget_event_check_prepare(event))
+    case scui_event_draw: {
+        if (scui_widget_event_check_prepare(event)) {
+            bool layout = scroll->layout;
             scui_scroll_update_layout(event);
+            
+            if (!layout)
+                 break;
+            scui_scroll_event_notify(event, 0xAA);
+        }
         break;
+    }
     case scui_event_ptr_down:
         if (!scui_widget_event_check_execute(event))
              break;

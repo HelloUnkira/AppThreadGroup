@@ -31,6 +31,18 @@ static void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
 static void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
 {
 }
+static void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
+{
+}
+static void scui_ui_bar_arc_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_list_arc_mask_event_proc(scui_event_t *event)
+{
+}
 static void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
 {
 }
@@ -146,6 +158,10 @@ extern void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_soccer_event_proc(scui_event_t *event);
 extern void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event);
 extern void scui_ui_scene_honeycomb_event_proc(scui_event_t *event);
+extern void scui_ui_scene_list_arc_event_proc(scui_event_t *event);
+extern void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event);
+extern void scui_ui_bar_arc_event_proc(scui_event_t *event);
+extern void scui_ui_scene_list_arc_mask_event_proc(scui_event_t *event);
 extern void scui_ui_scene_list_scale_event_proc(scui_event_t *event);
 extern void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event);
 extern void scui_ui_bar_arc_event_proc(scui_event_t *event);
@@ -309,6 +325,62 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
 	.dir                            = scui_event_dir_none,
 	.pos                            = scui_event_pos_c,
 	.springback                     = 35,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
+	.widget.style.sched_anima       = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC,
+	.widget.event_cb                = scui_ui_scene_list_arc_event_proc,
+	.widget.child_num               = 3,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL = {
+	.widget.type                    = scui_widget_type_scroll,
+	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC_SCROLL,
+	.widget.parent                  = SCUI_UI_SCENE_LIST_ARC,
+	.widget.child_num               = 50,
+	.notify_cb                      = scui_ui_scene_list_arc_scroll_notify_event,
+	.dir                            = scui_event_dir_ver,
+	.pos                            = scui_event_pos_c,
+	.space                          = 3,
+	.route_enc                      = SCUI_DRV_VER_RES / 4,
+	.route_key                      = SCUI_DRV_VER_RES / 4,
+	.keyid_fdir                     = scui_event_key_val_down,
+	.keyid_bdir                     = scui_event_key_val_up,
+	.springback                     = 70,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_RING = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.style.sched_anima       = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC_RING,
+	.widget.parent                  = SCUI_UI_SCENE_LIST_ARC,
+	.widget.event_cb                = scui_ui_bar_arc_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_MASK = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC_MASK,
+	.widget.parent                  = SCUI_UI_SCENE_LIST_ARC,
+	.widget.event_cb                = scui_ui_scene_list_arc_mask_event_proc,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
@@ -880,7 +952,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[54] = {
+const void * scui_widget_parser_table[58] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -891,6 +963,10 @@ const void * scui_widget_parser_table[54] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_HONEYCOMB,
 	(void *)&scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL,
+	(void *)&scui_widget_SCUI_UI_SCENE_LIST_ARC,
+	(void *)&scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL,
+	(void *)&scui_widget_SCUI_UI_SCENE_LIST_ARC_RING,
+	(void *)&scui_widget_SCUI_UI_SCENE_LIST_ARC_MASK,
 	(void *)&scui_widget_SCUI_UI_SCENE_LIST_SCALE,
 	(void *)&scui_widget_SCUI_UI_SCENE_LIST_SCALE_SCROLL,
 	(void *)&scui_widget_SCUI_UI_SCENE_LIST_SCALE_RING,

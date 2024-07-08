@@ -101,6 +101,14 @@ void scui_mem_record_analysis(bool force)
                  scui_mem.record[idx0].item[idx1].type,
                  scui_mem.record[idx0].item[idx1].ptr,
                  scui_mem.record[idx0].item[idx1].size);
+            
+            // 特殊问题特殊对待,查指定内容
+            #if 1
+            if (strcmp(scui_mem.record[idx0].item[idx1].func, "scui_clip_add") == 0) {
+                scui_clip_unit_t *unit = scui_mem.record[idx0].item[idx1].ptr;
+                SCUI_LOG_WARN("clip:%d-%d-%d-%d", unit->clip.x, unit->clip.y, unit->clip.w, unit->clip.h);
+            }
+            #endif
         }
     }
 }
@@ -159,6 +167,8 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     #if SCUI_MEM_RECORD_CHECK
     
     if (ptr == NULL) {
+        scui_mem_check(type);
+        
         #if SCUI_MEM_RECORD_STATISTIC
         scui_mem_record_statistic(true);
         #endif
@@ -224,12 +234,16 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
 }
 
 /*@brief 内存模组检查
+ *@param type 内存类型
  */
-void scui_mem_check(void)
+void scui_mem_check(scui_mem_type_t type)
 {
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_mix]);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_font]);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
+    if (type == scui_mem_type_mix)
+        app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_mix]);
+    if (type == scui_mem_type_font)
+        app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_font]);
+    if (type == scui_mem_type_graph)
+        app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
 }
 
 /*@brief 内存模组就绪
@@ -246,35 +260,29 @@ void scui_mem_ready(void)
     scui_mem.mem_olsf[scui_mem_type_mix]   = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     scui_mem.mem_olsf[scui_mem_type_font]  = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_font,  SCUI_MEM_TYPE_SIZE_FONT);
     scui_mem.mem_olsf[scui_mem_type_graph] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_graph, SCUI_MEM_TYPE_SIZE_GRAPH);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_mix]);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_font]);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
     
     #if SCUI_MEM_RECORD_CHECK
     uint8_t *item = NULL;
     #if SCUI_MEM_RECORD_CHECK_MIX
-    item = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[scui_mem_type_mix],   sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_mix]);
+    item = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX);
+    scui_mem_check(scui_mem_type_mix);
     scui_mem.record[scui_mem_type_mix].item    = item;
     scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
     scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
-    scui_mem.record[scui_mem_type_mix].size   -= sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
-    item = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[scui_mem_type_font],  sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_font]);
+    item = SCUI_MEM_ALLOC(scui_mem_type_font,  sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT);
+    scui_mem_check(scui_mem_type_font);
     scui_mem.record[scui_mem_type_font].item   = item;
     scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
     scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
-    scui_mem.record[scui_mem_type_font].size  -= sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
-    item = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[scui_mem_type_graph], sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH);
-    app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
+    item = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH);
+    scui_mem_check(scui_mem_type_graph);
     scui_mem.record[scui_mem_type_graph].item  = item;
     scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
     scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;
-    scui_mem.record[scui_mem_type_graph].size -= sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
     #endif
     #endif
 }

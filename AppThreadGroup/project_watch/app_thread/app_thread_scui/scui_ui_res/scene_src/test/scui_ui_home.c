@@ -37,6 +37,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         scui_ui_scene_list_type_t type = 0;
         type = scui_ui_scene_list_type_list_scale;
+        type = scui_ui_scene_list_type_list_arc;
         // type = scui_ui_scene_list_type_honeycomb;
         // type = scui_ui_scene_list_type_waterfall;
         // type = scui_ui_scene_list_type_themewheel;
@@ -52,6 +53,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
             scui_window_switch_type_cfg_set(switch_type);
             break;
         }
+        case scui_ui_scene_list_type_list_arc: // 弧形列表
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_LIST_ARC, false);
+            break;
         case scui_ui_scene_list_type_honeycomb: // 蜂窝
             scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);

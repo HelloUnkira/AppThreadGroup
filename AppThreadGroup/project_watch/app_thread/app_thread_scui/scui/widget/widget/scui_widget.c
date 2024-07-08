@@ -113,6 +113,7 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
         }
     }
     
+    SCUI_LOG_INFO("widget %u",              widget->myself);
     SCUI_LOG_INFO("widget type %u",         widget->type);
     SCUI_LOG_INFO("widget style %x",        widget->style);
     SCUI_LOG_INFO("widget clip.x %d",       widget->clip.x);
@@ -136,11 +137,11 @@ void scui_widget_destroy(scui_widget_t *widget)
         return;
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
-    /* 画布剪切域清除 */
-    scui_clip_clear(&widget->clip_set);
     /* 先递归销毁自己的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
         scui_widget_cb_destroy(widget->child_list[idx]);
+    /* 画布剪切域清除 */
+    scui_clip_clear(&widget->clip_set);
     /* 再从父控件的孩子列表移除自己 */
     if (widget->parent != SCUI_HANDLE_INVALID)
         scui_widget_child_del(widget->parent, widget->myself);

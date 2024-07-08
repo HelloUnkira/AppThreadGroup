@@ -4,7 +4,7 @@
 
 #define APP_SYS_LOG_RECORD_LIMIT    1
 #define APP_SYS_LOG_LOCAL_STATUS    1
-#define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define APP_SYS_LOG_LOCAL_LEVEL     1   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
@@ -653,7 +653,7 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
 {
     APP_SYS_LOG_INFO("mem_olsf mem:");
     APP_SYS_LOG_INFO("addr_base:%p",   (void *)mem_olsf->addr_base);
-    APP_SYS_LOG_INFO("addr_base:0x%x", mem_olsf->size_base);
+    APP_SYS_LOG_INFO("size_base:0x%x", mem_olsf->size_base);
     APP_SYS_LOG_INFO("mem_olsf align:");
     APP_SYS_LOG_INFO("addr_hdr:%p", (void *)mem_olsf->addr_hdr);
     APP_SYS_LOG_INFO("addr_end:%p", (void *)mem_olsf->addr_end);
@@ -667,14 +667,14 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
     APP_SYS_LOG_INFO_RAW("chunk \t size \t used \t near \t prev \t next \t left \t right");
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     for (uintptr_t chunk = 0; chunk < mem_olsf->number; ) {
-        APP_SYS_LOG_INFO_RAW("%u \t ", chunk);
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_size_get(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_used_get(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_size_near_get(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_free_prev_get(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_free_next_get(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_chunk_left(mem_olsf, chunk));
-        APP_SYS_LOG_INFO_RAW("%u \t ", app_sys_mem_olsf_chunk_right(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", chunk);
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_size_get(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%u \t ",   app_sys_mem_olsf_used_get(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_size_near_get(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_free_prev_get(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_free_next_get(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_chunk_left(mem_olsf, chunk));
+        APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_chunk_right(mem_olsf, chunk));
         APP_SYS_LOG_INFO_RAW(app_sys_log_line());
         
         chunk += app_sys_mem_olsf_size_get(mem_olsf, chunk);

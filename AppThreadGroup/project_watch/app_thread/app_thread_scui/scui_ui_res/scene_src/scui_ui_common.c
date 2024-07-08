@@ -86,6 +86,7 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
 {
     switch (type) {
     case scui_ui_scene_list_type_list_scale:
+    case scui_ui_scene_list_type_list_arc:
     case scui_ui_scene_list_type_waterfall:
     case scui_ui_scene_list_type_themewheel:
     case scui_ui_scene_list_type_spread: {

@@ -40,11 +40,9 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         
         if (scui_string_scroll_over(popup_string)) {
             /* 完全隐藏则回收控件 */
-            if (popup_alpha == 0) {
+            if (popup_alpha == 0)
                 scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
-            }
-            
-            if (popup_alpha > 0) {
+            else {
                 scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_POPUP_FADE_TIME / SCUI_ANIMA_TICK);
                 if (popup_alpha  > tick)
                     popup_alpha -= tick;
