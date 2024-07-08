@@ -52,6 +52,24 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
     /* 无布局的时候,简单排版绘制 */
     scui_point_t offset = {.x = src_clip_v.x,.y = src_clip_v.y,};
     
+    if (src_args->limit <= 0 && !src_args->line_multi) {
+        if (src_args->line_way) {
+            scui_coord_t line_h = -src_args->limit;
+            if (src_args->align_ver == 0);
+            if (src_args->align_ver == 1)
+                offset.y += line_h;
+            if (src_args->align_ver == 2)
+                offset.y += line_h / 2;
+        } else {
+            scui_coord_t line_w = -src_args->limit;
+            if (src_args->align_hor == 0);
+            if (src_args->align_hor == 1)
+                offset.x += line_w;
+            if (src_args->align_hor == 2)
+                offset.x += line_w / 2;
+        }
+    }
+    
     for (uint32_t idx = 0; idx < src_args->number; idx++) {
         
         scui_font_glyph_unit_t glyph_unit = {0};

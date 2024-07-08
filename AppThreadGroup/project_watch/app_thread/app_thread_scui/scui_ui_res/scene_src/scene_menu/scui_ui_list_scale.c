@@ -363,20 +363,20 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 scui_ui_res_local->list_widget[idx] = custom_handle;
                 
                 scui_string_maker_t string_maker = {0};
-                scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-                string_maker.widget.type    = scui_widget_type_string;
-                string_maker.widget.style.trans = true;
-                string_maker.widget.parent  = custom_handle;
-                string_maker.args.gap_none  = SCUI_STRING_SPACE_WIDTH;
-                string_maker.args.color.color_s.full = 0xFFFFFFFF;
-                string_maker.args.color.color_e.full = 0xFFFFFFFF;
-                string_maker.args.color.filter = true;
-                string_maker.widget.clip.x  = 52 + 8;
-                string_maker.widget.clip.w  = custom_maker.widget.clip.w - (52 + 16 + 8 * 2);
-                string_maker.widget.clip.h  = 58;
-                string_maker.widget.clip.y  = (60 - 58) / 2;
-                string_maker.font_idx       = 1;
-                string_maker.text           = scui_ui_res_local->list_text[idx];
+                scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
+                string_maker.widget.type                = scui_widget_type_string;
+                string_maker.widget.style.trans         = true;
+                string_maker.widget.parent              = custom_handle;
+                string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
+                string_maker.args.color.color_s.full    = 0xFFFFFFFF;
+                string_maker.args.color.color_e.full    = 0xFFFFFFFF;
+                string_maker.args.color.filter          = true;
+                string_maker.widget.clip.x              = 52 + 8;
+                string_maker.widget.clip.w              = custom_maker.widget.clip.w - (52 + 16 + 8 * 2);
+                string_maker.widget.clip.h              = 58;
+                string_maker.widget.clip.y              = (60 - 58) / 2;
+                string_maker.font_idx                   = 1;
+                string_maker.text                       = scui_ui_res_local->list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
                 
                 scui_event_cb_node_t event_cb_node = {

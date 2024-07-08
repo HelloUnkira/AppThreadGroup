@@ -29,10 +29,13 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
     string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
     string->unit_s      = maker->unit_s;
-    
-    string->name        = scui_font_name_get(string->font_idx);
     string->unit_over   = false;
     string->unit_way    = 1;
+    
+    if (string->args.name == SCUI_HANDLE_INVALID)
+        string->name = scui_font_name_get(string->font_idx);
+    else
+        string->name = string->args.name;
     
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, maker->text);
@@ -99,6 +102,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     }
     
     if (string->text != SCUI_HANDLE_INVALID) {
+        string->name = scui_font_name_get(string->font_idx);
         scui_multi_lang_type_t type = scui_font_type_switch(string->name);
         uint8_t *str_utf8  = scui_handle_get(scui_multi_lang_switch(type, string->text));
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);

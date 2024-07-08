@@ -55,18 +55,18 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
             dst_clip.x = dst_clip.x + dst_clip.w * 3 / 2;
             
             scui_string_maker_t string_maker = {0};
-            string_maker.widget.type        = scui_widget_type_string;
-            string_maker.widget.style.trans = true;
-            string_maker.widget.parent      = SCUI_UI_SCENE_THUMBWHEEL_CUSTOM;
-            string_maker.widget.clip.x      = dst_clip.x;
-            string_maker.widget.clip.w      = img_dist * 2 - img_dia * 2 - dst_clip.w * 2;
-            string_maker.widget.clip.h      = 60;
-            string_maker.widget.clip.y      = widget_clip.h / 2 - string_maker.widget.clip.h;
-            string_maker.args.gap_none           = SCUI_STRING_SPACE_WIDTH;
-            string_maker.args.color.color_s.full = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            string_maker.args.color.filter       = true;
-            string_maker.font_idx                = 1,
+            string_maker.widget.type                = scui_widget_type_string;
+            string_maker.widget.style.trans         = true;
+            string_maker.widget.parent              = SCUI_UI_SCENE_THUMBWHEEL_CUSTOM;
+            string_maker.widget.clip.x              = dst_clip.x;
+            string_maker.widget.clip.w              = img_dist * 2 - img_dia * 2 - dst_clip.w * 2;
+            string_maker.widget.clip.h              = 60;
+            string_maker.widget.clip.y              = widget_clip.h / 2 - string_maker.widget.clip.h;
+            string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
+            string_maker.args.color.color_s.full    = 0xFFFFFFFF;
+            string_maker.args.color.color_e.full    = 0xFFFFFFFF;
+            string_maker.args.color.filter          = true;
+            string_maker.font_idx                   = 1,
             scui_string_create(&string_maker, &scui_ui_res_local->string, false);
         }
         break;

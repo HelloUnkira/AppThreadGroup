@@ -28,13 +28,15 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             
             #if 1 /* test string widget */
             scui_string_maker_t string_maker = {0};
-            scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-            string_maker.widget.type    = scui_widget_type_string;
-            string_maker.widget.parent  = SCUI_UI_SCENE_TEST;
-            string_maker.args.gap_none  = SCUI_STRING_SPACE_WIDTH;
-            string_maker.args.color.color_s.full = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            string_maker.args.color.filter = true;
+            scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
+            string_maker.widget.type                = scui_widget_type_string;
+            string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
+            string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
+            string_maker.args.align_hor             = 2;
+            string_maker.args.align_ver             = 2;
+            string_maker.args.color.color_s.full    = 0xFFFFFFFF;
+            string_maker.args.color.color_e.full    = 0xFFFFFFFF;
+            string_maker.args.color.filter          = true;
             
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;

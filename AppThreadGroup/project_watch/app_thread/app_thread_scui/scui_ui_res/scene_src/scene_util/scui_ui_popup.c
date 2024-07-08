@@ -63,18 +63,20 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             
             scui_string_maker_t string_maker = {0};
-            string_maker.widget.type        = scui_widget_type_string;
-            string_maker.widget.style.trans = true;
-            string_maker.widget.parent      = SCUI_UI_SCENE_POPUP_BG;
-            string_maker.widget.clip.x      = 20;
-            string_maker.widget.clip.y      = 30;
-            string_maker.widget.clip.w      = 330;
-            string_maker.widget.clip.h      = 40;
-            string_maker.font_idx           = 0,
-            string_maker.args.gap_none      = SCUI_STRING_SPACE_WIDTH;
-            string_maker.args.color.color_s.full = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            string_maker.unit_s             = true;     //单次滚动,结束标记
+            string_maker.widget.type                = scui_widget_type_string;
+            string_maker.widget.style.trans         = true;
+            string_maker.widget.parent              = SCUI_UI_SCENE_POPUP_BG;
+            string_maker.widget.clip.x              = 20;
+            string_maker.widget.clip.y              = 30;
+            string_maker.widget.clip.w              = 350 - 20 * 2;
+            string_maker.widget.clip.h              = 40;
+            string_maker.font_idx                   = 0;
+            string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
+            string_maker.args.align_hor             = 2;
+            string_maker.args.align_ver             = 2;
+            string_maker.args.color.color_s.full    = 0xFFFFFFFF;
+            string_maker.args.color.color_e.full    = 0xFFFFFFFF;
+            string_maker.unit_s                     = true;     //单次滚动,结束标记
             scui_string_create(&string_maker, &popup_string, false);
         }
         
