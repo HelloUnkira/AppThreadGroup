@@ -262,7 +262,7 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
             unit = NULL;
         }
         /* 为数据区申请新资源 */
-        unit = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_font_unit_t));
+        unit = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_font_unit_t));
         unit->name    = font_unit->name;
         unit->font    = font_unit->font;
         unit->count   = 1;

@@ -4,5 +4,6 @@
 set (SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/lz4.c
              ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/lz4file.c
              ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/lz4frame.c
-             ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/lz4hc.c)
+             ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/lz4hc.c
+             ${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4/lib/xxhash.c)
 target_sources(app_third PRIVATE ${SOURCES})

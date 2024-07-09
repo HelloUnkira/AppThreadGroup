@@ -276,16 +276,6 @@ void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
         scui_pixel_by_color(surface->format, &color_s, color.color_s);
         scui_pixel_by_color(surface->format, &color_e, color.color_e);
         
-        if (pixel == NULL) {
-            SCUI_LOG_WARN("memory deficit was caught");
-            scui_image_cache_clear();
-            pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-        if (pixel == NULL) {
-            scui_image_cache_visit();
-            SCUI_ASSERT(false);
-        }
-        }
-        
         if (way) {
             /* 垂直渐变 */
             for (scui_coord_t y = 0; y < clip->h; y++) {

@@ -268,7 +268,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
             unit = NULL;
         }
         /* 为数据区申请新资源 */
-        unit = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_font_glyph_unit_t));
+        unit = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_font_glyph_unit_t));
         unit->name    = glyph_unit->name;
         unit->font    = glyph_unit->font;
         unit->glyph   = glyph_unit->glyph;

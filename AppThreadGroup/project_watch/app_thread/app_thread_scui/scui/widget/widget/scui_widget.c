@@ -555,18 +555,7 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
     scui_coord_t src_byte    = scui_pixel_bits(widget->surface->format) / 8;
     scui_coord_t src_remain  = sizeof(scui_color_limit_t) - src_byte;
     scui_multi_t res_surface = hor_res * ver_res * src_byte + src_remain;
-    
-    widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
-    /* 添加一个检测机制,如果surface不可创建时,清空image内存重新创建 */
-    if (widget->surface->pixel == NULL) {
-        SCUI_LOG_WARN("memory deficit was caught");
-        scui_image_cache_clear();
-        widget->surface->pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
-    if (widget->surface->pixel == NULL) {
-        scui_image_cache_visit();
-        SCUI_ASSERT(false);
-    }
-    }
+    widget->surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
 }
 
 /*@brief 控件画布销毁

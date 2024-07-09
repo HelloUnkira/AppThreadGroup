@@ -164,6 +164,45 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
     ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
     
+    // notify回调:这里暂时写作就地调用.后续整理
+    // 如果内存不够用,尝试清除缓存器后继续请求
+    #if 1
+    if (ptr == NULL) {
+        // scui_mem_type_graph
+        if (type == scui_mem_type_graph) {
+            SCUI_LOG_WARN("memory graph deficit was caught");
+            scui_image_cache_clear();
+            ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
+            if (ptr == NULL) {
+                scui_image_cache_visit();
+                SCUI_ASSERT(false);
+            }
+        }
+        // scui_mem_type_font
+        if (type == scui_mem_type_font) {
+            SCUI_LOG_WARN("memory font deficit was caught");
+            scui_font_glyph_cache_clear();
+            ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
+            if (ptr == NULL) {
+                scui_font_glyph_cache_visit();
+                SCUI_ASSERT(false);
+            }
+        }
+        // scui_mem_type_mix
+        if (type == scui_mem_type_mix) {
+            SCUI_LOG_WARN("memory mix deficit was caught");
+            scui_image_cache_clear();
+            scui_font_glyph_cache_clear();
+            ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
+            if (ptr == NULL) {
+                scui_image_cache_visit();
+                scui_font_glyph_cache_visit();
+                SCUI_ASSERT(false);
+            }
+        }
+    }
+    #endif
+    
     #if SCUI_MEM_RECORD_CHECK
     
     if (ptr == NULL) {

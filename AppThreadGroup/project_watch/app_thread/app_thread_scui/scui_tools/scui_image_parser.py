@@ -4,6 +4,7 @@ import os
 import sys
 import PIL.Image
 import lz4.block
+import lz4.frame
 
 # 设备像素格式
 scui_pixel_cf_0 = r'palette4'
@@ -44,15 +45,15 @@ def scui_image_pixel_bmp565(r8, g8, b8) -> tuple:
 def scui_image_lz4_compress(pixel_bytes_in) -> bytearray:
     # lz4hc = ctypes.cdll.LoadLibrary(r'.\lz4hc.dll')
     # lz4hc.LZ4_compress_HC(pixel_bytes_in, pixel_bytes_out, pixel_bytes_size, pixel_bytes_size, 12)
-    # pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
-    pixel_bytes_out = lz4.block.compress(pixel_bytes_in, mode='high_compression', compression=12, return_bytearray=True)
+    pixel_bytes_out = lz4.frame.compress(pixel_bytes_in, compression_level=12)
+    # pixel_bytes_out = lz4.block.compress(pixel_bytes_in, mode='high_compression', compression=12, return_bytearray=True)
     return pixel_bytes_out
 
 
 # lz4解压缩
 def scui_image_lz4_decompress(pixel_bytes_in) -> bytearray:
-    # pixel_bytes_out = lz4.frame.decompress(pixel_bytes_in)
-    pixel_bytes_out = lz4.block.decompress(pixel_bytes_in, return_bytearray=True)
+    pixel_bytes_out = lz4.frame.decompress(pixel_bytes_in)
+    # pixel_bytes_out = lz4.block.decompress(pixel_bytes_in, return_bytearray=True)
     return pixel_bytes_out
 
 

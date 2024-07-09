@@ -79,16 +79,6 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     scui_pixel_by_color(surface->format, &pixel_l, color.color_l);
     scui_pixel_by_color(surface->format, &pixel_d, color.color_d);
     
-    if (pixel == NULL) {
-        SCUI_LOG_WARN("memory deficit was caught");
-        scui_image_cache_clear();
-        pixel  = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-    if (pixel == NULL) {
-        scui_image_cache_visit();
-        SCUI_ASSERT(false);
-    }
-    }
-    
     for (int y = 0; y < scaled; y++)
     for (int x = 0; x < scaled; x++) {
          bool bit = qrcodegen_lvgl_getModule(qrcode, x / scale, y / scale);

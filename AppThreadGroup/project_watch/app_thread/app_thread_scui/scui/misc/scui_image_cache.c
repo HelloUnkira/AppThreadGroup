@@ -267,22 +267,12 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
             unit = NULL;
         }
         /* 为数据区申请新资源 */
-        unit = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_unit_t));
+        unit          = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_image_unit_t));
+        unit->data    = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
         unit->image   = image_unit->image;
         unit->count   = 1;
         unit->lock    = 1;
         cache->usage += unit->image->pixel.size_mem;
-        
-        /* 如果出现碎片化图形资源,做一次清空整合 */
-        unit->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
-        if (unit->data == NULL) {
-            scui_image_cache_clear();
-        unit->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
-        if (unit->data == NULL) {
-            scui_image_cache_visit();
-            SCUI_ASSERT(false);
-        }
-        }
         
         /* 图片资源加载 */
         scui_image_src_read(unit->image, unit->data);
