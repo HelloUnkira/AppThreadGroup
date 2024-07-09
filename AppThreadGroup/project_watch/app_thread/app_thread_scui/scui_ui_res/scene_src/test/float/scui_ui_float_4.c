@@ -28,8 +28,11 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         scui_scroll_center_target(scui_ui_res_local->scroll_1, &handle_scroll_1);
         if (handle_scroll_1_rcd != handle_scroll_1) {
             handle_scroll_1_rcd  = handle_scroll_1;
-            if (handle_scroll_1 != SCUI_HANDLE_INVALID)
-                SCUI_LOG_WARN("srcoll 1 center:%d", handle_scroll_1);
+            if (handle_scroll_1 != SCUI_HANDLE_INVALID) {
+                scui_handle_t  handle = handle_scroll_1;
+                scui_string_t *string = scui_handle_get(handle);
+                SCUI_LOG_WARN("srcoll 1 center:%s", string->str_utf8);
+            }
         }
         
         /* 滚动中心子控件 */
@@ -38,8 +41,11 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         scui_scroll_center_target(scui_ui_res_local->scroll_2, &handle_scroll_2);
         if (handle_scroll_2_rcd != handle_scroll_2) {
             handle_scroll_2_rcd  = handle_scroll_2;
-            if (handle_scroll_2 != SCUI_HANDLE_INVALID)
-                SCUI_LOG_WARN("srcoll 2 center:%d", handle_scroll_2);
+            if (handle_scroll_2 != SCUI_HANDLE_INVALID) {
+                scui_handle_t  handle = handle_scroll_2;
+                scui_string_t *string = scui_handle_get(handle);
+                SCUI_LOG_WARN("srcoll 1 center:%s", string->str_utf8);
+            }
         }
         
         break;

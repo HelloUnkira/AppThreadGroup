@@ -93,10 +93,9 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        scui_area_t  clip  = scui_widget_clip(event->object);
-        scui_color_t color = {0};
+        scui_area_t clip = scui_widget_clip(event->object);
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
-        scui_widget_draw_color(event->object, &clip, color);
+        scui_widget_draw_color(event->object, &clip, (scui_color_t){0});
         
         break;
     }

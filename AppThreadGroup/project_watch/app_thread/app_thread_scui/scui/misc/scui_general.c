@@ -133,6 +133,24 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         p2 = ((p2 | (p2 << 16)) & 0x07e0f81f);
         uint32_t ret = ((p1 * a1 + p2 * a2) >> 5) & 0x07e0f81f;
         ((scui_color565_t *)pixel_1)->full = (uint16_t)((ret >> 16) | ret);
+        #else
+        scui_color565_t  *c_1 = pixel_1;
+        scui_color565_t  *c_2 = pixel_2;
+        scui_color_limit_t a2 = alpha_2;
+        scui_color_limit_t a1 = alpha_1;
+        scui_color_limit_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
+        scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
+        scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
+        
+        if (alpha_1 == 0xFF)
+            return;
+        
+        scui_color565_t color565 = {
+            .ch.r = r,
+            .ch.g = g,
+            .ch.b = b,
+        };
+        *c_1 = color565;
         #endif
         
         return;
@@ -145,12 +163,11 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color8565_t *c_2 = pixel_2;
         scui_color_limit_t a2 = (uint16_t)c_2->ch.a * alpha_2 / 0xFF;
         scui_color_limit_t a1 = 0xFF - a2;
-        scui_color_limit_t as = a2 + a1 * alpha_1 / 0xFF;
         scui_color_limit_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
         scui_color_limit_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_limit_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
         
-        if (alpha_1 == 0xFF || a1 == 0xFF)
+        if (alpha_1 == 0xFF)
             return;
         
         scui_color565_t color565 = {

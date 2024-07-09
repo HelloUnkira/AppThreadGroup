@@ -17,6 +17,30 @@ static struct {
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_ptr_click: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_widget_event_mask_over(event);
+        scui_handle_t parent   = scui_widget_parent(event->object);
+        scui_handle_t ancestor = scui_widget_parent(parent);
+        scui_handle_t index    = scui_widget_child_to_index(ancestor, parent) - 1;
+        scui_handle_t custom   = scui_ui_res_local->list_widget[index];
+        SCUI_LOG_WARN("click idx:%d", index);
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
 {
     scui_ui_scene_link_cfg(event);
@@ -29,7 +53,9 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        scui_widget_image_set(SCUI_UI_SCENE_LIST_ARC_SCROLL, scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp);
+        // 这里画个圈,校验测试使用
+        scui_widget_image_set(SCUI_UI_SCENE_LIST_ARC_SCROLL,
+        scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
         
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
@@ -69,6 +95,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 group_maker.widget.clip.h            = item_maker.widget.clip.h;
                 group_maker.widget.parent            = item_handle;
                 group_maker.widget.child_num         = 2;
+                group_maker.widget.event_cb          = scui_ui_scene_item_arc_event_proc;
                 scui_custom_create(&group_maker, &group_handle, false);
                 scui_ui_res_local->list_widget[idx]  = group_handle;
                 
@@ -194,6 +221,7 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
             (group_cy > scroll_cy && scui_dist(group_c.y,             scroll_cy) > scroll_cy)) {
              scui_point_t point = {.x = scroll_cx,.y = group_c.y,};
              scui_widget_move_pos(group, &point);
+             scui_widget_alpha_set(group, scui_alpha_trans, true);
              continue;
         }
         
@@ -213,7 +241,10 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
         SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
         
         scui_point_t point = {.x = dist_x,.y = group_c.y,};
+        scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
+        
         scui_widget_move_pos(group, &point);
+        scui_widget_alpha_set(group, alpha, true);
     }
     
     scui_widget_draw(event->object, NULL, false);

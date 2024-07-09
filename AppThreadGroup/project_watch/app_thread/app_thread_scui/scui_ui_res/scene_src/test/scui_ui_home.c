@@ -37,7 +37,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         scui_ui_scene_list_type_t type = 0;
         type = scui_ui_scene_list_type_list_scale;
-        type = scui_ui_scene_list_type_list_arc;
+        // type = scui_ui_scene_list_type_list_arc;
         // type = scui_ui_scene_list_type_honeycomb;
         // type = scui_ui_scene_list_type_waterfall;
         // type = scui_ui_scene_list_type_themewheel;

@@ -126,8 +126,8 @@ void scui_button_draw_rect4(scui_event_t *event,    scui_area_t *clip,
         clip_a.h = image_clip.h;
     }
     
-    scui_coord_t delta_w = clip->w - clip_a.w;
-    scui_coord_t delta_h = clip->h - clip_a.h;
+    scui_coord_t delta_w = clip->w - clip_a.w * 2;
+    scui_coord_t delta_h = clip->h - clip_a.h * 2;
     /* 画俩个填充矩形(填充),画四个填充矩形(空心) */
     if (delta != 0) {
         if (delta_w > 0) {

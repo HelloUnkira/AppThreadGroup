@@ -205,6 +205,13 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
             SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         }
         
+        #if 1   // 更新alpha通道
+        scui_alpha_t alpha = scui_map(scui_min(percent * 2, 100), 0, 100, scui_alpha_pct100, scui_alpha_pct0);
+        scui_widget_alpha_set(event->object, scui_alpha_cover, true);
+        scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
+        scui_widget_alpha_set(event->object, alpha, true);
+        #endif
+        
         scui_area_t  src_clip  = scui_widget_clip(custom);
         scui_area_t  dst_clip  = scui_widget_clip(event->object);
         scui_point_t img_scale = {
