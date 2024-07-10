@@ -72,43 +72,61 @@ static void app_sys_table_rbs_test_fv(app_sys_table_rbsn_t *target, uint32_t idx
 
 void app_sys_table_rbs_test(void)
 {
-    #define APP_SYS_TABLE_TEST_LENGTH 10
+    #define APP_SYS_TABLE_RBS_LENGTH    10
+    #define APP_SYS_TABLE_RBS_MAX       (10000000)
+    
     app_sys_table_rbst_t test_table = {0};
-    app_sys_table_rbsl_t test_list[APP_SYS_TABLE_TEST_LENGTH] = {0};
+    app_sys_table_rbsl_t test_list[APP_SYS_TABLE_RBS_LENGTH] = {0};
     
-    app_sys_table_rbsl_reset(test_list,   APP_SYS_TABLE_TEST_LENGTH);
+    app_sys_table_rbsl_reset( test_list,  APP_SYS_TABLE_RBS_LENGTH);
     app_sys_table_rbst_reset(&test_table, app_sys_table_rbs_test_fd,
-                                         app_sys_table_rbs_test_fc1,
-                                         app_sys_table_rbs_test_fc2,
-                                         app_sys_table_rbs_test_fv,
-                             test_list,  APP_SYS_TABLE_TEST_LENGTH);
+                                          app_sys_table_rbs_test_fc1,
+                                          app_sys_table_rbs_test_fc2,
+                                          app_sys_table_rbs_test_fv,
+                              test_list,  APP_SYS_TABLE_RBS_LENGTH);
     
-    /* 随机生成100个键值对 */
-    for (uint32_t idx = 0; idx < 100; idx++) {
+    uint8_t pct_insert_rcd = 0;
+    APP_SYS_LOG_INFO("insert s:");
+    /* 随机生成键值对 */
+    for (uint32_t idx = 0; idx < APP_SYS_TABLE_RBS_MAX; idx++) {
         app_sys_table_rbs_test_t *data = app_mem_alloc(sizeof(app_sys_table_rbs_test_t));
-        data->key  = idx;
-        data->data = rand() % 100;
+        data->key  = rand() % 100;
+        data->data = idx;
         app_sys_table_rbsn_reset(&(data->node));
         app_sys_table_rbst_insert(&test_table, &(data->node));
+        
+        uint8_t pct_insert =  app_sys_map(idx, 0, APP_SYS_TABLE_RBS_MAX, 0, 100);
+        if (pct_insert_rcd != pct_insert) {
+            pct_insert_rcd  = pct_insert;
+            APP_SYS_LOG_INFO("pct_insert:%d", pct_insert);
+        }
     }
     
-    APP_SYS_LOG_INFO("insert:");
+    APP_SYS_LOG_INFO("insert e:");
     app_sys_table_rbst_visit(&test_table);
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
     
-    /* 随机移除一半的键值对 */
-    for (uint32_t idx = 0; idx < 50; idx) {
+    uint8_t pct_remove_rcd = 0;
+    APP_SYS_LOG_INFO("remove s:");
+    /* 随机移除键值对 */
+    for (uint32_t idx = 0; idx < APP_SYS_TABLE_RBS_MAX; idx) {
         /* 查询 */
-        app_sys_table_rbs_test_t  data = {.key = rand() % 100};
+        app_sys_table_rbs_test_t data = {.key = rand() % 100};
         app_sys_table_rbsn_t *target = app_sys_table_rbst_search(&test_table, &(data.node));
         if (target == NULL)
             continue;
         app_sys_table_rbst_remove(&test_table, target);
         app_mem_free(app_sys_own_ofs(app_sys_table_rbs_test_t, node, target));
         idx++;
+        
+        uint8_t pct_remove =  app_sys_map(idx, 0, APP_SYS_TABLE_RBS_MAX, 0, 100);
+        if (pct_remove_rcd != pct_remove) {
+            pct_remove_rcd  = pct_remove;
+            APP_SYS_LOG_INFO("pct_remove:%d", pct_remove);
+        }
     }
     
-    APP_SYS_LOG_INFO("remove:");
+    APP_SYS_LOG_INFO("remove e:");
     app_sys_table_rbst_visit(&test_table);
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
 }

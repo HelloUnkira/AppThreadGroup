@@ -1,6 +1,10 @@
 #ifndef SCUI_TABLE_RBS_H
 #define SCUI_TABLE_RBS_H
 
+/* 这个容器好像有问题, 暂时可以不去使用
+ * table有充足的一级散列,可以降低节点的长度
+ */
+
 /* 转为适配app_sys_table_rbs接口
  */
 
@@ -17,5 +21,6 @@
 #define scui_table_rbst_remove      app_sys_table_rbst_remove
 #define scui_table_rbst_search      app_sys_table_rbst_search
 #define scui_table_rbst_visit       app_sys_table_rbst_visit
+#define scui_table_rbst_check       app_sys_table_rbst_check
 
 #endif

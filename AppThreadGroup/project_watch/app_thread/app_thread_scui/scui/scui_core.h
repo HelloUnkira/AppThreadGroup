@@ -5,7 +5,8 @@
 #include "scui_os.h"
 #include "scui_log.h"
 #include "scui_macro.h"
-#include "scui_list_l.h"        // 侵入式容器:单链表双链表以及为载体的队列,优先队列,栈
+#include "scui_list_l.h"        // 侵入式容器:双链表以及为载体的队列,优先队列,栈
+#include "scui_table_dl.h"      // 侵入式容器:双链表为载体的哈希表(rbs平替目标)
 #include "scui_table_rbs.h"     // 侵入式容器:红黑树为载体的哈希表
 /* AppThreadGroup */
 #include "app_ext_lib.h"

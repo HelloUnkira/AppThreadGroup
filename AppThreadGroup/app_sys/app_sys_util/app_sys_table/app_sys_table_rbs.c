@@ -113,6 +113,32 @@ void app_sys_table_rbst_visit(app_sys_table_rbst_t *table)
     }
 }
 
+/*@brief 哈希表检查所有节点
+ *@param table 哈希表实例
+ */
+bool app_sys_table_rbst_check(app_sys_table_rbst_t *table)
+{
+    app_sys_tree_rbsn_t **stack = app_mem_alloc(sizeof(app_sys_tree_rbsn_t *) * (APP_SYS_TREE_RBS_DEPTH + 2));
+    int32_t              *flags = app_mem_alloc(sizeof(int32_t) * (APP_SYS_TREE_RBS_DEPTH + 2));
+    
+    uint8_t valid = 0;
+    for (uint32_t idx = 0; idx < table->length; idx++) {
+        app_sys_tree_rbsn_t *root = table->list[idx];
+        app_sys_tree_rbst_root_set(&table->rbst_tree,  root);
+        valid = app_sys_tree_rbst_check_valid(&table->rbst_tree, stack, flags, APP_SYS_TREE_RBS_DEPTH + 2);
+        app_sys_tree_rbst_root_get(&table->rbst_tree, &root);
+        table->list[idx] = root;
+        
+        if (valid != 1)
+            break;;
+    }
+    
+    app_mem_free(flags);
+    app_mem_free(stack);
+    
+    return valid == 1 ? true : false;
+}
+
 /*
  *keep adding
  */

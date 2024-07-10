@@ -64,6 +64,11 @@ app_sys_table_rbsn_t * app_sys_table_rbst_search(app_sys_table_rbst_t *table, ap
  */
 void app_sys_table_rbst_visit(app_sys_table_rbst_t *table);
 
+/*@brief 哈希表检查所有节点
+ *@param table 哈希表实例
+ */
+bool app_sys_table_rbst_check(app_sys_table_rbst_t *table);
+
 /*
  *keep adding
  */

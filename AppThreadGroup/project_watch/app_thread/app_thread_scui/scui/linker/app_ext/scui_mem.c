@@ -171,34 +171,32 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         // scui_mem_type_graph
         if (type == scui_mem_type_graph) {
             SCUI_LOG_WARN("memory graph deficit was caught");
+            scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+            
+            // scui_image_cache_visit();
             scui_image_cache_clear();
+            // scui_image_cache_visit();
+            
+            scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
             ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-            if (ptr == NULL) {
+            
+            if (ptr == NULL)
                 scui_image_cache_visit();
-                SCUI_ASSERT(false);
-            }
         }
         // scui_mem_type_font
         if (type == scui_mem_type_font) {
             SCUI_LOG_WARN("memory font deficit was caught");
+            scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+            
+            // scui_font_glyph_cache_visit();
             scui_font_glyph_cache_clear();
+            // scui_font_glyph_cache_visit();
+            
+            scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
             ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-            if (ptr == NULL) {
+            
+            if (ptr == NULL)
                 scui_font_glyph_cache_visit();
-                SCUI_ASSERT(false);
-            }
-        }
-        // scui_mem_type_mix
-        if (type == scui_mem_type_mix) {
-            SCUI_LOG_WARN("memory mix deficit was caught");
-            scui_image_cache_clear();
-            scui_font_glyph_cache_clear();
-            ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-            if (ptr == NULL) {
-                scui_image_cache_visit();
-                scui_font_glyph_cache_visit();
-                SCUI_ASSERT(false);
-            }
         }
     }
     #endif
@@ -221,6 +219,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
          SCUI_LOG_WARN("record queue is full, item will be discard");
     
     #endif
+    SCUI_ASSERT(ptr != NULL);
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
     return ptr;

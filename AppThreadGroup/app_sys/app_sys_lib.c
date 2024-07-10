@@ -28,33 +28,33 @@ bool app_sys_test(void)
     /* 系统组件插件测试,仅独立测试使用 */
     /* 测试接口有大量内存申请未释放的动作 */
     void app_sys_list_dll_test(void);
-         app_sys_list_dll_test();
+         // app_sys_list_dll_test();
     void app_sys_list_sll_test(void);
-         app_sys_list_sll_test();
+         // app_sys_list_sll_test();
     void app_sys_heap_g_test(void);
-         app_sys_heap_g_test();
+         // app_sys_heap_g_test();
     void app_sys_tree_s_test(void);
-         app_sys_tree_s_test();
+         // app_sys_tree_s_test();
     void app_sys_tree_rb_test(void);
-         app_sys_tree_rb_test();
+         // app_sys_tree_rb_test();
     void app_sys_tree_rbs_test(void);
-         app_sys_tree_rbs_test();
+         // app_sys_tree_rbs_test();
     void app_sys_tree_bs_test(void);
-         app_sys_tree_bs_test();
+         // app_sys_tree_bs_test();
     void app_sys_tree_fl_test(void);
-         app_sys_tree_fl_test();
+         // app_sys_tree_fl_test();
     void app_sys_tree_fw_test(void);
-         app_sys_tree_fw_test();
+         // app_sys_tree_fw_test();
     void app_sys_table_dl_test(void);
-         app_sys_table_dl_test();
+         // app_sys_table_dl_test();
     void app_sys_table_rbs_test(void);
-         app_sys_table_rbs_test();
+         // app_sys_table_rbs_test();
     void app_sys_map_dlm_test(void);
-         app_sys_map_dlm_test();
+         // app_sys_map_dlm_test();
     void app_sys_handle_test(void);
-         app_sys_handle_test();
+         // app_sys_handle_test();
     void app_sys_rbuf_test(void);
-         app_sys_rbuf_test();
+         // app_sys_rbuf_test();
     /*  */
     return true;
     #elif 0

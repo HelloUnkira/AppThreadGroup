@@ -39,35 +39,24 @@ static uint32_t scui_image_cache_hash(uint8_t *data, uint32_t length)
 
 /*@brief 哈希散列函数,哈希摘要函数
  */
-static uint32_t scui_image_cache_fd_t(scui_table_rbsn_t *node)
+static uint32_t scui_image_cache_fd_t(scui_table_dln_t *node)
 {
     scui_image_unit_t *unit = scui_own_ofs(scui_image_unit_t, ht_node, node);
-    /* 摘要的来源网络的Hash散列函数 */
-    uint32_t scui_table_elf_hash(uint8_t *data, uint32_t length);
-    return scui_image_cache_hash((void *)&unit->image->pixel.data_mem, sizeof(uintptr_t));
+    return scui_image_cache_hash((void *)&unit->image->pixel.data_raw, sizeof(uintptr_t));
 }
 
 /*@brief 哈希比较函数
  */
-static uint8_t scui_image_cache_fc1_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
+static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *node2)
 {
     scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data_mem < unit2->image->pixel.data_mem ? 1 : 0;
-}
-
-/*@brief 哈希比较函数
- */
-static uint8_t scui_image_cache_fc2_t(scui_table_rbsn_t *node1, scui_table_rbsn_t *node2)
-{
-    scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
-    scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data_mem == unit2->image->pixel.data_mem ? 0 : 1;
+    return unit1->image->pixel.data_raw == unit2->image->pixel.data_raw ? true : false;
 }
 
 /*@brief 哈希访问函数
  */
-static void scui_image_cache_fv_t(scui_table_rbsn_t *node, uint32_t idx)
+static void scui_image_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
 {
     scui_image_unit_t *unit = scui_own_ofs(scui_image_unit_t, ht_node, node);
     
@@ -90,12 +79,11 @@ void scui_image_cache_ready(void)
     scui_image_cache_t *cache = &scui_image_cache;
     
     scui_list_dll_reset(&cache->dl_list);
-    scui_table_rbst_fd_t digest  = scui_image_cache_fd_t;
-    scui_table_rbst_fc_t compare = scui_image_cache_fc1_t;
-    scui_table_rbst_fc_t confirm = scui_image_cache_fc2_t;
-    scui_table_rbst_fv_t visit   = scui_image_cache_fv_t;
-    scui_table_rbsl_reset(cache->ht_list, SCUI_IMAGE_LIMIT_HASH);
-    scui_table_rbst_reset(&cache->ht_table, digest, compare, confirm, visit, cache->ht_list, SCUI_IMAGE_LIMIT_HASH);
+    scui_table_dlt_fd_t digest  = scui_image_cache_fd_t;
+    scui_table_dlt_fc_t confirm = scui_image_cache_fc_t;
+    scui_table_dlt_fv_t visit   = scui_image_cache_fv_t;
+    scui_table_dll_reset(cache->ht_list, SCUI_IMAGE_LIMIT_HASH);
+    scui_table_dlt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, SCUI_IMAGE_LIMIT_HASH);
     
     cache->usage     = 0;
     cache->total     = SCUI_IMAGE_LIMIT_TOTAL;
@@ -126,7 +114,7 @@ void scui_image_cache_visit(void)
     scui_image_cache_t *cache = &scui_image_cache;
     
     SCUI_LOG_WARN("usage:%u", cache->usage);
-    scui_table_rbst_visit(&cache->ht_table);
+    scui_table_dlt_visit(&cache->ht_table);
 }
 
 /*@brief 图片资源清除
@@ -151,7 +139,7 @@ void scui_image_cache_clear(void)
         if (unit == NULL)
             return;
         scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
-        scui_table_rbst_remove(&cache->ht_table, &unit->ht_node);
+        scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
         
         /* 约减使用率 */
         cache->usage -= unit->image->pixel.size_mem;
@@ -178,9 +166,9 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
         return;
     
     scui_image_unit_t *unit = NULL;
-    scui_table_rbsn_t *unit_node = NULL;
+    scui_table_dln_t *unit_node = NULL;
     
-    if ((unit_node = scui_table_rbst_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
+    if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
         unit = scui_own_ofs(scui_image_unit_t, ht_node, unit_node);
     
     /* 如果缓存命中时 */
@@ -206,9 +194,9 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     }
     
     scui_image_unit_t *unit = NULL;
-    scui_table_rbsn_t *unit_node = NULL;
+    scui_table_dln_t *unit_node = NULL;
     
-    if ((unit_node = scui_table_rbst_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
+    if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
         unit = scui_own_ofs(scui_image_unit_t, ht_node, unit_node);
     
     /* 如果缓存命中时 */
@@ -257,7 +245,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
                 return;
             }
             scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
-            scui_table_rbst_remove(&cache->ht_table, &unit->ht_node);
+            scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
             
             /* 约减使用率 */
             cache->usage -= unit->image->pixel.size_mem;
@@ -280,8 +268,8 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         /* 带计数优先级加入 */
         scui_list_dln_reset(&unit->dl_node);
         scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_image_cache_sort);
-        scui_table_rbsn_reset(&unit->ht_node);
-        scui_table_rbst_insert(&cache->ht_table, &unit->ht_node);
+        scui_table_dln_reset(&unit->ht_node);
+        scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
     }
 }

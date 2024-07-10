@@ -3,8 +3,8 @@
 
 /* DL:      双链表容器为载体的散列表 */
 /* RBS:     红黑树容器为载体的散列表 */
-#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL      0
-#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS     1
+#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_DL      1
+#define APP_SYS_EXT_MEM_CACHE_USE_TABLE_RBS     0
 
 typedef enum {
     app_sys_ext_mem_cache_none = 0,

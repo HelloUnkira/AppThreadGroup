@@ -102,6 +102,29 @@ void scui_ui_scene_home_c_event_proc(scui_event_t *event)
         static uint8_t cnt = 0;
         cnt++;
         
+        
+        static uint32_t cache_cnt = 0;
+        cache_cnt++;
+        
+        #if 0   // font glyph cache test
+        scui_font_glyph_unit_t glyph_unit = {0};
+        glyph_unit.name = SCUI_FONT_TYPE_32_ZH;
+        glyph_unit.glyph.unicode_letter = 0x4E00 + cache_cnt % (0x9FFF - 0x4E00);
+        scui_font_glyph_cache_load(&glyph_unit);
+        scui_font_glyph_cache_unload(&glyph_unit);
+        #endif
+        
+        #if 0   // graph cache test
+        scui_image_unit_t image_unit = {0};
+        scui_handle_t image = SCUI_HANDLE_OFFSET_IMAGE + 1;
+        image += cache_cnt % 3350;
+        image_unit.image = scui_handle_get(image);
+        scui_image_cache_load(&image_unit);
+        scui_image_cache_unload(&image_unit);
+        #endif
+        
+        
+        
         if (cnt % (1000 / SCUI_ANIMA_TICK) == 0)
             scui_widget_draw(event->object, NULL, false);
         break;
