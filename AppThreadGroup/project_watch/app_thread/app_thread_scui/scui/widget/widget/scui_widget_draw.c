@@ -10,9 +10,9 @@
 /*@brief 为剪切域集合计算以调整源到目标的剪切域(内部接口)
  *@param 形如scui_widget_surface_draw_xxx的接口使用
  */
-static bool scui_widget_draw_clip_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
-                                         scui_area_t   *target,   scui_area_t *clip,
-                                         scui_area_t   *dst_clip, scui_area_t *src_clip)
+static bool scui_widget_draw_adjust(scui_widget_t *widget,   scui_area_t *unit_clip,
+                                    scui_area_t   *target,   scui_area_t *clip,
+                                    scui_area_t   *dst_clip, scui_area_t *src_clip)
 {
     *dst_clip = (scui_area_t){0};
     *src_clip = *clip;
@@ -82,7 +82,7 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, &string_clip, &dst_clip, &src_clip)) {
             
             // src_clip使用原始偏移坐标,非调整后的偏移坐标
@@ -128,7 +128,7 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, clip, clip, &dst_clip, &src_clip))
             scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
     }
@@ -204,7 +204,7 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
                             widget->alpha, color);
@@ -280,7 +280,7 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t     *target,
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip)) {
             
             src_offset.x += +(dst_clip.x - target->x);
@@ -341,7 +341,7 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, &src_clip,
                                    widget->alpha, angle, anchor, center);
@@ -395,7 +395,7 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, &src_clip,
                                            widget->alpha, matrix);
@@ -475,7 +475,7 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         
         scui_area_t dst_clip = {0};
         scui_area_t src_clip = {0};
-        if (scui_widget_draw_clip_adjust(widget,
+        if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_ring(widget->surface, &dst_clip, &dst_center, image_e_inst, image_inst, &src_clip,
                            angle_as, widget->alpha, angle_ae, color);

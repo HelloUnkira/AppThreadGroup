@@ -11,11 +11,11 @@
  *       scui_draw_ring是唯一调用者
  *@param 参数列表与调用者唯一一致
  */
-void scui_draw_ring_edge(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
-                         scui_point_t   *dst_center,  scui_image_t *src_image_e,
-                         scui_image_t   *src_image,   scui_area_t  *src_clip,
-                         scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
-                         scui_coord_t    src_angle_e, scui_color_t  src_color)
+static void scui_draw_ring_edge(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
+                                scui_point_t   *dst_center,  scui_image_t *src_image_e,
+                                scui_image_t   *src_image,   scui_area_t  *src_clip,
+                                scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
+                                scui_coord_t    src_angle_e, scui_color_t  src_color)
 {
     /* 绘制俩个端点 */
     scui_area_t edge_clip = {
@@ -45,11 +45,11 @@ void scui_draw_ring_edge(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
  *       scui_draw_ring是唯一调用者
  *@param 参数列表与调用者唯一一致
  */
-void scui_draw_ring_quadrant(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
-                             scui_point_t   *dst_center,  scui_image_t *src_image_e,
-                             scui_image_t   *src_image,   scui_area_t  *src_clip,
-                             scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
-                             scui_coord_t    src_angle_e, scui_color_t  src_color)
+static void scui_draw_ring_quadrant(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
+                                    scui_point_t   *dst_center,  scui_image_t *src_image_e,
+                                    scui_image_t   *src_image,   scui_area_t  *src_clip,
+                                    scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
+                                    scui_coord_t    src_angle_e, scui_color_t  src_color)
 {
     /* 检查四个象限,如果有完整部分,先行绘制该区块 */
     /* 绕过的重合点不计算在内,应被过滤掉(因为是一个整环) */
@@ -97,10 +97,10 @@ void scui_draw_ring_quadrant(scui_surface_t *dst_surface, scui_area_t  *dst_clip
 /*@brief 区域图像绘制(内部接口)
  *       scui_draw_ring_quadrant_1是唯一调用者
  */
-void scui_draw_ring_quadrant_1_angle_tan(scui_multi_t *angle_tan0_4096,
-                                         scui_coord_t  src_angle_s,
-                                         scui_multi_t *angle_tan1_4096,
-                                         scui_coord_t  src_angle_e)
+static void scui_draw_ring_quadrant_1_angle_tan(scui_multi_t *angle_tan0_4096,
+                                                scui_coord_t  src_angle_s,
+                                                scui_multi_t *angle_tan1_4096,
+                                                scui_coord_t  src_angle_e)
 {
     uint8_t idx = -1;
     /* 取那个一定不落在边界的角度 */
@@ -148,10 +148,10 @@ void scui_draw_ring_quadrant_1_angle_tan(scui_multi_t *angle_tan0_4096,
 /*@brief 区域图像绘制(内部接口)
  *       scui_draw_ring_quadrant_1是唯一调用者
 */
-scui_point_t scui_draw_ring_quadrant_1_draw_area(scui_area_t *draw_area,
-                                                 scui_multi_t idx_line, uint8_t idx,
-                                                 scui_multi_t angle_tan0_4096,
-                                                 scui_multi_t angle_tan1_4096)
+static scui_point_t scui_draw_ring_quadrant_1_draw_area(scui_area_t *draw_area,
+                                                        scui_multi_t idx_line, uint8_t idx,
+                                                        scui_multi_t angle_tan0_4096,
+                                                        scui_multi_t angle_tan1_4096)
 {
     scui_multi_t draw_area_x0 = 0;
     scui_multi_t draw_area_x1 = 0;
@@ -217,11 +217,11 @@ scui_point_t scui_draw_ring_quadrant_1_draw_area(scui_area_t *draw_area,
  *       scui_draw_ring是唯一调用者
  *@param 参数列表与调用者唯一一致
  */
-void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
-                               scui_point_t   *dst_center,  scui_image_t *src_image_e,
-                               scui_image_t   *src_image,   scui_area_t  *src_clip,
-                               scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
-                               scui_coord_t    src_angle_e, scui_color_t  src_color)
+static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
+                                      scui_point_t   *dst_center,  scui_image_t *src_image_e,
+                                      scui_image_t   *src_image,   scui_area_t  *src_clip,
+                                      scui_coord_t    src_angle_s, scui_alpha_t  src_alpha,
+                                      scui_coord_t    src_angle_e, scui_color_t  src_color)
 {
     #if 1
     /* 这里需要断言 */

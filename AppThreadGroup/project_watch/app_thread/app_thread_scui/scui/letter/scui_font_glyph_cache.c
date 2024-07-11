@@ -84,11 +84,11 @@ void scui_font_glyph_cache_ready(void)
     scui_table_dlt_fd_t digest  = scui_font_glyph_cache_fd_t;
     scui_table_dlt_fc_t confirm = scui_font_glyph_cache_fc_t;
     scui_table_dlt_fv_t visit   = scui_font_glyph_cache_fv_t;
-    scui_table_dll_reset(cache->ht_list, SCUI_FONT_GLYPH_LIMIT_HASH);
-    scui_table_dlt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, SCUI_FONT_GLYPH_LIMIT_HASH);
+    scui_table_dll_reset(cache->ht_list, SCUI_CACHE_FONT_GLYPH_HASH);
+    scui_table_dlt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, SCUI_CACHE_FONT_GLYPH_HASH);
     
     cache->usage     = 0;
-    cache->total     = SCUI_FONT_GLYPH_LIMIT_TOTAL;
+    cache->total     = SCUI_CACHE_FONT_GLYPH_TOTAL;
     cache->cnt_hit   = 0;
     cache->cnt_unhit = 0;
 }

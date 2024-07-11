@@ -1,5 +1,5 @@
 /*实现目标:
- *    简易动画
+ *    路径动画
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

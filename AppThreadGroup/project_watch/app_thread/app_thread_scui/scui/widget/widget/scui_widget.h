@@ -20,8 +20,8 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
+    uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
     uint8_t sched_anima:1;      /* 控件调度动画标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
@@ -81,12 +81,12 @@ typedef struct {
 
 /* 控件孩子列表宏迭代器(略过无效控件)(backward traverse) */
 #define scui_widget_child_list_btra(widget, idx)                            \
-    for (int32_t idx = 0; idx < (int32_t)widget->child_num; idx++)          \
+    for (int64_t idx = 0; idx < (int64_t)widget->child_num; idx++)          \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
 /* 控件孩子列表宏迭代器(略过无效控件)(forward traverse) */
 #define scui_widget_child_list_ftra(widget, idx)                            \
-    for (int32_t idx = (int32_t)widget->child_num - 1; idx >= 0; idx--)     \
+    for (int64_t idx = (int64_t)widget->child_num - 1; idx >= 0; idx--)     \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
 /*@brief 控件创建
