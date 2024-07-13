@@ -44,19 +44,22 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         
         scui_handle_t ofs         = SCUI_UI_WATERFALL_OFS_MAX;
         scui_handle_t image       = scui_ui_scene_list_image[index];
-        scui_area_t   scroll_clip = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
-        scui_area_t   icon_clip   = scui_widget_clip(event->object);
         
-        scui_coord_t scroll_y    = scroll_clip.y + scroll_clip.h / 2;
-        scui_coord_t icon_y      = icon_clip.y + icon_clip.h / 2;
-        scui_coord_t dist_y      = scui_dist(scroll_y, icon_y);
-        scui_coord_t dist_c      = scroll_clip.h / 2;
-        scui_coord_t ofs_min     = SCUI_UI_WATERFALL_OFS_MIN;
-        scui_coord_t ofs_max     = SCUI_UI_WATERFALL_OFS_MAX;
-        scui_coord_t ofs_cur     = ofs_min;
+        scui_area_t   scroll_c  = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
+        scui_coord_t  scroll_cx = scroll_c.x + scroll_c.w / 2;
+        scui_coord_t  scroll_cy = scroll_c.y + scroll_c.h / 2;
         
-        if (dist_y <= dist_c)
-            ofs_cur = scui_map(dist_y, 0, dist_c, ofs_max + 1, ofs_min - 1);
+        scui_area_t  icon_c  = scui_widget_clip(event->object);
+        scui_coord_t icon_cy = icon_c.y + icon_c.h / 2;
+        scui_coord_t dist_cy = scui_dist(scroll_cy, icon_cy);
+        scui_coord_t dist_ch = scroll_c.h / 2;
+        
+        scui_coord_t ofs_min = SCUI_UI_WATERFALL_OFS_MIN;
+        scui_coord_t ofs_max = SCUI_UI_WATERFALL_OFS_MAX;
+        scui_coord_t ofs_cur = ofs_min;
+        
+        if (dist_cy <= dist_ch)
+            ofs_cur = scui_map(dist_cy, 0, dist_ch, ofs_max + 1, ofs_min - 1);
         
         if (ofs_cur < ofs_min)
             ofs_cur = ofs_min;
@@ -66,22 +69,44 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         image += ofs_cur;
         // SCUI_LOG_WARN("dist_y:%d, dist_c:%d", dist_y, dist_c);
         
-        scui_coord_t dist_x = icon_clip.w - scui_image_w(image);
-        icon_clip.y += (icon_clip.h - scui_image_h(image)) / 2;
-        icon_clip.h  = scui_image_h(image);
-        icon_clip.w  = scui_image_w(image);
-        icon_clip.x += type == 0 ? dist_x : type == 1 ? dist_x / 2 : 0;
+        // 三角函数:
+        // sin_a = dist_y / rad_rr;
+        // cos_a = 1 - sin_a * sin_a
+        // dis_x = rad_rr - rad_rr * cos_a
+        scui_multi_t rad_rr = scroll_c.w / 2 - scui_image_h(image) / 2;
+        scui_multi_t dist_y = scui_min(rad_rr, scui_dist(icon_cy, scroll_cy));
         
-        if (type == 0 && dist_y <= dist_c)
-            icon_clip.x -= scui_map(dist_y, 0, dist_c, dist_x, 0);
-        if (type == 2 && dist_y <= dist_c)
-            icon_clip.x += scui_map(dist_y, 0, dist_c, dist_x, 0);
+        scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);
+        scui_multi_t cos_ia = 0;
+        scui_multi_t cos_fa = 0;
+        scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
+        scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
+        SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+        dist_x = scui_min(dist_x, icon_c.w - scui_image_w(image));
+        
+        scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
+        scui_widget_alpha_set(event->object, alpha, true);
+        
+        if (type == 0)
+            icon_c.x += dist_x;
+        if (type == 1)
+            icon_c.x += (icon_c.w - scui_image_w(image)) / 2;
+        if (type == 2)
+            icon_c.x += (icon_c.w - scui_image_w(image)) - dist_x;
+        
+        icon_c.y += (icon_c.h - scui_image_h(image)) / 2;
+        icon_c.h  = scui_image_h(image);
+        icon_c.w  = scui_image_w(image);
         
         if (event->type == scui_event_draw)
-            scui_widget_draw_image(event->object, &icon_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &icon_c, image, NULL, (scui_color_t){0});
         
         if (event->type == scui_event_ptr_click) {
-            if (scui_area_point(&icon_clip, &event->ptr_c)) {
+            
+            if (alpha <= scui_alpha_pct20)
+                break;
+            
+            if (scui_area_point(&icon_c, &event->ptr_c)) {
                 SCUI_LOG_WARN("click idx:%d", index);
                 break;
             }
@@ -119,6 +144,10 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
         
         if (scui_widget_event_check_prepare(event)) {
             
+            // 这里画个圈,校验测试使用
+            scui_widget_image_set(SCUI_UI_SCENE_WATERFALL_SCROLL,
+            scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
+            
             scui_coord_t set_width = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SET).w;
             
             // 取一张图(随便, 反正所有图都一样)
@@ -127,9 +156,9 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
             
-            scui_area_t clip_l = {.y = icon_h / 2,.w = set_width / 3,.h = icon_h,};
-            scui_area_t clip_m = {.w = set_width - set_width * 2 / 3,.h = icon_h,};
-            scui_area_t clip_r = {.y = icon_h / 2,.w = set_width / 3,.h = icon_h,};
+            scui_area_t clip_l = {.y = icon_h / 2,.w = (set_width - icon_w) / 2,.h = icon_h,};
+            scui_area_t clip_m = {.w = icon_w,.h = icon_h,};
+            scui_area_t clip_r = {.y = icon_h / 2,.w = (set_width - icon_w) / 2,.h = icon_h,};
             
             clip_l.x = 0;
             clip_m.x = clip_l.w;

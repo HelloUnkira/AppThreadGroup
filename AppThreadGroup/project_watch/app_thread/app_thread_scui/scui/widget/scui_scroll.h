@@ -9,8 +9,9 @@
 typedef struct {
     scui_widget_t       widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
-    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
+    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
+    scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
     scui_coord_t        route_enc;      /* 编码器行程 */
@@ -51,8 +52,9 @@ typedef struct {
 typedef struct {
     scui_widget_maker_t widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
-    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
     scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
+    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
+    scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
     scui_coord_t        route_enc;      /* 编码器行程 */
@@ -94,6 +96,12 @@ void scui_scroll_auto_offset_get(scui_handle_t handle, scui_coord_t *offset);
  */
 void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset);
 
+/*@brief 滚动控件边距(自由布局)
+ *@param handle 滚动控件句柄
+ *@param edge   滚动边距
+ */
+void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge);
+
 /*@brief 滚动控件布局更新
  *@param handle 滚动控件句柄
  */
@@ -130,7 +138,7 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
 /*@brief 滚动控件更新布局回调
  *@param event 事件
  */
-void scui_scroll_update_layout(scui_event_t *event);
+void scui_scroll_layout_update(scui_event_t *event);
 
 /*@brief 滚动控件事件流程合并
  *@param event 事件

@@ -28,8 +28,8 @@ scui_coord_t scui_ui_honeycomb_mid_y(scui_handle_t ofs_cur);
 void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_cur);
 /*****************************************************************************/
 /* 主题:瀑布(所有图标为正方形图标) */
-#define SCUI_UI_WATERFALL_OFS_MIN               (2)     // 最小缩小图标尺寸偏移
-#define SCUI_UI_WATERFALL_OFS_MAX               (6)     // 最大放大图标尺寸偏移
+#define SCUI_UI_WATERFALL_OFS_MIN               (3)     // 最小缩小图标尺寸偏移
+#define SCUI_UI_WATERFALL_OFS_MAX               (7)     // 最大放大图标尺寸偏移
 #define SCUI_UI_WATERFALL_LINE_SPACE            (8)     // 图标垂直间隙
 /*****************************************************************************/
 /* 主题:波轮(所有图标为正方形图标) */

@@ -16,7 +16,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_scroll",
-            "widget.style.trans":           "true",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
@@ -25,8 +24,8 @@
             "widget.myself":                "SCUI_UI_SCENE_WATERFALL_SCROLL",
             "widget.parent":                "SCUI_UI_SCENE_WATERFALL",
             "notify_cb":                    "scui_ui_scene_waterfall_scroll_notify_event",
-            "dir":                          "scui_event_dir_ver",
             "pos":                          "scui_event_pos_none",
+            "dir":                          "scui_event_dir_ver",
             "route_enc":                    "117",
             "route_key":                    "117",
             "keyid_fdir":                   "scui_event_key_val_down",
@@ -35,6 +34,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 2",
             "widget.myself":                "SCUI_UI_SCENE_WATERFALL_BLANK_U",
@@ -42,6 +42,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_WATERFALL_SET",
@@ -50,6 +51,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES / 2",
             "widget.myself":                "SCUI_UI_SCENE_WATERFALL_BLANK_D",

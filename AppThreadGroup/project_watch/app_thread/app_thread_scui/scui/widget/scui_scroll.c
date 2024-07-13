@@ -32,8 +32,9 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 状态初始化 */
     scroll->notify_cb   = maker->notify_cb;
-    scroll->dir         = maker->dir;
     scroll->pos         = maker->pos;
+    scroll->dir         = maker->dir;
+    scroll->edge        = maker->edge;
     scroll->space       = maker->space;
     scroll->springback  = maker->springback;
     scroll->fling_page  = maker->fling_page;
@@ -216,6 +217,26 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     // scui_scroll_event_auto_merge(&event, 0x02);
 }
 
+/*@brief 滚动控件边距(自由布局)
+ *@param handle 滚动控件句柄
+ *@param edge   滚动边距
+ */
+void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->type != scui_widget_type_scroll)
+        return;
+    
+    if (scroll->dir == scui_event_dir_none)
+        scroll->edge = *edge;
+    
+    scroll->layout = true;
+    scui_widget_draw(handle, NULL, false);
+}
+
 /*@brief 滚动控件布局更新
  *@param handle 滚动控件句柄
  */
@@ -347,7 +368,7 @@ void scui_scroll_anima_ready(void *instance)
             scui_scroll_event_auto_merge(&event, 0xAA);
         }
         break;
-        }
+    }
     case scui_event_dir_hor:
     case scui_event_dir_ver: {
         /* 自动布局,非循环,循环 */
@@ -626,7 +647,7 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
 /*@brief 滚动控件更新布局回调
  *@param event 事件
  */
-void scui_scroll_update_layout(scui_event_t *event)
+void scui_scroll_layout_update(scui_event_t *event)
 {
     scui_handle_t  handle = event->object;
     scui_widget_t *widget = scui_handle_get(handle);
@@ -683,10 +704,10 @@ void scui_scroll_update_layout(scui_event_t *event)
         scui_area_m_to_s(&clip);
         scui_area_m_to_s(&clip_widget);
         /* 计算自由布局下的ofs_min和ofs_max */
-        scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1);
-        scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1);
-        scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2);
-        scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2);
+        scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1) - scroll->edge.x;
+        scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1) - scroll->edge.y;
+        scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2) + scroll->edge.x;
+        scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2) + scroll->edge.y;
         SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
         SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
         
@@ -1224,7 +1245,7 @@ void scui_scroll_event(scui_event_t *event)
     case scui_event_draw: {
         if (scui_widget_event_check_prepare(event)) {
             bool layout = scroll->layout;
-            scui_scroll_update_layout(event);
+            scui_scroll_layout_update(event);
             
             if (!layout)
                  break;

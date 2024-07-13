@@ -24,6 +24,10 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
+        scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+        if (alpha <= scui_alpha_pct20)
+            break;
+        
         scui_widget_event_mask_over(event);
         scui_handle_t parent   = scui_widget_parent(event->object);
         scui_handle_t ancestor = scui_widget_parent(parent);

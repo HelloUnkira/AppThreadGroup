@@ -22,8 +22,8 @@
             "widget.myself":                "SCUI_UI_SCENE_HONEYCOMB_SCROLL",
             "widget.parent":                "SCUI_UI_SCENE_HONEYCOMB",
             "widget.child_num":             "50",
-            "dir":                          "scui_event_dir_none",
             "pos":                          "scui_event_pos_c",
+            "dir":                          "scui_event_dir_none",
             "springback":                   "35"
         }
     ]

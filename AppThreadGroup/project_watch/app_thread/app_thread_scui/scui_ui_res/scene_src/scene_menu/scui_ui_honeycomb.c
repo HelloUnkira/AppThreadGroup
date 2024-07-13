@@ -99,34 +99,51 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         if (icon_center.y > edge_center.y)
             ver_dir = scui_event_dir_to_u;
         
+        #if 0
+        // 距离中心偏移做均匀映射
+        scui_multi_t dist_cx = scui_dist(icon_center.x, edge_center.x) + icon_clip.w / 2;
+        scui_multi_t dist_cy = scui_dist(icon_center.y, edge_center.y) + icon_clip.h / 2;
+        scui_multi_t dist_dm = edge_clip.w * edge_clip.w / 4 + edge_clip.h * edge_clip.h / 4;
+        scui_multi_t dist_cm = dist_cx * dist_cx + dist_cy * dist_cy;
+        
+        dist_cm = scui_min(dist_cm, dist_dm);
+        ofs_cur = scui_map(dist_cm, 0, dist_dm, ofs_cur, SCUI_UI_HONEYCOMB_OFS_MIN);
+        #endif
+        
         for (int64_t idx = ofs_cur; idx >= SCUI_UI_HONEYCOMB_OFS_MIN; idx--) {
             scui_coord_t image_clip_w = scui_image_w(image + idx);
             scui_coord_t image_clip_h = scui_image_h(image + idx);
             
-            scui_area_t scale_clip = icon_clip;
+            scui_area_t scale_clip = {
+                .x = icon_clip.x,
+                .y = icon_clip.y,
+                .w = image_clip_w,
+                .h = image_clip_h,
+            };
             
             #if 1
             // 水平缩放
             if (hor_dir == scui_event_dir_none)
                 scale_clip.x += (icon_clip.w - image_clip_w) / 2;
-            if (hor_dir == scui_event_dir_to_l);
+            if (hor_dir == scui_event_dir_to_l)
+                scale_clip.x += (icon_clip.w - image_clip_w) * 1 / 4;
             if (hor_dir == scui_event_dir_to_r)
-                scale_clip.x += (icon_clip.w - image_clip_w);
+                scale_clip.x += (icon_clip.w - image_clip_w) * 3 / 4;
             
             // 垂直缩放
             if (ver_dir == scui_event_dir_none)
                 scale_clip.y += (icon_clip.h - image_clip_h) / 2;
-            if (ver_dir == scui_event_dir_to_u);
+            if (ver_dir == scui_event_dir_to_u)
+                scale_clip.y += (icon_clip.h - image_clip_h) * 1 / 4;
             if (ver_dir == scui_event_dir_to_d)
-                scale_clip.y += (icon_clip.h - image_clip_h);
+                scale_clip.y += (icon_clip.h - image_clip_h) * 3 / 4;
             #else
             // 图标居中对齐
             scale_clip.x += (icon_clip.w - image_clip_w) / 2;
             scale_clip.y += (icon_clip.h - image_clip_h) / 2;
             #endif
             
-            scale_clip.w = image_clip_w;
-            scale_clip.h = image_clip_h;
+            
             
             #if 0
             #elif SCUI_UI_HONEYCOMB_EDGE_MODE == 0  // 圆屏
@@ -190,6 +207,10 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
+        // 这里画个圈,校验测试使用
+        scui_widget_image_set(SCUI_UI_SCENE_HONEYCOMB_SCROLL,
+        scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
+        
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
@@ -209,6 +230,9 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             icon += scui_ui_res_local->ofs_cur;
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
+            
+            scui_point_t edge = {.x = icon_w, .y = icon_h,};
+            scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
             
             uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
             scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_mix, layout_size);
@@ -277,6 +301,9 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             icon += scui_ui_res_local->ofs_cur;
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
+            
+            scui_point_t edge = {.x = icon_w, .y = icon_h,};
+            scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
             
             uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
             scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_mix, layout_size);

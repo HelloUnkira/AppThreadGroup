@@ -58,8 +58,10 @@
             "maker": "scui_scroll_maker_t",
             "field": {
                 "notify_cb":                    "专属事件通知",
-                "dir":                          "滚动方向(自动布局)",
                 "pos":                          "滚动停留(边界或中心)",
+                "dir":                          "滚动方向(自动布局)",
+                "edge.x":                       "滚动边距(自由布局)",
+                "edge.y":                       "滚动边距(自由布局)",
                 "space":                        "控件间隙(自动布局)",
                 "fling_page":                   "翻页数量",
                 "route_enc":                    "编码器行程",
