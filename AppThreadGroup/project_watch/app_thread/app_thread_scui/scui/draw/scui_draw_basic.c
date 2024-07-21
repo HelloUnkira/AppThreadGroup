@@ -342,6 +342,48 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
          return;
     
+    #if 1
+    // 利用原图进行一次源初变换,以修饰限制目标区域
+    scui_matrix_t matrix = *inv_matrix;
+    scui_matrix_inverse(&matrix);
+    
+    scui_face2_t face2 = {0};
+    scui_face3_t face3 = {0};
+    face2.point2[0].y = src_area.y;
+    face2.point2[0].x = src_area.x;
+    face2.point2[1].y = face2.point2[0].y;
+    face2.point2[1].x = face2.point2[0].x + src_area.w - 1;
+    face2.point2[2].y = face2.point2[0].y + src_area.h - 1;
+    face2.point2[2].x = face2.point2[1].x;
+    face2.point2[3].y = face2.point2[2].y;
+    face2.point2[3].x = face2.point2[0].x;
+    
+    dst_area.x1 = scui_coord_max;
+    dst_area.y1 = scui_coord_max;
+    dst_area.x2 = scui_coord_min;
+    dst_area.y2 = scui_coord_min;
+    /* 对四个图像的角进行一次正变换 */
+    for (uint8_t idx = 0; idx < 4; idx++) {
+        scui_point3_by_point2(&face3.point3[idx], &face2.point2[idx]);
+        scui_point3_transform_by_matrix(&face3.point3[idx], &matrix);
+        scui_point3_to_point2(&face3.point3[idx], &face2.point2[idx]);
+        
+        dst_area.x1 = scui_min(dst_area.x1, face2.point2[idx].x - 1);
+        dst_area.y1 = scui_min(dst_area.y1, face2.point2[idx].y - 1);
+        dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1);
+        dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1);
+        
+        
+    }
+    scui_area_s_to_m(&dst_area);
+    
+    scui_area_t clip_inter = {0};
+    if (!scui_area_inter(&clip_inter, &dst_area, &dst_clip_v))
+         return;
+    dst_clip_v = clip_inter;
+    
+    #endif
+    
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
@@ -366,8 +408,8 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
          src_surface->format == scui_pixel_cf_bmp888 || src_surface->format == scui_pixel_cf_bmp8888)) {
         
         /* 注意区域对齐坐标 */
-        for (scui_multi_t idx_line = 0; idx_line < dst_clip_v.h; idx_line++)
-        for (scui_multi_t idx_item = 0; idx_item < dst_clip_v.w; idx_item++) {
+        for (scui_multi_t idx_line = dst_clip_v.y; idx_line < dst_clip_v.y + dst_clip_v.h; idx_line++)
+        for (scui_multi_t idx_item = dst_clip_v.x; idx_item < dst_clip_v.x + dst_clip_v.w; idx_item++) {
             scui_point_t  point  = {0};
             scui_point2_t point2 = {0};
             scui_point3_t point3 = {0};
@@ -384,7 +426,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
             
             /* 这里使用点对点上色 */
             /* 逆变换的结果落在的源区域, 取样上色 */
-            bool hit = scui_area_point(&src_area, &point);
+            bool hit = scui_area_point(&src_clip_v, &point);
             /* 检测周围距中心临近点是否在有效区域,重新取值上色 */
             if (!hit) {
                 #if 0
@@ -402,7 +444,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
             if (!hit)
                 continue;
             
-            uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+            uint8_t *dst_ofs = dst_surface->pixel + idx_line * dst_line + idx_item * dst_byte;
             uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * src_byte;
             
             scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,

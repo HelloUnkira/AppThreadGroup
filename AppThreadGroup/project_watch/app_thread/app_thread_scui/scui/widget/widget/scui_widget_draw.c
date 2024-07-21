@@ -259,20 +259,22 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t     *target,
     
     if ((pos & scui_event_pos_hor) != 0) {
         src_offset.x = clip->w / 2;
-        dst_offset.x = target->w / 2;
+        dst_offset.x = target->x + target->w / 2;
     } else if ((pos & scui_event_pos_l) != 0) {
+        dst_offset.x = target->x;
     } else if ((pos & scui_event_pos_r) != 0) {
         src_offset.x = clip->w;
-        dst_offset.x = target->w;
+        dst_offset.x = target->x + target->w;
     }
     
     if ((pos & scui_event_pos_ver) != 0) {
         src_offset.y = clip->h / 2;
-        dst_offset.y = target->h / 2;
+        dst_offset.y = target->y + target->h / 2;
     } else if ((pos & scui_event_pos_u) != 0) {
+        dst_offset.y = target->y;
     } else if ((pos & scui_event_pos_d) != 0) {
         src_offset.y = clip->h;
-        dst_offset.y = target->h;
+        dst_offset.y = target->y + target->h;
     }
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
