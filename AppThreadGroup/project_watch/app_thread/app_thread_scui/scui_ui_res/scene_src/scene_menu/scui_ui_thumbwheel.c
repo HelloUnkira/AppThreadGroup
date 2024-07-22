@@ -41,8 +41,8 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
             
             scui_area_t widget_clip = scui_widget_clip(SCUI_UI_SCENE_THUMBWHEEL);
             
-            scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
-            scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
+            scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
+            scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
             scui_coord_t img_dia  = scui_min(image_w, image_h);
             scui_coord_t img_dist = scui_min(widget_clip.w, widget_clip.h) / 2 - img_dia / 2;
             
@@ -61,7 +61,7 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
             string_maker.widget.clip.x              = dst_clip.x;
             string_maker.widget.clip.w              = img_dist * 2 - img_dia * 2 - dst_clip.w * 2;
             string_maker.widget.clip.h              = 60;
-            string_maker.widget.clip.y              = widget_clip.h / 2 - string_maker.widget.clip.h;
+            string_maker.widget.clip.y              = widget_clip.h / 2 - string_maker.widget.clip.h / 2;
             string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
@@ -134,8 +134,8 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         scui_coord_t widget_cx   = widget_clip.x + widget_clip.w / 2;
         scui_coord_t widget_cy   = widget_clip.y + widget_clip.h / 2;
         
-        scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
-        scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
+        scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
+        scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
         scui_coord_t img_dia  = scui_min(image_w, image_h);
         scui_coord_t img_dist = scui_min(widget_clip.w, widget_clip.h) / 2 - img_dia / 2;
         
@@ -154,23 +154,37 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             dst_clip.w = image_w;
             dst_clip.h = image_h;
             
+            #if 1
+            scui_coord_t ofs_a = angle + angle_ofs;
+            ofs_a = scui_max(0, scui_min(360 - SCUI_UI_THEMEWHEEL_ANGLE_UNIT, ofs_a));
+            scui_handle_t lst_a = scui_map(ofs_a, 0, 360 - SCUI_UI_THEMEWHEEL_ANGLE_UNIT,
+                SCUI_UI_THEMEWHEEL_OFS_MAX, SCUI_UI_THEMEWHEEL_OFS_MIN);
+            #else
+            scui_handle_t lst_a = SCUI_UI_THEMEWHEEL_OFS_MAX;
+            #endif
+            
+            scui_handle_t image = scui_ui_scene_list_image[lst_ofs] + lst_a;
+            dst_clip.x += (dst_clip.w - scui_image_w(image)) / 2;
+            dst_clip.y += (dst_clip.h - scui_image_h(image)) / 2;
+            dst_clip.w = scui_image_w(image);
+            dst_clip.h = scui_image_h(image);
+            
             if (event->type == scui_event_draw) {
-                scui_handle_t image = scui_ui_scene_list_image[lst_ofs] + SCUI_UI_THEMEWHEEL_OFS;
-                scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
-                
                 /* 画左边箭头以及文本: */
                 if (angle == 0) {
                     scui_handle_t image_arrow = SCUI_UI_THEMEWHEEL_IMAGE_ARROW;
-                    dst_clip.w = scui_image_w(image_arrow);
-                    dst_clip.h = scui_image_h(image_arrow);
-                    dst_clip.x = widget_cx - img_dist + img_dia / 2 + dst_clip.w / 2;
-                    dst_clip.y = widget_cy - dst_clip.h / 2;
-                    scui_widget_draw_image(event->object, &dst_clip, image_arrow, NULL, (scui_color_t){0});
+                    scui_area_t dst_clip_a = {0};
+                    dst_clip_a.w = scui_image_w(image_arrow);
+                    dst_clip_a.h = scui_image_h(image_arrow);
+                    dst_clip_a.x = widget_cx - img_dist + img_dia / 2 + dst_clip_a.w / 2;
+                    dst_clip_a.y = widget_cy - dst_clip_a.h / 2;
+                    scui_widget_draw_image(event->object, &dst_clip_a, image_arrow, NULL, (scui_color_t){0});
                     
                     scui_handle_t text = scui_ui_scene_list_text[lst_ofs];
                     scui_string_update_text(scui_ui_res_local->string, text);
-                    SCUI_LOG_WARN("click idx:%d", lst_ofs);
                 }
+                
+                scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
             }
             if (event->type == scui_event_ptr_click) {
                 if (scui_area_point(&dst_clip, &event->ptr_c)) {
@@ -190,8 +204,8 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
         scui_coord_t widget_cy   = widget_clip.y + widget_clip.h / 2;
         scui_coord_t widget_dist = scui_min(widget_clip.w, widget_clip.h);
         
-        scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
-        scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS);
+        scui_coord_t image_w  = scui_image_w(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
+        scui_coord_t image_h  = scui_image_h(scui_ui_scene_list_image[0] + SCUI_UI_THEMEWHEEL_OFS_MAX);
         scui_coord_t img_dia  = scui_min(image_w, image_h);
         scui_coord_t img_dist = scui_min(widget_clip.w, widget_clip.h) / 2 - img_dia / 2;
         

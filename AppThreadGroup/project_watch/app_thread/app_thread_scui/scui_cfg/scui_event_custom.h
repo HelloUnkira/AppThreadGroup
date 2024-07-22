@@ -16,7 +16,6 @@ typedef enum {
 
 /*@brief 事件响应(custom)
  *@param event 事件包
- *@retval 事件响应回调返回值
  */
 void scui_event_custom(scui_event_t *event);
 

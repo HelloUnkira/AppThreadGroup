@@ -33,8 +33,9 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_
 #define SCUI_UI_WATERFALL_LINE_SPACE            (8)     // 图标垂直间隙
 /*****************************************************************************/
 /* 主题:波轮(所有图标为正方形图标) */
-#define SCUI_UI_THEMEWHEEL_OFS                  (4)     // 图标尺寸偏移
-#define SCUI_UI_THEMEWHEEL_ANGLE_UNIT           (30)    // 一圈数量 == 360 / angle_unit
+#define SCUI_UI_THEMEWHEEL_OFS_MIN              (0)     // 图标尺寸偏移
+#define SCUI_UI_THEMEWHEEL_OFS_MAX              (5)     // 图标尺寸偏移
+#define SCUI_UI_THEMEWHEEL_ANGLE_UNIT           (24)    // 一圈数量 == 360 / angle_unit
 #define SCUI_UI_THEMEWHEEL_ANGLE_CELL           (6)     // 动画颗粒度,一般不改
 #define SCUI_UI_THEMEWHEEL_IMAGE_ARROW          (scui_image_prj_image_src_repeat_arrow_05_backbmp)
 /*****************************************************************************/
