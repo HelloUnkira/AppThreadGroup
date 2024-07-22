@@ -125,6 +125,15 @@ void scui_font_glyph_cache_clear(void)
 {
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
     
+    // SCUI_LOG_WARN("");
+    SCUI_LOG_WARN("usage:%u", cache->usage);
+    uint32_t cnt_hit = cache->cnt_hit;
+    uint32_t cnt_unhit = cache->cnt_unhit;
+    SCUI_LOG_WARN("hit:%u unhit:%u pct:%.02f",
+        cnt_hit, cnt_unhit, 1.0f * cnt_hit / (cnt_hit + cnt_unhit));
+    cache->cnt_hit = 0;
+    cache->cnt_unhit = 0;
+    
     scui_font_glyph_unit_t *unit = NULL;
     
     /* 所有已解锁资源全部回收 */

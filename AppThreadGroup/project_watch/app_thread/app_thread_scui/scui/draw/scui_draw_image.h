@@ -52,10 +52,12 @@ void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
  *@param src_image   图像源
  *@param src_clip    图像源绘制区域
  *@param src_alpha   图像透明度(非图像自带透明度)
+ *@param inv_matrix  图像变换逆矩阵
  *@param matrix      图像变换矩阵
  */
 void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
                                     scui_image_t   *src_image,   scui_area_t   *src_clip,
-                                    scui_alpha_t    src_alpha,   scui_matrix_t *matrix);
+                                    scui_alpha_t    src_alpha,   scui_matrix_t *inv_matrix,
+                                    scui_matrix_t  *matrix);
 
 #endif

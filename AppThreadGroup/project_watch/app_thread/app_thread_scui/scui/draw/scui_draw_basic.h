@@ -43,9 +43,10 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
  *@param inv_matrix  变换矩阵的逆矩阵
+ *@param matrix      变换矩阵的原矩阵
  */
-void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                                   scui_surface_t *src_surface, scui_area_t *src_clip,
-                                   scui_matrix_t  *inv_matrix);
+void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
+                                   scui_surface_t *src_surface, scui_area_t   *src_clip,
+                                   scui_matrix_t  *inv_matrix,  scui_matrix_t *matrix);
 
 #endif

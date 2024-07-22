@@ -305,8 +305,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
                 scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -dst_clip.w / 2,.y = -dst_clip.h / 2,});
                 // scui_matrix_check(&inv_matrix);
+                scui_matrix_t matrix = inv_matrix;
                 scui_matrix_inverse(&inv_matrix);
-                scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+                scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix, &matrix);
                 continue;
             }
         }
@@ -342,8 +343,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
             scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -dst_clip.w / 2,.y = -dst_clip.h / 2,});
             // scui_matrix_check(&inv_matrix);
+            scui_matrix_t matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
-            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix, &matrix);
             continue;
         }
         
@@ -543,6 +545,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_size2_t size2 = {.w = src_surface->hor_res,.h = src_surface->ver_res,};
             scui_matrix_affine_blit(&inv_matrix, &size2, &face);
             // scui_matrix_check(&inv_matrix);
+            scui_matrix_t matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
             dst_clip.x = 0;
             dst_clip.y = 0;
@@ -552,7 +555,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             src_clip.y = 0;
             src_clip.w = src_surface->hor_res;
             src_clip.h = src_surface->ver_res;
-            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix, &matrix);
             continue;
         }
         
@@ -629,6 +632,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_size2_t size2 = {.w = src_surface->hor_res,.h = src_surface->ver_res,};
             scui_matrix_affine_blit(&inv_matrix, &size2, &face);
             // scui_matrix_check(&inv_matrix);
+            scui_matrix_t matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
             dst_clip.x = 0;
             dst_clip.y = 0;
@@ -638,7 +642,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             src_clip.y = 0;
             src_clip.w = src_surface->hor_res;
             src_clip.h = src_surface->ver_res;
-            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix);
+            scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix, &matrix);
             continue;
         }
         

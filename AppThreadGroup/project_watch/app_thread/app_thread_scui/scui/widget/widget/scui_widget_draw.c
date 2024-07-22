@@ -392,6 +392,10 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
     scui_tick_elapse_us(true);
     #endif
     
+    // 给进来的就是逆矩阵, 这个接口现在不完善, 待定中
+    scui_matrix_t reb_matrix = *matrix;
+    scui_matrix_inverse(&reb_matrix);
+    
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         
@@ -400,7 +404,7 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
         if (scui_widget_draw_adjust(widget,
             &unit->clip, target, clip, &dst_clip, &src_clip))
             scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, &src_clip,
-                                           widget->alpha, matrix);
+                                           widget->alpha, matrix, &reb_matrix);
     }
     
     #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK

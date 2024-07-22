@@ -80,10 +80,12 @@ void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = +dst_offset.x, .y = +dst_offset.y,});
     scui_matrix_scale(&matrix, &(scui_point2_t){.x = scale.x / 1024.0f, .y = scale.y / 1024.0f,});
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = -src_offset.x, .y = -src_offset.y,});
-    scui_matrix_inverse(&matrix);
+    
+    scui_matrix_t inv_matrix = matrix;
+    scui_matrix_inverse(&inv_matrix);
     
     scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &matrix);
+    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &inv_matrix, &matrix);
     
     scui_image_cache_unload(&image);
 }
@@ -126,10 +128,12 @@ void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = +anchor->x, .y = +anchor->y,});
     scui_matrix_rotate(&matrix, (float)angle, 0x00);
     scui_matrix_translate(&matrix, &(scui_point2_t){.x = -center->x, .y = -center->y,});
-    scui_matrix_inverse(&matrix);
+    
+    scui_matrix_t inv_matrix = matrix;
+    scui_matrix_inverse(&inv_matrix);
     
     scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &matrix);
+    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &inv_matrix, &matrix);
     
     scui_image_cache_unload(&image);
 }
@@ -141,11 +145,13 @@ void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
  *@param src_image   图像源
  *@param src_clip    图像源绘制区域
  *@param src_alpha   图像透明度(非图像自带透明度)
+ *@param inv_matrix  图像变换逆矩阵
  *@param matrix      图像变换矩阵
  */
 void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
                                     scui_image_t   *src_image,   scui_area_t   *src_clip,
-                                    scui_alpha_t    src_alpha,   scui_matrix_t *matrix)
+                                    scui_alpha_t    src_alpha,   scui_matrix_t *inv_matrix,
+                                    scui_matrix_t  *matrix)
 {
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
@@ -165,7 +171,7 @@ void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *
     };
     
     scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, matrix);
+    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, inv_matrix, matrix);
     
     scui_image_cache_unload(&image);
 }

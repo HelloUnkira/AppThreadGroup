@@ -35,6 +35,10 @@
 #define SCUI_CACHE_FONT_GLYPH_HASH                  (23)
 #define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 64)
 
+/* 放大系数以及偏移值 */
+#define SCUI_SCALE_COF                              (1024)
+#define SCUI_SCALE_OFS                              (10)
+
 /* 设备像素格式(默认) */
 #define SCUI_PIXEL_CF_DEF                           (scui_pixel_cf_bmp565)
 #define SCUI_PIXEL_CF_DEF_A                         (scui_pixel_cf_bmp8565)
@@ -46,7 +50,6 @@
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN                   (300)   /* 连续点击最大间隔 */
-#define SCUI_INDEV_PTR_FLING_COF                    (1024)  /* fling检测: 放大系数 */
 #define SCUI_INDEV_PTR_FLING_RATE                   (448)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
 #define SCUI_INDEV_PTR_FLING_CNT                    (6)     /* fling检测: 敏感度调整(允许掠过部分move) */
 

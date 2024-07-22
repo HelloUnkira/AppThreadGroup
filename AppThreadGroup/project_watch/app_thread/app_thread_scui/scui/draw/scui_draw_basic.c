@@ -318,10 +318,11 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
  *@param src_surface 画布实例
  *@param src_clip    画布绘制区域
  *@param inv_matrix  变换矩阵的逆矩阵
+ *@param matrix      变换矩阵的原矩阵
  */
-void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                                   scui_surface_t *src_surface, scui_area_t *src_clip,
-                                   scui_matrix_t  *inv_matrix)
+void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
+                                   scui_surface_t *src_surface, scui_area_t   *src_clip,
+                                   scui_matrix_t  *inv_matrix,  scui_matrix_t *matrix)
 {
     #if SCUI_DRAW_MISC_USE_MATRIX == 0
     SCUI_ASSERT(false);
@@ -329,7 +330,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
-    SCUI_ASSERT(inv_matrix  != NULL);
+    SCUI_ASSERT(inv_matrix  != NULL && matrix != NULL);
     
     /* 按俩个画布的透明度进行像素点混合 */
     scui_area_t dst_clip_v = {0};   // v:vaild
@@ -344,8 +345,6 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     
     #if 1
     // 利用原图进行一次源初变换,以修饰限制目标区域
-    scui_matrix_t matrix = *inv_matrix;
-    scui_matrix_inverse(&matrix);
     
     scui_face2_t face2 = {0};
     scui_face3_t face3 = {0};
@@ -365,15 +364,13 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t *dst
     /* 对四个图像的角进行一次正变换 */
     for (uint8_t idx = 0; idx < 4; idx++) {
         scui_point3_by_point2(&face3.point3[idx], &face2.point2[idx]);
-        scui_point3_transform_by_matrix(&face3.point3[idx], &matrix);
+        scui_point3_transform_by_matrix(&face3.point3[idx], matrix);
         scui_point3_to_point2(&face3.point3[idx], &face2.point2[idx]);
         
         dst_area.x1 = scui_min(dst_area.x1, face2.point2[idx].x - 1);
         dst_area.y1 = scui_min(dst_area.y1, face2.point2[idx].y - 1);
         dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1);
         dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1);
-        
-        
     }
     scui_area_s_to_m(&dst_area);
     
