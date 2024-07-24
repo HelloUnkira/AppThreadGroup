@@ -22,7 +22,16 @@ void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool 
     memset(button, 0, sizeof(scui_button_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&button->widget, &maker->widget, handle, layout);
+    scui_widget_maker_t widget_maker = maker->widget;
+    
+    /* 必须标记ptr事件 */
+    widget_maker.style.indev_ptr = true;
+    /* 必须标记anima事件 */
+    if (maker->mode == scui_button_mode_scale)
+        widget_maker.style.sched_anima = true;
+    
+    /* 创建基础控件实例 */
+    scui_widget_create(&button->widget, &widget_maker, handle, layout);
     
     button->mode        = maker->mode;
     button->image[0]    = maker->image[0];
@@ -38,24 +47,6 @@ void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool 
         button->btn1_way  = -1;
         button->btn1_pct  = SCUI_WIDGET_BUTTON_BTN1_PCT;
         button->btn1_hold = false;
-        
-        /* 必须标记动画事件 */
-        button->widget.style.sched_anima = true;
-    }
-    
-    /* 必须标记点击事件 */
-    button->widget.style.indev_ptr = true;
-    
-    /* 为按钮控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = scui_button_event,};
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &cb_node);
-    
-    if (button->widget.style.indev_ptr) {
-        cb_node.event = scui_event_ptr_all;
-        scui_widget_event_add(*handle, &cb_node);
     }
 }
 

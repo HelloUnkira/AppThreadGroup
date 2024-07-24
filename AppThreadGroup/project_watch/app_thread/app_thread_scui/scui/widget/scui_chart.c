@@ -22,7 +22,8 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     memset(chart, 0, sizeof(scui_chart_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&chart->widget, &maker->widget, handle, layout);
+    scui_widget_maker_t widget_maker = maker->widget;
+    scui_widget_create(&chart->widget, &widget_maker, handle, layout);
     
     chart->type = maker->type;
     
@@ -78,13 +79,6 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
         SCUI_LOG_ERROR("unknown type:%u", chart->type);
         SCUI_ASSERT(false);
     }
-    
-    /* 为图表控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = scui_chart_event,};
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_draw;
-    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 图表控件销毁

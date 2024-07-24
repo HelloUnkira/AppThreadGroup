@@ -42,6 +42,7 @@ typedef struct {
     scui_widget_cb_create_t  create;
     scui_widget_cb_destroy_t destroy;
     scui_widget_cb_layout_t  layout;
+    scui_event_cb_t          event_cb;
 } scui_widget_cb_t;
 
 /*@brief 控件基础信息:
@@ -124,6 +125,12 @@ void scui_widget_cb_destroy(scui_handle_t handle);
  *@param handle 控件句柄
  */
 void scui_widget_cb_layout(scui_handle_t handle);
+
+/*@brief 控件默认事件响应回调
+ *@param handle   控件句柄
+ *@param event_cb 事件响应回调
+ */
+void scui_widget_cb_event_cb(scui_handle_t handle, scui_event_cb_t *event_cb);
 
 /*@brief 控件树的根控件
  *@param handle 控件句柄

@@ -22,7 +22,13 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     memset(watch, 0, sizeof(scui_watch_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&watch->widget, &maker->widget, handle, layout);
+    scui_widget_maker_t widget_maker = maker->widget;
+    
+    /* 必须标记anima事件 */
+    widget_maker.style.sched_anima = true;
+    
+    /* 创建基础控件实例 */
+    scui_widget_create(&watch->widget, &widget_maker, handle, layout);
     
     watch->image_h   = maker->image_h;
     watch->image_m   = maker->image_m;
@@ -34,18 +40,6 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     watch->anchor_s  = maker->anchor_s;
     watch->center_s  = maker->center_s;
     watch->tick_mode = maker->tick_mode;
-    
-    /* 为表盘指针控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = scui_watch_event,};
-    
-    /* 表盘指针控件需要帧动画 */
-    watch->widget.style.sched_anima = true;
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_anima_elapse;
-    scui_widget_event_add(*handle, &cb_node);
-    cb_node.event = scui_event_draw;
-    scui_widget_event_add(*handle, &cb_node);
     
     /* 创建时刷新一次 */
     scui_event_t event = {.object = *handle, .type = scui_event_anima_elapse,};

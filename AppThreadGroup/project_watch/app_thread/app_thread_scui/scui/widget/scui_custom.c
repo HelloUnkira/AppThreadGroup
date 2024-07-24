@@ -23,14 +23,8 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     memset(custom, 0, sizeof(scui_custom_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&custom->widget, &maker->widget, handle, layout);
-    
-    /* 为自定义控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &cb_node);
+    scui_widget_maker_t widget_maker = maker->widget;
+    scui_widget_create(&custom->widget, &widget_maker, handle, layout);
 }
 
 /*@brief 自定义控件销毁

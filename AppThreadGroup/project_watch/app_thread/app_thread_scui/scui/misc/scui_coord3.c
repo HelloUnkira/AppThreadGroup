@@ -66,8 +66,13 @@ void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, 
  */
 void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2)
 {
-    point2->x = (scui_coord_t)(point3->x / point3->z);
-    point2->y = (scui_coord_t)(point3->y / point3->z);
+    if (fabs(point3->z) <= 1e-6 || isnan(point3->z) || isinf(point3->z)) {
+        point2->x = (scui_coord_t)(point3->x);
+        point2->y = (scui_coord_t)(point3->y);
+    } else {
+        point2->x = (scui_coord_t)(point3->x / point3->z);
+        point2->y = (scui_coord_t)(point3->y / point3->z);
+    }
 }
 
 /*@brief 坐标转换(point2->point3)
@@ -76,9 +81,9 @@ void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2)
  */
 void scui_point3_by_point2(scui_point3_t *point3, scui_point2_t *point2)
 {
-    point3->x = (scui_coord3_t)point2->x;
-    point3->y = (scui_coord3_t)point2->y;
-    point3->z = 1.0f;
+    point3->x = (scui_coord3_t)point2->x * SCUI_SCALE_COF;
+    point3->y = (scui_coord3_t)point2->y * SCUI_SCALE_COF;
+    point3->z = 1.0f * SCUI_SCALE_COF;
 }
 
 /*@brief 坐标偏移

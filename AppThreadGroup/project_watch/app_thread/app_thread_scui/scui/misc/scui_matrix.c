@@ -202,7 +202,7 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
                           matrix->meta[0][0] * matrix->meta[1][2] * matrix->meta[2][1] -
                           matrix->meta[0][1] * matrix->meta[1][0] * matrix->meta[2][2] -
                           matrix->meta[0][2] * matrix->meta[1][1] * matrix->meta[2][0];
-
+    
     scui_matrix_t matrix_t;
     
     matrix_t.meta[0][0] = +(matrix->meta[1][1] * matrix->meta[2][2] -

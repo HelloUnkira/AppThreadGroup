@@ -22,7 +22,13 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     memset(string, 0, sizeof(scui_string_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&string->widget, &maker->widget, handle, layout);
+    scui_widget_maker_t widget_maker = maker->widget;
+    
+    /* 必须标记anima事件 */
+    widget_maker.style.sched_anima = true;
+    
+    /* 创建基础控件实例 */
+    scui_widget_create(&string->widget, &widget_maker, handle, layout);
     
     string->font_idx    = maker->font_idx;
     string->args        = maker->args;
@@ -39,16 +45,6 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, maker->text);
-    
-    /* 为字符串控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = scui_string_event,};
-    
-    /* 字符串控件需要帧动画 */
-    string->widget.style.sched_anima = true;
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &cb_node);
     
     /* 更新一次字符串绘制参数 */
     string->args.update = true;

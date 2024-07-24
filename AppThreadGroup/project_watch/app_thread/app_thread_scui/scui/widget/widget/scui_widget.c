@@ -90,14 +90,15 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
     widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
     
     /* 配置控件事件响应 */
-    if (maker->event_cb != NULL) {
-        scui_event_cb_node_t cb_node = {0};
-        cb_node.event_cb = maker->event_cb;
+    scui_event_cb_node_t cb_node = {0};
+    cb_node.event_cb = maker->event_cb;
+    if (maker->event_cb == NULL)
+        scui_widget_cb_event_cb(*handle, &cb_node.event_cb);
+    
+    if (cb_node.event_cb != NULL) {
         
-        if (widget->style.sched_anima) {
-            cb_node.event = scui_event_anima_elapse;
-            scui_widget_event_add(*handle, &cb_node);
-        }
+        cb_node.event = scui_event_sched_all;
+        scui_widget_event_add(*handle, &cb_node);
         
         if (widget->style.indev_ptr) {
             cb_node.event = scui_event_ptr_all;
@@ -164,26 +165,31 @@ scui_widget_cb_t * scui_widget_cb_find(uint32_t type)
     static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
         [scui_widget_type_window].create    = (scui_widget_cb_create_t)   scui_window_create,
         [scui_widget_type_window].destroy   = (scui_widget_cb_destroy_t)  scui_window_destroy,
-        [scui_widget_type_window].layout    = (scui_widget_cb_layout_t)   NULL,
+        
         [scui_widget_type_custom].create    = (scui_widget_cb_create_t)   scui_custom_create,
         [scui_widget_type_custom].destroy   = (scui_widget_cb_destroy_t)  scui_custom_destroy,
-        [scui_widget_type_custom].layout    = (scui_widget_cb_layout_t)   NULL,
+        
         [scui_widget_type_scroll].create    = (scui_widget_cb_create_t)   scui_scroll_create,
         [scui_widget_type_scroll].destroy   = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
         [scui_widget_type_scroll].layout    = (scui_widget_cb_layout_t)   scui_scroll_layout,
+        [scui_widget_type_scroll].event_cb  = (scui_event_cb_t)           scui_scroll_event,
+        
         [scui_widget_type_string].create    = (scui_widget_cb_create_t)   scui_string_create,
         [scui_widget_type_string].destroy   = (scui_widget_cb_destroy_t)  scui_string_destroy,
-        [scui_widget_type_string].layout    = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_string].event_cb  = (scui_event_cb_t)           scui_string_event,
+        
         /* 扩展控件 */
         [scui_widget_type_button].create    = (scui_widget_cb_create_t)   scui_button_create,
         [scui_widget_type_button].destroy   = (scui_widget_cb_destroy_t)  scui_button_destroy,
-        [scui_widget_type_button].layout    = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_button].event_cb  = (scui_event_cb_t)           scui_button_event,
+        
         [scui_widget_type_watch].create     = (scui_widget_cb_create_t)   scui_watch_create,
         [scui_widget_type_watch].destroy    = (scui_widget_cb_destroy_t)  scui_watch_destroy,
-        [scui_widget_type_watch].layout     = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_watch].event_cb   = (scui_event_cb_t)           scui_watch_event,
+        
         [scui_widget_type_chart].create     = (scui_widget_cb_create_t)   scui_chart_create,
         [scui_widget_type_chart].destroy    = (scui_widget_cb_destroy_t)  scui_chart_destroy,
-        [scui_widget_type_chart].layout     = (scui_widget_cb_layout_t)   NULL,
+        [scui_widget_type_chart].event_cb   = (scui_event_cb_t)           scui_chart_event,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
@@ -255,6 +261,22 @@ void scui_widget_cb_layout(scui_handle_t handle)
     scui_widget_cb_t *widget_cb = scui_widget_cb_find(widget->type);
     if (widget_cb->layout != NULL)
         widget_cb->layout(handle);
+}
+
+/*@brief 控件默认事件响应回调
+ *@param handle   控件句柄
+ *@param event_cb 事件响应回调
+ */
+void scui_widget_cb_event_cb(scui_handle_t handle, scui_event_cb_t *event_cb)
+{
+    if (scui_handle_unmap(handle))
+        return;
+    
+    scui_widget_t *widget = NULL;
+    widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    scui_widget_cb_t *widget_cb = scui_widget_cb_find(widget->type);
+    *event_cb = widget_cb->event_cb;
 }
 
 /*@brief 控件树的根控件

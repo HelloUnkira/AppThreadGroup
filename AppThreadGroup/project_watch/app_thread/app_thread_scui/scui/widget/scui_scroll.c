@@ -21,14 +21,14 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_scroll_t));
     memset(scroll, 0, sizeof(scui_scroll_t));
     
-    /* 滚动控件不响应外部事件 */
-    SCUI_ASSERT(maker->widget.event_cb == NULL);
+    /* 创建基础控件实例 */
+    scui_widget_maker_t widget_maker = maker->widget;
     
-    /* 滚动控件必须设置事件响应标记 */
-    SCUI_ASSERT(maker->widget.style.indev_ptr);
+    /* 必须标记ptr事件 */
+    widget_maker.style.indev_ptr = true;
     
     /* 创建基础控件实例 */
-    scui_widget_create(&scroll->widget, &maker->widget, handle, layout);
+    scui_widget_create(&scroll->widget, &widget_maker, handle, layout);
     
     /* 状态初始化 */
     scroll->notify_cb   = maker->notify_cb;
@@ -70,26 +70,6 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
         scroll->loop = false;
     
     scroll->layout = true;
-    
-    /* 为滚动控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = scui_scroll_event,};
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &cb_node);
-    
-    if (scroll->widget.style.indev_ptr) {
-        cb_node.event = scui_event_ptr_all;
-        scui_widget_event_add(*handle, &cb_node);
-    }
-    if (scroll->widget.style.indev_enc) {
-        cb_node.event = scui_event_enc_all;
-        scui_widget_event_add(*handle, &cb_node);
-    }
-    if (scroll->widget.style.indev_key) {
-        cb_node.event = scui_event_key_all;
-        scui_widget_event_add(*handle, &cb_node);
-    }
 }
 
 /*@brief 滚动控件销毁
