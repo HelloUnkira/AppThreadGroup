@@ -156,7 +156,6 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
             
             #if 1
             scui_coord_t ofs_a = angle + angle_ofs;
-            ofs_a = scui_max(0, scui_min(360 - SCUI_UI_THEMEWHEEL_ANGLE_UNIT, ofs_a));
             scui_handle_t lst_a = scui_map(ofs_a, 0, 360 - SCUI_UI_THEMEWHEEL_ANGLE_UNIT,
                 SCUI_UI_THEMEWHEEL_OFS_MAX, SCUI_UI_THEMEWHEEL_OFS_MIN);
             #else

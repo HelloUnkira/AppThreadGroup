@@ -16,6 +16,7 @@
 #define scui_betw_xr        app_sys_betw_xr
 #define scui_betw_lr        app_sys_betw_lr
 #define scui_map            app_sys_map
+#define scui_clamp          app_sys_clamp
 #define scui_arr_len        app_sys_arr_len
 #define scui_own_ofs        app_sys_own_ofs
 #define scui_pow2_check     app_sys_pow2_check

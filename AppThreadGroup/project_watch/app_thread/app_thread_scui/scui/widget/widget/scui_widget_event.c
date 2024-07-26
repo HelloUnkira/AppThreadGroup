@@ -305,11 +305,13 @@ void scui_widget_event_dispatch(scui_event_t *event)
         // 全局帧动画不分三步调度
         if (!scui_widget_event_check_execute(event))
              return;
-        /* 全局滚动检查 */
         scui_widget_event_mask_keep(event);
+        /* 全局滚动检查 */
+        #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
         scui_handle_t handle = SCUI_HANDLE_INVALID;
         if (scui_widget_event_scroll_flag(0x02, &handle))
             return;
+        #endif
         /* 继续冒泡,继续下沉 */
         scui_widget_child_list_btra(widget, idx) {
             event->object = widget->child_list[idx];

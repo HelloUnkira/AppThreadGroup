@@ -194,7 +194,7 @@ void scui_event_respond(scui_event_t *event)
     
     if (event->object == SCUI_HANDLE_SYSTEM) {
         
-        /* 系统事件发给浮动场景 */
+        /* 系统事件发给所有场景 */
         scui_handle_t *window_list = NULL;
         scui_window_list(&window_list);
         for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
@@ -204,15 +204,21 @@ void scui_event_respond(scui_event_t *event)
             scui_window_t *window = (void *)widget;
             SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            
+            #if 0
+            // 只发给浮动场景
             if (scui_widget_surface_only(widget) && !window->hang_only)
                 continue;
+            #endif
             
             switch (event->type) {
             case scui_event_anima_elapse: {
                 /* 全局滚动检查 */
+                #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
                 scui_handle_t handle = SCUI_HANDLE_INVALID;
                 if (scui_widget_event_scroll_flag(0x02, &handle))
                     continue;
+                #endif
                 event->object = widget->myself;
                 scui_event_respond(event);
                 event->object = SCUI_HANDLE_SYSTEM;

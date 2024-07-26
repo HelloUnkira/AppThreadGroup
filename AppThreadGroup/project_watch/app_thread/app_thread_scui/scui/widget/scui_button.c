@@ -302,6 +302,7 @@ void scui_button_event(scui_event_t *event)
         }
         break;
     }
+    case scui_event_ptr_move:
     case scui_event_ptr_up: {
         if (!scui_widget_event_check_execute(event))
              return;

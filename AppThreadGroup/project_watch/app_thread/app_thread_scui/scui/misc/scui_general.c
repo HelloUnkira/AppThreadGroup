@@ -245,8 +245,7 @@ scui_alpha_t scui_alpha_pct(uint8_t pct)
 {
     const scui_alpha_t alpha_s = scui_alpha_trans;
     const scui_alpha_t alpha_e = scui_alpha_cover;
-    return pct >= 100 ? scui_alpha_cover : (scui_alpha_t)
-           scui_map((uint16_t)pct, 0, 100, alpha_s, alpha_e);
+    return scui_map(pct, 0, 100, alpha_s, alpha_e);
 }
 
 /*@brief 像素点比特位数

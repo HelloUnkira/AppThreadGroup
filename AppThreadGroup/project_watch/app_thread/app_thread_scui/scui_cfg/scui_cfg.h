@@ -70,6 +70,9 @@
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT                       (2)
 
+/* 移动时停止帧动画(假渲染) */
+#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
+
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)

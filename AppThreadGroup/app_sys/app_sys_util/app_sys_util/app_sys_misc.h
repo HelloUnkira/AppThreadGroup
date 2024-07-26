@@ -135,6 +135,10 @@ do {                                                    \
 #define app_sys_max(x, y)           ((x) > (y) ? (x) : (y))
 #define app_sys_dist(x, y)          ((x) > (y) ? (x) - (y) : (y) - (x))
 
+/*@brief 区间剪切
+ */
+#define app_sys_clamp(x, min, max)  (app_sys_max(min, app_sys_min(max, x)))
+
 /*@brief 包含关系
  */
 #define app_sys_betw_xx(x, l, r)    ((x) >  (l) && (x) <  (r))
@@ -144,7 +148,9 @@ do {                                                    \
 
 /*@brief 区间映射
  */
-#define app_sys_map(x, l_i, r_i, l_o, r_o)  (((x) - (l_i)) * ((r_o) - (l_o)) / ((r_i) - (l_i)) + (l_o))
+#define app_sys_map(x, l_i, r_i, l_o, r_o)                          \
+    ((x) <= (l_i) ? (l_o) : (x) >= (r_i) ? (r_o) :                  \
+    ((x) - (l_i)) * ((r_o) - (l_o)) / ((r_i) - (l_i)) + (l_o))      \
 
 /*@brief 前导bit0数量
  */
