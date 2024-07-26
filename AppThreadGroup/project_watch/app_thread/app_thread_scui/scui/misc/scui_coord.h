@@ -1,20 +1,19 @@
 #ifndef SCUI_COORD_H
 #define SCUI_COORD_H
 
-#define scui_coord_max      (0x7fff)
-#define scui_coord_min      (0x8000)
-#define scui_multi_max      (0x7fffffff)
-#define scui_multi_min      (0x80000000)
-
 /*@brief 坐标点,范围:[-32768, +32767]
  *       通常来说不需要支持更大范围的坐标点
  */
 typedef int16_t scui_coord_t;
+#define scui_coord_max  (0x7fff)
+#define scui_coord_min  (0x8000)
 
 /*@brief 坐标点运算量
  *       坐标点运算可能产生溢出
  */
 typedef int32_t scui_multi_t;
+#define scui_multi_max  (0x7fffffff)
+#define scui_multi_min  (0x80000000)
 
 /*@brief 坐标
  */
@@ -59,12 +58,14 @@ typedef union {
 bool scui_line_cross(scui_line_t *line1, scui_line_t *line2);
 
 /*@breif 转化区域描述方式(主->从)
+ *@param area 区域
  */
 void scui_area_m_to_s(scui_area_t *area);
 
 /*@breif 转化区域描述方式(从->主)
+ *@param area 区域
  */
-void scui_area_s_to_m(scui_area_t *area);
+void scui_area_m_by_s(scui_area_t *area);
 
 /*@brief 区域为空检查
  *@param area 区域

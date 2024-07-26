@@ -372,7 +372,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *d
         dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1);
         dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1);
     }
-    scui_area_s_to_m(&dst_area);
+    scui_area_m_by_s(&dst_area);
     
     scui_area_t clip_inter = {0};
     if (!scui_area_inter(&clip_inter, &dst_area, &dst_clip_v))

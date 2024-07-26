@@ -149,7 +149,10 @@ do {                                                    \
 /*@brief 区间映射
  */
 #define app_sys_map(x, l_i, r_i, l_o, r_o)                          \
-    ((x) <= (l_i) ? (l_o) : (x) >= (r_i) ? (r_o) :                  \
+    ((l_i) <= (r_i) && (x) <= (l_i) ? (l_o) :                       \
+     (l_i) <= (r_i) && (x) >= (r_i) ? (r_o) :                       \
+     (l_i) >= (r_i) && (x) >= (l_i) ? (l_o) :                       \
+     (l_i) >= (r_i) && (x) <= (r_i) ? (r_o) :                       \
     ((x) - (l_i)) * ((r_o) - (l_o)) / ((r_i) - (l_i)) + (l_o))      \
 
 /*@brief 前导bit0数量

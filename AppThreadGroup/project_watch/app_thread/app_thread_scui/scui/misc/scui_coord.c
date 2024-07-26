@@ -52,6 +52,7 @@ bool scui_line_cross(scui_line_t *line1, scui_line_t *line2)
 }
 
 /*@breif 转化区域描述方式(主->从)
+ *@param area 区域
  */
 void scui_area_m_to_s(scui_area_t *area)
 {
@@ -65,8 +66,9 @@ void scui_area_m_to_s(scui_area_t *area)
 }
 
 /*@breif 转化区域描述方式(从->主)
+ *@param area 区域
  */
-void scui_area_s_to_m(scui_area_t *area)
+void scui_area_m_by_s(scui_area_t *area)
 {
     scui_coord_t x = area->x1, w = area->x2 - area->x1 + 1;
     scui_coord_t y = area->y1, h = area->y2 - area->y1 + 1;
@@ -119,9 +121,9 @@ bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
         area->y1 = scui_max(area1->y1, area2->y1);
         area->x2 = scui_min(area1->x2, area2->x2);
         area->y2 = scui_min(area1->y2, area2->y2);
-        scui_area_s_to_m(area2);
-        scui_area_s_to_m(area1);
-        scui_area_s_to_m(area);
+        scui_area_m_by_s(area2);
+        scui_area_m_by_s(area1);
+        scui_area_m_by_s(area);
     }
     
     return !scui_area_empty(area);
@@ -143,9 +145,9 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
         area->y1 = scui_min(area1->y1, area2->y1);
         area->x2 = scui_max(area1->x2, area2->x2);
         area->y2 = scui_max(area1->y2, area2->y2);
-        scui_area_s_to_m(area2);
-        scui_area_s_to_m(area1);
-        scui_area_s_to_m(area);
+        scui_area_m_by_s(area2);
+        scui_area_m_by_s(area1);
+        scui_area_m_by_s(area);
     }
 }
 
@@ -189,9 +191,9 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
         }
     }
     
-    scui_area_s_to_m(area2);
-    scui_area_s_to_m(area1);
-    scui_area_s_to_m(area);
+    scui_area_m_by_s(area2);
+    scui_area_m_by_s(area1);
+    scui_area_m_by_s(area);
     return result;
 }
 
@@ -266,11 +268,11 @@ bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
         (*num)++;
     }
     
-    scui_area_s_to_m(area2);
-    scui_area_s_to_m(area1);
+    scui_area_m_by_s(area2);
+    scui_area_m_by_s(area1);
     
     for (uint8_t idx = 0; idx < *num; idx++)
-        scui_area_s_to_m(&area[idx]);
+        scui_area_m_by_s(&area[idx]);
     
     return *num != 0;
 }

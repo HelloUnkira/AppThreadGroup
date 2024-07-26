@@ -42,7 +42,7 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         src_clip.y1 = scui_min(src_pos_1.y, src_pos_2.y);
         src_clip.x2 = scui_max(src_pos_1.x, src_pos_2.x);
         src_clip.y2 = scui_max(src_pos_1.y, src_pos_2.y);
-        scui_area_s_to_m(&src_clip);
+        scui_area_m_by_s(&src_clip);
         
         /* 均匀俩边算上自己是一个奇数 */
         if (src_width % 2 == 0)

@@ -298,12 +298,12 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                     scale_d = scui_map(pct, 100, 0,  50, 100) / 100.0f;
                 if (scui_window_mgr.switch_args.type == scui_window_switch_center_out)
                     scale_d = scui_map(pct, 100, 0, 150, 100) / 100.0f;
-                SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
+                SCUI_LOG_WARN("pct:%d, scale_d:%f", pct, scale_d);
                 scui_matrix_t inv_matrix = {0};
                 scui_matrix_identity(&inv_matrix);
                 scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
                 scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
-                scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -dst_clip.w / 2,.y = -dst_clip.h / 2,});
+                scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
                 // scui_matrix_check(&inv_matrix);
                 scui_matrix_t matrix = inv_matrix;
                 scui_matrix_inverse(&inv_matrix);
@@ -336,12 +336,14 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
                 scale_d = scui_map(src_clip.h, 0, src_surface->ver_res, 50, 100) / 100.0f;
+            
             SCUI_LOG_INFO("scale_d:%f", scale_d);
             scui_matrix_t inv_matrix = {0};
             scui_matrix_identity(&inv_matrix);
+            scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.x,    .y = +dst_clip.y,});
             scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
             scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
-            scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -dst_clip.w / 2,.y = -dst_clip.h / 2,});
+            scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
             // scui_matrix_check(&inv_matrix);
             scui_matrix_t matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
