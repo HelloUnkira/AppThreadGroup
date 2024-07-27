@@ -17,6 +17,90 @@ void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len)
     memcpy(dst_addr, src_addr, len);
 }
 
+/*@brief 区域模糊(可以使用GPU-blur加速优化)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ */
+void scui_draw_area_blur(scui_surface_t *dst_surface, scui_area_t *dst_clip)
+{
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    
+    scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+         return;
+    
+    if (scui_area_empty(&draw_area))
+        return;
+    
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    scui_multi_t dis_line = draw_area.w * dst_byte;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
+    
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        
+        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+        
+        /* 高斯模糊(中心+水平边界+垂直边界) */
+        uint8_t *dst_ofs_5[5] = {        dst_ofs,
+            idx_line > 0               ? dst_ofs - dst_line : dst_ofs,
+            idx_line < draw_area.h - 1 ? dst_ofs + dst_line : dst_ofs,
+            idx_item > 0               ? dst_ofs - dst_byte : dst_ofs,
+            idx_item < draw_area.w - 1 ? dst_ofs + dst_byte : dst_ofs,
+        };
+        scui_color_limit_t pixel = 0;
+        scui_color_limit_t pixel_5[5] = {0};
+        
+        for (uint8_t k = 0; k < 5; k++)
+            scui_pixel_by_cf(dst_surface->format, &pixel_5[k], dst_ofs_5[k]);
+        
+        if (dst_surface->format == scui_pixel_cf_bmp565) {
+            scui_color565_t *color565 = &pixel;
+            scui_color565_t *color565_5[5] = {0};
+            for (uint8_t k = 0; k < 5; color565_5[k] = &pixel_5[k], k++);
+            
+            uint16_t ch_r = 0;
+            uint16_t ch_g = 0;
+            uint16_t ch_b = 0;
+            for (uint8_t k = 0; k < 5; k++) {
+                ch_r += (uint16_t)color565_5[k]->ch.r;
+                ch_g += (uint16_t)color565_5[k]->ch.g;
+                ch_b += (uint16_t)color565_5[k]->ch.b;
+            }
+            
+            color565->ch.r = ch_r / 5;
+            color565->ch.g = ch_g / 5;
+            color565->ch.b = ch_b / 5;
+        }
+        
+        if (dst_surface->format == scui_pixel_cf_bmp8565) {
+            scui_color8565_t *color8565 = &pixel;
+            scui_color8565_t *color8565_5[5] = {0};
+            for (uint8_t k = 0; k < 5; color8565_5[k] = &pixel_5[k], k++);
+            
+            uint16_t ch_a = 0;
+            uint16_t ch_r = 0;
+            uint16_t ch_g = 0;
+            uint16_t ch_b = 0;
+            for (uint8_t k = 0; k < 5; k++) {
+                ch_a += (uint16_t)color8565_5[k]->ch.a;
+                ch_r += (uint16_t)color8565_5[k]->ch.r;
+                ch_g += (uint16_t)color8565_5[k]->ch.g;
+                ch_b += (uint16_t)color8565_5[k]->ch.b;
+            }
+            
+            color8565->ch.a = ch_a / 5;
+            color8565->ch.r = ch_r / 5;
+            color8565->ch.g = ch_g / 5;
+            color8565->ch.b = ch_b / 5;
+        }
+        
+        scui_pixel_by_cf(dst_surface->format, dst_ofs, &pixel);
+    }
+}
+
 /*@brief 区域填充像素点(可以使用DMA-fill加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域

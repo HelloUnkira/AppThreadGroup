@@ -206,7 +206,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         }
         
         #if 1   // 更新alpha通道
-        scui_alpha_t alpha = scui_alpha_pct(percent * 2);
+        scui_alpha_t alpha = scui_alpha_pct(scui_max(0, 100 - percent * 2));
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
         scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
         scui_widget_alpha_set(event->object, alpha, true);

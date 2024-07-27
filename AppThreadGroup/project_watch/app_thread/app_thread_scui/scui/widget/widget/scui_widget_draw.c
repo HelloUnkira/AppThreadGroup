@@ -140,6 +140,43 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     #endif
 }
 
+/*@brief 控件在画布绘制模糊
+ *@param handle 控件句柄
+ *@param clip   绘制区域
+ */
+void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
+{
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
+    
+    if (clip == NULL)
+        clip  = &widget->clip;
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    scui_tick_elapse_us(true);
+    #endif
+    
+    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
+        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+        
+        scui_area_t dst_clip = {0};
+        scui_area_t src_clip = {0};
+        if (scui_widget_draw_adjust(widget,
+            &unit->clip, clip, clip, &dst_clip, &src_clip))
+            scui_draw_area_blur(widget->surface, &dst_clip);
+    }
+    
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    uint64_t tick_us = scui_tick_elapse_us(false);
+    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    #endif
+}
+
 /*@brief 控件在画布绘制图像
  *@param handle 控件句柄
  *@param target 控件绘制区域

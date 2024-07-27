@@ -469,6 +469,13 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
                  break;
             /* 先释放其他窗口资源 */
             scui_window_list_hide_without(handle, false);
+            
+            #if 0
+            scui_area_t window_clip = scui_widget_clip(handle);
+            scui_widget_clip_reset(scui_handle_get(handle), &window_clip, false);
+            scui_widget_draw_blur(handle, NULL);
+            #endif
+            
             scui_widget_show(scui_window_float.target, false);
             scui_window_active(scui_window_float.target);
             scui_window_stack_cover(scui_window_float.target);

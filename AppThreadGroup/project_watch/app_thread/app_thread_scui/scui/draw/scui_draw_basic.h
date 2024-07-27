@@ -8,6 +8,12 @@
  */
 void scui_draw_line_copy(void *dst_addr, void *src_addr, uint32_t len);
 
+/*@brief 区域模糊(可以使用GPU-blur加速优化)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ */
+void scui_draw_area_blur(scui_surface_t *dst_surface, scui_area_t *dst_clip);
+
 /*@brief 区域填充像素点(可以使用DMA-fill加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域

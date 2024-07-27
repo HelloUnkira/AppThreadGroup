@@ -298,7 +298,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                     scale_d = scui_map(pct, 100, 0,  50, 100) / 100.0f;
                 if (scui_window_mgr.switch_args.type == scui_window_switch_center_out)
                     scale_d = scui_map(pct, 100, 0, 150, 100) / 100.0f;
-                SCUI_LOG_WARN("pct:%d, scale_d:%f", pct, scale_d);
+                SCUI_LOG_INFO("pct:%d, scale_d:%f", pct, scale_d);
                 scui_matrix_t inv_matrix = {0};
                 scui_matrix_identity(&inv_matrix);
                 scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
@@ -416,12 +416,17 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 scui_multi_t dist_dr = dist_drx * dist_drx + dist_dry * dist_dry;
                 scui_multi_t dist_ds = dist_dsx * dist_dsx + dist_dsy * dist_dsy;
                 
-                if (dist_dr < dist_ds)
-                    continue;
-                
                 dst_clip = clip_seg[idx_j][idx_i];
                 src_clip = clip_seg[idx_j][idx_i];
-                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                
+                if (dist_dr >= dist_ds) {
+                    src_surface->alpha = scui_map(dist_ds, 0, dist_dr, alpha, alpha / 2);
+                    scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+                    src_surface->alpha = alpha;
+                    continue;
+                }
             }
             continue;
         }
