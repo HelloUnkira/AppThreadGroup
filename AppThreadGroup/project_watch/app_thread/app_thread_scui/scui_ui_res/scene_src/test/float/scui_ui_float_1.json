@@ -11,7 +11,8 @@
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_1",
             "widget.event_cb":              "scui_ui_scene_float_1_event_proc",
             "level":                        "1",
-            "buffer":                       "true"
+            "buffer":                       "true",
+            "format":                       "SCUI_PIXEL_CF_DEF_A"
         },
         {
             "widget.type":                  "scui_widget_type_custom",

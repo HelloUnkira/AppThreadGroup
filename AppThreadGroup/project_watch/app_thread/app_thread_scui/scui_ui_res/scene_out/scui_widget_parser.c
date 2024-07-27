@@ -410,7 +410,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_SCROLL = {
 	.notify_cb                      = scui_ui_scene_list_scale_scroll_notify_event,
 	.pos                            = scui_event_pos_c,
 	.dir                            = scui_event_dir_ver,
-	.space                          = 3,
+	.space                          = 10,
 	.route_enc                      = 117,
 	.route_key                      = 117,
 	.keyid_fdir                     = scui_event_key_val_down,
@@ -607,6 +607,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.child_num               = 2,
 	.level                          = 1,
 	.buffer                         = true,
+	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
@@ -645,6 +646,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
+	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
@@ -720,6 +722,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.child_num               = 11,
 	.level                          = 1,
 	.buffer                         = true,
+	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING = {
@@ -747,6 +750,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
+	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {

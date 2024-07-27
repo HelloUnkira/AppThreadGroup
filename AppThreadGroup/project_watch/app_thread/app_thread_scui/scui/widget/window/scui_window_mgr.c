@@ -189,6 +189,8 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
 {
+    scui_surface_t *surface_fb = scui_surface_fb_draw();
+    
     int32_t idx = (int32_t)num - 1;
     for (idx = (int32_t)num - 1; idx >= 0; idx--) {
         scui_widget_t *widget = list[idx];
@@ -197,7 +199,8 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
         
         /* 完全覆盖,此时跳过 */
         if (widget->clip.x == 0 && widget->clip.y == 0 &&
-            widget->surface->alpha == scui_alpha_cover)
+            widget->surface->alpha  == scui_alpha_cover &&
+            widget->surface->format == surface_fb->format)
             break;
     }
     
@@ -674,6 +677,7 @@ void scui_window_surface_blend(void)
             continue;
         scui_handle_t  handle = scui_window_mgr.list[idx];
         scui_widget_t *widget = scui_handle_get(handle);
+        scui_window_t *window = (void *)widget;
         SCUI_ASSERT(scui_handle_remap(handle));
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
@@ -704,11 +708,18 @@ void scui_window_surface_blend(void)
     scui_window_surface_switch(0x01, &widget_only);
     if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
         widget_only = list_lvl_0[ofs_idx];
-        scui_window_surface_switch(0x00, &widget_only);
+        
         scui_surface_t *surface_fb = scui_surface_fb_draw();
-        scui_widget_surface_swap(list_lvl_0[ofs_idx], surface_fb);
-        SCUI_LOG_INFO("blend to switch mode");
-        return;
+        // 类型必须匹配才可交换
+        if (widget_only->surface->format  == surface_fb->format  &&
+            widget_only->surface->hor_res == surface_fb->hor_res &&
+            widget_only->surface->ver_res == surface_fb->ver_res) {
+            
+            scui_window_surface_switch(0x00, &widget_only);
+            scui_widget_surface_swap(list_lvl_0[ofs_idx], surface_fb);
+            SCUI_LOG_INFO("blend to switch mode");
+            return;
+        }
     }
     #endif
     

@@ -315,15 +315,15 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
     uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * src_bits / 8;
     
     
-    if (src_surface->format == scui_pixel_cf_palette4) {
+    if (image.image->format == scui_image_cf_palette4) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 4;
         scui_color_limit_t palette_table[1 << 4] = {0};
         scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
-        scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
-        scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
-        scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[0], src_color.color_e);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], src_color.color_s);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &filter, src_color.color_f);
         /* 无渐变时: */
         if (palette_table[0] == palette_table[palette_len - 1]) {
             if (src_color.filter && palette_table[0] == filter)
@@ -352,7 +352,7 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
                 uint8_t palette = (*src_addr_ofs >> (idx_item % 2 == 0 ? 0 : 4)) & 0xF;
                 alpha = (uint32_t)src_surface->alpha * palette * 0x11 / scui_alpha_cover;
                 scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                    dst_surface->format, &palette_table[0], alpha);
+                                    SCUI_PIXEL_CF_DEF, &palette_table[0], alpha);
             }
             }
         } else {
@@ -386,28 +386,28 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
                     scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
                     
                     palette_table[palette] = palette_table[0];
-                    scui_pixel_mix_with(dst_surface->format, &palette_table[palette], alpha_1,
-                                        dst_surface->format, &palette_table[palette_len - 1], alpha_2);
+                    scui_pixel_mix_with(SCUI_PIXEL_CF_DEF, &palette_table[palette], alpha_1,
+                                        SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], alpha_2);
                 }
                 
                 if (src_color.filter && palette_table[palette] == filter)
                     continue;
                 scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                    dst_surface->format, &palette_table[palette], src_surface->alpha);
+                                    SCUI_PIXEL_CF_DEF, &palette_table[palette], src_surface->alpha);
             }
             }
         }
         goto over;
     }
-    if (src_surface->format == scui_pixel_cf_palette8) {
+    if (image.image->format == scui_image_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 8;
         scui_color_limit_t palette_table[1 << 8] = {0};
         scui_color_limit_t filter = 0;
         /* 起始色调和结束色调固定 */
-        scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);
-        scui_pixel_by_color(dst_surface->format, &palette_table[palette_len - 1], src_color.color_s);
-        scui_pixel_by_color(dst_surface->format, &filter, src_color.color_f);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[0], src_color.color_e);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], src_color.color_s);
+        scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &filter, src_color.color_f);
         /* 无渐变时: */
         if (palette_table[0] == palette_table[palette_len - 1]) {
             if (src_color.filter && palette_table[0] == filter)
@@ -436,7 +436,7 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
                 uint8_t palette = *src_addr_ofs;
                 alpha = (uint32_t)src_surface->alpha * palette / scui_alpha_cover;
                 scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                    dst_surface->format, &palette_table[0], alpha);
+                                    SCUI_PIXEL_CF_DEF, &palette_table[0], alpha);
             }
             }
         } else {
@@ -471,14 +471,14 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
                     scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
                     
                     palette_table[palette] = palette_table[0];
-                    scui_pixel_mix_with(dst_surface->format, &palette_table[palette], alpha_1,
-                                        dst_surface->format, &palette_table[palette_len - 1], alpha_2);
+                    scui_pixel_mix_with(SCUI_PIXEL_CF_DEF, &palette_table[palette], alpha_1,
+                                        SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], alpha_2);
                 }
                 
                 if (src_color.filter && palette_table[palette] == filter)
                     continue;
                 scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
-                                    dst_surface->format, &palette_table[palette], src_surface->alpha);
+                                    SCUI_PIXEL_CF_DEF, &palette_table[palette], src_surface->alpha);
             }
             }
         }
