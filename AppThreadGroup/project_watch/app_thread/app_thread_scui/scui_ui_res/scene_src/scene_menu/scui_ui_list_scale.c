@@ -178,7 +178,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         
         // 创建一个独立临时的子画布,将目标绘制到一个独立子画布中
         if (scui_ui_res_local->list_surface[index] == NULL) {
-        scui_area_t clip = scui_widget_clip(custom);
+            scui_area_t clip = scui_widget_clip(custom);
             scui_widget_surface_create(custom, SCUI_PIXEL_CF_DEF_A, clip.w, clip.h);
             scui_ui_res_local->list_surface[index] = scui_widget_surface(custom);
             scui_ui_res_local->list_refr[index] = true;
@@ -198,15 +198,27 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         {   // 计算当前控件中心到父控件中心距离
             scui_area_t clip_p = scui_widget_clip(SCUI_UI_SCENE_LIST_SCALE);
             scui_area_t clip_w = scui_widget_clip(event->object);
-            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2),
-            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2),
-            percent = (scui_multi_t)offset.y * 100 / clip_p.h;
+            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
+            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
+            
+            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
+            scui_multi_t dist_y = scui_min(rad_rr, offset.y);
+            
+            scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);
+            scui_multi_t cos_ia = 0;
+            scui_multi_t cos_fa = 0;
+            scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
+            scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
+            SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+            
+            dist_x  = scui_min(dist_x, clip_p.w / 2);
+            percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
             percent = scui_min(percent, 100);
             SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         }
         
         #if 1   // 更新alpha通道
-        scui_alpha_t alpha = scui_alpha_pct(scui_max(0, 100 - percent * 2));
+        scui_alpha_t alpha = scui_alpha_pct(percent);
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
         scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
         scui_widget_alpha_set(event->object, alpha, true);
@@ -215,8 +227,8 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         scui_area_t  src_clip  = scui_widget_clip(custom);
         scui_area_t  dst_clip  = scui_widget_clip(event->object);
         scui_point_t img_scale = {
-            .x = 1024 * (scui_multi_t)(100 - percent) / 100,
-            .y = 1024 * (scui_multi_t)(100 - percent) / 100,
+            .x = 1024 * (scui_multi_t)percent / 100,
+            .y = 1024 * (scui_multi_t)percent / 100,
         };
         
         scui_area_t   btn_clip = dst_clip;
@@ -260,6 +272,10 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
     case scui_event_ptr_click: {
         if (!scui_widget_event_check_execute(event))
              break;
+        
+        scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+        if (alpha <= scui_alpha_pct20)
+            break;
         
         scui_widget_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);

@@ -7,13 +7,6 @@
 
 #include "scui.h"
 
-static struct {
-    scui_coord_t   icon_w;
-    scui_handle_t *list_widget;
-    uint8_t        layout_ready:1;
-    
-} * scui_ui_res_local = NULL;
-
 /*@brief 控件事件响应回调
  *@param event 事件
  */
@@ -32,7 +25,7 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
         scui_handle_t parent   = scui_widget_parent(event->object);
         scui_handle_t ancestor = scui_widget_parent(parent);
         scui_handle_t index    = scui_widget_child_to_index(ancestor, parent) - 1;
-        scui_handle_t custom   = scui_ui_res_local->list_widget[index];
+        scui_handle_t custom   = event->object;
         SCUI_LOG_WARN("click idx:%d", index);
         break;
     }
@@ -61,18 +54,6 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         scui_widget_image_set(SCUI_UI_SCENE_LIST_ARC_SCROLL,
         scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
         
-        /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
-            
-            SCUI_ASSERT(scui_ui_scene_list_num != 0);
-            scui_handle_t list_num = scui_ui_scene_list_num;
-            scui_ui_res_local->list_widget = SCUI_MEM_ALLOC(scui_mem_type_mix, list_num * sizeof(scui_handle_t));
-            memset(scui_ui_res_local->list_widget, 0, list_num * sizeof(scui_handle_t));
-        }
-        
         if (scui_widget_event_check_prepare(event)) {
             
             scui_custom_maker_t item_maker = {0};
@@ -83,10 +64,11 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
             item_maker.widget.parent      = SCUI_UI_SCENE_LIST_ARC_SCROLL;
             item_maker.widget.child_num   = 1;
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 72 / 2;
+            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 62 / 2;
             scui_custom_create(&item_maker, &item_handle, false);
             
-            item_maker.widget.clip.h = 72;
+            item_maker.widget.clip.h = 62;
+            SCUI_ASSERT(scui_ui_scene_list_num != 0);
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_custom_create(&item_maker, &item_handle, false);
                 
@@ -101,18 +83,16 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 group_maker.widget.child_num         = 2;
                 group_maker.widget.event_cb          = scui_ui_scene_item_arc_event_proc;
                 scui_custom_create(&group_maker, &group_handle, false);
-                scui_ui_res_local->list_widget[idx]  = group_handle;
                 
                 scui_custom_maker_t icon_maker = {0};
                 scui_handle_t icon_handle           = SCUI_HANDLE_INVALID;
                 icon_maker.widget.type              = scui_widget_type_custom;
-                icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 3;
+                icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
                 icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
                 icon_maker.widget.clip.h            = scui_image_h(icon_maker.widget.image);
                 icon_maker.widget.clip.y            = (group_maker.widget.clip.h - icon_maker.widget.clip.h) / 2;
                 icon_maker.widget.parent            = (group_handle);
                 scui_custom_create(&icon_maker, &icon_handle, false);
-                scui_ui_res_local->icon_w = scui_image_w(icon_maker.widget.image);
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
@@ -132,7 +112,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 scui_string_create(&string_maker, &string_handle, false);
             }
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 72 / 2;
+            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 62 / 2;
             scui_custom_create(&item_maker, &item_handle, false);
             
             scui_ui_bar_arc_reset(SCUI_UI_SCENE_LIST_ARC_RING);
@@ -140,15 +120,6 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        
-        /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            
-            SCUI_MEM_FREE(scui_ui_res_local->list_widget);
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
-        }
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
@@ -215,8 +186,17 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
     scui_coord_t  scroll_cx = scroll_c.x + scroll_c.w / 2;
     scui_coord_t  scroll_cy = scroll_c.y + scroll_c.h / 2;
     
-    for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
-        scui_handle_t group    = scui_ui_res_local->list_widget[idx];
+    for (uint8_t idx = 0; idx < scui_widget_child_num(scroll); idx++) {
+        
+        scui_handle_t child = scui_widget_child_by_index(scroll, idx);
+        if (child == SCUI_HANDLE_INVALID ||
+            scui_widget_child_num(child) == 0)
+            continue;
+        
+        scui_handle_t group = scui_widget_child_by_index(child, 0);
+        if (group == SCUI_HANDLE_INVALID)
+            continue;
+        
         scui_area_t   group_c  = scui_widget_clip(group);
         scui_coord_t  group_cx = group_c.x + group_c.w / 2;
         scui_coord_t  group_cy = group_c.y + group_c.h / 2;
@@ -233,8 +213,7 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
         // sin_a = dist_y / rad_rr;
         // cos_a = 1 - sin_a * sin_a
         // dis_x = rad_rr - rad_rr * cos_a
-        scui_coord_t icon_h = scui_ui_res_local->icon_w / 2;
-        scui_multi_t rad_rr = scroll_c.w / 2 - icon_h;
+        scui_multi_t rad_rr = scroll_c.h / 2 - group_c.h / 2;
         scui_multi_t dist_y = scui_min(rad_rr, scui_dist(group_cy, scroll_cy));
         
         scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);

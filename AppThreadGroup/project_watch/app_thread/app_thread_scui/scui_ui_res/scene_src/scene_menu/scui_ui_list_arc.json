@@ -26,7 +26,7 @@
             "notify_cb":                    "scui_ui_scene_list_arc_scroll_notify_event",
             "pos":                          "scui_event_pos_c",
             "dir":                          "scui_event_dir_ver",
-            "space":                        "3",
+            "space":                        "10",
             "route_enc":                    "SCUI_DRV_VER_RES / 4",
             "route_key":                    "SCUI_DRV_VER_RES / 4",
             "keyid_fdir":                   "scui_event_key_val_down",
