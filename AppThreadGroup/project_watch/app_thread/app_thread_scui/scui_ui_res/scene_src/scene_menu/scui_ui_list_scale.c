@@ -214,6 +214,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
             dist_x  = scui_min(dist_x, clip_p.w / 2);
             percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
             percent = scui_min(percent, 100);
+            percent = scui_max(percent, 30);
             SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         }
         

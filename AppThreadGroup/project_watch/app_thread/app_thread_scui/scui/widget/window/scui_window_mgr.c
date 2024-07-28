@@ -347,6 +347,27 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
             scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
             scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
+            
+            #if 1
+            // 扩充源区域的取点范围,保证到达边界
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+                scui_coord_t delta = (scui_multi_t)src_clip.w * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.w;
+                src_clip.w = scui_min(src_surface->hor_res, src_clip.w + delta);
+                if (src_clip.x > 0) {
+                    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -delta,});
+                    src_clip.x = scui_max(0, src_clip.x - delta);
+                }
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+                scui_coord_t delta = (scui_multi_t)src_clip.h * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.h;
+                    src_clip.h = scui_min(src_surface->ver_res, src_clip.h + delta);
+                if (src_clip.y > 0) {
+                    scui_matrix_translate(&inv_matrix, &(scui_point2_t){.y = -delta,});
+                    src_clip.y = scui_max(0, src_clip.y - delta);
+                }
+            }
+            #endif
+            
             // scui_matrix_check(&inv_matrix);
             scui_matrix_t matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
