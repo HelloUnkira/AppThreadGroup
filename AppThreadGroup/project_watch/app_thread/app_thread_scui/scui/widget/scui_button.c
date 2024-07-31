@@ -14,9 +14,6 @@
  */
 void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_button);
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
-    
     /* 创建按钮控件实例 */
     scui_button_t *button = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_button_t));
     memset(button, 0, sizeof(scui_button_t));
@@ -32,6 +29,8 @@ void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建基础控件实例 */
     scui_widget_create(&button->widget, &widget_maker, handle, layout);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_button));
+    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
     button->mode        = maker->mode;
     button->image[0]    = maker->image[0];
@@ -58,7 +57,6 @@ void scui_button_destroy(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_button_t *button = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_button);
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&button->widget);
@@ -79,8 +77,8 @@ void scui_button_draw_rect4(scui_event_t *event,    scui_area_t *clip,
                             scui_coord_t  delta)
 {
     // 本接口允许在custom回调中调用
-    SCUI_ASSERT(event->type != scui_widget_type_custom &&
-                event->type != scui_widget_type_button);
+    SCUI_ASSERT(scui_widget_type_check(event->object, scui_widget_type_button) ||
+                scui_widget_type_check(event->object, scui_widget_type_custom));
     
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);

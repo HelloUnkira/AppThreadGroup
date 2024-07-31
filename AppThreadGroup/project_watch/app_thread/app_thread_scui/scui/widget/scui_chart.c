@@ -14,9 +14,6 @@
  */
 void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_chart);
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
-    
     /* 创建图表控件实例 */
     scui_chart_t *chart = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_chart_t));
     memset(chart, 0, sizeof(scui_chart_t));
@@ -24,6 +21,8 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     /* 创建基础控件实例 */
     scui_widget_maker_t widget_maker = maker->widget;
     scui_widget_create(&chart->widget, &widget_maker, handle, layout);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_chart));
+    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
     chart->type = maker->type;
     
@@ -90,7 +89,6 @@ void scui_chart_destroy(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_chart_t  *chart  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_chart);
     
     switch (chart->type) {
     case scui_chart_type_histogram: {
@@ -121,10 +119,10 @@ void scui_chart_destroy(scui_handle_t handle)
  */
 void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_chart_t  *chart  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_chart);
     
     if (chart->type != scui_chart_type_histogram) {
         SCUI_LOG_ERROR("chart type unmatch");
@@ -153,10 +151,10 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
  */
 void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_chart_t  *chart  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_chart);
     
     if (chart->type != scui_chart_type_line) {
         SCUI_LOG_ERROR("chart type unmatch");

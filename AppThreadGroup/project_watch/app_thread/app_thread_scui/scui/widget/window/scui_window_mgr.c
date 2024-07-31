@@ -125,8 +125,8 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(scui_handle_remap(widget_1->myself));
         SCUI_ASSERT(scui_handle_remap(widget_2->myself));
         
-        SCUI_ASSERT(widget_1->type == scui_widget_type_window);
-        SCUI_ASSERT(widget_2->type == scui_widget_type_window);
+        SCUI_ASSERT(scui_widget_type_check(widget_1->myself, scui_widget_type_window));
+        SCUI_ASSERT(scui_widget_type_check(widget_2->myself, scui_widget_type_window));
         scui_window_t *window_1 = (scui_window_t *)widget_1;
         scui_window_t *window_2 = (scui_window_t *)widget_2;
         
@@ -155,8 +155,8 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
             SCUI_ASSERT(scui_handle_remap(widget_1->myself));
             SCUI_ASSERT(scui_handle_remap(widget_2->myself));
             
-            SCUI_ASSERT(widget_1->type == scui_widget_type_window);
-            SCUI_ASSERT(widget_2->type == scui_widget_type_window);
+            SCUI_ASSERT(scui_widget_type_check(widget_1->myself, scui_widget_type_window));
+            SCUI_ASSERT(scui_widget_type_check(widget_2->myself, scui_widget_type_window));
             scui_window_t *window_1 = (scui_window_t *)widget_1;
             scui_window_t *window_2 = (scui_window_t *)widget_2;
             

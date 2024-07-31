@@ -14,9 +14,6 @@
  */
 void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_string);
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
-    
     /* 创建字符串控件实例 */
     scui_string_t *string = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_t));
     memset(string, 0, sizeof(scui_string_t));
@@ -29,6 +26,8 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建基础控件实例 */
     scui_widget_create(&string->widget, &widget_maker, handle, layout);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
+    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
     if (maker->draw_cache) {
         string->widget.surface = NULL;
@@ -80,7 +79,6 @@ void scui_string_destroy(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_string);
     
     string->args.update = true;
     string->args.name   = SCUI_HANDLE_INVALID;
@@ -106,6 +104,7 @@ void scui_string_destroy(scui_handle_t handle)
  */
 void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
@@ -139,6 +138,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
  */
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
@@ -165,6 +165,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
  */
 bool scui_string_scroll_over(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     

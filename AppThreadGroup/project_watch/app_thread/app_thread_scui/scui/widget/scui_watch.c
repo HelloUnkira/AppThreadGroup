@@ -14,9 +14,6 @@
  */
 void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_watch);
-    SCUI_ASSERT(maker->widget.parent != SCUI_HANDLE_INVALID);
-    
     /* 创建表盘指针控件实例 */
     scui_watch_t *watch = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_watch_t));
     memset(watch, 0, sizeof(scui_watch_t));
@@ -29,6 +26,8 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     
     /* 创建基础控件实例 */
     scui_widget_create(&watch->widget, &widget_maker, handle, layout);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_watch));
+    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
     watch->image_h   = maker->image_h;
     watch->image_m   = maker->image_m;
@@ -56,7 +55,6 @@ void scui_watch_destroy(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_watch_t  *watch  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_watch);
     
     /* 销毁基础控件实例 */
     scui_widget_destroy(&watch->widget);
@@ -71,12 +69,10 @@ void scui_watch_destroy(scui_handle_t handle)
  */
 void scui_watch_tick_mode(scui_handle_t handle, bool tick_mode)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_watch));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_watch_t   *watch = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    
-    if (widget->type != scui_widget_type_watch)
-        return;
     
     watch->tick_mode = tick_mode;
     scui_widget_draw(handle, NULL, false);

@@ -14,16 +14,16 @@
  */
 void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
-    /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
-    SCUI_ASSERT(maker->widget.parent == SCUI_HANDLE_INVALID);
-    SCUI_ASSERT(maker->widget.type == scui_widget_type_window);
-    
     /* 创建窗口控件实例 */
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
     memset(window, 0, sizeof(scui_window_t));
     
     /* 创建基础控件实例 */
-    scui_widget_create(&window->widget, &maker->widget, handle, layout);
+    scui_widget_maker_t widget_maker = maker->widget;
+    scui_widget_create(&window->widget, &widget_maker, handle, layout);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_window));
+    SCUI_ASSERT(widget_maker.parent == SCUI_HANDLE_INVALID);
+    /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
     
     /* 创建surface */
     if (maker->buffer) {
@@ -44,13 +44,6 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     window->resident    = maker->resident;
     window->hang_only   = maker->hang_only;
     window->format      = maker->format;
-    
-    /* 为窗口控件添加指定的事件回调 */
-    scui_event_cb_node_t cb_node = {.event_cb = maker->widget.event_cb,};
-    
-    /* 事件默认全局接收 */
-    cb_node.event = scui_event_sched_all;
-    scui_widget_event_add(*handle, &cb_node);
 }
 
 /*@brief 窗口控件销毁
@@ -61,7 +54,6 @@ void scui_window_destroy(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_window);
     
     /* 回收surface */
     if (scui_widget_surface_only(widget))
@@ -92,10 +84,10 @@ void scui_window_cfg_def(scui_window_cfg_t *cfg)
  */
 void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_window);
     
     *cfg = window->cfg;
 }
@@ -106,10 +98,10 @@ void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
  */
 void scui_window_cfg_set(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_get(handle);
     scui_window_t *window = (void *)widget;
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_window);
     
     window->cfg = *cfg;
 }

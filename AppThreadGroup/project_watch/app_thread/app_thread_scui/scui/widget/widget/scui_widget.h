@@ -104,11 +104,18 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
  */
 void scui_widget_destroy(scui_widget_t *widget);
 
+/*@brief 控件类型检查
+ *@param handle 控件句柄
+ *@param type   控件类型
+ *@retval 控件类型检查
+ */
+bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
+
 /*@brief 查找控件映射表
  *@param type 控件类型
  *@retval 控件映射表
  */
-scui_widget_cb_t * scui_widget_cb_find(uint32_t type);
+scui_widget_cb_t * scui_widget_cb_find(scui_widget_type_t type);
 
 /*@brief 通过映射表调用创建一个控件树
  *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
@@ -310,12 +317,6 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
  */
 bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
                                 scui_point_t *offset, scui_event_pos_t pos);
-
-/*@brief 控件类型
- *@param handle 控件句柄
- *@retval 控件类型
- */
-scui_widget_type_t scui_widget_type(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄
