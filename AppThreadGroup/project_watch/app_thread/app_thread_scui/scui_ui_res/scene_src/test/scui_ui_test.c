@@ -37,6 +37,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
+            string_maker.draw_cache                 = true;
             
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;

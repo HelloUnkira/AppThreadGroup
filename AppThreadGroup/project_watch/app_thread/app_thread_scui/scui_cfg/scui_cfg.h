@@ -108,7 +108,6 @@
 #define SCUI_WINDOW_STACK_NEST                      (10)
 
 /* 内存文字宽度,文字边距: */
-#define SCUI_STRING_CACHE_ONLY                      (1)
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_SPACE_WIDTH                     (8)
 
