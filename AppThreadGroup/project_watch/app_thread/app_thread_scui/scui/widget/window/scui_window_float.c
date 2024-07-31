@@ -471,6 +471,15 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             scui_window_list_hide_without(handle, false);
             
             #if 0
+            if (true) {
+                scui_widget_draw(handle, NULL, true);
+                scui_event_t event = {0};
+                event.object = handle;
+                event.type = scui_event_draw;
+                // 移除跟主窗口相关所有绘制事件
+                while (scui_event_dequeue(&event, true));
+            }
+            
             scui_area_t window_clip = scui_widget_clip(handle);
             scui_widget_clip_reset(scui_handle_get(handle), &window_clip, false);
             scui_widget_draw_blur(handle, NULL);

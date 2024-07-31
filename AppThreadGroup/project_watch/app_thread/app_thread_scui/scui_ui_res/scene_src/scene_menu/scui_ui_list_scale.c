@@ -179,7 +179,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         // 创建一个独立临时的子画布,将目标绘制到一个独立子画布中
         if (scui_ui_res_local->list_surface[index] == NULL) {
             scui_area_t clip = scui_widget_clip(custom);
-            scui_widget_surface_create(custom, SCUI_PIXEL_CF_DEF_A, clip.w, clip.h);
+            scui_widget_surface_create(custom, SCUI_PIXEL_CF_DEF, scui_pixel_pb_shared, clip.w, clip.h);
             scui_ui_res_local->list_surface[index] = scui_widget_surface(custom);
             scui_ui_res_local->list_refr[index] = true;
         }

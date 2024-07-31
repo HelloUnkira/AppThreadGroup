@@ -554,19 +554,24 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle)
 /*@brief 控件画布创建
  *@param handle  控件句柄
  *@param format  画布格式
+ *@param protect 画布保护位
  *@param hor_res 画布水平尺寸
  *@param ver_res 画布垂直尺寸
  */
-void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
-                                scui_coord_t  hor_res, scui_coord_t    ver_res)
+void scui_widget_surface_create(scui_handle_t   handle,
+                                scui_pixel_cf_t format,
+                                scui_pixel_pb_t protect,
+                                scui_coord_t    hor_res,
+                                scui_coord_t    ver_res)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    SCUI_ASSERT(widget->surface == NULL && hor_res != 0 && ver_res != 0);
+    SCUI_ASSERT(widget->surface == NULL && hor_res > 0 && ver_res > 0);
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
     memset(widget->surface, 0, sizeof(scui_surface_t));
     widget->surface->format  = format;
+    widget->surface->protect = protect;
     widget->surface->hor_res = hor_res;
     widget->surface->ver_res = ver_res;
     widget->surface->alpha   = scui_alpha_cover;
@@ -576,8 +581,9 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
     
     scui_coord_t src_byte    = scui_pixel_bits(widget->surface->format) / 8;
     scui_coord_t src_remain  = sizeof(scui_color_limit_t) - src_byte;
-    scui_multi_t res_surface = hor_res * ver_res * src_byte + src_remain;
-    widget->surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, res_surface);
+    scui_multi_t src_size    = hor_res * ver_res * src_byte + src_remain;
+    
+    widget->surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, src_size);
 }
 
 /*@brief 控件画布销毁
@@ -606,7 +612,10 @@ void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
     SCUI_ASSERT(widget != NULL);
     
     SCUI_LOG_DEBUG("widget %u", widget->myself);
-    widget->surface = surface;
+    
+    if (widget->surface == NULL ||
+        widget->surface->protect != scui_pixel_pb_unique)
+        widget->surface = surface;
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];

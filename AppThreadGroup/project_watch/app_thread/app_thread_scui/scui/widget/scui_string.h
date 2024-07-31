@@ -38,6 +38,7 @@ typedef struct {
     uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
     /* 内部域: */
     scui_handle_t       name;           // 字库名字
+    uint64_t            unit_anima:1;   // 滚动动画标记
     uint64_t            unit_over:1;    // 滚动结束
     scui_coord_t        unit_way;       // 滚动单元方向
     scui_coord_t        rcd_ms;

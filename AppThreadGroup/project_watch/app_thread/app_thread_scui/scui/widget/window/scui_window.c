@@ -29,10 +29,11 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     if (maker->buffer) {
         /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
         scui_pixel_cf_t p_cf = maker->format;
+        scui_pixel_pb_t p_pb = scui_pixel_pb_shared;
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;
         scui_widget_clip_clear(&window->widget, true);
-        scui_widget_surface_create(*handle, p_cf, hor_res, ver_res);
+        scui_widget_surface_create(*handle, p_cf, p_pb, hor_res, ver_res);
         scui_widget_surface_refr(*handle, true);
     }
     

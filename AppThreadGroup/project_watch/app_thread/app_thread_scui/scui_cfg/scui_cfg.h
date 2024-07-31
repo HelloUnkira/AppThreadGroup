@@ -8,10 +8,22 @@
 #define SCUI_DRV_PIXEL_DEPTH                        (16)
 #define SCUI_DRV_DBUFFER                            (1)
 
-/* 内存使用占用 */
+/* 内存使用占用(0: 4M PSRAM; 1: 8M PSRAM) */
+#define SCUI_MEM_SIZE_TYPE                          (1)
+
+#if 0
+#elif SCUI_MEM_SIZE_TYPE == 0   // 4M PSRAM (空闲1M)
 #define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 128)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 128)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 2 + 1024 * 512 + 1024 * 256)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 3 - 1024 * (128 + 128))
+#elif SCUI_MEM_SIZE_TYPE == 1   // 8M PSRAM (空闲1M)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 256)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 512)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 7 - 1024 * (256 + 512))
+#else
+#error "unknown type"
+#endif
+
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_CHECK                       (0)
 #define SCUI_MEM_RECORD_ANALYSIS                    (0)
@@ -25,6 +37,8 @@
 #define SCUI_MEM_RECORD_ITEM_FONT                   (256)
 #define SCUI_MEM_RECORD_ITEM_GRAPH                  (64)
 
+#if 0
+#elif SCUI_MEM_SIZE_TYPE == 0
 /* 内存图片散列值,内存图片缓存最大限制 */
 #define SCUI_CACHE_IMAGE_HASH                       (17)
 #define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 1)
@@ -34,6 +48,18 @@
 /* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_CACHE_FONT_GLYPH_HASH                  (23)
 #define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 64)
+#elif SCUI_MEM_SIZE_TYPE == 1
+/* 内存图片散列值,内存图片缓存最大限制 */
+#define SCUI_CACHE_IMAGE_HASH                       (17)
+#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 5)
+/* 内存文字散列值,内存文字缓存最大限制 */
+#define SCUI_CACHE_FONT_HASH                        (3)
+#define SCUI_CACHE_FONT_TOTAL                       (1024 * 384)
+/* 内存文字散列值,内存文字缓存最大限制 */
+#define SCUI_CACHE_FONT_GLYPH_HASH                  (23)
+#define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 384)
+#else
+#endif
 
 /* 放大系数以及偏移值 */
 #define SCUI_SCALE_COF                              (1024)
@@ -82,6 +108,7 @@
 #define SCUI_WINDOW_STACK_NEST                      (10)
 
 /* 内存文字宽度,文字边距: */
+#define SCUI_STRING_CACHE_ONLY                      (1)
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_SPACE_WIDTH                     (8)
 

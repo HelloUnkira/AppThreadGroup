@@ -218,6 +218,11 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         .type = type, .ptr  = ptr,  .size = size,}))
          SCUI_LOG_WARN("record queue is full, item will be discard");
     
+    #else
+    
+    if (ptr == NULL)
+        scui_mem_check(type);
+    
     #endif
     SCUI_ASSERT(ptr != NULL);
     
