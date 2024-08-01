@@ -302,7 +302,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         }
         if (scui_window_mgr.switch_args.type == scui_window_switch_cover) {
             scui_coord_t pct = scui_window_mgr.switch_args.pct;
-            if (widget->myself != scui_window_active_curr()) {
+            if (widget->myself == scui_window_active_curr()) {
                 dst_clip.x = 0;
                 dst_clip.y = 0;
                 dst_clip.w = dst_surface->hor_res;
@@ -313,12 +313,12 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 src_clip.h = src_surface->ver_res;
                 
                 scui_alpha_t alpha = src_surface->alpha;
-                src_surface->alpha = scui_alpha_pct(pct);
+                src_surface->alpha = scui_alpha_pct(100 - pct);
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
                 src_surface->alpha = alpha;
             } else {
                 scui_alpha_t alpha = src_surface->alpha;
-                src_surface->alpha = scui_alpha_pct(100 - pct);
+                src_surface->alpha = scui_alpha_pct(pct);
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
                 src_surface->alpha = alpha;
             }

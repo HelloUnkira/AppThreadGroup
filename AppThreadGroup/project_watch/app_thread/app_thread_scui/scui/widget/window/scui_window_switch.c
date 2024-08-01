@@ -721,12 +721,39 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
                           (dir & scui_event_dir_ver) != 0 ? scui_disp_get_ver_res() : 0;
         SCUI_ASSERT(peroid != 0);
         scui_anima_t switch_anima = {0};
-        switch_anima.path    = scui_anima_path_bounce;
+        
+        switch (scui_window_mgr.switch_args.type) {
+        case scui_window_switch_grid:
+        case scui_window_switch_circle:
+        case scui_window_switch_center_out:
+        case scui_window_switch_center_in:
+        case scui_window_switch_cover:
+            switch_anima.path = scui_anima_path_ease_in_out;
+            break;
+        case scui_window_switch_cube:
+        case scui_window_switch_flip:
+        case scui_window_switch_zoom2:
+        case scui_window_switch_zoom1:
+        case scui_window_switch_move:
+            // 非叠加类型的移动可适合超调效果
+            switch_anima.path = scui_anima_path_overshoot;
+            // 非叠加类型的移动可适合重力回弹效果
+            switch_anima.path = scui_anima_path_bounce;
+            break;
+        default:
+            switch_anima.path = scui_anima_path_linear;
+            break;
+        }
+        
         switch_anima.start   = scui_window_jump_anima_start;
         switch_anima.ready   = scui_window_jump_anima_ready;
         switch_anima.expired = scui_window_jump_anima_expired;
         switch_anima.peroid  = peroid;
         scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);
+        
+        // 0帧到1帧中间有一个间隙,会闪一次
+        // 这里手动将0帧调整到1帧
+        scui_window_jump_anima_start(NULL);
     }
 }
