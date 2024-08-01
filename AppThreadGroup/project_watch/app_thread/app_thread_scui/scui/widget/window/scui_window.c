@@ -27,8 +27,13 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建surface */
     if (maker->buffer) {
-        /* 注意:每个独立资源窗口是一个完整显示区域以简化逻辑与布局 */
+        
+        #if 1   // 小内存
         scui_pixel_cf_t p_cf = maker->format;
+        #else   // 大内存
+        scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF_A;
+        #endif
+        
         scui_pixel_pb_t p_pb = scui_pixel_pb_shared;
         scui_coord_t hor_res = maker->widget.clip.w;
         scui_coord_t ver_res = maker->widget.clip.h;

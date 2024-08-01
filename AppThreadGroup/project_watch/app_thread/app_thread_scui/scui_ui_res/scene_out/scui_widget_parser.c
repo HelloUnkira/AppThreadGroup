@@ -607,7 +607,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.child_num               = 2,
 	.level                          = 1,
 	.buffer                         = true,
-	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
@@ -646,7 +645,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
-	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
@@ -722,7 +720,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.child_num               = 11,
 	.level                          = 1,
 	.buffer                         = true,
-	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING = {
@@ -750,7 +747,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
-	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {

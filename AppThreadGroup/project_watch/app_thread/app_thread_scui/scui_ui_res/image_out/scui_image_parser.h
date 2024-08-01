@@ -491,6 +491,48 @@ typedef enum {
 	scui_image_prj_image_src_00_theme_icon_42_measurement_08_07png,
 	scui_image_prj_image_src_00_theme_icon_42_measurement_09_08png,
 	scui_image_prj_image_src_00_theme_icon_42_measurement_10_09bmp,
+	scui_image_prj_image_src_00_theme_menu_menu_aipng,
+	scui_image_prj_image_src_00_theme_menu_menu_alipaypng,
+	scui_image_prj_image_src_00_theme_menu_menu_baidupng,
+	scui_image_prj_image_src_00_theme_menu_menu_bookpng,
+	scui_image_prj_image_src_00_theme_menu_menu_bppng,
+	scui_image_prj_image_src_00_theme_menu_menu_breathepng,
+	scui_image_prj_image_src_00_theme_menu_menu_calculatorpng,
+	scui_image_prj_image_src_00_theme_menu_menu_calendarpng,
+	scui_image_prj_image_src_00_theme_menu_menu_camerapng,
+	scui_image_prj_image_src_00_theme_menu_menu_cardpng,
+	scui_image_prj_image_src_00_theme_menu_menu_clockpng,
+	scui_image_prj_image_src_00_theme_menu_menu_compasspng,
+	scui_image_prj_image_src_00_theme_menu_menu_contactspng,
+	scui_image_prj_image_src_00_theme_menu_menu_datapng,
+	scui_image_prj_image_src_00_theme_menu_menu_gamepng,
+	scui_image_prj_image_src_00_theme_menu_menu_heartratepng,
+	scui_image_prj_image_src_00_theme_menu_menu_lefunpng,
+	scui_image_prj_image_src_00_theme_menu_menu_lefunAIpng,
+	scui_image_prj_image_src_00_theme_menu_menu_messagepng,
+	scui_image_prj_image_src_00_theme_menu_menu_musicpng,
+	scui_image_prj_image_src_00_theme_menu_menu_passwordpng,
+	scui_image_prj_image_src_00_theme_menu_menu_phonepng,
+	scui_image_prj_image_src_00_theme_menu_menu_photopng,
+	scui_image_prj_image_src_00_theme_menu_menu_physiologypng,
+	scui_image_prj_image_src_00_theme_menu_menu_pressurepng,
+	scui_image_prj_image_src_00_theme_menu_menu_recordingpng,
+	scui_image_prj_image_src_00_theme_menu_menu_restartpng,
+	scui_image_prj_image_src_00_theme_menu_menu_restorepng,
+	scui_image_prj_image_src_00_theme_menu_menu_setpng,
+	scui_image_prj_image_src_00_theme_menu_menu_Shutdownpng,
+	scui_image_prj_image_src_00_theme_menu_menu_sleeppng,
+	scui_image_prj_image_src_00_theme_menu_menu_Somatosensorypng,
+	scui_image_prj_image_src_00_theme_menu_menu_spo2png,
+	scui_image_prj_image_src_00_theme_menu_menu_sportpng,
+	scui_image_prj_image_src_00_theme_menu_menu_sport_recordpng,
+	scui_image_prj_image_src_00_theme_menu_menu_Stopwatchpng,
+	scui_image_prj_image_src_00_theme_menu_menu_styluspng,
+	scui_image_prj_image_src_00_theme_menu_menu_timerpng,
+	scui_image_prj_image_src_00_theme_menu_menu_videopng,
+	scui_image_prj_image_src_00_theme_menu_menu_walletpng,
+	scui_image_prj_image_src_00_theme_menu_menu_watchfacepng,
+	scui_image_prj_image_src_00_theme_menu_menu_weatherpng,
 	scui_image_prj_image_src_01_kaiji_icon_logo_01_00bmp,
 	scui_image_prj_image_src_01_kaiji_icon_logo_02_01bmp,
 	scui_image_prj_image_src_01_kaiji_icon_logo_03_02bmp,
@@ -3360,7 +3402,7 @@ typedef enum {
 	scui_image_prj_image_src_system_03_restartpng,
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[3352];
+extern const void * scui_image_parser_table[3394];
 
 //<         w,         h,  size_raw,  size_mem,     lz4_pct> handle
 //<      0x18,      0xeb,      2362,    0x4218,        0.14> scui_image_prj_image_src_00_3d_AnalogClock_00png
@@ -3848,6 +3890,48 @@ extern const void * scui_image_parser_table[3352];
 //<      0x5c,      0x5c,      2923,    0x6330,        0.12> scui_image_prj_image_src_00_theme_icon_42_measurement_08_07png
 //<      0x66,      0x66,      3170,    0x79ec,        0.10> scui_image_prj_image_src_00_theme_icon_42_measurement_09_08png
 //<      0x76,      0x76,      3141,    0x6cc8,        0.11> scui_image_prj_image_src_00_theme_icon_42_measurement_10_09bmp
+//<      0x6e,      0x6e,     15046,    0x8dcc,        0.41> scui_image_prj_image_src_00_theme_menu_menu_aipng
+//<      0x6e,      0x6e,     10034,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_alipaypng
+//<      0x6e,      0x6e,      8641,    0x8dcc,        0.24> scui_image_prj_image_src_00_theme_menu_menu_baidupng
+//<      0x6e,      0x6e,     10092,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_bookpng
+//<      0x6e,      0x6e,      9706,    0x8dcc,        0.27> scui_image_prj_image_src_00_theme_menu_menu_bppng
+//<      0x6e,      0x6e,      9790,    0x8dcc,        0.27> scui_image_prj_image_src_00_theme_menu_menu_breathepng
+//<      0x6e,      0x6e,     11162,    0x8dcc,        0.31> scui_image_prj_image_src_00_theme_menu_menu_calculatorpng
+//<      0x6e,      0x6e,      9263,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_calendarpng
+//<      0x6e,      0x6e,     10194,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_camerapng
+//<      0x6e,      0x6e,      8045,    0x8dcc,        0.22> scui_image_prj_image_src_00_theme_menu_menu_cardpng
+//<      0x6e,      0x6e,     10434,    0x8dcc,        0.29> scui_image_prj_image_src_00_theme_menu_menu_clockpng
+//<      0x6e,      0x6e,      9652,    0x8dcc,        0.27> scui_image_prj_image_src_00_theme_menu_menu_compasspng
+//<      0x6e,      0x6e,      9169,    0x8dcc,        0.25> scui_image_prj_image_src_00_theme_menu_menu_contactspng
+//<      0x6e,      0x6e,     11000,    0x8dcc,        0.30> scui_image_prj_image_src_00_theme_menu_menu_datapng
+//<      0x6e,      0x6e,      9591,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_gamepng
+//<      0x6e,      0x6e,      9386,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_heartratepng
+//<      0x6e,      0x6e,     10886,    0x8dcc,        0.30> scui_image_prj_image_src_00_theme_menu_menu_lefunpng
+//<      0x6e,      0x6e,     11308,    0x8dcc,        0.31> scui_image_prj_image_src_00_theme_menu_menu_lefunAIpng
+//<      0x6e,      0x6e,     10015,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_messagepng
+//<      0x6e,      0x6e,     10955,    0x8dcc,        0.30> scui_image_prj_image_src_00_theme_menu_menu_musicpng
+//<      0x6e,      0x6e,      9438,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_passwordpng
+//<      0x6e,      0x6e,     10513,    0x8dcc,        0.29> scui_image_prj_image_src_00_theme_menu_menu_phonepng
+//<      0x6e,      0x6e,      8665,    0x8dcc,        0.24> scui_image_prj_image_src_00_theme_menu_menu_photopng
+//<      0x6e,      0x6e,     10811,    0x8dcc,        0.30> scui_image_prj_image_src_00_theme_menu_menu_physiologypng
+//<      0x6e,      0x6e,      8988,    0x8dcc,        0.25> scui_image_prj_image_src_00_theme_menu_menu_pressurepng
+//<      0x6e,      0x6e,     12091,    0x8dcc,        0.33> scui_image_prj_image_src_00_theme_menu_menu_recordingpng
+//<      0x6e,      0x6e,     11407,    0x8dcc,        0.31> scui_image_prj_image_src_00_theme_menu_menu_restartpng
+//<      0x6e,      0x6e,      9021,    0x8dcc,        0.25> scui_image_prj_image_src_00_theme_menu_menu_restorepng
+//<      0x6e,      0x6e,     10856,    0x8dcc,        0.30> scui_image_prj_image_src_00_theme_menu_menu_setpng
+//<      0x6e,      0x6e,     10239,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_Shutdownpng
+//<      0x6e,      0x6e,     11775,    0x8dcc,        0.32> scui_image_prj_image_src_00_theme_menu_menu_sleeppng
+//<      0x6e,      0x6e,      9362,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_Somatosensorypng
+//<      0x6e,      0x6e,     10017,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_spo2png
+//<      0x6e,      0x6e,      9046,    0x8dcc,        0.25> scui_image_prj_image_src_00_theme_menu_menu_sportpng
+//<      0x6e,      0x6e,      9551,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_sport_recordpng
+//<      0x6e,      0x6e,      9736,    0x8dcc,        0.27> scui_image_prj_image_src_00_theme_menu_menu_Stopwatchpng
+//<      0x6e,      0x6e,      8229,    0x8dcc,        0.23> scui_image_prj_image_src_00_theme_menu_menu_styluspng
+//<      0x6e,      0x6e,     11861,    0x8dcc,        0.33> scui_image_prj_image_src_00_theme_menu_menu_timerpng
+//<      0x6e,      0x6e,      9027,    0x8dcc,        0.25> scui_image_prj_image_src_00_theme_menu_menu_videopng
+//<      0x6e,      0x6e,      9302,    0x8dcc,        0.26> scui_image_prj_image_src_00_theme_menu_menu_walletpng
+//<      0x6e,      0x6e,     14207,    0x8dcc,        0.39> scui_image_prj_image_src_00_theme_menu_menu_watchfacepng
+//<      0x6e,      0x6e,     10169,    0x8dcc,        0.28> scui_image_prj_image_src_00_theme_menu_menu_weatherpng
 //<      0x70,      0x46,        95,    0x3d40,        0.01> scui_image_prj_image_src_01_kaiji_icon_logo_01_00bmp
 //<      0x70,      0x46,       898,    0x3d40,        0.06> scui_image_prj_image_src_01_kaiji_icon_logo_02_01bmp
 //<      0x70,      0x46,      1208,    0x3d40,        0.08> scui_image_prj_image_src_01_kaiji_icon_logo_03_02bmp

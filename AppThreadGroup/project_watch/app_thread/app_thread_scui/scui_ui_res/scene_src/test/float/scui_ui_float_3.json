@@ -12,8 +12,7 @@
             "widget.event_cb":              "scui_ui_scene_float_3_event_proc",
             "widget.child_num":             "10",
             "level":                        "1",
-            "buffer":                       "true",
-            "format":                       "SCUI_PIXEL_CF_DEF_A"
+            "buffer":                       "true"
         },
         {
             "widget.type":                  "scui_widget_type_custom",

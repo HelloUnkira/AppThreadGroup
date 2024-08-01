@@ -68,7 +68,8 @@ void scui_window_jump_anima_start(void *instance)
     case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
-    case scui_window_switch_normal: {
+    case scui_window_switch_cover:
+    case scui_window_switch_move: {
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         switch (scui_window_mgr.switch_args.dir) {
         case scui_event_dir_to_u:
@@ -123,7 +124,8 @@ void scui_window_jump_anima_ready(void *instance)
     case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
-    case scui_window_switch_normal: {
+    case scui_window_switch_cover:
+    case scui_window_switch_move: {
         if (scui_window_mgr.switch_args.pct == 0) {
             scui_window_active(scui_window_mgr.switch_args.list[0]);
             scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
@@ -204,7 +206,8 @@ void scui_window_jump_anima_expired(void *instance)
     case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
-    case scui_window_switch_normal: {
+    case scui_window_switch_cover:
+    case scui_window_switch_move: {
         switch (scui_window_mgr.switch_args.dir) {
         case scui_event_dir_to_u:
             point.y = -scui_window_mgr.switch_args.ofs;
@@ -277,7 +280,8 @@ void scui_window_move_anima_ready(void *instance)
     case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
-    case scui_window_switch_normal: {
+    case scui_window_switch_cover:
+    case scui_window_switch_move: {
         if (scui_window_mgr.switch_args.pct == 0) {
             scui_window_active(scui_window_mgr.switch_args.list[0]);
             scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
@@ -362,7 +366,8 @@ void scui_window_move_anima_expired(void *instance)
     case scui_window_switch_flip:
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
-    case scui_window_switch_normal: {
+    case scui_window_switch_cover:
+    case scui_window_switch_move: {
         /* 移动窗口 */
         scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
         if (scui_window_mgr.switch_args.dir == scui_event_dir_to_u)

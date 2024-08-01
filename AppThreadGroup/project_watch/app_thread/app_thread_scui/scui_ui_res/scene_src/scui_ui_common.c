@@ -10,7 +10,7 @@
 /*****************************************************************************/
 /* 主题:蜂窝使用 */
 
-void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, scui_handle_t ofs_cur)
+void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, SCUI_UI_HONEYCOMB_T ofs_cur)
 {
     #define HB_DIFX     scui_ui_honeycomb_dif_x(ofs_cur)
     #define HB_DIFY     scui_ui_honeycomb_dif_y(ofs_cur)
@@ -225,6 +225,52 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
     }
     case scui_ui_scene_list_type_honeycomb: {
         
+        #if SCUI_UI_HONEYCOMB_SCALE_MODE
+        static const scui_handle_t list_image[SCUI_UI_HONEYCOMB_LIST_NUM] = {
+            scui_image_prj_image_src_00_theme_menu_menu_aipng,
+            scui_image_prj_image_src_00_theme_menu_menu_alipaypng,
+            scui_image_prj_image_src_00_theme_menu_menu_baidupng,
+            scui_image_prj_image_src_00_theme_menu_menu_bookpng,
+            scui_image_prj_image_src_00_theme_menu_menu_bppng,
+            scui_image_prj_image_src_00_theme_menu_menu_breathepng,
+            scui_image_prj_image_src_00_theme_menu_menu_calculatorpng,
+            scui_image_prj_image_src_00_theme_menu_menu_calendarpng,
+            scui_image_prj_image_src_00_theme_menu_menu_camerapng,
+            scui_image_prj_image_src_00_theme_menu_menu_cardpng,
+            scui_image_prj_image_src_00_theme_menu_menu_clockpng,
+            scui_image_prj_image_src_00_theme_menu_menu_compasspng,
+            scui_image_prj_image_src_00_theme_menu_menu_contactspng,
+            scui_image_prj_image_src_00_theme_menu_menu_datapng,
+            scui_image_prj_image_src_00_theme_menu_menu_gamepng,
+            scui_image_prj_image_src_00_theme_menu_menu_heartratepng,
+            scui_image_prj_image_src_00_theme_menu_menu_lefunpng,
+            scui_image_prj_image_src_00_theme_menu_menu_lefunAIpng,
+            scui_image_prj_image_src_00_theme_menu_menu_messagepng,
+            scui_image_prj_image_src_00_theme_menu_menu_musicpng,
+            scui_image_prj_image_src_00_theme_menu_menu_passwordpng,
+            scui_image_prj_image_src_00_theme_menu_menu_phonepng,
+            scui_image_prj_image_src_00_theme_menu_menu_photopng,
+            scui_image_prj_image_src_00_theme_menu_menu_physiologypng,
+            scui_image_prj_image_src_00_theme_menu_menu_pressurepng,
+            scui_image_prj_image_src_00_theme_menu_menu_recordingpng,
+            scui_image_prj_image_src_00_theme_menu_menu_restartpng,
+            scui_image_prj_image_src_00_theme_menu_menu_restorepng,
+            scui_image_prj_image_src_00_theme_menu_menu_setpng,
+            scui_image_prj_image_src_00_theme_menu_menu_Shutdownpng,
+            scui_image_prj_image_src_00_theme_menu_menu_sleeppng,
+            scui_image_prj_image_src_00_theme_menu_menu_Somatosensorypng,
+            scui_image_prj_image_src_00_theme_menu_menu_spo2png,
+            scui_image_prj_image_src_00_theme_menu_menu_sportpng,
+            scui_image_prj_image_src_00_theme_menu_menu_sport_recordpng,
+            scui_image_prj_image_src_00_theme_menu_menu_Stopwatchpng,
+            scui_image_prj_image_src_00_theme_menu_menu_styluspng,
+            // scui_image_prj_image_src_00_theme_menu_menu_timerpng,
+            // scui_image_prj_image_src_00_theme_menu_menu_videopng,
+            // scui_image_prj_image_src_00_theme_menu_menu_walletpng,
+            // scui_image_prj_image_src_00_theme_menu_menu_watchfacepng,
+            // scui_image_prj_image_src_00_theme_menu_menu_weatherpng,
+        };
+        #else
         static const scui_handle_t list_image[SCUI_UI_HONEYCOMB_LIST_NUM] = {
             scui_image_prj_image_src_00_theme_icon_00_heart_01_00png,
             scui_image_prj_image_src_00_theme_icon_01_spo2_01_00png,
@@ -266,6 +312,7 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
             // scui_image_prj_image_src_00_theme_icon_41_blood_pressure_01_00png,
             // scui_image_prj_image_src_00_theme_icon_42_measurement_01_00png,
         };
+        #endif
         
         static const scui_handle_t list_jump[SCUI_UI_HONEYCOMB_LIST_NUM] = {
             SCUI_UI_SCENE_6,

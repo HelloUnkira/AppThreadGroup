@@ -51,7 +51,7 @@
 #elif SCUI_MEM_SIZE_TYPE == 1
 /* 内存图片散列值,内存图片缓存最大限制 */
 #define SCUI_CACHE_IMAGE_HASH                       (17)
-#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 5)
+#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 4)
 /* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_CACHE_FONT_HASH                        (3)
 #define SCUI_CACHE_FONT_TOTAL                       (1024 * 384)

@@ -6,7 +6,8 @@ typedef enum {
     scui_window_switch_auto,            /* 自适应(适应部分特效) */
     scui_window_switch_single_s,
     
-    scui_window_switch_normal,          /* 常规效果 */
+    scui_window_switch_move,            /* 常规移动 */
+    scui_window_switch_cover,           /* 覆盖移动 */
     scui_window_switch_zoom1,           /* 单边缩放 */
     scui_window_switch_zoom2,           /* 双边缩放 */
     

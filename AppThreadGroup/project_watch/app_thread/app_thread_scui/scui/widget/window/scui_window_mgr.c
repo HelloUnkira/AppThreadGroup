@@ -217,6 +217,13 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
 void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
     scui_surface_t *dst_surface = scui_surface_fb_draw();
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    
+    /* 底图清空 */
+    scui_color_t dst_pixel = {0};
+    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
+    
+    /* 多画布变换混合 */
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t  *widget = list[idx];
         scui_window_t  *window = (void *)widget;
@@ -230,10 +237,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             src_clip.x = widget->clip.x;
             src_clip.y = widget->clip.y;
         }
-        scui_area_t dst_clip = {
-            .w = dst_surface->hor_res,
-            .h = dst_surface->ver_res,
-        };
+        scui_area_t dst_clip = scui_surface_area(dst_surface);
         /* 与显示区域做一次交集运算 */
         scui_area_t tmp_clip = src_clip;
         scui_area_t out_clip = {0};
@@ -292,6 +296,35 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(src_surface->hor_res == scui_disp_get_hor_res());
         SCUI_ASSERT(src_surface->ver_res == scui_disp_get_ver_res());
         
+        if (scui_window_mgr.switch_args.type == scui_window_switch_move) {
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+            continue;
+        }
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cover) {
+            scui_coord_t pct = scui_window_mgr.switch_args.pct;
+            if (widget->myself != scui_window_active_curr()) {
+                dst_clip.x = 0;
+                dst_clip.y = 0;
+                dst_clip.w = dst_surface->hor_res;
+                dst_clip.h = dst_surface->ver_res;
+                src_clip.x = 0;
+                src_clip.y = 0;
+                src_clip.w = src_surface->hor_res;
+                src_clip.h = src_surface->ver_res;
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_pct(pct);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+                src_surface->alpha = alpha;
+            } else {
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_pct(100 - pct);
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+                src_surface->alpha = alpha;
+            }
+            continue;
+        }
+        
         if (scui_window_mgr.switch_args.type == scui_window_switch_center_in ||
             scui_window_mgr.switch_args.type == scui_window_switch_center_out) {
             if (widget->myself == scui_window_active_curr()) {
@@ -318,8 +351,6 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         if (scui_window_mgr.switch_args.type == scui_window_switch_zoom1) {
             /* 如果底图透明度更新, 则清空底色防止错误混合 */
             if (src_surface->alpha != scui_alpha_cover) {
-                scui_color_t dst_pixel = {0};
-                scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
             }
             if (widget->myself == scui_window_active_curr()) {
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
@@ -329,11 +360,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         
         if (scui_window_mgr.switch_args.type == scui_window_switch_zoom1 ||
             scui_window_mgr.switch_args.type == scui_window_switch_zoom2) {
-            /* 如果底图透明度更新, 则清空底色防止错误混合 */
-            if (src_surface->alpha != scui_alpha_cover) {
-                scui_color_t dst_pixel = {0};
-                scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-            }
+            
             float scale_d = 0;
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
                 scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
@@ -532,13 +559,6 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                 if (widget->myself != scui_window_active_curr())
                     continue;
             }
-            /* 清空底色防止错误混合 */
-            scui_color_t dst_pixel = {0};
-            dst_clip.x = 0;
-            dst_clip.y = 0;
-            dst_clip.w = dst_surface->hor_res;
-            dst_clip.h = dst_surface->ver_res;
-            scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
             
             float angle = 0;
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
@@ -591,16 +611,6 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         }
         
         if (scui_window_mgr.switch_args.type == scui_window_switch_cube) {
-            
-            /* 清空底色防止错误混合 */
-            if (idx == 0) {
-                scui_color_t dst_pixel = {0};
-                dst_clip.x = 0;
-                dst_clip.y = 0;
-                dst_clip.w = dst_surface->hor_res;
-                dst_clip.h = dst_surface->ver_res;
-                scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-            }
             
             float angle = 0;
             if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
