@@ -515,7 +515,7 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *d
             point.y = (scui_coord_t)point2.y;
             point.x = (scui_coord_t)point2.x;
             
-            #if 0
+            #if 1
             /* 这里使用点对点上色 */
             /* 逆变换的结果落在的源区域, 取样上色 */
             if (scui_area_point(&src_clip_v, &point)) {

@@ -104,14 +104,16 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string);
 //
 //
 /*****************************************************************************/
-/* 全局弧形滚动条效果 */
-void scui_ui_bar_arc_pct(scui_handle_t pct);
-void scui_ui_bar_arc_reset(scui_handle_t handle);
+/* 弧形滚动条效果 */
+typedef struct {
+    scui_coord_t  bar_pct;
+    scui_coord_t  bar_wait;
+    scui_coord_t  bar_alpha;
+    scui_handle_t bar_handle;
+} scui_ui_bar_arc_t;
 
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_bar_arc_event_proc(scui_event_t *event);
+void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc);
+void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event);
 /*****************************************************************************/
 
 #endif

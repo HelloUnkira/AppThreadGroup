@@ -26,9 +26,10 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget_root != NULL);
     
-    // 额外补充,如果该控件没有目标画布
-    // 直接走单一事件,因为需要重定向
-    if (widget->surface == NULL) {
+    // 如果该控件控件树为自定义控件树
+    // 不走系统管理,转为回调直达,自定义控件树会重定向
+    if (widget->parent != SCUI_HANDLE_INVALID &&
+        widget_root->type != scui_widget_type_window) {
         scui_event_t event = {
             .object = handle,
             .type   = scui_event_draw,

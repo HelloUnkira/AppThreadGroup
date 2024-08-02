@@ -8,8 +8,28 @@
 #include "scui.h"
 
 static struct {
-    void *none;
+    scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event)
+{
+    scui_ui_bar_arc_event_proc(&scui_ui_res_local->bar_arc, event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_waterfall_scroll_notify_event(scui_event_t *event)
+{
+    scui_coord_t scroll_pct = 0;
+    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    SCUI_LOG_INFO("pct:%d", scroll_pct);
+    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+}
 
 /*@brief 控件事件响应回调
  *@param event 事件
@@ -139,7 +159,6 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
-            
         }
         
         if (scui_widget_event_check_prepare(event)) {
@@ -223,20 +242,16 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             scui_scroll_layout(SCUI_UI_SCENE_WATERFALL_SCROLL);
             scui_widget_draw(SCUI_UI_SCENE_WATERFALL, NULL, false);
             
-            scui_ui_bar_arc_reset(SCUI_UI_SCENE_WATERFALL_RING);
+            scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_WATERFALL_BAR_ARC;
+            scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
         }
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         
-        if (scui_widget_event_check_finish(event)) {
-            
-        }
-        
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
-            
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;
         }
@@ -253,16 +268,4 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_waterfall_scroll_notify_event(scui_event_t *event)
-{
-    scui_coord_t scroll_pct = 0;
-    scui_scroll_auto_percent_get(event->object, &scroll_pct);
-    SCUI_LOG_INFO("pct:%d", scroll_pct);
-    scui_ui_bar_arc_pct(scroll_pct);
-    scui_ui_bar_arc_reset(SCUI_UI_SCENE_WATERFALL_RING);
 }

@@ -133,8 +133,8 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
             // scui_image_prj_image_src_00_theme_icon_42_measurement_01_00png,
         };
         static const scui_handle_t list_text[] = {
-            SCUI_MULTI_LANG_0X0019,
-            SCUI_MULTI_LANG_0X0040,
+            SCUI_MULTI_LANG_0X0025, // SCUI_MULTI_LANG_0X0019,
+            SCUI_MULTI_LANG_0X0042, // SCUI_MULTI_LANG_0X0040,
             SCUI_MULTI_LANG_0X00c9,
             SCUI_MULTI_LANG_0X008b,
             SCUI_MULTI_LANG_0X01c5,
@@ -142,7 +142,7 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
             SCUI_MULTI_LANG_0X008b,
             SCUI_MULTI_LANG_0X0133,
             SCUI_MULTI_LANG_0X0140,
-            SCUI_MULTI_LANG_0X0092,
+            SCUI_MULTI_LANG_0X0093, // SCUI_MULTI_LANG_0X0092,
             SCUI_MULTI_LANG_0X010b,
             SCUI_MULTI_LANG_0X0030,
             SCUI_MULTI_LANG_0X0151,

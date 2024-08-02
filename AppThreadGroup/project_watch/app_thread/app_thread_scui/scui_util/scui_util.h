@@ -5,4 +5,6 @@
 #include "scui_custom_qrcode.h"
 #include "scui_custom_barcode.h"
 
+#include "scui_plug_conpler.h"
+
 #endif

@@ -39,9 +39,9 @@
             "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_DRV_HOR_RES",
             "widget.clip.h":                "SCUI_DRV_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_RING",
+            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_BAR_ARC",
             "widget.parent":                "SCUI_UI_SCENE_LIST_SCALE",
-            "widget.event_cb":              "scui_ui_bar_arc_event_proc"
+            "widget.event_cb":              "scui_ui_scene_list_scale_bar_arc_event"
         },
         {
             "widget.type":                  "scui_widget_type_custom",
@@ -50,7 +50,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_MASK",
             "widget.parent":                "SCUI_UI_SCENE_LIST_SCALE",
-            "widget.event_cb":              "scui_ui_scene_list_scale_mask_event_proc"
+            "widget.event_cb":              "scui_ui_mask_all_event_proc"
         }
     ]
 }

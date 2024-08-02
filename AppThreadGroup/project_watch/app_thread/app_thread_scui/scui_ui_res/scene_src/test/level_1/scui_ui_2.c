@@ -8,8 +8,17 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t scroll;       // 滚动控件
+    scui_handle_t     scroll;   // 滚动控件
+    scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
+{
+    scui_ui_bar_arc_event_proc(&scui_ui_res_local->bar_arc, event);
+}
 
 /*@brief 控件事件响应回调
  *@param event 事件
@@ -19,8 +28,8 @@ void scui_ui_scene_2_scroll_notify_event(scui_event_t *event)
     scui_coord_t scroll_pct = 0;
     scui_scroll_auto_percent_get(event->object, &scroll_pct);
     SCUI_LOG_INFO("pct:%d", scroll_pct);
-    scui_ui_bar_arc_pct(scroll_pct);
-    scui_ui_bar_arc_reset(SCUI_UI_SCENE_2_RING);
+    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
 }
 
 /*@brief 控件事件响应回调
@@ -135,7 +144,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             #endif
         }
         
-        scui_ui_bar_arc_reset(SCUI_UI_SCENE_2_RING);
+        scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_2_BAR_ARC;
+        scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
