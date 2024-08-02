@@ -22,6 +22,6 @@ void scui_indev_ptr_ready(void);
  *@param event 输入设备事件
  *@retval 手势方向
  */
-scui_event_dir_t scui_indev_ptr_dir(scui_event_t *event);
+scui_opt_dir_t scui_indev_ptr_dir(scui_event_t *event);
 
 #endif

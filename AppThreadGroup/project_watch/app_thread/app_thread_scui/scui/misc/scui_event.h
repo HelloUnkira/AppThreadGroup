@@ -110,35 +110,6 @@ typedef struct {
     scui_event_type_t event;        /* 事件 */
 } scui_event_cb_node_t;
 
-/*@brief 事件操作方向
- *       与事件操作位置透明切换
- */
-typedef enum {
-    scui_event_dir_none = (0x00),
-    scui_event_dir_to_u = (1 << 0),   // 向up
-    scui_event_dir_to_d = (1 << 1),   // 向down
-    scui_event_dir_to_l = (1 << 2),   // 向left
-    scui_event_dir_to_r = (1 << 3),   // 向right
-    scui_event_dir_ver  = (scui_event_dir_to_u | scui_event_dir_to_d),
-    scui_event_dir_hor  = (scui_event_dir_to_l | scui_event_dir_to_r),
-    scui_event_dir_all  = (scui_event_dir_ver  | scui_event_dir_hor ),
-} scui_event_dir_t;
-
-/*@brief 事件操作位置
- *       与事件操作方向透明切换
- */
-typedef enum {
-    scui_event_pos_none = scui_event_dir_none,
-    scui_event_pos_u    = scui_event_dir_to_d,
-    scui_event_pos_d    = scui_event_dir_to_u,
-    scui_event_pos_l    = scui_event_dir_to_r,
-    scui_event_pos_r    = scui_event_dir_to_l,
-    scui_event_pos_c    = scui_event_dir_all,
-    scui_event_pos_ver  = scui_event_dir_ver,
-    scui_event_pos_hor  = scui_event_dir_hor,
-    scui_event_pos_all  = scui_event_dir_all,
-} scui_event_pos_t;
-
 /*@brief 事件吸收回调(空吸收)
  *@param evt_old 旧事件
  *@param evt_new 新事件

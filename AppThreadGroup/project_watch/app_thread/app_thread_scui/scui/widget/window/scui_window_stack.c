@@ -62,7 +62,7 @@ void scui_window_stack_reset(scui_handle_t handle, bool reserve)
     }
     
     scui_window_stack_top(&handle_top);
-    scui_window_jump(handle_top, scui_window_switch_auto, scui_event_dir_none);
+    scui_window_jump(handle_top, scui_window_switch_auto, scui_opt_dir_none);
 }
 
 /*@brief 窗口栈覆盖
@@ -81,7 +81,7 @@ void scui_window_stack_cover(scui_handle_t handle)
     scui_window_stack.stack[scui_window_stack.top - 1] = handle;
     
     scui_window_stack_top(&handle_top);
-    scui_window_jump(handle_top, scui_window_switch_auto, scui_event_dir_none);
+    scui_window_jump(handle_top, scui_window_switch_auto, scui_opt_dir_none);
 }
 
 /*@brief 窗口栈添加
@@ -105,7 +105,7 @@ void scui_window_stack_add(scui_handle_t handle, bool reserve)
     }
     
     scui_window_stack_top(&handle_top);
-    scui_window_jump(handle_top, scui_window_switch_auto, scui_event_dir_none);
+    scui_window_jump(handle_top, scui_window_switch_auto, scui_opt_dir_none);
 }
 
 /*@brief 窗口栈移除
@@ -118,5 +118,5 @@ void scui_window_stack_del(void)
     scui_window_stack.top--;
     
     scui_window_stack_top(&handle_top);
-    scui_window_jump(handle_top, scui_window_switch_auto, scui_event_dir_none);
+    scui_window_jump(handle_top, scui_window_switch_auto, scui_opt_dir_none);
 }

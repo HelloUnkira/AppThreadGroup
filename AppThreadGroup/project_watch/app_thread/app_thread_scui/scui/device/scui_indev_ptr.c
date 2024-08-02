@@ -166,7 +166,7 @@ void scui_indev_ptr_ready(void)
  *@param event 输入设备事件
  *@retval 手势方向
  */
-scui_event_dir_t scui_indev_ptr_dir(scui_event_t *event)
+scui_opt_dir_t scui_indev_ptr_dir(scui_event_t *event)
 {
     if (event->type > scui_event_ptr_s && event->type < scui_event_ptr_e) {
         scui_coord_t dist_x = scui_dist(event->ptr_s.x, event->ptr_e.x);
@@ -174,16 +174,16 @@ scui_event_dir_t scui_indev_ptr_dir(scui_event_t *event)
         
         if (dist_x >= dist_y) {
             if (event->ptr_s.x >= event->ptr_e.x)
-                return scui_event_dir_to_l;
+                return scui_opt_dir_to_l;
             if (event->ptr_s.x <= event->ptr_e.x)
-                return scui_event_dir_to_r;
+                return scui_opt_dir_to_r;
         }
         if (dist_x <= dist_y) {
             if (event->ptr_s.y >= event->ptr_e.y)
-                return scui_event_dir_to_u;
+                return scui_opt_dir_to_u;
             if (event->ptr_s.y <= event->ptr_e.y)
-                return scui_event_dir_to_d;
+                return scui_opt_dir_to_d;
         }
     }
-    return scui_event_dir_none;
+    return scui_opt_dir_none;
 }

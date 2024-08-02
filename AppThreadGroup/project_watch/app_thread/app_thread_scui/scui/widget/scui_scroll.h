@@ -9,8 +9,8 @@
 typedef struct {
     scui_widget_t       widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
-    scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
-    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
+    scui_opt_pos_t      pos;            /* 滚动停留(边界或中心) */
+    scui_opt_dir_t      dir;            /* 滚动方向(自动布局) */
     scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
@@ -52,8 +52,8 @@ typedef struct {
 typedef struct {
     scui_widget_maker_t widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
-    scui_event_pos_t    pos;            /* 滚动停留(边界或中心) */
-    scui_event_dir_t    dir;            /* 滚动方向(自动布局) */
+    scui_opt_pos_t      pos;            /* 滚动停留(边界或中心) */
+    scui_opt_dir_t      dir;            /* 滚动方向(自动布局) */
     scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */

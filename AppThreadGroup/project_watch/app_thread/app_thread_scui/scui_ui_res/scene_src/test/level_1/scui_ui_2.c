@@ -84,18 +84,18 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scroll_maker.keyid_bdir = scui_event_key_val_up;
             
             #if SCUI_SCROLL_LAYOUT_AUTO
-            scroll_maker.pos = scui_event_pos_c;
-            // scroll_maker.pos = scui_event_dir_hor;
-            // scroll_maker.pos = scui_event_dir_ver;
-            // scroll_maker.dir = scui_event_dir_hor;
-            scroll_maker.dir = scui_event_dir_ver;
+            scroll_maker.pos = scui_opt_pos_c;
+            // scroll_maker.pos = scui_opt_dir_hor;
+            // scroll_maker.pos = scui_opt_dir_ver;
+            // scroll_maker.dir = scui_opt_dir_hor;
+            scroll_maker.dir = scui_opt_dir_ver;
             #else
-            scroll_maker.pos = scui_event_pos_c;
-            // scroll_maker.pos = scui_event_pos_l;
-            // scroll_maker.pos = scui_event_pos_r;
-            // scroll_maker.pos = scui_event_pos_u;
-            // scroll_maker.pos = scui_event_pos_d;
-            scroll_maker.dir = scui_event_dir_none;
+            scroll_maker.pos = scui_opt_pos_c;
+            // scroll_maker.pos = scui_opt_pos_l;
+            // scroll_maker.pos = scui_opt_pos_r;
+            // scroll_maker.pos = scui_opt_pos_u;
+            // scroll_maker.pos = scui_opt_pos_d;
+            scroll_maker.dir = scui_opt_dir_none;
             #endif
             scui_scroll_create(&scroll_maker, &scroll_handle, false);
             scui_ui_res_local->scroll = scroll_handle;

@@ -194,7 +194,7 @@ static void scui_ui_scene_item_scale_event_proc(scui_event_t *event)
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
-        scui_event_pos_t pos = scui_event_pos_c;
+        scui_opt_pos_t pos = scui_opt_pos_c;
         {   // 计算当前控件中心到父控件中心距离
             scui_area_t clip_p = scui_widget_clip(SCUI_UI_SCENE_LIST_SCALE);
             scui_area_t clip_w = scui_widget_clip(event->object);

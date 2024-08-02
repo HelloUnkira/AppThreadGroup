@@ -59,8 +59,8 @@ void scui_draw_letter(scui_surface_t    *dst_surface, scui_area_t *dst_clip,
     uint8_t *src_addr = src_surface->pixel;
     /* 调色板数组(为空时计算,有时直接取): */
     scui_multi_t palette_len = 1 << src_glyph->bpp;
-    scui_color_limit_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * sizeof(scui_color_limit_t));
-    scui_color_limit_t  filter = 0;
+    scui_color_wt_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_mix, palette_len * sizeof(scui_color_wt_t));
+    scui_color_wt_t  filter = 0;
     memset(palette_table, 0, palette_len * dst_byte);
     /* 起始色调和结束色调固定 */
     scui_pixel_by_color(dst_surface->format, &palette_table[0], src_color.color_e);

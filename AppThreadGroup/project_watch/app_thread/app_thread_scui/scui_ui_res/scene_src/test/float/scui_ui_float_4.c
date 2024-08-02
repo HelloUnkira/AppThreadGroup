@@ -130,8 +130,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             scroll_maker.widget.clip.h = SCUI_DRV_VER_RES * 11 / 25;
             scroll_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
             scroll_maker.widget.child_num = 60;
-            scroll_maker.pos  = scui_event_pos_c;
-            scroll_maker.dir  = scui_event_dir_ver;
+            scroll_maker.pos  = scui_opt_pos_c;
+            scroll_maker.dir  = scui_opt_dir_ver;
             scroll_maker.loop = true;
             
             scui_string_maker_t string_maker = {0};

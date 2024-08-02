@@ -53,16 +53,8 @@ typedef union {
 } scui_color8888_t;
 #pragma pack(pop)
 
-/* color format */
-typedef enum {
-    scui_color_format_rgb565,
-    scui_color_format_rgb888,
-    scui_color_format_argb8565,
-    scui_color_format_argb8888,
-}  scui_color_format_t;
-
-/* color limit */
-typedef uint32_t scui_color_limit_t;
+/* color wildcard type */
+typedef uint32_t scui_color_wt_t;
 
 /*@brief: 过度色, 固定此格式主要上层通用性
  */
@@ -146,6 +138,33 @@ typedef struct {
     scui_coord_t    ver_res;    // 画布像素流高度
     scui_alpha_t    alpha;      // 画布全局透明度
 } scui_surface_t;
+
+/*@brief 操作方向(与操作位置透明切换)
+ */
+typedef enum {
+    scui_opt_dir_none = (0x00),
+    scui_opt_dir_to_u = (1 << 0),   // 向up
+    scui_opt_dir_to_d = (1 << 1),   // 向down
+    scui_opt_dir_to_l = (1 << 2),   // 向left
+    scui_opt_dir_to_r = (1 << 3),   // 向right
+    scui_opt_dir_ver  = (scui_opt_dir_to_u | scui_opt_dir_to_d),
+    scui_opt_dir_hor  = (scui_opt_dir_to_l | scui_opt_dir_to_r),
+    scui_opt_dir_all  = (scui_opt_dir_ver  | scui_opt_dir_hor ),
+} scui_opt_dir_t;
+
+/*@brief 操作位置(与操作方向透明切换)
+ */
+typedef enum {
+    scui_opt_pos_none = scui_opt_dir_none,
+    scui_opt_pos_u    = scui_opt_dir_to_d,
+    scui_opt_pos_d    = scui_opt_dir_to_u,
+    scui_opt_pos_l    = scui_opt_dir_to_r,
+    scui_opt_pos_r    = scui_opt_dir_to_l,
+    scui_opt_pos_c    = scui_opt_dir_all,
+    scui_opt_pos_ver  = scui_opt_dir_ver,
+    scui_opt_pos_hor  = scui_opt_dir_hor,
+    scui_opt_pos_all  = scui_opt_dir_all,
+} scui_opt_pos_t;
 
 /*@brief 像素点配置
  *@param cf    像素点格式

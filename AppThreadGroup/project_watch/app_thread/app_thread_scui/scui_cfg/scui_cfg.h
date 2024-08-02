@@ -103,7 +103,7 @@
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
 /* 窗口交互方向 */
-#define SCUI_WINDOW_JUMP_DIR                        (scui_event_dir_to_l)
+#define SCUI_WINDOW_JUMP_DIR                        (scui_opt_dir_to_l)
 /* 窗口管理栈数量限制 */
 #define SCUI_WINDOW_STACK_NEST                      (10)
 

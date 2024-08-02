@@ -17,17 +17,17 @@ typedef int32_t scui_multi_t;
 
 /*@brief 坐标
  */
-typedef struct {
-    scui_coord_t x;
-    scui_coord_t y;
+typedef union {
+    struct {
+        scui_coord_t x;
+        scui_coord_t y;
+    };
+    struct {
+        scui_coord_t w;
+        scui_coord_t h;
+    };
+    scui_coord_t meta[2];
 } scui_point_t;
-
-/*@brief 线段
- */
-typedef struct {
-    scui_point_t p1;
-    scui_point_t p2;
-} scui_line_t;
 
 /*@brief 坐标区域
  *       总计使用俩种表达方式
@@ -48,6 +48,11 @@ typedef union {
         scui_coord_t x2;
         scui_coord_t y2;
     };
+    struct {
+        scui_point_t p1;
+        scui_point_t p2;
+    };
+    scui_coord_t meta[4];
 } scui_area_t;
 
 /*@brief 线段相交判断
@@ -55,7 +60,7 @@ typedef union {
  *@param line2 线段
  *@retval 是否相交
  */
-bool scui_line_cross(scui_line_t *line1, scui_line_t *line2);
+bool scui_line_cross(scui_area_t *line1, scui_area_t *line2);
 
 /*@breif 转化区域描述方式(主->从)
  *@param area 区域
@@ -143,6 +148,6 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point);
  *@param p2 坐标端点
  *@retval 包含true,不包含false
  */
-bool scui_area_line(scui_area_t *area, scui_line_t *line);
+bool scui_area_line(scui_area_t *area, scui_area_t *line);
 
 #endif

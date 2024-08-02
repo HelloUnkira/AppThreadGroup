@@ -268,12 +268,12 @@ void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
         scui_widget_t  *widget  = scui_handle_get(event->object);
         scui_surface_t *surface = widget->surface;
         scui_coord_t pixel_byte   = scui_pixel_bits(surface->format) / 8;
-        scui_coord_t pixel_remain = sizeof(scui_color_limit_t) - pixel_byte;
+        scui_coord_t pixel_remain = sizeof(scui_color_wt_t) - pixel_byte;
         scui_multi_t pixel_size   = pixel_byte * clip->w * clip->h + pixel_remain;
         uint8_t  *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
-        scui_color_limit_t color_s = 0;
-        scui_color_limit_t color_e = 0;
-        scui_color_limit_t pixel_a = 0;
+        scui_color_wt_t color_s = 0;
+        scui_color_wt_t color_e = 0;
+        scui_color_wt_t pixel_a = 0;
         scui_pixel_by_color(surface->format, &color_s, color.color_s);
         scui_pixel_by_color(surface->format, &color_e, color.color_e);
         

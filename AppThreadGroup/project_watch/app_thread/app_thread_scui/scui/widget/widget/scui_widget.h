@@ -277,7 +277,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
  *@param pos     对齐方向
  *@param offset  偏移量
  */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_event_pos_t pos, scui_point_t *offset);
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_pos_t pos, scui_point_t *offset);
 
 /*@brief 子控件坐标镜像
  *@param handle  控件句柄
@@ -285,7 +285,7 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_even
  *@param dir     镜像方向(水平镜像或垂直镜像)
  *@param recurse 递归处理(全局镜像有效)
  */
-void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_event_dir_t dir, bool recurse);
+void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_dir_t dir, bool recurse);
 
 /*@brief 控件尺寸更新
  *@param handle 控件句柄
@@ -315,8 +315,8 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
  *@param offset 偏移量
  *@param pos    对齐目标
  */
-bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t   *target,
-                                scui_point_t *offset, scui_event_pos_t pos);
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target,
+                                scui_point_t *offset, scui_opt_pos_t pos);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄

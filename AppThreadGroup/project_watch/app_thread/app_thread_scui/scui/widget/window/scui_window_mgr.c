@@ -20,7 +20,7 @@ scui_window_switch_type_t scui_window_switch_type_cfg_get(void)
 /*@brief 窗口切换方向(配置)
  *@retval 窗口切换方向
  */
-scui_event_dir_t scui_window_switch_dir_cfg_get(void)
+scui_opt_dir_t scui_window_switch_dir_cfg_get(void)
 {
     return scui_window_mgr.switch_args.cfg_dir;
 }
@@ -37,7 +37,7 @@ void scui_window_switch_type_cfg_set(scui_window_switch_type_t switch_type)
 /*@brief 窗口切换方向(配置)
  *@param switch_dir 窗口切换方向
  */
-void scui_window_switch_dir_cfg_set(scui_event_dir_t switch_dir)
+void scui_window_switch_dir_cfg_set(scui_opt_dir_t switch_dir)
 {
     scui_window_mgr.switch_args.cfg_dir = switch_dir;
 }
@@ -362,9 +362,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_window_mgr.switch_args.type == scui_window_switch_zoom2) {
             
             float scale_d = 0;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 scale_d = scui_map(src_clip.w, 0, src_surface->hor_res, 50, 100) / 100.0f;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 scale_d = scui_map(src_clip.h, 0, src_surface->ver_res, 50, 100) / 100.0f;
             
             SCUI_LOG_INFO("scale_d:%f", scale_d);
@@ -377,7 +377,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             
             #if 1
             // 扩充源区域的取点范围,保证到达边界
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
                 scui_coord_t delta = (scui_multi_t)src_clip.w * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.w;
                 src_clip.w = scui_min(src_surface->hor_res, src_clip.w + delta);
                 if (src_clip.x > 0) {
@@ -385,7 +385,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
                     src_clip.x = scui_max(0, src_clip.x - delta);
                 }
             }
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
                 scui_coord_t delta = (scui_multi_t)src_clip.h * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.h;
                     src_clip.h = scui_min(src_surface->ver_res, src_clip.h + delta);
                 if (src_clip.y > 0) {
@@ -545,14 +545,14 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         if (scui_window_mgr.switch_args.type == scui_window_switch_flip) {
             
             /* 小于一半跳过绘制, 因为会被覆盖 */
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
                 if (src_clip.w < src_surface->hor_res / 2)
                     continue;
                 if (src_clip.w == src_surface->hor_res / 2)
                 if (widget->myself != scui_window_active_curr())
                     continue;
             }
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
                 if (src_clip.h < src_surface->ver_res / 2)
                     continue;
                 if (src_clip.h == src_surface->ver_res / 2)
@@ -561,17 +561,17 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             }
             
             float angle = 0;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 angle = scui_map(src_clip.w - src_surface->hor_res / 2, 0, src_surface->hor_res / 2, 90, 0);
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 angle = scui_map(src_clip.h - src_surface->ver_res / 2, 0, src_surface->ver_res / 2, 90, 0);
             SCUI_LOG_INFO("angle:%f", angle);
             
             scui_matrix_t r_matrix = {0};
             scui_matrix_identity(&r_matrix);
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 scui_matrix_rotate(&r_matrix, angle, 0x02);
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 scui_matrix_rotate(&r_matrix, angle, 0x01);
             // scui_matrix_check(&r_matrix);
             scui_face3_t face = {
@@ -583,9 +583,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             scui_area3_transform_by_matrix(&face, &r_matrix);
             
             scui_point2_t offset = {0};
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 offset.x = (src_surface->hor_res - scui_dist(face.point3[0].x, face.point3[1].x)) / 2;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 offset.y = (src_surface->ver_res - scui_dist(face.point3[0].y, face.point3[2].y)) / 2;
             
             SCUI_LOG_INFO("offset:%f", offset);
@@ -613,12 +613,12 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
         if (scui_window_mgr.switch_args.type == scui_window_switch_cube) {
             
             float angle = 0;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
                 angle = scui_map(src_clip.w, 0, src_surface->hor_res, 90, 0);
                 if (src_clip.x == 0)
                     angle = 90 - angle;
             }
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0) {
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
                 angle = scui_map(src_clip.h, 0, src_surface->ver_res, 90, 0);
                 if (src_clip.y == 0)
                     angle = 90 - angle;
@@ -628,18 +628,18 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             
             scui_matrix_t r_matrix = {0};
             scui_matrix_identity(&r_matrix);
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 scui_matrix_rotate(&r_matrix, angle, 0x02);
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 scui_matrix_rotate(&r_matrix, angle, 0x01);
             // scui_matrix_check(&r_matrix);
             
             scui_coord_t x_res = src_surface->hor_res / 2;
             scui_coord_t y_res = src_surface->ver_res / 2;
             scui_coord_t z_res = 0;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 z_res = src_surface->hor_res / 2;
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 z_res = src_surface->ver_res / 2;
             
             scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
@@ -661,9 +661,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
             };
             
             scui_face3_t face = {0};
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_hor) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
                 face = src_clip.x > 0 ? face3[0] : face3[2];
-            if ((scui_window_mgr.switch_args.dir & scui_event_dir_ver) != 0)
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
                 face = src_clip.y > 0 ? face3[0] : face3[4];
             
             scui_area3_transform_by_matrix(&face, &r_matrix);

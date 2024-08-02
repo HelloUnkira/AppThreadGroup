@@ -33,7 +33,7 @@ void scui_ready(void)
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb->protect = scui_pixel_pb_shared;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
-    surface_fb_remain   = sizeof(scui_color_limit_t) - surface_fb_byte;
+    surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->hor_res = SCUI_DRV_HOR_RES;
@@ -46,7 +46,7 @@ void scui_ready(void)
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb->protect = scui_pixel_pb_shared;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
-    surface_fb_remain   = sizeof(scui_color_limit_t) - surface_fb_byte;
+    surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
     surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
     surface_fb->hor_res = SCUI_DRV_HOR_RES;

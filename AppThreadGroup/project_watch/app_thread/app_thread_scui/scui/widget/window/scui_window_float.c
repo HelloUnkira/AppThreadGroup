@@ -93,11 +93,11 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     /* 根据动作方向确定透明度 */
     scui_alpha_t alpha = scui_alpha_pct100;
-    if (scui_window_float.pos == scui_event_pos_l ||
-        scui_window_float.pos == scui_event_pos_r)
+    if (scui_window_float.pos == scui_opt_pos_l ||
+        scui_window_float.pos == scui_opt_pos_r)
         alpha -= scui_abs(clip.x) * (scui_coord_t)scui_alpha_pct100 / clip.w;
-    if (scui_window_float.pos == scui_event_pos_u ||
-        scui_window_float.pos == scui_event_pos_d)
+    if (scui_window_float.pos == scui_opt_pos_u ||
+        scui_window_float.pos == scui_opt_pos_d)
         alpha -= scui_abs(clip.y) * (scui_coord_t)scui_alpha_pct100 / clip.h;
     /* 更新透明度 */
     widget->surface->alpha = alpha;
@@ -129,10 +129,10 @@ void scui_window_float_anima_ready(void *instance)
     scui_point_t point = {.x = clip.x,.y = clip.y,};
     
     /* 默认已经覆盖,如果位置不对则已经回退 */
-    if ((scui_window_float.pos == scui_event_pos_l && point.x == -clip.w) ||
-        (scui_window_float.pos == scui_event_pos_u && point.y == -clip.h) ||
-        (scui_window_float.pos == scui_event_pos_r && point.x == +clip.w) ||
-        (scui_window_float.pos == scui_event_pos_d && point.y == +clip.h)) {
+    if ((scui_window_float.pos == scui_opt_pos_l && point.x == -clip.w) ||
+        (scui_window_float.pos == scui_opt_pos_u && point.y == -clip.h) ||
+        (scui_window_float.pos == scui_opt_pos_r && point.x == +clip.w) ||
+        (scui_window_float.pos == scui_opt_pos_d && point.y == +clip.h)) {
          scui_window_active(scui_window_float.main);
          scui_window_stack_cover(scui_window_float.main);
          scui_widget_hide(handle, true);
@@ -158,9 +158,9 @@ void scui_window_float_anima_expired(void *instance)
     scui_area_t   clip   = scui_widget_clip(handle);
     
     scui_point_t point = {.x = clip.x,.y = clip.y,};
-    if ((scui_window_float.dir & scui_event_dir_hor) != 0)
+    if ((scui_window_float.dir & scui_opt_dir_hor) != 0)
         point.x = anima->value_c;
-    if ((scui_window_float.dir & scui_event_dir_ver) != 0)
+    if ((scui_window_float.dir & scui_opt_dir_ver) != 0)
         point.y = anima->value_c;
     
     SCUI_LOG_INFO("<%d, %d>", point.x, point.y);
@@ -213,19 +213,19 @@ void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
     /* 从当前位置到达目标点 */
     int32_t value_s = 0;
     int32_t value_e = 0;
-    if (scui_window_float.dir == scui_event_dir_to_r) {
+    if (scui_window_float.dir == scui_opt_dir_to_r) {
         value_s = clip.x;
         value_e = inout ? 0 : -clip.w;
     }
-    if (scui_window_float.dir == scui_event_dir_to_l) {
+    if (scui_window_float.dir == scui_opt_dir_to_l) {
         value_s = clip.x;
         value_e = inout ? 0 : +hor_res;
     }
-    if (scui_window_float.dir == scui_event_dir_to_d) {
+    if (scui_window_float.dir == scui_opt_dir_to_d) {
         value_s = clip.y;
         value_e = inout ? 0 : -clip.h;
     }
-    if (scui_window_float.dir == scui_event_dir_to_u) {
+    if (scui_window_float.dir == scui_opt_dir_to_u) {
         value_s = clip.y;
         value_e = inout ? 0 : +ver_res;
     }
@@ -304,18 +304,18 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
             break;
         int32_t value_s = 0;
         int32_t value_e = 0;
-        if ((scui_window_float.dir & scui_event_dir_ver) != 0) {
+        if ((scui_window_float.dir & scui_opt_dir_ver) != 0) {
             value_s = clip.y;
-            if (scui_window_float.dir == scui_event_dir_to_d)
+            if (scui_window_float.dir == scui_opt_dir_to_d)
                 value_e = event->ptr_e.y - clip.h;
-            if (scui_window_float.dir == scui_event_dir_to_u)
+            if (scui_window_float.dir == scui_opt_dir_to_u)
                 value_e = event->ptr_e.y;
         }
-        if ((scui_window_float.dir & scui_event_dir_hor) != 0) {
+        if ((scui_window_float.dir & scui_opt_dir_hor) != 0) {
             value_s = clip.x;
-            if (scui_window_float.dir == scui_event_dir_to_r)
+            if (scui_window_float.dir == scui_opt_dir_to_r)
                 value_e = event->ptr_e.x - clip.w;
-            if (scui_window_float.dir == scui_event_dir_to_l)
+            if (scui_window_float.dir == scui_opt_dir_to_l)
                 value_e = event->ptr_e.x;
         }
         scui_window_float_anima_auto(value_s, value_e, 0);
@@ -334,28 +334,28 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
             
             if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
-                if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l) {
+                if (scui_window_float.pos == scui_opt_pos_u ||
+                    scui_window_float.pos == scui_opt_pos_l) {
                     scui_window_float_anima_inout(handle, false);
                     SCUI_LOG_DEBUG("");
                 }
             } else {
-                if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l) {
+                if (scui_window_float.pos == scui_opt_pos_u ||
+                    scui_window_float.pos == scui_opt_pos_l) {
                     scui_window_float_anima_inout(handle, true);
                     SCUI_LOG_DEBUG("");
                 }
             }
             if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
-                if (scui_window_float.pos == scui_event_pos_d ||
-                    scui_window_float.pos == scui_event_pos_r) {
+                if (scui_window_float.pos == scui_opt_pos_d ||
+                    scui_window_float.pos == scui_opt_pos_r) {
                     scui_window_float_anima_inout(handle, true);
                     SCUI_LOG_DEBUG("");
                 }
             } else {
-                if (scui_window_float.pos == scui_event_pos_d ||
-                    scui_window_float.pos == scui_event_pos_r) {
+                if (scui_window_float.pos == scui_opt_pos_d ||
+                    scui_window_float.pos == scui_opt_pos_r) {
                     scui_window_float_anima_inout(handle, false);
                     SCUI_LOG_DEBUG("");
                 }
@@ -363,28 +363,28 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         } else {
             if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
-                if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l) {
+                if (scui_window_float.pos == scui_opt_pos_u ||
+                    scui_window_float.pos == scui_opt_pos_l) {
                     scui_window_float_anima_inout(handle, false);
                     SCUI_LOG_DEBUG("");
                 }
             } else {
-                if (scui_window_float.pos == scui_event_pos_u ||
-                    scui_window_float.pos == scui_event_pos_l) {
+                if (scui_window_float.pos == scui_opt_pos_u ||
+                    scui_window_float.pos == scui_opt_pos_l) {
                     scui_window_float_anima_inout(handle, true);
                     SCUI_LOG_DEBUG("");
                 }
             }
             if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
-                if (scui_window_float.pos == scui_event_pos_d ||
-                    scui_window_float.pos == scui_event_pos_r) {
+                if (scui_window_float.pos == scui_opt_pos_d ||
+                    scui_window_float.pos == scui_opt_pos_r) {
                     scui_window_float_anima_inout(handle, true);
                     SCUI_LOG_DEBUG("");
                 }
             } else {
-                if (scui_window_float.pos == scui_event_pos_d ||
-                    scui_window_float.pos == scui_event_pos_r) {
+                if (scui_window_float.pos == scui_opt_pos_d ||
+                    scui_window_float.pos == scui_opt_pos_r) {
                     scui_window_float_anima_inout(handle, false);
                     SCUI_LOG_DEBUG("");
                 }
@@ -421,44 +421,44 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         scui_widget_event_mask_keep(event);
         scui_window_float.cover = false;
         /* 采用位置检测机制,这会使初始判断条件简单化 */
-        scui_window_float.pos = scui_event_pos_none;
+        scui_window_float.pos = scui_opt_pos_none;
         /* 水平位置先检测 */
         if (event->ptr_c.x <= clip.w * 1 / 2)
-            scui_window_float.pos |= scui_event_pos_l;
+            scui_window_float.pos |= scui_opt_pos_l;
         if (event->ptr_c.x >= clip.w * 1 / 2)
-            scui_window_float.pos |= scui_event_pos_r;
+            scui_window_float.pos |= scui_opt_pos_r;
         /* 垂直位置后检测,并且吸收水平位置检测结果 */
         if (event->ptr_c.y <= clip.h * 1 / 2)
-            scui_window_float.pos |= scui_event_pos_u;
+            scui_window_float.pos |= scui_opt_pos_u;
         if (event->ptr_c.y >= clip.h * 1 / 2)
-            scui_window_float.pos |= scui_event_pos_d;
+            scui_window_float.pos |= scui_opt_pos_d;
         break;
     }
     case scui_event_ptr_move: {
         scui_widget_event_mask_keep(event);
-        if (scui_window_float.pos == scui_event_pos_none)
+        if (scui_window_float.pos == scui_opt_pos_none)
             break;
         scui_point_t point = {0};
-        scui_event_dir_t event_dir = scui_indev_ptr_dir(event);
+        scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
         scui_window_float.target = SCUI_HANDLE_INVALID;
         /* 方向检测与条件加载 */
-        if (event_dir == scui_event_dir_to_r &&
-           (scui_window_float.pos & scui_event_pos_l) != 0) { /* 左浮窗:方向向右 */
+        if (event_dir == scui_opt_dir_to_r &&
+           (scui_window_float.pos & scui_opt_pos_l) != 0) { /* 左浮窗:方向向右 */
             scui_window_float.target = scui_window_float.list[2];
             point.x = -clip.w;
         }
-        if (event_dir == scui_event_dir_to_l &&
-           (scui_window_float.pos & scui_event_pos_r) != 0) { /* 右浮窗:方向向左 */
+        if (event_dir == scui_opt_dir_to_l &&
+           (scui_window_float.pos & scui_opt_pos_r) != 0) { /* 右浮窗:方向向左 */
             scui_window_float.target = scui_window_float.list[3];
             point.x = +clip.w;
         }
-        if (event_dir == scui_event_dir_to_d &&
-           (scui_window_float.pos & scui_event_pos_u) != 0) { /* 上浮窗:方向向下 */
+        if (event_dir == scui_opt_dir_to_d &&
+           (scui_window_float.pos & scui_opt_pos_u) != 0) { /* 上浮窗:方向向下 */
             scui_window_float.target = scui_window_float.list[0];
             point.y = -clip.h;
         }
-        if (event_dir == scui_event_dir_to_u &&
-           (scui_window_float.pos & scui_event_pos_d) != 0) { /* 下浮窗:方向向上 */
+        if (event_dir == scui_opt_dir_to_u &&
+           (scui_window_float.pos & scui_opt_pos_d) != 0) { /* 下浮窗:方向向上 */
             scui_window_float.target = scui_window_float.list[1];
             point.y = +clip.h;
         }
@@ -498,18 +498,18 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             /* 初始默认启动一次,等待动画被打断 */
             int32_t value_s = 0;
             int32_t value_e = 0;
-            if ((scui_window_float.dir & scui_event_dir_ver) != 0) {
+            if ((scui_window_float.dir & scui_opt_dir_ver) != 0) {
                 value_s = point.y;
-                if (scui_window_float.dir == scui_event_dir_to_d)
+                if (scui_window_float.dir == scui_opt_dir_to_d)
                     value_e = event->ptr_e.y - clip.h;
-                if (scui_window_float.dir == scui_event_dir_to_u)
+                if (scui_window_float.dir == scui_opt_dir_to_u)
                     value_e = event->ptr_e.y;
             }
-            if ((scui_window_float.dir & scui_event_dir_hor) != 0) {
+            if ((scui_window_float.dir & scui_opt_dir_hor) != 0) {
                 value_s = point.x;
-                if (scui_window_float.dir == scui_event_dir_to_r)
+                if (scui_window_float.dir == scui_opt_dir_to_r)
                     value_e = event->ptr_e.x - clip.w;
-                if (scui_window_float.dir == scui_event_dir_to_l)
+                if (scui_window_float.dir == scui_opt_dir_to_l)
                     value_e = event->ptr_e.x;
             }
             scui_window_float_anima_auto(value_s, value_e, 0);

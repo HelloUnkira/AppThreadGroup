@@ -98,18 +98,18 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         };
         
         // 获得icon的四个中点以确定水平与垂直的缩放方向
-        scui_event_dir_t hor_dir = scui_event_dir_none;
-        scui_event_dir_t ver_dir = scui_event_dir_none;
+        scui_opt_dir_t hor_dir = scui_opt_dir_none;
+        scui_opt_dir_t ver_dir = scui_opt_dir_none;
         
         if (icon_center.x < edge_center.x)
-            hor_dir = scui_event_dir_to_r;
+            hor_dir = scui_opt_dir_to_r;
         if (icon_center.x > edge_center.x)
-            hor_dir = scui_event_dir_to_l;
+            hor_dir = scui_opt_dir_to_l;
         
         if (icon_center.y < edge_center.y)
-            ver_dir = scui_event_dir_to_d;
+            ver_dir = scui_opt_dir_to_d;
         if (icon_center.y > edge_center.y)
-            ver_dir = scui_event_dir_to_u;
+            ver_dir = scui_opt_dir_to_u;
         
         #if 0
         // 距离中心偏移做qiu'mia映射
@@ -154,19 +154,19 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             scale_clip.y += (icon_clip.h - image_clip_h) / 2;
             #else
             // 水平缩放
-            if (hor_dir == scui_event_dir_none)
+            if (hor_dir == scui_opt_dir_none)
                 scale_clip.x += (icon_clip.w - image_clip_w) / 2;
-            if (hor_dir == scui_event_dir_to_l)
+            if (hor_dir == scui_opt_dir_to_l)
                 scale_clip.x += (icon_clip.w - image_clip_w) * 1 / 4;
-            if (hor_dir == scui_event_dir_to_r)
+            if (hor_dir == scui_opt_dir_to_r)
                 scale_clip.x += (icon_clip.w - image_clip_w) * 3 / 4;
             
             // 垂直缩放
-            if (ver_dir == scui_event_dir_none)
+            if (ver_dir == scui_opt_dir_none)
                 scale_clip.y += (icon_clip.h - image_clip_h) / 2;
-            if (ver_dir == scui_event_dir_to_u)
+            if (ver_dir == scui_opt_dir_to_u)
                 scale_clip.y += (icon_clip.h - image_clip_h) * 1 / 4;
-            if (ver_dir == scui_event_dir_to_d)
+            if (ver_dir == scui_opt_dir_to_d)
                 scale_clip.y += (icon_clip.h - image_clip_h) * 3 / 4;
             #endif
             
@@ -190,7 +190,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_event_pos_c);
+                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
                 #else
                 scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, (scui_color_t){0});
                 #endif
@@ -203,7 +203,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                     .x = scale_clip.w * SCUI_SCALE_COF / scui_image_w(image),
                     .y = scale_clip.h * SCUI_SCALE_COF / scui_image_h(image),
                 };
-                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_event_pos_c);
+                scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
                 #else
                 scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, (scui_color_t){0});
                 #endif

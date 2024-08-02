@@ -318,8 +318,8 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
     if (image.image->format == scui_image_cf_palette4) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 4;
-        scui_color_limit_t palette_table[1 << 4] = {0};
-        scui_color_limit_t filter = 0;
+        scui_color_wt_t palette_table[1 << 4] = {0};
+        scui_color_wt_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], src_color.color_s);
@@ -402,8 +402,8 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
     if (image.image->format == scui_image_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 8;
-        scui_color_limit_t palette_table[1 << 8] = {0};
-        scui_color_limit_t filter = 0;
+        scui_color_wt_t palette_table[1 << 8] = {0};
+        scui_color_wt_t filter = 0;
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[0], src_color.color_e);
         scui_pixel_by_color(SCUI_PIXEL_CF_DEF, &palette_table[palette_len - 1], src_color.color_s);

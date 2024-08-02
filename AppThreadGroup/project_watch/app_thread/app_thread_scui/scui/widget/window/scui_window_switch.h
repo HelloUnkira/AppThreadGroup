@@ -5,7 +5,7 @@
  *@param type 窗口切换风格
  *@param dir  窗口切换方向
  */
-void scui_window_switch_type_update(scui_window_switch_type_t type, scui_event_dir_t dir);
+void scui_window_switch_type_update(scui_window_switch_type_t type, scui_opt_dir_t dir);
 
 /*@brief 窗口跳转动画回调
  */
@@ -50,6 +50,6 @@ void scui_window_event_dispatch(scui_event_t *event);
  *@param type   窗口切换风格
  *@param dir    窗口切换方向
  */
-void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_event_dir_t dir);
+void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir);
 
 #endif

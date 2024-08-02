@@ -343,7 +343,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         SCUI_ASSERT(image != NULL);
         
         scui_point_t scale = image_scale;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_event_pos_c);
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_opt_pos_c);
         
         break;
     }

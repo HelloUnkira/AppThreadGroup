@@ -8,41 +8,41 @@
 #include "scui.h"
 
 /*@brief 线段相交判断
- *@param line1 线段
- *@param line2 线段
+ *@param line1 线段(s)
+ *@param line2 线段(s)
  *@retval 是否相交
  */
-bool scui_line_cross(scui_line_t *line1, scui_line_t *line2)
+bool scui_line_cross(scui_area_t *line1, scui_area_t *line2)
 {
     /* 排斥检查 */
     
-    if (scui_min(line1->p1.x, line1->p2.x) > scui_max(line2->p1.x, line2->p2.x) ||
-        scui_min(line2->p1.x, line2->p2.x) > scui_max(line1->p1.x, line1->p2.x) ||
-        scui_min(line1->p1.y, line1->p2.y) > scui_max(line2->p1.y, line2->p2.y) ||
-        scui_min(line2->p1.y, line2->p2.y) > scui_max(line1->p1.y, line1->p2.y))
+    if (scui_min(line1->x1, line1->x2) > scui_max(line2->x1, line2->x2) ||
+        scui_min(line2->x1, line2->x2) > scui_max(line1->x1, line1->x2) ||
+        scui_min(line1->y1, line1->y2) > scui_max(line2->y1, line2->y2) ||
+        scui_min(line2->y1, line2->y2) > scui_max(line1->y1, line1->y2))
         return false;
     
     /* 跨立检查 */
     
-    scui_multi_t dis_11_21_x = line1->p1.x - line2->p1.x;
-    scui_multi_t dis_12_21_x = line1->p2.x - line2->p1.x;
-    scui_multi_t dis_22_21_y = line2->p2.y - line2->p1.y;
+    scui_multi_t dis_11_21_x = line1->x1 - line2->x1;
+    scui_multi_t dis_12_21_x = line1->x2 - line2->x1;
+    scui_multi_t dis_22_21_y = line2->y2 - line2->y1;
     
-    scui_multi_t dis_11_21_y = line1->p1.y - line2->p1.y;
-    scui_multi_t dis_12_21_y = line1->p2.y - line2->p1.y;
-    scui_multi_t dis_22_21_x = line2->p2.x - line2->p1.x;
+    scui_multi_t dis_11_21_y = line1->y1 - line2->y1;
+    scui_multi_t dis_12_21_y = line1->y2 - line2->y1;
+    scui_multi_t dis_22_21_x = line2->x2 - line2->x1;
     
     if ((dis_11_21_x * dis_22_21_y - dis_11_21_y * dis_22_21_x) *
         (dis_12_21_x * dis_22_21_y - dis_12_21_y * dis_22_21_x) > 0)
         return false;
     
     scui_multi_t dis_21_11_x = -dis_11_21_x;
-    scui_multi_t dis_22_11_x = line2->p2.x - line1->p1.x;
-    scui_multi_t dis_12_11_y = line1->p2.y - line1->p1.y;
+    scui_multi_t dis_22_11_x = line2->x2 - line1->x1;
+    scui_multi_t dis_12_11_y = line1->y2 - line1->y1;
     
     scui_multi_t dis_21_11_y = -dis_11_21_y;
-    scui_multi_t dis_22_11_y = line2->p2.y - line1->p1.y;
-    scui_multi_t dis_12_11_x = line1->p2.x - line1->p1.x;
+    scui_multi_t dis_22_11_y = line2->y2 - line1->y1;
+    scui_multi_t dis_12_11_x = line1->x2 - line1->x1;
     
     if ((dis_21_11_x * dis_12_11_y - dis_21_11_y * dis_12_11_x) *
         (dis_22_11_x * dis_12_11_y - dis_22_11_y * dis_12_11_x) > 0)
@@ -307,12 +307,11 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point)
 }
 
 /*@brief 检查区域包含线(area包含line)
- *@param area   区域
- *@param p1 坐标端点
- *@param p2 坐标端点
+ *@param area 区域
+ *@param line 线段
  *@retval 包含true,不包含false
  */
-bool scui_area_line(scui_area_t *area, scui_line_t *line)
+bool scui_area_line(scui_area_t *area, scui_area_t *line)
 {
     /* 1.端点是否在域内 */
     if (scui_area_point(area, &line->p1))
@@ -320,13 +319,13 @@ bool scui_area_line(scui_area_t *area, scui_line_t *line)
     if (scui_area_point(area, &line->p2))
         return true;
     /* 2.线段与区域俩条对角线是否相交 */
-    scui_line_t line1 = {
-        .p1.x = area->x1, .p1.y = area->y1,
-        .p2.x = area->x2, .p2.y = area->y2,
+    scui_area_t line1 = {
+        .x1 = area->x1, .y1 = area->y1,
+        .x2 = area->x2, .y2 = area->y2,
     };
-    scui_line_t line2 = {
-        .p1.x = area->x1, .p1.y = area->y2,
-        .p2.x = area->x2, .p2.y = area->y1,
+    scui_area_t line2 = {
+        .x1 = area->x1, .y1 = area->y2,
+        .x2 = area->x2, .y2 = area->y1,
     };
     
     if (scui_line_cross(line, &line1))

@@ -5,10 +5,10 @@ typedef struct {
     scui_handle_t               list[4];    /* 0:临近上;1:临近下;2:临近左;3:临近右; */
     scui_handle_t               main;       /* 主窗口 */
     scui_handle_t               target;     /* 目标浮窗 */
-    scui_event_dir_t            dir;        /* 交互方向 */
-    scui_event_pos_t            pos;        /* 相对位置 */
     scui_handle_t               anima;      /* 交互动画 */
     scui_handle_t               key;        /* 全局滚动锁定 */
+    scui_opt_dir_t              dir;        /* 交互方向 */
+    scui_opt_pos_t              pos;        /* 相对位置 */
     uint8_t execute:1;
     uint8_t cover:1;
     uint8_t hold:1;

@@ -47,9 +47,9 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
  *@param scale  图形缩放比例(1024为放大系数)
  *@param pos    缩放锚点
  */
-void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t     *target,
-                                  scui_handle_t image,  scui_area_t     *clip,
-                                  scui_point_t  scale,  scui_event_pos_t pos);
+void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
+                                  scui_handle_t image,  scui_area_t   *clip,
+                                  scui_point_t  scale,  scui_opt_pos_t pos);
 
 /*@brief 控件在画布绘制图像
  *@param handle 控件句柄
