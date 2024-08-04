@@ -498,6 +498,9 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
         if (widget->alpha != scui_alpha_trans &&
            (widget->surface->format == scui_image_cf_bmp565 ||
             widget->surface->format == scui_image_cf_bmp888)) {
+            /* 控件标记完全覆盖 */
+            if (widget->style.cover)
+                return true;
             /* 控件背景不透明且全覆盖 */
             if (!widget->style.trans) {
                 /* 纯色背景,全覆盖 */
@@ -534,6 +537,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
         /* 控件满足完全覆盖的条件 */
         if (scui_widget_clip_cover(child))
             scui_clip_del(&widget->clip_set, &child->clip_set.clip);
+        /* 迭代到子控件 */
         scui_widget_clip_update(child);
     }
     
@@ -731,15 +735,8 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
     
     scui_surface_t *dst_surface = widget->surface;
     scui_surface_t *src_surface = surface;
-    scui_area_t dst_clip = {
-        .w = dst_surface->hor_res,
-        .h = dst_surface->ver_res,
-    };
-    scui_area_t src_clip = {
-        .w = src_surface->hor_res,
-        .h = src_surface->ver_res,
-    };
-    
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    scui_area_t src_clip = scui_surface_area(src_surface);
     scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
 }
 
@@ -775,13 +772,12 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     };
     
     SCUI_LOG_DEBUG("");
-    
     /* 移动自己 */
     widget->clip.x = point->x;
     widget->clip.y = point->y;
     
     SCUI_LOG_DEBUG("");
-    /* 更新画布剪切域 */
+    /* 更新画布剪切域(更新自己的) */
     scui_widget_clip_clear(widget, false);
     scui_widget_surface_refr(widget->myself, false);
     
@@ -795,6 +791,16 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
             .y = offset.y + child->clip.y,
         };
         scui_widget_move_pos(handle, &point);
+    }
+    
+    SCUI_LOG_DEBUG("");
+    /* 更新画布剪切域(更新自己和父亲的) */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        widget = scui_handle_get(widget->parent);
+        SCUI_ASSERT(widget != NULL);
+        
+        scui_widget_clip_clear(widget, false);
+        scui_widget_surface_refr(widget->myself, false);
     }
 }
 
@@ -915,7 +921,11 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     
     widget->clip.w = width;
     widget->clip.h = height;
-    /* 更新画布剪切域 */
+    /* 更新画布剪切域(从父控件开始递归) */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        widget = scui_handle_get(widget->parent);
+        SCUI_ASSERT(widget != NULL);
+    }
     scui_widget_clip_clear(widget, true);
     scui_widget_surface_refr(widget->myself, true);
 }

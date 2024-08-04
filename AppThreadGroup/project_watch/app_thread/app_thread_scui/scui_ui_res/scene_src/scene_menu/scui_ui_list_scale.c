@@ -9,7 +9,7 @@
 
 static struct {
     // 使用插件连接器,加速滚动子控件渲染
-    scui_plug_conpler_t *conpler;
+    scui_plug_coupler_t *coupler;
     scui_ui_bar_arc_t    bar_arc;
 } * scui_ui_res_local = NULL;
 
@@ -36,30 +36,30 @@ void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-static void scui_ui_scene_plug_conpler_widget_m_event_proc(scui_event_t *event)
+static void scui_ui_scene_plug_coupler_widget_m_event_proc(scui_event_t *event)
 {
-    scui_plug_conpler_widget_m_event_proc(scui_ui_res_local->conpler, event);
+    scui_plug_coupler_widget_m_event_proc(scui_ui_res_local->coupler, event);
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-static void scui_ui_scene_plug_conpler_widget_s_event_proc(scui_event_t *event)
+static void scui_ui_scene_plug_coupler_widget_s_event_proc(scui_event_t *event)
 {
-    scui_plug_conpler_widget_s_event_proc(scui_ui_res_local->conpler, event);
+    scui_plug_coupler_widget_s_event_proc(scui_ui_res_local->coupler, event);
 }
 
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-static void scui_ui_scene_plug_conpler_recycle_event_proc(scui_event_t *event)
+static void scui_ui_scene_plug_coupler_recycle_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_draw: {
         
         if (scui_widget_event_check_finish(event)) {
             // 从控件树绘制结束,回收部分不使用的画布
-            scui_plug_conpler_recycle(scui_ui_res_local->conpler, false);
+            scui_plug_coupler_recycle(scui_ui_res_local->coupler, false);
         }
         
         break;
@@ -95,7 +95,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, NULL, btn_color_full);
         
         scui_area_t   image_clip = scui_widget_clip(event->object);
-        scui_handle_t image_icon = scui_ui_scene_list_image[scui_ui_res_local->conpler->list_draw_idx] + 3;
+        scui_handle_t image_icon = scui_ui_scene_list_image[scui_ui_res_local->coupler->list_draw_idx] + 3;
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
         image_clip.h -= (image_clip.h - scui_image_h(image_icon));
         scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, (scui_color_t){0});
@@ -163,8 +163,8 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, alpha, true);
         #endif
         
-        scui_handle_t   index  = scui_ui_res_local->conpler->list_draw_idx;
-        scui_handle_t  custom  = scui_ui_res_local->conpler->list_widget_s[index];
+        scui_handle_t   index  = scui_ui_res_local->coupler->list_draw_idx;
+        scui_handle_t  custom  = scui_ui_res_local->coupler->list_widget_s[index];
         scui_area_t  src_clip  = scui_widget_clip(custom);
         scui_area_t  dst_clip  = scui_widget_clip(event->object);
         scui_point_t img_scale = {
@@ -220,7 +220,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
-        scui_handle_t  custom = scui_ui_res_local->conpler->list_widget_s[index];
+        scui_handle_t  custom = scui_ui_res_local->coupler->list_widget_s[index];
         SCUI_LOG_WARN("click idx:%d", index);
         break;
     }
@@ -249,14 +249,14 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
-            scui_plug_conpler_create(&scui_ui_res_local->conpler, scui_ui_scene_list_num);
-            scui_ui_res_local->conpler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
+            scui_plug_coupler_create(&scui_ui_res_local->coupler, scui_ui_scene_list_num);
+            scui_ui_res_local->coupler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
         }
         
         if (scui_widget_event_check_prepare(event)) {
             
             scui_event_cb_node_t event_cb_node = {
-                .event_cb = scui_ui_scene_plug_conpler_recycle_event_proc,
+                .event_cb = scui_ui_scene_plug_coupler_recycle_event_proc,
                 .event = scui_event_draw,
             };
             scui_widget_event_add(SCUI_UI_SCENE_LIST_SCALE_SCROLL, &event_cb_node);
@@ -276,10 +276,10 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             
             custom_maker.widget.style.indev_ptr = true;
             custom_maker.widget.clip.h   = 72;
-            custom_maker.widget.event_cb = scui_ui_scene_plug_conpler_widget_m_event_proc;
+            custom_maker.widget.event_cb = scui_ui_scene_plug_coupler_widget_m_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_custom_create(&custom_maker, &custom_handle, false);
-                scui_ui_res_local->conpler->list_widget_m[idx] = custom_handle;
+                scui_ui_res_local->coupler->list_widget_m[idx] = custom_handle;
             }
             
             custom_maker.widget.style.indev_ptr = false;
@@ -298,7 +298,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 custom_maker.widget.child_num   = 1;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
                 scui_custom_create(&custom_maker, &custom_handle, false);
-                scui_ui_res_local->conpler->list_widget_s[idx] = custom_handle;
+                scui_ui_res_local->coupler->list_widget_s[idx] = custom_handle;
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
@@ -319,7 +319,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 scui_string_create(&string_maker, &string_handle, false);
                 
                 scui_event_cb_node_t event_cb_node = {
-                    .event_cb = scui_ui_scene_plug_conpler_widget_s_event_proc,
+                    .event_cb = scui_ui_scene_plug_coupler_widget_s_event_proc,
                     .event = scui_event_draw,
                 };
                 scui_widget_event_add(string_handle, &event_cb_node);
@@ -334,12 +334,12 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         
         if (scui_widget_event_check_finish(event)) {
             
-            scui_plug_conpler_recycle(scui_ui_res_local->conpler, true);
+            scui_plug_coupler_recycle(scui_ui_res_local->coupler, true);
             
-            for (uint8_t idx = 0; idx < scui_ui_res_local->conpler->list_num; idx++)
-                scui_widget_hide(scui_ui_res_local->conpler->list_widget_s[idx], false);
+            for (uint8_t idx = 0; idx < scui_ui_res_local->coupler->list_num; idx++)
+                scui_widget_hide(scui_ui_res_local->coupler->list_widget_s[idx], false);
             
-            scui_plug_conpler_destroy(scui_ui_res_local->conpler);
+            scui_plug_coupler_destroy(scui_ui_res_local->coupler);
         }
         
         /* 界面数据转存回收 */
@@ -357,7 +357,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_key_click:
         
-        scui_plug_conpler_recycle(scui_ui_res_local->conpler, true);
+        scui_plug_coupler_recycle(scui_ui_res_local->coupler, true);
         
         scui_window_switch_type_t type = scui_window_switch_type_cfg_get();
         scui_window_switch_type_cfg_set(scui_window_switch_none);

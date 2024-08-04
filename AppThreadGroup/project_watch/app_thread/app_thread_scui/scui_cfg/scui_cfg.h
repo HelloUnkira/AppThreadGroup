@@ -96,6 +96,9 @@
 /* 帧缓冲区数量(1或2) */
 #define SCUI_SURFACE_FB_LIMIT                       (2)
 
+/* 根控件背景外存直达画布(节约峰值内存) */
+#define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)
+
 /* 移动时停止帧动画(假渲染) */
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
 

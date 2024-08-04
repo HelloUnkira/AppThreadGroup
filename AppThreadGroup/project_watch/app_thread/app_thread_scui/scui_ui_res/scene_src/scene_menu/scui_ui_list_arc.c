@@ -26,12 +26,6 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("widget %d, type %d", event->object, event->type);
     
-    scui_coord_t scroll_pct = 0;
-    scui_scroll_auto_percent_get(event->object, &scroll_pct);
-    SCUI_LOG_INFO("pct:%d", scroll_pct);
-    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
-    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
-    
     scui_handle_t scroll    = event->object;
     scui_area_t   scroll_c  = scui_widget_clip(scroll);
     scui_coord_t  scroll_cx = scroll_c.x + scroll_c.w / 2;
@@ -82,6 +76,14 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
     }
     
     scui_widget_draw(event->object, NULL, false);
+    
+    
+    
+    scui_coord_t scroll_pct = 0;
+    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    SCUI_LOG_INFO("pct:%d", scroll_pct);
+    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
 }
 
 /*@brief 控件事件响应回调

@@ -11,7 +11,20 @@ void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc)
 {
     bar_arc->bar_wait   = 0;
     bar_arc->bar_alpha  = scui_alpha_cover;
+    
+    // 不要使用默认重绘,只重绘背景这一部分即可
+    #if 0
+    scui_area_t draw_clip = {
+        .x = (SCUI_DRV_HOR_RES - 44),
+        .y = (SCUI_DRV_VER_RES - 236) / 2,
+        .w =  44,
+        .h = 236,
+    };
+    scui_widget_draw(bar_arc->bar_handle, &draw_clip, false);
+    #else
     scui_widget_draw(bar_arc->bar_handle, NULL, false);
+    #endif
+    
     scui_widget_alpha_set(bar_arc->bar_handle, bar_arc->bar_alpha, false);
 }
 

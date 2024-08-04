@@ -1,5 +1,5 @@
-#ifndef SCUI_PLUG_CONPLER_H
-#define SCUI_PLUG_CONPLER_H
+#ifndef SCUI_PLUG_COUPLER_H
+#define SCUI_PLUG_COUPLER_H
 
 /*@brief 插件:连接器
  *       该辅助目标主要将主控件与子控件树(自定义控件树)
@@ -21,35 +21,35 @@ typedef struct {
     scui_handle_t    list_num;          // 列表数量
     bool            *list_draw;         // 绘制标记
     bool            *list_refr;         // 刷新标记
-} scui_plug_conpler_t;
+} scui_plug_coupler_t;
 
 /*@brief 插件:连接器:创建
- *@param conpler  连接器实例地址
+ *@param coupler  连接器实例地址
  *@param list_num 控件数量
  */
-void scui_plug_conpler_create(scui_plug_conpler_t **conpler, scui_handle_t list_num);
+void scui_plug_coupler_create(scui_plug_coupler_t **coupler, scui_handle_t list_num);
 
 /*@brief 插件:连接器:销毁
- *@param conpler 连接器实例
+ *@param coupler 连接器实例
  */
-void scui_plug_conpler_destroy(scui_plug_conpler_t *conpler);
+void scui_plug_coupler_destroy(scui_plug_coupler_t *coupler);
 
 /*@brief 插件:连接器:回收
- *@param conpler 连接器实例
+ *@param coupler 连接器实例
  *@param any     回收所有
  */
-void scui_plug_conpler_recycle(scui_plug_conpler_t *conpler, bool any);
+void scui_plug_coupler_recycle(scui_plug_coupler_t *coupler, bool any);
 
 /*@brief 控件事件响应回调(需要包装)
- *@param conpler 连接器实例
+ *@param coupler 连接器实例
  *@param event   事件
  */
-void scui_plug_conpler_widget_s_event_proc(scui_plug_conpler_t *conpler, scui_event_t *event);
+void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_event_t *event);
 
 /*@brief 控件事件响应回调(需要包装)
- *@param conpler 连接器实例
+ *@param coupler 连接器实例
  *@param event   事件
  */
-void scui_plug_conpler_widget_m_event_proc(scui_plug_conpler_t *conpler, scui_event_t *event);
+void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_event_t *event);
 
 #endif

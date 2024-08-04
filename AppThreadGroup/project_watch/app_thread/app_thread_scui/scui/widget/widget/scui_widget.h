@@ -22,6 +22,7 @@ typedef enum {
 typedef struct {
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
     uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
+    uint8_t cover:1;            /* 局部覆盖:0;完全覆盖:1; */
     uint8_t sched_anima:1;      /* 控件调度动画标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */

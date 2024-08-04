@@ -198,26 +198,23 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_tick_elapse_us(true);
     #endif
     
-    #if 1
-    /* 这里有一个优化点(主要用于全局背景绘制) */
+    #if SCUI_WIDGET_ROOT_IMAGE_DIRECT
+    /* 这里有一个优化点(主要用于根控件背景绘制) */
     /* 条件达到时,将资源直接加载到绘制画布上即可 */
-    if ((widget->surface->format == scui_pixel_cf_bmp565 ||
-         widget->surface->format == scui_pixel_cf_bmp888)   &&
-         widget->clip_set.clip.w == scui_disp_get_hor_res() &&
-         widget->clip_set.clip.h == scui_disp_get_ver_res() &&
-         scui_area_equal(&widget->clip_set.clip, clip)) {
-         scui_image_src_read(image_inst, widget->surface->pixel);
-         #if 1
-         /* 上面默认使用的全局截切域 */
-         /* 所以可能存在覆盖,为所有子控件补充剪切域 */
-         scui_widget_child_list_btra(widget, idx) {
-             scui_handle_t handle = widget->child_list[idx];
-             scui_widget_t *child = scui_handle_get(handle);
-             scui_widget_clip_reset(child, &widget->clip_set.clip, true);
-             scui_widget_clip_update(child);
-         }
-         #endif
-         return;
+    if (widget->myself == SCUI_HANDLE_INVALID &&
+        scui_area_equal(&widget->clip_set.clip, clip)) {
+        scui_area_t clip_widget = scui_surface_area(widget->surface);
+    if (scui_area_equal(&widget->clip_set.clip, &clip_widget)) {
+        #if 1
+        scui_image_src_read(image_inst, widget->surface->pixel);
+        /* 上面默认使用的全局剪切域 */
+        /* 所以可能存在覆盖,为所有控件补充剪切域 */
+        scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
+        scui_widget_clip_clear(widget, false);
+        scui_widget_clip_update(widget);
+        return;
+        #endif
+    }
     }
     #endif
     
@@ -511,7 +508,7 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &unit->clip, clip))
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         /* 子剪切域相对同步偏移 */
         scui_area_t src_clip = *clip;
