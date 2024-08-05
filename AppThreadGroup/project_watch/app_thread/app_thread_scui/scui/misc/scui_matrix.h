@@ -14,6 +14,14 @@ void scui_matrix_check(scui_matrix_t *matrix);
  */
 bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face2_t *face2_dst);
 
+/*@brief 矩阵生成
+ *@param matrix    矩阵实例
+ *@param face2_src 平面
+ *@param face3_dst 平面(空间)
+ *@retval 成功或失败
+ */
+bool scui_matrix_by_face3(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face3_t *face3_dst);
+
 /*@brief 矩阵乘法可逆检查
  *@param matrix 矩阵实例
  */
