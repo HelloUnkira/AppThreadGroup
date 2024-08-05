@@ -16,8 +16,8 @@ typedef enum {
     scui_window_switch_circle,          /* 圈格缩放 */
     scui_window_switch_grid,            /* 网格缩放 */
     
-    scui_window_switch_flip,            /* 中心轴翻页(2.5D) */
-    scui_window_switch_flip_page,       /* 仿真页翻页(2.5D) */
+    scui_window_switch_flip1,           /* 中心轴翻页(2.5D) */
+    scui_window_switch_flip2,           /* 仿真页翻页(2.5D) */
     scui_window_switch_cube,            /* 正方体旋转(2.5D) */
 
     scui_window_switch_single_e,

@@ -13,7 +13,7 @@
 //
 /*****************************************************************************/
 /* 主题:蜂窝(所有图标为正方形图标) */
-#define SCUI_UI_HONEYCOMB_SCALE_MODE            (0)
+#define SCUI_UI_HONEYCOMB_SCALE_MODE            (1)
 #define SCUI_UI_HONEYCOMB_SCALE_DEF             (50)
 #define SCUI_UI_HONEYCOMB_SCALE_MIN             (20)
 #define SCUI_UI_HONEYCOMB_SCALE_MAX             (110)
@@ -69,12 +69,14 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, SCUI_UI_HONEYCOMB_
 //
 /*****************************************************************************/
 typedef enum {
+    scui_ui_scene_list_type_s,
     scui_ui_scene_list_type_list_scale,
     scui_ui_scene_list_type_list_arc,
     scui_ui_scene_list_type_honeycomb,
     scui_ui_scene_list_type_waterfall,
     scui_ui_scene_list_type_themewheel,
     scui_ui_scene_list_type_spread,
+    scui_ui_scene_list_type_e,
 } scui_ui_scene_list_type_t;
 
 /* 应用列表,设置列表,主题等使用 */

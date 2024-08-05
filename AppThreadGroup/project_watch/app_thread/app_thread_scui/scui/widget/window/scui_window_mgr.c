@@ -249,7 +249,8 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_grid:
          scui_window_transform_grid(list, num);
          break;
-    case scui_window_switch_flip:
+    case scui_window_switch_flip1:
+    case scui_window_switch_flip2:
          scui_window_transform_flip(list, num);
          break;
     case scui_window_switch_cube:

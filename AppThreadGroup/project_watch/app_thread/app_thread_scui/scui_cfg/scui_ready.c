@@ -102,7 +102,8 @@ void scui_ready(void)
     scui_window_switch_type_cfg_set(scui_window_switch_circle);
     scui_window_switch_type_cfg_set(scui_window_switch_grid);
     
-    scui_window_switch_type_cfg_set(scui_window_switch_flip);
+    scui_window_switch_type_cfg_set(scui_window_switch_flip1);
+    scui_window_switch_type_cfg_set(scui_window_switch_flip2);
     scui_window_switch_type_cfg_set(scui_window_switch_cube);
     
     /* 初始窗口 */

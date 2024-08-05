@@ -420,13 +420,46 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_flip(scui_widget_t **list, scui_handle_t num)
 {
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-    
     SCUI_ASSERT(num == 2);
+    
+    /* 底图清空 */
+    if (scui_window_mgr.switch_args.type == scui_window_switch_flip1) {
+        scui_color_t dst_pixel = {0};
+        scui_surface_t *dst_surface = scui_surface_fb_draw();
+        scui_area_t dst_clip = scui_surface_area(dst_surface);
+        scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
+    }
+    
+    /* 底图清空 */
+    if (scui_window_mgr.switch_args.type == scui_window_switch_flip2) {
+        
+        for (scui_handle_t idx = 0; idx < num; idx++) {
+            /* 场景切换满足全局目标 */
+            scui_surface_t *dst_surface = scui_surface_fb_draw();
+            scui_surface_t *src_surface = list[idx]->surface;
+            SCUI_ASSERT(src_surface->hor_res == scui_disp_get_hor_res());
+            SCUI_ASSERT(src_surface->ver_res == scui_disp_get_ver_res());
+            
+            scui_area_t dst_clip = {0};
+            scui_area_t src_clip = {0};
+            if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
+                 continue;
+            
+            scui_area_t area = scui_surface_area(dst_surface);
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
+                area.w = dst_surface->hor_res / 2;
+                area.x = dst_clip.x > 0 ? dst_surface->hor_res / 2 : 0;
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
+                area.h = dst_surface->ver_res / 2;
+                area.y = dst_clip.y > 0 ? src_surface->ver_res / 2 : 0;
+            }
+            
+            dst_clip = area;
+            src_clip = area;
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+        }
+    }
     
     for (scui_handle_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
@@ -456,33 +489,36 @@ void scui_window_transform_flip(scui_widget_t **list, scui_handle_t num)
                 continue;
         }
         
-        float angle = 0;
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
-            angle = scui_map(src_clip.w - src_surface->hor_res / 2, 0, src_surface->hor_res / 2, 90, 0);
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
-            angle = scui_map(src_clip.h - src_surface->ver_res / 2, 0, src_surface->ver_res / 2, 90, 0);
-        SCUI_LOG_INFO("angle:%f", angle);
-        
-        scui_matrix_t r_matrix = {0};
-        scui_matrix_identity(&r_matrix);
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
-            scui_matrix_rotate(&r_matrix, angle, 0x02);
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
-            scui_matrix_rotate(&r_matrix, angle, 0x01);
-        // scui_matrix_check(&r_matrix);
         scui_face3_t face = {
             .point3[1].x = src_surface->hor_res - 1,
             .point3[2].x = src_surface->hor_res - 1,
             .point3[2].y = src_surface->ver_res - 1,
             .point3[3].y = src_surface->ver_res - 1,
         };
-        scui_area3_transform_by_matrix(&face, &r_matrix);
-        
         scui_point2_t offset = {0};
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
-            offset.x = (src_surface->hor_res - scui_dist(face.point3[0].x, face.point3[1].x)) / 2;
-        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
-            offset.y = (src_surface->ver_res - scui_dist(face.point3[0].y, face.point3[2].y)) / 2;
+        scui_matrix_t r_matrix = {0};
+        scui_matrix_identity(&r_matrix);
+        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
+            float angle = scui_map(src_clip.w - src_surface->hor_res / 2, 0, src_surface->hor_res / 2, 90, 0);
+            scui_matrix_rotate(&r_matrix, angle, 0x02);
+            SCUI_LOG_INFO("angle:%f", angle);
+            
+            offset.x = src_surface->hor_res / 2;
+            for (uint8_t idx = 0; idx < 4; idx++)
+                face.point3[idx].x -= src_surface->hor_res / 2;
+        }
+        if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
+            float angle = scui_map(src_clip.h - src_surface->ver_res / 2, 0, src_surface->ver_res / 2, 90, 0);
+            scui_matrix_rotate(&r_matrix, angle, 0x01);
+            SCUI_LOG_INFO("angle:%f", angle);
+            
+            offset.y = src_surface->ver_res / 2;
+            for (uint8_t idx = 0; idx < 4; idx++)
+                face.point3[idx].y -= src_surface->ver_res / 2;
+        }
+        
+        // scui_matrix_check(&r_matrix);
+        scui_area3_transform_by_matrix(&face, &r_matrix);
         
         SCUI_LOG_INFO("offset:%f", offset);
         for (uint8_t idx_v = 0; idx_v < 4; idx_v++)
@@ -498,6 +534,47 @@ void scui_window_transform_flip(scui_widget_t **list, scui_handle_t num)
         dst_clip = scui_surface_area(dst_surface);
         src_clip = scui_surface_area(src_surface);
         scui_draw_area_blit_by_matrix(dst_surface, &dst_clip, src_surface, &src_clip, &inv_matrix, &matrix);
+    }
+    
+    // 这里投机取巧,在上面变换完之后,把不显示的那部分还原的给盖住
+    if (scui_window_mgr.switch_args.type == scui_window_switch_flip2) {
+        
+        for (scui_handle_t idx = 0; idx < num; idx++) {
+            /* 场景切换满足全局目标 */
+            scui_surface_t *dst_surface = scui_surface_fb_draw();
+            scui_surface_t *src_surface = list[idx]->surface;
+            SCUI_ASSERT(src_surface->hor_res == scui_disp_get_hor_res());
+            SCUI_ASSERT(src_surface->ver_res == scui_disp_get_ver_res());
+            
+            scui_area_t dst_clip = {0};
+            scui_area_t src_clip = {0};
+            if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
+                 continue;
+            
+            /* 小于一半跳过绘制, 因为不覆盖它 */
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
+                if (src_clip.w < src_surface->hor_res / 2)
+                    continue;
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
+                if (src_clip.h < src_surface->ver_res / 2)
+                    continue;
+            }
+            
+            scui_area_t area = scui_surface_area(dst_surface);
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0) {
+                area.w = dst_surface->hor_res / 2;
+                area.x = dst_clip.x > 0 ? dst_surface->hor_res / 2 : 0;
+            }
+            if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
+                area.h = dst_surface->ver_res / 2;
+                area.y = dst_clip.y > 0 ? src_surface->ver_res / 2 : 0;
+            }
+            
+            dst_clip = area;
+            src_clip = area;
+            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+        }
     }
 }
 

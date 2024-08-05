@@ -35,15 +35,16 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         scui_window_switch_type_t switch_type = 0;
         switch_type = scui_window_switch_type_cfg_get();
         
-        scui_ui_scene_list_type_t type = 0;
-        type = scui_ui_scene_list_type_list_arc;
-        // type = scui_ui_scene_list_type_list_scale;
-        // type = scui_ui_scene_list_type_honeycomb;
-        // type = scui_ui_scene_list_type_waterfall;
-        // type = scui_ui_scene_list_type_themewheel;
-        // type = scui_ui_scene_list_type_spread;
+        static scui_ui_scene_list_type_t type = 0;
+        type++;
         
+        if (type < scui_ui_scene_list_type_s + 1)
+            type = scui_ui_scene_list_type_e - 1;
+        if (type > scui_ui_scene_list_type_e - 1)
+            type = scui_ui_scene_list_type_s + 1;
         
+        SCUI_ASSERT(type > scui_ui_scene_list_type_s);
+        SCUI_ASSERT(type < scui_ui_scene_list_type_e);
         
         switch (type) {
         case scui_ui_scene_list_type_list_scale: { // 缩放列表
