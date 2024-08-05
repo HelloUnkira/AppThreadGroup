@@ -17,6 +17,7 @@ typedef enum {
     scui_window_switch_grid,            /* 网格缩放 */
     
     scui_window_switch_flip,            /* 中心轴翻页(2.5D) */
+    scui_window_switch_flip_page,       /* 仿真页翻页(2.5D) */
     scui_window_switch_cube,            /* 正方体旋转(2.5D) */
 
     scui_window_switch_single_e,
@@ -112,6 +113,13 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
  *@param num  根控件数量
  */
 void scui_window_list_blend(scui_widget_t **list, scui_handle_t num);
+
+/*@brief 窗口管理器渲染根控件列表
+ *       将所有根控件渲染到绘制画布上
+ *@param list 根控件列表
+ *@param num  根控件数量
+ */
+void scui_window_list_render(scui_widget_t **list, scui_handle_t num);
 
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上
