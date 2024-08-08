@@ -43,17 +43,6 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
     widget->myself = *handle;
     
     SCUI_LOG_DEBUG("");
-    /* 子控件的坐标区域是相对根控件(递归语义) */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
-        /* 父控件不能是根控件,统一相对偏移 */
-        if (widget_parent->parent != SCUI_HANDLE_INVALID) {
-            widget->clip.x += widget_parent->clip.x;
-            widget->clip.y += widget_parent->clip.y;
-        }
-    }
-    
-    SCUI_LOG_DEBUG("");
     /* 构建孩子列表 */
     widget->child_num = maker->child_num;
     widget->child_list = NULL;
@@ -67,11 +56,24 @@ void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
     SCUI_LOG_DEBUG("");
     /* 画布的映射是根控件 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_root = NULL;
-        scui_handle_t  handle_root = scui_widget_root(widget->myself);
-        widget_root = scui_handle_get(handle_root);
-        widget->surface = widget_root->surface;
+        scui_handle_t handle = scui_widget_root(widget->myself);
+        scui_widget_t  *root = scui_handle_get(handle);
+        widget->surface = root->surface;
     }
+    
+    SCUI_LOG_DEBUG("");
+    /* 子控件的坐标区域是相对根控件(递归语义) */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *parent = scui_handle_get(widget->parent);
+        
+        if (parent->parent == SCUI_HANDLE_INVALID &&
+            scui_widget_surface_only(widget));
+        else {
+            widget->clip.x += parent->clip.x;
+            widget->clip.y += parent->clip.y;
+        }
+    }
+    
     /* 画布剪切域重置更新 */
     scui_clip_ready(&widget->clip_set);
     scui_widget_surface_refr(widget->myself, false);
@@ -755,8 +757,9 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         return;
     
     SCUI_LOG_DEBUG("");
-    /* 如果移动的是窗口,只需要改变窗口位置 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
+    /* 存在独立画布下,如果移动的是窗口,只需要改变窗口位置 */
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
         widget->clip.x = point->x;
         widget->clip.y = point->y;
         scui_widget_refr(widget->myself, false);

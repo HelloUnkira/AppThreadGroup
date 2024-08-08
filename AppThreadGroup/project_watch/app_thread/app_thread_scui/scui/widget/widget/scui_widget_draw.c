@@ -7,6 +7,23 @@
 
 #include "scui.h"
 
+/*@brief 绘制滴答检查
+ */
+static void scui_widget_draw_tick(bool check)
+{
+    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    
+    if (check)
+        scui_tick_elapse_us(true);
+    else {
+        uint64_t tick_us = scui_tick_elapse_us(false);
+        if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+            SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
+    }
+    
+    #endif
+}
+
 /*@brief 控件剪切域为空(绘制)
  *@param handle 控件句柄
  *@retval 控件剪切域为空
@@ -34,24 +51,28 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    
-    /* 当前本接口作为控件专用绘制接口: */
     SCUI_ASSERT(widget->type == scui_widget_type_string);
+    /* 当前本接口作为控件专用绘制接口: */
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
     scui_area_t string_clip = {
         .w = widget->clip.w,
         .h = widget->clip.h,
     };
-    
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -74,14 +95,10 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
         src_clip.w =  (string_clip.w);
         src_clip.h =  (string_clip.h);
         
+        scui_widget_draw_tick(true);
         scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制纯色区域
@@ -96,15 +113,20 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
-    
-    if (clip == NULL)
-        clip  = &widget->clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    scui_area_t widget_clip = widget->clip;
+    if (clip != NULL)
+    if (!scui_area_inter2(&widget_clip, clip))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    clip = &widget_clip;
+    /* step:widget<e> */
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -114,14 +136,10 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制模糊
@@ -134,15 +152,20 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
-    
-    if (clip == NULL)
-        clip  = &widget->clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    scui_area_t widget_clip = widget->clip;
+    if (clip != NULL)
+    if (!scui_area_inter2(&widget_clip, clip))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    clip = &widget_clip;
+    /* step:widget<e> */
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -152,14 +175,10 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_area_blur(widget->surface, &dst_clip);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制图像
@@ -177,26 +196,33 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
+    /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(image_inst != NULL);
-    
-    scui_area_t image_clip = {
+    SCUI_ASSERT(  image_inst != NULL);
+    scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
-    
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    if (clip == NULL)
-        clip  = &image_clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    if (clip != NULL)
+    if (!scui_area_inter2(&image_clip, clip))
+         return;
+    clip = &image_clip;
+    /* step:image<e> */
     
     #if SCUI_WIDGET_ROOT_IMAGE_DIRECT
     /* 这里有一个优化点(主要用于根控件背景绘制) */
@@ -206,7 +232,9 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         scui_area_t clip_widget = scui_surface_area(widget->surface);
     if (scui_area_equal(&widget->clip_set.clip, &clip_widget)) {
         #if 1
+        scui_widget_draw_tick(true);
         scui_image_src_read(image_inst, widget->surface->pixel);
+        scui_widget_draw_tick(false);
         /* 上面默认使用的全局剪切域 */
         /* 所以可能存在覆盖,为所有控件补充剪切域 */
         scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
@@ -234,15 +262,11 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
                         widget->alpha, color);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制图像
@@ -261,27 +285,35 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
+    /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(image_inst != NULL);
-    
-    scui_area_t image_clip = {
+    SCUI_ASSERT(  image_inst != NULL);
+    scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
+    if (clip != NULL)
+    if (!scui_area_inter2(&image_clip, clip))
+         return;
+    clip = &image_clip;
+    /* step:image<e> */
     
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    if (clip == NULL)
-        clip  = &image_clip;
-    
-#if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-#endif
-    
+    /* step:align<s> */
     scui_point_t src_offset = {0};
     scui_point_t dst_offset = {0};
     
@@ -304,6 +336,7 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
         src_offset.y = clip->h;
         dst_offset.y = target->y + target->h;
     }
+    /* step:align<e> */
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -313,15 +346,11 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        scui_widget_draw_tick(false);
         scui_draw_image_scale(widget->surface, &dst_clip, image_inst, clip,
                               widget->alpha, scale, dst_offset, src_offset);
+        scui_widget_draw_tick(true);
     }
-    
-#if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-#endif
 }
 
 /*@brief 控件在画布绘制图像
@@ -342,26 +371,33 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
+    /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(image_inst != NULL);
-    
-    scui_area_t image_clip = {
+    SCUI_ASSERT(  image_inst != NULL);
+    scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
-    
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    if (clip == NULL)
-        clip  = &image_clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    if (clip != NULL)
+    if (!scui_area_inter2(&image_clip, clip))
+         return;
+    clip = &image_clip;
+    /* step:image<e> */
     
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
@@ -371,15 +407,11 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, clip,
                                widget->alpha, angle, anchor, center);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制图像
@@ -397,26 +429,33 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
+    /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(image_inst != NULL);
-    
-    scui_area_t image_clip = {
+    SCUI_ASSERT(  image_inst != NULL);
+    scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
-    
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    if (clip == NULL)
-        clip  = &image_clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    if (clip != NULL)
+    if (!scui_area_inter2(&image_clip, clip))
+         return;
+    clip = &image_clip;
+    /* step:image<e> */
     
     // 给进来的就是逆矩阵, 这个接口现在不完善, 待定中
     scui_matrix_t reb_matrix = *matrix;
@@ -430,15 +469,11 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, clip,
                                        widget->alpha, matrix, &reb_matrix);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-       SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制圆环
@@ -462,8 +497,20 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
+    /* step:widget<s> */
     if (scui_area_empty(&widget->clip_set.clip))
         return;
+    scui_area_t widget_clip = widget->clip;
+    if (target != NULL)
+    if (!scui_area_inter2(&widget_clip, target))
+         return;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    target = &widget_clip;
+    /* step:widget<e> */
     
     /* 参数检查: */
     SCUI_ASSERT(0 <= percent && percent <= 100);
@@ -478,25 +525,20 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         return;
     }
     
-    scui_image_t *image_inst = scui_handle_get(image);
     scui_image_t *image_e_inst = scui_handle_get(image_e);
-    SCUI_ASSERT(image_inst != NULL);
-    SCUI_ASSERT(image_e_inst != NULL);
-    
-    scui_area_t image_clip = {
+    SCUI_ASSERT(  image_e_inst != NULL);
+    /* step:image<s> */
+    scui_image_t *image_inst = scui_handle_get(image);
+    SCUI_ASSERT(  image_inst != NULL);
+    scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
     };
-    
-    if (target == NULL)
-        target  = &widget->clip;
-    
-    if (clip == NULL)
-        clip  = &image_clip;
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
+    if (clip != NULL)
+    if (!scui_area_inter2(&image_clip, clip))
+         return;
+    clip = &image_clip;
+    /* step:image<e> */
     
     scui_point_t dst_center = {
         .x = target->x - widget->clip.x + image_inst->pixel.width  / 2,
@@ -519,16 +561,12 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
+        scui_widget_draw_tick(true);
         scui_draw_ring(widget->surface, &dst_clip, &dst_center,
                        image_e_inst, image_inst, &src_clip,
                        angle_as, widget->alpha, angle_ae, color);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }
 
 /*@brief 控件在画布绘制线条
@@ -542,6 +580,7 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
                            scui_point_t  pos_1,  scui_point_t pos_2,
                            scui_color_t  color)
 {
+    
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -552,20 +591,12 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
     if (width <= 0)
         width  = 1;
     
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    scui_tick_elapse_us(true);
-    #endif
-    
     scui_list_dll_btra(&widget->clip_set.dl_list, node) {
         scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
         
+        scui_widget_draw_tick(true);
         scui_draw_line(widget->surface, &unit->clip, color,
                        width, pos_1, pos_2, widget->alpha);
+        scui_widget_draw_tick(false);
     }
-    
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
-    uint64_t tick_us = scui_tick_elapse_us(false);
-    if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
-        SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    #endif
 }

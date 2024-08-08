@@ -38,23 +38,20 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
         return;
     }
     
-    scui_area_t clip_valid = widget->clip;
-    if (scui_widget_surface_only(widget) &&
-        widget->parent == SCUI_HANDLE_INVALID) {
-        clip_valid.x = 0;
-        clip_valid.y = 0;
-    }
+    scui_area_t widget_clip = widget->clip;
+    if (clip != NULL)
+    if (!scui_area_inter2(&widget_clip, clip))
+         return;
     
-    if (clip != NULL) {
-        scui_area_t clip_inter = {0};
-        if (!scui_area_inter(&clip_inter, &widget->clip, clip))
-             return;
-        clip_valid = clip_inter;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
     }
     
     /* 为所有控件及其子控件添加指定剪切域 */
     // scui_widget_clip_check(handle_root, true);
-    scui_widget_clip_reset(widget_root, &clip_valid, true);
+    scui_widget_clip_reset(widget_root, &widget_clip, true);
     // scui_widget_clip_check(handle_root, true);
     scui_widget_clip_update(widget_root);
     // scui_widget_clip_check(handle_root, true);

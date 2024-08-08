@@ -129,6 +129,21 @@ bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
     return !scui_area_empty(area);
 }
 
+/*@brief 求区域交集(area = area & area1)
+ *@param area  区域
+ *@param area1 区域
+ *@retval 为空false,不为空true
+ */
+bool scui_area_inter2(scui_area_t *area, scui_area_t *area1)
+{
+    scui_area_t area_r = {0};
+    if (scui_area_inter(&area_r, area, area1)) {
+       *area = area_r;
+        return true;
+    }
+    return false;
+}
+
 /*@brief 求区域并集(area = area1 | area2)
  *@param area  区域
  *@param area1 区域
