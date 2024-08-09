@@ -517,7 +517,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
     /* 其他未列举事件走默认派发流程,单次派发 */
-    // SCUI_LOG_WARN("unknown dispatch");
+    // SCUI_LOG_INFO("unknown dispatch");
     event->object = scui_widget_root(widget->myself);
     scui_widget_event_proc(event);
     event->object = widget->myself;

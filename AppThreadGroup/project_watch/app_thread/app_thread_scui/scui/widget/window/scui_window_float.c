@@ -136,6 +136,10 @@ void scui_window_float_anima_ready(void *instance)
          scui_window_active(scui_window_float.main);
          scui_window_stack_cover(scui_window_float.main);
          scui_widget_hide(handle, true);
+         // 主窗口虚化
+         #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
+         scui_widget_draw(scui_window_float.main, NULL, false);
+         #endif
     }
     
     if (scui_window_float.anima != SCUI_HANDLE_INVALID) {
@@ -164,7 +168,6 @@ void scui_window_float_anima_expired(void *instance)
         point.y = anima->value_c;
     
     SCUI_LOG_INFO("<%d, %d>", point.x, point.y);
-    
     scui_window_float_move_with_alpha(handle, &point);
 }
 
@@ -469,27 +472,25 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
                  break;
             /* 先释放其他窗口资源 */
             scui_window_list_hide_without(handle, false);
-            
-            #if 0
-            if (true) {
-                scui_widget_draw(handle, NULL, true);
-                scui_event_t event = {0};
-                event.object = handle;
-                event.type = scui_event_draw;
-                // 移除跟主窗口相关所有绘制事件
-                while (scui_event_dequeue(&event, true));
-            }
-            
-            scui_area_t window_clip = scui_widget_clip(handle);
-            scui_widget_clip_reset(scui_handle_get(handle), &window_clip, false);
-            scui_widget_draw_blur(handle, NULL);
-            #endif
-            
             scui_widget_show(scui_window_float.target, false);
             scui_window_active(scui_window_float.target);
             scui_window_stack_cover(scui_window_float.target);
             /* 移动到所在边界然后真实重绘 */
             scui_window_float_move_with_alpha(scui_window_float.target, &point);
+            
+            // 主窗口虚化
+            #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
+            scui_widget_draw(handle, NULL, false);
+            scui_event_t event_draw = {0};
+            event_draw.object = handle;
+            event_draw.type = scui_event_draw;
+            // 移除跟主窗口相关所有绘制事件
+            while (scui_event_dequeue(&event_draw, true));
+            /* 主窗口虚化 */
+            scui_widget_draw_blur(handle, NULL);
+            SCUI_LOG_WARN("");
+            #endif
+            
             scui_window_float.main  = handle;
             scui_window_float.dir   = event_dir;
             scui_window_float.pos   = event_dir;

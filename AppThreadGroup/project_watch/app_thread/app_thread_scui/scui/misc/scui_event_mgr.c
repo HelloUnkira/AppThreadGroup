@@ -205,8 +205,8 @@ void scui_event_respond(scui_event_t *event)
             SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
             
-            #if 0
             // 只发给浮动场景
+            #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
             if (scui_widget_surface_only(widget) && !window->hang_only)
                 continue;
             #endif

@@ -319,9 +319,8 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
             dst_clip = clip_seg[idx_j][idx_i];
             src_clip = clip_seg[idx_j][idx_i];
             
-            scui_alpha_t alpha = src_surface->alpha;
-            
             if (dist_dr >= dist_ds) {
+                scui_alpha_t alpha = src_surface->alpha;
                 src_surface->alpha = scui_map(dist_ds, 0, dist_dr, alpha, alpha / 2);
                 scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
                 src_surface->alpha = alpha;
