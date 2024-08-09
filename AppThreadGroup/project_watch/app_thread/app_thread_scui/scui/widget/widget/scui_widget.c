@@ -804,6 +804,9 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         
         scui_widget_clip_clear(widget, false);
         scui_widget_surface_refr(widget->myself, false);
+        
+        // 全部更新后需要从父控件开始重绘
+        scui_widget_draw(widget->parent, NULL, false);
     }
 }
 

@@ -44,4 +44,9 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip);
  */
 bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip);
 
+// 迭代器
+#define scui_clip_btra(clip_set, node)  scui_list_dll_btra(&clip_set.dl_list, node)
+#define scui_clip_ftra(clip_set, node)  scui_list_dll_ftra(&clip_set.dl_list, node)
+#define scui_clip_unit(node)            scui_own_ofs(scui_clip_unit_t, dl_node, node)
+
 #endif

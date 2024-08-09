@@ -7,6 +7,28 @@
 
 #include "scui.h"
 
+/*@brief 绘制目标重定向
+ */
+static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
+{
+    // 这里挂个内部的全局量,用于给外部提供使用
+    static scui_area_t widget_clip = {0};
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return false;
+    widget_clip = widget->clip;
+    if (*target != NULL)
+    if (!scui_area_inter2(&widget_clip, *target))
+         return false;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    *target = &widget_clip;
+    return true;
+}
+
 /*@brief 绘制滴答检查
  */
 static void scui_widget_draw_tick(bool check)
@@ -54,35 +76,23 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
     SCUI_ASSERT(widget->type == scui_widget_type_string);
     /* 当前本接口作为控件专用绘制接口: */
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
-    scui_area_t string_clip = {
-        .w = widget->clip.w,
-        .h = widget->clip.h,
-    };
-    
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         /* 子剪切域要相对同步偏移 */
-        scui_area_t src_clip = string_clip;
+        scui_area_t string_clip = {
+            .w = widget->clip.w,
+            .h = widget->clip.h,
+        };
+        scui_area_t  src_clip   = string_clip;
         scui_point_t src_offset = {
             .x = dst_clip.x - target->x,
             .y = dst_clip.y - target->y,
@@ -113,23 +123,12 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (clip != NULL)
-    if (!scui_area_inter2(&widget_clip, clip))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &clip))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    clip = &widget_clip;
-    /* step:widget<e> */
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -152,23 +151,12 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (clip != NULL)
-    if (!scui_area_inter2(&widget_clip, clip))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &clip))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    clip = &widget_clip;
-    /* step:widget<e> */
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -196,20 +184,9 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
@@ -246,8 +223,8 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
     }
     #endif
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -285,20 +262,9 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
@@ -338,8 +304,8 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
     }
     /* step:align<e> */
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -371,20 +337,9 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
@@ -399,8 +354,8 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
     clip = &image_clip;
     /* step:image<e> */
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -429,20 +384,9 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
@@ -461,8 +405,8 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
     scui_matrix_t reb_matrix = *matrix;
     scui_matrix_inverse(&reb_matrix);
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -497,20 +441,9 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    /* step:widget<s> */
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
-    scui_area_t widget_clip = widget->clip;
-    if (target != NULL)
-    if (!scui_area_inter2(&widget_clip, target))
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
          return;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    target = &widget_clip;
-    /* step:widget<e> */
     
     /* 参数检查: */
     SCUI_ASSERT(0 <= percent && percent <= 100);
@@ -545,8 +478,8 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         .y = target->y - widget->clip.y + image_inst->pixel.height / 2,
     };
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
@@ -591,8 +524,8 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
     if (width <= 0)
         width  = 1;
     
-    scui_list_dll_btra(&widget->clip_set.dl_list, node) {
-        scui_clip_unit_t *unit = scui_own_ofs(scui_clip_unit_t, dl_node, node);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
         
         scui_widget_draw_tick(true);
         scui_draw_line(widget->surface, &unit->clip, color,
