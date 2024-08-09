@@ -719,6 +719,11 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
             z_res = src_surface->ver_res / 2;
         
+        const float scale_res = 0.618;
+        x_res *= scale_res;
+        y_res *= scale_res;
+        z_res *= scale_res;
+        
         scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
         scui_vertex3_t vertex3_1 = {+1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
         scui_vertex3_t vertex3_2 = {+1.0f * x_res, +1.0f * y_res, -1.0f * z_res,};
@@ -744,7 +749,10 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
             face = src_clip.y > 0 ? face3[0] : face3[4];
         
         scui_area3_transform_by_matrix(&face, &r_matrix);
-        scui_area3_offset_xy(&face, &(scui_point2_t){.x = x_res, .y = y_res,});
+        scui_area3_offset_xy(&face, &(scui_point2_t){
+            .x = src_surface->hor_res / 2,
+            .y = src_surface->ver_res / 2,
+        });
         
         scui_matrix_t inv_matrix = {0};
         scui_size2_t size2 = {.w = src_surface->hor_res,.h = src_surface->ver_res,};

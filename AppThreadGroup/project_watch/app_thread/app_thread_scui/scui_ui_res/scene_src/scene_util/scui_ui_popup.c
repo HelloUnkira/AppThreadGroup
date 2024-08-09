@@ -7,7 +7,8 @@
 
 #include "scui.h"
 
-static scui_alpha_t  popup_alpha  = scui_alpha_cover;       // 淡出透明度
+static scui_coord_t  popup_wait = 0;
+static scui_coord_t  popup_fade = 0;
 static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
@@ -15,9 +16,11 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
     if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
         return;
     
-    popup_alpha = scui_alpha_cover;
+    popup_wait = SCUI_UI_POPUP_STOP_TIME;
+    popup_fade = SCUI_UI_POPUP_FADE_TIME;
+    
     scui_widget_show(SCUI_UI_SCENE_POPUP, false);
-    scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
+    scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
     scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
     
     if (text != SCUI_HANDLE_INVALID)
@@ -38,19 +41,35 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
+        if (popup_wait != 0) {
+            if (popup_wait  > SCUI_ANIMA_TICK)
+                popup_wait -= SCUI_ANIMA_TICK;
+            else
+                popup_wait  = 0;
+            
+            uint8_t pct = scui_map(popup_wait, SCUI_UI_POPUP_STOP_TIME, 0,
+                                   scui_alpha_pct0, scui_alpha_pct100);
+            
+            SCUI_LOG_INFO("popup wait pct:%d", pct);
+            scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct(pct), true);
+            scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+            break;
+        }
         if (scui_string_scroll_over(popup_string)) {
             /* 完全隐藏则回收控件 */
-            if (popup_alpha == 0)
+            if (popup_fade == 0)
                 scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
             else {
-                scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_POPUP_FADE_TIME / SCUI_ANIMA_TICK);
-                if (popup_alpha  > tick)
-                    popup_alpha -= tick;
+                if (popup_fade  > SCUI_ANIMA_TICK)
+                    popup_fade -= SCUI_ANIMA_TICK;
                 else
-                    popup_alpha  = 0;
+                    popup_fade  = 0;
                 
-                SCUI_LOG_INFO("popup alpha:%d", popup_alpha);
-                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, popup_alpha, true);
+                uint8_t pct = scui_map(popup_fade, SCUI_UI_POPUP_FADE_TIME, 0,
+                                       scui_alpha_pct100, scui_alpha_pct0);
+                
+                SCUI_LOG_INFO("popup fade pct:%d", pct);
+                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct(pct), true);
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
             }
         }

@@ -488,7 +488,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             while (scui_event_dequeue(&event_draw, true));
             /* 主窗口虚化 */
             scui_widget_draw_blur(handle, NULL);
-            SCUI_LOG_WARN("");
+            SCUI_LOG_INFO("");
             #endif
             
             scui_window_float.main  = handle;

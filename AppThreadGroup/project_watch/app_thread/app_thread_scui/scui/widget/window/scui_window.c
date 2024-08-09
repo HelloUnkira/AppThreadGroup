@@ -28,10 +28,14 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     /* 创建surface */
     if (maker->buffer) {
         
-        #if 1   // 小内存
+        #if 1
         scui_pixel_cf_t p_cf = maker->format;
-        #else   // 大内存
+        #elif SCUI_MEM_SIZE_TYPE == 0
+        scui_pixel_cf_t p_cf = maker->format;
+        #elif SCUI_MEM_SIZE_TYPE == 1
         scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF_A;
+        #else
+        scui_pixel_cf_t p_cf = maker->format;
         #endif
         
         scui_pixel_pb_t p_pb = scui_pixel_pb_shared;

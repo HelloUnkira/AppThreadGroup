@@ -41,23 +41,29 @@ void scui_draw_area_blur(scui_surface_t *dst_surface, scui_area_t *dst_clip)
     #define GAUSS_SCALA     5
     SCUI_ASSERT(GAUSS_SCALA % 2 != 0);
     /* 高斯模糊核<s> */
-    const int8_t gauss_sum = 80;
-    const int8_t gauss_ofs = GAUSS_SCALA / 2;
-    uint16_t gauss_cof[GAUSS_SCALA][GAUSS_SCALA] = {
-        {1, 2, 3, 2, 1},
-        {2, 4, 6, 4, 2},
-        {3, 6, 8, 6, 3},
-        {2, 4, 6, 4, 2},
-        {1, 2, 3, 2, 1},
+     int32_t gauss_ofs = GAUSS_SCALA / 2;
+    uint32_t gauss_sum = 0;
+    uint32_t gauss_cof[GAUSS_SCALA][GAUSS_SCALA] = {
+        {1,  4,  7,  4, 1},
+        {4, 16, 26, 16, 4},
+        {7, 26, 41, 26, 7},
+        {4, 16, 26, 16, 4},
+        {1,  4,  7,  4, 1},
     };
     uintptr_t pixel_ofs[GAUSS_SCALA][GAUSS_SCALA] = {0};
     scui_color_wt_t pixel_mat[GAUSS_SCALA][GAUSS_SCALA] = {0};
+    
     for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
     for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
          pixel_ofs[idx_j][idx_i] = 0;
          pixel_ofs[idx_j][idx_i] += - dst_line * (idx_j + gauss_ofs - (GAUSS_SCALA - 1));
          pixel_ofs[idx_j][idx_i] += - dst_byte * (idx_i + gauss_ofs - (GAUSS_SCALA - 1));
-         gauss_cof[idx_j][idx_i] *= SCUI_SCALE_COF / gauss_sum;
+         gauss_sum += gauss_cof[idx_j][idx_i];
+    }
+    for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
+    for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
+         gauss_cof[idx_j][idx_i] *= SCUI_SCALE_COF;
+         gauss_cof[idx_j][idx_i] /= gauss_sum;
     }
     /* 高斯模糊核<e> */
     
