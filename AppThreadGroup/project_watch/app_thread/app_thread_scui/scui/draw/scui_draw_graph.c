@@ -67,16 +67,9 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     /* 用于绘制skew的线段 */
     /* 下面的内容是从其他地方抄录整理 */
     
-    scui_point_t pos_s = {0};
-    scui_point_t pos_e = {0};
     /* 从上往下绘制目标 */
-    if (src_pos_1.y < src_pos_2.y) {
-        pos_s = src_pos_1;
-        pos_e = src_pos_2;
-    } else {
-        pos_s = src_pos_2;
-        pos_e = src_pos_1;
-    }
+    scui_point_t pos_s = src_pos_1.y < src_pos_2.y ? src_pos_1 : src_pos_2;
+    scui_point_t pos_e = src_pos_1.y < src_pos_2.y ? src_pos_2 : src_pos_1;
     
     scui_area_t  clip_d = {0};
     scui_multi_t dx = pos_e.x - pos_s.x;

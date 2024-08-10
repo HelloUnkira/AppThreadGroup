@@ -31,6 +31,20 @@ double scui_cos(double radian);
  */
 double scui_tan(double radian);
 
+/*@brief 指数函数
+ *@param x 数字
+ *@param e 指数
+ *@retval 返回值(x^e)
+ */
+int64_t scui_pow(int64_t x, int8_t e);
+
+/*@brief 随机数
+ *@param min 数字
+ *@param max 数字
+ *@retval 返回值
+ */
+int64_t scui_rand(int64_t min, int64_t max);
+
 /*@brief 三角函数(sin),放大4096倍
  *@param angle 角度
  *@retval 三角函数值
@@ -57,32 +71,47 @@ int32_t scui_tan4096(int32_t angle);
  */
 void scui_sqrt(int32_t x, int32_t *q_i, int32_t *q_f, int32_t mask);
 
-#define SCUI_BEZIER_VAL_MAX   1024
-#define SCUI_BEZIER_VAL_SHIFT   10
-
 /*@brief 计算一个三次Bezier函数的值。
-* @param t  参数t时间范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u0 起始值0值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u1 控制值1值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u2 控制值2值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u3 结束值3值范围[0..SCUI_BEZIER_VAL_MAX]
+* @param t  参数t时间范围[0..SCUI_SCALE_COF]
+* @param u0 起始值0值范围[0..SCUI_SCALE_COF]
+* @param u1 控制值1值范围[0..SCUI_SCALE_COF]
+* @param u2 控制值2值范围[0..SCUI_SCALE_COF]
+* @param u3 结束值3值范围[0..SCUI_SCALE_COF]
 * @retval 给定参数在范围内计算的值
 */
 int32_t scui_bezier3(int32_t t, int32_t u0, int32_t u1, int32_t u2, int32_t u3);
 
-/*@brief 指数函数
- *@param x 数字
- *@param e 指数
- *@retval 返回值(x^e)
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
  */
-int64_t scui_pow(int64_t x, int8_t e);
+typedef int32_t (*scui_map_path_cb_t)(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
 
-/*@brief 随机数
- *@param min 数字
- *@param max 数字
- *@retval 返回值
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
  */
-int64_t scui_rand(int64_t min, int64_t max);
+int32_t scui_map_step(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_linear(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_in(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_out(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_in_out(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_overshoot(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_bounce(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
 
 /*@brief 有序序列二分搜索
  *@param arr  元素数组
@@ -92,7 +121,6 @@ int64_t scui_rand(int64_t min, int64_t max);
  *@param cmp  比较语义回调(似memcmp语义)
  *@retval 返回目标或空
  */
-void * scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key,
-                    int32_t (*cmp)(void *key, void *tar));
+void * scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key, int32_t (*cmp)(void *key, void *tar));
 
 #endif

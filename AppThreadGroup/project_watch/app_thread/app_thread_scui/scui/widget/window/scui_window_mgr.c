@@ -227,6 +227,12 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     // 直接渲染复用常规窗口移动变换(此时相当于不移动)
     scui_window_switch_type_t switch_type = mode_simple ? scui_window_switch_move : scui_window_mgr.switch_args.type;
     
+    /* 底图清空 */
+    scui_color_t dst_pixel = {0};
+    scui_surface_t *dst_surface = scui_surface_fb_draw();
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
+    
     /* 多画布混合变换 */
     switch (switch_type) {
     case scui_window_switch_move:

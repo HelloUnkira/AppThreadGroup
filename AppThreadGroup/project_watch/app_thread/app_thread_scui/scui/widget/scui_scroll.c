@@ -572,7 +572,7 @@ void scui_scroll_anima_expired(void *instance)
 void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid)
 {
     scui_anima_t anima = {0};
-    anima.path    = scui_anima_path_ease_in_out;
+    anima.path    = scui_map_ease_in_out;
     anima.start   = scui_scroll_anima_start;
     anima.ready   = scui_scroll_anima_ready;
     anima.expired = scui_scroll_anima_expired;

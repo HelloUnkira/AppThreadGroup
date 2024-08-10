@@ -1,11 +1,6 @@
 #ifndef SCUI_ANIMA_H
 #define SCUI_ANIMA_H
 
-/*@brief 缩放系数(Coefficient),为2的指数倍
- */
-#define SCUI_ANIMA_RES_COF      (1024)
-#define SCUI_ANIMA_RES_SHIFT    (10)
-
 /*@brief 动画轮调:常循环
  */
 #define SCUI_ANIMA_INFINITE     (0xFFFF)
@@ -17,10 +12,6 @@ typedef enum {
     scui_anima_status_run,
     scui_anima_status_break,
 } scui_anima_status_t;
-
-/*@brief 动画行程回调
- */
-typedef int32_t (*scui_anima_path_t)(void *anima);
 
 /*@brief 动画开始回调(第一次执行开始之前的回调)
  */
@@ -37,7 +28,7 @@ typedef void (*scui_anima_expired_t)(void *anima);
 /*@brief 动画
  */
 typedef struct {
-    scui_anima_path_t    path;      /* 动画行程回调 */
+    scui_map_path_cb_t   path;      /* 动画行程回调 */
     scui_anima_start_t   start;     /* 动画开始回调 */
     scui_anima_ready_t   ready;     /* 动画就绪回调 */
     scui_anima_expired_t expired;   /* 动画过期回调 */
@@ -113,47 +104,5 @@ bool scui_anima_running(scui_handle_t handle);
  *@retval 周期
  */
 uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_e);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_step(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_linear(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_ease_in(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_ease_out(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_ease_in_out(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_overshoot(void *instance);
-
-/*@brief 动画行程回调
- *@param instance 动画实例
- *@retval 动画进度值
- */
-int32_t scui_anima_path_bounce(void *instance);
 
 #endif

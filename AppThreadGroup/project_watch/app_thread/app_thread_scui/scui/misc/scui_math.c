@@ -52,6 +52,41 @@ double scui_tan(double radian)
     return tan(radian);
 }
 
+/*@brief 指数函数
+ *@param x 数字
+ *@param e 指数
+ *@retval 返回值(x^e)
+ */
+int64_t scui_pow(int64_t x, int8_t e)
+{
+    int64_t ret = 1;
+    for (e = e; e != 0; e >>= 1) {
+        if ((e & 0x1) != 0)
+            ret *= x;
+        x *= x;
+    }
+    return ret;
+}
+
+/*@brief 随机数
+ *@param min 数字
+ *@param max 数字
+ *@retval 返回值
+ */
+int64_t scui_rand(int64_t min, int64_t max)
+{
+    static int64_t a = 0x1234ABCD; /*Seed*/
+    
+    /*Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs"*/
+    int64_t x = a;
+    x ^= x << 13;
+    x ^= x >> 17;
+    x ^= x << 5;
+    a = x;
+    
+    return (a % (max - min + 1)) + min;
+}
+
 /*@brief 三角函数(sin),放大4096倍
  *@param angle 角度
  *@retval 三角函数值
@@ -128,62 +163,115 @@ void scui_sqrt(int32_t x, int32_t *q_i, int32_t *q_f, int32_t mask)
 }
 
 /*@brief 计算一个三次Bezier函数的值。
-* @param t  参数t时间范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u0 起始值0值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u1 控制值1值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u2 控制值2值范围[0..SCUI_BEZIER_VAL_MAX]
-* @param u3 结束值3值范围[0..SCUI_BEZIER_VAL_MAX]
+* @param t  参数t时间范围[0..SCUI_SCALE_COF]
+* @param u0 起始值0值范围[0..SCUI_SCALE_COF]
+* @param u1 控制值1值范围[0..SCUI_SCALE_COF]
+* @param u2 控制值2值范围[0..SCUI_SCALE_COF]
+* @param u3 结束值3值范围[0..SCUI_SCALE_COF]
 * @retval 给定参数在范围内计算的值
 */
 int32_t scui_bezier3(int32_t t, int32_t u0, int32_t u1, int32_t u2, int32_t u3)
 {
-    int32_t t_rem  = 1024 - t;
-    int32_t t_rem2 = (t_rem * t_rem) >> 10;
-    int32_t t_rem3 = (t_rem2 * t_rem) >> 10;
-    int32_t t2     = (t * t) >> 10;
-    int32_t t3     = (t2 * t) >> 10;
+    int32_t t_rem  = SCUI_SCALE_COF - t;
+    int32_t t_rem2 = (t_rem  * t_rem) >> SCUI_SCALE_OFS;
+    int32_t t_rem3 = (t_rem2 * t_rem) >> SCUI_SCALE_OFS;
+    int32_t t2     = (t  * t) >> SCUI_SCALE_OFS;
+    int32_t t3     = (t2 * t) >> SCUI_SCALE_OFS;
     
-    int32_t v1 = (t_rem3 * u0) >> 10;
-    int32_t v2 = (3 * t_rem2 * t * u1) >> 20;
-    int32_t v3 = (3 * t_rem * t2 * u2) >> 20;
-    int32_t v4 = (t3 * u3) >> 10;
+    int32_t v1 = (1 * t_rem3 * 1  * u0) >> (SCUI_SCALE_OFS * 1);
+    int32_t v2 = (3 * t_rem2 * t  * u1) >> (SCUI_SCALE_OFS * 2);
+    int32_t v3 = (3 * t_rem  * t2 * u2) >> (SCUI_SCALE_OFS * 2);
+    int32_t v4 = (t3 * u3) >> SCUI_SCALE_OFS;
     
     return v1 + v2 + v3 + v4;
 }
 
-/*@brief 指数函数
- *@param x 数字
- *@param e 指数
- *@retval 返回值(x^e)
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
  */
-int64_t scui_pow(int64_t x, int8_t e)
+int32_t scui_map_step(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
 {
-    int64_t ret = 1;
-    for (e = e; e != 0; e >>= 1) {
-        if ((e & 0x1) != 0)
-            ret *= x;
-        x *= x;
-    }
-    return ret;
+    return x < (r_i - l_i) / 2 ? l_o : r_o;
 }
 
-/*@brief 随机数
- *@param min 数字
- *@param max 数字
- *@retval 返回值
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
  */
-int64_t scui_rand(int64_t min, int64_t max)
+int32_t scui_map_linear(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
 {
-    static int64_t a = 0x1234ABCD; /*Seed*/
+    int32_t step = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    return ((step * (r_o - l_o)) >> SCUI_SCALE_OFS) + l_o;
+}
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_in(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
+{
+    int32_t xval = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    int32_t step = scui_bezier3(xval, 0, 50, 100, SCUI_SCALE_COF);
+    return ((step * (r_o - l_o)) >> SCUI_SCALE_OFS) + l_o;
+}
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_out(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
+{
+    int32_t xval = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    int32_t step = scui_bezier3(xval, 0, 900, 950, SCUI_SCALE_COF);
+    return ((step * (r_o - l_o)) >> SCUI_SCALE_OFS) + l_o;
+}
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_ease_in_out(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
+{
+    int32_t xval = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    int32_t step = scui_bezier3(xval, 0, 50, 950, SCUI_SCALE_COF);
+    return ((step * (r_o - l_o)) >> SCUI_SCALE_OFS) + l_o;
+}
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_overshoot(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
+{
+    int32_t xval = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    int32_t step = scui_bezier3(xval, 0, 1000, 1300, SCUI_SCALE_COF);
+    return ((step * (r_o - l_o)) >> SCUI_SCALE_OFS) + l_o;
+}
+
+/*@brief 路径映射(scui_map)多态(参数值,返回值)
+ */
+int32_t scui_map_bounce(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o)
+{
+    int32_t xval = scui_map(x, l_i, r_i, 0, SCUI_SCALE_COF);
+    int32_t diff = r_o - l_o;
     
-    /*Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs"*/
-    int64_t x = a;
-    x ^= x << 13;
-    x ^= x >> 17;
-    x ^= x << 5;
-    a = x;
+    /* 3反弹有5个部分:3个向下和2个向上,一部分是t/5长 */
     
-    return (a % (max - min + 1)) + min;
+    if (xval < 408) {   /* 下降 */
+        xval *= 2500;
+        xval  = xval >> SCUI_SCALE_OFS;
+    } else if (xval < 614) {    /* 第一次回弹 */
+        xval -= 408;
+        xval *= 5;
+        xval  = SCUI_SCALE_COF - xval;
+        diff /= 20;
+    } else if (xval < 819) {    /* 后退 */
+        xval -= 614;
+        xval *= 5;
+        diff /= 20;
+    } else if (xval < 921) {    /* 第二次回弹 */
+        xval -= 819;
+        xval *= 10;
+        xval  = SCUI_SCALE_COF - xval;
+        diff /= 40;
+    } else if (xval < SCUI_SCALE_COF) {    /* 后退 */
+        xval -= 921;
+        xval *= 10;
+        diff /= 40;
+    }
+    
+    xval = scui_clamp(xval, 0, SCUI_SCALE_COF);
+    int32_t step = scui_bezier3(xval, SCUI_SCALE_COF, 800, 500, 0);
+    return r_o - ((step * diff) >> SCUI_SCALE_OFS);
 }
 
 /*@brief 有序序列二分搜索
@@ -194,8 +282,7 @@ int64_t scui_rand(int64_t min, int64_t max)
  *@param cmp  比较语义回调(似memcmp语义)
  *@retval 返回目标或空
  */
-void *scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key,
-                   int32_t (*cmp)(void *key, void *tar))
+void *scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key, int32_t (*cmp)(void *key, void *tar))
 {
     uint8_t *mid = arr;
     

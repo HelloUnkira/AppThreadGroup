@@ -531,7 +531,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_center_out:
         case scui_window_switch_center_in:
         case scui_window_switch_cover:
-            switch_anima.path = scui_anima_path_ease_in_out;
+            switch_anima.path = scui_map_ease_in_out;
             break;
         case scui_window_switch_cube:
         case scui_window_switch_flip1:
@@ -539,12 +539,12 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_zoom1:
         case scui_window_switch_move:
             // 非叠加类型的移动可适合超调效果
-            switch_anima.path = scui_anima_path_overshoot;
+            switch_anima.path = scui_map_overshoot;
             // 非叠加类型的移动可适合重力回弹效果
-            switch_anima.path = scui_anima_path_bounce;
+            switch_anima.path = scui_map_bounce;
             break;
         default:
-            switch_anima.path = scui_anima_path_linear;
+            switch_anima.path = scui_map_linear;
             break;
         }
         

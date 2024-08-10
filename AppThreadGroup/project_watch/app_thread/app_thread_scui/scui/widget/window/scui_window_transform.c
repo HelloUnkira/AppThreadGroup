@@ -76,12 +76,6 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
     
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-    
     for (scui_handle_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
         scui_surface_t *dst_surface = scui_surface_fb_draw();
@@ -161,12 +155,6 @@ void scui_window_transform_center_in_out(scui_widget_t **list, scui_handle_t num
 void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
-    
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
     
     for (scui_handle_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
@@ -488,12 +476,6 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
     
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-    
     scui_window_transform_flip12(list, num);
 }
 
@@ -585,12 +567,6 @@ void scui_window_transform_flip3(scui_widget_t **list, scui_handle_t num)
     
     SCUI_ASSERT(num == 2);
     
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-    
     
     
     #define SCUI_WINDOW_TRANSFORM_FLIP_W_SEG    5
@@ -669,12 +645,6 @@ void scui_window_transform_flip3(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
 {
-    /* 底图清空 */
-    scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
-    scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
-    
     SCUI_ASSERT(num == 2);
     
     for (scui_handle_t idx = 0; idx < num; idx++) {

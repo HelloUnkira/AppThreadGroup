@@ -16,7 +16,10 @@
 #include "scui_mem.h"
 
 /* misc */
+#include "scui_math.h"          /* 数学库 */
 #include "scui_coord.h"         /* 坐标区域 */
+#include "scui_coord3.h"        /* 三维坐标区域 */
+#include "scui_matrix.h"        /* 矩阵库 */
 #include "scui_general.h"       /* 基础图元 */
 #include "scui_handle.h"        /* 泛用句柄 */
 #include "scui_anima.h"         /* 路径动画 */
@@ -27,11 +30,8 @@
 #include "scui_image_cache.h"   /* 图像缓存 */
 #include "scui_surface_fb.h"    /* 画布帧缓冲 */
 #include "scui_clip.h"          /* 画布剪切域 */
-#include "scui_math.h"          /* 数学库 */
-#include "scui_coord3.h"        /* 三维坐标区域 */
-#include "scui_matrix.h"        /* 矩阵库 */
-#include "scui_engine.h"        /* 引擎 */
 /* device */
+#include "scui_engine.h"        /* 引擎 */
 #include "scui_indev.h"         /* 输入设备 */
 #include "scui_indev_ptr.h"     /* 输入设备:ptr */
 #include "scui_indev_enc.h"     /* 输入设备:enc */
