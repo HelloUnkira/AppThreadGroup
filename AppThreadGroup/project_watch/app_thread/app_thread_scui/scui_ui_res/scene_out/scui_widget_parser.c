@@ -323,8 +323,9 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
 	.widget.parent                  = SCUI_UI_SCENE_HONEYCOMB,
 	.widget.child_num               = 50,
 	.pos                            = scui_opt_pos_c,
-	.dir                            = scui_opt_dir_none,
+	.dir                            = scui_opt_dir_all,
 	.springback                     = 35,
+	.freedom                        = true,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
@@ -517,43 +518,16 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_WATERFALL,
-	.widget.child_num               = 3,
+	.widget.child_num               = 50,
 	.notify_cb                      = scui_ui_scene_waterfall_scroll_notify_event,
-	.pos                            = scui_opt_pos_none,
+	.pos                            = scui_opt_pos_all,
 	.dir                            = scui_opt_dir_ver,
 	.route_enc                      = 117,
 	.route_key                      = 117,
 	.keyid_fdir                     = scui_event_key_val_down,
 	.keyid_bdir                     = scui_event_key_val_up,
 	.springback                     = 35,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BLANK_U = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.trans             = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES / 2,
-	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_BLANK_U,
-	.widget.parent                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SET = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.trans             = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_SET,
-	.widget.parent                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
-	.widget.child_num               = 50,
-};
-
-static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BLANK_D = {
-	.widget.type                    = scui_widget_type_custom,
-	.widget.style.trans             = true,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES / 2,
-	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_BLANK_D,
-	.widget.parent                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
+	.freedom                        = true,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC = {
@@ -954,7 +928,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[58] = {
+const void * scui_widget_parser_table[55] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -979,9 +953,6 @@ const void * scui_widget_parser_table[58] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_THUMBWHEEL_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL,
-	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_BLANK_U,
-	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_SET,
-	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_BLANK_D,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,

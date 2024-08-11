@@ -46,7 +46,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
              break;
         
         scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
+        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
         SCUI_LOG_INFO("list_idx:%d", index);
         
         uint8_t type = 1;   //l:0;m:1;r:2;
@@ -62,24 +62,42 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         if (scui_ui_scene_list_num % 3 == 2 &&
             index == scui_ui_scene_list_num - 1) type = 2;
         
-        scui_handle_t ofs         = SCUI_UI_WATERFALL_OFS_MAX;
-        scui_handle_t image       = scui_ui_scene_list_image[index];
+        scui_handle_t image   = scui_ui_scene_list_image[index];
+        scui_coord_t  ofs_min = SCUI_UI_WATERFALL_OFS_MIN;
+        scui_coord_t  ofs_max = SCUI_UI_WATERFALL_OFS_MAX;
+        scui_coord_t  ofs_cur = ofs_min;
         
-        scui_area_t   scroll_c  = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
-        scui_coord_t  scroll_cx = scroll_c.x + scroll_c.w / 2;
-        scui_coord_t  scroll_cy = scroll_c.y + scroll_c.h / 2;
+        scui_area_t  scroll_c  = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL);
+        scui_coord_t scroll_cx = scroll_c.x + scroll_c.w / 2;
+        scui_coord_t scroll_cy = scroll_c.y + scroll_c.h / 2;
         
         scui_area_t  icon_c  = scui_widget_clip(event->object);
+        scui_coord_t icon_cx = icon_c.x + icon_c.w / 2;
         scui_coord_t icon_cy = icon_c.y + icon_c.h / 2;
+        scui_coord_t dist_cx = scui_dist(scroll_cx, icon_cx);
         scui_coord_t dist_cy = scui_dist(scroll_cy, icon_cy);
+        scui_coord_t dist_cw = scroll_c.w / 2;
         scui_coord_t dist_ch = scroll_c.h / 2;
         
-        scui_coord_t ofs_min = SCUI_UI_WATERFALL_OFS_MIN;
-        scui_coord_t ofs_max = SCUI_UI_WATERFALL_OFS_MAX;
-        scui_coord_t ofs_cur = ofs_min;
-        
+        #if 1
         if (dist_cy <= dist_ch)
             ofs_cur = scui_map(dist_cy, 0, dist_ch, ofs_max + 1, ofs_min - 1);
+        // SCUI_LOG_WARN("ofs_cur:%d, dist_y:%d, dist_c:%d", ofs_cur, dist_y, dist_ch);
+        #else
+        scui_multi_t dist_x2 = dist_cx * dist_cx;
+        scui_multi_t dist_y2 = dist_cy * dist_cy;
+        scui_multi_t dist_w2 = dist_cw * dist_cw;
+        scui_multi_t dist_h2 = dist_ch * dist_ch;
+        scui_multi_t dist_cd = dist_x2 + dist_y2;
+        scui_multi_t dist_cf = 0;
+        scui_multi_t dist_md = dist_w2 + dist_h2;
+        scui_multi_t dist_mf = 0;
+        scui_sqrt(dist_cd, &dist_cd, &dist_cf, 0x8000);
+        scui_sqrt(dist_md, &dist_md, &dist_mf, 0x8000);
+        if (dist_cd <= dist_md)
+            ofs_cur = scui_map(dist_cd, 0, dist_md, ofs_max + 1, ofs_min - 1);
+        SCUI_LOG_WARN("ofs_cur:%d, dist_cd:%d, dist_md:%d", ofs_cur, dist_cd, dist_md);
+        #endif
         
         if (ofs_cur < ofs_min)
             ofs_cur = ofs_min;
@@ -87,7 +105,6 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
             ofs_cur = ofs_max;
         
         image += ofs_cur;
-        // SCUI_LOG_WARN("dist_y:%d, dist_c:%d", dist_y, dist_c);
         
         // 三角函数:
         // sin_a = dist_y / rad_rr;
@@ -167,7 +184,8 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             scui_widget_image_set(SCUI_UI_SCENE_WATERFALL_SCROLL,
             scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
             
-            scui_coord_t set_width = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SET).w;
+            scui_coord_t scroll_w = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
+            scui_coord_t scroll_h = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
             
             // 取一张图(随便, 反正所有图都一样)
             scui_handle_t icon = scui_ui_scene_list_image[0];
@@ -175,20 +193,34 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             scui_coord_t icon_w = scui_image_w(icon);
             scui_coord_t icon_h = scui_image_h(icon);
             
-            scui_area_t clip_l = {.y = icon_h / 2,.w = (set_width - icon_w) / 2,.h = icon_h,};
+            scui_area_t clip_l = {.y = icon_h / 2,.w = (scroll_w - icon_w) / 2,.h = icon_h,};
             scui_area_t clip_m = {.w = icon_w,.h = icon_h,};
-            scui_area_t clip_r = {.y = icon_h / 2,.w = (set_width - icon_w) / 2,.h = icon_h,};
+            scui_area_t clip_r = {.y = icon_h / 2,.w = (scroll_w - icon_w) / 2,.h = icon_h,};
             
             clip_l.x = 0;
             clip_m.x = clip_l.w;
             clip_r.x = clip_m.x + clip_m.w;
             
+            clip_l.y += (scroll_h - icon_h) / 2;
+            clip_m.y += (scroll_h - icon_h) / 2;
+            clip_r.y += (scroll_h - icon_h) / 2;
+            
             scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle         = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type            = scui_widget_type_custom;
-            custom_maker.widget.style.trans     = true;
+            scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
+            custom_maker.widget.type        = scui_widget_type_custom;
+            custom_maker.widget.style.trans = true;
+            custom_maker.widget.parent      = SCUI_UI_SCENE_WATERFALL_SCROLL;
+            
+            /* 上半部分空白 */
+            custom_maker.widget.style.indev_ptr = false;
+            custom_maker.widget.event_cb        = NULL;
+            custom_maker.widget.clip.x = 0;
+            custom_maker.widget.clip.y = 0;
+            custom_maker.widget.clip.w = scroll_w;
+            custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
+            scui_custom_create(&custom_maker, &custom_handle, false);
+            
             custom_maker.widget.style.indev_ptr = true;
-            custom_maker.widget.parent          = SCUI_UI_SCENE_WATERFALL_SET;
             custom_maker.widget.event_cb        = scui_ui_scene_waterfall_icon_event_proc;
             
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
@@ -237,8 +269,15 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             clip_m.y -= SCUI_UI_WATERFALL_LINE_SPACE;
             clip_r.y -= SCUI_UI_WATERFALL_LINE_SPACE;
             
-            scui_coord_t set_height = scui_max(clip_m.y, scui_max(clip_l.y, clip_r.y));
-            scui_widget_adjust_size(SCUI_UI_SCENE_WATERFALL_SET, set_width, set_height);
+            /* 下半部分空白 */
+            custom_maker.widget.style.indev_ptr = false;
+            custom_maker.widget.event_cb        = NULL;
+            custom_maker.widget.clip.x = 0;
+            custom_maker.widget.clip.y = scui_max(clip_m.y, scui_max(clip_l.y, clip_r.y));
+            custom_maker.widget.clip.w = scroll_w;
+            custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
+            scui_custom_create(&custom_maker, &custom_handle, false);
+            
             scui_scroll_layout(SCUI_UI_SCENE_WATERFALL_SCROLL);
             scui_widget_draw(SCUI_UI_SCENE_WATERFALL, NULL, false);
             

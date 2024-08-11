@@ -10,7 +10,7 @@ typedef struct {
     scui_widget_t       widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t      pos;            /* 滚动停留(边界或中心) */
-    scui_opt_dir_t      dir;            /* 滚动方向(自动布局) */
+    scui_opt_dir_t      dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
@@ -19,6 +19,7 @@ typedef struct {
     scui_coord_t        keyid_fdir;     /* 按键id,对应编码器事件(clockwise) */
     scui_coord_t        keyid_bdir;     /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t        springback;     /* 回弹效果 */
+    uint8_t             freedom:1;      /* 自由布局(默认自动布局) */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t       anima;              /* 移动动画 */
@@ -53,7 +54,7 @@ typedef struct {
     scui_widget_maker_t widget;
     scui_event_cb_t     notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t      pos;            /* 滚动停留(边界或中心) */
-    scui_opt_dir_t      dir;            /* 滚动方向(自动布局) */
+    scui_opt_dir_t      dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t        edge;           /* 滚动边距(自由布局) */
     scui_coord_t        space;          /* 控件间隙(自动布局) */
     scui_coord_t        fling_page;     /* 翻页数量 */
@@ -62,6 +63,7 @@ typedef struct {
     scui_coord_t        keyid_fdir;     /* 按键id,对应编码器事件(clockwise) */
     scui_coord_t        keyid_bdir;     /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t        springback;     /* 回弹效果 */
+    uint8_t             freedom:1;      /* 自由布局(默认自动布局) */
     uint8_t             loop:1;         /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
 #pragma pack(pop)

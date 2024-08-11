@@ -24,38 +24,15 @@
             "widget.myself":                "SCUI_UI_SCENE_WATERFALL_SCROLL",
             "widget.parent":                "SCUI_UI_SCENE_WATERFALL",
             "notify_cb":                    "scui_ui_scene_waterfall_scroll_notify_event",
-            "pos":                          "scui_opt_pos_none",
+            "widget.child_num":             "50",
+            "pos":                          "scui_opt_pos_all",
             "dir":                          "scui_opt_dir_ver",
             "route_enc":                    "117",
             "route_key":                    "117",
             "keyid_fdir":                   "scui_event_key_val_down",
             "keyid_bdir":                   "scui_event_key_val_up",
-            "springback":                   "35"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 2",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL_BLANK_U",
-            "widget.parent":                "SCUI_UI_SCENE_WATERFALL_SCROLL"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL_SET",
-            "widget.parent":                "SCUI_UI_SCENE_WATERFALL_SCROLL",
-            "widget.child_num":             "50"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES / 2",
-            "widget.myself":                "SCUI_UI_SCENE_WATERFALL_BLANK_D",
-            "widget.parent":                "SCUI_UI_SCENE_WATERFALL_SCROLL"
+            "springback":                   "35",
+            "freedom":                      "true"
         },
         {
             "widget.type":                  "scui_widget_type_custom",

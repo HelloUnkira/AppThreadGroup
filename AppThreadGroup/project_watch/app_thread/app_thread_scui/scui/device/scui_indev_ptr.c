@@ -133,8 +133,13 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)
                 scui_indev_ptr.move_cnt++;
             if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT)
+            
+            #if 0
+            if (dist_r > SCUI_INDEV_PTR_MOVE_LIMIT) {
+            #else
             if (scui_indev_ptr.ptr_last.x != point.x ||
                 scui_indev_ptr.ptr_last.y != point.y) {
+            #endif
                 event.type   = scui_event_ptr_move;
                 event.absorb = scui_event_ptr_move_absorb,
                 event.ptr_s  = scui_indev_ptr.ptr_last;

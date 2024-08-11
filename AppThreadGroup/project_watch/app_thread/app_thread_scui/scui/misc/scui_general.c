@@ -82,7 +82,7 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha)
     }
     case scui_pixel_cf_bmp8565: {
         scui_color8565_t *pixel8565 = pixel;
-        pixel8565->ch.a = (scui_alpha_t)((uint16_t)pixel8565->ch.a * alpha);
+        pixel8565->ch.a = scui_alpha_mix(pixel8565->ch.a, alpha);
         break;
     }
     default:
@@ -161,7 +161,7 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         
         scui_color565_t  *c_1 = pixel_1;
         scui_color8565_t *c_2 = pixel_2;
-        scui_color_wt_t a2 = (uint16_t)c_2->ch.a * alpha_2 / 0xFF;
+        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
         scui_color_wt_t a1 = 0xFF - a2;
         scui_color_wt_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
         scui_color_wt_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
@@ -185,9 +185,9 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         
         scui_color8565_t *c_1 = pixel_1;
         scui_color565_t  *c_2 = pixel_2;
-        scui_color_wt_t a1 = (uint16_t)c_1->ch.a * alpha_1 / 0xFF;
+        scui_color_wt_t a1 = scui_alpha_mix(c_1->ch.a, alpha_1);
         scui_color_wt_t a2 = 0xFF - a1;
-        scui_color_wt_t as = a1 + a2 * alpha_2 / 0xFF;
+        scui_color_wt_t as = a1 + scui_alpha_mix(a2, alpha_2);
         scui_color_wt_t r  = ((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2) / 0xFF;
         scui_color_wt_t g  = ((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_wt_t b  = ((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2) / 0xFF;
@@ -211,10 +211,10 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         
         scui_color8565_t *c_1 = pixel_1;
         scui_color8565_t *c_2 = pixel_2;
-        scui_color_wt_t a2 = (uint16_t)c_2->ch.a * alpha_2 / 0xFF;
-        scui_color_wt_t a1 = (uint16_t)c_1->ch.a * alpha_1 / 0xFF;
+        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
+        scui_color_wt_t a1 = scui_alpha_mix(c_1->ch.a, alpha_1);
         
-        scui_color_wt_t as = 0xFF - (0xFF - a2) * (0xFF - a1) / 0xFF;
+        scui_color_wt_t as = 0xFF - scui_alpha_mix(0xFF - a2, 0xFF - a1);
         scui_color_wt_t r  = ((uint16_t)c_1->ch.r * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.r * a2) / 0xFF;
         scui_color_wt_t g  = ((uint16_t)c_1->ch.g * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_wt_t b  = ((uint16_t)c_1->ch.b * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.b * a2) / 0xFF;
@@ -235,6 +235,16 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
     }
     
     SCUI_ASSERT(false);
+}
+
+/*@brief 透明度混合
+ *@param alpha1 透明度1
+ *@param alpha2 透明度2
+ *@retval 混合后的透明度
+ */
+scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
+{
+    return ((uint16_t)alpha1 * (uint16_t)alpha2) >> 8;
 }
 
 /*@brief 计算透明度通过百分比值

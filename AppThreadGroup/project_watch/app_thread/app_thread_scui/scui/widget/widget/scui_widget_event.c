@@ -19,6 +19,8 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     // 不要给已经销毁的目标添加剪切域
     if (scui_handle_unmap(handle))
         return;
+    if (scui_widget_style_is_hide(handle))
+        return;
     
     scui_widget_t *widget = scui_handle_get(handle);
     scui_handle_t  handle_root = scui_widget_root(handle);

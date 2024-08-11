@@ -307,6 +307,25 @@ void scui_matrix_perspective(scui_matrix_t *matrix, scui_point2_t *view)
     scui_matrix_multiply(matrix, &matrix_t);
 }
 
+/*@brief 矩阵倾斜(错切)
+ *@param matrix 矩阵实例
+ *@param skew   倾斜系数
+ */
+void scui_matrix_skew(scui_matrix_t *matrix, scui_point2_t *skew)
+{
+    scui_coord3_t tan_x = scui_tan(scui_radian_by_angle(skew->x));
+    scui_coord3_t tan_y = scui_tan(scui_radian_by_angle(skew->y));
+    
+    scui_matrix_t matrix_t = {
+        .meta = {
+            { 1.0f, tan_x, 0.0f},
+            {tan_y,  1.0f, 0.0f},
+            { 0.0f,  0.0f, 1.0f},
+        },
+    };
+    scui_matrix_multiply(matrix, &matrix_t);
+}
+
 /*@brief 矩阵缩放
  *@param matrix 矩阵实例
  *@param offset 缩放比(1.0为基准线)

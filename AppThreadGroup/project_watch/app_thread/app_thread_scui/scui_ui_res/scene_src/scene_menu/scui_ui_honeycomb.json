@@ -23,8 +23,9 @@
             "widget.parent":                "SCUI_UI_SCENE_HONEYCOMB",
             "widget.child_num":             "50",
             "pos":                          "scui_opt_pos_c",
-            "dir":                          "scui_opt_dir_none",
-            "springback":                   "35"
+            "dir":                          "scui_opt_dir_all",
+            "springback":                   "35",
+            "freedom":                      "true"
         }
     ]
 }

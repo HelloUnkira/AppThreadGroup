@@ -198,6 +198,13 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha);
 void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha_1,
                          scui_pixel_cf_t cf_2, void *pixel_2, scui_alpha_t alpha_2);
 
+/*@brief 透明度混合
+ *@param alpha1 透明度1
+ *@param alpha2 透明度2
+ *@retval 混合后的透明度
+ */
+scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2);
+
 /*@brief 计算透明度通过百分比值
  *@param pct 透明度百分比值[0, 100]
  *@retval 透明度

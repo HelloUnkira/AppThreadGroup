@@ -55,6 +55,12 @@ void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset);
  */
 void scui_matrix_perspective(scui_matrix_t *matrix, scui_point2_t *view);
 
+/*@brief 矩阵倾斜(错切)
+ *@param matrix 矩阵实例
+ *@param skew   倾斜系数
+ */
+void scui_matrix_skew(scui_matrix_t *matrix, scui_point2_t *skew);
+
 /*@brief 矩阵缩放
  *@param matrix 矩阵实例
  *@param offset 缩放比(1.0为基准线)

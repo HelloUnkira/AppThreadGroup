@@ -76,6 +76,7 @@
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK                        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN                   (300)   /* 连续点击最大间隔 */
+#define SCUI_INDEV_PTR_MOVE_LIMIT                   (6)     /* move消抖 */
 #define SCUI_INDEV_PTR_FLING_RATE                   (448)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
 #define SCUI_INDEV_PTR_FLING_CNT                    (6)     /* fling检测: 敏感度调整(允许掠过部分move) */
 
