@@ -126,11 +126,10 @@ void scui_event_dispatch(void)
  */
 void scui_event_respond(scui_event_t *event)
 {
-    SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
-    
     SCUI_ASSERT(scui_event_cb_prepare != NULL);
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
     SCUI_ASSERT(scui_event_cb_custom  != NULL);
+    SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     
     /* 内存监控 */
     #if SCUI_MEM_RECORD_CHECK
@@ -153,8 +152,28 @@ void scui_event_respond(scui_event_t *event)
         scui_widget_event_mask_over(event);
         return;
     case scui_event_anima_elapse:
-        if (event->object == SCUI_HANDLE_SYSTEM)
+        if (event->object == SCUI_HANDLE_SYSTEM) {
             scui_anima_update(SCUI_HANDLE_INVALID);
+            
+            /* 全局滚动检查 */
+            #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
+            scui_handle_t handle = SCUI_HANDLE_INVALID;
+            if (scui_widget_event_scroll_flag(0x02, &handle))
+                return;
+            #endif
+            
+            /* 系统事件发给所有场景 */
+            scui_handle_t *window_list = NULL;
+            scui_window_list(&window_list);
+            for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+                if (window_list[idx] != SCUI_HANDLE_INVALID) {
+                    event->object = window_list[idx];
+                    scui_event_respond(event);
+                }
+            
+            event->object = SCUI_HANDLE_SYSTEM;
+            return;
+        }
         break;
     case scui_event_refr:
         scui_window_surface_blend();
@@ -172,7 +191,6 @@ void scui_event_respond(scui_event_t *event)
         }
         return;
     case scui_event_font_change: {
-        
         if (event->object == SCUI_HANDLE_SYSTEM) {
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
@@ -193,42 +211,6 @@ void scui_event_respond(scui_event_t *event)
     }
     
     if (event->object == SCUI_HANDLE_SYSTEM) {
-        
-        /* 系统事件发给所有场景 */
-        scui_handle_t *window_list = NULL;
-        scui_window_list(&window_list);
-        for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
-            if (window_list[idx] == SCUI_HANDLE_INVALID)
-                continue;
-            scui_widget_t *widget = scui_handle_get(window_list[idx]);
-            scui_window_t *window = (void *)widget;
-            SCUI_ASSERT(widget != NULL);
-            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-            
-            // 只发给浮动场景
-            #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-            if (scui_widget_surface_only(widget) && !window->hang_only)
-                continue;
-            #endif
-            
-            switch (event->type) {
-            case scui_event_anima_elapse: {
-                /* 全局滚动检查 */
-                #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-                scui_handle_t handle = SCUI_HANDLE_INVALID;
-                if (scui_widget_event_scroll_flag(0x02, &handle))
-                    continue;
-                #endif
-                event->object = widget->myself;
-                scui_event_respond(event);
-                event->object = SCUI_HANDLE_SYSTEM;
-                break;
-            }
-            default:
-                break;
-            }
-        }
-        
         /* 系统事件发给活跃场景 */
         event->object = scui_window_active_curr();
     }
@@ -242,11 +224,10 @@ void scui_event_respond(scui_event_t *event)
     event->style.result = 0x00;
     
     /* 事件响应回调 */
-    if (scui_event_cb_check(event)) {
+    if (scui_event_cb_check(event))
         scui_event_cb_prepare(event);
-        if (scui_widget_event_check_over(event))
-            return;
-    }
+    if (scui_widget_event_check_over(event))
+        return;
     
     /* 系统事件响应 */
     if (event->type >= scui_event_sys_s &&
@@ -300,11 +281,10 @@ void scui_event_respond(scui_event_t *event)
     }
     
     /* 事件响应回调 */
-    if (scui_event_cb_check(event)) {
+    if (scui_event_cb_check(event))
         scui_event_cb_finish(event);
-        if (scui_widget_event_check_over(event))
-            return;
-    }
+    if (scui_widget_event_check_over(event))
+        return;
     
     if (event->style.result != 0)
         return;

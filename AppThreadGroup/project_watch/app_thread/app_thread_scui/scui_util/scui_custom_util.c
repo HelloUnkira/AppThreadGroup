@@ -326,3 +326,144 @@ void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
     
     SCUI_ASSERT(false);
 }
+
+/*@brief 按钮控件绘制(四个角使用图像绘制)
+ *@param event 自定义控件事件
+ *@param clip  剪切域(绘制区域)
+ *@param image 图像句柄(左上角,右上角,左下角,右下角)
+ *@param color 图像源色调
+ *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
+ */
+void scui_custom_draw_rect4(scui_event_t *event,    scui_area_t *clip,
+                            scui_handle_t image[4], scui_color_t color,
+                            scui_coord_t  delta)
+{
+    SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
+    SCUI_ASSERT(image != NULL);
+    
+    scui_area_t image_clip = {.w = -1, .h = -1,};
+    scui_image_t *image_inst[4] = {0};
+    for (uint8_t idx = 0; idx < 4; idx++) {
+        if (image[idx] != SCUI_HANDLE_INVALID) {
+            image_inst[idx] = scui_handle_get(image[idx]);
+            SCUI_ASSERT(image_inst[idx] != NULL);
+            /* 断言检查,所有有效图片应该保持同一宽与高 */
+            SCUI_ASSERT(image_clip.w == -1 || image_clip.w == image_inst[idx]->pixel.width);
+            SCUI_ASSERT(image_clip.h == -1 || image_clip.h == image_inst[idx]->pixel.height);
+            
+            if (image_clip.w == -1)
+                image_clip.w  = image_inst[idx]->pixel.width;
+            if (image_clip.h == -1)
+                image_clip.h  = image_inst[idx]->pixel.height;
+        }
+    }
+    scui_area_t clip_f = {0};
+    scui_area_t clip_a = {0};
+    /* 无图片,全填充或者不填充 */
+    if (image_clip.w == -1 || image_clip.h == -1) {
+        if (delta == -1) {
+            scui_widget_draw_color(event->object, clip, color);
+            return;
+        }
+        clip_a.w = delta;
+        clip_a.h = delta;
+    } else {
+        clip_a.w = image_clip.w;
+        clip_a.h = image_clip.h;
+    }
+    
+    scui_coord_t delta_w = clip->w - clip_a.w * 2;
+    scui_coord_t delta_h = clip->h - clip_a.h * 2;
+    /* 画俩个填充矩形(填充),画四个填充矩形(空心) */
+    if (delta != 0) {
+        if (delta_w > 0) {
+            clip_f.w = delta_w;
+            clip_f.h = delta != -1 ? delta : clip->h;
+            /* 画第一个矩形 */
+            clip_f.x = clip->x + clip_a.w;
+            clip_f.y = clip->y;
+            scui_area_t dst_clip = {0};
+            if (scui_area_inter(&dst_clip, clip, &clip_f))
+                scui_widget_draw_color(event->object, &dst_clip, color);
+            /* 画第二个矩形 */
+            if (delta != -1) {
+                clip_f.x = clip->x + clip_a.w;
+                clip_f.y = clip->y + clip->h - delta;
+                scui_area_t dst_clip = {0};
+                if (scui_area_inter(&dst_clip, clip, &clip_f))
+                    scui_widget_draw_color(event->object, &dst_clip, color);
+            }
+        }
+        if (delta_h > 0) {
+            clip_f.w = delta != -1 ? delta : clip->w;
+            clip_f.h = delta_h;
+            /* 画第一个矩形 */
+            clip_f.x = clip->x;
+            clip_f.y = clip->y + clip_a.h;
+            scui_area_t dst_clip = {0};
+            if (scui_area_inter(&dst_clip, clip, &clip_f))
+                scui_widget_draw_color(event->object, &dst_clip, color);
+            /* 画第二个矩形 */
+            if (delta != -1) {
+                clip_f.x = clip->x + clip->w - delta;
+                clip_f.y = clip->y + clip_a.h;
+                scui_area_t dst_clip = {0};
+                if (scui_area_inter(&dst_clip, clip, &clip_f))
+                    scui_widget_draw_color(event->object, &dst_clip, color);
+            }
+        }
+    }
+    /* 无图片 */
+    if (image_clip.w == -1 || image_clip.h == -1)
+        return;
+    /* 画一个角 */
+    clip_a.x = clip->x;
+    clip_a.y = clip->y;
+    if (image[0] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_image(event->object, &dst_clip, image[0], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x + clip->w - clip_a.w;
+    clip_a.y = clip->y;
+    if (image[1] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_image(event->object, &dst_clip, image[1], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x;
+    clip_a.y = clip->y + clip->h - clip_a.h;
+    if (image[2] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_image(event->object, &dst_clip, image[2], NULL, color);
+    }
+    /* 画一个角 */
+    clip_a.x = clip->x + clip->w - clip_a.w;
+    clip_a.y = clip->y + clip->h - clip_a.h;
+    if (image[3] == SCUI_HANDLE_INVALID) {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_color(event->object, &dst_clip, color);
+    } else {
+        scui_area_t dst_clip = {0};
+        if (scui_area_inter(&dst_clip, clip, &clip_a))
+            scui_widget_draw_image(event->object, &dst_clip, image[3], NULL, color);
+    }
+    /* ... */
+}

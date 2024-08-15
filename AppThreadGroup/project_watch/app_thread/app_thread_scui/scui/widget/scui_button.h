@@ -49,18 +49,6 @@ void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool 
  */
 void scui_button_destroy(scui_handle_t handle);
 
-/*@brief 按钮控件绘制(四个角使用图像绘制)
- *       一般主要用于绘制纯色圆角矩形
- *@param event 自定义控件事件
- *@param clip  剪切域(绘制区域)
- *@param image 图像句柄(左上角,右上角,左下角,右下角)
- *@param color 图像源色调
- *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
- */
-void scui_button_draw_rect4(scui_event_t *event,    scui_area_t *clip,
-                            scui_handle_t image[4], scui_color_t color,
-                            scui_coord_t  delta);
-
 /*@brief 按钮控件事件处理回调
  *@param event 事件
  */
