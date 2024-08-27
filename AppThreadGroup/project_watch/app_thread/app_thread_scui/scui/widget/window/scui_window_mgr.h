@@ -10,11 +10,12 @@ typedef enum {
     scui_window_switch_cover,           /* 覆盖移动 */
     scui_window_switch_zoom1,           /* 单边缩放 */
     scui_window_switch_zoom2,           /* 双边缩放 */
-    
     scui_window_switch_center_in,       /* 中心淡入 */
     scui_window_switch_center_out,      /* 中心淡出 */
-    scui_window_switch_circle,          /* 圈格缩放 */
-    scui_window_switch_grid,            /* 网格缩放 */
+    
+    scui_window_switch_rotate,          /* 旋转渐变 */
+    scui_window_switch_circle,          /* 圈格缩放(鬼点子) */
+    scui_window_switch_grid,            /* 网格缩放(鬼点子) */
     
     scui_window_switch_flip1,           /* 中心轴翻页(2.5D) */
     scui_window_switch_flip2,           /* 仿真页翻页(2.5D) */

@@ -249,6 +249,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_zoom2:
          scui_window_transform_zoom(list, num);
          break;
+    case scui_window_switch_rotate:
+         scui_window_transform_rotate(list, num);
+         break;
     case scui_window_switch_circle:
          scui_window_transform_circle(list, num);
          break;
@@ -438,12 +441,14 @@ void scui_window_active(scui_handle_t handle)
     if (scui_handle_remap(scui_window_mgr.active_last)) {
         event.type   = scui_event_focus_lost;
         event.object = scui_window_mgr.active_last;
+        SCUI_LOG_INFO("window %u focus lost", event.object);
         scui_event_notify(&event);
     }
     
     /* 后激活新的焦点窗口 */
     event.type   = scui_event_focus_get;
     event.object = scui_window_mgr.active_curr;
+    SCUI_LOG_INFO("window %u focus get", event.object);
     scui_event_notify(&event);
 }
 

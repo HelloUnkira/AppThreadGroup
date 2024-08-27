@@ -209,6 +209,41 @@ bool scui_matrix_inverse_check(scui_matrix_t *matrix)
  */
 void scui_matrix_inverse(scui_matrix_t *matrix)
 {
+    #if 1
+    /* 摘抄自lv_matrix:::. */
+    const scui_coord3_t eps = 1.1920929e-7f;
+    
+    float det00 = matrix->meta[1][1] * matrix->meta[2][2] - matrix->meta[2][1] * matrix->meta[1][2];
+    float det01 = matrix->meta[2][0] * matrix->meta[1][2] - matrix->meta[1][0] * matrix->meta[2][2];
+    float det02 = matrix->meta[1][0] * matrix->meta[2][1] - matrix->meta[2][0] * matrix->meta[1][1];
+    
+    float delta = matrix->meta[0][0] * det00 + matrix->meta[0][1] * det01 + matrix->meta[0][2] * det02;
+    // 这里有一个返回值的,这里改成断言
+    SCUI_ASSERT(scui_dist(delta, 0.0f) > eps);
+    delta = 1.0f / delta;
+    
+    scui_matrix_t matrix_t;
+    matrix_t.meta[0][0] = delta * det00;
+    matrix_t.meta[0][1] = delta * (matrix->meta[2][1] * matrix->meta[0][2] - matrix->meta[0][1] * matrix->meta[2][2]);
+    matrix_t.meta[0][2] = delta * (matrix->meta[0][1] * matrix->meta[1][2] - matrix->meta[1][1] * matrix->meta[0][2]);
+    matrix_t.meta[1][0] = delta * det01;
+    matrix_t.meta[1][1] = delta * (matrix->meta[0][0] * matrix->meta[2][2] - matrix->meta[2][0] * matrix->meta[0][2]);
+    matrix_t.meta[1][2] = delta * (matrix->meta[1][0] * matrix->meta[0][2] - matrix->meta[0][0] * matrix->meta[1][2]);
+    
+    if (scui_dist(matrix->meta[2][0], 0.0f) <= eps &&
+        scui_dist(matrix->meta[2][1], 0.0f) <= eps &&
+        scui_dist(matrix->meta[2][2], 1.0f) <= eps) {
+    matrix_t.meta[2][0] = 0.0f;
+    matrix_t.meta[2][1] = 0.0f;
+    matrix_t.meta[2][2] = 1.0f;
+    } else {
+    matrix_t.meta[2][0] = delta * det02;
+    matrix_t.meta[2][1] = delta * (matrix->meta[2][0] * matrix->meta[0][1] - matrix->meta[0][0] * matrix->meta[2][1]);
+    matrix_t.meta[2][2] = delta * (matrix->meta[0][0] * matrix->meta[1][1] - matrix->meta[1][0] * matrix->meta[0][1]);
+    }
+   *matrix = matrix_t;
+    
+    #else
     scui_coord3_t detal = matrix->meta[0][0] * matrix->meta[1][1] * matrix->meta[2][2] +
                           matrix->meta[0][1] * matrix->meta[1][2] * matrix->meta[2][0] +
                           matrix->meta[0][2] * matrix->meta[1][0] * matrix->meta[2][1] -
@@ -240,6 +275,7 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
                             matrix->meta[0][1] * matrix->meta[1][0]) / detal;
     
    *matrix = matrix_t;
+    #endif
 }
 
 /*@brief 矩阵乘法(matrix *= matrix1)

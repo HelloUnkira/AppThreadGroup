@@ -123,8 +123,8 @@ typedef enum {
 /*@brief 设备保护位(protect bit)
  */
 typedef enum {
-    scui_pixel_pb_shared = 0,
-    scui_pixel_pb_unique,
+    scui_pixel_pb_shared = 0,   // 共享画布
+    scui_pixel_pb_unique,       // 私有画布
 } scui_pixel_pb_t;
 
 /*@brief 实体抽象:画布
@@ -142,7 +142,7 @@ typedef struct {
 /*@brief 操作方向(与操作位置透明切换)
  */
 typedef enum {
-    scui_opt_dir_none = (0x00),
+    scui_opt_dir_none = (0),
     scui_opt_dir_to_u = (1 << 0),   // 向up
     scui_opt_dir_to_d = (1 << 1),   // 向down
     scui_opt_dir_to_l = (1 << 2),   // 向left

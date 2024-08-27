@@ -25,10 +25,12 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
 {
     scui_point3_t point3_t;
     
-    for (uint8_t row = 0; row < 3; row++)
+    for (uint8_t row = 0; row < 3; row++) {
         point3_t.meta[row] = matrix->meta[row][0] * point3->x +
                              matrix->meta[row][1] * point3->y +
                              matrix->meta[row][2] * point3->z;
+        // point3_t.meta[row] = roundf(point3_t.meta[row]);
+    }
     
     *point3 = point3_t;
 }
@@ -70,6 +72,8 @@ void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2)
     } else {
         point2->x = point3->x / point3->z;
         point2->y = point3->y / point3->z;
+        // point2->x = roundf(point2->x);
+        // point2->y = roundf(point2->y);
     }
 }
 
