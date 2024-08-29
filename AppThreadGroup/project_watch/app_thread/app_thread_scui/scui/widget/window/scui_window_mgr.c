@@ -252,6 +252,9 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_rotate:
          scui_window_transform_rotate(list, num);
          break;
+    case scui_window_switch_rotate1:
+         scui_window_transform_rotate1(list, num);
+         break;
     case scui_window_switch_circle:
          scui_window_transform_circle(list, num);
          break;

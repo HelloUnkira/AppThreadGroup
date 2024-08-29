@@ -100,6 +100,7 @@ void scui_ready(void)
     scui_window_switch_type_cfg_set(scui_window_switch_center_out);
     
     scui_window_switch_type_cfg_set(scui_window_switch_rotate);
+    scui_window_switch_type_cfg_set(scui_window_switch_rotate1);
     scui_window_switch_type_cfg_set(scui_window_switch_circle);
     scui_window_switch_type_cfg_set(scui_window_switch_grid);
     
