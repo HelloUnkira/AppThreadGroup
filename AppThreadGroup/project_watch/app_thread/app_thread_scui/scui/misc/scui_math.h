@@ -83,7 +83,7 @@ int32_t scui_bezier3(int32_t t, int32_t u0, int32_t u1, int32_t u2, int32_t u3);
 
 /*@brief 路径映射(scui_map)多态(参数值,返回值)
  */
-typedef int32_t (*scui_map_path_cb_t)(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
+typedef int32_t (*scui_map_cb_t)(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_t r_o);
 
 /*@brief 路径映射(scui_map)多态(参数值,返回值)
  */

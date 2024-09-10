@@ -28,7 +28,7 @@ typedef void (*scui_anima_expired_t)(void *anima);
 /*@brief 动画
  */
 typedef struct {
-    scui_map_path_cb_t   path;      /* 动画行程回调 */
+    scui_map_cb_t        path;      /* 动画行程回调 */
     scui_anima_start_t   start;     /* 动画开始回调 */
     scui_anima_ready_t   ready;     /* 动画就绪回调 */
     scui_anima_expired_t expired;   /* 动画过期回调 */

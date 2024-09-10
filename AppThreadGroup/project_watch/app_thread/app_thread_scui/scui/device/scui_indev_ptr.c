@@ -59,10 +59,10 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_indev_ptr.state  = data->state;
             scui_indev_ptr.ptr_cnt++;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
-            scui_coord_t dist_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
-            scui_coord_t dist_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
-            scui_coord_t dist_r = scui_max(scui_abs(dist_x), scui_abs(dist_y));
-            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_SCALE_COF * dist_r / elapse);
+            scui_coord_t last_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
+            scui_coord_t last_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
+            scui_coord_t last_r = scui_max(scui_abs(last_x), scui_abs(last_y));
+            scui_multi_t last_v = elapse == 0 ? 0 : (SCUI_SCALE_COF * last_r / elapse);
             /* 检查事件是否是点击 */
             if (elapse < SCUI_INDEV_PTR_CLICK) {
                 event.type    = scui_event_ptr_click;
@@ -72,12 +72,12 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 scui_event_notify(&event);
             } else
             /* 检查事件是否是fling */
-            if (rate_d >= SCUI_INDEV_PTR_FLING_RATE &&
-                scui_indev_ptr.move_cnt < SCUI_INDEV_PTR_FLING_CNT) {
+            if (last_v >= SCUI_INDEV_PTR_FLING_RATE &&
+                scui_indev_ptr.move_cnt < SCUI_INDEV_PTR_MOVE_CNT) {
                 event.type  = scui_event_ptr_fling;
                 event.ptr_s = scui_indev_ptr.ptr_last;
                 event.ptr_e = point;
-                SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", dist_r, rate_d);
+                SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", last_r, last_v);
                 scui_event_notify(&event);
             } else
             /* 事件是move */
@@ -87,7 +87,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.absorb = scui_event_ptr_move_absorb,
                 event.ptr_s  = scui_indev_ptr.ptr_last;
                 event.ptr_e  = point;
-                SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", dist_r, rate_d);
+                SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                 scui_event_notify(&event);
             }
             scui_indev_ptr.cnt_tick = scui_tick_cnt();
@@ -106,6 +106,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
         if (scui_indev_ptr.state == scui_indev_state_release) {
             scui_indev_ptr.state  = data->state;
             scui_indev_ptr.ptr_last = point;
+            scui_indev_ptr.ptr_near = point;
             scui_indev_ptr.move_cnt = 0;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
             scui_indev_ptr.cnt_tick = scui_tick_cnt();
@@ -124,29 +125,36 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
         if (scui_indev_ptr.state == scui_indev_state_press) {
             scui_indev_ptr.state  = data->state;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
-            scui_coord_t dist_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
-            scui_coord_t dist_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
-            scui_coord_t dist_r = scui_max(scui_abs(dist_x), scui_abs(dist_y));
-            scui_multi_t rate_d = elapse == 0 ? 0 : (SCUI_SCALE_COF * dist_r / elapse);
-            /* 移动总速度不满足fling条件,转为move */
-            if (rate_d < SCUI_INDEV_PTR_FLING_RATE)
-            if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_FLING_CNT)
-                scui_indev_ptr.move_cnt++;
-            if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_FLING_CNT)
-            
-            #if 0
-            if (dist_r > SCUI_INDEV_PTR_MOVE_LIMIT) {
-            #else
-            if (scui_indev_ptr.ptr_last.x != point.x ||
-                scui_indev_ptr.ptr_last.y != point.y) {
-            #endif
-                event.type   = scui_event_ptr_move;
-                event.absorb = scui_event_ptr_move_absorb,
-                event.ptr_s  = scui_indev_ptr.ptr_last;
-                event.ptr_e  = point;
-                SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", dist_r, rate_d);
-                scui_event_notify(&event);
-                scui_indev_ptr.ptr_last = point;
+            scui_coord_t last_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
+            scui_coord_t last_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
+            scui_coord_t near_x = scui_dist(scui_indev_ptr.ptr_near.x, point.x);
+            scui_coord_t near_y = scui_dist(scui_indev_ptr.ptr_near.y, point.y);
+            scui_coord_t last_r = scui_max(scui_abs(last_x), scui_abs(last_y));
+            scui_coord_t near_r = scui_max(scui_abs(near_x), scui_abs(near_y));
+            scui_multi_t last_v = elapse == 0 ? 0 : (SCUI_SCALE_COF * last_r / elapse);
+            scui_multi_t near_v = elapse == 0 ? 0 : (SCUI_SCALE_COF * near_r / elapse);
+            scui_indev_ptr.ptr_near = point;
+            /* 移动速度不满足fling条件,转为move */
+            if (last_v < SCUI_INDEV_PTR_FLING_RATE ||
+                near_v < SCUI_INDEV_PTR_FLING_RATE) {
+                
+                if (scui_indev_ptr.move_cnt <= SCUI_INDEV_PTR_MOVE_CNT)
+                    scui_indev_ptr.move_cnt++;
+                
+                if (scui_indev_ptr.move_cnt >= SCUI_INDEV_PTR_MOVE_CNT)
+                if (last_r >= SCUI_INDEV_PTR_MOVE_DELTA) {
+                    event.type   = scui_event_ptr_move;
+                    event.absorb = scui_event_ptr_move_absorb,
+                    event.ptr_s  = scui_indev_ptr.ptr_last;
+                    event.ptr_e  = point;
+                    SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
+                    SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
+                    scui_event_notify(&event);
+                    scui_indev_ptr.ptr_last = point;
+                }
+            } else {
+                // 清除移动计数器
+                scui_indev_ptr.move_cnt = 0;
             }
             /* 发送按下事件 */
             event.type     = scui_event_ptr_hold;

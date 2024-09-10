@@ -5,8 +5,8 @@
 /* ui的一些配置参数 */
 #define SCUI_UI_SCROLL_BAR_STOP_TIME            (750)
 #define SCUI_UI_SCROLL_BAR_FADE_TIME            (750)
-#define SCUI_UI_POPUP_STOP_TIME                 (1000)
-#define SCUI_UI_POPUP_FADE_TIME                 (750)
+#define SCUI_UI_POPUP_ANIM_TIME                 (750)
+#define SCUI_UI_POPUP_WAIT_TIME                 (1000)
 /*****************************************************************************/
 //
 //

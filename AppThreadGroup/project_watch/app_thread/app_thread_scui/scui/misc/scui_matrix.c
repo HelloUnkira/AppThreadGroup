@@ -209,7 +209,7 @@ bool scui_matrix_inverse_check(scui_matrix_t *matrix)
  */
 void scui_matrix_inverse(scui_matrix_t *matrix)
 {
-    #if 1
+    #if 0
     /* 摘抄自lv_matrix:::. */
     const scui_coord3_t eps = 1.1920929e-7f;
     

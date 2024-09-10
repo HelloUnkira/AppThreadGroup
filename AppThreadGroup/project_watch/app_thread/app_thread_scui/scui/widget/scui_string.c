@@ -51,6 +51,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->unit_s      = maker->unit_s;
     string->draw_cache  = maker->draw_cache;
     string->unit_anima  = true;
+    string->unit_abort  = false;
     string->unit_over   = false;
     string->unit_way    = 1;
     
@@ -159,8 +160,21 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     scui_widget_draw(handle, NULL, false);
 }
 
+/*@brief 字符串控件滚动中止
+ *@param handle 字符串控件句柄
+ *@param active 中止标记
+ */
+void scui_string_scroll_abort(scui_handle_t handle, bool abort)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_string_t *string = (void *)widget;
+    
+    string->unit_abort = abort;
+}
+
 /*@brief 字符串控件滚动结束(单次滚动)
- *@param handle   字符串控件句柄
+ *@param handle 字符串控件句柄
  *@retval 是否结束
  */
 bool scui_string_scroll_over(scui_handle_t handle)
@@ -189,6 +203,8 @@ void scui_string_event(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
+        if (string->unit_abort)
+            break;
         if (string->unit_over)
             break;
         

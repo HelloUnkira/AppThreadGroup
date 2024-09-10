@@ -40,6 +40,7 @@ typedef struct {
     /* 内部域: */
     scui_handle_t       name;           // 字库名字
     uint64_t            unit_anima:1;   // 滚动动画标记
+    uint64_t            unit_abort:1;   // 滚动中止标记
     uint64_t            unit_over:1;    // 滚动结束
     scui_coord_t        unit_way;       // 滚动单元方向
     scui_coord_t        rcd_ms;
@@ -82,6 +83,12 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text);
  *@param str_utf8 字符串(utf8)
  */
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
+
+/*@brief 字符串控件滚动中止
+ *@param handle 字符串控件句柄
+ *@param active 中止标记
+ */
+void scui_string_scroll_abort(scui_handle_t handle, bool abort);
 
 /*@brief 字符串控件滚动结束(单次滚动)
  *@param handle   字符串控件句柄

@@ -7,27 +7,38 @@
 
 #include "scui.h"
 
-static scui_coord_t  popup_wait = 0;
-static scui_coord_t  popup_fade = 0;
+// 可以开字画布做控件树真缩放的
+// 这里偷懒懒得折腾了,搞个差不齐的样子完事了
+
+
+
+// 工步1:重力回弹原点放大,透明度淡入
+// 工步2:悬停至少指定时间或等待结束
+// 工步3:淡出时候原点缩小,透明度淡出
+static scui_coord_t  scale_tar_w  = 0;
+static scui_coord_t  scale_tar_h  = 0;
+static scui_coord_t  scale_way    = +1;  /* (+1)==>(-1)==>(0) */
+static scui_coord_t  popup_anima  = 0;
 static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 {
+    #if 1   // 有俩种选择,一种是打断以前的,另一种是不打断
+    if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
+        scui_widget_hide(SCUI_UI_SCENE_POPUP, false);
+    #else
     if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
         return;
+    #endif
     
-    popup_wait = SCUI_UI_POPUP_STOP_TIME;
-    popup_fade = SCUI_UI_POPUP_FADE_TIME;
-    
+    // 显示界面,重绘它
     scui_widget_show(SCUI_UI_SCENE_POPUP, false);
-    scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
     scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
     
     if (text != SCUI_HANDLE_INVALID)
         scui_string_update_text(popup_string, text);
     else if (string != NULL)
         scui_string_update_str(popup_string, string);
-    
 }
 
 /*@brief 控件事件响应回调
@@ -41,35 +52,63 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        if (popup_wait != 0) {
-            if (popup_wait  > SCUI_ANIMA_TICK)
-                popup_wait -= SCUI_ANIMA_TICK;
-            else
-                popup_wait  = 0;
+        SCUI_ASSERT(scale_tar_w != 0);
+        SCUI_ASSERT(scale_tar_h != 0);
+        
+        // 工步1,3:
+        if (scale_way == +1 || scale_way == -1) {
+            scui_coord_t  pct_s  = scale_way == +1 ? 0 : 100;
+            scui_coord_t  pct_e  = scale_way == +1 ? 100 : 0;
+            scui_map_cb_t map_cb = scale_way == +1 ? scui_map_bounce : scui_map_ease_in;
             
-            uint8_t pct = scui_map(popup_wait, SCUI_UI_POPUP_STOP_TIME, 0,
-                                   scui_alpha_pct0, scui_alpha_pct100);
+            if (popup_anima <= SCUI_UI_POPUP_ANIM_TIME) {
+                scui_coord_t pct = scui_map(popup_anima, 0, SCUI_UI_POPUP_ANIM_TIME, pct_s, pct_e);
+                
+                scui_alpha_t scale_alpha = map_cb(pct, 0, 100, scui_alpha_pct0, scui_alpha_pct100);
+                scui_coord_t scale_cur_w = map_cb(pct, 0, 100, 0, scale_tar_w);
+                scui_coord_t scale_cur_h = map_cb(pct, 0, 100, 0, scale_tar_h);
+                scale_cur_w = scui_clamp(scale_cur_w, 10, scale_tar_w);
+                scale_cur_h = scui_clamp(scale_cur_h, 10, scale_tar_h);
+                scui_coord_t scale_cur_x = (scale_tar_w - scale_cur_w) / 2;
+                scui_coord_t scale_cur_y = (scale_tar_h - scale_cur_h) / 2;
+                
+                SCUI_LOG_INFO("popup scale:alpha:%d, pct:%d", scale_alpha, pct);
+                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scale_alpha, true);
+                scui_widget_adjust_size(SCUI_UI_SCENE_POPUP_SCALE, scale_cur_w, scale_cur_h);
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y});
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = 0, .y = 0});
+                
+                scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+                
+                popup_anima += SCUI_ANIMA_TICK;
+            }
             
-            SCUI_LOG_INFO("popup wait pct:%d", pct);
-            scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct(pct), true);
-            scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
-            break;
-        }
-        if (scui_string_scroll_over(popup_string)) {
-            /* 完全隐藏则回收控件 */
-            if (popup_fade == 0)
+            // 工步1结束到达工步2:
+            if (scale_way == +1 && popup_anima >= SCUI_UI_POPUP_ANIM_TIME) {
+                scui_string_scroll_abort(popup_string, false);
+                popup_anima = 0;
+                scale_way = 0;
+            }
+            // 工步3结束:
+            if (scale_way == -1 && popup_anima >= SCUI_UI_POPUP_ANIM_TIME) {
                 scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
-            else {
-                if (popup_fade  > SCUI_ANIMA_TICK)
-                    popup_fade -= SCUI_ANIMA_TICK;
-                else
-                    popup_fade  = 0;
-                
-                uint8_t pct = scui_map(popup_fade, SCUI_UI_POPUP_FADE_TIME, 0,
-                                       scui_alpha_pct100, scui_alpha_pct0);
-                
-                SCUI_LOG_INFO("popup fade pct:%d", pct);
-                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_pct(pct), true);
+                scale_way = 0xFF;
+            }
+        }
+        
+        // 工步2:
+        if (scale_way == 0) {
+            if (popup_anima <= SCUI_UI_POPUP_WAIT_TIME)
+                popup_anima += SCUI_ANIMA_TICK;
+            
+            // 工步2结束到达工步3:
+            if (popup_anima >= SCUI_UI_POPUP_WAIT_TIME &&
+                scui_string_scroll_over(popup_string)) {
+                popup_anima = 0;
+                scale_way = -1;
+            } else {
+                SCUI_LOG_INFO("popup wait");
+                scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_cover, true);
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
             }
         }
@@ -95,9 +134,16 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.unit_s                     = true;     //单次滚动,结束标记
             scui_string_create(&string_maker, &popup_string, false);
+            
+            scui_string_scroll_abort(popup_string, true);
+            scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
+            scale_tar_w = scui_widget_clip(SCUI_UI_SCENE_POPUP_SCALE).w;
+            scale_tar_h = scui_widget_clip(SCUI_UI_SCENE_POPUP_SCALE).h;
+            
+            // 启动工步1:
+            scale_way   = +1;
+            popup_anima = 0;
         }
-        
-        scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
@@ -130,9 +176,6 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
 void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        break;
     case scui_event_draw: {
         if (!scui_widget_event_check_execute(event))
              break;

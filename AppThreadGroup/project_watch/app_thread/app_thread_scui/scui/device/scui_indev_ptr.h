@@ -3,6 +3,7 @@
 
 typedef struct {
     scui_indev_state_t state;
+    scui_point_t ptr_near;
     scui_point_t ptr_last;
     scui_coord_t ptr_cnt;
     uint64_t cnt_tick;

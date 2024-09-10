@@ -22,8 +22,16 @@
             "widget.style.trans":           "true",
             "widget.clip.w":                "350",
             "widget.clip.h":                "100",
+            "widget.myself":                "SCUI_UI_SCENE_POPUP_SCALE",
+            "widget.parent":                "SCUI_UI_SCENE_POPUP"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.clip.w":                "350",
+            "widget.clip.h":                "100",
             "widget.myself":                "SCUI_UI_SCENE_POPUP_BG",
-            "widget.parent":                "SCUI_UI_SCENE_POPUP",
+            "widget.parent":                "SCUI_UI_SCENE_POPUP_SCALE",
             "widget.event_cb":              "scui_ui_scene_popup_bg_event_proc",
             "widget.child_num":             "5"
         }

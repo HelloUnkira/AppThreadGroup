@@ -558,13 +558,23 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.format                         = SCUI_PIXEL_CF_DEF_A,
 };
 
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_SCALE = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.clip.w                  = 350,
+	.widget.clip.h                  = 100,
+	.widget.myself                  = SCUI_UI_SCENE_POPUP_SCALE,
+	.widget.parent                  = SCUI_UI_SCENE_POPUP,
+	.widget.child_num               = 1,
+};
+
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 	.widget.type                    = scui_widget_type_custom,
 	.widget.style.trans             = true,
 	.widget.clip.w                  = 350,
 	.widget.clip.h                  = 100,
 	.widget.myself                  = SCUI_UI_SCENE_POPUP_BG,
-	.widget.parent                  = SCUI_UI_SCENE_POPUP,
+	.widget.parent                  = SCUI_UI_SCENE_POPUP_SCALE,
 	.widget.event_cb                = scui_ui_scene_popup_bg_event_proc,
 	.widget.child_num               = 5,
 };
@@ -928,7 +938,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[55] = {
+const void * scui_widget_parser_table[56] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -955,6 +965,7 @@ const void * scui_widget_parser_table[55] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL,
 	(void *)&scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
+	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_SCALE,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_1,
