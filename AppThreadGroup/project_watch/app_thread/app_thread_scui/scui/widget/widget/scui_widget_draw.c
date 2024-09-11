@@ -474,8 +474,10 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     /* step:image<e> */
     
     scui_point_t dst_center = {
-        .x = target->x - widget->clip.x + image_inst->pixel.width  / 2,
-        .y = target->y - widget->clip.y + image_inst->pixel.height / 2,
+        // .x = target->x - widget->clip.x + image_inst->pixel.width  / 2,
+        // .y = target->y - widget->clip.y + image_inst->pixel.height / 2,
+        .x = target->x + image_inst->pixel.width  / 2,
+        .y = target->y + image_inst->pixel.height / 2,
     };
     
     scui_clip_btra(widget->clip_set, node) {

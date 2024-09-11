@@ -352,3 +352,67 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         break;
     }
 }
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
+{
+    static scui_coord_t   spinner_pct = 0;
+    static scui_coord_t   spinner_tick = 0;
+    static const uint32_t spinner_round = 1000 / SCUI_ANIMA_TICK;
+    
+    
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        spinner_tick++;
+        if (spinner_tick > spinner_round)
+            spinner_tick = 0;
+        spinner_pct = scui_map(spinner_tick, 0, spinner_round, 0, 100);
+        
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
+    case scui_event_draw: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t clip = {0};
+        scui_color_t color_black = {0};
+        
+        clip = scui_widget_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
+        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        
+        scui_handle_t image_edge = scui_image_prj_image_src_19_widget_activity_04_dotbmp;
+        scui_handle_t image_ring = scui_image_prj_image_src_19_widget_activity_05_ringbmp;
+        
+        clip = scui_widget_clip(event->object);
+        clip.x += (clip.w - scui_image_w(image_ring)) / 2;
+        clip.y += (clip.h - scui_image_h(image_ring)) / 2;
+        clip.w = scui_image_w(image_ring);
+        clip.h = scui_image_h(image_ring);
+        
+        scui_color_t color = {
+            .color_l.full = 0xFFFFFFFF,
+            .color_d.full = 0xFF404040,
+            .filter = true,
+        };
+        
+        scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
+                                 spinner_pct, 270, 60, +1);
+        
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}

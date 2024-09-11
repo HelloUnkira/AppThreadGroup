@@ -7,6 +7,42 @@
 
 #include "scui.h"
 
+/*@brief 自定义控件:插件:加载圆环
+ *@param event      自定义控件事件
+ *@param clip       剪切域(绘制区域)
+ *@param spinner    图像句柄(调色板图)
+ *@param color      图像源色调(.color_l,.color_d,.color_f, .filter,)
+ *@param edge       图像句柄(边界点)
+ *@param percent    旋转进度点
+ *@param angle_s    旋转参考点(参考值270度)
+ *@param angle_l    旋转参考点(参考值270度)
+ *@param way        旋转方向(顺时针:+1;逆时针:-1;)
+ */
+void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
+                              scui_handle_t spinner, scui_color_t  color,
+                              scui_handle_t edge,    scui_coord_t  percent,
+                              scui_coord_t  angle_s, scui_coord_t  angle_l,
+                              scui_coord_t  way)
+{
+    SCUI_LOG_DEBUG("");
+    SCUI_ASSERT(clip != NULL);
+    
+    scui_color_t color_bg = {.color = color.color_d,.color_f = color.color_f, .filter = color.filter};
+    scui_color_t color_fg = {.color = color.color_l,.color_f = color.color_f, .filter = color.filter};
+    
+    /* 绘制背景 */
+    scui_widget_draw_image(event->object, clip, spinner, NULL, color_bg);
+    
+    scui_coord_t adj_s = angle_s + way * scui_map_ease_in_out(percent, 0, 100, 0, 360);
+    scui_coord_t adj_e = angle_s + way * scui_map(percent, 0, 100, 0, 360) + way * angle_l;
+    scui_coord_t ang_s = scui_min(adj_s, adj_e);
+    scui_coord_t ang_e = scui_max(adj_s, adj_e);
+    
+    /* 绘制圆环 */
+    scui_widget_draw_ring(event->object, clip, spinner, NULL,
+                          ang_s, color_fg, ang_e, 100, edge);
+}
+
 /*@brief 自定义控件:插件:进度条,滚动条
  *@param event      自定义控件事件
  *@param clip       剪切域(绘制区域)

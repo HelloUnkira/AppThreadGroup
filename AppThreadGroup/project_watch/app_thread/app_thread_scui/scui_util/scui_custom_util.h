@@ -1,6 +1,23 @@
 #ifndef SCUI_CUSTOM_UTIL_H
 #define SCUI_CUSTOM_UTIL_H
 
+/*@brief 自定义控件:插件:加载圆环
+ *@param event      自定义控件事件
+ *@param clip       剪切域(绘制区域)
+ *@param spinner    图像句柄(调色板图)
+ *@param color      图像源色调(.color_l,.color_d,.color_f, .filter,)
+ *@param edge       图像句柄(边界点)
+ *@param percent    旋转进度点
+ *@param angle_s    旋转参考点(参考值270度)
+ *@param angle_l    旋转参考点(参考值270度)
+ *@param way        旋转方向(顺时针:+1;逆时针:-1;)
+ */
+void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
+                              scui_handle_t spinner, scui_color_t  color,
+                              scui_handle_t edge,    scui_coord_t  percent,
+                              scui_coord_t  angle_s, scui_coord_t  angle_l,
+                              scui_coord_t  way);
+
 /*@brief 自定义控件:插件:进度条,滚动条
  *@param event      自定义控件事件
  *@param clip       剪切域(绘制区域)
