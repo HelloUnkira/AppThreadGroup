@@ -35,8 +35,7 @@ void app_thread_slave_process(uint32_t app_thread_id,
         app_sem_process(sem, app_sem_take);
         /* 计算事件处理时间(开始) */
         #if APP_THREAD_SLAVE_EXECUTE_TIME
-        app_execute_us_t execute_us = {0};
-        app_execute_us(&execute_us, true);
+        uint32_t tick_us_s = app_execute_us();
         #endif
         /* 线程包数量警告检查 */
         uint32_t pkg_num = app_sys_pipe_num(pipe);
@@ -48,8 +47,7 @@ void app_thread_slave_process(uint32_t app_thread_id,
             /* 计算事件处理时间(开始) */
             #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
             bool execute_us_remind = true;
-            app_execute_us_t execute_us = {0};
-            app_execute_us(&execute_us, true);
+            uint32_t tick_us_s = app_execute_us();
             #endif
             /* 处理子线程自定义包裹 */
             bool record = true;
@@ -98,7 +96,8 @@ void app_thread_slave_process(uint32_t app_thread_id,
             }
             /* 计算事件处理时间(结束) */
             #if APP_THREAD_SLAVE_EXECUTE_TIME_CHECK
-            uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
+            uint32_t tick_us_e = app_execute_us();
+            uint32_t ms = (tick_us_e - tick_us_s) / 1000.0;
             if (ms > APP_THREAD_SLAVE_EXECUTE_TIME_CHECK_MS && execute_us_remind) {
                 APP_SYS_LOG_WARN("thread %u package execute %d ms", app_thread_id, ms);
                 APP_SYS_LOG_WARN("package thread:%u", package.thread);
@@ -111,7 +110,8 @@ void app_thread_slave_process(uint32_t app_thread_id,
         }
         /* 计算事件处理时间(结束) */
         #if APP_THREAD_SLAVE_EXECUTE_TIME
-        double ms = app_execute_us(&execute_us, false) / 1000.0;
+        uint32_t tick_us_e = app_execute_us();
+        uint32_t ms = (tick_us_e - tick_us_s) / 1000.0;
         app_thread_execute_us_set(app_thread_id, &ms);
         #endif
     }

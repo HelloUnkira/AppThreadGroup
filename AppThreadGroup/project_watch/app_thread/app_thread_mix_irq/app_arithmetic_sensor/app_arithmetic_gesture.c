@@ -122,7 +122,8 @@ void app_arithmetic_gesture_shake(int32_t frame[][3], uint8_t length)
     if (!shake)
          return;
     
-    static app_execute_us_t execute_us = {0};
+    static uint64_t tick_us_s = 0;
+    static uint64_t tick_us_e = 0;
     
     for (uint8_t idx = 0; idx < length; idx++) {
         
@@ -143,12 +144,14 @@ void app_arithmetic_gesture_shake(int32_t frame[][3], uint8_t length)
         if (shake_cnt > 3 && !shake_onoff) {
             shake_onoff = true;
             /* 间隔时间(摇手事件) */
-            if (app_execute_us(&execute_us, false) / 1000.0 < 1200) {
+            tick_us_e = app_execute_us();
+            if ((tick_us_e - tick_us_s) / 1000.0 < 1200) {
                 /* 发送摇手事件 */
                 APP_SYS_LOG_WARN("shake hand");
             }
             break;
         }
     }
-    app_execute_us(&execute_us, true);
+    
+    tick_us_s = app_execute_us();
 }

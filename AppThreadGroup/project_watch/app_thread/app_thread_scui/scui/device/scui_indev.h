@@ -56,11 +56,6 @@ void scui_indev_notify(scui_indev_data_t *data);
  */
 void scui_indev_ready(void);
 
-/*@brief 输入设备注册数据集合实例回调
- *@param cb 回调
- */
-void scui_indev_data_set_register(scui_indev_data_set_t * (*cb)(void));
-
 /*@brief 输入设备获取数据集合实例
  *@param 数据集合实例
  */

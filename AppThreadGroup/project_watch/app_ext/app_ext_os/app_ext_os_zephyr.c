@@ -180,17 +180,12 @@ void app_delay_us(uint32_t us)
     k_busy_wait(us);
 }
 
-/*@brief 计算一段代码的延时时间(us)
+/*@brief 计算一个延时点(us)
  */
-double app_execute_us(app_execute_us_t *execute_us, bool run)
+uint64_t app_execute_us(void)
 {
-    if (run) {
-        execute_us->start = k_cycle_get_32();
-        return 0;
-    } else {
-        execute_us->end = k_cycle_get_32();
-        return (double)(execute_us->end - execute_us->start) * 1000 * 1000 / sys_clock_hw_cycles_per_sec;
-    }
+    uint32_t tick = k_cycle_get_32();
+    return (double)tick * 1000 * 1000 / sys_clock_hw_cycles_per_sec;
 }
 
 #endif

@@ -33,13 +33,17 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
  */
 static void scui_widget_draw_tick(bool check)
 {
-    #if SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK
+    #if 0
+    static uint32_t tick_us_s = 0;
+    static uint32_t tick_us_e = 0;
     
     if (check)
-        scui_tick_elapse_us(true);
+        tick_us_s = scui_tick_us();
     else {
-        uint64_t tick_us = scui_tick_elapse_us(false);
-        if (tick_us > SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER)
+        tick_us_e = scui_tick_us();
+        uint64_t tick_us = tick_us_e - tick_us_s;
+        // 统计绘制节点的时间,过滤小的绘制信息
+        if (tick_us > 1000)
             SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
     }
     

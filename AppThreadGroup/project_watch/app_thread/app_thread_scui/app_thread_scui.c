@@ -101,29 +101,6 @@ static void app_thread_scui_draw_test(void)
 
 #endif
 
-/*@brief scui 输入设备数据集
- */
-static scui_indev_data_set_t * scui_indev_data_set_cb(void)
-{
-    static scui_indev_data_set_t scui_indev_data_set = {0};
-    
-    app_module_clock_t clock = {0};
-    app_module_clock_get_system_clock(&clock);
-    scui_indev_data_set.sys_time_h      = clock.hour;
-    scui_indev_data_set.sys_time_m      = clock.minute;
-    scui_indev_data_set.sys_time_s      = clock.second;
-    
-    return &scui_indev_data_set;
-}
-
-/*@brief scui 耗时策略
- */
-static uint64_t scui_tick_elapse_us_cb(bool run)
-{
-    static app_execute_us_t execute_us = {0};
-    return app_execute_us(&execute_us, run);
-}
-
 /*@brief scui refr子线程
  */
 static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
@@ -165,8 +142,6 @@ static void app_thread_scui_routine_ready_cb(void)
     app_scui_timer_ready();
     app_scui_check_time_ready();
     /* 初始化scui */
-    scui_tick_elapse_us_register(scui_tick_elapse_us_cb);
-    scui_indev_data_set_register(scui_indev_data_set_cb);
     scui_ready();
     /* 初始化启动scui调度定时器 */
     app_scui_timer_start();

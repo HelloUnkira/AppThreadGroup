@@ -118,9 +118,9 @@ static void scui_window_jump_anima_expired(void *instance)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     if (scui_widget_surface_only(widget))
-        scui_widget_refr(widget->myself, true);
+        scui_widget_refr(widget->myself, false);
     else
-        scui_widget_draw(widget->myself, NULL, true);
+        scui_widget_draw(widget->myself, NULL, false);
 }
 
 /*@brief 窗口移动动画回调
@@ -199,9 +199,9 @@ static void scui_window_move_anima_expired(void *instance)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     if (scui_widget_surface_only(widget))
-        scui_widget_refr(widget->myself, true);
+        scui_widget_refr(widget->myself, false);
     else
-        scui_widget_draw(widget->myself, NULL, true);
+        scui_widget_draw(widget->myself, NULL, false);
 }
 
 /*@brief 窗口移动动画自动化
@@ -478,12 +478,16 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_mgr.switch_args.list[idx] = SCUI_HANDLE_INVALID;
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
-        if (scui_window_mgr.list[idx] != scui_window_mgr.active_curr &&
-            scui_window_mgr.list[idx] != handle) {
-            scui_widget_hide(scui_window_mgr.list[idx], false);
-            SCUI_ASSERT(scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID);
+        if (scui_window_mgr.list[idx] == scui_window_mgr.active_curr ||
+            scui_window_mgr.list[idx] == handle)
             continue;
-        }
+        scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
+        scui_window_t *window = (void *)widget;
+        SCUI_ASSERT(widget != NULL);
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+        
+        if (scui_widget_surface_only(widget) && !window->resident)
+            scui_widget_hide(scui_window_mgr.list[idx], false);
     }
     
     /* 如果没有焦点窗口 */

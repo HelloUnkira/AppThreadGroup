@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-#if 1
+#if APP_EXT_DEV_GUI_IS_SCUI
 
 #if 1 // bin field
 

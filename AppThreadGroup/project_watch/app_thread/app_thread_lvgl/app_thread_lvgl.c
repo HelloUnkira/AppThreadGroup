@@ -46,11 +46,11 @@ static bool app_thread_lvgl_routine_package_cb(app_thread_package_t *package, bo
         /* lvgl时钟调度事件 */
         if (package->event == app_thread_lvgl_sched_exec) {
             /* 计算事件处理时间(开始) */
-            // app_execute_us_t execute_us = {0};
-            // app_execute_us(&execute_us, true);
+            // uint32_t tick_us_s = app_execute_us();
             lv_timer_handler();
             /* 计算事件处理时间(结束) */
-            // uint32_t ms = app_execute_us(&execute_us, false) / 1000.0;
+            // uint32_t tick_us_e = app_execute_us();
+            // uint32_t ms = (tick_us_e - tick_us_s) / 1000.0;
             // APP_SYS_LOG_INFO("exec ms:%d", ms);
             #if 0
             /* 此处适应性降帧 */

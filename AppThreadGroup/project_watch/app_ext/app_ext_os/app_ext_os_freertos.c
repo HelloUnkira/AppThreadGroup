@@ -193,17 +193,12 @@ void app_delay_us(uint32_t us)
     //根据平台提供;
 }
 
-/*@brief 计算一段代码的延时时间(us)
+/*@brief 计算一个延时点(us)
  */
-double app_execute_us(app_execute_us_t *execute_us, bool run)
+uint64_t app_execute_us(void)
 {
-    if (run) {
-        execute_us->start = xTaskGetTickCount();
-        return 0;
-    } else {
-        execute_us->end = xTaskGetTickCount();
-        return (double)(execute_us->end - execute_us->start) * 1000 * 1000 / configTICK_RATE_HZ;
-    }
+    TickType_t tick = xTaskGetTickCount();
+    return (double)tick * 1000 * 1000 / configTICK_RATE_HZ;
 }
 
 #endif

@@ -85,10 +85,6 @@
 #define SCUI_INDEV_KEY_CLICK                        (200)
 #define SCUI_INDEV_KEY_CLICK_SPAN                   (300)   /* 连续点击最大间隔 */
 
-/* 检查事件调度耗时:以ms计 */
-#define SCUI_EVENT_MGR_TICK_CHECK                   (0)
-#define SCUI_EVENT_MGR_TICK_FILTER                  (100)
-
 /* 句柄表数量,共享句柄数量--最大限制 */
 #define SCUI_HANDLE_TABLE_LIMIT                     ((scui_handle_t)5)
 #define SCUI_HANDLE_SHARE_LIMIT                     ((scui_handle_t)512)
@@ -114,10 +110,6 @@
 /* 内存文字宽度,文字边距: */
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_SPACE_WIDTH                     (8)
-
-/* 检查事件调度耗时:以ms计 */
-#define SCUI_WIDGET_SURFACE_DRAW_TICK_CHECK         (0)
-#define SCUI_WIDGET_SURFACE_DRAW_TICK_FILTER        (1000)
 
 /* 文本滚动时间与距离 */
 #define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)

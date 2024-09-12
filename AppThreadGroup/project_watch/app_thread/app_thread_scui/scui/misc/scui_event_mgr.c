@@ -79,17 +79,9 @@ void scui_event_notify(scui_event_t *event)
     
     if (event->style.sync) {
         
-        #if SCUI_EVENT_MGR_TICK_CHECK
-        scui_tick_elapse_us(true);
-        #endif
-        
+        scui_tick_calc(0);
         scui_event_respond(event);
-        
-        #if SCUI_EVENT_MGR_TICK_CHECK
-        uint64_t tick_us = scui_tick_elapse_us(false);
-        if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
-            SCUI_LOG_WARN("event %u expend:%u.%u", event->type, tick_us / 1000, tick_us % 1000);
-        #endif
+        scui_tick_calc(1);
         
         return;
     }
@@ -101,23 +93,14 @@ void scui_event_notify(scui_event_t *event)
  */
 void scui_event_dispatch(void)
 {
-    bool retval = true;
     scui_event_t event = {0};
     while (scui_event_num() != 0) {
-        retval = scui_event_dequeue(&event, false);
+        bool retval = scui_event_dequeue(&event, false);
         SCUI_ASSERT(retval);
         
-        #if SCUI_EVENT_MGR_TICK_CHECK
-        scui_tick_elapse_us(true);
-        #endif
-        
+        scui_tick_calc(0);
         scui_event_respond(&event);
-        
-        #if SCUI_EVENT_MGR_TICK_CHECK
-        uint64_t tick_us = scui_tick_elapse_us(false);
-        if (tick_us > SCUI_EVENT_MGR_TICK_FILTER)
-            SCUI_LOG_WARN("event %u expend:%u.%u", event.type, tick_us / 1000, tick_us % 1000);
-        #endif
+        scui_tick_calc(1);
     }
 }
 

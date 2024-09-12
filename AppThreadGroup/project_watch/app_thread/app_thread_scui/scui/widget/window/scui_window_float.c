@@ -103,9 +103,9 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
     widget->surface->alpha = alpha;
     /* 有自己的独立buffer,直接refr */
     if (scui_widget_surface_only(widget))
-        scui_widget_refr(handle, true);
+        scui_widget_refr(handle, false);
     else
-        scui_widget_draw(handle, NULL, true);
+        scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 窗口浮动动画回调

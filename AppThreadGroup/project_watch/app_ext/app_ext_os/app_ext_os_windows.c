@@ -225,18 +225,15 @@ void app_delay_us(uint32_t us)
          QueryPerformanceCounter(&dw_c));
 }
 
-/*@brief 计算一段代码的延时时间(us)
+/*@brief 计算一个延时点(us)
  */
-double app_execute_us(app_execute_us_t *execute_us, bool run)
+uint64_t app_execute_us(void)
 {
-    if (run) {
-        QueryPerformanceFrequency(&execute_us->frequency);
-        QueryPerformanceCounter(&execute_us->start);
-        return 0;
-    } else {
-        QueryPerformanceCounter(&execute_us->end);
-        return (double)(execute_us->end.QuadPart - execute_us->start.QuadPart) * 1000 * 1000 / execute_us->frequency.QuadPart;
-    }
+    LARGE_INTEGER freq;
+    LARGE_INTEGER tick;
+    QueryPerformanceFrequency(&freq);
+    QueryPerformanceCounter(&tick);
+    return (double)tick.QuadPart * 1000 * 1000 / freq.QuadPart;
 }
 
 #endif
