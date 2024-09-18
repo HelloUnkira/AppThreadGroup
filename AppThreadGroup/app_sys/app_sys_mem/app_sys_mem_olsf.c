@@ -460,6 +460,19 @@ static uintptr_t app_sys_mem_olsf_calc_size(app_sys_mem_olsf_t *mem_olsf, uintpt
     return size / sizeof(uintptr_t);
 }
 
+/*@brief 一级隔离策略分配堆计算指定内存
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param pointer  内存地址
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_size(app_sys_mem_olsf_t *mem_olsf, void *pointer)
+{
+    if (pointer == NULL)
+        return 0;
+    uintptr_t chunk = app_sys_mem_olsf_addr_to_chunk(mem_olsf, (uintptr_t)pointer);
+    return app_sys_mem_olsf_size_get(mem_olsf, chunk) * sizeof(uintptr_t);
+}
+
 /*@brief 一级隔离策略分配堆释放内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param pointer  内存地址

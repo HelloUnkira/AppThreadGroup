@@ -346,12 +346,13 @@ void scui_window_surface_blend(void)
     scui_window_list_sort(list_lvl_0, list_lvl_0_num);
     scui_window_list_sort(list_lvl_1, list_lvl_1_num);
     
-    scui_handle_t ofs_idx = 0;
+    scui_handle_t list_lvl_0_ofs = 0;
+    scui_handle_t list_lvl_1_ofs = 0;
     /* 仅窗口切换时才应用特效渲染 */
     if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
         /* 过滤掉被覆盖的绘制界面 */
-        scui_window_list_filter(list_lvl_0, list_lvl_0_num, &ofs_idx);
-        list_lvl_0_num -= ofs_idx;
+        scui_window_list_filter(list_lvl_0, list_lvl_0_num, &list_lvl_0_ofs);
+        list_lvl_0_num -= list_lvl_0_ofs;
     }
     
     /* 切换switch模式? */
@@ -362,7 +363,7 @@ void scui_window_surface_blend(void)
     scui_widget_t *widget_only = NULL;
     scui_window_surface_switch(0x01, &widget_only);
     if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
-        widget_only = list_lvl_0[ofs_idx];
+        widget_only = list_lvl_0[list_lvl_0_ofs];
         
         scui_surface_t *surface_fb = scui_surface_fb_draw();
         // 类型必须匹配才可交换
@@ -371,7 +372,7 @@ void scui_window_surface_blend(void)
             widget_only->surface->ver_res == surface_fb->ver_res) {
             
             scui_window_surface_switch(0x00, &widget_only);
-            scui_widget_surface_swap(list_lvl_0[ofs_idx], surface_fb);
+            scui_widget_surface_swap(list_lvl_0[list_lvl_0_ofs], surface_fb);
             SCUI_LOG_INFO("blend to switch mode");
             return;
         }
@@ -379,9 +380,9 @@ void scui_window_surface_blend(void)
     #endif
     
     /* 第一轮混合:处理所有常规独立画布 */
-    scui_window_list_blend(&list_lvl_0[ofs_idx], list_lvl_0_num);
+    scui_window_list_blend(&list_lvl_0[list_lvl_0_ofs], list_lvl_0_num);
     /* 第二轮混合:处理所有特殊独立画布或共享画布 */
-    scui_window_list_render(&list_lvl_1[ofs_idx], list_lvl_1_num);
+    scui_window_list_render(&list_lvl_1[list_lvl_1_ofs], list_lvl_1_num);
 }
 
 /*@brief 窗口管理器混合画布模式检查

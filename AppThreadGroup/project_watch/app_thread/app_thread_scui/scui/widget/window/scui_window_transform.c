@@ -506,7 +506,6 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
             clip_seg[idx_j][idx_i].h -= scale_h;
             dst_clip = clip_seg[idx_j][idx_i];
             src_clip = clip_seg[idx_j][idx_i];
-            scui_color_t color = {0};
             scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
         }
     }

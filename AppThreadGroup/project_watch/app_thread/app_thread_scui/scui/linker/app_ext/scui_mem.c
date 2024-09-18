@@ -225,6 +225,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     
     #endif
     SCUI_ASSERT(ptr != NULL);
+    scui_mem.size_used[type] += app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
     return ptr;
@@ -246,6 +247,7 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     scui_mem_type(ptr, &type);
     
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    scui_mem.size_used[type] -= app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     app_sys_mem_olsf_free(scui_mem.mem_olsf[type], ptr);
     
     #if SCUI_MEM_RECORD_CHECK
@@ -289,6 +291,24 @@ void scui_mem_check(scui_mem_type_t type)
         app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
 }
 
+/*@brief 内存模组统计(消耗值)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_used(scui_mem_type_t type)
+{
+    return scui_mem.size_used[type];
+}
+
+/*@brief 内存模组统计(总计值)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_total(scui_mem_type_t type)
+{
+    return scui_mem.size_total[type];
+}
+
 /*@brief 内存模组就绪
  */
 void scui_mem_ready(void)
@@ -300,29 +320,40 @@ void scui_mem_ready(void)
     static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT]  = {0};
     static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH] = {0};
     
+    scui_mem.size_total[scui_mem_type_mix]   = SCUI_MEM_TYPE_SIZE_MIX;
+    scui_mem.size_total[scui_mem_type_font]  = SCUI_MEM_TYPE_SIZE_FONT;
+    scui_mem.size_total[scui_mem_type_graph] = SCUI_MEM_TYPE_SIZE_GRAPH;
+    
     scui_mem.mem_olsf[scui_mem_type_mix]   = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     scui_mem.mem_olsf[scui_mem_type_font]  = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_font,  SCUI_MEM_TYPE_SIZE_FONT);
     scui_mem.mem_olsf[scui_mem_type_graph] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_graph, SCUI_MEM_TYPE_SIZE_GRAPH);
     
     #if SCUI_MEM_RECORD_CHECK
-    uint8_t *item = NULL;
+    uint8_t  *item = NULL;
+    uintptr_t size = 0;
     #if SCUI_MEM_RECORD_CHECK_MIX
-    item = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX);
+    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
+    item = SCUI_MEM_ALLOC(scui_mem_type_mix, size);
     scui_mem_check(scui_mem_type_mix);
+    scui_mem.size_used[scui_mem_type_mix]     += size;
     scui_mem.record[scui_mem_type_mix].item    = item;
     scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
     scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
-    item = SCUI_MEM_ALLOC(scui_mem_type_font,  sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT);
+    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
+    item = SCUI_MEM_ALLOC(scui_mem_type_font, size);
     scui_mem_check(scui_mem_type_font);
+    scui_mem.size_used[scui_mem_type_font]    += size;
     scui_mem.record[scui_mem_type_font].item   = item;
     scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
     scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
-    item = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH);
+    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
+    item = SCUI_MEM_ALLOC(scui_mem_type_graph, size);
     scui_mem_check(scui_mem_type_graph);
+    scui_mem.size_used[scui_mem_type_graph]   += size;
     scui_mem.record[scui_mem_type_graph].item  = item;
     scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
     scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;

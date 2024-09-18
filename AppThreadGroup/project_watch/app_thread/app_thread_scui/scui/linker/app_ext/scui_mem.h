@@ -59,6 +59,8 @@ void scui_mem_record_statistic(bool force);
 
 typedef struct {
     scui_mutex_t mutex;
+    uintptr_t    size_total[scui_mem_type_num];
+    uintptr_t    size_used[scui_mem_type_num];
     
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     #if SCUI_MEM_RECORD_CHECK
@@ -93,6 +95,18 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
  *@param type 内存类型
  */
 void scui_mem_type(void *ptr, scui_mem_type_t *type);
+
+/*@brief 内存模组统计(消耗值)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_used(scui_mem_type_t type);
+
+/*@brief 内存模组统计(总计值)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_total(scui_mem_type_t type);
 
 /*@brief 内存模组检查
  *@param type 内存类型

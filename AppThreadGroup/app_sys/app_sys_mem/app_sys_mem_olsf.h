@@ -58,6 +58,13 @@ typedef struct {
 /* chunk的单元类型固定为uintptr_t */
 #define app_sys_mem_olsf_loops     3
 
+/*@brief 一级隔离策略分配堆计算指定内存
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param pointer  内存地址
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_size(app_sys_mem_olsf_t *mem_olsf, void *pointer);
+
 /*@brief 一级隔离策略分配堆释放内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param pointer  内存地址
