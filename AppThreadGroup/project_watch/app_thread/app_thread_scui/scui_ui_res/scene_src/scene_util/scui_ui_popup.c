@@ -127,7 +127,6 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             string_maker.widget.clip.w              = 350 - 20 * 2;
             string_maker.widget.clip.h              = 40;
             string_maker.font_idx                   = 0;
-            string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;

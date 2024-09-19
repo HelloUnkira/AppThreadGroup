@@ -2,29 +2,33 @@
 #define SCUI_STRING_H
 
 typedef struct {
+    uint32_t            line_mum;
+    uint32_t           *line_ofs;
+    uint32_t           *line_width;
+} scui_string_typo_t;
+
+typedef struct {
     scui_color_t        color;          // 字符串颜色
-    scui_coord_t        gap_line;       // 行间距
-    scui_coord_t        gap_item;       // 字间距
-    scui_coord_t        gap_none;       // 间距:空字符
-    uint64_t            mode:2;         // 绘制模式(0:回退滚动;1:循环滚动)
-    uint64_t            align_hor:2;    // 书写对齐(0:左对齐;1:右对齐;2:中心对齐)
-    uint64_t            align_ver:2;    // 书写对齐(0:上对齐;1:下对齐;2:中心对齐)
-    uint64_t            line_way:1;     // 书写方向(0:水平书写;1:垂直书写(未支持))
+    uint64_t            gap_line:7;     // 行间距(<= 127)
+    uint64_t            gap_item:7;     // 字间距(<= 127)
+    uint64_t            gap_none:7;     // 空字符(<= 127)
+    uint64_t            align_hor:2;    // 排版对齐(0:左对齐;1:右对齐;2:中心对齐)
+    uint64_t            align_ver:2;    // 排版对齐(0:上对齐;1:下对齐;2:中心对齐)
+    uint64_t            mode_scroll:2;  // 滚动模式(0:左右滚动;1:轮转滚动)
     uint64_t            line_multi:1;   // 多行模式(非默认)
     uint64_t            line_stand:1;   // 标准字符(非默认)
-    uint64_t            line_ltr:1;     // 绘制方向
     /* 外部域转内部域: */
     scui_area_t         clip;           // 绘制剪切域
     scui_handle_t       name;           // 字库文字句柄
     uint8_t            *utf8;           // 字符串(utf8)
     /* 内部域: */
+    scui_string_typo_t *typo;           // 排版信息(多行模式使用)
     scui_coord_t        width;          // 单行模式宽度
     scui_coord_t        height;         // 多行模式高度
-    scui_coord_t        limit;
-    scui_coord_t        offset;
+    scui_coord_t        limit;          // 滚动限制量
+    scui_coord_t        offset;         // 滚动偏移量
     uint32_t            number;         // 字符数量
     uint32_t           *unicode;        // 字符串(unicode)
-    void               *layout;         // 布局资源
     uint64_t            update:1;       // 更新标记
 } scui_string_args_t;
 
@@ -38,25 +42,25 @@ typedef struct {
     uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
     uint64_t            draw_cache:1;   // 绘制缓存块
     /* 内部域: */
-    scui_handle_t       name;           // 字库名字
     uint64_t            unit_anima:1;   // 滚动动画标记
     uint64_t            unit_abort:1;   // 滚动中止标记
     uint64_t            unit_over:1;    // 滚动结束
     scui_coord_t        unit_way;       // 滚动单元方向
     scui_coord_t        rcd_ms;
-    uint8_t *str_utf8;  // 字符串(utf8)
+    scui_handle_t       name;           // 字库名字
+    uint8_t            *str_utf8;       // 字符串(utf8)
 } scui_string_t;
 
 #pragma pack(push, 1)
 typedef struct {
-    scui_widget_maker_t widget;
-    scui_handle_t       font_idx;       // 字库尺寸
-    scui_handle_t       text;           // 字符串
-    scui_string_args_t  args;           // 字符串绘制参数
-    scui_coord_t        unit_ms;        // 滚动单元时间
-    scui_coord_t        unit_dx;        // 滚动单元距离
-    uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
-    uint64_t            draw_cache:1;   // 绘制缓存块
+    scui_widget_maker_t     widget;
+    scui_handle_t           font_idx;       // 字库尺寸
+    scui_handle_t           text;           // 字符串
+    scui_string_args_t      args;           // 字符串绘制参数
+    scui_coord_t            unit_ms;        // 滚动单元时间
+    scui_coord_t            unit_dx;        // 滚动单元距离
+    uint64_t                unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
+    uint64_t                draw_cache:1;   // 绘制缓存块
 } scui_string_maker_t;
 #pragma pack(pop)
 

@@ -309,7 +309,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.widget.clip.w              = custom_maker.widget.clip.w - (52 + 16 + 8 * 2);
                 string_maker.widget.clip.h              = 58;
                 string_maker.widget.clip.y              = (60 - 58) / 2;
-                string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
                 string_maker.args.color.color_s.full    = 0xFFFFFFFF;
                 string_maker.args.color.color_e.full    = 0xFFFFFFFF;
                 string_maker.args.color.filter          = true;

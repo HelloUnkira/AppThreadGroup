@@ -107,13 +107,17 @@
 /* 窗口管理栈数量限制 */
 #define SCUI_WINDOW_STACK_NEST                      (10)
 
-/* 内存文字宽度,文字边距: */
+/* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)
-#define SCUI_STRING_SPACE_WIDTH                     (8)
+#define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
+/* 行间距,字间距,空字符宽度 */
+#define SCUI_WIDGET_STRING_GAP_LINE                 (0)
+#define SCUI_WIDGET_STRING_GAP_ITEM                 (0)
+#define SCUI_WIDGET_STRING_GAP_NONE                 (8)
 /* 文本滚动时间与距离 */
 #define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
-#define SCUI_WIDGET_STRING_UNIT_DX                  (3)
+#define SCUI_WIDGET_STRING_UNIT_DX                  (1)
 /* 按钮1缩放限制百分比 */
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 

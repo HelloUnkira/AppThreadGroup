@@ -442,6 +442,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
+        /* 是否自己吸收处理(冒泡自己) */
+        if (widget->style.indev_enc)
+            scui_widget_event_proc(event);
+            scui_widget_event_mask_keep(event);
+        if (scui_widget_event_check_over(event))
+             return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
@@ -451,13 +457,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
                  break;
         }
         event->object = widget->myself;
-        scui_widget_event_mask_keep(event);
-        if (scui_widget_event_check_over(event))
-             return;
-        /* 是否自己吸收处理(冒泡自己) */
-        if (!widget->style.indev_enc)
-             return;
-        scui_widget_event_proc(event);
         return;
     }
     /*************************************************************************/
@@ -468,6 +467,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
+        /* 是否自己吸收处理(冒泡自己) */
+        if (widget->style.indev_key)
+            scui_widget_event_proc(event);
+            scui_widget_event_mask_keep(event);
+        if (scui_widget_event_check_over(event))
+             return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
@@ -477,13 +482,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
                  break;
         }
         event->object = widget->myself;
-        scui_widget_event_mask_keep(event);
-        if (scui_widget_event_check_over(event))
-             return;
-        /* 是否自己吸收处理(冒泡自己) */
-        if (!widget->style.indev_key)
-             return;
-        scui_widget_event_proc(event);
         return;
     }
     /*************************************************************************/

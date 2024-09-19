@@ -7,6 +7,19 @@
 
 #include "scui.h"
 
+/*@brief 绘制字符偏移计算
+ *@param args   字符串绘制参数
+ *@param glyph  字符
+ *@param offset 偏移量
+ */
+static void scui_draw_string_offset(scui_string_args_t *args, scui_font_glyph_t *glyph, scui_point_t *offset)
+{
+    if (glyph->bitmap != 0)
+        offset->x += glyph->ofs_x + glyph->box_w + args->gap_item;
+    else
+        offset->x += args->gap_none + args->gap_item;
+}
+
 /*@brief 绘制字符串
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
@@ -42,25 +55,111 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
     if (scui_area_empty(&draw_area))
         return;
     
-    if (src_args->layout) {
-        /* 单行模式不需要排版布局,绘制时手动计算偏移 */
-        SCUI_ASSERT(src_args->line_multi);
-
-        return;
-    }
-    
-    /* 无布局的时候,简单排版绘制 */
     scui_point_t offset = {.x = src_clip_v.x,.y = src_clip_v.y,};
     
-    if (src_args->limit <= 0 && !src_args->line_multi) {
-        if (src_args->line_way) {
+    if (src_args->line_multi) {
+        SCUI_ASSERT(src_args->typo != NULL);
+        
+        if (src_args->limit <= 0) {
             scui_coord_t line_h = -src_args->limit;
             if (src_args->align_ver == 0);
             if (src_args->align_ver == 1)
-                offset.y += line_h;
+                offset.x += line_h;
             if (src_args->align_ver == 2)
-                offset.y += line_h / 2;
-        } else {
+                offset.x += line_h / 2;
+        }
+        
+        uint32_t line_ofs = 0;
+        // 绘制每一个行
+        for (uint32_t idx_line = 0; idx_line < src_args->typo->line_mum; idx_line++) {
+             uint32_t line_s = line_ofs;
+             uint32_t line_e = src_args->typo->line_ofs[idx_line];
+             uint32_t line_w = src_args->typo->line_width[idx_line];
+             line_ofs = line_e + 1;
+             
+             scui_point_t offset_line = offset;
+             offset_line.y += (line_height + src_args->gap_line) * idx_line;
+             
+             if (src_args->align_hor == 0);
+             if (src_args->align_hor == 1)
+                 offset_line.x += src_clip_v.w - line_w;
+             if (src_args->align_hor == 2)
+                 offset_line.x += (src_clip_v.w - line_w) / 2;
+             
+             SCUI_LOG_INFO("line:<%d, %d> <%d>", line_s, line_e, line_w);
+             
+             // 行绘制
+             for (uint32_t idx = line_s; idx <= line_e; idx++) {
+                  SCUI_ASSERT(idx >= 0 && idx < src_args->number);
+                  
+                  if (src_args->unicode[idx] < 0x80)
+                      SCUI_LOG_DEBUG("letter:%c", src_args->unicode[idx]);
+                  else
+                      SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
+                  
+                  scui_font_glyph_unit_t glyph_unit = {
+                      .name = src_args->name,
+                      .glyph.space_width = src_args->gap_none,
+                      .glyph.unicode_letter = src_args->unicode[idx],
+                  };
+                  
+                  scui_font_glyph_cache_load(&glyph_unit);
+                  scui_font_glyph_cache_unload(&glyph_unit);
+                  
+                  SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
+                  SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
+                  SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
+                  SCUI_LOG_DEBUG("ofs_y:%d", glyph_unit.glyph.ofs_y);
+                  
+                  scui_area_t letter_clip = dst_clip_v;
+                  scui_area_t glyph_clip = {
+                      .w = glyph_unit.glyph.box_w,
+                      .h = glyph_unit.glyph.box_h,
+                  };
+                  
+                  scui_point_t letter_offset = offset_line;
+                  
+                  // 抄录自:lv_draw_sw_letter
+                  letter_offset.x += glyph_unit.glyph.ofs_x;
+                  letter_offset.y += src_args->offset;
+                  letter_offset.y += (line_height - base_line) - glyph_unit.glyph.box_h - glyph_unit.glyph.ofs_y;
+                  
+                  SCUI_LOG_INFO("offset:%d", src_args->offset);
+                  SCUI_LOG_INFO("offset_line:<%d, %d>", offset_line.x, offset_line.y);
+                  SCUI_LOG_INFO("letter_offset:<%d, %d>", letter_offset.x, letter_offset.y);
+                  
+                  if (!scui_area_limit_offset(&letter_clip, &letter_offset)) {
+                       scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
+                       continue;
+                  }
+                  
+                  scui_point_t glyph_offset = {0};
+                  glyph_offset.x = letter_offset.x < 0 ? -letter_offset.x : 0;
+                  glyph_offset.y = letter_offset.y < 0 ? -letter_offset.y : 0;
+                  if (!scui_area_limit_offset(&glyph_clip, &glyph_offset)) {
+                       scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
+                       continue;
+                  }
+                  
+                  scui_area_t clip_inter = {0};
+                  if (!scui_area_inter(&clip_inter, &letter_clip, &dst_clip_v)) {
+                       scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
+                       continue;
+                  }
+                  
+                  if (glyph_unit.glyph.bitmap != NULL) {
+                      letter_clip = clip_inter;
+                      scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
+                  }
+                  
+                  scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
+            }
+        }
+    } else {
+        /* 单行模式不需要排版布局,绘制时手动计算偏移 */
+        SCUI_ASSERT(src_args->typo == NULL);
+        
+        if (src_args->limit <= 0) {
             scui_coord_t line_w = -src_args->limit;
             if (src_args->align_hor == 0);
             if (src_args->align_hor == 1)
@@ -68,115 +167,84 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
             if (src_args->align_hor == 2)
                 offset.x += line_w / 2;
         }
-    }
-    
-    for (uint32_t idx = 0; idx < src_args->number; idx++) {
+        if (src_args->align_ver == 0);
+        if (src_args->align_ver == 1)
+            offset.y += (src_clip_v.h - (line_height - base_line));
+        if (src_args->align_ver == 2)
+            offset.y += (src_clip_v.h - (line_height - base_line)) / 2;
         
-        scui_font_glyph_unit_t glyph_unit = {0};
-        glyph_unit.name = src_args->name;
-        glyph_unit.glyph.space_width = src_args->gap_none;
-        glyph_unit.glyph.unicode_letter = src_args->unicode[idx];
-        
-        if (glyph_unit.glyph.unicode_letter < 0x80)
-            SCUI_LOG_INFO("letter:%c", glyph_unit.glyph.unicode_letter);
-        else
-            SCUI_LOG_INFO("letter:%x", glyph_unit.glyph.unicode_letter);
-        
-        scui_font_glyph_cache_load(&glyph_unit);
-        scui_font_glyph_cache_unload(&glyph_unit);
-        
-        SCUI_LOG_INFO("box_w:%d", glyph_unit.glyph.box_w);
-        SCUI_LOG_INFO("box_h:%d", glyph_unit.glyph.box_h);
-        SCUI_LOG_INFO("ofs_x:%d", glyph_unit.glyph.ofs_x);
-        SCUI_LOG_INFO("ofs_y:%d", glyph_unit.glyph.ofs_y);
-        
-        scui_area_t letter_clip = dst_clip_v;
-        scui_area_t glyph_clip = {
-            .w = glyph_unit.glyph.box_w,
-            .h = glyph_unit.glyph.box_h,
-        };
-        
-        if (src_args->line_multi) {
-            if (src_args->line_way) {
-                if (offset.y + glyph_clip.h + src_args->gap_item > src_clip_v.h) {
-                    offset.y  = 0;
-                    offset.x += src_args->width  + src_args->gap_line;
-                }
-            } else {
-                if (offset.x + glyph_clip.w + src_args->gap_item > src_clip_v.w) {
-                    offset.x  = 0;
-                    #if 0
-                    offset.y += src_args->height + src_args->gap_line;
-                    #else
-                    offset.y += line_height + src_args->gap_line;
-                    #endif
-                }
-            }
-        }
-        
-        scui_point_t letter_offset = offset;
-        
-        if (src_args->line_way) {
-            letter_offset.x += (src_args->width  - glyph_unit.glyph.box_w) / 2; // 行内居中对齐
-            if (src_args->line_multi)
-                letter_offset.x += src_args->offset;
+        for (uint32_t idx = 0; idx < src_args->number; idx++) {
+            
+            if (src_args->unicode[idx] < 0x80)
+                SCUI_LOG_DEBUG("letter:%c", src_args->unicode[idx]);
             else
-                letter_offset.y += src_args->offset;
-        } else {
-            #if 0
-            letter_offset.y += (src_args->height - glyph_unit.glyph.box_h) / 2; // 行内居中对齐
-            #else
+                SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
+            
+            scui_font_glyph_unit_t glyph_unit = {
+                .name = src_args->name,
+                .glyph.space_width = src_args->gap_none,
+                .glyph.unicode_letter = src_args->unicode[idx],
+            };
+            
+            scui_font_glyph_cache_load(&glyph_unit);
+            scui_font_glyph_cache_unload(&glyph_unit);
+            
+            SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
+            SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
+            SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
+            SCUI_LOG_DEBUG("ofs_y:%d", glyph_unit.glyph.ofs_y);
+            
+            scui_area_t letter_clip = dst_clip_v;
+            scui_area_t glyph_clip = {
+                .w = glyph_unit.glyph.box_w,
+                .h = glyph_unit.glyph.box_h,
+            };
+            
+            scui_point_t letter_offset = offset;
+            
             // 抄录自:lv_draw_sw_letter
-            letter_offset.x += glyph_unit.glyph.ofs_x;
+            letter_offset.x += src_args->offset + glyph_unit.glyph.ofs_x;
             letter_offset.y += (line_height - base_line) - glyph_unit.glyph.box_h - glyph_unit.glyph.ofs_y;
-            #endif
-            if (src_args->line_multi)
-                letter_offset.y += src_args->offset;
-            else {
-                letter_offset.x += src_args->offset;
-                // 单行模式垂直居中绘制
-                letter_offset.y += (src_clip_v.h - (line_height - base_line)) / 2;
+            
+            SCUI_LOG_INFO("offset:%d", src_args->offset);
+            SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
+            SCUI_LOG_INFO("letter_offset:<%d, %d>", letter_offset.x, letter_offset.y);
+            
+            if (!scui_area_limit_offset(&letter_clip, &letter_offset)) {
+                 scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);
+                 continue;
             }
+            
+            scui_point_t glyph_offset = {0};
+            glyph_offset.x = letter_offset.x < 0 ? -letter_offset.x : 0;
+            glyph_offset.y = letter_offset.y < 0 ? -letter_offset.y : 0;
+            if (!scui_area_limit_offset(&glyph_clip, &glyph_offset)) {
+                 scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);
+                 continue;
+            }
+            
+            scui_area_t clip_inter = {0};
+            if (!scui_area_inter(&clip_inter, &letter_clip, &dst_clip_v)) {
+                 scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);
+                 continue;
+            }
+            
+            if (glyph_unit.glyph.bitmap != NULL) {
+                letter_clip = clip_inter;
+                scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
+            }
+            
+            scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);
+            
+            #if 0   // test
+            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
+            for (uint32_t idx_g = 0; idx_g < glyph_unit.glyph.bitmap_size; idx_g++) {
+              if (idx_g % 8 == 0)
+                  SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+                  SCUI_LOG_INFO_RAW("0x%02x ", glyph_unit.glyph.bitmap[idx_g]);
+            }
+            SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
+            #endif
         }
-        
-        SCUI_LOG_INFO("offset:%d", src_args->offset);
-        SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
-        SCUI_LOG_INFO("letter_offset:<%d, %d>", letter_offset.x, letter_offset.y);
-        
-        if (!scui_area_limit_offset(&letter_clip, &letter_offset)) {
-             scui_string_args_offset(src_args, &glyph_unit.glyph, &offset);
-             continue;
-        }
-        
-        scui_point_t glyph_offset = {0};
-        glyph_offset.x = letter_offset.x < 0 ? -letter_offset.x : 0;
-        glyph_offset.y = letter_offset.y < 0 ? -letter_offset.y : 0;
-        if (!scui_area_limit_offset(&glyph_clip, &glyph_offset)) {
-             scui_string_args_offset(src_args, &glyph_unit.glyph, &offset);
-             continue;
-        }
-        
-        scui_area_t clip_inter = {0};
-        if (!scui_area_inter(&clip_inter, &letter_clip, &dst_clip_v)) {
-             scui_string_args_offset(src_args, &glyph_unit.glyph, &offset);
-             continue;
-        }
-        
-        if (glyph_unit.glyph.bitmap != NULL) {
-            letter_clip = clip_inter;
-            scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
-        }
-        
-        scui_string_args_offset(src_args, &glyph_unit.glyph, &offset);
-        
-        #if 0   // test
-        // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
-        for (uint32_t idx = 0; idx < glyph_unit.glyph.bitmap_size; idx++) {
-          if (idx % 8 == 0)
-              SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-              SCUI_LOG_INFO_RAW("0x%02x ", glyph_unit.glyph.bitmap[idx]);
-        }
-        SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-        #endif
     }
 }

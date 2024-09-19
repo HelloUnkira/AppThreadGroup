@@ -7,58 +7,74 @@
 
 #include "scui.h"
 
-/*@brief 绘制字符偏移计算
- *@param args   字符串绘制参数
- *@param glyph  字符
- *@param offset 偏移量
+/*@brief 绘制字符查找一个单词
+ *@param args    字符串绘制参数
+ *@param match_s 起始点
+ *@param match_e 结束点
+ *@param width   单词总宽度
+ *@param width   单词总宽度限制
  */
-void scui_string_args_offset(scui_string_args_t *args, scui_font_glyph_t *glyph, scui_point_t *offset)
+static void scui_string_args_find_word(scui_string_args_t *args, uint32_t *idx_s, uint32_t *idx_e, uint32_t *width, uint32_t *width_max)
 {
-    if (glyph->bitmap != 0) {
-        if (args->line_way)
-            offset->y += glyph->box_h + args->gap_item;
-        else
-            #if 0
-            offset->x += glyph->box_w + args->gap_item;
-            #else
-            offset->x += glyph->ofs_x + glyph->box_w + args->gap_item;
-            #endif
-    } else {
-        if (args->line_way)
-            offset->y += args->gap_none + args->gap_item;
-        else
-            offset->x += args->gap_none + args->gap_item;
+    uint32_t idx = 0;
+    *idx_e = *idx_s;
+    *width = 0;
+    
+    for (idx = *idx_s; idx < args->number; idx++) {
+        /* 文字信息缓存节点实例映射 */
+        scui_font_glyph_unit_t glyph_unit = {
+            .name                   = args->name,
+            .glyph.space_width      = args->gap_none,
+            .glyph.unicode_letter   = args->unicode[idx],
+        };
+        scui_font_glyph_cache_load(&glyph_unit);
+        scui_font_glyph_cache_unload(&glyph_unit);
+        
+        uint32_t glyph_width = 0;
+        glyph_width += glyph_unit.glyph.ofs_x;
+        glyph_width += glyph_unit.glyph.box_w;
+        glyph_width += args->gap_item;
+        
+        if (width_max != NULL && *width + glyph_width > *width_max) {
+           *idx_e = idx - 1;
+            break;
+        }
+        *width += glyph_width;
+        
+        // 找可以明确分割单词的字符
+        bool break_char = false;
+        
+        if (args->unicode[idx] == '\n' ||
+            args->unicode[idx] == '\r')
+            break_char = true;
+        
+        // 中文字符都可单独为一个单词
+        if (args->unicode[idx] >= 0x4E00 &&
+            args->unicode[idx] <= 0x9FA5)   // 0x4E00
+            break_char = true;
+        
+        // 被标记的字符都可以分割单词
+        for (uint8_t idx_k = 0; !break_char && SCUI_STRING_BREAK_CHAR[idx_k] != '\0'; idx_k++)
+            if (args->unicode[idx] == SCUI_STRING_BREAK_CHAR[idx_k])
+                break_char = true;
+        
+        if (break_char) {
+           *idx_e = idx;
+            break;
+        }
+    }
+    
+    if (idx ==  args->number) {
+       *idx_e = args->number - 1;
     }
 }
 
-/*@brief 字符串处理(变形,连字符等等)
+/*@brief 字符串处理
  *@param args 字符串绘制参数
  */
-void scui_string_args_process(scui_string_args_t *args)
+static void scui_string_args_prepare(scui_string_args_t *args)
 {
-    SCUI_ASSERT(args != NULL);
-    /*多字符字符串绘制一般分为以下三步曲调:
-     *步调1: 文字变形(例:阿拉伯语等)
-     *       它的目标主要是将原unicode单字符索引
-     *       根据前后字符关系映射到新的连字符索引
-     *步调2: 文字排版(一般是多行文字)
-     *       它的目标主要是将对齐效果作用到多行文字上去
-     *       使得多字符在整体的显示效果上具有美观效果
-     *步调3: 文字字符绘制
-     *       它的目标主要是将字符按排版和索引
-     *       一个个绘制到目标上面去
-     */
-    
-    if (!args->update)
-         return;
-    
-    args->update = false;
-    
-    /* 清空旧有布局 */
-    if (args->layout != NULL) {
-        SCUI_MEM_FREE(args->layout);
-        args->layout = NULL;
-    }
+    /* 预处理:将utf8->转为unicode */
     
     /* 清空旧有文本 */
     if (args->unicode != NULL) {
@@ -66,11 +82,8 @@ void scui_string_args_process(scui_string_args_t *args)
         args->unicode = NULL;
     }
     
-    args->width  = 0;
-    args->height = 0;
-    args->offset = 0;
-    
-    if (args->utf8 == NULL || args->name == SCUI_HANDLE_INVALID)
+    /* 提前退出,用于回收时使用 */
+    if (args->utf8 == NULL)
         return;
     
     /* 统计字符数量 */
@@ -79,7 +92,44 @@ void scui_string_args_process(scui_string_args_t *args)
     memset(args->unicode, 0, 4 * (args->number + 1));
     /* 将utf8转为unicode */
     scui_utf8_str_to_unicode(args->utf8, args->number, args->unicode);
+}
+
+/*@brief 字符串处理
+ *@param args 字符串绘制参数
+ */
+static void scui_string_args_transform(scui_string_args_t *args)
+{
+    if (args->utf8 == NULL || args->number == 0 ||
+        args->name == SCUI_HANDLE_INVALID)
+        return;
     
+    /* 文字变形:将特殊的连序unicode替换成新的映射unicode */
+}
+
+/*@brief 字符串处理
+ *@param args 字符串绘制参数
+ */
+static void scui_string_args_typography(scui_string_args_t *args)
+{
+    /* 清空已有排版 */
+    if (args->typo != NULL) {
+        if (args->typo->line_ofs != NULL)
+            SCUI_MEM_FREE(args->typo->line_ofs);
+        if (args->typo->line_width != NULL)
+            SCUI_MEM_FREE(args->typo->line_width);
+        SCUI_MEM_FREE(args->typo);
+        args->typo = NULL;
+    }
+    
+    if (args->utf8 == NULL || args->number == 0 ||
+        args->name == SCUI_HANDLE_INVALID)
+        return;
+    
+    args->width  = 0;
+    args->height = 0;
+    // 最大行宽为绘制区域的宽度
+    scui_area_t  src_clip_v = args->clip;
+    scui_point_t src_offset = {0};
     /* 从字库中提取一些信息 */
     scui_font_unit_t font_unit = {.name = args->name,};
     scui_font_cache_load(&font_unit);
@@ -87,110 +137,143 @@ void scui_string_args_process(scui_string_args_t *args)
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
     
-    /* 特定字体进行文字变形 */
-    /* ... */
-    
-    /* 文字进行排版布局(单行模式不需要排版布局) */
-    /* ... */
-    
-    if (args->layout != NULL) {
-        /* ... */
-        SCUI_ASSERT(false);
-    }
-    
-    /* 统计宽度和高度 */
-    args->width  = 0;
-    args->height = 0;
-    
-    for (uint32_t idx = 0; idx < args->number; idx++) {
+    if (args->line_multi) {
+        /* 文字排版是在虚拟区域内进行的 */
+        /* 也即当已知最大绘制宽度的情况下, 进行多行的排布 */
         
-        scui_font_glyph_unit_t glyph_unit = {0};
-        glyph_unit.name = args->name;
-        glyph_unit.glyph.space_width = args->gap_none;
-        glyph_unit.glyph.unicode_letter = args->unicode[idx];
+        // 先做统计,将信息填入到临时开辟的空间之中
+        uint32_t line_w_list[SCUI_STRING_LIMIT_LINE] = {0};
+        uint32_t line_o_list[SCUI_STRING_LIMIT_LINE] = {0};
+        uint32_t line_n = 1;
         
-        if (glyph_unit.glyph.unicode_letter < 0x80)
-            SCUI_LOG_INFO("letter:%c", glyph_unit.glyph.unicode_letter);
-        else
-            SCUI_LOG_INFO("letter:%x", glyph_unit.glyph.unicode_letter);
-        
-        scui_font_glyph_cache_load(&glyph_unit);
-        scui_font_glyph_cache_unload(&glyph_unit);
-        
-        if (args->line_way)
-            args->width  = scui_max(glyph_unit.glyph.box_w, args->width);
-        else
-            args->height = scui_max(glyph_unit.glyph.box_h, args->height);
-    }
-    
-    scui_point_t offset = {0};
-    scui_area_t  src_clip_v  = args->clip;
-    
-    for (uint32_t idx = 0; idx < args->number; idx++) {
-        
-        scui_font_glyph_unit_t glyph_unit = {0};
-        glyph_unit.name = args->name;
-        glyph_unit.glyph.space_width = args->gap_none;
-        glyph_unit.glyph.unicode_letter = args->unicode[idx];
-        
-        if (glyph_unit.glyph.unicode_letter < 0x80)
-            SCUI_LOG_INFO("letter:%c", glyph_unit.glyph.unicode_letter);
-        else
-            SCUI_LOG_INFO("letter:%x", glyph_unit.glyph.unicode_letter);
-        
-        scui_font_glyph_cache_load(&glyph_unit);
-        scui_font_glyph_cache_unload(&glyph_unit);
-        
-        scui_area_t glyph_clip = {
-            .w = glyph_unit.glyph.box_w,
-            .h = glyph_unit.glyph.box_h,
-        };
-        
-        if (args->line_multi) {
-            if (args->line_way) {
-                if (offset.y + glyph_clip.h + args->gap_item > src_clip_v.h) {
-                    offset.y  = 0;
-                    offset.x += args->width  + args->gap_line;
-                }
-            } else {
-                if (offset.x + glyph_clip.w + args->gap_item > src_clip_v.w) {
-                    offset.x  = 0;
-                    #if 0
-                    offset.y += args->height + args->gap_line;
-                    #else
-                    offset.y += line_height + args->gap_line;
-                    #endif
+        for (uint32_t idx = 0; idx < args->number; idx++) {
+            
+            if (args->unicode[idx] < 0x80)
+                SCUI_LOG_DEBUG("letter:%c", args->unicode[idx]);
+            else
+                SCUI_LOG_DEBUG("letter:%x", args->unicode[idx]);
+            
+            /* 文字信息缓存节点实例映射 */
+            scui_font_glyph_unit_t glyph_unit = {
+                .name                   = args->name,
+                .glyph.space_width      = args->gap_none,
+                .glyph.unicode_letter   = args->unicode[idx],
+            };
+            scui_font_glyph_cache_load(&glyph_unit);
+            scui_font_glyph_cache_unload(&glyph_unit);
+            
+            // 先拿一个单词,尝试填满
+            uint32_t word_s = idx;
+            uint32_t word_e = 0;
+            uint32_t word_w = 0;
+            scui_string_args_find_word(args, &word_s, &word_e, &word_w, NULL);
+            
+            // 本行还能接受一个单词,接受它
+            if (line_w_list[line_n - 1] +  word_w < src_clip_v.w) {
+                line_w_list[line_n - 1] += word_w;
+                line_o_list[line_n - 1]  = word_e;
+                idx = word_e;
+                continue;
+            }
+            
+            // 一个单词填不满,且不是单字符,限制填充
+            if (line_w_list[line_n - 1] == 0 && word_e - word_s > 0) {
+                uint32_t word_s = idx;
+                uint32_t word_e = 0;
+                uint32_t word_w = 0;
+                uint32_t word_m = src_clip_v.w - line_w_list[line_n];
+                scui_string_args_find_word(args, &word_s, &word_e, &word_w, &word_m);
+                if (word_w != 0) {
+                    line_w_list[line_n - 1] += word_w;
+                    line_o_list[line_n - 1]  = word_e;
+                    idx = word_e;
+                    continue;
                 }
             }
+            
+            // 换行,退格重填
+            SCUI_ASSERT(line_w_list[line_n - 1] <= src_clip_v.w);
+            line_n++;
+            idx--;
         }
         
-        if (args->line_way)
-            args->height += glyph_unit.glyph.box_h + args->gap_item;
-        else
-            args->width  += glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w + args->gap_item;
+        // 是否到达最后一个字符
+        SCUI_ASSERT(line_o_list[line_n - 1] == args->number - 1);
+        // 生成排版
+        args->typo = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_string_typo_t));
+        args->typo->line_mum = line_n;
+        args->typo->line_ofs = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(uint32_t) * line_n);
+        args->typo->line_width = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(uint32_t) * line_n);
         
-        scui_string_args_offset(args, &glyph_unit.glyph, &offset);
-    }
-    
-    if (args->line_multi) {
-        if (args->line_way) {
-            offset.x   += args->width;
-            args->limit = offset.x - src_clip_v.w;
-        } else {
-            #if 0
-            offset.y   += args->height;
-            #else
-            offset.y   += line_height;
-            #endif
-            args->limit = offset.y - src_clip_v.h;
+        SCUI_LOG_INFO("typo num:%d", line_n);
+        for (uint8_t idx = 0; idx < line_n; idx++) {
+            args->typo->line_ofs[idx]   = line_o_list[idx];
+            args->typo->line_width[idx] = line_w_list[idx];
+            SCUI_LOG_INFO("line end:%d",   args->typo->line_ofs[idx]);
+            SCUI_LOG_INFO("line width:%d", args->typo->line_width[idx]);
+            SCUI_ASSERT(line_w_list[idx] <= src_clip_v.w);
         }
+        
+        args->limit = line_n * (line_height + args->gap_line) - args->gap_line - src_clip_v.h;
     } else {
-        if (args->line_way) {
-            args->height -= args->gap_item;
-            args->limit   = args->height - src_clip_v.h;
-        } else {
-            args->width  -= args->gap_item;
-            args->limit   = args->width  - src_clip_v.w;
+        /* 单行模式下只需统计最大行宽即可 */
+        for (uint32_t idx = 0; idx < args->number; idx++) {
+            
+            if (args->unicode[idx] < 0x80)
+                SCUI_LOG_DEBUG("letter:%c", args->unicode[idx]);
+            else
+                SCUI_LOG_DEBUG("letter:%x", args->unicode[idx]);
+            
+            /* 文字信息缓存节点实例映射 */
+            scui_font_glyph_unit_t glyph_unit = {
+                .name                   = args->name,
+                .glyph.space_width      = args->gap_none,
+                .glyph.unicode_letter   = args->unicode[idx],
+            };
+            scui_font_glyph_cache_load(&glyph_unit);
+            scui_font_glyph_cache_unload(&glyph_unit);
+            
+            args->width += glyph_unit.glyph.ofs_x;
+            args->width += glyph_unit.glyph.box_w;
+            args->width += args->gap_item;
         }
+        args->width -= args->gap_item;
+        args->limit  = args->width - src_clip_v.w;
     }
+}
+
+/*@brief 字符串处理
+ *@param args 字符串绘制参数
+ */
+void scui_string_args_process(scui_string_args_t *args)
+{
+    SCUI_ASSERT(args != NULL);
+    // 无需更新时不处理文字
+    if (!args->update)
+         return;
+    // 更新参数初始状态
+    args->update = false;
+    args->width  = 0;
+    args->height = 0;
+    args->limit  = 0;
+    args->offset = 0;
+    
+    /*字符串绘制一般分为以下三步曲调:
+     *步调1: 文字预处理(例:阿拉伯语等)
+     *       它的目标主要是将原unicode单字符索引
+     *       根据前后字符关系映射到新的连字符索引
+     *步调2: 文字排版(多行文字绘制时使用)
+     *       它的目标主要是将对齐效果作用到多行文字上去
+     *       使得多字符在整体的显示效果上具有美观效果
+     *步调3: 文字字符绘制
+     *       它的目标主要是将字符按排版和索引
+     *       一个个绘制到目标上面去
+     */
+    
+    /* 文字预处理,信息准备 */
+    scui_string_args_prepare(args);
+    /* 特定文字进行文字变形 */
+    scui_string_args_transform(args);
+    /* 文字进行排版布局(单行模式不需要排版布局) */
+    scui_string_args_typography(args);
 }

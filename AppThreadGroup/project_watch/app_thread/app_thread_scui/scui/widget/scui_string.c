@@ -55,6 +55,13 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->unit_over   = false;
     string->unit_way    = 1;
     
+    if (string->args.gap_line == 0)
+        string->args.gap_line  = SCUI_WIDGET_STRING_GAP_LINE;
+    if (string->args.gap_item == 0)
+        string->args.gap_item  = SCUI_WIDGET_STRING_GAP_ITEM;
+    if (string->args.gap_none == 0)
+        string->args.gap_none  = SCUI_WIDGET_STRING_GAP_NONE;
+    
     if (string->args.name == SCUI_HANDLE_INVALID)
         string->name = scui_font_name_get(string->font_idx);
     else
@@ -127,6 +134,18 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
+        
+        #if 1 // 这个要不要???
+        /* 从字库中提取一些信息 */
+        scui_font_unit_t font_unit = {.name = string->name,};
+        scui_font_cache_load(&font_unit);
+        scui_font_cache_unload(&font_unit);
+        scui_coord_t base_line   = scui_font_base_line(font_unit.font);
+        scui_coord_t line_height = scui_font_line_height(font_unit.font);
+        
+        if (line_height > widget->clip.h)
+            scui_widget_adjust_size(handle, widget->clip.w, line_height);
+        #endif
     }
     
     string->args.update = true;

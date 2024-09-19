@@ -99,7 +99,6 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
                 string_maker.widget.style.trans         = true;
                 string_maker.widget.parent              = SCUI_UI_SCENE_MONITOR;
                 string_maker.font_idx                   = 0;
-                string_maker.args.gap_none              = SCUI_STRING_SPACE_WIDTH;
                 string_maker.args.color.color_s.full    = 0xFF808080;
                 string_maker.args.color.color_e.full    = 0xFF808080;
                 
