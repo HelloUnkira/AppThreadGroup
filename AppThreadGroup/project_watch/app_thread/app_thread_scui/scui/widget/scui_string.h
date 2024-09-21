@@ -41,6 +41,7 @@ typedef struct {
     scui_coord_t        unit_dx;        // 滚动单元距离
     uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
     uint64_t            draw_cache:1;   // 绘制缓存块
+    scui_surface_t     *draw_surface;   // 绘制缓存块
     /* 内部域: */
     uint64_t            unit_anima:1;   // 滚动动画标记
     uint64_t            unit_abort:1;   // 滚动中止标记

@@ -130,7 +130,7 @@ void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_ev
         if (event_cb != NULL)
             event_cb(event);
         
-        if (scui_widget_surface(event->object)->protect == scui_pixel_pb_unique) {
+        if (0) {
             scui_handle_t handle = scui_widget_root(event->object);
             for (scui_handle_t idx = 0; idx < coupler->list_num; idx++) {
                 if (coupler->list_widget_s[idx] != handle)
@@ -213,7 +213,7 @@ void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_ev
             // 创建一个独立的子画布,将目标绘制到一个独立子画布中
             if (surface_s == NULL) {
                 scui_area_t clip = scui_widget_clip(target_s);
-                scui_widget_surface_create(target_s, SCUI_PIXEL_CF_DEF_A, scui_pixel_pb_shared, clip.w, clip.h);
+                scui_widget_surface_create(target_s, SCUI_PIXEL_CF_DEF_A, clip.w, clip.h);
                 surface_s = coupler->list_surface_s[idx] = scui_widget_surface(target_s);
                 coupler->list_draw_clip[idx] = scui_widget_clip(target_s);
                 coupler->list_refr[idx] = true;

@@ -30,12 +30,12 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             scui_string_maker_t string_maker = {0};
             scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
             string_maker.widget.type                = scui_widget_type_string;
-            // string_maker.widget.style.trans         = true;
+            string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
             string_maker.args.color.filter          = true;
-            // string_maker.draw_cache                 = true;
+            string_maker.draw_cache                 = true;
             
             scui_coord_t y_offset = 25;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;

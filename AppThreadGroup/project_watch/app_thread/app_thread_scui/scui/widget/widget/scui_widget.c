@@ -583,13 +583,11 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle)
 /*@brief 控件画布创建
  *@param handle  控件句柄
  *@param format  画布格式
- *@param protect 画布保护位
  *@param hor_res 画布水平尺寸
  *@param ver_res 画布垂直尺寸
  */
 void scui_widget_surface_create(scui_handle_t   handle,
                                 scui_pixel_cf_t format,
-                                scui_pixel_pb_t protect,
                                 scui_coord_t    hor_res,
                                 scui_coord_t    ver_res)
 {
@@ -600,7 +598,6 @@ void scui_widget_surface_create(scui_handle_t   handle,
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
     memset(widget->surface, 0, sizeof(scui_surface_t));
     widget->surface->format  = format;
-    widget->surface->protect = protect;
     widget->surface->hor_res = hor_res;
     widget->surface->ver_res = ver_res;
     widget->surface->alpha   = scui_alpha_cover;
@@ -642,9 +639,7 @@ void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
     
     SCUI_LOG_DEBUG("widget %u", widget->myself);
     
-    if (widget->surface == NULL ||
-        widget->surface->protect != scui_pixel_pb_unique)
-        widget->surface = surface;
+    widget->surface = surface;
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];

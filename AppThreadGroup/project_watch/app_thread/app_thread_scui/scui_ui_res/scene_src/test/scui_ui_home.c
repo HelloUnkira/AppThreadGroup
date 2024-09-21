@@ -48,10 +48,15 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         switch (type) {
         case scui_ui_scene_list_type_list_scale: { // 缩放列表
+            #if 0   // 裁内存选择
             scui_ui_scene_list_cfg(type);
             scui_window_switch_type_cfg_set(scui_window_switch_none);
             scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
             scui_window_switch_type_cfg_set(switch_type);
+            #else
+            scui_ui_scene_list_cfg(type);
+            scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
+            #endif
             break;
         }
         case scui_ui_scene_list_type_list_arc: // 弧形列表

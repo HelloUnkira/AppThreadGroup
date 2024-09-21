@@ -31,7 +31,6 @@ void scui_ready(void)
     
     surface_fb = scui_surface_fb_draw();
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
-    surface_fb->protect = scui_pixel_pb_shared;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
@@ -44,7 +43,6 @@ void scui_ready(void)
     #if SCUI_SURFACE_FB_LIMIT == 2
     surface_fb = scui_surface_fb_refr();
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
-    surface_fb->protect = scui_pixel_pb_shared;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
     surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
@@ -114,7 +112,7 @@ void scui_ready(void)
     scui_engine_execute_status_set(true);
     
     /* 初始化scui性能监控 */
-    #if SCUI_UI_MONITOR_USE
+    #if 1 || SCUI_UI_MONITOR_USE
     scui_widget_show(SCUI_UI_SCENE_MONITOR, false);
     #endif
 }

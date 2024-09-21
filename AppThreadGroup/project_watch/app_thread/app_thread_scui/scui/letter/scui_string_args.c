@@ -214,7 +214,8 @@ static void scui_string_args_typography(scui_string_args_t *args)
             SCUI_ASSERT(line_w_list[idx] <= src_clip_v.w);
         }
         
-        args->limit = line_n * (line_height + args->gap_line) - args->gap_line - src_clip_v.h;
+        args->height = line_n * (line_height + args->gap_line) - args->gap_line;
+        args->limit  = args->height - src_clip_v.h;
     } else {
         /* 单行模式下只需统计最大行宽即可 */
         for (uint32_t idx = 0; idx < args->number; idx++) {

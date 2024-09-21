@@ -222,13 +222,11 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle);
 /*@brief 控件画布创建
  *@param handle  控件句柄
  *@param format  画布格式
- *@param protect 画布保护位
  *@param hor_res 画布水平尺寸
  *@param ver_res 画布垂直尺寸
  */
 void scui_widget_surface_create(scui_handle_t   handle,
                                 scui_pixel_cf_t format,
-                                scui_pixel_pb_t protect,
                                 scui_coord_t    hor_res,
                                 scui_coord_t    ver_res);
 

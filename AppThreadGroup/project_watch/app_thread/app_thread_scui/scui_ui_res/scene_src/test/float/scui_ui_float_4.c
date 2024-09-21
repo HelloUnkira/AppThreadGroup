@@ -144,10 +144,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             string_maker.args.color.color_e.full    = 0xFF0000FF;
             string_maker.args.color.filter          = true;
             string_maker.args.name                  = SCUI_FONT_TYPE_32_EN;
-            string_maker.widget.clip.x              = 0;
-            string_maker.widget.clip.w              = -1;
+            string_maker.widget.clip.w              = scroll_maker.widget.clip.w;
             string_maker.widget.clip.h              = 60;
-            string_maker.widget.clip.y              = 0;
             string_maker.font_idx                   = 1;
             
             // 24

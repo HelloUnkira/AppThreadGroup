@@ -120,20 +120,12 @@ typedef enum {
     scui_pixel_cf_all,
 } scui_pixel_cf_t;
 
-/*@brief 设备保护位(protect bit)
- */
-typedef enum {
-    scui_pixel_pb_shared = 0,   // 共享画布
-    scui_pixel_pb_unique,       // 私有画布
-} scui_pixel_pb_t;
-
 /*@brief 实体抽象:画布
  *       画布是块独立缓冲区或共享绘制画布的缓冲区
  */
 typedef struct {
     uint8_t        *pixel;      // 画布像素流地址
     scui_pixel_cf_t format;     // 画布像素流类型
-    scui_pixel_pb_t protect;    // 画布像素流保护
     scui_coord_t    hor_res;    // 画布像素流宽度
     scui_coord_t    ver_res;    // 画布像素流高度
     scui_alpha_t    alpha;      // 画布全局透明度
