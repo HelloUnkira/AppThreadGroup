@@ -94,7 +94,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         scui_color_t  btn_color_full = {.color.full = 0x00282828,};
         scui_widget_draw_color(event->object, NULL, btn_color_full);
         
-        scui_area_t   image_clip = scui_widget_clip(event->object);
+        scui_area_t image_clip = scui_widget_clip(event->object);
         scui_handle_t image_icon = scui_ui_scene_list_image[scui_ui_res_local->coupler->list_draw_idx] + 3;
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
         image_clip.h -= (image_clip.h - scui_image_h(image_icon));
@@ -194,17 +194,9 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         };
         scui_image_cf_by_pixel_cf(&img_inst.format, &scui_widget_surface(custom)->format);
         
-        scui_coord_t offset_x = (dst_clip.w - src_clip.w);
-        scui_coord_t offset_y = (dst_clip.h - src_clip.h);
-        dst_clip.x  = btn_clip.x;
-        dst_clip.w  = btn_clip.w;
-        dst_clip.y += offset_y / 2;
-        dst_clip.h -= offset_y;
-        
         scui_handle_t image = scui_handle_find();
         scui_handle_set(image, &img_inst);
-        scui_widget_draw_image_scale(event->object, &dst_clip, image, NULL, img_scale, pos);
-        // scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
+        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, pos);
         scui_handle_set(image, NULL);
         
         break;
@@ -289,12 +281,15 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 
+                scui_coord_t scale_w = scui_image_w(scui_ui_scene_list_image[0] + 3);
+                scui_coord_t scale_h = scui_image_h(scui_ui_scene_list_image[0] + 3);
+                
                 scui_custom_maker_t custom_maker = {0};
                 scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
                 custom_maker.widget.type        = scui_widget_type_custom;
                 custom_maker.widget.style.trans = true;
                 custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES - 20 - 10;
-                custom_maker.widget.clip.h      = 60;
+                custom_maker.widget.clip.h      = scale_h;
                 custom_maker.widget.child_num   = 1;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
                 scui_custom_create(&custom_maker, &custom_handle, false);
@@ -307,8 +302,9 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.widget.parent              = custom_handle;
                 string_maker.widget.clip.x              = 52 + 8;
                 string_maker.widget.clip.w              = custom_maker.widget.clip.w - (52 + 16 + 8 * 2);
-                string_maker.widget.clip.h              = 58;
-                string_maker.widget.clip.y              = (60 - 58) / 2;
+                string_maker.widget.clip.h              = custom_maker.widget.clip.h;
+                string_maker.args.align_hor             = 0;
+                string_maker.args.align_ver             = 2;
                 string_maker.args.color.color_s.full    = 0xFFFFFFFF;
                 string_maker.args.color.color_e.full    = 0xFFFFFFFF;
                 string_maker.args.color.filter          = true;

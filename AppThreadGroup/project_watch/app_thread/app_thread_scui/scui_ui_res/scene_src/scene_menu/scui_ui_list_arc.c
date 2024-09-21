@@ -149,11 +149,12 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
             item_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
             item_maker.widget.parent      = SCUI_UI_SCENE_LIST_ARC_SCROLL;
             item_maker.widget.child_num   = 1;
+            scui_coord_t icon_h = scui_image_h(scui_ui_scene_list_image[0] + 4);
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 62 / 2;
+            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - (icon_h + 10) / 2;
             scui_custom_create(&item_maker, &item_handle, false);
             
-            item_maker.widget.clip.h = 62;
+            item_maker.widget.clip.h = icon_h;
             SCUI_ASSERT(scui_ui_scene_list_num != 0);
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_custom_create(&item_maker, &item_handle, false);
@@ -175,8 +176,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 icon_maker.widget.type              = scui_widget_type_custom;
                 icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
                 icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
-                icon_maker.widget.clip.h            = scui_image_h(icon_maker.widget.image);
-                icon_maker.widget.clip.y            = (group_maker.widget.clip.h - icon_maker.widget.clip.h) / 2;
+                icon_maker.widget.clip.h            = group_maker.widget.clip.h;
                 icon_maker.widget.parent            = (group_handle);
                 scui_custom_create(&icon_maker, &icon_handle, false);
                 
@@ -190,14 +190,15 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 string_maker.args.color.filter          = true;
                 string_maker.widget.clip.x              = icon_maker.widget.clip.w + 8;
                 string_maker.widget.clip.w              = group_maker.widget.clip.w - (icon_maker.widget.clip.w + 8 * 2);
-                string_maker.widget.clip.h              = 58;
-                string_maker.widget.clip.y              = (group_maker.widget.clip.h - string_maker.widget.clip.h) / 2;
+                string_maker.widget.clip.h              = group_maker.widget.clip.h;
+                string_maker.args.align_hor             = 0;
+                string_maker.args.align_ver             = 2;
                 string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
             }
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - 3 - 62 / 2;
+            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - (icon_h + 10) / 2;
             scui_custom_create(&item_maker, &item_handle, false);
             
             scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_LIST_ARC_BAR_ARC;

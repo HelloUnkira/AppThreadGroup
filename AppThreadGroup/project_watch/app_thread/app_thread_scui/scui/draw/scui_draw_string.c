@@ -64,9 +64,9 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
             scui_coord_t line_h = -src_args->limit;
             if (src_args->align_ver == 0);
             if (src_args->align_ver == 1)
-                offset.x += line_h;
+                offset.y += line_h;
             if (src_args->align_ver == 2)
-                offset.x += line_h / 2;
+                offset.y += line_h / 2;
         }
         
         uint32_t line_ofs = 0;

@@ -176,6 +176,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         string->str_utf8[str_bytes] = '\0';
     }
     
+    string->args.update = true;
     scui_widget_draw(handle, NULL, false);
 }
 
@@ -267,19 +268,13 @@ void scui_string_event(scui_event_t *event)
         
         if (string->str_utf8 != NULL) {
             
-            bool update = string->args.update;
-            update = update || (string->args.number == 0);
-            update = update || (string->args.name != string->name);
-            update = update || (memcmp(string->args.utf8, string->str_utf8, string->args.number) != 0);
-            
-            string->args.update = update;
-            string->args.name   = string->name;
-            string->args.utf8   = string->str_utf8;
+            string->args.name = string->name;
+            string->args.utf8 = string->str_utf8;
             
             if (string->draw_cache) {
                 scui_surface_t  *surface = scui_widget_surface(handle);
                 scui_area_t clip_surface = scui_surface_area(surface);
-                if (string->unit_anima || update) {
+                if (string->unit_anima || string->args.update) {
                     string->unit_anima = false;
                     // 先将区域进行透明填色处理
                     scui_draw_area_fill(surface, &clip_surface, (scui_color_t){0}, scui_alpha_cover);

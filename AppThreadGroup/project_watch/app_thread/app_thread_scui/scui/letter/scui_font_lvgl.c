@@ -1190,8 +1190,10 @@ static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
     glyph->ofs_y = read_bits_signed(&bit_it, font_header->xy_bits);
     glyph->box_w = read_bits(&bit_it, font_header->wh_bits);
     glyph->box_h = read_bits(&bit_it, font_header->wh_bits);
-    SCUI_ASSERT(glyph->ofs_x <= 128 && glyph->box_w < 63 && glyph->box_w != 0);
-    SCUI_ASSERT(glyph->ofs_y <= 128 && glyph->box_h < 63 && glyph->box_h != 0);
+    
+    if (!(glyph->ofs_x <= 128 && glyph->box_w < 63 && glyph->box_w != 0) ||
+        !(glyph->ofs_y <= 128 && glyph->box_h < 63 && glyph->box_h != 0))
+        return;
     
     uint32_t nbits = font_header->advance_width_bits + 2 * font_header->xy_bits + 2 * font_header->wh_bits;
     uint32_t next_offset = (gid < loca_count - 1) ? offset2 : glyph_length;

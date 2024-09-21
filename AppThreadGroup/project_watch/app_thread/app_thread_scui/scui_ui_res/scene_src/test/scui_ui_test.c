@@ -34,40 +34,52 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
-            string_maker.args.color.color_s.full    = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
             // string_maker.draw_cache                 = true;
             
+            scui_coord_t y_offset = 25;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
-            string_maker.widget.clip.y = 25;
-            string_maker.widget.clip.h = 40;
+            string_maker.widget.clip.y = y_offset;
+            string_maker.widget.clip.h = 50;
             string_maker.font_idx      = 0,
-            string_maker.text          = SCUI_MULTI_LANG_0X0000;
-            scui_string_create(&string_maker, &string_handle, false);
-            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
-            string_maker.widget.clip.y = 75;
-            string_maker.widget.clip.h = 40;
-            string_maker.font_idx      = 0,
-            string_maker.text          = SCUI_MULTI_LANG_0X0025;
+            string_maker.text          = SCUI_MULTI_LANG_0X0029;
+            string_maker.args.color.color_s.full = 0xFFFFFFFF;
+            string_maker.args.color.color_e.full = 0xFFFFFFFF;
             scui_string_create(&string_maker, &string_handle, false);
             
+            y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
-            string_maker.widget.clip.y = 125;
-            string_maker.widget.clip.h = SCUI_DRV_VER_RES / 4;
+            string_maker.widget.clip.y = y_offset;
+            string_maker.widget.clip.h = 50;
             string_maker.font_idx      = 0,
-            string_maker.text          = SCUI_MULTI_LANG_0X0031;
+            string_maker.text          = SCUI_MULTI_LANG_0X0025;
+            string_maker.args.color.color_s.full = 0xFFFF00FF;
+            string_maker.args.color.color_e.full = 0xFF00FF00;
+            scui_string_create(&string_maker, &string_handle, false);
+            
+            y_offset += string_maker.widget.clip.h + 10;
+            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
+            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+            string_maker.widget.clip.y = y_offset;
+            string_maker.widget.clip.h = 130;
+            string_maker.font_idx      = 0,
+            string_maker.text          = SCUI_MULTI_LANG_0X0034;
+            string_maker.args.color.color_s.full = 0xFFFF0000;
+            string_maker.args.color.color_e.full = 0xFF0000FF;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
+            
+            y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
             string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
-            string_maker.widget.clip.y = 245;
-            string_maker.widget.clip.h = SCUI_DRV_VER_RES / 4;
+            string_maker.widget.clip.y = y_offset;
+            string_maker.widget.clip.h = 130;
             string_maker.font_idx      = 0,
-            string_maker.text          = SCUI_MULTI_LANG_0X0031;
+            string_maker.text          = SCUI_MULTI_LANG_0X0042;
+            string_maker.args.color.color_s.full = 0xFF0000FF;
+            string_maker.args.color.color_e.full = 0xFFFF0000;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
             #endif

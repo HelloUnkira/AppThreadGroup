@@ -24,3 +24,14 @@ lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format
 lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 32 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_zh_32.c
 lv_font_conv --font font_zh.ttf -r 0x00-0x7f -r 0x4e00-0x9fff --size 36 --format lvgl --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_zh_36.c
 
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 8 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_8.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 16 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_16.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 24 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_24.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 32 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_32.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 40 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_40.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 48 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_48.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 56 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_56.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 64 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_64.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 72 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_72.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 80 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_80.bin
+lv_font_conv --font font_zh_en.ttf -r 0x20-0x7f --size 88 --format bin  --bpp 2 --no-prefilter --no-kerning -o ../font_out/font_ascii_88.bin
