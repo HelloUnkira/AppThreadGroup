@@ -70,7 +70,7 @@
 #define SCUI_PIXEL_CF_DEF_A                         (scui_pixel_cf_bmp8565)
 
 /* 动画更新频率,动画最大数量 */
-#define SCUI_ANIMA_TICK                             (1000 / 60)
+#define SCUI_ANIMA_TICK                             (1000 / 100)
 #define SCUI_ANIMA_LIMIT                            (10)
 
 /* 输入设备:ptr */

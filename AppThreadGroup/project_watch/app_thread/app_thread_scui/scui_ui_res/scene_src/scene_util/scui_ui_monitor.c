@@ -16,20 +16,22 @@ scui_handle_t monitor_mem   = SCUI_HANDLE_INVALID;
 void scui_ui_scene_monitor_anima_expired(void *instance)
 {
     #if 1 // refr
+    uint32_t tick_fps = 0;
+    uint32_t sched_us = 0;
+    uint32_t draw_us  = 0;
+    scui_tick_calc(0xAA, &tick_fps, &sched_us, &draw_us);
+    
     static uint64_t refr_us_last = 0;
-    static uint64_t rcd_refr_us = 0;
-    uint64_t refr_us  = scui_tick_calc(2);
-    uint64_t refr_all = scui_tick_us() - refr_us_last;
-    if (rcd_refr_us != refr_us && refr_all > 500) {
-        rcd_refr_us  = refr_us;
+    uint64_t elapse_us = scui_tick_us() - refr_us_last;
+    if (elapse_us > 1000 * 1000) {
+        
         uint8_t str_refr[30] = {0};
-        uint64_t refr_ms  = 1000 * refr_us / refr_all;  // 1000ms * percent
-        uint64_t refr_fps = scui_clamp(refr_ms == 0 ? 0 : 1000 / refr_ms, 1, 1000 / SCUI_ANIMA_TICK);
-        snprintf(str_refr, sizeof(str_refr) - 1, "refr %04dms, fps %04d", refr_ms, refr_fps);
+        snprintf(str_refr, sizeof(str_refr) - 1, "refr S:%d%%, D:%d%%, Fps:%d",
+                 100 * sched_us / elapse_us, 100 * draw_us / elapse_us, tick_fps);
         scui_string_update_str(monitor_refr, str_refr);
         
         refr_us_last = scui_tick_us();
-        scui_tick_calc(3);
+        scui_tick_calc(0xFF, NULL, NULL, NULL);
     }
     #endif
     
@@ -37,7 +39,6 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
     uint8_t str_mem[100] = {0};
     uintptr_t mem_total[3] = {0};
     uintptr_t mem_used[3] = {0};
-    uintptr_t mem_used_rcd[3] = {0};
     
     mem_total[0] = scui_mem_size_total(scui_mem_type_mix);
     mem_total[1] = scui_mem_size_total(scui_mem_type_font);
@@ -46,10 +47,10 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
     mem_used[1]  = scui_mem_size_used(scui_mem_type_font);
     mem_used[2]  = scui_mem_size_used(scui_mem_type_graph);
     
-    if (scui_dist(mem_used[0], mem_used_rcd[0]) > 1024 * 5 ||
-        scui_dist(mem_used[1], mem_used_rcd[1]) > 1024 * 3 ||
-        scui_dist(mem_used[2], mem_used_rcd[2]) > 1024 * 1) {
-        
+    static uintptr_t mem_used_rcd[3] = {0};
+    if (scui_dist(mem_used[0], mem_used_rcd[0]) > 1024 * 2 ||
+        scui_dist(mem_used[1], mem_used_rcd[1]) > 1024 * 8 ||
+        scui_dist(mem_used[2], mem_used_rcd[2]) > 1024 * 16) {
         mem_used_rcd[0] = mem_used[0];
         mem_used_rcd[1] = mem_used[1];
         mem_used_rcd[2] = mem_used[2];
@@ -65,7 +66,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         mem_used_f[1] = (float)mem_used[1] / 1024;
         mem_used_f[2] = (float)mem_used[2] / 1024 / 1024;
         
-        snprintf(str_mem, sizeof(str_mem) - 1, "mem M:%0.2fK F:%.02fK G:%.02fM",
+        snprintf(str_mem, sizeof(str_mem) - 1, "mem M:%.02fK F:%.02fK G:%.02fM",
                  mem_used_f[0], mem_used_f[1], mem_used_f[2]);
         scui_string_update_str(monitor_mem, str_mem);
     }

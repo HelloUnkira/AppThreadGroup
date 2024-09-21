@@ -236,7 +236,7 @@ void scui_string_event(scui_event_t *event)
             break;
         }
         
-        string->rcd_ms += scui_event_anima_elapse;
+        string->rcd_ms += SCUI_ANIMA_TICK;
         if (string->rcd_ms < string->unit_ms)
             break;
         string->rcd_ms -= string->unit_ms;
@@ -342,13 +342,13 @@ void scui_string_event(scui_event_t *event)
              break;
         
         if (string->text != SCUI_HANDLE_INVALID) {
+            string->unit_over = false;
+            string->unit_way  = 1;
             scui_handle_t text = string->text;
             scui_string_update_text(handle, SCUI_HANDLE_INVALID);
             string->name = scui_font_name_get(string->font_idx);
             scui_string_update_text(handle, text);
-            string->args.offset = 0;
-            string->unit_over   = false;
-            string->unit_way    = 1;
+            scui_widget_draw(handle, NULL, true);
         }
         break;
     }

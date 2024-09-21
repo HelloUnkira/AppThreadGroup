@@ -112,7 +112,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
             ver_dir = scui_opt_dir_to_u;
         
         #if 0
-        // 距离中心偏移做qiu'mia映射
+        // 距离中心偏移做球面映射
         scui_multi_t dist_cx = scui_dist(icon_center.x, edge_center.x) + icon_clip.w / 2;
         scui_multi_t dist_cy = scui_dist(icon_center.y, edge_center.y) + icon_clip.h / 2;
         scui_multi_t dist_dm = edge_clip.w * edge_clip.w / 4 + edge_clip.h * edge_clip.h / 4;

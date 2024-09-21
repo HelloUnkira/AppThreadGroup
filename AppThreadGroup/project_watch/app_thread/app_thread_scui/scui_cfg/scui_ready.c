@@ -112,7 +112,7 @@ void scui_ready(void)
     scui_engine_execute_status_set(true);
     
     /* 初始化scui性能监控 */
-    #if 1 || SCUI_UI_MONITOR_USE
+    #if SCUI_UI_MONITOR_USE
     scui_widget_show(SCUI_UI_SCENE_MONITOR, false);
     #endif
 }

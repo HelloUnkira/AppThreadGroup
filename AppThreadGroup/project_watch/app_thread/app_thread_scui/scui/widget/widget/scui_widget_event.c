@@ -363,8 +363,11 @@ void scui_widget_event_dispatch(scui_event_t *event)
             SCUI_LOG_INFO("widget clip is empty");
         /* 先走控件绘制流程,再进行自定义绘制流程 */
         else {
+            scui_tick_calc(0x20, NULL, NULL, NULL);
             scui_widget_event_draw(event);
             scui_widget_event_proc(event);
+            scui_tick_calc(0x21, NULL, NULL, NULL);
+            
             /* 去除surface剪切域,因为已经绘制完毕 */
             if (scui_widget_event_check_finish(event))
                 scui_widget_clip_clear(widget, false);

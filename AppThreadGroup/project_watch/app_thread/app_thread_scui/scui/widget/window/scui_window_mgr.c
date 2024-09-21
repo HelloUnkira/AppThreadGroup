@@ -308,7 +308,9 @@ void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
                 dst_clip.x = widget->clip.x;
                 dst_clip.y = widget->clip.y;
             }
+            scui_tick_calc(0x20, NULL, NULL, NULL);
             scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+            scui_tick_calc(0x21, NULL, NULL, NULL);
             continue;
         }
         
@@ -380,7 +382,9 @@ void scui_window_surface_blend(void)
     #endif
     
     /* 第一轮混合:处理所有常规独立画布 */
+    scui_tick_calc(0x20, NULL, NULL, NULL);
     scui_window_list_blend(&list_lvl_0[list_lvl_0_ofs], list_lvl_0_num);
+    scui_tick_calc(0x21, NULL, NULL, NULL);
     /* 第二轮混合:处理所有特殊独立画布或共享画布 */
     scui_window_list_render(&list_lvl_1[list_lvl_1_ofs], list_lvl_1_num);
 }

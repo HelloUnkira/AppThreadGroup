@@ -114,7 +114,6 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
         void app_dev_gui_disp_scui_flush(scui_surface_t *suface);
         scui_surface_refr_routine(app_dev_gui_disp_scui_flush);
         #endif
-        app_delay_ms(10);   // 等待刷新完毕
     }
 }
 

@@ -27,8 +27,8 @@
             "pos":                          "scui_opt_pos_c",
             "dir":                          "scui_opt_dir_ver",
             "space":                        "10",
-            "route_enc":                    "SCUI_DRV_VER_RES / 4",
-            "route_key":                    "SCUI_DRV_VER_RES / 4",
+            "route_enc":                    "117",
+            "route_key":                    "117",
             "keyid_fdir":                   "scui_event_key_val_down",
             "keyid_bdir":                   "scui_event_key_val_up",
             "springback":                   "70"

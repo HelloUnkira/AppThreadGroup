@@ -79,9 +79,9 @@ void scui_event_notify(scui_event_t *event)
     
     if (event->style.sync) {
         
-        scui_tick_calc(0);
+        scui_tick_calc(0x10, NULL, NULL, NULL);
         scui_event_respond(event);
-        scui_tick_calc(1);
+        scui_tick_calc(0x11, NULL, NULL, NULL);
         
         return;
     }
@@ -98,9 +98,9 @@ void scui_event_dispatch(void)
         bool retval = scui_event_dequeue(&event, false);
         SCUI_ASSERT(retval);
         
-        scui_tick_calc(0);
+        scui_tick_calc(0x10, NULL, NULL, NULL);
         scui_event_respond(&event);
-        scui_tick_calc(1);
+        scui_tick_calc(0x11, NULL, NULL, NULL);
     }
 }
 
@@ -172,6 +172,8 @@ void scui_event_respond(scui_event_t *event)
             scui_surface_t *surface_fb = scui_surface_fb_refr();
             scui_widget_surface_sync(widget, surface_fb);
         }
+        
+        scui_tick_calc(0x00, NULL, NULL, NULL);
         return;
     case scui_event_font_change: {
         if (event->object == SCUI_HANDLE_SYSTEM) {

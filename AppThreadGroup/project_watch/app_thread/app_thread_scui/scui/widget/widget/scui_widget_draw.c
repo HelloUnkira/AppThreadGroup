@@ -29,27 +29,6 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
     return true;
 }
 
-/*@brief 绘制滴答检查
- */
-static void scui_widget_draw_tick(bool check)
-{
-    #if 0
-    static uint32_t tick_us_s = 0;
-    static uint32_t tick_us_e = 0;
-    
-    if (check)
-        tick_us_s = scui_tick_us();
-    else {
-        tick_us_e = scui_tick_us();
-        uint64_t tick_us = tick_us_e - tick_us_s;
-        // 统计绘制节点的时间,过滤小的绘制信息
-        if (tick_us > 1000)
-            SCUI_LOG_WARN("expend:%u.%u", tick_us / 1000, tick_us % 1000);
-    }
-    
-    #endif
-}
-
 /*@brief 控件剪切域为空(绘制)
  *@param handle 控件句柄
  *@retval 控件剪切域为空
@@ -109,9 +88,7 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
         src_clip.w =  (string_clip.w);
         src_clip.h =  (string_clip.h);
         
-        scui_widget_draw_tick(true);
         scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -139,9 +116,7 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -167,9 +142,7 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_area_blur(widget->surface, &dst_clip);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -213,9 +186,7 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         scui_area_t clip_widget = scui_surface_area(widget->surface);
     if (scui_area_equal(&widget->clip_set.clip, &clip_widget)) {
         #if 1
-        scui_widget_draw_tick(true);
         scui_image_src_read(image_inst, widget->surface->pixel);
-        scui_widget_draw_tick(false);
         /* 上面默认使用的全局剪切域 */
         /* 所以可能存在覆盖,为所有控件补充剪切域 */
         scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
@@ -243,10 +214,8 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
                         widget->alpha, color);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -316,10 +285,8 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_widget_draw_tick(false);
         scui_draw_image_scale(widget->surface, &dst_clip, image_inst, clip,
                               widget->alpha, scale, dst_offset, src_offset);
-        scui_widget_draw_tick(true);
     }
 }
 
@@ -366,10 +333,8 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, clip,
                                widget->alpha, angle, anchor, center);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -417,10 +382,8 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, clip,
                                        widget->alpha, matrix, &reb_matrix);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -500,11 +463,9 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        scui_widget_draw_tick(true);
         scui_draw_ring(widget->surface, &dst_clip, &dst_center,
                        image_e_inst, image_inst, &src_clip,
                        angle_as, widget->alpha, angle_ae, color);
-        scui_widget_draw_tick(false);
     }
 }
 
@@ -533,9 +494,7 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
         
-        scui_widget_draw_tick(true);
         scui_draw_line(widget->surface, &unit->clip, color,
                        width, pos_1, pos_2, widget->alpha);
-        scui_widget_draw_tick(false);
     }
 }
