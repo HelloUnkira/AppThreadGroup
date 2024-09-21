@@ -97,7 +97,7 @@
 #define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)
 
 /* 移动时停止帧动画(假渲染) */
-#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
+#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (0)
 
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)

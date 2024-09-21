@@ -79,6 +79,15 @@ void scui_string_destroy(scui_handle_t handle)
     scui_string_args_process(&string->args);
     scui_string_update_str(handle, NULL);
     
+    /* 回收旧颜色值表 */
+    if (string->args.colors != NULL) {
+        SCUI_MEM_FREE(string->args.colors->index_ls);
+        SCUI_MEM_FREE(string->args.colors->index_le);
+        SCUI_MEM_FREE(string->args.colors->color_ll);
+        SCUI_MEM_FREE(string->args.colors);
+        string->args.colors  = NULL;
+    }
+    
     /* 回收绘制缓存块 */
     if (string->draw_surface != NULL) {
         SCUI_MEM_FREE(string->draw_surface->pixel);
@@ -103,9 +112,18 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
+    /* 回收旧颜色值表 */
+    if (!string->args.recolor)
+    if (string->args.colors != NULL) {
+        SCUI_MEM_FREE(string->args.colors->index_ls);
+        SCUI_MEM_FREE(string->args.colors->index_le);
+        SCUI_MEM_FREE(string->args.colors->color_ll);
+        SCUI_MEM_FREE(string->args.colors);
+        string->args.colors  = NULL;
+    }
+    
     if (string->text == text)
         return;
-    
     string->text = text;
     
     if (string->str_utf8 != NULL) {
@@ -156,6 +174,16 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
+    /* 回收旧颜色值表 */
+    if (!string->args.recolor)
+    if (string->args.colors != NULL) {
+        SCUI_MEM_FREE(string->args.colors->index_ls);
+        SCUI_MEM_FREE(string->args.colors->index_le);
+        SCUI_MEM_FREE(string->args.colors->color_ll);
+        SCUI_MEM_FREE(string->args.colors);
+        string->args.colors  = NULL;
+    }
+    
     string->text = SCUI_HANDLE_INVALID;
     
     if (string->str_utf8 != NULL) {
@@ -179,6 +207,93 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     
     string->args.update = true;
     scui_widget_draw(handle, NULL, false);
+}
+
+/*@brief 字符串控件更新文本(重上色)
+ *@param 使用#- -#包裹的内容为重上色区域
+ *@param handle    字符串控件句柄
+ *@param str_utf8  字符串(utf8)
+ *@param color_num 重上色颜色数量
+ *@param color_ll  重上色颜色列表
+ */
+void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_t color_num, scui_color_t *color_ll)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_string_t *string = (void *)widget;
+    
+    SCUI_ASSERT(string->args.recolor);
+    /* 回收旧颜色值表 */
+    if (string->args.colors != NULL) {
+        SCUI_MEM_FREE(string->args.colors->index_ls);
+        SCUI_MEM_FREE(string->args.colors->index_le);
+        SCUI_MEM_FREE(string->args.colors->color_ll);
+        SCUI_MEM_FREE(string->args.colors);
+        string->args.colors  = NULL;
+    }
+    
+    /* 新建颜色值表 */
+    string->args.colors = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_rec_t));
+    string->args.colors->color_num = color_num;
+    string->args.colors->index_ls  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
+    string->args.colors->index_le  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_coord_t));
+    string->args.colors->color_ll  = SCUI_MEM_ALLOC(scui_mem_type_mix, color_num * sizeof(scui_color_t));
+    for (uint32_t idx = 0; idx < color_num; idx++) {
+        string->args.colors->index_ls[idx] = -1;
+        string->args.colors->index_le[idx] = -1;
+        string->args.colors->color_ll[idx] = color_ll[idx];
+    }
+    
+    /* 进行utf-8字符串转为unicode编码, 以此确认unicode编码下的index */
+    uint32_t  num_unicode = scui_utf8_str_num(str_utf8);
+    uint32_t *str_unicode = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (num_unicode + 1));
+    memset(str_unicode, 0, 4 * (num_unicode + 1));
+    scui_utf8_str_to_unicode(str_utf8, num_unicode, str_unicode);
+    
+    uint32_t idx_colors = 0, key_chars = 0;
+    /* 匹配颜色值的起始点和结束点, 记录范围索引值, 同时去除目标点 */
+    for (uint32_t idx = 0; idx + 1 < num_unicode; idx++) {
+        /* 匹配到颜色起始点:#- */
+        /* 匹配到颜色结束点:-# */
+        if (str_unicode[idx] == '#' && str_unicode[idx + 1] == '-') {
+            string->args.colors->index_ls[idx_colors] = idx - key_chars;
+            key_chars += 2;
+            idx++;
+            continue;
+        }
+        if (str_unicode[idx] == '-' && str_unicode[idx + 1] == '#') {
+            string->args.colors->index_le[idx_colors] = idx - key_chars - 1;
+            key_chars += 2;
+            idx++;
+            
+            idx_colors += 1;
+            SCUI_ASSERT(idx_colors <= color_num);
+            continue;
+        }
+    }
+    SCUI_MEM_FREE(str_unicode);
+    /* 规则匹配不上, 断言中止 */
+    SCUI_ASSERT(idx_colors == color_num);
+    
+    uint32_t idx_utf8_raw = 0;
+    uint32_t num_utf8_raw = strlen(str_utf8);
+    uint8_t *str_utf8_raw = SCUI_MEM_ALLOC(scui_mem_type_font, num_utf8_raw + 1);
+    memset(str_utf8_raw, 0, num_utf8_raw + 1);
+    for (uint32_t idx = 0; idx + 1 < num_utf8_raw; idx++) {
+        /* 匹配到颜色起始点:#- */
+        /* 匹配到颜色结束点:-# */
+        if ((str_utf8[idx] == '#' && str_utf8[idx + 1] == '-') ||
+            (str_utf8[idx] == '-' && str_utf8[idx + 1] == '#')) {
+             idx++;
+             continue;
+        }
+        /* 拷贝其他字符 */
+        str_utf8_raw[idx_utf8_raw] = str_utf8[idx];
+        idx_utf8_raw++;
+    }
+    
+    scui_string_update_str(handle, str_utf8_raw);
+    SCUI_MEM_FREE(str_utf8_raw);
 }
 
 /*@brief 字符串控件滚动中止

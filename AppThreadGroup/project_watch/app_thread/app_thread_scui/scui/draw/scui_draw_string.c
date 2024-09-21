@@ -149,7 +149,20 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
                   
                   if (glyph_unit.glyph.bitmap != NULL) {
                       letter_clip = clip_inter;
-                      scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
+                      
+                      scui_color_t glyph_color = src_args->color;
+                      if (src_args->recolor && src_args->colors != NULL)
+                      for (uint32_t idx_rec = 0; idx_rec < src_args->colors->color_num; idx_rec++) {
+                          if (src_args->colors->index_ls[idx_rec] == -1 ||
+                              src_args->colors->index_le[idx_rec] == -1 ||
+                              src_args->colors->index_ls[idx_rec] > idx ||
+                              src_args->colors->index_le[idx_rec] < idx)
+                              continue;
+                          
+                          glyph_color = src_args->colors->color_ll[idx_rec];
+                          break;
+                      }
+                      scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, glyph_color);
                   }
                   
                   scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
@@ -231,7 +244,20 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
             
             if (glyph_unit.glyph.bitmap != NULL) {
                 letter_clip = clip_inter;
-                scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, src_args->color);
+                
+                scui_color_t glyph_color = src_args->color;
+                if (src_args->recolor && src_args->colors != NULL)
+                for (uint32_t idx_rec = 0; idx_rec < src_args->colors->color_num; idx_rec++) {
+                    if (src_args->colors->index_ls[idx_rec] == -1 ||
+                        src_args->colors->index_le[idx_rec] == -1 ||
+                        src_args->colors->index_ls[idx_rec] > idx ||
+                        src_args->colors->index_le[idx_rec] < idx)
+                        continue;
+                    
+                    glyph_color = src_args->colors->color_ll[idx_rec];
+                    break;
+                }
+                scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, glyph_color);
             }
             
             scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);

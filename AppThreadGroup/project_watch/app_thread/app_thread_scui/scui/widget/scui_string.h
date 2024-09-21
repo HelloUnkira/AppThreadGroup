@@ -2,6 +2,13 @@
 #define SCUI_STRING_H
 
 typedef struct {
+    scui_coord_t *index_ls;
+    scui_coord_t *index_le;
+    scui_color_t *color_ll;
+    uint32_t      color_num;
+} scui_string_rec_t;
+
+typedef struct {
     uint32_t            line_mum;
     uint32_t           *line_ofs;
     uint32_t           *line_width;
@@ -9,6 +16,8 @@ typedef struct {
 
 typedef struct {
     scui_color_t        color;          // 字符串颜色
+    scui_string_rec_t  *colors;         // 字符颜色值表
+    uint64_t            recolor:1;      // 字符颜色值表使用
     uint64_t            gap_line:7;     // 行间距(<= 127)
     uint64_t            gap_item:7;     // 字间距(<= 127)
     uint64_t            gap_none:7;     // 空字符(<= 127)
@@ -88,6 +97,15 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text);
  *@param str_utf8 字符串(utf8)
  */
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
+
+/*@brief 字符串控件更新文本(重上色)
+ *@param 使用#- -#包裹的内容为重上色区域
+ *@param handle    字符串控件句柄
+ *@param str_utf8  字符串(utf8)
+ *@param color_num 重上色颜色数量
+ *@param color_ll  重上色颜色列表
+ */
+void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_t color_num, scui_color_t *color_ll);
 
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
