@@ -7,40 +7,6 @@
 
 #include "scui.h"
 
-/*@brief 图像格式转换
- *@param image_cf 图像格式
- *@param pixel_cf 像素格式
- */
-void scui_image_cf_by_pixel_cf(scui_image_cf_t *image_cf, scui_pixel_cf_t *pixel_cf)
-{
-    switch (*pixel_cf) {
-    case scui_pixel_cf_palette4:    *image_cf = scui_image_cf_palette4;         break;
-    case scui_pixel_cf_palette8:    *image_cf = scui_image_cf_palette8;         break;
-    case scui_pixel_cf_bmp565:      *image_cf = scui_image_cf_bmp565;           break;
-    case scui_pixel_cf_bmp888:      *image_cf = scui_image_cf_bmp888;           break;
-    case scui_pixel_cf_bmp8565:     *image_cf = scui_image_cf_bmp8565;          break;
-    case scui_pixel_cf_bmp8888:     *image_cf = scui_image_cf_bmp8888;          break;
-    default: SCUI_LOG_ERROR("unsupported image pixel");                         break;
-    }
-}
-
-/*@brief 图像格式转换
- *@param image_cf 图像格式
- *@param pixel_cf 像素格式
- */
-void scui_image_cf_to_pixel_cf(scui_image_cf_t *image_cf, scui_pixel_cf_t *pixel_cf)
-{
-    switch (*image_cf) {
-    case scui_image_cf_palette4:    *pixel_cf = scui_pixel_cf_palette4;         break;
-    case scui_image_cf_palette8:    *pixel_cf = scui_pixel_cf_palette8;         break;
-    case scui_image_cf_bmp565:      *pixel_cf = scui_pixel_cf_bmp565;           break;
-    case scui_image_cf_bmp888:      *pixel_cf = scui_pixel_cf_bmp888;           break;
-    case scui_image_cf_bmp8565:     *pixel_cf = scui_pixel_cf_bmp8565;          break;
-    case scui_image_cf_bmp8888:     *pixel_cf = scui_pixel_cf_bmp8888;          break;
-    default: SCUI_LOG_ERROR("unsupported image pixel");                         break;
-    }
-}
-
 /*@brief 图像宽
  *@param handle 图像句柄
  *@retval 图像宽
@@ -63,6 +29,15 @@ scui_coord_t scui_image_h(scui_handle_t handle)
     SCUI_ASSERT(image != NULL);
     
     return image->pixel.height;
+}
+
+/*@brief 图像大小
+ *@param image 图像实例
+ *@retval 图像大小
+ */
+uintptr_t scui_image_size(scui_image_t *image)
+{
+    return image->pixel.width * image->pixel.height * scui_pixel_bits(image->format) / 8;
 }
 
 /*@brief 统计图像列表排列尺寸

@@ -76,12 +76,12 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
     if (scui_area_limit_offset(&dst_clip, &offset)) {
         
         scui_image_t image_inst = {
-            .status         = scui_image_status_mem,
+            .type           = scui_image_type_mem,
+            .format         = surface->format,
             .pixel.width    = scaled,
             .pixel.height   = clip->h,
-            .pixel.data_mem = pixel,
+            .pixel.data_bin = pixel,
         };
-        scui_image_cf_by_pixel_cf(&image_inst.format, &surface->format);
         scui_handle_t image = scui_handle_find();
         scui_handle_set(image, &image_inst);
         scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});

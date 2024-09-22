@@ -187,12 +187,12 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
         
         scui_image_t img_inst  = {
-            .status         = scui_image_status_mem,
+            .type           = scui_image_type_mem,
+            .format         = scui_widget_surface(custom)->format,
             .pixel.width    = src_clip.w,
             .pixel.height   = src_clip.h,
-            .pixel.data_mem = scui_widget_surface(custom)->pixel,
+            .pixel.data_bin = scui_widget_surface(custom)->pixel,
         };
-        scui_image_cf_by_pixel_cf(&img_inst.format, &scui_widget_surface(custom)->format);
         
         scui_handle_t image = scui_handle_find();
         scui_handle_set(image, &img_inst);

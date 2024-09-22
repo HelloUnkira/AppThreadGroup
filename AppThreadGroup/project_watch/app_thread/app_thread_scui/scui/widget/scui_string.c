@@ -421,12 +421,12 @@ void scui_string_event(scui_event_t *event)
             }
             
             scui_image_t image_inst = {
-                .status         = scui_image_status_mem,
+                .type           = scui_image_type_mem,
+                .format         = string->draw_surface->format,
                 .pixel.width    = string->draw_surface->hor_res,
                 .pixel.height   = string->draw_surface->ver_res,
-                .pixel.data_mem = string->draw_surface->pixel,
+                .pixel.data_bin = string->draw_surface->pixel,
             };
-            scui_image_cf_by_pixel_cf(&image_inst.format, &string->draw_surface->format);
             scui_handle_t image = scui_handle_find();
             scui_handle_set(image, &image_inst);
             

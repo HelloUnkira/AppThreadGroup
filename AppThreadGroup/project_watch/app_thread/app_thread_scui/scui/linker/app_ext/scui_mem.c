@@ -291,6 +291,22 @@ void scui_mem_check(scui_mem_type_t type)
         app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
 }
 
+/*@brief 内存大小获取
+ *@param ptr  内存地址
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_ptr(void *ptr)
+{
+    if (ptr == NULL)
+        return 0;
+    
+    scui_mem_type_t type = scui_mem_type_none;
+    scui_mem_type(ptr, &type);
+    
+    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    return app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
+}
+
 /*@brief 内存模组统计(消耗值)
  *@param type 内存类型
  *@retval 内存大小

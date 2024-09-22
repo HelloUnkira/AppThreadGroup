@@ -96,6 +96,12 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
  */
 void scui_mem_type(void *ptr, scui_mem_type_t *type);
 
+/*@brief 内存大小获取
+ *@param ptr  内存地址
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_ptr(void *ptr);
+
 /*@brief 内存模组统计(消耗值)
  *@param type 内存类型
  *@retval 内存大小

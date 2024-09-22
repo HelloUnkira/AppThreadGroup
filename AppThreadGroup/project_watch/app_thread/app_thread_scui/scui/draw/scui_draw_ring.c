@@ -256,12 +256,12 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
     
     scui_surface_t image_surface = {
         .pixel   = image.data,
+        .format  = image.image->format,
         .hor_res = src_image->pixel.width,
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
     
-    scui_image_cf_to_pixel_cf(&image.image->format, &image_surface.format);
     scui_surface_t *src_surface = &image_surface;
     
     scui_point_t dst_offset = {
@@ -315,7 +315,7 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
     uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * src_bits / 8;
     
     
-    if (image.image->format == scui_image_cf_palette4) {
+    if (image.image->format == scui_pixel_cf_palette4) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 4;
         scui_color_wt_t palette_table[1 << 4] = {0};
@@ -399,7 +399,7 @@ static void scui_draw_ring_quadrant_1(scui_surface_t *dst_surface, scui_area_t  
         }
         goto over;
     }
-    if (image.image->format == scui_image_cf_palette8) {
+    if (image.image->format == scui_pixel_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << 8;
         scui_color_wt_t palette_table[1 << 8] = {0};
@@ -512,10 +512,10 @@ void scui_draw_ring(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
     /* 限制要求,只支持调色板位图 */
-    SCUI_ASSERT(src_image->format == scui_image_cf_palette4 ||
-                src_image->format == scui_image_cf_palette8);
-    SCUI_ASSERT(src_image_e->format == scui_image_cf_palette4 ||
-                src_image_e->format == scui_image_cf_palette8);
+    SCUI_ASSERT(src_image->format == scui_pixel_cf_palette4 ||
+                src_image->format == scui_pixel_cf_palette8);
+    SCUI_ASSERT(src_image_e->format == scui_pixel_cf_palette4 ||
+                src_image_e->format == scui_pixel_cf_palette8);
     
     /* 限制要求,调色板位图为正方形图像 */
     SCUI_ASSERT(src_image->pixel.width == src_image->pixel.height);

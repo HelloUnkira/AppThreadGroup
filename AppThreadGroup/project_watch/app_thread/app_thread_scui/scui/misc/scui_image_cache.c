@@ -42,7 +42,7 @@ static uint32_t scui_image_cache_hash(uint8_t *data, uint32_t length)
 static uint32_t scui_image_cache_fd_t(scui_table_dln_t *node)
 {
     scui_image_unit_t *unit = scui_own_ofs(scui_image_unit_t, ht_node, node);
-    return scui_image_cache_hash((void *)&unit->image->pixel.data_raw, sizeof(uintptr_t));
+    return scui_image_cache_hash((void *)&unit->image->pixel.data_bin, sizeof(uintptr_t));
 }
 
 /*@brief 哈希比较函数
@@ -51,7 +51,7 @@ static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
 {
     scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data_raw == unit2->image->pixel.data_raw ? true : false;
+    return unit1->image->pixel.data_bin == unit2->image->pixel.data_bin ? true : false;
 }
 
 /*@brief 哈希访问函数
@@ -62,11 +62,9 @@ static void scui_image_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
     
     SCUI_LOG_INFO("- width:%x",          unit->image->pixel.width);
     SCUI_LOG_INFO("- height:%x",         unit->image->pixel.height);
-    SCUI_LOG_INFO("- size_raw<src>:%x",  unit->image->pixel.size_raw);
-    SCUI_LOG_INFO("- size_mem<src>:%x",  unit->image->pixel.size_mem);
-    SCUI_LOG_INFO("- data_raw<src>:%x",  unit->image->pixel.data_raw);
-    SCUI_LOG_INFO("- data_mem<src>:%x",  unit->image->pixel.data_mem);
-    SCUI_LOG_INFO("- status:%x",         unit->image->status);
+    SCUI_LOG_INFO("- data_bin<src>:%x",  unit->image->pixel.data_bin);
+    SCUI_LOG_INFO("- size_bin<src>:%x",  unit->image->pixel.size_bin);
+    SCUI_LOG_INFO("- type:%x",           unit->image->type);
     SCUI_LOG_INFO("- format:%x",         unit->image->format);
     SCUI_LOG_INFO("- count:%x",          unit->count);
     SCUI_LOG_INFO("- lock:%x",           unit->lock);
@@ -149,7 +147,7 @@ void scui_image_cache_clear(void)
         scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
         
         /* 约减使用率 */
-        cache->usage -= unit->image->pixel.size_mem;
+        cache->usage -= scui_image_size(unit->image);
         /* 卸载图像资源 */
         SCUI_MEM_FREE(unit->data);
         SCUI_MEM_FREE(unit);
@@ -169,7 +167,7 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
     }
     
     // 内存图片直达即可(不走缓存管理)
-    if (image_unit->image->status == scui_image_status_mem)
+    if (image_unit->image->type == scui_image_type_mem)
         return;
     
     scui_image_unit_t *unit = NULL;
@@ -195,8 +193,8 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     }
     
     // 内存图片直达即可(不走缓存管理)
-    if (image_unit->image->status == scui_image_status_mem) {
-        image_unit->data = image_unit->image->pixel.data_mem;
+    if (image_unit->image->type == scui_image_type_mem) {
+        image_unit->data = image_unit->image->pixel.data_bin;
         return;
     }
     
@@ -238,8 +236,9 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     }
     /* 如果缓存未命中时 */
     if (unit == NULL) {
+        uintptr_t image_size = scui_image_size(image_unit->image);
         /* 如果缓存空间不足时,老化资源回收 */
-        while (cache->usage + image_unit->image->pixel.size_mem > cache->total) {
+        while (cache->usage + image_size > cache->total) {
             /* 前向遍历,找已经解锁的资源 */
             scui_list_dll_ftra(&cache->dl_list, curr) {
                 unit = scui_own_ofs(scui_image_unit_t, dl_node, curr);
@@ -255,7 +254,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
             scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
             
             /* 约减使用率 */
-            cache->usage -= unit->image->pixel.size_mem;
+            cache->usage -= scui_image_size(image_unit->image);
             /* 卸载图像资源 */
             SCUI_MEM_FREE(unit->data);
             SCUI_MEM_FREE(unit);
@@ -263,11 +262,11 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         }
         /* 为数据区申请新资源 */
         unit          = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_image_unit_t));
-        unit->data    = SCUI_MEM_ALLOC(scui_mem_type_graph, image_unit->image->pixel.size_mem);
+        unit->data    = SCUI_MEM_ALLOC(scui_mem_type_graph, image_size);
         unit->image   = image_unit->image;
         unit->count   = 1;
         unit->lock    = 1;
-        cache->usage += unit->image->pixel.size_mem;
+        cache->usage += image_size;
         
         /* 图片资源加载 */
         scui_image_src_read(unit->image, unit->data);
