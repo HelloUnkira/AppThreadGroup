@@ -88,7 +88,7 @@ void scui_ready(void)
     scui_font_name_set(SCUI_FONT_TYPE_ZH);
     
     /* 窗口交互风格 */
-    scui_window_switch_dir_cfg_set(SCUI_WINDOW_JUMP_DIR);
+    scui_window_switch_dir_cfg_set(SCUI_WINDOW_MGR_JUMP_DIR);
     /* 窗口交互风格 */
     scui_window_switch_type_cfg_set(scui_window_switch_move);
     scui_window_switch_type_cfg_set(scui_window_switch_cover);

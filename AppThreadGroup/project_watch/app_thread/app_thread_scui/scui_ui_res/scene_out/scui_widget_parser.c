@@ -366,8 +366,8 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL = {
 	.space                          = 10,
 	.route_enc                      = 117,
 	.route_key                      = 117,
-	.keyid_fdir                     = scui_event_key_val_down,
-	.keyid_bdir                     = scui_event_key_val_up,
+	.keyid_fdir                     = SCUI_WIDGET_SCROLL_KEY_FDIR,
+	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.springback                     = 70,
 };
 
@@ -422,8 +422,8 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_SCROLL = {
 	.space                          = 10,
 	.route_enc                      = 117,
 	.route_key                      = 117,
-	.keyid_fdir                     = scui_event_key_val_down,
-	.keyid_bdir                     = scui_event_key_val_up,
+	.keyid_fdir                     = SCUI_WIDGET_SCROLL_KEY_FDIR,
+	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.springback                     = 70,
 };
 
@@ -532,8 +532,8 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
 	.dir                            = scui_opt_dir_ver,
 	.route_enc                      = 117,
 	.route_key                      = 117,
-	.keyid_fdir                     = scui_event_key_val_down,
-	.keyid_bdir                     = scui_event_key_val_up,
+	.keyid_fdir                     = SCUI_WIDGET_SCROLL_KEY_FDIR,
+	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.springback                     = 35,
 	.freedom                        = true,
 };

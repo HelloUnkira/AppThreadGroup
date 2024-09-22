@@ -102,6 +102,8 @@
 /* 移动时停止帧动画(假渲染) */
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (0)
 
+/* 窗口管理栈数量限制 */
+#define SCUI_WINDOW_STACK_NEST                      (10)
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
@@ -109,16 +111,15 @@
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
-
-/* 窗口交互方向 */
-#define SCUI_WINDOW_JUMP_DIR                        (scui_opt_dir_to_l)
-/* 窗口管理栈数量限制 */
-#define SCUI_WINDOW_STACK_NEST                      (10)
+#define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
 
 /* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
+/* 滚动控件按键 */
+#define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
+#define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* 行间距,字间距,空字符宽度 */
 #define SCUI_WIDGET_STRING_GAP_LINE                 (0)
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)

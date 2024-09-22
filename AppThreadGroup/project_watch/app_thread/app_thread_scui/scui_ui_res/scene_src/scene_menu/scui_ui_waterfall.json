@@ -29,8 +29,8 @@
             "dir":                          "scui_opt_dir_ver",
             "route_enc":                    "117",
             "route_key":                    "117",
-            "keyid_fdir":                   "scui_event_key_val_down",
-            "keyid_bdir":                   "scui_event_key_val_up",
+            "keyid_fdir":                   "SCUI_WIDGET_SCROLL_KEY_FDIR",
+            "keyid_bdir":                   "SCUI_WIDGET_SCROLL_KEY_BDIR",
             "springback":                   "35",
             "freedom":                      "true"
         },

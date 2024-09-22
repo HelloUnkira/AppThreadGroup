@@ -89,8 +89,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scroll_maker.fling_page = 5;
             scroll_maker.route_enc = 117;
             scroll_maker.route_key = 117;
-            scroll_maker.keyid_fdir = scui_event_key_val_down;
-            scroll_maker.keyid_bdir = scui_event_key_val_up;
+            scroll_maker.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
+            scroll_maker.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
             
             #if SCUI_SCROLL_LAYOUT_AUTO
             scroll_maker.pos = scui_opt_pos_c;
