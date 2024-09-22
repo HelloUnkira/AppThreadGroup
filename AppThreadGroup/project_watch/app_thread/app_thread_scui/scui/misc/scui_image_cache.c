@@ -142,7 +142,7 @@ void scui_image_cache_clear(void)
             unit = NULL;
         }
         if (unit == NULL)
-            return;
+            break;
         scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
         scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
         
@@ -239,6 +239,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         uintptr_t image_size = scui_image_size(image_unit->image);
         /* 如果缓存空间不足时,老化资源回收 */
         while (cache->usage + image_size > cache->total) {
+            SCUI_ASSERT(cache->usage <= cache->total);
             /* 前向遍历,找已经解锁的资源 */
             scui_list_dll_ftra(&cache->dl_list, curr) {
                 unit = scui_own_ofs(scui_image_unit_t, dl_node, curr);
@@ -248,13 +249,15 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
             }
             if (unit == NULL) {
                 SCUI_LOG_ERROR("cache legacy excess");
-                return;
+                scui_image_cache_visit();
+                scui_image_cache_clear();
+                break;
             }
             scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
             scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
             
             /* 约减使用率 */
-            cache->usage -= scui_image_size(image_unit->image);
+            cache->usage -= scui_image_size(unit->image);
             /* 卸载图像资源 */
             SCUI_MEM_FREE(unit->data);
             SCUI_MEM_FREE(unit);

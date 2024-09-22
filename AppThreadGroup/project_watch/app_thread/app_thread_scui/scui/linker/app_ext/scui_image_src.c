@@ -198,6 +198,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
         
         SCUI_MEM_FREE(work);
         SCUI_MEM_FREE(jpg_data);
+        
         return;
     }
     

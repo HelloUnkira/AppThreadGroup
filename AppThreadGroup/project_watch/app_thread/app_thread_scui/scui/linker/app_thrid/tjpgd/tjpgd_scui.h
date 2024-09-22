@@ -15,6 +15,7 @@ extern "C" {
 #include "tjpgdcnf_scui.h"
 #include <string.h>
 
+#if 0
 #if defined(_WIN32)	/* VC++ or some compiler without stdint.h */
 typedef unsigned char	uint8_t;
 typedef unsigned short	uint16_t;
@@ -23,6 +24,9 @@ typedef unsigned long	uint32_t;
 typedef long			int32_t;
 #else				/* Embedded platform */
 #include <stdint.h>
+#endif
+#else
+#include "scui.h"
 #endif
 
 #if JD_FASTDECODE >= 1
