@@ -1,5 +1,5 @@
-#ifndef SCUI_UTIL_H
-#define SCUI_UTIL_H
+#ifndef SCUI_CUSTOM_MISC_H
+#define SCUI_CUSTOM_MISC_H
 
 #include "scui_custom_util.h"
 #include "scui_custom_qrcode.h"

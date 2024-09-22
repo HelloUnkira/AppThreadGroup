@@ -43,14 +43,17 @@
 #include "scui_widget.h"
 #include "scui_widget_draw.h"
 #include "scui_widget_event.h"
+/* widget: */
+#include "scui_window.h"
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_switch.h"     /* 窗口管理器 */
 #include "scui_window_transform.h"  /* 窗口管理器 */
 #include "scui_window_float.h"      /* 窗口管理器 */
 #include "scui_window_stack.h"      /* 窗口管理器 */
 /* widget: */
-#include "scui_window.h"
 #include "scui_custom.h"
+#include "scui_custom_misc.h"       /* misc */
+/* widget: */
 #include "scui_scroll.h"
 #include "scui_string.h"
 /* widget: */
