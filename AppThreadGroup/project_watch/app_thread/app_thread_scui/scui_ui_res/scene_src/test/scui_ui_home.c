@@ -31,6 +31,8 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click: {
+        if (event->key_id != scui_event_key_val_enter)
+            break;
         
         scui_window_switch_type_t switch_type = 0;
         switch_type = scui_window_switch_type_cfg_get();

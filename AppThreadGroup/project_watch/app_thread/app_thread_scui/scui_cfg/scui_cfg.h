@@ -105,6 +105,11 @@
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
+#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_U             (scui_event_key_val_up)
+#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
+#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
+#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
+
 /* 窗口交互方向 */
 #define SCUI_WINDOW_JUMP_DIR                        (scui_opt_dir_to_l)
 /* 窗口管理栈数量限制 */

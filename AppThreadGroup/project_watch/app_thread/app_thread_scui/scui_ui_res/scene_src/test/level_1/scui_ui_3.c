@@ -31,8 +31,11 @@ void scui_ui_scene_3_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
-        scui_widget_event_mask_over(event);
+        if (event->key_id != scui_event_key_val_enter)
+            break;
+        
         scui_ui_scene_popup_exec(SCUI_MULTI_LANG_0X002f, NULL);
+        scui_widget_event_mask_over(event);
         break;
     default:
         if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)

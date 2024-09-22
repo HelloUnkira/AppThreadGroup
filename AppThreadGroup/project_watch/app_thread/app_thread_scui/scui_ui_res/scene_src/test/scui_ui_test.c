@@ -95,9 +95,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
-        if (!scui_widget_event_check_execute(event))
-             return;
-        scui_widget_event_mask_over(event);
+        if (event->key_id != scui_event_key_val_enter)
+            break;
         
         static uint8_t font_name_table_idx = 0;
         static const scui_handle_t font_name_table[] = {
@@ -108,6 +107,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         font_name_table_idx %= scui_arr_len(font_name_table);
         scui_font_name_set(font_name_table[font_name_table_idx]);
         
+        scui_widget_event_mask_over(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
