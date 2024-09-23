@@ -20,6 +20,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
     uint32_t sched_us = 0;
     uint32_t draw_us  = 0;
     scui_tick_calc(0xAA, &tick_fps, &sched_us, &draw_us);
+    sched_us -= draw_us;
     
     static uint64_t refr_us_last = 0;
     uint64_t elapse_us = scui_tick_us() - refr_us_last;

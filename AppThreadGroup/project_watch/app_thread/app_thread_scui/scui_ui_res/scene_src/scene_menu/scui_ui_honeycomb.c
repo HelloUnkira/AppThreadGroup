@@ -113,13 +113,15 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         
         #if 0
         // 距离中心偏移做球面映射
+        scui_multi_t edge_rw = (edge_clip.w - icon_clip.w) / 2;
+        scui_multi_t edge_rh = (edge_clip.h - icon_clip.h) / 2;
         scui_multi_t dist_cx = scui_dist(icon_center.x, edge_center.x) + icon_clip.w / 2;
         scui_multi_t dist_cy = scui_dist(icon_center.y, edge_center.y) + icon_clip.h / 2;
-        scui_multi_t dist_dm = edge_clip.w * edge_clip.w / 4 + edge_clip.h * edge_clip.h / 4;
+        scui_multi_t dist_dm = edge_rw * edge_rw + edge_rh * edge_rh;
         scui_multi_t dist_cm = dist_cx * dist_cx + dist_cy * dist_cy;
         dist_cm = scui_min(dist_cm, dist_dm);
         
-        #if 1
+        #if 0
         scui_multi_t sin_a2 = (1024 * 1024) - (1024 * dist_cm / dist_dm) * (1024 * dist_cm / dist_dm);
         scui_multi_t sin_ia = 0;
         scui_multi_t sin_fa = 0;
@@ -127,7 +129,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         scui_multi_t dist_x = (1024 - sin_ia) * (dist_dm) / 1024;
         scale_ofs = scui_map(dist_x, 0, dist_dm, scale_ofs, SCUI_UI_HONEYCOMB_SCALE_MIN);
         #else
-        scale_ofs = scui_map(dist_cm, 0, dist_dm, scale_ofs, SCUI_UI_HONEYCOMB_SCALE_MIN);
+        scale_ofs = scui_map(dist_dm - dist_cm, 0, dist_dm, SCUI_UI_HONEYCOMB_SCALE_MIN, scale_ofs);
         #endif
         #endif
         

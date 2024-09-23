@@ -32,6 +32,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.type                = scui_widget_type_string;
             string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
+            string_maker.args.mode_scroll           = 1;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
             string_maker.args.color.filter          = true;
@@ -54,7 +55,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 50;
             string_maker.font_idx      = 0,
-            string_maker.text          = SCUI_MULTI_LANG_0X0025;
+            string_maker.text          = SCUI_MULTI_LANG_0X002e;
             string_maker.args.color.color_s.full = 0xFFFF00FF;
             string_maker.args.color.color_e.full = 0xFF00FF00;
             scui_string_create(&string_maker, &string_handle, false);

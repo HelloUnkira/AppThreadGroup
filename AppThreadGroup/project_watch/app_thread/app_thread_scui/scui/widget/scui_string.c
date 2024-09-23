@@ -345,6 +345,7 @@ void scui_string_event(scui_event_t *event)
             break;
         
         if (string->args.limit <= 0) {
+            string->args.offset = 0;
             /* 单次滚动结束标记 */
             if (string->unit_s)
                 string->unit_over = true;
@@ -359,19 +360,32 @@ void scui_string_event(scui_event_t *event)
         scui_string_args_process(&string->args);
         string->args.offset -= string->unit_dx * string->unit_way;
         
-        if (string->args.offset > 0) {
-            string->args.offset = 0;
-            string->unit_way = -string->unit_way;
-            /* 单次滚动结束标记 */
-            if (string->unit_s)
-                string->unit_over = true;
+        if (string->args.mode_scroll == 0) {
+            SCUI_ASSERT(string->args.offset <= 0);
+            
+            if (string->args.offset < -string->args.limit) {
+                string->args.offset = -string->args.limit;
+                string->unit_way = -string->unit_way;
+                /* 单次滚动结束标记 */
+                if (string->unit_s)
+                    string->unit_over = true;
+            }
         }
-        if (string->args.offset < -string->args.limit) {
-            string->args.offset = -string->args.limit;
-            string->unit_way = -string->unit_way;
-            /* 单次滚动结束标记 */
-            if (string->unit_s)
-                string->unit_over = true;
+        if (string->args.mode_scroll == 1) {
+            
+            scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
+            if (string->args.offset < -(string->args.limit + limit_all)) {
+                
+                if (string->args.line_multi)
+                    string->args.offset = SCUI_WIDGET_STRING_SCROLL_LINE;
+                else
+                    string->args.offset = SCUI_WIDGET_STRING_SCROLL_ITEM;
+                
+                string->unit_way = scui_abs(string->unit_way);
+                /* 单次滚动结束标记 */
+                if (string->unit_s)
+                    string->unit_over = true;
+            }
         }
         
         string->unit_anima = true;
@@ -438,10 +452,37 @@ void scui_string_event(scui_event_t *event)
                 else
                     SCUI_LOG_DEBUG("offset x:%d", string->args.offset);
                 
-                scui_area_t image_clip = scui_surface_area(string->draw_surface);
-                image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
-                image_clip.y = string->args.line_multi ? -string->args.offset : 0;
-                scui_widget_draw_image(handle, NULL, image, &image_clip, (scui_color_t){0});
+                if (string->args.mode_scroll == 0) {
+                    scui_area_t image_clip = scui_surface_area(string->draw_surface);
+                    image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
+                    image_clip.y = string->args.line_multi ? -string->args.offset : 0;
+                    scui_widget_draw_image(handle, NULL, image, &image_clip, (scui_color_t){0});
+                }
+                
+                if (string->args.mode_scroll == 1) {
+                    scui_area_t draw_clip  = widget->clip;
+                    scui_area_t image_clip = scui_surface_area(string->draw_surface);
+                    if (string->args.offset < 0) {
+                        image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
+                        image_clip.y = string->args.line_multi ? -string->args.offset : 0;
+                    } else {
+                        draw_clip.x += string->args.line_multi ? 0 : string->args.offset;
+                        draw_clip.y += string->args.line_multi ? string->args.offset : 0;
+                    }
+                    scui_widget_draw_image(handle, &draw_clip, image, &image_clip, (scui_color_t){0});
+                }
+                if (string->args.mode_scroll == 1 && string->args.limit > 0) {
+                    scui_coord_t offset    = string->args.offset;
+                    scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
+                    offset += string->args.limit + limit_all;
+                    offset += string->args.line_multi ? SCUI_WIDGET_STRING_SCROLL_LINE : 0;
+                    offset += string->args.line_multi ? 0 : SCUI_WIDGET_STRING_SCROLL_ITEM;
+                    
+                    scui_area_t draw_clip = widget->clip;
+                    draw_clip.x += string->args.line_multi ? 0 : offset;
+                    draw_clip.y += string->args.line_multi ? offset : 0;
+                    scui_widget_draw_image(handle, &draw_clip, image, NULL, (scui_color_t){0});
+                }
             }
             
             scui_handle_set(image, NULL);
@@ -450,6 +491,17 @@ void scui_string_event(scui_event_t *event)
         
         // 无缓存块的绘制下
         scui_widget_draw_string(handle, NULL, &string->args);
+        //
+        if (string->args.mode_scroll == 1 && string->args.limit > 0) {
+            scui_coord_t offset = string->args.offset;
+            scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;
+            string->args.offset += string->args.limit + limit_all;
+            string->args.offset += string->args.line_multi ? SCUI_WIDGET_STRING_SCROLL_LINE : 0;
+            string->args.offset += string->args.line_multi ? 0 : SCUI_WIDGET_STRING_SCROLL_ITEM;
+            
+            scui_widget_draw_string(handle, NULL, &string->args);
+            string->args.offset = offset;
+        }
         break;
     }
     case scui_event_font_change: {

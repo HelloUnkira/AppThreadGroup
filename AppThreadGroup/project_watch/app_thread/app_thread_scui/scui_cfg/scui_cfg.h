@@ -117,17 +117,20 @@
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
-/* 滚动控件按键 */
+/* scroll:按键 */
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
-/* 行间距,字间距,空字符宽度 */
+/* string:行间距,字间距,空字符宽度 */
 #define SCUI_WIDGET_STRING_GAP_LINE                 (0)
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)
 #define SCUI_WIDGET_STRING_GAP_NONE                 (8)
-/* 文本滚动时间与距离 */
-#define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
-#define SCUI_WIDGET_STRING_UNIT_DX                  (1)
-/* 按钮1缩放限制百分比 */
+/* string:文本滚动时间与距离 */
+#define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK * 2)
+#define SCUI_WIDGET_STRING_UNIT_DX                  (3)
+/* string:文本滚动空余间隙 */
+#define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
+#define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
+/* button:按钮1缩放限制百分比 */
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* 基础图元使用矩阵变换 */

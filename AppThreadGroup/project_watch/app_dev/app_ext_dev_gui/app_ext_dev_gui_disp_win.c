@@ -171,7 +171,7 @@ void app_dev_gui_disp_scui_flush(scui_surface_t *surface)
     
     HDC win_hdc = GetDC(cfg->display.window);
     if (win_hdc) {
-        int prev_mode = SetStretchBltMode(win_hdc, HALFTONE);
+        int prev_mode = SetStretchBltMode(win_hdc, COLORONCOLOR);
         
         StretchBlt(win_hdc, 0, 0,
             MulDiv(APP_DEV_GUI_DRV_HOR_RES * APP_DEV_GUI_DRV_ZOOM, cfg->display.dpi_value, APP_DEV_GUI_DISP_DPI_DEF),

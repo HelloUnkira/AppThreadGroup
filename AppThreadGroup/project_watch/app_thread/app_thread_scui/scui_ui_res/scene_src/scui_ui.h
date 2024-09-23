@@ -36,7 +36,8 @@
 
 #if SCUI_UI_HONEYCOMB_SCALE_MODE
 #define SCUI_UI_HONEYCOMB_T                     scui_coord_t
-#else
+#else
+
 #define SCUI_UI_HONEYCOMB_T                     scui_handle_t
 #endif
 
@@ -123,6 +124,12 @@ typedef struct {
 
 void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc);
 void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event);
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
+#include "scui_ui_presenter.h"      /* presenter */
 /*****************************************************************************/
 
 #endif
