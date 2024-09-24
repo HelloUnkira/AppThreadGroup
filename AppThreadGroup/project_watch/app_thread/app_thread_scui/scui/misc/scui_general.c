@@ -219,6 +219,11 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color_wt_t g  = ((uint16_t)c_1->ch.g * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.g * a2) / 0xFF;
         scui_color_wt_t b  = ((uint16_t)c_1->ch.b * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.b * a2) / 0xFF;
         
+        if (alpha_2 == 0xFF) {
+            *c_1 = *c_2;
+            return;
+        }
+        
         //去黑
         if (alpha_1 == 0xFF || a2 == 0x00)
             return;

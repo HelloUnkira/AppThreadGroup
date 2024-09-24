@@ -95,6 +95,12 @@ void scui_string_destroy(scui_handle_t handle)
         string->draw_surface = NULL;
     }
     
+    /* 回收渐变序列 */
+    if (string->args.grad_s != NULL) {
+        SCUI_MEM_FREE(string->args.grad_s);
+        string->args.grad_s  = NULL;
+    }
+    
     /* 销毁基础控件实例 */
     scui_widget_destroy(&string->widget);
     
@@ -296,6 +302,44 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_
     SCUI_MEM_FREE(str_utf8_raw);
 }
 
+/*@brief 字符串控件渐变序列更新
+ *@param handle 字符串控件句柄
+ *@param grad_s 渐变序列
+ *@param grad_n 渐变序列数量
+ */
+void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint32_t grad_n)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_string_t *string = (void *)widget;
+    
+    /* 必须要配置绘制缓存块 */
+    SCUI_ASSERT(string->args.regrad);
+    SCUI_ASSERT(string->draw_cache);
+    SCUI_ASSERT(grad_n >= 2);
+    
+    /* 回收渐变序列 */
+    if (string->args.grad_s != NULL) {
+        SCUI_MEM_FREE(string->args.grad_s);
+        string->args.grad_s  = NULL;
+    }
+    
+    string->args.grad_n = grad_n;
+    string->args.grad_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_color_t) * grad_n);
+    for (uint32_t idx = 0; idx < grad_n; idx++)
+        string->args.grad_s[idx] = grad_s[idx];
+    
+    /* 回收绘制缓存块 */
+    if (string->draw_surface != NULL) {
+        SCUI_MEM_FREE(string->draw_surface->pixel);
+        SCUI_MEM_FREE(string->draw_surface);
+        string->draw_surface = NULL;
+    }
+    
+    string->args.update = true;
+    scui_widget_draw(handle, NULL, false);
+}
+
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
  *@param active 中止标记
@@ -432,21 +476,13 @@ void scui_string_event(scui_event_t *event)
                 string->args.clip = draw_clip;
                 scui_area_t string_clip = draw_clip;
                 scui_draw_string(string->draw_surface, &draw_clip, &string->args, &string_clip, scui_alpha_cover);
-                
-                #if 0
-                /* test:全文本渐变 */
-                scui_color_t src_grad_s[8] = {
-                    {.color.full = 0xFF5733}, {.color.full = 0xFFBD33},
-                    {.color.full = 0x75FF33}, {.color.full = 0x33FF57},
-                    {.color.full = 0x33FFBD}, {.color.full = 0x3375FF},
-                    {.color.full = 0x5733FF}, {.color.full = 0xBD33FF},
+                /* 如果需要全局渐变,对绘制画布进行渐变 */
+                if (string->args.regrad) {
+                    scui_color_t src_filter = {.filter = true,};
+                    scui_draw_area_grads(string->draw_surface, &draw_clip,
+                        string->args.grad_s, string->args.grad_n, src_filter, scui_alpha_cover,
+                        string->args.grad_w);
                 };
-                scui_coord_t src_grad_n = 8;
-                scui_color_t src_filter = {.filter = true,};
-                uint8_t      src_way = 0;
-                scui_draw_area_grads(string->draw_surface, &draw_clip,
-                    src_grad_s, src_grad_n, src_filter, scui_alpha_cover, src_way);
-                #endif
             }
             
             scui_image_t image_inst = {

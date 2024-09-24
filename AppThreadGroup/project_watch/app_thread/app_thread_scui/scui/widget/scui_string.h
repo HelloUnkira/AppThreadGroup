@@ -19,9 +19,9 @@ typedef struct {
     scui_string_rec_t  *colors;         // 字符颜色值表
     scui_color_t       *grad_s;         // 字符渐变序列表
     uint32_t            grad_n;         // 字符渐变序列表数量
-    uint64_t            recolor:1;      // 字符颜色值表使用
-    uint64_t            regrad:1;       // 字符颜色渐变
-    uint64_t            grad_way:1;     // 字符颜色渐变方向(0:hor;1:ver;)
+    uint64_t            grad_w:1;       // 字符颜色渐变方向(0:hor;1:ver;)
+    uint64_t            regrad:1;       // 字符颜色渐变使能
+    uint64_t            recolor:1;      // 字符颜色值表使能
     uint64_t            gap_line:7;     // 行间距(<= 127)
     uint64_t            gap_item:7;     // 字间距(<= 127)
     uint64_t            gap_none:7;     // 空字符(<= 127)
@@ -110,6 +110,13 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
  *@param color_ll  重上色颜色列表
  */
 void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_t color_num, scui_color_t *color_ll);
+
+/*@brief 字符串控件渐变序列更新
+ *@param handle 字符串控件句柄
+ *@param grad_s 渐变序列
+ *@param grad_n 渐变序列数量
+ */
+void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint32_t grad_n);
 
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
