@@ -84,16 +84,6 @@ void scui_custom_draw_text(scui_event_t  *event, scui_area_t *clip,
                            scui_coord_t   span,  scui_coord_t num,
                            bool way);
 
-/*@brief 自定义控件:插件:区域绘制
- *@param event 自定义控件事件
- *@param clip  剪切域(绘制区域)
- *@param color 颜色(.color_s,.color_e,)
- *@param mix   绘制模式(0:常规绘制;1:渐变绘制;)
- *@param way   绘制方向(渐变绘制)(0:水平渐变;1:垂直渐变;)
- */
-void scui_custom_draw_rect(scui_event_t *event, scui_area_t *clip,
-                           scui_color_t  color, uint8_t mix, bool way);
-
 /*@brief 按钮控件绘制(四个角使用图像绘制)
  *       一般主要用于绘制纯色圆角矩形
  *@param event 自定义控件事件

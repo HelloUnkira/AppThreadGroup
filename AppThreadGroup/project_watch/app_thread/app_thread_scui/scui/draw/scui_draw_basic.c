@@ -151,7 +151,7 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
     
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
-    /* 在src_surface.clip中的draw_area中填满pixel */
+    /* 在dst_surface.clip中的draw_area中填满pixel */
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     scui_multi_t dis_line = draw_area.w * dst_byte;
@@ -171,6 +171,82 @@ void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
             uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
             scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
                                 dst_surface->format, &src_pixel, src_alpha);
+        }
+    }
+}
+
+/*@brief 区域填充渐变像素点(可以使用DMA-fill-grad加速优化)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ *@param src_color   像素点
+ *@param src_clip    画布绘制区域
+ *@param src_alpha   像素点透明度
+ *@param src_way     渐变方向(0:hor;1:ver;)
+ */
+void scui_draw_area_full_grad(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
+                              scui_color_t     src_color,   scui_area_t *src_clip,
+                              scui_alpha_t     src_alpha,   scui_coord_t src_way)
+{
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_clip != NULL && (src_way == 0 || src_way == 1));
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+         return;
+    
+    if (scui_area_empty(&draw_area))
+        return;
+    
+    scui_color_wt_t src_pixel_s = 0;
+    scui_color_wt_t src_pixel_e = 0;
+    scui_pixel_by_color(dst_surface->format, &src_pixel_s, src_color.color_s);
+    scui_pixel_by_color(dst_surface->format, &src_pixel_e, src_color.color_e);
+    /* 在dst_surface.clip中的draw_area中填满pixel */
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    scui_multi_t dis_line = draw_area.w * dst_byte;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
+    
+    /* 垂直渐变 */
+    if (src_way == 0)
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+        uint8_t percent = (scui_multi_t)idx_line * 100 / src_clip->h;
+        scui_alpha_t alpha_1 = scui_alpha_pct(100 - percent);
+        scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
+        scui_color_wt_t src_pixel_a = src_pixel_s;
+        scui_pixel_mix_with(dst_surface->format, &src_pixel_a, alpha_1,
+                            dst_surface->format, &src_pixel_e, alpha_2);
+        for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+            uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+            
+            if (src_alpha == scui_alpha_cover)
+                scui_pixel_by_cf(dst_surface->format, dst_ofs, &src_pixel_a);
+            else
+                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                    dst_surface->format, &src_pixel_a, src_alpha);
+        }
+    }
+    /* 水平渐变 */
+    if (src_way == 1)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        uint8_t percent = (scui_multi_t)idx_item * 100 / src_clip->w;
+        scui_alpha_t alpha_1 = scui_alpha_pct(100 - percent);
+        scui_alpha_t alpha_2 = scui_alpha_cover - alpha_1;
+        scui_color_wt_t src_pixel_a = src_pixel_s;
+        scui_pixel_mix_with(dst_surface->format, &src_pixel_a, alpha_1,
+                            dst_surface->format, &src_pixel_e, alpha_2);
+        for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
+            uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+            
+            if (src_alpha == scui_alpha_cover)
+                scui_pixel_by_cf(dst_surface->format, dst_ofs, &src_pixel_a);
+            else
+                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                    dst_surface->format, &src_pixel_a, src_alpha);
         }
     }
 }
@@ -620,4 +696,69 @@ void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *d
     SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
     SCUI_LOG_ERROR("src_surface format:%x", src_surface->format);
     SCUI_ASSERT(false);
+}
+
+/*@brief 区域序列渐变(可以使用DMA-grad加速优化?存疑中???)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ *@param src_grad_s  源渐变列表
+ *@param src_grad_n  源渐变列表数量
+ *@param src_filter  源渐变滤色
+ *@param src_alpha   源渐变透明
+ *@param src_way     源渐变方向(0:hor;1:ver;)
+ */
+void scui_draw_area_grads(scui_surface_t *dst_surface, scui_area_t *dst_clip,
+                          scui_color_t   *src_grad_s,  scui_coord_t src_grad_n,
+                          scui_color_t    src_filter,  scui_alpha_t src_alpha,
+                          uint8_t         src_way)
+{
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_grad_s != NULL && src_grad_n >= 2);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+         return;
+    
+    if (scui_area_empty(&draw_area))
+        return;
+    
+    scui_color_wt_t filter = 0;
+    scui_pixel_by_color(dst_surface->format, &filter, src_filter.color_f);
+    
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    scui_multi_t dis_line = draw_area.w * dst_byte;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
+    
+    /* 注意区域对齐坐标 */
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
+        uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
+        
+        scui_coord_t idx_grad = -1;
+        if (src_way == 0) {
+            idx_grad = scui_map(idx_item, 0, draw_area.w, -1, src_grad_n);
+            idx_grad = scui_clamp(idx_grad, 0, src_grad_n - 1);
+        }
+        if (src_way == 1) {
+            idx_grad = scui_map(idx_line, 0, draw_area.h, -1, src_grad_n);
+            idx_grad = scui_clamp(idx_grad, 0, src_grad_n - 1);
+        }
+        
+        scui_color_wt_t src_pixel = 0;
+        scui_pixel_by_color(dst_surface->format, &src_pixel, src_grad_s[idx_grad].color);
+        
+        /* 过滤色调,去色 */
+        scui_color_wt_t dst_pixel = 0;
+        scui_pixel_by_cf(dst_surface->format, &dst_pixel, dst_ofs);
+        if (src_filter.filter && dst_pixel == filter)
+            continue;
+        
+        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                            dst_surface->format, &src_pixel, src_alpha);
+    }
 }

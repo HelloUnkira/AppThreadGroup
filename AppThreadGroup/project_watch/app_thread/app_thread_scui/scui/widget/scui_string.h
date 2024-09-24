@@ -17,7 +17,11 @@ typedef struct {
 typedef struct {
     scui_color_t        color;          // 字符串颜色
     scui_string_rec_t  *colors;         // 字符颜色值表
+    scui_color_t       *grad_s;         // 字符渐变序列表
+    uint32_t            grad_n;         // 字符渐变序列表数量
     uint64_t            recolor:1;      // 字符颜色值表使用
+    uint64_t            regrad:1;       // 字符颜色渐变
+    uint64_t            grad_way:1;     // 字符颜色渐变方向(0:hor;1:ver;)
     uint64_t            gap_line:7;     // 行间距(<= 127)
     uint64_t            gap_item:7;     // 字间距(<= 127)
     uint64_t            gap_none:7;     // 空字符(<= 127)

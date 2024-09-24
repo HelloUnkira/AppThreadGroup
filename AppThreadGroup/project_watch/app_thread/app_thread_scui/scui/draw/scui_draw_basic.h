@@ -23,6 +23,18 @@ void scui_draw_area_blur(scui_surface_t *dst_surface, scui_area_t *dst_clip);
 void scui_draw_area_fill(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
                          scui_color_t     src_color,   scui_alpha_t src_alpha);
 
+/*@brief 区域填充渐变像素点(可以使用DMA-fill-grad加速优化)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ *@param src_color   像素点
+ *@param src_clip    画布绘制区域
+ *@param src_alpha   像素点透明度
+ *@param src_way     渐变方向(0:hor;1:ver;)
+ */
+void scui_draw_area_full_grad(scui_surface_t  *dst_surface, scui_area_t *dst_clip,
+                              scui_color_t     src_color,   scui_area_t *src_clip,
+                              scui_alpha_t     src_alpha,   scui_coord_t src_way);
+
 /*@brief 区域拷贝(可以使用DMA-copy加速优化)
  *@param dst_surface 画布实例
  *@param dst_clip    画布绘制区域
@@ -54,5 +66,19 @@ void scui_draw_area_blend(scui_surface_t *dst_surface, scui_area_t *dst_clip,
 void scui_draw_area_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
                                    scui_surface_t *src_surface, scui_area_t   *src_clip,
                                    scui_matrix_t  *inv_matrix,  scui_matrix_t *matrix);
+
+/*@brief 区域序列渐变(可以使用DMA-grad加速优化?存疑中???)
+ *@param dst_surface 画布实例
+ *@param dst_clip    画布绘制区域
+ *@param src_grad_s  源渐变列表
+ *@param src_grad_n  源渐变列表数量
+ *@param src_filter  源渐变滤色
+ *@param src_alpha   源渐变透明
+ *@param src_way     源渐变方向(0:hor;1:ver;)
+ */
+void scui_draw_area_grads(scui_surface_t *dst_surface, scui_area_t *dst_clip,
+                          scui_color_t   *src_grad_s,  scui_coord_t src_grad_n,
+                          scui_color_t    src_filter,  scui_alpha_t src_alpha,
+                          uint8_t         src_way);
 
 #endif

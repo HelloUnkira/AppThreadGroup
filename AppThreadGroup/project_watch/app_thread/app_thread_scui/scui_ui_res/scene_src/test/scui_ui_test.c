@@ -56,8 +56,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.h = 50;
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X002e;
-            string_maker.args.color.color_s.full = 0xFFFF00FF;
-            string_maker.args.color.color_e.full = 0xFF00FF00;
+            //string_maker.args.color.color_s.full = 0xFFFF00FF;
+            //string_maker.args.color.color_e.full = 0xFF00FF00;
             scui_string_create(&string_maker, &string_handle, false);
             
             y_offset += string_maker.widget.clip.h + 10;
@@ -67,8 +67,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.h = 130;
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0034;
-            string_maker.args.color.color_s.full = 0xFFFF0000;
-            string_maker.args.color.color_e.full = 0xFF0000FF;
+            //string_maker.args.color.color_s.full = 0xFFFF0000;
+            //string_maker.args.color.color_e.full = 0xFF0000FF;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
             
@@ -79,8 +79,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.h = 130;
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0042;
-            string_maker.args.color.color_s.full = 0xFF0000FF;
-            string_maker.args.color.color_e.full = 0xFFFF0000;
+            //string_maker.args.color.color_s.full = 0xFF0000FF;
+            //string_maker.args.color.color_e.full = 0xFFFF0000;
             string_maker.args.line_multi = true;
             scui_string_create(&string_maker, &string_handle, false);
             #endif

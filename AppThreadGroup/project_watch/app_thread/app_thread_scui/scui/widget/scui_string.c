@@ -432,6 +432,21 @@ void scui_string_event(scui_event_t *event)
                 string->args.clip = draw_clip;
                 scui_area_t string_clip = draw_clip;
                 scui_draw_string(string->draw_surface, &draw_clip, &string->args, &string_clip, scui_alpha_cover);
+                
+                #if 0
+                /* test:全文本渐变 */
+                scui_color_t src_grad_s[8] = {
+                    {.color.full = 0xFF5733}, {.color.full = 0xFFBD33},
+                    {.color.full = 0x75FF33}, {.color.full = 0x33FF57},
+                    {.color.full = 0x33FFBD}, {.color.full = 0x3375FF},
+                    {.color.full = 0x5733FF}, {.color.full = 0xBD33FF},
+                };
+                scui_coord_t src_grad_n = 8;
+                scui_color_t src_filter = {.filter = true,};
+                uint8_t      src_way = 0;
+                scui_draw_area_grads(string->draw_surface, &draw_clip,
+                    src_grad_s, src_grad_n, src_filter, scui_alpha_cover, src_way);
+                #endif
             }
             
             scui_image_t image_inst = {

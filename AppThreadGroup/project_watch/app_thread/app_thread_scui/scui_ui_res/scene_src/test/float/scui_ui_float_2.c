@@ -150,7 +150,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         clip = scui_widget_clip(event->object);
         clip.x += 15;
@@ -159,7 +159,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h -= 15 * 2;
         clip.h /= 2;
         clip.h -= 5;
-        scui_custom_draw_rect(event, &clip, color_mix, true, false);
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, false);
         
         clip = scui_widget_clip(event->object);
         clip.x += 15;
@@ -169,7 +169,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         clip.h /= 2;
         clip.y += clip.h + 5;
         clip.h -= 5;
-        scui_custom_draw_rect(event, &clip, color_mix, true, true);
+        scui_widget_draw_color_grad(event->object, &clip, color_mix, true);
         
         break;
     }
@@ -203,7 +203,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         scui_coord_t del_x = clip.w - 10;
         scui_coord_t del_y = clip.h - 10;
@@ -283,7 +283,7 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         scui_point_t center = {
             .x = clip.x + clip.w / 2,
@@ -336,7 +336,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
         scui_image_t *image = scui_handle_get(image_handle);
@@ -389,7 +389,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         clip.y += 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
-        scui_custom_draw_rect(event, &clip, color_black, false, false);
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         scui_handle_t image_edge = scui_image_prj_image_src_19_widget_activity_04_dotbmp;
         scui_handle_t image_ring = scui_image_prj_image_src_19_widget_activity_05_ringbmp;

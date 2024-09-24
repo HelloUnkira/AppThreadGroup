@@ -22,6 +22,15 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
 void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
                             scui_color_t  color);
 
+/*@brief 控件在画布绘制渐变纯色区域
+ *@param handle 控件句柄
+ *@param clip   绘制区域
+ *@param color  源色调
+ *@param way    渐变方向(0:hor;1:ver;)
+ */
+void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
+                                 scui_color_t  color,  scui_coord_t way);
+
 /*@brief 控件在画布绘制模糊
  *@param handle 控件句柄
  *@param clip   绘制区域

@@ -120,6 +120,35 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     }
 }
 
+/*@brief 控件在画布绘制渐变纯色区域
+ *@param handle 控件句柄
+ *@param clip   绘制区域
+ *@param color  源色调
+ *@param way    渐变方向(0:hor;1:ver;)
+ */
+void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
+                                 scui_color_t  color,  scui_coord_t way)
+{
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &clip))
+         return;
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, clip))
+             continue;
+        
+        scui_draw_area_full_grad(widget->surface, &dst_clip, color, clip, widget->alpha, way);
+    }
+}
+
 /*@brief 控件在画布绘制模糊
  *@param handle 控件句柄
  *@param clip   绘制区域
