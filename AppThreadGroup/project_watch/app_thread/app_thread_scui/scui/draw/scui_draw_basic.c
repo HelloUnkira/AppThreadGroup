@@ -208,9 +208,7 @@ void scui_draw_area_full_grad(scui_surface_t  *dst_surface, scui_area_t *dst_cli
     /* 在dst_surface.clip中的draw_area中填满pixel */
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
-    
     
     for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++) {
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
@@ -713,15 +711,13 @@ void scui_draw_area_grads(scui_surface_t *dst_surface, scui_area_t *dst_clip,
     if (scui_area_empty(&draw_area))
         return;
     
-    scui_color_wt_t filter = 0;
-    scui_pixel_by_color(dst_surface->format, &filter, src_filter.color_f);
-    
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
     
+    scui_color_wt_t  filter = 0;
     scui_color_wt_t *src_grad_l = SCUI_MEM_ALLOC(scui_mem_type_mix, src_grad_n * sizeof(scui_color_wt_t));
+    scui_pixel_by_color(dst_surface->format, &filter, src_filter.color_f);
     for (scui_coord_t idx = 0; idx < src_grad_n; idx++)
         scui_pixel_by_color(dst_surface->format, &src_grad_l[idx], src_grad_s[idx].color);
     
@@ -735,6 +731,10 @@ void scui_draw_area_grads(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         scui_pixel_by_cf(dst_surface->format, &dst_pixel, dst_ofs);
         if (src_filter.filter && dst_pixel == filter)
             continue;
+        
+        /* 提取底色色调:以白色(0xFFFFFFFF)为最大浓度0xFF */
+        uint8_t palette = 0;
+        scui_palette_by_pixel(dst_surface->format, &dst_pixel, &palette);
         
         scui_multi_t pct_scale = 0;
         scui_multi_t idx_grad = -1;
@@ -755,9 +755,8 @@ void scui_draw_area_grads(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         scui_color_wt_t src_pixel_a = src_grad_l[idx_grad];
         scui_pixel_mix_with(dst_surface->format, &src_pixel_a, alpha_1,
                             dst_surface->format, &src_grad_l[idx_grad + 1], alpha_2);
-        
-        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                            dst_surface->format, &src_pixel_a, src_alpha);
+        scui_pixel_mix_alpha(dst_surface->format, &src_pixel_a, palette);
+        scui_pixel_by_cf(dst_surface->format, dst_ofs, &src_pixel_a);
     }
     
     SCUI_MEM_FREE(src_grad_l);

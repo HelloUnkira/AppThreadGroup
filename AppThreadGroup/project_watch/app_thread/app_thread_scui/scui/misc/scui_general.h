@@ -190,6 +190,13 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha);
 void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha_1,
                          scui_pixel_cf_t cf_2, void *pixel_2, scui_alpha_t alpha_2);
 
+/*@brief 像素点生成灰度值
+ *@param cf      像素点格式
+ *@param pixel   像素点
+ *@param palette 灰度值
+ */
+void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette);
+
 /*@brief 透明度混合
  *@param alpha1 透明度1
  *@param alpha2 透明度2

@@ -471,6 +471,22 @@ void scui_string_event(scui_event_t *event)
                 /* 先填充透明背景 */
                 scui_area_t draw_clip = scui_surface_area(string->draw_surface);
                 scui_draw_area_fill(string->draw_surface, &draw_clip, (scui_color_t){0}, scui_alpha_cover);
+                /* 如果全局渐变 */
+                if (string->args.regrad) {
+                    /* 回收旧颜色值表 */
+                    if (string->args.colors != NULL) {
+                        SCUI_MEM_FREE(string->args.colors->index_ls);
+                        SCUI_MEM_FREE(string->args.colors->index_le);
+                        SCUI_MEM_FREE(string->args.colors->color_ll);
+                        SCUI_MEM_FREE(string->args.colors);
+                        string->args.colors  = NULL;
+                    }
+                    /* 所有颜色统一绘制成白色 */
+                    string->args.color = (scui_color_t){0};
+                    string->args.color.color_s.full = 0xFFFFFFFF;
+                    string->args.color.color_e.full = 0xFFFFFFFF;
+                    string->args.color.filter = true;
+                }
                 /* 后将文字绘制到这个画布中 */
                 string->args.offset = 0;
                 string->args.clip = draw_clip;
@@ -482,7 +498,7 @@ void scui_string_event(scui_event_t *event)
                     scui_draw_area_grads(string->draw_surface, &draw_clip,
                         string->args.grad_s, string->args.grad_n, src_filter, scui_alpha_cover,
                         string->args.grad_w);
-                };
+                }
             }
             
             scui_image_t image_inst = {
