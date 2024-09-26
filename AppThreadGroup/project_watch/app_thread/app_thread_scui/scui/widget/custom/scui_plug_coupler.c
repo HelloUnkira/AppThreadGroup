@@ -139,8 +139,6 @@ void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_ev
                 coupler->list_draw_clip[idx] = scui_widget_clip(event->object);
                 scui_widget_draw(coupler->list_widget_m[idx], NULL, false);
                 // scui_widget_clip_check(scui_widget_root(handle), true);
-                SCUI_LOG_INFO("widget idx:%u", idx);
-                coupler->list_refr[idx] = true;
                 break;
             }
             break;

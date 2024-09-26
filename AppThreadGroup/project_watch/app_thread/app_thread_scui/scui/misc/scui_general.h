@@ -75,6 +75,25 @@ typedef struct {
     };
 } scui_color_t;
 #pragma pack(pop)
+/* color32通用协议色调: */
+#define SCUI_COLOR32_WHITE      (0xFFFFFFFF)
+#define SCUI_COLOR32_SILVER     (0xFFC0C0C0)
+#define SCUI_COLOR32_GRAY       (0xFF808080)
+#define SCUI_COLOR32_BLACK      (0xFF000000)
+#define SCUI_COLOR32_RED        (0xFFFF0000)
+#define SCUI_COLOR32_MAROON     (0xFF800000)
+#define SCUI_COLOR32_YELLOW     (0xFFFFFF00)
+#define SCUI_COLOR32_OLIVE      (0xFF808000)
+#define SCUI_COLOR32_LIME       (0xFF00FF00)
+#define SCUI_COLOR32_GREEN      (0xFF008000)
+#define SCUI_COLOR32_CYAN       (0xFF00FFFF)
+#define SCUI_COLOR32_AQUA       (0xFF00FFFF)
+#define SCUI_COLOR32_TEAL       (0xFF008080)
+#define SCUI_COLOR32_BLUE       (0xFF0000FF)
+#define SCUI_COLOR32_NAVY       (0xFF000080)
+#define SCUI_COLOR32_MAGENTA    (0xFFFF00FF)
+#define SCUI_COLOR32_PURPLE     (0xFF800080)
+#define SCUI_COLOR32_ORANGE     (0xFFFFA500)
 
 /*@brief: 透明度枚举值
  *        设备透明度格式:

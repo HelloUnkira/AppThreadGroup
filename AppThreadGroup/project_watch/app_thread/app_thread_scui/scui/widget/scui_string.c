@@ -405,10 +405,15 @@ void scui_string_event(scui_event_t *event)
         string->args.offset -= string->unit_dx * string->unit_way;
         
         if (string->args.mode_scroll == 0) {
-            SCUI_ASSERT(string->args.offset <= 0);
             
-            if (string->args.offset < -string->args.limit) {
-                string->args.offset = -string->args.limit;
+            if (string->args.offset > 0 ||
+                string->args.offset < -string->args.limit) {
+                
+                if (string->args.offset > 0)
+                    string->args.offset = 0;
+                else
+                    string->args.offset = -string->args.limit;
+                
                 string->unit_way = -string->unit_way;
                 /* 单次滚动结束标记 */
                 if (string->unit_s)

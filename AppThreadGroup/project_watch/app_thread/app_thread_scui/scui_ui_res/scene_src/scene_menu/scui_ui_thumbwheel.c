@@ -62,6 +62,9 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
             string_maker.widget.clip.w              = img_dist * 2 - img_dia * 2 - dst_clip.w * 2;
             string_maker.widget.clip.h              = 60;
             string_maker.widget.clip.y              = widget_clip.h / 2 - string_maker.widget.clip.h / 2;
+            string_maker.args.align_hor             = 0;
+            string_maker.args.align_ver             = 2;
+            string_maker.args.mode_scroll           = 1;
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;

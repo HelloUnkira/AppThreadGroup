@@ -254,29 +254,29 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             scui_widget_event_add(SCUI_UI_SCENE_LIST_SCALE_SCROLL, &event_cb_node);
             
             scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type        = scui_widget_type_custom;
-            custom_maker.widget.style.trans = true;
-            custom_maker.widget.style.sched_anima = true;
-            custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
-            custom_maker.widget.parent      = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
+            scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
+            custom_maker.widget.type                = scui_widget_type_custom;
+            custom_maker.widget.style.trans         = true;
+            custom_maker.widget.style.sched_anima   = true;
+            custom_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
+            custom_maker.widget.parent              = SCUI_UI_SCENE_LIST_SCALE_SCROLL;
             
-            custom_maker.widget.style.indev_ptr = false;
-            custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
-            custom_maker.widget.event_cb = NULL;
+            custom_maker.widget.style.indev_ptr     = false;
+            custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
+            custom_maker.widget.event_cb            = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
             
-            custom_maker.widget.style.indev_ptr = true;
-            custom_maker.widget.clip.h   = 72;
-            custom_maker.widget.event_cb = scui_ui_scene_plug_coupler_widget_m_event_proc;
+            custom_maker.widget.style.indev_ptr     = true;
+            custom_maker.widget.clip.h              = 72;
+            custom_maker.widget.event_cb            = scui_ui_scene_plug_coupler_widget_m_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 scui_custom_create(&custom_maker, &custom_handle, false);
                 scui_ui_res_local->coupler->list_widget_m[idx] = custom_handle;
             }
             
-            custom_maker.widget.style.indev_ptr = false;
-            custom_maker.widget.clip.h   = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
-            custom_maker.widget.event_cb = NULL;
+            custom_maker.widget.style.indev_ptr     = false;
+            custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
+            custom_maker.widget.event_cb            = NULL;
             scui_custom_create(&custom_maker, &custom_handle, false);
             
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
@@ -305,6 +305,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.widget.clip.h              = custom_maker.widget.clip.h;
                 string_maker.args.align_hor             = 0;
                 string_maker.args.align_ver             = 2;
+                string_maker.args.mode_scroll           = 1;
                 string_maker.args.color.color_s.full    = 0xFFFFFFFF;
                 string_maker.args.color.color_e.full    = 0xFFFFFFFF;
                 string_maker.args.color.filter          = true;
