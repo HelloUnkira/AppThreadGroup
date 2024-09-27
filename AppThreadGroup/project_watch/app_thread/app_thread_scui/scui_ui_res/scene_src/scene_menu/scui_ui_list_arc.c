@@ -34,8 +34,7 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
     for (uint8_t idx = 0; idx < scui_widget_child_num(scroll); idx++) {
         
         scui_handle_t child = scui_widget_child_by_index(scroll, idx);
-        if (child == SCUI_HANDLE_INVALID ||
-            scui_widget_child_num(child) == 0)
+        if (child == SCUI_HANDLE_INVALID || scui_widget_child_num(child) == 0)
             continue;
         
         scui_handle_t group = scui_widget_child_by_index(child, 0);
@@ -74,13 +73,10 @@ void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
         scui_widget_move_pos(group, &point);
         scui_widget_alpha_set(group, alpha, true);
     }
-    
-    scui_widget_draw(event->object, NULL, false);
-    
-    
+    scui_widget_draw(scroll, NULL, false);
     
     scui_coord_t scroll_pct = 0;
-    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    scui_scroll_auto_percent_get(scroll, &scroll_pct);
     SCUI_LOG_INFO("pct:%d", scroll_pct);
     scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
     scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
@@ -172,12 +168,12 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 scui_custom_create(&group_maker, &group_handle, false);
                 
                 scui_custom_maker_t icon_maker = {0};
-                scui_handle_t icon_handle           = SCUI_HANDLE_INVALID;
-                icon_maker.widget.type              = scui_widget_type_custom;
-                icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
-                icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
-                icon_maker.widget.clip.h            = group_maker.widget.clip.h;
-                icon_maker.widget.parent            = (group_handle);
+                scui_handle_t icon_handle   = SCUI_HANDLE_INVALID;
+                icon_maker.widget.type      = scui_widget_type_custom;
+                icon_maker.widget.image     = scui_ui_scene_list_image[idx] + 4;
+                icon_maker.widget.clip.w    = scui_image_w(icon_maker.widget.image);
+                icon_maker.widget.clip.h    = group_maker.widget.clip.h;
+                icon_maker.widget.parent    = group_handle;
                 scui_custom_create(&icon_maker, &icon_handle, false);
                 
                 scui_string_maker_t string_maker = {0};

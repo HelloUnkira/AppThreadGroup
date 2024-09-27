@@ -29,7 +29,6 @@ typedef struct {
     uint64_t            align_ver:2;    // 排版对齐(0:上对齐;1:下对齐;2:中心对齐)
     uint64_t            mode_scroll:2;  // 滚动模式(0:左右滚动;1:轮转滚动)
     uint64_t            line_multi:1;   // 多行模式(非默认)
-    uint64_t            line_stand:1;   // 标准字符(非默认)
     /* 外部域转内部域: */
     scui_area_t         clip;           // 绘制剪切域
     scui_handle_t       name;           // 字库文字句柄

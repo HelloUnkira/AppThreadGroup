@@ -236,16 +236,8 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     event.ptr_e.x = offset->x;
     event.ptr_e.y = offset->y;
     
-    /* 自由布局 */
-    if (scroll->freedom) {
-        scui_scroll_event_auto_merge(&event, 0x10);
-        // scui_scroll_event_auto_merge(&event, 0x12);
-        return;
-    }
-    
-    /* 自动布局,非循环,循环 */
-    scui_scroll_event_auto_merge(&event, 0x00);
-    // scui_scroll_event_auto_merge(&event, 0x02);
+    uint8_t type = scroll->freedom ? 0x10 : 0x00;
+    scui_scroll_event_auto_merge(&event, type);
 }
 
 /*@brief 滚动控件边距(自由布局)
@@ -494,29 +486,30 @@ void scui_scroll_anima_expired(void *instance)
         };
         SCUI_LOG_DEBUG("dis_ofs_sum:<%d,%d>", dis_ofs_sum.x, dis_ofs_sum.y);
         
-        if (dis_ofs_sum.x > springback_min.x) {
+        if (dis_ofs_sum.x > springback_min.x ||
+            dis_ofs_sum.x < springback_max.x)
             delta.x = 0;
+        
+        if (dis_ofs_sum.x > springback_min.x)
             if (scroll->ofs_cur.x + scroll->ofs_sum.x < springback_min.x)
                 delta.x = springback_min.x - (scroll->ofs_cur.x + scroll->ofs_sum.x);
-        }
-        if (dis_ofs_sum.x < springback_max.x) {
-            delta.x = 0;
+        if (dis_ofs_sum.x < springback_max.x)
             if (scroll->ofs_cur.x + scroll->ofs_sum.x > springback_max.x)
                 delta.x = springback_max.x - (scroll->ofs_cur.x + scroll->ofs_sum.x);
-        }
-        if (dis_ofs_sum.y > springback_min.y) {
+        
+        if (dis_ofs_sum.y > springback_min.y ||
+            dis_ofs_sum.y < springback_max.y)
             delta.y = 0;
+        
+        if (dis_ofs_sum.y > springback_min.y)
             if (scroll->ofs_cur.y + scroll->ofs_sum.y > springback_min.y)
                 delta.y = springback_min.y - (scroll->ofs_cur.y + scroll->ofs_sum.y);
-        }
-        if (dis_ofs_sum.y < springback_max.y) {
-            delta.y = 0;
+        if (dis_ofs_sum.y < springback_max.y)
             if (scroll->ofs_cur.y + scroll->ofs_sum.y > springback_max.y)
                 delta.y = springback_max.y - (scroll->ofs_cur.y + scroll->ofs_sum.y);
-        }
         
         /* 最后一帧了,可以结束了 */
-        if (delta.x == 0 && delta.y == 0)
+        if (delta.x == 0 && delta.y == 0 && value_c != 0)
             anima->reduce = anima->peroid;
         
         scui_point_t offset = delta;
@@ -558,22 +551,20 @@ void scui_scroll_anima_expired(void *instance)
             scui_coord_t dis_ofs_sum = scroll->dis_ofs + scroll->dis_sum + delta;
             SCUI_LOG_DEBUG("dis_ofs_sum:%d", dis_ofs_sum);
             
-            if (dis_ofs_sum > springback_min) {
+            if (dis_ofs_sum > springback_min ||
+                dis_ofs_sum < springback_max)
                 delta = 0;
+            
+            if (dis_ofs_sum > springback_min)
                 if (scroll->dis_ofs + scroll->dis_sum < springback_min)
                     delta = springback_min - (scroll->dis_ofs + scroll->dis_sum);
-                else {
-                }
-            }
-            if (dis_ofs_sum < springback_max) {
-                delta = 0;
+            if (dis_ofs_sum < springback_max)
                 if (scroll->dis_ofs + scroll->dis_sum > springback_max)
                     delta = springback_max - (scroll->dis_ofs + scroll->dis_sum);
-            }
         }
         
         /* 最后一帧了,可以结束了 */
-        if (delta == 0)
+        if (delta == 0 && value_c != 0)
             anima->reduce = anima->peroid;
         
         scroll->dis_sum += delta;

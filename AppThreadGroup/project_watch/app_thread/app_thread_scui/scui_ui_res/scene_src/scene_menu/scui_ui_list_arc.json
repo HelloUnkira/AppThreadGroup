@@ -27,8 +27,8 @@
             "pos":                          "scui_opt_pos_c",
             "dir":                          "scui_opt_dir_ver",
             "space":                        "10",
-            "route_enc":                    "117",
-            "route_key":                    "117",
+            "route_enc":                    "80",
+            "route_key":                    "80",
             "keyid_fdir":                   "SCUI_WIDGET_SCROLL_KEY_FDIR",
             "keyid_bdir":                   "SCUI_WIDGET_SCROLL_KEY_BDIR",
             "springback":                   "70"
