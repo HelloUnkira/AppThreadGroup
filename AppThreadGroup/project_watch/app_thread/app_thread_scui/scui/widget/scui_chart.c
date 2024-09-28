@@ -255,7 +255,15 @@ void scui_chart_event(scui_event_t *event)
                 scui_coord_t offset_2y = scui_map(vlist[idx + 1], value_min, value_max, height, 0);
                 scui_point_t offset_1 = {.x = dst_clip.x + offset.x, .y = dst_clip.y + offset.y + offset_1y};
                 scui_point_t offset_2 = {.x = dst_clip.x + offset.x + space, .y = dst_clip.y + offset.y + offset_2y};
-                scui_widget_draw_line(handle, width, offset_1, offset_2, color);
+                
+                scui_draw_graph_dsc_t draw_graph = {
+                    .type = scui_draw_graph_type_line,
+                    .line.src_color = color,
+                    .line.src_width = width,
+                    .line.src_pos_1 = offset_1,
+                    .line.src_pos_2 = offset_2,
+                };
+                scui_widget_draw_graph(handle, &draw_graph);
                 offset.x += space;
             }
             

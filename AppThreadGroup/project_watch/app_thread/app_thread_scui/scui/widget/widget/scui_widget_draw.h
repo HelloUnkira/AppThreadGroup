@@ -103,14 +103,9 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
                            scui_handle_t image_e);
 
 /*@brief 控件在画布绘制线条
- *@param handle 控件句柄
- *@param width  线条宽
- *@param pos_1  位置1
- *@param pos_2  位置2
- *@param color  源色调
+ *@param handle     控件句柄
+ *@param draw_graph 绘制描述符实例
  */
-void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
-                           scui_point_t  pos_1,  scui_point_t pos_2,
-                           scui_color_t  color);
+void scui_widget_draw_graph(scui_handle_t handle, scui_draw_graph_dsc_t *draw_graph);
 
 #endif

@@ -38,6 +38,19 @@
 #include "scui_indev_key.h"     /* 输入设备:key */
 #include "scui_tick.h"          /* 滴答器 */
 #include "scui_disp.h"          /* 显示器 */
+/* font */
+#include "scui_font.h"
+#include "scui_font_cache.h"
+#include "scui_font_glyph_cache.h"
+#include "scui_letter.h"
+#include "scui_string_args.h"
+/* draw */
+#include "scui_draw_graph.h"
+#include "scui_draw_basic.h"
+#include "scui_draw_image.h"
+#include "scui_draw_letter.h"
+#include "scui_draw_string.h"
+#include "scui_draw_ring.h"
 
 /* widget: */
 #include "scui_widget.h"
@@ -60,21 +73,6 @@
 #include "scui_button.h"
 #include "scui_watch.h"
 #include "scui_chart.h"
-
-/* font */
-#include "scui_font.h"
-#include "scui_font_cache.h"
-#include "scui_font_glyph_cache.h"
-#include "scui_letter.h"
-#include "scui_string_args.h"
-
-/* draw */
-#include "scui_draw_graph.h"
-#include "scui_draw_basic.h"
-#include "scui_draw_image.h"
-#include "scui_draw_letter.h"
-#include "scui_draw_string.h"
-#include "scui_draw_ring.h"
 
 /* linker: */
 #include "scui_image_src.h"     /* 图像资源加载卸载 */

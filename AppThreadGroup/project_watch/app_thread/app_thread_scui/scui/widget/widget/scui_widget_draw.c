@@ -567,17 +567,11 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
 }
 
 /*@brief 控件在画布绘制线条
- *@param handle 控件句柄
- *@param width  线条宽
- *@param pos_1  位置1
- *@param pos_2  位置2
- *@param color  源色调
+ *@param handle     控件句柄
+ *@param draw_graph 绘制描述符实例
  */
-void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
-                           scui_point_t  pos_1,  scui_point_t pos_2,
-                           scui_color_t  color)
+void scui_widget_draw_graph(scui_handle_t handle, scui_draw_graph_dsc_t *draw_graph)
 {
-    
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -585,13 +579,12 @@ void scui_widget_draw_line(scui_handle_t handle, scui_coord_t width,
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    if (width <= 0)
-        width  = 1;
-    
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
         
-        scui_draw_line(widget->surface, &unit->clip, color,
-                       width, pos_1, pos_2, widget->alpha);
+        draw_graph->dst_surface = widget->surface;
+        draw_graph->dst_clip    = &unit->clip;
+        draw_graph->src_alpha   = widget->alpha;
+        scui_draw_graph(draw_graph);
     }
 }

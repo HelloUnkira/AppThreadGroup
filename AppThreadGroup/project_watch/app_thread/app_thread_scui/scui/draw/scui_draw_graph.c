@@ -8,32 +8,46 @@
 #include "scui.h"
 
 /*@brief 线条绘制(抗锯齿)
- *@param dst_surface 画布实例
- *@param dst_clip    画布绘制区域
- *@param src_color   源色调
- *@param src_width   线宽
- *@param src_pos_1   坐标点
- *@param src_pos_2   坐标点
- *@param src_alpha   透明度
+ *@param draw_graph 绘制描述符实例
  */
-void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                    scui_color_t    src_color,   scui_coord_t src_width,
-                    scui_point_t    src_pos_1,   scui_point_t src_pos_2,
-                    scui_alpha_t    src_alpha)
+void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph)
 {
+    bool scui_draw_line_simple(scui_draw_graph_dsc_t *draw_graph);
+    void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph);
+    
+    switch (draw_graph->type) {
+    case scui_draw_graph_type_line:
+        if (!scui_draw_line_simple(draw_graph))
+             scui_draw_line_skew(draw_graph);
+        break;
+    default:
+        SCUI_LOG_ERROR("unknown type:%d", draw_graph->type);
+        break;
+    }
+}
+
+/*@brief 线条绘制(水平线,垂直线)
+ *@param draw_graph 绘制描述符实例
+ */
+bool scui_draw_line_simple(scui_draw_graph_dsc_t *draw_graph)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_graph->dst_surface;
+    scui_area_t    *dst_clip    = draw_graph->dst_clip;
+    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
+    scui_color_t    src_color   = draw_graph->line.src_color;
+    scui_coord_t    src_width   = draw_graph->line.src_width;
+    scui_point_t    src_pos_1   = draw_graph->line.src_pos_1;
+    scui_point_t    src_pos_2   = draw_graph->line.src_pos_2;
+    /* draw dsc args<e> */
+    //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
     if (src_alpha == scui_alpha_trans)
-        return;
+        return true;
     
     if (src_width <= 0)
         src_width  = 1;
-    
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr  = dst_surface->pixel;
-    scui_color_wt_t src_pixel = 0;
-    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
     /* 这里变成了一个区域, 直接填色 */
     if (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y) {
@@ -59,7 +73,7 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         
         scui_area_t dst_area = {0};
         if (!scui_area_inter(&dst_area, dst_clip, &src_clip))
-             return;
+             return true;
         
         scui_draw_dsc_t draw_dsc = {
             .area_fill.dst_surface = dst_surface,
@@ -68,12 +82,46 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             .area_fill.src_color   = src_color,
         };
         scui_draw_area_fill(&draw_dsc);
-        return;
+        return true;
     }
     
-    /* 用于绘制skew的线段 */
-    /* 下面的内容是从其他地方抄录整理 */
+    return false;
+}
+
+/*@brief 线条绘制(抗锯齿)
+ *@param draw_graph 绘制描述符实例
+ */
+void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_graph->dst_surface;
+    scui_area_t    *dst_clip    = draw_graph->dst_clip;
+    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
+    scui_color_t    src_color   = draw_graph->line.src_color;
+    scui_coord_t    src_width   = draw_graph->line.src_width;
+    scui_point_t    src_pos_1   = draw_graph->line.src_pos_1;
+    scui_point_t    src_pos_2   = draw_graph->line.src_pos_2;
+    /* draw dsc args<e> */
+    //
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    if (src_width <= 0)
+        src_width  = 1;
+    
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    uint8_t *dst_addr  = dst_surface->pixel;
+    scui_color_wt_t src_pixel = 0;
+    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
+    
+    #if 0
+    
+    
+    
+    #else
     /* 从上往下绘制目标 */
     scui_point_t pos_s = src_pos_1.y < src_pos_2.y ? src_pos_1 : src_pos_2;
     scui_point_t pos_e = src_pos_1.y < src_pos_2.y ? src_pos_2 : src_pos_1;
@@ -221,4 +269,5 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
             }
         }
     }
+    #endif
 }

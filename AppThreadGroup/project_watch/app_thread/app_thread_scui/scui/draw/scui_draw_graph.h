@@ -1,6 +1,18 @@
 #ifndef SCUI_DRAW_GRAPH_H
 #define SCUI_DRAW_GRAPH_H
 
+/*绘制语义约定:
+ *    dst_surface + dst_clip
+ *    src_surface + src_clip
+ *    将src_surface中的src_clip范围内的区域
+ *    到dst_surface中的dst_clip范围内的区域
+ *    且变换要求取最小交集区域
+ *    即为原点对齐变换
+ */
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 typedef union {
     /**************************************************************************
      * draw basic(HW ACC Perhaps):
@@ -135,28 +147,45 @@ typedef union {
      * keep adding...
      */
 } scui_draw_dsc_t;
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 
-/*绘制语义约定:
- *    dst_surface + dst_clip
- *    src_surface + src_clip
- *    将src_surface中的src_clip范围内的区域
- *    到dst_surface中的dst_clip范围内的区域
- *    且变换要求取最小交集区域
- *    即为原点对齐变换
+
+
+typedef enum {
+    scui_draw_graph_type_none = 0,
+    scui_draw_graph_type_line,
+} scui_draw_graph_type_t;
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+typedef struct {
+    scui_draw_graph_type_t type;
+    // 基础图元绘制单独提出(Antialias)
+    // 因为这一部分可以使用任何库的绘制层简要摘出原理使用
+    /*************************************************************************/
+    scui_surface_t *dst_surface;    // 画布实例
+    scui_area_t    *dst_clip;       // 画布绘制区域
+    scui_alpha_t    src_alpha;      // 透明度
+    union {
+    /*************************************************************************/
+    struct {
+        scui_color_t    src_color;      // 源色调
+        scui_coord_t    src_width;      // 线宽
+        scui_point_t    src_pos_1;      // 坐标点
+        scui_point_t    src_pos_2;      // 坐标点
+    } line;
+    /*************************************************************************/
+    };
+} scui_draw_graph_dsc_t;
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+
+/*@brief 基础图元绘制(抗锯齿)
+ *@param draw_graph 绘制描述符实例
  */
+void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
 
-/*@brief 线条绘制(抗锯齿)
- *@param dst_surface 画布实例
- *@param dst_clip    画布绘制区域
- *@param src_color   源色调
- *@param src_width   线宽
- *@param src_pos_1   坐标点
- *@param src_pos_2   坐标点
- *@param src_alpha   透明度
- */
-void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                    scui_color_t    src_color,   scui_coord_t src_width,
-                    scui_point_t    src_pos_1,   scui_point_t src_pos_2,
-                    scui_alpha_t    src_alpha);
-
-#endif
+#endif

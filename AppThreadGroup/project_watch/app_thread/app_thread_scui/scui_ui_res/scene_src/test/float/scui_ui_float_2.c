@@ -211,38 +211,55 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         scui_point_t pos_e = {0};
         scui_area_m_to_s(&clip);
         
+        scui_draw_graph_dsc_t draw_graph = {
+            .type = scui_draw_graph_type_line,
+            .line.src_color = color_mix,
+            .line.src_width = 2,
+        };
+        
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = pos_s.x;
         pos_e.y = clip.y2 - 10;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
         pos_e.y = pos_s.y;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = pos_s.x + del_x / 2;
         pos_e.y = clip.y2 - 10;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
-        pos_e.y = pos_s.y + del_y / 2;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         
         pos_s.x = clip.x2 - 10;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x1 + 5 + del_x / 2;
         pos_e.y = clip.y2 - 10;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y2 - 10;
         pos_e.x = clip.x2 - 10;
         pos_e.y = clip.y1 + 5 + del_y / 2;
-        scui_widget_draw_line(event->object, 2, pos_s, pos_e, color_mix);
+        draw_graph.line.src_pos_1 = pos_s;
+        draw_graph.line.src_pos_2 = pos_e;
+        scui_widget_draw_graph(event->object, &draw_graph);
         
         break;
     }
