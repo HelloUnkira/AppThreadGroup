@@ -122,7 +122,12 @@ size_t scui_tjpgd_in_func_cb(JDEC *jd, uint8_t *buff, size_t nbyte)
         if (scui_tjpgd_ptr_ofs + nbyte >= scui_tjpgd_dat_ins) {
             nbyte = scui_tjpgd_dat_ins - scui_tjpgd_ptr_ofs;
         }
-        scui_draw_line_copy(buff, scui_tjpgd_dat_in + scui_tjpgd_ptr_ofs, nbyte);
+        scui_draw_dsc_t draw_dsc = {
+            .byte_copy.dst_addr = buff,
+            .byte_copy.src_addr = scui_tjpgd_dat_in + scui_tjpgd_ptr_ofs,
+            .byte_copy.len      = nbyte,
+        };
+        scui_draw_byte_copy(&draw_dsc);
         scui_tjpgd_ptr_ofs += nbyte;
         return nbyte;
     } else {
@@ -146,7 +151,12 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
     uint8_t *src = bitmap;
     
     for (uint32_t line = rect->top; line <= rect->bottom; line++) {
-        scui_draw_line_copy(dst, src, jpg_rect_w);
+        scui_draw_dsc_t draw_dsc = {
+            .byte_copy.dst_addr = dst,
+            .byte_copy.src_addr = src,
+            .byte_copy.len      = jpg_rect_w,
+        };
+        scui_draw_byte_copy(&draw_dsc);
         dst += jpg_data_w;
         src += jpg_rect_w;
     }
@@ -232,7 +242,13 @@ void scui_image_src_read(scui_image_t *image, void *data)
         /* 这个库只能解出ARGB8888格式,所以还需要流处理 */
         scui_lodepng_cvt_cf(png_data_dec, png_h_dec * png_w_dec);
         
-        scui_draw_line_copy(data, png_data_dec, scui_image_size(image));
+        scui_draw_dsc_t draw_dsc = {
+            .byte_copy.dst_addr = data,
+            .byte_copy.src_addr = png_data_dec,
+            .byte_copy.len      = scui_image_size(image),
+        };
+        scui_draw_byte_copy(&draw_dsc);
+        
         lodepng_scui_free(png_data_dec);
         lodepng_scui_free(png_data);
         

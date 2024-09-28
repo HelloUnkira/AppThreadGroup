@@ -475,7 +475,14 @@ void scui_string_event(scui_event_t *event)
                 
                 /* 先填充透明背景 */
                 scui_area_t draw_clip = scui_surface_area(string->draw_surface);
-                scui_draw_area_fill(string->draw_surface, &draw_clip, (scui_color_t){0}, scui_alpha_cover);
+                /* draw dsc */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_fill.dst_surface = string->draw_surface,
+                        .area_fill.dst_clip    = &draw_clip,
+                        .area_fill.src_alpha   = scui_alpha_cover,
+                    };
+                    scui_draw_area_fill(&draw_dsc);
+                };
                 /* 如果全局渐变 */
                 if (string->args.regrad) {
                     /* 回收旧颜色值表 */
@@ -496,13 +503,30 @@ void scui_string_event(scui_event_t *event)
                 string->args.offset = 0;
                 string->args.clip = draw_clip;
                 scui_area_t string_clip = draw_clip;
-                scui_draw_string(string->draw_surface, &draw_clip, &string->args, &string_clip, scui_alpha_cover);
+                
+                /* draw dsc */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .string.dst_surface = string->draw_surface,
+                        .string.dst_clip    = &draw_clip,
+                        .string.src_args    = &string->args,
+                        .string.src_clip    = &string_clip,
+                        .string.src_alpha   = scui_alpha_cover,
+                    };
+                    scui_draw_string(&draw_dsc);
+                };
                 /* 如果需要全局渐变,对绘制画布进行渐变 */
                 if (string->args.regrad) {
                     scui_color_t src_filter = {.filter = true,};
-                    scui_draw_area_grads(string->draw_surface, &draw_clip,
-                        string->args.grad_s, string->args.grad_n, src_filter, scui_alpha_cover,
-                        string->args.grad_w);
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_fill_grads.dst_surface = string->draw_surface,
+                        .area_fill_grads.dst_clip    = &draw_clip,
+                        .area_fill_grads.src_grad_s  = string->args.grad_s,
+                        .area_fill_grads.src_grad_n  = string->args.grad_n,
+                        .area_fill_grads.src_filter  = src_filter,
+                        .area_fill_grads.src_alpha   = scui_alpha_cover,
+                        .area_fill_grads.src_way     = string->args.grad_w,
+                    };
+                    scui_draw_area_fill_grads(&draw_dsc);
                 }
             }
             

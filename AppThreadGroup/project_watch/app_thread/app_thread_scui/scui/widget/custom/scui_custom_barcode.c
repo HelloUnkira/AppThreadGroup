@@ -65,9 +65,14 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
                                bit ? &pixel_l : &pixel_d);
     }
     
-    for (int y = 1; y < clip->h; y++)
-        scui_draw_line_copy(&pixel[(y * scaled + 0) * pixel_byte],
-                            &pixel[(0 * scaled + 0) * pixel_byte], pixel_byte * scaled);
+    for (int y = 1; y < clip->h; y++) {
+        scui_draw_dsc_t draw_dsc = {
+            .byte_copy.dst_addr = &pixel[(y * scaled + 0) * pixel_byte],
+            .byte_copy.src_addr = &pixel[(0 * scaled + 0) * pixel_byte],
+            .byte_copy.len      =  pixel_byte * scaled,
+        };
+        scui_draw_byte_copy(&draw_dsc);
+    }
     
     scui_point_t offset = {.x = margin,};
     scui_area_t dst_clip = {0};

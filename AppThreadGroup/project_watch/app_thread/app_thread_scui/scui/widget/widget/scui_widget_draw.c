@@ -88,7 +88,14 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
         src_clip.w =  (string_clip.w);
         src_clip.h =  (string_clip.h);
         
-        scui_draw_string(widget->surface, &dst_clip, args, &src_clip, widget->alpha);
+        scui_draw_dsc_t draw_dsc = {
+            .string.dst_surface = widget->surface,
+            .string.dst_clip    = &dst_clip,
+            .string.src_args    = args,
+            .string.src_clip    = &src_clip,
+            .string.src_alpha   = widget->alpha,
+        };
+        scui_draw_string(&draw_dsc);
     }
 }
 
@@ -116,7 +123,13 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
-        scui_draw_area_fill(widget->surface, &dst_clip, color, widget->alpha);
+        scui_draw_dsc_t draw_dsc = {
+            .area_fill.dst_surface = widget->surface,
+            .area_fill.dst_clip    = &dst_clip,
+            .area_fill.src_alpha   = widget->alpha,
+            .area_fill.src_color   = color,
+        };
+        scui_draw_area_fill(&draw_dsc);
     }
 }
 
@@ -145,7 +158,15 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
-        scui_draw_area_full_grad(widget->surface, &dst_clip, color, clip, widget->alpha, way);
+        scui_draw_dsc_t draw_dsc = {
+            .area_fill_grad.dst_surface = widget->surface,
+            .area_fill_grad.dst_clip    = &dst_clip,
+            .area_fill_grad.src_color   = color,
+            .area_fill_grad.src_clip    = clip,
+            .area_fill_grad.src_alpha   = widget->alpha,
+            .area_fill_grad.src_way     = way,
+        };
+        scui_draw_area_fill_grad(&draw_dsc);
     }
 }
 
@@ -171,7 +192,11 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
         
-        scui_draw_area_blur(widget->surface, &dst_clip);
+        scui_draw_dsc_t draw_dsc = {
+            .area_blur.dst_surface = widget->surface,
+            .area_blur.dst_clip    = &dst_clip,
+        };
+        scui_draw_area_blur(&draw_dsc);
     }
 }
 
@@ -243,8 +268,15 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        scui_draw_image(widget->surface, &dst_clip, image_inst, &src_clip,
-                        widget->alpha, color);
+        scui_draw_dsc_t draw_dsc = {
+            .image.dst_surface = widget->surface,
+            .image.dst_clip    = &dst_clip,
+            .image.src_image   = image_inst,
+            .image.src_clip    = &src_clip,
+            .image.src_alpha   = widget->alpha,
+            .image.src_color   = color,
+        };
+        scui_draw_image(&draw_dsc);
     }
 }
 
@@ -314,8 +346,17 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_draw_image_scale(widget->surface, &dst_clip, image_inst, clip,
-                              widget->alpha, scale, dst_offset, src_offset);
+        scui_draw_dsc_t draw_dsc = {
+            .image_scale.dst_surface = widget->surface,
+            .image_scale.dst_clip    = &dst_clip,
+            .image_scale.src_image   = image_inst,
+            .image_scale.src_clip    = clip,
+            .image_scale.src_alpha   = widget->alpha,
+            .image_scale.src_scale   = scale,
+            .image_scale.dst_offset  = dst_offset,
+            .image_scale.src_offset  = src_offset,
+        };
+        scui_draw_image_scale(&draw_dsc);
     }
 }
 
@@ -362,8 +403,17 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_draw_image_rotate(widget->surface, &dst_clip, image_inst, clip,
-                               widget->alpha, angle, anchor, center);
+        scui_draw_dsc_t draw_dsc = {
+            .image_rotate.dst_surface = widget->surface,
+            .image_rotate.dst_clip    = &dst_clip,
+            .image_rotate.src_image   = image_inst,
+            .image_rotate.src_clip    = clip,
+            .image_rotate.src_alpha   = widget->alpha,
+            .image_rotate.src_angle   = angle,
+            .image_rotate.src_anchor  = anchor,
+            .image_rotate.src_center  = center,
+        };
+        scui_draw_image_rotate(&draw_dsc);
     }
 }
 
@@ -411,8 +461,16 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        scui_draw_image_blit_by_matrix(widget->surface, &dst_clip, image_inst, clip,
-                                       widget->alpha, matrix, &reb_matrix);
+        scui_draw_dsc_t draw_dsc = {
+            .image_blit_by_matrix.dst_surface = widget->surface,
+            .image_blit_by_matrix.dst_clip    = &dst_clip,
+            .image_blit_by_matrix.src_image   = image_inst,
+            .image_blit_by_matrix.src_clip    = clip,
+            .image_blit_by_matrix.src_alpha   = widget->alpha,
+            .image_blit_by_matrix.inv_matrix  = matrix,
+            .image_blit_by_matrix.src_matrix  = &reb_matrix,
+        };
+        scui_draw_image_blit_by_matrix(&draw_dsc);
     }
 }
 
@@ -492,9 +550,19 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
-        scui_draw_ring(widget->surface, &dst_clip, &dst_center,
-                       image_e_inst, image_inst, &src_clip,
-                       angle_as, widget->alpha, angle_ae, color);
+        scui_draw_dsc_t draw_dsc = {
+            .ring.dst_surface = widget->surface,
+            .ring.dst_clip    = &dst_clip,
+            .ring.dst_center  = &dst_center,
+            .ring.src_image_e = image_e_inst,
+            .ring.src_image   = image_inst,
+            .ring.src_clip    = &src_clip,
+            .ring.src_angle_s = angle_as,
+            .ring.src_alpha   = widget->alpha,
+            .ring.src_angle_e = angle_ae,
+            .ring.src_color   = color,
+        };
+        scui_draw_ring(&draw_dsc);
     }
 }
 

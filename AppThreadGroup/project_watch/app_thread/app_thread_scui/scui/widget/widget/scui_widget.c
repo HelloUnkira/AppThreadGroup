@@ -734,7 +734,13 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
     scui_surface_t *src_surface = surface;
     scui_area_t dst_clip = scui_surface_area(dst_surface);
     scui_area_t src_clip = scui_surface_area(src_surface);
-    scui_draw_area_copy(dst_surface, &dst_clip, src_surface, &src_clip);
+    scui_draw_dsc_t draw_dsc = {
+        .area_copy.dst_surface = dst_surface,
+        .area_copy.dst_clip    = &dst_clip,
+        .area_copy.src_surface = src_surface,
+        .area_copy.src_clip    = &src_clip,
+    };
+    scui_draw_area_copy(&draw_dsc);
 }
 
 /*@brief 控件坐标更新

@@ -7,18 +7,20 @@
 
 #include "scui.h"
 
-/*@brief 区域图像绘制(可以使用DMA2D-blend加速优化)
- *@param dst_surface 画布目标实例
- *@param dst_clip    画布绘制区域
- *@param src_image   图像源
- *@param src_clip    图像源绘制区域
- *@param src_alpha   图像透明度(非图像自带透明度)
- *@param src_color   图像源色调(调色板)
+/*@brief 区域图像绘制
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                     scui_image_t   *src_image,   scui_area_t *src_clip,
-                     scui_alpha_t    src_alpha,   scui_color_t src_color)
+void scui_draw_image(scui_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_dsc->image.dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->image.dst_clip;
+    scui_image_t   *src_image   = draw_dsc->image.src_image;
+    scui_area_t    *src_clip    = draw_dsc->image.src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->image.src_alpha;
+    scui_color_t    src_color   = draw_dsc->image.src_color;
+    /* draw dsc args<e> */
+    //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
@@ -37,26 +39,35 @@ void scui_draw_image(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         .alpha   = src_alpha,
     };
     
-    scui_draw_area_blend(dst_surface, dst_clip, &image_surface, src_clip, src_color);
+    /* draw_dsc */ {
+        scui_draw_dsc_t draw_dsc = {
+            .area_blend.dst_surface = dst_surface,
+            .area_blend.dst_clip    = dst_clip,
+            .area_blend.src_surface = &image_surface,
+            .area_blend.src_clip    = src_clip,
+            .area_blend.src_color   = src_color,
+        };
+        scui_draw_area_blend(&draw_dsc);
+    };
     scui_image_cache_unload(&image);
 }
 
-/*@brief 区域图像缩放(可以使用DMA2D加速优化)
- *       以图形源绘制区域中心以放大缩小指定比例
- *@param dst_surface 画布目标实例
- *@param dst_clip    画布绘制区域
- *@param src_image   图像源
- *@param src_clip    图像源绘制区域
- *@param src_alpha   图像透明度(非图像自带透明度)
- *@param scale       图形缩放比例(1024为放大系数)
- *@param dst_offset  缩放锚点
- *@param src_offset  缩放锚点
+/*@brief 区域图像缩放
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
-                           scui_image_t   *src_image,   scui_area_t *src_clip,
-                           scui_alpha_t    src_alpha,   scui_point_t scale,
-                           scui_point_t    dst_offset,  scui_point_t src_offset)
+void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_dsc->image_scale.dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->image_scale.dst_clip;
+    scui_image_t   *src_image   = draw_dsc->image_scale.src_image;
+    scui_area_t    *src_clip    = draw_dsc->image_scale.src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->image_scale.src_alpha;
+    scui_point_t    src_scale   = draw_dsc->image_scale.src_scale;
+    scui_point_t    dst_offset  = draw_dsc->image_scale.dst_offset;
+    scui_point_t    src_offset  = draw_dsc->image_scale.src_offset;
+    /* draw dsc args<e> */
+    //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
@@ -75,34 +86,45 @@ void scui_draw_image_scale(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         .alpha   = src_alpha,
     };
     
-    scui_matrix_t matrix = {0};
-    scui_matrix_identity(&matrix);
-    scui_matrix_translate(&matrix, &(scui_point2_t){.x = +dst_offset.x, .y = +dst_offset.y,});
-    scui_matrix_scale(&matrix, &(scui_point2_t){.x = scale.x / 1024.0f, .y = scale.y / 1024.0f,});
-    scui_matrix_translate(&matrix, &(scui_point2_t){.x = -src_offset.x, .y = -src_offset.y,});
-    scui_matrix_t inv_matrix = matrix;
+    scui_matrix_t src_matrix = {0};
+    scui_matrix_identity(&src_matrix);
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +dst_offset.x, .y = +dst_offset.y,});
+    scui_matrix_scale(&src_matrix, &(scui_point2_t){.x = src_scale.x / 1024.0f, .y = src_scale.y / 1024.0f,});
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_offset.x, .y = -src_offset.y,});
+    scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &inv_matrix, &matrix);
+    /* draw_dsc */ {
+        scui_draw_dsc_t draw_dsc = {
+            .area_blit_by_matrix.dst_surface = dst_surface,
+            .area_blit_by_matrix.dst_clip    = dst_clip,
+            .area_blit_by_matrix.src_surface = &image_surface,
+            .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.inv_matrix  = &inv_matrix,
+            .area_blit_by_matrix.src_matrix  = &src_matrix,
+        };
+        scui_draw_area_blit_by_matrix(&draw_dsc);
+    };
     scui_image_cache_unload(&image);
 }
 
-/*@brief 区域图像旋转(可以使用DMA2D加速优化)
- *       以图形源绘制区域中心以指定方向旋转指定角度
- *@param dst_surface 画布目标实例
- *@param dst_clip    画布绘制区域
- *@param src_image   图像源
- *@param src_clip    图像源绘制区域
- *@param src_alpha   图像透明度(非图像自带透明度)
- *@param angle       图形旋转角度(顺时针旋转:+,逆时针旋转:-)
- *@param anchor      图形旋转轴心
- *@param center      图形旋转中心
+
+/*@brief 区域图像旋转
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
-                            scui_image_t   *src_image,   scui_area_t  *src_clip,
-                            scui_alpha_t    src_alpha,   scui_coord_t  angle,
-                            scui_point_t   *anchor,      scui_point_t *center)
+void scui_draw_image_rotate(scui_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_dsc->image_rotate.dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->image_rotate.dst_clip;
+    scui_image_t   *src_image   = draw_dsc->image_rotate.src_image;
+    scui_area_t    *src_clip    = draw_dsc->image_rotate.src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->image_rotate.src_alpha;
+    scui_coord_t    src_angle   = draw_dsc->image_rotate.src_angle;
+    scui_point_t   *src_anchor  = draw_dsc->image_rotate.src_anchor;
+    scui_point_t   *src_center  = draw_dsc->image_rotate.src_center;
+    /* draw dsc args<e> */
+    //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
@@ -121,33 +143,43 @@ void scui_draw_image_rotate(scui_surface_t *dst_surface, scui_area_t  *dst_clip,
         .alpha   = src_alpha,
     };
     
-    scui_matrix_t matrix = {0};
-    scui_matrix_identity(&matrix);
-    scui_matrix_translate(&matrix, &(scui_point2_t){.x = +anchor->x, .y = +anchor->y,});
-    scui_matrix_rotate(&matrix, (float)angle, 0x00);
-    scui_matrix_translate(&matrix, &(scui_point2_t){.x = -center->x, .y = -center->y,});
-    scui_matrix_t inv_matrix = matrix;
+    scui_matrix_t src_matrix = {0};
+    scui_matrix_identity(&src_matrix);
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +src_anchor->x, .y = +src_anchor->y,});
+    scui_matrix_rotate(&src_matrix, (float)src_angle, 0x00);
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_center->x, .y = -src_center->y,});
+    scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, &inv_matrix, &matrix);
+    /* draw_dsc */ {
+        scui_draw_dsc_t draw_dsc = {
+            .area_blit_by_matrix.dst_surface = dst_surface,
+            .area_blit_by_matrix.dst_clip    = dst_clip,
+            .area_blit_by_matrix.src_surface = &image_surface,
+            .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.inv_matrix  = &inv_matrix,
+            .area_blit_by_matrix.src_matrix  = &src_matrix,
+        };
+        scui_draw_area_blit_by_matrix(&draw_dsc);
+    };
     scui_image_cache_unload(&image);
 }
 
-/*@brief 区域图像变换(可以使用DMA2D加速优化)
- *       以图形源绘制区域中心以放大缩小指定比例
- *@param dst_surface 画布目标实例
- *@param dst_clip    画布绘制区域
- *@param src_image   图像源
- *@param src_clip    图像源绘制区域
- *@param src_alpha   图像透明度(非图像自带透明度)
- *@param inv_matrix  图像变换逆矩阵
- *@param matrix      图像变换矩阵
+/*@brief 区域图像变换
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *dst_clip,
-                                    scui_image_t   *src_image,   scui_area_t   *src_clip,
-                                    scui_alpha_t    src_alpha,   scui_matrix_t *inv_matrix,
-                                    scui_matrix_t  *matrix)
+void scui_draw_image_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_dsc->image_blit_by_matrix.dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->image_blit_by_matrix.dst_clip;
+    scui_image_t   *src_image   = draw_dsc->image_blit_by_matrix.src_image;
+    scui_area_t    *src_clip    = draw_dsc->image_blit_by_matrix.src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->image_blit_by_matrix.src_alpha;
+    scui_matrix_t  *inv_matrix  = draw_dsc->image_blit_by_matrix.inv_matrix;
+    scui_matrix_t  *src_matrix  = draw_dsc->image_blit_by_matrix.src_matrix;
+    /* draw dsc args<e> */
+    //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_image != NULL && src_clip != NULL);
     
@@ -166,6 +198,16 @@ void scui_draw_image_blit_by_matrix(scui_surface_t *dst_surface, scui_area_t   *
         .alpha   = src_alpha,
     };
     
-    scui_draw_area_blit_by_matrix(dst_surface, dst_clip, &image_surface, src_clip, inv_matrix, matrix);
+    /* draw_dsc */ {
+        scui_draw_dsc_t draw_dsc = {
+            .area_blit_by_matrix.dst_surface = dst_surface,
+            .area_blit_by_matrix.dst_clip    = dst_clip,
+            .area_blit_by_matrix.src_surface = &image_surface,
+            .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.inv_matrix  = inv_matrix,
+            .area_blit_by_matrix.src_matrix  = src_matrix,
+        };
+        scui_draw_area_blit_by_matrix(&draw_dsc);
+    };
     scui_image_cache_unload(&image);
 }

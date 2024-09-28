@@ -21,16 +21,18 @@ static void scui_draw_string_offset(scui_string_args_t *args, scui_font_glyph_t 
 }
 
 /*@brief 绘制字符串
- *@param dst_surface 画布实例
- *@param dst_clip    画布绘制区域
- *@param src_args    字符串绘制参数
- *@param src_clip    画布绘制区域
- *@param src_alpha   字符透明度
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
-                      scui_string_args_t *src_args,    scui_area_t *src_clip,
-                      scui_alpha_t        src_alpha)
+void scui_draw_string(scui_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_surface_t     *dst_surface = draw_dsc->string.dst_surface;
+    scui_area_t        *dst_clip    = draw_dsc->string.dst_clip;
+    scui_string_args_t *src_args    = draw_dsc->string.src_args;
+    scui_area_t        *src_clip    = draw_dsc->string.src_clip;
+    scui_alpha_t        src_alpha   = draw_dsc->string.src_alpha;
+    /* draw dsc args<e> */
+    //
     /* 从字库中提取一些信息 */
     scui_font_unit_t font_unit = {.name = src_args->name,};
     scui_font_cache_load(&font_unit);
@@ -162,7 +164,17 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
                           glyph_color = src_args->colors->color_ll[idx_rec];
                           break;
                       }
-                      scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, glyph_color);
+                      /* draw dsc */ {
+                          scui_draw_dsc_t draw_dsc = {
+                              .letter.dst_surface = dst_surface,
+                              .letter.dst_clip    = &letter_clip,
+                              .letter.src_glyph   = &glyph_unit.glyph,
+                              .letter.src_clip    = &glyph_clip,
+                              .letter.src_alpha   = src_alpha,
+                              .letter.src_color   = glyph_color,
+                          };
+                          scui_draw_letter(&draw_dsc);
+                      };
                   }
                   
                   scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
@@ -257,7 +269,17 @@ void scui_draw_string(scui_surface_t     *dst_surface, scui_area_t *dst_clip,
                     glyph_color = src_args->colors->color_ll[idx_rec];
                     break;
                 }
-                scui_draw_letter(dst_surface, &letter_clip, &glyph_unit.glyph, &glyph_clip, src_alpha, glyph_color);
+                /* draw dsc */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .letter.dst_surface = dst_surface,
+                        .letter.dst_clip    = &letter_clip,
+                        .letter.src_glyph   = &glyph_unit.glyph,
+                        .letter.src_clip    = &glyph_clip,
+                        .letter.src_alpha   = src_alpha,
+                        .letter.src_color   = glyph_color,
+                    };
+                    scui_draw_letter(&draw_dsc);
+                };
             }
             
             scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);

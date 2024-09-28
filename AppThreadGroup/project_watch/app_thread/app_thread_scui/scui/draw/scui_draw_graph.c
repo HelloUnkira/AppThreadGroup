@@ -60,7 +60,14 @@ void scui_draw_line(scui_surface_t *dst_surface, scui_area_t *dst_clip,
         scui_area_t dst_area = {0};
         if (!scui_area_inter(&dst_area, dst_clip, &src_clip))
              return;
-        scui_draw_area_fill(dst_surface, &dst_area, src_color, src_alpha);
+        
+        scui_draw_dsc_t draw_dsc = {
+            .area_fill.dst_surface = dst_surface,
+            .area_fill.dst_clip    = &dst_area,
+            .area_fill.src_alpha   = src_alpha,
+            .area_fill.src_color   = src_color,
+        };
+        scui_draw_area_fill(&draw_dsc);
         return;
     }
     

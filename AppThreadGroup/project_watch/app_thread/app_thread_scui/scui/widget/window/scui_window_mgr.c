@@ -231,7 +231,12 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     scui_color_t dst_pixel = {0};
     scui_surface_t *dst_surface = scui_surface_fb_draw();
     scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, dst_pixel, scui_alpha_cover);
+    scui_draw_dsc_t draw_dsc = {
+        .area_fill.dst_surface = dst_surface,
+        .area_fill.dst_clip    = &dst_clip,
+        .area_fill.src_alpha   = scui_alpha_cover,
+    };
+    scui_draw_area_fill(&draw_dsc);
     
     /* 多画布混合变换 */
     switch (switch_type) {
@@ -309,7 +314,13 @@ void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
                 dst_clip.y = widget->clip.y;
             }
             scui_tick_calc(0x20, NULL, NULL, NULL);
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, (scui_color_t){0});
+            scui_draw_dsc_t draw_dsc = {
+                .area_blend.dst_surface = dst_surface,
+                .area_blend.dst_clip    = &dst_clip,
+                .area_blend.src_surface = src_surface,
+                .area_blend.src_clip    = &src_clip,
+            };
+            scui_draw_area_blend(&draw_dsc);
             scui_tick_calc(0x21, NULL, NULL, NULL);
             continue;
         }
