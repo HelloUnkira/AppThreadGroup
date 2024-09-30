@@ -51,11 +51,12 @@ bool scui_draw_line_simple(scui_draw_graph_dsc_t *draw_graph)
     
     /* 这里变成了一个区域, 直接填色 */
     if (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y) {
-        scui_area_t src_clip = {0};
-        src_clip.x1 = scui_min(src_pos_1.x, src_pos_2.x);
-        src_clip.y1 = scui_min(src_pos_1.y, src_pos_2.y);
-        src_clip.x2 = scui_max(src_pos_1.x, src_pos_2.x);
-        src_clip.y2 = scui_max(src_pos_1.y, src_pos_2.y);
+        scui_area_t src_clip = {
+            .x1 = scui_min(src_pos_1.x, src_pos_2.x),
+            .y1 = scui_min(src_pos_1.y, src_pos_2.y),
+            .x2 = scui_max(src_pos_1.x, src_pos_2.x),
+            .y2 = scui_max(src_pos_1.y, src_pos_2.y),
+        };
         scui_area_m_by_s(&src_clip);
         
         /* 均匀俩边算上自己是一个奇数 */
@@ -111,18 +112,113 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
     if (src_width <= 0)
         src_width  = 1;
     
+    scui_area_t draw_area = {0};
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+         return;
+    
+    if (scui_area_empty(&draw_area))
+        return;
+    
     scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
     scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
     uint8_t *dst_addr  = dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
-    #if 0
+    if (src_width == 1) {
+        #if 0   // 没有抗锯齿??? emWin:GL_DrawLine1Ex
+        scui_coord_t x1 = src_pos_1.x;
+        scui_coord_t y1 = src_pos_1.y;
+        scui_coord_t x2 = src_pos_2.x;
+        scui_coord_t y2 = src_pos_2.y;
+        scui_coord_t x_dis = x2 - x1;
+        scui_coord_t y_dis = y2 - y1;
+        scui_coord_t x_dis_by2 = 0;
+        scui_coord_t x_dir = 1;
+        bool xy_swapped = false;
+        
+        /* 保证x_diff > y_diff, 以保持横向扫描 */
+        if (scui_abs(x_dis) < scui_abs(y_dis)) {
+            scui_coord_t t_dis = 0, t1 = 0, t2 = 0;
+            t_dis = x_dis; t1 = x1; t2 = x2;
+            x_dis = y_dis; x1 = y1; x2 = y2;
+            y_dis = t_dis; y1 = t1; y2 = t2;
+            xy_swapped = true;
+        }
+        /* 纠正x方向为正向 */
+        if (x_dis < 0) {
+            scui_coord_t tx = 0, ty = 0;
+            x_dis = -x_dis; tx = x1; x1 = x2; x2 = tx;
+            y_dis = -y_dis; ty = y1; y1 = y2; y2 = ty;
+            x_dir = -1;
+        }
+        x_dis_by2 = y_dis < 0 ? -x_dis / 2 : x_dis / 2;
+        /* 像素填充 */
+        if (1) {        /* 实线绘制 */
+            for (scui_multi_t i = 0; i < x_dis; i++) {
+                 scui_multi_t l = i * y_dis + x_dis_by2;
+                 scui_coord_t y = y1 + l / x_dis;
+                 
+                 scui_point_t point = {
+                     .x = xy_swapped ? y : x1 + i,
+                     .y = xy_swapped ? x1 + i : y,
+                 };
+                 if (scui_area_point(dst_clip, &point)) {
+                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                         dst_surface->format, &src_pixel, src_alpha);
+                 }
+            }
+        } else {        /* 虚线绘制 */
+            scui_coord_t p_cnt  = x_dis;
+            for (scui_multi_t i = 0; i < x_dis; i++) {
+                 scui_multi_t l = i * y_dis + x_dis_by2;
+                 scui_coord_t y = y1 + l / x_dis;
+                 
+                 p_cnt += x_dir;
+                 
+                 #if 0
+                 // dash(虚线)
+                 if (0 && (p_cnt + 6) % 16 < 12)
+                     continue;
+                 // dot(打点线)
+                 if (0 && (p_cnt % 4) < 2)
+                     continue;
+                 // dash dot
+                 if (0 && ((p_cnt % 20) < 12) || ((p_cnt % 20) >= 16 && (p_cnt % 20) < 18))
+                     continue;
+                 // dash dot dot
+                 if (0 && ((p_cnt % 24) < 12) || ((p_cnt % 20) >= 16 && (p_cnt % 20) < 18)
+                                              || ((p_cnt % 20) >= 20 && (p_cnt % 20) < 22))
+                     continue;
+                 #else
+                 if ((p_cnt % 4) < 2)
+                     continue;
+                 #endif
+                 
+                 scui_point_t point = {
+                     .x = xy_swapped ? y : x1 + i,
+                     .y = xy_swapped ? x1 + i : y,
+                 };
+                 
+                 if (scui_area_point(dst_clip, &point)) {
+                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                         dst_surface->format, &src_pixel, src_alpha);
+                 }
+            }
+        }
+        return;
+        #endif
+    } else {
+        // 宽度大于1的时候,绘线直接转为绘制多边形(四边形)
+        
+    }
     
     
     
-    #else
-    /* 从上往下绘制目标 */
+    #if 1   /* 下面的内容是从其他地方抄录整理,效果有待商榷 */
     scui_point_t pos_s = src_pos_1.y < src_pos_2.y ? src_pos_1 : src_pos_2;
     scui_point_t pos_e = src_pos_1.y < src_pos_2.y ? src_pos_2 : src_pos_1;
     
@@ -172,7 +268,6 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
                                         dst_surface->format, &src_pixel, alpha);
                 }
@@ -181,7 +276,6 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
                                         dst_surface->format, &src_pixel, alpha);
                 }
@@ -189,17 +283,12 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 scui_area_t dst_area = {0};
                 if (scui_area_inter(&dst_area, dst_clip, &clip_d)) {
                     SCUI_LOG_INFO("<%d,%d,%d,%d>", dst_area.x, dst_area.y, dst_area.w, dst_area.h);
-                    #if 0
-                    // scui_draw_area_fill(dst_surface, &dst_area, &src_pixel, src_alpha);
-                    #else
                     for (scui_multi_t idx_line = dst_area.y; idx_line < dst_area.y + dst_area.h; idx_line++)
                     for (scui_multi_t idx_item = dst_area.x; idx_item < dst_area.x + dst_area.w; idx_item++) {
                         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-                        
-                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                            dst_surface->format, &src_pixel, alpha);
+                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                            dst_surface->format, &src_pixel, src_alpha);
                     }
-                    #endif
                 }
             }
         }
@@ -237,7 +326,6 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
                                         dst_surface->format, &src_pixel, alpha);
                 }
@@ -246,7 +334,6 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 alpha = scui_alpha_cover - alpha;
                 if (scui_area_point(dst_clip, &point)) {
                     uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
                                         dst_surface->format, &src_pixel, alpha);
                 }
@@ -254,17 +341,12 @@ void scui_draw_line_skew(scui_draw_graph_dsc_t *draw_graph)
                 scui_area_t dst_area = {0};
                 if (scui_area_inter(&dst_area, dst_clip, &clip_d)) {
                     SCUI_LOG_INFO("<%d,%d,%d,%d>", dst_area.x, dst_area.y, dst_area.w, dst_area.h);
-                    #if 0
-                    // scui_draw_area_fill(dst_surface, &dst_area, &src_pixel, src_alpha);
-                    #else
                     for (scui_multi_t idx_line = dst_area.y; idx_line < dst_area.y + dst_area.h; idx_line++)
                     for (scui_multi_t idx_item = dst_area.x; idx_item < dst_area.x + dst_area.w; idx_item++) {
                         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
-                        
-                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
-                                            dst_surface->format, &src_pixel, alpha);
+                        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                            dst_surface->format, &src_pixel, src_alpha);
                     }
-                    #endif
                 }
             }
         }

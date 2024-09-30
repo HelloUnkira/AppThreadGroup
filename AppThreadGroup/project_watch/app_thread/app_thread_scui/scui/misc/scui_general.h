@@ -216,6 +216,13 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
  */
 void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette);
 
+/*@brief 计算调色板值
+ *@param bitmap 位图
+ *@param bpp_x  偏移值
+ *@retval 调色板值
+ */
+uint8_t scui_palette_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
+
 /*@brief 透明度混合
  *@param alpha1 透明度1
  *@param alpha2 透明度2

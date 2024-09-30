@@ -298,6 +298,42 @@ void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette)
     SCUI_ASSERT(false);
 }
 
+/*@brief 计算调色板值
+ *@param bitmap 位图
+ *@param bpp_x  偏移值
+ *@retval 调色板值
+ */
+uint8_t scui_palette_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
+{
+    /* 只支持1,2,4,8的bpp, 在字库加载时检查 */
+    SCUI_ASSERT(bpp * bpp_x < 8);
+    
+    uint8_t ofs = 0;
+    const uint16_t mask_1 = 0x0001;
+    const uint16_t mask_2 = 0x0003;
+    const uint16_t mask_4 = 0x000F;
+    const uint16_t mask_8 = 0x00FF;
+    
+    switch (bpp) {
+    /* 高位在前,地位在后 */
+    case 1:
+        ofs = 7 - bpp_x * 1;
+        return ((bitmap & (mask_1 << ofs)) >> ofs) * 0xFF / mask_1;
+    case 2:
+        ofs = 6 - bpp_x * 2;
+        return ((bitmap & (mask_2 << ofs)) >> ofs) * 0xFF / mask_2;
+    case 4:
+        ofs = 4 - bpp_x * 4;
+        return ((bitmap & (mask_4 << ofs)) >> ofs) * 0xFF / mask_4;
+    case 8:
+        ofs = 0;    // 0 - bpp_x * 8;   // 这个应该永远都是0
+        return ((bitmap & (mask_8 << ofs)) >> ofs) * 0xFF / mask_8;
+    default:
+        SCUI_ASSERT(false);
+        return 0;
+    }
+}
+
 /*@brief 透明度混合
  *@param alpha1 透明度1
  *@param alpha2 透明度2

@@ -42,7 +42,6 @@
 #include "scui_font.h"
 #include "scui_font_cache.h"
 #include "scui_font_glyph_cache.h"
-#include "scui_letter.h"
 #include "scui_string_args.h"
 /* draw */
 #include "scui_draw_graph.h"

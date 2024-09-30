@@ -49,4 +49,50 @@ typedef struct {
  */
 void scui_string_args_process(scui_string_args_t *args);
 
+/*****************************************************************************/
+/* utf-8 unicode tools<s>:************************************************** */
+/*****************************************************************************/
+
+/*@brief utf8字符转unicode字符
+ *@param utf8    utf8字符
+ *@param unicode unicode字符
+ *@retval utf8字符字节数
+ */
+uint32_t scui_utf8_to_unicode(uint8_t *utf8, uint32_t *unicode);
+
+/*@brief utf8字符字节数
+ *@param utf8 字符(首字符)
+ *@retval 字符长度
+ */
+uint32_t scui_utf8_bytes(uint8_t utf8);
+
+/*@brief utf8字符数量
+ *@param utf8 字符串
+ *@retval 字符数量
+ */
+uint32_t scui_utf8_str_num(uint8_t *utf8);
+
+/*@brief utf8字节数量
+ *@param utf8 字符串
+ *@retval 字节数量
+ */
+uint32_t scui_utf8_str_bytes(uint8_t *utf8);
+
+/*@brief utf8字符串转为unicode字符串
+ *@param unicode  unicode字符串
+ *@param utf8     utf8字符串
+ *@param utf8_num utf8字符数
+ */
+void scui_utf8_str_to_unicode(uint8_t *utf8, uint32_t utf8_num, uint32_t *unicode);
+
+/*@brief 后缀匹配
+ *@param str    utf8字符串
+ *@param suffix utf8字符串
+ */
+bool scui_utf8_str_match_suffix(uint8_t *str, uint8_t *suffix);
+
+/*****************************************************************************/
+/* utf-8 unicode tools<e>:************************************************** */
+/*****************************************************************************/
+
 #endif

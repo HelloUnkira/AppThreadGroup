@@ -61,11 +61,9 @@ static void scui_ui_scene_plug_coupler_recycle_event_proc(scui_event_t *event)
             // 从控件树绘制结束,回收部分不使用的画布
             scui_plug_coupler_recycle(scui_ui_res_local->coupler, false);
         }
-        
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
     

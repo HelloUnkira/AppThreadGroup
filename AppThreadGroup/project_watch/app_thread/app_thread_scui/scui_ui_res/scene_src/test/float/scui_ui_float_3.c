@@ -177,9 +177,9 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         #endif
         
         #if 1
-        scui_color_t color_r = {.filter = true,.color.ch.r = 0xFF,};
-        scui_color_t color_g = {.filter = true,.color.ch.g = 0xFF,};
-        scui_color_t color_b = {.filter = true,.color.ch.b = 0xFF,};
+        scui_color_t color_r = {.filter = true,.color_s.ch.r = 0xFF,.color_e.ch.r = 0xFF,};
+        scui_color_t color_g = {.filter = true,.color_s.ch.g = 0xFF,.color_e.ch.g = 0xFF,};
+        scui_color_t color_b = {.filter = true,.color_s.ch.b = 0xFF,.color_e.ch.b = 0xFF,};
         scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  -81, color_r,  +22, pct, image_edge);
         scui_widget_draw_ring(event->object, &clip, image_ring, NULL,  +39, color_g, +141, pct, image_edge);
         scui_widget_draw_ring(event->object, &clip, image_ring, NULL, +158, color_b, +262, pct, image_edge);

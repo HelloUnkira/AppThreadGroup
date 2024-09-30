@@ -27,10 +27,12 @@ void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
-    scui_color_t color_bg = {.color = color.color_d,.color_f = color.color_f, .filter = color.filter};
-    scui_color_t color_fg = {.color = color.color_l,.color_f = color.color_f, .filter = color.filter};
-    
     /* 绘制背景 */
+    scui_color_t color_bg = {
+        .color   = color.color_d,
+        .color_f = color.color_f,
+        .filter  = color.filter
+    };
     scui_widget_draw_image(event->object, clip, spinner, NULL, color_bg);
     
     scui_coord_t adj_s = angle_s + way * scui_map_ease_in_out(percent, 0, 100, 0, 360);
@@ -39,6 +41,12 @@ void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
     scui_coord_t ang_e = scui_max(adj_s, adj_e);
     
     /* 绘制圆环 */
+    scui_color_t color_fg = {
+        .color_s = color.color_l,
+        .color_e = color.color_l,
+        .color_f = color.color_f,
+        .filter = color.filter
+    };
     scui_widget_draw_ring(event->object, clip, spinner, NULL,
                           ang_s, color_fg, ang_e, 100, edge);
 }

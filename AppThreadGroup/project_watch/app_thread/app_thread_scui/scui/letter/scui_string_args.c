@@ -278,3 +278,145 @@ void scui_string_args_process(scui_string_args_t *args)
     /* 文字进行排版布局(单行模式不需要排版布局) */
     scui_string_args_typography(args);
 }
+
+/*****************************************************************************/
+/* utf-8 unicode tools<s>:************************************************** */
+/*****************************************************************************/
+
+/*@brief utf8字符转unicode字符
+ *@param utf8    utf8字符
+ *@param unicode unicode字符
+ *@retval utf8字符字节数
+ */
+uint32_t scui_utf8_to_unicode(uint8_t *utf8, uint32_t *unicode)
+{
+    if (utf8[0] < 0x80) {
+        
+       *unicode = utf8[0];
+        return 1;
+    }
+    if (utf8[0] < 0xE0) {
+        
+       *unicode = ((utf8[0] & 0x1F) << 6) |
+                   (utf8[1] & 0x3F);
+        return 2;
+    }
+    if (utf8[0] < 0xF0) {
+        
+       *unicode = ((utf8[0] & 0x0F) << 12) |
+                  ((utf8[1] & 0x3F) << 6) |
+                   (utf8[2] & 0x3F);
+        return 3;
+    }
+    if (0xF0 == (utf8[0] & 0xF0)) {
+        
+       *unicode = ((utf8[0] & 0x07) << 18) |
+                  ((utf8[1] & 0x3F) << 12) |
+                  ((utf8[2] & 0x3F) << 6) |
+                   (utf8[3] & 0x3F);
+        return 4;
+    }
+    
+    /* 新标准只支持utf8映射到unicode的字符集(1~4字节) */
+    SCUI_ASSERT(false);
+    return 0;
+}
+
+/*@brief utf8字符字节数
+ *@param utf8 字符(首字符)
+ *@retval 字符长度
+ */
+uint32_t scui_utf8_bytes(uint8_t utf8)
+{
+    if (utf8 <= 0x7F)                   // ASCII 占用1个字节
+        return 1;
+    if (utf8 >= 0xC0 && utf8 <= 0xDF)   // UTF-8 占用2个字节
+        return 2;
+    if (utf8 >= 0xE0 && utf8 <= 0xEF)   // UTF-8 占用3个字节
+        return 3;
+    if (utf8 >= 0xF0 && utf8 <= 0xF7)   // UTF-8 占用4个字节
+        return 4;
+    if (utf8 >= 0xF8 && utf8 <= 0xFB)   // UTF-8 占用5个字节
+        return 5;
+    if (utf8 >= 0xFC && utf8 <= 0xFD)   // UTF-8 占用6个字节
+        return 6;
+    
+    /* 新标准只支持utf8映射到unicode的字符集(1~4字节) */
+    // UTF-8 非首字节
+    SCUI_ASSERT(false);
+    return 0;
+}
+
+/*@brief utf8字符数量
+ *@param utf8 字符串
+ *@retval 字符数量
+ */
+uint32_t scui_utf8_str_num(uint8_t *utf8)
+{
+    /* 统计utf8字符数量 */
+    uint32_t str_num = 0;
+    while (*utf8 != '\0') {
+        uint8_t utf8_len = scui_utf8_bytes(*utf8);
+        utf8 += utf8_len;
+        str_num++;
+    }
+    
+    return str_num;
+}
+
+/*@brief utf8字节数量
+ *@param utf8 字符串
+ *@retval 字节数量
+ */
+uint32_t scui_utf8_str_bytes(uint8_t *utf8)
+{
+    /* 统计utf8字节数量(不包括结尾符) */
+    uint32_t str_bytes = 0;
+    while (*utf8 != '\0') {
+        uint8_t utf8_bytes = scui_utf8_bytes(*utf8);
+        utf8 += utf8_bytes;
+        str_bytes += utf8_bytes;
+    }
+    
+    return str_bytes;
+}
+
+/*@brief utf8字符串转为unicode字符串
+ *@param unicode  unicode字符串
+ *@param utf8     utf8字符串
+ *@param utf8_num utf8字符数
+ */
+void scui_utf8_str_to_unicode(uint8_t *utf8, uint32_t utf8_num, uint32_t *unicode)
+{
+    uint8_t *utf8_ptr = utf8;
+    for (uint32_t idx = 0; idx < utf8_num; idx++) {
+         uint8_t utf8_len = scui_utf8_to_unicode(utf8_ptr, &unicode[idx]);
+         SCUI_ASSERT(utf8_len != 0);
+         utf8_ptr += utf8_len;
+    }
+}
+
+/*@brief utf8字符串后缀匹配
+ *@param str    utf8字符串
+ *@param suffix utf8字符串
+ */
+bool scui_utf8_str_match_suffix(uint8_t *str, uint8_t *suffix)
+{
+    uint32_t bytes_str    = scui_utf8_str_bytes(str);
+    uint32_t bytes_suffix = scui_utf8_str_bytes(suffix);
+    uint32_t bytes_offset = bytes_str - bytes_suffix;
+    
+    if (bytes_str < bytes_suffix)
+        return false;
+    
+    for (uint32_t idx = 0; idx < bytes_suffix; idx++)
+        if (str[bytes_offset + idx] != suffix[idx])
+            return false;
+    
+    return true;
+}
+
+/*****************************************************************************/
+/* utf-8 unicode tools<e>:************************************************** */
+/*****************************************************************************/
+
