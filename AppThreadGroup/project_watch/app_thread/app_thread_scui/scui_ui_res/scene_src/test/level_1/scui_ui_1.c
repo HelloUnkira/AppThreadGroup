@@ -34,7 +34,8 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        static scui_window_switch_type_t switch_type = 0;
+        SCUI_LOG_WARN("scui_event_key_click");
+        static scui_window_switch_type_t switch_type = SCUI_WINDOW_MGR_TYPE_CFG;
         switch_type++;
         
         if (switch_type < scui_window_switch_single_s + 1)

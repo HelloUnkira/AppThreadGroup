@@ -102,23 +102,7 @@ void scui_ready(void)
     
     /* 窗口交互风格 */
     scui_window_switch_dir_cfg_set(SCUI_WINDOW_MGR_JUMP_DIR);
-    /* 窗口交互风格 */
-    scui_window_switch_type_cfg_set(scui_window_switch_move);
-    scui_window_switch_type_cfg_set(scui_window_switch_cover);
-    scui_window_switch_type_cfg_set(scui_window_switch_zoom1);
-    scui_window_switch_type_cfg_set(scui_window_switch_zoom2);
-    scui_window_switch_type_cfg_set(scui_window_switch_center_in);
-    scui_window_switch_type_cfg_set(scui_window_switch_center_out);
-    
-    scui_window_switch_type_cfg_set(scui_window_switch_rotate);
-    scui_window_switch_type_cfg_set(scui_window_switch_rotate1);
-    scui_window_switch_type_cfg_set(scui_window_switch_circle);
-    scui_window_switch_type_cfg_set(scui_window_switch_grid);
-    
-    scui_window_switch_type_cfg_set(scui_window_switch_flip1);
-    scui_window_switch_type_cfg_set(scui_window_switch_flip2);
-    scui_window_switch_type_cfg_set(scui_window_switch_flip3);
-    scui_window_switch_type_cfg_set(scui_window_switch_cube);
+    scui_window_switch_type_cfg_set(SCUI_WINDOW_MGR_TYPE_CFG);
     
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);

@@ -435,6 +435,8 @@ static void scui_window_event_switch(scui_event_t *event)
         
         if (scui_window_mgr.switch_args.lock_jump)
             break;
+        if (scui_window_mgr.switch_args.lock_move)
+            break;
         
         scui_handle_t target = SCUI_HANDLE_INVALID;
         scui_opt_dir_t event_dir = scui_opt_dir_none;
