@@ -491,14 +491,14 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
         return;
     }
     
-    scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
-    scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
-    dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
-    src_addr = src_surface->pixel + src_pixel_ofs * src_bits / 8;
-    
     /* pixel cover:(调色板) */
     if (src_surface->format == scui_pixel_cf_palette4 ||
         src_surface->format == scui_pixel_cf_palette8) {
+        scui_multi_t dst_pixel_ofs = dst_clip_v.y * dst_surface->hor_res + dst_clip_v.x;
+        scui_multi_t src_pixel_ofs = src_clip_v.y * src_surface->hor_res + src_clip_v.x;
+        dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
+        src_addr = src_surface->pixel;
+        
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << src_bits;
         scui_color_wt_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_color_wt_t) * palette_len);
@@ -513,8 +513,8 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
         
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
-            uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
-            uint32_t idx_ofs = src_pixel_ofs + (src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item);
+            uint8_t *dst_ofs = dst_addr + (idx_line * dst_surface->hor_res + idx_item) * dst_byte;
+            uint32_t idx_ofs = src_pixel_ofs + idx_line * src_surface->hor_res + idx_item;
             uint8_t *src_ofs = src_addr + idx_ofs / (8 / src_bits);
             uint8_t  palette = scui_palette_bpp_x(*src_ofs, src_bits, idx_ofs % (8 / src_bits));
             uint8_t  palette_idx = pixel_no_grad ? 0 : (uint16_t)palette * (palette_len - 1) / 0xFF;
@@ -541,6 +541,8 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
             scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - alpha,
                                 dst_surface->format, &palette_table[palette_idx], alpha);
         }
+        
+        SCUI_MEM_FREE(palette_table);
         return;
     }
     

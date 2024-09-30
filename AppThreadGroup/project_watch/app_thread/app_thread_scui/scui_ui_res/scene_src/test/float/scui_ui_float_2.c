@@ -375,10 +375,9 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
 {
-    static scui_coord_t   spinner_pct = 0;
-    static scui_coord_t   spinner_tick = 0;
-    static const uint32_t spinner_round = 1000 / SCUI_ANIMA_TICK;
-    
+    static scui_coord_t spinner_pct  = 0;
+    static scui_coord_t spinner_cnt  = 0;
+    static scui_coord_t spinner_tick = 750 / SCUI_ANIMA_TICK;
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -386,11 +385,11 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              break;
         
-        spinner_tick++;
-        if (spinner_tick > spinner_round)
-            spinner_tick = 0;
-        spinner_pct = scui_map(spinner_tick, 0, spinner_round, 0, 100);
+        spinner_cnt++;
+        if (spinner_cnt >  spinner_tick)
+            spinner_cnt -= spinner_tick;
         
+        spinner_pct = scui_map(spinner_cnt, 0, spinner_tick, 0, 100);
         scui_widget_draw(event->object, NULL, false);
         break;
     }

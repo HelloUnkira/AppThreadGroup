@@ -13,7 +13,7 @@
  *@param spinner    图像句柄(调色板图)
  *@param color      图像源色调(.color_l,.color_d,.color_f, .filter,)
  *@param edge       图像句柄(边界点)
- *@param percent    旋转进度点
+ *@param percent    旋转百分比(0~100)
  *@param angle_s    旋转参考点(参考值270度)
  *@param angle_l    旋转参考点(参考值270度)
  *@param way        旋转方向(顺时针:+1;逆时针:-1;)
@@ -35,20 +35,23 @@ void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
     };
     scui_widget_draw_image(event->object, clip, spinner, NULL, color_bg);
     
-    scui_coord_t adj_s = angle_s + way * scui_map_ease_in_out(percent, 0, 100, 0, 360);
-    scui_coord_t adj_e = angle_s + way * scui_map(percent, 0, 100, 0, 360) + way * angle_l;
-    scui_coord_t ang_s = scui_min(adj_s, adj_e);
-    scui_coord_t ang_e = scui_max(adj_s, adj_e);
+    scui_coord_t  angle_c = scui_map(percent % 100, 0, 100, 0, 360);
+    scui_map_cb_t path_map = scui_map_ease_out;
+    if (scui_mabs(angle_c / 180, 2) == 1)
+        path_map = scui_map_ease_in;
+    
+    scui_coord_t adj_p = scui_mabs(angle_c % 180, 180);
+    scui_coord_t adj_s = angle_s + way * path_map(adj_p, 0, 180, 0, 360);
+    scui_coord_t adj_e = angle_s + way * scui_map(adj_p, 0, 180, 0, 360) + way * angle_l;
     
     /* 绘制圆环 */
     scui_color_t color_fg = {
         .color_s = color.color_l,
         .color_e = color.color_l,
         .color_f = color.color_f,
-        .filter = color.filter
+        .filter  = color.filter
     };
-    scui_widget_draw_ring(event->object, clip, spinner, NULL,
-                          ang_s, color_fg, ang_e, 100, edge);
+    scui_widget_draw_ring(event->object, clip, spinner, NULL, adj_s, color_fg, adj_e, 100, edge);
 }
 
 /*@brief 自定义控件:插件:进度条,滚动条

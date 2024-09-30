@@ -95,10 +95,10 @@ static void scui_draw_ring_quadrant(scui_draw_dsc_t *draw_dsc)
     /* 检查四个象限,如果有完整部分,先行绘制该区块 */
     /* 绕过的重合点不计算在内,应被过滤掉(因为是一个整环) */
     bool quadrant_flag[4] = {
-        ((src_angle_s <=   +0 && src_angle_e >=  +90) || (src_angle_s <= -360 && src_angle_e >= -270)),
-        ((src_angle_s <=  +90 && src_angle_e >= +180) || (src_angle_s <= -270 && src_angle_e >= -180)),
-        ((src_angle_s <= +180 && src_angle_e >= +270) || (src_angle_s <= -180 && src_angle_e >=  -90)),
-        ((src_angle_s <= +270 && src_angle_e >= +360) || (src_angle_s <=  -90 && src_angle_e >=   -0)),
+        ((src_angle_s <=   0 && src_angle_e >=  90) || (src_angle_s <= 360 && src_angle_e >= 450)),
+        ((src_angle_s <=  90 && src_angle_e >= 180) || (src_angle_s <= 450 && src_angle_e >= 540)),
+        ((src_angle_s <= 180 && src_angle_e >= 270) || (src_angle_s <= 540 && src_angle_e >= 630)),
+        ((src_angle_s <= 270 && src_angle_e >= 360) || (src_angle_s <= 630 && src_angle_e >= 720)),
     };
     scui_point_t quadrant_offset[4] = {
         {.x = +src_image->pixel.width / 2,.y = +src_image->pixel.height / 2,},
@@ -477,19 +477,23 @@ void scui_draw_ring(scui_draw_dsc_t *draw_dsc)
     /* 这将限制角度以顺时针旋转绘制为目标 */
     if (src_angle_s > src_angle_e) {
         /*  */
-        src_angle_s = src_angle_s ^ src_angle_e;
-        src_angle_e = src_angle_s ^ src_angle_e;
-        src_angle_s = src_angle_s ^ src_angle_e;
+        scui_coord_t  src_angle_t = 0;
+        src_angle_t = src_angle_e;
+        src_angle_e = src_angle_s;
+        src_angle_s = src_angle_t;
     }
-    /* 角度限制(-360, +360): */
-    while (src_angle_e > 360) {
-        src_angle_s -= 360;
-        src_angle_e -= 360;
-    }
+    /* 保证两个角度之间的间隙不超过360度 */
+    while (src_angle_e - src_angle_s >= 360)
+           src_angle_s += 360;
     
-    while (src_angle_e <= 0) {
-        src_angle_s += 360;
-        src_angle_e += 360;
+    /* 角度限制(-360, +360): */
+    while (src_angle_e >  360) {
+           src_angle_e -= 360;
+           src_angle_s -= 360;
+    }
+    while (src_angle_s <    0) {
+           src_angle_s += 360;
+           src_angle_e += 360;
     }
     
     scui_draw_dsc_t draw_dsc_local  = *draw_dsc;
@@ -498,40 +502,52 @@ void scui_draw_ring(scui_draw_dsc_t *draw_dsc)
     
     /* 1.绘制俩个端点 */
     scui_draw_ring_edge(&draw_dsc_local);
-    
     /* 2.绘制完整象限(绕过的重合点不计算,在上面被过滤掉) */
     scui_draw_ring_quadrant(&draw_dsc_local);
     
+    /* 完整的绘制跳过,上面已经绘制完了 */
+    if (src_angle_s % 90 == 0 && src_angle_e % 90 == 0)
+        return;
+    
     /* 3.1绘制在同一象限 */
     if (src_angle_s / 90 == src_angle_e / 90 &&
-        src_angle_s % 90 != 0 && src_angle_s % 90 != 0) {
+       (src_angle_s % 90 != 0 || src_angle_e % 90 != 0)) {
         /* 如果s和e在一个象限内,按照上面e>0的限制,s一定大于0 */
-        if (src_angle_s > 0 && src_angle_e > 0) {
-            scui_draw_ring_quadrant_1(&draw_dsc_local);
-            return;
-        }
+        SCUI_ASSERT(src_angle_s >=    0 && src_angle_e >     0);
+        SCUI_ASSERT(src_angle_s >= -360 && src_angle_s <= +360);
+        SCUI_ASSERT(src_angle_e >= -360 && src_angle_e <= +360);
+        scui_draw_ring_quadrant_1(&draw_dsc_local);
+        return;
     }
     
-    if (src_angle_s % 90 != 0 && src_angle_e % 90 != 0) {
-        
+    /* 3.2绘制在最多俩个不完整象限 */
+    if (src_angle_s % 90 != 0 || src_angle_e % 90 != 0) {
         scui_coord_t rcd_angle_s = src_angle_s;
         scui_coord_t rcd_angle_e = src_angle_e;
+        
         /* s有可能小于0,此时求个模 */
-        while (rcd_angle_s < 0)
+        while (rcd_angle_s <    0)
                rcd_angle_s += 360;
-        /* 3.2绘制在最多俩个不完整象限 */
         
         src_angle_s = (rcd_angle_s);
         src_angle_e = (rcd_angle_s / 90 + 1) * 90;
-        if (src_angle_s != src_angle_e) {
+        if (src_angle_s != src_angle_e && src_angle_s % 90 != 0) {
+            SCUI_ASSERT(src_angle_s >= -360 && src_angle_s <= +360);
+            SCUI_ASSERT(src_angle_e >= -360 && src_angle_e <= +360);
             draw_dsc_local.ring.src_angle_s = src_angle_s;
             draw_dsc_local.ring.src_angle_e = src_angle_e;
             scui_draw_ring_quadrant_1(&draw_dsc_local);
         }
         
+        /* e有可能大于360,此时求个模 */
+        while (rcd_angle_e >  360)
+               rcd_angle_e -= 360;
+        
         src_angle_s = (rcd_angle_e / 90) * 90;
         src_angle_e = (rcd_angle_e);
-        if (src_angle_s != src_angle_e) {
+        if (src_angle_s != src_angle_e && src_angle_e % 90 != 0) {
+            SCUI_ASSERT(src_angle_s >= -360 && src_angle_s <= +360);
+            SCUI_ASSERT(src_angle_e >= -360 && src_angle_e <= +360);
             draw_dsc_local.ring.src_angle_s = src_angle_s;
             draw_dsc_local.ring.src_angle_e = src_angle_e;
             scui_draw_ring_quadrant_1(&draw_dsc_local);
@@ -539,8 +555,5 @@ void scui_draw_ring(scui_draw_dsc_t *draw_dsc)
         return;
     }
     
-    if (src_angle_s % 90 != 0 || src_angle_e % 90 != 0) {
-        scui_draw_ring_quadrant_1(&draw_dsc_local);
-        return;
-    }
+    SCUI_ASSERT(false);
 }

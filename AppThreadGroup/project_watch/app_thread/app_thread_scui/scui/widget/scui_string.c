@@ -600,6 +600,18 @@ void scui_string_event(scui_event_t *event)
         }
         break;
     }
+    case scui_event_size_adjust:{
+        
+        /* 回收绘制缓存块 */
+        if (string->draw_surface != NULL) {
+            SCUI_MEM_FREE(string->draw_surface->pixel);
+            SCUI_MEM_FREE(string->draw_surface);
+            string->draw_surface = NULL;
+        }
+        string->args.update = true;
+        scui_widget_draw(handle, NULL, false);
+        break;
+    }
     case scui_event_font_change: {
         if (!scui_widget_event_check_execute(event))
              break;
