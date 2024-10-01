@@ -679,9 +679,7 @@ void scui_scroll_layout_update(scui_event_t *event)
         scui_widget_child_list_btra(widget, idx) {
             scui_handle_t handle = widget->child_list[idx];
             scui_widget_t *child = scui_handle_get(handle);
-            scui_area_t clip_inter = {0};
-            scui_area_merge(&clip_inter, &child->clip, &clip);
-            clip = clip_inter;
+            scui_area_merge2(&clip, &child->clip);
         }
         scui_area_t clip_widget = widget->clip;
         scui_area_m_to_s(&clip);

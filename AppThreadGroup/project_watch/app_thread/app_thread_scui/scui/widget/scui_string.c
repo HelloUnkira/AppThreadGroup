@@ -79,6 +79,12 @@ void scui_string_destroy(scui_handle_t handle)
     scui_string_args_process(&string->args);
     scui_string_update_str(handle, NULL);
     
+    /* 回收渐变序列 */
+    if (string->args.grad_s != NULL) {
+        SCUI_MEM_FREE(string->args.grad_s);
+        string->args.grad_s  = NULL;
+    }
+    
     /* 回收旧颜色值表 */
     if (string->args.colors != NULL) {
         SCUI_MEM_FREE(string->args.colors->index_ls);
@@ -93,12 +99,6 @@ void scui_string_destroy(scui_handle_t handle)
         SCUI_MEM_FREE(string->draw_surface->pixel);
         SCUI_MEM_FREE(string->draw_surface);
         string->draw_surface = NULL;
-    }
-    
-    /* 回收渐变序列 */
-    if (string->args.grad_s != NULL) {
-        SCUI_MEM_FREE(string->args.grad_s);
-        string->args.grad_s  = NULL;
     }
     
     /* 销毁基础控件实例 */
@@ -119,7 +119,6 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     scui_string_t *string = (void *)widget;
     
     /* 回收旧颜色值表 */
-    if (!string->args.recolor)
     if (string->args.colors != NULL) {
         SCUI_MEM_FREE(string->args.colors->index_ls);
         SCUI_MEM_FREE(string->args.colors->index_le);
@@ -159,13 +158,6 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         #endif
     }
     
-    /* 回收绘制缓存块 */
-    if (string->draw_surface != NULL) {
-        SCUI_MEM_FREE(string->draw_surface->pixel);
-        SCUI_MEM_FREE(string->draw_surface);
-        string->draw_surface = NULL;
-    }
-    
     string->args.update = true;
     scui_widget_draw(handle, NULL, false);
 }
@@ -202,13 +194,6 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
-    }
-    
-    /* 回收绘制缓存块 */
-    if (string->draw_surface != NULL) {
-        SCUI_MEM_FREE(string->draw_surface->pixel);
-        SCUI_MEM_FREE(string->draw_surface);
-        string->draw_surface = NULL;
     }
     
     string->args.update = true;
@@ -329,13 +314,6 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint3
     for (uint32_t idx = 0; idx < grad_n; idx++)
         string->args.grad_s[idx] = grad_s[idx];
     
-    /* 回收绘制缓存块 */
-    if (string->draw_surface != NULL) {
-        SCUI_MEM_FREE(string->draw_surface->pixel);
-        SCUI_MEM_FREE(string->draw_surface);
-        string->draw_surface = NULL;
-    }
-    
     string->args.update = true;
     scui_widget_draw(handle, NULL, false);
 }
@@ -448,6 +426,16 @@ void scui_string_event(scui_event_t *event)
         // 无绘制目标
         if (string->str_utf8 == NULL)
             break;
+        
+        if (string->args.update)
+        if (string->draw_cache) {
+            /* 回收绘制缓存块 */
+            if (string->draw_surface != NULL) {
+                SCUI_MEM_FREE(string->draw_surface->pixel);
+                SCUI_MEM_FREE(string->draw_surface);
+                string->draw_surface = NULL;
+            }
+        }
         
         string->args.name = string->name;
         string->args.utf8 = string->str_utf8;
@@ -601,13 +589,6 @@ void scui_string_event(scui_event_t *event)
         break;
     }
     case scui_event_size_adjust:{
-        
-        /* 回收绘制缓存块 */
-        if (string->draw_surface != NULL) {
-            SCUI_MEM_FREE(string->draw_surface->pixel);
-            SCUI_MEM_FREE(string->draw_surface);
-            string->draw_surface = NULL;
-        }
         string->args.update = true;
         scui_widget_draw(handle, NULL, false);
         break;

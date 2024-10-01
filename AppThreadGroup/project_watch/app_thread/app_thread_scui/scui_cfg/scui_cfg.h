@@ -111,7 +111,7 @@
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
-#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_rotate1)
+#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_cover)
 #define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
 
 /* 文字多行排版限制,可被分隔的字符 */

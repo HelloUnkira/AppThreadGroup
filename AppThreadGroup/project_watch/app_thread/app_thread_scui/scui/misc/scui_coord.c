@@ -166,6 +166,17 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
     }
 }
 
+/*@brief 求区域并集(area = area | area1)
+ *@param area  区域
+ *@param area1 区域
+ */
+void scui_area_merge2(scui_area_t *area, scui_area_t *area1)
+{
+    scui_area_t area_r = {0};
+    scui_area_merge(&area_r, area, area1);
+    *area = area_r;
+}
+
 /*@brief 求区域联合(area = area1 U area2)
  *       联合要求:区域互相平行或垂直
  *@param area  区域

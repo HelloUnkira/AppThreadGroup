@@ -55,13 +55,13 @@ void scui_frame_buffer_draw_wait(void)
     SCUI_LOG_INFO("draw wait start");
     bool refr_hold = false;
     do {
-        scui_mutex_process(&scui_frame_buffer.mutex, scui_mutex_take);
         #if SCUI_FRAME_BUFFER_ASYNC
-        refr_hold = scui_frame_buffer.refr_hold & (1 << scui_frame_buffer.draw_idx);
+        // refr_hold = scui_frame_buffer.refr_hold & (1 << scui_frame_buffer.draw_idx);
         #else
+        scui_mutex_process(&scui_frame_buffer.mutex, scui_mutex_take);
         refr_hold = scui_frame_buffer.refr_hold & (1 << 0);
-        #endif
         scui_mutex_process(&scui_frame_buffer.mutex, scui_mutex_give);
+        #endif
     } while (refr_hold);
     SCUI_LOG_INFO("draw wait over");
 }

@@ -189,6 +189,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 string_maker.widget.clip.h              = group_maker.widget.clip.h;
                 string_maker.args.align_hor             = 0;
                 string_maker.args.align_ver             = 2;
+                string_maker.draw_cache                 = 1;
                 string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
                 scui_string_create(&string_maker, &string_handle, false);
