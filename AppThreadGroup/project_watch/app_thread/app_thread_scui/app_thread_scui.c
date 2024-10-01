@@ -75,7 +75,7 @@ static void app_thread_scui_draw_test_anima_ready(void *anima)
 
 static void app_thread_scui_draw_test_anima_expired(void *anima)
 {
-    scui_surface_draw_routine(app_thread_scui_draw_test_routine);
+    scui_frame_buffer_refr_toggle(app_thread_scui_draw_test_routine);
     // APP_SYS_LOG_WARN("");
 }
 
@@ -112,7 +112,7 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
          */
         #if APP_EXT_DEV_GUI_IS_SCUI
         void app_dev_gui_disp_scui_flush(scui_surface_t *suface);
-        scui_surface_refr_routine(app_dev_gui_disp_scui_flush);
+        scui_frame_buffer_refr_routine(app_dev_gui_disp_scui_flush);
         #endif
     }
 }

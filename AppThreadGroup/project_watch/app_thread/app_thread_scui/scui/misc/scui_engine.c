@@ -23,7 +23,7 @@ void scui_engine_ready(void)
     scui_font_cache_ready();
     scui_font_glyph_cache_ready();
     
-    scui_surface_fb_ready();
+    scui_frame_buffer_ready();
 }
 
 /*@brief 引擎等待

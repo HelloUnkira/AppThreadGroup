@@ -93,8 +93,8 @@
 #define SCUI_HANDLE_SHARE_LIMIT                     ((scui_handle_t)512)
 #define SCUI_HANDLE_SHARE_OFFSET                    ((scui_handle_t)0x9FFF)
 
-/* 帧缓冲区数量(1或2) */
-#define SCUI_SURFACE_FB_LIMIT                       (2)
+/* 帧缓冲异步(同步:1块;异步:2块;) */
+#define SCUI_FRAME_BUFFER_ASYNC                     (1)
 
 /* 根控件背景外存直达画布(节约峰值内存) */
 #define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)

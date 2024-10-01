@@ -28,8 +28,8 @@
 #include "scui_event_mgr.h"     /* 事件管理器 */
 #include "scui_image.h"         /* 图像 */
 #include "scui_image_cache.h"   /* 图像缓存 */
-#include "scui_surface_fb.h"    /* 画布帧缓冲 */
-#include "scui_clip.h"          /* 画布剪切域 */
+#include "scui_frame_buffer.h"  /* 帧缓冲 */
+#include "scui_clip.h"          /* 剪切域 */
 /* device */
 #include "scui_engine.h"        /* 引擎 */
 #include "scui_indev.h"         /* 输入设备 */

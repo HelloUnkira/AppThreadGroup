@@ -189,7 +189,7 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
 {
-    scui_surface_t *surface_fb = scui_surface_fb_draw();
+    scui_surface_t *surface_fb = scui_frame_buffer_draw();
     
     int32_t idx = (int32_t)num - 1;
     for (idx = (int32_t)num - 1; idx >= 0; idx--) {
@@ -229,7 +229,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     
     /* 底图清空 */
     scui_color_t dst_pixel = {0};
-    scui_surface_t *dst_surface = scui_surface_fb_draw();
+    scui_surface_t *dst_surface = scui_frame_buffer_draw();
     scui_area_t dst_clip = scui_surface_area(dst_surface);
     scui_draw_dsc_t draw_dsc = {
         .area_fill.dst_surface = dst_surface,
@@ -301,7 +301,7 @@ void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         
         /* 当前窗口独立于管理之外时,直接渲染 */
         if (scui_widget_surface_only(widget) && window->hang_only) {
-            scui_surface_t *dst_surface = scui_surface_fb_draw();
+            scui_surface_t *dst_surface = scui_frame_buffer_draw();
             scui_surface_t *src_surface = widget->surface;
             scui_area_t dst_clip = scui_surface_area(dst_surface);
             scui_area_t src_clip = scui_surface_area(src_surface);
@@ -378,7 +378,7 @@ void scui_window_surface_blend(void)
     if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
         widget_only = list_lvl_0[list_lvl_0_ofs];
         
-        scui_surface_t *surface_fb = scui_surface_fb_draw();
+        scui_surface_t *surface_fb = scui_frame_buffer_draw();
         // 类型必须匹配才可交换
         if (widget_only->surface->format  == surface_fb->format  &&
             widget_only->surface->hor_res == surface_fb->hor_res &&

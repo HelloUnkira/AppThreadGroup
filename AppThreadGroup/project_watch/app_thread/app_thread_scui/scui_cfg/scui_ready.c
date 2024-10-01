@@ -28,7 +28,7 @@ void scui_ready(void)
     scui_coord_t surface_fb_remain = 0;
     scui_multi_t surface_fb_size   = 0;
     
-    surface_fb = scui_surface_fb_draw();
+    surface_fb = scui_frame_buffer_draw();
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
@@ -46,8 +46,8 @@ void scui_ready(void)
         };
         scui_draw_area_fill(&draw_dsc);
     };
-    #if SCUI_SURFACE_FB_LIMIT == 2
-    surface_fb = scui_surface_fb_refr();
+    #if SCUI_FRAME_BUFFER_ASYNC
+    surface_fb = scui_frame_buffer_refr();
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
     surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
     surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
