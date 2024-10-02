@@ -568,22 +568,30 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
 
 /*@brief 控件在画布绘制线条
  *@param handle     控件句柄
+ *@param target     控件绘制区域
  *@param draw_graph 绘制描述符实例
  */
-void scui_widget_draw_graph(scui_handle_t handle, scui_draw_graph_dsc_t *draw_graph)
+void scui_widget_draw_graph(scui_handle_t handle, scui_area_t *target,
+                            scui_draw_graph_dsc_t *draw_graph)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
-    if (scui_area_empty(&widget->clip_set.clip))
-        return;
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
+         return;
     
     scui_clip_btra(widget->clip_set, node) {
         scui_clip_unit_t *unit = scui_clip_unit(node);
         
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        
         draw_graph->dst_surface = widget->surface;
-        draw_graph->dst_clip    = &unit->clip;
+        draw_graph->dst_clip    = &dst_clip;
         draw_graph->src_alpha   = widget->alpha;
         scui_draw_graph(draw_graph);
     }

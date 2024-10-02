@@ -3,6 +3,7 @@
 
 // 快除 0xFF
 #define SCUI_DIV_U255(x)    (((x) * 0x8081U) >> 0x17)
+#define SCUI_DIV_0xFF(x)    (((x) * 0x8081U) >> 0x17)
 
 /*@brief 弧度角度转换
  *@param angle 角度

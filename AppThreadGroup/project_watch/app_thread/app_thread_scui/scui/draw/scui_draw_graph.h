@@ -156,6 +156,7 @@ typedef union {
 typedef enum {
     scui_draw_graph_type_none = 0,
     scui_draw_graph_type_line,
+    scui_draw_graph_type_circle,
 } scui_draw_graph_type_t;
 /*****************************************************************************/
 /*****************************************************************************/
@@ -168,14 +169,19 @@ typedef struct {
     scui_surface_t *dst_surface;    // 画布实例
     scui_area_t    *dst_clip;       // 画布绘制区域
     scui_alpha_t    src_alpha;      // 透明度
+    scui_color_t    src_color;      // 源色调
     union {
     /*************************************************************************/
     struct {
-        scui_color_t    src_color;      // 源色调
-        scui_coord_t    src_width;      // 线宽
-        scui_point_t    src_pos_1;      // 坐标点
-        scui_point_t    src_pos_2;      // 坐标点
+        scui_coord_t src_width;     // 线宽
+        scui_point_t src_pos_1;     // 坐标点
+        scui_point_t src_pos_2;     // 坐标点
     } line;
+    struct {
+        scui_coord_t src_width;     // 环宽(0或大于半径为填充圆)
+        scui_coord_t src_radius;    // 圆半径
+        scui_point_t src_center;    // 圆心点
+    } circle;
     /*************************************************************************/
     };
 } scui_draw_graph_dsc_t;
@@ -187,5 +193,42 @@ typedef struct {
  *@param draw_graph 绘制描述符实例
  */
 void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
+
+typedef enum {
+    scui_draw_circle_type_lt,    // left top
+    scui_draw_circle_type_lb,    // left bottom
+    scui_draw_circle_type_rt,    // right top
+    scui_draw_circle_type_rb,    // right bottm
+} scui_draw_circle_type_t;
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/* EmbeddedGUI: */
+#pragma pack(push, 1)
+typedef struct {
+    uint16_t offset;
+    uint16_t count;
+    uint16_t pixel;
+} scui_draw_circle_item_t;
+
+typedef struct {
+    uint16_t radius;
+    uint16_t count;
+    const uint8_t *data;
+    const scui_draw_circle_item_t *item;
+} scui_draw_circle_info_t;
+#pragma pack(pop)
+
+#define SCUI_DRAW_CIRCLE_RES_RANGE 500
+#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_HOR_RES
+#error "circle res is not enough"
+#endif
+#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_VER_RES
+#error "circle res is not enough"
+#endif
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 
 #endif

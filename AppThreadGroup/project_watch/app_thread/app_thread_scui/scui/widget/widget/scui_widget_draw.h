@@ -104,8 +104,10 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
 
 /*@brief 控件在画布绘制线条
  *@param handle     控件句柄
+ *@param target     控件绘制区域
  *@param draw_graph 绘制描述符实例
  */
-void scui_widget_draw_graph(scui_handle_t handle, scui_draw_graph_dsc_t *draw_graph);
+void scui_widget_draw_graph(scui_handle_t handle, scui_area_t *target,
+                            scui_draw_graph_dsc_t *draw_graph);
 
 #endif
