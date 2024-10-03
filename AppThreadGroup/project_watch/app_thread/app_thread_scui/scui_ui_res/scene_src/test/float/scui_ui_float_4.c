@@ -110,6 +110,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart2_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
             chart2_maker.widget.color.color.full = 0xFF4F4F4F;
             chart2_maker.type = scui_chart_type_line;
+            chart2_maker.line.edge = scui_image_prj_image_src_repeat_05_dotbmp;
             chart2_maker.line.width     = 2;
             chart2_maker.line.value_min = 60;
             chart2_maker.line.value_max = 220;

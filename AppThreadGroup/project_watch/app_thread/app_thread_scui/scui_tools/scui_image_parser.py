@@ -19,7 +19,7 @@ scui_image_offset_value = '0x2000 - 1'
 def scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
     rgb_0 = (r8_0 + g8_0 + b8_0) / 3
     rgb_1 = (r8_1 + g8_1 + b8_1) / 3
-    return int(rgb_0 / 16) + (int(rgb_1 / 16) << 4)
+    return (int(rgb_0 / 16) << 4) + int(rgb_1 / 16)
 
 
 # 生成pixel bmp565
@@ -141,7 +141,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
             image_std = PIL.Image.open(file).convert('RGBA')
         except Exception as e:
             print('image parse fail :', e)
-            continue
+            return
         # print(image_raw.size)       # 图片尺寸
         # print(image_raw.mode)       # 图片模式
         # print(image_raw.getbands())

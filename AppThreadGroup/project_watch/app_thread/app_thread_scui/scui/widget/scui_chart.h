@@ -22,7 +22,8 @@ typedef struct {
     scui_coord_t   *vlist_max;
 } scui_chart_histogram_data_t;
 
-typedef struct {
+typedef struct {                    /* 折线图 */
+    scui_handle_t   edge;           /* 边界点 */
     scui_coord_t    value_min;      /* 最小取值 */
     scui_coord_t    value_max;      /* 最大取值 */
     scui_point_t    offset;         /* 点起始偏移 */

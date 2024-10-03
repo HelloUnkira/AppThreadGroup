@@ -49,9 +49,9 @@ bool scui_widget_draw_empty(scui_handle_t handle)
 /*@brief 控件在画布绘制字符串
  *@param handle 控件句柄
  *@param target 控件绘制区域
- *@param args   字符串绘制参数(scui_string_args_t)
+ *@param args   字符串绘制参数
  */
-void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *args)
+void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_string_args_t *args)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -101,10 +101,10 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, void *ar
 
 /*@brief 控件在画布绘制纯色区域
  *@param handle 控件句柄
- *@param clip   绘制区域
+ *@param target 绘制区域
  *@param color  源色调
  */
-void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
+void scui_widget_draw_color(scui_handle_t handle, scui_area_t *target,
                             scui_color_t  color)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
@@ -112,7 +112,7 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
     SCUI_ASSERT(widget != NULL);
     
     // 绘制目标重定向
-    if (!scui_widget_draw_target(widget, &clip))
+    if (!scui_widget_draw_target(widget, &target))
          return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -120,7 +120,7 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &unit->clip, clip))
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
         scui_draw_dsc_t draw_dsc = {
@@ -135,11 +135,11 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *clip,
 
 /*@brief 控件在画布绘制渐变纯色区域
  *@param handle 控件句柄
- *@param clip   绘制区域
+ *@param target 绘制区域
  *@param color  源色调
  *@param way    渐变方向(0:hor;1:ver;)
  */
-void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
+void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *target,
                                  scui_color_t  color,  scui_coord_t way)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
@@ -147,7 +147,7 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
     SCUI_ASSERT(widget != NULL);
     
     // 绘制目标重定向
-    if (!scui_widget_draw_target(widget, &clip))
+    if (!scui_widget_draw_target(widget, &target))
          return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -155,14 +155,14 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *clip,
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &unit->clip, clip))
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
         scui_draw_dsc_t draw_dsc = {
             .area_fill_grad.dst_surface = widget->surface,
             .area_fill_grad.dst_clip    = &dst_clip,
             .area_fill_grad.src_color   = color,
-            .area_fill_grad.src_clip    = clip,
+            .area_fill_grad.src_clip    = target,
             .area_fill_grad.src_alpha   = widget->alpha,
             .area_fill_grad.src_way     = way,
         };

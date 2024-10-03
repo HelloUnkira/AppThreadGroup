@@ -237,9 +237,9 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         scui_color_wt_t a1 = scui_alpha_mix(c_1->ch.a, alpha_1);
         
         scui_color_wt_t as = 0xFF - scui_alpha_mix(0xFF - a2, 0xFF - a1);
-        scui_color_wt_t r  = SCUI_DIV_0xFF((uint16_t)c_1->ch.r * a1 * (0xFF - a2)) + SCUI_DIV_0xFF((uint16_t)c_2->ch.r * a2);
-        scui_color_wt_t g  = SCUI_DIV_0xFF((uint16_t)c_1->ch.g * a1 * (0xFF - a2)) + SCUI_DIV_0xFF((uint16_t)c_2->ch.g * a2);
-        scui_color_wt_t b  = SCUI_DIV_0xFF((uint16_t)c_1->ch.b * a1 * (0xFF - a2)) + SCUI_DIV_0xFF((uint16_t)c_2->ch.b * a2);
+        scui_color_wt_t r  = SCUI_DIV_0xFF((uint32_t)c_1->ch.r * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.r * a2);
+        scui_color_wt_t g  = SCUI_DIV_0xFF((uint32_t)c_1->ch.g * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.g * a2);
+        scui_color_wt_t b  = SCUI_DIV_0xFF((uint32_t)c_1->ch.b * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.b * a2);
         
         //去黑
         if (alpha_1 == 0xFF || a2 == 0x00)
