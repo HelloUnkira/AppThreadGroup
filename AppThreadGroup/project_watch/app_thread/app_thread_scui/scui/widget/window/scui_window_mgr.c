@@ -9,37 +9,28 @@
 
 scui_window_mgr_t scui_window_mgr = {0};
 
-/*@brief 窗口切换风格(配置)
- *@retval 窗口切换风格
- */
-scui_window_switch_type_t scui_window_switch_type_cfg_get(void)
-{
-    return scui_window_mgr.switch_args.cfg_type;
-}
-
-/*@brief 窗口切换方向(配置)
- *@retval 窗口切换方向
- */
-scui_opt_dir_t scui_window_switch_dir_cfg_get(void)
-{
-    return scui_window_mgr.switch_args.cfg_dir;
-}
-
-/*@brief 窗口切换风格(配置)
+/*@brief 窗口切换风格实例
  *@param switch_type 窗口切换风格
  */
-void scui_window_switch_type_cfg_set(scui_window_switch_type_t switch_type)
+void scui_window_switch_cfg_type(scui_window_switch_type_t **cfg_type)
 {
-    SCUI_ASSERT(switch_type != scui_window_switch_auto);
-    scui_window_mgr.switch_args.cfg_type = switch_type;
+    *cfg_type = &scui_window_mgr.switch_args.cfg_type;
 }
 
-/*@brief 窗口切换方向(配置)
- *@param switch_dir 窗口切换方向
+/*@brief 窗口切换参数实例
+ *@param cfg_args 实例
  */
-void scui_window_switch_dir_cfg_set(scui_opt_dir_t switch_dir)
+void scui_window_switch_cfg_args(scui_window_switch_args_t **cfg_args)
 {
-    scui_window_mgr.switch_args.cfg_dir = switch_dir;
+    *cfg_args = &scui_window_mgr.switch_args.cfg_args;
+}
+
+/*@brief 窗口切换方向实例
+ *@param cfg_dir 窗口切换方向
+ */
+void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir)
+{
+    *cfg_dir = &scui_window_mgr.switch_args.cfg_dir;
 }
 
 /*@brief 窗口管理器根控件列表
@@ -113,7 +104,7 @@ void scui_window_list_del(scui_handle_t handle)
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
+static void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
 {
     /* 要用稳定排序,这里使用冒泡排序 */
     for (scui_handle_t idx_i = 0; idx_i < num; idx_i++)
@@ -187,7 +178,7 @@ void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
  *@param num  根控件数量
  *@param ofs  根控件偏移
  */
-void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
+static void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs)
 {
     scui_surface_t *surface_fb = scui_frame_buffer_draw();
     
@@ -214,8 +205,11 @@ void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handl
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
+static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
+    SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type > scui_window_switch_single_s);
+    SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type < scui_window_switch_single_e);
+    
     bool mode_simple = false;
     /* 1.单一窗口直接渲染 */
     mode_simple = mode_simple || num == 1;
@@ -290,7 +284,7 @@ void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
+static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
 {
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t *widget = list[idx];

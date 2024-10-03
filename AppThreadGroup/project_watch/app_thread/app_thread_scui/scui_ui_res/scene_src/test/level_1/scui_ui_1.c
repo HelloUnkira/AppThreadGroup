@@ -45,7 +45,9 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         
         SCUI_ASSERT(switch_type > scui_window_switch_single_s);
         SCUI_ASSERT(switch_type < scui_window_switch_single_e);
-        scui_window_switch_type_cfg_set(switch_type);
+        scui_window_switch_type_t *cfg_type = NULL;
+        scui_window_switch_cfg_type(&cfg_type);
+        *cfg_type = switch_type;
         
         scui_widget_event_mask_over(event);
         break;

@@ -77,7 +77,7 @@ bool scui_window_float_running(void)
  *@param handle 窗口控件句柄
  *@param point  窗口移动坐标
  */
-void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point)
+static void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
@@ -110,14 +110,14 @@ void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point
 
 /*@brief 窗口浮动动画回调
  */
-void scui_window_float_anima_start(void *instance)
+static void scui_window_float_anima_start(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 窗口浮动动画回调
  */
-void scui_window_float_anima_ready(void *instance)
+static void scui_window_float_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t *anima  = instance;
@@ -154,7 +154,7 @@ void scui_window_float_anima_ready(void *instance)
 
 /*@brief 窗口浮动动画回调
  */
-void scui_window_float_anima_expired(void *instance)
+static void scui_window_float_anima_expired(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t *anima  = instance;
@@ -173,7 +173,7 @@ void scui_window_float_anima_expired(void *instance)
 
 /*@brief 窗口浮动动画自动化
  */
-void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid)
+static void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid)
 {
     scui_anima_t anima = {0};
     anima.start   = scui_window_float_anima_start;
@@ -205,7 +205,7 @@ void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t per
  *@param handle 窗口句柄
  *@param inout  true:进入;false:退出;
  */
-void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
+static void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
 {
     scui_coord_t hor_res = scui_disp_get_hor_res();
     scui_coord_t ver_res = scui_disp_get_ver_res();

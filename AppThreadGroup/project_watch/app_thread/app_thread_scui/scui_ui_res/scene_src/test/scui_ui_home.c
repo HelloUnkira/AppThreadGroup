@@ -34,9 +34,9 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         if (event->key_id != scui_event_key_val_enter)
             break;
         
-        scui_window_switch_type_t switch_type = 0;
-        switch_type = scui_window_switch_type_cfg_get();
-        
+        scui_window_switch_type_t *cfg_type = NULL;
+        scui_window_switch_cfg_type(&cfg_type);
+        scui_window_switch_type_t switch_type = *cfg_type;
         static scui_ui_scene_list_type_t type = 0;
         type++;
         

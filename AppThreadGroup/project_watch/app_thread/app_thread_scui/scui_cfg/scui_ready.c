@@ -101,8 +101,17 @@ void scui_ready(void)
     scui_font_name_set(SCUI_FONT_TYPE_ZH);
     
     /* 窗口交互风格 */
-    scui_window_switch_dir_cfg_set(SCUI_WINDOW_MGR_JUMP_DIR);
-    scui_window_switch_type_cfg_set(SCUI_WINDOW_MGR_TYPE_CFG);
+    scui_window_switch_type_t *cfg_type = NULL;
+    scui_window_switch_cfg_type(&cfg_type);
+    *cfg_type = SCUI_WINDOW_MGR_TYPE_CFG;
+    scui_opt_dir_t *cfg_dir = NULL;
+    scui_window_switch_cfg_dir(&cfg_dir);
+    *cfg_dir  = SCUI_WINDOW_MGR_JUMP_DIR;
+    
+    /* 窗口交互参数 */
+    scui_window_switch_args_t *cfg_args = NULL;
+    scui_window_switch_cfg_args(&cfg_args);
+    cfg_args->cube.shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
     
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);

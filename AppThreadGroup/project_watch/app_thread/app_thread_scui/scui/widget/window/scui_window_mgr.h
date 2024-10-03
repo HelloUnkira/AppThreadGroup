@@ -26,11 +26,18 @@ typedef enum {
     scui_window_switch_single_e,
 } scui_window_switch_type_t;
 
+typedef union {
+    struct {
+        scui_handle_t shadow;
+    } cube;
+} scui_window_switch_args_t;
+
 typedef struct {
     scui_handle_t             list[SCUI_WINDOW_MGR_LIMIT];
-    scui_opt_dir_t            cfg_dir;      /* 窗口切换方向(配置) */
-    scui_window_switch_type_t cfg_type;     /* 窗口切换风格(配置) */
     scui_window_switch_type_t type;         /* 窗口切换风格(当前) */
+    scui_window_switch_type_t cfg_type;     /* 窗口切换风格(配置) */
+    scui_window_switch_args_t cfg_args;     /* 窗口切换参数(配置) */
+    scui_opt_dir_t            cfg_dir;      /* 窗口切换方向(配置) */
     scui_opt_dir_t            dir;          /* 窗口切换方向(当前) */
     scui_opt_pos_t            pos;          /* 窗口切换位置(当前) */
     scui_handle_t             key;          /* 窗口切换全局锁 */
@@ -55,25 +62,20 @@ typedef struct {
     /*  */
 } scui_window_mgr_t;
 
-/*@brief 窗口切换风格(配置)
- *@retval 窗口切换风格
- */
-scui_window_switch_type_t scui_window_switch_type_cfg_get(void);
-
-/*@brief 窗口切换方向(配置)
- *@retval 窗口切换方向
- */
-scui_opt_dir_t scui_window_switch_dir_cfg_get(void);
-
-/*@brief 窗口切换风格(配置)
+/*@brief 窗口切换风格实例
  *@param switch_type 窗口切换风格
  */
-void scui_window_switch_type_cfg_set(scui_window_switch_type_t switch_type);
+void scui_window_switch_cfg_type(scui_window_switch_type_t **cfg_type);
 
-/*@brief 窗口切换方向(配置)
- *@param switch_dir 窗口切换方向
+/*@brief 窗口切换参数实例
+ *@param cfg_args 实例
  */
-void scui_window_switch_dir_cfg_set(scui_opt_dir_t switch_dir);
+void scui_window_switch_cfg_args(scui_window_switch_args_t **cfg_args);
+
+/*@brief 窗口切换方向实例
+ *@param cfg_dir 窗口切换方向
+ */
+void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir);
 
 /*@brief 窗口管理器根控件列表
  *@param list 根控件列表
@@ -94,35 +96,6 @@ void scui_window_list_add(scui_handle_t handle);
  *@param handle 窗口句柄
  */
 void scui_window_list_del(scui_handle_t handle);
-
-/*@brief 窗口管理器排序根控件列表
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_window_list_sort(scui_widget_t **list, scui_handle_t num);
-
-/*@brief 窗口管理器过滤根控件列表
- *@param list 根控件列表
- *@param num  根控件数量
- *@param ofs  根控件偏移
- */
-void scui_window_list_filter(scui_widget_t **list, scui_handle_t num, scui_handle_t *ofs);
-
-/*@brief 窗口管理器混合根控件列表
- *       将所有根控件画布混合到绘制画布上
- *       窗口管理器会有特殊的处理
- *       用于处理画布级别特效流程
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_window_list_blend(scui_widget_t **list, scui_handle_t num);
-
-/*@brief 窗口管理器渲染根控件列表
- *       将所有根控件渲染到绘制画布上
- *@param list 根控件列表
- *@param num  根控件数量
- */
-void scui_window_list_render(scui_widget_t **list, scui_handle_t num);
 
 /*@brief 窗口管理器混合画布
  *       将所有独立画布混合到绘制画布上

@@ -31,34 +31,6 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg);
  */
 bool scui_window_float_running(void);
 
-/*@brief 窗口移动伴随透明度更新
- *@param handle 窗口控件句柄
- *@param point  窗口移动坐标
- */
-void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point);
-
-/*@brief 窗口浮动动画回调
- */
-void scui_window_float_anima_start(void *instance);
-
-/*@brief 窗口浮动动画回调
- */
-void scui_window_float_anima_ready(void *instance);
-
-/*@brief 窗口浮动动画回调
- */
-void scui_window_float_anima_expired(void *instance);
-
-/*@brief 窗口浮动动画自动化
- */
-void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid);
-
-/*@brief 窗口浮动动画回调
- *@param handle 窗口句柄
- *@param inout  true:进入;false:退出;
- */
-void scui_window_float_anima_inout(scui_handle_t handle, bool inout);
-
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
  */

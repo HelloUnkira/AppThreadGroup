@@ -16,7 +16,7 @@ extern scui_window_mgr_t scui_window_mgr;
  *@param src_clip 控件画布剪切域
  *@retval 有效或无效
  */
-bool scui_window_transform_clip(scui_widget_t *widget, scui_area_t *dst_clip, scui_area_t *src_clip)
+static bool scui_window_transform_clip(scui_widget_t *widget, scui_area_t *dst_clip, scui_area_t *src_clip)
 {
     scui_surface_t *dst_surface = scui_frame_buffer_draw();
     scui_surface_t *src_surface = widget->surface;
@@ -956,5 +956,37 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
             .area_blit_by_matrix.src_matrix  = &src_matrix,
         };
         scui_draw_area_blit_by_matrix(&draw_dsc);
+        
+        #if 1   // 光影特效
+        scui_coord_t pct = 0;
+        if (list[idx]->myself == scui_window_mgr.active_curr)
+            pct = 100 - scui_window_mgr.switch_args.pct;
+        if (list[idx]->myself != scui_window_mgr.active_curr)
+            pct = scui_window_mgr.switch_args.pct;
+        
+        scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.cube.shadow;
+        scui_image_t *shadow = scui_handle_get(handle);
+        SCUI_ASSERT(shadow != NULL);
+        size2.w = scui_image_w(handle) / 2;
+        size2.h = scui_image_h(handle);
+        scui_matrix_affine_blit(&inv_matrix, &size2, &face);
+        src_clip.w = size2.w;
+        src_clip.h = size2.h;
+        src_clip.x = pct * size2.w / 100;
+        src_clip.y = 0;
+        src_matrix = inv_matrix;
+        scui_matrix_inverse(&inv_matrix);
+        
+        scui_draw_dsc_t draw_image_dsc = {
+            .image_blit_by_matrix.dst_surface = dst_surface,
+            .image_blit_by_matrix.dst_clip    = &dst_clip,
+            .image_blit_by_matrix.src_image   = shadow,
+            .image_blit_by_matrix.src_clip    = &src_clip,
+            .image_blit_by_matrix.src_alpha   = scui_alpha_pct50,
+            .image_blit_by_matrix.inv_matrix  = &inv_matrix,
+            .image_blit_by_matrix.src_matrix  = &src_matrix,
+        };
+        scui_draw_image_blit_by_matrix(&draw_image_dsc);
+        #endif
     }
 }
