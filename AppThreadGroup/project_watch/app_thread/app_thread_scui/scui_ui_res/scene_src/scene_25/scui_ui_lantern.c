@@ -9,18 +9,19 @@
 
 static struct {
     scui_handle_t  num;
-    scui_handle_t *image;       // 面图标
-    scui_matrix_t *matrix;      // 投影矩阵
-    scui_handle_t *image_s;     // 面图标
-    scui_matrix_t *matrix_s;    // 投影矩阵
-    scui_coord_t   w_res;       // 水平宽度
-    scui_coord_t   h_res;       // 垂直宽度
-    scui_coord_t   y_ofs;       // 垂直偏转
-    scui_coord_t   x_span;      // 水平间隙
-    scui_coord_t   scale_c;     // 整体缩放
-    scui_coord_t   angle_a;     // 单位角度
-    scui_coord_t   rotate_y;    // 旋转角度
-    bool           move_lock;   // 移动锁
+    scui_handle_t *image;           // 面图标
+    scui_matrix_t *matrix;          // 投影矩阵
+    scui_matrix_t *matrix_inv;      // 投影矩阵(倒影)
+    scui_matrix_t *matrix_s;        // 投影矩阵
+    scui_matrix_t *matrix_inv_s;    // 投影矩阵
+    scui_handle_t *image_s;         // 面图标
+    scui_coord_t   w_res;           // 水平宽度
+    scui_coord_t   h_res;           // 垂直宽度
+    scui_coord_t   x_span;          // 水平间隙
+    scui_coord_t   scale_c;         // 整体缩放
+    scui_coord_t   angle_a;         // 单位角度
+    scui_coord_t   rotate_y;        // 旋转角度
+    bool           move_lock;       // 移动锁
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -50,11 +51,13 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
             
             scui_ui_res_local->num = 6;
             scui_handle_t num = scui_ui_res_local->num;
-            scui_ui_res_local->image    = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
-            scui_ui_res_local->matrix   = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->image_s  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
-            scui_ui_res_local->matrix_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->angle_a  = 360 / scui_ui_res_local->num;
+            scui_ui_res_local->image        = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
+            scui_ui_res_local->matrix       = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_inv   = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_s     = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_inv_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->image_s      = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
+            scui_ui_res_local->angle_a      = 360 / scui_ui_res_local->num;
             SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
             
             scui_ui_res_local->image[0] = scui_image_prj_image_src_home_watch_D10604001_preview_01_1bmp;
@@ -64,10 +67,9 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
             scui_ui_res_local->image[4] = scui_image_prj_image_src_home_watch_D10602001_preview_01_1jpg;
             scui_ui_res_local->image[5] = scui_image_prj_image_src_home_watch_D10603001_preview_01_1jpg;
             
-            scui_ui_res_local->w_res = 382;
-            scui_ui_res_local->h_res = 298;
-            scui_ui_res_local->y_ofs = 100;
-            scui_ui_res_local->x_span = 0;
+            scui_ui_res_local->w_res   = scui_image_w(scui_ui_res_local->image[0]);
+            scui_ui_res_local->h_res   = scui_image_h(scui_ui_res_local->image[0]);
+            scui_ui_res_local->x_span  = 0;
             scui_ui_res_local->scale_c = 1024;
         }
         break;
@@ -77,8 +79,10 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
-            SCUI_MEM_FREE(scui_ui_res_local->matrix_s);
             SCUI_MEM_FREE(scui_ui_res_local->image_s);
+            SCUI_MEM_FREE(scui_ui_res_local->matrix_inv_s);
+            SCUI_MEM_FREE(scui_ui_res_local->matrix_s);
+            SCUI_MEM_FREE(scui_ui_res_local->matrix_inv);
             SCUI_MEM_FREE(scui_ui_res_local->matrix);
             SCUI_MEM_FREE(scui_ui_res_local->image);
             SCUI_MEM_FREE(scui_ui_res_local);
@@ -116,7 +120,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         static int32_t resize_step = 0;
         static int16_t resize_way  = 1;
         resize_step += 1 * resize_way;
-        if (!scui_betw_lr(resize_step, -512, 512))
+        if (!scui_betw_lr(resize_step, -256, 256))
              resize_way = -resize_way;
         
         scui_ui_res_local->scale_c  += resize_way;
@@ -138,8 +142,8 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             scui_area_t clip = scui_widget_clip(event->object);
             scui_point3_t offset = {
                 .x = clip.x + clip.w / 2,
-                .y = clip.y + clip.h / 2 + scui_ui_res_local->y_ofs,
-                .z = -2.0f * z_res,
+                .y = clip.y + clip.h / 2 + clip.h / 3,
+                .z = -8.0f * z_res,
             };
             
             scui_view3_t view3 = {
@@ -161,35 +165,59 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                     .point3[2] = {(+w_res / 2 - x_span) * scale_c, (+h_res / 2) * scale_c, z_res * scale_c,},
                     .point3[3] = {(-w_res / 2 + x_span) * scale_c, (+h_res / 2) * scale_c, z_res * scale_c,},
                 };
+                // 交换0-3,1-2以倒位面, 后y移动h
+                scui_face3_t face3_inv = {
+                    .point3[0] = face3.point3[3],
+                    .point3[1] = face3.point3[2],
+                    .point3[2] = face3.point3[1],
+                    .point3[3] = face3.point3[0],
+                };
+                face3_inv.point3[0].y += h_res * scale_c;
+                face3_inv.point3[1].y += h_res * scale_c;
+                face3_inv.point3[2].y += h_res * scale_c;
+                face3_inv.point3[3].y += h_res * scale_c;
                 
                 scui_point3_transform_by_matrix(&face3.point3[0], &r_matrix);
                 scui_point3_transform_by_matrix(&face3.point3[1], &r_matrix);
                 scui_point3_transform_by_matrix(&face3.point3[2], &r_matrix);
                 scui_point3_transform_by_matrix(&face3.point3[3], &r_matrix);
-                
                 scui_point3_offset(&face3.point3[0], &offset);
                 scui_point3_offset(&face3.point3[1], &offset);
                 scui_point3_offset(&face3.point3[2], &offset);
                 scui_point3_offset(&face3.point3[3], &offset);
                 
+                scui_point3_transform_by_matrix(&face3_inv.point3[0], &r_matrix);
+                scui_point3_transform_by_matrix(&face3_inv.point3[1], &r_matrix);
+                scui_point3_transform_by_matrix(&face3_inv.point3[2], &r_matrix);
+                scui_point3_transform_by_matrix(&face3_inv.point3[3], &r_matrix);
+                scui_point3_offset(&face3_inv.point3[0], &offset);
+                scui_point3_offset(&face3_inv.point3[1], &offset);
+                scui_point3_offset(&face3_inv.point3[2], &offset);
+                scui_point3_offset(&face3_inv.point3[3], &offset);
+                
                 /* 透视变换矩阵 */
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
+                scui_matrix_t *matrix_inv = scui_ui_res_local->matrix_inv;
                 scui_image_t *image = scui_handle_get(scui_ui_res_local->image[idx]);
                 SCUI_ASSERT(image != NULL);
                 
                 scui_size2_t size2 = {.w = image->pixel.width,.h = image->pixel.height,};
                 scui_matrix_perspective_view_blit(&matrix[idx], &size2, &face3, &view3);
+                scui_matrix_perspective_view_blit(&matrix_inv[idx], &size2, &face3_inv, &view3);
             }
             
             /* 通过矩阵的y平移参数进行排序 */
-            scui_handle_t *image    = scui_ui_res_local->image;
-            scui_matrix_t *matrix   = scui_ui_res_local->matrix;
-            scui_handle_t *image_s  = scui_ui_res_local->image_s;
-            scui_matrix_t *matrix_s = scui_ui_res_local->matrix_s;
+            scui_handle_t *image        = scui_ui_res_local->image;
+            scui_matrix_t *matrix       = scui_ui_res_local->matrix;
+            scui_matrix_t *matrix_inv   = scui_ui_res_local->matrix_inv;
+            scui_handle_t *image_s      = scui_ui_res_local->image_s;
+            scui_matrix_t *matrix_s     = scui_ui_res_local->matrix_s;
+            scui_matrix_t *matrix_inv_s = scui_ui_res_local->matrix_inv_s;
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
-                image_s[idx]  = image[idx];
-                matrix_s[idx] = matrix[idx];
+                image_s[idx]      = image[idx];
+                matrix_s[idx]     = matrix[idx];
+                matrix_inv_s[idx] = matrix_inv[idx];
             }
             
             for (uint8_t idx_i = 0; idx_i < scui_ui_res_local->num; idx_i++)
@@ -203,11 +231,16 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                     scui_matrix_t matrix_j = matrix_s[idx_j];
                     matrix_s[idx_i] = matrix_j;
                     matrix_s[idx_j] = matrix_i;
+                    scui_matrix_t matrix_inv_i = matrix_inv_s[idx_i];
+                    scui_matrix_t matrix_inv_j = matrix_inv_s[idx_j];
+                    matrix_inv_s[idx_i] = matrix_inv_j;
+                    matrix_inv_s[idx_j] = matrix_inv_i;
                 }
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 // scui_matrix_check(&matrix_s[idx]);
                 scui_matrix_inverse(&matrix_s[idx]);
+                scui_matrix_inverse(&matrix_inv_s[idx]);
             }
         }
         
@@ -217,9 +250,15 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < 6; idx++) {
                 
-                scui_handle_t *image  = scui_ui_res_local->image_s;
-                scui_matrix_t *matrix = scui_ui_res_local->matrix_s;
+                scui_handle_t *image      = scui_ui_res_local->image_s;
+                scui_matrix_t *matrix     = scui_ui_res_local->matrix_s;
+                scui_matrix_t *matrix_inv = scui_ui_res_local->matrix_inv_s;
                 scui_widget_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
+                
+                scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+                scui_widget_alpha_set(event->object, scui_alpha_pct50, false);
+                scui_widget_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix_inv[idx]);
+                scui_widget_alpha_set(event->object, alpha, false);
             }
         }
         break;

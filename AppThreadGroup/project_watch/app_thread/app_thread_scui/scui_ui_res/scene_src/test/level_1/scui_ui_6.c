@@ -171,8 +171,8 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
         scui_draw_graph_dsc_t draw_graph = {
             .type                = scui_draw_graph_type_circle,
             .src_color           = color_mix,
-            .circle.src_width    = 40,
-            .circle.src_radius   = 40,
+            .circle.src_width    = clip.w / 2,
+            .circle.src_radius   = clip.w / 2,
             .circle.src_center.x = clip.x + clip.w / 2,
             .circle.src_center.y = clip.y + clip.h / 2,
         };
@@ -216,12 +216,41 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
             .type                = scui_draw_graph_type_circle,
             .src_color           = color_mix,
             .circle.src_width    = 2,
-            .circle.src_radius   = 40,
+            .circle.src_radius   = clip.w / 2,
             .circle.src_center.x = clip.x + clip.w / 2,
             .circle.src_center.y = clip.y + clip.h / 2,
         };
-        
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        
+        scui_area_t widget_clip = clip;
+        widget_clip = clip;
+        widget_clip.w /= 4;
+        widget_clip.h /= 4;
+        draw_graph.circle.src_radius = clip.w / 4 - 5;
+        
+        draw_graph.circle.src_center.x = clip.x + clip.w / 2 - clip.w / 8;
+        draw_graph.circle.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
+        widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
+        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        
+        draw_graph.circle.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
+        draw_graph.circle.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
+        widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
+        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        
+        draw_graph.circle.src_center.x = clip.x + clip.w / 2 - clip.w / 8;
+        draw_graph.circle.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
+        widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
+        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        
+        draw_graph.circle.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
+        draw_graph.circle.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
+        widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
+        widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
+        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
         
         break;
     }
@@ -236,9 +265,25 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_6_4_event_proc(scui_event_t *event)
 {
+    static uint16_t cnt = 0;
+    static uint16_t rnd = 1;
+    static uint16_t tick = 1000 / SCUI_ANIMA_TICK;
+    static scui_coord_t src_angle_s = 0;
+    static scui_coord_t src_angle_e = 30;
+    
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        
+        cnt++;
+        if (cnt >  tick) {
+            cnt -= tick;
+            rnd ++;
+        }
+        
+        src_angle_s = scui_map(cnt, 0, tick, 0, 360);
+        src_angle_e = src_angle_s + rnd * 30;
+        scui_widget_draw(event->object, NULL, false);
+        
         break;
     case scui_event_draw: {
         if (!scui_widget_event_check_execute(event))
@@ -257,46 +302,17 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
             .color.full = 0xFF00FF00,
         };
         scui_draw_graph_dsc_t draw_graph = {
-            .type                = scui_draw_graph_type_circle,
-            .src_color           = color_mix,
-            .circle.src_width    = 2,
-            .circle.src_radius   = 20,
-            .circle.src_center.x = clip.x + clip.w / 2,
-            .circle.src_center.y = clip.y + clip.h / 2,
+            .type             = scui_draw_graph_type_arc,
+            .src_color        = color_mix,
+            .arc.src_width    = clip.w / 2 - 10,
+            .arc.src_radius   = clip.w / 2 - 10,
+            .arc.src_center.x = clip.x + clip.w / 2,
+            .arc.src_center.y = clip.y + clip.h / 2,
+            .arc.src_angle_s  = src_angle_s,
+            .arc.src_angle_e  = src_angle_e,
         };
-        scui_area_t widget_clip = clip;
-        
-        widget_clip = clip;
-        widget_clip.w /= 4;
-        widget_clip.h /= 4;
-        draw_graph.circle.src_center.x = clip.x + clip.w / 4;
-        draw_graph.circle.src_center.y = clip.y + clip.h / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
-        
-        widget_clip = clip;
-        widget_clip.w /= 4;
-        widget_clip.h /= 4;
-        widget_clip.x += clip.w * 3 / 4;
-        draw_graph.circle.src_center.x = clip.x + clip.w * 3 / 4;
-        draw_graph.circle.src_center.y = clip.y + clip.h / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
-        
-        widget_clip = clip;
-        widget_clip.w /= 4;
-        widget_clip.h /= 4;
-        widget_clip.y += clip.h * 3 / 4;
-        draw_graph.circle.src_center.x = clip.x + clip.w / 4;
-        draw_graph.circle.src_center.y = clip.y + clip.h * 3 / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
-        
-        widget_clip = clip;
-        widget_clip.w /= 4;
-        widget_clip.h /= 4;
-        widget_clip.x += clip.w * 3 / 4;
-        widget_clip.y += clip.h * 3 / 4;
-        draw_graph.circle.src_center.x = clip.x + clip.w * 3 / 4;
-        draw_graph.circle.src_center.y = clip.y + clip.h * 3 / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
+        scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;
     }
@@ -311,9 +327,25 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_6_5_event_proc(scui_event_t *event)
 {
+    static uint16_t cnt = 0;
+    static uint16_t rnd = 1;
+    static uint16_t tick = 1000 / SCUI_ANIMA_TICK;
+    static scui_coord_t src_angle_s = 0;
+    static scui_coord_t src_angle_e = 30;
+    
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        
+        cnt++;
+        if (cnt >  tick) {
+            cnt -= tick;
+            rnd ++;
+        }
+        
+        src_angle_s = scui_map(cnt, 0, tick, 0, 360);
+        src_angle_e = src_angle_s + rnd * 30;
+        scui_widget_draw(event->object, NULL, false);
+        
         break;
     case scui_event_draw: {
         if (!scui_widget_event_check_execute(event))
@@ -327,6 +359,22 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
         clip.w -= 10 * 2;
         clip.h -= 10 * 2;
         scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_color_t color_mix = {
+            .color.full = 0xFF00FF00,
+        };
+        scui_draw_graph_dsc_t draw_graph = {
+            .type             = scui_draw_graph_type_arc,
+            .src_color        = color_mix,
+            .arc.src_width    = 2,
+            .arc.src_radius   = clip.w / 2 - 10,
+            .arc.src_center.x = clip.x + clip.w / 2,
+            .arc.src_center.y = clip.y + clip.h / 2,
+            .arc.src_angle_s  = src_angle_s,
+            .arc.src_angle_e  = src_angle_e,
+        };
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
+        scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;
     }

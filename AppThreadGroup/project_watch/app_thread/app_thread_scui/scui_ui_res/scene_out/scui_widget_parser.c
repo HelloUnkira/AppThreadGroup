@@ -919,6 +919,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_1 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -931,6 +932,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_2 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -943,6 +945,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_3 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -955,6 +958,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_3 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_4 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -967,6 +971,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_4 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_5 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -979,6 +984,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_5 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_6 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -991,6 +997,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_6 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_7 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 9 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -1003,6 +1010,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_7 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_8 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 9 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -1015,6 +1023,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_8 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 9 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,

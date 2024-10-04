@@ -13,6 +13,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 1 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 1 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -24,6 +25,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 5 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 1 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -35,6 +37,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 9 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 1 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -46,6 +49,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 1 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 5 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -57,6 +61,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 5 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 5 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -68,6 +73,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 9 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 5 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -79,6 +85,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 1 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 9 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -90,6 +97,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 5 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 9 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",
@@ -101,6 +109,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_DRV_HOR_RES * 9 / 13",
             "widget.clip.y":                "SCUI_DRV_VER_RES * 9 / 13",
             "widget.clip.w":                "SCUI_DRV_HOR_RES * 3 / 13",

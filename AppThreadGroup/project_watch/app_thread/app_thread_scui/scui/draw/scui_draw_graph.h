@@ -157,6 +157,7 @@ typedef enum {
     scui_draw_graph_type_none = 0,
     scui_draw_graph_type_line,
     scui_draw_graph_type_circle,
+    scui_draw_graph_type_arc,
 } scui_draw_graph_type_t;
 /*****************************************************************************/
 /*****************************************************************************/
@@ -182,6 +183,13 @@ typedef struct {
         scui_coord_t src_radius;    // 圆半径
         scui_point_t src_center;    // 圆心点
     } circle;
+    struct {
+        scui_coord_t src_width;     // 弧环宽
+        scui_coord_t src_radius;    // 弧圆半径
+        scui_point_t src_center;    // 弧圆心点
+        scui_coord_t src_angle_s;   // 起始角度
+        scui_coord_t src_angle_e;   // 结束角度
+    } arc;
     /*************************************************************************/
     };
 } scui_draw_graph_dsc_t;
@@ -194,16 +202,12 @@ typedef struct {
  */
 void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
 
-typedef enum {
-    scui_draw_circle_type_lt,    // left top
-    scui_draw_circle_type_lb,    // left bottom
-    scui_draw_circle_type_rt,    // right top
-    scui_draw_circle_type_rb,    // right bottm
-} scui_draw_circle_type_t;
-
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+/* EmbeddedGUI: */
+#define SCUI_DRAW_GRAPH_USE_EGUI    1
+#if     SCUI_DRAW_GRAPH_USE_EGUI
 /* EmbeddedGUI: */
 #pragma pack(push, 1)
 typedef struct {
@@ -220,12 +224,9 @@ typedef struct {
 } scui_draw_circle_info_t;
 #pragma pack(pop)
 
-#define SCUI_DRAW_CIRCLE_RES_RANGE 500
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_HOR_RES
-#error "circle res is not enough"
-#endif
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_VER_RES
-#error "circle res is not enough"
+#define SCUI_DRAW_CIRCLE_RES_RANGE  500
+#else
+#define SCUI_DRAW_CIRCLE_RES_RANGE  10000
 #endif
 /*****************************************************************************/
 /*****************************************************************************/
