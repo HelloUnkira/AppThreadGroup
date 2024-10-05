@@ -151,6 +151,9 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
                 string_maker.args.color.color_e.full    = 0xFF808080;
                 string_maker.args.color.filter          = true;
                 string_maker.args.name                  = SCUI_FONT_TYPE_16_ASCII;
+                string_maker.args.line_width            = 1;
+                string_maker.args.line_under            = 1;
+                string_maker.args.line_delete           = 1;
                 
                 string_maker.widget.clip.x              = 10;
                 string_maker.widget.clip.y              = 50;

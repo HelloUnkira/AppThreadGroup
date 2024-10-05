@@ -85,7 +85,7 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
              
              if (src_args->align_hor == 0);
              if (src_args->align_hor == 1)
-                 offset_line.x += src_clip_v.w - line_w;
+                 offset_line.x += (src_clip_v.w - line_w);
              if (src_args->align_hor == 2)
                  offset_line.x += (src_clip_v.w - line_w) / 2;
              
@@ -187,7 +187,11 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
             
             /* 下划线和删除线 */
             line_point_e = offset_line;
-            if (src_args->line_delete) {
+            if (src_args->line_delete || src_args->line_under) {
+                line_point_s.x += dst_clip->x;
+                line_point_s.y += dst_clip->y;
+                line_point_e.x += dst_clip->x;
+                line_point_e.y += dst_clip->y;
                 scui_draw_graph_dsc_t draw_graph = {
                     .type           = scui_draw_graph_type_line,
                     .dst_surface    = dst_surface,
@@ -196,26 +200,26 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
                     .src_color      = src_args->color,
                     .line.src_width = src_args->line_width,
                 };
-                draw_graph.line.src_pos_1.x = line_point_s.x;
-                draw_graph.line.src_pos_1.y = line_point_s.y + (line_height - src_args->line_width) / 2;
-                draw_graph.line.src_pos_2.x = line_point_e.x;
-                draw_graph.line.src_pos_2.y = line_point_e.y + (line_height - src_args->line_width) / 2;
-                scui_draw_graph(&draw_graph);
-            }
-            if (src_args->line_under) {
-                scui_draw_graph_dsc_t draw_graph = {
-                    .type           = scui_draw_graph_type_line,
-                    .dst_surface    = dst_surface,
-                    .dst_clip       = dst_clip,
-                    .src_alpha      = src_alpha,
-                    .src_color      = src_args->color,
-                    .line.src_width = src_args->line_width,
-                };
-                draw_graph.line.src_pos_1.x = line_point_s.x;
-                draw_graph.line.src_pos_1.y = line_point_s.y + line_height - base_line - underline;
-                draw_graph.line.src_pos_2.x = line_point_e.x;
-                draw_graph.line.src_pos_2.y = line_point_e.y + line_height - base_line - underline;
-                scui_draw_graph(&draw_graph);
+                scui_coord_t offset_line_delete = (line_height - src_args->line_width) / 2;
+                scui_coord_t offset_line_under  = (line_height - base_line - underline);
+                if (src_args->line_delete) {
+                    draw_graph.line.src_pos_1 = line_point_s;
+                    draw_graph.line.src_pos_2 = line_point_e;
+                    draw_graph.line.src_pos_1.y += offset_line_delete;
+                    draw_graph.line.src_pos_2.y += offset_line_delete;
+                    draw_graph.line.src_pos_1.y += src_args->offset;
+                    draw_graph.line.src_pos_2.y += src_args->offset;
+                    scui_draw_graph(&draw_graph);
+                }
+                if (src_args->line_under) {
+                    draw_graph.line.src_pos_1 = line_point_s;
+                    draw_graph.line.src_pos_2 = line_point_e;
+                    draw_graph.line.src_pos_1.y += offset_line_under;
+                    draw_graph.line.src_pos_2.y += offset_line_under;
+                    draw_graph.line.src_pos_1.y += src_args->offset;
+                    draw_graph.line.src_pos_2.y += src_args->offset;
+                    scui_draw_graph(&draw_graph);
+                }
             }
         }
     } else {
@@ -329,7 +333,11 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
         
         /* 下划线和删除线 */
         line_point_e = offset;
-        if (src_args->line_delete) {
+        if (src_args->line_delete || src_args->line_under) {
+            line_point_s.x += dst_clip->x;
+            line_point_s.y += dst_clip->y;
+            line_point_e.x += dst_clip->x;
+            line_point_e.y += dst_clip->y;
             scui_draw_graph_dsc_t draw_graph = {
                 .type           = scui_draw_graph_type_line,
                 .dst_surface    = dst_surface,
@@ -338,26 +346,26 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
                 .src_color      = src_args->color,
                 .line.src_width = src_args->line_width,
             };
-            draw_graph.line.src_pos_1.x = line_point_s.x;
-            draw_graph.line.src_pos_1.y = line_point_s.y + (line_height - src_args->line_width) / 2;
-            draw_graph.line.src_pos_2.x = line_point_e.x;
-            draw_graph.line.src_pos_2.y = line_point_e.y + (line_height - src_args->line_width) / 2;
-            scui_draw_graph(&draw_graph);
-        }
-        if (src_args->line_under) {
-            scui_draw_graph_dsc_t draw_graph = {
-                .type           = scui_draw_graph_type_line,
-                .dst_surface    = dst_surface,
-                .dst_clip       = dst_clip,
-                .src_alpha      = src_alpha,
-                .src_color      = src_args->color,
-                .line.src_width = src_args->line_width,
-            };
-            draw_graph.line.src_pos_1.x = line_point_s.x;
-            draw_graph.line.src_pos_1.y = line_point_s.y + line_height - base_line - underline;
-            draw_graph.line.src_pos_2.x = line_point_e.x;
-            draw_graph.line.src_pos_2.y = line_point_e.y + line_height - base_line - underline;
-            scui_draw_graph(&draw_graph);
+            scui_coord_t offset_line_delete = (line_height - src_args->line_width) / 2;
+            scui_coord_t offset_line_under  = (line_height - base_line - underline);
+            if (src_args->line_delete) {
+                draw_graph.line.src_pos_1 = line_point_s;
+                draw_graph.line.src_pos_2 = line_point_e;
+                draw_graph.line.src_pos_1.y += offset_line_delete;
+                draw_graph.line.src_pos_2.y += offset_line_delete;
+                draw_graph.line.src_pos_1.x += src_args->offset;
+                draw_graph.line.src_pos_2.x += src_args->offset;
+                scui_draw_graph(&draw_graph);
+            }
+            if (src_args->line_under) {
+                draw_graph.line.src_pos_1 = line_point_s;
+                draw_graph.line.src_pos_2 = line_point_e;
+                draw_graph.line.src_pos_1.y += offset_line_under;
+                draw_graph.line.src_pos_2.y += offset_line_under;
+                draw_graph.line.src_pos_1.x += src_args->offset;
+                draw_graph.line.src_pos_2.x += src_args->offset;
+                scui_draw_graph(&draw_graph);
+            }
         }
     }
 }
