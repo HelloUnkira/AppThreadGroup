@@ -39,6 +39,7 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
     scui_font_cache_unload(&font_unit);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
+    scui_coord_t underline   = scui_font_underline(font_unit.font);
     
     scui_area_t dst_clip_v = *dst_clip;   // v:vaild
     scui_area_t src_clip_v = *src_clip;   // v:vaild
@@ -90,6 +91,10 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
              
              SCUI_LOG_INFO("line:<%d, %d> <%d>", line_s, line_e, line_w);
              
+            /* 下划线和删除线 */
+            scui_point_t line_point_s = offset_line;
+            scui_point_t line_point_e = offset_line;
+            
              // 行绘制
              for (uint32_t idx = line_s; idx <= line_e; idx++) {
                   SCUI_ASSERT(idx >= 0 && idx < src_args->number);
@@ -179,6 +184,39 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
                   
                   scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset_line);
             }
+            
+            /* 下划线和删除线 */
+            line_point_e = offset_line;
+            if (src_args->line_delete) {
+                scui_draw_graph_dsc_t draw_graph = {
+                    .type           = scui_draw_graph_type_line,
+                    .dst_surface    = dst_surface,
+                    .dst_clip       = dst_clip,
+                    .src_alpha      = src_alpha,
+                    .src_color      = src_args->color,
+                    .line.src_width = src_args->line_width,
+                };
+                draw_graph.line.src_pos_1.x = line_point_s.x;
+                draw_graph.line.src_pos_1.y = line_point_s.y + (line_height - src_args->line_width) / 2;
+                draw_graph.line.src_pos_2.x = line_point_e.x;
+                draw_graph.line.src_pos_2.y = line_point_e.y + (line_height - src_args->line_width) / 2;
+                scui_draw_graph(&draw_graph);
+            }
+            if (src_args->line_under) {
+                scui_draw_graph_dsc_t draw_graph = {
+                    .type           = scui_draw_graph_type_line,
+                    .dst_surface    = dst_surface,
+                    .dst_clip       = dst_clip,
+                    .src_alpha      = src_alpha,
+                    .src_color      = src_args->color,
+                    .line.src_width = src_args->line_width,
+                };
+                draw_graph.line.src_pos_1.x = line_point_s.x;
+                draw_graph.line.src_pos_1.y = line_point_s.y + line_height - base_line - underline;
+                draw_graph.line.src_pos_2.x = line_point_e.x;
+                draw_graph.line.src_pos_2.y = line_point_e.y + line_height - base_line - underline;
+                scui_draw_graph(&draw_graph);
+            }
         }
     } else {
         /* 单行模式不需要排版布局,绘制时手动计算偏移 */
@@ -197,6 +235,10 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
             offset.y += (src_clip_v.h - (line_height - base_line));
         if (src_args->align_ver == 2)
             offset.y += (src_clip_v.h - (line_height - base_line)) / 2;
+        
+        /* 下划线和删除线 */
+        scui_point_t line_point_s = offset;
+        scui_point_t line_point_e = offset;
         
         for (uint32_t idx = 0; idx < src_args->number; idx++) {
             
@@ -283,16 +325,39 @@ void scui_draw_string(scui_draw_dsc_t *draw_dsc)
             }
             
             scui_draw_string_offset(src_args, &glyph_unit.glyph, &offset);
-            
-            #if 0   // test
-            // 通过生成的lvgl_font.c的数据流做比较确认数据获取的准确性
-            for (uint32_t idx_g = 0; idx_g < glyph_unit.glyph.bitmap_size; idx_g++) {
-              if (idx_g % 8 == 0)
-                  SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-                  SCUI_LOG_INFO_RAW("0x%02x ", glyph_unit.glyph.bitmap[idx_g]);
-            }
-            SCUI_LOG_INFO_RAW(SCUI_LOG_LINE);
-            #endif
+        }
+        
+        /* 下划线和删除线 */
+        line_point_e = offset;
+        if (src_args->line_delete) {
+            scui_draw_graph_dsc_t draw_graph = {
+                .type           = scui_draw_graph_type_line,
+                .dst_surface    = dst_surface,
+                .dst_clip       = dst_clip,
+                .src_alpha      = src_alpha,
+                .src_color      = src_args->color,
+                .line.src_width = src_args->line_width,
+            };
+            draw_graph.line.src_pos_1.x = line_point_s.x;
+            draw_graph.line.src_pos_1.y = line_point_s.y + (line_height - src_args->line_width) / 2;
+            draw_graph.line.src_pos_2.x = line_point_e.x;
+            draw_graph.line.src_pos_2.y = line_point_e.y + (line_height - src_args->line_width) / 2;
+            scui_draw_graph(&draw_graph);
+        }
+        if (src_args->line_under) {
+            scui_draw_graph_dsc_t draw_graph = {
+                .type           = scui_draw_graph_type_line,
+                .dst_surface    = dst_surface,
+                .dst_clip       = dst_clip,
+                .src_alpha      = src_alpha,
+                .src_color      = src_args->color,
+                .line.src_width = src_args->line_width,
+            };
+            draw_graph.line.src_pos_1.x = line_point_s.x;
+            draw_graph.line.src_pos_1.y = line_point_s.y + line_height - base_line - underline;
+            draw_graph.line.src_pos_2.x = line_point_e.x;
+            draw_graph.line.src_pos_2.y = line_point_e.y + line_height - base_line - underline;
+            scui_draw_graph(&draw_graph);
         }
     }
 }

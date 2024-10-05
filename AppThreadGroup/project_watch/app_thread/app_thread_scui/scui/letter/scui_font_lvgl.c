@@ -1349,6 +1349,18 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
     return font->line_height;
 }
 
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_underline(scui_handle_t handle)
+{
+    lv_font_t *font = scui_handle_get(handle);
+    SCUI_ASSERT(font != NULL);
+    
+    return font->underline_position;
+}
+
 /*@brief 字型加载
  *@param glyph 字形信息
  */
@@ -1442,6 +1454,15 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
  *@retval 字库参数信息
  */
 scui_coord_t scui_font_line_height(scui_handle_t handle)
+{
+    SCUI_ASSERT(false);
+}
+
+/*@brief 字库参数信息
+ *@param handle 字库句柄
+ *@retval 字库参数信息
+ */
+scui_coord_t scui_font_underline(scui_handle_t handle)
 {
     SCUI_ASSERT(false);
 }

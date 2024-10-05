@@ -121,6 +121,13 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart2_maker.line.space     = 10;
             chart2_maker.line.color.color.full = 0xFFFF0000;
             scui_chart_create(&chart2_maker, &chart2_handle, false);
+            
+            for (uint8_t idx = 0; idx < chart2_maker.line.number; idx++) {
+                int32_t angle = scui_map(idx, 0, chart2_maker.line.number, 0, 360);
+                scui_coord_t base = chart2_maker.line.value_min;
+                scui_coord_t offset = (chart2_maker.line.value_max - base) / 2;
+                vlist[idx] = base + offset + ((scui_sin4096(angle) * offset) >> 12);
+            }
             scui_chart_line_data(chart2_handle, vlist);
             
             // digit picker == scroll + string * num

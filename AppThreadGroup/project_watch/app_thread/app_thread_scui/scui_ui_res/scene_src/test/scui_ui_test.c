@@ -32,6 +32,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.type                = scui_widget_type_string;
             //string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
+            string_maker.args.line_width            = 2;
             string_maker.args.mode_scroll           = 1;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
@@ -56,6 +57,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0029;
             string_maker.args.grad_w   = 0;
+            string_maker.args.line_under  = 1;
+            string_maker.args.line_delete = 0;
             string_maker.args.color.color_s.full = 0xFFFFFFFF;
             string_maker.args.color.color_e.full = 0xFFFFFFFF;
             scui_string_create(&string_maker, &string_handle, false);
@@ -69,6 +72,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X002e;
             string_maker.args.grad_w   = 0;
+            string_maker.args.line_under  = 0;
+            string_maker.args.line_delete = 1;
             string_maker.args.color.color_s.full = 0xFFFF00FF;
             string_maker.args.color.color_e.full = 0xFF00FF00;
             scui_string_create(&string_maker, &string_handle, false);
@@ -82,6 +87,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0034;
             string_maker.args.grad_w   = 1;
+            string_maker.args.line_under  = 1;
+            string_maker.args.line_delete = 0;
             string_maker.args.color.color_s.full = 0xFFFF0000;
             string_maker.args.color.color_e.full = 0xFF0000FF;
             string_maker.args.line_multi = true;
@@ -96,6 +103,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.font_idx      = 0,
             string_maker.text          = SCUI_MULTI_LANG_0X0042;
             string_maker.args.grad_w   = 1;
+            string_maker.args.line_under  = 0;
+            string_maker.args.line_delete = 1;
             string_maker.args.color.color_s.full = 0xFF0000FF;
             string_maker.args.color.color_e.full = 0xFFFF0000;
             string_maker.args.line_multi = true;
