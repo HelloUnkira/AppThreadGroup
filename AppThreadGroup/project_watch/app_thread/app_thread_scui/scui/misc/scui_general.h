@@ -55,23 +55,25 @@ typedef union {
 
 /* color wildcard type */
 typedef uint32_t scui_color_wt_t;
+/* color single type */
+typedef scui_color8888_t scui_color32_t;
 
 /*@brief: 过度色, 固定此格式主要上层通用性
  */
 #pragma pack(push, 1)
 typedef struct {
-    uint8_t filter:1;   // 过滤色调标记
+    uint8_t filter:1;           // 滤色调标记
     union {
-        scui_color8888_t color;     // 主色调
-        scui_color8888_t color_s;   // 始色调
-        scui_color8888_t color_l;   // 亮色调
+        scui_color32_t color;   // 主色调
+        scui_color32_t color_s; // 始色调
+        scui_color32_t color_l; // 亮色调
     };
     union {
-        scui_color8888_t color_e;   // 终色调
-        scui_color8888_t color_d;   // 暗色调
+        scui_color32_t color_e; // 终色调
+        scui_color32_t color_d; // 暗色调
     };
     union {
-        scui_color8888_t color_f;   // 过滤色调
+        scui_color32_t color_f; // 滤色调
     };
 } scui_color_t;
 #pragma pack(pop)

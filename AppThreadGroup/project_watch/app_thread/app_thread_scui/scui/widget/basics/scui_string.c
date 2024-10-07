@@ -59,7 +59,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     string->args.update = true;
     string->args.name   = string->name;
     string->args.utf8   = string->str_utf8;
-    string->args.clip   = scui_widget_clip(*handle);
+    string->args.clip   = string->widget.clip;
     scui_string_args_process(&string->args);
 }
 
@@ -439,7 +439,7 @@ void scui_string_event(scui_event_t *event)
         
         string->args.name = string->name;
         string->args.utf8 = string->str_utf8;
-        string->args.clip = scui_widget_clip(handle);
+        string->args.clip = string->widget.clip;
         scui_string_args_process(&string->args);
         
         if (string->draw_cache) {

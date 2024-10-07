@@ -56,25 +56,26 @@
 #include "scui_widget_draw.h"
 #include "scui_widget_event.h"
 /* widget: */
-#include "scui_window.h"
+#include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_switch.h"     /* 窗口管理器 */
 #include "scui_window_transform.h"  /* 窗口管理器 */
 #include "scui_window_float.h"      /* 窗口管理器 */
 #include "scui_window_stack.h"      /* 窗口管理器 */
 /* widget: */
-#include "scui_custom.h"
-#include "scui_custom_misc.h"       /* misc */
+#include "scui_custom.h"            /* 控件(自定义) */
+#include "scui_custom_misc.h"       /* 自定义插件 */
+#include "scui_scroll.h"            /* 控件(滚动) */
+#include "scui_string.h"            /* 控件(字符串) */
 /* widget: */
-#include "scui_scroll.h"
-#include "scui_string.h"
+#include "scui_objbtn.h"            /* 对象按钮 */
 /* widget: */
 #include "scui_button.h"
 #include "scui_watch.h"
 #include "scui_chart.h"
 
 /* linker: */
-#include "scui_image_src.h"     /* 图像资源加载卸载 */
-#include "scui_font_src.h"      /* 字体资源获取 */
+#include "scui_image_src.h"         /* 图像资源加载卸载 */
+#include "scui_font_src.h"          /* 字体资源获取 */
 
 #endif

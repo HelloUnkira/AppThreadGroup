@@ -132,6 +132,7 @@
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
 /* button:按钮1缩放限制百分比 */
+#define SCUI_WIDGET_OBJECT_PCT                      (90)
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* 基础图元使用矩阵变换 */

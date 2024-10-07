@@ -705,6 +705,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -717,6 +718,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_2 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 1 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
@@ -745,8 +747,8 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_4 = {
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_DRV_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES * 3 / 13,
-	.widget.clip.h                  = SCUI_DRV_VER_RES * 3 / 13,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES * 5 / 13,
+	.widget.clip.h                  = SCUI_DRV_VER_RES * 5 / 13,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2_4,
 	.widget.parent                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.color.color.full        = 0xFFFFFFFF,
@@ -756,14 +758,15 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_4 = {
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_5 = {
 	.widget.type                    = scui_widget_type_custom,
 	.widget.style.sched_anima       = true,
-	.widget.clip.x                  = SCUI_DRV_HOR_RES * 5 / 13,
+	.widget.clip.x                  = SCUI_DRV_HOR_RES * 7 / 13,
 	.widget.clip.y                  = SCUI_DRV_VER_RES * 5 / 13,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES * 5 / 13,
-	.widget.clip.h                  = SCUI_DRV_VER_RES * 5 / 13,
+	.widget.clip.h                  = SCUI_DRV_VER_RES * 7 / 13,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2_5,
 	.widget.parent                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.color.color.full        = 0xFFFFFFFF,
 	.widget.event_cb                = scui_ui_scene_float_2_5_event_proc,
+	.widget.child_num               = 5,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {

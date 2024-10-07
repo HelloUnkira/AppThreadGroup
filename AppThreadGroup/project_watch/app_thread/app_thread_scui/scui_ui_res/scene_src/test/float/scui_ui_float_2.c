@@ -10,6 +10,14 @@
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_2_button_event_proc(scui_event_t *event)
+{
+    SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
@@ -184,7 +192,52 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
 {
+    static scui_multi_t image_pct = 0;
+    static scui_point_t image_scale = {.x = 1024,.y = 1024,};
+    
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        image_pct++;
+        if (image_pct > 100)
+            image_pct = 0;
+        
+        image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
+        image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    case scui_event_draw: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t clip = {0};
+        scui_color_t color_black = {0};
+        
+        clip = scui_widget_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
+        scui_widget_draw_color(event->object, &clip, color_black);
+        
+        scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
+        scui_image_t *image = scui_handle_get(image_handle);
+        SCUI_ASSERT(image != NULL);
+        
+        scui_point_t scale = image_scale;
+        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_opt_pos_c);
+        
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
 }
+
 
 /*@brief 控件事件响应回调
  *@param event 事件
@@ -241,57 +294,6 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
 {
-    static scui_multi_t image_pct = 0;
-    static scui_point_t image_scale = {.x = 1024,.y = 1024,};
-    
-    switch (event->type) {
-    case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        image_pct++;
-        if (image_pct > 100)
-            image_pct = 0;
-        
-        image_scale.x = scui_map(image_pct, 0, 100, 512, 1536);
-        image_scale.y = scui_map(image_pct, 0, 100, 512, 1536);
-        scui_widget_draw(event->object, NULL, false);
-        break;
-    case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
-             break;
-        
-        scui_area_t clip = {0};
-        scui_color_t color_black = {0};
-        
-        clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2;
-        scui_widget_draw_color(event->object, &clip, color_black);
-        
-        scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
-        scui_image_t *image = scui_handle_get(image_handle);
-        SCUI_ASSERT(image != NULL);
-        
-        scui_point_t scale = image_scale;
-        scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_opt_pos_c);
-        
-        break;
-    }
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
-{
     static scui_coord_t spinner_pct  = 0;
     static scui_coord_t spinner_cnt  = 0;
     static scui_coord_t spinner_tick = 750 / SCUI_ANIMA_TICK;
@@ -341,6 +343,82 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         
         scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
                                  spinner_pct, 270, 60, +1);
+        
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        if (!scui_widget_event_check_execute(event))
+             break;
+        break;
+    }
+    case scui_event_show:
+        SCUI_LOG_INFO("scui_event_show");
+        scui_objbtn_maker_t objbtn_maker = {0};
+        scui_handle_t objbtn_handle = SCUI_HANDLE_INVALID;
+        objbtn_maker.widget.type   = scui_widget_type_objbtn;
+        objbtn_maker.widget.clip.w = scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - 30;
+        objbtn_maker.widget.clip.h = 75;
+        objbtn_maker.widget.clip.x = (scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - objbtn_maker.widget.clip.w) / 2;
+        objbtn_maker.widget.clip.y = 10;
+        objbtn_maker.widget.clip.x += 10;
+        objbtn_maker.widget.clip.y += 10;
+        objbtn_maker.widget.clip.w -= 10 * 2;
+        objbtn_maker.widget.clip.h -= 10 * 2;
+        objbtn_maker.widget.parent = SCUI_UI_SCENE_FLOAT_2_5;
+        objbtn_maker.notify_cb = scui_ui_scene_2_button_event_proc;
+        objbtn_maker.color[0].color_s.full = 0xFF00FF00;
+        objbtn_maker.color[0].color_e.full = 0xFF008000;
+        objbtn_maker.color[1].color_s.full = 0xFF0000FF;
+        objbtn_maker.color[1].color_e.full = 0xFF000080;
+        objbtn_maker.color[2].color_s.full = 0xFFFF0000;
+        objbtn_maker.color[2].color_e.full = 0xFF800000;
+        objbtn_maker.color[3].color_s.full = 0xFF808080;
+        objbtn_maker.color[3].color_e.full = 0xFF808080;
+        objbtn_maker.alpha[0] = scui_alpha_cover;
+        objbtn_maker.alpha[1] = scui_alpha_cover;
+        objbtn_maker.alpha[2] = scui_alpha_cover;
+        objbtn_maker.alpha[3] = scui_alpha_cover;
+        objbtn_maker.width[1] = 3;
+        objbtn_maker.width[2] = 3;
+        objbtn_maker.width[3] = 3;
+        objbtn_maker.side[0]  = scui_opt_pos_all;
+        objbtn_maker.side[1]  = scui_opt_pos_all;
+        objbtn_maker.side[2]  = scui_opt_pos_all;
+        objbtn_maker.side[3]  = scui_opt_pos_all;
+        objbtn_maker.radius = 10;
+        scui_objbtn_create(&objbtn_maker, &objbtn_handle, false);
+        /* 该控件未完成,待定中... */
+        
+        break;
+    case scui_event_hide:
+        SCUI_LOG_INFO("scui_event_hide");
+        break;
+    case scui_event_draw: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t clip = {0};
+        scui_color_t color_black = {0};
+        
+        clip = scui_widget_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
+        scui_widget_draw_color(event->object, &clip, color_black);
         
         break;
     }

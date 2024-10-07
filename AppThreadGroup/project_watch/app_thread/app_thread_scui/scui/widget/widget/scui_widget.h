@@ -9,6 +9,8 @@ typedef enum {
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
+    /* 对象控件 */
+    scui_widget_type_objbtn,    /* 对象按钮 */
     /* 扩展控件(按需补充) */
     scui_widget_type_button,    /* 纯色按钮 */
     scui_widget_type_watch,     /* 表盘指针控件 */
@@ -225,10 +227,8 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle);
  *@param hor_res 画布水平尺寸
  *@param ver_res 画布垂直尺寸
  */
-void scui_widget_surface_create(scui_handle_t   handle,
-                                scui_pixel_cf_t format,
-                                scui_coord_t    hor_res,
-                                scui_coord_t    ver_res);
+void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
+                                scui_coord_t  hor_res, scui_coord_t    ver_res);
 
 /*@brief 控件画布销毁
  *@param handle 控件句柄

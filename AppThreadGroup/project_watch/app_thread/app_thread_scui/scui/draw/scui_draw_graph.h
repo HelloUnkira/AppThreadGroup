@@ -157,6 +157,7 @@ typedef enum {
     scui_draw_graph_type_none = 0,
     scui_draw_graph_type_line,
     scui_draw_graph_type_circle,
+    scui_draw_graph_type_crect,
     scui_draw_graph_type_arc,
 } scui_draw_graph_type_t;
 /*****************************************************************************/
@@ -183,6 +184,10 @@ typedef struct {
         scui_coord_t src_radius;    // 圆半径
         scui_point_t src_center;    // 圆心点
     } circle;
+    struct {
+        scui_coord_t src_width;     // 边界宽
+        scui_coord_t src_radius;    // 圆半径
+    } crect;
     struct {
         scui_coord_t src_width;     // 弧环宽
         scui_coord_t src_radius;    // 弧圆半径

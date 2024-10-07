@@ -204,6 +204,11 @@ scui_widget_cb_t * scui_widget_cb_find(scui_widget_type_t type)
         [scui_widget_type_string].event_cb  = (scui_event_cb_t)           scui_string_event,
         
         /* 扩展控件 */
+        [scui_widget_type_objbtn].create    = (scui_widget_cb_create_t)   scui_objbtn_create,
+        [scui_widget_type_objbtn].destroy   = (scui_widget_cb_destroy_t)  scui_objbtn_destroy,
+        [scui_widget_type_objbtn].event_cb  = (scui_event_cb_t)           scui_objbtn_event,
+        
+        /* 扩展控件 */
         [scui_widget_type_button].create    = (scui_widget_cb_create_t)   scui_button_create,
         [scui_widget_type_button].destroy   = (scui_widget_cb_destroy_t)  scui_button_destroy,
         [scui_widget_type_button].event_cb  = (scui_event_cb_t)           scui_button_event,
@@ -586,10 +591,8 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle)
  *@param hor_res 画布水平尺寸
  *@param ver_res 画布垂直尺寸
  */
-void scui_widget_surface_create(scui_handle_t   handle,
-                                scui_pixel_cf_t format,
-                                scui_coord_t    hor_res,
-                                scui_coord_t    ver_res)
+void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
+                                scui_coord_t  hor_res, scui_coord_t    ver_res)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
