@@ -53,6 +53,8 @@
 
 /* widget: */
 #include "scui_widget.h"
+#include "scui_widget_cb.h"
+#include "scui_widget_opt.h"
 #include "scui_widget_draw.h"
 #include "scui_widget_event.h"
 /* widget: */

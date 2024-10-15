@@ -20,7 +20,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     
     /* 创建基础控件实例 */
     scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_create(&chart->widget, &widget_maker, handle, layout);
+    scui_widget_constructor(&chart->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_chart));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -106,7 +106,7 @@ void scui_chart_destroy(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&chart->widget);
+    scui_widget_destructor(&chart->widget);
     
     /* 销毁图表控件实例 */
     SCUI_MEM_FREE(chart);

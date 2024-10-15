@@ -27,7 +27,7 @@ void scui_objbtn_create(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool 
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_create(&objbtn->widget, &widget_maker, handle, layout);
+    scui_widget_constructor(&objbtn->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_objbtn));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -58,7 +58,7 @@ void scui_objbtn_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&objbtn->widget);
+    scui_widget_destructor(&objbtn->widget);
     
     /* 销毁按钮控件实例 */
     SCUI_MEM_FREE(objbtn);
@@ -112,6 +112,14 @@ void scui_objbtn_event(scui_event_t *event)
         
         scui_area_t dst_clip[4] = {0};
         dst_clip[3] = objbtn->widget.clip;
+        
+        SCUI_ASSERT(objbtn->pct >= objbtn->lim && objbtn->pct <= 100);
+        scui_multi_t scale_x = dst_clip[3].w * (100 - objbtn->pct) / 100 / 2;
+        scui_multi_t scale_y = dst_clip[3].h * (100 - objbtn->pct) / 100 / 2;
+        dst_clip[3].x += scale_x;
+        dst_clip[3].y += scale_y;
+        dst_clip[3].w -= scale_x * 2;
+        dst_clip[3].h -= scale_y * 2;
         /* 生成各个部件剪切域 */
         for (scui_coord_t idx = 3; idx - 1 >= 0; idx--) {
             dst_clip[idx - 1] = dst_clip[idx];
@@ -122,16 +130,13 @@ void scui_objbtn_event(scui_event_t *event)
             dst_clip[idx - 1].w -= (objbtn->side[idx] & scui_opt_pos_r) ? objbtn->width[idx] : 0;
             dst_clip[idx - 1].h -= (objbtn->side[idx] & scui_opt_pos_d) ? objbtn->width[idx] : 0;
         }
-        
         scui_color_t src_color[4] = {0};
-        SCUI_ASSERT(objbtn->pct >= objbtn->lim && objbtn->pct <= 100);
+        scui_coord_t src_radius[4] = {0};
+        src_radius[0] = objbtn->radius;
+        for (scui_coord_t idx = 0; idx + 1 < 4; idx++) {
+            src_radius[idx + 1] = src_radius[idx] + objbtn->width[idx + 1];
+        }
         for (scui_coord_t idx = 0; idx < 4; idx++) {
-            scui_multi_t scale_x = dst_clip[idx].w * (100 - objbtn->pct) / 100 / 2;
-            scui_multi_t scale_y = dst_clip[idx].h * (100 - objbtn->pct) / 100 / 2;
-            dst_clip[idx].x += scale_x;
-            dst_clip[idx].y += scale_y;
-            dst_clip[idx].w -= scale_x * 2;
-            dst_clip[idx].h -= scale_y * 2;
             
             scui_color32_t color_s = objbtn->color[idx].color_s;
             scui_color32_t color_e = objbtn->color[idx].color_e;
@@ -140,12 +145,6 @@ void scui_objbtn_event(scui_event_t *event)
             src_color[idx].color.ch.r = scui_map(objbtn->pct, 100, objbtn->lim, color_e.ch.r, color_s.ch.r);
             src_color[idx].color.ch.a = scui_map(objbtn->pct, 100, objbtn->lim, color_e.ch.a, color_s.ch.a);
         }
-        scui_coord_t src_radius[4] = {0};
-        src_radius[0] = objbtn->radius;
-        for (scui_coord_t idx = 0; idx + 1 < 4; idx++) {
-            src_radius[idx + 1] = src_radius[idx] + objbtn->width[idx + 1];
-        }
-        
         scui_draw_graph_dsc_t draw_graph = {
             .type        = scui_draw_graph_type_crect,
             .dst_surface = widget->surface,

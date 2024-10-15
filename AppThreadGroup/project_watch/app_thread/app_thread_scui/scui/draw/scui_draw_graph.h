@@ -216,14 +216,14 @@ void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
 /* EmbeddedGUI: */
 #pragma pack(push, 1)
 typedef struct {
-    uint16_t offset;
-    uint16_t count;
-    uint16_t pixel;
+    int16_t offset;
+    int16_t count;
+    int16_t pixel;
 } scui_draw_circle_item_t;
 
 typedef struct {
-    uint16_t radius;
-    uint16_t count;
+    int16_t radius;
+    int16_t count;
     const uint8_t *data;
     const scui_draw_circle_item_t *item;
 } scui_draw_circle_info_t;

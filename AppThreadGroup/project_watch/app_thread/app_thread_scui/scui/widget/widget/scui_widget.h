@@ -93,54 +93,31 @@ typedef struct {
     for (int64_t idx = (int64_t)widget->child_num - 1; idx >= 0; idx--)     \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
-/*@brief 控件创建
+/*@brief 创建控件
+ *@param maker  控件实例构造参数
+ *@param handle 控件句柄
+ *@param layout 通过布局
+ */
+void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
+
+/*@brief 销毁控件
+ *@param handle 控件句柄
+ */
+void scui_widget_destroy(scui_handle_t handle);
+
+/*@brief 控件构造器
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
  *@param layout 通过布局
  */
-void scui_widget_create(scui_widget_t *widget, scui_widget_maker_t *maker,
-                        scui_handle_t *handle, bool layout);
+void scui_widget_constructor(scui_widget_t *widget, scui_widget_maker_t *maker,
+                             scui_handle_t *handle, bool layout);
 
-/*@brief 控件销毁
+/*@brief 控件析构器
  *@param widget 控件实例
  */
-void scui_widget_destroy(scui_widget_t *widget);
-
-/*@brief 控件类型检查
- *@param handle 控件句柄
- *@param type   控件类型
- *@retval 控件类型检查
- */
-bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
-
-/*@brief 查找控件映射表
- *@param type 控件类型
- *@retval 控件映射表
- */
-scui_widget_cb_t * scui_widget_cb_find(scui_widget_type_t type);
-
-/*@brief 通过映射表调用创建一个控件树
- *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
- *@param handle 控件句柄
- */
-void scui_widget_cb_create(scui_handle_t handle);
-
-/*@brief 卸载一个控件
- *@param handle 控件句柄
- */
-void scui_widget_cb_destroy(scui_handle_t handle);
-
-/*@brief 更新一个控件布局
- *@param handle 控件句柄
- */
-void scui_widget_cb_layout(scui_handle_t handle);
-
-/*@brief 控件默认事件响应回调
- *@param handle   控件句柄
- *@param event_cb 事件响应回调
- */
-void scui_widget_cb_event_cb(scui_handle_t handle, scui_event_cb_t *event_cb);
+void scui_widget_destructor(scui_widget_t *widget);
 
 /*@brief 控件树的根控件
  *@param handle 控件句柄
@@ -264,58 +241,11 @@ void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
  */
 void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
-/*@brief 控件坐标更新
+/*@brief 控件类型
  *@param handle 控件句柄
- *@param point  坐标点
+ *@retval 控件类型
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
-
-/*@brief 子控件坐标对齐
- *@param handle  控件句柄
- *@param handle  控件句柄(目标控件,不存在则相对父控件)
- *@param pos     对齐方向
- *@param offset  偏移量
- */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_pos_t pos, scui_point_t *offset);
-
-/*@brief 子控件坐标镜像
- *@param handle  控件句柄
- *@param child   控件子控件句柄(为空则镜像所有子控件)
- *@param dir     镜像方向(水平镜像或垂直镜像)
- *@param recurse 递归处理(全局镜像有效)
- */
-void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_dir_t dir, bool recurse);
-
-/*@brief 控件尺寸更新
- *@param handle 控件句柄
- *@param width  宽度
- *@param height 高度
- */
-void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
-
-/*@brief 控件移动子控件
- *@param handle 控件句柄
- *@param offset 偏移量
- */
-void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset);
-
-/*@brief 控件移动子控件(循环模式)
- *@param handle 控件句柄
- *@param offset 偏移量
- *@param range  偏移量限制
- */
-void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
-
-/*@brief 控件对齐子控件计算
- *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
- *       边界对齐:则边界中心点与子控件中心点偏移量(最小)
- *@param handle 控件句柄
- *@param target 控件句柄(目标控件)
- *@param offset 偏移量
- *@param pos    对齐目标
- */
-bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target,
-                                scui_point_t *offset, scui_opt_pos_t pos);
+scui_widget_type_t scui_widget_type(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄

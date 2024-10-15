@@ -25,7 +25,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_create(&string->widget, &widget_maker, handle, layout);
+    scui_widget_constructor(&string->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -102,7 +102,7 @@ void scui_string_destroy(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&string->widget);
+    scui_widget_destructor(&string->widget);
     
     /* 销毁字符串控件实例 */
     SCUI_MEM_FREE(string);

@@ -97,7 +97,7 @@ static void scui_widget_show_delay(scui_handle_t handle)
     SCUI_LOG_DEBUG("");
     
     if (scui_handle_unmap(handle)) {
-        scui_widget_cb_create(handle);
+        scui_widget_create_layout_tree(handle);
         
         SCUI_LOG_DEBUG("");
         scui_event_t event = {
@@ -117,7 +117,10 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_window_list_add(widget->myself);
     
     /* 布局更新 */
-    scui_widget_cb_layout(widget->myself);
+    scui_widget_cb_t *widget_cb = NULL;
+    scui_widget_cb_find(widget->type, &widget_cb);
+    if (widget_cb->layout != NULL)
+        widget_cb->layout(widget->myself);
     
     bool only = scui_widget_surface_only(widget);
     scui_widget_draw(widget->myself, NULL, only);
@@ -165,7 +168,14 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     }
     
     /* 布局更新 */
-    scui_widget_cb_layout(widget->parent);
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        SCUI_ASSERT(widget_parent != NULL);
+        scui_widget_cb_t *widget_cb = NULL;
+        scui_widget_cb_find(widget_parent->type, &widget_cb);
+        if (widget_cb->layout != NULL)
+            widget_cb->layout(widget->parent);
+    }
     
     // 重新刷新窗口列表
     scui_widget_refr(widget->myself, false);
@@ -186,7 +196,7 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         scui_event_notify(&event);
         
         scui_widget_clip_clear(widget, true);
-        scui_widget_cb_destroy(widget->myself);
+        scui_widget_destroy(widget->myself);
         
         // 窗口已销毁,移除掉跟本窗口相关的所有绘制事件
         event.object = widget->myself;
@@ -403,12 +413,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
             if (scui_widget_event_check_over(event))
-                 break;
+                break;
         }
         event->object = widget->myself;
         scui_widget_event_mask_keep(event);
         if (scui_widget_event_check_over(event) && event_filter)
-             return;
+            return;
         /* 是否自己吸收处理 */
         if (!widget->style.indev_ptr)
              return;
@@ -450,14 +460,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_proc(event);
             scui_widget_event_mask_keep(event);
         if (scui_widget_event_check_over(event))
-             return;
+            return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
             if (scui_widget_event_check_over(event))
-                 break;
+                break;
         }
         event->object = widget->myself;
         return;
@@ -475,14 +485,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_proc(event);
             scui_widget_event_mask_keep(event);
         if (scui_widget_event_check_over(event))
-             return;
+            return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
             if (scui_widget_event_check_over(event))
-                 break;
+                break;
         }
         event->object = widget->myself;
         return;

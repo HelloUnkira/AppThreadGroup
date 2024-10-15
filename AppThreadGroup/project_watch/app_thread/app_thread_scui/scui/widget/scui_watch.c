@@ -25,7 +25,7 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_create(&watch->widget, &widget_maker, handle, layout);
+    scui_widget_constructor(&watch->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_watch));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -57,7 +57,7 @@ void scui_watch_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&watch->widget);
+    scui_widget_destructor(&watch->widget);
     
     /* 销毁表盘指针控件实例 */
     SCUI_MEM_FREE(watch);

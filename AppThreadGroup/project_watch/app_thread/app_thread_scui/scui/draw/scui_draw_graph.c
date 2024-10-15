@@ -80,7 +80,7 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
         return;
     }
     
-    #if 1
+    #if SCUI_DRAW_GRAPH_USE_EGUI
     // EmbeddedGUI移植: egui_canvas_draw_line
     scui_coord_t x1 = src_pos_1.x;
     scui_coord_t y1 = src_pos_1.y;
@@ -790,6 +790,7 @@ static void scui_draw_circle(scui_draw_graph_dsc_t *draw_graph)
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_lb);
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_rt);
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_rb);
+    return;
     
     scui_draw_graph_dsc_t draw_graph_line = {
         .type = scui_draw_graph_type_line,
@@ -860,6 +861,7 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
     if (src_radius <= 0)
         src_radius  = 1;
     
+    #if 1
     /* 绘制四个象限的圆或圆环 */
     scui_area_t  dst_area   = {0};
     scui_point_t src_center = {0};
@@ -911,20 +913,21 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
     
     // 完全填充
     if (src_width == 0 || src_width >= src_radius) {
-        /* 绘制上下俩个水平矩形 */
+        /* 绘制中间水平矩形 */
         x = dst_clip->x + src_radius;
         l = dst_clip->w - src_radius * 2;
-        w = src_radius;
-        /*  */
         y = dst_clip->y;
+        w = dst_clip->h;
         scui_draw_hline(&draw_graph_line, x, y, l, w);
-        y = dst_clip->y + dst_clip->h - src_radius;
-        scui_draw_hline(&draw_graph_line, x, y, l, w);
-        /* 绘制中间水平矩形 */
-        x = dst_clip->x;
-        l = dst_clip->w;
-        w = dst_clip->h - src_radius * 2;
+        /* 绘制左右水平矩形 */
         y = dst_clip->y + src_radius;
+        l = src_radius;
+        w = dst_clip->h - src_radius * 2;
+        /*  */
+        x = dst_clip->x;
+        scui_draw_hline(&draw_graph_line, x, y, l, w);
+        /*  */
+        x = dst_clip->x + dst_clip->w - src_radius;
         scui_draw_hline(&draw_graph_line, x, y, l, w);
     } else {
         /* 绘制上下两条边线 */
@@ -934,7 +937,7 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
         /*  */
         y = dst_clip->y;
         scui_draw_hline(&draw_graph_line, x, y, l, w);
-        y = dst_clip->y + dst_clip->h - src_width - 1;
+        y = dst_clip->y + dst_clip->h - src_width;
         scui_draw_hline(&draw_graph_line, x, y, l, w);
         /* 绘制左右两条边线 */
         y = dst_clip->y + src_radius;
@@ -943,9 +946,10 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
         /*  */
         x = dst_clip->x;
         scui_draw_vline(&draw_graph_line, x, y, l, w);
-        x = dst_clip->x + dst_clip->w - src_width - 1;
+        x = dst_clip->x + dst_clip->w - src_width;
         scui_draw_vline(&draw_graph_line, x, y, l, w);
     }
+    #endif
 }
 
 /*@brief 弧绘制(抗锯齿)

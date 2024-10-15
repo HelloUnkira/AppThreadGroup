@@ -28,7 +28,7 @@ void scui_button_create(scui_button_maker_t *maker, scui_handle_t *handle, bool 
         widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_create(&button->widget, &widget_maker, handle, layout);
+    scui_widget_constructor(&button->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_button));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -59,7 +59,7 @@ void scui_button_destroy(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destroy(&button->widget);
+    scui_widget_destructor(&button->widget);
     
     /* 销毁按钮控件实例 */
     SCUI_MEM_FREE(button);

@@ -370,7 +370,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         scui_handle_t objbtn_handle = SCUI_HANDLE_INVALID;
         objbtn_maker.widget.type   = scui_widget_type_objbtn;
         objbtn_maker.widget.clip.w = scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - 30;
-        objbtn_maker.widget.clip.h = 75;
+        objbtn_maker.widget.clip.h = 90;
         objbtn_maker.widget.clip.x = (scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - objbtn_maker.widget.clip.w) / 2;
         objbtn_maker.widget.clip.y = 10;
         objbtn_maker.widget.clip.x += 10;
@@ -386,7 +386,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         objbtn_maker.color[2].color_s.full = 0xFFFF0000;
         objbtn_maker.color[2].color_e.full = 0xFF800000;
         objbtn_maker.color[3].color_s.full = 0xFF808080;
-        objbtn_maker.color[3].color_e.full = 0xFF808080;
+        objbtn_maker.color[3].color_e.full = 0xFF404040;
         objbtn_maker.alpha[0] = scui_alpha_cover;
         objbtn_maker.alpha[1] = scui_alpha_cover;
         objbtn_maker.alpha[2] = scui_alpha_cover;
@@ -398,7 +398,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         objbtn_maker.side[1]  = scui_opt_pos_all;
         objbtn_maker.side[2]  = scui_opt_pos_all;
         objbtn_maker.side[3]  = scui_opt_pos_all;
-        objbtn_maker.radius = 10;
+        objbtn_maker.radius = 13;
         scui_objbtn_create(&objbtn_maker, &objbtn_handle, false);
         /* 该控件未完成,待定中... */
         

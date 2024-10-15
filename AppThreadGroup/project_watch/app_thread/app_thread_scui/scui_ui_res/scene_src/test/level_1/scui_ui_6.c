@@ -171,8 +171,8 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
         scui_draw_graph_dsc_t draw_graph = {
             .type                = scui_draw_graph_type_circle,
             .src_color           = color_mix,
-            .circle.src_width    = clip.w / 2,
-            .circle.src_radius   = clip.w / 2,
+            .circle.src_width    = clip.w / 2 - 1,
+            .circle.src_radius   = clip.w / 2 - 1,
             .circle.src_center.x = clip.x + clip.w / 2,
             .circle.src_center.y = clip.y + clip.h / 2,
         };
@@ -216,7 +216,7 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
             .type                = scui_draw_graph_type_circle,
             .src_color           = color_mix,
             .circle.src_width    = 2,
-            .circle.src_radius   = clip.w / 2,
+            .circle.src_radius   = clip.w / 2 - 1,
             .circle.src_center.x = clip.x + clip.w / 2,
             .circle.src_center.y = clip.y + clip.h / 2,
         };
