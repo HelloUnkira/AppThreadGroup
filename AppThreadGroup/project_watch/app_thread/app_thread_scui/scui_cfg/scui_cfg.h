@@ -100,7 +100,7 @@
 #define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)
 
 /* 移动时停止帧动画(假渲染) */
-#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (0)
+#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
 
 /* 窗口管理栈数量限制 */
 #define SCUI_WINDOW_STACK_NEST                      (10)
@@ -111,7 +111,7 @@
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
-#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_cover)
+#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_cube)
 #define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
 
 /* 文字多行排版限制,可被分隔的字符 */
@@ -135,8 +135,7 @@
 #define SCUI_WIDGET_OBJECT_PCT                      (90)
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
-/* 基础图元使用矩阵变换 */
-#define SCUI_DRAW_MISC_USE_SOFTWARE                 (0)
+/* 图形变换使用矩阵变换(包括:缩放旋转) */
 #define SCUI_DRAW_MISC_USE_MATRIX                   (1)
 
 #endif

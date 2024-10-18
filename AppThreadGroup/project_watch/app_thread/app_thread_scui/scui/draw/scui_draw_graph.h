@@ -43,6 +43,15 @@ typedef union {
     struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_alpha_t    src_alpha;      // 像素点透明度
+        scui_color_t   *src_grad_s;     // 源渐变列表
+        scui_coord_t    src_grad_n;     // 源渐变列表数量
+        scui_color_t    src_filter;     // 源渐变滤色
+        scui_coord_t    src_way;        // 源渐变方向(0:hor;1:ver;)
+    } area_fill_grads;
+    struct {
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
         scui_surface_t *src_surface;    // 画布实例
         scui_area_t    *src_clip;       // 画布绘制区域
     } area_copy;
@@ -51,25 +60,26 @@ typedef union {
         scui_area_t    *dst_clip;       // 画布绘制区域
         scui_surface_t *src_surface;    // 画布实例
         scui_area_t    *src_clip;       // 画布绘制区域
-        scui_color_t    src_color;      // 画布协议色(调色板)
+        scui_color_t    src_color;      // 画布协议色
     } area_blend;
+    struct {
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_area_t    *src_clip;       // 画布绘制区域
+        scui_alpha_t    src_alpha;      // 像素点透明度
+        scui_color_t    src_color;      // 画布协议色
+        scui_matrix_t  *inv_matrix;     // 逆变换矩阵
+        scui_matrix_t  *src_matrix;     // 源变换矩阵
+    } area_fill_by_matrix;
     struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
         scui_surface_t *src_surface;    // 画布实例
         scui_area_t    *src_clip;       // 画布绘制区域
+        scui_color_t    src_color;      // 画布协议色
         scui_matrix_t  *inv_matrix;     // 逆变换矩阵
         scui_matrix_t  *src_matrix;     // 源变换矩阵
     } area_blit_by_matrix;
-    struct {
-        scui_surface_t *dst_surface;    // 画布实例
-        scui_area_t    *dst_clip;       // 画布绘制区域
-        scui_alpha_t    src_alpha;      // 像素点透明度
-        scui_color_t   *src_grad_s;     // 源渐变列表
-        scui_coord_t    src_grad_n;     // 源渐变列表数量
-        scui_color_t    src_filter;     // 源渐变滤色
-        scui_coord_t    src_way;        // 源渐变方向(0:hor;1:ver;)
-    } area_fill_grads;
     /**************************************************************************
      * draw image:
      */
@@ -79,7 +89,7 @@ typedef union {
         scui_image_t   *src_image;      // 图像源
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
-        scui_color_t    src_color;      // 图像源色调(调色板)
+        scui_color_t    src_color;      // 图像源色调
     } image;
     struct {
         scui_surface_t *dst_surface;    // 画布实例
@@ -87,6 +97,7 @@ typedef union {
         scui_image_t   *src_image;      // 图像源
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
+        scui_color_t    src_color;      // 图像源色调
         scui_point_t    src_scale;      // 图形缩放比例(SCUI_SCALE_COF为放大系数)
         scui_point_t    dst_offset;     // 缩放锚点
         scui_point_t    src_offset;     // 缩放锚点
@@ -97,6 +108,7 @@ typedef union {
         scui_image_t   *src_image;      // 图像源
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
+        scui_color_t    src_color;      // 图像源色调
         scui_coord_t    src_angle;      // 图形旋转角度(顺时针:+,逆时针:-)
         scui_point_t   *src_anchor;     // 图像旋转轴心
         scui_point_t   *src_center;     // 图像旋转中心
@@ -107,6 +119,7 @@ typedef union {
         scui_image_t   *src_image;      // 图像源
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
+        scui_color_t    src_color;      // 图像源色调
         scui_matrix_t  *inv_matrix;     // 逆变换矩阵
         scui_matrix_t  *src_matrix;     // 源变换矩阵
     } image_blit_by_matrix;

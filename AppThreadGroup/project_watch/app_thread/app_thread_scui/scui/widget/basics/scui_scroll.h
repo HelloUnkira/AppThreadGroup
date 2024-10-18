@@ -121,18 +121,6 @@ void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
  */
 void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target);
 
-/*@brief 滚动控件动画回调
- */
-void scui_scroll_anima_start(void *instance);
-
-/*@brief 滚动控件动画回调
- */
-void scui_scroll_anima_ready(void *instance);
-
-/*@brief 滚动控件动画回调
- */
-void scui_scroll_anima_expired(void *instance);
-
 /*@brief 滚动控件动画自动化
  */
 void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid);

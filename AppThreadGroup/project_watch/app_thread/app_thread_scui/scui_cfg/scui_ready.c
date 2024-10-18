@@ -104,6 +104,7 @@ void scui_ready(void)
     scui_window_switch_type_t *cfg_type = NULL;
     scui_window_switch_cfg_type(&cfg_type);
     *cfg_type = SCUI_WINDOW_MGR_TYPE_CFG;
+    
     scui_opt_dir_t *cfg_dir = NULL;
     scui_window_switch_cfg_dir(&cfg_dir);
     *cfg_dir  = SCUI_WINDOW_MGR_JUMP_DIR;

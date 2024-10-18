@@ -314,14 +314,14 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target)
 
 /*@brief 滚动控件动画回调
  */
-void scui_scroll_anima_start(void *instance)
+static void scui_scroll_anima_start(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 滚动控件动画回调
  */
-void scui_scroll_anima_ready(void *instance)
+static void scui_scroll_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
@@ -436,7 +436,7 @@ void scui_scroll_anima_ready(void *instance)
 
 /*@brief 滚动控件动画回调
  */
-void scui_scroll_anima_expired(void *instance)
+static void scui_scroll_anima_expired(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;

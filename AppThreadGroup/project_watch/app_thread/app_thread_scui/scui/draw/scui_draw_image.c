@@ -63,6 +63,7 @@ void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
     scui_image_t   *src_image   = draw_dsc->image_scale.src_image;
     scui_area_t    *src_clip    = draw_dsc->image_scale.src_clip;
     scui_alpha_t    src_alpha   = draw_dsc->image_scale.src_alpha;
+    scui_color_t    src_color   = draw_dsc->image_scale.src_color;
     scui_point_t    src_scale   = draw_dsc->image_scale.src_scale;
     scui_point_t    dst_offset  = draw_dsc->image_scale.dst_offset;
     scui_point_t    src_offset  = draw_dsc->image_scale.src_offset;
@@ -100,6 +101,7 @@ void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
             .area_blit_by_matrix.dst_clip    = dst_clip,
             .area_blit_by_matrix.src_surface = &image_surface,
             .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.src_color   = src_color,
             .area_blit_by_matrix.inv_matrix  = &inv_matrix,
             .area_blit_by_matrix.src_matrix  = &src_matrix,
         };
@@ -107,7 +109,6 @@ void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
     };
     scui_image_cache_unload(&image);
 }
-
 
 /*@brief 区域图像旋转
  *@param draw_dsc 绘制描述符实例
@@ -120,6 +121,7 @@ void scui_draw_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_image_t   *src_image   = draw_dsc->image_rotate.src_image;
     scui_area_t    *src_clip    = draw_dsc->image_rotate.src_clip;
     scui_alpha_t    src_alpha   = draw_dsc->image_rotate.src_alpha;
+    scui_color_t    src_color   = draw_dsc->image_rotate.src_color;
     scui_coord_t    src_angle   = draw_dsc->image_rotate.src_angle;
     scui_point_t   *src_anchor  = draw_dsc->image_rotate.src_anchor;
     scui_point_t   *src_center  = draw_dsc->image_rotate.src_center;
@@ -157,6 +159,7 @@ void scui_draw_image_rotate(scui_draw_dsc_t *draw_dsc)
             .area_blit_by_matrix.dst_clip    = dst_clip,
             .area_blit_by_matrix.src_surface = &image_surface,
             .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.src_color   = src_color,
             .area_blit_by_matrix.inv_matrix  = &inv_matrix,
             .area_blit_by_matrix.src_matrix  = &src_matrix,
         };
@@ -176,6 +179,7 @@ void scui_draw_image_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
     scui_image_t   *src_image   = draw_dsc->image_blit_by_matrix.src_image;
     scui_area_t    *src_clip    = draw_dsc->image_blit_by_matrix.src_clip;
     scui_alpha_t    src_alpha   = draw_dsc->image_blit_by_matrix.src_alpha;
+    scui_color_t    src_color   = draw_dsc->image_blit_by_matrix.src_color;
     scui_matrix_t  *inv_matrix  = draw_dsc->image_blit_by_matrix.inv_matrix;
     scui_matrix_t  *src_matrix  = draw_dsc->image_blit_by_matrix.src_matrix;
     /* draw dsc args<e> */
@@ -204,6 +208,7 @@ void scui_draw_image_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
             .area_blit_by_matrix.dst_clip    = dst_clip,
             .area_blit_by_matrix.src_surface = &image_surface,
             .area_blit_by_matrix.src_clip    = src_clip,
+            .area_blit_by_matrix.src_color   = src_color,
             .area_blit_by_matrix.inv_matrix  = inv_matrix,
             .area_blit_by_matrix.src_matrix  = src_matrix,
         };

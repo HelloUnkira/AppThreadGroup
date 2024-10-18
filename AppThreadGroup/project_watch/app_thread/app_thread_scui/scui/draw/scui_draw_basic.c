@@ -552,6 +552,110 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(false);
 }
 
+/*@brief 图形变换填色(可以使用VGLITE-blit加速优化)
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_area_fill_by_matrix(scui_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_surface_t *dst_surface = draw_dsc->area_fill_by_matrix.dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->area_fill_by_matrix.dst_clip;
+    scui_area_t    *src_clip    = draw_dsc->area_blit_by_matrix.src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->area_fill_by_matrix.src_alpha;
+    scui_color_t    src_color   = draw_dsc->area_fill_by_matrix.src_color;
+    scui_matrix_t  *inv_matrix  = draw_dsc->area_fill_by_matrix.inv_matrix;
+    scui_matrix_t  *src_matrix  = draw_dsc->area_fill_by_matrix.src_matrix;
+    /* draw dsc args<e> */
+    //
+    #if SCUI_DRAW_MISC_USE_MATRIX == 0
+    SCUI_ASSERT(false);
+    #endif
+    
+    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_clip != NULL);
+    SCUI_ASSERT(inv_matrix  != NULL);
+    
+    if (src_alpha == scui_alpha_trans)
+        return;
+    
+    /* 按俩个画布的透明度进行像素点混合 */
+    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_area = scui_surface_area(dst_surface);
+    if (!scui_area_inter(&dst_clip_v, &dst_area, dst_clip))
+         return;
+    
+    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_area = *src_clip;
+    if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
+         return;
+    
+    // 利用原图进行一次源初变换,以修饰限制目标区域
+    if (src_matrix != NULL) {
+        scui_face2_t face2 = {0};
+        scui_face3_t face3 = {0};
+        scui_area2_by_area(&face2, &src_area);
+        
+        dst_area.x1 = scui_coord_max;
+        dst_area.y1 = scui_coord_max;
+        dst_area.x2 = scui_coord_min;
+        dst_area.y2 = scui_coord_min;
+        /* 对四个图像的角进行一次正变换 */
+        for (uint8_t idx = 0; idx < 4; idx++) {
+            scui_point3_by_point2(&face3.point3[idx], &face2.point2[idx]);
+            scui_point3_transform_by_matrix(&face3.point3[idx], src_matrix);
+            scui_point3_to_point2(&face3.point3[idx], &face2.point2[idx]);
+            
+            dst_area.x1 = scui_min(dst_area.x1, face2.point2[idx].x - 1.5);
+            dst_area.y1 = scui_min(dst_area.y1, face2.point2[idx].y - 1.5);
+            dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1.5);
+            dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1.5);
+        }
+        scui_area_m_by_s(&dst_area);
+        
+        if (!scui_area_inter2(&dst_clip_v, &dst_area))
+             return;
+    }
+    
+    scui_color_wt_t src_pixel = 0;
+    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
+    /* 在dst_surface.clip中的dst_clip_v中每个像素点混合到src_surface.clip中的src_clip_v中 */
+    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
+    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
+    uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * dst_byte;
+    
+    /* 注意区域对齐坐标 */
+    for (scui_multi_t idx_line = dst_clip_v.y; idx_line < dst_clip_v.y + dst_clip_v.h; idx_line++)
+    for (scui_multi_t idx_item = dst_clip_v.x; idx_item < dst_clip_v.x + dst_clip_v.w; idx_item++) {
+        scui_point_t  point  = {0};
+        scui_point2_t point2 = {0};
+        scui_point3_t point3 = {0};
+        point2.y = idx_line - 0.5;
+        point2.x = idx_item - 0.5;
+        /* 反扫描结果坐标对每一个坐标进行逆变换 */
+        scui_point3_by_point2(&point3, &point2);
+        scui_point3_transform_by_matrix(&point3, inv_matrix);
+        scui_point3_to_point2(&point3, &point2);
+        point2.y += src_clip_v.y - 0.5;
+        point2.x += src_clip_v.x - 0.5;
+        point.y = (scui_coord_t)point2.y;
+        point.x = (scui_coord_t)point2.x;
+        
+        /* 这里使用点对点上色 */
+        /* 逆变换的结果落在的源区域, 取样上色 */
+        if (scui_area_point(&src_clip_v, &point)) {
+            uint8_t *dst_ofs = dst_surface->pixel + idx_line * dst_line + idx_item * dst_byte;
+            
+            scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
+                                dst_surface->format, &src_pixel, src_alpha);
+            continue;
+        }
+    }
+    return;
+    SCUI_LOG_ERROR("unsupported fill:");
+    SCUI_LOG_ERROR("dst_surface format:%x", dst_surface->format);
+    SCUI_ASSERT(false);
+}
+
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */
@@ -562,6 +666,7 @@ void scui_draw_area_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *dst_clip    = draw_dsc->area_blit_by_matrix.dst_clip;
     scui_surface_t *src_surface = draw_dsc->area_blit_by_matrix.src_surface;
     scui_area_t    *src_clip    = draw_dsc->area_blit_by_matrix.src_clip;
+    scui_color_t    src_color   = draw_dsc->area_blit_by_matrix.src_color;
     scui_matrix_t  *inv_matrix  = draw_dsc->area_blit_by_matrix.inv_matrix;
     scui_matrix_t  *src_matrix  = draw_dsc->area_blit_by_matrix.src_matrix;
     /* draw dsc args<e> */
@@ -625,6 +730,9 @@ void scui_draw_area_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
          dst_surface->format == scui_pixel_cf_bmp888 || dst_surface->format == scui_pixel_cf_bmp8888) &&
         (src_surface->format == scui_pixel_cf_bmp565 || src_surface->format == scui_pixel_cf_bmp8565  ||
          src_surface->format == scui_pixel_cf_bmp888 || src_surface->format == scui_pixel_cf_bmp8888)) {
+        
+        scui_color_wt_t filter = 0;
+        scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
         
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = dst_clip_v.y; idx_line < dst_clip_v.y + dst_clip_v.h; idx_line++)
@@ -719,6 +827,14 @@ void scui_draw_area_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
             if (scui_area_point(&src_clip_v, &point)) {
                 uint8_t *dst_ofs = dst_surface->pixel + idx_line * dst_line + idx_item * dst_byte;
                 uint8_t *src_ofs = src_surface->pixel + point.y * src_line + point.x * src_byte;
+                
+                if (src_color.filter) {
+                    scui_color_wt_t color = 0;
+                    scui_pixel_by_cf(src_surface->format, &color, src_ofs);
+                    if (color == filter)
+                        continue;
+                }
+                
                 scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
                                     src_surface->format, src_ofs, src_surface->alpha);
                 continue;

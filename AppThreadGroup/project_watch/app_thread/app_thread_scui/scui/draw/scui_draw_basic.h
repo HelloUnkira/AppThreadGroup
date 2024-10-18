@@ -36,6 +36,11 @@ void scui_draw_area_copy(scui_draw_dsc_t *draw_dsc);
  */
 void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc);
 
+/*@brief 图形变换填色(可以使用VGLITE-blit加速优化)
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_area_fill_by_matrix(scui_draw_dsc_t *draw_dsc);
+
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */

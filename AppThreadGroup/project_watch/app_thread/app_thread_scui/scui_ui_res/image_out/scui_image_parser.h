@@ -259,6 +259,7 @@ typedef enum {
 	scui_image_prj_image_src_00_3d_Soccer_voicebmp,
 	scui_image_prj_image_src_00_3d_Soccer_weatherbmp,
 	scui_image_prj_image_src_00_3d_Trans_Lightpng,
+	scui_image_prj_image_src_00_3d_Trans_Light_rawpng,
 	scui_image_prj_image_src_00_3d_Wave_Board00png,
 	scui_image_prj_image_src_00_3d_Wave_Board01png,
 	scui_image_prj_image_src_00_3d_Wave_Board02png,
@@ -3594,7 +3595,7 @@ typedef enum {
 	scui_image_prj_image_src_system_03_restartpng,
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[3586];
+extern const void * scui_image_parser_table[3587];
 
 //<     w,     h,size_raw,size_mem,com_pct> handle
 //< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_image_src_00_3d_AnalogClock_0jpg
@@ -3849,7 +3850,8 @@ extern const void * scui_image_parser_table[3586];
 //<  0x50,  0x50,0x191d,0x3200,0.50> scui_image_prj_image_src_00_3d_Soccer_stressbmp
 //<  0x50,  0x50,0x179e,0x3200,0.47> scui_image_prj_image_src_00_3d_Soccer_voicebmp
 //<  0x50,  0x50,0x1867,0x3200,0.49> scui_image_prj_image_src_00_3d_Soccer_weatherbmp
-//< 0x100,  0x80,0x1215e,0x18000,0.75> scui_image_prj_image_src_00_3d_Trans_Lightpng
+//< 0x100,  0x80,0x15863,0x18000,0.90> scui_image_prj_image_src_00_3d_Trans_Lightpng
+//< 0x100,  0x80,0x1215e,0x18000,0.75> scui_image_prj_image_src_00_3d_Trans_Light_rawpng
 //< 0x1d2, 0x1d2,0x4448,0x9f0cc,0.03> scui_image_prj_image_src_00_3d_Wave_Board00png
 //< 0x1d2, 0x1d2,0x8e40,0x9f0cc,0.06> scui_image_prj_image_src_00_3d_Wave_Board01png
 //< 0x1d2, 0x1d2,0x6260,0x9f0cc,0.04> scui_image_prj_image_src_00_3d_Wave_Board02png
