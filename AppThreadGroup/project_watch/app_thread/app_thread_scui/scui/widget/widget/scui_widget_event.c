@@ -28,7 +28,7 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget_root != NULL);
     
-    // 如果该控件控件树为自定义控件树
+    // 如果控件树为自定义控件树
     // 不走系统管理,转为回调直达,自定义控件树会重定向
     if (widget->parent != SCUI_HANDLE_INVALID &&
         widget_root->type != scui_widget_type_window) {
@@ -54,9 +54,6 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     /* 为所有控件及其子控件添加指定剪切域 */
     // scui_widget_clip_check(handle_root, true);
     scui_widget_clip_reset(widget_root, &widget_clip, true);
-    // scui_widget_clip_check(handle_root, true);
-    scui_widget_clip_update(widget_root);
-    // scui_widget_clip_check(handle_root, true);
     
     scui_event_t event = {
         .object     = handle_root,
@@ -341,32 +338,29 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_draw) {
         
-        if (scui_widget_event_check_execute(event))
-            SCUI_LOG_INFO("widget:%d", widget->myself);
-        
+        /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
+        /* 无独立画布,如果是异步绘制,不在draw绘制,而是refr完成前绘制 */
         bool surface_only = scui_widget_surface_only(widget);
-        /* 无独立画布时不在draw绘制,转为到refr后绘制 */
+        if (!surface_only && !event->style.sync) {
+             scui_widget_refr(widget->myself, true);
+             return;
+        }
+        if (!surface_only && event->style.sync)
         if (widget->parent == SCUI_HANDLE_INVALID) {
-            if (!surface_only) {
-                /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
-                if (event->style.sync) {
-                    /* 只需要根控件时执行一次即可 */
-                    /* 将整个控件树重定向到绘制画布上面去 */
-                    if (widget->parent == SCUI_HANDLE_INVALID) {
-                        scui_surface_t *surface = scui_frame_buffer_draw();
-                        scui_widget_surface_remap(widget->myself, surface);
-                    }
-                } else {
-                    scui_widget_refr(widget->myself, true);
-                    scui_widget_event_mask_keep(event);
-                    return;
-                }
-            }
+            scui_surface_t *surface = scui_frame_buffer_draw();
+            scui_widget_surface_remap(widget->myself, surface);
         }
         /* 绘制事件不能被控件响应 */
         if (scui_widget_style_is_hide(widget->myself)) {
             SCUI_LOG_INFO("widget is hide");
             return;
+        }
+        /* 添加surface剪切域,因为绘制即将开始 */
+        if (scui_widget_event_check_prepare(event))
+        if (widget->parent == SCUI_HANDLE_INVALID) {
+            // scui_widget_clip_check(widget->myself, true);
+            scui_widget_clip_update(widget);
+            // scui_widget_clip_check(widget->myself, true);
         }
         /* 先冒泡自己,绘制事件没有剪切域,忽略 */
         if (scui_clip_empty(&widget->clip_set))
@@ -377,11 +371,10 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_draw(event);
             scui_widget_event_proc(event);
             scui_tick_calc(0x21, NULL, NULL, NULL);
-            
-            /* 去除surface剪切域,因为已经绘制完毕 */
-            if (scui_widget_event_check_finish(event))
-                scui_widget_clip_clear(widget, false);
         }
+        /* 去除surface剪切域,因为已经绘制完毕 */
+        if (scui_widget_event_check_finish(event))
+            scui_widget_clip_clear(widget, false);
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_btra(widget, idx) {
             event->object = widget->child_list[idx];

@@ -305,3 +305,12 @@ uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_
     
     return peroid;
 }
+
+/*@brief 距离上次动画嘀嗒数
+ *       响应事件回调使用:scui_event_anima_elapse
+ *@param tick 嘀嗒数
+ */
+uint32_t scui_anima_passby_tick(void)
+{
+    return scui_anima_list.elapse;
+}

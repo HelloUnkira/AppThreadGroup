@@ -598,6 +598,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_anima_t switch_anima = {0};
         
         switch (scui_window_mgr.switch_args.type) {
+        case scui_window_switch_cube:
         case scui_window_switch_flip2:
         case scui_window_switch_grid:
         case scui_window_switch_circle:
@@ -606,7 +607,6 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_cover:
             switch_anima.path = scui_map_ease_in_out;
             break;
-        case scui_window_switch_cube:
         case scui_window_switch_flip1:
         case scui_window_switch_zoom2:
         case scui_window_switch_zoom1:

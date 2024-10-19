@@ -580,12 +580,6 @@ static void scui_scroll_anima_expired(void *instance)
         SCUI_LOG_DEBUG("offset:<x:%d,y:%d>", offset.x, offset.y);
         
         /* 偏移所有子控件 */
-        if (!scroll->loop) {
-            
-            scui_event_t event = {.object = widget->myself};
-            scui_widget_move_ofs_child_list(widget->myself, &offset);
-            scui_scroll_event_notify(&event, 0x02);
-        }
         if (scroll->loop) {
             scui_point_t range = {0};
             if (scroll->dir == scui_opt_dir_hor)
@@ -595,6 +589,10 @@ static void scui_scroll_anima_expired(void *instance)
             
             scui_event_t event = {.object = widget->myself};
             scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range);
+            scui_scroll_event_notify(&event, 0x02);
+        } else {
+            scui_event_t event = {.object = widget->myself};
+            scui_widget_move_ofs_child_list(widget->myself, &offset);
             scui_scroll_event_notify(&event, 0x02);
         }
         

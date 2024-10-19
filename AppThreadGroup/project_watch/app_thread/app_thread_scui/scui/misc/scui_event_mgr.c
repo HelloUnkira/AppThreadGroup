@@ -42,7 +42,7 @@ void scui_event_register_custom(scui_event_cb_t event_cb)
  *@param event 事件包
  *@retval 允许该事件
  */
-bool scui_event_cb_check(scui_event_t *event)
+static bool scui_event_cb_check(scui_event_t *event)
 {
     /* 自定义事件一律允许响应before和after */
     if (event->type >= scui_event_custom_s &&
@@ -69,45 +69,26 @@ bool scui_event_cb_check(scui_event_t *event)
     return false;
 }
 
-/*@brief 事件通报
+/*@brief 监控调度过程中指定的事件
  *@param event 事件包
  */
-void scui_event_notify(scui_event_t *event)
+static void scui_event_tar_check(scui_event_t *event)
 {
-    /* 同步事件就地响应 */
-    /* 异步事件入调度队列 */
+    static const scui_event_type_t type_table[] = {
+        scui_event_none,
+    };
     
-    if (event->style.sync) {
-        
-        scui_tick_calc(0x10, NULL, NULL, NULL);
-        scui_event_respond(event);
-        scui_tick_calc(0x11, NULL, NULL, NULL);
-        
-        return;
-    }
-    scui_event_enqueue(event);
-}
-
-/*@brief 事件派发
- *@param event 事件包
- */
-void scui_event_dispatch(void)
-{
-    scui_event_t event = {0};
-    while (scui_event_num() != 0) {
-        bool retval = scui_event_dequeue(&event, false);
-        SCUI_ASSERT(retval);
-        
-        scui_tick_calc(0x10, NULL, NULL, NULL);
-        scui_event_respond(&event);
-        scui_tick_calc(0x11, NULL, NULL, NULL);
-    }
+    for (uint8_t idx = 0; idx < scui_arr_len(type_table); idx++)
+        if (event->type == type_table[idx]) {
+            SCUI_LOG_INFO("catch event:%d", event->type);
+            break;
+        }
 }
 
 /*@brief 事件响应
  *@param event 事件包
  */
-void scui_event_respond(scui_event_t *event)
+static void scui_event_respond(scui_event_t *event)
 {
     SCUI_ASSERT(scui_event_cb_prepare != NULL);
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
@@ -197,10 +178,9 @@ void scui_event_respond(scui_event_t *event)
         break;
     }
     
-    if (event->object == SCUI_HANDLE_SYSTEM) {
-        /* 系统事件发给活跃场景 */
+    /* 系统事件发给活跃场景 */
+    if (event->object == SCUI_HANDLE_SYSTEM)
         event->object = scui_window_active_curr();
-    }
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
@@ -293,4 +273,40 @@ void scui_event_respond(scui_event_t *event)
     SCUI_LOG_ERROR("event->style:%u",           event->style);
     SCUI_LOG_ERROR("event->object:%u",          event->object);
     SCUI_LOG_ERROR("event->style.priority:%u",  event->style.priority);
+}
+
+/*@brief 事件通报
+ *@param event 事件包
+ */
+void scui_event_notify(scui_event_t *event)
+{
+    /* 同步事件就地响应 */
+    /* 异步事件入调度队列 */
+    
+    if (event->style.sync) {
+        
+        scui_tick_calc(0x10, NULL, NULL, NULL);
+        scui_event_respond(event);
+        scui_tick_calc(0x11, NULL, NULL, NULL);
+        
+        return;
+    }
+    scui_event_enqueue(event);
+}
+
+/*@brief 事件派发
+ *@param event 事件包
+ */
+void scui_event_dispatch(void)
+{
+    scui_event_t event = {0};
+    while (scui_event_num() != 0) {
+        bool retval = scui_event_dequeue(&event, false);
+        SCUI_ASSERT(retval);
+        
+        scui_tick_calc(0x10, NULL, NULL, NULL);
+        scui_event_respond(&event);
+        scui_tick_calc(0x11, NULL, NULL, NULL);
+        
+    }
 }
