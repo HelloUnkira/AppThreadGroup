@@ -8,5 +8,5 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_jerryscript    ${CMAKE_CURRENT_
 #
 # JerryScript库(JS):
 # master https://github.com/jerryscript-project/jerryscript.git
-# AppThreadGroup/app_third/lib_jerryscript/lib_jerryscript
+# AppThreadGroup/project_study/app_third/lib_jerryscript/lib_jerryscript
 #

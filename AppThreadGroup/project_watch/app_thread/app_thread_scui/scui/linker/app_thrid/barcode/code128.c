@@ -24,7 +24,7 @@
 #if     LV_USE_BARCODE
 
 #include "scui.h"
-#include "code128_lvgl.h"
+#include "code128.h"
 #include <string.h>
 
 void * lv_malloc(size_t size)
@@ -42,28 +42,28 @@ void lv_free(void *ptr)
     SCUI_MEM_FREE(ptr);
 }
 
-#define CODE128_LVGL_MALLOC      lv_malloc
-#define CODE128_LVGL_REALLOC     lv_realloc
-#define CODE128_LVGL_FREE        lv_free
-#define CODE128_LVGL_MEMSET      memset
-#define CODE128_LVGL_STRLEN      strlen
-#define CODE128_LVGL_ASSERT      SCUI_ASSERT
+#define CODE128_MALLOC      lv_malloc
+#define CODE128_REALLOC     lv_realloc
+#define CODE128_FREE        lv_free
+#define CODE128_MEMSET      memset
+#define CODE128_STRLEN      strlen
+#define CODE128_ASSERT      SCUI_ASSERT
 
-#define CODE128_LVGL_QUIET_ZONE_LEN 10
-#define CODE128_LVGL_CHAR_LEN       11
-#define CODE128_LVGL_STOP_CODE_LEN  13
+#define CODE128_QUIET_ZONE_LEN 10
+#define CODE128_CHAR_LEN       11
+#define CODE128_STOP_CODE_LEN  13
 
-#define CODE128_LVGL_START_CODE_A 103
-#define CODE128_LVGL_START_CODE_B 104
-#define CODE128_LVGL_START_CODE_C 105
+#define CODE128_START_CODE_A 103
+#define CODE128_START_CODE_B 104
+#define CODE128_START_CODE_C 105
 
-#define CODE128_LVGL_MODE_A    'a'
-#define CODE128_LVGL_MODE_B    'b'
-#define CODE128_LVGL_MODE_C    'c'
+#define CODE128_MODE_A    'a'
+#define CODE128_MODE_B    'b'
+#define CODE128_MODE_C    'c'
 
-#define CODE128_LVGL_MIN_ENCODE_LEN (CODE128_LVGL_QUIET_ZONE_LEN * 2 + CODE128_LVGL_CHAR_LEN * 2 + CODE128_LVGL_STOP_CODE_LEN)
+#define CODE128_MIN_ENCODE_LEN (CODE128_QUIET_ZONE_LEN * 2 + CODE128_CHAR_LEN * 2 + CODE128_STOP_CODE_LEN)
 
-static const int code128_lvglpattern[] = {
+static const int code128_pattern[] = {
     // value: pattern,     bar/space widths
     1740, //   0: 11011001100, 212222
     1644, //   1: 11001101100, 222122
@@ -173,9 +173,9 @@ static const int code128_lvglpattern[] = {
     1692  // 105: 11010011100, 211232
 };
 
-static const int code128_lvglstop_pattern = 6379; // 1100011101011, 2331112
+static const int code128_stop_pattern = 6379; // 1100011101011, 2331112
 
-struct code128_lvglstep {
+struct code128_step {
     int prev_ix;                // Index of previous step, if any
     const char * next_input;    // Remaining input
     unsigned short len;         // The length of the pattern so far (includes this step)
@@ -183,8 +183,8 @@ struct code128_lvglstep {
     signed char code;           // What code should be written for this step
 };
 
-struct code128_lvglstate {
-    struct code128_lvglstep * steps;
+struct code128_state {
+    struct code128_step * steps;
     int allocated_steps;
     int current_ix;
     int todo_ix;
@@ -193,20 +193,20 @@ struct code128_lvglstate {
     size_t maxlength;
 };
 
-size_t code128_lvglestimate_len(const char * s)
+size_t code128_estimate_len(const char * s)
 {
-    return CODE128_LVGL_QUIET_ZONE_LEN
-           + CODE128_LVGL_CHAR_LEN // start code
-           + CODE128_LVGL_CHAR_LEN * (CODE128_LVGL_STRLEN(s) * 11 / 10) // contents + 10% padding
-           + CODE128_LVGL_CHAR_LEN // checksum
-           + CODE128_LVGL_STOP_CODE_LEN
-           + CODE128_LVGL_QUIET_ZONE_LEN;
+    return CODE128_QUIET_ZONE_LEN
+           + CODE128_CHAR_LEN // start code
+           + CODE128_CHAR_LEN * (CODE128_STRLEN(s) * 11 / 10) // contents + 10% padding
+           + CODE128_CHAR_LEN // checksum
+           + CODE128_STOP_CODE_LEN
+           + CODE128_QUIET_ZONE_LEN;
 }
 
-static void code128_lvglappend_pattern(int pattern, int pattern_length, char * out)
+static void code128_append_pattern(int pattern, int pattern_length, char * out)
 {
     // All patterns have their first bit set by design
-    CODE128_LVGL_ASSERT(pattern & (1 << (pattern_length - 1)));
+    CODE128_ASSERT(pattern & (1 << (pattern_length - 1)));
 
     int i;
     for(i = pattern_length - 1; i >= 0; i--) {
@@ -215,45 +215,45 @@ static void code128_lvglappend_pattern(int pattern, int pattern_length, char * o
     }
 }
 
-static int code128_lvglappend_code(int code, char * out)
+static int code128_append_code(int code, char * out)
 {
-    CODE128_LVGL_ASSERT(code >= 0 && code < (int)(sizeof(code128_lvglpattern) / sizeof(code128_lvglpattern[0])));
-    code128_lvglappend_pattern(code128_lvglpattern[code], CODE128_LVGL_CHAR_LEN, out);
-    return CODE128_LVGL_CHAR_LEN;
+    CODE128_ASSERT(code >= 0 && code < (int)(sizeof(code128_pattern) / sizeof(code128_pattern[0])));
+    code128_append_pattern(code128_pattern[code], CODE128_CHAR_LEN, out);
+    return CODE128_CHAR_LEN;
 }
 
-static int code128_lvglappend_stop_code(char * out)
+static int code128_append_stop_code(char * out)
 {
-    code128_lvglappend_pattern(code128_lvglstop_pattern, CODE128_LVGL_STOP_CODE_LEN, out);
-    return CODE128_LVGL_STOP_CODE_LEN;
+    code128_append_pattern(code128_stop_pattern, CODE128_STOP_CODE_LEN, out);
+    return CODE128_STOP_CODE_LEN;
 }
 
-static signed char code128_lvglswitch_code(char from_mode, char to_mode)
+static signed char code128_switch_code(char from_mode, char to_mode)
 {
     switch(from_mode) {
-        case CODE128_LVGL_MODE_A:
+        case CODE128_MODE_A:
             switch(to_mode) {
-                case CODE128_LVGL_MODE_B:
+                case CODE128_MODE_B:
                     return 100;
-                case CODE128_LVGL_MODE_C:
+                case CODE128_MODE_C:
                     return 99;
             }
             break;
 
-        case CODE128_LVGL_MODE_B:
+        case CODE128_MODE_B:
             switch(to_mode) {
-                case CODE128_LVGL_MODE_A:
+                case CODE128_MODE_A:
                     return 101;
-                case CODE128_LVGL_MODE_C:
+                case CODE128_MODE_C:
                     return 99;
             }
             break;
 
-        case CODE128_LVGL_MODE_C:
+        case CODE128_MODE_C:
             switch(to_mode) {
-                case CODE128_LVGL_MODE_B:
+                case CODE128_MODE_B:
                     return 100;
-                case CODE128_LVGL_MODE_A:
+                case CODE128_MODE_A:
                     return 101;
             }
             break;
@@ -261,7 +261,7 @@ static signed char code128_lvglswitch_code(char from_mode, char to_mode)
             break;
     }
 
-    CODE128_LVGL_ASSERT(0); // Invalid mode switch
+    CODE128_ASSERT(0); // Invalid mode switch
     return -1;
 }
 
@@ -271,13 +271,13 @@ static signed char code128a_ascii_to_code(signed char value)
         return (signed char)(value - ' ');
     else if(value >= 0 && value < ' ')
         return (signed char)(value + 64);
-    else if(value == (signed char)CODE128_LVGL_FNC1)
+    else if(value == (signed char)CODE128_FNC1)
         return 102;
-    else if(value == (signed char)CODE128_LVGL_FNC2)
+    else if(value == (signed char)CODE128_FNC2)
         return 97;
-    else if(value == (signed char)CODE128_LVGL_FNC3)
+    else if(value == (signed char)CODE128_FNC3)
         return 96;
-    else if(value == (signed char)CODE128_LVGL_FNC4)
+    else if(value == (signed char)CODE128_FNC4)
         return 101;
     else
         return -1;
@@ -287,13 +287,13 @@ static signed char code128b_ascii_to_code(signed char value)
 {
     if(value >= ' ')  // value <= 127 is implied
         return (signed char)(value - ' ');
-    else if(value == (signed char)CODE128_LVGL_FNC1)
+    else if(value == (signed char)CODE128_FNC1)
         return 102;
-    else if(value == (signed char)CODE128_LVGL_FNC2)
+    else if(value == (signed char)CODE128_FNC2)
         return 97;
-    else if(value == (signed char)CODE128_LVGL_FNC3)
+    else if(value == (signed char)CODE128_FNC3)
         return 96;
-    else if(value == (signed char)CODE128_LVGL_FNC4)
+    else if(value == (signed char)CODE128_FNC4)
         return 100;
     else
         return -1;
@@ -301,7 +301,7 @@ static signed char code128b_ascii_to_code(signed char value)
 
 static signed char code128c_ascii_to_code(const char * values)
 {
-    if(values[0] == CODE128_LVGL_FNC1)
+    if(values[0] == CODE128_FNC1)
         return 102;
 
     if(values[0] >= '0' && values[0] <= '9' &&
@@ -313,10 +313,10 @@ static signed char code128c_ascii_to_code(const char * values)
     return -1;
 }
 
-static int code128_lvgldo_a_step(struct code128_lvglstep * base, int prev_ix, int ix)
+static int code128_do_a_step(struct code128_step * base, int prev_ix, int ix)
 {
-    struct code128_lvglstep * previous_step = &base[prev_ix];
-    struct code128_lvglstep * step = &base[ix];
+    struct code128_step * previous_step = &base[prev_ix];
+    struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
     // NOTE: Currently we can't encode NULL
@@ -329,18 +329,18 @@ static int code128_lvgldo_a_step(struct code128_lvglstep * base, int prev_ix, in
 
     step->prev_ix = prev_ix;
     step->next_input = previous_step->next_input + 1;
-    step->mode = CODE128_LVGL_MODE_A;
-    step->len = previous_step->len + CODE128_LVGL_CHAR_LEN;
+    step->mode = CODE128_MODE_A;
+    step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_LVGL_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Need to switch modes
 
     return 1;
 }
 
-static int code128_lvgldo_b_step(struct code128_lvglstep * base, int prev_ix, int ix)
+static int code128_do_b_step(struct code128_step * base, int prev_ix, int ix)
 {
-    struct code128_lvglstep * previous_step = &base[prev_ix];
-    struct code128_lvglstep * step = &base[ix];
+    struct code128_step * previous_step = &base[prev_ix];
+    struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
     // NOTE: Currently we can't encode NULL
@@ -353,18 +353,18 @@ static int code128_lvgldo_b_step(struct code128_lvglstep * base, int prev_ix, in
 
     step->prev_ix = prev_ix;
     step->next_input = previous_step->next_input + 1;
-    step->mode = CODE128_LVGL_MODE_B;
-    step->len = previous_step->len + CODE128_LVGL_CHAR_LEN;
+    step->mode = CODE128_MODE_B;
+    step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_LVGL_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Need to switch modes
 
     return 1;
 }
 
-static int code128_lvgldo_c_step(struct code128_lvglstep * base, int prev_ix, int ix)
+static int code128_do_c_step(struct code128_step * base, int prev_ix, int ix)
 {
-    struct code128_lvglstep * previous_step = &base[prev_ix];
-    struct code128_lvglstep * step = &base[ix];
+    struct code128_step * previous_step = &base[prev_ix];
+    struct code128_step * step = &base[ix];
 
     char value = *previous_step->next_input;
     // NOTE: Currently we can't encode NULL
@@ -382,40 +382,40 @@ static int code128_lvgldo_c_step(struct code128_lvglstep * base, int prev_ix, in
     if(step->code < 100)
         step->next_input++;
 
-    step->mode = CODE128_LVGL_MODE_C;
-    step->len = previous_step->len + CODE128_LVGL_CHAR_LEN;
+    step->mode = CODE128_MODE_C;
+    step->len = previous_step->len + CODE128_CHAR_LEN;
     if(step->mode != previous_step->mode)
-        step->len += CODE128_LVGL_CHAR_LEN; // Need to switch modes
+        step->len += CODE128_CHAR_LEN; // Need to switch modes
 
     return 1;
 }
 
-static struct code128_lvglstep * code128_lvglalloc_step(struct code128_lvglstate * state)
+static struct code128_step * code128_alloc_step(struct code128_state * state)
 {
     if(state->todo_ix >= state->allocated_steps) {
         state->allocated_steps += 1024;
         #if 0
-        state->steps = (struct code128_lvglstep *) CODE128_LVGL_REALLOC(state->steps,
-                                                               state->allocated_steps * sizeof(struct code128_lvglstep));
+        state->steps = (struct code128_step *) CODE128_REALLOC(state->steps,
+                                                               state->allocated_steps * sizeof(struct code128_step));
         #else
-        void *state_ptr = CODE128_LVGL_MALLOC(state->allocated_steps * sizeof(struct code128_lvglstep));
+        void *state_ptr = CODE128_MALLOC(state->allocated_steps * sizeof(struct code128_step));
         if (state->allocated_steps - 1024 > 0) {
-            memcpy(state_ptr, state->steps, (state->allocated_steps - 1024) * sizeof(struct code128_lvglstep));
+            memcpy(state_ptr, state->steps, (state->allocated_steps - 1024) * sizeof(struct code128_step));
         }
-        CODE128_LVGL_FREE(state->steps);
+        CODE128_FREE(state->steps);
         state->steps = state_ptr;
         #endif
     }
 
-    struct code128_lvglstep * step = &state->steps[state->todo_ix];
+    struct code128_step * step = &state->steps[state->todo_ix];
 
-    CODE128_LVGL_MEMSET(step, 0, sizeof(*step));
+    CODE128_MEMSET(step, 0, sizeof(*step));
     return step;
 }
 
-static void code128_lvgldo_step(struct code128_lvglstate * state)
+static void code128_do_step(struct code128_state * state)
 {
-    struct code128_lvglstep * step = &state->steps[state->current_ix];
+    struct code128_step * step = &state->steps[state->current_ix];
     if(*step->next_input == 0) {
         // Done, so see if we have a new shortest encoding.
         if((step->len < state->maxlength) ||
@@ -434,28 +434,28 @@ static void code128_lvgldo_step(struct code128_lvglstate * state)
         return;
     char mode = step->mode;
 
-    code128_lvglalloc_step(state);
+    code128_alloc_step(state);
     int mode_c_worked = 0;
 
     // Always try mode C
-    if(code128_lvgldo_c_step(state->steps, state->current_ix, state->todo_ix)) {
+    if(code128_do_c_step(state->steps, state->current_ix, state->todo_ix)) {
         state->todo_ix++;
-        code128_lvglalloc_step(state);
+        code128_alloc_step(state);
         mode_c_worked = 1;
     }
 
-    if(mode == CODE128_LVGL_MODE_A) {
+    if(mode == CODE128_MODE_A) {
         // If A works, stick with A. There's no advantage to switching
         // to B proactively if A still works.
-        if(code128_lvgldo_a_step(state->steps, state->current_ix, state->todo_ix) ||
-           code128_lvgldo_b_step(state->steps, state->current_ix, state->todo_ix))
+        if(code128_do_a_step(state->steps, state->current_ix, state->todo_ix) ||
+           code128_do_b_step(state->steps, state->current_ix, state->todo_ix))
             state->todo_ix++;
     }
-    else if(mode == CODE128_LVGL_MODE_B) {
+    else if(mode == CODE128_MODE_B) {
         // The same logic applies here. There's no advantage to switching
         // proactively to A if B still works.
-        if(code128_lvgldo_b_step(state->steps, state->current_ix, state->todo_ix) ||
-           code128_lvgldo_a_step(state->steps, state->current_ix, state->todo_ix))
+        if(code128_do_b_step(state->steps, state->current_ix, state->todo_ix) ||
+           code128_do_a_step(state->steps, state->current_ix, state->todo_ix))
             state->todo_ix++;
     }
     else if(!mode_c_worked) {
@@ -465,31 +465,31 @@ static void code128_lvgldo_step(struct code128_lvglstate * state)
 
         // If we're leaving mode C, though, try both in case one ends up
         // better than the other.
-        if(code128_lvgldo_a_step(state->steps, state->current_ix, state->todo_ix)) {
+        if(code128_do_a_step(state->steps, state->current_ix, state->todo_ix)) {
             state->todo_ix++;
-            code128_lvglalloc_step(state);
+            code128_alloc_step(state);
         }
-        if(code128_lvgldo_b_step(state->steps, state->current_ix, state->todo_ix))
+        if(code128_do_b_step(state->steps, state->current_ix, state->todo_ix))
             state->todo_ix++;
     }
 }
 
-size_t code128_lvglencode_raw(const char * s, char * out, size_t maxlength)
+size_t code128_encode_raw(const char * s, char * out, size_t maxlength)
 {
-    struct code128_lvglstate state;
+    struct code128_state state;
 
-    const size_t overhead = CODE128_LVGL_QUIET_ZONE_LEN
-                            + CODE128_LVGL_CHAR_LEN // checksum
-                            + CODE128_LVGL_STOP_CODE_LEN
-                            + CODE128_LVGL_QUIET_ZONE_LEN;
-    if(maxlength < overhead + CODE128_LVGL_CHAR_LEN + CODE128_LVGL_CHAR_LEN) {
+    const size_t overhead = CODE128_QUIET_ZONE_LEN
+                            + CODE128_CHAR_LEN // checksum
+                            + CODE128_STOP_CODE_LEN
+                            + CODE128_QUIET_ZONE_LEN;
+    if(maxlength < overhead + CODE128_CHAR_LEN + CODE128_CHAR_LEN) {
         // Need space to encode the start character and one additional
         // character.
         return 0;
     }
 
     state.allocated_steps = 256;
-    state.steps = (struct code128_lvglstep *) CODE128_LVGL_MALLOC(state.allocated_steps * sizeof(struct code128_lvglstep));
+    state.steps = (struct code128_step *) CODE128_MALLOC(state.allocated_steps * sizeof(struct code128_step));
     state.current_ix = 0;
     state.todo_ix = 0;
     state.maxlength = maxlength - overhead;
@@ -498,49 +498,49 @@ size_t code128_lvglencode_raw(const char * s, char * out, size_t maxlength)
     // Initialize the first 3 steps for the 3 encoding routes (A, B, C)
     state.steps[0].prev_ix = -1;
     state.steps[0].next_input = s;
-    state.steps[0].len = CODE128_LVGL_CHAR_LEN;
-    state.steps[0].mode = CODE128_LVGL_MODE_C;
-    state.steps[0].code = CODE128_LVGL_START_CODE_C;
+    state.steps[0].len = CODE128_CHAR_LEN;
+    state.steps[0].mode = CODE128_MODE_C;
+    state.steps[0].code = CODE128_START_CODE_C;
 
     state.steps[1].prev_ix = -1;
     state.steps[1].next_input = s;
-    state.steps[1].len = CODE128_LVGL_CHAR_LEN;
-    state.steps[1].mode = CODE128_LVGL_MODE_A;
-    state.steps[1].code = CODE128_LVGL_START_CODE_A;
+    state.steps[1].len = CODE128_CHAR_LEN;
+    state.steps[1].mode = CODE128_MODE_A;
+    state.steps[1].code = CODE128_START_CODE_A;
 
     state.steps[2].prev_ix = -1;
     state.steps[2].next_input = s;
-    state.steps[2].len = CODE128_LVGL_CHAR_LEN;
-    state.steps[2].mode = CODE128_LVGL_MODE_B;
-    state.steps[2].code = CODE128_LVGL_START_CODE_B;
+    state.steps[2].len = CODE128_CHAR_LEN;
+    state.steps[2].mode = CODE128_MODE_B;
+    state.steps[2].code = CODE128_START_CODE_B;
 
     state.todo_ix = 3;
 
     // Keep going until no more work
     do {
-        code128_lvgldo_step(&state);
+        code128_do_step(&state);
         state.current_ix++;
     } while(state.current_ix != state.todo_ix);
 
     // If no best_step, then fail.
     if(state.best_ix < 0) {
-        CODE128_LVGL_FREE(state.steps);
+        CODE128_FREE(state.steps);
         return 0;
     }
 
     // Determine the list of codes
-    size_t num_codes = state.maxlength / CODE128_LVGL_CHAR_LEN;
-    char * codes = CODE128_LVGL_MALLOC(num_codes);
-    CODE128_LVGL_ASSERT(codes);
+    size_t num_codes = state.maxlength / CODE128_CHAR_LEN;
+    char * codes = CODE128_MALLOC(num_codes);
+    CODE128_ASSERT(codes);
 
-    struct code128_lvglstep * step = &state.steps[state.best_ix];
+    struct code128_step * step = &state.steps[state.best_ix];
     size_t i;
     for(i = num_codes - 1; i > 0; --i) {
-        struct code128_lvglstep * prev_step = &state.steps[step->prev_ix];
+        struct code128_step * prev_step = &state.steps[step->prev_ix];
         codes[i] = step->code;
         if(step->mode != prev_step->mode) {
             --i;
-            codes[i] = code128_lvglswitch_code(prev_step->mode, step->mode);
+            codes[i] = code128_switch_code(prev_step->mode, step->mode);
         }
         step = prev_step;
     }
@@ -548,23 +548,23 @@ size_t code128_lvglencode_raw(const char * s, char * out, size_t maxlength)
 
     // Encode everything up to the checksum
     size_t actual_length = state.maxlength + overhead;
-    CODE128_LVGL_MEMSET(out, 0, CODE128_LVGL_QUIET_ZONE_LEN);
-    out += CODE128_LVGL_QUIET_ZONE_LEN;
+    CODE128_MEMSET(out, 0, CODE128_QUIET_ZONE_LEN);
+    out += CODE128_QUIET_ZONE_LEN;
     for(i = 0; i < num_codes; i++)
-        out += code128_lvglappend_code(codes[i], out);
+        out += code128_append_code(codes[i], out);
 
     // Compute the checksum
     int sum = codes[0];
     for(i = 1; i < num_codes; i++)
         sum += (int)(codes[i] * i);
-    out += code128_lvglappend_code(sum % 103, out);
+    out += code128_append_code(sum % 103, out);
 
     // Finalize the code.
-    out += code128_lvglappend_stop_code(out);
-    CODE128_LVGL_MEMSET(out, 0, CODE128_LVGL_QUIET_ZONE_LEN);
+    out += code128_append_stop_code(out);
+    CODE128_MEMSET(out, 0, CODE128_QUIET_ZONE_LEN);
 
-    CODE128_LVGL_FREE(codes);
-    CODE128_LVGL_FREE(state.steps);
+    CODE128_FREE(codes);
+    CODE128_FREE(state.steps);
     return actual_length;
 }
 
@@ -576,11 +576,11 @@ size_t code128_lvglencode_raw(const char * s, char * out, size_t maxlength)
  *
  * @return the length of barcode data in bytes
  */
-size_t code128_lvglencode_gs1(const char * s, char * out, size_t maxlength)
+size_t code128_encode_gs1(const char * s, char * out, size_t maxlength)
 {
-    size_t raw_size = CODE128_LVGL_STRLEN(s) + 1;
-    char * raw = CODE128_LVGL_MALLOC(raw_size);
-    CODE128_LVGL_ASSERT(raw);
+    size_t raw_size = CODE128_STRLEN(s) + 1;
+    char * raw = CODE128_MALLOC(raw_size);
+    CODE128_ASSERT(raw);
     if(!raw) {
         return 0;
     }
@@ -588,7 +588,7 @@ size_t code128_lvglencode_gs1(const char * s, char * out, size_t maxlength)
     char * p = raw;
     for(; *s != '\0'; s++) {
         if(strncmp(s, "[FNC1]", 6) == 0) {
-            *p++ = CODE128_LVGL_FNC1;
+            *p++ = CODE128_FNC1;
             s += 5;
         }
         else if(*s != ' ') {
@@ -597,9 +597,9 @@ size_t code128_lvglencode_gs1(const char * s, char * out, size_t maxlength)
     }
     *p = '\0';
 
-    size_t length = code128_lvglencode_raw(raw, out, maxlength);
+    size_t length = code128_encode_raw(raw, out, maxlength);
 
-    CODE128_LVGL_FREE(raw);
+    CODE128_FREE(raw);
 
     return length;
 }

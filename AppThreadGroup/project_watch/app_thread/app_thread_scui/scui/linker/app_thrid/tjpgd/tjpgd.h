@@ -1,18 +1,14 @@
 /*----------------------------------------------------------------------------/
 / TJpgDec - Tiny JPEG Decompressor R0.03 include file         (C)ChaN, 2021
 /----------------------------------------------------------------------------*/
-#ifndef DEF_TJPGDEC_SCUI
-#define DEF_TJPGDEC_SCUI
+#ifndef DEF_TJPGDEC
+#define DEF_TJPGDEC
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/**我没有对该库做任何的额外修改,制作了api的重命名,防止编译时的重定义而已
- * 可与原tjpgd进行对比,不会有差异性
- */
-
-#include "tjpgdcnf_scui.h"
+#include "tjpgdcnf.h"
 #include <string.h>
 
 #if 0
@@ -99,8 +95,8 @@ struct JDEC {
 
 
 /* TJpgDec API functions */
-JRESULT jd_prepare_scui (JDEC* jd, size_t (*infunc)(JDEC*,uint8_t*,size_t), void* pool, size_t sz_pool, void* dev);
-JRESULT jd_decomp_scui (JDEC* jd, int (*outfunc)(JDEC*,void*,JRECT*), uint8_t scale);
+JRESULT jd_prepare (JDEC* jd, size_t (*infunc)(JDEC*,uint8_t*,size_t), void* pool, size_t sz_pool, void* dev);
+JRESULT jd_decomp (JDEC* jd, int (*outfunc)(JDEC*,void*,JRECT*), uint8_t scale);
 
 
 #ifdef __cplusplus

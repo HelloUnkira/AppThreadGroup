@@ -38,6 +38,12 @@ endif()
 # AppThreadGroup/project_watch/app_third/lib_nanopb/lib_nanopb
 # nanopb库(编译器):https://jpa.kapsi.fi/nanopb/download
 #
+# LZ4库:
+# dev https://github.com/lz4/lz4.git
+# AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4
+#
+#
+#
 # tinycrypt库:
 # master https://github.com/intel/tinycrypt.git 
 # AppThreadGroup/project_watch/app_third/lib_tinycrypt/lib_tinycrypt
@@ -45,10 +51,6 @@ endif()
 # mbedtls库:
 # master https://github.com/Mbed-TLS/mbedtls.git
 # AppThreadGroup/project_watch/app_third/lib_mbedtls/lib_mbedtls
-#
-# LZ4库:
-# dev https://github.com/lz4/lz4.git
-# AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4
 #
 # TinyEKF库(Extend Kalman Filter):
 # master https://github.com/simondlevy/TinyEKF.git

@@ -6,7 +6,7 @@
 #define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
-#include "code128_lvgl.h"
+#include "code128.h"
 
 /*@brief 自定义控件:插件:条形码生成器
  *@param event 自定义控件事件
@@ -32,9 +32,9 @@ void scui_custom_draw_barcode(scui_event_t *event, scui_area_t *clip,
         return;
     }
     
-    size_t len = code128_lvglestimate_len(data);
+    size_t len = code128_estimate_len(data);
     uint8_t *out_buf = SCUI_MEM_ALLOC(scui_mem_type_mix, len);
-    size_t barcode_w = code128_lvglencode_gs1(data, out_buf, len);
+    size_t barcode_w = code128_encode_gs1(data, out_buf, len);
     
     if (barcode_w > clip->w) {
         SCUI_LOG_ERROR("clip too small:%d - %d", barcode_w , clip->w);

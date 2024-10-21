@@ -13,10 +13,10 @@
 #include "lz4frame.h"
 
 // PNG
-#include "lodepng_scui.h"
+#include "lodepng.h"
 
 // JPG
-#include "tjpgd_scui.h"
+#include "tjpgd.h"
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -63,7 +63,7 @@ static size_t scui_lodepng_size_cur = 0;
 static size_t scui_lodepng_size_top = 0;
 static size_t scui_lodepng_size_rcd = 0;
 
-void *lodepng_scui_malloc(size_t size)
+void *lodepng_malloc(size_t size)
 {
     void *ptr = SCUI_MEM_ALLOC(scui_mem_type_graph, size);
     
@@ -73,17 +73,17 @@ void *lodepng_scui_malloc(size_t size)
     
     return ptr;
 }
-void lodepng_scui_free(void* ptr)
+void lodepng_free(void* ptr)
 {
     scui_lodepng_size_cur -= scui_mem_size_ptr(ptr);
     SCUI_MEM_FREE(ptr);
 }
-void *lodepng_scui_realloc(void* ptr, size_t new_size)
+void *lodepng_realloc(void* ptr, size_t new_size)
 {
-    void  *ptr_new = lodepng_scui_malloc(new_size);
+    void  *ptr_new = lodepng_malloc(new_size);
     size_t siz_old = scui_mem_size_ptr(ptr);
     memcpy(ptr_new, ptr, scui_min(siz_old, new_size));
-    lodepng_scui_free(ptr);
+    lodepng_free(ptr);
     
     return ptr_new;
 }
@@ -192,15 +192,15 @@ void scui_image_src_read(scui_image_t *image, void *data)
         scui_tjpgd_dat_ins = jpg_size;
         scui_tjpgd_image   = image;
         
-        JDEC jdec;
+        static volatile JDEC jdec = {0};
         void *work = SCUI_MEM_ALLOC(scui_mem_type_graph, JD_SZBUF * 4);
-        JRESULT res = jd_prepare_scui(&jdec, scui_tjpgd_in_func_cb, work, JD_SZBUF * 4, NULL);
+        JRESULT res = jd_prepare(&jdec, scui_tjpgd_in_func_cb, work, JD_SZBUF * 4, NULL);
         if (res != JDR_OK) {
             SCUI_LOG_ERROR("ret:%d", res);
             SCUI_ASSERT(false);
         }
         
-        res = jd_decomp_scui(&jdec, scui_tjpgd_out_func_cb, 0);
+        res = jd_decomp(&jdec, scui_tjpgd_out_func_cb, 0);
         if (res != JDR_OK) {
             SCUI_LOG_ERROR("ret:%d", res);
             SCUI_ASSERT(false);
@@ -218,7 +218,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
         scui_lodepng_size_top = 0;
         
         size_t png_size = image->pixel.size_bin;
-        void  *png_data = lodepng_scui_malloc(png_size);
+        void  *png_data = lodepng_malloc(png_size);
         
         FILE *file = fopen("scui_image_parser.bin", "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
@@ -229,10 +229,10 @@ void scui_image_src_read(scui_image_t *image, void *data)
         uint8_t *png_data_dec = NULL;
         unsigned png_w_dec = 0;
         unsigned png_h_dec = 0;
-        unsigned lib_error = lodepng_scui_decode32(&png_data_dec, &png_w_dec, &png_h_dec, png_data, png_size);
+        unsigned lib_error = lodepng_decode32(&png_data_dec, &png_w_dec, &png_h_dec, png_data, png_size);
         
         if (lib_error != 0) {
-            SCUI_LOG_ERROR("%s", lodepng_scui_error_text(lib_error));
+            SCUI_LOG_ERROR("%s", lodepng_error_text(lib_error));
             SCUI_ASSERT(false);
         }
         SCUI_ASSERT(png_w_dec == image->pixel.width);
@@ -249,8 +249,8 @@ void scui_image_src_read(scui_image_t *image, void *data)
         };
         scui_draw_byte_copy(&draw_dsc);
         
-        lodepng_scui_free(png_data_dec);
-        lodepng_scui_free(png_data);
+        lodepng_free(png_data_dec);
+        lodepng_free(png_data);
         
         if (scui_lodepng_size_rcd < scui_lodepng_size_top) {
             scui_lodepng_size_rcd = scui_lodepng_size_top;

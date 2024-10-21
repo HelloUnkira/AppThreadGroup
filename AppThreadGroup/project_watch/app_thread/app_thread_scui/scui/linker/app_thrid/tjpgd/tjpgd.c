@@ -24,7 +24,7 @@
 /                     Some performance improvement.
 /----------------------------------------------------------------------------*/
 
-#include "tjpgd_scui.h"
+#include "tjpgd.h"
 
 
 #if JD_FASTDECODE == 2
@@ -959,7 +959,7 @@ static JRESULT mcu_output (
 #define	LDB_WORD(ptr)		(uint16_t)(((uint16_t)*((uint8_t*)(ptr))<<8)|(uint16_t)*(uint8_t*)((ptr)+1))
 
 
-JRESULT jd_prepare_scui (
+JRESULT jd_prepare (
 	JDEC* jd,				/* Blank decompressor object */
 	size_t (*infunc)(JDEC*, uint8_t*, size_t),	/* JPEG strem input function */
 	void* pool,				/* Working buffer for the decompression session */
@@ -1115,7 +1115,7 @@ JRESULT jd_prepare_scui (
 /* Start to decompress the JPEG picture                                  */
 /*-----------------------------------------------------------------------*/
 
-JRESULT jd_decomp_scui (
+JRESULT jd_decomp (
 	JDEC* jd,								/* Initialized decompression object */
 	int (*outfunc)(JDEC*, void*, JRECT*),	/* RGB output function */
 	uint8_t scale							/* Output de-scaling factor (0 to 3) */

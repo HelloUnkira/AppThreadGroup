@@ -6,7 +6,7 @@
 #define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
-#include "qrcodegen_lvgl.h"
+#include "qrcodegen.h"
 
 /*@brief 自定义控件:插件:二维码生成器
  *@param event 自定义控件事件
@@ -27,12 +27,12 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
         scui_widget_draw_color(event->object, clip, bg_color);
     }
     
-    if (size >= qrcodegen_lvgl_BUFFER_LEN_MAX) {
+    if (size >= qrcodegen_BUFFER_LEN_MAX) {
         SCUI_LOG_ERROR("error");
         return;
     }
-    int qr_version  = qrcodegen_lvgl_getMinFitVersion(qrcodegen_lvgl_Ecc_MEDIUM, size);
-    int qr_size     = qrcodegen_lvgl_version2size(qr_version);
+    int qr_version  = qrcodegen_getMinFitVersion(qrcodegen_Ecc_MEDIUM, size);
+    int qr_size     = qrcodegen_version2size(qr_version);
     if (qr_version <= 0) {
         SCUI_LOG_ERROR("error");
         return;
@@ -46,24 +46,24 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     int remain = clip->w % qr_size;
     
     uint32_t version_extend = remain / (scale << 2);
-    if (version_extend != 0 && qr_version < qrcodegen_lvgl_VERSION_MAX)
-        qr_version = scui_min(qr_version + version_extend, qrcodegen_lvgl_VERSION_MAX);
+    if (version_extend != 0 && qr_version < qrcodegen_VERSION_MAX)
+        qr_version = scui_min(qr_version + version_extend, qrcodegen_VERSION_MAX);
     
-    uint32_t qr_version_len = qrcodegen_lvgl_BUFFER_LEN_FOR_VERSION(qr_version);
+    uint32_t qr_version_len = qrcodegen_BUFFER_LEN_FOR_VERSION(qr_version);
     uint8_t *qrcode = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
     uint8_t *data_t = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
     memcpy(data_t, data, size);
     
-    enum qrcodegen_lvgl_Ecc  ecc  = qrcodegen_lvgl_Ecc_MEDIUM;
-    enum qrcodegen_lvgl_Mask mask = qrcodegen_lvgl_Mask_AUTO;
-    if (!qrcodegen_lvgl_encodeBinary(data_t, size, qrcode, ecc, qr_version, qr_version, mask, true)) {
+    enum qrcodegen_Ecc  ecc  = qrcodegen_Ecc_MEDIUM;
+    enum qrcodegen_Mask mask = qrcodegen_Mask_AUTO;
+    if (!qrcodegen_encodeBinary(data_t, size, qrcode, ecc, qr_version, qr_version, mask, true)) {
          SCUI_LOG_ERROR("error");
          SCUI_MEM_FREE(data_t);
          SCUI_MEM_FREE(qrcode);
          return;
     }
     
-    qr_size = qrcodegen_lvgl_getSize(qrcode);
+    qr_size = qrcodegen_getSize(qrcode);
     scale   = clip->w / qr_size;
     int scaled = (qr_size * scale);
     int margin = (clip->w - scaled) / 2;
@@ -82,7 +82,7 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     
     for (int y = 0; y < scaled; y++)
     for (int x = 0; x < scaled; x++) {
-         bool bit = qrcodegen_lvgl_getModule(qrcode, x / scale, y / scale);
+         bool bit = qrcodegen_getModule(qrcode, x / scale, y / scale);
          scui_pixel_by_cf(surface->format, &pixel[(y * scaled + x) * pixel_byte], bit ? &pixel_l : &pixel_d);
     }
     
