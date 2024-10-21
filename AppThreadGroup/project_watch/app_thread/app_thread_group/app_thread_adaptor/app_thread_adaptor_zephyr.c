@@ -25,11 +25,15 @@ static  K_THREAD_STACK_DEFINE(app_thread_mix_custom_stack, APP_THREAD_MIX_CUSTOM
 #define APP_THREAD_MANAGE_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_manage_stack, APP_THREAD_MANAGE_STACK_SIZE);
 
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_lvgl_stack, APP_THREAD_LVGL_STACK_SIZE);
-
+#elif APP_EXT_DEV_GUI_IS_SCUI
 #define APP_THREAD_SCUI_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_scui_stack, APP_THREAD_SCUI_STACK_SIZE);
+#else
+#endif
 
 /* @线程体栈信息<End> */
 
@@ -63,19 +67,23 @@ app_thread_t app_thread_manage = {
     .entry      = app_thread_manage_routine,
 };
 
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
 app_thread_t app_thread_lvgl = {
     .stack      = app_thread_lvgl_stack,
     .stack_size = APP_THREAD_LVGL_STACK_SIZE,
     .priority   = 4,
     .entry      = app_thread_lvgl_routine,
 };
-
+#elif APP_EXT_DEV_GUI_IS_SCUI
 app_thread_t app_thread_scui = {
     .stack      = app_thread_scui_stack,
     .stack_size = APP_THREAD_SCUI_STACK_SIZE,
     .priority   = 4,
     .entry      = app_thread_scui_routine,
 };
+#else
+#endif
 
 /* @线程体<End> */
 

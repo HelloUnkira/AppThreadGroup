@@ -254,18 +254,13 @@ void app_delay_us(uint32_t us)
 	}
 }
 
-/*@brief 计算一段代码的延时时间(us)
+/*@brief 计算一个延时点(us)
  */
-double app_execute_us(app_execute_us_t *execute_us, bool run)
+uint64_t app_execute_us(void)
 {
-    if (run) {
-        clock_gettime(CLOCK_MONOTONIC, &execute_us->start);
-        return 0;
-    } else {
-        clock_gettime(CLOCK_MONOTONIC, &execute_us->end);;
-        return (double)(execute_us->end.tv_sec -  execute_us->start.tv_sec) * 1000 * 1000 +
-                       (execute_us->end.tv_nsec - execute_us->start.tv_nsec) / 1000.0;
-    }
+    timespec tick;
+    clock_gettime(CLOCK_MONOTONIC, &tick);
+    return (double)(tick.tv_sec) * 1000 * 1000 + (tick.tv_nsec) / 1000.0;
 }
 
 #endif

@@ -1,1 +1,11 @@
+lib_self/StudyRecord
+lib_fatfs/lib_fatfs
+lib_lvgl/lib_lvgl_8_2
+lib_lvgl/lib_lvgl_8_3
+lib_lvgl/lib_lvgl_font_conv
+lib_json/lib_json
+lib_lz4/lib_lz4
+lib_nanopb/lib_nanopb
+lib_nanopb/nanopb_out
+lib_nanopb/nanopb_src
 lib_nanopb/nanopb_x86

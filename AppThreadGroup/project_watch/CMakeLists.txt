@@ -21,17 +21,19 @@ set_target_properties(app_sys    PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_dev    PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_third  PROPERTIES LINKER_LANGUAGE C)
 set_target_properties(app_thread PROPERTIES LINKER_LANGUAGE C)
+# 定义GUI宏
+set(app_thread_group_use_lvgl   FALSE)
+set(app_thread_group_use_scui   TRUE)
 # 这里存在库的交叉依赖,因为日志模组希望做成全局化
 target_link_libraries(app_sys    PUBLIC app_ext)
 target_link_libraries(app_dev    PUBLIC app_sys)
+if (app_thread_group_use_lvgl)
 target_link_libraries(app_dev    PUBLIC lvgl)
-target_link_libraries(app_dev    PUBLIC lvgl_examples)
 target_link_libraries(app_dev    PUBLIC lvgl_demos)
+target_link_libraries(app_dev    PUBLIC lvgl_examples)
+endif()
 target_link_libraries(app_third  PUBLIC app_dev)
 target_link_libraries(app_thread PUBLIC app_third)
-# 文件迁移到目标
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/../app_sys/app_sys_ext_mem/*.py")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_sys/app_sys_ext_mem)
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
@@ -46,25 +48,3 @@ set(EXECUTABLE_OUTPUT_PATH                   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cm
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY           ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE   ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_exe)
-
-# 注意:  
-# 依赖资源文件:  
-# app_main/app_source  
-# 程序打包到依赖资源文件中的文件:  
-# app_thread/app_thread_lvgl/app_lv_res/lvgl_font  
-# app_thread/app_thread_lvgl/app_lv_res/lvgl_pic  
-# 上面的资源文件与可执行文件应该在同一文件夹下面  
-
-# 文件迁移到调试
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_main/app_source/*")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_font/*")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_font)
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_lvgl/app_lv_res/lvgl_pic/*")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main/lvgl_pic)
-# 文件迁移到调试
-file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/font_out/*"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.mem"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.raw"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread/app_thread_scui/scui_ui_res/image_out/scui_image_parser.bin")
-file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/project_main)

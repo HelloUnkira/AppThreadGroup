@@ -37,17 +37,21 @@ app_thread_t app_thread_manage = {
    .args     = NULL,
 };
 
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
 app_thread_t app_thread_lvgl = {
    .priority = THREAD_PRIORITY_NORMAL,
    .routine  = app_thread_lvgl_routine,
    .args     = NULL,
 };
-
+#elif APP_EXT_DEV_GUI_IS_SCUI
 app_thread_t app_thread_scui = {
   .priority = THREAD_PRIORITY_NORMAL,
   .routine  = app_thread_scui_routine,
   .args     = NULL,
 };
+#else
+#endif
 
 /* @线程体<End> */
 

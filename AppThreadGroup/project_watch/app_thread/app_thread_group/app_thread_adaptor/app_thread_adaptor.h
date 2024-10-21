@@ -40,8 +40,13 @@ APP_THREAD_GROUP_HANDLER(app_thread_master_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_mix_irq_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_mix_custom_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_manage_routine);
+#if 0
+#elif APP_EXT_DEV_GUI_IS_LVGL
 APP_THREAD_GROUP_HANDLER(app_thread_lvgl_routine);
+#elif APP_EXT_DEV_GUI_IS_SCUI
 APP_THREAD_GROUP_HANDLER(app_thread_scui_routine);
+#else
+#endif
 
 /* 静态线程信息声明 */
 extern app_thread_t app_thread_master;

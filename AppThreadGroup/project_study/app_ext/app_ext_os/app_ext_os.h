@@ -9,6 +9,8 @@
 /* APP OS custom adaptor */
 #include "app_ext_os_windows.h"
 #include "app_ext_os_linux.h"
+#include "app_ext_os_zephyr.h"
+#include "app_ext_os_freertos.h"
 
 /*@brief 初始化OS
  */
@@ -108,8 +110,8 @@ void app_delay_ms(uint32_t ms);
  */
 void app_delay_us(uint32_t us);
 
-/*@brief 计算一段代码的延时时间(us)
+/*@brief 计算一个延时点(us)
  */
-double app_execute_us(app_execute_us_t *execute_us, bool run);
+uint64_t app_execute_us(void);
 
 #endif

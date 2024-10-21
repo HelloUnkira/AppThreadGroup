@@ -23,6 +23,7 @@
 #define APP_EXT_DEV_GUI_USE_WIN     1
 #define APP_EXT_DEV_GUI_USE_SDL     0
 /* gui framework: */
+// 修改这个要同步修改CmakeLists中对应变量
 #define APP_EXT_DEV_GUI_IS_LVGL     0
 #define APP_EXT_DEV_GUI_IS_SCUI     1
 /*************************************************************************************************/

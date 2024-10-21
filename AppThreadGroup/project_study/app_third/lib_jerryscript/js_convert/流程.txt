@@ -1,0 +1,41 @@
+注意事项:
+//Bin2C.exe与convert_c.py必须要保持以下相对路径:
+//..\software\Bin2C.exe
+//..\convert_c.py
+//(!!除非你需要做额外的修改,在convert_c.py的bin_to_c函数中!!)
+
+//当前工程默认遵守上述注意事项,所以无需关心
+//但Bin2C.exe不要进行手动调用
+
+
+
+准备流程:
+//(为了方便使用,一键next)
+//(注意:如果不是一键next,而是手动指定安装目录,那么需要手动添加环境变量)
+//(nodejs默认路径:C:\Program Files\nodejs,用于添加环境变量提供参考)
+//(python3.8来源于共享文件夹,如果不可用那里还有另一个Python3.8)
+
+1.安装下述软件(python3.8 nodejs)
+software\python3.8.0  
+software\node-v16.13.0-x64.msi
+
+如果安装成功且环境变量配置完后
+直接在cmd的任意相对路径执行以下查看版本的指令就可以了
+打印版本号:
+cmd:python -V(大写)
+cmd:node   -v
+cmd:npm    -v
+更新js软件(可选,用不了时去执行):
+npm install uglify-js -g
+
+
+
+
+
+执行流程:
+//(目前还未做完全的批处理,等待后续补充)
+打开：convert_c.bat (notepad++等工具打开,不执行)
+修改: convert_c.py  Buffer.js  buffer
+执行：convert_c.bat
+生成: buffer   --> 字符串流文件(尾缀建议不加,直接notepad++打开就能看到代码)
+      buffer.c --> 字符数组文件

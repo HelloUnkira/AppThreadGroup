@@ -121,12 +121,12 @@ void scui_anima_update(scui_handle_t handle)
                 int32_t value_te = anima->value_e;
                 anima->value_s = value_te;
                 anima->value_e = value_ts;
-                /* 更新value_c */
-                if (anima->value_s < anima->value_e)
-                    anima->value_c = anima->value_s - 1;
-                if (anima->value_s > anima->value_e)
-                    anima->value_c = anima->value_s + 1;
             }
+            /* 更新value_c */
+            if (anima->value_s < anima->value_e)
+                anima->value_c = anima->value_s - 1;
+            if (anima->value_s > anima->value_e)
+                anima->value_c = anima->value_s + 1;
             continue;
         }
         
