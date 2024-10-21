@@ -1,18 +1,14 @@
-[submodule "AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_8_3"]
-	path = AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_8_3
-	url = https://github.com/lvgl/lvgl.git
-	branch = release/v8.3
-[submodule "AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_8_2"]
-	path = AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_8_2
+[submodule "AppThreadGroup/project_watch/app_third/lib_self/StudyRecord"]
+	path = AppThreadGroup/project_watch/app_third/lib_self/StudyRecord
+	url = https://github.com/HelloUnkira/StudyRecord.git
+	branch = master
+[submodule "AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl"]
+	path = AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl
 	url = https://github.com/lvgl/lvgl.git
 	branch = release/v8.2
 [submodule "AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_font_conv"]
 	path = AppThreadGroup/project_watch/app_third/lib_lvgl/lib_lvgl_font_conv
 	url = https://github.com/lvgl/lv_font_conv.git
-	branch = master
-[submodule "AppThreadGroup/project_watch/app_third/lib_fatfs/lib_fatfs"]
-	path = AppThreadGroup/project_watch/app_third/lib_fatfs/lib_fatfs
-	url = https://github.com/abbrev/fatfs.git
 	branch = master
 [submodule "AppThreadGroup/project_watch/app_third/lib_nanopb/lib_nanopb"]
 	path = AppThreadGroup/project_watch/app_third/lib_nanopb/lib_nanopb
@@ -22,16 +18,15 @@
 	path = AppThreadGroup/project_watch/app_third/lib_json/lib_json
 	url = https://github.com/DaveGamble/cJSON.git
 	branch = master
+[submodule "AppThreadGroup/project_watch/app_third/lib_fatfs/lib_fatfs"]
+	path = AppThreadGroup/project_watch/app_third/lib_fatfs/lib_fatfs
+	url = https://github.com/abbrev/fatfs.git
+	branch = master
 [submodule "AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4"]
 	path = AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4
 	url = https://github.com/lz4/lz4.git
 	branch = dev
-[submodule "AppThreadGroup/project_watch/app_third/lib_self/StudyRecord"]
-	path = AppThreadGroup/project_watch/app_third/lib_self/StudyRecord
-	url = https://github.com/HelloUnkira/StudyRecord.git
-	branch = master
-
-[submodule "AppThreadGroup/project_watch/app_third/lib_jerryscript/lib_jerryscript"]
-	path = AppThreadGroup/project_watch/app_third/lib_jerryscript/lib_jerryscript
+[submodule "AppThreadGroup/project_study/app_third/lib_jerryscript/lib_jerryscript"]
+	path = AppThreadGroup/project_study/app_third/lib_jerryscript/lib_jerryscript
 	url = https://github.com/jerryscript-project/jerryscript.git
 	branch = master
