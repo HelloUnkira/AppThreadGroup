@@ -110,14 +110,33 @@ static void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t
 
 /*@brief 窗口浮动动画回调
  */
-static void scui_window_float_anima_start(void *instance)
+static void scui_window_float_anima_prepare(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 窗口浮动动画回调
  */
-static void scui_window_float_anima_ready(void *instance)
+static void scui_window_float_anima_expired(void *instance)
+{
+    SCUI_LOG_INFO("");
+    scui_anima_t *anima  = instance;
+    scui_handle_t handle = scui_window_float.target;
+    scui_area_t   clip   = scui_widget_clip(handle);
+    
+    scui_point_t point = {.x = clip.x,.y = clip.y,};
+    if ((scui_window_float.dir & scui_opt_dir_hor) != 0)
+        point.x = anima->value_c;
+    if ((scui_window_float.dir & scui_opt_dir_ver) != 0)
+        point.y = anima->value_c;
+    
+    SCUI_LOG_INFO("<%d, %d>", point.x, point.y);
+    scui_window_float_move_with_alpha(handle, &point);
+}
+
+/*@brief 窗口浮动动画回调
+ */
+static void scui_window_float_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t *anima  = instance;
@@ -152,33 +171,14 @@ static void scui_window_float_anima_ready(void *instance)
          scui_widget_event_scroll_flag(0x01, &scui_window_float.key);
 }
 
-/*@brief 窗口浮动动画回调
- */
-static void scui_window_float_anima_expired(void *instance)
-{
-    SCUI_LOG_INFO("");
-    scui_anima_t *anima  = instance;
-    scui_handle_t handle = scui_window_float.target;
-    scui_area_t   clip   = scui_widget_clip(handle);
-    
-    scui_point_t point = {.x = clip.x,.y = clip.y,};
-    if ((scui_window_float.dir & scui_opt_dir_hor) != 0)
-        point.x = anima->value_c;
-    if ((scui_window_float.dir & scui_opt_dir_ver) != 0)
-        point.y = anima->value_c;
-    
-    SCUI_LOG_INFO("<%d, %d>", point.x, point.y);
-    scui_window_float_move_with_alpha(handle, &point);
-}
-
 /*@brief 窗口浮动动画自动化
  */
 static void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid)
 {
     scui_anima_t anima = {0};
-    anima.start   = scui_window_float_anima_start;
-    anima.ready   = scui_window_float_anima_ready;
+    anima.prepare = scui_window_float_anima_prepare;
     anima.expired = scui_window_float_anima_expired;
+    anima.finish  = scui_window_float_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
     anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s) / 2;
@@ -192,9 +192,9 @@ static void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint3
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_window_float_anima_start(&anima);
+        scui_window_float_anima_prepare(&anima);
         scui_window_float_anima_expired(&anima);
-        scui_window_float_anima_ready(&anima);
+        scui_window_float_anima_finish(&anima);
         return;
     }
     scui_anima_create(&anima, &scui_window_float.anima);

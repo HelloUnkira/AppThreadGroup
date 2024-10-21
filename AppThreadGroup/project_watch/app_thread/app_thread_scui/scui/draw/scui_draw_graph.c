@@ -790,7 +790,6 @@ static void scui_draw_circle(scui_draw_graph_dsc_t *draw_graph)
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_lb);
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_rt);
     scui_draw_circle_corner(draw_graph, scui_draw_circle_type_rb);
-    return;
     
     scui_draw_graph_dsc_t draw_graph_line = {
         .type = scui_draw_graph_type_line,

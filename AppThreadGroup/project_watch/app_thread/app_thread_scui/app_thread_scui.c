@@ -63,12 +63,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     #endif
 }
 
-static void app_thread_scui_draw_test_anima_start(void *anima)
-{
-    APP_SYS_LOG_WARN("");
-}
-
-static void app_thread_scui_draw_test_anima_ready(void *anima)
+static void app_thread_scui_draw_test_anima_prepare(void *anima)
 {
     APP_SYS_LOG_WARN("");
 }
@@ -79,12 +74,17 @@ static void app_thread_scui_draw_test_anima_expired(void *anima)
     // APP_SYS_LOG_WARN("");
 }
 
+static void app_thread_scui_draw_test_anima_finish(void *anima)
+{
+    APP_SYS_LOG_WARN("");
+}
+
 static void app_thread_scui_draw_test(void)
 {
     scui_anima_t anima = {
-        .start   = app_thread_scui_draw_test_anima_start,
-        .ready   = app_thread_scui_draw_test_anima_ready,
+        .prepare = app_thread_scui_draw_test_anima_prepare,
         .expired = app_thread_scui_draw_test_anima_expired,
+        .finish  = app_thread_scui_draw_test_anima_finish,
         .reload  = 0xFF,
         .peroid  = SCUI_ANIMA_TICK,
     };

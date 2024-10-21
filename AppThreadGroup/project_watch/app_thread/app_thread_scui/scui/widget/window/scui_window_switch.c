@@ -27,38 +27,9 @@ static void scui_window_switch_type_update(scui_window_switch_type_t type, scui_
 
 /*@brief 窗口跳转动画回调
  */
-static void scui_window_jump_anima_start(void *instance)
+static void scui_window_jump_anima_prepare(void *instance)
 {
     SCUI_LOG_INFO("");
-}
-
-/*@brief 窗口跳转动画回调
- */
-static void scui_window_jump_anima_ready(void *instance)
-{
-    SCUI_LOG_INFO("");
-    scui_point_t   point  = {0};
-    scui_widget_t *widget = NULL;
-    
-    if (scui_window_mgr.switch_args.pct == 0) {
-        scui_window_active(scui_window_mgr.switch_args.list[0]);
-        scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
-        scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
-    }
-    if (scui_window_mgr.switch_args.pct == 100) {
-        scui_window_active(scui_window_mgr.switch_args.list[1]);
-        scui_window_stack_cover(scui_window_mgr.switch_args.list[1]);
-        scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
-    }
-    
-    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
-        scui_anima_stop(scui_window_mgr.switch_args.anima);
-        scui_anima_destroy(scui_window_mgr.switch_args.anima);
-        scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
-    }
-    
-    scui_window_mgr.switch_args.lock_jump = false;
-    scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
 
 /*@brief 窗口跳转动画回调
@@ -123,18 +94,13 @@ static void scui_window_jump_anima_expired(void *instance)
         scui_widget_draw(widget->myself, NULL, false);
 }
 
-/*@brief 窗口移动动画回调
+/*@brief 窗口跳转动画回调
  */
-static void scui_window_move_anima_start(void *instance)
+static void scui_window_jump_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
-}
-
-/*@brief 窗口移动动画回调
- */
-static void scui_window_move_anima_ready(void *instance)
-{
-    SCUI_LOG_INFO("");
+    scui_point_t   point  = {0};
+    scui_widget_t *widget = NULL;
     
     if (scui_window_mgr.switch_args.pct == 0) {
         scui_window_active(scui_window_mgr.switch_args.list[0]);
@@ -153,10 +119,15 @@ static void scui_window_move_anima_ready(void *instance)
         scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
     }
     
-    if (!scui_window_mgr.switch_args.hold_move) {
-         scui_window_mgr.switch_args.lock_move = false;
-         scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
-    }
+    scui_window_mgr.switch_args.lock_jump = false;
+    scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+}
+
+/*@brief 窗口移动动画回调
+ */
+static void scui_window_move_anima_prepare(void *instance)
+{
+    SCUI_LOG_INFO("");
 }
 
 /*@brief 窗口移动动画回调
@@ -204,14 +175,43 @@ static void scui_window_move_anima_expired(void *instance)
         scui_widget_draw(widget->myself, NULL, false);
 }
 
+/*@brief 窗口移动动画回调
+ */
+static void scui_window_move_anima_finish(void *instance)
+{
+    SCUI_LOG_INFO("");
+    
+    if (scui_window_mgr.switch_args.pct == 0) {
+        scui_window_active(scui_window_mgr.switch_args.list[0]);
+        scui_window_stack_cover(scui_window_mgr.switch_args.list[0]);
+        scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
+    }
+    if (scui_window_mgr.switch_args.pct == 100) {
+        scui_window_active(scui_window_mgr.switch_args.list[1]);
+        scui_window_stack_cover(scui_window_mgr.switch_args.list[1]);
+        scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
+    }
+    
+    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+        scui_anima_stop(scui_window_mgr.switch_args.anima);
+        scui_anima_destroy(scui_window_mgr.switch_args.anima);
+        scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
+    }
+    
+    if (!scui_window_mgr.switch_args.hold_move) {
+         scui_window_mgr.switch_args.lock_move = false;
+         scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    }
+}
+
 /*@brief 窗口移动动画自动化
  */
 static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid)
 {
     scui_anima_t anima = {0};
-    anima.start   = scui_window_move_anima_start;
-    anima.ready   = scui_window_move_anima_ready;
+    anima.prepare = scui_window_move_anima_prepare;
     anima.expired = scui_window_move_anima_expired;
+    anima.finish  = scui_window_move_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
     anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s) / 2;
@@ -225,9 +225,9 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_window_move_anima_start(&anima);
+        scui_window_move_anima_prepare(&anima);
         scui_window_move_anima_expired(&anima);
-        scui_window_move_anima_ready(&anima);
+        scui_window_move_anima_finish(&anima);
         return;
     }
     scui_anima_create(&anima, &scui_window_mgr.switch_args.anima);
@@ -643,9 +643,9 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         }
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         
-        switch_anima.start   = scui_window_jump_anima_start;
-        switch_anima.ready   = scui_window_jump_anima_ready;
+        switch_anima.prepare = scui_window_jump_anima_prepare;
         switch_anima.expired = scui_window_jump_anima_expired;
+        switch_anima.finish  = scui_window_jump_anima_finish;
         switch_anima.peroid  = peroid;
         scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);

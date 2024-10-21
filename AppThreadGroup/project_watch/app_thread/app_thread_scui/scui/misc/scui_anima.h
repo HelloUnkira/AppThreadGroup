@@ -5,41 +5,30 @@
  */
 #define SCUI_ANIMA_INFINITE     (0xFFFF)
 
-/*@brief 动画的运动状态
+/*@brief 动画回调:准备,过期,完成
  */
-typedef enum {
-    scui_anima_status_idle = 0,
-    scui_anima_status_run,
-    scui_anima_status_break,
-} scui_anima_status_t;
-
-/*@brief 动画开始回调(第一次执行开始之前的回调)
- */
-typedef void (*scui_anima_start_t)(void *anima);
-
-/*@brief 动画就绪回调(最后一次执行完之后的回调)
- */
-typedef void (*scui_anima_ready_t)(void *anima);
-
-/*@brief 动画过期回调
- */
+typedef void (*scui_anima_prepare_t)(void *anima);
 typedef void (*scui_anima_expired_t)(void *anima);
+typedef void (*scui_anima_finish_t)(void *anima);
 
 /*@brief 动画
  */
 typedef struct {
     scui_map_cb_t        path;      /* 动画行程回调 */
-    scui_anima_start_t   start;     /* 动画开始回调 */
-    scui_anima_ready_t   ready;     /* 动画就绪回调 */
+    scui_anima_prepare_t prepare;   /* 动画准备回调(第一次执行之前) */
     scui_anima_expired_t expired;   /* 动画过期回调 */
-    uint32_t reload;                /* 重加载次数(0==1) */
-    uint32_t peroid;                /* 回调周期 */
-    int32_t  value_s;               /* 起始值(默认0) */
-    int32_t  value_e;               /* 结束值(默认100) */
-    int32_t  value_c;               /* 当前值(回调使用) */
-    uint32_t reduce;                /* 内部使用:约减数 */
-    uint32_t running:1;             /* 内部使用:动画状态 */
-    uint32_t first:1;               /* 内部使用:第一次结束 */
+    scui_anima_finish_t  finish;    /* 动画完成回调(最后一次执行完之后) */
+    int32_t delay;                  /* 起始迟延(周期) */
+    int32_t peroid;                 /* 回调周期 */
+    int32_t reload;                 /* 重载次数(0==1,常循环:SCUI_ANIMA_INFINITE) */
+    int32_t replay:1;               /* 双向回播标记 */
+    int32_t playback:1;             /* 双向回播方向(true:value_s和value_e被交换) */
+    int32_t value_s;                /* 起始值(默认0) */
+    int32_t value_e;                /* 结束值(默认100) */
+    int32_t value_c;                /* 当前值(回调使用) */
+    int32_t reduce;                 /* 内部使用:约减数 */
+    int32_t running:1;              /* 内部使用:动画状态 */
+    int32_t first:1;                /* 内部使用:prepare回调标记 */
     /* scui定制化动画数据: */
     scui_handle_t handle;
 } scui_anima_t;

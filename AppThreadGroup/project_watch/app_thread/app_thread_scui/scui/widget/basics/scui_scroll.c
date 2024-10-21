@@ -314,124 +314,9 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target)
 
 /*@brief 滚动控件动画回调
  */
-static void scui_scroll_anima_start(void *instance)
+static void scui_scroll_anima_prepare(void *instance)
 {
     SCUI_LOG_INFO("");
-}
-
-/*@brief 滚动控件动画回调
- */
-static void scui_scroll_anima_ready(void *instance)
-{
-    SCUI_LOG_INFO("");
-    scui_anima_t  *anima  = instance;
-    scui_handle_t  handle = anima->handle;
-    scui_widget_t *widget = scui_handle_get(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
-    
-    scui_event_t event = {.object = handle};
-    
-    /* 这里需要考虑回弹效果,包括回弹点,边界对齐 */
-    
-    if (scroll->freedom) {
-        /* 自由布局 */
-        SCUI_LOG_DEBUG("ofs_cur:<%d,%d>", scroll->ofs_cur.x, scroll->ofs_cur.y);
-        SCUI_LOG_DEBUG("ofs_sum:<%d,%d>", scroll->ofs_sum.x, scroll->ofs_sum.y);
-        scui_scroll_event_auto_merge(&event, 0x11);
-        
-        SCUI_ASSERT(!scroll->loop);
-        
-        if (!scroll->hold_move) {
-            
-            /* 到达回弹点,则开始回弹 */
-            if (scroll->ofs_cur.x > -scroll->ofs_min.x ||
-                scroll->ofs_cur.y > -scroll->ofs_min.y ||
-                scroll->ofs_cur.x < -scroll->ofs_max.x ||
-                scroll->ofs_cur.y < -scroll->ofs_max.y) {
-                 scroll->mask_springback = true;
-                 
-                if (scroll->ofs_cur.x > -scroll->ofs_min.x)
-                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_min.x);
-                if (scroll->ofs_cur.y > -scroll->ofs_min.y)
-                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_min.y);
-                
-                if (scroll->ofs_cur.x < -scroll->ofs_max.x)
-                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_max.x);
-                if (scroll->ofs_cur.y < -scroll->ofs_max.y)
-                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_max.y);
-                
-                scui_multi_t dist = 0;
-                scui_point_t offset = {
-                    .x = scroll->ofs_cur.x,
-                    .y = scroll->ofs_cur.y,
-                };
-                dist = offset.x * offset.x + offset.y * offset.y;
-                
-                int32_t sqrt_i = 0, sqrt_f = 0;
-                scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
-                goto over;
-            }
-            
-            /* 进行回弹则不再校正 */
-            if (scroll->mask_springback)
-                goto over;
-            
-            /* 未回弹则需要校正 */
-            scui_scroll_event_auto_merge(&event, 0xAA);
-        }
-    } else {
-        /* 自动布局,非循环,循环 */
-        SCUI_LOG_DEBUG("dis_ofs:%d", scroll->dis_ofs);
-        SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
-        scui_scroll_event_auto_merge(&event, 0x01);
-        
-        if (!scroll->hold_move) {
-            
-            if (!scroll->loop) {
-                
-                /* 到达回弹点,则开始回弹 */
-                if (scroll->dis_ofs > +0) {
-                    scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0);
-                    goto over;
-                }
-                if (scroll->dis_ofs < -scroll->dis_lim) {
-                    scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0);
-                    goto over;
-                }
-                /* 进行回弹则不再校正 */
-                if (scroll->mask_springback)
-                    goto over;
-            }
-            
-            if (scroll->dis_lim == 0)
-                goto over;
-            
-            /* 未回弹则需要校正 */
-            scui_scroll_event_auto_merge(&event, 0xAA);
-        }
-    }
-    over:
-    
-    if (!scroll->hold_move) {
-         scroll->lock_move = false;
-         scui_widget_event_scroll_flag(0x01, &scroll->key);
-        
-        if (scroll->anima != SCUI_HANDLE_INVALID)
-        if (!scui_anima_running(scroll->anima)) {
-             scui_event_t event = {.object = widget->myself};
-             scui_scroll_event_notify(&event, 0x01);
-             
-             if (scroll->anima != SCUI_HANDLE_INVALID) {
-                 scui_anima_stop(scroll->anima);
-                 scui_anima_destroy(scroll->anima);
-                 scroll->anima = SCUI_HANDLE_INVALID;
-             }
-        }
-    }
 }
 
 /*@brief 滚动控件动画回调
@@ -600,15 +485,130 @@ static void scui_scroll_anima_expired(void *instance)
     }
 }
 
+/*@brief 滚动控件动画回调
+ */
+static void scui_scroll_anima_finish(void *instance)
+{
+    SCUI_LOG_INFO("");
+    scui_anima_t  *anima  = instance;
+    scui_handle_t  handle = anima->handle;
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    scui_event_t event = {.object = handle};
+    
+    /* 这里需要考虑回弹效果,包括回弹点,边界对齐 */
+    
+    if (scroll->freedom) {
+        /* 自由布局 */
+        SCUI_LOG_DEBUG("ofs_cur:<%d,%d>", scroll->ofs_cur.x, scroll->ofs_cur.y);
+        SCUI_LOG_DEBUG("ofs_sum:<%d,%d>", scroll->ofs_sum.x, scroll->ofs_sum.y);
+        scui_scroll_event_auto_merge(&event, 0x11);
+        
+        SCUI_ASSERT(!scroll->loop);
+        
+        if (!scroll->hold_move) {
+            
+            /* 到达回弹点,则开始回弹 */
+            if (scroll->ofs_cur.x > -scroll->ofs_min.x ||
+                scroll->ofs_cur.y > -scroll->ofs_min.y ||
+                scroll->ofs_cur.x < -scroll->ofs_max.x ||
+                scroll->ofs_cur.y < -scroll->ofs_max.y) {
+                 scroll->mask_springback = true;
+                 
+                if (scroll->ofs_cur.x > -scroll->ofs_min.x)
+                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_min.x);
+                if (scroll->ofs_cur.y > -scroll->ofs_min.y)
+                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_min.y);
+                
+                if (scroll->ofs_cur.x < -scroll->ofs_max.x)
+                    scroll->point_ofs.x = -(scroll->ofs_cur.x + scroll->ofs_max.x);
+                if (scroll->ofs_cur.y < -scroll->ofs_max.y)
+                    scroll->point_ofs.y = -(scroll->ofs_cur.y + scroll->ofs_max.y);
+                
+                scui_multi_t dist = 0;
+                scui_point_t offset = {
+                    .x = scroll->ofs_cur.x,
+                    .y = scroll->ofs_cur.y,
+                };
+                dist = offset.x * offset.x + offset.y * offset.y;
+                
+                int32_t sqrt_i = 0, sqrt_f = 0;
+                scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
+                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+                goto over;
+            }
+            
+            /* 进行回弹则不再校正 */
+            if (scroll->mask_springback)
+                goto over;
+            
+            /* 未回弹则需要校正 */
+            scui_scroll_event_auto_merge(&event, 0xAA);
+        }
+    } else {
+        /* 自动布局,非循环,循环 */
+        SCUI_LOG_DEBUG("dis_ofs:%d", scroll->dis_ofs);
+        SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
+        scui_scroll_event_auto_merge(&event, 0x01);
+        
+        if (!scroll->hold_move) {
+            
+            if (!scroll->loop) {
+                
+                /* 到达回弹点,则开始回弹 */
+                if (scroll->dis_ofs > +0) {
+                    scroll->mask_springback = true;
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0);
+                    goto over;
+                }
+                if (scroll->dis_ofs < -scroll->dis_lim) {
+                    scroll->mask_springback = true;
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0);
+                    goto over;
+                }
+                /* 进行回弹则不再校正 */
+                if (scroll->mask_springback)
+                    goto over;
+            }
+            
+            if (scroll->dis_lim == 0)
+                goto over;
+            
+            /* 未回弹则需要校正 */
+            scui_scroll_event_auto_merge(&event, 0xAA);
+        }
+    }
+    over:
+    
+    if (!scroll->hold_move) {
+         scroll->lock_move = false;
+         scui_widget_event_scroll_flag(0x01, &scroll->key);
+        
+        if (scroll->anima != SCUI_HANDLE_INVALID)
+        if (!scui_anima_running(scroll->anima)) {
+             scui_event_t event = {.object = widget->myself};
+             scui_scroll_event_notify(&event, 0x01);
+             
+             if (scroll->anima != SCUI_HANDLE_INVALID) {
+                 scui_anima_stop(scroll->anima);
+                 scui_anima_destroy(scroll->anima);
+                 scroll->anima = SCUI_HANDLE_INVALID;
+             }
+        }
+    }
+}
+
 /*@brief 滚动控件动画自动化
  */
 void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid)
 {
     scui_anima_t anima = {0};
     anima.path    = scui_map_ease_in_out;
-    anima.start   = scui_scroll_anima_start;
-    anima.ready   = scui_scroll_anima_ready;
+    anima.prepare = scui_scroll_anima_prepare;
     anima.expired = scui_scroll_anima_expired;
+    anima.finish  = scui_scroll_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
     anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s);
@@ -632,9 +632,9 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_scroll_anima_start(&anima);
+        scui_scroll_anima_prepare(&anima);
         scui_scroll_anima_expired(&anima);
-        scui_scroll_anima_ready(&anima);
+        scui_scroll_anima_finish(&anima);
         return;
     }
     scui_anima_create(&anima, &scroll->anima);

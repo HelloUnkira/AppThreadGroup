@@ -35,10 +35,9 @@ void scui_anima_update(scui_handle_t handle)
     for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
-        
         /* 如果指定动画句柄则只调度目标动画,否则调度所有动画 */
-        if (handle != SCUI_HANDLE_INVALID &&
-            handle != scui_anima_list.list[idx])
+        if (scui_anima_list.list[idx] != handle &&
+            handle != SCUI_HANDLE_INVALID)
             continue;
         
         scui_anima_t *anima = scui_handle_get(scui_anima_list.list[idx]);
@@ -49,9 +48,9 @@ void scui_anima_update(scui_handle_t handle)
              continue;
         
         /* 起始调 */
-        if (anima->start && anima->first) {
+        if (anima->first && anima->prepare) {
             anima->first = false;
-            anima->start(anima);
+            anima->prepare(anima);
         }
         /* 回调中销毁了动画实例 */
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
@@ -65,6 +64,10 @@ void scui_anima_update(scui_handle_t handle)
         
         /* 动画tick迭代 */
         anima->reduce += scui_anima_list.elapse;
+        /* 动画delay */
+        if (anima->reduce < 0)
+            continue;
+        
         if (anima->reduce > anima->peroid)
             anima->reduce = anima->peroid;
         
@@ -107,14 +110,31 @@ void scui_anima_update(scui_handle_t handle)
             reload = true;
         
         /* 重加载 */
-        if (reload)
+        if (reload) {
+            anima->reduce = -anima->delay;
+            /* 支持双向回拨 */
+            if (anima->replay) {
+                anima->playback = anima->playback ? false : true;
+                /* 这是互锁语义,除非回调干扰 */
+                /* 此时交换value_s和value_e */
+                int32_t value_ts = anima->value_s;
+                int32_t value_te = anima->value_e;
+                anima->value_s = value_te;
+                anima->value_e = value_ts;
+                /* 更新value_c */
+                if (anima->value_s < anima->value_e)
+                    anima->value_c = anima->value_s - 1;
+                if (anima->value_s > anima->value_e)
+                    anima->value_c = anima->value_s + 1;
+            }
             continue;
+        }
         
         /* 关闭动画 */
         anima->running = false;
         /* 结束调 */
-        if (anima->ready)
-            anima->ready(anima);
+        if (anima->finish)
+            anima->finish(anima);
         /* 回调中销毁了动画实例 */
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
@@ -125,8 +145,10 @@ void scui_anima_update(scui_handle_t handle)
             continue;
         }
     }
+    
     /* 当次流逝已处理完毕,归零 */
-    scui_anima_list.elapse = 0;
+    if (handle == SCUI_HANDLE_INVALID)
+        scui_anima_list.elapse = 0;
 }
 
 /*@brief 创建动画
@@ -149,9 +171,10 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
         scui_handle_set(scui_anima_list.list[idx], anima);
        *handle = scui_anima_list.list[idx];
        *anima = *item;
-        anima->running = false;
-        anima->reduce  = 0;
-        anima->first   = true;
+        anima->reduce   = -anima->delay;
+        anima->running  = false;
+        anima->playback = false;
+        anima->first    = true;
         /* 默认使用线性回调 */
         if (anima->path == NULL)
             anima->path  = scui_map_linear;
@@ -163,6 +186,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
             anima->value_e  = 100;
             anima->value_s  = 0;
         }
+        /* 更新value_c */
         if (anima->value_s < anima->value_e)
             anima->value_c = anima->value_s - 1;
         if (anima->value_s > anima->value_e)

@@ -8,6 +8,9 @@
 #include "scui_multi_lang.h"        /* 多国语字符串表 */
 #include "scui_font_type.h"         /* 字库类型表 */
 
+// 图标库
+// 缺图标可从此取用https://www.iconfont.cn
+
 /* 空回调,测试控件使用 */
 #define SCUI_WIDGET_EVENT_USE_EMPTY     (0)
 
