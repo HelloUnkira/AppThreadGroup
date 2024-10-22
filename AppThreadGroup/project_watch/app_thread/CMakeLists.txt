@@ -1,4 +1,4 @@
-# 收集源,生成库,指定库的链接语言,添加库依赖
+# 收集源,导入库
 file(GLOB_RECURSE SOURCES app_thread_group/*.c)
 target_sources(app_thread PRIVATE ${SOURCES})
 file(GLOB_RECURSE SOURCES app_thread_mix_irq/*.c)
@@ -35,6 +35,17 @@ target_sources(app_thread PRIVATE ${SOURCES})
 endif()
 
 if (app_thread_group_use_scui)
+
+if (FALSE)
+add_library(scui_thorvg STATIC)
+set_target_properties(scui_thorvg PROPERTIES LINKER_LANGUAGE CXX)
+target_link_libraries(app_thread PUBLIC scui_thorvg)
+file(GLOB_RECURSE SOURCES app_thread_scui/scui/linker/app_thrid/thorvg/*.cpp)
+target_sources(scui_thorvg PRIVATE ${SOURCES})
+FIND_TARGET_H_PATH(scui_thorvg_path_h ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui/linker/app_thrid/thorvg)
+FIND_TARGET_HPP_PATH(scui_thorvg_path_hpp ${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui/linker/app_thrid/thorvg)
+target_include_directories(scui_thorvg SYSTEM PUBLIC scui_thorvg_path_h scui_thorvg_path_hpp)
+endif()
 
 # 文件迁移到调试
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/font_out/*"

@@ -7,6 +7,6 @@ execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem/ap
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem)
 execute_process(COMMAND ${PYTHON} ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem/app_sys_ext_mem_src_table.py
                 WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/app_sys_ext_mem)
-# 收集源,生成库,指定库的链接语言,添加库依赖
+# 收集源,导入库
 file(GLOB_RECURSE SOURCES *.c)
 target_sources(app_sys PRIVATE ${SOURCES})

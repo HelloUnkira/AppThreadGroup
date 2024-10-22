@@ -1,3 +1,3 @@
-# 收集源,生成库,指定库的链接语言,添加库依赖
+# 收集源,导入库
 file(GLOB_RECURSE SOURCES *.c)
 target_sources(app_ext PRIVATE ${SOURCES})

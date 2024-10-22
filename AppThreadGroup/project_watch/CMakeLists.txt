@@ -1,14 +1,28 @@
 cmake_minimum_required (VERSION 3.10.1)
+#
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 # 添加任意策略
 # target_link_libraries
 cmake_policy(SET CMP0079 NEW)
 # 创建项目
-project(app_thread_group C)
+project(app_thread_group C CXX)
+# 设置C和C++的编译选项
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
+# 禁用预编译头
+set(CMAKE_DISABLE_PRECOMPILE_HEADERS OFF)
 # 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
 link_libraries(-lm -lpthread -lSDL2)
 # 编译参数设置,导入文件搜索路径
 include(${CMAKE_CURRENT_SOURCE_DIR}/compile.cmake)
 include(${CMAKE_CURRENT_SOURCE_DIR}/directory.cmake)
+# 编译器添加文件搜索路径
+FIND_TARGET_H_PATH(app_ext_path     ${CMAKE_CURRENT_SOURCE_DIR}/../app_ext)
+FIND_TARGET_H_PATH(app_sys_path     ${CMAKE_CURRENT_SOURCE_DIR}/../app_sys)
+FIND_TARGET_H_PATH(app_thread_path  ${CMAKE_CURRENT_SOURCE_DIR}/../app_thread)
+include_directories(${app_ext_path})
+include_directories(${app_sys_path})
+include_directories(${app_thread_path})
 # 添加生成库
 add_library(app_ext     STATIC)
 add_library(app_sys     STATIC)
@@ -34,6 +48,19 @@ target_link_libraries(app_dev    PUBLIC lvgl_examples)
 endif()
 target_link_libraries(app_third  PUBLIC app_dev)
 target_link_libraries(app_thread PUBLIC app_third)
+# 编译器添加文件搜索路径
+FIND_TARGET_H_PATH(app_ext_path     ${CMAKE_CURRENT_SOURCE_DIR}/app_ext)
+FIND_TARGET_H_PATH(app_sys_path     ${CMAKE_CURRENT_SOURCE_DIR}/app_sys)
+FIND_TARGET_H_PATH(app_dev_path     ${CMAKE_CURRENT_SOURCE_DIR}/app_dev)
+FIND_TARGET_H_PATH(app_third_path   ${CMAKE_CURRENT_SOURCE_DIR}/app_third)
+FIND_TARGET_H_PATH(app_thread_path  ${CMAKE_CURRENT_SOURCE_DIR}/app_thread)
+FIND_TARGET_H_PATH(app_main_path    ${CMAKE_CURRENT_SOURCE_DIR}/app_main)
+include_directories(${app_ext_path})
+include_directories(${app_sys_path})
+include_directories(${app_dev_path})
+include_directories(${app_third_path})
+include_directories(${app_thread_path})
+include_directories(${app_main_path})
 # 添加子目录
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_sys     ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_sys)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/../app_thread  ${CMAKE_CURRENT_SOURCE_DIR}/app_!cmake/app_thread)
