@@ -6,6 +6,6 @@ file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/p
 # 收集源,导入库,重命名
 file(GLOB_RECURSE SOURCES *.c)
 add_executable(app_main ${SOURCES})
-set_target_properties(app_main PROPERTIES LINKER_LANGUAGE C)
+# set_target_properties(app_main PROPERTIES LINKER_LANGUAGE C)
 target_link_libraries(app_main PUBLIC app_thread)
 set_target_properties(app_main PROPERTIES OUTPUT_NAME main PREFIX "")

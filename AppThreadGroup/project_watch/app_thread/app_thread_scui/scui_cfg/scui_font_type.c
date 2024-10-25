@@ -34,18 +34,6 @@ scui_multi_lang_type_t scui_font_type_switch(scui_handle_t handle)
     case SCUI_FONT_TYPE_32_ZH:
     case SCUI_FONT_TYPE_36_ZH:
         return scui_multi_lang_type_zh;
-    case SCUI_FONT_TYPE_8_ASCII:
-    case SCUI_FONT_TYPE_16_ASCII:
-    case SCUI_FONT_TYPE_24_ASCII:
-    case SCUI_FONT_TYPE_32_ASCII:
-    case SCUI_FONT_TYPE_40_ASCII:
-    case SCUI_FONT_TYPE_48_ASCII:
-    case SCUI_FONT_TYPE_56_ASCII:
-    case SCUI_FONT_TYPE_64_ASCII:
-    case SCUI_FONT_TYPE_72_ASCII:
-    case SCUI_FONT_TYPE_80_ASCII:
-    case SCUI_FONT_TYPE_88_ASCII:
-        return SCUI_FONT_TYPE_ASCII;
     default:
         SCUI_ASSERT(false);
         return SCUI_HANDLE_INVALID;

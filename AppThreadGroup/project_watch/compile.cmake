@@ -1,18 +1,22 @@
-# 多核编译加速:
-# if (WIN32)
-    # if(MSVC)
-        # option(USE_MP "use multiple" ON)
-        # option(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP 
-            # "Set The Global Option COMPILE_FLAGS /MP to target." ON)
-        # if(ProjectConfig_Global_COMPILE_FLAGS_WITH_MP OR USE_MP)
-            # set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /MP")
-            # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
-        # endif()
-        # set(VS_STARTUP_PROJECT ${PROJECT_NAME})
-    # endif(MSVC)
-# endif()
-# add_compile_options(-j8)
+# 设置C和C++的编译选项
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
+# message(STATUS "CMAKE_C_FLAGS: ${CMAKE_C_FLAGS}")
+# message(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+# 禁用预编译头
+set(CMAKE_DISABLE_PRECOMPILE_HEADERS OFF)
+# 禁用编译优化
+# 多核编译加速
+if (MSVC)
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+add_compile_options(/Od)
 add_compile_options(/MP)
+else()
+# 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
+link_libraries(-lm -lpthread -lSDL2)
+add_compile_options(/Od)
+add_compile_options(-j8)
+endif()
 
 # 编译器禁用警告
 # Visual Studio一大堆警告,甚至库里面都有,屏蔽掉不必要关心的警告
@@ -43,6 +47,7 @@ add_compile_options(/MP)
 # /* 屏蔽警告4716:函数缺少返回值(库里面的) */
 # /* 屏蔽警告4819:非 Unicode文件,包含不能表示的字符 */
 # /* 屏蔽警告6387:参数可能为0 */
+if (MSVC)
 add_compile_options(/W4)
 add_compile_options(/wd4005)
 add_compile_options(/wd4018)
@@ -76,3 +81,4 @@ add_compile_options(/wd4716)
 add_compile_options(/wd4819)
 add_compile_options(/wd4996)
 add_compile_options(/wd6387)
+endif()

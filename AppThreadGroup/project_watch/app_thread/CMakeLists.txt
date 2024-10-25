@@ -38,7 +38,7 @@ if (app_thread_group_use_scui)
 
 if (FALSE)
 add_library(scui_thorvg STATIC)
-set_target_properties(scui_thorvg PROPERTIES LINKER_LANGUAGE CXX)
+# set_target_properties(scui_thorvg PROPERTIES LINKER_LANGUAGE CXX)
 target_link_libraries(app_thread PUBLIC scui_thorvg)
 file(GLOB_RECURSE SOURCES app_thread_scui/scui/linker/app_thrid/thorvg/*.cpp)
 target_sources(scui_thorvg PRIVATE ${SOURCES})
