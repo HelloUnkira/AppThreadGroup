@@ -54,7 +54,9 @@ typedef enum {
 	SCUI_UI_SCENE_2_BAR_ARC,
 	SCUI_UI_SCENE_3,
 	SCUI_UI_SCENE_4,
+	SCUI_UI_SCENE_4_RING,
 	SCUI_UI_SCENE_5,
+	SCUI_UI_SCENE_5_RING,
 	SCUI_UI_SCENE_6,
 	SCUI_UI_SCENE_6_1,
 	SCUI_UI_SCENE_6_2,
@@ -70,6 +72,6 @@ typedef enum {
 	SCUI_UI_SCENE_TEST,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[62];
+extern const void * scui_widget_parser_table[64];
 
 #endif

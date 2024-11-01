@@ -28,12 +28,14 @@ void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
     SCUI_ASSERT(clip != NULL);
     
     /* 绘制背景 */
-    scui_color_t color_bg = {
-        .color   = color.color_d,
-        .color_f = color.color_f,
-        .filter  = color.filter
-    };
-    scui_widget_draw_image(event->object, clip, spinner, NULL, color_bg);
+    if (color.color_d.full != 0x0) {
+        scui_color_t color_bg = {
+            .color   = color.color_d,
+            .color_f = color.color_f,
+            .filter  = color.filter
+        };
+        scui_widget_draw_image(event->object, clip, spinner, NULL, color_bg);
+    }
     
     scui_coord_t  angle_c = scui_map(percent % 100, 0, 100, 0, 360);
     scui_map_cb_t path_map = scui_map_ease_out;

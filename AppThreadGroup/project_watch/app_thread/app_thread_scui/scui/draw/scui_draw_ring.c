@@ -26,7 +26,7 @@ static void scui_draw_ring_edge(scui_draw_dsc_t *draw_dsc)
     scui_color_t    src_color   = draw_dsc->ring.src_color;
     /* draw dsc args<e> */
     //
-    /* 可能有些目标无需绘制断点 */
+    /* 可能有些目标无需绘制端点 */
     if (src_image_e == NULL)
         return;
     /* 绘制俩个端点 */
@@ -373,8 +373,47 @@ static void scui_draw_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     uint8_t *dst_addr = dst_surface->pixel + dst_pixel_ofs * dst_byte;
     uint8_t *src_addr = src_surface->pixel + src_pixel_ofs * src_byte;
     
-    if (image.image->format == scui_pixel_cf_palette4 ||
-        image.image->format == scui_pixel_cf_palette8) {
+    /* 像素格式不带透明度, 像素格式带透明度 */
+    if ((dst_surface->format == scui_pixel_cf_bmp565 || dst_surface->format == scui_pixel_cf_bmp8565  ||
+         dst_surface->format == scui_pixel_cf_bmp888 || dst_surface->format == scui_pixel_cf_bmp8888) &&
+        (src_surface->format == scui_pixel_cf_bmp565 || src_surface->format == scui_pixel_cf_bmp8565  ||
+         src_surface->format == scui_pixel_cf_bmp888 || src_surface->format == scui_pixel_cf_bmp8888)) {
+        
+        scui_color_wt_t filter = 0;
+        scui_pixel_by_color(src_surface->format, &filter, src_color.color_f);
+        
+        for (scui_multi_t idx_line = 0; idx_line < src_area.h; idx_line++) {
+            /* 扫描区不在src_clip_v中,跳过它 */
+            if (src_area.y + idx_line < src_clip_v.y ||
+                src_area.y + idx_line > src_clip_v.y + draw_area.h)
+                continue;
+            /* 原扫描行[0, draw_area.w],现在重新更新到新的限制扫描行 */
+            scui_point_t draw_area_x  = scui_draw_ring_quadrant_1_draw_area(&src_area,
+                                        idx_line, idx, angle_tan0_4096, angle_tan1_4096);
+            /* 扫描区不在src_clip_v中,跳过它 */
+            scui_multi_t draw_area_xl = scui_max(draw_area_x.x, src_clip_v.x - src_area.x);
+            scui_multi_t draw_area_xr = scui_min(draw_area_x.y, src_clip_v.x - src_area.x+ draw_area.w);
+            /* 更新原扫描行到新的限制扫描行即可 */
+            for (scui_multi_t idx_item = draw_area_xl; idx_item < draw_area_xr; idx_item++) {
+                uint8_t *dst_ofs = dst_addr + ((src_area.y + idx_line) * dst_surface->hor_res + (src_area.x + idx_item)) * dst_byte;
+                uint32_t idx_ofs = src_pixel_ofs + (src_area.y + idx_line) * src_surface->hor_res + (src_area.x + idx_item);
+                uint8_t *src_ofs = src_addr + idx_ofs * src_byte;
+                
+                if (src_color.filter) {
+                    scui_color_wt_t color = 0;
+                    scui_pixel_by_cf(src_surface->format, &color, src_ofs);
+                    if (color == filter)
+                        continue;
+                }
+                
+                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
+                                    src_surface->format, src_ofs, src_surface->alpha);
+            }
+        }
+    }
+    
+    if (src_surface->format == scui_pixel_cf_palette4 ||
+        src_surface->format == scui_pixel_cf_palette8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t palette_len = 1 << src_bits;
         scui_color_wt_t *palette_table = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_color_wt_t) * palette_len);

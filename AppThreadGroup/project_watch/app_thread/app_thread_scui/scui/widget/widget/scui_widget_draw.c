@@ -512,8 +512,10 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
         return;
     }
     
-    scui_image_t *image_e_inst = scui_handle_get(image_e);
-    SCUI_ASSERT(  image_e_inst != NULL);
+    scui_image_t *image_e_inst = NULL;
+    if (image_e != SCUI_HANDLE_INVALID)
+        image_e_inst = scui_handle_get(image_e);
+    
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_get(image);
     SCUI_ASSERT(  image_inst != NULL);

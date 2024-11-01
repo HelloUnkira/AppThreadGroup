@@ -249,14 +249,14 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
                 scui_mormal3_z_by_matrix(&normal3, &normal_z_bg[idx_j][idx_i], &t_matrix);
                 scui_mormal3_z_by_matrix(&normal3, &normal_z_fg[idx_j][idx_i], &t_matrix);
-                if (normal_z_bg[idx_j][idx_i] > 0.0f) {
+                if (normal_z_bg[idx_j][idx_i] < -0.0f) {
                     /* 仿射变换矩阵 */
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
                     scui_size2_t size2_bg = {.w = image_bg_w,.h = image_bg_h,};
                     scui_matrix_affine_blit(&matrix_bg[idx_j][idx_i], &size2_bg, &face3_bg);
                     scui_matrix_inverse(&matrix_bg[idx_j][idx_i]);
                 }
-                if (normal_z_fg[idx_j][idx_i] > 0.0f) {
+                if (normal_z_fg[idx_j][idx_i] < -0.0f) {
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
                     scui_size2_t size2_fg = {.w = image_fg_w,.h = image_fg_h,};
                     scui_matrix_affine_blit(&matrix_fg[idx_j][idx_i], &size2_fg, &face3_fg);
@@ -274,12 +274,12 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 
                 scui_coord3_t (*normal_z_bg)[5] = scui_ui_res_local->normal_z_bg;
                 scui_coord3_t (*normal_z_fg)[5] = scui_ui_res_local->normal_z_fg;
-                if (normal_z_bg[idx_j][idx_i] > 0.0f) {
+                if (normal_z_bg[idx_j][idx_i] < -0.0f) {
                     scui_handle_t   image_bg = scui_ui_res_local->image_bg;
                     scui_matrix_t (*matrix_bg)[5] = scui_ui_res_local->matrix_bg;
                     scui_widget_draw_image_by_matrix(event->object, NULL, image_bg, NULL, &matrix_bg[idx_j][idx_i]);
                 }
-                if (normal_z_fg[idx_j][idx_i] > 0.0f) {
+                if (normal_z_fg[idx_j][idx_i] < -0.0f) {
                     scui_handle_t (*image_fg)[5] = scui_ui_res_local->image_fg;
                     scui_matrix_t (*matrix_fg)[5] = scui_ui_res_local->matrix_fg;
                     scui_widget_draw_image_by_matrix(event->object, NULL, image_fg[idx_j][idx_i], NULL, &matrix_fg[idx_j][idx_i]);

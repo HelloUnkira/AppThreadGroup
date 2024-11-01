@@ -418,11 +418,9 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
         return;
     
     /* 全覆盖混合:直接copy */
-    if (dst_surface->alpha  == scui_alpha_cover     &&
-        src_surface->alpha  == scui_alpha_cover     &&
-        dst_surface->format == src_surface->format  &&
-       (dst_surface->format == scui_pixel_cf_bmp565 ||
-        dst_surface->format == scui_pixel_cf_bmp888)) {
+    if (dst_surface->alpha  == scui_alpha_cover     && src_surface->alpha  == scui_alpha_cover      &&
+       (dst_surface->format == scui_pixel_cf_bmp565 || dst_surface->format == scui_pixel_cf_bmp888) &&
+        dst_surface->format == src_surface->format  && !src_color.filter) {
         scui_draw_dsc_t draw_dsc = {
             .area_copy.dst_surface = dst_surface,
             .area_copy.dst_clip    = dst_clip,

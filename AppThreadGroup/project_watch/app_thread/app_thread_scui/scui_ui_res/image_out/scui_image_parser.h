@@ -2180,6 +2180,8 @@ typedef enum {
 	scui_image_prj_image_src_34_measure_icon_01_heartbmp,
 	scui_image_prj_image_src_34_measure_icon_02_pressurebmp,
 	scui_image_prj_image_src_34_measure_icon_03_spobmp,
+	scui_image_prj_image_src_400X400pxbmp,
+	scui_image_prj_image_src_400X400pxpng,
 	scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	scui_image_prj_image_src_home_watch_D10450001_bg_01_bgjpg,
 	scui_image_prj_image_src_home_watch_D10450001_preview_01_00bmp,
@@ -3595,7 +3597,7 @@ typedef enum {
 	scui_image_prj_image_src_system_03_restartpng,
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[3587];
+extern const void * scui_image_parser_table[3589];
 
 //<     w,     h,size_raw,size_mem,com_pct> handle
 //< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_image_src_00_3d_AnalogClock_0jpg
@@ -5772,6 +5774,8 @@ extern const void * scui_image_parser_table[3587];
 //<  0x34,  0x34, 0x3c1,0x1520,0.18> scui_image_prj_image_src_34_measure_icon_01_heartbmp
 //<  0x34,  0x34, 0x5b4,0x1520,0.27> scui_image_prj_image_src_34_measure_icon_02_pressurebmp
 //<  0x34,  0x34, 0x6b7,0x1520,0.32> scui_image_prj_image_src_34_measure_icon_03_spobmp
+//< 0x190, 0x190,0x249b,0x4e200,0.03> scui_image_prj_image_src_400X400pxbmp
+//< 0x190, 0x190,0x4a44,0x75300,0.04> scui_image_prj_image_src_400X400pxpng
 //< 0x1d2, 0x1d2,0x37f9,0x6a088,0.03> scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp
 //< 0x1d2, 0x1d2,0x82bd,0x6a088,0.08> scui_image_prj_image_src_home_watch_D10450001_bg_01_bgjpg
 //< 0x17e, 0x12a,0x4742,0x37958,0.08> scui_image_prj_image_src_home_watch_D10450001_preview_01_00bmp
