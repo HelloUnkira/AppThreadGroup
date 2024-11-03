@@ -326,8 +326,8 @@ bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
  */
 bool scui_area_point(scui_area_t *area, scui_point_t *point)
 {
-    if (point->x >= area->x && point->x <= area->x + area->w &&
-        point->y >= area->y && point->y <= area->y + area->h)
+    if (point->x >= area->x && point->x <= area->x + area->w - 1 &&
+        point->y >= area->y && point->y <= area->y + area->h - 1)
         return true;
     return false;
 }

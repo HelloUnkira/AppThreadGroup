@@ -348,12 +348,11 @@ static void scui_draw_circle_corner(scui_draw_graph_dsc_t *draw_graph, scui_draw
                 case scui_draw_circle_type_rt: point.x += sel_x; point.y -= sel_y; break;
                 case scui_draw_circle_type_rb: point.x += sel_x; point.y += sel_y; break;
                 }
-                if (!scui_area_point(&draw_area, &point))
-                     continue;
-                
-                dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                    dst_surface->format, &src_pixel, mix_a);
+                if (scui_area_point(&draw_area, &point)) {
+                    dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
+                                        dst_surface->format, &src_pixel, mix_a);
+                }
                 
                 // 跳过对角线的两次绘制
                 if (sel_x == sel_y)
@@ -366,12 +365,11 @@ static void scui_draw_circle_corner(scui_draw_graph_dsc_t *draw_graph, scui_draw
                 case scui_draw_circle_type_rt: point.x += sel_y; point.y -= sel_x; break;
                 case scui_draw_circle_type_rb: point.x += sel_y; point.y += sel_x; break;
                 }
-                if (!scui_area_point(&draw_area, &point))
-                     continue;
-                
-                dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-                scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
-                                    dst_surface->format, &src_pixel, mix_a);
+                if (scui_area_point(&draw_area, &point)) {
+                    dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
+                    scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - mix_a,
+                                        dst_surface->format, &src_pixel, mix_a);
+                }
             }
             
             scui_coord_t length = src_radius - (item->offset + item->count);

@@ -738,21 +738,21 @@ void scui_draw_area_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
             scui_point_t  point  = {0};
             scui_point2_t point2 = {0};
             scui_point3_t point3 = {0};
-            point2.y = idx_line - 0.5;
-            point2.x = idx_item - 0.5;
+            point2.y = idx_line;
+            point2.x = idx_item;
             /* 反扫描结果坐标对每一个坐标进行逆变换 */
             scui_point3_by_point2(&point3, &point2);
             scui_point3_transform_by_matrix(&point3, inv_matrix);
             scui_point3_to_point2(&point3, &point2);
-            point2.y += src_clip_v.y - 0.5;
-            point2.x += src_clip_v.x - 0.5;
+            point2.y += src_clip_v.y;
+            point2.x += src_clip_v.x;
             point.y = (scui_coord_t)point2.y;
             point.x = (scui_coord_t)point2.x;
             
             #if 1
             // 这里使用双线性插值求平均
-            scui_coord_t dy = (point2.y - point.y) * SCUI_SCALE_COF;
-            scui_coord_t dx = (point2.x - point.x) * SCUI_SCALE_COF;
+            scui_coord_t dy = (point2.y < point.y ? 0 : point2.y - point.y) * SCUI_SCALE_COF;
+            scui_coord_t dx = (point2.x < point.x ? 0 : point2.x - point.x) * SCUI_SCALE_COF;
             scui_point_t pos4[4] = {
                 {.x = point.x + 0, .y = point.y + 0,},
                 {.x = point.x + 1, .y = point.y + 0,},
@@ -805,14 +805,12 @@ void scui_draw_area_blit_by_matrix(scui_draw_dsc_t *draw_dsc)
                 
                 if (src_surface->format == scui_pixel_cf_bmp565) {
                     scui_color565_t color565 = {.ch.r = del_r,.ch.g = del_g,.ch.b = del_b,};
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
                                         src_surface->format, &color565, src_surface->alpha);
                 }
                 
                 if (src_surface->format == scui_pixel_cf_bmp8565) {
                     scui_color8565_t color8565 = {.ch.a = del_a,.ch.r = del_r,.ch.g = del_g,.ch.b = del_b,};
-                    
                     scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_surface->alpha,
                                         src_surface->format, &color8565, src_surface->alpha);
                 }
