@@ -224,28 +224,8 @@ void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
 /*****************************************************************************/
 /*****************************************************************************/
 /* EmbeddedGUI: */
-#define SCUI_DRAW_GRAPH_USE_EGUI    1
-#if     SCUI_DRAW_GRAPH_USE_EGUI
-/* EmbeddedGUI: */
-#pragma pack(push, 1)
-typedef struct {
-    int16_t offset;
-    int16_t count;
-    int16_t pixel;
-} scui_draw_circle_item_t;
-
-typedef struct {
-    int16_t radius;
-    int16_t count;
-    const uint8_t *data;
-    const scui_draw_circle_item_t *item;
-} scui_draw_circle_info_t;
-#pragma pack(pop)
-
-#define SCUI_DRAW_CIRCLE_RES_RANGE  500
-#else
-#define SCUI_DRAW_CIRCLE_RES_RANGE  10000
-#endif
+#define   SCUI_DRAW_GRAPH_USE_EGUI      0
+#include "scui_draw_graph_EGUI.h"
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/

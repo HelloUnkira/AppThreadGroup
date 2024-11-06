@@ -47,67 +47,82 @@ void scui_draw_area_blur(scui_draw_dsc_t *draw_dsc)
     scui_multi_t dis_line = draw_area.w * dst_byte;
     uint8_t *dst_addr = dst_surface->pixel + dst_clip->y * dst_line + dst_clip->x * dst_byte;
     
-    #define GAUSS_SCALA     5
-    SCUI_ASSERT(GAUSS_SCALA % 2 != 0);
-    /* 高斯模糊核<s> */
-     int32_t gauss_ofs = GAUSS_SCALA / 2;
-    uint32_t gauss_sum = 0;
-    uint32_t gauss_cof[GAUSS_SCALA][GAUSS_SCALA] = {
-        #if 1
-        /* 如果是高斯模糊,这里填入量化后的高斯模糊矩阵 */
-        0,
-        #else
+    #define  BLUR_SCALA         8
+    uint32_t blur_sum = 0;
+    uint32_t blur_cof[BLUR_SCALA][BLUR_SCALA] = {
+        #if 0
+        #elif 0 // 平滑模糊核
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        {1, 1, 1, 1, 1},
+        #elif 1 // dither模糊核
+        { 0, 48, 12, 60,  3, 51, 15, 63},
+        {32, 16, 44, 28, 35, 19, 47, 31},
+        { 8, 56,  4, 52, 11, 59,  7, 55},
+        {40, 24, 36, 20, 43, 27, 39, 23},
+        { 2, 50, 14, 62,  1, 49, 13, 61},
+        {34, 18, 46, 30, 33, 17, 45, 29},
+        {10, 58,  6, 54,  9, 57,  5, 53},
+        {42, 26, 38, 22, 41, 25, 37, 21},
+        #elif 1 // 高斯模糊核
         {1,  4,  7,  4, 1},
         {4, 16, 26, 16, 4},
         {7, 26, 41, 26, 7},
         {4, 16, 26, 16, 4},
         {1,  4,  7,  4, 1},
+        #else
         #endif
     };
     
-    uintptr_t pixel_ofs[GAUSS_SCALA][GAUSS_SCALA] = {0};
-    scui_color_wt_t pixel_mat[GAUSS_SCALA][GAUSS_SCALA] = {0};
+    uintptr_t pixel_ofs[BLUR_SCALA][BLUR_SCALA] = {0};
+    scui_color_wt_t pixel_mat[BLUR_SCALA][BLUR_SCALA] = {0};
+    scui_coord_t blur_ofs = BLUR_SCALA / 2;
     
-    for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
-    for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
-         #if 1
-         // 这里是平滑模糊矩阵,所有矩阵值均为1
-         // 如果是高斯模糊矩阵,注销此处
-         gauss_cof[idx_j][idx_i] = 1;
-         #endif
+    /* 模糊核<s> */
+    for (int8_t idx_j = 0; idx_j < BLUR_SCALA; idx_j++)
+    for (int8_t idx_i = 0; idx_i < BLUR_SCALA; idx_i++) {
          pixel_ofs[idx_j][idx_i] = 0;
-         pixel_ofs[idx_j][idx_i] += - dst_line * (idx_j + gauss_ofs - (GAUSS_SCALA - 1));
-         pixel_ofs[idx_j][idx_i] += - dst_byte * (idx_i + gauss_ofs - (GAUSS_SCALA - 1));
-         gauss_sum += gauss_cof[idx_j][idx_i];
+         pixel_ofs[idx_j][idx_i] += - dst_line * (idx_j + blur_ofs - BLUR_SCALA);
+         pixel_ofs[idx_j][idx_i] += - dst_byte * (idx_i + blur_ofs - BLUR_SCALA);
+         blur_sum += blur_cof[idx_j][idx_i];
     }
-    for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
-    for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
-         gauss_cof[idx_j][idx_i] *= SCUI_SCALE_COF;
-         gauss_cof[idx_j][idx_i] /= gauss_sum;
+    for (int8_t idx_j = 0; idx_j < BLUR_SCALA; idx_j++)
+    for (int8_t idx_i = 0; idx_i < BLUR_SCALA; idx_i++) {
+         blur_cof[idx_j][idx_i] *= SCUI_SCALE_COF;
+         blur_cof[idx_j][idx_i] /= blur_sum;
     }
-    /* 高斯模糊核<e> */
+    /* 模糊核<e> */
     
-    for (scui_multi_t idx_line = gauss_ofs; idx_line < draw_area.h - gauss_ofs; idx_line++)
-    for (scui_multi_t idx_item = gauss_ofs; idx_item < draw_area.w - gauss_ofs; idx_item++) {
+    for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
+    for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
          uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
          scui_color_wt_t pixel = 0;
         
-        /* 高斯模糊<s> */
-        for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
-        for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
-             uint8_t *pixel_ptr = dst_ofs + pixel_ofs[idx_j][idx_i];
-             scui_pixel_by_cf(dst_surface->format, &pixel_mat[idx_j][idx_i], pixel_ptr);
+        /* 模糊<s> */
+        for (int8_t idx_j = 0; idx_j < BLUR_SCALA; idx_j++)
+        for (int8_t idx_i = 0; idx_i < BLUR_SCALA; idx_i++) {
+             scui_point_t point = {
+                 .y = idx_line + idx_j + blur_ofs - BLUR_SCALA,
+                 .x = idx_item + idx_i + blur_ofs - BLUR_SCALA,
+             };
+             pixel_mat[idx_j][idx_i] = 0;
+             if (scui_area_point(&draw_area, &point)) {
+                 uint8_t *pixel_ptr = dst_ofs + pixel_ofs[idx_j][idx_i];
+                 scui_pixel_by_cf(dst_surface->format, &pixel_mat[idx_j][idx_i], pixel_ptr);
+             }
         }
-        /* 高斯模糊<e> */
+        /* 模糊<e> */
         
         if (dst_surface->format == scui_pixel_cf_bmp565) {
             uint32_t ch_r = 0, ch_g = 0, ch_b = 0;
-            for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
-            for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
+            for (int8_t idx_j = 0; idx_j < BLUR_SCALA; idx_j++)
+            for (int8_t idx_i = 0; idx_i < BLUR_SCALA; idx_i++) {
                 scui_color565_t *color565_ij = &pixel_mat[idx_j][idx_i];
-                ch_r += (uint32_t)color565_ij->ch.r * gauss_cof[idx_j][idx_i];
-                ch_g += (uint32_t)color565_ij->ch.g * gauss_cof[idx_j][idx_i];
-                ch_b += (uint32_t)color565_ij->ch.b * gauss_cof[idx_j][idx_i];
+                ch_r += (uint32_t)color565_ij->ch.r * blur_cof[idx_j][idx_i];
+                ch_g += (uint32_t)color565_ij->ch.g * blur_cof[idx_j][idx_i];
+                ch_b += (uint32_t)color565_ij->ch.b * blur_cof[idx_j][idx_i];
             }
             scui_color565_t *color565 = &pixel;
             color565->ch.r = ch_r >> SCUI_SCALE_OFS;
@@ -117,13 +132,13 @@ void scui_draw_area_blur(scui_draw_dsc_t *draw_dsc)
         
         if (dst_surface->format == scui_pixel_cf_bmp8565) {
             uint32_t ch_a = 0, ch_r = 0, ch_g = 0, ch_b = 0;
-            for (int8_t idx_j = 0; idx_j < GAUSS_SCALA; idx_j++)
-            for (int8_t idx_i = 0; idx_i < GAUSS_SCALA; idx_i++) {
+            for (int8_t idx_j = 0; idx_j < BLUR_SCALA; idx_j++)
+            for (int8_t idx_i = 0; idx_i < BLUR_SCALA; idx_i++) {
                 scui_color8565_t *color8565_ij = &pixel_mat[idx_j][idx_i];
-                ch_a += (uint32_t)color8565_ij->ch.a * gauss_cof[idx_j][idx_i];
-                ch_r += (uint32_t)color8565_ij->ch.r * gauss_cof[idx_j][idx_i];
-                ch_g += (uint32_t)color8565_ij->ch.g * gauss_cof[idx_j][idx_i];
-                ch_b += (uint32_t)color8565_ij->ch.b * gauss_cof[idx_j][idx_i];
+                ch_a += (uint32_t)color8565_ij->ch.a * blur_cof[idx_j][idx_i];
+                ch_r += (uint32_t)color8565_ij->ch.r * blur_cof[idx_j][idx_i];
+                ch_g += (uint32_t)color8565_ij->ch.g * blur_cof[idx_j][idx_i];
+                ch_b += (uint32_t)color8565_ij->ch.b * blur_cof[idx_j][idx_i];
             }
             scui_color8565_t *color8565 = &pixel;
             color8565->ch.a = ch_a >> SCUI_SCALE_OFS;
