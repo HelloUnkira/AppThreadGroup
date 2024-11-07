@@ -41,43 +41,11 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
     scui_color_wt_t src_pixel = 0;
     scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
     
-    /* 这里变成了一个点, 直接填色 */
-    if (src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) {
-        scui_point_t point = {.x = src_pos_1.x, .y = src_pos_1.y};
-        if (!scui_area_point(&draw_area, &point))
-             return;
-        
-        uint8_t *dst_ofs = dst_addr + point.y * dst_line + point.x * dst_byte;
-        scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
-                            dst_surface->format, &src_pixel, src_alpha);
-    }
-    /* 这里变成了一个区域, 直接填色 */
-    if (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y) {
-        scui_area_t src_clip = {
-            .x1 = scui_min(src_pos_1.x, src_pos_2.x),
-            .y1 = scui_min(src_pos_1.y, src_pos_2.y),
-            .x2 = scui_max(src_pos_1.x, src_pos_2.x),
-            .y2 = scui_max(src_pos_1.y, src_pos_2.y),
-        };
-        scui_area_m_by_s(&src_clip);
-        
-        if (src_pos_1.x == src_pos_2.x)
-            src_clip.w  += src_width - 1;
-        if (src_pos_1.y == src_pos_2.y)
-            src_clip.h  += src_width - 1;
-        
-        scui_area_t dst_area = {0};
-        if (!scui_area_inter(&dst_area, &draw_area, &src_clip))
-             return;
-        
-        scui_draw_dsc_t draw_dsc = {
-            .area_fill.dst_surface = dst_surface,
-            .area_fill.dst_clip    = &dst_area,
-            .area_fill.src_alpha   = src_alpha,
-            .area_fill.src_color   = src_color,
-        };
-        scui_draw_area_fill(&draw_dsc);
-        return;
+    /* 变成了一个点, 变成了一个区域, 直接填色 */
+    if ((src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) ||
+        (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
+         scui_draw_sline(draw_graph);
+         return;
     }
     
     #if 1
@@ -156,35 +124,6 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
         }
     }
     #endif
-}
-
-/*@brief 水平线绘制
- *@param draw_graph    绘制描述符实例
- *@param x,y,len,width 坐标点,坐标点,线长,线宽
- */
-static inline void scui_draw_hline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
-{
-    draw_graph->type = scui_draw_graph_type_line;
-    draw_graph->line.src_width   = width;
-    draw_graph->line.src_pos_1.x = x;
-    draw_graph->line.src_pos_1.y = y;
-    draw_graph->line.src_pos_2.x = x + len - 1;
-    draw_graph->line.src_pos_2.y = y;
-    scui_draw_graph(draw_graph);
-}
-
-/*@brief 垂直线绘制
- *@param draw_graph 绘制描述符实例
- *@param x,y,h      绘制参数
- */
-static inline void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
-{
-    draw_graph->line.src_width   = width;
-    draw_graph->line.src_pos_1.x = x;
-    draw_graph->line.src_pos_1.y = y;
-    draw_graph->line.src_pos_2.x = x;
-    draw_graph->line.src_pos_2.y = y + len - 1;
-    scui_draw_graph(draw_graph);
 }
 
 /* EmbeddedGUI移植 */

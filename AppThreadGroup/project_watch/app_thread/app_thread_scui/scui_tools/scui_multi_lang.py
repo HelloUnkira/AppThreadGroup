@@ -25,7 +25,7 @@ def encode_scui_multi_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
             c_array = c_array.replace('\'', '')
             c_array = c_array.replace('[', '{')
             c_array = c_array.replace(']', ', 0}')
-            c_array = c_array.replace('{', '(char []){')
+            c_array = c_array.replace('{', '(const char []){')
             file.write('\t//%s\n' % str(data.value).replace('\n', '\\n'))
             file.write('\t{0}\n'.format("%s," % c_array))    # 多国语这里不能很好的对齐,因为不同语言的空格宽度不一致
     file.write('};\n')

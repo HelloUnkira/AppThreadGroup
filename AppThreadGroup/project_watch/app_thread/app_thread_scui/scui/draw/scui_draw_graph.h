@@ -215,6 +215,14 @@ typedef struct {
 /*****************************************************************************/
 /*****************************************************************************/
 
+/*@brief 线条绘制(简易绘制)
+ *@param draw_graph 绘制描述符实例
+ *@param x,y,len,width 坐标点,坐标点,线长,线宽
+ */
+void scui_draw_sline(scui_draw_graph_dsc_t *draw_graph);
+void scui_draw_hline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
+void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
+
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
@@ -223,8 +231,13 @@ void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-/* EmbeddedGUI: */
+/*基础图元绘制:
+ *    可以自己写(反正就是堆工作量)
+ *    可以移植第三方的gui中的内容
+ */
+#define   SCUI_DRAW_GRAPH_USE_LVGL      0
 #define   SCUI_DRAW_GRAPH_USE_EGUI      0
+#include "scui_draw_graph_LVGL.h"
 #include "scui_draw_graph_EGUI.h"
 /*****************************************************************************/
 /*****************************************************************************/
