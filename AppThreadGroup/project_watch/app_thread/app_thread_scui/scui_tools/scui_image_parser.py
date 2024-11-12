@@ -104,10 +104,13 @@ def scui_image_pixel_stream(image_raw, image_std) -> ():
 
 # 流式处理所有image文件
 # 头文件保存目标数据描述表,源文件保存数据源,二进制文件保存源文件的流式版本
-def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
+def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     scui_image_parser_h = scui_image_parser_list[0]
     scui_image_parser_c = scui_image_parser_list[1]
     scui_image_parser_bin = scui_image_parser_list[2]
+    scui_image_parser_sub = scui_image_parser_list[3]
+    # 检查子路径是否存在,不存在则创建它
+    os.makedirs(scui_image_parser_sub, exist_ok=True)
     # 头文件添加前缀, 源文件添加前缀
     scui_image_parser_h.write('#ifndef SCUI_IMAGE_PARSER_H\n')
     scui_image_parser_h.write('#define SCUI_IMAGE_PARSER_H\n\n')
@@ -131,10 +134,13 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
     scui_image_parser_h.write('//<%6s,%6s,%6s,%6s,%2s> handle\n' % ('w', 'h', 'size_raw', 'size_mem', 'com_pct'))
     # 对目标图片集合进行流式处理,提取数据内容
     for file in file_path_list:
-        scui_pixel_cf = 'scui_pixel_cf_bmp565'
-        scui_image_type = 'scui_image_type_bmp'
-        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
+        # 每一个迭代都有一个默认的起始状态
         scui_image_pkg_over = False
+        scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
+        scui_image_byte = 0
+        scui_image_type = 'scui_image_type_bmp'
+        scui_pixel_cf = 'scui_pixel_cf_bmp565'
+        # 这里记录源文件的俩个关键信息,以用于后续的生成子文件
         # 取出图片转为RGBA并获得各个通道的数据值并且转化为二维像素矩阵
         try:
             image_raw = PIL.Image.open(file)
@@ -161,6 +167,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
                     pixel_bin_len = len(pixel_stream)
                     pixel_raw_len = image_std.size[0] * image_std.size[1] * 2
                     scui_image_parser_bin.write(pixel_stream)
+                    scui_image_byte = pixel_stream
                     print('jpg:' + scui_image_tag)
         # 通用压缩协议
         if scui_image_pkg_use_png:
@@ -174,6 +181,7 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
                     pixel_bin_len = len(pixel_stream)
                     pixel_raw_len = image_std.size[0] * image_std.size[1] * 3
                     scui_image_parser_bin.write(pixel_stream)
+                    scui_image_byte = pixel_stream
                     print('png:' + scui_image_tag)
         # 自定义打包格式
         if not scui_image_pkg_over:
@@ -196,20 +204,37 @@ def scui_image_parse(file_path_list, scui_image_parser_list, project_name):
                 pixel_bin_len = len(pixel_bytes_lz4_com)
                 pixel_raw_len = len(pixel_bytes)
                 scui_image_parser_bin.write(pixel_bytes_lz4_com)
+                scui_image_byte = pixel_bytes_lz4_com
             else:
                 print('raw:' + scui_image_tag)
                 pixel_bin_len = len(pixel_bytes)
                 pixel_raw_len = len(pixel_bytes)
                 scui_image_parser_bin.write(pixel_bytes)
+                scui_image_byte = pixel_bytes
         # 写入结构, 更新pixel_offset
-        scui_image_parser_c.write('static const scui_image_t %s = {\n' % scui_image_tag)
-        scui_image_parser_c.write('\t.pixel.width\t = %s,\n' % hex(image_std.size[0]))
-        scui_image_parser_c.write('\t.pixel.height\t = %s,\n' % hex(image_std.size[1]))
-        scui_image_parser_c.write('\t.pixel.data_bin\t = %s,\n' % hex(pixel_bin_ofs))
-        scui_image_parser_c.write('\t.pixel.size_bin\t = %s,\n' % hex(pixel_bin_len))
-        scui_image_parser_c.write('\t.format\t\t\t = %s,\n' % scui_pixel_cf)
-        scui_image_parser_c.write('\t.type\t\t\t = %s,\n' % scui_image_type)
-        scui_image_parser_c.write('};\n\n')
+        scui_image_struct = ''
+        scui_image_struct += 'const scui_image_t %s = {\n' % scui_image_tag
+        scui_image_struct += '\t.pixel.width\t = %s,\n' % hex(image_std.size[0])
+        scui_image_struct += '\t.pixel.height\t = %s,\n' % hex(image_std.size[1])
+        scui_image_struct += '\t.pixel.data_bin\t = %s,\n' % hex(pixel_bin_ofs)
+        scui_image_struct += '\t.pixel.size_bin\t = %s,\n' % hex(pixel_bin_len)
+        scui_image_struct += '\t.format\t\t\t = %s,\n' % scui_pixel_cf
+        scui_image_struct += '\t.type\t\t\t = %s,\n' % scui_image_type
+        scui_image_struct += '};\n\n'
+        scui_image_parser_c.write(scui_image_struct)
+        # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)
+        scui_image_parser_sub_file = os.path.join(scui_image_parser_sub, scui_image_tag)
+        with open(scui_image_parser_sub_file, mode='w', encoding='utf-8') as file:
+            file.write('\n const uint8_t scui_image_array[] = {\n\t')
+            # 迭代字节数据流, 将其转为hex字符
+            scui_image_width = image_std.size[0]
+            scui_image_byte_cnt = 0
+            for byte in scui_image_byte:
+                file.write('0x{:02x}, '.format(byte))
+                scui_image_byte_cnt += 1
+                if scui_image_byte_cnt % scui_image_width == 0:
+                    file.write('\n\t')
+            file.write('}\n\n' + scui_image_struct + '\n')
         # 信息记录
         pixel_bin_all += pixel_bin_len
         pixel_raw_all += pixel_raw_len
@@ -292,8 +317,14 @@ def scui_image_parser():
     scui_image_parser_h = open(os.path.join(dst_path, 'scui_image_parser.h'), mode='w', encoding='utf-8')
     scui_image_parser_c = open(os.path.join(dst_path, 'scui_image_parser.c'), mode='w', encoding='utf-8')
     scui_image_parser_bin = open(os.path.join(dst_path, 'scui_image_parser.bin'), mode='wb')
-    scui_image_parser_list = [scui_image_parser_h,scui_image_parser_c,scui_image_parser_bin,]
-    scui_image_parse(file_path_list, scui_image_parser_list, project_name)
+    scui_image_parser_sub = os.path.join(dst_path, "image_array")   # 子文件单独生成到子路径
+    scui_image_parser_list = [
+        scui_image_parser_h,
+        scui_image_parser_c,
+        scui_image_parser_bin,
+        scui_image_parser_sub,
+    ]
+    scui_image_parser_all(file_path_list, scui_image_parser_list, project_name)
     scui_image_parser_h.close()
     scui_image_parser_c.close()
     scui_image_parser_bin.close()
