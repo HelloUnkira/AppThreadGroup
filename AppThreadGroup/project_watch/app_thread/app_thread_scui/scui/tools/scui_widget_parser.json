@@ -1,0 +1,99 @@
+{
+    "type": "scui widget parser table",
+    "anno": "child_num指的是动态子控件数量",
+    "anno": "在布局界面的静态子控件数量会自动计算并累加",
+    "anno": "所有的未书写字段默认为0",
+    "anno": "句柄表偏移:控件",
+    "offset_name":  "SCUI_HANDLE_OFFSET_WIDGET",
+    "offset_value": "0x1000 - 1",
+    "widget": [
+        {
+            "class": "widget",
+            "maker": "scui_widget_maker_t: you can't use this",
+            "field": {
+                "widget.type":                  "控件类型",
+                "widget.style.trans":           "控件状态风格(背景透明)",
+                "widget.style.sched_anima":     "控件状态风格(控件调度动画标记)",
+                "widget.style.indev_ptr":       "控件状态风格(输入事件响应标记:ptr)",
+                "widget.style.indev_enc":       "控件状态风格(输入事件响应标记:enc)",
+                "widget.style.indev_key":       "控件状态风格(输入事件响应标记:key)",
+                "widget.clip.x":                "控件所在父控件区域(x)",
+                "widget.clip.y":                "控件所在父控件区域(y)",
+                "widget.clip.w":                "控件所在父控件区域(w)",
+                "widget.clip.h":                "控件所在父控件区域(h)",
+                "widget.myself":                "控件关联属性:自己",
+                "widget.parent":                "控件关联属性:父控件",
+                "widget.child_num":             "控件关联属性:子控件数量(动态创建)",
+                "widget.image":                 "背景图片(如果有背景图片,优先绘制)",
+                "widget.color.color.full":      "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_s.full":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_l.full":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_e.full":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_d.full":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.color.color_f.full":    "纯色背景(如果没背景图片,颜色绘制)",
+                "widget.event_cb":              "事件响应回调(可选字段,非控件自身字段)"
+            }
+        },
+        {
+            "class": "scui_widget_type_window",
+            "maker": "scui_window_maker_t",
+            "field": {
+                "level":                        "窗口所在层级(数字越大越高)",
+                "buffer":                       "窗口是否使用独立画布",
+                "resident":                     "窗口常驻标记(特殊使用)",
+                "hang_only":                    "窗口悬挂标记(特殊使用)",
+                "format":                       "窗口独立画布基础像素格式"
+            }
+        },
+        {
+            "class": "scui_widget_type_custom",
+            "maker": "scui_custom_maker_t",
+            "field": {
+                "anno":                         "custom是widget的别名",
+                "anno":                         "它不存在别的字段"
+            }
+        },
+        {
+            "class": "scui_widget_type_scroll",
+            "maker": "scui_scroll_maker_t",
+            "field": {
+                "notify_cb":                    "专属事件通知",
+                "pos":                          "滚动停留(边界或中心)",
+                "dir":                          "滚动方向(水平滚动,垂直滚动,全局滚动)",
+                "edge.x":                       "滚动边距(自由布局)",
+                "edge.y":                       "滚动边距(自由布局)",
+                "space":                        "控件间隙(自动布局)",
+                "fling_page":                   "翻页数量",
+                "route_enc":                    "编码器行程",
+                "route_key":                    "按键行程",
+                "keyid_fdir":                   "按键id,对应编码器事件(clockwise)",
+                "keyid_bdir":                   "按键id,对应编码器事件(clockwise_anti)",
+                "springback":                   "回弹效果",
+                "freedom":                      "自由布局(默认自动布局)",
+                "loop":                         "滚动循环"
+            }
+        },
+        {
+            "class": "scui_widget_type_watch",
+            "maker": "scui_watch_maker_t",
+            "field": {
+                "image_h":                      "图片句柄(hour)",
+                "image_m":                      "图片句柄(minute)",
+                "image_s":                      "图片句柄(second)",
+                "anchor_h.x":                   "图片旋转围绕轴心",
+                "anchor_h.y":                   "图片旋转围绕轴心",
+                "center_h.x":                   "图片旋转中心",
+                "center_h.y":                   "图片旋转中心",
+                "anchor_m.x":                   "图片旋转围绕轴心",
+                "anchor_m.y":                   "图片旋转围绕轴心",
+                "center_m.x":                   "图片旋转中心",
+                "center_m.y":                   "图片旋转中心",
+                "anchor_s.x":                   "图片旋转围绕轴心",
+                "anchor_s.y":                   "图片旋转围绕轴心",
+                "center_s.x":                   "图片旋转中心",
+                "center_s.y":                   "图片旋转中心",
+                "tick_mode":                    "一度一跳:1;一秒一跳:0;"
+            }
+        }
+    ]
+}
