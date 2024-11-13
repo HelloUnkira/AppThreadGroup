@@ -85,6 +85,7 @@ static void scui_draw_circle(scui_draw_graph_dsc_t *draw_graph)
         src_radius  = 1;
     
     #if 1
+    (void)src_center;(void)src_color;
     #endif
 }
 
@@ -111,6 +112,7 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
         src_radius  = 1;
     
     #if 1
+    (void)src_color;
     #endif
 }
 
@@ -167,6 +169,7 @@ static void scui_draw_arc(scui_draw_graph_dsc_t *draw_graph)
         return;
     
     #if 1
+    (void)src_center;(void)src_color;
     #endif
 }
 

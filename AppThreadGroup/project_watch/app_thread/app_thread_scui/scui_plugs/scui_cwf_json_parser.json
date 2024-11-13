@@ -1,0 +1,218 @@
+{
+    "annotation": "简单的cloud watch face双边json布局协议",
+    "annotation": "布局协议较为固定主要支持大部分较为简单云表盘显示元素使用",
+    "annotation": "解析器会从bin文件中解析出json布局以及图片资源等相关信息",
+    "annotation": "而文字相关的内容则以设备实际情况去支持显示",
+    
+    "annotation": "注意:在json布局文件中",
+    "annotation": "无论你写多少annotation都不会被打包到bin中",
+    "annotation": "所有的注释相关的信息都写成此关键字标记",
+    
+    "annotation": "每一个cwf在编写时都要指定自己的版本号,固件解析器和cwf资源对应",
+    "annotation": "所有版本都来源于本协议,脚本和固件都依此协议同步更新版本号",
+    "version":    [0, 0, 1, 17],
+    
+    "annotation": "每一个cwf都有一个自己的id号,由业务协议规定即可,不重复",
+    "annotation": "这个主要用于下载和替换cwf时使用,保证本地的cwf唯一性",
+    "id"        : "一般是一个固定前缀加一个编号组成: 如CWF_XT0001",
+    
+    "annotation": "每一个cwf都有一个自己的layout, 每一个layout都对应一个完整的显示动作",
+    "annotation": "后面的显示会覆盖前面的显示,是以显示优先级越高越往后排列",
+    "annotation": "每一个显示类型都是列表中的一个小集合,layout至少有一个集合",
+    "annotation": "被列举的字段不可省略,至少填一个默认值",
+    
+    "scui_cwf_json_format": [
+        "scui_cwf_json_format_none",
+        "scui_cwf_json_format_palette4",
+        "scui_cwf_json_format_palette8",
+        "scui_cwf_json_format_bmp565",
+        "scui_cwf_json_format_bmp888",
+        "scui_cwf_json_format_bmp8565",
+        "scui_cwf_json_format_bmp8888",
+        "scui_cwf_json_format_num"
+    ],
+    
+    "scui_cwf_json_type": [
+        {"key": "scui_cwf_json_type_none",                  "annotation": ""},
+        {"key": "scui_cwf_json_type_img",                   "annotation": "图片"},
+        {"key": "scui_cwf_json_type_txt",                   "annotation": "文本"},
+        {"key": "scui_cwf_json_type_num",                   "annotation": ""}
+    ],
+    "scui_cwf_json_type_img": [
+        {"key": "scui_cwf_json_type_img_none",              "annotation": ""},
+        
+        {
+            "key": "scui_cwf_json_type_img_preview",
+            "annotation": "(1)预览:不显示"
+        },
+        {
+            "key": "scui_cwf_json_type_img_bg",
+            "annotation": "(1)背景:只显示",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_watch",
+            "annotation": "(3)指针:表盘指针(时分秒)",
+            "annotation": "hx:坐标;hy:坐标;h_cy:图心y",
+            "annotation": "mx:坐标;my:坐标;m_cy:图心y",
+            "annotation": "sx:坐标;sy:坐标;s_cy:图心y"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_month",
+            "annotation": "(12)月份",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_day",
+            "annotation": "(10)天",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_week",
+            "annotation": "(7)星期:日一二三四五六",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_ampm",
+            "annotation": "(2)上午下午",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_timeh",
+            "annotation": "(10)时间:时",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_timem",
+            "annotation": "(10)时间:分",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_times",
+            "annotation": "(10)时间:秒",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_hr_prog",
+            "annotation": "(n)进度条,系统映射",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_hr",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_hr_unit",
+            "annotation": "(1)单位",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_kcal_prog",
+            "annotation": "(n)进度条,系统映射",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_kcal",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3千4万5",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_kcal_unit",
+            "annotation": "(1)单位",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_step_prog",
+            "annotation": "(n)进度条,系统映射",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_step",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3千4万5",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_step_unit",
+            "annotation": "(1)单位",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_batt_prog",
+            "annotation": "(n)进度条,系统映射",
+            "annotation": "x:坐标;y:坐标"
+        },
+        {
+            "key": "scui_cwf_json_type_img_batt",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_batt_unit",
+            "annotation": "(1)单位",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        
+        {"key": "scui_cwf_json_type_img_num",               "annotation": ""}
+    ],
+    "scui_cwf_json_type_txt": [
+        {"key": "scui_cwf_json_type_txt_none",              "annotation": ""},
+        
+        {"key": "scui_cwf_json_type_txt_week",              "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_ampm",              "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_day",               "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_mon",               "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_digit_mon",         "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_digit_mon_day",     "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_day_digit_mon",     "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_bat",               "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_bat_pct",           "annotation": ""},
+        
+        {"key": "scui_cwf_json_type_txt_num",               "annotation": ""}
+    ],
+    
+    "layout" : [
+        {
+            "type"      : "scui_cwf_json_type_img",
+            "type_sub"  : "cwf类型:scui_cwf_json_type_img字段",
+            
+            "image_src" : ["这里填图片的名字(只要前缀),字符串逗号隔开"]
+        },
+        {
+            "type"      : "scui_cwf_json_type_txt",
+            "type_sub"  : "cwf类型:scui_cwf_json_type_txt字段",
+            
+            "x"         : "原点坐标(也就是左上角坐标)",
+            "y"         : "原点坐标(也就是左上角坐标)",
+            "w"         : "显示信息宽度(必须填非0值)",
+            "h"         : "显示信息高度(必须填非0值)",
+            
+            "align"     : "默认左对齐(0);居中对齐(1);右对齐(2);",
+            "color"     : "通用色字符串,固定32位16进制字符串,如:0xFFFFFFFF",
+            "size"      : "文字参考大小,设备给出支持的最临近文字大小"
+        }
+    ]
+}

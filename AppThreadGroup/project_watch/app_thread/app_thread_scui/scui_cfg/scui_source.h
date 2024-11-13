@@ -8,6 +8,11 @@
 #include "scui_multi_lang.h"        /* 多国语字符串表 */
 #include "scui_font_type.h"         /* 字库类型表 */
 
+// cwf json
+#include "scui_cwf_json_proto.h"
+#include "scui_cwf_json_parser.h"
+#include "scui_cwf_json_maker.h"
+
 // 图标库
 // 缺图标可从此取用https://www.iconfont.cn
 

@@ -149,13 +149,10 @@ class ScuiRedirectPrint(object):
 # 主流程
 def scui_widget_parser():
     # json转Python字符串并转标准字典
-    path_script = sys.path[0]
-    path_execute = os.getcwd()
-    os.chdir(path_script)   # 切换到脚本所在位置
-    json_file = open('scui_widget_parser.json', 'r', encoding='utf-8')
+    parser_path = os.path.join(os.path.dirname(__file__), 'scui_widget_parser.json')
+    json_file = open(parser_path, 'r', encoding='utf-8')
     json_dict = json.loads(json_file.read())
     json_file.close()
-    os.chdir(path_execute)  # 切换回执行所在位置
     if json_dict['type'] != r'scui widget parser table':
         print('parser table unknown')
         return
