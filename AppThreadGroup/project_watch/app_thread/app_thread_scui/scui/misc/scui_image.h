@@ -27,6 +27,7 @@ typedef struct {
     scui_pixel_cf_t     format;     // 图片格式
     scui_image_type_t   type;       // 图片状态
     scui_image_pixel_t  pixel;      // 图片色彩数据
+    scui_handle_t       from;       // 图库来源
 } scui_image_t;
 
 /*@brief 图像宽

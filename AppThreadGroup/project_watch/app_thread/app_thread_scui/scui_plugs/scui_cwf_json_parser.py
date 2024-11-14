@@ -91,8 +91,8 @@ def scui_cwf_json_parser_proto():
         file.write('#ifndef SCUI_CWF_JSON_PROTO_H\n')
         file.write('#define SCUI_CWF_JSON_PROTO_H\n\n')
         file.write('#define SCUI_CWF_JSON_VER\t\t{%d, %d, %d, %d}\n\n' %
-            (json_parser['version'][0], json_parser['version'][1],
-             json_parser['version'][2], json_parser['version'][3]))
+            (json_parser['version'][3], json_parser['version'][2],
+             json_parser['version'][1], json_parser['version'][0]))
         
         file.write('typedef enum {\n')
         for idx, item in enumerate(json_parser['scui_cwf_json_format']):

@@ -175,13 +175,19 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
 void scui_image_src_read(scui_image_t *image, void *data)
 {
     // 使用image生成==>data
+    const char *image_bin = "scui_image_parser.bin";
+    const char *image_src = image_bin;
+    if (image->from != SCUI_HANDLE_INVALID)
+        image_src = scui_handle_get(image->from);
+    
+    
     
     if (image->type == scui_image_type_jpg) {
         
         size_t jpg_size = image->pixel.size_bin;
         void  *jpg_data = SCUI_MEM_ALLOC(scui_mem_type_graph, jpg_size);
         
-        FILE *file = fopen("scui_image_parser.bin", "rb+");
+        FILE *file = fopen(image_src, "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
         fread(jpg_data, jpg_size, 1, file);
         fclose(file);
@@ -220,7 +226,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
         size_t png_size = image->pixel.size_bin;
         void  *png_data = lodepng_malloc(png_size);
         
-        FILE *file = fopen("scui_image_parser.bin", "rb+");
+        FILE *file = fopen(image_src, "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
         fread(png_data, png_size, 1, file);
         fclose(file);
@@ -273,7 +279,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
         size_t com_size = image->pixel.size_bin;
         void  *com_data = scui_LZ4F_AllocFunction(NULL, com_size);
         
-        FILE *file = fopen("scui_image_parser.bin", "rb+");
+        FILE *file = fopen(image_src, "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
         fread(com_data, com_size, 1, file);
         fclose(file);
@@ -305,7 +311,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
     if (image->type == scui_image_type_bmp) {
         // 原始内存数据,直接使用的
         size_t retval = -1;
-        FILE *file = fopen("scui_image_parser.bin", "rb+");
+        FILE *file = fopen(image_src, "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
         retval = fread(data, image->pixel.size_bin, 1, file);
         fclose(file);
@@ -314,4 +320,19 @@ void scui_image_src_read(scui_image_t *image, void *data)
     }
     
     SCUI_ASSERT(false);
+}
+
+/*brief 图片文件资源读取
+ *param name   包名
+ *param offset 偏移量
+ *param size   数据长度
+ *param data   数据流
+ */
+void scui_image_bin_read(const char *name, uintptr_t offset, uintptr_t size, uint8_t *data)
+{
+    size_t retval = -1;
+    FILE *file = fopen(name, "rb+");
+    fseek(file, offset, SEEK_SET);
+    retval = fread(data, size, 1, file);
+    fclose(file);
 }

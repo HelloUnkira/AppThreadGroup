@@ -29,19 +29,32 @@
 
 typedef struct {
     scui_handle_t  name;
-    scui_handle_t  preview;
     scui_image_t  *image_src;
-    scui_handle_t  image_num;
+    scui_handle_t *image_hit;
+    uint32_t       image_num;
     scui_handle_t  parent;
-    scui_handle_t  list_num;
     scui_handle_t *list_child;
-    scui_handle_t *list_type;
-    scui_handle_t *list_type_sub;
-} scui_cwf_parser_t;
+    uint32_t       list_num;
+    uint8_t       *list_type;
+    uint8_t       *list_type_sub;
+    void         **list_src;
+} scui_cwf_json_parser_t;
 
-// 在window hide cb 中使用burn
-// 在window show cb 中使用make
-void scui_cwf_json_burn(scui_cwf_parser_t **parser);
-void scui_cwf_json_make(scui_cwf_parser_t **parser, const char *file, scui_handle_t parent);
+/*@brief 更新cwf
+ *@param inst 实例
+ */
+void scui_cwf_json_anim(void *inst);
+
+/*@brief 销毁cwf
+ *@param inst 实例地址
+ */
+void scui_cwf_json_burn(void **inst);
+
+/*@brief 构建cwf
+ *@param inst   实例地址
+ *@param file   cwf名字
+ *@param parent 父控件
+ */
+void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent);
 
 #endif

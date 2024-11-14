@@ -124,4 +124,12 @@ void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph)
     scui_draw_graph_EGUI(draw_graph);
     return;
     #endif
+    
+    switch (draw_graph->type) {
+    case scui_draw_graph_type_line:
+        scui_draw_sline(draw_graph);
+        break;
+    default:
+        break;
+    }
 }

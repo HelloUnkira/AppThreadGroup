@@ -1,7 +1,7 @@
 #ifndef SCUI_CWF_JSON_PROTO_H
 #define SCUI_CWF_JSON_PROTO_H
 
-#define SCUI_CWF_JSON_VER		{0, 0, 1, 17}
+#define SCUI_CWF_JSON_VER		{17, 1, 0, 0}
 
 typedef enum {
 	scui_cwf_json_format_none = 0,
