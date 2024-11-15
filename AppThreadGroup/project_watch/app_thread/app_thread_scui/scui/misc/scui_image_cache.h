@@ -42,6 +42,11 @@ void scui_image_cache_visit(void);
  */
 void scui_image_cache_clear(void);
 
+/*@brief 图片资源缓存无效化(指定目标)
+ *@brief image_unit 图片资源缓存节点
+ */
+void scui_image_cache_invalidate(scui_image_unit_t *image_unit);
+
 /*@brief 图片资源缓存卸载
  *@brief image_unit 图片资源缓存节点
  */

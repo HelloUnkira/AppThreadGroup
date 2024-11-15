@@ -78,28 +78,33 @@ void scui_cwf_json_burn(void **inst)
     if (parser == NULL)
         return;
     
-    // 批量销毁所有条目
+    // 批量销毁所有条目资源
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_burn_item(parser, idx);
-    // 批量销毁所有控件
-    for (uint32_t idx = 0; idx < parser->list_num; idx++) {
-        scui_cwf_json_burn_item(parser, idx);
-        if (parser->list_child[idx] != SCUI_HANDLE_INVALID)
-            scui_widget_destroy(parser->list_child[idx]);
-    }
+    // 销毁整个子控件树
+    scui_widget_destroy(parser->parent);
+    // 回收内部维护资源
     SCUI_MEM_FREE(parser->list_child);
     SCUI_MEM_FREE(parser->list_type);
     SCUI_MEM_FREE(parser->list_type_sub);
     SCUI_MEM_FREE(parser->list_src);
+    // 图片资源缓存无效化
+    for (uint32_t idx = 0; idx < parser->image_num; idx++) {
+        scui_image_unit_t image_unit = {0};
+        image_unit.image = &parser->image_src[idx];
+        scui_image_cache_invalidate(&image_unit);
+    }
     // 批量回收所有图片句柄
     for (uint32_t idx = 0; idx < parser->image_num; idx++)
         if (parser->image_hit[idx] != SCUI_HANDLE_INVALID)
             scui_handle_set(parser->image_hit[idx], NULL);
+    // 回收内部维护资源
     SCUI_MEM_FREE(parser->image_hit);
     SCUI_MEM_FREE(parser->image_src);
     // 回收名字和对应句柄
     const char *name = scui_handle_get(parser->name);
     scui_handle_set(parser->name, NULL);
+    // 回收内部维护资源
     SCUI_MEM_FREE(name);
     
     // 销毁解析器
@@ -201,7 +206,6 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     parser->list_type     = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(uint8_t));
     parser->list_type_sub = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(uint8_t));
     parser->list_src      = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(void *));
-    parser->parent = parent;
     
     #if 0   /* 检查JSON */
     char *json_format = cJSON_Print(json_object);
@@ -214,6 +218,16 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     memset(parser->list_type,     0, parser->list_num * sizeof(uint8_t));
     memset(parser->list_type_sub, 0, parser->list_num * sizeof(uint8_t));
     memset(parser->list_src,      0, parser->list_num * sizeof(void *));
+    
+    // 构建一个父容器,用于承载cwf
+    scui_custom_maker_t custom_maker = {0};
+    custom_maker.widget.type        = scui_widget_type_custom;
+    custom_maker.widget.style.trans = true;
+    custom_maker.widget.style.cover = true;
+    custom_maker.widget.clip        = scui_widget_clip(parent);
+    custom_maker.widget.parent      = parent;
+    custom_maker.widget.child_num   = parser->list_num;
+    scui_custom_create(&custom_maker, &parser->parent, false);
     
     // 按索引顺序一个个解析, 然后添加到parser中去
     for (uint32_t idx = 0; idx < parser->list_num; idx++) {

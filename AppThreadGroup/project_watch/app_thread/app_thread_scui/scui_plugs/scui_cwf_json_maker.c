@@ -120,6 +120,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         // 继续构建资源索引, 以便将来快速访问image_hit
         for (uint32_t idx = 0; idx < res->img_num; idx++) {
              uint32_t ofs = cJSON_GetNumberValue(cJSON_GetArrayItem(json_src, idx)) + 0.1;
+             SCUI_ASSERT(ofs < parser->image_num);
              res->img_ofs[idx] = ofs;
         }
         
@@ -131,6 +132,41 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             break;
         }
         case scui_cwf_json_type_img_bg: {
+            SCUI_ASSERT(res->img_num == 1);
+            scui_custom_maker_t custom_maker = {0};
+            custom_maker.widget.type   = scui_widget_type_custom;
+            custom_maker.widget.clip.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
+            custom_maker.widget.clip.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
+            custom_maker.widget.clip.w = scui_image_w(parser->image_hit[res->img_ofs[0]]);
+            custom_maker.widget.clip.h = scui_image_h(parser->image_hit[res->img_ofs[0]]);
+            custom_maker.widget.parent = parser->parent;
+            custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
+            scui_custom_create(&custom_maker, &parser->list_child[idx], false);
+            break;
+        }
+        case scui_cwf_json_type_img_watch: {
+            SCUI_ASSERT(res->img_num == 3);
+            scui_watch_maker_t watch_maker = {0};
+            watch_maker.widget.type        = scui_widget_type_watch;
+            watch_maker.widget.style.trans = true;
+            watch_maker.widget.clip        = scui_widget_clip(parser->parent);
+            watch_maker.widget.parent      = parser->parent;
+            watch_maker.image_h = parser->image_hit[res->img_ofs[0]];
+            watch_maker.image_m = parser->image_hit[res->img_ofs[1]];
+            watch_maker.image_s = parser->image_hit[res->img_ofs[2]];
+            watch_maker.anchor_h.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hx")) + 0.1;
+            watch_maker.anchor_h.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hy")) + 0.1;
+            watch_maker.anchor_m.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "mx")) + 0.1;
+            watch_maker.anchor_m.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "my")) + 0.1;
+            watch_maker.anchor_s.x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sx")) + 0.1;
+            watch_maker.anchor_s.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sy")) + 0.1;
+            watch_maker.center_h.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "h_cy")) + 0.1;
+            watch_maker.center_m.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "m_cy")) + 0.1;
+            watch_maker.center_s.y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "s_cy")) + 0.1;
+            watch_maker.center_h.x = scui_image_w(parser->image_hit[res->img_ofs[0]]) / 2;
+            watch_maker.center_m.x = scui_image_w(parser->image_hit[res->img_ofs[1]]) / 2;
+            watch_maker.center_s.x = scui_image_w(parser->image_hit[res->img_ofs[2]]) / 2;
+            scui_watch_create(&watch_maker, &parser->list_child[idx], false);
             break;
         }
         default:

@@ -225,7 +225,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         # 我们生成一个子记录,用于外界解析时使用(内部只使用全部bin)
         scui_image_parser_sub_file = os.path.join(scui_image_parser_sub, scui_image_tag)
         with open(scui_image_parser_sub_file, mode='w', encoding='utf-8') as file:
-            file.write('\n const uint8_t scui_image_array[] = {\n\t')
+            file.write('\nconst uint8_t scui_image_array[] = {\n\t')
             # 迭代字节数据流, 将其转为hex字符
             scui_image_width = image_std.size[0]
             scui_image_byte_cnt = 0
@@ -234,7 +234,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                 scui_image_byte_cnt += 1
                 if scui_image_byte_cnt % scui_image_width == 0:
                     file.write('\n\t')
-            file.write('}\n\n' + scui_image_struct + '\n')
+            file.write('\n\n};\n\n' + scui_image_struct + '\n')
         # 信息记录
         pixel_bin_all += pixel_bin_len
         pixel_raw_all += pixel_raw_len

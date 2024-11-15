@@ -209,6 +209,8 @@ def scui_cwf_json_parser_image_data(image_path, c_file_list):
     # 对所有的image data统计
     for file_name in c_file_list:
         # 从c源文件的此区域内, 提取十六进制字符串的bin文件数据流
+        image_size = 0
+        context_size = 0
         context_pattern_s = "const uint8_t scui_image_array\[\] = {"
         context_pattern_e = "}"
         working = False
@@ -221,11 +223,23 @@ def scui_cwf_json_parser_image_data(image_path, c_file_list):
                     break
                 if working:
                     for char in line.strip().split(','):
-                        if char.strip() != '':
-                            image_data_bytes.extend(int(char.strip(), 16).to_bytes(byteorder='little', length=1))
+                        if char.strip() == '':
+                            continue
+                        image_data_bytes.extend(int(char.strip(), 16).to_bytes(byteorder='little', length=1))
+                        context_size += 1
                 if re.search(context_pattern_s, line):
                     # print("context_pattern_s")
                     working = True
+        # 对所有的image data打包
+        with open(os.path.join(image_path, file_name), mode='r', encoding='utf-8') as file:
+            for line in file.readlines():
+                if re.search(r'\.pixel\.size_bin', line):
+                    payload = line.split('=')[1].split(',')[0].strip()
+                    image_size = int(payload[2:], 16)
+        # 检查一下image data大小是否匹配
+        if image_size != context_size:
+            print("image array bin size unmatched:%s" % file_name)
+            print("image array bin size diff: <%d, %d>" % (image_size, context_size))
     # 写入json文件到达缓存目标文件
     with open(scui_cwf_json_parser_tmp_bin[2], mode='wb') as file:
         file.write(image_data_bytes)

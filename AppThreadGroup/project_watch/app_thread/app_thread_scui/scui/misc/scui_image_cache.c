@@ -51,7 +51,10 @@ static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
 {
     scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
-    return unit1->image->pixel.data_bin == unit2->image->pixel.data_bin ? true : false;
+    // 来源和地址同步匹配才可确认资源一致性
+    bool cond_tar = unit1->image->from == unit2->image->from;
+    bool cond_bin = unit1->image->pixel.data_bin == unit2->image->pixel.data_bin;
+    return cond_tar && cond_bin ? true : false;
 }
 
 /*@brief 哈希访问函数
@@ -155,7 +158,43 @@ void scui_image_cache_clear(void)
     }
 }
 
+/*@brief 图片资源缓存无效化(指定目标)
+ *@brief image_unit 图片资源缓存节点
+ */
+void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
+{
+    scui_image_cache_t *cache = &scui_image_cache;
+    
+    if (image_unit == NULL) {
+        SCUI_LOG_WARN("image unit is empty");
+        return;
+    }
+    
+    // 内存图片直达即可(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem)
+        return;
+    
+    scui_image_unit_t *unit = NULL;
+    scui_table_dln_t *unit_node = NULL;
+    
+    if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
+        unit = scui_own_ofs(scui_image_unit_t, ht_node, unit_node);
+    
+    /* 如果缓存命中时 */
+    if (unit != NULL) {
+        scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
+        scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
+        
+        /* 约减使用率 */
+        cache->usage -= scui_image_size(unit->image);
+        /* 卸载图像资源 */
+        SCUI_MEM_FREE(unit->data);
+        SCUI_MEM_FREE(unit);
+    }
+}
+
 /*@brief 图片资源卸载
+ *@brief image_unit 图片资源缓存节点
  */
 void scui_image_cache_unload(scui_image_unit_t *image_unit)
 {

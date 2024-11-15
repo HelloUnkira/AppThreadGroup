@@ -1078,7 +1078,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
 	.widget.image                   = scui_image_prj_image_src_home_watch_D10603001_bg_01_00bmp,
-	.widget.child_num               = 1,
+	.widget.child_num               = 6,
 	.level                          = 0,
 	.buffer                         = true,
 };
