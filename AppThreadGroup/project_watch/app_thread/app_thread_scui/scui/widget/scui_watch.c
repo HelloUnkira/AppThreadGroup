@@ -96,10 +96,6 @@ void scui_watch_event(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         
-        watch->tick_ms += SCUI_ANIMA_TICK;
-        if (watch->tick_ms >= 1000)
-            watch->tick_ms  = 1000;
-        
         scui_indev_data_set_t *data_set = NULL;
         scui_indev_data_set(&data_set);
         
@@ -116,12 +112,20 @@ void scui_watch_event(scui_event_t *event)
         }
         
         if (watch->tick_mode) {
+            
+            watch->tick_ms += SCUI_ANIMA_TICK;
+            if (watch->tick_ms >= 1000)
+                watch->tick_ms  = 1000;
+            
             /* 一度一跳时 */
             if (scui_dist(watch->tick_ms, watch->tick_ms_rcd) >= (1000 / 6)) {
                 watch->tick_ms_rcd = watch->tick_ms;
                 scui_widget_draw(handle, NULL, false);
                 break;
             }
+        } else {
+            watch->tick_ms     = 0;
+            watch->tick_ms_rcd = 0;
         }
         break;
     }

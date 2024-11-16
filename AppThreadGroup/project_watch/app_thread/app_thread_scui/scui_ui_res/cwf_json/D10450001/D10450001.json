@@ -8,7 +8,7 @@
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_bg",
+            "type_sub": "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_bgjpg"]

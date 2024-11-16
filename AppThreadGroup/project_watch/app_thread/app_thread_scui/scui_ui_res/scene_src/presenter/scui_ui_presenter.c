@@ -34,6 +34,8 @@ static bool scui_ui_func_local_is_pm(void)
  */
 static bool scui_ui_func_local_is_24(void)
 {
+    app_module_clock_set_system_clock_mode(false);
+    
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     return clock.is_24;
@@ -111,11 +113,164 @@ static uint8_t scui_ui_func_local_get_week(void)
     return clock.week;
 }
 
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_hr_min(void)
+{
+    return 60;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_hr_max(void)
+{
+    return 140;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_hr_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_hr_min();
+    uint32_t max = scui_ui_func_local_get_hr_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_spo2_min(void)
+{
+    return 92;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_spo2_max(void)
+{
+    return 100;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_spo2_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_spo2_min();
+    uint32_t max = scui_ui_func_local_get_spo2_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_kcal_min(void)
+{
+    return 0;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_kcal_max(void)
+{
+    return 9999;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_kcal_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_kcal_min();
+    uint32_t max = scui_ui_func_local_get_kcal_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_step_min(void)
+{
+    return 0;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_step_max(void)
+{
+    return 99999;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_step_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_step_min();
+    uint32_t max = scui_ui_func_local_get_step_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_batt_min(void)
+{
+    return 0;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_batt_max(void)
+{
+    return 100;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_batt_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_batt_min();
+    uint32_t max = scui_ui_func_local_get_batt_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_dist_min(void)
+{
+    return 0;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_dist_max(void)
+{
+    return 9999;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_dist_cur(void)
+{
+    uint32_t min = scui_ui_func_local_get_dist_min();
+    uint32_t max = scui_ui_func_local_get_dist_max();
+    return scui_rand(min, max);
+}
+
+/*@brief scui ui数据交互回调
+ */
+static int16_t scui_ui_func_local_get_temp_cur(void)
+{
+    return 25;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static bool scui_ui_func_local_get_temp_unit(void)
+{
+    return false;
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 /* scui 唯一交互实例回调集合 */
 scui_ui_presenter_t scui_ui_presenter = {
+    /* date time: */
     .is_am          = scui_ui_func_local_is_am,
     .is_pm          = scui_ui_func_local_is_pm,
     .is_24          = scui_ui_func_local_is_24,
@@ -127,6 +282,29 @@ scui_ui_presenter_t scui_ui_presenter = {
     .get_minute     = scui_ui_func_local_get_minute,
     .get_second     = scui_ui_func_local_get_second,
     .get_week       = scui_ui_func_local_get_week,
+    /* dev data: */
+    .get_hr_min     = scui_ui_func_local_get_hr_min,
+    .get_hr_max     = scui_ui_func_local_get_hr_max,
+    .get_hr_cur     = scui_ui_func_local_get_hr_cur,
+    .get_spo2_min   = scui_ui_func_local_get_spo2_min,
+    .get_spo2_max   = scui_ui_func_local_get_spo2_max,
+    .get_spo2_cur   = scui_ui_func_local_get_spo2_cur,
+    .get_kcal_min   = scui_ui_func_local_get_kcal_min,
+    .get_kcal_max   = scui_ui_func_local_get_kcal_max,
+    .get_kcal_cur   = scui_ui_func_local_get_kcal_cur,
+    .get_step_min   = scui_ui_func_local_get_step_min,
+    .get_step_max   = scui_ui_func_local_get_step_max,
+    .get_step_cur   = scui_ui_func_local_get_step_cur,
+    .get_batt_min   = scui_ui_func_local_get_batt_min,
+    .get_batt_max   = scui_ui_func_local_get_batt_max,
+    .get_batt_cur   = scui_ui_func_local_get_batt_cur,
+    .get_dist_min   = scui_ui_func_local_get_dist_min,
+    .get_dist_max   = scui_ui_func_local_get_dist_max,
+    .get_dist_cur   = scui_ui_func_local_get_dist_cur,
+    .get_temp_cur   = scui_ui_func_local_get_temp_cur,
+    .get_temp_unit  = scui_ui_func_local_get_temp_unit,
+    
+    /* keep adding... */
 };
 /*****************************************************************************/
 /*****************************************************************************/

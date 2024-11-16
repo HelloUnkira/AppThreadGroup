@@ -20,7 +20,10 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        
+        //cwf json 测试
+        scui_cwf_json_anim(&scui_ui_res_local->cwf_json_inst);
+        
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -34,14 +37,26 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         // cwf json 测试
         if (scui_widget_event_check_prepare(event)) {
-            scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, "D10597001.bin", event->object);
+            
+            static const * cwf_list[] = {
+                "D10597001.bin",
+                "D10598001.bin",
+                "D10599001.bin",
+                "D10600001.bin",
+                "D10601001.bin",
+                "D10602001.bin",
+                "D10603001.bin",
+                "D10604001.bin",
+            };
+            
+            scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_list[7], event->object);
         }
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         
         // cwf json 测试
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_widget_event_check_finish(event)) {
             scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         }
         

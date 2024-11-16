@@ -84,7 +84,9 @@ int64_t scui_rand(int64_t min, int64_t max)
     x ^= x << 5;
     a = x;
     
-    return (a % (max - min + 1)) + min;
+    // 这里不知道为什么, v会超过min到max的范围
+    int64_t v = (a % (max - min + 1)) + min;
+    return scui_clamp(v, min, max);
 }
 
 /*@brief 三角函数(sin),放大4096倍
@@ -305,4 +307,18 @@ void *scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key, int32_t (*
         return mid;
     }
     return NULL;
+}
+
+/*@brief 十进制数字位数
+ *@param val 数字
+ *@retval 位数
+ */
+uint8_t scui_dec_bits(uint32_t val)
+{
+    uint8_t cnt = 0;
+    do {
+        val /= 10;
+        cnt += 1;
+    } while (val != 0);
+    return cnt;
 }

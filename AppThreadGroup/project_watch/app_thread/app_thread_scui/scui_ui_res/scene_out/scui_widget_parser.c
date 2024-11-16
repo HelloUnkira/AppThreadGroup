@@ -1071,6 +1071,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,

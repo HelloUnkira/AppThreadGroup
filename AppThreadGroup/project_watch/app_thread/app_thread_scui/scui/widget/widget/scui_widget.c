@@ -172,6 +172,9 @@ void scui_widget_destructor(scui_widget_t *widget)
         return;
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
+    /* 回收用户资源句柄 */
+    if (widget->user_data != SCUI_HANDLE_INVALID)
+        scui_handle_set(widget->user_data, NULL);
     /* 先递归销毁自己的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
         scui_widget_destroy(widget->child_list[idx]);
@@ -688,6 +691,21 @@ bool scui_widget_style_is_hide(scui_handle_t handle)
     return !scui_widget_style_is_show(handle);
 }
 
+/*@brief 用户资源获取
+ *@param handle 控件句柄
+ *@retval 用户资源
+ */
+void * scui_widget_user_data_get(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->user_data == SCUI_HANDLE_INVALID)
+        return NULL;
+    
+    return scui_handle_get(widget->user_data);
+}
+
 /*@brief 控件透明度获取
  *@param handle 控件句柄
  *@retval 控件透明度
@@ -722,6 +740,22 @@ scui_color_t scui_widget_color_get(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     return widget->color;
+}
+
+/*@brief 用户资源设置
+ *@param handle    控件句柄
+ *@param user_data 用户资源
+ */
+void scui_widget_user_data_set(scui_handle_t handle, void *user_data)
+{
+    SCUI_LOG_INFO("widget %u user src %u set", handle, user_data);
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    
+    if (widget->user_data == SCUI_HANDLE_INVALID)
+        widget->user_data  = scui_handle_find();
+    
+    scui_handle_set(widget->user_data, user_data);
 }
 
 /*@brief 控件透明度设置

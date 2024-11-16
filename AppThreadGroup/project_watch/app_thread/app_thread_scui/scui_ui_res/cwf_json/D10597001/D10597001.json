@@ -8,7 +8,7 @@
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_bg",
+            "type_sub": "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_1jpg"]
@@ -89,7 +89,7 @@
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_timeh",
+            "type_sub": "scui_cwf_json_type_img_hour",
             "x":        152,
             "y":        88,
             "bits":     0,
@@ -109,7 +109,7 @@
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_timem",
+            "type_sub": "scui_cwf_json_type_img_minute",
             "x":        244,
             "y":        88,
             "bits":     0,
@@ -190,16 +190,16 @@
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal_unit",
-            "x":        84,
-            "y":        325,
+            "type_sub": "scui_cwf_json_type_img_simple",
+            "x":        330,
+            "y":        353,
             "image_src": ["cwf_image_unit_char_kcal_02_01bmp"]
         },
         {
             "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step_unit",
-            "x":        84,
-            "y":        325,
+            "type_sub": "scui_cwf_json_type_img_simple",
+            "x":        106,
+            "y":        353,
             "image_src": ["cwf_image_unit_char_step_02_01bmp"]
         },
         

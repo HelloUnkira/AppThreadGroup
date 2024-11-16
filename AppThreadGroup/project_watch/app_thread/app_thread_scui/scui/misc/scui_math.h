@@ -127,4 +127,10 @@ int32_t scui_map_bounce(int32_t x, int32_t l_i, int32_t r_i, int32_t l_o, int32_
  */
 void * scui_bsearch(void *arr, uint32_t len, uint32_t size, void *key, int32_t (*cmp)(void *key, void *tar));
 
+/*@brief 十进制数字位数
+ *@param val 数字
+ *@retval 位数
+ */
+uint8_t scui_dec_bits(uint32_t val);
+
 #endif

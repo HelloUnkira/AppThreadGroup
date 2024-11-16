@@ -43,11 +43,11 @@
         
         {
             "key": "scui_cwf_json_type_img_preview",
-            "annotation": "(1)预览:不显示"
+            "annotation": "预览:不显示"
         },
         {
-            "key": "scui_cwf_json_type_img_bg",
-            "annotation": "(1)背景:只显示",
+            "key": "scui_cwf_json_type_img_simple",
+            "annotation": "(1)单图:只显示",
             "annotation": "x:坐标;y:坐标"
         },
         {
@@ -59,16 +59,38 @@
         },
         
         {
-            "key": "scui_cwf_json_type_img_month",
-            "annotation": "(12)月份",
-            "annotation": "x:坐标;y:坐标"
-        },
-        {
             "key": "scui_cwf_json_type_img_day",
             "annotation": "(10)天",
             "annotation": "x:坐标;y:坐标",
             "annotation": "bits:全0个1十2",
             "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_hour",
+            "annotation": "(10)时间:时",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_minute",
+            "annotation": "(10)时间:分",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_second",
+            "annotation": "(10)时间:秒",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2",
+            "annotation": "span:间隙,默认0"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_month",
+            "annotation": "(12)月份",
+            "annotation": "x:坐标;y:坐标"
         },
         {
             "key": "scui_cwf_json_type_img_week",
@@ -79,28 +101,6 @@
             "key": "scui_cwf_json_type_img_ampm",
             "annotation": "(2)上午下午",
             "annotation": "x:坐标;y:坐标"
-        },
-        
-        {
-            "key": "scui_cwf_json_type_img_timeh",
-            "annotation": "(10)时间:时",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_timem",
-            "annotation": "(10)时间:分",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_times",
-            "annotation": "(10)时间:秒",
-            "annotation": "x:坐标;y:坐标",
-            "annotation": "bits:全0个1十2",
-            "annotation": "span:间隙,默认0"
         },
         
         {
@@ -115,11 +115,6 @@
             "annotation": "bits:全0个1十2百3",
             "annotation": "span:间隙,默认0"
         },
-        {
-            "key": "scui_cwf_json_type_img_hr_unit",
-            "annotation": "(1)单位",
-            "annotation": "x:坐标;y:坐标"
-        },
         
         {
             "key": "scui_cwf_json_type_img_kcal_prog",
@@ -132,11 +127,6 @@
             "annotation": "x:坐标;y:坐标",
             "annotation": "bits:全0个1十2百3千4万5",
             "annotation": "span:间隙,默认0"
-        },
-        {
-            "key": "scui_cwf_json_type_img_kcal_unit",
-            "annotation": "(1)单位",
-            "annotation": "x:坐标;y:坐标"
         },
         
         {
@@ -151,11 +141,6 @@
             "annotation": "bits:全0个1十2百3千4万5",
             "annotation": "span:间隙,默认0"
         },
-        {
-            "key": "scui_cwf_json_type_img_step_unit",
-            "annotation": "(1)单位",
-            "annotation": "x:坐标;y:坐标"
-        },
         
         {
             "key": "scui_cwf_json_type_img_batt_prog",
@@ -169,11 +154,39 @@
             "annotation": "bits:全0个1十2百3",
             "annotation": "span:间隙,默认0"
         },
+        
         {
-            "key": "scui_cwf_json_type_img_batt_unit",
-            "annotation": "(1)单位",
+            "key": "scui_cwf_json_type_img_dist_prog",
+            "annotation": "(n)进度条,系统映射",
             "annotation": "x:坐标;y:坐标"
         },
+        {
+            "key": "scui_cwf_json_type_img_dist",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3千4万5",
+            "annotation": "span:间隙,默认0"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_temp",
+            "annotation": "(10)",
+            "annotation": "x:坐标;y:坐标",
+            "annotation": "bits:全0个1十2百3",
+            "annotation": "span:间隙,默认0"
+        },
+        {
+            "key": "scui_cwf_json_type_img_temp_unit",
+            "annotation": "(2)",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
+        {
+            "key": "scui_cwf_json_type_img_anim",
+            "annotation": "(n)",
+            "annotation": "x:坐标;y:坐标"
+        },
+        
         
         
         {"key": "scui_cwf_json_type_img_num",               "annotation": ""}

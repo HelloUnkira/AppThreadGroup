@@ -43,7 +43,7 @@ typedef struct {
 /*@brief 更新cwf
  *@param inst 实例
  */
-void scui_cwf_json_anim(void *inst);
+void scui_cwf_json_anim(void **inst);
 
 /*@brief 销毁cwf
  *@param inst 实例地址

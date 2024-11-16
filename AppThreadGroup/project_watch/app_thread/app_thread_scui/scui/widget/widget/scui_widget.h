@@ -62,6 +62,7 @@ typedef struct {
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
     scui_surface_t         *surface;        /* 控件画布(图形上下文):画布实例 */
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
+    scui_handle_t           user_data;      /* 扩展字段:用户资源句柄 */
     scui_alpha_t            alpha;          /* 控件透明度 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
@@ -265,6 +266,12 @@ bool scui_widget_style_is_show(scui_handle_t handle);
  */
 bool scui_widget_style_is_hide(scui_handle_t handle);
 
+/*@brief 用户资源获取
+ *@param handle 控件句柄
+ *@retval 用户资源
+ */
+void * scui_widget_user_data_get(scui_handle_t handle);
+
 /*@brief 控件透明度获取
  *@param handle 控件句柄
  *@retval 控件透明度
@@ -282,6 +289,12 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle);
  *@retval 颜色
  */
 scui_color_t scui_widget_color_get(scui_handle_t handle);
+
+/*@brief 用户资源设置
+ *@param handle    控件句柄
+ *@param user_data 用户资源
+ */
+void scui_widget_user_data_set(scui_handle_t handle, void *user_data);
 
 /*@brief 控件透明度设置
  *@param handle  控件句柄

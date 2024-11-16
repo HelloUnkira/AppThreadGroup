@@ -57,13 +57,24 @@ static uint32_t scui_cwf_json_u32(uint8_t byte4[4])
 /*@brief 更新cwf
  *@param inst 实例
  */
-void scui_cwf_json_anim(void *inst)
+void scui_cwf_json_anim(void **inst)
 {
     SCUI_ASSERT(inst != NULL);
-    scui_cwf_json_parser_t *parser = inst;
+    scui_cwf_json_parser_t *parser = *inst;
+    
+    /* 做个缓速 */
+    static uint32_t span_fps = 7;
+    static uint32_t tick_cnt = 0;
+    tick_cnt += SCUI_ANIMA_TICK;
+    if (tick_cnt >= 1000 / span_fps)
+        tick_cnt -= 1000 / span_fps;
+    else
+        return;
     
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);
+    
+    scui_widget_draw(parser->parent, NULL, false);
 }
 
 /*@brief 销毁cwf
@@ -238,4 +249,8 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     SCUI_MEM_FREE(image_info);
     cJSON_Delete(json_object);
     SCUI_MEM_FREE(json_file);
+    
+    // 在结束的时候,进行一次anim更新
+    for (uint32_t idx = 0; idx < parser->list_num; idx++)
+        scui_cwf_json_anim_item(parser, idx);
 }

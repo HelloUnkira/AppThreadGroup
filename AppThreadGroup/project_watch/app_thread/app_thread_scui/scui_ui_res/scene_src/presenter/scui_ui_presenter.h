@@ -14,6 +14,28 @@ typedef struct {
     uint8_t  (*get_minute)(void);
     uint8_t  (*get_second)(void);
     uint8_t  (*get_week)(void);
+    /* dev data: */
+    uint32_t (*get_hr_min)(void);
+    uint32_t (*get_hr_max)(void);
+    uint32_t (*get_hr_cur)(void);
+    uint32_t (*get_spo2_min)(void);
+    uint32_t (*get_spo2_max)(void);
+    uint32_t (*get_spo2_cur)(void);
+    uint32_t (*get_kcal_min)(void);
+    uint32_t (*get_kcal_max)(void);
+    uint32_t (*get_kcal_cur)(void);
+    uint32_t (*get_step_min)(void);
+    uint32_t (*get_step_max)(void);
+    uint32_t (*get_step_cur)(void);
+    uint32_t (*get_batt_min)(void);
+    uint32_t (*get_batt_max)(void);
+    uint32_t (*get_batt_cur)(void);
+    uint32_t (*get_dist_min)(void);
+    uint32_t (*get_dist_max)(void);
+    uint32_t (*get_dist_cur)(void);
+    int16_t  (*get_temp_cur)(void);
+    bool     (*get_temp_unit)(void);
+    
     /* keep adding... */
 } scui_ui_presenter_t;
 
