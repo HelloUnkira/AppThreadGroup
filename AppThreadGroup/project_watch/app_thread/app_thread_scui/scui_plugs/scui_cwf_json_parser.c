@@ -254,3 +254,120 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);
 }
+
+/*@brief 销毁cwf preview
+ *@param preview 预览图句柄地址
+ */
+void scui_cwf_json_burn_pv(scui_handle_t *preview)
+{
+    SCUI_ASSERT(preview != NULL);
+    scui_handle_t image_hit = *preview;
+    *preview = SCUI_HANDLE_INVALID;
+    
+    if (image_hit == SCUI_HANDLE_INVALID)
+        return;
+    
+    scui_image_t *image_src = scui_handle_get(image_hit);
+    SCUI_ASSERT(image_src != NULL);
+    
+    char *name = scui_handle_get(image_src->from);
+    scui_handle_set(image_src->from, NULL);
+    SCUI_MEM_FREE(name);
+    
+    scui_handle_set(image_hit, NULL);
+    SCUI_MEM_FREE(image_src);
+}
+
+/*@brief 构建cwf preview
+ *@param inst 预览图实例地址
+ *@param file cwf名字
+ */
+void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
+{
+    SCUI_ASSERT(preview != NULL);
+    // 在构建时尝试销毁上一次cwf
+    scui_cwf_json_burn_pv(preview);
+    
+    uint8_t head[28] = {0};
+    scui_image_bin_read(file, 0, sizeof(head), head);
+    // 先提取头部信息
+    uint8_t  fw_ver[4]   = SCUI_CWF_JSON_VER;
+    uint8_t  cwf_ver[4]  = {head[0],head[1],head[2],head[3],};
+    uint32_t json_ofs    = scui_cwf_json_u32(&head[4 * 1]);
+    uint32_t json_size   = scui_cwf_json_u32(&head[4 * 2]);
+    uint32_t image_iofs  = scui_cwf_json_u32(&head[4 * 3]);
+    uint32_t image_isize = scui_cwf_json_u32(&head[4 * 4]);
+    uint32_t image_dofs  = scui_cwf_json_u32(&head[4 * 5]);
+    uint32_t image_dsize = scui_cwf_json_u32(&head[4 * 6]);
+    // 进行版本校验
+    if (memcmp(fw_ver, cwf_ver, 4) != 0)
+        SCUI_LOG_ERROR("unmatched cwf version");
+    
+    uint8_t *json_file = SCUI_MEM_ALLOC(scui_mem_type_graph, json_size + 1);
+    scui_image_bin_read(file, json_ofs, json_size, json_file);
+    json_file[json_size] = '\0';
+    
+    // 提取json文件,对顶层解析,继续构建资源
+    cJSON *json_object = cJSON_Parse(json_file);
+    cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
+    
+    for (uint32_t idx = 0; idx < cJSON_GetArraySize(json_layout); idx++) {
+        cJSON *json_dict = cJSON_GetArrayItem(json_layout, idx);
+        
+        uint8_t type     = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type")) + 0.1;
+        uint8_t type_sub = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type_sub")) + 0.1;
+        
+        // 预览图被记录在:
+        // scui_cwf_json_type_img
+        // scui_cwf_json_type_img_preview
+        if (type == scui_cwf_json_type_img && type_sub == scui_cwf_json_type_img_preview) {
+            cJSON *json_src = cJSON_GetObjectItem(json_dict, "image_src");
+            cJSON *json_num = cJSON_GetObjectItem(json_dict, "image_num");
+            uint32_t img_ofs = cJSON_GetNumberValue(cJSON_GetArrayItem(json_src, 0)) + 0.1;
+            uint16_t img_num = cJSON_GetNumberValue(json_num) + 0.1;
+            SCUI_ASSERT(img_num == 1);
+            
+            uint8_t image_info[18] = {0};
+            scui_image_bin_read(file, image_iofs + img_ofs * 18, 18, image_info);
+            scui_image_t *image_src = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_t));
+            memset(image_src, 0, sizeof(scui_image_t));
+            
+            uint8_t  format = image_info[18 * 0 + 0];
+            uint8_t  type   = image_info[18 * 0 + 1];
+            uint32_t height = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 0]);
+            uint32_t width  = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 1]);
+            uint32_t size   = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 2]);
+            uint32_t data   = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 3]);
+            
+            switch (format) {
+            case scui_cwf_json_format_palette4: image_src->format = scui_pixel_cf_palette4; break;
+            case scui_cwf_json_format_palette8: image_src->format = scui_pixel_cf_palette8; break;
+            case scui_cwf_json_format_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
+            case scui_cwf_json_format_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
+            case scui_cwf_json_format_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
+            case scui_cwf_json_format_bmp8888:  image_src->format = scui_pixel_cf_bmp8888;  break;
+            default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
+            }
+            image_src->type = type;
+            image_src->pixel.height   = (uintptr_t)height;
+            image_src->pixel.width    = (uintptr_t)width;
+            image_src->pixel.size_bin = (uintptr_t)size;
+            image_src->pixel.data_bin = (uintptr_t)data;
+            
+            uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(file) + 1);
+            strncpy(name, file, strlen(file) + 1);
+            name[strlen(file)] = '\0';
+            image_src->from = scui_handle_find();
+            scui_handle_set(image_src->from, name);
+            
+            // 资源关联绑定 handle <---> image
+            scui_handle_t image_hit = scui_handle_find();
+            scui_handle_set(image_hit, image_src);
+            *preview = image_hit;
+            break;
+        }
+    }
+    
+    cJSON_Delete(json_object);
+    SCUI_MEM_FREE(json_file);
+}

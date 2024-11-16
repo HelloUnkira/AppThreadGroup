@@ -7,8 +7,20 @@
 
 #include "scui.h"
 
+static const char * cwf_json_bin[] = {
+    "D10597001.bin",
+    "D10598001.bin",
+    "D10599001.bin",
+    "D10600001.bin",
+    "D10601001.bin",
+    "D10602001.bin",
+    "D10603001.bin",
+    "D10604001.bin",
+};
+
 static struct {
-    void *cwf_json_inst;
+    void   *cwf_json_inst;
+    uint8_t cwf_json_idx;
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -38,18 +50,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         // cwf json 测试
         if (scui_widget_event_check_prepare(event)) {
             
-            static const * cwf_list[] = {
-                "D10597001.bin",
-                "D10598001.bin",
-                "D10599001.bin",
-                "D10600001.bin",
-                "D10601001.bin",
-                "D10602001.bin",
-                "D10603001.bin",
-                "D10604001.bin",
-            };
-            
-            scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_list[7], event->object);
+            scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
         }
         break;
     case scui_event_hide:
@@ -73,6 +74,30 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
+    case scui_event_enc_clockwise: {
+        SCUI_LOG_INFO("scui_event_enc_clockwise");
+        
+        scui_ui_res_local->cwf_json_idx += 1;
+        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
+            scui_ui_res_local->cwf_json_idx  = 0;
+        
+        scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
+        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
+    case scui_event_enc_clockwise_anti: {
+        SCUI_LOG_INFO("scui_event_enc_clockwise_anti");
+        
+        scui_ui_res_local->cwf_json_idx -= 1;
+        if (scui_ui_res_local->cwf_json_idx >= scui_arr_len(cwf_json_bin))
+            scui_ui_res_local->cwf_json_idx  = scui_arr_len(cwf_json_bin) - 1;
+        
+        scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
+        scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
+        scui_widget_draw(event->object, NULL, false);
+        break;
+    }
     case scui_event_key_click: {
         if (event->key_id != scui_event_key_val_enter)
             break;

@@ -128,14 +128,14 @@ def scui_cwf_json_parser_image_collect(image_path):
 
 
 # 子流程:json文件处理,存入缓存列表中去
-def scui_cwf_json_parser_json(src_path, c_file_list, json_name):
+def scui_cwf_json_parser_json(src_path, dst_path, c_file_list, json_name):
     # 读出json文件预处理后序列化
     with open(os.path.join(src_path, json_name + '.json'), mode='r', encoding='utf-8') as file:
         json_data = json.dumps(scui_cwf_json_parser_preprocess(c_file_list, json.load(file)))
         json_bytes = bytes(re.sub(r'\s+', '', json_data), encoding='utf-8')
         print("parser json bytes:%d" % len(json_bytes))
     # 写一个处理后的json, 用于核对检查
-    with open(os.path.join(src_path, json_name + '_json.prog'), mode='w', encoding='utf-8') as file:
+    with open(os.path.join(dst_path, json_name + '_json.prog'), mode='w', encoding='utf-8') as file:
         file.write(json.dumps(json.loads(json_data), indent=4))
     # 写入json文件到达缓存目标文件
     with open(scui_cwf_json_parser_tmp_bin[0], mode='wb') as file:
@@ -248,11 +248,11 @@ def scui_cwf_json_parser_image_data(image_path, c_file_list):
 # 主流程
 def scui_cwf_json_parser():
     # 参数列表: 相对路径
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print('argv list not match')
         return
     src_path = sys.argv[1]
-    dst_path = sys.argv[1]
+    dst_path = sys.argv[2]
     img_path = os.path.join(src_path, 'image_array')
     # 获得文件处理相对路径
     if not os.path.exists(src_path):
@@ -273,7 +273,7 @@ def scui_cwf_json_parser():
     json_name = json_file_list[0].rsplit('.', 1)[0]
     # json文件整理后转入临时文件
     c_file_list = scui_cwf_json_parser_image_collect(img_path)
-    json_bytes = scui_cwf_json_parser_json(src_path, c_file_list, json_name)
+    json_bytes = scui_cwf_json_parser_json(src_path, dst_path, c_file_list, json_name)
     # image info 和 image data整理后转入临时文件
     c_data_offset = 28 + json_bytes + len(c_file_list) * 18
     scui_cwf_json_parser_image_info(img_path, c_file_list, c_data_offset)

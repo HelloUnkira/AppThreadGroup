@@ -825,37 +825,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_1,
 	.widget.event_cb                = scui_ui_scene_1_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10598001_bg_01_1bmp,
-	.widget.child_num               = 1,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.level                          = 0,
 	.buffer                         = true,
-};
-
-static const scui_watch_maker_t scui_widget_SCUI_UI_SCENE_1_PTR = {
-	.widget.type                    = scui_widget_type_watch,
-	.widget.style.trans             = true,
-	.widget.clip.x                  = 0,
-	.widget.clip.y                  = 0,
-	.widget.clip.w                  = SCUI_DRV_HOR_RES,
-	.widget.clip.h                  = SCUI_DRV_VER_RES,
-	.widget.myself                  = SCUI_UI_SCENE_1_PTR,
-	.widget.parent                  = SCUI_UI_SCENE_1,
-	.image_h                        = scui_image_prj_image_src_home_watch_D10598001_h_01_hpng,
-	.image_m                        = scui_image_prj_image_src_home_watch_D10598001_m_01_mpng,
-	.image_s                        = scui_image_prj_image_src_home_watch_D10598001_s_01_spng,
-	.anchor_h.x                     = SCUI_DRV_HOR_RES / 2,
-	.anchor_h.y                     = SCUI_DRV_VER_RES / 2,
-	.center_h.x                     = 25,
-	.center_h.y                     = 142,
-	.anchor_m.x                     = SCUI_DRV_HOR_RES / 2,
-	.anchor_m.y                     = SCUI_DRV_VER_RES / 2,
-	.center_m.x                     = 21,
-	.center_m.y                     = 217,
-	.anchor_s.x                     = SCUI_DRV_HOR_RES / 2,
-	.anchor_s.y                     = SCUI_DRV_VER_RES / 2,
-	.center_s.x                     = 19,
-	.center_s.y                     = 220,
-	.tick_mode                      = true,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
@@ -865,7 +837,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_2,
 	.widget.event_cb                = scui_ui_scene_2_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10599001_bg_01_1bmp,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.widget.child_num               = 6,
 	.level                          = 0,
 	.buffer                         = true,
@@ -889,7 +861,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_3,
 	.widget.event_cb                = scui_ui_scene_3_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10600001_bg_01_00bmp,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.level                          = 0,
 	.buffer                         = true,
 };
@@ -900,7 +872,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_4 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_4,
 	.widget.event_cb                = scui_ui_scene_4_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10601001_bg_01_00bmp,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
@@ -923,7 +895,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_5 = {
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_5,
 	.widget.event_cb                = scui_ui_scene_5_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10602001_bg_01_00bmp,
+	.widget.image                   = scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp,
 	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1071,14 +1043,15 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
+	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
 	.widget.clip.h                  = SCUI_DRV_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
-	.widget.image                   = scui_image_prj_image_src_home_watch_D10603001_bg_01_00bmp,
 	.widget.child_num               = 6,
 	.level                          = 0,
 	.buffer                         = true,
@@ -1110,7 +1083,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[64] = {
+const void * scui_widget_parser_table[63] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1154,7 +1127,6 @@ const void * scui_widget_parser_table[64] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_3_RING,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_4,
 	(void *)&scui_widget_SCUI_UI_SCENE_1,
-	(void *)&scui_widget_SCUI_UI_SCENE_1_PTR,
 	(void *)&scui_widget_SCUI_UI_SCENE_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_2_BAR_ARC,
 	(void *)&scui_widget_SCUI_UI_SCENE_3,

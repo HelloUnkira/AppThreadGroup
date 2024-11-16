@@ -57,4 +57,15 @@ void scui_cwf_json_burn(void **inst);
  */
 void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent);
 
+/*@brief 销毁cwf preview
+ *@param preview 预览图句柄地址
+ */
+void scui_cwf_json_burn_pv(scui_handle_t *preview);
+
+/*@brief 构建cwf preview
+ *@param inst 预览图实例地址
+ *@param file cwf名字
+ */
+void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file);
+
 #endif

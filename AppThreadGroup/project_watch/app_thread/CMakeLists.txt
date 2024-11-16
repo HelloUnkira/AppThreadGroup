@@ -49,9 +49,8 @@ endif()
 
 # 文件迁移到调试
 file(GLOB   SourceFiles "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/font_out/*"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/image_out/*.mem"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/image_out/*.raw"
-                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/image_out/*.bin")
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/image_out/*.bin"
+                        "${CMAKE_CURRENT_SOURCE_DIR}/app_thread_scui/scui_ui_res/cwf_json/bin/*.bin")
 file(COPY ${SourceFiles} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_main)
 
 file(GLOB_RECURSE SOURCES app_thread_scui/*.c)
