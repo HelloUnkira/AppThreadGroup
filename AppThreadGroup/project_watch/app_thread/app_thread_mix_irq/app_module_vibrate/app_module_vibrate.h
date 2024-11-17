@@ -11,7 +11,7 @@ typedef uint8_t (*app_module_vibrate_melody_t)(void *vibrate, uint32_t current, 
 
 typedef struct {
     /*  */
-    #define APP_MODULE_VIBRATE_XMS  100     /* 周期时间 */
+    #define APP_MODULE_VIBRATE_XMS  1       /* 周期时间 */
     
     app_module_vibrate_melody_t melody; /* 震动节拍回调 */
     uint64_t tick:10;       /* 震动周期记录(内部使用) */

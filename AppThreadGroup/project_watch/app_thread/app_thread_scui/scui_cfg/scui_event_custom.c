@@ -26,6 +26,12 @@ void scui_event_custom_prepare(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
+    // case scui_event_widget_scroll_s:
+    // case scui_event_widget_scroll_e:
+    // case scui_event_widget_scroll_c:
+    case scui_event_widget_scroll_s:
+        scui_ui_presenter.vibrate_shot();
+        break;
     default:
         break;
     }

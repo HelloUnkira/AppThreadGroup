@@ -11,6 +11,7 @@
 #include "scui.h"
 /* 外部引用: */
 #include "app_module_clock.h"
+#include "app_module_vibrate.h"
 
 /*@brief scui ui数据交互回调
  */
@@ -265,6 +266,25 @@ static bool scui_ui_func_local_get_temp_unit(void)
     return false;
 }
 
+/*@brief scui ui数据交互回调
+ */
+static bool scui_ui_func_local_vibrate_shot(void)
+{
+    SCUI_LOG_WARN("vibrate_shot");
+    
+    app_module_vibrate_t vibrate = {
+        .melody  = app_module_vibrate_melody_default_2,
+        .pwm_max = 100,
+        .pwm_min = 0,
+        .period  = 75,
+        .repeat  = 0,
+    };
+    /* 可以先获取震动状态考虑是否需要打断,这里默认打断 */
+    app_module_vibrate_stop();
+    app_module_vibrate_set(&vibrate);
+    app_module_vibrate_start();
+}
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -303,6 +323,8 @@ scui_ui_presenter_t scui_ui_presenter = {
     .get_dist_cur   = scui_ui_func_local_get_dist_cur,
     .get_temp_cur   = scui_ui_func_local_get_temp_cur,
     .get_temp_unit  = scui_ui_func_local_get_temp_unit,
+    /* drv func: */
+    .vibrate_shot   = scui_ui_func_local_vibrate_shot,
     
     /* keep adding... */
 };

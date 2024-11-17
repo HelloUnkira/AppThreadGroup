@@ -1143,36 +1143,39 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         if (!scroll->over_scroll)
              break;
         scroll->over_scroll = false;
-        if (scroll->notify_cb != NULL) {
-            scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_widget_scroll_s,
-            };
+        /* scroll event: */
+        scui_event_t event = {
+            .object = widget->myself,
+            .type   = scui_event_widget_scroll_s,
+        };
+        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL)
             scroll->notify_cb(&event);
-        }
         break;
     }
     case 0x01: {
         if (scroll->over_scroll)
             break;
         scroll->over_scroll = true;
-        if (scroll->notify_cb != NULL) {
-            scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_widget_scroll_e,
-            };
+        /* scroll event: */
+        scui_event_t event = {
+            .object = widget->myself,
+            .type   = scui_event_widget_scroll_e,
+        };
+        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL)
             scroll->notify_cb(&event);
-        }
         break;
     }
     case 0x02: {
-        if (scroll->notify_cb != NULL) {
-            scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_widget_scroll_c,
-            };
+        /* scroll event: */
+        scui_event_t event = {
+            .object = widget->myself,
+            .type   = scui_event_widget_scroll_c,
+        };
+        scui_event_notify(&event);
+        if (scroll->notify_cb != NULL)
             scroll->notify_cb(&event);
-        }
         break;
     }
     case 0xAA: {

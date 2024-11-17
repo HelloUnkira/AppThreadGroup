@@ -21,6 +21,7 @@ typedef enum {
     scui_event_refr,            /* 界面刷新事件 */
     scui_event_size_adjust,     /* 控件尺寸调整 */
     scui_event_font_change,     /* 更新字库 */
+    /* 特殊控件生成事件: */
     scui_event_widget_scroll_s,         /* 滚动控件:滚动开始 */
     scui_event_widget_scroll_c,         /* 滚动控件:滚动进行 */
     scui_event_widget_scroll_e,         /* 滚动控件:滚动结束 */

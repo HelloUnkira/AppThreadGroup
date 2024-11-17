@@ -65,7 +65,7 @@ void app_module_vibrate_start(void)
     app_module_vibrate.onoff = true;
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
     app_sys_timer_start(&app_module_vibrate_timer);
-    APP_SYS_LOG_WARN("vibrate start");
+    APP_SYS_LOG_INFO("vibrate start");
     app_dev_vibrate_open(&app_dev_vibrate);
 }
 
@@ -77,7 +77,7 @@ void app_module_vibrate_stop(void)
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_take);
     app_module_vibrate.onoff = false;
     app_mutex_process(&app_module_vibrate_mutex, app_mutex_give);
-    APP_SYS_LOG_WARN("vibrate end");
+    APP_SYS_LOG_INFO("vibrate end");
     app_dev_vibrate_close(&app_dev_vibrate);
 }
 
@@ -120,6 +120,16 @@ void app_module_vibrate_msec_update(void)
     app_module_vibrate_set(&vibrate);
 }
 
+/*@brief 软件定时器事件包吸收
+ */
+static bool app_module_vibrate_package_absorb(void *pkg_old, void *pkg_new)
+{
+    app_thread_package_t *package_old = pkg_old;
+    app_thread_package_t *package_new = pkg_new;
+    
+    return true;
+}
+
 /*@brief 震动模组软件定时器回调
  */
 static void app_module_vibrate_timer_handler(void *timer)
@@ -129,6 +139,7 @@ static void app_module_vibrate_timer_handler(void *timer)
         .thread = app_thread_id_mix_irq,
         .module = app_thread_mix_irq_vibrate,
         .event  = app_thread_mix_irq_vibrate_msec_update,
+        .absorb = app_module_vibrate_package_absorb,
     };
     app_thread_package_notify(&package);
 }
