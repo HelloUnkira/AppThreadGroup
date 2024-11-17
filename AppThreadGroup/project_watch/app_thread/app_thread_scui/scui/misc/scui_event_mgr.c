@@ -60,6 +60,10 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_key_click,
         scui_event_enc_clockwise,
         scui_event_enc_clockwise_anti,
+        
+        scui_event_widget_scroll_s,
+        scui_event_widget_scroll_e,
+        scui_event_widget_scroll_c,
     };
     
     for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)
@@ -203,6 +207,9 @@ static void scui_event_respond(scui_event_t *event)
         bool event_filter = false;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
         event_filter = event_filter || event->type == scui_event_anima_elapse;
+        event_filter = event_filter || event->type == scui_event_widget_scroll_s;
+        event_filter = event_filter || event->type == scui_event_widget_scroll_e;
+        event_filter = event_filter || event->type == scui_event_widget_scroll_c;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(ptr) */
         event_filter = event_filter || event->type == scui_event_ptr_hold;
         event_filter = event_filter || event->type == scui_event_ptr_move;

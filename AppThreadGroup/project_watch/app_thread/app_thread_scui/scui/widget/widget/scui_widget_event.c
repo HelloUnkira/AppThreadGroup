@@ -520,6 +520,16 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     }
     /*************************************************************************/
+    /*滚动事件:单次派发 **************************************************** */
+    /*************************************************************************/
+    if (event->type == scui_event_widget_scroll_s ||
+        event->type == scui_event_widget_scroll_e ||
+        event->type == scui_event_widget_scroll_c) {
+        scui_widget_event_mask_over(event);
+        scui_widget_event_proc(event);
+        return;
+    }
+    /*************************************************************************/
     /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_size_adjust) {

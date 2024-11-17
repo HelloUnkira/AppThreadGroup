@@ -35,7 +35,8 @@ typedef struct {
     uint32_t (*get_dist_cur)(void);
     int16_t  (*get_temp_cur)(void);
     bool     (*get_temp_unit)(void);
-    
+    /* drv func: */
+    void (*vibrate_shot)(void);
     /* keep adding... */
 } scui_ui_presenter_t;
 

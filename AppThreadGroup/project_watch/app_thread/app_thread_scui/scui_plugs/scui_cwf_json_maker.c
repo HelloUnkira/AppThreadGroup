@@ -10,6 +10,17 @@
 // JSON解析库
 #include "cJSON.h"
 
+/*@brief 内部函数:将hex16字符转为16进制数字
+ */
+static uint8_t scui_cwf_json_chex16(char chex)
+{
+    if (chex >= '0' && chex <= '9') return chex - '0';
+    if (chex >= 'A' && chex <= 'F') return chex - 'A' + 10;
+    if (chex >= 'a' && chex <= 'f') return chex - 'a' + 10;
+    
+    return 0;
+}
+
 /*@brief 内部函数:将val转为idx_ofs数组
  */
 static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_t idx, uint32_t val, const char *format, uint8_t fix)
@@ -451,12 +462,46 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         break;
     }
     case scui_cwf_json_type_txt: {
+        // 每一个该type都有类似的资源表, 直接构建即可
+        char  *str_color = cJSON_GetStringValue(cJSON_GetObjectItem(dict, "color"));
+        uint8_t  color_r = scui_cwf_json_chex16(str_color[2]) * 16 + scui_cwf_json_chex16(str_color[3]);
+        uint8_t  color_g = scui_cwf_json_chex16(str_color[4]) * 16 + scui_cwf_json_chex16(str_color[5]);
+        uint8_t  color_b = scui_cwf_json_chex16(str_color[6]) * 16 + scui_cwf_json_chex16(str_color[7]);
+        uint32_t color32 = 0xFF000000 + (color_r << 16) + (color_g << 8) + (color_b << 0);
+        scui_color_t color = {.color_s.full = color32, .color_e.full = color32,.filter = true,};
+        
+        uint32_t align = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "align")) + 0.1;
+        uint32_t size  = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "size")) + 0.1;
+        
+        scui_string_maker_t string_maker = {0};
+        scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
+        string_maker.widget.type                = scui_widget_type_string;
+        string_maker.widget.style.trans         = true;
+        string_maker.widget.clip.x              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
+        string_maker.widget.clip.y              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
+        string_maker.widget.clip.w              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "w")) + 0.1;
+        string_maker.widget.clip.h              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "h")) + 0.1;
+        string_maker.args.align_hor             = align == 0 ? 0 : align == 1 ? 2 : 1;
+        string_maker.args.align_ver             = 2;
+        string_maker.args.color                 = color;
+        string_maker.font_idx                   = size <= 32 ? 0 : 1;       // 到底要不要使用设备语言???
+        scui_string_create(&string_maker, &parser->list_child[idx], false);
         
         
         
         // 为type_sub进行构建
         switch (parser->list_type_sub[idx]) {
-        
+        case scui_cwf_json_type_txt_week:
+        case scui_cwf_json_type_txt_ampm:
+        case scui_cwf_json_type_txt_day:
+        case scui_cwf_json_type_txt_mon:
+        case scui_cwf_json_type_txt_digit_mon:
+        case scui_cwf_json_type_txt_digit_mon_day:
+        case scui_cwf_json_type_txt_day_digit_mon:
+        case scui_cwf_json_type_txt_bat:
+        case scui_cwf_json_type_txt_bat_pct: {
+            break;
+        }
         default:
             SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type_sub[idx]);
             break;
