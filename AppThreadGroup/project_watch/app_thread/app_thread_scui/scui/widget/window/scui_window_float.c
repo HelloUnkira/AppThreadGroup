@@ -86,7 +86,7 @@ static void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t
     if (scui_handle_unmap(handle))
         return;
     /* 移动窗口 */
-    scui_widget_move_pos(handle, point);
+    scui_widget_move_pos(handle, point, true);
     /* 获得窗口宽高 */
     scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);

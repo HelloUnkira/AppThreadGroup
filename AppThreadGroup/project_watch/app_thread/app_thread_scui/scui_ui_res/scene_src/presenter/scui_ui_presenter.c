@@ -270,7 +270,7 @@ static bool scui_ui_func_local_get_temp_unit(void)
  */
 static bool scui_ui_func_local_vibrate_shot(void)
 {
-    SCUI_LOG_WARN("vibrate_shot");
+    SCUI_LOG_INFO("vibrate_shot");
     
     app_module_vibrate_t vibrate = {
         .melody  = app_module_vibrate_melody_default_2,

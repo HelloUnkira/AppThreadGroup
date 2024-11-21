@@ -391,7 +391,7 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
 bool scui_widget_clip_cover(scui_widget_t *widget)
 {
     /* 控件需要显示 */
-    if (scui_widget_style_is_show(widget->myself)) {
+    if (scui_widget_is_show(widget->myself)) {
         /* 控件不透明 */
         if (widget->alpha != scui_alpha_trans &&
            (widget->surface->format == scui_pixel_cf_bmp565 ||
@@ -430,7 +430,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_get(handle);
         /* 控件隐藏则跳过 */
-        if (scui_widget_style_is_hide(handle))
+        if (scui_widget_is_hide(handle))
             continue;
         /* 控件满足完全覆盖的条件 */
         if (scui_widget_clip_cover(child))
@@ -451,7 +451,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
                 scui_handle_t handle = widget_parent->child_list[idx];
                 scui_widget_t *buddy = scui_handle_get(handle);
                 /* 控件隐藏则跳过 */
-                if (scui_widget_style_is_hide(handle))
+                if (scui_widget_is_hide(handle))
                     continue;
                 /* 控件满足完全覆盖的条件 */
                 if (scui_widget_clip_cover(buddy))
@@ -665,14 +665,14 @@ scui_area_t scui_widget_clip(scui_handle_t handle)
  *@param handle 控件句柄
  *@retval 是否显示
  */
-bool scui_widget_style_is_show(scui_handle_t handle)
+bool scui_widget_is_show(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
     
     /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID)
-    if (!scui_widget_style_is_show(widget->parent))
+    if (!scui_widget_is_show(widget->parent))
          return false;
     
     /* 它自己的显示状态 */
@@ -686,9 +686,9 @@ bool scui_widget_style_is_show(scui_handle_t handle)
  *@param handle 控件句柄
  *@retval 是否隐藏
  */
-bool scui_widget_style_is_hide(scui_handle_t handle)
+bool scui_widget_is_hide(scui_handle_t handle)
 {
-    return !scui_widget_style_is_show(handle);
+    return !scui_widget_is_show(handle);
 }
 
 /*@brief 用户资源获取

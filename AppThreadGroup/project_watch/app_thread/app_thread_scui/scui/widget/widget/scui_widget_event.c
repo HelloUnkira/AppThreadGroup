@@ -19,14 +19,17 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     // 不要给已经销毁的目标添加剪切域
     if (scui_handle_unmap(handle))
         return;
-    if (scui_widget_style_is_hide(handle))
+    if (scui_widget_is_hide(handle))
         return;
     
     scui_widget_t *widget = scui_handle_get(handle);
     scui_handle_t  handle_root = scui_widget_root(handle);
     scui_widget_t *widget_root = scui_handle_get(handle_root);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget_root != NULL);
+    SCUI_ASSERT(widget != NULL && widget_root != NULL);
+    
+    // 没有绘制剪切域时不要绘制
+    if (scui_area_empty(&widget->clip_set.clip))
+        return;
     
     // 如果控件树为自定义控件树
     // 不走系统管理,转为回调直达,自定义控件树会重定向
@@ -71,14 +74,13 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    scui_handle_t  handle_root = scui_widget_root(handle);
-    scui_widget_t *widget_root = scui_handle_get(handle_root);
-    SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget_root != NULL);
+    // scui_widget_t *widget = scui_handle_get(handle);
+    // scui_handle_t  handle_root = scui_widget_root(handle);
+    // scui_widget_t *widget_root = scui_handle_get(handle_root);
+    // SCUI_ASSERT(widget != NULL && widget_root != NULL);
     
     scui_event_t event = {
-        .object     = handle_root,
+        .object     = SCUI_HANDLE_SYSTEM,
         .style.sync = sync,
         .type       = scui_event_refr,
         .absorb     = scui_event_absorb_none,
@@ -351,7 +353,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_surface_remap(widget->myself, surface);
         }
         /* 绘制事件不能被控件响应 */
-        if (scui_widget_style_is_hide(widget->myself)) {
+        if (scui_widget_is_hide(widget->myself)) {
             SCUI_LOG_INFO("widget is hide");
             return;
         }

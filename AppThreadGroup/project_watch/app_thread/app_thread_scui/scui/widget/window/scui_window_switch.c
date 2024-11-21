@@ -57,27 +57,27 @@ static void scui_window_jump_anima_expired(void *instance)
     switch (scui_window_mgr.switch_args.dir) {
     case scui_opt_dir_to_u:
         point.y = -scui_window_mgr.switch_args.ofs;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
         point.y += +scui_widget_clip(scui_window_mgr.switch_args.list[0]).h;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
         break;
     case scui_opt_dir_to_d:
         point.y = +scui_window_mgr.switch_args.ofs;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
         point.y += -scui_widget_clip(scui_window_mgr.switch_args.list[1]).h;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
         break;
     case scui_opt_dir_to_l:
         point.x = -scui_window_mgr.switch_args.ofs;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
         point.x += +scui_widget_clip(scui_window_mgr.switch_args.list[0]).w;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
         break;
     case scui_opt_dir_to_r:
         point.x = +scui_window_mgr.switch_args.ofs;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
         point.x += -scui_widget_clip(scui_window_mgr.switch_args.list[1]).w;
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
         break;
     default:
         SCUI_LOG_ERROR("error switch dir 0x%08x", scui_window_mgr.switch_args.dir);
@@ -154,7 +154,7 @@ static void scui_window_move_anima_expired(void *instance)
     scui_window_mgr.switch_args.point = point;
     
     /* 更新point */
-    scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+    scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_u)
         point.y += scui_widget_clip(scui_window_mgr.switch_args.list[0]).h;
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_d)
@@ -163,7 +163,7 @@ static void scui_window_move_anima_expired(void *instance)
         point.x += scui_widget_clip(scui_window_mgr.switch_args.list[0]).w;
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_r)
         point.x -= scui_widget_clip(scui_window_mgr.switch_args.list[1]).w;
-    scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+    scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
     
     /* 有自己的独立buffer,直接refr */
     widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
@@ -365,11 +365,11 @@ static void scui_window_event_switch(scui_event_t *event)
                 /* 先释放其他窗口资源 */
                 scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
                 scui_widget_show(scui_window_mgr.switch_args.list[1], false);
-                scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+                scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
                 /* 额外做一次校正,应该没意义 */
                 point = (scui_point_t){0};
                 scui_window_mgr.switch_args.point = point;
-                scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+                scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
                 /* 初始默认启动一次,等待动画被打断 */
                 if (event->type == scui_event_ptr_fling)
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
@@ -482,11 +482,11 @@ static void scui_window_event_switch(scui_event_t *event)
             /* 先释放其他窗口资源 */
             scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
             scui_widget_show(scui_window_mgr.switch_args.list[1], false);
-            scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+            scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
             /* 额外做一次校正,应该没意义 */
             point = (scui_point_t){0};
             scui_window_mgr.switch_args.point = point;
-            scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+            scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
             /* 初始默认启动一次,等待动画被打断 */
             scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
             SCUI_LOG_DEBUG("");
@@ -623,7 +623,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         
         /* 更新point: */
         scui_point_t point = {0};
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
         switch (scui_window_mgr.switch_args.dir) {
         case scui_opt_dir_to_u:
             point.y = +scui_widget_clip(scui_window_mgr.switch_args.list[0]).h;
@@ -641,7 +641,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
             SCUI_LOG_ERROR("error switch dir 0x%08x", scui_window_mgr.switch_args.dir);
             break;
         }
-        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
+        scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
         
         switch_anima.prepare = scui_window_jump_anima_prepare;
         switch_anima.expired = scui_window_jump_anima_expired;

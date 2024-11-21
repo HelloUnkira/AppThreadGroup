@@ -52,9 +52,25 @@ static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
     scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
     // 来源和地址同步匹配才可确认资源一致性
-    bool cond_tar = unit1->image->from == unit2->image->from;
-    bool cond_bin = unit1->image->pixel.data_bin == unit2->image->pixel.data_bin;
-    return cond_tar && cond_bin ? true : false;
+    bool cond_bin = false;
+    bool cond_tar = false;
+    
+    if (unit1->image->pixel.data_bin ==
+        unit2->image->pixel.data_bin)
+        cond_bin = true;
+    
+    if (unit1->image->from == SCUI_HANDLE_INVALID &&
+        unit2->image->from == SCUI_HANDLE_INVALID)
+        cond_tar = true;
+    if (unit1->image->from != SCUI_HANDLE_INVALID &&
+        unit2->image->from != SCUI_HANDLE_INVALID) {
+        const char *from_str1 = scui_handle_get(unit1->image->from);
+        const char *from_str2 = scui_handle_get(unit2->image->from);
+        if (strcmp(from_str1, from_str2) == 0)
+            cond_tar = true;
+    }
+    
+    return cond_bin && cond_tar ? true : false;
 }
 
 /*@brief 哈希访问函数
@@ -63,12 +79,18 @@ static void scui_image_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
 {
     scui_image_unit_t *unit = scui_own_ofs(scui_image_unit_t, ht_node, node);
     
+    static const char *unit__image__local = "local";
+    char * unit__image__from = unit__image__local;
+    if (unit->image->from != SCUI_HANDLE_INVALID)
+        unit__image__from  = scui_handle_get(unit->image->from);
+    
     SCUI_LOG_INFO("- width:%x",          unit->image->pixel.width);
     SCUI_LOG_INFO("- height:%x",         unit->image->pixel.height);
     SCUI_LOG_INFO("- data_bin<src>:%x",  unit->image->pixel.data_bin);
     SCUI_LOG_INFO("- size_bin<src>:%x",  unit->image->pixel.size_bin);
     SCUI_LOG_INFO("- type:%x",           unit->image->type);
     SCUI_LOG_INFO("- format:%x",         unit->image->format);
+    SCUI_LOG_INFO("- from:%s",           unit__image__from);
     SCUI_LOG_INFO("- count:%x",          unit->count);
     SCUI_LOG_INFO("- lock:%x",           unit->lock);
 }

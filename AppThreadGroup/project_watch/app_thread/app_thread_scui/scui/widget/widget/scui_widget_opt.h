@@ -4,8 +4,9 @@
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
+ *@param dirty  脏标记(批量移动控件使用, 默认true)
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty);
 
 /*@brief 子控件坐标对齐
  *@param handle  控件句柄
@@ -33,15 +34,17 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
 /*@brief 控件移动子控件
  *@param handle 控件句柄
  *@param offset 偏移量
+ *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset);
+void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset, bool dirty);
 
 /*@brief 控件移动子控件(循环模式)
  *@param handle 控件句柄
  *@param offset 偏移量
  *@param range  偏移量限制
+ *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
+void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty);
 
 /*@brief 控件对齐子控件计算
  *       中心对齐:则控件中心点与子控件中心点偏移量(最小)

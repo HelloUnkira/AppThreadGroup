@@ -258,13 +258,13 @@ scui_area_t scui_widget_clip(scui_handle_t handle);
  *@param handle 控件句柄
  *@retval 是否显示
  */
-bool scui_widget_style_is_show(scui_handle_t handle);
+bool scui_widget_is_show(scui_handle_t handle);
 
 /*@brief 控件隐藏状态获取
  *@param handle 控件句柄
  *@retval 是否隐藏
  */
-bool scui_widget_style_is_hide(scui_handle_t handle);
+bool scui_widget_is_hide(scui_handle_t handle);
 
 /*@brief 用户资源获取
  *@param handle 控件句柄

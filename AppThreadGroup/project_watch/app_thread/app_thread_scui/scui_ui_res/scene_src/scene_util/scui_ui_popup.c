@@ -24,10 +24,10 @@ static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 {
     #if 1   // 有俩种选择,一种是打断以前的,另一种是不打断
-    if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
+    if (scui_widget_is_show(SCUI_UI_SCENE_POPUP))
         scui_widget_hide(SCUI_UI_SCENE_POPUP, false);
     #else
-    if (scui_widget_style_is_show(SCUI_UI_SCENE_POPUP))
+    if (scui_widget_is_show(SCUI_UI_SCENE_POPUP))
         return;
     #endif
     
@@ -75,8 +75,8 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
                 SCUI_LOG_INFO("popup scale:alpha:%d, pct:%d", scale_alpha, pct);
                 scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scale_alpha, true);
                 scui_widget_adjust_size(SCUI_UI_SCENE_POPUP_SCALE, scale_cur_w, scale_cur_h);
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y});
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = 0, .y = 0});
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y}, true);
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = 0, .y = 0}, true);
                 
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
                 

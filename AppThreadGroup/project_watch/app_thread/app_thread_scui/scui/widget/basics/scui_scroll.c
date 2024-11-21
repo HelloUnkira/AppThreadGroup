@@ -407,8 +407,11 @@ static void scui_scroll_anima_expired(void *instance)
         
         /* 偏移所有子控件 */
         scui_event_t event = {.object = widget->myself};
-        scui_widget_move_ofs_child_list(widget->myself, &offset);
+        scui_widget_move_ofs_child_list(widget->myself, &offset, false);
         scui_scroll_event_notify(&event, 0x02);
+        
+        scui_widget_clip_clear(widget, true);
+        scui_widget_surface_refr(widget->myself, true);
         scui_widget_draw(widget->myself, NULL, false);
     } else {
         /* 自动布局,非循环,循环 */
@@ -473,14 +476,16 @@ static void scui_scroll_anima_expired(void *instance)
                 range.y = scroll->dis_lim;
             
             scui_event_t event = {.object = widget->myself};
-            scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range);
+            scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range, false);
             scui_scroll_event_notify(&event, 0x02);
         } else {
             scui_event_t event = {.object = widget->myself};
-            scui_widget_move_ofs_child_list(widget->myself, &offset);
+            scui_widget_move_ofs_child_list(widget->myself, &offset, false);
             scui_scroll_event_notify(&event, 0x02);
         }
         
+        scui_widget_clip_clear(widget, true);
+        scui_widget_surface_refr(widget->myself, true);
         scui_widget_draw(widget->myself, NULL, false);
     }
 }
@@ -709,7 +714,7 @@ void scui_scroll_layout_update(scui_event_t *event)
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_get(handle);
         /* 被隐藏的控件忽略 */
-        if (scui_widget_style_is_hide(handle))
+        if (scui_widget_is_hide(handle))
             continue;
         
         /* 更新子控件尺寸 */
@@ -718,7 +723,7 @@ void scui_scroll_layout_update(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             scui_widget_adjust_size(handle, widget->clip.w, child->clip.h);
         /* 更新子控件位置 */
-        scui_widget_move_pos(handle, &pos);
+        scui_widget_move_pos(handle, &pos, true);
         /* 迭代到下一子控件 */
         if (scroll->dir == scui_opt_dir_hor)
             pos.x += child->clip.w + scroll->space;

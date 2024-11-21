@@ -10,8 +10,9 @@
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
+ *@param dirty  脏标记
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
 {
     SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_get(handle);
@@ -46,8 +47,10 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     
     SCUI_LOG_DEBUG("");
     /* 更新画布剪切域(更新自己的) */
-    scui_widget_clip_clear(widget, false);
-    scui_widget_surface_refr(widget->myself, false);
+    if (dirty) {
+        scui_widget_surface_refr(widget->myself, false);
+        scui_widget_clip_clear(widget, false);
+    }
     
     SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
@@ -58,17 +61,18 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
             .x = offset.x + child->clip.x,
             .y = offset.y + child->clip.y,
         };
-        scui_widget_move_pos(handle, &point);
+        scui_widget_move_pos(handle, &point, dirty);
     }
     
     SCUI_LOG_DEBUG("");
     /* 更新画布剪切域(更新自己和父亲的) */
+    if (dirty)
     if (widget->parent != SCUI_HANDLE_INVALID) {
         widget = scui_handle_get(widget->parent);
         SCUI_ASSERT(widget != NULL);
         
-        scui_widget_clip_clear(widget, false);
         scui_widget_surface_refr(widget->myself, false);
+        scui_widget_clip_clear(widget, false);
         
         // 全部更新后需要从父控件开始重绘
         scui_widget_draw(widget->parent, NULL, false);
@@ -121,7 +125,7 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_
     
     point.x += offset->x;
     point.y += offset->y;
-    scui_widget_move_pos(handle, &point);
+    scui_widget_move_pos(handle, &point, true);
 }
 
 /*@brief 子控件坐标镜像
@@ -155,7 +159,7 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_
         if (dir == scui_opt_dir_ver)
             point.y = widget->clip.h - child->clip.h - child->clip.y;
         
-        scui_widget_move_pos(handle, &point);
+        scui_widget_move_pos(handle, &point, true);
         
         if (!recurse)
              continue;
@@ -210,8 +214,9 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
 /*@brief 控件移动子控件
  *@param handle 控件句柄
  *@param offset 偏移量
+ *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
+void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset, bool dirty)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -226,7 +231,7 @@ void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
         scui_area_t clip_child = child->clip;
         clip_child.x += offset->x;
         clip_child.y += offset->y;
-        scui_widget_move_pos(handle, &clip_child);
+        scui_widget_move_pos(handle, &clip_child, dirty);
     }
 }
 
@@ -234,8 +239,9 @@ void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset)
  *@param handle 控件句柄
  *@param offset 偏移量
  *@param range  偏移量限制
+ *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range)
+void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -254,7 +260,7 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         
         /* 计算是否与父控件存在交集 */
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child);
+            scui_widget_move_pos(handle, &clip_child, dirty);
             continue;
         }
         
@@ -262,7 +268,7 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         clip_child.x -= range->x;
         clip_child.y -= range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child);
+            scui_widget_move_pos(handle, &clip_child, dirty);
             continue;
         }
         clip_child.x += range->x;
@@ -272,14 +278,14 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         clip_child.x += range->x;
         clip_child.y += range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child);
+            scui_widget_move_pos(handle, &clip_child, dirty);
             continue;
         }
         clip_child.x -= range->x;
         clip_child.y -= range->y;
         
         /* 正常继续偏转 */
-        scui_widget_move_pos(handle, &clip_child);
+        scui_widget_move_pos(handle, &clip_child, dirty);
     }
 }
 
