@@ -38,38 +38,37 @@ void scui_widget_cb_find(scui_widget_type_t type, scui_widget_cb_t **widget_cb)
 {
     /* 控件组织表 */
     static const scui_widget_cb_t scui_widget_cb[scui_widget_type_num] = {
-        [scui_widget_type_window].create    = (scui_widget_cb_create_t)   scui_window_create,
-        [scui_widget_type_window].destroy   = (scui_widget_cb_destroy_t)  scui_window_destroy,
+        [scui_widget_type_window].make = (scui_widget_cb_make_t)scui_window_make,
+        [scui_widget_type_window].burn = (scui_widget_cb_burn_t)scui_window_burn,
+        [scui_widget_type_custom].make = (scui_widget_cb_make_t)scui_custom_make,
+        [scui_widget_type_custom].burn = (scui_widget_cb_burn_t)scui_custom_burn,
+        [scui_widget_type_scroll].make = (scui_widget_cb_make_t)scui_scroll_make,
+        [scui_widget_type_scroll].burn = (scui_widget_cb_burn_t)scui_scroll_burn,
+        [scui_widget_type_string].make = (scui_widget_cb_make_t)scui_string_make,
+        [scui_widget_type_string].burn = (scui_widget_cb_burn_t)scui_string_burn,
         
-        [scui_widget_type_custom].create    = (scui_widget_cb_create_t)   scui_custom_create,
-        [scui_widget_type_custom].destroy   = (scui_widget_cb_destroy_t)  scui_custom_destroy,
+        [scui_widget_type_scroll].layout = (scui_widget_cb_layout_t)scui_scroll_layout,
         
-        [scui_widget_type_scroll].create    = (scui_widget_cb_create_t)   scui_scroll_create,
-        [scui_widget_type_scroll].destroy   = (scui_widget_cb_destroy_t)  scui_scroll_destroy,
-        [scui_widget_type_scroll].layout    = (scui_widget_cb_layout_t)   scui_scroll_layout,
-        [scui_widget_type_scroll].event_cb  = (scui_event_cb_t)           scui_scroll_event,
-        
-        [scui_widget_type_string].create    = (scui_widget_cb_create_t)   scui_string_create,
-        [scui_widget_type_string].destroy   = (scui_widget_cb_destroy_t)  scui_string_destroy,
-        [scui_widget_type_string].event_cb  = (scui_event_cb_t)           scui_string_event,
-        
-        /* 扩展控件 */
-        [scui_widget_type_objbtn].create    = (scui_widget_cb_create_t)   scui_objbtn_create,
-        [scui_widget_type_objbtn].destroy   = (scui_widget_cb_destroy_t)  scui_objbtn_destroy,
-        [scui_widget_type_objbtn].event_cb  = (scui_event_cb_t)           scui_objbtn_event,
+        [scui_widget_type_scroll].invoke = (scui_event_cb_t)scui_scroll_event,
+        [scui_widget_type_string].invoke = (scui_event_cb_t)scui_string_event,
         
         /* 扩展控件 */
-        [scui_widget_type_button].create    = (scui_widget_cb_create_t)   scui_button_create,
-        [scui_widget_type_button].destroy   = (scui_widget_cb_destroy_t)  scui_button_destroy,
-        [scui_widget_type_button].event_cb  = (scui_event_cb_t)           scui_button_event,
+        [scui_widget_type_objbtn].make = (scui_widget_cb_make_t)scui_objbtn_make,
+        [scui_widget_type_objbtn].burn = (scui_widget_cb_burn_t)scui_objbtn_burn,
         
-        [scui_widget_type_watch].create     = (scui_widget_cb_create_t)   scui_watch_create,
-        [scui_widget_type_watch].destroy    = (scui_widget_cb_destroy_t)  scui_watch_destroy,
-        [scui_widget_type_watch].event_cb   = (scui_event_cb_t)           scui_watch_event,
+        [scui_widget_type_objbtn].invoke = (scui_event_cb_t)scui_objbtn_event,
         
-        [scui_widget_type_chart].create     = (scui_widget_cb_create_t)   scui_chart_create,
-        [scui_widget_type_chart].destroy    = (scui_widget_cb_destroy_t)  scui_chart_destroy,
-        [scui_widget_type_chart].event_cb   = (scui_event_cb_t)           scui_chart_event,
+        /* 扩展控件 */
+        [scui_widget_type_button].make = (scui_widget_cb_make_t)scui_button_make,
+        [scui_widget_type_button].burn = (scui_widget_cb_burn_t)scui_button_burn,
+        [scui_widget_type_watch].make  = (scui_widget_cb_make_t)scui_watch_make,
+        [scui_widget_type_watch].burn  = (scui_widget_cb_burn_t)scui_watch_burn,
+        [scui_widget_type_chart].make  = (scui_widget_cb_make_t)scui_chart_make,
+        [scui_widget_type_chart].burn  = (scui_widget_cb_burn_t)scui_chart_burn,
+        
+        [scui_widget_type_button].invoke = (scui_event_cb_t)scui_button_event,
+        [scui_widget_type_watch].invoke  = (scui_event_cb_t)scui_watch_event,
+        [scui_widget_type_chart].invoke  = (scui_event_cb_t)scui_chart_event,
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
@@ -99,7 +98,7 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
         /* 静态控件规则为,一个场景为一段连续句柄,父控件在前子控件在后 */
         scui_widget_cb_t *widget_cb = NULL;
         scui_widget_cb_find(maker->type, &widget_cb);
-        widget_cb->create(maker, &handle, true);
+        widget_cb->make(maker, &handle, true);
         /* 迭代到下一个句柄 */
         handle++;
         widget = maker = scui_handle_get(handle);
@@ -111,3 +110,33 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
             break;
     } while (handle < handle_table->offset + handle_table->number);
 }
+
+/*@brief 创建控件
+ *@param maker  控件实例构造参数
+ *@param handle 控件句柄
+ *@param layout 通过布局
+ */
+void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
+{
+    scui_widget_maker_t *widget_maker = maker;
+    scui_widget_cb_t *widget_cb = NULL;
+    scui_widget_cb_find(widget_maker->type, &widget_cb);
+    widget_cb->make(maker, handle, layout);
+}
+
+/*@brief 销毁控件
+ *@param handle 控件句柄
+ */
+void scui_widget_destroy(scui_handle_t handle)
+{
+    /* 重复的销毁过滤 */
+    if (scui_handle_unmap(handle))
+        return;
+    
+    scui_widget_t *widget = scui_handle_get(handle);
+    SCUI_ASSERT(widget != NULL);
+    scui_widget_cb_t *widget_cb = NULL;
+    scui_widget_cb_find(widget->type, &widget_cb);
+    widget_cb->burn(handle);
+}
+

@@ -42,12 +42,12 @@ typedef struct {
  *@param handle 表盘指针控件句柄
  *@param layout 通过布局创建
  */
-void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_watch_make(scui_watch_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 表盘指针控件销毁
  *@param handle 表盘指针控件句柄
  */
-void scui_watch_destroy(scui_handle_t handle);
+void scui_watch_burn(scui_handle_t handle);
 
 /*@brief 表盘指针跳动模式
  *@param handle 滚动控件句柄

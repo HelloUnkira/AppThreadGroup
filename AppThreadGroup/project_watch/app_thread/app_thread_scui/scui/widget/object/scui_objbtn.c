@@ -12,7 +12,7 @@
  *@param handle 按钮控件句柄
  *@param layout 通过布局创建
  */
-void scui_objbtn_create(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_objbtn_make(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建按钮控件实例 */
     scui_objbtn_t *objbtn = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_objbtn_t));
@@ -27,7 +27,7 @@ void scui_objbtn_create(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool 
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_constructor(&objbtn->widget, &widget_maker, handle, layout);
+    scui_widget_make(&objbtn->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_objbtn));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -51,14 +51,14 @@ void scui_objbtn_create(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool 
 /*@brief 按钮控件销毁
  *@param handle 按钮控件句柄
  */
-void scui_objbtn_destroy(scui_handle_t handle)
+void scui_objbtn_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_objbtn_t *objbtn = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&objbtn->widget);
+    scui_widget_burn(&objbtn->widget);
     
     /* 销毁按钮控件实例 */
     SCUI_MEM_FREE(objbtn);

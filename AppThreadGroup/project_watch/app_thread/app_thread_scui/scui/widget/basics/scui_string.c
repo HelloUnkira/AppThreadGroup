@@ -12,7 +12,7 @@
  *@param handle 字符串控件句柄
  *@param layout 通过布局创建
  */
-void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建字符串控件实例 */
     scui_string_t *string = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_t));
@@ -25,7 +25,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_constructor(&string->widget, &widget_maker, handle, layout);
+    scui_widget_make(&string->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -67,7 +67,7 @@ void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool 
  *@param handle 字符串控件句柄
  *@param parent_way 来自父控件的销毁
  */
-void scui_string_destroy(scui_handle_t handle)
+void scui_string_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
@@ -102,7 +102,7 @@ void scui_string_destroy(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&string->widget);
+    scui_widget_burn(&string->widget);
     
     /* 销毁字符串控件实例 */
     SCUI_MEM_FREE(string);

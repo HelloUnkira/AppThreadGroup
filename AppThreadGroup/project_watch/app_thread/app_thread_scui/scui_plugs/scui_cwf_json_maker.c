@@ -368,7 +368,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.parent = parser->parent;
             
             custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
-            scui_custom_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
             break;
         }
         case scui_cwf_json_type_img_watch: {
@@ -395,7 +395,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             // watch_maker.tick_mode = true;
             
             watch_maker.widget.style.trans = true;
-            scui_watch_create(&watch_maker, &parser->list_child[idx], false);
+            scui_widget_create(&watch_maker, &parser->list_child[idx], false);
             break;
         }
         case scui_cwf_json_type_img_day:
@@ -420,7 +420,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             
             custom_maker.widget.style.trans = true;
             custom_maker.widget.event_cb = scui_cwf_json_custom_event_cb;
-            scui_custom_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
             break;
         }
         case scui_cwf_json_type_img_month:
@@ -449,7 +449,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.parent = parser->parent;
             
             custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
-            scui_custom_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
             break;
         }
         default:
@@ -485,7 +485,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         string_maker.args.align_ver             = 2;
         string_maker.args.color                 = color;
         string_maker.font_idx                   = size <= 32 ? 0 : 1;       // 到底要不要使用设备语言???
-        scui_string_create(&string_maker, &parser->list_child[idx], false);
+        scui_widget_create(&string_maker, &parser->list_child[idx], false);
         
         
         

@@ -44,12 +44,12 @@ typedef struct {
  *@param handle 按钮控件句柄
  *@param layout 通过布局创建
  */
-void scui_objbtn_create(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_objbtn_make(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 按钮控件销毁
  *@param handle 按钮控件句柄
  */
-void scui_objbtn_destroy(scui_handle_t handle);
+void scui_objbtn_burn(scui_handle_t handle);
 
 /*@brief 按钮控件事件处理回调
  *@param event 事件

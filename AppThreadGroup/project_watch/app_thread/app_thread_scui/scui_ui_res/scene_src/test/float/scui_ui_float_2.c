@@ -399,7 +399,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         objbtn_maker.side[2]  = scui_opt_pos_all;
         objbtn_maker.side[3]  = scui_opt_pos_all;
         objbtn_maker.radius = 13;
-        scui_objbtn_create(&objbtn_maker, &objbtn_handle, false);
+        scui_widget_create(&objbtn_maker, &objbtn_handle, false);
         /* 该控件未完成,待定中... */
         
         break;

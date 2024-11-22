@@ -73,12 +73,12 @@ typedef struct {
  *@param handle 滚动控件句柄
  *@param layout 通过布局创建
  */
-void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 滚动控件销毁
  *@param handle 滚动控件句柄
  */
-void scui_scroll_destroy(scui_handle_t handle);
+void scui_scroll_burn(scui_handle_t handle);
 
 /*@brief 滚动控件获取偏移量百分比(自动布局)
  *@param handle 滚动控件句柄

@@ -12,7 +12,7 @@
  *@param handle 自定义控件句柄
  *@param layout 通过布局创建
  */
-void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_custom_make(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建自定义控件实例 */
     scui_custom_t *custom = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_custom_t));
@@ -20,7 +20,7 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建基础控件实例 */
     scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_constructor(&custom->widget, &widget_maker, handle, layout);
+    scui_widget_make(&custom->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_custom));
     // 自定义控件既可以是根控件(子画布控件树),也可以是非根控件
 }
@@ -28,14 +28,14 @@ void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool 
 /*@brief 自定义控件销毁
  *@param handle 自定义控件句柄
  */
-void scui_custom_destroy(scui_handle_t handle)
+void scui_custom_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_custom_t *custom = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&custom->widget);
+    scui_widget_burn(&custom->widget);
     
     /* 销毁自定义控件实例 */
     SCUI_MEM_FREE(custom);

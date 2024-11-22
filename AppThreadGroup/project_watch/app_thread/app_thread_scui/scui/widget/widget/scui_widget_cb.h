@@ -20,4 +20,16 @@ void scui_widget_cb_find(scui_widget_type_t type, scui_widget_cb_t **widget_cb);
  */
 void scui_widget_create_layout_tree(scui_handle_t handle);
 
+/*@brief 创建控件
+ *@param maker  控件实例构造参数
+ *@param handle 控件句柄
+ *@param layout 通过布局
+ */
+void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
+
+/*@brief 销毁控件
+ *@param handle 控件句柄
+ */
+void scui_widget_destroy(scui_handle_t handle);
+
 #endif

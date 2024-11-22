@@ -12,7 +12,7 @@
  *@param handle 窗口控件句柄
  *@param layout 通过布局创建
  */
-void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_window_make(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建窗口控件实例 */
     scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
@@ -20,7 +20,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
     
     /* 创建基础控件实例 */
     scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_constructor(&window->widget, &widget_maker, handle, layout);
+    scui_widget_make(&window->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_window));
     SCUI_ASSERT(widget_maker.parent == SCUI_HANDLE_INVALID);
     /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
@@ -57,7 +57,7 @@ void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool 
 /*@brief 窗口控件销毁
  *@param handle 窗口控件句柄
  */
-void scui_window_destroy(scui_handle_t handle)
+void scui_window_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_window_t *window = (void *)widget;
@@ -68,7 +68,7 @@ void scui_window_destroy(scui_handle_t handle)
         scui_widget_surface_destroy(widget->myself);
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&window->widget);
+    scui_widget_burn(&window->widget);
     
     /* 销毁窗口控件实例 */
     SCUI_MEM_FREE(window);

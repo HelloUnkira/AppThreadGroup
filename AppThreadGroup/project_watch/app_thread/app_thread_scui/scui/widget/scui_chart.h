@@ -73,12 +73,12 @@ typedef struct {
  *@param handle 图表控件句柄
  *@param layout 通过布局创建
  */
-void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 图表控件销毁
  *@param handle 图表控件句柄
  */
-void scui_chart_destroy(scui_handle_t handle);
+void scui_chart_burn(scui_handle_t handle);
 
 /*@brief 图表控件数据列表更新(柱状图)
  *@param handle 图表控件句柄

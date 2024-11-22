@@ -31,21 +31,21 @@ typedef struct {
     uint8_t indev_key:1;        /* 输入事件响应标记:key */
 } scui_widget_style_t;
 
-/*@brief 控件创建回调
+/*@brief 控件构建回调
  *@brief 控件销毁回调
  *@brief 控件布局更新回调
  */
-typedef void (*scui_widget_cb_create_t)(void *maker, scui_handle_t *handle, bool layout);
-typedef void (*scui_widget_cb_destroy_t)(scui_handle_t handle);
+typedef void (*scui_widget_cb_make_t)(void *maker, scui_handle_t *handle, bool layout);
+typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
 typedef void (*scui_widget_cb_layout_t)(scui_handle_t handle);
 
 /*@brief 控件处理函数映射表
  */
 typedef struct {
-    scui_widget_cb_create_t  create;
-    scui_widget_cb_destroy_t destroy;
-    scui_widget_cb_layout_t  layout;
-    scui_event_cb_t          event_cb;
+    scui_widget_cb_make_t   make;   // 控件构建
+    scui_widget_cb_burn_t   burn;   // 控件销毁
+    scui_widget_cb_layout_t layout; // 控件布局
+    scui_event_cb_t         invoke; // 控件调用
 } scui_widget_cb_t;
 
 /*@brief 控件基础信息:
@@ -94,31 +94,19 @@ typedef struct {
     for (int64_t idx = (int64_t)widget->child_num - 1; idx >= 0; idx--)     \
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
 
-/*@brief 创建控件
- *@param maker  控件实例构造参数
- *@param handle 控件句柄
- *@param layout 通过布局
- */
-void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
-
-/*@brief 销毁控件
- *@param handle 控件句柄
- */
-void scui_widget_destroy(scui_handle_t handle);
-
 /*@brief 控件构造器
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
  *@param layout 通过布局
  */
-void scui_widget_constructor(scui_widget_t *widget, scui_widget_maker_t *maker,
-                             scui_handle_t *handle, bool layout);
+void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
+                      scui_handle_t *handle, bool layout);
 
 /*@brief 控件析构器
  *@param widget 控件实例
  */
-void scui_widget_destructor(scui_widget_t *widget);
+void scui_widget_burn(scui_widget_t *widget);
 
 /*@brief 控件树的根控件
  *@param handle 控件句柄

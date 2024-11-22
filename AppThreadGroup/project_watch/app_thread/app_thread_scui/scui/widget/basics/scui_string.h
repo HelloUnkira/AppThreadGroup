@@ -39,12 +39,12 @@ typedef struct {
  *@param handle 字符串控件句柄
  *@param layout 通过布局创建
  */
-void scui_string_create(scui_string_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 字符串控件销毁
  *@param handle 字符串控件句柄
  */
-void scui_string_destroy(scui_handle_t handle);
+void scui_string_burn(scui_handle_t handle);
 
 /*@brief 字符串控件更新文本
  *@param handle 字符串控件句柄

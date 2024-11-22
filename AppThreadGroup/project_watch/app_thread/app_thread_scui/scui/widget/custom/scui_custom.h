@@ -16,11 +16,11 @@ typedef struct {
  *@param handle 自定义控件句柄
  *@param layout 通过布局创建
  */
-void scui_custom_create(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_custom_make(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 自定义控件销毁
  *@param handle 自定义控件句柄
  */
-void scui_custom_destroy(scui_handle_t handle);
+void scui_custom_burn(scui_handle_t handle);
 
 #endif

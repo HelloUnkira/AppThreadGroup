@@ -12,7 +12,7 @@
  *@param handle 表盘指针控件句柄
  *@param layout 通过布局创建
  */
-void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_watch_make(scui_watch_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建表盘指针控件实例 */
     scui_watch_t *watch = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_watch_t));
@@ -25,7 +25,7 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
     widget_maker.style.sched_anima = true;
     
     /* 创建基础控件实例 */
-    scui_widget_constructor(&watch->widget, &widget_maker, handle, layout);
+    scui_widget_make(&watch->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_watch));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -50,14 +50,14 @@ void scui_watch_create(scui_watch_maker_t *maker, scui_handle_t *handle, bool la
  *@param handle 表盘指针控件句柄
  *@param parent_way 来自父控件的销毁
  */
-void scui_watch_destroy(scui_handle_t handle)
+void scui_watch_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_watch_t  *watch  = (void *)widget;
     SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&watch->widget);
+    scui_widget_burn(&watch->widget);
     
     /* 销毁表盘指针控件实例 */
     SCUI_MEM_FREE(watch);

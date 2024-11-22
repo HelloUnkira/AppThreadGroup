@@ -93,7 +93,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart1_maker.histogram.height    = chart1_maker.widget.clip.h - 10;
             chart1_maker.histogram.space     = 4;
             chart1_maker.histogram.color.color.full = 0xFFFF0000;
-            scui_chart_create(&chart1_maker, &chart1_handle, false);
+            scui_widget_create(&chart1_maker, &chart1_handle, false);
             scui_chart_histogram_data(chart1_handle, vlist_min, vlist_max);
             
             // chart line
@@ -120,7 +120,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart2_maker.line.height    = chart2_maker.widget.clip.h - 10;
             chart2_maker.line.space     = 10;
             chart2_maker.line.color.color.full = 0xFFFF0000;
-            scui_chart_create(&chart2_maker, &chart2_handle, false);
+            scui_widget_create(&chart2_maker, &chart2_handle, false);
             
             for (uint8_t idx = 0; idx < chart2_maker.line.number; idx++) {
                 int32_t angle = scui_map(idx, 0, chart2_maker.line.number, 0, 360);
@@ -159,11 +159,11 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             // 24
             scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
             scroll_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
-            scui_scroll_create(&scroll_maker, &scui_ui_res_local->scroll_1, false);
+            scui_widget_create(&scroll_maker, &scui_ui_res_local->scroll_1, false);
             string_maker.widget.parent  = scui_ui_res_local->scroll_1;
             
             for (uint8_t idx = 0; idx < 24; idx++) {
-                scui_string_create(&string_maker, &string_handle, false);
+                scui_widget_create(&string_maker, &string_handle, false);
                 uint8_t str_utf8[10] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%02d", idx);
                 scui_string_update_str(string_handle, str_utf8);
@@ -172,7 +172,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             // month
             scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES * 13 / 25;
             scroll_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
-            scui_scroll_create(&scroll_maker, &scui_ui_res_local->scroll_2, false);
+            scui_widget_create(&scroll_maker, &scui_ui_res_local->scroll_2, false);
             string_maker.widget.parent  = scui_ui_res_local->scroll_2;
             
             const char *str_utf8_month[] = {
@@ -181,7 +181,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             };
             
             for (uint8_t idx = 0; idx < scui_arr_len(str_utf8_month); idx++) {
-                scui_string_create(&string_maker, &string_handle, false);
+                scui_widget_create(&string_maker, &string_handle, false);
                 uint8_t str_utf8[20] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%s", str_utf8_month[idx]);
                 scui_string_update_str(string_handle, str_utf8);

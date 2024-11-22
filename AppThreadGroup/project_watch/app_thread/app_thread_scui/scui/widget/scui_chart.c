@@ -12,7 +12,7 @@
  *@param handle 图表控件句柄
  *@param layout 通过布局创建
  */
-void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建图表控件实例 */
     scui_chart_t *chart = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_chart_t));
@@ -20,7 +20,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
     
     /* 创建基础控件实例 */
     scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_constructor(&chart->widget, &widget_maker, handle, layout);
+    scui_widget_make(&chart->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_chart));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -84,7 +84,7 @@ void scui_chart_create(scui_chart_maker_t *maker, scui_handle_t *handle, bool la
  *@param handle 图表控件句柄
  *@param parent_way 来自父控件的销毁
  */
-void scui_chart_destroy(scui_handle_t handle)
+void scui_chart_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_chart_t  *chart  = (void *)widget;
@@ -106,7 +106,7 @@ void scui_chart_destroy(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&chart->widget);
+    scui_widget_burn(&chart->widget);
     
     /* 销毁图表控件实例 */
     SCUI_MEM_FREE(chart);

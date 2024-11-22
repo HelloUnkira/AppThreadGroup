@@ -69,7 +69,7 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
             string_maker.font_idx                   = 1,
-            scui_string_create(&string_maker, &scui_ui_res_local->string, false);
+            scui_widget_create(&string_maker, &scui_ui_res_local->string, false);
         }
         break;
     case scui_event_hide:

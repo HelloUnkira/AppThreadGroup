@@ -12,7 +12,7 @@
  *@param handle 滚动控件句柄
  *@param layout 通过布局创建
  */
-void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout)
 {
     /* 创建滚动控件实例 */
     scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_scroll_t));
@@ -25,7 +25,7 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
     widget_maker.style.indev_ptr = true;
     
     /* 创建基础控件实例 */
-    scui_widget_constructor(&scroll->widget, &widget_maker, handle, layout);
+    scui_widget_make(&scroll->widget, &widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_scroll));
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
@@ -83,7 +83,7 @@ void scui_scroll_create(scui_scroll_maker_t *maker, scui_handle_t *handle, bool 
 /*@brief 滚动控件销毁
  *@param handle 滚动控件句柄
  */
-void scui_scroll_destroy(scui_handle_t handle)
+void scui_scroll_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_get(handle);
     scui_scroll_t *scroll = (void *)widget;
@@ -96,7 +96,7 @@ void scui_scroll_destroy(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
-    scui_widget_destructor(&scroll->widget);
+    scui_widget_burn(&scroll->widget);
     
     /* 销毁滚动控件实例 */
     SCUI_MEM_FREE(scroll);

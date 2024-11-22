@@ -9,43 +9,14 @@
 
 #include "scui.h"
 
-/*@brief 创建控件
- *@param maker  控件实例构造参数
- *@param handle 控件句柄
- *@param layout 通过布局
- */
-void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
-{
-    scui_widget_maker_t *widget_maker = maker;
-    scui_widget_cb_t *widget_cb = NULL;
-    scui_widget_cb_find(widget_maker->type, &widget_cb);
-    widget_cb->create(maker, handle, layout);
-}
-
-/*@brief 销毁控件
- *@param handle 控件句柄
- */
-void scui_widget_destroy(scui_handle_t handle)
-{
-    /* 重复的销毁过滤 */
-    if (scui_handle_unmap(handle))
-        return;
-    
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    scui_widget_cb_t *widget_cb = NULL;
-    scui_widget_cb_find(widget->type, &widget_cb);
-    widget_cb->destroy(handle);
-}
-
 /*@brief 控件构造器
  *@param widget 控件实例
  *@param maker  控件实例构造参数
  *@param handle 控件句柄
  *@param layout 通过布局
  */
-void scui_widget_constructor(scui_widget_t *widget, scui_widget_maker_t *maker,
-                             scui_handle_t *handle, bool layout)
+void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
+                      scui_handle_t *handle, bool layout)
 {
     SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL);
     SCUI_ASSERT(maker->clip.w != 0);
@@ -126,7 +97,7 @@ void scui_widget_constructor(scui_widget_t *widget, scui_widget_maker_t *maker,
     if (maker->event_cb == NULL) {
         scui_widget_cb_t *widget_cb = NULL;
         scui_widget_cb_find(widget->type, &widget_cb);
-        cb_node.event_cb = widget_cb->event_cb;
+        cb_node.event_cb = widget_cb->invoke;
     }
     
     if (cb_node.event_cb != NULL) {
@@ -165,7 +136,7 @@ void scui_widget_constructor(scui_widget_t *widget, scui_widget_maker_t *maker,
 /*@brief 控件析构器
  *@param widget 控件实例
  */
-void scui_widget_destructor(scui_widget_t *widget)
+void scui_widget_burn(scui_widget_t *widget)
 {
     if (scui_handle_unmap(widget->myself)) {
         SCUI_LOG_INFO("widget %u not load", widget->myself);

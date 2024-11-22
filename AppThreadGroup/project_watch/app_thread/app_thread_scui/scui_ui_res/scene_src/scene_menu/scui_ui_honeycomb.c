@@ -303,7 +303,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             for (uint8_t idx = 0; idx < SCUI_UI_HONEYCOMB_LIST_NUM; idx++) {
                 custom_maker.widget.clip.x = list_layout[idx].x;
                 custom_maker.widget.clip.y = list_layout[idx].y;
-                scui_custom_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle, false);
             }
             
             SCUI_MEM_FREE(list_layout);

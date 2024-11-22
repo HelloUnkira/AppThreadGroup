@@ -33,12 +33,12 @@ typedef struct {
  *@param handle 窗口控件句柄
  *@param layout 通过布局创建
  */
-void scui_window_create(scui_window_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_window_make(scui_window_maker_t *maker, scui_handle_t *handle, bool layout);
 
 /*@brief 窗口控件销毁
  *@param handle 窗口控件句柄
  */
-void scui_window_destroy(scui_handle_t handle);
+void scui_window_burn(scui_handle_t handle);
 
 /*@brief 窗口配置参数默认
  *@param handle 窗口控件句柄

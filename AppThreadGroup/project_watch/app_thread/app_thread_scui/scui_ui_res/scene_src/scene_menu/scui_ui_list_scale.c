@@ -262,20 +262,20 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             custom_maker.widget.style.indev_ptr     = false;
             custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
             custom_maker.widget.event_cb            = NULL;
-            scui_custom_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle, false);
             
             custom_maker.widget.style.indev_ptr     = true;
             custom_maker.widget.clip.h              = 72;
             custom_maker.widget.event_cb            = scui_ui_scene_plug_coupler_widget_m_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
-                scui_custom_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle, false);
                 scui_ui_res_local->coupler->list_widget_m[idx] = custom_handle;
             }
             
             custom_maker.widget.style.indev_ptr     = false;
             custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 72 / 2;
             custom_maker.widget.event_cb            = NULL;
-            scui_custom_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle, false);
             
             for (uint8_t idx = 0; idx < scui_ui_scene_list_num; idx++) {
                 
@@ -290,7 +290,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 custom_maker.widget.clip.h      = scale_h;
                 custom_maker.widget.child_num   = 1;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
-                scui_custom_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle, false);
                 scui_ui_res_local->coupler->list_widget_s[idx] = custom_handle;
                 
                 scui_string_maker_t string_maker = {0};
@@ -310,7 +310,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.draw_cache                 = true;
                 string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
-                scui_string_create(&string_maker, &string_handle, false);
+                scui_widget_create(&string_maker, &string_handle, false);
                 
                 scui_event_cb_node_t event_cb_node = {
                     .event_cb = scui_ui_scene_plug_coupler_widget_s_event_proc,

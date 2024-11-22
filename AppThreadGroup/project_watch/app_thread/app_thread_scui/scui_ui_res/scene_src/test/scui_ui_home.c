@@ -58,6 +58,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         // cwf json 测试
         if (scui_widget_event_check_finish(event)) {
+            
             scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         }
         
