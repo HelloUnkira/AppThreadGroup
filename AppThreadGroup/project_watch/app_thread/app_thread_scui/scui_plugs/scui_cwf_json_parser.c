@@ -233,7 +233,6 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     // 构建一个父容器,用于承载cwf
     scui_custom_maker_t custom_maker = {0};
     custom_maker.widget.type        = scui_widget_type_custom;
-    custom_maker.widget.style.trans = true;
     custom_maker.widget.style.cover = true;
     custom_maker.widget.clip        = scui_widget_clip(parent);
     custom_maker.widget.parent      = parent;
@@ -269,6 +268,10 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
     
     scui_image_t *image_src = scui_handle_get(image_hit);
     SCUI_ASSERT(image_src != NULL);
+    
+    // 记得要清理缓存
+    scui_image_unit_t image_unit = {.image = image_src,};
+    scui_image_cache_invalidate(&image_unit);
     
     char *name = scui_handle_get(image_src->from);
     scui_handle_set(image_src->from, NULL);

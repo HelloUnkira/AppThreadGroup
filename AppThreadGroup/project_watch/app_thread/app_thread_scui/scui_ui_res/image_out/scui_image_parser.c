@@ -19587,9091 +19587,10 @@ const scui_image_t prj_image_src_400X400pxpng = {
 	.type			 = scui_image_type_png,
 };
 
-const scui_image_t prj_image_src_home_watch_D10450001_bg_01_bgbmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xcc0b09,
-	.pixel.size_bin	 = 0x37f9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10450001_bg_01_bgjpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xcc4302,
-	.pixel.size_bin	 = 0x82bd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10450001_preview_01_00bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xccc5bf,
-	.pixel.size_bin	 = 0x4742,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10450001_preview_01_00jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xcd0d01,
-	.pixel.size_bin	 = 0x66d0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_bg_01_1bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xcd73d1,
-	.pixel.size_bin	 = 0xd563,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_bg_01_1jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xce4934,
-	.pixel.size_bin	 = 0xd669,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_01_00bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf1f9d,
-	.pixel.size_bin	 = 0x178,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_02_01bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf2115,
-	.pixel.size_bin	 = 0x15a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_03_02bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf226f,
-	.pixel.size_bin	 = 0x166,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_04_03bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf23d5,
-	.pixel.size_bin	 = 0x17a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_05_04bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf254f,
-	.pixel.size_bin	 = 0x1e9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_06_05bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf2738,
-	.pixel.size_bin	 = 0x1eb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_07_06bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf2923,
-	.pixel.size_bin	 = 0x226,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_08_07bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf2b49,
-	.pixel.size_bin	 = 0x231,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_09_08bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf2d7a,
-	.pixel.size_bin	 = 0x2ff,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_10_09bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf3079,
-	.pixel.size_bin	 = 0x12c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_11_10bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf31a5,
-	.pixel.size_bin	 = 0x26f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_12_11bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf3414,
-	.pixel.size_bin	 = 0x13e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_13_12bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf3552,
-	.pixel.size_bin	 = 0x125,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_char_week_14_13bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xcf3677,
-	.pixel.size_bin	 = 0x208,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_h_01_h_50x164_158png = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0xa4,
-	.pixel.data_bin	 = 0xcf387f,
-	.pixel.size_bin	 = 0xe1c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_01_00png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcf469b,
-	.pixel.size_bin	 = 0x1214,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_02_01png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcf58af,
-	.pixel.size_bin	 = 0x17e7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_03_02png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcf7096,
-	.pixel.size_bin	 = 0x16b8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_04_03png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcf874e,
-	.pixel.size_bin	 = 0x1262,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_05_04png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcf99b0,
-	.pixel.size_bin	 = 0x16ec,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_06_05png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcfb09c,
-	.pixel.size_bin	 = 0x13c2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_heart_07_06png = {
-	.pixel.width	 = 0x96,
-	.pixel.height	 = 0x58,
-	.pixel.data_bin	 = 0xcfc45e,
-	.pixel.size_bin	 = 0x122d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_01_00bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xcfd68b,
-	.pixel.size_bin	 = 0x25c8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_02_01bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xcffc53,
-	.pixel.size_bin	 = 0x2577,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_03_02bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd021ca,
-	.pixel.size_bin	 = 0x2516,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_04_03bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd046e0,
-	.pixel.size_bin	 = 0x256b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_05_04bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd06c4b,
-	.pixel.size_bin	 = 0x2616,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_06_05bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd09261,
-	.pixel.size_bin	 = 0x26b9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_07_06bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd0b91a,
-	.pixel.size_bin	 = 0x260a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_08_07bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd0df24,
-	.pixel.size_bin	 = 0x2583,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_09_08bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd104a7,
-	.pixel.size_bin	 = 0x2564,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_10_09bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd12a0b,
-	.pixel.size_bin	 = 0x25ad,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_kcal_11_10bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd14fb8,
-	.pixel.size_bin	 = 0x25d8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_01_00bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd17590,
-	.pixel.size_bin	 = 0x25bd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_02_01bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd19b4d,
-	.pixel.size_bin	 = 0x2532,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_03_02bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd1c07f,
-	.pixel.size_bin	 = 0x24d2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_04_03bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd1e551,
-	.pixel.size_bin	 = 0x2587,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_05_04bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd20ad8,
-	.pixel.size_bin	 = 0x2606,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_06_05bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd230de,
-	.pixel.size_bin	 = 0x26be,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_07_06bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd2579c,
-	.pixel.size_bin	 = 0x260e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_08_07bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd27daa,
-	.pixel.size_bin	 = 0x2572,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_09_08bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd2a31c,
-	.pixel.size_bin	 = 0x24fc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_10_09bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd2c818,
-	.pixel.size_bin	 = 0x2579,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_icon_progress_step_11_10bmp = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x8c,
-	.pixel.data_bin	 = 0xd2ed91,
-	.pixel.size_bin	 = 0x261a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_m_01_m_46x213_207png = {
-	.pixel.width	 = 0x2e,
-	.pixel.height	 = 0xd5,
-	.pixel.data_bin	 = 0xd313ab,
-	.pixel.size_bin	 = 0xe5c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_01_00bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32207,
-	.pixel.size_bin	 = 0x4d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_02_01bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32254,
-	.pixel.size_bin	 = 0x8a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_03_02bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd322de,
-	.pixel.size_bin	 = 0xf8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_04_03bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd323d6,
-	.pixel.size_bin	 = 0x22f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_05_04bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32605,
-	.pixel.size_bin	 = 0x71,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_06_05bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32676,
-	.pixel.size_bin	 = 0x1db,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_07_06bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32851,
-	.pixel.size_bin	 = 0x240,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_08_07bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32a91,
-	.pixel.size_bin	 = 0x179,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_09_08bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32c0a,
-	.pixel.size_bin	 = 0x211,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_10_09bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd32e1b,
-	.pixel.size_bin	 = 0x22e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_11_10bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd33049,
-	.pixel.size_bin	 = 0xf0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_12_11bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd33139,
-	.pixel.size_bin	 = 0x269,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_13_12bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd333a2,
-	.pixel.size_bin	 = 0x232,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_hour_min_14_13bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xd335d4,
-	.pixel.size_bin	 = 0x97,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_01_00png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd3366b,
-	.pixel.size_bin	 = 0x416,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_02_01png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd33a81,
-	.pixel.size_bin	 = 0x419,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_03_02png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd33e9a,
-	.pixel.size_bin	 = 0x464,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_04_03png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd342fe,
-	.pixel.size_bin	 = 0x48d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_05_04png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd3478b,
-	.pixel.size_bin	 = 0x42e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_06_05png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd34bb9,
-	.pixel.size_bin	 = 0x479,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_07_06png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd35032,
-	.pixel.size_bin	 = 0x48a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_08_07png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd354bc,
-	.pixel.size_bin	 = 0x481,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_09_08png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd3593d,
-	.pixel.size_bin	 = 0x492,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_10_09png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd35dcf,
-	.pixel.size_bin	 = 0x487,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_11_10png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd36256,
-	.pixel.size_bin	 = 0x454,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_12_11png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd366aa,
-	.pixel.size_bin	 = 0x492,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_13_12png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd36b3c,
-	.pixel.size_bin	 = 0x485,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_num_step_kcal_heart_14_13png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0xf,
-	.pixel.data_bin	 = 0xd36fc1,
-	.pixel.size_bin	 = 0x422,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xd373e3,
-	.pixel.size_bin	 = 0xc058,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_preview_01_1jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xd4343b,
-	.pixel.size_bin	 = 0x9378,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_s_01_s_56x255_208png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0xff,
-	.pixel.data_bin	 = 0xd4c7b3,
-	.pixel.size_bin	 = 0xcc2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_unit_char_kcal_01_00bmp = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xd4d475,
-	.pixel.size_bin	 = 0x150,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_unit_char_kcal_02_01bmp = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xd4d5c5,
-	.pixel.size_bin	 = 0x1de,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_unit_char_step_01_00bmp = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xd4d7a3,
-	.pixel.size_bin	 = 0x129,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10597001_unit_char_step_02_01bmp = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xd4d8cc,
-	.pixel.size_bin	 = 0x1dd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_bg_01_1bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xd4daa9,
-	.pixel.size_bin	 = 0xf3b5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_bg_01_1jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xd5ce5e,
-	.pixel.size_bin	 = 0xf460,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_01_00bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c2be,
-	.pixel.size_bin	 = 0xbd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_02_01bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c37b,
-	.pixel.size_bin	 = 0xeb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_03_02bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c466,
-	.pixel.size_bin	 = 0x111,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_04_04bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c577,
-	.pixel.size_bin	 = 0x131,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_05_05bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c6a8,
-	.pixel.size_bin	 = 0x155,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_06_06bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c7fd,
-	.pixel.size_bin	 = 0x17d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_07_07bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6c97a,
-	.pixel.size_bin	 = 0x131,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_08_08bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6caab,
-	.pixel.size_bin	 = 0x18d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_09_09bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6cc38,
-	.pixel.size_bin	 = 0x17e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_10_10bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6cdb6,
-	.pixel.size_bin	 = 0xed,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_11_11bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6cea3,
-	.pixel.size_bin	 = 0xfe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_12_12bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6cfa1,
-	.pixel.size_bin	 = 0x127,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_13_13bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d0c8,
-	.pixel.size_bin	 = 0x1ca,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_14_14bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d292,
-	.pixel.size_bin	 = 0x112,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_15_15bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d3a4,
-	.pixel.size_bin	 = 0x242,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_16_16bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d5e6,
-	.pixel.size_bin	 = 0x1df,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_17_17bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d7c5,
-	.pixel.size_bin	 = 0x21d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_18_18bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6d9e2,
-	.pixel.size_bin	 = 0x137,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_19_19bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6db19,
-	.pixel.size_bin	 = 0xc3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_20_20bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6dbdc,
-	.pixel.size_bin	 = 0x1ae,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_21_21bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6dd8a,
-	.pixel.size_bin	 = 0x16e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_22_22bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6def8,
-	.pixel.size_bin	 = 0xfb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_23_23bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6dff3,
-	.pixel.size_bin	 = 0x1f4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_month_24_24bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xd6e1e7,
-	.pixel.size_bin	 = 0x113,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_01_00bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd6e2fa,
-	.pixel.size_bin	 = 0x1de3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_02_01bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd700dd,
-	.pixel.size_bin	 = 0x1dd8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_03_02bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd71eb5,
-	.pixel.size_bin	 = 0x1dfe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_04_03bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd73cb3,
-	.pixel.size_bin	 = 0x1e11,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_05_04bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd75ac4,
-	.pixel.size_bin	 = 0x1e06,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_06_05bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd778ca,
-	.pixel.size_bin	 = 0x1e10,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_07_06bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd796da,
-	.pixel.size_bin	 = 0x1e13,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_08_07bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd7b4ed,
-	.pixel.size_bin	 = 0x1b87,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_09_08bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd7d074,
-	.pixel.size_bin	 = 0x1b98,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_10_09bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd7ec0c,
-	.pixel.size_bin	 = 0x1bb3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_11_10bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd807bf,
-	.pixel.size_bin	 = 0x1bb2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_12_11bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd82371,
-	.pixel.size_bin	 = 0x1b8c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_13_12bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd83efd,
-	.pixel.size_bin	 = 0x1b98,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_char_week_14_13bmp = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7a,
-	.pixel.data_bin	 = 0xd85a95,
-	.pixel.size_bin	 = 0x1bc4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_h_01_hpng = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0xad,
-	.pixel.data_bin	 = 0xd87659,
-	.pixel.size_bin	 = 0x8bb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_01_00png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd87f14,
-	.pixel.size_bin	 = 0x50a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_02_01png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8841e,
-	.pixel.size_bin	 = 0x73b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_03_02png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd88b59,
-	.pixel.size_bin	 = 0x98b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_04_03png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd894e4,
-	.pixel.size_bin	 = 0xb52,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_05_04png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8a036,
-	.pixel.size_bin	 = 0xd98,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_06_05png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8adce,
-	.pixel.size_bin	 = 0xf29,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_07_06png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8bcf7,
-	.pixel.size_bin	 = 0x10d3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_08_07png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8cdca,
-	.pixel.size_bin	 = 0x12f4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_09_08png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8e0be,
-	.pixel.size_bin	 = 0x1473,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_10_09png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd8f531,
-	.pixel.size_bin	 = 0x1675,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_icon_progress_step_11_10png = {
-	.pixel.width	 = 0x9a,
-	.pixel.height	 = 0x9c,
-	.pixel.data_bin	 = 0xd90ba6,
-	.pixel.size_bin	 = 0x17cb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_m_01_mpng = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0xf9,
-	.pixel.data_bin	 = 0xd92371,
-	.pixel.size_bin	 = 0x870,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_01_00bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92be1,
-	.pixel.size_bin	 = 0x31,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_02_01bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92c12,
-	.pixel.size_bin	 = 0x2f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_03_02bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92c41,
-	.pixel.size_bin	 = 0x8f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_04_03bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92cd0,
-	.pixel.size_bin	 = 0xab,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_05_04bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92d7b,
-	.pixel.size_bin	 = 0x3b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_06_05bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92db6,
-	.pixel.size_bin	 = 0xde,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_07_06bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92e94,
-	.pixel.size_bin	 = 0xf9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_08_07bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd92f8d,
-	.pixel.size_bin	 = 0xbe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_09_08bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd9304b,
-	.pixel.size_bin	 = 0xec,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_10_09bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd93137,
-	.pixel.size_bin	 = 0xe2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_11_10bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd93219,
-	.pixel.size_bin	 = 0xae,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_12_11bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd932c7,
-	.pixel.size_bin	 = 0xf3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_13_12bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd933ba,
-	.pixel.size_bin	 = 0xe1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_batt_14_13bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xd9349b,
-	.pixel.size_bin	 = 0x36,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_01_00bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd934d1,
-	.pixel.size_bin	 = 0x41,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_02_01bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93512,
-	.pixel.size_bin	 = 0x3e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_03_02bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93550,
-	.pixel.size_bin	 = 0x99,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_04_03bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd935e9,
-	.pixel.size_bin	 = 0xd8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_05_04bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd936c1,
-	.pixel.size_bin	 = 0x4c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_06_05bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9370d,
-	.pixel.size_bin	 = 0xdb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_07_06bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd937e8,
-	.pixel.size_bin	 = 0x113,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_08_07bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd938fb,
-	.pixel.size_bin	 = 0xd8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_09_08bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd939d3,
-	.pixel.size_bin	 = 0x100,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_10_09bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93ad3,
-	.pixel.size_bin	 = 0x10e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_11_10bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93be1,
-	.pixel.size_bin	 = 0xcc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_12_11bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93cad,
-	.pixel.size_bin	 = 0x11b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_13_12bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93dc8,
-	.pixel.size_bin	 = 0x11c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_date_14_13bmp = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd93ee4,
-	.pixel.size_bin	 = 0x5b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_01_00png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd93f3f,
-	.pixel.size_bin	 = 0x462,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_02_01png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd943a1,
-	.pixel.size_bin	 = 0x4c2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_03_02png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd94863,
-	.pixel.size_bin	 = 0x587,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_04_03png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd94dea,
-	.pixel.size_bin	 = 0x66d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_05_04png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd95457,
-	.pixel.size_bin	 = 0x4a4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_06_05png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd958fb,
-	.pixel.size_bin	 = 0x63a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_07_06png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd95f35,
-	.pixel.size_bin	 = 0x670,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_08_07png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd965a5,
-	.pixel.size_bin	 = 0x58c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_09_08png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd96b31,
-	.pixel.size_bin	 = 0x63f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_10_09png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd97170,
-	.pixel.size_bin	 = 0x689,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_11_10png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd977f9,
-	.pixel.size_bin	 = 0x57a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_12_11png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd97d73,
-	.pixel.size_bin	 = 0x6a3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_13_12png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd98416,
-	.pixel.size_bin	 = 0x68a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_hour_min_14_13png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0x31,
-	.pixel.data_bin	 = 0xd98aa0,
-	.pixel.size_bin	 = 0x4e7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd98f87,
-	.pixel.size_bin	 = 0x41d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_02_01png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd993a4,
-	.pixel.size_bin	 = 0x41b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_03_02png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd997bf,
-	.pixel.size_bin	 = 0x486,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_04_03png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd99c45,
-	.pixel.size_bin	 = 0x4a2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_05_04png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9a0e7,
-	.pixel.size_bin	 = 0x424,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_06_05png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9a50b,
-	.pixel.size_bin	 = 0x4ab,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_07_06png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9a9b6,
-	.pixel.size_bin	 = 0x4c9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_08_07png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9ae7f,
-	.pixel.size_bin	 = 0x49a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_09_08png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9b319,
-	.pixel.size_bin	 = 0x4c2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_10_09png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9b7db,
-	.pixel.size_bin	 = 0x4c8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_11_10png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9bca3,
-	.pixel.size_bin	 = 0x498,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_12_11png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9c13b,
-	.pixel.size_bin	 = 0x4ca,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_13_12png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9c605,
-	.pixel.size_bin	 = 0x4c9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_num_step_heart_kcal_14_13png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xd9cace,
-	.pixel.size_bin	 = 0x430,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xd9cefe,
-	.pixel.size_bin	 = 0xcb83,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_preview_01_1jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xda9a81,
-	.pixel.size_bin	 = 0xad38,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_s_01_spng = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0xff,
-	.pixel.data_bin	 = 0xdb47b9,
-	.pixel.size_bin	 = 0x935,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10598001_unit_char_batt_01_1bmp = {
-	.pixel.width	 = 0x14,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xdb50ee,
-	.pixel.size_bin	 = 0x13f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_bg_01_1bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xdb522d,
-	.pixel.size_bin	 = 0x9e0d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_bg_01_1jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xdbf03a,
-	.pixel.size_bin	 = 0xb4d4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_batt_01_00bmp = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xdca50e,
-	.pixel.size_bin	 = 0x100,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_batt_02_01bmp = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xdca60e,
-	.pixel.size_bin	 = 0x11d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_01_00bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdca72b,
-	.pixel.size_bin	 = 0xd2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_02_01bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdca7fd,
-	.pixel.size_bin	 = 0xf8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_03_02bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdca8f5,
-	.pixel.size_bin	 = 0xfd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_04_03bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdca9f2,
-	.pixel.size_bin	 = 0x15a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_05_04bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcab4c,
-	.pixel.size_bin	 = 0x175,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_06_05bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcacc1,
-	.pixel.size_bin	 = 0x1b8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_07_06bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcae79,
-	.pixel.size_bin	 = 0x150,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_08_07bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcafc9,
-	.pixel.size_bin	 = 0x1b1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_09_08bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb17a,
-	.pixel.size_bin	 = 0x19f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_10_09bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb319,
-	.pixel.size_bin	 = 0xe3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_11_10bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb3fc,
-	.pixel.size_bin	 = 0xe8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_12_11bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb4e4,
-	.pixel.size_bin	 = 0x119,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_13_12bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb5fd,
-	.pixel.size_bin	 = 0x20e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_14_13bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb80b,
-	.pixel.size_bin	 = 0x11a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_15_14bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcb925,
-	.pixel.size_bin	 = 0x2a8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_16_15bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcbbcd,
-	.pixel.size_bin	 = 0x20c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_17_16bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcbdd9,
-	.pixel.size_bin	 = 0x28d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_18_17bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc066,
-	.pixel.size_bin	 = 0x18b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_19_18bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc1f1,
-	.pixel.size_bin	 = 0x117,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_20_19bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc308,
-	.pixel.size_bin	 = 0x25a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_21_20bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc562,
-	.pixel.size_bin	 = 0x1aa,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_22_21bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc70c,
-	.pixel.size_bin	 = 0x213,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_23_22bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdcc91f,
-	.pixel.size_bin	 = 0x27c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_month_24_23bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xdccb9b,
-	.pixel.size_bin	 = 0x1d5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_01_00png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdccd70,
-	.pixel.size_bin	 = 0x568,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_02_01png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcd2d8,
-	.pixel.size_bin	 = 0x544,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_03_02png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcd81c,
-	.pixel.size_bin	 = 0x557,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_04_03png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcdd73,
-	.pixel.size_bin	 = 0x57c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_05_04png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdce2ef,
-	.pixel.size_bin	 = 0x5b2,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_06_05png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdce8a1,
-	.pixel.size_bin	 = 0x5a8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_07_06png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcee49,
-	.pixel.size_bin	 = 0x620,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_08_07png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcf469,
-	.pixel.size_bin	 = 0x604,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_09_08png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdcfa6d,
-	.pixel.size_bin	 = 0x688,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_10_09png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdd00f5,
-	.pixel.size_bin	 = 0x51d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_11_10png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdd0612,
-	.pixel.size_bin	 = 0x611,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_12_11png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdd0c23,
-	.pixel.size_bin	 = 0x50a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_13_12png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdd112d,
-	.pixel.size_bin	 = 0x513,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_char_week_14_13png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xdd1640,
-	.pixel.size_bin	 = 0x5ff,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_h_01_hpng = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xad,
-	.pixel.data_bin	 = 0xdd1c3f,
-	.pixel.size_bin	 = 0xdae,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_01_00bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd29ed,
-	.pixel.size_bin	 = 0x122f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_02_01bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd3c1c,
-	.pixel.size_bin	 = 0x1321,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_03_02bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd4f3d,
-	.pixel.size_bin	 = 0x13b0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_04_03bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd62ed,
-	.pixel.size_bin	 = 0x13de,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_05_04bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd76cb,
-	.pixel.size_bin	 = 0x13cb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_06_04bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd8a96,
-	.pixel.size_bin	 = 0x13e8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_07_06bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdd9e7e,
-	.pixel.size_bin	 = 0x140f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_08_07bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xddb28d,
-	.pixel.size_bin	 = 0x1470,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_09_08bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xddc6fd,
-	.pixel.size_bin	 = 0x149a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_10_09bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xdddb97,
-	.pixel.size_bin	 = 0x14c4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_batt_11_10bmp = {
-	.pixel.width	 = 0x60,
-	.pixel.height	 = 0x61,
-	.pixel.data_bin	 = 0xddf05b,
-	.pixel.size_bin	 = 0x1549,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_01_00bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde05a4,
-	.pixel.size_bin	 = 0x1509,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_02_01bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde1aad,
-	.pixel.size_bin	 = 0x1601,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_03_02bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde30ae,
-	.pixel.size_bin	 = 0x168b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_04_03bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde4739,
-	.pixel.size_bin	 = 0x16e8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_05_04bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde5e21,
-	.pixel.size_bin	 = 0x1728,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_06_05bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde7549,
-	.pixel.size_bin	 = 0x1788,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_07_06bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xde8cd1,
-	.pixel.size_bin	 = 0x17d0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_08_07bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xdea4a1,
-	.pixel.size_bin	 = 0x1815,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_09_08bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xdebcb6,
-	.pixel.size_bin	 = 0x1845,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_10_09bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xded4fb,
-	.pixel.size_bin	 = 0x1860,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_kcal_11_10bmp = {
-	.pixel.width	 = 0x70,
-	.pixel.height	 = 0x66,
-	.pixel.data_bin	 = 0xdeed5b,
-	.pixel.size_bin	 = 0x18ef,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_01_00bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf064a,
-	.pixel.size_bin	 = 0x1327,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_02_01bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf1971,
-	.pixel.size_bin	 = 0x1435,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_03_02bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf2da6,
-	.pixel.size_bin	 = 0x149f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_04_03bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf4245,
-	.pixel.size_bin	 = 0x1502,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_05_04bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf5747,
-	.pixel.size_bin	 = 0x1544,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_06_05bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf6c8b,
-	.pixel.size_bin	 = 0x158e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_07_06bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf8219,
-	.pixel.size_bin	 = 0x15df,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_08_07bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdf97f8,
-	.pixel.size_bin	 = 0x1646,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_09_08bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdfae3e,
-	.pixel.size_bin	 = 0x1661,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_10_09bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdfc49f,
-	.pixel.size_bin	 = 0x1695,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_progress_step_11_10bmp = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6c,
-	.pixel.data_bin	 = 0xdfdb34,
-	.pixel.size_bin	 = 0x16fd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_01_32x32_x148_y55bmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xdff231,
-	.pixel.size_bin	 = 0x341,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_02_icon_02_duoyunbmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xdff572,
-	.pixel.size_bin	 = 0x3e7,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_03_icon_03_yingbmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xdff959,
-	.pixel.size_bin	 = 0x389,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_04_icon_04_zhenyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xdffce2,
-	.pixel.size_bin	 = 0x3c0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_05_icon_05_leizhenyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe000a2,
-	.pixel.size_bin	 = 0x358,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_06_icon_06_leizhenyubanbingbaobmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe003fa,
-	.pixel.size_bin	 = 0x351,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_07_icon_07_yujiaxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe0074b,
-	.pixel.size_bin	 = 0x373,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_08_icon_08_xiaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe00abe,
-	.pixel.size_bin	 = 0x2e0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_09_icon_09_zhongyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe00d9e,
-	.pixel.size_bin	 = 0x308,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_10_icon_10_dayubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe010a6,
-	.pixel.size_bin	 = 0x2f6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_11_icon_11_baoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe0139c,
-	.pixel.size_bin	 = 0x319,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_12_icon_12_dabaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe016b5,
-	.pixel.size_bin	 = 0x410,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_13_icon_13_tedabaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe01ac5,
-	.pixel.size_bin	 = 0x491,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_14_icon_14_zhenxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe01f56,
-	.pixel.size_bin	 = 0x3de,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_15_icon_15_xiaoxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe02334,
-	.pixel.size_bin	 = 0x2d6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_16_icon_16_zhongxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe0260a,
-	.pixel.size_bin	 = 0x306,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_17_icon_17_daxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe02910,
-	.pixel.size_bin	 = 0x339,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_18_icon_18_baoxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe02c49,
-	.pixel.size_bin	 = 0x36f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_19_icon_19_wubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe02fb8,
-	.pixel.size_bin	 = 0x3f3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_20_icon_20_dongyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe033ab,
-	.pixel.size_bin	 = 0x31f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_21_icon_21_shachenbaobmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe036ca,
-	.pixel.size_bin	 = 0x28d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_22_icon_22_xiaodaozhongyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe03957,
-	.pixel.size_bin	 = 0x2e5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_23_icon_23_zhongdaodayubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe03c3c,
-	.pixel.size_bin	 = 0x310,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_24_icon_24_dadaobaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe03f4c,
-	.pixel.size_bin	 = 0x354,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_25_icon_25_baoyudaodavaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe042a0,
-	.pixel.size_bin	 = 0x417,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_26_icon_26_dabaoyudaotedabaoyubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe046b7,
-	.pixel.size_bin	 = 0x462,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_27_icon_27_xiaodaozhongxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe04b19,
-	.pixel.size_bin	 = 0x321,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_28_icon_28_zhongdaodaxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe04e3a,
-	.pixel.size_bin	 = 0x343,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_29_icon_29_dadaobaoxuebmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe0517d,
-	.pixel.size_bin	 = 0x3b4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_30_icon_30_fuchenbmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe05531,
-	.pixel.size_bin	 = 0x1f3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_31_icon_31_yangchenbmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe05724,
-	.pixel.size_bin	 = 0x2ef,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_32_icon_32_qiangshachenbaobmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe05a13,
-	.pixel.size_bin	 = 0x36d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_33_icon_33_maibmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe05d80,
-	.pixel.size_bin	 = 0x369,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_icon_weather_34_icon_34_wubmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xe060e9,
-	.pixel.size_bin	 = 0x255,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_m_01_mpng = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xfc,
-	.pixel.data_bin	 = 0xe0633e,
-	.pixel.size_bin	 = 0x1027,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_01_00bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07365,
-	.pixel.size_bin	 = 0x49,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_02_01bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe073ae,
-	.pixel.size_bin	 = 0x57,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_03_02bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07405,
-	.pixel.size_bin	 = 0x74,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_04_03bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07479,
-	.pixel.size_bin	 = 0xfc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_05_04bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07575,
-	.pixel.size_bin	 = 0x44,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_06_05bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe075b9,
-	.pixel.size_bin	 = 0xe8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_07_06bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe076a1,
-	.pixel.size_bin	 = 0x103,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_08_07bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe077a4,
-	.pixel.size_bin	 = 0xb5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_09_08bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07859,
-	.pixel.size_bin	 = 0xdc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_10_09bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07935,
-	.pixel.size_bin	 = 0xe6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_11_10bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07a1b,
-	.pixel.size_bin	 = 0x71,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_12_11bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07a8c,
-	.pixel.size_bin	 = 0xfc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_13_12bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07b88,
-	.pixel.size_bin	 = 0xf2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_batt_14_13bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07c7a,
-	.pixel.size_bin	 = 0x65,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_01_00bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07cdf,
-	.pixel.size_bin	 = 0x4a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_02_01bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07d29,
-	.pixel.size_bin	 = 0x58,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_03_02bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07d81,
-	.pixel.size_bin	 = 0x73,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_04_03bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07df4,
-	.pixel.size_bin	 = 0xfd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_05_04bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07ef1,
-	.pixel.size_bin	 = 0x45,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_06_05bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe07f36,
-	.pixel.size_bin	 = 0xe8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_07_06bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0801e,
-	.pixel.size_bin	 = 0x103,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_08_07bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe08121,
-	.pixel.size_bin	 = 0xb5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_09_08bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe081d6,
-	.pixel.size_bin	 = 0xdc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_10_09bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe082b2,
-	.pixel.size_bin	 = 0xe5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_11_10bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe08397,
-	.pixel.size_bin	 = 0x71,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_12_11bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe08408,
-	.pixel.size_bin	 = 0xfd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_13_12bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe08505,
-	.pixel.size_bin	 = 0xf2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_date_14_13bmp = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe085f7,
-	.pixel.size_bin	 = 0x66,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_01_00png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0865d,
-	.pixel.size_bin	 = 0x485,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_02_01png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe08ae2,
-	.pixel.size_bin	 = 0x42f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_03_02png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe08f11,
-	.pixel.size_bin	 = 0x5b6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_04_03png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe094c7,
-	.pixel.size_bin	 = 0x5dd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_05_04png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe09aa4,
-	.pixel.size_bin	 = 0x4d6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_06_05png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe09f7a,
-	.pixel.size_bin	 = 0x59e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_07_06png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0a518,
-	.pixel.size_bin	 = 0x578,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_08_07png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0aa90,
-	.pixel.size_bin	 = 0x567,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_09_08png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0aff7,
-	.pixel.size_bin	 = 0x5a0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_10_09png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0b597,
-	.pixel.size_bin	 = 0x5cf,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_11_10png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0bb66,
-	.pixel.size_bin	 = 0x51b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_12_11png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0c081,
-	.pixel.size_bin	 = 0x5f1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_13_12png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0c672,
-	.pixel.size_bin	 = 0x5bf,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_hour_min_14_13png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x2d,
-	.pixel.data_bin	 = 0xe0cc31,
-	.pixel.size_bin	 = 0x439,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0d06a,
-	.pixel.size_bin	 = 0x424,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_02_01png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0d48e,
-	.pixel.size_bin	 = 0x42a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_03_02png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0d8b8,
-	.pixel.size_bin	 = 0x461,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_04_03png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0dd19,
-	.pixel.size_bin	 = 0x4af,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_05_04png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0e1c8,
-	.pixel.size_bin	 = 0x41f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_06_05png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0e5e7,
-	.pixel.size_bin	 = 0x4a1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_07_06png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0ea88,
-	.pixel.size_bin	 = 0x4b1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_08_07png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0ef39,
-	.pixel.size_bin	 = 0x479,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_09_08png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0f3b2,
-	.pixel.size_bin	 = 0x4a6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_10_09png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0f858,
-	.pixel.size_bin	 = 0x4a1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_11_10png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe0fcf9,
-	.pixel.size_bin	 = 0x45f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_12_11png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe10158,
-	.pixel.size_bin	 = 0x4b1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_13_12png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe10609,
-	.pixel.size_bin	 = 0x4a8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_14_13png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe10ab1,
-	.pixel.size_bin	 = 0x440,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xe10ef1,
-	.pixel.size_bin	 = 0xacef,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_preview_01_1jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xe1bbe0,
-	.pixel.size_bin	 = 0xa093,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_s_01_spng = {
-	.pixel.width	 = 0x20,
-	.pixel.height	 = 0xfb,
-	.pixel.data_bin	 = 0xe25c73,
-	.pixel.size_bin	 = 0x97b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_batt_01_00bmp = {
-	.pixel.width	 = 0x14,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xe265ee,
-	.pixel.size_bin	 = 0x15b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_kcal_01_00png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xe26749,
-	.pixel.size_bin	 = 0x4ef,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_kcal_02_01png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xe26c38,
-	.pixel.size_bin	 = 0x547,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_step_01_00png = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xe2717f,
-	.pixel.size_bin	 = 0x4e5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_step_02_01png = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0xe,
-	.pixel.data_bin	 = 0xe27664,
-	.pixel.size_bin	 = 0x547,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_weather_01_00bmp = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xe27bab,
-	.pixel.size_bin	 = 0x1a8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10599001_unit_char_weather_02_01bmp = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xe27d53,
-	.pixel.size_bin	 = 0x111,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_bg_01_00bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xe27e64,
-	.pixel.size_bin	 = 0x11186,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_bg_01_00jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xe38fea,
-	.pixel.size_bin	 = 0xdf40,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_01_00bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe46f2a,
-	.pixel.size_bin	 = 0x26c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_02_01bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe47196,
-	.pixel.size_bin	 = 0x287,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_03_02bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4741d,
-	.pixel.size_bin	 = 0x2ae,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_04_03bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe476cb,
-	.pixel.size_bin	 = 0x337,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_05_04bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe47a02,
-	.pixel.size_bin	 = 0x31f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_06_05bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe47d21,
-	.pixel.size_bin	 = 0x32e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_07_06bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4804f,
-	.pixel.size_bin	 = 0x320,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_08_07bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4836f,
-	.pixel.size_bin	 = 0x34e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_09_08bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe486bd,
-	.pixel.size_bin	 = 0x366,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_10_09bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe48a23,
-	.pixel.size_bin	 = 0x2b9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_11_10bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe48cdc,
-	.pixel.size_bin	 = 0x2e2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_12_11bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe48fbe,
-	.pixel.size_bin	 = 0x304,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_13_12bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe492c2,
-	.pixel.size_bin	 = 0x37e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_14_13bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe49640,
-	.pixel.size_bin	 = 0x2ea,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_15_14bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4992a,
-	.pixel.size_bin	 = 0x414,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_16_15bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe49d3e,
-	.pixel.size_bin	 = 0x391,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_17_16bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4a0cf,
-	.pixel.size_bin	 = 0x3fb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_18_17bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4a4ca,
-	.pixel.size_bin	 = 0x328,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_19_18bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4a7f2,
-	.pixel.size_bin	 = 0x2c5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_20_19bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4aab7,
-	.pixel.size_bin	 = 0x3a8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_21_20bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4ae5f,
-	.pixel.size_bin	 = 0x32f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_22_21bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4b18e,
-	.pixel.size_bin	 = 0x356,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_23_22bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4b4e4,
-	.pixel.size_bin	 = 0x400,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_mon_24_23bmp = {
-	.pixel.width	 = 0x44,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4b8e4,
-	.pixel.size_bin	 = 0x348,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_01_00bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4bc2c,
-	.pixel.size_bin	 = 0x28f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_02_01bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4bebb,
-	.pixel.size_bin	 = 0x246,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_03_02bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4c101,
-	.pixel.size_bin	 = 0x263,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_04_03bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4c364,
-	.pixel.size_bin	 = 0x284,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_05_04bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4c5e8,
-	.pixel.size_bin	 = 0x2f4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_06_05bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4c8dc,
-	.pixel.size_bin	 = 0x2d1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_07_06bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4cbad,
-	.pixel.size_bin	 = 0x2f5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_08_07bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4cea2,
-	.pixel.size_bin	 = 0x2e1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_09_08bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4d183,
-	.pixel.size_bin	 = 0x3cf,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_10_09bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4d552,
-	.pixel.size_bin	 = 0x1d1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_11_10bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4d723,
-	.pixel.size_bin	 = 0x375,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_12_11bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4da98,
-	.pixel.size_bin	 = 0x1da,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_13_12bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4dc72,
-	.pixel.size_bin	 = 0x202,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_char_week_14_13bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xe4de74,
-	.pixel.size_bin	 = 0x2d3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_h_01_00png = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0xc0,
-	.pixel.data_bin	 = 0xe4e147,
-	.pixel.size_bin	 = 0x1ee9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_01_00png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe50030,
-	.pixel.size_bin	 = 0x408d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_02_01png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe540bd,
-	.pixel.size_bin	 = 0x4268,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_03_02png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe58325,
-	.pixel.size_bin	 = 0x42f7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_04_03png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe5c61c,
-	.pixel.size_bin	 = 0x43f1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_05_04png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe60a0d,
-	.pixel.size_bin	 = 0x42cc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_06_05png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe64cd9,
-	.pixel.size_bin	 = 0x4078,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_07_06png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe68d51,
-	.pixel.size_bin	 = 0x4277,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_08_07png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe6cfc8,
-	.pixel.size_bin	 = 0x42dd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_09_08png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe712a5,
-	.pixel.size_bin	 = 0x441e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_10_09png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe756c3,
-	.pixel.size_bin	 = 0x436f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_batt_percent_11_10png = {
-	.pixel.width	 = 0x7e,
-	.pixel.height	 = 0x7d,
-	.pixel.data_bin	 = 0xe79a32,
-	.pixel.size_bin	 = 0x3dec,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_01_00png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe7d81e,
-	.pixel.size_bin	 = 0xf7c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_02_01png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe7e79a,
-	.pixel.size_bin	 = 0x1053,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_03_02png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe7f7ed,
-	.pixel.size_bin	 = 0x10d9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_04_03png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe808c6,
-	.pixel.size_bin	 = 0x1132,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_05_04png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe819f8,
-	.pixel.size_bin	 = 0x11cc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_06_05png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe82bc4,
-	.pixel.size_bin	 = 0x11ed,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_heart_percent_07_06png = {
-	.pixel.width	 = 0x54,
-	.pixel.height	 = 0x51,
-	.pixel.data_bin	 = 0xe83db1,
-	.pixel.size_bin	 = 0x11ed,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_01_00png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe84f9e,
-	.pixel.size_bin	 = 0x262e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_02_01png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe875cc,
-	.pixel.size_bin	 = 0x2bce,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_03_02png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe8a19a,
-	.pixel.size_bin	 = 0x2c24,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_04_03png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe8cdbe,
-	.pixel.size_bin	 = 0x2efd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_05_04png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe8fcbb,
-	.pixel.size_bin	 = 0x3049,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_06_05png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe92d04,
-	.pixel.size_bin	 = 0x2e53,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_07_06png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe95b57,
-	.pixel.size_bin	 = 0x3263,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_08_07png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe98dba,
-	.pixel.size_bin	 = 0x322e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_09_08png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe9bfe8,
-	.pixel.size_bin	 = 0x3383,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_10_9png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xe9f36b,
-	.pixel.size_bin	 = 0x353b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_icon_percent_step_11_10png = {
-	.pixel.width	 = 0x92,
-	.pixel.height	 = 0x91,
-	.pixel.data_bin	 = 0xea28a6,
-	.pixel.size_bin	 = 0x31c3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_m_01_00png = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x100,
-	.pixel.data_bin	 = 0xea5a69,
-	.pixel.size_bin	 = 0x2461,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_01_00png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea7eca,
-	.pixel.size_bin	 = 0x426,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_02_01png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea82f0,
-	.pixel.size_bin	 = 0x407,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_03_02png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea86f7,
-	.pixel.size_bin	 = 0x48d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_04_03png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea8b84,
-	.pixel.size_bin	 = 0x4c0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_05_04png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea9044,
-	.pixel.size_bin	 = 0x436,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_06_05png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea947a,
-	.pixel.size_bin	 = 0x4d7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_07_06png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea9951,
-	.pixel.size_bin	 = 0x4f9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_08_07png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xea9e4a,
-	.pixel.size_bin	 = 0x4a6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_09_08png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaa2f0,
-	.pixel.size_bin	 = 0x4e7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_10_09png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaa7d7,
-	.pixel.size_bin	 = 0x4e3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_11_10png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaacba,
-	.pixel.size_bin	 = 0x4b9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_12_11png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeab173,
-	.pixel.size_bin	 = 0x4fe,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_13_12png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeab671,
-	.pixel.size_bin	 = 0x4e9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_date_14_13png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeabb5a,
-	.pixel.size_bin	 = 0x438,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_01_00png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeabf92,
-	.pixel.size_bin	 = 0x41e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_02_01png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeac3b0,
-	.pixel.size_bin	 = 0x406,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_03_02png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeac7b6,
-	.pixel.size_bin	 = 0x47f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_04_03png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeacc35,
-	.pixel.size_bin	 = 0x495,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_05_04png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xead0ca,
-	.pixel.size_bin	 = 0x42c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_06_05png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xead4f6,
-	.pixel.size_bin	 = 0x4aa,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_07_06png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xead9a0,
-	.pixel.size_bin	 = 0x4ce,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_08_07png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeade6e,
-	.pixel.size_bin	 = 0x491,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_09_08png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeae2ff,
-	.pixel.size_bin	 = 0x4c1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_10_09png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeae7c0,
-	.pixel.size_bin	 = 0x4a7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_11_10png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaec67,
-	.pixel.size_bin	 = 0x497,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_12_11png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaf0fe,
-	.pixel.size_bin	 = 0x4c6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_13_12png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeaf5c4,
-	.pixel.size_bin	 = 0x4b1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_step_bpm_batt_14_13png = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xeafa75,
-	.pixel.size_bin	 = 0x42a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_01_00png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeafe9f,
-	.pixel.size_bin	 = 0x43d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_02_01png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb02dc,
-	.pixel.size_bin	 = 0x438,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_03_02png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb0714,
-	.pixel.size_bin	 = 0x510,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_04_03png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb0c24,
-	.pixel.size_bin	 = 0x58f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_05_04png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb11b3,
-	.pixel.size_bin	 = 0x456,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_06_05png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb1609,
-	.pixel.size_bin	 = 0x59c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_07_06png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb1ba5,
-	.pixel.size_bin	 = 0x608,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_08_07png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb21ad,
-	.pixel.size_bin	 = 0x50e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_09_08png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb26bb,
-	.pixel.size_bin	 = 0x5d5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_10_09png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb2c90,
-	.pixel.size_bin	 = 0x5f7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_11_10png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb3287,
-	.pixel.size_bin	 = 0x551,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_12_11png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb37d8,
-	.pixel.size_bin	 = 0x619,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_13_12png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb3df1,
-	.pixel.size_bin	 = 0x5ff,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_num_time_14_13png = {
-	.pixel.width	 = 0x1c,
-	.pixel.height	 = 0x29,
-	.pixel.data_bin	 = 0xeb43f0,
-	.pixel.size_bin	 = 0x44f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_perview_01_00bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xeb483f,
-	.pixel.size_bin	 = 0xdee4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_perview_01_00jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xec2723,
-	.pixel.size_bin	 = 0xa6be,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_s_01_00png = {
-	.pixel.width	 = 0x42,
-	.pixel.height	 = 0xfe,
-	.pixel.data_bin	 = 0xeccde1,
-	.pixel.size_bin	 = 0x132a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10600001_unit_batt_01_00png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xece10b,
-	.pixel.size_bin	 = 0x4f3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_bg_01_00bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xece5fe,
-	.pixel.size_bin	 = 0x167c6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_bg_01_00jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xee4dc4,
-	.pixel.size_bin	 = 0x1218e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_01_00bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef6f52,
-	.pixel.size_bin	 = 0x25e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_02_01bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef71b0,
-	.pixel.size_bin	 = 0x26e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_03_02bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef741e,
-	.pixel.size_bin	 = 0x28e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_04_03bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef76ac,
-	.pixel.size_bin	 = 0x309,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_05_04bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef79b5,
-	.pixel.size_bin	 = 0x2fe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_06_05bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef7cb3,
-	.pixel.size_bin	 = 0x330,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_07_06bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef7fe3,
-	.pixel.size_bin	 = 0x2fd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_08_07bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef82e0,
-	.pixel.size_bin	 = 0x328,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_09_08bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef8608,
-	.pixel.size_bin	 = 0x32d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_10_09bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef8935,
-	.pixel.size_bin	 = 0x2ba,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_11_10bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef8bef,
-	.pixel.size_bin	 = 0x2ca,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_12_11bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef8eb9,
-	.pixel.size_bin	 = 0x2e5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_13_12bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef919e,
-	.pixel.size_bin	 = 0x35c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_14_13bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef94fa,
-	.pixel.size_bin	 = 0x2c3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_15_14bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef97bd,
-	.pixel.size_bin	 = 0x412,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_16_15bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef9bcf,
-	.pixel.size_bin	 = 0x38e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_17_16bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xef9f5d,
-	.pixel.size_bin	 = 0x3fe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_18_17bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefa35b,
-	.pixel.size_bin	 = 0x2e8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_19_18bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefa643,
-	.pixel.size_bin	 = 0x268,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_20_19bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefa8ab,
-	.pixel.size_bin	 = 0x397,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_21_20bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefac42,
-	.pixel.size_bin	 = 0x30a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_22_21bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefaf4c,
-	.pixel.size_bin	 = 0x32c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_23_22bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefb278,
-	.pixel.size_bin	 = 0x3dd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_mon_24_23bmp = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefb655,
-	.pixel.size_bin	 = 0x32e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_01_00bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefb983,
-	.pixel.size_bin	 = 0x1fa,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_02_01bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefbb7d,
-	.pixel.size_bin	 = 0x1c4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_03_02bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefbd41,
-	.pixel.size_bin	 = 0x1da,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_04_03bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefbf1b,
-	.pixel.size_bin	 = 0x1f0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_05_04bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefc10b,
-	.pixel.size_bin	 = 0x25a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_06_05bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefc365,
-	.pixel.size_bin	 = 0x26a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_07_06bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefc5cf,
-	.pixel.size_bin	 = 0x292,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_08_07bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefc861,
-	.pixel.size_bin	 = 0x26f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_09_08bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefcad0,
-	.pixel.size_bin	 = 0x318,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_10_09bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefcde8,
-	.pixel.size_bin	 = 0x152,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_11_10bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefcf3a,
-	.pixel.size_bin	 = 0x2c3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_12_11bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefd1fd,
-	.pixel.size_bin	 = 0x16a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_13_12bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefd367,
-	.pixel.size_bin	 = 0x173,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_char_week_14_13bmp = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xefd4da,
-	.pixel.size_bin	 = 0x240,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_h_01_00png = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xab,
-	.pixel.data_bin	 = 0xefd71a,
-	.pixel.size_bin	 = 0x6e7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_01_00png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xefde01,
-	.pixel.size_bin	 = 0xffb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_02_01png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xefedfc,
-	.pixel.size_bin	 = 0x10c0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_03_02png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xeffebc,
-	.pixel.size_bin	 = 0xb9c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_04_03png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf00a58,
-	.pixel.size_bin	 = 0xfc3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_05_04png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf01a1b,
-	.pixel.size_bin	 = 0x1116,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_06_05png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf02b31,
-	.pixel.size_bin	 = 0xc21,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_07_06png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf03752,
-	.pixel.size_bin	 = 0x1061,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_08_07png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf047b3,
-	.pixel.size_bin	 = 0x10b8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_09_08png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf0586b,
-	.pixel.size_bin	 = 0xbe7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_10_09png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf06452,
-	.pixel.size_bin	 = 0x1153,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_batt_percent_11_10png = {
-	.pixel.width	 = 0x84,
-	.pixel.height	 = 0x7e,
-	.pixel.data_bin	 = 0xf075a5,
-	.pixel.size_bin	 = 0x1147,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_01_00png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf086ec,
-	.pixel.size_bin	 = 0x135f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_02_01png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf09a4b,
-	.pixel.size_bin	 = 0x14a0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_03_02png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf0aeeb,
-	.pixel.size_bin	 = 0x156c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_04_03png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf0c457,
-	.pixel.size_bin	 = 0x16a6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_05_04png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf0dafd,
-	.pixel.size_bin	 = 0x1764,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_06_05png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf0f261,
-	.pixel.size_bin	 = 0x186d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_07_06png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf10ace,
-	.pixel.size_bin	 = 0x19ad,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_08_07png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf1247b,
-	.pixel.size_bin	 = 0x1a92,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_09_08png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf13f0d,
-	.pixel.size_bin	 = 0x1ba8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_step_percent_10_09png = {
-	.pixel.width	 = 0x6e,
-	.pixel.height	 = 0x6e,
-	.pixel.data_bin	 = 0xf15ab5,
-	.pixel.size_bin	 = 0x1c49,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_01_00png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf176fe,
-	.pixel.size_bin	 = 0xf5f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_02_01png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1865d,
-	.pixel.size_bin	 = 0xfb3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_03_02png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf19610,
-	.pixel.size_bin	 = 0xf95,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_04_03png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1a5a5,
-	.pixel.size_bin	 = 0x10e0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_05_04png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1b685,
-	.pixel.size_bin	 = 0xfaa,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_06_05png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1c62f,
-	.pixel.size_bin	 = 0xfd4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_07_06png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1d603,
-	.pixel.size_bin	 = 0x102c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_08_07png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1e62f,
-	.pixel.size_bin	 = 0xf10,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_09_08png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf1f53f,
-	.pixel.size_bin	 = 0xf60,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_10_09png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2049f,
-	.pixel.size_bin	 = 0xf75,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_11_10png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf21414,
-	.pixel.size_bin	 = 0xfce,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_12_11png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf223e2,
-	.pixel.size_bin	 = 0x10e1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_13_12png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf234c3,
-	.pixel.size_bin	 = 0x1209,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_14_13png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf246cc,
-	.pixel.size_bin	 = 0x110a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_15_14png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf257d6,
-	.pixel.size_bin	 = 0xf65,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_16_15png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2673b,
-	.pixel.size_bin	 = 0xf93,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_17_16png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf276ce,
-	.pixel.size_bin	 = 0xfe7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_18_17png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf286b5,
-	.pixel.size_bin	 = 0x1043,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_19_18png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf296f8,
-	.pixel.size_bin	 = 0x11da,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_20_19png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2a8d2,
-	.pixel.size_bin	 = 0xfa7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_21_20png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2b879,
-	.pixel.size_bin	 = 0xe0e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_22_21png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2c687,
-	.pixel.size_bin	 = 0xf8c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_23_22png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2d613,
-	.pixel.size_bin	 = 0xfbd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_24_23png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2e5d0,
-	.pixel.size_bin	 = 0xff9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_25_24png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf2f5c9,
-	.pixel.size_bin	 = 0x111b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_26_25png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf306e4,
-	.pixel.size_bin	 = 0x114f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_27_26png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf31833,
-	.pixel.size_bin	 = 0xfa1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_28_27png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf327d4,
-	.pixel.size_bin	 = 0x1037,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_29_28png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf3380b,
-	.pixel.size_bin	 = 0x10aa,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_30_29png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf348b5,
-	.pixel.size_bin	 = 0xd5a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_31_30png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf3560f,
-	.pixel.size_bin	 = 0xee4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_32_31png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf364f3,
-	.pixel.size_bin	 = 0xfad,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_33_32png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf374a0,
-	.pixel.size_bin	 = 0x78d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_icon_weather_34_33png = {
-	.pixel.width	 = 0x2a,
-	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0xf37c2d,
-	.pixel.size_bin	 = 0xd59,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_m_01_00png = {
-	.pixel.width	 = 0x30,
-	.pixel.height	 = 0xc3,
-	.pixel.data_bin	 = 0xf38986,
-	.pixel.size_bin	 = 0x770,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_01_00png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf390f6,
-	.pixel.size_bin	 = 0x415,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_02_01png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3950b,
-	.pixel.size_bin	 = 0x40d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_03_02png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf39918,
-	.pixel.size_bin	 = 0x491,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_04_03png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf39da9,
-	.pixel.size_bin	 = 0x488,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_05_04png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3a231,
-	.pixel.size_bin	 = 0x43c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_06_05png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3a66d,
-	.pixel.size_bin	 = 0x4b0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_07_06png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3ab1d,
-	.pixel.size_bin	 = 0x4c8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_08_07png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3afe5,
-	.pixel.size_bin	 = 0x497,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_09_08png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3b47c,
-	.pixel.size_bin	 = 0x4b3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_10_09png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3b92f,
-	.pixel.size_bin	 = 0x4b9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_11_10png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3bde8,
-	.pixel.size_bin	 = 0x482,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_12_11png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3c26a,
-	.pixel.size_bin	 = 0x4c4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_13_12png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3c72e,
-	.pixel.size_bin	 = 0x4c4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_batt_step_14_13png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf3cbf2,
-	.pixel.size_bin	 = 0x429,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3d01b,
-	.pixel.size_bin	 = 0x424,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_02_01png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3d43f,
-	.pixel.size_bin	 = 0x42a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_03_02png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3d869,
-	.pixel.size_bin	 = 0x47b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_04_03png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3dce4,
-	.pixel.size_bin	 = 0x4ce,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_05_04png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3e1b2,
-	.pixel.size_bin	 = 0x430,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_06_05png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3e5e2,
-	.pixel.size_bin	 = 0x4cf,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_07_06png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3eab1,
-	.pixel.size_bin	 = 0x4c1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_08_07png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3ef72,
-	.pixel.size_bin	 = 0x4ab,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_09_08png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3f41d,
-	.pixel.size_bin	 = 0x4cb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_10_09png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3f8e8,
-	.pixel.size_bin	 = 0x4df,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_11_10png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf3fdc7,
-	.pixel.size_bin	 = 0x487,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_12_11png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf4024e,
-	.pixel.size_bin	 = 0x4d7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_13_12png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf40725,
-	.pixel.size_bin	 = 0x4c5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_kcal_dist_14_13png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf40bea,
-	.pixel.size_bin	 = 0x437,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf41021,
-	.pixel.size_bin	 = 0x424,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_02_01png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf41445,
-	.pixel.size_bin	 = 0x42a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_03_02png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf4186f,
-	.pixel.size_bin	 = 0x47b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_04_03png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf41cea,
-	.pixel.size_bin	 = 0x4ce,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_05_04png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf421b8,
-	.pixel.size_bin	 = 0x430,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_06_05png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf425e8,
-	.pixel.size_bin	 = 0x4cf,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_07_06png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf42ab7,
-	.pixel.size_bin	 = 0x4c1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_08_07png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf42f78,
-	.pixel.size_bin	 = 0x4ab,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_09_08png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf43423,
-	.pixel.size_bin	 = 0x4cb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_10_09png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf438ee,
-	.pixel.size_bin	 = 0x4df,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_11_10png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf43dcd,
-	.pixel.size_bin	 = 0x487,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_12_11png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf44254,
-	.pixel.size_bin	 = 0x4d7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_13_12png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf4472b,
-	.pixel.size_bin	 = 0x4c5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_temp_date_14_13png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xf44bf0,
-	.pixel.size_bin	 = 0x437,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_01_00png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf45027,
-	.pixel.size_bin	 = 0x41c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_02_01png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf45443,
-	.pixel.size_bin	 = 0x46b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_03_02png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf458ae,
-	.pixel.size_bin	 = 0x512,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_04_03png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf45dc0,
-	.pixel.size_bin	 = 0x58f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_05_04png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf4634f,
-	.pixel.size_bin	 = 0x461,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_06_05png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf467b0,
-	.pixel.size_bin	 = 0x577,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_07_06png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf46d27,
-	.pixel.size_bin	 = 0x5aa,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_08_07png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf472d1,
-	.pixel.size_bin	 = 0x548,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_09_08png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf47819,
-	.pixel.size_bin	 = 0x591,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_10_09png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf47daa,
-	.pixel.size_bin	 = 0x5ac,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_11_10png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf48356,
-	.pixel.size_bin	 = 0x4fd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_12_11png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf48853,
-	.pixel.size_bin	 = 0x5c6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_13_12png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf48e19,
-	.pixel.size_bin	 = 0x58d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_num_time_14_13png = {
-	.pixel.width	 = 0x1e,
-	.pixel.height	 = 0x25,
-	.pixel.data_bin	 = 0xf493a6,
-	.pixel.size_bin	 = 0x48b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_perview_01_00bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xf49831,
-	.pixel.size_bin	 = 0xe494,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_perview_01_00jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xf57cc5,
-	.pixel.size_bin	 = 0xafac,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_s_01_00png = {
-	.pixel.width	 = 0x48,
-	.pixel.height	 = 0xf7,
-	.pixel.data_bin	 = 0xf62c71,
-	.pixel.size_bin	 = 0x1ce3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_unit_batt_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf64954,
-	.pixel.size_bin	 = 0x519,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_unit_temp_01_00png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf64e6d,
-	.pixel.size_bin	 = 0x4f5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10601001_unit_temp_02_01png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0xf65362,
-	.pixel.size_bin	 = 0x4a9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_bg_01_00bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xf6580b,
-	.pixel.size_bin	 = 0x29f4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_bg_01_00jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xf681ff,
-	.pixel.size_bin	 = 0x5fc7,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_01_00bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6e1c6,
-	.pixel.size_bin	 = 0x178,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_02_01bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6e33e,
-	.pixel.size_bin	 = 0x19d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_03_02bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6e4db,
-	.pixel.size_bin	 = 0x1a3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_04_03bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6e67e,
-	.pixel.size_bin	 = 0x20d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_05_04bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6e88b,
-	.pixel.size_bin	 = 0x1f5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_06_05bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6ea80,
-	.pixel.size_bin	 = 0x266,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_07_06bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6ece6,
-	.pixel.size_bin	 = 0x21a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_08_07bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6ef00,
-	.pixel.size_bin	 = 0x272,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_09_08bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6f172,
-	.pixel.size_bin	 = 0x240,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_10_09bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6f3b2,
-	.pixel.size_bin	 = 0x197,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_11_10bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6f549,
-	.pixel.size_bin	 = 0x1f1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_12_11bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6f73a,
-	.pixel.size_bin	 = 0x212,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_13_12bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6f94c,
-	.pixel.size_bin	 = 0x266,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_14_13bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6fbb2,
-	.pixel.size_bin	 = 0x1b6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_15_14bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf6fd68,
-	.pixel.size_bin	 = 0x2ed,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_16_15bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf70055,
-	.pixel.size_bin	 = 0x241,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_17_16bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf70296,
-	.pixel.size_bin	 = 0x2f9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_18_17bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf7058f,
-	.pixel.size_bin	 = 0x1ce,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_19_18bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf7075d,
-	.pixel.size_bin	 = 0x157,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_20_19bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf708b4,
-	.pixel.size_bin	 = 0x22e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_21_20bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf70ae2,
-	.pixel.size_bin	 = 0x1e0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_22_21bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf70cc2,
-	.pixel.size_bin	 = 0x19d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_23_22bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf70e5f,
-	.pixel.size_bin	 = 0x2af,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_month_24_23bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0xf7110e,
-	.pixel.size_bin	 = 0x1aa,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_01_00bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x23,
-	.pixel.data_bin	 = 0xf712b8,
-	.pixel.size_bin	 = 0x272,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_heart_01_00bmp = {
-	.pixel.width	 = 0x3a,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xf7152a,
-	.pixel.size_bin	 = 0x2d8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_heart_02_01bmp = {
-	.pixel.width	 = 0x3a,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0xf71802,
-	.pixel.size_bin	 = 0x21b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_kcal_01_00bmp = {
-	.pixel.width	 = 0x30,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf71a1d,
-	.pixel.size_bin	 = 0x1d4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_kcal_02_01bmp = {
-	.pixel.width	 = 0x30,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf71bf1,
-	.pixel.size_bin	 = 0x241,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_step_01_00bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf71e32,
-	.pixel.size_bin	 = 0x182,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_step_02_01bmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf71fb4,
-	.pixel.size_bin	 = 0x23a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_weather_01_00bmp = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0xf721ee,
-	.pixel.size_bin	 = 0x28a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_unit_weather_02_01bmp = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0xf72478,
-	.pixel.size_bin	 = 0x1ad,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_01_00bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf72625,
-	.pixel.size_bin	 = 0x176,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_02_01bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf7279b,
-	.pixel.size_bin	 = 0x13a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_03_02bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf728d5,
-	.pixel.size_bin	 = 0x171,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_04_03bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf72a46,
-	.pixel.size_bin	 = 0x17c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_05_04bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf72bc2,
-	.pixel.size_bin	 = 0x1e2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_06_05bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf72da4,
-	.pixel.size_bin	 = 0x1f6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_07_06bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf72f9a,
-	.pixel.size_bin	 = 0x22b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_08_07bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf731c5,
-	.pixel.size_bin	 = 0x1b1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_09_08bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73376,
-	.pixel.size_bin	 = 0x20a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_10_09bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73580,
-	.pixel.size_bin	 = 0xf3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_11_10bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73673,
-	.pixel.size_bin	 = 0x21e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_12_11bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73891,
-	.pixel.size_bin	 = 0xd7,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_13_12bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73968,
-	.pixel.size_bin	 = 0x117,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_char_week_14_13bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0xf73a7f,
-	.pixel.size_bin	 = 0x1d3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_01_00bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf73c52,
-	.pixel.size_bin	 = 0x4bc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_02_01bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf7410e,
-	.pixel.size_bin	 = 0x54a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_03_02bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf74658,
-	.pixel.size_bin	 = 0x58e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_04_03bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf74be6,
-	.pixel.size_bin	 = 0x5dc,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_05_04bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf751c2,
-	.pixel.size_bin	 = 0x62c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_06_05bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf757ee,
-	.pixel.size_bin	 = 0x672,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_07_06bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf75e60,
-	.pixel.size_bin	 = 0x6a9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_08_07bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf76509,
-	.pixel.size_bin	 = 0x6cd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_09_08bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf76bd6,
-	.pixel.size_bin	 = 0x703,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_10_09bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf772d9,
-	.pixel.size_bin	 = 0x72d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_batt_11_10bmp = {
-	.pixel.width	 = 0xd8,
-	.pixel.height	 = 0x73,
-	.pixel.data_bin	 = 0xf77a06,
-	.pixel.size_bin	 = 0x712,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_call_01_00bmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xf78118,
-	.pixel.size_bin	 = 0x28f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_clock_01_00bmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xf783a7,
-	.pixel.size_bin	 = 0x2aa,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_message_01_00bmp = {
-	.pixel.width	 = 0x22,
-	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0xf78651,
-	.pixel.size_bin	 = 0x23f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_01_icon_01_qingpng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf78890,
-	.pixel.size_bin	 = 0xa60,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_02_icon_02_duoyunpng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf792f0,
-	.pixel.size_bin	 = 0xb1d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_03_icon_03_yingpng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf79e0d,
-	.pixel.size_bin	 = 0xa87,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_04_icon_04_zhenyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7a894,
-	.pixel.size_bin	 = 0xc70,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_05_icon_05_leizhenyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7b504,
-	.pixel.size_bin	 = 0xad9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_06_icon_06_leizhenyubanbingbaopng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7bfdd,
-	.pixel.size_bin	 = 0xaf7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_07_icon_07_yujiaxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7cad4,
-	.pixel.size_bin	 = 0xb7d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_08_icon_08_xiaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7d651,
-	.pixel.size_bin	 = 0x997,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_09_icon_09_zhongyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7dfe8,
-	.pixel.size_bin	 = 0x9f0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_10_icon_10_dayupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7e9d8,
-	.pixel.size_bin	 = 0xa60,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_11_icon_11_baoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7f438,
-	.pixel.size_bin	 = 0xa41,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_12_icon_12_dabaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf7fe79,
-	.pixel.size_bin	 = 0xc28,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_13_icon_13_tedabaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf80aa1,
-	.pixel.size_bin	 = 0xd61,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_14_icon_14_zhenxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf81802,
-	.pixel.size_bin	 = 0xcc1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_15_icon_15_xiaoxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf824c3,
-	.pixel.size_bin	 = 0x9b9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_16_icon_16_zhongxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf82e7c,
-	.pixel.size_bin	 = 0xa7c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_17_icon_17_daxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf838f8,
-	.pixel.size_bin	 = 0xadc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_18_icon_18_baoxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf843d4,
-	.pixel.size_bin	 = 0xb4b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_19_icon_19_wupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf84f1f,
-	.pixel.size_bin	 = 0xd77,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_20_icon_20_dongyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf85c96,
-	.pixel.size_bin	 = 0xa3e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_21_icon_21_shachenbaopng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf866d4,
-	.pixel.size_bin	 = 0x7e1,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_22_icon_22_xiaodaozhongyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf86eb5,
-	.pixel.size_bin	 = 0xa2f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_23_icon_23_zhongdaodayupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf878e4,
-	.pixel.size_bin	 = 0xa75,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_24_icon_24_dadaobaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf88359,
-	.pixel.size_bin	 = 0xaf0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_25_icon_25_baoyudaodavaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf88e49,
-	.pixel.size_bin	 = 0xc43,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_26_icon_26_dabaoyudaotedabaoyupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf89a8c,
-	.pixel.size_bin	 = 0xcec,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_27_icon_27_xiaodaozhongxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8a778,
-	.pixel.size_bin	 = 0xa51,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_28_icon_28_zhongdaodaxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8b1c9,
-	.pixel.size_bin	 = 0xae7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_29_icon_29_dadaobaoxuepng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8bcb0,
-	.pixel.size_bin	 = 0xc1b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_30_icon_30_fuchenpng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8c8cb,
-	.pixel.size_bin	 = 0x6eb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_31_icon_31_yangchenpng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8cfb6,
-	.pixel.size_bin	 = 0x92c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_32_icon_32_qiangshachenbaopng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8d8e2,
-	.pixel.size_bin	 = 0xa5a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_33_icon_33_maipng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8e33c,
-	.pixel.size_bin	 = 0xdc5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_icon_weather_34_icon_34_wupng = {
-	.pixel.width	 = 0x40,
-	.pixel.height	 = 0x3f,
-	.pixel.data_bin	 = 0xf8f101,
-	.pixel.size_bin	 = 0x769,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_01_00bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8f86a,
-	.pixel.size_bin	 = 0x47,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_02_01bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8f8b1,
-	.pixel.size_bin	 = 0x57,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_03_02bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8f908,
-	.pixel.size_bin	 = 0xc5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_04_03bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8f9cd,
-	.pixel.size_bin	 = 0x9f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_05_04bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fa6c,
-	.pixel.size_bin	 = 0x56,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_06_05bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fac2,
-	.pixel.size_bin	 = 0xbd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_07_06bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fb7f,
-	.pixel.size_bin	 = 0xb4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_08_07bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fc33,
-	.pixel.size_bin	 = 0xc2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_09_08bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fcf5,
-	.pixel.size_bin	 = 0x9f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_10_09bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fd94,
-	.pixel.size_bin	 = 0xce,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_11_10bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8fe62,
-	.pixel.size_bin	 = 0xb8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_12_11bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf8ff1a,
-	.pixel.size_bin	 = 0xf1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_13_12bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf9000b,
-	.pixel.size_bin	 = 0xcf,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_date_14_13bmp = {
-	.pixel.width	 = 0xe,
-	.pixel.height	 = 0x15,
-	.pixel.data_bin	 = 0xf900da,
-	.pixel.size_bin	 = 0x80,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_01_00bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf9015a,
-	.pixel.size_bin	 = 0xf3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_02_01bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf9024d,
-	.pixel.size_bin	 = 0x143,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_03_02bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf90390,
-	.pixel.size_bin	 = 0x1a2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_04_03bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf90532,
-	.pixel.size_bin	 = 0x327,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_05_04bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf90859,
-	.pixel.size_bin	 = 0x1c4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_06_05bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf90a1d,
-	.pixel.size_bin	 = 0x361,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_07_06bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf90d7e,
-	.pixel.size_bin	 = 0x36c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_08_07bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf910ea,
-	.pixel.size_bin	 = 0x386,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_09_08bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf91470,
-	.pixel.size_bin	 = 0x343,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_10_09bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf917b3,
-	.pixel.size_bin	 = 0x422,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_11_10bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf91bd5,
-	.pixel.size_bin	 = 0x2e3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_12_11bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf91eb8,
-	.pixel.size_bin	 = 0x49c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_13_12bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf92354,
-	.pixel.size_bin	 = 0x454,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_hour_min_14_13bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0xf927a8,
-	.pixel.size_bin	 = 0x1f1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_01_00png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf92999,
-	.pixel.size_bin	 = 0x422,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_02_01png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf92dbb,
-	.pixel.size_bin	 = 0x456,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_03_02png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf93211,
-	.pixel.size_bin	 = 0x4cb,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_04_03png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf936dc,
-	.pixel.size_bin	 = 0x4c8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_05_04png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf93ba4,
-	.pixel.size_bin	 = 0x464,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_06_05png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf94008,
-	.pixel.size_bin	 = 0x4df,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_07_06png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf944e7,
-	.pixel.size_bin	 = 0x511,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_08_07png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf949f8,
-	.pixel.size_bin	 = 0x4d3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_09_08png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf94ecb,
-	.pixel.size_bin	 = 0x4b8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_10_09png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf95383,
-	.pixel.size_bin	 = 0x513,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_11_10png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf95896,
-	.pixel.size_bin	 = 0x4db,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_12_11png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf95d71,
-	.pixel.size_bin	 = 0x53c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_13_12png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf962ad,
-	.pixel.size_bin	 = 0x527,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_step_heart_kcal_14_13png = {
-	.pixel.width	 = 0x18,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf967d4,
-	.pixel.size_bin	 = 0x4b5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_01_00png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf96c89,
-	.pixel.size_bin	 = 0x41f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_02_01png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf970a8,
-	.pixel.size_bin	 = 0x453,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_03_02png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf974fb,
-	.pixel.size_bin	 = 0x4c5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_04_03png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf979c0,
-	.pixel.size_bin	 = 0x4be,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_05_04png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf97e7e,
-	.pixel.size_bin	 = 0x463,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_06_05png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf982e1,
-	.pixel.size_bin	 = 0x4db,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_07_06png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf987bc,
-	.pixel.size_bin	 = 0x50d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_08_07png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf98cc9,
-	.pixel.size_bin	 = 0x4d0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_09_08png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf99199,
-	.pixel.size_bin	 = 0x4b9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_10_09png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf99652,
-	.pixel.size_bin	 = 0x50d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_11_10png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf99b5f,
-	.pixel.size_bin	 = 0x4d9,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_12_11png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf9a038,
-	.pixel.size_bin	 = 0x534,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_13_12png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf9a56c,
-	.pixel.size_bin	 = 0x51c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_num_weather_batt_14_13png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x21,
-	.pixel.data_bin	 = 0xf9aa88,
-	.pixel.size_bin	 = 0x4af,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xf9af37,
-	.pixel.size_bin	 = 0x54d3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10602001_preview_01_1jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xfa040a,
-	.pixel.size_bin	 = 0x8945,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_bg_01_00bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xfa8d4f,
-	.pixel.size_bin	 = 0x2e77,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_bg_01_00jpg = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xfabbc6,
-	.pixel.size_bin	 = 0x7ebe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_batt_01_00bmp = {
-	.pixel.width	 = 0x14,
-	.pixel.height	 = 0xa,
-	.pixel.data_bin	 = 0xfb3a84,
-	.pixel.size_bin	 = 0xde,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_batt_02_01bmp = {
-	.pixel.width	 = 0x14,
-	.pixel.height	 = 0xa,
-	.pixel.data_bin	 = 0xfb3b62,
-	.pixel.size_bin	 = 0xef,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_01_00bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb3c51,
-	.pixel.size_bin	 = 0xf8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_02_01bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb3d49,
-	.pixel.size_bin	 = 0x137,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_03_02bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb3e80,
-	.pixel.size_bin	 = 0x13b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_04_03bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb3fbb,
-	.pixel.size_bin	 = 0x19e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_05_04bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4159,
-	.pixel.size_bin	 = 0x1bd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_06_05bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4316,
-	.pixel.size_bin	 = 0x1fe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_07_06bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4514,
-	.pixel.size_bin	 = 0x1a1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_08_07bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb46b5,
-	.pixel.size_bin	 = 0x211,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_09_08bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb48c6,
-	.pixel.size_bin	 = 0x1ee,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_10_09bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4ab4,
-	.pixel.size_bin	 = 0x122,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_11_10bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4bd6,
-	.pixel.size_bin	 = 0x125,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_12_11bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4cfb,
-	.pixel.size_bin	 = 0x15a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_13_12bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb4e55,
-	.pixel.size_bin	 = 0x26b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_14_13bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb50c0,
-	.pixel.size_bin	 = 0x143,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_15_14bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb5203,
-	.pixel.size_bin	 = 0x322,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_16_15bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb5525,
-	.pixel.size_bin	 = 0x279,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_17_16bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb579e,
-	.pixel.size_bin	 = 0x2d9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_18_17bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb5a77,
-	.pixel.size_bin	 = 0x1ca,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_19_18bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb5c41,
-	.pixel.size_bin	 = 0x139,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_20_19bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb5d7a,
-	.pixel.size_bin	 = 0x2ba,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_21_20bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb6034,
-	.pixel.size_bin	 = 0x1f3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_22_21bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb6227,
-	.pixel.size_bin	 = 0x291,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_23_22bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb64b8,
-	.pixel.size_bin	 = 0x32b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_month_24_23bmp = {
-	.pixel.width	 = 0x58,
-	.pixel.height	 = 0x1e,
-	.pixel.data_bin	 = 0xfb67e3,
-	.pixel.size_bin	 = 0x253,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_batt_01_00bmp = {
-	.pixel.width	 = 0xa,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfb6a36,
-	.pixel.size_bin	 = 0xa9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_dis_01_00bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb6adf,
-	.pixel.size_bin	 = 0x1a8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_dis_02_01bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb6c87,
-	.pixel.size_bin	 = 0x1aa,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_dis_03_02bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb6e31,
-	.pixel.size_bin	 = 0x15a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_dis_04_03bmp = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb6f8b,
-	.pixel.size_bin	 = 0xed,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_heart_01_00bmp = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0xfb7078,
-	.pixel.size_bin	 = 0x218,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_heart_02_01bmp = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0xfb7290,
-	.pixel.size_bin	 = 0x1a8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_kcal_01_00bmp = {
-	.pixel.width	 = 0x30,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb7438,
-	.pixel.size_bin	 = 0x12b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_kcal_02_01bmp = {
-	.pixel.width	 = 0x30,
-	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0xfb7563,
-	.pixel.size_bin	 = 0x1b6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_step_01_00bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0xfb7719,
-	.pixel.size_bin	 = 0x103,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_unit_step_02_01bmp = {
-	.pixel.width	 = 0x32,
-	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0xfb781c,
-	.pixel.size_bin	 = 0x1ec,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_01_00bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb7a08,
-	.pixel.size_bin	 = 0x1d0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_02_01bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb7bd8,
-	.pixel.size_bin	 = 0x1a4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_03_02bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb7d7c,
-	.pixel.size_bin	 = 0x1b5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_04_03bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb7f31,
-	.pixel.size_bin	 = 0x1d9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_05_04bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb810a,
-	.pixel.size_bin	 = 0x243,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_06_05bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb834d,
-	.pixel.size_bin	 = 0x251,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_07_06bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb859e,
-	.pixel.size_bin	 = 0x290,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_08_07bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb882e,
-	.pixel.size_bin	 = 0x272,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_09_08bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb8aa0,
-	.pixel.size_bin	 = 0x341,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_10_09bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb8de1,
-	.pixel.size_bin	 = 0x12b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_11_10bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb8f0c,
-	.pixel.size_bin	 = 0x2b2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_12_11bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb91be,
-	.pixel.size_bin	 = 0x126,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_13_12bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb92e4,
-	.pixel.size_bin	 = 0x157,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_char_week_14_13bmp = {
-	.pixel.width	 = 0x4c,
-	.pixel.height	 = 0x1d,
-	.pixel.data_bin	 = 0xfb943b,
-	.pixel.size_bin	 = 0x25b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_01_00bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb9696,
-	.pixel.size_bin	 = 0x43,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_02_01bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb96d9,
-	.pixel.size_bin	 = 0x67,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_03_02bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb9740,
-	.pixel.size_bin	 = 0x68,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_04_03bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb97a8,
-	.pixel.size_bin	 = 0x64,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_05_04bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb980c,
-	.pixel.size_bin	 = 0x66,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_06_05bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb9872,
-	.pixel.size_bin	 = 0x64,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_07_06bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb98d6,
-	.pixel.size_bin	 = 0x64,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_08_07bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb993a,
-	.pixel.size_bin	 = 0x65,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_09_08bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb999f,
-	.pixel.size_bin	 = 0x66,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_10_09bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb9a05,
-	.pixel.size_bin	 = 0x69,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_batt_11_10bmp = {
-	.pixel.width	 = 0xc4,
-	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0xfb9a6e,
-	.pixel.size_bin	 = 0x52,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_call_01_00bmp = {
-	.pixel.width	 = 0x28,
-	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0xfb9ac0,
-	.pixel.size_bin	 = 0x38c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_clock_01_00bmp = {
-	.pixel.width	 = 0x34,
-	.pixel.height	 = 0x34,
-	.pixel.data_bin	 = 0xfb9e4c,
-	.pixel.size_bin	 = 0x3c4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_message_01_00bmp = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0x2c,
-	.pixel.data_bin	 = 0xfba210,
-	.pixel.size_bin	 = 0x2a3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_01_icon_01_qingbmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfba4b3,
-	.pixel.size_bin	 = 0x2b0,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_02_icon_02_duoyunbmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfba763,
-	.pixel.size_bin	 = 0x311,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_03_icon_03_yingbmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbaa74,
-	.pixel.size_bin	 = 0x29e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_04_icon_04_zhenyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbad12,
-	.pixel.size_bin	 = 0x3a9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_05_icon_05_leizhenyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbb0bb,
-	.pixel.size_bin	 = 0x29f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_06_icon_06_leizhenyubanbingbaobmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbb35a,
-	.pixel.size_bin	 = 0x28b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_07_icon_07_yujiaxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbb5e5,
-	.pixel.size_bin	 = 0x2d4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_08_icon_08_xiaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbb8b9,
-	.pixel.size_bin	 = 0x20c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_09_icon_09_zhongyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbbac5,
-	.pixel.size_bin	 = 0x250,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_10_icon_10_dayubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbbd15,
-	.pixel.size_bin	 = 0x255,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_11_icon_11_baoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbbf6a,
-	.pixel.size_bin	 = 0x272,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_12_icon_12_dabaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbc1dc,
-	.pixel.size_bin	 = 0x33a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_13_icon_13_tedabaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbc516,
-	.pixel.size_bin	 = 0x40c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_14_icon_14_zhenxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbc922,
-	.pixel.size_bin	 = 0x3e7,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_15_icon_15_xiaoxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbcd09,
-	.pixel.size_bin	 = 0x227,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_16_icon_16_zhongxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbcf30,
-	.pixel.size_bin	 = 0x28b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_17_icon_17_daxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbd1bb,
-	.pixel.size_bin	 = 0x2d3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_18_icon_18_baoxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbd48e,
-	.pixel.size_bin	 = 0x322,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_19_icon_19_wubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbd7b0,
-	.pixel.size_bin	 = 0x456,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_20_icon_20_dongyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbdc06,
-	.pixel.size_bin	 = 0x26c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_21_icon_21_shachenbaobmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbde72,
-	.pixel.size_bin	 = 0x279,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_22_icon_22_xiaodaozhongyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbe0eb,
-	.pixel.size_bin	 = 0x257,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_23_icon_23_zhongdaodayubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbe342,
-	.pixel.size_bin	 = 0x283,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_24_icon_24_dadaobaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbe5c5,
-	.pixel.size_bin	 = 0x2c6,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_25_icon_25_baoyudaodavaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbe88b,
-	.pixel.size_bin	 = 0x338,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_26_icon_26_dabaoyudaotedabaoyubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbebc3,
-	.pixel.size_bin	 = 0x398,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_27_icon_27_xiaodaozhongxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbef5b,
-	.pixel.size_bin	 = 0x28a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_28_icon_28_zhongdaodaxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbf1e5,
-	.pixel.size_bin	 = 0x2b9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_29_icon_29_dadaobaoxuebmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbf49e,
-	.pixel.size_bin	 = 0x34d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_30_icon_30_fuchenbmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbf7eb,
-	.pixel.size_bin	 = 0x1cd,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_31_icon_31_yangchenbmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbf9b8,
-	.pixel.size_bin	 = 0x2ea,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_32_icon_32_qiangshachenbaobmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfbfca2,
-	.pixel.size_bin	 = 0x40a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_33_icon_33_maibmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfc00ac,
-	.pixel.size_bin	 = 0x477,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_icon_weather_34_icon_34_wubmp = {
-	.pixel.width	 = 0x3c,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0xfc0523,
-	.pixel.size_bin	 = 0x23d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_01_00bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0760,
-	.pixel.size_bin	 = 0x37,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_02_01bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0797,
-	.pixel.size_bin	 = 0x31,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_03_02bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc07c8,
-	.pixel.size_bin	 = 0x3b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_04_03bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0803,
-	.pixel.size_bin	 = 0x63,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_05_04bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0866,
-	.pixel.size_bin	 = 0x3e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_06_05bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc08a4,
-	.pixel.size_bin	 = 0x86,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_07_06bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc092a,
-	.pixel.size_bin	 = 0x8e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_08_07bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc09b8,
-	.pixel.size_bin	 = 0x77,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_09_08bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0a2f,
-	.pixel.size_bin	 = 0x82,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_10_09bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0ab1,
-	.pixel.size_bin	 = 0x8c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_11_10bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0b3d,
-	.pixel.size_bin	 = 0x6f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_12_11bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0bac,
-	.pixel.size_bin	 = 0x9d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_13_12bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0c49,
-	.pixel.size_bin	 = 0x8b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_batt_14_13bmp = {
-	.pixel.width	 = 0x8,
-	.pixel.height	 = 0xb,
-	.pixel.data_bin	 = 0xfc0cd4,
-	.pixel.size_bin	 = 0x3c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_01_00png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc0d10,
-	.pixel.size_bin	 = 0x3cf,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_02_01png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc10df,
-	.pixel.size_bin	 = 0x3c7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_03_02png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc14a6,
-	.pixel.size_bin	 = 0x454,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_04_03png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc18fa,
-	.pixel.size_bin	 = 0x478,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_05_04png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc1d72,
-	.pixel.size_bin	 = 0x3dd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_06_05png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc214f,
-	.pixel.size_bin	 = 0x489,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_07_06png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc25d8,
-	.pixel.size_bin	 = 0x4bc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_08_07png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc2a94,
-	.pixel.size_bin	 = 0x462,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_09_08png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc2ef6,
-	.pixel.size_bin	 = 0x4ac,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_10_09png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc33a2,
-	.pixel.size_bin	 = 0x4ad,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_11_10png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc384f,
-	.pixel.size_bin	 = 0x454,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_12_11png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc3ca3,
-	.pixel.size_bin	 = 0x4bc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_13_12png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc415f,
-	.pixel.size_bin	 = 0x4a6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_14_13png = {
-	.pixel.width	 = 0x12,
-	.pixel.height	 = 0x18,
-	.pixel.data_bin	 = 0xfc4605,
-	.pixel.size_bin	 = 0x3f6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_01_00png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc49fb,
-	.pixel.size_bin	 = 0x407,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_02_01png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc4e02,
-	.pixel.size_bin	 = 0x40c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_03_02png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc520e,
-	.pixel.size_bin	 = 0x4f4,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_04_03png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc5702,
-	.pixel.size_bin	 = 0x683,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_05_04png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc5d85,
-	.pixel.size_bin	 = 0x413,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_06_05png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc6198,
-	.pixel.size_bin	 = 0x591,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_07_06png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc6729,
-	.pixel.size_bin	 = 0x5b3,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_08_07png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc6cdc,
-	.pixel.size_bin	 = 0x547,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_09_08png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc7223,
-	.pixel.size_bin	 = 0x55a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_10_09png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc777d,
-	.pixel.size_bin	 = 0x683,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_11_10png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc7e00,
-	.pixel.size_bin	 = 0x529,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_12_11png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc8329,
-	.pixel.size_bin	 = 0x6d7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_13_12png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc8a00,
-	.pixel.size_bin	 = 0x67c,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_num_hour_min_14_13png = {
-	.pixel.width	 = 0x38,
-	.pixel.height	 = 0x39,
-	.pixel.data_bin	 = 0xfc907c,
-	.pixel.size_bin	 = 0x437,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xfc94b3,
-	.pixel.size_bin	 = 0x51eb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10603001_preview_01_1jpg = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xfce69e,
-	.pixel.size_bin	 = 0x7c8f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_jpg,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_bg_01_00bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xfd632d,
-	.pixel.size_bin	 = 0x7d2b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_char_unit_batt_01_00png = {
-	.pixel.width	 = 0x10,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0xfde058,
-	.pixel.size_bin	 = 0x4db,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_gif_01_00bmp = {
-	.pixel.width	 = 0x14e,
-	.pixel.height	 = 0x138,
-	.pixel.data_bin	 = 0xfde533,
-	.pixel.size_bin	 = 0xa1db,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_gif_02_01bmp = {
-	.pixel.width	 = 0x14e,
-	.pixel.height	 = 0x138,
-	.pixel.data_bin	 = 0xfe870e,
-	.pixel.size_bin	 = 0xa43e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_gif_03_02bmp = {
-	.pixel.width	 = 0x14e,
-	.pixel.height	 = 0x138,
-	.pixel.data_bin	 = 0xff2b4c,
-	.pixel.size_bin	 = 0xa48d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_gif_04_03bmp = {
-	.pixel.width	 = 0x14e,
-	.pixel.height	 = 0x138,
-	.pixel.data_bin	 = 0xffcfd9,
-	.pixel.size_bin	 = 0xaa43,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_h_01_00png = {
-	.pixel.width	 = 0x3e,
-	.pixel.height	 = 0xba,
-	.pixel.data_bin	 = 0x1007a1c,
-	.pixel.size_bin	 = 0xc8e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_01_00bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x10086aa,
-	.pixel.size_bin	 = 0xbfe,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_02_01bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x10092a8,
-	.pixel.size_bin	 = 0xcca,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_03_02bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1009f72,
-	.pixel.size_bin	 = 0xd10,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_04_03bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100ac82,
-	.pixel.size_bin	 = 0xd49,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_05_04bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100b9cb,
-	.pixel.size_bin	 = 0xd67,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_06_05bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100c732,
-	.pixel.size_bin	 = 0xd5b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_07_06bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100d48d,
-	.pixel.size_bin	 = 0xdb9,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_08_07bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100e246,
-	.pixel.size_bin	 = 0xe20,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_09_08bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100f066,
-	.pixel.size_bin	 = 0xe5d,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_10_09bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x100fec3,
-	.pixel.size_bin	 = 0xea8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_batt_11_10bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1010d6b,
-	.pixel.size_bin	 = 0xe60,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_01_00bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1011bcb,
-	.pixel.size_bin	 = 0xc54,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_02_01bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101281f,
-	.pixel.size_bin	 = 0xd1a,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_03_02bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1013539,
-	.pixel.size_bin	 = 0xd56,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_04_03bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101428f,
-	.pixel.size_bin	 = 0xd85,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_05_04bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1015014,
-	.pixel.size_bin	 = 0xd86,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_06_05bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1015d9a,
-	.pixel.size_bin	 = 0xd5b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_07_06bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1016af5,
-	.pixel.size_bin	 = 0xdca,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_08_07bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x10178bf,
-	.pixel.size_bin	 = 0xe11,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_09_08bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x10186d0,
-	.pixel.size_bin	 = 0xe35,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_10_09bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1019505,
-	.pixel.size_bin	 = 0xe6b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_kcal_11_10bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101a370,
-	.pixel.size_bin	 = 0xdeb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_01_00bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101b15b,
-	.pixel.size_bin	 = 0xcc4,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_02_01bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101be1f,
-	.pixel.size_bin	 = 0xd74,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_03_02bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101cb93,
-	.pixel.size_bin	 = 0xda8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_04_03bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101d93b,
-	.pixel.size_bin	 = 0xde7,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_05_04bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101e722,
-	.pixel.size_bin	 = 0xe02,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_06_05bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x101f524,
-	.pixel.size_bin	 = 0xdeb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_07_06bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x102030f,
-	.pixel.size_bin	 = 0xe40,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_08_07bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x102114f,
-	.pixel.size_bin	 = 0xe92,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_09_08bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1021fe1,
-	.pixel.size_bin	 = 0xead,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_10_09bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1022e8e,
-	.pixel.size_bin	 = 0xee5,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_icon_step_11_10bmp = {
-	.pixel.width	 = 0x5c,
-	.pixel.height	 = 0x5c,
-	.pixel.data_bin	 = 0x1023d73,
-	.pixel.size_bin	 = 0xea2,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_m_01_00png = {
-	.pixel.width	 = 0x26,
-	.pixel.height	 = 0xfc,
-	.pixel.data_bin	 = 0x1024c15,
-	.pixel.size_bin	 = 0xbb7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_01_00png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x10257cc,
-	.pixel.size_bin	 = 0x3c8,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_02_01png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1025b94,
-	.pixel.size_bin	 = 0x3c5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_03_02png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1025f59,
-	.pixel.size_bin	 = 0x435,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_04_03png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x102638e,
-	.pixel.size_bin	 = 0x429,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_05_04png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x10267b7,
-	.pixel.size_bin	 = 0x3dc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_06_05png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1026b93,
-	.pixel.size_bin	 = 0x45f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_07_06png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1026ff2,
-	.pixel.size_bin	 = 0x45b,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_08_07png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x102744d,
-	.pixel.size_bin	 = 0x436,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_09_08png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1027883,
-	.pixel.size_bin	 = 0x444,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_10_09png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1027cc7,
-	.pixel.size_bin	 = 0x44d,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_11_10png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1028114,
-	.pixel.size_bin	 = 0x442,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_12_11png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1028556,
-	.pixel.size_bin	 = 0x465,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_13_12png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x10289bb,
-	.pixel.size_bin	 = 0x449,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_num_kcal_step_batt_14_13png = {
-	.pixel.width	 = 0xc,
-	.pixel.height	 = 0x13,
-	.pixel.data_bin	 = 0x1028e04,
-	.pixel.size_bin	 = 0x3e0,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0x10291e4,
-	.pixel.size_bin	 = 0xd66b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_home_watch_D10604001_s_01_00png = {
-	.pixel.width	 = 0x24,
-	.pixel.height	 = 0xfa,
-	.pixel.data_bin	 = 0x103684f,
-	.pixel.size_bin	 = 0x7fe,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
 const scui_image_t prj_image_src_num_01_102_du_32x76png = {
 	.pixel.width	 = 0x20,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103704d,
+	.pixel.data_bin	 = 0xcc0b09,
 	.pixel.size_bin	 = 0x20f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28680,7 +19599,7 @@ const scui_image_t prj_image_src_num_01_102_du_32x76png = {
 const scui_image_t prj_image_src_num_02_22_percent_16x18bmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103725c,
+	.pixel.data_bin	 = 0xcc0d18,
 	.pixel.size_bin	 = 0x141,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -28689,7 +19608,7 @@ const scui_image_t prj_image_src_num_02_22_percent_16x18bmp = {
 const scui_image_t prj_image_src_num_03_28_c_24x22png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x103739d,
+	.pixel.data_bin	 = 0xcc0e59,
 	.pixel.size_bin	 = 0x27c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28698,7 +19617,7 @@ const scui_image_t prj_image_src_num_03_28_c_24x22png = {
 const scui_image_t prj_image_src_num_04_28_f_24x22png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1037619,
+	.pixel.data_bin	 = 0xcc10d5,
 	.pixel.size_bin	 = 0x1d3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28707,7 +19626,7 @@ const scui_image_t prj_image_src_num_04_28_f_24x22png = {
 const scui_image_t prj_image_src_num_05_34_c_30x28png = {
 	.pixel.width	 = 0x1e,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x10377ec,
+	.pixel.data_bin	 = 0xcc12a8,
 	.pixel.size_bin	 = 0x309,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28716,7 +19635,7 @@ const scui_image_t prj_image_src_num_05_34_c_30x28png = {
 const scui_image_t prj_image_src_num_06_34_f_30x28png = {
 	.pixel.width	 = 0x1e,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1037af5,
+	.pixel.data_bin	 = 0xcc15b1,
 	.pixel.size_bin	 = 0x203,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28725,7 +19644,7 @@ const scui_image_t prj_image_src_num_06_34_f_30x28png = {
 const scui_image_t prj_image_src_num_07_34_percent_24x28png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1037cf8,
+	.pixel.data_bin	 = 0xcc17b4,
 	.pixel.size_bin	 = 0x31f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28734,7 +19653,7 @@ const scui_image_t prj_image_src_num_07_34_percent_24x28png = {
 const scui_image_t prj_image_src_num_08_44_percent_red_32x34bmp = {
 	.pixel.width	 = 0x20,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1038017,
+	.pixel.data_bin	 = 0xcc1ad3,
 	.pixel.size_bin	 = 0x24f,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -28743,7 +19662,7 @@ const scui_image_t prj_image_src_num_08_44_percent_red_32x34bmp = {
 const scui_image_t prj_image_src_num_09_44_percent_white_32x34png = {
 	.pixel.width	 = 0x20,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1038266,
+	.pixel.data_bin	 = 0xcc1d22,
 	.pixel.size_bin	 = 0x3f0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28752,7 +19671,7 @@ const scui_image_t prj_image_src_num_09_44_percent_white_32x34png = {
 const scui_image_t prj_image_src_num_102_white_56x76_01_00png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x1038656,
+	.pixel.data_bin	 = 0xcc2112,
 	.pixel.size_bin	 = 0x192,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28761,7 +19680,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_01_00png = {
 const scui_image_t prj_image_src_num_102_white_56x76_02_01png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x10387e8,
+	.pixel.data_bin	 = 0xcc22a4,
 	.pixel.size_bin	 = 0x208,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28770,7 +19689,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_02_01png = {
 const scui_image_t prj_image_src_num_102_white_56x76_03_02png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x10389f0,
+	.pixel.data_bin	 = 0xcc24ac,
 	.pixel.size_bin	 = 0x3df,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28779,7 +19698,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_03_02png = {
 const scui_image_t prj_image_src_num_102_white_56x76_04_03png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x1038dcf,
+	.pixel.data_bin	 = 0xcc288b,
 	.pixel.size_bin	 = 0x680,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28788,7 +19707,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_04_03png = {
 const scui_image_t prj_image_src_num_102_white_56x76_05_04png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103944f,
+	.pixel.data_bin	 = 0xcc2f0b,
 	.pixel.size_bin	 = 0x249,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28797,7 +19716,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_05_04png = {
 const scui_image_t prj_image_src_num_102_white_56x76_06_05png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x1039698,
+	.pixel.data_bin	 = 0xcc3154,
 	.pixel.size_bin	 = 0x532,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28806,7 +19725,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_06_05png = {
 const scui_image_t prj_image_src_num_102_white_56x76_07_06png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x1039bca,
+	.pixel.data_bin	 = 0xcc3686,
 	.pixel.size_bin	 = 0x5bf,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28815,7 +19734,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_07_06png = {
 const scui_image_t prj_image_src_num_102_white_56x76_08_07png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103a189,
+	.pixel.data_bin	 = 0xcc3c45,
 	.pixel.size_bin	 = 0x49f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28824,7 +19743,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_08_07png = {
 const scui_image_t prj_image_src_num_102_white_56x76_09_08png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103a628,
+	.pixel.data_bin	 = 0xcc40e4,
 	.pixel.size_bin	 = 0x5fa,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28833,7 +19752,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_09_08png = {
 const scui_image_t prj_image_src_num_102_white_56x76_10_09png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103ac22,
+	.pixel.data_bin	 = 0xcc46de,
 	.pixel.size_bin	 = 0x662,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28842,7 +19761,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_10_09png = {
 const scui_image_t prj_image_src_num_102_white_56x76_11_10png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103b284,
+	.pixel.data_bin	 = 0xcc4d40,
 	.pixel.size_bin	 = 0x457,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28851,7 +19770,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_11_10png = {
 const scui_image_t prj_image_src_num_102_white_56x76_12_11png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103b6db,
+	.pixel.data_bin	 = 0xcc5197,
 	.pixel.size_bin	 = 0x779,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28860,7 +19779,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_12_11png = {
 const scui_image_t prj_image_src_num_102_white_56x76_13_12png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103be54,
+	.pixel.data_bin	 = 0xcc5910,
 	.pixel.size_bin	 = 0x666,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28869,7 +19788,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_13_12png = {
 const scui_image_t prj_image_src_num_102_white_56x76_14_13png = {
 	.pixel.width	 = 0x16,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x103c4ba,
+	.pixel.data_bin	 = 0xcc5f76,
 	.pixel.size_bin	 = 0x747,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28878,7 +19797,7 @@ const scui_image_t prj_image_src_num_102_white_56x76_14_13png = {
 const scui_image_t prj_image_src_num_10_52_pace_12x40png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x103cc01,
+	.pixel.data_bin	 = 0xcc66bd,
 	.pixel.size_bin	 = 0xc6,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28887,7 +19806,7 @@ const scui_image_t prj_image_src_num_10_52_pace_12x40png = {
 const scui_image_t prj_image_src_num_11_52_pace_16x40png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x103ccc7,
+	.pixel.data_bin	 = 0xcc6783,
 	.pixel.size_bin	 = 0xd1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28896,7 +19815,7 @@ const scui_image_t prj_image_src_num_11_52_pace_16x40png = {
 const scui_image_t prj_image_src_num_12_62_c_34x48png = {
 	.pixel.width	 = 0x22,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103cd98,
+	.pixel.data_bin	 = 0xcc6854,
 	.pixel.size_bin	 = 0x34c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28905,7 +19824,7 @@ const scui_image_t prj_image_src_num_12_62_c_34x48png = {
 const scui_image_t prj_image_src_num_13_62_dial1_24x48png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103d0e4,
+	.pixel.data_bin	 = 0xcc6ba0,
 	.pixel.size_bin	 = 0x155,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28914,7 +19833,7 @@ const scui_image_t prj_image_src_num_13_62_dial1_24x48png = {
 const scui_image_t prj_image_src_num_14_62_dial2_24x48png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103d239,
+	.pixel.data_bin	 = 0xcc6cf5,
 	.pixel.size_bin	 = 0x202,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28923,7 +19842,7 @@ const scui_image_t prj_image_src_num_14_62_dial2_24x48png = {
 const scui_image_t prj_image_src_num_15_62_dial3_24x48png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103d43b,
+	.pixel.data_bin	 = 0xcc6ef7,
 	.pixel.size_bin	 = 0x268,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28932,7 +19851,7 @@ const scui_image_t prj_image_src_num_15_62_dial3_24x48png = {
 const scui_image_t prj_image_src_num_16_62_du_24x48png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103d6a3,
+	.pixel.data_bin	 = 0xcc715f,
 	.pixel.size_bin	 = 0x1a4,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28941,7 +19860,7 @@ const scui_image_t prj_image_src_num_16_62_du_24x48png = {
 const scui_image_t prj_image_src_num_17_62_f_34x48png = {
 	.pixel.width	 = 0x22,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103d847,
+	.pixel.data_bin	 = 0xcc7303,
 	.pixel.size_bin	 = 0x22d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28950,7 +19869,7 @@ const scui_image_t prj_image_src_num_17_62_f_34x48png = {
 const scui_image_t prj_image_src_num_18_62_pace_12x48png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103da74,
+	.pixel.data_bin	 = 0xcc7530,
 	.pixel.size_bin	 = 0xcd,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28959,7 +19878,7 @@ const scui_image_t prj_image_src_num_18_62_pace_12x48png = {
 const scui_image_t prj_image_src_num_19_62_pace_20x48png = {
 	.pixel.width	 = 0x14,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103db41,
+	.pixel.data_bin	 = 0xcc75fd,
 	.pixel.size_bin	 = 0xdc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28968,7 +19887,7 @@ const scui_image_t prj_image_src_num_19_62_pace_20x48png = {
 const scui_image_t prj_image_src_num_20_62_percent_28x48png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103dc1d,
+	.pixel.data_bin	 = 0xcc76d9,
 	.pixel.size_bin	 = 0x4d8,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28977,7 +19896,7 @@ const scui_image_t prj_image_src_num_20_62_percent_28x48png = {
 const scui_image_t prj_image_src_num_21_62_percent_44x48png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x103e0f5,
+	.pixel.data_bin	 = 0xcc7bb1,
 	.pixel.size_bin	 = 0x59d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28986,7 +19905,7 @@ const scui_image_t prj_image_src_num_21_62_percent_44x48png = {
 const scui_image_t prj_image_src_num_22_80_percent_56x60png = {
 	.pixel.width	 = 0x38,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x103e692,
+	.pixel.data_bin	 = 0xcc814e,
 	.pixel.size_bin	 = 0x726,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -28995,7 +19914,7 @@ const scui_image_t prj_image_src_num_22_80_percent_56x60png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_01_00png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103edb8,
+	.pixel.data_bin	 = 0xcc8874,
 	.pixel.size_bin	 = 0xc2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29004,7 +19923,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_01_00png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_02_01png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103ee7a,
+	.pixel.data_bin	 = 0xcc8936,
 	.pixel.size_bin	 = 0xe9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29013,7 +19932,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_02_01png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_03_02png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103ef63,
+	.pixel.data_bin	 = 0xcc8a1f,
 	.pixel.size_bin	 = 0x188,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29022,7 +19941,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_03_02png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_04_03png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103f0eb,
+	.pixel.data_bin	 = 0xcc8ba7,
 	.pixel.size_bin	 = 0x21b,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29031,7 +19950,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_04_03png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_05_04png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103f306,
+	.pixel.data_bin	 = 0xcc8dc2,
 	.pixel.size_bin	 = 0x120,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29040,7 +19959,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_05_04png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_06_05png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103f426,
+	.pixel.data_bin	 = 0xcc8ee2,
 	.pixel.size_bin	 = 0x203,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29049,7 +19968,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_06_05png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_07_06png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103f629,
+	.pixel.data_bin	 = 0xcc90e5,
 	.pixel.size_bin	 = 0x229,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29058,7 +19977,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_07_06png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_08_07png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103f852,
+	.pixel.data_bin	 = 0xcc930e,
 	.pixel.size_bin	 = 0x1c5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29067,7 +19986,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_08_07png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_09_08png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103fa17,
+	.pixel.data_bin	 = 0xcc94d3,
 	.pixel.size_bin	 = 0x21a,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29076,7 +19995,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_09_08png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_10_09png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103fc31,
+	.pixel.data_bin	 = 0xcc96ed,
 	.pixel.size_bin	 = 0x224,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29085,7 +20004,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_10_09png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_11_10png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x103fe55,
+	.pixel.data_bin	 = 0xcc9911,
 	.pixel.size_bin	 = 0x1ba,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29094,7 +20013,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_11_10png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_12_11png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x104000f,
+	.pixel.data_bin	 = 0xcc9acb,
 	.pixel.size_bin	 = 0x280,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29103,7 +20022,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_12_11png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_13_12png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x104028f,
+	.pixel.data_bin	 = 0xcc9d4b,
 	.pixel.size_bin	 = 0x226,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29112,7 +20031,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_13_12png = {
 const scui_image_t prj_image_src_num_22_grey_12x18_14_13png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10404b5,
+	.pixel.data_bin	 = 0xcc9f71,
 	.pixel.size_bin	 = 0x116,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29121,7 +20040,7 @@ const scui_image_t prj_image_src_num_22_grey_12x18_14_13png = {
 const scui_image_t prj_image_src_num_22_red_12x18_01_00bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10405cb,
+	.pixel.data_bin	 = 0xcca087,
 	.pixel.size_bin	 = 0x33,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29130,7 +20049,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_01_00bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_02_01bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10405fe,
+	.pixel.data_bin	 = 0xcca0ba,
 	.pixel.size_bin	 = 0x42,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29139,7 +20058,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_02_01bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_03_02bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040640,
+	.pixel.data_bin	 = 0xcca0fc,
 	.pixel.size_bin	 = 0x6d,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29148,7 +20067,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_03_02bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_04_03bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10406ad,
+	.pixel.data_bin	 = 0xcca169,
 	.pixel.size_bin	 = 0xfa,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29157,7 +20076,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_04_03bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_05_04bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10407a7,
+	.pixel.data_bin	 = 0xcca263,
 	.pixel.size_bin	 = 0x58,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29166,7 +20085,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_05_04bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_06_05bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10407ff,
+	.pixel.data_bin	 = 0xcca2bb,
 	.pixel.size_bin	 = 0xe3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29175,7 +20094,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_06_05bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_07_06bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10408e2,
+	.pixel.data_bin	 = 0xcca39e,
 	.pixel.size_bin	 = 0xe6,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29184,7 +20103,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_07_06bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_08_07bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10409c8,
+	.pixel.data_bin	 = 0xcca484,
 	.pixel.size_bin	 = 0xb8,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29193,7 +20112,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_08_07bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_09_08bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040a80,
+	.pixel.data_bin	 = 0xcca53c,
 	.pixel.size_bin	 = 0xfa,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29202,7 +20121,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_09_08bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_10_09bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040b7a,
+	.pixel.data_bin	 = 0xcca636,
 	.pixel.size_bin	 = 0xf8,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29211,7 +20130,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_10_09bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_11_10bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040c72,
+	.pixel.data_bin	 = 0xcca72e,
 	.pixel.size_bin	 = 0xb2,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29220,7 +20139,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_11_10bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_12_11bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040d24,
+	.pixel.data_bin	 = 0xcca7e0,
 	.pixel.size_bin	 = 0x11d,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29229,7 +20148,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_12_11bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_13_12bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040e41,
+	.pixel.data_bin	 = 0xcca8fd,
 	.pixel.size_bin	 = 0xf9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29238,7 +20157,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_13_12bmp = {
 const scui_image_t prj_image_src_num_22_red_12x18_14_13bmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040f3a,
+	.pixel.data_bin	 = 0xcca9f6,
 	.pixel.size_bin	 = 0x50,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29247,7 +20166,7 @@ const scui_image_t prj_image_src_num_22_red_12x18_14_13bmp = {
 const scui_image_t prj_image_src_num_22_white_12x18_01_00png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1040f8a,
+	.pixel.data_bin	 = 0xccaa46,
 	.pixel.size_bin	 = 0xbc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29256,7 +20175,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_01_00png = {
 const scui_image_t prj_image_src_num_22_white_12x18_02_01png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041046,
+	.pixel.data_bin	 = 0xccab02,
 	.pixel.size_bin	 = 0xd4,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29265,7 +20184,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_02_01png = {
 const scui_image_t prj_image_src_num_22_white_12x18_03_02png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x104111a,
+	.pixel.data_bin	 = 0xccabd6,
 	.pixel.size_bin	 = 0x16d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29274,7 +20193,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_03_02png = {
 const scui_image_t prj_image_src_num_22_white_12x18_04_03png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041287,
+	.pixel.data_bin	 = 0xccad43,
 	.pixel.size_bin	 = 0x1bb,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29283,7 +20202,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_04_03png = {
 const scui_image_t prj_image_src_num_22_white_12x18_05_04png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041442,
+	.pixel.data_bin	 = 0xccaefe,
 	.pixel.size_bin	 = 0xfd,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29292,7 +20211,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_05_04png = {
 const scui_image_t prj_image_src_num_22_white_12x18_06_05png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x104153f,
+	.pixel.data_bin	 = 0xccaffb,
 	.pixel.size_bin	 = 0x1a7,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29301,7 +20220,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_06_05png = {
 const scui_image_t prj_image_src_num_22_white_12x18_07_06png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10416e6,
+	.pixel.data_bin	 = 0xccb1a2,
 	.pixel.size_bin	 = 0x1ae,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29310,7 +20229,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_07_06png = {
 const scui_image_t prj_image_src_num_22_white_12x18_08_07png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041894,
+	.pixel.data_bin	 = 0xccb350,
 	.pixel.size_bin	 = 0x196,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29319,7 +20238,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_08_07png = {
 const scui_image_t prj_image_src_num_22_white_12x18_09_08png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041a2a,
+	.pixel.data_bin	 = 0xccb4e6,
 	.pixel.size_bin	 = 0x1c1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29328,7 +20247,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_09_08png = {
 const scui_image_t prj_image_src_num_22_white_12x18_10_09png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041beb,
+	.pixel.data_bin	 = 0xccb6a7,
 	.pixel.size_bin	 = 0x1c0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29337,7 +20256,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_10_09png = {
 const scui_image_t prj_image_src_num_22_white_12x18_11_10png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041dab,
+	.pixel.data_bin	 = 0xccb867,
 	.pixel.size_bin	 = 0x16b,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29346,7 +20265,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_11_10png = {
 const scui_image_t prj_image_src_num_22_white_12x18_12_11png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x1041f16,
+	.pixel.data_bin	 = 0xccb9d2,
 	.pixel.size_bin	 = 0x1df,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29355,7 +20274,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_12_11png = {
 const scui_image_t prj_image_src_num_22_white_12x18_13_12png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10420f5,
+	.pixel.data_bin	 = 0xccbbb1,
 	.pixel.size_bin	 = 0x1ab,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29364,7 +20283,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_13_12png = {
 const scui_image_t prj_image_src_num_22_white_12x18_14_13png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x12,
-	.pixel.data_bin	 = 0x10422a0,
+	.pixel.data_bin	 = 0xccbd5c,
 	.pixel.size_bin	 = 0xfc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29373,7 +20292,7 @@ const scui_image_t prj_image_src_num_22_white_12x18_14_13png = {
 const scui_image_t prj_image_src_num_23_92_c_44x76png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x104239c,
+	.pixel.data_bin	 = 0xccbe58,
 	.pixel.size_bin	 = 0x3e9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29382,7 +20301,7 @@ const scui_image_t prj_image_src_num_23_92_c_44x76png = {
 const scui_image_t prj_image_src_num_24_92_f_44x76png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x1042785,
+	.pixel.data_bin	 = 0xccc241,
 	.pixel.size_bin	 = 0x2a5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29391,7 +20310,7 @@ const scui_image_t prj_image_src_num_24_92_f_44x76png = {
 const scui_image_t prj_image_src_num_25_102_percent_74x76png = {
 	.pixel.width	 = 0x4a,
 	.pixel.height	 = 0x4c,
-	.pixel.data_bin	 = 0x1042a2a,
+	.pixel.data_bin	 = 0xccc4e6,
 	.pixel.size_bin	 = 0x93f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29400,7 +20319,7 @@ const scui_image_t prj_image_src_num_25_102_percent_74x76png = {
 const scui_image_t prj_image_src_num_28_white_16x22_01_00png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043369,
+	.pixel.data_bin	 = 0xccce25,
 	.pixel.size_bin	 = 0xe0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29409,7 +20328,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_01_00png = {
 const scui_image_t prj_image_src_num_28_white_16x22_02_01png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043449,
+	.pixel.data_bin	 = 0xcccf05,
 	.pixel.size_bin	 = 0xe8,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29418,7 +20337,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_02_01png = {
 const scui_image_t prj_image_src_num_28_white_16x22_03_02png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043531,
+	.pixel.data_bin	 = 0xcccfed,
 	.pixel.size_bin	 = 0x18f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29427,7 +20346,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_03_02png = {
 const scui_image_t prj_image_src_num_28_white_16x22_04_03png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10436c0,
+	.pixel.data_bin	 = 0xccd17c,
 	.pixel.size_bin	 = 0x227,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29436,7 +20355,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_04_03png = {
 const scui_image_t prj_image_src_num_28_white_16x22_05_04png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10438e7,
+	.pixel.data_bin	 = 0xccd3a3,
 	.pixel.size_bin	 = 0x11d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29445,7 +20364,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_05_04png = {
 const scui_image_t prj_image_src_num_28_white_16x22_06_05png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043a04,
+	.pixel.data_bin	 = 0xccd4c0,
 	.pixel.size_bin	 = 0x1e1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29454,7 +20373,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_06_05png = {
 const scui_image_t prj_image_src_num_28_white_16x22_07_06png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043be5,
+	.pixel.data_bin	 = 0xccd6a1,
 	.pixel.size_bin	 = 0x1f8,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29463,7 +20382,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_07_06png = {
 const scui_image_t prj_image_src_num_28_white_16x22_08_07png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043ddd,
+	.pixel.data_bin	 = 0xccd899,
 	.pixel.size_bin	 = 0x1d9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29472,7 +20391,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_08_07png = {
 const scui_image_t prj_image_src_num_28_white_16x22_09_08png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1043fb6,
+	.pixel.data_bin	 = 0xccda72,
 	.pixel.size_bin	 = 0x1ff,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29481,7 +20400,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_09_08png = {
 const scui_image_t prj_image_src_num_28_white_16x22_10_09png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10441b5,
+	.pixel.data_bin	 = 0xccdc71,
 	.pixel.size_bin	 = 0x215,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29490,7 +20409,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_10_09png = {
 const scui_image_t prj_image_src_num_28_white_16x22_11_10png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10443ca,
+	.pixel.data_bin	 = 0xccde86,
 	.pixel.size_bin	 = 0x1bc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29499,7 +20418,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_11_10png = {
 const scui_image_t prj_image_src_num_28_white_16x22_12_11png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x1044586,
+	.pixel.data_bin	 = 0xcce042,
 	.pixel.size_bin	 = 0x24c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29508,7 +20427,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_12_11png = {
 const scui_image_t prj_image_src_num_28_white_16x22_13_12png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10447d2,
+	.pixel.data_bin	 = 0xcce28e,
 	.pixel.size_bin	 = 0x20a,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29517,7 +20436,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_13_12png = {
 const scui_image_t prj_image_src_num_28_white_16x22_14_13png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10449dc,
+	.pixel.data_bin	 = 0xcce498,
 	.pixel.size_bin	 = 0x10f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29526,7 +20445,7 @@ const scui_image_t prj_image_src_num_28_white_16x22_14_13png = {
 const scui_image_t prj_image_src_num_34_white_18x28_01_00png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1044aeb,
+	.pixel.data_bin	 = 0xcce5a7,
 	.pixel.size_bin	 = 0xda,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29535,7 +20454,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_01_00png = {
 const scui_image_t prj_image_src_num_34_white_18x28_02_01png = {
 	.pixel.width	 = 0x8,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1044bc5,
+	.pixel.data_bin	 = 0xcce681,
 	.pixel.size_bin	 = 0x5d9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29544,7 +20463,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_02_01png = {
 const scui_image_t prj_image_src_num_34_white_18x28_03_02png = {
 	.pixel.width	 = 0xe,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x104519e,
+	.pixel.data_bin	 = 0xccec5a,
 	.pixel.size_bin	 = 0x674,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29553,7 +20472,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_03_02png = {
 const scui_image_t prj_image_src_num_34_white_18x28_04_03png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1045812,
+	.pixel.data_bin	 = 0xccf2ce,
 	.pixel.size_bin	 = 0x253,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29562,7 +20481,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_04_03png = {
 const scui_image_t prj_image_src_num_34_white_18x28_05_04png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1045a65,
+	.pixel.data_bin	 = 0xccf521,
 	.pixel.size_bin	 = 0x131,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29571,7 +20490,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_05_04png = {
 const scui_image_t prj_image_src_num_34_white_18x28_06_05png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1045b96,
+	.pixel.data_bin	 = 0xccf652,
 	.pixel.size_bin	 = 0x223,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29580,7 +20499,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_06_05png = {
 const scui_image_t prj_image_src_num_34_white_18x28_07_06png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1045db9,
+	.pixel.data_bin	 = 0xccf875,
 	.pixel.size_bin	 = 0x240,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29589,7 +20508,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_07_06png = {
 const scui_image_t prj_image_src_num_34_white_18x28_08_07png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1045ff9,
+	.pixel.data_bin	 = 0xccfab5,
 	.pixel.size_bin	 = 0x1ea,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29598,7 +20517,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_08_07png = {
 const scui_image_t prj_image_src_num_34_white_18x28_09_08png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x10461e3,
+	.pixel.data_bin	 = 0xccfc9f,
 	.pixel.size_bin	 = 0x24f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29607,7 +20526,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_09_08png = {
 const scui_image_t prj_image_src_num_34_white_18x28_10_09png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1046432,
+	.pixel.data_bin	 = 0xccfeee,
 	.pixel.size_bin	 = 0x25d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29616,7 +20535,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_10_09png = {
 const scui_image_t prj_image_src_num_34_white_18x28_11_10png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x104668f,
+	.pixel.data_bin	 = 0xcd014b,
 	.pixel.size_bin	 = 0x1c4,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29625,7 +20544,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_11_10png = {
 const scui_image_t prj_image_src_num_34_white_18x28_12_11png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1046853,
+	.pixel.data_bin	 = 0xcd030f,
 	.pixel.size_bin	 = 0x2a2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29634,7 +20553,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_12_11png = {
 const scui_image_t prj_image_src_num_34_white_18x28_13_12png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1046af5,
+	.pixel.data_bin	 = 0xcd05b1,
 	.pixel.size_bin	 = 0x260,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29643,7 +20562,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_13_12png = {
 const scui_image_t prj_image_src_num_34_white_18x28_14_13png = {
 	.pixel.width	 = 0x8,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x1046d55,
+	.pixel.data_bin	 = 0xcd0811,
 	.pixel.size_bin	 = 0x6e2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29652,7 +20571,7 @@ const scui_image_t prj_image_src_num_34_white_18x28_14_13png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_01_00png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1047437,
+	.pixel.data_bin	 = 0xcd0ef3,
 	.pixel.size_bin	 = 0x117,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29661,7 +20580,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_01_00png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_02_01png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104754e,
+	.pixel.data_bin	 = 0xcd100a,
 	.pixel.size_bin	 = 0x136,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29670,7 +20589,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_02_01png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_03_02png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1047684,
+	.pixel.data_bin	 = 0xcd1140,
 	.pixel.size_bin	 = 0x264,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29679,7 +20598,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_03_02png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_04_03png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x10478e8,
+	.pixel.data_bin	 = 0xcd13a4,
 	.pixel.size_bin	 = 0x3ed,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29688,7 +20607,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_04_03png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_05_04png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1047cd5,
+	.pixel.data_bin	 = 0xcd1791,
 	.pixel.size_bin	 = 0x164,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29697,7 +20616,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_05_04png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_06_05png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1047e39,
+	.pixel.data_bin	 = 0xcd18f5,
 	.pixel.size_bin	 = 0x382,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29706,7 +20625,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_06_05png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_07_06png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x10481bb,
+	.pixel.data_bin	 = 0xcd1c77,
 	.pixel.size_bin	 = 0x3d5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29715,7 +20634,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_07_06png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_08_07png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1048590,
+	.pixel.data_bin	 = 0xcd204c,
 	.pixel.size_bin	 = 0x2b9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29724,7 +20643,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_08_07png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_09_08png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1048849,
+	.pixel.data_bin	 = 0xcd2305,
 	.pixel.size_bin	 = 0x3bc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29733,7 +20652,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_09_08png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_10_09png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1048c05,
+	.pixel.data_bin	 = 0xcd26c1,
 	.pixel.size_bin	 = 0x418,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29742,7 +20661,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_10_09png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_11_10png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104901d,
+	.pixel.data_bin	 = 0xcd2ad9,
 	.pixel.size_bin	 = 0x2c5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29751,7 +20670,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_11_10png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_12_11png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x10492e2,
+	.pixel.data_bin	 = 0xcd2d9e,
 	.pixel.size_bin	 = 0x49d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29760,7 +20679,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_12_11png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_13_12png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104977f,
+	.pixel.data_bin	 = 0xcd323b,
 	.pixel.size_bin	 = 0x3fc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29769,7 +20688,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_13_12png = {
 const scui_image_t prj_image_src_num_44_grey_24x34_14_13png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1049b7b,
+	.pixel.data_bin	 = 0xcd3637,
 	.pixel.size_bin	 = 0x1c1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29778,7 +20697,7 @@ const scui_image_t prj_image_src_num_44_grey_24x34_14_13png = {
 const scui_image_t prj_image_src_num_44_red_24x34_01_00bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1049d3c,
+	.pixel.data_bin	 = 0xcd37f8,
 	.pixel.size_bin	 = 0x54,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29787,7 +20706,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_01_00bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_02_01bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1049d90,
+	.pixel.data_bin	 = 0xcd384c,
 	.pixel.size_bin	 = 0x77,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29796,7 +20715,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_02_01bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_03_02bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1049e07,
+	.pixel.data_bin	 = 0xcd38c3,
 	.pixel.size_bin	 = 0x98,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29805,7 +20724,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_03_02bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_04_03bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1049e9f,
+	.pixel.data_bin	 = 0xcd395b,
 	.pixel.size_bin	 = 0x1ab,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29814,7 +20733,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_04_03bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_05_04bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a04a,
+	.pixel.data_bin	 = 0xcd3b06,
 	.pixel.size_bin	 = 0x7c,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29823,7 +20742,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_05_04bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_06_05bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a0c6,
+	.pixel.data_bin	 = 0xcd3b82,
 	.pixel.size_bin	 = 0x17e,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29832,7 +20751,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_06_05bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_07_06bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a244,
+	.pixel.data_bin	 = 0xcd3d00,
 	.pixel.size_bin	 = 0x199,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29841,7 +20760,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_07_06bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_08_07bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a3dd,
+	.pixel.data_bin	 = 0xcd3e99,
 	.pixel.size_bin	 = 0x151,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29850,7 +20769,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_08_07bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_09_08bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a52e,
+	.pixel.data_bin	 = 0xcd3fea,
 	.pixel.size_bin	 = 0x1bb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29859,7 +20778,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_09_08bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_10_09bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a6e9,
+	.pixel.data_bin	 = 0xcd41a5,
 	.pixel.size_bin	 = 0x1bf,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29868,7 +20787,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_10_09bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_11_10bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a8a8,
+	.pixel.data_bin	 = 0xcd4364,
 	.pixel.size_bin	 = 0x130,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29877,7 +20796,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_11_10bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_12_11bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104a9d8,
+	.pixel.data_bin	 = 0xcd4494,
 	.pixel.size_bin	 = 0x1f1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29886,7 +20805,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_12_11bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_13_12bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104abc9,
+	.pixel.data_bin	 = 0xcd4685,
 	.pixel.size_bin	 = 0x1cc,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29895,7 +20814,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_13_12bmp = {
 const scui_image_t prj_image_src_num_44_red_24x34_14_13bmp = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104ad95,
+	.pixel.data_bin	 = 0xcd4851,
 	.pixel.size_bin	 = 0xa2,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -29904,7 +20823,7 @@ const scui_image_t prj_image_src_num_44_red_24x34_14_13bmp = {
 const scui_image_t prj_image_src_num_44_white_24x34_01_00png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104ae37,
+	.pixel.data_bin	 = 0xcd48f3,
 	.pixel.size_bin	 = 0x103,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29913,7 +20832,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_01_00png = {
 const scui_image_t prj_image_src_num_44_white_24x34_02_01png = {
 	.pixel.width	 = 0xa,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104af3a,
+	.pixel.data_bin	 = 0xcd49f6,
 	.pixel.size_bin	 = 0x5f2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29922,7 +20841,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_02_01png = {
 const scui_image_t prj_image_src_num_44_white_24x34_03_02png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104b52c,
+	.pixel.data_bin	 = 0xcd4fe8,
 	.pixel.size_bin	 = 0x695,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29931,7 +20850,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_03_02png = {
 const scui_image_t prj_image_src_num_44_white_24x34_04_03png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104bbc1,
+	.pixel.data_bin	 = 0xcd567d,
 	.pixel.size_bin	 = 0x301,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29940,7 +20859,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_04_03png = {
 const scui_image_t prj_image_src_num_44_white_24x34_05_04png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104bec2,
+	.pixel.data_bin	 = 0xcd597e,
 	.pixel.size_bin	 = 0x162,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29949,7 +20868,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_05_04png = {
 const scui_image_t prj_image_src_num_44_white_24x34_06_05png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104c024,
+	.pixel.data_bin	 = 0xcd5ae0,
 	.pixel.size_bin	 = 0x286,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29958,7 +20877,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_06_05png = {
 const scui_image_t prj_image_src_num_44_white_24x34_07_06png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104c2aa,
+	.pixel.data_bin	 = 0xcd5d66,
 	.pixel.size_bin	 = 0x2bc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29967,7 +20886,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_07_06png = {
 const scui_image_t prj_image_src_num_44_white_24x34_08_07png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104c566,
+	.pixel.data_bin	 = 0xcd6022,
 	.pixel.size_bin	 = 0x286,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29976,7 +20895,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_08_07png = {
 const scui_image_t prj_image_src_num_44_white_24x34_09_08png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104c7ec,
+	.pixel.data_bin	 = 0xcd62a8,
 	.pixel.size_bin	 = 0x2db,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29985,7 +20904,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_09_08png = {
 const scui_image_t prj_image_src_num_44_white_24x34_10_09png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104cac7,
+	.pixel.data_bin	 = 0xcd6583,
 	.pixel.size_bin	 = 0x2fe,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -29994,7 +20913,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_10_09png = {
 const scui_image_t prj_image_src_num_44_white_24x34_11_10png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104cdc5,
+	.pixel.data_bin	 = 0xcd6881,
 	.pixel.size_bin	 = 0x23c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30003,7 +20922,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_11_10png = {
 const scui_image_t prj_image_src_num_44_white_24x34_12_11png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104d001,
+	.pixel.data_bin	 = 0xcd6abd,
 	.pixel.size_bin	 = 0x34b,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30012,7 +20931,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_12_11png = {
 const scui_image_t prj_image_src_num_44_white_24x34_13_12png = {
 	.pixel.width	 = 0x18,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104d34c,
+	.pixel.data_bin	 = 0xcd6e08,
 	.pixel.size_bin	 = 0x2ec,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30021,7 +20940,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_13_12png = {
 const scui_image_t prj_image_src_num_44_white_24x34_14_13png = {
 	.pixel.width	 = 0xa,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x104d638,
+	.pixel.data_bin	 = 0xcd70f4,
 	.pixel.size_bin	 = 0x713,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30030,7 +20949,7 @@ const scui_image_t prj_image_src_num_44_white_24x34_14_13png = {
 const scui_image_t prj_image_src_num_52_red_28x40_01_00bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104dd4b,
+	.pixel.data_bin	 = 0xcd7807,
 	.pixel.size_bin	 = 0x5d,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30039,7 +20958,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_01_00bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_02_01bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104dda8,
+	.pixel.data_bin	 = 0xcd7864,
 	.pixel.size_bin	 = 0x84,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30048,7 +20967,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_02_01bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_03_02bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104de2c,
+	.pixel.data_bin	 = 0xcd78e8,
 	.pixel.size_bin	 = 0x95,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30057,7 +20976,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_03_02bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_04_03bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104dec1,
+	.pixel.data_bin	 = 0xcd797d,
 	.pixel.size_bin	 = 0x22c,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30066,7 +20985,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_04_03bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_05_04bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e0ed,
+	.pixel.data_bin	 = 0xcd7ba9,
 	.pixel.size_bin	 = 0x97,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30075,7 +20994,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_05_04bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_06_05bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e184,
+	.pixel.data_bin	 = 0xcd7c40,
 	.pixel.size_bin	 = 0x1de,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30084,7 +21003,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_06_05bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_07_06bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e362,
+	.pixel.data_bin	 = 0xcd7e1e,
 	.pixel.size_bin	 = 0x1f0,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30093,7 +21012,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_07_06bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_08_07bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e552,
+	.pixel.data_bin	 = 0xcd800e,
 	.pixel.size_bin	 = 0x17e,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30102,7 +21021,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_08_07bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_09_08bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e6d0,
+	.pixel.data_bin	 = 0xcd818c,
 	.pixel.size_bin	 = 0x211,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30111,7 +21030,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_09_08bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_10_09bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104e8e1,
+	.pixel.data_bin	 = 0xcd839d,
 	.pixel.size_bin	 = 0x21e,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30120,7 +21039,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_10_09bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_11_10bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104eaff,
+	.pixel.data_bin	 = 0xcd85bb,
 	.pixel.size_bin	 = 0x15a,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30129,7 +21048,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_11_10bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_12_11bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104ec59,
+	.pixel.data_bin	 = 0xcd8715,
 	.pixel.size_bin	 = 0x27b,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30138,7 +21057,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_12_11bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_13_12bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104eed4,
+	.pixel.data_bin	 = 0xcd8990,
 	.pixel.size_bin	 = 0x20f,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30147,7 +21066,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_13_12bmp = {
 const scui_image_t prj_image_src_num_52_red_28x40_14_13bmp = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104f0e3,
+	.pixel.data_bin	 = 0xcd8b9f,
 	.pixel.size_bin	 = 0xd1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30156,7 +21075,7 @@ const scui_image_t prj_image_src_num_52_red_28x40_14_13bmp = {
 const scui_image_t prj_image_src_num_52_white_28x40_01_00png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104f1b4,
+	.pixel.data_bin	 = 0xcd8c70,
 	.pixel.size_bin	 = 0x10e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30165,7 +21084,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_01_00png = {
 const scui_image_t prj_image_src_num_52_white_28x40_02_01png = {
 	.pixel.width	 = 0xe,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104f2c2,
+	.pixel.data_bin	 = 0xcd8d7e,
 	.pixel.size_bin	 = 0x615,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30174,7 +21093,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_02_01png = {
 const scui_image_t prj_image_src_num_52_white_28x40_03_02png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104f8d7,
+	.pixel.data_bin	 = 0xcd9393,
 	.pixel.size_bin	 = 0x20d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30183,7 +21102,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_03_02png = {
 const scui_image_t prj_image_src_num_52_white_28x40_04_03png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104fae4,
+	.pixel.data_bin	 = 0xcd95a0,
 	.pixel.size_bin	 = 0x359,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30192,7 +21111,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_04_03png = {
 const scui_image_t prj_image_src_num_52_white_28x40_05_04png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104fe3d,
+	.pixel.data_bin	 = 0xcd98f9,
 	.pixel.size_bin	 = 0x18c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30201,7 +21120,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_05_04png = {
 const scui_image_t prj_image_src_num_52_white_28x40_06_05png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x104ffc9,
+	.pixel.data_bin	 = 0xcd9a85,
 	.pixel.size_bin	 = 0x2e5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30210,7 +21129,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_06_05png = {
 const scui_image_t prj_image_src_num_52_white_28x40_07_06png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x10502ae,
+	.pixel.data_bin	 = 0xcd9d6a,
 	.pixel.size_bin	 = 0x320,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30219,7 +21138,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_07_06png = {
 const scui_image_t prj_image_src_num_52_white_28x40_08_07png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x10505ce,
+	.pixel.data_bin	 = 0xcda08a,
 	.pixel.size_bin	 = 0x277,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30228,7 +21147,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_08_07png = {
 const scui_image_t prj_image_src_num_52_white_28x40_09_08png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1050845,
+	.pixel.data_bin	 = 0xcda301,
 	.pixel.size_bin	 = 0x348,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30237,7 +21156,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_09_08png = {
 const scui_image_t prj_image_src_num_52_white_28x40_10_09png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1050b8d,
+	.pixel.data_bin	 = 0xcda649,
 	.pixel.size_bin	 = 0x378,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30246,7 +21165,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_10_09png = {
 const scui_image_t prj_image_src_num_52_white_28x40_11_10png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1050f05,
+	.pixel.data_bin	 = 0xcda9c1,
 	.pixel.size_bin	 = 0x27c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30255,7 +21174,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_11_10png = {
 const scui_image_t prj_image_src_num_52_white_28x40_12_11png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1051181,
+	.pixel.data_bin	 = 0xcdac3d,
 	.pixel.size_bin	 = 0x3e7,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30264,7 +21183,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_12_11png = {
 const scui_image_t prj_image_src_num_52_white_28x40_13_12png = {
 	.pixel.width	 = 0x1c,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1051568,
+	.pixel.data_bin	 = 0xcdb024,
 	.pixel.size_bin	 = 0x36f,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30273,7 +21192,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_13_12png = {
 const scui_image_t prj_image_src_num_52_white_28x40_14_13png = {
 	.pixel.width	 = 0xe,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x10518d7,
+	.pixel.data_bin	 = 0xcdb393,
 	.pixel.size_bin	 = 0x684,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30282,7 +21201,7 @@ const scui_image_t prj_image_src_num_52_white_28x40_14_13png = {
 const scui_image_t prj_image_src_num_62_white_36x46_01_00png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1051f5b,
+	.pixel.data_bin	 = 0xcdba17,
 	.pixel.size_bin	 = 0x119,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30291,7 +21210,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_01_00png = {
 const scui_image_t prj_image_src_num_62_white_36x46_02_01png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1052074,
+	.pixel.data_bin	 = 0xcdbb30,
 	.pixel.size_bin	 = 0x614,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30300,7 +21219,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_02_01png = {
 const scui_image_t prj_image_src_num_62_white_36x46_03_02png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1052688,
+	.pixel.data_bin	 = 0xcdc144,
 	.pixel.size_bin	 = 0x2d1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30309,7 +21228,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_03_02png = {
 const scui_image_t prj_image_src_num_62_white_36x46_04_03png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1052959,
+	.pixel.data_bin	 = 0xcdc415,
 	.pixel.size_bin	 = 0x40e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30318,7 +21237,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_04_03png = {
 const scui_image_t prj_image_src_num_62_white_36x46_05_04png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1052d67,
+	.pixel.data_bin	 = 0xcdc823,
 	.pixel.size_bin	 = 0x1b5,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30327,7 +21246,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_05_04png = {
 const scui_image_t prj_image_src_num_62_white_36x46_06_05png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1052f1c,
+	.pixel.data_bin	 = 0xcdc9d8,
 	.pixel.size_bin	 = 0x367,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30336,7 +21255,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_06_05png = {
 const scui_image_t prj_image_src_num_62_white_36x46_07_06png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1053283,
+	.pixel.data_bin	 = 0xcdcd3f,
 	.pixel.size_bin	 = 0x3b6,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30345,7 +21264,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_07_06png = {
 const scui_image_t prj_image_src_num_62_white_36x46_08_07png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1053639,
+	.pixel.data_bin	 = 0xcdd0f5,
 	.pixel.size_bin	 = 0x341,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30354,7 +21273,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_08_07png = {
 const scui_image_t prj_image_src_num_62_white_36x46_09_08png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x105397a,
+	.pixel.data_bin	 = 0xcdd436,
 	.pixel.size_bin	 = 0x3c7,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30363,7 +21282,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_09_08png = {
 const scui_image_t prj_image_src_num_62_white_36x46_10_09png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1053d41,
+	.pixel.data_bin	 = 0xcdd7fd,
 	.pixel.size_bin	 = 0x40e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30372,7 +21291,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_10_09png = {
 const scui_image_t prj_image_src_num_62_white_36x46_11_10png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x105414f,
+	.pixel.data_bin	 = 0xcddc0b,
 	.pixel.size_bin	 = 0x309,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30381,7 +21300,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_11_10png = {
 const scui_image_t prj_image_src_num_62_white_36x46_12_11png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1054458,
+	.pixel.data_bin	 = 0xcddf14,
 	.pixel.size_bin	 = 0x4a2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30390,7 +21309,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_12_11png = {
 const scui_image_t prj_image_src_num_62_white_36x46_13_12png = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x10548fa,
+	.pixel.data_bin	 = 0xcde3b6,
 	.pixel.size_bin	 = 0x3fe,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30399,7 +21318,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_13_12png = {
 const scui_image_t prj_image_src_num_62_white_36x46_14_13png = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0x30,
-	.pixel.data_bin	 = 0x1054cf8,
+	.pixel.data_bin	 = 0xcde7b4,
 	.pixel.size_bin	 = 0x756,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30408,7 +21327,7 @@ const scui_image_t prj_image_src_num_62_white_36x46_14_13png = {
 const scui_image_t prj_image_src_num_80_white_44x60_01_00png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x105544e,
+	.pixel.data_bin	 = 0xcdef0a,
 	.pixel.size_bin	 = 0x148,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30417,7 +21336,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_01_00png = {
 const scui_image_t prj_image_src_num_80_white_44x60_02_01png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1055596,
+	.pixel.data_bin	 = 0xcdf052,
 	.pixel.size_bin	 = 0x63b,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30426,7 +21345,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_02_01png = {
 const scui_image_t prj_image_src_num_80_white_44x60_03_02png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1055bd1,
+	.pixel.data_bin	 = 0xcdf68d,
 	.pixel.size_bin	 = 0x35c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30435,7 +21354,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_03_02png = {
 const scui_image_t prj_image_src_num_80_white_44x60_04_03png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1055f2d,
+	.pixel.data_bin	 = 0xcdf9e9,
 	.pixel.size_bin	 = 0x524,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30444,7 +21363,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_04_03png = {
 const scui_image_t prj_image_src_num_80_white_44x60_05_04png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1056451,
+	.pixel.data_bin	 = 0xcdff0d,
 	.pixel.size_bin	 = 0x1f8,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30453,7 +21372,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_05_04png = {
 const scui_image_t prj_image_src_num_80_white_44x60_06_05png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1056649,
+	.pixel.data_bin	 = 0xce0105,
 	.pixel.size_bin	 = 0x469,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30462,7 +21381,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_06_05png = {
 const scui_image_t prj_image_src_num_80_white_44x60_07_06png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1056ab2,
+	.pixel.data_bin	 = 0xce056e,
 	.pixel.size_bin	 = 0x47a,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30471,7 +21390,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_07_06png = {
 const scui_image_t prj_image_src_num_80_white_44x60_08_07png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1056f2c,
+	.pixel.data_bin	 = 0xce09e8,
 	.pixel.size_bin	 = 0x3bc,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30480,7 +21399,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_08_07png = {
 const scui_image_t prj_image_src_num_80_white_44x60_09_08png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x10572e8,
+	.pixel.data_bin	 = 0xce0da4,
 	.pixel.size_bin	 = 0x4a9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30489,7 +21408,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_09_08png = {
 const scui_image_t prj_image_src_num_80_white_44x60_10_09png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1057791,
+	.pixel.data_bin	 = 0xce124d,
 	.pixel.size_bin	 = 0x4df,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30498,7 +21417,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_10_09png = {
 const scui_image_t prj_image_src_num_80_white_44x60_11_10png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1057c70,
+	.pixel.data_bin	 = 0xce172c,
 	.pixel.size_bin	 = 0x345,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30507,7 +21426,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_11_10png = {
 const scui_image_t prj_image_src_num_80_white_44x60_12_11png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1057fb5,
+	.pixel.data_bin	 = 0xce1a71,
 	.pixel.size_bin	 = 0x5e2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30516,7 +21435,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_12_11png = {
 const scui_image_t prj_image_src_num_80_white_44x60_13_12png = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1058597,
+	.pixel.data_bin	 = 0xce2053,
 	.pixel.size_bin	 = 0x543,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30525,7 +21444,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_13_12png = {
 const scui_image_t prj_image_src_num_80_white_44x60_14_13png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x3c,
-	.pixel.data_bin	 = 0x1058ada,
+	.pixel.data_bin	 = 0xce2596,
 	.pixel.size_bin	 = 0x6e3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30534,7 +21453,7 @@ const scui_image_t prj_image_src_num_80_white_44x60_14_13png = {
 const scui_image_t prj_image_src_num_92_white_52x70_01_00png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x10591bd,
+	.pixel.data_bin	 = 0xce2c79,
 	.pixel.size_bin	 = 0x170,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30543,7 +21462,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_01_00png = {
 const scui_image_t prj_image_src_num_92_white_52x70_02_01png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105932d,
+	.pixel.data_bin	 = 0xce2de9,
 	.pixel.size_bin	 = 0x1c2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30552,7 +21471,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_02_01png = {
 const scui_image_t prj_image_src_num_92_white_52x70_03_02png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x10594ef,
+	.pixel.data_bin	 = 0xce2fab,
 	.pixel.size_bin	 = 0x3b1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30561,7 +21480,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_03_02png = {
 const scui_image_t prj_image_src_num_92_white_52x70_04_03png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x10598a0,
+	.pixel.data_bin	 = 0xce335c,
 	.pixel.size_bin	 = 0x5ac,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30570,7 +21489,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_04_03png = {
 const scui_image_t prj_image_src_num_92_white_52x70_05_04png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x1059e4c,
+	.pixel.data_bin	 = 0xce3908,
 	.pixel.size_bin	 = 0x243,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30579,7 +21498,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_05_04png = {
 const scui_image_t prj_image_src_num_92_white_52x70_06_05png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105a08f,
+	.pixel.data_bin	 = 0xce3b4b,
 	.pixel.size_bin	 = 0x4ef,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30588,7 +21507,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_06_05png = {
 const scui_image_t prj_image_src_num_92_white_52x70_07_06png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105a57e,
+	.pixel.data_bin	 = 0xce403a,
 	.pixel.size_bin	 = 0x52c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30597,7 +21516,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_07_06png = {
 const scui_image_t prj_image_src_num_92_white_52x70_08_07png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105aaaa,
+	.pixel.data_bin	 = 0xce4566,
 	.pixel.size_bin	 = 0x476,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30606,7 +21525,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_08_07png = {
 const scui_image_t prj_image_src_num_92_white_52x70_09_08png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105af20,
+	.pixel.data_bin	 = 0xce49dc,
 	.pixel.size_bin	 = 0x55c,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30615,7 +21534,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_09_08png = {
 const scui_image_t prj_image_src_num_92_white_52x70_10_09png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105b47c,
+	.pixel.data_bin	 = 0xce4f38,
 	.pixel.size_bin	 = 0x5f4,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30624,7 +21543,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_10_09png = {
 const scui_image_t prj_image_src_num_92_white_52x70_11_10png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105ba70,
+	.pixel.data_bin	 = 0xce552c,
 	.pixel.size_bin	 = 0x40b,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30633,7 +21552,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_11_10png = {
 const scui_image_t prj_image_src_num_92_white_52x70_12_11png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105be7b,
+	.pixel.data_bin	 = 0xce5937,
 	.pixel.size_bin	 = 0x6ba,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30642,7 +21561,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_12_11png = {
 const scui_image_t prj_image_src_num_92_white_52x70_13_12png = {
 	.pixel.width	 = 0x34,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105c535,
+	.pixel.data_bin	 = 0xce5ff1,
 	.pixel.size_bin	 = 0x5b3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30651,7 +21570,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_13_12png = {
 const scui_image_t prj_image_src_num_92_white_52x70_14_13png = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x46,
-	.pixel.data_bin	 = 0x105cae8,
+	.pixel.data_bin	 = 0xce65a4,
 	.pixel.size_bin	 = 0x7d0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30660,7 +21579,7 @@ const scui_image_t prj_image_src_num_92_white_52x70_14_13png = {
 const scui_image_t prj_image_src_repeat_01_bluetoothbmp = {
 	.pixel.width	 = 0xd2,
 	.pixel.height	 = 0xd2,
-	.pixel.data_bin	 = 0x105d2b8,
+	.pixel.data_bin	 = 0xce6d74,
 	.pixel.size_bin	 = 0xefe,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30669,7 +21588,7 @@ const scui_image_t prj_image_src_repeat_01_bluetoothbmp = {
 const scui_image_t prj_image_src_repeat_02_windowpng = {
 	.pixel.width	 = 0x146,
 	.pixel.height	 = 0x7c,
-	.pixel.data_bin	 = 0x105e1b6,
+	.pixel.data_bin	 = 0xce7c72,
 	.pixel.size_bin	 = 0x1ae6,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -30678,7 +21597,7 @@ const scui_image_t prj_image_src_repeat_02_windowpng = {
 const scui_image_t prj_image_src_repeat_03_barbmp = {
 	.pixel.width	 = 0x6,
 	.pixel.height	 = 0x98,
-	.pixel.data_bin	 = 0x105fc9c,
+	.pixel.data_bin	 = 0xce9758,
 	.pixel.size_bin	 = 0x30,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -30687,7 +21606,7 @@ const scui_image_t prj_image_src_repeat_03_barbmp = {
 const scui_image_t prj_image_src_repeat_04_barbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x90,
-	.pixel.data_bin	 = 0x105fccc,
+	.pixel.data_bin	 = 0xce9788,
 	.pixel.size_bin	 = 0x4c,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -30696,7 +21615,7 @@ const scui_image_t prj_image_src_repeat_04_barbmp = {
 const scui_image_t prj_image_src_repeat_05_dotbmp = {
 	.pixel.width	 = 0x6,
 	.pixel.height	 = 0x6,
-	.pixel.data_bin	 = 0x105fd18,
+	.pixel.data_bin	 = 0xce97d4,
 	.pixel.size_bin	 = 0x29,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -30705,7 +21624,7 @@ const scui_image_t prj_image_src_repeat_05_dotbmp = {
 const scui_image_t prj_image_src_repeat_arrow_01_backbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x105fd41,
+	.pixel.data_bin	 = 0xce97fd,
 	.pixel.size_bin	 = 0x7e,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30714,7 +21633,7 @@ const scui_image_t prj_image_src_repeat_arrow_01_backbmp = {
 const scui_image_t prj_image_src_repeat_arrow_02_underbmp = {
 	.pixel.width	 = 0x22,
 	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0x105fdbf,
+	.pixel.data_bin	 = 0xce987b,
 	.pixel.size_bin	 = 0xfc,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30723,7 +21642,7 @@ const scui_image_t prj_image_src_repeat_arrow_02_underbmp = {
 const scui_image_t prj_image_src_repeat_arrow_03_upbmp = {
 	.pixel.width	 = 0x22,
 	.pixel.height	 = 0x14,
-	.pixel.data_bin	 = 0x105febb,
+	.pixel.data_bin	 = 0xce9977,
 	.pixel.size_bin	 = 0xe9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30732,7 +21651,7 @@ const scui_image_t prj_image_src_repeat_arrow_03_upbmp = {
 const scui_image_t prj_image_src_repeat_arrow_04_backbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x105ffa4,
+	.pixel.data_bin	 = 0xce9a60,
 	.pixel.size_bin	 = 0x77,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30741,7 +21660,7 @@ const scui_image_t prj_image_src_repeat_arrow_04_backbmp = {
 const scui_image_t prj_image_src_repeat_arrow_05_backbmp = {
 	.pixel.width	 = 0x12,
 	.pixel.height	 = 0x17,
-	.pixel.data_bin	 = 0x106001b,
+	.pixel.data_bin	 = 0xce9ad7,
 	.pixel.size_bin	 = 0xd6,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30750,7 +21669,7 @@ const scui_image_t prj_image_src_repeat_arrow_05_backbmp = {
 const scui_image_t prj_image_src_repeat_arrow_06_backbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x1b,
-	.pixel.data_bin	 = 0x10600f1,
+	.pixel.data_bin	 = 0xce9bad,
 	.pixel.size_bin	 = 0x62,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -30759,7 +21678,7 @@ const scui_image_t prj_image_src_repeat_arrow_06_backbmp = {
 const scui_image_t prj_image_src_repeat_box_alarm_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060153,
+	.pixel.data_bin	 = 0xce9c0f,
 	.pixel.size_bin	 = 0xc5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30768,7 +21687,7 @@ const scui_image_t prj_image_src_repeat_box_alarm_01_left_downbmp = {
 const scui_image_t prj_image_src_repeat_box_alarm_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060218,
+	.pixel.data_bin	 = 0xce9cd4,
 	.pixel.size_bin	 = 0xcb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30777,7 +21696,7 @@ const scui_image_t prj_image_src_repeat_box_alarm_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_alarm_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10602e3,
+	.pixel.data_bin	 = 0xce9d9f,
 	.pixel.size_bin	 = 0xcb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30786,7 +21705,7 @@ const scui_image_t prj_image_src_repeat_box_alarm_03_right_downbmp = {
 const scui_image_t prj_image_src_repeat_box_alarm_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10603ae,
+	.pixel.data_bin	 = 0xce9e6a,
 	.pixel.size_bin	 = 0xca,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30795,7 +21714,7 @@ const scui_image_t prj_image_src_repeat_box_alarm_04_right_upbmp = {
 const scui_image_t prj_image_src_repeat_box_grey_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060478,
+	.pixel.data_bin	 = 0xce9f34,
 	.pixel.size_bin	 = 0xbb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30804,7 +21723,7 @@ const scui_image_t prj_image_src_repeat_box_grey_01_left_downbmp = {
 const scui_image_t prj_image_src_repeat_box_grey_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060533,
+	.pixel.data_bin	 = 0xce9fef,
 	.pixel.size_bin	 = 0xc3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30813,7 +21732,7 @@ const scui_image_t prj_image_src_repeat_box_grey_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_grey_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10605f6,
+	.pixel.data_bin	 = 0xcea0b2,
 	.pixel.size_bin	 = 0xc4,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30822,7 +21741,7 @@ const scui_image_t prj_image_src_repeat_box_grey_03_right_downbmp = {
 const scui_image_t prj_image_src_repeat_box_grey_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10606ba,
+	.pixel.data_bin	 = 0xcea176,
 	.pixel.size_bin	 = 0xc3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30831,7 +21750,7 @@ const scui_image_t prj_image_src_repeat_box_grey_04_right_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sleep_breathe_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x106077d,
+	.pixel.data_bin	 = 0xcea239,
 	.pixel.size_bin	 = 0xca,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30840,7 +21759,7 @@ const scui_image_t prj_image_src_repeat_box_sleep_breathe_01_left_downbmp = {
 const scui_image_t prj_image_src_repeat_box_sleep_breathe_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060847,
+	.pixel.data_bin	 = 0xcea303,
 	.pixel.size_bin	 = 0xcd,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30849,7 +21768,7 @@ const scui_image_t prj_image_src_repeat_box_sleep_breathe_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sleep_breathe_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060914,
+	.pixel.data_bin	 = 0xcea3d0,
 	.pixel.size_bin	 = 0xd6,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30858,7 +21777,7 @@ const scui_image_t prj_image_src_repeat_box_sleep_breathe_03_right_downbmp = {
 const scui_image_t prj_image_src_repeat_box_sleep_breathe_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10609ea,
+	.pixel.data_bin	 = 0xcea4a6,
 	.pixel.size_bin	 = 0xce,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30867,7 +21786,7 @@ const scui_image_t prj_image_src_repeat_box_sleep_breathe_04_right_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060ab8,
+	.pixel.data_bin	 = 0xcea574,
 	.pixel.size_bin	 = 0xbf,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30876,7 +21795,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_01_left_downbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060b77,
+	.pixel.data_bin	 = 0xcea633,
 	.pixel.size_bin	 = 0xc6,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30885,7 +21804,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060c3d,
+	.pixel.data_bin	 = 0xcea6f9,
 	.pixel.size_bin	 = 0xc9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30894,7 +21813,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_03_right_downbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060d06,
+	.pixel.data_bin	 = 0xcea7c2,
 	.pixel.size_bin	 = 0xcb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30903,7 +21822,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_04_right_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_dis_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060dd1,
+	.pixel.data_bin	 = 0xcea88d,
 	.pixel.size_bin	 = 0xc5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30912,7 +21831,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_dis_01_left_downbmp =
 const scui_image_t prj_image_src_repeat_box_sport_settings_dis_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060e96,
+	.pixel.data_bin	 = 0xcea952,
 	.pixel.size_bin	 = 0xc9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30921,7 +21840,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_dis_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_sport_settings_dis_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1060f5f,
+	.pixel.data_bin	 = 0xceaa1b,
 	.pixel.size_bin	 = 0xcf,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30930,7 +21849,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_dis_03_right_downbmp 
 const scui_image_t prj_image_src_repeat_box_sport_settings_dis_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x106102e,
+	.pixel.data_bin	 = 0xceaaea,
 	.pixel.size_bin	 = 0xc9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30939,7 +21858,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_dis_04_right_upbmp = 
 const scui_image_t prj_image_src_repeat_box_sport_settings_heart_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10610f7,
+	.pixel.data_bin	 = 0xceabb3,
 	.pixel.size_bin	 = 0xc4,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30948,7 +21867,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_heart_01_left_downbmp
 const scui_image_t prj_image_src_repeat_box_sport_settings_heart_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10611bb,
+	.pixel.data_bin	 = 0xceac77,
 	.pixel.size_bin	 = 0xc9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30957,7 +21876,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_heart_02_left_upbmp =
 const scui_image_t prj_image_src_repeat_box_sport_settings_heart_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061284,
+	.pixel.data_bin	 = 0xcead40,
 	.pixel.size_bin	 = 0xc4,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30966,7 +21885,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_heart_03_right_downbm
 const scui_image_t prj_image_src_repeat_box_sport_settings_heart_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061348,
+	.pixel.data_bin	 = 0xceae04,
 	.pixel.size_bin	 = 0xc1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30975,7 +21894,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_heart_04_right_upbmp 
 const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061409,
+	.pixel.data_bin	 = 0xceaec5,
 	.pixel.size_bin	 = 0xc5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30984,7 +21903,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_01_left_downbmp 
 const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10614ce,
+	.pixel.data_bin	 = 0xceaf8a,
 	.pixel.size_bin	 = 0xcb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -30993,7 +21912,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_02_left_upbmp = 
 const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061599,
+	.pixel.data_bin	 = 0xceb055,
 	.pixel.size_bin	 = 0xc7,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31002,7 +21921,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_03_right_downbmp
 const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061660,
+	.pixel.data_bin	 = 0xceb11c,
 	.pixel.size_bin	 = 0xc5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31011,7 +21930,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_kcal_04_right_upbmp =
 const scui_image_t prj_image_src_repeat_box_sport_settings_time_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061725,
+	.pixel.data_bin	 = 0xceb1e1,
 	.pixel.size_bin	 = 0xc1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31020,7 +21939,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_time_01_left_downbmp 
 const scui_image_t prj_image_src_repeat_box_sport_settings_time_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10617e6,
+	.pixel.data_bin	 = 0xceb2a2,
 	.pixel.size_bin	 = 0xc8,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31029,7 +21948,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_time_02_left_upbmp = 
 const scui_image_t prj_image_src_repeat_box_sport_settings_time_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10618ae,
+	.pixel.data_bin	 = 0xceb36a,
 	.pixel.size_bin	 = 0xca,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31038,7 +21957,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_time_03_right_downbmp
 const scui_image_t prj_image_src_repeat_box_sport_settings_time_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061978,
+	.pixel.data_bin	 = 0xceb434,
 	.pixel.size_bin	 = 0xc4,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31047,7 +21966,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_time_04_right_upbmp =
 const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061a3c,
+	.pixel.data_bin	 = 0xceb4f8,
 	.pixel.size_bin	 = 0xcd,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31056,7 +21975,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_01_left_d
 const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061b09,
+	.pixel.data_bin	 = 0xceb5c5,
 	.pixel.size_bin	 = 0xd0,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31065,7 +21984,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_02_left_u
 const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061bd9,
+	.pixel.data_bin	 = 0xceb695,
 	.pixel.size_bin	 = 0xd3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31074,7 +21993,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_03_right_
 const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061cac,
+	.pixel.data_bin	 = 0xceb768,
 	.pixel.size_bin	 = 0xcd,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31083,7 +22002,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_trip_number_04_right_
 const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061d79,
+	.pixel.data_bin	 = 0xceb835,
 	.pixel.size_bin	 = 0xcd,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31092,7 +22011,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_01_left_downbm
 const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061e46,
+	.pixel.data_bin	 = 0xceb902,
 	.pixel.size_bin	 = 0xcf,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31101,7 +22020,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_02_left_upbmp 
 const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061f15,
+	.pixel.data_bin	 = 0xceb9d1,
 	.pixel.size_bin	 = 0xd3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31110,7 +22029,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_03_right_downb
 const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1061fe8,
+	.pixel.data_bin	 = 0xcebaa4,
 	.pixel.size_bin	 = 0xcb,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31119,7 +22038,7 @@ const scui_image_t prj_image_src_repeat_box_sport_settings_yellow_04_right_upbmp
 const scui_image_t prj_image_src_repeat_box_timer_01_left_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x10620b3,
+	.pixel.data_bin	 = 0xcebb6f,
 	.pixel.size_bin	 = 0xc7,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31128,7 +22047,7 @@ const scui_image_t prj_image_src_repeat_box_timer_01_left_downbmp = {
 const scui_image_t prj_image_src_repeat_box_timer_02_left_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x106217a,
+	.pixel.data_bin	 = 0xcebc36,
 	.pixel.size_bin	 = 0xc6,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31137,7 +22056,7 @@ const scui_image_t prj_image_src_repeat_box_timer_02_left_upbmp = {
 const scui_image_t prj_image_src_repeat_box_timer_03_right_downbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1062240,
+	.pixel.data_bin	 = 0xcebcfc,
 	.pixel.size_bin	 = 0xc9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31146,7 +22065,7 @@ const scui_image_t prj_image_src_repeat_box_timer_03_right_downbmp = {
 const scui_image_t prj_image_src_repeat_box_timer_04_right_upbmp = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x10,
-	.pixel.data_bin	 = 0x1062309,
+	.pixel.data_bin	 = 0xcebdc5,
 	.pixel.size_bin	 = 0xc5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31155,7 +22074,7 @@ const scui_image_t prj_image_src_repeat_box_timer_04_right_upbmp = {
 const scui_image_t prj_image_src_repeat_btn_01_card_mediunpng = {
 	.pixel.width	 = 0x15e,
 	.pixel.height	 = 0x64,
-	.pixel.data_bin	 = 0x10623ce,
+	.pixel.data_bin	 = 0xcebe8a,
 	.pixel.size_bin	 = 0xbe1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31164,7 +22083,7 @@ const scui_image_t prj_image_src_repeat_btn_01_card_mediunpng = {
 const scui_image_t prj_image_src_repeat_btn_02_closebmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1062faf,
+	.pixel.data_bin	 = 0xceca6b,
 	.pixel.size_bin	 = 0x386,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31173,7 +22092,7 @@ const scui_image_t prj_image_src_repeat_btn_02_closebmp = {
 const scui_image_t prj_image_src_repeat_btn_04_delete_01bmp = {
 	.pixel.width	 = 0xb0,
 	.pixel.height	 = 0x74,
-	.pixel.data_bin	 = 0x1063335,
+	.pixel.data_bin	 = 0xcecdf1,
 	.pixel.size_bin	 = 0x4ef,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31182,7 +22101,7 @@ const scui_image_t prj_image_src_repeat_btn_04_delete_01bmp = {
 const scui_image_t prj_image_src_repeat_btn_05_delete_02bmp = {
 	.pixel.width	 = 0xb0,
 	.pixel.height	 = 0x64,
-	.pixel.data_bin	 = 0x1063824,
+	.pixel.data_bin	 = 0xced2e0,
 	.pixel.size_bin	 = 0x4d8,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31191,7 +22110,7 @@ const scui_image_t prj_image_src_repeat_btn_05_delete_02bmp = {
 const scui_image_t prj_image_src_repeat_btn_06_delete_dotbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1063cfc,
+	.pixel.data_bin	 = 0xced7b8,
 	.pixel.size_bin	 = 0x555,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31200,7 +22119,7 @@ const scui_image_t prj_image_src_repeat_btn_06_delete_dotbmp = {
 const scui_image_t prj_image_src_repeat_btn_11_ok_alarmbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1064251,
+	.pixel.data_bin	 = 0xcedd0d,
 	.pixel.size_bin	 = 0x571,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31209,7 +22128,7 @@ const scui_image_t prj_image_src_repeat_btn_11_ok_alarmbmp = {
 const scui_image_t prj_image_src_repeat_btn_12_ok_breathe_sleep_sportbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x10647c2,
+	.pixel.data_bin	 = 0xcee27e,
 	.pixel.size_bin	 = 0x5ae,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31218,7 +22137,7 @@ const scui_image_t prj_image_src_repeat_btn_12_ok_breathe_sleep_sportbmp = {
 const scui_image_t prj_image_src_repeat_btn_13_ok_callbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1064d70,
+	.pixel.data_bin	 = 0xcee82c,
 	.pixel.size_bin	 = 0x5b3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31227,7 +22146,7 @@ const scui_image_t prj_image_src_repeat_btn_13_ok_callbmp = {
 const scui_image_t prj_image_src_repeat_btn_14_ok_heart_spo2_settingsbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1065323,
+	.pixel.data_bin	 = 0xceeddf,
 	.pixel.size_bin	 = 0x574,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31236,7 +22155,7 @@ const scui_image_t prj_image_src_repeat_btn_14_ok_heart_spo2_settingsbmp = {
 const scui_image_t prj_image_src_repeat_btn_15_ok_sport_disbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1065897,
+	.pixel.data_bin	 = 0xcef353,
 	.pixel.size_bin	 = 0x582,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31245,7 +22164,7 @@ const scui_image_t prj_image_src_repeat_btn_15_ok_sport_disbmp = {
 const scui_image_t prj_image_src_repeat_btn_16_ok_sport_dis_timebmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1065e19,
+	.pixel.data_bin	 = 0xcef8d5,
 	.pixel.size_bin	 = 0x5bc,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31254,7 +22173,7 @@ const scui_image_t prj_image_src_repeat_btn_16_ok_sport_dis_timebmp = {
 const scui_image_t prj_image_src_repeat_btn_17_ok_sport_heartbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x10663d5,
+	.pixel.data_bin	 = 0xcefe91,
 	.pixel.size_bin	 = 0x531,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31263,7 +22182,7 @@ const scui_image_t prj_image_src_repeat_btn_17_ok_sport_heartbmp = {
 const scui_image_t prj_image_src_repeat_btn_18_ok_sport_kcalbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1066906,
+	.pixel.data_bin	 = 0xcf03c2,
 	.pixel.size_bin	 = 0x58f,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31272,7 +22191,7 @@ const scui_image_t prj_image_src_repeat_btn_18_ok_sport_kcalbmp = {
 const scui_image_t prj_image_src_repeat_btn_19_ok_sport_timebmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1066e95,
+	.pixel.data_bin	 = 0xcf0951,
 	.pixel.size_bin	 = 0x581,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31281,7 +22200,7 @@ const scui_image_t prj_image_src_repeat_btn_19_ok_sport_timebmp = {
 const scui_image_t prj_image_src_repeat_btn_20_ok_sport_trip_numberbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1067416,
+	.pixel.data_bin	 = 0xcf0ed2,
 	.pixel.size_bin	 = 0x5a0,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31290,7 +22209,7 @@ const scui_image_t prj_image_src_repeat_btn_20_ok_sport_trip_numberbmp = {
 const scui_image_t prj_image_src_repeat_btn_21_retey_stressbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x10679b6,
+	.pixel.data_bin	 = 0xcf1472,
 	.pixel.size_bin	 = 0x6c2,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31299,7 +22218,7 @@ const scui_image_t prj_image_src_repeat_btn_21_retey_stressbmp = {
 const scui_image_t prj_image_src_repeat_btn_22_retry_heartbmp = {
 	.pixel.width	 = 0x62,
 	.pixel.height	 = 0x62,
-	.pixel.data_bin	 = 0x1068078,
+	.pixel.data_bin	 = 0xcf1b34,
 	.pixel.size_bin	 = 0x67c,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31308,7 +22227,7 @@ const scui_image_t prj_image_src_repeat_btn_22_retry_heartbmp = {
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_01_delete_00_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x10686f4,
+	.pixel.data_bin	 = 0xcf21b0,
 	.pixel.size_bin	 = 0x167,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31317,7 +22236,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_01_delete_0
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_02_delete_00_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106885b,
+	.pixel.data_bin	 = 0xcf2317,
 	.pixel.size_bin	 = 0x16d,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31326,7 +22245,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_02_delete_0
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_03_delete_00_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x10689c8,
+	.pixel.data_bin	 = 0xcf2484,
 	.pixel.size_bin	 = 0x157,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31335,7 +22254,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_03_delete_0
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_04_delete_00_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1068b1f,
+	.pixel.data_bin	 = 0xcf25db,
 	.pixel.size_bin	 = 0x159,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31344,7 +22263,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_04_delete_0
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_05_juxing_alarms_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1068c78,
+	.pixel.data_bin	 = 0xcf2734,
 	.pixel.size_bin	 = 0x1a1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31353,7 +22272,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_05_juxing_a
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_06_juxing_alarms_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1068e19,
+	.pixel.data_bin	 = 0xcf28d5,
 	.pixel.size_bin	 = 0x196,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31362,7 +22281,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_06_juxing_a
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_07_juxing_alarms_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1068faf,
+	.pixel.data_bin	 = 0xcf2a6b,
 	.pixel.size_bin	 = 0x181,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31371,7 +22290,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_07_juxing_a
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_08_juxing_alarms_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069130,
+	.pixel.data_bin	 = 0xcf2bec,
 	.pixel.size_bin	 = 0x195,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31380,7 +22299,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_08_juxing_a
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_09_juxing_breathe_sleep_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x10692c5,
+	.pixel.data_bin	 = 0xcf2d81,
 	.pixel.size_bin	 = 0x1ab,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31389,7 +22308,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_09_juxing_b
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_10_juxing_breathe_sleep_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069470,
+	.pixel.data_bin	 = 0xcf2f2c,
 	.pixel.size_bin	 = 0x1a5,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31398,7 +22317,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_10_juxing_b
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_11_juxing_breathe_sleep_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069615,
+	.pixel.data_bin	 = 0xcf30d1,
 	.pixel.size_bin	 = 0x18b,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31407,7 +22326,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_11_juxing_b
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_12_juxing_breathe_sleep_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x10697a0,
+	.pixel.data_bin	 = 0xcf325c,
 	.pixel.size_bin	 = 0x199,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31416,7 +22335,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_12_juxing_b
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_13_juxing_grey_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069939,
+	.pixel.data_bin	 = 0xcf33f5,
 	.pixel.size_bin	 = 0x172,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31425,7 +22344,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_13_juxing_g
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_14_juxing_grey_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069aab,
+	.pixel.data_bin	 = 0xcf3567,
 	.pixel.size_bin	 = 0x166,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31434,7 +22353,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_14_juxing_g
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_15_juxing_grey_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069c11,
+	.pixel.data_bin	 = 0xcf36cd,
 	.pixel.size_bin	 = 0x15c,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31443,7 +22362,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_15_juxing_g
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_16_juxing_grey_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069d6d,
+	.pixel.data_bin	 = 0xcf3829,
 	.pixel.size_bin	 = 0x161,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31452,7 +22371,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_16_juxing_g
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_17_juxing_sport_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1069ece,
+	.pixel.data_bin	 = 0xcf398a,
 	.pixel.size_bin	 = 0x199,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31461,7 +22380,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_17_juxing_s
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_18_juxing_sport_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a067,
+	.pixel.data_bin	 = 0xcf3b23,
 	.pixel.size_bin	 = 0x192,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31470,7 +22389,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_18_juxing_s
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_19_juxing_sport_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a1f9,
+	.pixel.data_bin	 = 0xcf3cb5,
 	.pixel.size_bin	 = 0x17b,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31479,7 +22398,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_19_juxing_s
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_20_juxing_sport_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a374,
+	.pixel.data_bin	 = 0xcf3e30,
 	.pixel.size_bin	 = 0x188,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31488,7 +22407,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_20_juxing_s
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_21_juxing_timer_r46_1bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a4fc,
+	.pixel.data_bin	 = 0xcf3fb8,
 	.pixel.size_bin	 = 0x197,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31497,7 +22416,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_21_juxing_t
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_22_juxing_timer_r46_2bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a693,
+	.pixel.data_bin	 = 0xcf414f,
 	.pixel.size_bin	 = 0x191,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31506,7 +22425,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_22_juxing_t
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_23_juxing_timer_r46_3bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a824,
+	.pixel.data_bin	 = 0xcf42e0,
 	.pixel.size_bin	 = 0x179,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31515,7 +22434,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_23_juxing_t
 const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_24_juxing_timer_r46_4bmp = {
 	.pixel.width	 = 0x2e,
 	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x106a99d,
+	.pixel.data_bin	 = 0xcf4459,
 	.pixel.size_bin	 = 0x18a,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31524,7 +22443,7 @@ const scui_image_t prj_image_src_repeat_btn_juxing_breathe_sleep_r46_24_juxing_t
 const scui_image_t prj_image_src_repeat_card_01_heartbmp = {
 	.pixel.width	 = 0x19a,
 	.pixel.height	 = 0xe6,
-	.pixel.data_bin	 = 0x106ab27,
+	.pixel.data_bin	 = 0xcf45e3,
 	.pixel.size_bin	 = 0x3c68,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31533,7 +22452,7 @@ const scui_image_t prj_image_src_repeat_card_01_heartbmp = {
 const scui_image_t prj_image_src_repeat_card_01_heart_01bmp = {
 	.pixel.width	 = 0x19a,
 	.pixel.height	 = 0xe6,
-	.pixel.data_bin	 = 0x106e78f,
+	.pixel.data_bin	 = 0xcf824b,
 	.pixel.size_bin	 = 0x5c3,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31542,7 +22461,7 @@ const scui_image_t prj_image_src_repeat_card_01_heart_01bmp = {
 const scui_image_t prj_image_src_repeat_card_02_small_downbmp = {
 	.pixel.width	 = 0x19a,
 	.pixel.height	 = 0x64,
-	.pixel.data_bin	 = 0x106ed52,
+	.pixel.data_bin	 = 0xcf880e,
 	.pixel.size_bin	 = 0x313,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31551,7 +22470,7 @@ const scui_image_t prj_image_src_repeat_card_02_small_downbmp = {
 const scui_image_t prj_image_src_repeat_card_03_small_onbmp = {
 	.pixel.width	 = 0x19a,
 	.pixel.height	 = 0x64,
-	.pixel.data_bin	 = 0x106f065,
+	.pixel.data_bin	 = 0xcf8b21,
 	.pixel.size_bin	 = 0x315,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31560,7 +22479,7 @@ const scui_image_t prj_image_src_repeat_card_03_small_onbmp = {
 const scui_image_t prj_image_src_repeat_card_04_r36_1bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f37a,
+	.pixel.data_bin	 = 0xcf8e36,
 	.pixel.size_bin	 = 0x131,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31569,7 +22488,7 @@ const scui_image_t prj_image_src_repeat_card_04_r36_1bmp = {
 const scui_image_t prj_image_src_repeat_card_05_r36_2bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f4ab,
+	.pixel.data_bin	 = 0xcf8f67,
 	.pixel.size_bin	 = 0x128,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31578,7 +22497,7 @@ const scui_image_t prj_image_src_repeat_card_05_r36_2bmp = {
 const scui_image_t prj_image_src_repeat_card_06_r36_3bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f5d3,
+	.pixel.data_bin	 = 0xcf908f,
 	.pixel.size_bin	 = 0x11a,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31587,7 +22506,7 @@ const scui_image_t prj_image_src_repeat_card_06_r36_3bmp = {
 const scui_image_t prj_image_src_repeat_card_07_r36_4bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f6ed,
+	.pixel.data_bin	 = 0xcf91a9,
 	.pixel.size_bin	 = 0x11a,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31596,7 +22515,7 @@ const scui_image_t prj_image_src_repeat_card_07_r36_4bmp = {
 const scui_image_t prj_image_src_repeat_card_08_r36_5bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f807,
+	.pixel.data_bin	 = 0xcf92c3,
 	.pixel.size_bin	 = 0x13a,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31605,7 +22524,7 @@ const scui_image_t prj_image_src_repeat_card_08_r36_5bmp = {
 const scui_image_t prj_image_src_repeat_card_09_r36_6bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106f941,
+	.pixel.data_bin	 = 0xcf93fd,
 	.pixel.size_bin	 = 0x136,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31614,7 +22533,7 @@ const scui_image_t prj_image_src_repeat_card_09_r36_6bmp = {
 const scui_image_t prj_image_src_repeat_card_10_r36_7bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106fa77,
+	.pixel.data_bin	 = 0xcf9533,
 	.pixel.size_bin	 = 0x123,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31623,7 +22542,7 @@ const scui_image_t prj_image_src_repeat_card_10_r36_7bmp = {
 const scui_image_t prj_image_src_repeat_card_11_r36_8bmp = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x106fb9a,
+	.pixel.data_bin	 = 0xcf9656,
 	.pixel.size_bin	 = 0x124,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31632,7 +22551,7 @@ const scui_image_t prj_image_src_repeat_card_11_r36_8bmp = {
 const scui_image_t prj_image_src_repeat_card_12_r40_1bmp = {
 	.pixel.width	 = 0x28,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x106fcbe,
+	.pixel.data_bin	 = 0xcf977a,
 	.pixel.size_bin	 = 0x148,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31641,7 +22560,7 @@ const scui_image_t prj_image_src_repeat_card_12_r40_1bmp = {
 const scui_image_t prj_image_src_repeat_card_13_r40_2bmp = {
 	.pixel.width	 = 0x28,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x106fe06,
+	.pixel.data_bin	 = 0xcf98c2,
 	.pixel.size_bin	 = 0x141,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31650,7 +22569,7 @@ const scui_image_t prj_image_src_repeat_card_13_r40_2bmp = {
 const scui_image_t prj_image_src_repeat_card_14_r40_3bmp = {
 	.pixel.width	 = 0x28,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x106ff47,
+	.pixel.data_bin	 = 0xcf9a03,
 	.pixel.size_bin	 = 0x131,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31659,7 +22578,7 @@ const scui_image_t prj_image_src_repeat_card_14_r40_3bmp = {
 const scui_image_t prj_image_src_repeat_card_15_r40_4bmp = {
 	.pixel.width	 = 0x28,
 	.pixel.height	 = 0x28,
-	.pixel.data_bin	 = 0x1070078,
+	.pixel.data_bin	 = 0xcf9b34,
 	.pixel.size_bin	 = 0x136,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31668,7 +22587,7 @@ const scui_image_t prj_image_src_repeat_card_15_r40_4bmp = {
 const scui_image_t prj_image_src_repeat_control_01_goupng = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0x2c,
-	.pixel.data_bin	 = 0x10701ae,
+	.pixel.data_bin	 = 0xcf9c6a,
 	.pixel.size_bin	 = 0x507,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31677,7 +22596,7 @@ const scui_image_t prj_image_src_repeat_control_01_goupng = {
 const scui_image_t prj_image_src_repeat_dot_01_greybmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0xc,
-	.pixel.data_bin	 = 0x10706b5,
+	.pixel.data_bin	 = 0xcfa171,
 	.pixel.size_bin	 = 0x6e,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31686,7 +22605,7 @@ const scui_image_t prj_image_src_repeat_dot_01_greybmp = {
 const scui_image_t prj_image_src_repeat_dot_02_whitebmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0xc,
-	.pixel.data_bin	 = 0x1070723,
+	.pixel.data_bin	 = 0xcfa1df,
 	.pixel.size_bin	 = 0x75,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31695,7 +22614,7 @@ const scui_image_t prj_image_src_repeat_dot_02_whitebmp = {
 const scui_image_t prj_image_src_repeat_map_01_max_heartbmp = {
 	.pixel.width	 = 0x1e,
 	.pixel.height	 = 0x1a,
-	.pixel.data_bin	 = 0x1070798,
+	.pixel.data_bin	 = 0xcfa254,
 	.pixel.size_bin	 = 0x11b,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31704,7 +22623,7 @@ const scui_image_t prj_image_src_repeat_map_01_max_heartbmp = {
 const scui_image_t prj_image_src_repeat_map_02_max_stressbmp = {
 	.pixel.width	 = 0x1e,
 	.pixel.height	 = 0x1a,
-	.pixel.data_bin	 = 0x10708b3,
+	.pixel.data_bin	 = 0xcfa36f,
 	.pixel.size_bin	 = 0x11b,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31713,7 +22632,7 @@ const scui_image_t prj_image_src_repeat_map_02_max_stressbmp = {
 const scui_image_t prj_image_src_repeat_map_03_minbmp = {
 	.pixel.width	 = 0x1e,
 	.pixel.height	 = 0x1a,
-	.pixel.data_bin	 = 0x10709ce,
+	.pixel.data_bin	 = 0xcfa48a,
 	.pixel.size_bin	 = 0x124,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31722,7 +22641,7 @@ const scui_image_t prj_image_src_repeat_map_03_minbmp = {
 const scui_image_t prj_image_src_repeat_mask_01_big_downpng = {
 	.pixel.width	 = 0xc8,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1070af2,
+	.pixel.data_bin	 = 0xcfa5ae,
 	.pixel.size_bin	 = 0x58e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31731,7 +22650,7 @@ const scui_image_t prj_image_src_repeat_mask_01_big_downpng = {
 const scui_image_t prj_image_src_repeat_mask_02_big_uppng = {
 	.pixel.width	 = 0xc8,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1071080,
+	.pixel.data_bin	 = 0xcfab3c,
 	.pixel.size_bin	 = 0x644,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31740,7 +22659,7 @@ const scui_image_t prj_image_src_repeat_mask_02_big_uppng = {
 const scui_image_t prj_image_src_repeat_mask_03_small_downpng = {
 	.pixel.width	 = 0x5e,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x10716c4,
+	.pixel.data_bin	 = 0xcfb180,
 	.pixel.size_bin	 = 0x37a,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31749,7 +22668,7 @@ const scui_image_t prj_image_src_repeat_mask_03_small_downpng = {
 const scui_image_t prj_image_src_repeat_mask_04_small_uppng = {
 	.pixel.width	 = 0x5e,
 	.pixel.height	 = 0x22,
-	.pixel.data_bin	 = 0x1071a3e,
+	.pixel.data_bin	 = 0xcfb4fa,
 	.pixel.size_bin	 = 0x3f0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31758,7 +22677,7 @@ const scui_image_t prj_image_src_repeat_mask_04_small_uppng = {
 const scui_image_t prj_image_src_repeat_mask_05_big_downpng = {
 	.pixel.width	 = 0x1aa,
 	.pixel.height	 = 0x89,
-	.pixel.data_bin	 = 0x1071e2e,
+	.pixel.data_bin	 = 0xcfb8ea,
 	.pixel.size_bin	 = 0x1073,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31767,7 +22686,7 @@ const scui_image_t prj_image_src_repeat_mask_05_big_downpng = {
 const scui_image_t prj_image_src_repeat_mask_06_big_uppng = {
 	.pixel.width	 = 0x1aa,
 	.pixel.height	 = 0x8b,
-	.pixel.data_bin	 = 0x1072ea1,
+	.pixel.data_bin	 = 0xcfc95d,
 	.pixel.size_bin	 = 0xfa9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31776,7 +22695,7 @@ const scui_image_t prj_image_src_repeat_mask_06_big_uppng = {
 const scui_image_t prj_image_src_repeat_mask_07_small_downpng = {
 	.pixel.width	 = 0x192,
 	.pixel.height	 = 0x70,
-	.pixel.data_bin	 = 0x1073e4a,
+	.pixel.data_bin	 = 0xcfd906,
 	.pixel.size_bin	 = 0xdd1,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31785,7 +22704,7 @@ const scui_image_t prj_image_src_repeat_mask_07_small_downpng = {
 const scui_image_t prj_image_src_repeat_mask_08_small_uppng = {
 	.pixel.width	 = 0x192,
 	.pixel.height	 = 0x70,
-	.pixel.data_bin	 = 0x1074c1b,
+	.pixel.data_bin	 = 0xcfe6d7,
 	.pixel.size_bin	 = 0xd14,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31794,7 +22713,7 @@ const scui_image_t prj_image_src_repeat_mask_08_small_uppng = {
 const scui_image_t prj_image_src_repeat_mask_09_all_maskpng = {
 	.pixel.width	 = 0xf0,
 	.pixel.height	 = 0xc6,
-	.pixel.data_bin	 = 0x107592f,
+	.pixel.data_bin	 = 0xcff3eb,
 	.pixel.size_bin	 = 0x16e2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31803,7 +22722,7 @@ const scui_image_t prj_image_src_repeat_mask_09_all_maskpng = {
 const scui_image_t prj_image_src_repeat_mask_10_all_maskpng = {
 	.pixel.width	 = 0xa6,
 	.pixel.height	 = 0xc6,
-	.pixel.data_bin	 = 0x1077011,
+	.pixel.data_bin	 = 0xd00acd,
 	.pixel.size_bin	 = 0x11ea,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31812,7 +22731,7 @@ const scui_image_t prj_image_src_repeat_mask_10_all_maskpng = {
 const scui_image_t prj_image_src_repeat_mask_11_all_maskpng = {
 	.pixel.width	 = 0x5e,
 	.pixel.height	 = 0xc6,
-	.pixel.data_bin	 = 0x10781fb,
+	.pixel.data_bin	 = 0xd01cb7,
 	.pixel.size_bin	 = 0xc8e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31821,7 +22740,7 @@ const scui_image_t prj_image_src_repeat_mask_11_all_maskpng = {
 const scui_image_t prj_image_src_repeat_mask_12_all_maskpng = {
 	.pixel.width	 = 0x18e,
 	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0x1078e89,
+	.pixel.data_bin	 = 0xd02945,
 	.pixel.size_bin	 = 0x4ca9,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31830,7 +22749,7 @@ const scui_image_t prj_image_src_repeat_mask_12_all_maskpng = {
 const scui_image_t prj_image_src_repeat_slider_01_bgbmp = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0xec,
-	.pixel.data_bin	 = 0x107db32,
+	.pixel.data_bin	 = 0xd075ee,
 	.pixel.size_bin	 = 0x3d1,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -31839,7 +22758,7 @@ const scui_image_t prj_image_src_repeat_slider_01_bgbmp = {
 const scui_image_t prj_image_src_repeat_slider_02_dotbmp = {
 	.pixel.width	 = 0xc,
 	.pixel.height	 = 0xc,
-	.pixel.data_bin	 = 0x107df03,
+	.pixel.data_bin	 = 0xd079bf,
 	.pixel.size_bin	 = 0x50,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -31848,7 +22767,7 @@ const scui_image_t prj_image_src_repeat_slider_02_dotbmp = {
 const scui_image_t prj_image_src_repeat_slider_03_ringbmp = {
 	.pixel.width	 = 0x1ce,
 	.pixel.height	 = 0x1ce,
-	.pixel.data_bin	 = 0x107df53,
+	.pixel.data_bin	 = 0xd07a0f,
 	.pixel.size_bin	 = 0x1469,
 	.format			 = scui_pixel_cf_palette4,
 	.type			 = scui_image_type_lz4,
@@ -31857,7 +22776,7 @@ const scui_image_t prj_image_src_repeat_slider_03_ringbmp = {
 const scui_image_t prj_image_src_repeat_slider_04_bgpng = {
 	.pixel.width	 = 0x2c,
 	.pixel.height	 = 0xec,
-	.pixel.data_bin	 = 0x107f3bc,
+	.pixel.data_bin	 = 0xd08e78,
 	.pixel.size_bin	 = 0xa05,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31866,7 +22785,7 @@ const scui_image_t prj_image_src_repeat_slider_04_bgpng = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_01_00png = {
 	.pixel.width	 = 0x2a,
 	.pixel.height	 = 0x7b,
-	.pixel.data_bin	 = 0x107fdc1,
+	.pixel.data_bin	 = 0xd0987d,
 	.pixel.size_bin	 = 0xafd,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31875,7 +22794,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_01_00png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_02_01png = {
 	.pixel.width	 = 0x26,
 	.pixel.height	 = 0x54,
-	.pixel.data_bin	 = 0x10808be,
+	.pixel.data_bin	 = 0xd0a37a,
 	.pixel.size_bin	 = 0x932,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31884,7 +22803,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_02_01png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_03_02png = {
 	.pixel.width	 = 0x22,
 	.pixel.height	 = 0x41,
-	.pixel.data_bin	 = 0x10811f0,
+	.pixel.data_bin	 = 0xd0acac,
 	.pixel.size_bin	 = 0x812,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31893,7 +22812,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_03_02png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_04_03png = {
 	.pixel.width	 = 0x16,
 	.pixel.height	 = 0x1f,
-	.pixel.data_bin	 = 0x1081a02,
+	.pixel.data_bin	 = 0xd0b4be,
 	.pixel.size_bin	 = 0x6c3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31902,7 +22821,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_04_03png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_05_04png = {
 	.pixel.width	 = 0x16,
 	.pixel.height	 = 0x1c,
-	.pixel.data_bin	 = 0x10820c5,
+	.pixel.data_bin	 = 0xd0bb81,
 	.pixel.size_bin	 = 0x6b3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31911,7 +22830,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_05_04png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_06_05png = {
 	.pixel.width	 = 0x10,
 	.pixel.height	 = 0x11,
-	.pixel.data_bin	 = 0x1082778,
+	.pixel.data_bin	 = 0xd0c234,
 	.pixel.size_bin	 = 0x64d,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31920,7 +22839,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_06_05png = {
 const scui_image_t prj_image_src_repeat_slider_jindutiao_07_bgpng = {
 	.pixel.width	 = 0x2a,
 	.pixel.height	 = 0xeb,
-	.pixel.data_bin	 = 0x1082dc5,
+	.pixel.data_bin	 = 0xd0c881,
 	.pixel.size_bin	 = 0xa1a,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31929,7 +22848,7 @@ const scui_image_t prj_image_src_repeat_slider_jindutiao_07_bgpng = {
 const scui_image_t prj_image_src_repeat_switch_01_alarmspng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x10837df,
+	.pixel.data_bin	 = 0xd0d29b,
 	.pixel.size_bin	 = 0x398,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31938,7 +22857,7 @@ const scui_image_t prj_image_src_repeat_switch_01_alarmspng = {
 const scui_image_t prj_image_src_repeat_switch_02_batterypng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x1083b77,
+	.pixel.data_bin	 = 0xd0d633,
 	.pixel.size_bin	 = 0x3a0,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31947,7 +22866,7 @@ const scui_image_t prj_image_src_repeat_switch_02_batterypng = {
 const scui_image_t prj_image_src_repeat_switch_03_dotpng = {
 	.pixel.width	 = 0x24,
 	.pixel.height	 = 0x24,
-	.pixel.data_bin	 = 0x1083f17,
+	.pixel.data_bin	 = 0xd0d9d3,
 	.pixel.size_bin	 = 0x247,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31956,7 +22875,7 @@ const scui_image_t prj_image_src_repeat_switch_03_dotpng = {
 const scui_image_t prj_image_src_repeat_switch_04_heartpng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x108415e,
+	.pixel.data_bin	 = 0xd0dc1a,
 	.pixel.size_bin	 = 0x3ad,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31965,7 +22884,7 @@ const scui_image_t prj_image_src_repeat_switch_04_heartpng = {
 const scui_image_t prj_image_src_repeat_switch_05_offpng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x108450b,
+	.pixel.data_bin	 = 0xd0dfc7,
 	.pixel.size_bin	 = 0x3a3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31974,7 +22893,7 @@ const scui_image_t prj_image_src_repeat_switch_05_offpng = {
 const scui_image_t prj_image_src_repeat_switch_06_sleeppng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x10848ae,
+	.pixel.data_bin	 = 0xd0e36a,
 	.pixel.size_bin	 = 0x3a2,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -31983,296 +22902,8 @@ const scui_image_t prj_image_src_repeat_switch_06_sleeppng = {
 const scui_image_t prj_image_src_repeat_switch_07_sport_settingspng = {
 	.pixel.width	 = 0x46,
 	.pixel.height	 = 0x2a,
-	.pixel.data_bin	 = 0x1084c50,
+	.pixel.data_bin	 = 0xd0e70c,
 	.pixel.size_bin	 = 0x365,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10597001_standby_watch_D10597001_dot_46x46_x210_y210png = {
-	.pixel.width	 = 0x2e,
-	.pixel.height	 = 0x2e,
-	.pixel.data_bin	 = 0x1084fb5,
-	.pixel.size_bin	 = 0x143a,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10598001_standby_watch_D10598001_dot_26x26_x220_y220png = {
-	.pixel.width	 = 0x1a,
-	.pixel.height	 = 0x1a,
-	.pixel.data_bin	 = 0x10863ef,
-	.pixel.size_bin	 = 0x11f5,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10599001_standby_watch_D10599001_dot_22x22_x222_y222png = {
-	.pixel.width	 = 0x16,
-	.pixel.height	 = 0x16,
-	.pixel.data_bin	 = 0x10875e4,
-	.pixel.size_bin	 = 0x10dd,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10600001_standby_watch_D10600001_dot_54x54_x206_y206png = {
-	.pixel.width	 = 0x36,
-	.pixel.height	 = 0x36,
-	.pixel.data_bin	 = 0x10886c1,
-	.pixel.size_bin	 = 0x1ab7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10601001_standby_watch_dot_D10601001_58x58_x204_y204png = {
-	.pixel.width	 = 0x3a,
-	.pixel.height	 = 0x3a,
-	.pixel.data_bin	 = 0x108a178,
-	.pixel.size_bin	 = 0x2845,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10604001_standby_watch_D10604001_dot_26x26_x220_y220png = {
-	.pixel.width	 = 0x1a,
-	.pixel.height	 = 0x1a,
-	.pixel.data_bin	 = 0x108c9bd,
-	.pixel.size_bin	 = 0x9c6,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_bg_01_1bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0x108d383,
-	.pixel.size_bin	 = 0x717,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_01_00bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108da9a,
-	.pixel.size_bin	 = 0xf3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_02_01bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108db8d,
-	.pixel.size_bin	 = 0x143,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_03_02bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108dcd0,
-	.pixel.size_bin	 = 0x151,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_04_03bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108de21,
-	.pixel.size_bin	 = 0x327,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_05_04bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108e148,
-	.pixel.size_bin	 = 0x1c3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_06_05bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108e30b,
-	.pixel.size_bin	 = 0x361,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_07_06bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108e66c,
-	.pixel.size_bin	 = 0x36c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_08_07bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108e9d8,
-	.pixel.size_bin	 = 0x386,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_09_08bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108ed5e,
-	.pixel.size_bin	 = 0x33f,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_10_09bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108f09d,
-	.pixel.size_bin	 = 0x422,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_11_10bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108f4bf,
-	.pixel.size_bin	 = 0x2e3,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_12_11bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108f7a2,
-	.pixel.size_bin	 = 0x49b,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_13_12bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x108fc3d,
-	.pixel.size_bin	 = 0x454,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_14_13bmp = {
-	.pixel.width	 = 0x4a,
-	.pixel.height	 = 0x67,
-	.pixel.data_bin	 = 0x1090091,
-	.pixel.size_bin	 = 0x1f1,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10605001_preview_01_1bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0x1090282,
-	.pixel.size_bin	 = 0x158c,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10606001_bg_01_2bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0x109180e,
-	.pixel.size_bin	 = 0x1ebb,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10606001_hour_44x173_125_01_00png = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xad,
-	.pixel.data_bin	 = 0x10936c9,
-	.pixel.size_bin	 = 0xd6f,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10606001_min_44x252_204_01_00png = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xfc,
-	.pixel.data_bin	 = 0x1094438,
-	.pixel.size_bin	 = 0x1018,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10606001_perview_01_00bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0x1095450,
-	.pixel.size_bin	 = 0x2350,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10606001_sec_32x251_203_01_00png = {
-	.pixel.width	 = 0x20,
-	.pixel.height	 = 0xfb,
-	.pixel.data_bin	 = 0x10977a0,
-	.pixel.size_bin	 = 0x98e,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10607001_bg_01_3bmp = {
-	.pixel.width	 = 0x1d2,
-	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0x109812e,
-	.pixel.size_bin	 = 0x7ca8,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10607001_hour_44x171_164_01_00png = {
-	.pixel.width	 = 0x2c,
-	.pixel.height	 = 0xab,
-	.pixel.data_bin	 = 0x109fdd6,
-	.pixel.size_bin	 = 0x6e7,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10607001_min_70x246_211_01_00png = {
-	.pixel.width	 = 0x46,
-	.pixel.height	 = 0xf6,
-	.pixel.data_bin	 = 0x10a04bd,
-	.pixel.size_bin	 = 0x2bcc,
-	.format			 = scui_pixel_cf_bmp8565,
-	.type			 = scui_image_type_png,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10607001_perview_01_00bmp = {
-	.pixel.width	 = 0x17e,
-	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0x10a3089,
-	.pixel.size_bin	 = 0x636e,
-	.format			 = scui_pixel_cf_bmp565,
-	.type			 = scui_image_type_lz4,
-};
-
-const scui_image_t prj_image_src_standby_watch_D10607001_sec_72x247_200_01_00png = {
-	.pixel.width	 = 0x48,
-	.pixel.height	 = 0xf7,
-	.pixel.data_bin	 = 0x10a93f7,
-	.pixel.size_bin	 = 0x1ce3,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
 };
@@ -32280,7 +22911,7 @@ const scui_image_t prj_image_src_standby_watch_D10607001_sec_72x247_200_01_00png
 const scui_image_t prj_image_src_system_01_sospng = {
 	.pixel.width	 = 0x50,
 	.pixel.height	 = 0x50,
-	.pixel.data_bin	 = 0x10ab0da,
+	.pixel.data_bin	 = 0xd0ea71,
 	.pixel.size_bin	 = 0xd84,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -32289,7 +22920,7 @@ const scui_image_t prj_image_src_system_01_sospng = {
 const scui_image_t prj_image_src_system_02_turn_offpng = {
 	.pixel.width	 = 0x50,
 	.pixel.height	 = 0x50,
-	.pixel.data_bin	 = 0x10abe5e,
+	.pixel.data_bin	 = 0xd0f7f5,
 	.pixel.size_bin	 = 0xa84,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
@@ -32298,13 +22929,49 @@ const scui_image_t prj_image_src_system_02_turn_offpng = {
 const scui_image_t prj_image_src_system_03_restartpng = {
 	.pixel.width	 = 0x50,
 	.pixel.height	 = 0x50,
-	.pixel.data_bin	 = 0x10ac8e2,
+	.pixel.data_bin	 = 0xd10279,
 	.pixel.size_bin	 = 0x86e,
 	.format			 = scui_pixel_cf_bmp8565,
 	.type			 = scui_image_type_png,
 };
 
-const void * scui_image_parser_table[3589] = {
+const scui_image_t prj_image_src_watchface_bg_01_bgbmp = {
+	.pixel.width	 = 0x1d2,
+	.pixel.height	 = 0x1d2,
+	.pixel.data_bin	 = 0xd10ae7,
+	.pixel.size_bin	 = 0x37f9,
+	.format			 = scui_pixel_cf_bmp565,
+	.type			 = scui_image_type_lz4,
+};
+
+const scui_image_t prj_image_src_watchface_bg_01_bgjpg = {
+	.pixel.width	 = 0x1d2,
+	.pixel.height	 = 0x1d2,
+	.pixel.data_bin	 = 0xd142e0,
+	.pixel.size_bin	 = 0x82bd,
+	.format			 = scui_pixel_cf_bmp565,
+	.type			 = scui_image_type_jpg,
+};
+
+const scui_image_t prj_image_src_watchface_preview_01_00bmp = {
+	.pixel.width	 = 0x17e,
+	.pixel.height	 = 0x12a,
+	.pixel.data_bin	 = 0xd1c59d,
+	.pixel.size_bin	 = 0x4742,
+	.format			 = scui_pixel_cf_bmp565,
+	.type			 = scui_image_type_lz4,
+};
+
+const scui_image_t prj_image_src_watchface_preview_01_00jpg = {
+	.pixel.width	 = 0x17e,
+	.pixel.height	 = 0x12a,
+	.pixel.data_bin	 = 0xd20cdf,
+	.pixel.size_bin	 = 0x66d0,
+	.format			 = scui_pixel_cf_bmp565,
+	.type			 = scui_image_type_jpg,
+};
+
+const void * scui_image_parser_table[2552] = {
 	(void *)&prj_image_src_00_3d_AnalogClock_0jpg,
 	(void *)&prj_image_src_00_3d_AnalogClock_00png,
 	(void *)&prj_image_src_00_3d_AnalogClock_01png,
@@ -34481,1015 +25148,6 @@ const void * scui_image_parser_table[3589] = {
 	(void *)&prj_image_src_34_measure_icon_03_spobmp,
 	(void *)&prj_image_src_400X400pxbmp,
 	(void *)&prj_image_src_400X400pxpng,
-	(void *)&prj_image_src_home_watch_D10450001_bg_01_bgbmp,
-	(void *)&prj_image_src_home_watch_D10450001_bg_01_bgjpg,
-	(void *)&prj_image_src_home_watch_D10450001_preview_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10450001_preview_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10597001_bg_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10597001_bg_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10597001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10597001_h_01_h_50x164_158png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_01_00png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_02_01png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_03_02png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_04_03png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_05_04png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_06_05png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_heart_07_06png,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_kcal_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10597001_icon_progress_step_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10597001_m_01_m_46x213_207png,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_hour_min_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_01_00png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_02_01png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_03_02png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_04_03png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_05_04png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_06_05png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_07_06png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_08_07png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_09_08png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_10_09png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_11_10png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_12_11png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_13_12png,
-	(void *)&prj_image_src_home_watch_D10597001_num_step_kcal_heart_14_13png,
-	(void *)&prj_image_src_home_watch_D10597001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10597001_preview_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10597001_s_01_s_56x255_208png,
-	(void *)&prj_image_src_home_watch_D10597001_unit_char_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_unit_char_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10597001_unit_char_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10597001_unit_char_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10598001_bg_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10598001_bg_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_04_04bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_05_05bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_06_06bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_07_07bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_08_08bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_09_09bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_10_10bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_11_11bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_12_12bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_13_13bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_14_14bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_15_15bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_16_16bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_17_17bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_18_18bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_19_19bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_20_20bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_21_21bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_22_22bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_23_23bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_month_24_24bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10598001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10598001_h_01_hpng,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_01_00png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_02_01png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_03_02png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_04_03png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_05_04png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_06_05png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_07_06png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_08_07png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_09_08png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_10_09png,
-	(void *)&prj_image_src_home_watch_D10598001_icon_progress_step_11_10png,
-	(void *)&prj_image_src_home_watch_D10598001_m_01_mpng,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_batt_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_date_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_01_00png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_02_01png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_03_02png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_04_03png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_05_04png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_06_05png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_07_06png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_08_07png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_09_08png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_10_09png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_11_10png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_12_11png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_13_12png,
-	(void *)&prj_image_src_home_watch_D10598001_num_hour_min_14_13png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_01_00png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_02_01png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_03_02png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_04_03png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_05_04png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_06_05png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_07_06png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_08_07png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_09_08png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_10_09png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_11_10png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_12_11png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_13_12png,
-	(void *)&prj_image_src_home_watch_D10598001_num_step_heart_kcal_14_13png,
-	(void *)&prj_image_src_home_watch_D10598001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10598001_preview_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10598001_s_01_spng,
-	(void *)&prj_image_src_home_watch_D10598001_unit_char_batt_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10599001_bg_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10599001_bg_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10599001_char_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_15_14bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_16_15bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_17_16bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_18_17bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_19_18bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_20_19bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_21_20bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_22_21bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_23_22bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_month_24_23bmp,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_01_00png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_02_01png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_03_02png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_04_03png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_05_04png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_06_05png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_07_06png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_08_07png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_09_08png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_10_09png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_11_10png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_12_11png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_13_12png,
-	(void *)&prj_image_src_home_watch_D10599001_char_week_14_13png,
-	(void *)&prj_image_src_home_watch_D10599001_h_01_hpng,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_06_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_kcal_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_progress_step_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_01_32x32_x148_y55bmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_02_icon_02_duoyunbmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_03_icon_03_yingbmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_04_icon_04_zhenyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_05_icon_05_leizhenyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_06_icon_06_leizhenyubanbingbaobmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_07_icon_07_yujiaxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_08_icon_08_xiaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_09_icon_09_zhongyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_10_icon_10_dayubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_11_icon_11_baoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_12_icon_12_dabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_13_icon_13_tedabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_14_icon_14_zhenxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_15_icon_15_xiaoxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_16_icon_16_zhongxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_17_icon_17_daxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_18_icon_18_baoxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_19_icon_19_wubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_20_icon_20_dongyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_21_icon_21_shachenbaobmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_22_icon_22_xiaodaozhongyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_23_icon_23_zhongdaodayubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_24_icon_24_dadaobaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_25_icon_25_baoyudaodavaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_26_icon_26_dabaoyudaotedabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_27_icon_27_xiaodaozhongxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_28_icon_28_zhongdaodaxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_29_icon_29_dadaobaoxuebmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_30_icon_30_fuchenbmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_31_icon_31_yangchenbmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_32_icon_32_qiangshachenbaobmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_33_icon_33_maibmp,
-	(void *)&prj_image_src_home_watch_D10599001_icon_weather_34_icon_34_wubmp,
-	(void *)&prj_image_src_home_watch_D10599001_m_01_mpng,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_batt_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_date_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_01_00png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_02_01png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_03_02png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_04_03png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_05_04png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_06_05png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_07_06png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_08_07png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_09_08png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_10_09png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_11_10png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_12_11png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_13_12png,
-	(void *)&prj_image_src_home_watch_D10599001_num_hour_min_14_13png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_01_00png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_02_01png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_03_02png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_04_03png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_05_04png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_06_05png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_07_06png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_08_07png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_09_08png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_10_09png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_11_10png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_12_11png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_13_12png,
-	(void *)&prj_image_src_home_watch_D10599001_num_weather_kcal_step_heart_14_13png,
-	(void *)&prj_image_src_home_watch_D10599001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10599001_preview_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10599001_s_01_spng,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_kcal_01_00png,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_kcal_02_01png,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_step_01_00png,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_step_02_01png,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_weather_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10599001_unit_char_weather_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10600001_bg_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10600001_bg_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_15_14bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_16_15bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_17_16bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_18_17bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_19_18bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_20_19bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_21_20bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_22_21bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_23_22bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_mon_24_23bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10600001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10600001_h_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_08_07png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_09_08png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_10_09png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_batt_percent_11_10png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_heart_percent_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_08_07png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_09_08png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_10_9png,
-	(void *)&prj_image_src_home_watch_D10600001_icon_percent_step_11_10png,
-	(void *)&prj_image_src_home_watch_D10600001_m_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_08_07png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_09_08png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_10_09png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_11_10png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_12_11png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_13_12png,
-	(void *)&prj_image_src_home_watch_D10600001_num_date_14_13png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_08_07png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_09_08png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_10_09png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_11_10png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_12_11png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_13_12png,
-	(void *)&prj_image_src_home_watch_D10600001_num_step_bpm_batt_14_13png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_02_01png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_03_02png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_04_03png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_05_04png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_06_05png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_07_06png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_08_07png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_09_08png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_10_09png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_11_10png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_12_11png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_13_12png,
-	(void *)&prj_image_src_home_watch_D10600001_num_time_14_13png,
-	(void *)&prj_image_src_home_watch_D10600001_perview_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10600001_perview_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10600001_s_01_00png,
-	(void *)&prj_image_src_home_watch_D10600001_unit_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_bg_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10601001_bg_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_15_14bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_16_15bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_17_16bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_18_17bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_19_18bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_20_19bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_21_20bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_22_21bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_23_22bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_mon_24_23bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10601001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10601001_h_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_batt_percent_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_step_percent_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_12_11png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_13_12png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_14_13png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_15_14png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_16_15png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_17_16png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_18_17png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_19_18png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_20_19png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_21_20png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_22_21png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_23_22png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_24_23png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_25_24png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_26_25png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_27_26png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_28_27png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_29_28png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_30_29png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_31_30png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_32_31png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_33_32png,
-	(void *)&prj_image_src_home_watch_D10601001_icon_weather_34_33png,
-	(void *)&prj_image_src_home_watch_D10601001_m_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_12_11png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_13_12png,
-	(void *)&prj_image_src_home_watch_D10601001_num_batt_step_14_13png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_12_11png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_13_12png,
-	(void *)&prj_image_src_home_watch_D10601001_num_kcal_dist_14_13png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_12_11png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_13_12png,
-	(void *)&prj_image_src_home_watch_D10601001_num_temp_date_14_13png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_02_01png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_03_02png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_04_03png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_05_04png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_06_05png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_07_06png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_08_07png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_09_08png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_10_09png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_11_10png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_12_11png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_13_12png,
-	(void *)&prj_image_src_home_watch_D10601001_num_time_14_13png,
-	(void *)&prj_image_src_home_watch_D10601001_perview_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10601001_perview_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10601001_s_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_unit_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_unit_temp_01_00png,
-	(void *)&prj_image_src_home_watch_D10601001_unit_temp_02_01png,
-	(void *)&prj_image_src_home_watch_D10602001_bg_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_bg_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_15_14bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_16_15bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_17_16bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_18_17bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_19_18bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_20_19bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_21_20bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_22_21bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_23_22bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_month_24_23bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_heart_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_heart_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_weather_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_unit_weather_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10602001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_call_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_clock_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_message_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_01_icon_01_qingpng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_02_icon_02_duoyunpng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_03_icon_03_yingpng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_04_icon_04_zhenyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_05_icon_05_leizhenyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_06_icon_06_leizhenyubanbingbaopng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_07_icon_07_yujiaxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_08_icon_08_xiaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_09_icon_09_zhongyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_10_icon_10_dayupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_11_icon_11_baoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_12_icon_12_dabaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_13_icon_13_tedabaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_14_icon_14_zhenxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_15_icon_15_xiaoxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_16_icon_16_zhongxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_17_icon_17_daxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_18_icon_18_baoxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_19_icon_19_wupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_20_icon_20_dongyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_21_icon_21_shachenbaopng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_22_icon_22_xiaodaozhongyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_23_icon_23_zhongdaodayupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_24_icon_24_dadaobaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_25_icon_25_baoyudaodavaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_26_icon_26_dabaoyudaotedabaoyupng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_27_icon_27_xiaodaozhongxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_28_icon_28_zhongdaodaxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_29_icon_29_dadaobaoxuepng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_30_icon_30_fuchenpng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_31_icon_31_yangchenpng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_32_icon_32_qiangshachenbaopng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_33_icon_33_maipng,
-	(void *)&prj_image_src_home_watch_D10602001_icon_weather_34_icon_34_wupng,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_date_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_hour_min_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_01_00png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_02_01png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_03_02png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_04_03png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_05_04png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_06_05png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_07_06png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_08_07png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_09_08png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_10_09png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_11_10png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_12_11png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_13_12png,
-	(void *)&prj_image_src_home_watch_D10602001_num_step_heart_kcal_14_13png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_02_01png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_03_02png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_04_03png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_05_04png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_06_05png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_07_06png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_08_07png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_09_08png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_10_09png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_11_10png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_12_11png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_13_12png,
-	(void *)&prj_image_src_home_watch_D10602001_num_weather_batt_14_13png,
-	(void *)&prj_image_src_home_watch_D10602001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10602001_preview_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10603001_bg_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_bg_01_00jpg,
-	(void *)&prj_image_src_home_watch_D10603001_char_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_15_14bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_16_15bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_17_16bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_18_17bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_19_18bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_20_19bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_21_20bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_22_21bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_23_22bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_month_24_23bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_dis_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_dis_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_dis_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_dis_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_heart_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_heart_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_unit_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10603001_char_week_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_call_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_clock_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_message_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_01_icon_01_qingbmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_02_icon_02_duoyunbmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_03_icon_03_yingbmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_04_icon_04_zhenyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_05_icon_05_leizhenyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_06_icon_06_leizhenyubanbingbaobmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_07_icon_07_yujiaxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_08_icon_08_xiaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_09_icon_09_zhongyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_10_icon_10_dayubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_11_icon_11_baoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_12_icon_12_dabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_13_icon_13_tedabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_14_icon_14_zhenxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_15_icon_15_xiaoxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_16_icon_16_zhongxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_17_icon_17_daxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_18_icon_18_baoxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_19_icon_19_wubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_20_icon_20_dongyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_21_icon_21_shachenbaobmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_22_icon_22_xiaodaozhongyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_23_icon_23_zhongdaodayubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_24_icon_24_dadaobaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_25_icon_25_baoyudaodavaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_26_icon_26_dabaoyudaotedabaoyubmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_27_icon_27_xiaodaozhongxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_28_icon_28_zhongdaodaxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_29_icon_29_dadaobaoxuebmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_30_icon_30_fuchenbmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_31_icon_31_yangchenbmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_32_icon_32_qiangshachenbaobmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_33_icon_33_maibmp,
-	(void *)&prj_image_src_home_watch_D10603001_icon_weather_34_icon_34_wubmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_12_11bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_13_12bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_batt_14_13bmp,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_01_00png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_02_01png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_03_02png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_04_03png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_05_04png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_06_05png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_07_06png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_08_07png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_09_08png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_10_09png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_11_10png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_12_11png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_13_12png,
-	(void *)&prj_image_src_home_watch_D10603001_num_date_step_dis_kcal_heart_14_13png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_01_00png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_02_01png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_03_02png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_04_03png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_05_04png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_06_05png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_07_06png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_08_07png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_09_08png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_10_09png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_11_10png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_12_11png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_13_12png,
-	(void *)&prj_image_src_home_watch_D10603001_num_hour_min_14_13png,
-	(void *)&prj_image_src_home_watch_D10603001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10603001_preview_01_1jpg,
-	(void *)&prj_image_src_home_watch_D10604001_bg_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10604001_char_unit_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10604001_gif_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10604001_gif_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10604001_gif_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10604001_gif_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10604001_h_01_00png,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_batt_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_kcal_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_01_00bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_02_01bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_03_02bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_04_03bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_05_04bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_06_05bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_07_06bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_08_07bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_09_08bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_10_09bmp,
-	(void *)&prj_image_src_home_watch_D10604001_icon_step_11_10bmp,
-	(void *)&prj_image_src_home_watch_D10604001_m_01_00png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_01_00png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_02_01png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_03_02png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_04_03png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_05_04png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_06_05png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_07_06png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_08_07png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_09_08png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_10_09png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_11_10png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_12_11png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_13_12png,
-	(void *)&prj_image_src_home_watch_D10604001_num_kcal_step_batt_14_13png,
-	(void *)&prj_image_src_home_watch_D10604001_preview_01_1bmp,
-	(void *)&prj_image_src_home_watch_D10604001_s_01_00png,
 	(void *)&prj_image_src_num_01_102_du_32x76png,
 	(void *)&prj_image_src_num_02_22_percent_16x18bmp,
 	(void *)&prj_image_src_num_03_28_c_24x22png,
@@ -35859,39 +25517,11 @@ const void * scui_image_parser_table[3589] = {
 	(void *)&prj_image_src_repeat_switch_05_offpng,
 	(void *)&prj_image_src_repeat_switch_06_sleeppng,
 	(void *)&prj_image_src_repeat_switch_07_sport_settingspng,
-	(void *)&prj_image_src_standby_watch_D10597001_standby_watch_D10597001_dot_46x46_x210_y210png,
-	(void *)&prj_image_src_standby_watch_D10598001_standby_watch_D10598001_dot_26x26_x220_y220png,
-	(void *)&prj_image_src_standby_watch_D10599001_standby_watch_D10599001_dot_22x22_x222_y222png,
-	(void *)&prj_image_src_standby_watch_D10600001_standby_watch_D10600001_dot_54x54_x206_y206png,
-	(void *)&prj_image_src_standby_watch_D10601001_standby_watch_dot_D10601001_58x58_x204_y204png,
-	(void *)&prj_image_src_standby_watch_D10604001_standby_watch_D10604001_dot_26x26_x220_y220png,
-	(void *)&prj_image_src_standby_watch_D10605001_bg_01_1bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_01_00bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_02_01bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_03_02bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_04_03bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_05_04bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_06_05bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_07_06bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_08_07bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_09_08bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_10_09bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_11_10bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_12_11bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_13_12bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_num_hour_min_74x103_x170_y105_x148_y224_14_13bmp,
-	(void *)&prj_image_src_standby_watch_D10605001_preview_01_1bmp,
-	(void *)&prj_image_src_standby_watch_D10606001_bg_01_2bmp,
-	(void *)&prj_image_src_standby_watch_D10606001_hour_44x173_125_01_00png,
-	(void *)&prj_image_src_standby_watch_D10606001_min_44x252_204_01_00png,
-	(void *)&prj_image_src_standby_watch_D10606001_perview_01_00bmp,
-	(void *)&prj_image_src_standby_watch_D10606001_sec_32x251_203_01_00png,
-	(void *)&prj_image_src_standby_watch_D10607001_bg_01_3bmp,
-	(void *)&prj_image_src_standby_watch_D10607001_hour_44x171_164_01_00png,
-	(void *)&prj_image_src_standby_watch_D10607001_min_70x246_211_01_00png,
-	(void *)&prj_image_src_standby_watch_D10607001_perview_01_00bmp,
-	(void *)&prj_image_src_standby_watch_D10607001_sec_72x247_200_01_00png,
 	(void *)&prj_image_src_system_01_sospng,
 	(void *)&prj_image_src_system_02_turn_offpng,
 	(void *)&prj_image_src_system_03_restartpng,
+	(void *)&prj_image_src_watchface_bg_01_bgbmp,
+	(void *)&prj_image_src_watchface_bg_01_bgjpg,
+	(void *)&prj_image_src_watchface_preview_01_00bmp,
+	(void *)&prj_image_src_watchface_preview_01_00jpg,
 };

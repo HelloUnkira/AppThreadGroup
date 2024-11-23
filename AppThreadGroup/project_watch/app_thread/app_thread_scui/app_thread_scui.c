@@ -148,7 +148,7 @@ static void app_thread_scui_routine_ready_cb(void)
     static app_thread_t app_thread_scui_refr = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
     app_thread_process(&app_thread_scui_refr, app_thread_static);
-    /* 创建draw子线程 */
+    /* 创建draw子线程(模拟器下不使用事件调度) */
     static app_thread_t app_thread_scui_draw = {0};
     app_thread_group_create(&app_thread_scui, &app_thread_scui_draw, app_thread_scui_draw_routine);
     app_thread_process(&app_thread_scui_draw, app_thread_static);
@@ -198,6 +198,12 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
                     else
                         app_arch_reset();
                 }
+                
+                scui_event_t event_ui = {
+                    .object = SCUI_HANDLE_SYSTEM,
+                    .type   = scui_event_ui_none_goto,
+                };
+                scui_event_notify(&event_ui);
             }
             *record = false;
         }
@@ -207,11 +213,18 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
         /* 与scui绑定的驱动设备进入DLPS */
         if (package->event == app_thread_scui_sched_dlps_enter) {
             /* 进入dlps界面 */
-            /*...*/
+            APP_SYS_LOG_WARN("ui dlps enter");
+            
+            scui_event_t event_ui = {
+                .object = SCUI_HANDLE_SYSTEM,
+                .type   = scui_event_ui_stady_enter,
+            };
+            scui_event_notify(&event_ui);
+            
             /* 关闭设备(业务需求,不就地关闭鼠标,鼠标需要有唤醒能力) */
-            app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
-            app_dev_gui_key_dlps_enter(&app_dev_gui_key);
-            app_dev_gui_enc_dlps_enter(&app_dev_gui_enc);
+            // app_dev_gui_disp_dlps_enter(&app_dev_gui_disp);
+            // app_dev_gui_key_dlps_enter(&app_dev_gui_key);
+            // app_dev_gui_enc_dlps_enter(&app_dev_gui_enc);
             // app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
         }
         /* 与scui绑定的驱动设备退出DLPS */
@@ -220,18 +233,18 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             app_scui_check_time_reset(0, 0);
             app_scui_check_time_exec(true);
             /* 开启设备 */
-            app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
-            app_dev_gui_key_dlps_exit(&app_dev_gui_key);
-            app_dev_gui_enc_dlps_exit(&app_dev_gui_enc);
-            app_dev_gui_ptr_dlps_exit(&app_dev_gui_ptr);
+            // app_dev_gui_disp_dlps_exit(&app_dev_gui_disp);
+            // app_dev_gui_key_dlps_exit(&app_dev_gui_key);
+            // app_dev_gui_enc_dlps_exit(&app_dev_gui_enc);
+            // app_dev_gui_ptr_dlps_exit(&app_dev_gui_ptr);
             /* 退出dlps界面 */
-            /*...*/
+            APP_SYS_LOG_WARN("ui dlps exit");
         }
         return true;
     }
     case app_thread_scui_ui: {
         /* 测试模式拦截该模组全部事件 */
-        #if 1
+        #if 0
         /* 禁用超时回退 */
         app_scui_check_time_reset(0, 0);
         app_scui_check_time_exec(false);
@@ -248,6 +261,12 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             app_dev_gui_key_dlps_exit(&app_dev_gui_key);
             app_dev_gui_enc_dlps_exit(&app_dev_gui_enc);
             app_dev_gui_ptr_dlps_exit(&app_dev_gui_ptr);
+            
+            scui_event_t event_ui = {
+                .object = SCUI_HANDLE_SYSTEM,
+                .type   = scui_event_ui_home_goto,
+            };
+            scui_event_notify(&event_ui);
         }
         /* 终止UI场景 */
         if (package->event == app_thread_scui_ui_scene_stop) {
@@ -260,6 +279,12 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             app_dev_gui_key_dlps_enter(&app_dev_gui_key);
             app_dev_gui_enc_dlps_enter(&app_dev_gui_enc);
             app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
+            
+            scui_event_t event_ui = {
+                .object = SCUI_HANDLE_SYSTEM,
+                .type   = scui_event_ui_none_goto,
+            };
+            scui_event_notify(&event_ui);
         }
         /* 进入UI场景(关机) */
         if (package->event == app_thread_scui_ui_scene_shutdown) {
@@ -272,6 +297,12 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             app_dev_gui_key_dlps_enter(&app_dev_gui_key);
             app_dev_gui_enc_dlps_enter(&app_dev_gui_enc);
             app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
+            
+            scui_event_t event_ui = {
+                .object = SCUI_HANDLE_SYSTEM,
+                .type   = scui_event_ui_none_goto,
+            };
+            scui_event_notify(&event_ui);
         }
         
         return true;

@@ -419,7 +419,6 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         window_cfg.sibling[3] = SCUI_UI_SCENE_2;
         break;
     case SCUI_UI_SCENE_2:
-        window_cfg.sibling[0] = SCUI_UI_SCENE_LANTERN;
         window_cfg.sibling[1] = SCUI_UI_SCENE_SOCCER;
         window_cfg.sibling[2] = SCUI_UI_SCENE_1;
         window_cfg.sibling[3] = SCUI_UI_SCENE_3;
@@ -449,9 +448,6 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         window_cfg.sibling[0] = SCUI_UI_SCENE_1;
         break;
     
-    case SCUI_UI_SCENE_LANTERN:
-        window_cfg.sibling[1] = SCUI_UI_SCENE_2;
-        break;
     case SCUI_UI_SCENE_SOCCER:
         window_cfg.sibling[0] = SCUI_UI_SCENE_2;
         break;

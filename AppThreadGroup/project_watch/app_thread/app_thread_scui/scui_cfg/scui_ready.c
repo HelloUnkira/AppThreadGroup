@@ -115,7 +115,7 @@ void scui_ready(void)
     cfg_args->cube.shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
     
     /* 初始窗口 */
-    scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
+    scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
     scui_engine_execute_status_set(true);
     
     /* 初始化scui性能监控 */

@@ -7,6 +7,17 @@
 
 #include "scui.h"
 
+static const char * cwf_json_bin[] = {
+    "D10597001.bin",
+    "D10598001.bin",
+    "D10599001.bin",
+    "D10600001.bin",
+    "D10601001.bin",
+    "D10602001.bin",
+    "D10603001.bin",
+    "D10604001.bin",
+};
+
 static struct {
     scui_handle_t  num;
     scui_handle_t *image;           // 面图标
@@ -49,7 +60,7 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_ui_res_local->num = 6;
+            scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
             scui_handle_t num = scui_ui_res_local->num;
             scui_ui_res_local->image        = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
             scui_ui_res_local->matrix       = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
@@ -60,12 +71,14 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
             scui_ui_res_local->angle_a      = 360 / scui_ui_res_local->num;
             SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
             
-            scui_ui_res_local->image[0] = scui_image_prj_image_src_home_watch_D10604001_preview_01_1bmp;
-            scui_ui_res_local->image[1] = scui_image_prj_image_src_home_watch_D10597001_preview_01_1jpg;
-            scui_ui_res_local->image[2] = scui_image_prj_image_src_home_watch_D10598001_preview_01_1jpg;
-            scui_ui_res_local->image[3] = scui_image_prj_image_src_home_watch_D10599001_preview_01_1jpg;
-            scui_ui_res_local->image[4] = scui_image_prj_image_src_home_watch_D10602001_preview_01_1jpg;
-            scui_ui_res_local->image[5] = scui_image_prj_image_src_home_watch_D10603001_preview_01_1jpg;
+            
+            
+            for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++) {
+                scui_ui_res_local->image[idx] = SCUI_HANDLE_INVALID;
+                scui_cwf_json_make_pv(&scui_ui_res_local->image[idx], cwf_json_bin[idx]);
+            }
+            
+            
             
             scui_ui_res_local->w_res   = scui_image_w(scui_ui_res_local->image[0]);
             scui_ui_res_local->h_res   = scui_image_h(scui_ui_res_local->image[0]);
@@ -78,6 +91,14 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         
         /* 界面数据转存回收 */
         if (scui_widget_event_check_finish(event)) {
+            
+            
+            
+            for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++)
+                scui_cwf_json_burn_pv(&scui_ui_res_local->image[idx]);
+            
+            
+            
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local->image_s);
             SCUI_MEM_FREE(scui_ui_res_local->matrix_inv_s);
@@ -133,11 +154,12 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            scui_coord3_t w_res   = scui_ui_res_local->w_res;
-            scui_coord3_t h_res   = scui_ui_res_local->h_res;
-            scui_coord3_t z_res   = w_res * scui_sin4096(scui_ui_res_local->angle_a) / 4096.0f;
-            scui_coord3_t x_span  = scui_ui_res_local->x_span;
-            scui_coord3_t scale_c = scui_ui_res_local->scale_c / 1024.0f;
+            float tan_a = scui_tan(scui_radian_by_angle(scui_ui_res_local->angle_a / 2.0f));
+            scui_coord3_t scale  = scui_ui_res_local->scale_c / 1024.0f;
+            scui_coord3_t x_span = scui_ui_res_local->x_span;
+            scui_coord3_t w_res  = scui_ui_res_local->w_res;
+            scui_coord3_t h_res  = scui_ui_res_local->h_res;
+            scui_coord3_t z_res  = (w_res + x_span * 2) / 2 / tan_a;
             
             scui_area_t clip = scui_widget_clip(event->object);
             scui_point3_t offset = {
@@ -160,10 +182,10 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                 // scui_matrix_check(&r_matrix);
                 
                 scui_face3_t face3 = {
-                    .point3[0] = {(-w_res / 2 + x_span) * scale_c, (-h_res / 2) * scale_c, z_res * scale_c,},
-                    .point3[1] = {(+w_res / 2 - x_span) * scale_c, (-h_res / 2) * scale_c, z_res * scale_c,},
-                    .point3[2] = {(+w_res / 2 - x_span) * scale_c, (+h_res / 2) * scale_c, z_res * scale_c,},
-                    .point3[3] = {(-w_res / 2 + x_span) * scale_c, (+h_res / 2) * scale_c, z_res * scale_c,},
+                    .point3[0] = {(-w_res / 2) * scale, (-h_res / 2) * scale, z_res * scale,},
+                    .point3[1] = {(+w_res / 2) * scale, (-h_res / 2) * scale, z_res * scale,},
+                    .point3[2] = {(+w_res / 2) * scale, (+h_res / 2) * scale, z_res * scale,},
+                    .point3[3] = {(-w_res / 2) * scale, (+h_res / 2) * scale, z_res * scale,},
                 };
                 // 交换0-3,1-2以倒位面, 后y移动h
                 scui_face3_t face3_inv = {
@@ -172,10 +194,10 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                     .point3[2] = face3.point3[1],
                     .point3[3] = face3.point3[0],
                 };
-                face3_inv.point3[0].y += h_res * scale_c;
-                face3_inv.point3[1].y += h_res * scale_c;
-                face3_inv.point3[2].y += h_res * scale_c;
-                face3_inv.point3[3].y += h_res * scale_c;
+                face3_inv.point3[0].y += h_res * scale;
+                face3_inv.point3[1].y += h_res * scale;
+                face3_inv.point3[2].y += h_res * scale;
+                face3_inv.point3[3].y += h_res * scale;
                 
                 scui_point3_transform_by_matrix(&face3.point3[0], &r_matrix);
                 scui_point3_transform_by_matrix(&face3.point3[1], &r_matrix);
@@ -248,7 +270,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_widget_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            for (uint8_t idx = 0; idx < 6; idx++) {
+            for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 
                 scui_handle_t *image      = scui_ui_res_local->image_s;
                 scui_matrix_t *matrix     = scui_ui_res_local->matrix_s;
@@ -272,6 +294,19 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
     case scui_event_ptr_up:
         scui_ui_res_local->move_lock = false;
         break;
+    case scui_event_key_click: {
+        if (event->key_id != scui_event_key_val_enter)
+            break;
+        
+        scui_window_switch_type_t *cfg_type = NULL;
+        scui_window_switch_cfg_type(&cfg_type);
+        scui_window_switch_type_t type = *cfg_type;
+        *cfg_type = scui_window_switch_circle;
+        scui_window_stack_del();
+        *cfg_type = type;
+        
+        break;
+    }
     break;
     default:
         SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);

@@ -24,7 +24,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         if (scui_widget_event_check_prepare(event)) {
         
             /* 设置背景 */
-            scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp);
+            scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_watchface_bg_01_bgjpg);
             
             #if 1 /* test string widget */
             scui_string_maker_t string_maker = {0};

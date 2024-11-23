@@ -252,10 +252,6 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        // 这里画个圈,校验测试使用
-        scui_widget_image_set(SCUI_UI_SCENE_HONEYCOMB_SCROLL,
-        scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
-        
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);

@@ -61,9 +61,13 @@ void app_scui_check_time_update(void)
             if (app_scui_check_time.idle_time == 0) {
                 if (app_scui_check_time.back) {
                     app_scui_check_time.back = false;
-                    /* 关闭鼠标 */
-                    app_dev_gui_ptr_dlps_enter(&app_dev_gui_ptr);
-                    app_scui_check_time_exec(false);
+                    
+                    APP_SYS_LOG_WARN("ui idle back home");
+                    scui_event_t event_ui = {
+                        .object = SCUI_HANDLE_SYSTEM,
+                        .type   = scui_event_ui_home_goto,
+                    };
+                    scui_event_notify(&event_ui);
                 }
             }
         }

@@ -1,0 +1,53 @@
+{
+    "cwf_id": "D10705001",
+    "layout": [
+        {
+            "type":     "scui_cwf_json_type_img",
+            "type_sub": "scui_cwf_json_type_img_preview",
+            "image_src": ["cwf_image_preview_01_1bmp"]
+        },
+        
+        {
+            "type":     "scui_cwf_json_type_img",
+            "type_sub": "scui_cwf_json_type_img_hour",
+            "x":        170,
+            "y":        105,
+            "bits":     0,
+            "span":     0,
+            "image_src": [
+                "cwf_image_num_hour_min_04_03bmp",
+                "cwf_image_num_hour_min_05_04bmp",
+                "cwf_image_num_hour_min_06_05bmp",
+                "cwf_image_num_hour_min_07_06bmp",
+                "cwf_image_num_hour_min_08_07bmp",
+                "cwf_image_num_hour_min_09_08bmp",
+                "cwf_image_num_hour_min_10_09bmp",
+                "cwf_image_num_hour_min_11_10bmp",
+                "cwf_image_num_hour_min_12_11bmp",
+                "cwf_image_num_hour_min_13_12bmp"
+            ]
+        },
+        {
+            "type":     "scui_cwf_json_type_img",
+            "type_sub": "scui_cwf_json_type_img_minute",
+            "x":        148,
+            "y":        224,
+            "bits":     0,
+            "span":     0,
+            "image_src": [
+                "cwf_image_num_hour_min_04_03bmp",
+                "cwf_image_num_hour_min_05_04bmp",
+                "cwf_image_num_hour_min_06_05bmp",
+                "cwf_image_num_hour_min_07_06bmp",
+                "cwf_image_num_hour_min_08_07bmp",
+                "cwf_image_num_hour_min_09_08bmp",
+                "cwf_image_num_hour_min_10_09bmp",
+                "cwf_image_num_hour_min_11_10bmp",
+                "cwf_image_num_hour_min_12_11bmp",
+                "cwf_image_num_hour_min_13_12bmp"
+            ]
+        }
+    ]
+}
+
+

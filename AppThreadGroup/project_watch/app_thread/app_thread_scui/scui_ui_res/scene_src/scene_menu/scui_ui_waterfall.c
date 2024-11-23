@@ -180,10 +180,6 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
         
         if (scui_widget_event_check_prepare(event)) {
             
-            // 这里画个圈,校验测试使用
-            scui_widget_image_set(SCUI_UI_SCENE_WATERFALL_SCROLL,
-            scui_image_prj_image_src_standby_watch_D10606001_bg_01_2bmp);
-            
             scui_coord_t scroll_w = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
             scui_coord_t scroll_h = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
             

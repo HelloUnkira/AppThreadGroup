@@ -7,7 +7,7 @@
             "widget.clip.h":                "SCUI_DRV_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_6",
             "widget.event_cb":              "scui_ui_scene_6_event_proc",
-            "widget.image":                 "scui_image_prj_image_src_home_watch_D10450001_bg_01_bgbmp",
+            "widget.image":                 "scui_image_prj_image_src_watchface_bg_01_bgjpg",
             "level":                        "0",
             "buffer":                       "true"
         },
