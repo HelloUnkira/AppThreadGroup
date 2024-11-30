@@ -172,6 +172,11 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     scui_widget_t *widget = scui_handle_get(handle);
     scui_string_t *string = (void *)widget;
     
+    // 重复的字符串, 跳过绘制
+    if (string->str_utf8 != NULL && str_utf8 != NULL &&
+        strcmp(string->str_utf8, str_utf8) == 0)
+        return;
+    
     /* 回收旧颜色值表 */
     if (!string->args.recolor)
     if (string->args.colors != NULL) {

@@ -98,9 +98,36 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type);
 //
 //
 /*****************************************************************************/
-/*@brief 窗口关联配置
- *@param event 事件
- */
+typedef enum {
+    scui_ui_scene_mini_card_type_daily_exercise,
+    scui_ui_scene_mini_card_type_music_control,
+    scui_ui_scene_mini_card_type_hr,
+    scui_ui_scene_mini_card_type_spo2,
+    scui_ui_scene_mini_card_type_stress,
+    scui_ui_scene_mini_card_type_weather,
+    scui_ui_scene_mini_card_type_alarm,
+    scui_ui_scene_mini_card_type_sleep,
+    scui_ui_scene_mini_card_type_sport_record,
+    scui_ui_scene_mini_card_type_women_health,
+    scui_ui_scene_mini_card_type_compass,
+    scui_ui_scene_mini_card_type_altimeter,
+    scui_ui_scene_mini_card_type_stopwatch,
+    scui_ui_scene_mini_card_type_countdown,
+    scui_ui_scene_mini_card_type_world_time,
+    scui_ui_scene_mini_card_type_num,
+} scui_ui_scene_mini_card_type_t;
+
+/* 小卡片类型表配置 */
+extern scui_handle_t scui_ui_scene_mini_card_num;
+extern scui_handle_t scui_ui_scene_mini_card_type[];
+extern scui_handle_t scui_ui_scene_mini_card_jump[];
+void scui_ui_scene_mini_card_cfg(void);
+/*****************************************************************************/
+//
+//
+//
+/*****************************************************************************/
+/* 窗口关联配置 */
 void scui_ui_scene_link_cfg(scui_event_t *event);
 /*****************************************************************************/
 //

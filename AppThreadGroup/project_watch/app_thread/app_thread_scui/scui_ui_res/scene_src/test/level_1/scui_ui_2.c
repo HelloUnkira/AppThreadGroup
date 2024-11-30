@@ -26,7 +26,7 @@ void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
 void scui_ui_scene_2_scroll_notify_event(scui_event_t *event)
 {
     scui_coord_t scroll_pct = 0;
-    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    scui_scroll_percent_get(event->object, &scroll_pct);
     SCUI_LOG_INFO("pct:%d", scroll_pct);
     scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
     scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
@@ -48,7 +48,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_rcd = SCUI_HANDLE_INVALID;
-        scui_scroll_center_target(scui_ui_res_local->scroll, &handle_scroll);
+        scui_scroll_center_target_get(scui_ui_res_local->scroll, &handle_scroll);
         if (handle_scroll_rcd != handle_scroll) {
             handle_scroll_rcd  = handle_scroll;
             if (handle_scroll != SCUI_HANDLE_INVALID)

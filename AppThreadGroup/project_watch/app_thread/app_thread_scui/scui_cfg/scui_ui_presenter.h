@@ -18,9 +18,15 @@ typedef struct {
     uint32_t (*get_hr_min)(void);
     uint32_t (*get_hr_max)(void);
     uint32_t (*get_hr_cur)(void);
+    uint32_t (*get_hr_passby)(void);
     uint32_t (*get_spo2_min)(void);
     uint32_t (*get_spo2_max)(void);
     uint32_t (*get_spo2_cur)(void);
+    uint32_t (*get_spo2_passby)(void);
+    uint32_t (*get_stress_min)(void);
+    uint32_t (*get_stress_max)(void);
+    uint32_t (*get_stress_cur)(void);
+    uint32_t (*get_stress_passby)(void);
     uint32_t (*get_kcal_min)(void);
     uint32_t (*get_kcal_max)(void);
     uint32_t (*get_kcal_cur)(void);
@@ -33,8 +39,37 @@ typedef struct {
     uint32_t (*get_dist_min)(void);
     uint32_t (*get_dist_max)(void);
     uint32_t (*get_dist_cur)(void);
+    uint32_t (*get_temp_type)(void);
+    uint32_t (*get_temp_icon)(void);
+    int16_t  (*get_temp_min)(void);
+    int16_t  (*get_temp_max)(void);
     int16_t  (*get_temp_cur)(void);
     bool     (*get_temp_unit)(void);
+    /* dev data: */
+    bool     (*alarm_none)(void);
+    bool     (*alarm_near_state)(void);
+    uint16_t (*alarm_near_date)(void);
+    uint8_t  (*alarm_near_hour)(void);
+    uint8_t  (*alarm_near_minute)(void);
+    bool     (*sleep_none)(void);
+    uint8_t  (*sleep_hour)(void);
+    uint8_t  (*sleep_minute)(void);
+    void     (*sleep_pct4)(uint8_t pct[4]);
+    bool     (*sport_record_none)(void);
+    uint32_t (*sport_record_type)(void);
+    uint32_t (*sport_record_icon)(void);
+    uint8_t  (*sport_record_hour)(void);
+    uint8_t  (*sport_record_minute)(void);
+    bool     (*women_health_none)(void);
+    uint32_t (*women_health_type)(void);
+    uint32_t (*women_health_icon)(void);
+    uint8_t  (*women_health_hour)(void);
+    uint8_t  (*women_health_minute)(void);
+    bool     (*compass_invalid)(void);
+    uint16_t (*compass_angle)(void);
+    float    (*altimeter_pressure)(void);
+    float    (*altimeter_altitude)(void);
+    
     /* drv func: */
     void (*vibrate_shot)(void);
     /* keep adding... */

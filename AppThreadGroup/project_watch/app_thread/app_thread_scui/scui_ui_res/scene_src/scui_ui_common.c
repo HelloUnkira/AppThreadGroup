@@ -368,36 +368,58 @@ void scui_ui_scene_list_cfg(scui_ui_scene_list_type_t type)
 }
 
 /*****************************************************************************/
-/*@brief 窗口关联配置
- *@param event 事件
- */
+scui_handle_t scui_ui_scene_mini_card_num = 0;
+scui_handle_t scui_ui_scene_mini_card_type[scui_ui_scene_mini_card_type_num] = {0};
+scui_handle_t scui_ui_scene_mini_card_jump[scui_ui_scene_mini_card_type_num] = {0};
+
+void scui_ui_scene_mini_card_cfg(void)
+{
+    // type list default:
+    for (uint32_t idx = 0; idx < scui_ui_scene_mini_card_type_num;idx++) {
+         scui_ui_scene_mini_card_type[idx] = idx;
+         scui_ui_scene_mini_card_jump[idx] = SCUI_UI_SCENE_6;
+    }
+    scui_ui_scene_mini_card_num = scui_ui_scene_mini_card_type_num;
+    
+    // 从 scui_ui_presenter的接口中读取系统保存的mini card配置项
+    // ......
+}
+
+/*****************************************************************************/
 void scui_ui_scene_link_cfg(scui_event_t *event)
 {
+    if (event->type == scui_event_show &&
+        scui_widget_event_check_prepare(event)) {
+        
+        /* 窗口属性参数配置(浮动窗口) */
+        scui_window_float_t float_cfg = {0};
+        scui_window_float_cfg_get(&float_cfg);
+        float_cfg.main = event->object;
+        float_cfg.list[0] = SCUI_HANDLE_INVALID;
+        float_cfg.list[1] = SCUI_HANDLE_INVALID;
+        float_cfg.list[2] = SCUI_HANDLE_INVALID;
+        float_cfg.list[3] = SCUI_HANDLE_INVALID;
+        
+        switch (event->object) {
+        case SCUI_UI_SCENE_HOME:
+        case SCUI_UI_SCENE_MINI_CARD:
+            float_cfg.main = SCUI_UI_SCENE_HOME;
+            float_cfg.list[0] = SCUI_UI_SCENE_FLOAT_1;
+            float_cfg.list[1] = SCUI_UI_SCENE_FLOAT_2;
+            float_cfg.list[2] = SCUI_UI_SCENE_MINI_CARD;
+            float_cfg.list[3] = SCUI_UI_SCENE_FLOAT_4;
+            break;
+        default:
+            break;
+        }
+        scui_window_float_cfg_set(&float_cfg);
+        return;
+    }
+    
     // 仅焦点切换时才可进行
     if (event->type != scui_event_focus_get ||
        !scui_widget_event_check_prepare(event))
         return;
-    
-    /* 窗口属性参数配置(浮动窗口) */
-    scui_window_float_t float_cfg = {0};
-    scui_window_float_cfg_get(&float_cfg);
-    float_cfg.main = event->object;
-    float_cfg.list[0] = SCUI_HANDLE_INVALID;
-    float_cfg.list[1] = SCUI_HANDLE_INVALID;
-    float_cfg.list[2] = SCUI_HANDLE_INVALID;
-    float_cfg.list[3] = SCUI_HANDLE_INVALID;
-    
-    switch (event->object) {
-    case SCUI_UI_SCENE_HOME:
-        float_cfg.list[0] = SCUI_UI_SCENE_FLOAT_1;
-        float_cfg.list[1] = SCUI_UI_SCENE_FLOAT_2;
-        float_cfg.list[2] = SCUI_UI_SCENE_FLOAT_3;
-        float_cfg.list[3] = SCUI_UI_SCENE_FLOAT_4;
-        break;
-    default:
-        break;
-    }
-    scui_window_float_cfg_set(&float_cfg);
     
     /* 窗口属性参数配置(场景管理) */
     scui_window_cfg_t window_cfg = {0};

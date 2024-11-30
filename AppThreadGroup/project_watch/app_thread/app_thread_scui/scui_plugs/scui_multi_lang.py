@@ -11,6 +11,19 @@ import openpyxl
 # print(xlsx_sheet.cell(1, 1).value)
 
 
+# 统计文件
+def encode_scui_multi_lang_txt(file, xlsx_sheet, sheet_row, sheet_col):
+    char_set = set()
+    for item in xlsx_sheet.rows:
+        for data in item:
+            char_set = char_set | set(str(data.value))
+            # print(set(str(data.value)))
+    char_set = sorted(list(char_set))
+    print("char_set:\n", char_set)
+    for item in char_set:
+        file.write(item)
+
+
 # 编写集成化源文件
 def encode_scui_multi_lang_c(file, xlsx_sheet, sheet_row, sheet_col):
     # 写点简要的说明
@@ -121,12 +134,15 @@ def encode_scui_multi_lang():
     # 开启三个文件
     scui_multi_lang_h = open(os.path.join(dst_path, 'scui_multi_lang.h'), mode='w', encoding='utf-8')
     scui_multi_lang_c = open(os.path.join(dst_path, 'scui_multi_lang.c'), mode='w', encoding='utf-8')
+    scui_multi_lang_txt = open(os.path.join(dst_path, 'scui_multi_lang.txt'), mode='w', encoding='utf-8')
     # 解析
     encode_scui_multi_lang_h(scui_multi_lang_h, xlsx_sheet, sheet_row, sheet_col, args_list)
     encode_scui_multi_lang_c(scui_multi_lang_c, xlsx_sheet, sheet_row, sheet_col)
+    encode_scui_multi_lang_txt(scui_multi_lang_txt, xlsx_sheet, sheet_row, sheet_col)
     # 关闭三个文件
     scui_multi_lang_h.close()
     scui_multi_lang_c.close()
+    scui_multi_lang_txt.close()
     # 关闭工作簿
     xlsx_file.close()
 

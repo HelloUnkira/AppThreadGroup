@@ -36,6 +36,10 @@ typedef enum {
 	SCUI_UI_SCENE_POPUP_SCALE,
 	SCUI_UI_SCENE_POPUP_BG,
 	SCUI_UI_SCENE_HOME,
+	SCUI_UI_SCENE_MINI_CARD,
+	SCUI_UI_SCENE_MINI_CARD_SCROLL,
+	SCUI_UI_SCENE_MINI_CARD_BAR_ARC,
+	SCUI_UI_SCENE_MINI_CARD_MASK,
 	SCUI_UI_SCENE_NONE,
 	SCUI_UI_SCENE_STANDBY,
 	SCUI_UI_SCENE_FLOAT_1,
@@ -72,6 +76,6 @@ typedef enum {
 	SCUI_UI_SCENE_TEST,
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[64];
+extern const void * scui_widget_parser_table[68];
 
 #endif

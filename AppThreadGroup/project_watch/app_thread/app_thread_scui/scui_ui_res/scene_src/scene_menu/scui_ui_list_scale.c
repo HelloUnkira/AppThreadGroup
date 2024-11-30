@@ -27,7 +27,7 @@ void scui_ui_scene_list_scale_bar_arc_event(scui_event_t *event)
 void scui_ui_scene_list_scale_scroll_notify_event(scui_event_t *event)
 {
     scui_coord_t scroll_pct = 0;
-    scui_scroll_auto_percent_get(event->object, &scroll_pct);
+    scui_scroll_percent_get(event->object, &scroll_pct);
     SCUI_LOG_INFO("pct:%d", scroll_pct);
     scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
     scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
@@ -307,7 +307,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.args.color.color_s.full    = 0xFFFFFFFF;
                 string_maker.args.color.color_e.full    = 0xFFFFFFFF;
                 string_maker.args.color.filter          = true;
-                string_maker.draw_cache                 = true;
+                // string_maker.draw_cache                 = true;
                 string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
                 scui_widget_create(&string_maker, &string_handle, false);

@@ -106,7 +106,7 @@ void scui_scroll_burn(scui_handle_t handle)
  *@param handle 滚动控件句柄
  *@param percent 偏移量
  */
-void scui_scroll_auto_percent_get(scui_handle_t handle, scui_coord_t *percent)
+void scui_scroll_percent_get(scui_handle_t handle, scui_coord_t *percent)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_get(handle);
@@ -155,11 +155,83 @@ void scui_scroll_auto_percent_get(scui_handle_t handle, scui_coord_t *percent)
     }
 }
 
+/*@brief 滚动控件中心对齐子控件
+ *@param handle 滚动控件句柄
+ *@param target 中心对齐子控件
+ */
+void scui_scroll_center_target_get(scui_handle_t handle, scui_handle_t *target)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
+    SCUI_ASSERT(target != NULL);
+    *target = SCUI_HANDLE_INVALID;
+    
+    scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
+    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
+        return;
+    
+    scui_point_t offset = {0};
+    scui_widget_align_pos_calc(handle, target, &offset, scui_opt_pos_c);
+}
+
+/*@brief 滚动控件中心对齐子控件
+ *@param handle 滚动控件句柄
+ *@param target 中心对齐子控件
+ */
+void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
+    scui_widget_t *widget = scui_handle_get(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    SCUI_ASSERT(widget != NULL);
+    
+    SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
+    SCUI_ASSERT(target != SCUI_HANDLE_INVALID);
+    
+    bool child_not_find = true;
+    scui_widget_child_list_btra(widget, idx)
+    if (widget->child_list[idx] == target) {
+        child_not_find = false;
+        break;
+    }
+    if (child_not_find) {
+        SCUI_LOG_WARN("child not find");
+        return;
+    }
+    
+    scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
+    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
+        return;
+    
+    // 如果已经是中心子控件, 跳过目标
+    scui_handle_t target_center = SCUI_HANDLE_INVALID;
+    scui_scroll_center_target_get(handle, &target_center);
+    if (target_center == target)
+        return;
+    
+    scui_widget_t *widget_child = scui_handle_get(target);
+    scui_coord_t center_x = widget->clip.x + widget->clip.w / 2;
+    scui_coord_t center_y = widget->clip.y + widget->clip.h / 2;
+    scui_coord_t center_child_x = widget_child->clip.x + widget_child->clip.w / 2;
+    scui_coord_t center_child_y = widget_child->clip.y + widget_child->clip.h / 2;
+    
+    scui_point_t offset = {
+        .x = center_x - center_child_x,
+        .y = center_y - center_child_y,
+    };
+    SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
+    scui_scroll_offset(handle, &offset);
+}
+
 /*@brief 滚动控件获取偏移量(自动布局)
  *@param handle 滚动控件句柄
  *@param offset 偏移量
  */
-void scui_scroll_auto_offset_get(scui_handle_t handle, scui_coord_t *offset)
+void scui_scroll_offset_get(scui_handle_t handle, scui_coord_t *offset)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_get(handle);
@@ -287,29 +359,6 @@ void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
     
     if (scroll->fling_page <= 0)
         scroll->fling_page  = 1;
-}
-
-/*@brief 滚动控件中心对齐子控件
- *@param handle 滚动控件句柄
- *@param target 中心对齐子控件
- */
-void scui_scroll_center_target(scui_handle_t handle, scui_handle_t *target)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
-    
-    SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
-    SCUI_ASSERT(target != NULL);
-    *target = SCUI_HANDLE_INVALID;
-    
-    scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
-    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
-        return;
-    
-    scui_point_t offset = {0};
-    scui_widget_align_pos_calc(handle, target, &offset, scui_opt_pos_c);
 }
 
 /*@brief 滚动控件动画回调

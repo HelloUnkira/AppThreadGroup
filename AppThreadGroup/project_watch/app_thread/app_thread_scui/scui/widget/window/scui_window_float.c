@@ -254,7 +254,6 @@ void scui_window_float_event_grasp_hide(scui_event_t *event)
 {
     if (!scui_widget_event_check_finish(event))
          return;
-    
 }
 
 /*@brief 窗口浮动事件抓取回调

@@ -37,4 +37,11 @@ extern const char * scui_font_type_table[SCUI_FONT_TYPE_NUM - SCUI_HANDLE_OFFSET
  */
 scui_multi_lang_type_t scui_font_type_switch(scui_handle_t handle);
 
+/*@brief 多国语字符串转换
+ *@param font_idx   字库索引
+ *@param multi_lang 多国语句柄
+ *@retval 字符串
+ */
+uint8_t * scui_str_by_multi_lang(scui_handle_t font_idx, scui_handle_t multi_lang);
+
 #endif

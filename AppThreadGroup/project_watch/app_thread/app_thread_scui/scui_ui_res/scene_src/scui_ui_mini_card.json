@@ -1,0 +1,57 @@
+{
+    "type": "scene",
+    "widget": [
+        {
+            "widget.type":                  "scui_widget_type_window",
+            "widget.style.trans":           "true",
+            "widget.style.sched_anima":     "true",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb":              "scui_ui_scene_mini_card_event_proc",
+            "level":                        "0",
+            "buffer":                       "true"
+        },
+        {
+            "widget.type":                  "scui_widget_type_scroll",
+            "widget.style.indev_ptr":       "true",
+            "widget.style.indev_enc":       "true",
+            "widget.style.indev_key":       "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD_SCROLL",
+            "widget.parent":                "SCUI_UI_SCENE_MINI_CARD",
+            "widget.child_num":             "50",
+            "notify_cb":                    "scui_ui_scene_mini_card_scroll_notify_event",
+            "pos":                          "scui_opt_pos_c",
+            "dir":                          "scui_opt_dir_ver",
+            "space":                        "3",
+            "route_enc":                    "117",
+            "route_key":                    "117",
+            "keyid_fdir":                   "SCUI_WIDGET_SCROLL_KEY_FDIR",
+            "keyid_bdir":                   "SCUI_WIDGET_SCROLL_KEY_BDIR",
+            "springback":                   "70"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.style.sched_anima":     "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD_BAR_ARC",
+            "widget.parent":                "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb":              "scui_ui_scene_mini_card_bar_arc_event"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_MINI_CARD_MASK",
+            "widget.parent":                "SCUI_UI_SCENE_MINI_CARD",
+            "widget.event_cb":              "scui_ui_mask_all_event_proc"
+        }
+    ]
+}

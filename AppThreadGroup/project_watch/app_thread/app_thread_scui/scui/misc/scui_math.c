@@ -86,6 +86,8 @@ int64_t scui_rand(int64_t min, int64_t max)
     
     // 这里不知道为什么, v会超过min到max的范围
     int64_t v = (a % (max - min + 1)) + min;
+    if (v < min) v += min;
+    
     return scui_clamp(v, min, max);
 }
 
