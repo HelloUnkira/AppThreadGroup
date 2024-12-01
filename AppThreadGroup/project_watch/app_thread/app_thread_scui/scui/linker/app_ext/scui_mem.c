@@ -215,8 +215,18 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     } else
     if (!scui_mem_record_item_add((scui_mem_record_item_t) {
         .file = file, .func = func, .line = line,
-        .type = type, .ptr  = ptr,  .size = size,}))
-         SCUI_LOG_WARN("record queue is full, item will be discard");
+        .type = type, .ptr  = ptr,  .size = size,})) {
+        
+        SCUI_LOG_WARN("[%d] record queue is full, item will be discard", type);
+        // scui_mem_check(type);
+        
+        #if SCUI_MEM_RECORD_STATISTIC
+        // scui_mem_record_statistic(true);
+        #endif
+        #if SCUI_MEM_RECORD_ANALYSIS
+        // scui_mem_record_analysis(true);
+        #endif
+    }
     
     #else
     
@@ -253,8 +263,10 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     #if SCUI_MEM_RECORD_CHECK
     
     if (!scui_mem_record_item_del((scui_mem_record_item_t){
-        .type = type, .ptr = ptr,}))
-         SCUI_LOG_WARN("record queue is not find, maybe discard");
+        .type = type, .ptr = ptr,})) {
+        
+        SCUI_LOG_WARN("[%d] record queue is not find, maybe discard", type);
+    }
     
     #endif
     
@@ -274,8 +286,10 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
             scui_mem.mem_olsf[idx]->addr_hdr <= (uintptr_t)ptr &&
             scui_mem.mem_olsf[idx]->addr_end >= (uintptr_t)ptr) {
             *type = idx;
-             break;
+             return;
         }
+    
+    SCUI_ASSERT(false);
 }
 
 /*@brief 内存模组检查
@@ -289,6 +303,8 @@ void scui_mem_check(scui_mem_type_t type)
         app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_font]);
     if (type == scui_mem_type_graph)
         app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_graph]);
+    if (type == scui_mem_type_user)
+        app_sys_mem_olsf_check(scui_mem.mem_olsf[scui_mem_type_user]);
 }
 
 /*@brief 内存大小获取
@@ -330,49 +346,60 @@ uint32_t scui_mem_size_total(scui_mem_type_t type)
 void scui_mem_ready(void)
 {
     scui_mutex_process(&scui_mem.mutex, scui_mutex_static);
-    /* 这里使用自定义内存分配器, 用于查内存越界问题 */
     
-    static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX]   = {0};
-    static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT]  = {0};
-    static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH] = {0};
-    
-    scui_mem.size_total[scui_mem_type_mix]   = SCUI_MEM_TYPE_SIZE_MIX;
-    scui_mem.size_total[scui_mem_type_font]  = SCUI_MEM_TYPE_SIZE_FONT;
+    scui_mem.size_total[scui_mem_type_mix  ] = SCUI_MEM_TYPE_SIZE_MIX;
+    scui_mem.size_total[scui_mem_type_font ] = SCUI_MEM_TYPE_SIZE_FONT;
     scui_mem.size_total[scui_mem_type_graph] = SCUI_MEM_TYPE_SIZE_GRAPH;
+    scui_mem.size_total[scui_mem_type_user ] = SCUI_MEM_TYPE_SIZE_USER;
     
-    scui_mem.mem_olsf[scui_mem_type_mix]   = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
-    scui_mem.mem_olsf[scui_mem_type_font]  = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_font,  SCUI_MEM_TYPE_SIZE_FONT);
+    /* 这里使用自定义内存分配器, 用于查内存越界问题 */
+    static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX  ] = {0};
+    static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT ] = {0};
+    static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH] = {0};
+    static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER ] = {0};
+    scui_mem.mem_olsf[scui_mem_type_mix  ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
+    scui_mem.mem_olsf[scui_mem_type_font ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_font,  SCUI_MEM_TYPE_SIZE_FONT);
     scui_mem.mem_olsf[scui_mem_type_graph] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_graph, SCUI_MEM_TYPE_SIZE_GRAPH);
+    scui_mem.mem_olsf[scui_mem_type_user ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_user,  SCUI_MEM_TYPE_SIZE_USER);
     
     #if SCUI_MEM_RECORD_CHECK
     uint8_t  *item = NULL;
     uintptr_t size = 0;
     #if SCUI_MEM_RECORD_CHECK_MIX
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
-    item = SCUI_MEM_ALLOC(scui_mem_type_mix, size);
-    scui_mem_check(scui_mem_type_mix);
+    item = SCUI_MEM_ALLOC(scui_mem_type_mix,   size);
     scui_mem.size_used[scui_mem_type_mix]     += size;
     scui_mem.record[scui_mem_type_mix].item    = item;
     scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
     scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
+    // scui_mem_check(scui_mem_type_mix);
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
-    item = SCUI_MEM_ALLOC(scui_mem_type_font, size);
-    scui_mem_check(scui_mem_type_font);
+    item = SCUI_MEM_ALLOC(scui_mem_type_font,  size);
     scui_mem.size_used[scui_mem_type_font]    += size;
     scui_mem.record[scui_mem_type_font].item   = item;
     scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
     scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
+    // scui_mem_check(scui_mem_type_font);
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
     item = SCUI_MEM_ALLOC(scui_mem_type_graph, size);
-    scui_mem_check(scui_mem_type_graph);
     scui_mem.size_used[scui_mem_type_graph]   += size;
     scui_mem.record[scui_mem_type_graph].item  = item;
     scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
     scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;
+    // scui_mem_check(scui_mem_type_graph);
+    #endif
+    #if SCUI_MEM_RECORD_CHECK_USER
+    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_USER;
+    item = SCUI_MEM_ALLOC(scui_mem_type_user,  size);
+    scui_mem.size_used[scui_mem_type_user]    += size;
+    scui_mem.record[scui_mem_type_user].item   = item;
+    scui_mem.record[scui_mem_type_user].num    = SCUI_MEM_RECORD_ITEM_USER;
+    scui_mem.record[scui_mem_type_user].size   = SCUI_MEM_TYPE_SIZE_USER;
+    // scui_mem_check(scui_mem_type_user);
     #endif
     #endif
 }

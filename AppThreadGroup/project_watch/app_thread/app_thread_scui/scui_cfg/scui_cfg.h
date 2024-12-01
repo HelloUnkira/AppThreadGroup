@@ -10,58 +10,48 @@
 
 /* 内存使用占用(0: 4M PSRAM; 1: 8M PSRAM) */
 #define SCUI_MEM_SIZE_TYPE                          (1)
-#if 0
-#elif   SCUI_MEM_SIZE_TYPE == 0     // 4M PSRAM (空闲1M)
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 128)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 128)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 3 - 1024 * (128 + 128))
-#elif   SCUI_MEM_SIZE_TYPE == 1     // 8M PSRAM (空闲1M)
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 256)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 512)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 7 - 1024 * (256 + 512))
-#else
-#error "unknown type"
-#endif
-
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_CHECK                       (0)
+#define SCUI_MEM_RECORD_CHECK                       (1)
 #define SCUI_MEM_RECORD_ANALYSIS                    (1)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
-#define SCUI_MEM_RECORD_CHECK_MIX                   (0)
-#define SCUI_MEM_RECORD_CHECK_FONT                  (0)
+#define SCUI_MEM_RECORD_CHECK_MIX                   (1)
+#define SCUI_MEM_RECORD_CHECK_FONT                  (1)
 #define SCUI_MEM_RECORD_CHECK_GRAPH                 (1)
+#define SCUI_MEM_RECORD_CHECK_USER                  (1)
+/* 内存使用记录监控: */
+#define SCUI_MEM_RECORD_ITEM_MIX                    (1024)
+#define SCUI_MEM_RECORD_ITEM_FONT                   (512)
+#define SCUI_MEM_RECORD_ITEM_GRAPH                  (256)
+#define SCUI_MEM_RECORD_ITEM_USER                   (1024)
 
 #if 0
-#elif SCUI_MEM_SIZE_TYPE == 0
-/* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_ITEM_MIX                    (512)
-#define SCUI_MEM_RECORD_ITEM_FONT                   (256)
-#define SCUI_MEM_RECORD_ITEM_GRAPH                  (64)
-/* 内存图片散列值,内存图片缓存最大限制 */
-#define SCUI_CACHE_IMAGE_HASH                       (17)
-#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 1)
-/* 内存文字散列值,内存文字缓存最大限制 */
+#elif   SCUI_MEM_SIZE_TYPE == 0     // 4M PSRAM (空闲1M)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 64)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 128)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 3 - 1024 * (256))
+#define SCUI_MEM_TYPE_SIZE_USER                     (1024 * 64)
+/* 缓存散列值(建议素数),缓存最大限制 */
 #define SCUI_CACHE_FONT_HASH                        (3)
 #define SCUI_CACHE_FONT_TOTAL                       (1024 * 64)
-/* 内存文字散列值,内存文字缓存最大限制 */
 #define SCUI_CACHE_FONT_GLYPH_HASH                  (23)
 #define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 64)
-#elif SCUI_MEM_SIZE_TYPE == 1
-/* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_ITEM_MIX                    (2048)
-#define SCUI_MEM_RECORD_ITEM_FONT                   (1024)
-#define SCUI_MEM_RECORD_ITEM_GRAPH                  (512)
-/* 内存图片散列值,内存图片缓存最大限制 */
-#define SCUI_CACHE_IMAGE_HASH                       (17 * 2)
-#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 4)
-/* 内存文字散列值,内存文字缓存最大限制 */
-#define SCUI_CACHE_FONT_HASH                        (3 + 1)
+#define SCUI_CACHE_IMAGE_HASH                       (17)
+#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 1)
+#elif   SCUI_MEM_SIZE_TYPE == 1     // 8M PSRAM (空闲1M)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 128)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 512)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 7 - 1024 * (768))
+#define SCUI_MEM_TYPE_SIZE_USER                     (1024 * 128)
+/* 缓存散列值(建议素数),缓存最大限制 */
+#define SCUI_CACHE_FONT_HASH                        (5)
 #define SCUI_CACHE_FONT_TOTAL                       (1024 * 128)
-/* 内存文字散列值,内存文字缓存最大限制 */
-#define SCUI_CACHE_FONT_GLYPH_HASH                  (23 * 2)
+#define SCUI_CACHE_FONT_GLYPH_HASH                  (47)
 #define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 384)
+#define SCUI_CACHE_IMAGE_HASH                       (37)
+#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 4)
 #else
+#error "unknown type"
 #endif
 
 /* 放大系数以及偏移值 */

@@ -19,6 +19,7 @@ typedef enum {
     scui_mem_type_mix,
     scui_mem_type_font,
     scui_mem_type_graph,
+    scui_mem_type_user,
     scui_mem_type_num,
 } scui_mem_type_t;
 
@@ -35,9 +36,9 @@ typedef struct {
 
 typedef struct {
     scui_mem_record_item_t *item;
-    uint32_t                num;
-    uint32_t                size;
-    bool                    update;
+    uint32_t num;
+    uint32_t size;
+    uint32_t update:1;
 } scui_mem_record_t;
 
 
@@ -59,12 +60,12 @@ void scui_mem_record_statistic(bool force);
 
 typedef struct {
     scui_mutex_t mutex;
-    uintptr_t    size_total[scui_mem_type_num];
-    uintptr_t    size_used[scui_mem_type_num];
+    uintptr_t size_total[scui_mem_type_num];
+    uintptr_t size_used[scui_mem_type_num];
     
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     #if SCUI_MEM_RECORD_CHECK
-    scui_mem_record_t   record[scui_mem_type_num];
+    scui_mem_record_t record[scui_mem_type_num];
     #endif
 } scui_mem_t;
 

@@ -31,7 +31,7 @@ void scui_ui_scene_thumbwheel_event_proc(scui_event_t *event)
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
+            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         

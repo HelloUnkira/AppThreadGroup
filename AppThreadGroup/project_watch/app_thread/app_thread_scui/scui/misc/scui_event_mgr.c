@@ -103,10 +103,10 @@ static void scui_event_respond(scui_event_t *event)
     #if SCUI_MEM_RECORD_CHECK
     if (event->type == scui_event_draw) {
         #if SCUI_MEM_RECORD_STATISTIC
-        scui_mem_record_statistic(false);
+        // scui_mem_record_statistic(false);
         #endif
         #if SCUI_MEM_RECORD_ANALYSIS
-        scui_mem_record_analysis(false);
+        // scui_mem_record_analysis(false);
         #endif
     }
     #endif

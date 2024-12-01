@@ -52,7 +52,7 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
+            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
@@ -62,12 +62,12 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
             
             scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
             scui_handle_t num = scui_ui_res_local->num;
-            scui_ui_res_local->image        = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
-            scui_ui_res_local->matrix       = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->matrix_inv   = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->matrix_s     = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->matrix_inv_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->image_s      = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * num);
+            scui_ui_res_local->image        = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_handle_t) * num);
+            scui_ui_res_local->matrix       = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_inv   = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_s     = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->matrix_inv_s = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
+            scui_ui_res_local->image_s      = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_handle_t) * num);
             scui_ui_res_local->angle_a      = 360 / scui_ui_res_local->num;
             SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
             

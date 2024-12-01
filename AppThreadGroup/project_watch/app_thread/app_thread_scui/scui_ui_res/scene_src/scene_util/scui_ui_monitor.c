@@ -9,7 +9,8 @@
 
 scui_handle_t monitor_anima = SCUI_HANDLE_INVALID;
 scui_handle_t monitor_refr  = SCUI_HANDLE_INVALID;
-scui_handle_t monitor_mem   = SCUI_HANDLE_INVALID;
+scui_handle_t monitor_mem1  = SCUI_HANDLE_INVALID;
+scui_handle_t monitor_mem2  = SCUI_HANDLE_INVALID;
 
 /*@brief scui 监控器常驻动画响应回调
  */
@@ -58,53 +59,68 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
     #endif
     
     #if 1 // mem
-    uintptr_t mem_total[3] = {0};
-    uintptr_t mem_used[3] = {0};
+    #define MEM_TYPE    4
     
-    mem_total[0] = scui_mem_size_total(scui_mem_type_mix);
-    mem_total[1] = scui_mem_size_total(scui_mem_type_font);
-    mem_total[2] = scui_mem_size_total(scui_mem_type_graph);
-    mem_used[0]  = scui_mem_size_used(scui_mem_type_mix);
-    mem_used[1]  = scui_mem_size_used(scui_mem_type_font);
-    mem_used[2]  = scui_mem_size_used(scui_mem_type_graph);
+    uintptr_t mem_total[MEM_TYPE] = {
+        scui_mem_size_total(scui_mem_type_mix),
+        scui_mem_size_total(scui_mem_type_font),
+        scui_mem_size_total(scui_mem_type_graph),
+        scui_mem_size_total(scui_mem_type_user),
+    };
+    uintptr_t mem_used[MEM_TYPE] = {
+        scui_mem_size_used(scui_mem_type_mix),
+        scui_mem_size_used(scui_mem_type_font),
+        scui_mem_size_used(scui_mem_type_graph),
+        scui_mem_size_used(scui_mem_type_user),
+    };
     
-    static uintptr_t mem_used_rcd[3] = {0};
-    if (scui_dist(mem_used[0], mem_used_rcd[0]) > 1024 * 2 ||
-        scui_dist(mem_used[1], mem_used_rcd[1]) > 1024 * 8 ||
-        scui_dist(mem_used[2], mem_used_rcd[2]) > 1024 * 16) {
-        mem_used_rcd[0] = mem_used[0];
-        mem_used_rcd[1] = mem_used[1];
-        mem_used_rcd[2] = mem_used[2];
+    static uintptr_t mem_used_rcd[MEM_TYPE] = {0};
+    if (scui_dist(mem_used[0], mem_used_rcd[0]) > 1024 * 2  ||
+        scui_dist(mem_used[1], mem_used_rcd[1]) > 1024 * 8  ||
+        scui_dist(mem_used[2], mem_used_rcd[2]) > 1024 * 16 ||
+        scui_dist(mem_used[3], mem_used_rcd[3]) > 1024 * 2) {
         
-        float mem_total_f[3] = {0};
-        float mem_used_f[3] = {0};
+        for (uint8_t idx = 0; idx < scui_arr_len(mem_used); idx++)
+            mem_used_rcd[idx] = mem_used[idx];
         
+        float mem_total_f[MEM_TYPE] = {0};
         mem_total_f[0] = (float)mem_total[0] / 1024 / 1024;
         mem_total_f[1] = (float)mem_total[1] / 1024 / 1024;
         mem_total_f[2] = (float)mem_total[2] / 1024 / 1024;
+        mem_total_f[3] = (float)mem_total[3] / 1024 / 1024;
         
+        float mem_used_f[MEM_TYPE] = {0};
         mem_used_f[0] = (float)mem_used[0] / 1024;
         mem_used_f[1] = (float)mem_used[1] / 1024;
         mem_used_f[2] = (float)mem_used[2] / 1024 / 1024;
+        mem_used_f[3] = (float)mem_used[3] / 1024;
         
-        uint32_t pct_args[3] = {
-            mem_used[0] * 100 / mem_total[0],
-            mem_used[1] * 100 / mem_total[1],
-            mem_used[2] * 100 / mem_total[2],
-        };
+        uint32_t pct_args[MEM_TYPE] = {0};
+        for (uint8_t idx = 0; idx < scui_arr_len(mem_used); idx++)
+            pct_args[idx] = mem_used[idx] * 100 / mem_total[idx];
         
-        uint8_t str_mem[100] = {0};
-        snprintf(str_mem, sizeof(str_mem) - 1, "Mix:#-%d%%:%.02fK-# Font:#-%d%%:%.02fK-# Graph:#-%d%%:%.02fM-#",
-                 pct_args[0], mem_used_f[0], pct_args[1], mem_used_f[1], pct_args[2], mem_used_f[2]);
+        uint8_t str_mem1[100] = {0};
+        uint8_t str_mem2[100] = {0};
+        snprintf(str_mem1, sizeof(str_mem1) - 1,
+            "Mix:#-%d%%:%.02fK-# User:#-%d%%:%.02fK-#",
+                 pct_args[0], mem_used_f[0], pct_args[3], mem_used_f[3]);
+        snprintf(str_mem2, sizeof(str_mem2) - 1,
+            "Font:#-%d%%:%.02fK-# Graph:#-%d%%:%.02fM-#",
+                 pct_args[1], mem_used_f[1], pct_args[2], mem_used_f[2]);
         
         uint32_t color_g = 0xFF00FF00;
         uint32_t color_y = 0xFFFFFF00;
         uint32_t color_r = 0xFFFF0000;
         
-        scui_color_t recolors[3] = {
+        scui_color_t recolors1[2] = {
             {   .filter = true,
                 .color_s.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = pct_args[2] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[2] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,},
+        };
+        scui_color_t recolors2[2] = {
             {   .filter = true,
                 .color_s.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,},
@@ -112,7 +128,9 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
                 .color_s.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,},
         };
-        scui_string_update_str_rec(monitor_mem, str_mem, scui_arr_len(recolors), recolors);
+        scui_string_update_str_rec(monitor_mem1, str_mem1, scui_arr_len(recolors1), recolors1);
+        scui_string_update_str_rec(monitor_mem2, str_mem2, scui_arr_len(recolors2), recolors2);
+        
     }
     #endif
 }
@@ -156,18 +174,24 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
                 string_maker.args.line_delete           = 1;
                 
                 string_maker.widget.clip.x              = 10;
-                string_maker.widget.clip.y              = 50;
+                string_maker.widget.clip.y              = 30;
                 string_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
                 string_maker.widget.clip.h              = 20;
                 scui_widget_create(&string_maker, &monitor_refr, false);
                 string_maker.widget.clip.x              = 10;
+                string_maker.widget.clip.y              = 50;
+                string_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
+                string_maker.widget.clip.h              = 20;
+                scui_widget_create(&string_maker, &monitor_mem1, false);
+                string_maker.widget.clip.x              = 10;
                 string_maker.widget.clip.y              = 70;
                 string_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
                 string_maker.widget.clip.h              = 20;
-                scui_widget_create(&string_maker, &monitor_mem, false);
+                scui_widget_create(&string_maker, &monitor_mem2, false);
                 
                 scui_string_update_str(monitor_refr, "refr");
-                scui_string_update_str(monitor_mem,  "mem");
+                scui_string_update_str(monitor_mem1, "mem");
+                scui_string_update_str(monitor_mem2, "mem");
             }
         }
         break;

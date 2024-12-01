@@ -364,7 +364,7 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
     /* 控件需要显示 */
     if (scui_widget_is_show(widget->myself)) {
         /* 控件不透明 */
-        if (widget->alpha != scui_alpha_trans &&
+        if (widget->alpha == scui_alpha_cover &&
            (widget->surface->format == scui_pixel_cf_bmp565 ||
             widget->surface->format == scui_pixel_cf_bmp888)) {
             /* 控件标记完全覆盖 */

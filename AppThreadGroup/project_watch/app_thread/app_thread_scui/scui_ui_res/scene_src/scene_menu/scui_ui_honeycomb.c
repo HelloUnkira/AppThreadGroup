@@ -255,7 +255,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         /* 界面数据加载准备 */
         if (scui_widget_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(*scui_ui_res_local));
+            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
         }
@@ -283,7 +283,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
             
             uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_mix, layout_size);
+            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
             scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
             
             scui_custom_maker_t custom_maker = {0};
@@ -371,7 +371,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
             
             uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_mix, layout_size);
+            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
             scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
             
             scui_handle_t child_num = scui_widget_child_num(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
