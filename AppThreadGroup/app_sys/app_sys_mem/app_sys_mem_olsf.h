@@ -103,4 +103,10 @@ app_sys_mem_olsf_t * app_sys_mem_olsf_ready(void *addr, uintptr_t size);
  */
 void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf);
 
+/*@brief 一级隔离策略分配堆内存遍历检查
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param invoke   回调实例
+ */
+void app_sys_mem_olsf_walk(app_sys_mem_olsf_t *mem_olsf, void (*invoke)(void *pointer, bool used));
+
 #endif

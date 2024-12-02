@@ -74,74 +74,120 @@ static bool scui_mem_record_item_del(scui_mem_record_item_t item)
     return false;
 }
 
+#if SCUI_MEM_RECORD_ANALYSIS
+
+/*@brief 内存记录分析
+ *@param type 类型
+ */
+static void scui_mem_record_analysis_type(scui_mem_type_t type)
+{
+    for (uint32_t idx = 0; idx < scui_mem.record[type].num; idx++) {
+        if (scui_mem.record[type].item[idx].ptr == NULL)
+            continue;
+        SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
+             scui_mem.record[type].item[idx].file,
+             scui_mem.record[type].item[idx].func,
+             scui_mem.record[type].item[idx].line,
+             scui_mem.record[type].item[idx].type,
+             scui_mem.record[type].item[idx].ptr,
+             scui_mem.record[type].item[idx].size);
+    }
+}
+
 /*@brief 内存记录分析
  *@param force 强制检查
  */
-#if SCUI_MEM_RECORD_ANALYSIS
 void scui_mem_record_analysis(bool force)
 {
     bool update = force;
-    for (uint32_t idx0 = scui_mem_type_none; idx0 < scui_mem_type_num; idx0++)
-         update = update || scui_mem.record[idx0].update;
+    for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++)
+         update = update || scui_mem.record[idx].update;
     if (!update)
          return;
     
     SCUI_LOG_INFO("scui mem record: --- <file,func,line,type,ptr,size>:");
-    for (uint32_t idx0 = scui_mem_type_none; idx0 < scui_mem_type_num; idx0++) {
-        if (!scui_mem.record[idx0].update && !force)
+    for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++) {
+        if (!scui_mem.record[idx].update && !force)
              continue;
-             scui_mem.record[idx0].update = false;
-        for (uint32_t idx1 = 0; idx1 < scui_mem.record[idx0].num; idx1++) {
-            if (scui_mem.record[idx0].item[idx1].ptr == NULL)
-                continue;
-            SCUI_LOG_INFO("<%s,%s,%u,%u,%p,%u>",
-                 scui_mem.record[idx0].item[idx1].file,
-                 scui_mem.record[idx0].item[idx1].func,
-                 scui_mem.record[idx0].item[idx1].line,
-                 scui_mem.record[idx0].item[idx1].type,
-                 scui_mem.record[idx0].item[idx1].ptr,
-                 scui_mem.record[idx0].item[idx1].size);
-            
-            // 特殊问题特殊对待,查指定内容
-            #if 1
-            if (strcmp(scui_mem.record[idx0].item[idx1].func, "scui_clip_add") == 0) {
-                scui_clip_unit_t *unit = scui_mem.record[idx0].item[idx1].ptr;
-                SCUI_LOG_WARN("clip:%d-%d-%d-%d", unit->clip.x, unit->clip.y, unit->clip.w, unit->clip.h);
-            }
-            #endif
-        }
+        scui_mem_record_analysis_type(idx);
+        scui_mem.record[idx].update = false;
     }
 }
+
 #endif
+
+#if SCUI_MEM_RECORD_STATISTIC
+
+/*@brief 内存记录统计
+ *@param type 类型
+ */
+static void scui_mem_record_statistic_type(scui_mem_type_t type)
+{
+    uint32_t size = 0;
+    for (uint32_t idx = 0; idx < scui_mem.record[type].num; idx++)
+           if (scui_mem.record[type].item[idx].ptr != NULL)
+               size += scui_mem.record[type].item[idx].size;
+    
+    uint32_t total = scui_mem.record[type].size;
+    SCUI_LOG_INFO("<type:%d, alloc:%u, free:%u, total:%u>", type, size, total - size, total);
+}
 
 /*@brief 内存记录统计
  *@param force 强制检查
  */
-#if SCUI_MEM_RECORD_STATISTIC
 void scui_mem_record_statistic(bool force)
 {
     bool update = force;
-    for (uint32_t idx0 = scui_mem_type_none; idx0 < scui_mem_type_num; idx0++)
-         update = update || scui_mem.record[idx0].update;
+    for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++)
+         update = update || scui_mem.record[idx].update;
     if (!update)
          return;
     
     SCUI_LOG_INFO("scui mem record:");
-    for (uint32_t idx0 = scui_mem_type_none; idx0 < scui_mem_type_num; idx0++) {
-        if (!scui_mem.record[idx0].update && !force)
+    for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++) {
+        if (!scui_mem.record[idx].update && !force)
              continue;
-             scui_mem.record[idx0].update = false;
-        
-        uint32_t size = 0;
-        for (uint32_t idx1 = 0; idx1 < scui_mem.record[idx0].num; idx1++)
-               if (scui_mem.record[idx0].item[idx1].ptr != NULL)
-                   size += scui_mem.record[idx0].item[idx1].size;
-        
-        uint32_t total = scui_mem.record[idx0].size;
-        SCUI_LOG_INFO("<type:%d, alloc:%u, free:%u, total:%u>", idx0, size, total - size, total);
+        scui_mem_record_statistic_type(idx);
+        scui_mem.record[idx].update = false;
     }
 }
+
 #endif
+
+#endif
+
+#if SCUI_MEM_SENTRY_CHECK
+
+/*@brief 内存哨兵检查
+ *@param ptr  内存地址
+ *@param used 使用标记
+ */
+static void scui_mem_sentry_check_invoke(void *ptr, bool used)
+{
+    if (used) {
+        
+        /* [size][sentry][monitoring data][sentry] */
+        // ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2;
+        uint32_t size_raw = *(uint32_t *)((uint8_t *)ptr + 0);
+        uint32_t sentry_s = scui_crc32((uint8_t *)&size_raw, sizeof(uint32_t));
+        uint32_t sentry_h = *(uint32_t *)((uint8_t *)ptr + 4);
+        uint32_t sentry_t = *(uint32_t *)((uint8_t *)ptr + size_raw + sizeof(uint32_t) * 2);
+        if (sentry_s != sentry_h || sentry_s != sentry_t) {
+            SCUI_LOG_ERROR("mem sentry catch:%p", ptr);
+            SCUI_ASSERT(false);
+        }
+    }
+}
+
+/*@brief 内存哨兵检查
+ */
+void scui_mem_sentry_check(void)
+{
+    app_sys_mem_olsf_walk(scui_mem.mem_olsf[scui_mem_type_mix]  , scui_mem_sentry_check_invoke);
+    app_sys_mem_olsf_walk(scui_mem.mem_olsf[scui_mem_type_font] , scui_mem_sentry_check_invoke);
+    app_sys_mem_olsf_walk(scui_mem.mem_olsf[scui_mem_type_graph], scui_mem_sentry_check_invoke);
+    app_sys_mem_olsf_walk(scui_mem.mem_olsf[scui_mem_type_user] , scui_mem_sentry_check_invoke);
+}
 
 #endif
 
@@ -159,6 +205,11 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     
     if (size == 0)
         return NULL;
+    
+    #if SCUI_MEM_SENTRY_CHECK
+    /* [size][sentry][monitoring data][sentry] */
+    size += sizeof(uint32_t) * 3;
+    #endif
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
@@ -221,10 +272,10 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         // scui_mem_check(type);
         
         #if SCUI_MEM_RECORD_STATISTIC
-        // scui_mem_record_statistic(true);
+        scui_mem_record_statistic_type(type);
         #endif
         #if SCUI_MEM_RECORD_ANALYSIS
-        // scui_mem_record_analysis(true);
+        scui_mem_record_analysis_type(type);
         #endif
     }
     
@@ -238,6 +289,17 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     scui_mem.size_used[type] += app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+    
+    #if SCUI_MEM_SENTRY_CHECK
+    /* [size][sentry][monitoring data][sentry] */
+    uint32_t size_raw = size - sizeof(uint32_t) * 3;
+    uint32_t sentry_s = scui_crc32((uint8_t *)&size_raw, sizeof(uint32_t));
+    *(uint32_t *)((uint8_t *)ptr + 0) = size_raw;
+    *(uint32_t *)((uint8_t *)ptr + 4) = sentry_s;
+    *(uint32_t *)((uint8_t *)ptr + size - sizeof(uint32_t)) = sentry_s;
+    ptr = (uint8_t *)ptr + sizeof(uint32_t) * 2;
+    #endif
+    
     return ptr;
 }
 
@@ -251,6 +313,19 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
 {
     if (ptr == NULL)
         return;
+    
+    #if SCUI_MEM_SENTRY_CHECK
+    /* [size][sentry][monitoring data][sentry] */
+    ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2;
+    uint32_t size_raw = *(uint32_t *)((uint8_t *)ptr + 0);
+    uint32_t sentry_s = scui_crc32((uint8_t *)&size_raw, sizeof(uint32_t));
+    uint32_t sentry_h = *(uint32_t *)((uint8_t *)ptr + 4);
+    uint32_t sentry_t = *(uint32_t *)((uint8_t *)ptr + size_raw + sizeof(uint32_t) * 2);
+    if (sentry_s != sentry_h || sentry_s != sentry_t) {
+        SCUI_LOG_ERROR("mem sentry catch:%p", ptr);
+        SCUI_ASSERT(false);
+    }
+    #endif
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
     scui_mem_type_t type = scui_mem_type_none;
@@ -316,6 +391,11 @@ uint32_t scui_mem_size_ptr(void *ptr)
     if (ptr == NULL)
         return 0;
     
+    #if SCUI_MEM_SENTRY_CHECK
+    /* [size][sentry][monitoring data][sentry] */
+    ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2;
+    #endif
+    
     scui_mem_type_t type = scui_mem_type_none;
     scui_mem_type(ptr, &type);
     
@@ -367,7 +447,7 @@ void scui_mem_ready(void)
     uintptr_t size = 0;
     #if SCUI_MEM_RECORD_CHECK_MIX
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
-    item = SCUI_MEM_ALLOC(scui_mem_type_mix,   size);
+    item = SCUI_MEM_ALLOC(scui_mem_type_mix,     size);
     scui_mem.size_used[scui_mem_type_mix]     += size;
     scui_mem.record[scui_mem_type_mix].item    = item;
     scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
@@ -376,7 +456,7 @@ void scui_mem_ready(void)
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
-    item = SCUI_MEM_ALLOC(scui_mem_type_font,  size);
+    item = SCUI_MEM_ALLOC(scui_mem_type_font,    size);
     scui_mem.size_used[scui_mem_type_font]    += size;
     scui_mem.record[scui_mem_type_font].item   = item;
     scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
@@ -385,7 +465,7 @@ void scui_mem_ready(void)
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
-    item = SCUI_MEM_ALLOC(scui_mem_type_graph, size);
+    item = SCUI_MEM_ALLOC(scui_mem_type_graph,   size);
     scui_mem.size_used[scui_mem_type_graph]   += size;
     scui_mem.record[scui_mem_type_graph].item  = item;
     scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
@@ -394,7 +474,7 @@ void scui_mem_ready(void)
     #endif
     #if SCUI_MEM_RECORD_CHECK_USER
     size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_USER;
-    item = SCUI_MEM_ALLOC(scui_mem_type_user,  size);
+    item = SCUI_MEM_ALLOC(scui_mem_type_user,    size);
     scui_mem.size_used[scui_mem_type_user]    += size;
     scui_mem.record[scui_mem_type_user].item   = item;
     scui_mem.record[scui_mem_type_user].num    = SCUI_MEM_RECORD_ITEM_USER;

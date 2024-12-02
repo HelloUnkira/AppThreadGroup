@@ -341,6 +341,23 @@ uint32_t scui_utf8_bytes(uint8_t utf8)
     if (utf8 >= 0xFC && utf8 <= 0xFD)   // UTF-8 占用6个字节
         return 6;
     
+    #if 1
+    // 我不知道为什么代码会走到此处
+    SCUI_LOG_DEBUG("here ?");
+    uint8_t offset = 1;
+    
+    if(utf8 & 128)
+        if(utf8 & 32)
+            if(utf8 & 16)
+                if(utf8 & 8)
+                    if(utf8 & 4) offset = 6;
+                    else offset = 5;
+                else offset = 4;
+            else offset = 3;
+        else offset = 2;
+    return offset;
+    #endif
+    
     /* 新标准只支持utf8映射到unicode的字符集(1~4字节) */
     // UTF-8 非首字节
     SCUI_ASSERT(false);

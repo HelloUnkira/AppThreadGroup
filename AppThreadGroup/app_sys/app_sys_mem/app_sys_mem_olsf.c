@@ -695,3 +695,26 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
         chunk += app_sys_mem_olsf_size_get(mem_olsf, chunk);
     }
 }
+
+/*@brief 一级隔离策略分配堆内存遍历检查
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param invoke   回调实例
+ */
+void app_sys_mem_olsf_walk(app_sys_mem_olsf_t *mem_olsf, void (*invoke)(void *pointer, bool used))
+{
+    for (uintptr_t chunk = 0; chunk < mem_olsf->number; ) {
+        bool chunk_inner = false;
+        
+        // 跳过内部维护的chunk
+        if (app_sys_mem_olsf_free_prev_get(mem_olsf, chunk) == 
+            app_sys_mem_olsf_free_next_get(mem_olsf, chunk))
+            chunk_inner = true;
+        
+        bool  used = app_sys_mem_olsf_used_get(mem_olsf, chunk);
+        void *pointer = (void *)app_sys_mem_olsf_chunk_to_addr(mem_olsf, chunk);
+        chunk += app_sys_mem_olsf_size_get(mem_olsf, chunk);
+        
+        if (!chunk_inner)
+            invoke(pointer, used);
+    }
+}

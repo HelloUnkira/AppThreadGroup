@@ -39,8 +39,12 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
     res->idx_num = bit;
     res->idx_ofs = SCUI_MEM_ALLOC(scui_mem_type_mix, (res->idx_num + 1) * sizeof(uint8_t));
     snprintf(res->idx_ofs, res->idx_num + 1, format, val);
-    for (uint16_t idx = 0; idx < res->idx_num; idx++)
+    for (uint16_t idx = 0; idx < res->idx_num; idx++) {
         res->idx_ofs[idx] -= '0';
+        
+        // assert check
+        SCUI_ASSERT(res->idx_ofs[idx] <= parser->image_num);
+    }
 }
 
 /*@brief 事件处理回调
@@ -168,13 +172,15 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             break;
         }
         case scui_cwf_json_type_img_month: {
-            uint8_t val = scui_ui_presenter.get_month();
+            uint8_t val = scui_ui_presenter.get_month() - 1;
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
         }
         case scui_cwf_json_type_img_week: {
             uint8_t val = scui_ui_presenter.get_week();
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -186,6 +192,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
                 scui_widget_show(handle, true);
                 uint8_t val = scui_ui_presenter.get_hour();
                 val = val >= 12 ? 1 : 0;
+                SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
                 scui_handle_t image = parser->image_hit[res->img_ofs[val]];
                 scui_widget_image_set(handle, image);
             }
@@ -193,6 +200,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
         }
         case scui_cwf_json_type_img_temp_unit: {
             uint8_t val = scui_ui_presenter.get_temp_unit() ? 0 : 1;
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -202,6 +210,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             int64_t val_max = scui_ui_presenter.get_hr_max();
             int64_t val_cur = scui_ui_presenter.get_hr_cur();
             int64_t val = scui_map(val_cur, val_min, val_max, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -211,6 +220,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             int64_t val_max = scui_ui_presenter.get_kcal_max();
             int64_t val_cur = scui_ui_presenter.get_kcal_cur();
             int64_t val = scui_map(val_cur, val_min, val_max, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -220,6 +230,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             int64_t val_max = scui_ui_presenter.get_step_max();
             int64_t val_cur = scui_ui_presenter.get_step_cur();
             int64_t val = scui_map(val_cur, val_min, val_max, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -229,6 +240,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             int64_t val_max = scui_ui_presenter.get_batt_max();
             int64_t val_cur = scui_ui_presenter.get_batt_cur();
             int64_t val = scui_map(val_cur, val_min, val_max, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -238,6 +250,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             int64_t val_max = scui_ui_presenter.get_dist_max();
             int64_t val_cur = scui_ui_presenter.get_dist_cur();
             int64_t val = scui_map(val_cur, val_min, val_max, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;
@@ -248,6 +261,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
                 res->idx_anim  = -1;
             
             uint8_t val = scui_clamp(res->idx_anim, 0, res->img_num - 1);
+            SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
             break;

@@ -108,6 +108,10 @@ static void scui_event_respond(scui_event_t *event)
         #if SCUI_MEM_RECORD_ANALYSIS
         // scui_mem_record_analysis(false);
         #endif
+        
+        #if SCUI_MEM_SENTRY_CHECK
+        scui_mem_sentry_check();
+        #endif
     }
     #endif
     

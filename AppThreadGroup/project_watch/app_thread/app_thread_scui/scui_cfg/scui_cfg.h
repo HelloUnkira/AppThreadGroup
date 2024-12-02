@@ -10,19 +10,21 @@
 
 /* 内存使用占用(0: 4M PSRAM; 1: 8M PSRAM) */
 #define SCUI_MEM_SIZE_TYPE                          (1)
+/* 内存哨兵监控(用于序列内存泄漏追查) */
+#define SCUI_MEM_SENTRY_CHECK                       (1)
 /* 内存使用记录监控: */
-#define SCUI_MEM_RECORD_CHECK                       (1)
+#define SCUI_MEM_RECORD_CHECK                       (0)
 #define SCUI_MEM_RECORD_ANALYSIS                    (1)
 #define SCUI_MEM_RECORD_STATISTIC                   (1)
 /* 内存使用记录监控(子类型): */
-#define SCUI_MEM_RECORD_CHECK_MIX                   (1)
-#define SCUI_MEM_RECORD_CHECK_FONT                  (1)
-#define SCUI_MEM_RECORD_CHECK_GRAPH                 (1)
-#define SCUI_MEM_RECORD_CHECK_USER                  (1)
+#define SCUI_MEM_RECORD_CHECK_MIX                   (0)
+#define SCUI_MEM_RECORD_CHECK_FONT                  (0)
+#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0)
+#define SCUI_MEM_RECORD_CHECK_USER                  (0)
 /* 内存使用记录监控: */
 #define SCUI_MEM_RECORD_ITEM_MIX                    (1024)
-#define SCUI_MEM_RECORD_ITEM_FONT                   (512)
-#define SCUI_MEM_RECORD_ITEM_GRAPH                  (256)
+#define SCUI_MEM_RECORD_ITEM_FONT                   (1024)
+#define SCUI_MEM_RECORD_ITEM_GRAPH                  (1024)
 #define SCUI_MEM_RECORD_ITEM_USER                   (1024)
 
 #if 0
@@ -101,7 +103,7 @@
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
-#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_cube)
+#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_move)
 #define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
 
 /* 文字多行排版限制,可被分隔的字符 */

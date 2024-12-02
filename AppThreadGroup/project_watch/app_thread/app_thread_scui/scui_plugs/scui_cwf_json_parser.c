@@ -159,7 +159,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     
     // 构建parser资源
     uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(file) + 1);
-    strncpy(name, file, strlen(file) + 1);
+    strncpy(name, file, strlen(file));
     name[strlen(file)] = '\0';
     parser->name = scui_handle_find();
     scui_handle_set(parser->name, name);

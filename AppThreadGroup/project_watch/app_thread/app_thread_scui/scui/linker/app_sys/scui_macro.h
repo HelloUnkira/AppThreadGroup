@@ -21,5 +21,7 @@
 #define scui_own_ofs        app_sys_own_ofs
 #define scui_pow2_check     app_sys_pow2_check
 
+#define scui_crc32          app_sys_crc32
+#define scui_crc8           app_sys_crc8
 
 #endif

@@ -41,20 +41,31 @@ typedef struct {
     uint32_t update:1;
 } scui_mem_record_t;
 
+#if SCUI_MEM_RECORD_ANALYSIS
 
 /*@brief 内存记录分析
  *@param force 强制检查
  */
-#if SCUI_MEM_RECORD_ANALYSIS
 void scui_mem_record_analysis(bool force);
+
 #endif
+
+#if SCUI_MEM_RECORD_STATISTIC
 
 /*@brief 内存记录统计
  *@param force 强制检查
  */
-#if SCUI_MEM_RECORD_STATISTIC
 void scui_mem_record_statistic(bool force);
+
 #endif
+
+#endif
+
+#if SCUI_MEM_SENTRY_CHECK
+
+/*@brief 内存哨兵检查
+ */
+void scui_mem_sentry_check(void);
 
 #endif
 
