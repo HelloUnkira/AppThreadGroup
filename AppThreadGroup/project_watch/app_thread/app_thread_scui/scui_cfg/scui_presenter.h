@@ -1,5 +1,5 @@
-#ifndef SCUI_UI_PRESENTER_H
-#define SCUI_UI_PRESENTER_H
+#ifndef SCUI_PRESENTER_H
+#define SCUI_PRESENTER_H
 
 typedef struct {
     /* date time: */
@@ -73,9 +73,9 @@ typedef struct {
     /* drv func: */
     void (*vibrate_shot)(void);
     /* keep adding... */
-} scui_ui_presenter_t;
+} scui_presenter_t;
 
 /* scui 唯一交互实例回调集合 */
-extern scui_ui_presenter_t scui_ui_presenter;
+extern scui_presenter_t scui_presenter;
 
 #endif

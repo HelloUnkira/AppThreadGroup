@@ -74,8 +74,8 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
             indicator_index++;
             if (indicator_index >= 5)
                 indicator_index  = 0;
-            progressbar_s = (uint32_t)scui_rand(0, 100) % 45;
-            progressbar_e = 100 - (uint32_t)scui_rand(0, 100) % 45;
+            progressbar_s = (uint32_t)scui_rand(100) % 45;
+            progressbar_e = 100 - (uint32_t)scui_rand(100) % 45;
             scui_widget_draw(event->object, NULL, false);
         }
         break;

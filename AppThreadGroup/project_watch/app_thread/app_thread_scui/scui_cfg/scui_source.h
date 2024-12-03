@@ -8,6 +8,10 @@
 #include "scui_multi_lang.h"        /* 多国语字符串表 */
 #include "scui_font_type.h"         /* 字库类型表 */
 
+// monkey
+#include "scui_monkey.h"
+// presenter
+#include "scui_presenter.h"
 // cwf json
 #include "scui_cwf_json_proto.h"
 #include "scui_cwf_json_parser.h"

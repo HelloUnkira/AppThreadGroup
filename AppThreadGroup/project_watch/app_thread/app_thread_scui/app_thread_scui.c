@@ -169,6 +169,9 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
         if (package->event == app_thread_scui_sched_drv) {
             app_dev_gui_drv_timer_handler(&app_dev_gui_drv);
             #if APP_EXT_DEV_GUI_IS_SCUI
+            #if SCUI_MONKEY_TEST
+            /* monkey test时切断输入流 */
+            #else
             /*@brief scui 输入设备回调接口
              */
             void app_dev_gui_ptr_scui_read(scui_indev_data_t *indev_data);
@@ -183,6 +186,7 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             scui_indev_notify(&indev_data);
             app_dev_gui_key_scui_read(&indev_data);
             scui_indev_notify(&indev_data);
+            #endif
             #endif
             /*  */
             if (app_dev_gui_drv_shutdown(&app_dev_gui_drv)) {

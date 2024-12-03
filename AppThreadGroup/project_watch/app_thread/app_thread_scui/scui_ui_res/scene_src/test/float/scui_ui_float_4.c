@@ -65,9 +65,9 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             scui_coord_t vlist_min[20] = {0};
             scui_coord_t vlist_max[20] = {0};
             for (uint32_t idx = 0; idx < 20; idx++) {
-                vlist_min[idx] =  60 + (uint32_t)scui_rand(0, 0xFF) % 40;   //统一底点就是柱状图,否则为股价图
-                vlist_max[idx] = 220 - (uint32_t)scui_rand(0, 0xFF) % 40;
-                vlist[idx] = 60 + (uint32_t)scui_rand(0, 0xFF) % ((220 - 60) / 3);
+                vlist_min[idx] =  60 + (uint32_t)scui_rand(0xFF) % 40;   //统一底点就是柱状图,否则为股价图
+                vlist_max[idx] = 220 - (uint32_t)scui_rand(0xFF) % 40;
+                vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60) / 3);
             }
             
             // chart histogram

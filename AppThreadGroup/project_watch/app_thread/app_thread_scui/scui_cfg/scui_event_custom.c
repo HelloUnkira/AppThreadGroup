@@ -97,7 +97,7 @@ void scui_event_custom_prepare(scui_event_t *event)
     case scui_event_widget_scroll_s:
     case scui_event_widget_scroll_e:
     case scui_event_widget_scroll_c:
-        scui_ui_presenter.vibrate_shot();
+        scui_presenter.vibrate_shot();
         break;
     default:
         break;

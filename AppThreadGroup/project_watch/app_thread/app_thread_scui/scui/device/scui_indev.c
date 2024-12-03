@@ -39,9 +39,9 @@ void scui_indev_data_set(scui_indev_data_set_t **data_set)
     
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
-    scui_indev_data_set.sys_time_h      = clock.hour;
-    scui_indev_data_set.sys_time_m      = clock.minute;
-    scui_indev_data_set.sys_time_s      = clock.second;
+    scui_indev_data_set.sys_time_h = clock.hour;
+    scui_indev_data_set.sys_time_m = clock.minute;
+    scui_indev_data_set.sys_time_s = clock.second;
     
     *data_set = &scui_indev_data_set;
 }

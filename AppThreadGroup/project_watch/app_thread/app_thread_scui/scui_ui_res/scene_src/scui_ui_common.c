@@ -381,7 +381,7 @@ void scui_ui_scene_mini_card_cfg(void)
     }
     scui_ui_scene_mini_card_num = scui_ui_scene_mini_card_type_num;
     
-    // 从 scui_ui_presenter的接口中读取系统保存的mini card配置项
+    // 从 scui_presenter的接口中读取系统保存的mini card配置项
     // ......
 }
 

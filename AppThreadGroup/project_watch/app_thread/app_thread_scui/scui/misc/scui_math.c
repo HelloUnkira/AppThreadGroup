@@ -69,26 +69,21 @@ int64_t scui_pow(int64_t x, int8_t e)
 }
 
 /*@brief 随机数
- *@param min 数字
- *@param max 数字
+ *@param limit 数字
  *@retval 返回值
  */
-int64_t scui_rand(int64_t min, int64_t max)
+uint32_t scui_rand(uint32_t limit)
 {
-    static int64_t a = 0x1234ABCD; /*Seed*/
-    
+    static uint32_t a = 0x1234ABCD; /*Seed*/
+
     /*Algorithm "xor" from p. 4 of Marsaglia, "Xorshift RNGs"*/
-    int64_t x = a;
+    uint32_t x = a;
     x ^= x << 13;
     x ^= x >> 17;
     x ^= x << 5;
     a = x;
-    
-    // 这里不知道为什么, v会超过min到max的范围
-    int64_t v = (a % (max - min + 1)) + min;
-    if (v < min) v += min;
-    
-    return scui_clamp(v, min, max);
+
+    return (a % (limit + 1));
 }
 
 /*@brief 三角函数(sin),放大4096倍
@@ -138,6 +133,70 @@ int32_t scui_cos4096(int32_t angle)
 int32_t scui_tan4096(int32_t angle)
 {
     return (scui_sin4096(angle) << 12) / scui_cos4096(angle);
+}
+
+/*@brief 计算一个向量的atan2
+ *@param x 向量值x(范围:(-1456, +1456))
+ *@param y 向量值y(范围:(-1456, +1456))
+ *@retval 根据给定参数在[0..360]范围内计算出的角度
+ */
+uint16_t scui_atan2(int32_t x, int32_t y)
+{
+    // 见lv_atan2(仅做过一点整理)
+    SCUI_ASSERT(x > -1456 && x < +1456);
+    SCUI_ASSERT(y > -1456 && y < +1456);
+    
+    uint8_t tag_neg = 0;
+    
+    if (x < 0) {
+        tag_neg += 0x01;
+        x = (0 - x);
+    }
+    if (y < 0) {
+        tag_neg += 0x02;
+        y = (0 - y);
+    }
+    
+    uint32_t ux = x;
+    uint32_t uy = y;
+    uint32_t degree;
+    
+    if (ux > uy) {
+        tag_neg += 0x10;
+        degree = (uy * 45) / ux;
+    } else {
+        degree = (ux * 45) / uy;
+    }
+    
+    uint8_t com_t = 0;
+    uint8_t degree_t = degree;
+    if (degree_t > 22) {
+        if(degree_t <= 44) com_t++;
+        if(degree_t <= 41) com_t++;
+        if(degree_t <= 37) com_t++;
+        if(degree_t <= 32) com_t++;
+    } else {
+        if(degree_t >= 2)  com_t++;
+        if(degree_t >= 6)  com_t++;
+        if(degree_t >= 10) com_t++;
+        if(degree_t >= 15) com_t++;
+    }
+    degree += com_t;
+    
+    if (tag_neg & 0x10)
+        degree = (90 - degree);
+    
+    if (tag_neg & 0x02) {
+        if (tag_neg & 0x01)
+            degree = (180 + degree);
+        else
+            degree = (180 - degree);
+    } else {
+        if (tag_neg & 0x01)
+            degree = (360 - degree);
+    }
+    
+    return degree;
 }
 
 /*@brief 平方根

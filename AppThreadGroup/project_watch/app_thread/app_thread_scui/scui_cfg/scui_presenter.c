@@ -134,14 +134,14 @@ static uint32_t scui_ui_func_local_get_hr_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_hr_min();
     uint32_t max = scui_ui_func_local_get_hr_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
  */
 static uint32_t scui_ui_func_local_get_hr_passby(void)
 {
-    return scui_rand(0, 60 * 24 * 7 + 1);
+    return scui_rand(60 * 24 * 7 + 1);
 }
 
 /*@brief scui ui数据交互回调
@@ -164,14 +164,14 @@ static uint32_t scui_ui_func_local_get_spo2_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_spo2_min();
     uint32_t max = scui_ui_func_local_get_spo2_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
  */
 static uint32_t scui_ui_func_local_get_spo2_passby(void)
 {
-    return scui_rand(0, 60 * 24 * 7 + 1);
+    return scui_rand(60 * 24 * 7 + 1);
 }
 
 /*@brief scui ui数据交互回调
@@ -194,14 +194,14 @@ static uint32_t scui_ui_func_local_get_stress_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_stress_min();
     uint32_t max = scui_ui_func_local_get_stress_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
  */
 static uint32_t scui_ui_func_local_get_stress_passby(void)
 {
-    return scui_rand(0, 60 * 24 * 7 + 1);
+    return scui_rand(60 * 24 * 7 + 1);
 }
 
 /*@brief scui ui数据交互回调
@@ -224,7 +224,7 @@ static uint32_t scui_ui_func_local_get_kcal_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_kcal_min();
     uint32_t max = scui_ui_func_local_get_kcal_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
@@ -247,7 +247,7 @@ static uint32_t scui_ui_func_local_get_step_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_step_min();
     uint32_t max = scui_ui_func_local_get_step_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
@@ -270,7 +270,7 @@ static uint32_t scui_ui_func_local_get_batt_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_batt_min();
     uint32_t max = scui_ui_func_local_get_batt_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
@@ -293,7 +293,7 @@ static uint32_t scui_ui_func_local_get_dist_cur(void)
 {
     uint32_t min = scui_ui_func_local_get_dist_min();
     uint32_t max = scui_ui_func_local_get_dist_max();
-    return scui_rand(min, max);
+    return scui_rand(max - min) + min;
 }
 
 /*@brief scui ui数据交互回调
@@ -485,7 +485,7 @@ static bool scui_ui_func_local_compass_invalid(void)
  */
 static uint16_t scui_ui_func_local_compass_angle(void)
 {
-    return scui_rand(0, 360);
+    return scui_rand(360);
 }
 
 /*@brief scui ui数据交互回调
@@ -525,7 +525,7 @@ static bool scui_ui_func_local_vibrate_shot(void)
 /*****************************************************************************/
 /*****************************************************************************/
 /* scui 唯一交互实例回调集合 */
-scui_ui_presenter_t scui_ui_presenter = {
+scui_presenter_t scui_presenter = {
     /* date time: */
     .is_am          = scui_ui_func_local_is_am,
     .is_pm          = scui_ui_func_local_is_pm,

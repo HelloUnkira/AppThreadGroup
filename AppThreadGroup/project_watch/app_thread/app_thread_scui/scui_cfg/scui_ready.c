@@ -122,4 +122,8 @@ void scui_ready(void)
     #if SCUI_UI_MONITOR_USE
     scui_widget_show(SCUI_UI_SCENE_MONITOR, false);
     #endif
+    
+    #if SCUI_MONKEY_TEST
+    scui_monkey_test();
+    #endif
 }

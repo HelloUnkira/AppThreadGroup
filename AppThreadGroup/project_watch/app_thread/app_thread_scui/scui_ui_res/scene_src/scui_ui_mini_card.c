@@ -176,9 +176,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             // 三环绘制
             scui_area_t clip_bg = clip; clip_bg.x += 250; clip_bg.y += 22;
             scui_area_t clip_fg = clip; clip_fg.x += 250; clip_fg.y += 22;
-            scui_coord_t pct_kcal = scui_map(scui_ui_presenter.get_kcal_cur(), scui_ui_presenter.get_kcal_min(), scui_ui_presenter.get_kcal_max(), 0, 100);
-            scui_coord_t pct_step = scui_map(scui_ui_presenter.get_step_cur(), scui_ui_presenter.get_step_min(), scui_ui_presenter.get_step_max(), 0, 100);
-            scui_coord_t pct_dist = scui_map(scui_ui_presenter.get_dist_cur(), scui_ui_presenter.get_dist_min(), scui_ui_presenter.get_dist_max(), 0, 100);
+            scui_coord_t pct_kcal = scui_map(scui_presenter.get_kcal_cur(), scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
+            scui_coord_t pct_step = scui_map(scui_presenter.get_step_cur(), scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
+            scui_coord_t pct_dist = scui_map(scui_presenter.get_dist_cur(), scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
             scui_color_t color_kcal = {.filter = true,.color_s.full = 0xFFDA2069,.color_e.full = 0xFFDA2069,};
             scui_color_t color_step = {.filter = true,.color_s.full = 0xFFDFC026,.color_e.full = 0xFFDFC026,};
             scui_color_t color_dist = {.filter = true,.color_s.full = 0xFF06AEFF,.color_e.full = 0xFF06AEFF,};
@@ -208,9 +208,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             uint8_t char_digit_kcal[10] = {0};
             uint8_t char_digit_step[10] = {0};
             uint8_t char_digit_dist[10] = {0};
-            scui_coord_t digit_kcal_num = snprintf(char_digit_kcal, sizeof(char_digit_kcal), "%d", scui_ui_presenter.get_kcal_cur());
-            scui_coord_t digit_step_num = snprintf(char_digit_step, sizeof(char_digit_step), "%d", scui_ui_presenter.get_kcal_cur());
-            scui_coord_t digit_dist_num = snprintf(char_digit_dist, sizeof(char_digit_dist), "%d", scui_ui_presenter.get_kcal_cur());
+            scui_coord_t digit_kcal_num = snprintf(char_digit_kcal, sizeof(char_digit_kcal), "%d", scui_presenter.get_kcal_cur());
+            scui_coord_t digit_step_num = snprintf(char_digit_step, sizeof(char_digit_step), "%d", scui_presenter.get_kcal_cur());
+            scui_coord_t digit_dist_num = snprintf(char_digit_dist, sizeof(char_digit_dist), "%d", scui_presenter.get_kcal_cur());
             scui_area_t clip_digit_kcal = clip_icon_kcal; clip_digit_kcal.x += scui_image_w(image_icon_kcal) + 10;
             scui_area_t clip_digit_step = clip_icon_step; clip_digit_step.x += scui_image_w(image_icon_step) + 10;
             scui_area_t clip_digit_dist = clip_icon_dist; clip_digit_dist.x += scui_image_w(image_icon_dist) + 10;
@@ -266,29 +266,29 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 unit_text = SCUI_MULTI_LANG_0X0021;
                 
                 snprintf(data_unit, sizeof(data_unit), "%d %s",
-                    scui_ui_presenter.get_hr_cur(),
+                    scui_presenter.get_hr_cur(),
                     scui_str_by_multi_lang(0, unit_text));
                 scui_string_update_str(scui_ui_res_local->data_hr, data_unit);
-                passby_last = scui_ui_presenter.get_hr_passby();
+                passby_last = scui_presenter.get_hr_passby();
             }
             if (type == scui_ui_scene_mini_card_type_spo2) {
                 
                 snprintf(data_unit, sizeof(data_unit), "%d %s",
-                    scui_ui_presenter.get_spo2_cur(), "%");
+                    scui_presenter.get_spo2_cur(), "%");
                 scui_string_update_str(scui_ui_res_local->data_spo2, data_unit);
-                passby_last = scui_ui_presenter.get_spo2_passby();
+                passby_last = scui_presenter.get_spo2_passby();
             }
             if (type == scui_ui_scene_mini_card_type_stress) {
                 unit_text = SCUI_MULTI_LANG_0X004e;
-                if (scui_ui_presenter.get_stress_cur() < 70) unit_text = SCUI_MULTI_LANG_0X004d;
-                if (scui_ui_presenter.get_stress_cur() < 50) unit_text = SCUI_MULTI_LANG_0X004c;
-                if (scui_ui_presenter.get_stress_cur() < 30) unit_text = SCUI_MULTI_LANG_0X004b;
+                if (scui_presenter.get_stress_cur() < 70) unit_text = SCUI_MULTI_LANG_0X004d;
+                if (scui_presenter.get_stress_cur() < 50) unit_text = SCUI_MULTI_LANG_0X004c;
+                if (scui_presenter.get_stress_cur() < 30) unit_text = SCUI_MULTI_LANG_0X004b;
                 
                 snprintf(data_unit, sizeof(data_unit), "%d %s",
-                    scui_ui_presenter.get_stress_cur(),
+                    scui_presenter.get_stress_cur(),
                     scui_str_by_multi_lang(0, unit_text));
                 scui_string_update_str(scui_ui_res_local->data_stress, data_unit);
-                passby_last = scui_ui_presenter.get_stress_passby();
+                passby_last = scui_presenter.get_stress_passby();
             }
             
             if (passby_last < 1) unit_text = SCUI_MULTI_LANG_0X001d;
@@ -318,7 +318,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         }
         case scui_ui_scene_mini_card_type_weather: {
             
-            scui_handle_t image = scui_ui_presenter.get_temp_icon();
+            scui_handle_t image = scui_presenter.get_temp_icon();
             scui_area_t image_clip = clip; image_clip.x += 346; image_clip.y += 69;
             scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
             
@@ -326,21 +326,21 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_handle_t unit_text = SCUI_HANDLE_INVALID;
             
             snprintf(data_unit, sizeof(data_unit), "%d %s",
-                scui_ui_presenter.get_temp_cur(),
-                scui_ui_presenter.get_temp_unit() ? "/C" : "/F");
+                scui_presenter.get_temp_cur(),
+                scui_presenter.get_temp_unit() ? "/C" : "/F");
             scui_string_update_str(scui_ui_res_local->data_weather_cur, data_unit);
             
             snprintf(data_unit, sizeof(data_unit), "%d/%d %s",
-                scui_ui_presenter.get_temp_min(),
-                scui_ui_presenter.get_temp_max(),
-                scui_ui_presenter.get_temp_unit() ? "/C" : "/F");
+                scui_presenter.get_temp_min(),
+                scui_presenter.get_temp_max(),
+                scui_presenter.get_temp_unit() ? "/C" : "/F");
             scui_string_update_str(scui_ui_res_local->data_weather_lim, data_unit);
             
             break;
         }
         case scui_ui_scene_mini_card_type_alarm: {
             
-            if (scui_ui_presenter.alarm_none()) {
+            if (scui_presenter.alarm_none()) {
                 scui_handle_t image = scui_image_prj_image_src_19_widget_01_arrowbmp;
                 scui_area_t image_clip = clip; image_clip.x += 24; image_clip.y += 129 + 10;
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
@@ -350,7 +350,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_handle_t image_off = scui_image_prj_image_src_repeat_switch_05_offpng;
                 scui_handle_t image_dot = scui_image_prj_image_src_repeat_switch_03_dotpng;
                 
-                if (scui_ui_presenter.alarm_near_state()) {
+                if (scui_presenter.alarm_near_state()) {
                     scui_area_t image_on_clip = clip; image_on_clip.x += 316; image_on_clip.y += 71;
                     scui_widget_draw_image(event->object, &image_on_clip, image_on, NULL, (scui_color_t){0});
                     scui_area_t image_dot_clip = clip; image_dot_clip.x += 316 + 30; image_dot_clip.y += 71 + 3;
@@ -364,27 +364,27 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 char data_unit[200] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d:%02d",
-                    scui_ui_presenter.alarm_near_hour(),
-                    scui_ui_presenter.alarm_near_minute());
+                    scui_presenter.alarm_near_hour(),
+                    scui_presenter.alarm_near_minute());
                 scui_string_update_str(scui_ui_res_local->data_alarm, data_unit);
                 
                 data_unit[0] = '\0';
                 
-                if ((scui_ui_presenter.alarm_near_date() & 0x1000) != 0)
+                if ((scui_presenter.alarm_near_date() & 0x1000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
                         "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00c5));
-                if ((scui_ui_presenter.alarm_near_date() & 0x2000) != 0)
+                if ((scui_presenter.alarm_near_date() & 0x2000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
                         "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f8));
-                if ((scui_ui_presenter.alarm_near_date() & 0x8000) != 0)
+                if ((scui_presenter.alarm_near_date() & 0x8000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
                         "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f2));
-                if ((scui_ui_presenter.alarm_near_date() & 0x7f) == 0x7f)
+                if ((scui_presenter.alarm_near_date() & 0x7f) == 0x7f)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
                         "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f1));
                 
                 if (strlen(data_unit) == 0)
-                if ((scui_ui_presenter.alarm_near_date() & 0x7f) != 0) {
+                if ((scui_presenter.alarm_near_date() & 0x7f) != 0) {
                     uint32_t text_week[] = {
                         SCUI_MULTI_LANG_0X006d, /* 周日 */
                         SCUI_MULTI_LANG_0X0067, /* 周一 */
@@ -394,7 +394,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                         SCUI_MULTI_LANG_0X006b, /* 周五 */
                         SCUI_MULTI_LANG_0X006c, /* 周六 */
                     };
-                    uint8_t week = scui_ui_presenter.alarm_near_date();
+                    uint8_t week = scui_presenter.alarm_near_date();
                     
                     for (uint8_t idx = 0; idx < 7; idx++) {
                         if ((week & (1 << idx)) == 0)
@@ -413,7 +413,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             
             scui_coord_t width = 354;
             
-            if (scui_ui_presenter.sleep_none()) {
+            if (scui_presenter.sleep_none()) {
                 
                 scui_handle_t image_l = scui_image_prj_image_src_22_sleep_home_bar_03_grey_00bmp;
                 scui_handle_t image_r = scui_image_prj_image_src_22_sleep_home_bar_04_grey_01bmp;
@@ -428,9 +428,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_ui_presenter.sleep_hour(),
+                    scui_presenter.sleep_hour(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_ui_presenter.sleep_minute(),
+                    scui_presenter.sleep_minute(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
                 scui_string_update_str(scui_ui_res_local->data_sleep, data_unit);
                 
@@ -454,7 +454,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 uint8_t pct4[4] = {0};
                 scui_coord_t pos_x4[4] = {0};
                 scui_coord_t width4[4] = {0};
-                scui_ui_presenter.sleep_pct4(pct4);
+                scui_presenter.sleep_pct4(pct4);
                 /* 计算宽度 */
                 for (uint8_t idx = 0; idx < 4; idx++)
                     width4[idx] = width * pct4[idx] / 100;
@@ -498,22 +498,22 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         }
         case scui_ui_scene_mini_card_type_sport_record: {
             
-            if (scui_ui_presenter.sport_record_none()) {
+            if (scui_presenter.sport_record_none()) {
                 
             } else {
                 
-                scui_handle_t text = scui_ui_presenter.sport_record_type();
+                scui_handle_t text = scui_presenter.sport_record_type();
                 scui_string_update_text(scui_ui_res_local->data_sport_record, text);
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_ui_presenter.sport_record_hour(),
+                    scui_presenter.sport_record_hour(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_ui_presenter.sport_record_minute(),
+                    scui_presenter.sport_record_minute(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
                 scui_string_update_str(scui_ui_res_local->data_sport_record_time, data_unit);
                 
-                scui_handle_t image = scui_ui_presenter.sport_record_icon();
+                scui_handle_t image = scui_presenter.sport_record_icon();
                 scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
                 
@@ -523,22 +523,22 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         }
         case scui_ui_scene_mini_card_type_women_health: {
             
-            if (scui_ui_presenter.women_health_none()) {
+            if (scui_presenter.women_health_none()) {
                 
             } else {
                 
-                scui_handle_t text = scui_ui_presenter.women_health_type();
+                scui_handle_t text = scui_presenter.women_health_type();
                 scui_string_update_text(scui_ui_res_local->data_women_health, text);
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_ui_presenter.women_health_hour(),
+                    scui_presenter.women_health_hour(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_ui_presenter.women_health_minute(),
+                    scui_presenter.women_health_minute(),
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
                 scui_string_update_str(scui_ui_res_local->data_women_health_time, data_unit);
                 
-                scui_handle_t image = scui_ui_presenter.women_health_icon();
+                scui_handle_t image = scui_presenter.women_health_icon();
                 scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
                 
@@ -553,7 +553,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 73;
             scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
             
-            if (scui_ui_presenter.compass_invalid()) {
+            if (scui_presenter.compass_invalid()) {
                 
                 scui_handle_t image = scui_image_prj_image_src_19_widget_01_arrowbmp;
                 scui_area_t image_clip = clip; image_clip.x += 24; image_clip.y += 136;
@@ -571,11 +571,11 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     .y = clip.y + 100 + center.y,
                 };
                 scui_widget_draw_image_rotate(event->object, NULL, image, NULL,
-                    &anchor, &center, scui_ui_presenter.compass_angle());
+                    &anchor, &center, scui_presenter.compass_angle());
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%d %%",
-                    scui_ui_presenter.compass_angle());
+                    scui_presenter.compass_angle());
                 scui_string_update_str(scui_ui_res_local->data_compass, data_unit);
                 
                 struct
@@ -596,7 +596,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     { (270) + (45 / 2), (315) + (45 / 2), SCUI_MULTI_LANG_0X0124 }
                 };
                 
-                uint16_t angle = scui_ui_presenter.compass_angle();
+                uint16_t angle = scui_presenter.compass_angle();
                 uint16_t text_handle = dir_table[0].text;
                 for (uint8_t idx = 1; idx < scui_arr_len(dir_table); idx++)
                     if (dir_table[idx].angle_s <= angle &&
@@ -615,11 +615,11 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             char data_unit[50] = {0};
             
             snprintf(data_unit, sizeof(data_unit), "%.2f",
-                scui_ui_presenter.altimeter_pressure());
+                scui_presenter.altimeter_pressure());
             scui_string_update_str(scui_ui_res_local->data_altimeter_info1, data_unit);
             
             snprintf(data_unit, sizeof(data_unit), "%.2f",
-                scui_ui_presenter.altimeter_altitude());
+                scui_presenter.altimeter_altitude());
             scui_string_update_str(scui_ui_res_local->data_altimeter_info2, data_unit);
             
             scui_area_t color_clip = clip;
@@ -884,7 +884,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         }
         case scui_ui_scene_mini_card_type_alarm: {
             
-            if (scui_ui_presenter.alarm_none()) {
+            if (scui_presenter.alarm_none()) {
                 
                 scui_area_t btn_clip = {
                     .w = 50,.x = 24,
@@ -956,6 +956,10 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             tick_cnt -= 1000 / span_fps;
         else
             return;
+        
+        // 标记子控件树需要更新
+        for (uint32_t idx = 0; idx < scui_ui_res_local->coupler->list_num; idx++)
+            scui_ui_res_local->coupler->list_refr[idx] = true;
         
         scui_widget_draw(event->object, NULL, false);
         break;
@@ -1167,7 +1171,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle, false);
                     scui_widget_event_add(string_handle, &event_cb_node);
                     
-                    if (scui_ui_presenter.alarm_none()) {
+                    if (scui_presenter.alarm_none()) {
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
@@ -1222,7 +1226,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle, false);
                     scui_widget_event_add(string_handle, &event_cb_node);
                     
-                    if (scui_ui_presenter.sleep_none()) {
+                    if (scui_presenter.sleep_none()) {
                         
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
@@ -1260,7 +1264,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle, false);
                     scui_widget_event_add(string_handle, &event_cb_node);
                     
-                    if (scui_ui_presenter.sport_record_none()) {
+                    if (scui_presenter.sport_record_none()) {
                         
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
@@ -1306,7 +1310,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle, false);
                     scui_widget_event_add(string_handle, &event_cb_node);
                     
-                    if (scui_ui_presenter.women_health_none()) {
+                    if (scui_presenter.women_health_none()) {
                         
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
@@ -1352,7 +1356,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     scui_widget_create(&string_t_maker, &string_handle, false);
                     scui_widget_event_add(string_handle, &event_cb_node);
                     
-                    if (scui_ui_presenter.compass_invalid()) {
+                    if (scui_presenter.compass_invalid()) {
                         
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;

@@ -43,11 +43,10 @@ double scui_tan(double radian);
 int64_t scui_pow(int64_t x, int8_t e);
 
 /*@brief 随机数
- *@param min 数字
- *@param max 数字
+ *@param limit 数字
  *@retval 返回值
  */
-int64_t scui_rand(int64_t min, int64_t max);
+uint32_t scui_rand(uint32_t limit);
 
 /*@brief 三角函数(sin),放大4096倍
  *@param angle 角度
@@ -66,6 +65,13 @@ int32_t scui_cos4096(int32_t angle);
  *@retval 三角函数值
  */
 int32_t scui_tan4096(int32_t angle);
+
+/*@brief 计算一个向量的atan2
+ *@param x 向量值x(范围:(-1456, +1456))
+ *@param y 向量值y(范围:(-1456, +1456))
+ *@retval 根据给定参数在[0..360]范围内计算出的角度
+ */
+uint16_t scui_atan2(int32_t x, int32_t y);
 
 /*@brief 平方根
  *@param x 数字

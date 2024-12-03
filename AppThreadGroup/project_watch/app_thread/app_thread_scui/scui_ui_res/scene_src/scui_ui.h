@@ -156,7 +156,5 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
 //
 //
 /*****************************************************************************/
-#include "scui_ui_presenter.h"      /* presenter */
-/*****************************************************************************/
 
 #endif

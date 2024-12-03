@@ -14,7 +14,7 @@
 #if     SCUI_CWF_JSON_PARSER_HOOK
 void * scui_cwf_json_parser_alloc(size_t size)
 {
-    return SCUI_MEM_ALLOC(scui_mem_type_mix, size);
+    return SCUI_MEM_ALLOC(scui_mem_type_user, size);
 }
 void scui_cwf_json_parser_free(void *ptr)
 {
@@ -149,7 +149,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         SCUI_LOG_ERROR("unmatched cwf version");
     
     scui_cwf_json_parser_t *parser = NULL;
-    parser = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_cwf_json_parser_t));
+    parser = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_cwf_json_parser_t));
     memset(parser, 0, sizeof(scui_cwf_json_parser_t));
     *inst = parser;
     
@@ -158,7 +158,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     json_file[json_size] = '\0';
     
     // 构建parser资源
-    uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(file) + 1);
+    uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_user, strlen(file) + 1);
     strncpy(name, file, strlen(file));
     name[strlen(file)] = '\0';
     parser->name = scui_handle_find();
@@ -166,10 +166,10 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     
     SCUI_ASSERT(image_isize % 18 == 0);
     parser->image_num = image_isize / 18;
-    parser->image_src = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->image_num * sizeof(scui_image_t));
-    parser->image_hit = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->image_num * sizeof(scui_handle_t));
+    parser->image_src = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * sizeof(scui_image_t));
+    parser->image_hit = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * sizeof(scui_handle_t));
     
-    uint8_t *image_info = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->image_num * 18);
+    uint8_t *image_info = SCUI_MEM_ALLOC(scui_mem_type_user, parser->image_num * 18);
     scui_image_bin_read(file, image_iofs, parser->image_num * 18, image_info);
     for (uint32_t idx = 0; idx < parser->image_num; idx++) {
         uint8_t  format = image_info[18 * idx + 0];
@@ -213,10 +213,10 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON *json_object = cJSON_Parse(json_file);
     cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
     parser->list_num   = cJSON_GetArraySize(json_layout);
-    parser->list_child    = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(scui_handle_t));
-    parser->list_type     = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(uint8_t));
-    parser->list_type_sub = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(uint8_t));
-    parser->list_src      = SCUI_MEM_ALLOC(scui_mem_type_mix, parser->list_num * sizeof(void *));
+    parser->list_child    = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(scui_handle_t));
+    parser->list_type     = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
+    parser->list_type_sub = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
+    parser->list_src      = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(void *));
     
     #if 0   /* 检查JSON */
     char *json_format = cJSON_Print(json_object);
@@ -332,7 +332,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             
             uint8_t image_info[18] = {0};
             scui_image_bin_read(file, image_iofs + img_ofs * 18, 18, image_info);
-            scui_image_t *image_src = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_t));
+            scui_image_t *image_src = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_image_t));
             memset(image_src, 0, sizeof(scui_image_t));
             
             uint8_t  format = image_info[18 * 0 + 0];
@@ -357,7 +357,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             image_src->pixel.size_bin = (uintptr_t)size;
             image_src->pixel.data_bin = (uintptr_t)data;
             
-            uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_mix, strlen(file) + 1);
+            uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_user, strlen(file) + 1);
             strncpy(name, file, strlen(file) + 1);
             name[strlen(file)] = '\0';
             image_src->from = scui_handle_find();

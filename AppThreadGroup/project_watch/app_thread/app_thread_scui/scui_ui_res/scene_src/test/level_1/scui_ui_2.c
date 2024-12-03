@@ -120,9 +120,9 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             // 自动布局模式
             for (uint8_t idx = 0; idx < 10; idx++) {
                 custom_maker.widget.color.color.ch.a = 0xFF;
-                custom_maker.widget.color.color.ch.r = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.g = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.b = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
                 scui_widget_create(&custom_maker, &custom_handle, false);
             }
             #else
@@ -136,9 +136,9 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
                 custom_maker.widget.clip.y = scui_map(idx / 5, 0, 5, - custom_h, scroll_h + custom_h);
                 SCUI_LOG_DEBUG("<x:%d,y:%d>", custom_maker.widget.clip.x, custom_maker.widget.clip.y);
                 custom_maker.widget.color.color.ch.a = 0xFF;
-                custom_maker.widget.color.color.ch.r = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.g = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
-                custom_maker.widget.color.color.ch.b = scui_rand(0, 10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+                custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
                 scui_widget_create(&custom_maker, &custom_handle, false);
             }
             #endif
