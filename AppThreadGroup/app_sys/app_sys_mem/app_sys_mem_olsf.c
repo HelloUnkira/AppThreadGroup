@@ -702,12 +702,16 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
     APP_SYS_LOG_INFO("mem_olsf align:");
     APP_SYS_LOG_INFO("addr_hdr:%p", (void *)mem_olsf->addr_hdr);
     APP_SYS_LOG_INFO("addr_end:%p", (void *)mem_olsf->addr_end);
-    APP_SYS_LOG_INFO("size_old:%u", mem_olsf->size_old);
-    APP_SYS_LOG_INFO("size_new:%u", mem_olsf->size_new);
+    APP_SYS_LOG_INFO("size_old:%u",  mem_olsf->size_old);
+    APP_SYS_LOG_INFO("size_new:%u",  mem_olsf->size_new);
     APP_SYS_LOG_INFO("mem_olsf:");
     APP_SYS_LOG_INFO("field_size:%u",   app_sys_mem_olsf_field_size(mem_olsf, false));
     APP_SYS_LOG_INFO("number:%u",       mem_olsf->number);
     APP_SYS_LOG_INFO("bitmap:0x%x:",    mem_olsf->bitmap);
+    
+    uintptr_t size_free_max = 0;
+    uintptr_t size_free = 0;
+    uintptr_t size_used = 0;
     
     APP_SYS_LOG_INFO_RAW("chunk \t size \t used \t near \t prev \t next \t left \t right");
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
@@ -722,8 +726,21 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
         APP_SYS_LOG_INFO_RAW("%08u \t ", app_sys_mem_olsf_chunk_right(mem_olsf, chunk));
         APP_SYS_LOG_INFO_RAW(app_sys_log_line());
         
-        chunk += app_sys_mem_olsf_size_get(mem_olsf, chunk);
+        bool used = app_sys_mem_olsf_used_get(mem_olsf, chunk);
+        uintptr_t size = app_sys_mem_olsf_size_get(mem_olsf, chunk);
+        size_free += used ? 0 : size;
+        size_used += used ? size : 0;
+        if (size_free_max < size_free)
+            size_free_max = size_free;
+        
+        chunk += size;
     }
+    
+    APP_SYS_LOG_INFO("total:");
+    APP_SYS_LOG_INFO("size_used:%u", mem_olsf->size_used);
+    APP_SYS_LOG_INFO("size_used:%u", size_used);
+    APP_SYS_LOG_INFO("size_free:%u", size_free);
+    APP_SYS_LOG_INFO("size_free_max:%u", size_free_max);
 }
 
 /*@brief 一级隔离策略分配堆内存遍历检查

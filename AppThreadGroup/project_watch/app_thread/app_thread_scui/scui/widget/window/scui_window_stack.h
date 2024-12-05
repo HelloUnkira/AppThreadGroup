@@ -6,6 +6,11 @@ typedef struct {
     scui_handle_t top;
 } scui_window_stack_t;
 
+/*@brief 窗口栈更新栈顶窗口(内部接口)
+ *@param handle 窗口句柄
+ */
+void scui_window_stack_update(scui_handle_t handle);
+
 /*@brief 窗口栈深度
  *@param top 栈深
  */

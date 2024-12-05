@@ -35,23 +35,23 @@
 #define SCUI_MEM_TYPE_SIZE_USER                     (1024 * 64)
 /* 缓存散列值(建议素数),缓存最大限制 */
 #define SCUI_CACHE_FONT_HASH                        (3)
-#define SCUI_CACHE_FONT_TOTAL                       (1024 * 64)
+#define SCUI_CACHE_FONT_TOTAL                       (SCUI_MEM_TYPE_SIZE_FONT * 20 / 100)
 #define SCUI_CACHE_FONT_GLYPH_HASH                  (23)
-#define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 64)
+#define SCUI_CACHE_FONT_GLYPH_TOTAL                 (SCUI_MEM_TYPE_SIZE_FONT * 50 / 100)
 #define SCUI_CACHE_IMAGE_HASH                       (17)
-#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 1)
+#define SCUI_CACHE_IMAGE_TOTAL                      (SCUI_MEM_TYPE_SIZE_GRAPH * 30 / 100)
 #elif   SCUI_MEM_SIZE_TYPE == 1     // 8M PSRAM (空闲1M)
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 128)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 512)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 384)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (1024 * 256)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (1024 * 1024 * 7 - 1024 * (768))
 #define SCUI_MEM_TYPE_SIZE_USER                     (1024 * 128)
 /* 缓存散列值(建议素数),缓存最大限制 */
 #define SCUI_CACHE_FONT_HASH                        (5)
-#define SCUI_CACHE_FONT_TOTAL                       (1024 * 128)
+#define SCUI_CACHE_FONT_TOTAL                       (SCUI_MEM_TYPE_SIZE_FONT * 20 / 100)
 #define SCUI_CACHE_FONT_GLYPH_HASH                  (47)
-#define SCUI_CACHE_FONT_GLYPH_TOTAL                 (1024 * 384)
+#define SCUI_CACHE_FONT_GLYPH_TOTAL                 (SCUI_MEM_TYPE_SIZE_FONT * 50 / 100)
 #define SCUI_CACHE_IMAGE_HASH                       (37)
-#define SCUI_CACHE_IMAGE_TOTAL                      (1024 * 1024 * 4)
+#define SCUI_CACHE_IMAGE_TOTAL                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
 #else
 #error "unknown type"
 #endif

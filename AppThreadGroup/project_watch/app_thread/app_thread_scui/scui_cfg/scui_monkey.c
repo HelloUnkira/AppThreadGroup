@@ -53,14 +53,14 @@ void scui_monkey_anim_execute(void *instance)
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
                 //
-                scui_ui_res_local->tick = scui_rand(20) + 2;
+                scui_ui_res_local->tick = scui_rand(10) + 2;
                 scui_ui_res_local->count = 0;
                 //
                 scui_ui_res_local->ptr_pos.x = SCUI_DRV_HOR_RES / 2;
                 scui_ui_res_local->ptr_pos.y = SCUI_DRV_VER_RES / 2;
-                scui_ui_res_local->ptr_move_step = scui_rand(75);
+                scui_ui_res_local->ptr_move_step = scui_rand(25) + 25;
                 scui_ui_res_local->ptr_move_way = 1 << scui_rand(3);
-                scui_ui_res_local->ptr_move = scui_rand(1);
+                scui_ui_res_local->ptr_move = scui_rand(9) < 7 ? 1 : 0;
             } else {
                 if (scui_ui_res_local->ptr_move) {
                     scui_coord_t step = scui_ui_res_local->ptr_move_step;
@@ -106,9 +106,18 @@ void scui_monkey_anim_execute(void *instance)
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
                 //
-                scui_ui_res_local->key_id  = scui_event_key_val_enter;
+                static const uint32_t key_id[] = {
+                    scui_event_key_val_enter,
+                    scui_event_key_val_up,
+                    scui_event_key_val_down,
+                    scui_event_key_val_left,
+                    scui_event_key_val_right,
+                    scui_event_key_val_back,
+                };
+                
+                scui_ui_res_local->key_id  = key_id[scui_rand(scui_arr_len(key_id) - 1)];
                 scui_ui_res_local->key_val = 0;
-                scui_ui_res_local->tick = scui_rand(20) + 2;
+                scui_ui_res_local->tick = scui_rand(10) + 2;
                 scui_ui_res_local->count = 0;
             } else {
                 
