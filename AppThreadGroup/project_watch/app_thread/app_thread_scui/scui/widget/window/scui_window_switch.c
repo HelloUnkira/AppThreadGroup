@@ -504,8 +504,9 @@ static void scui_window_event_switch(scui_event_t *event)
  *@param handle 窗口句柄
  *@param type   窗口切换风格
  *@param dir    窗口切换方向
+ *@retval 成功失败
  */
-void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir)
+bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir)
 {
     SCUI_LOG_INFO("");
     
@@ -522,16 +523,16 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     if (scui_window_mgr.switch_args.lock_jump) {
          SCUI_LOG_INFO("scene is switching");
-         return;
+         return false;
     }
     if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
         SCUI_LOG_INFO("scene is switching");
-        return;
+        return false;
     }
     
     /* 先上锁 */
     if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
-         return;
+         return false;
     
     scui_window_mgr.switch_args.lock_jump = true;
     
@@ -565,7 +566,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
         scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
-        return;
+        return true;
     }
     
     /* 新窗口已经是焦点窗口 */
@@ -574,7 +575,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
         scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
-        return;
+        return true;
     }
     
     /* 无切换效果 */
@@ -650,6 +651,7 @@ void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);
     }
+    return true;
 }
 
 /*@brief 控件默认事件处理回调

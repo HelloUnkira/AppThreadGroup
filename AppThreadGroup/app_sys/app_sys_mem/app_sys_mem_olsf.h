@@ -48,6 +48,7 @@ typedef struct {
     uintptr_t addr_end;
     uintptr_t size_old;
     uintptr_t size_new;
+    uintptr_t size_used;
     uintptr_t chunk_hdr;
     uintptr_t chunk_end;
     uintptr_t number;       /* 单元块数量 */
@@ -58,12 +59,25 @@ typedef struct {
 /* chunk的单元类型固定为uintptr_t */
 #define app_sys_mem_olsf_loops     3
 
+/*@brief 一级隔离策略分配堆内存使用
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_used(app_sys_mem_olsf_t *mem_olsf);
+
 /*@brief 一级隔离策略分配堆计算指定内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param pointer  内存地址
  *@retval 内存大小
  */
 uintptr_t app_sys_mem_olsf_size(app_sys_mem_olsf_t *mem_olsf, void *pointer);
+
+/*@brief 一级隔离策略分配堆计算指定内存所属
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param pointer  内存地址
+ *@retval 包含与否
+ */
+bool app_sys_mem_olsf_inside(app_sys_mem_olsf_t *mem_olsf, void *pointer);
 
 /*@brief 一级隔离策略分配堆释放内存
  *@param mem_olsf 一级隔离策略分配堆实例

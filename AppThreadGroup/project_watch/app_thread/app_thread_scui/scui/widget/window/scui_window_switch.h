@@ -5,8 +5,9 @@
  *@param handle 窗口句柄
  *@param type   窗口切换风格
  *@param dir    窗口切换方向
+ *@retval 成功失败
  */
-void scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir);
+bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui_opt_dir_t dir);
 
 /*@brief 控件默认事件处理回调
  *@param event 事件

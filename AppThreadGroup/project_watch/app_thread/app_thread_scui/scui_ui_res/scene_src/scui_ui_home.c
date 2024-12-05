@@ -135,34 +135,27 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         switch (type) {
         case scui_ui_scene_list_type_list_scale: { // 缩放列表
             #if 0   // 裁内存选择
-            scui_ui_scene_list_cfg(type);
             scui_window_switch_type_cfg_set(scui_window_switch_none);
             scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
             scui_window_switch_type_cfg_set(switch_type);
             #else
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
             #endif
             break;
         }
         case scui_ui_scene_list_type_list_arc: // 弧形列表
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_LIST_ARC, false);
             break;
         case scui_ui_scene_list_type_honeycomb: // 蜂窝
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_HONEYCOMB, false);
             break;
         case scui_ui_scene_list_type_waterfall: // 瀑布
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_WATERFALL, false);
             break;
         case scui_ui_scene_list_type_themewheel: // 波轮
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_THUMBWHEEL, false);
             break;
         case scui_ui_scene_list_type_spread: // 扩散
-            scui_ui_scene_list_cfg(type);
             scui_window_stack_add(SCUI_UI_SCENE_SPREAD, false);
             break;
         default:

@@ -33,6 +33,8 @@ void scui_ui_scene_spread_event_proc(scui_event_t *event)
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
+            
+            scui_ui_scene_list_cfg(scui_ui_scene_list_type_spread);
         }
         
         /* 界面数据加载准备 */

@@ -358,8 +358,7 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
     
     for (uint32_t idx = scui_mem_type_none; idx < scui_mem_type_num; idx++)
         if (scui_mem.mem_olsf[idx] != NULL &&
-            scui_mem.mem_olsf[idx]->addr_hdr <= (uintptr_t)ptr &&
-            scui_mem.mem_olsf[idx]->addr_end >= (uintptr_t)ptr) {
+            app_sys_mem_olsf_inside(scui_mem.mem_olsf[idx], ptr)) {
             *type = idx;
              return;
         }
@@ -409,6 +408,7 @@ uint32_t scui_mem_size_ptr(void *ptr)
  */
 uint32_t scui_mem_size_used(scui_mem_type_t type)
 {
+    return app_sys_mem_olsf_used(scui_mem.mem_olsf[type]);
     return scui_mem.size_used[type];
 }
 

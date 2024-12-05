@@ -258,6 +258,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
+            scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
         }
         
         if (scui_widget_event_check_prepare(event)) {

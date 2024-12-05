@@ -460,6 +460,15 @@ static uintptr_t app_sys_mem_olsf_calc_size(app_sys_mem_olsf_t *mem_olsf, uintpt
     return size / sizeof(uintptr_t);
 }
 
+/*@brief 一级隔离策略分配堆内存使用
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_used(app_sys_mem_olsf_t *mem_olsf)
+{
+    return mem_olsf->size_used;
+}
+
 /*@brief 一级隔离策略分配堆计算指定内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param pointer  内存地址
@@ -475,6 +484,23 @@ uintptr_t app_sys_mem_olsf_size(app_sys_mem_olsf_t *mem_olsf, void *pointer)
     return chunk_size * sizeof(uintptr_t) - field_size;
 }
 
+/*@brief 一级隔离策略分配堆计算指定内存所属
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@param pointer  内存地址
+ *@retval 包含与否
+ */
+bool app_sys_mem_olsf_inside(app_sys_mem_olsf_t *mem_olsf, void *pointer)
+{
+    if (pointer == NULL)
+        return false;
+    
+    if (mem_olsf->addr_hdr <= (uintptr_t)pointer &&
+        mem_olsf->addr_end >= (uintptr_t)pointer)
+        return true;
+    
+    return false;
+}
+
 /*@brief 一级隔离策略分配堆释放内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param pointer  内存地址
@@ -483,6 +509,7 @@ void app_sys_mem_olsf_free(app_sys_mem_olsf_t *mem_olsf, void *pointer)
 {
     if (pointer == NULL)
         return;
+    mem_olsf->size_used -= app_sys_mem_olsf_size(mem_olsf, pointer);
     uintptr_t chunk = app_sys_mem_olsf_addr_to_chunk(mem_olsf, (uintptr_t)pointer);
     /* 意外的堆状态(二次释放?) */
     APP_SYS_ASSERT(app_sys_mem_olsf_used_get(mem_olsf, chunk) != 0);
@@ -521,6 +548,7 @@ void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size)
     }
     app_sys_mem_olsf_used_set(mem_olsf, chunk, true);
     pointer = (void *)app_sys_mem_olsf_chunk_to_addr(mem_olsf, chunk);
+    mem_olsf->size_used += app_sys_mem_olsf_size(mem_olsf, pointer);
     return pointer;
 }
 
@@ -579,6 +607,7 @@ void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size
     app_sys_mem_olsf_used_set(mem_olsf, chunk, true);
     pointer = (void *)app_sys_mem_olsf_chunk_to_addr(mem_olsf, chunk);
     APP_SYS_ASSERT(app_sys_align_check(pointer, align));
+    mem_olsf->size_used += app_sys_mem_olsf_size(mem_olsf, pointer);
     return pointer;
 }
 
@@ -658,6 +687,7 @@ app_sys_mem_olsf_t * app_sys_mem_olsf_ready(void *addr, uintptr_t size)
     mem_olsf->addr_end  = addr_end;
     mem_olsf->size_old  = size_old;
     mem_olsf->size_new  = size_new;
+    mem_olsf->size_used = 0;
     return mem_olsf;
 }
 

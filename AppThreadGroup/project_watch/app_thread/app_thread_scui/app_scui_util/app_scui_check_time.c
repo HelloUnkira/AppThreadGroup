@@ -75,6 +75,17 @@ void app_scui_check_time_update(void)
     app_mutex_process(&app_scui_check_time_mutex, app_mutex_give);
 }
 
+/*@brief check time执行 事件包吸收
+ */
+static bool app_scui_check_time_package_absorb(void *pkg_old, void *pkg_new)
+{
+    app_thread_package_t *package_old = pkg_old;
+    app_thread_package_t *package_new = pkg_new;
+    
+    /* 多的直接丢弃即可,这里为空 */
+    return true;
+}
+
 /*@brief 界面状态控制更新
  *       内部使用: 被scui线程使用
  */
@@ -85,6 +96,7 @@ static void app_scui_check_time_timer_handler(void *timer)
         .thread = app_thread_id_scui,
         .module = app_thread_scui_sched,
         .event  = app_thread_scui_sched_check_time,
+        .absorb = app_scui_check_time_package_absorb,
     };
     app_thread_package_notify(&package);
 }

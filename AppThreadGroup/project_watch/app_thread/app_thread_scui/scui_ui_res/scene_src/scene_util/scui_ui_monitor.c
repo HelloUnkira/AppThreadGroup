@@ -117,8 +117,8 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
                 .color_s.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,},
             {   .filter = true,
-                .color_s.full = pct_args[2] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,
-                .color_e.full = pct_args[2] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,},
+                .color_s.full = pct_args[3] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[3] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,},
         };
         scui_color_t recolors2[2] = {
             {   .filter = true,
