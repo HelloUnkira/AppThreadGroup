@@ -730,8 +730,8 @@ void app_sys_mem_olsf_check(app_sys_mem_olsf_t *mem_olsf)
         uintptr_t size = app_sys_mem_olsf_size_get(mem_olsf, chunk);
         size_free += used ? 0 : size;
         size_used += used ? size : 0;
-        if (size_free_max < size_free)
-            size_free_max = size_free;
+        if (size_free_max < size && !used)
+            size_free_max = size;
         
         chunk += size;
     }

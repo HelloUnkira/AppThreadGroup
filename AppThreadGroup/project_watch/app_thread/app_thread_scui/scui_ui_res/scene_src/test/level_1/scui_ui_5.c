@@ -66,6 +66,7 @@ void scui_ui_scene_5_ring_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         
+        #if 0   // 仅测试png下的情况, 内存顶不住
         scui_handle_t image_edge = SCUI_HANDLE_INVALID;
         scui_handle_t image_ring = scui_image_prj_image_src_400X400pxpng;
         
@@ -81,6 +82,7 @@ void scui_ui_scene_5_ring_event_proc(scui_event_t *event)
         scui_color_t color = {.filter = true,};
         scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
                                  spinner_pct, 270, 60, +1);
+        #endif
         
         break;
     }

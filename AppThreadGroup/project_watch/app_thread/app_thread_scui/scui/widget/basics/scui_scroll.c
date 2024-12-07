@@ -1226,6 +1226,7 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         scui_event_t event = {
             .object = widget->myself,
             .type   = scui_event_widget_scroll_c,
+            .absorb = scui_event_absorb_none,
         };
         scui_event_notify(&event);
         if (scroll->notify_cb != NULL)

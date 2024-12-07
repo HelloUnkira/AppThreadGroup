@@ -302,13 +302,14 @@ void scui_widget_event_proc(scui_event_t *event)
  */
 void scui_widget_event_dispatch(scui_event_t *event)
 {
+    /* 事件调度序列可能有无效事件 */
+    if (scui_handle_unmap(event->object))
+        return;
+    
     SCUI_LOG_DEBUG("event %u", event->type);
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     scui_widget_t *widget = scui_handle_get(event->object);
     SCUI_ASSERT(widget != NULL);
-    
-    if (scui_handle_unmap(widget->myself))
-        return;
     
     /*************************************************************************/
     /* 动画事件:顺向递归**************************************************** */
@@ -630,13 +631,13 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
     
     switch (state) {
     case 0x00:
-        if (scroll_flag.lock && scroll_flag.key == *key)
-            return true;
-        if (scroll_flag.lock && scroll_flag.key != *key) {
-            *key = SCUI_HANDLE_INVALID;
-            return false;
+        if (scroll_flag.lock)
+            return scroll_flag.key == *key;
+        
+        if (scroll_flag.key == SCUI_HANDLE_INVALID) {
+            scroll_flag.key  = scui_handle_find();
+            scui_handle_set(scroll_flag.key, &scroll_flag);
         }
-        scroll_flag.key  = scui_handle_find();
         scroll_flag.lock = true;
         *key = scroll_flag.key;
         return true;
@@ -648,12 +649,12 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
             *key = SCUI_HANDLE_INVALID;
              return true;
         }
-        *key = SCUI_HANDLE_INVALID;
         return false;
     case 0x02:
         if (scroll_flag.lock && scroll_flag.key == *key)
             return false;
-        *key = SCUI_HANDLE_INVALID;
+        
+        *key = scroll_flag.key;
         return scroll_flag.lock;
     default:
         SCUI_LOG_ERROR("unknown state");

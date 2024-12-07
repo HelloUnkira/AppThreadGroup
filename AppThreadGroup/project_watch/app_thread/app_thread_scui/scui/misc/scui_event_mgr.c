@@ -196,6 +196,10 @@ static void scui_event_respond(scui_event_t *event)
         return;
     }
     
+    /* 事件响应对象无效(未知情况?) */
+    if (scui_handle_get(event->object) == NULL)
+        return;
+    
     event->style.result = 0x00;
     
     /* 事件响应回调 */

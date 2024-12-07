@@ -522,17 +522,19 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     if (scui_window_mgr.switch_args.lock_jump) {
-         SCUI_LOG_INFO("scene is switching");
+         SCUI_LOG_WARN("scene is switching");
          return false;
     }
     if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
-        SCUI_LOG_INFO("scene is switching");
+        SCUI_LOG_WARN("scene is switching");
         return false;
     }
     
     /* 先上锁 */
-    if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
+    if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key)) {
+        SCUI_LOG_WARN("scene is switching: %u", scui_window_mgr.switch_args.key);
          return false;
+    }
     
     scui_window_mgr.switch_args.lock_jump = true;
     

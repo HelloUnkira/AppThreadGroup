@@ -263,6 +263,8 @@ void scui_image_src_read(scui_image_t *image, void *data)
             SCUI_LOG_WARN("png occupy top:%d", scui_lodepng_size_top);
         }
         
+        // 检查空间是否释放完毕
+        SCUI_ASSERT(scui_lodepng_size_cur == 0);
         return;
     }
     
@@ -305,6 +307,8 @@ void scui_image_src_read(scui_image_t *image, void *data)
             SCUI_LOG_WARN("lz4 occupy top:%d", scui_LZ4F_size_top);
         }
         
+        // 检查空间是否释放完毕
+        SCUI_ASSERT(scui_LZ4F_size_cur == 0);
         return;
     }
     
