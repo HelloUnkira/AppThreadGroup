@@ -218,8 +218,12 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     /* 3.仅窗口切换时应用特效渲染 */
     mode_simple = mode_simple || scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key);
     
+    scui_window_switch_type_t switch_type = scui_window_switch_none;
     // 直接渲染复用常规窗口移动变换(此时相当于不移动)
-    scui_window_switch_type_t switch_type = mode_simple ? scui_window_switch_move : scui_window_mgr.switch_args.type;
+    switch_type = mode_simple ? scui_window_switch_move : scui_window_mgr.switch_args.type;
+    
+    if (switch_type == scui_window_switch_none)
+        switch_type  = scui_window_mgr.switch_args.cfg_type;
     
     /* 底图清空 */
     scui_color_t dst_pixel = {0};
@@ -234,6 +238,9 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     
     /* 多画布混合变换 */
     switch (switch_type) {
+    default:
+         SCUI_LOG_ERROR("unknown switch type");
+         SCUI_LOG_ERROR("switch to move type");
     case scui_window_switch_move:
          scui_window_transform_move(list, num);
          break;
@@ -271,10 +278,6 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
          break;
     case scui_window_switch_cube:
          scui_window_transform_cube(list, num);
-         break;
-    default:
-         SCUI_LOG_ERROR("unknown switch type");
-         SCUI_ASSERT(false);
          break;
     }
 }

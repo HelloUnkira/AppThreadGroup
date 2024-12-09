@@ -97,7 +97,6 @@ void scui_cwf_json_burn(void **inst)
     // 回收内部维护资源
     SCUI_MEM_FREE(parser->list_child);
     SCUI_MEM_FREE(parser->list_type);
-    SCUI_MEM_FREE(parser->list_type_sub);
     SCUI_MEM_FREE(parser->list_src);
     // 图片资源缓存无效化
     for (uint32_t idx = 0; idx < parser->image_num; idx++) {
@@ -180,12 +179,12 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         uint32_t data   = scui_cwf_json_u32(&image_info[18 * idx + 2 + 4 * 3]);
         
         switch (format) {
-        case scui_cwf_json_format_palette4: parser->image_src[idx].format = scui_pixel_cf_palette4; break;
-        case scui_cwf_json_format_palette8: parser->image_src[idx].format = scui_pixel_cf_palette8; break;
-        case scui_cwf_json_format_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
-        case scui_cwf_json_format_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
-        case scui_cwf_json_format_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
-        case scui_cwf_json_format_bmp8888:  parser->image_src[idx].format = scui_pixel_cf_bmp8888;  break;
+        case scui_cwf_json_image_cf_palette4: parser->image_src[idx].format = scui_pixel_cf_palette4; break;
+        case scui_cwf_json_image_cf_palette8: parser->image_src[idx].format = scui_pixel_cf_palette8; break;
+        case scui_cwf_json_image_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
+        case scui_cwf_json_image_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
+        case scui_cwf_json_image_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
+        case scui_cwf_json_image_cf_bmp8888:  parser->image_src[idx].format = scui_pixel_cf_bmp8888;  break;
         default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
         }
         parser->image_src[idx].type = type;
@@ -213,10 +212,9 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON *json_object = cJSON_Parse(json_file);
     cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
     parser->list_num   = cJSON_GetArraySize(json_layout);
-    parser->list_child    = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(scui_handle_t));
-    parser->list_type     = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
-    parser->list_type_sub = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
-    parser->list_src      = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(void *));
+    parser->list_child = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(scui_handle_t));
+    parser->list_type  = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
+    parser->list_src   = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(void *));
     
     #if 0   /* 检查JSON */
     char *json_format = cJSON_Print(json_object);
@@ -225,10 +223,9 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON_free(json_format);
     #endif
     
-    memset(parser->list_child,    0, parser->list_num * sizeof(scui_handle_t));
-    memset(parser->list_type,     0, parser->list_num * sizeof(uint8_t));
-    memset(parser->list_type_sub, 0, parser->list_num * sizeof(uint8_t));
-    memset(parser->list_src,      0, parser->list_num * sizeof(void *));
+    memset(parser->list_child, 0, parser->list_num * sizeof(scui_handle_t));
+    memset(parser->list_type,  0, parser->list_num * sizeof(uint8_t));
+    memset(parser->list_src,   0, parser->list_num * sizeof(void *));
     
     // 构建一个父容器,用于承载cwf
     scui_custom_maker_t custom_maker = {0};
@@ -317,13 +314,11 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
     for (uint32_t idx = 0; idx < cJSON_GetArraySize(json_layout); idx++) {
         cJSON *json_dict = cJSON_GetArrayItem(json_layout, idx);
         
-        uint8_t type     = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type")) + 0.1;
-        uint8_t type_sub = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type_sub")) + 0.1;
+        uint8_t type = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type")) + 0.1;
         
         // 预览图被记录在:
-        // scui_cwf_json_type_img
         // scui_cwf_json_type_img_preview
-        if (type == scui_cwf_json_type_img && type_sub == scui_cwf_json_type_img_preview) {
+        if (type == scui_cwf_json_type_img_preview) {
             cJSON *json_src = cJSON_GetObjectItem(json_dict, "image_src");
             cJSON *json_num = cJSON_GetObjectItem(json_dict, "image_num");
             uint32_t img_ofs = cJSON_GetNumberValue(cJSON_GetArrayItem(json_src, 0)) + 0.1;
@@ -343,12 +338,12 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             uint32_t data   = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 3]);
             
             switch (format) {
-            case scui_cwf_json_format_palette4: image_src->format = scui_pixel_cf_palette4; break;
-            case scui_cwf_json_format_palette8: image_src->format = scui_pixel_cf_palette8; break;
-            case scui_cwf_json_format_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
-            case scui_cwf_json_format_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
-            case scui_cwf_json_format_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
-            case scui_cwf_json_format_bmp8888:  image_src->format = scui_pixel_cf_bmp8888;  break;
+            case scui_cwf_json_image_cf_palette4: image_src->format = scui_pixel_cf_palette4; break;
+            case scui_cwf_json_image_cf_palette8: image_src->format = scui_pixel_cf_palette8; break;
+            case scui_cwf_json_image_cf_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
+            case scui_cwf_json_image_cf_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
+            case scui_cwf_json_image_cf_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
+            case scui_cwf_json_image_cf_bmp8888:  image_src->format = scui_pixel_cf_bmp8888;  break;
             default: SCUI_LOG_ERROR("unknown cwf json image format:%d", format);
             }
             image_src->type = type;

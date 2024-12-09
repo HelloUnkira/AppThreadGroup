@@ -109,13 +109,11 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
     uint16_t list_idx = res->list_idx;
     
     // 目前还未为type开发太多效果
-    switch (parser->list_type[idx]) {
-    case scui_cwf_json_type_img: {
+    if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
+        parser->list_type[idx] < scui_cwf_json_type_img_e) {
         
-        
-        
-        // 为type_sub进行构建
-        switch (parser->list_type_sub[idx]) {
+        // 为type进行构建
+        switch (parser->list_type[idx]) {
         case scui_cwf_json_type_img_preview:
         case scui_cwf_json_type_img_simple:
         case scui_cwf_json_type_img_watch:
@@ -267,33 +265,15 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             break;
         }
         default:
-            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type_sub[idx]);
+            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type[idx]);
             break;
         }
-        
-        
-        
-        break;
     }
-    case scui_cwf_json_type_txt: {
-        
-        
-        
-        // 为type_sub进行构建
-        switch (parser->list_type_sub[idx]) {
-        
-        default:
-            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type_sub[idx]);
-            break;
-        }
-        
-        
-        
-        break;
-    }
-    default:
-        SCUI_LOG_ERROR("unknown type:%d", parser->list_type[idx]);
-        break;
+    
+    // 目前还未为type开发太多效果
+    if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
+        parser->list_type[idx] < scui_cwf_json_type_txt_e) {
+        // keep adding
     }
 }
 
@@ -307,24 +287,19 @@ void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx)
     parser->list_src[idx] = NULL;
     
     // 目前还未为type开发太多效果
-    switch (parser->list_type[idx]) {
-    case scui_cwf_json_type_img: {
+    if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
+        parser->list_type[idx] < scui_cwf_json_type_img_e) {
         
         // 回收动态生成的子资源
         SCUI_MEM_FREE(res->idx_ofs);
-        
         // 回收动态生成的子资源
         SCUI_MEM_FREE(res->img_ofs);
-        
-        break;
     }
-    case scui_cwf_json_type_txt: {
-        
-        break;
-    }
-    default:
-        SCUI_LOG_ERROR("unknown type:%d", parser->list_type[idx]);
-        break;
+    
+    // 目前还未为type开发太多效果
+    if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
+        parser->list_type[idx] < scui_cwf_json_type_txt_e) {
+        // keep adding
     }
     
     SCUI_MEM_FREE(res);
@@ -343,12 +318,20 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
     
     // 按协议解析字段 (进行一级解析)
     // 按协议解析字段 (进行二级解析)
-    parser->list_type[idx]     = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "type")) + 0.1;
-    parser->list_type_sub[idx] = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "type_sub")) + 0.1;
+    parser->list_type[idx] = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "type")) + 0.1;
+    
+    // 类型检查
+    bool type_unmatch = true;
+    if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
+        parser->list_type[idx] < scui_cwf_json_type_img_e) type_unmatch = false;
+    if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
+        parser->list_type[idx] < scui_cwf_json_type_txt_e) type_unmatch = false;
+    if (type_unmatch)
+        SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type[idx]);
     
     // 目前还未为type开发太多效果
-    switch (parser->list_type[idx]) {
-    case scui_cwf_json_type_img: {
+    if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
+        parser->list_type[idx] < scui_cwf_json_type_img_e) {
         // 每一个该type都有类似的资源表, 直接构建即可
         cJSON *json_src = cJSON_GetObjectItem(dict, "image_src");
         cJSON *json_num = cJSON_GetObjectItem(dict, "image_num");
@@ -364,10 +347,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         res->img_w = scui_image_w(parser->image_hit[res->img_ofs[0]]);
         res->img_h = scui_image_h(parser->image_hit[res->img_ofs[0]]);
         
-        
-        
-        // 为type_sub进行构建
-        switch (parser->list_type_sub[idx]) {
+        // 为type进行构建
+        switch (parser->list_type[idx]) {
         case scui_cwf_json_type_img_preview:
             /* skip... */
             break;
@@ -447,11 +428,11 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         case scui_cwf_json_type_img_batt_prog :
         case scui_cwf_json_type_img_dist_prog :
         case scui_cwf_json_type_img_anim: {
-            if (parser->list_type_sub[idx] == scui_cwf_json_type_img_month)
+            if (parser->list_type[idx] == scui_cwf_json_type_img_month)
                 SCUI_ASSERT(res->img_num == 12);
-            if (parser->list_type_sub[idx] == scui_cwf_json_type_img_week)
+            if (parser->list_type[idx] == scui_cwf_json_type_img_week)
                 SCUI_ASSERT(res->img_num == 7);
-            if (parser->list_type_sub[idx] == scui_cwf_json_type_img_ampm)
+            if (parser->list_type[idx] == scui_cwf_json_type_img_ampm)
                 SCUI_ASSERT(res->img_num == 2);
             
             scui_custom_maker_t custom_maker = {0};
@@ -467,15 +448,14 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             break;
         }
         default:
-            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type_sub[idx]);
+            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type[idx]);
             break;
         }
-        
-        
-        
-        break;
     }
-    case scui_cwf_json_type_txt: {
+    
+    // 目前还未为type开发太多效果
+    if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
+        parser->list_type[idx] < scui_cwf_json_type_txt_e) {
         // 每一个该type都有类似的资源表, 直接构建即可
         char  *str_color = cJSON_GetStringValue(cJSON_GetObjectItem(dict, "color"));
         uint8_t  color_r = scui_cwf_json_chex16(str_color[2]) * 16 + scui_cwf_json_chex16(str_color[3]);
@@ -501,10 +481,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         string_maker.font_idx                   = size <= 32 ? 0 : 1;       // 到底要不要使用设备语言???
         scui_widget_create(&string_maker, &parser->list_child[idx], false);
         
-        
-        
-        // 为type_sub进行构建
-        switch (parser->list_type_sub[idx]) {
+        // 为type进行构建
+        switch (parser->list_type[idx]) {
         case scui_cwf_json_type_txt_week:
         case scui_cwf_json_type_txt_ampm:
         case scui_cwf_json_type_txt_day:
@@ -517,17 +495,9 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             break;
         }
         default:
-            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type_sub[idx]);
+            SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type[idx]);
             break;
         }
-        
-        
-        
-        break;
-    }
-    default:
-        SCUI_LOG_ERROR("unknown type:%d", parser->list_type[idx]);
-        break;
     }
     
     // 关联逆向索引, 资源绑定到目标

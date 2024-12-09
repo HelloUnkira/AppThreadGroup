@@ -2,14 +2,12 @@
     "cwf_id": "D10705001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_preview",
+            "type":     "scui_cwf_json_type_img_preview",
             "image_src": ["cwf_image_preview_01_1bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hour",
+            "type":     "scui_cwf_json_type_img_hour",
             "x":        170,
             "y":        105,
             "bits":     0,
@@ -28,8 +26,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_minute",
+            "type":     "scui_cwf_json_type_img_minute",
             "x":        148,
             "y":        224,
             "bits":     0,

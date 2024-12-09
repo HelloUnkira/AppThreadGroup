@@ -39,21 +39,12 @@ def scui_cwf_json_parser_preprocess(c_file_list, json_obj):
     # 清洗image_src字段, 将其替换成协议c_file_list中列表下标
     # 更新image_num字段, 将其替换成实际image_src数量
     for idx, node in enumerate(json_obj['layout']):
-        if node['type'] == 'scui_cwf_json_type_img':
+        # 有些类型没有这个字段
+        if re.match('scui_cwf_json_type_img_', node['type']) is not None:
             image_src = json_obj['layout'][idx]['image_src']
             for idx_t, image in enumerate(node['image_src']):
                 json_obj['layout'][idx]['image_src'][idx_t] = image_list.index(image)
             json_obj['layout'][idx]['image_num'] = len(image_src)
-    # 替换type_sub
-    for idx, node in enumerate(json_obj['layout']):
-        for idx_t, dict in enumerate(json_parser[node['type']]):
-            if dict['key'] == node['type_sub']:
-                json_obj['layout'][idx]['type_sub'] = idx_t
-                break
-        continue
-        if type(json_obj['layout'][idx]['type_sub']) != int:
-            print(json.dumps(json_obj, indent=4))
-            raise ValueError("json type_sub error:%d" % idx)
     # 替换type
     for idx, node in enumerate(json_obj['layout']):
         for idx_t, dict in enumerate(json_parser['scui_cwf_json_type']):
@@ -95,22 +86,14 @@ def scui_cwf_json_parser_proto():
              json_parser['version'][1], json_parser['version'][0]))
         
         file.write('typedef enum {\n')
-        for idx, item in enumerate(json_parser['scui_cwf_json_format']):
+        for idx, item in enumerate(json_parser['scui_cwf_json_image_cf']):
             file.write('\t%s%s,\n' % (item, ' = 0' if idx == 0 else ''))
-        file.write('} scui_cwf_json_format_t;\n\n')
+        file.write('} scui_cwf_json_image_cf_t;\n\n')
         
         file.write('typedef enum {\n')
         for idx, dict in enumerate(json_parser['scui_cwf_json_type']):
             file.write('\t%s%s,\n' % (dict['key'], ' = 0' if idx == 0 else ''))
         file.write('} scui_cwf_json_type_t;\n\n')
-        
-        for idx, dict in enumerate(json_parser['scui_cwf_json_type']):
-            if idx == 0 or idx == len(json_parser['scui_cwf_json_type']) - 1:
-                continue
-            file.write('typedef enum {\n')
-            for idx_t, item in enumerate(json_parser[dict['key']]):
-                file.write('\t%s%s,\n' % (item['key'], ' = 0' if idx_t == 0 else ''))
-            file.write('} %s_t;\n\n' % dict['key'])
         
         file.write('#endif\n')
 

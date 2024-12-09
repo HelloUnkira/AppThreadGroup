@@ -2,21 +2,18 @@
     "cwf_id": "D10602001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_preview",
+            "type":     "scui_cwf_json_type_img_preview",
             "image_src": ["cwf_image_preview_01_1jpg"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_00jpg"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_month",
+            "type":     "scui_cwf_json_type_img_month",
             "x":        234,
             "y":        343,
             "image_src": [
@@ -35,8 +32,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_week",
+            "type":     "scui_cwf_json_type_img_week",
             "x":        368,
             "y":        344,
             "image_src": [
@@ -51,47 +47,41 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        346,
             "y":        45,
             "image_src": ["cwf_image_char_unit_01_00bmp"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        136,
             "y":        336,
             "image_src": ["cwf_image_char_unit_heart_02_01bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        278,
             "y":        428,
             "image_src": ["cwf_image_char_unit_kcal_02_01bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        144,
             "y":        230,
             "image_src": ["cwf_image_char_unit_step_02_01bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        144,
             "y":        230,
             "image_src": ["cwf_image_char_unit_step_02_01bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_temp_unit",
+            "type":     "scui_cwf_json_type_img_temp_unit",
             "x":        200,
             "y":        146,
             "image_src": [
@@ -101,8 +91,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt_prog",
+            "type":     "scui_cwf_json_type_img_batt_prog",
             "x":        50,
             "y":        28,
             "image_src": [
@@ -121,32 +110,28 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        418,
             "y":        166,
             "image_src": ["cwf_image_icon_call_01_00bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        418,
             "y":        216,
             "image_src": ["cwf_image_icon_clock_01_00bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        418,
             "y":        216,
             "image_src": ["cwf_image_icon_message_01_00bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_day",
+            "type":     "scui_cwf_json_type_img_day",
             "x":        322,
             "y":        345,
             "bits":     0,
@@ -166,8 +151,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hour",
+            "type":     "scui_cwf_json_type_img_hour",
             "x":        260,
             "y":        105,
             "bits":     0,
@@ -186,8 +170,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_minute",
+            "type":     "scui_cwf_json_type_img_minute",
             "x":        238,
             "y":        224,
             "bits":     0,
@@ -207,8 +190,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hr",
+            "type":     "scui_cwf_json_type_img_hr",
             "x":        62,
             "y":        322,
             "bits":     0,
@@ -227,8 +209,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal",
+            "type":     "scui_cwf_json_type_img_kcal",
             "x":        172,
             "y":        414,
             "bits":     0,
@@ -247,8 +228,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step",
+            "type":     "scui_cwf_json_type_img_step",
             "x":        18,
             "y":        218,
             "bits":     0,
@@ -268,8 +248,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_temp",
+            "type":     "scui_cwf_json_type_img_temp",
             "x":        112,
             "y":        147,
             "bits":     0,
@@ -288,8 +267,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt",
+            "type":     "scui_cwf_json_type_img_batt",
             "x":        280,
             "y":        46,
             "bits":     0,

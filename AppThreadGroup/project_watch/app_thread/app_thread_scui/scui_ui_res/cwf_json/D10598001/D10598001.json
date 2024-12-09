@@ -2,21 +2,18 @@
     "cwf_id": "D10598001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_preview",
+            "type":     "scui_cwf_json_type_img_preview",
             "image_src": ["cwf_image_preview_01_1jpg"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_1jpg"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_week",
+            "type":     "scui_cwf_json_type_img_week",
             "x":        166,
             "y":        272,
             "image_src": [
@@ -30,8 +27,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_month",
+            "type":     "scui_cwf_json_type_img_month",
             "x":        204,
             "y":        311,
             "image_src": [
@@ -51,8 +47,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step_prog",
+            "type":     "scui_cwf_json_type_img_step_prog",
             "x":        40,
             "y":        154,
             "image_src": [
@@ -71,8 +66,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt",
+            "type":     "scui_cwf_json_type_img_batt",
             "x":        200,
             "y":        134,
             "bits":     0,
@@ -92,8 +86,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_day",
+            "type":     "scui_cwf_json_type_img_day",
             "x":        214,
             "y":        345,
             "bits":     0,
@@ -113,8 +106,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hour",
+            "type":     "scui_cwf_json_type_img_hour",
             "x":        254,
             "y":        207,
             "bits":     0,
@@ -133,8 +125,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_minute",
+            "type":     "scui_cwf_json_type_img_minute",
             "x":        350,
             "y":        207,
             "bits":     0,
@@ -154,8 +145,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hr",
+            "type":     "scui_cwf_json_type_img_hr",
             "x":        336,
             "y":        145,
             "bits":     0,
@@ -174,8 +164,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal",
+            "type":     "scui_cwf_json_type_img_kcal",
             "x":        330,
             "y":        328,
             "bits":     0,
@@ -194,8 +183,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step",
+            "type":     "scui_cwf_json_type_img_step",
             "x":        76,
             "y":        238,
             "bits":     0,
@@ -215,16 +203,14 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        242,
             "y":        134,
             "image_src": ["cwf_image_unit_char_batt_01_1bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_watch",
+            "type":     "scui_cwf_json_type_img_watch",
             "hx":        233,
             "hy":        233,
             "h_cy":      142,

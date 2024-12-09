@@ -21,26 +21,21 @@
     "annotation": "每一个显示类型都是列表中的一个小集合,layout至少有一个集合",
     "annotation": "被列举的字段不可省略,至少填一个默认值",
     
-    "scui_cwf_json_format": [
-        "scui_cwf_json_format_none",
-        "scui_cwf_json_format_palette4",
-        "scui_cwf_json_format_palette8",
-        "scui_cwf_json_format_bmp565",
-        "scui_cwf_json_format_bmp888",
-        "scui_cwf_json_format_bmp8565",
-        "scui_cwf_json_format_bmp8888",
-        "scui_cwf_json_format_num"
+    "scui_cwf_json_image_cf": [
+        "scui_cwf_json_image_cf_none",
+        "scui_cwf_json_image_cf_palette4",
+        "scui_cwf_json_image_cf_palette8",
+        "scui_cwf_json_image_cf_bmp565",
+        "scui_cwf_json_image_cf_bmp888",
+        "scui_cwf_json_image_cf_bmp8565",
+        "scui_cwf_json_image_cf_bmp8888",
+        "scui_cwf_json_image_cf_num"
     ],
     
     "scui_cwf_json_type": [
         {"key": "scui_cwf_json_type_none",                  "annotation": ""},
-        {"key": "scui_cwf_json_type_img",                   "annotation": "图片"},
-        {"key": "scui_cwf_json_type_txt",                   "annotation": "文本"},
-        {"key": "scui_cwf_json_type_num",                   "annotation": ""}
-    ],
-    "scui_cwf_json_type_img": [
-        {"key": "scui_cwf_json_type_img_none",              "annotation": ""},
         
+        {"key": "scui_cwf_json_type_img_s",                 "annotation": ""},
         {
             "key": "scui_cwf_json_type_img_preview",
             "annotation": "预览:不显示"
@@ -186,14 +181,11 @@
             "annotation": "(n)",
             "annotation": "x:坐标;y:坐标"
         },
+        {"key": "scui_cwf_json_type_img_e",                 "annotation": ""},
         
         
         
-        {"key": "scui_cwf_json_type_img_num",               "annotation": ""}
-    ],
-    "scui_cwf_json_type_txt": [
-        {"key": "scui_cwf_json_type_txt_none",              "annotation": ""},
-        
+        {"key": "scui_cwf_json_type_txt_s",                 "annotation": ""},
         {"key": "scui_cwf_json_type_txt_week",              "annotation": ""},
         {"key": "scui_cwf_json_type_txt_ampm",              "annotation": ""},
         {"key": "scui_cwf_json_type_txt_day",               "annotation": ""},
@@ -203,20 +195,20 @@
         {"key": "scui_cwf_json_type_txt_day_digit_mon",     "annotation": ""},
         {"key": "scui_cwf_json_type_txt_bat",               "annotation": ""},
         {"key": "scui_cwf_json_type_txt_bat_pct",           "annotation": ""},
+        {"key": "scui_cwf_json_type_txt_e",                 "annotation": ""},
         
-        {"key": "scui_cwf_json_type_txt_num",               "annotation": ""}
+        
+        
+        {"key": "scui_cwf_json_type_num",                   "annotation": ""}
     ],
     
     "layout" : [
         {
-            "type"      : "scui_cwf_json_type_img",
-            "type_sub"  : "cwf类型:scui_cwf_json_type_img字段",
-            
+            "type"      : "cwf类型:scui_cwf_json_type_img_字段",
             "image_src" : ["这里填图片的名字(只要前缀),字符串逗号隔开"]
         },
         {
-            "type"      : "scui_cwf_json_type_txt",
-            "type_sub"  : "cwf类型:scui_cwf_json_type_txt字段",
+            "type"      : "cwf类型:scui_cwf_json_type_txt_字段",
             
             "x"         : "原点坐标(也就是左上角坐标)",
             "y"         : "原点坐标(也就是左上角坐标)",

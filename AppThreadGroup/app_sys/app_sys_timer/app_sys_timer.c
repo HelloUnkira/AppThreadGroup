@@ -88,6 +88,7 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
                     app_sys_list_sll_insert(&app_sys_timer_list.sl_list, prev, &timer->sl_node);
                 app_sys_timer_list.number++;
                 status = false;
+                break;
             }
             prev = node;
         }

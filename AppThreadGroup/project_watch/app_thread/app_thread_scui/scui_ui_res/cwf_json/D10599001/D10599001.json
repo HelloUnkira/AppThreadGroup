@@ -2,29 +2,25 @@
     "cwf_id": "D10599001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_preview",
+            "type":     "scui_cwf_json_type_img_preview",
             "image_src": ["cwf_image_preview_01_1jpg"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_1jpg"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        80,
             "y":        186,
             "image_src": ["cwf_image_char_batt_02_01bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_month",
+            "type":     "scui_cwf_json_type_img_month",
             "x":        310,
             "y":        291,
             "image_src": [
@@ -43,8 +39,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_week",
+            "type":     "scui_cwf_json_type_img_week",
             "x":        340,
             "y":        177,
             "image_src": [
@@ -59,8 +54,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt_prog",
+            "type":     "scui_cwf_json_type_img_batt_prog",
             "x":        40,
             "y":        201,
             "image_src": [
@@ -79,8 +73,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal_prog",
+            "type":     "scui_cwf_json_type_img_kcal_prog",
             "x":        220,
             "y":        40,
             "image_src": [
@@ -98,8 +91,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step_prog",
+            "type":     "scui_cwf_json_type_img_step_prog",
             "x":        128,
             "y":        304,
             "image_src": [
@@ -118,8 +110,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt",
+            "type":     "scui_cwf_json_type_img_batt",
             "x":        56,
             "y":        150,
             "bits":     0,
@@ -138,8 +129,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_day",
+            "type":     "scui_cwf_json_type_img_day",
             "x":        384,
             "y":        292,
             "bits":     0,
@@ -158,8 +148,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hour",
+            "type":     "scui_cwf_json_type_img_hour",
             "x":        290,
             "y":        223,
             "bits":     0,
@@ -178,8 +167,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_minute",
+            "type":     "scui_cwf_json_type_img_minute",
             "x":        376,
             "y":        223,
             "bits":     0,
@@ -199,8 +187,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_hr",
+            "type":     "scui_cwf_json_type_img_hr",
             "x":        294,
             "y":        359,
             "bits":     0,
@@ -219,8 +206,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal",
+            "type":     "scui_cwf_json_type_img_kcal",
             "x":        192,
             "y":        158,
             "bits":     0,
@@ -239,8 +225,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step",
+            "type":     "scui_cwf_json_type_img_step",
             "x":        184,
             "y":        282,
             "bits":     0,
@@ -260,30 +245,26 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        104,
             "y":        150,
             "image_src": ["cwf_image_unit_char_batt_01_00bmp"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        220,
             "y":        134,
             "image_src": ["cwf_image_unit_char_kcal_02_01png"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        206,
             "y":        315,
             "image_src": ["cwf_image_unit_char_step_02_01png"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_watch",
+            "type":     "scui_cwf_json_type_img_watch",
             "hx":        233,
             "hy":        233,
             "h_cy":      125,

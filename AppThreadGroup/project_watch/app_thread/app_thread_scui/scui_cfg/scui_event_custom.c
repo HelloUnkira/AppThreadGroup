@@ -19,7 +19,8 @@
 void scui_event_custom(scui_event_t *event)
 {
     // 当前在待机场景时
-    bool standby = scui_window_active_curr() == SCUI_UI_SCENE_STANDBY;
+    scui_handle_t handle_top = SCUI_HANDLE_INVALID;
+    scui_window_stack_top(&handle_top);
     
     
     
@@ -28,26 +29,30 @@ void scui_event_custom(scui_event_t *event)
     case scui_event_ui_none_goto: {
         scui_widget_event_mask_over(event);
         
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t type = *cfg_type;
-        *cfg_type = scui_window_switch_none;
-        scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
-        *cfg_type = type;
+        if (handle_top != SCUI_UI_SCENE_NONE) {
+            scui_window_switch_type_t *cfg_type = NULL;
+            scui_window_switch_cfg_type(&cfg_type);
+            scui_window_switch_type_t type = *cfg_type;
+            *cfg_type = scui_window_switch_none;
+            scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
+            *cfg_type = type;
+        }
         break;
     }
     case scui_event_ui_home_goto: {
         scui_widget_event_mask_over(event);
         
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t type = *cfg_type;
-        *cfg_type = scui_window_switch_none;
-        scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
-        *cfg_type = type;
+        if (handle_top != SCUI_UI_SCENE_HOME) {
+            scui_window_switch_type_t *cfg_type = NULL;
+            scui_window_switch_cfg_type(&cfg_type);
+            scui_window_switch_type_t type = *cfg_type;
+            *cfg_type = scui_window_switch_none;
+            scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
+            *cfg_type = type;
+        }
         
         // 如果本来是在待机界面时
-        if (standby) {
+        if (handle_top == SCUI_UI_SCENE_STANDBY) {
             scui_window_switch_type_t *cfg_type = NULL;
             scui_window_switch_cfg_type(&cfg_type);
             scui_window_switch_type_t type = *cfg_type;
@@ -60,19 +65,21 @@ void scui_event_custom(scui_event_t *event)
     case scui_event_ui_stady_enter: {
         scui_widget_event_mask_over(event);
         
-        scui_window_switch_type_t *cfg_type = NULL;
-        scui_window_switch_cfg_type(&cfg_type);
-        scui_window_switch_type_t type = *cfg_type;
-        *cfg_type = scui_window_switch_none;
-        scui_window_stack_add(SCUI_UI_SCENE_STANDBY, false);
-        *cfg_type = type;
+        // 如果本来是在待机界面时
+        if (handle_top != SCUI_UI_SCENE_STANDBY) {
+            scui_window_switch_type_t *cfg_type = NULL;
+            scui_window_switch_cfg_type(&cfg_type);
+            scui_window_switch_type_t type = *cfg_type;
+            *cfg_type = scui_window_switch_none;
+            scui_window_stack_add(SCUI_UI_SCENE_STANDBY, false);
+            *cfg_type = type;
+        }
         break;
     }
     case scui_event_ui_stady_exit: {
         scui_widget_event_mask_over(event);
         
-        if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
-            
+        if (handle_top == SCUI_UI_SCENE_STANDBY) {
             scui_window_switch_type_t *cfg_type = NULL;
             scui_window_switch_cfg_type(&cfg_type);
             scui_window_switch_type_t type = *cfg_type;

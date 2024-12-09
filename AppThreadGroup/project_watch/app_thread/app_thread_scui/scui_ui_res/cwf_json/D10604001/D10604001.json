@@ -2,21 +2,18 @@
     "cwf_id": "D10604001",
     "layout": [
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_preview",
+            "type":     "scui_cwf_json_type_img_preview",
             "image_src": ["cwf_image_preview_01_1bmp"]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        0,
             "y":        0,
             "image_src": ["cwf_image_bg_01_00bmp"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_anim",
+            "type":     "scui_cwf_json_type_img_anim",
             "x":        66,
             "y":        51,
             "image_src": [
@@ -28,16 +25,14 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_simple",
+            "type":     "scui_cwf_json_type_img_simple",
             "x":        242,
             "y":        339,
             "image_src": ["cwf_image_char_unit_batt_01_00png"]
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt_prog",
+            "type":     "scui_cwf_json_type_img_batt_prog",
             "x":        188,
             "y":        292,
             "image_src": [
@@ -56,8 +51,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal_prog",
+            "type":     "scui_cwf_json_type_img_kcal_prog",
             "x":        82,
             "y":        187,
             "image_src": [
@@ -75,8 +69,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step_prog",
+            "type":     "scui_cwf_json_type_img_step_prog",
             "x":        292,
             "y":        187,
             "image_src": [
@@ -95,8 +88,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_kcal",
+            "type":     "scui_cwf_json_type_img_kcal",
             "x":        104,
             "y":        234,
             "bits":     0,
@@ -115,8 +107,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_step",
+            "type":     "scui_cwf_json_type_img_step",
             "x":        308,
             "y":        234,
             "bits":     0,
@@ -135,8 +126,7 @@
             ]
         },
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_batt",
+            "type":     "scui_cwf_json_type_img_batt",
             "x":        206,
             "y":        339,
             "bits":     0,
@@ -156,8 +146,7 @@
         },
         
         {
-            "type":     "scui_cwf_json_type_img",
-            "type_sub": "scui_cwf_json_type_img_watch",
+            "type":     "scui_cwf_json_type_img_watch",
             "hx":        233,
             "hy":        233,
             "h_cy":      130,
