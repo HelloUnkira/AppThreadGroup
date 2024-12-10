@@ -5,8 +5,8 @@
 
 typedef enum {
 	scui_cwf_json_image_cf_none = 0,
-	scui_cwf_json_image_cf_palette4,
-	scui_cwf_json_image_cf_palette8,
+	scui_cwf_json_image_cf_alpha4,
+	scui_cwf_json_image_cf_alpha8,
 	scui_cwf_json_image_cf_bmp565,
 	scui_cwf_json_image_cf_bmp888,
 	scui_cwf_json_image_cf_bmp8565,

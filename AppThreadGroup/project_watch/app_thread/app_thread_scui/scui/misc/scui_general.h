@@ -77,25 +77,26 @@ typedef struct {
     };
 } scui_color_t;
 #pragma pack(pop)
+
 /* color32通用协议色调: */
 #define SCUI_COLOR32_WHITE      (0xFFFFFFFF)
-#define SCUI_COLOR32_SILVER     (0xFFC0C0C0)
-#define SCUI_COLOR32_GRAY       (0xFF808080)
 #define SCUI_COLOR32_BLACK      (0xFF000000)
+#define SCUI_COLOR32_GRAY       (0xFF808080)
 #define SCUI_COLOR32_RED        (0xFFFF0000)
-#define SCUI_COLOR32_MAROON     (0xFF800000)
+#define SCUI_COLOR32_BLUE       (0xFF0000FF)
+#define SCUI_COLOR32_GREEN      (0xFF008000)
+#define SCUI_COLOR32_PURPLE     (0xFF800080)
 #define SCUI_COLOR32_YELLOW     (0xFFFFFF00)
+#define SCUI_COLOR32_ORANGE     (0xFFFFA500)
+#define SCUI_COLOR32_SILVER     (0xFFC0C0C0)
+#define SCUI_COLOR32_MAROON     (0xFF800000)
+#define SCUI_COLOR32_MAGENTA    (0xFFFF00FF)
 #define SCUI_COLOR32_OLIVE      (0xFF808000)
 #define SCUI_COLOR32_LIME       (0xFF00FF00)
-#define SCUI_COLOR32_GREEN      (0xFF008000)
 #define SCUI_COLOR32_CYAN       (0xFF00FFFF)
 #define SCUI_COLOR32_AQUA       (0xFF00FFFF)
 #define SCUI_COLOR32_TEAL       (0xFF008080)
-#define SCUI_COLOR32_BLUE       (0xFF0000FF)
 #define SCUI_COLOR32_NAVY       (0xFF000080)
-#define SCUI_COLOR32_MAGENTA    (0xFFFF00FF)
-#define SCUI_COLOR32_PURPLE     (0xFF800080)
-#define SCUI_COLOR32_ORANGE     (0xFFFFA500)
 
 /*@brief: 透明度枚举值
  *        设备透明度格式:
@@ -129,11 +130,12 @@ typedef enum {
  */
 typedef enum {
     scui_pixel_cf_def       = 0,
-    scui_pixel_cf_none      = 0,
     scui_pixel_cf_type_mask = 0xFF00,
     scui_pixel_cf_bits_mask = 0x00FF,
-    scui_pixel_cf_palette4  = 0x0100 + 1 * 8 / 2,   // palette
-    scui_pixel_cf_palette8  = 0x0100 + 1 * 8,       // palette
+    
+    scui_pixel_cf_none      = 0,
+    scui_pixel_cf_alpha4    = 0x0100 + 1 * 8 / 2,   // alpha
+    scui_pixel_cf_alpha8    = 0x0100 + 1 * 8,       // alpha
     scui_pixel_cf_bmp565    = 0x0200 + 2 * 8,       // bitmap
     scui_pixel_cf_bmp888    = 0x0200 + 3 * 8,       // bitmap
     scui_pixel_cf_bmp8565   = 0x0300 + 3 * 8,       // bitmap
@@ -211,19 +213,19 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha);
 void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha_1,
                          scui_pixel_cf_t cf_2, void *pixel_2, scui_alpha_t alpha_2);
 
-/*@brief 像素点生成灰度值
+/*@brief 像素点生成调色板值
  *@param cf      像素点格式
  *@param pixel   像素点
- *@param palette 灰度值
+ *@param palette 调色板值
  */
 void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette);
 
-/*@brief 计算调色板值
+/*@brief 计算灰度值
  *@param bitmap 位图
  *@param bpp_x  偏移值
- *@retval 调色板值
+ *@retval 灰度值
  */
-uint8_t scui_palette_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
+uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x);
 
 /*@brief 透明度混合
  *@param alpha1 透明度1

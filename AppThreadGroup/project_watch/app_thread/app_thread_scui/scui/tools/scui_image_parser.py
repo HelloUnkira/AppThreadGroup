@@ -15,7 +15,7 @@ scui_image_offset_name = 'SCUI_HANDLE_OFFSET_IMAGE'
 scui_image_offset_value = '0x2000 - 1'
 
 
-# 生成pixel p4(palette)
+# 生成pixel p4(grey)
 def scui_image_pixel_p4(r8_0, g8_0, b8_0, r8_1, g8_1, b8_1) -> int:
     rgb_0 = (r8_0 + g8_0 + b8_0) / 3
     rgb_1 = (r8_1 + g8_1 + b8_1) / 3
@@ -63,7 +63,7 @@ def scui_image_pixel_stream(image_raw, image_std) -> ():
     pixel_stream = []
     # 迭代每一个像素点
     if image_raw.mode == 'P':
-        scui_pixel_cf = 'scui_pixel_cf_palette4'
+        scui_pixel_cf = 'scui_pixel_cf_alpha4'
         for j in range(image_std.size[1]):
             for i in range(0, image_std.size[0], 2):
                 r8_0, r8_1 = pixel_matrix[i + 0, j][0], pixel_matrix[i + 1, j][0]

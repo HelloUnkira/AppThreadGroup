@@ -144,7 +144,7 @@ def scui_cwf_json_parser_image_info(image_path, c_file_list, c_data_offset):
             for line in file.readlines():
                 if re.search(r'\.format', line):
                     payload = line.split('=')[1].split(',')[0]
-                    if re.search('scui_pixel_cf_palette4', payload):
+                    if re.search('scui_pixel_cf_alpha4', payload):
                         scui_image_format = 1
                     if re.search('scui_pixel_cf_bmp565', payload):
                         scui_image_format = 3

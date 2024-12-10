@@ -259,10 +259,10 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
     SCUI_ASSERT(false);
 }
 
-/*@brief 像素点生成灰度值
+/*@brief 像素点生成调色板值
  *@param cf      像素点格式
  *@param pixel   像素点
- *@param palette 灰度值
+ *@param palette 调色板值
  */
 void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette)
 {
@@ -298,12 +298,12 @@ void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette)
     SCUI_ASSERT(false);
 }
 
-/*@brief 计算调色板值
+/*@brief 计算灰度值
  *@param bitmap 位图
  *@param bpp_x  偏移值
- *@retval 调色板值
+ *@retval 灰度值
  */
-uint8_t scui_palette_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
+uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
 {
     /* 只支持1,2,4,8的bpp, 在字库加载时检查 */
     SCUI_ASSERT(bpp * bpp_x < 8);
@@ -339,7 +339,7 @@ uint8_t scui_palette_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
  *@param alpha2 透明度2
  *@retval 混合后的透明度
  */
-scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
+static inline scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
 {
     return SCUI_DIV_0xFF(((uint16_t)alpha1 * (uint16_t)alpha2));
 }

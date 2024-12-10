@@ -1835,7 +1835,7 @@ const scui_image_t prj_image_src_00_3d_dotbmp = {
 	.pixel.height	 = 0x6,
 	.pixel.data_bin	 = 0x421ae2,
 	.pixel.size_bin	 = 0x29,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -7784,7 +7784,7 @@ const scui_image_t prj_image_src_03_activity_bar_01_barbmp = {
 	.pixel.height	 = 0x56,
 	.pixel.data_bin	 = 0x7b7ed7,
 	.pixel.size_bin	 = 0x55,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -7829,7 +7829,7 @@ const scui_image_t prj_image_src_03_activity_ring_big_max_02_bj_00bmp = {
 	.pixel.height	 = 0x2e,
 	.pixel.data_bin	 = 0x7ba165,
 	.pixel.size_bin	 = 0x12e,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -7838,7 +7838,7 @@ const scui_image_t prj_image_src_03_activity_ring_big_max_03_bj_01bmp = {
 	.pixel.height	 = 0x1ca,
 	.pixel.data_bin	 = 0x7ba293,
 	.pixel.size_bin	 = 0x12ea,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -9368,7 +9368,7 @@ const scui_image_t prj_image_src_09_timer_02_dotbmp = {
 	.pixel.height	 = 0x10,
 	.pixel.data_bin	 = 0x8dc98f,
 	.pixel.size_bin	 = 0x6e,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -9377,7 +9377,7 @@ const scui_image_t prj_image_src_09_timer_03_ringbmp = {
 	.pixel.height	 = 0x1d2,
 	.pixel.data_bin	 = 0x8dc9fd,
 	.pixel.size_bin	 = 0x14b0,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14489,7 +14489,7 @@ const scui_image_t prj_image_src_10_sport_04_in_motion_unlock_02_dotbmp = {
 	.pixel.height	 = 0xc,
 	.pixel.data_bin	 = 0xa63386,
 	.pixel.size_bin	 = 0x50,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14498,7 +14498,7 @@ const scui_image_t prj_image_src_10_sport_04_in_motion_unlock_03_ringbmp = {
 	.pixel.height	 = 0xc6,
 	.pixel.data_bin	 = 0xa633d6,
 	.pixel.size_bin	 = 0x706,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14507,7 +14507,7 @@ const scui_image_t prj_image_src_10_sport_05_paused_01_dotbmp = {
 	.pixel.height	 = 0x8,
 	.pixel.data_bin	 = 0xa63adc,
 	.pixel.size_bin	 = 0x37,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14543,7 +14543,7 @@ const scui_image_t prj_image_src_10_sport_05_paused_05_ringbmp = {
 	.pixel.height	 = 0x7a,
 	.pixel.data_bin	 = 0xa64739,
 	.pixel.size_bin	 = 0x49b,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14624,7 +14624,7 @@ const scui_image_t prj_image_src_10_sport_06_end_bar_chang_01_barbmp = {
 	.pixel.height	 = 0xa,
 	.pixel.data_bin	 = 0xa6ac93,
 	.pixel.size_bin	 = 0x55,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14633,7 +14633,7 @@ const scui_image_t prj_image_src_10_sport_06_end_bar_chang_02_bar_00bmp = {
 	.pixel.height	 = 0xa,
 	.pixel.data_bin	 = 0xa6ace8,
 	.pixel.size_bin	 = 0x34,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -14642,7 +14642,7 @@ const scui_image_t prj_image_src_10_sport_06_end_bar_chang_03_bar_01bmp = {
 	.pixel.height	 = 0xa,
 	.pixel.data_bin	 = 0xa6ad1c,
 	.pixel.size_bin	 = 0x35,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -16280,7 +16280,7 @@ const scui_image_t prj_image_src_19_widget_activity_04_dotbmp = {
 	.pixel.height	 = 0x16,
 	.pixel.data_bin	 = 0xb0ea1d,
 	.pixel.size_bin	 = 0x91,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -16289,7 +16289,7 @@ const scui_image_t prj_image_src_19_widget_activity_05_ringbmp = {
 	.pixel.height	 = 0x86,
 	.pixel.data_bin	 = 0xb0eaae,
 	.pixel.size_bin	 = 0x593,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -16856,7 +16856,7 @@ const scui_image_t prj_image_src_20_control_center_battery_02_dotbmp = {
 	.pixel.height	 = 0xe,
 	.pixel.data_bin	 = 0xb1be84,
 	.pixel.size_bin	 = 0x62,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -16865,7 +16865,7 @@ const scui_image_t prj_image_src_20_control_center_battery_03_ringbmp = {
 	.pixel.height	 = 0x7e,
 	.pixel.data_bin	 = 0xb1bee6,
 	.pixel.size_bin	 = 0x4ab,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -17738,7 +17738,7 @@ const scui_image_t prj_image_src_23_call_volume_01_barbmp = {
 	.pixel.height	 = 0x8,
 	.pixel.data_bin	 = 0xb3b267,
 	.pixel.size_bin	 = 0x49,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -17783,7 +17783,7 @@ const scui_image_t prj_image_src_24_Charge_02_dotbmp = {
 	.pixel.height	 = 0x20,
 	.pixel.data_bin	 = 0xb3b845,
 	.pixel.size_bin	 = 0xc9,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -17801,7 +17801,7 @@ const scui_image_t prj_image_src_24_Charge_04_ringbmp = {
 	.pixel.height	 = 0x1ce,
 	.pixel.data_bin	 = 0xb3c46a,
 	.pixel.size_bin	 = 0x14f3,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -17963,7 +17963,7 @@ const scui_image_t prj_image_src_25_music_sound_02_bar_01bmp = {
 	.pixel.height	 = 0x8,
 	.pixel.data_bin	 = 0xb68628,
 	.pixel.size_bin	 = 0x49,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -18638,7 +18638,7 @@ const scui_image_t prj_image_src_30_settings_03_bright_sound_theme_dnd_02_bar_2b
 	.pixel.height	 = 0xc,
 	.pixel.data_bin	 = 0xbcf537,
 	.pixel.size_bin	 = 0x67,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -21599,7 +21599,7 @@ const scui_image_t prj_image_src_repeat_03_barbmp = {
 	.pixel.height	 = 0x98,
 	.pixel.data_bin	 = 0xce9758,
 	.pixel.size_bin	 = 0x30,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -21608,7 +21608,7 @@ const scui_image_t prj_image_src_repeat_04_barbmp = {
 	.pixel.height	 = 0x90,
 	.pixel.data_bin	 = 0xce9788,
 	.pixel.size_bin	 = 0x4c,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -21617,7 +21617,7 @@ const scui_image_t prj_image_src_repeat_05_dotbmp = {
 	.pixel.height	 = 0x6,
 	.pixel.data_bin	 = 0xce97d4,
 	.pixel.size_bin	 = 0x29,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -21671,7 +21671,7 @@ const scui_image_t prj_image_src_repeat_arrow_06_backbmp = {
 	.pixel.height	 = 0x1b,
 	.pixel.data_bin	 = 0xce9bad,
 	.pixel.size_bin	 = 0x62,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -22760,7 +22760,7 @@ const scui_image_t prj_image_src_repeat_slider_02_dotbmp = {
 	.pixel.height	 = 0xc,
 	.pixel.data_bin	 = 0xd079bf,
 	.pixel.size_bin	 = 0x50,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 
@@ -22769,7 +22769,7 @@ const scui_image_t prj_image_src_repeat_slider_03_ringbmp = {
 	.pixel.height	 = 0x1ce,
 	.pixel.data_bin	 = 0xd07a0f,
 	.pixel.size_bin	 = 0x1469,
-	.format			 = scui_pixel_cf_palette4,
+	.format			 = scui_pixel_cf_alpha4,
 	.type			 = scui_image_type_lz4,
 };
 

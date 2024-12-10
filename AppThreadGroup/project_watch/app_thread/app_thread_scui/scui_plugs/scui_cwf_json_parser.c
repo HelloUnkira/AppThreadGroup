@@ -179,8 +179,8 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         uint32_t data   = scui_cwf_json_u32(&image_info[18 * idx + 2 + 4 * 3]);
         
         switch (format) {
-        case scui_cwf_json_image_cf_palette4: parser->image_src[idx].format = scui_pixel_cf_palette4; break;
-        case scui_cwf_json_image_cf_palette8: parser->image_src[idx].format = scui_pixel_cf_palette8; break;
+        case scui_cwf_json_image_cf_alpha4: parser->image_src[idx].format = scui_pixel_cf_alpha4; break;
+        case scui_cwf_json_image_cf_alpha8: parser->image_src[idx].format = scui_pixel_cf_alpha8; break;
         case scui_cwf_json_image_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
         case scui_cwf_json_image_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
         case scui_cwf_json_image_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;
@@ -338,8 +338,8 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             uint32_t data   = scui_cwf_json_u32(&image_info[18 * 0 + 2 + 4 * 3]);
             
             switch (format) {
-            case scui_cwf_json_image_cf_palette4: image_src->format = scui_pixel_cf_palette4; break;
-            case scui_cwf_json_image_cf_palette8: image_src->format = scui_pixel_cf_palette8; break;
+            case scui_cwf_json_image_cf_alpha4: image_src->format = scui_pixel_cf_alpha4; break;
+            case scui_cwf_json_image_cf_alpha8: image_src->format = scui_pixel_cf_alpha8; break;
             case scui_cwf_json_image_cf_bmp565:   image_src->format = scui_pixel_cf_bmp565;   break;
             case scui_cwf_json_image_cf_bmp888:   image_src->format = scui_pixel_cf_bmp888;   break;
             case scui_cwf_json_image_cf_bmp8565:  image_src->format = scui_pixel_cf_bmp8565;  break;
