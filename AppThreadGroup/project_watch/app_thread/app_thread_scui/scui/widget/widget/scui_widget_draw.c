@@ -56,8 +56,10 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_str
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
-    SCUI_ASSERT(widget->type == scui_widget_type_string);
+    
     /* 当前本接口作为控件专用绘制接口: */
+    SCUI_ASSERT(widget->type == scui_widget_type_string ||
+                widget->type == scui_widget_type_custom);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
@@ -71,11 +73,7 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_str
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         /* 子剪切域要相对同步偏移 */
-        scui_area_t string_clip = {
-            .w = widget->clip.w,
-            .h = widget->clip.h,
-        };
-        scui_area_t  src_clip   = string_clip;
+        scui_area_t  src_clip   = args->clip;
         scui_point_t src_offset = {
             .x = dst_clip.x - target->x,
             .y = dst_clip.y - target->y,
@@ -83,10 +81,10 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_str
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         // src_clip使用原始偏移坐标,非调整后的偏移坐标
-        src_clip.x = -(string_clip.w - src_clip.w);
-        src_clip.y = -(string_clip.h - src_clip.h);
-        src_clip.w =  (string_clip.w);
-        src_clip.h =  (string_clip.h);
+        src_clip.x = -(args->clip.w - src_clip.w);
+        src_clip.y = -(args->clip.h - src_clip.h);
+        src_clip.w =  (args->clip.w);
+        src_clip.h =  (args->clip.h);
         
         scui_draw_dsc_t draw_dsc = {
             .string.dst_surface = widget->surface,

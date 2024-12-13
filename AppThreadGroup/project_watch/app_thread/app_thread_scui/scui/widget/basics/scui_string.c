@@ -593,12 +593,12 @@ void scui_string_event(scui_event_t *event)
         }
         break;
     }
-    case scui_event_size_adjust:{
+    case scui_event_adjust_size:{
         string->args.update = true;
         scui_widget_draw(handle, NULL, false);
         break;
     }
-    case scui_event_font_change: {
+    case scui_event_change_font: {
         if (!scui_widget_event_check_execute(event))
              break;
         

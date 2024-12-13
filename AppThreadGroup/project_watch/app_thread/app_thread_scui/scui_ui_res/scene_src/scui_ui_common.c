@@ -432,12 +432,16 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     switch (event->object) {
     case SCUI_UI_SCENE_HOME:
         window_cfg.sibling[2] = SCUI_UI_SCENE_6;
+        window_cfg.sibling[3] = SCUI_UI_SCENE_ACTIVITY;
+        break;
+    case SCUI_UI_SCENE_ACTIVITY:
+        window_cfg.sibling[2] = SCUI_UI_SCENE_HOME;
         window_cfg.sibling[3] = SCUI_UI_SCENE_1;
         break;
     case SCUI_UI_SCENE_1:
         window_cfg.sibling[0] = SCUI_UI_SCENE_TEST;
         window_cfg.sibling[1] = SCUI_UI_SCENE_CUBE;
-        window_cfg.sibling[2] = SCUI_UI_SCENE_HOME;
+        window_cfg.sibling[2] = SCUI_UI_SCENE_ACTIVITY;
         window_cfg.sibling[3] = SCUI_UI_SCENE_2;
         break;
     case SCUI_UI_SCENE_2:

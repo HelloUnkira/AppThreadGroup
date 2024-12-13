@@ -340,6 +340,54 @@ static bool scui_ui_func_local_get_temp_unit(void)
 
 /*@brief scui ui数据交互回调
  */
+static uint32_t scui_ui_func_local_get_kcal_day7(uint32_t day7[7])
+{
+    for (uint8_t idx = 0; idx < 7; idx++)
+        day7[idx] = scui_ui_func_local_get_kcal_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_kcal_day7_24(uint32_t day7_idx, uint32_t day7_24[24])
+{
+    for (uint8_t idx = 0; idx < 24; idx++)
+        day7_24[idx] = scui_ui_func_local_get_kcal_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_step_day7(uint32_t day7[7])
+{
+    for (uint8_t idx = 0; idx < 7; idx++)
+        day7[idx] = scui_ui_func_local_get_step_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_step_day7_24(uint32_t day7_idx, uint32_t day7_24[24])
+{
+    for (uint8_t idx = 0; idx < 24; idx++)
+        day7_24[idx] = scui_ui_func_local_get_step_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_dist_day7(uint32_t day7[7])
+{
+    for (uint8_t idx = 0; idx < 7; idx++)
+        day7[idx] = scui_ui_func_local_get_dist_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint32_t scui_ui_func_local_get_dist_day7_24(uint32_t day7_idx, uint32_t day7_24[24])
+{
+    for (uint8_t idx = 0; idx < 24; idx++)
+        day7_24[idx] = scui_ui_func_local_get_dist_cur();
+}
+
+/*@brief scui ui数据交互回调
+ */
 static bool scui_ui_func_local_alarm_none(void)
 {
     return false;
@@ -569,6 +617,13 @@ scui_presenter_t scui_presenter = {
     .get_temp_max       = scui_ui_func_local_get_temp_max,
     .get_temp_cur       = scui_ui_func_local_get_temp_cur,
     .get_temp_unit      = scui_ui_func_local_get_temp_unit,
+    /* history data */
+    .get_kcal_day7      = scui_ui_func_local_get_kcal_day7,
+    .get_kcal_day7_24   = scui_ui_func_local_get_kcal_day7_24,
+    .get_step_day7      = scui_ui_func_local_get_step_day7,
+    .get_step_day7_24   = scui_ui_func_local_get_step_day7_24,
+    .get_dist_day7      = scui_ui_func_local_get_dist_day7,
+    .get_dist_day7_24   = scui_ui_func_local_get_dist_day7_24,
     /* dev data: */
     .alarm_none             = scui_ui_func_local_alarm_none,
     .alarm_near_state       = scui_ui_func_local_alarm_near_state,

@@ -496,7 +496,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     /*流程派发 ************************************************************* */
     /*************************************************************************/
-    if (event->type == scui_event_font_change) {
+    if (event->type == scui_event_change_font) {
         // 控件事件不分三步调度
         if (!scui_widget_event_check_execute(event))
              return;
@@ -523,19 +523,20 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     }
     /*************************************************************************/
-    /*滚动事件:单次派发 **************************************************** */
+    /*其余事件:单次派发 **************************************************** */
     /*************************************************************************/
-    if (event->type == scui_event_widget_scroll_s ||
-        event->type == scui_event_widget_scroll_e ||
-        event->type == scui_event_widget_scroll_c) {
+    if (event->type == scui_event_layout ||
+        event->type == scui_event_adjust_size) {
         scui_widget_event_mask_over(event);
         scui_widget_event_proc(event);
         return;
     }
     /*************************************************************************/
-    /*其余事件:单次派发 **************************************************** */
+    /*滚动事件:单次派发 **************************************************** */
     /*************************************************************************/
-    if (event->type == scui_event_size_adjust) {
+    if (event->type == scui_event_widget_scroll_s ||
+        event->type == scui_event_widget_scroll_e ||
+        event->type == scui_event_widget_scroll_c) {
         scui_widget_event_mask_over(event);
         scui_widget_event_proc(event);
         return;
@@ -631,30 +632,41 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
     
     switch (state) {
     case 0x00:
-        if (scroll_flag.lock)
-            return scroll_flag.key == *key;
-        
-        if (scroll_flag.key == SCUI_HANDLE_INVALID) {
-            scroll_flag.key  = scui_handle_find();
-            scui_handle_set(scroll_flag.key, &scroll_flag);
+        if (scroll_flag.lock && scroll_flag.key == *key)
+            return true;
+        if (scroll_flag.lock && scroll_flag.key != *key) {
+            if (*key != SCUI_HANDLE_INVALID) {
+                scui_handle_set(*key, NULL);
+                *key  = SCUI_HANDLE_INVALID;
+            }
+            return false;
         }
+        if (scroll_flag.key != SCUI_HANDLE_INVALID) {
+            scui_handle_set(scroll_flag.key, NULL);
+            scroll_flag.key  = SCUI_HANDLE_INVALID;
+        }
+        scroll_flag.key  = scui_handle_find();
         scroll_flag.lock = true;
         *key = scroll_flag.key;
         return true;
     case 0x01:
         if (scroll_flag.lock && scroll_flag.key == *key) {
-            scui_handle_set(scroll_flag.key, NULL);
+            if (*key != SCUI_HANDLE_INVALID) {
+                scui_handle_set(*key, NULL);
+                *key  = SCUI_HANDLE_INVALID;
+            }
             scroll_flag.key  = SCUI_HANDLE_INVALID;
             scroll_flag.lock = false;
-            *key = SCUI_HANDLE_INVALID;
-             return true;
+            return true;
+        }
+        if (*key != SCUI_HANDLE_INVALID) {
+            scui_handle_set(*key, NULL);
+            *key  = SCUI_HANDLE_INVALID;
         }
         return false;
     case 0x02:
         if (scroll_flag.lock && scroll_flag.key == *key)
             return false;
-        
-        *key = scroll_flag.key;
         return scroll_flag.lock;
     default:
         SCUI_LOG_ERROR("unknown state");

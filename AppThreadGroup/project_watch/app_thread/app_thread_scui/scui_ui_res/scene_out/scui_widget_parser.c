@@ -85,6 +85,33 @@ static void scui_ui_scene_popup_event_proc(scui_event_t *event)
 static void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
 {
 }
+static void scui_ui_scene_activity_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_notify_event(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
+{
+}
 static void scui_ui_scene_home_event_proc(scui_event_t *event)
 {
 }
@@ -227,6 +254,15 @@ extern void scui_ui_scene_waterfall_bar_arc_event(scui_event_t *event);
 extern void scui_ui_scene_monitor_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_event_proc(scui_event_t *event);
 extern void scui_ui_scene_popup_bg_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_notify_event(scui_event_t *event);
+extern void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event);
+extern void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event);
 extern void scui_ui_scene_home_event_proc(scui_event_t *event);
 extern void scui_ui_scene_mini_card_event_proc(scui_event_t *event);
 extern void scui_ui_scene_mini_card_scroll_notify_event(scui_event_t *event);
@@ -662,6 +698,114 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 	.widget.parent                  = SCUI_UI_SCENE_POPUP_SCALE,
 	.widget.event_cb                = scui_ui_scene_popup_bg_event_proc,
 	.widget.child_num               = 5,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY,
+	.widget.event_cb                = scui_ui_scene_activity_event_proc,
+	.widget.child_num               = 2,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
+static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL = {
+	.widget.type                    = scui_widget_type_scroll,
+	.widget.style.indev_enc         = true,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY,
+	.widget.child_num               = 7,
+	.notify_cb                      = scui_ui_scene_activity_scroll_notify_event,
+	.pos                            = scui_opt_pos_c,
+	.dir                            = scui_opt_dir_ver,
+	.route_enc                      = SCUI_DRV_HOR_RES * 2 / 3,
+	.route_key                      = SCUI_DRV_HOR_RES * 2 / 3,
+	.keyid_fdir                     = SCUI_WIDGET_SCROLL_KEY_FDIR,
+	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
+	.space                          = 10,
+	.springback                     = 70,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.style.trans             = true,
+	.widget.style.sched_anima       = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_BAR_ARC,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY,
+	.widget.event_cb                = scui_ui_scene_activity_bar_arc_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3 = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ring_big_3_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 90,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ditail_title_event_proc,
+	.widget.child_num               = 1,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 155,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ditail_sum_event_proc,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 250,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ditail_kcal_event_proc,
+	.widget.child_num               = 1,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 250,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ditail_step_event_proc,
+	.widget.child_num               = 1,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 250,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	.widget.event_cb                = scui_ui_scene_activity_scroll_ditail_dist_event_proc,
+	.widget.child_num               = 1,
+};
+
+static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK = {
+	.widget.type                    = scui_widget_type_custom,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = 95,
+	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK,
+	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
@@ -1169,7 +1313,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[68] = {
+const void * scui_widget_parser_table[78] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1199,6 +1343,16 @@ const void * scui_widget_parser_table[68] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_SCALE,
 	(void *)&scui_widget_SCUI_UI_SCENE_POPUP_BG,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST,
+	(void *)&scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK,
 	(void *)&scui_widget_SCUI_UI_SCENE_HOME,
 	(void *)&scui_widget_SCUI_UI_SCENE_MINI_CARD,
 	(void *)&scui_widget_SCUI_UI_SCENE_MINI_CARD_SCROLL,

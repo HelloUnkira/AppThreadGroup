@@ -184,7 +184,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         btn_clip.w -= btn_scale_x;
         scui_custom_draw_rect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
         
-        scui_image_t img_inst  = {
+        scui_image_t img_inst = {
             .type           = scui_image_type_mem,
             .format         = scui_widget_surface(custom)->format,
             .pixel.width    = src_clip.w,

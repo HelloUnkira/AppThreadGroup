@@ -291,9 +291,10 @@ scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t chi
  */
 void scui_widget_clip_check(scui_handle_t handle, bool recurse)
 {
-    SCUI_LOG_WARN("widget: %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
     SCUI_ASSERT(widget != NULL);
+    
+    SCUI_LOG_WARN("widget: %u, parent: %u", handle, widget->parent);
     
     SCUI_LOG_WARN("widget_clip:<%d, %d, %d, %d>",
                   widget->clip.x, widget->clip.y,

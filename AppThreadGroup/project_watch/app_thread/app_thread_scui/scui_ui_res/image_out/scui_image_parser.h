@@ -2408,6 +2408,7 @@ typedef enum {
 	scui_image_prj_image_src_repeat_03_barbmp,
 	scui_image_prj_image_src_repeat_04_barbmp,
 	scui_image_prj_image_src_repeat_05_dotbmp,
+	scui_image_prj_image_src_repeat_06_dotbmp,
 	scui_image_prj_image_src_repeat_arrow_01_backbmp,
 	scui_image_prj_image_src_repeat_arrow_02_underbmp,
 	scui_image_prj_image_src_repeat_arrow_03_upbmp,
@@ -2560,7 +2561,7 @@ typedef enum {
 	scui_image_prj_image_src_watchface_preview_01_00jpg,
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[2552];
+extern const void * scui_image_parser_table[2553];
 
 //<     w,     h,size_raw,size_mem,com_pct> handle
 //< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_image_src_00_3d_AnalogClock_0jpg
@@ -4965,6 +4966,7 @@ extern const void * scui_image_parser_table[2552];
 //<   0x6,  0x98,  0x30, 0x1c8,0.11> scui_image_prj_image_src_repeat_03_barbmp
 //<  0x10,  0x90,  0x4c, 0x480,0.07> scui_image_prj_image_src_repeat_04_barbmp
 //<   0x6,   0x6,  0x29,  0x12,2.28> scui_image_prj_image_src_repeat_05_dotbmp
+//<   0xc,   0xc,  0x50,  0x48,1.11> scui_image_prj_image_src_repeat_06_dotbmp
 //<  0x10,  0x1c,  0x7e, 0x380,0.14> scui_image_prj_image_src_repeat_arrow_01_backbmp
 //<  0x22,  0x14,  0xfc, 0x550,0.19> scui_image_prj_image_src_repeat_arrow_02_underbmp
 //<  0x22,  0x14,  0xe9, 0x550,0.17> scui_image_prj_image_src_repeat_arrow_03_upbmp

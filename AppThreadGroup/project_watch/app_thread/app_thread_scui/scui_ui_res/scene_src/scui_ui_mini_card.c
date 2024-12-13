@@ -223,9 +223,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 image_digit_step_list[idx] = image_digit_step + char_digit_step[idx] - '0';
             for (scui_coord_t idx = 0; idx < digit_dist_num; idx++)
                 image_digit_dist_list[idx] = image_digit_dist + char_digit_dist[idx] - '0';
-            scui_custom_draw_text(event, &clip_digit_kcal, image_digit_kcal_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
-            scui_custom_draw_text(event, &clip_digit_step, image_digit_step_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
-            scui_custom_draw_text(event, &clip_digit_dist, image_digit_dist_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_kcal, image_digit_kcal_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_step, image_digit_step_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_dist, image_digit_dist_list, (scui_color_t){.filter = true,}, 3, digit_kcal_num, 0);
             
             break;
         }
@@ -645,7 +645,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 if (char_digit[idx] == '.')
                     image_digit_list[idx] = image_digit - 2;
             }
-            scui_custom_draw_text(event, &clip_digit, image_digit_list, (scui_color_t){.filter = true,}, 3, digit_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit, image_digit_list, (scui_color_t){.filter = true,}, 3, digit_num, 0);
             
             scui_handle_t image = scui_image_prj_image_src_19_widget_02_pausedbmp;
             scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;

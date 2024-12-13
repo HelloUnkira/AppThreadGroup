@@ -205,10 +205,11 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     scui_widget_surface_refr(widget->myself, true);
     
     scui_event_t event = {
-        .object     = widget->myself,
-        .type       = scui_event_size_adjust,
+        .object = widget->myself,
+        .type   = scui_event_adjust_size,
+        .absorb = scui_event_absorb_none,
     };
-    scui_widget_event_proc(&event);
+    scui_event_notify(&event);
 }
 
 /*@brief 控件移动子控件

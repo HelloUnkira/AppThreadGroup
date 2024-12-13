@@ -22,7 +22,7 @@ void scui_font_name_set(scui_handle_t name)
     
     scui_event_t event = {
         .object = SCUI_HANDLE_SYSTEM,
-        .type   = scui_event_font_change,
+        .type   = scui_event_change_font,
         .absorb = scui_event_absorb_none,
     };
     scui_event_notify(&event);

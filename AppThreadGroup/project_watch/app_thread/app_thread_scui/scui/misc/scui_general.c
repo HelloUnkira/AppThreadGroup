@@ -339,7 +339,7 @@ uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
  *@param alpha2 透明度2
  *@retval 混合后的透明度
  */
-static inline scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
+scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
 {
     return SCUI_DIV_0xFF(((uint16_t)alpha1 * (uint16_t)alpha2));
 }

@@ -79,10 +79,10 @@ void scui_custom_draw_ring_edge(scui_event_t *event,  scui_point_t *center,
  *@param num   图像数量
  *@param way   方向(0:水平方向;1:垂直方向)
  */
-void scui_custom_draw_text(scui_event_t  *event, scui_area_t *clip,
-                           scui_handle_t *image, scui_color_t color,
-                           scui_coord_t   span,  scui_coord_t num,
-                           bool way);
+void scui_custom_draw_image_text(scui_event_t  *event, scui_area_t *clip,
+                                 scui_handle_t *image, scui_color_t color,
+                                 scui_coord_t   span,  scui_coord_t num,
+                                 bool way);
 
 /*@brief 按钮控件绘制(四个角使用图像绘制)
  *       一般主要用于绘制纯色圆角矩形

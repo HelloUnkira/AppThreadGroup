@@ -45,6 +45,13 @@ typedef struct {
     int16_t  (*get_temp_max)(void);
     int16_t  (*get_temp_cur)(void);
     bool     (*get_temp_unit)(void);
+    /* history data */
+    uint32_t (*get_kcal_day7)(uint32_t day7[7]);
+    uint32_t (*get_kcal_day7_24)(uint32_t day7_idx, uint32_t day7_24[24]);
+    uint32_t (*get_step_day7)(uint32_t day7[7]);
+    uint32_t (*get_step_day7_24)(uint32_t day7_idx, uint32_t day7_24[24]);
+    uint32_t (*get_dist_day7)(uint32_t day7[7]);
+    uint32_t (*get_dist_day7_24)(uint32_t day7_idx, uint32_t day7_24[24]);
     /* dev data: */
     bool     (*alarm_none)(void);
     bool     (*alarm_near_state)(void);

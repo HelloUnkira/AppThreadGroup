@@ -341,7 +341,13 @@ void scui_scroll_layout(scui_handle_t handle)
     SCUI_ASSERT(widget != NULL);
     
     scroll->layout = true;
-    scui_widget_draw(handle, NULL, false);
+    
+    scui_event_t event = {
+        .object = widget->myself,
+        .type   = scui_event_layout,
+        .absorb = scui_event_absorb_none,
+    };
+    scui_event_notify(&event);
 }
 
 /*@brief 滚动控件翻页数更新
@@ -1234,14 +1240,14 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         break;
     }
     case 0xAA: {
-            if (scroll->notify_cb != NULL) {
-                scui_event_t event = {
-                    .object = widget->myself,
-                    .type   = scui_event_widget_scroll_layout,
-                };
-                scroll->notify_cb(&event);
-            }
-            break;
+        if (scroll->notify_cb != NULL) {
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_widget_scroll_layout,
+            };
+            scroll->notify_cb(&event);
+        }
+        break;
     }
     default:
         SCUI_LOG_ERROR("unknown type: %x", type);
@@ -1265,18 +1271,13 @@ void scui_scroll_event(scui_event_t *event)
     case scui_event_hide:
     case scui_event_focus_get:
     case scui_event_focus_lost:
-        if (scui_widget_event_check_prepare(event))
-            scroll->layout = true;
+        scroll->layout = true;
         break;
-    case scui_event_draw: {
-        if (scui_widget_event_check_prepare(event)) {
-            bool layout = scroll->layout;
-            scui_scroll_layout_update(event);
-            
-            if (!layout)
-                 break;
-            scui_scroll_event_notify(event, 0xAA);
-        }
+    case scui_event_layout: {
+        scui_scroll_layout_update(event);
+        scui_widget_event_mask_over(event);
+        
+        scui_scroll_event_notify(event, 0xAA);
         break;
     }
     case scui_event_ptr_down:

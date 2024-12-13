@@ -202,29 +202,34 @@ void scui_chart_event(scui_event_t *event)
                 .w = scui_image_w(image),
                 .h = scui_image_h(image) / 2,
             };
-            scui_coord_t histogram_h = height - scui_image_h(image);
             scui_color_t color_edge  = color;
+            color_edge.color_s.full  = color.color.full;
+            color_edge.color_e.full  = color.color.full;
             color_edge.color_f.full  = 0xFF000000;
             color_edge.filter        = true;
             
             for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
-                scui_coord_t offset_1y = scui_map(vlist_min[idx], value_min, value_max, histogram_h, 0);
-                scui_coord_t offset_2y = scui_map(vlist_max[idx], value_min, value_max, histogram_h, 0);
-                scui_point_t offset_1  = {.x = offset.x, .y = offset.y + offset_1y};
-                scui_point_t offset_2  = {.x = offset.x, .y = offset.y + offset_2y - src_clip.h};
+                scui_coord_t offset_1y = scui_map(vlist_min[idx], value_min, value_max, height, 0);
+                scui_coord_t offset_2y = scui_map(vlist_max[idx], value_min, value_max, height, 0);
+                
+                // 值为0, 不进行绘制
+                if (offset_1y - offset_2y < src_clip.h * 2) {
+                    offset.x += scui_image_w(image) + space;
+                    continue;
+                }
                 
                 /* 绘制edge */
                 src_clip.y = 0;
                 dst_clip = chart->widget.clip;
                 dst_clip.x += offset.x;
-                dst_clip.y += offset.y + offset_2y - src_clip.h;
+                dst_clip.y += offset.y + offset_2y;
                 scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color_edge);
                 
                 /* 绘制edge */
                 src_clip.y = src_clip.h;
                 dst_clip = chart->widget.clip;
                 dst_clip.x += offset.x;
-                dst_clip.y += offset.y + offset_1y;
+                dst_clip.y += offset.y + offset_1y - src_clip.h;
                 scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color_edge);
                 
                 /* 填充这块区域 */
@@ -232,12 +237,12 @@ void scui_chart_event(scui_event_t *event)
                 scui_area_t area = {
                     .x = dst_clip.x + offset.x,
                     .w = src_clip.w,
-                    .y = dst_clip.y + offset_2.y + src_clip.h,
-                    .h = offset_1.y - offset_2.y - src_clip.h,
+                    .y = dst_clip.y + offset.y + offset_2y + src_clip.h,
+                    .h = offset_1y - offset_2y - src_clip.h * 2,
                 };
                 scui_widget_draw_color(handle, &area, color);
                 
-                offset.x += scui_image_h(image) + space;
+                offset.x += scui_image_w(image) + space;
             }
             
             break;
