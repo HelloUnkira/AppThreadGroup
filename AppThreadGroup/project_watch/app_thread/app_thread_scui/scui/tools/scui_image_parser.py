@@ -126,9 +126,12 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     offset_value = scui_image_offset_value
     scui_image_parser_h.write('typedef enum {\n')
     scui_image_parser_h.write('\t%s = %s,\n' % (offset_name, offset_value))
+    scui_image_num = 0
     for file in file_path_list:
+        scui_image_num += 1
         scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
-        scui_image_parser_h.write('\tscui_image_%s,\n' % scui_image_tag)
+        scui_image_ofs = hex(eval(offset_value) + scui_image_num)
+        scui_image_parser_h.write('\tscui_image_%s, // %s\n' % (scui_image_tag, scui_image_ofs))
     scui_image_parser_h.write('} scui_image_parser_handle_t;\n\n')
     scui_image_parser_h.write('extern const void * scui_image_parser_table[%d];\n\n' % len(file_path_list))
     scui_image_parser_h.write('//<%6s,%6s,%6s,%6s,%2s> handle\n' % ('w', 'h', 'size_raw', 'size_mem', 'com_pct'))

@@ -221,7 +221,7 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
             
             scui_event_t event_ui = {
                 .object = SCUI_HANDLE_SYSTEM,
-                .type   = scui_event_ui_stady_enter,
+                .type   = scui_event_ui_standy_enter,
             };
             scui_event_notify(&event_ui);
             

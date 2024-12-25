@@ -9,14 +9,20 @@ typedef enum {
     /* 自定义事件<s> */
     scui_event_ui_none_goto,
     scui_event_ui_home_goto,
-    scui_event_ui_stady_enter,
-    scui_event_ui_stady_exit,
+    scui_event_ui_standy_enter,
+    scui_event_ui_standy_exit,
     
     /* 自定义事件<e> */
     
     scui_event_custom_e,
     
 } scui_event_custom_t;
+
+/*@brief 事件类型转标记字符串
+ *@param type 事件类型
+ *@retval 标记字符串
+ */
+const char * scui_event_type_misc_stringify(scui_event_type_t type);
 
 /*@brief 事件响应(custom)
  *@param event 事件包

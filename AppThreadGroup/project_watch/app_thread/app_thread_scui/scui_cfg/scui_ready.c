@@ -68,6 +68,9 @@ void scui_ready(void)
     #endif
     
     /* event register: */
+    scui_event_register_type_stringify(scui_event_type_misc_stringify);
+    
+    /* event register: */
     scui_event_register_prepare(scui_event_custom_prepare);
     scui_event_register_finish(scui_event_custom_finish);
     scui_event_register_custom(scui_event_custom);

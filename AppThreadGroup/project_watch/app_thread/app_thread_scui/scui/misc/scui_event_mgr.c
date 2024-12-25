@@ -7,11 +7,41 @@
 
 #include "scui.h"
 
+/* 事件类型转标号字符串回调(可选支持,可能浪费空间占用) */
+static scui_event_cb_type_stringify_t scui_event_cb_type_stringify = NULL;
+
 /* 引擎有一个全局默认的先响应和后响应回调 */
 static scui_event_cb_t scui_event_cb_prepare = NULL;
 static scui_event_cb_t scui_event_cb_finish  = NULL;
 /* 自定义事件使用回调注册 */
 static scui_event_cb_t scui_event_cb_custom  = NULL;
+
+/*@brief 事件类型转标记字符串
+ *@param type 事件类型
+ *@retval 标记字符串
+ */
+const char * scui_event_type_stringify(scui_event_type_t type)
+{
+    const char * type_stringify = NULL;
+    if (scui_event_cb_type_stringify != NULL)
+        type_stringify = scui_event_cb_type_stringify(type);
+    
+    // 不支持的和未识别的直接返回本身的数字字符串
+    if (type_stringify == NULL) {
+        static uint16_t stringify[10] = {0};
+        snprintf(stringify, sizeof(stringify), "%d", type);
+        return stringify;
+    }
+    return type_stringify;
+}
+
+/*@brief 事件引擎注册转标号字符串回调
+ *@param type_stringify 回调
+ */
+void scui_event_register_type_stringify(scui_event_cb_type_stringify_t type_stringify)
+{
+    scui_event_cb_type_stringify = type_stringify;
+}
 
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
@@ -276,6 +306,7 @@ static void scui_event_respond(scui_event_t *event)
         return;
     
     /* 参考事件区间 */
+    #if 0
     SCUI_LOG_ERROR("scui_event_sched_s:%u", scui_event_sched_s);
     SCUI_LOG_ERROR("scui_event_sched_e:%u", scui_event_sched_e);
     SCUI_LOG_ERROR("scui_event_ptr_s:%u", scui_event_ptr_s);
@@ -286,9 +317,11 @@ static void scui_event_respond(scui_event_t *event)
     SCUI_LOG_ERROR("scui_event_key_e:%u", scui_event_key_e);
     SCUI_LOG_ERROR("scui_event_custom_s:%u", scui_event_custom_s);
     SCUI_LOG_ERROR("scui_event_custom_e:%u", scui_event_custom_e);
+    #endif
+    
     /* 未定义事件响应 */
     SCUI_LOG_ERROR("catch unknown event:");
-    SCUI_LOG_ERROR("event->type:%u",            event->type);
+    SCUI_LOG_ERROR("event->type:%s",            scui_event_type_stringify(event->type));
     SCUI_LOG_ERROR("event->style:%u",           event->style);
     SCUI_LOG_ERROR("event->object:%u",          event->object);
     SCUI_LOG_ERROR("event->style.priority:%u",  event->style.priority);
