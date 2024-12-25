@@ -320,9 +320,9 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
             if (scui_window_float.dir == scui_opt_dir_to_l)
                 value_e = event->ptr_e.x;
         }
+        scui_window_float.hold = true;
         scui_window_float_anima_auto(value_s, value_e, 0);
         scui_widget_event_mask_over(event);
-        scui_window_float.hold = true;
         break;
     }
     case scui_event_ptr_up: {
@@ -333,6 +333,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
             // 没有移动时,不做回弹
             if (!scui_window_float.hold)
                  break;
+            scui_window_float.hold = false;
             
             if (scui_mabs(clip.x, clip.w) < clip.w * 2 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 2 / 3) {
@@ -363,6 +364,8 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
                 }
             }
         } else {
+            scui_window_float.hold = false;
+            
             if (scui_mabs(clip.x, clip.w) < clip.w * 1 / 3 &&
                 scui_mabs(clip.y, clip.h) < clip.h * 1 / 3) {
                 if (scui_window_float.pos == scui_opt_pos_u ||
@@ -392,7 +395,6 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
                 }
             }
         }
-        scui_window_float.hold = false;
         break;
     }
     default:

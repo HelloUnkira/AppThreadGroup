@@ -222,13 +222,19 @@ static void scui_event_respond(scui_event_t *event)
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
-        SCUI_LOG_WARN("unknown widget %u %u", event->object, event->type);
+        // 存在控件树已经被回收的情况
+        // 但是事件调度队列还存在控件树的事件未响应
+        // 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响
+        const char *type_stringify = scui_event_type_stringify(event->type);
+        SCUI_LOG_INFO("unknown widget %u %s", event->object, type_stringify);
         return;
     }
     
     /* 事件响应对象无效(未知情况?) */
-    if (scui_handle_get(event->object) == NULL)
+    if (scui_handle_get(event->object) == NULL) {
+        SCUI_LOG_WARN("what's mean, we don't know this");
         return;
+    }
     
     event->style.result = 0x00;
     
@@ -319,9 +325,10 @@ static void scui_event_respond(scui_event_t *event)
     SCUI_LOG_ERROR("scui_event_custom_e:%u", scui_event_custom_e);
     #endif
     
+    const char *type_stringify = scui_event_type_stringify(event->type);
     /* 未定义事件响应 */
     SCUI_LOG_ERROR("catch unknown event:");
-    SCUI_LOG_ERROR("event->type:%s",            scui_event_type_stringify(event->type));
+    SCUI_LOG_ERROR("event->type:%s",            type_stringify);
     SCUI_LOG_ERROR("event->style:%u",           event->style);
     SCUI_LOG_ERROR("event->object:%u",          event->object);
     SCUI_LOG_ERROR("event->style.priority:%u",  event->style.priority);

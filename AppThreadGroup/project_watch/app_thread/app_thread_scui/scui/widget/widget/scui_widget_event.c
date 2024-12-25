@@ -632,37 +632,39 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
     
     switch (state) {
     case 0x00:
+        if (scroll_flag.lock && scroll_flag.key != *key)
+            return false;
         if (scroll_flag.lock && scroll_flag.key == *key)
             return true;
-        if (scroll_flag.lock && scroll_flag.key != *key) {
-            if (*key != SCUI_HANDLE_INVALID) {
-                scui_handle_set(*key, NULL);
-                *key  = SCUI_HANDLE_INVALID;
-            }
-            return false;
-        }
-        if (scroll_flag.key != SCUI_HANDLE_INVALID) {
-            scui_handle_set(scroll_flag.key, NULL);
-            scroll_flag.key  = SCUI_HANDLE_INVALID;
-        }
+        
+        // 未得锁,此时应该为无效句柄
+        SCUI_ASSERT(scroll_flag.key == SCUI_HANDLE_INVALID);
+        SCUI_ASSERT(*key == SCUI_HANDLE_INVALID);
+        
+        SCUI_LOG_INFO("scroll lock");
         scroll_flag.key  = scui_handle_find();
         scroll_flag.lock = true;
         *key = scroll_flag.key;
         return true;
     case 0x01:
+        // 释放锁,此时应该为目标句柄
+        if (scroll_flag.lock && scroll_flag.key != *key) {
+            SCUI_LOG_ERROR("unknown target");
+            SCUI_ASSERT(false);
+        }
         if (scroll_flag.lock && scroll_flag.key == *key) {
-            if (*key != SCUI_HANDLE_INVALID) {
-                scui_handle_set(*key, NULL);
-                *key  = SCUI_HANDLE_INVALID;
-            }
+            SCUI_ASSERT(*key != SCUI_HANDLE_INVALID);
+            
+            SCUI_LOG_INFO("scroll unlock");
+            scui_handle_set(scroll_flag.key, NULL);
             scroll_flag.key  = SCUI_HANDLE_INVALID;
             scroll_flag.lock = false;
+            *key = scroll_flag.key;
             return true;
         }
-        if (*key != SCUI_HANDLE_INVALID) {
-            scui_handle_set(*key, NULL);
-            *key  = SCUI_HANDLE_INVALID;
-        }
+        
+        SCUI_LOG_ERROR("unknown target");
+        SCUI_ASSERT(false);
         return false;
     case 0x02:
         if (scroll_flag.lock && scroll_flag.key == *key)

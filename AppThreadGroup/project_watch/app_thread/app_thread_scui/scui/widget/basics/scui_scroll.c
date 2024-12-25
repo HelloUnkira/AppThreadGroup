@@ -644,18 +644,23 @@ static void scui_scroll_anima_finish(void *instance)
     
     if (!scroll->hold_move) {
          scroll->lock_move = false;
-         scui_widget_event_scroll_flag(0x01, &scroll->key);
+         
+        // 仅仅当anima完全结束后,解锁scroll标记
+        if (scroll->anima == SCUI_HANDLE_INVALID ||
+           !scui_anima_running(scroll->anima))
+            scui_widget_event_scroll_flag(0x01, &scroll->key);
         
-        if (scroll->anima != SCUI_HANDLE_INVALID)
-        if (!scui_anima_running(scroll->anima)) {
-             scui_event_t event = {.object = widget->myself};
-             scui_scroll_event_notify(&event, 0x01);
-             
-             if (scroll->anima != SCUI_HANDLE_INVALID) {
-                 scui_anima_stop(scroll->anima);
-                 scui_anima_destroy(scroll->anima);
-                 scroll->anima = SCUI_HANDLE_INVALID;
-             }
+        if (scroll->anima != SCUI_HANDLE_INVALID &&
+           !scui_anima_running(scroll->anima)) {
+            
+            scui_event_t event = {.object = widget->myself};
+            scui_scroll_event_notify(&event, 0x01);
+            
+            if (scroll->anima != SCUI_HANDLE_INVALID) {
+                scui_anima_stop(scroll->anima);
+                scui_anima_destroy(scroll->anima);
+                scroll->anima = SCUI_HANDLE_INVALID;
+            }
         }
     }
 }

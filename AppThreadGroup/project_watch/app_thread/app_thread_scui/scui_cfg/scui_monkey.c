@@ -27,14 +27,14 @@ static struct {
 
 /*@brief monkey test动画回调
  */
-void scui_monkey_anim_prepare(void *instance)
+static void scui_monkey_anim_prepare(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief monkey test动画回调
  */
-void scui_monkey_anim_execute(void *instance)
+static void scui_monkey_anim_execute(void *instance)
 {
     SCUI_LOG_INFO("");
     
@@ -53,14 +53,17 @@ void scui_monkey_anim_execute(void *instance)
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
                 //
-                scui_ui_res_local->tick = scui_rand(10) + 2;
+                scui_ui_res_local->tick = scui_rand(10) + 5;
                 scui_ui_res_local->count = 0;
                 //
                 scui_ui_res_local->ptr_pos.x = SCUI_DRV_HOR_RES / 2;
                 scui_ui_res_local->ptr_pos.y = SCUI_DRV_VER_RES / 2;
-                scui_ui_res_local->ptr_move_step = scui_rand(25) + 25;
+                scui_ui_res_local->ptr_move_step = scui_rand(20) + 20;
                 scui_ui_res_local->ptr_move_way = 1 << scui_rand(3);
-                scui_ui_res_local->ptr_move = scui_rand(9) < 7 ? 1 : 0;
+                scui_ui_res_local->ptr_move = scui_rand(9) < 5 ? 1 : 0;
+                
+                indev_data.state = scui_ui_res_local->state;
+                indev_data.ptr.ptr_pos = scui_ui_res_local->ptr_pos;
             } else {
                 if (scui_ui_res_local->ptr_move) {
                     scui_coord_t step = scui_ui_res_local->ptr_move_step;
@@ -86,10 +89,14 @@ void scui_monkey_anim_execute(void *instance)
                 if (scui_ui_res_local->tick < scui_ui_res_local->count) {
                     scui_ui_res_local->idle = true;
                     scui_ui_res_local->state = scui_indev_state_release;
+                    scui_ui_res_local->count = 0;
                 }
                 
                 indev_data.state = scui_ui_res_local->state;
                 indev_data.ptr.ptr_pos = scui_ui_res_local->ptr_pos;
+                SCUI_LOG_DEBUG("state: %d", indev_data.state);
+                SCUI_LOG_DEBUG("pos_x: %d", indev_data.ptr.ptr_pos.x);
+                SCUI_LOG_DEBUG("pos_y: %d", indev_data.ptr.ptr_pos.y);
             }
             break;
         }
@@ -144,9 +151,16 @@ void scui_monkey_anim_execute(void *instance)
 
 /*@brief monkey test动画回调
  */
-void scui_monkey_anim_finish(void *instance)
+static void scui_monkey_anim_finish(void *instance)
 {
     SCUI_LOG_INFO("");
+}
+
+/*@brief monkey test动画回调
+ */
+static void app_scui_monkey_timer_handler(void *timer)
+{
+    scui_monkey_anim_execute(NULL);
 }
 
 /*@brief monkey test
@@ -158,6 +172,7 @@ void scui_monkey_test(void)
     memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
     scui_ui_res_local->idle = true;
     
+    #if 1
     scui_anima_t anima = {0};
     anima.prepare = scui_monkey_anim_prepare;
     anima.expired = scui_monkey_anim_execute;
@@ -168,4 +183,13 @@ void scui_monkey_test(void)
     scui_handle_t scui_monkey_test_anima = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &scui_monkey_test_anima);
     scui_anima_start(scui_monkey_test_anima);
+    #else
+    
+    static app_sys_timer_t app_scui_monkey_timer = {0};
+    app_scui_monkey_timer.expired = app_scui_monkey_timer_handler;
+    app_scui_monkey_timer.peroid  = 1000 / 60;
+    app_scui_monkey_timer.reload  = true;
+    app_sys_timer_start(&app_scui_monkey_timer);
+    
+    #endif
 }
