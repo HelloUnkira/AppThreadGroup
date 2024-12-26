@@ -977,6 +977,8 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
+            // 清空图像资源缓存
+            scui_image_cache_clear();
             scui_plug_coupler_create(&scui_ui_res_local->coupler, scui_ui_scene_mini_card_num);
             scui_ui_res_local->coupler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
         }

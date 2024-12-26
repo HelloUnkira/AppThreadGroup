@@ -131,9 +131,11 @@ void scui_event_enqueue(scui_event_t *event);
 
 /*@brief 事件包出列函数
  *@param event 事件包
+ *@param hit   命中指定对象(指定事件)
+ *@param any   命中指定对象(非指定事件)
  *@retval 提取到有效事件包
  */
-bool scui_event_dequeue(scui_event_t *event, bool hit);
+bool scui_event_dequeue(scui_event_t *event, bool hit, bool any);
 
 /*@brief 事件队列事件数量
  *@retval 事件数量

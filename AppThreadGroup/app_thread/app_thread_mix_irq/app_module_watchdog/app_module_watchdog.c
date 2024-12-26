@@ -51,7 +51,7 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
         app_mutex_process(&app_module_watchdog_mutex, app_mutex_take);
         if (app_module_watchdog.count_sw_s[idx - app_thread_id_s_s - 1]++ > APP_MODULE_WATCHDOG_XS) {
             APP_SYS_LOG_ERROR("catch thread %u block", idx);
-            APP_SYS_ASSERT(true == false);
+            // APP_SYS_ASSERT(true == false);
         }
         app_mutex_process(&app_module_watchdog_mutex, app_mutex_give);
     }

@@ -13,6 +13,8 @@
 #include "lz4frame.h"
 
 // PNG
+// 备注:这个组件对瞬时内存的消耗量较大
+// 并且它有realloc这个操作,导致峰值内存更多
 #include "lodepng.h"
 
 // JPG

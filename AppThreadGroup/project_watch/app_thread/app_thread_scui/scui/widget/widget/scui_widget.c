@@ -159,6 +159,9 @@ void scui_widget_burn(scui_widget_t *widget)
     widget->child_list = NULL;
     /* 清空事件列表 */
     scui_widget_event_clear(widget->myself);
+    /* 清空事件队列所有事件 */
+    scui_event_t event = {.object = widget->myself};
+    while (scui_event_dequeue(&event, true, true));
     /* 回收句柄 */
     scui_handle_set(widget->myself, NULL);
 }

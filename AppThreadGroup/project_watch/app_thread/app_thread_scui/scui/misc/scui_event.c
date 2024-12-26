@@ -107,9 +107,11 @@ void scui_event_enqueue(scui_event_t *event)
 
 /*@brief 事件包出列函数
  *@param event 事件包
+ *@param hit   命中指定对象(指定事件)
+ *@param any   命中指定对象(非指定事件)
  *@retval 提取到有效事件包
  */
-bool scui_event_dequeue(scui_event_t *event, bool hit)
+bool scui_event_dequeue(scui_event_t *event, bool hit, bool any)
 {
     bool retval = false;
     scui_event_t *event_new = NULL;
@@ -126,10 +128,22 @@ bool scui_event_dequeue(scui_event_t *event, bool hit)
     if (scui_event_queue.list_num != 0) {
         /* 需要命中指定资源包 */
         if (hit) {
-            scui_list_dll_btra(&scui_event_queue.dl_list, node)
-            if (scui_event_confirm(&event->dl_node, node)) {
-                event_new = scui_own_ofs(scui_event_t, dl_node, node);
-                break;
+            // 额外定制的类型补充, 命中指定对象
+            if (any) {
+                scui_event_t *event_tar = NULL;
+                scui_list_dll_btra(&scui_event_queue.dl_list, node) {
+                    event_tar = scui_own_ofs(scui_event_t, dl_node, node);
+                    if (event_tar->object == event->object) {
+                        event_new = event_tar;
+                        break;
+                    }
+                }
+            } else {
+                scui_list_dll_btra(&scui_event_queue.dl_list, node)
+                if (scui_event_confirm(&event->dl_node, node)) {
+                    event_new = scui_own_ofs(scui_event_t, dl_node, node);
+                    break;
+                }
             }
         } else {
             scui_list_dln_t *node = scui_list_dll_head(&scui_event_queue.dl_list);

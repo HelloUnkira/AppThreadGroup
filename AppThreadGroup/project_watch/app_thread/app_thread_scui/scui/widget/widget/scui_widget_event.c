@@ -196,11 +196,6 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         
         scui_widget_clip_clear(widget, true);
         scui_widget_destroy(widget->myself);
-        
-        // 窗口已销毁,移除掉跟本窗口相关的所有绘制事件
-        event.object = widget->myself;
-        event.type = scui_event_draw;
-        while (scui_event_dequeue(&event, true));
     }
 }
 

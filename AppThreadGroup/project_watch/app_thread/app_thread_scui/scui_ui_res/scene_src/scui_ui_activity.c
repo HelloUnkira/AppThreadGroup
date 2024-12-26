@@ -93,6 +93,8 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         
         if (scui_widget_event_check_prepare(event)) {
             
+            // 清空图像资源缓存
+            scui_image_cache_clear();
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
             custom_maker.widget.type        = scui_widget_type_custom;

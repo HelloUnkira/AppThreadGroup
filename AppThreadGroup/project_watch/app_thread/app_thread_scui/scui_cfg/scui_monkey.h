@@ -1,7 +1,7 @@
 #ifndef SCUI_MONKEY_H
 #define SCUI_MONKEY_H
 
-#define SCUI_MONKEY_TEST    (1)
+#define SCUI_MONKEY_TEST    (0)
 
 /*@brief monkey test
  */

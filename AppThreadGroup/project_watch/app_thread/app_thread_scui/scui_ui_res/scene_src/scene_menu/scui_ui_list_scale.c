@@ -240,6 +240,9 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
             scui_ui_scene_list_cfg(scui_ui_scene_list_type_list_scale);
+            
+            // 清空图像资源缓存
+            scui_image_cache_clear();
             scui_plug_coupler_create(&scui_ui_res_local->coupler, scui_ui_scene_list_num);
             scui_ui_res_local->coupler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
         }

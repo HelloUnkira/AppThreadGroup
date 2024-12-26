@@ -486,7 +486,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
             event_draw.object = handle;
             event_draw.type = scui_event_draw;
             // 移除跟主窗口相关所有绘制事件
-            while (scui_event_dequeue(&event_draw, true));
+            while (scui_event_dequeue(&event_draw, true, false));
             /* 主窗口虚化 */
             scui_widget_draw_blur(handle, NULL);
             SCUI_LOG_INFO("");

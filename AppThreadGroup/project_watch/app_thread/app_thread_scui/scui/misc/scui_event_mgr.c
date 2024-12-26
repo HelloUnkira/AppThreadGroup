@@ -226,13 +226,14 @@ static void scui_event_respond(scui_event_t *event)
         // 但是事件调度队列还存在控件树的事件未响应
         // 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响
         const char *type_stringify = scui_event_type_stringify(event->type);
-        SCUI_LOG_INFO("unknown widget %u %s", event->object, type_stringify);
+        SCUI_LOG_WARN("error widget %u %s", event->object, type_stringify);
         return;
     }
     
     /* 事件响应对象无效(未知情况?) */
     if (scui_handle_get(event->object) == NULL) {
-        SCUI_LOG_WARN("what's mean, we don't know this");
+        const char *type_stringify = scui_event_type_stringify(event->type);
+        SCUI_LOG_WARN("error widget %u %s", event->object, type_stringify);
         return;
     }
     
@@ -360,7 +361,7 @@ void scui_event_dispatch(void)
 {
     scui_event_t event = {0};
     while (scui_event_num() != 0) {
-        bool retval = scui_event_dequeue(&event, false);
+        bool retval = scui_event_dequeue(&event, false, false);
         SCUI_ASSERT(retval);
         
         scui_tick_calc(0x10, NULL, NULL, NULL);

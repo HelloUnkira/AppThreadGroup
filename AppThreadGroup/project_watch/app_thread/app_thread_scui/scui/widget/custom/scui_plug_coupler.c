@@ -229,7 +229,7 @@ void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_ev
                 event.object = target_s;
                 event.type = scui_event_draw;
                 // 移除跟主窗口相关所有绘制事件
-                while (scui_event_dequeue(&event, true));
+                while (scui_event_dequeue(&event, true, false));
             }
             coupler->list_draw[idx] = true;
             
