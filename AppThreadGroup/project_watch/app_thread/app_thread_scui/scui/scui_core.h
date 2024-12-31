@@ -77,6 +77,7 @@
 #include "scui_chart.h"
 
 /* linker: */
+#include "scui_image_frame.h"       /* 图像帧资源加载卸载 */
 #include "scui_image_src.h"         /* 图像资源加载卸载 */
 #include "scui_font_src.h"          /* 字体资源获取 */
 

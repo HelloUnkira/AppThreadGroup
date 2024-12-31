@@ -22944,10 +22944,28 @@ const scui_image_t prj_image_src_system_03_restartpng = {
 	.type			 = scui_image_type_png,
 };
 
+const scui_image_t prj_image_src_vedio_birdsmp4 = {
+	.pixel.width	 = 0x0,
+	.pixel.height	 = 0x0,
+	.pixel.data_bin	 = 0xd10b37,
+	.pixel.size_bin	 = 0x14bac9,
+	.format			 = scui_pixel_cf_none,
+	.type			 = scui_image_type_mp4,
+};
+
+const scui_image_t prj_image_src_vedio_bulbgif = {
+	.pixel.width	 = 0x0,
+	.pixel.height	 = 0x0,
+	.pixel.data_bin	 = 0xe5c600,
+	.pixel.size_bin	 = 0x451d,
+	.format			 = scui_pixel_cf_none,
+	.type			 = scui_image_type_gif,
+};
+
 const scui_image_t prj_image_src_watchface_bg_01_bgbmp = {
 	.pixel.width	 = 0x1d2,
 	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xd10b37,
+	.pixel.data_bin	 = 0xe60b1d,
 	.pixel.size_bin	 = 0x37f9,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -22956,7 +22974,7 @@ const scui_image_t prj_image_src_watchface_bg_01_bgbmp = {
 const scui_image_t prj_image_src_watchface_bg_01_bgjpg = {
 	.pixel.width	 = 0x1d2,
 	.pixel.height	 = 0x1d2,
-	.pixel.data_bin	 = 0xd14330,
+	.pixel.data_bin	 = 0xe64316,
 	.pixel.size_bin	 = 0x82bd,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_jpg,
@@ -22965,7 +22983,7 @@ const scui_image_t prj_image_src_watchface_bg_01_bgjpg = {
 const scui_image_t prj_image_src_watchface_preview_01_00bmp = {
 	.pixel.width	 = 0x17e,
 	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xd1c5ed,
+	.pixel.data_bin	 = 0xe6c5d3,
 	.pixel.size_bin	 = 0x4742,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_lz4,
@@ -22974,13 +22992,13 @@ const scui_image_t prj_image_src_watchface_preview_01_00bmp = {
 const scui_image_t prj_image_src_watchface_preview_01_00jpg = {
 	.pixel.width	 = 0x17e,
 	.pixel.height	 = 0x12a,
-	.pixel.data_bin	 = 0xd20d2f,
+	.pixel.data_bin	 = 0xe70d15,
 	.pixel.size_bin	 = 0x66d0,
 	.format			 = scui_pixel_cf_bmp565,
 	.type			 = scui_image_type_jpg,
 };
 
-const void * scui_image_parser_table[2553] = {
+const void * scui_image_parser_table[2555] = {
 	(void *)&prj_image_src_00_3d_AnalogClock_0jpg,
 	(void *)&prj_image_src_00_3d_AnalogClock_00png,
 	(void *)&prj_image_src_00_3d_AnalogClock_01png,
@@ -25530,6 +25548,8 @@ const void * scui_image_parser_table[2553] = {
 	(void *)&prj_image_src_system_01_sospng,
 	(void *)&prj_image_src_system_02_turn_offpng,
 	(void *)&prj_image_src_system_03_restartpng,
+	(void *)&prj_image_src_vedio_birdsmp4,
+	(void *)&prj_image_src_vedio_bulbgif,
 	(void *)&prj_image_src_watchface_bg_01_bgbmp,
 	(void *)&prj_image_src_watchface_bg_01_bgjpg,
 	(void *)&prj_image_src_watchface_preview_01_00bmp,

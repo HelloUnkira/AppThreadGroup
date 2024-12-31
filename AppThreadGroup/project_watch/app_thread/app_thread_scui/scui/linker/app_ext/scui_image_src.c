@@ -184,6 +184,17 @@ void scui_image_src_read(scui_image_t *image, void *data)
     
     
     
+    if (image->type == scui_image_type_gif) {
+        // 原始内存数据,直接使用的
+        size_t retval = -1;
+        FILE *file = fopen(image_src, "rb+");
+        fseek(file, image->pixel.data_bin, SEEK_SET);
+        retval = fread(data, image->pixel.size_bin, 1, file);
+        fclose(file);
+        
+        return;
+    }
+    
     if (image->type == scui_image_type_jpg) {
         
         size_t jpg_size = image->pixel.size_bin;

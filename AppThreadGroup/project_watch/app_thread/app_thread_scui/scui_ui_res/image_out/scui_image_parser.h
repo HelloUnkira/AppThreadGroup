@@ -2555,13 +2555,15 @@ typedef enum {
 	scui_image_prj_image_src_system_01_sospng, // 0x29f2
 	scui_image_prj_image_src_system_02_turn_offpng, // 0x29f3
 	scui_image_prj_image_src_system_03_restartpng, // 0x29f4
-	scui_image_prj_image_src_watchface_bg_01_bgbmp, // 0x29f5
-	scui_image_prj_image_src_watchface_bg_01_bgjpg, // 0x29f6
-	scui_image_prj_image_src_watchface_preview_01_00bmp, // 0x29f7
-	scui_image_prj_image_src_watchface_preview_01_00jpg, // 0x29f8
+	scui_image_prj_image_src_vedio_birdsmp4, // 0x29f5
+	scui_image_prj_image_src_vedio_bulbgif, // 0x29f6
+	scui_image_prj_image_src_watchface_bg_01_bgbmp, // 0x29f7
+	scui_image_prj_image_src_watchface_bg_01_bgjpg, // 0x29f8
+	scui_image_prj_image_src_watchface_preview_01_00bmp, // 0x29f9
+	scui_image_prj_image_src_watchface_preview_01_00jpg, // 0x29fa
 } scui_image_parser_handle_t;
 
-extern const void * scui_image_parser_table[2553];
+extern const void * scui_image_parser_table[2555];
 
 //<     w,     h,size_raw,size_mem,com_pct> handle
 //< 0x1d2, 0x1d2,0xb688,0x6a088,0.11> scui_image_prj_image_src_00_3d_AnalogClock_0jpg
@@ -5113,11 +5115,13 @@ extern const void * scui_image_parser_table[2553];
 //<  0x50,  0x50, 0xd84,0x4b00,0.18> scui_image_prj_image_src_system_01_sospng
 //<  0x50,  0x50, 0xa84,0x4b00,0.14> scui_image_prj_image_src_system_02_turn_offpng
 //<  0x50,  0x50, 0x86e,0x4b00,0.11> scui_image_prj_image_src_system_03_restartpng
+//<   0x0,   0x0,0x14bac9,0x14bac9,1.00> scui_image_prj_image_src_vedio_birdsmp4
+//<   0x0,   0x0,0x451d,0x451d,1.00> scui_image_prj_image_src_vedio_bulbgif
 //< 0x1d2, 0x1d2,0x37f9,0x6a088,0.03> scui_image_prj_image_src_watchface_bg_01_bgbmp
 //< 0x1d2, 0x1d2,0x82bd,0x6a088,0.08> scui_image_prj_image_src_watchface_bg_01_bgjpg
 //< 0x17e, 0x12a,0x4742,0x37958,0.08> scui_image_prj_image_src_watchface_preview_01_00bmp
 //< 0x17e, 0x12a,0x66d0,0x37958,0.12> scui_image_prj_image_src_watchface_preview_01_00jpg
 
-//static pct:0.16
+//static pct:0.17
 
 #endif

@@ -8,6 +8,8 @@ typedef enum {
     scui_image_type_lz4,        // 压缩图片(lz4,只压缩bitmap)
     scui_image_type_jpg,        // JPG压缩图片(原图)
     scui_image_type_png,        // PNG压缩图片(原图)
+    scui_image_type_gif,        // GIF压缩序列图片(原图)
+    scui_image_type_mp4,        // MP4压缩序列图片(原图)
     scui_image_type_mem,        // 内存图片(bmp)
     scui_image_type_num,
 } scui_image_type_t;

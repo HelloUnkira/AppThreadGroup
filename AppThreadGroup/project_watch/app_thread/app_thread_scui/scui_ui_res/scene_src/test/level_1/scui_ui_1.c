@@ -59,3 +59,74 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         break;
     }
 }
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
+{
+    static scui_image_frame_t image_frame_gif = {0};
+    static bool image_frame_gif_refr = false;
+    
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 这个事件可以视为本控件的全局刷新帧动画 */
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        static uint8_t cnt = 0;
+        cnt++;
+        
+        if (cnt % 1 == 0) {
+            // 更新一个图像帧
+            image_frame_gif_refr = true;
+            scui_widget_draw(event->object, NULL, false);
+        }
+        break;
+    }
+    case scui_event_show: {
+        SCUI_LOG_INFO("scui_event_show");
+        
+        if (scui_widget_event_check_prepare(event)) {
+            
+            // 构建一个图像帧
+            image_frame_gif.type = scui_image_type_gif;
+            image_frame_gif.handle = scui_image_prj_image_src_vedio_bulbgif;
+            
+            image_frame_gif.loop = 100;
+            scui_image_frame_make(&image_frame_gif);
+        }
+        break;
+    }
+    case scui_event_hide: {
+        SCUI_LOG_INFO("scui_event_hide");
+        
+        if (scui_widget_event_check_finish(event)) {
+            
+            // 销毁一个图像帧
+            scui_image_frame_burn(&image_frame_gif);
+        }
+        break;
+    }
+    case scui_event_draw: {
+        if (!scui_widget_event_check_execute(event))
+             break;
+        
+        scui_area_t clip = scui_widget_clip(event->object);
+        
+        if (image_frame_gif_refr && scui_image_frame_data(&image_frame_gif)) {
+            image_frame_gif_refr = false;
+            
+            scui_handle_t image = image_frame_gif.frame;
+            clip.x += (clip.w - scui_image_w(image)) / 2;
+            clip.y += (clip.h - scui_image_h(image)) / 2 - SCUI_DRV_VER_RES / 3;
+            scui_widget_draw_image(event->object, &clip, image, NULL, (scui_color_t){0});
+        }
+        
+        break;
+    }
+    default:
+        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
+        break;
+    }
+}
