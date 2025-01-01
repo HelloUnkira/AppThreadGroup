@@ -4,6 +4,7 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_fatfs      ${CMAKE_CURRENT_SOUR
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_nanopb     ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_nanopb)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json       ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_json)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4        ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lz4)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_rlottie    ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lib_rlottie)
 
 # 载入第三方库(lvgl库)
 if (app_thread_group_use_lvgl)
@@ -41,6 +42,14 @@ endif()
 # LZ4库:
 # dev https://github.com/lz4/lz4.git
 # AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4
+#
+# FFmpeg
+# master https://github.com/FFmpeg/FFmpeg.git
+# AppThreadGroup/project_watch/app_third/lib_ffmpeg/lib_ffmpeg
+#
+# rlottie
+# master https://github.com/Samsung/rlottie.git
+# AppThreadGroup/project_watch/app_third/lib_rlottie/lib_rlottie
 #
 #
 #

@@ -145,7 +145,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
         scui_image_type = 'scui_image_type_bmp'
         scui_pixel_cf = 'scui_pixel_cf_bmp565'
         # 通用压缩协议(vedio, gif)
-        if os.path.splitext(file)[1] == '.gif':
+        if file.endswith('.gif'):
             scui_pixel_cf = 'scui_pixel_cf_none'
             scui_image_type = 'scui_image_type_gif'
             scui_image_pkg_over = True
@@ -158,8 +158,22 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                 scui_image_parser_bin.write(pixel_stream)
                 scui_image_byte = pixel_stream
                 print('gif:' + scui_image_tag)
+        # 通用压缩协议(vedio, lottie)
+        if file.endswith('.lottie.json'):
+            scui_pixel_cf = 'scui_pixel_cf_none'
+            scui_image_type = 'scui_image_type_lottie'
+            scui_image_pkg_over = True
+            scui_image_tag_frame = True
+            # 直接原模原样的copy即可
+            with open(file, mode='rb') as file_raw:
+                pixel_stream = file_raw.read()
+                pixel_bin_len = len(pixel_stream)
+                pixel_raw_len = len(pixel_stream)
+                scui_image_parser_bin.write(pixel_stream)
+                scui_image_byte = pixel_stream
+                print('lottie:' + scui_image_tag)
         # 通用压缩协议(vedio, mp4)
-        if os.path.splitext(file)[1] == '.mp4':
+        if file.endswith('.mp4'):
             scui_pixel_cf = 'scui_pixel_cf_none'
             scui_image_type = 'scui_image_type_mp4'
             scui_image_pkg_over = True
@@ -190,7 +204,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                 return
         # 通用压缩协议
         if scui_image_pkg_use_jpg:
-            if os.path.splitext(file)[1] == '.jpg' or os.path.splitext(file)[1] == '.jpeg':
+            if file.endswith('.jpg') or file.endswith('.jpeg'):
                 scui_pixel_cf = 'scui_pixel_cf_bmp565'
                 scui_image_type = 'scui_image_type_jpg'
                 scui_image_pkg_over = True
@@ -204,7 +218,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                     print('jpg:' + scui_image_tag)
         # 通用压缩协议
         if scui_image_pkg_use_png:
-            if os.path.splitext(file)[1] == '.png':
+            if file.endswith('.png'):
                 scui_pixel_cf = 'scui_pixel_cf_bmp8565'
                 scui_image_type = 'scui_image_type_png'
                 scui_image_pkg_over = True
@@ -300,10 +314,12 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
 def scui_image_collect(file_path_list, file_ext_list, path):
     if os.path.isfile(path):
         # 获取指定扩展名的文件
-        if os.path.splitext(path)[1] in file_ext_list:
-            # 规定如果目标文件或所在路径存在特殊屏蔽标记#,忽略它
-            if not re.findall(r'#', path):
-                file_path_list.append(path)
+        for ext in file_ext_list:
+            if path.endswith(ext):
+                # 规定如果目标文件或所在路径存在特殊屏蔽标记#,忽略它
+                if not re.findall(r'#', path):
+                    file_path_list.append(path)
+                break
     if os.path.isdir(path):
         for item in os.listdir(path):
             # 规定如果目标文件或所在路径存在特殊屏蔽标记#,忽略它
@@ -350,7 +366,7 @@ def scui_image_parser():
     print('path:', src_path)
     print('path:', dst_path)
     # 遍历整个文件夹,获取指定扩展名的文件
-    file_ext_list = ['.bmp', '.jpg', '.jpeg', '.png', '.gif', '.mp4']
+    file_ext_list = ['.bmp', '.jpg', '.jpeg', '.png', '.gif', '.lottie.json', '.mp4']
     file_path_list = []
     scui_image_collect(file_path_list, file_ext_list, src_path)
     # check:

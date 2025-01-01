@@ -9,8 +9,19 @@ typedef struct {
     uint8_t *data;  // 图像帧源
     uint32_t size;  // 图像帧源大小
     void    *local; // 内部数据
+    /* 定向资源参数 */
+    union {
     // 有限支持度
-    uint32_t loop;
+    struct {
+        uint32_t loop;      // 循环次数
+    } gif;
+    struct {
+        uint32_t frame;     // 总帧数
+        uint32_t index;     // 当前帧
+        uint32_t rate;      // 帧率
+    } lottie;
+    // keep adding...
+    };
 } scui_image_frame_t;
 
 /*@brief 图像帧数据销毁

@@ -26,6 +26,11 @@
 	path = AppThreadGroup/project_watch/app_third/lib_lz4/lib_lz4
 	url = https://github.com/lz4/lz4.git
 	branch = dev
+[submodule "AppThreadGroup/project_watch/app_third/lib_rlottie/lib_rlottie"]
+	path = AppThreadGroup/project_watch/app_third/lib_rlottie/lib_rlottie
+	url = https://github.com/Samsung/rlottie.git
+	branch = master
+
 [submodule "AppThreadGroup/project_study/app_third/lib_jerryscript/lib_jerryscript"]
 	path = AppThreadGroup/project_study/app_third/lib_jerryscript/lib_jerryscript
 	url = https://github.com/jerryscript-project/jerryscript.git

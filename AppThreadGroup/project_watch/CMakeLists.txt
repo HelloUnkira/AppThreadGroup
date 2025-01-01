@@ -1,5 +1,7 @@
-cmake_minimum_required (VERSION 3.10.1)
+cmake_minimum_required (VERSION 3.14)
 # 添加任意策略
+cmake_policy(VERSION 3.14)
+cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0079 NEW)
 # 创建项目
 project(app_thread_group C CXX)

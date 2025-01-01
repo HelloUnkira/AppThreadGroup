@@ -184,8 +184,13 @@ void scui_image_src_read(scui_image_t *image, void *data)
     
     
     
-    if (image->type == scui_image_type_gif) {
-        // 原始内存数据,直接使用的
+    bool image_type_raw = false;
+    image_type_raw = image_type_raw || image->type == scui_image_type_bmp;
+    image_type_raw = image_type_raw || image->type == scui_image_type_gif;
+    image_type_raw = image_type_raw || image->type == scui_image_type_lottie;
+    
+    // 原始内存数据,直接使用的
+    if (image_type_raw) {
         size_t retval = -1;
         FILE *file = fopen(image_src, "rb+");
         fseek(file, image->pixel.data_bin, SEEK_SET);
@@ -322,17 +327,6 @@ void scui_image_src_read(scui_image_t *image, void *data)
         
         // 检查空间是否释放完毕
         SCUI_ASSERT(scui_LZ4F_size_cur == 0);
-        return;
-    }
-    
-    if (image->type == scui_image_type_bmp) {
-        // 原始内存数据,直接使用的
-        size_t retval = -1;
-        FILE *file = fopen(image_src, "rb+");
-        fseek(file, image->pixel.data_bin, SEEK_SET);
-        retval = fread(data, image->pixel.size_bin, 1, file);
-        fclose(file);
-        
         return;
     }
     

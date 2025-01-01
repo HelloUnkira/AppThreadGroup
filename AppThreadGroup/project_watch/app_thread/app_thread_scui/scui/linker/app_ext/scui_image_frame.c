@@ -10,6 +10,9 @@
 // GIF
 #include "gifdec.h"
 
+// rlottie
+#include "rlottie_capi.h"
+
 /*@brief 本地内部数据
  *       用于维护帧数据的合理迭代
  */
@@ -17,6 +20,9 @@ typedef union {
     struct {
         gd_GIF *gif;
     };
+    struct {
+        struct Lottie_Animation_S *Animation;
+    } rlottie;
 } scui_image_frame_local_t;
 
 /*@brief 帧数据格式转换(就地转换)
@@ -49,9 +55,28 @@ void scui_image_frame_burn(scui_image_frame_t *image_frame)
     switch (image_frame->type) {
     case scui_image_type_gif: {
         
-        // 生成GIF的管理器
+        // 销毁GIF的管理器
         if (local != NULL && local->gif != NULL)
             gd_close_gif(local->gif);
+        
+        uintptr_t data_bin = image_frame->image.pixel.data_bin;
+        SCUI_MEM_FREE((void *)data_bin);
+        
+        scui_handle_set(image_frame->frame, NULL);
+        SCUI_MEM_FREE(image_frame->data);
+        SCUI_MEM_FREE(image_frame->local);
+        
+        image_frame->local = NULL;
+        image_frame->data  = NULL;
+        image_frame->frame = SCUI_HANDLE_INVALID;
+        memset(&image_frame->image, 0, sizeof(scui_image_t));
+        break;
+    }
+    case scui_image_type_lottie: {
+        
+        // 销毁Lottie的管理器
+        if (local != NULL && local->rlottie.Animation != NULL)
+            lottie_animation_destroy(local->rlottie.Animation);
         
         uintptr_t data_bin = image_frame->image.pixel.data_bin;
         SCUI_MEM_FREE((void *)data_bin);
@@ -98,6 +123,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         
         // 生成GIF的管理器
         local->gif = gd_open_gif_data(image_frame->data);
+        SCUI_ASSERT(local->gif->width != 0 && local->gif->height != 0);
         // 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用)
         uintptr_t size_bin = 4 * local->gif->width * local->gif->height;
         uintptr_t data_bin = SCUI_MEM_ALLOC(scui_mem_type_graph, size_bin);
@@ -110,8 +136,44 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->frame = scui_handle_find();
         scui_handle_set(image_frame->frame, &image_frame->image);
         
-        local->gif->loop_count = image_frame->loop;
+        // 更新基础参数
+        local->gif->loop_count = image_frame->gif.loop;
+        break;
+    }
+    case scui_image_type_lottie: {
         
+        scui_image_t *image = scui_handle_get(image_frame->handle);
+        SCUI_ASSERT(image != NULL && image->type == scui_image_type_lottie);
+        
+        SCUI_ASSERT(image_frame->data == NULL);
+        image_frame->size = image->pixel.size_bin + 1;
+        image_frame->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_frame->size);
+        scui_image_src_read(image, image_frame->data);
+        image_frame->data[image_frame->size - 1] = '\0';
+        
+        // 生成Lottie的管理器
+        local->rlottie.Animation = lottie_animation_from_data(image_frame->data, image_frame->data, "");
+        
+        // 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用)
+        size_t rlottie_width = 0, rlottie_height = 0;
+        lottie_animation_get_size(local->rlottie.Animation, &rlottie_width, &rlottie_height);
+        SCUI_ASSERT(rlottie_width != 0 && rlottie_height != 0);
+        
+        uintptr_t size_bin = 4 * rlottie_width * rlottie_height;
+        uintptr_t data_bin = SCUI_MEM_ALLOC(scui_mem_type_graph, size_bin);
+        image_frame->image.type = scui_image_type_mem;
+        image_frame->image.format = scui_pixel_cf_bmp8565;
+        image_frame->image.pixel.width  = rlottie_width;
+        image_frame->image.pixel.height = rlottie_height;
+        image_frame->image.pixel.data_bin = data_bin;
+        image_frame->image.pixel.size_bin = size_bin;
+        image_frame->frame = scui_handle_find();
+        scui_handle_set(image_frame->frame, &image_frame->image);
+        
+        // 更新基础参数
+        image_frame->lottie.frame = lottie_animation_get_totalframe(local->rlottie.Animation);
+        image_frame->lottie.rate  = lottie_animation_get_framerate(local->rlottie.Animation);
+        image_frame->lottie.index = 0;
         break;
     }
     default:
@@ -150,6 +212,23 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         
         // 帧数据转为本地设备格式
         uint32_t pixel_cnt = local->gif->width * local->gif->height;
+        scui_image_frame_gif_cvt_cf((void *)data_bin, pixel_cnt);
+        
+        return true;
+        break;
+    }
+    case scui_image_type_lottie: {
+        
+        uint32_t rlottie_width  = image_frame->image.pixel.width;
+        uint32_t rlottie_height = image_frame->image.pixel.height;
+        uintptr_t size_bin = image_frame->image.pixel.size_bin;
+        uintptr_t data_bin = image_frame->image.pixel.data_bin;
+        
+        lottie_animation_render(local->rlottie.Animation, image_frame->lottie.index,
+            (void *)data_bin, rlottie_width, rlottie_height, rlottie_width * 4);
+        
+        // 帧数据转为本地设备格式
+        uint32_t pixel_cnt = rlottie_width * rlottie_height;
         scui_image_frame_gif_cvt_cf((void *)data_bin, pixel_cnt);
         
         return true;
