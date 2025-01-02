@@ -79,9 +79,9 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
  *@param clip   图像源绘制区域
  *@param matrix 变换矩阵
  */
-void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target,
-                                      scui_handle_t  image,  scui_area_t *clip,
-                                      scui_matrix_t *matrix);
+void scui_widget_draw_image_matrix(scui_handle_t  handle, scui_area_t *target,
+                                   scui_handle_t  image,  scui_area_t *clip,
+                                   scui_matrix_t *matrix);
 
 /*@brief 控件在画布绘制圆环
  *@param handle  控件句柄

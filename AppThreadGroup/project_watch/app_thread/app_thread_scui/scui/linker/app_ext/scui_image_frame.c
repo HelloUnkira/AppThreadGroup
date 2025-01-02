@@ -27,7 +27,7 @@ typedef union {
 
 /*@brief 帧数据格式转换(就地转换)
  */
-static void scui_image_frame_gif_cvt_cf(void *dec, uint32_t pixel_cnt)
+static void scui_image_frame_ARGB32_cvt_cf(void *dec, uint32_t pixel_cnt)
 {
     scui_color8888_t *argb8888 = dec;
     
@@ -212,7 +212,7 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         
         // 帧数据转为本地设备格式
         uint32_t pixel_cnt = local->gif->width * local->gif->height;
-        scui_image_frame_gif_cvt_cf((void *)data_bin, pixel_cnt);
+        scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
         
         return true;
         break;
@@ -229,7 +229,7 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         
         // 帧数据转为本地设备格式
         uint32_t pixel_cnt = rlottie_width * rlottie_height;
-        scui_image_frame_gif_cvt_cf((void *)data_bin, pixel_cnt);
+        scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
         
         return true;
         break;

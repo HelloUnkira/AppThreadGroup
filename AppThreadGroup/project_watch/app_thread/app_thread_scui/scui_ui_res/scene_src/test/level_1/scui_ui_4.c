@@ -66,8 +66,9 @@ void scui_ui_scene_4_ring_event_proc(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         
-        scui_handle_t image_edge = SCUI_HANDLE_INVALID;
+        scui_handle_t image_edge = scui_image_prj_image_src_400X400px_dotbmp;
         scui_handle_t image_ring = scui_image_prj_image_src_400X400pxbmp;
+        // scui_handle_t image_ring = scui_image_prj_image_src_400X400pxpng;
         
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += (clip.w - scui_image_w(image_ring)) / 2;

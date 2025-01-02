@@ -190,7 +190,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
                 
                 scui_handle_t *image  = scui_ui_res_local->image;
                 scui_matrix_t *matrix = scui_ui_res_local->matrix;
-                scui_widget_draw_image_by_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
+                scui_widget_draw_image_matrix(event->object, NULL, image[idx], NULL, &matrix[idx]);
             }
         }
         break;

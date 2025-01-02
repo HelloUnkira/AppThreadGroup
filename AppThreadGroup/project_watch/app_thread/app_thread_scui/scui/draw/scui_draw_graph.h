@@ -65,12 +65,18 @@ typedef union {
     struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_surface_t *src_surface;    // 画布实例
+        scui_area_t    *src_clip;       // 画布绘制区域
+    } area_alpha_filter;
+    struct {
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
         scui_area_t    *src_clip;       // 画布绘制区域
         scui_alpha_t    src_alpha;      // 像素点透明度
         scui_color_t    src_color;      // 画布协议色
         scui_matrix_t  *inv_matrix;     // 逆变换矩阵
         scui_matrix_t  *src_matrix;     // 源变换矩阵
-    } area_fill_by_matrix;
+    } area_matrix_fill;
     struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
@@ -79,7 +85,7 @@ typedef union {
         scui_color_t    src_color;      // 画布协议色
         scui_matrix_t  *inv_matrix;     // 逆变换矩阵
         scui_matrix_t  *src_matrix;     // 源变换矩阵
-    } area_blit_by_matrix;
+    } area_matrix_blend;
     /**************************************************************************
      * draw image:
      */
@@ -122,7 +128,7 @@ typedef union {
         scui_color_t    src_color;      // 图像源色调
         scui_matrix_t  *inv_matrix;     // 逆变换矩阵
         scui_matrix_t  *src_matrix;     // 源变换矩阵
-    } image_blit_by_matrix;
+    } image_matrix_blend;
     /**************************************************************************
      * draw letter & string:
      */

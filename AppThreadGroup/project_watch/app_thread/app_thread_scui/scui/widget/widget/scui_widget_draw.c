@@ -422,9 +422,9 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
  *@param clip   图像源绘制区域
  *@param matrix 变换矩阵
  */
-void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target,
-                                      scui_handle_t  image,  scui_area_t *clip,
-                                      scui_matrix_t *matrix)
+void scui_widget_draw_image_matrix(scui_handle_t  handle, scui_area_t *target,
+                                   scui_handle_t  image,  scui_area_t *clip,
+                                   scui_matrix_t *matrix)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_get(handle);
@@ -460,15 +460,15 @@ void scui_widget_draw_image_by_matrix(scui_handle_t  handle, scui_area_t *target
              continue;
         
         scui_draw_dsc_t draw_dsc = {
-            .image_blit_by_matrix.dst_surface = widget->surface,
-            .image_blit_by_matrix.dst_clip    = &dst_clip,
-            .image_blit_by_matrix.src_image   = image_inst,
-            .image_blit_by_matrix.src_clip    = clip,
-            .image_blit_by_matrix.src_alpha   = widget->alpha,
-            .image_blit_by_matrix.inv_matrix  = matrix,
-            .image_blit_by_matrix.src_matrix  = &reb_matrix,
+            .image_matrix_blend.dst_surface = widget->surface,
+            .image_matrix_blend.dst_clip    = &dst_clip,
+            .image_matrix_blend.src_image   = image_inst,
+            .image_matrix_blend.src_clip    = clip,
+            .image_matrix_blend.src_alpha   = widget->alpha,
+            .image_matrix_blend.inv_matrix  = matrix,
+            .image_matrix_blend.src_matrix  = &reb_matrix,
         };
-        scui_draw_image_blit_by_matrix(&draw_dsc);
+        scui_draw_image_matrix_blend(&draw_dsc);
     }
 }
 

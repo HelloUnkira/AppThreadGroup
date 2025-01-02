@@ -46,6 +46,48 @@ static void scui_draw_ring_edge(scui_draw_dsc_t *draw_dsc)
     edge_clip_e.x = dst_center->x + center_e_ex - edge_clip.w / 2;
     edge_clip_e.y = dst_center->y + center_e_ey - edge_clip.h / 2;
     
+    // 缓存一下图片
+    scui_image_unit_t image = {.image = src_image,};
+    scui_image_unit_t image_e = {.image = src_image_e,};
+    scui_image_cache_load(&image);
+    scui_image_cache_load(&image_e);
+    scui_image_cache_unload(&image);
+    scui_image_cache_unload(&image_e);
+    SCUI_ASSERT(image.data != NULL);
+    SCUI_ASSERT(image_e.data != NULL);
+    
+    scui_surface_t image_surface = {
+        .pixel   = image.data,
+        .format  = image.image->format,
+        .hor_res = image.image->pixel.width,
+        .ver_res = image.image->pixel.height,
+        .alpha   = scui_alpha_cover,
+    };
+    
+    scui_surface_t image_e_surface = {
+        .pixel   = image_e.data,
+        .format  = image_e.image->format,
+        .hor_res = image_e.image->pixel.width,
+        .ver_res = image_e.image->pixel.height,
+        .alpha   = scui_alpha_cover,
+    };
+    
+    scui_surface_t edge_surface = {0};
+    if (src_image->format != scui_pixel_cf_alpha4 &&
+        src_image->format != scui_pixel_cf_alpha8) {
+        scui_coord_t hor_res = src_image_e->pixel.width;
+        scui_coord_t ver_res = src_image_e->pixel.height;
+        // 开辟一个底图画布
+        scui_coord_t surface_byte   = scui_pixel_bits(src_image->format) / 8;
+        scui_coord_t surface_remain = sizeof(scui_color_wt_t) - surface_byte;
+        scui_multi_t surface_size   = hor_res * ver_res * surface_byte + surface_remain;
+        edge_surface.pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
+        edge_surface.format  = src_image->format;
+        edge_surface.hor_res = hor_res;
+        edge_surface.ver_res = ver_res;
+        edge_surface.alpha   = scui_alpha_cover;
+    }
+    
     scui_area_t dst_edge_clip_s = {0};
     if (scui_area_inter(&dst_edge_clip_s, dst_clip, &edge_clip_s)) {
         scui_area_t src_clip = edge_clip;
@@ -54,15 +96,51 @@ static void scui_draw_ring_edge(scui_draw_dsc_t *draw_dsc)
             .y = dst_edge_clip_s.y - edge_clip_s.y,
         };
         if (scui_area_limit_offset(&src_clip, &src_offset)) {
-            scui_draw_dsc_t draw_dsc = {
-                .image.dst_surface = dst_surface,
-                .image.dst_clip    = &dst_edge_clip_s,
-                .image.src_image   = src_image_e,
-                .image.src_clip    = &src_clip,
-                .image.src_alpha   = src_alpha,
-                .image.src_color   = src_color,
-            };
-            scui_draw_image(&draw_dsc);
+            
+            if (src_image->format != scui_pixel_cf_alpha4 &&
+                src_image->format != scui_pixel_cf_alpha8) {
+                /* 先取image底图到达edge画布 */ {
+                    scui_area_t src_edge_clip_s = dst_edge_clip_s;
+                    src_edge_clip_s.x -= dst_clip->x;
+                    src_edge_clip_s.y -= dst_clip->y;
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_copy.dst_surface = &edge_surface,
+                        .area_copy.dst_clip    = &edge_clip,
+                        .area_copy.src_surface = &image_surface,
+                        .area_copy.src_clip    = &src_edge_clip_s,
+                    };
+                    scui_draw_area_copy(&draw_dsc);
+                }
+                /* 对edge画布作用edge透明过滤 */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_alpha_filter.dst_surface = &edge_surface,
+                        .area_alpha_filter.dst_clip    = &edge_clip,
+                        .area_alpha_filter.src_surface = &image_e_surface,
+                        .area_alpha_filter.src_clip    = &edge_clip,
+                    };
+                    scui_draw_area_alpha_filter(&draw_dsc);
+                }
+                /* 将edge画布结果绘制 */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_blend.dst_surface = dst_surface,
+                        .area_blend.dst_clip    = &dst_edge_clip_s,
+                        .area_blend.src_surface = &edge_surface,
+                        .area_blend.src_clip    = &src_clip,
+                        .area_blend.src_color   = src_color,
+                    };
+                    scui_draw_area_blend(&draw_dsc);
+                }
+            } else {
+                scui_draw_dsc_t draw_dsc = {
+                    .image.dst_surface = dst_surface,
+                    .image.dst_clip    = &dst_edge_clip_s,
+                    .image.src_image   = src_image_e,
+                    .image.src_clip    = &src_clip,
+                    .image.src_alpha   = src_alpha,
+                    .image.src_color   = src_color,
+                };
+                scui_draw_image(&draw_dsc);
+            }
         }
     }
     
@@ -74,17 +152,55 @@ static void scui_draw_ring_edge(scui_draw_dsc_t *draw_dsc)
             .y = dst_edge_clip_e.y - edge_clip_e.y,
         };
         if (scui_area_limit_offset(&src_clip, &src_offset)) {
-            scui_draw_dsc_t draw_dsc = {
-                .image.dst_surface = dst_surface,
-                .image.dst_clip    = &dst_edge_clip_e,
-                .image.src_image   = src_image_e,
-                .image.src_clip    = &src_clip,
-                .image.src_alpha   = src_alpha,
-                .image.src_color   = src_color,
-            };
-            scui_draw_image(&draw_dsc);
+            
+            if (src_image->format != scui_pixel_cf_alpha4 &&
+                src_image->format != scui_pixel_cf_alpha8) {
+                /* 先取image底图到达edge画布 */ {
+                    scui_area_t src_edge_clip_e = dst_edge_clip_e;
+                    src_edge_clip_e.x -= dst_clip->x;
+                    src_edge_clip_e.y -= dst_clip->y;
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_copy.dst_surface = &edge_surface,
+                        .area_copy.dst_clip    = &edge_clip,
+                        .area_copy.src_surface = &image_surface,
+                        .area_copy.src_clip    = &src_edge_clip_e,
+                    };
+                    scui_draw_area_copy(&draw_dsc);
+                }
+                /* 对edge画布作用edge透明过滤 */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_alpha_filter.dst_surface = &edge_surface,
+                        .area_alpha_filter.dst_clip    = &edge_clip,
+                        .area_alpha_filter.src_surface = &image_e_surface,
+                        .area_alpha_filter.src_clip    = &edge_clip,
+                    };
+                    scui_draw_area_alpha_filter(&draw_dsc);
+                }
+                /* 将edge画布结果绘制 */ {
+                    scui_draw_dsc_t draw_dsc = {
+                        .area_blend.dst_surface = dst_surface,
+                        .area_blend.dst_clip    = &dst_edge_clip_e,
+                        .area_blend.src_surface = &edge_surface,
+                        .area_blend.src_clip    = &src_clip,
+                        .area_blend.src_color   = src_color,
+                    };
+                    scui_draw_area_blend(&draw_dsc);
+                }
+            } else {
+                scui_draw_dsc_t draw_dsc = {
+                    .image.dst_surface = dst_surface,
+                    .image.dst_clip    = &dst_edge_clip_e,
+                    .image.src_image   = src_image_e,
+                    .image.src_clip    = &src_clip,
+                    .image.src_alpha   = src_alpha,
+                    .image.src_color   = src_color,
+                };
+                scui_draw_image(&draw_dsc);
+            }
         }
     }
+    
+    SCUI_MEM_FREE(edge_surface.pixel);
 }
 
 /*@brief 区域图像绘制(内部接口)
