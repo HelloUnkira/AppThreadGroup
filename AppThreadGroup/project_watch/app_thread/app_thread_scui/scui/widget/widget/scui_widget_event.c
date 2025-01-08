@@ -22,10 +22,9 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     if (scui_widget_is_hide(handle))
         return;
     
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget      = scui_handle_source_check(handle);
     scui_handle_t  handle_root = scui_widget_root(handle);
-    scui_widget_t *widget_root = scui_handle_get(handle_root);
-    SCUI_ASSERT(widget != NULL && widget_root != NULL);
+    scui_widget_t *widget_root = scui_handle_source_check(handle_root);
     
     // 没有绘制剪切域时不要绘制
     if (scui_area_empty(&widget->clip_set.clip))
@@ -74,10 +73,6 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
-    // scui_widget_t *widget = scui_handle_get(handle);
-    // scui_handle_t  handle_root = scui_widget_root(handle);
-    // scui_widget_t *widget_root = scui_handle_get(handle_root);
-    // SCUI_ASSERT(widget != NULL && widget_root != NULL);
     
     scui_event_t event = {
         .object     = SCUI_HANDLE_SYSTEM,
@@ -107,8 +102,8 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_event_notify(&event);
     }
     
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    /* 设置控件状态为显示 */
     widget->style.state = true;
     
     /* 将该显示窗口加入到场景管理器中 */
@@ -155,8 +150,7 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     /* 设置控件状态为隐藏 */
     widget->style.state = false;
     
@@ -168,8 +162,8 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     
     /* 布局更新 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
-        SCUI_ASSERT(widget_parent != NULL);
+        scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
+        
         scui_widget_cb_t *widget_cb = NULL;
         scui_widget_cb_find(widget_parent->type, &widget_cb);
         if (widget_cb->layout != NULL)
@@ -226,8 +220,7 @@ void scui_widget_hide(scui_handle_t handle, bool delay)
 void scui_widget_event_clear(scui_handle_t handle)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     scui_event_cb_clear(&widget->list);
 }
@@ -238,10 +231,9 @@ void scui_widget_event_clear(scui_handle_t handle)
  */
 void scui_widget_event_find(scui_handle_t handle, scui_event_cb_node_t *node)
 {
-    SCUI_ASSERT(node != NULL);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
+    SCUI_ASSERT(node != NULL);
     scui_event_cb_find(&widget->list, node);
 }
 
@@ -251,11 +243,10 @@ void scui_widget_event_find(scui_handle_t handle, scui_event_cb_node_t *node)
  */
 void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node)
 {
-    SCUI_ASSERT(node != NULL);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
     SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
+    SCUI_ASSERT(node != NULL);
     scui_event_cb_add(&widget->list, node);
 }
 
@@ -265,11 +256,10 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node)
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
 {
-    SCUI_ASSERT(node != NULL);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
     SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
+    SCUI_ASSERT(node != NULL);
     scui_event_cb_del(&widget->list, node);
 }
 
@@ -279,13 +269,12 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
 void scui_widget_event_proc(scui_event_t *event)
 {
     SCUI_LOG_DEBUG("event %u", event->type);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    
     /* 准备抓取控件事件响应回调 */
-    scui_handle_t handle = event->object;
-    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     scui_event_cb_node_t cb_node = {.event = event->type,};
-    scui_widget_event_find(handle, &cb_node);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_event_find(event->object, &cb_node);
     
     if (cb_node.event_cb != NULL)
         cb_node.event_cb(event);
@@ -301,10 +290,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     if (scui_handle_unmap(event->object))
         return;
     
-    SCUI_LOG_DEBUG("event %u", event->type);
     /* 不同的事件处理流程有不同的递归冒泡规则 */
-    scui_widget_t *widget = scui_handle_get(event->object);
-    SCUI_ASSERT(widget != NULL);
+    SCUI_LOG_DEBUG("event %u", event->type);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     
     /*************************************************************************/
     /* 动画事件:顺向递归**************************************************** */
@@ -419,7 +407,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         /* 有些事件可能被吸收,选择传递 */
         if (event_filter) {
             scui_handle_t handle = scui_widget_root(widget->myself);
-            scui_widget_t  *root = scui_handle_get(handle);
+            scui_widget_t  *root = scui_handle_source_check(handle);
             /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
             /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
             /* 窗口子控件相对窗口也有偏移 */
@@ -556,8 +544,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
  */
 void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
 {
-    scui_widget_t *widget = scui_handle_get(event->object);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     
     if (first) {
         if (event_cb != NULL)
@@ -597,8 +584,7 @@ void scui_widget_event_draw(scui_event_t *event)
          return;
     
     SCUI_LOG_DEBUG("event %u", event->type);
-    scui_widget_t *widget = scui_handle_get(event->object);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     
     /* 控件透明则不绘制 */
     if (widget->style.trans)
@@ -651,7 +637,7 @@ bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
             SCUI_ASSERT(*key != SCUI_HANDLE_INVALID);
             
             SCUI_LOG_INFO("scroll unlock");
-            scui_handle_set(scroll_flag.key, NULL);
+            scui_handle_clear(scroll_flag.key);
             scroll_flag.key  = SCUI_HANDLE_INVALID;
             scroll_flag.lock = false;
             *key = scroll_flag.key;

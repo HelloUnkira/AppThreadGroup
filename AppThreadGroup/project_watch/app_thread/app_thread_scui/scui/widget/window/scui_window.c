@@ -59,9 +59,8 @@ void scui_window_make(scui_window_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_window_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     /* 回收surface */
     if (scui_widget_surface_only(widget))
@@ -93,9 +92,8 @@ void scui_window_cfg_def(scui_window_cfg_t *cfg)
 void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     *cfg = window->cfg;
 }
@@ -107,9 +105,8 @@ void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
 void scui_window_cfg_set(scui_handle_t handle, scui_window_cfg_t *cfg)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     window->cfg = *cfg;
 }

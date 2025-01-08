@@ -69,9 +69,8 @@ void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_string_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     string->args.update = true;
     string->args.name   = SCUI_HANDLE_INVALID;
@@ -108,6 +107,30 @@ void scui_string_burn(scui_handle_t handle)
     SCUI_MEM_FREE(string);
 }
 
+/*@brief 字符串控件文本
+ *@param handle 字符串控件句柄
+ *@param text   字符串句柄
+ */
+void scui_string_text(scui_handle_t handle, scui_handle_t *text)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
+    *text = string->text;
+}
+
+/*@brief 字符串控件字符串
+ *@param handle   字符串控件句柄
+ *@param str_utf8 字符串(utf8)
+ */
+void scui_string_str_utf8(scui_handle_t handle, uint8_t **str_utf8)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
+    *str_utf8 = string->str_utf8;
+}
+
 /*@brief 字符串控件更新文本
  *@param handle 字符串控件句柄
  *@param text   字符串句柄
@@ -115,7 +138,7 @@ void scui_string_burn(scui_handle_t handle)
 void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
     /* 回收旧颜色值表 */
@@ -139,7 +162,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     if (string->text != SCUI_HANDLE_INVALID) {
         string->name = scui_font_name_get(string->font_idx);
         scui_multi_lang_type_t type = scui_font_type_switch(string->name);
-        uint8_t *str_utf8  = scui_handle_get(scui_multi_lang_switch(type, string->text));
+        uint8_t *str_utf8  = scui_handle_source(scui_multi_lang_switch(type, string->text));
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
@@ -162,14 +185,14 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     scui_widget_draw(handle, NULL, false);
 }
 
-/*@brief 字符串控件更新文本
+/*@brief 字符串控件更新字符串
  *@param handle   字符串控件句柄
  *@param str_utf8 字符串(utf8)
  */
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
     // 重复的字符串, 跳过绘制
@@ -205,7 +228,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     scui_widget_draw(handle, NULL, false);
 }
 
-/*@brief 字符串控件更新文本(重上色)
+/*@brief 字符串控件更新字符串(重上色)
  *@param 使用#- -#包裹的内容为重上色区域
  *@param handle    字符串控件句柄
  *@param str_utf8  字符串(utf8)
@@ -215,7 +238,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
 void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_t color_num, scui_color_t *color_ll)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
     SCUI_ASSERT(string->args.recolor);
@@ -300,7 +323,7 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_
 void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint32_t grad_n)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
     /* 必须要配置绘制缓存块 */
@@ -330,9 +353,8 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint3
 void scui_string_scroll_abort(scui_handle_t handle, bool abort)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
-    
     string->unit_abort = abort;
 }
 
@@ -343,9 +365,8 @@ void scui_string_scroll_abort(scui_handle_t handle, bool abort)
 bool scui_string_scroll_over(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
-    
     return string->unit_over;
 }
 
@@ -355,10 +376,8 @@ bool scui_string_scroll_over(scui_handle_t handle)
 void scui_string_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_string_t *string = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -421,7 +440,7 @@ void scui_string_event(scui_event_t *event)
         }
         
         string->unit_anima = true;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false);
         break;
     }
     case scui_event_draw: {
@@ -531,10 +550,10 @@ void scui_string_event(scui_event_t *event)
                 .pixel.data_bin = string->draw_surface->pixel,
             };
             scui_handle_t image = scui_handle_find();
-            scui_handle_set(image, &image_inst);
+            scui_handle_linker(image, &image_inst);
             
             if (string->args.limit <= 0)
-                scui_widget_draw_image(handle, NULL, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(widget->myself, NULL, image, NULL, (scui_color_t){0});
             else {
                 if (string->args.line_multi)
                     SCUI_LOG_DEBUG("offset y:%d", string->args.offset);
@@ -545,7 +564,7 @@ void scui_string_event(scui_event_t *event)
                     scui_area_t image_clip = scui_surface_area(string->draw_surface);
                     image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
                     image_clip.y = string->args.line_multi ? -string->args.offset : 0;
-                    scui_widget_draw_image(handle, NULL, image, &image_clip, (scui_color_t){0});
+                    scui_widget_draw_image(widget->myself, NULL, image, &image_clip, (scui_color_t){0});
                 }
                 
                 if (string->args.mode_scroll == 1) {
@@ -558,7 +577,7 @@ void scui_string_event(scui_event_t *event)
                         draw_clip.x += string->args.line_multi ? 0 : string->args.offset;
                         draw_clip.y += string->args.line_multi ? string->args.offset : 0;
                     }
-                    scui_widget_draw_image(handle, &draw_clip, image, &image_clip, (scui_color_t){0});
+                    scui_widget_draw_image(widget->myself, &draw_clip, image, &image_clip, (scui_color_t){0});
                 }
                 if (string->args.mode_scroll == 1 && string->args.limit > 0) {
                     scui_coord_t offset    = string->args.offset;
@@ -570,16 +589,16 @@ void scui_string_event(scui_event_t *event)
                     scui_area_t draw_clip = widget->clip;
                     draw_clip.x += string->args.line_multi ? 0 : offset;
                     draw_clip.y += string->args.line_multi ? offset : 0;
-                    scui_widget_draw_image(handle, &draw_clip, image, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(widget->myself, &draw_clip, image, NULL, (scui_color_t){0});
                 }
             }
             
-            scui_handle_set(image, NULL);
+            scui_handle_clear(image);
             break;
         }
         
         // 无缓存块的绘制下
-        scui_widget_draw_string(handle, NULL, &string->args);
+        scui_widget_draw_string(widget->myself, NULL, &string->args);
         //
         if (string->args.mode_scroll == 1 && string->args.limit > 0) {
             scui_coord_t offset = string->args.offset;
@@ -588,14 +607,14 @@ void scui_string_event(scui_event_t *event)
             string->args.offset += string->args.line_multi ? SCUI_WIDGET_STRING_SCROLL_LINE : 0;
             string->args.offset += string->args.line_multi ? 0 : SCUI_WIDGET_STRING_SCROLL_ITEM;
             
-            scui_widget_draw_string(handle, NULL, &string->args);
+            scui_widget_draw_string(widget->myself, NULL, &string->args);
             string->args.offset = offset;
         }
         break;
     }
     case scui_event_adjust_size:{
         string->args.update = true;
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false);
         break;
     }
     case scui_event_change_font: {
@@ -606,10 +625,10 @@ void scui_string_event(scui_event_t *event)
             string->unit_over = false;
             string->unit_way  = 1;
             scui_handle_t text = string->text;
-            scui_string_update_text(handle, SCUI_HANDLE_INVALID);
+            scui_string_update_text(widget->myself, SCUI_HANDLE_INVALID);
             string->name = scui_font_name_get(string->font_idx);
-            scui_string_update_text(handle, text);
-            scui_widget_draw(handle, NULL, true);
+            scui_string_update_text(widget->myself, text);
+            scui_widget_draw(widget->myself, NULL, true);
         }
         break;
     }

@@ -54,9 +54,8 @@ void scui_button_make(scui_button_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_button_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_button_t *button = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_burn(&button->widget);
@@ -71,10 +70,8 @@ void scui_button_burn(scui_handle_t handle)
 void scui_button_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_button_t *button = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -136,7 +133,7 @@ void scui_button_event(scui_event_t *event)
              return;
         
         scui_handle_t handle = scui_widget_root(widget->myself);
-        scui_widget_t  *root = scui_handle_get(handle);
+        scui_widget_t  *root = scui_handle_source_check(handle);
         
         scui_area_t clip = widget->clip;
         if (widget != root) {

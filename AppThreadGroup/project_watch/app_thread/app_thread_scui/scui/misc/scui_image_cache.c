@@ -64,8 +64,8 @@ static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
         cond_tar = true;
     if (unit1->image->from != SCUI_HANDLE_INVALID &&
         unit2->image->from != SCUI_HANDLE_INVALID) {
-        const char *from_str1 = scui_handle_get(unit1->image->from);
-        const char *from_str2 = scui_handle_get(unit2->image->from);
+        const char *from_str1 = scui_handle_source(unit1->image->from);
+        const char *from_str2 = scui_handle_source(unit2->image->from);
         if (strcmp(from_str1, from_str2) == 0)
             cond_tar = true;
     }
@@ -82,7 +82,7 @@ static void scui_image_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
     static const char *unit__image__local = "local";
     char * unit__image__from = unit__image__local;
     if (unit->image->from != SCUI_HANDLE_INVALID)
-        unit__image__from  = scui_handle_get(unit->image->from);
+        unit__image__from  = scui_handle_source(unit->image->from);
     
     SCUI_LOG_INFO("- width:%x",          unit->image->pixel.width);
     SCUI_LOG_INFO("- height:%x",         unit->image->pixel.height);

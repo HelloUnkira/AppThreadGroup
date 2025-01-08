@@ -30,9 +30,8 @@ void scui_custom_make(scui_custom_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_custom_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_burn(&custom->widget);
@@ -50,14 +49,13 @@ void scui_custom_burn(scui_handle_t handle)
 void scui_custom_draw_text(scui_handle_t handle, scui_area_t *target, scui_string_args_t *args, scui_handle_t text)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (text != SCUI_HANDLE_INVALID) {
         scui_multi_lang_type_t type = scui_font_type_switch(args->name);
         scui_handle_t text_ml = scui_multi_lang_switch(type, text);
-        args->utf8 = scui_handle_get(text_ml);
+        args->utf8 = scui_handle_source(text_ml);
     }
     args->clip = scui_widget_clip(handle);
     

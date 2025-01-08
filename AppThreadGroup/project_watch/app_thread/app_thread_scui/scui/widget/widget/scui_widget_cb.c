@@ -14,8 +14,7 @@
  */
 bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 控件类型相等
     if (widget->type == type)
@@ -86,8 +85,7 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
     
     scui_widget_t *widget = NULL;
     scui_widget_maker_t *maker = NULL;
-    widget = maker = scui_handle_get(handle);
-    SCUI_ASSERT(maker != NULL);
+    widget = maker = scui_handle_source_check(handle);
     SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
     
     scui_handle_table_t *handle_table = scui_handle_table_find(handle);
@@ -101,11 +99,11 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
         widget_cb->make(maker, &handle, true);
         /* 迭代到下一个句柄 */
         handle++;
-        widget = maker = scui_handle_get(handle);
+        widget = maker = scui_handle_source(handle);
         if (maker == NULL)
             break;
         /* 一直迭代到下一个根控件句柄前停下 */
-        if ((scui_handle_unmap(handle) && maker->parent == SCUI_HANDLE_INVALID) ||
+        if ((scui_handle_unmap(handle) &&  maker->parent == SCUI_HANDLE_INVALID) ||
             (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID))
             break;
     } while (handle < handle_table->offset + handle_table->number);
@@ -133,8 +131,7 @@ void scui_widget_destroy(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t    *widget    = scui_handle_source_check(handle);
     scui_widget_cb_t *widget_cb = NULL;
     scui_widget_cb_find(widget->type, &widget_cb);
     widget_cb->burn(handle);

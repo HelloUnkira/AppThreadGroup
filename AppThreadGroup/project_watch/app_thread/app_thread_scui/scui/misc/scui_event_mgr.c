@@ -231,7 +231,7 @@ static void scui_event_respond(scui_event_t *event)
     }
     
     /* 事件响应对象无效(未知情况?) */
-    if (scui_handle_get(event->object) == NULL) {
+    if (scui_handle_source(event->object) == NULL) {
         const char *type_stringify = scui_event_type_stringify(event->type);
         SCUI_LOG_WARN("error widget %u %s", event->object, type_stringify);
         return;

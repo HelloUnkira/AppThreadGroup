@@ -66,15 +66,12 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
                     scui_ui_res_local->image_fg[idx_j][idx_i] += 2;
             }
             
-            scui_image_t *image_bg = scui_handle_get(scui_ui_res_local->image_bg);
-            scui_image_t *image_fg = scui_handle_get(scui_ui_res_local->image_fg[0][0]);
-            SCUI_ASSERT(image_bg != NULL);
-            SCUI_ASSERT(image_fg != NULL);
-            
-            scui_coord3_t image_bg_w = image_bg->pixel.width;
-            scui_coord3_t image_bg_h = image_bg->pixel.height;
-            scui_coord3_t image_fg_w = image_fg->pixel.width;
-            scui_coord3_t image_fg_h = image_fg->pixel.height;
+            scui_handle_t image_bg = scui_ui_res_local->image_bg;
+            scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
+            scui_coord3_t image_bg_w = scui_image_w(image_bg);
+            scui_coord3_t image_bg_h = scui_image_h(image_bg);
+            scui_coord3_t image_fg_w = scui_image_w(image_fg);
+            scui_coord3_t image_fg_h = scui_image_h(image_fg);
             SCUI_ASSERT(image_bg_h == image_bg_w);
             SCUI_ASSERT(image_fg_h == image_fg_w);
             
@@ -142,15 +139,12 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             scui_coord3_t sub_hor_res = scui_ui_res_local->sub_hor_res;
             scui_coord3_t sub_ver_res = scui_ui_res_local->sub_ver_res;
             
-            scui_image_t *image_bg = scui_handle_get(scui_ui_res_local->image_bg);
-            scui_image_t *image_fg = scui_handle_get(scui_ui_res_local->image_fg[0][0]);
-            SCUI_ASSERT(image_bg != NULL);
-            SCUI_ASSERT(image_fg != NULL);
-            
-            scui_coord3_t image_bg_w = image_bg->pixel.width;
-            scui_coord3_t image_bg_h = image_bg->pixel.height;
-            scui_coord3_t image_fg_w = image_fg->pixel.width;
-            scui_coord3_t image_fg_h = image_fg->pixel.height;
+            scui_handle_t image_bg = scui_ui_res_local->image_bg;
+            scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
+            scui_coord3_t image_bg_w = scui_image_w(image_bg);
+            scui_coord3_t image_bg_h = scui_image_h(image_bg);
+            scui_coord3_t image_fg_w = scui_image_w(image_fg);
+            scui_coord3_t image_fg_h = scui_image_h(image_fg);
             scui_point2_t offset_bg  = scui_ui_res_local->offset_bg;
             scui_point2_t offset_fg  = scui_ui_res_local->offset_fg;
             

@@ -68,8 +68,7 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
     int scaled = (qr_size * scale);
     int margin = (clip->w - scaled) / 2;
     
-    scui_widget_t  *widget  = scui_handle_get(event->object);
-    scui_surface_t *surface = widget->surface;
+    scui_surface_t *surface   = scui_widget_surface(event->object);
     scui_coord_t pixel_byte   = scui_pixel_bits(surface->format) / 8;
     scui_coord_t pixel_remain = sizeof(scui_color_wt_t) - pixel_byte;
     scui_multi_t pixel_size   = pixel_byte * scaled * scaled + pixel_remain;
@@ -100,9 +99,9 @@ void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
             .pixel.data_bin = pixel,
         };
         scui_handle_t image = scui_handle_find();
-        scui_handle_set(image, &image_inst);
+        scui_handle_linker(image, &image_inst);
         scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
-        scui_handle_set(image, NULL);
+        scui_handle_clear(image);
     }
     
     SCUI_MEM_FREE(pixel);

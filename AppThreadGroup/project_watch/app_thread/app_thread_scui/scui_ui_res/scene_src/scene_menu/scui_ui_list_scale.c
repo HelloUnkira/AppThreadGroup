@@ -193,9 +193,9 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         };
         
         scui_handle_t image = scui_handle_find();
-        scui_handle_set(image, &img_inst);
+        scui_handle_linker(image, &img_inst);
         scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, pos);
-        scui_handle_set(image, NULL);
+        scui_handle_clear(image);
         
         break;
     }

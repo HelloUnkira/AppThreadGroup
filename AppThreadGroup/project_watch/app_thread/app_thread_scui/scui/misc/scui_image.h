@@ -28,10 +28,22 @@ typedef struct {
  */
 typedef struct {
     scui_pixel_cf_t     format;     // 图片格式
-    scui_image_type_t   type;       // 图片状态
+    scui_image_type_t   type;       // 图片类型
     scui_image_pixel_t  pixel;      // 图片色彩数据
     scui_handle_t       from;       // 图库来源
 } scui_image_t;
+
+/*@brief 图像格式
+ *@param handle 图像句柄
+ *@retval 图像格式
+ */
+scui_pixel_cf_t scui_image_cf(scui_handle_t handle);
+
+/*@brief 图像类型
+ *@param handle 图像句柄
+ *@retval 图像类型
+ */
+scui_image_type_t scui_image_type(scui_handle_t handle);
 
 /*@brief 图像宽
  *@param handle 图像句柄

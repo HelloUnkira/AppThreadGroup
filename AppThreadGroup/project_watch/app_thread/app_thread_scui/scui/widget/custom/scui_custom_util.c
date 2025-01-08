@@ -92,14 +92,11 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
         cmax = temp;
     }
     
-    scui_image_t *image_inst = scui_handle_get(edge);
-    SCUI_ASSERT(image_inst != NULL);
-    
     scui_area_t  dst_area = {0};
     scui_area_t  dst_clip = *clip;
     scui_area_t  src_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
+        .w = scui_image_w(edge),
+        .h = scui_image_h(edge),
     };
     
     if (way) {
@@ -194,11 +191,6 @@ void scui_custom_draw_indicator(scui_event_t *event, scui_area_t  *clip,
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
-    scui_image_t *image_wait  = scui_handle_get(wait);
-    scui_image_t *image_focus = scui_handle_get(focus);
-    SCUI_ASSERT(image_wait  != NULL);
-    SCUI_ASSERT(image_focus != NULL);
-    
     scui_point_t offset = {0};
     for (scui_handle_t idx = 0; idx < count; idx++) {
         if (idx == index) {
@@ -206,17 +198,17 @@ void scui_custom_draw_indicator(scui_event_t *event, scui_area_t  *clip,
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, focus, NULL, color_focus);
             if (dir_hor)
-                offset.x += image_focus->pixel.width  + span;
+                offset.x += scui_image_w(focus) + span;
             else
-                offset.y += image_focus->pixel.height + span;
+                offset.y += scui_image_h(focus) + span;
         } else {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, wait, NULL, color_wait);
             if (dir_hor)
-                offset.x += image_wait->pixel.width  + span;
+                offset.x += scui_image_w(wait) + span;
             else
-                offset.y += image_wait->pixel.height + span;
+                offset.y += scui_image_h(wait) + span;
         }
     }
 }
@@ -235,17 +227,14 @@ void scui_custom_draw_ring_edge(scui_event_t *event,  scui_point_t *center,
 {
     SCUI_LOG_DEBUG("");
     
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(image_inst != NULL);
-    
     scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
     scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
     
     scui_area_t clip = {
-        .x = center->x + point_x - image_inst->pixel.width  / 2,
-        .y = center->y + point_y - image_inst->pixel.height / 2,
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
+        .x = center->x + point_x - scui_image_w(image) / 2,
+        .y = center->y + point_y - scui_image_h(image) / 2,
+        .w = scui_image_w(image),
+        .h = scui_image_h(image),
     };
     scui_widget_draw_image(event->object, &clip, image, NULL, color);
 }
@@ -273,17 +262,15 @@ void scui_custom_draw_image_text(scui_event_t  *event, scui_area_t *clip,
     for (scui_handle_t idx = 0; idx < num; idx++) {
         if (image[idx] == SCUI_HANDLE_INVALID)
             continue;
-        scui_image_t *image_inst = scui_handle_get(image[idx]);
-        SCUI_ASSERT(image_inst != NULL);
         
         scui_area_t dst_clip = *clip;
         if (scui_area_limit_offset(&dst_clip, &offset))
             scui_widget_draw_image(event->object, &dst_clip, image[idx], NULL, color);
         
         if (way)
-            offset.y += span + image_inst->pixel.height;
+            offset.y += span + scui_image_h(image[idx]);
         else
-            offset.x += span + image_inst->pixel.width;
+            offset.x += span + scui_image_w(image[idx]);
     }
 }
 
@@ -303,21 +290,17 @@ void scui_custom_draw_rect4(scui_event_t *event,    scui_area_t *clip,
     SCUI_ASSERT(image != NULL);
     
     scui_area_t image_clip = {.w = -1, .h = -1,};
-    scui_image_t *image_inst[4] = {0};
+    
+    /* 断言检查,所有有效图片应该保持同一宽与高 */
     for (uint8_t idx = 0; idx < 4; idx++) {
         if (image[idx] != SCUI_HANDLE_INVALID) {
-            image_inst[idx] = scui_handle_get(image[idx]);
-            SCUI_ASSERT(image_inst[idx] != NULL);
-            /* 断言检查,所有有效图片应该保持同一宽与高 */
-            SCUI_ASSERT(image_clip.w == -1 || image_clip.w == image_inst[idx]->pixel.width);
-            SCUI_ASSERT(image_clip.h == -1 || image_clip.h == image_inst[idx]->pixel.height);
-            
-            if (image_clip.w == -1)
-                image_clip.w  = image_inst[idx]->pixel.width;
-            if (image_clip.h == -1)
-                image_clip.h  = image_inst[idx]->pixel.height;
+            SCUI_ASSERT(image_clip.w == -1 || image_clip.w == scui_image_w(image[idx]));
+            SCUI_ASSERT(image_clip.h == -1 || image_clip.h == scui_image_h(image[idx]));
+            if (image_clip.w == -1) image_clip.w  = scui_image_w(image[idx]);
+            if (image_clip.h == -1) image_clip.h  = scui_image_h(image[idx]);
         }
     }
+    
     scui_area_t clip_f = {0};
     scui_area_t clip_a = {0};
     /* 无图片,全填充或者不填充 */

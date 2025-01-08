@@ -224,8 +224,6 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, &clip, color_black);
         
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_btn_22_retry_heartbmp;
-        scui_image_t *image = scui_handle_get(image_handle);
-        SCUI_ASSERT(image != NULL);
         
         scui_point_t scale = image_scale;
         scui_widget_draw_image_scale(event->object, &clip, image_handle, NULL, scale, scui_opt_pos_c);

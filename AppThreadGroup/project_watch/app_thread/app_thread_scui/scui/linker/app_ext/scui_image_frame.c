@@ -62,7 +62,7 @@ void scui_image_frame_burn(scui_image_frame_t *image_frame)
         uintptr_t data_bin = image_frame->image.pixel.data_bin;
         SCUI_MEM_FREE((void *)data_bin);
         
-        scui_handle_set(image_frame->frame, NULL);
+        scui_handle_clear(image_frame->frame);
         SCUI_MEM_FREE(image_frame->data);
         SCUI_MEM_FREE(image_frame->local);
         
@@ -81,7 +81,7 @@ void scui_image_frame_burn(scui_image_frame_t *image_frame)
         uintptr_t data_bin = image_frame->image.pixel.data_bin;
         SCUI_MEM_FREE((void *)data_bin);
         
-        scui_handle_set(image_frame->frame, NULL);
+        scui_handle_clear(image_frame->frame);
         SCUI_MEM_FREE(image_frame->data);
         SCUI_MEM_FREE(image_frame->local);
         
@@ -113,8 +113,8 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
     switch (image_frame->type) {
     case scui_image_type_gif: {
         
-        scui_image_t *image = scui_handle_get(image_frame->handle);
-        SCUI_ASSERT(image != NULL && image->type == scui_image_type_gif);
+        scui_image_t *image = scui_handle_source_check(image_frame->handle);
+        SCUI_ASSERT(image->type == scui_image_type_gif);
         
         SCUI_ASSERT(image_frame->data == NULL);
         image_frame->size = image->pixel.size_bin;
@@ -134,7 +134,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->image.pixel.data_bin = data_bin;
         image_frame->image.pixel.size_bin = size_bin;
         image_frame->frame = scui_handle_find();
-        scui_handle_set(image_frame->frame, &image_frame->image);
+        scui_handle_linker(image_frame->frame, &image_frame->image);
         
         // 更新基础参数
         local->gif->loop_count = image_frame->gif.loop;
@@ -142,8 +142,8 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
     }
     case scui_image_type_lottie: {
         
-        scui_image_t *image = scui_handle_get(image_frame->handle);
-        SCUI_ASSERT(image != NULL && image->type == scui_image_type_lottie);
+        scui_image_t *image = scui_handle_source_check(image_frame->handle);
+        SCUI_ASSERT(image->type == scui_image_type_lottie);
         
         SCUI_ASSERT(image_frame->data == NULL);
         image_frame->size = image->pixel.size_bin + 1;
@@ -168,7 +168,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->image.pixel.data_bin = data_bin;
         image_frame->image.pixel.size_bin = size_bin;
         image_frame->frame = scui_handle_find();
-        scui_handle_set(image_frame->frame, &image_frame->image);
+        scui_handle_linker(image_frame->frame, &image_frame->image);
         
         // 更新基础参数
         image_frame->lottie.frame = lottie_animation_get_totalframe(local->rlottie.Animation);

@@ -52,9 +52,8 @@ void scui_watch_make(scui_watch_maker_t *maker, scui_handle_t *handle, bool layo
  */
 void scui_watch_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_watch_t  *watch  = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     /* 销毁基础控件实例 */
     scui_widget_burn(&watch->widget);
@@ -70,9 +69,8 @@ void scui_watch_burn(scui_handle_t handle)
 void scui_watch_tick_mode(scui_handle_t handle, bool tick_mode)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_watch));
-    scui_widget_t *widget = scui_handle_get(handle);
-    scui_watch_t   *watch = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_watch_t  *watch  = (void *)widget;
     
     watch->tick_mode = tick_mode;
     scui_widget_draw(handle, NULL, false);
@@ -84,10 +82,8 @@ void scui_watch_tick_mode(scui_handle_t handle, bool tick_mode)
 void scui_watch_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    scui_watch_t   *watch = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_watch_t  *watch  = (void *)widget;
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -107,7 +103,7 @@ void scui_watch_event(scui_event_t *event)
             watch->tick_s  = data_set->sys_time_s;
             watch->tick_ms     = 0;
             watch->tick_ms_rcd = 0;
-            scui_widget_draw(handle, NULL, false);
+            scui_widget_draw(widget->myself, NULL, false);
             break;
         }
         
@@ -120,7 +116,7 @@ void scui_watch_event(scui_event_t *event)
             /* 一度一跳时 */
             if (scui_dist(watch->tick_ms, watch->tick_ms_rcd) >= (1000 / 6)) {
                 watch->tick_ms_rcd = watch->tick_ms;
-                scui_widget_draw(handle, NULL, false);
+                scui_widget_draw(widget->myself, NULL, false);
                 break;
             }
         } else {
@@ -136,13 +132,13 @@ void scui_watch_event(scui_event_t *event)
         
         /* hour: */
         scui_coord_t angle_h = watch->tick_h * (360 / 24) + watch->tick_m * (360 / 60) * 6 / 360;
-        scui_widget_draw_image_rotate(handle, NULL, watch->image_h, NULL, &watch->anchor_h, &watch->center_h, angle_h);
+        scui_widget_draw_image_rotate(widget->myself, NULL, watch->image_h, NULL, &watch->anchor_h, &watch->center_h, angle_h);
         /* minute: */
         scui_coord_t angle_m = watch->tick_m * (360 / 60) + watch->tick_s * (360 / 60) * 6 / 360;
-        scui_widget_draw_image_rotate(handle, NULL, watch->image_m, NULL, &watch->anchor_m, &watch->center_m, angle_m);
+        scui_widget_draw_image_rotate(widget->myself, NULL, watch->image_m, NULL, &watch->anchor_m, &watch->center_m, angle_m);
         /* second: */
         scui_coord_t angle_s = watch->tick_s * (360 / 60) + watch->tick_ms * 6 / 1000;
-        scui_widget_draw_image_rotate(handle, NULL, watch->image_s, NULL, &watch->anchor_s, &watch->center_s, angle_s);
+        scui_widget_draw_image_rotate(widget->myself, NULL, watch->image_s, NULL, &watch->anchor_s, &watch->center_s, angle_s);
         
         break;
     }

@@ -27,7 +27,7 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     
     SCUI_LOG_DEBUG("");
     /* 为句柄设置映射 */
-    scui_handle_set(*handle, widget);
+    scui_handle_linker(*handle, widget);
     
     /* 控件使用maker构造 */
     if (maker->parent != SCUI_HANDLE_INVALID)
@@ -57,14 +57,14 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     /* 画布的映射是根控件 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_handle_t handle = scui_widget_root(widget->myself);
-        scui_widget_t  *root = scui_handle_get(handle);
+        scui_widget_t  *root = scui_handle_source_check(handle);
         widget->surface = root->surface;
     }
     
     SCUI_LOG_DEBUG("");
     /* 子控件的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *parent = scui_handle_get(widget->parent);
+        scui_widget_t *parent = scui_handle_source_check(widget->parent);
         
         if (parent->parent == SCUI_HANDLE_INVALID &&
             scui_widget_surface_only(widget));
@@ -145,7 +145,7 @@ void scui_widget_burn(scui_widget_t *widget)
     SCUI_LOG_INFO("widget %u", widget->myself);
     /* 回收用户资源句柄 */
     if (widget->user_data != SCUI_HANDLE_INVALID)
-        scui_handle_set(widget->user_data, NULL);
+        scui_handle_clear(widget->user_data);
     /* 先递归销毁自己的孩子列表 */
     scui_widget_child_list_btra(widget, idx)
         scui_widget_destroy(widget->child_list[idx]);
@@ -163,7 +163,7 @@ void scui_widget_burn(scui_widget_t *widget)
     scui_event_t event = {.object = widget->myself};
     while (scui_event_dequeue(&event, true, true));
     /* 回收句柄 */
-    scui_handle_set(widget->myself, NULL);
+    scui_handle_clear(widget->myself);
 }
 
 /*@brief 控件树的根控件
@@ -172,12 +172,9 @@ void scui_widget_burn(scui_widget_t *widget)
  */
 scui_handle_t scui_widget_root(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        return scui_widget_root(widget->parent);
-    return handle;
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    return widget->parent == SCUI_HANDLE_INVALID ?
+        handle : scui_widget_root(widget->parent);
 }
 
 /*@brief 控件的父控件
@@ -186,9 +183,7 @@ scui_handle_t scui_widget_root(scui_handle_t handle)
  */
 scui_handle_t scui_widget_parent(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->parent;
 }
 
@@ -198,9 +193,7 @@ scui_handle_t scui_widget_parent(scui_handle_t handle)
  */
 scui_handle_t scui_widget_child_num(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->child_num;
 }
 
@@ -211,8 +204,7 @@ scui_handle_t scui_widget_child_num(scui_handle_t handle)
 void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
 {
     SCUI_LOG_INFO("widget %u add child %u", handle, child);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
@@ -235,8 +227,7 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
 void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
 {
     SCUI_LOG_INFO("widget %u del child %u", handle, child);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == child) {
@@ -259,8 +250,7 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
  */
 scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 其他范围映射到取值范围[0:num) */
     index = scui_mabs(index, widget->child_num);
@@ -277,8 +267,7 @@ scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t ind
  */
 scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     scui_widget_child_list_btra(widget, idx)
         if (child == widget->child_list[idx])
@@ -294,8 +283,7 @@ scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t chi
  */
 void scui_widget_clip_check(scui_handle_t handle, bool recurse)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     SCUI_LOG_WARN("widget: %u, parent: %u", handle, widget->parent);
     
@@ -331,7 +319,7 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_t *child = scui_handle_source(handle);
         scui_widget_clip_clear(child, recurse);
     }
 }
@@ -355,7 +343,7 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
     
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_t *child = scui_handle_source(handle);
         scui_widget_clip_reset(child, clip, recurse);
     }
 }
@@ -380,10 +368,8 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
                 if (widget->image == SCUI_HANDLE_INVALID)
                     return true;
                 /* 图片背景,看是否自带透明度 */
-                scui_image_t *image = scui_handle_get(widget->image);
-                SCUI_ASSERT(image != NULL);
-                if (image->format == scui_pixel_cf_bmp565 ||
-                    image->format == scui_pixel_cf_bmp888)
+                if (scui_image_cf(widget->image) == scui_pixel_cf_bmp565 ||
+                    scui_image_cf(widget->image) == scui_pixel_cf_bmp888)
                     return true;
             }
         }
@@ -403,7 +389,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
     /* 迭代到子控件,清除自己的剪切域 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_t *child = scui_handle_source(handle);
         /* 控件隐藏则跳过 */
         if (scui_widget_is_hide(handle))
             continue;
@@ -417,14 +403,14 @@ void scui_widget_clip_update(scui_widget_t *widget)
     /* 从父控件的当前位置开始,迭代到后面的兄弟控件,清除自己的剪切域 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         bool not_match = true;
-        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
         for (scui_handle_t idx = 0; idx < widget_parent->child_num; idx++) {
             if (widget_parent->child_list[idx] != SCUI_HANDLE_INVALID &&
                 widget_parent->child_list[idx] != widget->myself) {
                 if (not_match)
                     continue;
                 scui_handle_t handle = widget_parent->child_list[idx];
-                scui_widget_t *buddy = scui_handle_get(handle);
+                scui_widget_t *buddy = scui_handle_source_check(handle);
                 /* 控件隐藏则跳过 */
                 if (scui_widget_is_hide(handle))
                     continue;
@@ -445,9 +431,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
  */
 scui_surface_t * scui_widget_surface(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->surface;
 }
 
@@ -460,9 +444,7 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle)
 void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
                                 scui_coord_t  hor_res, scui_coord_t    ver_res)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->surface == NULL && hor_res > 0 && ver_res > 0);
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
     memset(widget->surface, 0, sizeof(scui_surface_t));
@@ -486,9 +468,7 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
  */
 void scui_widget_surface_destroy(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     if (widget->surface == NULL)
         return;
     
@@ -503,10 +483,8 @@ void scui_widget_surface_destroy(scui_handle_t handle)
  */
 void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    SCUI_LOG_DEBUG("widget %u", widget->myself);
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     widget->surface = surface;
     
@@ -522,10 +500,9 @@ void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
  */
 void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
-    SCUI_LOG_DEBUG("widget %u", widget->myself);
     widget->clip_set.clip = widget->clip;
     /* 有独立画布的根控件不记录原点偏移,控件树永远相对独立画布移动 */
     /* 没有独立画布的根控件保留原点偏移,控件树永远相对绘制画布移动 */
@@ -537,7 +514,7 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
     
     /* 画布的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = scui_handle_get(widget->parent);
+        scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
         scui_area_t widget_clip = widget->clip_set.clip;
         scui_area_t parent_clip = widget_parent->clip_set.clip;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
@@ -618,9 +595,7 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface)
  */
 scui_widget_type_t scui_widget_type(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->type;
 }
 
@@ -630,9 +605,7 @@ scui_widget_type_t scui_widget_type(scui_handle_t handle)
  */
 scui_area_t scui_widget_clip(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->clip;
 }
 
@@ -642,9 +615,7 @@ scui_area_t scui_widget_clip(scui_handle_t handle)
  */
 bool scui_widget_is_show(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID)
     if (!scui_widget_is_show(widget->parent))
@@ -672,13 +643,9 @@ bool scui_widget_is_hide(scui_handle_t handle)
  */
 void * scui_widget_user_data_get(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
-    if (widget->user_data == SCUI_HANDLE_INVALID)
-        return NULL;
-    
-    return scui_handle_get(widget->user_data);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    return widget->user_data == SCUI_HANDLE_INVALID ?
+         NULL : scui_handle_source(widget->user_data);
 }
 
 /*@brief 控件透明度获取
@@ -687,9 +654,7 @@ void * scui_widget_user_data_get(scui_handle_t handle)
  */
 scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->alpha;
 }
 
@@ -699,9 +664,7 @@ scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
  */
 scui_handle_t scui_widget_image_get(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->image;
 }
 
@@ -711,9 +674,7 @@ scui_handle_t scui_widget_image_get(scui_handle_t handle)
  */
 scui_color_t scui_widget_color_get(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->color;
 }
 
@@ -724,13 +685,12 @@ scui_color_t scui_widget_color_get(scui_handle_t handle)
 void scui_widget_user_data_set(scui_handle_t handle, void *user_data)
 {
     SCUI_LOG_INFO("widget %u user src %u set", handle, user_data);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     if (widget->user_data == SCUI_HANDLE_INVALID)
         widget->user_data  = scui_handle_find();
     
-    scui_handle_set(widget->user_data, user_data);
+    scui_handle_linker(widget->user_data, user_data);
 }
 
 /*@brief 控件透明度设置
@@ -741,8 +701,7 @@ void scui_widget_user_data_set(scui_handle_t handle, void *user_data)
 void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurse)
 {
     SCUI_LOG_INFO("widget %u alpha %u set", handle, alpha);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     widget->alpha = alpha;
     
@@ -750,8 +709,10 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurs
          return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
-    scui_widget_child_list_btra(widget, idx)
-        scui_widget_alpha_set(widget->child_list[idx], alpha, recurse);
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_alpha_set(handle, alpha, recurse);
+    }
 }
 
 /*@brief 控件图片设置
@@ -761,9 +722,7 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurs
 void scui_widget_image_set(scui_handle_t handle, scui_handle_t image)
 {
     SCUI_LOG_INFO("widget %u image %u set", handle, image);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     widget->image = image;
 }
 
@@ -774,8 +733,6 @@ void scui_widget_image_set(scui_handle_t handle, scui_handle_t image)
 void scui_widget_color_set(scui_handle_t handle, scui_color_t color)
 {
     SCUI_LOG_INFO("widget %u color %x set", handle, color.color.full);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
-    
+    scui_widget_t *widget = scui_handle_source_check(handle);
     widget->color = color;
 }

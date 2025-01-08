@@ -85,9 +85,9 @@ static void scui_window_jump_anima_expired(void *instance)
     }
     
     /* 有自己的独立buffer,直接refr */
-    widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-    SCUI_ASSERT(widget != NULL);
+    widget = scui_handle_source_check(scui_window_mgr.switch_args.list[0]);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, false);
     else
@@ -166,9 +166,9 @@ static void scui_window_move_anima_expired(void *instance)
     scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
     
     /* 有自己的独立buffer,直接refr */
-    widget = scui_handle_get(scui_window_mgr.switch_args.list[0]);
-    SCUI_ASSERT(widget != NULL);
+    widget = scui_handle_source_check(scui_window_mgr.switch_args.list[0]);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    
     if (scui_widget_surface_only(widget))
         scui_widget_refr(widget->myself, false);
     else
@@ -281,9 +281,8 @@ static void scui_window_event_switch(scui_event_t *event)
     scui_coord_t ver_res = scui_disp_get_ver_res();
     scui_point_t point   = scui_window_mgr.switch_args.point;
     
-    scui_widget_t *widget = scui_handle_get(event->object);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = widget;
-    SCUI_ASSERT(widget != NULL);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     
     switch (event->type) {
@@ -512,12 +511,10 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     if (scui_handle_remap(handle)) {
-        scui_widget_t *widget = scui_handle_get(handle);
-        SCUI_ASSERT(widget != NULL);
+        scui_widget_t *widget = scui_handle_source_check(handle);
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     } else {
-        scui_widget_maker_t *maker = scui_handle_get(handle);
-        SCUI_ASSERT(maker != NULL);
+        scui_widget_maker_t *maker = scui_handle_source_check(handle);
         SCUI_ASSERT(maker->parent == SCUI_HANDLE_INVALID);
     }
     
@@ -553,9 +550,8 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         if (scui_window_mgr.list[idx] == scui_window_mgr.active_curr ||
             scui_window_mgr.list[idx] == handle)
             continue;
-        scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
+        scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
         scui_window_t *window = (void *)widget;
-        SCUI_ASSERT(widget != NULL);
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
         if (scui_widget_surface_only(widget) && !window->resident)

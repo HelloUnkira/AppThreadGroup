@@ -31,9 +31,8 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     for (uint8_t idx = 0; idx < 4; idx++) {
         scui_handle_t handle = scui_window_float.list[idx];
         if (handle != SCUI_HANDLE_INVALID) {
-            scui_widget_t *widget = scui_handle_get(handle);
+            scui_widget_t *widget = scui_handle_source_check(handle);
             scui_widget_maker_t *maker = (void *)widget;
-            SCUI_ASSERT(widget != NULL);
             
             /* 窗口至少要给定ptr事件响应标记 */
             if (scui_handle_remap(handle)) {
@@ -49,9 +48,8 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     if (float_flag) {
         scui_handle_t handle = scui_window_float.main;
         SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
-        scui_widget_t *widget = scui_handle_get(handle);
+        scui_widget_t *widget = scui_handle_source_check(handle);
         scui_widget_maker_t *maker = (void *)widget;
-        SCUI_ASSERT(widget != NULL);
         
         /* 窗口至少要给定ptr事件响应标记 */
         if (scui_handle_remap(handle)) {
@@ -79,8 +77,7 @@ bool scui_window_float_running(void)
  */
 static void scui_window_float_move_with_alpha(scui_handle_t handle, scui_point_t *point)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* ??? */
     if (scui_handle_unmap(handle))
@@ -283,8 +280,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* 获得窗口宽高 */
     scui_area_t clip = scui_widget_clip(handle);
@@ -412,8 +408,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     /* 获得窗口宽高 */
     scui_area_t clip = scui_widget_clip(handle);

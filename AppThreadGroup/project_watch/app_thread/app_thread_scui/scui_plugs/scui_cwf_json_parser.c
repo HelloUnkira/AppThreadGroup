@@ -107,13 +107,13 @@ void scui_cwf_json_burn(void **inst)
     // 批量回收所有图片句柄
     for (uint32_t idx = 0; idx < parser->image_num; idx++)
         if (parser->image_hit[idx] != SCUI_HANDLE_INVALID)
-            scui_handle_set(parser->image_hit[idx], NULL);
+            scui_handle_clear(parser->image_hit[idx]);
     // 回收内部维护资源
     SCUI_MEM_FREE(parser->image_hit);
     SCUI_MEM_FREE(parser->image_src);
     // 回收名字和对应句柄
-    const char *name = scui_handle_get(parser->name);
-    scui_handle_set(parser->name, NULL);
+    const char *name = scui_handle_source(parser->name);
+    scui_handle_clear(parser->name);
     // 回收内部维护资源
     SCUI_MEM_FREE(name);
     
@@ -161,7 +161,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     strncpy(name, file, strlen(file));
     name[strlen(file)] = '\0';
     parser->name = scui_handle_find();
-    scui_handle_set(parser->name, name);
+    scui_handle_linker(parser->name, name);
     
     SCUI_ASSERT(image_isize % 18 == 0);
     parser->image_num = image_isize / 18;
@@ -196,7 +196,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         
         // 资源关联绑定 handle <---> image
         parser->image_hit[idx] = scui_handle_find();
-        scui_handle_set(parser->image_hit[idx], &parser->image_src[idx]);
+        scui_handle_linker(parser->image_hit[idx], &parser->image_src[idx]);
     }
     
     /* cJSON组件初始化(选择性使用) */
@@ -263,18 +263,17 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
     if (image_hit == SCUI_HANDLE_INVALID)
         return;
     
-    scui_image_t *image_src = scui_handle_get(image_hit);
-    SCUI_ASSERT(image_src != NULL);
+    scui_image_t *image_src = scui_handle_source_check(image_hit);
     
     // 记得要清理缓存
     scui_image_unit_t image_unit = {.image = image_src,};
     scui_image_cache_invalidate(&image_unit);
     
-    char *name = scui_handle_get(image_src->from);
-    scui_handle_set(image_src->from, NULL);
+    char *name = scui_handle_source(image_src->from);
+    scui_handle_clear(image_src->from);
     SCUI_MEM_FREE(name);
     
-    scui_handle_set(image_hit, NULL);
+    scui_handle_clear(image_hit);
     SCUI_MEM_FREE(image_src);
 }
 
@@ -356,11 +355,11 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             strncpy(name, file, strlen(file) + 1);
             name[strlen(file)] = '\0';
             image_src->from = scui_handle_find();
-            scui_handle_set(image_src->from, name);
+            scui_handle_linker(image_src->from, name);
             
             // 资源关联绑定 handle <---> image
             scui_handle_t image_hit = scui_handle_find();
-            scui_handle_set(image_hit, image_src);
+            scui_handle_linker(image_hit, image_src);
             *preview = image_hit;
             break;
         }

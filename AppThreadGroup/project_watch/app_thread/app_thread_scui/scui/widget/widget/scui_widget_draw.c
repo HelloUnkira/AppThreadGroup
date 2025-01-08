@@ -35,8 +35,7 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
  */
 bool scui_widget_draw_empty(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     if (scui_area_empty(&widget->clip_set.clip))
         return true;
@@ -54,8 +53,7 @@ bool scui_widget_draw_empty(scui_handle_t handle)
 void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_string_args_t *args)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     /* 当前本接口作为控件专用绘制接口: */
     SCUI_ASSERT(widget->type == scui_widget_type_string ||
@@ -106,8 +104,7 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *target,
                             scui_color_t  color)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
@@ -141,8 +138,7 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *target,
                                  scui_color_t  color,  scui_coord_t way)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
@@ -175,8 +171,7 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *target,
 void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &clip))
@@ -210,16 +205,14 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
                             scui_color_t  color)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
          return;
     
     /* step:image<s> */
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(  image_inst != NULL);
+    scui_image_t *image_inst = scui_handle_source_check(image);
     scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
@@ -291,16 +284,14 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
                                   scui_point_t  scale,  scui_opt_pos_t pos)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
          return;
     
     /* step:image<s> */
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(  image_inst != NULL);
+    scui_image_t *image_inst = scui_handle_source_check(image);
     scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
@@ -373,16 +364,14 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
                                    scui_coord_t  angle)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
          return;
     
     /* step:image<s> */
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(  image_inst != NULL);
+    scui_image_t *image_inst = scui_handle_source_check(image);
     scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
@@ -427,16 +416,14 @@ void scui_widget_draw_image_matrix(scui_handle_t  handle, scui_area_t *target,
                                    scui_matrix_t *matrix)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
          return;
     
     /* step:image<s> */
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(  image_inst != NULL);
+    scui_image_t *image_inst = scui_handle_source_check(image);
     scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
@@ -490,8 +477,7 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
                            scui_handle_t image_e)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))
@@ -512,11 +498,10 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     
     scui_image_t *image_e_inst = NULL;
     if (image_e != SCUI_HANDLE_INVALID)
-        image_e_inst = scui_handle_get(image_e);
+        image_e_inst = scui_handle_source_check(image_e);
     
     /* step:image<s> */
-    scui_image_t *image_inst = scui_handle_get(image);
-    SCUI_ASSERT(  image_inst != NULL);
+    scui_image_t *image_inst = scui_handle_source_check(image);
     scui_area_t   image_clip = {
         .w = image_inst->pixel.width,
         .h = image_inst->pixel.height,
@@ -575,8 +560,7 @@ void scui_widget_draw_graph(scui_handle_t handle, scui_area_t *target,
                             scui_draw_graph_dsc_t *draw_graph)
 {
     SCUI_LOG_DEBUG("widget %u", handle);
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
     if (!scui_widget_draw_target(widget, &target))

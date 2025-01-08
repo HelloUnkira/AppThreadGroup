@@ -7,15 +7,33 @@
 
 #include "scui.h"
 
+/*@brief 图像格式
+ *@param handle 图像句柄
+ *@retval 图像格式
+ */
+scui_pixel_cf_t scui_image_cf(scui_handle_t handle)
+{
+    scui_image_t *image = scui_handle_source_check(handle);
+    return image->format;
+}
+
+/*@brief 图像类型
+ *@param handle 图像句柄
+ *@retval 图像类型
+ */
+scui_image_type_t scui_image_type(scui_handle_t handle)
+{
+    scui_image_t *image = scui_handle_source_check(handle);
+    return image->type;
+}
+
 /*@brief 图像宽
  *@param handle 图像句柄
  *@retval 图像宽
  */
 scui_coord_t scui_image_w(scui_handle_t handle)
 {
-    scui_image_t *image = scui_handle_get(handle);
-    SCUI_ASSERT(image != NULL);
-    
+    scui_image_t *image = scui_handle_source_check(handle);
     return image->pixel.width;
 }
 
@@ -25,9 +43,7 @@ scui_coord_t scui_image_w(scui_handle_t handle)
  */
 scui_coord_t scui_image_h(scui_handle_t handle)
 {
-    scui_image_t *image = scui_handle_get(handle);
-    SCUI_ASSERT(image != NULL);
-    
+    scui_image_t *image = scui_handle_source_check(handle);
     return image->pixel.height;
 }
 
@@ -55,8 +71,7 @@ void scui_image_list_calc(scui_handle_t *image, scui_coord_t num,
     for (scui_coord_t idx = 0; idx < num; idx++) {
         if (image[idx] == SCUI_HANDLE_INVALID)
             continue;
-        scui_image_t *image_inst = scui_handle_get(image[idx]);
-        SCUI_ASSERT(image_inst != NULL);
+        scui_image_t *image_inst = scui_handle_source_check(image[idx]);
         
         if (way)
            *dist += image_inst->pixel.height;

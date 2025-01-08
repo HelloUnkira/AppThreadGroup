@@ -1297,7 +1297,7 @@ void scui_font_load(char *name, scui_handle_t *handle)
 {
     *handle = scui_handle_find();
     lv_font_t *font = lv_font_load(name);
-    scui_handle_set(*handle, font);
+    scui_handle_linker(*handle, font);
     
     /* 只去支持1,2,4,8的bpp */
     uint8_t bpp = font->bin_head.bits_per_pixel;
@@ -1309,10 +1309,9 @@ void scui_font_load(char *name, scui_handle_t *handle)
  */
 void scui_font_unload(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_get(handle);
-    SCUI_ASSERT(font != NULL);
+    lv_font_t *font = scui_handle_source_check(handle);
     lv_font_free(font);
-    scui_handle_set(handle, NULL);
+    scui_handle_clear(handle);
 }
 
 /*@brief 字库大小
@@ -1321,9 +1320,7 @@ void scui_font_unload(scui_handle_t handle)
  */
 uint32_t scui_font_size(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_get(handle);
-    SCUI_ASSERT(font != NULL);
-    
+    lv_font_t *font = scui_handle_source_check(handle);
     return font->size;
 }
 
@@ -1333,9 +1330,7 @@ uint32_t scui_font_size(scui_handle_t handle)
  */
 scui_coord_t scui_font_base_line(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_get(handle);
-    SCUI_ASSERT(font != NULL);
-    
+    lv_font_t *font = scui_handle_source_check(handle);
     return font->base_line;
 }
 
@@ -1345,9 +1340,7 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
  */
 scui_coord_t scui_font_line_height(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_get(handle);
-    SCUI_ASSERT(font != NULL);
-    
+    lv_font_t *font = scui_handle_source_check(handle);
     return font->line_height;
 }
 
@@ -1357,9 +1350,7 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
  */
 scui_coord_t scui_font_underline(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_get(handle);
-    SCUI_ASSERT(font != NULL);
-    
+    lv_font_t *font = scui_handle_source_check(handle);
     return font->underline_position;
 }
 
@@ -1370,8 +1361,7 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
 {
     SCUI_ASSERT(glyph != NULL);
     SCUI_ASSERT(glyph->bitmap == NULL);
-    lv_font_t *font = scui_handle_get(glyph->handle);
-    SCUI_ASSERT(font != NULL);
+    lv_font_t *font = scui_handle_source_check(glyph->handle);
     
     /* 只去支持1,2,4,8的bpp */
     uint8_t bpp = font->bin_head.bits_per_pixel;

@@ -141,9 +141,9 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         };
         
         scui_handle_t image = scui_handle_find();
-        scui_handle_set(image, &img_inst);
+        scui_handle_linker(image, &img_inst);
         scui_widget_draw_image(event->object, NULL, image, NULL, (scui_color_t){0});
-        scui_handle_set(image, NULL);
+        scui_handle_clear(image);
         break;
     }
     default:

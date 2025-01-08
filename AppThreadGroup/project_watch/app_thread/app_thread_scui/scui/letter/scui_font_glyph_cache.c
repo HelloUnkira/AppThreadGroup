@@ -68,7 +68,7 @@ static void scui_font_glyph_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
 {
     scui_font_glyph_unit_t *unit = scui_own_ofs(scui_font_glyph_unit_t, ht_node, node);
     
-    SCUI_LOG_INFO("- name:%s",   scui_handle_get(unit->name));
+    SCUI_LOG_INFO("- name:%s",   scui_handle_source(unit->name));
     SCUI_LOG_INFO("- letter:%x", unit->glyph.unicode_letter);
     SCUI_LOG_INFO("- count:%x",  unit->count);
     SCUI_LOG_INFO("- lock:%x",   unit->lock);

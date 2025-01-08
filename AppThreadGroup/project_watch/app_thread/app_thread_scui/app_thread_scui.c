@@ -38,7 +38,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     
     scui_image_unit_t image_unit = {0};
     scui_handle_t handle = scui_image_prj_image_src_00_theme_02_ringbmp;
-    image_unit.image = scui_handle_get(handle);
+    image_unit.image = scui_handle_source(handle);
     scui_area_t src_clip = {
         .w = image_unit.image->pixel.width,
         .h = image_unit.image->pixel.height,

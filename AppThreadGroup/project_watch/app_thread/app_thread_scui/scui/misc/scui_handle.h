@@ -71,4 +71,15 @@ bool scui_handle_remap(scui_handle_t handle);
  */
 bool scui_handle_unmap(scui_handle_t handle);
 
+/* 宏函数(内联版本):简化句柄到资源的访问(快速访问) */
+static inline void * scui_handle_source_assert(scui_handle_t handle)    \
+{void *source = scui_handle_get(handle);SCUI_ASSERT(source != NULL);return source;}
+
+/* 简单的对句柄进行一次宏转义 */
+/* 这里的get和set语义定义的不是特别好 */
+#define scui_handle_linker                  scui_handle_set
+#define scui_handle_source(handle)          scui_handle_get(handle)
+#define scui_handle_source_check(handle)    scui_handle_source_assert(handle)
+#define scui_handle_clear(handle)           scui_handle_set(handle, NULL)
+
 #endif

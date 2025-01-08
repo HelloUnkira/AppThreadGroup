@@ -50,7 +50,7 @@ uint8_t * scui_str_by_multi_lang(scui_handle_t font_idx, scui_handle_t multi_lan
     scui_handle_t name = scui_font_name_get(0);
     scui_handle_t font = scui_font_type_switch(name);
     scui_handle_t text = scui_multi_lang_switch(font, multi_lang);
-    uint8_t *str_utf8 = scui_handle_get(text);
+    uint8_t *str_utf8 = scui_handle_source(text);
     
     return str_utf8;
 }

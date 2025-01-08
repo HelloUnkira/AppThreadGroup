@@ -86,9 +86,8 @@ void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layo
  */
 void scui_chart_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_chart_t  *chart  = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (chart->type) {
     case scui_chart_type_histogram: {
@@ -120,9 +119,8 @@ void scui_chart_burn(scui_handle_t handle)
 void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_chart_t  *chart  = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (chart->type != scui_chart_type_histogram) {
         SCUI_LOG_ERROR("chart type unmatch");
@@ -152,9 +150,8 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
 void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_chart_t  *chart  = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (chart->type != scui_chart_type_line) {
         SCUI_LOG_ERROR("chart type unmatch");
@@ -175,10 +172,8 @@ void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
 void scui_chart_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_chart_t   *chart = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
     case scui_event_draw: {
@@ -223,14 +218,14 @@ void scui_chart_event(scui_event_t *event)
                 dst_clip = chart->widget.clip;
                 dst_clip.x += offset.x;
                 dst_clip.y += offset.y + offset_2y;
-                scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color_edge);
+                scui_widget_draw_image(widget->myself, &dst_clip, image, &src_clip, color_edge);
                 
                 /* 绘制edge */
                 src_clip.y = src_clip.h;
                 dst_clip = chart->widget.clip;
                 dst_clip.x += offset.x;
                 dst_clip.y += offset.y + offset_1y - src_clip.h;
-                scui_widget_draw_image(handle, &dst_clip, image, &src_clip, color_edge);
+                scui_widget_draw_image(widget->myself, &dst_clip, image, &src_clip, color_edge);
                 
                 /* 填充这块区域 */
                 dst_clip = chart->widget.clip;
@@ -240,7 +235,7 @@ void scui_chart_event(scui_event_t *event)
                     .y = dst_clip.y + offset.y + offset_2y + src_clip.h,
                     .h = offset_1y - offset_2y - src_clip.h * 2,
                 };
-                scui_widget_draw_color(handle, &area, color);
+                scui_widget_draw_color(widget->myself, &area, color);
                 
                 offset.x += scui_image_w(image) + space;
             }
@@ -279,7 +274,7 @@ void scui_chart_event(scui_event_t *event)
                     dst_clip = chart->widget.clip;
                     dst_clip.x += offset_1.x - src_clip.w;
                     dst_clip.y += offset_1.y - src_clip.h;
-                    scui_widget_draw_image(handle, &dst_clip, image, NULL, color_edge);
+                    scui_widget_draw_image(widget->myself, &dst_clip, image, NULL, color_edge);
                 }
                 
                 /* 绘制edge */
@@ -287,7 +282,7 @@ void scui_chart_event(scui_event_t *event)
                     dst_clip = chart->widget.clip;
                     dst_clip.x += offset_2.x - src_clip.w;
                     dst_clip.y += offset_2.y - src_clip.h;
-                    scui_widget_draw_image(handle, &dst_clip, image, NULL, color_edge);
+                    scui_widget_draw_image(widget->myself, &dst_clip, image, NULL, color_edge);
                 }
                 
                 scui_draw_graph_dsc_t draw_graph = {
@@ -297,7 +292,7 @@ void scui_chart_event(scui_event_t *event)
                     .line.src_pos_1 = offset_1,
                     .line.src_pos_2 = offset_2,
                 };
-                scui_widget_draw_graph(handle, NULL, &draw_graph);
+                scui_widget_draw_graph(widget->myself, NULL, &draw_graph);
                 offset.x += space;
             }
             

@@ -85,9 +85,8 @@ void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_scroll_burn(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -109,9 +108,8 @@ void scui_scroll_burn(scui_handle_t handle)
 void scui_scroll_percent_get(scui_handle_t handle, scui_coord_t *percent)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     SCUI_ASSERT(percent != NULL);
     *percent = 0;
@@ -162,9 +160,8 @@ void scui_scroll_percent_get(scui_handle_t handle, scui_coord_t *percent)
 void scui_scroll_center_target_get(scui_handle_t handle, scui_handle_t *target)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
     SCUI_ASSERT(target != NULL);
@@ -185,9 +182,8 @@ void scui_scroll_center_target_get(scui_handle_t handle, scui_handle_t *target)
 void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
     SCUI_ASSERT(target != SCUI_HANDLE_INVALID);
@@ -213,7 +209,7 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
     if (target_center == target)
         return;
     
-    scui_widget_t *widget_child = scui_handle_get(target);
+    scui_widget_t *widget_child = scui_handle_source_check(target);
     scui_coord_t center_x = widget->clip.x + widget->clip.w / 2;
     scui_coord_t center_y = widget->clip.y + widget->clip.h / 2;
     scui_coord_t center_child_x = widget_child->clip.x + widget_child->clip.w / 2;
@@ -234,9 +230,8 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
 void scui_scroll_offset_get(scui_handle_t handle, scui_coord_t *offset)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     SCUI_ASSERT(offset != NULL);
     *offset = 0;
@@ -287,9 +282,8 @@ void scui_scroll_offset_get(scui_handle_t handle, scui_coord_t *offset)
 void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (offset->x == 0 && offset->y == 0)
         return;
@@ -319,9 +313,8 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
 void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     if (scroll->freedom)
         scroll->edge = *edge;
@@ -336,9 +329,8 @@ void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
 void scui_scroll_layout(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     scroll->layout = true;
     
@@ -357,9 +349,8 @@ void scui_scroll_layout(scui_handle_t handle)
 void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     scroll->fling_page = fling_page;
     
@@ -380,10 +371,8 @@ static void scui_scroll_anima_expired(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
-    scui_handle_t  handle = anima->handle;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(anima->handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     int32_t value_s = anima->value_s;
     int32_t value_e = anima->value_e;
@@ -551,12 +540,10 @@ static void scui_scroll_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
-    scui_handle_t  handle = anima->handle;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(anima->handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
-    scui_event_t event = {.object = handle};
+    scui_event_t event = {.object = anima->handle};
     
     /* 这里需要考虑回弹效果,包括回弹点,边界对齐 */
     
@@ -679,9 +666,8 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s);
     anima.handle  = handle;
     
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     
@@ -711,10 +697,8 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
  */
 void scui_scroll_layout_update(scui_event_t *event)
 {
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     /* 仅标记布局触发布局更新 */
     if (scroll->layout)
@@ -741,7 +725,7 @@ void scui_scroll_layout_update(scui_event_t *event)
         /* 布局内容为所有子控件的全集 */
         scui_widget_child_list_btra(widget, idx) {
             scui_handle_t handle = widget->child_list[idx];
-            scui_widget_t *child = scui_handle_get(handle);
+            scui_widget_t *child = scui_handle_source_check(handle);
             scui_area_merge2(&clip, &child->clip);
         }
         scui_area_t clip_widget = widget->clip;
@@ -758,7 +742,7 @@ void scui_scroll_layout_update(scui_event_t *event)
         // 状态量还原
         scroll->ofs_cur = (scui_point_t){0};
         scroll->ofs_sum = (scui_point_t){0};
-        scui_widget_draw(handle, NULL, false);
+        scui_widget_draw(widget->myself, NULL, false);
         return;
     }
     
@@ -772,7 +756,7 @@ void scui_scroll_layout_update(scui_event_t *event)
     /* 根据布局方向调整子控件信息 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_get(handle);
+        scui_widget_t *child = scui_handle_source_check(handle);
         /* 被隐藏的控件忽略 */
         if (scui_widget_is_hide(handle))
             continue;
@@ -830,7 +814,7 @@ void scui_scroll_layout_update(scui_event_t *event)
     }
     SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
     
-    scui_widget_draw(handle, NULL, false);
+    scui_widget_draw(widget->myself, NULL, false);
 }
 
 /*@brief 滚动控件事件流程合并
@@ -847,10 +831,8 @@ void scui_scroll_layout_update(scui_event_t *event)
 void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (type) {
     case 0x00: {
@@ -1070,7 +1052,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         scui_point_t offset  = {0};
         /* 中心点对齐,开始校正 */
         if (scroll->pos == scui_opt_pos_c) {
-            retval = scui_widget_align_pos_calc(handle, NULL, &offset, scui_opt_pos_c);
+            retval = scui_widget_align_pos_calc(widget->myself, NULL, &offset, scui_opt_pos_c);
             if (retval) {
                 /* 已经校正完毕,不再校正 */
                 if (offset.x == 0 && offset.y == 0)
@@ -1106,19 +1088,19 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         offset.y = scui_coord_max;
         
         if ((scroll->pos & scui_opt_pos_l) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_opt_pos_l);
+            retval = retval && scui_widget_align_pos_calc(widget->myself, NULL, &offset, scui_opt_pos_l);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_opt_pos_r) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_opt_pos_r);
+            retval = retval && scui_widget_align_pos_calc(widget->myself, NULL, &offset, scui_opt_pos_r);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_opt_pos_u) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_opt_pos_u);
+            retval = retval && scui_widget_align_pos_calc(widget->myself, NULL, &offset, scui_opt_pos_u);
             offset4[offset_num++] = offset;
         }
         if ((scroll->pos & scui_opt_pos_d) != 0) {
-            retval = retval && scui_widget_align_pos_calc(handle, NULL, &offset, scui_opt_pos_d);
+            retval = retval && scui_widget_align_pos_calc(widget->myself, NULL, &offset, scui_opt_pos_d);
             offset4[offset_num++] = offset;
         }
         
@@ -1196,10 +1178,8 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
  */
 void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
 {
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (type) {
     case 0x00: {
@@ -1266,10 +1246,8 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
 void scui_scroll_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_handle_t  handle = event->object;
-    scui_widget_t *widget = scui_handle_get(handle);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
-    SCUI_ASSERT(widget != NULL);
     
     switch (event->type) {
     case scui_event_show:
@@ -1354,7 +1332,7 @@ void scui_scroll_event(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_enc * event->enc_diff;
         
-        scui_scroll_offset(handle, &offset);
+        scui_scroll_offset(widget->myself, &offset);
         scui_widget_event_mask_over(event);
         break;
     }
@@ -1388,7 +1366,7 @@ void scui_scroll_event(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_key;
         
-        scui_scroll_offset(handle, &offset);
+        scui_scroll_offset(widget->myself, &offset);
         scui_widget_event_mask_over(event);
         break;
     }

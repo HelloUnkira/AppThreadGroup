@@ -180,7 +180,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
     const char *image_bin = "scui_image_parser.bin";
     const char *image_src = image_bin;
     if (image->from != SCUI_HANDLE_INVALID)
-        image_src = scui_handle_get(image->from);
+        image_src = scui_handle_source(image->from);
     
     
     

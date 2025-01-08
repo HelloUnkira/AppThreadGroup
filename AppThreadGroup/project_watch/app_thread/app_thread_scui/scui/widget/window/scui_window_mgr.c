@@ -52,9 +52,8 @@ void scui_window_list_hide_without(scui_handle_t handle, bool any)
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
         if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
             scui_window_mgr.list[idx] != handle) {
-            scui_widget_t *widget = scui_handle_get(scui_window_mgr.list[idx]);
+            scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
             scui_window_t *window = (void *)widget;
-            SCUI_ASSERT(widget != NULL);
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
             if (any || (scui_widget_surface_only(widget) && !window->resident))
                 scui_widget_hide(scui_window_mgr.list[idx], false);
@@ -341,7 +340,7 @@ void scui_window_surface_blend(void)
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         scui_handle_t  handle = scui_window_mgr.list[idx];
-        scui_widget_t *widget = scui_handle_get(handle);
+        scui_widget_t *widget = scui_handle_source_check(handle);
         scui_window_t *window = (void *)widget;
         SCUI_ASSERT(scui_handle_remap(handle));
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
@@ -427,8 +426,7 @@ bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
 void scui_window_active(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_handle_remap(handle));
-    scui_widget_t *widget = scui_handle_get(handle);
-    SCUI_ASSERT(widget != NULL);
+    scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
     
     if (scui_window_mgr.active_curr == handle) {

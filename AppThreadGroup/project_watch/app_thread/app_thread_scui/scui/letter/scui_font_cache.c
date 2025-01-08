@@ -66,7 +66,7 @@ static void scui_font_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
 {
     scui_font_unit_t *unit = scui_own_ofs(scui_font_unit_t, ht_node, node);
     
-    SCUI_LOG_INFO("- name:%s",  scui_handle_get(unit->name));
+    SCUI_LOG_INFO("- name:%s",  scui_handle_source(unit->name));
     SCUI_LOG_INFO("- font:%x",  unit->font);
     SCUI_LOG_INFO("- count:%x", unit->count);
     SCUI_LOG_INFO("- lock:%x",  unit->lock);
@@ -229,10 +229,9 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
     /* 如果缓存未命中时 */
     if (unit == NULL) {
         /* 先加载字库 */
-        char *name = scui_handle_get(font_unit->name);
-        SCUI_ASSERT(name != NULL);
+        char *name = scui_handle_source_check(font_unit->name);
         scui_font_load(name, &font_unit->font);
-        SCUI_ASSERT(scui_handle_get(font_unit->font) != NULL);
+        SCUI_ASSERT(scui_handle_source(font_unit->font) != NULL);
         /* 如果缓存空间不足时,老化资源回收 */
         while (cache->usage + scui_font_size(font_unit->font) > cache->total) {
             /* 前向遍历,找已经解锁的资源 */

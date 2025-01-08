@@ -968,8 +968,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         
         #if 1   // 光影特效
         scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.cube.shadow;
-        scui_image_t *shadow = scui_handle_get(handle);
-        SCUI_ASSERT(shadow != NULL);
+        scui_image_t *shadow = scui_handle_source_check(handle);
         size2.w = scui_image_w(handle) / 2;
         size2.h = scui_image_h(handle);
         scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face, &view);

@@ -46,19 +46,31 @@ void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool la
  */
 void scui_string_burn(scui_handle_t handle);
 
+/*@brief 字符串控件文本
+ *@param handle 字符串控件句柄
+ *@param text   字符串句柄
+ */
+void scui_string_text(scui_handle_t handle, scui_handle_t *text);
+
+/*@brief 字符串控件字符串
+ *@param handle   字符串控件句柄
+ *@param str_utf8 字符串(utf8)
+ */
+void scui_string_str_utf8(scui_handle_t handle, uint8_t **str_utf8);
+
 /*@brief 字符串控件更新文本
  *@param handle 字符串控件句柄
  *@param text   字符串句柄
  */
 void scui_string_update_text(scui_handle_t handle, scui_handle_t text);
 
-/*@brief 字符串控件更新文本
+/*@brief 字符串控件更新字符串
  *@param handle   字符串控件句柄
  *@param str_utf8 字符串(utf8)
  */
 void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
 
-/*@brief 字符串控件更新文本(重上色)
+/*@brief 字符串控件更新字符串(重上色)
  *@param 使用#- -#包裹的内容为重上色区域
  *@param handle    字符串控件句柄
  *@param str_utf8  字符串(utf8)
