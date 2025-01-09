@@ -118,16 +118,16 @@ void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
  */
 void scui_area2_by_area(scui_area2_t *area2, scui_area_t *area)
 {
-    scui_area_m_to_s(area);
-    area2->point2[0].x = area->x1;
-    area2->point2[0].y = area->y1;
-    area2->point2[1].x = area->x2;
-    area2->point2[1].y = area->y1;
-    area2->point2[2].x = area->x2;
-    area2->point2[2].y = area->y2;
-    area2->point2[3].x = area->x1;
-    area2->point2[3].y = area->y2;
-    scui_area_m_by_s(area);
+    scui_area_t area_s = {0};
+    scui_area_m_to_s(area, &area_s);
+    area2->point2[0].x = area_s.x1;
+    area2->point2[0].y = area_s.y1;
+    area2->point2[1].x = area_s.x2;
+    area2->point2[1].y = area_s.y1;
+    area2->point2[2].x = area_s.x2;
+    area2->point2[2].y = area_s.y2;
+    area2->point2[3].x = area_s.x1;
+    area2->point2[3].y = area_s.y2;
 }
 
 /*@brief 区域转换(area->area3)

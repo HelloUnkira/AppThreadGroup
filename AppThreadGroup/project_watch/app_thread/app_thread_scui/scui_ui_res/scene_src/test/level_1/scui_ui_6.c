@@ -65,7 +65,7 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         scui_coord_t del_y = clip.h - 10;
         scui_point_t pos_s = {0};
         scui_point_t pos_e = {0};
-        scui_area_m_to_s(&clip);
+        scui_area_m_to_s(&clip, &clip);
         
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,

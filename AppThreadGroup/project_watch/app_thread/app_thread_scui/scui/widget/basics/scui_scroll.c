@@ -729,8 +729,8 @@ void scui_scroll_layout_update(scui_event_t *event)
             scui_area_merge2(&clip, &child->clip);
         }
         scui_area_t clip_widget = widget->clip;
-        scui_area_m_to_s(&clip);
-        scui_area_m_to_s(&clip_widget);
+        scui_area_m_to_s(&clip, &clip);
+        scui_area_m_to_s(&clip_widget, &clip_widget);
         /* 计算自由布局下的ofs_min和ofs_max */
         scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1) - scroll->edge.x;
         scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1) - scroll->edge.y;

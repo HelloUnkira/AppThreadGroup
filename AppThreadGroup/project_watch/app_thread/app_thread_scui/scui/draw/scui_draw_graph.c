@@ -246,7 +246,7 @@ void scui_draw_sline(scui_draw_graph_dsc_t *draw_graph)
             .x2 = scui_max(src_pos_1.x, src_pos_2.x),
             .y2 = scui_max(src_pos_1.y, src_pos_2.y),
         };
-        scui_area_m_by_s(&src_clip);
+        scui_area_m_by_s(&src_clip, &src_clip);
         
         if (src_pos_1.x == src_pos_2.x)
             src_clip.w  += src_width - 1;

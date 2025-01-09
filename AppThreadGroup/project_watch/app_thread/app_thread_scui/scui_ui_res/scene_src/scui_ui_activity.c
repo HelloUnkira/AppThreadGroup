@@ -309,7 +309,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         scui_area_t clip_line = clip;
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 243 - 90;
-        scui_area_m_to_s(&clip_line);
+        scui_area_m_to_s(&clip_line, &clip_line);
         
         scui_draw_graph_dsc_t draw_graph = {0};
         draw_graph.type = scui_draw_graph_type_line;
@@ -422,7 +422,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 scui_area_t clip_line = clip;
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
-                scui_area_m_to_s(&clip_line);
+                scui_area_m_to_s(&clip_line, &clip_line);
                 
                 scui_draw_graph_dsc_t draw_graph = {0};
                 draw_graph.type = scui_draw_graph_type_line;
@@ -466,7 +466,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_area_t clip_line = clip;
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
-        scui_area_m_to_s(&clip_line);
+        scui_area_m_to_s(&clip_line, &clip_line);
         
         scui_draw_graph_dsc_t draw_graph = {0};
         draw_graph.type = scui_draw_graph_type_line;
@@ -579,7 +579,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 scui_area_t clip_line = clip;
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
-                scui_area_m_to_s(&clip_line);
+                scui_area_m_to_s(&clip_line, &clip_line);
                 
                 scui_draw_graph_dsc_t draw_graph = {0};
                 draw_graph.type = scui_draw_graph_type_line;
@@ -623,7 +623,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_area_t clip_line = clip;
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
-        scui_area_m_to_s(&clip_line);
+        scui_area_m_to_s(&clip_line, &clip_line);
         
         scui_draw_graph_dsc_t draw_graph = {0};
         draw_graph.type = scui_draw_graph_type_line;
@@ -736,7 +736,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 scui_area_t clip_line = clip;
                 clip_line.w =   1; clip_line.x += 42 + idx * (12 + 4) - 2;
                 clip_line.h = 110; clip_line.y += 113;
-                scui_area_m_to_s(&clip_line);
+                scui_area_m_to_s(&clip_line, &clip_line);
                 
                 scui_draw_graph_dsc_t draw_graph = {0};
                 draw_graph.type = scui_draw_graph_type_line;
@@ -780,7 +780,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_area_t clip_line = clip;
         clip_line.w = 394; clip_line.x += 36;
         clip_line.h =   2; clip_line.y += 248;
-        scui_area_m_to_s(&clip_line);
+        scui_area_m_to_s(&clip_line, &clip_line);
         
         scui_draw_graph_dsc_t draw_graph = {0};
         draw_graph.type = scui_draw_graph_type_line;

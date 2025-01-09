@@ -713,7 +713,7 @@ void scui_draw_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
             dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1.5);
             dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1.5);
         }
-        scui_area_m_by_s(&dst_area);
+        scui_area_m_by_s(&dst_area, &dst_area);
         
         if (!scui_area_inter2(&dst_clip_v, &dst_area))
              return;
@@ -814,7 +814,7 @@ void scui_draw_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
             dst_area.x2 = scui_max(dst_area.x2, face2.point2[idx].x + 1.5);
             dst_area.y2 = scui_max(dst_area.y2, face2.point2[idx].y + 1.5);
         }
-        scui_area_m_by_s(&dst_area);
+        scui_area_m_by_s(&dst_area, &dst_area);
         
         if (!scui_area_inter2(&dst_clip_v, &dst_area))
              return;

@@ -52,31 +52,33 @@ bool scui_line_cross(scui_area_t *line1, scui_area_t *line2)
 }
 
 /*@breif 转化区域描述方式(主->从)
- *@param area 区域
+ *@param area_m 区域(主)
+ *@param area_s 区域(从)
  */
-void scui_area_m_to_s(scui_area_t *area)
+void scui_area_m_to_s(scui_area_t *area_m, scui_area_t *area_s)
 {
-    scui_coord_t x1 = area->x, x2 = area->x + area->w - 1;
-    scui_coord_t y1 = area->y, y2 = area->y + area->h - 1;
+    scui_coord_t x1 = area_m->x, x2 = area_m->x + area_m->w - 1;
+    scui_coord_t y1 = area_m->y, y2 = area_m->y + area_m->h - 1;
     
-    area->x1 = x1;
-    area->x2 = x2;
-    area->y1 = y1;
-    area->y2 = y2;
+    area_s->x1 = x1;
+    area_s->x2 = x2;
+    area_s->y1 = y1;
+    area_s->y2 = y2;
 }
 
 /*@breif 转化区域描述方式(从->主)
- *@param area 区域
+ *@param area_m 区域(主)
+ *@param area_s 区域(从)
  */
-void scui_area_m_by_s(scui_area_t *area)
+void scui_area_m_by_s(scui_area_t *area_m, scui_area_t *area_s)
 {
-    scui_coord_t x = area->x1, w = area->x2 - area->x1 + 1;
-    scui_coord_t y = area->y1, h = area->y2 - area->y1 + 1;
+    scui_coord_t x = area_s->x1, w = area_s->x2 - area_s->x1 + 1;
+    scui_coord_t y = area_s->y1, h = area_s->y2 - area_s->y1 + 1;
     
-    area->x = x;
-    area->y = y;
-    area->w = w;
-    area->h = h;
+    area_m->x = x;
+    area_m->y = y;
+    area_m->w = w;
+    area_m->h = h;
 }
 
 /*@brief 区域为空检查
@@ -115,15 +117,15 @@ bool scui_area_inter(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
     if (area1 == area2) {
         *area = *area1;
     } else {
-        scui_area_m_to_s(area1);
-        scui_area_m_to_s(area2);
-        area->x1 = scui_max(area1->x1, area2->x1);
-        area->y1 = scui_max(area1->y1, area2->y1);
-        area->x2 = scui_min(area1->x2, area2->x2);
-        area->y2 = scui_min(area1->y2, area2->y2);
-        scui_area_m_by_s(area2);
-        scui_area_m_by_s(area1);
-        scui_area_m_by_s(area);
+        scui_area_t area1_s = {0};
+        scui_area_t area2_s = {0};
+        scui_area_m_to_s(area1, &area1_s);
+        scui_area_m_to_s(area2, &area2_s);
+        area->x1 = scui_max(area1_s.x1, area2_s.x1);
+        area->y1 = scui_max(area1_s.y1, area2_s.y1);
+        area->x2 = scui_min(area1_s.x2, area2_s.x2);
+        area->y2 = scui_min(area1_s.y2, area2_s.y2);
+        scui_area_m_by_s(area, area);
     }
     
     return !scui_area_empty(area);
@@ -154,15 +156,15 @@ void scui_area_merge(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
     if (area1 == area2) {
         *area = *area1;
     } else {
-        scui_area_m_to_s(area1);
-        scui_area_m_to_s(area2);
-        area->x1 = scui_min(area1->x1, area2->x1);
-        area->y1 = scui_min(area1->y1, area2->y1);
-        area->x2 = scui_max(area1->x2, area2->x2);
-        area->y2 = scui_max(area1->y2, area2->y2);
-        scui_area_m_by_s(area2);
-        scui_area_m_by_s(area1);
-        scui_area_m_by_s(area);
+        scui_area_t area1_s = {0};
+        scui_area_t area2_s = {0};
+        scui_area_m_to_s(area1, &area1_s);
+        scui_area_m_to_s(area2, &area2_s);
+        area->x1 = scui_min(area1_s.x1, area2_s.x1);
+        area->y1 = scui_min(area1_s.y1, area2_s.y1);
+        area->x2 = scui_max(area1_s.x2, area2_s.x2);
+        area->y2 = scui_max(area1_s.y2, area2_s.y2);
+        scui_area_m_by_s(area, area);
     }
 }
 
@@ -187,41 +189,43 @@ void scui_area_merge2(scui_area_t *area, scui_area_t *area1)
 bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
 {
     bool result = false;
-    scui_area_m_to_s(area1);
-    scui_area_m_to_s(area2);
+    
+    scui_area_t area1_s = {0};
+    scui_area_t area2_s = {0};
+    scui_area_m_to_s(area1, &area1_s);
+    scui_area_m_to_s(area2, &area2_s);
     /* 区域求和要求:区域互相平行或垂直 */
     
     /* 区域垂直: */
-    if (area1->x1 == area2->x1 && area1->x2 == area2->x2) {
+    if (area1_s.x1 == area2_s.x1 && area1_s.x2 == area2_s.x2) {
         /*  */
-        if (!(area1->y1 > area2->y2 || area1->y2 < area2->y1)) {
+        if (!(area1_s.y1 > area2_s.y2 || area1_s.y2 < area2_s.y1)) {
             /*  */
-            area->x1 = (area1->x1, area2->x1);
-            area->x2 = (area1->x2, area2->x2);
-            area->y1 = scui_min(area1->y1, area2->y1);
-            area->y2 = scui_max(area1->y2, area2->y2);
+            area->x1 = (area1_s.x1, area2_s.x1);
+            area->x2 = (area1_s.x2, area2_s.x2);
+            area->y1 = scui_min(area1_s.y1, area2_s.y1);
+            area->y2 = scui_max(area1_s.y2, area2_s.y2);
             result = true;
         }
     }
     
     /* 区域平行: */
-    if (area1->y1 == area2->y1 && area1->y2 == area2->y2) {
+    if (area1_s.y1 == area2_s.y1 && area1_s.y2 == area2_s.y2) {
         /*  */
-        if (!(area1->x1 > area2->x2 || area1->x2 < area2->x1)) {
+        if (!(area1_s.x1 > area2_s.x2 || area1_s.x2 < area2_s.x1)) {
             /*  */
-            area->y1 = (area1->y1, area2->y1);
-            area->y2 = (area1->y2, area2->y2);
-            area->x1 = scui_min(area1->x1, area2->x1);
-            area->x2 = scui_max(area1->x2, area2->x2);
+            area->y1 = (area1_s.y1, area2_s.y1);
+            area->y2 = (area1_s.y2, area2_s.y2);
+            area->x1 = scui_min(area1_s.x1, area2_s.x1);
+            area->x2 = scui_max(area1_s.x2, area2_s.x2);
             result = true;
         }
     }
     
-    scui_area_m_by_s(area2);
-    scui_area_m_by_s(area1);
-    scui_area_m_by_s(area);
+    scui_area_m_by_s(area, area);
     return result;
 }
+
 
 /*@brief 剪切域偏移调整
  *       先调整剪切域偏移
@@ -258,47 +262,46 @@ bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset)
 bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2)
 {
     *num = 0;
-    scui_area_m_to_s(area1);
-    scui_area_m_to_s(area2);
+    scui_area_t area1_s = {0};
+    scui_area_t area2_s = {0};
+    scui_area_m_to_s(area1, &area1_s);
+    scui_area_m_to_s(area2, &area2_s);
     
     /* 裁剪多余上部 */
-    if (area1->y1 < area2->y1) {
-        area[*num].x1 = area1->x1;
-        area[*num].x2 = area1->x2;
-        area[*num].y1 = area1->y1;
-        area[*num].y2 = area2->y1 - 1;
+    if (area1_s.y1 < area2_s.y1) {
+        area[*num].x1 = area1_s.x1;
+        area[*num].x2 = area1_s.x2;
+        area[*num].y1 = area1_s.y1;
+        area[*num].y2 = area2_s.y1 - 1;
         (*num)++;
     }
     /* 裁剪多余下部 */
-    if (area1->y2 > area2->y2) {
-        area[*num].x1 = area1->x1;
-        area[*num].x2 = area1->x2;
-        area[*num].y1 = area2->y2 + 1;
-        area[*num].y2 = area1->y2;
+    if (area1_s.y2 > area2_s.y2) {
+        area[*num].x1 = area1_s.x1;
+        area[*num].x2 = area1_s.x2;
+        area[*num].y1 = area2_s.y2 + 1;
+        area[*num].y2 = area1_s.y2;
         (*num)++;
     }
     /* 裁剪多余左部 */
-    if (area1->x1 < area2->x1) {
-        area[*num].y1 = area2->y1;
-        area[*num].y2 = area2->y2;
-        area[*num].x1 = area1->x1;
-        area[*num].x2 = area2->x1 - 1;
+    if (area1_s.x1 < area2_s.x1) {
+        area[*num].y1 = area2_s.y1;
+        area[*num].y2 = area2_s.y2;
+        area[*num].x1 = area1_s.x1;
+        area[*num].x2 = area2_s.x1 - 1;
         (*num)++;
     }
     /* 裁剪主域多余右部 */
-    if (area1->x2 > area2->x2) {
-        area[*num].y1 = area2->y1;
-        area[*num].y2 = area2->y2;
-        area[*num].x1 = area2->x2 + 1;
-        area[*num].x2 = area1->x2;
+    if (area1_s.x2 > area2_s.x2) {
+        area[*num].y1 = area2_s.y1;
+        area[*num].y2 = area2_s.y2;
+        area[*num].x1 = area2_s.x2 + 1;
+        area[*num].x2 = area1_s.x2;
         (*num)++;
     }
     
-    scui_area_m_by_s(area2);
-    scui_area_m_by_s(area1);
-    
     for (uint8_t idx = 0; idx < *num; idx++)
-        scui_area_m_by_s(&area[idx]);
+        scui_area_m_by_s(&area[idx], &area[idx]);
     
     return *num != 0;
 }
@@ -329,6 +332,7 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point)
     if (point->x >= area->x && point->x <= area->x + area->w - 1 &&
         point->y >= area->y && point->y <= area->y + area->h - 1)
         return true;
+    
     return false;
 }
 
