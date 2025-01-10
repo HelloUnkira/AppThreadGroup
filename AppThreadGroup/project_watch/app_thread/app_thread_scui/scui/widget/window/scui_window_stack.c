@@ -27,11 +27,32 @@ static void scui_window_stack_check(void)
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
  *@param handle 窗口句柄
+ *@param type   更新类型(0:cover;1:add;2:del;)
  */
-void scui_window_stack_update(scui_handle_t handle)
+void scui_window_stack_update(scui_handle_t handle, uint8_t type)
 {
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
-    scui_window_stack.stack[scui_window_stack.top - 1] = handle;
+    scui_handle_t handle_top = SCUI_HANDLE_INVALID;
+    handle_top = scui_window_stack.stack[scui_window_stack.top - 1];
+    
+    switch (type) {
+    case 0:
+        scui_window_stack.stack[scui_window_stack.top - 1] = handle;
+        break;
+    case 1:
+        scui_window_stack.top++;
+        scui_window_stack.stack[scui_window_stack.top - 1] = handle;
+        break;
+    case 2:
+        SCUI_ASSERT(handle_top == handle);
+        scui_window_stack.top--;
+        break;
+    default:
+        SCUI_LOG_ERROR("unknown type");
+        SCUI_ASSERT(false);
+        break;
+    }
+    
     scui_window_stack_check();
 }
 

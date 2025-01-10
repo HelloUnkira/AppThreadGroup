@@ -14,7 +14,7 @@
 /*  */
 #define APP_DEV_GUI_DISP_STY      (WS_OVERLAPPEDWINDOW & ~(WS_SIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME))
 #define APP_DEV_GUI_DISP_STY_EX   (WS_EX_CLIENTEDGE)
-#define APP_DEV_GUI_DISP_DPI_DEF  (72)
+#define APP_DEV_GUI_DISP_DPI_DEF  (1)
 
 /*  */
 #if 0
@@ -219,6 +219,9 @@ static UINT app_dev_gui_disp_get_dpi_for_window(_In_ HWND WindowHandle)
     app_dev_t *driver = app_dev_gui_disp_inst();
     app_dev_gui_disp_cfg_t *cfg = driver->cfg;
     app_dev_gui_disp_data_t *data = driver->data;
+    
+    // 不使用DPI缩放,保证显示原始图像
+    return 1;
     
     typedef enum {
         MDT_EFFECTIVE_DPI   = 0,

@@ -242,7 +242,7 @@ void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
  *    可以移植第三方的gui中的内容
  */
 #define   SCUI_DRAW_GRAPH_USE_LVGL      0
-#define   SCUI_DRAW_GRAPH_USE_EGUI      0
+#define   SCUI_DRAW_GRAPH_USE_EGUI      1
 #include "scui_draw_graph_LVGL.h"
 #include "scui_draw_graph_EGUI.h"
 /*****************************************************************************/

@@ -107,9 +107,6 @@ void scui_objbtn_event(scui_event_t *event)
         if (!scui_widget_event_check_execute(event))
              return;
         
-        // 基础图元绘制那个接口还有问题,待定中
-        return;
-        
         scui_area_t dst_clip[4] = {0};
         dst_clip[3] = objbtn->widget.clip;
         

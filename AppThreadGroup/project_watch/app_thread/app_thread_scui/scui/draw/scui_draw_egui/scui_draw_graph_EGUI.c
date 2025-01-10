@@ -801,8 +801,8 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
     /* 绘制四个象限的圆或圆环 */
     scui_area_t  dst_area   = {0};
     scui_point_t src_center = {0};
-    dst_area.w = src_radius * 2;
-    dst_area.h = src_radius * 2;
+    dst_area.w = src_radius * 2 + 1;
+    dst_area.h = src_radius * 2 + 1;
     scui_draw_graph_dsc_t draw_graph_circle = {
         .type = scui_draw_graph_type_circle,
         .dst_surface = dst_surface,
@@ -813,6 +813,7 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
         .circle.src_radius = src_radius,
     };
     //
+    #if 1
     dst_area.x = dst_clip->x + 0;
     dst_area.y = dst_clip->y + 0;
     draw_graph_circle.circle.src_center.x = dst_area.x + src_radius;
@@ -885,6 +886,8 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
         x = dst_clip->x + dst_clip->w - src_width;
         scui_draw_vline(&draw_graph_line, x, y, l, w);
     }
+    #endif
+    
     #endif
 }
 

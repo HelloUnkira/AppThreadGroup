@@ -7,9 +7,9 @@ typedef struct {
 } scui_window_stack_t;
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
- *@param handle 窗口句柄
+ *@param type   更新类型(0:cover;1:add;2:del;)
  */
-void scui_window_stack_update(scui_handle_t handle);
+void scui_window_stack_update(scui_handle_t handle, uint8_t type);
 
 /*@brief 窗口栈深度
  *@param top 栈深

@@ -88,7 +88,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
  */
 static void scui_widget_show_delay(scui_handle_t handle)
 {
-    SCUI_LOG_DEBUG("");
+    SCUI_LOG_INFO("widget :%u", handle);
     
     if (scui_handle_unmap(handle)) {
         scui_widget_create_layout_tree(handle);
@@ -145,7 +145,7 @@ void scui_widget_show(scui_handle_t handle, bool delay)
  */
 static void scui_widget_hide_delay(scui_handle_t handle)
 {
-    SCUI_LOG_DEBUG("");
+    SCUI_LOG_INFO("widget :%u", handle);
     
     if (scui_handle_unmap(handle))
         return;

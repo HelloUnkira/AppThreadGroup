@@ -394,25 +394,24 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         /* 窗口属性参数配置(浮动窗口) */
         scui_window_float_t float_cfg = {0};
         scui_window_float_cfg_get(&float_cfg);
-        float_cfg.main = event->object;
-        float_cfg.list[0] = SCUI_HANDLE_INVALID;
-        float_cfg.list[1] = SCUI_HANDLE_INVALID;
-        float_cfg.list[2] = SCUI_HANDLE_INVALID;
-        float_cfg.list[3] = SCUI_HANDLE_INVALID;
+        /* 该状态是唯一全局实例,不可随意修改 */
         
         switch (event->object) {
         case SCUI_UI_SCENE_HOME:
+        case SCUI_UI_SCENE_FLOAT_1:
+        case SCUI_UI_SCENE_FLOAT_2:
         case SCUI_UI_SCENE_MINI_CARD:
+        case SCUI_UI_SCENE_FLOAT_4:
             float_cfg.main = SCUI_UI_SCENE_HOME;
             float_cfg.list[0] = SCUI_UI_SCENE_FLOAT_1;
             float_cfg.list[1] = SCUI_UI_SCENE_FLOAT_2;
             float_cfg.list[2] = SCUI_UI_SCENE_MINI_CARD;
             float_cfg.list[3] = SCUI_UI_SCENE_FLOAT_4;
+            scui_window_float_cfg_set(&float_cfg);
             break;
         default:
             break;
         }
-        scui_window_float_cfg_set(&float_cfg);
         return;
     }
     
