@@ -66,7 +66,7 @@
 #include "scui_window_stack.h"      /* 窗口管理器 */
 /* widget: */
 #include "scui_custom.h"            /* 控件(自定义) */
-#include "scui_custom_misc.h"       /* 自定义插件 */
+#include "scui_custom_draw.h"       /* 控件(自定义:插件) */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_string.h"            /* 控件(字符串) */
 /* widget: */

@@ -8,22 +8,21 @@
 #include "scui.h"
 
 /*@brief 自定义控件:插件:加载圆环
- *@param event      自定义控件事件
- *@param clip       剪切域(绘制区域)
- *@param spinner    图像句柄(调色板图)
- *@param color      图像源色调(.color_l,.color_d,.color_f, .filter,)
- *@param edge       图像句柄(边界点)
- *@param percent    旋转百分比(0~100)
- *@param angle_s    旋转参考点(参考值270度)
- *@param angle_l    旋转参考点(参考值270度)
- *@param way        旋转方向(顺时针:+1;逆时针:-1;)
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
-                              scui_handle_t spinner, scui_color_t  color,
-                              scui_handle_t edge,    scui_coord_t  percent,
-                              scui_coord_t  angle_s, scui_coord_t  angle_l,
-                              scui_coord_t  way)
+void scui_custom_draw_spinner(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t *event     = draw_dsc->event;
+    scui_area_t  *clip      = draw_dsc->clip;
+    scui_handle_t spinner   = draw_dsc->spinner.spinner;
+    scui_handle_t edge      = draw_dsc->spinner.edge;
+    scui_color_t  color     = draw_dsc->spinner.color;
+    scui_coord_t  percent   = draw_dsc->spinner.percent;
+    scui_coord_t  angle_s   = draw_dsc->spinner.angle_s;
+    scui_coord_t  angle_l   = draw_dsc->spinner.angle_l;
+    scui_coord_t  way       = draw_dsc->spinner.way;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
@@ -57,26 +56,24 @@ void scui_custom_draw_spinner(scui_event_t *event,   scui_area_t  *clip,
 }
 
 /*@brief 自定义控件:插件:进度条,滚动条
- *@param event      自定义控件事件
- *@param clip       剪切域(绘制区域)
- *@param bar        图像句柄(背景图)
- *@param color_bar  图像源色调(调色板使用)
- *@param edge       图像句柄(边界点)
- *@param color_edge 图像源色调(调色板使用)
- *@param vmin       最小值(默认可为百分比:0)
- *@param vmax       最大值(默认可为百分比:100)
- *@param cmin       当前最小值
- *@param cmax       当前最大值
- *@param dist       宽度或高度
- *@param way        方向(0:水平方向;1:垂直方向)
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
-                             scui_handle_t bar,   scui_color_t  color_bar,
-                             scui_handle_t edge,  scui_color_t  color_edge,
-                             scui_coord_t  vmin,  scui_coord_t  vmax,
-                             scui_coord_t  cmin,  scui_coord_t  cmax,
-                             scui_handle_t dist,  bool way)
+void scui_custom_draw_slider(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t *event         = draw_dsc->event;
+    scui_area_t  *clip          = draw_dsc->clip;
+    scui_handle_t bar           = draw_dsc->slider.bar;
+    scui_handle_t edge          = draw_dsc->slider.edge;
+    scui_color_t  color_bar     = draw_dsc->slider.color_bar;
+    scui_color_t  color_edge    = draw_dsc->slider.color_edge;
+    scui_coord_t  vmin          = draw_dsc->slider.vmin;
+    scui_coord_t  vmax          = draw_dsc->slider.vmax;
+    scui_coord_t  cmin          = draw_dsc->slider.cmin;
+    scui_coord_t  cmax          = draw_dsc->slider.cmax;
+    scui_handle_t dist          = draw_dsc->slider.dist;
+    bool          way           = draw_dsc->slider.way;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
@@ -171,23 +168,22 @@ void scui_custom_draw_slider(scui_event_t *event, scui_area_t  *clip,
 }
 
 /*@brief 自定义控件:插件:导航点
- *@param event       自定义控件事件
- *@param clip        剪切域(绘制区域)
- *@param wait        图像句柄(未选中)
- *@param color_wait  图像源色调(调色板使用)
- *@param focus       图像句柄(选中)
- *@param color_focus 图像源色调(调色板使用)
- *@param count       导航点数量
- *@param index       目标索引(选中)
- *@param span        间隙
- *@param dir_hor     水平方向
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_indicator(scui_event_t *event, scui_area_t  *clip,
-                                scui_handle_t wait,  scui_color_t  color_wait,
-                                scui_handle_t focus, scui_color_t  color_focus,
-                                scui_handle_t count, scui_handle_t index,
-                                scui_handle_t span,  bool          dir_hor)
+void scui_custom_draw_indicator(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t *event         = draw_dsc->event;
+    scui_area_t  *clip          = draw_dsc->clip;
+    scui_handle_t wait          = draw_dsc->indicator.wait;
+    scui_handle_t focus         = draw_dsc->indicator.focus;
+    scui_color_t  color_wait    = draw_dsc->indicator.color_wait;
+    scui_color_t  color_focus   = draw_dsc->indicator.color_focus;
+    scui_handle_t count         = draw_dsc->indicator.count;
+    scui_handle_t index         = draw_dsc->indicator.index;
+    scui_handle_t span          = draw_dsc->indicator.span;
+    bool          way           = draw_dsc->indicator.way;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     
@@ -197,63 +193,65 @@ void scui_custom_draw_indicator(scui_event_t *event, scui_area_t  *clip,
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, focus, NULL, color_focus);
-            if (dir_hor)
-                offset.x += scui_image_w(focus) + span;
-            else
+            if (way)
                 offset.y += scui_image_h(focus) + span;
+            else
+                offset.x += scui_image_w(focus) + span;
         } else {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, wait, NULL, color_wait);
-            if (dir_hor)
-                offset.x += scui_image_w(wait) + span;
-            else
+            if (way)
                 offset.y += scui_image_h(wait) + span;
+            else
+                offset.x += scui_image_w(wait) + span;
         }
     }
 }
 
 /*@brief 自定义控件:插件:绕圆旋转图像
- *@param event  自定义控件事件
- *@param center 旋转中心
- *@param image  图像句柄
- *@param color  图像源色调(调色板使用)
- *@param radius 旋转半径
- *@param angle  旋转角度(顺时针旋转:+,逆时针旋转:-)
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ring_edge(scui_event_t *event,  scui_point_t *center,
-                                scui_handle_t image,  scui_color_t  color,
-                                scui_coord_t  radius, scui_coord_t  angle)
+void scui_custom_draw_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t *event         = draw_dsc->event;
+    scui_area_t  *clip          = draw_dsc->clip;
+    scui_handle_t image         = draw_dsc->ring_edge.image;
+    scui_color_t  color         = draw_dsc->ring_edge.color;
+    scui_point_t *center        = draw_dsc->ring_edge.center;
+    scui_coord_t  radius        = draw_dsc->ring_edge.radius;
+    scui_coord_t  angle         = draw_dsc->ring_edge.angle;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     
     scui_multi_t point_x = radius * scui_cos4096((int32_t)angle) >> 12;
     scui_multi_t point_y = radius * scui_sin4096((int32_t)angle) >> 12;
     
-    scui_area_t clip = {
+    scui_area_t clip_edge = {
         .x = center->x + point_x - scui_image_w(image) / 2,
         .y = center->y + point_y - scui_image_h(image) / 2,
         .w = scui_image_w(image),
         .h = scui_image_h(image),
     };
-    scui_widget_draw_image(event->object, &clip, image, NULL, color);
+    scui_widget_draw_image(event->object, &clip_edge, image, NULL, color);
 }
 
 /*@brief 自定义控件:插件:图像连续绘制
  *       一般主要用于绘制连续数字符号图片
- *@param event 自定义控件事件
- *@param clip  剪切域(绘制区域)
- *@param image 图像句柄(背景图)
- *@param color 图像源色调(调色板使用)
- *@param span  图像间隙
- *@param num   图像数量
- *@param way   方向(0:水平方向;1:垂直方向)
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_image_text(scui_event_t  *event, scui_area_t *clip,
-                                 scui_handle_t *image, scui_color_t color,
-                                 scui_coord_t   span,  scui_coord_t num,
-                                 bool way)
+void scui_custom_draw_image_text(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t  *event        = draw_dsc->event;
+    scui_area_t   *clip         = draw_dsc->clip;
+    scui_handle_t *image        = draw_dsc->image_text.image;
+    scui_color_t   color        = draw_dsc->image_text.color;
+    scui_coord_t   span         = draw_dsc->image_text.span;
+    scui_coord_t   num          = draw_dsc->image_text.num;
+    bool           way          = draw_dsc->image_text.way;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     SCUI_ASSERT(image != NULL);
@@ -275,16 +273,17 @@ void scui_custom_draw_image_text(scui_event_t  *event, scui_area_t *clip,
 }
 
 /*@brief 按钮控件绘制(四个角使用图像绘制)
- *@param event 自定义控件事件
- *@param clip  剪切域(绘制区域)
- *@param image 图像句柄(左上角,右上角,左下角,右下角)
- *@param color 图像源色调
- *@param delta 边界填充线(0:忽略填充(复杂图像集成);-1:全填充(全填充圆角矩形);其他:边界填充(空心圆角矩形))
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_rect4(scui_event_t *event,    scui_area_t *clip,
-                            scui_handle_t image[4], scui_color_t color,
-                            scui_coord_t  delta)
+void scui_custom_draw_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t  *event        = draw_dsc->event;
+    scui_area_t   *clip         = draw_dsc->clip;
+    scui_handle_t *image        = draw_dsc->image_crect4.image;
+    scui_color_t   color        = draw_dsc->image_crect4.color;
+    scui_coord_t   delta        = draw_dsc->image_crect4.delta;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     SCUI_ASSERT(clip != NULL);
     SCUI_ASSERT(image != NULL);
@@ -410,3 +409,4 @@ void scui_custom_draw_rect4(scui_event_t *event,    scui_area_t *clip,
     }
     /* ... */
 }
+

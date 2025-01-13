@@ -88,7 +88,6 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         scui_area_t clip_ver     = {0};
         scui_point_t offset_hor  = {0};
         scui_point_t offset_ver  = {0};
-        scui_color_t color_black = {0};
         
         scui_handle_t wait  = scui_image_prj_image_src_repeat_dot_01_greybmp;
         scui_handle_t focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
@@ -96,16 +95,42 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         offset_hor.x = 15;
         offset_hor.y = SCUI_DRV_VER_RES - 30;
         clip_hor = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_indicator(event, &clip_hor, wait, color_black, focus, color_black,
-                                             5, indicator_index, 6, true);
+        if (scui_area_limit_offset(&clip_hor, &offset_hor)) {
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &clip_hor,
+                .indicator.wait        = wait,
+                .indicator.focus       = focus,
+                .indicator.color_wait  = {0},
+                .indicator.color_focus = {0},
+                .indicator.count       = 5,
+                .indicator.index       = indicator_index,
+                .indicator.span        = 6,
+                .indicator.way         = 0,
+            };
+            scui_custom_draw_indicator(&draw_dsc);
+        }
         
         offset_ver.x = 15;
         offset_ver.y = SCUI_DRV_VER_RES - 150;
         clip_ver = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_indicator(event, &clip_ver, wait, color_black, focus, color_black,
-                                             5, indicator_index, 6, false);
+        if (scui_area_limit_offset(&clip_ver, &offset_ver)) {
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &clip_ver,
+                .indicator.wait        = wait,
+                .indicator.focus       = focus,
+                .indicator.color_wait  = {0},
+                .indicator.color_focus = {0},
+                .indicator.count       = 5,
+                .indicator.index       = indicator_index,
+                .indicator.span        = 6,
+                .indicator.way         = 1,
+            };
+            scui_custom_draw_indicator(&draw_dsc);
+        }
         
         scui_handle_t bar  = scui_image_prj_image_src_repeat_03_barbmp;
         scui_handle_t edge = scui_image_prj_image_src_repeat_05_dotbmp;
@@ -116,15 +141,47 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         offset_hor.x = 15;
         offset_hor.y = SCUI_DRV_VER_RES - 40;
         clip_hor = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_hor, &offset_hor))
-            scui_custom_draw_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
+        if (scui_area_limit_offset(&clip_hor, &offset_hor)) {
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &clip_hor,
+                .slider.bar        = bar,
+                .slider.edge       = edge,
+                .slider.color_bar  = color_bar,
+                .slider.color_edge = color_edge,
+                .slider.vmin       = 0,
+                .slider.vmax       = 100,
+                .slider.cmin       = progressbar_s,
+                .slider.cmax       = progressbar_e,
+                .slider.dist       = 152,
+                .slider.way        = 1,
+            };
+            scui_custom_draw_slider(&draw_dsc);
+        }
         #endif
         
         offset_ver.x = 5;
         offset_ver.y = SCUI_DRV_VER_RES - 160;
         clip_ver = scui_widget_clip(event->object);
-        if (scui_area_limit_offset(&clip_ver, &offset_ver))
-            scui_custom_draw_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);
+        if (scui_area_limit_offset(&clip_ver, &offset_ver)) {
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &clip_ver,
+                .slider.bar        = bar,
+                .slider.edge       = edge,
+                .slider.color_bar  = color_bar,
+                .slider.color_edge = color_edge,
+                .slider.vmin       = 0,
+                .slider.vmax       = 100,
+                .slider.cmin       = progressbar_s,
+                .slider.cmax       = progressbar_e,
+                .slider.dist       = 152,
+                .slider.way        = 0,
+            };
+            scui_custom_draw_slider(&draw_dsc);
+        }
         break;
     }
     default:
@@ -277,7 +334,17 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         scui_coord_t  radius = clip.w / 2 - 20;
         scui_coord_t  angle  = image_ring_angle;
         scui_handle_t image_handle = scui_image_prj_image_src_repeat_dot_02_whitebmp;
-        scui_custom_draw_ring_edge(event, &center, image_handle, color_mix, radius, angle);
+        
+        scui_custom_draw_dsc_t draw_dsc = {
+            .event = event,
+            .clip  = NULL,
+            .ring_edge.image  = image_handle,
+            .ring_edge.color  = color_mix,
+            .ring_edge.center = &center,
+            .ring_edge.radius = radius,
+            .ring_edge.angle  = angle,
+        };
+        scui_custom_draw_ring_edge(&draw_dsc);
         
         break;
     }
@@ -339,9 +406,18 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
             .filter = true,
         };
         
-        scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
-                                 spinner_pct, 270, 60, +1);
-        
+        scui_custom_draw_dsc_t draw_dsc = {
+            .event = event,
+            .clip  = &clip,
+            .spinner.spinner = image_ring,
+            .spinner.edge    = image_edge,
+            .spinner.color   = color,
+            .spinner.percent = spinner_pct,
+            .spinner.angle_s = 270,
+            .spinner.angle_l = 60,
+            .spinner.way     = +1,
+        };
+        scui_custom_draw_spinner(&draw_dsc);
         break;
     }
     default:

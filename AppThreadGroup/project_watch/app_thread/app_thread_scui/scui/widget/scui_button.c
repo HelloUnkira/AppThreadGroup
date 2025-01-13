@@ -111,7 +111,15 @@ void scui_button_event(scui_event_t *event)
              return;
         
         if (button->mode == scui_button_mode_static) {
-            scui_custom_draw_rect4(event, &widget->clip, button->image, button->color, button->delta);
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &widget->clip,
+                .image_crect4.image = button->image,
+                .image_crect4.color = button->color,
+                .image_crect4.delta = button->delta,
+            };
+            scui_custom_draw_image_crect4(&draw_dsc);
             break;
         }
         if (button->mode == scui_button_mode_scale) {
@@ -123,7 +131,15 @@ void scui_button_event(scui_event_t *event)
             scale_clip.y += scale_y;
             scale_clip.w -= scale_x * 2;
             scale_clip.h -= scale_y * 2;
-            scui_custom_draw_rect4(event, &scale_clip, button->image, button->color, button->delta);
+            
+            scui_custom_draw_dsc_t draw_dsc = {
+                .event = event,
+                .clip  = &scale_clip,
+                .image_crect4.image = button->image,
+                .image_crect4.color = button->color,
+                .image_crect4.delta = button->delta,
+            };
+            scui_custom_draw_image_crect4(&draw_dsc);
             break;
         }
         break;

@@ -6,20 +6,22 @@
 #define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
+// 二维码生成器库(qrcode):
 #include "qrcodegen.h"
 
 /*@brief 自定义控件:插件:二维码生成器
- *@param event 自定义控件事件
- *@param clip  剪切域(绘制区域)
- *@param color 颜色(.color_lighten,.color_darken,)
- *@param data  url网址链接字符串
- *@param size  字符串长度
- *@param cover 背景覆盖
+ *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_qrcode(scui_event_t *event, scui_area_t *clip,
-                             scui_color_t  color, bool cover,
-                             uint8_t *data, uint32_t size)
+void scui_custom_draw_qrcode(scui_custom_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_event_t *event = draw_dsc->event;
+    scui_area_t  *clip  = draw_dsc->clip;
+    scui_color_t  color = draw_dsc->qrcode.color;
+    uint8_t      *data  = draw_dsc->qrcode.data;
+    uint32_t      size  = draw_dsc->qrcode.size;
+    bool          cover = draw_dsc->qrcode.cover;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     
     if (cover) {
