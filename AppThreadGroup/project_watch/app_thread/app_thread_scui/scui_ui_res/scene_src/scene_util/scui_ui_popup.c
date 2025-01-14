@@ -186,7 +186,7 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, alpha, false);
         
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
-        scui_widget_draw_image(event->object, NULL, image, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
         
         break;
     }

@@ -82,7 +82,7 @@ static void scui_cwf_json_custom_event_cb(scui_event_t *event)
             if (res->img_bits == 0 || res->img_bits - 1 == idx) {
                 clip.w = scui_image_w(image);
                 clip.h = scui_image_h(image);
-                scui_widget_draw_image(event->object, &clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
             }
             // 迭代到下一个绘制目标
             clip.x += clip.w + res->img_span;

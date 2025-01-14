@@ -201,7 +201,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     draw_graph.line.src_pos_2.y += offset_line_delete;
                     draw_graph.line.src_pos_1.y += src_args->offset;
                     draw_graph.line.src_pos_2.y += src_args->offset;
-                    scui_draw_graph_context(&draw_graph);
+                    scui_draw_graph_ctx(&draw_graph);
                 }
                 if (src_args->line_under) {
                     draw_graph.line.src_pos_1 = line_point_s;
@@ -210,7 +210,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     draw_graph.line.src_pos_2.y += offset_line_under;
                     draw_graph.line.src_pos_1.y += src_args->offset;
                     draw_graph.line.src_pos_2.y += src_args->offset;
-                    scui_draw_graph_context(&draw_graph);
+                    scui_draw_graph_ctx(&draw_graph);
                 }
             }
         }
@@ -339,7 +339,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 draw_graph.line.src_pos_2.y += offset_line_delete;
                 draw_graph.line.src_pos_1.x += src_args->offset;
                 draw_graph.line.src_pos_2.x += src_args->offset;
-                scui_draw_graph_context(&draw_graph);
+                scui_draw_graph_ctx(&draw_graph);
             }
             if (src_args->line_under) {
                 draw_graph.line.src_pos_1 = line_point_s;
@@ -348,7 +348,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 draw_graph.line.src_pos_2.y += offset_line_under;
                 draw_graph.line.src_pos_1.x += src_args->offset;
                 draw_graph.line.src_pos_2.x += src_args->offset;
-                scui_draw_graph_context(&draw_graph);
+                scui_draw_graph_ctx(&draw_graph);
             }
         }
     }

@@ -181,13 +181,13 @@ void scui_ui_scene_thumbwheel_custom_event_proc(scui_event_t *event)
                     dst_clip_a.h = scui_image_h(image_arrow);
                     dst_clip_a.x = widget_cx - img_dist + img_dia / 2 + dst_clip_a.w / 2;
                     dst_clip_a.y = widget_cy - dst_clip_a.h / 2;
-                    scui_widget_draw_image(event->object, &dst_clip_a, image_arrow, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &dst_clip_a, image_arrow, NULL, SCUI_COLOR_UNUSED);
                     
                     scui_handle_t text = scui_ui_scene_list_text[lst_ofs];
                     scui_string_update_text(scui_ui_res_local->string, text);
                 }
                 
-                scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &dst_clip, image, NULL, SCUI_COLOR_UNUSED);
             }
             if (event->type == scui_event_ptr_click) {
                 if (scui_area_point(&dst_clip, &event->ptr_c)) {

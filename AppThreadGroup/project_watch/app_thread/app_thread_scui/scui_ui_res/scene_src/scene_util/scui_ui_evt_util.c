@@ -24,14 +24,14 @@ void scui_ui_mask_all_event_proc(scui_event_t *event)
         clip.h = scui_image_h(image_mask_u);
         clip.x = (SCUI_DRV_HOR_RES - clip.w) / 2;
         clip.y = 0;
-        // scui_widget_draw_image(event->object, &clip, image_mask_u, NULL, (scui_color_t){0});
+        // scui_widget_draw_image(event->object, &clip, image_mask_u, NULL, SCUI_COLOR_UNUSED);
         
         scui_handle_t image_mask_d = scui_image_prj_image_src_repeat_mask_05_big_downpng;
         clip.w = scui_image_w(image_mask_d);
         clip.h = scui_image_h(image_mask_d);
         clip.x = (SCUI_DRV_HOR_RES - clip.w) / 2;
         clip.y = (SCUI_DRV_VER_RES - clip.h);
-        // scui_widget_draw_image(event->object, &clip, image_mask_d, NULL, (scui_color_t){0});
+        // scui_widget_draw_image(event->object, &clip, image_mask_d, NULL, SCUI_COLOR_UNUSED);
         break;
     }
     default:

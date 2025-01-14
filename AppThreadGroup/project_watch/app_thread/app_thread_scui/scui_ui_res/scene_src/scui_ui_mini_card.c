@@ -147,7 +147,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         switch (type) {
         case scui_ui_scene_mini_card_type_music_control: {
             scui_handle_t image = scui_image_prj_image_src_19_widget_music_01_bgbmp;
-            scui_widget_draw_image(event->object, NULL, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
             break;
         }
         default: {
@@ -185,7 +185,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_handle_t image_bg   = scui_image_prj_image_src_19_widget_activity_01_bgbmp;
             scui_handle_t image_edge = scui_image_prj_image_src_19_widget_activity_04_dotbmp;
             scui_handle_t image_ring = scui_image_prj_image_src_19_widget_activity_05_ringbmp;
-            scui_widget_draw_image(event->object, &clip_bg, image_bg, NULL, (scui_color_t){.filter = true,});
+            scui_widget_draw_image(event->object, &clip_bg, image_bg, NULL, SCUI_COLOR_FILTER_TRANS);
             scui_widget_draw_ring(event->object, &clip_fg, image_ring, NULL,  -81, color_kcal,  +22, pct_kcal, image_edge);
             scui_widget_draw_ring(event->object, &clip_fg, image_ring, NULL,  +39, color_step, +141, pct_step, image_edge);
             scui_widget_draw_ring(event->object, &clip_fg, image_ring, NULL, +158, color_dist, +262, pct_dist, image_edge);
@@ -197,9 +197,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_handle_t image_icon_kcal = scui_image_prj_image_src_19_widget_activity_02_caloriesbmp;
             scui_handle_t image_icon_step = scui_image_prj_image_src_19_widget_activity_08_stepsbmp;
             scui_handle_t image_icon_dist = scui_image_prj_image_src_19_widget_activity_03_distancebmp;
-            scui_widget_draw_image(event->object, &clip_icon_kcal, image_icon_kcal, NULL, (scui_color_t){.filter = true,});
-            scui_widget_draw_image(event->object, &clip_icon_step, image_icon_step, NULL, (scui_color_t){.filter = true,});
-            scui_widget_draw_image(event->object, &clip_icon_dist, image_icon_dist, NULL, (scui_color_t){.filter = true,});
+            scui_widget_draw_image(event->object, &clip_icon_kcal, image_icon_kcal, NULL, SCUI_COLOR_FILTER_TRANS);
+            scui_widget_draw_image(event->object, &clip_icon_step, image_icon_step, NULL, SCUI_COLOR_FILTER_TRANS);
+            scui_widget_draw_image(event->object, &clip_icon_dist, image_icon_dist, NULL, SCUI_COLOR_FILTER_TRANS);
             
             // 绘制数字图标
             scui_handle_t image_digit_kcal = scui_image_prj_image_src_19_widget_activity_num_pink_04_03bmp;
@@ -223,9 +223,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 image_digit_step_list[idx] = image_digit_step + char_digit_step[idx] - '0';
             for (scui_coord_t idx = 0; idx < digit_dist_num; idx++)
                 image_digit_dist_list[idx] = image_digit_dist + char_digit_dist[idx] - '0';
-            scui_custom_draw_image_text(event, &clip_digit_kcal, image_digit_kcal_list, SCUI_COLOR_FILTER_BALCK, 3, digit_kcal_num, 0);
-            scui_custom_draw_image_text(event, &clip_digit_step, image_digit_step_list, SCUI_COLOR_FILTER_BALCK, 3, digit_kcal_num, 0);
-            scui_custom_draw_image_text(event, &clip_digit_dist, image_digit_dist_list, SCUI_COLOR_FILTER_BALCK, 3, digit_kcal_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_kcal, image_digit_kcal_list, SCUI_COLOR_FILTER_TRANS, 3, digit_kcal_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_step, image_digit_step_list, SCUI_COLOR_FILTER_TRANS, 3, digit_step_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit_dist, image_digit_dist_list, SCUI_COLOR_FILTER_TRANS, 3, digit_dist_num, 0);
             
             break;
         }
@@ -244,9 +244,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_area_t btn_clip_2 = clip;
             btn_clip_0.x += 60; btn_clip_1.x += 160; btn_clip_2.x += 308;
             btn_clip_0.y += 99; btn_clip_1.y +=  77; btn_clip_2.y +=  99;
-            scui_widget_draw_image(event->object, &btn_clip_0, image0, NULL, (scui_color_t){0});
-            scui_widget_draw_image(event->object, &btn_clip_1, image1, NULL, (scui_color_t){0});
-            scui_widget_draw_image(event->object, &btn_clip_2, image2, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &btn_clip_0, image0, NULL, SCUI_COLOR_UNUSED);
+            scui_widget_draw_image(event->object, &btn_clip_1, image1, NULL, SCUI_COLOR_UNUSED);
+            scui_widget_draw_image(event->object, &btn_clip_2, image2, NULL, SCUI_COLOR_UNUSED);
             
             break;
         }
@@ -256,7 +256,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             
             scui_handle_t image = scui_image_prj_image_src_19_widget_06_retrybmp;
             scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
-            scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             char data_unit[50] = {0};
             scui_handle_t unit_text = SCUI_HANDLE_INVALID;
@@ -320,7 +320,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             
             scui_handle_t image = scui_presenter.get_temp_icon();
             scui_area_t image_clip = clip; image_clip.x += 346; image_clip.y += 69;
-            scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             char data_unit[50] = {0};
             scui_handle_t unit_text = SCUI_HANDLE_INVALID;
@@ -343,7 +343,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             if (scui_presenter.alarm_none()) {
                 scui_handle_t image = scui_image_prj_image_src_19_widget_01_arrowbmp;
                 scui_area_t image_clip = clip; image_clip.x += 24; image_clip.y += 129 + 10;
-                scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             } else {
                 
                 scui_handle_t image_on  = scui_image_prj_image_src_repeat_switch_01_alarmspng;
@@ -352,14 +352,14 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 if (scui_presenter.alarm_near_state()) {
                     scui_area_t image_on_clip = clip; image_on_clip.x += 316; image_on_clip.y += 71;
-                    scui_widget_draw_image(event->object, &image_on_clip, image_on, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &image_on_clip, image_on, NULL, SCUI_COLOR_UNUSED);
                     scui_area_t image_dot_clip = clip; image_dot_clip.x += 316 + 30; image_dot_clip.y += 71 + 3;
-                    scui_widget_draw_image(event->object, &image_dot_clip, image_dot, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &image_dot_clip, image_dot, NULL, SCUI_COLOR_UNUSED);
                 } else {
                     scui_area_t image_on_clip = clip; image_on_clip.x += 316; image_on_clip.y += 71;
-                    scui_widget_draw_image(event->object, &image_on_clip, image_on, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &image_on_clip, image_on, NULL, SCUI_COLOR_UNUSED);
                     scui_area_t image_dot_clip = clip; image_dot_clip.x += 316 + 3; image_dot_clip.y += 71 + 3;
-                    scui_widget_draw_image(event->object, &image_dot_clip, image_dot, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &image_dot_clip, image_dot, NULL, SCUI_COLOR_UNUSED);
                 }
                 
                 char data_unit[200] = {0};
@@ -419,11 +419,12 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_handle_t image_r = scui_image_prj_image_src_22_sleep_home_bar_04_grey_01bmp;
                 scui_area_t image_clip_l = clip; image_clip_l.y += 137; image_clip_l.x += 28;
                 scui_area_t image_clip_r = clip; image_clip_r.y += 137; image_clip_r.x += 28 + width - scui_image_w(image_r);
-                scui_widget_draw_image(event->object, &image_clip_l, image_l, NULL, (scui_color_t){0});
-                scui_widget_draw_image(event->object, &image_clip_r, image_r, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip_l, image_l, NULL, SCUI_COLOR_UNUSED);
+                scui_widget_draw_image(event->object, &image_clip_r, image_r, NULL, SCUI_COLOR_UNUSED);
                 scui_area_t image_clip_c = clip; image_clip_c.y += 137; image_clip_c.x += 28 + scui_image_w(image_l);
                 image_clip_c.h = scui_image_h(image_l); image_clip_c.w = width - scui_image_w(image_l) - scui_image_w(image_r);
-                scui_widget_draw_color(event->object, &image_clip_c, (scui_color_t){.color.full = 0xFF6A6A6A,});
+                scui_widget_draw_color(event->object, &image_clip_c, SCUI_COLOR_MAKE32(false, 0x0, 0xFF6A6A6A));
+                
             } else {
                 
                 char data_unit[50] = {0};
@@ -484,12 +485,13 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     scui_area_t image_clip_r = clip; image_clip_r.y += 137;
                     image_clip_l.x += pos_x4[idx];
                     image_clip_r.x += pos_x4[idx] + width4[idx] - scui_image_w(image_r);
-                    scui_widget_draw_image(event->object, &image_clip_l, image_l, NULL, (scui_color_t){0});
-                    scui_widget_draw_image(event->object, &image_clip_r, image_r, NULL, (scui_color_t){0});
+                    scui_widget_draw_image(event->object, &image_clip_l, image_l, NULL, SCUI_COLOR_UNUSED);
+                    scui_widget_draw_image(event->object, &image_clip_r, image_r, NULL, SCUI_COLOR_UNUSED);
                     scui_area_t image_clip_c = clip; image_clip_c.y += 137; image_clip_c.h = scui_image_h(image_l);
                     image_clip_c.x += pos_x4[idx] + scui_image_w(image_l);
                     image_clip_c.w = width4[idx] - scui_image_w(image_l) - scui_image_w(image_r);
-                    scui_widget_draw_color(event->object, &image_clip_c, (scui_color_t){.color.full = color4[idx],});
+                    scui_widget_draw_color(event->object, &image_clip_c, SCUI_COLOR_MAKE32(false, 0x0, color4[idx]));
+                    
                 }
                 
             }
@@ -515,7 +517,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 scui_handle_t image = scui_presenter.sport_record_icon();
                 scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
-                scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
                 
             }
             
@@ -540,7 +542,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 scui_handle_t image = scui_presenter.women_health_icon();
                 scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
-                scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
                 
             }
             
@@ -551,13 +553,13 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             /* 指北针背景表图 */
             scui_handle_t image = scui_image_prj_image_src_19_widget_compass_02_bgbmp;
             scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 73;
-            scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             if (scui_presenter.compass_invalid()) {
                 
                 scui_handle_t image = scui_image_prj_image_src_19_widget_01_arrowbmp;
                 scui_area_t image_clip = clip; image_clip.x += 24; image_clip.y += 136;
-                scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             } else {
                 
                 scui_handle_t image = scui_image_prj_image_src_19_widget_compass_03_arrowpng;
@@ -625,7 +627,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_area_t color_clip = clip;
             color_clip.x += 204; color_clip.w = 2;
             color_clip.y +=  85; color_clip.h = 68;
-            scui_widget_draw_color(event->object, &color_clip, (scui_color_t){.color.full = 0xFF4D4D4D,});
+            scui_widget_draw_color(event->object, &color_clip, SCUI_COLOR_MAKE32(false, 0x0, 0xFF4D4D4D));
             
             break;
         }
@@ -645,11 +647,11 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 if (char_digit[idx] == '.')
                     image_digit_list[idx] = image_digit - 2;
             }
-            scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
+            scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
             
             scui_handle_t image = scui_image_prj_image_src_19_widget_02_pausedbmp;
             scui_area_t image_clip = clip; image_clip.x += 298; image_clip.y += 66;
-            scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             break;
         }
@@ -669,7 +671,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_area_t image_clip = clip;
                 image_clip.x += image_clip4[idx].x;
                 image_clip.y += image_clip4[idx].y;
-                scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
                 
                 snprintf(data_unit, sizeof(data_unit), "%d %s", num[idx],
                     scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
@@ -685,7 +687,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             scui_area_t image_clip = clip;
             image_clip.x += clip.w - scui_image_w(image);
             image_clip.y += clip.h - scui_image_h(image);
-            scui_widget_draw_image(event->object, &image_clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
             
             uint8_t world_time_cnt = 2;
             /* 在这里获取第一个要显示的世界时钟 */
@@ -720,7 +722,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_area_t color_clip = clip;
                 color_clip.x += 204; color_clip.w = 2;
                 color_clip.y +=  85; color_clip.h = 68;
-                scui_widget_draw_color(event->object, &color_clip, (scui_color_t){.color.full = 0xFF4D4D4D,});
+                scui_widget_draw_color(event->object, &color_clip, SCUI_COLOR_MAKE32(false, 0x0, 0xFF4D4D4D));
             }
             
             break;
@@ -781,7 +783,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         #if 0   // 更新alpha通道
         scui_alpha_t alpha = scui_alpha_pct(percent);
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-        scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_UNUSED);
         scui_widget_alpha_set(event->object, alpha, true);
         #else
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);

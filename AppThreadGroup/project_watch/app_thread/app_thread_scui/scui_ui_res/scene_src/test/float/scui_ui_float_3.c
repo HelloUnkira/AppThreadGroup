@@ -136,7 +136,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         
         /* 绘制圆环背景图: */
         // scui_widget_draw_color(event->object, NULL, (scui_color_t){.color.full = 0xFFFFFFFF,});
-        scui_widget_draw_image(event->object, NULL, image_bg, NULL, (scui_color_t){.filter = true,});
+        scui_widget_draw_image(event->object, NULL, image_bg, NULL, SCUI_COLOR_FILTER_TRANS);
         
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += (466 - 458) / 2;

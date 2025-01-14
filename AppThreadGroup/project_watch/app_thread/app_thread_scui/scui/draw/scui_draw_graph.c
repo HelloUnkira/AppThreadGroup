@@ -91,6 +91,10 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
     case scui_draw_type_ring:
         scui_draw_ctx_ring(draw_dsc);
         break;
+    default:
+        SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
+        SCUI_ASSERT(false);
+        break;
     }
 }
 
@@ -372,7 +376,7 @@ void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coo
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
-void scui_draw_graph_context(scui_draw_graph_dsc_t *draw_graph)
+void scui_draw_graph_ctx(scui_draw_graph_dsc_t *draw_graph)
 {
     #if SCUI_DRAW_GRAPH_USE_LVGL
     scui_draw_graph_LVGL(draw_graph);

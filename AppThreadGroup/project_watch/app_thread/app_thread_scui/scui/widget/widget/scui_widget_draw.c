@@ -45,13 +45,70 @@ bool scui_widget_draw_empty(scui_handle_t handle)
     return false;
 }
 
-/*@brief 控件在画布绘制字符串
- *@param handle 控件句柄
- *@param target 控件绘制区域
- *@param args   字符串绘制参数
+/*@brief 控件绘制上下文
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_string_args_t *args)
+void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
 {
+    void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
+    
+    switch (draw_dsc->type) {
+    case scui_widget_draw_type_string:
+        scui_widget_draw_ctx_string(draw_dsc);
+        break;
+    case scui_widget_draw_type_color:
+        scui_widget_draw_ctx_color(draw_dsc);
+        break;
+    case scui_widget_draw_type_color_grad:
+        scui_widget_draw_ctx_color_grad(draw_dsc);
+        break;
+    case scui_widget_draw_type_blur:
+        scui_widget_draw_ctx_blur(draw_dsc);
+        break;
+    case scui_widget_draw_type_image:
+        scui_widget_draw_ctx_image(draw_dsc);
+        break;
+    case scui_widget_draw_type_image_scale:
+        scui_widget_draw_ctx_image_scale(draw_dsc);
+        break;
+    case scui_widget_draw_type_image_rotate:
+        scui_widget_draw_ctx_image_rotate(draw_dsc);
+        break;
+    case scui_widget_draw_type_image_matrix:
+        scui_widget_draw_ctx_image_matrix(draw_dsc);
+        break;
+    case scui_widget_draw_type_ring:
+        scui_widget_draw_ctx_ring(draw_dsc);
+        break;
+    case scui_widget_draw_type_graph:
+        scui_widget_draw_ctx_graph(draw_dsc);
+        break;
+    default:
+        SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
+        SCUI_ASSERT(false);
+        break;
+    }
+}
+
+/*@brief 控件在画布绘制字符串
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_string_args_t *args = draw_dsc->string.args;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -90,13 +147,15 @@ void scui_widget_draw_string(scui_handle_t handle, scui_area_t *target, scui_str
 }
 
 /*@brief 控件在画布绘制纯色区域
- *@param handle 控件句柄
- *@param target 绘制区域
- *@param color  源色调
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_color(scui_handle_t handle, scui_area_t *target,
-                            scui_color_t  color)
+void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_color_t  color  = draw_dsc->color.color;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -117,14 +176,16 @@ void scui_widget_draw_color(scui_handle_t handle, scui_area_t *target,
 }
 
 /*@brief 控件在画布绘制渐变纯色区域
- *@param handle 控件句柄
- *@param target 绘制区域
- *@param color  源色调
- *@param way    渐变方向(0:hor;1:ver;)
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *target,
-                                 scui_color_t  color,  scui_coord_t way)
+void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_color_t  color  = draw_dsc->color_grad.color;
+    scui_coord_t  way    = draw_dsc->color_grad.way;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -146,11 +207,15 @@ void scui_widget_draw_color_grad(scui_handle_t handle, scui_area_t *target,
 }
 
 /*@brief 控件在画布绘制模糊
- *@param handle 控件句柄
- *@param clip   绘制区域
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
+void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_area_t  *clip   = draw_dsc->blur.clip;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -171,16 +236,17 @@ void scui_widget_draw_blur(scui_handle_t handle, scui_area_t *clip)
 }
 
 /*@brief 控件在画布绘制图像
- *@param handle 控件句柄
- *@param target 控件绘制区域
- *@param image  图像句柄
- *@param clip   图像源绘制区域
- *@param color  图像源色调(调色板)
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
-                            scui_handle_t image,  scui_area_t *clip,
-                            scui_color_t  color)
+void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_handle_t image  = draw_dsc->image.image;
+    scui_area_t  *clip   = draw_dsc->image.clip;
+    scui_color_t  color  = draw_dsc->image.color;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -242,17 +308,18 @@ void scui_widget_draw_image(scui_handle_t handle, scui_area_t *target,
 }
 
 /*@brief 控件在画布绘制图像
- *@param handle 控件句柄
- *@param target 控件绘制区域
- *@param image  图像句柄
- *@param clip   图像源绘制区域
- *@param scale  图形缩放比例(1024为放大系数)
- *@param pos    缩放锚点
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
-                                  scui_handle_t image,  scui_area_t   *clip,
-                                  scui_point_t  scale,  scui_opt_pos_t pos)
+void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_handle_t image  = draw_dsc->image_scale.image;
+    scui_area_t   *clip  = draw_dsc->image_scale.clip;
+    scui_point_t  scale  = draw_dsc->image_scale.scale;
+    scui_opt_pos_t pos   = draw_dsc->image_scale.pos;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -312,19 +379,19 @@ void scui_widget_draw_image_scale(scui_handle_t handle, scui_area_t   *target,
 }
 
 /*@brief 控件在画布绘制图像
- *@param handle 控件句柄
- *@param target 控件绘制区域
- *@param image  图像句柄
- *@param clip   图像源绘制区域
- *@param anchor 图像旋转轴心
- *@param center 图像旋转中心
- *@param angle  图像旋转角度(顺时针旋转:+,逆时针旋转:-)
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
-                                   scui_handle_t image,  scui_area_t  *clip,
-                                   scui_point_t *anchor, scui_point_t *center,
-                                   scui_coord_t  angle)
+void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_handle_t image  = draw_dsc->image_rotate.image;
+    scui_area_t  *clip   = draw_dsc->image_rotate.clip;
+    scui_point_t *anchor = draw_dsc->image_rotate.anchor;
+    scui_point_t *center = draw_dsc->image_rotate.center;
+    scui_coord_t  angle  = draw_dsc->image_rotate.angle;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -358,16 +425,17 @@ void scui_widget_draw_image_rotate(scui_handle_t handle, scui_area_t  *target,
 }
 
 /*@brief 控件在画布绘制图像
- *@param handle 控件句柄
- *@param target 控件绘制区域
- *@param image  图像句柄
- *@param clip   图像源绘制区域
- *@param matrix 变换矩阵
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_image_matrix(scui_handle_t  handle, scui_area_t *target,
-                                   scui_handle_t  image,  scui_area_t *clip,
-                                   scui_matrix_t *matrix)
+void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle  = draw_dsc->handle;
+    scui_area_t  *target  = draw_dsc->target;
+    scui_handle_t  image  = draw_dsc->image_matrix.image;
+    scui_area_t   *clip   = draw_dsc->image_matrix.clip;
+    scui_matrix_t *matrix = draw_dsc->image_matrix.matrix;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -406,22 +474,21 @@ void scui_widget_draw_image_matrix(scui_handle_t  handle, scui_area_t *target,
 }
 
 /*@brief 控件在画布绘制圆环
- *@param handle  控件句柄
- *@param target  控件绘制区域
- *@param image   图像句柄
- *@param clip    图像源绘制区域
- *@param angle_s 起始角度
- *@param color   源色调
- *@param angle_s 起始角度
- *@param percent 圆环进度(百分比)
- *@param image_e 控件句柄
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
-                           scui_handle_t image,   scui_area_t *clip,
-                           scui_coord_t  angle_s, scui_color_t color,
-                           scui_coord_t  angle_e, scui_coord_t percent,
-                           scui_handle_t image_e)
+void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle  = draw_dsc->handle;
+    scui_area_t  *target  = draw_dsc->target;
+    scui_handle_t image   = draw_dsc->ring.image;
+    scui_area_t  *clip    = draw_dsc->ring.clip;
+    scui_color_t  color   = draw_dsc->ring.color;
+    scui_coord_t  angle_s = draw_dsc->ring.angle_s;
+    scui_coord_t  angle_e = draw_dsc->ring.angle_e;
+    scui_coord_t  percent = draw_dsc->ring.percent;
+    scui_handle_t image_e = draw_dsc->ring.image_e;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -487,14 +554,16 @@ void scui_widget_draw_ring(scui_handle_t handle,  scui_area_t *target,
     }
 }
 
-/*@brief 控件在画布绘制线条
- *@param handle     控件句柄
- *@param target     控件绘制区域
- *@param draw_graph 绘制描述符实例
+/*@brief 控件在画布绘制图形
+ *@param draw_graph 绘制参数实例
  */
-void scui_widget_draw_graph(scui_handle_t handle, scui_area_t *target,
-                            scui_draw_graph_dsc_t *draw_graph)
+void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
 {
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_draw_graph_dsc_t *graph_dsc = draw_dsc->graph.graph_dsc;
+    /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
@@ -510,9 +579,9 @@ void scui_widget_draw_graph(scui_handle_t handle, scui_area_t *target,
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
-        draw_graph->dst_surface = widget->surface;
-        draw_graph->dst_clip    = &dst_clip;
-        draw_graph->src_alpha   = widget->alpha;
-        scui_draw_graph_context(draw_graph);
+        graph_dsc->dst_surface = widget->surface;
+        graph_dsc->dst_clip    = &dst_clip;
+        graph_dsc->src_alpha   = widget->alpha;
+        scui_draw_graph_ctx(graph_dsc);
     }
 }

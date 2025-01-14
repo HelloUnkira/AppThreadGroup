@@ -266,7 +266,7 @@ void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coo
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
-void scui_draw_graph_context(scui_draw_graph_dsc_t *draw_graph);
+void scui_draw_graph_ctx(scui_draw_graph_dsc_t *draw_graph);
 
 /*****************************************************************************/
 /*****************************************************************************/

@@ -137,7 +137,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             scui_area_t clip = scui_widget_clip(event->object);
             clip.x += SCUI_DRV_VER_RES / 6;
             clip.y += SCUI_DRV_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         if (image_frame_lottie_refr_1 && scui_image_frame_data(&image_frame_lottie_1)) {
@@ -151,7 +151,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             scui_area_t clip = scui_widget_clip(event->object);
             clip.x += SCUI_DRV_VER_RES / 6 + 120;
             clip.y += SCUI_DRV_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
         if (image_frame_lottie_refr_2 && scui_image_frame_data(&image_frame_lottie_2)) {
             image_frame_lottie_refr_2 = false;
@@ -164,7 +164,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             scui_area_t clip = scui_widget_clip(event->object);
             clip.x += SCUI_DRV_VER_RES / 6 + 120 + 120;
             clip.y += SCUI_DRV_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         break;

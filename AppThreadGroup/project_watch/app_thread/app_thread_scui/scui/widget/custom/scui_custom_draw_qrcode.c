@@ -102,7 +102,7 @@ void scui_custom_draw_ctx_qrcode(scui_custom_draw_dsc_t *draw_dsc)
         };
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &image_inst);
-        scui_widget_draw_image(event->object, &dst_clip, image, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, &dst_clip, image, NULL, SCUI_COLOR_UNUSED);
         scui_handle_clear(image);
     }
     

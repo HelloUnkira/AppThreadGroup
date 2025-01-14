@@ -46,7 +46,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc(scui_event_t *eve
         scui_handle_t image_edge = scui_image_prj_image_src_03_activity_ring_big_max_02_bj_00bmp;
         scui_handle_t image_ring = scui_image_prj_image_src_03_activity_ring_big_max_03_bj_01bmp;
         
-        scui_widget_draw_image(event->object, NULL, image_bg, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, NULL, image_bg, NULL, SCUI_COLOR_UNUSED);
         scui_area_t clip = scui_widget_clip(event->object);
         clip.x += (466 - 458) / 2;
         clip.y += (466 - 458) / 2;
@@ -69,11 +69,11 @@ void scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc(scui_event_t *eve
         scui_handle_t image_pic_dist = scui_image_prj_image_src_03_activity_02_icon_dispng;
         /* 绘制圆环前景图: */
         clip = scui_widget_clip(event->object); clip.x += 242; clip.y +=  10;
-        scui_widget_draw_image(event->object, &clip, image_pic_kcal, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, &clip, image_pic_kcal, NULL, SCUI_COLOR_UNUSED);
         clip = scui_widget_clip(event->object); clip.x += 376; clip.y += 341;
-        scui_widget_draw_image(event->object, &clip, image_pic_step, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, &clip, image_pic_step, NULL, SCUI_COLOR_UNUSED);
         clip = scui_widget_clip(event->object); clip.x +=  22; clip.y += 291;
-        scui_widget_draw_image(event->object, &clip, image_pic_dist, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, &clip, image_pic_dist, NULL, SCUI_COLOR_UNUSED);
         
         break;
     }
@@ -142,7 +142,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
-        scui_widget_draw_image(event->object, NULL, image, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
         scui_handle_clear(image);
         break;
     }
@@ -227,7 +227,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 scui_area_t clip_image = clip;
                 clip_image.w = 44; clip_image.x += 36 + idx * (44 + 12);
                 clip_image.h = 44; clip_image.y += 113 - 90;
-                scui_widget_draw_image(event->object, &clip_image, image, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &clip_image, image, NULL, SCUI_COLOR_UNUSED);
             }
             
             /* 单字符文本 */
@@ -278,7 +278,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             pct_dist = 9;scui_clamp(pct_dist / 10, 0, 9);
             /* 先画背景 */
             scui_handle_t image = scui_image_prj_image_src_03_activity_ring_small_min_01_bjbmp;
-            scui_widget_draw_image(event->object, &clip_icon, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip_icon, image, NULL, SCUI_COLOR_UNUSED);
             /* 画三个环 */
             if (pct_kcal != 0) {
                 scui_handle_t  image = scui_image_prj_image_src_03_activity_ring_small_min_calories_01_01png;
@@ -286,7 +286,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 clip_min.x += 14; clip_min.y -= 8;
                 clip_min.x += (clip_min.w - scui_image_w(image)) / 2;
                 clip_min.y += (clip_min.h - scui_image_h(image)) / 2;
-                scui_widget_draw_image(event->object, &clip_min, image + pct_kcal, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &clip_min, image + pct_kcal, NULL, SCUI_COLOR_UNUSED);
             }
             if (pct_step != 0) {
                 scui_handle_t  image = scui_image_prj_image_src_03_activity_ring_small_min_steps_01_01png;
@@ -294,7 +294,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 clip_min.y += 16;
                 clip_min.x += (clip_min.w - scui_image_w(image)) / 2;
                 clip_min.y += (clip_min.h - scui_image_h(image)) / 2;
-                scui_widget_draw_image(event->object, &clip_min, image + pct_step, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &clip_min, image + pct_step, NULL, SCUI_COLOR_UNUSED);
             }
             if (pct_dist != 0) {
                 scui_handle_t  image = scui_image_prj_image_src_03_activity_ring_small_min_distance_01_01png;
@@ -302,7 +302,7 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
                 clip_min.x -= 14; clip_min.y -= 8;
                 clip_min.x += (clip_min.w - scui_image_w(image)) / 2;
                 clip_min.y += (clip_min.h - scui_image_h(image)) / 2;
-                scui_widget_draw_image(event->object, &clip_min, image + pct_dist, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &clip_min, image + pct_dist, NULL, SCUI_COLOR_UNUSED);
             }
         }
         //分割线
@@ -400,7 +400,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -459,7 +459,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_02_dot_caloriesbmp;
             scui_area_t clip_dot = clip;
             clip_dot.x += 42 + idx * (12 + 4); clip_dot.y += 187 - 12;
-            scui_widget_draw_image(event->object, &clip_dot, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip_dot, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         //分割线
@@ -557,7 +557,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -616,7 +616,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_04_dot_stepsbmp;
             scui_area_t clip_dot = clip;
             clip_dot.x += 42 + idx * (12 + 4); clip_dot.y += 187 - 12;
-            scui_widget_draw_image(event->object, &clip_dot, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip_dot, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         //分割线
@@ -714,7 +714,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_TRANS, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -773,7 +773,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_03_dot_distancebmp;
             scui_area_t clip_dot = clip;
             clip_dot.x += 42 + idx * (12 + 4); clip_dot.y += 187 - 12;
-            scui_widget_draw_image(event->object, &clip_dot, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &clip_dot, image, NULL, SCUI_COLOR_UNUSED);
         }
         
         //分割线

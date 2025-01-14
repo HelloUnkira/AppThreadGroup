@@ -152,7 +152,7 @@ void scui_objbtn_event(scui_event_t *event)
             draw_graph.src_color        = src_color[idx];
             draw_graph.crect.src_width  = objbtn->width[idx];
             draw_graph.crect.src_radius = src_radius[idx];
-            scui_draw_graph_context(&draw_graph);
+            scui_draw_graph_ctx(&draw_graph);
         }
         
         break;

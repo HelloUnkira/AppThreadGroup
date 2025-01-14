@@ -96,7 +96,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         scui_handle_t image_icon = scui_ui_scene_list_image[scui_ui_res_local->coupler->list_draw_idx] + 3;
         image_clip.y += (image_clip.h - scui_image_h(image_icon)) / 2;
         image_clip.h -= (image_clip.h - scui_image_h(image_icon));
-        scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, (scui_color_t){0});
+        scui_widget_draw_image(event->object, &image_clip, image_icon, NULL, SCUI_COLOR_UNUSED);
         
         image_clip = scui_widget_clip(event->object);
         image_icon = scui_image_prj_image_src_repeat_arrow_06_backbmp;

@@ -194,7 +194,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                 };
                 scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
                 #else
-                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif
                 break;
             }
@@ -207,7 +207,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
                 };
                 scui_widget_draw_image_scale(event->object, &scale_clip, image, NULL, scale, scui_opt_pos_c);
                 #else
-                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, (scui_color_t){0});
+                scui_widget_draw_image(event->object, &scale_clip, image + idx, NULL, SCUI_COLOR_UNUSED);
                 #endif
                 break;
             }

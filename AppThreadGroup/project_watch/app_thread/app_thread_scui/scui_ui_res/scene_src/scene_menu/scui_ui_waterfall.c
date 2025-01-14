@@ -136,7 +136,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
         icon_c.w  = scui_image_w(image);
         
         if (event->type == scui_event_draw)
-            scui_widget_draw_image(event->object, &icon_c, image, NULL, (scui_color_t){0});
+            scui_widget_draw_image(event->object, &icon_c, image, NULL, SCUI_COLOR_UNUSED);
         
         if (event->type == scui_event_ptr_click) {
             
