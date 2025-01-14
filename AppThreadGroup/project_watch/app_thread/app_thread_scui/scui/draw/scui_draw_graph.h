@@ -10,10 +10,35 @@
  *    即为原点对齐变换
  */
 
+typedef enum {
+    scui_draw_type_none = 0,
+    scui_draw_type_byte_copy,
+    scui_draw_type_area_blur,
+    scui_draw_type_area_fill,
+    scui_draw_type_area_fill_grad,
+    scui_draw_type_area_fill_grads,
+    scui_draw_type_area_copy,
+    scui_draw_type_area_blend,
+    scui_draw_type_area_alpha_filter,
+    scui_draw_type_area_matrix_fill,
+    scui_draw_type_area_matrix_blend,
+    scui_draw_type_image,
+    scui_draw_type_image_scale,
+    scui_draw_type_image_rotate,
+    scui_draw_type_image_matrix_blend,
+    scui_draw_type_letter,
+    scui_draw_type_string,
+    scui_draw_type_ring,
+    scui_draw_type_num,
+} scui_draw_type_t;
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
-typedef union {
+typedef struct {
+    scui_draw_type_t type;
+    /*************************************************************************/
+    union {
     /**************************************************************************
      * draw basic(HW ACC Perhaps):
      */
@@ -165,7 +190,16 @@ typedef union {
     /**************************************************************************
      * keep adding...
      */
+    /*************************************************************************/
+    };
 } scui_draw_dsc_t;
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx(scui_draw_dsc_t *draw_dsc);
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
@@ -232,7 +266,7 @@ void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coo
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
-void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph);
+void scui_draw_graph_context(scui_draw_graph_dsc_t *draw_graph);
 
 /*****************************************************************************/
 /*****************************************************************************/

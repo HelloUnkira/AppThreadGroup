@@ -10,7 +10,7 @@
 /*@brief 区域图像绘制
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->image.dst_surface;
@@ -39,23 +39,16 @@ void scui_draw_image(scui_draw_dsc_t *draw_dsc)
         .alpha   = src_alpha,
     };
     
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_blend.dst_surface = dst_surface,
-            .area_blend.dst_clip    = dst_clip,
-            .area_blend.src_surface = &image_surface,
-            .area_blend.src_clip    = src_clip,
-            .area_blend.src_color   = src_color,
-        };
-        scui_draw_area_blend(&draw_dsc);
-    };
+    scui_draw_area_blend(dst_surface, dst_clip,
+        &image_surface, src_clip, src_color);
+    
     scui_image_cache_unload(&image);
 }
 
 /*@brief 区域图像缩放
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->image_scale.dst_surface;
@@ -95,25 +88,16 @@ void scui_draw_image_scale(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_matrix_blend.dst_surface = dst_surface,
-            .area_matrix_blend.dst_clip    = dst_clip,
-            .area_matrix_blend.src_surface = &image_surface,
-            .area_matrix_blend.src_clip    = src_clip,
-            .area_matrix_blend.src_color   = src_color,
-            .area_matrix_blend.inv_matrix  = &inv_matrix,
-            .area_matrix_blend.src_matrix  = &src_matrix,
-        };
-        scui_draw_area_matrix_blend(&draw_dsc);
-    };
+    scui_draw_area_matrix_blend(dst_surface, dst_clip,
+        &image_surface, src_clip, src_color, &inv_matrix, &src_matrix);
+    
     scui_image_cache_unload(&image);
 }
 
 /*@brief 区域图像旋转
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_rotate(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->image_rotate.dst_surface;
@@ -153,25 +137,16 @@ void scui_draw_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_matrix_blend.dst_surface = dst_surface,
-            .area_matrix_blend.dst_clip    = dst_clip,
-            .area_matrix_blend.src_surface = &image_surface,
-            .area_matrix_blend.src_clip    = src_clip,
-            .area_matrix_blend.src_color   = src_color,
-            .area_matrix_blend.inv_matrix  = &inv_matrix,
-            .area_matrix_blend.src_matrix  = &src_matrix,
-        };
-        scui_draw_area_matrix_blend(&draw_dsc);
-    };
+    scui_draw_area_matrix_blend(dst_surface, dst_clip,
+        &image_surface, src_clip, src_color, &inv_matrix, &src_matrix);
+    
     scui_image_cache_unload(&image);
 }
 
 /*@brief 区域图像变换
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->image_matrix_blend.dst_surface;
@@ -202,17 +177,8 @@ void scui_draw_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
         .alpha   = src_alpha,
     };
     
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_matrix_blend.dst_surface = dst_surface,
-            .area_matrix_blend.dst_clip    = dst_clip,
-            .area_matrix_blend.src_surface = &image_surface,
-            .area_matrix_blend.src_clip    = src_clip,
-            .area_matrix_blend.src_color   = src_color,
-            .area_matrix_blend.inv_matrix  = inv_matrix,
-            .area_matrix_blend.src_matrix  = src_matrix,
-        };
-        scui_draw_area_matrix_blend(&draw_dsc);
-    };
+    scui_draw_area_matrix_blend(dst_surface, dst_clip,
+        &image_surface, src_clip, src_color, inv_matrix, src_matrix);
+    
     scui_image_cache_unload(&image);
 }

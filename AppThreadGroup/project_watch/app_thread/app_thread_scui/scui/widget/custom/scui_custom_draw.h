@@ -96,7 +96,7 @@ typedef struct {
 /*@brief 自定义控件:插件:上下文绘制
  *@param draw_graph 绘制参数实例
  */
-void scui_custom_draw_context(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc);
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -115,7 +115,7 @@ do {                                                                        \
         .qrcode.data  = data_v,                                             \
         .qrcode.size  = size_v,                                             \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_barcode */
@@ -129,7 +129,7 @@ do {                                                                        \
         .qrcode.data  = data_v,                                             \
         .qrcode.size  = size_v,                                             \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_spinner */
@@ -146,7 +146,7 @@ do {                                                                        \
         .spinner.angle_l = angle_l_v,                                       \
         .spinner.way     = way_v,                                           \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_slider */
@@ -167,7 +167,7 @@ do {                                                                        \
         .slider.dist       = dist_v,                                        \
         .slider.way        = way_v,                                         \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 
@@ -187,7 +187,7 @@ do {                                                                        \
         .indicator.span        = span_v,                                    \
         .indicator.way         = way_v,                                     \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_ring_edge */
@@ -202,7 +202,7 @@ do {                                                                        \
         .ring_edge.radius = radius_v,                                       \
         .ring_edge.angle  = angle_v,                                        \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_image_text */
@@ -217,7 +217,7 @@ do {                                                                        \
         .image_text.way   = way_v,                                          \
         .image_text.num   = num_v,                                          \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /* scui_custom_draw_type_image_crect4 */
@@ -230,7 +230,7 @@ do {                                                                        \
         .image_crect4.color = color_v,                                      \
         .image_crect4.delta = delta_v,                                      \
     };                                                                      \
-    scui_custom_draw_context(&draw_dsc);                                    \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
 /*****************************************************************************/

@@ -10,7 +10,7 @@
 /*@brief 绘制字符
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_letter(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t    *dst_surface = draw_dsc->letter.dst_surface;

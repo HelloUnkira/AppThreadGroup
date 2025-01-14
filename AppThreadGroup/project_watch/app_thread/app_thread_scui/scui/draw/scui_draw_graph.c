@@ -16,6 +16,84 @@
  *    它在使用过程中,限制较大
  */
 
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
+{
+    void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
+    
+    switch (draw_dsc->type) {
+    case scui_draw_type_byte_copy:
+        scui_draw_ctx_byte_copy(draw_dsc);
+        break;
+    case scui_draw_type_area_blur:
+        scui_draw_ctx_area_blur(draw_dsc);
+        break;
+    case scui_draw_type_area_fill:
+        scui_draw_ctx_area_fill(draw_dsc);
+        break;
+    case scui_draw_type_area_fill_grad:
+        scui_draw_ctx_area_fill_grad(draw_dsc);
+        break;
+    case scui_draw_type_area_fill_grads:
+        scui_draw_ctx_area_fill_grads(draw_dsc);
+        break;
+    case scui_draw_type_area_copy:
+        scui_draw_ctx_area_copy(draw_dsc);
+        break;
+    case scui_draw_type_area_blend:
+        scui_draw_ctx_area_blend(draw_dsc);
+        break;
+    case scui_draw_type_area_alpha_filter:
+        scui_draw_ctx_area_alpha_filter(draw_dsc);
+        break;
+    case scui_draw_type_area_matrix_fill:
+        scui_draw_ctx_area_matrix_fill(draw_dsc);
+        break;
+    case scui_draw_type_area_matrix_blend:
+        scui_draw_ctx_area_matrix_blend(draw_dsc);
+        break;
+    case scui_draw_type_image:
+        scui_draw_ctx_image(draw_dsc);
+        break;
+    case scui_draw_type_image_scale:
+        scui_draw_ctx_image_scale(draw_dsc);
+        break;
+    case scui_draw_type_image_rotate:
+        scui_draw_ctx_image_rotate(draw_dsc);
+        break;
+    case scui_draw_type_image_matrix_blend:
+        scui_draw_ctx_image_matrix_blend(draw_dsc);
+        break;
+    case scui_draw_type_letter:
+        scui_draw_ctx_letter(draw_dsc);
+        break;
+    case scui_draw_type_string:
+        scui_draw_ctx_string(draw_dsc);
+        break;
+    case scui_draw_type_ring:
+        scui_draw_ctx_ring(draw_dsc);
+        break;
+    }
+}
+
 /*@brief 线条绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
@@ -257,13 +335,7 @@ void scui_draw_sline(scui_draw_graph_dsc_t *draw_graph)
         if (!scui_area_inter(&dst_area, &draw_area, &src_clip))
              return;
         
-        scui_draw_dsc_t draw_dsc = {
-            .area_fill.dst_surface = dst_surface,
-            .area_fill.dst_clip    = &dst_area,
-            .area_fill.src_alpha   = src_alpha,
-            .area_fill.src_color   = src_color,
-        };
-        scui_draw_area_fill(&draw_dsc);
+        scui_draw_area_fill(dst_surface, &dst_area, src_alpha, src_color);
         return;
     }
 }
@@ -300,7 +372,7 @@ void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coo
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
  */
-void scui_draw_graph(scui_draw_graph_dsc_t *draw_graph)
+void scui_draw_graph_context(scui_draw_graph_dsc_t *draw_graph)
 {
     #if SCUI_DRAW_GRAPH_USE_LVGL
     scui_draw_graph_LVGL(draw_graph);

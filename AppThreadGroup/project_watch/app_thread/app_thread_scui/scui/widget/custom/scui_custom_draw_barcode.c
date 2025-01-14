@@ -12,7 +12,7 @@
 /*@brief 自定义控件:插件:条形码生成器
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_p_barcode(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_ctx_barcode(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event = draw_dsc->event;
@@ -67,12 +67,9 @@ void scui_custom_draw_p_barcode(scui_custom_draw_dsc_t *draw_dsc)
     }
     
     for (int y = 1; y < clip->h; y++) {
-        scui_draw_dsc_t draw_dsc = {
-            .byte_copy.dst_addr = &pixel[(y * scaled + 0) * pixel_byte],
-            .byte_copy.src_addr = &pixel[(0 * scaled + 0) * pixel_byte],
-            .byte_copy.len      =  pixel_byte * scaled,
-        };
-        scui_draw_byte_copy(&draw_dsc);
+        void *dst_addr = &pixel[(y * scaled + 0) * pixel_byte];
+        void *src_addr = &pixel[(0 * scaled + 0) * pixel_byte];
+        scui_draw_byte_copy(dst_addr, src_addr, pixel_byte * scaled);
     }
     
     scui_point_t offset = {.x = margin,};

@@ -38,14 +38,7 @@ void scui_ready(void)
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
     SCUI_ASSERT(surface_fb->pixel != NULL);
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_fill.dst_surface = surface_fb,
-            .area_fill.dst_clip    = &clip,
-            .area_fill.src_alpha   = surface_fb->alpha,
-        };
-        scui_draw_area_fill(&draw_dsc);
-    };
+    scui_draw_area_fill(surface_fb, &clip, surface_fb->alpha, SCUI_COLOR_ZEROED);
     #if SCUI_FRAME_BUFFER_ASYNC
     surface_fb = scui_frame_buffer_refr();
     surface_fb->format  = SCUI_PIXEL_CF_DEF;
@@ -57,14 +50,7 @@ void scui_ready(void)
     surface_fb->ver_res = SCUI_DRV_VER_RES;
     surface_fb->alpha   = scui_alpha_cover;
     SCUI_ASSERT(surface_fb->pixel != NULL);
-    /* draw_dsc */ {
-        scui_draw_dsc_t draw_dsc = {
-            .area_fill.dst_surface = surface_fb,
-            .area_fill.dst_clip    = &clip,
-            .area_fill.src_alpha   = surface_fb->alpha,
-        };
-        scui_draw_area_fill(&draw_dsc);
-    };
+    scui_draw_area_fill(surface_fb, &clip, surface_fb->alpha, SCUI_COLOR_ZEROED);
     #endif
     
     /* event register: */

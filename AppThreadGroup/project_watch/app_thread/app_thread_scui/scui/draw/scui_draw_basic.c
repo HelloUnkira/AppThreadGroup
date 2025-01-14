@@ -10,7 +10,7 @@
 /*@brief 绘制字节拷贝(可以使用DMA-copy加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_byte_copy(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     void *dst_addr = draw_dsc->byte_copy.dst_addr;
@@ -25,7 +25,7 @@ void scui_draw_byte_copy(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域模糊(可以使用GPU-blur加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_blur(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_blur.dst_surface;
@@ -154,7 +154,7 @@ void scui_draw_area_blur(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域填充像素点(可以使用DMA-fill加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_fill(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_fill.dst_surface;
@@ -189,14 +189,8 @@ void scui_draw_area_fill(scui_draw_dsc_t *draw_dsc)
         for (scui_multi_t idx = 0; idx < draw_area.w; idx++)
             scui_pixel_by_cf(dst_surface->format, dst_addr + idx * dst_byte, &src_pixel);
         /* 后使用第一行像素点填充其他行像素点 */
-        for (scui_multi_t idx = 1; idx < draw_area.h; idx++) {
-            scui_draw_dsc_t draw_dsc = {
-                .byte_copy.dst_addr = dst_addr + idx * dst_line,
-                .byte_copy.src_addr = dst_addr,
-                .byte_copy.len      = dis_line,
-            };
-            scui_draw_byte_copy(&draw_dsc);
-        }
+        for (scui_multi_t idx = 1; idx < draw_area.h; idx++)
+            scui_draw_byte_copy(dst_addr + idx * dst_line, dst_addr, dis_line);
     } else {
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -211,7 +205,7 @@ void scui_draw_area_fill(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域填充渐变像素点(可以使用DMA-fill-grad加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_fill_grad(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_fill_grad.dst_surface;
@@ -274,7 +268,7 @@ void scui_draw_area_fill_grad(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域序列渐变像素点(暂未知优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_fill_grads(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_fill_grads.dst_surface;
@@ -354,7 +348,7 @@ void scui_draw_area_fill_grads(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域拷贝(可以使用DMA-copy加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_copy(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_copy.dst_surface;
@@ -405,20 +399,14 @@ void scui_draw_area_copy(scui_draw_dsc_t *draw_dsc)
     uint8_t *dst_addr = dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * dst_byte;
     uint8_t *src_addr = src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     /* 注意区域对齐坐标 */
-    for (scui_multi_t idx = 0; idx < draw_area.h; idx++) {
-        scui_draw_dsc_t draw_dsc = {
-            .byte_copy.dst_addr = dst_addr + idx * dst_line,
-            .byte_copy.src_addr = src_addr + idx * src_line,
-            .byte_copy.len      = dis_line,
-        };
-        scui_draw_byte_copy(&draw_dsc);
-    }
+    for (scui_multi_t idx = 0; idx < draw_area.h; idx++)
+        scui_draw_byte_copy(dst_addr + idx * dst_line, src_addr + idx * src_line, dis_line);
 }
 
 /*@brief 区域混合(可以使用DMA2D-blend加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_blend.dst_surface;
@@ -439,14 +427,8 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
         src_surface->alpha  == scui_alpha_cover &&
        (dst_surface->format == scui_pixel_cf_bmp565 ||
         dst_surface->format == scui_pixel_cf_bmp888) &&
-        dst_surface->format == src_surface->format  && !src_color.filter) {
-        scui_draw_dsc_t draw_dsc = {
-            .area_copy.dst_surface = dst_surface,
-            .area_copy.dst_clip    = dst_clip,
-            .area_copy.src_surface = src_surface,
-            .area_copy.src_clip    = src_clip,
-        };
-        scui_draw_area_copy(&draw_dsc);
+        dst_surface->format == src_surface->format && !src_color.filter) {
+        scui_draw_area_copy(dst_surface, dst_clip, src_surface, src_clip);
         return;
     }
     
@@ -572,7 +554,7 @@ void scui_draw_area_blend(scui_draw_dsc_t *draw_dsc)
 /*@brief 区域透明过滤像素点(暂未知优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_alpha_filter.dst_surface;
@@ -658,7 +640,7 @@ void scui_draw_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
 /*@brief 图形变换填色(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_matrix_fill.dst_surface;
@@ -762,7 +744,7 @@ void scui_draw_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
 /*@brief 图形变换迁移(可以使用VGLITE-blit加速优化)
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->area_matrix_blend.dst_surface;

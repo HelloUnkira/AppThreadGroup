@@ -87,6 +87,7 @@ static inline scui_color_t SCUI_COLOR_MAKE32_LD(bool filter, uint32_t color_f, u
 {return (scui_color_t){ .color_l.full = color_l, .color_d.full = color_d, .color_f.full = color_f, .filter = filter, };}
 
 /* scui_color_t常用值: */
+#define SCUI_COLOR_ZEROED           SCUI_COLOR_MAKE32(false, 0x0, 0x0)
 #define SCUI_COLOR_UNUSED           SCUI_COLOR_MAKE32(false, 0x0, 0x0)
 #define SCUI_COLOR_FILTER_BALCK     SCUI_COLOR_MAKE32(true,  0x0, 0x0)
 
