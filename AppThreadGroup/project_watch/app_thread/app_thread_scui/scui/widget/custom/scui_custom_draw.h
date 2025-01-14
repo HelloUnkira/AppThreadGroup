@@ -4,7 +4,21 @@
 // custom插件:
 #include "scui_plug_coupler.h"
 
+typedef enum {
+    scui_custom_draw_type_none = 0,
+    scui_custom_draw_type_qrcode,
+    scui_custom_draw_type_barcode,
+    scui_custom_draw_type_spinner,
+    scui_custom_draw_type_slider,
+    scui_custom_draw_type_indicator,
+    scui_custom_draw_type_ring_edge,
+    scui_custom_draw_type_image_text,
+    scui_custom_draw_type_image_crect4,
+    scui_custom_draw_type_num,
+} scui_custom_draw_type_t;
+
 typedef struct {
+    scui_custom_draw_type_t type;
     /*************************************************************************/
     scui_event_t *event;            // 绘制事件
     scui_area_t  *clip;             // 绘制区域
@@ -68,57 +82,159 @@ typedef struct {
         bool           way;         // 方向(0:水平方向;1:垂直方向)
     } image_text;
     struct {
-        scui_handle_t image[4];     // 图像句柄(左上角,右上角,左下角,右下角)
-        scui_color_t  color;        // 图像源色调(alpha图使用)
-        scui_coord_t  delta;        // 边界填充线:
+        scui_handle_t *image;       // 图像句柄(左上角,右上角,左下角,右下角)
+        scui_color_t   color;       // 图像源色调(alpha图使用)
+        scui_coord_t   delta;       // 边界填充线:
                                     //   0:忽略(复杂图像集成)
                                     //  -1:完全填充(全填充圆角矩形)
                                     //  其他:边界填充(空心圆角矩形)
     } image_crect4;
-    
     /*************************************************************************/
     };
 } scui_custom_draw_dsc_t;
 
-/*@brief 自定义控件:插件:二维码生成器
+/*@brief 自定义控件:插件:上下文绘制
  *@param draw_graph 绘制参数实例
  */
-void scui_custom_draw_qrcode(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_context(scui_custom_draw_dsc_t *draw_dsc);
 
-/*@brief 自定义控件:插件:条形码生成器
- *@param draw_graph 绘制参数实例
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/*@brief 简化转义的宏api
  */
-void scui_custom_draw_barcode(scui_custom_draw_dsc_t *draw_dsc);
 
-/*@brief 自定义控件:插件:加载圆环
- *@param draw_graph 绘制参数实例
- */
-void scui_custom_draw_spinner(scui_custom_draw_dsc_t *draw_dsc);
+/* scui_custom_draw_type_qrcode */
+#define scui_custom_draw_qrcode(event_v, clip_v,                            \
+    color_v, cover_v, data_v, size_v)                                       \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_qrcode,                               \
+        .qrcode.color = color_v,                                            \
+        .qrcode.cover = cover_v,                                            \
+        .qrcode.data  = data_v,                                             \
+        .qrcode.size  = size_v,                                             \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
 
-/*@brief 自定义控件:插件:进度条,滚动条
- *@param draw_dsc 绘制参数实例
- */
-void scui_custom_draw_slider(scui_custom_draw_dsc_t *draw_dsc);
+/* scui_custom_draw_type_barcode */
+#define scui_custom_draw_barcode(event_v, clip_v,                           \
+    color_v, cover_v, data_v, size_v)                                       \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_barcode,                              \
+        .qrcode.color = color_v,                                            \
+        .qrcode.cover = cover_v,                                            \
+        .qrcode.data  = data_v,                                             \
+        .qrcode.size  = size_v,                                             \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
 
-/*@brief 自定义控件:插件:导航点
- *@param draw_dsc 绘制参数实例
- */
-void scui_custom_draw_indicator(scui_custom_draw_dsc_t *draw_dsc);
+/* scui_custom_draw_type_spinner */
+#define scui_custom_draw_spinner(event_v, clip_v,                           \
+    spinner_v, color_v, edge_v, percent_v, angle_s_v, angle_l_v, way_v)     \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_spinner,                              \
+        .spinner.spinner = spinner_v,                                       \
+        .spinner.edge    = edge_v,                                          \
+        .spinner.color   = color_v,                                         \
+        .spinner.percent = percent_v,                                       \
+        .spinner.angle_s = angle_s_v,                                       \
+        .spinner.angle_l = angle_l_v,                                       \
+        .spinner.way     = way_v,                                           \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
 
-/*@brief 自定义控件:插件:绕圆旋转图像
- *@param draw_dsc 绘制参数实例
- */
-void scui_custom_draw_ring_edge(scui_custom_draw_dsc_t *draw_dsc);
+/* scui_custom_draw_type_slider */
+#define scui_custom_draw_slider(event_v, clip_v,                            \
+    bar_v, color_bar_v, edge_v, color_edge_v,                               \
+    vmin_v, vmax_v, cmin_v, cmax_v, dist_v, way_v)                          \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_slider,                               \
+        .slider.bar        = bar_v,                                         \
+        .slider.edge       = edge_v,                                        \
+        .slider.color_bar  = color_bar_v,                                   \
+        .slider.color_edge = color_edge_v,                                  \
+        .slider.vmin       = vmin_v,                                        \
+        .slider.vmax       = vmax_v,                                        \
+        .slider.cmin       = cmin_v,                                        \
+        .slider.cmax       = cmax_v,                                        \
+        .slider.dist       = dist_v,                                        \
+        .slider.way        = way_v,                                         \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
 
-/*@brief 自定义控件:插件:图像连续绘制
- *       一般主要用于绘制连续数字符号图片
- *@param draw_dsc 绘制参数实例
- */
-void scui_custom_draw_image_text(scui_custom_draw_dsc_t *draw_dsc);
 
-/*@brief 按钮控件绘制(四个角使用图像绘制)
- *@param draw_dsc 绘制参数实例
- */
-void scui_custom_draw_image_crect4(scui_custom_draw_dsc_t *draw_dsc);
+/* scui_custom_draw_type_indicator */
+#define scui_custom_draw_indicator(event_v, clip_v,                         \
+    wait_v, color_wait_v, focus_v, color_focus_v,                           \
+    count_v, index_v, span_v, way_v)                                        \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_indicator,                            \
+        .indicator.wait        = wait_v,                                    \
+        .indicator.focus       = focus_v,                                   \
+        .indicator.color_wait  = color_wait_v,                              \
+        .indicator.color_focus = color_focus_v,                             \
+        .indicator.count       = count_v,                                   \
+        .indicator.index       = index_v,                                   \
+        .indicator.span        = span_v,                                    \
+        .indicator.way         = way_v,                                     \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
+
+/* scui_custom_draw_type_ring_edge */
+#define scui_custom_draw_ring_edge(event_v, clip_v,                         \
+    center_v, image_v, color_v, radius_v, angle_v)                          \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_ring_edge,                            \
+        .ring_edge.image  = image_v,                                        \
+        .ring_edge.color  = color_v,                                        \
+        .ring_edge.center = center_v,                                       \
+        .ring_edge.radius = radius_v,                                       \
+        .ring_edge.angle  = angle_v,                                        \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
+
+/* scui_custom_draw_type_image_text */
+#define scui_custom_draw_image_text(event_v, clip_v,                        \
+    image_v, color_v, span_v, num_v, way_v)                                 \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_image_text,                           \
+        .image_text.image = image_v,                                        \
+        .image_text.color = color_v,                                        \
+        .image_text.span  = span_v,                                         \
+        .image_text.way   = way_v,                                          \
+        .image_text.num   = num_v,                                          \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
+
+/* scui_custom_draw_type_image_crect4 */
+#define scui_custom_draw_image_crect4(event_v, clip_v,                      \
+    image_v, color_v, delta_v)                                              \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_image_crect4,                         \
+        .image_crect4.image = image_v,                                      \
+        .image_crect4.color = color_v,                                      \
+        .image_crect4.delta = delta_v,                                      \
+    };                                                                      \
+    scui_custom_draw_context(&draw_dsc);                                    \
+} while (0)                                                                 \
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
 
 #endif

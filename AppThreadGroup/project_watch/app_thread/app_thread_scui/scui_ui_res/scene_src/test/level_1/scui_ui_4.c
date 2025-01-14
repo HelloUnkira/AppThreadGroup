@@ -79,18 +79,10 @@ void scui_ui_scene_4_ring_event_proc(scui_event_t *event)
         // scui_color_t color_black = {0};
         // scui_widget_draw_color(event->object, &clip, color_black);
         
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip,
-            .spinner.spinner = image_ring,
-            .spinner.edge    = image_edge,
-            .spinner.color   = {.filter = true,},
-            .spinner.percent = spinner_pct,
-            .spinner.angle_s = 270,
-            .spinner.angle_l = 60,
-            .spinner.way     = +1,
-        };
-        scui_custom_draw_spinner(&draw_dsc);
+        scui_color_t color = {.filter = true,};
+        scui_custom_draw_spinner(event, &clip, image_ring, color, image_edge,
+                                 spinner_pct, 270, 60, +1);
+        
         break;
     }
     default:

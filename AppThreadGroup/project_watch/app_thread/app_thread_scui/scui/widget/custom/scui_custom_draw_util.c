@@ -10,7 +10,7 @@
 /*@brief 自定义控件:插件:加载圆环
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_spinner(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_spinner(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event     = draw_dsc->event;
@@ -58,7 +58,7 @@ void scui_custom_draw_spinner(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:进度条,滚动条
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_slider(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_slider(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -170,7 +170,7 @@ void scui_custom_draw_slider(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:导航点
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_indicator(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_indicator(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -212,7 +212,7 @@ void scui_custom_draw_indicator(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:绕圆旋转图像
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -241,7 +241,7 @@ void scui_custom_draw_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
  *       一般主要用于绘制连续数字符号图片
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_image_text(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_image_text(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t  *event        = draw_dsc->event;
@@ -275,7 +275,7 @@ void scui_custom_draw_image_text(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 按钮控件绘制(四个角使用图像绘制)
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t  *event        = draw_dsc->event;

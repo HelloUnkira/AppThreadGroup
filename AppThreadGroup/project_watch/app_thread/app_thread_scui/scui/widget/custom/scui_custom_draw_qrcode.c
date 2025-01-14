@@ -12,7 +12,7 @@
 /*@brief 自定义控件:插件:二维码生成器
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_qrcode(scui_custom_draw_dsc_t *draw_dsc)
+void scui_custom_draw_p_qrcode(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event = draw_dsc->event;

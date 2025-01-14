@@ -400,17 +400,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip_digit,
-            .image_text.image = image_digit_list,
-            .image_text.color = {.filter = true,},
-            .image_text.span  = 3,
-            .image_text.num   = digit_num,
-            .image_text.way   = 0,
-        };
-        scui_custom_draw_image_text(&draw_dsc);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -567,17 +557,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip_digit,
-            .image_text.image = image_digit_list,
-            .image_text.color = {.filter = true,},
-            .image_text.span  = 3,
-            .image_text.num   = digit_num,
-            .image_text.way   = 0,
-        };
-        scui_custom_draw_image_text(&draw_dsc);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;
@@ -734,17 +714,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_handle_t image_digit_list[10] = {0};
         for (scui_coord_t idx = 0; idx < digit_num; idx++)
             image_digit_list[idx] = image_digit + char_digit[idx] - '0';
-        
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip_digit,
-            .image_text.image = image_digit_list,
-            .image_text.color = {.filter = true,},
-            .image_text.span  = 3,
-            .image_text.num   = digit_num,
-            .image_text.way   = 0,
-        };
-        scui_custom_draw_image_text(&draw_dsc);
+        scui_custom_draw_image_text(event, &clip_digit, image_digit_list, SCUI_COLOR_FILTER_BALCK, 3, digit_num, 0);
         
         args.color.color_s.full = 0XFFFFFFFF;
         args.color.color_e.full = 0XFFFFFFFF;

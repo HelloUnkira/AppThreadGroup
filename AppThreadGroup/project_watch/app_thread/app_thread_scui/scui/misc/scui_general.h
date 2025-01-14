@@ -62,41 +62,35 @@ typedef scui_color8888_t scui_color32_t;
  */
 #pragma pack(push, 1)
 typedef struct {
-    uint8_t filter:1;           // 滤色调标记
     union {
-        scui_color32_t color;   // 主色调
-        scui_color32_t color_s; // 始色调
-        scui_color32_t color_l; // 亮色调
+        scui_color32_t color;       // 主色调
+        scui_color32_t color_s;     // 始色调
+        scui_color32_t color_l;     // 亮色调
     };
     union {
-        scui_color32_t color_e; // 终色调
-        scui_color32_t color_d; // 暗色调
+        scui_color32_t color_e;     // 终色调
+        scui_color32_t color_d;     // 暗色调
     };
-    union {
-        scui_color32_t color_f; // 滤色调
+    struct {
+        scui_color32_t color_f;     // 滤色调
+        uint8_t        filter:1;    // 标记
     };
 } scui_color_t;
 #pragma pack(pop)
 
-/* color32通用协议色调: */
-#define SCUI_COLOR32_WHITE      (0xFFFFFFFF)
-#define SCUI_COLOR32_BLACK      (0xFF000000)
-#define SCUI_COLOR32_GRAY       (0xFF808080)
-#define SCUI_COLOR32_RED        (0xFFFF0000)
-#define SCUI_COLOR32_BLUE       (0xFF0000FF)
-#define SCUI_COLOR32_GREEN      (0xFF008000)
-#define SCUI_COLOR32_PURPLE     (0xFF800080)
-#define SCUI_COLOR32_YELLOW     (0xFFFFFF00)
-#define SCUI_COLOR32_ORANGE     (0xFFFFA500)
-#define SCUI_COLOR32_SILVER     (0xFFC0C0C0)
-#define SCUI_COLOR32_MAROON     (0xFF800000)
-#define SCUI_COLOR32_MAGENTA    (0xFFFF00FF)
-#define SCUI_COLOR32_OLIVE      (0xFF808000)
-#define SCUI_COLOR32_LIME       (0xFF00FF00)
-#define SCUI_COLOR32_CYAN       (0xFF00FFFF)
-#define SCUI_COLOR32_AQUA       (0xFF00FFFF)
-#define SCUI_COLOR32_TEAL       (0xFF008080)
-#define SCUI_COLOR32_NAVY       (0xFF000080)
+/* scui_color_t组合宏(这里用内联函数表出): */
+static inline scui_color_t SCUI_COLOR_MAKE32(bool filter, uint32_t color_f, uint32_t color)
+{return (scui_color_t){ .color.full = color, .color_f.full = color_f, .filter = filter, };}
+static inline scui_color_t SCUI_COLOR_MAKE32_SE(bool filter, uint32_t color_f, uint32_t color_s, uint32_t color_e)
+{return (scui_color_t){ .color_s.full = color_s, .color_e.full = color_e, .color_f.full = color_f, .filter = filter, };}
+static inline scui_color_t SCUI_COLOR_MAKE32_LD(bool filter, uint32_t color_f, uint32_t color_l, uint32_t color_d)
+{return (scui_color_t){ .color_l.full = color_l, .color_d.full = color_d, .color_f.full = color_f, .filter = filter, };}
+
+/* scui_color_t常用值: */
+#define SCUI_COLOR_UNUSED           SCUI_COLOR_MAKE32(false, 0x0, 0x0)
+#define SCUI_COLOR_FILTER_BALCK     SCUI_COLOR_MAKE32(true,  0x0, 0x0)
+
+
 
 /*@brief: 透明度枚举值
  *        设备透明度格式:

@@ -76,16 +76,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         clip.y += clip.h / 6;
         clip.w -= clip.w / 6 * 2;
         clip.h -= clip.h / 6 * 2;
-        
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip,
-            .qrcode.color = color,
-            .qrcode.cover = false,
-            .qrcode.data  = url,
-            .qrcode.size  = strlen(url),
-        };
-        scui_custom_draw_qrcode(&draw_dsc);
+        scui_custom_draw_qrcode(event, &clip, color, false, url, strlen(url));
         break;
     }
     default:
@@ -129,16 +120,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         clip.y += 10 + 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2 + 10 * 2;
-        
-        scui_custom_draw_dsc_t draw_dsc = {
-            .event = event,
-            .clip  = &clip,
-            .barcode.color = color_xxx,
-            .barcode.cover = false,
-            .barcode.data  = url,
-            .barcode.size  = strlen(url),
-        };
-        scui_custom_draw_barcode(&draw_dsc);
+        scui_custom_draw_barcode(event, &clip, color_xxx, false, url, strlen(url));
         break;
     }
     default:
