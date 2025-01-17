@@ -58,6 +58,7 @@ void scui_button_burn(scui_handle_t handle)
     scui_button_t *button = (void *)widget;
     
     /* 销毁基础控件实例 */
+    SCUI_ASSERT(widget->type == scui_widget_type_button);
     scui_widget_burn(&button->widget);
     
     /* 销毁按钮控件实例 */

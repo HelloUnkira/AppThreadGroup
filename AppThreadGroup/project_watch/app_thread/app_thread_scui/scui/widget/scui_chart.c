@@ -105,6 +105,7 @@ void scui_chart_burn(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
+    SCUI_ASSERT(widget->type == scui_widget_type_chart);
     scui_widget_burn(&chart->widget);
     
     /* 销毁图表控件实例 */

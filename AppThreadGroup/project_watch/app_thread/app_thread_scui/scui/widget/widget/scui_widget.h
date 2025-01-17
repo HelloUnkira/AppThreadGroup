@@ -13,7 +13,6 @@ typedef enum {
     scui_widget_type_objbtn,    /* 对象按钮 */
     /* 扩展控件(按需补充) */
     scui_widget_type_button,    /* 纯色按钮 */
-    scui_widget_type_watch,     /* 表盘指针控件 */
     scui_widget_type_chart,     /* 图表控件 */
     /* 继续补充... */
     scui_widget_type_num,

@@ -39,63 +39,36 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
     void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
     void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
     
-    switch (draw_dsc->type) {
-    case scui_draw_type_byte_copy:
-        scui_draw_ctx_byte_copy(draw_dsc);
-        break;
-    case scui_draw_type_area_blur:
-        scui_draw_ctx_area_blur(draw_dsc);
-        break;
-    case scui_draw_type_area_fill:
-        scui_draw_ctx_area_fill(draw_dsc);
-        break;
-    case scui_draw_type_area_fill_grad:
-        scui_draw_ctx_area_fill_grad(draw_dsc);
-        break;
-    case scui_draw_type_area_fill_grads:
-        scui_draw_ctx_area_fill_grads(draw_dsc);
-        break;
-    case scui_draw_type_area_copy:
-        scui_draw_ctx_area_copy(draw_dsc);
-        break;
-    case scui_draw_type_area_blend:
-        scui_draw_ctx_area_blend(draw_dsc);
-        break;
-    case scui_draw_type_area_alpha_filter:
-        scui_draw_ctx_area_alpha_filter(draw_dsc);
-        break;
-    case scui_draw_type_area_matrix_fill:
-        scui_draw_ctx_area_matrix_fill(draw_dsc);
-        break;
-    case scui_draw_type_area_matrix_blend:
-        scui_draw_ctx_area_matrix_blend(draw_dsc);
-        break;
-    case scui_draw_type_image:
-        scui_draw_ctx_image(draw_dsc);
-        break;
-    case scui_draw_type_image_scale:
-        scui_draw_ctx_image_scale(draw_dsc);
-        break;
-    case scui_draw_type_image_rotate:
-        scui_draw_ctx_image_rotate(draw_dsc);
-        break;
-    case scui_draw_type_image_matrix_blend:
-        scui_draw_ctx_image_matrix_blend(draw_dsc);
-        break;
-    case scui_draw_type_letter:
-        scui_draw_ctx_letter(draw_dsc);
-        break;
-    case scui_draw_type_string:
-        scui_draw_ctx_string(draw_dsc);
-        break;
-    case scui_draw_type_ring:
-        scui_draw_ctx_ring(draw_dsc);
-        break;
-    default:
-        SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
-        SCUI_ASSERT(false);
-        break;
-    }
+    void (*ctx_cb)(scui_draw_dsc_t *draw_dsc) = NULL;
+    static const struct {uint32_t type; void *exec_ctx;} ctx_table[] = {
+        {scui_draw_type_byte_copy,              (void *)scui_draw_ctx_byte_copy,},
+        {scui_draw_type_area_blur,              (void *)scui_draw_ctx_area_blur,},
+        {scui_draw_type_area_fill,              (void *)scui_draw_ctx_area_fill,},
+        {scui_draw_type_area_fill_grad,         (void *)scui_draw_ctx_area_fill_grad,},
+        {scui_draw_type_area_fill_grads,        (void *)scui_draw_ctx_area_fill_grads,},
+        {scui_draw_type_area_copy,              (void *)scui_draw_ctx_area_copy,},
+        {scui_draw_type_area_blend,             (void *)scui_draw_ctx_area_blend,},
+        {scui_draw_type_area_alpha_filter,      (void *)scui_draw_ctx_area_alpha_filter,},
+        {scui_draw_type_area_matrix_fill,       (void *)scui_draw_ctx_area_matrix_fill,},
+        {scui_draw_type_area_matrix_blend,      (void *)scui_draw_ctx_area_matrix_blend,},
+        {scui_draw_type_image,                  (void *)scui_draw_ctx_image,},
+        {scui_draw_type_image_scale,            (void *)scui_draw_ctx_image_scale,},
+        {scui_draw_type_image_rotate,           (void *)scui_draw_ctx_image_rotate,},
+        {scui_draw_type_image_matrix_blend,     (void *)scui_draw_ctx_image_matrix_blend,},
+        {scui_draw_type_letter,                 (void *)scui_draw_ctx_letter,},
+        {scui_draw_type_string,                 (void *)scui_draw_ctx_string,},
+        {scui_draw_type_ring,                   (void *)scui_draw_ctx_ring,},
+    };
+    
+    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+        if (ctx_table[idx].type == draw_dsc->type) {
+            ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
+            ctx_cb(draw_dsc);
+            return;
+        }
+    
+    SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
+    SCUI_ASSERT(false);
 }
 
 /*@brief 线条绘制(抗锯齿)

@@ -95,6 +95,7 @@ void scui_scroll_burn(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
+    SCUI_ASSERT(widget->type == scui_widget_type_scroll);
     scui_widget_burn(&scroll->widget);
     
     /* 销毁滚动控件实例 */

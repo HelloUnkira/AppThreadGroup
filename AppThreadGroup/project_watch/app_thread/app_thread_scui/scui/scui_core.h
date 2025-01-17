@@ -73,7 +73,6 @@
 #include "scui_objbtn.h"            /* 对象按钮 */
 /* widget: */
 #include "scui_button.h"
-#include "scui_watch.h"
 #include "scui_chart.h"
 
 /* linker: */

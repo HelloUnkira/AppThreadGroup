@@ -7,6 +7,161 @@
 
 #include "scui.h"
 
+/*@brief 控件剪切域为空(绘制)
+ *@param handle 控件句柄
+ *@retval 控件剪切域为空
+ */
+bool scui_widget_draw_empty(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return true;
+    if (scui_clip_empty(&widget->clip_set))
+        return true;
+    
+    return false;
+}
+
+/*@breaf 计算绘制片段的最小区域
+ *@param clip 最小绘制区域
+ *@param frag 绘制片段区域
+ *@param face 图形形状
+ */
+bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2_t *face)
+{
+    scui_area_t frag_t = *frag;
+    
+    scui_coord_t y_min = scui_coord_max;
+    scui_coord_t y_max = scui_coord_min;
+    scui_coord_t x_min_a = scui_coord_max;
+    scui_coord_t x_max_a = scui_coord_min;
+    scui_coord_t y_min_idx = -1;
+    scui_coord_t y_max_idx = -1;
+    /* 上下边界,共计8次线相交 */
+    scui_coord_t y_edge[2] = {frag_t.y, frag_t.y + frag_t.h - 1,};
+    
+    const uint8_t idx_line[4][2] = {{0,1},{1,2},{2,3},{3,1}};
+    /* 如果线段与frag上边界相交,最多可能有四个焦点,求最小值和最大值 */
+    /* 如果线段与frag下边界相交,最多可能有四个焦点,求最小值和最大值 */
+    for (uint8_t idx_i = 0; idx_i < 4; idx_i++) {
+        
+        /* 先计算上下线 */
+        for (uint8_t idx_c = 0; idx_c < 2; idx_c++) {
+            
+            scui_coord_t x_min = 0;
+            scui_coord_t x_max = 0;
+            float x1 = face->point2[idx_line[idx_i][0]].x;
+            float y1 = face->point2[idx_line[idx_i][0]].y;
+            float x2 = face->point2[idx_line[idx_i][1]].x;
+            float y2 = face->point2[idx_line[idx_i][1]].y;
+            /* 三角形相似性原理(浮点计算,所以有俩个值): */
+            bool inter = false;
+            if ((y1 <= y_edge[idx_c] && y_edge[idx_c] <= y2) ||
+                (y2 <= y_edge[idx_c] && y_edge[idx_c] <= y1)) {
+                float dst_x = scui_dist(x1, x2);
+                float dst_y = scui_dist(y1, y2);
+                float dst_l = scui_dist(scui_min(y1, y2), y_edge[idx_c]);
+                float x = dst_x * dst_l / dst_y;
+                x_min = x - 0.5;
+                x_max = x + 0.5;
+                inter = true;
+            }
+            if (inter) {
+                x_min_a = scui_min(x_min_a, x_min);
+                x_max_a = scui_max(x_max_a, x_max);
+            }
+        }
+        /* 任意点 */
+        scui_point_t vertex = {
+            .x = face->point2[idx_i].x,
+            .y = face->point2[idx_i].y,
+        };
+        if (scui_area_point(&frag_t, &vertex)) {
+            x_min_a = scui_min(x_min_a, vertex.x);
+            x_max_a = scui_max(x_max_a, vertex.x);
+        }
+        /* y上下边界 */
+        if (y_min > face->point2[idx_i].y) {
+            y_min = face->point2[idx_i].y;
+            y_min_idx = idx_i;
+        }
+        if (y_max < face->point2[idx_i].y) {
+            y_max = face->point2[idx_i].y;
+            y_max_idx = idx_i;
+        }
+    }
+    /* y上下边界点 */
+    scui_point_t vertex_max = {
+        .x = face->point2[y_max_idx].x,
+        .y = face->point2[y_max_idx].y,
+    };
+    if (scui_area_point(&frag_t, &vertex_max)) {
+        x_min_a  = scui_min(x_min_a, face->point2[y_max_idx].x);
+        x_max_a  = scui_max(x_max_a, face->point2[y_max_idx].x);
+        frag_t.h = face->point2[y_max_idx].y - frag_t.y + 1;
+    }
+    /* y上下边界点 */
+    scui_point_t vertex_min = {
+        .x = face->point2[y_min_idx].x,
+        .y = face->point2[y_min_idx].y,
+    };
+    if (scui_area_point(&frag_t, &vertex_min)) {
+        x_min_a  = scui_min(x_min_a, face->point2[y_min_idx].x);
+        x_max_a  = scui_max(x_max_a, face->point2[y_min_idx].x);
+        frag_t.y = face->point2[y_min_idx].y;
+    }
+    /* 区域交集检查 */
+    if (frag->x < x_max_a && x_max_a < frag->x - frag->w + 1)
+        frag_t.w = x_max_a - frag_t.x + 1;
+    if (frag->x < x_min_a && x_min_a < frag->x - frag->w + 1)
+        frag_t.w = x_min_a;
+    
+    *clip = frag_t;
+    return scui_area_inside(clip, frag) && !scui_area_empty(clip);
+}
+
+/*@brief 控件绘制上下文
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
+{
+    void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
+    
+    void (*ctx_cb)(scui_widget_draw_dsc_t *draw_dsc) = NULL;
+    static const struct {uint32_t type; void *exec_ctx;} ctx_table[] = {
+        {scui_widget_draw_type_string,          (void *)scui_widget_draw_ctx_string,},
+        {scui_widget_draw_type_color,           (void *)scui_widget_draw_ctx_color,},
+        {scui_widget_draw_type_color_grad,      (void *)scui_widget_draw_ctx_color_grad,},
+        {scui_widget_draw_type_blur,            (void *)scui_widget_draw_ctx_blur,},
+        {scui_widget_draw_type_image,           (void *)scui_widget_draw_ctx_image,},
+        {scui_widget_draw_type_image_scale,     (void *)scui_widget_draw_ctx_image_scale,},
+        {scui_widget_draw_type_image_rotate,    (void *)scui_widget_draw_ctx_image_rotate,},
+        {scui_widget_draw_type_image_matrix,    (void *)scui_widget_draw_ctx_image_matrix,},
+        {scui_widget_draw_type_ring,            (void *)scui_widget_draw_ctx_ring,},
+        {scui_widget_draw_type_graph,           (void *)scui_widget_draw_ctx_graph,},
+    };
+    
+    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+        if (ctx_table[idx].type == draw_dsc->type) {
+            ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
+            ctx_cb(draw_dsc);
+            return;
+        }
+    
+    SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
+    SCUI_ASSERT(false);
+}
+
 /*@brief 绘制目标重定向
  */
 static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
@@ -27,76 +182,6 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
     }
     *target = &widget_clip;
     return true;
-}
-
-/*@brief 控件剪切域为空(绘制)
- *@param handle 控件句柄
- *@retval 控件剪切域为空
- */
-bool scui_widget_draw_empty(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    
-    if (scui_area_empty(&widget->clip_set.clip))
-        return true;
-    if (scui_clip_empty(&widget->clip_set))
-        return true;
-    
-    return false;
-}
-
-/*@brief 控件绘制上下文
- *@param draw_graph 绘制参数实例
- */
-void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
-{
-    void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
-    
-    switch (draw_dsc->type) {
-    case scui_widget_draw_type_string:
-        scui_widget_draw_ctx_string(draw_dsc);
-        break;
-    case scui_widget_draw_type_color:
-        scui_widget_draw_ctx_color(draw_dsc);
-        break;
-    case scui_widget_draw_type_color_grad:
-        scui_widget_draw_ctx_color_grad(draw_dsc);
-        break;
-    case scui_widget_draw_type_blur:
-        scui_widget_draw_ctx_blur(draw_dsc);
-        break;
-    case scui_widget_draw_type_image:
-        scui_widget_draw_ctx_image(draw_dsc);
-        break;
-    case scui_widget_draw_type_image_scale:
-        scui_widget_draw_ctx_image_scale(draw_dsc);
-        break;
-    case scui_widget_draw_type_image_rotate:
-        scui_widget_draw_ctx_image_rotate(draw_dsc);
-        break;
-    case scui_widget_draw_type_image_matrix:
-        scui_widget_draw_ctx_image_matrix(draw_dsc);
-        break;
-    case scui_widget_draw_type_ring:
-        scui_widget_draw_ctx_ring(draw_dsc);
-        break;
-    case scui_widget_draw_type_graph:
-        scui_widget_draw_ctx_graph(draw_dsc);
-        break;
-    default:
-        SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
-        SCUI_ASSERT(false);
-        break;
-    }
 }
 
 /*@brief 控件在画布绘制字符串

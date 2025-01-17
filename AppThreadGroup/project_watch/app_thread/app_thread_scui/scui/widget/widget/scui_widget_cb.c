@@ -60,13 +60,10 @@ void scui_widget_cb_find(scui_widget_type_t type, scui_widget_cb_t **widget_cb)
         /* 扩展控件 */
         [scui_widget_type_button].make = (scui_widget_cb_make_t)scui_button_make,
         [scui_widget_type_button].burn = (scui_widget_cb_burn_t)scui_button_burn,
-        [scui_widget_type_watch].make  = (scui_widget_cb_make_t)scui_watch_make,
-        [scui_widget_type_watch].burn  = (scui_widget_cb_burn_t)scui_watch_burn,
         [scui_widget_type_chart].make  = (scui_widget_cb_make_t)scui_chart_make,
         [scui_widget_type_chart].burn  = (scui_widget_cb_burn_t)scui_chart_burn,
         
         [scui_widget_type_button].invoke = (scui_event_cb_t)scui_button_event,
-        [scui_widget_type_watch].invoke  = (scui_event_cb_t)scui_watch_event,
         [scui_widget_type_chart].invoke  = (scui_event_cb_t)scui_chart_event,
     };
     

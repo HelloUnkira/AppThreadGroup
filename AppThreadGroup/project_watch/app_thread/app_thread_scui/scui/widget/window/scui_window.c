@@ -67,6 +67,7 @@ void scui_window_burn(scui_handle_t handle)
         scui_widget_surface_destroy(widget->myself);
     
     /* 销毁基础控件实例 */
+    SCUI_ASSERT(widget->type == scui_widget_type_window);
     scui_widget_burn(&window->widget);
     
     /* 销毁窗口控件实例 */

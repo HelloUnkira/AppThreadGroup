@@ -101,6 +101,7 @@ void scui_string_burn(scui_handle_t handle)
     }
     
     /* 销毁基础控件实例 */
+    SCUI_ASSERT(widget->type == scui_widget_type_string);
     scui_widget_burn(&string->widget);
     
     /* 销毁字符串控件实例 */

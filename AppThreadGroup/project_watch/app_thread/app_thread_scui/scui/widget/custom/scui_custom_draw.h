@@ -1,11 +1,12 @@
 #ifndef SCUI_CUSTOM_DRAW_H
 #define SCUI_CUSTOM_DRAW_H
 
-// custom插件:
-#include "scui_plug_coupler.h"
-
 typedef enum {
     scui_custom_draw_type_none = 0,
+    /* basic draw type */
+    scui_custom_draw_type_text,
+    /* custom draw type */
+    scui_custom_draw_type_dial_ptr,
     scui_custom_draw_type_qrcode,
     scui_custom_draw_type_barcode,
     scui_custom_draw_type_spinner,
@@ -18,12 +19,34 @@ typedef enum {
 } scui_custom_draw_type_t;
 
 typedef struct {
+    bool custom_draw_anim;
     scui_custom_draw_type_t type;
     /*************************************************************************/
     scui_event_t *event;            // 绘制事件
     scui_area_t  *clip;             // 绘制区域
     union {
+    /* basic draw type */
     /*************************************************************************/
+    struct {
+        scui_handle_t       handle; // 绘制对象
+        scui_area_t        *target; // 绘制区域
+        scui_string_args_t *args;   // 字符串绘制参数
+        scui_handle_t       text;   // 文本句柄
+    } text;
+    /* custom draw type */
+    /*************************************************************************/
+    struct {
+        scui_handle_t image[3];     // 图片句柄(hour,minute,second)
+        scui_point_t  anchor[3];    // 图片围绕轴心(hour,minute,second)
+        scui_point_t  center[3];    // 图片旋转中心(hour,minute,second)
+        /* frame anim sched: */
+        uint64_t tick_mode:1;       // 1:一度一跳;0:一秒一跳;
+        uint64_t tick_curr_s:20;    // 当前时刻:时.分.秒
+        uint64_t tick_last_s:20;    // 前一时刻:时.分.秒
+        uint64_t tick_curr_ms:10;   // 当前时刻:毫秒
+        uint64_t tick_last_ms:10;   // 前一时刻:毫秒
+        uint64_t tick_passby:10;    // 流失时间(ms)
+    } dial_ptr;
     struct {
         scui_color_t color;         // 颜色(.color_l,.color_d,)
         uint8_t     *data;          // url网址链接字符串
@@ -82,9 +105,9 @@ typedef struct {
         bool           way;         // 方向(0:水平方向;1:垂直方向)
     } image_text;
     struct {
-        scui_handle_t *image;       // 图像句柄(左上角,右上角,左下角,右下角)
-        scui_color_t   color;       // 图像源色调(alpha图使用)
-        scui_coord_t   delta;       // 边界填充线:
+        scui_handle_t image[4];     // 图像句柄(左上角,右上角,左下角,右下角)
+        scui_color_t  color;        // 图像源色调(alpha图使用)
+        scui_coord_t  delta;        // 边界填充线:
                                     //   0:忽略(复杂图像集成)
                                     //  -1:完全填充(全填充圆角矩形)
                                     //  其他:边界填充(空心圆角矩形)
@@ -98,11 +121,55 @@ typedef struct {
  */
 void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc);
 
+/*@brief 自定义控件:插件:上下文绘制(帧动画调度)
+ *@param draw_graph 绘制参数实例
+ */
+void scui_custom_draw_anim_ctx(scui_custom_draw_dsc_t *draw_dsc);
+
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
 /*@brief 简化转义的宏api
  */
+
+/* scui_custom_draw_type_text */
+#define scui_custom_draw_text(handle_v, target_v, args_v, text_v)           \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = {                                     \
+        .type = scui_custom_draw_type_text,                                 \
+        .text.handle = handle_v,                                            \
+        .text.target = target_v,                                            \
+        .text.args   = args_v,                                              \
+        .text.text   = text_v,                                              \
+    };                                                                      \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
+} while (0)                                                                 \
+
+/*****************************************************************************/
+/*****************************************************************************/
+/*****************************************************************************/
+/*@brief 简化转义的宏api
+ */
+
+/* scui_custom_draw_type_dial_ptr */
+#define scui_custom_draw_dial_ptr(event_v, clip_v,                          \
+    image_v, anchor_v, center_v, tick_ms_v)                                 \
+do {                                                                        \
+    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
+        .type = scui_custom_draw_type_dial_ptr,                             \
+        .dial_ptr.image[0]  = image_v[0],                                   \
+        .dial_ptr.image[1]  = image_v[1],                                   \
+        .dial_ptr.image[2]  = image_v[2],                                   \
+        .dial_ptr.anchor[0] = anchor_v[0],                                  \
+        .dial_ptr.anchor[1] = anchor_v[1],                                  \
+        .dial_ptr.anchor[2] = anchor_v[2],                                  \
+        .dial_ptr.center[0] = center_v[0],                                  \
+        .dial_ptr.center[1] = center_v[1],                                  \
+        .dial_ptr.center[2] = center_v[2],                                  \
+        .dial_ptr.tick_ms_c = tick_ms_v,                                    \
+    };                                                                      \
+    scui_custom_draw_ctx(&draw_dsc);                                        \
+} while (0)                                                                 \
 
 /* scui_custom_draw_type_qrcode */
 #define scui_custom_draw_qrcode(event_v, clip_v,                            \
@@ -226,7 +293,10 @@ do {                                                                        \
 do {                                                                        \
     scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
         .type = scui_custom_draw_type_image_crect4,                         \
-        .image_crect4.image = image_v,                                      \
+        .image_crect4.image[0] = image_v[0],                                \
+        .image_crect4.image[1] = image_v[1],                                \
+        .image_crect4.image[2] = image_v[2],                                \
+        .image_crect4.image[3] = image_v[3],                                \
         .image_crect4.color = color_v,                                      \
         .image_crect4.delta = delta_v,                                      \
     };                                                                      \
@@ -236,5 +306,8 @@ do {                                                                        \
 /*****************************************************************************/
 /*****************************************************************************/
 /*****************************************************************************/
+
+// custom插件:
+#include "scui_plug_coupler.h"
 
 #endif
