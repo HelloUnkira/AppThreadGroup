@@ -28,8 +28,9 @@ bool scui_widget_draw_empty(scui_handle_t handle)
  *@param frag 绘制片段区域
  *@param face 图形形状
  */
-bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2_t *face)
+bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *face)
 {
+    bool area_frag = false;
     scui_area_t frag_t = *frag;
     
     scui_coord_t y_min = scui_coord_max;
@@ -70,6 +71,7 @@ bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2
             if (inter) {
                 x_min_a = scui_min(x_min_a, x_min);
                 x_max_a = scui_max(x_max_a, x_max);
+                area_frag = true;
             }
         }
         /* 任意点 */
@@ -80,6 +82,7 @@ bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2
         if (scui_area_point(&frag_t, &vertex)) {
             x_min_a = scui_min(x_min_a, vertex.x);
             x_max_a = scui_max(x_max_a, vertex.x);
+            area_frag = true;
         }
         /* y上下边界 */
         if (y_min > face->point2[idx_i].y) {
@@ -97,9 +100,10 @@ bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2
         .y = face->point2[y_max_idx].y,
     };
     if (scui_area_point(&frag_t, &vertex_max)) {
-        x_min_a  = scui_min(x_min_a, face->point2[y_max_idx].x);
-        x_max_a  = scui_max(x_max_a, face->point2[y_max_idx].x);
+        x_min_a = scui_min(x_min_a, face->point2[y_max_idx].x);
+        x_max_a = scui_max(x_max_a, face->point2[y_max_idx].x);
         frag_t.h = face->point2[y_max_idx].y - frag_t.y + 1;
+        area_frag = true;
     }
     /* y上下边界点 */
     scui_point_t vertex_min = {
@@ -107,18 +111,22 @@ bool scui_widget_draw_clip_calc(scui_area_t *clip, scui_area_t *frag, scui_face2
         .y = face->point2[y_min_idx].y,
     };
     if (scui_area_point(&frag_t, &vertex_min)) {
-        x_min_a  = scui_min(x_min_a, face->point2[y_min_idx].x);
-        x_max_a  = scui_max(x_max_a, face->point2[y_min_idx].x);
+        x_min_a = scui_min(x_min_a, face->point2[y_min_idx].x);
+        x_max_a = scui_max(x_max_a, face->point2[y_min_idx].x);
         frag_t.y = face->point2[y_min_idx].y;
+        area_frag = true;
     }
     /* 区域交集检查 */
-    if (frag->x < x_max_a && x_max_a < frag->x - frag->w + 1)
+    if (frag->x < x_max_a && x_max_a < frag->x + frag->w - 1)
         frag_t.w = x_max_a - frag_t.x + 1;
-    if (frag->x < x_min_a && x_min_a < frag->x - frag->w + 1)
-        frag_t.w = x_min_a;
+    if (frag->x < x_min_a && x_min_a < frag->x + frag->w - 1)
+        frag_t.x = x_min_a;
     
     *clip = frag_t;
-    return scui_area_inside(clip, frag) && !scui_area_empty(clip);
+    
+    bool area_inside = scui_area_inside(frag, clip);
+    bool area_empty = scui_area_empty(clip);
+    return area_frag && area_inside && !area_empty;
 }
 
 /*@brief 控件绘制上下文

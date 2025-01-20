@@ -74,7 +74,8 @@ void scui_cwf_json_anim(void **inst)
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);
     
-    scui_widget_draw(parser->parent, NULL, false);
+    // 控件自行更新, 不做全局刷新
+    // scui_widget_draw(parser->parent, NULL, false);
 }
 
 /*@brief 销毁cwf

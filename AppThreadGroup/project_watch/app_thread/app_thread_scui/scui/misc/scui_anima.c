@@ -10,6 +10,18 @@
 /* 动画实例句柄列表 */
 static scui_anima_list_t scui_anima_list = {0};
 
+/*@brief 动画事件吸收回调
+ */
+static bool scui_event_anima_elapse_absorb(void *evt_old, void *evt_new)
+{
+    scui_event_t *event_old = evt_old;
+    scui_event_t *event_new = evt_new;
+    
+    /* 将ptr值转移到它上面: */
+    event_old->tick += event_new->tick;
+    return true;
+}
+
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
@@ -21,7 +33,8 @@ void scui_anima_elapse(uint32_t elapse)
         scui_event_t event = {
             .object = SCUI_HANDLE_SYSTEM,
             .type   = scui_event_anima_elapse,
-            .absorb = scui_event_absorb_none,
+            .absorb = scui_event_anima_elapse_absorb,
+            .tick   = 1,
         };
         scui_event_notify(&event);
     }

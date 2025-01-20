@@ -41,6 +41,7 @@ typedef struct {
     void (*absorb)(void *evt_old, void *evt_new);
     /* 扩展字段 */
     union {
+        /* 动画嘀嗒次数 */
         /* 输入设备数据<ptr> */
         struct {
             scui_point_t ptr_c;
@@ -66,6 +67,7 @@ typedef struct {
         scui_area_t  area;
         scui_point_t point;
         scui_coord_t coord;
+        scui_coord_t tick;
         /* scui定制调度事件数据: */
         struct {
             void (*sched)(scui_handle_t handle);

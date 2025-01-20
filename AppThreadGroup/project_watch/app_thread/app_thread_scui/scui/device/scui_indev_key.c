@@ -9,7 +9,7 @@
 
 static scui_indev_key_t scui_indev_key = {.item = {0}};
 
-/*@brief 编码器事件吸收回调
+/*@brief 按键事件吸收回调
  */
 static bool scui_event_key_hold_absorb(void *evt_old, void *evt_new)
 {

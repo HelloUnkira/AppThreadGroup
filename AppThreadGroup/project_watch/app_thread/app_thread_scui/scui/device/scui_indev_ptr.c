@@ -9,7 +9,7 @@
 
 static scui_indev_ptr_t scui_indev_ptr = {0};
 
-/*@brief 编码器事件吸收回调
+/*@brief 指针事件吸收回调
  */
 static bool scui_event_ptr_hold_absorb(void *evt_old, void *evt_new)
 {
