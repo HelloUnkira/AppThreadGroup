@@ -49,7 +49,7 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         scui_window_switch_cfg_type(&cfg_type);
         *cfg_type = switch_type;
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     default:
@@ -76,7 +76,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         static uint8_t cnt = 0;
@@ -94,7 +94,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             // 构建一个图像帧
             image_frame_gif.type = scui_image_type_gif;
@@ -115,7 +115,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
     case scui_event_hide: {
         SCUI_LOG_INFO("scui_event_hide");
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             // 销毁一个图像帧
             scui_image_frame_burn(&image_frame_gif);
@@ -127,7 +127,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (image_frame_gif_refr && scui_image_frame_data(&image_frame_gif)) {

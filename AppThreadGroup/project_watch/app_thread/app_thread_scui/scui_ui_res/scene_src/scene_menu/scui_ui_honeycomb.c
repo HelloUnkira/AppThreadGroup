@@ -75,7 +75,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_handle_t  parent = scui_widget_parent(event->object);
@@ -221,10 +221,10 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
         SCUI_LOG_WARN("click idx:%d", index);
@@ -253,7 +253,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
@@ -261,7 +261,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
         }
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_ui_res_local->scroll_width  = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).w;
             scui_ui_res_local->scroll_height = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).h;
@@ -309,12 +309,12 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
         }
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             SCUI_MEM_FREE(scui_ui_res_local);
@@ -329,7 +329,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         bool relayout = false;

@@ -178,7 +178,7 @@ void scui_chart_event(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         switch (chart->type) {

@@ -73,11 +73,19 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("");
     bool tick_draw = false;
     
+    uint64_t draw_tick_last_s  = tick_last_s;
+    uint64_t draw_tick_last_ms = tick_last_ms;
+    uint64_t draw_tick_curr_s  = tick_curr_s;
+    uint64_t draw_tick_curr_ms = tick_curr_ms;
+    
     if (tick_last_s != tick_curr_s) {
         tick_last_s  = tick_curr_s;
         tick_curr_ms = 0;
         tick_last_ms = 0;
+        
         tick_draw = true;
+        draw_tick_curr_s  = tick_curr_s;
+        draw_tick_curr_ms = tick_curr_ms;
     } else {
         if (tick_mode) {
             tick_curr_ms += tick_passby - 1;
@@ -87,7 +95,10 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
             /* 一度一跳时 */
             if (scui_dist(tick_last_ms, tick_curr_ms) >= (1000 / 6 / 2)) {
                 tick_last_ms = tick_curr_ms;
+                
                 tick_draw = true;
+                draw_tick_curr_s  = tick_curr_s;
+                draw_tick_curr_ms = tick_curr_ms;
             }
         } else {
             tick_curr_ms = 0;
@@ -104,10 +115,11 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     if (tick_draw) {
         
         #if 0
+        // 这里脏矩阵添加重绘区域还有点问题
         /* <curr> <last> */
         uint64_t tick_ms[2] = {0};
-        tick_ms[0] = tick_curr_s * 1000 + tick_curr_ms;
-        tick_ms[1] = tick_last_s * 1000 + tick_last_ms;
+        tick_ms[0] = draw_tick_curr_s * 1000 + draw_tick_curr_ms;
+        tick_ms[1] = draw_tick_last_s * 1000 + draw_tick_last_ms;
         
         for (uint8_t idx_tick_ms = 0; idx_tick_ms < scui_arr_len(tick_ms); idx_tick_ms++) {
             
@@ -147,7 +159,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_area3_to_area2(&image3_clip, &image2_clip);
                 
                 scui_area_t clip_widget = scui_widget_clip(event->object);
-                scui_area_t  clip_frag = clip_widget;
+                scui_area_t clip_frag = clip_widget;
                 
                 scui_coord_t vofs = 0;
                 scui_coord_t vfrag = clip_widget.h / 10;
@@ -161,12 +173,11 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                         break;
                     
                     scui_area_t draw_clip = {0};
-                    bool calc = scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip);
-                    
-                    if (calc) {
+                    if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
+                        
                         sumpox += draw_clip.w * draw_clip.h;
                         
-                        SCUI_LOG_INFO("draw clip<%d,%d,%d,%d>",
+                        SCUI_LOG_WARN("draw clip<%d,%d,%d,%d>",
                             draw_clip.x, draw_clip.y,
                             draw_clip.w, draw_clip.h);
                         
@@ -175,7 +186,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                     
                     vofs += clip_frag.h;
                 }
-                SCUI_LOG_INFO("draw clip:%d", sumpox);
+                SCUI_LOG_WARN("draw clip:%d", sumpox);
             }
         }
         #else

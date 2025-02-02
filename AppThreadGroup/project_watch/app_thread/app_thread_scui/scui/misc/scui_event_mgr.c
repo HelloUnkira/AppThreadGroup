@@ -151,7 +151,7 @@ static void scui_event_respond(scui_event_t *event)
     switch (event->type) {
     case scui_event_sched_delay:
         event->sched(event->handle);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         return;
     case scui_event_anima_elapse:
         if (event->object == SCUI_HANDLE_SYSTEM) {
@@ -179,7 +179,7 @@ static void scui_event_respond(scui_event_t *event)
         break;
     case scui_event_refr:
         scui_window_surface_blend();
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         /* 混合绘制刷新流程结束 */
         /* 使用绘制启动刷新流程 */
         scui_frame_buffer_refr_toggle();
@@ -242,7 +242,7 @@ static void scui_event_respond(scui_event_t *event)
     /* 事件响应回调 */
     if (scui_event_cb_check(event))
         scui_event_cb_prepare(event);
-    if (scui_widget_event_check_over(event))
+    if (scui_event_check_over(event))
         return;
     
     /* 系统事件响应 */
@@ -267,24 +267,24 @@ static void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_hold;
         event_filter = event_filter || event->type == scui_event_key_click;
         
-        scui_widget_event_mask_prepare(event);
+        scui_event_mask_prepare(event);
         scui_widget_event_dispatch(event);
-        scui_widget_event_mask_execute(event);
+        scui_event_mask_execute(event);
         scui_widget_event_dispatch(event);
-        scui_widget_event_mask_finish(event);
+        scui_event_mask_finish(event);
         scui_widget_event_dispatch(event);
         
-        if (scui_widget_event_check_over(event) && event_filter)
+        if (scui_event_check_over(event) && event_filter)
             return;
         
-        scui_widget_event_mask_prepare(event);
+        scui_event_mask_prepare(event);
         scui_window_event_dispatch(event);
-        scui_widget_event_mask_execute(event);
+        scui_event_mask_execute(event);
         scui_window_event_dispatch(event);
-        scui_widget_event_mask_finish(event);
+        scui_event_mask_finish(event);
         scui_window_event_dispatch(event);
         
-        if (scui_widget_event_check_over(event))
+        if (scui_event_check_over(event))
             return;
     }
     
@@ -292,21 +292,21 @@ static void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_custom_s &&
         event->type <= scui_event_custom_e) {
         
-        scui_widget_event_mask_prepare(event);
+        scui_event_mask_prepare(event);
         scui_event_cb_custom(event);
-        scui_widget_event_mask_execute(event);
+        scui_event_mask_execute(event);
         scui_event_cb_custom(event);
-        scui_widget_event_mask_finish(event);
+        scui_event_mask_finish(event);
         scui_event_cb_custom(event);
         
-        if (scui_widget_event_check_over(event))
+        if (scui_event_check_over(event))
             return;
     }
     
     /* 事件响应回调 */
     if (scui_event_cb_check(event))
         scui_event_cb_finish(event);
-    if (scui_widget_event_check_over(event))
+    if (scui_event_check_over(event))
         return;
     
     if (event->style.result != 0)

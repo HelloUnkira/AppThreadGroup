@@ -64,7 +64,7 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         static uint8_t cnt = 0;
@@ -81,7 +81,7 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip_hor     = {0};
@@ -143,7 +143,7 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -198,7 +198,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         image_pct++;
@@ -210,7 +210,7 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};
@@ -247,14 +247,14 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         image_ring_angle += 1;
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};
@@ -299,7 +299,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         spinner_cnt++;
@@ -311,7 +311,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};
@@ -358,7 +358,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         break;
     }
@@ -405,7 +405,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};

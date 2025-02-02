@@ -273,7 +273,7 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
  */
 static void scui_window_event_switch(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
+    if (!scui_event_check_execute(event))
          return;
     
     /* 获得窗口宽高 */
@@ -287,7 +287,7 @@ static void scui_window_event_switch(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down:
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_mgr.switch_args.pos = scui_opt_pos_none;
         /* 水平位置先检测 */
@@ -305,7 +305,7 @@ static void scui_window_event_switch(scui_event_t *event)
     case scui_event_ptr_fling:
         /* 场景正在切换时,中止更新切换目标 */
         if (scui_window_mgr.switch_args.lock_move) {
-            scui_widget_event_mask_over(event);
+            scui_event_mask_over(event);
             SCUI_LOG_INFO("");
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_l)
                 scui_window_move_anima_auto(point.x, event->ptr_e.x, 0);
@@ -382,12 +382,12 @@ static void scui_window_event_switch(scui_event_t *event)
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
                         scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, 0);
                 }
-                scui_widget_event_mask_over(event);
+                scui_event_mask_over(event);
             }
         }
         break;
     case scui_event_ptr_up:
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         if (scui_window_mgr.switch_args.lock_move) {
             scui_window_mgr.switch_args.hold_move = false;
             if (scui_window_mgr.switch_args.mask_fling) {
@@ -490,7 +490,7 @@ static void scui_window_event_switch(scui_event_t *event)
             scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
             SCUI_LOG_DEBUG("");
             
-            scui_widget_event_mask_over(event);
+            scui_event_mask_over(event);
         }
         break;
     }

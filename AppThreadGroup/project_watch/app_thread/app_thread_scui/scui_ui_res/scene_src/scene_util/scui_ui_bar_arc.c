@@ -32,7 +32,7 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (bar_arc->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
@@ -50,7 +50,7 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
         }
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t   clip = {0};

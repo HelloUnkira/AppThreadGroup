@@ -135,8 +135,8 @@ void scui_event_custom(scui_event_t *event)
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
     case scui_event_ui_none_goto: {
-        scui_widget_event_mask_over(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_over(event);
+        if (!scui_event_check_execute(event))
              break;
         
         if (handle_top != SCUI_UI_SCENE_NONE) {
@@ -150,8 +150,8 @@ void scui_event_custom(scui_event_t *event)
         break;
     }
     case scui_event_ui_home_goto: {
-        scui_widget_event_mask_over(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_over(event);
+        if (!scui_event_check_execute(event))
              break;
         
         if (handle_top != SCUI_UI_SCENE_HOME) {
@@ -175,8 +175,8 @@ void scui_event_custom(scui_event_t *event)
         break;
     }
     case scui_event_ui_standy_enter: {
-        scui_widget_event_mask_over(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_over(event);
+        if (!scui_event_check_execute(event))
              break;
         
         // 如果本来是在待机界面时
@@ -191,8 +191,8 @@ void scui_event_custom(scui_event_t *event)
         break;
     }
     case scui_event_ui_standy_exit: {
-        scui_widget_event_mask_over(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_over(event);
+        if (!scui_event_check_execute(event))
              break;
         
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
@@ -283,7 +283,7 @@ void scui_event_custom_finish(scui_event_t *event)
             scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
         }
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     default:

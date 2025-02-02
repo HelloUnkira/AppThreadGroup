@@ -1259,18 +1259,18 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_layout: {
         scui_scroll_layout_update(event);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         
         scui_scroll_event_notify(event, 0xAA);
         break;
     }
     case scui_event_ptr_down:
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
@@ -1291,11 +1291,11 @@ void scui_scroll_event(scui_event_t *event)
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
         scui_scroll_event_auto_merge(event, type);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_up:
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (scroll->hold_move) {
@@ -1308,7 +1308,7 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (scroll->dir != scui_opt_dir_hor &&
@@ -1334,11 +1334,11 @@ void scui_scroll_event(scui_event_t *event)
             offset.y = way * scroll->route_enc * event->enc_diff;
         
         scui_scroll_offset(widget->myself, &offset);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     case scui_event_key_click: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (scroll->dir != scui_opt_dir_hor &&
@@ -1368,7 +1368,7 @@ void scui_scroll_event(scui_event_t *event)
             offset.y = way * scroll->route_key;
         
         scui_scroll_offset(widget->myself, &offset);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     default:

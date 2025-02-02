@@ -53,7 +53,7 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};
@@ -97,7 +97,7 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = {0};

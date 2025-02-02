@@ -29,7 +29,7 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         scui_window_float_event_grasp_show(event);
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             scui_button_maker_t button_maker = {0};
             scui_handle_t button_bandle         = SCUI_HANDLE_INVALID;
             button_maker.widget.type            = scui_widget_type_button;
@@ -117,7 +117,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         pct += way;
@@ -127,7 +127,7 @@ void scui_ui_scene_float_3_ring_event_proc(scui_event_t *event)
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         scui_handle_t image_bg   = scui_image_prj_image_src_03_activity_ring_big_max_01_bjbmp;

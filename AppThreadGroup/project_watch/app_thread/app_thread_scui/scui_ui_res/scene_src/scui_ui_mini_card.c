@@ -106,7 +106,7 @@ static void scui_ui_scene_plug_coupler_recycle_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw: {
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             // 从控件树绘制结束,回收部分不使用的画布
             scui_plug_coupler_recycle(scui_ui_res_local->coupler, false);
         }
@@ -135,7 +135,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_handle_t index = scui_ui_res_local->coupler->list_draw_idx;
@@ -751,7 +751,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_point_t offset  = {0};
@@ -813,14 +813,14 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_alpha_t alpha = scui_widget_alpha_get(event->object);
         if (alpha <= scui_alpha_pct20)
             break;
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
         scui_handle_t  custom = scui_ui_res_local->coupler->list_widget_s[index];
@@ -969,12 +969,12 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         scui_window_float_event_grasp_show(event);
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             scui_ui_scene_mini_card_cfg();
         }
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
@@ -985,7 +985,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             scui_ui_res_local->coupler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
         }
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_event_cb_node_t event_cb_node = {
                 .event_cb = scui_ui_scene_plug_coupler_recycle_event_proc,
@@ -1604,7 +1604,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         scui_window_float_event_grasp_hide(event);
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             scui_plug_coupler_recycle(scui_ui_res_local->coupler, true);
             
@@ -1615,7 +1615,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         }
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;

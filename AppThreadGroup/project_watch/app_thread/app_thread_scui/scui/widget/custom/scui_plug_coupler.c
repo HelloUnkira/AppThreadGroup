@@ -180,7 +180,7 @@ void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_ev
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         for (scui_handle_t idx = 0; idx < coupler->list_num; idx++) {

@@ -36,14 +36,14 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
         // cwf json 测试
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
         }
@@ -52,13 +52,13 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         // cwf json 测试
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
         }
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;
@@ -106,7 +106,7 @@ void scui_ui_scene_standby_event_proc(scui_event_t *event)
         scui_window_stack_del();
         *cfg_type = type;
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     default:

@@ -238,7 +238,7 @@ static void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
  */
 void scui_window_float_event_grasp_show(scui_event_t *event)
 {
-    if (!scui_widget_event_check_prepare(event))
+    if (!scui_event_check_prepare(event))
          return;
     
     scui_widget_show(scui_window_float.main, false);
@@ -249,7 +249,7 @@ void scui_window_float_event_grasp_show(scui_event_t *event)
  */
 void scui_window_float_event_grasp_hide(scui_event_t *event)
 {
-    if (!scui_widget_event_check_finish(event))
+    if (!scui_event_check_finish(event))
          return;
 }
 
@@ -258,7 +258,7 @@ void scui_window_float_event_grasp_hide(scui_event_t *event)
  */
 void scui_window_float_event_grasp_key(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
+    if (!scui_event_check_execute(event))
          return;
     
     if (event->type == scui_event_key_click) {
@@ -266,7 +266,7 @@ void scui_window_float_event_grasp_key(scui_event_t *event)
         if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
              return;
         scui_window_float_anima_inout(event->object, false);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
     }
 }
 
@@ -275,7 +275,7 @@ void scui_window_float_event_grasp_key(scui_event_t *event)
  */
 void scui_window_float_event_grasp_ptr(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
+    if (!scui_event_check_execute(event))
          return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
@@ -289,7 +289,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         scui_window_float.cover = true;
         break;
     }
@@ -297,7 +297,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         /* 全局滚动锁定 */
         if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
              break;
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
         int32_t value_s = 0;
@@ -318,11 +318,11 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
         }
         scui_window_float.hold = true;
         scui_window_float_anima_auto(value_s, value_e, 0);
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     }
     case scui_event_ptr_up: {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         if (scui_window_float.target != handle)
             break;
         if (scui_window_float.cover) {
@@ -411,7 +411,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
  */
 void scui_window_float_event_check_ptr(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
+    if (!scui_event_check_execute(event))
          return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
@@ -425,7 +425,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_down: {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         scui_window_float.cover = false;
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_float.pos = scui_opt_pos_none;
@@ -442,7 +442,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         break;
     }
     case scui_event_ptr_move: {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         if (scui_window_float.pos == scui_opt_pos_none)
             break;
         scui_point_t point = {0};
@@ -518,7 +518,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
                     value_e = event->ptr_e.x;
             }
             scui_window_float_anima_auto(value_s, value_e, 0);
-            scui_widget_event_mask_over(event);
+            scui_event_mask_over(event);
         }
         break;
     }

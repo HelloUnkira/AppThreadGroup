@@ -39,7 +39,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc(scui_event_t *eve
 {
     switch (event->type) {
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_handle_t image_bg   = scui_image_prj_image_src_03_activity_ring_big_max_01_bjbmp;
@@ -91,7 +91,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             // 清空图像资源缓存
             scui_image_cache_clear();
@@ -120,7 +120,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     case scui_event_hide: {
         SCUI_LOG_INFO("scui_event_hide");
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             scui_widget_surface_destroy(scui_ui_res_local->big_3_slave);
             scui_widget_hide(scui_ui_res_local->big_3_slave, false);
@@ -128,7 +128,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_handle_t  custom = scui_ui_res_local->big_3_slave;
@@ -160,7 +160,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_string_maker_t string_maker = {0};
             scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
@@ -197,13 +197,13 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
         }
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -337,7 +337,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             // chart histogram
             scui_chart_maker_t chart_maker = {0};
@@ -374,7 +374,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -494,7 +494,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             // chart histogram
             scui_chart_maker_t chart_maker = {0};
@@ -531,7 +531,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -651,7 +651,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     case scui_event_show: {
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             // chart histogram
             scui_chart_maker_t chart_maker = {0};
@@ -688,7 +688,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -809,7 +809,7 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         break;
@@ -818,13 +818,13 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
         }
         
@@ -835,7 +835,7 @@ void scui_ui_scene_activity_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;

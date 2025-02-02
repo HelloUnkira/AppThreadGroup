@@ -1,24 +1,6 @@
 #ifndef SCUI_WIDGET_EVENT_H
 #define SCUI_WIDGET_EVENT_H
 
-/* 标记事件访问状态 */
-#define scui_widget_event_mask_quit(event)      ((event))
-#define scui_widget_event_mask_keep(event)      ((event)->style.result |= 0x01)
-#define scui_widget_event_mask_over(event)      ((event)->style.result |= 0x02)
-/* 检查事件访问状态 */
-#define scui_widget_event_check_quit(event)     ((event)->style.result == 0x00)
-#define scui_widget_event_check_keep(event)     (((event)->style.result & 0x01) != 0)
-#define scui_widget_event_check_over(event)     (((event)->style.result & 0x02) != 0)
-
-/* 标记事件访问流程 */
-#define scui_widget_event_mask_prepare(event)   ((event)->style.order = 0x00)
-#define scui_widget_event_mask_execute(event)   ((event)->style.order = 0x01)
-#define scui_widget_event_mask_finish(event)    ((event)->style.order = 0x02)
-/* 检查事件访问流程 */
-#define scui_widget_event_check_prepare(event)  ((event)->style.order == 0x00)
-#define scui_widget_event_check_execute(event)  ((event)->style.order == 0x01)
-#define scui_widget_event_check_finish(event)   ((event)->style.order == 0x02)
-
 /*@brief 绘制控件
  *@param handle 控件句柄
  *@param clip   剪切域

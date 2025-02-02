@@ -50,14 +50,14 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
@@ -90,7 +90,7 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             
             
@@ -132,7 +132,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (scui_ui_res_local->move_lock)
@@ -151,7 +151,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
     case scui_event_draw:
         
         /* 绘制流程准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             float tan_a = scui_tan(scui_radian_by_angle(scui_ui_res_local->angle_a / 2.0f));
@@ -266,7 +266,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         }
         
         /* 绘制流程进行 */
-        if (scui_widget_event_check_execute(event)) {
+        if (scui_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
@@ -284,7 +284,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         }
         break;
     case scui_event_ptr_move:
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_ui_res_local->move_lock = true;
         scui_ui_res_local->rotate_y += event->ptr_e.x - event->ptr_s.x;
         scui_widget_draw(event->object, NULL, false);

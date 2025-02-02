@@ -89,14 +89,14 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_ptr_click: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_alpha_t alpha = scui_widget_alpha_get(event->object);
         if (alpha <= scui_alpha_pct20)
             break;
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_handle_t parent   = scui_widget_parent(event->object);
         scui_handle_t ancestor = scui_widget_parent(parent);
         scui_handle_t index    = scui_widget_child_to_index(ancestor, parent) - 1;
@@ -126,7 +126,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
@@ -134,7 +134,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
             scui_ui_scene_list_cfg(scui_ui_scene_list_type_list_arc);
         }
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_custom_maker_t item_maker = {0};
             scui_handle_t item_handle     = SCUI_HANDLE_INVALID;
@@ -204,7 +204,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;

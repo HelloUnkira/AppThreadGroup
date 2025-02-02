@@ -21,7 +21,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
         
             /* 设置背景 */
             scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_watchface_bg_01_bgjpg);
@@ -135,7 +135,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         font_name_table_idx %= scui_arr_len(font_name_table);
         scui_font_name_set(font_name_table[font_name_table_idx]);
         
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         break;
     default:
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);

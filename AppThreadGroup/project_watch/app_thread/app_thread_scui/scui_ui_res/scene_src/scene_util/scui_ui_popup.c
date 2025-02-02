@@ -49,7 +49,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         SCUI_ASSERT(scale_tar_w != 0);
@@ -116,7 +116,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             scui_string_maker_t string_maker = {0};
             string_maker.widget.type                = scui_widget_type_string;
@@ -154,7 +154,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -176,7 +176,7 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         // 这里需要填完全覆盖的纯透明色调

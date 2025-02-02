@@ -299,9 +299,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
         // 全局帧动画不分三步调度
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         /* 全局滚动检查 */
         #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
         scui_handle_t handle = SCUI_HANDLE_INVALID;
@@ -342,7 +342,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             return;
         }
         /* 添加surface剪切域,因为绘制即将开始 */
-        if (scui_widget_event_check_prepare(event))
+        if (scui_event_check_prepare(event))
         if (widget->parent == SCUI_HANDLE_INVALID) {
             // scui_widget_clip_check(widget->myself, true);
             scui_widget_clip_update(widget);
@@ -359,7 +359,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_tick_calc(0x21, NULL, NULL, NULL);
         }
         /* 去除surface剪切域,因为已经绘制完毕 */
-        if (scui_widget_event_check_finish(event))
+        if (scui_event_check_finish(event))
             scui_widget_clip_clear(widget, false);
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_btra(widget, idx) {
@@ -367,7 +367,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_widget_event_dispatch(event);
         }
         event->object = widget->myself;
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         /* 绘制结束产生一次异步刷新 */
         if (surface_only)
             scui_widget_refr(widget->myself, false);
@@ -378,7 +378,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
         // 输入事件不分三步调度
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
@@ -391,12 +391,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if (scui_widget_event_check_over(event))
+            if (scui_event_check_over(event))
                 break;
         }
         event->object = widget->myself;
-        scui_widget_event_mask_keep(event);
-        if (scui_widget_event_check_over(event) && event_filter)
+        scui_event_mask_keep(event);
+        if (scui_event_check_over(event) && event_filter)
             return;
         /* 是否自己吸收处理 */
         if (!widget->style.indev_ptr)
@@ -431,21 +431,21 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
         // 输入事件不分三步调度
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 是否自己吸收处理(冒泡自己) */
         if (widget->style.indev_enc)
             scui_widget_event_proc(event);
-            scui_widget_event_mask_keep(event);
-        if (scui_widget_event_check_over(event))
+            scui_event_mask_keep(event);
+        if (scui_event_check_over(event))
             return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if (scui_widget_event_check_over(event))
+            if (scui_event_check_over(event))
                 break;
         }
         event->object = widget->myself;
@@ -456,21 +456,21 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
         // 输入事件不分三步调度
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 是否自己吸收处理(冒泡自己) */
         if (widget->style.indev_key)
             scui_widget_event_proc(event);
-            scui_widget_event_mask_keep(event);
-        if (scui_widget_event_check_over(event))
+            scui_event_mask_keep(event);
+        if (scui_event_check_over(event))
             return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if (scui_widget_event_check_over(event))
+            if (scui_event_check_over(event))
                 break;
         }
         event->object = widget->myself;
@@ -481,9 +481,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_change_font) {
         // 控件事件不分三步调度
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         scui_widget_event_bubble(event, NULL, true);
         return;
     }
@@ -492,7 +492,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_focus_get ||
         event->type == scui_event_show) {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         scui_widget_event_bubble(event, NULL, true);
         return;
     }
@@ -501,7 +501,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_focus_lost ||
         event->type == scui_event_hide) {
-        scui_widget_event_mask_keep(event);
+        scui_event_mask_keep(event);
         scui_widget_event_bubble(event, NULL, false);
         return;
     }
@@ -510,7 +510,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     if (event->type == scui_event_layout ||
         event->type == scui_event_adjust_size) {
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_widget_event_proc(event);
         return;
     }
@@ -520,7 +520,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     if (event->type == scui_event_widget_scroll_s ||
         event->type == scui_event_widget_scroll_e ||
         event->type == scui_event_widget_scroll_c) {
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         scui_widget_event_proc(event);
         return;
     }
@@ -551,18 +551,18 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
             event_cb(event);
         else
             scui_widget_event_proc(event);
-        if (scui_widget_event_check_over(event))
+        if (scui_event_check_over(event))
             return;
     }
     
     scui_widget_child_list_btra(widget, idx) {
         event->object = widget->child_list[idx];
         scui_widget_event_bubble(event, event_cb, first);
-        if (scui_widget_event_check_over(event))
+        if (scui_event_check_over(event))
             break;
     }
     event->object = widget->myself;
-    if (scui_widget_event_check_over(event))
+    if (scui_event_check_over(event))
         return;
     
     if (!first) {
@@ -570,7 +570,7 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
             event_cb(event);
         else
             scui_widget_event_proc(event);
-        if (scui_widget_event_check_over(event))
+        if (scui_event_check_over(event))
             return;
     }
 }
@@ -580,7 +580,7 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
  */
 void scui_widget_event_draw(scui_event_t *event)
 {
-    if (!scui_widget_event_check_execute(event))
+    if (!scui_event_check_execute(event))
          return;
     
     SCUI_LOG_DEBUG("event %u", event->type);
@@ -590,7 +590,7 @@ void scui_widget_event_draw(scui_event_t *event)
     if (widget->style.trans)
         return;
     
-    scui_widget_event_mask_keep(event);
+    scui_event_mask_keep(event);
     /* 有背景图片则优先绘制背景 */
     /* 没有背景图片则绘制纯色背景 */
     if (widget->image != SCUI_HANDLE_INVALID)

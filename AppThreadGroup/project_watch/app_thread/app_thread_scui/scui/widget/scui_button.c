@@ -77,7 +77,7 @@ void scui_button_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         if (button->mode == scui_button_mode_scale) {
@@ -108,7 +108,7 @@ void scui_button_event(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         if (button->mode == scui_button_mode_static) {
@@ -130,7 +130,7 @@ void scui_button_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_down: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         scui_handle_t handle = scui_widget_root(widget->myself);
@@ -155,7 +155,7 @@ void scui_button_event(scui_event_t *event)
     }
     case scui_event_ptr_move:
     case scui_event_ptr_up: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         if (button->mode == scui_button_mode_scale) {
@@ -166,7 +166,7 @@ void scui_button_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              return;
         
         if (button->mode == scui_button_mode_static) {
@@ -180,7 +180,7 @@ void scui_button_event(scui_event_t *event)
             break;
         }
         if (button->mode == scui_button_mode_scale) {
-            scui_widget_event_mask_over(event);
+            scui_event_mask_over(event);
             SCUI_LOG_INFO("");
             button->btn1_hold = true;
             button->btn_click = true;

@@ -146,7 +146,7 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             
             if (monitor_anima == SCUI_HANDLE_INVALID) {
                 scui_anima_t anima = {0};
@@ -198,7 +198,7 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             
             if (monitor_anima != SCUI_HANDLE_INVALID) {
                 scui_anima_stop(monitor_anima);

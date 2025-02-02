@@ -49,7 +49,7 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -153,7 +153,7 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -197,7 +197,7 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -286,7 +286,7 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
         
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -348,7 +348,7 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
         
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -394,7 +394,7 @@ void scui_ui_scene_6_6_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -424,7 +424,7 @@ void scui_ui_scene_6_7_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -454,7 +454,7 @@ void scui_ui_scene_6_8_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};
@@ -484,7 +484,7 @@ void scui_ui_scene_6_9_event_proc(scui_event_t *event)
         /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         scui_area_t  clip = {0};

@@ -31,14 +31,14 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local == NULL);
             scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
         /* 界面数据加载准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_09_08png;
@@ -57,7 +57,7 @@ void scui_ui_scene_cube_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_hide");
         
         /* 界面数据转存回收 */
-        if (scui_widget_event_check_finish(event)) {
+        if (scui_event_check_finish(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             SCUI_MEM_FREE(scui_ui_res_local);
             scui_ui_res_local = NULL;
@@ -85,7 +85,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (scui_ui_res_local->move_lock)
@@ -111,7 +111,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
     case scui_event_draw:
         
         /* 绘制流程准备 */
-        if (scui_widget_event_check_prepare(event)) {
+        if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             /* 8个顶点 */
@@ -177,7 +177,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         }
         
         /* 绘制流程进行 */
-        if (scui_widget_event_check_execute(event)) {
+        if (scui_event_check_execute(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
             for (uint8_t idx = 0; idx < 6; idx++) {
@@ -193,7 +193,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         }
         break;
     case scui_event_ptr_move:
-        scui_widget_event_mask_over(event);
+        scui_event_mask_over(event);
         /* y轴旋转是x的移动偏移量 */
         /* x轴旋转是y的移动偏移量 */
         scui_ui_res_local->move_lock = true;

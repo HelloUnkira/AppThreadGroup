@@ -112,6 +112,24 @@ typedef struct {
     scui_event_type_t event;        /* 事件 */
 } scui_event_cb_node_t;
 
+/* 标记事件访问状态 */
+static inline void scui_event_mask_quit(scui_event_t *event)     {(event);}
+static inline void scui_event_mask_keep(scui_event_t *event)     {(event->style.result |= 0x01);}
+static inline void scui_event_mask_over(scui_event_t *event)     {(event->style.result |= 0x02);}
+/* 标记事件访问流程 */
+static inline void scui_event_mask_prepare(scui_event_t *event)  {event->style.order = 0x00;}
+static inline void scui_event_mask_execute(scui_event_t *event)  {event->style.order = 0x01;}
+static inline void scui_event_mask_finish(scui_event_t *event)   {event->style.order = 0x02;}
+
+/* 检查事件访问状态 */
+static inline bool scui_event_check_quit(scui_event_t *event)    {return (event->style.result) == 0x00;}
+static inline bool scui_event_check_keep(scui_event_t *event)    {return (event->style.result & 0x01) != 0;}
+static inline bool scui_event_check_over(scui_event_t *event)    {return (event->style.result & 0x02) != 0;}
+/* 检查事件访问流程 */
+static inline bool scui_event_check_prepare(scui_event_t *event) {return event->style.order == 0x00;}
+static inline bool scui_event_check_execute(scui_event_t *event) {return event->style.order == 0x01;}
+static inline bool scui_event_check_finish(scui_event_t *event)  {return event->style.order == 0x02;}
+
 /*@brief 事件吸收回调(空吸收)
  *@param evt_old 旧事件
  *@param evt_new 新事件

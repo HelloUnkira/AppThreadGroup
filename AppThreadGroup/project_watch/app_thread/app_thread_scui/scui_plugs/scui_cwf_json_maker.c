@@ -63,8 +63,8 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        scui_widget_event_mask_keep(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_keep(event);
+        if (!scui_event_check_execute(event))
              return;
         
         uint8_t hour   = scui_presenter.get_hour();
@@ -82,8 +82,8 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_keep(event);
+        if (!scui_event_check_execute(event))
              return;
         
         scui_area_t clip = scui_widget_clip(event->object);
@@ -118,8 +118,8 @@ static void scui_cwf_json_custom_event_cb(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_draw: {
-        scui_widget_event_mask_keep(event);
-        if (!scui_widget_event_check_execute(event))
+        scui_event_mask_keep(event);
+        if (!scui_event_check_execute(event))
              return;
         
         // 没有信息则不绘制

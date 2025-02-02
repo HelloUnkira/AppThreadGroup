@@ -383,7 +383,7 @@ void scui_string_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (string->unit_abort)
@@ -445,7 +445,7 @@ void scui_string_event(scui_event_t *event)
         break;
     }
     case scui_event_draw: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         // 无绘制目标
@@ -597,7 +597,7 @@ void scui_string_event(scui_event_t *event)
         break;
     }
     case scui_event_change_font: {
-        if (!scui_widget_event_check_execute(event))
+        if (!scui_event_check_execute(event))
              break;
         
         if (string->text != SCUI_HANDLE_INVALID) {
