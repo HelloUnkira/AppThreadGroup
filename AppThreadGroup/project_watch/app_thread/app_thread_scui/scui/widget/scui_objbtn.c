@@ -35,12 +35,10 @@ void scui_objbtn_make(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool la
         objbtn->color[idx] = maker->color[idx];
         objbtn->alpha[idx] = maker->alpha[idx];
         objbtn->width[idx] = maker->width[idx];
-        objbtn->side[idx]  = maker->side[idx];
     }
     objbtn->radius = maker->radius;
     
     objbtn->notify_cb   = maker->notify_cb;
-    objbtn->time        = maker->time;
     objbtn->lim         = SCUI_WIDGET_OBJECT_PCT;
     objbtn->pct         = SCUI_WIDGET_OBJECT_PCT;
     objbtn->way         = -1;
@@ -85,7 +83,7 @@ void scui_objbtn_event(scui_event_t *event)
             if ((objbtn->pct  < 100 && objbtn->pct > objbtn->lim) ||
                 (objbtn->pct == 100 && objbtn->way == -1) ||
                 (objbtn->pct == objbtn->lim && objbtn->way == +1)) {
-                 objbtn->pct += objbtn->way;
+                 objbtn->pct += objbtn->way * 2;
                  scui_widget_draw(widget->myself, NULL, false);
             }
             SCUI_LOG_INFO("<%d, %d>", objbtn->pct, objbtn->way);
@@ -121,13 +119,12 @@ void scui_objbtn_event(scui_event_t *event)
         /* 生成各个部件剪切域 */
         for (scui_coord_t idx = 3; idx - 1 >= 0; idx--) {
             dst_clip[idx - 1] = dst_clip[idx];
-            dst_clip[idx - 1].x += (objbtn->side[idx] & scui_opt_pos_l) ? objbtn->width[idx] : 0;
-            dst_clip[idx - 1].y += (objbtn->side[idx] & scui_opt_pos_u) ? objbtn->width[idx] : 0;
-            dst_clip[idx - 1].w -= (objbtn->side[idx] & scui_opt_pos_l) ? objbtn->width[idx] : 0;
-            dst_clip[idx - 1].h -= (objbtn->side[idx] & scui_opt_pos_u) ? objbtn->width[idx] : 0;
-            dst_clip[idx - 1].w -= (objbtn->side[idx] & scui_opt_pos_r) ? objbtn->width[idx] : 0;
-            dst_clip[idx - 1].h -= (objbtn->side[idx] & scui_opt_pos_d) ? objbtn->width[idx] : 0;
+            dst_clip[idx - 1].x += objbtn->width[idx];
+            dst_clip[idx - 1].y += objbtn->width[idx];
+            dst_clip[idx - 1].w -= objbtn->width[idx] * 2;
+            dst_clip[idx - 1].h -= objbtn->width[idx] * 2;
         }
+        
         scui_color_t src_color[4] = {0};
         scui_coord_t src_radius[4] = {0};
         src_radius[0] = objbtn->radius;
@@ -143,16 +140,24 @@ void scui_objbtn_event(scui_event_t *event)
             src_color[idx].color.ch.r = scui_map(objbtn->pct, 100, objbtn->lim, color_e.ch.r, color_s.ch.r);
             src_color[idx].color.ch.a = scui_map(objbtn->pct, 100, objbtn->lim, color_e.ch.a, color_s.ch.a);
         }
-        scui_draw_graph_dsc_t draw_graph = {
-            .type        = scui_draw_graph_type_crect,
-            .dst_surface = widget->surface,
-        };
+        
         for (scui_coord_t idx = 3; idx >= 0; idx--) {
-            draw_graph.dst_clip         = &dst_clip[idx];
-            draw_graph.src_alpha        = objbtn->alpha[idx];
-            draw_graph.src_color        = src_color[idx];
-            draw_graph.crect.src_width  = objbtn->width[idx];
-            draw_graph.crect.src_radius = src_radius[idx];
+            
+            scui_draw_graph_dsc_t draw_graph = {0};
+            draw_graph.dst_surface = widget->surface;
+            draw_graph.dst_clip  = &dst_clip[idx];
+            draw_graph.src_alpha = objbtn->alpha[idx];
+            draw_graph.src_color = src_color[idx];
+            
+            if (idx != 3) {
+                draw_graph.type = scui_draw_graph_type_crect;
+                draw_graph.crect.src_width  = objbtn->width[idx];
+                draw_graph.crect.src_radius = src_radius[idx];
+            } else {
+                draw_graph.type = scui_draw_graph_type_crect_shadow;
+                draw_graph.crect_shadow.src_width  = objbtn->width[idx];
+                draw_graph.crect_shadow.src_radius = src_radius[idx];
+            }
             scui_draw_graph_ctx(&draw_graph);
         }
         

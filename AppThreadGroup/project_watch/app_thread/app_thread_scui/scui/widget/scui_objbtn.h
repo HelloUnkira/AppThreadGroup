@@ -15,9 +15,7 @@ typedef struct {
     scui_color_t        color[4];   /* 部件源色调(s->e) */
     scui_alpha_t        alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
     scui_coord_t        width[4];   /* 部件宽度(背景无效) */
-    scui_opt_pos_t      side[4];    /* 部件有效(背景无效) */
     scui_coord_t        radius;     /* 部件圆角(背景半径) */
-    scui_coord_t        time;       /* 动画时间 */
     /* 内部域(模式): */
     scui_coord_t        way;
     scui_coord_t        pct;
@@ -33,9 +31,7 @@ typedef struct {
     scui_color_t        color[4];   /* 部件源色调(s->e) */
     scui_alpha_t        alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
     scui_coord_t        width[4];   /* 部件宽度(背景无效) */
-    scui_opt_pos_t      side[4];    /* 部件边界(背景无效) */
     scui_coord_t        radius;     /* 部件圆角(背景半径) */
-    scui_coord_t        time;       /* 动画时间 */
 } scui_objbtn_maker_t;
 #pragma pack(pop)
 
