@@ -232,6 +232,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
     if (unit == NULL) {
         /* 先加载字库 */
         scui_font_unit_t font_unit = {0};
+        font_unit.size = glyph_unit->size;
         font_unit.name = glyph_unit->name;
         scui_font_cache_load(&font_unit);
         scui_font_cache_unload(&font_unit);

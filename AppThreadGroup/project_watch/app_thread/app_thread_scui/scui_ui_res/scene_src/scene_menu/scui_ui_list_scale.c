@@ -312,8 +312,8 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 string_maker.args.color.color_e.full    = 0xFFFFFFFF;
                 string_maker.args.color.filter          = true;
                 // string_maker.draw_cache                 = true;
-                string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
+                string_maker.font_idx                   = SCUI_FONT_IDX_36;
                 scui_widget_create(&string_maker, &string_handle, false);
                 
                 scui_event_cb_node_t event_cb_node = {

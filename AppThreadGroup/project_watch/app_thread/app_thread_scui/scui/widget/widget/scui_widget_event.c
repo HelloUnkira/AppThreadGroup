@@ -479,7 +479,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     /*流程派发 ************************************************************* */
     /*************************************************************************/
-    if (event->type == scui_event_change_font) {
+    if (event->type == scui_event_change_lang) {
         // 控件事件不分三步调度
         if (!scui_event_check_execute(event))
              return;

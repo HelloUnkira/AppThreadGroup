@@ -53,11 +53,12 @@ def encode_scui_multi_lang_h(file, xlsx_sheet, sheet_row, sheet_col, args_list):
     file.write(' *通过scui_multi_lang.py生成\n */\n\n')
     # 编写头部索引
     file.write('#define SCUI_MULTI_LANG_NUM_TYPE    %s\n' % str(sheet_col))
-    file.write('#define SCUI_MULTI_LANG_NUM_STR     %s\n\n' % str(sheet_row))
+    file.write('#define SCUI_MULTI_LANG_NUM_STR     %s\n' % str(sheet_row))
+    file.write('#define SCUI_MULTI_LANG_NUM_OFS     1\n\n')
     # 编写头部索引
     file.write('typedef enum {\n')
     for idx, item in enumerate(args_list[0]):
-        file.write('\t%s = %s * %s,\n' % (item, 'SCUI_MULTI_LANG_NUM_STR', str(idx)))
+        file.write('\t%s = %s * %s + SCUI_MULTI_LANG_NUM_OFS,\n' % (item, 'SCUI_MULTI_LANG_NUM_STR', str(idx)))
     file.write('} scui_multi_lang_type_t;\n\n')
     # 编写头部索引
     file.write('typedef enum {\n')
@@ -67,14 +68,6 @@ def encode_scui_multi_lang_h(file, xlsx_sheet, sheet_row, sheet_col, args_list):
         file.write('\tSCUI_MULTI_LANG_0X%04x,\t/* %s */\n' % (i, c_str))
     file.write('} scui_multi_lang_str_t;\n\n')
     file.write('extern const char * scui_multi_lang_table[%d * %d];\n\n' % (sheet_row, sheet_col))
-    # 编写固化访问函数
-    file.write('/*@brief 转换字符串句柄到多国语字符串句柄\n')
-    file.write(' *       字符串句柄默认是第一个语言的字符串句柄\n')
-    file.write(' *       其他语言都需要添加偏移做转换\n')
-    file.write(' *@param type   语言编号(scui_multi_lang_type_t)\n')
-    file.write(' *@param handle 字符串编号(scui_multi_lang_str_t)\n */\n')
-    file.write('static inline scui_handle_t scui_multi_lang_switch(scui_handle_t type, scui_handle_t handle)\n')
-    file.write('{\n\treturn type + handle;\n}\n')
     file.write('#endif\n')
 
 

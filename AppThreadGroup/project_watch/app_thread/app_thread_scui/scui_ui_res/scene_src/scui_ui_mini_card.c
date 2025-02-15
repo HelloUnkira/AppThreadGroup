@@ -265,9 +265,12 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             if (type == scui_ui_scene_mini_card_type_hr) {
                 unit_text = SCUI_MULTI_LANG_0X0021;
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                const char *lang_str = scui_multi_lang_str(unit_text, lang_type);
+                
                 snprintf(data_unit, sizeof(data_unit), "%d %s",
-                    scui_presenter.get_hr_cur(),
-                    scui_str_by_multi_lang(0, unit_text));
+                    scui_presenter.get_hr_cur(), lang_str);
                 scui_string_update_str(scui_ui_res_local->data_hr, data_unit);
                 passby_last = scui_presenter.get_hr_passby();
             }
@@ -284,9 +287,12 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 if (scui_presenter.get_stress_cur() < 50) unit_text = SCUI_MULTI_LANG_0X004c;
                 if (scui_presenter.get_stress_cur() < 30) unit_text = SCUI_MULTI_LANG_0X004b;
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                const char *lang_str = scui_multi_lang_str(unit_text, lang_type);
+                
                 snprintf(data_unit, sizeof(data_unit), "%d %s",
-                    scui_presenter.get_stress_cur(),
-                    scui_str_by_multi_lang(0, unit_text));
+                    scui_presenter.get_stress_cur(), lang_str);
                 scui_string_update_str(scui_ui_res_local->data_stress, data_unit);
                 passby_last = scui_presenter.get_stress_passby();
             }
@@ -304,7 +310,11 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 snprintf(data_unit, sizeof(data_unit), "%d ", passby_last);
             }
             
-            snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit), "%s", scui_str_by_multi_lang(0, unit_text));
+            scui_multi_lang_type_t lang_type = 0;
+            scui_multi_lang_get(&lang_type);
+            const char *lang_str = scui_multi_lang_str(unit_text, lang_type);
+            
+            snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit), "%s", lang_str);
             scui_ui_str_remove_discard_char(data_unit, '#');
             
             if (type == scui_ui_scene_mini_card_type_hr)
@@ -370,18 +380,21 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
                 data_unit[0] = '\0';
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                
                 if ((scui_presenter.alarm_near_date() & 0x1000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
-                        "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00c5));
+                        "%s", scui_multi_lang_str(SCUI_MULTI_LANG_0X00c5, lang_type));
                 if ((scui_presenter.alarm_near_date() & 0x2000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
-                        "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f8));
+                        "%s", scui_multi_lang_str(SCUI_MULTI_LANG_0X00f8, lang_type));
                 if ((scui_presenter.alarm_near_date() & 0x8000) != 0)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
-                        "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f2));
+                        "%s", scui_multi_lang_str(SCUI_MULTI_LANG_0X00f2, lang_type));
                 if ((scui_presenter.alarm_near_date() & 0x7f) == 0x7f)
                     snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
-                        "%s", scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X00f1));
+                        "%s", scui_multi_lang_str(SCUI_MULTI_LANG_0X00f1, lang_type));
                 
                 if (strlen(data_unit) == 0)
                 if ((scui_presenter.alarm_near_date() & 0x7f) != 0) {
@@ -396,11 +409,14 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     };
                     uint8_t week = scui_presenter.alarm_near_date();
                     
+                    scui_multi_lang_type_t lang_type = 0;
+                    scui_multi_lang_get(&lang_type);
+                    
                     for (uint8_t idx = 0; idx < 7; idx++) {
                         if ((week & (1 << idx)) == 0)
                             continue;
                         snprintf(data_unit + strlen(data_unit), sizeof(data_unit) - strlen(data_unit),
-                            "%s ", scui_str_by_multi_lang(0, text_week[idx]));
+                            "%s ", scui_multi_lang_str(text_week[idx], lang_type));
                     }
                 }
                 
@@ -427,12 +443,13 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 
             } else {
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_presenter.sleep_hour(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_presenter.sleep_minute(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
+                    scui_presenter.sleep_hour(),   scui_multi_lang_str(SCUI_MULTI_LANG_0X013b, lang_type),
+                    scui_presenter.sleep_minute(), scui_multi_lang_str(SCUI_MULTI_LANG_0X013c, lang_type));
                 scui_string_update_str(scui_ui_res_local->data_sleep, data_unit);
                 
                 uint32_t color4[4] = {
@@ -507,12 +524,13 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_handle_t text = scui_presenter.sport_record_type();
                 scui_string_update_text(scui_ui_res_local->data_sport_record, text);
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_presenter.sport_record_hour(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_presenter.sport_record_minute(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
+                    scui_presenter.sport_record_hour(),   scui_multi_lang_str(SCUI_MULTI_LANG_0X013b, lang_type),
+                    scui_presenter.sport_record_minute(), scui_multi_lang_str(SCUI_MULTI_LANG_0X013c, lang_type));
                 scui_string_update_str(scui_ui_res_local->data_sport_record_time, data_unit);
                 
                 scui_handle_t image = scui_presenter.sport_record_icon();
@@ -532,12 +550,13 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 scui_handle_t text = scui_presenter.women_health_type();
                 scui_string_update_text(scui_ui_res_local->data_women_health, text);
                 
+                scui_multi_lang_type_t lang_type = 0;
+                scui_multi_lang_get(&lang_type);
+                
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%02d%s%02d%s",
-                    scui_presenter.women_health_hour(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013b),
-                    scui_presenter.women_health_minute(),
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
+                    scui_presenter.women_health_hour(),   scui_multi_lang_str(SCUI_MULTI_LANG_0X013b, lang_type),
+                    scui_presenter.women_health_minute(), scui_multi_lang_str(SCUI_MULTI_LANG_0X013c, lang_type));
                 scui_string_update_str(scui_ui_res_local->data_women_health_time, data_unit);
                 
                 scui_handle_t image = scui_presenter.women_health_icon();
@@ -666,6 +685,10 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 [3] = {.x = 310, .y = 69, },
             };
             
+            scui_multi_lang_type_t lang_type = 0;
+            scui_multi_lang_get(&lang_type);
+            const char *lang_str = scui_multi_lang_str(SCUI_MULTI_LANG_0X013c, lang_type);
+            
             scui_handle_t image = scui_image_prj_image_src_19_widget_timer_01_bgbmp;
             for (uint8_t idx = 0; idx < scui_arr_len(image_clip4); idx++) {
                 scui_area_t image_clip = clip;
@@ -673,8 +696,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                 image_clip.y += image_clip4[idx].y;
                 scui_widget_draw_image(event->object, &image_clip, image, NULL, SCUI_COLOR_UNUSED);
                 
-                snprintf(data_unit, sizeof(data_unit), "%d %s", num[idx],
-                    scui_str_by_multi_lang(0, SCUI_MULTI_LANG_0X013c));
+                snprintf(data_unit, sizeof(data_unit), "%d %s", num[idx], lang_str);
                 scui_string_update_str(scui_ui_res_local->data_countdown[idx], data_unit);
             }
             
@@ -1045,7 +1067,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                 string_maker.args.align_ver     = 2;
                 string_maker.args.color.filter  = true;
                 // string_maker.draw_cache         = true;
-                string_maker.font_idx           = 1;
+                string_maker.font_idx           = SCUI_FONT_IDX_32;
                 
                 scui_event_cb_node_t event_cb_node = {
                     .event_cb = scui_ui_scene_plug_coupler_widget_s_event_proc,

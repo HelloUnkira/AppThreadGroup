@@ -230,7 +230,7 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
     if (unit == NULL) {
         /* 先加载字库 */
         char *name = scui_handle_source_check(font_unit->name);
-        scui_font_load(name, &font_unit->font);
+        scui_font_load(name, font_unit->size, &font_unit->font);
         SCUI_ASSERT(scui_handle_source(font_unit->font) != NULL);
         /* 如果缓存空间不足时,老化资源回收 */
         while (cache->usage + scui_font_size(font_unit->font) > cache->total) {

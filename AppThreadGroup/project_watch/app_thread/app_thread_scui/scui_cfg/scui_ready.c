@@ -87,7 +87,8 @@ void scui_ready(void)
     scui_handle_table_register(&table);
     
     /* 字库配置 */
-    scui_font_name_set(SCUI_FONT_TYPE_ZH);
+    scui_multi_lang_type_t lang_type = scui_multi_lang_type_zh;
+    scui_multi_lang_set(&lang_type);
     
     /* 窗口交互风格 */
     scui_window_switch_type_t *cfg_type = NULL;

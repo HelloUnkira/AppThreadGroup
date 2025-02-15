@@ -176,8 +176,8 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
-            string_maker.font_idx                   = 1;
             string_maker.text                       = SCUI_MULTI_LANG_0X0017;
+            string_maker.font_idx                   = SCUI_FONT_IDX_36;
             scui_widget_create(&string_maker, &string_handle, false);
             
         }
@@ -202,6 +202,9 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         }
         break;
     }
+    case scui_event_change_lang:
+        scui_widget_draw(event->object, NULL, false);
+        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -237,7 +240,10 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             args.color.filter = true;
             args.align_hor = 2;
             args.align_ver = 2;
-            args.name = scui_font_name_get(0);
+            
+            scui_multi_lang_get(&args.lang);
+            args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+            args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
             
             scui_area_t clip_str = clip;
             clip_str.w = 44; clip_str.x += 36 + idx * (44 + 12);
@@ -373,6 +379,9 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         }
         break;
     }
+    case scui_event_change_lang:
+        scui_widget_draw(event->object, NULL, false);
+        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -386,7 +395,10 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
         clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
@@ -407,7 +419,10 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
@@ -530,6 +545,9 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         }
         break;
     }
+    case scui_event_change_lang:
+        scui_widget_draw(event->object, NULL, false);
+        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -543,7 +561,10 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
         clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
@@ -564,7 +585,10 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
@@ -687,6 +711,9 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         }
         break;
     }
+    case scui_event_change_lang:
+        scui_widget_draw(event->object, NULL, false);
+        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
@@ -700,7 +727,10 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
         clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
@@ -721,7 +751,10 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.color.filter = true;
         args.align_hor = 0;
         args.align_ver = 2;
-        args.name = scui_font_name_get(0);
+        
+        scui_multi_lang_get(&args.lang);
+        args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
+        args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;

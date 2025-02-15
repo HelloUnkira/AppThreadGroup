@@ -38,6 +38,7 @@ void scui_handle_table_register(scui_handle_table_t *table);
 /*@brief 通过句柄判断属于哪一个偏移
  *       通过这种方式可以确认句柄所在类型
  *@param handle 句柄
+ *@retval 句柄偏移量
  */
 scui_handle_t scui_handle_check(scui_handle_t handle);
 

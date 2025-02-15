@@ -196,7 +196,7 @@ static void scui_event_respond(scui_event_t *event)
         
         scui_tick_calc(0x00, NULL, NULL, NULL);
         return;
-    case scui_event_change_font: {
+    case scui_event_change_lang: {
         if (event->object == SCUI_HANDLE_SYSTEM) {
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
@@ -254,7 +254,7 @@ static void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_anima_elapse;
         event_filter = event_filter || event->type == scui_event_layout;
         event_filter = event_filter || event->type == scui_event_adjust_size;
-        event_filter = event_filter || event->type == scui_event_change_font;
+        event_filter = event_filter || event->type == scui_event_change_lang;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
         event_filter = event_filter || event->type == scui_event_widget_scroll_s;
         event_filter = event_filter || event->type == scui_event_widget_scroll_e;

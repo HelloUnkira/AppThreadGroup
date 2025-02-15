@@ -293,7 +293,7 @@ typedef struct _lv_font_t {
     scui_font_src_t font_src;
     uint32_t size;
     char name[128];
-
+    
 } lv_font_t;
 
 #if 1   // iter
@@ -1291,17 +1291,29 @@ static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 
 /*@brief 字库加载
  *@param name   字库名称
+ *@param size   字库字号
  *@param handle 字库句柄
  */
-void scui_font_load(char *name, scui_handle_t *handle)
+void scui_font_load(char *name, uint32_t size, scui_handle_t *handle)
 {
+    scui_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_font_t));
+    memset(font, 0, sizeof(scui_font_t));
     *handle = scui_handle_find();
-    lv_font_t *font = lv_font_load(name);
     scui_handle_linker(*handle, font);
+    font->size = size;
     
-    /* 只去支持1,2,4,8的bpp */
-    uint8_t bpp = font->bin_head.bits_per_pixel;
-    SCUI_ASSERT(scui_pow2_check(bpp));
+    if (font->size == 0) {
+        font->bmp_fixed = lv_font_load(name);
+        
+        /* 只去支持1,2,4,8的bpp */
+        lv_font_t *lv_font = font->bmp_fixed;
+        uint8_t bpp = lv_font->bin_head.bits_per_pixel;
+        SCUI_ASSERT(scui_pow2_check(bpp) && bpp <= 8);
+    } else {
+        
+        
+        
+    }
 }
 
 /*@brief 字库卸载
@@ -1309,9 +1321,18 @@ void scui_font_load(char *name, scui_handle_t *handle)
  */
 void scui_font_unload(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_source_check(handle);
-    lv_font_free(font);
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->size == 0) {
+        lv_font_free(font->bmp_fixed);
+    } else {
+        
+        
+        
+    }
+    
     scui_handle_clear(handle);
+    SCUI_MEM_FREE(font);
 }
 
 /*@brief 字库大小
@@ -1320,8 +1341,15 @@ void scui_font_unload(scui_handle_t handle)
  */
 uint32_t scui_font_size(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_source_check(handle);
-    return font->size;
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        return lv_font->size;
+    } else {
+        
+        return font->size;
+    }
 }
 
 /*@brief 字库参数信息
@@ -1330,8 +1358,16 @@ uint32_t scui_font_size(scui_handle_t handle)
  */
 scui_coord_t scui_font_base_line(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_source_check(handle);
-    return font->base_line;
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        return lv_font->base_line;
+    } else {
+        
+        
+        
+    }
 }
 
 /*@brief 字库参数信息
@@ -1340,8 +1376,16 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
  */
 scui_coord_t scui_font_line_height(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_source_check(handle);
-    return font->line_height;
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        return lv_font->line_height;
+    } else {
+        
+        
+        
+    }
 }
 
 /*@brief 字库参数信息
@@ -1350,8 +1394,16 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
  */
 scui_coord_t scui_font_underline(scui_handle_t handle)
 {
-    lv_font_t *font = scui_handle_source_check(handle);
-    return font->underline_position;
+    scui_font_t *font = scui_handle_source_check(handle);
+    
+    if (font->size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        return lv_font->underline_position;
+    } else {
+        
+        
+        
+    }
 }
 
 /*@brief 字型加载
@@ -1361,11 +1413,7 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
 {
     SCUI_ASSERT(glyph != NULL);
     SCUI_ASSERT(glyph->bitmap == NULL);
-    lv_font_t *font = scui_handle_source_check(glyph->handle);
-    
-    /* 只去支持1,2,4,8的bpp */
-    uint8_t bpp = font->bin_head.bits_per_pixel;
-    SCUI_ASSERT(scui_pow2_check(bpp));
+    scui_font_t *font = scui_handle_source_check(glyph->handle);
     
     if (glyph->unicode_letter  < 0x20   ||
         glyph->unicode_letter == 0x20   || glyph->unicode_letter == 0xA0   ||
@@ -1381,9 +1429,14 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
         return;
     }
     
-    scui_font_src_open(&font->font_src, font->name);
-    lvgl_font_glpyh_load(font, glyph);
-    scui_font_src_close(&font->font_src);
+    if (font->size == 0) {
+        lv_font_t *lv_font = font->bmp_fixed;
+        scui_font_src_open(&lv_font->font_src, lv_font->name);
+        lvgl_font_glpyh_load(lv_font, glyph);
+        scui_font_src_close(&lv_font->font_src);
+    } else {
+        
+    }
     
     if (glyph->bitmap == NULL) {
         

@@ -34,7 +34,9 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     //
     /* 从字库中提取一些信息 */
-    scui_font_unit_t font_unit = {.name = src_args->name,};
+    scui_font_unit_t font_unit = {0};
+    font_unit.name = src_args->name;
+    font_unit.size = src_args->size;
     scui_font_cache_load(&font_unit);
     scui_font_cache_unload(&font_unit);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);

@@ -18,16 +18,10 @@ void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     
-    if (text != SCUI_HANDLE_INVALID) {
-        scui_multi_lang_type_t type = scui_font_type_switch(args->name);
-        scui_handle_t text_ml = scui_multi_lang_switch(type, text);
-        args->utf8 = scui_handle_source(text_ml);
-    }
-    args->clip = scui_widget_clip(handle);
+    if (text != SCUI_HANDLE_INVALID)
+        args->utf8 = scui_multi_lang_str(text, args->lang);
     
-    if (target != NULL)
-        args->clip = *target;
-    
+    args->clip   = target != NULL ? *target : scui_widget_clip(handle);
     args->update = true;
     scui_string_args_process(args);
     scui_widget_draw_string(handle, target, args);

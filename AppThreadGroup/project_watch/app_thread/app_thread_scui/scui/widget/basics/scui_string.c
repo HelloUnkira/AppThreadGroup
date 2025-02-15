@@ -30,6 +30,7 @@ void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool la
     SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
     
     string->font_idx    = maker->font_idx;
+    string->lang_type   = maker->lang_type;
     string->args        = maker->args;
     string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
     string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
@@ -47,17 +48,18 @@ void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool la
     if (string->args.gap_none == 0)
         string->args.gap_none  = SCUI_WIDGET_STRING_GAP_NONE;
     
-    if (string->args.name == SCUI_HANDLE_INVALID)
-        string->name = scui_font_name_get(string->font_idx);
-    else
-        string->name = string->args.name;
+    string->args.lang = string->lang_type;
+    if (string->args.lang == SCUI_HANDLE_INVALID)
+        scui_multi_lang_get(&string->args.lang);
+    
+    string->args.size = scui_font_size_match(string->font_idx, string->args.size);
+    string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
     
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, maker->text);
     
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
-    string->args.name   = string->name;
     string->args.utf8   = string->str_utf8;
     string->args.clip   = string->widget.clip;
     scui_string_args_process(&string->args);
@@ -161,9 +163,7 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     }
     
     if (string->text != SCUI_HANDLE_INVALID) {
-        string->name = scui_font_name_get(string->font_idx);
-        scui_multi_lang_type_t type = scui_font_type_switch(string->name);
-        uint8_t *str_utf8  = scui_handle_source(scui_multi_lang_switch(type, string->text));
+        uint8_t *str_utf8  = scui_multi_lang_str(string->text, string->args.lang);
         uint32_t str_bytes = scui_utf8_str_bytes(str_utf8);
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
@@ -171,7 +171,9 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         
         #if 1 // 这个要不要???
         /* 从字库中提取一些信息 */
-        scui_font_unit_t font_unit = {.name = string->name,};
+        scui_font_unit_t font_unit = {0};
+        font_unit.name = string->args.name;
+        font_unit.size = string->args.size;
         scui_font_cache_load(&font_unit);
         scui_font_cache_unload(&font_unit);
         scui_coord_t base_line   = scui_font_base_line(font_unit.font);
@@ -462,7 +464,6 @@ void scui_string_event(scui_event_t *event)
             }
         }
         
-        string->args.name = string->name;
         string->args.utf8 = string->str_utf8;
         string->args.clip = string->widget.clip;
         scui_string_args_process(&string->args);
@@ -596,7 +597,7 @@ void scui_string_event(scui_event_t *event)
         scui_widget_draw(widget->myself, NULL, false);
         break;
     }
-    case scui_event_change_font: {
+    case scui_event_change_lang: {
         if (!scui_event_check_execute(event))
              break;
         
@@ -605,7 +606,9 @@ void scui_string_event(scui_event_t *event)
             string->unit_way  = 1;
             scui_handle_t text = string->text;
             scui_string_update_text(widget->myself, SCUI_HANDLE_INVALID);
-            string->name = scui_font_name_get(string->font_idx);
+            scui_multi_lang_get(&string->args.lang);
+            string->args.size = scui_font_size_match(string->font_idx, string->args.size);
+            string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
             scui_string_update_text(widget->myself, text);
             scui_widget_draw(widget->myself, NULL, true);
         }

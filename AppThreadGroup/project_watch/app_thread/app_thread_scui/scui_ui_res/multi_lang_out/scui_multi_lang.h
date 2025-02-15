@@ -7,10 +7,11 @@
 
 #define SCUI_MULTI_LANG_NUM_TYPE    2
 #define SCUI_MULTI_LANG_NUM_STR     756
+#define SCUI_MULTI_LANG_NUM_OFS     1
 
 typedef enum {
-	scui_multi_lang_type_zh = SCUI_MULTI_LANG_NUM_STR * 0,
-	scui_multi_lang_type_en = SCUI_MULTI_LANG_NUM_STR * 1,
+	scui_multi_lang_type_zh = SCUI_MULTI_LANG_NUM_STR * 0 + SCUI_MULTI_LANG_NUM_OFS,
+	scui_multi_lang_type_en = SCUI_MULTI_LANG_NUM_STR * 1 + SCUI_MULTI_LANG_NUM_OFS,
 } scui_multi_lang_type_t;
 
 typedef enum {
@@ -775,14 +776,4 @@ typedef enum {
 
 extern const char * scui_multi_lang_table[756 * 2];
 
-/*@brief 转换字符串句柄到多国语字符串句柄
- *       字符串句柄默认是第一个语言的字符串句柄
- *       其他语言都需要添加偏移做转换
- *@param type   语言编号(scui_multi_lang_type_t)
- *@param handle 字符串编号(scui_multi_lang_str_t)
- */
-static inline scui_handle_t scui_multi_lang_switch(scui_handle_t type, scui_handle_t handle)
-{
-	return type + handle;
-}
 #endif

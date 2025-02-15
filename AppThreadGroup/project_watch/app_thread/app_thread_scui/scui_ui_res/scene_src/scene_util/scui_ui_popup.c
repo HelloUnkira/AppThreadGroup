@@ -126,12 +126,12 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             string_maker.widget.clip.y              = 30;
             string_maker.widget.clip.w              = 350 - 20 * 2;
             string_maker.widget.clip.h              = 40;
-            string_maker.font_idx                   = 0;
             string_maker.args.align_hor             = 2;
             string_maker.args.align_ver             = 2;
             string_maker.args.color.color_s.full    = 0xFFFFFFFF;
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.unit_s                     = true;     //单次滚动,结束标记
+            string_maker.font_idx                   = SCUI_FONT_IDX_32;
             scui_widget_create(&string_maker, &popup_string, false);
             
             scui_string_scroll_abort(popup_string, true);

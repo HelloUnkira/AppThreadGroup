@@ -45,8 +45,8 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
             return scui_stringify(scui_event_layout);
         case scui_event_adjust_size:
             return scui_stringify(scui_event_adjust_size);
-        case scui_event_change_font:
-            return scui_stringify(scui_event_change_font);
+        case scui_event_change_lang:
+            return scui_stringify(scui_event_change_lang);
         
         case scui_event_widget_scroll_s:
             return scui_stringify(scui_event_widget_scroll_s);

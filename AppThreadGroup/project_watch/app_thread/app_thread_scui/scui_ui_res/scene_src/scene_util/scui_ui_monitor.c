@@ -161,17 +161,17 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
                 string_maker.widget.type                = scui_widget_type_string;
                 string_maker.widget.style.trans         = true;
                 string_maker.widget.parent              = SCUI_UI_SCENE_MONITOR;
-                string_maker.font_idx                   = 0;
                 string_maker.args.recolor               = true;
                 string_maker.args.align_hor             = 0;
                 string_maker.args.align_ver             = 2;
                 string_maker.args.color.color_s.full    = 0xFF808080;
                 string_maker.args.color.color_e.full    = 0xFF808080;
                 string_maker.args.color.filter          = true;
-                string_maker.args.name                  = SCUI_FONT_TYPE_16_ASCII;
                 string_maker.args.line_width            = 1;
                 string_maker.args.line_under            = 1;
                 string_maker.args.line_delete           = 1;
+                string_maker.font_idx                   = SCUI_FONT_IDX_A16;
+                string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_A;
                 
                 string_maker.widget.clip.x              = 10;
                 string_maker.widget.clip.y              = 30;

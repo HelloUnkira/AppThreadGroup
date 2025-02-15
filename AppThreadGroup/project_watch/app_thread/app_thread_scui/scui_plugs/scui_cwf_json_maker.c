@@ -541,7 +541,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         string_maker.args.align_hor             = align == 0 ? 0 : align == 1 ? 2 : 1;
         string_maker.args.align_ver             = 2;
         string_maker.args.color                 = color;
-        string_maker.font_idx                   = size <= 32 ? 0 : 1;       // 到底要不要使用设备语言???
+        string_maker.font_idx                   = SCUI_FONT_IDX_32;
         scui_widget_create(&string_maker, &parser->list_child[idx], false);
         
         // 为type进行构建

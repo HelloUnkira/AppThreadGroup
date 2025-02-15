@@ -188,8 +188,8 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 string_maker.args.align_hor             = 0;
                 string_maker.args.align_ver             = 2;
                 // string_maker.draw_cache                 = 1;
-                string_maker.font_idx                   = 1;
                 string_maker.text                       = scui_ui_scene_list_text[idx];
+                string_maker.font_idx                   = SCUI_FONT_IDX_36;
                 scui_widget_create(&string_maker, &string_handle, false);
             }
             

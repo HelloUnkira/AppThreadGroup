@@ -131,7 +131,9 @@ static void scui_string_args_typography(scui_string_args_t *args)
     scui_area_t  src_clip_v = args->clip;
     scui_point_t src_offset = {0};
     /* 从字库中提取一些信息 */
-    scui_font_unit_t font_unit = {.name = args->name,};
+    scui_font_unit_t font_unit = {0};
+    font_unit.name = args->name;
+    font_unit.size = args->size;
     scui_font_cache_load(&font_unit);
     scui_font_cache_unload(&font_unit);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
