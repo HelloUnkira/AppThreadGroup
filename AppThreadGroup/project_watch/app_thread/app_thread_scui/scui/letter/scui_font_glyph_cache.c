@@ -58,8 +58,10 @@ static uint8_t scui_font_glyph_cache_fc_t(scui_table_dln_t *node1, scui_table_dl
     scui_handle_t name2 = unit2->name;
     uint32_t letter1 = unit1->glyph.unicode_letter;
     uint32_t letter2 = unit2->glyph.unicode_letter;
+    uint16_t size1 = unit1->size;
+    uint16_t size2 = unit2->size;
     
-    return name1 == name2 && letter1 == letter2 ? true : false;
+    return name1 == name2 && letter1 == letter2 && size1 == size2 ? true : false;
 }
 
 /*@brief 哈希访问函数
@@ -69,6 +71,7 @@ static void scui_font_glyph_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
     scui_font_glyph_unit_t *unit = scui_own_ofs(scui_font_glyph_unit_t, ht_node, node);
     
     SCUI_LOG_INFO("- name:%s",   scui_handle_source(unit->name));
+    SCUI_LOG_INFO("- size:%u",   unit->size);
     SCUI_LOG_INFO("- letter:%x", unit->glyph.unicode_letter);
     SCUI_LOG_INFO("- count:%x",  unit->count);
     SCUI_LOG_INFO("- lock:%x",   unit->lock);
@@ -202,6 +205,8 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
     if (unit != NULL) {
         /* 上锁 */
         unit->lock++;
+        if (unit->lock > 0x7A)
+            SCUI_LOG_WARN("lock num will be overflow");
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
@@ -264,6 +269,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         }
         /* 为数据区申请新资源 */
         unit = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_font_glyph_unit_t));
+        unit->size    = glyph_unit->size;
         unit->name    = glyph_unit->name;
         unit->font    = glyph_unit->font;
         unit->glyph   = glyph_unit->glyph;

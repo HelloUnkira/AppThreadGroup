@@ -269,6 +269,8 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     if (unit != NULL) {
         /* 上锁 */
         unit->lock++;
+        if (unit->lock > 0x7A)
+            SCUI_LOG_WARN("lock num will be overflow");
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;

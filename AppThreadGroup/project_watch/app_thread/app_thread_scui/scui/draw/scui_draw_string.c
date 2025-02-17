@@ -107,6 +107,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
                 
                 scui_font_glyph_unit_t glyph_unit = {
+                    .size = src_args->size,
                     .name = src_args->name,
                     .glyph.space_width = src_args->gap_none,
                     .glyph.unicode_letter = src_args->unicode[idx],
@@ -246,6 +247,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
             
             scui_font_glyph_unit_t glyph_unit = {
+                .size = src_args->size,
                 .name = src_args->name,
                 .glyph.space_width = src_args->gap_none,
                 .glyph.unicode_letter = src_args->unicode[idx],

@@ -56,8 +56,10 @@ static bool scui_font_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *node
     
     scui_handle_t name1 = unit1->name;
     scui_handle_t name2 = unit2->name;
+    uint16_t size1 = unit1->size;
+    uint16_t size2 = unit2->size;
     
-    return name1 == name2 ? true : false;
+    return name1 == name2 && size1 == size2 ? true : false;
 }
 
 /*@brief 哈希访问函数
@@ -67,6 +69,7 @@ static void scui_font_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
     scui_font_unit_t *unit = scui_own_ofs(scui_font_unit_t, ht_node, node);
     
     SCUI_LOG_INFO("- name:%s",  scui_handle_source(unit->name));
+    SCUI_LOG_INFO("- size:%u",  unit->size);
     SCUI_LOG_INFO("- font:%x",  unit->font);
     SCUI_LOG_INFO("- count:%x", unit->count);
     SCUI_LOG_INFO("- lock:%x",  unit->lock);
@@ -200,6 +203,8 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
     if (unit != NULL) {
         /* 上锁 */
         unit->lock++;
+        if (unit->lock > 0x7A)
+            SCUI_LOG_WARN("lock num will be overflow");
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
@@ -257,6 +262,7 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
         }
         /* 为数据区申请新资源 */
         unit = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_font_unit_t));
+        unit->size    = font_unit->size;
         unit->name    = font_unit->name;
         unit->font    = font_unit->font;
         unit->count   = 1;

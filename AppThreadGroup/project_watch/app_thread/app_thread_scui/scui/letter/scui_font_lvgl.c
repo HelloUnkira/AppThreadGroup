@@ -7,6 +7,10 @@
 
 #include "scui.h"
 
+// 整个字库都是移植的lvgl字库
+// 因为这部分没有覆写的意义和必要
+
+#if 1
 #if defined(LVGL_VERSION_MAJOR) || defined(LVGL_VERSION_MINOR) || defined(LVGL_VERSION_PATCH)
 #error "do not import any lvgl header files"
 #endif
@@ -55,8 +59,6 @@ typedef struct cmap_table_bin {
 #pragma pack(pop)
 
 #endif
-
-#if 1
 
 #define LV_FONT_FMT_TXT_LARGE       0
 #define LV_USE_USER_DATA            0
@@ -1123,7 +1125,7 @@ static void lv_font_util_shift_left2(uint8_t *operand, uint32_t length, uint64_t
 // lv_font_get_glyph_dsc_fmt_txt
 // 原型改造,修订到可以直接动态获取字形和字体信息
 
-static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
+static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 {
     uint32_t unicode_letter      = glyph->unicode_letter;
     uint32_t unicode_letter_next = glyph->unicode_letter_next;
@@ -1289,6 +1291,138 @@ static void lvgl_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 
 #endif
 
+#if 1
+// 适配层(这部分是从lv_tiny_ttf中适配过来)
+
+// ttf tiny 库的宏配置选项
+#define STB_RECT_PACK_IMPLEMENTATION
+#define STBRP_STATIC
+#define STBTT_STATIC
+#define STB_TRUETYPE_IMPLEMENTATION
+#define STBTT_HEAP_FACTOR_SIZE_32       50
+#define STBTT_HEAP_FACTOR_SIZE_128      20
+#define STBTT_HEAP_FACTOR_SIZE_DEFAULT  10
+
+// ttf tiny 库的内存管理钩子
+#define STBTT_malloc(x, u)  ((void)(u), SCUI_MEM_ALLOC(scui_mem_type_font, x))
+#define STBTT_free(x, u)    ((void)(u), SCUI_MEM_FREE(x))
+
+// ttf tiny 库的断言钩子
+#define STBTT_assert(x)     SCUI_ASSERT(x)
+
+// ttf tiny 库的文件读写钩子
+#define STBTT_STREAM_TYPE           scui_font_src_t *
+#define STBTT_STREAM_SEEK(s, x)     scui_font_src_seek(s, x);
+#define STBTT_STREAM_READ(s, x, y)  scui_font_src_read(s, x, y);
+
+// ttf tiny 库
+#include "stb_rect_pack.h"
+#include "stb_truetype_htcw.h"
+
+typedef struct {
+    // ttf tiny
+    stbtt_fontinfo info;
+    float scale;
+    int ascent;
+    int descent;
+    
+    // lvgl font field
+    scui_coord_t line_height;
+    scui_coord_t base_line;
+    
+    int8_t underline_position;
+    
+    /* font fs扩展字段 */
+    scui_font_src_t font_src;
+    uint32_t size;
+    char name[128];
+    
+} lv_font_ttf_tiny_t;
+
+static void * lv_font_ttf_tiny_load(char *name, uint32_t size)
+{
+    lv_font_ttf_tiny_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_ttf_tiny_t));
+    memset(font, 0, sizeof(lv_font_ttf_tiny_t));
+    font->size += sizeof(lv_font_ttf_tiny_t);
+    
+    strcpy(font->name, name);
+    scui_font_src_open(&font->font_src, font->name);
+    
+    // 加载ttf_tiny实例
+    int index0 = stbtt_GetFontOffsetForIndex(&font->font_src, 0);
+    int retval = stbtt_InitFont(&font->info, &font->font_src, index0);
+    SCUI_ASSERT(retval != 0);
+    
+    SCUI_ASSERT(size > 0);
+    // 设置ttf_tiny字号, 获得缩放比例值
+    font->scale = stbtt_ScaleForMappingEmToPixels(&font->info, size);
+    
+    int line_gap = 0;
+    // 读取字库的上沿和下沿以及行间距
+    stbtt_GetFontVMetrics(&font->info, &font->ascent, &font->descent, &line_gap);
+    
+    // 计算行高和基线
+    font->line_height = (int32_t)(font->scale * (font->ascent - font->descent + line_gap));
+    font->base_line = (int32_t)(font->scale * (line_gap - font->descent));
+    
+    // 下划线有什么办法计算出么
+    font->underline_position = (int8_t)(font->scale * (line_gap));
+    
+    return font;
+}
+
+static void lv_font_ttf_tiny_unload(lv_font_ttf_tiny_t *font)
+{
+    scui_font_src_close(&font->font_src);
+    SCUI_MEM_FREE(font);
+}
+
+static void lv_font_ttf_tiny_glpyh_load(lv_font_ttf_tiny_t *font, scui_font_glyph_t *glyph)
+{
+    uint32_t unicode_letter      = glyph->unicode_letter;
+    uint32_t unicode_letter_next = glyph->unicode_letter_next;
+    
+    int g1  = stbtt_FindGlyphIndex(&font->info, (int)unicode_letter);
+    if (g1 == 0)
+        return;
+    
+    int x1, y1, x2, y2;
+    stbtt_GetGlyphBitmapBox(&font->info, g1, font->scale, font->scale, &x1, &y1, &x2, &y2);
+    
+    int g2 = 0;
+    if (unicode_letter_next != 0)
+        g2 = stbtt_FindGlyphIndex(&font->info, (int)unicode_letter_next);
+    
+    int advw, lsb;
+    stbtt_GetGlyphHMetrics(&font->info, g1, &advw, &lsb);
+    int k = stbtt_GetGlyphKernAdvance(&font->info, g1, g2);
+    
+    glyph->adv_w = (uint16_t)((((float)advw + (float)k) * font->scale) + 0.5f);
+    glyph->box_w = (x2 - x1 + 1);
+    glyph->box_h = (y2 - y1 + 1);
+    glyph->ofs_x = x1;
+    glyph->ofs_y = -y2;
+    glyph->bpp   = 8;   // 默认都加载的是1字节字符
+    
+    int w, h;
+    w = x2 - x1 + 1;
+    h = y2 - y1 + 1;
+    uint32_t bitmap_size = w * h + 4;
+    
+    //空格字符是合法字符
+    if (glyph->box_w != 0 && glyph->box_h != 0) {
+        
+        /* 生成内存并加载bitmap */
+        glyph->bitmap = SCUI_MEM_ALLOC(scui_mem_type_font, bitmap_size);
+        glyph->bitmap_size = bitmap_size;
+        
+        uint32_t stride = w;
+        stbtt_MakeGlyphBitmap(&font->info, glyph->bitmap, w, h, stride, font->scale, font->scale, g1);
+    }
+}
+
+#endif
+
 /*@brief 字库加载
  *@param name   字库名称
  *@param size   字库字号
@@ -1310,9 +1444,7 @@ void scui_font_load(char *name, uint32_t size, scui_handle_t *handle)
         uint8_t bpp = lv_font->bin_head.bits_per_pixel;
         SCUI_ASSERT(scui_pow2_check(bpp) && bpp <= 8);
     } else {
-        
-        
-        
+        font->ttf_tiny = lv_font_ttf_tiny_load(name, size);
     }
 }
 
@@ -1326,9 +1458,7 @@ void scui_font_unload(scui_handle_t handle)
     if (font->size == 0) {
         lv_font_free(font->bmp_fixed);
     } else {
-        
-        
-        
+        lv_font_ttf_tiny_unload(font->ttf_tiny);
     }
     
     scui_handle_clear(handle);
@@ -1347,8 +1477,8 @@ uint32_t scui_font_size(scui_handle_t handle)
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->size;
     } else {
-        
-        return font->size;
+        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
+        return ttf_tiny->size;
     }
 }
 
@@ -1364,9 +1494,8 @@ scui_coord_t scui_font_base_line(scui_handle_t handle)
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->base_line;
     } else {
-        
-        
-        
+        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
+        return ttf_tiny->base_line;
     }
 }
 
@@ -1382,9 +1511,8 @@ scui_coord_t scui_font_line_height(scui_handle_t handle)
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->line_height;
     } else {
-        
-        
-        
+        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
+        return ttf_tiny->line_height;
     }
 }
 
@@ -1400,9 +1528,8 @@ scui_coord_t scui_font_underline(scui_handle_t handle)
         lv_font_t *lv_font = font->bmp_fixed;
         return lv_font->underline_position;
     } else {
-        
-        
-        
+        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
+        return ttf_tiny->underline_position;
     }
 }
 
@@ -1432,10 +1559,13 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
     if (font->size == 0) {
         lv_font_t *lv_font = font->bmp_fixed;
         scui_font_src_open(&lv_font->font_src, lv_font->name);
-        lvgl_font_glpyh_load(lv_font, glyph);
+        lv_font_glpyh_load(lv_font, glyph);
         scui_font_src_close(&lv_font->font_src);
     } else {
-        
+        lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
+        // scui_font_src_open(&ttf_tiny->font_src, ttf_tiny->name);
+        lv_font_ttf_tiny_glpyh_load(ttf_tiny, glyph);
+        // scui_font_src_close(&ttf_tiny->font_src);
     }
     
     if (glyph->bitmap == NULL) {
@@ -1454,5 +1584,6 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
  */
 void scui_font_glyph_unload(scui_font_glyph_t *glyph)
 {
+    SCUI_ASSERT(glyph != NULL);
     SCUI_MEM_FREE(glyph->bitmap);
 }

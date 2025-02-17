@@ -23,6 +23,7 @@ static void scui_string_args_find_word(scui_string_args_t *args, uint32_t *idx_s
     for (idx = *idx_s; idx < args->number; idx++) {
         /* 文字信息缓存节点实例映射 */
         scui_font_glyph_unit_t glyph_unit = {
+            .size                   = args->size,
             .name                   = args->name,
             .glyph.space_width      = args->gap_none,
             .glyph.unicode_letter   = args->unicode[idx],
@@ -157,6 +158,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
             
             /* 文字信息缓存节点实例映射 */
             scui_font_glyph_unit_t glyph_unit = {
+                .size                   = args->size,
                 .name                   = args->name,
                 .glyph.space_width      = args->gap_none,
                 .glyph.unicode_letter   = args->unicode[idx],
@@ -229,6 +231,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
             
             /* 文字信息缓存节点实例映射 */
             scui_font_glyph_unit_t glyph_unit = {
+                .size                   = args->size,
                 .name                   = args->name,
                 .glyph.space_width      = args->gap_none,
                 .glyph.unicode_letter   = args->unicode[idx],

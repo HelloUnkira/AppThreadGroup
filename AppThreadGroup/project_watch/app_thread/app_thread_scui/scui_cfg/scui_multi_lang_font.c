@@ -16,7 +16,7 @@ const char * scui_font_type_table[SCUI_FONT_TYPE_NUM - SCUI_HANDLE_OFFSET_FONT] 
     [SCUI_FONT_TYPE_32_ZH    - SCUI_HANDLE_OFFSET_FONT - 1] = "font_zh_32.bin",
     [SCUI_FONT_TYPE_36_ZH    - SCUI_HANDLE_OFFSET_FONT - 1] = "font_zh_36.bin",
     
-    [SCUI_FONT_TYPE_MZ       - SCUI_HANDLE_OFFSET_FONT - 1] = "ttf_tiny_file.ttf",
+    [SCUI_FONT_TYPE_MZ       - SCUI_HANDLE_OFFSET_FONT - 1] = "font_test.ttf",
     
     [SCUI_FONT_TYPE_8_ASCII  - SCUI_HANDLE_OFFSET_FONT - 1] = "font_ascii_8.bin",
     [SCUI_FONT_TYPE_16_ASCII - SCUI_HANDLE_OFFSET_FONT - 1] = "font_ascii_16.bin",
