@@ -14,6 +14,13 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
 {
     scui_ui_scene_link_cfg(event);
     
+    static uint16_t font_size = 32;
+    static const uint16_t font_size_gap = 2;
+    static const uint16_t font_size_min = 10;
+    static const uint16_t font_size_max = 40;
+    static scui_handle_t handle_string[4] = {0};
+    // 备注: 如果需要使用动态文字缩放, 则应该放弃掉缓冲帧和级联着色, 否则可能会爆内存
+    
     switch (event->type) {
     case scui_event_anima_elapse:
         /* 这个事件可以视为本控件的全局刷新帧动画 */
@@ -28,9 +35,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             
             #if 1 /* test string widget */
             scui_string_maker_t string_maker = {0};
-            scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
             string_maker.widget.type                = scui_widget_type_string;
-            //string_maker.widget.style.trans         = true;
+            // string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
             string_maker.args.line_width            = 2;
             string_maker.args.mode_scroll           = 1;
@@ -42,7 +48,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             
             string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
             string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_MZ;
-            string_maker.args.size                  = 32;
+            string_maker.args.size                  = font_size;
             
             /* test:全文本渐变 */
             scui_coord_t grad_n = 8;
@@ -64,8 +70,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.args.line_delete = 0;
             string_maker.args.color.color_s.full = 0xFFFFFFFF;
             string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            scui_widget_create(&string_maker, &string_handle, false);
-            scui_string_upgrade_grads(string_handle, grad_s, grad_n);
+            scui_widget_create(&string_maker, &handle_string[0], false);
+            scui_string_upgrade_grads(handle_string[0], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
@@ -78,8 +84,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.args.line_delete = 1;
             string_maker.args.color.color_s.full = 0xFFFF00FF;
             string_maker.args.color.color_e.full = 0xFF00FF00;
-            scui_widget_create(&string_maker, &string_handle, false);
-            scui_string_upgrade_grads(string_handle, grad_s, grad_n);
+            scui_widget_create(&string_maker, &handle_string[1], false);
+            scui_string_upgrade_grads(handle_string[1], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
@@ -93,8 +99,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.args.color.color_s.full = 0xFFFF0000;
             string_maker.args.color.color_e.full = 0xFF0000FF;
             string_maker.args.line_multi = true;
-            scui_widget_create(&string_maker, &string_handle, false);
-            scui_string_upgrade_grads(string_handle, grad_s, grad_n);
+            scui_widget_create(&string_maker, &handle_string[2], false);
+            scui_string_upgrade_grads(handle_string[2], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
@@ -108,8 +114,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.args.color.color_s.full = 0xFF0000FF;
             string_maker.args.color.color_e.full = 0xFFFF0000;
             string_maker.args.line_multi = true;
-            scui_widget_create(&string_maker, &string_handle, false);
-            scui_string_upgrade_grads(string_handle, grad_s, grad_n);
+            scui_widget_create(&string_maker, &handle_string[3], false);
+            scui_string_upgrade_grads(handle_string[3], grad_s, grad_n);
             #endif
         }
         break;
@@ -135,6 +141,20 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         multi_lang_table_idx %= scui_arr_len(multi_lang_table);
         scui_multi_lang_set(&multi_lang_table[multi_lang_table_idx]);
         
+        scui_event_mask_over(event);
+        break;
+    case scui_event_enc_clockwise:
+        if (font_size +  font_size_gap <= font_size_max)
+            font_size += font_size_gap;
+        for (uint8_t idx = 0; idx < scui_arr_len(handle_string); idx++)
+            scui_string_adjust_size(handle_string[idx], font_size);
+        scui_event_mask_over(event);
+        break;
+    case scui_event_enc_clockwise_anti:
+        if (font_size -  font_size_gap >= font_size_min)
+            font_size -= font_size_gap;
+        for (uint8_t idx = 0; idx < scui_arr_len(handle_string); idx++)
+            scui_string_adjust_size(handle_string[idx], font_size);
         scui_event_mask_over(event);
         break;
     default:

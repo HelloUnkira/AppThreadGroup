@@ -249,16 +249,19 @@ static void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_sys_s &&
         event->type <= scui_event_sys_e) {
         
+        
+        bool event_widget = false;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
+        event_widget = event_widget || event->type == scui_event_anima_elapse;
+        event_widget = event_widget || event->type == scui_event_layout;
+        event_widget = event_widget || event->type == scui_event_adjust_size;
+        event_widget = event_widget || event->type == scui_event_change_lang;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
+        event_widget = event_widget || event->type == scui_event_widget_scroll_s;
+        event_widget = event_widget || event->type == scui_event_widget_scroll_e;
+        event_widget = event_widget || event->type == scui_event_widget_scroll_c;
+        
         bool event_filter = false;
-        /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
-        event_filter = event_filter || event->type == scui_event_anima_elapse;
-        event_filter = event_filter || event->type == scui_event_layout;
-        event_filter = event_filter || event->type == scui_event_adjust_size;
-        event_filter = event_filter || event->type == scui_event_change_lang;
-        /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(sched) */
-        event_filter = event_filter || event->type == scui_event_widget_scroll_s;
-        event_filter = event_filter || event->type == scui_event_widget_scroll_e;
-        event_filter = event_filter || event->type == scui_event_widget_scroll_c;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(ptr) */
         event_filter = event_filter || event->type == scui_event_ptr_hold;
         event_filter = event_filter || event->type == scui_event_ptr_move;
@@ -277,12 +280,14 @@ static void scui_event_respond(scui_event_t *event)
         if (scui_event_check_over(event) && event_filter)
             return;
         
-        scui_event_mask_prepare(event);
-        scui_window_event_dispatch(event);
-        scui_event_mask_execute(event);
-        scui_window_event_dispatch(event);
-        scui_event_mask_finish(event);
-        scui_window_event_dispatch(event);
+        if (!event_widget) {
+            scui_event_mask_prepare(event);
+            scui_window_event_dispatch(event);
+            scui_event_mask_execute(event);
+            scui_window_event_dispatch(event);
+            scui_event_mask_finish(event);
+            scui_window_event_dispatch(event);
+        }
         
         if (scui_event_check_over(event))
             return;

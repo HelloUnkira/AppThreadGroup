@@ -89,15 +89,21 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint3
 
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
- *@param active 中止标记
+ *@param abort  中止标记
  */
 void scui_string_scroll_abort(scui_handle_t handle, bool abort);
 
 /*@brief 字符串控件滚动结束(单次滚动)
- *@param handle   字符串控件句柄
+ *@param handle 字符串控件句柄
  *@retval 是否结束
  */
 bool scui_string_scroll_over(scui_handle_t handle);
+
+/*@brief 字符串控件修改文字尺寸(仅矢量字体有效)
+ *@param handle 字符串控件句柄
+ *@param size   新尺寸
+ */
+void scui_string_adjust_size(scui_handle_t handle, uint16_t size);
 
 /*@brief 字符串控件事件处理回调
  *@param event 事件

@@ -351,7 +351,7 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint3
 
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
- *@param active 中止标记
+ *@param abort  中止标记
  */
 void scui_string_scroll_abort(scui_handle_t handle, bool abort)
 {
@@ -371,6 +371,28 @@ bool scui_string_scroll_over(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     return string->unit_over;
+}
+
+/*@brief 字符串控件修改文字尺寸(仅矢量字库有效)
+ *@param handle 字符串控件句柄
+ *@param size   新尺寸
+ */
+void scui_string_adjust_size(scui_handle_t handle, uint16_t size)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_string_t *string = (void *)widget;
+    
+    if (string->args.size == 0)
+        return;
+    if (string->args.size == size)
+        return;
+    
+    string->args.size = scui_font_size_match(string->font_idx, size);
+    
+    // 这里是需要重刷新
+    string->args.update = true;
+    scui_widget_draw(widget->myself, NULL, false);
 }
 
 /*@brief 字符串控件事件处理回调

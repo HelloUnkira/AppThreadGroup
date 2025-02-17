@@ -391,7 +391,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if (scui_event_check_over(event))
+            if (scui_event_check_over(event) && event_filter)
                 break;
         }
         event->object = widget->myself;
@@ -427,32 +427,37 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     }
     /*************************************************************************/
-    /* 输入事件enc:回溯递归************************************************* */
+    /* 输入事件enc:顺向递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
         // 输入事件不分三步调度
         if (!scui_event_check_execute(event))
              return;
         SCUI_LOG_INFO("event %u", event->type);
+        /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
+        bool event_filter = true;
+        event_filter = event_filter && event->type != scui_event_key_hold;
+        event_filter = event_filter && event->type != scui_event_key_down;
+        event_filter = event_filter && event->type != scui_event_key_up;
         /* 是否自己吸收处理(冒泡自己) */
         if (widget->style.indev_enc)
             scui_widget_event_proc(event);
             scui_event_mask_keep(event);
-        if (scui_event_check_over(event))
+        if (scui_event_check_over(event) && event_filter)
             return;
         /* 如果需要继续冒泡,则继续下沉 */
         scui_widget_child_list_ftra(widget, idx) {
             event->object = widget->child_list[idx];
             /* 事件如果被吸收,终止派发 */
             scui_widget_event_dispatch(event);
-            if (scui_event_check_over(event))
+            if (scui_event_check_over(event) && event_filter)
                 break;
         }
         event->object = widget->myself;
         return;
     }
     /*************************************************************************/
-    /* 输入事件key:回溯递归************************************************* */
+    /* 输入事件key:顺向递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
         // 输入事件不分三步调度
