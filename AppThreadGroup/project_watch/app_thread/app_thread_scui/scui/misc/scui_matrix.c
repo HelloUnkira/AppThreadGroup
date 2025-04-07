@@ -569,12 +569,7 @@ void scui_matrix_affine_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_fac
 bool scui_matrix_perspective_blit(scui_matrix_t *matrix, scui_size2_t *size, scui_face3_t *face)
 {
     scui_face2_t face2_src = {.point2 = {{0,0},{size->w,0},{size->w,size->h},{0,size->h},}};
-    scui_face2_t face2_dst = {.point2 = {
-        {face->point3[0].x, face->point3[0].y,}, {face->point3[1].x, face->point3[1].y,},
-        {face->point3[2].x, face->point3[2].y,}, {face->point3[3].x, face->point3[3].y,},
-    }};
-    
-    return scui_matrix_by_face2(matrix, &face2_src, &face2_dst);
+    return scui_matrix_by_face3(matrix, &face2_src, face);
 }
 
 /*@brief 矩阵投影(blit)
@@ -588,6 +583,5 @@ bool scui_matrix_perspective_view_blit(scui_matrix_t *matrix, scui_size2_t *size
 {
     scui_face3_t face3_view = *face;
     scui_area3_perspective(&face3_view, view);
-    
     return scui_matrix_perspective_blit(matrix, size, &face3_view);
 }

@@ -14,7 +14,11 @@
  */
 void scui_mormal3_z_by_matrix(scui_normal3_t *normal3, scui_coord3_t *normal_z, scui_matrix_t *matrix)
 {
-    *normal_z = matrix->meta[2][0] * normal3->x + matrix->meta[2][1] * normal3->y + matrix->meta[2][2] * normal3->z;
+    scui_coord3_t m_dx = matrix->meta[2][0] * normal3->x;
+    scui_coord3_t m_dy = matrix->meta[2][1] * normal3->y;
+    scui_coord3_t m_dz = matrix->meta[2][2] * normal3->z;
+    
+    *normal_z = m_dx + m_dy + m_dz;
 }
 
 /*@brief 坐标变换(矩阵)
@@ -26,9 +30,11 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
     scui_point3_t point3_t;
     
     for (uint8_t row = 0; row < 3; row++) {
-        point3_t.meta[row] = matrix->meta[row][0] * point3->x +
-                             matrix->meta[row][1] * point3->y +
-                             matrix->meta[row][2] * point3->z;
+        scui_coord3_t m_dx = matrix->meta[row][0] * point3->x;
+        scui_coord3_t m_dy = matrix->meta[row][1] * point3->y;
+        scui_coord3_t m_dz = matrix->meta[row][2] * point3->z;
+        
+        point3_t.meta[row] = m_dx + m_dy + m_dz;
         // point3_t.meta[row] = roundf(point3_t.meta[row]);
     }
     
@@ -41,23 +47,12 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
  */
 void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix)
 {
-    scui_point3_t point3 = {0};
-    
-    point3 = area3->point3[0];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    area3->point3[0] = point3;
-    
-    point3 = area3->point3[1];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    area3->point3[1] = point3;
-    
-    point3 = area3->point3[2];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    area3->point3[2] = point3;
-    
-    point3 = area3->point3[3];
-    scui_point3_transform_by_matrix(&point3, matrix);
-    area3->point3[3] = point3;
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        
+        scui_point3_t point3 = area3->point3[idx];
+        scui_point3_transform_by_matrix(&point3, matrix);
+        area3->point3[idx] = point3;
+    }
 }
 
 /*@brief 坐标转换(point3->point2)
@@ -94,10 +89,8 @@ void scui_point3_by_point2(scui_point3_t *point3, scui_point2_t *point2)
  */
 void scui_area3_to_area2(scui_area3_t *area3, scui_area2_t *area2)
 {
-    scui_point3_to_point2(&area3->point3[0], &area2->point2[0]);
-    scui_point3_to_point2(&area3->point3[1], &area2->point2[1]);
-    scui_point3_to_point2(&area3->point3[2], &area2->point2[2]);
-    scui_point3_to_point2(&area3->point3[3], &area2->point2[3]);
+    for (scui_coord_t idx = 0; idx < 4; idx++)
+        scui_point3_to_point2(&area3->point3[idx], &area2->point2[idx]);
 }
 
 /*@brief 区域转换(area2->area3)
@@ -106,10 +99,8 @@ void scui_area3_to_area2(scui_area3_t *area3, scui_area2_t *area2)
  */
 void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
 {
-    scui_point3_by_point2(&area3->point3[0], &area2->point2[0]);
-    scui_point3_by_point2(&area3->point3[1], &area2->point2[1]);
-    scui_point3_by_point2(&area3->point3[2], &area2->point2[2]);
-    scui_point3_by_point2(&area3->point3[3], &area2->point2[3]);
+    for (scui_coord_t idx = 0; idx < 4; idx++)
+        scui_point3_by_point2(&area3->point3[idx], &area2->point2[idx]);
 }
 
 /*@brief 区域转换(area->area2)
@@ -168,23 +159,12 @@ void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *offset)
  */
 void scui_area3_offset(scui_area3_t *area3, scui_point3_t *offset)
 {
-    scui_point3_t point3 = {0};
-    
-    point3 = area3->point3[0];
-    scui_point3_offset(&point3, offset);
-    area3->point3[0] = point3;
-    
-    point3 = area3->point3[1];
-    scui_point3_offset(&point3, offset);
-    area3->point3[1] = point3;
-    
-    point3 = area3->point3[2];
-    scui_point3_offset(&point3, offset);
-    area3->point3[2] = point3;
-    
-    point3 = area3->point3[3];
-    scui_point3_offset(&point3, offset);
-    area3->point3[3] = point3;
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        
+        scui_point3_t point3 = area3->point3[idx];
+        scui_point3_offset(&point3, offset);
+        area3->point3[idx] = point3;
+    }
 }
 
 /*@brief 区域偏移
@@ -193,23 +173,12 @@ void scui_area3_offset(scui_area3_t *area3, scui_point3_t *offset)
  */
 void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *offset)
 {
-    scui_point3_t point3 = {0};
-    
-    point3 = area3->point3[0];
-    scui_point3_offset_xy(&point3, offset);
-    area3->point3[0] = point3;
-    
-    point3 = area3->point3[1];
-    scui_point3_offset_xy(&point3, offset);
-    area3->point3[1] = point3;
-    
-    point3 = area3->point3[2];
-    scui_point3_offset_xy(&point3, offset);
-    area3->point3[2] = point3;
-    
-    point3 = area3->point3[3];
-    scui_point3_offset_xy(&point3, offset);
-    area3->point3[3] = point3;
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        
+        scui_point3_t point3 = area3->point3[idx];
+        scui_point3_offset_xy(&point3, offset);
+        area3->point3[idx] = point3;
+    }
 }
 
 /*@brief 坐标透视
@@ -218,13 +187,9 @@ void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *offset)
  */
 void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
 {
-    #if 1
     point3->x = view3->x - (view3->x - point3->x) * view3->z / (view3->z - point3->z);
     point3->y = view3->y - (view3->y - point3->y) * view3->z / (view3->z - point3->z);
-    #else
-    point3->x = view3->x + (point3->x - view3->x) * view3->z / (view3->z + point3->z);
-    point3->y = view3->y + (point3->y - view3->y) * view3->z / (view3->z + point3->z);
-    #endif
+    point3->z = 1.0;
 }
 
 /*@brief 区域透视
@@ -233,21 +198,10 @@ void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
  */
 void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3)
 {
-    scui_point3_t point3 = {0};
-    
-    point3 = area3->point3[0];
-    scui_point3_perspective(&point3, view3);
-    area3->point3[0] = point3;
-    
-    point3 = area3->point3[1];
-    scui_point3_perspective(&point3, view3);
-    area3->point3[1] = point3;
-    
-    point3 = area3->point3[2];
-    scui_point3_perspective(&point3, view3);
-    area3->point3[2] = point3;
-    
-    point3 = area3->point3[3];
-    scui_point3_perspective(&point3, view3);
-    area3->point3[3] = point3;
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        
+        scui_point3_t point3 = area3->point3[idx];
+        scui_point3_perspective(&point3, view3);
+        area3->point3[idx] = point3;
+    }
 }

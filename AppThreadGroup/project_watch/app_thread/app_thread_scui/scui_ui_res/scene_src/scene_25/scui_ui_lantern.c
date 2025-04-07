@@ -31,6 +31,7 @@ static struct {
     scui_coord_t   x_span;          // 水平间隙
     scui_coord_t   scale_c;         // 整体缩放
     scui_coord_t   angle_a;         // 单位角度
+    scui_coord_t   rotate_x;        // 旋转角度
     scui_coord_t   rotate_y;        // 旋转角度
     bool           move_lock;       // 移动锁
 } * scui_ui_res_local = NULL;
@@ -145,7 +146,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
              resize_way = -resize_way;
         
         scui_ui_res_local->scale_c  += resize_way;
-        scui_ui_res_local->rotate_y += 1.0f;
+        scui_ui_res_local->rotate_x += 1.0f;
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_draw:
@@ -175,10 +176,13 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
             
             for (uint8_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 
-                scui_coord3_t rotate_y = scui_ui_res_local->rotate_y + idx * scui_ui_res_local->angle_a;
                 scui_matrix_t r_matrix = {0};
                 scui_matrix_identity(&r_matrix);
-                scui_matrix_rotate(&r_matrix, rotate_y, 0x02);
+                scui_point3_t rotate_3 = {
+                    .y = scui_ui_res_local->rotate_x + idx * scui_ui_res_local->angle_a,
+                    .x = scui_ui_res_local->rotate_y,
+                };
+                scui_matrix_rotate3(&r_matrix, &rotate_3, 0x05);
                 // scui_matrix_check(&r_matrix);
                 
                 scui_face3_t face3 = {
@@ -285,8 +289,14 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         break;
     case scui_event_ptr_move:
         scui_event_mask_over(event);
+        scui_coord_t ptr_dx = event->ptr_e.x - event->ptr_s.x;
+        scui_coord_t ptr_dy = event->ptr_e.y - event->ptr_s.y;
         scui_ui_res_local->move_lock = true;
-        scui_ui_res_local->rotate_y += event->ptr_e.x - event->ptr_s.x;
+        scui_ui_res_local->rotate_x += ptr_dx;
+        
+        if (scui_betw_lr(scui_ui_res_local->rotate_y + ptr_dy, -15, 15))
+            scui_ui_res_local->rotate_y += ptr_dy;
+        
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_ptr_down:
