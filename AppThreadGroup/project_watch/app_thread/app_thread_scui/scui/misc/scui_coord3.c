@@ -55,6 +55,39 @@ void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix)
     }
 }
 
+/*@brief 坐标透视
+ *@param point3 坐标
+ *@param view3  视点坐标(.z: 视点距离)
+ */
+void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
+{
+    #if 0
+    point3->x = view3->x - (view3->x - point3->x) * view3->z / (view3->z - point3->z);
+    point3->y = view3->y - (view3->y - point3->y) * view3->z / (view3->z - point3->z);
+    point3->z = 1.0;
+    #else
+    scui_coord3_t perspective = view3->z / (view3->z - point3->z);
+    
+    point3->x  = view3->x - (view3->x - point3->x) * perspective;
+    point3->y  = view3->y - (view3->y - point3->y) * perspective;
+    point3->z = 1.0; // point3->z *= perspective;
+    #endif
+}
+
+/*@brief 区域透视
+ *@param area3 区域
+ *@param view3 视点坐标(.z: 视点距离)
+ */
+void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3)
+{
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        
+        scui_point3_t point3 = area3->point3[idx];
+        scui_point3_perspective(&point3, view3);
+        area3->point3[idx] = point3;
+    }
+}
+
 /*@brief 坐标转换(point3->point2)
  *@param point3 坐标
  *@param point2 坐标
@@ -81,6 +114,27 @@ void scui_point3_by_point2(scui_point3_t *point3, scui_point2_t *point2)
     point3->x = point2->x;
     point3->y = point2->y;
     point3->z = 1.0f;
+}
+
+/*@brief 坐标偏移
+ *@param point3 坐标
+ *@param offset 偏移
+ */
+void scui_point3_offset(scui_point3_t *point3, scui_point3_t *offset)
+{
+    point3->x += offset->x;
+    point3->y += offset->y;
+    point3->z += offset->z;
+}
+
+/*@brief 坐标偏移
+ *@param point3 坐标
+ *@param point2 坐标
+ */
+void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *offset)
+{
+    point3->x += offset->x;
+    point3->y += offset->y;
 }
 
 /*@brief 区域转换(area3->area2)
@@ -132,27 +186,6 @@ void scui_area3_by_area(scui_area3_t *area3, scui_area_t *area)
     scui_area3_by_area2(area3, &area2);
 }
 
-/*@brief 坐标偏移
- *@param point3 坐标
- *@param offset 偏移
- */
-void scui_point3_offset(scui_point3_t *point3, scui_point3_t *offset)
-{
-    point3->x += offset->x;
-    point3->y += offset->y;
-    point3->z += offset->z;
-}
-
-/*@brief 坐标偏移
- *@param point3 坐标
- *@param point2 坐标
- */
-void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *offset)
-{
-    point3->x += offset->x;
-    point3->y += offset->y;
-}
-
 /*@brief 区域偏移
  *@param area3  区域
  *@param offset 坐标
@@ -181,27 +214,27 @@ void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *offset)
     }
 }
 
-/*@brief 坐标透视
+/*@brief 面中心点
+ *@param area3  区域
  *@param point3 坐标
- *@param view3  视点坐标(.z: 视点距离)
  */
-void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
+void scui_area3_center(scui_area3_t *area3, scui_point3_t *point3)
 {
-    point3->x = view3->x - (view3->x - point3->x) * view3->z / (view3->z - point3->z);
-    point3->y = view3->y - (view3->y - point3->y) * view3->z / (view3->z - point3->z);
-    point3->z = 1.0;
+    point3->x = area3->point3[0].x + area3->point3[1].x + area3->point3[2].x + area3->point3[3].x;
+    point3->y = area3->point3[0].y + area3->point3[1].y + area3->point3[2].y + area3->point3[3].y;
+    point3->z = area3->point3[0].z + area3->point3[1].z + area3->point3[2].z + area3->point3[3].z;
+    
+    point3->x /= 4;
+    point3->y /= 4;
+    point3->z /= 4;
 }
 
-/*@brief 区域透视
- *@param area3 区域
- *@param view3 视点坐标(.z: 视点距离)
+/*@brief 面中心点z轴
+ *@param area3    区域
+ *@param point3_z 坐标z轴
  */
-void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3)
+void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z)
 {
-    for (scui_coord_t idx = 0; idx < 4; idx++) {
-        
-        scui_point3_t point3 = area3->point3[idx];
-        scui_point3_perspective(&point3, view3);
-        area3->point3[idx] = point3;
-    }
+    *point3_z  = area3->point3[0].z + area3->point3[1].z + area3->point3[2].z + area3->point3[3].z;
+    *point3_z /= 4;
 }

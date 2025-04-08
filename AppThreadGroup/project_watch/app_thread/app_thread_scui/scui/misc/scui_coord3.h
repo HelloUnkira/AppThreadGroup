@@ -77,6 +77,18 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
  */
 void scui_area3_transform_by_matrix(scui_area3_t *area3, scui_matrix_t *matrix);
 
+/*@brief 坐标透视
+ *@param point3 坐标
+ *@param view3  视点坐标(.z: 视点距离)
+ */
+void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3);
+
+/*@brief 区域透视
+ *@param area3 区域
+ *@param view3 视点坐标(.z: 视点距离)
+ */
+void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3);
+
 /*@brief 坐标转换(point3->point2)
  *@param point3 坐标
  *@param point2 坐标
@@ -88,6 +100,18 @@ void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2);
  *@param point2  坐标
  */
 void scui_point3_by_point2(scui_point3_t *point3, scui_point2_t *point2);
+
+/*@brief 坐标偏移
+ *@param point3 坐标
+ *@param offset 偏移
+ */
+void scui_point3_offset(scui_point3_t *point3, scui_point3_t *offset);
+
+/*@brief 坐标偏移
+ *@param point3 坐标
+ *@param offset 坐标
+ */
+void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *offset);
 
 /*@brief 区域转换(area3->area2)
  *@param area3 区域
@@ -113,18 +137,6 @@ void scui_area2_by_area(scui_area2_t *area2, scui_area_t *area);
  */
 void scui_area3_by_area(scui_area3_t *area3, scui_area_t *area);
 
-/*@brief 坐标偏移
- *@param point3 坐标
- *@param offset 偏移
- */
-void scui_point3_offset(scui_point3_t *point3, scui_point3_t *offset);
-
-/*@brief 坐标偏移
- *@param point3 坐标
- *@param offset 坐标
- */
-void scui_point3_offset_xy(scui_point3_t *point3, scui_point2_t *offset);
-
 /*@brief 区域偏移
  *@param area3  区域
  *@param offset 坐标
@@ -137,16 +149,16 @@ void scui_area3_offset(scui_area3_t *area3, scui_point3_t *offset);
  */
 void scui_area3_offset_xy(scui_area3_t *area3, scui_point2_t *offset);
 
-/*@brief 坐标透视
+/*@brief 面中心点
+ *@param area3  区域
  *@param point3 坐标
- *@param view3  视点坐标(.z: 视点距离)
  */
-void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3);
+void scui_area3_center(scui_area3_t *area3, scui_point3_t *point3);
 
-/*@brief 区域透视
- *@param area3 区域
- *@param view3 视点坐标(.z: 视点距离)
+/*@brief 面中心点z轴
+ *@param area3    区域
+ *@param point3_z 坐标z轴
  */
-void scui_area3_perspective(scui_area3_t *area3, scui_view3_t *view3);
+void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z);
 
 #endif
