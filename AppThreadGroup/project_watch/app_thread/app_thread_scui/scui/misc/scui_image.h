@@ -57,6 +57,18 @@ scui_coord_t scui_image_w(scui_handle_t handle);
  */
 scui_coord_t scui_image_h(scui_handle_t handle);
 
+/*@brief 图像区域
+ *@param handle 图像句柄
+ *@retval 图像区域
+ */
+scui_size2_t scui_image_s2(scui_handle_t handle);
+
+/*@brief 图像区域
+ *@param handle 图像句柄
+ *@retval 图像区域
+ */
+scui_area_t scui_image_area(scui_handle_t handle);
+
 /*@brief 图像大小
  *@param image 图像实例
  *@retval 图像大小

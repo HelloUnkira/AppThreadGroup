@@ -663,6 +663,10 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
+    // 如果逆矩阵是无效矩阵, 则不做使用
+    if (scui_matrix_invalid(inv_matrix))
+        return;
+    
     /* 按俩个画布的透明度进行像素点混合 */
     scui_area_t dst_clip_v = {0};   // v:vaild
     scui_area_t dst_area = scui_surface_area(dst_surface);

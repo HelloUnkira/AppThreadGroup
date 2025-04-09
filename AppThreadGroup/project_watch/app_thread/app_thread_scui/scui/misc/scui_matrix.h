@@ -22,10 +22,11 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
  */
 bool scui_matrix_by_face3(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_face3_t *face3_dst);
 
-/*@brief 矩阵乘法可逆检查
+/*@brief 矩阵无效检查(奇异矩阵)
  *@param matrix 矩阵实例
+ *@retval 是否无效
  */
-bool scui_matrix_inverse_check(scui_matrix_t *matrix);
+bool scui_matrix_invalid(scui_matrix_t *matrix);
 
 /*@brief 矩阵乘法逆(matrix = 1 / matrix)
  *@param matrix 矩阵实例

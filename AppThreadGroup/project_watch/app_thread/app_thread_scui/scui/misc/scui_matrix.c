@@ -94,7 +94,12 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
                 k = j;
         /* 只要遇到主元为0, 终止并退出 */
         if (scui_abs(matrix_a[k][i]) < eps) {
-            SCUI_LOG_ERROR("gauss transform failure");
+            // 将矩阵清空, 此时已无用
+            for (uint8_t idx_i = 0; idx_i < 3; idx_i++)
+            for (uint8_t idx_j = 0; idx_j < 3; idx_j++)
+                matrix->meta[idx_i][idx_j] = 0.0f;
+            // 这里不必打印, 存在计算不出矩阵的可能性
+            // SCUI_LOG_ERROR("gauss transform failure");
             return false;
         }
         
@@ -182,11 +187,14 @@ bool scui_matrix_by_face3(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
     return scui_matrix_by_face2(matrix, face2_src, &face2_dst);
 }
 
-/*@brief 矩阵乘法可逆检查
+/*@brief 矩阵无效检查(奇异矩阵)
  *@param matrix 矩阵实例
+ *@retval 是否无效
  */
-bool scui_matrix_inverse_check(scui_matrix_t *matrix)
+bool scui_matrix_invalid(scui_matrix_t *matrix)
 {
+    // 计算矩阵的行列式, 奇异矩阵的行列式值为0
+    
     scui_coord3_t det00 = matrix->meta[1][1] * matrix->meta[2][2] -
                   matrix->meta[2][1] * matrix->meta[1][2];
     scui_coord3_t det01 = matrix->meta[2][0] * matrix->meta[1][2] -
@@ -199,7 +207,7 @@ bool scui_matrix_inverse_check(scui_matrix_t *matrix)
                 matrix->meta[0][2] * det02;
     
     if (det >= -1E-6 && det <= 1E-6)
-        return false;
+        return true;
     else
         return false;
 }
@@ -287,11 +295,13 @@ void scui_matrix_multiply(scui_matrix_t *matrix, scui_matrix_t *matrix1)
     scui_matrix_t matrix_t;
     
     for (uint8_t row = 0; row < 3; row++)
-    for (uint8_t col = 0; col < 3; col++)
-        matrix_t.meta[row][col] = 
-                 matrix->meta[row][0] * matrix1->meta[0][col] +
-                 matrix->meta[row][1] * matrix1->meta[1][col] +
-                 matrix->meta[row][2] * matrix1->meta[2][col];
+    for (uint8_t col = 0; col < 3; col++) {
+        scui_coord3_t m_v0 = matrix->meta[row][0] * matrix1->meta[0][col];
+        scui_coord3_t m_v1 = matrix->meta[row][1] * matrix1->meta[1][col];
+        scui_coord3_t m_v2 = matrix->meta[row][2] * matrix1->meta[2][col];
+        
+        matrix_t.meta[row][col] = m_v0 + m_v1 + m_v2;
+    }
     
    *matrix = matrix_t;
 }
@@ -317,6 +327,10 @@ void scui_matrix_identity(scui_matrix_t *matrix)
  */
 void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset)
 {
+    // 平移是非线性变换
+    // 3D空间下平移:不支持
+    // 2D平面上平移:支持
+    
     scui_matrix_t matrix_t = {
         .meta = {
             {1.0f, 0.0f, offset->x},
