@@ -12,6 +12,7 @@ typedef enum {
     scui_window_switch_zoom2,           /* 双边缩放 */
     scui_window_switch_center_in,       /* 中心淡入 */
     scui_window_switch_center_out,      /* 中心淡出 */
+    scui_window_switch_center_inout,    /* 中心淡入淡出 */
     
     scui_window_switch_rotate,          /* 旋转渐变(鬼点子, 中心点) */
     scui_window_switch_rotate1,         /* 旋转渐变(鬼点子, 边缘点) */

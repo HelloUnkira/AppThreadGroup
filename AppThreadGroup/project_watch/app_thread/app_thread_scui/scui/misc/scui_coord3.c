@@ -68,8 +68,8 @@ void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
     #else
     scui_coord3_t perspective = view3->z / (view3->z - point3->z);
     
-    point3->x  = view3->x - (view3->x - point3->x) * perspective;
-    point3->y  = view3->y - (view3->y - point3->y) * perspective;
+    point3->x = view3->x - (view3->x - point3->x) * perspective;
+    point3->y = view3->y - (view3->y - point3->y) * perspective;
     point3->z = 1.0; // point3->z *= perspective;
     #endif
 }
@@ -153,8 +153,11 @@ void scui_area3_to_area2(scui_area3_t *area3, scui_area2_t *area2)
  */
 void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
 {
-    for (scui_coord_t idx = 0; idx < 4; idx++)
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
         scui_point3_by_point2(&area3->point3[idx], &area2->point2[idx]);
+        // xy平面构建出的空间面, 应该落在xy平面内
+        area3->point3[idx].z = 0.0f;
+    }
 }
 
 /*@brief 区域转换(area->area2)

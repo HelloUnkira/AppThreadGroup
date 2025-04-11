@@ -243,7 +243,8 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
          break;
     case scui_window_switch_center_in:
     case scui_window_switch_center_out:
-         scui_window_transform_center_in_out(list, num);
+    case scui_window_switch_center_inout:
+         scui_window_transform_cinout(list, num);
          break;
     case scui_window_switch_zoom1:
     case scui_window_switch_zoom2:
