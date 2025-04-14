@@ -268,11 +268,11 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_flip2:
          scui_window_transform_flip2(list, num);
          break;
-    case scui_window_switch_flip3:
-         scui_window_transform_flip3(list, num);
-         break;
     case scui_window_switch_flap1:
          scui_window_transform_flap1(list, num);
+         break;
+    case scui_window_switch_flap2:
+         scui_window_transform_flap2(list, num);
          break;
     case scui_window_switch_cube:
          scui_window_transform_cube(list, num);

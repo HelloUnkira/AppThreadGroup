@@ -65,13 +65,13 @@ void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num);
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_transform_flip3(scui_widget_t **list, scui_handle_t num);
+void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num);
 
 /*@brief 窗口管理器画布混合变换
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num);
+void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num);
 
 /*@brief 窗口管理器画布混合变换
  *@param list 根控件列表
