@@ -160,6 +160,24 @@ void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
     }
 }
 
+/*@brief 区域转换(area2->area)
+ *@param area2 区域
+ *@param area  区域
+ */
+void scui_area2_to_area(scui_area2_t *area2, scui_area_t *area)
+{
+    scui_area_t area_s = {0};
+    area_s.x1 = area2->point2[0].x;
+    area_s.y1 = area2->point2[0].y;
+    area_s.x2 = area2->point2[1].x;
+    area_s.y1 = area2->point2[1].y;
+    area_s.x2 = area2->point2[2].x;
+    area_s.y2 = area2->point2[2].y;
+    area_s.x1 = area2->point2[3].x;
+    area_s.y2 = area2->point2[3].y;
+    scui_area_m_by_s(area, &area_s);
+}
+
 /*@brief 区域转换(area->area2)
  *@param area2 区域
  *@param area  区域
@@ -176,6 +194,17 @@ void scui_area2_by_area(scui_area2_t *area2, scui_area_t *area)
     area2->point2[2].y = area_s.y2;
     area2->point2[3].x = area_s.x1;
     area2->point2[3].y = area_s.y2;
+}
+
+/*@brief 区域转换(area3->area)
+ *@param area2 区域
+ *@param area  区域
+ */
+void scui_area3_to_area(scui_area3_t *area3, scui_area_t *area)
+{
+    scui_area2_t area2 = {0};
+    scui_area3_to_area2(area3, &area2);
+    scui_area2_to_area(&area2, area);
 }
 
 /*@brief 区域转换(area->area3)
@@ -240,4 +269,41 @@ void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z)
 {
     *point3_z  = area3->point3[0].z + area3->point3[1].z + area3->point3[2].z + area3->point3[3].z;
     *point3_z /= 4;
+}
+
+/*@brief 面垂直检查
+ *@param area3  区域
+*@param  axis   法线轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
+ */
+bool scui_area3_parallel(scui_area3_t *area3, uint8_t axis)
+{
+    const scui_coord3_t eps = 1.1920929e-7f;
+    
+    switch (axis) {
+    case 0x00:  // 平行XY平面
+        if (scui_dist(area3->point3[0].z, area3->point3[0].z) < eps &&
+            scui_dist(area3->point3[0].z, area3->point3[1].z) < eps &&
+            scui_dist(area3->point3[0].z, area3->point3[2].z) < eps)
+            return true;
+        
+        return false;
+    case 0x01:  // 平行YZ平面
+        
+        if (scui_dist(area3->point3[0].x, area3->point3[0].x) < eps &&
+            scui_dist(area3->point3[0].x, area3->point3[1].x) < eps &&
+            scui_dist(area3->point3[0].x, area3->point3[2].x) < eps)
+            return true;
+        
+        return false;
+    case 0x02:  // 平行XZ平面
+        if (scui_dist(area3->point3[0].y, area3->point3[0].y) < eps &&
+            scui_dist(area3->point3[0].y, area3->point3[1].y) < eps &&
+            scui_dist(area3->point3[0].y, area3->point3[2].y) < eps)
+            return true;
+        
+        return false;
+    default:
+        SCUI_LOG_ERROR("unknown axis:%x", axis);
+        break;
+    }
 }

@@ -22,6 +22,9 @@ typedef enum {
     scui_window_switch_flip1,           /* 中心轴翻页(2.5D) */
     scui_window_switch_flip2,           /* 仿真页翻页(2.5D) */
     scui_window_switch_flip3,           /* 分段式翻页(2.5D) */
+    
+    scui_window_switch_flap1,           /* 中心轴翻版(2.5D) */
+    
     scui_window_switch_cube,            /* 正方体旋转(2.5D) */
 
     scui_window_switch_single_e,

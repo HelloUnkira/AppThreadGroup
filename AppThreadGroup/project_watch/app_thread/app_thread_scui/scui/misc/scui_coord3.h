@@ -125,11 +125,23 @@ void scui_area3_to_area2(scui_area3_t *area3, scui_area2_t *area2);
  */
 void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2);
 
+/*@brief 区域转换(area2->area)
+ *@param area2 区域
+ *@param area  区域
+ */
+void scui_area2_to_area(scui_area2_t *area2, scui_area_t *area);
+
 /*@brief 区域转换(area->area2)
  *@param area2 区域
  *@param area  区域
  */
 void scui_area2_by_area(scui_area2_t *area2, scui_area_t *area);
+
+/*@brief 区域转换(area3->area)
+ *@param area2 区域
+ *@param area  区域
+ */
+void scui_area3_to_area(scui_area3_t *area3, scui_area_t *area);
 
 /*@brief 区域转换(area->area3)
  *@param area2 区域
@@ -160,5 +172,11 @@ void scui_area3_center(scui_area3_t *area3, scui_point3_t *point3);
  *@param point3_z 坐标z轴
  */
 void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z);
+
+/*@brief 面垂直检查
+ *@param area3  区域
+*@param  axis   法线轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
+ */
+bool scui_area3_parallel(scui_area3_t *area3, uint8_t axis);
 
 #endif
