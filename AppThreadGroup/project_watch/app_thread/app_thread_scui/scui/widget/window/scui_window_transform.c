@@ -96,25 +96,54 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(src_surface->hor_res == scui_disp_get_hor_res());
         SCUI_ASSERT(src_surface->ver_res == scui_disp_get_ver_res());
         
-        if (list[idx]->myself == scui_window_mgr.active_curr) {
+        // 该部分效果相对于,浮动窗口进入时的样子
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in) {
             
-            scui_area_t dst_clip = scui_surface_area(dst_surface);
-            scui_area_t src_clip = scui_surface_area(src_surface);
+            if (list[idx]->myself == scui_window_mgr.active_curr) {
+                
+                scui_area_t dst_clip = scui_surface_area(dst_surface);
+                scui_area_t src_clip = scui_surface_area(src_surface);
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(100 - scui_window_mgr.switch_args.pct));
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
+                src_surface->alpha = alpha;
+            } else {
+                
+                scui_area_t dst_clip = {0}, src_clip = {0};
+                if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
+                     continue;
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(scui_window_mgr.switch_args.pct));
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
+                src_surface->alpha = alpha;
+            }
+        }
+        
+        // 该部分效果相对于,浮动窗口退出时的样子
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out) {
             
-            scui_alpha_t alpha = src_surface->alpha;
-            src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(100 - scui_window_mgr.switch_args.pct));
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
-            src_surface->alpha = alpha;
-        } else {
-            
-            scui_area_t dst_clip = {0}, src_clip = {0};
-            if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
-                 continue;
-            
-            scui_alpha_t alpha = src_surface->alpha;
-            src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(scui_window_mgr.switch_args.pct));
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
-            src_surface->alpha = alpha;
+            if (list[idx]->myself != scui_window_mgr.active_curr) {
+                
+                scui_area_t dst_clip = scui_surface_area(dst_surface);
+                scui_area_t src_clip = scui_surface_area(src_surface);
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(scui_window_mgr.switch_args.pct));
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
+                src_surface->alpha = alpha;
+            } else {
+                
+                scui_area_t dst_clip = {0}, src_clip = {0};
+                if (!scui_window_transform_clip(list[idx], &dst_clip, &src_clip))
+                     continue;
+                
+                scui_alpha_t alpha = src_surface->alpha;
+                src_surface->alpha = scui_alpha_mix(alpha, scui_alpha_pct(100 - scui_window_mgr.switch_args.pct));
+                scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
+                src_surface->alpha = alpha;
+            }
         }
     }
 }
@@ -202,7 +231,7 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
  *@param list 根控件列表
  *@param num  根控件数量
  */
-void scui_window_transform_cinout(scui_widget_t **list, scui_handle_t num)
+void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
     

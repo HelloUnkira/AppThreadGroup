@@ -600,9 +600,11 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_flip2:
         case scui_window_switch_grid:
         case scui_window_switch_circle:
+        case scui_window_switch_center_inout:
         case scui_window_switch_center_out:
         case scui_window_switch_center_in:
-        case scui_window_switch_cover:
+        case scui_window_switch_cover_out:
+        case scui_window_switch_cover_in:
             switch_anima.path = scui_map_ease_in_out;
             break;
         case scui_window_switch_flip1:

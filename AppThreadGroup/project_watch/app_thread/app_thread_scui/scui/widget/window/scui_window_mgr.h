@@ -7,7 +7,8 @@ typedef enum {
     scui_window_switch_single_s,
     
     scui_window_switch_move,            /* 常规移动 */
-    scui_window_switch_cover,           /* 覆盖移动 */
+    scui_window_switch_cover_in,        /* 覆盖移动(进入) */
+    scui_window_switch_cover_out,       /* 覆盖移动(退出) */
     scui_window_switch_zoom1,           /* 单边缩放 */
     scui_window_switch_zoom2,           /* 双边缩放 */
     scui_window_switch_center_in,       /* 中心淡入 */

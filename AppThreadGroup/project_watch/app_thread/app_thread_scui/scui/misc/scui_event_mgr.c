@@ -121,6 +121,8 @@ static bool scui_event_order_check(scui_event_t *event)
         scui_event_show,
         scui_event_hide,
         scui_event_draw,
+        scui_event_focus_lost,
+        scui_event_focus_get,
     };
     
     for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)

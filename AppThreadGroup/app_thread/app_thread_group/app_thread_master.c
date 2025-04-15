@@ -46,6 +46,7 @@ static double app_thread_execute_us_d[app_thread_id_d_e - app_thread_id_d_s - 1]
 #define APP_THREAD_PACKAGE_RECORD_SIZE (APP_THREAD_PACKAGE_RECORD_CNT * sizeof(app_thread_package_t))
 static uint8_t app_thread_record_buffer[APP_THREAD_PACKAGE_RECORD_SIZE] = {0};
 static app_sys_rbuf_t app_thread_record_rbuf = {0};
+static app_mutex_t app_thread_record_mutex = {0};
 #endif
 
 /*@brief 访问线程事件包
@@ -228,6 +229,7 @@ void app_thread_master_prepare(void)
                  (uintptr_t)app_thread_pipe_dst_mem_d[idx - app_thread_id_d_s - 1], APP_THREAD_PIPE_MEM_SLAVE_SIZE);
     /* 记录线程包的执行序列 */
     #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
+    app_mutex_process(&app_thread_record_mutex, app_mutex_static);
     app_sys_rbuf_ready(&app_thread_record_rbuf, 1, app_thread_record_buffer, APP_THREAD_PACKAGE_RECORD_SIZE);
     #endif
 }
@@ -310,6 +312,7 @@ bool app_thread_package_notify(app_thread_package_t *package)
 #if APP_THREAD_PACKAGE_RECORD_CNT >= 10
 void app_thread_package_record(app_thread_package_t *package, bool record)
 {
+    app_mutex_process(&app_thread_record_mutex, app_mutex_take);
     if (app_sys_rbuf_space(&app_thread_record_rbuf) == 0 || !record) {
         APP_SYS_LOG_INFO("package record");
         for (uint32_t idx = 0; !app_sys_rbuf_empty(&app_thread_record_rbuf); idx++) {
@@ -328,6 +331,7 @@ void app_thread_package_record(app_thread_package_t *package, bool record)
     if (record) {
         APP_SYS_RBUF_PUTS_FIXED(&app_thread_record_rbuf, package, app_thread_package_t);
     }
+    app_mutex_process(&app_thread_record_mutex, app_mutex_give);
 }
 #endif
 
