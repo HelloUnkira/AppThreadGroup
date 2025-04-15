@@ -73,9 +73,6 @@ void scui_objbtn_event(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             return;
         
         if (!(objbtn->pct <= objbtn->lim && objbtn->way == -1)) {
             if (!objbtn->hold && (objbtn->pct == 100 || objbtn->pct == objbtn->lim))
@@ -164,8 +161,6 @@ void scui_objbtn_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_down: {
-        if (!scui_event_check_execute(event))
-             return;
         
         scui_handle_t handle = scui_widget_root(widget->myself);
         scui_widget_t  *root = scui_handle_source_check(handle);
@@ -186,16 +181,12 @@ void scui_objbtn_event(scui_event_t *event)
     }
     case scui_event_ptr_move:
     case scui_event_ptr_up: {
-        if (!scui_event_check_execute(event))
-             return;
         
         SCUI_LOG_INFO("");
         objbtn->hold = false;
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_event_check_execute(event))
-             return;
         
         scui_event_mask_over(event);
         SCUI_LOG_INFO("");

@@ -139,10 +139,10 @@ static void scui_window_move_anima_expired(void *instance)
     
     scui_widget_t *widget = NULL;
     scui_multi_t pct = scui_abs(anima->value_c) * 100;
-    if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
-         pct /= scui_disp_get_ver_res();
     if ((scui_window_mgr.switch_args.dir & scui_opt_dir_hor) != 0)
          pct /= scui_disp_get_hor_res();
+    if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0)
+         pct /= scui_disp_get_ver_res();
     scui_window_mgr.switch_args.pct = pct;
     SCUI_LOG_DEBUG("pct:%d", scui_window_mgr.switch_args.pct);
     
@@ -181,6 +181,16 @@ static void scui_window_move_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
     
+    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+        scui_anima_stop(scui_window_mgr.switch_args.anima);
+        scui_anima_destroy(scui_window_mgr.switch_args.anima);
+        scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
+    }
+    
+    // 仅最后的动画帧才进行资源回收
+    if (scui_window_mgr.switch_args.hold_move)
+        return;
+    
     if (scui_window_mgr.switch_args.pct == 0) {
         scui_window_active(scui_window_mgr.switch_args.list[0]);
         scui_window_stack_update(scui_window_mgr.switch_args.list[0], 0);
@@ -192,16 +202,8 @@ static void scui_window_move_anima_finish(void *instance)
         scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
     }
     
-    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
-        scui_anima_stop(scui_window_mgr.switch_args.anima);
-        scui_anima_destroy(scui_window_mgr.switch_args.anima);
-        scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
-    }
-    
-    if (!scui_window_mgr.switch_args.hold_move) {
-         scui_window_mgr.switch_args.lock_move = false;
-         scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
-    }
+    scui_window_mgr.switch_args.lock_move = false;
+    scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
 
 /*@brief 窗口移动动画自动化
@@ -273,9 +275,6 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
  */
 static void scui_window_event_switch(scui_event_t *event)
 {
-    if (!scui_event_check_execute(event))
-         return;
-    
     /* 获得窗口宽高 */
     scui_coord_t hor_res = scui_disp_get_hor_res();
     scui_coord_t ver_res = scui_disp_get_ver_res();

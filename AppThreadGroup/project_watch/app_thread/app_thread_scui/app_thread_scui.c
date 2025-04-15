@@ -126,7 +126,7 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_draw_routine)
         scui_engine_execute();
         
         // 让出一点时间用于调度
-        app_delay_ms(3);
+        app_delay_ms(5);
     }
 }
 

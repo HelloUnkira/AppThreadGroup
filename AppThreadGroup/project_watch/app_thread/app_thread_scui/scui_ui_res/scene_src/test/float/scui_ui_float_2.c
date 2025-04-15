@@ -23,7 +23,6 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -63,9 +62,6 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         static uint8_t cnt = 0;
         cnt++;
@@ -140,7 +136,6 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -197,9 +192,6 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         image_pct++;
         if (image_pct > 100)
@@ -246,9 +238,6 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         image_ring_angle += 1;
         scui_widget_draw(event->object, NULL, false);
@@ -298,9 +287,6 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         spinner_cnt++;
         if (spinner_cnt >  spinner_tick)
@@ -356,12 +342,8 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
 void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
+    case scui_event_anima_elapse:
         break;
-    }
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         scui_objbtn_maker_t objbtn_maker = {0};

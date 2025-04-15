@@ -23,7 +23,6 @@ void scui_ui_scene_spread_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -76,9 +75,6 @@ void scui_ui_scene_spread_custom_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         if (scui_ui_res_local->anima) {
             scui_coord_t angle_ofs = scui_ui_res_local->way > 0 ? scui_ui_res_local->route -

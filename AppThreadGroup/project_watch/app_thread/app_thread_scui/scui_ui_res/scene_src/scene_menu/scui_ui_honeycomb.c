@@ -72,7 +72,6 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -221,8 +220,6 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_event_check_execute(event))
-             break;
         
         scui_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
@@ -329,8 +326,6 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        if (!scui_event_check_execute(event))
-             break;
         
         bool relayout = false;
         #if SCUI_UI_HONEYCOMB_SCALE_MODE

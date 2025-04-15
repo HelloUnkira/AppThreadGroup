@@ -11,6 +11,7 @@ typedef enum {
     /* 调度事件<s> */
     scui_event_sched_s,
     scui_event_sched_all,
+    scui_event_sched_none,      /* 空调度(激活事件调度用) */
     scui_event_sched_delay,     /* 迟延调度(异步到新事件) */
     scui_event_anima_elapse,    /* 动画轮转调度 */
     scui_event_focus_lost,      /* 窗口焦点失去事件 */

@@ -298,9 +298,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 动画事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_anima_elapse) {
-        // 全局帧动画不分三步调度
-        if (!scui_event_check_execute(event))
-             return;
         scui_event_mask_keep(event);
         /* 全局滚动检查 */
         #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
@@ -377,9 +374,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件ptr:回溯递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
-        // 输入事件不分三步调度
-        if (!scui_event_check_execute(event))
-             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
         bool event_filter = true;
@@ -430,9 +424,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件enc:顺向递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
-        // 输入事件不分三步调度
-        if (!scui_event_check_execute(event))
-             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
         bool event_filter = true;
@@ -460,9 +451,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 输入事件key:顺向递归************************************************* */
     /*************************************************************************/
     if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
-        // 输入事件不分三步调度
-        if (!scui_event_check_execute(event))
-             return;
         SCUI_LOG_INFO("event %u", event->type);
         /* 是否自己吸收处理(冒泡自己) */
         if (widget->style.indev_key)
@@ -485,9 +473,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*流程派发 ************************************************************* */
     /*************************************************************************/
     if (event->type == scui_event_change_lang) {
-        // 控件事件不分三步调度
-        if (!scui_event_check_execute(event))
-             return;
         scui_event_mask_keep(event);
         scui_widget_event_bubble(event, NULL, true);
         return;

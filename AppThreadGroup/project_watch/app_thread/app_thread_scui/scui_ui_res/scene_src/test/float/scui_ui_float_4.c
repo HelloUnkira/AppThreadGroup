@@ -20,7 +20,6 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_1 = SCUI_HANDLE_INVALID;

@@ -41,9 +41,6 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;

@@ -88,6 +88,9 @@
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
 
+/* 主事件调度最长占用 */
+#define SCUI_EVENT_OCCUPY_LIMIT                     (300 * 1000)
+
 /* 根控件背景外存直达画布(节约峰值内存) */
 #define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)
 
@@ -126,6 +129,9 @@
 /* button:按钮1缩放限制百分比 */
 #define SCUI_WIDGET_OBJECT_PCT                      (90)
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
+
+/* indev猴子测试 */
+#define SCUI_MONKEY_TEST                            (0)
 
 /* 图形变换使用矩阵变换(包括:缩放旋转) */
 #define SCUI_DRAW_MISC_USE_MATRIX                   (1)

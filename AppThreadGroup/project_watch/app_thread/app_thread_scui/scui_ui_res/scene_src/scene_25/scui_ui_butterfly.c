@@ -234,7 +234,6 @@ void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -298,9 +297,6 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         /* 蝴蝶的跳动节拍 */
         if (scui_ui_res_local->heart_count < -scui_ui_res_local->heart_peroid ||

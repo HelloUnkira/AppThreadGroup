@@ -258,9 +258,6 @@ void scui_window_float_event_grasp_hide(scui_event_t *event)
  */
 void scui_window_float_event_grasp_key(scui_event_t *event)
 {
-    if (!scui_event_check_execute(event))
-         return;
-    
     if (event->type == scui_event_key_click) {
         /* 全局滚动锁定 */
         if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
@@ -275,8 +272,6 @@ void scui_window_float_event_grasp_key(scui_event_t *event)
  */
 void scui_window_float_event_grasp_ptr(scui_event_t *event)
 {
-    if (!scui_event_check_execute(event))
-         return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;
@@ -411,8 +406,6 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
  */
 void scui_window_float_event_check_ptr(scui_event_t *event)
 {
-    if (!scui_event_check_execute(event))
-         return;
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     scui_handle_t  handle = event->object;

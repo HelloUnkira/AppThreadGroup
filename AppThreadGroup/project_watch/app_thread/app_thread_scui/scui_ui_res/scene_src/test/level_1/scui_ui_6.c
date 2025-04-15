@@ -16,7 +16,6 @@ void scui_ui_scene_6_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -46,7 +45,6 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -150,7 +148,6 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -194,7 +191,6 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -391,7 +387,6 @@ void scui_ui_scene_6_6_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -421,7 +416,6 @@ void scui_ui_scene_6_7_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -451,7 +445,6 @@ void scui_ui_scene_6_8_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -481,7 +474,6 @@ void scui_ui_scene_6_9_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))

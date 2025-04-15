@@ -48,9 +48,6 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         SCUI_ASSERT(scale_tar_w != 0);
         SCUI_ASSERT(scale_tar_h != 0);

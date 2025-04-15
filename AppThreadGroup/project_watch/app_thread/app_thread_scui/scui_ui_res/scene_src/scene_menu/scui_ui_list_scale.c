@@ -77,7 +77,6 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -122,7 +121,6 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -200,8 +198,6 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         break;
     }
     case scui_event_ptr_click: {
-        if (!scui_event_check_execute(event))
-             break;
         
         scui_alpha_t alpha = scui_widget_alpha_get(event->object);
         if (alpha <= scui_alpha_pct20)

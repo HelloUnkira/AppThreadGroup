@@ -188,10 +188,14 @@ void scui_event_custom_myself(scui_event_t *event)
     
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
+    case scui_event_ui_tick_frame: {
+        scui_event_mask_over(event);
+        // 如果要是用时序调度, 通过该事件控制
+        scui_widget_refr(SCUI_HANDLE_INVALID, false);
+        break;
+    }
     case scui_event_ui_none_goto: {
         scui_event_mask_over(event);
-        if (!scui_event_check_execute(event))
-             break;
         
         if (handle_top != SCUI_UI_SCENE_NONE) {
             scui_window_switch_type_t *cfg_type = NULL;

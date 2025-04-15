@@ -67,7 +67,6 @@ void scui_event_register_finish(scui_event_cb_t event_cb)
     scui_event_cb_finish = event_cb;
 }
 
-
 /*@brief 事件回调全局响应权限检查
  *       before和after的响应权限检查
  *@param event 事件包
@@ -104,20 +103,31 @@ static bool scui_event_cb_check(scui_event_t *event)
     return false;
 }
 
-/*@brief 监控调度过程中指定的事件
+/*@brief 事件回调全局响应权限检查
+ *       prepare和finish的响应权限检查
  *@param event 事件包
+ *@retval 允许该事件
  */
-static void scui_event_tar_check(scui_event_t *event)
+static bool scui_event_order_check(scui_event_t *event)
 {
-    static const scui_event_type_t type_table[] = {
-        scui_event_none,
+    /* 自定义事件一律允许响应prepare和finish */
+    if (event->type >= scui_event_custom_s &&
+        event->type <= scui_event_custom_e)
+        return true;
+    
+    /* 大部分系统事件不需要响应prepare和finish */
+    /* 系统事件中必须该表中事件才响应prepare和finish */
+    static const uint32_t event_table[] = {
+        scui_event_show,
+        scui_event_hide,
+        scui_event_draw,
     };
     
-    for (uint8_t idx = 0; idx < scui_arr_len(type_table); idx++)
-        if (event->type == type_table[idx]) {
-            SCUI_LOG_INFO("catch event:%d", event->type);
-            break;
-        }
+    for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)
+        if (event->type == event_table[idx])
+            return true;
+    
+    return false;
 }
 
 /*@brief 事件响应
@@ -150,6 +160,9 @@ static void scui_event_respond(scui_event_t *event)
     /* 部分内部事件不允许正常控件监督流程 */
     /* 优先则走系统调度管理流程 */
     switch (event->type) {
+    case scui_event_sched_none:
+        scui_event_mask_over(event);
+        return;
     case scui_event_sched_delay:
         event->sched(event->handle);
         scui_event_mask_over(event);
@@ -219,7 +232,7 @@ static void scui_event_respond(scui_event_t *event)
     
     /* 系统事件发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
-        event->object = scui_window_active_curr();
+        event->object  = scui_window_active_curr();
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
@@ -227,14 +240,14 @@ static void scui_event_respond(scui_event_t *event)
         // 但是事件调度队列还存在控件树的事件未响应
         // 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响
         const char *type_stringify = scui_event_type_stringify(event->type);
-        SCUI_LOG_WARN("error widget %u %s", event->object, type_stringify);
+        SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
         return;
     }
     
     /* 事件响应对象无效(未知情况?) */
     if (scui_handle_source(event->object) == NULL) {
         const char *type_stringify = scui_event_type_stringify(event->type);
-        SCUI_LOG_WARN("error widget %u %s", event->object, type_stringify);
+        SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
         return;
     }
     
@@ -271,23 +284,43 @@ static void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_hold;
         event_filter = event_filter || event->type == scui_event_key_click;
         
-        scui_event_mask_prepare(event);
-        scui_widget_event_dispatch(event);
-        scui_event_mask_execute(event);
-        scui_widget_event_dispatch(event);
-        scui_event_mask_finish(event);
-        scui_widget_event_dispatch(event);
+        // 系统事件调度工步:prepare
+        if (scui_event_order_check(event)) {
+            scui_event_mask_prepare(event);
+            scui_widget_event_dispatch(event);
+        }
+        // 系统事件调度工步:execute
+        if (true/* must execute */) {
+            scui_event_mask_execute(event);
+            scui_widget_event_dispatch(event);
+        }
+        // 系统事件调度工步:finish
+        if (scui_event_order_check(event)) {
+            scui_event_mask_finish(event);
+            scui_widget_event_dispatch(event);
+        }
         
+        // 控件树调度结束, 检查事件是否处理完毕
         if (scui_event_check_over(event) && event_filter)
             return;
         
         if (!event_widget) {
-            scui_event_mask_prepare(event);
-            scui_window_event_dispatch(event);
-            scui_event_mask_execute(event);
-            scui_window_event_dispatch(event);
-            scui_event_mask_finish(event);
-            scui_window_event_dispatch(event);
+            
+            // 系统事件调度工步:prepare
+            if (scui_event_order_check(event)) {
+                scui_event_mask_prepare(event);
+                scui_window_event_dispatch(event);
+            }
+            // 系统事件调度工步:execute
+            if (true/* must execute */) {
+                scui_event_mask_execute(event);
+                scui_window_event_dispatch(event);
+            }
+            // 系统事件调度工步:finish
+            if (scui_event_order_check(event)) {
+                scui_event_mask_finish(event);
+                scui_window_event_dispatch(event);
+            }
         }
         
         if (scui_event_check_over(event))
@@ -298,12 +331,21 @@ static void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_custom_s &&
         event->type <= scui_event_custom_e) {
         
-        scui_event_mask_prepare(event);
-        scui_event_cb_custom(event);
-        scui_event_mask_execute(event);
-        scui_event_cb_custom(event);
-        scui_event_mask_finish(event);
-        scui_event_cb_custom(event);
+        // 系统事件调度工步:prepare
+        if (scui_event_order_check(event)) {
+            scui_event_mask_prepare(event);
+            scui_event_cb_custom(event);
+        }
+        // 系统事件调度工步:execute
+        if (true/* must execute */) {
+            scui_event_mask_execute(event);
+            scui_event_cb_custom(event);
+        }
+        // 系统事件调度工步:finish
+        if (scui_event_order_check(event)) {
+            scui_event_mask_finish(event);
+            scui_event_cb_custom(event);
+        }
         
         if (scui_event_check_over(event))
             return;
@@ -365,6 +407,8 @@ void scui_event_notify(scui_event_t *event)
  */
 void scui_event_dispatch(void)
 {
+    uint64_t tick_us = scui_tick_us();
+    
     scui_event_t event = {0};
     while (scui_event_num() != 0) {
         bool retval = scui_event_dequeue(&event, false, false);
@@ -374,5 +418,21 @@ void scui_event_dispatch(void)
         scui_event_respond(&event);
         scui_tick_calc(0x11, NULL, NULL, NULL);
         
+        // 不要让此调度, 长期的占用CPU资源
+        uint64_t tick_us_now = scui_tick_us();
+        if (tick_us_now - tick_us > SCUI_EVENT_OCCUPY_LIMIT) {
+            // 如果还有事件未处理
+            // 通过一个空的事件去补充通知
+            if (scui_event_num() != 0) {
+                scui_event_t event_ui = {
+                    .object = SCUI_HANDLE_SYSTEM,
+                    .type   = scui_event_sched_none,
+                    .absorb = scui_event_absorb_none,
+                };
+                scui_event_notify(&event_ui);
+            }
+            SCUI_LOG_WARN("occupy cpu too long");
+            break;
+        }
     }
 }

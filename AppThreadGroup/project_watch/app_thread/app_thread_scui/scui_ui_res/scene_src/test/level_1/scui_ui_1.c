@@ -16,7 +16,6 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -75,9 +74,6 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
-        if (!scui_event_check_execute(event))
-             break;
         
         static uint8_t cnt = 0;
         cnt++;

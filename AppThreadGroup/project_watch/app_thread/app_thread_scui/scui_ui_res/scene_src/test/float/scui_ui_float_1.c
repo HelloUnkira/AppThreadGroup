@@ -15,7 +15,6 @@ void scui_ui_scene_float_1_event_proc(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
@@ -48,7 +47,6 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         
         scui_widget_draw(event->object, NULL, false);
         break;
@@ -92,7 +90,6 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         
         scui_widget_draw(event->object, NULL, false);
         break;

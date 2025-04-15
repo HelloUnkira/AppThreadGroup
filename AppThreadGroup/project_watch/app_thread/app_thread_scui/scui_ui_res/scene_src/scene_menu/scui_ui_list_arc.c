@@ -89,8 +89,6 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_ptr_click: {
-        if (!scui_event_check_execute(event))
-             break;
         
         scui_alpha_t alpha = scui_widget_alpha_get(event->object);
         if (alpha <= scui_alpha_pct20)

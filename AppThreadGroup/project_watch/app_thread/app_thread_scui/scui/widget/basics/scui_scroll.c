@@ -1265,13 +1265,9 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_down:
-        if (!scui_event_check_execute(event))
-             break;
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
-        if (!scui_event_check_execute(event))
-             break;
         
         scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
         SCUI_LOG_INFO("dir:%u", event_dir);
@@ -1295,8 +1291,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_ptr_up:
-        if (!scui_event_check_execute(event))
-             break;
         
         if (scroll->hold_move) {
             scroll->hold_move = false;
@@ -1308,8 +1302,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
-        if (!scui_event_check_execute(event))
-             break;
         
         if (scroll->dir != scui_opt_dir_hor &&
             scroll->dir != scui_opt_dir_ver) {
@@ -1338,8 +1330,6 @@ void scui_scroll_event(scui_event_t *event)
         break;
     }
     case scui_event_key_click: {
-        if (!scui_event_check_execute(event))
-             break;
         
         if (scroll->dir != scui_opt_dir_hor &&
             scroll->dir != scui_opt_dir_ver) {

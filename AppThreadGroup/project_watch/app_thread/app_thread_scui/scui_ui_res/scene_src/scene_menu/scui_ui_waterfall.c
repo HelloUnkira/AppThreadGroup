@@ -38,7 +38,6 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse:
-        /* 这个事件可以视为本控件的全局刷新帧动画 */
         break;
     case scui_event_ptr_click:
     case scui_event_draw: {
