@@ -11,10 +11,10 @@
 static scui_event_cb_type_stringify_t scui_event_cb_type_stringify = NULL;
 
 /* 引擎有一个全局默认的先响应和后响应回调 */
-static scui_event_cb_t scui_event_cb_prepare = NULL;
-static scui_event_cb_t scui_event_cb_finish  = NULL;
-/* 自定义事件使用回调注册 */
-static scui_event_cb_t scui_event_cb_custom  = NULL;
+/* 事件会依照类别分为系统事件与自定义事件 */
+static scui_event_cb_t scui_event_cb_access = NULL;
+static scui_event_cb_t scui_event_cb_custom = NULL;
+static scui_event_cb_t scui_event_cb_finish = NULL;
 
 /*@brief 事件类型转标记字符串
  *@param type 事件类型
@@ -46,9 +46,17 @@ void scui_event_register_type_stringify(scui_event_cb_type_stringify_t type_stri
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
  */
-void scui_event_register_prepare(scui_event_cb_t event_cb)
+void scui_event_register_access(scui_event_cb_t event_cb)
 {
-    scui_event_cb_prepare = event_cb;
+    scui_event_cb_access = event_cb;
+}
+
+/*@brief 事件响应注册(custom)
+ *@param event_cb 事件回调
+ */
+void scui_event_register_custom(scui_event_cb_t event_cb)
+{
+    scui_event_cb_custom = event_cb;
 }
 
 /*@brief 事件引擎注册响应回调
@@ -59,13 +67,6 @@ void scui_event_register_finish(scui_event_cb_t event_cb)
     scui_event_cb_finish = event_cb;
 }
 
-/*@brief 事件响应注册(custom)
- *@param event_cb 事件回调
- */
-void scui_event_register_custom(scui_event_cb_t event_cb)
-{
-    scui_event_cb_custom = event_cb;
-}
 
 /*@brief 事件回调全局响应权限检查
  *       before和after的响应权限检查
@@ -124,7 +125,7 @@ static void scui_event_tar_check(scui_event_t *event)
  */
 static void scui_event_respond(scui_event_t *event)
 {
-    SCUI_ASSERT(scui_event_cb_prepare != NULL);
+    SCUI_ASSERT(scui_event_cb_access != NULL);
     SCUI_ASSERT(scui_event_cb_finish  != NULL);
     SCUI_ASSERT(scui_event_cb_custom  != NULL);
     SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
@@ -241,7 +242,7 @@ static void scui_event_respond(scui_event_t *event)
     
     /* 事件响应回调 */
     if (scui_event_cb_check(event))
-        scui_event_cb_prepare(event);
+        scui_event_cb_access(event);
     if (scui_event_check_over(event))
         return;
     

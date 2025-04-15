@@ -18,17 +18,17 @@ void scui_event_register_type_stringify(scui_event_cb_type_stringify_t type_stri
 /*@brief 事件引擎注册响应回调
  *@param event_cb 事件回调
  */
-void scui_event_register_prepare(scui_event_cb_t event_cb);
-
-/*@brief 事件引擎注册响应回调
- *@param event_cb 事件回调
- */
-void scui_event_register_finish(scui_event_cb_t event_cb);
+void scui_event_register_access(scui_event_cb_t event_cb);
 
 /*@brief 事件响应注册(custom)
  *@param event_cb 事件回调
  */
 void scui_event_register_custom(scui_event_cb_t event_cb);
+
+/*@brief 事件引擎注册响应回调
+ *@param event_cb 事件回调
+ */
+void scui_event_register_finish(scui_event_cb_t event_cb);
 
 /*@brief 事件通报
  *@param event 事件包

@@ -1,11 +1,6 @@
 #ifndef SCUI_WINDOW_STACK_H
 #define SCUI_WINDOW_STACK_H
 
-typedef struct {
-    scui_handle_t stack[SCUI_WINDOW_STACK_NEST];
-    scui_handle_t top;
-} scui_window_stack_t;
-
 /*@brief 窗口栈更新栈顶窗口(内部接口)
  *@param type   更新类型(0:cover;1:add;2:del;)
  */

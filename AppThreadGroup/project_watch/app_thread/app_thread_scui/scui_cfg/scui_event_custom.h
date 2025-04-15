@@ -24,15 +24,20 @@ typedef enum {
  */
 const char * scui_event_type_misc_stringify(scui_event_type_t type);
 
-/*@brief 事件响应(custom)
- *@param event 事件包
+/*备注:
+ *    事件调度分为以下的步调
+ *    access -> system/custom(myself) -> finish
  */
-void scui_event_custom(scui_event_t *event);
 
 /*@brief 事件响应
  *@param event 事件包
  */
-void scui_event_custom_prepare(scui_event_t *event);
+void scui_event_custom_access(scui_event_t *event);
+
+/*@brief 事件响应(custom)
+ *@param event 事件包
+ */
+void scui_event_custom_myself(scui_event_t *event);
 
 /*@brief 事件响应
  *@param event 事件包

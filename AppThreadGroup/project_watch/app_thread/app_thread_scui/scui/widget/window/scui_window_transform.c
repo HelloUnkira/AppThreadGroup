@@ -280,13 +280,13 @@ void scui_window_transform_cinout(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
 {
-    SCUI_ASSERT(num == 2);
-    
     // 这是特殊的变换, 只有水平变换, 没有垂直变换
     if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
         scui_window_transform_move(list, num);
         return;
     }
+    
+    SCUI_ASSERT(num == 2);
     
     for (scui_handle_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
@@ -336,13 +336,13 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
 {
-    SCUI_ASSERT(num == 2);
-    
     // 这是特殊的变换, 只有水平变换, 没有垂直变换
     if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
         scui_window_transform_move(list, num);
         return;
     }
+    
+    SCUI_ASSERT(num == 2);
     
     for (scui_handle_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
@@ -859,29 +859,25 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         
         
         
-        #if 0   // 光影特效
-        scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.cube.shadow;
-        scui_image_t *shadow = scui_handle_source_check(handle);
-        size2.w = scui_image_w(handle) / 2;
-        size2.h = scui_image_h(handle);
-        scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-        // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-        // scui_matrix_check(&inv_matrix);
-        
-        scui_area_t src_clip = {0};
-        src_clip.w = size2.w;
-        src_clip.h = size2.h;
-        src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
-        src_clip.y = 0;
-        src_matrix = inv_matrix;
-        scui_matrix_inverse(&inv_matrix);
-        
-        scui_color_t src_color = {
-            .filter = true, .color_f.full = 0xFF000000,
-        };
-        
-        scui_draw_image_matrix_blend(dst_surface, &dst_clip,
-            shadow, &src_clip, scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+        #if 1   // 光影特效
+        do {
+            scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
+            scui_image_t *shadow = scui_handle_source_check(handle);
+            size2.w = scui_image_w(handle) / 2;
+            size2.h = scui_image_h(handle);
+            scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
+            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
+            // scui_matrix_check(&inv_matrix);
+            src_matrix = inv_matrix;
+            scui_matrix_inverse(&inv_matrix);
+            
+            scui_area_t  src_clip  = {.w = size2.w, .h = size2.h,};
+            scui_color_t src_color = SCUI_COLOR_MAKE32(true, 0xFF000000, 0x0);
+            src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
+            
+            scui_draw_image_matrix_blend(dst_surface, &dst_clip, shadow, &src_clip,
+                scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+        } while (0);
         #endif
     }
 }
@@ -892,13 +888,13 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
 {
-    SCUI_ASSERT(num == 2);
-    
     // 这是特殊的变换, 只有水平变换, 没有垂直变换
     if ((scui_window_mgr.switch_args.dir & scui_opt_dir_ver) != 0) {
         scui_window_transform_move(list, num);
         return;
     }
+    
+    SCUI_ASSERT(num == 2);
     
     // active, inactive
     scui_handle_t  window_a = scui_window_active_curr();
@@ -1053,29 +1049,26 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
             
             
             
-            #if 0   // 光影特效
-            scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.cube.shadow;
-            scui_image_t *shadow = scui_handle_source_check(handle);
-            size2.w = scui_image_w(handle) / 2;
-            size2.h = scui_image_h(handle);
-            scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-            // scui_matrix_check(&inv_matrix);
-            
-            scui_area_t src_clip = {0};
-            src_clip.w = size2.w;
-            src_clip.h = size2.h;
-            src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
-            src_clip.y = 0;
-            src_matrix = inv_matrix;
-            scui_matrix_inverse(&inv_matrix);
-            
-            scui_color_t src_color = {
-                .filter = true, .color_f.full = 0xFF000000,
-            };
-            
-            scui_draw_image_matrix_blend(dst_surface, &dst_clip,
-                shadow, &src_clip, scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+            #if 1   // 光影特效
+            do {
+                scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
+                scui_image_t *shadow = scui_handle_source_check(handle);
+                size2.w = scui_image_w(handle) / 2;
+                size2.h = scui_image_h(handle) / seg_num;
+                scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
+                // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
+                // scui_matrix_check(&inv_matrix);
+                src_matrix = inv_matrix;
+                scui_matrix_inverse(&inv_matrix);
+                
+                scui_area_t  src_clip  = {.w = size2.w, .h = size2.h,};
+                scui_color_t src_color = SCUI_COLOR_MAKE32(true, 0xFF000000, 0x0);
+                src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
+                src_clip.y = size2.h * seg_idx;
+                
+                scui_draw_image_matrix_blend(dst_surface, &dst_clip, shadow, &src_clip,
+                    scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+            } while (0);
             #endif
         }
     }
@@ -1242,28 +1235,25 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         
         
         
-        #if 0   // 光影特效
-        scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.cube.shadow;
-        scui_image_t *shadow = scui_handle_source_check(handle);
-        size2.w = scui_image_w(handle) / 2;
-        size2.h = scui_image_h(handle);
-        scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-        // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-        // scui_matrix_check(&inv_matrix);
-        
-        src_clip.w = size2.w;
-        src_clip.h = size2.h;
-        src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
-        src_clip.y = 0;
-        src_matrix = inv_matrix;
-        scui_matrix_inverse(&inv_matrix);
-        
-        scui_color_t src_color = {
-            .filter = true, .color_f.full = 0xFF000000,
-        };
-        
-        scui_draw_image_matrix_blend(dst_surface, &dst_clip,
-            shadow, &src_clip, scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+        #if 1   // 光影特效
+        do {
+            scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
+            scui_image_t *shadow = scui_handle_source_check(handle);
+            size2.w = scui_image_w(handle) / 2;
+            size2.h = scui_image_h(handle);
+            scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
+            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
+            // scui_matrix_check(&inv_matrix);
+            src_matrix = inv_matrix;
+            scui_matrix_inverse(&inv_matrix);
+            
+            scui_area_t  src_clip  = {.w = size2.w, .h = size2.h,};
+            scui_color_t src_color = SCUI_COLOR_MAKE32(true, 0xFF000000, 0x0);
+            src_clip.x = scui_window_mgr.switch_args.pct * size2.w / 100;
+            
+            scui_draw_image_matrix_blend(dst_surface, &dst_clip, shadow, &src_clip, 
+                scui_alpha_pct100, src_color, &inv_matrix, &src_matrix);
+        } while (0);
         #endif
     }
 }

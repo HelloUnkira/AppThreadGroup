@@ -57,17 +57,18 @@ void scui_ready(void)
     scui_event_register_type_stringify(scui_event_type_misc_stringify);
     
     /* event register: */
-    scui_event_register_prepare(scui_event_custom_prepare);
+    scui_event_register_access(scui_event_custom_access);
+    scui_event_register_custom(scui_event_custom_myself);
     scui_event_register_finish(scui_event_custom_finish);
-    scui_event_register_custom(scui_event_custom);
     
     scui_handle_table_t table = {0};
     /* 句柄表(widget) */
-    static void *widget_remap[scui_arr_len(scui_widget_parser_table)] = {0};
-    table.source_remap = widget_remap;
     table.offset = SCUI_HANDLE_OFFSET_WIDGET + 1;
     table.source = scui_widget_parser_table;
     table.number = scui_arr_len(scui_widget_parser_table);
+    scui_multi_t remap_size = table.number * sizeof(void *);
+    table.source_remap = SCUI_MEM_ALLOC(scui_mem_type_mix, remap_size);
+    memset(table.source_remap, 0, remap_size);
     scui_handle_table_register(&table);
     table.source_remap = NULL;
     /* 句柄表(image) */
@@ -91,18 +92,18 @@ void scui_ready(void)
     scui_multi_lang_set(&lang_type);
     
     /* 窗口交互风格 */
+    scui_opt_dir_t *cfg_dir = NULL;
+    scui_window_switch_cfg_dir(&cfg_dir);
+    *cfg_dir = SCUI_WINDOW_MGR_JUMP_DIR;
+    
     scui_window_switch_type_t *cfg_type = NULL;
     scui_window_switch_cfg_type(&cfg_type);
     *cfg_type = SCUI_WINDOW_MGR_TYPE_CFG;
     
-    scui_opt_dir_t *cfg_dir = NULL;
-    scui_window_switch_cfg_dir(&cfg_dir);
-    *cfg_dir  = SCUI_WINDOW_MGR_JUMP_DIR;
-    
     /* 窗口交互参数 */
     scui_window_switch_args_t *cfg_args = NULL;
     scui_window_switch_cfg_args(&cfg_args);
-    cfg_args->cube.shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
+    cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
     
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);

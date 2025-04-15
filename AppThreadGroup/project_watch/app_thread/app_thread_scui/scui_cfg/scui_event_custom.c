@@ -121,10 +121,64 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
     return NULL;
 }
 
+/*@brief 事件响应
+ *@param event 事件包
+ */
+void scui_event_custom_access(scui_event_t *event)
+{
+    SCUI_LOG_INFO("event widget %u", event->object);
+    switch (event->type) {
+    case scui_event_widget_scroll_s:
+    case scui_event_widget_scroll_e:
+    case scui_event_widget_scroll_c:
+        scui_presenter.vibrate_shot();
+        break;
+    default:
+        break;
+    }
+    
+    // 当我们遇到认为不能休眠的事件时,重置时间
+    switch (event->type) {
+    case scui_event_ptr_hold:
+    case scui_event_key_hold:
+    case scui_event_enc_clockwise:
+    case scui_event_enc_clockwise_anti:
+    case scui_event_widget_scroll_s:
+    case scui_event_widget_scroll_e:
+    case scui_event_widget_scroll_c:
+        app_scui_check_time_reset(0, 0);
+        break;
+    default:
+        break;
+    }
+    
+    // 此处退出休眠
+    switch (event->type) {
+    case scui_event_ptr_hold:
+    case scui_event_key_hold:
+        
+        if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
+            
+            scui_event_t event_ui = {
+                .object = SCUI_HANDLE_SYSTEM,
+                .type   = scui_event_ui_standy_exit,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event_ui);
+            app_module_system_dlps_set(false);
+        } else {
+            
+        }
+        break;
+    default:
+        break;
+    }
+}
+
 /*@brief 事件响应(custom)
  *@param event 事件包
  */
-void scui_event_custom(scui_event_t *event)
+void scui_event_custom_myself(scui_event_t *event)
 {
     // 当前在待机场景时
     scui_handle_t handle_top = SCUI_HANDLE_INVALID;
@@ -205,60 +259,6 @@ void scui_event_custom(scui_event_t *event)
         }
         break;
     }
-    default:
-        break;
-    }
-}
-
-/*@brief 事件响应
- *@param event 事件包
- */
-void scui_event_custom_prepare(scui_event_t *event)
-{
-    SCUI_LOG_INFO("event widget %u", event->object);
-    switch (event->type) {
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_e:
-    case scui_event_widget_scroll_c:
-        scui_presenter.vibrate_shot();
-        break;
-    default:
-        break;
-    }
-    
-    // 当我们遇到认为不能休眠的事件时,重置时间
-    switch (event->type) {
-    case scui_event_ptr_hold:
-    case scui_event_key_hold:
-    case scui_event_enc_clockwise:
-    case scui_event_enc_clockwise_anti:
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_e:
-    case scui_event_widget_scroll_c:
-        app_scui_check_time_reset(0, 0);
-        break;
-    default:
-        break;
-    }
-    
-    // 此处退出休眠
-    switch (event->type) {
-    case scui_event_ptr_hold:
-    case scui_event_key_hold:
-        
-        if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
-            
-            scui_event_t event_ui = {
-                .object = SCUI_HANDLE_SYSTEM,
-                .type   = scui_event_ui_standy_exit,
-                .absorb = scui_event_absorb_none,
-            };
-            scui_event_notify(&event_ui);
-            app_module_system_dlps_set(false);
-        } else {
-            
-        }
-        break;
     default:
         break;
     }

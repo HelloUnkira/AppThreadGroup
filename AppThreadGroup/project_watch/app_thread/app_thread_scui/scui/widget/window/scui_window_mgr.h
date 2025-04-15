@@ -30,9 +30,8 @@ typedef enum {
 } scui_window_switch_type_t;
 
 typedef union {
-    struct {
-        scui_handle_t shadow;
-    } cube;
+    // 这部分参数未定, 暂保留自由度
+    scui_handle_t shadow;
 } scui_window_switch_args_t;
 
 typedef struct {
@@ -55,8 +54,14 @@ typedef struct {
 } scui_window_switch_t;
 
 typedef struct {
+    scui_handle_t stack[SCUI_WINDOW_STACK_NEST];
+    scui_handle_t top;
+} scui_window_stack_t;
+
+typedef struct {
     scui_handle_t        list_num;                      /* 窗口列表数量 */
     scui_handle_t        list[SCUI_WINDOW_MGR_LIMIT];   /* 窗口管理列表 */
+    scui_window_stack_t  stack_args;                    /* 窗口栈式记录 */
     scui_window_switch_t switch_args;                   /* 窗口切换信息 */
     scui_handle_t        active_curr;                   /* 当前活跃窗口 */
     scui_handle_t        active_last;                   /* 上一活跃窗口 */
