@@ -349,33 +349,39 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_source_check(image);
-    scui_area_t   image_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
-    };
-    if (clip != NULL)
-    if (!scui_area_inter2(&image_clip, clip))
-         return;
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
+        return;
     clip = &image_clip;
     /* step:image<e> */
     
-    #if SCUI_WIDGET_ROOT_IMAGE_DIRECT
-    /* 这里有一个优化点(主要用于根控件背景绘制) */
+    /* 这里有一个优化点(主要用于覆盖的背景绘制) */
     /* 条件达到时,将资源直接加载到绘制画布上即可 */
-    if (widget->myself == SCUI_HANDLE_INVALID &&
-        scui_area_equal(&widget->clip_set.clip, clip)) {
-        scui_area_t clip_widget = scui_surface_area(widget->surface);
-    if (scui_area_equal(&widget->clip_set.clip, &clip_widget)) {
-        #if 1
-        scui_image_src_read(image_inst, widget->surface->pixel);
-        /* 上面默认使用的全局剪切域 */
-        /* 所以可能存在覆盖,为所有控件补充剪切域 */
-        scui_widget_clip_reset(widget, &widget->clip_set.clip, true);
-        scui_widget_clip_clear(widget, false);
-        scui_widget_clip_update(widget);
-        return;
-        #endif
-    }
+    #if SCUI_WIDGET_IMAGE_DIRECT
+    /* 图片的大小有个阈值,且类型要匹配 */
+    if (image_inst->type != scui_image_type_mem &&
+       !scui_pixel_have_alpha(image_inst->format) &&
+        image_inst->format == widget->surface->format)
+    if (SCUI_WIDGET_IMAGE_DIRECT_LIMIT <= scui_image_size(image_inst)) {
+        scui_area_t clip_surface = scui_surface_area(widget->surface);
+        scui_area_t clip_image   = scui_image_area(image);
+        /* 宽度要保持一致,因为需要连续的线性内存空间 */
+        if (target->w == clip_surface.w && scui_area_equal(&clip_image, clip) &&
+            target->w == clip_image.w && scui_area_inside(target, &clip_image)) {
+            /* 折算y偏移量, 到达图片的对齐点 */
+            uint32_t byte = scui_pixel_bits(widget->surface->format) / 8;
+            uint32_t line = target->y * target->w * byte;
+            uint8_t *data = widget->surface->pixel + line;
+            #if 1
+            SCUI_LOG_INFO("image direct");
+            scui_image_src_read(image_inst, data);
+            /* 上面默认使用的全局剪切域 */
+            /* 所以可能存在覆盖,为所有控件补充剪切域 */
+            scui_widget_clip_reset(widget, target, true);
+            scui_widget_clip_update(widget);
+            return;
+            #endif
+        }
     }
     #endif
     
@@ -422,13 +428,9 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_source_check(image);
-    scui_area_t   image_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
-    };
-    if (clip != NULL)
-    if (!scui_area_inter2(&image_clip, clip))
-         return;
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
+        return;
     clip = &image_clip;
     /* step:image<e> */
     
@@ -494,13 +496,9 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_source_check(image);
-    scui_area_t   image_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
-    };
-    if (clip != NULL)
-    if (!scui_area_inter2(&image_clip, clip))
-         return;
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
+        return;
     clip = &image_clip;
     /* step:image<e> */
     
@@ -538,13 +536,9 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_source_check(image);
-    scui_area_t   image_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
-    };
-    if (clip != NULL)
-    if (!scui_area_inter2(&image_clip, clip))
-         return;
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
+        return;
     clip = &image_clip;
     /* step:image<e> */
     
@@ -608,12 +602,8 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
     
     /* step:image<s> */
     scui_image_t *image_inst = scui_handle_source_check(image);
-    scui_area_t   image_clip = {
-        .w = image_inst->pixel.width,
-        .h = image_inst->pixel.height,
-    };
-    if (clip != NULL)
-    if (!scui_area_inter2(&image_clip, clip))
+    scui_area_t   image_clip = scui_image_area(image);
+    if (clip != NULL && !scui_area_inter2(&image_clip, clip))
          return;
     clip = &image_clip;
     /* step:image<e> */

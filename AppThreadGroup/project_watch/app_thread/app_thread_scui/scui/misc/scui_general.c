@@ -364,6 +364,21 @@ scui_coord_t scui_pixel_bits(scui_pixel_cf_t cf)
     return cf & scui_pixel_cf_bits_mask;
 }
 
+/*@brief 像素点是否有透明度
+ *@param cf 像素点格式
+ *@retval 是否有透明度
+ */
+bool scui_pixel_have_alpha(scui_pixel_cf_t cf)
+{
+    switch (cf) {
+    case scui_pixel_cf_bmp565:
+    case scui_pixel_cf_bmp888:
+        return false;
+    default:
+        return true;
+    }
+}
+
 /*@brief 画布有效区域
  *@param surface 画布实例
  *@retval 区域

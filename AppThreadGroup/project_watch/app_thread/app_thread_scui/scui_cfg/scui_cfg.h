@@ -91,8 +91,9 @@
 /* 主事件调度最长占用 */
 #define SCUI_EVENT_OCCUPY_LIMIT                     (300 * 1000)
 
-/* 根控件背景外存直达画布(节约峰值内存) */
-#define SCUI_WIDGET_ROOT_IMAGE_DIRECT               (1)
+/* 图片外存直达画布(节约峰值内存) */
+#define SCUI_WIDGET_IMAGE_DIRECT                    (1)
+#define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES / 3)
 
 /* 移动时停止帧动画(假渲染) */
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)

@@ -361,11 +361,10 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);
     
     // 需要加这个条件吗??? 带透明度的画布不允许copy吗???
-    // dst_surface->format != scui_pixel_cf_bmp565 &&
-    // dst_surface->format != scui_pixel_cf_bmp888
+    // scui_pixel_have_alpha(dst_surface->format)
     
-    if (dst_surface->alpha  != scui_alpha_cover     ||
-        src_surface->alpha  != scui_alpha_cover     ||
+    if (dst_surface->alpha  != scui_alpha_cover ||
+        src_surface->alpha  != scui_alpha_cover ||
         dst_surface->format != src_surface->format) {
         SCUI_LOG_ERROR("unsupported copy");
         return;
@@ -425,9 +424,8 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
     /* 全覆盖混合:直接copy */
     if (dst_surface->alpha  == scui_alpha_cover &&
         src_surface->alpha  == scui_alpha_cover &&
-       (dst_surface->format == scui_pixel_cf_bmp565 ||
-        dst_surface->format == scui_pixel_cf_bmp888) &&
-        dst_surface->format == src_surface->format && !src_color.filter) {
+        dst_surface->format == src_surface->format &&
+       !scui_pixel_have_alpha(src_surface->format) && !src_color.filter) {
         scui_draw_area_copy(dst_surface, dst_clip, src_surface, src_clip);
         return;
     }
