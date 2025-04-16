@@ -7,6 +7,8 @@
 
 #include "scui.h"
 
+#if 0   // discard, we don't need this
+
 static scui_window_float_t scui_window_float = {0};
 
 /*@brief 窗口配置参数获取
@@ -523,3 +525,4 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         break;
     }
 }
+#endif

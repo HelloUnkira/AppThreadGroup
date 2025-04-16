@@ -6,13 +6,13 @@ typedef enum {
     scui_button_mode_scale,         // 缩放按钮
 } scui_button_mode_t;
 
-typedef struct {
-    scui_widget_t       widget;
-    scui_event_cb_t     notify_cb;  /* 专属事件通知 */
-    scui_button_mode_t  mode;       /* 按钮模式 */
-    scui_handle_t       image[4];   /* 图像句柄:四角(左上,右上,左下,右下) */
-    scui_color_t        color;      /* 图像源色调 */
-    scui_coord_t        delta;      /* 边界填充线(0:忽略;-1:所有;其他:边界) */
+typedef struct { scui_class_widget(widget)
+    /* 外部域: */
+    scui_event_cb_t    notify_cb;   /* 专属事件通知 */
+    scui_button_mode_t mode;        /* 按钮模式 */
+    scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */
+    scui_color_t       color;       /* 图像源色调 */
+    scui_coord_t       delta;       /* 边界填充线(0:忽略;-1:所有;其他:边界) */
     /* 内部域(模式): */
     union {
         /* 缩放按钮 */
@@ -27,13 +27,13 @@ typedef struct {
 } scui_button_t;
 
 #pragma pack(push, 1)
-typedef struct {
-    scui_widget_maker_t widget;
-    scui_event_cb_t     notify_cb;  /* 专属事件通知 */
-    scui_button_mode_t  mode;       /* 按钮模式 */
-    scui_handle_t       image[4];   /* 图像句柄:四角(左上,右上,左下,右下) */
-    scui_color_t        color;      /* 图像源色调 */
-    scui_coord_t        delta;      /* 边界填充线(0:忽略;-1:所有;其他:边界) */
+typedef struct { scui_class_widget_maker(widget)
+    /* 外部域: */
+    scui_event_cb_t    notify_cb;   /* 专属事件通知 */
+    scui_button_mode_t mode;        /* 按钮模式 */
+    scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */
+    scui_color_t       color;       /* 图像源色调 */
+    scui_coord_t       delta;       /* 边界填充线(0:忽略;-1:所有;其他:边界) */
 } scui_button_maker_t;
 #pragma pack(pop)
 

@@ -58,12 +58,12 @@
 #include "scui_widget_draw.h"
 #include "scui_widget_event.h"
 /* widget: */
-#include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_mgr.h"        /* 窗口管理器 */
 #include "scui_window_switch.h"     /* 窗口管理器 */
 #include "scui_window_transform.h"  /* 窗口管理器 */
 #include "scui_window_float.h"      /* 窗口管理器 */
 #include "scui_window_stack.h"      /* 窗口管理器 */
+#include "scui_window.h"            /* 控件(窗口) */
 /* widget: */
 #include "scui_custom.h"            /* 控件(自定义) */
 #include "scui_custom_draw.h"       /* 控件(自定义:插件) */

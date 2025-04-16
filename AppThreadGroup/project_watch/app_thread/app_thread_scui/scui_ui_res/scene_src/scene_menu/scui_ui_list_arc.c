@@ -215,8 +215,6 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     default:
-        if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
-            scui_window_float_event_check_ptr(event);
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }

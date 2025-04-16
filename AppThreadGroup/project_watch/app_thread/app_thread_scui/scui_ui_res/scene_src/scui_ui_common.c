@@ -388,6 +388,7 @@ void scui_ui_scene_mini_card_cfg(void)
 /*****************************************************************************/
 void scui_ui_scene_link_cfg(scui_event_t *event)
 {
+    #if 0   // discard, we don't need this
     if (event->type == scui_event_show &&
         scui_event_check_prepare(event)) {
         
@@ -414,6 +415,7 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         }
         return;
     }
+    #endif
     
     // 仅焦点切换时才可进行
     if (event->type != scui_event_focus_get ||
@@ -421,67 +423,98 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         return;
     
     /* 窗口属性参数配置(场景管理) */
-    scui_window_cfg_t window_cfg = {0};
-    scui_window_cfg_get(event->object, &window_cfg);
-    window_cfg.sibling[0] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[1] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[2] = SCUI_HANDLE_INVALID;
-    window_cfg.sibling[3] = SCUI_HANDLE_INVALID;
+    scui_handle_t window_sibling[4] = {0};
+    scui_window_switch_type_t switch_type[4] = {0};
+    window_sibling[0] = SCUI_HANDLE_INVALID;
+    window_sibling[1] = SCUI_HANDLE_INVALID;
+    window_sibling[2] = SCUI_HANDLE_INVALID;
+    window_sibling[3] = SCUI_HANDLE_INVALID;
+    switch_type[0] = scui_window_switch_auto;
+    switch_type[1] = scui_window_switch_auto;
+    switch_type[2] = scui_window_switch_auto;
+    switch_type[3] = scui_window_switch_auto;
+    
+    // float window
+    switch (event->object) {
+    case SCUI_UI_SCENE_TEST:
+        window_sibling[0] = SCUI_UI_SCENE_FLOAT_1;
+        window_sibling[1] = SCUI_UI_SCENE_FLOAT_2;
+        window_sibling[2] = SCUI_UI_SCENE_FLOAT_3;
+        window_sibling[3] = SCUI_UI_SCENE_FLOAT_4;
+        switch_type[0] = scui_window_switch_cover_in;
+        switch_type[1] = scui_window_switch_cover_in;
+        switch_type[2] = scui_window_switch_cover_in;
+        switch_type[3] = scui_window_switch_cover_in;
+        break;
+    case SCUI_UI_SCENE_FLOAT_1:
+        window_sibling[1] = SCUI_UI_SCENE_TEST;
+        switch_type[1] = scui_window_switch_cover_out;
+        break;
+    case SCUI_UI_SCENE_FLOAT_2:
+        window_sibling[0] = SCUI_UI_SCENE_TEST;
+        switch_type[0] = scui_window_switch_cover_out;
+        break;
+    case SCUI_UI_SCENE_FLOAT_3:
+        window_sibling[3] = SCUI_UI_SCENE_TEST;
+        switch_type[3] = scui_window_switch_cover_out;
+        break;
+    case SCUI_UI_SCENE_FLOAT_4:
+        window_sibling[2] = SCUI_UI_SCENE_TEST;
+        switch_type[2] = scui_window_switch_cover_out;
+        break;
+    }
+    
+    // float window
+    switch (event->object) {
+    case SCUI_UI_SCENE_HOME:
+        window_sibling[2] = SCUI_UI_SCENE_MINI_CARD;
+        switch_type[2] = scui_window_switch_cover_in;
+        break;
+    case SCUI_UI_SCENE_MINI_CARD:
+        window_sibling[3] = SCUI_UI_SCENE_HOME;
+        switch_type[3] = scui_window_switch_cover_out;
+        break;
+    }
     
     switch (event->object) {
     case SCUI_UI_SCENE_HOME:
-        window_cfg.sibling[2] = SCUI_UI_SCENE_6;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_ACTIVITY;
+        window_sibling[3] = SCUI_UI_SCENE_ACTIVITY;
         break;
     case SCUI_UI_SCENE_ACTIVITY:
-        window_cfg.sibling[2] = SCUI_UI_SCENE_HOME;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_1;
+        window_sibling[2] = SCUI_UI_SCENE_HOME;
+        window_sibling[3] = SCUI_UI_SCENE_1;
         break;
     case SCUI_UI_SCENE_1:
-        window_cfg.sibling[0] = SCUI_UI_SCENE_TEST;
-        window_cfg.sibling[1] = SCUI_UI_SCENE_CUBE;
-        window_cfg.sibling[2] = SCUI_UI_SCENE_ACTIVITY;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_2;
-        break;
-    case SCUI_UI_SCENE_2:
-        window_cfg.sibling[1] = SCUI_UI_SCENE_SOCCER;
-        window_cfg.sibling[2] = SCUI_UI_SCENE_1;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_3;
-        break;
-    case SCUI_UI_SCENE_3:
-        window_cfg.sibling[0] = SCUI_UI_SCENE_BUTTERFLY;
-        window_cfg.sibling[2] = SCUI_UI_SCENE_2;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_4;
-        break;
-    case SCUI_UI_SCENE_4:
-        window_cfg.sibling[2] = SCUI_UI_SCENE_3;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_5;
-        break;
-    case SCUI_UI_SCENE_5:
-        window_cfg.sibling[2] = SCUI_UI_SCENE_4;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_6;
-        break;
-    case SCUI_UI_SCENE_6:
-        window_cfg.sibling[2] = SCUI_UI_SCENE_5;
-        window_cfg.sibling[3] = SCUI_UI_SCENE_HOME;
-        break;
-    
-    case SCUI_UI_SCENE_TEST:
-        window_cfg.sibling[1] = SCUI_UI_SCENE_1;
+        window_sibling[0] = SCUI_UI_SCENE_TEST;
+        window_sibling[1] = SCUI_UI_SCENE_CUBE;
+        window_sibling[2] = SCUI_UI_SCENE_ACTIVITY;
+        window_sibling[3] = SCUI_UI_SCENE_2;
         break;
     case SCUI_UI_SCENE_CUBE:
-        window_cfg.sibling[0] = SCUI_UI_SCENE_1;
+        window_sibling[0] = SCUI_UI_SCENE_1;
         break;
     
-    case SCUI_UI_SCENE_SOCCER:
-        window_cfg.sibling[0] = SCUI_UI_SCENE_2;
+    case SCUI_UI_SCENE_2:
+        window_sibling[0] = SCUI_UI_SCENE_BUTTERFLY;
+        window_sibling[1] = SCUI_UI_SCENE_SOCCER;
+        window_sibling[2] = SCUI_UI_SCENE_1;
+        window_sibling[3] = SCUI_UI_SCENE_6;
         break;
-    
     case SCUI_UI_SCENE_BUTTERFLY:
-        window_cfg.sibling[1] = SCUI_UI_SCENE_3;
+        window_sibling[1] = SCUI_UI_SCENE_2;
         break;
+    case SCUI_UI_SCENE_SOCCER:
+        window_sibling[0] = SCUI_UI_SCENE_2;
+        break;
+    
+    case SCUI_UI_SCENE_6:
+        window_sibling[2] = SCUI_UI_SCENE_2;
+        window_sibling[3] = SCUI_UI_SCENE_HOME;
+        break;
+    
     default:
         break;
     }
-    scui_window_cfg_set(event->object, &window_cfg);
+    scui_window_sibling_set(event->object, window_sibling);
+    scui_window_switch_type_set(event->object, switch_type);
 }

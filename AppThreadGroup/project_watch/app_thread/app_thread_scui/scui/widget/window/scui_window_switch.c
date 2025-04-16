@@ -19,10 +19,11 @@ static void scui_window_switch_type_update(scui_window_switch_type_t type, scui_
     scui_window_mgr.switch_args.dir  = dir;
     scui_window_mgr.switch_args.type = type;
     /* 自适应需要更新窗口切换状态 */
-    if (type == scui_window_switch_auto) {
+    if (scui_window_mgr.switch_args.type == scui_window_switch_auto)
+        scui_window_mgr.switch_args.type  = scui_window_mgr.switch_args.cfg_type;
+    /* 自适应需要更新窗口切换状态 */
+    if (scui_window_mgr.switch_args.dir == scui_opt_dir_none)
         scui_window_mgr.switch_args.dir  = scui_window_mgr.switch_args.cfg_dir;
-        scui_window_mgr.switch_args.type = scui_window_mgr.switch_args.cfg_type;
-    }
 }
 
 /*@brief 窗口跳转动画回调
@@ -320,27 +321,32 @@ static void scui_window_event_switch(scui_event_t *event)
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_none)
                 break;
             scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
+            scui_window_switch_type_t switch_type = scui_window_switch_auto;
             scui_handle_t target = SCUI_HANDLE_INVALID;
             SCUI_LOG_INFO("dir:%u", event_dir);
             /* 方向检测与条件加载 */
             if (event_dir == scui_opt_dir_to_r &&
                (scui_window_mgr.switch_args.pos & scui_opt_pos_l) != 0) { /* 左窗:方向向右 */
-                target = window->cfg.sibling[2];
+                target = window->sibling[2];
+                switch_type = window->switch_type[2];
                 point.x = -hor_res;
             }
             if (event_dir == scui_opt_dir_to_l &&
                (scui_window_mgr.switch_args.pos & scui_opt_pos_r) != 0) { /* 右窗:方向向左 */
-                target = window->cfg.sibling[3];
+                target = window->sibling[3];
+                switch_type = window->switch_type[3];
                 point.x = +hor_res;
             }
             if (event_dir == scui_opt_dir_to_d &&
                (scui_window_mgr.switch_args.pos & scui_opt_pos_u) != 0) { /* 上窗:方向向下 */
-                target = window->cfg.sibling[0];
+                target = window->sibling[0];
+                switch_type = window->switch_type[0];
                 point.y = -ver_res;
             }
             if (event_dir == scui_opt_dir_to_u &&
                (scui_window_mgr.switch_args.pos & scui_opt_pos_d) != 0) { /* 下窗:方向向上 */
-                target = window->cfg.sibling[1];
+                target = window->sibling[1];
+                switch_type = window->switch_type[1];
                 point.y = +ver_res;
             }
             /* 抓获到运动的目标 */
@@ -357,9 +363,7 @@ static void scui_window_event_switch(scui_event_t *event)
                 scui_window_mgr.switch_args.list[0] = widget->myself;
                 scui_window_mgr.switch_args.list[1] = target;
                 // 更新交互方向
-                scui_window_switch_type_t type = scui_window_mgr.switch_args.cfg_type;
-                scui_opt_dir_t dir = scui_window_mgr.switch_args.dir;
-                scui_window_switch_type_update(type, dir);
+                scui_window_switch_type_update(switch_type, event_dir);
                 /* 先释放其他窗口资源 */
                 scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
                 scui_widget_show(scui_window_mgr.switch_args.list[1], false);
@@ -437,27 +441,32 @@ static void scui_window_event_switch(scui_event_t *event)
             break;
         
         scui_handle_t target = SCUI_HANDLE_INVALID;
+        scui_window_switch_type_t switch_type = scui_window_switch_auto;
         scui_opt_dir_t event_dir = scui_opt_dir_none;
         SCUI_LOG_INFO("key_id:%u", event->key_id);
         /* 方向检测与条件加载 */
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_R) { /* 左窗:方向向右 */
             event_dir = scui_opt_dir_to_r;
-            target = window->cfg.sibling[2];
+            target = window->sibling[2];
+            switch_type = window->switch_type[2];
             point.x = -hor_res;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_L) { /* 右窗:方向向左 */
             event_dir = scui_opt_dir_to_l;
-            target = window->cfg.sibling[3];
+            target = window->sibling[3];
+            switch_type = window->switch_type[3];
             point.x = +hor_res;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_D) { /* 上窗:方向向下 */
             event_dir = scui_opt_dir_to_d;
-            target = window->cfg.sibling[0];
+            target = window->sibling[0];
+            switch_type = window->switch_type[0];
             point.y = -ver_res;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_U) { /* 下窗:方向向上 */
             event_dir = scui_opt_dir_to_u;
-            target = window->cfg.sibling[1];
+            target = window->sibling[1];
+            switch_type = window->switch_type[1];
             point.y = +ver_res;
         }
         /* 抓获到运动的目标 */
@@ -474,9 +483,7 @@ static void scui_window_event_switch(scui_event_t *event)
             scui_window_mgr.switch_args.list[0] = widget->myself;
             scui_window_mgr.switch_args.list[1] = target;
             // 更新交互方向
-            scui_window_switch_type_t type = scui_window_mgr.switch_args.cfg_type;
-            scui_opt_dir_t dir = scui_window_mgr.switch_args.dir;
-            scui_window_switch_type_update(type, dir);
+            scui_window_switch_type_update(switch_type, event_dir);
             /* 先释放其他窗口资源 */
             scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
             scui_widget_show(scui_window_mgr.switch_args.list[1], false);
@@ -535,8 +542,6 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     scui_window_mgr.switch_args.lock_jump = true;
     
     /* 自适应需要更新窗口切换状态 */
-    scui_window_mgr.switch_args.type = type;
-    scui_window_mgr.switch_args.dir  = dir;
     scui_window_switch_type_update(type, dir);
     type = scui_window_mgr.switch_args.type;
     dir  = scui_window_mgr.switch_args.dir;

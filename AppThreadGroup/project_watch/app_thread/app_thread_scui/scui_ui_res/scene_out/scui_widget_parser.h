@@ -69,23 +69,20 @@ typedef enum {
 	SCUI_UI_SCENE_1_VEDIO, // 0x103c
 	SCUI_UI_SCENE_2, // 0x103d
 	SCUI_UI_SCENE_2_BAR_ARC, // 0x103e
-	SCUI_UI_SCENE_3, // 0x103f
-	SCUI_UI_SCENE_4, // 0x1040
-	SCUI_UI_SCENE_4_RING, // 0x1041
-	SCUI_UI_SCENE_5, // 0x1042
-	SCUI_UI_SCENE_6, // 0x1043
-	SCUI_UI_SCENE_6_1, // 0x1044
-	SCUI_UI_SCENE_6_2, // 0x1045
-	SCUI_UI_SCENE_6_3, // 0x1046
-	SCUI_UI_SCENE_6_4, // 0x1047
-	SCUI_UI_SCENE_6_5, // 0x1048
-	SCUI_UI_SCENE_6_6, // 0x1049
-	SCUI_UI_SCENE_6_7, // 0x104a
-	SCUI_UI_SCENE_6_8, // 0x104b
-	SCUI_UI_SCENE_6_9, // 0x104c
-	SCUI_UI_SCENE_TEST, // 0x104d
+	SCUI_UI_SCENE_2_RING, // 0x103f
+	SCUI_UI_SCENE_6, // 0x1040
+	SCUI_UI_SCENE_6_1, // 0x1041
+	SCUI_UI_SCENE_6_2, // 0x1042
+	SCUI_UI_SCENE_6_3, // 0x1043
+	SCUI_UI_SCENE_6_4, // 0x1044
+	SCUI_UI_SCENE_6_5, // 0x1045
+	SCUI_UI_SCENE_6_6, // 0x1046
+	SCUI_UI_SCENE_6_7, // 0x1047
+	SCUI_UI_SCENE_6_8, // 0x1048
+	SCUI_UI_SCENE_6_9, // 0x1049
+	SCUI_UI_SCENE_TEST, // 0x104a
 } scui_widget_parser_handle_t;
 
-extern const void * scui_widget_parser_table[78];
+extern const void * scui_widget_parser_table[75];
 
 #endif

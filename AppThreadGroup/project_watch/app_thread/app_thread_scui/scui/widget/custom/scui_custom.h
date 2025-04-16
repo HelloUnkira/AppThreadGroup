@@ -1,14 +1,15 @@
 #ifndef SCUI_CUSTOM_H
 #define SCUI_CUSTOM_H
 
-typedef struct {
-    scui_widget_t widget;
-    void         *draw_dsc;     /* 绘制描述符(全局,唯一) */
+typedef struct { scui_class_widget(widget)
+    /* 外部域: */
+    /* 内部域: */
+    void *draw_dsc; /* 绘制描述符(全局,唯一) */
 } scui_custom_t;
 
 #pragma pack(push, 1)
-typedef struct {
-    scui_widget_maker_t widget;
+typedef struct { scui_class_widget_maker(widget)
+    /* 外部域: */
 } scui_custom_maker_t;
 #pragma pack(pop)
 

@@ -1,8 +1,8 @@
 #ifndef SCUI_STRING_H
 #define SCUI_STRING_H
 
-typedef struct {
-    scui_widget_t       widget;
+typedef struct { scui_class_widget(widget)
+    /* 外部域: */
     scui_handle_t       text;           // 字符串
     scui_handle_t       font_idx;       // 字库索引
     scui_handle_t       lang_type;      // 语言类型
@@ -22,16 +22,16 @@ typedef struct {
 } scui_string_t;
 
 #pragma pack(push, 1)
-typedef struct {
-    scui_widget_maker_t     widget;
-    scui_handle_t           text;           // 字符串
-    scui_handle_t           font_idx;       // 字库索引
-    scui_handle_t           lang_type;      // 语言类型
-    scui_string_args_t      args;           // 字符串绘制参数
-    scui_coord_t            unit_ms;        // 滚动单元时间
-    scui_coord_t            unit_dx;        // 滚动单元距离
-    uint64_t                unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
-    uint64_t                draw_cache:1;   // 绘制缓存块
+typedef struct { scui_class_widget_maker(widget)
+    /* 外部域: */
+    scui_handle_t       text;           // 字符串
+    scui_handle_t       font_idx;       // 字库索引
+    scui_handle_t       lang_type;      // 语言类型
+    scui_string_args_t  args;           // 字符串绘制参数
+    scui_coord_t        unit_ms;        // 滚动单元时间
+    scui_coord_t        unit_dx;        // 滚动单元距离
+    uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
+    uint64_t            draw_cache:1;   // 绘制缓存块
 } scui_string_maker_t;
 #pragma pack(pop)
 

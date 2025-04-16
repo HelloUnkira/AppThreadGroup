@@ -9,29 +9,29 @@
  *           背景,边界,外部线,阴影
  */
 
-typedef struct {
-    scui_widget_t       widget;
-    scui_event_cb_t     notify_cb;  /* 专属事件通知 */
-    scui_color_t        color[4];   /* 部件源色调(s->e) */
-    scui_alpha_t        alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
-    scui_coord_t        width[4];   /* 部件宽度(背景无效) */
-    scui_coord_t        radius;     /* 部件圆角(背景半径) */
+typedef struct { scui_class_widget(widget)
+    /* 外部域: */
+    scui_event_cb_t notify_cb;  /* 专属事件通知 */
+    scui_color_t    color[4];   /* 部件源色调(s->e) */
+    scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
+    scui_coord_t    width[4];   /* 部件宽度(背景无效) */
+    scui_coord_t    radius;     /* 部件圆角(背景半径) */
     /* 内部域(模式): */
-    scui_coord_t        way;
-    scui_coord_t        pct;
-    scui_coord_t        lim;
-    uint8_t             hold:1;
-    uint8_t             click:1;
+    scui_coord_t    way;
+    scui_coord_t    pct;
+    scui_coord_t    lim;
+    uint8_t         hold:1;
+    uint8_t         click:1;
 } scui_objbtn_t;
 
 #pragma pack(push, 1)
-typedef struct {
-    scui_widget_maker_t widget;
-    scui_event_cb_t     notify_cb;  /* 专属事件通知 */
-    scui_color_t        color[4];   /* 部件源色调(s->e) */
-    scui_alpha_t        alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
-    scui_coord_t        width[4];   /* 部件宽度(背景无效) */
-    scui_coord_t        radius;     /* 部件圆角(背景半径) */
+typedef struct { scui_class_widget_maker(widget)
+    /* 外部域: */
+    scui_event_cb_t notify_cb;  /* 专属事件通知 */
+    scui_color_t    color[4];   /* 部件源色调(s->e) */
+    scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
+    scui_coord_t    width[4];   /* 部件宽度(背景无效) */
+    scui_coord_t    radius;     /* 部件圆角(背景半径) */
 } scui_objbtn_maker_t;
 #pragma pack(pop)
 

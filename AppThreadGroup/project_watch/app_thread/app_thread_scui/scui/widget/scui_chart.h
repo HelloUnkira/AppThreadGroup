@@ -38,13 +38,13 @@ typedef struct {
     scui_coord_t   *vlist;
 } scui_chart_line_data_t;
 
-typedef struct {
-    scui_widget_t       widget;
-    scui_chart_type_t   type;
+typedef struct { scui_class_widget(widget)
+    /* 外部域: */
+    scui_chart_type_t type;
     /* 图表类型对应数据域: */
     union {
-    scui_chart_histogram_t  histogram;
-    scui_chart_line_t       line;
+    scui_chart_histogram_t histogram;
+    scui_chart_line_t      line;
     /* 继续补充... */
     };
     /* 内部域: */
@@ -56,13 +56,13 @@ typedef struct {
 } scui_chart_t;
 
 #pragma pack(push, 1)
-typedef struct {
-    scui_widget_maker_t widget;
-    scui_chart_type_t   type;
+typedef struct { scui_class_widget_maker(widget)
+    /* 外部域: */
+    scui_chart_type_t type;
     /* 图表类型对应数据域: */
     union {
-    scui_chart_histogram_t  histogram;
-    scui_chart_line_t       line;
+    scui_chart_histogram_t histogram;
+    scui_chart_line_t      line;
     /* 继续补充... */
     };
 } scui_chart_maker_t;

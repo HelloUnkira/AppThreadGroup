@@ -45,13 +45,15 @@ void scui_window_make(scui_window_maker_t *maker, scui_handle_t *handle, bool la
         scui_widget_surface_refr(*handle, true);
     }
     
-    scui_window_cfg_def(&window->cfg);
-    
     window->level       = maker->level;
     window->buffer      = maker->buffer;
     window->resident    = maker->resident;
     window->hang_only   = maker->hang_only;
     window->format      = maker->format;
+    
+    // 初始化默认为自动切换类型
+    for(scui_handle_t idx = 0; idx < 4; idx++)
+        window->switch_type[idx] = scui_window_switch_auto;
 }
 
 /*@brief 窗口控件销毁
@@ -74,40 +76,58 @@ void scui_window_burn(scui_handle_t handle)
     SCUI_MEM_FREE(window);
 }
 
-/*@brief 窗口配置参数默认
- *@param handle 窗口控件句柄
- *@param cfg    配置参数
- */
-void scui_window_cfg_def(scui_window_cfg_t *cfg)
-{
-    for (uint8_t idx = 0; idx < 4; idx++) {
-        cfg->sibling[idx] = SCUI_HANDLE_INVALID;
-        cfg->preload[idx] = false;
-    }
-}
-
 /*@brief 窗口配置参数获取
- *@param handle 窗口控件句柄
- *@param cfg    配置参数
+ *@param handle  窗口控件句柄
+ *@param sibling 配置参数
  */
-void scui_window_cfg_get(scui_handle_t handle, scui_window_cfg_t *cfg)
+void scui_window_sibling_get(scui_handle_t handle, scui_handle_t sibling[4])
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
     
-    *cfg = window->cfg;
+    for(scui_handle_t idx = 0; idx < 4; idx++)
+        sibling[idx] = window->sibling[idx];
 }
 
 /*@brief 窗口配置参数设置
- *@param handle 窗口控件句柄
- *@param cfg    配置参数
+ *@param handle  窗口控件句柄
+ *@param sibling 配置参数
  */
-void scui_window_cfg_set(scui_handle_t handle, scui_window_cfg_t *cfg)
+void scui_window_sibling_set(scui_handle_t handle, scui_handle_t sibling[4])
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
     
-    window->cfg = *cfg;
+    for(scui_handle_t idx = 0; idx < 4; idx++)
+        window->sibling[idx] = sibling[idx];
+}
+
+/*@brief 窗口配置参数获取
+ *@param handle      窗口控件句柄
+ *@param switch_type 配置参数
+ */
+void scui_window_switch_type_get(scui_handle_t handle, scui_window_switch_type_t switch_type[4])
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    for(scui_handle_t idx = 0; idx < 4; idx++)
+        switch_type[idx] = window->switch_type[idx];
+}
+
+/*@brief 窗口配置参数设置
+ *@param handle      窗口控件句柄
+ *@param switch_type 配置参数
+ */
+void scui_window_switch_type_set(scui_handle_t handle, scui_window_switch_type_t switch_type[4])
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    for(scui_handle_t idx = 0; idx < 4; idx++)
+        window->switch_type[idx] = switch_type[idx];
 }

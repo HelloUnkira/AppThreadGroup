@@ -213,7 +213,9 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     /* 1.单一窗口直接渲染 */
     mode_simple = mode_simple || num == 1;
     /* 2.多窗口叠加不应用特效渲染 */
+    #if 0   // discard, we don't need this
     mode_simple = mode_simple || scui_window_float_running();
+    #endif
     /* 3.仅窗口切换时应用特效渲染 */
     mode_simple = mode_simple || scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key);
     
