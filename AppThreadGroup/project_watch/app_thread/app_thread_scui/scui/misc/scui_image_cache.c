@@ -327,8 +327,8 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
             unit = NULL;
         }
         /* 为数据区申请新资源 */
-        unit          = SCUI_MEM_ALLOC(scui_mem_type_mix,   sizeof(scui_image_unit_t));
-        unit->data    = SCUI_MEM_ALLOC(scui_mem_type_graph, image_size);
+        unit          = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_unit_t));
+        unit->data    = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);
         unit->image   = image_unit->image;
         unit->count   = 1;
         unit->lock    = 1;

@@ -113,7 +113,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
             scui_widget_surface_refr(scui_ui_res_local->big_3_slave, true);
             
             scui_widget_show(scui_ui_res_local->big_3_slave, false);
-            scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, false);
+            scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, true);
         }
         break;
     }

@@ -29,7 +29,6 @@ void app_sys_mem_dir_ready(app_sys_mem_dir_t *mem_dir, uintptr_t addr, uintptr_t
 {
     APP_SYS_ASSERT(size > sizeof(app_sys_mem_dir_item_t));
     APP_SYS_ASSERT(app_sys_align_check((void *)addr, sizeof(uintptr_t)));
-    app_mutex_process(&mem_dir->mutex, app_mutex_static);
     app_sys_list_dll_reset(&mem_dir->dl_list_alloc);
     app_sys_list_dll_reset(&mem_dir->dl_list_free);
     mem_dir->addr = addr;
@@ -52,7 +51,6 @@ void app_sys_mem_dir_ready(app_sys_mem_dir_t *mem_dir, uintptr_t addr, uintptr_t
 static void * app_sys_mem_dir_alloc_raw(app_sys_mem_dir_t *mem_dir, uintptr_t size, bool way)
 {
     void *pointer = NULL;
-    app_mutex_process(&mem_dir->mutex, app_mutex_take);
     /* 正向分配,逆向分配: */
     if (way) {
         app_sys_mem_dir_item_t *mem_dir_item = NULL;
@@ -114,7 +112,6 @@ static void * app_sys_mem_dir_alloc_raw(app_sys_mem_dir_t *mem_dir, uintptr_t si
         }
     }
     /*  */
-    app_mutex_process(&mem_dir->mutex, app_mutex_give);
     return pointer;
 }
 
@@ -130,7 +127,6 @@ static void app_sys_mem_dir_free_raw(app_sys_mem_dir_t *mem_dir, void *pointer)
         APP_SYS_LOG_WARN("ont in this heap");
         return;
     }
-    app_mutex_process(&mem_dir->mutex, app_mutex_take);
     app_sys_mem_dir_item_t *mem_dir_item = (uintptr_t)pointer - sizeof(app_sys_mem_dir_item_t);
     /* canary检查 */
     bool canary_check = true;
@@ -177,7 +173,6 @@ static void app_sys_mem_dir_free_raw(app_sys_mem_dir_t *mem_dir, void *pointer)
         /*  */
     }
     /*  */
-    app_mutex_process(&mem_dir->mutex, app_mutex_give);
 }
 
 /*@brief 双端分配堆获取内存
@@ -230,13 +225,57 @@ void app_sys_mem_dir_free(app_sys_mem_dir_t *mem_dir, void *pointer)
     app_sys_mem_dir_free_raw(mem_dir, pointer);
 }
 
+/*@brief 双端分配堆内存使用
+ *@param mem_olsf 双端分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_dir_used(app_sys_mem_dir_t *mem_dir)
+{
+    return mem_dir->used;
+}
+
+/*@brief 双端分配堆计算指定内存
+ *@param mem_olsf 双端分配堆实例
+ *@param pointer  内存地址
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_dir_size(app_sys_mem_dir_t *mem_dir, void *pointer)
+{
+    app_sys_list_dll_btra(&mem_dir->dl_list_alloc, item) {
+        app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
+        void *pointer_inner = (uint8_t *)mem_dir_item + sizeof(app_sys_mem_dir_item_t);
+        
+        if (pointer_inner == pointer)
+            return mem_dir_item->size;
+    }
+    
+    return 0;
+}
+
+/*@brief 双端分配堆计算指定内存所属
+ *@param mem_olsf 双端分配堆实例
+ *@param pointer  内存地址
+ *@retval 包含与否
+ */
+bool app_sys_mem_dir_inside(app_sys_mem_dir_t *mem_dir, void *pointer)
+{
+    if (pointer == NULL)
+        return false;
+    
+    if (mem_dir->addr <= (uintptr_t)pointer &&
+        mem_dir->addr + mem_dir->size >= (uintptr_t)pointer)
+        return true;
+    
+    return false;
+}
+
 /*@brief 双端分配堆获取内存
  *@param mem_dir 双端分配堆实例
+ *@retval 堆状态(正常, 异常)
  */
 bool app_sys_mem_dir_check(app_sys_mem_dir_t *mem_dir)
 {
     bool mem_dir_is_valid = true;
-    app_mutex_process(&mem_dir->mutex, app_mutex_take);
     APP_SYS_LOG_INFO("heap size:%d", mem_dir->size);
     APP_SYS_LOG_INFO("heap used:%d", mem_dir->used);
     /* 分配堆 */
@@ -262,6 +301,45 @@ bool app_sys_mem_dir_check(app_sys_mem_dir_t *mem_dir)
         APP_SYS_LOG_INFO("addr:%p total size:%d", mem_dir_item->offset, mem_dir_item->size);
     }
     /*  */
-    app_mutex_process(&mem_dir->mutex, app_mutex_give);
+    return mem_dir_is_valid;
+}
+
+/*@brief 双端分配堆内存遍历检查
+ *@param mem_olsf 双端分配堆实例
+ *@param invoke   回调实例
+ *@retval 堆状态(正常, 异常)
+ */
+bool app_sys_mem_dir_walk(app_sys_mem_dir_t *mem_dir, void (*invoke)(void *pointer, bool used))
+{
+    bool mem_dir_is_valid = true;
+    APP_SYS_LOG_INFO("heap size:%d", mem_dir->size);
+    APP_SYS_LOG_INFO("heap used:%d", mem_dir->used);
+    /* 分配堆 */
+    APP_SYS_LOG_INFO("heap list alloc:");
+    app_sys_list_dll_btra(&mem_dir->dl_list_alloc, item) {
+        app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
+        void *pointer = (uint8_t *)mem_dir_item + sizeof(app_sys_mem_dir_item_t);
+        invoke(pointer, true);
+        if (mem_dir_item->canary != APP_SYS_MEM_DIR_CANARY) {
+            APP_SYS_LOG_ERROR("block %p canary check fail, heap is broken", mem_dir_item->offset);
+            mem_dir_is_valid = false;
+            break;
+        }
+        APP_SYS_LOG_INFO("addr:%p total size:%d", mem_dir_item->offset, mem_dir_item->size);
+    }
+    /* 空闲堆 */
+    APP_SYS_LOG_INFO("heap list free:");
+    app_sys_list_dll_btra(&mem_dir->dl_list_free, item) {
+        app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
+        void *pointer = (uint8_t *)mem_dir_item + sizeof(app_sys_mem_dir_item_t);
+        invoke(pointer, false);
+        if (mem_dir_item->canary != APP_SYS_MEM_DIR_CANARY) {
+            APP_SYS_LOG_ERROR("block %p canary check fail, heap is broken", mem_dir_item->offset);
+            mem_dir_is_valid = false;
+            break;
+        }
+        APP_SYS_LOG_INFO("addr:%p total size:%d", mem_dir_item->offset, mem_dir_item->size);
+    }
+    /*  */
     return mem_dir_is_valid;
 }

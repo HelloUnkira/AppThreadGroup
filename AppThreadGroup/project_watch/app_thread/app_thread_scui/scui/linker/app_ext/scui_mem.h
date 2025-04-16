@@ -69,20 +69,32 @@ void scui_mem_sentry_check(void);
 
 #endif
 
+typedef enum {
+    scui_mem_mgr_type_none = 0,
+    scui_mem_mgr_type_olsf,
+    scui_mem_mgr_type_dir,
+} scui_mem_mgr_type_t;
+
 typedef struct {
     scui_mutex_t mutex;
     uintptr_t size_total[scui_mem_type_num];
     uintptr_t size_used[scui_mem_type_num];
     
+    // 这里尝试多种内存管理方案
+    bool mem_mgr_type[scui_mem_type_num];
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
+    app_sys_mem_dir_t   mem_dir[scui_mem_type_num];
+    
     #if SCUI_MEM_RECORD_CHECK
     scui_mem_record_t record[scui_mem_type_num];
     #endif
 } scui_mem_t;
 
 /* 宏转接,外部使用接口 */
-#define SCUI_MEM_ALLOC(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size)
-#define SCUI_MEM_FREE(ptr)          scui_mem_free( __FILE__, __func__, __LINE__, ptr)
+#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
+#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
+#define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
+
 
 /*@brief 内存分配(外部不直接调用)
  *@param file 内存分配点(文件名)
@@ -90,9 +102,10 @@ typedef struct {
  *@param func 内存分配点(函数名称)
  *@param type 内存分配类型
  *@param size 内存大小
+ *@param way  内存分配方向
  *@retval 内存地址
  */
-void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_mem_type_t type, uint32_t size);
+void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_mem_type_t type, uint32_t size, bool way);
 
 /*@brief 内存释放(外部不直接调用)
  *@param file 内存分配点(文件名)
