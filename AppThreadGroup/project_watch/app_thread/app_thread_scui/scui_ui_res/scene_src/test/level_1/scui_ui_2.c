@@ -65,7 +65,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
         }
         
-        #if 0
+        #if 1
         if (scui_event_check_prepare(event)) {
             
             #define SCUI_SCROLL_LAYOUT_AUTO     1

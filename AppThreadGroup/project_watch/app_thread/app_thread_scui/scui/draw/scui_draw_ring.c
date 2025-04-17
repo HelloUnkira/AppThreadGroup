@@ -90,20 +90,19 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     
     scui_area_t dst_edge_clip_s = {0};
     if (scui_area_inter(&dst_edge_clip_s, dst_clip, &edge_clip_s)) {
-        scui_area_t src_clip = edge_clip;
+        scui_area_t src_edge_clip = edge_clip;
         scui_point_t src_offset = {
             .x = dst_edge_clip_s.x - edge_clip_s.x,
             .y = dst_edge_clip_s.y - edge_clip_s.y,
         };
-        if (scui_area_limit_offset(&src_clip, &src_offset)) {
+        if (scui_area_limit_offset(&src_edge_clip, &src_offset)) {
             
             if (src_image->format != scui_pixel_cf_alpha4 &&
                 src_image->format != scui_pixel_cf_alpha8) {
                 /* 先取image底图到达edge画布 */ {
-                    scui_area_t src_edge_clip_s = dst_edge_clip_s;
-                    src_edge_clip_s.x -= dst_clip->x;
-                    src_edge_clip_s.y -= dst_clip->y;
-                    
+                    scui_area_t src_edge_clip_s = edge_clip_s;
+                    src_edge_clip_s.x -= dst_clip->x - src_clip->x;
+                    src_edge_clip_s.y -= dst_clip->y - src_clip->y;
                     scui_draw_area_copy(&edge_surface, &edge_clip,
                         &image_surface, &src_edge_clip_s);
                 }
@@ -112,31 +111,30 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
                      &image_e_surface, &edge_clip);
                 /* 将edge画布结果绘制 */
                 scui_draw_area_blend(dst_surface, &dst_edge_clip_s,
-                    &edge_surface, &src_clip, src_color);
+                    &edge_surface, &src_edge_clip, src_color);
             } else {
                 
                 scui_draw_image(dst_surface, &dst_edge_clip_s,
-                    src_image_e, &src_clip, src_alpha, src_color);
+                    src_image_e, &src_edge_clip, src_alpha, src_color);
             }
         }
     }
     
     scui_area_t dst_edge_clip_e = {0};
     if (scui_area_inter(&dst_edge_clip_e, dst_clip, &edge_clip_e)) {
-        scui_area_t src_clip = edge_clip;
+        scui_area_t src_edge_clip = edge_clip;
         scui_point_t src_offset = {
             .x = dst_edge_clip_e.x - edge_clip_e.x,
             .y = dst_edge_clip_e.y - edge_clip_e.y,
         };
-        if (scui_area_limit_offset(&src_clip, &src_offset)) {
+        if (scui_area_limit_offset(&src_edge_clip, &src_offset)) {
             
             if (src_image->format != scui_pixel_cf_alpha4 &&
                 src_image->format != scui_pixel_cf_alpha8) {
                 /* 先取image底图到达edge画布 */ {
-                    scui_area_t src_edge_clip_e = dst_edge_clip_e;
-                    src_edge_clip_e.x -= dst_clip->x;
-                    src_edge_clip_e.y -= dst_clip->y;
-                    
+                    scui_area_t src_edge_clip_e = edge_clip_e;
+                    src_edge_clip_e.x -= dst_clip->x - src_clip->x;
+                    src_edge_clip_e.y -= dst_clip->y - src_clip->y;
                     scui_draw_area_copy(&edge_surface, &edge_clip,
                         &image_surface, &src_edge_clip_e);
                 }
@@ -145,11 +143,11 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
                     &image_e_surface, &edge_clip);
                 /* 将edge画布结果绘制 */
                 scui_draw_area_blend(dst_surface, &dst_edge_clip_e,
-                    &edge_surface, &src_clip, src_color);
+                    &edge_surface, &src_edge_clip, src_color);
             } else {
                 
                 scui_draw_image(dst_surface, &dst_edge_clip_e,
-                    src_image_e, &src_clip, src_alpha, src_color);
+                    src_image_e, &src_edge_clip, src_alpha, src_color);
             }
         }
     }
