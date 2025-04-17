@@ -432,6 +432,19 @@ uint32_t scui_mem_size_ptr(void *ptr)
         return app_sys_mem_dir_size(&scui_mem.mem_dir[type], ptr);
 }
 
+/*@brief 内存模组统计(最大片段)
+ *@param type 内存类型
+ *@retval 内存大小
+ */
+uint32_t scui_mem_size_frag(scui_mem_type_t type)
+{
+    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
+        return app_sys_mem_olsf_frag(scui_mem.mem_olsf[type]);
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
+        return app_sys_mem_dir_frag(&scui_mem.mem_dir[type]);
+}
+
 /*@brief 内存模组统计(消耗值)
  *@param type 内存类型
  *@retval 内存大小

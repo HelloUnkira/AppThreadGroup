@@ -36,9 +36,9 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         snprintf(str_refr, sizeof(str_refr) - 1, "Sched:#-%d%%-#, Draw:#-%d%%-#, Fps:#-%d-#",
                  val_args[0], val_args[1], val_args[2]);
         
-        uint32_t color_g = 0xFF00FF00;
-        uint32_t color_y = 0xFFFFFF00;
-        uint32_t color_r = 0xFFFF0000;
+        uint32_t color_g = 0xFF008000;
+        uint32_t color_y = 0xFF808000;
+        uint32_t color_r = 0xFF800000;
         
         scui_color_t recolors[3] = {
             {   .filter = true,
@@ -73,6 +73,12 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         scui_mem_size_used(scui_mem_type_graph),
         scui_mem_size_used(scui_mem_type_user),
     };
+    uintptr_t mem_frag[MEM_TYPE] = {
+        0, // scui_mem_size_frag(scui_mem_type_mix),
+        0, // scui_mem_size_frag(scui_mem_type_font),
+        scui_mem_size_frag(scui_mem_type_graph),
+        0, // scui_mem_size_frag(scui_mem_type_user),
+    };
     
     static uintptr_t mem_used_rcd[MEM_TYPE] = {0};
     if (scui_dist(mem_used[0], mem_used_rcd[0]) > 1024 * 2  ||
@@ -95,6 +101,12 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         mem_used_f[2] = (float)mem_used[2] / 1024 / 1024;
         mem_used_f[3] = (float)mem_used[3] / 1024;
         
+        float mem_frag_f[MEM_TYPE] = {0};
+        mem_frag_f[0] = (float)mem_frag[0] / 1024;
+        mem_frag_f[1] = (float)mem_frag[1] / 1024;
+        mem_frag_f[2] = (float)mem_frag[2] / 1024 / 1024;
+        mem_frag_f[3] = (float)mem_frag[3] / 1024;
+        
         uint32_t pct_args[MEM_TYPE] = {0};
         for (uint8_t idx = 0; idx < scui_arr_len(mem_used); idx++)
             pct_args[idx] = mem_used[idx] * 100 / mem_total[idx];
@@ -105,12 +117,12 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
             "Mix:#-%d%%:%.02fK-# User:#-%d%%:%.02fK-#",
                  pct_args[0], mem_used_f[0], pct_args[3], mem_used_f[3]);
         snprintf(str_mem2, sizeof(str_mem2) - 1,
-            "Font:#-%d%%:%.02fK-# Graph:#-%d%%:%.02fM-#",
-                 pct_args[1], mem_used_f[1], pct_args[2], mem_used_f[2]);
+            "Font:#-%d%%:%.02fK-# Graph:#-%d%%:%.02fM-# Frag:#-%.03fM-#",
+                 pct_args[1], mem_used_f[1], pct_args[2], mem_used_f[2], mem_frag_f[2]);
         
-        uint32_t color_g = 0xFF00FF00;
-        uint32_t color_y = 0xFFFFFF00;
-        uint32_t color_r = 0xFFFF0000;
+        uint32_t color_g = 0xFF008000;
+        uint32_t color_y = 0xFF808000;
+        uint32_t color_r = 0xFF800000;
         
         scui_color_t recolors1[2] = {
             {   .filter = true,
@@ -120,10 +132,13 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
                 .color_s.full = pct_args[3] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[3] > 80 ? color_r : pct_args[3] > 60 ? color_y : color_g,},
         };
-        scui_color_t recolors2[2] = {
+        scui_color_t recolors2[3] = {
             {   .filter = true,
                 .color_s.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,},
             {   .filter = true,
                 .color_s.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,
                 .color_e.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,},
@@ -164,8 +179,8 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
                 string_maker.args.recolor               = true;
                 string_maker.args.align_hor             = 0;
                 string_maker.args.align_ver             = 2;
-                string_maker.args.color.color_s.full    = 0xFF808080;
-                string_maker.args.color.color_e.full    = 0xFF808080;
+                string_maker.args.color.color_s.full    = 0xFF404040;
+                string_maker.args.color.color_e.full    = 0xFF404040;
                 string_maker.args.color.filter          = true;
                 string_maker.args.line_width            = 1;
                 string_maker.args.line_under            = 1;

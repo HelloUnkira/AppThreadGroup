@@ -59,6 +59,12 @@ typedef struct {
 /* chunk的单元类型固定为uintptr_t */
 #define app_sys_mem_olsf_loops     3
 
+/*@brief 一级隔离策略分配堆内存使用(最大片段)
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_frag(app_sys_mem_olsf_t *mem_olsf);
+
 /*@brief 一级隔离策略分配堆内存使用
  *@param mem_olsf 一级隔离策略分配堆实例
  *@retval 内存大小
@@ -95,15 +101,10 @@ void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size);
 /*@brief 一级隔离策略分配堆申请内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param size     字节大小
- *@param align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@param align    指定字节对齐(sizeof(uintptr_t) * 2^k)
  *@retval 内存地址
  */
 void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size, uintptr_t align);
-
-/*@brief 一级隔离策略分配堆重获取内存
- *       realloc语义不提供,应该规避这种情况的使用
- *       它存在造成内存峰值过大的情况,使用应该规避掉对这种逻辑的产生
- */
 
 /*@brief 一级隔离策略分配堆实例初始化
  *@param addr 内存地址

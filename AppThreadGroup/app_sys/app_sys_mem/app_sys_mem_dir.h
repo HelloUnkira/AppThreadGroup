@@ -62,33 +62,34 @@ void * app_sys_mem_dir_alloc_align(app_sys_mem_dir_t *mem_dir, uintptr_t size, u
  */
 void * app_sys_mem_dir_alloc(app_sys_mem_dir_t *mem_dir, uintptr_t size, bool way);
 
-/*@brief 双端分配堆重获取内存
- *       realloc语义不提供,应该规避这种情况的使用
- *       它存在造成内存封装过大的情况,使用应该规避掉对这种逻辑的产生
- */
-
 /*@brief 双端分配堆归还内存
  *@param mem_dir 双端分配堆实例
  *@param pointer 内存地址
  */
 void app_sys_mem_dir_free(app_sys_mem_dir_t *mem_dir, void *pointer);
 
+/*@brief 双端分配堆内存使用(最大片段)
+ *@param mem_dir 双端分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_dir_frag(app_sys_mem_dir_t *mem_dir);
+
 /*@brief 双端分配堆内存使用
- *@param mem_olsf 双端分配堆实例
+ *@param mem_dir 双端分配堆实例
  *@retval 内存大小
  */
 uintptr_t app_sys_mem_dir_used(app_sys_mem_dir_t *mem_dir);
 
 /*@brief 双端分配堆计算指定内存
- *@param mem_olsf 双端分配堆实例
- *@param pointer  内存地址
+ *@param mem_dir 双端分配堆实例
+ *@param pointer 内存地址
  *@retval 内存大小
  */
 uintptr_t app_sys_mem_dir_size(app_sys_mem_dir_t *mem_dir, void *pointer);
 
 /*@brief 双端分配堆计算指定内存所属
- *@param mem_olsf 双端分配堆实例
- *@param pointer  内存地址
+ *@param mem_dir 双端分配堆实例
+ *@param pointer 内存地址
  *@retval 包含与否
  */
 bool app_sys_mem_dir_inside(app_sys_mem_dir_t *mem_dir, void *pointer);
@@ -105,8 +106,8 @@ bool app_sys_mem_dir_check(app_sys_mem_dir_t *mem_dir);
 bool app_sys_mem_dir_valid(app_sys_mem_dir_t *mem_dir);
 
 /*@brief 双端分配堆内存遍历检查
- *@param mem_olsf 双端分配堆实例
- *@param invoke   回调实例
+ *@param mem_dir 双端分配堆实例
+ *@param invoke  回调实例
  *@retval 堆状态(正常, 异常)
  */
 bool app_sys_mem_dir_walk(app_sys_mem_dir_t *mem_dir, void (*invoke)(void *pointer, bool used));

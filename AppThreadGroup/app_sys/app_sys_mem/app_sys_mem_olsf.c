@@ -460,6 +460,29 @@ static uintptr_t app_sys_mem_olsf_calc_size(app_sys_mem_olsf_t *mem_olsf, uintpt
     return size / sizeof(uintptr_t);
 }
 
+/*@brief 一级隔离策略分配堆内存使用(最大片段)
+ *@param mem_olsf 一级隔离策略分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_olsf_frag(app_sys_mem_olsf_t *mem_olsf)
+{
+    uintptr_t chunk_frag = 0;
+    uintptr_t size_free = 0;
+    uintptr_t size_used = 0;
+    
+    for (uintptr_t chunk = 0; chunk < mem_olsf->number; ) {
+        
+        uintptr_t chunk_size = app_sys_mem_olsf_size_get(mem_olsf, chunk);
+        if (chunk_frag < chunk_size && !app_sys_mem_olsf_used_get(mem_olsf, chunk))
+            chunk_frag = chunk_size;
+        
+        chunk += chunk_size;
+    }
+    
+    uintptr_t field_size = app_sys_mem_olsf_field_size(mem_olsf, true);
+    return chunk_frag * sizeof(uintptr_t) - field_size;
+}
+
 /*@brief 一级隔离策略分配堆内存使用
  *@param mem_olsf 一级隔离策略分配堆实例
  *@retval 内存大小
@@ -555,7 +578,7 @@ void * app_sys_mem_olsf_alloc(app_sys_mem_olsf_t *mem_olsf, uintptr_t size)
 /*@brief 一级隔离策略分配堆申请内存
  *@param mem_olsf 一级隔离策略分配堆实例
  *@param size     字节大小
- *@param align    指定字节对齐(不小于平台字节对齐, 2的指数)
+ *@param align    指定字节对齐(sizeof(uintptr_t) * 2^k)
  *@retval 内存地址
  */
 void * app_sys_mem_olsf_alloc_align(app_sys_mem_olsf_t *mem_olsf, uintptr_t size, uintptr_t align)

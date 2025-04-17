@@ -230,8 +230,24 @@ void app_sys_mem_dir_free(app_sys_mem_dir_t *mem_dir, void *pointer)
     app_sys_mem_dir_free_raw(mem_dir, pointer_raw);
 }
 
+/*@brief 双端分配堆内存使用(最大片段)
+ *@param mem_dir 双端分配堆实例
+ *@retval 内存大小
+ */
+uintptr_t app_sys_mem_dir_frag(app_sys_mem_dir_t *mem_dir)
+{
+    uintptr_t size_frag = 0;
+    
+    app_sys_list_dll_btra(&mem_dir->dl_list_free, item) {
+        app_sys_mem_dir_item_t *mem_dir_item = app_sys_own_ofs(app_sys_mem_dir_item_t, dl_node, item);
+        if (size_frag < mem_dir_item->size)
+            size_frag = mem_dir_item->size;
+    }
+    return size_frag - sizeof(app_sys_mem_dir_item_t);
+}
+
 /*@brief 双端分配堆内存使用
- *@param mem_olsf 双端分配堆实例
+ *@param mem_dir 双端分配堆实例
  *@retval 内存大小
  */
 uintptr_t app_sys_mem_dir_used(app_sys_mem_dir_t *mem_dir)
@@ -240,8 +256,8 @@ uintptr_t app_sys_mem_dir_used(app_sys_mem_dir_t *mem_dir)
 }
 
 /*@brief 双端分配堆计算指定内存
- *@param mem_olsf 双端分配堆实例
- *@param pointer  内存地址
+ *@param mem_dir 双端分配堆实例
+ *@param pointer 内存地址
  *@retval 内存大小
  */
 uintptr_t app_sys_mem_dir_size(app_sys_mem_dir_t *mem_dir, void *pointer)
@@ -256,8 +272,8 @@ uintptr_t app_sys_mem_dir_size(app_sys_mem_dir_t *mem_dir, void *pointer)
 }
 
 /*@brief 双端分配堆计算指定内存所属
- *@param mem_olsf 双端分配堆实例
- *@param pointer  内存地址
+ *@param mem_dir 双端分配堆实例
+ *@param pointer 内存地址
  *@retval 包含与否
  */
 bool app_sys_mem_dir_inside(app_sys_mem_dir_t *mem_dir, void *pointer)
@@ -341,8 +357,8 @@ bool app_sys_mem_dir_valid(app_sys_mem_dir_t *mem_dir)
 }
 
 /*@brief 双端分配堆内存遍历检查
- *@param mem_olsf 双端分配堆实例
- *@param invoke   回调实例
+ *@param mem_dir 双端分配堆实例
+ *@param invoke  回调实例
  *@retval 堆状态(正常, 异常)
  */
 bool app_sys_mem_dir_walk(app_sys_mem_dir_t *mem_dir, void (*invoke)(void *pointer, bool used))
