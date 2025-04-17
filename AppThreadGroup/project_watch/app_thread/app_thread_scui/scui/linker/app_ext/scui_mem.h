@@ -81,7 +81,7 @@ typedef struct {
     uintptr_t size_used[scui_mem_type_num];
     
     // 这里尝试多种内存管理方案
-    bool mem_mgr_type[scui_mem_type_num];
+    scui_mem_mgr_type_t mem_mgr_type[scui_mem_type_num];
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     app_sys_mem_dir_t   mem_dir[scui_mem_type_num];
     
@@ -91,8 +91,8 @@ typedef struct {
 } scui_mem_t;
 
 /* 宏转接,外部使用接口 */
-#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
-#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
+#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
+#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
 #define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
 
 

@@ -52,7 +52,7 @@ void scui_custom_draw_ctx_barcode(scui_custom_draw_dsc_t *draw_dsc)
     scui_coord_t pixel_remain = sizeof(scui_color_wt_t) - pixel_byte;
     scui_multi_t pixel_size   = pixel_byte * scaled * clip->h + pixel_remain;
     /* 为了加快绘制速度,这里使用SCUI_PIXEL_TYPE格式快速上色 */
-    uint8_t *pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
+    uint8_t *pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, pixel_size);
     scui_color_wt_t pixel_l = 0;
     scui_color_wt_t pixel_d = 0;
     scui_pixel_by_color(surface->format, &pixel_l, color.color_l);

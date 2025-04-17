@@ -93,10 +93,16 @@ uintptr_t app_sys_mem_dir_size(app_sys_mem_dir_t *mem_dir, void *pointer);
  */
 bool app_sys_mem_dir_inside(app_sys_mem_dir_t *mem_dir, void *pointer);
 
-/*@brief 双端分配堆获取内存
+/*@brief 双端分配堆检查内存
  *@param mem_dir 双端分配堆实例
  */
 bool app_sys_mem_dir_check(app_sys_mem_dir_t *mem_dir);
+
+/*@brief 双端分配堆检查内存
+ *@param mem_dir 双端分配堆实例
+ *@retval 堆状态(正常, 异常)
+ */
+bool app_sys_mem_dir_valid(app_sys_mem_dir_t *mem_dir);
 
 /*@brief 双端分配堆内存遍历检查
  *@param mem_olsf 双端分配堆实例
