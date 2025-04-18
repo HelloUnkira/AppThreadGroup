@@ -9,7 +9,7 @@
  *           背景,边界,外部线,阴影
  */
 
-typedef struct { scui_class_widget(widget)
+typedef struct { scui_class_widget(widget);
     /* 外部域: */
     scui_event_cb_t notify_cb;  /* 专属事件通知 */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
@@ -25,7 +25,7 @@ typedef struct { scui_class_widget(widget)
 } scui_objbtn_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget)
+typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
     scui_event_cb_t notify_cb;  /* 专属事件通知 */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
@@ -35,19 +35,20 @@ typedef struct { scui_class_widget_maker(widget)
 } scui_objbtn_maker_t;
 #pragma pack(pop)
 
-/*@brief 按钮控件创建
- *@param maker  按钮控件创建参数
- *@param handle 按钮控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_objbtn_make(scui_objbtn_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_objbtn_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 
-/*@brief 按钮控件销毁
- *@param handle 按钮控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_objbtn_burn(scui_handle_t handle);
 
-/*@brief 按钮控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_objbtn_event(scui_event_t *event);

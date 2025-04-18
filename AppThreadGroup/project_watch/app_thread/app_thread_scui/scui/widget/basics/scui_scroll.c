@@ -7,58 +7,59 @@
 
 #include "scui.h"
 
-/*@brief 滚动控件创建
- *@param maker  滚动控件创建参数
- *@param handle 滚动控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建滚动控件实例 */
-    scui_scroll_t *scroll = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_scroll_t));
-    memset(scroll, 0, sizeof(scui_scroll_t));
-    
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_scroll_t *scroll = widget;
+    scui_scroll_maker_t *scroll_maker = widget_maker;
     
     /* 必须标记ptr事件 */
-    widget_maker.style.indev_ptr = true;
+    widget_maker->style.indev_ptr = true;
     
-    /* 创建基础控件实例 */
-    scui_widget_make(&scroll->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_scroll));
-    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 状态初始化 */
-    scroll->notify_cb   = maker->notify_cb;
-    scroll->pos         = maker->pos;
-    scroll->dir         = maker->dir;
-    scroll->edge        = maker->edge;
-    scroll->space       = maker->space;
-    scroll->springback  = maker->springback;
-    scroll->fling_page  = maker->fling_page;
-    scroll->route_enc   = maker->route_enc;
-    scroll->route_key   = maker->route_key;
-    scroll->keyid_fdir  = maker->keyid_fdir;
-    scroll->keyid_bdir  = maker->keyid_bdir;
-    scroll->freedom     = maker->freedom;
-    scroll->loop        = maker->loop;
+    scroll->notify_cb   = scroll_maker->notify_cb;
+    scroll->pos         = scroll_maker->pos;
+    scroll->dir         = scroll_maker->dir;
+    scroll->edge        = scroll_maker->edge;
+    scroll->space       = scroll_maker->space;
+    scroll->springback  = scroll_maker->springback;
+    scroll->fling_page  = scroll_maker->fling_page;
+    scroll->route_enc   = scroll_maker->route_enc;
+    scroll->route_key   = scroll_maker->route_key;
+    scroll->keyid_fdir  = scroll_maker->keyid_fdir;
+    scroll->keyid_bdir  = scroll_maker->keyid_bdir;
+    scroll->freedom     = scroll_maker->freedom;
+    scroll->loop        = scroll_maker->loop;
     scroll->over_scroll = true;
     
     /* 默认保持一个翻页 */
     if (scroll->route_enc == 0) {
         if (scroll->dir == scui_opt_dir_hor)
-            scroll->route_enc = scroll->widget.clip.w;
+            scroll->route_enc = widget->clip.w;
         if (scroll->dir == scui_opt_dir_ver)
-            scroll->route_enc = scroll->widget.clip.h;
+            scroll->route_enc = widget->clip.h;
     }
     
     /* 默认保持一个翻页 */
     if (scroll->route_key == 0) {
         if (scroll->dir == scui_opt_dir_hor)
-            scroll->route_key = scroll->widget.clip.w;
+            scroll->route_key = widget->clip.w;
         if (scroll->dir == scui_opt_dir_ver)
-            scroll->route_key = scroll->widget.clip.h;
+            scroll->route_key = widget->clip.h;
     }
     
     /* 最低保持一个翻页 */
@@ -80,8 +81,8 @@ void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool la
                 scroll->dir == scui_opt_dir_ver);
 }
 
-/*@brief 滚动控件销毁
- *@param handle 滚动控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_scroll_burn(scui_handle_t handle)
 {
@@ -94,12 +95,28 @@ void scui_scroll_burn(scui_handle_t handle)
         scroll->anima = SCUI_HANDLE_INVALID;
     }
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_scroll);
-    scui_widget_burn(&scroll->widget);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
+    scui_widget_burn(widget);
+}
+
+/*@brief 控件布局更新
+ *@param handle 控件句柄
+ */
+void scui_scroll_layout(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
     
-    /* 销毁滚动控件实例 */
-    SCUI_MEM_FREE(scroll);
+    scroll->layout = true;
+    
+    scui_event_t event = {
+        .object = widget->myself,
+        .type   = scui_event_layout,
+        .absorb = scui_event_absorb_none,
+    };
+    scui_event_notify(&event);
 }
 
 /*@brief 滚动控件获取偏移量百分比(自动布局)
@@ -322,25 +339,6 @@ void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
     
     scroll->layout = true;
     scui_widget_draw(handle, NULL, false);
-}
-
-/*@brief 滚动控件布局更新
- *@param handle 滚动控件句柄
- */
-void scui_scroll_layout(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    
-    scroll->layout = true;
-    
-    scui_event_t event = {
-        .object = widget->myself,
-        .type   = scui_event_layout,
-        .absorb = scui_event_absorb_none,
-    };
-    scui_event_notify(&event);
 }
 
 /*@brief 滚动控件翻页数更新
@@ -1241,7 +1239,7 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
     }
 }
 
-/*@brief 滚动控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_scroll_event(scui_event_t *event)

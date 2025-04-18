@@ -38,7 +38,7 @@ typedef struct {
     scui_coord_t   *vlist;
 } scui_chart_line_data_t;
 
-typedef struct { scui_class_widget(widget)
+typedef struct { scui_class_widget(widget);
     /* 外部域: */
     scui_chart_type_t type;
     /* 图表类型对应数据域: */
@@ -56,7 +56,7 @@ typedef struct { scui_class_widget(widget)
 } scui_chart_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget)
+typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
     scui_chart_type_t type;
     /* 图表类型对应数据域: */
@@ -68,15 +68,16 @@ typedef struct { scui_class_widget_maker(widget)
 } scui_chart_maker_t;
 #pragma pack(pop)
 
-/*@brief 图表控件创建
- *@param maker  图表控件创建参数
- *@param handle 图表控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 
-/*@brief 图表控件销毁
- *@param handle 图表控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_chart_burn(scui_handle_t handle);
 
@@ -93,7 +94,7 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
  */
 void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist);
 
-/*@brief 图表控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_chart_event(scui_event_t *event);

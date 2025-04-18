@@ -53,7 +53,7 @@
 
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_cb.h"
+#include "scui_widget_map.h"
 #include "scui_widget_opt.h"
 #include "scui_widget_draw.h"
 #include "scui_widget_event.h"
@@ -69,6 +69,7 @@
 #include "scui_custom_draw.h"       /* 控件(自定义:插件) */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_string.h"            /* 控件(字符串) */
+#include "scui_roller.h"            /* 控件(滚轮) */
 /* widget: */
 #include "scui_objbtn.h"            /* 对象按钮 */
 /* widget: */

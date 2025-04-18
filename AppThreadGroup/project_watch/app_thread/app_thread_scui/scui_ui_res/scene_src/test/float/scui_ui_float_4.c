@@ -8,8 +8,8 @@
 #include "scui.h"
 
 static struct {
-    scui_handle_t scroll_1;     // 滚动控件
-    scui_handle_t scroll_2;     // 滚动控件
+    scui_handle_t roller_1;     // 滚轮控件
+    scui_handle_t roller_2;     // 滚轮控件
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -26,26 +26,26 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_1 = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_1_rcd = SCUI_HANDLE_INVALID;
-        scui_scroll_center_target_get(scui_ui_res_local->scroll_1, &handle_scroll_1);
+        scui_roller_center_target_get(scui_ui_res_local->roller_1, &handle_scroll_1);
         if (handle_scroll_1_rcd != handle_scroll_1) {
             handle_scroll_1_rcd  = handle_scroll_1;
             if (handle_scroll_1 != SCUI_HANDLE_INVALID) {
                 uint8_t *str_utf8 = NULL;
                 scui_string_str_utf8(handle_scroll_1, &str_utf8);
-                SCUI_LOG_WARN("srcoll 1 center:%s", str_utf8);
+                SCUI_LOG_WARN("roller 1 center:%s", str_utf8);
             }
         }
         
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_2 = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_2_rcd = SCUI_HANDLE_INVALID;
-        scui_scroll_center_target_get(scui_ui_res_local->scroll_2, &handle_scroll_2);
+        scui_roller_center_target_get(scui_ui_res_local->roller_2, &handle_scroll_2);
         if (handle_scroll_2_rcd != handle_scroll_2) {
             handle_scroll_2_rcd  = handle_scroll_2;
             if (handle_scroll_2 != SCUI_HANDLE_INVALID) {
                 uint8_t *str_utf8 = NULL;
                 scui_string_str_utf8(handle_scroll_2, &str_utf8);
-                SCUI_LOG_WARN("srcoll 2 center:%s", str_utf8);
+                SCUI_LOG_WARN("roller 2 center:%s", str_utf8);
             }
         }
         
@@ -132,49 +132,43 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             scui_chart_line_data(chart2_handle, vlist);
             
             // digit picker == scroll + string * num
-            scui_scroll_maker_t scroll_maker = {0};
-            scroll_maker.widget.type = scui_widget_type_scroll;
-            scroll_maker.widget.style.indev_ptr = true;
-            scroll_maker.widget.clip.w = SCUI_DRV_HOR_RES * 11 / 25;
-            scroll_maker.widget.clip.h = SCUI_DRV_VER_RES * 11 / 25;
-            scroll_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
-            scroll_maker.widget.child_num = 60;
-            scroll_maker.pos  = scui_opt_pos_c;
-            scroll_maker.dir  = scui_opt_dir_ver;
-            scroll_maker.loop = true;
-            
-            scui_string_maker_t string_maker = {0};
-            scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
-            string_maker.widget.type                = scui_widget_type_string;
-            string_maker.widget.style.trans         = true;
-            string_maker.args.align_hor             = 2;
-            string_maker.args.align_ver             = 2;
-            string_maker.args.color.color_s.full    = 0xFF0000FF;
-            string_maker.args.color.color_e.full    = 0xFF0000FF;
-            string_maker.args.color.filter          = true;
-            string_maker.args.name                  = SCUI_FONT_TYPE_32_EN;
-            string_maker.widget.clip.w              = -1; // scroll_maker.widget.clip.w;
-            string_maker.widget.clip.h              = 60;
-            string_maker.font_idx                   = SCUI_FONT_IDX_32;
+            scui_roller_maker_t roller_maker = {0};
+            roller_maker.widget.type            = scui_widget_type_roller;
+            roller_maker.widget.style.indev_ptr = true;
+            roller_maker.widget.clip.w          = SCUI_DRV_HOR_RES * 11 / 25;
+            roller_maker.widget.clip.h          = SCUI_DRV_VER_RES * 11 / 25;
+            roller_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_4;
+            roller_maker.widget.child_num       = 60;
+            roller_maker.scroll.pos  = scui_opt_pos_c;
+            roller_maker.scroll.dir  = scui_opt_dir_ver;
+            roller_maker.scroll.loop = true;
+            roller_maker.string.widget.type                = scui_widget_type_string;
+            roller_maker.string.widget.style.trans         = true;
+            roller_maker.string.args.align_hor             = 2;
+            roller_maker.string.args.align_ver             = 2;
+            roller_maker.string.args.color.color_s.full    = 0xFF0000FF;
+            roller_maker.string.args.color.color_e.full    = 0xFF0000FF;
+            roller_maker.string.args.color.filter          = true;
+            roller_maker.string.args.name                  = SCUI_FONT_TYPE_32_EN;
+            roller_maker.string.widget.clip.w              = -1; // scroll_maker.widget.clip.w;
+            roller_maker.string.widget.clip.h              = 60;
+            roller_maker.string.font_idx                   = SCUI_FONT_IDX_32;
             
             // 24
-            scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
-            scroll_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
-            scui_widget_create(&scroll_maker, &scui_ui_res_local->scroll_1, false);
-            string_maker.widget.parent  = scui_ui_res_local->scroll_1;
+            roller_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
+            roller_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
+            scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
             
             for (uint8_t idx = 0; idx < 24; idx++) {
-                scui_widget_create(&string_maker, &string_handle, false);
                 uint8_t str_utf8[10] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%02d", idx);
-                scui_string_update_str(string_handle, str_utf8);
+                scui_roller_string_str(scui_ui_res_local->roller_1, str_utf8);
             }
             
             // month
-            scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES * 13 / 25;
-            scroll_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
-            scui_widget_create(&scroll_maker, &scui_ui_res_local->scroll_2, false);
-            string_maker.widget.parent  = scui_ui_res_local->scroll_2;
+            roller_maker.widget.clip.x = SCUI_DRV_HOR_RES * 13 / 25;
+            roller_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
+            scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2, false);
             
             const char *str_utf8_month[] = {
                 "January", "February", "March", "April", "May\n", "June", "July",
@@ -182,10 +176,9 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             };
             
             for (uint8_t idx = 0; idx < scui_arr_len(str_utf8_month); idx++) {
-                scui_widget_create(&string_maker, &string_handle, false);
                 uint8_t str_utf8[20] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%s", str_utf8_month[idx]);
-                scui_string_update_str(string_handle, str_utf8);
+                scui_roller_string_str(scui_ui_res_local->roller_2, str_utf8);
             }
         }
         

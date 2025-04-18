@@ -7,35 +7,36 @@
 
 #include "scui.h"
 
-/*@brief 字符串控件创建
- *@param maker  字符串控件创建参数
- *@param handle 字符串控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建字符串控件实例 */
-    scui_string_t *string = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_string_t));
-    memset(string, 0, sizeof(scui_string_t));
-    
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_string_t *string = widget;
+    scui_string_maker_t *string_maker = widget_maker;
     
     /* 必须标记anima事件 */
-    widget_maker.style.sched_anima = true;
+    widget_maker->style.sched_anima = true;
     
-    /* 创建基础控件实例 */
-    scui_widget_make(&string->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
-    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    string->font_idx    = maker->font_idx;
-    string->lang_type   = maker->lang_type;
-    string->args        = maker->args;
-    string->unit_ms     = maker->unit_ms != 0 ? maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
-    string->unit_dx     = maker->unit_dx != 0 ? maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
-    string->unit_s      = maker->unit_s;
-    string->draw_cache  = maker->draw_cache;
+    string->font_idx    = string_maker->font_idx;
+    string->lang_type   = string_maker->lang_type;
+    string->args        = string_maker->args;
+    string->unit_ms     = string_maker->unit_ms != 0 ? string_maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
+    string->unit_dx     = string_maker->unit_dx != 0 ? string_maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
+    string->unit_s      = string_maker->unit_s;
+    string->draw_cache  = string_maker->draw_cache;
     string->unit_anima  = true;
     string->unit_abort  = false;
     string->unit_over   = false;
@@ -56,18 +57,17 @@ void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool la
     string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
     
     /* 尝试初始更新字符串文本信息 */
-    scui_string_update_text(*handle, maker->text);
+    scui_string_update_text(*handle, string_maker->text);
     
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
     string->args.utf8   = string->str_utf8;
-    string->args.clip   = string->widget.clip;
+    string->args.clip   = widget->clip;
     scui_string_args_process(&string->args);
 }
 
-/*@brief 字符串控件销毁
- *@param handle 字符串控件句柄
- *@param parent_way 来自父控件的销毁
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_string_burn(scui_handle_t handle)
 {
@@ -102,12 +102,9 @@ void scui_string_burn(scui_handle_t handle)
         string->draw_surface = NULL;
     }
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_string);
-    scui_widget_burn(&string->widget);
-    
-    /* 销毁字符串控件实例 */
-    SCUI_MEM_FREE(string);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
+    scui_widget_burn(widget);
 }
 
 /*@brief 字符串控件文本
@@ -395,7 +392,7 @@ void scui_string_adjust_size(scui_handle_t handle, uint16_t size)
     scui_widget_draw(widget->myself, NULL, false);
 }
 
-/*@brief 字符串控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_string_event(scui_event_t *event)

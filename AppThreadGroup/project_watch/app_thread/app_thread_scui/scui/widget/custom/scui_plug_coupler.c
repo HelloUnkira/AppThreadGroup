@@ -125,10 +125,10 @@ void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_ev
             break;
         }
         
-        scui_widget_cb_t *widget_cb = NULL;
-        scui_widget_cb_find(scui_widget_type(event->object), &widget_cb);
-        if (widget_cb->invoke != NULL)
-            widget_cb->invoke(event);
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
         
         if (0) {
             scui_handle_t handle = scui_widget_root(event->object);
@@ -146,10 +146,10 @@ void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_ev
         break;
     }
     default: {
-        scui_widget_cb_t *widget_cb = NULL;
-        scui_widget_cb_find(scui_widget_type(event->object), &widget_cb);
-        if (widget_cb->invoke != NULL)
-            widget_cb->invoke(event);
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
         break;
     }
     }

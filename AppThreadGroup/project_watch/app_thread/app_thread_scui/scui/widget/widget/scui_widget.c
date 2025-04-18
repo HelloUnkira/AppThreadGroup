@@ -95,9 +95,9 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     scui_event_cb_node_t cb_node = {0};
     cb_node.event_cb = maker->event_cb;
     if (maker->event_cb == NULL) {
-        scui_widget_cb_t *widget_cb = NULL;
-        scui_widget_cb_find(widget->type, &widget_cb);
-        cb_node.event_cb = widget_cb->invoke;
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(widget->type, &widget_map);
+        cb_node.event_cb = widget_map->invoke;
     }
     
     if (cb_node.event_cb != NULL) {
@@ -211,10 +211,10 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
             widget->child_list[idx]  = child;
             
             /* 子控件列表更新,布局更新 */
-            scui_widget_cb_t *widget_cb = NULL;
-            scui_widget_cb_find(widget->type, &widget_cb);
-            if (widget_cb->layout != NULL)
-                widget_cb->layout(handle);
+            scui_widget_map_t *widget_map = NULL;
+            scui_widget_map_find(widget->type, &widget_map);
+            if (widget_map->layout != NULL)
+                widget_map->layout(handle);
             return;
         }
     SCUI_LOG_WARN("widget %u add child %u fail", handle, child);
@@ -234,10 +234,10 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
             
             /* 子控件列表更新,布局更新 */
-            scui_widget_cb_t *widget_cb = NULL;
-            scui_widget_cb_find(widget->type, &widget_cb);
-            if (widget_cb->layout != NULL)
-                widget_cb->layout(handle);
+            scui_widget_map_t *widget_map = NULL;
+            scui_widget_map_find(widget->type, &widget_map);
+            if (widget_map->layout != NULL)
+                widget_map->layout(handle);
             return;
         }
     SCUI_LOG_WARN("widget %u del child %u fail", handle, child);

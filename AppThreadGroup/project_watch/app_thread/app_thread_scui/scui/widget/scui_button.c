@@ -7,39 +7,40 @@
 
 #include "scui.h"
 
-/*@brief 按钮控件创建
- *@param maker  按钮控件创建参数
- *@param handle 按钮控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_button_make(scui_button_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建按钮控件实例 */
-    scui_button_t *button = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_button_t));
-    memset(button, 0, sizeof(scui_button_t));
-    
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_button_t *button = widget;
+    scui_button_maker_t *button_maker = widget_maker;
     
     /* 必须标记ptr事件 */
-    widget_maker.style.indev_ptr = true;
+    widget_maker->style.indev_ptr = true;
     /* 必须标记anima事件 */
-    if (maker->mode == scui_button_mode_scale)
-        widget_maker.style.sched_anima = true;
+    if (button_maker->mode == scui_button_mode_scale)
+        widget_maker->style.sched_anima = true;
     
-    /* 创建基础控件实例 */
-    scui_widget_make(&button->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_button));
-    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    button->mode        = maker->mode;
-    button->image[0]    = maker->image[0];
-    button->image[1]    = maker->image[1];
-    button->image[2]    = maker->image[2];
-    button->image[3]    = maker->image[3];
-    button->color       = maker->color;
-    button->delta       = maker->delta;
-    button->notify_cb   = maker->notify_cb;
+    button->mode        = button_maker->mode;
+    button->image[0]    = button_maker->image[0];
+    button->image[1]    = button_maker->image[1];
+    button->image[2]    = button_maker->image[2];
+    button->image[3]    = button_maker->image[3];
+    button->color       = button_maker->color;
+    button->delta       = button_maker->delta;
+    button->notify_cb   = button_maker->notify_cb;
     
     if (button->mode == scui_button_mode_scale) {
         button->btn1_lim  = SCUI_WIDGET_BUTTON_BTN1_PCT;
@@ -49,23 +50,20 @@ void scui_button_make(scui_button_maker_t *maker, scui_handle_t *handle, bool la
     }
 }
 
-/*@brief 按钮控件销毁
- *@param handle 按钮控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_button_burn(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_button_t *button = (void *)widget;
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_button);
-    scui_widget_burn(&button->widget);
-    
-    /* 销毁按钮控件实例 */
-    SCUI_MEM_FREE(button);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_button));
+    scui_widget_burn(widget);
 }
 
-/*@brief 按钮控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_button_event(scui_event_t *event)

@@ -6,7 +6,7 @@
  *       垂直自动布局会调整所有子控件的(x,y,w)
  */
 
-typedef struct { scui_class_widget(widget)
+typedef struct { scui_class_widget(widget);
     /* 外部域: */
     scui_event_cb_t notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
@@ -50,7 +50,7 @@ typedef struct { scui_class_widget(widget)
 } scui_scroll_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget)
+typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
     scui_event_cb_t notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
@@ -68,17 +68,23 @@ typedef struct { scui_class_widget_maker(widget)
 } scui_scroll_maker_t;
 #pragma pack(pop)
 
-/*@brief 滚动控件创建
- *@param maker  滚动控件创建参数
- *@param handle 滚动控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_scroll_make(scui_scroll_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 
-/*@brief 滚动控件销毁
- *@param handle 滚动控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_scroll_burn(scui_handle_t handle);
+
+/*@brief 控件布局更新
+ *@param handle 控件句柄
+ */
+void scui_scroll_layout(scui_handle_t handle);
 
 /*@brief 滚动控件获取偏移量百分比(自动布局)
  *@param handle 滚动控件句柄
@@ -115,11 +121,6 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset);
  *@param edge   滚动边距
  */
 void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge);
-
-/*@brief 滚动控件布局更新
- *@param handle 滚动控件句柄
- */
-void scui_scroll_layout(scui_handle_t handle);
 
 /*@brief 滚动控件翻页数更新
  *@param handle 滚动控件句柄
@@ -159,7 +160,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
  */
 void scui_scroll_event_notify(scui_event_t *event, uint8_t type);
 
-/*@brief 滚动控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_scroll_event(scui_event_t *event);

@@ -9,6 +9,7 @@ typedef enum {
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 可滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
+    scui_widget_type_roller,    /* 滚动轮控件 */
     /* 对象控件 */
     scui_widget_type_objbtn,    /* 对象按钮 */
     /* 扩展控件(按需补充) */
@@ -23,25 +24,25 @@ typedef enum {
  */
 #if 1
 // 基类:控件
-#define scui_class_widget(widget) scui_widget_t widget;
-#define scui_class_widget_maker(widget) scui_widget_maker_t widget;
+#define scui_class_widget(widget) union {scui_widget_t widget;}
+#define scui_class_widget_maker(widget) union {scui_widget_maker_t widget;}
 // 一级派生:基础控件
-#define scui_class_window(widget, window) union {scui_widget_t widget; scui_window_t window;};
-#define scui_class_custom(widget, custom) union {scui_widget_t widget; scui_custom_t custom;};
-#define scui_class_scroll(widget, scroll) union {scui_widget_t widget; scui_scroll_t scroll;};
-#define scui_class_string(widget, string) union {scui_widget_t widget; scui_string_t string;};
-#define scui_class_window_maker(widget, window) union {scui_widget_maker_t widget; scui_window_maker_t window;};
-#define scui_class_custom_maker(widget, custom) union {scui_widget_maker_t widget; scui_custom_maker_t custom;};
-#define scui_class_scroll_maker(widget, scroll) union {scui_widget_maker_t widget; scui_scroll_maker_t scroll;};
-#define scui_class_string_maker(widget, string) union {scui_widget_maker_t widget; scui_string_maker_t string;};
+#define scui_class_window(widget, window) union {scui_widget_t widget; scui_window_t window;}
+#define scui_class_custom(widget, custom) union {scui_widget_t widget; scui_custom_t custom;}
+#define scui_class_scroll(widget, scroll) union {scui_widget_t widget; scui_scroll_t scroll;}
+#define scui_class_string(widget, string) union {scui_widget_t widget; scui_string_t string;}
+#define scui_class_window_maker(widget, window) union {scui_widget_maker_t widget; scui_window_maker_t window;}
+#define scui_class_custom_maker(widget, custom) union {scui_widget_maker_t widget; scui_custom_maker_t custom;}
+#define scui_class_scroll_maker(widget, scroll) union {scui_widget_maker_t widget; scui_scroll_maker_t scroll;}
+#define scui_class_string_maker(widget, string) union {scui_widget_maker_t widget; scui_string_maker_t string;}
 // 一级派生:对象控件
-#define scui_class_objbtn(widget, objbtn) union {scui_widget_t widget; scui_objbtn_t objbtn;};
-#define scui_class_objbtn_maker(widget, objbtn) union {scui_widget_maker_t widget; scui_objbtn_maker_t objbtn;};
+#define scui_class_objbtn(widget, objbtn) union {scui_widget_t widget; scui_objbtn_t objbtn;}
+#define scui_class_objbtn_maker(widget, objbtn) union {scui_widget_maker_t widget; scui_objbtn_maker_t objbtn;}
 // 一级派生:扩展控件
-#define scui_class_button(widget, button) union {scui_widget_t widget; scui_button_t button;};
-#define scui_class_chart(widget,  chart)  union {scui_widget_t widget; scui_chart_t  chart;};
-#define scui_class_button_maker(widget, button) union {scui_widget_maker_t widget; scui_button_maker_t button;};
-#define scui_class_chart_maker(widget,  chart)  union {scui_widget_maker_t widget; scui_chart_maker_t  chart;};
+#define scui_class_button(widget, button) union {scui_widget_t widget; scui_button_t button;}
+#define scui_class_chart(widget,  chart)  union {scui_widget_t widget; scui_chart_t  chart;}
+#define scui_class_button_maker(widget, button) union {scui_widget_maker_t widget; scui_button_maker_t button;}
+#define scui_class_chart_maker(widget,  chart)  union {scui_widget_maker_t widget; scui_chart_maker_t  chart;}
 #endif
 
 /*@brief 控件状态风格
@@ -49,29 +50,34 @@ typedef enum {
 typedef struct {
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
     uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
-    uint8_t cover:1;            /* 局部覆盖:0;完全覆盖:1; */
+    uint8_t cover:1;            /* 未知覆盖:0;完全覆盖:1; */
     uint8_t sched_anima:1;      /* 控件调度动画标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
     uint8_t indev_key:1;        /* 输入事件响应标记:key */
 } scui_widget_style_t;
 
-/*@brief 控件构建回调
- *@brief 控件销毁回调
- *@brief 控件布局更新回调
+/*@brief 控件构造回调
+ *@brief 控件析构回调
+ *@brief 控件布局回调
+ *@brief 控件事件回调
  */
-typedef void (*scui_widget_cb_make_t)(void *maker, scui_handle_t *handle, bool layout);
+typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
 typedef void (*scui_widget_cb_layout_t)(scui_handle_t handle);
+typedef scui_event_cb_t scui_widget_cb_invoke_t;
 
-/*@brief 控件处理函数映射表
+/*@brief 控件处理映射表
  */
 typedef struct {
-    scui_widget_cb_make_t   make;   // 控件构建
-    scui_widget_cb_burn_t   burn;   // 控件销毁
+    scui_handle_t           size;   // 控件实例大小
+    scui_handle_t           maker;  // 控件构造器大小
+    scui_widget_type_t      base;   // 控件基类
+    scui_widget_cb_make_t   make;   // 控件构造
+    scui_widget_cb_burn_t   burn;   // 控件析构
+    scui_widget_cb_invoke_t invoke; // 控件调用
     scui_widget_cb_layout_t layout; // 控件布局
-    scui_event_cb_t         invoke; // 控件调用
-} scui_widget_cb_t;
+} scui_widget_map_t;
 
 /*@brief 控件基础信息:
  *       控件只处理最基础绘制(背景)

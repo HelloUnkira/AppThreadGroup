@@ -7,26 +7,29 @@
 
 #include "scui.h"
 
-/*@brief 自定义控件创建
- *@param maker  自定义控件创建参数
- *@param handle 自定义控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_custom_make(scui_custom_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建自定义控件实例 */
-    scui_custom_t *custom = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_custom_t));
-    memset(custom, 0, sizeof(scui_custom_t));
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_custom_t *custom = widget;
+    scui_custom_maker_t *custom_maker = widget_maker;
     
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_make(&custom->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_custom));
     // 自定义控件既可以是根控件(子画布控件树),也可以是非根控件
 }
 
-/*@brief 自定义控件销毁
- *@param handle 自定义控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_custom_burn(scui_handle_t handle)
 {
@@ -36,12 +39,9 @@ void scui_custom_burn(scui_handle_t handle)
     // 回收绘制描述符(全局)
     SCUI_MEM_FREE(custom->draw_dsc);
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_custom);
-    scui_widget_burn(&custom->widget);
-    
-    /* 销毁自定义控件实例 */
-    SCUI_MEM_FREE(custom);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_burn(widget);
 }
 
 /*@brief 自定义控件绘制描述符(全局,唯一)

@@ -7,57 +7,60 @@
 
 #include "scui.h"
 
-/*@brief 窗口控件创建
- *@param maker  窗口控件创建参数
- *@param handle 窗口控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_window_make(scui_window_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建窗口控件实例 */
-    scui_window_t *window = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_window_t));
-    memset(window, 0, sizeof(scui_window_t));
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_window_t *window = widget;
+    scui_window_maker_t *window_maker = widget_maker;
     
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_make(&window->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_window));
-    SCUI_ASSERT(widget_maker.parent == SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
     /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
     
     /* 创建surface */
-    if (maker->buffer) {
+    if (window_maker->buffer) {
         
         #if 1
-        scui_pixel_cf_t p_cf = maker->format;
+        scui_pixel_cf_t p_cf = window_maker->format;
         #elif SCUI_MEM_SIZE_TYPE == 0
-        scui_pixel_cf_t p_cf = maker->format;
+        scui_pixel_cf_t p_cf = window_maker->format;
         #elif SCUI_MEM_SIZE_TYPE == 1
         scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF_A;
         #else
-        scui_pixel_cf_t p_cf = maker->format;
+        scui_pixel_cf_t p_cf = window_maker->format;
         #endif
         
-        scui_coord_t hor_res = maker->widget.clip.w;
-        scui_coord_t ver_res = maker->widget.clip.h;
-        scui_widget_clip_clear(&window->widget, true);
+        scui_coord_t hor_res = widget->clip.w;
+        scui_coord_t ver_res = widget->clip.h;
+        scui_widget_clip_clear(widget, true);
         scui_widget_surface_create(*handle, p_cf, hor_res, ver_res);
         scui_widget_surface_refr(*handle, true);
     }
     
-    window->level       = maker->level;
-    window->buffer      = maker->buffer;
-    window->resident    = maker->resident;
-    window->hang_only   = maker->hang_only;
-    window->format      = maker->format;
+    window->level       = window_maker->level;
+    window->buffer      = window_maker->buffer;
+    window->resident    = window_maker->resident;
+    window->hang_only   = window_maker->hang_only;
+    window->format      = window_maker->format;
     
     // 初始化默认为自动切换类型
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = scui_window_switch_auto;
 }
 
-/*@brief 窗口控件销毁
- *@param handle 窗口控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_window_burn(scui_handle_t handle)
 {
@@ -68,12 +71,9 @@ void scui_window_burn(scui_handle_t handle)
     if (scui_widget_surface_only(widget))
         scui_widget_surface_destroy(widget->myself);
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_window);
-    scui_widget_burn(&window->widget);
-    
-    /* 销毁窗口控件实例 */
-    SCUI_MEM_FREE(window);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_burn(widget);
 }
 
 /*@brief 窗口配置参数获取

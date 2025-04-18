@@ -1,7 +1,7 @@
 #ifndef SCUI_STRING_H
 #define SCUI_STRING_H
 
-typedef struct { scui_class_widget(widget)
+typedef struct { scui_class_widget(widget);
     /* 外部域: */
     scui_handle_t       text;           // 字符串
     scui_handle_t       font_idx;       // 字库索引
@@ -22,7 +22,7 @@ typedef struct { scui_class_widget(widget)
 } scui_string_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget)
+typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
     scui_handle_t       text;           // 字符串
     scui_handle_t       font_idx;       // 字库索引
@@ -35,15 +35,16 @@ typedef struct { scui_class_widget_maker(widget)
 } scui_string_maker_t;
 #pragma pack(pop)
 
-/*@brief 字符串控件创建
- *@param maker  字符串控件创建参数
- *@param handle 字符串控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_string_make(scui_string_maker_t *maker, scui_handle_t *handle, bool layout);
+void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 
-/*@brief 字符串控件销毁
- *@param handle 字符串控件句柄
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_string_burn(scui_handle_t handle);
 
@@ -105,7 +106,7 @@ bool scui_string_scroll_over(scui_handle_t handle);
  */
 void scui_string_adjust_size(scui_handle_t handle, uint16_t size);
 
-/*@brief 字符串控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_string_event(scui_event_t *event);

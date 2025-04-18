@@ -111,10 +111,10 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_window_list_add(widget->myself);
     
     /* 布局更新 */
-    scui_widget_cb_t *widget_cb = NULL;
-    scui_widget_cb_find(widget->type, &widget_cb);
-    if (widget_cb->layout != NULL)
-        widget_cb->layout(widget->myself);
+    scui_widget_map_t *widget_map = NULL;
+    scui_widget_map_find(widget->type, &widget_map);
+    if (widget_map->layout != NULL)
+        widget_map->layout(widget->myself);
     
     bool only = scui_widget_surface_only(widget);
     scui_widget_draw(widget->myself, NULL, only);
@@ -164,10 +164,10 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
         
-        scui_widget_cb_t *widget_cb = NULL;
-        scui_widget_cb_find(widget_parent->type, &widget_cb);
-        if (widget_cb->layout != NULL)
-            widget_cb->layout(widget->parent);
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(widget_parent->type, &widget_map);
+        if (widget_map->layout != NULL)
+            widget_map->layout(widget->parent);
     }
     
     // 重新刷新窗口列表

@@ -7,28 +7,31 @@
 
 #include "scui.h"
 
-/*@brief 图表控件创建
- *@param maker  图表控件创建参数
- *@param handle 图表控件句柄
- *@param layout 通过布局创建
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ *@param layout     通过布局创建
  */
-void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layout)
+void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
 {
-    /* 创建图表控件实例 */
-    scui_chart_t *chart = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_chart_t));
-    memset(chart, 0, sizeof(scui_chart_t));
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_chart_t *chart = widget;
+    scui_chart_maker_t *chart_maker = widget_maker;
     
-    /* 创建基础控件实例 */
-    scui_widget_maker_t widget_maker = maker->widget;
-    scui_widget_make(&chart->widget, &widget_maker, handle, layout);
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_chart));
-    SCUI_ASSERT(widget_maker.parent != SCUI_HANDLE_INVALID);
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    chart->type = maker->type;
+    chart->type = chart_maker->type;
     
     switch (chart->type) {
     case scui_chart_type_histogram: {
-        chart->histogram = maker->histogram;
+        chart->histogram = chart_maker->histogram;
         /* 这里加点断言判断参数的有效性 */
         SCUI_ASSERT(chart->histogram.number != 0);
         SCUI_ASSERT(chart->histogram.height != 0);
@@ -52,7 +55,7 @@ void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layo
         break;
     }
     case scui_chart_type_line : {
-        chart->line = maker->line;
+        chart->line = chart_maker->line;
         /* 这里加点断言判断参数的有效性 */
         SCUI_ASSERT(chart->line.number != 0);
         SCUI_ASSERT(chart->line.height != 0);
@@ -80,9 +83,8 @@ void scui_chart_make(scui_chart_maker_t *maker, scui_handle_t *handle, bool layo
     }
 }
 
-/*@brief 图表控件销毁
- *@param handle 图表控件句柄
- *@param parent_way 来自父控件的销毁
+/*@brief 控件析构
+ *@param handle 控件句柄
  */
 void scui_chart_burn(scui_handle_t handle)
 {
@@ -104,12 +106,9 @@ void scui_chart_burn(scui_handle_t handle)
         SCUI_ASSERT(false);
     }
     
-    /* 销毁基础控件实例 */
-    SCUI_ASSERT(widget->type == scui_widget_type_chart);
-    scui_widget_burn(&chart->widget);
-    
-    /* 销毁图表控件实例 */
-    SCUI_MEM_FREE(chart);
+    /* 析构基础控件实例 */
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
+    scui_widget_burn(widget);
 }
 
 /*@brief 图表控件数据列表更新(柱状图)
@@ -167,7 +166,7 @@ void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
     }
 }
 
-/*@brief 图表控件事件处理回调
+/*@brief 事件处理回调
  *@param event 事件
  */
 void scui_chart_event(scui_event_t *event)
