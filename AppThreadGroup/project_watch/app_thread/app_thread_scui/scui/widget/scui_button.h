@@ -8,7 +8,6 @@ typedef enum {
 
 typedef struct { scui_class_widget(widget);
     /* 外部域: */
-    scui_event_cb_t    notify_cb;   /* 专属事件通知 */
     scui_button_mode_t mode;        /* 按钮模式 */
     scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */
     scui_color_t       color;       /* 图像源色调 */
@@ -29,7 +28,6 @@ typedef struct { scui_class_widget(widget);
 #pragma pack(push, 1)
 typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
-    scui_event_cb_t    notify_cb;   /* 专属事件通知 */
     scui_button_mode_t mode;        /* 按钮模式 */
     scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */
     scui_color_t       color;       /* 图像源色调 */

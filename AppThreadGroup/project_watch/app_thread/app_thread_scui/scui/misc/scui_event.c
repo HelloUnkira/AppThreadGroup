@@ -224,28 +224,53 @@ void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_
         }
     }
     
-    bool event_sched = cb_node->event >= scui_event_sched_s &&
-                       cb_node->event <= scui_event_sched_e;
-    bool event_ptr = cb_node->event >= scui_event_ptr_s &&
-                     cb_node->event <= scui_event_ptr_e;
-    bool event_enc = cb_node->event >= scui_event_enc_s &&
-                     cb_node->event <= scui_event_enc_e;
-    bool event_key = cb_node->event >= scui_event_key_s &&
-                     cb_node->event <= scui_event_key_e;
-    bool event_custom = cb_node->event >= scui_event_custom_s &&
-                        cb_node->event <= scui_event_custom_e;
-    
     /* 一个事件至多一个响应回调, 其次匹配集成事件 */
     scui_list_dll_ftra(&cb_list->dl_list, node) {
         cb_node_inner = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
-        if ((cb_node_inner->event == scui_event_sched_all && event_sched) ||
-            (cb_node_inner->event == scui_event_ptr_all && event_ptr) ||
-            (cb_node_inner->event == scui_event_enc_all && event_enc) ||
-            (cb_node_inner->event == scui_event_key_all && event_key) ||
-            (cb_node_inner->event == scui_event_custom_all && event_custom)) {
-             cb_node->event_cb = cb_node_inner->event_cb;
-             return;
-        }
+        bool cb_node_unmatch = true;
+        
+        if (cb_node_unmatch)    // 序列通配回调:sched
+        if (cb_node_inner->event == scui_event_sched_all &&
+            cb_node->event >= scui_event_sched_s &&
+            cb_node->event <= scui_event_sched_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)    // 序列通配回调:widget
+        if (cb_node_inner->event == scui_event_widget_all &&
+            cb_node->event >= scui_event_widget_s &&
+            cb_node->event <= scui_event_widget_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)    // 序列通配回调:ptr
+        if (cb_node_inner->event == scui_event_ptr_all &&
+            cb_node->event >= scui_event_ptr_s &&
+            cb_node->event <= scui_event_ptr_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)    // 序列通配回调:enc
+        if (cb_node_inner->event == scui_event_enc_all &&
+            cb_node->event >= scui_event_enc_s &&
+            cb_node->event <= scui_event_enc_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)    // 序列通配回调:key
+        if (cb_node_inner->event == scui_event_key_all &&
+            cb_node->event >= scui_event_key_s &&
+            cb_node->event <= scui_event_key_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)    // 序列通配回调:custom
+        if (cb_node_inner->event == scui_event_custom_all &&
+            cb_node->event >= scui_event_custom_s &&
+            cb_node->event <= scui_event_custom_e)
+            cb_node_unmatch = false;
+        
+        if (cb_node_unmatch)
+            continue;
+        
+        // 匹配到了
+        cb_node->event_cb = cb_node_inner->event_cb;
+        return;
     }
     
     cb_node->event_cb = NULL;

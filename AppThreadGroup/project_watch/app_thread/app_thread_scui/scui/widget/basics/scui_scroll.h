@@ -8,7 +8,6 @@
 
 typedef struct { scui_class_widget(widget);
     /* 外部域: */
-    scui_event_cb_t notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t    edge;           /* 滚动边距(自由布局) */
@@ -52,7 +51,6 @@ typedef struct { scui_class_widget(widget);
 #pragma pack(push, 1)
 typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
-    scui_event_cb_t notify_cb;      /* 专属事件通知 */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t    edge;           /* 滚动边距(自由布局) */

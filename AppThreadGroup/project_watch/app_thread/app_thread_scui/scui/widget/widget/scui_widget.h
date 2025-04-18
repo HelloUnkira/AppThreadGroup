@@ -51,7 +51,8 @@ typedef struct {
     uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
     uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
     uint8_t cover:1;            /* 未知覆盖:0;完全覆盖:1; */
-    uint8_t sched_anima:1;      /* 控件调度动画标记 */
+    uint8_t sched_anima:1;      /* 控件调度帧动画标记 */
+    uint8_t sched_widget:1;     /* 控件专属事件响应标记 */
     uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
     uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
     uint8_t indev_key:1;        /* 输入事件响应标记:key */
@@ -105,7 +106,8 @@ typedef struct {
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
-    scui_event_cb_t         event_cb;       /* 事件响应回调(可选字段,非控件自身字段) */
+    scui_event_cb_t         event_cb;       /* 事件响应回调(通用事件:可选字段,非控件自身字段) */
+    scui_event_cb_t         widget_cb;      /* 事件响应回调(专属事件:可选字段,非控件自身字段) */
     scui_area_t             clip;           /* 控件所在父控件区域 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */

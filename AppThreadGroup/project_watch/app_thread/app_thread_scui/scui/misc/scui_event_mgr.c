@@ -265,18 +265,6 @@ static void scui_event_respond(scui_event_t *event)
     if (event->type >= scui_event_sys_s &&
         event->type <= scui_event_sys_e) {
         
-        
-        bool event_widget = false;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
-        event_widget = event_widget || event->type == scui_event_anima_elapse;
-        event_widget = event_widget || event->type == scui_event_layout;
-        event_widget = event_widget || event->type == scui_event_adjust_size;
-        event_widget = event_widget || event->type == scui_event_change_lang;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
-        event_widget = event_widget || event->type == scui_event_widget_scroll_s;
-        event_widget = event_widget || event->type == scui_event_widget_scroll_e;
-        event_widget = event_widget || event->type == scui_event_widget_scroll_c;
-        
         bool event_filter = false;
         /* 仅在特殊事件中才按需传递给场景管理器,默认都传递给场景管理器(ptr) */
         event_filter = event_filter || event->type == scui_event_ptr_hold;
@@ -305,6 +293,17 @@ static void scui_event_respond(scui_event_t *event)
         // 控件树调度结束, 检查事件是否处理完毕
         if (scui_event_check_over(event) && event_filter)
             return;
+        
+        bool event_widget = false;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
+        event_widget = event_widget || event->type == scui_event_anima_elapse;
+        event_widget = event_widget || event->type == scui_event_layout;
+        event_widget = event_widget || event->type == scui_event_adjust_size;
+        event_widget = event_widget || event->type == scui_event_change_lang;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(widget) */
+        if (event->type >= scui_event_widget_s &&
+            event->type <= scui_event_widget_e)
+            event_widget = true;
         
         if (!event_widget) {
             

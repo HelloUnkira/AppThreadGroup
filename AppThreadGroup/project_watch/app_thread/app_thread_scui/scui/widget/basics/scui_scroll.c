@@ -22,8 +22,9 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_scroll_t *scroll = widget;
     scui_scroll_maker_t *scroll_maker = widget_maker;
     
-    /* 必须标记ptr事件 */
-    widget_maker->style.indev_ptr = true;
+    /* 必须标记widget,ptr事件 */
+    widget_maker->style.sched_widget = true;
+    widget_maker->style.indev_ptr    = true;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle, layout);
@@ -31,7 +32,6 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 状态初始化 */
-    scroll->notify_cb   = scroll_maker->notify_cb;
     scroll->pos         = scroll_maker->pos;
     scroll->dir         = scroll_maker->dir;
     scroll->edge        = scroll_maker->edge;
@@ -1189,12 +1189,11 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         scroll->over_scroll = false;
         /* scroll event: */
         scui_event_t event = {
-            .object = widget->myself,
-            .type   = scui_event_widget_scroll_s,
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_s,
         };
         scui_event_notify(&event);
-        if (scroll->notify_cb != NULL)
-            scroll->notify_cb(&event);
         break;
     }
     case 0x01: {
@@ -1203,34 +1202,31 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
         scroll->over_scroll = true;
         /* scroll event: */
         scui_event_t event = {
-            .object = widget->myself,
-            .type   = scui_event_widget_scroll_e,
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_e,
         };
         scui_event_notify(&event);
-        if (scroll->notify_cb != NULL)
-            scroll->notify_cb(&event);
         break;
     }
     case 0x02: {
         /* scroll event: */
         scui_event_t event = {
-            .object = widget->myself,
-            .type   = scui_event_widget_scroll_c,
-            .absorb = scui_event_absorb_none,
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_c,
+            .absorb     = scui_event_absorb_none,
         };
         scui_event_notify(&event);
-        if (scroll->notify_cb != NULL)
-            scroll->notify_cb(&event);
         break;
     }
     case 0xAA: {
-        if (scroll->notify_cb != NULL) {
-            scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_widget_scroll_layout,
-            };
-            scroll->notify_cb(&event);
-        }
+        scui_event_t event = {
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_layout,
+        };
+        scui_event_notify(&event);
         break;
     }
     default:

@@ -23,8 +23,19 @@ void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_2_scroll_notify_event(scui_event_t *event)
+void scui_ui_scene_2_scroll_event(scui_event_t *event)
 {
+    // 转移至控件调度
+    if (event->type < scui_event_widget_s ||
+        event->type > scui_event_widget_e) {
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
+        
+        return;
+    }
+    
     scui_coord_t scroll_pct = 0;
     scui_scroll_percent_get(event->object, &scroll_pct);
     SCUI_LOG_INFO("pct:%d", scroll_pct);
@@ -72,6 +83,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scui_scroll_maker_t scroll_maker = {0};
             scui_handle_t scroll_handle = SCUI_HANDLE_INVALID;
             scroll_maker.widget.type = scui_widget_type_scroll;
+            scroll_maker.widget.style.sched_widget = true;
             scroll_maker.widget.style.indev_ptr = true;
             scroll_maker.widget.style.indev_enc = true;
             scroll_maker.widget.style.indev_key = true;
@@ -82,7 +94,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scroll_maker.widget.parent = SCUI_UI_SCENE_2;
             scroll_maker.widget.child_num = 50;
             scroll_maker.widget.color.color.full = 0xFF4F4F4F;
-            scroll_maker.notify_cb = scui_ui_scene_2_scroll_notify_event;
+            scroll_maker.widget.event_cb = scui_ui_scene_2_scroll_event;
             scroll_maker.springback = 70;
             scroll_maker.space = 50;
             // scroll_maker.loop = true;

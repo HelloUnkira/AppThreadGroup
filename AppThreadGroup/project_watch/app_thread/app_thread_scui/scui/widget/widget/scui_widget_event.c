@@ -507,9 +507,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /*************************************************************************/
     /*滚动事件:单次派发 **************************************************** */
     /*************************************************************************/
-    if (event->type == scui_event_widget_scroll_s ||
-        event->type == scui_event_widget_scroll_e ||
-        event->type == scui_event_widget_scroll_c) {
+    if (event->type >= scui_event_widget_s &&
+        event->type <= scui_event_widget_e) {
         scui_event_mask_over(event);
         scui_widget_event_proc(event);
         return;

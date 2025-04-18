@@ -11,7 +11,6 @@
 
 typedef struct { scui_class_widget(widget);
     /* 外部域: */
-    scui_event_cb_t notify_cb;  /* 专属事件通知 */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
     scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
     scui_coord_t    width[4];   /* 部件宽度(背景无效) */
@@ -27,7 +26,6 @@ typedef struct { scui_class_widget(widget);
 #pragma pack(push, 1)
 typedef struct { scui_class_widget_maker(widget);
     /* 外部域: */
-    scui_event_cb_t notify_cb;  /* 专属事件通知 */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
     scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
     scui_coord_t    width[4];   /* 部件宽度(背景无效) */

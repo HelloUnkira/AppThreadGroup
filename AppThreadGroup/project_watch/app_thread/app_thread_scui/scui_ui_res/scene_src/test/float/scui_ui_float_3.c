@@ -10,8 +10,19 @@
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_float_3_button_event_proc(scui_event_t *event)
+void scui_ui_scene_float_3_button_event(scui_event_t *event)
 {
+    // 转移至控件调度
+    if (event->type < scui_event_widget_s ||
+        event->type > scui_event_widget_e) {
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
+        
+        return;
+    }
+    
     SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
 }
 
@@ -34,57 +45,57 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
         
         if (scui_event_check_prepare(event)) {
             scui_button_maker_t button_maker = {0};
-            scui_handle_t button_bandle         = SCUI_HANDLE_INVALID;
-            button_maker.widget.type            = scui_widget_type_button;
-            button_maker.widget.style.trans     = true;
-            button_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_3;
-            button_maker.notify_cb              = scui_ui_scene_float_3_button_event_proc;
-            button_maker.color.color.full       = 0xFF282828;
-            button_maker.mode                   = scui_button_mode_static;
+            scui_handle_t button_bandle     = SCUI_HANDLE_INVALID;
+            button_maker.widget.type        = scui_widget_type_button;
+            button_maker.widget.style.trans = true;
+            button_maker.widget.parent      = SCUI_UI_SCENE_FLOAT_3;
+            button_maker.widget.event_cb    = scui_ui_scene_float_3_button_event;
+            button_maker.color.color.full   = 0xFF282828;
+            button_maker.mode               = scui_button_mode_static;
             
-            button_maker.widget.clip.w          = 72 * 2;
-            button_maker.widget.clip.h          = 72;
-            button_maker.widget.clip.x          = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
-            button_maker.widget.clip.y          = SCUI_DRV_VER_RES / 4 - button_maker.widget.clip.h / 2;
-            button_maker.image[0]               = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-            button_maker.image[1]               = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-            button_maker.image[2]               = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-            button_maker.image[3]               = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
-            button_maker.delta                  = -1;
+            button_maker.widget.clip.w = 72 * 2;
+            button_maker.widget.clip.h = 72;
+            button_maker.widget.clip.x = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.y = SCUI_DRV_VER_RES / 4 - button_maker.widget.clip.h / 2;
+            button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+            button_maker.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+            button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+            button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+            button_maker.delta = -1;
             scui_widget_create(&button_maker, &button_bandle, false);
             
-            button_maker.widget.clip.w          = 72 * 2 + 20;
-            button_maker.widget.clip.x          = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
-            button_maker.widget.clip.y         += button_maker.widget.clip.h + 15;
-            button_maker.widget.clip.h          = 72 + 20;
-            button_maker.image[0]               = scui_image_prj_image_src_repeat_box_sleep_breathe_02_left_upbmp;
-            button_maker.image[1]               = scui_image_prj_image_src_repeat_box_sleep_breathe_04_right_upbmp;
-            button_maker.image[2]               = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
-            button_maker.image[3]               = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
-            button_maker.delta                  = 4;
+            button_maker.widget.clip.w  = 72 * 2 + 20;
+            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
+            button_maker.widget.clip.h  = 72 + 20;
+            button_maker.image[0] = scui_image_prj_image_src_repeat_box_sleep_breathe_02_left_upbmp;
+            button_maker.image[1] = scui_image_prj_image_src_repeat_box_sleep_breathe_04_right_upbmp;
+            button_maker.image[2] = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
+            button_maker.image[3] = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
+            button_maker.delta = 4;
             scui_widget_create(&button_maker, &button_bandle, false);
             
-            button_maker.widget.clip.w          = 72 * 2;
-            button_maker.widget.clip.x          = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
-            button_maker.widget.clip.y         += 5;
-            button_maker.widget.clip.h          = 72 + 10;
-            button_maker.image[0]               = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-            button_maker.image[1]               = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-            button_maker.image[2]               = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-            button_maker.image[3]               = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
-            button_maker.delta                  = 0;
+            button_maker.widget.clip.w  = 72 * 2;
+            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.y += 5;
+            button_maker.widget.clip.h  = 72 + 10;
+            button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+            button_maker.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+            button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+            button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+            button_maker.delta = 0;
             scui_widget_create(&button_maker, &button_bandle, false);
             
-            button_maker.widget.clip.w          = 72 * 2;
-            button_maker.widget.clip.x          = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
-            button_maker.widget.clip.y         += button_maker.widget.clip.h + 15;
-            button_maker.widget.clip.h          = 72 + 15;
-            button_maker.image[0]               = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
-            button_maker.image[1]               = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
-            button_maker.image[2]               = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
-            button_maker.image[3]               = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
-            button_maker.mode                   = scui_button_mode_scale;
-            button_maker.delta                  = -1;
+            button_maker.widget.clip.w  = 72 * 2;
+            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
+            button_maker.widget.clip.h  = 72 + 15;
+            button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
+            button_maker.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
+            button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
+            button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
+            button_maker.mode  = scui_button_mode_scale;
+            button_maker.delta = -1;
             scui_widget_create(&button_maker, &button_bandle, false);
         }
         

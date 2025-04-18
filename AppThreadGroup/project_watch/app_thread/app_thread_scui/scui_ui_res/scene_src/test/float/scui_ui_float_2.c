@@ -12,6 +12,17 @@
  */
 void scui_ui_scene_2_button_event_proc(scui_event_t *event)
 {
+    // 转移至控件调度
+    if (event->type < scui_event_widget_s ||
+        event->type > scui_event_widget_e) {
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
+        
+        return;
+    }
+    
     SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
 }
 
@@ -356,17 +367,17 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         SCUI_LOG_INFO("scui_event_show");
         scui_objbtn_maker_t objbtn_maker = {0};
         scui_handle_t objbtn_handle = SCUI_HANDLE_INVALID;
-        objbtn_maker.widget.type   = scui_widget_type_objbtn;
-        objbtn_maker.widget.clip.w = scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - 15;
-        objbtn_maker.widget.clip.h = 120;
-        objbtn_maker.widget.clip.x = (scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - objbtn_maker.widget.clip.w) / 2;
-        objbtn_maker.widget.clip.y = 10;
+        objbtn_maker.widget.type    = scui_widget_type_objbtn;
+        objbtn_maker.widget.clip.w  = scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - 15;
+        objbtn_maker.widget.clip.h  = 120;
+        objbtn_maker.widget.clip.x  = (scui_widget_clip(SCUI_UI_SCENE_FLOAT_2_5).w - objbtn_maker.widget.clip.w) / 2;
+        objbtn_maker.widget.clip.y  = 10;
         objbtn_maker.widget.clip.x += 10;
         objbtn_maker.widget.clip.y += 10;
         objbtn_maker.widget.clip.w -= 10 * 2;
         objbtn_maker.widget.clip.h -= 10 * 2;
         objbtn_maker.widget.parent = SCUI_UI_SCENE_FLOAT_2_5;
-        objbtn_maker.notify_cb = scui_ui_scene_2_button_event_proc;
+        objbtn_maker.widget.event_cb = scui_ui_scene_2_button_event_proc;
         objbtn_maker.color[0].color_s.full = 0xFF00FF00;
         objbtn_maker.color[0].color_e.full = 0xFF008000;
         objbtn_maker.color[1].color_s.full = 0xFF000080;

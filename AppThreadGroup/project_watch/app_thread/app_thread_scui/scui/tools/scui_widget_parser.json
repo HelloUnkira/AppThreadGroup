@@ -13,7 +13,8 @@
             "field": {
                 "widget.type":                  "控件类型",
                 "widget.style.trans":           "控件状态风格(背景透明)",
-                "widget.style.sched_anima":     "控件状态风格(控件调度动画标记)",
+                "widget.style.sched_anima":     "控件状态风格(控件调度帧动画标记)",
+                "widget.style.sched_widget":    "控件状态风格(控件专属事件响应标记)",
                 "widget.style.indev_ptr":       "控件状态风格(输入事件响应标记:ptr)",
                 "widget.style.indev_enc":       "控件状态风格(输入事件响应标记:enc)",
                 "widget.style.indev_key":       "控件状态风格(输入事件响应标记:key)",
@@ -57,7 +58,6 @@
             "class": "scui_widget_type_scroll",
             "maker": "scui_scroll_maker_t",
             "field": {
-                "notify_cb":                    "专属事件通知",
                 "pos":                          "滚动停留(边界或中心)",
                 "dir":                          "滚动方向(水平滚动,垂直滚动,全局滚动)",
                 "edge.x":                       "滚动边距(自由布局)",

@@ -3,7 +3,6 @@
 
 typedef struct { scui_class_scroll(widget, scroll);
     /* 外部域: */
-    scui_event_cb_t     notify_cb;      /* 专属事件通知(scroll) */
     scui_string_maker_t string;
     /* 内部域: */
     scui_handle_t       center;
@@ -43,11 +42,6 @@ void scui_roller_center_target_get(scui_handle_t handle, scui_handle_t *target);
  *@param str_utf8 字符串(utf8)
  */
 void scui_roller_string_str(scui_handle_t handle, uint8_t *str_utf8);
-
-/*@brief 专属事件通知回调
- *@param event 事件
- */
-void scui_roller_scroll_notify_cb(scui_event_t *event);
 
 /*@brief 事件处理回调
  *@param event 事件

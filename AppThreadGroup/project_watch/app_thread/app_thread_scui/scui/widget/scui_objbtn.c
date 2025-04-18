@@ -22,10 +22,10 @@ void scui_objbtn_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_objbtn_t *objbtn = widget;
     scui_objbtn_maker_t *objbtn_maker = widget_maker;
     
-    /* 必须标记ptr事件 */
-    /* 必须标记anima事件 */
-    widget_maker->style.indev_ptr   = true;
-    widget_maker->style.sched_anima = true;
+    /* 必须标记anima,widget,ptr事件 */
+    widget_maker->style.sched_anima  = true;
+    widget_maker->style.sched_widget = true;
+    widget_maker->style.indev_ptr    = true;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle, layout);
@@ -39,7 +39,6 @@ void scui_objbtn_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     }
     objbtn->radius = objbtn_maker->radius;
     
-    objbtn->notify_cb   = objbtn_maker->notify_cb;
     objbtn->lim         = SCUI_WIDGET_OBJECT_PCT;
     objbtn->pct         = SCUI_WIDGET_OBJECT_PCT;
     objbtn->way         = -1;
@@ -85,13 +84,12 @@ void scui_objbtn_event(scui_event_t *event)
         } else {
             if (objbtn->click) {
                 objbtn->click = false;
-                if (objbtn->notify_cb != NULL) {
-                    scui_event_t event = {
-                        .object = widget->myself,
-                        .type   = scui_event_widget_button_click,
-                    };
-                    objbtn->notify_cb(&event);
-                }
+                scui_event_t event = {
+                    .object     = widget->myself,
+                    .style.sync = true,
+                    .type       = scui_event_widget_button_click,
+                };
+                scui_event_notify(&event);
             }
         }
         

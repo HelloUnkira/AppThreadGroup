@@ -22,8 +22,19 @@ void scui_ui_scene_list_arc_bar_arc_event(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_list_arc_scroll_notify_event(scui_event_t *event)
+void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
 {
+    // 转移至控件调度
+    if (event->type < scui_event_widget_s ||
+        event->type > scui_event_widget_e) {
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+        if (widget_map->invoke != NULL)
+            widget_map->invoke(event);
+        
+        return;
+    }
+    
     SCUI_LOG_INFO("widget %d, type %d", event->object, event->type);
     
     scui_handle_t scroll    = event->object;

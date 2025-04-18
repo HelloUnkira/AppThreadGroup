@@ -22,11 +22,10 @@ void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_button_t *button = widget;
     scui_button_maker_t *button_maker = widget_maker;
     
-    /* 必须标记ptr事件 */
-    widget_maker->style.indev_ptr = true;
-    /* 必须标记anima事件 */
-    if (button_maker->mode == scui_button_mode_scale)
-        widget_maker->style.sched_anima = true;
+    /* 必须标记anima,widget,ptr事件 */
+    widget_maker->style.sched_anima  = true;
+    widget_maker->style.sched_widget = true;
+    widget_maker->style.indev_ptr    = true;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle, layout);
@@ -40,7 +39,6 @@ void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     button->image[3]    = button_maker->image[3];
     button->color       = button_maker->color;
     button->delta       = button_maker->delta;
-    button->notify_cb   = button_maker->notify_cb;
     
     if (button->mode == scui_button_mode_scale) {
         button->btn1_lim  = SCUI_WIDGET_BUTTON_BTN1_PCT;
@@ -89,13 +87,12 @@ void scui_button_event(scui_event_t *event)
             } else {
                 if (button->btn_click) {
                     button->btn_click = false;
-                    if (button->notify_cb != NULL) {
-                        scui_event_t event = {
-                            .object = widget->myself,
-                            .type   = scui_event_widget_button_click,
-                        };
-                        button->notify_cb(&event);
-                    }
+                    scui_event_t event = {
+                        .object     = widget->myself,
+                        .style.sync = true,
+                        .type       = scui_event_widget_button_click,
+                    };
+                    scui_event_notify(&event);
                 }
             }
         }
@@ -159,13 +156,12 @@ void scui_button_event(scui_event_t *event)
     case scui_event_ptr_click: {
         
         if (button->mode == scui_button_mode_static) {
-            if (button->notify_cb != NULL) {
-                scui_event_t event = {
-                    .object = widget->myself,
-                    .type   = scui_event_widget_button_click,
-                };
-                button->notify_cb(&event);
-            }
+            scui_event_t event = {
+                .object     = widget->myself,
+                .style.sync = true,
+                .type       = scui_event_widget_button_click,
+            };
+            scui_event_notify(&event);
             break;
         }
         if (button->mode == scui_button_mode_scale) {

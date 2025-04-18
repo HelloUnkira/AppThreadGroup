@@ -25,9 +25,8 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_roller_t *roller = widget;
     scui_roller_maker_t *roller_maker = widget_maker;
     
-    // 包装专属事件通知
-    roller->notify_cb = scroll_maker->notify_cb;
-    scroll_maker->notify_cb = scui_roller_scroll_notify_cb;
+    /* 必须标记widget事件 */
+    widget_maker->style.sched_widget = true;
     
     /* 构造派生控件实例 */
     scui_scroll_make(scroll, scroll_maker, handle, layout);
@@ -98,10 +97,10 @@ void scui_roller_center_target_get(scui_handle_t handle, scui_handle_t *target)
     *target = roller->center;
 }
 
-/*@brief 专属事件通知回调
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_roller_scroll_notify_cb(scui_event_t *event)
+void scui_roller_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
@@ -117,22 +116,6 @@ void scui_roller_scroll_notify_cb(scui_event_t *event)
     default:
         break;
     }
-    
-    // 进行层级冒泡
-    if (roller->notify_cb != NULL)
-        roller->notify_cb(event);
-}
-
-/*@brief 事件处理回调
- *@param event 事件
- */
-void scui_roller_event(scui_event_t *event)
-{
-    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_roller_t *roller = (void *)widget;
-    
-    
     
     scui_widget_map_t *widget_map = NULL;
     scui_widget_map_find(widget->type, &widget_map);
