@@ -38,7 +38,11 @@ typedef struct {
     scui_coord_t   *vlist;
 } scui_chart_line_data_t;
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_chart_type_t type;
     /* 图表类型对应数据域: */
@@ -56,7 +60,11 @@ typedef struct { scui_class_widget(widget);
 } scui_chart_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_chart_type_t type;
     /* 图表类型对应数据域: */

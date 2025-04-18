@@ -1,7 +1,12 @@
 #ifndef SCUI_LIST_H
 #define SCUI_LIST_H
 
-typedef struct { scui_class_scroll(widget, scroll);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    scui_scroll_t scroll;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t    list_num;          // 列表数量
     /* 内部域: */
@@ -21,7 +26,12 @@ typedef struct { scui_class_scroll(widget, scroll);
     uintptr_t remain_byte;
 } scui_list_t;
 
-typedef struct { scui_class_scroll_maker(widget, scroll);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    scui_scroll_maker_t scroll;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t    list_num;          // 列表数量
 } scui_list_maker_t;

@@ -1,14 +1,24 @@
 #ifndef SCUI_ROLLER_H
 #define SCUI_ROLLER_H
 
-typedef struct { scui_class_scroll(widget, scroll);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    scui_scroll_t scroll;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_string_maker_t string;
     /* 内部域: */
     scui_handle_t       center;
 } scui_roller_t;
 
-typedef struct { scui_class_scroll_maker(widget, scroll);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    scui_scroll_maker_t scroll;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_string_maker_t string;
 } scui_roller_maker_t;

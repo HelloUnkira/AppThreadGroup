@@ -6,7 +6,11 @@
  *       垂直自动布局会调整所有子控件的(x,y,w)
  */
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
@@ -49,7 +53,11 @@ typedef struct { scui_class_widget(widget);
 } scui_scroll_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_opt_pos_t  pos;            /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;            /* 滚动方向(水平滚动,垂直滚动,全局滚动) */

@@ -1,7 +1,11 @@
 #ifndef SCUI_STRING_H
 #define SCUI_STRING_H
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t       text;           // 字符串
     scui_handle_t       font_idx;       // 字库索引
@@ -22,7 +26,11 @@ typedef struct { scui_class_widget(widget);
 } scui_string_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t       text;           // 字符串
     scui_handle_t       font_idx;       // 字库索引

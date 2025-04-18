@@ -20,31 +20,10 @@ typedef enum {
     scui_widget_type_num,
 } scui_widget_type_t;
 
-/*@brief 控件类包装器
- *       仅控件声明时使用
+/*@brief 字段继承(控件声明时使用)
  */
-#if 1
-// 基类:控件
-#define scui_class_widget(widget) union {scui_widget_t widget;}
-#define scui_class_widget_maker(widget) union {scui_widget_maker_t widget;}
-// 一级派生:基础控件
-#define scui_class_window(widget, window) union {scui_widget_t widget; scui_window_t window;}
-#define scui_class_custom(widget, custom) union {scui_widget_t widget; scui_custom_t custom;}
-#define scui_class_scroll(widget, scroll) union {scui_widget_t widget; scui_scroll_t scroll;}
-#define scui_class_string(widget, string) union {scui_widget_t widget; scui_string_t string;}
-#define scui_class_window_maker(widget, window) union {scui_widget_maker_t widget; scui_window_maker_t window;}
-#define scui_class_custom_maker(widget, custom) union {scui_widget_maker_t widget; scui_custom_maker_t custom;}
-#define scui_class_scroll_maker(widget, scroll) union {scui_widget_maker_t widget; scui_scroll_maker_t scroll;}
-#define scui_class_string_maker(widget, string) union {scui_widget_maker_t widget; scui_string_maker_t string;}
-// 一级派生:对象控件
-#define scui_class_objbtn(widget, objbtn) union {scui_widget_t widget; scui_objbtn_t objbtn;}
-#define scui_class_objbtn_maker(widget, objbtn) union {scui_widget_maker_t widget; scui_objbtn_maker_t objbtn;}
-// 一级派生:扩展控件
-#define scui_class_button(widget, button) union {scui_widget_t widget; scui_button_t button;}
-#define scui_class_chart(widget,  chart)  union {scui_widget_t widget; scui_chart_t  chart;}
-#define scui_class_button_maker(widget, button) union {scui_widget_maker_t widget; scui_button_maker_t button;}
-#define scui_class_chart_maker(widget,  chart)  union {scui_widget_maker_t widget; scui_chart_maker_t  chart;}
-#endif
+#define SCUI_EXTEND_FIELD_S     union {
+#define SCUI_EXTEND_FIELD_E     };
 
 /*@brief 控件状态风格
  */

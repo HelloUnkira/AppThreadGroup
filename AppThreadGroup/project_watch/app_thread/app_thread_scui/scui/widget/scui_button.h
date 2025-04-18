@@ -6,7 +6,11 @@ typedef enum {
     scui_button_mode_scale,         // 缩放按钮
 } scui_button_mode_t;
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_button_mode_t mode;        /* 按钮模式 */
     scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */
@@ -26,7 +30,11 @@ typedef struct { scui_class_widget(widget);
 } scui_button_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_button_mode_t mode;        /* 按钮模式 */
     scui_handle_t      image[4];    /* 图像句柄:四角(左上,右上,左下,右下) */

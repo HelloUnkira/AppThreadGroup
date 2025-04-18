@@ -9,7 +9,11 @@
  *           背景,边界,外部线,阴影
  */
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
     scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */
@@ -24,7 +28,11 @@ typedef struct { scui_class_widget(widget);
 } scui_objbtn_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_color_t    color[4];   /* 部件源色调(s->e) */
     scui_alpha_t    alpha[4];   /* 部件透明度(背景,边界,外部线,阴影) */

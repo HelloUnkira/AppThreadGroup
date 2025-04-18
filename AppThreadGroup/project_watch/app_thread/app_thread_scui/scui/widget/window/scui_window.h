@@ -1,7 +1,11 @@
 #ifndef SCUI_WINDOW_H
 #define SCUI_WINDOW_H
 
-typedef struct { scui_class_widget(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     uint16_t        level:6;        /* 窗口所在层级(数字越大越高) */
     uint16_t        buffer:1;       /* 窗口是否使用独立画布 */
@@ -14,7 +18,11 @@ typedef struct { scui_class_widget(widget);
 } scui_window_t;
 
 #pragma pack(push, 1)
-typedef struct { scui_class_widget_maker(widget);
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_maker_t widget;
+    SCUI_EXTEND_FIELD_E
     /* 外部域: */
     uint16_t        level:6;        /* 窗口所在层级(数字越大越高) */
     uint16_t        buffer:1;       /* 窗口是否使用独立画布 */
