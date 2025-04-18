@@ -286,7 +286,13 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
             scui_widget_create(&custom_maker, &custom_handle, false);
             
-            scui_scroll_layout(SCUI_UI_SCENE_WATERFALL_SCROLL);
+            scui_event_t event = {
+                .object = SCUI_UI_SCENE_WATERFALL_SCROLL,
+                .type   = scui_event_layout,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event);
+            
             scui_widget_draw(SCUI_UI_SCENE_WATERFALL, NULL, false);
             
             scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_WATERFALL_BAR_ARC;

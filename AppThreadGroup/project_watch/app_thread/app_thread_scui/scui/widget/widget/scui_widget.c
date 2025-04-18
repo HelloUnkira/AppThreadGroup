@@ -215,10 +215,12 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
             widget->child_list[idx]  = child;
             
             /* 子控件列表更新,布局更新 */
-            scui_widget_map_t *widget_map = NULL;
-            scui_widget_map_find(widget->type, &widget_map);
-            if (widget_map->layout != NULL)
-                widget_map->layout(handle);
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_layout,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event);
             return;
         }
     SCUI_LOG_WARN("widget %u add child %u fail", handle, child);
@@ -238,10 +240,12 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
             
             /* 子控件列表更新,布局更新 */
-            scui_widget_map_t *widget_map = NULL;
-            scui_widget_map_find(widget->type, &widget_map);
-            if (widget_map->layout != NULL)
-                widget_map->layout(handle);
+            scui_event_t event = {
+                .object = widget->myself,
+                .type   = scui_event_layout,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event);
             return;
         }
     SCUI_LOG_WARN("widget %u del child %u fail", handle, child);

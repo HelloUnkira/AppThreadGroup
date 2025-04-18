@@ -82,18 +82,6 @@ void scui_linear_burn(scui_handle_t handle)
     scui_scroll_burn(widget->myself);
 }
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_linear_layout(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_linear_t *linear = (void *)widget;
-    
-    scui_scroll_layout(handle);
-}
-
 /*@brief 列表控件缓存资源回收
  *@param handle 列表控件句柄
  *@param any    回收所有

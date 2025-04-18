@@ -87,11 +87,6 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_scroll_burn(scui_handle_t handle);
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_scroll_layout(scui_handle_t handle);
-
 /*@brief 滚动控件获取偏移量百分比(自动布局)
  *@param handle 滚动控件句柄
  *@param percent 偏移量

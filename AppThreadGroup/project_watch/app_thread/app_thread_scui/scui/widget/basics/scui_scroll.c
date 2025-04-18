@@ -100,25 +100,6 @@ void scui_scroll_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_scroll_layout(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    
-    scroll->layout = true;
-    
-    scui_event_t event = {
-        .object = widget->myself,
-        .type   = scui_event_layout,
-        .absorb = scui_event_absorb_none,
-    };
-    scui_event_notify(&event);
-}
-
 /*@brief 滚动控件获取偏移量百分比(自动布局)
  *@param handle 滚动控件句柄
  *@param percent 偏移量
@@ -1252,6 +1233,7 @@ void scui_scroll_event(scui_event_t *event)
         scroll->layout = true;
         break;
     case scui_event_layout: {
+        scroll->layout = true;
         scui_scroll_layout_update(event);
         scui_event_mask_over(event);
         

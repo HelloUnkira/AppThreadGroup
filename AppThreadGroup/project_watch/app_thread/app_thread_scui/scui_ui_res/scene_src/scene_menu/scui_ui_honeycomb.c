@@ -378,7 +378,13 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
                     scui_widget_move_pos(child, &list_layout[idx], true);
                 }
             }
-            scui_scroll_layout(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
+            scui_event_t event = {
+                .object = SCUI_UI_SCENE_HONEYCOMB_SCROLL,
+                .type   = scui_event_layout,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event);
+            
             scui_widget_draw(SCUI_UI_SCENE_HONEYCOMB, NULL, false);
             
             SCUI_MEM_FREE(list_layout);

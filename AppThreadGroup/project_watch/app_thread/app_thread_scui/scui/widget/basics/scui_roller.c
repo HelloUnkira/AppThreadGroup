@@ -49,18 +49,6 @@ void scui_roller_burn(scui_handle_t handle)
     scui_linear_burn(widget->myself);
 }
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_roller_layout(scui_handle_t handle)
-{
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_roller_t *roller = (void *)widget;
-    
-    scui_linear_layout(handle);
-}
-
 /*@brief 事件处理回调
  *@param event 事件
  */

@@ -49,7 +49,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_window_make,
             .burn   = scui_window_burn,
             .invoke = NULL,
-            .layout = NULL,
         },
         [scui_widget_type_custom] = {
             .size   = sizeof(scui_custom_t),
@@ -58,7 +57,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_custom_make,
             .burn   = scui_custom_burn,
             .invoke = NULL,
-            .layout = NULL,
         },
         [scui_widget_type_scroll] = {
             .size   = sizeof(scui_scroll_t),
@@ -67,7 +65,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_scroll_make,
             .burn   = scui_scroll_burn,
             .invoke = scui_scroll_event,
-            .layout = scui_scroll_layout,
         },
         [scui_widget_type_string] = {
             .size   = sizeof(scui_string_t),
@@ -76,7 +73,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_string_make,
             .burn   = scui_string_burn,
             .invoke = scui_string_event,
-            .layout = NULL,
         },
         [scui_widget_type_linear] = {
             .size   = sizeof(scui_linear_t),
@@ -85,7 +81,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_linear_make,
             .burn   = scui_linear_burn,
             .invoke = scui_linear_event,
-            .layout = scui_linear_layout,
         },
         [scui_widget_type_roller] = {
             .size   = sizeof(scui_roller_t),
@@ -94,7 +89,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_roller_make,
             .burn   = scui_roller_burn,
             .invoke = scui_roller_event,
-            .layout = scui_roller_layout,
         },
         
         /* 扩展控件 */
@@ -105,7 +99,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_objbtn_make,
             .burn   = scui_objbtn_burn,
             .invoke = scui_objbtn_event,
-            .layout = NULL,
         },
         /* 扩展控件 */
         [scui_widget_type_button] = {
@@ -115,7 +108,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_button_make,
             .burn   = scui_button_burn,
             .invoke = scui_button_event,
-            .layout = NULL,
         },
         [scui_widget_type_chart] = {
             .size   = sizeof(scui_chart_t),
@@ -124,7 +116,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make   = scui_chart_make,
             .burn   = scui_chart_burn,
             .invoke = scui_chart_event,
-            .layout = NULL,
         },
     };
     

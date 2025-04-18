@@ -36,11 +36,6 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_roller_burn(scui_handle_t handle);
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_roller_layout(scui_handle_t handle);
-
 /*@brief 滚轮控件中心对齐子控件
  *@param handle 滚轮控件句柄
  *@param target 中心对齐子控件

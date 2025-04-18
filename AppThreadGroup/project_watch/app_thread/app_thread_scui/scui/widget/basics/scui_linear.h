@@ -49,11 +49,6 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_linear_burn(scui_handle_t handle);
 
-/*@brief 控件布局更新
- *@param handle 控件句柄
- */
-void scui_linear_layout(scui_handle_t handle);
-
 /*@brief 列表控件缓存资源回收
  *@param handle 列表控件句柄
  *@param any    回收所有

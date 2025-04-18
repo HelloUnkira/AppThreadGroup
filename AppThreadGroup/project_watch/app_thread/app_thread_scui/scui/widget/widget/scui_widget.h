@@ -45,7 +45,6 @@ typedef struct {
  */
 typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
-typedef void (*scui_widget_cb_layout_t)(scui_handle_t handle);
 typedef scui_event_cb_t scui_widget_cb_invoke_t;
 
 /*@brief 控件处理映射表
@@ -57,7 +56,6 @@ typedef struct {
     scui_widget_cb_make_t   make;   // 控件构造
     scui_widget_cb_burn_t   burn;   // 控件析构
     scui_widget_cb_invoke_t invoke; // 控件调用
-    scui_widget_cb_layout_t layout; // 控件布局
 } scui_widget_map_t;
 
 /*@brief 控件基础信息:
