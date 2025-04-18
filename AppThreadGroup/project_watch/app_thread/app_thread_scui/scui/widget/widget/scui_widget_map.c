@@ -17,16 +17,18 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_widget_type_t widget_type = widget->type;
     
-    do {
+    while (true) {
         // 控件类型相等
         if (widget_type == type)
             return true;
         
-        scui_widget_map_t *widget_map = {0};
+        scui_widget_map_t *widget_map = NULL;
         scui_widget_map_find(widget_type, &widget_map);
-        widget_type = widget_map->base;
+        if (widget_map == NULL || widget_type == widget_map->base)
+            break;
         
-    } while (widget_type != scui_widget_type_unknown);
+        widget_type = widget_map->base;
+    }
     
     return false;
 }
@@ -88,7 +90,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
         [scui_widget_type_roller] = {
             .size   = sizeof(scui_roller_t),
             .maker  = sizeof(scui_roller_maker_t),
-            .base   = scui_widget_type_scroll,
+            .base   = scui_widget_type_linear,
             .make   = scui_roller_make,
             .burn   = scui_roller_burn,
             .invoke = scui_roller_event,

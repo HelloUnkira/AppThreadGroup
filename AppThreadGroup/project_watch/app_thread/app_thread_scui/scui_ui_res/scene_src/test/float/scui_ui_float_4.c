@@ -134,40 +134,44 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             // digit picker == scroll + string * num
             scui_roller_maker_t roller_maker = {0};
             roller_maker.widget.type            = scui_widget_type_roller;
-            roller_maker.widget.style.indev_ptr = true;
             roller_maker.widget.clip.w          = SCUI_DRV_HOR_RES * 11 / 25;
             roller_maker.widget.clip.h          = SCUI_DRV_VER_RES * 11 / 25;
             roller_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_4;
+            roller_maker.widget.color           = SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF);
             roller_maker.widget.child_num       = 60;
             roller_maker.scroll.pos  = scui_opt_pos_c;
             roller_maker.scroll.dir  = scui_opt_dir_ver;
             roller_maker.scroll.loop = true;
-            roller_maker.string.widget.type                = scui_widget_type_string;
-            roller_maker.string.widget.style.trans         = true;
-            roller_maker.string.args.align_hor             = 2;
-            roller_maker.string.args.align_ver             = 2;
-            roller_maker.string.args.color.color_s.full    = 0xFF0000FF;
-            roller_maker.string.args.color.color_e.full    = 0xFF0000FF;
-            roller_maker.string.args.color.filter          = true;
-            roller_maker.string.args.name                  = SCUI_FONT_TYPE_32_EN;
-            roller_maker.string.widget.clip.w              = -1; // scroll_maker.widget.clip.w;
-            roller_maker.string.widget.clip.h              = 60;
-            roller_maker.string.font_idx                   = SCUI_FONT_IDX_32;
+            
+            scui_string_maker_t string_maker = {0};
+            string_maker.widget.type                = scui_widget_type_string;
+            string_maker.widget.style.trans         = true;
+            string_maker.args.align_hor             = 2;
+            string_maker.args.align_ver             = 2;
+            string_maker.args.color.color_s.full    = 0xFF0000FF;
+            string_maker.args.color.color_e.full    = 0xFF0000FF;
+            string_maker.args.color.filter          = true;
+            string_maker.args.name                  = SCUI_FONT_TYPE_32_EN;
+            string_maker.widget.clip.w              = roller_maker.widget.clip.w;
+            string_maker.widget.clip.h              = roller_maker.widget.clip.h / 5;
+            string_maker.font_idx                   = SCUI_FONT_IDX_32;
             
             // 24
-            roller_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
-            roller_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.widget.clip.x   = SCUI_DRV_HOR_RES *  1 / 25;
+            roller_maker.widget.clip.y   = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.linear.list_num = 24;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
             
             for (uint8_t idx = 0; idx < 24; idx++) {
                 uint8_t str_utf8[10] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%02d", idx);
-                scui_roller_string_str(scui_ui_res_local->roller_1, str_utf8);
+                scui_roller_string_str(scui_ui_res_local->roller_1, &string_maker, str_utf8);
             }
             
             // month
-            roller_maker.widget.clip.x = SCUI_DRV_HOR_RES * 13 / 25;
-            roller_maker.widget.clip.y = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.widget.clip.x   = SCUI_DRV_HOR_RES * 13 / 25;
+            roller_maker.widget.clip.y   = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.linear.list_num = 12;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2, false);
             
             const char *str_utf8_month[] = {
@@ -178,7 +182,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             for (uint8_t idx = 0; idx < scui_arr_len(str_utf8_month); idx++) {
                 uint8_t str_utf8[20] = {0};
                 snprintf(str_utf8, sizeof(str_utf8), "%s", str_utf8_month[idx]);
-                scui_roller_string_str(scui_ui_res_local->roller_2, str_utf8);
+                scui_roller_string_str(scui_ui_res_local->roller_2, &string_maker, str_utf8);
             }
         }
         
