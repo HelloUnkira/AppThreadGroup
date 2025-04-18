@@ -25,9 +25,6 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_roller_t *roller = widget;
     scui_roller_maker_t *roller_maker = widget_maker;
     
-    /* 必须标记widget事件 */
-    widget_maker->style.sched_widget = true;
-    
     /* 构造派生控件实例 */
     scui_scroll_make(scroll, scroll_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));

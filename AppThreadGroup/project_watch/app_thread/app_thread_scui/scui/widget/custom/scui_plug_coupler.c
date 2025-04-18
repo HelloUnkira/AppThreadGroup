@@ -7,6 +7,8 @@
 
 #include "scui.h"
 
+#if 0   // discard, we don't need this
+
 /*@brief 插件:连接器:创建
  *@param coupler  连接器实例地址
  *@param list_num 控件数量
@@ -244,3 +246,5 @@ void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_ev
         break;
     }
 }
+
+#endif

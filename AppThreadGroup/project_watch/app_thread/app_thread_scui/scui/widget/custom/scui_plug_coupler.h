@@ -1,6 +1,8 @@
 #ifndef SCUI_PLUG_COUPLER_H
 #define SCUI_PLUG_COUPLER_H
 
+#if 0   // discard, we don't need this
+
 /*@brief 插件:连接器
  *       该辅助目标主要将主控件与子控件树(自定义控件树)
  *       之间构建一个桥梁,子控件树有一个自己的画布
@@ -51,5 +53,7 @@ void scui_plug_coupler_widget_s_event_proc(scui_plug_coupler_t *coupler, scui_ev
  *@param event   事件
  */
 void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_event_t *event);
+
+#endif
 
 #endif

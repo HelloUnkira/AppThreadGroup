@@ -44,9 +44,22 @@ void scui_custom_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
-/*@brief 自定义控件绘制描述符(全局,唯一)
- *       一个控件仅使用一个绘制描述符
+/*@brief 自定义控件外部关联者(全局,唯一)
  *@param handle 自定义控件句柄
+ *@param linker 外部关联者
+ */
+void scui_custom_linker(scui_handle_t handle, void ***linker)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_custom_t *custom = (void *)widget;
+    
+    *linker = &custom->linker;
+}
+
+/*@brief 自定义控件绘制描述符(全局,唯一)
+ *@param handle   自定义控件句柄
+ *@param draw_dsc 绘制描述符
  */
 void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc)
 {

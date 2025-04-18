@@ -4,6 +4,7 @@
 typedef struct { scui_class_widget(widget);
     /* 外部域: */
     /* 内部域: */
+    void *linker;   /* 外部关联者(全局,唯一) */
     void *draw_dsc; /* 绘制描述符(全局,唯一) */
 } scui_custom_t;
 
@@ -26,9 +27,15 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_custom_burn(scui_handle_t handle);
 
-/*@brief 自定义控件绘制描述符(全局,唯一)
- *       一个控件仅使用一个绘制描述符
+/*@brief 自定义控件外部关联者(全局,唯一)
  *@param handle 自定义控件句柄
+ *@param linker 外部关联者
+ */
+void scui_custom_linker(scui_handle_t handle, void ***linker);
+
+/*@brief 自定义控件绘制描述符(全局,唯一)
+ *@param handle   自定义控件句柄
+ *@param draw_dsc 绘制描述符
  */
 void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc);
 

@@ -76,6 +76,15 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .invoke = scui_string_event,
             .layout = NULL,
         },
+        [scui_widget_type_list] = {
+            .size   = sizeof(scui_list_t),
+            .maker  = sizeof(scui_list_maker_t),
+            .base   = scui_widget_type_scroll,
+            .make   = scui_list_make,
+            .burn   = scui_list_burn,
+            .invoke = scui_list_event,
+            .layout = scui_list_layout,
+        },
         [scui_widget_type_roller] = {
             .size   = sizeof(scui_roller_t),
             .maker  = sizeof(scui_roller_maker_t),

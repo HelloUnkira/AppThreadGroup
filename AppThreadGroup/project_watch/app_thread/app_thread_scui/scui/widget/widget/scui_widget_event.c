@@ -16,29 +16,32 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     
-    // 不要给已经销毁的目标添加剪切域
+    /* 不给无效目标添加剪切域 */
     if (scui_handle_unmap(handle))
         return;
     if (scui_widget_is_hide(handle))
         return;
     
-    scui_widget_t *widget      = scui_handle_source_check(handle);
-    scui_handle_t  handle_root = scui_widget_root(handle);
-    scui_widget_t *widget_root = scui_handle_source_check(handle_root);
-    
-    // 没有绘制剪切域时不要绘制
+    /* 没有绘制剪切域时不要绘制 */
+    scui_widget_t *widget = scui_handle_source_check(handle);
     if (scui_area_empty(&widget->clip_set.clip))
         return;
     
-    // 如果控件树为自定义控件树
-    // 不走系统管理,转为回调直达,自定义控件树会重定向
-    if (widget->parent != SCUI_HANDLE_INVALID &&
-        widget_root->type != scui_widget_type_window) {
+    scui_handle_t  handle_r = scui_widget_root(handle);
+    scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+    
+    /* 非窗口控件树兼容 */
+    /* 如果没有绘制画布 */
+    /* 此时将事件转义给根控件 */
+    if (widget_r->type != scui_widget_type_window)
+    if (scui_widget_surface(handle) == NULL) {
         scui_event_t event = {
-            .object = handle,
-            .type   = scui_event_draw,
+            .object     = handle_r,
+            .style.sync = true,
+            .type       = scui_event_draw_empty,
+            .absorb     = scui_event_absorb_none,
         };
-        scui_widget_event_proc(&event);
+        scui_event_notify(&event);
         return;
     }
     
@@ -54,11 +57,11 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     }
     
     /* 为所有控件及其子控件添加指定剪切域 */
-    // scui_widget_clip_check(handle_root, true);
-    scui_widget_clip_reset(widget_root, &widget_clip, true);
+    // scui_widget_clip_check(handle_r, true);
+    scui_widget_clip_reset(widget_r, &widget_clip, true);
     
     scui_event_t event = {
-        .object     = handle_root,
+        .object     = handle_r,
         .style.sync = sync,
         .type       = scui_event_draw,
         .absorb     = scui_event_absorb_none,
@@ -320,7 +323,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 绘制事件:顺向递归**************************************************** */
     /*************************************************************************/
     if (event->type == scui_event_draw) {
-        
         /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
         /* 无独立画布,如果是异步绘制,不在draw绘制,而是refr完成前绘制 */
         bool surface_only = scui_widget_surface_only(widget);

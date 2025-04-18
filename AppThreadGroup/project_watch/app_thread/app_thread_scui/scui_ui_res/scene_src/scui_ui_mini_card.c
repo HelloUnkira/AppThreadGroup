@@ -8,9 +8,8 @@
 #include "scui.h"
 
 static struct {
-    // 使用插件连接器,加速滚动子控件渲染
-    scui_plug_coupler_t *coupler;
-    scui_ui_bar_arc_t    bar_arc;
+    scui_handle_t     list;
+    scui_ui_bar_arc_t bar_arc;
     // 结构相关数据
     scui_handle_t title_music;
     scui_handle_t data_hr;
@@ -96,43 +95,6 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-static void scui_ui_scene_plug_coupler_widget_m_event_proc(scui_event_t *event)
-{
-    scui_plug_coupler_widget_m_event_proc(scui_ui_res_local->coupler, event);
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-static void scui_ui_scene_plug_coupler_widget_s_event_proc(scui_event_t *event)
-{
-    scui_plug_coupler_widget_s_event_proc(scui_ui_res_local->coupler, event);
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-static void scui_ui_scene_plug_coupler_recycle_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_draw: {
-        
-        if (scui_event_check_finish(event)) {
-            // 从控件树绘制结束,回收部分不使用的画布
-            scui_plug_coupler_recycle(scui_ui_res_local->coupler, false);
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    
-    scui_scroll_event(event);
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
 static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
     switch (event->type) {
@@ -144,12 +106,19 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         break;
+    case scui_event_draw_empty:
+        scui_event_mask_keep(event);
+        // 特殊的固定调用
+        scui_list_s_event_draw_empty(event);
+        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
         
-        scui_handle_t index = scui_ui_res_local->coupler->list_draw_idx;
-        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[index];
+        scui_handle_t draw_idx = 0;
+        scui_list_draw_idx(scui_ui_res_local->list, &draw_idx);
+        
+        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[draw_idx];
         scui_area_t clip = scui_widget_clip(event->object);
         
         /* 先绘制背景 */
@@ -778,6 +747,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
  */
 static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
 {
+    // 特殊的固定调用
+    scui_list_m_event(event);
+    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -820,8 +792,12 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
         #endif
         
-        scui_handle_t   index  = scui_ui_res_local->coupler->list_draw_idx;
-        scui_handle_t  custom  = scui_ui_res_local->coupler->list_widget_s[index];
+        scui_handle_t  draw_idx = 0;
+        scui_handle_t *handle_s = SCUI_HANDLE_INVALID;
+        scui_list_draw_idx(scui_ui_res_local->list, &draw_idx);
+        scui_list_s_item(scui_ui_res_local->list, &handle_s, draw_idx);
+        
+        scui_handle_t  custom  = *handle_s;
         scui_area_t  src_clip  = scui_widget_clip(custom);
         scui_point_t img_scale = {
             .x = 1024 * (scui_multi_t)percent / 100,
@@ -852,7 +828,10 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
-        scui_handle_t  custom = scui_ui_res_local->coupler->list_widget_s[index];
+        scui_handle_t *handle_m = SCUI_HANDLE_INVALID;
+        scui_list_m_item(scui_ui_res_local->list, &handle_m, index);
+        
+        scui_handle_t  custom = *handle_m;
         SCUI_LOG_WARN("click idx:%d", index);
         
         // 不是点击到中心子控件, 聚焦它
@@ -988,10 +967,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         else
             return;
         
-        // 标记子控件树需要更新
-        for (uint32_t idx = 0; idx < scui_ui_res_local->coupler->list_num; idx++)
-            scui_ui_res_local->coupler->list_refr[idx] = true;
-        
         scui_widget_draw(event->object, NULL, false);
         break;
     case scui_event_show:
@@ -1001,7 +976,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         #endif
         
         if (scui_event_check_prepare(event)) {
-            scui_ui_scene_mini_card_cfg();
         }
         
         /* 界面数据加载准备 */
@@ -1012,17 +986,34 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             
             // 清空图像资源缓存
             scui_image_cache_clear();
-            scui_plug_coupler_create(&scui_ui_res_local->coupler, scui_ui_scene_mini_card_num);
-            scui_ui_res_local->coupler->list_widget_m_cb = scui_ui_scene_item_m_event_proc;
+            scui_ui_scene_mini_card_cfg();
         }
         
         if (scui_event_check_prepare(event)) {
             
-            scui_event_cb_node_t event_cb_node = {
-                .event_cb = scui_ui_scene_plug_coupler_recycle_event_proc,
-                .event = scui_event_draw,
-            };
-            scui_widget_event_add(SCUI_UI_SCENE_MINI_CARD_SCROLL, &event_cb_node);
+            // 销毁该占用控件, 为list控件留出位置
+            scui_widget_destroy(SCUI_UI_SCENE_MINI_CARD_LIST);
+            scui_list_maker_t list_maker = {0};
+            scui_handle_t list_handle = SCUI_HANDLE_INVALID;
+            list_maker.widget.type = scui_widget_type_list;
+            list_maker.widget.style.indev_enc = true;
+            list_maker.widget.style.indev_key = true;
+            list_maker.widget.clip.w = SCUI_DRV_HOR_RES;
+            list_maker.widget.clip.h = SCUI_DRV_VER_RES;
+            list_maker.widget.parent = SCUI_UI_SCENE_MINI_CARD;
+            list_maker.widget.event_cb   = scui_ui_scene_mini_card_scroll_event;
+            list_maker.widget.child_num  = 50;
+            list_maker.scroll.pos        = scui_opt_pos_c;
+            list_maker.scroll.dir        = scui_opt_dir_ver;
+            list_maker.scroll.space      = 3;
+            list_maker.scroll.route_enc  = 117;
+            list_maker.scroll.route_key  = 117;
+            list_maker.scroll.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
+            list_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
+            list_maker.scroll.springback = 70;
+            list_maker.list_num = scui_ui_scene_mini_card_num;
+            scui_widget_create(&list_maker, &list_handle, false);
+            scui_ui_res_local->list = list_handle;
             
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
@@ -1030,28 +1021,32 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             custom_maker.widget.style.trans         = true;
             custom_maker.widget.style.sched_anima   = true;
             custom_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
-            custom_maker.widget.parent              = SCUI_UI_SCENE_MINI_CARD_SCROLL;
+            custom_maker.widget.parent              = list_handle;
             
+            // 上半部分留白占用
             custom_maker.widget.style.indev_ptr     = false;
             custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 180 / 2;
             custom_maker.widget.event_cb            = NULL;
             scui_widget_create(&custom_maker, &custom_handle, false);
             
+            // list的各个子控件
             custom_maker.widget.style.indev_ptr     = true;
             custom_maker.widget.clip.h              = 180;
-            custom_maker.widget.event_cb            = scui_ui_scene_plug_coupler_widget_m_event_proc;
+            custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
+                scui_handle_t *handle_m = NULL;
+                scui_list_m_item(list_handle, &handle_m, idx);
                 scui_widget_create(&custom_maker, &custom_handle, false);
-                scui_ui_res_local->coupler->list_widget_m[idx] = custom_handle;
+                *handle_m = custom_handle;
             }
             
+            // 下半部分留白占用
             custom_maker.widget.style.indev_ptr     = false;
             custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 180 / 2;
             custom_maker.widget.event_cb            = NULL;
             scui_widget_create(&custom_maker, &custom_handle, false);
             
-            
-            
+            // list的各个子控件树
             for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
                 
                 scui_custom_maker_t custom_maker = {0};
@@ -1063,7 +1058,10 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                 custom_maker.widget.child_num   = 5;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
                 scui_widget_create(&custom_maker, &custom_handle, false);
-                scui_ui_res_local->coupler->list_widget_s[idx] = custom_handle;
+                scui_handle_t *handle_s = NULL;
+                scui_list_s_item(list_handle, &handle_s, idx);
+                scui_list_s_linker(list_handle, custom_handle);
+                *handle_s = custom_handle;
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
@@ -1078,10 +1076,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                 // string_maker.draw_cache         = true;
                 string_maker.font_idx           = SCUI_FONT_IDX_32;
                 
-                scui_event_cb_node_t event_cb_node = {
-                    .event_cb = scui_ui_scene_plug_coupler_widget_s_event_proc,
-                    .event = scui_event_draw,
-                };
                 // 特定卡片给自己添加额外控件
                 scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
                 switch (type) {
@@ -1094,7 +1088,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     string_t_maker.text = SCUI_MULTI_LANG_0X0176;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_ui_res_local->title_music = string_handle;
                     break;
                 }
@@ -1126,13 +1119,11 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     }
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     
                     if (type == scui_ui_scene_mini_card_type_hr)
@@ -1146,7 +1137,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     
                     if (type == scui_ui_scene_mini_card_type_hr)
@@ -1171,13 +1161,11 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X0092;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_weather_cur = string_handle;
                     
@@ -1185,7 +1173,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_weather_lim = string_handle;
                     
@@ -1204,7 +1191,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X00e6;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     if (scui_presenter.alarm_none()) {
                         string_t_maker.widget.clip.y = 69;
@@ -1212,7 +1198,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         string_t_maker.text = SCUI_MULTI_LANG_0X00f0;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         
                         #if 1
                         scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
@@ -1223,14 +1208,12 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         string_t_maker.text = SCUI_MULTI_LANG_0X00e7;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         #endif
                     } else {
                         string_t_maker.widget.clip.y = 69;
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_alarm = string_handle;
                         
@@ -1238,7 +1221,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_alarm_date = string_handle;
                         
@@ -1259,7 +1241,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X004f;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     if (scui_presenter.sleep_none()) {
                         
@@ -1268,7 +1249,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         string_t_maker.text = SCUI_MULTI_LANG_0X0051;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         
                     } else {
                         
@@ -1276,7 +1256,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_sleep = string_handle;
                         
@@ -1297,7 +1276,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X01c5;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     if (scui_presenter.sport_record_none()) {
                         
@@ -1306,7 +1284,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         
                     } else {
                         
@@ -1314,7 +1291,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_sport_record = string_handle;
                         
@@ -1322,7 +1298,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_sport_record_time = string_handle;
                         
@@ -1343,7 +1318,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X0110;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     if (scui_presenter.women_health_none()) {
                         
@@ -1352,7 +1326,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         
                     } else {
                         
@@ -1360,7 +1333,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_women_health = string_handle;
                         
@@ -1368,7 +1340,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_women_health_time = string_handle;
                         
@@ -1389,7 +1360,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X011c;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     if (scui_presenter.compass_invalid()) {
                         
@@ -1397,7 +1367,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "--");
                         
                         #if 1
@@ -1409,7 +1378,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         string_t_maker.text = SCUI_MULTI_LANG_0X00f6;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         #endif
                     } else {
                         
@@ -1417,7 +1385,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_compass = string_handle;
                         
@@ -1425,7 +1392,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                         string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_compass_info = string_handle;
                         
@@ -1446,7 +1412,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X012a;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     string_t_maker.widget.clip.x = 36;
                     string_t_maker.widget.clip.y = 77;
@@ -1456,7 +1421,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_altimeter_info1 = string_handle;
                     
@@ -1468,7 +1432,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_altimeter_info2 = string_handle;
                     
@@ -1481,7 +1444,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     string_t_maker.widget.clip.x = 410 / 2 + 36;
                     string_t_maker.widget.clip.y = 127;
@@ -1492,7 +1454,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     break;
                 }
@@ -1509,7 +1470,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X013f;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     
                     
@@ -1528,7 +1488,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X0139;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     #if 1
                     scui_handle_t image = scui_image_prj_image_src_19_widget_timer_01_bgbmp;
@@ -1547,7 +1506,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                         string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                         string_t_maker.font_idx = 0;
                         scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_widget_event_add(string_handle, &event_cb_node);
                         scui_string_update_str(string_handle, "");
                         scui_ui_res_local->data_countdown[idx] = string_handle;
                     }
@@ -1569,7 +1527,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X0140;
                     
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     
                     string_t_maker.widget.clip.x = 36;
                     string_t_maker.widget.clip.y = 77;
@@ -1579,7 +1536,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_world_time1_time = string_handle;
                     
@@ -1591,7 +1547,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_world_time2_time = string_handle;
                     
@@ -1603,7 +1558,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_world_time1_unit = string_handle;
                     
@@ -1615,7 +1569,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_widget_event_add(string_handle, &event_cb_node);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_world_time2_unit = string_handle;
                     
@@ -1636,16 +1589,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         #if 0   // discard, we don't need this
         scui_window_float_event_grasp_hide(event);
         #endif
-        
-        if (scui_event_check_finish(event)) {
-            
-            scui_plug_coupler_recycle(scui_ui_res_local->coupler, true);
-            
-            for (uint8_t idx = 0; idx < scui_ui_res_local->coupler->list_num; idx++)
-                scui_widget_hide(scui_ui_res_local->coupler->list_widget_s[idx], false);
-            
-            scui_plug_coupler_destroy(scui_ui_res_local->coupler);
-        }
         
         /* 界面数据转存回收 */
         if (scui_event_check_finish(event)) {

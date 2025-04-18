@@ -19,6 +19,7 @@ typedef enum {
     scui_event_hide,            /* 窗口隐藏事件 */
     scui_event_show,            /* 窗口显示事件 */
     scui_event_draw,            /* 控件绘制事件 */
+    scui_event_draw_empty,      /* 控件绘制事件(内部转义) */
     scui_event_refr,            /* 界面刷新事件 */
     scui_event_layout,          /* 控件布局更新回调 */
     scui_event_adjust_size,     /* 控件尺寸调整 */

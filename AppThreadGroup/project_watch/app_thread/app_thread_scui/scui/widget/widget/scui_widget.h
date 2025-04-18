@@ -7,9 +7,10 @@ typedef enum {
     scui_widget_type_unknown,   /* 未知控件 */
     scui_widget_type_window,    /* 窗口控件(仅根控件) */
     scui_widget_type_custom,    /* 自定义控件 */
-    scui_widget_type_scroll,    /* 可滚动控件 */
+    scui_widget_type_scroll,    /* 滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
-    scui_widget_type_roller,    /* 滚动轮控件 */
+    scui_widget_type_list,      /* 列表控件 */
+    scui_widget_type_roller,    /* 滚动控件 */
     /* 对象控件 */
     scui_widget_type_objbtn,    /* 对象按钮 */
     /* 扩展控件(按需补充) */
