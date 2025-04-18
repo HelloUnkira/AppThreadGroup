@@ -9,7 +9,7 @@ typedef enum {
     scui_widget_type_custom,    /* 自定义控件 */
     scui_widget_type_scroll,    /* 滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
-    scui_widget_type_list,      /* 列表控件 */
+    scui_widget_type_linear,    /* 列表控件 */
     scui_widget_type_roller,    /* 滚动控件 */
     /* 对象控件 */
     scui_widget_type_objbtn,    /* 对象按钮 */

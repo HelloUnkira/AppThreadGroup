@@ -1,5 +1,5 @@
-#ifndef SCUI_LIST_H
-#define SCUI_LIST_H
+#ifndef SCUI_LINEAR_H
+#define SCUI_LINEAR_H
 
 typedef struct {
     /* 继承域: */
@@ -24,7 +24,7 @@ typedef struct {
     uintptr_t clear_byte;
     uintptr_t remain_num;
     uintptr_t remain_byte;
-} scui_list_t;
+} scui_linear_t;
 
 typedef struct {
     /* 继承域: */
@@ -34,7 +34,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_handle_t    list_num;          // 列表数量
-} scui_list_maker_t;
+} scui_linear_maker_t;
 
 /*@brief 控件构造
  *@param inst       控件实例
@@ -42,66 +42,66 @@ typedef struct {
  *@param handle     控件句柄
  *@param layout     通过布局创建
  */
-void scui_list_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
+void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
 
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_list_burn(scui_handle_t handle);
+void scui_linear_burn(scui_handle_t handle);
 
 /*@brief 控件布局更新
  *@param handle 控件句柄
  */
-void scui_list_layout(scui_handle_t handle);
+void scui_linear_layout(scui_handle_t handle);
 
 /*@brief 列表控件缓存资源回收
  *@param handle 列表控件句柄
  *@param any    回收所有
  */
-void scui_list_recycle(scui_handle_t handle, bool any);
+void scui_linear_recycle(scui_handle_t handle, bool any);
 
 /*@brief 列表控件绘制索引
  *@param handle   列表控件句柄
  *@param draw_idx 绘制索引
  */
-void scui_list_draw_idx(scui_handle_t handle, scui_handle_t *draw_idx);
+void scui_linear_draw_idx(scui_handle_t handle, scui_handle_t *draw_idx);
 
 /*@brief 列表子控件事件响应回调(从)
  *       子控件树的根控件事件响应
  *       仅响应:scui_event_draw_empty
  *@param event 事件
  */
-void scui_list_s_event_draw_empty(scui_event_t *event);
+void scui_linear_s_event_draw_empty(scui_event_t *event);
 
 /*@brief 列表控件添加关联
  *@param handle   列表控件句柄
  *@param handle_s 子控件树句柄
  */
-void scui_list_s_linker(scui_handle_t handle, scui_handle_t handle_s);
+void scui_linear_s_linker(scui_handle_t handle, scui_handle_t handle_s);
 
 /*@brief 列表控件指定条目
  *@param handle   列表控件句柄
  *@param handle_s 子控件树句柄
  *@param idx      列表索引
  */
-void scui_list_s_item(scui_handle_t handle, scui_handle_t **handle_s, scui_handle_t idx);
+void scui_linear_s_item(scui_handle_t handle, scui_handle_t **handle_s, scui_handle_t idx);
 
 /*@brief 列表控件指定条目
  *@param handle   列表控件句柄
  *@param handle_m 子控件句柄
  *@param idx      列表索引
  */
-void scui_list_m_item(scui_handle_t handle, scui_handle_t **handle_m, scui_handle_t idx);
+void scui_linear_m_item(scui_handle_t handle, scui_handle_t **handle_m, scui_handle_t idx);
 
 /*@brief 列表子控件事件响应回调(主)
  *@param event 事件
  */
-void scui_list_m_event(scui_event_t *event);
+void scui_linear_m_event(scui_event_t *event);
 
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_list_event(scui_event_t *event);
+void scui_linear_event(scui_event_t *event);
 
 #endif
 

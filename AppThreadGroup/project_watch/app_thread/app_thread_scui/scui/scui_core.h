@@ -5,7 +5,7 @@
 #include "scui_os.h"
 #include "scui_log.h"
 #include "scui_macro.h"
-#include "scui_list_l.h"        // 侵入式容器:双链表以及为载体的队列,优先队列,栈
+#include "scui_list_ll.h"       // 侵入式容器:链表(以及为载体的:队列,优先队列,栈)
 #include "scui_table_dl.h"      // 侵入式容器:双链表为载体的哈希表(rbs平替目标)
 #include "scui_table_rbs.h"     // 侵入式容器:红黑树为载体的哈希表
 /* AppThreadGroup */
@@ -69,7 +69,7 @@
 #include "scui_custom_draw.h"       /* 控件(自定义:插件) */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_string.h"            /* 控件(字符串) */
-#include "scui_list.h"              /* 控件(列表) */
+#include "scui_linear.h"            /* 控件(列表) */
 #include "scui_roller.h"            /* 控件(滚轮) */
 /* widget: */
 #include "scui_objbtn.h"            /* 对象按钮 */
