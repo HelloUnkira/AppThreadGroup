@@ -58,8 +58,6 @@ void scui_roller_layout(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_roller_t *roller = (void *)widget;
     
-    
-    
     scui_linear_layout(handle);
 }
 

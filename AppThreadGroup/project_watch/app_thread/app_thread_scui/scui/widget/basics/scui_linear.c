@@ -91,8 +91,6 @@ void scui_linear_layout(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_linear_t *linear = (void *)widget;
     
-    
-    
     scui_scroll_layout(handle);
 }
 
