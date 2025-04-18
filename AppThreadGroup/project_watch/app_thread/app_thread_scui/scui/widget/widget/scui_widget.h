@@ -87,7 +87,6 @@ typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
     scui_event_cb_t         event_cb;       /* 事件响应回调(通用事件:可选字段,非控件自身字段) */
-    scui_event_cb_t         widget_cb;      /* 事件响应回调(专属事件:可选字段,非控件自身字段) */
     scui_area_t             clip;           /* 控件所在父控件区域 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */

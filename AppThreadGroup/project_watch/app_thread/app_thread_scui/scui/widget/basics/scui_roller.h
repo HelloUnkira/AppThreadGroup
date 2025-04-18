@@ -6,11 +6,11 @@ typedef struct {
     SCUI_EXTEND_FIELD_S
     scui_widget_t widget;
     scui_scroll_t scroll;
+    scui_linear_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_string_maker_t string;
     /* 内部域: */
-    scui_handle_t       center;
+    scui_handle_t center;
 } scui_roller_t;
 
 typedef struct {
@@ -18,9 +18,9 @@ typedef struct {
     SCUI_EXTEND_FIELD_S
     scui_widget_maker_t widget;
     scui_scroll_maker_t scroll;
+    scui_linear_maker_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_string_maker_t string;
 } scui_roller_maker_t;
 
 /*@brief 控件构造
@@ -49,9 +49,10 @@ void scui_roller_center_target_get(scui_handle_t handle, scui_handle_t *target);
 
 /*@brief 滚轮控件设置字符串
  *@param handle   滚轮控件句柄
+ *@param maker    字符控件构造器
  *@param str_utf8 字符串(utf8)
  */
-void scui_roller_string_str(scui_handle_t handle, uint8_t *str_utf8);
+void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, uint8_t *str_utf8);
 
 /*@brief 事件处理回调
  *@param event 事件
