@@ -97,6 +97,9 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
  */
 static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
+    // 特殊的固定调用
+    scui_linear_s_event(event);
+    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -106,19 +109,14 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         break;
-    case scui_event_draw_empty:
-        scui_event_mask_keep(event);
-        // 特殊的固定调用
-        scui_linear_s_event_draw_empty(event);
-        break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;
         
-        scui_handle_t draw_idx = 0;
-        scui_linear_draw_idx(scui_ui_res_local->linear, &draw_idx);
+        scui_linear_item_t linear_item = {.draw_idx = -1,};
+        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
         
-        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[draw_idx];
+        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[linear_item.draw_idx];
         scui_area_t clip = scui_widget_clip(event->object);
         
         /* 先绘制背景 */
@@ -792,12 +790,10 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, scui_alpha_cover, true);
         #endif
         
-        scui_handle_t  draw_idx = 0;
-        scui_handle_t *handle_s = SCUI_HANDLE_INVALID;
-        scui_linear_draw_idx(scui_ui_res_local->linear, &draw_idx);
-        scui_linear_s_item(scui_ui_res_local->linear, &handle_s, draw_idx);
+        scui_linear_item_t linear_item = {.draw_idx = -1,};
+        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
         
-        scui_handle_t  custom  = *handle_s;
+        scui_handle_t  custom  = linear_item.handle_s;
         scui_area_t  src_clip  = scui_widget_clip(custom);
         scui_point_t img_scale = {
             .x = 1024 * (scui_multi_t)percent / 100,
@@ -826,12 +822,13 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
             break;
         
         scui_event_mask_over(event);
-        scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
-        scui_handle_t *handle_m = SCUI_HANDLE_INVALID;
-        scui_linear_m_item(scui_ui_res_local->linear, &handle_m, index);
+        scui_handle_t parent = scui_widget_parent(event->object);
+        scui_handle_t index  = scui_widget_child_to_index(parent, event->object) - 1;
         
-        scui_handle_t  custom = *handle_m;
+        scui_linear_item_t linear_item = {.draw_idx = -1,};
+        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+        
+        scui_handle_t  custom = linear_item.handle_m;
         SCUI_LOG_WARN("click idx:%d", index);
         
         // 不是点击到中心子控件, 聚焦它
@@ -1034,10 +1031,11 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             custom_maker.widget.clip.h              = 180;
             custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
             for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-                scui_handle_t *handle_m = NULL;
-                scui_linear_m_item(linear_handle, &handle_m, idx);
                 scui_widget_create(&custom_maker, &custom_handle, false);
-                *handle_m = custom_handle;
+                scui_linear_item_t linear_item = {.draw_idx = idx,};
+                scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+                linear_item.handle_m = custom_handle;
+                scui_linear_item_sets(scui_ui_res_local->linear, &linear_item);
             }
             
             // 下半部分留白占用
@@ -1058,10 +1056,11 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
                 custom_maker.widget.child_num   = 5;
                 custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
                 scui_widget_create(&custom_maker, &custom_handle, false);
-                scui_handle_t *handle_s = NULL;
-                scui_linear_s_item(linear_handle, &handle_s, idx);
+                scui_linear_item_t linear_item = {.draw_idx = idx,};
+                scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+                linear_item.handle_s = custom_handle;
+                scui_linear_item_sets(scui_ui_res_local->linear, &linear_item);
                 scui_linear_s_linker(linear_handle, custom_handle);
-                *handle_s = custom_handle;
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
