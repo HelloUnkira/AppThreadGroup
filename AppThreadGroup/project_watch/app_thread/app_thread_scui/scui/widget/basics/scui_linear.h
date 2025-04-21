@@ -8,22 +8,22 @@ typedef struct {
     scui_scroll_t scroll;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_handle_t list_num; // 列表数量
+    scui_handle_t       list_num;           // 列表数量
     /* 内部域: */
-    scui_event_cb_t *event_cb_list_m;   // 列表子控件响应回调(主)
-    scui_event_cb_t *event_cb_list_s;   // 列表子控件树响应回调(从)
-    scui_surface_t **list_surface_s;    // 从控件树画布列表(slave)
-    scui_handle_t   *list_widget_s;     // 从控件树列表(slave)
-    scui_handle_t   *list_widget_m;     // 主控件列表(master)
-    scui_area_t     *list_draw_clip;    // 绘制目标剪切域
-    scui_handle_t    list_draw_idx;     // 绘制目标
-    bool            *list_draw;         // 绘制标记
-    bool            *list_refr;         // 刷新标记
+    scui_event_cb_t    *event_cb_list_m;    // 列表子控件响应回调(主)
+    scui_event_cb_t    *event_cb_list_s;    // 列表子控件树响应回调(从)
+    scui_surface_t    **list_surface_s;     // 从控件树画布列表(slave)
+    scui_handle_t      *list_widget_s;      // 从控件树列表(slave)
+    scui_handle_t      *list_widget_m;      // 主控件列表(master)
+    scui_area_t        *list_draw_clip;     // 绘制目标剪切域
+    scui_handle_t       list_draw_idx;      // 绘制目标
+    bool               *list_draw;          // 绘制标记
+    bool               *list_refr;          // 刷新标记
     /* 内部域: */
-    uintptr_t clear_num;
-    uintptr_t clear_byte;
-    uintptr_t remain_num;
-    uintptr_t remain_byte;
+    uintptr_t           clear_num;
+    uintptr_t           clear_byte;
+    uintptr_t           remain_num;
+    uintptr_t           remain_byte;
 } scui_linear_t;
 
 typedef struct {
@@ -33,13 +33,13 @@ typedef struct {
     scui_scroll_maker_t scroll;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_handle_t list_num; // 列表数量
+    scui_handle_t       list_num;           // 列表数量
 } scui_linear_maker_t;
 
 typedef struct {
-    scui_handle_t draw_idx;
-    scui_handle_t handle_m;
-    scui_handle_t handle_s;
+    scui_handle_t       draw_idx;
+    scui_handle_t       handle_m;
+    scui_handle_t       handle_s;
 } scui_linear_item_t;
 
 /*@brief 控件构造

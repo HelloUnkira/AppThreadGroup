@@ -474,9 +474,9 @@ static void scui_window_event_switch(scui_event_t *event)
             /* 全局滚动锁定 */
             if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
                  break;
-            scui_window_mgr.switch_args.lock_move = true;
-            scui_window_mgr.switch_args.hold_move = false;
-            scui_window_mgr.switch_args.mask_fling = event->type == scui_event_ptr_fling;
+            scui_window_mgr.switch_args.lock_move  = true;
+            scui_window_mgr.switch_args.hold_move  = false;
+            scui_window_mgr.switch_args.mask_fling = true;
             scui_window_mgr.switch_args.dir = event_dir;
             scui_window_mgr.switch_args.pos = event_dir;
             scui_window_mgr.switch_args.pct = 0;
@@ -525,6 +525,10 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     if (scui_window_mgr.switch_args.lock_jump) {
+        SCUI_LOG_WARN("window switching");
+        return false;
+    }
+    if (scui_window_mgr.switch_args.lock_move) {
         SCUI_LOG_WARN("window switching");
         return false;
     }
