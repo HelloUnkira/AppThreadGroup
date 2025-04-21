@@ -141,7 +141,7 @@ bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
  *@param area2 区域
  *@retval 不为空
  */
-bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2);
+bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2);
 
 /*@brief 检查区域包含区域(area1包含area2)
  *@param area1 区域

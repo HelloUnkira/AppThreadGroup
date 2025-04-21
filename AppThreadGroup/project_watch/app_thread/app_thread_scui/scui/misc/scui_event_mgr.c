@@ -96,7 +96,7 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_widget_scroll_c,
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)
+    for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)
         if (event->type == event_table[idx])
             return true;
     
@@ -125,7 +125,7 @@ static bool scui_event_order_check(scui_event_t *event)
         scui_event_focus_get,
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(event_table); idx++)
+    for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)
         if (event->type == event_table[idx])
             return true;
     
@@ -183,7 +183,7 @@ static void scui_event_respond(scui_event_t *event)
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
             scui_window_list(&window_list);
-            for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
                 if (window_list[idx] != SCUI_HANDLE_INVALID) {
                     event->object = window_list[idx];
                     scui_event_respond(event);
@@ -217,7 +217,7 @@ static void scui_event_respond(scui_event_t *event)
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
             scui_window_list(&window_list);
-            for (uint8_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
                 if (window_list[idx] != SCUI_HANDLE_INVALID) {
                     event->object = window_list[idx];
                     scui_event_respond(event);

@@ -291,7 +291,7 @@ void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
     scui_area_t image_clip = {.w = -1, .h = -1,};
     
     /* 断言检查,所有有效图片应该保持同一宽与高 */
-    for (uint8_t idx = 0; idx < 4; idx++) {
+    for (scui_handle_t idx = 0; idx < 4; idx++) {
         if (image[idx] != SCUI_HANDLE_INVALID) {
             SCUI_ASSERT(image_clip.w == -1 || image_clip.w == scui_image_w(image[idx]));
             SCUI_ASSERT(image_clip.h == -1 || image_clip.h == scui_image_h(image[idx]));

@@ -66,7 +66,7 @@ void scui_linear_burn(scui_handle_t handle)
     // 回收所有子控件树画布
     scui_linear_recycle(handle, true);
     // 销毁所有子控件树
-    for (uint8_t idx = 0; idx < linear->list_num; idx++)
+    for (scui_handle_t idx = 0; idx < linear->list_num; idx++)
         scui_widget_hide(linear->list_widget_s[idx], false);
     
     /* 销毁缓存资源 */
@@ -98,7 +98,7 @@ void scui_linear_recycle(scui_handle_t handle, bool any)
     linear->remain_num  = 0;
     linear->remain_byte = 0;
     
-    for (uint8_t idx = 0; idx < linear->list_num; idx++) {
+    for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
         
         scui_surface_t *surface_s = linear->list_surface_s[idx];
         scui_handle_t   target_s  = linear->list_widget_s[idx];

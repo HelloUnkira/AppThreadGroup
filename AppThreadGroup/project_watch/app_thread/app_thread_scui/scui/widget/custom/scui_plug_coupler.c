@@ -64,7 +64,7 @@ void scui_plug_coupler_recycle(scui_plug_coupler_t *coupler, bool any)
     uintptr_t surface_remain_nums  = 0;
     uintptr_t surface_remain_bytes = 0;
     
-    for (uint8_t idx = 0; idx < coupler->list_num; idx++) {
+    for (scui_handle_t idx = 0; idx < coupler->list_num; idx++) {
         
         scui_surface_t *surface_s = coupler->list_surface_s[idx];
         scui_handle_t   target_s  = coupler->list_widget_s[idx];

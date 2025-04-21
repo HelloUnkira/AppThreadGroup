@@ -189,7 +189,7 @@ static void scui_draw_ctx_ring_quadrant(scui_draw_dsc_t *draw_dsc)
         {.x = +src_image->pixel.width / 2,.y = -0,},
     };
     
-    for (uint8_t idx = 0; idx < 4; idx++) {
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
         if (!quadrant_flag[idx])
              continue;
         scui_point_t dst_clip_offset = {

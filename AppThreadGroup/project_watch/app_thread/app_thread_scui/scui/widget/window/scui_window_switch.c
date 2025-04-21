@@ -580,6 +580,26 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         return true;
     }
     
+    #if 1
+    // 窗口交互风格自适应
+    // 如果目标和当前窗口是临近窗口且指定交互类型
+    // 此时的窗口将自适应为到达目标窗口的交互类型
+    scui_widget_t *widget_curr  = scui_handle_source_check(scui_window_mgr.active_curr);
+    scui_window_t *window_curr  = (void *)widget_curr;
+    for (scui_handle_t idx = 0; idx < 4; idx++)
+        if (window_curr->sibling[idx] == handle) {
+            type = window_curr->switch_type[idx];
+            // 判断方向
+            if (idx == 0) dir = scui_opt_dir_to_d;
+            if (idx == 1) dir = scui_opt_dir_to_u;
+            if (idx == 2) dir = scui_opt_dir_to_r;
+            if (idx == 3) dir = scui_opt_dir_to_l;
+            /* 自适应需要更新窗口切换状态 */
+            scui_window_switch_type_update(type, dir);
+            break;
+        }
+    #endif
+    
     /* 无切换效果 */
     if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
         scui_widget_hide(scui_window_mgr.active_curr, false);

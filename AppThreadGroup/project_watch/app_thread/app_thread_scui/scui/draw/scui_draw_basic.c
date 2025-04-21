@@ -687,7 +687,7 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
         dst_area.x2 = scui_coord_min;
         dst_area.y2 = scui_coord_min;
         /* 对四个图像的角进行一次正变换 */
-        for (uint8_t idx = 0; idx < 4; idx++) {
+        for (scui_coord_t idx = 0; idx < 4; idx++) {
             scui_point3_by_point2(&face3.point3[idx], &face2.point2[idx]);
             scui_point3_transform_by_matrix(&face3.point3[idx], src_matrix);
             scui_point3_to_point2(&face3.point3[idx], &face2.point2[idx]);
@@ -788,7 +788,7 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
         dst_area.x2 = scui_coord_min;
         dst_area.y2 = scui_coord_min;
         /* 对四个图像的角进行一次正变换 */
-        for (uint8_t idx = 0; idx < 4; idx++) {
+        for (scui_coord_t idx = 0; idx < 4; idx++) {
             scui_point3_by_point2(&face3.point3[idx], &face2.point2[idx]);
             scui_point3_transform_by_matrix(&face3.point3[idx], src_matrix);
             scui_point3_to_point2(&face3.point3[idx], &face2.point2[idx]);
@@ -861,7 +861,7 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
             scui_color_wt_t del_b = 0;
             
             uint8_t val_cnt = 0;
-            for (uint8_t idx = 0; idx < 4; idx++)
+            for (scui_coord_t idx = 0; idx < 4; idx++)
             if (scui_area_point(&src_clip_v, &pos4[idx])) {
                 val_cnt++;
                 

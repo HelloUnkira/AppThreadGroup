@@ -60,7 +60,7 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
         {scui_draw_type_ring,                   (void *)scui_draw_ctx_ring,},
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+    for (scui_coord_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
         if (ctx_table[idx].type == draw_dsc->type) {
             ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
             ctx_cb(draw_dsc);

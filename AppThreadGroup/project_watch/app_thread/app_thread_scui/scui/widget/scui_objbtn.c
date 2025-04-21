@@ -32,7 +32,7 @@ void scui_objbtn_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_objbtn));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    for (uint8_t idx = 0; idx < 4; idx++) {
+    for (scui_handle_t idx = 0; idx < 4; idx++) {
         objbtn->color[idx] = objbtn_maker->color[idx];
         objbtn->alpha[idx] = objbtn_maker->alpha[idx];
         objbtn->width[idx] = objbtn_maker->width[idx];

@@ -45,7 +45,7 @@ void scui_anima_elapse(uint32_t elapse)
  */
 void scui_anima_update(scui_handle_t handle)
 {
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         /* 如果指定动画句柄则只调度目标动画,否则调度所有动画 */
@@ -176,7 +176,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     }
     
     scui_anima_t *item = anima;
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
         scui_anima_list.list[idx] = scui_handle_find();
@@ -209,7 +209,7 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     
     /* 动画实例过多 */
     SCUI_LOG_ERROR("anima too much:");
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID) {
             anima = scui_handle_source(scui_anima_list.list[idx]);
             SCUI_LOG_ERROR("expired:%p, peroid:%u, reload:%u",
@@ -227,7 +227,7 @@ void scui_anima_destroy(scui_handle_t handle)
         return;
     }
     
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
             scui_handle_clear(scui_anima_list.list[idx]);
@@ -252,7 +252,7 @@ void scui_anima_start(scui_handle_t handle)
         return;
     }
     
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
             anima->running = true;
@@ -274,7 +274,7 @@ void scui_anima_stop(scui_handle_t handle)
         return;
     }
     
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
             anima->running = false;
@@ -299,7 +299,7 @@ bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima)
     
     *anima = NULL;
     
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             *anima = scui_handle_source(scui_anima_list.list[idx]);
             return true;
@@ -319,7 +319,7 @@ bool scui_anima_running(scui_handle_t handle)
         return false;
     }
     
-    for (uint32_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] == handle) {
             scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
             return anima->running;

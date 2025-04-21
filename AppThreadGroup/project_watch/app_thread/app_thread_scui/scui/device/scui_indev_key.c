@@ -36,13 +36,13 @@ void scui_indev_key_notify(scui_indev_data_t *data)
     SCUI_LOG_DEBUG("key_val:%d",  data->key.key_val);
     
     bool key_id_not_find = true;
-    for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
+    for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         if (scui_indev_key.item[idx].key_id == data->key.key_id) {
             key_id_not_find = false;
             break;
         }
     if (key_id_not_find)
-    for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
+    for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         if (scui_indev_key.item[idx].key_id == -1) {
             scui_indev_key.item[idx].key_id  = data->key.key_id;
             key_id_not_find = false;
@@ -51,13 +51,13 @@ void scui_indev_key_notify(scui_indev_data_t *data)
     if (key_id_not_find) {
         SCUI_LOG_ERROR("key id is too much:");
         SCUI_LOG_ERROR("key_id:%d", data->key.key_id);
-        for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
+        for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
             SCUI_LOG_ERROR("key_id:%d", scui_indev_key.item[idx].key_id);
         SCUI_ASSERT(false);
     }
     
     /* 如果命中按键号,直接处理 */
-    for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
+    for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         if (scui_indev_key.item[idx].key_id == data->key.key_id) {
             scui_indev_key.item[idx].key_id  = data->key.key_id;
             scui_indev_key.item[idx].key_val = data->key.key_val;
@@ -130,6 +130,6 @@ void scui_indev_key_notify(scui_indev_data_t *data)
  */
 void scui_indev_key_ready(void)
 {
-    for (uint32_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
+    for (scui_coord_t idx = 0; idx < SCUI_INDEV_KEY_LIMIT; idx++)
         scui_indev_key.item[idx].key_id = -1;
 }

@@ -19,7 +19,7 @@ static void scui_window_stack_check(void)
     
     uint8_t stack_top = 0;
     uint8_t stack_str[10 * SCUI_WINDOW_STACK_NEST] = {0};
-    for (uint8_t top = 0; top < scui_window_mgr.stack_args.top; top++)
+    for (scui_handle_t top = 0; top < scui_window_mgr.stack_args.top; top++)
         stack_top += snprintf(stack_str + stack_top, sizeof(stack_str) - stack_top,
         "0x%x ", scui_window_mgr.stack_args.stack[top]);
     

@@ -29,7 +29,7 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
 {
     scui_point3_t point3_t;
     
-    for (uint8_t row = 0; row < 3; row++) {
+    for (scui_coord_t row = 0; row < 3; row++) {
         scui_coord3_t m_dx = matrix->meta[row][0] * point3->x;
         scui_coord3_t m_dy = matrix->meta[row][1] * point3->y;
         scui_coord3_t m_dz = matrix->meta[row][2] * point3->z;

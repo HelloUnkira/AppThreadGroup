@@ -138,9 +138,10 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
 {
     scui_clip_set_t   *set = clip_set;
     scui_clip_unit_t *unit = NULL;
-    scui_area_t clip_valid = {0};
-    scui_area_t clip4[4] = {0};
-    uint8_t clip4_num = 0;
+    
+    scui_area_t  clip4[4]   = {0};
+    scui_area_t  clip_valid = {0};
+    scui_coord_t clip4_num  = 0;
     
     if (scui_area_empty(&clip_set->clip))
         return false;
@@ -173,7 +174,7 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
             scui_list_dll_remove(&set->dl_list, &unit->dl_node);
             SCUI_MEM_FREE(unit);
             unit = NULL;
-            for (uint8_t idx = 0; idx < clip4_num; idx++) {
+            for (scui_handle_t idx = 0; idx < clip4_num; idx++) {
                 scui_clip_add(set, &clip4[idx]);
                 clip4[idx] = (scui_area_t){0};
             }

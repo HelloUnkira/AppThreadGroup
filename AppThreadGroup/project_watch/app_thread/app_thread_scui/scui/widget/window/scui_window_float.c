@@ -30,7 +30,7 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
     
     bool float_flag = false;
     /* 断言检查: */
-    for (uint8_t idx = 0; idx < 4; idx++) {
+    for (scui_handle_t idx = 0; idx < 4; idx++) {
         scui_handle_t handle = scui_window_float.list[idx];
         if (handle != SCUI_HANDLE_INVALID) {
             scui_widget_t *widget = scui_handle_source_check(handle);

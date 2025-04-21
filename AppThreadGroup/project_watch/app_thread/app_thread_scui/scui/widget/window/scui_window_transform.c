@@ -457,8 +457,8 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
         scui_coord_t scale_d = scui_window_mgr.switch_args.pct;
         SCUI_LOG_INFO("scale_d:%d", scale_d);
         
-        for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
-        for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+        for (scui_handle_t idx_j = 0; idx_j < h_num; idx_j++)
+        for (scui_handle_t idx_i = 0; idx_i < w_num; idx_i++) {
             clip_seg[idx_j][idx_i].w = w_seg;
             clip_seg[idx_j][idx_i].h = h_seg;
             
@@ -478,8 +478,8 @@ void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num)
             }
         }
         
-        for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
-        for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+        for (scui_handle_t idx_j = 0; idx_j < h_num; idx_j++)
+        for (scui_handle_t idx_i = 0; idx_i < w_num; idx_i++) {
             scui_coord_t center_rx = w_res / 2;
             scui_coord_t center_ry = h_res / 2;
             scui_coord_t center_sx = clip_seg[idx_j][idx_i].x + clip_seg[idx_j][idx_i].w / 2;
@@ -547,8 +547,8 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
         scui_coord_t scale_d = scui_window_mgr.switch_args.pct;
         SCUI_LOG_INFO("scale_d:%d", scale_d);
         
-        for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
-        for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+        for (scui_handle_t idx_j = 0; idx_j < h_num; idx_j++)
+        for (scui_handle_t idx_i = 0; idx_i < w_num; idx_i++) {
             clip_seg[idx_j][idx_i].w = w_seg;
             clip_seg[idx_j][idx_i].h = h_seg;
             
@@ -568,8 +568,8 @@ void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num)
             }
         }
         
-        for (uint8_t idx_j = 0; idx_j < h_num; idx_j++)
-        for (uint8_t idx_i = 0; idx_i < w_num; idx_i++) {
+        for (scui_handle_t idx_j = 0; idx_j < h_num; idx_j++)
+        for (scui_handle_t idx_i = 0; idx_i < w_num; idx_i++) {
             scui_coord_t scale_w = scui_map(scale_d, 0, 100, 0, clip_seg[idx_j][idx_i].w);
             scui_coord_t scale_h = scui_map(scale_d, 0, 100, 0, clip_seg[idx_j][idx_i].h);
             clip_seg[idx_j][idx_i].x += scale_w / 2 + scale_w % 2;

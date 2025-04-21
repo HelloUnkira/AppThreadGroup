@@ -68,7 +68,7 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
         {scui_custom_draw_type_image_crect4,    (void *)scui_custom_draw_ctx_image_crect4,},
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
         if (ctx_table[idx].type == draw_dsc->type) {
             ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
             ctx_cb(draw_dsc);
@@ -91,7 +91,7 @@ void scui_custom_draw_anim_ctx(scui_custom_draw_dsc_t *draw_dsc)
         {scui_custom_draw_type_dial_ptr,        (void *)scui_custom_draw_anim_ctx_dial_ptr,},
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
         if (ctx_table[idx].type == draw_dsc->type) {
             ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
             ctx_cb(draw_dsc);

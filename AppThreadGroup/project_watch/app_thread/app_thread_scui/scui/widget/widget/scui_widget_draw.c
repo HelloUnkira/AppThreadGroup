@@ -45,10 +45,10 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
     const uint8_t idx_line[4][2] = {{0,1},{1,2},{2,3},{3,1}};
     /* 如果线段与frag上边界相交,最多可能有四个焦点,求最小值和最大值 */
     /* 如果线段与frag下边界相交,最多可能有四个焦点,求最小值和最大值 */
-    for (uint8_t idx_i = 0; idx_i < 4; idx_i++) {
+    for (scui_handle_t idx_i = 0; idx_i < 4; idx_i++) {
         
         /* 先计算上下线 */
-        for (uint8_t idx_c = 0; idx_c < 2; idx_c++) {
+        for (scui_handle_t idx_c = 0; idx_c < 2; idx_c++) {
             
             scui_coord_t x_min = 0;
             scui_coord_t x_max = 0;
@@ -159,7 +159,7 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
         {scui_widget_draw_type_graph,           (void *)scui_widget_draw_ctx_graph,},
     };
     
-    for (uint32_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
+    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
         if (ctx_table[idx].type == draw_dsc->type) {
             ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
             ctx_cb(draw_dsc);

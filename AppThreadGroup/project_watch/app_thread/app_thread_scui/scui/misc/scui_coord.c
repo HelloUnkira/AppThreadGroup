@@ -259,7 +259,7 @@ bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset)
  *@param area2 区域
  *@retval 不为空
  */
-bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scui_area_t *area2)
+bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2)
 {
     *num = 0;
     scui_area_t area1_s = {0};
@@ -300,7 +300,7 @@ bool scui_area_differ(scui_area_t area[4], uint8_t *num, scui_area_t *area1, scu
         (*num)++;
     }
     
-    for (uint8_t idx = 0; idx < *num; idx++)
+    for (scui_coord_t idx = 0; idx < *num; idx++)
         scui_area_m_by_s(&area[idx], &area[idx]);
     
     return *num != 0;
