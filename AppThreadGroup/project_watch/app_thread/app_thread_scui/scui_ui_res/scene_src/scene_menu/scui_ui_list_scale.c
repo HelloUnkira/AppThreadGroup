@@ -305,7 +305,9 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
                 scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
                 linear_item.handle_s = custom_handle;
                 scui_linear_item_sets(scui_ui_res_local->linear, &linear_item);
-                scui_linear_s_linker(linear_handle, custom_handle);
+                scui_handle_t *handle_m = NULL;
+                scui_custom_handle_m(custom_handle, &handle_m);
+                *handle_m = linear_item.handle_m;
                 
                 scui_string_maker_t string_maker = {0};
                 scui_handle_t string_handle             = SCUI_HANDLE_INVALID;

@@ -44,24 +44,37 @@ void scui_custom_burn(scui_handle_t handle)
     scui_widget_burn(widget);
 }
 
-/*@brief 自定义控件外部关联者(全局,唯一)
- *@param handle 自定义控件句柄
- *@param linker 外部关联者
+/*@brief 自定义控件子控件(可选)
+ *@param handle   自定义控件句柄
+ *@param handle_s 控件句柄地址
  */
-void scui_custom_linker(scui_handle_t handle, void ***linker)
+void scui_custom_handle_m(scui_handle_t handle, scui_handle_t **handle_m)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
     
-    *linker = &custom->linker;
+    *handle_m = &custom->handle_m;
+}
+
+/*@brief 自定义控件子控件树(可选)
+ *@param handle   自定义控件句柄
+ *@param handle_s 控件句柄地址
+ */
+void scui_custom_handle_s(scui_handle_t handle, scui_handle_t **handle_s)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_custom_t *custom = (void *)widget;
+    
+    *handle_s = &custom->handle_s;
 }
 
 /*@brief 自定义控件绘制描述符(全局,唯一)
  *@param handle   自定义控件句柄
  *@param draw_dsc 绘制描述符
  */
-void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc)
+void scui_custom_draw_dsc(scui_handle_t handle, scui_custom_draw_dsc_t **draw_dsc)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
     scui_widget_t *widget = scui_handle_source_check(handle);

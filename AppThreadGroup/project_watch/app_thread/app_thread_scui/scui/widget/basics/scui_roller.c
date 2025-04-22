@@ -235,7 +235,10 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     
     linear_item.handle_s = custom_handle;
     scui_linear_item_sets(widget->myself, &linear_item);
-    scui_linear_s_linker(handle, custom_handle);
+    
+    scui_handle_t *handle_m = NULL;
+    scui_custom_handle_m(linear_item.handle_s, &handle_m);
+    *handle_m = linear_item.handle_m;
     
     // 使用预制的构造器构造对象
     scui_string_maker_t string_maker = *maker;

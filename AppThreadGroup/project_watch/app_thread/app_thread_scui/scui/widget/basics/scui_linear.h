@@ -73,12 +73,6 @@ void scui_linear_item_gets(scui_handle_t handle, scui_linear_item_t *item);
  */
 void scui_linear_item_sets(scui_handle_t handle, scui_linear_item_t *item);
 
-/*@brief 列表控件添加关联
- *@param handle   列表控件句柄
- *@param handle_s 子控件树句柄
- */
-void scui_linear_s_linker(scui_handle_t handle, scui_handle_t handle_s);
-
 /*@brief 列表子控件事件响应回调(从)
  *@param event 事件
  */
