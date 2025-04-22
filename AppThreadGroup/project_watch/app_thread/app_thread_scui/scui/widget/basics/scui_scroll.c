@@ -903,8 +903,8 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         scui_coord_t delta_x = event->ptr_e.x - event->ptr_s.x;
         scui_coord_t delta_y = event->ptr_e.y - event->ptr_s.y;
         
-        delta_x = (scroll->dir & scui_opt_dir_hor) != 0 ? delta_x : 0;
-        delta_y = (scroll->dir & scui_opt_dir_ver) != 0 ? delta_y : 0;
+        delta_x = scui_opt_bits_check(scroll->dir, scui_opt_dir_hor) ? delta_x : 0;
+        delta_y = scui_opt_bits_check(scroll->dir, scui_opt_dir_ver) ? delta_y : 0;
         
         /* 自由布局的翻页退化为移动 */
         if (event->type == scui_event_ptr_fling);
@@ -1110,12 +1110,12 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         }
         
         /* 边界对齐,开始校正 */
-        if ((scroll->dir == scui_opt_dir_hor && (scroll->pos & scui_opt_dir_hor) != 0) ||
-            (scroll->dir == scui_opt_dir_ver && (scroll->pos & scui_opt_dir_ver) != 0)) {
+        if ((scroll->dir == scui_opt_dir_hor && scui_opt_bits_check(scroll->pos, scui_opt_dir_hor)) ||
+            (scroll->dir == scui_opt_dir_ver && scui_opt_bits_check(scroll->pos, scui_opt_dir_ver))) {
             
             /* 不可以同时为多个方向的目标 */
-            SCUI_ASSERT(!((scroll->pos & scui_opt_dir_hor) != 0 &&
-                          (scroll->pos & scui_opt_dir_ver) != 0));
+            SCUI_ASSERT(!(scui_opt_bits_check(scroll->pos, scui_opt_dir_hor) &&
+                          scui_opt_bits_check(scroll->pos, scui_opt_dir_ver)));
             
             if (retval) {
                 /* 取最小偏移量 */

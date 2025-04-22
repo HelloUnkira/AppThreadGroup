@@ -177,6 +177,13 @@ typedef enum {
     scui_opt_pos_all  = scui_opt_dir_all,
 } scui_opt_pos_t;
 
+/*@brief 操作检查
+ */
+#define scui_opt_bits_equal(bits, mask)     (((bits) & (mask)) == (mask))
+#define scui_opt_bits_check(bits, mask)     (((bits) & (mask)) != (0))
+
+
+
 /*@brief 像素点配置
  *@param cf    像素点格式
  *@param pixel 像素点

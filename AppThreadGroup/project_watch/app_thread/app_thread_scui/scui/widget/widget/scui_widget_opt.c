@@ -94,30 +94,25 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_
     };
     
     if (target != SCUI_HANDLE_INVALID || widget->parent != SCUI_HANDLE_INVALID) {
-        scui_handle_t  handle_target = target != SCUI_HANDLE_INVALID ? target : widget->parent;
-        scui_widget_t *widget_target = scui_handle_source_check(handle_target);
+        scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
+        scui_widget_t *widget_t = scui_handle_source_check(handle_t);
         
         point.x = widget->clip.x;
-        // 水平左对齐
-        if ((pos & scui_opt_pos_l) != 0)
-            point.x = (widget_target->clip.x);
-        // 水平右对齐
-        if ((pos & scui_opt_pos_r) != 0)
-            point.x = (widget_target->clip.x + widget_target->clip.w - widget->clip.w);
-        // 水平中心对齐
-        if ((pos & scui_opt_dir_hor) != 0)
-            point.x /= 2;
-        
         point.y = widget->clip.y;
-        // 垂直上对齐
-        if ((pos & scui_opt_pos_u) != 0)
-            point.y = (widget_target->clip.y);
-        // 垂直下对齐
-        if ((pos & scui_opt_pos_d) != 0)
-            point.y = (widget_target->clip.y + widget_target->clip.h - widget->clip.h);
-        // 垂直中心对齐
-        if ((pos & scui_opt_dir_ver) != 0)
+        
+        if (scui_opt_bits_equal(pos, scui_opt_dir_hor))
+            point.x /= 2;
+        else if (scui_opt_bits_equal(pos, scui_opt_pos_l))
+            point.x = (widget_t->clip.x);
+        else if (scui_opt_bits_equal(pos, scui_opt_pos_r))
+            point.x = (widget_t->clip.x + widget_t->clip.w - widget->clip.w);
+        
+        if (scui_opt_bits_equal(pos, scui_opt_dir_ver))
             point.y /= 2;
+        else if (scui_opt_bits_equal(pos, scui_opt_pos_u))
+            point.y = (widget_t->clip.y);
+        else if (scui_opt_bits_equal(pos, scui_opt_pos_d))
+            point.y = (widget_t->clip.y + widget_t->clip.h - widget->clip.h);
     }
     
     point.x += offset->x;
@@ -299,27 +294,30 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
     scui_point_t point_c = {0};
     scui_point_t point_child_c = {0};
     /* 中心对齐:则控件中心点与子控件中心点偏移量(最小) */
-    if (pos == scui_opt_pos_c) {
+    switch (pos) {
+    case scui_opt_pos_c:
         point_c.x = widget->clip.x + widget->clip.w / 2;
         point_c.y = widget->clip.y + widget->clip.h / 2;
-    }
-    
-    if (pos == scui_opt_pos_u) {
+        break;
+    case scui_opt_pos_u:
         point_c.x = widget->clip.x + widget->clip.w / 2;
         point_c.y = widget->clip.y;
-    }
-    if (pos == scui_opt_pos_d) {
+        break;
+    case scui_opt_pos_d:
         point_c.x = widget->clip.x + widget->clip.w / 2;
         point_c.y = widget->clip.y + widget->clip.h;
-    }
-    
-    if (pos == scui_opt_pos_l) {
+        break;
+    case scui_opt_pos_l:
         point_c.x = widget->clip.x;
         point_c.y = widget->clip.y + widget->clip.h / 2;
-    }
-    if (pos == scui_opt_pos_r) {
+        break;
+    case scui_opt_pos_r:
         point_c.x = widget->clip.x + widget->clip.w;
         point_c.y = widget->clip.y + widget->clip.h / 2;
+        break;
+    default:
+        SCUI_ASSERT(false);
+        break;
     }
     
     if (point_c.x == 0 && point_c.y == 0)
@@ -335,27 +333,30 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_source_check(handle);
         
-        if (pos == scui_opt_pos_c) {
+        switch (pos) {
+        case scui_opt_pos_c:
             point_child_c.x = child->clip.x + child->clip.w / 2;
             point_child_c.y = child->clip.y + child->clip.h / 2;
-        }
-        
-        if (pos == scui_opt_pos_u) {
+            break;
+        case scui_opt_pos_u:
             point_child_c.x = child->clip.x + child->clip.w / 2;
             point_child_c.y = child->clip.y;
-        }
-        if (pos == scui_opt_pos_d) {
+            break;
+        case scui_opt_pos_d:
             point_child_c.x = child->clip.x + child->clip.w / 2;
             point_child_c.y = child->clip.y + child->clip.h;
-        }
-        
-        if (pos == scui_opt_pos_l) {
+            break;
+        case scui_opt_pos_l:
             point_child_c.x = child->clip.x;
             point_child_c.y = child->clip.y + child->clip.h / 2;
-        }
-        if (pos == scui_opt_pos_r) {
+            break;
+        case scui_opt_pos_r:
             point_child_c.x = child->clip.x + child->clip.w;
             point_child_c.y = child->clip.y + child->clip.h / 2;
+            break;
+        default:
+            SCUI_ASSERT(false);
+            break;
         }
         
         scui_coord_t dist_x = point_child_c.x - point_c.x;
