@@ -86,6 +86,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_scroll_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
@@ -96,7 +97,6 @@ void scui_scroll_burn(scui_handle_t handle)
     }
     
     /* 析构基础控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_burn(widget);
 }
 

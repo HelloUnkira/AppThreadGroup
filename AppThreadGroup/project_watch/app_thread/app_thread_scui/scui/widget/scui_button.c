@@ -53,11 +53,11 @@ void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_button_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_button));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_button_t *button = (void *)widget;
     
     /* 析构基础控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_button));
     scui_widget_burn(widget);
 }
 

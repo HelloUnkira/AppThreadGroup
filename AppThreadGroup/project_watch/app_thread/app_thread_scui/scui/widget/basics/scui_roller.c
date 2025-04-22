@@ -41,11 +41,11 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_roller_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_roller_t *roller = (void *)widget;
     
     /* 析构派生控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_linear_burn(widget->myself);
 }
 

@@ -60,6 +60,7 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_linear_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_linear_t *linear = (void *)widget;
     
@@ -78,7 +79,6 @@ void scui_linear_burn(scui_handle_t handle)
     SCUI_MEM_FREE(linear->list_surface_s);
     
     /* 析构派生控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear));
     scui_scroll_burn(widget->myself);
 }
 

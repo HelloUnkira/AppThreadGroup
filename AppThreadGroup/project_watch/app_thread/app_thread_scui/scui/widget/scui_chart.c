@@ -88,6 +88,7 @@ void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle, bool l
  */
 void scui_chart_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_chart_t  *chart  = (void *)widget;
     
@@ -107,7 +108,6 @@ void scui_chart_burn(scui_handle_t handle)
     }
     
     /* 析构基础控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
     scui_widget_burn(widget);
 }
 

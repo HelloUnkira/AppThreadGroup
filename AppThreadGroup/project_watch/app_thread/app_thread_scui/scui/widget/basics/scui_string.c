@@ -71,6 +71,7 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_string_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
@@ -103,7 +104,6 @@ void scui_string_burn(scui_handle_t handle)
     }
     
     /* 析构基础控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_string));
     scui_widget_burn(widget);
 }
 

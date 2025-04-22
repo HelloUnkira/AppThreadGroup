@@ -33,6 +33,7 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_custom_burn(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
     
@@ -40,7 +41,6 @@ void scui_custom_burn(scui_handle_t handle)
     SCUI_MEM_FREE(custom->draw_dsc);
     
     /* 析构基础控件实例 */
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
     scui_widget_burn(widget);
 }
 
