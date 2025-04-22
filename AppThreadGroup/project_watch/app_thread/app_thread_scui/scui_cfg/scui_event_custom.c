@@ -275,21 +275,10 @@ void scui_event_custom_finish(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
-    case scui_event_key_click: {
-        
-        scui_handle_t stack_top = {0};
-        scui_window_stack_nest(&stack_top);
-        if (stack_top > 1) {
-            // 返回上一层
-            scui_window_stack_del();
-        } else {
-            // 回到主界面
-            scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
-        }
-        
+    case scui_event_key_click:
         scui_event_mask_over(event);
+        scui_ui_scene_return();
         break;
-    }
     default:
         break;
     }

@@ -67,6 +67,17 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
         .absorb     = scui_event_absorb_none,
     };
     scui_event_notify(&event);
+    
+    // 同步绘制后移除调度队列中
+    // 可能存在的异步绘制
+    if (sync) {
+        scui_event_t event = {
+            .object = handle_r,
+            .type   = scui_event_draw,
+        };
+        // 移除跟主窗口相关所有绘制事件
+        while (scui_event_dequeue(&event, true, false));
+    }
 }
 
 /*@brief 刷新控件

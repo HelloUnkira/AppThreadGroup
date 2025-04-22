@@ -518,3 +518,32 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     scui_window_sibling_set(event->object, window_sibling);
     scui_window_switch_type_set(event->object, switch_type);
 }
+
+/*****************************************************************************/
+void scui_ui_scene_return(void)
+{
+    scui_handle_t stack_nest = 0;
+    scui_handle_t stack_top  = 0;
+    scui_window_stack_nest(&stack_nest);
+    scui_window_stack_top(&stack_top);
+    
+    // 浮窗界面, 要跳回属于它自己的主窗口
+    if (stack_top == SCUI_UI_SCENE_FLOAT_1 ||
+        stack_top == SCUI_UI_SCENE_FLOAT_2 ||
+        stack_top == SCUI_UI_SCENE_FLOAT_3 ||
+        stack_top == SCUI_UI_SCENE_FLOAT_4) {
+        // 回到主界面
+        scui_window_stack_cover(SCUI_UI_SCENE_TEST);
+        return;
+    }
+    
+    if (stack_nest > 1) {
+        // 返回上一层
+        scui_window_stack_del();
+        return;
+    } else {
+        // 回到主界面
+        scui_window_stack_reset(SCUI_UI_SCENE_HOME, false);
+        return;
+    }
+}

@@ -209,7 +209,7 @@ static void scui_window_move_anima_finish(void *instance)
 
 /*@brief 窗口移动动画自动化
  */
-static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32_t peroid)
+static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_t value_all, uint32_t peroid)
 {
     scui_anima_t anima = {0};
     anima.prepare = scui_window_move_anima_prepare;
@@ -217,7 +217,15 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32
     anima.finish  = scui_window_move_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
-    anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s) / 2;
+    
+    if (peroid != 0)
+        anima.peroid = peroid;
+    else {
+        SCUI_ASSERT(value_all != 0);
+        anima.peroid  = scui_abs(anima.value_e - anima.value_s);
+        anima.peroid *= SCUI_WINDOW_MGR_SWITCH_MOVE_MS;
+        anima.peroid /= value_all;
+    }
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     
@@ -244,31 +252,28 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, uint32
 static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
 {
     /* 获得窗口宽高 */
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
-    scui_point_t point   = scui_window_mgr.switch_args.point;
+    scui_point_t    point = scui_window_mgr.switch_args.point;
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_coord_t  hor_res = widget->surface->hor_res;
+    scui_coord_t  ver_res = widget->surface->ver_res;
     
     /* 从当前位置到达目标点 */
-    int32_t value_s = 0;
-    int32_t value_e = 0;
+    int32_t value_s = 0, value_e = 0, value_all = 0;
+    
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_r) {
-        value_s = point.x;
-        value_e = inout ? 0 : +hor_res;
+        value_s = point.x; value_e = inout ? 0 : +hor_res; value_all = hor_res;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_l) {
-        value_s = point.x;
-        value_e = inout ? 0 : -hor_res;
+        value_s = point.x; value_e = inout ? 0 : -hor_res; value_all = hor_res;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_d) {
-        value_s = point.y;
-        value_e = inout ? 0 : +ver_res;
+        value_s = point.y; value_e = inout ? 0 : +ver_res; value_all = ver_res;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_u) {
-        value_s = point.y;
-        value_e = inout ? 0 : -ver_res;
+        value_s = point.y; value_e = inout ? 0 : -ver_res; value_all = ver_res;
     }
     
-    scui_window_move_anima_auto(value_s, value_e, 0);
+    scui_window_move_anima_auto(value_s, value_e, value_all, 0);
 }
 
 /*@brief 窗口切换事件处理回调
@@ -308,13 +313,13 @@ static void scui_window_event_switch(scui_event_t *event)
             scui_event_mask_over(event);
             SCUI_LOG_INFO("");
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_l)
-                scui_window_move_anima_auto(point.x, event->ptr_e.x, 0);
+                scui_window_move_anima_auto(point.x, event->ptr_e.x, hor_res, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_r)
-                scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, 0);
+                scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, hor_res, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_u)
-                scui_window_move_anima_auto(point.y, event->ptr_e.y, 0);
+                scui_window_move_anima_auto(point.y, event->ptr_e.y, ver_res, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
-                scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, 0);
+                scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, ver_res, 0);
         } else {
             if (scui_window_mgr.switch_args.lock_jump)
                 break;
@@ -377,13 +382,13 @@ static void scui_window_event_switch(scui_event_t *event)
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
                 else {
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_l)
-                        scui_window_move_anima_auto(point.x, event->ptr_e.x, 0);
+                        scui_window_move_anima_auto(point.x, event->ptr_e.x, hor_res, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_r)
-                        scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, 0);
+                        scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, hor_res, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_u)
-                        scui_window_move_anima_auto(point.y, event->ptr_e.y, 0);
+                        scui_window_move_anima_auto(point.y, event->ptr_e.y, ver_res, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
-                        scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, 0);
+                        scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, ver_res, 0);
                 }
                 scui_event_mask_over(event);
             }
@@ -588,8 +593,8 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     // 窗口交互风格自适应
     // 如果目标和当前窗口是临近窗口且指定交互类型
     // 此时的窗口将自适应为到达目标窗口的交互类型
-    scui_widget_t *widget_curr  = scui_handle_source_check(scui_window_mgr.active_curr);
-    scui_window_t *window_curr  = (void *)widget_curr;
+    scui_widget_t *widget_curr = scui_handle_source_check(scui_window_mgr.active_curr);
+    scui_window_t *window_curr = (void *)widget_curr;
     for (scui_handle_t idx = 0; idx < 4; idx++)
         if (window_curr->sibling[idx] == handle) {
             type = window_curr->switch_type[idx];
@@ -618,10 +623,8 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_window_mgr.switch_args.list[1] = handle;
         scui_widget_show(scui_window_mgr.active_curr, false);
         scui_widget_show(handle, false);
+        
         /* 其他切换效果都需要动画完成 */
-        uint32_t peroid = (dir & scui_opt_dir_hor) != 0 ? scui_disp_get_hor_res() :
-                          (dir & scui_opt_dir_ver) != 0 ? scui_disp_get_ver_res() : 0;
-        SCUI_ASSERT(peroid != 0);
         scui_anima_t switch_anima = {0};
         
         switch (scui_window_mgr.switch_args.type) {
@@ -635,6 +638,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_cover_out:
         case scui_window_switch_cover_in:
             switch_anima.path = scui_map_ease_in_out;
+            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
             break;
         case scui_window_switch_flip1:
         case scui_window_switch_zoom2:
@@ -642,11 +646,14 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_move:
             // 非叠加类型的移动可适合超调效果
             switch_anima.path = scui_map_overshoot;
+            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
             // 非叠加类型的移动可适合重力回弹效果
             switch_anima.path = scui_map_bounce;
+            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
             break;
         default:
             switch_anima.path = scui_map_linear;
+            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
             break;
         }
         
@@ -675,7 +682,6 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         switch_anima.prepare = scui_window_jump_anima_prepare;
         switch_anima.expired = scui_window_jump_anima_expired;
         switch_anima.finish  = scui_window_jump_anima_finish;
-        switch_anima.peroid  = peroid;
         scui_anima_create(&switch_anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);
     }
