@@ -12,6 +12,8 @@
  */
 void scui_ui_scene_test_event_proc(scui_event_t *event)
 {
+    static bool ptr_long_jump = false;
+    
     scui_ui_scene_link_cfg(event);
     
     static uint16_t font_size = 32;
@@ -127,6 +129,22 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
+    
+    case scui_event_ptr_down:
+        SCUI_LOG_INFO("scui_event_ptr_down");
+        ptr_long_jump = false;
+        break;
+    case scui_event_ptr_hold:
+        SCUI_LOG_INFO("scui_event_ptr_hold");
+        if (event->ptr_tick > 3000)
+            ptr_long_jump = true;
+        break;
+    case scui_event_ptr_up:
+        SCUI_LOG_INFO("scui_event_ptr_up");
+        if (ptr_long_jump)
+            scui_ui_scene_return();
+        break;
+    
     case scui_event_key_click:
         if (event->key_id != scui_event_key_val_enter)
             break;

@@ -76,20 +76,22 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
-    case scui_event_ptr_hold: {
-        SCUI_LOG_INFO("scui_event_ptr_hold");
-        
-        if (event->ptr_tick > 3000 && !scui_ui_res_local->ptr_long_jump) {
-            scui_ui_res_local->ptr_long_jump = true;
-            scui_window_switch_type_t *cfg_type = NULL;
-            scui_window_switch_cfg_type(&cfg_type);
-            scui_window_switch_type_t type = *cfg_type;
-            *cfg_type = scui_window_switch_circle;
-            scui_window_stack_add(SCUI_UI_SCENE_LANTERN, false);
-            *cfg_type = type;
-        }
+    
+    case scui_event_ptr_down:
+        SCUI_LOG_INFO("scui_event_ptr_down");
+        scui_ui_res_local->ptr_long_jump = false;
         break;
-    }
+    case scui_event_ptr_hold:
+        SCUI_LOG_INFO("scui_event_ptr_hold");
+        if (event->ptr_tick > 3000)
+            scui_ui_res_local->ptr_long_jump = true;
+        break;
+    case scui_event_ptr_up:
+        SCUI_LOG_INFO("scui_event_ptr_up");
+        if (scui_ui_res_local->ptr_long_jump)
+            scui_ui_scene_return();
+        break;
+    
     case scui_event_enc_clockwise: {
         SCUI_LOG_INFO("scui_event_enc_clockwise");
         

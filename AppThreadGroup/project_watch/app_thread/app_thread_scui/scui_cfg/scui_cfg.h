@@ -98,6 +98,10 @@
 /* 移动时停止帧动画(假渲染) */
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
 
+/* 窗口切换动画时间(以1整屏计算) */
+#define SCUI_WINDOW_MGR_SWITCH_MOVE_MS              (175)
+#define SCUI_WINDOW_MGR_SWITCH_JUMP_MS              (225)
+
 /* 窗口管理栈数量限制 */
 #define SCUI_WINDOW_STACK_NEST                      (10)
 /* 窗口管理数量限制 */
