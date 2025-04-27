@@ -40,7 +40,6 @@ typedef struct {
 
 /*@brief 控件构造回调
  *@brief 控件析构回调
- *@brief 控件布局回调
  *@brief 控件事件回调
  */
 typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
@@ -265,28 +264,28 @@ bool scui_widget_is_show(scui_handle_t handle);
 bool scui_widget_is_hide(scui_handle_t handle);
 
 /*@brief 用户资源获取
- *@param handle 控件句柄
- *@retval 用户资源
+ *@param handle    控件句柄
+ *@param user_data 用户资源
  */
-void * scui_widget_user_data_get(scui_handle_t handle);
+void scui_widget_user_data_get(scui_handle_t handle, void **user_data);
 
 /*@brief 控件透明度获取
  *@param handle 控件句柄
- *@retval 控件透明度
+ *@param alpha  控件透明度
  */
-scui_alpha_t scui_widget_alpha_get(scui_handle_t handle);
+void scui_widget_alpha_get(scui_handle_t handle, scui_alpha_t *alpha);
 
 /*@brief 控件图片获取
  *@param handle 控件句柄
- *@retval 图片句柄
+ *@param image  图片句柄
  */
-scui_handle_t scui_widget_image_get(scui_handle_t handle);
+void scui_widget_image_get(scui_handle_t handle, scui_handle_t *image);
 
 /*@brief 控件颜色获取
  *@param handle 控件句柄
- *@retval 颜色
+ *@param color  颜色
  */
-scui_color_t scui_widget_color_get(scui_handle_t handle);
+void scui_widget_color_get(scui_handle_t handle, scui_color_t *color);
 
 /*@brief 用户资源设置
  *@param handle    控件句柄

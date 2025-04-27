@@ -638,44 +638,47 @@ bool scui_widget_is_hide(scui_handle_t handle)
 }
 
 /*@brief 用户资源获取
- *@param handle 控件句柄
- *@retval 用户资源
+ *@param handle    控件句柄
+ *@param user_data 用户资源
  */
-void * scui_widget_user_data_get(scui_handle_t handle)
+void scui_widget_user_data_get(scui_handle_t handle, void **user_data)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->user_data == SCUI_HANDLE_INVALID ?
-         NULL : scui_handle_source(widget->user_data);
+    
+    if (widget->user_data == SCUI_HANDLE_INVALID)
+       *user_data = NULL;
+    if (widget->user_data != SCUI_HANDLE_INVALID)
+       *user_data = scui_handle_source(widget->user_data);
 }
 
 /*@brief 控件透明度获取
  *@param handle 控件句柄
- *@retval 控件透明度
+ *@param alpha  控件透明度
  */
-scui_alpha_t scui_widget_alpha_get(scui_handle_t handle)
+void scui_widget_alpha_get(scui_handle_t handle, scui_alpha_t *alpha)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->alpha;
+    *alpha = widget->alpha;
 }
 
 /*@brief 控件图片获取
  *@param handle 控件句柄
- *@retval 图片句柄
+ *@param image  图片句柄
  */
-scui_handle_t scui_widget_image_get(scui_handle_t handle)
+void scui_widget_image_get(scui_handle_t handle, scui_handle_t *image)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->image;
+    *image = widget->image;
 }
 
 /*@brief 控件颜色获取
  *@param handle 控件句柄
- *@retval 颜色
+ *@param color  颜色
  */
-scui_color_t scui_widget_color_get(scui_handle_t handle)
+void scui_widget_color_get(scui_handle_t handle, scui_color_t *color)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->color;
+    *color = widget->color;
 }
 
 /*@brief 用户资源设置

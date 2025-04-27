@@ -53,8 +53,8 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
 static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
 {
     // 固定资源绑定到res, 构建时将widget与固定的res绑定
-    void *user_data = scui_widget_user_data_get(event->object);
-    scui_csf_json_item__res_t *res = user_data;
+    scui_csf_json_item__res_t *res = NULL;
+    scui_widget_user_data_get(event->object, &res);
     SCUI_ASSERT(res != NULL);
     
     // 从res中逆向获取解析器目标
@@ -104,8 +104,8 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
 static void scui_cwf_json_custom_event_cb(scui_event_t *event)
 {
     // 固定资源绑定到res, 构建时将widget与固定的res绑定
-    void *user_data = scui_widget_user_data_get(event->object);
-    scui_csf_json_item__res_t *res = user_data;
+    scui_csf_json_item__res_t *res = NULL;
+    scui_widget_user_data_get(event->object, &res);
     SCUI_ASSERT(res != NULL);
     
     // 从res中逆向获取解析器目标

@@ -30,28 +30,28 @@ typedef enum {
     scui_window_switch_single_e,
 } scui_window_switch_type_t;
 
-typedef union {
+typedef struct {
     // 这部分参数未定, 暂保留自由度
     scui_handle_t shadow;
 } scui_window_switch_args_t;
 
 typedef struct {
-    scui_handle_t             list[SCUI_WINDOW_MGR_LIMIT];
-    scui_window_switch_type_t type;         /* 窗口切换风格(当前) */
-    scui_window_switch_type_t cfg_type;     /* 窗口切换风格(配置) */
-    scui_window_switch_args_t cfg_args;     /* 窗口切换参数(配置) */
-    scui_opt_dir_t            cfg_dir;      /* 窗口切换方向(配置) */
-    scui_opt_dir_t            dir;          /* 窗口切换方向(当前) */
-    scui_opt_pos_t            pos;          /* 窗口切换位置(当前) */
-    scui_handle_t             key;          /* 窗口切换全局锁 */
-    scui_handle_t             anima;        /* 窗口切换动画 */
-    scui_point_t              point;        /* 窗口切换偏移(坐标点) */
-    scui_coord_t              pct;          /* 窗口切换进度(百分比) */
-    scui_coord_t              ofs;          /* 窗口切换偏移(像素点) */
-    uint32_t                  lock_jump:1;  /* 窗口切换锁 */
-    uint32_t                  lock_move:1;  /* 窗口切换锁 */
-    uint32_t                  mask_fling:1; /* 窗口切换锁 */
-    uint8_t                   hold_move:1;  /* 窗口使用锁 */
+    scui_handle_t               list[SCUI_WINDOW_MGR_LIMIT];
+    scui_window_switch_type_t   type;             /* 窗口切换风格(当前) */
+    scui_window_switch_type_t   cfg_type;         /* 窗口切换风格(配置) */
+    scui_window_switch_args_t   cfg_args;         /* 窗口切换参数(配置) */
+    scui_opt_dir_t              cfg_dir;          /* 窗口切换方向(配置) */
+    scui_opt_dir_t              dir;              /* 窗口切换方向(当前) */
+    scui_opt_pos_t              pos;              /* 窗口切换位置(当前) */
+    scui_handle_t               key;              /* 窗口切换全局锁 */
+    scui_handle_t               anima;            /* 窗口切换动画 */
+    scui_point_t                point;            /* 窗口切换偏移(坐标点) */
+    scui_coord_t                pct;              /* 窗口切换进度(百分比) */
+    scui_coord_t                ofs;              /* 窗口切换偏移(像素点) */
+    uint32_t                    lock_jump:1;      /* 窗口切换锁 */
+    uint32_t                    lock_move:1;      /* 窗口切换锁 */
+    uint32_t                    mask_fling:1;     /* 窗口切换锁 */
+    uint8_t                     hold_move:1;      /* 窗口使用锁 */
 } scui_window_switch_t;
 
 typedef struct {
@@ -60,14 +60,14 @@ typedef struct {
 } scui_window_stack_t;
 
 typedef struct {
-    scui_handle_t        list_num;                      /* 窗口列表数量 */
-    scui_handle_t        list[SCUI_WINDOW_MGR_LIMIT];   /* 窗口管理列表 */
-    scui_window_stack_t  stack_args;                    /* 窗口栈式记录 */
-    scui_window_switch_t switch_args;                   /* 窗口切换信息 */
-    scui_handle_t        active_curr;                   /* 当前活跃窗口 */
-    scui_handle_t        active_last;                   /* 上一活跃窗口 */
-    scui_widget_t       *refr_widget;                   /* 窗口送显模式控件实例地址 */
-    uint32_t             refr_switch:1;                 /* 窗口送显模式标记 */
+    scui_handle_t           list_num;                       /* 窗口列表数量 */
+    scui_handle_t           list[SCUI_WINDOW_MGR_LIMIT];    /* 窗口管理列表 */
+    scui_window_stack_t     stack_args;                     /* 窗口栈式记录 */
+    scui_window_switch_t    switch_args;                    /* 窗口切换信息 */
+    scui_handle_t           active_curr;                    /* 当前活跃窗口 */
+    scui_handle_t           active_last;                    /* 上一活跃窗口 */
+    scui_widget_t          *refr_widget;                    /* 窗口送显模式控件实例地址 */
+    uint32_t                refr_switch:1;                  /* 窗口送显模式标记 */
     /*  */
 } scui_window_mgr_t;
 

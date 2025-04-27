@@ -177,7 +177,8 @@ static void scui_roller_m_event(scui_event_t *event)
     }
     case scui_event_ptr_click: {
         
-        scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+        scui_alpha_t alpha = scui_alpha_trans;
+        scui_widget_alpha_get(event->object, &alpha);
         if (alpha <= scui_alpha_pct20)
             break;
         

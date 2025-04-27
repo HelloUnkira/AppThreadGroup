@@ -14,11 +14,10 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
  */
 void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_map);
 
-/*@brief 通过映射表调用创建一个控件树
- *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
+/*@brief 销毁控件
  *@param handle 控件句柄
  */
-void scui_widget_create_layout_tree(scui_handle_t handle);
+void scui_widget_destroy(scui_handle_t handle);
 
 /*@brief 创建控件
  *@param maker  控件实例构造参数
@@ -27,9 +26,9 @@ void scui_widget_create_layout_tree(scui_handle_t handle);
  */
 void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
 
-/*@brief 销毁控件
- *@param handle 控件句柄
+/*@brief 通过映射表调用创建一个控件树
+ *@param handle 根控件句柄
  */
-void scui_widget_destroy(scui_handle_t handle);
+void scui_widget_create_layout_tree(scui_handle_t handle);
 
 #endif

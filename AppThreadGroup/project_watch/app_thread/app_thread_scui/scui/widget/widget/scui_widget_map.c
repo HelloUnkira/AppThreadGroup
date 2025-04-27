@@ -123,9 +123,49 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
     *widget_map = &scui_widget_map[type];
 }
 
-/*@brief 通过映射表调用创建一个控件树
- *       从根控件开始到它的所有子控件(动态子控件在show之前生成)
+/*@brief 销毁控件
  *@param handle 控件句柄
+ */
+void scui_widget_destroy(scui_handle_t handle)
+{
+    /* 重复的销毁过滤 */
+    if (scui_handle_unmap(handle))
+        return;
+    
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_widget_map_t *widget_map = NULL;
+    scui_widget_map_find(widget->type, &widget_map);
+    
+    widget_map->burn(handle);
+    
+    /* 销毁控件实例 */
+    SCUI_MEM_FREE(widget);
+}
+/*@brief 创建控件
+ *@param maker  控件实例构造参数
+ *@param handle 控件句柄
+ *@param layout 通过布局
+ */
+void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
+{
+    scui_widget_map_t   *widget_map   = NULL;
+    scui_widget_maker_t *widget_maker = maker;
+    scui_widget_map_find(widget_maker->type, &widget_map);
+    
+    /* 创建构造器实例 */
+    void *local_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
+    memcpy(local_maker, widget_maker, widget_map->maker);
+    /* 创建控件实例 */
+    scui_widget_t *widget = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->size);
+    memset(widget, 0, widget_map->size);
+    /* 构造流程 */
+    widget_maker = local_maker;
+    widget_map->make(widget, widget_maker, handle, layout);
+    SCUI_MEM_FREE(widget_maker);
+}
+
+/*@brief 通过映射表调用创建一个控件树
+ *@param handle 根控件句柄
  */
 void scui_widget_create_layout_tree(scui_handle_t handle)
 {
@@ -165,46 +205,4 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
             (scui_handle_remap(handle) && widget->parent == SCUI_HANDLE_INVALID))
             break;
     } while (handle < handle_table->offset + handle_table->number);
-}
-
-/*@brief 创建控件
- *@param maker  控件实例构造参数
- *@param handle 控件句柄
- *@param layout 通过布局
- */
-void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
-{
-    scui_widget_map_t   *widget_map   = NULL;
-    scui_widget_maker_t *widget_maker = maker;
-    scui_widget_map_find(widget_maker->type, &widget_map);
-    
-    /* 创建构造器实例 */
-    void *local_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
-    memcpy(local_maker, widget_maker, widget_map->maker);
-    /* 创建控件实例 */
-    scui_widget_t *widget = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->size);
-    memset(widget, 0, widget_map->size);
-    /* 构造流程 */
-    widget_maker = local_maker;
-    widget_map->make(widget, widget_maker, handle, layout);
-    SCUI_MEM_FREE(widget_maker);
-}
-
-/*@brief 销毁控件
- *@param handle 控件句柄
- */
-void scui_widget_destroy(scui_handle_t handle)
-{
-    /* 重复的销毁过滤 */
-    if (scui_handle_unmap(handle))
-        return;
-    
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_widget_map_t *widget_map = NULL;
-    scui_widget_map_find(widget->type, &widget_map);
-    
-    widget_map->burn(handle);
-    
-    /* 销毁控件实例 */
-    SCUI_MEM_FREE(widget);
 }

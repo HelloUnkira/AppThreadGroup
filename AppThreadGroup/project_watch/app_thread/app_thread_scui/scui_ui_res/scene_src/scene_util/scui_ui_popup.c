@@ -177,7 +177,8 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
              break;
         
         // 这里需要填完全覆盖的纯透明色调
-        scui_alpha_t alpha = scui_widget_alpha_get(event->object);
+        scui_alpha_t alpha = scui_alpha_trans;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
         scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
         scui_widget_alpha_set(event->object, alpha, false);
