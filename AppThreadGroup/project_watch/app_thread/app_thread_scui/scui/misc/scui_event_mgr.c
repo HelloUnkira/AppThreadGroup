@@ -176,7 +176,7 @@ static void scui_event_respond(scui_event_t *event)
             /* 全局滚动检查 */
             #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
             scui_handle_t handle = SCUI_HANDLE_INVALID;
-            if (scui_widget_event_scroll_flag(0x02, &handle))
+            if (scui_widget_global_scroll_flag(0x02, &handle))
                 return;
             #endif
             
@@ -187,9 +187,9 @@ static void scui_event_respond(scui_event_t *event)
                 if (window_list[idx] != SCUI_HANDLE_INVALID) {
                     event->object = window_list[idx];
                     scui_event_respond(event);
+                    event->object = SCUI_HANDLE_SYSTEM;
                 }
             
-            event->object = SCUI_HANDLE_SYSTEM;
             return;
         }
         break;
@@ -253,7 +253,8 @@ static void scui_event_respond(scui_event_t *event)
         return;
     }
     
-    event->style.result = 0x00;
+    /* 标记事件为未处理 */
+    scui_event_mask_quit(event);
     
     /* 事件响应回调 */
     if (scui_event_cb_check(event))
@@ -338,7 +339,7 @@ static void scui_event_respond(scui_event_t *event)
             scui_event_cb_custom(event);
         }
         // 系统事件调度工步:execute
-        if (true/* must execute */) {
+        if (scui_event_order_check(event)) {
             scui_event_mask_execute(event);
             scui_event_cb_custom(event);
         }
@@ -358,8 +359,9 @@ static void scui_event_respond(scui_event_t *event)
     if (scui_event_check_over(event))
         return;
     
-    if (event->style.result != 0)
-        return;
+    /* 不是未知事件, 流程结束 */
+    if (!scui_event_check_quit(event))
+         return;
     
     /* 参考事件区间 */
     #if 0

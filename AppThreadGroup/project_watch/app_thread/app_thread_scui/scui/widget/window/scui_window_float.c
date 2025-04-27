@@ -70,7 +70,7 @@ void scui_window_float_cfg_set(scui_window_float_t *cfg)
 bool scui_window_float_running(void)
 {
     return scui_window_float.cover ||
-          !scui_widget_event_scroll_flag(0x02, &scui_window_float.key);
+          !scui_widget_global_scroll_flag(0x02, &scui_window_float.key);
 }
 
 /*@brief 窗口移动伴随透明度更新
@@ -167,7 +167,7 @@ static void scui_window_float_anima_finish(void *instance)
     }
     
     if (!scui_window_float.hold)
-         scui_widget_event_scroll_flag(0x01, &scui_window_float.key);
+         scui_widget_global_scroll_flag(0x01, &scui_window_float.key);
 }
 
 /*@brief 窗口浮动动画自动化
@@ -262,7 +262,7 @@ void scui_window_float_event_grasp_key(scui_event_t *event)
 {
     if (event->type == scui_event_key_click) {
         /* 全局滚动锁定 */
-        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+        if (!scui_widget_global_scroll_flag(0x00, &scui_window_float.key))
              return;
         scui_window_float_anima_inout(event->object, false);
         scui_event_mask_over(event);
@@ -292,7 +292,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     }
     case scui_event_ptr_move: {
         /* 全局滚动锁定 */
-        if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+        if (!scui_widget_global_scroll_flag(0x00, &scui_window_float.key))
              break;
         scui_event_mask_keep(event);
         if (scui_window_float.target != handle)
@@ -467,7 +467,7 @@ void scui_window_float_event_check_ptr(scui_event_t *event)
         /* 抓获到运动的目标 */
         if (scui_window_float.target != SCUI_HANDLE_INVALID) {
             /* 全局滚动锁定 */
-            if (!scui_widget_event_scroll_flag(0x00, &scui_window_float.key))
+            if (!scui_widget_global_scroll_flag(0x00, &scui_window_float.key))
                  break;
             /* 先释放其他窗口资源 */
             scui_window_list_hide_without(handle, false);

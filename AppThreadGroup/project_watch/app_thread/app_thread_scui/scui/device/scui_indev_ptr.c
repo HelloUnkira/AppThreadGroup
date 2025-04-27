@@ -39,12 +39,18 @@ static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
 void scui_indev_ptr_notify(scui_indev_data_t *data)
 {
     scui_point_t point = data->ptr.ptr_pos;
+    scui_coord_t hor_res = scui_disp_get_hor_res();
+    scui_coord_t ver_res = scui_disp_get_ver_res();
     
     /* 检查范围是否跃出 */
-    if (point.x < 0 || point.x >= scui_disp_get_hor_res())
-        SCUI_LOG_WARN("pos x invalid<%d, %d>:%d", 0, scui_disp_get_hor_res() - 1, point.x);
-    if (point.y < 0 || point.y >= scui_disp_get_ver_res())
-        SCUI_LOG_WARN("pos y invalid<%d, %d>:%d", 0, scui_disp_get_ver_res() - 1, point.y);
+    if (point.x < 0 || point.x >= hor_res)
+        SCUI_LOG_WARN("pos x invalid<%d, %d>:%d", 0, hor_res - 1, point.x);
+    if (point.y < 0 || point.y >= ver_res)
+        SCUI_LOG_WARN("pos y invalid<%d, %d>:%d", 0, ver_res - 1, point.y);
+    
+    /* 限制坐标范围 */
+    point.x = scui_clamp(point.x, 0, hor_res - 1);
+    point.y = scui_clamp(point.y, 0, ver_res - 1);
     
     scui_event_t event = {
         .object = SCUI_HANDLE_SYSTEM,

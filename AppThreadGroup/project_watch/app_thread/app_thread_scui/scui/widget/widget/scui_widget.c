@@ -89,7 +89,8 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     
     SCUI_LOG_DEBUG("");
     /* 非根控件要设置为显示,否则为隐藏 */
-    widget->style.state = widget->parent != SCUI_HANDLE_INVALID;
+    if (widget->parent != SCUI_HANDLE_INVALID)
+        widget->style.state = true;
     
     /* 配置控件事件响应 */
     scui_event_cb_node_t cb_node = {0};

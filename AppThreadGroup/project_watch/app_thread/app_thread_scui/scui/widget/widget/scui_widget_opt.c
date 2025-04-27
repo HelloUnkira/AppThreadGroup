@@ -14,14 +14,12 @@
  */
 void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
 {
-    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     if (widget->clip.x == point->x &&
         widget->clip.y == point->y)
         return;
     
-    SCUI_LOG_DEBUG("");
     /* 存在独立画布下,如果移动的是窗口,只需要改变窗口位置 */
     if (widget->parent == SCUI_HANDLE_INVALID &&
         scui_widget_surface_only(widget)) {
@@ -32,26 +30,26 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
         return;
     }
     
-    SCUI_LOG_DEBUG("");
+    /* 控件悬浮, 不响应移动 */
+    if (widget->style.fixed)
+        return;
+    
     /* 计算移动偏移量 */
     scui_point_t offset = {
         .x = point->x - widget->clip.x,
         .y = point->y - widget->clip.y,
     };
     
-    SCUI_LOG_DEBUG("");
     /* 移动自己 */
     widget->clip.x = point->x;
     widget->clip.y = point->y;
     
-    SCUI_LOG_DEBUG("");
     /* 更新画布剪切域(更新自己的) */
     if (dirty) {
         scui_widget_surface_refr(widget->myself, false);
         scui_widget_clip_clear(widget, false);
     }
     
-    SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
@@ -63,7 +61,6 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
         scui_widget_move_pos(handle, &point, dirty);
     }
     
-    SCUI_LOG_DEBUG("");
     /* 更新画布剪切域(更新自己和父亲的) */
     if (dirty)
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -77,6 +74,30 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
     }
 }
 
+/*@brief 控件移动
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param dirty  脏标记
+ */
+void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty)
+{
+    SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    if (offset->x == 0 && offset->y == 0)
+        return;
+    
+    scui_point_t point = {0};
+    point.x = widget->clip.x + offset->x;
+    point.y = widget->clip.y + offset->y;
+    scui_widget_move_pos(handle, &point, dirty);
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_move_ofs(handle, offset, dirty);
+    }
+}
+
 /*@brief 子控件坐标对齐
  *@param handle  控件句柄
  *@param handle  控件句柄(目标控件,不存在则相对父控件)
@@ -85,7 +106,6 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
  */
 void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_pos_t pos, scui_point_t *offset)
 {
-    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     scui_point_t point = {
@@ -128,13 +148,11 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_
  */
 void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_dir_t dir, bool recurse)
 {
-    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     scui_handle_t handle_child = child;
     SCUI_ASSERT(dir == scui_opt_dir_hor || dir == scui_opt_dir_ver);
     
-    SCUI_LOG_DEBUG("");
     /* 移动孩子,迭代它的孩子列表 */
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
@@ -170,7 +188,6 @@ void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_
  */
 void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height)
 {
-    SCUI_LOG_DEBUG("");
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     if (widget->parent == SCUI_HANDLE_INVALID) {
@@ -216,10 +233,10 @@ void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset,
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_source_check(handle);
-        scui_area_t clip_child = child->clip;
-        clip_child.x += offset->x;
-        clip_child.y += offset->y;
-        scui_widget_move_pos(handle, &clip_child, dirty);
+        scui_point_t   point = {0};
+        point.x = child->clip.x + offset->x;
+        point.y = child->clip.y + offset->y;
+        scui_widget_move_pos(handle, &point, dirty);
     }
 }
 
@@ -240,6 +257,7 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
     scui_widget_child_list_btra(widget, idx) {
         scui_handle_t handle = widget->child_list[idx];
         scui_widget_t *child = scui_handle_source_check(handle);
+        
         scui_area_t clip_child = child->clip;
         scui_area_t clip_inter = {0};
         clip_child.x += offset->x;
@@ -247,7 +265,7 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         
         /* 计算是否与父控件存在交集 */
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child, dirty);
+            scui_widget_move_pos(handle, &clip_child.pos, dirty);
             continue;
         }
         
@@ -255,7 +273,7 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         clip_child.x -= range->x;
         clip_child.y -= range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child, dirty);
+            scui_widget_move_pos(handle, &clip_child.pos, dirty);
             continue;
         }
         clip_child.x += range->x;
@@ -265,14 +283,14 @@ void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *of
         clip_child.x += range->x;
         clip_child.y += range->y;
         if (scui_area_inter(&clip_inter, &widget->clip, &clip_child)) {
-            scui_widget_move_pos(handle, &clip_child, dirty);
+            scui_widget_move_pos(handle, &clip_child.pos, dirty);
             continue;
         }
         clip_child.x -= range->x;
         clip_child.y -= range->y;
         
         /* 正常继续偏转 */
-        scui_widget_move_pos(handle, &clip_child, dirty);
+        scui_widget_move_pos(handle, &clip_child.pos, dirty);
     }
 }
 
@@ -379,4 +397,61 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
     offset->x = -dist_tar_x;
     offset->y = -dist_tar_y;
     return true;
+}
+
+/*@prief 事件滚动状态检查更新
+ *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
+ *@param key  锁定标记句柄(浮动校验密钥)
+ */
+bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key)
+{
+    static struct {
+        bool lock;
+        scui_handle_t key;
+    } scroll_flag = {0};
+    
+    switch (state) {
+    case 0x00:
+        if (scroll_flag.lock && scroll_flag.key != *key)
+            return false;
+        if (scroll_flag.lock && scroll_flag.key == *key)
+            return true;
+        
+        // 未得锁,此时应该为无效句柄
+        SCUI_ASSERT(scroll_flag.key == SCUI_HANDLE_INVALID);
+        SCUI_ASSERT(*key == SCUI_HANDLE_INVALID);
+        
+        SCUI_LOG_INFO("scroll lock");
+        scroll_flag.key  = scui_handle_find();
+        scroll_flag.lock = true;
+        *key = scroll_flag.key;
+        return true;
+    case 0x01:
+        // 释放锁,此时应该为目标句柄
+        if (scroll_flag.lock && scroll_flag.key != *key) {
+            SCUI_LOG_ERROR("unknown target");
+            SCUI_ASSERT(false);
+        }
+        if (scroll_flag.lock && scroll_flag.key == *key) {
+            SCUI_ASSERT(*key != SCUI_HANDLE_INVALID);
+            
+            SCUI_LOG_INFO("scroll unlock");
+            scui_handle_clear(scroll_flag.key);
+            scroll_flag.key  = SCUI_HANDLE_INVALID;
+            scroll_flag.lock = false;
+            *key = scroll_flag.key;
+            return true;
+        }
+        
+        SCUI_LOG_ERROR("unknown target");
+        SCUI_ASSERT(false);
+        return false;
+    case 0x02:
+        if (scroll_flag.lock && scroll_flag.key == *key)
+            return false;
+        return scroll_flag.lock;
+    default:
+        SCUI_LOG_ERROR("unknown state");
+        return false;
+    }
 }

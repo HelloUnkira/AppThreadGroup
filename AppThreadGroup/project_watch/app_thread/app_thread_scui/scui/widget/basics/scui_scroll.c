@@ -167,7 +167,7 @@ void scui_scroll_center_target_get(scui_handle_t handle, scui_handle_t *target)
     *target = SCUI_HANDLE_INVALID;
     
     scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
-    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
+    if (scui_widget_global_scroll_flag(0x02, &handle_scroll))
         return;
     
     scui_point_t offset = {0};
@@ -199,7 +199,7 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
     }
     
     scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
-    if (scui_widget_event_scroll_flag(0x02, &handle_scroll))
+    if (scui_widget_global_scroll_flag(0x02, &handle_scroll))
         return;
     
     // 如果已经是中心子控件, 跳过目标
@@ -288,7 +288,7 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
         return;
     
     /* 全局滚动锁定 */
-    if (!scui_widget_event_scroll_flag(0x00, &scroll->key))
+    if (!scui_widget_global_scroll_flag(0x00, &scroll->key))
          return;
     scroll->lock_move = true;
     scroll->hold_move = false;
@@ -615,7 +615,7 @@ static void scui_scroll_anima_finish(void *instance)
         // 仅仅当anima完全结束后,解锁scroll标记
         if (scroll->anima == SCUI_HANDLE_INVALID ||
            !scui_anima_running(scroll->anima))
-            scui_widget_event_scroll_flag(0x01, &scroll->key);
+            scui_widget_global_scroll_flag(0x01, &scroll->key);
         
         if (scroll->anima != SCUI_HANDLE_INVALID &&
            !scui_anima_running(scroll->anima)) {
@@ -1254,7 +1254,7 @@ void scui_scroll_event(scui_event_t *event)
         
         if (!scroll->lock_move) {
             /* 全局滚动锁定 */
-            if (!scui_widget_event_scroll_flag(0x00, &scroll->key))
+            if (!scui_widget_global_scroll_flag(0x00, &scroll->key))
                  break;
             
             scroll->lock_move = true;

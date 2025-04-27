@@ -281,22 +281,234 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
     scui_event_cb_del(&widget->list, node);
 }
 
+/*@brief 控件事件冒泡
+ *       亦可用于控件迭代等其他动作
+ *@param event    事件(可以是假事件)
+ *@param event_cb 事件回调(可以是假事件回调)
+ *@param first    优先冒泡自己
+ */
+void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
+{
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    
+    if (first) {
+        if (event_cb != NULL) event_cb(event);
+        else scui_widget_event_process(event);
+        if (scui_event_check_over(event))
+            return;
+    }
+    
+    scui_widget_child_list_btra(widget, idx) {
+        event->object = widget->child_list[idx];
+        scui_widget_event_bubble(event, event_cb, first);
+        event->object = widget->myself;
+        if (scui_event_check_over(event))
+            return;
+    }
+    
+    if (!first) {
+        if (event_cb != NULL) event_cb(event);
+        else scui_widget_event_process(event);
+        if (scui_event_check_over(event))
+            return;
+    }
+}
+
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */
-void scui_widget_event_proc(scui_event_t *event)
+void scui_widget_event_process(scui_event_t *event)
 {
     SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    /* 准备抓取控件事件响应回调 */
+    /* 可以在此处标记为访问 */
+    /* 未知事件不会流转此处 */
+    scui_event_mask_keep(event);
+    
+    /* 默认控件事件处理 */
+    if (event->type == scui_event_anima_elapse)
+        if (!widget->style.sched_anima)
+             return;
+    if (event->type >= scui_event_ptr_s &&
+        event->type <= scui_event_ptr_e)
+        if (!widget->style.indev_ptr)
+             return;
+    if (event->type >= scui_event_enc_s &&
+        event->type <= scui_event_enc_e)
+        if (!widget->style.indev_enc)
+             return;
+    if (event->type >= scui_event_key_s &&
+        event->type <= scui_event_key_e)
+        if (!widget->style.indev_key)
+             return;
+    
+    /* 默认控件事件处理 */
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        /* 全局滚动检查 */
+        #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
+        scui_handle_t handle = SCUI_HANDLE_INVALID;
+        if (scui_widget_global_scroll_flag(0x02, &handle))
+            return;
+        #endif
+        break;
+    }
+    case scui_event_draw: {
+        
+        /* 控件绘制流程在执行步 */
+        if (!scui_event_check_execute(event))
+             break;
+        
+        /* 控件透明则不绘制 */
+        if (widget->style.trans)
+            break;
+        
+        /* 绘制图片背景(有背景图片) */
+        /* 绘制纯色背景(没有背景图片) */
+        if (widget->image != SCUI_HANDLE_INVALID)
+            scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
+        else
+            scui_widget_draw_color(event->object, NULL, widget->color);
+        
+        break;
+    }
+    case scui_event_ptr_click:
+    case scui_event_ptr_fling:
+    case scui_event_ptr_move: {
+        /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
+        scui_handle_t handle = scui_widget_root(widget->myself);
+        scui_widget_t  *root = scui_handle_source_check(handle);
+        /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
+        /* 窗口子控件相对窗口也有偏移 */
+        scui_area_t clip = widget->clip;
+        if (widget->parent != SCUI_HANDLE_INVALID ) {
+            clip.x += root->clip.x;
+            clip.y += root->clip.y;
+        }
+        /* 不产生交集,事件不能被响应,无需发送 */
+        if (!(widget->parent == SCUI_HANDLE_INVALID ||
+              scui_area_point(&clip, &event->ptr_c) ||
+             (scui_area_point(&clip, &event->ptr_s) &&
+              scui_area_point(&clip, &event->ptr_e))))
+              return;
+        
+        /* 基础控件拖动效果 */
+        if (event->type == scui_event_ptr_move) {
+            
+            /* 控件指针移动跟随标记 */
+            if (widget->style.indev_ptr_move) {
+                
+                scui_point_t offset = {0};
+                offset.x = event->ptr_e.x - event->ptr_s.x;
+                offset.y = event->ptr_e.y - event->ptr_s.y;
+                scui_widget_move_ofs(widget->myself, &offset, true);
+            }
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    
+    
+    
+    /* 获取控件事件响应回调, 并且执行它 */
     SCUI_ASSERT(event->object != SCUI_HANDLE_INVALID);
     scui_event_cb_node_t cb_node = {.event = event->type,};
     scui_widget_event_find(event->object, &cb_node);
-    
     if (cb_node.event_cb != NULL)
         cb_node.event_cb(event);
+    
+    
+    
+    /* 默认控件事件处理 */
+    /* 有些事件不允许被吸收 */
+    /* 它涉及到系统状态维护 */
+    switch (event->type) {
+    case scui_event_anima_elapse:
+    case scui_event_draw:
+    case scui_event_show:
+    case scui_event_hide:
+    case scui_event_ptr_down:
+    case scui_event_ptr_hold:
+    case scui_event_ptr_up:
+    case scui_event_key_down:
+    case scui_event_key_hold:
+    case scui_event_key_up:
+        /* 有些事件不允许被吸收 */
+        /* 它涉及到系统状态维护 */
+        scui_event_mask_quit(event);
+        scui_event_mask_keep(event);
+        break;
+    default:
+        break;
+    }
+}
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ */
+void scui_widget_event_process_draw(scui_event_t *event)
+{
+    SCUI_LOG_DEBUG("event %u", event->type);
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    
+    /* 无独立画布,如果是异步绘制,不在draw绘制,而是refr完成前绘制 */
+    bool surface_only = scui_widget_surface_only(widget);
+    if (!surface_only && !event->style.sync) {
+         scui_widget_refr(widget->myself, true);
+         return;
+    }
+    /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
+    if (!surface_only && event->style.sync)
+    if (widget->parent == SCUI_HANDLE_INVALID) {
+        scui_surface_t *surface = scui_frame_buffer_draw();
+        scui_widget_surface_remap(widget->myself, surface);
+    }
+    /* 绘制事件不能被控件响应 */
+    if (scui_widget_is_hide(widget->myself)) {
+        SCUI_LOG_INFO("widget is hide");
         return;
+    }
+    /* 添加surface剪切域,因为绘制即将开始 */
+    if (scui_event_check_prepare(event))
+    if (widget->parent == SCUI_HANDLE_INVALID) {
+        // scui_widget_clip_check(widget->myself, true);
+        scui_widget_clip_update(widget);
+        // scui_widget_clip_check(widget->myself, true);
+    }
+    /* 先冒泡自己,绘制事件没有剪切域,忽略 */
+    if (scui_clip_empty(&widget->clip_set))
+        SCUI_LOG_INFO("widget clip is empty");
+    /* 先走控件绘制流程,再进行自定义绘制流程 */
+    else {
+        scui_tick_calc(0x20, NULL, NULL, NULL);
+        scui_widget_event_process(event);
+        scui_tick_calc(0x21, NULL, NULL, NULL);
+    }
+    /* 去除surface剪切域,因为已经绘制完毕 */
+    if (scui_event_check_finish(event))
+        scui_widget_clip_clear(widget, false);
+    /* 如果需要继续冒泡,则继续下沉 */
+    if (scui_event_check_over(event)) {
+        /* 有些事件不允许被吸收 */
+        /* 它涉及到系统状态维护 */
+        scui_event_mask_quit(event);
+        scui_event_mask_keep(event);
+    } else {
+        scui_widget_child_list_btra(widget, idx) {
+            event->object = widget->child_list[idx];
+            scui_widget_event_dispatch(event);
+            event->object = widget->myself;
+        }
+    }
+    /* 绘制结束产生一次异步刷新 */
+    if (surface_only)
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_widget_refr(widget->myself, false);
+    
+    return;
 }
 
 /*@brief 控件默认事件处理回调
@@ -310,355 +522,67 @@ void scui_widget_event_dispatch(scui_event_t *event)
     
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    /*************************************************************************/
-    /* 动画事件:顺向递归**************************************************** */
-    /*************************************************************************/
-    if (event->type == scui_event_anima_elapse) {
-        scui_event_mask_keep(event);
-        /* 全局滚动检查 */
-        #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-        scui_handle_t handle = SCUI_HANDLE_INVALID;
-        if (scui_widget_event_scroll_flag(0x02, &handle))
-            return;
-        #endif
-        /* 继续冒泡,继续下沉 */
-        scui_widget_child_list_btra(widget, idx) {
-            event->object = widget->child_list[idx];
-            scui_widget_event_dispatch(event);
-        }
-        event->object = widget->myself;
-        /* 冒泡自己 */
-        if (widget->style.sched_anima)
-            scui_widget_event_proc(event);
-        return;
-    }
-    /*************************************************************************/
-    /* 绘制事件:顺向递归**************************************************** */
-    /*************************************************************************/
-    if (event->type == scui_event_draw) {
-        /* 无独立画布,如果是同步绘制,就地直达绘制画布 */
-        /* 无独立画布,如果是异步绘制,不在draw绘制,而是refr完成前绘制 */
-        bool surface_only = scui_widget_surface_only(widget);
-        if (!surface_only && !event->style.sync) {
-             scui_widget_refr(widget->myself, true);
-             return;
-        }
-        if (!surface_only && event->style.sync)
-        if (widget->parent == SCUI_HANDLE_INVALID) {
-            scui_surface_t *surface = scui_frame_buffer_draw();
-            scui_widget_surface_remap(widget->myself, surface);
-        }
-        /* 绘制事件不能被控件响应 */
-        if (scui_widget_is_hide(widget->myself)) {
-            SCUI_LOG_INFO("widget is hide");
-            return;
-        }
-        /* 添加surface剪切域,因为绘制即将开始 */
-        if (scui_event_check_prepare(event))
-        if (widget->parent == SCUI_HANDLE_INVALID) {
-            // scui_widget_clip_check(widget->myself, true);
-            scui_widget_clip_update(widget);
-            // scui_widget_clip_check(widget->myself, true);
-        }
-        /* 先冒泡自己,绘制事件没有剪切域,忽略 */
-        if (scui_clip_empty(&widget->clip_set))
-            SCUI_LOG_INFO("widget clip is empty");
-        /* 先走控件绘制流程,再进行自定义绘制流程 */
-        else {
-            scui_tick_calc(0x20, NULL, NULL, NULL);
-            scui_widget_event_draw(event);
-            scui_widget_event_proc(event);
-            scui_tick_calc(0x21, NULL, NULL, NULL);
-        }
-        /* 去除surface剪切域,因为已经绘制完毕 */
-        if (scui_event_check_finish(event))
-            scui_widget_clip_clear(widget, false);
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_btra(widget, idx) {
-            event->object = widget->child_list[idx];
-            scui_widget_event_dispatch(event);
-        }
-        event->object = widget->myself;
-        scui_event_mask_keep(event);
-        /* 绘制结束产生一次异步刷新 */
-        if (surface_only)
-            scui_widget_refr(widget->myself, false);
-        return;
-    }
-    /*************************************************************************/
-    /* 输入事件ptr:回溯递归************************************************* */
-    /*************************************************************************/
-    if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
-        SCUI_LOG_INFO("event %u", event->type);
-        /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
-        bool event_filter = true;
-        event_filter = event_filter && event->type != scui_event_ptr_hold;
-        event_filter = event_filter && event->type != scui_event_ptr_down;
-        event_filter = event_filter && event->type != scui_event_ptr_up;
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_ftra(widget, idx) {
-            event->object = widget->child_list[idx];
-            /* 事件如果被吸收,终止派发 */
-            scui_widget_event_dispatch(event);
-            if (scui_event_check_over(event) && event_filter)
-                break;
-        }
-        event->object = widget->myself;
-        scui_event_mask_keep(event);
-        if (scui_event_check_over(event) && event_filter)
-            return;
-        /* 是否自己吸收处理 */
-        if (!widget->style.indev_ptr)
-             return;
-        /* 有些事件涉及到全局状态维护,需要同步传递 */
-        if (!event_filter)
-             scui_widget_event_proc(event);
-        /* 有些事件可能被吸收,选择传递 */
-        if (event_filter) {
-            scui_handle_t handle = scui_widget_root(widget->myself);
-            scui_widget_t  *root = scui_handle_source_check(handle);
-            /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
-            /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
-            /* 窗口子控件相对窗口也有偏移 */
-            scui_area_t clip = widget->clip;
-            if (widget != root) {
-                clip.x += root->clip.x;
-                clip.y += root->clip.y;
-            }
-            /* 产生交集,事件可能被吸收(冒泡自己) */
-            if (widget->parent == SCUI_HANDLE_INVALID ||
-                scui_area_point(&clip, &event->ptr_c) ||
-               (scui_area_point(&clip, &event->ptr_s) &&
-                scui_area_point(&clip, &event->ptr_e)))
-                scui_widget_event_proc(event);
-        }
-        
-        return;
-    }
-    /*************************************************************************/
-    /* 输入事件enc:顺向递归************************************************* */
-    /*************************************************************************/
-    if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
-        SCUI_LOG_INFO("event %u", event->type);
-        /* 有些事件是不允许被吸收的,它可能涉及到系统状态的维护 */
-        bool event_filter = true;
-        event_filter = event_filter && event->type != scui_event_key_hold;
-        event_filter = event_filter && event->type != scui_event_key_down;
-        event_filter = event_filter && event->type != scui_event_key_up;
-        /* 是否自己吸收处理(冒泡自己) */
-        if (widget->style.indev_enc)
-            scui_widget_event_proc(event);
-            scui_event_mask_keep(event);
-        if (scui_event_check_over(event) && event_filter)
-            return;
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_ftra(widget, idx) {
-            event->object = widget->child_list[idx];
-            /* 事件如果被吸收,终止派发 */
-            scui_widget_event_dispatch(event);
-            if (scui_event_check_over(event) && event_filter)
-                break;
-        }
-        event->object = widget->myself;
-        return;
-    }
-    /*************************************************************************/
-    /* 输入事件key:顺向递归************************************************* */
-    /*************************************************************************/
-    if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
-        SCUI_LOG_INFO("event %u", event->type);
-        /* 是否自己吸收处理(冒泡自己) */
-        if (widget->style.indev_key)
-            scui_widget_event_proc(event);
-            scui_event_mask_keep(event);
-        if (scui_event_check_over(event))
-            return;
-        /* 如果需要继续冒泡,则继续下沉 */
-        scui_widget_child_list_ftra(widget, idx) {
-            event->object = widget->child_list[idx];
-            /* 事件如果被吸收,终止派发 */
-            scui_widget_event_dispatch(event);
-            if (scui_event_check_over(event))
-                break;
-        }
-        event->object = widget->myself;
-        return;
-    }
-    /*************************************************************************/
-    /*流程派发 ************************************************************* */
-    /*************************************************************************/
-    if (event->type == scui_event_change_lang) {
-        scui_event_mask_keep(event);
-        scui_widget_event_bubble(event, NULL, true);
-        return;
-    }
-    /*************************************************************************/
-    /*流程派发 ************************************************************* */
-    /*************************************************************************/
-    if (event->type == scui_event_focus_get ||
-        event->type == scui_event_show) {
-        scui_event_mask_keep(event);
-        scui_widget_event_bubble(event, NULL, true);
-        return;
-    }
-    /*************************************************************************/
-    /*流程派发 ************************************************************* */
-    /*************************************************************************/
-    if (event->type == scui_event_focus_lost ||
-        event->type == scui_event_hide) {
-        scui_event_mask_keep(event);
+    /* 输入事件ptr:回溯递归 */
+    if (event->type >= scui_event_ptr_s &&
+        event->type <= scui_event_ptr_e) {
         scui_widget_event_bubble(event, NULL, false);
         return;
     }
-    /*************************************************************************/
-    /*其余事件:单次派发 **************************************************** */
-    /*************************************************************************/
-    if (event->type == scui_event_layout ||
-        event->type == scui_event_adjust_size) {
-        scui_event_mask_over(event);
-        scui_widget_event_proc(event);
+    /* 输入事件enc:顺向递归 */
+    if (event->type >= scui_event_enc_s &&
+        event->type <= scui_event_enc_e) {
+        scui_widget_event_bubble(event, NULL, true);
         return;
     }
-    /*************************************************************************/
-    /*滚动事件:单次派发 **************************************************** */
-    /*************************************************************************/
+    /* 输入事件key:顺向递归 */
+    if (event->type >= scui_event_key_s &&
+        event->type <= scui_event_key_e) {
+        scui_widget_event_bubble(event, NULL, true);
+        return;
+    }
+    
+    /* 控件事件widget:单次派发 */
     if (event->type >= scui_event_widget_s &&
         event->type <= scui_event_widget_e) {
+        scui_widget_event_process(event);
         scui_event_mask_over(event);
-        scui_widget_event_proc(event);
         return;
     }
-    /*************************************************************************/
-    /*其余事件:单次派发 **************************************************** */
-    /*************************************************************************/
-    /* 其他未列举事件走默认派发流程,单次派发 */
-    // SCUI_LOG_INFO("unknown dispatch");
-    event->object = scui_widget_root(widget->myself);
-    scui_widget_event_proc(event);
-    event->object = widget->myself;
     
-    return;
-}
-
-/*@brief 控件事件冒泡
- *       亦可用于控件迭代等其他动作
- *@param event    事件(可以是假事件)
- *@param event_cb 事件回调(可以是假事件回调)
- *@param first    优先冒泡自己
- */
-void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
-{
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    
-    if (first) {
-        if (event_cb != NULL)
-            event_cb(event);
-        else
-            scui_widget_event_proc(event);
-        if (scui_event_check_over(event))
-            return;
-    }
-    
-    scui_widget_child_list_btra(widget, idx) {
-        event->object = widget->child_list[idx];
-        scui_widget_event_bubble(event, event_cb, first);
-        if (scui_event_check_over(event))
-            break;
-    }
-    event->object = widget->myself;
-    if (scui_event_check_over(event))
+    /* 其他事件:泛用流程 */
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        scui_widget_event_bubble(event, NULL, false);
         return;
-    
-    if (!first) {
-        if (event_cb != NULL)
-            event_cb(event);
-        else
-            scui_widget_event_proc(event);
-        if (scui_event_check_over(event))
-            return;
-    }
-}
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_widget_event_draw(scui_event_t *event)
-{
-    if (!scui_event_check_execute(event))
-         return;
-    
-    SCUI_LOG_DEBUG("event %u", event->type);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    
-    /* 控件透明则不绘制 */
-    if (widget->style.trans)
+    case scui_event_draw:
+        scui_widget_event_process_draw(event);
         return;
-    
-    scui_event_mask_keep(event);
-    /* 有背景图片则优先绘制背景 */
-    /* 没有背景图片则绘制纯色背景 */
-    if (widget->image != SCUI_HANDLE_INVALID)
-        /* 优化点:如果背景图片和设备FB类型一致则可直达,否则就不直达 */
-        scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
-    else
-        scui_widget_draw_color(event->object, NULL, widget->color);
-}
-
-/*@prief 事件滚动状态检查更新
- *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@param key  锁定标记句柄(浮动校验密钥)
- */
-bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key)
-{
-    static struct {
-        bool lock;
-        scui_handle_t key;
-    } scroll_flag = {0};
-    
-    switch (state) {
-    case 0x00:
-        if (scroll_flag.lock && scroll_flag.key != *key)
-            return false;
-        if (scroll_flag.lock && scroll_flag.key == *key)
-            return true;
-        
-        // 未得锁,此时应该为无效句柄
-        SCUI_ASSERT(scroll_flag.key == SCUI_HANDLE_INVALID);
-        SCUI_ASSERT(*key == SCUI_HANDLE_INVALID);
-        
-        SCUI_LOG_INFO("scroll lock");
-        scroll_flag.key  = scui_handle_find();
-        scroll_flag.lock = true;
-        *key = scroll_flag.key;
-        return true;
-    case 0x01:
-        // 释放锁,此时应该为目标句柄
-        if (scroll_flag.lock && scroll_flag.key != *key) {
-            SCUI_LOG_ERROR("unknown target");
-            SCUI_ASSERT(false);
-        }
-        if (scroll_flag.lock && scroll_flag.key == *key) {
-            SCUI_ASSERT(*key != SCUI_HANDLE_INVALID);
-            
-            SCUI_LOG_INFO("scroll unlock");
-            scui_handle_clear(scroll_flag.key);
-            scroll_flag.key  = SCUI_HANDLE_INVALID;
-            scroll_flag.lock = false;
-            *key = scroll_flag.key;
-            return true;
-        }
-        
-        SCUI_LOG_ERROR("unknown target");
-        SCUI_ASSERT(false);
-        return false;
-    case 0x02:
-        if (scroll_flag.lock && scroll_flag.key == *key)
-            return false;
-        return scroll_flag.lock;
-    default:
-        SCUI_LOG_ERROR("unknown state");
-        return false;
+    case scui_event_show:
+        scui_widget_event_bubble(event, NULL, true);
+        return;
+    case scui_event_hide:
+        scui_widget_event_bubble(event, NULL, false);
+        return;
+    case scui_event_change_lang:
+        scui_widget_event_bubble(event, NULL, false);
+        return;
+    case scui_event_focus_get:
+    case scui_event_focus_lost:
+    case scui_event_layout:
+    case scui_event_adjust_size:
+        /* 其他事件:单次派发 */
+        scui_widget_event_process(event);
+        scui_event_mask_over(event);
+        return;
+    default: {
+        // SCUI_LOG_INFO("unknown dispatch");
+        /* 其他未列举事件走默认派发流程,单次派发 */
+        scui_handle_t handle = event->object;
+        event->object = scui_widget_root(handle);
+        scui_widget_event_process(event);
+        event->object = handle;
+        return;
+    }
     }
 }

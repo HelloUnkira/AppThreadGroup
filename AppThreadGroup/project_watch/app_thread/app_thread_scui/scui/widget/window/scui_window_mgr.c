@@ -217,7 +217,7 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     mode_simple = mode_simple || scui_window_float_running();
     #endif
     /* 3.仅窗口切换时应用特效渲染 */
-    mode_simple = mode_simple || scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key);
+    mode_simple = mode_simple || scui_widget_global_scroll_flag(0x02, &scui_window_mgr.switch_args.key);
     
     scui_window_switch_type_t switch_type = scui_window_switch_none;
     // 直接渲染复用常规窗口移动变换(此时相当于不移动)
@@ -354,7 +354,7 @@ void scui_window_surface_blend(void)
     scui_handle_t list_lvl_0_ofs = 0;
     scui_handle_t list_lvl_1_ofs = 0;
     /* 仅窗口切换时才应用特效渲染 */
-    if (scui_widget_event_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
+    if (scui_widget_global_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
         /* 过滤掉被覆盖的绘制界面 */
         scui_window_list_filter(list_lvl_0, list_lvl_0_num, &list_lvl_0_ofs);
         list_lvl_0_num -= list_lvl_0_ofs;

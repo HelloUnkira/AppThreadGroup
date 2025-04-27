@@ -121,7 +121,7 @@ static void scui_window_jump_anima_finish(void *instance)
     }
     
     scui_window_mgr.switch_args.lock_jump = false;
-    scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
 
 /*@brief 窗口移动动画回调
@@ -204,7 +204,7 @@ static void scui_window_move_anima_finish(void *instance)
     }
     
     scui_window_mgr.switch_args.lock_move = false;
-    scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
 
 /*@brief 窗口移动动画自动化
@@ -357,7 +357,7 @@ static void scui_window_event_switch(scui_event_t *event)
             /* 抓获到运动的目标 */
             if (target != SCUI_HANDLE_INVALID) {
                 /* 全局滚动锁定 */
-                if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
+                if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
                      break;
                 scui_window_mgr.switch_args.lock_move = true;
                 scui_window_mgr.switch_args.hold_move = true;
@@ -477,7 +477,7 @@ static void scui_window_event_switch(scui_event_t *event)
         /* 抓获到运动的目标 */
         if (target != SCUI_HANDLE_INVALID && event_dir != scui_opt_dir_none) {
             /* 全局滚动锁定 */
-            if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
+            if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
                  break;
             scui_window_mgr.switch_args.lock_move  = true;
             scui_window_mgr.switch_args.hold_move  = false;
@@ -543,7 +543,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     /* 先上锁 */
-    if (!scui_widget_event_scroll_flag(0x00, &scui_window_mgr.switch_args.key)) {
+    if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key)) {
          SCUI_LOG_WARN("window switching: %u", scui_window_mgr.switch_args.key);
          return false;
     }
@@ -576,7 +576,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
         return true;
     }
     
@@ -585,7 +585,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
         return true;
     }
     
@@ -615,7 +615,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_event_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
     } else {
         scui_window_mgr.switch_args.pct = 0;
         scui_window_mgr.switch_args.ofs = 0;

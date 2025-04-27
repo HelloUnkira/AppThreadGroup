@@ -28,14 +28,16 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    uint8_t state:1;            /* 控件隐藏:0;控件显示:1; */
-    uint8_t trans:1;            /* 背景显示:0;背景透明:1; */
-    uint8_t cover:1;            /* 未知覆盖:0;完全覆盖:1; */
-    uint8_t sched_anima:1;      /* 控件调度帧动画标记 */
-    uint8_t sched_widget:1;     /* 控件专属事件响应标记 */
-    uint8_t indev_ptr:1;        /* 输入事件响应标记:ptr */
-    uint8_t indev_enc:1;        /* 输入事件响应标记:enc */
-    uint8_t indev_key:1;        /* 输入事件响应标记:key */
+    uintptr_t state:1;              /* 控件隐藏:0;控件显示:1; */
+    uintptr_t trans:1;              /* 背景显示:0;背景透明:1; */
+    uintptr_t cover:1;              /* 未知覆盖:0;完全覆盖:1; */
+    uintptr_t fixed:1;              /* 控件移动禁止(悬浮) */
+    uintptr_t sched_anima:1;        /* 控件调度帧动画标记 */
+    uintptr_t sched_widget:1;       /* 控件专属事件响应标记 */
+    uintptr_t indev_ptr:1;          /* 输入事件响应标记:ptr */
+    uintptr_t indev_ptr_move:1;     /* 输入事件响应标记:ptr move 自动跟随 */
+    uintptr_t indev_enc:1;          /* 输入事件响应标记:enc */
+    uintptr_t indev_key:1;          /* 输入事件响应标记:key */
 } scui_widget_style_t;
 
 /*@brief 控件构造回调

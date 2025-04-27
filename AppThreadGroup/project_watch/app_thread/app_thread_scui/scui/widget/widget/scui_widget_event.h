@@ -49,16 +49,6 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
 
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_widget_event_proc(scui_event_t *event);
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_widget_event_dispatch(scui_event_t *event);
-
 /*@brief 控件事件冒泡
  *       亦可用于控件迭代等其他动作
  *@param event    事件(可以是假事件)
@@ -70,12 +60,16 @@ void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, boo
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */
-void scui_widget_event_draw(scui_event_t *event);
+void scui_widget_event_process(scui_event_t *event);
 
-/*@prief 事件滚动状态检查更新
- *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@param key  锁定标记句柄(浮动校验密钥)
+/*@brief 控件默认事件处理回调
+ *@param event 事件
  */
-bool scui_widget_event_scroll_flag(uint8_t state, scui_handle_t *key);
+void scui_widget_event_process_draw(scui_event_t *event);
+
+/*@brief 控件默认事件处理回调
+ *@param event 事件
+ */
+void scui_widget_event_dispatch(scui_event_t *event);
 
 #endif

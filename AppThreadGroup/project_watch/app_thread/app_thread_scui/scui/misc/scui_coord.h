@@ -52,6 +52,10 @@ typedef union {
         scui_point_t p1;
         scui_point_t p2;
     };
+    struct {
+        scui_point_t pos;
+        scui_point_t size;
+    };
     scui_coord_t meta[4];
 } scui_area_t;
 
