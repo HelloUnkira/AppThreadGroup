@@ -454,6 +454,10 @@ void scui_widget_event_process_draw(scui_event_t *event)
     SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
+    /* 可以在此处标记为访问 */
+    /* 未知事件不会流转此处 */
+    scui_event_mask_keep(event);
+    
     /* 无独立画布,如果是异步绘制,不在draw绘制,而是refr完成前绘制 */
     bool surface_only = scui_widget_surface_only(widget);
     if (!surface_only && !event->style.sync) {

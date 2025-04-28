@@ -114,13 +114,13 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     
     if (tick_draw) {
         
-        #if 0
-        // 这里脏矩阵添加重绘区域还有点问题
+        #if 1
         /* <curr> <last> */
         uint64_t tick_ms[2] = {0};
         tick_ms[0] = draw_tick_curr_s * 1000 + draw_tick_curr_ms;
         tick_ms[1] = draw_tick_last_s * 1000 + draw_tick_last_ms;
         
+        SCUI_LOG_INFO("draw ready");
         for (scui_handle_t idx_tick_ms = 0; idx_tick_ms < scui_arr_len(tick_ms); idx_tick_ms++) {
             
             uint8_t time_ms = tick_ms[idx_tick_ms] % 1000; tick_ms[idx_tick_ms] /= 1000;
@@ -157,38 +157,60 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_area3_by_area2(&image3_clip, &image2_clip);
                 scui_area3_transform_by_matrix(&image3_clip, &matrix);
                 scui_area3_to_area2(&image3_clip, &image2_clip);
+                scui_area2_to_area(&image2_clip, &image_clip);
                 
+                #if 0
+                // 是整体区域剪除
+                // 从控件区域缩小到图片完全绘制区域
+                scui_area_t draw_clip = image_clip;
+                scui_widget_draw(event->object, &draw_clip, false);
+                #else
                 scui_area_t clip_widget = scui_widget_clip(event->object);
-                scui_area_t clip_frag = clip_widget;
+                // if (!scui_area_inter2(&clip_widget, &image_clip))
+                //      break;
                 
-                scui_coord_t vofs = 0;
-                scui_coord_t vfrag = clip_widget.h / 10;
-                scui_multi_t sumpox = 0;
+                scui_multi_t sumpox = 0, vofs = 0;
+                scui_multi_t vfrag = clip_widget.h / 10;
+                scui_area_t  clip_frag = clip_widget;
                 
-                for (true; true; true) {
+                while (true) {
                     
                     clip_frag.y = clip_widget.y + vofs;
                     clip_frag.h = clip_widget.h - vofs < vfrag ? clip_widget.h - vofs : vfrag;
                     if (clip_frag.h <= 0)
                         break;
                     
-                    scui_area_t draw_clip = {0};
+                    scui_area_t draw_clip = clip_frag;
+                    // 这里脏矩阵计算重绘区域还有问题(?)
                     if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
                         
-                        sumpox += draw_clip.w * draw_clip.h;
-                        
-                        SCUI_LOG_WARN("draw clip<%d,%d,%d,%d>",
+                        #if 0
+                        SCUI_LOG_INFO("draw_clip<%3d,%3d,%3d,%3d>"
+                                      "clip_frag<%3d,%3d,%3d,%3d>"
+                                      "image2_clip<%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f>",
+                            
                             draw_clip.x, draw_clip.y,
-                            draw_clip.w, draw_clip.h);
+                            draw_clip.w, draw_clip.h,
+                            
+                            clip_frag.x, clip_frag.y,
+                            clip_frag.w, clip_frag.h,
+                            
+                            image2_clip.point2[0].x, image2_clip.point2[0].y,
+                            image2_clip.point2[1].x, image2_clip.point2[1].y,
+                            image2_clip.point2[2].x, image2_clip.point2[2].y,
+                            image2_clip.point2[3].x, image2_clip.point2[3].y);
+                        #endif
                         
                         scui_widget_draw(event->object, &draw_clip, false);
+                        sumpox += draw_clip.w * draw_clip.h;
                     }
-                    
                     vofs += clip_frag.h;
                 }
-                SCUI_LOG_WARN("draw clip:%d", sumpox);
+                SCUI_LOG_INFO("draw clip:%d", sumpox);
+                #endif
             }
         }
+        SCUI_LOG_INFO("draw over");
         #else
         scui_widget_draw(event->object, NULL, false);
         #endif
