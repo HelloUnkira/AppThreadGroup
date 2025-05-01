@@ -45,6 +45,9 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
         // assert check
         SCUI_ASSERT(res->idx_ofs[idx] <= parser->image_num);
     }
+    
+    // 修改之后更新本控件
+    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 事件处理回调
@@ -224,6 +227,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_week: {
@@ -231,6 +235,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_ampm: {
@@ -244,6 +249,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
                 scui_handle_t image = parser->image_hit[res->img_ofs[val]];
                 scui_widget_image_set(handle, image);
             }
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_temp_unit: {
@@ -251,6 +257,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_hr_prog : {
@@ -261,6 +268,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_kcal_prog : {
@@ -271,6 +279,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_step_prog : {
@@ -281,6 +290,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_batt_prog : {
@@ -291,6 +301,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_dist_prog : {
@@ -301,6 +312,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         case scui_cwf_json_type_img_anim: {
@@ -312,6 +324,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
+            scui_widget_draw(handle, NULL, false);
             break;
         }
         default:
@@ -325,9 +338,6 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
         parser->list_type[idx] < scui_cwf_json_type_txt_e) {
         // keep adding
     }
-    
-    // 修改之后更新本控件
-    scui_widget_draw(handle, NULL, false);
 }
 
 /*@brief 解析器指定项销毁
