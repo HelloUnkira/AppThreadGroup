@@ -286,6 +286,24 @@ scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t chi
     return -1;
 }
 
+/*@brief 控件统计剪切域大小
+ *@param handle 控件句柄
+ *@param size   剪切域大小
+ */
+void scui_widget_clip_sizes(scui_handle_t handle, scui_multi_t *size)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_multi_t size_cur = 0;
+    scui_clip_sizes(&widget->clip_set, &size_cur);
+    *size += size_cur;
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_clip_sizes(handle, size);
+    }
+}
+
 /*@brief 控件检查剪切域
  *@param handle  控件句柄
  *@param recurse 递归处理

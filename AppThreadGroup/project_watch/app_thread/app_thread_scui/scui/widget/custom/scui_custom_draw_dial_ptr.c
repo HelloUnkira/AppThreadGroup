@@ -185,6 +185,10 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                     if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
                         
                         #if 0
+                        SCUI_LOG_INFO("draw_clip<%3d,%3d,%3d,%3d>",
+                            draw_clip.x, draw_clip.y,
+                            draw_clip.w, draw_clip.h);
+                        
                         SCUI_LOG_INFO("draw_clip<%3d,%3d,%3d,%3d>"
                                       "clip_frag<%3d,%3d,%3d,%3d>"
                                       "image2_clip<%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f><%3.2f,%3.2f>",
