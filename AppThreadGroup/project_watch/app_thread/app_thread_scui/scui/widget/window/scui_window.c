@@ -31,16 +31,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     /* 创建surface */
     if (window_maker->buffer) {
         
-        #if 1
-        scui_pixel_cf_t p_cf = window_maker->format;
-        #elif SCUI_MEM_SIZE_TYPE == 0
-        scui_pixel_cf_t p_cf = window_maker->format;
-        #elif SCUI_MEM_SIZE_TYPE == 1
-        scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF_A;
-        #else
-        scui_pixel_cf_t p_cf = window_maker->format;
-        #endif
-        
+        scui_pixel_cf_t p_cf = window_maker->format; // SCUI_PIXEL_CF_DEF_A;
         scui_coord_t hor_res = widget->clip.w;
         scui_coord_t ver_res = widget->clip.h;
         scui_widget_clip_clear(widget, true);

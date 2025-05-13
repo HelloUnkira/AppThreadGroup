@@ -27,7 +27,7 @@
 #define APP_DEV_GUI_DRV_HOR_RES     SCUI_DRV_HOR_RES
 #define APP_DEV_GUI_DRV_VER_RES     SCUI_DRV_VER_RES
 #define APP_DEV_GUI_DRV_ZOOM        1
-#define APP_DEV_GUI_DRV_DBUF        SCUI_DRV_DBUFFER
+#define APP_DEV_GUI_DRV_DBUF        1
 #endif
 
 /*  */

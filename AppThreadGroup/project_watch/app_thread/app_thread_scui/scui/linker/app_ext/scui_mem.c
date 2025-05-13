@@ -194,6 +194,140 @@ void scui_mem_sentry_check(void)
 
 #endif
 
+/*@brief 内存分配(原型)
+ *@param type 内存分配类型
+ *@param size 内存大小
+ *@param way  内存分配方向
+ *@retval 内存地址
+ */
+static void * scui_mem_alloc_raw(scui_mem_type_t type, uint32_t size, bool way)
+{
+    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
+        return app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
+        return app_sys_mem_dir_alloc(&scui_mem.mem_dir[type], size, way);
+}
+
+/*@brief 内存释放(原型)
+ *@param type 内存分配类型
+ *@param ptr  内存地址
+ */
+static void scui_mem_free_raw(scui_mem_type_t type, void *ptr)
+{
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
+        app_sys_mem_olsf_free(scui_mem.mem_olsf[type], ptr);
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir) {
+        app_sys_mem_dir_free(&scui_mem.mem_dir[type], ptr);
+        SCUI_ASSERT(app_sys_mem_dir_valid(&scui_mem.mem_dir[type]));
+    }
+}
+
+/*@brief 内存大小(原型)
+ *@param type 内存分配类型
+ *@param ptr  内存地址
+ */
+static uint32_t scui_mem_size_raw(scui_mem_type_t type, void *ptr)
+{
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
+        return app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
+    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
+        return app_sys_mem_dir_size(&scui_mem.mem_dir[type], ptr);
+}
+
+/*@brief 内存分配失败通知
+ *@param type 内存分配类型
+ *@param size 内存大小
+ *@param way  内存分配方向
+ *@param ptr  内存地址
+ *@retval 内存地址
+ */
+static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool way, void *ptr)
+{
+    // 分配成功无需通知
+    if (ptr != NULL)
+        return ptr;
+    
+    // 这里暂时写作就地调用.后续整理
+    // 如果内存不够用,尝试清除缓存器后继续请求
+    // 实际上,这里应该产生事件调度,到达缓存器处理
+    
+    #if SCUI_MEM_FEAT_MINI
+    /* 此时回收所有缓存 */ {
+        SCUI_LOG_WARN("memory deficit was caught");
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+        
+        // 图片缓存:
+        // scui_image_cache_visit();
+        scui_image_cache_clear();
+        // scui_image_cache_visit();
+        
+        // 字库缓存:
+        // scui_font_cache_visit();
+        scui_font_cache_clear();
+        // scui_font_cache_visit();
+        
+        // 文字缓存:
+        // scui_font_glyph_cache_visit();
+        scui_font_glyph_cache_clear();
+        // scui_font_glyph_cache_visit();
+        
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
+        ptr = scui_mem_alloc_raw(type, size, way);
+        
+        if (ptr == NULL) {
+            scui_font_cache_visit();
+            scui_font_glyph_cache_visit();
+            scui_image_cache_visit();
+        }
+    }
+    #else
+    // scui_mem_type_graph
+    if (type == scui_mem_type_graph) {
+        SCUI_LOG_WARN("memory graph deficit was caught");
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+        
+        // 图片缓存:
+        // scui_image_cache_visit();
+        scui_image_cache_clear();
+        // scui_image_cache_visit();
+        
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
+        ptr = scui_mem_alloc_raw(type, size, way);
+        
+        if (ptr == NULL)
+            scui_image_cache_visit();
+    }
+    // scui_mem_type_font
+    if (type == scui_mem_type_font) {
+        SCUI_LOG_WARN("memory font deficit was caught");
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+        
+        // 字库缓存:
+        // 这里只回收文字即可, 不回收字库
+        // scui_font_cache_visit();
+        // scui_font_cache_clear();
+        // scui_font_cache_visit();
+        
+        // 文字缓存:
+        // scui_font_glyph_cache_visit();
+        scui_font_glyph_cache_clear();
+        // scui_font_glyph_cache_visit();
+        
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
+        ptr = scui_mem_alloc_raw(type, size, way);
+        
+        if (ptr == NULL) {
+            scui_font_cache_visit();
+            scui_font_glyph_cache_visit();
+        }
+    }
+    #endif
+    
+    return ptr;
+}
+
 /*@brief 内存分配(外部不直接调用)
  *@param file 内存分配点(文件名)
  *@param line 内存分配点(文件行数)
@@ -205,8 +339,6 @@ void scui_mem_sentry_check(void)
  */
 void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_mem_type_t type, uint32_t size, bool way)
 {
-    void *ptr = NULL;
-    
     if (size == 0)
         return NULL;
     
@@ -216,60 +348,14 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     #endif
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-        ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
-        ptr = app_sys_mem_dir_alloc(&scui_mem.mem_dir[type], size, way);
+    void *ptr = scui_mem_alloc_raw(type, size, way);
+    ptr = scui_mem_alloc_notify(type, size, way, ptr);
     
-    // notify回调:这里暂时写作就地调用.后续整理
-    // 如果内存不够用,尝试清除缓存器后继续请求
-    #if 1
-    if (ptr == NULL) {
-        // scui_mem_type_graph
-        if (type == scui_mem_type_graph) {
-            SCUI_LOG_WARN("memory graph deficit was caught");
-            scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
-            
-            // scui_image_cache_visit();
-            scui_image_cache_clear();
-            // scui_image_cache_visit();
-            
-            scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-            if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-                ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-            if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
-                ptr = app_sys_mem_dir_alloc(&scui_mem.mem_dir[type], size, way);
-            
-            if (ptr == NULL)
-                scui_image_cache_visit();
-        }
-        // scui_mem_type_font
-        if (type == scui_mem_type_font) {
-            SCUI_LOG_WARN("memory font deficit was caught");
-            scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
-            
-            // scui_font_glyph_cache_visit();
-            scui_font_glyph_cache_clear();
-            // scui_font_glyph_cache_visit();
-            
-            scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-            if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-                ptr = app_sys_mem_olsf_alloc(scui_mem.mem_olsf[type], size);
-            if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
-                ptr = app_sys_mem_dir_alloc(&scui_mem.mem_dir[type], size, way);
-            
-            if (ptr == NULL)
-                scui_font_glyph_cache_visit();
-        }
-    }
-    #endif
+    if (ptr == NULL)
+        scui_mem_check(type);
     
     #if SCUI_MEM_RECORD_CHECK
-    
     if (ptr == NULL) {
-        scui_mem_check(type);
-        
         #if SCUI_MEM_RECORD_STATISTIC
         scui_mem_record_statistic(true);
         #endif
@@ -291,20 +377,10 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         scui_mem_record_analysis_type(type);
         #endif
     }
-    
-    #else
-    
-    if (ptr == NULL)
-        scui_mem_check(type);
-    
     #endif
+    
     SCUI_ASSERT(ptr != NULL);
-    
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-        scui_mem.size_used[type] += app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
-        scui_mem.size_used[type] += app_sys_mem_dir_size(&scui_mem.mem_dir[type], ptr);
-    
+    scui_mem.size_used[type] += scui_mem_size_raw(type, ptr);
     scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
     
     #if SCUI_MEM_SENTRY_CHECK
@@ -348,18 +424,8 @@ void scui_mem_free(const char *file, const char *func, uint32_t line, void *ptr)
     scui_mem_type_t type = scui_mem_type_none;
     scui_mem_type(ptr, &type);
     
-    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-        scui_mem.size_used[type] -= app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
-        scui_mem.size_used[type] -= app_sys_mem_dir_size(&scui_mem.mem_dir[type], ptr);
-    
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
-        app_sys_mem_olsf_free(scui_mem.mem_olsf[type], ptr);
-    if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir) {
-        app_sys_mem_dir_free(&scui_mem.mem_dir[type], ptr);
-        SCUI_ASSERT(app_sys_mem_dir_valid(&scui_mem.mem_dir[type]));
-    }
+    scui_mem.size_used[type] -= scui_mem_size_raw(type, ptr);
+    scui_mem_free_raw(type, ptr);
     
     #if SCUI_MEM_RECORD_CHECK
     if (!scui_mem_record_item_del((scui_mem_record_item_t){
@@ -385,16 +451,17 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
         if (scui_mem.mem_mgr_type[idx] == scui_mem_mgr_type_olsf)
         if (app_sys_mem_olsf_inside(scui_mem.mem_olsf[idx], ptr)) {
             *type = idx;
-             return;
+             break;
         }
         if (scui_mem.mem_mgr_type[idx] == scui_mem_mgr_type_dir)
         if (app_sys_mem_dir_inside(&scui_mem.mem_dir[idx], ptr)) {
             *type = idx;
-             return;
+             break;
         }
     }
     
-    SCUI_ASSERT(false);
+    // 检查一下匹配情况
+    SCUI_ASSERT(*type > scui_mem_type_none && *type < scui_mem_type_num);
 }
 
 /*@brief 内存模组检查
@@ -425,7 +492,6 @@ uint32_t scui_mem_size_ptr(void *ptr)
     scui_mem_type_t type = scui_mem_type_none;
     scui_mem_type(ptr, &type);
     
-    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_size(scui_mem.mem_olsf[type], ptr);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -439,6 +505,7 @@ uint32_t scui_mem_size_ptr(void *ptr)
 uint32_t scui_mem_size_frag(scui_mem_type_t type)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_frag(scui_mem.mem_olsf[type]);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -452,6 +519,7 @@ uint32_t scui_mem_size_frag(scui_mem_type_t type)
 uint32_t scui_mem_size_used(scui_mem_type_t type)
 {
     SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_olsf)
         return app_sys_mem_olsf_used(scui_mem.mem_olsf[type]);
     if (scui_mem.mem_mgr_type[type] == scui_mem_mgr_type_dir)
@@ -466,6 +534,8 @@ uint32_t scui_mem_size_used(scui_mem_type_t type)
  */
 uint32_t scui_mem_size_total(scui_mem_type_t type)
 {
+    SCUI_ASSERT(type > scui_mem_type_none && type < scui_mem_type_num);
+    
     return scui_mem.size_total[type];
 }
 
@@ -486,11 +556,19 @@ void scui_mem_ready(void)
     static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH] = {0};
     static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER ] = {0};
     
+    #if SCUI_MEM_FEAT_MINI
+    scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
+    scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_none;
+    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_none;
+    scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_none;
+    #else
     scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
     scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_olsf;
     scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     // 图形使用双向内存堆分配器
     scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_olsf;
+    #endif
     
+    // 内存分配器oslf
     if (scui_mem.mem_mgr_type[scui_mem_type_mix  ] == scui_mem_mgr_type_olsf)
         scui_mem.mem_olsf[scui_mem_type_mix  ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     if (scui_mem.mem_mgr_type[scui_mem_type_font ] == scui_mem_mgr_type_olsf)
@@ -500,6 +578,7 @@ void scui_mem_ready(void)
     if (scui_mem.mem_mgr_type[scui_mem_type_user ] == scui_mem_mgr_type_olsf)
         scui_mem.mem_olsf[scui_mem_type_user ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_user,  SCUI_MEM_TYPE_SIZE_USER);
     
+    // 内存分配器dir
     if (scui_mem.mem_mgr_type[scui_mem_type_mix  ] == scui_mem_mgr_type_dir)
         app_sys_mem_dir_ready(&scui_mem.mem_dir[scui_mem_type_mix],   (uintptr_t)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     if (scui_mem.mem_mgr_type[scui_mem_type_font ] == scui_mem_mgr_type_dir)

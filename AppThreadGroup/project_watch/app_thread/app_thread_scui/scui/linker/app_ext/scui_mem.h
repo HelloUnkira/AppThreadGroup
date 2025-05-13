@@ -41,32 +41,27 @@ typedef struct {
     uint32_t update:1;
 } scui_mem_record_t;
 
-#if SCUI_MEM_RECORD_ANALYSIS
-
 /*@brief 内存记录分析
  *@param force 强制检查
  */
+#if  SCUI_MEM_RECORD_ANALYSIS
 void scui_mem_record_analysis(bool force);
-
 #endif
-
-#if SCUI_MEM_RECORD_STATISTIC
 
 /*@brief 内存记录统计
  *@param force 强制检查
  */
+#if  SCUI_MEM_RECORD_STATISTIC
 void scui_mem_record_statistic(bool force);
-
 #endif
 
 #endif
 
-#if SCUI_MEM_SENTRY_CHECK
 
 /*@brief 内存哨兵检查
  */
+#if  SCUI_MEM_SENTRY_CHECK
 void scui_mem_sentry_check(void);
-
 #endif
 
 typedef enum {
@@ -91,10 +86,15 @@ typedef struct {
 } scui_mem_t;
 
 /* 宏转接,外部使用接口 */
+#if SCUI_MEM_FEAT_MINI
+#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, scui_mem_type_mix, size, true)
+#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, scui_mem_type_mix, size, false)
+#define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
+#else
 #define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
 #define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
 #define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
-
+#endif
 
 /*@brief 内存分配(外部不直接调用)
  *@param file 内存分配点(文件名)
