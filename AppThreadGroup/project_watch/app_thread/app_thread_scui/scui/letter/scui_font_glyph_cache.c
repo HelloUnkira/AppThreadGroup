@@ -3,9 +3,11 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
+
+#if SCUI_CACHE_HASH_FONT_GLYPH != 0
 
 static scui_font_glyph_cache_t scui_font_glyph_cache = {0};
 
@@ -181,6 +183,7 @@ void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
     
     /* 如果缓存命中时 */
     if (unit != NULL)
+    if (unit->lock != 0)
         unit->lock--;
 }
 
@@ -206,7 +209,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         /* 上锁 */
         unit->lock++;
         if (unit->lock > 0x7A)
-            SCUI_LOG_WARN("lock num will be overflow");
+            SCUI_LOG_INFO("lock num will be overflow");
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
@@ -240,10 +243,10 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         font_unit.size = glyph_unit->size;
         font_unit.name = glyph_unit->name;
         scui_font_cache_load(&font_unit);
-        scui_font_cache_unload(&font_unit);
         glyph_unit->font = font_unit.font;
         glyph_unit->glyph.handle = font_unit.font;
         scui_font_glyph_load(&glyph_unit->glyph);
+        scui_font_cache_unload(&font_unit);
         /* 如果缓存空间不足时,老化资源回收 */
         while (cache->usage + glyph_unit->glyph.bitmap_size > cache->total) {
             /* 前向遍历,找已经解锁的资源 */
@@ -285,3 +288,55 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         cache->cnt_unhit++;
     }
 }
+
+#else
+
+/*@brief 文字初始化
+ */
+void scui_font_glyph_cache_ready(void)
+{
+}
+
+/*@brief 文字资源重校正
+ *       将计数器重衰减到0以刷新权重
+ */
+void scui_font_glyph_cache_rectify(void)
+{
+}
+
+/*@brief 文字资源检查
+ */
+void scui_font_glyph_cache_visit(void)
+{
+}
+
+/*@brief 文字资源清除
+ */
+void scui_font_glyph_cache_clear(void)
+{
+}
+
+/*@brief 文字资源卸载
+ */
+void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
+{
+    /* 卸载文字资源 */
+    scui_font_glyph_unload(&glyph_unit->glyph);
+}
+
+/*@brief 文字资源加载
+ */
+void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
+{
+    /* 先加载字库 */
+    scui_font_unit_t font_unit = {0};
+    font_unit.size = glyph_unit->size;
+    font_unit.name = glyph_unit->name;
+    scui_font_cache_load(&font_unit);
+    glyph_unit->font = font_unit.font;
+    glyph_unit->glyph.handle = font_unit.font;
+    scui_font_glyph_load(&glyph_unit->glyph);
+    scui_font_cache_unload(&font_unit);
+}
+
+#endif

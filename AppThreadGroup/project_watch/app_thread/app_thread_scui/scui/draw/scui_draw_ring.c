@@ -51,8 +51,6 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     scui_image_unit_t image_e = {.image = src_image_e,};
     scui_image_cache_load(&image);
     scui_image_cache_load(&image_e);
-    scui_image_cache_unload(&image);
-    scui_image_cache_unload(&image_e);
     SCUI_ASSERT(image.data != NULL);
     SCUI_ASSERT(image_e.data != NULL);
     
@@ -153,6 +151,9 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     }
     
     SCUI_MEM_FREE(edge_surface.pixel);
+    
+    scui_image_cache_unload(&image);
+    scui_image_cache_unload(&image_e);
 }
 
 /*@brief 区域图像绘制(内部接口)
@@ -385,7 +386,6 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     
     scui_image_unit_t image = {.image = src_image,};
     scui_image_cache_load(&image);
-    scui_image_cache_unload(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -412,15 +412,15 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     dst_area_s.x += dst_offset.x;
     dst_area_s.y += dst_offset.y;
     if (!scui_area_inter(&dst_area_v, &dst_area, &dst_area_s))
-         return;
+         goto over;
     if (!scui_area_inter(&dst_clip_v,  dst_clip, &dst_area_v))
-         return;
+         goto over;
     
     scui_area_t src_clip_v = {0};   // v:vaild
     /* 在此处将quadrant_clip融合进去(它一定是src_surface的子剪切域) */
     scui_area_t src_area = quadrant_clip;
     if (!scui_area_inter(&src_clip_v, &src_area, src_clip))
-         return;
+         goto over;
     
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
@@ -429,7 +429,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     
     if (scui_area_empty(&draw_area))
-        return;
+        goto over;
     
     #if 1
     scui_multi_t angle_tan0_4096 = -1;
@@ -544,6 +544,9 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         }
         SCUI_MEM_FREE(grey_table);
     }
+    
+over:
+    scui_image_cache_unload(&image);
 }
 
 /*@brief 区域图像绘制

@@ -3,9 +3,11 @@
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
-#define SCUI_LOG_LOCAL_LEVEL        0   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
+#define SCUI_LOG_LOCAL_LEVEL        2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "scui.h"
+
+#if SCUI_CACHE_HASH_IMAGE != 0
 
 static scui_image_cache_t scui_image_cache = {0};
 
@@ -239,6 +241,7 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
     
     /* 如果缓存命中时 */
     if (unit != NULL)
+    if (unit->lock != 0)
         unit->lock--;
 }
 
@@ -270,7 +273,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         /* 上锁 */
         unit->lock++;
         if (unit->lock > 0x7A)
-            SCUI_LOG_WARN("lock num will be overflow");
+            SCUI_LOG_INFO("lock num will be overflow");
         /* 命中缓存资源计数加 */
         if (unit->count != 0 && unit->count < 100) {
             unit->count++;
@@ -345,3 +348,68 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         cache->cnt_unhit++;
     }
 }
+
+#else
+
+/*@brief 图片初始化
+ */
+void scui_image_cache_ready(void)
+{
+}
+
+/*@brief 图片资源重校正
+ *       将计数器重衰减到0以刷新权重
+ */
+void scui_image_cache_rectify(void)
+{
+}
+
+/*@brief 图片资源检查
+ */
+void scui_image_cache_visit(void)
+{
+}
+
+/*@brief 图片资源清除
+ */
+void scui_image_cache_clear(void)
+{
+}
+
+/*@brief 图片资源缓存无效化(指定目标)
+ *@brief image_unit 图片资源缓存节点
+ */
+void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
+{
+}
+
+/*@brief 图片资源卸载
+ *@brief image_unit 图片资源缓存节点
+ */
+void scui_image_cache_unload(scui_image_unit_t *image_unit)
+{
+    // 内存图片直达即可(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem)
+        return;
+    
+    /* 卸载图像资源 */
+    SCUI_MEM_FREE(image_unit->data);
+}
+
+/*@brief 图片资源加载
+ */
+void scui_image_cache_load(scui_image_unit_t *image_unit)
+{
+    // 内存图片直达即可(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem) {
+        image_unit->data = image_unit->image->pixel.data_bin;
+        return;
+    }
+    
+    /* 图片资源加载 */
+    uintptr_t image_size = scui_image_size(image_unit->image);
+    image_unit->data = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);
+    scui_image_src_read(image_unit->image, image_unit->data);
+}
+
+#endif

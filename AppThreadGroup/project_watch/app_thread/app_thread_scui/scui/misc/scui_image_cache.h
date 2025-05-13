@@ -17,7 +17,7 @@ typedef struct {
  */
 typedef struct {
     scui_list_dll_t  dl_list;
-    scui_table_dll_t ht_list[SCUI_CACHE_HASH_IMAGE];
+    scui_table_dll_t ht_list[SCUI_CACHE_HASH_IMAGE + 1];
     scui_table_dlt_t ht_table;
     uint32_t usage;     /* 缓存对内存资源占用情况 */
     uint32_t total;     /* 缓存对内存资源占用总门限 */

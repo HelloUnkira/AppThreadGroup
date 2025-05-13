@@ -29,12 +29,13 @@ static void scui_string_args_find_word(scui_string_args_t *args, uint32_t *idx_s
             .glyph.unicode_letter   = args->unicode[idx],
         };
         scui_font_glyph_cache_load(&glyph_unit);
-        scui_font_glyph_cache_unload(&glyph_unit);
         
         uint32_t glyph_width = 0;
         glyph_width += glyph_unit.glyph.ofs_x;
         glyph_width += glyph_unit.glyph.box_w;
         glyph_width += args->gap_item;
+        
+        scui_font_glyph_cache_unload(&glyph_unit);
         
         if (width_max != NULL && *width + glyph_width > *width_max) {
            *idx_e = idx - 1;
@@ -136,9 +137,9 @@ static void scui_string_args_typography(scui_string_args_t *args)
     font_unit.name = args->name;
     font_unit.size = args->size;
     scui_font_cache_load(&font_unit);
-    scui_font_cache_unload(&font_unit);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
+    scui_font_cache_unload(&font_unit);
     
     if (args->line_multi) {
         /* 文字排版是在虚拟区域内进行的 */
@@ -155,16 +156,6 @@ static void scui_string_args_typography(scui_string_args_t *args)
                 SCUI_LOG_DEBUG("letter:%c", args->unicode[idx]);
             else
                 SCUI_LOG_DEBUG("letter:%x", args->unicode[idx]);
-            
-            /* 文字信息缓存节点实例映射 */
-            scui_font_glyph_unit_t glyph_unit = {
-                .size                   = args->size,
-                .name                   = args->name,
-                .glyph.space_width      = args->gap_none,
-                .glyph.unicode_letter   = args->unicode[idx],
-            };
-            scui_font_glyph_cache_load(&glyph_unit);
-            scui_font_glyph_cache_unload(&glyph_unit);
             
             // 先拿一个单词,尝试填满
             uint32_t word_s = idx;
@@ -237,11 +228,12 @@ static void scui_string_args_typography(scui_string_args_t *args)
                 .glyph.unicode_letter   = args->unicode[idx],
             };
             scui_font_glyph_cache_load(&glyph_unit);
-            scui_font_glyph_cache_unload(&glyph_unit);
             
             args->width += glyph_unit.glyph.ofs_x;
             args->width += glyph_unit.glyph.box_w;
             args->width += args->gap_item;
+            
+            scui_font_glyph_cache_unload(&glyph_unit);
         }
         args->width -= args->gap_item;
         args->limit  = args->width - src_clip_v.w;
