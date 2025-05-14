@@ -479,11 +479,11 @@ void scui_widget_event_process_draw(scui_event_t *event)
     if (scui_event_check_prepare(event))
     if (widget->parent == SCUI_HANDLE_INVALID) {
         scui_multi_t size_old = 0, size_new = 0;
-        scui_widget_clip_sizes(widget->myself, &size_old);
+        // scui_widget_clip_sizes(widget->myself, &size_old);
         // scui_widget_clip_check(widget->myself, true);
         scui_widget_clip_update(widget);
         // scui_widget_clip_check(widget->myself, true);
-        scui_widget_clip_sizes(widget->myself, &size_new);
+        // scui_widget_clip_sizes(widget->myself, &size_new);
         SCUI_LOG_DEBUG("size_old: %d, size_new:%d", size_old, size_new);
     }
     /* 先冒泡自己,绘制事件没有剪切域,忽略 */

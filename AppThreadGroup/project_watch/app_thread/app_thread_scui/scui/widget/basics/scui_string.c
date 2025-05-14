@@ -59,6 +59,13 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     /* 尝试初始更新字符串文本信息 */
     scui_string_update_text(*handle, string_maker->text);
     
+    #if SCUI_MEM_FEAT_MINI
+    /* 禁用绘制缓存块 */
+    /* 禁用级联色彩渐变 */
+    string->draw_cache  = false;
+    string->args.regrad = false;
+    #endif
+    
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
     string->args.utf8   = string->str_utf8;
@@ -326,6 +333,11 @@ void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint3
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
+    #if SCUI_MEM_FEAT_MINI
+    /* 禁用级联色彩渐变 */
+    return;
+    #endif
+    
     /* 必须要配置绘制缓存块 */
     SCUI_ASSERT(string->args.regrad);
     SCUI_ASSERT(string->draw_cache);
@@ -380,8 +392,10 @@ void scui_string_adjust_size(scui_handle_t handle, uint16_t size)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
-    if (string->args.size == 0)
+    if (string->args.size == 0) {
+        SCUI_LOG_ERROR("only support vector font");
         return;
+    }
     if (string->args.size == size)
         return;
     

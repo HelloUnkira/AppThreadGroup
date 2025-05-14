@@ -301,6 +301,20 @@ void scui_widget_color_get(scui_handle_t handle, scui_color_t *color);
  */
 void scui_widget_user_data_set(scui_handle_t handle, void *user_data);
 
+/*@brief 控件透明度设置撤销
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
+ */
+void scui_widget_alpha_undo(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
+
+/*@brief 控件透明度设置融合
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
+ */
+void scui_widget_alpha_mix(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
+
 /*@brief 控件透明度设置
  *@param handle  控件句柄
  *@param alpha   控件透明度

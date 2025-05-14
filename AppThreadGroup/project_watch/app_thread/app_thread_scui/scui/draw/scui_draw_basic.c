@@ -649,10 +649,6 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t  *inv_matrix  = draw_dsc->area_matrix_fill.inv_matrix;
     scui_matrix_t  *src_matrix  = draw_dsc->area_matrix_fill.src_matrix;
     /* draw dsc args<e> */
-    //
-    #if SCUI_DRAW_MISC_USE_MATRIX == 0
-    SCUI_ASSERT(false);
-    #endif
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_clip != NULL);
@@ -757,10 +753,6 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t  *inv_matrix  = draw_dsc->area_matrix_blend.inv_matrix;
     scui_matrix_t  *src_matrix  = draw_dsc->area_matrix_blend.src_matrix;
     /* draw dsc args<e> */
-    //
-    #if SCUI_DRAW_MISC_USE_MATRIX == 0
-    SCUI_ASSERT(false);
-    #endif
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
     SCUI_ASSERT(src_surface != NULL && src_surface->pixel != NULL && src_clip != NULL);

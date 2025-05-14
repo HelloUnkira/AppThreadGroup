@@ -384,7 +384,7 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
             scui_widget_t *widget_r = scui_handle_source_check(handle_r);
             
             scui_multi_t size_old = 0, size_new = 0;
-            scui_widget_clip_sizes(widget_r->myself, &size_old);
+            // scui_widget_clip_sizes(widget_r->myself, &size_old);
             /* 上面默认使用的全局剪切域 */
             /* 所以可能存在覆盖,为所有控件补充剪切域 */
             scui_widget_clip_reset(widget_r, target, true);
@@ -392,7 +392,7 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
             // scui_widget_clip_check(widget_r->myself, true);
             scui_widget_clip_update(widget_r);
             // scui_widget_clip_check(widget_r->myself, true);
-            scui_widget_clip_sizes(widget_r->myself, &size_new);
+            // scui_widget_clip_sizes(widget_r->myself, &size_new);
             SCUI_LOG_DEBUG("size_ofs:%d", size_new - size_old);
             return;
             #endif

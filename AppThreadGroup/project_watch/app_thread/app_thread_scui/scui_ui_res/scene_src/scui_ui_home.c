@@ -88,10 +88,18 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         break;
     case scui_event_ptr_up:
         SCUI_LOG_INFO("scui_event_ptr_up");
-        if (scui_ui_res_local->ptr_long_jump)
-            scui_ui_scene_return();
+        if (scui_ui_res_local->ptr_long_jump) {
+            scui_ui_res_local->ptr_long_jump = true;
+            #if SCUI_MEM_FEAT_MINI == 0
+            scui_window_switch_type_t *cfg_type = NULL;
+            scui_window_switch_cfg_type(&cfg_type);
+            scui_window_switch_type_t type = *cfg_type;
+            *cfg_type = scui_window_switch_circle;
+            scui_window_stack_add(SCUI_UI_SCENE_LANTERN, false);
+            *cfg_type = type;
+            #endif
+        }
         break;
-    
     case scui_event_enc_clockwise: {
         SCUI_LOG_INFO("scui_event_enc_clockwise");
         
@@ -135,8 +143,9 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         SCUI_ASSERT(type < scui_ui_scene_list_type_e);
         
         switch (type) {
+        #if SCUI_MEM_FEAT_MINI == 0
         case scui_ui_scene_list_type_list_scale: { // 缩放列表
-            #if 0   // 裁内存选择
+            #if 0   // 裁内存选择(去掉过场动画)
             scui_window_switch_type_cfg_set(scui_window_switch_none);
             scui_window_stack_add(SCUI_UI_SCENE_LIST_SCALE, false);
             scui_window_switch_type_cfg_set(switch_type);
@@ -145,6 +154,7 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
             #endif
             break;
         }
+        #endif
         case scui_ui_scene_list_type_list_arc: // 弧形列表
             scui_window_stack_add(SCUI_UI_SCENE_LIST_ARC, false);
             break;

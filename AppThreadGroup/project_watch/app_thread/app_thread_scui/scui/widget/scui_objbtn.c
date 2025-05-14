@@ -39,8 +39,8 @@ void scui_objbtn_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     }
     objbtn->radius = objbtn_maker->radius;
     
-    objbtn->lim         = SCUI_WIDGET_OBJECT_PCT;
-    objbtn->pct         = SCUI_WIDGET_OBJECT_PCT;
+    objbtn->lim         = SCUI_WIDGET_OBJBTN_PCT;
+    objbtn->pct         = SCUI_WIDGET_OBJBTN_PCT;
     objbtn->way         = -1;
     objbtn->hold        = false;
     objbtn->click       = false;

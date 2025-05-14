@@ -26,7 +26,12 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_widget_make(widget, widget_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_window));
     SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
-    /* 注意:要求只能是根控件才可以创建窗口(根控件==窗口) */
+    /* 注意:要求只能是根控件才可以创建窗口 */
+    
+    #if SCUI_MEM_FEAT_MINI
+    /* 小内存方案禁用窗口独立画布 */
+    window_maker->buffer = false;
+    #endif
     
     /* 创建surface */
     if (window_maker->buffer) {
@@ -45,7 +50,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     window->hang_only   = window_maker->hang_only;
     window->format      = window_maker->format;
     
-    // 初始化默认为自动切换类型
+    // 初始化默认切换类型为自适应
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = scui_window_switch_auto;
 }

@@ -40,6 +40,11 @@
 /* 小内存方案(开发中......) */
 // 分块双Buffer + 缓存(可选)
 
+// 不支持特性(不推荐, 缺内存):
+// SCUI_MEM_FEAT_MINI == true:
+// 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐)
+// 子控件树, 静态画布真缩放, 窗口转场变换
+
 #define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (0)
@@ -124,27 +129,40 @@
 /* feat: */
 
 /* 移动时停止帧动画(假渲染) */
+#if SCUI_MEM_FEAT_MINI
+#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (0)
+#else
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
+#endif
 
 /* 图片外存直达画布(节约峰值内存, 但会加重绘制时间) */
+#if SCUI_MEM_FEAT_MINI
+#define SCUI_WIDGET_IMAGE_DIRECT                    (0)
+#define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (0)
+#else
 #define SCUI_WIDGET_IMAGE_DIRECT                    (1)
 #define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES / 3)
-
-/* 窗口切换动画时间(以1整屏计算) */
-#define SCUI_WINDOW_MGR_SWITCH_MOVE_MS              (175)
-#define SCUI_WINDOW_MGR_SWITCH_JUMP_MS              (225)
+#endif
 
 /* 窗口管理栈数量限制 */
 #define SCUI_WINDOW_STACK_NEST                      (10)
+
 /* 窗口管理数量限制 */
 #define SCUI_WINDOW_MGR_LIMIT                       (5)
-#define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_U             (scui_event_key_val_up)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
 #define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
 #define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_move)
 #define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
+/* 窗口切换动画时间(以1整屏计算) */
+#define SCUI_WINDOW_MGR_SWITCH_MOVE_MS              (175)
+#define SCUI_WINDOW_MGR_SWITCH_JUMP_MS              (225)
+#if SCUI_MEM_FEAT_MINI
+#define SCUI_WINDOW_MGR_SWITCH_MODE                 (0)
+#else
+#define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
+#endif
 
 /* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)
@@ -164,19 +182,11 @@
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)
 /* button:按钮1缩放限制百分比 */
-#define SCUI_WIDGET_OBJECT_PCT                      (90)
+#define SCUI_WIDGET_OBJBTN_PCT                      (90)
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* indev猴子测试 */
 #define SCUI_MONKEY_TEST                            (0)
-
-/*************************************************************************************************/
-/*************************************************************************************************/
-/*************************************************************************************************/
-/* other: */
-
-/* 图形变换使用矩阵变换(包括:缩放旋转) */
-#define SCUI_DRAW_MISC_USE_MATRIX                   (1)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -290,6 +290,40 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
  */
 static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
 {
+    #if SCUI_MEM_FEAT_MINI
+    scui_widget_t *widget_cur = list[0];
+    scui_widget_t *widget_tar = list[1];
+    scui_alpha_t alpha_cur = scui_alpha_cover;
+    scui_alpha_t alpha_tar = scui_alpha_cover;
+    /* 对窗口进行坐标偏移处理 */
+    switch (scui_window_mgr.switch_args.type) {
+    default:
+    case scui_window_switch_move:
+        /* 其他风格都忽略为move */
+        break;
+    case scui_window_switch_cover_in: {
+        scui_point_t point = {0};
+        scui_widget_move_pos(widget_cur->myself, &point, false);
+        alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
+        alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct);
+        scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true);
+        scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true);
+        break;
+    }
+    case scui_window_switch_cover_out: {
+        scui_point_t point = {0};
+        scui_widget_move_pos(widget_tar->myself, &point, false);
+        alpha_tar = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
+        alpha_cur = scui_alpha_pct(scui_window_mgr.switch_args.pct);
+        scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true);
+        scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true);
+        break;
+    }
+    }
+    #endif
+    
+    
+    
     for (scui_handle_t idx = 0; idx < num; idx++) {
         scui_widget_t *widget = list[idx];
         scui_window_t *window = (void *)widget;
@@ -319,6 +353,30 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         
         scui_widget_draw(handle, NULL, true);
     }
+    
+    
+    
+    #if SCUI_MEM_FEAT_MINI
+    scui_widget_t *widget_cur = list[0];
+    scui_widget_t *widget_tar = list[1];
+    /* 对窗口进行坐标偏移处理 */
+    switch (scui_window_mgr.switch_args.type) {
+    default:
+    case scui_window_switch_move:
+        /* 其他风格都忽略为move */
+        break;
+    case scui_window_switch_cover_in: {
+        scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
+        scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
+        break;
+    }
+    case scui_window_switch_cover_out: {
+        scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
+        scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
+        break;
+    }
+    }
+    #endif
 }
 
 /*@brief 窗口管理器混合画布
@@ -345,6 +403,12 @@ void scui_window_surface_blend(void)
             list_lvl_0[list_lvl_0_num++] = widget;
         else
             list_lvl_1[list_lvl_1_num++] = widget;
+        
+        /* 小内存方案没有窗口独立画布混合 */
+        #if SCUI_MEM_FEAT_MINI
+        if (scui_widget_surface_only(widget))
+            SCUI_ASSERT(false);
+        #endif
     }
     
     /* 依照窗口层级进行排序 */

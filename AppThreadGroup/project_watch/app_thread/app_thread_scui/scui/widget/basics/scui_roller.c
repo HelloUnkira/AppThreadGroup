@@ -32,6 +32,12 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_linear_make(linear, linear_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));
     
+    #if SCUI_MEM_FEAT_MINI
+    /* 禁用子控件树, 画布缓存块渲染 */
+    /* 本控件无效用, 拦截使用者 */
+    SCUI_ASSERT(false);
+    #endif
+    
     /* 状态初始化 */
     roller->center = SCUI_HANDLE_INVALID;
 }

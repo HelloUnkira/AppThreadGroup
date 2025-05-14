@@ -467,8 +467,10 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     // float window
     switch (event->object) {
     case SCUI_UI_SCENE_HOME:
+        #if SCUI_MEM_FEAT_MINI == 0
         window_sibling[2] = SCUI_UI_SCENE_MINI_CARD;
         switch_type[2] = scui_window_switch_cover_in;
+        #endif
         break;
     case SCUI_UI_SCENE_MINI_CARD:
         window_sibling[3] = SCUI_UI_SCENE_HOME;
@@ -478,7 +480,11 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     
     switch (event->object) {
     case SCUI_UI_SCENE_HOME:
+        #if SCUI_MEM_FEAT_MINI == 0
         window_sibling[3] = SCUI_UI_SCENE_ACTIVITY;
+        #else
+        window_sibling[3] = SCUI_UI_SCENE_1;
+        #endif
         break;
     case SCUI_UI_SCENE_ACTIVITY:
         window_sibling[2] = SCUI_UI_SCENE_HOME;
@@ -486,8 +492,12 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         break;
     case SCUI_UI_SCENE_1:
         window_sibling[0] = SCUI_UI_SCENE_TEST;
+        #if SCUI_MEM_FEAT_MINI == 0
         window_sibling[1] = SCUI_UI_SCENE_CUBE;
         window_sibling[2] = SCUI_UI_SCENE_ACTIVITY;
+        #else
+        window_sibling[2] = SCUI_UI_SCENE_HOME;
+        #endif
         window_sibling[3] = SCUI_UI_SCENE_2;
         break;
     case SCUI_UI_SCENE_CUBE:
@@ -495,8 +505,10 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         break;
     
     case SCUI_UI_SCENE_2:
+        #if SCUI_MEM_FEAT_MINI == 0
         window_sibling[0] = SCUI_UI_SCENE_BUTTERFLY;
         window_sibling[1] = SCUI_UI_SCENE_SOCCER;
+        #endif
         window_sibling[2] = SCUI_UI_SCENE_1;
         window_sibling[3] = SCUI_UI_SCENE_6;
         break;

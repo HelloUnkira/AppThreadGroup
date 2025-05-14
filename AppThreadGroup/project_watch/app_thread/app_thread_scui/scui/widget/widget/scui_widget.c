@@ -715,6 +715,50 @@ void scui_widget_user_data_set(scui_handle_t handle, void *user_data)
     scui_handle_linker(widget->user_data, user_data);
 }
 
+/*@brief 控件透明度设置撤销
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
+ */
+void scui_widget_alpha_undo(scui_handle_t handle, scui_alpha_t alpha, bool recurse)
+{
+    SCUI_LOG_INFO("widget %u alpha %u set", handle, alpha);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    widget->alpha = scui_alpha_undo(widget->alpha, alpha);
+    
+    if (!recurse)
+         return;
+    
+    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_alpha_set(handle, alpha, recurse);
+    }
+}
+
+/*@brief 控件透明度设置融合
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
+ */
+void scui_widget_alpha_mix(scui_handle_t handle, scui_alpha_t alpha, bool recurse)
+{
+    SCUI_LOG_INFO("widget %u alpha %u set", handle, alpha);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    widget->alpha = scui_alpha_mix(widget->alpha, alpha);
+    
+    if (!recurse)
+         return;
+    
+    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_alpha_set(handle, alpha, recurse);
+    }
+}
+
 /*@brief 控件透明度设置
  *@param handle  控件句柄
  *@param alpha   控件透明度
