@@ -37,6 +37,8 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
     void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
     void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
     void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
     void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
     
     void (*ctx_cb)(scui_draw_dsc_t *draw_dsc) = NULL;
@@ -57,6 +59,8 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
         {scui_draw_type_image_matrix_blend,     (void *)scui_draw_ctx_image_matrix_blend,},
         {scui_draw_type_letter,                 (void *)scui_draw_ctx_letter,},
         {scui_draw_type_string,                 (void *)scui_draw_ctx_string,},
+        {scui_draw_type_qrcode,                 (void *)scui_draw_ctx_qrcode,},
+        {scui_draw_type_barcode,                (void *)scui_draw_ctx_barcode,},
         {scui_draw_type_ring,                   (void *)scui_draw_ctx_ring,},
     };
     

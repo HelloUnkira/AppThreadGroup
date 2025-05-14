@@ -41,9 +41,9 @@
 // 分块双Buffer + 缓存(可选)
 
 #define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (1) // occupy
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (1) // occupy
-#define SCUI_MEM_TYPE_SIZE_USER                     (1) // occupy
+#define SCUI_MEM_TYPE_SIZE_FONT                     (0)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0)
+#define SCUI_MEM_TYPE_SIZE_USER                     (0)
 
 /* 缓存散列值(可选:不使用为0) */
 #define SCUI_CACHE_HASH_FONT                        (0) // (3)
@@ -53,7 +53,6 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 20 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
-
 #else
 /* 大内存方案: */
 // 4M PSRAM (空闲1M):     MIX: 64K; FONT:128K; USER: 64K; GRAPH:3M - other

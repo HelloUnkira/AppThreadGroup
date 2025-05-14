@@ -7,8 +7,6 @@ typedef enum {
     scui_custom_draw_type_text,
     /* custom draw type */
     scui_custom_draw_type_dial_ptr,
-    scui_custom_draw_type_qrcode,
-    scui_custom_draw_type_barcode,
     scui_custom_draw_type_spinner,
     scui_custom_draw_type_slider,
     scui_custom_draw_type_indicator,
@@ -47,18 +45,6 @@ typedef struct {
         uint64_t tick_last_ms:10;   // 前一时刻:毫秒
         uint64_t tick_passby:10;    // 流失时间(ms)
     } dial_ptr;
-    struct {
-        scui_color_t color;         // 颜色(.color_l,.color_d,)
-        uint8_t     *data;          // url网址链接字符串
-        uint32_t     size:31;       // 字符串长度
-        uint32_t     cover:1;       // 背景覆盖
-    } qrcode;
-    struct {
-        scui_color_t color;         // 颜色(.color_l,.color_d,)
-        uint8_t     *data;          // url网址链接字符串
-        uint32_t     size:31;       // 字符串长度
-        uint32_t     cover:1;       // 背景覆盖
-    } barcode;
     struct {
         scui_handle_t spinner;      // 图像句柄(alpha图:环)
         scui_handle_t edge;         // 图像句柄(alpha图:边界点)
@@ -167,34 +153,6 @@ do {                                                                        \
         .dial_ptr.center[1] = center_v[1],                                  \
         .dial_ptr.center[2] = center_v[2],                                  \
         .dial_ptr.tick_ms_c = tick_ms_v,                                    \
-    };                                                                      \
-    scui_custom_draw_ctx(&draw_dsc);                                        \
-} while (0)                                                                 \
-
-/* scui_custom_draw_type_qrcode */
-#define scui_custom_draw_qrcode(event_v, clip_v,                            \
-    color_v, cover_v, data_v, size_v)                                       \
-do {                                                                        \
-    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
-        .type = scui_custom_draw_type_qrcode,                               \
-        .qrcode.color = color_v,                                            \
-        .qrcode.cover = cover_v,                                            \
-        .qrcode.data  = data_v,                                             \
-        .qrcode.size  = size_v,                                             \
-    };                                                                      \
-    scui_custom_draw_ctx(&draw_dsc);                                        \
-} while (0)                                                                 \
-
-/* scui_custom_draw_type_barcode */
-#define scui_custom_draw_barcode(event_v, clip_v,                           \
-    color_v, cover_v, data_v, size_v)                                       \
-do {                                                                        \
-    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
-        .type = scui_custom_draw_type_barcode,                              \
-        .qrcode.color = color_v,                                            \
-        .qrcode.cover = cover_v,                                            \
-        .qrcode.data  = data_v,                                             \
-        .qrcode.size  = size_v,                                             \
     };                                                                      \
     scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \

@@ -48,7 +48,7 @@
 #include "scui_draw_basic.h"
 #include "scui_draw_image.h"
 #include "scui_draw_letter.h"
-#include "scui_draw_string.h"
+#include "scui_draw_misc.h"
 #include "scui_draw_ring.h"
 
 /* widget: */

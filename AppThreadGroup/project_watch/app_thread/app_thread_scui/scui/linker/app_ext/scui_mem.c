@@ -551,10 +551,10 @@ void scui_mem_ready(void)
     scui_mem.size_total[scui_mem_type_user ] = SCUI_MEM_TYPE_SIZE_USER;
     
     /* 这里使用自定义内存分配器, 用于查内存越界问题 */
-    static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX  ] = {0};
-    static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT ] = {0};
-    static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH] = {0};
-    static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER ] = {0};
+    static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX   + 1] = {0};
+    static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT  + 1] = {0};
+    static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH + 1] = {0};
+    static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER  + 1] = {0};
     
     #if SCUI_MEM_FEAT_MINI
     scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
@@ -589,43 +589,51 @@ void scui_mem_ready(void)
         app_sys_mem_dir_ready(&scui_mem.mem_dir[scui_mem_type_user],  (uintptr_t)mem_olsf_buffer_user,  SCUI_MEM_TYPE_SIZE_USER);
     
     #if SCUI_MEM_RECORD_CHECK
-    uint8_t  *item = NULL;
-    uintptr_t size = 0;
+    
     #if SCUI_MEM_RECORD_CHECK_MIX
-    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
-    item = SCUI_MEM_ALLOC(scui_mem_type_mix,     size);
-    scui_mem.size_used[scui_mem_type_mix]     += size;
-    scui_mem.record[scui_mem_type_mix].item    = item;
-    scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
-    scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
-    // scui_mem_check(scui_mem_type_mix);
+    if (scui_mem.mem_mgr_type[scui_mem_type_mix  ] != scui_mem_mgr_type_none) {
+        uintptr_t size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_MIX;
+        uint8_t  *item = SCUI_MEM_ALLOC(scui_mem_type_mix,     size);
+        scui_mem.size_used[scui_mem_type_mix]     += size;
+        scui_mem.record[scui_mem_type_mix].item    = item;
+        scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
+        scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
+        // scui_mem_check(scui_mem_type_mix);
+    }
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
-    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
-    item = SCUI_MEM_ALLOC(scui_mem_type_font,    size);
-    scui_mem.size_used[scui_mem_type_font]    += size;
-    scui_mem.record[scui_mem_type_font].item   = item;
-    scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
-    scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
-    // scui_mem_check(scui_mem_type_font);
+    if (scui_mem.mem_mgr_type[scui_mem_type_font ] != scui_mem_mgr_type_none) {
+        uintptr_t size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_FONT;
+        uint8_t  *item = SCUI_MEM_ALLOC(scui_mem_type_font,    size);
+        scui_mem.size_used[scui_mem_type_font]    += size;
+        scui_mem.record[scui_mem_type_font].item   = item;
+        scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
+        scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
+        // scui_mem_check(scui_mem_type_font);
+    }
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
-    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
-    item = SCUI_MEM_ALLOC(scui_mem_type_graph,   size);
-    scui_mem.size_used[scui_mem_type_graph]   += size;
-    scui_mem.record[scui_mem_type_graph].item  = item;
-    scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
-    scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;
-    // scui_mem_check(scui_mem_type_graph);
+    if (scui_mem.mem_mgr_type[scui_mem_type_graph] != scui_mem_mgr_type_none) {
+        uintptr_t size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_GRAPH;
+        uint8_t  *item = SCUI_MEM_ALLOC(scui_mem_type_graph,   size);
+        scui_mem.size_used[scui_mem_type_graph]   += size;
+        scui_mem.record[scui_mem_type_graph].item  = item;
+        scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
+        scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;
+        // scui_mem_check(scui_mem_type_graph);
+    }
     #endif
     #if SCUI_MEM_RECORD_CHECK_USER
-    size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_USER;
-    item = SCUI_MEM_ALLOC(scui_mem_type_user,    size);
-    scui_mem.size_used[scui_mem_type_user]    += size;
-    scui_mem.record[scui_mem_type_user].item   = item;
-    scui_mem.record[scui_mem_type_user].num    = SCUI_MEM_RECORD_ITEM_USER;
-    scui_mem.record[scui_mem_type_user].size   = SCUI_MEM_TYPE_SIZE_USER;
-    // scui_mem_check(scui_mem_type_user);
+    if (scui_mem.mem_mgr_type[scui_mem_type_user ] != scui_mem_mgr_type_none) {
+        uintptr_t size = sizeof(scui_mem_record_item_t) * SCUI_MEM_RECORD_ITEM_USER;
+        uint8_t  *item = SCUI_MEM_ALLOC(scui_mem_type_user,    size);
+        scui_mem.size_used[scui_mem_type_user]    += size;
+        scui_mem.record[scui_mem_type_user].item   = item;
+        scui_mem.record[scui_mem_type_user].num    = SCUI_MEM_RECORD_ITEM_USER;
+        scui_mem.record[scui_mem_type_user].size   = SCUI_MEM_TYPE_SIZE_USER;
+        // scui_mem_check(scui_mem_type_user);
+    }
     #endif
+    
     #endif
 }

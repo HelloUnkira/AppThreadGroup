@@ -11,6 +11,8 @@ typedef enum {
     scui_widget_draw_type_image_scale,
     scui_widget_draw_type_image_rotate,
     scui_widget_draw_type_image_matrix,
+    scui_widget_draw_type_qrcode,
+    scui_widget_draw_type_barcode,
     scui_widget_draw_type_ring,
     scui_widget_draw_type_graph,
     scui_widget_draw_type_num,
@@ -59,6 +61,16 @@ typedef struct {
         scui_area_t   *clip;                    // 图像源绘制区域
         scui_matrix_t *matrix;                  // 变换矩阵(逆矩阵)
     } image_matrix;
+    struct {
+        scui_color_t color;                     // 图像源色调
+        scui_multi_t size;                      // 字符串长度
+        uint8_t     *data;                      // url网址链接字符串
+    } qrcode;
+    struct {
+        scui_color_t color;                     // 图像源色调
+        scui_multi_t size;                      // 字符串长度
+        uint8_t     *data;                      // url网址链接字符串
+    } barcode;
     struct {
         scui_handle_t image;                    // 图像句柄
         scui_area_t  *clip;                     // 图像源绘制区域
@@ -207,6 +219,36 @@ do {                                                                        \
         .image_matrix.image  = image_v,                                     \
         .image_matrix.clip   = clip_v,                                      \
         .image_matrix.matrix = matrix_v,                                    \
+    };                                                                      \
+    scui_widget_draw_ctx(&draw_dsc);                                        \
+} while (0)                                                                 \
+
+/* scui_widget_draw_type_qrcode */
+#define scui_widget_draw_qrcode(handle_v, target_v,                         \
+    color_v, size_v, data_v)                                                \
+do {                                                                        \
+    scui_widget_draw_dsc_t draw_dsc = {                                     \
+        .handle = handle_v,                                                 \
+        .target = target_v,                                                 \
+        .type = scui_widget_draw_type_qrcode,                               \
+        .qrcode.color = color_v,                                            \
+        .qrcode.size  = size_v,                                             \
+        .qrcode.data  = data_v,                                             \
+    };                                                                      \
+    scui_widget_draw_ctx(&draw_dsc);                                        \
+} while (0)                                                                 \
+
+/* scui_widget_draw_type_barcode */
+#define scui_widget_draw_barcode(handle_v, target_v,                        \
+    color_v, size_v, data_v)                                                \
+do {                                                                        \
+    scui_widget_draw_dsc_t draw_dsc = {                                     \
+        .handle = handle_v,                                                 \
+        .target = target_v,                                                 \
+        .type = scui_widget_draw_type_barcode,                              \
+        .barcode.color = color_v,                                           \
+        .barcode.size  = size_v,                                            \
+        .barcode.data  = data_v,                                            \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \

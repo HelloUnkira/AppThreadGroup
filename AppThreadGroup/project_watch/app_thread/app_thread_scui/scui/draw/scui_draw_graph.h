@@ -28,6 +28,8 @@ typedef enum {
     scui_draw_type_image_matrix_blend,
     scui_draw_type_letter,
     scui_draw_type_string,
+    scui_draw_type_qrcode,
+    scui_draw_type_barcode,
     scui_draw_type_ring,
     scui_draw_type_num,
 } scui_draw_type_t;
@@ -187,6 +189,26 @@ typedef struct {
         scui_coord_t    src_angle_e;    // 结束角度
         scui_color_t    src_color;      // 图像源色调
     } ring;
+    /**************************************************************************
+     * draw qrcode:
+     * draw barcode:
+     */
+     struct {
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_alpha_t    src_alpha;      // 图像透明度
+        scui_color_t    src_color;      // 图像源色调
+        scui_multi_t    src_size;       // 字符串长度
+        uint8_t        *src_data;       // url网址链接字符串
+     } qrcode;
+     struct {
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_alpha_t    src_alpha;      // 图像透明度
+        scui_color_t    src_color;      // 图像源色调
+        scui_multi_t    src_size;       // 字符串长度
+        uint8_t        *src_data;       // url网址链接字符串
+     } barcode;
     /**************************************************************************
      * keep adding...
      */

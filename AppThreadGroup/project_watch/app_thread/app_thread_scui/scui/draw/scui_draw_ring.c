@@ -1,5 +1,5 @@
 /*实现目标:
- *    调色板圆环绘制
+ *    图像圆环绘制
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1

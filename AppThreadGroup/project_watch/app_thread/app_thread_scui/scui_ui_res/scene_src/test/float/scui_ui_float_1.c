@@ -82,7 +82,8 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
         clip.y += clip.h / 6;
         clip.w -= clip.w / 6 * 2;
         clip.h -= clip.h / 6 * 2;
-        scui_custom_draw_qrcode(event, &clip, color, false, url, strlen(url));
+        scui_widget_draw_qrcode(event->object, &clip, color, strlen(url), url);
+        
         break;
     }
     default:
@@ -116,16 +117,16 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
         scui_widget_draw_color(event->object, &clip, color_black);
         
         char *url = "https://github.com/HelloUnkira";
-        scui_color_t color_xxx = {
-            .color_l.full = 0xFF000000,
-            .color_d.full = 0xFFFFFFFF,
+        scui_color_t color = {
+            .color_l.full = 0xFF00FF00,
+            .color_d.full = 0xFF0000FF,
         };
         clip = scui_widget_clip(event->object);
         clip.x += 10;
         clip.y += 10 + 10;
         clip.w -= 10 * 2;
         clip.h -= 10 * 2 + 10 * 2;
-        scui_custom_draw_barcode(event, &clip, color_xxx, false, url, strlen(url));
+        scui_widget_draw_barcode(event->object, &clip, color, strlen(url), url);
         break;
     }
     default:

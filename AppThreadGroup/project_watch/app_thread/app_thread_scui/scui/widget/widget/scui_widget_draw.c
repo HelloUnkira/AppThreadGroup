@@ -142,6 +142,8 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
     void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc);
+    void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
     
@@ -156,6 +158,8 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
         {scui_widget_draw_type_image_rotate,    (void *)scui_widget_draw_ctx_image_rotate,},
         {scui_widget_draw_type_image_matrix,    (void *)scui_widget_draw_ctx_image_matrix,},
         {scui_widget_draw_type_ring,            (void *)scui_widget_draw_ctx_ring,},
+        {scui_widget_draw_type_qrcode,          (void *)scui_widget_draw_ctx_qrcode,},
+        {scui_widget_draw_type_barcode,         (void *)scui_widget_draw_ctx_barcode,},
         {scui_widget_draw_type_graph,           (void *)scui_widget_draw_ctx_graph,},
     };
     
@@ -568,6 +572,70 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
         scui_draw_image_matrix_blend(widget->surface, &dst_clip,
             image_inst, clip, widget->alpha, SCUI_COLOR_UNUSED,
             matrix, &reb_matrix);
+    }
+}
+
+/*@brief 控件在画布绘制二维码
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_color_t  color  = draw_dsc->qrcode.color;
+    scui_multi_t  size   = draw_dsc->qrcode.size;
+    uint8_t      *data   = draw_dsc->qrcode.data;
+    /* draw dsc args<e> */
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
+         return;
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        
+        scui_draw_qrcode(widget->surface, &dst_clip,
+            widget->alpha, color, size, data);
+    }
+}
+
+/*@brief 控件在画布绘制条形码
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
+{
+    /* draw dsc args<s> */
+    scui_handle_t handle = draw_dsc->handle;
+    scui_area_t  *target = draw_dsc->target;
+    scui_color_t  color  = draw_dsc->qrcode.color;
+    scui_multi_t  size   = draw_dsc->qrcode.size;
+    uint8_t      *data   = draw_dsc->qrcode.data;
+    /* draw dsc args<e> */
+    SCUI_LOG_DEBUG("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    // 绘制目标重定向
+    if (!scui_widget_draw_target(widget, &target))
+         return;
+    
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        
+        /* 子剪切域相对同步偏移 */
+        scui_area_t dst_clip = {0};
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
+             continue;
+        
+        scui_draw_barcode(widget->surface, &dst_clip,
+            widget->alpha, color, size, data);
     }
 }
 

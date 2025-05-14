@@ -43,8 +43,6 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
     void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc);
     /* custom draw type */
     void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_qrcode(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_barcode(scui_custom_draw_dsc_t *draw_dsc);
     void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc);
     void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc);
     void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc);
@@ -58,8 +56,6 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
         {scui_custom_draw_type_text,            (void *)scui_custom_draw_ctx_text,},
         /* custom draw type */
         {scui_custom_draw_type_dial_ptr,        (void *)scui_custom_draw_ctx_dial_ptr,},
-        {scui_custom_draw_type_qrcode,          (void *)scui_custom_draw_ctx_qrcode,},
-        {scui_custom_draw_type_barcode,         (void *)scui_custom_draw_ctx_barcode,},
         {scui_custom_draw_type_spinner,         (void *)scui_custom_draw_ctx_spinner,},
         {scui_custom_draw_type_slider,          (void *)scui_custom_draw_ctx_slider,},
         {scui_custom_draw_type_indicator,       (void *)scui_custom_draw_ctx_indicator,},
