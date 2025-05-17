@@ -632,6 +632,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.style.sched_anima       = true,
+	.widget.style.trans             = true,
 	.widget.clip.x                  = 58,
 	.widget.clip.y                  = 60,
 	.widget.clip.w                  = 350,

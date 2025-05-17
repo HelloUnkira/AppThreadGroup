@@ -17,9 +17,8 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_LOG_INFO("%u", handle);
     
     /* 不给无效目标添加剪切域 */
-    if (scui_handle_unmap(handle))
-        return;
-    if (scui_widget_is_hide(handle))
+    if (scui_handle_unmap(handle) ||
+        scui_widget_is_hide(handle))
         return;
     
     /* 没有绘制剪切域时不要绘制 */
@@ -42,13 +41,15 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
             .absorb     = scui_event_absorb_none,
         };
         scui_event_notify(&event);
+        #if SCUI_MEM_FEAT_MINI
+        SCUI_ASSERT(false);
+        #endif
         return;
     }
     
     scui_area_t widget_clip = widget->clip;
-    if (clip != NULL)
-    if (!scui_area_inter2(&widget_clip, clip))
-         return;
+    if (clip != NULL && !scui_area_inter2(&widget_clip, clip))
+        return;
     
     if (widget->parent == SCUI_HANDLE_INVALID &&
         scui_widget_surface_only(widget)) {
@@ -71,10 +72,9 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     // 同步绘制后移除调度队列中
     // 可能存在的异步绘制
     if (sync) {
-        scui_event_t event = {
-            .object = handle_r,
-            .type   = scui_event_draw,
-        };
+        scui_event_t event = {0};
+        event.object = handle_r;
+        event.type   = scui_event_draw;
         // 移除跟主窗口相关所有绘制事件
         while (scui_event_dequeue(&event, true, false));
     }

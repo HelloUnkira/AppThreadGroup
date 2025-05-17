@@ -64,13 +64,13 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     SCUI_LOG_DEBUG("");
     /* 子控件的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *parent = scui_handle_source_check(widget->parent);
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
         
-        if (parent->parent == SCUI_HANDLE_INVALID &&
+        if (widget_p->parent == SCUI_HANDLE_INVALID &&
             scui_widget_surface_only(widget));
         else {
-            widget->clip.x += parent->clip.x;
-            widget->clip.y += parent->clip.y;
+            widget->clip.x += widget_p->clip.x;
+            widget->clip.y += widget_p->clip.y;
         }
     }
     
