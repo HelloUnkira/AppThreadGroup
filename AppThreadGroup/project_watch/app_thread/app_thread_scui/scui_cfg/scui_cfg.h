@@ -45,7 +45,7 @@
 // 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐)
 // 子控件树, 静态画布真缩放, 窗口转场变换
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512 + 1024 * 1024 * 2)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (0)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0)
@@ -122,6 +122,7 @@
 
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
+#define SCUI_FRAME_BUFFER_SEG                       (SCUI_DRV_VER_RES / 3)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

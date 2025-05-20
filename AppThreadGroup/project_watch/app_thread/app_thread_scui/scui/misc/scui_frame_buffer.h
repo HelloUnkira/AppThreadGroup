@@ -11,7 +11,29 @@ typedef struct {
     scui_surface_t surface[2];
     uint8_t refr_hold:2;
     uint8_t draw_idx:1;
+    
+    #if SCUI_MEM_FEAT_MINI
+    scui_area_t clip_seg;
+    #endif
 } scui_frame_buffer_t;
+
+#if SCUI_MEM_FEAT_MINI
+
+/*@brief 获得帧缓冲区段区域
+ *@param clip_seg 段区域
+ */
+void scui_frame_buffer_seg(scui_area_t *clip_seg);
+
+/*@brief 就绪帧缓冲区段区域
+ */
+void scui_frame_buffer_seg_ready(void);
+
+/*@brief 偏移帧缓冲区段区域
+ *@param 段区域有效性
+ */
+bool scui_frame_buffer_seg_offset(void);
+
+#endif
 
 /*@brief 画布帧缓冲区刷新画布实例
  *@retval 刷新画布实例

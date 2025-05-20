@@ -9,6 +9,44 @@
 
 static scui_frame_buffer_t scui_frame_buffer = {0};
 
+#if SCUI_MEM_FEAT_MINI
+
+/*@brief 获得帧缓冲区段区域
+ *@param clip_seg 段区域
+ */
+void scui_frame_buffer_seg(scui_area_t *clip_seg)
+{
+    *clip_seg = scui_frame_buffer.clip_seg;
+}
+
+/*@brief 就绪帧缓冲区段区域
+ */
+void scui_frame_buffer_seg_ready(void)
+{
+    scui_surface_t *surface_fb = scui_frame_buffer_draw();
+    scui_frame_buffer.clip_seg = scui_surface_area(surface_fb);
+}
+
+/*@brief 偏移帧缓冲区段区域
+ *@param 段区域有效性
+ */
+bool scui_frame_buffer_seg_offset(void)
+{
+    scui_area_t clip_seg = scui_frame_buffer.clip_seg;
+    scui_coord_t hor_res = scui_disp_get_hor_res();
+    scui_coord_t ver_res = scui_disp_get_ver_res();
+    
+    clip_seg.y += SCUI_FRAME_BUFFER_SEG;
+    if (clip_seg.y + clip_seg.w > ver_res)
+        clip_seg.w = ver_res - clip_seg.y;
+    
+    scui_frame_buffer.clip_seg = clip_seg;
+    scui_area_t screen = {.w = hor_res,.h = ver_res,};
+    return scui_area_inside(&screen, &scui_frame_buffer.clip_seg);
+}
+
+#endif
+
 /*@brief 画布帧缓冲区刷新画布实例
  *@retval 刷新画布实例
  */

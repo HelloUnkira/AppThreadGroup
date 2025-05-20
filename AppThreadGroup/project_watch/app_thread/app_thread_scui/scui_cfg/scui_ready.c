@@ -23,32 +23,32 @@ void scui_ready(void)
         .w = SCUI_DRV_HOR_RES,
         .w = SCUI_DRV_VER_RES,
     };
+    scui_surface_t  surface = {0};
     scui_surface_t *surface_fb = NULL;
-    scui_coord_t surface_fb_byte   = 0;
-    scui_coord_t surface_fb_remain = 0;
-    scui_multi_t surface_fb_size   = 0;
+    surface.format  = SCUI_PIXEL_CF_DEF;
+    surface.hor_res = SCUI_DRV_HOR_RES;
+    surface.ver_res = SCUI_DRV_VER_RES;
+    surface.alpha   = scui_alpha_cover;
+    scui_coord_t surface_byte = scui_pixel_bits(surface.format) / 8;
+    scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface_byte;
+    scui_coord_t surface_line = surface.hor_res * surface_byte;
+    scui_multi_t surface_size = surface.ver_res * surface_line  + surface_rem;
     
-    surface_fb = scui_frame_buffer_draw();
-    surface_fb->format  = SCUI_PIXEL_CF_DEF;
-    surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
-    surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
-    surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
-    surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
-    surface_fb->hor_res = SCUI_DRV_HOR_RES;
-    surface_fb->ver_res = SCUI_DRV_VER_RES;
-    surface_fb->alpha   = scui_alpha_cover;
+    #if SCUI_MEM_FEAT_MINI
+    surface.ver_res = SCUI_FRAME_BUFFER_SEG;
+    surface_size = surface.ver_res * surface_line  + surface_rem;
+    #endif
+    
+    // 为绘制画布配置参数信息并且开辟资源
+    surface_fb = scui_frame_buffer_draw(); *surface_fb = surface;
+    surface_fb->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
     SCUI_ASSERT(surface_fb->pixel != NULL);
     scui_draw_area_fill(surface_fb, &clip, surface_fb->alpha, SCUI_COLOR_ZEROED);
+    
     #if SCUI_FRAME_BUFFER_ASYNC
-    surface_fb = scui_frame_buffer_refr();
-    surface_fb->format  = SCUI_PIXEL_CF_DEF;
-    surface_fb_byte     = scui_pixel_bits(surface_fb->format) / 8;
-    surface_fb_remain   = sizeof(scui_color_wt_t) - surface_fb_byte;
-    surface_fb_size     = SCUI_DRV_HOR_RES * SCUI_DRV_VER_RES * surface_fb_byte + surface_fb_remain;
-    surface_fb->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_fb_size);
-    surface_fb->hor_res = SCUI_DRV_HOR_RES;
-    surface_fb->ver_res = SCUI_DRV_VER_RES;
-    surface_fb->alpha   = scui_alpha_cover;
+    // 为送显画布配置参数信息并且开辟资源
+    surface_fb = scui_frame_buffer_refr(); *surface_fb = surface;
+    surface_fb->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
     SCUI_ASSERT(surface_fb->pixel != NULL);
     scui_draw_area_fill(surface_fb, &clip, surface_fb->alpha, SCUI_COLOR_ZEROED);
     #endif

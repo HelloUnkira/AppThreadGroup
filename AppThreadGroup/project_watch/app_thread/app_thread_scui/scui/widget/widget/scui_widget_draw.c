@@ -129,6 +129,44 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
     return area_frag && area_inside && !area_empty;
 }
 
+/*@brief 绘制目标重定向
+ */
+static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
+{
+    // 这里挂个内部的全局量,用于给外部提供使用
+    static scui_area_t widget_clip = {0};
+    
+    if (scui_area_empty(&widget->clip_set.clip))
+        return false;
+    widget_clip = widget->clip;
+    if (*target != NULL)
+    if (!scui_area_inter2(&widget_clip, *target))
+         return false;
+    if (widget->parent == SCUI_HANDLE_INVALID &&
+        scui_widget_surface_only(widget)) {
+        widget_clip.x -= widget->clip.x;
+        widget_clip.y -= widget->clip.y;
+    }
+    *target = &widget_clip;
+    return true;
+}
+
+/*@brief 绘制目标重定向
+ */
+#if SCUI_MEM_FEAT_MINI
+static bool scui_widget_draw_target_seg(scui_area_t *target)
+{
+    /* 将段剪切域偏移追加到该目标上 */
+    scui_area_t clip_seg = {0};
+    scui_frame_buffer_seg(&clip_seg);
+    if (!scui_area_inter2(target, clip_seg))
+         return false;
+    /* 在结果去除段偏移以映射到surface上 */
+    target->x -= clip_seg.x;
+    target->y -= clip_seg.y;
+}
+#endif
+
 /*@brief 控件绘制上下文
  *@param draw_graph 绘制参数实例
  */
@@ -174,28 +212,6 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(false);
 }
 
-/*@brief 绘制目标重定向
- */
-static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
-{
-    // 这里挂个内部的全局量,用于给外部提供使用
-    static scui_area_t widget_clip = {0};
-    
-    if (scui_area_empty(&widget->clip_set.clip))
-        return false;
-    widget_clip = widget->clip;
-    if (*target != NULL)
-    if (!scui_area_inter2(&widget_clip, *target))
-         return false;
-    if (widget->parent == SCUI_HANDLE_INVALID &&
-        scui_widget_surface_only(widget)) {
-        widget_clip.x -= widget->clip.x;
-        widget_clip.y -= widget->clip.y;
-    }
-    *target = &widget_clip;
-    return true;
-}
-
 /*@brief 控件在画布绘制字符串
  *@param draw_graph 绘制参数实例
  */
@@ -238,6 +254,11 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.w =  (args->clip.w);
         src_clip.h =  (args->clip.h);
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_string(widget->surface, &dst_clip,
             args, &src_clip, widget->alpha);
     }
@@ -267,6 +288,11 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
         
         scui_draw_area_fill(widget->surface, &dst_clip, widget->alpha, color);
     }
@@ -298,6 +324,11 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_area_fill_grad(widget->surface, &dst_clip,
             color, target, widget->alpha, way);
     }
@@ -327,6 +358,11 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, clip))
              continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
         
         scui_draw_area_blur(widget->surface, &dst_clip);
     }
@@ -416,6 +452,11 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_image(widget->surface, &dst_clip,
             image_inst, &src_clip, widget->alpha, color);
     }
@@ -482,6 +523,11 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_image_scale(widget->surface, &dst_clip,
             image_inst, clip, widget->alpha, scale,
             dst_offset, src_offset);
@@ -524,6 +570,11 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
         
         scui_draw_image_rotate(widget->surface, &dst_clip,
             image_inst, clip, widget->alpha, angle, anchor, center);
@@ -569,6 +620,11 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_image_matrix_blend(widget->surface, &dst_clip,
             image_inst, clip, widget->alpha, SCUI_COLOR_UNUSED,
             matrix, &reb_matrix);
@@ -602,6 +658,11 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_qrcode(widget->surface, &dst_clip,
             widget->alpha, color, size, data);
     }
@@ -633,6 +694,11 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
         
         scui_draw_barcode(widget->surface, &dst_clip,
             widget->alpha, color, size, data);
@@ -710,6 +776,11 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
+        
         scui_draw_ring(widget->surface, &dst_clip,
             &dst_center, image_e_inst, image_inst, &src_clip,
             angle_as, widget->alpha, angle_ae, color);
@@ -740,6 +811,11 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        
+        #if SCUI_MEM_FEAT_MINI
+        if (!scui_widget_draw_target_seg(&dst_clip))
+             continue;
+        #endif
         
         graph_dsc->dst_surface = widget->surface;
         graph_dsc->dst_clip    = &dst_clip;
