@@ -109,7 +109,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         
         uint32_t pct_args[MEM_TYPE] = {0};
         for (uint8_t idx = 0; idx < scui_arr_len(mem_used); idx++)
-            pct_args[idx] = mem_used[idx] * 100 / mem_total[idx];
+            pct_args[idx] = mem_total[idx] == 0 ? 0 : mem_used[idx] * 100 / mem_total[idx];
         
         uint8_t str_mem1[100] = {0};
         uint8_t str_mem2[100] = {0};

@@ -178,6 +178,9 @@ static void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
 static void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
 {
 }
+static void scui_ui_scene_3_event_proc(scui_event_t *event)
+{
+}
 static void scui_ui_scene_6_event_proc(scui_event_t *event)
 {
 }
@@ -270,6 +273,7 @@ extern void scui_ui_scene_1_vedio_event_proc(scui_event_t *event);
 extern void scui_ui_scene_2_event_proc(scui_event_t *event);
 extern void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event);
 extern void scui_ui_scene_2_ring_event_proc(scui_event_t *event);
+extern void scui_ui_scene_3_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_1_event_proc(scui_event_t *event);
 extern void scui_ui_scene_6_2_event_proc(scui_event_t *event);
@@ -1092,6 +1096,18 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_2_RING = {
 	.widget.event_cb                = scui_ui_scene_2_ring_event_proc,
 };
 
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.style.indev_key         = true,
+	.widget.clip.w                  = SCUI_DRV_HOR_RES,
+	.widget.clip.h                  = SCUI_DRV_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_3,
+	.widget.event_cb                = scui_ui_scene_3_event_proc,
+	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
+	.level                          = 0,
+	.buffer                         = true,
+};
+
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.clip.w                  = SCUI_DRV_HOR_RES,
@@ -1236,7 +1252,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.buffer                         = true,
 };
 
-const void * scui_widget_parser_table[75] = {
+const void * scui_widget_parser_table[76] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1301,6 +1317,7 @@ const void * scui_widget_parser_table[75] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_2,
 	(void *)&scui_widget_SCUI_UI_SCENE_2_BAR_ARC,
 	(void *)&scui_widget_SCUI_UI_SCENE_2_RING,
+	(void *)&scui_widget_SCUI_UI_SCENE_3,
 	(void *)&scui_widget_SCUI_UI_SCENE_6,
 	(void *)&scui_widget_SCUI_UI_SCENE_6_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_6_2,

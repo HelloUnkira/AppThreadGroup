@@ -476,12 +476,10 @@ static void scui_window_surface_blend(void)
 void scui_window_refresh(void)
 {
     #if SCUI_MEM_FEAT_MINI
-    scui_area_t surface_clip = {0};
     scui_window_surface_ready();
     /* 在此处启动段绘制 */
     scui_frame_buffer_seg_ready();
     for (bool seg_valid = true; seg_valid; seg_valid) {
-        scui_frame_buffer_seg(&surface_clip);
         scui_window_surface_blend();
         /* 混合绘制刷新流程结束 */
         /* 使用绘制启动刷新流程 */

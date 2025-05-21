@@ -32,15 +32,18 @@ void scui_frame_buffer_seg_ready(void)
  */
 bool scui_frame_buffer_seg_offset(void)
 {
-    scui_area_t clip_seg = scui_frame_buffer.clip_seg;
     scui_coord_t hor_res = scui_disp_get_hor_res();
     scui_coord_t ver_res = scui_disp_get_ver_res();
+    scui_area_t clip_seg = scui_frame_buffer.clip_seg;
     
     clip_seg.y += SCUI_FRAME_BUFFER_SEG;
-    if (clip_seg.y + clip_seg.w > ver_res)
-        clip_seg.w = ver_res - clip_seg.y;
-    
+    if (clip_seg.y + clip_seg.h > ver_res)
+        clip_seg.h = ver_res - clip_seg.y;
     scui_frame_buffer.clip_seg = clip_seg;
+    
+    if (scui_area_empty(&clip_seg))
+        return false;
+    
     scui_area_t screen = {.w = hor_res,.h = ver_res,};
     return scui_area_inside(&screen, &scui_frame_buffer.clip_seg);
 }
@@ -121,6 +124,15 @@ void scui_frame_buffer_refr_toggle(void)
     scui_frame_buffer.refr_hold |= (1 << 0);
     scui_frame_buffer.draw_idx = 0;
     #endif
+    
+    #if SCUI_MEM_FEAT_MINI
+    #if SCUI_FRAME_BUFFER_ASYNC
+    scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx] = scui_frame_buffer.clip_seg;
+    #else
+    scui_frame_buffer.clip_seg_refr[0] = scui_frame_buffer.clip_seg;
+    #endif
+    #endif
+    
     scui_mutex_process(&scui_frame_buffer.mutex, scui_mutex_give);
     
     SCUI_LOG_INFO("send refr sem");
@@ -140,9 +152,11 @@ void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_a
     SCUI_ASSERT(surface != NULL && surface->pixel != NULL);
     
     if (refr) {
+        
         #if SCUI_MEM_FEAT_MINI
-        scui_area_t clip_seg = {0};
-        scui_frame_buffer_seg(&clip_seg);
+        scui_area_t clip_seg = scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx];
+        SCUI_LOG_WARN("clip seg:<%d, %d, %d, %d>",
+            clip_seg.x, clip_seg.y, clip_seg.w, clip_seg.h);
         refr(surface, &clip_seg);
         #else
         refr(surface, NULL);

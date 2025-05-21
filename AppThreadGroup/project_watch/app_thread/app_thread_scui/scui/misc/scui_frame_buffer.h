@@ -14,6 +14,7 @@ typedef struct {
     
     #if SCUI_MEM_FEAT_MINI
     scui_area_t clip_seg;
+    scui_area_t clip_seg_refr[2];
     #endif
 } scui_frame_buffer_t;
 

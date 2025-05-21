@@ -174,7 +174,7 @@ void app_dev_gui_disp_scui_flush(scui_surface_t *surface, scui_area_t *clip)
         scui_multi_t surface_line = surface->hor_res * surface_byte;
         
         for (int line = 0; line < clip->h; line++)
-            memcpy(&cfg->display.pixel_buf[(clip->y + line) * surface_line + clip->x],
+            memcpy((uint8_t *)cfg->display.pixel_buf + (clip->y + line) * surface_line + clip->x,
                 surface->pixel + line * surface_line, clip->w * surface_byte);
     }
     

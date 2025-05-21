@@ -49,24 +49,6 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
 
-/*@brief 控件事件冒泡
- *       亦可用于控件迭代等其他动作
- *@param event    事件(可以是假事件)
- *@param event_cb 事件回调(可以是假事件回调)
- *@param first    优先冒泡自己
- */
-void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first);
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_widget_event_process(scui_event_t *event);
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_widget_event_process_draw(scui_event_t *event);
-
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */

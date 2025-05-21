@@ -286,43 +286,10 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
     scui_event_cb_del(&widget->list, node);
 }
 
-/*@brief 控件事件冒泡
- *       亦可用于控件迭代等其他动作
- *@param event    事件(可以是假事件)
- *@param event_cb 事件回调(可以是假事件回调)
- *@param first    优先冒泡自己
- */
-void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
-{
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    
-    if (first) {
-        if (event_cb != NULL) event_cb(event);
-        else scui_widget_event_process(event);
-        if (scui_event_check_over(event))
-            return;
-    }
-    
-    scui_widget_child_list_btra(widget, idx) {
-        event->object = widget->child_list[idx];
-        scui_widget_event_bubble(event, event_cb, first);
-        event->object = widget->myself;
-        if (scui_event_check_over(event))
-            return;
-    }
-    
-    if (!first) {
-        if (event_cb != NULL) event_cb(event);
-        else scui_widget_event_process(event);
-        if (scui_event_check_over(event))
-            return;
-    }
-}
-
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */
-void scui_widget_event_process(scui_event_t *event)
+static void scui_widget_event_process(scui_event_t *event)
 {
     SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_source_check(event->object);
@@ -361,21 +328,30 @@ void scui_widget_event_process(scui_event_t *event)
     }
     case scui_event_draw: {
         
+        /* 绘制事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
+        }
+        /* 绘制事件没有剪切域,忽略 */
+        if (scui_clip_empty(&widget->clip_set)) {
+            SCUI_LOG_INFO("widget clip is empty");
+            return;
+        }
+        
         /* 控件绘制流程在执行步 */
-        if (!scui_event_check_execute(event))
-             break;
-        
-        /* 控件透明则不绘制 */
-        if (widget->style.trans)
-            break;
-        
-        /* 绘制图片背景(有背景图片) */
-        /* 绘制纯色背景(没有背景图片) */
-        if (widget->image != SCUI_HANDLE_INVALID)
-            scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
-        else
-            scui_widget_draw_color(event->object, NULL, widget->color);
-        
+        if (scui_event_check_execute(event)) {
+            /* 控件背景透明则不绘制 */
+            if (widget->style.trans)
+                break;
+            
+            /* 绘制图片背景(有背景图片) */
+            /* 绘制纯色背景(没有背景图片) */
+            if (widget->image != SCUI_HANDLE_INVALID)
+                scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
+            else
+                scui_widget_draw_color(event->object, NULL, widget->color);
+        }
         break;
     }
     case scui_event_ptr_click:
@@ -451,44 +427,36 @@ void scui_widget_event_process(scui_event_t *event)
     }
 }
 
-/*@brief 控件默认事件处理回调
- *@param event 事件
+/*@brief 控件事件冒泡
+ *       亦可用于控件迭代等其他动作
+ *@param event    事件(可以是假事件)
+ *@param event_cb 事件回调(可以是假事件回调)
+ *@param first    优先冒泡自己
  */
-void scui_widget_event_process_draw(scui_event_t *event)
+static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
 {
-    SCUI_LOG_DEBUG("event %u", event->type);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    /* 可以在此处标记为访问 */
-    /* 未知事件不会流转此处 */
-    scui_event_mask_keep(event);
+    if (first) {
+        if (event_cb != NULL) event_cb(event);
+        else scui_widget_event_process(event);
+        if (scui_event_check_over(event))
+            return;
+    }
     
-    /* 绘制事件不能被控件响应 */
-    if (scui_widget_is_hide(widget->myself)) {
-        SCUI_LOG_INFO("widget is hide");
-        return;
+    scui_widget_child_list_btra(widget, idx) {
+        event->object = widget->child_list[idx];
+        scui_widget_event_bubble(event, event_cb, first);
+        event->object = widget->myself;
+        if (scui_event_check_over(event))
+            return;
     }
-    /* 先冒泡自己,绘制事件没有剪切域,忽略 */
-    if (scui_clip_empty(&widget->clip_set))
-        SCUI_LOG_INFO("widget clip is empty");
-    /* 先走控件绘制流程,再进行自定义绘制流程 */
-    else {
-        scui_tick_calc(0x20, NULL, NULL, NULL);
-        scui_widget_event_process(event);
-        scui_tick_calc(0x21, NULL, NULL, NULL);
-    }
-    /* 如果需要继续冒泡,则继续下沉 */
-    if (scui_event_check_over(event)) {
-        /* 有些事件不允许被吸收 */
-        /* 它涉及到系统状态维护 */
-        scui_event_mask_quit(event);
-        scui_event_mask_keep(event);
-    } else {
-        scui_widget_child_list_btra(widget, idx) {
-            event->object = widget->child_list[idx];
-            scui_widget_event_dispatch(event);
-            event->object = widget->myself;
-        }
+    
+    if (!first) {
+        if (event_cb != NULL) event_cb(event);
+        else scui_widget_event_process(event);
+        if (scui_event_check_over(event))
+            return;
     }
 }
 
@@ -537,6 +505,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         scui_widget_event_bubble(event, NULL, false);
         return;
     case scui_event_draw: {
+        scui_event_mask_keep(event);
         scui_widget_t *widget = scui_handle_source_check(event->object);
         /* 在调度的最开始, 需要根据实际情况做调整 */
         if (widget->parent == SCUI_HANDLE_INVALID) {
@@ -570,7 +539,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_clear(widget, false);
         }
         
-        scui_widget_event_process_draw(event);
+        // 启用集成事件冒泡流程
+        scui_widget_event_bubble(event, NULL, true);
         return;
     }
     case scui_event_show:
