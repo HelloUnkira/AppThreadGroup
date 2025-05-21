@@ -159,7 +159,7 @@ static bool scui_widget_draw_target_seg(scui_area_t *target)
     /* 将段剪切域偏移追加到该目标上 */
     scui_area_t clip_seg = {0};
     scui_frame_buffer_seg(&clip_seg);
-    if (!scui_area_inter2(target, clip_seg))
+    if (!scui_area_inter2(target, &clip_seg))
          return false;
     /* 在结果去除段偏移以映射到surface上 */
     target->x -= clip_seg.x;

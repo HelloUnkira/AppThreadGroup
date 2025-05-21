@@ -59,7 +59,8 @@ void scui_frame_buffer_refr_toggle(void);
 
 /*@brief 刷新画布流程
  *@param refr 刷新流程
+ *@param clip 屏幕剪切域
  */
-void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface));
+void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_area_t *clip));
 
 #endif

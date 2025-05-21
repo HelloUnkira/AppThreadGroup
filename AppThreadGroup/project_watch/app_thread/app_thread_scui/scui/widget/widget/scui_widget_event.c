@@ -570,18 +570,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_clear(widget, false);
         }
         
-        #if SCUI_MEM_FEAT_MINI
-        if (scui_event_check_execute(event))
-        if (event->style.sync) {
-            /* 在此处启动段绘制 */
-            scui_frame_buffer_seg_ready();
-            for (bool seg_valid = true; seg_valid; seg_valid) {
-                scui_widget_event_process_draw(event);
-                seg_valid = scui_frame_buffer_seg_offset();
-            }
-            return;
-        }
-        #endif
         scui_widget_event_process_draw(event);
         return;
     }

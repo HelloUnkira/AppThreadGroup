@@ -194,23 +194,8 @@ static void scui_event_respond(scui_event_t *event)
         }
         break;
     case scui_event_refr:
-        scui_window_surface_blend();
+        scui_window_refresh();
         scui_event_mask_over(event);
-        /* 混合绘制刷新流程结束 */
-        /* 使用绘制启动刷新流程 */
-        scui_frame_buffer_refr_toggle();
-        /* 开始refr的switch模式同步 */
-        scui_widget_t *widget = NULL;
-        if (scui_window_surface_switch(0x02, &widget)) {
-            SCUI_ASSERT(widget != NULL);
-            SCUI_LOG_INFO("switch mode sync");
-            scui_surface_t *surface_fb = scui_frame_buffer_refr();
-            scui_widget_surface_sync(widget, surface_fb);
-        }
-        /* 等待绘制目标刷新 */
-        scui_frame_buffer_draw_wait();
-        
-        scui_tick_calc(0x00, NULL, NULL, NULL);
         return;
     case scui_event_change_lang: {
         if (event->object == SCUI_HANDLE_SYSTEM) {

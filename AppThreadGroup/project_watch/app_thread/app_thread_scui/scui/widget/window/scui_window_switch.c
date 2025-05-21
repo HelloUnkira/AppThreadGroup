@@ -26,6 +26,25 @@ static void scui_window_switch_type_update(scui_window_switch_type_t type, scui_
         scui_window_mgr.switch_args.dir  = scui_window_mgr.switch_args.cfg_dir;
 }
 
+/*@brief 窗口隐藏
+ *@param handle 窗口句柄
+ *@param any    所有或者仅含有资源的窗口
+ */
+static void scui_window_switch_hide_without(scui_handle_t handle, bool any)
+{
+    SCUI_LOG_INFO("");
+    
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+        if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
+            scui_window_mgr.list[idx] != handle) {
+            scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
+            scui_window_t *window = (void *)widget;
+            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            if (any || (scui_widget_surface_only(widget) && !window->resident))
+                scui_widget_hide(scui_window_mgr.list[idx], false);
+        }
+}
+
 /*@brief 窗口跳转动画回调
  */
 static void scui_window_jump_anima_prepare(void *instance)
@@ -370,7 +389,7 @@ static void scui_window_event_switch(scui_event_t *event)
                 // 更新交互方向
                 scui_window_switch_type_update(switch_type, event_dir);
                 /* 先释放其他窗口资源 */
-                scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
+                scui_window_switch_hide_without(scui_window_mgr.switch_args.list[0], false);
                 scui_widget_show(scui_window_mgr.switch_args.list[1], false);
                 scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
                 /* 额外做一次校正,应该没意义 */
@@ -490,7 +509,7 @@ static void scui_window_event_switch(scui_event_t *event)
             // 更新交互方向
             scui_window_switch_type_update(switch_type, event_dir);
             /* 先释放其他窗口资源 */
-            scui_window_list_hide_without(scui_window_mgr.switch_args.list[0], false);
+            scui_window_switch_hide_without(scui_window_mgr.switch_args.list[0], false);
             scui_widget_show(scui_window_mgr.switch_args.list[1], false);
             scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point, true);
             /* 额外做一次校正,应该没意义 */

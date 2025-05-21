@@ -60,14 +60,19 @@ typedef struct {
 } scui_window_stack_t;
 
 typedef struct {
-    scui_handle_t           list_num;                       /* 窗口列表数量 */
-    scui_handle_t           list[SCUI_WINDOW_MGR_LIMIT];    /* 窗口管理列表 */
-    scui_window_stack_t     stack_args;                     /* 窗口栈式记录 */
-    scui_window_switch_t    switch_args;                    /* 窗口切换信息 */
-    scui_handle_t           active_curr;                    /* 当前活跃窗口 */
-    scui_handle_t           active_last;                    /* 上一活跃窗口 */
-    scui_widget_t          *refr_widget;                    /* 窗口送显模式控件实例地址 */
-    uint32_t                refr_switch:1;                  /* 窗口送显模式标记 */
+    scui_handle_t           list_num;                           /* 窗口列表数量 */
+    scui_handle_t           list[SCUI_WINDOW_MGR_LIMIT];        /* 窗口管理列表 */
+    scui_window_stack_t     stack_args;                         /* 窗口栈式记录 */
+    scui_window_switch_t    switch_args;                        /* 窗口切换信息 */
+    scui_handle_t           active_curr;                        /* 当前活跃窗口 */
+    scui_handle_t           active_last;                        /* 上一活跃窗口 */
+    scui_widget_t          *refr_widget;                        /* 窗口送显模式控件实例地址 */
+    uint32_t                refr_switch:1;                      /* 窗口送显模式标记 */
+    /* 窗口混合信息: */
+    scui_widget_t          *list_0[SCUI_WINDOW_MGR_LIMIT];      /* 窗口管理列表(有独立画布) */
+    scui_widget_t          *list_1[SCUI_WINDOW_MGR_LIMIT];      /* 窗口管理列表(无独立画布) */
+    scui_handle_t           list_0_num;                         /* 窗口列表数量(有独立画布) */
+    scui_handle_t           list_1_num;                         /* 窗口列表数量(无独立画布) */
     /*  */
 } scui_window_mgr_t;
 
@@ -91,33 +96,19 @@ void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir);
  */
 void scui_window_list(scui_handle_t **list);
 
-/*@brief 窗口隐藏
- *@param handle 窗口句柄
- */
-void scui_window_list_hide_without(scui_handle_t handle, bool any);
-
-/*@brief 窗口列表添加窗口
+/*@brief 窗口列表添加窗口(内部使用)
  *@param handle 窗口句柄
  */
 void scui_window_list_add(scui_handle_t handle);
 
-/*@brief 窗口列表移除窗口
+/*@brief 窗口列表移除窗口(内部使用)
  *@param handle 窗口句柄
  */
 void scui_window_list_del(scui_handle_t handle);
 
-/*@brief 窗口管理器混合画布
- *       将所有独立画布混合到绘制画布上
- *       将所有无独立画布就地渲染
- *       将绘制画布生成刷新事件
+/*@brief 窗口刷新(仅调度使用)
  */
-void scui_window_surface_blend(void);
-
-/*@brief 窗口管理器混合画布模式检查
- *@param state  状态(0x00:设置标记;0x01:清除标记;0x02:检查标记;)
- *@param widget 控件实例地址
- */
-bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget);
+void scui_window_refresh(void);
 
 /*@brief 窗口激活
  *@param handle 窗口句柄

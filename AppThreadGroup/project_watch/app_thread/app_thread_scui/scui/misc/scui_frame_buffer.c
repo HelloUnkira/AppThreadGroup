@@ -129,8 +129,9 @@ void scui_frame_buffer_refr_toggle(void)
 
 /*@brief 刷新画布流程
  *@param refr 刷新流程
+ *@param clip 屏幕剪切域
  */
-void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface))
+void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_area_t *clip))
 {
     SCUI_LOG_INFO("wait refr sem");
     scui_sem_process(&scui_frame_buffer.sem_refr, scui_sem_take);
@@ -138,8 +139,15 @@ void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface))
     scui_surface_t *surface = scui_frame_buffer_refr();
     SCUI_ASSERT(surface != NULL && surface->pixel != NULL);
     
-    if (refr)
-        refr(surface);
+    if (refr) {
+        #if SCUI_MEM_FEAT_MINI
+        scui_area_t clip_seg = {0};
+        scui_frame_buffer_seg(&clip_seg);
+        refr(surface, &clip_seg);
+        #else
+        refr(surface, NULL);
+        #endif
+    }
     
     SCUI_LOG_INFO("unlock refr");
     scui_mutex_process(&scui_frame_buffer.mutex, scui_mutex_take);

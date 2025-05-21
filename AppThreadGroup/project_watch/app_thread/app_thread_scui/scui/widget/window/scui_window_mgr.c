@@ -41,26 +41,7 @@ void scui_window_list(scui_handle_t **list)
     *list = scui_window_mgr.list;
 }
 
-/*@brief 窗口隐藏
- *@param handle 窗口句柄
- *@param any    所有或者仅含有资源的窗口
- */
-void scui_window_list_hide_without(scui_handle_t handle, bool any)
-{
-    SCUI_LOG_INFO("");
-    
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
-        if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
-            scui_window_mgr.list[idx] != handle) {
-            scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
-            scui_window_t *window = (void *)widget;
-            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-            if (any || (scui_widget_surface_only(widget) && !window->resident))
-                scui_widget_hide(scui_window_mgr.list[idx], false);
-        }
-}
-
-/*@brief 窗口列表添加窗口
+/*@brief 窗口列表添加窗口(内部使用)
  *@param handle 窗口句柄
  */
 void scui_window_list_add(scui_handle_t handle)
@@ -79,7 +60,7 @@ void scui_window_list_add(scui_handle_t handle)
     SCUI_LOG_ERROR("scene %u add fail", handle);
 }
 
-/*@brief 窗口列表移除窗口
+/*@brief 窗口列表移除窗口(内部使用)
  *@param handle 窗口句柄
  */
 void scui_window_list_del(scui_handle_t handle)
@@ -208,6 +189,11 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type > scui_window_switch_single_s);
     SCUI_ASSERT(scui_window_mgr.switch_args.cfg_type < scui_window_switch_single_e);
+    
+    #if SCUI_MEM_FEAT_MINI
+    /* 小内存方案无独立画布 */
+    return;
+    #endif
     
     bool mode_simple = false;
     /* 1.单一窗口直接渲染 */
@@ -357,8 +343,6 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     
     
     #if SCUI_MEM_FEAT_MINI
-    scui_widget_t *widget_cur = list[0];
-    scui_widget_t *widget_tar = list[1];
     /* 对窗口进行坐标偏移处理 */
     switch (scui_window_mgr.switch_args.type) {
     default:
@@ -379,88 +363,11 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     #endif
 }
 
-/*@brief 窗口管理器混合画布
- *       将所有独立画布混合到绘制画布上
- *       将所有无独立画布就地渲染
- */
-void scui_window_surface_blend(void)
-{
-    scui_handle_t  list_lvl_0_num = 0;
-    scui_handle_t  list_lvl_1_num = 0;
-    scui_widget_t *list_lvl_0[SCUI_WINDOW_MGR_LIMIT] = {0};
-    scui_widget_t *list_lvl_1[SCUI_WINDOW_MGR_LIMIT] = {0};
-    
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
-        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
-            continue;
-        scui_handle_t  handle = scui_window_mgr.list[idx];
-        scui_widget_t *widget = scui_handle_source_check(handle);
-        scui_window_t *window = (void *)widget;
-        SCUI_ASSERT(scui_handle_remap(handle));
-        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-        
-        if (scui_widget_surface_only(widget) && !window->hang_only)
-            list_lvl_0[list_lvl_0_num++] = widget;
-        else
-            list_lvl_1[list_lvl_1_num++] = widget;
-        
-        /* 小内存方案没有窗口独立画布混合 */
-        #if SCUI_MEM_FEAT_MINI
-        if (scui_widget_surface_only(widget))
-            SCUI_ASSERT(false);
-        #endif
-    }
-    
-    /* 依照窗口层级进行排序 */
-    scui_window_list_sort(list_lvl_0, list_lvl_0_num);
-    scui_window_list_sort(list_lvl_1, list_lvl_1_num);
-    
-    scui_handle_t list_lvl_0_ofs = 0;
-    scui_handle_t list_lvl_1_ofs = 0;
-    /* 仅窗口切换时才应用特效渲染 */
-    if (scui_widget_global_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
-        /* 过滤掉被覆盖的绘制界面 */
-        scui_window_list_filter(list_lvl_0, list_lvl_0_num, &list_lvl_0_ofs);
-        list_lvl_0_num -= list_lvl_0_ofs;
-    }
-    
-    /* 切换switch模式? */
-    /* 如果送显数据刚好为完整的一个surface */
-    /* 此时则使用switch模式直接交换surface快速进入refr异步 */
-    /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
-    #if SCUI_WINDOW_MGR_SWITCH_MODE
-    scui_widget_t *widget_only = NULL;
-    scui_window_surface_switch(0x01, &widget_only);
-    if (list_lvl_0_num == 1 && list_lvl_1_num == 0) {
-        widget_only = list_lvl_0[list_lvl_0_ofs];
-        
-        scui_surface_t *surface_fb = scui_frame_buffer_draw();
-        // 类型必须匹配才可交换
-        if (widget_only->surface->format  == surface_fb->format  &&
-            widget_only->surface->hor_res == surface_fb->hor_res &&
-            widget_only->surface->ver_res == surface_fb->ver_res) {
-            
-            scui_window_surface_switch(0x00, &widget_only);
-            scui_widget_surface_swap(list_lvl_0[list_lvl_0_ofs], surface_fb);
-            SCUI_LOG_INFO("blend to switch mode");
-            return;
-        }
-    }
-    #endif
-    
-    /* 第一轮混合:处理所有常规独立画布 */
-    scui_tick_calc(0x20, NULL, NULL, NULL);
-    scui_window_list_blend(&list_lvl_0[list_lvl_0_ofs], list_lvl_0_num);
-    scui_tick_calc(0x21, NULL, NULL, NULL);
-    /* 第二轮混合:处理所有特殊独立画布或共享画布 */
-    scui_window_list_render(&list_lvl_1[list_lvl_1_ofs], list_lvl_1_num);
-}
-
 /*@brief 窗口管理器混合画布模式检查
  *@param state  状态(0x00:设置标记;0x01:清除标记;0x02:检查标记;)
  *@param widget 控件实例地址
  */
-bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
+static bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
 {
     switch (state) {
     case 0x00:
@@ -478,6 +385,131 @@ bool scui_window_surface_switch(uint8_t state, scui_widget_t **widget)
         SCUI_LOG_ERROR("unknown state");
         return false;
     }
+}
+
+/*@brief 窗口管理器画布就绪
+ *       分类整理所需处理的窗口
+ */
+static void scui_window_surface_ready(void)
+{
+    scui_window_mgr.list_0_num = 0;
+    scui_window_mgr.list_1_num = 0;
+    
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
+        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        scui_handle_t  handle = scui_window_mgr.list[idx];
+        scui_widget_t *widget = scui_handle_source_check(handle);
+        scui_window_t *window = (void *)widget;
+        SCUI_ASSERT(scui_handle_remap(handle));
+        SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+        
+        if (scui_widget_surface_only(widget) && !window->hang_only)
+            scui_window_mgr.list_0[scui_window_mgr.list_0_num++] = widget;
+        else
+            scui_window_mgr.list_1[scui_window_mgr.list_1_num++] = widget;
+        
+        /* 小内存方案没有窗口独立画布混合 */
+        #if SCUI_MEM_FEAT_MINI
+        if (scui_widget_surface_only(widget))
+            SCUI_ASSERT(false);
+        #endif
+    }
+    
+    /* 依照窗口层级进行排序 */
+    scui_window_list_sort(scui_window_mgr.list_0, scui_window_mgr.list_0_num);
+    scui_window_list_sort(scui_window_mgr.list_1, scui_window_mgr.list_1_num);
+    
+    scui_handle_t list_lvl_0_ofs = 0;
+    scui_handle_t list_lvl_1_ofs = 0;
+    /* 仅窗口切换时才应用特效渲染 */
+    if (scui_widget_global_scroll_flag(0x02, &scui_window_mgr.switch_args.key)) {
+        /* 过滤掉被覆盖的绘制界面 */
+        scui_window_list_filter(scui_window_mgr.list_0, scui_window_mgr.list_0_num, &list_lvl_0_ofs);
+        /* 去除掉覆盖的窗口 */
+        for (scui_handle_t idx = 0; idx + list_lvl_0_ofs < scui_window_mgr.list_0_num; idx++)
+            scui_window_mgr.list_0[idx] = scui_window_mgr.list_0[idx + list_lvl_0_ofs];
+        scui_window_mgr.list_0_num -= list_lvl_0_ofs;
+    }
+}
+
+/*@brief 窗口管理器混合画布
+ *       将所有独立画布混合到绘制画布上
+ *       将所有无独立画布就地渲染
+ */
+static void scui_window_surface_blend(void)
+{
+    /* 切换switch模式? */
+    /* 如果送显数据刚好为完整的一个surface */
+    /* 此时则使用switch模式直接交换surface快速进入refr异步 */
+    /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
+    #if SCUI_WINDOW_MGR_SWITCH_MODE
+    scui_widget_t *widget_only = NULL;
+    scui_window_surface_switch(0x01, &widget_only);
+    if (scui_window_mgr.list_0_num == 1 && scui_window_mgr.list_1_num == 0) {
+        widget_only = scui_window_mgr.list_0[0];
+        
+        scui_surface_t *surface_fb = scui_frame_buffer_draw();
+        // 类型必须匹配才可交换
+        if (widget_only->surface->format  == surface_fb->format  &&
+            widget_only->surface->hor_res == surface_fb->hor_res &&
+            widget_only->surface->ver_res == surface_fb->ver_res) {
+            
+            scui_window_surface_switch(0x00, &widget_only);
+            scui_widget_surface_swap(scui_window_mgr.list_0[0], surface_fb);
+            SCUI_LOG_INFO("blend to switch mode");
+            return;
+        }
+    }
+    #endif
+    
+    /* 第一轮混合:处理所有常规独立画布 */
+    scui_tick_calc(0x20, NULL, NULL, NULL);
+    scui_window_list_blend(scui_window_mgr.list_0, scui_window_mgr.list_0_num);
+    scui_tick_calc(0x21, NULL, NULL, NULL);
+    /* 第二轮混合:处理所有特殊独立画布或共享画布 */
+    scui_window_list_render(scui_window_mgr.list_1, scui_window_mgr.list_1_num);
+}
+
+/*@brief 窗口刷新(仅调度使用)
+ */
+void scui_window_refresh(void)
+{
+    #if SCUI_MEM_FEAT_MINI
+    scui_area_t surface_clip = {0};
+    scui_window_surface_ready();
+    /* 在此处启动段绘制 */
+    scui_frame_buffer_seg_ready();
+    for (bool seg_valid = true; seg_valid; seg_valid) {
+        scui_frame_buffer_seg(&surface_clip);
+        scui_window_surface_blend();
+        /* 混合绘制刷新流程结束 */
+        /* 使用绘制启动刷新流程 */
+        scui_frame_buffer_refr_toggle();
+        /* 等待绘制目标刷新 */
+        scui_frame_buffer_draw_wait();
+        seg_valid = scui_frame_buffer_seg_offset();
+    }
+    scui_tick_calc(0x00, NULL, NULL, NULL);
+    return;
+    #endif
+    
+    scui_window_surface_ready();
+    scui_window_surface_blend();
+    /* 混合绘制刷新流程结束 */
+    /* 使用绘制启动刷新流程 */
+    scui_frame_buffer_refr_toggle();
+    /* 开始refr的switch模式同步 */
+    scui_widget_t *widget = NULL;
+    if (scui_window_surface_switch(0x02, &widget)) {
+        SCUI_ASSERT(widget != NULL);
+        SCUI_LOG_INFO("switch mode sync");
+        scui_surface_t *surface_fb = scui_frame_buffer_refr();
+        scui_widget_surface_sync(widget, surface_fb);
+    }
+    /* 等待绘制目标刷新 */
+    scui_frame_buffer_draw_wait();
+    scui_tick_calc(0x00, NULL, NULL, NULL);
 }
 
 /*@brief 窗口激活

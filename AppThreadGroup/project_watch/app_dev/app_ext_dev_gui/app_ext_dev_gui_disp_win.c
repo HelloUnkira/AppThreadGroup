@@ -158,7 +158,7 @@ void app_dev_gui_disp_lv_rounder(lv_disp_drv_t* disp_drv, lv_area_t* area)
 #elif APP_EXT_DEV_GUI_IS_SCUI
 /*@brief scui 屏幕刷新回调接口
  */
-void app_dev_gui_disp_scui_flush(scui_surface_t *surface)
+void app_dev_gui_disp_scui_flush(scui_surface_t *surface, scui_area_t *clip)
 {
     app_dev_t *driver = app_dev_gui_disp_inst();
     app_dev_gui_disp_cfg_t *cfg = driver->cfg;
@@ -167,7 +167,16 @@ void app_dev_gui_disp_scui_flush(scui_surface_t *surface)
     uint32_t p_cf_bits = SCUI_PIXEL_CF_DEF & scui_pixel_cf_bits_mask;
     APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == p_cf_bits / 8);
     
-    memcpy(cfg->display.pixel_buf, surface->pixel, cfg->display.pixel_buf_size);
+    if (clip == NULL) {
+        memcpy(cfg->display.pixel_buf, surface->pixel, cfg->display.pixel_buf_size);
+    } else {
+        scui_coord_t surface_byte = scui_pixel_bits(surface->format) / 8;
+        scui_multi_t surface_line = surface->hor_res * surface_byte;
+        
+        for (int line = 0; line < clip->h; line++)
+            memcpy(&cfg->display.pixel_buf[(clip->y + line) * surface_line + clip->x],
+                surface->pixel + line * surface_line, clip->w * surface_byte);
+    }
     
     HDC win_hdc = GetDC(cfg->display.window);
     if (win_hdc) {

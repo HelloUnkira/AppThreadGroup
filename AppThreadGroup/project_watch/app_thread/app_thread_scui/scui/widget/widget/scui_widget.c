@@ -564,6 +564,11 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
  */
 bool scui_widget_surface_only(scui_widget_t *widget)
 {
+    #if SCUI_MEM_FEAT_MINI
+    /* 小内存方案无独立画布 */
+    return false;
+    #endif
+    
     if (widget->surface == NULL ||
         widget->surface->pixel == NULL ||
         widget->surface->pixel == scui_frame_buffer_draw()->pixel ||
