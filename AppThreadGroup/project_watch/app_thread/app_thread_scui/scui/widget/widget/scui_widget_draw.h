@@ -36,7 +36,7 @@ typedef struct {
         scui_coord_t way;                       // 渐变方向(0:hor;1:ver;)
     } color_grad;
     struct {
-        scui_area_t  *clip;                     // 图像源绘制区域
+        void *occupy;                           // 无效字段(占用)
     } blur;
     struct {
         scui_handle_t image;                    // 图像句柄
@@ -149,13 +149,12 @@ do {                                                                        \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_blur */
-#define scui_widget_draw_blur(handle_v, clip_v)                             \
+#define scui_widget_draw_blur(handle_v, target_v)                           \
 do {                                                                        \
     scui_widget_draw_dsc_t draw_dsc = {                                     \
         .handle = handle_v,                                                 \
-        .target = NULL,                                                     \
+        .target = target_v,                                                 \
         .type = scui_widget_draw_type_blur,                                 \
-        .blur.clip = clip_v,                                                \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \

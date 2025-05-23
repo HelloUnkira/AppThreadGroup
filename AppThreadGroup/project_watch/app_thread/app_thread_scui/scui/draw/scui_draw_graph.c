@@ -41,6 +41,8 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
     void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
     void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
     
+    
+    
     typedef void (*scui_draw_ctx_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_cb_t scui_draw_ctx_cb[scui_draw_type_num] = {
         [scui_draw_type_byte_copy] =                scui_draw_ctx_byte_copy,

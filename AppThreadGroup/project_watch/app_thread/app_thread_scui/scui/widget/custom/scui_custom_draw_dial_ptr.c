@@ -38,18 +38,27 @@ void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     scui_coord_t angle_m = dtime_m * (360 / 60) + dtime_s * (360 / 60) * 6 / 360;
     scui_coord_t angle_s = dtime_s * (360 / 60) + time_ms * 6 / 1000;
     
-    if (image[0] != SCUI_HANDLE_INVALID)    // hour
-    scui_widget_draw_image_rotate(event->object, NULL,
-        image[0], NULL, anchor[0], center[0], angle_h);
+    scui_point_t anchor_c = {0}, center_c = {0};
+    scui_area_t widget_clip = scui_widget_clip(event->object);
     
-    if (image[1] != SCUI_HANDLE_INVALID)    // minute
-    scui_widget_draw_image_rotate(event->object, NULL,
-        image[1], NULL, anchor[1], center[1], angle_m);
-    
-    if (image[2] != SCUI_HANDLE_INVALID)    // second
-    scui_widget_draw_image_rotate(event->object, NULL,
-        image[2], NULL, anchor[2], center[2], angle_s);
-    
+    if (image[0] != SCUI_HANDLE_INVALID) {  // hour
+        anchor_c.x = widget_clip.x + anchor[0].x;
+        anchor_c.y = widget_clip.y + anchor[0].y;
+        scui_widget_draw_image_rotate(event->object, NULL,
+            image[0], NULL, anchor_c, center[0], angle_h);
+    }
+    if (image[1] != SCUI_HANDLE_INVALID) {  // minute
+        anchor_c.x = widget_clip.x + anchor[1].x;
+        anchor_c.y = widget_clip.y + anchor[1].y;
+        scui_widget_draw_image_rotate(event->object, NULL,
+            image[1], NULL, anchor_c, center[1], angle_m);
+    }
+    if (image[2] != SCUI_HANDLE_INVALID) {  // second
+        anchor_c.x = widget_clip.x + anchor[2].x;
+        anchor_c.y = widget_clip.y + anchor[2].y;
+        scui_widget_draw_image_rotate(event->object, NULL,
+            image[2], NULL, anchor_c, center[2], angle_s);
+    }
 }
 
 /*@brief 自定义控件:插件:表盘指针(动画)

@@ -50,6 +50,8 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
     void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc);
     void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc);
     
+    
+    
     typedef void (*scui_custom_draw_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
     static const scui_custom_draw_ctx_cb_t scui_custom_draw_ctx_cb[scui_custom_draw_type_num] = {
         /* basic draw type */
@@ -76,18 +78,14 @@ void scui_custom_draw_anim_ctx(scui_custom_draw_dsc_t *draw_dsc)
 {
     void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
     
-    void (*ctx_cb)(scui_custom_draw_dsc_t *draw_dsc) = NULL;
-    static const struct {uint32_t type; void *exec_ctx;} ctx_table[] = {
-        {scui_custom_draw_type_dial_ptr,        (void *)scui_custom_draw_anim_ctx_dial_ptr,},
+    
+    
+    typedef void (*scui_custom_draw_anim_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
+    static const scui_custom_draw_anim_ctx_cb_t scui_custom_draw_anim_ctx_cb[scui_custom_draw_type_num] = {
+        [scui_custom_draw_type_dial_ptr] =          scui_custom_draw_anim_ctx_dial_ptr,
     };
     
-    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
-        if (ctx_table[idx].type == draw_dsc->type) {
-            ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
-            ctx_cb(draw_dsc);
-            return;
-        }
-    
-    SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
-    SCUI_ASSERT(false);
+    SCUI_ASSERT(draw_dsc->type > scui_custom_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_custom_draw_type_num);
+    scui_custom_draw_anim_ctx_cb[draw_dsc->type](draw_dsc);
 }

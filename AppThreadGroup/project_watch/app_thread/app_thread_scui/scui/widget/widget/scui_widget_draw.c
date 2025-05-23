@@ -196,6 +196,8 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
     void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
     
+    
+    
     typedef void (*scui_widget_draw_cb_t)(scui_widget_draw_dsc_t *draw_dsc);
     static const scui_widget_draw_cb_t scui_widget_draw_cb[scui_widget_draw_type_num] = {
         [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
@@ -347,13 +349,12 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_area_t  *clip   = draw_dsc->blur.clip;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     // 绘制目标重定向
-    if (!scui_widget_draw_target(widget, &clip))
+    if (!scui_widget_draw_target(widget, &target))
          return;
     
     scui_clip_btra(widget->clip_set, node) {
@@ -361,7 +362,7 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
         
         /* 子剪切域相对同步偏移 */
         scui_area_t dst_clip = {0};
-        if (!scui_area_inter(&dst_clip, &unit->clip, clip))
+        if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         
         #if SCUI_MEM_FEAT_MINI
