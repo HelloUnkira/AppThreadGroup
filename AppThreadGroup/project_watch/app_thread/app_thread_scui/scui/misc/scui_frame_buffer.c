@@ -155,8 +155,7 @@ void scui_frame_buffer_refr_routine(void (*refr)(scui_surface_t *surface, scui_a
         
         #if SCUI_MEM_FEAT_MINI
         scui_area_t clip_seg = scui_frame_buffer.clip_seg_refr[1 - scui_frame_buffer.draw_idx];
-        SCUI_LOG_WARN("clip seg:<%d, %d, %d, %d>",
-            clip_seg.x, clip_seg.y, clip_seg.w, clip_seg.h);
+        SCUI_LOG_INFO("clip seg:<%d, %d, %d, %d>", clip_seg.x, clip_seg.y, clip_seg.w, clip_seg.h);
         refr(surface, &clip_seg);
         #else
         refr(surface, NULL);

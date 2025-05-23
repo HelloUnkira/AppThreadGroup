@@ -52,8 +52,8 @@ typedef struct {
     struct {
         scui_handle_t image;                    // 图像句柄
         scui_area_t  *clip;                     // 图像源绘制区域
-        scui_point_t *anchor;                   // 图像旋转轴心
-        scui_point_t *center;                   // 图像旋转中心
+        scui_point_t  anchor;                   // 图像旋转轴心
+        scui_point_t  center;                   // 图像旋转中心
         scui_coord_t  angle;                    // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
     } image_rotate;
     struct {

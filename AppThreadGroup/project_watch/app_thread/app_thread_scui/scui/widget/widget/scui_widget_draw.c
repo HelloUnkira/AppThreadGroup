@@ -154,15 +154,22 @@ static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
 /*@brief 绘制目标重定向
  */
 #if SCUI_MEM_FEAT_MINI
-static bool scui_widget_draw_clip_seg(scui_area_t *dst_clip, scui_point_t *seg_offset)
+static bool scui_widget_draw_clip_seg(scui_area_t *dst_clip, scui_point_t *dst_offset, scui_point_t *seg_offset)
 {
-    /* 将段剪切域偏移追加到该目标上 */
     scui_area_t clip_seg = {0};
     scui_frame_buffer_seg(&clip_seg);
-    seg_offset->x = clip_seg.x - dst_clip->x;
-    seg_offset->y = clip_seg.y - dst_clip->y;
+    /* 将段剪切域偏移追加到该目标上 */
+    scui_area_t dst_clip_raw = *dst_clip;
     if (!scui_area_inter2(dst_clip, &clip_seg))
          return false;
+    if (dst_offset != NULL) {
+        dst_offset->x = +(dst_clip->x - dst_clip_raw.x);
+        dst_offset->y = +(dst_clip->y - dst_clip_raw.y);
+    }
+    if (seg_offset != NULL) {
+        seg_offset->x = +(clip_seg.x);
+        seg_offset->y = +(clip_seg.y);
+    }
     /* 在结果去除段偏移以映射到surface上 */
     dst_clip->x -= clip_seg.x;
     dst_clip->y -= clip_seg.y;
@@ -189,31 +196,25 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
     void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
     void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
     
-    void (*ctx_cb)(scui_widget_draw_dsc_t *draw_dsc) = NULL;
-    static const struct {uint32_t type; void *exec_ctx;} ctx_table[] = {
-        {scui_widget_draw_type_string,          (void *)scui_widget_draw_ctx_string,},
-        {scui_widget_draw_type_color,           (void *)scui_widget_draw_ctx_color,},
-        {scui_widget_draw_type_color_grad,      (void *)scui_widget_draw_ctx_color_grad,},
-        {scui_widget_draw_type_blur,            (void *)scui_widget_draw_ctx_blur,},
-        {scui_widget_draw_type_image,           (void *)scui_widget_draw_ctx_image,},
-        {scui_widget_draw_type_image_scale,     (void *)scui_widget_draw_ctx_image_scale,},
-        {scui_widget_draw_type_image_rotate,    (void *)scui_widget_draw_ctx_image_rotate,},
-        {scui_widget_draw_type_image_matrix,    (void *)scui_widget_draw_ctx_image_matrix,},
-        {scui_widget_draw_type_ring,            (void *)scui_widget_draw_ctx_ring,},
-        {scui_widget_draw_type_qrcode,          (void *)scui_widget_draw_ctx_qrcode,},
-        {scui_widget_draw_type_barcode,         (void *)scui_widget_draw_ctx_barcode,},
-        {scui_widget_draw_type_graph,           (void *)scui_widget_draw_ctx_graph,},
+    typedef void (*scui_widget_draw_cb_t)(scui_widget_draw_dsc_t *draw_dsc);
+    static const scui_widget_draw_cb_t scui_widget_draw_cb[scui_widget_draw_type_num] = {
+        [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
+        [scui_widget_draw_type_color] =             scui_widget_draw_ctx_color,
+        [scui_widget_draw_type_color_grad] =        scui_widget_draw_ctx_color_grad,
+        [scui_widget_draw_type_blur] =              scui_widget_draw_ctx_blur,
+        [scui_widget_draw_type_image] =             scui_widget_draw_ctx_image,
+        [scui_widget_draw_type_image_scale] =       scui_widget_draw_ctx_image_scale,
+        [scui_widget_draw_type_image_rotate] =      scui_widget_draw_ctx_image_rotate,
+        [scui_widget_draw_type_image_matrix] =      scui_widget_draw_ctx_image_matrix,
+        [scui_widget_draw_type_ring] =              scui_widget_draw_ctx_ring,
+        [scui_widget_draw_type_qrcode] =            scui_widget_draw_ctx_qrcode,
+        [scui_widget_draw_type_barcode] =           scui_widget_draw_ctx_barcode,
+        [scui_widget_draw_type_graph] =             scui_widget_draw_ctx_graph,
     };
     
-    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
-        if (ctx_table[idx].type == draw_dsc->type) {
-            ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
-            ctx_cb(draw_dsc);
-            return;
-        }
-    
-    SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
-    SCUI_ASSERT(false);
+    SCUI_ASSERT(draw_dsc->type > scui_widget_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_widget_draw_type_num);
+    scui_widget_draw_cb[draw_dsc->type](draw_dsc);
 }
 
 /*@brief 控件在画布绘制字符串
@@ -259,8 +260,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.h =  (args->clip.h);
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -295,8 +295,7 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -331,7 +330,7 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        if (!scui_widget_draw_clip_seg(&dst_clip, NULL))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -366,8 +365,7 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -450,6 +448,7 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        
         /* 子剪切域相对同步偏移 */
         scui_area_t src_clip = *clip;
         scui_point_t src_offset = {
@@ -460,10 +459,10 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        scui_point_t dst_offset = {0};
+        if (!scui_widget_draw_clip_seg(&dst_clip, &dst_offset, NULL))
              continue;
-        if (!scui_area_limit_offset(&src_clip, &seg_offset))
+        if (!scui_area_limit_offset(&src_clip, &dst_offset))
              continue;
         #endif
         
@@ -535,8 +534,10 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
         
         #if SCUI_MEM_FEAT_MINI
         scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, &seg_offset))
              continue;
+        dst_offset.x -= seg_offset.x;
+        dst_offset.y -= seg_offset.y;
         #endif
         
         scui_draw_image_scale(widget->surface, &dst_clip,
@@ -555,8 +556,8 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
     scui_area_t  *target = draw_dsc->target;
     scui_handle_t image  = draw_dsc->image_rotate.image;
     scui_area_t  *clip   = draw_dsc->image_rotate.clip;
-    scui_point_t *anchor = draw_dsc->image_rotate.anchor;
-    scui_point_t *center = draw_dsc->image_rotate.center;
+    scui_point_t  anchor = draw_dsc->image_rotate.anchor;
+    scui_point_t  center = draw_dsc->image_rotate.center;
     scui_coord_t  angle  = draw_dsc->image_rotate.angle;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
@@ -581,17 +582,22 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
         scui_area_t dst_clip = {0};
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
+        /* 子剪切域相对同步偏移 */
+        scui_point_t src_offset = {
+            .x = dst_clip.x - target->x,
+            .y = dst_clip.y - target->y,
+        };
         
         #if SCUI_MEM_FEAT_MINI
         scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, &seg_offset))
              continue;
-        if (!scui_area_limit_offset(clip, &seg_offset))
-             continue;
+        anchor.x -= seg_offset.x;
+        anchor.y -= seg_offset.y;
         #endif
         
         scui_draw_image_rotate(widget->surface, &dst_clip,
-            image_inst, clip, widget->alpha, angle, anchor, center);
+            image_inst, clip, widget->alpha, angle, &anchor, &center);
     }
 }
 
@@ -635,8 +641,7 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -674,7 +679,7 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        if (!scui_widget_draw_clip_seg(&dst_clip, NULL))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -711,8 +716,7 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -793,8 +797,7 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         
@@ -830,8 +833,7 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        scui_point_t seg_offset = {0};
-        if (!scui_widget_draw_clip_seg(&dst_clip, &seg_offset))
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
              continue;
         #endif
         

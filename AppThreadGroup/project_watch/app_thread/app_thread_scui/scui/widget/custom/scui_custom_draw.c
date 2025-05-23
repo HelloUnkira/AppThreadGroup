@@ -50,29 +50,23 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
     void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc);
     void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc);
     
-    void (*ctx_cb)(scui_custom_draw_dsc_t *draw_dsc) = NULL;
-    static const struct {uint32_t type; void *exec_ctx;} ctx_table[] = {
+    typedef void (*scui_custom_draw_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
+    static const scui_custom_draw_ctx_cb_t scui_custom_draw_ctx_cb[scui_custom_draw_type_num] = {
         /* basic draw type */
-        {scui_custom_draw_type_text,            (void *)scui_custom_draw_ctx_text,},
+        [scui_custom_draw_type_text] =              scui_custom_draw_ctx_text,
         /* custom draw type */
-        {scui_custom_draw_type_dial_ptr,        (void *)scui_custom_draw_ctx_dial_ptr,},
-        {scui_custom_draw_type_spinner,         (void *)scui_custom_draw_ctx_spinner,},
-        {scui_custom_draw_type_slider,          (void *)scui_custom_draw_ctx_slider,},
-        {scui_custom_draw_type_indicator,       (void *)scui_custom_draw_ctx_indicator,},
-        {scui_custom_draw_type_ring_edge,       (void *)scui_custom_draw_ctx_ring_edge,},
-        {scui_custom_draw_type_image_text,      (void *)scui_custom_draw_ctx_image_text,},
-        {scui_custom_draw_type_image_crect4,    (void *)scui_custom_draw_ctx_image_crect4,},
+        [scui_custom_draw_type_dial_ptr] =          scui_custom_draw_ctx_dial_ptr,
+        [scui_custom_draw_type_spinner] =           scui_custom_draw_ctx_spinner,
+        [scui_custom_draw_type_slider] =            scui_custom_draw_ctx_slider,
+        [scui_custom_draw_type_indicator] =         scui_custom_draw_ctx_indicator,
+        [scui_custom_draw_type_ring_edge] =         scui_custom_draw_ctx_ring_edge,
+        [scui_custom_draw_type_image_text] =        scui_custom_draw_ctx_image_text,
+        [scui_custom_draw_type_image_crect4] =      scui_custom_draw_ctx_image_crect4,
     };
     
-    for (scui_handle_t idx = 0; idx < scui_arr_len(ctx_table); idx++)
-        if (ctx_table[idx].type == draw_dsc->type) {
-            ctx_cb = (void (*)(void *))ctx_table[idx].exec_ctx;
-            ctx_cb(draw_dsc);
-            return;
-        }
-    
-    SCUI_LOG_ERROR("unknown type :%d", draw_dsc->type);
-    SCUI_ASSERT(false);
+    SCUI_ASSERT(draw_dsc->type > scui_custom_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_custom_draw_type_num);
+    scui_custom_draw_ctx_cb[draw_dsc->type](draw_dsc);
 }
 
 /*@brief 自定义控件:插件:上下文绘制(帧动画调度)

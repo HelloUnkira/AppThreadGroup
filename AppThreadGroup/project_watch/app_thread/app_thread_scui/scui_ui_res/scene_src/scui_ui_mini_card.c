@@ -569,7 +569,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     .y = clip.y + 100 + center.y,
                 };
                 scui_widget_draw_image_rotate(event->object, NULL, image, NULL,
-                    &anchor, &center, scui_presenter.compass_angle());
+                    anchor, center, scui_presenter.compass_angle());
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%d %%",

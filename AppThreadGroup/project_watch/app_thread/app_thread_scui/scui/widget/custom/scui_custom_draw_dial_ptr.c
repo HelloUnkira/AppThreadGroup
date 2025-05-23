@@ -40,15 +40,15 @@ void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     
     if (image[0] != SCUI_HANDLE_INVALID)    // hour
     scui_widget_draw_image_rotate(event->object, NULL,
-        image[0], NULL, &anchor[0], &center[0], angle_h);
+        image[0], NULL, anchor[0], center[0], angle_h);
     
     if (image[1] != SCUI_HANDLE_INVALID)    // minute
     scui_widget_draw_image_rotate(event->object, NULL,
-        image[1], NULL, &anchor[1], &center[1], angle_m);
+        image[1], NULL, anchor[1], center[1], angle_m);
     
     if (image[2] != SCUI_HANDLE_INVALID)    // second
     scui_widget_draw_image_rotate(event->object, NULL,
-        image[2], NULL, &anchor[2], &center[2], angle_s);
+        image[2], NULL, anchor[2], center[2], angle_s);
     
 }
 

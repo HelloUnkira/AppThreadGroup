@@ -298,18 +298,17 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 未知事件不会流转此处 */
     scui_event_mask_keep(event);
     
-    /* 默认控件事件处理 */
-    if (event->type == scui_event_anima_elapse)
-        if (!widget->style.sched_anima)
-             return;
+    /* 默认控件事件处理(ptr) */
     if (event->type >= scui_event_ptr_s &&
         event->type <= scui_event_ptr_e)
         if (!widget->style.indev_ptr)
              return;
+    /* 默认控件事件处理(enc) */
     if (event->type >= scui_event_enc_s &&
         event->type <= scui_event_enc_e)
         if (!widget->style.indev_enc)
              return;
+    /* 默认控件事件处理(key) */
     if (event->type >= scui_event_key_s &&
         event->type <= scui_event_key_e)
         if (!widget->style.indev_key)
@@ -318,12 +317,10 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 默认控件事件处理 */
     switch (event->type) {
     case scui_event_anima_elapse: {
-        /* 全局滚动检查 */
-        #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-        scui_handle_t handle = SCUI_HANDLE_INVALID;
-        if (scui_widget_global_scroll_flag(0x02, &handle))
-            return;
-        #endif
+        
+        // 仅仅被标记的控件才可响应该事件
+        if (!widget->style.sched_anima)
+             return;
         break;
     }
     case scui_event_draw: {
@@ -363,9 +360,14 @@ static void scui_widget_event_process(scui_event_t *event)
         /* 通常来说ptr的点是屏幕上的点,屏幕相对窗口有偏移 */
         /* 窗口子控件相对窗口也有偏移 */
         scui_area_t clip = widget->clip;
-        if (widget->parent != SCUI_HANDLE_INVALID ) {
+        if (widget->parent != SCUI_HANDLE_INVALID) {
             clip.x += root->clip.x;
             clip.y += root->clip.y;
+        }
+        /* 事件不能被控件响应 */
+        if (scui_widget_is_hide(widget->myself)) {
+            SCUI_LOG_INFO("widget is hide");
+            return;
         }
         /* 不产生交集,事件不能被响应,无需发送 */
         if (!(widget->parent == SCUI_HANDLE_INVALID ||
