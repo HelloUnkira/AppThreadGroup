@@ -3,6 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
+            "widget.style.trans":           "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "0",
             "widget.clip.y":                "SCUI_DRV_VER_RES - 100",

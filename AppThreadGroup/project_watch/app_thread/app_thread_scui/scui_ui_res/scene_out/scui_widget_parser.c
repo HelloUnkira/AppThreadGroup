@@ -618,6 +618,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
 	.widget.type                    = scui_widget_type_window,
+	.widget.style.trans             = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = 0,
 	.widget.clip.y                  = SCUI_DRV_VER_RES - 100,

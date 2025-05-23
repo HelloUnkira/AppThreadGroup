@@ -63,12 +63,9 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
 void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
 {
     static scui_image_frame_t image_frame_gif = {0};
-    static bool image_frame_gif_refr = false;
     
     static scui_image_frame_t image_frame_lottie_1 = {0};
-    static bool image_frame_lottie_refr_1 = false;
     static scui_image_frame_t image_frame_lottie_2 = {0};
-    static bool image_frame_lottie_refr_2 = false;
     
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -78,9 +75,6 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
         
         if (cnt % 1 == 0) {
             // 更新一个图像帧
-            image_frame_gif_refr = true;
-            image_frame_lottie_refr_1 = true;
-            image_frame_lottie_refr_2 = true;
             scui_widget_draw(event->object, NULL, false);
         }
         break;
@@ -124,8 +118,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        if (image_frame_gif_refr && scui_image_frame_data(&image_frame_gif)) {
-            image_frame_gif_refr = false;
+        scui_image_frame_data(&image_frame_gif); {
             
             scui_handle_t image = image_frame_gif.frame;
             scui_area_t clip = scui_widget_clip(event->object);
@@ -134,8 +127,7 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
         
-        if (image_frame_lottie_refr_1 && scui_image_frame_data(&image_frame_lottie_1)) {
-            image_frame_lottie_refr_1 = false;
+        scui_image_frame_data(&image_frame_lottie_1); {
             
             image_frame_lottie_1.lottie.index++;
             if (image_frame_lottie_1.lottie.index >= image_frame_lottie_1.lottie.frame)
@@ -147,8 +139,8 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             clip.y += SCUI_DRV_VER_RES / 5 - scui_image_h(image) / 2;
             scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
-        if (image_frame_lottie_refr_2 && scui_image_frame_data(&image_frame_lottie_2)) {
-            image_frame_lottie_refr_2 = false;
+        
+        scui_image_frame_data(&image_frame_lottie_2); {
             
             image_frame_lottie_2.lottie.index++;
             if (image_frame_lottie_2.lottie.index >= image_frame_lottie_2.lottie.frame)
@@ -160,7 +152,6 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
             clip.y += SCUI_DRV_VER_RES / 5 - scui_image_h(image) / 2;
             scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
         }
-        
         break;
     }
     default:

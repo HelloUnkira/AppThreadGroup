@@ -222,6 +222,11 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             }
         }
         break;
+    case scui_event_draw:
+        #if SCUI_MEM_FEAT_MINI == 0
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
+        #endif
+        break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
         break;
