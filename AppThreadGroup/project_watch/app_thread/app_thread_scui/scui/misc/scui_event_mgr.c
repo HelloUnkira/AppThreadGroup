@@ -284,7 +284,8 @@ static void scui_event_respond(scui_event_t *event)
         /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
         event_widget = event_widget || event->type == scui_event_anima_elapse;
         event_widget = event_widget || event->type == scui_event_layout;
-        event_widget = event_widget || event->type == scui_event_adjust_size;
+        event_widget = event_widget || event->type == scui_event_size_auto;
+        event_widget = event_widget || event->type == scui_event_size_adjust;
         event_widget = event_widget || event->type == scui_event_change_lang;
         /* 有些事件仅仅为控件事件,默认不传递给场景管理器(widget) */
         if (event->type >= scui_event_widget_s &&

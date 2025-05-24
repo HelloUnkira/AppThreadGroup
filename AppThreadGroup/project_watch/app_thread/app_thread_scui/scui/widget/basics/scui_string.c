@@ -172,20 +172,6 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);
         memcpy(string->str_utf8, str_utf8, str_bytes);
         string->str_utf8[str_bytes] = '\0';
-        
-        #if 0 // 这个要不要???
-        /* 从字库中提取一些信息 */
-        scui_font_unit_t font_unit = {0};
-        font_unit.name = string->args.name;
-        font_unit.size = string->args.size;
-        scui_font_cache_load(&font_unit);
-        scui_coord_t base_line   = scui_font_base_line(font_unit.font);
-        scui_coord_t line_height = scui_font_line_height(font_unit.font);
-        scui_font_cache_unload(&font_unit);
-        
-        if (line_height > widget->clip.h)
-            scui_widget_adjust_size(handle, widget->clip.w, line_height);
-        #endif
     }
     
     string->args.update = true;
@@ -622,9 +608,23 @@ void scui_string_event(scui_event_t *event)
         }
         break;
     }
-    case scui_event_adjust_size:{
+    case scui_event_size_adjust:{
         string->args.update = true;
         scui_widget_draw(widget->myself, NULL, false);
+        break;
+    }
+    case scui_event_size_auto: {
+        /* 从字库中提取一些信息 */
+        scui_font_unit_t font_unit = {0};
+        font_unit.name = string->args.name;
+        font_unit.size = string->args.size;
+        scui_font_cache_load(&font_unit);
+        scui_coord_t base_line   = scui_font_base_line(font_unit.font);
+        scui_coord_t line_height = scui_font_line_height(font_unit.font);
+        scui_font_cache_unload(&font_unit);
+        
+        if (line_height > widget->clip.h)
+            scui_widget_adjust_size(event->object, widget->clip.w, line_height);
         break;
     }
     case scui_event_change_lang: {

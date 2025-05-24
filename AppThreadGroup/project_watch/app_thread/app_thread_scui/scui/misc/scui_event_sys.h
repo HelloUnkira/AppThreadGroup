@@ -21,8 +21,9 @@ typedef enum {
     scui_event_draw,            /* 控件绘制事件 */
     scui_event_draw_empty,      /* 控件绘制事件(内部转义) */
     scui_event_refr,            /* 界面刷新事件 */
+    scui_event_size_auto,       /* 控件尺寸调整 */
+    scui_event_size_adjust,     /* 控件尺寸调整 */
     scui_event_layout,          /* 控件布局更新回调 */
-    scui_event_adjust_size,     /* 控件尺寸调整 */
     scui_event_change_lang,     /* 更新语言 */
     scui_event_sched_e,
     /* 特殊控件生成事件: */

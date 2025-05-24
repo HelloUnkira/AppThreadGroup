@@ -390,6 +390,18 @@ static void scui_widget_event_process(scui_event_t *event)
         }
         break;
     }
+    
+    case scui_event_size_adjust: {
+        if (widget->parent != SCUI_HANDLE_INVALID) {
+            /* 子控件更新,父控件布局更新 */
+            scui_event_t event = {
+                .object = widget->parent,
+                .type   = scui_event_layout,
+                .absorb = scui_event_absorb_none,
+            };
+            scui_event_notify(&event);
+        }
+    }
     default:
         break;
     }
@@ -557,7 +569,8 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_focus_get:
     case scui_event_focus_lost:
     case scui_event_layout:
-    case scui_event_adjust_size:
+    case scui_event_size_auto:
+    case scui_event_size_adjust:
         /* 其他事件:单次派发 */
         scui_widget_event_process(event);
         scui_event_mask_over(event);

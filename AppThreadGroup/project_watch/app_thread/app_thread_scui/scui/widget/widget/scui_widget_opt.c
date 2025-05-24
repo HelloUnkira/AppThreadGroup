@@ -61,6 +61,17 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
         scui_widget_move_pos(handle, &point, dirty);
     }
     
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        /* 子控件更新,父控件布局更新 */
+        scui_event_t event = {
+            .object     = widget->parent,
+            .style.sync = true,
+            .type       = scui_event_layout,
+            .absorb     = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+    }
+    
     /* 更新画布剪切域(更新自己和父亲的) */
     if (dirty)
     if (widget->parent != SCUI_HANDLE_INVALID) {
@@ -101,39 +112,38 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty
 /*@brief 子控件坐标对齐
  *@param handle  控件句柄
  *@param handle  控件句柄(目标控件,不存在则相对父控件)
- *@param pos     对齐方向
+ *@param align   对齐方向
  *@param offset  偏移量
  */
-void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_pos_t pos, scui_point_t *offset)
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
+    // 需要找到有效的对齐目标
+    if (target == SCUI_HANDLE_INVALID && widget->parent == SCUI_HANDLE_INVALID)
+        return;
     
-    scui_point_t point = {
-        .x = widget->clip.x,
-        .y = widget->clip.y,
-    };
+    scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
+    scui_widget_t *widget_t = scui_handle_source_check(handle_t);
     
-    if (target != SCUI_HANDLE_INVALID || widget->parent != SCUI_HANDLE_INVALID) {
-        scui_handle_t  handle_t = target != SCUI_HANDLE_INVALID ? target : widget->parent;
-        scui_widget_t *widget_t = scui_handle_source_check(handle_t);
-        
-        point.x = widget->clip.x;
-        point.y = widget->clip.y;
-        
-        if (scui_opt_bits_equal(pos, scui_opt_dir_hor))
-            point.x /= 2;
-        else if (scui_opt_bits_equal(pos, scui_opt_pos_l))
-            point.x = (widget_t->clip.x);
-        else if (scui_opt_bits_equal(pos, scui_opt_pos_r))
-            point.x = (widget_t->clip.x + widget_t->clip.w - widget->clip.w);
-        
-        if (scui_opt_bits_equal(pos, scui_opt_dir_ver))
-            point.y /= 2;
-        else if (scui_opt_bits_equal(pos, scui_opt_pos_u))
-            point.y = (widget_t->clip.y);
-        else if (scui_opt_bits_equal(pos, scui_opt_pos_d))
-            point.y = (widget_t->clip.y + widget_t->clip.h - widget->clip.h);
-    }
+    scui_area_t clip_t = widget_t->clip;
+    scui_area_t clip_w = widget->clip;
+    scui_point_t point = {0};
+    point.x = clip_t.x;
+    point.y = clip_t.y;
+    
+    if (0) ;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixl)) ;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixm)) point.x += (clip_t.w - clip_w.w) / 2;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_ixr)) point.x += (clip_t.w - clip_w.w);
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oxl)) point.x -= (clip_w.w);
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oxr)) point.x += (clip_t.w);
+    
+    if (0) ;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iyt)) ;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iym)) point.y += (clip_t.h - clip_w.h) / 2;
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_iyb)) point.y += (clip_t.h - clip_w.h);
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyt)) point.y -= (clip_w.h);
+    else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyb)) point.y += (clip_t.h);
     
     point.x += offset->x;
     point.y += offset->y;
@@ -195,6 +205,18 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         return;
     }
     
+    if (width <= 0 || height <= 0) {
+        
+        scui_event_t event = {
+            .object     = handle,
+            .style.sync = true,
+            .type       = scui_event_size_auto,
+            .absorb     = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+        return;
+    }
+    
     SCUI_ASSERT(width >= 0 && height >= 0);
     if (widget->clip.w == width &&
         widget->clip.h == height)
@@ -211,7 +233,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     
     scui_event_t event = {
         .object = widget->myself,
-        .type   = scui_event_adjust_size,
+        .type   = scui_event_size_adjust,
         .absorb = scui_event_absorb_none,
     };
     scui_event_notify(&event);

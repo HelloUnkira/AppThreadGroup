@@ -177,6 +177,46 @@ typedef enum {
     scui_opt_pos_all  = scui_opt_dir_all,
 } scui_opt_pos_t;
 
+typedef enum {
+    // 0x yy xx
+    scui_opt_align_mask_ixl = 0x0001,
+    scui_opt_align_mask_ixm = 0x0002,
+    scui_opt_align_mask_ixr = 0x0004,
+    scui_opt_align_mask_oxl = 0x0010,
+    scui_opt_align_mask_oxr = 0x0020,
+    
+    scui_opt_align_mask_iyt = 0x0100,
+    scui_opt_align_mask_iym = 0x0200,
+    scui_opt_align_mask_iyb = 0x0400,
+    scui_opt_align_mask_oyt = 0x1000,
+    scui_opt_align_mask_oyb = 0x2000,
+    
+    scui_opt_align_itl = 0x0101,    // in top left
+    scui_opt_align_itm = 0x0102,    // in top middle
+    scui_opt_align_itr = 0x0104,    // in top right
+    scui_opt_align_ibl = 0x0401,    // in bottom left
+    scui_opt_align_ibm = 0x0402,    // in bottom middle
+    scui_opt_align_ibr = 0x0404,    // in bottom right
+    scui_opt_align_ilm = 0x0201,    // in left middle
+    scui_opt_align_irm = 0x0204,    // in right middle
+    scui_opt_align_icc = 0x0202,    // in center center
+    
+    scui_opt_align_otl = 0x1001,    // out top left
+    scui_opt_align_otm = 0x1002,    // out top middle
+    scui_opt_align_otr = 0x1004,    // out top right
+    scui_opt_align_obl = 0x2001,    // out bottom left
+    scui_opt_align_obm = 0x2002,    // out bottom middle
+    scui_opt_align_obr = 0x2004,    // out bottom right
+    
+    scui_opt_align_olt = 0x0110,    // out left top
+    scui_opt_align_olm = 0x0210,    // out left middle
+    scui_opt_align_olb = 0x0410,    // out left bottom
+    scui_opt_align_ort = 0x0120,    // out right top
+    scui_opt_align_orm = 0x0220,    // out right middle
+    scui_opt_align_orb = 0x0420,    // out right bottom
+    
+} scui_opt_align_t;
+
 /*@brief 操作检查
  */
 #define scui_opt_bits_equal(bits, mask)     (((bits) & (mask)) == (mask))

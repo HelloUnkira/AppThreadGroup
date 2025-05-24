@@ -34,7 +34,7 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
         case scui_event_draw:                       return scui_stringify(scui_event_draw);
         case scui_event_refr:                       return scui_stringify(scui_event_refr);
         case scui_event_layout:                     return scui_stringify(scui_event_layout);
-        case scui_event_adjust_size:                return scui_stringify(scui_event_adjust_size);
+        case scui_event_size_adjust:                return scui_stringify(scui_event_size_adjust);
         case scui_event_change_lang:                return scui_stringify(scui_event_change_lang);
         /* 系统事件: sched */
         case scui_event_widget_scroll_s:            return scui_stringify(scui_event_widget_scroll_s);
