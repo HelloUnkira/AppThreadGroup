@@ -282,7 +282,9 @@ static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool wa
             scui_image_cache_visit();
         }
     }
-    #else
+    return ptr;
+    #endif
+    
     // scui_mem_type_graph
     if (type == scui_mem_type_graph) {
         SCUI_LOG_WARN("memory graph deficit was caught");
@@ -323,7 +325,6 @@ static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool wa
             scui_font_glyph_cache_visit();
         }
     }
-    #endif
     
     return ptr;
 }
@@ -556,16 +557,16 @@ void scui_mem_ready(void)
     static uint8_t mem_olsf_buffer_graph[SCUI_MEM_TYPE_SIZE_GRAPH + 1] = {0};
     static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER  + 1] = {0};
     
+    scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
+    scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_olsf;
+    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     // 图形使用双向内存堆分配器
+    scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_olsf;
+    
     #if SCUI_MEM_FEAT_MINI
     scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
     scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_none;
     scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_none;
     scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_none;
-    #else
-    scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
-    scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_olsf;
-    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     // 图形使用双向内存堆分配器
-    scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_olsf;
     #endif
     
     // 内存分配器oslf

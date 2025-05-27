@@ -351,7 +351,9 @@ scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
  */
 scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2)
 {
-    return ((uint16_t)alpha1 * scui_alpha_cover / (uint16_t)alpha2);
+    if (alpha2 == 0) return alpha1;
+    return scui_clamp((uint16_t)alpha1 * scui_alpha_pct100 / alpha2,
+        scui_alpha_pct0, scui_alpha_pct100);
 }
 
 /*@brief 计算透明度通过百分比值

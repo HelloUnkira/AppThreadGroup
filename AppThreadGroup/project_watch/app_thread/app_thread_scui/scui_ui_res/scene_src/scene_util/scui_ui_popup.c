@@ -61,8 +61,11 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             if (popup_anima <= SCUI_UI_POPUP_ANIM_TIME) {
                 scui_coord_t pct = scui_map(popup_anima, 0, SCUI_UI_POPUP_ANIM_TIME, pct_s, pct_e);
                 scui_area_t clip = scui_widget_clip(event->object);
+                
+                #if SCUI_MEM_FEAT_MINI == 0
                 // 备注:如果是独立画布,此处的clip为<0,0>
                 clip.x = clip.y = 0;
+                #endif
                 
                 scui_alpha_t scale_alpha = map_cb(pct, 0, 100, scui_alpha_pct0, scui_alpha_pct100);
                 scui_coord_t scale_cur_w = map_cb(pct, 0, 100, 0, scale_tar_w);
@@ -157,8 +160,10 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
+        #if SCUI_MEM_FEAT_MINI == 0
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
         scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
+        #endif
         break;
     }
     default:
@@ -178,11 +183,13 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
              break;
         
         // 这里需要填完全覆盖的纯透明色调
+        #if SCUI_MEM_FEAT_MINI == 0
         scui_alpha_t alpha = scui_alpha_trans;
         scui_widget_alpha_get(event->object, &alpha);
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
         scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         scui_widget_alpha_set(event->object, alpha, false);
+        #endif
         
         scui_handle_t image = scui_image_prj_image_src_repeat_btn_01_card_mediunpng;
         scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_ZEROED);

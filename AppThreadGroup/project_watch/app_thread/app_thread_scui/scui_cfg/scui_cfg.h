@@ -122,7 +122,7 @@
 
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
-#define SCUI_FRAME_BUFFER_SEG                       (95/* SCUI_DRV_VER_RES / 3 */)
+#define SCUI_FRAME_BUFFER_SEG                       (SCUI_DRV_VER_RES/* 95 SCUI_DRV_VER_RES / 3 */)
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -190,7 +190,7 @@
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* indev猴子测试 */
-#define SCUI_MONKEY_TEST                            (1)
+#define SCUI_MONKEY_TEST                            (0)
 
 
 /*************************************************************************************************/

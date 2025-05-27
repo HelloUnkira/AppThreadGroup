@@ -19,10 +19,9 @@ void scui_ready(void)
     scui_engine_ready();
     
     /* frame buffer: */
-    scui_area_t clip = {
-        .w = SCUI_DRV_HOR_RES,
-        .w = SCUI_DRV_VER_RES,
-    };
+    scui_area_t clip = {0};
+    clip.w = SCUI_DRV_HOR_RES;
+    clip.h = SCUI_DRV_VER_RES;
     scui_surface_t  surface = {0};
     scui_surface_t *surface_fb = NULL;
     surface.format  = SCUI_PIXEL_CF_DEF;
@@ -35,8 +34,9 @@ void scui_ready(void)
     scui_multi_t surface_size = surface.ver_res * surface_line + surface_rem;
     
     #if SCUI_MEM_FEAT_MINI
+    clip.h = SCUI_FRAME_BUFFER_SEG;
     surface.ver_res = SCUI_FRAME_BUFFER_SEG;
-    surface_size = surface.ver_res * (surface_line + 10) + surface_rem;
+    surface_size = surface.ver_res * surface_line + surface_rem;
     #endif
     
     // 为绘制画布配置参数信息并且开辟资源
