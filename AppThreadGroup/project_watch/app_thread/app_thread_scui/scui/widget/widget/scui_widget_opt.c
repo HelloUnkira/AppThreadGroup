@@ -61,6 +61,8 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
         scui_widget_move_pos(handle, &point, dirty);
     }
     
+    #if 0
+    // 父控件布局不由子控件位置移动决定?(这里有问题)
     if (widget->parent != SCUI_HANDLE_INVALID) {
         /* 子控件更新,父控件布局更新 */
         scui_event_t event = {
@@ -71,6 +73,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
         };
         scui_event_notify(&event);
     }
+    #endif
     
     /* 更新画布剪切域(更新自己和父亲的) */
     if (dirty)

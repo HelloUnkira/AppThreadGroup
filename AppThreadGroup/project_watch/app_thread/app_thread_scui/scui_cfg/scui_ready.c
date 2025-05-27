@@ -32,11 +32,11 @@ void scui_ready(void)
     scui_coord_t surface_byte = scui_pixel_bits(surface.format) / 8;
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface_byte;
     scui_coord_t surface_line = surface.hor_res * surface_byte;
-    scui_multi_t surface_size = surface.ver_res * surface_line  + surface_rem;
+    scui_multi_t surface_size = surface.ver_res * surface_line + surface_rem;
     
     #if SCUI_MEM_FEAT_MINI
     surface.ver_res = SCUI_FRAME_BUFFER_SEG;
-    surface_size = surface.ver_res * surface_line  + surface_rem;
+    surface_size = surface.ver_res * (surface_line + 10) + surface_rem;
     #endif
     
     // 为绘制画布配置参数信息并且开辟资源

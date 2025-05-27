@@ -45,19 +45,19 @@
 // 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐)
 // 子控件树, 静态画布真缩放, 窗口转场变换
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512 + 1024 * 1024 * 2)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512 + /* 临时缓存: */ 1024 * 1024 * 4)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (0)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0)
 
 /* 缓存散列值(可选:不使用为0) */
-#define SCUI_CACHE_HASH_FONT                        (0) // (3)
-#define SCUI_CACHE_HASH_FONT_GLYPH                  (0) // (23)
-#define SCUI_CACHE_HASH_IMAGE                       (0) // (17)
+#define SCUI_CACHE_HASH_FONT                        (3)
+#define SCUI_CACHE_HASH_FONT_GLYPH                  (23)
+#define SCUI_CACHE_HASH_IMAGE                       (17)
 /* 缓存最大限制 */
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
-#define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 20 / 100)
-#define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
+#define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
+#define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
 #else
 /* 大内存方案: */
 // 4M PSRAM (空闲1M):     MIX: 64K; FONT:128K; USER: 64K; GRAPH:3M - other
@@ -122,7 +122,7 @@
 
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
-#define SCUI_FRAME_BUFFER_SEG                       (SCUI_DRV_VER_RES / 3)
+#define SCUI_FRAME_BUFFER_SEG                       (95/* SCUI_DRV_VER_RES / 3 */)
 
 /*************************************************************************************************/
 /*************************************************************************************************/
@@ -165,6 +165,9 @@
 #define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
 #endif
 
+/* 控件布局标记(为控件添加随机颜色轮廓) */
+#define SCUI_WIDGET_BORDER_TAG                      (0)
+
 /* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
@@ -187,7 +190,8 @@
 #define SCUI_WIDGET_BUTTON_BTN1_PCT                 (90)
 
 /* indev猴子测试 */
-#define SCUI_MONKEY_TEST                            (0)
+#define SCUI_MONKEY_TEST                            (1)
+
 
 /*************************************************************************************************/
 /*************************************************************************************************/

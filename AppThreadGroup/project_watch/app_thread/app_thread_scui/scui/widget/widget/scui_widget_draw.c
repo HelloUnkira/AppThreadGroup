@@ -174,6 +174,8 @@ static bool scui_widget_draw_clip_seg(scui_area_t *dst_clip, scui_point_t *dst_o
     dst_clip->x -= clip_seg.x;
     dst_clip->y -= clip_seg.y;
     
+    SCUI_ASSERT(dst_clip->x + dst_clip->w <= 0 + clip_seg.w);
+    SCUI_ASSERT(dst_clip->y + dst_clip->h <= 0 + clip_seg.h);
     return true;
 }
 #endif

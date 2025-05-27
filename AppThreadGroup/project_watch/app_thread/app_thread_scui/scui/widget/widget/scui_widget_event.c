@@ -336,8 +336,46 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         
+        #if SCUI_WIDGET_BORDER_TAG
+        /* 控件绘制流程在完结步(最前) */
+        if (scui_event_check_finish(event)) {
+            scui_draw_graph_dsc_t graph_dsc = {
+                .type = scui_draw_graph_type_line,
+                .src_color.color.ch.a = 0xFF,
+                .src_color.color.ch.r = scui_rand(0xFF),
+                .src_color.color.ch.g = scui_rand(0xFF),
+                .src_color.color.ch.b = scui_rand(0xFF),
+                .line.src_width = 1,
+            };
+            
+            scui_area_t clip = widget->clip;
+            scui_area_m_to_s(&clip, &clip);
+            
+            graph_dsc.line.src_pos_1.x = clip.x1;
+            graph_dsc.line.src_pos_2.x = clip.x2;
+            
+            graph_dsc.line.src_pos_1.y = clip.y1;
+            graph_dsc.line.src_pos_2.y = clip.y1;
+            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
+            graph_dsc.line.src_pos_1.y = clip.y2;
+            graph_dsc.line.src_pos_2.y = clip.y2;
+            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
+            
+            graph_dsc.line.src_pos_1.y = clip.y1;
+            graph_dsc.line.src_pos_2.y = clip.y2;
+            
+            graph_dsc.line.src_pos_1.x = clip.x1;
+            graph_dsc.line.src_pos_2.x = clip.x1;
+            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
+            graph_dsc.line.src_pos_1.x = clip.x2;
+            graph_dsc.line.src_pos_2.x = clip.x2;
+            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
+        }
+        #endif
+        
         /* 控件绘制流程在执行步 */
         if (scui_event_check_execute(event)) {
+            
             /* 控件背景透明则不绘制 */
             if (widget->style.trans)
                 break;
