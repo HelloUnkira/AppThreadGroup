@@ -61,8 +61,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             };
             
             scui_coord_t y_offset = 25;
-            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 50;
             string_maker.text             = SCUI_MULTI_LANG_0X0029;
@@ -75,8 +75,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             scui_string_upgrade_grads(handle_string[0], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 50;
             string_maker.text             = SCUI_MULTI_LANG_0X002e;
@@ -89,8 +89,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             scui_string_upgrade_grads(handle_string[1], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 130;
             string_maker.text             = SCUI_MULTI_LANG_0X0034;
@@ -104,8 +104,8 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             scui_string_upgrade_grads(handle_string[2], grad_s, grad_n);
             
             y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_DRV_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_DRV_HOR_RES / 2;
+            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 130;
             string_maker.text             = SCUI_MULTI_LANG_0X0042;

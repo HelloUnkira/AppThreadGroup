@@ -24,8 +24,8 @@
 #define APP_DEV_GUI_DRV_ZOOM        LV_DRV_ZOOM
 #define APP_DEV_GUI_DRV_DBUF        LV_DRV_DBUFFER
 #elif APP_EXT_DEV_GUI_IS_SCUI
-#define APP_DEV_GUI_DRV_HOR_RES     SCUI_DRV_HOR_RES
-#define APP_DEV_GUI_DRV_VER_RES     SCUI_DRV_VER_RES
+#define APP_DEV_GUI_DRV_HOR_RES     SCUI_HOR_RES
+#define APP_DEV_GUI_DRV_VER_RES     SCUI_VER_RES
 #define APP_DEV_GUI_DRV_ZOOM        1
 #define APP_DEV_GUI_DRV_DBUF        1
 #endif
@@ -165,7 +165,7 @@ void app_dev_gui_disp_scui_flush(scui_surface_t *surface, scui_area_t *clip)
     app_dev_gui_disp_data_t *data = driver->data;
     
     uint32_t p_cf_bits = SCUI_PIXEL_CF_DEF & scui_pixel_cf_bits_mask;
-    APP_SYS_ASSERT(SCUI_DRV_PIXEL_DEPTH / 8 == p_cf_bits / 8);
+    APP_SYS_ASSERT(SCUI_PCF_DEP / 8 == p_cf_bits / 8);
     
     if (clip == NULL) {
         memcpy(cfg->display.pixel_buf, surface->pixel, cfg->display.pixel_buf_size);
@@ -357,7 +357,7 @@ static HDC app_dev_gui_disp_frame_buffer(HWND WindowHandle, LONG Width, LONG Hei
         #elif APP_EXT_DEV_GUI_IS_LVGL
         #define APP_EXT_DEV_GUI_COLOR_DEPTH     LV_COLOR_DEPTH
         #elif APP_EXT_DEV_GUI_IS_SCUI
-        #define APP_EXT_DEV_GUI_COLOR_DEPTH     SCUI_DRV_PIXEL_DEPTH
+        #define APP_EXT_DEV_GUI_COLOR_DEPTH     SCUI_PCF_DEP
         #else
         #endif
         

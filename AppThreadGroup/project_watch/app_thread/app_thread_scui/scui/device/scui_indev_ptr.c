@@ -39,8 +39,8 @@ static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
 void scui_indev_ptr_notify(scui_indev_data_t *data)
 {
     scui_point_t point = data->ptr.ptr_pos;
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
+    scui_coord_t hor_res = SCUI_HOR_RES;
+    scui_coord_t ver_res = SCUI_VER_RES;
     
     /* 检查范围是否跃出 */
     if (point.x < 0 || point.x >= hor_res)

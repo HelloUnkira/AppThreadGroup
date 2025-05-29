@@ -63,9 +63,9 @@ static void scui_window_jump_anima_expired(void *instance)
     
     scui_multi_t ofs = 0;
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
-        ofs = scui_disp_get_ver_res();
+        ofs = SCUI_VER_RES;
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
-        ofs = scui_disp_get_hor_res();
+        ofs = SCUI_HOR_RES;
     
     ofs *= anima->value_c;
     ofs /= 100;
@@ -160,9 +160,9 @@ static void scui_window_move_anima_expired(void *instance)
     scui_widget_t *widget = NULL;
     scui_multi_t pct = scui_abs(anima->value_c) * 100;
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
-         pct /= scui_disp_get_hor_res();
+         pct /= SCUI_HOR_RES;
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
-         pct /= scui_disp_get_ver_res();
+         pct /= SCUI_VER_RES;
     scui_window_mgr.switch_args.pct = pct;
     SCUI_LOG_DEBUG("pct:%d", scui_window_mgr.switch_args.pct);
     
@@ -172,6 +172,7 @@ static void scui_window_move_anima_expired(void *instance)
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
         point.y = anima->value_c;
     scui_window_mgr.switch_args.point = point;
+    SCUI_LOG_DEBUG("point:<%d,%d>", point.x, point.y);
     
     /* 更新point */
     scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point, true);
@@ -273,23 +274,21 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
     /* 获得窗口宽高 */
     scui_point_t    point = scui_window_mgr.switch_args.point;
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_coord_t  hor_res = widget->surface->hor_res;
-    scui_coord_t  ver_res = widget->surface->ver_res;
     
     /* 从当前位置到达目标点 */
     int32_t value_s = 0, value_e = 0, value_all = 0;
     
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_r) {
-        value_s = point.x; value_e = inout ? 0 : +hor_res; value_all = hor_res;
+        value_s = point.x; value_e = inout ? 0 : +SCUI_HOR_RES; value_all = SCUI_HOR_RES;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_l) {
-        value_s = point.x; value_e = inout ? 0 : -hor_res; value_all = hor_res;
+        value_s = point.x; value_e = inout ? 0 : -SCUI_HOR_RES; value_all = SCUI_HOR_RES;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_d) {
-        value_s = point.y; value_e = inout ? 0 : +ver_res; value_all = ver_res;
+        value_s = point.y; value_e = inout ? 0 : +SCUI_VER_RES; value_all = SCUI_VER_RES;
     }
     if (scui_window_mgr.switch_args.dir == scui_opt_dir_to_u) {
-        value_s = point.y; value_e = inout ? 0 : -ver_res; value_all = ver_res;
+        value_s = point.y; value_e = inout ? 0 : -SCUI_VER_RES; value_all = SCUI_VER_RES;
     }
     
     scui_window_move_anima_auto(value_s, value_e, value_all, 0);
@@ -300,10 +299,7 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
  */
 static void scui_window_event_switch(scui_event_t *event)
 {
-    /* 获得窗口宽高 */
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
-    scui_point_t point   = scui_window_mgr.switch_args.point;
+    scui_point_t point = scui_window_mgr.switch_args.point;
     
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = widget;
@@ -315,14 +311,14 @@ static void scui_window_event_switch(scui_event_t *event)
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_mgr.switch_args.pos = scui_opt_pos_none;
         /* 水平位置先检测 */
-        if (event->ptr_c.x <= hor_res * 1 / 2)
+        if (event->ptr_c.x <= SCUI_HOR_RES * 1 / 2)
             scui_window_mgr.switch_args.pos |= scui_opt_pos_l;
-        if (event->ptr_c.x >= hor_res * 1 / 2)
+        if (event->ptr_c.x >= SCUI_HOR_RES * 1 / 2)
             scui_window_mgr.switch_args.pos |= scui_opt_pos_r;
         /* 垂直位置后检测,并且吸收水平位置检测结果 */
-        if (event->ptr_c.y <= ver_res * 1 / 2)
+        if (event->ptr_c.y <= SCUI_VER_RES * 1 / 2)
             scui_window_mgr.switch_args.pos |= scui_opt_pos_u;
-        if (event->ptr_c.y >= ver_res * 1 / 2)
+        if (event->ptr_c.y >= SCUI_VER_RES * 1 / 2)
             scui_window_mgr.switch_args.pos |= scui_opt_pos_d;
         break;
     case scui_event_ptr_move:
@@ -332,13 +328,13 @@ static void scui_window_event_switch(scui_event_t *event)
             scui_event_mask_over(event);
             SCUI_LOG_INFO("");
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_l)
-                scui_window_move_anima_auto(point.x, event->ptr_e.x, hor_res, 0);
+                scui_window_move_anima_auto(point.x, event->ptr_e.x, SCUI_HOR_RES, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_r)
-                scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, hor_res, 0);
+                scui_window_move_anima_auto(point.x, event->ptr_e.x - SCUI_HOR_RES, SCUI_HOR_RES, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_u)
-                scui_window_move_anima_auto(point.y, event->ptr_e.y, ver_res, 0);
+                scui_window_move_anima_auto(point.y, event->ptr_e.y, SCUI_VER_RES, 0);
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
-                scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, ver_res, 0);
+                scui_window_move_anima_auto(point.y, event->ptr_e.y - SCUI_VER_RES, SCUI_VER_RES, 0);
         } else {
             if (scui_window_mgr.switch_args.lock_jump)
                 break;
@@ -353,25 +349,25 @@ static void scui_window_event_switch(scui_event_t *event)
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_l)) { /* 左窗:方向向右 */
                 target = window->sibling[2];
                 switch_type = window->switch_type[2];
-                point.x = -hor_res;
+                point.x = -SCUI_HOR_RES;
             }
             if (event_dir == scui_opt_dir_to_l &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_r)) { /* 右窗:方向向左 */
                 target = window->sibling[3];
                 switch_type = window->switch_type[3];
-                point.x = +hor_res;
+                point.x = +SCUI_HOR_RES;
             }
             if (event_dir == scui_opt_dir_to_d &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_u)) { /* 上窗:方向向下 */
                 target = window->sibling[0];
                 switch_type = window->switch_type[0];
-                point.y = -ver_res;
+                point.y = -SCUI_VER_RES;
             }
             if (event_dir == scui_opt_dir_to_u &&
                 scui_opt_bits_check(scui_window_mgr.switch_args.pos, scui_opt_pos_d)) { /* 下窗:方向向上 */
                 target = window->sibling[1];
                 switch_type = window->switch_type[1];
-                point.y = +ver_res;
+                point.y = +SCUI_VER_RES;
             }
             /* 抓获到运动的目标 */
             if (target != SCUI_HANDLE_INVALID) {
@@ -401,13 +397,13 @@ static void scui_window_event_switch(scui_event_t *event)
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
                 else {
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_l)
-                        scui_window_move_anima_auto(point.x, event->ptr_e.x, hor_res, 0);
+                        scui_window_move_anima_auto(point.x, event->ptr_e.x, SCUI_HOR_RES, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_r)
-                        scui_window_move_anima_auto(point.x, event->ptr_e.x - hor_res, hor_res, 0);
+                        scui_window_move_anima_auto(point.x, event->ptr_e.x - SCUI_HOR_RES, SCUI_HOR_RES, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_u)
-                        scui_window_move_anima_auto(point.y, event->ptr_e.y, ver_res, 0);
+                        scui_window_move_anima_auto(point.y, event->ptr_e.y, SCUI_VER_RES, 0);
                     if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
-                        scui_window_move_anima_auto(point.y, event->ptr_e.y - ver_res, ver_res, 0);
+                        scui_window_move_anima_auto(point.y, event->ptr_e.y - SCUI_VER_RES, SCUI_VER_RES, 0);
                 }
                 scui_event_mask_over(event);
             }
@@ -422,8 +418,8 @@ static void scui_window_event_switch(scui_event_t *event)
                 scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
                 break;
             }
-            if (scui_mabs(point.x, hor_res) < hor_res * 1 / 3 &&
-                scui_mabs(point.y, ver_res) < ver_res * 1 / 3) {
+            if (scui_mabs(point.x, SCUI_HOR_RES) < SCUI_HOR_RES * 1 / 3 &&
+                scui_mabs(point.y, SCUI_VER_RES) < SCUI_VER_RES * 1 / 3) {
                 if (scui_window_mgr.switch_args.pos == scui_opt_pos_u ||
                     scui_window_mgr.switch_args.pos == scui_opt_pos_l) {
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], true);
@@ -436,8 +432,8 @@ static void scui_window_event_switch(scui_event_t *event)
                     SCUI_LOG_DEBUG("");
                 }
             }
-            if (scui_mabs(point.x, hor_res) < hor_res * 2 / 3 &&
-                scui_mabs(point.y, ver_res) < ver_res * 2 / 3) {
+            if (scui_mabs(point.x, SCUI_HOR_RES) < SCUI_HOR_RES * 2 / 3 &&
+                scui_mabs(point.y, SCUI_VER_RES) < SCUI_VER_RES * 2 / 3) {
                 if (scui_window_mgr.switch_args.pos == scui_opt_pos_d ||
                     scui_window_mgr.switch_args.pos == scui_opt_pos_r) {
                     scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
@@ -473,25 +469,25 @@ static void scui_window_event_switch(scui_event_t *event)
             event_dir = scui_opt_dir_to_r;
             target = window->sibling[2];
             switch_type = window->switch_type[2];
-            point.x = -hor_res;
+            point.x = -SCUI_HOR_RES;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_L) { /* 右窗:方向向左 */
             event_dir = scui_opt_dir_to_l;
             target = window->sibling[3];
             switch_type = window->switch_type[3];
-            point.x = +hor_res;
+            point.x = +SCUI_HOR_RES;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_D) { /* 上窗:方向向下 */
             event_dir = scui_opt_dir_to_d;
             target = window->sibling[0];
             switch_type = window->switch_type[0];
-            point.y = -ver_res;
+            point.y = -SCUI_VER_RES;
         }
         if (event->key_id == SCUI_WINDOW_MGR_SWITCH_KEY_TO_U) { /* 下窗:方向向上 */
             event_dir = scui_opt_dir_to_u;
             target = window->sibling[1];
             switch_type = window->switch_type[1];
-            point.y = +ver_res;
+            point.y = +SCUI_VER_RES;
         }
         /* 抓获到运动的目标 */
         if (target != SCUI_HANDLE_INVALID && event_dir != scui_opt_dir_none) {

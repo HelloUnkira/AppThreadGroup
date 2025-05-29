@@ -15,8 +15,8 @@ void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc)
     // 不要使用默认重绘,只重绘背景这一部分即可
     #if 0
     scui_area_t draw_clip = {
-        .x = (SCUI_DRV_HOR_RES - 44),
-        .y = (SCUI_DRV_VER_RES - 236) / 2,
+        .x = (SCUI_HOR_RES - 44),
+        .y = (SCUI_VER_RES - 236) / 2,
         .w =  44,
         .h = 236,
     };
@@ -58,8 +58,8 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
         scui_handle_t image_ring = scui_image_prj_image_src_repeat_slider_03_ringbmp;
         scui_handle_t image_edge = scui_image_prj_image_src_repeat_slider_02_dotbmp;
         
-        clip.x = (SCUI_DRV_HOR_RES - 44);
-        clip.y = (SCUI_DRV_VER_RES - 236) / 2;
+        clip.x = (SCUI_HOR_RES - 44);
+        clip.y = (SCUI_VER_RES - 236) / 2;
         clip.w =  44;
         clip.h = 236;
         scui_widget_draw_image(event->object, &clip, image_bg, NULL, color_black);

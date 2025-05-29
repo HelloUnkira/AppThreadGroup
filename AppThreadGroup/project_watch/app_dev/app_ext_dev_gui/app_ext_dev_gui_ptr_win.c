@@ -91,12 +91,12 @@ void app_dev_gui_ptr_scui_read(scui_indev_data_t *indev_data)
     /* 整理坐标范围 */
     if (indev_data->ptr.ptr_pos.x < 0)
         indev_data->ptr.ptr_pos.x = 0;
-    if (indev_data->ptr.ptr_pos.x > SCUI_DRV_HOR_RES - 1)
-        indev_data->ptr.ptr_pos.x = SCUI_DRV_HOR_RES - 1;
+    if (indev_data->ptr.ptr_pos.x > SCUI_HOR_RES - 1)
+        indev_data->ptr.ptr_pos.x = SCUI_HOR_RES - 1;
     if (indev_data->ptr.ptr_pos.y < 0)
         indev_data->ptr.ptr_pos.y = 0;
-    if (indev_data->ptr.ptr_pos.y > SCUI_DRV_VER_RES - 1)
-        indev_data->ptr.ptr_pos.y = SCUI_DRV_VER_RES - 1;
+    if (indev_data->ptr.ptr_pos.y > SCUI_VER_RES - 1)
+        indev_data->ptr.ptr_pos.y = SCUI_VER_RES - 1;
 }
 #else
 #endif

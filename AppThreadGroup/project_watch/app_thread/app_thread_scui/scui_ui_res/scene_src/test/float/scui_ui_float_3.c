@@ -55,8 +55,8 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
             
             button_maker.widget.clip.w = 72 * 2;
             button_maker.widget.clip.h = 72;
-            button_maker.widget.clip.x = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
-            button_maker.widget.clip.y = SCUI_DRV_VER_RES / 4 - button_maker.widget.clip.h / 2;
+            button_maker.widget.clip.x = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.y = SCUI_VER_RES / 4 - button_maker.widget.clip.h / 2;
             button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
             button_maker.image[1] = scui_image_prj_image_src_repeat_card_05_r36_2bmp;
             button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
@@ -65,7 +65,7 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
             scui_widget_create(&button_maker, &button_bandle, false);
             
             button_maker.widget.clip.w  = 72 * 2 + 20;
-            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
             button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
             button_maker.widget.clip.h  = 72 + 20;
             button_maker.image[0] = scui_image_prj_image_src_repeat_box_sleep_breathe_02_left_upbmp;
@@ -76,7 +76,7 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
             scui_widget_create(&button_maker, &button_bandle, false);
             
             button_maker.widget.clip.w  = 72 * 2;
-            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
             button_maker.widget.clip.y += 5;
             button_maker.widget.clip.h  = 72 + 10;
             button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;
@@ -87,7 +87,7 @@ void scui_ui_scene_float_3_event_proc(scui_event_t *event)
             scui_widget_create(&button_maker, &button_bandle, false);
             
             button_maker.widget.clip.w  = 72 * 2;
-            button_maker.widget.clip.x  = SCUI_DRV_HOR_RES / 2 - button_maker.widget.clip.w / 2;
+            button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
             button_maker.widget.clip.y += button_maker.widget.clip.h + 15;
             button_maker.widget.clip.h  = 72 + 15;
             button_maker.image[0] = scui_image_prj_image_src_repeat_card_04_r36_1bmp;

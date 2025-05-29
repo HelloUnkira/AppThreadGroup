@@ -67,8 +67,8 @@ void scui_ui_honeycomb_list_layout(scui_point_t *list_layout, SCUI_UI_HONEYCOMB_
 #define SCUI_UI_SPREAD_ANGLE_UNIT               (45)    // 一圈数量 == 360 / angle_unit
 #define SCUI_UI_SPREAD_ANGLE_CELL               (8)     // 动画颗粒度,一般不改
 #define SCUI_UI_SPREAD_RAD_FADE                 (5)     // 消失圆半径
-#define SCUI_UI_SPREAD_RAD_MIN                  ((SCUI_DRV_HOR_RES - 10 * 2) / 2 / 4)   /* 小圈圆半径(静止时) */
-#define SCUI_UI_SPREAD_DIS_MAX                  ((SCUI_DRV_HOR_RES - 10 * 2) / 2 / 2)   /* 小圈圆到大圈圆距离(静止时) */
+#define SCUI_UI_SPREAD_RAD_MIN                  ((SCUI_HOR_RES - 10 * 2) / 2 / 4)   /* 小圈圆半径(静止时) */
+#define SCUI_UI_SPREAD_DIS_MAX                  ((SCUI_HOR_RES - 10 * 2) / 2 / 2)   /* 小圈圆到大圈圆距离(静止时) */
 #define SCUI_UI_SPREAD_FLING_MODE               (1)     // 0:normal;1:circle;
 #define SCUI_UI_SPREAD_FLING_WAY                (0)     // 0:any;1:hori;2:vert;
 /*****************************************************************************/

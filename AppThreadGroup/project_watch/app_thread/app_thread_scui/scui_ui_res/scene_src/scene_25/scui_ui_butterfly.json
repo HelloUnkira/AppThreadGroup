@@ -4,8 +4,8 @@
         {
             "widget.type":                  "scui_widget_type_window",
             "widget.style.trans":           "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_BUTTERFLY",
             "widget.event_cb":              "scui_ui_scene_butterfly_event_proc",
             "widget.child_num":             "10",
@@ -18,8 +18,8 @@
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_BUTTERFLY_CUSTOM",
             "widget.parent":                "SCUI_UI_SCENE_BUTTERFLY",
             "widget.event_cb":              "scui_ui_scene_butterfly_custom_event_proc"

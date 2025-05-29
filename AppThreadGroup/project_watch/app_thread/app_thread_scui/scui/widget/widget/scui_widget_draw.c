@@ -226,6 +226,10 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
@@ -479,6 +483,10 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
@@ -554,6 +562,10 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
@@ -609,6 +621,10 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle  = draw_dsc->handle;
     scui_area_t  *target  = draw_dsc->target;
@@ -659,6 +675,10 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
@@ -696,6 +716,10 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
@@ -733,6 +757,10 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle  = draw_dsc->handle;
     scui_area_t  *target  = draw_dsc->target;
@@ -815,6 +843,10 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
 {
+    return;
+    
+    
+    
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;

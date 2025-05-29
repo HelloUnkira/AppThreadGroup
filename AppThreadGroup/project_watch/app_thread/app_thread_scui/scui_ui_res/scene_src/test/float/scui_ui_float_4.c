@@ -23,6 +23,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
+        #if SCUI_MEM_FEAT_MINI == 0
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_1 = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_1_rcd = SCUI_HANDLE_INVALID;
@@ -48,6 +49,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
                 SCUI_LOG_WARN("roller 2 center:%s", str_utf8);
             }
         }
+        #endif
         
         break;
     case scui_event_show:
@@ -78,10 +80,10 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart1_maker.widget.style.indev_ptr = true;
             chart1_maker.widget.style.indev_enc = true;
             chart1_maker.widget.style.indev_key = true;
-            chart1_maker.widget.clip.x = SCUI_DRV_HOR_RES *  1 / 25;
-            chart1_maker.widget.clip.y = SCUI_DRV_VER_RES *  1 / 25;
-            chart1_maker.widget.clip.w = SCUI_DRV_HOR_RES * 11 / 25;
-            chart1_maker.widget.clip.h = SCUI_DRV_VER_RES * 11 / 25;
+            chart1_maker.widget.clip.x = SCUI_HOR_RES *  1 / 25;
+            chart1_maker.widget.clip.y = SCUI_VER_RES *  1 / 25;
+            chart1_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
+            chart1_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
             chart1_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
             chart1_maker.widget.color.color.full = 0xFF4F4F4F;
             chart1_maker.type = scui_chart_type_histogram;
@@ -104,10 +106,10 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             chart2_maker.widget.style.indev_ptr = true;
             chart2_maker.widget.style.indev_enc = true;
             chart2_maker.widget.style.indev_key = true;
-            chart2_maker.widget.clip.x = SCUI_DRV_HOR_RES * 13 / 25;
-            chart2_maker.widget.clip.y = SCUI_DRV_VER_RES *  1 / 25;
-            chart2_maker.widget.clip.w = SCUI_DRV_HOR_RES * 11 / 25;
-            chart2_maker.widget.clip.h = SCUI_DRV_VER_RES * 11 / 25;
+            chart2_maker.widget.clip.x = SCUI_HOR_RES * 13 / 25;
+            chart2_maker.widget.clip.y = SCUI_VER_RES *  1 / 25;
+            chart2_maker.widget.clip.w = SCUI_HOR_RES * 11 / 25;
+            chart2_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
             chart2_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
             chart2_maker.widget.color.color.full = 0xFF4F4F4F;
             chart2_maker.type = scui_chart_type_line;
@@ -131,11 +133,12 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             }
             scui_chart_line_data(chart2_handle, vlist);
             
+            #if SCUI_MEM_FEAT_MINI == 0
             // digit picker == scroll + string * num
             scui_roller_maker_t roller_maker = {0};
             roller_maker.widget.type            = scui_widget_type_roller;
-            roller_maker.widget.clip.w          = SCUI_DRV_HOR_RES * 11 / 25;
-            roller_maker.widget.clip.h          = SCUI_DRV_VER_RES * 11 / 25;
+            roller_maker.widget.clip.w          = SCUI_HOR_RES * 11 / 25;
+            roller_maker.widget.clip.h          = SCUI_VER_RES * 11 / 25;
             roller_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_4;
             roller_maker.widget.color           = SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF);
             roller_maker.widget.child_num       = 60;
@@ -157,8 +160,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             string_maker.font_idx                   = SCUI_FONT_IDX_32;
             
             // 24
-            roller_maker.widget.clip.x   = SCUI_DRV_HOR_RES *  1 / 25;
-            roller_maker.widget.clip.y   = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.widget.clip.x   = SCUI_HOR_RES *  1 / 25;
+            roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
             roller_maker.linear.list_num = 24;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
             
@@ -169,8 +172,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             }
             
             // month
-            roller_maker.widget.clip.x   = SCUI_DRV_HOR_RES * 13 / 25;
-            roller_maker.widget.clip.y   = SCUI_DRV_VER_RES * 13 / 25;
+            roller_maker.widget.clip.x   = SCUI_HOR_RES * 13 / 25;
+            roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
             roller_maker.linear.list_num = 12;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2, false);
             
@@ -184,6 +187,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
                 snprintf(str_utf8, sizeof(str_utf8), "%s", str_utf8_month[idx]);
                 scui_roller_string_str(scui_ui_res_local->roller_2, &string_maker, str_utf8);
             }
+            #endif
         }
         
         #if 0   // discard, we don't need this

@@ -129,10 +129,10 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
 /* EmbeddedGUI移植 */
 #if 1
 /* EmbeddedGUI移植 */
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_HOR_RES
+#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_HOR_RES
 #error "circle res is not enough"
 #endif
-#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_DRV_VER_RES
+#if     SCUI_DRAW_CIRCLE_RES_RANGE < SCUI_VER_RES
 #error "circle res is not enough"
 #endif
 /* EmbeddedGUI移植 */

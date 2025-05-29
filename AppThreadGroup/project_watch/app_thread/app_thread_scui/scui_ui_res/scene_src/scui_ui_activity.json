@@ -4,8 +4,8 @@
         {
             "annotation":                   "每日活动界面",
             "widget.type":                  "scui_widget_type_window",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY",
             "widget.event_cb":              "scui_ui_scene_activity_event_proc",
             "level":                        "0",
@@ -16,15 +16,15 @@
             "widget.type":                  "scui_widget_type_scroll",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY",
             "widget.event_cb":           	"scui_ui_scene_activity_scroll_event",
             "pos":                          "scui_opt_pos_c",
             "dir":                          "scui_opt_dir_ver",
-            "route_enc":                    "SCUI_DRV_HOR_RES * 2 / 3",
-            "route_key":                    "SCUI_DRV_HOR_RES * 2 / 3",
+            "route_enc":                    "SCUI_HOR_RES * 2 / 3",
+            "route_key":                    "SCUI_HOR_RES * 2 / 3",
             "keyid_fdir":                   "SCUI_WIDGET_SCROLL_KEY_FDIR",
             "keyid_bdir":                   "SCUI_WIDGET_SCROLL_KEY_BDIR",
             "space":                        "10",
@@ -35,8 +35,8 @@
             "widget.type":                  "scui_widget_type_custom",
             "widget.style.trans":           "true",
             "widget.style.sched_anima":     "true",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_BAR_ARC",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY",
             "widget.event_cb":              "scui_ui_scene_activity_bar_arc_event_proc"
@@ -44,8 +44,8 @@
         {
             "annotation":                   "每日活动界面-大三环",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
             "widget.event_cb":              "scui_ui_scene_activity_scroll_ring_big_3_event_proc"
@@ -53,7 +53,7 @@
         {
             "annotation":                   "每日活动界面-详情-标题",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "90",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_TITLE",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
@@ -63,7 +63,7 @@
         {
             "annotation":                   "每日活动界面-详情-明细",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "155",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_SUM",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
@@ -72,7 +72,7 @@
         {
             "annotation":                   "每日活动界面-详情-明细-千卡",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "250",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_KCAL",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
@@ -82,7 +82,7 @@
         {
             "annotation":                   "每日活动界面-详情-明细-步数",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "250",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_STEP",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
@@ -92,7 +92,7 @@
         {
             "annotation":                   "每日活动界面-详情-明细-距离",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "250",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_DITAIL_DIST",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL",
@@ -102,7 +102,7 @@
         {
             "annotation":                   "每日活动界面-留白",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "95",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK",
             "widget.parent":                "SCUI_UI_SCENE_ACTIVITY_SCROLL"

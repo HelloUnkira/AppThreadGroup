@@ -140,8 +140,8 @@ static void scui_window_float_anima_finish(void *instance)
     SCUI_LOG_INFO("");
     scui_anima_t *anima  = instance;
     scui_handle_t handle = scui_window_float.target;
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
+    scui_coord_t hor_res = SCUI_HOR_RES;
+    scui_coord_t ver_res = SCUI_VER_RES;
     
     scui_area_t   clip = scui_widget_clip(handle);
     scui_point_t point = {.x = clip.x,.y = clip.y,};
@@ -206,8 +206,8 @@ static void scui_window_float_anima_auto(int32_t value_s, int32_t value_e, uint3
  */
 static void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
 {
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
+    scui_coord_t hor_res = SCUI_HOR_RES;
+    scui_coord_t ver_res = SCUI_VER_RES;
     scui_area_t clip = scui_widget_clip(handle);
     SCUI_ASSERT(clip.x >= -clip.w && clip.x <= +clip.w);
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);

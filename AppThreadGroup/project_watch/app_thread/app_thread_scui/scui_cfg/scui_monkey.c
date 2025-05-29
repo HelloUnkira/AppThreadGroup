@@ -56,8 +56,8 @@ static void scui_monkey_anim_execute(void *instance)
                 scui_ui_res_local->tick = scui_rand(10) + 5;
                 scui_ui_res_local->count = 0;
                 //
-                scui_ui_res_local->ptr_pos.x = SCUI_DRV_HOR_RES / 2;
-                scui_ui_res_local->ptr_pos.y = SCUI_DRV_VER_RES / 2;
+                scui_ui_res_local->ptr_pos.x = SCUI_HOR_RES / 2;
+                scui_ui_res_local->ptr_pos.y = SCUI_VER_RES / 2;
                 scui_ui_res_local->ptr_move_step = scui_rand(20) + 20;
                 scui_ui_res_local->ptr_move_way = 1 << scui_rand(3);
                 scui_ui_res_local->ptr_move = scui_rand(9) < 5 ? 1 : 0;
@@ -79,10 +79,10 @@ static void scui_monkey_anim_execute(void *instance)
                         scui_ui_res_local->ptr_pos.x = 0;
                     if (scui_ui_res_local->ptr_pos.y < 0)
                         scui_ui_res_local->ptr_pos.y = 0;
-                    if (scui_ui_res_local->ptr_pos.x > SCUI_DRV_HOR_RES - 1)
-                        scui_ui_res_local->ptr_pos.x = SCUI_DRV_HOR_RES - 1;
-                    if (scui_ui_res_local->ptr_pos.y > SCUI_DRV_VER_RES - 1)
-                        scui_ui_res_local->ptr_pos.y = SCUI_DRV_VER_RES - 1;
+                    if (scui_ui_res_local->ptr_pos.x > SCUI_HOR_RES - 1)
+                        scui_ui_res_local->ptr_pos.x = SCUI_HOR_RES - 1;
+                    if (scui_ui_res_local->ptr_pos.y > SCUI_VER_RES - 1)
+                        scui_ui_res_local->ptr_pos.y = SCUI_VER_RES - 1;
                 }
                 
                 scui_ui_res_local->count++;

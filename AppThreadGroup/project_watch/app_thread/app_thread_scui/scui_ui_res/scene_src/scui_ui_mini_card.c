@@ -996,8 +996,8 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             linear_maker.widget.type = scui_widget_type_linear;
             linear_maker.widget.style.indev_enc = true;
             linear_maker.widget.style.indev_key = true;
-            linear_maker.widget.clip.w = SCUI_DRV_HOR_RES;
-            linear_maker.widget.clip.h = SCUI_DRV_VER_RES;
+            linear_maker.widget.clip.w = SCUI_HOR_RES;
+            linear_maker.widget.clip.h = SCUI_VER_RES;
             linear_maker.widget.parent = SCUI_UI_SCENE_MINI_CARD;
             linear_maker.widget.event_cb   = scui_ui_scene_mini_card_scroll_event;
             linear_maker.widget.child_num  = 50;
@@ -1018,12 +1018,12 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             custom_maker.widget.type                = scui_widget_type_custom;
             custom_maker.widget.style.trans         = true;
             custom_maker.widget.style.sched_anima   = true;
-            custom_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
+            custom_maker.widget.clip.w              = SCUI_HOR_RES;
             custom_maker.widget.parent              = linear_handle;
             
             // 上半部分留白占用
             custom_maker.widget.style.indev_ptr     = false;
-            custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 180 / 2;
+            custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
             custom_maker.widget.event_cb            = NULL;
             scui_widget_create(&custom_maker, &custom_handle, false);
             
@@ -1041,7 +1041,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
             
             // 下半部分留白占用
             custom_maker.widget.style.indev_ptr     = false;
-            custom_maker.widget.clip.h              = SCUI_DRV_VER_RES / 2 - 10 - 180 / 2;
+            custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
             custom_maker.widget.event_cb            = NULL;
             scui_widget_create(&custom_maker, &custom_handle, false);
             

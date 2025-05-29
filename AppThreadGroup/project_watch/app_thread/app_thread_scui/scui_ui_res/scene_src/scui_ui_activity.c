@@ -110,8 +110,8 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
             scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
             custom_maker.widget.type        = scui_widget_type_custom;
             custom_maker.widget.style.trans = true;
-            custom_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
-            custom_maker.widget.clip.h      = SCUI_DRV_VER_RES;
+            custom_maker.widget.clip.w      = SCUI_HOR_RES;
+            custom_maker.widget.clip.h      = SCUI_VER_RES;
             custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
             scui_widget_create(&custom_maker, &custom_handle, false);
             scui_ui_res_local->big_3_slave = custom_handle;
@@ -178,7 +178,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
             string_maker.widget.type                = scui_widget_type_string;
             string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = event->object;
-            string_maker.widget.clip.w              = SCUI_DRV_HOR_RES;
+            string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 40;
             string_maker.widget.clip.y              = (scui_widget_clip(event->object).h - string_maker.widget.clip.h) / 2;
             string_maker.args.align_hor             = 2;
@@ -363,7 +363,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             chart_maker.widget.style.trans = true;
             chart_maker.widget.clip.x = 0;
             chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_DRV_HOR_RES;
+            chart_maker.widget.clip.w = SCUI_HOR_RES;
             chart_maker.widget.clip.h = 86;
             chart_maker.widget.parent = event->object;
             chart_maker.type = scui_chart_type_histogram;
@@ -412,7 +412,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
-        clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
+        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
         clip_str.h = 40; clip_str.y += 25 - 16;
         scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000a);
         
@@ -437,7 +437,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_DRV_HOR_RES - (clip_unit.x - clip.x) - 40;
+        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
         scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000d);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
@@ -529,7 +529,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             chart_maker.widget.style.trans = true;
             chart_maker.widget.clip.x = 0;
             chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_DRV_HOR_RES;
+            chart_maker.widget.clip.w = SCUI_HOR_RES;
             chart_maker.widget.clip.h = 86;
             chart_maker.widget.parent = event->object;
             chart_maker.type = scui_chart_type_histogram;
@@ -578,7 +578,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
-        clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
+        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
         clip_str.h = 40; clip_str.y += 25 - 16;
         scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000c);
         
@@ -603,7 +603,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_DRV_HOR_RES - (clip_unit.x - clip.x) - 40;
+        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
         scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000f);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
@@ -695,7 +695,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             chart_maker.widget.style.trans = true;
             chart_maker.widget.clip.x = 0;
             chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_DRV_HOR_RES;
+            chart_maker.widget.clip.w = SCUI_HOR_RES;
             chart_maker.widget.clip.h = 86;
             chart_maker.widget.parent = event->object;
             chart_maker.type = scui_chart_type_histogram;
@@ -744,7 +744,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
         scui_area_t clip_str = clip;
-        clip_str.w = SCUI_DRV_HOR_RES - 40 * 2; clip_str.x += 40;
+        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
         clip_str.h = 40; clip_str.y += 25 - 16;
         scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000b);
         
@@ -769,7 +769,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         
         scui_area_t clip_unit = clip;
         clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_DRV_HOR_RES - (clip_unit.x - clip.x) - 40;
+        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
         scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000e);
         
         for (int16_t idx = 0; idx <= 24; idx++) {

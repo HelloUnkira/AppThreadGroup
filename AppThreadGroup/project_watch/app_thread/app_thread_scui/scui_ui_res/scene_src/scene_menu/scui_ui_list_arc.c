@@ -150,12 +150,12 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
             scui_handle_t item_handle     = SCUI_HANDLE_INVALID;
             item_maker.widget.type        = scui_widget_type_custom;
             item_maker.widget.style.trans = true;
-            item_maker.widget.clip.w      = SCUI_DRV_HOR_RES;
+            item_maker.widget.clip.w      = SCUI_HOR_RES;
             item_maker.widget.parent      = SCUI_UI_SCENE_LIST_ARC_SCROLL;
             item_maker.widget.child_num   = 1;
             scui_coord_t icon_h = scui_image_h(scui_ui_scene_list_image[0] + 4);
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - (icon_h + 10) / 2;
+            item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
             scui_widget_create(&item_maker, &item_handle, false);
             
             item_maker.widget.clip.h = icon_h;
@@ -203,7 +203,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
                 scui_widget_create(&string_maker, &string_handle, false);
             }
             
-            item_maker.widget.clip.h = SCUI_DRV_VER_RES / 2 - (icon_h + 10) / 2;
+            item_maker.widget.clip.h = SCUI_VER_RES / 2 - (icon_h + 10) / 2;
             scui_widget_create(&item_maker, &item_handle, false);
             
             scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_LIST_ARC_BAR_ARC;

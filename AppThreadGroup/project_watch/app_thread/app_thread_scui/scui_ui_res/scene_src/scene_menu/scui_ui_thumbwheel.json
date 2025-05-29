@@ -3,8 +3,8 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES",
-            "widget.clip.h":                "SCUI_DRV_VER_RES",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_THUMBWHEEL",
             "widget.event_cb":              "scui_ui_scene_thumbwheel_event_proc",
             "level":                        "0",
@@ -18,8 +18,8 @@
             "widget.style.indev_key":       "true",
             "widget.clip.x":                "5",
             "widget.clip.y":                "5",
-            "widget.clip.w":                "SCUI_DRV_HOR_RES - 5 * 2",
-            "widget.clip.h":                "SCUI_DRV_VER_RES - 5 * 2",
+            "widget.clip.w":                "SCUI_HOR_RES - 5 * 2",
+            "widget.clip.h":                "SCUI_VER_RES - 5 * 2",
             "widget.myself":                "SCUI_UI_SCENE_THUMBWHEEL_CUSTOM",
             "widget.parent":                "SCUI_UI_SCENE_THUMBWHEEL",
             "widget.child_num":             "3",

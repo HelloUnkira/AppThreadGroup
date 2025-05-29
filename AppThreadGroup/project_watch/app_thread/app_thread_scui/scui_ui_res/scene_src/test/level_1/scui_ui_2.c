@@ -87,10 +87,10 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scroll_maker.widget.style.indev_ptr = true;
             scroll_maker.widget.style.indev_enc = true;
             scroll_maker.widget.style.indev_key = true;
-            scroll_maker.widget.clip.x = SCUI_DRV_HOR_RES / 6;
-            scroll_maker.widget.clip.y = SCUI_DRV_VER_RES / 6;
-            scroll_maker.widget.clip.w = SCUI_DRV_HOR_RES * 4 / 6;
-            scroll_maker.widget.clip.h = SCUI_DRV_VER_RES * 4 / 6;
+            scroll_maker.widget.clip.x = SCUI_HOR_RES / 6;
+            scroll_maker.widget.clip.y = SCUI_VER_RES / 6;
+            scroll_maker.widget.clip.w = SCUI_HOR_RES * 4 / 6;
+            scroll_maker.widget.clip.h = SCUI_VER_RES * 4 / 6;
             scroll_maker.widget.parent = SCUI_UI_SCENE_2;
             scroll_maker.widget.child_num = 50;
             scroll_maker.widget.color.color.full = 0xFF4F4F4F;
@@ -124,8 +124,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
             custom_maker.widget.type   = scui_widget_type_custom;
-            custom_maker.widget.clip.w = SCUI_DRV_HOR_RES / 8;
-            custom_maker.widget.clip.h = SCUI_DRV_VER_RES / 8;
+            custom_maker.widget.clip.w = SCUI_HOR_RES / 8;
+            custom_maker.widget.clip.h = SCUI_VER_RES / 8;
             custom_maker.widget.parent = scroll_handle;
             
             #if SCUI_SCROLL_LAYOUT_AUTO

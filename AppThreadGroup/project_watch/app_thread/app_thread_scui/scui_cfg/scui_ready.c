@@ -11,22 +11,18 @@
  */
 void scui_ready(void)
 {
-    /* 配置屏参 */
-    scui_disp_set_hor_res(SCUI_DRV_HOR_RES);
-    scui_disp_set_ver_res(SCUI_DRV_VER_RES);
-    
     /* 初始化scui */
     scui_engine_ready();
     
     /* frame buffer: */
     scui_area_t clip = {0};
-    clip.w = SCUI_DRV_HOR_RES;
-    clip.h = SCUI_DRV_VER_RES;
+    clip.w = SCUI_HOR_RES;
+    clip.h = SCUI_VER_RES;
     scui_surface_t  surface = {0};
     scui_surface_t *surface_fb = NULL;
     surface.format  = SCUI_PIXEL_CF_DEF;
-    surface.hor_res = SCUI_DRV_HOR_RES;
-    surface.ver_res = SCUI_DRV_VER_RES;
+    surface.hor_res = SCUI_HOR_RES;
+    surface.ver_res = SCUI_VER_RES;
     surface.alpha   = scui_alpha_cover;
     scui_coord_t surface_byte = scui_pixel_bits(surface.format) / 8;
     scui_coord_t surface_rem  = sizeof(scui_color_wt_t) - surface_byte;

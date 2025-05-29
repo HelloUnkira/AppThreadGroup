@@ -109,14 +109,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         scui_handle_t focus = scui_image_prj_image_src_repeat_dot_02_whitebmp;
         
         offset_hor.x = 15;
-        offset_hor.y = SCUI_DRV_VER_RES - 30;
+        offset_hor.y = SCUI_VER_RES - 30;
         clip_hor = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
             scui_custom_draw_indicator(event, &clip_hor, wait, color_black, focus, color_black,
                                              5, indicator_index, 6, false);
         
         offset_ver.x = 15;
-        offset_ver.y = SCUI_DRV_VER_RES - 150;
+        offset_ver.y = SCUI_VER_RES - 150;
         clip_ver = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_indicator(event, &clip_ver, wait, color_black, focus, color_black,
@@ -129,14 +129,14 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         
         #if 0   // 没有水平滚动条背景
         offset_hor.x = 15;
-        offset_hor.y = SCUI_DRV_VER_RES - 40;
+        offset_hor.y = SCUI_VER_RES - 40;
         clip_hor = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_hor, &offset_hor))
             scui_custom_draw_slider(event, &clip_hor, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, true);
         #endif
         
         offset_ver.x = 5;
-        offset_ver.y = SCUI_DRV_VER_RES - 160;
+        offset_ver.y = SCUI_VER_RES - 160;
         clip_ver = scui_widget_clip(event->object);
         if (scui_area_limit_offset(&clip_ver, &offset_ver))
             scui_custom_draw_slider(event, &clip_ver, bar, color_bar, edge, color_edge, 0, 100, progressbar_s, progressbar_e, 152, false);

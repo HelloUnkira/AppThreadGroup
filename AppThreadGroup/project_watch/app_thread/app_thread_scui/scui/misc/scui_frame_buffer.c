@@ -32,8 +32,8 @@ void scui_frame_buffer_seg_ready(void)
  */
 bool scui_frame_buffer_seg_offset(void)
 {
-    scui_coord_t hor_res = scui_disp_get_hor_res();
-    scui_coord_t ver_res = scui_disp_get_ver_res();
+    scui_coord_t hor_res = SCUI_HOR_RES;
+    scui_coord_t ver_res = SCUI_VER_RES;
     scui_area_t clip_seg = scui_frame_buffer.clip_seg;
     
     clip_seg.y += SCUI_FRAME_BUFFER_SEG;
