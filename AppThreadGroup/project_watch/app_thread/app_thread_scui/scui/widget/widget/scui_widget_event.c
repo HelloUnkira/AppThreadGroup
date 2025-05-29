@@ -17,9 +17,34 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     SCUI_LOG_INFO("%u", handle);
     
     /* 不给无效目标添加剪切域 */
-    if (scui_handle_unmap(handle) ||
-        scui_widget_is_hide(handle))
+    if (scui_handle_unmap(handle))
         return;
+    if (scui_widget_is_hide(handle))
+        return;
+    
+    #if SCUI_MEM_FEAT_MINI
+    /* 分段绘制直接全局添加即可 */
+    /* 所以迟延到最终绘制前进行 */ {
+        scui_event_t event = {
+            .object     = scui_widget_root(handle),
+            .style.sync = sync,
+            .type       = scui_event_draw,
+            .absorb     = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+        
+        // 同步绘制后移除调度队列中
+        // 可能存在的异步绘制
+        if (sync) {
+            scui_event_t event = {0};
+            event.object = scui_widget_root(handle);
+            event.type   = scui_event_draw;
+            // 移除跟主窗口相关所有绘制事件
+            while (scui_event_dequeue(&event, true, false));
+        }
+        return;
+    }
+    #endif
     
     /* 没有绘制剪切域时不要绘制 */
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -47,14 +72,9 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
         return;
     }
     
-    #if SCUI_MEM_FEAT_MINI
-    /* 分段绘制需要添加全局剪切域 */
-    scui_area_t widget_clip = widget_r->clip;
-    #else
     scui_area_t widget_clip = widget->clip;
     if (clip != NULL && !scui_area_inter2(&widget_clip, clip))
         return;
-    #endif
     
     if (widget->parent == SCUI_HANDLE_INVALID &&
         scui_widget_surface_only(widget)) {
@@ -578,6 +598,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
             
             /* 更新surface剪切域, 因为绘制即将开始 */
             if (scui_event_check_prepare(event)) {
+                
+                #if SCUI_MEM_FEAT_MINI
+                /* 为所有控件及其子控件添加全局剪切域 */
+                // scui_widget_clip_check(handle_r, true);
+                scui_area_t clip = widget->clip;
+                scui_widget_clip_reset(widget, &clip, true);
+                #endif
+                
                 scui_multi_t size_old = 0, size_new = 0;
                 // scui_widget_clip_sizes(widget->myself, &size_old);
                 // scui_widget_clip_check(widget->myself, true);

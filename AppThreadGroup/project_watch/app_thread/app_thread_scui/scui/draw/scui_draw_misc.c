@@ -21,6 +21,7 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t *dst_surface = draw_dsc->qrcode.dst_surface;
     scui_area_t    *dst_clip    = draw_dsc->qrcode.dst_clip;
+    scui_area_t    *src_clip    = draw_dsc->qrcode.src_clip;
     scui_alpha_t    src_alpha   = draw_dsc->qrcode.src_alpha;
     scui_color_t    src_color   = draw_dsc->qrcode.src_color;
     scui_multi_t    src_size    = draw_dsc->qrcode.src_size;
@@ -28,6 +29,7 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_clip != NULL);
     
     if (src_alpha == scui_alpha_trans)
         return;
@@ -71,10 +73,12 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     scui_multi_t scaled = (qr_size * scale);
     scui_multi_t margin = (dst_clip->w - scaled) / 2;
     
-    draw_area.x = margin;
-    draw_area.y = margin;
-    draw_area.w = scui_min(draw_area.w, scaled);
-    draw_area.h = scui_min(draw_area.h, scaled);
+    draw_area.x = scui_max(margin - src_clip->x, 0);
+    draw_area.y = scui_max(margin - src_clip->y, 0);
+    draw_area.w = scui_min(scui_min(draw_area.w, src_clip->w), scaled);
+    draw_area.h = scui_min(scui_min(draw_area.h, src_clip->h), scaled);
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     if (scui_area_empty(&draw_area))
         goto over;
     
@@ -93,9 +97,13 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
     for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
         uint8_t *dst_ofs = dst_addr + idx_line * dst_line + idx_item * dst_byte;
         
-        bool bit = qrcodegen_getModule(qrcode, idx_item / scale, idx_line / scale);
+        scui_coord_t src_ofs_iy = scui_max(src_clip->y - margin, 0) + idx_line;
+        scui_coord_t src_ofs_ix = scui_max(src_clip->x - margin, 0) + idx_item;
+        bool bit = qrcodegen_getModule(qrcode, src_ofs_ix / scale, src_ofs_iy / scale);
         scui_pixel_mix_with(dst_surface->format, dst_ofs, scui_alpha_cover - src_alpha,
                             dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
+        
+        SCUI_ASSERT(dst_ofs < dst_surface->pixel + dst_line * dst_surface->ver_res);
     }
     
 over:
@@ -112,12 +120,14 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
     scui_surface_t *dst_surface = draw_dsc->barcode.dst_surface;
     scui_area_t    *dst_clip    = draw_dsc->barcode.dst_clip;
     scui_alpha_t    src_alpha   = draw_dsc->barcode.src_alpha;
+    scui_area_t    *src_clip    = draw_dsc->barcode.src_clip;
     scui_color_t    src_color   = draw_dsc->barcode.src_color;
     scui_multi_t    src_size    = draw_dsc->barcode.src_size;
     uint8_t        *src_data    = draw_dsc->barcode.src_data;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(src_clip != NULL);
     
     if (src_alpha == scui_alpha_trans)
         return;
@@ -126,6 +136,11 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
     scui_area_t dst_area = scui_surface_area(dst_surface);
     if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
          return;
+    
+    draw_area.w = scui_min(draw_area.w, src_clip->w);
+    draw_area.h = scui_min(draw_area.h, src_clip->h);
+    SCUI_ASSERT(dst_clip->x + draw_area.w <= dst_surface->hor_res);
+    SCUI_ASSERT(dst_clip->y + draw_area.h <= dst_surface->ver_res);
     
     if (src_data == NULL || src_size == 0) {
         SCUI_LOG_ERROR("args invalid");

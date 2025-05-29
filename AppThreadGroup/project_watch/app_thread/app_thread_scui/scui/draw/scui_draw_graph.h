@@ -196,6 +196,7 @@ typedef struct {
      struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_area_t    *src_clip;       // 图像绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
         scui_color_t    src_color;      // 图像源色调
         scui_multi_t    src_size;       // 字符串长度
@@ -204,6 +205,7 @@ typedef struct {
      struct {
         scui_surface_t *dst_surface;    // 画布实例
         scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_area_t    *src_clip;       // 图像绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
         scui_color_t    src_color;      // 图像源色调
         scui_multi_t    src_size;       // 字符串长度

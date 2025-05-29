@@ -277,10 +277,16 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
 static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
 {
     #if SCUI_MEM_FEAT_MINI
-    scui_widget_t *widget_cur = list[0];
-    scui_widget_t *widget_tar = list[1];
+    /* 底图清空 */
+    scui_surface_t *dst_surface = scui_frame_buffer_draw();
+    scui_area_t dst_clip = scui_surface_area(dst_surface);
+    scui_draw_area_fill(dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
+    
+    scui_widget_t *widget_cur = NULL;
+    scui_widget_t *widget_tar = NULL;
     scui_alpha_t alpha_cur = scui_alpha_cover;
     scui_alpha_t alpha_tar = scui_alpha_cover;
+    scui_point_t point = {0};
     /* 对窗口进行坐标偏移处理 */
     switch (scui_window_mgr.switch_args.type) {
     default:
@@ -288,12 +294,8 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         /* 其他风格都忽略为move */
         break;
     case scui_window_switch_cover_in: {
-        /* 底图清空 */
-        scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_area_t dst_clip = scui_surface_area(dst_surface);
-        scui_draw_area_fill(dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
-        
-        scui_point_t point = {0};
+        widget_cur = list[0];
+        widget_tar = list[1];
         scui_widget_move_pos(widget_cur->myself, &point, true);
         // alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
         // alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct);
@@ -302,15 +304,11 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         break;
     }
     case scui_window_switch_cover_out: {
-        /* 底图清空 */
-        scui_surface_t *dst_surface = scui_frame_buffer_draw();
-        scui_area_t dst_clip = scui_surface_area(dst_surface);
-        scui_draw_area_fill(dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
-        
-        scui_point_t point = {0};
+        widget_cur = list[1];
+        widget_tar = list[0];
         scui_widget_move_pos(widget_tar->myself, &point, true);
-        // alpha_tar = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
-        // alpha_cur = scui_alpha_pct(scui_window_mgr.switch_args.pct);
+        // alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
+        // alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct);
         // scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true);
         // scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true);
         break;
@@ -360,11 +358,15 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         /* 其他风格都忽略为move */
         break;
     case scui_window_switch_cover_in: {
+        SCUI_ASSERT(widget_cur->clip.w == SCUI_HOR_RES);
+        SCUI_ASSERT(widget_cur->clip.h == SCUI_VER_RES);
         // scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
         // scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
         break;
     }
     case scui_window_switch_cover_out: {
+        SCUI_ASSERT(widget_tar->clip.w == SCUI_HOR_RES);
+        SCUI_ASSERT(widget_tar->clip.h == SCUI_VER_RES);
         // scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
         // scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
         break;

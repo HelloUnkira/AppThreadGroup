@@ -216,11 +216,13 @@ static void scui_window_move_anima_finish(void *instance)
         scui_window_active(scui_window_mgr.switch_args.list[0]);
         scui_window_stack_update(scui_window_mgr.switch_args.list[0], 0);
         scui_widget_hide(scui_window_mgr.switch_args.list[1], true);
+        scui_window_switch_type_update(scui_window_switch_move, scui_opt_dir_none);
     }
     if (scui_window_mgr.switch_args.pct == 100) {
         scui_window_active(scui_window_mgr.switch_args.list[1]);
         scui_window_stack_update(scui_window_mgr.switch_args.list[1], 0);
         scui_widget_hide(scui_window_mgr.switch_args.list[0], true);
+        scui_window_switch_type_update(scui_window_switch_move, scui_opt_dir_none);
     }
     
     scui_window_mgr.switch_args.lock_move = false;
