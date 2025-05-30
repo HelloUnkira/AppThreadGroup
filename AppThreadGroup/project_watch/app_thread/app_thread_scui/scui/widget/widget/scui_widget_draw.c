@@ -830,8 +830,11 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         
         #if SCUI_MEM_FEAT_MINI
-        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, NULL))
+        scui_point_t seg_offset = {0};
+        if (!scui_widget_draw_clip_seg(&dst_clip, NULL, &seg_offset))
              continue;
+        dst_center.x -= seg_offset.x;
+        dst_center.y -= seg_offset.y;
         #endif
         
         scui_draw_ring(widget->surface, &dst_clip,

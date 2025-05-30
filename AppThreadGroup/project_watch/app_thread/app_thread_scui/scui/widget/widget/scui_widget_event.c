@@ -55,10 +55,9 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     scui_widget_t *widget_r = scui_handle_source_check(handle_r);
     
     /* 非窗口控件树兼容 */
-    /* 如果没有绘制画布 */
-    /* 此时将事件转义给根控件 */
+    /* 如果控件没有画布, 将事件转义给根控件 */
     if (widget_r->type != scui_widget_type_window)
-    if (scui_widget_surface(handle) == NULL) {
+    if (widget->surface == NULL) {
         scui_event_t event = {
             .object     = handle_r,
             .style.sync = true,

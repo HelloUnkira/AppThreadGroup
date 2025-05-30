@@ -114,11 +114,6 @@ typedef struct {
 void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
                       scui_handle_t *handle, bool layout);
 
-/*@brief 控件析构器
- *@param widget 控件实例
- */
-void scui_widget_burn(scui_widget_t *widget);
-
 /*@brief 控件树的根控件
  *@param handle 控件句柄
  *@retval 根控件句柄
@@ -131,23 +126,28 @@ scui_handle_t scui_widget_root(scui_handle_t handle);
  */
 scui_handle_t scui_widget_parent(scui_handle_t handle);
 
+/*@brief 控件析构器
+ *@param widget 控件实例
+ */
+void scui_widget_burn(scui_widget_t *widget);
+
+/*@brief 控件添加子控件
+ *@param widget 控件实例
+ *@param child  控件子控件句柄
+ */
+void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child);
+
+/*@brief 控件移除子控件
+ *@param widget 控件实例
+ *@param child  控件子控件句柄
+ */
+void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child);
+
 /*@brief 子控件总数量
  *@param handle 控件句柄
  *@retval 子控件数量
  */
 scui_handle_t scui_widget_child_num(scui_handle_t handle);
-
-/*@brief 控件添加子控件
- *@param handle 控件句柄
- *@param child  控件子控件句柄
- */
-void scui_widget_child_add(scui_handle_t handle, scui_handle_t child);
-
-/*@brief 控件移除子控件
- *@param handle 控件句柄
- *@param child  控件子控件句柄
- */
-void scui_widget_child_del(scui_handle_t handle, scui_handle_t child);
 
 /*@brief 指定位置子控件
  *@param handle 控件句柄

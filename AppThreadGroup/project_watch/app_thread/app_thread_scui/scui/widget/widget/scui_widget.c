@@ -25,7 +25,6 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     /* 非布局则句柄为动态创建 */
     *handle = layout ? maker->myself : scui_handle_find();
     
-    SCUI_LOG_DEBUG("");
     /* 为句柄设置映射 */
     scui_handle_linker(*handle, widget);
     
@@ -33,66 +32,14 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     if (maker->parent != SCUI_HANDLE_INVALID)
         SCUI_ASSERT(scui_handle_remap(maker->parent));
     
-    scui_event_cb_ready(&widget->list);
-    
-    SCUI_LOG_DEBUG("");
     widget->type   = maker->type;
     widget->style  = maker->style;
     widget->clip   = maker->clip;
     widget->parent = maker->parent;
     widget->myself = *handle;
     
-    SCUI_LOG_DEBUG("");
-    /* 构建孩子列表 */
-    widget->child_num = maker->child_num;
-    widget->child_list = NULL;
-    if (widget->child_num != 0) {
-        uint32_t child_list_size = widget->child_num * sizeof(scui_handle_t);
-        widget->child_list = SCUI_MEM_ALLOC(scui_mem_type_mix, child_list_size);
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            widget->child_list[idx] = SCUI_HANDLE_INVALID;
-    }
-    
-    SCUI_LOG_DEBUG("");
-    /* 画布的映射是根控件 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_handle_t handle = scui_widget_root(widget->myself);
-        scui_widget_t  *root = scui_handle_source_check(handle);
-        widget->surface = root->surface;
-    }
-    
-    SCUI_LOG_DEBUG("");
-    /* 子控件的坐标区域是相对根控件(递归语义) */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
-        
-        if (widget_p->parent == SCUI_HANDLE_INVALID &&
-            scui_widget_surface_only(widget));
-        else {
-            widget->clip.x += widget_p->clip.x;
-            widget->clip.y += widget_p->clip.y;
-        }
-    }
-    
-    /* 画布剪切域重置更新 */
-    scui_clip_ready(&widget->clip_set);
-    scui_widget_surface_refr(widget->myself, false);
-    
-    widget->alpha = scui_alpha_cover;
-    widget->image = maker->image;
-    widget->color = maker->color;
-    
-    SCUI_LOG_DEBUG("");
-    /* 向父控件的孩子列表添加自己 */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        scui_widget_child_add(widget->parent, widget->myself);
-    
-    SCUI_LOG_DEBUG("");
-    /* 非根控件要设置为显示,否则为隐藏 */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        widget->style.state = true;
-    
     /* 配置控件事件响应 */
+    scui_event_cb_ready(&widget->list);
     scui_event_cb_node_t cb_node = {0};
     cb_node.event_cb = maker->event_cb;
     if (maker->event_cb == NULL) {
@@ -124,6 +71,49 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
         }
     }
     
+    /* 构建孩子列表 */
+    widget->child_num = maker->child_num;
+    widget->child_list = NULL;
+    if (widget->child_num != 0) {
+        scui_handle_t list_size = widget->child_num * sizeof(scui_handle_t);
+        widget->child_list = SCUI_MEM_ALLOC(scui_mem_type_mix, list_size);
+        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+            widget->child_list[idx] = SCUI_HANDLE_INVALID;
+    }
+    
+    /* 构建父子关联 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_handle_t  handle_r = scui_widget_root(widget->myself);
+        scui_widget_t *widget_r = scui_handle_source_check(handle_r);
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        
+        /* 画布的映射是根控件 */
+        widget->surface = widget_r->surface;
+        
+        /* 子控件的坐标区域是相对根控件(递归语义) */
+        if (widget_p->parent == SCUI_HANDLE_INVALID &&
+            scui_widget_surface_only(widget));
+        else {
+            widget->clip.x += widget_p->clip.x;
+            widget->clip.y += widget_p->clip.y;
+        }
+        
+        /* 向父控件的孩子列表添加自己 */
+        scui_widget_child_add(widget_p, widget->myself);
+        
+        /* 非根控件默认设置为显示 */
+        widget->style.state = true;
+    }
+    
+    /* 画布剪切域重置更新 */
+    scui_clip_ready(&widget->clip_set);
+    scui_widget_surface_refr(widget->myself, false);
+    
+    /* 默认控件透明度为全覆盖 */
+    widget->alpha = scui_alpha_cover;
+    widget->image = maker->image;
+    widget->color = maker->color;
+    
     SCUI_LOG_INFO("widget %u",              widget->myself);
     SCUI_LOG_INFO("widget type %u",         widget->type);
     SCUI_LOG_INFO("widget style %x",        widget->style);
@@ -148,25 +138,34 @@ void scui_widget_burn(scui_widget_t *widget)
         return;
     }
     SCUI_LOG_INFO("widget %u", widget->myself);
+    
+    /* 先递归销毁自己的孩子 */
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_destroy(widget->child_list[idx]);
+    
     /* 回收用户资源句柄 */
     if (widget->user_data != SCUI_HANDLE_INVALID)
         scui_handle_clear(widget->user_data);
-    /* 先递归销毁自己的孩子列表 */
-    scui_widget_child_list_btra(widget, idx)
-        scui_widget_destroy(widget->child_list[idx]);
+    
     /* 画布剪切域清除 */
     scui_clip_clear(&widget->clip_set);
-    /* 再从父控件的孩子列表移除自己 */
-    if (widget->parent != SCUI_HANDLE_INVALID)
-        scui_widget_child_del(widget->parent, widget->myself);
-    /* 最后回收资源 */
-    SCUI_MEM_FREE(widget->child_list);
-    widget->child_list = NULL;
+    
     /* 清空事件列表 */
     scui_widget_event_clear(widget->myself);
     /* 清空事件队列所有事件 */
     scui_event_t event = {.object = widget->myself};
     while (scui_event_dequeue(&event, true, true));
+    
+    /* 再从父控件的孩子列表移除自己 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        scui_widget_child_del(widget_p, widget->myself);
+    }
+    
+    /* 回收孩子列表 */
+    SCUI_MEM_FREE(widget->child_list);
+    widget->child_list = NULL;
+    
     /* 回收句柄 */
     scui_handle_clear(widget->myself);
 }
@@ -192,24 +191,13 @@ scui_handle_t scui_widget_parent(scui_handle_t handle)
     return widget->parent;
 }
 
-/*@brief 子控件总数量
- *@param handle 控件句柄
- *@retval 子控件数量
- */
-scui_handle_t scui_widget_child_num(scui_handle_t handle)
-{
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    return widget->child_num;
-}
-
 /*@brief 控件添加子控件
- *@param handle 控件句柄
+ *@param widget 控件实例
  *@param child  控件子控件句柄
  */
-void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
+void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child)
 {
-    SCUI_LOG_INFO("widget %u add child %u", handle, child);
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    SCUI_LOG_INFO("widget %u add child %u", widget->myself, child);
     
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
@@ -224,17 +212,16 @@ void scui_widget_child_add(scui_handle_t handle, scui_handle_t child)
             scui_event_notify(&event);
             return;
         }
-    SCUI_LOG_WARN("widget %u add child %u fail", handle, child);
+    SCUI_LOG_WARN("widget %u add child %u fail", widget->myself, child);
 }
 
 /*@brief 控件移除子控件
- *@param handle 控件句柄
+ *@param widget 控件实例
  *@param child  控件子控件句柄
  */
-void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
+void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child)
 {
-    SCUI_LOG_INFO("widget %u del child %u", handle, child);
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    SCUI_LOG_INFO("widget %u del child %u", widget->myself, child);
     
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == child) {
@@ -249,7 +236,17 @@ void scui_widget_child_del(scui_handle_t handle, scui_handle_t child)
             scui_event_notify(&event);
             return;
         }
-    SCUI_LOG_WARN("widget %u del child %u fail", handle, child);
+    SCUI_LOG_WARN("widget %u del child %u fail", widget->myself, child);
+}
+
+/*@brief 子控件总数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_num(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    return widget->child_num;
 }
 
 /*@brief 指定位置子控件
@@ -266,6 +263,7 @@ scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t ind
     
     if (index < widget->child_num)
         return widget->child_list[index];
+    
     return SCUI_HANDLE_INVALID;
 }
 
@@ -279,7 +277,7 @@ scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t chi
     scui_widget_t *widget = scui_handle_source_check(handle);
     
     scui_widget_child_list_btra(widget, idx)
-        if (child == widget->child_list[idx])
+        if (widget->child_list[idx] == child)
             return idx;
     
     SCUI_ASSERT(false);
@@ -298,10 +296,8 @@ void scui_widget_clip_sizes(scui_handle_t handle, scui_multi_t *size)
     scui_clip_sizes(&widget->clip_set, &size_cur);
     *size += size_cur;
     
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_clip_sizes(handle, size);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_clip_sizes(widget->child_list[idx], size);
 }
 
 /*@brief 控件检查剪切域
@@ -326,10 +322,8 @@ void scui_widget_clip_check(scui_handle_t handle, bool recurse)
     if (!recurse)
          return;
     
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_clip_check(handle, recurse);
-    }
+    scui_widget_child_list_btra(widget, idx)
+        scui_widget_clip_check(widget->child_list[idx], recurse);
 }
 
 /*@brief 控件清除剪切域
@@ -345,9 +339,9 @@ void scui_widget_clip_clear(scui_widget_t *widget, bool recurse)
          return;
     
     scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_source(handle);
-        scui_widget_clip_clear(child, recurse);
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
+        scui_widget_clip_clear(widget_c, recurse);
     }
 }
 
@@ -369,9 +363,9 @@ void scui_widget_clip_reset(scui_widget_t *widget, scui_area_t *clip, bool recur
          return;
     
     scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_source(handle);
-        scui_widget_clip_reset(child, clip, recurse);
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
+        scui_widget_clip_reset(widget_c, clip, recurse);
     }
 }
 
@@ -413,37 +407,37 @@ void scui_widget_clip_update(scui_widget_t *widget)
     
     /* 迭代到子控件,清除自己的剪切域 */
     scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_source(handle);
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
         /* 控件隐藏则跳过 */
-        if (scui_widget_is_hide(handle))
+        if (scui_widget_is_hide(handle_c))
             continue;
         /* 控件满足完全覆盖的条件 */
-        if (scui_widget_clip_cover(child))
-            scui_clip_del(&widget->clip_set, &child->clip_set.clip);
+        if (scui_widget_clip_cover(widget_c))
+            scui_clip_del(&widget->clip_set, &widget_c->clip_set.clip);
         /* 迭代到子控件 */
-        scui_widget_clip_update(child);
+        scui_widget_clip_update(widget_c);
     }
     
     /* 从父控件的当前位置开始,迭代到后面的兄弟控件,清除自己的剪切域 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         bool not_match = true;
-        scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
-        for (scui_handle_t idx = 0; idx < widget_parent->child_num; idx++) {
-            if (widget_parent->child_list[idx] != SCUI_HANDLE_INVALID &&
-                widget_parent->child_list[idx] != widget->myself) {
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        for (scui_handle_t idx = 0; idx < widget_p->child_num; idx++) {
+            if (widget_p->child_list[idx] != SCUI_HANDLE_INVALID &&
+                widget_p->child_list[idx] != widget->myself) {
                 if (not_match)
                     continue;
-                scui_handle_t handle = widget_parent->child_list[idx];
-                scui_widget_t *buddy = scui_handle_source_check(handle);
+                scui_handle_t  handle_s = widget_p->child_list[idx];
+                scui_widget_t *widget_s = scui_handle_source_check(handle_s);
                 /* 控件隐藏则跳过 */
-                if (scui_widget_is_hide(handle))
+                if (scui_widget_is_hide(handle_s))
                     continue;
                 /* 控件满足完全覆盖的条件 */
-                if (scui_widget_clip_cover(buddy))
-                    scui_clip_del(&widget->clip_set, &buddy->clip_set.clip);
+                if (scui_widget_clip_cover(widget_s))
+                    scui_clip_del(&widget->clip_set, &widget_s->clip_set.clip);
             }
-            if (widget_parent->child_list[idx] == widget->myself)
+            if (widget_p->child_list[idx] == widget->myself)
                 not_match = false;
         }
         SCUI_ASSERT(!not_match);
@@ -472,7 +466,7 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_ASSERT(widget->surface == NULL && hor_res > 0 && ver_res > 0);
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
-    memset(widget->surface, 0, sizeof(scui_surface_t));
+    
     widget->surface->format  = format;
     widget->surface->hor_res = hor_res;
     widget->surface->ver_res = ver_res;
@@ -481,11 +475,10 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
     if (widget->surface->format == scui_pixel_cf_def)
         widget->surface->format  = SCUI_PIXEL_CF_DEF;
     
-    scui_coord_t src_byte    = scui_pixel_bits(widget->surface->format) / 8;
-    scui_coord_t src_remain  = sizeof(scui_color_wt_t) - src_byte;
-    scui_multi_t src_size    = hor_res * ver_res * src_byte + src_remain;
-    
-    widget->surface->pixel   = SCUI_MEM_ALLOC(scui_mem_type_graph, src_size);
+    scui_coord_t res_byte = scui_pixel_bits(widget->surface->format) / 8;
+    scui_coord_t res_rem  = sizeof(scui_color_wt_t) - res_byte;
+    scui_multi_t res_size = hor_res * ver_res * res_byte + res_rem;
+    widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_size);
 }
 
 /*@brief 控件画布销毁
@@ -513,10 +506,8 @@ void scui_widget_surface_remap(scui_handle_t handle, scui_surface_t *surface)
     
     widget->surface = surface;
     
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_surface_remap(handle, surface);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_surface_remap(widget->child_list[idx], surface);
 }
 
 /*@brief 控件画布剪切域刷新
@@ -539,12 +530,12 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
     
     /* 画布的坐标区域是相对根控件(递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_widget_t *widget_parent = scui_handle_source_check(widget->parent);
-        scui_area_t widget_clip = widget->clip_set.clip;
-        scui_area_t parent_clip = widget_parent->clip_set.clip;
+        scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
+        scui_area_t clip_w = widget->clip_set.clip;
+        scui_area_t clip_p = widget_p->clip_set.clip;
         /* 子控件的坐标区域是父控件坐标区域的子集 */
         scui_area_t clip_inter = {0};
-        if (scui_area_inter(&clip_inter, &widget_clip, &parent_clip))
+        if (scui_area_inter(&clip_inter, &clip_w, &clip_p))
             widget->clip_set.clip = clip_inter;
         else
             widget->clip_set.clip = (scui_area_t){0};
@@ -553,10 +544,8 @@ void scui_widget_surface_refr(scui_handle_t handle, bool recurse)
     if (!recurse)
          return;
     
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_surface_refr(handle, recurse);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_surface_refr(widget->child_list[idx], recurse);
 }
 
 /*@brief 控件画布为独立画布
@@ -640,6 +629,7 @@ scui_area_t scui_widget_clip(scui_handle_t handle)
 bool scui_widget_is_show(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
+    
     /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID)
     if (!scui_widget_is_show(widget->parent))
@@ -669,8 +659,7 @@ void scui_widget_user_data_get(scui_handle_t handle, void **user_data)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    if (widget->user_data == SCUI_HANDLE_INVALID)
-       *user_data = NULL;
+    *user_data = NULL;
     if (widget->user_data != SCUI_HANDLE_INVALID)
        *user_data = scui_handle_source(widget->user_data);
 }
@@ -736,10 +725,8 @@ void scui_widget_alpha_undo(scui_handle_t handle, scui_alpha_t alpha, bool recur
          return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_alpha_set(handle, alpha, recurse);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_alpha_set(widget->child_list[idx], alpha, recurse);
 }
 
 /*@brief 控件透明度设置融合
@@ -758,10 +745,8 @@ void scui_widget_alpha_mix(scui_handle_t handle, scui_alpha_t alpha, bool recurs
          return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_alpha_set(handle, alpha, recurse);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_alpha_set(widget->child_list[idx], alpha, recurse);
 }
 
 /*@brief 控件透明度设置
@@ -780,10 +765,8 @@ void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurs
          return;
     
     /* 必须递归设置控件透明度,迭代它的孩子列表 */
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_alpha_set(handle, alpha, recurse);
-    }
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_alpha_set(widget->child_list[idx], alpha, recurse);
 }
 
 /*@brief 控件图片设置
