@@ -620,7 +620,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
         }
         
         // 启用集成事件冒泡流程
+        scui_tick_calc(0x20, NULL, NULL, NULL);
         scui_widget_event_bubble(event, NULL, true);
+        scui_tick_calc(0x21, NULL, NULL, NULL);
         return;
     }
     case scui_event_show:
