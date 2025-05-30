@@ -77,11 +77,11 @@ void scui_ui_scene_float_1_1_event_proc(scui_event_t *event)
             .color_l.full = 0xFF00FF00,
             .color_d.full = 0xFF0000FF,
         };
-        // clip = scui_widget_clip(event->object);
-        // clip.x += clip.w / 6;
-        // clip.y += clip.h / 6;
-        // clip.w -= clip.w / 6 * 2;
-        // clip.h -= clip.h / 6 * 2;
+        clip = scui_widget_clip(event->object);
+        clip.x += 10;
+        clip.y += 10;
+        clip.w -= 10 * 2;
+        clip.h -= 10 * 2;
         scui_widget_draw_qrcode(event->object, &clip, color, strlen(url), url);
         
         break;
@@ -122,10 +122,10 @@ void scui_ui_scene_float_1_2_event_proc(scui_event_t *event)
             .color_d.full = 0xFF0000FF,
         };
         clip = scui_widget_clip(event->object);
-        clip.x += 10;
-        clip.y += 10 + 10;
-        clip.w -= 10 * 2;
-        clip.h -= 10 * 2 + 10 * 2;
+        clip.x += 15;
+        clip.y += 15;
+        clip.w -= 15 * 2;
+        clip.h -= 15 * 2;
         scui_widget_draw_barcode(event->object, &clip, color, strlen(url), url);
         break;
     }

@@ -614,6 +614,7 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
 {
     #if SCUI_MEM_FEAT_MINI
     SCUI_ASSERT(false);
+    return;
     #endif
     
     /* draw dsc args<s> */
@@ -666,9 +667,9 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
 {
+    #if SCUI_MEM_FEAT_MINI
     return;
-    
-    
+    #endif
     
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
@@ -713,9 +714,9 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
 {
+    #if SCUI_MEM_FEAT_MINI
     return;
-    
-    
+    #endif
     
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
@@ -758,9 +759,9 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
 {
+    #if SCUI_MEM_FEAT_MINI
     return;
-    
-    
+    #endif
     
     /* draw dsc args<s> */
     scui_handle_t handle  = draw_dsc->handle;
@@ -844,9 +845,9 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
  */
 void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
 {
+    #if SCUI_MEM_FEAT_MINI
     return;
-    
-    
+    #endif
     
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
