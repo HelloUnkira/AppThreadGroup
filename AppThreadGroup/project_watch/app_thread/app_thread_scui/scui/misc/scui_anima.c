@@ -81,10 +81,10 @@ void scui_anima_update(scui_handle_t handle)
         if (anima->reduce < 0)
             continue;
         
-        if (anima->reduce > anima->peroid)
-            anima->reduce = anima->peroid;
+        if (anima->reduce > anima->period)
+            anima->reduce = anima->period;
         
-        int32_t value_c = anima->path(anima->reduce, 0, anima->peroid,
+        int32_t value_c = anima->path(anima->reduce, 0, anima->period,
                                       anima->value_s,   anima->value_e);
         
         /* 更新value */
@@ -105,12 +105,12 @@ void scui_anima_update(scui_handle_t handle)
         }
         
         /* 当次轮转未结束 */
-        if (anima->reduce < anima->peroid)
+        if (anima->reduce < anima->period)
             continue;
         
         bool reload = false;
         /* 当次轮转未结束 */
-        if (anima->reduce >= anima->peroid)
+        if (anima->reduce >= anima->period)
             anima->value_c = 0;
         /* 常加载轮转 */
         if (anima->reload == SCUI_ANIMA_INFINITE)
@@ -192,8 +192,8 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
         if (anima->path == NULL)
             anima->path  = scui_map_linear;
         /* 动画限制最小周期 */
-        if (anima->peroid < SCUI_ANIMA_TICK)
-            anima->peroid = SCUI_ANIMA_TICK;
+        if (anima->period < SCUI_ANIMA_TICK)
+            anima->period = SCUI_ANIMA_TICK;
         /* 默认值变动为周期 */
         if (anima->value_s == anima->value_e) {
             anima->value_e  = 100;
@@ -212,8 +212,8 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID) {
             anima = scui_handle_source(scui_anima_list.list[idx]);
-            SCUI_LOG_ERROR("expired:%p, peroid:%u, reload:%u",
-                              anima->expired, anima->peroid, anima->reload);
+            SCUI_LOG_ERROR("expired:%p, period:%u, reload:%u",
+                              anima->expired, anima->period, anima->reload);
         }
 }
 
@@ -338,9 +338,9 @@ bool scui_anima_running(scui_handle_t handle)
 uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_e)
 {
     uint32_t dist = scui_dist(dist_s, dist_e);
-    uint32_t peroid = dist * 1000 / speed_ms;
+    uint32_t period = dist * 1000 / speed_ms;
     
-    return peroid;
+    return period;
 }
 
 /*@brief 距离上次动画嘀嗒数

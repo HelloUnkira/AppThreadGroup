@@ -230,8 +230,12 @@ static void scui_window_move_anima_finish(void *instance)
 }
 
 /*@brief 窗口移动动画自动化
+ *@param value_s   起始值
+ *@param value_e   结束值
+ *@param value_all 计数值
+ *@param period    周期值
  */
-static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_t value_all, uint32_t peroid)
+static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_t value_all, uint32_t period)
 {
     scui_anima_t anima = {0};
     anima.prepare = scui_window_move_anima_prepare;
@@ -240,13 +244,13 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
     anima.value_s = value_s;
     anima.value_e = value_e;
     
-    if (peroid != 0)
-        anima.peroid = peroid;
+    if (period != 0)
+        anima.period = period;
     else {
         SCUI_ASSERT(value_all != 0);
-        anima.peroid  = scui_abs(anima.value_e - anima.value_s);
-        anima.peroid *= SCUI_WINDOW_MGR_SWITCH_MOVE_MS;
-        anima.peroid /= value_all;
+        anima.period  = scui_abs(anima.value_e - anima.value_s);
+        anima.period *= SCUI_WINDOW_MGR_SWITCH_MOVE_MS;
+        anima.period /= value_all;
     }
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
@@ -655,7 +659,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_cover_out:
         case scui_window_switch_cover_in:
             switch_anima.path = scui_map_ease_in_out;
-            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
+            switch_anima.period = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
             break;
         case scui_window_switch_flip1:
         case scui_window_switch_zoom2:
@@ -663,14 +667,14 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         case scui_window_switch_move:
             // 非叠加类型的移动可适合超调效果
             switch_anima.path = scui_map_overshoot;
-            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
+            switch_anima.period = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
             // 非叠加类型的移动可适合重力回弹效果
             switch_anima.path = scui_map_bounce;
-            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
+            switch_anima.period = SCUI_WINDOW_MGR_SWITCH_JUMP_MS * 3 / 2;
             break;
         default:
             switch_anima.path = scui_map_linear;
-            switch_anima.peroid = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
+            switch_anima.period = SCUI_WINDOW_MGR_SWITCH_JUMP_MS;
             break;
         }
         

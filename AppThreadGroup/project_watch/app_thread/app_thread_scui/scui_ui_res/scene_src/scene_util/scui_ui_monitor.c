@@ -166,7 +166,7 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             if (monitor_anima == SCUI_HANDLE_INVALID) {
                 scui_anima_t anima = {0};
                 anima.expired = scui_ui_scene_monitor_anima_expired;
-                anima.peroid  = SCUI_ANIMA_TICK * 5;
+                anima.period  = SCUI_ANIMA_TICK * 5;
                 anima.reload  = SCUI_ANIMA_INFINITE;
                 scui_anima_create(&anima, &monitor_anima);
                 scui_anima_start(monitor_anima);

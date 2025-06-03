@@ -87,56 +87,18 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
  */
 void scui_scroll_burn(scui_handle_t handle);
 
-/*@brief 滚动控件获取偏移量百分比(自动布局)
- *@param handle 滚动控件句柄
- *@param percent 偏移量
- */
-void scui_scroll_percent_get(scui_handle_t handle, scui_coord_t *percent);
-
-/*@brief 滚动控件中心对齐子控件
- *@param handle 滚动控件句柄
- *@param target 中心对齐子控件
- */
-void scui_scroll_center_target_get(scui_handle_t handle, scui_handle_t *target);
-
-/*@brief 滚动控件中心对齐子控件
- *@param handle 滚动控件句柄
- *@param target 中心对齐子控件
- */
-void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target);
-
-/*@brief 滚动控件获取偏移量(自动布局)
- *@param handle 滚动控件句柄
- *@param offset 偏移量
- */
-void scui_scroll_offset_get(scui_handle_t handle, scui_coord_t *offset);
-
-/*@brief 滚动控件设置偏移量
- *@param handle 滚动控件句柄
- *@param offset 偏移量
- */
-void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset);
-
-/*@brief 滚动控件边距(自由布局)
- *@param handle 滚动控件句柄
- *@param edge   滚动边距
- */
-void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge);
-
-/*@brief 滚动控件翻页数更新
- *@param handle 滚动控件句柄
- *@param fling_page 翻页数
- */
-void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
-
-/*@brief 滚动控件动画自动化
- */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid);
-
-/*@brief 滚动控件更新布局回调
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_scroll_layout_update(scui_event_t *event);
+void scui_scroll_event(scui_event_t *event);
+
+/*@brief 滚动控件动画自动化
+ *@param handle  滚动控件句柄
+ *@param value_s 起始值
+ *@param value_e 结束值
+ *@param period  周期值
+ */
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
 
 /*@brief 滚动控件事件流程合并
  *@param event 事件
@@ -160,10 +122,5 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
  *       0xAA  滚动布局更新事件
  */
 void scui_scroll_event_notify(scui_event_t *event, uint8_t type);
-
-/*@brief 事件处理回调
- *@param event 事件
- */
-void scui_scroll_event(scui_event_t *event);
 
 #endif

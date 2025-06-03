@@ -218,6 +218,21 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     scui_area_t dst_clip = scui_surface_area(dst_surface);
     scui_draw_area_fill(dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
     
+    /* 内部唯一引用::: */
+    void scui_window_transform_move(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_center(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num);
+    
     /* 多画布混合变换 */
     switch (switch_type) {
     default:

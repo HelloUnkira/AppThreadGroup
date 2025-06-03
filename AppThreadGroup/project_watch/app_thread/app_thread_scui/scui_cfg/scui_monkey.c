@@ -178,7 +178,7 @@ void scui_monkey_test(void)
     anima.expired = scui_monkey_anim_execute;
     anima.finish  = scui_monkey_anim_finish;
     anima.reload  = SCUI_ANIMA_INFINITE;
-    anima.peroid  = SCUI_ANIMA_TICK;
+    anima.period  = SCUI_ANIMA_TICK;
     
     scui_handle_t scui_monkey_test_anima = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &scui_monkey_test_anima);

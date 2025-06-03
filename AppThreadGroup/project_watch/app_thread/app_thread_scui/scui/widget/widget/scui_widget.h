@@ -114,18 +114,6 @@ typedef struct {
 void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
                       scui_handle_t *handle, bool layout);
 
-/*@brief 控件树的根控件
- *@param handle 控件句柄
- *@retval 根控件句柄
- */
-scui_handle_t scui_widget_root(scui_handle_t handle);
-
-/*@brief 控件的父控件
- *@param handle 控件句柄
- *@retval 父控件
- */
-scui_handle_t scui_widget_parent(scui_handle_t handle);
-
 /*@brief 控件析构器
  *@param widget 控件实例
  */
@@ -142,26 +130,6 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child);
  *@param child  控件子控件句柄
  */
 void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child);
-
-/*@brief 子控件总数量
- *@param handle 控件句柄
- *@retval 子控件数量
- */
-scui_handle_t scui_widget_child_num(scui_handle_t handle);
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件位置(映射点)
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index);
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件句柄
- *@retval 子控件句柄
- */
-scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
 
 /*@brief 控件统计剪切域大小
  *@param handle 控件句柄
@@ -247,60 +215,6 @@ void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
  */
 void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
-/*@brief 控件类型
- *@param handle 控件句柄
- *@retval 控件类型
- */
-scui_widget_type_t scui_widget_type(scui_handle_t handle);
-
-/*@brief 控件剪切域
- *@param handle 控件句柄
- *@retval 控件剪切域
- */
-scui_area_t scui_widget_clip(scui_handle_t handle);
-
-/*@brief 控件显示状态获取
- *@param handle 控件句柄
- *@retval 是否显示
- */
-bool scui_widget_is_show(scui_handle_t handle);
-
-/*@brief 控件隐藏状态获取
- *@param handle 控件句柄
- *@retval 是否隐藏
- */
-bool scui_widget_is_hide(scui_handle_t handle);
-
-/*@brief 用户资源获取
- *@param handle    控件句柄
- *@param user_data 用户资源
- */
-void scui_widget_user_data_get(scui_handle_t handle, void **user_data);
-
-/*@brief 控件透明度获取
- *@param handle 控件句柄
- *@param alpha  控件透明度
- */
-void scui_widget_alpha_get(scui_handle_t handle, scui_alpha_t *alpha);
-
-/*@brief 控件图片获取
- *@param handle 控件句柄
- *@param image  图片句柄
- */
-void scui_widget_image_get(scui_handle_t handle, scui_handle_t *image);
-
-/*@brief 控件颜色获取
- *@param handle 控件句柄
- *@param color  颜色
- */
-void scui_widget_color_get(scui_handle_t handle, scui_color_t *color);
-
-/*@brief 用户资源设置
- *@param handle    控件句柄
- *@param user_data 用户资源
- */
-void scui_widget_user_data_set(scui_handle_t handle, void *user_data);
-
 /*@brief 控件透明度设置撤销
  *@param handle  控件句柄
  *@param alpha   控件透明度
@@ -315,23 +229,53 @@ void scui_widget_alpha_undo(scui_handle_t handle, scui_alpha_t alpha, bool recur
  */
 void scui_widget_alpha_mix(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
 
-/*@brief 控件透明度设置
- *@param handle  控件句柄
- *@param alpha   控件透明度
- *@param recurse 递归处理
+/*@brief 控件默认事件处理回调
+ *@param event 事件
  */
-void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
+void scui_widget_event_dispatch(scui_event_t *event);
 
-/*@brief 控件图片设置
+/*@brief 控件类型检查
  *@param handle 控件句柄
- *@param image  图片句柄
+ *@param type   控件类型
+ *@retval 控件类型检查
  */
-void scui_widget_image_set(scui_handle_t handle, scui_handle_t image);
+bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
 
-/*@brief 控件颜色设置
- *@param handle 控件句柄
- *@param color  颜色
+/*@brief 查找控件映射表
+ *@param type       控件类型
+ *@param widget_map 控件映射表
  */
-void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
+void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_map);
+
+/*@brief 控件移动子控件
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param dirty  脏标记
+ */
+void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset, bool dirty);
+
+/*@brief 控件移动子控件(循环模式)
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param range  偏移量限制
+ *@param dirty  脏标记
+ */
+void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty);
+
+/*@brief 控件对齐子控件计算
+ *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
+ *       边界对齐:则边界中心点与子控件中心点偏移量(最小)
+ *@param handle 控件句柄
+ *@param target 控件句柄(目标控件)
+ *@param offset 偏移量
+ *@param pos    对齐目标
+ */
+bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scui_point_t *offset, scui_opt_pos_t pos);
+
+/*@prief 事件滚动状态检查更新
+ *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
+ *@param key  锁定标记句柄(浮动校验密钥)
+ */
+bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key);
 
 #endif

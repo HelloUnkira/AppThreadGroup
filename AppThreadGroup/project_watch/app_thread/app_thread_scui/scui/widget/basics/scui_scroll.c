@@ -349,6 +349,9 @@ static void scui_scroll_anima_prepare(void *instance)
  */
 static void scui_scroll_anima_expired(void *instance)
 {
+    
+    
+    
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
     scui_widget_t *widget = scui_handle_source_check(anima->handle);
@@ -419,7 +422,7 @@ static void scui_scroll_anima_expired(void *instance)
         
         /* 最后一帧了,可以结束了 */
         if (delta.x == 0 && delta.y == 0 && value_c != 0)
-            anima->reduce = anima->peroid;
+            anima->reduce = anima->period;
         
         scui_point_t offset = delta;
         scroll->ofs_sum.x += delta.x;
@@ -477,7 +480,7 @@ static void scui_scroll_anima_expired(void *instance)
         
         /* 最后一帧了,可以结束了 */
         if (delta == 0 && value_c != 0)
-            anima->reduce = anima->peroid;
+            anima->reduce = anima->period;
         
         scroll->dis_sum += delta;
         
@@ -518,6 +521,9 @@ static void scui_scroll_anima_expired(void *instance)
  */
 static void scui_scroll_anima_finish(void *instance)
 {
+    void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
+    
+    
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
     scui_widget_t *widget = scui_handle_source_check(anima->handle);
@@ -633,8 +639,12 @@ static void scui_scroll_anima_finish(void *instance)
 }
 
 /*@brief 滚动控件动画自动化
+ *@param handle  滚动控件句柄
+ *@param value_s 起始值
+ *@param value_e 结束值
+ *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t peroid)
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period)
 {
     scui_anima_t anima = {0};
     anima.path    = scui_map_ease_in_out;
@@ -643,7 +653,7 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     anima.finish  = scui_scroll_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
-    anima.peroid  = peroid != 0 ? peroid : scui_abs(anima.value_e - anima.value_s);
+    anima.period  = period != 0 ? period : scui_abs(anima.value_e - anima.value_s);
     anima.handle  = handle;
     
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -670,131 +680,6 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     }
     scui_anima_create(&anima, &scroll->anima);
     scui_anima_start(scroll->anima);
-}
-
-/*@brief 滚动控件更新布局回调
- *@param event 事件
- */
-void scui_scroll_layout_update(scui_event_t *event)
-{
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_scroll_t *scroll = (void *)widget;
-    
-    /* 仅标记布局触发布局更新 */
-    if (scroll->layout)
-        scroll->layout = false;
-    else
-        return;
-    
-    if (widget->child_num == 0)
-        return;
-    
-    SCUI_LOG_INFO("widget: %u", widget->myself);
-    
-    // 状态量还原
-    scroll->point_cur = (scui_point_t){0};
-    scroll->point_ofs = (scui_point_t){0};
-    
-    /* 仅指定布局触发布局更新 */
-    /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
-    if (scroll->freedom) {
-        scroll->loop = false;
-        
-        /* 计算布局内容 */
-        scui_area_t clip = widget->clip;
-        /* 布局内容为所有子控件的全集 */
-        scui_widget_child_list_btra(widget, idx) {
-            scui_handle_t handle = widget->child_list[idx];
-            scui_widget_t *child = scui_handle_source_check(handle);
-            scui_area_merge2(&clip, &child->clip);
-        }
-        scui_area_t clip_widget = widget->clip;
-        scui_area_m_to_s(&clip, &clip);
-        scui_area_m_to_s(&clip_widget, &clip_widget);
-        /* 计算自由布局下的ofs_min和ofs_max */
-        scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1) - scroll->edge.x;
-        scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1) - scroll->edge.y;
-        scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2) + scroll->edge.x;
-        scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2) + scroll->edge.y;
-        SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
-        SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
-        
-        // 状态量还原
-        scroll->ofs_cur = (scui_point_t){0};
-        scroll->ofs_sum = (scui_point_t){0};
-        scui_widget_draw(widget->myself, NULL, false);
-        return;
-    }
-    
-    // 水平自动布局会调整所有子控件的(x,y,h)
-    // 垂直自动布局会调整所有子控件的(x,y,w)
-    scui_point_t pos = {
-        .x = widget->clip.x,
-        .y = widget->clip.y,
-    };
-    
-    /* 根据布局方向调整子控件信息 */
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_source_check(handle);
-        /* 被隐藏的控件忽略 */
-        if (scui_widget_is_hide(handle))
-            continue;
-        
-        /* 更新子控件尺寸 */
-        if (scroll->dir == scui_opt_dir_hor)
-            scui_widget_adjust_size(handle, child->clip.w, widget->clip.h);
-        if (scroll->dir == scui_opt_dir_ver)
-            scui_widget_adjust_size(handle, widget->clip.w, child->clip.h);
-        /* 更新子控件位置 */
-        scui_widget_move_pos(handle, &pos, true);
-        /* 迭代到下一子控件 */
-        if (scroll->dir == scui_opt_dir_hor)
-            pos.x += child->clip.w + scroll->space;
-        if (scroll->dir == scui_opt_dir_ver)
-            pos.y += child->clip.h + scroll->space;
-    }
-    
-    // 状态量还原
-    scroll->dis_sum = 0;
-    scroll->dis_ofs = 0;
-    scroll->dis_lim = 0;
-    
-    if (!scroll->loop) {
-    
-        /* 空隙只夹杂在控件中 */
-        if (scroll->dir == scui_opt_dir_hor)
-            pos.x -= scroll->space;
-        if (scroll->dir == scui_opt_dir_ver)
-            pos.y -= scroll->space;
-    }
-    
-    /* 不同模式设置不同参数 */
-    if (scroll->dir == scui_opt_dir_hor) {
-        scroll->dis_lim = pos.x - widget->clip.x;
-        
-        if (!scroll->loop) {
-            
-            if (scroll->dis_lim >  widget->clip.w)
-                scroll->dis_lim -= widget->clip.w;
-            else
-                scroll->dis_lim = 0;
-        }
-    }
-    if (scroll->dir == scui_opt_dir_ver) {
-        scroll->dis_lim = pos.y - widget->clip.y;
-        
-        if (!scroll->loop) {
-            
-            if (scroll->dis_lim >  widget->clip.h)
-                scroll->dis_lim -= widget->clip.h;
-            else
-                scroll->dis_lim = 0;
-        }
-    }
-    SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
-    
-    scui_widget_draw(widget->myself, NULL, false);
 }
 
 /*@brief 滚动控件事件流程合并
@@ -1216,6 +1101,131 @@ void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
     }
 }
 
+/*@brief 滚动控件更新布局回调
+ *@param event 事件
+ */
+static void scui_scroll_event_layout(scui_event_t *event)
+{
+    scui_widget_t *widget = scui_handle_source_check(event->object);
+    scui_scroll_t *scroll = (void *)widget;
+    
+    /* 仅标记布局触发布局更新 */
+    if (scroll->layout)
+        scroll->layout = false;
+    else
+        return;
+    
+    if (widget->child_num == 0)
+        return;
+    
+    SCUI_LOG_INFO("widget: %u", widget->myself);
+    
+    // 状态量还原
+    scroll->point_cur = (scui_point_t){0};
+    scroll->point_ofs = (scui_point_t){0};
+    
+    /* 仅指定布局触发布局更新 */
+    /* 粘性布局,与自由布局类似,只需要边界自动对齐即可 */
+    if (scroll->freedom) {
+        scroll->loop = false;
+        
+        /* 计算布局内容 */
+        scui_area_t clip = widget->clip;
+        /* 布局内容为所有子控件的全集 */
+        scui_widget_child_list_btra(widget, idx) {
+            scui_handle_t handle = widget->child_list[idx];
+            scui_widget_t *child = scui_handle_source_check(handle);
+            scui_area_merge2(&clip, &child->clip);
+        }
+        scui_area_t clip_widget = widget->clip;
+        scui_area_m_to_s(&clip, &clip);
+        scui_area_m_to_s(&clip_widget, &clip_widget);
+        /* 计算自由布局下的ofs_min和ofs_max */
+        scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1) - scroll->edge.x;
+        scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1) - scroll->edge.y;
+        scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2) + scroll->edge.x;
+        scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2) + scroll->edge.y;
+        SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
+        SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
+        
+        // 状态量还原
+        scroll->ofs_cur = (scui_point_t){0};
+        scroll->ofs_sum = (scui_point_t){0};
+        scui_widget_draw(widget->myself, NULL, false);
+        return;
+    }
+    
+    // 水平自动布局会调整所有子控件的(x,y,h)
+    // 垂直自动布局会调整所有子控件的(x,y,w)
+    scui_point_t pos = {
+        .x = widget->clip.x,
+        .y = widget->clip.y,
+    };
+    
+    /* 根据布局方向调整子控件信息 */
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle = widget->child_list[idx];
+        scui_widget_t *child = scui_handle_source_check(handle);
+        /* 被隐藏的控件忽略 */
+        if (scui_widget_is_hide(handle))
+            continue;
+        
+        /* 更新子控件尺寸 */
+        if (scroll->dir == scui_opt_dir_hor)
+            scui_widget_adjust_size(handle, child->clip.w, widget->clip.h);
+        if (scroll->dir == scui_opt_dir_ver)
+            scui_widget_adjust_size(handle, widget->clip.w, child->clip.h);
+        /* 更新子控件位置 */
+        scui_widget_move_pos(handle, &pos, true);
+        /* 迭代到下一子控件 */
+        if (scroll->dir == scui_opt_dir_hor)
+            pos.x += child->clip.w + scroll->space;
+        if (scroll->dir == scui_opt_dir_ver)
+            pos.y += child->clip.h + scroll->space;
+    }
+    
+    // 状态量还原
+    scroll->dis_sum = 0;
+    scroll->dis_ofs = 0;
+    scroll->dis_lim = 0;
+    
+    if (!scroll->loop) {
+    
+        /* 空隙只夹杂在控件中 */
+        if (scroll->dir == scui_opt_dir_hor)
+            pos.x -= scroll->space;
+        if (scroll->dir == scui_opt_dir_ver)
+            pos.y -= scroll->space;
+    }
+    
+    /* 不同模式设置不同参数 */
+    if (scroll->dir == scui_opt_dir_hor) {
+        scroll->dis_lim = pos.x - widget->clip.x;
+        
+        if (!scroll->loop) {
+            
+            if (scroll->dis_lim >  widget->clip.w)
+                scroll->dis_lim -= widget->clip.w;
+            else
+                scroll->dis_lim = 0;
+        }
+    }
+    if (scroll->dir == scui_opt_dir_ver) {
+        scroll->dis_lim = pos.y - widget->clip.y;
+        
+        if (!scroll->loop) {
+            
+            if (scroll->dis_lim >  widget->clip.h)
+                scroll->dis_lim -= widget->clip.h;
+            else
+                scroll->dis_lim = 0;
+        }
+    }
+    SCUI_LOG_DEBUG("range:[0, %d]", scroll->dis_lim);
+    
+    scui_widget_draw(widget->myself, NULL, false);
+}
+
 /*@brief 事件处理回调
  *@param event 事件
  */
@@ -1234,9 +1244,8 @@ void scui_scroll_event(scui_event_t *event)
         break;
     case scui_event_layout: {
         scroll->layout = true;
-        scui_scroll_layout_update(event);
         scui_event_mask_over(event);
-        
+        scui_scroll_event_layout(event);
         scui_scroll_event_notify(event, 0xAA);
         break;
     }

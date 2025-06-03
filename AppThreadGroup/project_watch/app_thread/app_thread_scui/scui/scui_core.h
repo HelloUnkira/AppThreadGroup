@@ -53,29 +53,28 @@
 
 /* widget: */
 #include "scui_widget.h"
-#include "scui_widget_map.h"
-#include "scui_widget_opt.h"
-#include "scui_widget_draw.h"
-#include "scui_widget_event.h"
-/* widget: */
-#include "scui_window_mgr.h"        /* 窗口管理器 */
-#include "scui_window_switch.h"     /* 窗口管理器 */
-#include "scui_window_transform.h"  /* 窗口管理器 */
-#include "scui_window_float.h"      /* 窗口管理器 */
-#include "scui_window_stack.h"      /* 窗口管理器 */
+#include "scui_widget_inf.h"
 #include "scui_window.h"            /* 控件(窗口) */
+#include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget: */
-#include "scui_custom_draw.h"       /* 控件(自定义:插件) */
 #include "scui_custom.h"            /* 控件(自定义) */
+#include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
+#include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_string.h"            /* 控件(字符串) */
+#include "scui_string_inf.h"        /* 控件(字符串)API */
 #include "scui_linear.h"            /* 控件(列表) */
+#include "scui_linear_inf.h"        /* 控件(列表)API */
 #include "scui_roller.h"            /* 控件(滚轮) */
+#include "scui_roller_inf.h"        /* 控件(滚轮)API */
 /* widget: */
-#include "scui_objbtn.h"            /* 对象按钮 */
+#include "scui_objbtn.h"            /* 控件(对象按钮) */
+#include "scui_objbtn_inf.h"        /* 控件(对象按钮)API */
 /* widget: */
 #include "scui_button.h"
+#include "scui_button_inf.h"
 #include "scui_chart.h"
+#include "scui_chart_inf.h"
 
 /* linker: */
 #include "scui_image_frame.h"       /* 图像帧资源加载卸载 */

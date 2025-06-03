@@ -19,7 +19,7 @@ typedef struct {
     scui_anima_expired_t expired;   /* 动画过期回调 */
     scui_anima_finish_t  finish;    /* 动画完成回调(最后一次执行完之后) */
     int32_t delay;                  /* 起始迟延(周期) */
-    int32_t peroid;                 /* 回调周期 */
+    int32_t period;                 /* 回调周期 */
     int32_t reload;                 /* 重载次数(0==1,常循环:SCUI_ANIMA_INFINITE) */
     int32_t replay:1;               /* 双向回播标记 */
     int32_t playback:1;             /* 双向回播方向(true:value_s和value_e被交换) */

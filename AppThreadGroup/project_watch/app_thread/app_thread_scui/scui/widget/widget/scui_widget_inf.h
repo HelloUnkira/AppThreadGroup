@@ -1,5 +1,228 @@
-#ifndef SCUI_WIDGET_DRAW_H
-#define SCUI_WIDGET_DRAW_H
+#ifndef SCUI_WIDGET_INF_H
+#define SCUI_WIDGET_INF_H
+
+/*@brief 控件树的根控件
+ *@param handle 控件句柄
+ *@retval 根控件句柄
+ */
+scui_handle_t scui_widget_root(scui_handle_t handle);
+
+/*@brief 控件的父控件
+ *@param handle 控件句柄
+ *@retval 父控件
+ */
+scui_handle_t scui_widget_parent(scui_handle_t handle);
+
+/*@brief 子控件总数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_num(scui_handle_t handle);
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件位置(映射点)
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index);
+
+/*@brief 指定位置子控件
+ *@param handle 控件句柄
+ *@param index  子控件句柄
+ *@retval 子控件句柄
+ */
+scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
+
+/*@brief 控件类型
+ *@param handle 控件句柄
+ *@retval 控件类型
+ */
+scui_widget_type_t scui_widget_type(scui_handle_t handle);
+
+/*@brief 控件剪切域
+ *@param handle 控件句柄
+ *@retval 控件剪切域
+ */
+scui_area_t scui_widget_clip(scui_handle_t handle);
+
+/*@brief 控件显示状态获取
+ *@param handle 控件句柄
+ *@retval 是否显示
+ */
+bool scui_widget_is_show(scui_handle_t handle);
+
+/*@brief 控件隐藏状态获取
+ *@param handle 控件句柄
+ *@retval 是否隐藏
+ */
+bool scui_widget_is_hide(scui_handle_t handle);
+
+/*@brief 用户资源获取
+ *@param handle    控件句柄
+ *@param user_data 用户资源
+ */
+void scui_widget_user_data_get(scui_handle_t handle, void **user_data);
+
+/*@brief 控件透明度获取
+ *@param handle 控件句柄
+ *@param alpha  控件透明度
+ */
+void scui_widget_alpha_get(scui_handle_t handle, scui_alpha_t *alpha);
+
+/*@brief 控件图片获取
+ *@param handle 控件句柄
+ *@param image  图片句柄
+ */
+void scui_widget_image_get(scui_handle_t handle, scui_handle_t *image);
+
+/*@brief 控件颜色获取
+ *@param handle 控件句柄
+ *@param color  颜色
+ */
+void scui_widget_color_get(scui_handle_t handle, scui_color_t *color);
+
+/*@brief 用户资源设置
+ *@param handle    控件句柄
+ *@param user_data 用户资源
+ */
+void scui_widget_user_data_set(scui_handle_t handle, void *user_data);
+
+/*@brief 控件透明度设置
+ *@param handle  控件句柄
+ *@param alpha   控件透明度
+ *@param recurse 递归处理
+ */
+void scui_widget_alpha_set(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
+
+/*@brief 控件图片设置
+ *@param handle 控件句柄
+ *@param image  图片句柄
+ */
+void scui_widget_image_set(scui_handle_t handle, scui_handle_t image);
+
+/*@brief 控件颜色设置
+ *@param handle 控件句柄
+ *@param color  颜色
+ */
+void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+/*@brief 销毁控件
+ *@param handle 控件句柄
+ */
+void scui_widget_destroy(scui_handle_t handle);
+
+/*@brief 创建控件
+ *@param maker  控件实例构造参数
+ *@param handle 控件句柄
+ *@param layout 通过布局
+ */
+void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
+
+/*@brief 通过映射表调用创建一个控件树
+ *@param handle 根控件句柄
+ */
+void scui_widget_create_layout_tree(scui_handle_t handle);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+/*@brief 控件坐标更新
+ *@param handle 控件句柄
+ *@param point  坐标点
+ *@param dirty  脏标记(批量移动控件使用, 默认true)
+ */
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty);
+
+/*@brief 控件移动
+ *@param handle 控件句柄
+ *@param offset 偏移量
+ *@param dirty  脏标记
+ */
+void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty);
+
+/*@brief 子控件坐标对齐
+ *@param handle  控件句柄
+ *@param handle  控件句柄(目标控件,不存在则相对父控件)
+ *@param align   对齐方向
+ *@param offset  偏移量
+ */
+void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset);
+
+/*@brief 子控件坐标镜像
+ *@param handle  控件句柄
+ *@param child   控件子控件句柄(为空则镜像所有子控件)
+ *@param dir     镜像方向(水平镜像或垂直镜像)
+ *@param recurse 递归处理(全局镜像有效)
+ */
+void scui_widget_mirror_pos(scui_handle_t handle, scui_handle_t child, scui_opt_dir_t dir, bool recurse);
+
+/*@brief 控件尺寸更新
+ *@param handle 控件句柄
+ *@param width  宽度
+ *@param height 高度
+ */
+void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coord_t height);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
+/*@brief 绘制控件
+ *@param handle 控件句柄
+ *@param clip   剪切域
+ *@param sync   同步绘制
+ */
+void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync);
+
+/*@brief 刷新控件
+ *@param handle 控件句柄
+ *@param sync   同步刷新
+ */
+void scui_widget_refr(scui_handle_t handle, bool sync);
+
+/*@brief 控件显示
+ *@param handle 控件句柄
+ *@param delay  迟延调度
+ */
+void scui_widget_show(scui_handle_t handle, bool delay);
+
+/*@brief 控件隐藏
+ *@param handle 控件句柄
+ *@param delay  迟延调度
+ */
+void scui_widget_hide(scui_handle_t handle, bool delay);
+
+/*@brief 清除事件的所有自定义回调
+ *@param handle 控件句柄
+ */
+void scui_widget_event_clear(scui_handle_t handle);
+
+/*@brief 获取事件的自定义回调
+ *@param handle 控件句柄
+ *@param node   自定义控件回调
+ */
+void scui_widget_event_find(scui_handle_t handle, scui_event_cb_node_t *node);
+
+/*@brief 添加事件的自定义回调
+ *@param handle 控件句柄
+ *@param node   自定义控件回调
+ */
+void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
+
+/*@brief 清除事件的自定义回调
+ *@param handle 控件句柄
+ *@param node   自定义控件回调
+ */
+void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 typedef enum {
     scui_widget_draw_type_none = 0,
@@ -105,8 +328,6 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
  */
 void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc);
 
-/*****************************************************************************/
-/*****************************************************************************/
 /*****************************************************************************/
 /*@brief 简化转义的宏api
  */
@@ -283,8 +504,8 @@ do {                                                                        \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
 
-/*****************************************************************************/
-/*****************************************************************************/
-/*****************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 #endif
