@@ -38,6 +38,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scroll->space       = scroll_maker->space;
     scroll->springback  = scroll_maker->springback;
     scroll->fling_page  = scroll_maker->fling_page;
+    scroll->speed_anim  = scroll_maker->speed_anim;
     scroll->route_enc   = scroll_maker->route_enc;
     scroll->route_key   = scroll_maker->route_key;
     scroll->keyid_fdir  = scroll_maker->keyid_fdir;
@@ -65,6 +66,10 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
         scroll->fling_page  = 1;
+    
+    /* 设置最低速度 */
+    if (scroll->speed_anim <= SCUI_WIDGET_SCROLL_LIM_ANIM)
+        scroll->speed_anim  = SCUI_WIDGET_SCROLL_LIM_ANIM;
     
     /* 自由布局无循环模式 */
     if (scroll->freedom) {
@@ -521,9 +526,6 @@ static void scui_scroll_anima_expired(void *instance)
  */
 static void scui_scroll_anima_finish(void *instance)
 {
-    void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
-    
-    
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
     scui_widget_t *widget = scui_handle_source_check(anima->handle);
@@ -569,7 +571,7 @@ static void scui_scroll_anima_finish(void *instance)
                 
                 int32_t sqrt_i = 0, sqrt_f = 0;
                 scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
                 goto over;
             }
             
@@ -593,12 +595,12 @@ static void scui_scroll_anima_finish(void *instance)
                 /* 到达回弹点,则开始回弹 */
                 if (scroll->dis_ofs > +0) {
                     scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0);
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0, true);
                     goto over;
                 }
                 if (scroll->dis_ofs < -scroll->dis_lim) {
                     scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0);
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0, true);
                     goto over;
                 }
                 /* 进行回弹则不再校正 */
@@ -644,22 +646,28 @@ static void scui_scroll_anima_finish(void *instance)
  *@param value_e 结束值
  *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period)
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period, bool linear)
 {
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    
     scui_anima_t anima = {0};
-    anima.path    = scui_map_ease_in_out;
+    anima.path    = linear ? scui_map_ease_in_out : scui_map_bounce;
     anima.prepare = scui_scroll_anima_prepare;
     anima.expired = scui_scroll_anima_expired;
     anima.finish  = scui_scroll_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
-    anima.period  = period != 0 ? period : scui_abs(anima.value_e - anima.value_s);
+    anima.period  = period;
     anima.handle  = handle;
     
-    scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_scroll_t *scroll = (void *)widget;
-    
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
+    
+    if (anima.period == 0)
+        anima.period  = scui_dist(anima.value_s, anima.value_e);
+    // 计算当前动画的周期
+    anima.period = anima.period * 1000 / scroll->speed_anim;
+    
     
     if (scroll->anima == SCUI_HANDLE_INVALID) {
          scui_event_t event = {.object = handle};
@@ -737,13 +745,13 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             track += scroll->point_ofs.x - scroll->point_cur.x;
             scroll->point_cur.x = 0;
             scroll->point_ofs.x = delta_x + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_x + track, 0);
+            scui_scroll_anima_auto(widget->myself, 0, delta_x + track, 0, true);
         }
         if (scroll->dir == scui_opt_dir_ver) {
             track += scroll->point_ofs.y - scroll->point_cur.y;
             scroll->point_cur.y = 0;
             scroll->point_ofs.y = delta_y + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_y + track, 0);
+            scui_scroll_anima_auto(widget->myself, 0, delta_y + track, 0, true);
         }
         break;
     }
@@ -777,7 +785,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 track += scroll->point_ofs.x - scroll->point_cur.x;
             if (scroll->dir == scui_opt_dir_ver)
                 track += scroll->point_ofs.y - scroll->point_cur.y;
-            scui_scroll_anima_auto(widget->myself, 0, track, 0);
+            scui_scroll_anima_auto(widget->myself, 0, track, 0, true);
         }
         scroll->point_cur = (scui_point_t){0};
         scroll->point_ofs = (scui_point_t){0};
@@ -847,7 +855,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         
         int32_t sqrt_i = 0, sqrt_f = 0;
         scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-        scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+        scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
         break;
     }
     case 0x11:
@@ -908,7 +916,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             
             int32_t sqrt_i = 0, sqrt_f = 0;
             scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-            scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+            scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
         }
         break;
     }
@@ -931,7 +939,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                     
                     int32_t sqrt_i = 0, sqrt_f = 0;
                     scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                    scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+                    scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, false);
                 } else {
                     SCUI_ASSERT(!(offset.x != 0 && offset.y != 0));
                     
@@ -939,9 +947,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                                 (scroll->dir == scui_opt_dir_ver && offset.y != 0));
                     
                     if (scroll->dir == scui_opt_dir_hor)
-                        scui_scroll_anima_auto(widget->myself, 0, offset.x, 0);
+                        scui_scroll_anima_auto(widget->myself, 0, offset.x, 0, false);
                     if (scroll->dir == scui_opt_dir_ver)
-                        scui_scroll_anima_auto(widget->myself, 0, offset.y, 0);
+                        scui_scroll_anima_auto(widget->myself, 0, offset.y, 0, false);
                 }
             }
             break;
@@ -990,7 +998,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 
                 int32_t sqrt_i = 0, sqrt_f = 0;
                 scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, false);
             }
         }
         
@@ -1019,9 +1027,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                             (scroll->dir == scui_opt_dir_ver && offset.y != 0));
                 
                 if (scroll->dir == scui_opt_dir_hor)
-                    scui_scroll_anima_auto(widget->myself, 0, offset.x, 0);
+                    scui_scroll_anima_auto(widget->myself, 0, offset.x, 0, false);
                 if (scroll->dir == scui_opt_dir_ver)
-                    scui_scroll_anima_auto(widget->myself, 0, offset.y, 0);
+                    scui_scroll_anima_auto(widget->myself, 0, offset.y, 0, false);
             }
             break;
         }

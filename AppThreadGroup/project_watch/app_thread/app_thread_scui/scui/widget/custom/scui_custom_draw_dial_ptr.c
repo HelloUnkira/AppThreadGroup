@@ -152,7 +152,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_matrix_t matrix = {0};
                 scui_matrix_identity(&matrix);
                 scui_matrix_translate(&matrix, &anchor2);
-                scui_matrix_rotate(&matrix, (float)angle[idx_angle], 0x00);
+                scui_matrix_rotate_a(&matrix, (float)angle[idx_angle], 0x00);
                 scui_matrix_translate(&matrix, &center2);
                 
                 scui_area_t image_clip = {

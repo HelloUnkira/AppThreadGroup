@@ -200,7 +200,7 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 /* 2.进行x轴向旋转 */
                 scui_matrix_t x_matrix = {0};
                 scui_matrix_identity(&x_matrix);
-                scui_matrix_rotate(&x_matrix, -(angle_x[idx_j]), 0x01);
+                scui_matrix_rotate_a(&x_matrix, -(angle_x[idx_j]), 0x01);
                 scui_area3_transform_by_matrix(&face3_bg, &x_matrix);
                 scui_area3_transform_by_matrix(&face3_fg, &x_matrix);
                 /* 3.移动y轴向和z轴向 */
@@ -214,14 +214,14 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
                 scui_matrix_t y_matrix = {0};
                 scui_matrix_identity(&y_matrix);
                 scui_coord3_t rotate_y = scui_ui_res_local->rotate.y;
-                scui_matrix_rotate(&y_matrix, +(idx_i * 72.0f + (idx_j < 2 ? 0.0f : 36.0f) + rotate_y), 0x02);
+                scui_matrix_rotate_a(&y_matrix, +(idx_i * 72.0f + (idx_j < 2 ? 0.0f : 36.0f) + rotate_y), 0x02);
                 scui_area3_transform_by_matrix(&face3_bg, &y_matrix);
                 scui_area3_transform_by_matrix(&face3_fg, &y_matrix);
                 /* 4.进行x轴向旋转 */
                 scui_matrix_t rx_matrix = {0};
                 scui_matrix_identity(&rx_matrix);
                 scui_coord3_t rotate_x = scui_ui_res_local->rotate.x;
-                scui_matrix_rotate(&rx_matrix, +(rotate_x), 0x01);
+                scui_matrix_rotate_a(&rx_matrix, +(rotate_x), 0x01);
                 scui_area3_transform_by_matrix(&face3_bg, &rx_matrix);
                 scui_area3_transform_by_matrix(&face3_fg, &rx_matrix);
                 /* 5.移动到中心点 */

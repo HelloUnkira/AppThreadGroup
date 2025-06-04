@@ -23,8 +23,8 @@ typedef struct {
     scui_coord_t    way;
     scui_coord_t    pct;
     scui_coord_t    lim;
-    uint8_t         hold:1;
-    uint8_t         click:1;
+    uintptr_t       hold:1;
+    uintptr_t       click:1;
 } scui_objbtn_t;
 
 #pragma pack(push, 1)

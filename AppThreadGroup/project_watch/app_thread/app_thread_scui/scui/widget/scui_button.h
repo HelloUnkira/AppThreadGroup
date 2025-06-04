@@ -26,7 +26,7 @@ typedef struct {
             uint8_t         btn1_hold;
         };
     };
-    uint8_t btn_click:1;
+    uintptr_t btn_click:1;
 } scui_button_t;
 
 #pragma pack(push, 1)

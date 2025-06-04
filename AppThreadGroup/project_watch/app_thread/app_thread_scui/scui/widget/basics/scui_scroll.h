@@ -17,23 +17,24 @@ typedef struct {
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
+    scui_coord_t    speed_anim;         /* 动画速度(像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
     scui_coord_t    keyid_bdir;         /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t    springback;         /* 回弹效果 */
-    uint8_t         freedom:1;          /* 自由布局(默认自动布局) */
-    uint8_t         loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
+    uintptr_t       freedom:1;          /* 自由布局(默认自动布局) */
+    uintptr_t       loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t   anima;              /* 移动动画 */
     scui_handle_t   key;                /* 全局滚动锁定 */
     scui_point_t    point_cur;          /* 移动动画当前 */
     scui_point_t    point_ofs;          /* 移动动画总计 */
-    uint8_t         layout:1;           /* 布局更新标记 */
-    uint8_t         over_scroll;        /* 滚动迭代状态 */
-    uint8_t         lock_move:1;        /* 滚动长留锁 */
-    uint8_t         hold_move:1;        /* 滚动长留锁 */
-    uint8_t         mask_springback:1;  /* 回弹暂留锁 */
+    uintptr_t       layout:1;           /* 布局更新标记 */
+    uintptr_t       over_scroll;        /* 滚动迭代状态 */
+    uintptr_t       lock_move:1;        /* 滚动长留锁 */
+    uintptr_t       hold_move:1;        /* 滚动长留锁 */
+    uintptr_t       mask_springback:1;  /* 回弹暂留锁 */
     /* 内部域(模式): */
     union {
         /* 无方向布局(自由布局) */
@@ -64,13 +65,14 @@ typedef struct {
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
+    scui_coord_t    speed_anim;         /* 动画速度(像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
     scui_coord_t    keyid_bdir;         /* 按键id,对应编码器事件(clockwise_anti) */
     scui_coord_t    springback;         /* 回弹效果 */
-    uint8_t         freedom:1;          /* 自由布局(默认自动布局) */
-    uint8_t         loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
+    uintptr_t       freedom:1;          /* 自由布局(默认自动布局) */
+    uintptr_t       loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
 } scui_scroll_maker_t;
 #pragma pack(pop)
 
@@ -98,7 +100,7 @@ void scui_scroll_event(scui_event_t *event);
  *@param value_e 结束值
  *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period, bool linear);
 
 /*@brief 滚动控件事件流程合并
  *@param event 事件

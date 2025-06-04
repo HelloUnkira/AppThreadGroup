@@ -132,7 +132,7 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t src_matrix = {0};
     scui_matrix_identity(&src_matrix);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +src_anchor->x, .y = +src_anchor->y,});
-    scui_matrix_rotate(&src_matrix, (float)src_angle, 0x00);
+    scui_matrix_rotate_a(&src_matrix, (float)src_angle, 0x00);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_center->x, .y = -src_center->y,});
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);

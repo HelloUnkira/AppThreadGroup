@@ -394,13 +394,13 @@ void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale)
 
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
- *@param angle  旋转角度
+ *@param chord  旋转角度弦(y:sin; x:cos)
  *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
  */
-void scui_matrix_rotate(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis)
+void scui_matrix_rotate_c(scui_matrix_t *matrix, scui_point2_t *chord, uint8_t axis)
 {
-    scui_coord3_t sin_a = scui_sin4096((int32_t)angle) / 4096.0f;
-    scui_coord3_t cos_a = scui_cos4096((int32_t)angle) / 4096.0f;
+    scui_coord3_t sin_a = chord->y;     // y: sin(angle)
+    scui_coord3_t cos_a = chord->x;     // x: cos(angle)
     scui_matrix_t matrix_t = {0};
     
     /*X轴向:
@@ -459,16 +459,29 @@ void scui_matrix_rotate(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
  *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
+ */
+void scui_matrix_rotate_a(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis)
+{
+    scui_coord3_t sin_a = scui_sin4096((int32_t)angle) / 4096.0f;
+    scui_coord3_t cos_a = scui_cos4096((int32_t)angle) / 4096.0f;
+    scui_point2_t chord = {.y = sin_a, .x = cos_a,};
+    scui_matrix_rotate_c(matrix, &chord, axis);
+}
+
+/*@brief 矩阵旋转
+ *@param matrix 矩阵实例
+ *@param angle  旋转角度弦[x, y, z](y:sin; x:cos)
  *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
  */
-void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis)
+void scui_matrix_rotate_c3(scui_matrix_t *matrix, scui_point2_t chord[3], uint8_t axis)
 {
-    scui_coord3_t sin_rx = scui_sin4096(angle->x) / 4096.0f;
-    scui_coord3_t cos_rx = scui_cos4096(angle->x) / 4096.0f;
-    scui_coord3_t sin_ry = scui_sin4096(angle->y) / 4096.0f;
-    scui_coord3_t cos_ry = scui_cos4096(angle->y) / 4096.0f;
-    scui_coord3_t sin_rz = scui_sin4096(angle->z) / 4096.0f;
-    scui_coord3_t cos_rz = scui_cos4096(angle->z) / 4096.0f;
+    scui_coord3_t sin_rx = chord[0].y;
+    scui_coord3_t cos_rx = chord[0].x;
+    scui_coord3_t sin_ry = chord[1].y;
+    scui_coord3_t cos_ry = chord[1].x;
+    scui_coord3_t sin_rz = chord[2].y;
+    scui_coord3_t cos_rz = chord[2].x;
     
     switch(axis) {
     case 0x00:
@@ -546,6 +559,23 @@ void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t ax
     default:
         SCUI_LOG_ERROR("unknown axis:%x", axis);
     }
+}
+
+/*@brief 矩阵旋转
+ *@param matrix 矩阵实例
+ *@param angle  旋转角度
+ *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
+ */
+void scui_matrix_rotate_a3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis)
+{
+    scui_point2_t chord[3] = {0};
+    chord[0].y = scui_sin4096(angle->x) / 4096.0f;
+    chord[0].x = scui_cos4096(angle->x) / 4096.0f;
+    chord[1].y = scui_sin4096(angle->y) / 4096.0f;
+    chord[1].x = scui_cos4096(angle->y) / 4096.0f;
+    chord[2].y = scui_sin4096(angle->z) / 4096.0f;
+    chord[2].x = scui_cos4096(angle->z) / 4096.0f;
+    scui_matrix_rotate_c3(matrix, chord, axis);
 }
 
 /*@brief 矩阵仿射(blit)

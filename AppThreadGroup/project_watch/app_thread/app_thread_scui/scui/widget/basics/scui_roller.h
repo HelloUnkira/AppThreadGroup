@@ -1,6 +1,12 @@
 #ifndef SCUI_ROLLER_H
 #define SCUI_ROLLER_H
 
+typedef enum {
+    scui_roller_type_simple = 0,
+    scui_roller_type_scale,
+    scui_roller_type_spin,
+} scui_roller_type_t;
+
 typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
@@ -9,6 +15,8 @@ typedef struct {
     scui_linear_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_roller_type_t  type;
+    uintptr_t           grad:1;
     /* 内部域: */
     scui_handle_t center;
 } scui_roller_t;
@@ -21,6 +29,8 @@ typedef struct {
     scui_linear_maker_t linear;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_roller_type_t  type;
+    uintptr_t           grad:1;
 } scui_roller_maker_t;
 
 /*@brief 控件构造

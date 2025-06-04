@@ -174,7 +174,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
                     .y = scui_ui_res_local->rotate_x + idx * scui_ui_res_local->angle_a,
                     .x = scui_ui_res_local->rotate_y,
                 };
-                scui_matrix_rotate3(&r_matrix, &rotate_3, 0x05);
+                scui_matrix_rotate_a3(&r_matrix, &rotate_3, 0x05);
                 // scui_matrix_check(&r_matrix);
                 
                 scui_face3_t face3 = {

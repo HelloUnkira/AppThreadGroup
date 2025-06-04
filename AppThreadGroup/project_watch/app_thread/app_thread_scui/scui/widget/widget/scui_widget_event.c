@@ -350,7 +350,7 @@ static void scui_widget_event_process(scui_event_t *event)
             return;
         }
         /* 绘制事件没有剪切域,忽略 */
-        if (scui_clip_empty(&widget->clip_set)) {
+        if (scui_widget_draw_empty(event->object)) {
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }

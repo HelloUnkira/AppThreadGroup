@@ -73,7 +73,7 @@
 /* indev: */
 
 /* 输入设备:ptr */
-#define SCUI_INDEV_PTR_CLICK                        (200)
+#define SCUI_INDEV_PTR_CLICK                        (100)
 #define SCUI_INDEV_PTR_CLICK_SPAN                   (300)   /* 连续点击最大间隔 */
 #define SCUI_INDEV_PTR_FLING_RATE                   (448)   /* fling检测: distance * 放大系数 / time == 速度 * 放大系数 */
 #define SCUI_INDEV_PTR_MOVE_DELTA                   (1)     /* move消抖 */
@@ -169,6 +169,7 @@
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
 /* scroll:按键 */
+#define SCUI_WIDGET_SCROLL_LIM_ANIM                 (SCUI_HOR_RES * 2)
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* string:行间距,字间距,空字符宽度 */

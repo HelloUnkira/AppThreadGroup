@@ -177,52 +177,52 @@ static void scui_ui_scene_butterfly_face_matrix_update(void)
             .y = 1.0 + scui_ui_res_local->scale_var / 1024.0f,
         };
         scui_matrix_scale(&matrix_list[idx], &scale);
-        scui_matrix_rotate(&matrix_list[idx], scui_ui_res_local->rotate_angle, 0x02);
+        scui_matrix_rotate_a(&matrix_list[idx], scui_ui_res_local->rotate_angle, 0x02);
     }
     #endif
     
     #if 1
     // 变成左侧视图 <head, tail>
-    scui_matrix_rotate(&matrix_trunk[0], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_trunk[1], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_trunk[2], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_trunk[3], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_trunk[0], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_trunk[1], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_trunk[2], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_trunk[3], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_trunk[0], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_trunk[1], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_trunk[2], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_trunk[3], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_trunk[0], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_trunk[1], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_trunk[2], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_trunk[3], -90.0f, 0x00);
     
-    scui_matrix_rotate(&matrix_antenna[0], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_antenna[1], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_antenna[0], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_antenna[1], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_antenna[0], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_antenna[1], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_antenna[0], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_antenna[1], -90.0f, 0x00);
     
-    scui_matrix_rotate(&matrix_antenna[0], -60.0f, 0x02);
-    scui_matrix_rotate(&matrix_antenna[1], +60.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_antenna[0], -60.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_antenna[1], +60.0f, 0x02);
     
-    scui_matrix_rotate(&matrix_wing[0], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_wing[1], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_wing[2], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_wing[3], 90.0f, 0x01);
-    scui_matrix_rotate(&matrix_wing[0], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_wing[1], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_wing[2], -90.0f, 0x00);
-    scui_matrix_rotate(&matrix_wing[3], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_wing[0], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_wing[1], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_wing[2], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_wing[3], 90.0f, 0x01);
+    scui_matrix_rotate_a(&matrix_wing[0], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_wing[1], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_wing[2], -90.0f, 0x00);
+    scui_matrix_rotate_a(&matrix_wing[3], -90.0f, 0x00);
     #endif
     
     // 蝴蝶煽动翅膀
-    scui_matrix_rotate(&matrix_wing[0], +scui_ui_res_local->wing_angle, 0x02);
-    scui_matrix_rotate(&matrix_wing[1], -scui_ui_res_local->wing_angle, 0x02);
-    scui_matrix_rotate(&matrix_wing[2], +scui_ui_res_local->wing_angle, 0x02);
-    scui_matrix_rotate(&matrix_wing[3], -scui_ui_res_local->wing_angle, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[0], +scui_ui_res_local->wing_angle, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[1], -scui_ui_res_local->wing_angle, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[2], +scui_ui_res_local->wing_angle, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[3], -scui_ui_res_local->wing_angle, 0x02);
     
     // 有一半矩阵是对称的
-    scui_matrix_rotate(&matrix_antenna[1], 180.0f, 0x02);
-    scui_matrix_rotate(&matrix_trunk[0], 180.0f, 0x02);
-    scui_matrix_rotate(&matrix_trunk[2], 270.0f, 0x02);
-    scui_matrix_rotate(&matrix_trunk[3], 90.0f, 0x02);
-    scui_matrix_rotate(&matrix_wing[1], 180.0f, 0x02);
-    scui_matrix_rotate(&matrix_wing[3], 180.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_antenna[1], 180.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_trunk[0], 180.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_trunk[2], 270.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_trunk[3], 90.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[1], 180.0f, 0x02);
+    scui_matrix_rotate_a(&matrix_wing[3], 180.0f, 0x02);
 }
 
 /*@brief 控件事件响应回调

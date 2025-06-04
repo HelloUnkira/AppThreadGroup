@@ -13,13 +13,13 @@ typedef struct {
     scui_string_args_t  args;           // 字符串绘制参数
     scui_coord_t        unit_ms;        // 滚动单元时间
     scui_coord_t        unit_dx;        // 滚动单元距离
-    uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
-    uint64_t            draw_cache:1;   // 绘制缓存块
+    uintptr_t           unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
+    uintptr_t           draw_cache:1;   // 绘制缓存块
     scui_surface_t     *draw_surface;   // 绘制缓存块
     /* 内部域: */
-    uint64_t            unit_anima:1;   // 滚动动画标记
-    uint64_t            unit_abort:1;   // 滚动中止标记
-    uint64_t            unit_over:1;    // 滚动结束
+    uintptr_t           unit_anima:1;   // 滚动动画标记
+    uintptr_t           unit_abort:1;   // 滚动中止标记
+    uintptr_t           unit_over:1;    // 滚动结束
     scui_coord_t        unit_way;       // 滚动单元方向
     scui_coord_t        rcd_ms;
     uint8_t            *str_utf8;       // 字符串(utf8)
@@ -38,8 +38,8 @@ typedef struct {
     scui_string_args_t  args;           // 字符串绘制参数
     scui_coord_t        unit_ms;        // 滚动单元时间
     scui_coord_t        unit_dx;        // 滚动单元距离
-    uint64_t            unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
-    uint64_t            draw_cache:1;   // 绘制缓存块
+    uintptr_t           unit_s:1;       // 滚动模式(单次滚动,结束后不再滚动)
+    uintptr_t           draw_cache:1;   // 绘制缓存块
 } scui_string_maker_t;
 #pragma pack(pop)
 

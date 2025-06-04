@@ -32,13 +32,9 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_linear_make(linear, linear_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));
     
-    #if SCUI_MEM_FEAT_MINI
-    /* 禁用子控件树, 画布缓存块渲染 */
-    /* 本控件无效用, 拦截使用者 */
-    SCUI_ASSERT(false);
-    #endif
-    
     /* 状态初始化 */
+    roller->type   = roller_maker->type;
+    roller->grad   = roller_maker->grad;
     roller->center = SCUI_HANDLE_INVALID;
 }
 
@@ -99,73 +95,18 @@ static void scui_roller_m_event(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-        scui_widget_t *widget = scui_handle_source_check(event->object);
         // 列表控件是当前控件的父控件
-        widget = scui_handle_source_check(widget->parent);
+        SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
+        scui_handle_t  handle = scui_widget_parent(event->object);
+        scui_widget_t *widget = scui_handle_source_check(handle);
         scui_linear_t *linear = (void *)widget;
-        
-        scui_point_t offset  = {0};
-        scui_multi_t percent = 100;
-        scui_opt_pos_t pos = scui_opt_pos_c;
-        
-        #if 1
-        {   // 计算当前控件中心到父控件中心距离
-            scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
-            scui_area_t clip_w = scui_widget_clip(event->object);
-            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
-            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
-            
-            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
-            scui_multi_t dist_y = scui_min(rad_rr, offset.y);
-            
-            scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);
-            scui_multi_t cos_ia = 0;
-            scui_multi_t cos_fa = 0;
-            scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
-            scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
-            SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
-            
-            dist_x  = scui_min(dist_x, clip_p.w / 2);
-            percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
-            percent = scui_min(percent, 100);
-            percent = scui_max(percent, 50);
-            SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
-        }
-        #else
-        {   // 计算当前控件中心到父控件中心距离
-            scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
-            scui_area_t clip_w = scui_widget_clip(event->object);
-            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
-            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
-            
-            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
-            scui_multi_t dist_y = scui_min(rad_rr, offset.y);
-            
-            percent = (clip_p.h / 2 - dist_y) * 100 / (clip_p.h / 2);
-            percent = scui_min(percent, 100);
-            percent = scui_max(percent, 50);
-            SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
-        }
-        #endif
-        
-        #if 1   // 更新alpha通道
-        scui_alpha_t alpha = scui_alpha_pct(percent);
-        scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-        scui_widget_draw_color(event->object, NULL, (scui_color_t){0});
-        scui_widget_alpha_set(event->object, alpha, true);
-        #endif
+        scui_roller_t *roller = (void *)widget;
         
         scui_linear_item_t linear_item = {.draw_idx = -1,};
         scui_linear_item_gets(widget->myself, &linear_item);
         
-        scui_handle_t  custom  = linear_item.handle_s;
-        scui_area_t  src_clip  = scui_widget_clip(custom);
-        scui_point_t img_scale = {
-            .x = 1024 * (scui_multi_t)percent / 100,
-            .y = 1024 * (scui_multi_t)percent / 100,
-        };
-        
+        scui_handle_t  custom = linear_item.handle_s;
+        scui_area_t  src_clip = scui_widget_clip(custom);
         scui_image_t img_inst = {
             .type           = scui_image_type_mem,
             .format         = scui_widget_surface(custom)->format,
@@ -173,12 +114,112 @@ static void scui_roller_m_event(scui_event_t *event)
             .pixel.height   = src_clip.h,
             .pixel.data_bin = scui_widget_surface(custom)->pixel,
         };
-        
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
-        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, pos);
-        scui_handle_clear(image);
         
+        
+        
+        scui_point_t offset  = {0};
+        scui_multi_t percent = 100;
+        // 计算当前控件中心到父控件中心距离
+        scui_area_t clip_p = scui_widget_clip(handle);
+        scui_area_t clip_w = scui_widget_clip(event->object);
+        offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
+        offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
+        
+        scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
+        scui_multi_t dist_y = (1024 * scui_min(rad_rr, offset.y) / rad_rr);
+        scui_multi_t cos_a2 = (1024 * 1024) - dist_y * dist_y;
+        scui_multi_t cos_ia = 0, cos_fa = 0;
+        scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
+        scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
+        SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+        
+        dist_x  = scui_min(dist_x, clip_p.w / 2);
+        percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
+        percent = scui_min(scui_max(percent, 50), 100);
+        SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
+        
+        scui_alpha_t alpha_raw = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha_raw);
+        // 更新alpha通道
+        if (roller->grad) {
+            scui_alpha_t alpha = scui_alpha_pct(percent);
+            scui_widget_alpha_set(event->object, scui_alpha_cover, true);
+            scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
+            scui_widget_alpha_set(event->object, alpha, true);
+        }
+        
+        
+        
+        switch (roller->type) {
+        case scui_roller_type_simple: {
+            scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
+            break;
+        }
+        case scui_roller_type_scale: {
+            scui_point_t img_scale = {0};
+            scui_opt_pos_t img_pos = scui_opt_pos_c;
+            img_scale.x = 1024 * (scui_multi_t)percent / 100;
+            img_scale.y = 1024 * (scui_multi_t)percent / 100;
+            scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
+            break;
+        }
+        case scui_roller_type_spin: {
+            scui_coord_t c_px = clip_p.x + clip_p.w / 2;
+            scui_coord_t c_py = clip_p.y + clip_p.h / 2;
+            scui_coord_t c_wx = clip_w.x + clip_w.w / 2;
+            scui_coord_t c_wy = clip_w.y + clip_w.h / 2;
+            scui_coord3_t scale_3 = scui_max(percent / 100.0f, 0.5);
+            scui_coord3_t dist_x3 = ((scui_coord3_t)rad_rr - dist_x) / rad_rr;
+            scui_coord3_t dist_y3 = ((scui_coord3_t)scui_min(rad_rr, offset.y)) / rad_rr;
+            scui_coord3_t dist_yf = c_wy < c_py ? -1.0f : +1.0f;
+            
+            /*
+             * 缩放没找到对应的缩放函数
+             * 暂时只是像而已 ... 待定中
+             */
+            
+            scui_matrix_t x_matrix = {0};
+            scui_matrix_identity(&x_matrix);
+            scui_point2_t scale = {.x = scale_3, .y = scale_3,};
+            scui_point2_t chord = {.x = dist_x3, .y = dist_yf * dist_y3,};
+            scui_matrix_rotate_c(&x_matrix, &chord, 0x01);
+            scui_matrix_scale(&x_matrix, &scale);
+            /* 视点在控件中心 */
+            scui_view3_t view3 = {
+                .x = +c_wx,
+                .y = +c_wy,
+                .z = -rad_rr,
+            };
+            scui_point3_t offset3 = {.x = c_wx, .y = c_wy,};
+            /* 创建面, 平行xy平面, 距离z轴一个cos距离 */
+            scui_face3_t face3 = {
+                .point3[0] = {-clip_w.w / 2, -clip_w.h / 2},
+                .point3[1] = {+clip_w.w / 2, -clip_w.h / 2},
+                .point3[2] = {+clip_w.w / 2, +clip_w.h / 2},
+                .point3[3] = {-clip_w.w / 2, +clip_w.h / 2},
+            };
+            scui_area3_transform_by_matrix(&face3, &x_matrix);
+            scui_area3_offset(&face3, &offset3);
+            
+            scui_matrix_t matrix = {0};
+            scui_size2_t size2 = {.w = scui_image_w(image),.h = scui_image_h(image),};
+            scui_matrix_perspective_view_blit(&matrix, &size2, &face3, &view3);
+            scui_matrix_inverse(&matrix);
+            
+            // 这里暂时不分为三个步调, 都在execute执行完毕
+            scui_widget_draw_image_matrix(event->object, NULL, image, NULL, &matrix);
+            break;
+        }
+        default:
+            break;
+        }
+        
+        
+        
+        scui_widget_alpha_set(event->object, alpha_raw, true);
+        scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {
@@ -189,11 +230,11 @@ static void scui_roller_m_event(scui_event_t *event)
             break;
         
         scui_event_mask_over(event);
-        scui_handle_t parent = scui_widget_parent(event->object);
-        scui_handle_t index  = scui_widget_child_to_index(parent, event->object);
+        scui_handle_t handle_p = scui_widget_parent(event->object);
+        scui_handle_t index = scui_widget_child_to_index(handle_p, event->object);
         
         scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(parent, &linear_item);
+        scui_linear_item_gets(handle_p, &linear_item);
         
         scui_handle_t custom = linear_item.handle_m;
         SCUI_LOG_WARN("click idx:%d", index);

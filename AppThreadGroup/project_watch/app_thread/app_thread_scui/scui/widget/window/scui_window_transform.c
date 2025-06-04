@@ -345,7 +345,7 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t inv_matrix = {0};
         scui_matrix_identity(&inv_matrix);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
-        scui_matrix_rotate(&inv_matrix, angle, 0x00);
+        scui_matrix_rotate_a(&inv_matrix, angle, 0x00);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
         // scui_matrix_check(&inv_matrix);
         scui_matrix_t src_matrix = inv_matrix;
@@ -405,7 +405,7 @@ void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t inv_matrix = {0};
         scui_matrix_identity(&inv_matrix);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +point_x,.y = +point_y,});
-        scui_matrix_rotate(&inv_matrix, angle - 270, 0x00);
+        scui_matrix_rotate_a(&inv_matrix, angle - 270, 0x00);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
         // scui_matrix_check(&inv_matrix);
         scui_matrix_t src_matrix = inv_matrix;
@@ -612,12 +612,12 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_identity(&r_matrix);
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor)) {
             angle = scui_map(src_clip.w, 0, src_surface->hor_res, 180, 0);
-            scui_matrix_rotate(&r_matrix, angle, 0x02);
+            scui_matrix_rotate_a(&r_matrix, angle, 0x02);
             offset.x = -src_surface->hor_res / 2;
         }
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver)) {
             angle = scui_map(src_clip.h, 0, src_surface->ver_res, 180, 0);
-            scui_matrix_rotate(&r_matrix, angle, 0x01);
+            scui_matrix_rotate_a(&r_matrix, angle, 0x01);
             offset.y = -src_surface->ver_res / 2;
         }
         /* 小于一半跳过绘制, 因为会被覆盖 */
@@ -772,9 +772,9 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     scui_matrix_t r_matrix = {0};
     scui_matrix_identity(&r_matrix);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
-        scui_matrix_rotate(&r_matrix, angle, 0x02);
+        scui_matrix_rotate_a(&r_matrix, angle, 0x02);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
-        scui_matrix_rotate(&r_matrix, angle, 0x01);
+        scui_matrix_rotate_a(&r_matrix, angle, 0x01);
     // scui_matrix_check(&r_matrix);
     
     /* 3D空间建模(8个顶点) */
@@ -966,9 +966,9 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t r_matrix = {0};
         scui_matrix_identity(&r_matrix);
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
-            scui_matrix_rotate(&r_matrix, angle, 0x02);
+            scui_matrix_rotate_a(&r_matrix, angle, 0x02);
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
-            scui_matrix_rotate(&r_matrix, angle, 0x01);
+            scui_matrix_rotate_a(&r_matrix, angle, 0x01);
         // scui_matrix_check(&r_matrix);
         
         /* 3D空间建模(8个顶点) */
@@ -1153,9 +1153,9 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     scui_matrix_t r_matrix = {0};
     scui_matrix_identity(&r_matrix);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
-        scui_matrix_rotate(&r_matrix, angle, 0x02);
+        scui_matrix_rotate_a(&r_matrix, angle, 0x02);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
-        scui_matrix_rotate(&r_matrix, angle, 0x01);
+        scui_matrix_rotate_a(&r_matrix, angle, 0x01);
     // scui_matrix_check(&r_matrix);
     
     /* 3D空间建模(8个顶点) */

@@ -163,11 +163,13 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             roller_maker.widget.clip.x   = SCUI_HOR_RES *  1 / 25;
             roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
             roller_maker.linear.list_num = 24;
+            roller_maker.type = scui_roller_type_spin;
+            roller_maker.grad = false;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
             
             for (uint8_t idx = 0; idx < 24; idx++) {
                 uint8_t str_utf8[10] = {0};
-                snprintf(str_utf8, sizeof(str_utf8), "%02d", idx);
+                snprintf(str_utf8, sizeof(str_utf8), "@!00%02d!@", idx);
                 scui_roller_string_str(scui_ui_res_local->roller_1, &string_maker, str_utf8);
             }
             
@@ -175,6 +177,8 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             roller_maker.widget.clip.x   = SCUI_HOR_RES * 13 / 25;
             roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
             roller_maker.linear.list_num = 12;
+            roller_maker.type = scui_roller_type_scale;
+            roller_maker.grad = true;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2, false);
             
             const char *str_utf8_month[] = {

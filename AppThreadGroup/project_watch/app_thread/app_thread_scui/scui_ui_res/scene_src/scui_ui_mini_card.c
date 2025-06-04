@@ -701,8 +701,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             if (world_time_cnt > 0) {
                 
                 char data_unit[50] = {0};
-                snprintf(data_unit, sizeof(data_unit), "%02d:%02d",
-                    world_time1_hour, world_time1_minute);
+                snprintf(data_unit, sizeof(data_unit), "%02d:%02d", world_time1_hour, world_time1_minute);
                 scui_string_update_str(scui_ui_res_local->data_world_time1_time, data_unit);
                 scui_string_update_str(scui_ui_res_local->data_world_time1_unit, world_time1_str);
             }
@@ -710,8 +709,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
             if (world_time_cnt > 1) {
                 
                 char data_unit[50] = {0};
-                snprintf(data_unit, sizeof(data_unit), "%02d:%02d",
-                    world_time2_hour, world_time2_minute);
+                snprintf(data_unit, sizeof(data_unit), "%02d:%02d", world_time2_hour, world_time2_minute);
                 scui_string_update_str(scui_ui_res_local->data_world_time2_time, data_unit);
                 scui_string_update_str(scui_ui_res_local->data_world_time2_unit, world_time2_str);
             }
@@ -755,64 +753,65 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        scui_point_t offset  = {0};
-        scui_multi_t percent = 100;
-        scui_opt_pos_t pos = scui_opt_pos_c;
-        {   // 计算当前控件中心到父控件中心距离
-            scui_area_t clip_p = scui_widget_clip(SCUI_UI_SCENE_MINI_CARD);
-            scui_area_t clip_w = scui_widget_clip(event->object);
-            offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
-            offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
-            
-            scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
-            scui_multi_t dist_y = scui_min(rad_rr, offset.y);
-            
-            scui_multi_t cos_a2 = (1024 * 1024) - (1024 * dist_y / rad_rr) * (1024 * dist_y / rad_rr);
-            scui_multi_t cos_ia = 0;
-            scui_multi_t cos_fa = 0;
-            scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
-            scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
-            SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
-            
-            dist_x  = scui_min(dist_x, clip_p.w / 2);
-            percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
-            percent = scui_min(percent, 100);
-            percent = scui_max(percent, 30);
-            SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
-        }
-        
-        #if 0   // 更新alpha通道
-        scui_alpha_t alpha = scui_alpha_pct(percent);
-        scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_UNUSED);
-        scui_widget_alpha_set(event->object, alpha, true);
-        #else
-        scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-        #endif
-        
         scui_linear_item_t linear_item = {.draw_idx = -1,};
         scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
         
-        scui_handle_t  custom  = linear_item.handle_s;
-        scui_area_t  src_clip  = scui_widget_clip(custom);
-        scui_point_t img_scale = {
-            .x = 1024 * (scui_multi_t)percent / 100,
-            .y = 1024 * (scui_multi_t)percent / 100,
-        };
-        
-        scui_image_t img_inst  = {
+        scui_handle_t  custom = linear_item.handle_s;
+        scui_area_t  src_clip = scui_widget_clip(custom);
+        scui_image_t img_inst = {
             .type           = scui_image_type_mem,
             .format         = scui_widget_surface(custom)->format,
             .pixel.width    = src_clip.w,
             .pixel.height   = src_clip.h,
             .pixel.data_bin = scui_widget_surface(custom)->pixel,
         };
-        
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
-        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, pos);
-        scui_handle_clear(image);
         
+        
+        
+        scui_point_t offset  = {0};
+        scui_multi_t percent = 100;
+        // 计算当前控件中心到父控件中心距离
+        scui_area_t clip_p = scui_widget_clip(SCUI_UI_SCENE_MINI_CARD);
+        scui_area_t clip_w = scui_widget_clip(event->object);
+        offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
+        offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
+        
+        scui_multi_t rad_rr = clip_p.h / 2 - clip_w.h / 2;
+        scui_multi_t dist_y = (1024 * scui_min(rad_rr, offset.y) / rad_rr);
+        scui_multi_t cos_a2 = (1024 * 1024) - dist_y * dist_y;
+        scui_multi_t cos_ia = 0, cos_fa = 0;
+        scui_sqrt(cos_a2, &cos_ia, &cos_fa, 0x8000);
+        scui_multi_t dist_x = (1024 - cos_ia) * (rad_rr) / 1024;
+        SCUI_LOG_INFO("dist_y:%d cos_a2:%08x cos_ia:%d dist_x:%d", dist_y, cos_a2, cos_ia, dist_x);
+        
+        dist_x  = scui_min(dist_x, clip_p.w / 2);
+        percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
+        percent = scui_min(scui_max(percent, 30), 100);
+        SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
+        
+        scui_alpha_t alpha_raw = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha_raw);
+        #if 0   // 更新alpha通道
+        scui_alpha_t alpha = scui_alpha_pct(percent);
+        scui_widget_alpha_set(event->object, scui_alpha_cover, true);
+        scui_widget_draw_color(event->object, NULL, SCUI_COLOR_UNUSED);
+        scui_widget_alpha_set(event->object, alpha, true);
+        #endif
+        
+        
+        
+        scui_point_t img_scale = {0};
+        scui_opt_pos_t img_pos = scui_opt_pos_c;
+        img_scale.x = 1024 * (scui_multi_t)percent / 100;
+        img_scale.y = 1024 * (scui_multi_t)percent / 100;
+        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
+        
+        
+        
+        scui_widget_alpha_set(event->object, alpha_raw, true);
+        scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {

@@ -149,7 +149,7 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
             /* 三轴旋转矩阵 */
             scui_matrix_t r_matrix = {0};
             scui_point3_t angle = scui_ui_res_local->rotate;
-            scui_matrix_rotate3(&r_matrix, &angle, 0x00);
+            scui_matrix_rotate_a3(&r_matrix, &angle, 0x00);
             
             for (uint8_t idx = 0; idx < 6; idx++) {
                 /* 旋转面,移动面 */

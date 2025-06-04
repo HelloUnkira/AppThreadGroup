@@ -70,17 +70,31 @@ void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale);
 
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
+ *@param chord  旋转角度弦(y:sin; x:cos)
+ *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
+ */
+void scui_matrix_rotate_c(scui_matrix_t *matrix, scui_point2_t *chord, uint8_t axis);
+
+/*@brief 矩阵旋转
+ *@param matrix 矩阵实例
  *@param angle  旋转角度
  *@param axis   旋转轴向(0x00:Z轴向;0x01:X轴向;0x02:Y轴向;)
  */
-void scui_matrix_rotate(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis);
+void scui_matrix_rotate_a(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis);
+
+/*@brief 矩阵旋转
+ *@param matrix 矩阵实例
+ *@param angle  旋转角度弦[x, y, z](y:sin; x:cos)
+ *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
+ */
+void scui_matrix_rotate_c3(scui_matrix_t *matrix, scui_point2_t chord[3], uint8_t axis);
 
 /*@brief 矩阵旋转
  *@param matrix 矩阵实例
  *@param angle  旋转角度
  *@param axis   旋转轴向(0x00:ZYX;0x01:ZXY;0x02:YZX;0x03:YXZ;0x04:XYZ;0x05:XZY;)
  */
-void scui_matrix_rotate3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis);
+void scui_matrix_rotate_a3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis);
 
 /*@brief 矩阵仿射(blit)
  *@param matrix 矩阵实例
