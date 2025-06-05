@@ -28,6 +28,14 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_roller_t *roller = widget;
     scui_roller_maker_t *roller_maker = widget_maker;
     
+    /* 使用滚轮的默认滚动 */
+    if (scroll_maker->path_auto == NULL)
+        scroll_maker->path_auto  = scui_map_bounce;
+    
+    /* 使用滚轮的默认滚动速度 */
+    if (scroll_maker->speed_auto == 0)
+        scroll_maker->speed_auto  = SCUI_WIDGET_ROLLER_ANIM_AUTO;
+    
     /* 构造派生控件实例 */
     scui_linear_make(linear, linear_maker, handle, layout);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));
@@ -137,18 +145,22 @@ static void scui_roller_m_event(scui_event_t *event)
         
         dist_x  = scui_min(dist_x, clip_p.w / 2);
         percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
-        percent = scui_min(scui_max(percent, 50), 100);
+        percent = scui_min(scui_max(percent, 30), 100);
         SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         
-        scui_alpha_t alpha_raw = scui_alpha_cover;
-        scui_widget_alpha_get(event->object, &alpha_raw);
+        scui_alpha_t alpha_w = scui_alpha_cover;
+        scui_alpha_t alpha_c = scui_alpha_cover;
+        scui_widget_alpha_get(widget->myself, &alpha_w);
+        scui_widget_alpha_get(event->object, &alpha_c);
         // 更新alpha通道
         if (roller->grad) {
+            // 更新alpha通道
             scui_alpha_t alpha = scui_alpha_pct(percent);
-            scui_widget_alpha_set(event->object, scui_alpha_cover, true);
-            scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
-            scui_widget_alpha_set(event->object, alpha, true);
+            scui_widget_alpha_set(widget->myself, alpha, false);
+            scui_widget_alpha_set(event->object, alpha, false);
         }
+        SCUI_LOG_INFO("widget %u draw sub idx: %u", widget->myself,
+            scui_widget_child_to_index(widget->myself, event->object));
         
         
         
@@ -170,35 +182,27 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_coord_t c_py = clip_p.y + clip_p.h / 2;
             scui_coord_t c_wx = clip_w.x + clip_w.w / 2;
             scui_coord_t c_wy = clip_w.y + clip_w.h / 2;
-            scui_coord3_t scale_3 = scui_max(percent / 100.0f, 0.5);
-            scui_coord3_t dist_x3 = ((scui_coord3_t)rad_rr - dist_x) / rad_rr;
-            scui_coord3_t dist_y3 = ((scui_coord3_t)scui_min(rad_rr, offset.y)) / rad_rr;
-            scui_coord3_t dist_yf = c_wy < c_py ? -1.0f : +1.0f;
-            
-            /*
-             * 缩放没找到对应的缩放函数
-             * 暂时只是像而已 ... 待定中
-             */
+            scui_coord3_t dist_x3 = ((scui_coord3_t)cos_ia) / 1024;
+            scui_coord3_t dist_y3 = ((scui_coord3_t)dist_y) / 1024;
+            scui_coord3_t dist_yf = c_wy < c_py ? +1.0f : -1.0f;
             
             scui_matrix_t x_matrix = {0};
             scui_matrix_identity(&x_matrix);
-            scui_point2_t scale = {.x = scale_3, .y = scale_3,};
             scui_point2_t chord = {.x = dist_x3, .y = dist_yf * dist_y3,};
             scui_matrix_rotate_c(&x_matrix, &chord, 0x01);
-            scui_matrix_scale(&x_matrix, &scale);
             /* 视点在控件中心 */
             scui_view3_t view3 = {
                 .x = +c_wx,
                 .y = +c_wy,
-                .z = -rad_rr,
+                .z = +rad_rr * 16,
             };
-            scui_point3_t offset3 = {.x = c_wx, .y = c_wy,};
+            scui_point3_t offset3 = {.x = c_px, .y = c_py,};
             /* 创建面, 平行xy平面, 距离z轴一个cos距离 */
             scui_face3_t face3 = {
-                .point3[0] = {-clip_w.w / 2, -clip_w.h / 2},
-                .point3[1] = {+clip_w.w / 2, -clip_w.h / 2},
-                .point3[2] = {+clip_w.w / 2, +clip_w.h / 2},
-                .point3[3] = {-clip_w.w / 2, +clip_w.h / 2},
+                .point3[0] = {-clip_w.w / 2, -clip_w.h / 2, rad_rr},
+                .point3[1] = {+clip_w.w / 2, -clip_w.h / 2, rad_rr},
+                .point3[2] = {+clip_w.w / 2, +clip_w.h / 2, rad_rr},
+                .point3[3] = {-clip_w.w / 2, +clip_w.h / 2, rad_rr},
             };
             scui_area3_transform_by_matrix(&face3, &x_matrix);
             scui_area3_offset(&face3, &offset3);
@@ -209,7 +213,8 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_matrix_inverse(&matrix);
             
             // 这里暂时不分为三个步调, 都在execute执行完毕
-            scui_widget_draw_image_matrix(event->object, NULL, image, NULL, &matrix);
+            // 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制
+            scui_widget_draw_image_matrix(widget->myself, NULL, image, NULL, &matrix);
             break;
         }
         default:
@@ -218,17 +223,12 @@ static void scui_roller_m_event(scui_event_t *event)
         
         
         
-        scui_widget_alpha_set(event->object, alpha_raw, true);
+        scui_widget_alpha_set(widget->myself, alpha_w, false);
+        scui_widget_alpha_set(event->object, alpha_c, false);
         scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {
-        
-        scui_alpha_t alpha = scui_alpha_trans;
-        scui_widget_alpha_get(event->object, &alpha);
-        if (alpha <= scui_alpha_pct20)
-            break;
-        
         scui_event_mask_over(event);
         scui_handle_t handle_p = scui_widget_parent(event->object);
         scui_handle_t index = scui_widget_child_to_index(handle_p, event->object);
@@ -237,7 +237,10 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_linear_item_gets(handle_p, &linear_item);
         
         scui_handle_t custom = linear_item.handle_m;
-        SCUI_LOG_WARN("click idx:%d", index);
+        SCUI_LOG_INFO("click idx:%d", index);
+        
+        // 聚焦它到中心
+        scui_scroll_center_target(handle_p, event->object);
         break;
     }
     default:
@@ -259,15 +262,16 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     
     // 基类对象同步
     scui_custom_maker_t custom_maker = {0};
-    scui_handle_t custom_handle  = SCUI_HANDLE_INVALID;
-    custom_maker.widget             = maker->widget;
-    custom_maker.widget.type        = scui_widget_type_custom;
-    custom_maker.widget.style.trans = false;
-    custom_maker.widget.parent      = SCUI_HANDLE_INVALID;
+    scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
+    custom_maker.widget         = maker->widget;
+    custom_maker.widget.type    = scui_widget_type_custom;
+    custom_maker.widget.parent  = SCUI_HANDLE_INVALID;
     
-    // 创建子控件
-    custom_maker.widget.parent   = widget->myself;
-    custom_maker.widget.event_cb = scui_roller_m_event;
+    // 创建子控件(继承父控件部分参数)
+    custom_maker.widget.style.trans     = true;
+    custom_maker.widget.style.indev_ptr = true;
+    custom_maker.widget.parent          = widget->myself;
+    custom_maker.widget.event_cb        = scui_roller_m_event;
     scui_widget_create(&custom_maker, &custom_handle, false);
     scui_handle_t idx = scui_widget_child_to_index(widget->myself, custom_handle);
     
@@ -276,9 +280,11 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     linear_item.handle_m = custom_handle;
     
     // 创建子控件树
-    custom_maker.widget.parent    = SCUI_HANDLE_INVALID;
-    custom_maker.widget.event_cb  = scui_roller_s_event;
-    custom_maker.widget.child_num = 1;
+    custom_maker.widget.style.trans     = false;
+    custom_maker.widget.style.indev_ptr = false;
+    custom_maker.widget.parent          = SCUI_HANDLE_INVALID;
+    custom_maker.widget.event_cb        = scui_roller_s_event;
+    custom_maker.widget.child_num       = 1;
     scui_widget_create(&custom_maker, &custom_handle, false);
     
     linear_item.handle_s = custom_handle;

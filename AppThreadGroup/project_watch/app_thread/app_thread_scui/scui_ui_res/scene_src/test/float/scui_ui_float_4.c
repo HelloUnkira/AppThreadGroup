@@ -140,7 +140,6 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             roller_maker.widget.clip.w          = SCUI_HOR_RES * 11 / 25;
             roller_maker.widget.clip.h          = SCUI_VER_RES * 11 / 25;
             roller_maker.widget.parent          = SCUI_UI_SCENE_FLOAT_4;
-            roller_maker.widget.color           = SCUI_COLOR_MAKE32(false, 0x0, 0xFFFFFFFF);
             roller_maker.widget.child_num       = 60;
             roller_maker.scroll.pos  = scui_opt_pos_c;
             roller_maker.scroll.dir  = scui_opt_dir_ver;

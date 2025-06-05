@@ -36,9 +36,12 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scroll->dir         = scroll_maker->dir;
     scroll->edge        = scroll_maker->edge;
     scroll->space       = scroll_maker->space;
+    scroll->path_ptr    = scroll_maker->path_ptr;
+    scroll->path_auto   = scroll_maker->path_auto;
+    scroll->speed_ptr   = scroll_maker->speed_ptr;
+    scroll->speed_auto  = scroll_maker->speed_auto;
     scroll->springback  = scroll_maker->springback;
     scroll->fling_page  = scroll_maker->fling_page;
-    scroll->speed_anim  = scroll_maker->speed_anim;
     scroll->route_enc   = scroll_maker->route_enc;
     scroll->route_key   = scroll_maker->route_key;
     scroll->keyid_fdir  = scroll_maker->keyid_fdir;
@@ -67,9 +70,21 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     if (scroll->fling_page <= 0)
         scroll->fling_page  = 1;
     
-    /* 设置最低速度 */
-    if (scroll->speed_anim <= SCUI_WIDGET_SCROLL_LIM_ANIM)
-        scroll->speed_anim  = SCUI_WIDGET_SCROLL_LIM_ANIM;
+    /* 设置动画轨迹ptr */
+    if (scroll->path_ptr == NULL)
+        scroll->path_ptr  = scui_map_linear;
+    
+    /* 设置动画轨迹auto */
+    if (scroll->path_auto == NULL)
+        scroll->path_auto  = scui_map_linear;
+    
+    /* 设置默认速度ptr */
+    if (scroll->speed_ptr == 0)
+        scroll->speed_ptr  = SCUI_WIDGET_SCROLL_ANIM_PTR;
+    
+    /* 设置默认速度auto */
+    if (scroll->speed_auto == 0)
+        scroll->speed_auto  = SCUI_WIDGET_SCROLL_ANIM_AUTO;
     
     /* 自由布局无循环模式 */
     if (scroll->freedom) {
@@ -571,7 +586,7 @@ static void scui_scroll_anima_finish(void *instance)
                 
                 int32_t sqrt_i = 0, sqrt_f = 0;
                 scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
+                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
                 goto over;
             }
             
@@ -595,12 +610,12 @@ static void scui_scroll_anima_finish(void *instance)
                 /* 到达回弹点,则开始回弹 */
                 if (scroll->dis_ofs > +0) {
                     scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0, true);
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs + 0, 0);
                     goto over;
                 }
                 if (scroll->dis_ofs < -scroll->dis_lim) {
                     scroll->mask_springback = true;
-                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0, true);
+                    scui_scroll_anima_auto(widget->myself, 0, -scroll->dis_ofs - scroll->dis_lim, 0);
                     goto over;
                 }
                 /* 进行回弹则不再校正 */
@@ -646,13 +661,13 @@ static void scui_scroll_anima_finish(void *instance)
  *@param value_e 结束值
  *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period, bool linear)
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
     scui_anima_t anima = {0};
-    anima.path    = linear ? scui_map_ease_in_out : scui_map_bounce;
+    anima.path    = scroll->hold_move ? scroll->path_ptr : scroll->path_auto;
     anima.prepare = scui_scroll_anima_prepare;
     anima.expired = scui_scroll_anima_expired;
     anima.finish  = scui_scroll_anima_finish;
@@ -666,8 +681,8 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     if (anima.period == 0)
         anima.period  = scui_dist(anima.value_s, anima.value_e);
     // 计算当前动画的周期
-    anima.period = anima.period * 1000 / scroll->speed_anim;
-    
+    int32_t speed_anim = scroll->hold_move ? scroll->speed_ptr : scroll->speed_auto;
+    anima.period = anima.period * 1000 / speed_anim;
     
     if (scroll->anima == SCUI_HANDLE_INVALID) {
          scui_event_t event = {.object = handle};
@@ -745,13 +760,13 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             track += scroll->point_ofs.x - scroll->point_cur.x;
             scroll->point_cur.x = 0;
             scroll->point_ofs.x = delta_x + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_x + track, 0, true);
+            scui_scroll_anima_auto(widget->myself, 0, delta_x + track, 0);
         }
         if (scroll->dir == scui_opt_dir_ver) {
             track += scroll->point_ofs.y - scroll->point_cur.y;
             scroll->point_cur.y = 0;
             scroll->point_ofs.y = delta_y + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_y + track, 0, true);
+            scui_scroll_anima_auto(widget->myself, 0, delta_y + track, 0);
         }
         break;
     }
@@ -785,7 +800,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 track += scroll->point_ofs.x - scroll->point_cur.x;
             if (scroll->dir == scui_opt_dir_ver)
                 track += scroll->point_ofs.y - scroll->point_cur.y;
-            scui_scroll_anima_auto(widget->myself, 0, track, 0, true);
+            scui_scroll_anima_auto(widget->myself, 0, track, 0);
         }
         scroll->point_cur = (scui_point_t){0};
         scroll->point_ofs = (scui_point_t){0};
@@ -855,7 +870,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
         
         int32_t sqrt_i = 0, sqrt_f = 0;
         scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-        scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
+        scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
         break;
     }
     case 0x11:
@@ -916,7 +931,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
             
             int32_t sqrt_i = 0, sqrt_f = 0;
             scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-            scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, true);
+            scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
         }
         break;
     }
@@ -939,7 +954,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                     
                     int32_t sqrt_i = 0, sqrt_f = 0;
                     scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                    scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, false);
+                    scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
                 } else {
                     SCUI_ASSERT(!(offset.x != 0 && offset.y != 0));
                     
@@ -947,9 +962,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                                 (scroll->dir == scui_opt_dir_ver && offset.y != 0));
                     
                     if (scroll->dir == scui_opt_dir_hor)
-                        scui_scroll_anima_auto(widget->myself, 0, offset.x, 0, false);
+                        scui_scroll_anima_auto(widget->myself, 0, offset.x, 0);
                     if (scroll->dir == scui_opt_dir_ver)
-                        scui_scroll_anima_auto(widget->myself, 0, offset.y, 0, false);
+                        scui_scroll_anima_auto(widget->myself, 0, offset.y, 0);
                 }
             }
             break;
@@ -998,7 +1013,7 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                 
                 int32_t sqrt_i = 0, sqrt_f = 0;
                 scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0, false);
+                scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
             }
         }
         
@@ -1027,9 +1042,9 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
                             (scroll->dir == scui_opt_dir_ver && offset.y != 0));
                 
                 if (scroll->dir == scui_opt_dir_hor)
-                    scui_scroll_anima_auto(widget->myself, 0, offset.x, 0, false);
+                    scui_scroll_anima_auto(widget->myself, 0, offset.x, 0);
                 if (scroll->dir == scui_opt_dir_ver)
-                    scui_scroll_anima_auto(widget->myself, 0, offset.y, 0, false);
+                    scui_scroll_anima_auto(widget->myself, 0, offset.y, 0);
             }
             break;
         }

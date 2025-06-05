@@ -16,8 +16,11 @@ typedef struct {
     scui_opt_dir_t  dir;                /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
+    scui_map_cb_t   path_ptr;           /* 动画轨迹 */
+    scui_map_cb_t   path_auto;          /* 动画轨迹 */
+    scui_coord_t    speed_ptr;          /* 动画速度(像素点/1s) */
+    scui_coord_t    speed_auto;         /* 动画速度(像素点/1s) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_coord_t    speed_anim;         /* 动画速度(像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
@@ -64,8 +67,11 @@ typedef struct {
     scui_opt_dir_t  dir;                /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
+    scui_map_cb_t   path_ptr;           /* 动画轨迹 */
+    scui_map_cb_t   path_auto;          /* 动画轨迹 */
+    scui_coord_t    speed_ptr;          /* 动画速度(像素点/1s) */
+    scui_coord_t    speed_auto;         /* 动画速度(像素点/1s) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_coord_t    speed_anim;         /* 动画速度(像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
@@ -100,7 +106,7 @@ void scui_scroll_event(scui_event_t *event);
  *@param value_e 结束值
  *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period, bool linear);
+void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
 
 /*@brief 滚动控件事件流程合并
  *@param event 事件
