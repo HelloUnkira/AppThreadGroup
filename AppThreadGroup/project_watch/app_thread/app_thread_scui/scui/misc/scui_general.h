@@ -86,13 +86,48 @@ static inline scui_color_t SCUI_COLOR_MAKE32_SE(bool filter, uint32_t color_f, u
 static inline scui_color_t SCUI_COLOR_MAKE32_LD(bool filter, uint32_t color_f, uint32_t color_l, uint32_t color_d)
 {return (scui_color_t){ .color_l.full = color_l, .color_d.full = color_d, .color_f.full = color_f, .filter = filter, };}
 
+/* scui_color_t组合宏(这里用内联函数表出): */
+static inline scui_color32_t SCUI_COLOR32_MAKE8(uint8_t a8, uint8_t r8, uint8_t g8, uint8_t b8)
+{return (scui_color32_t){.ch.a = a8, .ch.r = r8, .ch.g = g8, .ch.b = b8,};}
+static inline scui_color32_t SCUI_COLOR32_MAKE32(uint8_t color)
+{return (scui_color32_t){.full = color};}
+
 /* scui_color_t常用值: */
 #define SCUI_COLOR_UNUSED           SCUI_COLOR_MAKE32(false, 0x00000000, 0x00000000)
 #define SCUI_COLOR_ZEROED           SCUI_COLOR_MAKE32(false, 0x00000000, 0x00000000)
 #define SCUI_COLOR_FILTER_TRANS     SCUI_COLOR_MAKE32(true,  0x00000000, 0x00000000)
 #define SCUI_COLOR_FILTER_BLACK     SCUI_COLOR_MAKE32(true,  0xFF000000, 0xFF000000)
 
+/* scui_color_t常用值: */
+#define SCUI_COLOR32_BLACK          SCUI_COLOR32_MAKE32(0xFF000000)
+#define SCUI_COLOR32_WHITE          SCUI_COLOR32_MAKE32(0xFFFFFFFF)
 
+/*@brief 调色板
+ */
+typedef enum {
+    SCUI_PALETTE_RED,
+    SCUI_PALETTE_PINK,
+    SCUI_PALETTE_PURPLE,
+    SCUI_PALETTE_DEEP_PURPLE,
+    SCUI_PALETTE_INDIGO,
+    SCUI_PALETTE_BLUE,
+    SCUI_PALETTE_LIGHT_BLUE,
+    SCUI_PALETTE_CYAN,
+    SCUI_PALETTE_TEAL,
+    SCUI_PALETTE_GREEN,
+    SCUI_PALETTE_LIGHT_GREEN,
+    SCUI_PALETTE_LIME,
+    SCUI_PALETTE_YELLOW,
+    SCUI_PALETTE_AMBER,
+    SCUI_PALETTE_ORANGE,
+    SCUI_PALETTE_DEEP_ORANGE,
+    SCUI_PALETTE_BROWN,
+    SCUI_PALETTE_BLUE_GREY,
+    SCUI_PALETTE_GREY,
+    
+    SCUI_PALETTE_LAST,
+    SCUI_PALETTE_NONE = 0xff,
+} scui_palette_t;
 
 /*@brief: 透明度枚举值
  *        设备透明度格式:
@@ -222,7 +257,13 @@ typedef enum {
 #define scui_opt_bits_equal(bits, mask)     (((bits) & (mask)) == (mask))
 #define scui_opt_bits_check(bits, mask)     (((bits) & (mask)) != (0))
 
-
+/*@brief 调色板生成颜色值
+ *@param color   颜色值
+ *@param palette 调色板
+ *@param type    调色板类型(0:主调色板;1:亮调色板;2:暗调色板)
+ *@param level   亮度等级(0~5)
+ */
+void scui_color_by_palette(scui_color_t *color, scui_palette_t palette, uint8_t type, uint8_t level);
 
 /*@brief 像素点配置
  *@param cf    像素点格式
