@@ -19,35 +19,27 @@ void scui_pixel_by_cf(scui_pixel_cf_t cf, void *pixel, void *tar)
     case scui_pixel_cf_bmp565: {
         scui_color565_t *c0 = pixel;
         scui_color565_t *c1 = tar;
-        c0->ch.r = c1->ch.r;
-        c0->ch.g = c1->ch.g;
-        c0->ch.b = c1->ch.b;
+        c0->full = c1->full;
         break;
     }
     case scui_pixel_cf_bmp8565: {
         scui_color8565_t *c0 = pixel;
         scui_color8565_t *c1 = tar;
-        c0->ch.a = c1->ch.a;
-        c0->ch.r = c1->ch.r;
-        c0->ch.g = c1->ch.g;
-        c0->ch.b = c1->ch.b;
+        for (uint8_t idx = 0; idx < 3; idx++)
+        c0->byte[idx] = c1->byte[idx];
         break;
     }
     case scui_pixel_cf_bmp888: {
         scui_color888_t *c0 = pixel;
         scui_color888_t *c1 = tar;
-        c0->ch.r = c1->ch.r;
-        c0->ch.g = c1->ch.g;
-        c0->ch.b = c1->ch.b;
+        for (uint8_t idx = 0; idx < 3; idx++)
+        c0->byte[idx] = c1->byte[idx];
         break;
     }
     case scui_pixel_cf_bmp8888: {
         scui_color8888_t *c0 = pixel;
         scui_color8888_t *c1 = tar;
-        c0->ch.a = c1->ch.a;
-        c0->ch.r = c1->ch.r;
-        c0->ch.g = c1->ch.g;
-        c0->ch.b = c1->ch.b;
+        c0->full = c1->full;
         break;
     }
     default:
@@ -94,17 +86,15 @@ void scui_pixel_mix_alpha(scui_pixel_cf_t cf, void *pixel, scui_alpha_t alpha)
 {
     switch (cf) {
     case scui_pixel_cf_bmp565: {
-        scui_color565_t *pixel565 = pixel;
-        *pixel565 = (scui_color565_t){
-            .ch.r = (uint8_t)SCUI_DIV_0xFF((uint16_t)pixel565->ch.r * alpha),
-            .ch.g = (uint8_t)SCUI_DIV_0xFF((uint16_t)pixel565->ch.g * alpha),
-            .ch.b = (uint8_t)SCUI_DIV_0xFF((uint16_t)pixel565->ch.b * alpha),
-        };
+        scui_color565_t *pc = pixel;
+        pc->ch.r = SCUI_DIV_0xFF((uint16_t)pc->ch.r * alpha);
+        pc->ch.g = SCUI_DIV_0xFF((uint16_t)pc->ch.g * alpha);
+        pc->ch.b = SCUI_DIV_0xFF((uint16_t)pc->ch.b * alpha);
         break;
     }
     case scui_pixel_cf_bmp8565: {
-        scui_color8565_t *pixel8565 = pixel;
-        pixel8565->ch.a = scui_alpha_mix(pixel8565->ch.a, alpha);
+        scui_color8565_t *pc = pixel;
+        pc->ch.a = SCUI_DIV_0xFF((uint16_t)pc->ch.a * alpha);
         break;
     }
     default:
@@ -127,16 +117,17 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
     /* 像素点融合主要处理俩个像素点在一个新像素点中的浓度 */
     /* 所以说此时的透明度可以等价理解为该原始像素点的浓度 */
     /* 这俩个像素点为融合后的像素点稳定的贡献全部的颜色 */
-    SCUI_ASSERT(alpha_1 + alpha_2 == scui_alpha_cover);
+    SCUI_ASSERT(alpha_1 + alpha_2 == 0xFF);
     
     if (cf_1 == scui_pixel_cf_bmp565 &&
         cf_2 == scui_pixel_cf_bmp565) {
+        scui_color565_t *c_1 = pixel_1;
+        scui_color565_t *c_2 = pixel_2;
         
-        if (alpha_1 == scui_alpha_cover)
+        if (alpha_1 == 0xFF)
             return;
-        if (alpha_2 == scui_alpha_cover) {
-            *(scui_color565_t *)pixel_1 =
-            *(scui_color565_t *)pixel_2;
+        if (alpha_2 == 0xFF) {
+            c_1->full = c_2->full;
             return;
         }
         
@@ -147,32 +138,18 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         //     into  00000gggggg00000rrrrr000000bbbbb
         // with mask 00000111111000001111100000011111
         // This is useful because it makes space for a parallel fixed-point multiply
-        uint8_t a1 = alpha_1 >> 3;
-        uint8_t a2 = alpha_2 >> 3;
-        uint32_t p1 = ((scui_color565_t *)pixel_1)->full;
-        uint32_t p2 = ((scui_color565_t *)pixel_2)->full;
+        uint8_t a1 = alpha_1 >> 3; uint32_t p1 = c_1->full;
+        uint8_t a2 = alpha_2 >> 3; uint32_t p2 = c_2->full;
         p1 = ((p1 | (p1 << 16)) & 0x07e0f81f);
         p2 = ((p2 | (p2 << 16)) & 0x07e0f81f);
         uint32_t ret = ((p1 * a1 + p2 * a2) >> 5) & 0x07e0f81f;
-        ((scui_color565_t *)pixel_1)->full = (uint16_t)((ret >> 16) | ret);
+        c_1->full = ((ret >> 16) | ret);
         #else
-        scui_color565_t  *c_1 = pixel_1;
-        scui_color565_t  *c_2 = pixel_2;
         scui_color_wt_t a2 = alpha_2;
         scui_color_wt_t a1 = alpha_1;
-        scui_color_wt_t r  = SCUI_DIV_0xFF((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2);
-        scui_color_wt_t g  = SCUI_DIV_0xFF((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2);
-        scui_color_wt_t b  = SCUI_DIV_0xFF((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2);
-        
-        if (alpha_1 == 0xFF)
-            return;
-        
-        scui_color565_t color565 = {
-            .ch.r = r,
-            .ch.g = g,
-            .ch.b = b,
-        };
-        *c_1 = color565;
+        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
+        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
+        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
         #endif
         
         return;
@@ -180,122 +157,99 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
     
     if (cf_1 == scui_pixel_cf_bmp565 &&
         cf_2 == scui_pixel_cf_bmp8565) {
-        
         scui_color565_t  *c_1 = pixel_1;
         scui_color8565_t *c_2 = pixel_2;
-        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
-        scui_color_wt_t a1 = 0xFF - a2;
-        scui_color_wt_t r  = SCUI_DIV_0xFF((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2);
-        scui_color_wt_t g  = SCUI_DIV_0xFF((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2);
-        scui_color_wt_t b  = SCUI_DIV_0xFF((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2);
         
         if (alpha_1 == 0xFF)
             return;
         
-        scui_color565_t color565 = {
-            .ch.r = r,
-            .ch.g = g,
-            .ch.b = b,
-        };
-        *c_1 = color565;
-        
+        scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
+        scui_color_wt_t a1 = 0xFF - a2;
+        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
+        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
+        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
         return;
     }
     
     if (cf_1 == scui_pixel_cf_bmp8565 &&
         cf_2 == scui_pixel_cf_bmp565) {
-        
         scui_color8565_t *c_1 = pixel_1;
         scui_color565_t  *c_2 = pixel_2;
+        
         scui_color_wt_t a2 = alpha_2;
         scui_color_wt_t a1 = 0xFF - a2;
-        scui_color_wt_t as = a2 + a1;
-        scui_color_wt_t r  = SCUI_DIV_0xFF((uint16_t)c_1->ch.r * a1 + (uint16_t)c_2->ch.r * a2);
-        scui_color_wt_t g  = SCUI_DIV_0xFF((uint16_t)c_1->ch.g * a1 + (uint16_t)c_2->ch.g * a2);
-        scui_color_wt_t b  = SCUI_DIV_0xFF((uint16_t)c_1->ch.b * a1 + (uint16_t)c_2->ch.b * a2);
         
         if (alpha_1 == 0xFF || a2 == 0x00)
             return;
         
-        scui_color8565_t color8565 = {
-            .ch.a = as,
-            .ch.r = r,
-            .ch.g = g,
-            .ch.b = b,
-        };
-        *c_1 = color8565;
-        
+        c_1->ch.a = a2 + a1;
+        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * a1 + c_2->ch.r * a2);
+        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * a1 + c_2->ch.g * a2);
+        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * a1 + c_2->ch.b * a2);
         return;
     }
     
     if (cf_1 == scui_pixel_cf_bmp8565 &&
         cf_2 == scui_pixel_cf_bmp8565) {
-        
         scui_color8565_t *c_1 = pixel_1;
         scui_color8565_t *c_2 = pixel_2;
+        
         scui_color_wt_t a2 = scui_alpha_mix(c_2->ch.a, alpha_2);
         scui_color_wt_t a1 = scui_alpha_mix(c_1->ch.a, alpha_1);
+        scui_color_wt_t as = scui_alpha_mix(a1, (0xFF - a2));
         
-        scui_color_wt_t as = 0xFF - scui_alpha_mix(0xFF - a2, 0xFF - a1);
-        scui_color_wt_t r  = SCUI_DIV_0xFF((uint32_t)c_1->ch.r * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.r * a2);
-        scui_color_wt_t g  = SCUI_DIV_0xFF((uint32_t)c_1->ch.g * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.g * a2);
-        scui_color_wt_t b  = SCUI_DIV_0xFF((uint32_t)c_1->ch.b * a1 * (0xFF - a2) / 0xFF + (uint16_t)c_2->ch.b * a2);
-        
-        //去黑
         if (alpha_1 == 0xFF || a2 == 0x00)
             return;
         
-        scui_color8565_t color8565 = {
-            .ch.a = as,
-            .ch.r = r,
-            .ch.g = g,
-            .ch.b = b,
-        };
-        *c_1 = color8565;
-        
+        c_1->ch.a = 0xFF - scui_alpha_mix(0xFF - a2, 0xFF - a1);
+        c_1->ch.r = SCUI_DIV_0xFF(c_1->ch.r * as + c_2->ch.r * a2);
+        c_1->ch.g = SCUI_DIV_0xFF(c_1->ch.g * as + c_2->ch.g * a2);
+        c_1->ch.b = SCUI_DIV_0xFF(c_1->ch.b * as + c_2->ch.b * a2);
         return;
     }
     
     SCUI_ASSERT(false);
 }
 
-/*@brief 像素点生成调色板值
- *@param cf      像素点格式
- *@param pixel   像素点
- *@param palette 调色板值
+/*@brief 像素点生成灰度值
+ *@param cf    像素点格式
+ *@param pixel 像素点
+ *@retval grey 灰度值
  */
-void scui_palette_by_pixel(scui_pixel_cf_t cf, void *pixel, uint8_t *palette)
+uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel)
 {
-    if (cf == scui_pixel_cf_bmp565) {
-        scui_color565_t *c565 = pixel;
+    switch (cf) {
+    case scui_pixel_cf_bmp565: {
+        scui_color565_t *pc = pixel;
         
-        uint16_t r8 = c565->ch.r << 3;
-        uint16_t g8 = c565->ch.g << 2;
-        uint16_t b8 = c565->ch.b << 3;
+        uint16_t r8 = (pc->ch.r << 3) + 0b111;
+        uint16_t g8 = (pc->ch.g << 2) + 0b11;
+        uint16_t b8 = (pc->ch.b << 3) + 0b111;
         
         // Gray * 1024 = R * 306 + G * 601 + B * 117
-        *palette = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
-        return;
+        uint8_t grey = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
+        return grey;
     }
-    
-    if (cf == scui_pixel_cf_bmp8565) {
-        scui_color8565_t *c8565 = pixel;
+    case scui_pixel_cf_bmp8565: {
+        scui_color8565_t *pc = pixel;
         scui_color565_t c565 = {0};
-        c565.ch.r = c8565->ch.r;
-        c565.ch.g = c8565->ch.g;
-        c565.ch.b = c8565->ch.b;
-        scui_pixel_mix_alpha(scui_pixel_cf_bmp565, &c565, c8565->ch.a);
+        c565.ch.r = pc->ch.r;
+        c565.ch.g = pc->ch.g;
+        c565.ch.b = pc->ch.b;
+        scui_pixel_mix_alpha(scui_pixel_cf_bmp565, &c565, pc->ch.a);
         
         uint16_t r8 = (c565.ch.r << 3) + 0b111;
         uint16_t g8 = (c565.ch.g << 2) + 0b11;
         uint16_t b8 = (c565.ch.b << 3) + 0b111;
         
         // Gray * 1024 = R * 306 + G * 601 + B * 117
-        *palette = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
-        return;
+        uint8_t grey = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
+        return grey;
     }
-    
-    SCUI_ASSERT(false);
+    default:
+        SCUI_ASSERT(false);
+        return 0;
+    }
 }
 
 /*@brief 计算灰度值
@@ -316,17 +270,13 @@ uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
     
     switch (bpp) {
     /* 高位在前,地位在后 */
-    case 1:
-        ofs = 7 - bpp_x * 1;
+    case 1: ofs = 7 - bpp_x * 1;
         return ((bitmap & (mask_1 << ofs)) >> ofs) * 0xFF / mask_1;
-    case 2:
-        ofs = 6 - bpp_x * 2;
+    case 2: ofs = 6 - bpp_x * 2;
         return ((bitmap & (mask_2 << ofs)) >> ofs) * 0xFF / mask_2;
-    case 4:
-        ofs = 4 - bpp_x * 4;
+    case 4: ofs = 4 - bpp_x * 4;
         return ((bitmap & (mask_4 << ofs)) >> ofs) * 0xFF / mask_4;
-    case 8:
-        ofs = 0;    // 0 - bpp_x * 8;   // 这个应该永远都是0
+    case 8: ofs = 0;    // 0 - bpp_x * 8;   // 这个应该永远都是0
         return ((bitmap & (mask_8 << ofs)) >> ofs) * 0xFF / mask_8;
     default:
         SCUI_ASSERT(false);
@@ -351,9 +301,11 @@ scui_alpha_t scui_alpha_mix(scui_alpha_t alpha1, scui_alpha_t alpha2)
  */
 scui_alpha_t scui_alpha_undo(scui_alpha_t alpha1, scui_alpha_t alpha2)
 {
+    const scui_alpha_t alpha_s = scui_alpha_trans;
+    const scui_alpha_t alpha_e = scui_alpha_cover;
+    
     if (alpha2 == 0) return alpha1;
-    return scui_clamp((uint16_t)alpha1 * scui_alpha_pct100 / alpha2,
-        scui_alpha_pct0, scui_alpha_pct100);
+    return scui_clamp((uint16_t)alpha1 * alpha_e / alpha2, alpha_s, alpha_e);
 }
 
 /*@brief 计算透明度通过百分比值

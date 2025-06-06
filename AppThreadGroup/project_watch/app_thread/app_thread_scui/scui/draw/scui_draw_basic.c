@@ -316,8 +316,7 @@ void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
             continue;
         
         /* 提取底色色调:以白色(0xFFFFFFFF)为最大浓度0xFF */
-        uint8_t grey = 0;
-        scui_palette_by_pixel(dst_surface->format, &dst_pixel, &grey);
+        uint8_t grey = scui_grey_by_pixel(dst_surface->format, &dst_pixel);
         
         scui_multi_t pct_scale = 0;
         scui_multi_t idx_grad = -1;
