@@ -36,10 +36,6 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scroll->dir         = scroll_maker->dir;
     scroll->edge        = scroll_maker->edge;
     scroll->space       = scroll_maker->space;
-    scroll->path_ptr    = scroll_maker->path_ptr;
-    scroll->path_auto   = scroll_maker->path_auto;
-    scroll->speed_ptr   = scroll_maker->speed_ptr;
-    scroll->speed_auto  = scroll_maker->speed_auto;
     scroll->springback  = scroll_maker->springback;
     scroll->fling_page  = scroll_maker->fling_page;
     scroll->route_enc   = scroll_maker->route_enc;
@@ -49,6 +45,22 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scroll->freedom     = scroll_maker->freedom;
     scroll->loop        = scroll_maker->loop;
     scroll->over_scroll = true;
+    
+    /* 设置动画轨迹, 动画速度 */
+    scui_coord_t anima_speed[4] = SCUI_WIDGET_SCROLL_SPD_ANIM;
+    for (scui_handle_t idx = 0; idx < 4; idx++) {
+        scroll->anima_tag[idx] = false;
+        /* 动画轨迹 */
+        scroll->anima_path[idx]  = scroll_maker->anima_path[idx];
+        if (scroll->anima_path[idx] == NULL)
+            scroll->anima_path[idx]  = scui_map_linear;
+        /* 动画速度 */
+        scroll->anima_speed[idx] = scroll_maker->anima_speed[idx];
+        if (scroll->anima_speed[idx] == 0)
+            scroll->anima_speed[idx]  = anima_speed[idx];
+    }
+    if (scroll->anima_path[3] == scui_map_linear)
+        scroll->anima_path[3]  = scui_map_overshoot;
     
     /* 默认保持一个翻页 */
     if (scroll->route_enc == 0) {
@@ -69,22 +81,6 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     /* 最低保持一个翻页 */
     if (scroll->fling_page <= 0)
         scroll->fling_page  = 1;
-    
-    /* 设置动画轨迹ptr */
-    if (scroll->path_ptr == NULL)
-        scroll->path_ptr  = scui_map_linear;
-    
-    /* 设置动画轨迹auto */
-    if (scroll->path_auto == NULL)
-        scroll->path_auto  = scui_map_linear;
-    
-    /* 设置默认速度ptr */
-    if (scroll->speed_ptr == 0)
-        scroll->speed_ptr  = SCUI_WIDGET_SCROLL_ANIM_PTR;
-    
-    /* 设置默认速度auto */
-    if (scroll->speed_auto == 0)
-        scroll->speed_auto  = SCUI_WIDGET_SCROLL_ANIM_AUTO;
     
     /* 自由布局无循环模式 */
     if (scroll->freedom) {
@@ -228,15 +224,18 @@ void scui_scroll_center_target(scui_handle_t handle, scui_handle_t target)
     if (target_center == target)
         return;
     
-    scui_widget_t *widget_child = scui_handle_source_check(target);
+    scui_widget_t *widget_c = scui_handle_source_check(target);
     scui_coord_t center_x = widget->clip.x + widget->clip.w / 2;
     scui_coord_t center_y = widget->clip.y + widget->clip.h / 2;
-    scui_coord_t center_child_x = widget_child->clip.x + widget_child->clip.w / 2;
-    scui_coord_t center_child_y = widget_child->clip.y + widget_child->clip.h / 2;
+    scui_coord_t center_c_x = widget_c->clip.x + widget_c->clip.w / 2;
+    scui_coord_t center_c_y = widget_c->clip.y + widget_c->clip.h / 2;
+    
+    for (scui_handle_t idx = 0; idx < 4; idx++)
+        scroll->anima_tag[idx] = false;
     
     scui_point_t offset = {
-        .x = center_x - center_child_x,
-        .y = center_y - center_child_y,
+        .x = center_x - center_c_x,
+        .y = center_y - center_c_y,
     };
     SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
     scui_scroll_offset(handle, &offset);
@@ -369,9 +368,6 @@ static void scui_scroll_anima_prepare(void *instance)
  */
 static void scui_scroll_anima_expired(void *instance)
 {
-    
-    
-    
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
     scui_widget_t *widget = scui_handle_source_check(anima->handle);
@@ -667,22 +663,25 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
     scui_scroll_t *scroll = (void *)widget;
     
     scui_anima_t anima = {0};
-    anima.path    = scroll->hold_move ? scroll->path_ptr : scroll->path_auto;
     anima.prepare = scui_scroll_anima_prepare;
     anima.expired = scui_scroll_anima_expired;
     anima.finish  = scui_scroll_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
-    anima.period  = period;
+    anima.period  = period != 0 ? period : scui_dist(anima.value_s, anima.value_e);
     anima.handle  = handle;
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     
-    if (anima.period == 0)
-        anima.period  = scui_dist(anima.value_s, anima.value_e);
+    // 确定当前动画的路径
     // 计算当前动画的周期
-    int32_t speed_anim = scroll->hold_move ? scroll->speed_ptr : scroll->speed_auto;
-    anima.period = anima.period * 1000 / speed_anim;
+    scroll->anima_tag[3] = true;    // 默认auto
+    for (scui_handle_t idx = 0; idx < 4; idx++)
+        if (scroll->anima_tag[idx]) {
+            anima.path = scroll->anima_path[idx];
+            anima.period = anima.period * 1000 / scroll->anima_speed[idx];
+            break;
+        }
     
     if (scroll->anima == SCUI_HANDLE_INVALID) {
          scui_event_t event = {.object = handle};
@@ -1291,6 +1290,10 @@ void scui_scroll_event(scui_event_t *event)
             
             scroll->lock_move = true;
             scroll->hold_move = true;
+            
+            for (scui_handle_t idx = 0; idx < 4; idx++)
+                scroll->anima_tag[idx] = false;
+                scroll->anima_tag[0] = true;
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
@@ -1333,6 +1336,10 @@ void scui_scroll_event(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_enc * event->enc_diff;
         
+        for (scui_handle_t idx = 0; idx < 4; idx++)
+            scroll->anima_tag[idx] = false;
+            scroll->anima_tag[1] = true;
+        
         scui_scroll_offset(widget->myself, &offset);
         scui_event_mask_over(event);
         break;
@@ -1364,6 +1371,10 @@ void scui_scroll_event(scui_event_t *event)
             offset.x = way * scroll->route_key;
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_key;
+        
+        for (scui_handle_t idx = 0; idx < 4; idx++)
+            scroll->anima_tag[idx] = false;
+            scroll->anima_tag[2] = true;
         
         scui_scroll_offset(widget->myself, &offset);
         scui_event_mask_over(event);

@@ -29,12 +29,15 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_roller_maker_t *roller_maker = widget_maker;
     
     /* 使用滚轮的默认滚动 */
-    if (scroll_maker->path_auto == NULL)
-        scroll_maker->path_auto  = scui_map_bounce;
+    if (scroll_maker->anima_path[3] == NULL)
+        scroll_maker->anima_path[3]  = scui_map_bounce;
     
     /* 使用滚轮的默认滚动速度 */
-    if (scroll_maker->speed_auto == 0)
-        scroll_maker->speed_auto  = SCUI_WIDGET_ROLLER_ANIM_AUTO;
+    scui_coord_t anima_speed[4] = SCUI_WIDGET_ROLLER_SPD_ANIM;
+    for (scui_handle_t idx = 0; idx < 4; idx++) {
+        if (scroll_maker->anima_speed[idx] == 0)
+            scroll_maker->anima_speed[idx]  = anima_speed[idx];
+    }
     
     /* 构造派生控件实例 */
     scui_linear_make(linear, linear_maker, handle, layout);
@@ -145,7 +148,7 @@ static void scui_roller_m_event(scui_event_t *event)
         
         dist_x  = scui_min(dist_x, clip_p.w / 2);
         percent = (clip_p.w / 2 - dist_x) * 100 / (clip_p.w / 2);
-        percent = scui_min(scui_max(percent, 30), 100);
+        percent = scui_min(scui_max(percent, 10), 100);
         SCUI_LOG_INFO("<%d, %d>:%u", offset.x, offset.y, percent);
         
         scui_alpha_t alpha_w = scui_alpha_cover;
@@ -192,9 +195,9 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_matrix_rotate_c(&x_matrix, &chord, 0x01);
             /* 视点在控件中心 */
             scui_view3_t view3 = {
-                .x = +c_wx,
-                .y = +c_wy,
-                .z = +rad_rr * 16,
+                .x = +c_px,
+                .y = +c_py,
+                .z = +rad_rr * 8,
             };
             scui_point3_t offset3 = {.x = c_px, .y = c_py,};
             /* 创建面, 平行xy平面, 距离z轴一个cos距离 */

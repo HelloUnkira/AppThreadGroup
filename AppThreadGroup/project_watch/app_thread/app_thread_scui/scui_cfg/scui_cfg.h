@@ -168,13 +168,12 @@
 #define SCUI_STRING_LIMIT_LINE                      (64)
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
-/* scroll:按键, 全局滚动速度 */
-#define SCUI_WIDGET_SCROLL_ANIM_PTR                 (SCUI_VER_RES * 2)
-#define SCUI_WIDGET_SCROLL_ANIM_AUTO                (SCUI_VER_RES * 2)
+/* scroll:按键, 动画速度[ptr, enc, key, auto] */
+#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1000, 1000, 1000, 300}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* roller: */
-#define SCUI_WIDGET_ROLLER_ANIM_AUTO                (SCUI_VER_RES / 5)
+#define SCUI_WIDGET_ROLLER_SPD_ANIM                 {1000, 75, 75, 75}
 /* string:行间距,字间距,空字符宽度 */
 #define SCUI_WIDGET_STRING_GAP_LINE                 (0)
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)

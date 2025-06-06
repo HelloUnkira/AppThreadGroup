@@ -163,7 +163,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
             roller_maker.linear.list_num = 24;
             roller_maker.type = scui_roller_type_spin;
-            roller_maker.grad = false;
+            roller_maker.grad = true;
             scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
             
             for (uint8_t idx = 0; idx < 24; idx++) {
