@@ -7,6 +7,13 @@
 
 #include "scui.h"
 
+/* 内部交叉引用<auto>: */
+static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
+static void scui_scroll_event_auto(scui_event_t *event,  uint8_t type);
+/* 内部交叉引用: */
+
+
+
 /*@brief 控件构造
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
@@ -45,6 +52,11 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scroll->freedom     = scroll_maker->freedom;
     scroll->loop        = scroll_maker->loop;
     scroll->over_scroll = true;
+    
+    /* 偏移点记录 */
+    scroll->point_rcd = SCUI_MEM_ALLOC(scui_mem_type_mix, widget->child_num * sizeof(scui_point_t));
+    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
+        scroll->point_rcd[idx] = (scui_point_t){0};
     
     /* 设置动画轨迹, 动画速度 */
     scui_coord_t anima_speed[4] = SCUI_WIDGET_SCROLL_SPD_ANIM;
@@ -105,6 +117,9 @@ void scui_scroll_burn(scui_handle_t handle)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
+    
+    // 回收记录点列表
+    SCUI_MEM_FREE(scroll->point_rcd);
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -321,7 +336,7 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     event.ptr_e.y = offset->y;
     
     uint8_t type = scroll->freedom ? 0x10 : 0x00;
-    scui_scroll_event_auto_merge(&event, type);
+    scui_scroll_event_auto(&event, type);
 }
 
 /*@brief 滚动控件边距(自由布局)
@@ -341,20 +356,100 @@ void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
     scui_widget_draw(handle, NULL, false);
 }
 
-/*@brief 滚动控件翻页数更新
+/*@brief 滚动控件事件处理回调
  *@param handle 滚动控件句柄
- *@param fling_page 翻页数
+ *@param type   事件类型
+ *       0x00   滚动开始事件
+ *       0x01   滚动结束事件
+ *       0x02   滚动进行事件
+ *       0xAA   滚动布局更新事件
  */
-void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page)
+static void scui_scroll_notify_event(scui_handle_t handle, uint8_t type)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    scroll->fling_page = fling_page;
+    switch (type) {
+    case 0x00: {
+        /* 上一次滚动已经结束才可产生下一次滚动开始事件 */
+        /* 否则为滚动被打断,此时应该吸收中间的事件 */
+        if (!scroll->over_scroll)
+             break;
+        scroll->over_scroll = false;
+        /* scroll event: */
+        scui_event_t event = {
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_start,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    case 0x01: {
+        if (scroll->over_scroll)
+            break;
+        scroll->over_scroll = true;
+        /* scroll event: */
+        scui_event_t event = {
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_over,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    case 0x02: {
+        /* scroll event: */
+        scui_event_t event = {
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_keep,
+            .absorb     = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    case 0xAA: {
+        scui_event_t event = {
+            .object     = widget->myself,
+            .style.sync = true,
+            .type       = scui_event_widget_scroll_layout,
+        };
+        scui_event_notify(&event);
+        break;
+    }
+    default:
+        SCUI_LOG_ERROR("unknown type: %x", type);
+        break;
+    }
+}
+
+/*@brief 滚动控件子控件坐标记录
+ *@param handle 滚动控件句柄
+ *@param record true:记录; false:作用
+ */
+static void scui_scroll_point_record(scui_handle_t handle, bool record)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
     
-    if (scroll->fling_page <= 0)
-        scroll->fling_page  = 1;
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source(handle_c);
+        
+        if (record) {
+            // 此处计算相对偏移量
+            // 保存的是子控件相对父控件的偏移量
+            scroll->point_rcd[idx].x = widget_c->clip.x - widget->clip.x;
+            scroll->point_rcd[idx].y = widget_c->clip.y - widget->clip.y;
+        } else {
+            scui_point_t point_c = {
+                .x = widget->clip.x + scroll->point_rcd[idx].x,
+                .y = widget->clip.y + scroll->point_rcd[idx].y,
+            };
+            scui_widget_move_pos(handle_c, &point_c, false);
+        }
+    }
 }
 
 /*@brief 滚动控件动画回调
@@ -449,9 +544,10 @@ static void scui_scroll_anima_expired(void *instance)
         SCUI_LOG_DEBUG("offset:<x:%d,y:%d>", offset.x, offset.y);
         
         /* 偏移所有子控件 */
-        scui_event_t event = {.object = widget->myself};
-        scui_widget_move_ofs_child_list(widget->myself, &offset, false);
-        scui_scroll_event_notify(&event, 0x02);
+        scui_scroll_point_record(widget->myself, false);
+        scui_widget_clist_move_ofs(widget->myself, &offset, false);
+        scui_scroll_point_record(widget->myself, true);
+        scui_scroll_notify_event(widget->myself, 0x02);
         
         scui_widget_clip_clear(widget, true);
         scui_widget_surface_refr(widget->myself, true);
@@ -518,13 +614,15 @@ static void scui_scroll_anima_expired(void *instance)
             if (scroll->dir == scui_opt_dir_ver)
                 range.y = scroll->dis_lim;
             
-            scui_event_t event = {.object = widget->myself};
-            scui_widget_move_ofs_child_list_loop(widget->myself, &offset, &range, false);
-            scui_scroll_event_notify(&event, 0x02);
+            scui_scroll_point_record(widget->myself, false);
+            scui_widget_clist_move_ofs_loop(widget->myself, &offset, &range, false);
+            scui_scroll_point_record(widget->myself, true);
+            scui_scroll_notify_event(widget->myself, 0x02);
         } else {
-            scui_event_t event = {.object = widget->myself};
-            scui_widget_move_ofs_child_list(widget->myself, &offset, false);
-            scui_scroll_event_notify(&event, 0x02);
+            scui_scroll_point_record(widget->myself, false);
+            scui_widget_clist_move_ofs(widget->myself, &offset, false);
+            scui_scroll_point_record(widget->myself, true);
+            scui_scroll_notify_event(widget->myself, 0x02);
         }
         
         scui_widget_clip_clear(widget, true);
@@ -550,7 +648,7 @@ static void scui_scroll_anima_finish(void *instance)
         /* 自由布局 */
         SCUI_LOG_DEBUG("ofs_cur:<%d,%d>", scroll->ofs_cur.x, scroll->ofs_cur.y);
         SCUI_LOG_DEBUG("ofs_sum:<%d,%d>", scroll->ofs_sum.x, scroll->ofs_sum.y);
-        scui_scroll_event_auto_merge(&event, 0x11);
+        scui_scroll_event_auto(&event, 0x11);
         
         SCUI_ASSERT(!scroll->loop);
         
@@ -591,13 +689,13 @@ static void scui_scroll_anima_finish(void *instance)
                 goto over;
             
             /* 未回弹则需要校正 */
-            scui_scroll_event_auto_merge(&event, 0xAA);
+            scui_scroll_event_auto(&event, 0xAA);
         }
     } else {
         /* 自动布局,非循环,循环 */
         SCUI_LOG_DEBUG("dis_ofs:%d", scroll->dis_ofs);
         SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
-        scui_scroll_event_auto_merge(&event, 0x01);
+        scui_scroll_event_auto(&event, 0x01);
         
         if (!scroll->hold_move) {
             
@@ -623,7 +721,7 @@ static void scui_scroll_anima_finish(void *instance)
                 goto over;
             
             /* 未回弹则需要校正 */
-            scui_scroll_event_auto_merge(&event, 0xAA);
+            scui_scroll_event_auto(&event, 0xAA);
         }
     }
     over:
@@ -639,8 +737,7 @@ static void scui_scroll_anima_finish(void *instance)
         if (scroll->anima != SCUI_HANDLE_INVALID &&
            !scui_anima_running(scroll->anima)) {
             
-            scui_event_t event = {.object = widget->myself};
-            scui_scroll_event_notify(&event, 0x01);
+            scui_scroll_notify_event(widget->myself, 0x01);
             
             if (scroll->anima != SCUI_HANDLE_INVALID) {
                 scui_anima_stop(scroll->anima);
@@ -657,7 +754,7 @@ static void scui_scroll_anima_finish(void *instance)
  *@param value_e 结束值
  *@param period  周期值
  */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period)
+static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
@@ -683,10 +780,8 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
             break;
         }
     
-    if (scroll->anima == SCUI_HANDLE_INVALID) {
-         scui_event_t event = {.object = handle};
-        scui_scroll_event_notify(&event, 0x00);
-    }
+    if (scroll->anima == SCUI_HANDLE_INVALID)
+        scui_scroll_notify_event(handle, 0x00);
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -715,7 +810,7 @@ void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value
  *             0x12 动画重置事件(自由布局)
  *             0xAA 动画回弹事件(自动布局, 自由布局, 非循环, 循环)
  */
-void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
+static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
@@ -1055,74 +1150,6 @@ void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type)
     }
 }
 
-/*@brief 滚动控件事件处理回调
- *@param event 事件
- *@param type  事件类型
- *       0x00  滚动开始事件
- *       0x01  滚动结束事件
- *       0x02  滚动进行事件
- *       0xAA  滚动布局更新事件
- */
-void scui_scroll_event_notify(scui_event_t *event, uint8_t type)
-{
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_scroll_t *scroll = (void *)widget;
-    
-    switch (type) {
-    case 0x00: {
-        /* 上一次滚动已经结束才可产生下一次滚动开始事件 */
-        /* 否则为滚动被打断,此时应该吸收中间的事件 */
-        if (!scroll->over_scroll)
-             break;
-        scroll->over_scroll = false;
-        /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_s,
-        };
-        scui_event_notify(&event);
-        break;
-    }
-    case 0x01: {
-        if (scroll->over_scroll)
-            break;
-        scroll->over_scroll = true;
-        /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_e,
-        };
-        scui_event_notify(&event);
-        break;
-    }
-    case 0x02: {
-        /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_c,
-            .absorb     = scui_event_absorb_none,
-        };
-        scui_event_notify(&event);
-        break;
-    }
-    case 0xAA: {
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_layout,
-        };
-        scui_event_notify(&event);
-        break;
-    }
-    default:
-        SCUI_LOG_ERROR("unknown type: %x", type);
-        break;
-    }
-}
-
 /*@brief 滚动控件更新布局回调
  *@param event 事件
  */
@@ -1155,20 +1182,23 @@ static void scui_scroll_event_layout(scui_event_t *event)
         scui_area_t clip = widget->clip;
         /* 布局内容为所有子控件的全集 */
         scui_widget_child_list_btra(widget, idx) {
-            scui_handle_t handle = widget->child_list[idx];
-            scui_widget_t *child = scui_handle_source_check(handle);
-            scui_area_merge2(&clip, &child->clip);
+            scui_handle_t  handle_c = widget->child_list[idx];
+            scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+            scui_area_merge2(&clip, &widget_c->clip);
         }
-        scui_area_t clip_widget = widget->clip;
+        scui_area_t clip_w = widget->clip;
         scui_area_m_to_s(&clip, &clip);
-        scui_area_m_to_s(&clip_widget, &clip_widget);
+        scui_area_m_to_s(&clip_w, &clip_w);
         /* 计算自由布局下的ofs_min和ofs_max */
-        scroll->ofs_min.x = -scui_dist(clip_widget.x1, clip.x1) - scroll->edge.x;
-        scroll->ofs_min.y = -scui_dist(clip_widget.y1, clip.y1) - scroll->edge.y;
-        scroll->ofs_max.x = +scui_dist(clip_widget.x2, clip.x2) + scroll->edge.x;
-        scroll->ofs_max.y = +scui_dist(clip_widget.y2, clip.y2) + scroll->edge.y;
+        scroll->ofs_min.x = -scui_dist(clip_w.x1, clip.x1) - scroll->edge.x;
+        scroll->ofs_min.y = -scui_dist(clip_w.y1, clip.y1) - scroll->edge.y;
+        scroll->ofs_max.x = +scui_dist(clip_w.x2, clip.x2) + scroll->edge.x;
+        scroll->ofs_max.y = +scui_dist(clip_w.y2, clip.y2) + scroll->edge.y;
         SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
         SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
+        
+        // 保存子控件的坐标记录
+        scui_scroll_point_record(event->object, true);
         
         // 状态量还原
         scroll->ofs_cur = (scui_point_t){0};
@@ -1186,25 +1216,27 @@ static void scui_scroll_event_layout(scui_event_t *event)
     
     /* 根据布局方向调整子控件信息 */
     scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle = widget->child_list[idx];
-        scui_widget_t *child = scui_handle_source_check(handle);
+        scui_handle_t  handle_c = widget->child_list[idx];
+        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
         /* 被隐藏的控件忽略 */
-        if (scui_widget_is_hide(handle))
+        if (scui_widget_is_hide(handle_c))
             continue;
         
         /* 更新子控件尺寸 */
         if (scroll->dir == scui_opt_dir_hor)
-            scui_widget_adjust_size(handle, child->clip.w, widget->clip.h);
+            scui_widget_adjust_size(handle_c, widget_c->clip.w, widget->clip.h);
         if (scroll->dir == scui_opt_dir_ver)
-            scui_widget_adjust_size(handle, widget->clip.w, child->clip.h);
+            scui_widget_adjust_size(handle_c, widget->clip.w, widget_c->clip.h);
         /* 更新子控件位置 */
-        scui_widget_move_pos(handle, &pos, true);
+        scui_widget_move_pos(handle_c, &pos, true);
         /* 迭代到下一子控件 */
         if (scroll->dir == scui_opt_dir_hor)
-            pos.x += child->clip.w + scroll->space;
+            pos.x += widget_c->clip.w + scroll->space;
         if (scroll->dir == scui_opt_dir_ver)
-            pos.y += child->clip.h + scroll->space;
+            pos.y += widget_c->clip.h + scroll->space;
     }
+    // 保存子控件的坐标记录
+    scui_scroll_point_record(event->object, true);
     
     // 状态量还原
     scroll->dis_sum = 0;
@@ -1268,7 +1300,7 @@ void scui_scroll_event(scui_event_t *event)
         scroll->layout = true;
         scui_event_mask_over(event);
         scui_scroll_event_layout(event);
-        scui_scroll_event_notify(event, 0xAA);
+        scui_scroll_notify_event(event->object, 0xAA);
         break;
     }
     case scui_event_ptr_down:
@@ -1297,7 +1329,7 @@ void scui_scroll_event(scui_event_t *event)
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
-        scui_scroll_event_auto_merge(event, type);
+        scui_scroll_event_auto(event, type);
         scui_event_mask_over(event);
         break;
     }
@@ -1308,7 +1340,7 @@ void scui_scroll_event(scui_event_t *event)
             scroll->mask_springback = false;
             
             uint8_t type = scroll->freedom ? 0x12 : 0x02;
-            scui_scroll_event_auto_merge(event, type);
+            scui_scroll_event_auto(event, type);
         }
         break;
     case scui_event_enc_clockwise:

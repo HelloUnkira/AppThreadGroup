@@ -502,28 +502,49 @@ static void scui_widget_event_process(scui_event_t *event)
  *       亦可用于控件迭代等其他动作
  *@param event    事件(可以是假事件)
  *@param event_cb 事件回调(可以是假事件回调)
- *@param first    优先冒泡自己
+ *@param suborder 子控件冒泡顺序(0:顺序冒泡;1:逆序冒泡)
+ *@param preorder 本控件冒泡顺序(0:后序冒泡;1:先序冒泡)
  */
-static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool first)
+static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_cb, bool suborder, bool preorder)
 {
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    if (first) {
+    // 进行一次冒泡重定向
+    bool suborder_w = suborder;
+    switch (event->type) {
+    case scui_event_draw:
+        suborder_w = widget->style.order_draw;
+        break;
+    default:
+        break;
+    }
+    
+    if (preorder) {
         if (event_cb != NULL) event_cb(event);
         else scui_widget_event_process(event);
         if (scui_event_check_over(event))
             return;
     }
     
-    scui_widget_child_list_btra(widget, idx) {
-        event->object = widget->child_list[idx];
-        scui_widget_event_bubble(event, event_cb, first);
-        event->object = widget->myself;
-        if (scui_event_check_over(event))
-            return;
+    if (suborder_w) {
+        scui_widget_child_list_ftra(widget, idx) {
+            event->object = widget->child_list[idx];
+            scui_widget_event_bubble(event, event_cb, suborder, preorder);
+            event->object = widget->myself;
+            if (scui_event_check_over(event))
+                return;
+        }
+    } else {
+        scui_widget_child_list_btra(widget, idx) {
+            event->object = widget->child_list[idx];
+            scui_widget_event_bubble(event, event_cb, suborder, preorder);
+            event->object = widget->myself;
+            if (scui_event_check_over(event))
+                return;
+        }
     }
     
-    if (!first) {
+    if (!preorder) {
         if (event_cb != NULL) event_cb(event);
         else scui_widget_event_process(event);
         if (scui_event_check_over(event))
@@ -544,21 +565,18 @@ void scui_widget_event_dispatch(scui_event_t *event)
     SCUI_LOG_DEBUG("event %u", event->type);
     
     /* 输入事件ptr:回溯递归 */
-    if (event->type >= scui_event_ptr_s &&
-        event->type <= scui_event_ptr_e) {
-        scui_widget_event_bubble(event, NULL, false);
-        return;
-    }
     /* 输入事件enc:顺向递归 */
-    if (event->type >= scui_event_enc_s &&
-        event->type <= scui_event_enc_e) {
-        scui_widget_event_bubble(event, NULL, true);
+    /* 输入事件key:顺向递归 */
+    if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
+        scui_widget_event_bubble(event, NULL, true, false);
         return;
     }
-    /* 输入事件key:顺向递归 */
-    if (event->type >= scui_event_key_s &&
-        event->type <= scui_event_key_e) {
-        scui_widget_event_bubble(event, NULL, true);
+    if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
+        scui_widget_event_bubble(event, NULL, false, true);
+        return;
+    }
+    if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
+        scui_widget_event_bubble(event, NULL, false, true);
         return;
     }
     
@@ -573,7 +591,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 其他事件:泛用流程 */
     switch (event->type) {
     case scui_event_anima_elapse:
-        scui_widget_event_bubble(event, NULL, false);
+        scui_widget_event_bubble(event, NULL, false, false);
         return;
     case scui_event_draw: {
         scui_event_mask_keep(event);
@@ -620,18 +638,18 @@ void scui_widget_event_dispatch(scui_event_t *event)
         
         // 启用集成事件冒泡流程
         scui_tick_calc(0x20, NULL, NULL, NULL);
-        scui_widget_event_bubble(event, NULL, true);
+        scui_widget_event_bubble(event, NULL, false, true);
         scui_tick_calc(0x21, NULL, NULL, NULL);
         return;
     }
     case scui_event_show:
-        scui_widget_event_bubble(event, NULL, true);
+        scui_widget_event_bubble(event, NULL, false, true);
         return;
     case scui_event_hide:
-        scui_widget_event_bubble(event, NULL, false);
+        scui_widget_event_bubble(event, NULL, true, false);
         return;
     case scui_event_change_lang:
-        scui_widget_event_bubble(event, NULL, false);
+        scui_widget_event_bubble(event, NULL, false, false);
         return;
     case scui_event_focus_get:
     case scui_event_focus_lost:

@@ -37,10 +37,4 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset);
  */
 void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge);
 
-/*@brief 滚动控件翻页数更新
- *@param handle 滚动控件句柄
- *@param fling_page 翻页数
- */
-void scui_scroll_fling_page(scui_handle_t handle, scui_coord_t fling_page);
-
 #endif

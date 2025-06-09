@@ -91,9 +91,9 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_enc_clockwise,
         scui_event_enc_clockwise_anti,
         
-        scui_event_widget_scroll_s,
-        scui_event_widget_scroll_e,
-        scui_event_widget_scroll_c,
+        scui_event_widget_scroll_start,
+        scui_event_widget_scroll_over,
+        scui_event_widget_scroll_keep,
     };
     
     for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)

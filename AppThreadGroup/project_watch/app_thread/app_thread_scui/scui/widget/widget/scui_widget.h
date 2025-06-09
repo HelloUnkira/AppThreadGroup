@@ -32,6 +32,7 @@ typedef struct {
     uintptr_t trans:1;              /* 背景显示:0;背景透明:1; */
     uintptr_t cover:1;              /* 未知覆盖:0;完全覆盖:1; */
     uintptr_t fixed:1;              /* 控件移动禁止(悬浮) */
+    uintptr_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     uintptr_t sched_anima:1;        /* 控件调度帧动画标记 */
     uintptr_t sched_widget:1;       /* 控件专属事件响应标记 */
     uintptr_t indev_ptr:1;          /* 输入事件响应标记:ptr */
@@ -229,10 +230,18 @@ void scui_widget_alpha_undo(scui_handle_t handle, scui_alpha_t alpha, bool recur
  */
 void scui_widget_alpha_mix(scui_handle_t handle, scui_alpha_t alpha, bool recurse);
 
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 /*@brief 控件默认事件处理回调
  *@param event 事件
  */
 void scui_widget_event_dispatch(scui_event_t *event);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 /*@brief 控件类型检查
  *@param handle 控件句柄
@@ -247,12 +256,16 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
  */
 void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_map);
 
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 /*@brief 控件移动子控件
  *@param handle 控件句柄
  *@param offset 偏移量
  *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset, bool dirty);
+void scui_widget_clist_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty);
 
 /*@brief 控件移动子控件(循环模式)
  *@param handle 控件句柄
@@ -260,7 +273,7 @@ void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset,
  *@param range  偏移量限制
  *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty);
+void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty);
 
 /*@brief 控件对齐子控件计算
  *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
@@ -277,5 +290,9 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
  *@param key  锁定标记句柄(浮动校验密钥)
  */
 bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 
 #endif

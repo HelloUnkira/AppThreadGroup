@@ -29,6 +29,7 @@ typedef struct {
     /* 内部域: */
     scui_handle_t   anima;              /* 移动动画 */
     scui_handle_t   key;                /* 全局滚动锁定 */
+    scui_point_t   *point_rcd;          /* 子控件移动记录 */
     scui_point_t    point_cur;          /* 移动动画当前 */
     scui_point_t    point_ofs;          /* 移动动画总计 */
     bool            anima_tag[4];       /* 动画标记[ptr, enc, key, auto] */
@@ -96,36 +97,5 @@ void scui_scroll_burn(scui_handle_t handle);
  *@param event 事件
  */
 void scui_scroll_event(scui_event_t *event);
-
-/*@brief 滚动控件动画自动化
- *@param handle  滚动控件句柄
- *@param value_s 起始值
- *@param value_e 结束值
- *@param period  周期值
- */
-void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
-
-/*@brief 滚动控件事件流程合并
- *@param event 事件
- *@param type  自动事件类型
- *             0x00 动画打断事件(自动布局, 非循环, 循环)
- *             0x01 动画重置事件(自动布局, 非循环, 循环)
- *             0x02 动画重置事件(自动布局, 非循环, 循环)
- *             0x10 动画打断事件(自由布局)
- *             0x11 动画重置事件(自由布局)
- *             0x12 动画重置事件(自由布局)
- *             0xAA 动画回弹事件(自动布局, 自由布局, 非循环, 循环)
- */
-void scui_scroll_event_auto_merge(scui_event_t *event, uint8_t type);
-
-/*@brief 滚动控件事件处理回调
- *@param event 事件
- *@param type  事件类型
- *       0x00  滚动开始事件
- *       0x01  滚动结束事件
- *       0x02  滚动进行事件
- *       0xAA  滚动布局更新事件
- */
-void scui_scroll_event_notify(scui_event_t *event, uint8_t type);
 
 #endif

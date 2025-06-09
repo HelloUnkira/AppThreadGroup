@@ -37,9 +37,9 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
         case scui_event_size_adjust:                return scui_stringify(scui_event_size_adjust);
         case scui_event_change_lang:                return scui_stringify(scui_event_change_lang);
         /* 系统事件: sched */
-        case scui_event_widget_scroll_s:            return scui_stringify(scui_event_widget_scroll_s);
-        case scui_event_widget_scroll_c:            return scui_stringify(scui_event_widget_scroll_c);
-        case scui_event_widget_scroll_e:            return scui_stringify(scui_event_widget_scroll_e);
+        case scui_event_widget_scroll_start:        return scui_stringify(scui_event_widget_scroll_start);
+        case scui_event_widget_scroll_keep:         return scui_stringify(scui_event_widget_scroll_keep);
+        case scui_event_widget_scroll_over:         return scui_stringify(scui_event_widget_scroll_over);
         case scui_event_widget_scroll_layout:       return scui_stringify(scui_event_widget_scroll_layout);
         case scui_event_widget_button_click:        return scui_stringify(scui_event_widget_button_click);
         /* 系统事件: ptr */
@@ -88,9 +88,9 @@ void scui_event_custom_access(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_e:
-    case scui_event_widget_scroll_c:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_over:
+    case scui_event_widget_scroll_keep:
         scui_presenter.vibrate_shot();
         break;
     default:
@@ -103,9 +103,9 @@ void scui_event_custom_access(scui_event_t *event)
     case scui_event_key_hold:
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti:
-    case scui_event_widget_scroll_s:
-    case scui_event_widget_scroll_e:
-    case scui_event_widget_scroll_c:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_over:
+    case scui_event_widget_scroll_keep:
         app_scui_check_time_reset(0, 0);
         break;
     default:

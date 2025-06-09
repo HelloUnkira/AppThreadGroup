@@ -29,9 +29,9 @@ typedef enum {
     /* 特殊控件生成事件: */
     scui_event_widget_s,
     scui_event_widget_all,
-    scui_event_widget_scroll_s,         /* 滚动控件:滚动开始 */
-    scui_event_widget_scroll_c,         /* 滚动控件:滚动进行 */
-    scui_event_widget_scroll_e,         /* 滚动控件:滚动结束 */
+    scui_event_widget_scroll_start,     /* 滚动控件:滚动开始 */
+    scui_event_widget_scroll_keep,      /* 滚动控件:滚动进行 */
+    scui_event_widget_scroll_over,      /* 滚动控件:滚动结束 */
     scui_event_widget_scroll_layout,    /* 滚动控件:布局更新 */
     scui_event_widget_button_click,     /* 按钮控件:指针点击 */
     scui_event_widget_e,

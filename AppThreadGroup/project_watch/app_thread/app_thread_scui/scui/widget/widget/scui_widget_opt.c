@@ -10,7 +10,7 @@
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
- *@param dirty  脏标记
+ *@param dirty  脏标记(批量移动控件使用, 默认true)
  */
 void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty)
 {
@@ -242,7 +242,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
  *@param offset 偏移量
  *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset, bool dirty)
+void scui_widget_clist_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -266,7 +266,7 @@ void scui_widget_move_ofs_child_list(scui_handle_t handle, scui_point_t *offset,
  *@param range  偏移量限制
  *@param dirty  脏标记
  */
-void scui_widget_move_ofs_child_list_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty)
+void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty)
 {
     SCUI_LOG_INFO("widget %u offset(%u, %u)", handle, offset->x, offset->y);
     scui_widget_t *widget = scui_handle_source_check(handle);

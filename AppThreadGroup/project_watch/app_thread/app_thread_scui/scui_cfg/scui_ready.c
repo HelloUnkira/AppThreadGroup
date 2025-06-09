@@ -7,10 +7,31 @@
 
 #include "scui.h"
 
+static void scui_element_evaluate(void)
+{
+    SCUI_LOG_INFO("");
+    SCUI_LOG_INFO("scui widget evaluate:");
+    SCUI_LOG_INFO("scui_widget_t:%d, scui_widget_maker_t:%d", sizeof(scui_widget_t), sizeof(scui_widget_maker_t));
+    SCUI_LOG_INFO("scui_window_t:%d, scui_window_maker_t:%d", sizeof(scui_window_t), sizeof(scui_window_maker_t));
+    SCUI_LOG_INFO("scui_custom_t:%d, scui_custom_maker_t:%d", sizeof(scui_custom_t), sizeof(scui_custom_maker_t));
+    SCUI_LOG_INFO("scui_scroll_t:%d, scui_scroll_maker_t:%d", sizeof(scui_scroll_t), sizeof(scui_scroll_maker_t));
+    SCUI_LOG_INFO("scui_string_t:%d, scui_string_maker_t:%d", sizeof(scui_string_t), sizeof(scui_string_maker_t));
+    SCUI_LOG_INFO("scui_linear_t:%d, scui_linear_maker_t:%d", sizeof(scui_linear_t), sizeof(scui_linear_maker_t));
+    SCUI_LOG_INFO("scui_roller_t:%d, scui_roller_maker_t:%d", sizeof(scui_roller_t), sizeof(scui_roller_maker_t));
+    
+    SCUI_LOG_INFO("scui_objbtn_t:%d, scui_objbtn_maker_t:%d", sizeof(scui_objbtn_t), sizeof(scui_objbtn_maker_t));
+    SCUI_LOG_INFO("scui_button_t:%d, scui_button_maker_t:%d", sizeof(scui_button_t), sizeof(scui_button_maker_t));
+    SCUI_LOG_INFO("scui_chart_t:%d,  scui_chart_maker_t:%d",  sizeof(scui_chart_t),  sizeof(scui_chart_maker_t));
+    
+    SCUI_LOG_INFO("");
+}
+
 /*@brief 初始化scui
  */
 void scui_ready(void)
 {
+    scui_element_evaluate();
+    
     /* 初始化scui */
     scui_engine_ready();
     
