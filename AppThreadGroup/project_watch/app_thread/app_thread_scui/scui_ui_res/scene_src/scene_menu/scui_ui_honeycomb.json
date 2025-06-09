@@ -24,6 +24,7 @@
             "widget.child_num":             "50",
             "pos":                          "scui_opt_pos_c",
             "dir":                          "scui_opt_dir_all",
+            "skip":							"scui_opt_pos_all",
             "springback":                   "35",
             "freedom":                      "true"
         }

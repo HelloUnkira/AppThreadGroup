@@ -294,9 +294,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
 	.widget.event_cb                = scui_ui_scene_butterfly_event_proc,
-	.widget.child_num               = 11,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 11,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
@@ -319,9 +319,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_CUBE,
 	.widget.event_cb                = scui_ui_scene_cube_event_proc,
-	.widget.child_num               = 11,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 11,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
@@ -344,9 +344,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
 	.widget.event_cb                = scui_ui_scene_lantern_event_proc,
-	.widget.child_num               = 11,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 11,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
@@ -369,9 +369,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
 	.widget.event_cb                = scui_ui_scene_soccer_event_proc,
-	.widget.child_num               = 11,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 11,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
@@ -397,9 +397,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HONEYCOMB,
 	.widget.event_cb                = scui_ui_scene_honeycomb_event_proc,
-	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 1,
 };
 
 static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
@@ -409,11 +409,12 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HONEYCOMB_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_HONEYCOMB,
-	.widget.child_num               = 50,
 	.pos                            = scui_opt_pos_c,
 	.dir                            = scui_opt_dir_all,
+	.skip                           = scui_opt_pos_all,
 	.springback                     = 35,
 	.freedom                        = true,
+	.widget.child_num               = 50,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
@@ -425,9 +426,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC,
 	.widget.event_cb                = scui_ui_scene_list_arc_event_proc,
-	.widget.child_num               = 3,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 3,
 };
 
 static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL = {
@@ -439,7 +440,6 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL = {
 	.widget.myself                  = SCUI_UI_SCENE_LIST_ARC_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_LIST_ARC,
 	.widget.event_cb                = scui_ui_scene_list_arc_scroll_event,
-	.widget.child_num               = 50,
 	.pos                            = scui_opt_pos_c,
 	.dir                            = scui_opt_dir_ver,
 	.space                          = 10,
@@ -448,6 +448,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_SCROLL = {
 	.keyid_fdir                     = SCUI_WIDGET_SCROLL_KEY_FDIR,
 	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.springback                     = 70,
+	.widget.child_num               = 50,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_BAR_ARC = {
@@ -480,9 +481,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LIST_SCALE,
 	.widget.event_cb                = scui_ui_scene_list_scale_event_proc,
-	.widget.child_num               = 3,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 3,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_LIST = {
@@ -522,9 +523,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SPREAD = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_SPREAD,
 	.widget.event_cb                = scui_ui_scene_spread_event_proc,
-	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 1,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SPREAD_CUSTOM = {
@@ -549,9 +550,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_THUMBWHEEL,
 	.widget.event_cb                = scui_ui_scene_thumbwheel_event_proc,
-	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 1,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL_CUSTOM = {
@@ -580,9 +581,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_WATERFALL,
 	.widget.event_cb                = scui_ui_scene_waterfall_event_proc,
-	.widget.child_num               = 2,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 2,
 };
 
 static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
@@ -594,7 +595,6 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
 	.widget.myself                  = SCUI_UI_SCENE_WATERFALL_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_WATERFALL,
 	.widget.event_cb                = scui_ui_scene_waterfall_scroll_event,
-	.widget.child_num               = 50,
 	.pos                            = scui_opt_pos_all,
 	.dir                            = scui_opt_dir_ver,
 	.route_enc                      = 117,
@@ -603,6 +603,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_SCROLL = {
 	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.springback                     = 35,
 	.freedom                        = true,
+	.widget.child_num               = 50,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL_BAR_ARC = {
@@ -626,12 +627,12 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
 	.widget.clip.h                  = 100,
 	.widget.myself                  = SCUI_UI_SCENE_MONITOR,
 	.widget.event_cb                = scui_ui_scene_monitor_event_proc,
-	.widget.child_num               = 10,
 	.level                          = 10,
 	.buffer                         = true,
 	.resident                       = true,
 	.hang_only                      = true,
 	.format                         = SCUI_PIXEL_CF_DEF_A,
+	.widget.child_num               = 10,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
@@ -644,12 +645,12 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.widget.clip.h                  = 100,
 	.widget.myself                  = SCUI_UI_SCENE_POPUP,
 	.widget.event_cb                = scui_ui_scene_popup_event_proc,
-	.widget.child_num               = 6,
 	.level                          = 10,
 	.buffer                         = true,
 	.resident                       = true,
 	.hang_only                      = true,
 	.format                         = SCUI_PIXEL_CF_DEF_A,
+	.widget.child_num               = 6,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_SCALE = {
@@ -679,9 +680,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY,
 	.widget.event_cb                = scui_ui_scene_activity_event_proc,
-	.widget.child_num               = 2,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 2,
 };
 
 static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL = {
@@ -693,7 +694,6 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL = {
 	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL,
 	.widget.parent                  = SCUI_UI_SCENE_ACTIVITY,
 	.widget.event_cb                = scui_ui_scene_activity_scroll_event,
-	.widget.child_num               = 7,
 	.pos                            = scui_opt_pos_c,
 	.dir                            = scui_opt_dir_ver,
 	.route_enc                      = SCUI_HOR_RES * 2 / 3,
@@ -702,6 +702,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL = {
 	.keyid_bdir                     = SCUI_WIDGET_SCROLL_KEY_BDIR,
 	.space                          = 10,
 	.springback                     = 70,
+	.widget.child_num               = 7,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC = {
@@ -792,9 +793,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_HOME,
 	.widget.event_cb                = scui_ui_scene_home_event_proc,
-	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 5,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
@@ -807,9 +808,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_MINI_CARD,
 	.widget.event_cb                = scui_ui_scene_mini_card_event_proc,
-	.widget.child_num               = 3,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 3,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD_LIST = {
@@ -862,9 +863,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_STANDBY,
 	.widget.event_cb                = scui_ui_scene_standby_event_proc,
-	.widget.child_num               = 5,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 5,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
@@ -876,9 +877,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_1,
 	.widget.event_cb                = scui_ui_scene_float_1_event_proc,
-	.widget.child_num               = 2,
 	.level                          = 1,
 	.buffer                         = true,
+	.widget.child_num               = 2,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
@@ -914,9 +915,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_2,
 	.widget.event_cb                = scui_ui_scene_float_2_event_proc,
-	.widget.child_num               = 6,
 	.level                          = 1,
 	.buffer                         = true,
+	.widget.child_num               = 6,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
@@ -1005,9 +1006,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_3,
 	.widget.event_cb                = scui_ui_scene_float_3_event_proc,
-	.widget.child_num               = 11,
 	.level                          = 1,
 	.buffer                         = true,
+	.widget.child_num               = 11,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_RING = {
@@ -1032,9 +1033,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_FLOAT_4,
 	.widget.event_cb                = scui_ui_scene_float_4_event_proc,
-	.widget.child_num               = 5,
 	.level                          = 1,
 	.buffer                         = true,
+	.widget.child_num               = 5,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
@@ -1045,9 +1046,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	.widget.myself                  = SCUI_UI_SCENE_1,
 	.widget.event_cb                = scui_ui_scene_1_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
-	.widget.child_num               = 1,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 1,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_VEDIO = {
@@ -1070,9 +1071,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.myself                  = SCUI_UI_SCENE_2,
 	.widget.event_cb                = scui_ui_scene_2_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
-	.widget.child_num               = 7,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 7,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_2_BAR_ARC = {
@@ -1116,9 +1117,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.myself                  = SCUI_UI_SCENE_6,
 	.widget.event_cb                = scui_ui_scene_6_event_proc,
 	.widget.image                   = scui_image_prj_image_src_watchface_bg_01_bgjpg,
-	.widget.child_num               = 9,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 9,
 };
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_1 = {
@@ -1248,9 +1249,9 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_TEST,
 	.widget.event_cb                = scui_ui_scene_test_event_proc,
-	.widget.child_num               = 10,
 	.level                          = 0,
 	.buffer                         = true,
+	.widget.child_num               = 10,
 };
 
 const void * scui_widget_parser_table[76] = {

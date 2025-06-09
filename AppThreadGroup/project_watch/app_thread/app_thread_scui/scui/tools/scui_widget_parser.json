@@ -9,88 +9,38 @@
     "widget": [
         {
             "class": "widget",
-            "maker": "scui_widget_maker_t: you can't use this",
-            "field": {
-                "widget.type":                  "控件类型",
-                "widget.style.trans":           "控件状态风格(背景透明)",
-                "widget.style.sched_anima":     "控件状态风格(控件调度帧动画标记)",
-                "widget.style.sched_widget":    "控件状态风格(控件专属事件响应标记)",
-                "widget.style.indev_ptr":       "控件状态风格(输入事件响应标记:ptr)",
-                "widget.style.indev_enc":       "控件状态风格(输入事件响应标记:enc)",
-                "widget.style.indev_key":       "控件状态风格(输入事件响应标记:key)",
-                "widget.clip.x":                "控件所在父控件区域(x)",
-                "widget.clip.y":                "控件所在父控件区域(y)",
-                "widget.clip.w":                "控件所在父控件区域(w)",
-                "widget.clip.h":                "控件所在父控件区域(h)",
-                "widget.myself":                "控件关联属性:自己",
-                "widget.parent":                "控件关联属性:父控件",
-                "widget.child_num":             "控件关联属性:子控件数量(动态创建)",
-                "widget.image":                 "背景图片(如果有背景图片,优先绘制)",
-                "widget.color.color.full":      "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.color.color_s.full":    "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.color.color_l.full":    "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.color.color_e.full":    "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.color.color_d.full":    "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.color.color_f.full":    "纯色背景(如果没背景图片,颜色绘制)",
-                "widget.event_cb":              "事件响应回调(可选字段,非控件自身字段)"
-            }
+            "maker": "scui_widget_maker_t: you can't use this"
         },
         {
             "class": "scui_widget_type_window",
-            "maker": "scui_window_maker_t",
-            "field": {
-                "level":                        "窗口所在层级(数字越大越高)",
-                "buffer":                       "窗口是否使用独立画布",
-                "resident":                     "窗口常驻标记(特殊使用)",
-                "hang_only":                    "窗口悬挂标记(特殊使用)",
-                "format":                       "窗口独立画布基础像素格式"
-            }
+            "maker": "scui_window_maker_t"
         },
         {
             "class": "scui_widget_type_custom",
-            "maker": "scui_custom_maker_t",
-            "field": {
-                "anno":                         "custom是widget的别名",
-                "anno":                         "它不存在别的字段"
-            }
+            "maker": "scui_custom_maker_t"
         },
         {
             "class": "scui_widget_type_scroll",
-            "maker": "scui_scroll_maker_t",
-            "field": {
-                "pos":                          "滚动停留(边界或中心)",
-                "dir":                          "滚动方向(水平滚动,垂直滚动,全局滚动)",
-                "edge.x":                       "滚动边距(自由布局)",
-                "edge.y":                       "滚动边距(自由布局)",
-                "space":                        "控件间隙(自动布局)",
-                "fling_page":                   "翻页数量",
-                "route_enc":                    "编码器行程",
-                "route_key":                    "按键行程",
-                "keyid_fdir":                   "按键id,对应编码器事件(clockwise)",
-                "keyid_bdir":                   "按键id,对应编码器事件(clockwise_anti)",
-                "springback":                   "回弹效果",
-                "freedom":                      "自由布局(默认自动布局)",
-                "loop":                         "滚动循环"
-            }
+            "maker": "scui_scroll_maker_t"
         },
         {
             "class": "scui_widget_type_string",
-            "maker": "scui_string_maker_t",
-            "field": {
-                "anno":                         "待定中,暂不引入到json",
-                "anno":                         "DIY有点严重,参数条目太多"
-            }
+            "maker": "scui_string_maker_t"
+        },
+        {
+            "class": "scui_widget_type_linear",
+            "maker": "scui_linear_maker_t"
+        },
+        {
+            "class": "scui_widget_type_roller",
+            "maker": "scui_roller_maker_t"
         },
         
         
         
         {
             "class": "scui_widget_type_other:::",
-            "maker": "scui_xxxxxx_maker_t",
-            "field": {
-                "anno":                         "其他DIY控件不导入json",
-                "anno":                         "在c里面动态构建"
-            }
+            "maker": "scui_xxxxxx_maker_t"
         }
     ]
 }

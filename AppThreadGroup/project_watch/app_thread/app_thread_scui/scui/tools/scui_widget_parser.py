@@ -43,22 +43,12 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                 scui_widget_parser_c.write('%s\n{\n}\n' % scui_event_cb % widget['widget.event_cb'])
             except Exception as e:
                 pass
-            try:
-                scui_event_cb = 'static void %s(scui_event_t *event)'
-                scui_widget_parser_c.write('%s\n{\n}\n' % scui_event_cb % widget['notify_cb'])
-            except Exception as e:
-                pass
     scui_widget_parser_c.write('#else\n')
     for scene in scene_list:
         for widget in scene['widget']:
             try:
                 scui_event_cb = 'extern void %s(scui_event_t *event);'
                 scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['widget.event_cb'])
-            except Exception as e:
-                pass
-            try:
-                scui_event_cb = 'extern void %s(scui_event_t *event);'
-                scui_widget_parser_c.write('%s\n' % scui_event_cb % widget['notify_cb'])
             except Exception as e:
                 pass
     scui_widget_parser_c.write('#endif\n\n')
@@ -79,17 +69,12 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                 print('\nwidget type unknown\n')
                 print(widget)
                 continue
-            # 填充基础数据目标
+            # 统计本控件有多少布局孩子
             scui_widget_field_child_num = 0
             for field in widget:
-                for widget_maker in scui_widget_parser_table['widget']:
-                    if widget_maker['class'] == 'widget':
-                        # 存在子控件字段,单独计算
-                        if field == 'widget.child_num':
-                            scui_widget_field_child_num = eval(widget[field])
-                        elif field in widget_maker['field']:
-                            scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
-                        break
+                if field == 'widget.child_num':
+                    scui_widget_field_child_num = eval(widget[field])
+                    break
             # 统计本控件有多少布局孩子
             for target in scene['widget']:
                 try:
@@ -97,15 +82,15 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
                         scui_widget_field_child_num += 1
                 except Exception as e:
                     pass
-            if scui_widget_field_child_num != 0:
-                scui_widget_parser_c.write('\t.%-30s = %s,\n' % ("widget.child_num", str(scui_widget_field_child_num)))
             # 填充指定数据目标
             for field in widget:
-                for widget_maker in scui_widget_parser_table['widget']:
-                    if widget_maker['class'] == widget['widget.type']:
-                        if field in widget_maker['field']:
-                            scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
-                        break
+                if field == 'annotation':
+                    continue
+                if field == 'widget.child_num':
+                    continue
+                scui_widget_parser_c.write('\t.%-30s = %s,\n' % (field, widget[field]))
+            if scui_widget_field_child_num != 0:
+                scui_widget_parser_c.write('\t.%-30s = %s,\n' % ("widget.child_num", str(scui_widget_field_child_num)))
             scui_widget_parser_c.write('};\n\n')
     # 填充数据表
     scui_widget_parser_c.write('const void * scui_widget_parser_table[%s] = {\n' % scui_widget_parser_handle_num)

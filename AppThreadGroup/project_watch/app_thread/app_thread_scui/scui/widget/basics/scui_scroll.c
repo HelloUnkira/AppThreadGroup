@@ -41,6 +41,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     /* 状态初始化 */
     scroll->pos         = scroll_maker->pos;
     scroll->dir         = scroll_maker->dir;
+    scroll->skip        = scroll_maker->skip;
     scroll->edge        = scroll_maker->edge;
     scroll->space       = scroll_maker->space;
     scroll->springback  = scroll_maker->springback;
@@ -354,6 +355,59 @@ void scui_scroll_edge(scui_handle_t handle, scui_point_t *edge)
     
     scroll->layout = true;
     scui_widget_draw(handle, NULL, false);
+}
+
+/*@brief 滚动控件边界忽略检查
+ *@param handle 滚动控件句柄
+ *@param dir    滚动方向
+ */
+static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_scroll_t *scroll = (void *)widget;
+    
+    scui_area_t clip_w = widget->clip;
+    scui_area_m_to_s(&clip_w,  &clip_w);
+    
+    // 上边界和左边界:计算第一个子控件与控件相对偏移值
+    if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u) ||
+        scui_opt_bits_check(scroll->skip, scui_opt_pos_l)) {
+        scui_handle_t  handle_c = scui_widget_child_offset(handle, 0, false);
+        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+        scui_area_t clip_c = widget_c->clip;
+        scui_area_m_to_s(&clip_c, &clip_c);
+        
+        if (dir == scui_opt_dir_to_d)
+        if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u))
+        if (clip_w.y1 == clip_c.y1)
+            return true;
+        
+        if (dir == scui_opt_dir_to_r)
+        if (scui_opt_bits_check(scroll->skip, scui_opt_pos_l))
+        if (clip_w.x1 == clip_c.x1)
+            return true;
+    }
+    
+    // 下边界和右边界:计算最后一个子控件与控件相对偏移值
+    if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d) ||
+        scui_opt_bits_check(scroll->skip, scui_opt_pos_r)) {
+        scui_handle_t  handle_c = scui_widget_child_offset(handle, 0, true);
+        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+        scui_area_t clip_c = widget_c->clip;
+        scui_area_m_to_s(&clip_c, &clip_c);
+        
+        if (dir == scui_opt_dir_to_u)
+        if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d))
+        if (clip_w.y2 == clip_c.y2)
+            return true;
+        
+        if (dir == scui_opt_dir_to_l)
+        if (scui_opt_bits_check(scroll->skip, scui_opt_pos_r))
+        if (clip_w.x2 == clip_c.x2)
+            return true;
+    }
+    
+    return false;
 }
 
 /*@brief 滚动控件事件处理回调
@@ -1312,7 +1366,11 @@ void scui_scroll_event(scui_event_t *event)
         SCUI_LOG_INFO("dir:%u", event_dir);
         
         // 不匹配的方向不支持
-        if ((event_dir & scroll->dir) == 0)
+        if (!scui_opt_bits_check(event_dir, scroll->dir))
+            break;
+        
+        // 忽略的方向不支持
+        if (scui_scroll_edge_skip(event->object, event_dir))
             break;
         
         if (!scroll->lock_move) {

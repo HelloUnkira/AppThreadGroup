@@ -118,6 +118,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             // scroll_maker.pos = scui_opt_pos_d;
             scroll_maker.dir = scui_opt_dir_none;
             #endif
+            scroll_maker.skip = scui_opt_pos_all;
             scui_widget_create(&scroll_maker, &scroll_handle, false);
             scui_ui_res_local->scroll = scroll_handle;
             

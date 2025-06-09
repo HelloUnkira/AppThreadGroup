@@ -19,6 +19,13 @@ scui_handle_t scui_widget_parent(scui_handle_t handle);
  */
 scui_handle_t scui_widget_child_num(scui_handle_t handle);
 
+/*@brief 指定偏移子控件
+ *@param handle 控件句柄
+ *@param offset 偏移值
+ *@param way    偏移方向(0:顺向;1:逆向;)
+ */
+scui_handle_t scui_widget_child_offset(scui_handle_t handle, scui_handle_t offset, bool way);
+
 /*@brief 指定位置子控件
  *@param handle 控件句柄
  *@param index  子控件位置(映射点)

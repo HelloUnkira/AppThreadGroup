@@ -14,11 +14,12 @@ typedef struct {
     /* 外部域: */
     scui_opt_pos_t  pos;                /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;                /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
+    scui_opt_pos_t  skip;               /* 滚动锁定(边界忽略) */
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr, enc, key, auto] */
-    scui_coord_t    anima_speed[4];     /* 动画速度[ptr, enc, key, auto](像素点/1s) */
+    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
+    scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
@@ -32,7 +33,7 @@ typedef struct {
     scui_point_t   *point_rcd;          /* 子控件移动记录 */
     scui_point_t    point_cur;          /* 移动动画当前 */
     scui_point_t    point_ofs;          /* 移动动画总计 */
-    bool            anima_tag[4];       /* 动画标记[ptr, enc, key, auto] */
+    bool            anima_tag[4];       /* 动画标记[ptr,enc,key,auto] */
     uintptr_t       layout:1;           /* 布局更新标记 */
     uintptr_t       over_scroll;        /* 滚动迭代状态 */
     uintptr_t       lock_move:1;        /* 滚动长留锁 */
@@ -65,11 +66,12 @@ typedef struct {
     /* 外部域: */
     scui_opt_pos_t  pos;                /* 滚动停留(边界或中心) */
     scui_opt_dir_t  dir;                /* 滚动方向(水平滚动,垂直滚动,全局滚动) */
+    scui_opt_pos_t  skip;               /* 滚动锁定(边界忽略) */
     scui_point_t    edge;               /* 滚动边距(自由布局) */
     scui_coord_t    space;              /* 控件间隙(自动布局) */
     scui_coord_t    fling_page;         /* 翻页数量 */
-    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr, enc, key, auto] */
-    scui_coord_t    anima_speed[4];     /* 动画速度[ptr, enc, key, auto](像素点/1s) */
+    scui_map_cb_t   anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
+    scui_coord_t    anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
     scui_coord_t    route_enc;          /* 编码器行程 */
     scui_coord_t    route_key;          /* 按键行程 */
     scui_coord_t    keyid_fdir;         /* 按键id,对应编码器事件(clockwise) */
