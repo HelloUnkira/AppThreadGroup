@@ -66,13 +66,12 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 50;
             string_maker.text             = SCUI_MULTI_LANG_0X0029;
-            string_maker.args.grad_w      = 0;
             string_maker.args.line_under  = 1;
             string_maker.args.line_delete = 0;
             string_maker.args.color.color_s.full = 0xFFFFFFFF;
             string_maker.args.color.color_e.full = 0xFFFFFFFF;
             scui_widget_create(&string_maker, &handle_string[0], false);
-            scui_string_upgrade_grads(handle_string[0], grad_s, grad_n);
+            scui_string_upgrade_grads(handle_string[0], grad_s, grad_n, false);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_HOR_RES / 4;
@@ -80,13 +79,12 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 50;
             string_maker.text             = SCUI_MULTI_LANG_0X002e;
-            string_maker.args.grad_w      = 0;
             string_maker.args.line_under  = 0;
             string_maker.args.line_delete = 1;
             string_maker.args.color.color_s.full = 0xFFFF00FF;
             string_maker.args.color.color_e.full = 0xFF00FF00;
             scui_widget_create(&string_maker, &handle_string[1], false);
-            scui_string_upgrade_grads(handle_string[1], grad_s, grad_n);
+            scui_string_upgrade_grads(handle_string[1], grad_s, grad_n, false);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_HOR_RES / 4;
@@ -94,14 +92,13 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 130;
             string_maker.text             = SCUI_MULTI_LANG_0X0034;
-            string_maker.args.grad_w      = 1;
             string_maker.args.line_under  = 1;
             string_maker.args.line_delete = 0;
             string_maker.args.color.color_s.full = 0xFFFF0000;
             string_maker.args.color.color_e.full = 0xFF0000FF;
             string_maker.args.line_multi = true;
             scui_widget_create(&string_maker, &handle_string[2], false);
-            scui_string_upgrade_grads(handle_string[2], grad_s, grad_n);
+            scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, true);
             
             y_offset += string_maker.widget.clip.h + 10;
             string_maker.widget.clip.x = SCUI_HOR_RES / 4;
@@ -109,14 +106,13 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
             string_maker.widget.clip.y = y_offset;
             string_maker.widget.clip.h = 130;
             string_maker.text             = SCUI_MULTI_LANG_0X0042;
-            string_maker.args.grad_w      = 1;
             string_maker.args.line_under  = 0;
             string_maker.args.line_delete = 1;
             string_maker.args.color.color_s.full = 0xFF0000FF;
             string_maker.args.color.color_e.full = 0xFFFF0000;
             string_maker.args.line_multi = true;
             scui_widget_create(&string_maker, &handle_string[3], false);
-            scui_string_upgrade_grads(handle_string[3], grad_s, grad_n);
+            scui_string_upgrade_grads(handle_string[3], grad_s, grad_n, true);
             #endif
         }
         break;

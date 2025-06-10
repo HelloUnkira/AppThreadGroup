@@ -32,14 +32,15 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8);
  *@param color_num 重上色颜色数量
  *@param color_ll  重上色颜色列表
  */
-void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, uint32_t color_num, scui_color_t *color_ll);
+void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_coord_t color_num, scui_color_t *color_ll);
 
 /*@brief 字符串控件渐变序列更新
  *@param handle 字符串控件句柄
  *@param grad_s 渐变序列
  *@param grad_n 渐变序列数量
+ *@param grad_w 渐变序列方向(0:hor;1:ver;)
  */
-void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, uint32_t grad_n);
+void scui_string_upgrade_grads(scui_handle_t handle, scui_color_t *grad_s, scui_coord_t grad_n, bool grad_w);
 
 /*@brief 字符串控件滚动中止
  *@param handle 字符串控件句柄
@@ -57,6 +58,6 @@ bool scui_string_scroll_over(scui_handle_t handle);
  *@param handle 字符串控件句柄
  *@param size   新尺寸
  */
-void scui_string_adjust_size(scui_handle_t handle, uint16_t size);
+void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size);
 
 #endif
