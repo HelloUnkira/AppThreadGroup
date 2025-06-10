@@ -16,6 +16,8 @@ scui_handle_t monitor_mem2  = SCUI_HANDLE_INVALID;
  */
 void scui_ui_scene_monitor_anima_expired(void *instance)
 {
+    bool redraw_tag = false;
+    
     #if 1 // refr
     uint32_t tick_fps = 0;
     uint32_t sched_us = 0;
@@ -52,6 +54,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
                 .color_e.full = val_args[2] > 40 ? color_g : val_args[2] > 30 ? color_y : color_r,},
         };
         scui_string_update_str_rec(monitor_refr, str_refr, scui_arr_len(recolors), recolors);
+        redraw_tag = true;
         
         refr_us_last = scui_tick_us();
         scui_tick_calc(0xFF, NULL, NULL, NULL);
@@ -145,9 +148,16 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         };
         scui_string_update_str_rec(monitor_mem1, str_mem1, scui_arr_len(recolors1), recolors1);
         scui_string_update_str_rec(monitor_mem2, str_mem2, scui_arr_len(recolors2), recolors2);
-        
+        redraw_tag = true;
     }
     #endif
+    
+    // 怪事???
+    if (redraw_tag) {
+        scui_widget_draw(monitor_refr, NULL, false);
+        scui_widget_draw(monitor_mem1, NULL, false);
+        scui_widget_draw(monitor_mem2, NULL, false);
+    }
 }
 
 /*@brief 控件事件响应回调
@@ -224,6 +234,7 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
         break;
     case scui_event_draw:
         #if SCUI_MEM_FEAT_MINI == 0
+        scui_widget_alpha_set(event->object, scui_alpha_cover, false);
         scui_widget_draw_color(event->object, NULL, SCUI_COLOR_ZEROED);
         #endif
         break;

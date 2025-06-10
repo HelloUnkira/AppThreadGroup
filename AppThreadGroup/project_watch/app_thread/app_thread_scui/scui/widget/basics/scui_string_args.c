@@ -115,10 +115,8 @@ static void scui_string_args_typography(scui_string_args_t *args)
 {
     /* 清空已有排版 */
     if (args->typo != NULL) {
-        if (args->typo->line_ofs != NULL)
-            SCUI_MEM_FREE(args->typo->line_ofs);
-        if (args->typo->line_width != NULL)
-            SCUI_MEM_FREE(args->typo->line_width);
+        SCUI_MEM_FREE(args->typo->line_ofs);
+        SCUI_MEM_FREE(args->typo->line_width);
         SCUI_MEM_FREE(args->typo);
         args->typo = NULL;
     }

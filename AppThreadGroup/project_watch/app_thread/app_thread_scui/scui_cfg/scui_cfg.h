@@ -126,25 +126,17 @@
 /* feat: */
 
 /* 移动时停止帧动画(假渲染) */
-#if SCUI_MEM_FEAT_MINI
-#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (0)
-#else
-#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1)
-#endif
+#define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1 && !SCUI_MEM_FEAT_MINI)
 
 /* 图片外存直达画布(节约峰值内存, 但会加重绘制时间) */
-#if SCUI_MEM_FEAT_MINI
-#define SCUI_WIDGET_IMAGE_DIRECT                    (0)
-#define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (0)
-#else
-#define SCUI_WIDGET_IMAGE_DIRECT                    (1)
+#define SCUI_WIDGET_IMAGE_DIRECT                    (1 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_HOR_RES * SCUI_VER_RES / 3)
-#endif
 
 /* 窗口管理器参数配置 */
 /* 窗口切换动画速度[ptr, enc, key, auto] */
 #define SCUI_WINDOW_LIST_LIMIT                      (5)
 #define SCUI_WINDOW_STACK_NEST                      (10)
+#define SCUI_WINDOW_SWITCH_MODE                     (1 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_WINDOW_SWITCH_KEY_TO_U                 (scui_event_key_val_up)
 #define SCUI_WINDOW_SWITCH_KEY_TO_D                 (scui_event_key_val_down)
 #define SCUI_WINDOW_SWITCH_KEY_TO_L                 (scui_event_key_val_left)
@@ -153,11 +145,6 @@
 #define SCUI_WINDOW_SWITCH_MOVE_SPD                 {2000, 1700, 1700, 1000}
 #define SCUI_WINDOW_SWITCH_JUMP_DIR                 (scui_opt_dir_to_l)
 #define SCUI_WINDOW_SWITCH_JUMP_MS                  (300)
-#if SCUI_MEM_FEAT_MINI
-#define SCUI_WINDOW_SWITCH_MODE                     (0)
-#else
-#define SCUI_WINDOW_SWITCH_MODE                     (1)
-#endif
 
 /* 控件布局标记(为控件添加随机颜色轮廓) */
 #define SCUI_WIDGET_BORDER_TAG                      (0)
