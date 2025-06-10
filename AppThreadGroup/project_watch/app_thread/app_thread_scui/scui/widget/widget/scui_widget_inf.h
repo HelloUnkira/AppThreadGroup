@@ -256,7 +256,7 @@ typedef struct {
     union {
     /*************************************************************************/
     struct {
-        scui_string_args_t *args;               // 字符串绘制参数
+        void *args;                             // 字符串绘制参数(scui_string_args_t)
     } string;
     struct {
         scui_color_t color;                     // 源色调
@@ -311,7 +311,7 @@ typedef struct {
         scui_handle_t image_e;                  // 控件句柄
     } ring;
     struct {
-        scui_draw_graph_dsc_t *graph_dsc;       // 绘制描述符实例
+        void *graph_dsc;                        // 绘制描述符实例(scui_draw_graph_dsc_t)
     } graph;
     /*************************************************************************/
     };

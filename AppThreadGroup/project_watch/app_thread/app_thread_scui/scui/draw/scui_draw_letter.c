@@ -15,10 +15,10 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t    *dst_surface = draw_dsc->letter.dst_surface;
     scui_area_t       *dst_clip    = draw_dsc->letter.dst_clip;
-    scui_font_glyph_t *src_glyph   = draw_dsc->letter.src_glyph;
     scui_area_t       *src_clip    = draw_dsc->letter.src_clip;
     scui_alpha_t       src_alpha   = draw_dsc->letter.src_alpha;
     scui_color_t       src_color   = draw_dsc->letter.src_color;
+    scui_font_glyph_t *src_glyph   = draw_dsc->letter.src_glyph;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_clip != NULL);
@@ -124,9 +124,9 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t     *dst_surface = draw_dsc->string.dst_surface;
     scui_area_t        *dst_clip    = draw_dsc->string.dst_clip;
-    scui_string_args_t *src_args    = draw_dsc->string.src_args;
     scui_area_t        *src_clip    = draw_dsc->string.src_clip;
     scui_alpha_t        src_alpha   = draw_dsc->string.src_alpha;
+    scui_string_args_t *src_args    = draw_dsc->string.src_args;
     /* draw dsc args<e> */
     //
     /* 从字库中提取一些信息 */

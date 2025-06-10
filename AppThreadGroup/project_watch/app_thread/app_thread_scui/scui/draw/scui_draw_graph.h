@@ -160,19 +160,19 @@ typedef struct {
      * draw letter & string:
      */
     struct {
-        scui_surface_t    *dst_surface;     // 画布实例
-        scui_area_t       *dst_clip;        // 画布绘制区域
-        scui_font_glyph_t *src_glyph;       // 字符信息
-        scui_area_t       *src_clip;        // 字符绘制区域
-        scui_alpha_t       src_alpha;       // 字符透明度
-        scui_color_t       src_color;       // 字符色调
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_area_t    *src_clip;       // 字符绘制区域
+        scui_alpha_t    src_alpha;      // 字符透明度
+        scui_color_t    src_color;      // 字符色调
+        void           *src_glyph;      // 字符信息(scui_font_glyph_t)
     } letter;
     struct {
-        scui_surface_t     *dst_surface;    // 画布实例
-        scui_area_t        *dst_clip;       // 画布绘制区域
-        scui_string_args_t *src_args;       // 字符串绘制参数
-        scui_area_t        *src_clip;       // 画布绘制区域
-        scui_alpha_t        src_alpha;      // 字符透明度
+        scui_surface_t *dst_surface;    // 画布实例
+        scui_area_t    *dst_clip;       // 画布绘制区域
+        scui_area_t    *src_clip;       // 画布绘制区域
+        scui_alpha_t    src_alpha;      // 字符透明度
+        void           *src_args;       // 字符串绘制参数(scui_string_args_t)
     } string;
     /**************************************************************************
      * draw ring:

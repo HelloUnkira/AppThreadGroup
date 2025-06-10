@@ -42,7 +42,6 @@
 #include "scui_font.h"
 #include "scui_font_cache.h"
 #include "scui_font_glyph_cache.h"
-#include "scui_string_args.h"
 /* draw */
 #include "scui_draw_graph.h"
 #include "scui_draw_basic.h"
@@ -57,12 +56,12 @@
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget: */
+#include "scui_string.h"            /* 控件(字符串) */
+#include "scui_string_inf.h"        /* 控件(字符串)API */
 #include "scui_custom.h"            /* 控件(自定义) */
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
-#include "scui_string.h"            /* 控件(字符串) */
-#include "scui_string_inf.h"        /* 控件(字符串)API */
 #include "scui_linear.h"            /* 控件(列表) */
 #include "scui_linear_inf.h"        /* 控件(列表)API */
 #include "scui_roller.h"            /* 控件(滚轮) */
