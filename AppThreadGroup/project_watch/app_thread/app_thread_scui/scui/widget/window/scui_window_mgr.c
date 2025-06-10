@@ -41,17 +41,17 @@ void scui_window_list(scui_handle_t **list)
     *list = scui_window_mgr.list;
 }
 
-/*@brief 窗口列表添加窗口(内部使用)
+/*@brief 窗口列表添加窗口
  *@param handle 窗口句柄
  */
 void scui_window_list_add(scui_handle_t handle)
 {
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             SCUI_LOG_INFO("redundant operation");
             return;
         }
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID) {
             scui_window_mgr.list[idx]  = handle;
             scui_window_mgr.list_num++;
@@ -60,7 +60,7 @@ void scui_window_list_add(scui_handle_t handle)
     SCUI_LOG_ERROR("scene %u add fail", handle);
 }
 
-/*@brief 窗口列表移除窗口(内部使用)
+/*@brief 窗口列表移除窗口
  *@param handle 窗口句柄
  */
 void scui_window_list_del(scui_handle_t handle)
@@ -71,7 +71,7 @@ void scui_window_list_del(scui_handle_t handle)
     if (scui_window_mgr.active_last == handle)
         scui_window_mgr.active_last  = SCUI_HANDLE_INVALID;
     
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             scui_window_mgr.list[idx]  = SCUI_HANDLE_INVALID;
             scui_window_mgr.list_num--;
@@ -422,7 +422,7 @@ static void scui_window_surface_ready(void)
     scui_window_mgr.list_0_num = 0;
     scui_window_mgr.list_1_num = 0;
     
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++) {
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
         if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         scui_handle_t  handle = scui_window_mgr.list[idx];
@@ -470,7 +470,7 @@ static void scui_window_surface_blend(void)
     /* 如果送显数据刚好为完整的一个surface */
     /* 此时则使用switch模式直接交换surface快速进入refr异步 */
     /* 在refr异步的开始则异步进行数据同步,还原本地的surface */
-    #if SCUI_WINDOW_MGR_SWITCH_MODE
+    #if SCUI_WINDOW_SWITCH_MODE
     scui_widget_t *widget_only = NULL;
     scui_window_surface_switch(0x01, &widget_only);
     if (scui_window_mgr.list_0_num == 1 && scui_window_mgr.list_1_num == 0) {
@@ -556,7 +556,7 @@ void scui_window_active(scui_handle_t handle)
     
     /* 焦点必须在窗口列表中 */
     bool not_match_yet = true;
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             not_match_yet = false;
             break;

@@ -428,7 +428,11 @@ bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key)
     static struct {
         bool lock;
         scui_handle_t key;
+        scui_handle_t key_t;
     } scroll_flag = {0};
+    
+    if (key == NULL)
+        key = &scroll_flag.key_t;
     
     switch (state) {
     case 0x00:

@@ -175,15 +175,14 @@ static void scui_event_respond(scui_event_t *event)
             
             /* 全局滚动检查 */
             #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-            scui_handle_t handle = SCUI_HANDLE_INVALID;
-            if (scui_widget_global_scroll_flag(0x02, &handle))
+            if (scui_widget_global_scroll_flag(0x02, NULL))
                 return;
             #endif
             
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
             scui_window_list(&window_list);
-            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
                 if (window_list[idx] != SCUI_HANDLE_INVALID) {
                     event->object = window_list[idx];
                     scui_event_respond(event);
@@ -202,7 +201,7 @@ static void scui_event_respond(scui_event_t *event)
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
             scui_window_list(&window_list);
-            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_MGR_LIMIT; idx++)
+            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
                 if (window_list[idx] != SCUI_HANDLE_INVALID) {
                     event->object = window_list[idx];
                     scui_event_respond(event);

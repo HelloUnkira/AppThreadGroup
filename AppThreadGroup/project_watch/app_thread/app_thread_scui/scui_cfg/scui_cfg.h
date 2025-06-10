@@ -141,24 +141,22 @@
 #define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_HOR_RES * SCUI_VER_RES / 3)
 #endif
 
-/* 窗口管理栈数量限制 */
+/* 窗口管理器参数配置 */
+/* 窗口切换动画速度[ptr, enc, key, auto] */
+#define SCUI_WINDOW_LIST_LIMIT                      (5)
 #define SCUI_WINDOW_STACK_NEST                      (10)
-
-/* 窗口管理数量限制 */
-#define SCUI_WINDOW_MGR_LIMIT                       (5)
-#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_U             (scui_event_key_val_up)
-#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_D             (scui_event_key_val_down)
-#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_L             (scui_event_key_val_left)
-#define SCUI_WINDOW_MGR_SWITCH_KEY_TO_R             (scui_event_key_val_right)
-#define SCUI_WINDOW_MGR_TYPE_CFG                    (scui_window_switch_move)
-#define SCUI_WINDOW_MGR_JUMP_DIR                    (scui_opt_dir_to_l)
-/* 窗口切换动画时间(以1整屏计算) */
-#define SCUI_WINDOW_MGR_SWITCH_MOVE_MS              (175)
-#define SCUI_WINDOW_MGR_SWITCH_JUMP_MS              (225)
+#define SCUI_WINDOW_SWITCH_KEY_TO_U                 (scui_event_key_val_up)
+#define SCUI_WINDOW_SWITCH_KEY_TO_D                 (scui_event_key_val_down)
+#define SCUI_WINDOW_SWITCH_KEY_TO_L                 (scui_event_key_val_left)
+#define SCUI_WINDOW_SWITCH_KEY_TO_R                 (scui_event_key_val_right)
+#define SCUI_WINDOW_SWITCH_TYPE                     (scui_window_switch_move)
+#define SCUI_WINDOW_SWITCH_MOVE_SPD                 {2000, 1700, 1700, 1000}
+#define SCUI_WINDOW_SWITCH_JUMP_DIR                 (scui_opt_dir_to_l)
+#define SCUI_WINDOW_SWITCH_JUMP_MS                  (300)
 #if SCUI_MEM_FEAT_MINI
-#define SCUI_WINDOW_MGR_SWITCH_MODE                 (0)
+#define SCUI_WINDOW_SWITCH_MODE                     (0)
 #else
-#define SCUI_WINDOW_MGR_SWITCH_MODE                 (1)
+#define SCUI_WINDOW_SWITCH_MODE                     (1)
 #endif
 
 /* 控件布局标记(为控件添加随机颜色轮廓) */
@@ -169,7 +167,7 @@
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
 /* scroll:按键, 动画速度[ptr, enc, key, auto] */
-#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1000, 1000, 1000, 300}
+#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 300}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* roller: */

@@ -110,16 +110,16 @@ void scui_ready(void)
     
     /* 窗口交互风格 */
     scui_opt_dir_t *cfg_dir = NULL;
-    scui_window_switch_cfg_dir(&cfg_dir);
-    *cfg_dir = SCUI_WINDOW_MGR_JUMP_DIR;
-    
     scui_window_switch_type_t *cfg_type = NULL;
+    scui_window_switch_args_t *cfg_args = NULL;
+    
+    scui_window_switch_cfg_dir(&cfg_dir);
     scui_window_switch_cfg_type(&cfg_type);
-    *cfg_type = SCUI_WINDOW_MGR_TYPE_CFG;
+    scui_window_switch_cfg_args(&cfg_args);
+    *cfg_dir  = SCUI_WINDOW_SWITCH_JUMP_DIR;
+    *cfg_type = SCUI_WINDOW_SWITCH_TYPE;
     
     /* 窗口交互参数 */
-    scui_window_switch_args_t *cfg_args = NULL;
-    scui_window_switch_cfg_args(&cfg_args);
     cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
     
     /* 初始窗口 */
