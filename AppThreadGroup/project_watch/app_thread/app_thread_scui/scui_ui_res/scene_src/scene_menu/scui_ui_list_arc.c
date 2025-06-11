@@ -124,10 +124,7 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
  *@param event 事件
  */
 void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
-{
-    scui_ui_scene_link_cfg(event);
-    
-    switch (event->type) {
+{    switch (event->type) {
     case scui_event_local_res:
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
@@ -210,6 +207,7 @@ void scui_ui_scene_list_arc_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
+        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");

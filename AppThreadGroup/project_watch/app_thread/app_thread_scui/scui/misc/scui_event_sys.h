@@ -43,8 +43,8 @@ typedef enum {
     scui_event_ptr_all,
     scui_event_ptr_cover,   /* 覆盖事件<> */
     scui_event_ptr_down,    /* 按下事件<point> */
-    scui_event_ptr_hold,    /* 持续事件<point>:通过参数通报持续时间 */
-    scui_event_ptr_click,   /* 点击事件<point>:通过参数通报点击次数 */
+    scui_event_ptr_hold,    /* 持续事件<point>:持续时间 */
+    scui_event_ptr_click,   /* 点击事件<point>:点击次数 */
     scui_event_ptr_fling,   /* 轻扫事件<pos_s, pos_e> */
     scui_event_ptr_move,    /* 移动事件<pos_s, pos_e> */
     scui_event_ptr_up,      /* 抬起事件<point> */
@@ -63,8 +63,8 @@ typedef enum {
     scui_event_key_s,
     scui_event_key_all,
     scui_event_key_down,    /* 按下事件<coord> */
-    scui_event_key_hold,    /* 持续事件<coord>:通过参数通报持续时间 */
-    scui_event_key_click,   /* 单击事件<coord>:通过参数通报点击次数 */
+    scui_event_key_hold,    /* 持续事件<coord>:持续时间 */
+    scui_event_key_click,   /* 单击事件<coord>:点击次数 */
     scui_event_key_up,      /* 抬起事件<coord> */
     scui_event_key_e,
     /* 输入设备事件<key,e> */

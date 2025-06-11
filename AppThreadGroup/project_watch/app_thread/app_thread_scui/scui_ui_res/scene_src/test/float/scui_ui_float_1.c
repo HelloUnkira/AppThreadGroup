@@ -12,37 +12,24 @@
  */
 void scui_ui_scene_float_1_event_proc(scui_event_t *event)
 {
-    scui_ui_scene_link_cfg(event);
-    
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
-        #if 0   // discard, we don't need this
-        scui_window_float_event_grasp_show(event);
-        #endif
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        #if 0   // discard, we don't need this
-        scui_window_float_event_grasp_hide(event);
-        #endif
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
+        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     default:
-        #if 0   // discard, we don't need this
-        if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
-            scui_window_float_event_grasp_ptr(event);
-        if (event->type >= scui_event_key_s && event->type <= scui_event_key_e)
-            scui_window_float_event_grasp_key(event);
-        #endif
         SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }

@@ -36,27 +36,12 @@ bool scui_window_float_running(void);
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
  */
-void scui_window_float_event_grasp_show(scui_event_t *event);
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_hide(scui_event_t *event);
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_key(scui_event_t *event);
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_ptr(scui_event_t *event);
+void scui_window_float_event_grasp(scui_event_t *event);
 
 /*@brief 窗口浮动事件检查回调
  *@param event 事件
  */
-void scui_window_float_event_check_ptr(scui_event_t *event);
+void scui_window_float_event_check(scui_event_t *event);
 
 #endif
 

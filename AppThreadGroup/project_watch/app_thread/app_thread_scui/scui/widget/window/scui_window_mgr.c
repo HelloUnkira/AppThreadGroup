@@ -195,6 +195,10 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     return;
     #endif
     
+    scui_window_switch_type_t switch_type = scui_window_mgr.switch_args.type;
+    if (switch_type == scui_window_switch_none)
+        switch_type  = scui_window_mgr.switch_args.cfg_type;
+    
     bool mode_simple = false;
     /* 1.单一窗口直接渲染 */
     mode_simple = mode_simple || num == 1;
@@ -205,12 +209,8 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     /* 3.仅窗口切换时应用特效渲染 */
     mode_simple = mode_simple || scui_widget_global_scroll_flag(0x02, &scui_window_mgr.switch_args.key);
     
-    scui_window_switch_type_t switch_type = scui_window_switch_none;
     // 直接渲染复用常规窗口移动变换(此时相当于不移动)
-    switch_type = mode_simple ? scui_window_switch_move : scui_window_mgr.switch_args.type;
-    
-    if (switch_type == scui_window_switch_none)
-        switch_type  = scui_window_mgr.switch_args.cfg_type;
+    if (mode_simple) switch_type = scui_window_switch_move;
     
     /* 底图清空 */
     scui_color_t dst_pixel = {0};

@@ -179,6 +179,73 @@ static void scui_window_jump_anima_finish(void *instance)
     scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
 }
 
+/*@brief 移动动画事件
+ *@param type (0x00:移动开始; 0x01:移动结束; 0x02:移动中)
+ */
+static void scui_window_move_anima_state(uint8_t type)
+{
+    static bool over_switch = true;
+    
+    switch (type) {
+    case 0x00: {
+        /* 上一次滚动已经结束才可产生下一次滚动开始事件 */
+        /* 否则为滚动被打断,此时应该吸收中间的事件 */
+        if (!over_switch) break;
+        over_switch = false;
+        
+        // 背景窗口虚化
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in ||
+            scui_window_mgr.switch_args.type == scui_window_switch_cover_out) {
+            scui_handle_t handle_t = SCUI_HANDLE_INVALID;
+            
+            if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in)
+                handle_t = scui_window_mgr.switch_args.list[0];
+            if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
+                handle_t = scui_window_mgr.switch_args.list[1];
+            
+            // 问题:存在之后的窗口重绘失效虚化
+            // 窗口绘制锁定, 禁止绘制该控件树
+            scui_widget_t *widget = scui_handle_source_assert(handle_t);
+            scui_window_t *window = (void *)widget;
+            // window->draw_lock = true;
+            
+            /* 主窗口虚化 */
+            scui_widget_draw(handle_t, NULL, false);
+            scui_widget_draw_blur(handle_t, NULL);
+            SCUI_LOG_INFO("");
+        }
+        break;
+    }
+    case 0x01: {
+        if (over_switch) break;
+        over_switch = true;
+        
+        if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in ||
+            scui_window_mgr.switch_args.type == scui_window_switch_cover_out) {
+            scui_handle_t handle_t = SCUI_HANDLE_INVALID;
+            
+            if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in)
+                handle_t = scui_window_mgr.switch_args.list[0];
+            if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
+                handle_t = scui_window_mgr.switch_args.list[1];
+            
+            // 窗口绘制解锁
+            scui_widget_t *widget = scui_handle_source_assert(handle_t);
+            scui_window_t *window = (void *)widget;
+            // window->draw_lock = false;
+            
+            scui_widget_draw(handle_t, NULL, false);
+        }
+        break;
+    }
+    case 0x02: {
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 /*@brief 窗口切换初始化
  */
 static void scui_window_move_anima_cfg(void)
@@ -232,6 +299,8 @@ static void scui_window_move_anima_expired(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t *anima = instance;
+    
+    scui_window_move_anima_state(0x02);
     
     scui_widget_t *widget = NULL;
     scui_multi_t pct = scui_abs(anima->value_c) * 100;
@@ -288,6 +357,8 @@ static void scui_window_move_anima_finish(void *instance)
     if (scui_window_mgr.switch_args.hold_move)
         return;
     
+    scui_window_move_anima_state(0x01);
+    
     if (scui_window_mgr.switch_args.pct == 0) {
         scui_window_active(scui_window_mgr.switch_args.list[0]);
         scui_window_stack_update(scui_window_mgr.switch_args.list[0], 0);
@@ -332,6 +403,9 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
         }
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
+    
+    if (scui_window_mgr.switch_args.anima == SCUI_HANDLE_INVALID)
+        scui_window_move_anima_state(0x00);
     
     if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scui_window_mgr.switch_args.anima);
@@ -395,15 +469,11 @@ static void scui_window_event_switch(scui_event_t *event)
         /* 采用位置检测机制,这会使初始判断条件简单化 */
         scui_window_mgr.switch_args.pos = scui_opt_pos_none;
         /* 水平位置先检测 */
-        if (event->ptr_c.x <= SCUI_HOR_RES * 1 / 2)
-            scui_window_mgr.switch_args.pos |= scui_opt_pos_l;
-        if (event->ptr_c.x >= SCUI_HOR_RES * 1 / 2)
-            scui_window_mgr.switch_args.pos |= scui_opt_pos_r;
         /* 垂直位置后检测,并且吸收水平位置检测结果 */
-        if (event->ptr_c.y <= SCUI_VER_RES * 1 / 2)
-            scui_window_mgr.switch_args.pos |= scui_opt_pos_u;
-        if (event->ptr_c.y >= SCUI_VER_RES * 1 / 2)
-            scui_window_mgr.switch_args.pos |= scui_opt_pos_d;
+        if (event->ptr_c.x <= SCUI_HOR_RES * 1 / 2) scui_window_mgr.switch_args.pos |= scui_opt_pos_l;
+        if (event->ptr_c.x >= SCUI_HOR_RES * 1 / 2) scui_window_mgr.switch_args.pos |= scui_opt_pos_r;
+        if (event->ptr_c.y <= SCUI_VER_RES * 1 / 2) scui_window_mgr.switch_args.pos |= scui_opt_pos_u;
+        if (event->ptr_c.y >= SCUI_VER_RES * 1 / 2) scui_window_mgr.switch_args.pos |= scui_opt_pos_d;
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling:

@@ -16,6 +16,7 @@ typedef struct {
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
     scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
     void               *local_res;          /* 窗口资源实例 */
+    uintptr_t           draw_lock;          /* 窗口绘制锁 */
 } scui_window_t;
 
 #pragma pack(push, 1)
@@ -100,10 +101,10 @@ typedef struct {
     scui_coord_t                pct;                /* 窗口切换进度(百分比) */
     scui_coord_t                ofs;                /* 窗口切换偏移(像素点) */
     bool                        anima_tag[4];       /* 动画标记[ptr,enc,key,auto] */
-    uint32_t                    lock_jump:1;        /* 窗口切换锁 */
-    uint32_t                    lock_move:1;        /* 窗口切换锁 */
-    uint32_t                    mask_fling:1;       /* 窗口切换锁 */
-    uint8_t                     hold_move:1;        /* 窗口使用锁 */
+    uintptr_t                   lock_jump:1;        /* 窗口切换锁 */
+    uintptr_t                   lock_move:1;        /* 窗口切换锁 */
+    uintptr_t                   mask_fling:1;       /* 窗口切换锁 */
+    uintptr_t                   hold_move:1;        /* 窗口使用锁 */
 } scui_window_switch_t;
 
 typedef struct {
@@ -119,7 +120,7 @@ typedef struct {
     scui_handle_t           active_curr;                        /* 当前活跃窗口 */
     scui_handle_t           active_last;                        /* 上一活跃窗口 */
     scui_widget_t          *refr_widget;                        /* 窗口送显模式控件实例地址 */
-    uint32_t                refr_switch:1;                      /* 窗口送显模式标记 */
+    uintptr_t               refr_switch:1;                      /* 窗口送显模式标记 */
     /* 窗口混合信息: */
     scui_widget_t          *list_0[SCUI_WINDOW_LIST_LIMIT];      /* 窗口管理列表(有独立画布) */
     scui_widget_t          *list_1[SCUI_WINDOW_LIST_LIMIT];      /* 窗口管理列表(无独立画布) */

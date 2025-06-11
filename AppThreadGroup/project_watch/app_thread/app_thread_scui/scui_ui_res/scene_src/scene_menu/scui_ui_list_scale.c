@@ -211,8 +211,6 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
 {
-    scui_ui_scene_link_cfg(event);
-    
     switch (event->type) {
     case scui_event_local_res:
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
@@ -337,6 +335,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
+        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");

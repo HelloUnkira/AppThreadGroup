@@ -12,8 +12,6 @@
  */
 void scui_ui_scene_6_event_proc(scui_event_t *event)
 {
-    scui_ui_scene_link_cfg(event);
-    
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
@@ -25,6 +23,7 @@ void scui_ui_scene_6_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
+        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");

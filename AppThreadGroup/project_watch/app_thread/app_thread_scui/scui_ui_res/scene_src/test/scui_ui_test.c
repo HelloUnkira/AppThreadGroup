@@ -14,8 +14,6 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
 {
     static bool ptr_long_jump = false;
     
-    scui_ui_scene_link_cfg(event);
-    
     static uint16_t font_size = 32;
     static const uint16_t font_size_gap = 2;
     static const uint16_t font_size_min = 10;
@@ -121,6 +119,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
+        scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");

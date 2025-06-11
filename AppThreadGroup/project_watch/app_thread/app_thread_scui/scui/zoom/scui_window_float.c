@@ -238,41 +238,7 @@ static void scui_window_float_anima_inout(scui_handle_t handle, bool inout)
 /*@brief 窗口浮动事件抓取回调
  *@param event 事件
  */
-void scui_window_float_event_grasp_show(scui_event_t *event)
-{
-    if (!scui_event_check_prepare(event))
-         return;
-    
-    scui_widget_show(scui_window_float.main, false);
-}
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_hide(scui_event_t *event)
-{
-    if (!scui_event_check_finish(event))
-         return;
-}
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_key(scui_event_t *event)
-{
-    if (event->type == scui_event_key_click) {
-        /* 全局滚动锁定 */
-        if (!scui_widget_global_scroll_flag(0x00, &scui_window_float.key))
-             return;
-        scui_window_float_anima_inout(event->object, false);
-        scui_event_mask_over(event);
-    }
-}
-
-/*@brief 窗口浮动事件抓取回调
- *@param event 事件
- */
-void scui_window_float_event_grasp_ptr(scui_event_t *event)
+void scui_window_float_event_grasp(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
@@ -285,6 +251,22 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     
     switch (event->type) {
+    case scui_event_show:
+        if (scui_event_check_prepare(event)) {
+            
+            scui_widget_show(scui_window_float.main, false);
+        }
+        break;
+    case scui_event_hide:
+        break;
+    case scui_event_key_click: {
+        /* 全局滚动锁定 */
+        if (!scui_widget_global_scroll_flag(0x00, &scui_window_float.key))
+             break;
+        scui_window_float_anima_inout(event->object, false);
+        scui_event_mask_over(event);
+        break
+    }
     case scui_event_ptr_down: {
         scui_event_mask_keep(event);
         scui_window_float.cover = true;
@@ -406,7 +388,7 @@ void scui_window_float_event_grasp_ptr(scui_event_t *event)
 /*@brief 窗口浮动事件检查回调
  *@param event 事件
  */
-void scui_window_float_event_check_ptr(scui_event_t *event)
+void scui_window_float_event_check(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     

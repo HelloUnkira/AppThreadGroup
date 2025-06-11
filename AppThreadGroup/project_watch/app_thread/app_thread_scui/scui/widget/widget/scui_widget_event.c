@@ -631,6 +631,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_clear(widget, false);
         }
         
+        // 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘
+        if (widget->type == scui_widget_type_window &&
+            scui_widget_surface_only(widget)) {
+            scui_window_t *window = (void *)widget;
+            if (window->draw_lock)
+                return;
+        }
+        
         // 启用集成事件冒泡流程
         scui_tick_calc(0x20, NULL, NULL, NULL);
         scui_widget_event_bubble(event, NULL, false, true);
