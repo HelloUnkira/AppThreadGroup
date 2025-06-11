@@ -643,11 +643,12 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_hide:
         scui_widget_event_bubble(event, NULL, true, false);
         return;
-    case scui_event_change_lang:
+    case scui_event_lang_change:
         scui_widget_event_bubble(event, NULL, false, false);
         return;
-    case scui_event_focus_get:
     case scui_event_focus_lost:
+    case scui_event_focus_get:
+    case scui_event_local_res:
     case scui_event_layout:
     case scui_event_size_auto:
     case scui_event_size_adjust:

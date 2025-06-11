@@ -242,23 +242,18 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
     scui_ui_scene_link_cfg(event);
     
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        
+    case scui_event_local_res:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         break;
-    }
+    case scui_event_anima_elapse:
+        break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        /* 界面数据加载准备 */
         if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
             scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
-        }
-        
-        if (scui_event_check_prepare(event)) {
             
             scui_ui_res_local->scroll_width  = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).w;
             scui_ui_res_local->scroll_height = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).h;
@@ -305,18 +300,6 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        
-        if (scui_event_check_finish(event)) {
-            
-        }
-        
-        /* 界面数据转存回收 */
-        if (scui_event_check_finish(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
-        }
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");
@@ -378,14 +361,6 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
                     scui_widget_move_pos(child, &list_layout[idx], true);
                 }
             }
-            scui_event_t event = {
-                .object = SCUI_UI_SCENE_HONEYCOMB_SCROLL,
-                .type   = scui_event_layout,
-                .absorb = scui_event_absorb_none,
-            };
-            scui_event_notify(&event);
-            
-            scui_widget_draw(SCUI_UI_SCENE_HONEYCOMB, NULL, false);
             
             SCUI_MEM_FREE(list_layout);
         }

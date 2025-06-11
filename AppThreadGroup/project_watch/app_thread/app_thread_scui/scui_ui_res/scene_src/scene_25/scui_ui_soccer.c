@@ -33,6 +33,10 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
     scui_ui_scene_link_cfg(event);
     
     switch (event->type) {
+    case scui_event_local_res:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
+        break;
     case scui_event_anima_elapse:
         break;
     case scui_event_show:
@@ -40,14 +44,6 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         
         /* 界面数据加载准备 */
         if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
-        }
-        
-        /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
             
             // 相邻两个六边形之间的夹角约为 138.190f
             // 五边形和六边形之间的夹角约为 142.623f
@@ -86,13 +82,6 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        
-        /* 界面数据转存回收 */
-        if (scui_event_check_finish(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
-        }
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");

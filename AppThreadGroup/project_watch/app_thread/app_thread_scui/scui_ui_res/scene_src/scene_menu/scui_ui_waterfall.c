@@ -174,23 +174,18 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
     scui_ui_scene_link_cfg(event);
     
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        
+    case scui_event_local_res:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         break;
-    }
+    case scui_event_anima_elapse:
+        break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        /* 界面数据加载准备 */
         if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
             
             scui_ui_scene_list_cfg(scui_ui_scene_list_type_waterfall);
-        }
-        
-        if (scui_event_check_prepare(event)) {
             
             scui_coord_t scroll_w = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
             scui_coord_t scroll_h = scui_widget_clip(SCUI_UI_SCENE_WATERFALL_SCROLL).w;
@@ -286,28 +281,12 @@ void scui_ui_scene_waterfall_event_proc(scui_event_t *event)
             custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
             scui_widget_create(&custom_maker, &custom_handle, false);
             
-            scui_event_t event = {
-                .object = SCUI_UI_SCENE_WATERFALL_SCROLL,
-                .type   = scui_event_layout,
-                .absorb = scui_event_absorb_none,
-            };
-            scui_event_notify(&event);
-            
-            scui_widget_draw(SCUI_UI_SCENE_WATERFALL, NULL, false);
-            
             scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_WATERFALL_BAR_ARC;
             scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
         }
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
-        
-        /* 界面数据转存回收 */
-        if (scui_event_check_finish(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
-        }
         break;
     case scui_event_focus_get:
         SCUI_LOG_INFO("scui_event_focus_get");

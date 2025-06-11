@@ -32,42 +32,30 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     scui_ui_scene_link_cfg(event);
     
     switch (event->type) {
+    case scui_event_local_res:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
+        break;
     case scui_event_anima_elapse:
-        
         //cwf json 测试
         scui_cwf_json_anim(&scui_ui_res_local->cwf_json_inst);
-        
         break;
     case scui_event_show:
         SCUI_LOG_INFO("scui_event_show");
         
-        /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
-        }
-        
-        // cwf json 测试
         if (scui_event_check_prepare(event)) {
             
+            // cwf json 测试
             scui_cwf_json_make(&scui_ui_res_local->cwf_json_inst, cwf_json_bin[scui_ui_res_local->cwf_json_idx], event->object);
         }
         break;
     case scui_event_hide:
         SCUI_LOG_INFO("scui_event_hide");
         
-        // cwf json 测试
         if (scui_event_check_finish(event)) {
             
+            // cwf json 测试
             scui_cwf_json_burn(&scui_ui_res_local->cwf_json_inst);
-        }
-        
-        /* 界面数据转存回收 */
-        if (scui_event_check_finish(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
         }
         break;
     case scui_event_focus_get:
@@ -76,7 +64,6 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
     case scui_event_focus_lost:
         SCUI_LOG_INFO("scui_event_focus_lost");
         break;
-    
     case scui_event_ptr_down:
         SCUI_LOG_INFO("scui_event_ptr_down");
         scui_ui_res_local->ptr_long_jump = false;

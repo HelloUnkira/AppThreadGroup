@@ -19,19 +19,19 @@ static const char * cwf_json_bin[] = {
 };
 
 static struct {
-    scui_handle_t  num;
-    scui_handle_t *image;           // 面图标
-    scui_matrix_t *matrix;          // 投影矩阵
-    scui_matrix_t *matrix_inv;      // 投影矩阵
-    scui_coord3_t *center_z;        // 中心点z
-    scui_coord_t   w_res;           // 水平宽度
-    scui_coord_t   h_res;           // 垂直宽度
-    scui_coord_t   x_span;          // 水平间隙
-    scui_coord_t   scale_c;         // 整体缩放
-    scui_coord_t   angle_a;         // 单位角度
-    scui_coord_t   rotate_x;        // 旋转角度
-    scui_coord_t   rotate_y;        // 旋转角度
-    bool           move_lock;       // 移动锁
+    scui_handle_t num;
+    scui_handle_t image[20];        // 面图标
+    scui_matrix_t matrix[20];       // 投影矩阵
+    scui_matrix_t matrix_inv[20];   // 投影矩阵
+    scui_coord3_t center_z[20];     // 中心点z
+    scui_coord_t  w_res;            // 水平宽度
+    scui_coord_t  h_res;            // 垂直宽度
+    scui_coord_t  x_span;           // 水平间隙
+    scui_coord_t  scale_c;          // 整体缩放
+    scui_coord_t  angle_a;          // 单位角度
+    scui_coord_t  rotate_x;         // 旋转角度
+    scui_coord_t  rotate_y;         // 旋转角度
+    bool          move_lock;        // 移动锁
 } * scui_ui_res_local = NULL;
 
 /*@brief 控件事件响应回调
@@ -42,6 +42,10 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
     scui_ui_scene_link_cfg(event);
     
     switch (event->type) {
+    case scui_event_local_res:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
+        break;
     case scui_event_anima_elapse:
         break;
     case scui_event_show:
@@ -49,33 +53,16 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         
         /* 界面数据加载准备 */
         if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local == NULL);
-            scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-            memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
-        }
-        
-        /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            SCUI_ASSERT(scui_ui_res_local != NULL);
             
             scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
-            scui_handle_t num = scui_ui_res_local->num;
-            scui_ui_res_local->image      = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_handle_t) * num);
-            scui_ui_res_local->matrix     = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->matrix_inv = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_matrix_t) * num);
-            scui_ui_res_local->center_z   = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_coord3_t) * num);
-            scui_ui_res_local->angle_a    = 360 / scui_ui_res_local->num;
+            scui_ui_res_local->angle_a = 360 / scui_ui_res_local->num;
             SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
-            
-            
             
             //cwf json 测试:  读取云表盘预览图
             for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++) {
                 scui_ui_res_local->image[idx] = SCUI_HANDLE_INVALID;
                 scui_cwf_json_make_pv(&scui_ui_res_local->image[idx], cwf_json_bin[idx]);
             }
-            
-            
             
             scui_ui_res_local->w_res   = scui_image_w(scui_ui_res_local->image[0]);
             scui_ui_res_local->h_res   = scui_image_h(scui_ui_res_local->image[0]);
@@ -89,21 +76,9 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         /* 界面数据转存回收 */
         if (scui_event_check_finish(event)) {
             
-            
-            
             //cwf json 测试: 释放云表盘预览图
             for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++)
                 scui_cwf_json_burn_pv(&scui_ui_res_local->image[idx]);
-            
-            
-            
-            SCUI_ASSERT(scui_ui_res_local != NULL);
-            SCUI_MEM_FREE(scui_ui_res_local->center_z);
-            SCUI_MEM_FREE(scui_ui_res_local->matrix_inv);
-            SCUI_MEM_FREE(scui_ui_res_local->matrix);
-            SCUI_MEM_FREE(scui_ui_res_local->image);
-            SCUI_MEM_FREE(scui_ui_res_local);
-            scui_ui_res_local = NULL;
         }
         break;
     case scui_event_focus_get:

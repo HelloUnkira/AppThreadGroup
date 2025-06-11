@@ -196,7 +196,7 @@ static void scui_event_respond(scui_event_t *event)
         scui_window_refresh();
         scui_event_mask_over(event);
         return;
-    case scui_event_change_lang: {
+    case scui_event_lang_change: {
         if (event->object == SCUI_HANDLE_SYSTEM) {
             /* 系统事件发给所有场景 */
             scui_handle_t *window_list = NULL;
@@ -282,10 +282,11 @@ static void scui_event_respond(scui_event_t *event)
         bool event_widget = false;
         /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
         event_widget = event_widget || event->type == scui_event_anima_elapse;
+        event_widget = event_widget || event->type == scui_event_local_res;
         event_widget = event_widget || event->type == scui_event_layout;
         event_widget = event_widget || event->type == scui_event_size_auto;
         event_widget = event_widget || event->type == scui_event_size_adjust;
-        event_widget = event_widget || event->type == scui_event_change_lang;
+        event_widget = event_widget || event->type == scui_event_lang_change;
         /* 有些事件仅仅为控件事件,默认不传递给场景管理器(widget) */
         if (event->type >= scui_event_widget_s &&
             event->type <= scui_event_widget_e)

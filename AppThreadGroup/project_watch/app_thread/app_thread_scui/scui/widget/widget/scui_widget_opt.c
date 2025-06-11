@@ -220,6 +220,14 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     
     widget->clip.w = width;
     widget->clip.h = height;
+    
+    scui_event_t event = {
+        .object = widget->myself,
+        .type   = scui_event_size_adjust,
+        .absorb = scui_event_absorb_none,
+    };
+    scui_event_notify(&event);
+    
     /* 更新画布剪切域(从父控件开始递归) */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_handle_t  handle_p = widget->parent;
@@ -230,10 +238,10 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         
         scui_event_t event = {
             .object = widget_p->myself,
-            .type   = scui_event_size_adjust,
+            .type   = scui_event_layout,
             .absorb = scui_event_absorb_none,
         };
-        scui_event_notify(&event);
+        scui_event_notify(&event);
     }
 }
 

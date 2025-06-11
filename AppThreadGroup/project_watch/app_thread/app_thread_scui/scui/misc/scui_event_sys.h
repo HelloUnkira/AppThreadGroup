@@ -16,24 +16,25 @@ typedef enum {
     scui_event_anima_elapse,    /* 动画轮转调度 */
     scui_event_focus_lost,      /* 窗口焦点失去事件 */
     scui_event_focus_get,       /* 窗口焦点获取事件 */
+    scui_event_local_res,       /* 窗口绑定资源事件 */
     scui_event_hide,            /* 窗口隐藏事件 */
     scui_event_show,            /* 窗口显示事件 */
     scui_event_draw,            /* 控件绘制事件 */
     scui_event_draw_empty,      /* 控件绘制事件(内部转义) */
     scui_event_refr,            /* 界面刷新事件 */
+    scui_event_layout,          /* 控件布局更新 */
     scui_event_size_auto,       /* 控件尺寸调整 */
     scui_event_size_adjust,     /* 控件尺寸调整 */
-    scui_event_layout,          /* 控件布局更新回调 */
-    scui_event_change_lang,     /* 更新语言 */
+    scui_event_lang_change,     /* 全局更新语言 */
     scui_event_sched_e,
     /* 特殊控件生成事件: */
     scui_event_widget_s,
     scui_event_widget_all,
-    scui_event_widget_scroll_start,     /* 滚动控件:滚动开始 */
-    scui_event_widget_scroll_keep,      /* 滚动控件:滚动进行 */
-    scui_event_widget_scroll_over,      /* 滚动控件:滚动结束 */
-    scui_event_widget_scroll_layout,    /* 滚动控件:布局更新 */
-    scui_event_widget_button_click,     /* 按钮控件:指针点击 */
+    scui_event_widget_scroll_start,         /* 滚动控件:滚动开始 */
+    scui_event_widget_scroll_keep,          /* 滚动控件:滚动进行 */
+    scui_event_widget_scroll_over,          /* 滚动控件:滚动结束 */
+    scui_event_widget_scroll_layout,        /* 滚动控件:布局更新 */
+    scui_event_widget_button_click,         /* 按钮控件:指针点击 */
     scui_event_widget_e,
     /* 调度事件<e> */
     

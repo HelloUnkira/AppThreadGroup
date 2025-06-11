@@ -53,6 +53,14 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     // 初始化默认切换类型为自适应
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = scui_window_switch_auto;
+    
+    // 构建结束:绑定窗口资源
+    scui_event_t event = {
+        .object     = widget->myself,
+        .type       = scui_event_local_res,
+        .style.sync = true,
+    };
+    scui_event_notify(&event);
 }
 
 /*@brief 控件析构
@@ -63,6 +71,9 @@ void scui_window_burn(scui_handle_t handle)
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_window_t *window = (void *)widget;
+    
+    /* 回收本地资源 */
+    SCUI_MEM_FREE(window->local_res);
     
     /* 回收surface */
     if (scui_widget_surface_only(widget))
@@ -126,4 +137,33 @@ void scui_window_switch_type_set(scui_handle_t handle, scui_window_switch_type_t
     
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = switch_type[idx];
+}
+
+/*@brief 窗口资源获取
+ *@param handle    窗口控件句柄
+ *@param local_res 窗口资源
+ */
+void scui_window_local_res_get(scui_handle_t handle, void **local_res)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    SCUI_ASSERT(window->local_res != NULL);
+    *local_res = window->local_res;
+}
+
+/*@brief 窗口资源设置
+ *@param handle 窗口控件句柄
+ *@param size   窗口资源大小
+ */
+void scui_window_local_res_set(scui_handle_t handle, scui_handle_t size)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_window_t *window = (void *)widget;
+    
+    SCUI_MEM_FREE(window->local_res);
+    window->local_res = SCUI_MEM_ALLOC(scui_mem_type_user, size);
+    memset(window->local_res, 0, size);
 }

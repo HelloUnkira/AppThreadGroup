@@ -616,11 +616,6 @@ void scui_string_event(scui_event_t *event)
         }
         break;
     }
-    case scui_event_size_adjust:{
-        string->args.update = true;
-        scui_widget_draw(widget->myself, NULL, false);
-        break;
-    }
     case scui_event_size_auto: {
         /* 从字库中提取一些信息 */
         scui_font_unit_t font_unit = {0};
@@ -635,7 +630,12 @@ void scui_string_event(scui_event_t *event)
             scui_widget_adjust_size(event->object, widget->clip.w, line_height);
         break;
     }
-    case scui_event_change_lang: {
+    case scui_event_size_adjust: {
+        string->args.update = true;
+        scui_widget_draw(widget->myself, NULL, false);
+        break;
+    }
+    case scui_event_lang_change: {
         
         if (string->text != SCUI_HANDLE_INVALID) {
             string->unit_over = false;

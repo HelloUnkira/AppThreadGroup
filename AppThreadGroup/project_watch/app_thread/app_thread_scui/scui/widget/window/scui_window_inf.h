@@ -25,6 +25,18 @@ void scui_window_switch_type_get(scui_handle_t handle, scui_window_switch_type_t
  */
 void scui_window_switch_type_set(scui_handle_t handle, scui_window_switch_type_t switch_type[4]);
 
+/*@brief 窗口资源获取
+ *@param handle    窗口控件句柄
+ *@param local_res 窗口资源
+ */
+void scui_window_local_res_get(scui_handle_t handle, void **local_res);
+
+/*@brief 窗口资源设置
+ *@param handle 窗口控件句柄
+ *@param size   窗口资源大小
+ */
+void scui_window_local_res_set(scui_handle_t handle, scui_handle_t size);
+
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

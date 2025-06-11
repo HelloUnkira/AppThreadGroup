@@ -15,6 +15,7 @@ typedef struct {
     /* 内部域: */
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
     scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
+    void               *local_res;          /* 窗口资源实例 */
 } scui_window_t;
 
 #pragma pack(push, 1)
