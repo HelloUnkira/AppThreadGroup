@@ -235,7 +235,16 @@ void scui_event_custom_finish(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
     switch (event->type) {
+    case scui_event_ptr_fling:
+        // 全局的右滑响应事件
+        if (scui_indev_ptr_dir(event) == scui_opt_dir_to_r) {
+            
+            scui_event_mask_over(event);
+            scui_ui_scene_return();
+        }
+        break;
     case scui_event_key_click:
+        // 全局的按键响应事件
         scui_event_mask_over(event);
         scui_ui_scene_return();
         break;

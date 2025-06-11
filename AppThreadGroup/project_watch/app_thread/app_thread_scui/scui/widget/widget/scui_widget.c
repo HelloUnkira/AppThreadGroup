@@ -323,9 +323,12 @@ void scui_widget_clip_sizes(scui_handle_t handle, scui_multi_t *size)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    scui_multi_t size_cur = 0;
-    scui_clip_sizes(&widget->clip_set, &size_cur);
-    *size += size_cur;
+    scui_multi_t size_c = 0;
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        size_c += unit->clip.w * unit->clip.h;
+    }
+    *size += size_c;
     
     scui_widget_child_list_btra(widget, idx)
     scui_widget_clip_sizes(widget->child_list[idx], size);
@@ -339,16 +342,21 @@ void scui_widget_clip_check(scui_handle_t handle, bool recurse)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    SCUI_LOG_WARN("widget: %u, parent: %u", handle, widget->parent);
+    SCUI_LOG_INFO("widget: %u, parent: %u", handle, widget->parent);
     
-    SCUI_LOG_WARN("widget_clip:<%d, %d, %d, %d>",
+    SCUI_LOG_INFO("widget_clip:<%d, %d, %d, %d>",
                   widget->clip.x, widget->clip.y,
                   widget->clip.w, widget->clip.h);
-    SCUI_LOG_WARN("surface_clip:<%d, %d, %d, %d>",
+    SCUI_LOG_INFO("surface_clip:<%d, %d, %d, %d>",
                   widget->clip_set.clip.x, widget->clip_set.clip.y,
                   widget->clip_set.clip.w, widget->clip_set.clip.h);
     
-    scui_clip_check(&widget->clip_set);
+    scui_clip_btra(widget->clip_set, node) {
+        scui_clip_unit_t *unit = scui_clip_unit(node);
+        SCUI_LOG_INFO("<%d, %d, %d, %d>",
+            unit->clip.x, unit->clip.y,
+            unit->clip.w, unit->clip.h);
+    }
     
     if (!recurse)
          return;
