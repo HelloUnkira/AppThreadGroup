@@ -7,7 +7,8 @@ typedef struct {
     scui_point_t ptr_last;
     scui_coord_t ptr_cnt;
     uint64_t cnt_tick;
-    uint32_t move_cnt;
+    uint32_t move_cnt:20;
+    uint32_t move_tag:1;
 } scui_indev_ptr_t;
 
 /*@brief 输入设备数据通报

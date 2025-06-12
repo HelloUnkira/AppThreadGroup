@@ -69,8 +69,11 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_coord_t last_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t last_r = scui_max(scui_abs(last_x), scui_abs(last_y));
             scui_multi_t last_v = elapse == 0 ? 0 : (SCUI_SCALE_COF * last_r / elapse);
+            /* 扫描范围超出限制, 不看作是click */
+            if (last_r > SCUI_INDEV_PTR_CLICK_RANGE)
+                scui_indev_ptr.move_tag = true;
             /* 检查事件是否是点击 */
-            if (elapse < SCUI_INDEV_PTR_CLICK) {
+            if (elapse < SCUI_INDEV_PTR_CLICK && !scui_indev_ptr.move_tag) {
                 event.type    = scui_event_ptr_click;
                 event.ptr_cnt = scui_indev_ptr.ptr_cnt;
                 event.ptr_c   = point;
@@ -114,6 +117,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_indev_ptr.ptr_last = point;
             scui_indev_ptr.ptr_near = point;
             scui_indev_ptr.move_cnt = 0;
+            scui_indev_ptr.move_tag = false;
             scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
             scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 检查点击是否连续 */
@@ -157,6 +161,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
                     scui_event_notify(&event);
                     scui_indev_ptr.ptr_last = point;
+                    scui_indev_ptr.move_tag = true;
                 }
             } else {
                 // 清除移动计数器
