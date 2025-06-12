@@ -8,23 +8,23 @@ typedef uint16_t scui_event_type_t;
 /*@brief 事件优先级(数字越大优先级越高)
  */
 typedef enum {
-    scui_event_priority_none            = 0x00,
-    scui_event_priority_default         = scui_event_priority_none,
-    scui_event_priority_lowest          = 0x01,
-    scui_event_priority_highest         = 0xFE,
-    scui_event_priority_normal          = 0xFF / 2,
-    scui_event_priority_normal_below    = scui_event_priority_normal - 0x0F,
-    scui_event_priority_normal_above    = scui_event_priority_normal + 0x0F,
-    scui_event_priority_real_time       = 0xFF,
-} scui_event_priority_t;
+    scui_event_prior_none   = 0x00,
+    scui_event_prior_real   = 0xFF,
+    scui_event_prior_normal = 0xFF / 2,
+    scui_event_prior_below  = scui_event_prior_normal - 0x01,
+    scui_event_prior_above  = scui_event_prior_normal + 0x01,
+    scui_event_prior_low    = scui_event_prior_none + 0x01,
+    scui_event_prior_high   = scui_event_prior_real - 0x01,
+} scui_event_prior_t;
 
 /*@brief 事件状态风格
  */
 typedef struct {
     uintptr_t sync:1;           /* 事件响应调度: 同步调度,异步调度 */
+    uintptr_t prior:8;          /* 事件优先级别: 数字越大优先级越高 */
     uintptr_t order:2;          /* 事件响应顺序: 0x00:准备步; 0x01:处理步; 0x02:完成步; */
     uintptr_t result:2;         /* 事件响应结果: 0x00:未处理; 0x01:已问询; 0x02:已吸收; */
-    uintptr_t priority:8;       /* 事件优先级别: 数字越大优先级越高 */
+    uintptr_t bubble:1;         /* 事件响应冒泡: 备注:!!特殊事件使用; false:不冒泡; true:冒泡; */
 } scui_event_style_t;
 
 /*@brief 事件

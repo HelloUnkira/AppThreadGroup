@@ -59,7 +59,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         if ((group_cy < scroll_cy && scui_dist(group_c.y + group_c.h, scroll_cy) > scroll_cy) ||
             (group_cy > scroll_cy && scui_dist(group_c.y,             scroll_cy) > scroll_cy)) {
              scui_point_t point = {.x = scroll_cx,.y = group_c.y,};
-             scui_widget_move_pos(group, &point, true);
+             scui_widget_move_pos(group, &point);
              scui_widget_alpha_set(group, scui_alpha_trans, true);
              continue;
         }
@@ -81,7 +81,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         scui_point_t point = {.x = dist_x,.y = group_c.y,};
         scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
         
-        scui_widget_move_pos(group, &point, true);
+        scui_widget_move_pos(group, &point);
         scui_widget_alpha_set(group, alpha, true);
     }
     scui_widget_draw(scroll, NULL, false);

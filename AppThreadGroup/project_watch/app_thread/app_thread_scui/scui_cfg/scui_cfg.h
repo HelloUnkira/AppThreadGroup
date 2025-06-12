@@ -154,7 +154,7 @@
 #define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
 
 /* scroll:按键, 动画速度[ptr, enc, key, auto] */
-#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 300}
+#define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 900}
 #define SCUI_WIDGET_SCROLL_KEY_FDIR                 (scui_event_key_val_down)
 #define SCUI_WIDGET_SCROLL_KEY_BDIR                 (scui_event_key_val_up)
 /* roller: */

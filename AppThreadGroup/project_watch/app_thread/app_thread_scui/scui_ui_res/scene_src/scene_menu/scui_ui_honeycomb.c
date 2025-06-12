@@ -357,7 +357,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
                 scui_handle_t child = scui_widget_child_by_index(SCUI_UI_SCENE_HONEYCOMB_SCROLL, idx);
                 if (child != SCUI_HANDLE_INVALID) {
                     scui_widget_adjust_size(child, icon_w, icon_h);
-                    scui_widget_move_pos(child, &list_layout[idx], true);
+                    scui_widget_move_pos(child, &list_layout[idx]);
                 }
             }
             

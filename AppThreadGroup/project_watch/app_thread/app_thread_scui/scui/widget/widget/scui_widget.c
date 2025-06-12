@@ -38,6 +38,9 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     widget->parent = maker->parent;
     widget->myself = *handle;
     
+    /* 控件默认设置为显示 */
+    widget->style.state = true;
+    
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);
     scui_event_cb_node_t cb_node = {0};
@@ -100,9 +103,6 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
         
         /* 向父控件的孩子列表添加自己 */
         scui_widget_child_add(widget_p, widget->myself);
-        
-        /* 非根控件默认设置为显示 */
-        widget->style.state = true;
     }
     
     /* 画布剪切域重置更新 */
@@ -203,11 +203,11 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
             widget->child_list[idx]  = child;
             
-            /* 子控件列表更新,布局更新 */
+            /* 子控件列表更新通知 */
             scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_layout,
-                .absorb = scui_event_absorb_none,
+                .object     = widget->myself,
+                .type       = scui_event_child_nums,
+                .absorb     = scui_event_absorb_none,
             };
             scui_event_notify(&event);
             return;
@@ -227,11 +227,11 @@ void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child)
         if (widget->child_list[idx] == child) {
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
             
-            /* 子控件列表更新,布局更新 */
+            /* 子控件列表更新通知 */
             scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_layout,
-                .absorb = scui_event_absorb_none,
+                .object     = widget->myself,
+                .type       = scui_event_child_nums,
+                .absorb     = scui_event_absorb_none,
             };
             scui_event_notify(&event);
             return;

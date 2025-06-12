@@ -78,8 +78,8 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
                 SCUI_LOG_INFO("popup scale:alpha:%d, pct:%d", scale_alpha, pct);
                 scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scale_alpha, true);
                 scui_widget_adjust_size(SCUI_UI_SCENE_POPUP_SCALE, scale_cur_w, scale_cur_h);
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y}, true);
-                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = clip.x, .y = clip.y}, true);
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_SCALE, &(scui_point_t){.x = scale_cur_x, .y = scale_cur_y});
+                scui_widget_move_pos(SCUI_UI_SCENE_POPUP_BG, &(scui_point_t){.x = clip.x, .y = clip.y});
                 
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
                 

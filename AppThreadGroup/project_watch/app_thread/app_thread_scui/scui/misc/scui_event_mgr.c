@@ -279,20 +279,18 @@ static void scui_event_respond(scui_event_t *event)
         if (scui_event_check_over(event) && event_filter)
             return;
         
-        bool event_widget = false;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
-        event_widget = event_widget || event->type == scui_event_anima_elapse;
-        event_widget = event_widget || event->type == scui_event_local_res;
-        event_widget = event_widget || event->type == scui_event_layout;
-        event_widget = event_widget || event->type == scui_event_size_auto;
-        event_widget = event_widget || event->type == scui_event_size_adjust;
-        event_widget = event_widget || event->type == scui_event_lang_change;
-        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(widget) */
+        event_filter = true;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器 */
+        if (event->type >= scui_event_sched_s &&
+            event->type <= scui_event_sched_e)
+            event_filter = false;
         if (event->type >= scui_event_widget_s &&
             event->type <= scui_event_widget_e)
-            event_widget = true;
+            event_filter = false;
+        /* 有些事件仅仅为控件事件,默认不传递给场景管理器(sched) */
+        event_filter = event_filter || event->type == scui_event_anima_elapse;
         
-        if (!event_widget) {
+        if (event_filter) {
             
             // 系统事件调度工步:prepare
             if (scui_event_order_check(event)) {
@@ -369,7 +367,63 @@ static void scui_event_respond(scui_event_t *event)
     SCUI_LOG_ERROR("event->type:%s",            type_stringify);
     SCUI_LOG_ERROR("event->style:%u",           event->style);
     SCUI_LOG_ERROR("event->object:%u",          event->object);
-    SCUI_LOG_ERROR("event->style.priority:%u",  event->style.priority);
+    SCUI_LOG_ERROR("event->style.priority:%u",  event->style.prior);
+}
+
+/*@brief 事件优先级更新
+ *@param event 事件包
+ */
+void scui_event_adjust_prior(scui_event_t *event)
+{
+    scui_event_prior_t event_sys_prior[scui_event_sys_num] = {
+        
+        [scui_event_sched_delay]    = scui_event_prior_real,
+        [scui_event_focus_lost]     = scui_event_prior_high,
+        [scui_event_focus_get]      = scui_event_prior_high,
+        [scui_event_local_res]      = scui_event_prior_high,
+        [scui_event_show]           = scui_event_prior_high,
+        [scui_event_hide]           = scui_event_prior_high,
+        [scui_event_draw]           = scui_event_prior_low,
+        [scui_event_draw_empty]     = scui_event_prior_above,
+        [scui_event_refr]           = scui_event_prior_low,
+        
+        [scui_event_layout]         = scui_event_prior_above,
+        [scui_event_child_nums]     = scui_event_prior_above,
+        [scui_event_child_size]     = scui_event_prior_above,
+        [scui_event_child_pos]      = scui_event_prior_above,
+        [scui_event_size_auto]      = scui_event_prior_above,
+        [scui_event_size_adjust]    = scui_event_prior_above,
+        [scui_event_lang_change]    = scui_event_prior_above,
+    };
+    
+    /* 已经指定的优先级不必额外配置 */
+    if (event->style.prior != scui_event_prior_none)
+        return;
+    
+    /* indev: ptr,enc,key */
+    if ((event->type > scui_event_ptr_s && event->type < scui_event_ptr_e) ||
+        (event->type > scui_event_enc_s && event->type < scui_event_enc_e) ||
+        (event->type > scui_event_key_s && event->type < scui_event_key_e)) {
+        event->style.prior = scui_event_prior_normal;
+        return;
+    }
+    
+    /* widget: */
+    if (event->type > scui_event_widget_s &&
+        event->type < scui_event_widget_e) {
+        event->style.prior = scui_event_prior_above;
+        return;
+    }
+    
+    /* sys: */
+    if (event->type > scui_event_sched_s &&
+        event->type < scui_event_sched_e) {
+        event->style.prior = event_sys_prior[event->type];
+        return;
+    }
+    
+    /* default: */
+    event->style.prior = scui_event_prior_normal;
 }
 
 /*@brief 事件通报
@@ -377,6 +431,9 @@ static void scui_event_respond(scui_event_t *event)
  */
 void scui_event_notify(scui_event_t *event)
 {
+    /* 为所有事件调整优先级 */
+    scui_event_adjust_prior(event);
+    
     /* 同步事件就地响应 */
     /* 异步事件入调度队列 */
     
@@ -388,6 +445,7 @@ void scui_event_notify(scui_event_t *event)
         
         return;
     }
+    
     scui_event_enqueue(event);
 }
 

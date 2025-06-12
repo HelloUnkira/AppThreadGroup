@@ -141,16 +141,14 @@ void scui_widget_create_layout_tree(scui_handle_t handle);
 /*@brief 控件坐标更新
  *@param handle 控件句柄
  *@param point  坐标点
- *@param dirty  脏标记(批量移动控件使用, 默认true)
  */
-void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point, bool dirty);
+void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point);
 
 /*@brief 控件移动
  *@param handle 控件句柄
  *@param offset 偏移量
- *@param dirty  脏标记
  */
-void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty);
+void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset);
 
 /*@brief 子控件坐标对齐
  *@param handle  控件句柄

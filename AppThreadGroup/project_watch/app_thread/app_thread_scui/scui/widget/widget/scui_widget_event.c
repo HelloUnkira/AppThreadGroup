@@ -116,12 +116,24 @@ static void scui_widget_show_delay(scui_handle_t handle)
     if (scui_handle_unmap(handle)) {
         scui_widget_create_layout_tree(handle);
         
-        scui_event_t event = {
-            .object     = handle,
-            .type       = scui_event_show,
-            .style.sync = true,
-        };
-        scui_event_notify(&event);
+        /* 先显示所有 */ {
+            scui_event_t event = {
+                .object     = handle,
+                .style.sync = true,
+                .type       = scui_event_show,
+            };
+            scui_event_notify(&event);
+        }
+        
+        /* 后初始布局所有 */ {
+            scui_event_t event = {
+                .object       = handle,
+                .style.sync   = true,
+                .style.bubble = true,
+                .type         = scui_event_layout,
+            };
+            scui_event_notify(&event);
+        }
     }
     
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -146,26 +158,6 @@ static void scui_widget_show_delay(scui_handle_t handle)
     
     bool only = scui_widget_surface_only(widget);
     scui_widget_draw(widget->myself, NULL, only);
-}
-
-/*@brief 控件显示
- *@param handle 控件句柄
- *@param delay  迟延调度
- */
-void scui_widget_show(scui_handle_t handle, bool delay)
-{
-    if (delay) {
-        scui_event_t event = {
-            .object         = SCUI_HANDLE_SYSTEM,
-            .style.priority = scui_event_priority_real_time,
-            .type           = scui_event_sched_delay,
-            .sched          = scui_widget_show_delay,
-            .handle         = handle,
-        };
-        scui_event_notify(&event);
-        return;
-    }
-    scui_widget_show_delay(handle);
 }
 
 /*@brief 控件隐藏
@@ -217,6 +209,26 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     scui_widget_refr(widget->myself, false);
 }
 
+/*@brief 控件显示
+ *@param handle 控件句柄
+ *@param delay  迟延调度
+ */
+void scui_widget_show(scui_handle_t handle, bool delay)
+{
+    if (delay) {
+        scui_event_t event = {
+            .object      = SCUI_HANDLE_SYSTEM,
+            .style.prior = scui_event_prior_real,
+            .type        = scui_event_sched_delay,
+            .sched       = scui_widget_show_delay,
+            .handle      = handle,
+        };
+        scui_event_notify(&event);
+        return;
+    }
+    scui_widget_show_delay(handle);
+}
+
 /*@brief 控件隐藏
  *@param handle 控件句柄
  *@param delay  迟延调度
@@ -225,16 +237,15 @@ void scui_widget_hide(scui_handle_t handle, bool delay)
 {
     if (delay) {
         scui_event_t event = {
-            .object         = SCUI_HANDLE_SYSTEM,
-            .style.priority = scui_event_priority_real_time,
-            .type           = scui_event_sched_delay,
-            .sched          = scui_widget_hide_delay,
-            .handle         = handle,
+            .object      = SCUI_HANDLE_SYSTEM,
+            .style.prior = scui_event_prior_real,
+            .type        = scui_event_sched_delay,
+            .sched       = scui_widget_hide_delay,
+            .handle      = handle,
         };
         scui_event_notify(&event);
         return;
     }
-    
     scui_widget_hide_delay(handle);
 }
 
@@ -424,7 +435,7 @@ static void scui_widget_event_process(scui_event_t *event)
                 scui_point_t offset = {0};
                 offset.x = event->ptr_e.x - event->ptr_s.x;
                 offset.y = event->ptr_e.y - event->ptr_s.y;
-                scui_widget_move_ofs(widget->myself, &offset, true);
+                scui_widget_move_ofs(widget->myself, &offset);
             }
         }
         break;
@@ -629,14 +640,15 @@ void scui_widget_event_dispatch(scui_event_t *event)
             /* 去除surface剪切域, 因为已经绘制完毕 */
             if (scui_event_check_finish(event))
                 scui_widget_clip_clear(widget, false);
-        }
-        
-        // 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘
-        if (widget->type == scui_widget_type_window &&
-            scui_widget_surface_only(widget)) {
-            scui_window_t *window = (void *)widget;
-            if (window->draw_lock)
-                return;
+            
+            
+            
+            // 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘
+            if (widget->type == scui_widget_type_window && surface_only) {
+                scui_window_t *window = (void *)widget;
+                if (window->draw_lock)
+                    return;
+            }
         }
         
         // 启用集成事件冒泡流程
@@ -654,19 +666,50 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_lang_change:
         scui_widget_event_bubble(event, NULL, false, false);
         return;
+    case scui_event_layout:
+        if (event->style.bubble)
+            scui_widget_event_bubble(event, NULL, false, true);
+        else {
+            scui_widget_event_process(event);
+            // scui_event_mask_over(event);
+        }
+        
+        // 孩子信息更变, 更新画布剪切域
+        scui_widget_t *widget = scui_handle_source_check(event->object);
+        scui_widget_surface_refr(widget->myself, true);
+        scui_widget_clip_clear(widget, true);
+        return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
     case scui_event_local_res:
-    case scui_event_layout:
-    case scui_event_size_auto:
-    case scui_event_size_adjust:
-        /* 其他事件:单次派发 */
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;
+    case scui_event_child_nums:
+    case scui_event_child_size:
+    case scui_event_child_pos: {
+        scui_widget_event_process(event);
+        scui_event_mask_over(event);
+        
+        // 孩子信息更变, 更新画布剪切域
+        scui_widget_t *widget = scui_handle_source_check(event->object);
+        scui_widget_surface_refr(widget->myself, true);
+        scui_widget_clip_clear(widget, true);
+        return;
+    }
+    case scui_event_size_auto:
+        scui_widget_event_process(event);
+        scui_event_mask_over(event);
+        return;
+    case scui_event_size_adjust: {
+        scui_widget_event_process(event);
+        scui_event_mask_over(event);
+        return;
+    }
     default: {
-        // SCUI_LOG_INFO("unknown dispatch");
-        /* 其他未列举事件走默认派发流程,单次派发 */
+        SCUI_LOG_INFO("unknown dispatch");
+        /* 其他未列举事件走默认派发流程 */
+        /* 单次派发给它的根控件用以处理 */
         scui_handle_t handle = event->object;
         event->object = scui_widget_root(handle);
         scui_widget_event_process(event);

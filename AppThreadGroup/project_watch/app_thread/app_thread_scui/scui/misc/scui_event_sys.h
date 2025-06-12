@@ -19,10 +19,13 @@ typedef enum {
     scui_event_local_res,       /* 窗口绑定资源事件 */
     scui_event_hide,            /* 窗口隐藏事件 */
     scui_event_show,            /* 窗口显示事件 */
+    scui_event_refr,            /* 窗口刷新事件 */
     scui_event_draw,            /* 控件绘制事件 */
     scui_event_draw_empty,      /* 控件绘制事件(内部转义) */
-    scui_event_refr,            /* 界面刷新事件 */
     scui_event_layout,          /* 控件布局更新 */
+    scui_event_child_nums,      /* 控件添加移除子控件 */
+    scui_event_child_size,      /* 控件的子控件坐标改变 */
+    scui_event_child_pos,       /* 控件的子控件坐标改变 */
     scui_event_size_auto,       /* 控件尺寸调整 */
     scui_event_size_adjust,     /* 控件尺寸调整 */
     scui_event_lang_change,     /* 全局更新语言 */

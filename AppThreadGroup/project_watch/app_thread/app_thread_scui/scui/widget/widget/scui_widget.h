@@ -263,17 +263,15 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
 /*@brief 控件移动子控件
  *@param handle 控件句柄
  *@param offset 偏移量
- *@param dirty  脏标记
  */
-void scui_widget_clist_move_ofs(scui_handle_t handle, scui_point_t *offset, bool dirty);
+void scui_widget_clist_move_ofs(scui_handle_t handle, scui_point_t *offset);
 
 /*@brief 控件移动子控件(循环模式)
  *@param handle 控件句柄
  *@param offset 偏移量
  *@param range  偏移量限制
- *@param dirty  脏标记
  */
-void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range, bool dirty);
+void scui_widget_clist_move_ofs_loop(scui_handle_t handle, scui_point_t *offset, scui_point_t *range);
 
 /*@brief 控件对齐子控件计算
  *       中心对齐:则控件中心点与子控件中心点偏移量(最小)
