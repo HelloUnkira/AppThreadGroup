@@ -26,6 +26,7 @@ typedef struct {
     uintptr_t           remain_byte;
 } scui_linear_t;
 
+#pragma pack(push, 1)
 typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
@@ -35,6 +36,7 @@ typedef struct {
     /* 外部域: */
     scui_handle_t       list_num;           // 列表数量
 } scui_linear_maker_t;
+#pragma pack(pop)
 
 /*@brief 控件构造
  *@param inst       控件实例

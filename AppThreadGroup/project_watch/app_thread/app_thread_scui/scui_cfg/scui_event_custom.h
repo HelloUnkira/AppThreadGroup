@@ -16,6 +16,7 @@ typedef enum {
     /* 自定义事件<e> */
     
     scui_event_custom_e,
+    scui_event_custom_num,
     
 } scui_event_custom_t;
 

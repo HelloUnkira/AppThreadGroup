@@ -21,6 +21,7 @@ typedef struct {
     scui_handle_t center;
 } scui_roller_t;
 
+#pragma pack(push, 1)
 typedef struct {
     /* 继承域: */
     SCUI_EXTEND_FIELD_S
@@ -32,6 +33,7 @@ typedef struct {
     scui_roller_type_t  type;
     uintptr_t           grad:1;
 } scui_roller_maker_t;
+#pragma pack(pop)
 
 /*@brief 控件构造
  *@param inst       控件实例

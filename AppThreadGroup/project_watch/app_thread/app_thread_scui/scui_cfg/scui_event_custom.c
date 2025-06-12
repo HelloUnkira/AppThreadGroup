@@ -22,61 +22,58 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
     if (type >= scui_event_sys_s &&
         type <= scui_event_sys_e) {
         
-        switch (type) {
+        static const char * event_sys_str[scui_event_sys_num] = {
+            /* 系统事件: sched */
+            [scui_event_sched_delay] =              scui_stringify(scui_event_sched_delay),
+            [scui_event_anima_elapse] =             scui_stringify(scui_event_anima_elapse),
+            [scui_event_focus_lost] =               scui_stringify(scui_event_focus_lost),
+            [scui_event_focus_get] =                scui_stringify(scui_event_focus_get),
+            [scui_event_hide] =                     scui_stringify(scui_event_hide),
+            [scui_event_show] =                     scui_stringify(scui_event_show),
+            [scui_event_draw] =                     scui_stringify(scui_event_draw),
+            [scui_event_refr] =                     scui_stringify(scui_event_refr),
+            [scui_event_layout] =                   scui_stringify(scui_event_layout),
+            [scui_event_size_auto] =                scui_stringify(scui_event_size_auto),
+            [scui_event_size_adjust] =              scui_stringify(scui_event_size_adjust),
+            [scui_event_lang_change] =              scui_stringify(scui_event_lang_change),
+            /* 系统事件: sched */
+            [scui_event_widget_scroll_start] =      scui_stringify(scui_event_widget_scroll_start),
+            [scui_event_widget_scroll_keep] =       scui_stringify(scui_event_widget_scroll_keep),
+            [scui_event_widget_scroll_over] =       scui_stringify(scui_event_widget_scroll_over),
+            [scui_event_widget_scroll_layout] =     scui_stringify(scui_event_widget_scroll_layout),
+            [scui_event_widget_button_click] =      scui_stringify(scui_event_widget_button_click),
+            /* 系统事件: ptr */
+            [scui_event_ptr_cover] =                scui_stringify(scui_event_ptr_cover),
+            [scui_event_ptr_down] =                 scui_stringify(scui_event_ptr_down),
+            [scui_event_ptr_hold] =                 scui_stringify(scui_event_ptr_hold),
+            [scui_event_ptr_click] =                scui_stringify(scui_event_ptr_click),
+            [scui_event_ptr_fling] =                scui_stringify(scui_event_ptr_fling),
+            [scui_event_ptr_move] =                 scui_stringify(scui_event_ptr_move),
+            [scui_event_ptr_up] =                   scui_stringify(scui_event_ptr_up),
+            /* 系统事件: enc */
+            [scui_event_enc_clockwise] =            scui_stringify(scui_event_enc_clockwise),
+            [scui_event_enc_clockwise_anti] =       scui_stringify(scui_event_enc_clockwise_anti),
+            /* 系统事件: key */
+            [scui_event_key_down] =                 scui_stringify(scui_event_key_down),
+            [scui_event_key_hold] =                 scui_stringify(scui_event_key_hold),
+            [scui_event_key_click] =                scui_stringify(scui_event_key_click),
+            [scui_event_key_up] =                   scui_stringify(scui_event_key_up),
+        };
         
-        /* 系统事件: sched */
-        case scui_event_sched_delay:                return scui_stringify(scui_event_sched_delay);
-        case scui_event_anima_elapse:               return scui_stringify(scui_event_anima_elapse);
-        case scui_event_focus_lost:                 return scui_stringify(scui_event_focus_lost);
-        case scui_event_focus_get:                  return scui_stringify(scui_event_focus_get);
-        case scui_event_hide:                       return scui_stringify(scui_event_hide);
-        case scui_event_show:                       return scui_stringify(scui_event_show);
-        case scui_event_draw:                       return scui_stringify(scui_event_draw);
-        case scui_event_refr:                       return scui_stringify(scui_event_refr);
-        case scui_event_layout:                     return scui_stringify(scui_event_layout);
-        case scui_event_size_auto:                  return scui_stringify(scui_event_size_auto);
-        case scui_event_size_adjust:                return scui_stringify(scui_event_size_adjust);
-        case scui_event_lang_change:                return scui_stringify(scui_event_lang_change);
-        /* 系统事件: sched */
-        case scui_event_widget_scroll_start:        return scui_stringify(scui_event_widget_scroll_start);
-        case scui_event_widget_scroll_keep:         return scui_stringify(scui_event_widget_scroll_keep);
-        case scui_event_widget_scroll_over:         return scui_stringify(scui_event_widget_scroll_over);
-        case scui_event_widget_scroll_layout:       return scui_stringify(scui_event_widget_scroll_layout);
-        case scui_event_widget_button_click:        return scui_stringify(scui_event_widget_button_click);
-        /* 系统事件: ptr */
-        case scui_event_ptr_cover:                  return scui_stringify(scui_event_ptr_cover);
-        case scui_event_ptr_down:                   return scui_stringify(scui_event_ptr_down);
-        case scui_event_ptr_hold:                   return scui_stringify(scui_event_ptr_hold);
-        case scui_event_ptr_click:                  return scui_stringify(scui_event_ptr_click);
-        case scui_event_ptr_fling:                  return scui_stringify(scui_event_ptr_fling);
-        case scui_event_ptr_move:                   return scui_stringify(scui_event_ptr_move);
-        case scui_event_ptr_up:                     return scui_stringify(scui_event_ptr_up);
-        /* 系统事件: enc */
-        case scui_event_enc_clockwise:              return scui_stringify(scui_event_enc_clockwise);
-        case scui_event_enc_clockwise_anti:         return scui_stringify(scui_event_enc_clockwise_anti);
-        /* 系统事件: key */
-        case scui_event_key_down:                   return scui_stringify(scui_event_key_down);
-        case scui_event_key_hold:                   return scui_stringify(scui_event_key_hold);
-        case scui_event_key_click:                  return scui_stringify(scui_event_key_click);
-        case scui_event_key_up:                     return scui_stringify(scui_event_key_up);
-        
-        default:
-            break;
-        }
+        return event_sys_str[type];
     }
     
     if (type >= scui_event_custom_s &&
         type <= scui_event_custom_e) {
         
-        switch (type) {
+        static const char * event_custom_str[scui_event_custom_num - scui_event_sys_num] = {
+            [scui_event_ui_none_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_none_goto),
+            [scui_event_ui_home_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_home_goto),
+            [scui_event_ui_standy_enter             - scui_event_sys_num] = scui_stringify(scui_event_ui_standy_enter),
+            [scui_event_ui_standy_exit              - scui_event_sys_num] = scui_stringify(scui_event_ui_standy_exit),
+        };
         
-        case scui_event_ui_none_goto:               return scui_stringify(scui_event_ui_none_goto);
-        case scui_event_ui_home_goto:               return scui_stringify(scui_event_ui_home_goto);
-        case scui_event_ui_standy_enter:            return scui_stringify(scui_event_ui_standy_enter);
-        case scui_event_ui_standy_exit:             return scui_stringify(scui_event_ui_standy_exit);
-        
-        default: break;
-        }
+        return event_custom_str[type - scui_event_sys_num];
     }
     
     return NULL;
