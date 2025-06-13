@@ -468,13 +468,26 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     switch (event->object) {
     case SCUI_UI_SCENE_HOME:
         #if SCUI_MEM_FEAT_MINI == 0
+        window_sibling[0] = SCUI_UI_SCENE_NOTIFY;
+        window_sibling[1] = SCUI_UI_SCENE_QUICK_CARD;
         window_sibling[2] = SCUI_UI_SCENE_MINI_CARD;
+        switch_type[0] = scui_window_switch_cover_in;
+        switch_type[1] = scui_window_switch_cover_in;
         switch_type[2] = scui_window_switch_cover_in;
         #endif
         break;
+    
     case SCUI_UI_SCENE_MINI_CARD:
         window_sibling[3] = SCUI_UI_SCENE_HOME;
         switch_type[3] = scui_window_switch_cover_out;
+        break;
+    case SCUI_UI_SCENE_NOTIFY:
+        window_sibling[1] = SCUI_UI_SCENE_HOME;
+        switch_type[1] = scui_window_switch_cover_out;
+        break;
+    case SCUI_UI_SCENE_QUICK_CARD:
+        window_sibling[0] = SCUI_UI_SCENE_HOME;
+        switch_type[0] = scui_window_switch_cover_out;
         break;
     }
     
@@ -486,10 +499,12 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         window_sibling[3] = SCUI_UI_SCENE_1;
         #endif
         break;
+    
     case SCUI_UI_SCENE_ACTIVITY:
         window_sibling[2] = SCUI_UI_SCENE_HOME;
         window_sibling[3] = SCUI_UI_SCENE_1;
         break;
+    
     case SCUI_UI_SCENE_1:
         window_sibling[0] = SCUI_UI_SCENE_TEST;
         #if SCUI_MEM_FEAT_MINI == 0
@@ -500,6 +515,7 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         #endif
         window_sibling[3] = SCUI_UI_SCENE_2;
         break;
+    
     case SCUI_UI_SCENE_CUBE:
         window_sibling[0] = SCUI_UI_SCENE_1;
         break;
@@ -512,9 +528,11 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         window_sibling[2] = SCUI_UI_SCENE_1;
         window_sibling[3] = SCUI_UI_SCENE_6;
         break;
+    
     case SCUI_UI_SCENE_BUTTERFLY:
         window_sibling[1] = SCUI_UI_SCENE_2;
         break;
+    
     case SCUI_UI_SCENE_SOCCER:
         window_sibling[0] = SCUI_UI_SCENE_2;
         break;

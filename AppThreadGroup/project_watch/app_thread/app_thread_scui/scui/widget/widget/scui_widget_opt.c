@@ -127,8 +127,10 @@ void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_
     else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyt)) point.y -= (clip_w.h);
     else if (scui_opt_bits_equal(align, scui_opt_align_mask_oyb)) point.y += (clip_t.h);
     
-    point.x += offset->x;
-    point.y += offset->y;
+    if (offset != NULL) {
+        point.x += offset->x;
+        point.y += offset->y;
+    }
     scui_widget_move_pos(handle, &point);
 }
 

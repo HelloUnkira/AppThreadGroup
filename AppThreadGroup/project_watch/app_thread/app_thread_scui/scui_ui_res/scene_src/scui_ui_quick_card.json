@@ -1,0 +1,15 @@
+{
+    "type": "scene",
+    "widget": [
+        {
+            "widget.type":                  "scui_widget_type_window",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_QUICK_CARD",
+            "widget.event_cb":              "scui_ui_scene_quick_card_event_proc",
+            "widget.child_num":             "5",
+            "level":                        "0",
+            "buffer":                       "true"
+        }
+    ]
+}

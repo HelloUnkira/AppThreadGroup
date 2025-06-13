@@ -121,6 +121,12 @@ static void scui_ui_scene_mini_card_bar_arc_event(scui_event_t *event)
 static void scui_ui_mask_all_event_proc(scui_event_t *event)
 {
 }
+static void scui_ui_scene_notify_event_proc(scui_event_t *event)
+{
+}
+static void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
+{
+}
 static void scui_ui_scene_standby_event_proc(scui_event_t *event)
 {
 }
@@ -254,6 +260,8 @@ extern void scui_ui_scene_home_event_proc(scui_event_t *event);
 extern void scui_ui_scene_mini_card_event_proc(scui_event_t *event);
 extern void scui_ui_scene_mini_card_bar_arc_event(scui_event_t *event);
 extern void scui_ui_mask_all_event_proc(scui_event_t *event);
+extern void scui_ui_scene_notify_event_proc(scui_event_t *event);
+extern void scui_ui_scene_quick_card_event_proc(scui_event_t *event);
 extern void scui_ui_scene_standby_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_1_event_proc(scui_event_t *event);
 extern void scui_ui_scene_float_1_1_event_proc(scui_event_t *event);
@@ -853,6 +861,28 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 	.buffer                         = true,
 };
 
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.clip.w                  = SCUI_HOR_RES,
+	.widget.clip.h                  = SCUI_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_NOTIFY,
+	.widget.event_cb                = scui_ui_scene_notify_event_proc,
+	.level                          = 0,
+	.buffer                         = true,
+	.widget.child_num               = 5,
+};
+
+static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
+	.widget.type                    = scui_widget_type_window,
+	.widget.clip.w                  = SCUI_HOR_RES,
+	.widget.clip.h                  = SCUI_VER_RES,
+	.widget.myself                  = SCUI_UI_SCENE_QUICK_CARD,
+	.widget.event_cb                = scui_ui_scene_quick_card_event_proc,
+	.level                          = 0,
+	.buffer                         = true,
+	.widget.child_num               = 5,
+};
+
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 	.widget.type                    = scui_widget_type_window,
 	.widget.style.sched_anima       = true,
@@ -1254,7 +1284,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.child_num               = 10,
 };
 
-const void * scui_widget_parser_table[76] = {
+const void * scui_widget_parser_table[78] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY,
 	(void *)&scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM,
 	(void *)&scui_widget_SCUI_UI_SCENE_CUBE,
@@ -1300,6 +1330,8 @@ const void * scui_widget_parser_table[76] = {
 	(void *)&scui_widget_SCUI_UI_SCENE_MINI_CARD_BAR_ARC,
 	(void *)&scui_widget_SCUI_UI_SCENE_MINI_CARD_MASK,
 	(void *)&scui_widget_SCUI_UI_SCENE_NONE,
+	(void *)&scui_widget_SCUI_UI_SCENE_NOTIFY,
+	(void *)&scui_widget_SCUI_UI_SCENE_QUICK_CARD,
 	(void *)&scui_widget_SCUI_UI_SCENE_STANDBY,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1,
 	(void *)&scui_widget_SCUI_UI_SCENE_FLOAT_1_1,
