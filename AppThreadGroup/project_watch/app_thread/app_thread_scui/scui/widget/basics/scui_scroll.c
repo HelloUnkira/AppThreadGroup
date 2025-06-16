@@ -1360,6 +1360,8 @@ void scui_scroll_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_show:
     case scui_event_hide:
+    case scui_event_create:
+    case scui_event_destroy:
     case scui_event_focus_get:
     case scui_event_focus_lost:
     case scui_event_child_nums:

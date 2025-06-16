@@ -40,56 +40,47 @@ static struct {
 void scui_ui_scene_lantern_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
         /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            
-            scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
-            scui_ui_res_local->angle_a = 360 / scui_ui_res_local->num;
-            SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
-            
-            //cwf json 测试:  读取云表盘预览图
-            for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++) {
-                scui_ui_res_local->image[idx] = SCUI_HANDLE_INVALID;
-                scui_cwf_json_make_pv(&scui_ui_res_local->image[idx], cwf_json_bin[idx]);
-            }
-            
-            scui_ui_res_local->w_res   = scui_image_w(scui_ui_res_local->image[0]);
-            scui_ui_res_local->h_res   = scui_image_h(scui_ui_res_local->image[0]);
-            scui_ui_res_local->x_span  = 0;
-            scui_ui_res_local->scale_c = 1024;
-        }
-        break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
         
-        /* 界面数据转存回收 */
-        if (scui_event_check_finish(event)) {
-            
-            //cwf json 测试: 释放云表盘预览图
-            for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++)
-                scui_cwf_json_burn_pv(&scui_ui_res_local->image[idx]);
+        scui_ui_res_local->num = scui_arr_len(cwf_json_bin);
+        scui_ui_res_local->angle_a = 360 / scui_ui_res_local->num;
+        SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
+        
+        //cwf json 测试:  读取云表盘预览图
+        for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++) {
+            scui_ui_res_local->image[idx] = SCUI_HANDLE_INVALID;
+            scui_cwf_json_make_pv(&scui_ui_res_local->image[idx], cwf_json_bin[idx]);
         }
+        
+        scui_ui_res_local->w_res   = scui_image_w(scui_ui_res_local->image[0]);
+        scui_ui_res_local->h_res   = scui_image_h(scui_ui_res_local->image[0]);
+        scui_ui_res_local->x_span  = 0;
+        scui_ui_res_local->scale_c = 1024;
+        
         break;
+    }
+    case scui_event_destroy: {
+        
+        //cwf json 测试: 释放云表盘预览图
+        for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++)
+            scui_cwf_json_burn_pv(&scui_ui_res_local->image[idx]);
+        
+        break;
+    }
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
         break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -267,7 +258,6 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
     }
     break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

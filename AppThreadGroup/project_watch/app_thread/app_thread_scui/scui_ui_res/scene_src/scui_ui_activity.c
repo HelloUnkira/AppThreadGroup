@@ -15,9 +15,26 @@ static struct {
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event)
+void scui_ui_scene_activity_event_proc(scui_event_t *event)
 {
-    scui_ui_bar_arc_event_proc(&scui_ui_res_local->bar_arc, event);
+    switch (event->type) {
+    case scui_event_anima_elapse:
+        break;
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
+        
+        break;
+    case scui_event_destroy:
+        break;
+    case scui_event_focus_get:
+        scui_ui_scene_link_cfg(event);
+        break;
+    case scui_event_focus_lost:
+        break;
+    default:
+        break;
+    }
 }
 
 /*@brief 控件事件响应回调
@@ -25,22 +42,39 @@ void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_activity_scroll_event(scui_event_t *event)
 {
-    // 转移至控件调度
-    if (event->type < scui_event_widget_s ||
-        event->type > scui_event_widget_e) {
-        scui_widget_map_t *widget_map = NULL;
-        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
-        if (widget_map->invoke != NULL)
-            widget_map->invoke(event);
+    switch (event->type) {
+    case scui_event_create: {
         
-        return;
+        scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_ACTIVITY_BAR_ARC;
+        break;
+    }
+    case scui_event_widget_scroll_layout:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_keep:
+    case scui_event_widget_scroll_over: {
+        
+        scui_coord_t scroll_pct = 0;
+        scui_scroll_percent_get(event->object, &scroll_pct);
+        scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+        scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+        break;
+    }
+    default:
+        break;
     }
     
-    scui_coord_t scroll_pct = 0;
-    scui_scroll_percent_get(event->object, &scroll_pct);
-    SCUI_LOG_INFO("pct:%d", scroll_pct);
-    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
-    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+    
+    
+    // 转移至控件调度
+    scui_widget_event_shift(event);
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_activity_bar_arc_event_proc(scui_event_t *event)
+{
+    scui_ui_bar_arc_event_proc(&scui_ui_res_local->bar_arc, event);
 }
 
 /*@brief 控件事件响应回调
@@ -99,43 +133,36 @@ void scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc(scui_event_t *eve
 void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            // 清空图像资源缓存
-            scui_image_cache_clear();
-            scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type        = scui_widget_type_custom;
-            custom_maker.widget.style.trans = true;
-            custom_maker.widget.clip.w      = SCUI_HOR_RES;
-            custom_maker.widget.clip.h      = SCUI_VER_RES;
-            custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
-            scui_widget_create(&custom_maker, &custom_handle, false);
-            scui_ui_res_local->big_3_slave = custom_handle;
-            
-            // 创建画布,用于绘制
-            scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF;
-            scui_coord_t hor_res = custom_maker.widget.clip.w;
-            scui_coord_t ver_res = custom_maker.widget.clip.h;
-            scui_widget_surface_create(scui_ui_res_local->big_3_slave, p_cf, hor_res, ver_res);
-            scui_widget_surface_refr(scui_ui_res_local->big_3_slave, true);
-            
-            scui_widget_show(scui_ui_res_local->big_3_slave, false);
-            scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, true);
-        }
+        // 清空图像资源缓存
+        scui_image_cache_clear();
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type        = scui_widget_type_custom;
+        custom_maker.widget.style.trans = true;
+        custom_maker.widget.clip.w      = SCUI_HOR_RES;
+        custom_maker.widget.clip.h      = SCUI_VER_RES;
+        custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
+        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_ui_res_local->big_3_slave = custom_handle;
+        
+        // 创建画布,用于绘制
+        scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF;
+        scui_coord_t hor_res = custom_maker.widget.clip.w;
+        scui_coord_t ver_res = custom_maker.widget.clip.h;
+        scui_widget_surface_create(scui_ui_res_local->big_3_slave, p_cf, hor_res, ver_res);
+        scui_widget_surface_refr(scui_ui_res_local->big_3_slave, true);
+        
+        scui_widget_show(scui_ui_res_local->big_3_slave, false);
+        scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, true);
         break;
     }
-    case scui_event_hide: {
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy: {
         
-        if (scui_event_check_finish(event)) {
-            
-            scui_widget_surface_destroy(scui_ui_res_local->big_3_slave);
-            scui_widget_hide(scui_ui_res_local->big_3_slave, false);
-        }
+        scui_widget_surface_destroy(scui_ui_res_local->big_3_slave);
+        scui_widget_hide(scui_ui_res_local->big_3_slave, false);
+        scui_ui_res_local->big_3_slave = SCUI_HANDLE_INVALID;
         break;
     }
     case scui_event_draw: {
@@ -168,30 +195,25 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
 void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            scui_string_maker_t string_maker = {0};
-            scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
-            string_maker.widget.type                = scui_widget_type_string;
-            string_maker.widget.style.trans         = true;
-            string_maker.widget.parent              = event->object;
-            string_maker.widget.clip.w              = SCUI_HOR_RES;
-            string_maker.widget.clip.h              = 40;
-            string_maker.widget.clip.y              = (scui_widget_clip(event->object).h - string_maker.widget.clip.h) / 2;
-            string_maker.args.align_hor             = 2;
-            string_maker.args.align_ver             = 2;
-            string_maker.args.mode_scroll           = 1;
-            string_maker.args.color.color_s.full    = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full    = 0xFFFFFFFF;
-            string_maker.args.color.filter          = true;
-            string_maker.text                       = SCUI_MULTI_LANG_0X0017;
-            string_maker.font_idx                   = SCUI_FONT_IDX_36;
-            scui_widget_create(&string_maker, &string_handle, false);
-            
-        }
+        scui_string_maker_t string_maker = {0};
+        scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
+        string_maker.widget.type                = scui_widget_type_string;
+        string_maker.widget.style.trans         = true;
+        string_maker.widget.parent              = event->object;
+        string_maker.widget.clip.w              = SCUI_HOR_RES;
+        string_maker.widget.clip.h              = 40;
+        string_maker.widget.clip.y              = (scui_widget_clip(event->object).h - string_maker.widget.clip.h) / 2;
+        string_maker.args.align_hor             = 2;
+        string_maker.args.align_ver             = 2;
+        string_maker.args.mode_scroll           = 1;
+        string_maker.args.color.color_s.full    = 0xFFFFFFFF;
+        string_maker.args.color.color_e.full    = 0xFFFFFFFF;
+        string_maker.args.color.filter          = true;
+        string_maker.text                       = SCUI_MULTI_LANG_0X0017;
+        string_maker.font_idx                   = SCUI_FONT_IDX_36;
+        scui_widget_create(&string_maker, &string_handle, false);
         break;
     }
     default:
@@ -205,12 +227,8 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
 void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-        }
         break;
     }
     case scui_event_lang_change:
@@ -351,43 +369,39 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
 void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            // chart histogram
-            scui_chart_maker_t chart_maker = {0};
-            scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-            chart_maker.widget.type = scui_widget_type_chart;
-            chart_maker.widget.style.trans = true;
-            chart_maker.widget.clip.x = 0;
-            chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_HOR_RES;
-            chart_maker.widget.clip.h = 86;
-            chart_maker.widget.parent = event->object;
-            chart_maker.type = scui_chart_type_histogram;
-            chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-            chart_maker.histogram.value_min = 0;
-            chart_maker.histogram.value_max = 100;
-            chart_maker.histogram.number    = 24;
-            chart_maker.histogram.offset.x  = 42;
-            chart_maker.histogram.height    = 86;
-            chart_maker.histogram.space     = 4;
-            chart_maker.histogram.color.color.full = 0xFFF9104F;
-            scui_widget_create(&chart_maker, &chart_handle, false);
-            
-            uint32_t day7_24[24] = {0};
-            scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
-            
-            scui_coord_t vlist_min[24] = {0};
-            scui_coord_t vlist_max[24] = {0};
-            for (uint32_t idx  = 0; idx < 24; idx++) {
-                vlist_min[idx] = 0;
-                vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
-            }
-            scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
+        // chart histogram
+        scui_chart_maker_t chart_maker = {0};
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
+        chart_maker.widget.type = scui_widget_type_chart;
+        chart_maker.widget.style.trans = true;
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
+        chart_maker.type = scui_chart_type_histogram;
+        chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        chart_maker.histogram.value_min = 0;
+        chart_maker.histogram.value_max = 100;
+        chart_maker.histogram.number    = 24;
+        chart_maker.histogram.offset.x  = 42;
+        chart_maker.histogram.height    = 86;
+        chart_maker.histogram.space     = 4;
+        chart_maker.histogram.color.color.full = 0xFFF9104F;
+        scui_widget_create(&chart_maker, &chart_handle, false);
+        
+        uint32_t day7_24[24] = {0};
+        scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
+        
+        scui_coord_t vlist_min[24] = {0};
+        scui_coord_t vlist_max[24] = {0};
+        for (uint32_t idx  = 0; idx < 24; idx++) {
+            vlist_min[idx] = 0;
+            vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
         }
+        scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:
@@ -517,43 +531,39 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
 void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            // chart histogram
-            scui_chart_maker_t chart_maker = {0};
-            scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-            chart_maker.widget.type = scui_widget_type_chart;
-            chart_maker.widget.style.trans = true;
-            chart_maker.widget.clip.x = 0;
-            chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_HOR_RES;
-            chart_maker.widget.clip.h = 86;
-            chart_maker.widget.parent = event->object;
-            chart_maker.type = scui_chart_type_histogram;
-            chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-            chart_maker.histogram.value_min = 0;
-            chart_maker.histogram.value_max = 100;
-            chart_maker.histogram.number    = 24;
-            chart_maker.histogram.offset.x  = 42;
-            chart_maker.histogram.height    = 86;
-            chart_maker.histogram.space     = 4;
-            chart_maker.histogram.color.color.full = 0xFFE1CC00;
-            scui_widget_create(&chart_maker, &chart_handle, false);
-            
-            uint32_t day7_24[24] = {0};
-            scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
-            
-            scui_coord_t vlist_min[24] = {0};
-            scui_coord_t vlist_max[24] = {0};
-            for (uint32_t idx  = 0; idx < 24; idx++) {
-                vlist_min[idx] = 0;
-                vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
-            }
-            scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
+        // chart histogram
+        scui_chart_maker_t chart_maker = {0};
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
+        chart_maker.widget.type = scui_widget_type_chart;
+        chart_maker.widget.style.trans = true;
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
+        chart_maker.type = scui_chart_type_histogram;
+        chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        chart_maker.histogram.value_min = 0;
+        chart_maker.histogram.value_max = 100;
+        chart_maker.histogram.number    = 24;
+        chart_maker.histogram.offset.x  = 42;
+        chart_maker.histogram.height    = 86;
+        chart_maker.histogram.space     = 4;
+        chart_maker.histogram.color.color.full = 0xFFE1CC00;
+        scui_widget_create(&chart_maker, &chart_handle, false);
+        
+        uint32_t day7_24[24] = {0};
+        scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
+        
+        scui_coord_t vlist_min[24] = {0};
+        scui_coord_t vlist_max[24] = {0};
+        for (uint32_t idx  = 0; idx < 24; idx++) {
+            vlist_min[idx] = 0;
+            vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
         }
+        scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:
@@ -683,43 +693,39 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
 void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            // chart histogram
-            scui_chart_maker_t chart_maker = {0};
-            scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-            chart_maker.widget.type = scui_widget_type_chart;
-            chart_maker.widget.style.trans = true;
-            chart_maker.widget.clip.x = 0;
-            chart_maker.widget.clip.y = 100;
-            chart_maker.widget.clip.w = SCUI_HOR_RES;
-            chart_maker.widget.clip.h = 86;
-            chart_maker.widget.parent = event->object;
-            chart_maker.type = scui_chart_type_histogram;
-            chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-            chart_maker.histogram.value_min = 0;
-            chart_maker.histogram.value_max = 100;
-            chart_maker.histogram.number    = 24;
-            chart_maker.histogram.offset.x  = 42;
-            chart_maker.histogram.height    = 86;
-            chart_maker.histogram.space     = 4;
-            chart_maker.histogram.color.color.full = 0xFF00B7FF;
-            scui_widget_create(&chart_maker, &chart_handle, false);
-            
-            uint32_t day7_24[24] = {0};
-            scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);
-            
-            scui_coord_t vlist_min[24] = {0};
-            scui_coord_t vlist_max[24] = {0};
-            for (uint32_t idx  = 0; idx < 24; idx++) {
-                vlist_min[idx] = 0;
-                vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
-            }
-            scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
+        // chart histogram
+        scui_chart_maker_t chart_maker = {0};
+        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
+        chart_maker.widget.type = scui_widget_type_chart;
+        chart_maker.widget.style.trans = true;
+        chart_maker.widget.clip.x = 0;
+        chart_maker.widget.clip.y = 100;
+        chart_maker.widget.clip.w = SCUI_HOR_RES;
+        chart_maker.widget.clip.h = 86;
+        chart_maker.widget.parent = event->object;
+        chart_maker.type = scui_chart_type_histogram;
+        chart_maker.histogram.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        chart_maker.histogram.value_min = 0;
+        chart_maker.histogram.value_max = 100;
+        chart_maker.histogram.number    = 24;
+        chart_maker.histogram.offset.x  = 42;
+        chart_maker.histogram.height    = 86;
+        chart_maker.histogram.space     = 4;
+        chart_maker.histogram.color.color.full = 0xFF00B7FF;
+        scui_widget_create(&chart_maker, &chart_handle, false);
+        
+        uint32_t day7_24[24] = {0};
+        scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);
+        
+        scui_coord_t vlist_min[24] = {0};
+        scui_coord_t vlist_max[24] = {0};
+        for (uint32_t idx  = 0; idx < 24; idx++) {
+            vlist_min[idx] = 0;
+            vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
         }
+        scui_chart_histogram_data(chart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:
@@ -839,43 +845,6 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         break;
     }
     default:
-        break;
-    }
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
-void scui_ui_scene_activity_event_proc(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
-    case scui_event_anima_elapse:
-        break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
-        
-        if (scui_event_check_prepare(event)) {
-            
-            scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_ACTIVITY_BAR_ARC;
-            scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
-        }
-        break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
-        break;
-    case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
-        scui_ui_scene_link_cfg(event);
-        break;
-    case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
-        break;
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

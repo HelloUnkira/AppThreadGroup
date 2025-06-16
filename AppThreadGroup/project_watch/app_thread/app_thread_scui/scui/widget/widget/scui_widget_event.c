@@ -113,51 +113,32 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
  */
 static void scui_widget_show_delay(scui_handle_t handle)
 {
-    if (scui_handle_unmap(handle)) {
+    if (scui_handle_unmap(handle))
         scui_widget_create_layout_tree(handle);
-        
-        /* 先显示所有 */ {
-            scui_event_t event = {
-                .object     = handle,
-                .style.sync = true,
-                .type       = scui_event_show,
-            };
-            scui_event_notify(&event);
-        }
-        
-        /* 后初始布局所有 */ {
-            scui_event_t event = {
-                .object       = handle,
-                .style.sync   = true,
-                .style.bubble = true,
-                .type         = scui_event_layout,
-            };
-            scui_event_notify(&event);
-        }
-    }
     
+    /* 设置控件状态为显示 */
+    scui_widget_state_show(handle, false);
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_LOG_INFO("widget :%u", handle);
     
-    /* 设置控件状态为显示 */
-    widget->style.state = true;
-    
-    /* 父控件布局更新 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
+    /* 根控件手动布局一次 */
+    if (widget->parent == SCUI_HANDLE_INVALID) {
         scui_event_t event = {
-            .object = widget->parent,
-            .type   = scui_event_layout,
-            .absorb = scui_event_absorb_none,
+            .object       = handle,
+            .style.sync   = true,
+            .style.bubble = true,
+            .type         = scui_event_layout,
         };
         scui_event_notify(&event);
     }
     
+    /* 控件布局更新, 重绘自己 */
+    bool only = scui_widget_surface_only(widget);
+    scui_widget_draw(widget->myself, NULL, only);
+    
     /* 将该显示窗口加入到场景管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_add(widget->myself);
-    
-    bool only = scui_widget_surface_only(widget);
-    scui_widget_draw(widget->myself, NULL, only);
 }
 
 /*@brief 控件隐藏
@@ -168,45 +149,26 @@ static void scui_widget_hide_delay(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
+    /* 设置控件状态为隐藏 */
+    scui_widget_state_hide(handle, false);
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_LOG_INFO("widget :%u", handle);
-    /* 设置控件状态为隐藏 */
-    widget->style.state = false;
     
-    /* 父控件布局更新 */
-    if (widget->parent != SCUI_HANDLE_INVALID) {
-        scui_event_t event = {
-            .object = widget->parent,
-            .type   = scui_event_layout,
-            .absorb = scui_event_absorb_none,
-        };
-        scui_event_notify(&event);
-    }
-    
-    /* 通知父窗口重绘 */
+    /* 父控件布局更新, 重绘父窗口 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         bool only = scui_widget_surface_only(widget);
         scui_widget_draw(widget->parent, NULL, only);
     }
     
-    /* 只有销毁窗口时才做整体销毁 */
-    if (widget->parent == SCUI_HANDLE_INVALID) {
-        scui_event_t event = {
-            .object     = widget->myself,
-            .type       = scui_event_hide,
-            .style.sync = true,
-        };
-        scui_event_notify(&event);
-        
-        scui_widget_destroy(widget->myself);
-    }
-    
-    /* 将该显示窗口移除出场景管理器中 */
+    /* 窗口移除出场景管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_del(widget->myself);
-    
-    // 重新刷新窗口列表
-    scui_widget_refr(widget->myself, false);
+    /* 销毁整个控件树 */
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_widget_destroy(widget->myself);
+    /* 刷新窗口列表 */
+    if (widget->parent == SCUI_HANDLE_INVALID)
+        scui_widget_refr(widget->myself, false);
 }
 
 /*@brief 控件显示
@@ -296,6 +258,17 @@ void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node)
     
     SCUI_ASSERT(node != NULL);
     scui_event_cb_del(&widget->list, node);
+}
+
+/*@brief 控件事件响应转移
+ *@param event 事件
+ */
+void scui_widget_event_shift(scui_event_t *event)
+{
+    scui_widget_map_t *widget_map = NULL;
+    scui_widget_map_find(scui_widget_type(event->object), &widget_map);
+    if (widget_map->invoke != NULL)
+        widget_map->invoke(event);
 }
 
 /*@brief 控件默认事件处理回调
@@ -472,9 +445,11 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 它涉及到系统状态维护 */
     switch (event->type) {
     case scui_event_anima_elapse:
-    case scui_event_draw:
     case scui_event_show:
     case scui_event_hide:
+    case scui_event_draw:
+    case scui_event_create:
+    case scui_event_destroy:
     case scui_event_ptr_down:
     case scui_event_ptr_hold:
     case scui_event_ptr_up:
@@ -657,12 +632,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
         scui_tick_calc(0x21, NULL, NULL, NULL);
         return;
     }
-    case scui_event_show:
-        scui_widget_event_bubble(event, NULL, false, true);
-        return;
-    case scui_event_hide:
-        scui_widget_event_bubble(event, NULL, true, false);
-        return;
     case scui_event_lang_change:
         scui_widget_event_bubble(event, NULL, false, false);
         return;
@@ -681,13 +650,16 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
-    case scui_event_local_res:
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;
+    case scui_event_show:
+    case scui_event_hide:
     case scui_event_child_nums:
     case scui_event_child_size:
-    case scui_event_child_pos: {
+    case scui_event_child_pos:
+    case scui_event_create:
+    case scui_event_destroy: {
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         

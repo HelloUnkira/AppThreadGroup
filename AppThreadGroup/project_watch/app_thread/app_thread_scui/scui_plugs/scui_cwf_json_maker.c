@@ -55,15 +55,6 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
  */
 static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
 {
-    // 固定资源绑定到res, 构建时将widget与固定的res绑定
-    scui_csf_json_item__res_t *res = NULL;
-    scui_widget_user_data_get(event->object, &res);
-    SCUI_ASSERT(res != NULL);
-    
-    // 从res中逆向获取解析器目标
-    scui_cwf_json_parser_t *parser = res->parser;
-    uint16_t list_idx = res->list_idx;
-    
     switch (event->type) {
     case scui_event_anima_elapse: {
         
@@ -84,6 +75,15 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              return;
+        
+        // 固定资源绑定到res, 构建时将widget与固定的res绑定
+        scui_csf_json_item__res_t *res = NULL;
+        scui_widget_user_data_get(event->object, &res);
+        SCUI_ASSERT(res != NULL);
+        
+        // 从res中逆向获取解析器目标
+        scui_cwf_json_parser_t *parser = res->parser;
+        uint16_t list_idx = res->list_idx;
         
         scui_area_t clip = scui_widget_clip(event->object);
         scui_custom_draw_dsc_t *draw_dsc = NULL;
@@ -106,19 +106,19 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
  */
 static void scui_cwf_json_custom_event_cb(scui_event_t *event)
 {
-    // 固定资源绑定到res, 构建时将widget与固定的res绑定
-    scui_csf_json_item__res_t *res = NULL;
-    scui_widget_user_data_get(event->object, &res);
-    SCUI_ASSERT(res != NULL);
-    
-    // 从res中逆向获取解析器目标
-    scui_cwf_json_parser_t *parser = res->parser;
-    uint16_t list_idx = res->list_idx;
-    
     switch (event->type) {
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              return;
+        
+        // 固定资源绑定到res, 构建时将widget与固定的res绑定
+        scui_csf_json_item__res_t *res = NULL;
+        scui_widget_user_data_get(event->object, &res);
+        SCUI_ASSERT(res != NULL);
+        
+        // 从res中逆向获取解析器目标
+        scui_cwf_json_parser_t *parser = res->parser;
+        uint16_t list_idx = res->list_idx;
         
         // 没有信息则不绘制
         if (res->idx_ofs == NULL)

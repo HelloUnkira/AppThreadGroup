@@ -24,6 +24,16 @@
             "widget.myself":                "SCUI_UI_SCENE_FLOAT_3_RING",
             "widget.parent":                "SCUI_UI_SCENE_FLOAT_3",
             "widget.event_cb":              "scui_ui_scene_float_3_ring_event_proc"
+        },
+        {
+            "widget.type":                  "scui_widget_type_custom",
+            "widget.style.trans":           "true",
+            "widget.clip.w":                "SCUI_HOR_RES",
+            "widget.clip.h":                "SCUI_VER_RES",
+            "widget.myself":                "SCUI_UI_SCENE_FLOAT_3_BTN",
+            "widget.parent":                "SCUI_UI_SCENE_FLOAT_3",
+            "widget.event_cb":              "scui_ui_scene_float_3_btn_event_proc",
+            "widget.child_num":             "10"
         }
     ]
 }

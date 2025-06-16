@@ -168,70 +168,64 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
+        if (monitor_anima == SCUI_HANDLE_INVALID) {
+            scui_anima_t anima = {0};
+            anima.expired = scui_ui_scene_monitor_anima_expired;
+            anima.period  = SCUI_ANIMA_TICK * 5;
+            anima.reload  = SCUI_ANIMA_INFINITE;
+            scui_anima_create(&anima, &monitor_anima);
+            scui_anima_start(monitor_anima);
             
-            if (monitor_anima == SCUI_HANDLE_INVALID) {
-                scui_anima_t anima = {0};
-                anima.expired = scui_ui_scene_monitor_anima_expired;
-                anima.period  = SCUI_ANIMA_TICK * 5;
-                anima.reload  = SCUI_ANIMA_INFINITE;
-                scui_anima_create(&anima, &monitor_anima);
-                scui_anima_start(monitor_anima);
-                
-                /* 创建显示信息文本,都是英文 */
-                scui_string_maker_t string_maker = {0};
-                string_maker.widget.type                = scui_widget_type_string;
-                string_maker.widget.style.trans         = true;
-                string_maker.widget.parent              = SCUI_UI_SCENE_MONITOR;
-                string_maker.args.recolor               = true;
-                string_maker.args.align_hor             = 0;
-                string_maker.args.align_ver             = 2;
-                string_maker.args.color.color_s.full    = 0xFF404040;
-                string_maker.args.color.color_e.full    = 0xFF404040;
-                string_maker.args.color.filter          = true;
-                string_maker.args.line_width            = 1;
-                string_maker.args.line_under            = 1;
-                string_maker.args.line_delete           = 1;
-                string_maker.font_idx                   = SCUI_FONT_IDX_A16;
-                string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_A;
-                
-                string_maker.widget.clip.x              = 10;
-                string_maker.widget.clip.y              = 30;
-                string_maker.widget.clip.w              = SCUI_HOR_RES;
-                string_maker.widget.clip.h              = 20;
-                scui_widget_create(&string_maker, &monitor_refr, false);
-                string_maker.widget.clip.x              = 10;
-                string_maker.widget.clip.y              = 50;
-                string_maker.widget.clip.w              = SCUI_HOR_RES;
-                string_maker.widget.clip.h              = 20;
-                scui_widget_create(&string_maker, &monitor_mem1, false);
-                string_maker.widget.clip.x              = 10;
-                string_maker.widget.clip.y              = 70;
-                string_maker.widget.clip.w              = SCUI_HOR_RES;
-                string_maker.widget.clip.h              = 20;
-                scui_widget_create(&string_maker, &monitor_mem2, false);
-                
-                scui_string_update_str(monitor_refr, "refr");
-                scui_string_update_str(monitor_mem1, "mem");
-                scui_string_update_str(monitor_mem2, "mem");
-            }
+            /* 创建显示信息文本,都是英文 */
+            scui_string_maker_t string_maker = {0};
+            string_maker.widget.type                = scui_widget_type_string;
+            string_maker.widget.style.trans         = true;
+            string_maker.widget.parent              = SCUI_UI_SCENE_MONITOR;
+            string_maker.args.recolor               = true;
+            string_maker.args.align_hor             = 0;
+            string_maker.args.align_ver             = 2;
+            string_maker.args.color.color_s.full    = 0xFF404040;
+            string_maker.args.color.color_e.full    = 0xFF404040;
+            string_maker.args.color.filter          = true;
+            string_maker.args.line_width            = 1;
+            string_maker.args.line_under            = 1;
+            string_maker.args.line_delete           = 1;
+            string_maker.font_idx                   = SCUI_FONT_IDX_A16;
+            string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_A;
+            
+            string_maker.widget.clip.x              = 10;
+            string_maker.widget.clip.y              = 30;
+            string_maker.widget.clip.w              = SCUI_HOR_RES;
+            string_maker.widget.clip.h              = 20;
+            scui_widget_create(&string_maker, &monitor_refr, false);
+            string_maker.widget.clip.x              = 10;
+            string_maker.widget.clip.y              = 50;
+            string_maker.widget.clip.w              = SCUI_HOR_RES;
+            string_maker.widget.clip.h              = 20;
+            scui_widget_create(&string_maker, &monitor_mem1, false);
+            string_maker.widget.clip.x              = 10;
+            string_maker.widget.clip.y              = 70;
+            string_maker.widget.clip.w              = SCUI_HOR_RES;
+            string_maker.widget.clip.h              = 20;
+            scui_widget_create(&string_maker, &monitor_mem2, false);
+            
+            scui_string_update_str(monitor_refr, "refr");
+            scui_string_update_str(monitor_mem1, "mem");
+            scui_string_update_str(monitor_mem2, "mem");
         }
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    }
+    case scui_event_destroy: {
         
-        if (scui_event_check_finish(event)) {
-            
-            if (monitor_anima != SCUI_HANDLE_INVALID) {
-                scui_anima_stop(monitor_anima);
-                scui_anima_destroy(monitor_anima);
-                monitor_anima = SCUI_HANDLE_INVALID;
-            }
+        if (monitor_anima != SCUI_HANDLE_INVALID) {
+            scui_anima_stop(monitor_anima);
+            scui_anima_destroy(monitor_anima);
+            monitor_anima = SCUI_HANDLE_INVALID;
         }
         break;
+    }
     case scui_event_draw:
         #if SCUI_MEM_FEAT_MINI == 0
         scui_widget_alpha_set(event->object, scui_alpha_cover, false);
@@ -239,13 +233,10 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
         #endif
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

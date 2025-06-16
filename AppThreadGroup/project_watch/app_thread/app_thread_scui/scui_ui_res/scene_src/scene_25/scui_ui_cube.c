@@ -22,44 +22,35 @@ static struct {
 void scui_ui_scene_cube_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
         /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            
-            scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_09_08png;
-            scui_ui_res_local->image[1] = scui_image_prj_image_src_00_theme_icon_01_spo2_09_08png;
-            scui_ui_res_local->image[2] = scui_image_prj_image_src_00_theme_icon_02_message_09_08png;
-            scui_ui_res_local->image[3] = scui_image_prj_image_src_00_theme_icon_04_call_09_08png;
-            scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_09_08png;
-            scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_09_08png;
-            scui_ui_res_local->size = 102;
-            
-            scui_ui_res_local->rotate.x = 45.0f;
-            scui_ui_res_local->rotate.y = 45.0f;
-        }
+        
+        scui_ui_res_local->image[0] = scui_image_prj_image_src_00_theme_icon_00_heart_09_08png;
+        scui_ui_res_local->image[1] = scui_image_prj_image_src_00_theme_icon_01_spo2_09_08png;
+        scui_ui_res_local->image[2] = scui_image_prj_image_src_00_theme_icon_02_message_09_08png;
+        scui_ui_res_local->image[3] = scui_image_prj_image_src_00_theme_icon_04_call_09_08png;
+        scui_ui_res_local->image[4] = scui_image_prj_image_src_00_theme_icon_05_sport_record_09_08png;
+        scui_ui_res_local->image[5] = scui_image_prj_image_src_00_theme_icon_06_activity_09_08png;
+        scui_ui_res_local->size = 102;
+        
+        scui_ui_res_local->rotate.x = 45.0f;
+        scui_ui_res_local->rotate.y = 45.0f;
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
         break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -191,7 +182,6 @@ void scui_ui_scene_cube_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

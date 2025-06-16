@@ -231,49 +231,38 @@ static void scui_ui_scene_butterfly_face_matrix_update(void)
 void scui_ui_scene_butterfly_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            
-            scui_ui_res_local->image_wing_type = 1;
-            scui_ui_scene_butterfly_image_update();
-            
-            /* 蝴蝶的跳动节拍 */
-            scui_ui_res_local->heart_peroid = 10;
-            scui_ui_res_local->heart_way    = +1;
-            
-            /* 蝴蝶翅膀煽动 */
-            scui_ui_res_local->wing_limit = 45;
-            /* 蝴蝶整体上下摆动 */
-            scui_ui_res_local->sway_limit = 45;
-            /* 蝴蝶整体缩放 */
-            scui_ui_res_local->scale_max = +256;
-            scui_ui_res_local->scale_min = -768;
-            scui_ui_res_local->scale_way = -1;
-        }
+        scui_ui_res_local->image_wing_type = 1;
+        scui_ui_scene_butterfly_image_update();
+        
+        /* 蝴蝶的跳动节拍 */
+        scui_ui_res_local->heart_peroid = 10;
+        scui_ui_res_local->heart_way    = +1;
+        
+        /* 蝴蝶翅膀煽动 */
+        scui_ui_res_local->wing_limit = 45;
+        /* 蝴蝶整体上下摆动 */
+        scui_ui_res_local->sway_limit = 45;
+        /* 蝴蝶整体缩放 */
+        scui_ui_res_local->scale_max = +256;
+        scui_ui_res_local->scale_min = -768;
+        scui_ui_res_local->scale_way = -1;
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
         break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -449,7 +438,6 @@ void scui_ui_scene_butterfly_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

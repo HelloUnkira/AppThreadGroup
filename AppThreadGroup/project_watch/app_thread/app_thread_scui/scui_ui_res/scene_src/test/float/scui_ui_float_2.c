@@ -15,11 +15,7 @@ void scui_ui_scene_2_button_event_proc(scui_event_t *event)
     // 转移至控件调度
     if (event->type < scui_event_widget_s ||
         event->type > scui_event_widget_e) {
-        scui_widget_map_t *widget_map = NULL;
-        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
-        if (widget_map->invoke != NULL)
-            widget_map->invoke(event);
-        
+        scui_widget_event_shift(event);
         return;
     }
     
@@ -31,25 +27,19 @@ void scui_ui_scene_2_button_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_float_2_event_proc(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_draw:
-        SCUI_LOG_INFO("scui_event_draw");
         break;
     default:
         #if 0   // discard, we don't need this
@@ -58,7 +48,6 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         if (event->type >= scui_event_key_s && event->type <= scui_event_key_e)
             scui_window_float_event_grasp_key(event);
         #endif
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -136,7 +125,6 @@ void scui_ui_scene_float_2_c_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -189,7 +177,6 @@ void scui_ui_scene_float_2_1_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -235,7 +222,6 @@ void scui_ui_scene_float_2_2_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -283,7 +269,6 @@ void scui_ui_scene_float_2_3_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -343,7 +328,6 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -356,8 +340,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
         scui_objbtn_maker_t objbtn_maker = {0};
         scui_handle_t objbtn_handle = SCUI_HANDLE_INVALID;
         objbtn_maker.widget.type    = scui_widget_type_objbtn;
@@ -391,8 +374,7 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         /* 该控件未完成,待定中... */
         
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -411,7 +393,6 @@ void scui_ui_scene_float_2_5_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

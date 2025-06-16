@@ -38,8 +38,8 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     widget->parent = maker->parent;
     widget->myself = *handle;
     
-    /* 控件默认设置为显示 */
-    widget->style.state = true;
+    /* 控件初始默认为隐藏(无响应) */
+    widget->style.state = false;
     
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);
@@ -659,6 +659,90 @@ scui_area_t scui_widget_clip(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->clip;
+}
+
+/*@brief 控件显示状态更新
+ *@param handle  控件句柄
+ *@param recurse 递归处理
+ */
+void scui_widget_state_show(scui_handle_t handle, bool recurse)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    SCUI_LOG_INFO("widget :%u", handle);
+    
+    /* 无需重复显示 */
+    if (widget->style.state)
+        return;
+    
+    /* 设置控件状态为显示 */
+    widget->style.state = true;
+    
+    /* 同步生成控件显示事件 */
+    scui_event_t event = {
+        .object     = handle,
+        .style.sync = true,
+        .type       = scui_event_show,
+    };
+    scui_event_notify(&event);
+    
+    /* 非根控件更新父控件布局 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_event_t event = {
+            .object = widget->parent,
+            .type   = scui_event_layout,
+            .absorb = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+    }
+    
+    if (!recurse)
+         return;
+    
+    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_state_show(widget->child_list[idx], recurse);
+}
+
+/*@brief 控件隐藏状态更新
+ *@param handle  控件句柄
+ *@param recurse 递归处理
+ */
+void scui_widget_state_hide(scui_handle_t handle, bool recurse)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    SCUI_LOG_INFO("widget :%u", handle);
+    
+    /* 无需重复隐藏 */
+    if (!widget->style.state)
+         return;
+    
+    /* 设置控件状态为隐藏 */
+    widget->style.state = false;
+    
+    /* 同步生成控件隐藏事件 */
+    scui_event_t event = {
+        .object     = handle,
+        .style.sync = true,
+        .type       = scui_event_hide,
+    };
+    scui_event_notify(&event);
+    
+    /* 非根控件更新父控件布局 */
+    if (widget->parent != SCUI_HANDLE_INVALID) {
+        scui_event_t event = {
+            .object = widget->parent,
+            .type   = scui_event_layout,
+            .absorb = scui_event_absorb_none,
+        };
+        scui_event_notify(&event);
+    }
+    
+    if (!recurse)
+         return;
+    
+    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_state_hide(widget->child_list[idx], recurse);
 }
 
 /*@brief 控件显示状态获取

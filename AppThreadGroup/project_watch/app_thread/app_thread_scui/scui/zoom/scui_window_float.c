@@ -251,13 +251,10 @@ void scui_window_float_event_grasp(scui_event_t *event)
     SCUI_ASSERT(clip.y >= -clip.h && clip.y <= +clip.h);
     
     switch (event->type) {
-    case scui_event_show:
-        if (scui_event_check_prepare(event)) {
-            
-            scui_widget_show(scui_window_float.main, false);
-        }
+    case scui_event_create:
+        scui_widget_show(scui_window_float.main, false);
         break;
-    case scui_event_hide:
+    case scui_event_destroy:
         break;
     case scui_event_key_click: {
         /* 全局滚动锁定 */

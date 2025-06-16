@@ -115,14 +115,10 @@ static bool scui_event_order_check(scui_event_t *event)
         event->type <= scui_event_custom_e)
         return true;
     
-    /* 大部分系统事件不需要响应prepare和finish */
+    /* 绝大部分系统事件不需要响应prepare和finish */
     /* 系统事件中必须该表中事件才响应prepare和finish */
     static const uint32_t event_table[] = {
-        scui_event_show,
-        scui_event_hide,
         scui_event_draw,
-        scui_event_focus_lost,
-        scui_event_focus_get,
     };
     
     for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)
@@ -380,14 +376,16 @@ void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_sched_delay]    = scui_event_prior_real,
         [scui_event_focus_lost]     = scui_event_prior_high,
         [scui_event_focus_get]      = scui_event_prior_high,
-        [scui_event_local_res]      = scui_event_prior_high,
         [scui_event_show]           = scui_event_prior_high,
         [scui_event_hide]           = scui_event_prior_high,
         [scui_event_draw]           = scui_event_prior_low,
         [scui_event_draw_empty]     = scui_event_prior_above,
         [scui_event_refr]           = scui_event_prior_low,
         
+        [scui_event_create]         = scui_event_prior_high,
         [scui_event_layout]         = scui_event_prior_above,
+        [scui_event_destroy]        = scui_event_prior_high,
+        
         [scui_event_child_nums]     = scui_event_prior_above,
         [scui_event_child_size]     = scui_event_prior_above,
         [scui_event_child_pos]      = scui_event_prior_above,

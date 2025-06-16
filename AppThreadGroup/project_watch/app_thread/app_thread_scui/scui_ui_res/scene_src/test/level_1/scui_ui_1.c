@@ -15,18 +15,14 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click: {
         if (event->key_id != scui_event_key_val_enter)
@@ -51,7 +47,6 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -78,39 +73,31 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
         }
         break;
     }
-    case scui_event_show: {
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
-            
-            // 构建一个图像帧
-            image_frame_gif.type = scui_image_type_gif;
-            image_frame_gif.handle = scui_image_prj_image_src_vedio_bulbgif;
-            image_frame_gif.gif.loop = 100;
-            scui_image_frame_make(&image_frame_gif);
-            
-            // 构建一个图像帧
-            image_frame_lottie_1.type = scui_image_type_lottie;
-            image_frame_lottie_1.handle = scui_image_prj_image_src_vedio_comfirmlottiejson;
-            scui_image_frame_make(&image_frame_lottie_1);
-            image_frame_lottie_2.type = scui_image_type_lottie;
-            image_frame_lottie_2.handle = scui_image_prj_image_src_vedio_musiclottiejson;
-            scui_image_frame_make(&image_frame_lottie_2);
-        }
+        // 构建一个图像帧
+        image_frame_gif.type = scui_image_type_gif;
+        image_frame_gif.handle = scui_image_prj_image_src_vedio_bulbgif;
+        image_frame_gif.gif.loop = 100;
+        scui_image_frame_make(&image_frame_gif);
+        
+        // 构建一个图像帧
+        image_frame_lottie_1.type = scui_image_type_lottie;
+        image_frame_lottie_1.handle = scui_image_prj_image_src_vedio_comfirmlottiejson;
+        scui_image_frame_make(&image_frame_lottie_1);
+        image_frame_lottie_2.type = scui_image_type_lottie;
+        image_frame_lottie_2.handle = scui_image_prj_image_src_vedio_musiclottiejson;
+        scui_image_frame_make(&image_frame_lottie_2);
         break;
     }
-    case scui_event_hide: {
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy: {
         
-        if (scui_event_check_finish(event)) {
-            
-            // 销毁一个图像帧
-            scui_image_frame_burn(&image_frame_gif);
-            
-            // 销毁一个图像帧
-            scui_image_frame_burn(&image_frame_lottie_1);
-            scui_image_frame_burn(&image_frame_lottie_2);
-        }
+        // 销毁一个图像帧
+        scui_image_frame_burn(&image_frame_gif);
+        
+        // 销毁一个图像帧
+        scui_image_frame_burn(&image_frame_lottie_1);
+        scui_image_frame_burn(&image_frame_lottie_2);
         break;
     }
     case scui_event_draw: {
@@ -154,7 +141,6 @@ void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

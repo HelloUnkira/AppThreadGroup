@@ -73,11 +73,11 @@ static void scui_roller_s_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
+        SCUI_LOG_INFO("scui_event_create");
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
+        SCUI_LOG_INFO("scui_event_destroy");
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))

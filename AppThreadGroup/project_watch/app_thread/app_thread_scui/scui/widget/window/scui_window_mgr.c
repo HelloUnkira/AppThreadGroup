@@ -46,6 +46,8 @@ void scui_window_list(scui_handle_t **list)
  */
 void scui_window_list_add(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    
     for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
         if (scui_window_mgr.list[idx] == handle) {
             SCUI_LOG_INFO("redundant operation");
@@ -65,6 +67,8 @@ void scui_window_list_add(scui_handle_t handle)
  */
 void scui_window_list_del(scui_handle_t handle)
 {
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_window));
+    
     /* 如果移除的是焦点,记得清空 */
     if (scui_window_mgr.active_curr == handle)
         scui_window_mgr.active_curr  = SCUI_HANDLE_INVALID;

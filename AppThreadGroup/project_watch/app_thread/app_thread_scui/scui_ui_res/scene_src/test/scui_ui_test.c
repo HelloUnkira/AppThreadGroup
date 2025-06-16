@@ -24,118 +24,112 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
         
-        if (scui_event_check_prepare(event)) {
+        /* 设置背景 */
+        scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_watchface_bg_01_bgjpg);
         
-            /* 设置背景 */
-            scui_widget_image_set(SCUI_UI_SCENE_TEST, scui_image_prj_image_src_watchface_bg_01_bgjpg);
-            
-            #if 1 /* test string widget */
-            scui_string_maker_t string_maker = {0};
-            string_maker.widget.type                = scui_widget_type_string;
-            // string_maker.widget.style.trans         = true;
-            string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
-            string_maker.args.line_width            = 2;
-            string_maker.args.mode_scroll           = 1;
-            string_maker.args.align_hor             = 2;
-            string_maker.args.align_ver             = 2;
-            string_maker.args.color.filter          = true;
-            string_maker.args.regrad                = true;
-            string_maker.draw_cache                 = true;
-            
-            string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
-            string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_MZ;
-            string_maker.args.size                  = font_size;
-            
-            /* test:全文本渐变 */
-            scui_coord_t grad_n = 8;
-            scui_color_t grad_s[8] = {
-                {.color.full = 0xFFFF5733}, {.color.full = 0xFFFFBD33},
-                {.color.full = 0xFF75FF33}, {.color.full = 0xFF33FF57},
-                {.color.full = 0xFF33FFBD}, {.color.full = 0xFF3375FF},
-                {.color.full = 0xFF5733FF}, {.color.full = 0xFFBD33FF},
-            };
-            
-            scui_coord_t y_offset = 25;
-            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
-            string_maker.widget.clip.y = y_offset;
-            string_maker.widget.clip.h = 50;
-            string_maker.text             = SCUI_MULTI_LANG_0X0029;
-            string_maker.args.line_under  = 1;
-            string_maker.args.line_delete = 0;
-            string_maker.args.color.color_s.full = 0xFFFFFFFF;
-            string_maker.args.color.color_e.full = 0xFFFFFFFF;
-            scui_widget_create(&string_maker, &handle_string[0], false);
-            scui_string_upgrade_grads(handle_string[0], grad_s, grad_n, false);
-            
-            y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
-            string_maker.widget.clip.y = y_offset;
-            string_maker.widget.clip.h = 50;
-            string_maker.text             = SCUI_MULTI_LANG_0X002e;
-            string_maker.args.line_under  = 0;
-            string_maker.args.line_delete = 1;
-            string_maker.args.color.color_s.full = 0xFFFF00FF;
-            string_maker.args.color.color_e.full = 0xFF00FF00;
-            scui_widget_create(&string_maker, &handle_string[1], false);
-            scui_string_upgrade_grads(handle_string[1], grad_s, grad_n, false);
-            
-            y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
-            string_maker.widget.clip.y = y_offset;
-            string_maker.widget.clip.h = 130;
-            string_maker.text             = SCUI_MULTI_LANG_0X0034;
-            string_maker.args.line_under  = 1;
-            string_maker.args.line_delete = 0;
-            string_maker.args.color.color_s.full = 0xFFFF0000;
-            string_maker.args.color.color_e.full = 0xFF0000FF;
-            string_maker.args.line_multi = true;
-            scui_widget_create(&string_maker, &handle_string[2], false);
-            scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, true);
-            
-            y_offset += string_maker.widget.clip.h + 10;
-            string_maker.widget.clip.x = SCUI_HOR_RES / 4;
-            string_maker.widget.clip.w = SCUI_HOR_RES / 2;
-            string_maker.widget.clip.y = y_offset;
-            string_maker.widget.clip.h = 130;
-            string_maker.text             = SCUI_MULTI_LANG_0X0042;
-            string_maker.args.line_under  = 0;
-            string_maker.args.line_delete = 1;
-            string_maker.args.color.color_s.full = 0xFF0000FF;
-            string_maker.args.color.color_e.full = 0xFFFF0000;
-            string_maker.args.line_multi = true;
-            scui_widget_create(&string_maker, &handle_string[3], false);
-            scui_string_upgrade_grads(handle_string[3], grad_s, grad_n, true);
-            #endif
-        }
+        #if 1 /* test string widget */
+        scui_string_maker_t string_maker = {0};
+        string_maker.widget.type                = scui_widget_type_string;
+        // string_maker.widget.style.trans         = true;
+        string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
+        string_maker.args.line_width            = 2;
+        string_maker.args.mode_scroll           = 1;
+        string_maker.args.align_hor             = 2;
+        string_maker.args.align_ver             = 2;
+        string_maker.args.color.filter          = true;
+        string_maker.args.regrad                = true;
+        string_maker.draw_cache                 = true;
+        
+        string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
+        string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_MZ;
+        string_maker.args.size                  = font_size;
+        
+        /* test:全文本渐变 */
+        scui_coord_t grad_n = 8;
+        scui_color_t grad_s[8] = {
+            {.color.full = 0xFFFF5733}, {.color.full = 0xFFFFBD33},
+            {.color.full = 0xFF75FF33}, {.color.full = 0xFF33FF57},
+            {.color.full = 0xFF33FFBD}, {.color.full = 0xFF3375FF},
+            {.color.full = 0xFF5733FF}, {.color.full = 0xFFBD33FF},
+        };
+        
+        scui_coord_t y_offset = 25;
+        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
+        string_maker.widget.clip.y = y_offset;
+        string_maker.widget.clip.h = 50;
+        string_maker.text             = SCUI_MULTI_LANG_0X0029;
+        string_maker.args.line_under  = 1;
+        string_maker.args.line_delete = 0;
+        string_maker.args.color.color_s.full = 0xFFFFFFFF;
+        string_maker.args.color.color_e.full = 0xFFFFFFFF;
+        scui_widget_create(&string_maker, &handle_string[0], false);
+        scui_string_upgrade_grads(handle_string[0], grad_s, grad_n, false);
+        
+        y_offset += string_maker.widget.clip.h + 10;
+        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
+        string_maker.widget.clip.y = y_offset;
+        string_maker.widget.clip.h = 50;
+        string_maker.text             = SCUI_MULTI_LANG_0X002e;
+        string_maker.args.line_under  = 0;
+        string_maker.args.line_delete = 1;
+        string_maker.args.color.color_s.full = 0xFFFF00FF;
+        string_maker.args.color.color_e.full = 0xFF00FF00;
+        scui_widget_create(&string_maker, &handle_string[1], false);
+        scui_string_upgrade_grads(handle_string[1], grad_s, grad_n, false);
+        
+        y_offset += string_maker.widget.clip.h + 10;
+        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
+        string_maker.widget.clip.y = y_offset;
+        string_maker.widget.clip.h = 130;
+        string_maker.text             = SCUI_MULTI_LANG_0X0034;
+        string_maker.args.line_under  = 1;
+        string_maker.args.line_delete = 0;
+        string_maker.args.color.color_s.full = 0xFFFF0000;
+        string_maker.args.color.color_e.full = 0xFF0000FF;
+        string_maker.args.line_multi = true;
+        scui_widget_create(&string_maker, &handle_string[2], false);
+        scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, true);
+        
+        y_offset += string_maker.widget.clip.h + 10;
+        string_maker.widget.clip.x = SCUI_HOR_RES / 4;
+        string_maker.widget.clip.w = SCUI_HOR_RES / 2;
+        string_maker.widget.clip.y = y_offset;
+        string_maker.widget.clip.h = 130;
+        string_maker.text             = SCUI_MULTI_LANG_0X0042;
+        string_maker.args.line_under  = 0;
+        string_maker.args.line_delete = 1;
+        string_maker.args.color.color_s.full = 0xFF0000FF;
+        string_maker.args.color.color_e.full = 0xFFFF0000;
+        string_maker.args.line_multi = true;
+        scui_widget_create(&string_maker, &handle_string[3], false);
+        scui_string_upgrade_grads(handle_string[3], grad_s, grad_n, true);
+        #endif
+        
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    }
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     
     case scui_event_ptr_down:
-        SCUI_LOG_INFO("scui_event_ptr_down");
         ptr_long_jump = false;
         break;
     case scui_event_ptr_hold:
-        SCUI_LOG_INFO("scui_event_ptr_hold");
-        if (event->ptr_tick > 3000)
-            ptr_long_jump = true;
+        if (event->ptr_tick > 3000) {
+            if (!ptr_long_jump) SCUI_LOG_WARN("ptr long hold");
+            ptr_long_jump = true;
+        }
         break;
     case scui_event_ptr_up:
-        SCUI_LOG_INFO("scui_event_ptr_up");
         if (ptr_long_jump)
             scui_ui_scene_return();
         break;
@@ -170,7 +164,6 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

@@ -225,6 +225,11 @@ void scui_widget_event_add(scui_handle_t handle, scui_event_cb_node_t *node);
  */
 void scui_widget_event_del(scui_handle_t handle, scui_event_cb_node_t *node);
 
+/*@brief 控件事件响应转移
+ *@param event 事件
+ */
+void scui_widget_event_shift(scui_event_t *event);
+
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

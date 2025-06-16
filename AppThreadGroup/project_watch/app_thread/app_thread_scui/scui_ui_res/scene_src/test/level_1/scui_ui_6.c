@@ -15,24 +15,19 @@ void scui_ui_scene_6_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
         scui_widget_draw(event->object, NULL, false);
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -135,7 +130,6 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -178,7 +172,6 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -250,7 +243,6 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -306,13 +298,11 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
             .arc.src_angle_s  = src_angle_s,
             .arc.src_angle_e  = src_angle_e,
         };
-        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
-        
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -368,13 +358,11 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
             .arc.src_angle_s  = src_angle_s,
             .arc.src_angle_e  = src_angle_e,
         };
-        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
-        
+        SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -403,7 +391,6 @@ void scui_ui_scene_6_6_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -432,7 +419,6 @@ void scui_ui_scene_6_7_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -461,7 +447,6 @@ void scui_ui_scene_6_8_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -490,7 +475,6 @@ void scui_ui_scene_6_9_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

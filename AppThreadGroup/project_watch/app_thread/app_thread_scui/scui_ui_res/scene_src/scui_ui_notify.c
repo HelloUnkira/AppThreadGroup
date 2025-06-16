@@ -46,42 +46,33 @@ void scui_ui_scene_notify_none_event(scui_event_t *event)
  */
 void scui_ui_scene_notify_event_proc(scui_event_t *event)
 {
-    SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        if (scui_event_check_prepare(event)) {
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type                = scui_widget_type_custom;
+        custom_maker.widget.style.trans         = true;
+        custom_maker.widget.clip.w              = SCUI_HOR_RES;
+        custom_maker.widget.parent              = event->object;
+        custom_maker.widget.clip.h              = 80;
+        custom_maker.widget.event_cb            = scui_ui_scene_notify_none_event;
+        scui_widget_create(&custom_maker, &custom_handle, false);
         
-            scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type                = scui_widget_type_custom;
-            custom_maker.widget.style.trans         = true;
-            custom_maker.widget.clip.w              = SCUI_HOR_RES;
-            custom_maker.widget.parent              = event->object;
-            custom_maker.widget.clip.h              = 80;
-            custom_maker.widget.event_cb            = scui_ui_scene_notify_none_event;
-            scui_widget_create(&custom_maker, &custom_handle, false);
-            
-            scui_widget_align_pos(custom_handle, event->object, scui_opt_align_icc, NULL);
-        }
+        scui_widget_align_pos(custom_handle, event->object, scui_opt_align_icc, NULL);
         
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    }
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -97,7 +88,6 @@ void scui_ui_scene_notify_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

@@ -132,12 +132,23 @@ void scui_widget_destroy(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
+    /* 控件默认设置为隐藏 */
+    scui_widget_state_show(handle, false);
+    
+    /* 控件销毁前:控件销毁事件 */
+    scui_event_t event = {
+        .object     = handle,
+        .style.sync = true,
+        .type       = scui_event_destroy,
+    };
+    scui_event_notify(&event);
+    
+    /* 得到控件实例 */
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_widget_map_t *widget_map = NULL;
     scui_widget_map_find(widget->type, &widget_map);
-    
+    /* 销毁流程 */
     widget_map->burn(handle);
-    
     /* 销毁控件实例 */
     SCUI_MEM_FREE(widget);
 }
@@ -162,6 +173,17 @@ void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
     widget_maker = local_maker;
     widget_map->make(widget, widget_maker, handle, layout);
     SCUI_MEM_FREE(widget_maker);
+    
+    /* 控件构建后:控件构建事件 */
+    scui_event_t event = {
+        .object     = widget->myself,
+        .style.sync = true,
+        .type       = scui_event_create,
+    };
+    scui_event_notify(&event);
+    
+    /* 控件默认设置为显示 */
+    scui_widget_state_show(widget->myself, false);
 }
 
 /*@brief 通过映射表调用创建一个控件树
@@ -183,18 +205,7 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
     do {
         /* 先创建根控件,然后延续依次创建剩下的控件 */
         /* 静态控件规则为,一个场景为一段连续句柄,父控件在前子控件在后 */
-        scui_widget_map_t *widget_map = NULL;
-        scui_widget_map_find(widget_maker->type, &widget_map);
-        /* 创建构造器实例 */
-        void *local_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
-        memcpy(local_maker, widget_maker, widget_map->maker);
-        /* 创建控件实例 */
-        widget = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->size);
-        memset(widget, 0, widget_map->size);
-        /* 构造流程 */
-        widget_maker = local_maker;
-        widget_map->make(widget, widget_maker, &handle, true);
-        SCUI_MEM_FREE(widget_maker);
+        scui_widget_create(widget_maker, &handle, true);
         /* 迭代到下一个句柄 */
         widget_maker = scui_handle_source(++handle);
         if (widget_maker == NULL)

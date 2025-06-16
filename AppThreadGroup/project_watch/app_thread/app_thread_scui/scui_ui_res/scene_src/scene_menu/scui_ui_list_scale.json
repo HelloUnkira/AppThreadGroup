@@ -10,17 +10,9 @@
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE",
             "widget.event_cb":              "scui_ui_scene_list_scale_event_proc",
+            "widget.child_num":             "10",
             "level":                        "0",
             "buffer":                       "true"
-        },
-        {
-            "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
-            "widget.style.sched_anima":     "true",
-            "widget.clip.w":                "SCUI_HOR_RES",
-            "widget.clip.h":                "SCUI_VER_RES",
-            "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_LIST",
-            "widget.parent":                "SCUI_UI_SCENE_LIST_SCALE"
         },
         {
             "widget.type":                  "scui_widget_type_custom",

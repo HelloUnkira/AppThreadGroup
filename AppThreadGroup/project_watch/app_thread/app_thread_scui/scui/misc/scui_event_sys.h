@@ -16,13 +16,14 @@ typedef enum {
     scui_event_anima_elapse,    /* 动画轮转调度 */
     scui_event_focus_lost,      /* 窗口焦点失去事件 */
     scui_event_focus_get,       /* 窗口焦点获取事件 */
-    scui_event_local_res,       /* 窗口绑定资源事件 */
-    scui_event_hide,            /* 窗口隐藏事件 */
-    scui_event_show,            /* 窗口显示事件 */
     scui_event_refr,            /* 窗口刷新事件 */
     scui_event_draw,            /* 控件绘制事件 */
-    scui_event_draw_empty,      /* 控件绘制事件(内部转义) */
+    scui_event_draw_empty,      /* 控件绘制事件(绘制转义) */
+    scui_event_show,            /* 控件隐藏事件 */
+    scui_event_hide,            /* 控件显示事件 */
+    scui_event_create,          /* 控件创建事件 */
     scui_event_layout,          /* 控件布局更新 */
+    scui_event_destroy,         /* 控件销毁事件 */
     scui_event_child_nums,      /* 控件添加移除子控件 */
     scui_event_child_size,      /* 控件的子控件坐标改变 */
     scui_event_child_pos,       /* 控件的子控件坐标改变 */

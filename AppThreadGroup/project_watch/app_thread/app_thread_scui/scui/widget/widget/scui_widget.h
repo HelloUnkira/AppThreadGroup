@@ -216,6 +216,18 @@ void scui_widget_surface_swap(scui_widget_t *widget, scui_surface_t *surface);
  */
 void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
+/*@brief 控件显示状态更新
+ *@param handle  控件句柄
+ *@param recurse 递归处理
+ */
+void scui_widget_state_show(scui_handle_t handle, bool recurse);
+
+/*@brief 控件隐藏状态更新
+ *@param handle  控件句柄
+ *@param recurse 递归处理
+ */
+void scui_widget_state_hide(scui_handle_t handle, bool recurse);
+
 /*@brief 控件透明度设置撤销
  *@param handle  控件句柄
  *@param alpha   控件透明度

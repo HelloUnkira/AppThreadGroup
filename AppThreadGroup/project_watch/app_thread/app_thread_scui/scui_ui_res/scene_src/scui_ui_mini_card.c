@@ -72,29 +72,6 @@ void scui_ui_scene_mini_card_bar_arc_event(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
-void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
-{
-    // 转移至控件调度
-    if (event->type < scui_event_widget_s ||
-        event->type > scui_event_widget_e) {
-        scui_widget_map_t *widget_map = NULL;
-        scui_widget_map_find(scui_widget_type(event->object), &widget_map);
-        if (widget_map->invoke != NULL)
-            widget_map->invoke(event);
-        
-        return;
-    }
-    
-    scui_coord_t scroll_pct = 0;
-    scui_scroll_percent_get(event->object, &scroll_pct);
-    SCUI_LOG_INFO("pct:%d", scroll_pct);
-    scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
-    scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
-}
-
-/*@brief 控件事件响应回调
- *@param event 事件
- */
 static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
     // 特殊的固定调用
@@ -103,11 +80,9 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
@@ -733,7 +708,6 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -940,9 +914,610 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
+void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create: {
+        
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type                = scui_widget_type_custom;
+        custom_maker.widget.style.trans         = true;
+        custom_maker.widget.style.sched_anima   = true;
+        custom_maker.widget.clip.w              = SCUI_HOR_RES;
+        custom_maker.widget.parent              = event->object;
+        
+        // 上半部分留白占用
+        custom_maker.widget.style.indev_ptr     = false;
+        custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
+        custom_maker.widget.event_cb            = NULL;
+        scui_widget_create(&custom_maker, &custom_handle, false);
+        
+        // list的各个子控件
+        custom_maker.widget.style.indev_ptr     = true;
+        custom_maker.widget.clip.h              = 180;
+        custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
+        for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
+            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_linear_item_t linear_item = {.draw_idx = idx,};
+            scui_linear_item_gets(event->object, &linear_item);
+            linear_item.handle_m = custom_handle;
+            scui_linear_item_sets(event->object, &linear_item);
+        }
+        
+        // 下半部分留白占用
+        custom_maker.widget.style.indev_ptr     = false;
+        custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
+        custom_maker.widget.event_cb            = NULL;
+        scui_widget_create(&custom_maker, &custom_handle, false);
+        
+        // list的各个子控件树
+        for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
+            
+            scui_custom_maker_t custom_maker = {0};
+            scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
+            custom_maker.widget.type        = scui_widget_type_custom;
+            custom_maker.widget.style.trans = true;
+            custom_maker.widget.clip.w      = 410;
+            custom_maker.widget.clip.h      = 180;
+            custom_maker.widget.child_num   = 5;
+            custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
+            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_linear_item_t linear_item = {.draw_idx = idx,};
+            scui_linear_item_gets(event->object, &linear_item);
+            linear_item.handle_s = custom_handle;
+            scui_linear_item_sets(event->object, &linear_item);
+            scui_handle_t *handle_m = NULL;
+            scui_custom_handle_m(custom_handle, &handle_m);
+            *handle_m = linear_item.handle_m;
+            
+            scui_string_maker_t string_maker = {0};
+            scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
+            string_maker.widget.type        = scui_widget_type_string;
+            string_maker.widget.style.trans = true;
+            string_maker.widget.parent      = custom_handle;
+            string_maker.widget.clip.w      = custom_maker.widget.clip.w;
+            string_maker.widget.clip.h      = custom_maker.widget.clip.h;
+            string_maker.args.align_hor     = 2;
+            string_maker.args.align_ver     = 2;
+            string_maker.args.color.filter  = true;
+            // string_maker.draw_cache         = true;
+            string_maker.font_idx           = SCUI_FONT_IDX_32;
+            
+            // 特定卡片给自己添加额外控件
+            scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
+            switch (type) {
+            case scui_ui_scene_mini_card_type_music_control: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0176;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_ui_res_local->title_music = string_handle;
+                break;
+            }
+            case scui_ui_scene_mini_card_type_hr:
+            case scui_ui_scene_mini_card_type_spo2:
+            case scui_ui_scene_mini_card_type_stress: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                
+                if (type == scui_ui_scene_mini_card_type_hr) {
+                    string_t_maker.args.color.color_s.full = 0xFFFF0000;
+                    string_t_maker.args.color.color_e.full = 0xFFFF0000;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X0019;
+                }
+                if (type == scui_ui_scene_mini_card_type_spo2) {
+                    string_t_maker.args.color.color_s.full = 0xFFFF0000;
+                    string_t_maker.args.color.color_e.full = 0xFFFF0000;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X0040;
+                }
+                if (type == scui_ui_scene_mini_card_type_stress) {
+                    string_t_maker.args.color.color_s.full = 0xFF00F4EA;
+                    string_t_maker.args.color.color_e.full = 0xFF00F4EA;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X0049;
+                }
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                string_t_maker.widget.clip.y = 69;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                
+                if (type == scui_ui_scene_mini_card_type_hr)
+                    scui_ui_res_local->data_hr = string_handle;
+                if (type == scui_ui_scene_mini_card_type_spo2)
+                    scui_ui_res_local->data_spo2 = string_handle;
+                if (type == scui_ui_scene_mini_card_type_stress)
+                    scui_ui_res_local->data_stress = string_handle;
+                
+                string_t_maker.widget.clip.y = 129;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                
+                if (type == scui_ui_scene_mini_card_type_hr)
+                    scui_ui_res_local->passby_hr = string_handle;
+                if (type == scui_ui_scene_mini_card_type_spo2)
+                    scui_ui_res_local->passby_spo2 = string_handle;
+                if (type == scui_ui_scene_mini_card_type_stress)
+                    scui_ui_res_local->passby_stress = string_handle;
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_weather: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFF06AEFF;
+                string_t_maker.args.color.color_e.full = 0xFF06AEFF;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0092;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                string_t_maker.widget.clip.y = 69;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_weather_cur = string_handle;
+                
+                string_t_maker.widget.clip.y = 129;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_weather_lim = string_handle;
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_alarm: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFFDE8926;
+                string_t_maker.args.color.color_e.full = 0xFFDE8926;
+                string_t_maker.text = SCUI_MULTI_LANG_0X00e6;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                if (scui_presenter.alarm_none()) {
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X00f0;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    
+                    #if 1
+                    scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
+                    
+                    string_t_maker.widget.clip.x += scui_image_w(image) + 10;
+                    string_t_maker.widget.clip.y  = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X00e7;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    #endif
+                } else {
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_alarm = string_handle;
+                    
+                    string_t_maker.widget.clip.y = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_alarm_date = string_handle;
+                    
+                }
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_sleep: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFF06E2ED;
+                string_t_maker.args.color.color_e.full = 0xFF06E2ED;
+                string_t_maker.text = SCUI_MULTI_LANG_0X004f;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                if (scui_presenter.sleep_none()) {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X0051;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    
+                } else {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_sleep = string_handle;
+                    
+                }
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_sport_record: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFFF83600;
+                string_t_maker.args.color.color_e.full = 0xFFF83600;
+                string_t_maker.text = SCUI_MULTI_LANG_0X01c5;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                if (scui_presenter.sport_record_none()) {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    
+                } else {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_sport_record = string_handle;
+                    
+                    string_t_maker.widget.clip.y = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_sport_record_time = string_handle;
+                    
+                }
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_women_health: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFFD83371;
+                string_t_maker.args.color.color_e.full = 0xFFD83371;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0110;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                if (scui_presenter.women_health_none()) {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    
+                } else {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_women_health = string_handle;
+                    
+                    string_t_maker.widget.clip.y = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_women_health_time = string_handle;
+                    
+                }
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_compass: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFFFD2627;
+                string_t_maker.args.color.color_e.full = 0xFFFD2627;
+                string_t_maker.text = SCUI_MULTI_LANG_0X011c;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                if (scui_presenter.compass_invalid()) {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "--");
+                    
+                    #if 1
+                    scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
+                    
+                    string_t_maker.widget.clip.x += scui_image_w(image) + 10;
+                    string_t_maker.widget.clip.y = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    string_t_maker.text = SCUI_MULTI_LANG_0X00f6;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    #endif
+                } else {
+                    
+                    string_t_maker.widget.clip.y = 69;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_compass = string_handle;
+                    
+                    string_t_maker.widget.clip.y = 129;
+                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_compass_info = string_handle;
+                    
+                }
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_altimeter: {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFF98FF02;
+                string_t_maker.args.color.color_e.full = 0xFF98FF02;
+                string_t_maker.text = SCUI_MULTI_LANG_0X012a;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                string_t_maker.widget.clip.x = 36;
+                string_t_maker.widget.clip.y = 77;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_altimeter_info1 = string_handle;
+                
+                string_t_maker.widget.clip.x = 410 / 2 + 36;
+                string_t_maker.widget.clip.y = 77;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_altimeter_info2 = string_handle;
+                
+                string_t_maker.widget.clip.x = 36;
+                string_t_maker.widget.clip.y = 127;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0127;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                string_t_maker.widget.clip.x = 410 / 2 + 36;
+                string_t_maker.widget.clip.y = 127;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0126;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_stopwatch : {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFF00E85E;
+                string_t_maker.args.color.color_e.full = 0xFF00E85E;
+                string_t_maker.text = SCUI_MULTI_LANG_0X013f;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_countdown : {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFFDF7331;
+                string_t_maker.args.color.color_e.full = 0xFFDF7331;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0139;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                #if 1
+                scui_handle_t image = scui_image_prj_image_src_19_widget_timer_01_bgbmp;
+                scui_coord_t  image_w = scui_image_w(image);
+                scui_coord_t  image_h = scui_image_h(image);
+                scui_area_t   image_clip4[4] = {
+                    [0] = {.x =  22 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
+                    [1] = {.x = 116 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
+                    [2] = {.x = 212 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
+                    [3] = {.x = 310 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
+                };
+                for (uint8_t idx = 0; idx < 4; idx++) {
+                    string_t_maker.widget.clip = image_clip4[idx];
+                    string_t_maker.args.align_hor = 2;
+                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                    string_t_maker.font_idx = 0;
+                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_string_update_str(string_handle, "");
+                    scui_ui_res_local->data_countdown[idx] = string_handle;
+                }
+                
+                #endif
+                
+                break;
+            }
+            case scui_ui_scene_mini_card_type_world_time : {
+                
+                scui_string_maker_t string_t_maker = string_maker;
+                string_t_maker.widget.clip.x = 24;
+                string_t_maker.widget.clip.y = 22;
+                string_t_maker.widget.clip.w = 410 - 24 * 2;
+                string_t_maker.widget.clip.h = 40;
+                string_t_maker.args.align_hor = 0;
+                string_t_maker.args.color.color_s.full = 0xFF1977FF;
+                string_t_maker.args.color.color_e.full = 0xFF1977FF;
+                string_t_maker.text = SCUI_MULTI_LANG_0X0140;
+                
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                
+                string_t_maker.widget.clip.x = 36;
+                string_t_maker.widget.clip.y = 77;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_world_time1_time = string_handle;
+                
+                string_t_maker.widget.clip.x = 410 / 2 + 36;
+                string_t_maker.widget.clip.y = 77;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
+                string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_world_time2_time = string_handle;
+                
+                string_t_maker.widget.clip.x = 36;
+                string_t_maker.widget.clip.y = 127;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_world_time1_unit = string_handle;
+                
+                string_t_maker.widget.clip.x = 410 / 2 + 36;
+                string_t_maker.widget.clip.y = 127;
+                string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
+                string_t_maker.widget.clip.h = 36;
+                string_t_maker.args.align_hor = 2;
+                string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
+                string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
+                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_string_update_str(string_handle, "");
+                scui_ui_res_local->data_world_time2_unit = string_handle;
+                
+                break;
+            }
+            
+            default:
+                break;
+            }
+        }
+        
+        scui_ui_res_local->linear = event->object;
+        scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_MINI_CARD_BAR_ARC;
+        break;
+    }
+    case scui_event_widget_scroll_layout:
+    case scui_event_widget_scroll_start:
+    case scui_event_widget_scroll_keep:
+    case scui_event_widget_scroll_over: {
+        
+        scui_coord_t scroll_pct = 0;
+        scui_scroll_percent_get(event->object, &scroll_pct);
+        scui_ui_res_local->bar_arc.bar_pct = scroll_pct;
+        scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
+        break;
+    }
+    default:
+        break;
+    }
+    
+    
+    
+    // 转移至控件调度
+    scui_widget_event_shift(event);
 }
 
 /*@brief 控件事件响应回调
@@ -951,10 +1526,6 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
 void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         
         /* 做个缓速 */
@@ -968,623 +1539,46 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         
         scui_widget_draw(event->object, NULL, false);
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create: {
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        if (scui_event_check_prepare(event)) {
-            // 清空图像资源缓存
-            scui_image_cache_clear();
-            scui_ui_scene_mini_card_cfg();
-            
-            // 销毁该占用控件, 为list控件留出位置
-            scui_widget_destroy(SCUI_UI_SCENE_MINI_CARD_LIST);
-            scui_linear_maker_t linear_maker = {0};
-            scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
-            linear_maker.widget.type = scui_widget_type_linear;
-            linear_maker.widget.style.indev_enc = true;
-            linear_maker.widget.style.indev_key = true;
-            linear_maker.widget.clip.w = SCUI_HOR_RES;
-            linear_maker.widget.clip.h = SCUI_VER_RES;
-            linear_maker.widget.parent = SCUI_UI_SCENE_MINI_CARD;
-            linear_maker.widget.event_cb   = scui_ui_scene_mini_card_scroll_event;
-            linear_maker.widget.child_num  = 50;
-            linear_maker.scroll.pos        = scui_opt_pos_c;
-            linear_maker.scroll.dir        = scui_opt_dir_ver;
-            linear_maker.scroll.space      = 3;
-            linear_maker.scroll.route_enc  = 117;
-            linear_maker.scroll.route_key  = 117;
-            linear_maker.scroll.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
-            linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
-            linear_maker.scroll.springback = 70;
-            linear_maker.list_num = scui_ui_scene_mini_card_num;
-            scui_widget_create(&linear_maker, &linear_handle, false);
-            scui_ui_res_local->linear = linear_handle;
-            
-            scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type                = scui_widget_type_custom;
-            custom_maker.widget.style.trans         = true;
-            custom_maker.widget.style.sched_anima   = true;
-            custom_maker.widget.clip.w              = SCUI_HOR_RES;
-            custom_maker.widget.parent              = linear_handle;
-            
-            // 上半部分留白占用
-            custom_maker.widget.style.indev_ptr     = false;
-            custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
-            custom_maker.widget.event_cb            = NULL;
-            scui_widget_create(&custom_maker, &custom_handle, false);
-            
-            // list的各个子控件
-            custom_maker.widget.style.indev_ptr     = true;
-            custom_maker.widget.clip.h              = 180;
-            custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
-            for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-                scui_widget_create(&custom_maker, &custom_handle, false);
-                scui_linear_item_t linear_item = {.draw_idx = idx,};
-                scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
-                linear_item.handle_m = custom_handle;
-                scui_linear_item_sets(scui_ui_res_local->linear, &linear_item);
-            }
-            
-            // 下半部分留白占用
-            custom_maker.widget.style.indev_ptr     = false;
-            custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
-            custom_maker.widget.event_cb            = NULL;
-            scui_widget_create(&custom_maker, &custom_handle, false);
-            
-            // list的各个子控件树
-            for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-                
-                scui_custom_maker_t custom_maker = {0};
-                scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
-                custom_maker.widget.type        = scui_widget_type_custom;
-                custom_maker.widget.style.trans = true;
-                custom_maker.widget.clip.w      = 410;
-                custom_maker.widget.clip.h      = 180;
-                custom_maker.widget.child_num   = 5;
-                custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
-                scui_widget_create(&custom_maker, &custom_handle, false);
-                scui_linear_item_t linear_item = {.draw_idx = idx,};
-                scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
-                linear_item.handle_s = custom_handle;
-                scui_linear_item_sets(scui_ui_res_local->linear, &linear_item);
-                scui_handle_t *handle_m = NULL;
-                scui_custom_handle_m(custom_handle, &handle_m);
-                *handle_m = linear_item.handle_m;
-                
-                scui_string_maker_t string_maker = {0};
-                scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
-                string_maker.widget.type        = scui_widget_type_string;
-                string_maker.widget.style.trans = true;
-                string_maker.widget.parent      = custom_handle;
-                string_maker.widget.clip.w      = custom_maker.widget.clip.w;
-                string_maker.widget.clip.h      = custom_maker.widget.clip.h;
-                string_maker.args.align_hor     = 2;
-                string_maker.args.align_ver     = 2;
-                string_maker.args.color.filter  = true;
-                // string_maker.draw_cache         = true;
-                string_maker.font_idx           = SCUI_FONT_IDX_32;
-                
-                // 特定卡片给自己添加额外控件
-                scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
-                switch (type) {
-                case scui_ui_scene_mini_card_type_music_control: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0176;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_ui_res_local->title_music = string_handle;
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_hr:
-                case scui_ui_scene_mini_card_type_spo2:
-                case scui_ui_scene_mini_card_type_stress: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    
-                    if (type == scui_ui_scene_mini_card_type_hr) {
-                        string_t_maker.args.color.color_s.full = 0xFFFF0000;
-                        string_t_maker.args.color.color_e.full = 0xFFFF0000;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X0019;
-                    }
-                    if (type == scui_ui_scene_mini_card_type_spo2) {
-                        string_t_maker.args.color.color_s.full = 0xFFFF0000;
-                        string_t_maker.args.color.color_e.full = 0xFFFF0000;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X0040;
-                    }
-                    if (type == scui_ui_scene_mini_card_type_stress) {
-                        string_t_maker.args.color.color_s.full = 0xFF00F4EA;
-                        string_t_maker.args.color.color_e.full = 0xFF00F4EA;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X0049;
-                    }
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    string_t_maker.widget.clip.y = 69;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    
-                    if (type == scui_ui_scene_mini_card_type_hr)
-                        scui_ui_res_local->data_hr = string_handle;
-                    if (type == scui_ui_scene_mini_card_type_spo2)
-                        scui_ui_res_local->data_spo2 = string_handle;
-                    if (type == scui_ui_scene_mini_card_type_stress)
-                        scui_ui_res_local->data_stress = string_handle;
-                    
-                    string_t_maker.widget.clip.y = 129;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    
-                    if (type == scui_ui_scene_mini_card_type_hr)
-                        scui_ui_res_local->passby_hr = string_handle;
-                    if (type == scui_ui_scene_mini_card_type_spo2)
-                        scui_ui_res_local->passby_spo2 = string_handle;
-                    if (type == scui_ui_scene_mini_card_type_stress)
-                        scui_ui_res_local->passby_stress = string_handle;
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_weather: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFF06AEFF;
-                    string_t_maker.args.color.color_e.full = 0xFF06AEFF;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0092;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    string_t_maker.widget.clip.y = 69;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_weather_cur = string_handle;
-                    
-                    string_t_maker.widget.clip.y = 129;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_weather_lim = string_handle;
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_alarm: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFFDE8926;
-                    string_t_maker.args.color.color_e.full = 0xFFDE8926;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X00e6;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    if (scui_presenter.alarm_none()) {
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X00f0;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        
-                        #if 1
-                        scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
-                        
-                        string_t_maker.widget.clip.x += scui_image_w(image) + 10;
-                        string_t_maker.widget.clip.y  = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X00e7;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        #endif
-                    } else {
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_alarm = string_handle;
-                        
-                        string_t_maker.widget.clip.y = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_alarm_date = string_handle;
-                        
-                    }
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_sleep: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFF06E2ED;
-                    string_t_maker.args.color.color_e.full = 0xFF06E2ED;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X004f;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    if (scui_presenter.sleep_none()) {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X0051;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        
-                    } else {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_sleep = string_handle;
-                        
-                    }
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_sport_record: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFFF83600;
-                    string_t_maker.args.color.color_e.full = 0xFFF83600;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X01c5;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    if (scui_presenter.sport_record_none()) {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        
-                    } else {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_sport_record = string_handle;
-                        
-                        string_t_maker.widget.clip.y = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_sport_record_time = string_handle;
-                        
-                    }
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_women_health: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFFD83371;
-                    string_t_maker.args.color.color_e.full = 0xFFD83371;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0110;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    if (scui_presenter.women_health_none()) {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        
-                    } else {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_women_health = string_handle;
-                        
-                        string_t_maker.widget.clip.y = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_women_health_time = string_handle;
-                        
-                    }
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_compass: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFFFD2627;
-                    string_t_maker.args.color.color_e.full = 0xFFFD2627;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X011c;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    if (scui_presenter.compass_invalid()) {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "--");
-                        
-                        #if 1
-                        scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
-                        
-                        string_t_maker.widget.clip.x += scui_image_w(image) + 10;
-                        string_t_maker.widget.clip.y = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        string_t_maker.text = SCUI_MULTI_LANG_0X00f6;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        #endif
-                    } else {
-                        
-                        string_t_maker.widget.clip.y = 69;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_compass = string_handle;
-                        
-                        string_t_maker.widget.clip.y = 129;
-                        string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                        string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_compass_info = string_handle;
-                        
-                    }
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_altimeter: {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFF98FF02;
-                    string_t_maker.args.color.color_e.full = 0xFF98FF02;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X012a;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    string_t_maker.widget.clip.x = 36;
-                    string_t_maker.widget.clip.y = 77;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_altimeter_info1 = string_handle;
-                    
-                    string_t_maker.widget.clip.x = 410 / 2 + 36;
-                    string_t_maker.widget.clip.y = 77;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_altimeter_info2 = string_handle;
-                    
-                    string_t_maker.widget.clip.x = 36;
-                    string_t_maker.widget.clip.y = 127;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0127;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    string_t_maker.widget.clip.x = 410 / 2 + 36;
-                    string_t_maker.widget.clip.y = 127;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0126;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_stopwatch : {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFF00E85E;
-                    string_t_maker.args.color.color_e.full = 0xFF00E85E;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X013f;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_countdown : {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFFDF7331;
-                    string_t_maker.args.color.color_e.full = 0xFFDF7331;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0139;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    #if 1
-                    scui_handle_t image = scui_image_prj_image_src_19_widget_timer_01_bgbmp;
-                    scui_coord_t  image_w = scui_image_w(image);
-                    scui_coord_t  image_h = scui_image_h(image);
-                    scui_area_t   image_clip4[4] = {
-                        [0] = {.x =  22 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
-                        [1] = {.x = 116 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
-                        [2] = {.x = 212 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
-                        [3] = {.x = 310 + (10) / 2, .y = 69 + image_h / 2 - 36 / 2, .w = (image_w - 10), .h = 36,},
-                    };
-                    for (uint8_t idx = 0; idx < 4; idx++) {
-                        string_t_maker.widget.clip = image_clip4[idx];
-                        string_t_maker.args.align_hor = 2;
-                        string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                        string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                        string_t_maker.font_idx = 0;
-                        scui_widget_create(&string_t_maker, &string_handle, false);
-                        scui_string_update_str(string_handle, "");
-                        scui_ui_res_local->data_countdown[idx] = string_handle;
-                    }
-                    
-                    #endif
-                    
-                    break;
-                }
-                case scui_ui_scene_mini_card_type_world_time : {
-                    
-                    scui_string_maker_t string_t_maker = string_maker;
-                    string_t_maker.widget.clip.x = 24;
-                    string_t_maker.widget.clip.y = 22;
-                    string_t_maker.widget.clip.w = 410 - 24 * 2;
-                    string_t_maker.widget.clip.h = 40;
-                    string_t_maker.args.align_hor = 0;
-                    string_t_maker.args.color.color_s.full = 0xFF1977FF;
-                    string_t_maker.args.color.color_e.full = 0xFF1977FF;
-                    string_t_maker.text = SCUI_MULTI_LANG_0X0140;
-                    
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    
-                    string_t_maker.widget.clip.x = 36;
-                    string_t_maker.widget.clip.y = 77;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_world_time1_time = string_handle;
-                    
-                    string_t_maker.widget.clip.x = 410 / 2 + 36;
-                    string_t_maker.widget.clip.y = 77;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
-                    string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_world_time2_time = string_handle;
-                    
-                    string_t_maker.widget.clip.x = 36;
-                    string_t_maker.widget.clip.y = 127;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_world_time1_unit = string_handle;
-                    
-                    string_t_maker.widget.clip.x = 410 / 2 + 36;
-                    string_t_maker.widget.clip.y = 127;
-                    string_t_maker.widget.clip.w = 410 / 2 - 36 * 2;
-                    string_t_maker.widget.clip.h = 36;
-                    string_t_maker.args.align_hor = 2;
-                    string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
-                    string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
-                    scui_string_update_str(string_handle, "");
-                    scui_ui_res_local->data_world_time2_unit = string_handle;
-                    
-                    break;
-                }
-                
-                default:
-                    break;
-                }
-            }
-            
-            scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_MINI_CARD_BAR_ARC;
-            scui_ui_bar_arc_reset(&scui_ui_res_local->bar_arc);
-        }
+        // 清空图像资源缓存
+        scui_image_cache_clear();
+        scui_ui_scene_mini_card_cfg();
+        
+        // 销毁该占用控件, 为list控件留出位置
+        scui_linear_maker_t linear_maker = {0};
+        scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
+        linear_maker.widget.type = scui_widget_type_linear;
+        linear_maker.widget.style.indev_enc = true;
+        linear_maker.widget.style.indev_key = true;
+        linear_maker.widget.clip.w = SCUI_HOR_RES;
+        linear_maker.widget.clip.h = SCUI_VER_RES;
+        linear_maker.widget.parent = event->object;
+        linear_maker.widget.event_cb   = scui_ui_scene_mini_card_scroll_event;
+        linear_maker.widget.child_num  = 50;
+        linear_maker.scroll.pos        = scui_opt_pos_c;
+        linear_maker.scroll.dir        = scui_opt_dir_ver;
+        linear_maker.scroll.space      = 3;
+        linear_maker.scroll.route_enc  = 117;
+        linear_maker.scroll.route_key  = 117;
+        linear_maker.scroll.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
+        linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
+        linear_maker.scroll.springback = 70;
+        linear_maker.list_num = scui_ui_scene_mini_card_num;
+        scui_widget_create(&linear_maker, &linear_handle, false);
+        
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    }
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

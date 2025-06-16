@@ -79,7 +79,6 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         
         scui_handle_t  parent = scui_widget_parent(event->object);
         scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
-        SCUI_LOG_INFO("list_idx:%d", index);
         
         scui_handle_t image   = scui_ui_scene_list_image[index];
         scui_handle_t scale_ofs = scui_ui_res_local->scale_ofs;
@@ -229,7 +228,6 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }
@@ -237,74 +235,84 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_honeycomb_scroll_event_proc(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_create: {
+        
+        scui_ui_res_local->scroll_width  = scui_widget_clip(event->object).w;
+        scui_ui_res_local->scroll_height = scui_widget_clip(event->object).h;
+        
+        #if SCUI_UI_HONEYCOMB_SCALE_MODE
+        scui_handle_t icon = scui_ui_scene_list_image[0];
+        SCUI_ASSERT(scui_image_w(icon) == scui_image_h(icon));
+        scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_SCALE_DEF;
+        scui_coord_t icon_w = scui_ui_res_local->scale_ofs;
+        scui_coord_t icon_h = scui_ui_res_local->scale_ofs;
+        #else
+        scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_OFS_DEF;
+        scui_handle_t icon = scui_ui_scene_list_image[0];
+        icon += scui_ui_res_local->scale_ofs;
+        scui_coord_t icon_w = scui_image_w(icon);
+        scui_coord_t icon_h = scui_image_h(icon);
+        #endif
+        
+        scui_point_t edge = {.x = icon_w, .y = icon_h,};
+        scui_scroll_edge(event->object, &edge);
+        
+        uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
+        scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
+        scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
+        
+        scui_custom_maker_t custom_maker = {0};
+        scui_handle_t custom_handle         = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type            = scui_widget_type_custom;
+        custom_maker.widget.style.trans     = true;
+        custom_maker.widget.style.indev_ptr = true;
+        custom_maker.widget.clip.w          = icon_w;
+        custom_maker.widget.clip.h          = icon_h;
+        custom_maker.widget.parent          = event->object;
+        custom_maker.widget.event_cb        = scui_ui_scene_honeycomb_icon_event_proc;
+        
+        for (uint8_t idx = 0; idx < SCUI_UI_HONEYCOMB_LIST_NUM; idx++) {
+            custom_maker.widget.clip.x = list_layout[idx].x;
+            custom_maker.widget.clip.y = list_layout[idx].y;
+            scui_widget_create(&custom_maker, &custom_handle, false);
+        }
+        
+        SCUI_MEM_FREE(list_layout);
+        
+        break;
+    }
+    default:
+        break;
+    }
+    
+    
+    
+    // 转移至控件调度
+    scui_widget_event_shift(event);
+}
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        if (scui_event_check_prepare(event)) {
-            
-            scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
-            
-            scui_ui_res_local->scroll_width  = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).w;
-            scui_ui_res_local->scroll_height = scui_widget_clip(SCUI_UI_SCENE_HONEYCOMB_SCROLL).h;
-            
-            #if SCUI_UI_HONEYCOMB_SCALE_MODE
-            scui_handle_t icon = scui_ui_scene_list_image[0];
-            SCUI_ASSERT(scui_image_w(icon) == scui_image_h(icon));
-            scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_SCALE_DEF;
-            scui_coord_t icon_w = scui_ui_res_local->scale_ofs;
-            scui_coord_t icon_h = scui_ui_res_local->scale_ofs;
-            #else
-            scui_ui_res_local->scale_ofs = SCUI_UI_HONEYCOMB_OFS_DEF;
-            scui_handle_t icon = scui_ui_scene_list_image[0];
-            icon += scui_ui_res_local->scale_ofs;
-            scui_coord_t icon_w = scui_image_w(icon);
-            scui_coord_t icon_h = scui_image_h(icon);
-            #endif
-            
-            scui_point_t edge = {.x = icon_w, .y = icon_h,};
-            scui_scroll_edge(SCUI_UI_SCENE_HONEYCOMB_SCROLL, &edge);
-            
-            uintptr_t layout_size = SCUI_UI_HONEYCOMB_LIST_NUM * sizeof(scui_point_t);
-            scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
-            scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
-            
-            scui_custom_maker_t custom_maker = {0};
-            scui_handle_t custom_handle         = SCUI_HANDLE_INVALID;
-            custom_maker.widget.type            = scui_widget_type_custom;
-            custom_maker.widget.style.trans     = true;
-            custom_maker.widget.style.indev_ptr = true;
-            custom_maker.widget.clip.w          = icon_w;
-            custom_maker.widget.clip.h          = icon_h;
-            custom_maker.widget.parent          = SCUI_UI_SCENE_HONEYCOMB_SCROLL;
-            custom_maker.widget.event_cb        = scui_ui_scene_honeycomb_icon_event_proc;
-            
-            for (uint8_t idx = 0; idx < SCUI_UI_HONEYCOMB_LIST_NUM; idx++) {
-                custom_maker.widget.clip.x = list_layout[idx].x;
-                custom_maker.widget.clip.y = list_layout[idx].y;
-                scui_widget_create(&custom_maker, &custom_handle, false);
-            }
-            
-            SCUI_MEM_FREE(list_layout);
-        }
+        scui_ui_scene_list_cfg(scui_ui_scene_list_type_honeycomb);
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
@@ -366,7 +374,6 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
         break;
     }
     default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
         break;
     }
 }

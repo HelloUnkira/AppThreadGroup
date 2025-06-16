@@ -180,22 +180,21 @@ void scui_linear_s_event(scui_event_t *event)
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_custom_t *custom = (void *)widget;
     
-    // 子控件树会逆向链接到列表控件
-    SCUI_ASSERT(custom->handle_m != SCUI_HANDLE_INVALID);
-    scui_handle_t  handle = scui_widget_parent(custom->handle_m);
-    scui_linear_t *linear = scui_handle_source_check(handle);
-    
     switch (event->type) {
         case scui_event_draw_empty: {
-            scui_event_mask_keep(event);
+            // 子控件树会逆向链接到列表控件
+            SCUI_ASSERT(custom->handle_m != SCUI_HANDLE_INVALID);
+            scui_handle_t  handle = scui_widget_parent(custom->handle_m);
+            scui_linear_t *linear = scui_handle_source_check(handle);
+            
             // 这是一个特殊事件
             // 子控件树没有绘制画布时
             // 发送此事件激活子控件绘制流程
             SCUI_ASSERT(scui_widget_surface(event->object) == NULL);
             
-            scui_handle_t handle = scui_widget_root(event->object);
+            scui_handle_t handle_r = scui_widget_root(event->object);
             for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
-                if (linear->list_widget_s[idx] != handle)
+                if (linear->list_widget_s[idx] != handle_r)
                     continue;
                 // scui_widget_clip_check(scui_widget_root(handle), true);
                 scui_widget_draw(linear->list_widget_m[idx], NULL, false);
@@ -214,12 +213,11 @@ void scui_linear_s_event(scui_event_t *event)
 void scui_linear_m_event(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_custom_t *custom = (void *)widget;
-    
+    scui_widget_t *widget_w = scui_handle_source_check(event->object);
+    scui_widget_t *widget_p = scui_handle_source_check(widget_w->parent);
+    scui_custom_t *custom = (void *)widget_w;
+    scui_linear_t *linear = (void *)widget_p;
     // 列表控件是当前控件的父控件
-    widget = scui_handle_source_check(widget->parent);
-    scui_linear_t *linear = (void *)widget;
     
     switch (event->type) {
     case scui_event_anima_elapse:

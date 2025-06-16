@@ -31,67 +31,56 @@ static struct {
 void scui_ui_scene_soccer_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_local_res:
-        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
-        scui_window_local_res_get(event->object, &scui_ui_res_local);
-        break;
     case scui_event_anima_elapse:
         break;
-    case scui_event_show:
-        SCUI_LOG_INFO("scui_event_show");
+    case scui_event_create:
+        scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
+        scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        /* 界面数据加载准备 */
-        if (scui_event_check_prepare(event)) {
-            
-            // 相邻两个六边形之间的夹角约为 138.190f
-            // 五边形和六边形之间的夹角约为 142.623f
-            scui_ui_res_local->angle_56 = 142.623f - 90.0f;
-            scui_ui_res_local->angle_66 = 138.190f - 90.0f - (180.0f - 142.623f);
-            
-            scui_ui_res_local->image_bg = scui_image_prj_image_src_00_3d_Soccer_boardpng;
-            for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
-            for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
-                scui_handle_t image_fg_0 = scui_ui_res_local->image_bg - 3;
-                scui_ui_res_local->image_fg[idx_j][idx_i] = image_fg_0 + idx_j * 5 + idx_i;
-                if ((idx_j * 5 + idx_i) >= scui_image_prj_image_src_00_3d_Soccer_starpng - 2 - image_fg_0)
-                    scui_ui_res_local->image_fg[idx_j][idx_i] += 1;
-                if ((idx_j * 5 + idx_i) >= scui_image_prj_image_src_00_3d_Soccer_backgroundpng - image_fg_0)
-                    scui_ui_res_local->image_fg[idx_j][idx_i] += 2;
-            }
-            
-            scui_handle_t image_bg = scui_ui_res_local->image_bg;
-            scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
-            scui_coord3_t image_bg_w = scui_image_w(image_bg);
-            scui_coord3_t image_bg_h = scui_image_h(image_bg);
-            scui_coord3_t image_fg_w = scui_image_w(image_fg);
-            scui_coord3_t image_fg_h = scui_image_h(image_fg);
-            SCUI_ASSERT(image_bg_h == image_bg_w);
-            SCUI_ASSERT(image_fg_h == image_fg_w);
-            
-            /* 要求:背景图是的水平距离是正六边形的水平宽度 */
-            scui_ui_res_local->sub_size = image_bg_w / 2;
-            scui_ui_res_local->sub_hor_res = image_bg_w;
-            scui_ui_res_local->sub_ver_res = image_bg_w * scui_cos(scui_radian_by_angle(30));
-            scui_ui_res_local->offset_bg.x = (0) / 2;
-            scui_ui_res_local->offset_bg.y = (image_bg_h - scui_cos(scui_radian_by_angle(30)) * image_bg_w) / 2;
-            scui_ui_res_local->offset_fg.x = (image_bg_w - image_fg_w) / 2;
-            scui_ui_res_local->offset_fg.y = (image_bg_h - image_fg_h) / 2;
+        // 相邻两个六边形之间的夹角约为 138.190f
+        // 五边形和六边形之间的夹角约为 142.623f
+        scui_ui_res_local->angle_56 = 142.623f - 90.0f;
+        scui_ui_res_local->angle_66 = 138.190f - 90.0f - (180.0f - 142.623f);
+        
+        scui_ui_res_local->image_bg = scui_image_prj_image_src_00_3d_Soccer_boardpng;
+        for (uint8_t idx_j = 0; idx_j < 4; idx_j++)
+        for (uint8_t idx_i = 0; idx_i < 5; idx_i++) {
+            scui_handle_t image_fg_0 = scui_ui_res_local->image_bg - 3;
+            scui_ui_res_local->image_fg[idx_j][idx_i] = image_fg_0 + idx_j * 5 + idx_i;
+            if ((idx_j * 5 + idx_i) >= scui_image_prj_image_src_00_3d_Soccer_starpng - 2 - image_fg_0)
+                scui_ui_res_local->image_fg[idx_j][idx_i] += 1;
+            if ((idx_j * 5 + idx_i) >= scui_image_prj_image_src_00_3d_Soccer_backgroundpng - image_fg_0)
+                scui_ui_res_local->image_fg[idx_j][idx_i] += 2;
         }
+        
+        scui_handle_t image_bg = scui_ui_res_local->image_bg;
+        scui_handle_t image_fg = scui_ui_res_local->image_fg[0][0];
+        scui_coord3_t image_bg_w = scui_image_w(image_bg);
+        scui_coord3_t image_bg_h = scui_image_h(image_bg);
+        scui_coord3_t image_fg_w = scui_image_w(image_fg);
+        scui_coord3_t image_fg_h = scui_image_h(image_fg);
+        SCUI_ASSERT(image_bg_h == image_bg_w);
+        SCUI_ASSERT(image_fg_h == image_fg_w);
+        
+        /* 要求:背景图是的水平距离是正六边形的水平宽度 */
+        scui_ui_res_local->sub_size = image_bg_w / 2;
+        scui_ui_res_local->sub_hor_res = image_bg_w;
+        scui_ui_res_local->sub_ver_res = image_bg_w * scui_cos(scui_radian_by_angle(30));
+        scui_ui_res_local->offset_bg.x = (0) / 2;
+        scui_ui_res_local->offset_bg.y = (image_bg_h - scui_cos(scui_radian_by_angle(30)) * image_bg_w) / 2;
+        scui_ui_res_local->offset_fg.x = (image_bg_w - image_fg_w) / 2;
+        scui_ui_res_local->offset_fg.y = (image_bg_h - image_fg_h) / 2;
         break;
-    case scui_event_hide:
-        SCUI_LOG_INFO("scui_event_hide");
+    case scui_event_destroy:
         break;
     case scui_event_focus_get:
-        SCUI_LOG_INFO("scui_event_focus_get");
         scui_ui_scene_link_cfg(event);
         break;
     case scui_event_focus_lost:
-        SCUI_LOG_INFO("scui_event_focus_lost");
         break;
     case scui_event_key_click:
         break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }
@@ -282,7 +271,6 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
         break;
     break;
     default:
-        SCUI_LOG_DEBUG("event %u event->object %u", event->type, event->object);
         break;
     }
 }

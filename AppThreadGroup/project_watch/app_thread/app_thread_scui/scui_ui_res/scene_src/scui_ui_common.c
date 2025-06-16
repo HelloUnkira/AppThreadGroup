@@ -389,8 +389,7 @@ void scui_ui_scene_mini_card_cfg(void)
 void scui_ui_scene_link_cfg(scui_event_t *event)
 {
     #if 0   // discard, we don't need this
-    if (event->type == scui_event_show &&
-        scui_event_check_prepare(event)) {
+    if (event->type == scui_event_create) {
         
         /* 窗口属性参数配置(浮动窗口) */
         scui_window_float_t float_cfg = {0};
@@ -418,8 +417,7 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
     #endif
     
     // 仅焦点切换时才可进行
-    if (event->type != scui_event_focus_get ||
-       !scui_event_check_prepare(event))
+    if (event->type != scui_event_focus_get)
         return;
     
     /* 窗口属性参数配置(场景管理) */

@@ -53,14 +53,6 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     // 初始化默认切换类型为自适应
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = scui_window_switch_auto;
-    
-    // 构建结束:绑定窗口资源
-    scui_event_t event = {
-        .object     = widget->myself,
-        .type       = scui_event_local_res,
-        .style.sync = true,
-    };
-    scui_event_notify(&event);
 }
 
 /*@brief 控件析构
