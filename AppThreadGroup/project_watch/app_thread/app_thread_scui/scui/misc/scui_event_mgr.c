@@ -389,6 +389,7 @@ void scui_event_adjust_prior(scui_event_t *event)
         [scui_event_child_nums]     = scui_event_prior_above,
         [scui_event_child_size]     = scui_event_prior_above,
         [scui_event_child_pos]      = scui_event_prior_above,
+        
         [scui_event_size_auto]      = scui_event_prior_above,
         [scui_event_size_adjust]    = scui_event_prior_above,
         [scui_event_lang_change]    = scui_event_prior_above,
@@ -417,7 +418,8 @@ void scui_event_adjust_prior(scui_event_t *event)
     if (event->type > scui_event_sched_s &&
         event->type < scui_event_sched_e) {
         event->style.prior = event_sys_prior[event->type];
-        return;
+        if (event->style.prior != scui_event_prior_none)
+            return;
     }
     
     /* default: */
@@ -429,21 +431,18 @@ void scui_event_adjust_prior(scui_event_t *event)
  */
 void scui_event_notify(scui_event_t *event)
 {
-    /* 为所有事件调整优先级 */
-    scui_event_adjust_prior(event);
-    
     /* 同步事件就地响应 */
-    /* 异步事件入调度队列 */
-    
     if (event->style.sync) {
         
         scui_tick_calc(0x10, NULL, NULL, NULL);
         scui_event_respond(event);
         scui_tick_calc(0x11, NULL, NULL, NULL);
-        
         return;
     }
     
+    /* 为所有事件调整优先级 */
+    scui_event_adjust_prior(event);
+    /* 异步事件入调度队列 */
     scui_event_enqueue(event);
 }
 

@@ -132,13 +132,13 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_event_notify(&event);
     }
     
-    /* 控件布局更新, 重绘自己 */
-    bool only = scui_widget_surface_only(widget);
-    scui_widget_draw(widget->myself, NULL, only);
-    
     /* 将该显示窗口加入到场景管理器中 */
     if (widget->type == scui_widget_type_window)
         scui_window_list_add(widget->myself);
+    
+    /* 控件布局更新, 重绘自己 */
+    bool only = scui_widget_surface_only(widget);
+    scui_widget_draw(widget->myself, NULL, only);
 }
 
 /*@brief 控件隐藏
@@ -635,19 +635,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
     case scui_event_lang_change:
         scui_widget_event_bubble(event, NULL, false, false);
         return;
-    case scui_event_layout:
-        if (event->style.bubble)
-            scui_widget_event_bubble(event, NULL, false, true);
-        else {
-            scui_widget_event_process(event);
-            // scui_event_mask_over(event);
-        }
-        
-        // 孩子信息更变, 更新画布剪切域
-        scui_widget_t *widget = scui_handle_source_check(event->object);
-        scui_widget_surface_refr(widget->myself, true);
-        scui_widget_clip_clear(widget, true);
-        return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
         scui_widget_event_process(event);
@@ -655,29 +642,33 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     case scui_event_show:
     case scui_event_hide:
+    case scui_event_create:
+    case scui_event_layout:
+    case scui_event_destroy:
     case scui_event_child_nums:
     case scui_event_child_size:
-    case scui_event_child_pos:
-    case scui_event_create:
-    case scui_event_destroy: {
-        scui_widget_event_process(event);
-        scui_event_mask_over(event);
+    case scui_event_child_pos: {
+        if (event->style.bubble) {
+            scui_widget_event_bubble(event, NULL, false, true);
+            scui_event_mask_over(event);
+        } else {
+            scui_widget_event_process(event);
+            scui_event_mask_over(event);
+        }
         
         // 孩子信息更变, 更新画布剪切域
         scui_widget_t *widget = scui_handle_source_check(event->object);
         scui_widget_surface_refr(widget->myself, true);
-        scui_widget_clip_clear(widget, true);
+        if (widget->parent != SCUI_HANDLE_INVALID &&
+            scui_widget_surface_only(widget))
+            scui_widget_clip_clear(widget, true);
         return;
     }
     case scui_event_size_auto:
+    case scui_event_size_adjust:
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;
-    case scui_event_size_adjust: {
-        scui_widget_event_process(event);
-        scui_event_mask_over(event);
-        return;
-    }
     default: {
         SCUI_LOG_INFO("unknown dispatch");
         /* 其他未列举事件走默认派发流程 */

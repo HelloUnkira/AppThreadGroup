@@ -203,13 +203,13 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
                 handle_t = scui_window_mgr.switch_args.list[1];
             
-            // 问题:存在之后的窗口重绘失效虚化
-            // 窗口绘制锁定, 禁止绘制该控件树
+            // 问题:存在之后的窗口重绘失效当前虚化
+            // 暂定:锁定窗口绘制, 禁止绘制该控件树
             scui_widget_t *widget = scui_handle_source_assert(handle_t);
             scui_window_t *window = (void *)widget;
-            // window->draw_lock = true;
+            window->draw_lock = true;
             
-            /* 主窗口虚化 */
+            /* 背景窗口虚化 */
             scui_widget_draw(handle_t, NULL, false);
             scui_widget_draw_blur(handle_t, NULL);
             SCUI_LOG_INFO("");
@@ -229,10 +229,15 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
                 handle_t = scui_window_mgr.switch_args.list[1];
             
-            // 窗口绘制解锁
-            scui_widget_t *widget = scui_handle_source_assert(handle_t);
-            scui_window_t *window = (void *)widget;
-            // window->draw_lock = false;
+            // 窗口绘制解锁(解锁所有窗口即可)
+            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+                if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+                    continue;
+                scui_handle_t  handle = scui_window_mgr.list[idx];
+                scui_widget_t *widget = scui_handle_source_assert(handle);
+                scui_window_t *window = (void *)widget;
+                window->draw_lock = false;
+            }
             
             scui_widget_draw(handle_t, NULL, false);
         }
