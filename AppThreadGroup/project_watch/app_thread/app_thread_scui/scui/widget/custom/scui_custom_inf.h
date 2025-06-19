@@ -61,11 +61,8 @@ typedef struct {
         scui_point_t  center[3];    // 图片旋转中心(hour,minute,second)
         /* frame anim sched: */
         uint64_t tick_mode:1;       // 1:一度一跳;0:一秒一跳;
-        uint64_t tick_curr_s:20;    // 当前时刻:时.分.秒
-        uint64_t tick_last_s:20;    // 前一时刻:时.分.秒
-        uint64_t tick_curr_ms:10;   // 当前时刻:毫秒
-        uint64_t tick_last_ms:10;   // 前一时刻:毫秒
-        uint64_t tick_passby:10;    // 流失时间(ms)
+        uint64_t tick_curr:31;      // 当前时刻:时.分.秒.毫秒
+        uint64_t tick_last:31;      // 前一时刻:时.分.秒.毫秒
     } dial_ptr;
     struct {
         scui_handle_t spinner;      // 图像句柄(alpha图:环)

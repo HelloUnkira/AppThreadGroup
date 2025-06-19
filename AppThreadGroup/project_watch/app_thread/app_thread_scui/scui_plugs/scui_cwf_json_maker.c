@@ -58,19 +58,25 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        uint8_t  hour = scui_presenter.get_hour();
-        uint8_t  min  = scui_presenter.get_min();
-        uint8_t  sec  = scui_presenter.get_sec();
-        uint16_t msec = scui_presenter.get_msec();
-        
         scui_area_t clip = scui_widget_clip(event->object);
         scui_custom_draw_dsc_t *draw_dsc = NULL;
         scui_custom_draw_dsc(event->object, &draw_dsc);
-        draw_dsc->event  = event;
-        draw_dsc->clip   = &clip;
-        draw_dsc->dial_ptr.tick_curr_s  = hour * 60 * 60 + min * 60 + sec;
-        draw_dsc->dial_ptr.tick_curr_ms = msec;
-        draw_dsc->dial_ptr.tick_passby  = SCUI_ANIMA_TICK * event->tick;
+        draw_dsc->event = event;
+        draw_dsc->clip  = &clip;
+        
+        #if 1
+        // 如果外界时钟可信, 那么可以一直使用
+        // 如果外界时钟不可信, 那么在最开始同步一次即可
+        // 不要频繁的在它工作时同步, 会有严重的跳秒现象
+        uint8_t  hour = scui_presenter.get_hour();
+        uint8_t  min  = scui_presenter.get_min();
+        uint8_t  sec  = scui_presenter.get_sec();
+        uint64_t tick = (((hour * 60) + min) * 60 + sec) * 1000;
+        if (scui_dist(draw_dsc->dial_ptr.tick_curr, tick) > 1000 * 60)
+            draw_dsc->dial_ptr.tick_curr = tick;
+        #endif
+        
+        draw_dsc->dial_ptr.tick_curr += SCUI_ANIMA_TICK * event->tick;
         scui_custom_draw_anim_ctx(draw_dsc);
         break;
     }
@@ -460,7 +466,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             draw_dsc->dial_ptr.center[0].x = scui_image_w(parser->image_hit[res->img_ofs[0]]) / 2;
             draw_dsc->dial_ptr.center[1].x = scui_image_w(parser->image_hit[res->img_ofs[1]]) / 2;
             draw_dsc->dial_ptr.center[2].x = scui_image_w(parser->image_hit[res->img_ofs[2]]) / 2;
-            // draw_dsc->dial_ptr.tick_mode = 1;
+            draw_dsc->dial_ptr.tick_mode = 1;
             break;
         }
         case scui_cwf_json_type_img_day:
