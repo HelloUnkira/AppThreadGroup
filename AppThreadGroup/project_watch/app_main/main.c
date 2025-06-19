@@ -29,8 +29,12 @@ int main(int argc, char *argv[])
         /* 模拟发送1ms定时器中断事件 */
         #if APP_ARCH_IS_PC
         /* fake hard clock 1ms irq */
+        app_module_rtc_sync();
         app_module_rtc_1ms_cb();
         app_delay_us(1000);
+        
+        
+        
         #else
         #error "delete this error"
         #endif

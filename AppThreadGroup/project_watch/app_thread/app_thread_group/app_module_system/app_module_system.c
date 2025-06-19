@@ -12,9 +12,9 @@
 #include "app_thread_group.h"
 
 #if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
+#elif APP_DEV_GUI_IS_LVGL
 #include "app_lv_lib.h"
-#elif APP_EXT_DEV_GUI_IS_SCUI
+#elif APP_DEV_GUI_IS_SCUI
 #include "app_scui_lib.h"
 #else
 #endif
@@ -32,9 +32,9 @@ void app_module_system_dlps_set(bool dlps)
         app_module_system.dlps_exec = true;
         
         #if 0
-        #elif APP_EXT_DEV_GUI_IS_LVGL
+        #elif APP_DEV_GUI_IS_LVGL
         app_lv_scene_dlps(dlps);
-        #elif APP_EXT_DEV_GUI_IS_SCUI
+        #elif APP_DEV_GUI_IS_SCUI
         app_scui_window_dlps(dlps);
         #else
         #endif

@@ -32,7 +32,7 @@ static const char * app_sys_log_file(const char *file)
  */
 const char * app_sys_log_line(void)
 {
-    return APP_DEV_LOG_MSG_LINE;
+    return APP_SYS_LOG_MSG_LINE;
 }
 
 /*@brief 日志模组初始化

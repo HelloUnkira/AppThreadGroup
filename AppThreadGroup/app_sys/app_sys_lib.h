@@ -36,6 +36,7 @@
 #include "app_sys_ext_mem_src_table.h"
 /*  */
 #include "app_sys_timer.h"
+#include "app_sys_clock.h"
 #include "app_sys_pipe.h"
 
 typedef struct {

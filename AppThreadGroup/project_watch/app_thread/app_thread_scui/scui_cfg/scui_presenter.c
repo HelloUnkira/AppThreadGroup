@@ -10,6 +10,7 @@
 
 #include "scui.h"
 /* 外部引用: */
+#include "app_module_rtc.h"
 #include "app_module_clock.h"
 #include "app_module_vibrate.h"
 
@@ -62,7 +63,7 @@ static uint16_t scui_ui_func_local_get_year(void)
 
 /*@brief scui ui数据交互回调
  */
-static uint8_t scui_ui_func_local_get_month(void)
+static uint8_t scui_ui_func_local_get_mon(void)
 {
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
@@ -89,7 +90,7 @@ static uint8_t scui_ui_func_local_get_hour(void)
 
 /*@brief scui ui数据交互回调
  */
-static uint8_t scui_ui_func_local_get_minute(void)
+static uint8_t scui_ui_func_local_get_min(void)
 {
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
@@ -98,11 +99,20 @@ static uint8_t scui_ui_func_local_get_minute(void)
 
 /*@brief scui ui数据交互回调
  */
-static uint8_t scui_ui_func_local_get_second(void)
+static uint8_t scui_ui_func_local_get_sec(void)
 {
     app_module_clock_t clock = {0};
     app_module_clock_get_system_clock(&clock);
     return clock.second;
+}
+
+/*@brief scui ui数据交互回调
+ */
+static uint8_t scui_ui_func_local_get_msec(void)
+{
+    app_module_rtc_t rtc = {0};
+    app_module_rtc_get(&rtc);
+    return rtc.utc_ms;
 }
 
 /*@brief scui ui数据交互回调
@@ -580,11 +590,12 @@ scui_presenter_t scui_presenter = {
     .is_24          = scui_ui_func_local_is_24,
     .get_utc        = scui_ui_func_local_get_utc,
     .get_year       = scui_ui_func_local_get_year,
-    .get_month      = scui_ui_func_local_get_month,
+    .get_mon        = scui_ui_func_local_get_mon,
     .get_day        = scui_ui_func_local_get_day,
     .get_hour       = scui_ui_func_local_get_hour,
-    .get_minute     = scui_ui_func_local_get_minute,
-    .get_second     = scui_ui_func_local_get_second,
+    .get_min        = scui_ui_func_local_get_min,
+    .get_sec        = scui_ui_func_local_get_sec,
+    .get_msec       = scui_ui_func_local_get_msec,
     .get_week       = scui_ui_func_local_get_week,
     /* dev data: */
     .get_hr_min         = scui_ui_func_local_get_hr_min,

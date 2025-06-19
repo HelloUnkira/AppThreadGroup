@@ -103,8 +103,8 @@ bool app_json_xfer_respond_system_clock(cJSON *json_object)
     APP_SYS_LOG_INFO("system_clock.zone:%u",    clock.zone_sec);
     APP_SYS_LOG_INFO("system_clock.mode:%u",    clock.is_24);
     
-    app_module_clock_to_utc(&clock);
-    app_module_clock_to_week(&clock);
+    app_sys_clock_to_utc(&clock);
+    app_sys_clock_to_week(&clock);
     app_module_clock_set_system_clock(&clock);
     return true;
 }

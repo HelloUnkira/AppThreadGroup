@@ -26,10 +26,10 @@ static  StackType_t app_thread_mix_custom_stack[APP_THREAD_MIX_CUSTOM_STACK_SIZE
 static  StackType_t app_thread_manage_stack[APP_THREAD_MANAGE_STACK_SIZE];
 
 #if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
+#elif APP_DEV_GUI_IS_LVGL
 #define APP_THREAD_LVGL_STACK_SIZE  (1024)
 static  StackType_t app_thread_lvgl_stack[APP_THREAD_LVGL_STACK_SIZE];
-#elif APP_EXT_DEV_GUI_IS_SCUI
+#elif APP_DEV_GUI_IS_SCUI
 #define APP_THREAD_SCUI_STACK_SIZE  (1024)
 static  StackType_t app_thread_scui_stack[APP_THREAD_SCUI_STACK_SIZE];
 #else
@@ -72,7 +72,7 @@ app_thread_t app_thread_manage = {
 };
 
 #if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
+#elif APP_DEV_GUI_IS_LVGL
 app_thread_t app_thread_lvgl = {
     .stack      = app_thread_lvgl_stack,
     .stack_size = APP_THREAD_LVGL_STACK_SIZE,
@@ -80,7 +80,7 @@ app_thread_t app_thread_lvgl = {
     .task       = app_thread_lvgl_routine,
     .name       = "app_thread_lvgl",
 };
-#elif APP_EXT_DEV_GUI_IS_SCUI
+#elif APP_DEV_GUI_IS_SCUI
 app_thread_t app_thread_scui = {
     .stack      = app_thread_scui_stack,
     .stack_size = APP_THREAD_SCUI_STACK_SIZE,
@@ -114,12 +114,6 @@ void app_thread_group_create(app_thread_t *thread_old,
 void app_thread_group_destroy(app_thread_t *thread_new)
 {
     app_mem_free(thread_new->stack);
-}
-
-/*@brief 线程就绪后配置
- */
-void app_thread_group_extend(void)
-{
 }
 
 #endif

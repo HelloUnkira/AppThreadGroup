@@ -87,6 +87,10 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     uint64_t draw_tick_curr_s  = tick_curr_s;
     uint64_t draw_tick_curr_ms = tick_curr_ms;
     
+    
+    
+    #if 0
+    // 软件伪造的有些假(会跳秒), 不建议使用
     if (tick_last_s != tick_curr_s) {
         tick_last_s  = tick_curr_s;
         tick_curr_ms = 0;
@@ -120,6 +124,27 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     draw_dsc->dial_ptr.tick_last_s  = tick_last_s;
     draw_dsc->dial_ptr.tick_curr_ms = tick_curr_ms;
     draw_dsc->dial_ptr.tick_last_ms = tick_last_ms;
+    #else
+    if (tick_last_s != tick_curr_s) {
+        tick_last_s  = tick_curr_s;
+        tick_curr_ms = 0;
+        tick_last_ms = 0;
+        
+        tick_draw = true;
+        draw_tick_curr_s  = tick_curr_s;
+        draw_tick_curr_ms = tick_curr_ms;
+    } else {
+        if (tick_mode) {
+            if (scui_dist(tick_last_ms, tick_curr_ms) >= (1000 / 6 / 2))
+                tick_draw = true;
+        } else {
+            draw_tick_curr_ms = 0;
+            draw_tick_last_ms = 0;
+        }
+    }
+    #endif
+    
+    
     
     if (tick_draw) {
         
@@ -227,5 +252,9 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
         #else
         scui_widget_draw(event->object, NULL, false);
         #endif
+        
+        // 记录一下当次有效的更新
+        draw_dsc->dial_ptr.tick_last_s  = draw_dsc->dial_ptr.tick_curr_s;
+        draw_dsc->dial_ptr.tick_last_ms = draw_dsc->dial_ptr.tick_curr_ms;
     }
 }

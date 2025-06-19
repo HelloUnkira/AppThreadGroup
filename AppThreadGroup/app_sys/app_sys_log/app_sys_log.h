@@ -23,12 +23,12 @@
 
 /* 全局持久化宏控限制 */
 /* 备注:不是所有的模组都需要使用该功能, 例如持久化模组自己 */
-#ifndef APP_SYS_LOG_RECORD_LIMIT
-#define APP_SYS_LOG_RECORD_LIMIT        0   /* 1:ENABLE,0:DISABLE */
+#ifndef APP_SYS_LOG_LIMIT_RECORD
+#define APP_SYS_LOG_LIMIT_RECORD        0   /* 1:ENABLE,0:DISABLE */
 #endif
 
 /* 全局持久化宏控覆盖(依赖本地宏控) */
-#if    (APP_SYS_LOG_RECORD_STATUS && !APP_SYS_LOG_RECORD_LIMIT)
+#if    (APP_SYS_LOG_RECORD_STATUS && !APP_SYS_LOG_LIMIT_RECORD)
 #define APP_SYS_LOG_RECORD_0          APP_SYS_LOG_RECORD_LEVEL <= 0 ? true : false
 #define APP_SYS_LOG_RECORD_1          APP_SYS_LOG_RECORD_LEVEL <= 1 ? true : false
 #define APP_SYS_LOG_RECORD_2          APP_SYS_LOG_RECORD_LEVEL <= 2 ? true : false
@@ -85,6 +85,8 @@
 #define APP_SYS_LOG_ERROR(...)
 #define APP_SYS_LOG_ERROR_RAW(...)
 #endif
+
+#define APP_SYS_LOG_MSG_LINE    "\r\n"
 
 /* 断言:条件为真继续执行,为假时中断系统 */
 #define APP_SYS_ASSERT(cond)    (app_sys_assert(__FILE__, __func__, __LINE__, cond))

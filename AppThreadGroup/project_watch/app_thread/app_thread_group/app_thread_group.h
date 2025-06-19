@@ -50,9 +50,9 @@ void app_thread_slave_schedule(void);
 #include "app_thread_mix_custom.h"
 #include "app_thread_manage.h"
 #if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
+#elif APP_DEV_GUI_IS_LVGL
 #include "app_thread_lvgl.h"
-#elif APP_EXT_DEV_GUI_IS_SCUI
+#elif APP_DEV_GUI_IS_SCUI
 #include "app_thread_scui.h"
 #else
 #endif

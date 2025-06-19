@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 #include "app_thread_group.h"
 
 /*@brief 设置RTC模组
@@ -16,7 +17,7 @@ void app_module_rtc_set(app_module_rtc_t *rtc)
     app_critical_t critical = {0};
     app_critical_process(&critical, app_critical_create);
     app_critical_process(&critical, app_critical_enter);
-    app_dev_rtc_set_utc(&app_dev_rtc, &rtc->utc);
+    app_dev_rtc_set_utc(&app_dev_rtc, &rtc->utc, &rtc->utc_ms);
     app_critical_process(&critical, app_critical_exit);
     app_critical_process(&critical, app_critical_destroy);
 }
@@ -28,7 +29,7 @@ void app_module_rtc_get(app_module_rtc_t *rtc)
     app_critical_t critical = {0};
     app_critical_process(&critical, app_critical_create);
     app_critical_process(&critical, app_critical_enter);
-    app_dev_rtc_get_utc(&app_dev_rtc, &rtc->utc);
+    app_dev_rtc_get_utc(&app_dev_rtc, &rtc->utc, &rtc->utc_ms);
     app_critical_process(&critical, app_critical_exit);
     app_critical_process(&critical, app_critical_destroy);
 }
@@ -49,6 +50,13 @@ void app_module_rtc_1ms_cb(void)
     /* 心跳是生命之源 */
     if (count % 1000 == 0)
         APP_SYS_LOG_INFO("1s handler");
+}
+
+/*@brief 同步RTC模组
+ */
+void app_module_rtc_sync(void)
+{
+    app_dev_rtc_sync(&app_dev_rtc);
 }
 
 /*@brief 初始化RTC模组

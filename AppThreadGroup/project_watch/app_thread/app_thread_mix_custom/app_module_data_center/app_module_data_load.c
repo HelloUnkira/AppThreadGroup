@@ -26,8 +26,6 @@ void app_module_data_load_process(void)
     APP_SYS_LOG_WARN("start");
     APP_SYS_LOG_WARN("...");
     app_module_remind_alarm_load();
-    /* 一些补充的扩展配置,与OS相关 */
-    app_thread_group_extend();
     /* ... */
     app_module_data_load_status_not_over = false;
     APP_SYS_LOG_WARN("end");

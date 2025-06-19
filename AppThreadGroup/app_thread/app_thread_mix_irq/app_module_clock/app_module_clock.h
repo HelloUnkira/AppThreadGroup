@@ -2,6 +2,7 @@
 #define APP_MODULE_CLOCK_H
 
 typedef struct {
+    /* 基础字段(同步 app_sys_clock_t) */
     uint64_t utc;       /* 协调世界时UTC */
     uint16_t year;      /* 年 */
     uint8_t  month;     /* 月 */
@@ -16,57 +17,6 @@ typedef struct {
     uint8_t  is_am:1;   /* 12小时:上午 */
     uint8_t  is_pm:1;   /* 12小时:下午 */
 } app_module_clock_t;
-
-/*@brief 闰年判断
- *@param clock 时钟实例{.year,}
- *@retval 是否为闰年
- */
-bool app_module_clock_is_leap_year(app_module_clock_t *clock);
-
-/*@brief 下一闰年
- *@param clock 时钟实例{.year,}
- *@param leap_clock 下一闰年时钟实例{.year,}
- */
-void app_module_clock_next_leap_year(app_module_clock_t *clock, app_module_clock_t *leap_clock);
-
-/*@brief 一个月有多少天
- *@param clock 时钟实例{.year,.month,}
- *@retval 天数
- */
-uint32_t app_module_clock_month_days(app_module_clock_t *clock);
-
-/*@brief 一年过了多少天
- *@param clock 时钟实例{.year,.month,.day,}
- *@retval 天数
- */
-uint32_t app_module_clock_year_days(app_module_clock_t *clock);
-
-/*@brief 俩个日期间的天数
- *@param clock1 时钟实例{.year,.month,.day,}
- *@param clock2 时钟实例{.year,.month,.day,}
- *@retval 天数
- */
-uint32_t app_module_clock_how_many_days(app_module_clock_t *clock1, app_module_clock_t *clock2);
-
-/*@brief 星期转化(蔡勒公式)
- *@param clock 时钟实例{.year,.month,.day,}
- *@param clock 时钟实例{.week,}
- */
-void app_module_clock_to_week(app_module_clock_t *clock);
-
-/*@brief 日期转化为utc
- *@param clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
- *@param clock 时钟实例{.utc,}
- */
-void app_module_clock_to_utc(app_module_clock_t *clock);
-
-/*@brief utc转化为日期
- *@param clock 时钟实例{.utc,}
- *@param clock 时钟实例{.year,.month,.day,.hour,.minute,.second,}
- */
-void app_module_clock_to_dtime(app_module_clock_t *clock);
-
-/* 分界线:<上面是模组通用接口, 下面是模组功能定制接口> */
 
 typedef enum {
     app_module_clock_update_default,

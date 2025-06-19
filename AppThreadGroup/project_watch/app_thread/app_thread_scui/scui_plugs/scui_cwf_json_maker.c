@@ -58,17 +58,19 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        uint8_t hour   = scui_presenter.get_hour();
-        uint8_t minute = scui_presenter.get_minute();
-        uint8_t second = scui_presenter.get_second();
+        uint8_t  hour = scui_presenter.get_hour();
+        uint8_t  min  = scui_presenter.get_min();
+        uint8_t  sec  = scui_presenter.get_sec();
+        uint16_t msec = scui_presenter.get_msec();
         
         scui_area_t clip = scui_widget_clip(event->object);
         scui_custom_draw_dsc_t *draw_dsc = NULL;
         scui_custom_draw_dsc(event->object, &draw_dsc);
         draw_dsc->event  = event;
         draw_dsc->clip   = &clip;
-        draw_dsc->dial_ptr.tick_curr_s = hour * 60 * 60 + minute * 60 + second;
-        draw_dsc->dial_ptr.tick_passby = SCUI_ANIMA_TICK * event->tick;
+        draw_dsc->dial_ptr.tick_curr_s  = hour * 60 * 60 + min * 60 + sec;
+        draw_dsc->dial_ptr.tick_curr_ms = msec;
+        draw_dsc->dial_ptr.tick_passby  = SCUI_ANIMA_TICK * event->tick;
         scui_custom_draw_anim_ctx(draw_dsc);
         break;
     }
@@ -183,12 +185,12 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             break;
         }
         case scui_cwf_json_type_img_minute: {
-            uint8_t val = scui_presenter.get_minute();
+            uint8_t val = scui_presenter.get_min();
             scui_cwf_json_val_to_idx_ofs(parser, idx, val, "%02u", 2);
             break;
         }
         case scui_cwf_json_type_img_second: {
-            uint8_t val = scui_presenter.get_second();
+            uint8_t val = scui_presenter.get_sec();
             scui_cwf_json_val_to_idx_ofs(parser, idx, val, "%02u", 2);
             break;
         }
@@ -223,7 +225,7 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
             break;
         }
         case scui_cwf_json_type_img_month: {
-            uint8_t val = scui_presenter.get_month() - 1;
+            uint8_t val = scui_presenter.get_mon() - 1;
             SCUI_ASSERT(res->img_ofs[val] < parser->image_num);
             scui_handle_t image = parser->image_hit[res->img_ofs[val]];
             scui_widget_image_set(handle, image);
@@ -458,7 +460,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             draw_dsc->dial_ptr.center[0].x = scui_image_w(parser->image_hit[res->img_ofs[0]]) / 2;
             draw_dsc->dial_ptr.center[1].x = scui_image_w(parser->image_hit[res->img_ofs[1]]) / 2;
             draw_dsc->dial_ptr.center[2].x = scui_image_w(parser->image_hit[res->img_ofs[2]]) / 2;
-            draw_dsc->dial_ptr.tick_mode = 1;
+            // draw_dsc->dial_ptr.tick_mode = 1;
             break;
         }
         case scui_cwf_json_type_img_day:

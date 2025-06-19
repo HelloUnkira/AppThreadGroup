@@ -68,6 +68,6 @@ void app_module_world_time_change(app_module_clock_t *clock, const
                                   app_module_world_time_t *world_time)
 {
     clock->utc += world_time->zone;
-    app_module_clock_to_dtime(clock);
-    app_module_clock_to_week(clock);
+    app_sys_clock_to_dtime(clock);
+    app_sys_clock_to_week(clock);
 }

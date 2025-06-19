@@ -41,9 +41,9 @@ APP_THREAD_GROUP_HANDLER(app_thread_mix_irq_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_mix_custom_routine);
 APP_THREAD_GROUP_HANDLER(app_thread_manage_routine);
 #if 0
-#elif APP_EXT_DEV_GUI_IS_LVGL
+#elif APP_DEV_GUI_IS_LVGL
 APP_THREAD_GROUP_HANDLER(app_thread_lvgl_routine);
-#elif APP_EXT_DEV_GUI_IS_SCUI
+#elif APP_DEV_GUI_IS_SCUI
 APP_THREAD_GROUP_HANDLER(app_thread_scui_routine);
 #else
 #endif
@@ -70,9 +70,5 @@ void app_thread_group_create(app_thread_t *thread_old,
  *@param thread_new 新线程的基本信息
  */
 void app_thread_group_destroy(app_thread_t *thread_new);
-
-/*@brief 线程就绪后配置
- */
-void app_thread_group_extend(void);
 
 #endif

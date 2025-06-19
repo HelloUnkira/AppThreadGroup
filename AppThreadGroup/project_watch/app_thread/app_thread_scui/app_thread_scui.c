@@ -110,7 +110,7 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_refr_routine)
     while (true) {
         /*@brief scui 屏幕刷新回调接口
          */
-        #if APP_EXT_DEV_GUI_IS_SCUI
+        #if APP_DEV_GUI_IS_SCUI
         void app_dev_gui_disp_scui_flush(scui_surface_t *suface, scui_area_t *clip);
         scui_frame_buffer_refr_routine(app_dev_gui_disp_scui_flush);
         #endif
@@ -171,7 +171,7 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
         /* lvgl驱动检查事件 */
         if (package->event == app_thread_scui_sched_drv) {
             app_dev_gui_drv_timer_handler(&app_dev_gui_drv);
-            #if APP_EXT_DEV_GUI_IS_SCUI
+            #if APP_DEV_GUI_IS_SCUI
             #if SCUI_MONKEY_TEST
             /* monkey test时切断输入流 */
             #else

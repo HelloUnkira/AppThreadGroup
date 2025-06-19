@@ -3,12 +3,13 @@
  *    将各种数据以chunk的形式组织起来
  */
 
-#define APP_SYS_LOG_RECORD_LIMIT    1
+#define APP_SYS_LOG_LIMIT_RECORD    1
 #define APP_SYS_LOG_LOCAL_STATUS    1
 #define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"    // 未解耦:备注
 
 static app_mutex_t app_sys_ext_mem_mutex = {0};
 

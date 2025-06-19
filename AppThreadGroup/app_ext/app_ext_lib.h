@@ -15,13 +15,11 @@
 #include <time.h>
 
 /* Project Config */
-#include "app_project_config.h"
+#include "app_prj_cfg.h"
 /* Arch lib hook */
 #include "app_ext_arch.h"
 /* OS lib hook */
 #include "app_ext_os.h"
-/* Dev lib hook */
-#include "app_ext_dev.h"
 
 /* Keep Adding */
 

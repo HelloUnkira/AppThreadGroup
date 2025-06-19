@@ -8,11 +8,12 @@ typedef struct {
     bool     (*is_24)(void);
     uint64_t (*get_utc)(void);
     uint16_t (*get_year)(void);
-    uint8_t  (*get_month)(void);
+    uint8_t  (*get_mon)(void);
     uint8_t  (*get_day)(void);
     uint8_t  (*get_hour)(void);
-    uint8_t  (*get_minute)(void);
-    uint8_t  (*get_second)(void);
+    uint8_t  (*get_min)(void);
+    uint8_t  (*get_sec)(void);
+    uint16_t (*get_msec)(void);
     uint8_t  (*get_week)(void);
     /* dev data: */
     uint32_t (*get_hr_min)(void);

@@ -13,6 +13,8 @@ FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR}/../app_ext)
 include_directories(${target_path})
 FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR}/../app_sys)
 include_directories(${target_path})
+FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR}/../app_dev)
+include_directories(${target_path})
 FIND_TARGET_H_PATH(target_path ${CMAKE_CURRENT_SOURCE_DIR}/../app_thread)
 include_directories(${target_path})
 # 添加生成库

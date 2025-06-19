@@ -33,9 +33,9 @@ void app_thread_slave_schedule(void)
     app_thread_process(&app_thread_mix_custom,      app_thread_static);
     app_thread_process(&app_thread_manage,          app_thread_static);
     #if 0
-    #elif APP_EXT_DEV_GUI_IS_LVGL
+    #elif APP_DEV_GUI_IS_LVGL
     app_thread_process(&app_thread_lvgl,            app_thread_static);
-    #elif APP_EXT_DEV_GUI_IS_SCUI
+    #elif APP_DEV_GUI_IS_SCUI
     app_thread_process(&app_thread_scui,            app_thread_static);
     #else
     #error "gui framework is unsupport"
@@ -58,7 +58,7 @@ void app_thread_group_schedule(void)
     /*
      *!!!就绪app ext(dev)层
      */
-    app_dev_1_ready();
+    app_dev_ready();
     /*
      *!!!就绪app sys层
      */
@@ -76,10 +76,6 @@ void app_thread_group_schedule(void)
         },
     };
     app_sys_ready(&sys_cfg);
-    /*
-     *!!!就绪app dev层
-     */
-    app_dev_2_ready();
     /*
      *!!!就绪app thread层
      */

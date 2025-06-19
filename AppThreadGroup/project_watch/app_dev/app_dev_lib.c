@@ -11,6 +11,7 @@
 
 /*@brief 初始化设备
  */
-void app_dev_2_ready(void)
+void app_dev_ready(void)
 {
+    app_dev_log_ready(&app_dev_log);
 }

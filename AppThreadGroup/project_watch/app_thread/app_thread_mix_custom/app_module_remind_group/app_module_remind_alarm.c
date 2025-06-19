@@ -119,8 +119,8 @@ void app_module_remind_alarm_test(void)
     alarm_item[0].clock.hour   = 0;
     alarm_item[0].clock.minute = 0;
     alarm_item[0].clock.second = 2;
-    app_module_clock_to_utc(&alarm_item[0].clock);
-    app_module_clock_to_week(&alarm_item[0].clock);
+    app_sys_clock_to_utc(&alarm_item[0].clock);
+    app_sys_clock_to_week(&alarm_item[0].clock);
     alarm_item[0].offset_utc = alarm_item[0].clock.utc /* +-xxx sec */;
     /* 提醒闹钟1(滚动模式) */
     const char *alarm_name_1 = "Alarm 1";
@@ -137,8 +137,8 @@ void app_module_remind_alarm_test(void)
     alarm_item[1].clock.hour   = 1;
     alarm_item[1].clock.minute = 1;
     alarm_item[1].clock.second = 2;
-    app_module_clock_to_utc(&alarm_item[1].clock);
-    app_module_clock_to_week(&alarm_item[1].clock);
+    app_sys_clock_to_utc(&alarm_item[1].clock);
+    app_sys_clock_to_week(&alarm_item[1].clock);
     alarm_item[1].offset_utc = alarm_item[1].clock.utc /* +-xxx sec */;
     /* 继续添加 */
     app_module_remind_alarm_array_unlock();

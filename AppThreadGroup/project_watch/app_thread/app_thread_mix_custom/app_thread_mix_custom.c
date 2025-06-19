@@ -47,7 +47,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             app_module_countdown_xmsec_update();
         /* 倒计时模组到期事件 */
         if (package->event == app_thread_mix_custom_countdown_expired) {
-            #if APP_EXT_DEV_GUI_IS_LVGL
+            #if APP_DEV_GUI_IS_LVGL
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
                 .module  = app_thread_lvgl_ui,
@@ -67,7 +67,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             app_module_remind_package_t *remind = package->data;
             /* 该提醒组事件来自提醒闹钟组: */
             if (app_module_remind_alarm_group_check(remind->remind_group)) {
-                #if APP_EXT_DEV_GUI_IS_LVGL
+                #if APP_DEV_GUI_IS_LVGL
                 /* 发送闹钟事件(直接转发) */
                 package->thread = app_thread_id_lvgl;
                 package->module = app_thread_lvgl_ui;
@@ -85,7 +85,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
             app_module_remind_drink_xmin_update();
         /* 走动提醒模组到期事件 */
         if (package->event == app_thread_mix_custom_remind_sedentary_interval) {
-            #if APP_EXT_DEV_GUI_IS_LVGL
+            #if APP_DEV_GUI_IS_LVGL
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
                 .module  = app_thread_lvgl_ui,
@@ -96,7 +96,7 @@ static bool app_thread_mix_custom_routine_package_cb(app_thread_package_t *packa
         }
         /* 喝水提醒模组到期事件 */
         if (package->event == app_thread_mix_custom_remind_drink_interval) {
-            #if APP_EXT_DEV_GUI_IS_LVGL
+            #if APP_DEV_GUI_IS_LVGL
             app_thread_package_t package = {
                 .thread  = app_thread_id_lvgl,
                 .module  = app_thread_lvgl_ui,

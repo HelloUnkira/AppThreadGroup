@@ -20,7 +20,7 @@ lv_group_t *app_lv_group_inst(void)
  */
 void app_lv_ready(void)
 {
-    #if APP_EXT_DEV_GUI_IS_LVGL
+    #if APP_DEV_GUI_IS_LVGL
     /*@brief lvgl 输入设备回调接口
      *@brief lvgl 屏幕刷新回调接口
      */

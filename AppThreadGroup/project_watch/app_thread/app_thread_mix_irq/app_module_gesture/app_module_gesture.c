@@ -41,10 +41,10 @@ static void app_module_gesture_proc_exec(void)
      *手势设备帧数据采集
      */
     uint8_t gesture_length = 0;
-    int32_t gesture_frame[APP_EXT_DEV_GESTURE_FRAME_LIMIT][3] = {0};
+    int32_t gesture_frame[APP_DEV_GESTURE_FRAME_LIMIT][3] = {0};
     app_dev_gesture_proc_exec(&app_dev_gesture);
     app_dev_gesture_get_frame(&app_dev_gesture, gesture_frame, &gesture_length);
-    if (APP_EXT_DEV_GESTURE_FRAME_LIMIT > gesture_length)
+    if (APP_DEV_GESTURE_FRAME_LIMIT > gesture_length)
         APP_SYS_LOG_INFO("frame is incomplete");
     if (gesture_length == 0)
         return;

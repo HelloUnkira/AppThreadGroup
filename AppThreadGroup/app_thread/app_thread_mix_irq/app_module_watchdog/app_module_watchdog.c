@@ -7,6 +7,7 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
+#include "app_dev_lib.h"
 #include "app_thread_group.h"
 
 static app_mutex_t app_module_watchdog_mutex = {0};
@@ -40,7 +41,7 @@ static void app_module_watchdog_feed_work(void *argument)
 void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 {
     if (app_module_watchdog.count_fw++ % APP_MODULE_WATCHDOG_XS == 0)
-        app_dev_watchdog_feed(&app_dev_watchdog);
+        app_dev_wdt_feed(&app_dev_wdt);
     /* 批量向其他子线程递进软件看门狗的喂狗任务 */
     for (uint32_t idx = app_thread_id_s_s + 1; idx <= app_thread_id_s_e - 1; idx++) {
         /* 每隔1s发送一次软件看门狗喂狗事件 */
@@ -78,5 +79,5 @@ void app_module_watchdog_ctrl_check(app_module_clock_t clock[1])
 void app_module_watchdog_ready(void)
 {
     app_mutex_process(&app_module_watchdog_mutex, app_mutex_static);
-    app_dev_watchdog_ready(&app_dev_watchdog);
+    app_dev_wdt_ready(&app_dev_wdt);
 }

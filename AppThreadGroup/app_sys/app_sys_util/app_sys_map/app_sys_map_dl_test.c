@@ -2,7 +2,7 @@
  *    泛型图(十字链表,重邻接表)测试
  */
 
-#define APP_SYS_LOG_RECORD_LIMIT    1
+#define APP_SYS_LOG_LIMIT_RECORD    1
 #define APP_SYS_LOG_LOCAL_STATUS    1
 #define APP_SYS_LOG_LOCAL_LEVEL     2   /* 0:DEBUG,1:INFO,2:WARN,3:ERROR,4:NONE */
 

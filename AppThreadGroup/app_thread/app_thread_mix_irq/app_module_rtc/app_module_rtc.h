@@ -3,6 +3,7 @@
 
 typedef struct {
     uint64_t utc;
+    uint64_t utc_ms;
 } app_module_rtc_t;
 
 /*@brief 设置RTC模组
@@ -16,6 +17,10 @@ void app_module_rtc_get(app_module_rtc_t *rtc);
 /*@brief RTC模组1ms事件中断回调
  */
 void app_module_rtc_1ms_cb(void);
+
+/*@brief 同步RTC模组
+ */
+void app_module_rtc_sync(void);
 
 /*@brief 初始化RTC模组
  */
