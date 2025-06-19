@@ -20,6 +20,7 @@ typedef struct {
     scui_list_dll_t  dl_list;
     scui_table_dll_t ht_list[SCUI_CACHE_HASH_FONT + 1];
     scui_table_dlt_t ht_table;
+    uint32_t nodes;     /* 缓存单位数量 */
     uint32_t usage;     /* 缓存对内存资源占用情况 */
     uint32_t total;     /* 缓存对内存资源占用总门限 */
     uint32_t cnt_hit;   /* 命中次数 */
@@ -38,6 +39,16 @@ void scui_font_cache_rectify(void);
 /*@brief 字库资源检查
  */
 void scui_font_cache_visit(void);
+
+/*@brief 字库资源使用
+ *@param usage 字库资源使用
+ */
+void scui_font_cache_usage(uint32_t *usage);
+
+/*@brief 字库资源数量
+ *@param nodes 字库资源数量
+ */
+void scui_font_cache_nodes(uint32_t *nodes);
 
 /*@brief 字库资源缓存清除
  */

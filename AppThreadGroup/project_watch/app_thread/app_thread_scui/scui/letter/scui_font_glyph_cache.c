@@ -7,8 +7,6 @@
 
 #include "scui.h"
 
-#if SCUI_CACHE_HASH_FONT_GLYPH != 0
-
 static scui_font_glyph_cache_t scui_font_glyph_cache = {0};
 
 /*@brief 缓存带计数优先级排序入队列比较回调
@@ -83,6 +81,7 @@ static void scui_font_glyph_cache_fv_t(scui_table_dln_t *node, uint32_t idx)
  */
 void scui_font_glyph_cache_ready(void)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
     
     scui_list_dll_reset(&cache->dl_list);
@@ -92,10 +91,8 @@ void scui_font_glyph_cache_ready(void)
     scui_table_dll_reset(cache->ht_list, SCUI_CACHE_HASH_FONT_GLYPH);
     scui_table_dlt_reset(&cache->ht_table, digest, confirm, visit, cache->ht_list, SCUI_CACHE_HASH_FONT_GLYPH);
     
-    cache->usage     = 0;
-    cache->total     = SCUI_CACHE_TOTAL_FONT_GLYPH;
-    cache->cnt_hit   = 0;
-    cache->cnt_unhit = 0;
+    cache->total = SCUI_CACHE_TOTAL_FONT_GLYPH;
+    #endif
 }
 
 /*@brief 文字资源重校正
@@ -103,43 +100,74 @@ void scui_font_glyph_cache_ready(void)
  */
 void scui_font_glyph_cache_rectify(void)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
-    
-    scui_font_glyph_unit_t *unit = NULL;
+    scui_font_glyph_unit_t  *unit  =  NULL;
     
     /* 所有资源全部重衰减 */
     scui_list_dll_ftra(&cache->dl_list, curr) {
         unit = scui_own_ofs(scui_font_glyph_unit_t, dl_node, curr);
         unit->count = 0;
     }
+    #endif
 }
 
 /*@brief 文字资源检查
  */
 void scui_font_glyph_cache_visit(void)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
     
-    SCUI_LOG_WARN("usage:%u", cache->usage);
+    SCUI_LOG_WARN("nodes:%u, usage:%u", cache->nodes, cache->usage);
     scui_table_dlt_visit(&cache->ht_table);
+    #endif
+}
+
+/*@brief 文字资源使用
+ *@param usage 文字资源使用
+ */
+void scui_font_glyph_cache_usage(uint32_t *usage)
+{
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
+    scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
+    
+    SCUI_ASSERT(usage != NULL);
+    *usage = cache->usage;
+    #endif
+}
+
+/*@brief 文字资源数量
+ *@param nodes 文字资源数量
+ */
+void scui_font_glyph_cache_nodes(uint32_t *nodes)
+{
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
+    scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
+    
+    SCUI_ASSERT(nodes != NULL);
+    *nodes = cache->nodes;
+    #endif
 }
 
 /*@brief 文字资源清除
  */
 void scui_font_glyph_cache_clear(void)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
     
-    // SCUI_LOG_WARN("");
-    SCUI_LOG_WARN("usage:%u", cache->usage);
+    SCUI_LOG_WARN("nodes:%u, usage:%u", cache->nodes, cache->usage);
     uint32_t cnt_hit = cache->cnt_hit;
     uint32_t cnt_unhit = cache->cnt_unhit;
     SCUI_LOG_WARN("hit:%u unhit:%u pct:%.02f",
         cnt_hit, cnt_unhit, 1.0f * cnt_hit / (cnt_hit + cnt_unhit));
     cache->cnt_hit = 0;
     cache->cnt_unhit = 0;
-    
-    scui_font_glyph_unit_t *unit = NULL;
     
     /* 所有已解锁资源全部回收 */
     while (true) {
@@ -157,27 +185,29 @@ void scui_font_glyph_cache_clear(void)
         
         /* 约减使用率 */
         cache->usage -= unit->glyph.bitmap_size;
+        cache->nodes --;
         /* 卸载文字资源 */
         scui_font_glyph_unload(&unit->glyph);
         SCUI_MEM_FREE(unit);
         unit = NULL;
     }
+    #endif
 }
 
 /*@brief 文字资源卸载
  */
 void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
     
     if (glyph_unit == NULL) {
         SCUI_LOG_WARN("font unit is empty");
         return;
     }
     
-    scui_font_glyph_unit_t *unit = NULL;
     scui_table_dln_t *unit_node = NULL;
-    
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &glyph_unit->ht_node)) != NULL)
         unit = scui_own_ofs(scui_font_glyph_unit_t, ht_node, unit_node);
     
@@ -185,22 +215,23 @@ void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
     if (unit != NULL)
     if (unit->lock != 0)
         unit->lock--;
+    #endif
 }
 
 /*@brief 文字资源加载
  */
 void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
 {
+    #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
+    scui_font_glyph_unit_t  *unit  =  NULL;
     
     if (glyph_unit == NULL) {
         SCUI_LOG_WARN("font info is empty");
         return;
     }
     
-    scui_font_glyph_unit_t *unit = NULL;
     scui_table_dln_t *unit_node = NULL;
-    
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &glyph_unit->ht_node)) != NULL)
         unit = scui_own_ofs(scui_font_glyph_unit_t, ht_node, unit_node);
     
@@ -265,6 +296,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
             
             /* 约减使用率 */
             cache->usage -= unit->glyph.bitmap_size;
+            cache->nodes --;
             /* 卸载文字资源 */
             scui_font_glyph_unload(&unit->glyph);
             SCUI_MEM_FREE(unit);
@@ -279,6 +311,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         unit->count   = 1;
         unit->lock    = 1;
         cache->usage += glyph_unit->glyph.bitmap_size;
+        cache->nodes ++;
         *glyph_unit = *unit;
         /* 带计数优先级加入 */
         scui_list_dln_reset(&unit->dl_node);
@@ -287,56 +320,5 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
     }
+    #endif
 }
-
-#else
-
-/*@brief 文字初始化
- */
-void scui_font_glyph_cache_ready(void)
-{
-}
-
-/*@brief 文字资源重校正
- *       将计数器重衰减到0以刷新权重
- */
-void scui_font_glyph_cache_rectify(void)
-{
-}
-
-/*@brief 文字资源检查
- */
-void scui_font_glyph_cache_visit(void)
-{
-}
-
-/*@brief 文字资源清除
- */
-void scui_font_glyph_cache_clear(void)
-{
-}
-
-/*@brief 文字资源卸载
- */
-void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
-{
-    /* 卸载文字资源 */
-    scui_font_glyph_unload(&glyph_unit->glyph);
-}
-
-/*@brief 文字资源加载
- */
-void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
-{
-    /* 先加载字库 */
-    scui_font_unit_t font_unit = {0};
-    font_unit.size = glyph_unit->size;
-    font_unit.name = glyph_unit->name;
-    scui_font_cache_load(&font_unit);
-    glyph_unit->font = font_unit.font;
-    glyph_unit->glyph.handle = font_unit.font;
-    scui_font_glyph_load(&glyph_unit->glyph);
-    scui_font_cache_unload(&font_unit);
-}
-
-#endif

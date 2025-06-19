@@ -11,6 +11,7 @@ scui_handle_t monitor_anima = SCUI_HANDLE_INVALID;
 scui_handle_t monitor_refr  = SCUI_HANDLE_INVALID;
 scui_handle_t monitor_mem1  = SCUI_HANDLE_INVALID;
 scui_handle_t monitor_mem2  = SCUI_HANDLE_INVALID;
+scui_handle_t monitor_cache = SCUI_HANDLE_INVALID;
 
 /*@brief scui 监控器常驻动画响应回调
  */
@@ -152,11 +153,82 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
     }
     #endif
     
+    #if 1 // cache
+    #define CACHE_NUM   3
+    if (redraw_tag) {
+        uint32_t cache_rcd[CACHE_NUM * 2] = {0};
+        scui_font_cache_usage(&cache_rcd[0]);
+        scui_font_cache_nodes(&cache_rcd[1]);
+        scui_font_glyph_cache_usage(&cache_rcd[2]);
+        scui_font_glyph_cache_nodes(&cache_rcd[3]);
+        scui_image_cache_usage(&cache_rcd[4]);
+        scui_image_cache_nodes(&cache_rcd[5]);
+        
+        uintptr_t mem_total[CACHE_NUM] = {
+            SCUI_CACHE_TOTAL_FONT,
+            SCUI_CACHE_TOTAL_FONT_GLYPH,
+            SCUI_CACHE_TOTAL_IMAGE,
+        };
+        uintptr_t mem_used[CACHE_NUM] = {
+            cache_rcd[0], cache_rcd[2], cache_rcd[4],
+        };
+        
+        float mem_total_f[CACHE_NUM] = {0};
+        mem_total_f[0] = (float)mem_total[0] / 1024 / 1024;
+        mem_total_f[1] = (float)mem_total[1] / 1024 / 1024;
+        mem_total_f[2] = (float)mem_total[2] / 1024 / 1024;
+        
+        float mem_used_f[CACHE_NUM] = {0};
+        mem_used_f[0] = (float)mem_used[0] / 1024;
+        mem_used_f[1] = (float)mem_used[1] / 1024 / 1024;
+        mem_used_f[2] = (float)mem_used[2] / 1024 / 1024;
+        
+        uint32_t pct_args[CACHE_NUM] = {0};
+        for (uint8_t idx = 0; idx < scui_arr_len(mem_used); idx++)
+            pct_args[idx] = mem_total[idx] == 0 ? 0 : mem_used[idx] * 100 / mem_total[idx];
+        
+        #if 0
+        uint8_t str_cache[100] = {0};
+        snprintf(str_cache, sizeof(str_cache) - 1,
+            "Font:#-%d,%d%%:%.02fK-# Glyph:#-%d,%d%%:%.02fK-# Graph:#-%d,%d%%:%.02fM-#",
+                 cache_rcd[1], pct_args[0], mem_used_f[0],
+                 cache_rcd[3], pct_args[1], mem_used_f[1],
+                 cache_rcd[5], pct_args[2], mem_used_f[2]);
+        #else
+        uint8_t str_cache[100] = {0};
+        snprintf(str_cache, sizeof(str_cache) - 1,
+            "Font:#-%u,%.02fK-# Glyph:#-%d,%.02fM-# Graph:#-%d,%.02fM-#",
+                 cache_rcd[1], mem_used_f[0],
+                 cache_rcd[3], mem_used_f[1],
+                 cache_rcd[5], mem_used_f[2]);
+        #endif
+        
+        uint32_t color_g = 0xFF008000;
+        uint32_t color_y = 0xFF808000;
+        uint32_t color_r = 0xFF800000;
+        
+        scui_color_t recolors[3] = {
+            {   .filter = true,
+                .color_s.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[0] > 80 ? color_r : pct_args[0] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[1] > 80 ? color_r : pct_args[1] > 60 ? color_y : color_g,},
+            {   .filter = true,
+                .color_s.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,
+                .color_e.full = pct_args[2] > 80 ? color_r : pct_args[2] > 60 ? color_y : color_g,},
+        };
+        
+        scui_string_update_str_rec(monitor_cache, str_cache, scui_arr_len(recolors), recolors);
+    }
+    #endif
+    
     // 怪事???
     if (redraw_tag) {
         scui_widget_draw(monitor_refr, NULL, false);
         scui_widget_draw(monitor_mem1, NULL, false);
         scui_widget_draw(monitor_mem2, NULL, false);
+        scui_widget_draw(monitor_cache, NULL, false);
     }
 }
 
@@ -210,10 +282,16 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 20;
             scui_widget_create(&string_maker, &monitor_mem2, false);
+            string_maker.widget.clip.x              = 10;
+            string_maker.widget.clip.y              = 90;
+            string_maker.widget.clip.w              = SCUI_HOR_RES;
+            string_maker.widget.clip.h              = 20;
+            scui_widget_create(&string_maker, &monitor_cache, false);
             
-            scui_string_update_str(monitor_refr, "refr");
-            scui_string_update_str(monitor_mem1, "mem");
-            scui_string_update_str(monitor_mem2, "mem");
+            scui_string_update_str(monitor_refr,  "refr");
+            scui_string_update_str(monitor_mem1,  "mem");
+            scui_string_update_str(monitor_mem2,  "mem");
+            scui_string_update_str(monitor_cache, "cache");
         }
         break;
     }

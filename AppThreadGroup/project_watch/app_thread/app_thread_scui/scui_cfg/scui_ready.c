@@ -7,8 +7,12 @@
 
 #include "scui.h"
 
-static void scui_element_evaluate(void)
+static void scui_evaluate(void)
 {
+    SCUI_LOG_INFO("");
+    float graph_occupy = scui_mem_size_used(scui_mem_type_graph) / 1024.0f / 1024.0f;
+    SCUI_LOG_INFO("scui graph occupy: %.2fM", graph_occupy);
+    
     SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui widget evaluate:");
     SCUI_LOG_INFO("scui_widget_t:%d, scui_widget_maker_t:%d", sizeof(scui_widget_t), sizeof(scui_widget_maker_t));
@@ -30,8 +34,6 @@ static void scui_element_evaluate(void)
  */
 void scui_ready(void)
 {
-    scui_element_evaluate();
-    
     /* 初始化scui */
     scui_engine_ready();
     
@@ -134,4 +136,7 @@ void scui_ready(void)
     #if SCUI_MONKEY_TEST
     scui_monkey_test();
     #endif
+    
+    // 输出一些基础信息
+    scui_evaluate();
 }
