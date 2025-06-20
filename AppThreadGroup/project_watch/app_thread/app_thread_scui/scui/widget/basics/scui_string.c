@@ -11,9 +11,8 @@
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
+void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -26,7 +25,7 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     widget_maker->style.sched_anima = true;
     
     /* 构造基础控件实例 */
-    scui_widget_make(widget, widget_maker, handle, layout);
+    scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_string));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
@@ -402,7 +401,7 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_string_event(scui_event_t *event)
+void scui_string_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);

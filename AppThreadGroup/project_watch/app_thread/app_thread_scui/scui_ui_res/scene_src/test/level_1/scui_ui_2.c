@@ -104,7 +104,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scroll_maker.dir = scui_opt_dir_none;
         #endif
         scroll_maker.skip = scui_opt_pos_all;
-        scui_widget_create(&scroll_maker, &scroll_handle, false);
+        scui_widget_create(&scroll_maker, &scroll_handle);
         scui_ui_res_local->scroll = scroll_handle;
         
         scui_custom_maker_t custom_maker = {0};
@@ -121,7 +121,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
         }
         #else
         scui_coord_t scroll_w = scroll_maker.widget.clip.w;
@@ -137,7 +137,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
         }
         #endif
         #endif

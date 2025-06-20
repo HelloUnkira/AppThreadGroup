@@ -64,7 +64,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_scroll,
             .make   = scui_scroll_make,
             .burn   = scui_scroll_burn,
-            .invoke = scui_scroll_event,
+            .invoke = scui_scroll_invoke,
         },
         [scui_widget_type_string] = {
             .size   = sizeof(scui_string_t),
@@ -72,7 +72,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_string,
             .make   = scui_string_make,
             .burn   = scui_string_burn,
-            .invoke = scui_string_event,
+            .invoke = scui_string_invoke,
         },
         [scui_widget_type_linear] = {
             .size   = sizeof(scui_linear_t),
@@ -80,7 +80,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_scroll,
             .make   = scui_linear_make,
             .burn   = scui_linear_burn,
-            .invoke = scui_linear_event,
+            .invoke = scui_linear_invoke,
         },
         [scui_widget_type_roller] = {
             .size   = sizeof(scui_roller_t),
@@ -88,7 +88,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_linear,
             .make   = scui_roller_make,
             .burn   = scui_roller_burn,
-            .invoke = scui_roller_event,
+            .invoke = scui_roller_invoke,
         },
         
         /* 扩展控件 */
@@ -98,7 +98,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_objbtn,
             .make   = scui_objbtn_make,
             .burn   = scui_objbtn_burn,
-            .invoke = scui_objbtn_event,
+            .invoke = scui_objbtn_invoke,
         },
         /* 扩展控件 */
         [scui_widget_type_button] = {
@@ -107,7 +107,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_button,
             .make   = scui_button_make,
             .burn   = scui_button_burn,
-            .invoke = scui_button_event,
+            .invoke = scui_button_invoke,
         },
         [scui_widget_type_chart] = {
             .size   = sizeof(scui_chart_t),
@@ -115,7 +115,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .base   = scui_widget_type_chart,
             .make   = scui_chart_make,
             .burn   = scui_chart_burn,
-            .invoke = scui_chart_event,
+            .invoke = scui_chart_invoke,
         },
     };
     
@@ -153,11 +153,10 @@ void scui_widget_destroy(scui_handle_t handle)
     SCUI_MEM_FREE(widget);
 }
 /*@brief 创建控件
- *@param maker  控件实例构造参数
+ *@param maker  控件构造实例
  *@param handle 控件句柄
- *@param layout 通过布局
  */
-void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
+void scui_widget_create(void *maker, scui_handle_t *handle)
 {
     scui_widget_map_t   *widget_map   = NULL;
     scui_widget_maker_t *widget_maker = maker;
@@ -171,7 +170,10 @@ void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
     memset(widget, 0, widget_map->size);
     /* 构造流程 */
     widget_maker = local_maker;
-    widget_map->make(widget, widget_maker, handle, layout);
+    /* 备注:动态构造器是不知道句柄的 */
+    /* 所以动态构造器需要填入非法句柄 */
+    // widget_maker->myself = SCUI_HANDLE_INVALID;
+    widget_map->make(widget, widget_maker, handle);
     SCUI_MEM_FREE(widget_maker);
     
     /* 控件构建后:控件构建事件 */
@@ -186,7 +188,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle, bool layout)
     scui_widget_state_show(widget->myself, false);
 }
 
-/*@brief 通过映射表调用创建一个控件树
+/*@brief 创建控件树(句柄映射表)
  *@param handle 根控件句柄
  */
 void scui_widget_create_layout_tree(scui_handle_t handle)
@@ -205,7 +207,7 @@ void scui_widget_create_layout_tree(scui_handle_t handle)
     do {
         /* 先创建根控件,然后延续依次创建剩下的控件 */
         /* 静态控件规则为,一个场景为一段连续句柄,父控件在前子控件在后 */
-        scui_widget_create(widget_maker, &handle, true);
+        scui_widget_create(widget_maker, &handle);
         /* 迭代到下一个句柄 */
         widget_maker = scui_handle_source(++handle);
         if (widget_maker == NULL)

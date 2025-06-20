@@ -434,7 +434,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.parent = parser->parent;
             
             custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
-            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }
         case scui_cwf_json_type_img_watch: {
@@ -447,7 +447,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.style.trans = true;
             custom_maker.widget.style.sched_anima = true;
             custom_maker.widget.event_cb = scui_cwf_json_custom_dial_ptr_event_cb;
-            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx]);
             scui_custom_draw_dsc_t *draw_dsc = NULL;
             scui_custom_draw_dsc(parser->list_child[idx], &draw_dsc);
             draw_dsc->type = scui_custom_draw_type_dial_ptr;
@@ -491,7 +491,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             
             custom_maker.widget.style.trans = true;
             custom_maker.widget.event_cb = scui_cwf_json_custom_event_cb;
-            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }
         case scui_cwf_json_type_img_month:
@@ -520,7 +520,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.parent = parser->parent;
             
             custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
-            scui_widget_create(&custom_maker, &parser->list_child[idx], false);
+            scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }
         default:
@@ -555,7 +555,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         string_maker.args.align_ver             = 2;
         string_maker.args.color                 = color;
         string_maker.font_idx                   = SCUI_FONT_IDX_32;
-        scui_widget_create(&string_maker, &parser->list_child[idx], false);
+        scui_widget_create(&string_maker, &parser->list_child[idx]);
         
         // 为type进行构建
         switch (parser->list_type[idx]) {

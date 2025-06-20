@@ -177,14 +177,14 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         custom_maker.widget.style.indev_ptr     = false;
         custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
         custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         // list的各个子控件
         custom_maker.widget.style.indev_ptr     = true;
         custom_maker.widget.clip.h              = 180;
         custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
         for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
             scui_linear_item_t linear_item = {.draw_idx = idx,};
             scui_linear_item_gets(event->object, &linear_item);
             linear_item.handle_m = custom_handle;
@@ -195,7 +195,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         custom_maker.widget.style.indev_ptr     = false;
         custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
         custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         // list的各个子控件树
         for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
@@ -208,7 +208,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
             custom_maker.widget.clip.h      = 180;
             custom_maker.widget.child_num   = 5;
             custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
             scui_linear_item_t linear_item = {.draw_idx = idx,};
             scui_linear_item_gets(event->object, &linear_item);
             linear_item.handle_s = custom_handle;
@@ -321,7 +321,7 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
         linear_maker.scroll.springback = 70;
         linear_maker.list_num          = scui_ui_res_local->list_num;
-        scui_widget_create(&linear_maker, &linear_handle, false);
+        scui_widget_create(&linear_maker, &linear_handle);
         
         break;
     }

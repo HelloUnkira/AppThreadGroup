@@ -11,9 +11,8 @@
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
+void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -40,7 +39,7 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     }
     
     /* 构造派生控件实例 */
-    scui_linear_make(linear, linear_maker, handle, layout);
+    scui_linear_make(linear, linear_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));
     
     /* 状态初始化 */
@@ -275,7 +274,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     custom_maker.widget.style.indev_ptr = true;
     custom_maker.widget.parent          = widget->myself;
     custom_maker.widget.event_cb        = scui_roller_m_event;
-    scui_widget_create(&custom_maker, &custom_handle, false);
+    scui_widget_create(&custom_maker, &custom_handle);
     scui_handle_t idx = scui_widget_child_to_index(widget->myself, custom_handle);
     
     scui_linear_item_t linear_item = {.draw_idx = idx,};
@@ -288,7 +287,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     custom_maker.widget.parent          = SCUI_HANDLE_INVALID;
     custom_maker.widget.event_cb        = scui_roller_s_event;
     custom_maker.widget.child_num       = 1;
-    scui_widget_create(&custom_maker, &custom_handle, false);
+    scui_widget_create(&custom_maker, &custom_handle);
     
     linear_item.handle_s = custom_handle;
     scui_linear_item_sets(widget->myself, &linear_item);
@@ -301,7 +300,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_string_maker_t string_maker = *maker;
     scui_handle_t string_handle = SCUI_HANDLE_INVALID;
     string_maker.widget.parent  = custom_handle;
-    scui_widget_create(&string_maker, &string_handle, false);
+    scui_widget_create(&string_maker, &string_handle);
     scui_string_update_str(string_handle, str_utf8);
     
     // 添加控件重绘
@@ -324,7 +323,7 @@ void scui_roller_center_get(scui_handle_t handle, scui_handle_t *target)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_roller_event(scui_event_t *event)
+void scui_roller_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
@@ -349,5 +348,5 @@ void scui_roller_event(scui_event_t *event)
         break;
     }
     
-    scui_linear_event(event);
+    scui_linear_invoke(event);
 }

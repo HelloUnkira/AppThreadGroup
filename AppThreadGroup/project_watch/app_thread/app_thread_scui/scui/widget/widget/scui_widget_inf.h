@@ -123,16 +123,10 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 void scui_widget_destroy(scui_handle_t handle);
 
 /*@brief 创建控件
- *@param maker  控件实例构造参数
+ *@param maker  控件构造实例
  *@param handle 控件句柄
- *@param layout 通过布局
  */
-void scui_widget_create(void *maker, scui_handle_t *handle, bool layout);
-
-/*@brief 通过映射表调用创建一个控件树
- *@param handle 根控件句柄
- */
-void scui_widget_create_layout_tree(scui_handle_t handle);
+void scui_widget_create(void *maker, scui_handle_t *handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

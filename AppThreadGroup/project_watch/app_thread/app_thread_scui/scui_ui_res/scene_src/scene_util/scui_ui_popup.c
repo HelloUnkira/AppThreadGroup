@@ -161,7 +161,7 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         string_maker.args.color.color_e.full    = 0xFFFFFFFF;
         string_maker.unit_s                     = true;     //单次滚动,结束标记
         string_maker.font_idx                   = SCUI_FONT_IDX_32;
-        scui_widget_create(&string_maker, &popup_string, false);
+        scui_widget_create(&string_maker, &popup_string);
         scui_string_scroll_abort(popup_string, true);
         
         scui_widget_alpha_set(SCUI_UI_SCENE_POPUP, scui_alpha_trans, true);

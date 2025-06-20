@@ -47,9 +47,8 @@ typedef struct {
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
+void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle);
 
 /*@brief 控件析构
  *@param handle 控件句柄
@@ -59,6 +58,6 @@ void scui_button_burn(scui_handle_t handle);
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_button_event(scui_event_t *event);
+void scui_button_invoke(scui_event_t *event);
 
 #endif

@@ -11,9 +11,8 @@
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
+void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -29,7 +28,7 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     widget_maker->style.sched_anima = true;
     
     /* 构造派生控件实例 */
-    scui_scroll_make(scroll, scroll_maker, handle, layout);
+    scui_scroll_make(scroll, scroll_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear));
     
     #if SCUI_MEM_FEAT_MINI
@@ -300,7 +299,7 @@ void scui_linear_m_event(scui_event_t *event)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_linear_event(scui_event_t *event)
+void scui_linear_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
@@ -329,5 +328,5 @@ void scui_linear_event(scui_event_t *event)
         break;
     }
     
-    scui_scroll_event(event);
+    scui_scroll_invoke(event);
 }

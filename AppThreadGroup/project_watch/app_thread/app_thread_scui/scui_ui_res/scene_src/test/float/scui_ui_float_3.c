@@ -155,7 +155,7 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
         button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         button_maker.delta = -1;
-        scui_widget_create(&button_maker, &button_bandle, false);
+        scui_widget_create(&button_maker, &button_bandle);
         
         button_maker.widget.clip.w  = 72 * 2 + 20;
         button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
@@ -166,7 +166,7 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.image[2] = scui_image_prj_image_src_repeat_box_sleep_breathe_01_left_downbmp;
         button_maker.image[3] = scui_image_prj_image_src_repeat_box_sleep_breathe_03_right_downbmp;
         button_maker.delta = 4;
-        scui_widget_create(&button_maker, &button_bandle, false);
+        scui_widget_create(&button_maker, &button_bandle);
         
         button_maker.widget.clip.w  = 72 * 2;
         button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
@@ -177,7 +177,7 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.image[2] = scui_image_prj_image_src_repeat_card_06_r36_3bmp;
         button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         button_maker.delta = 0;
-        scui_widget_create(&button_maker, &button_bandle, false);
+        scui_widget_create(&button_maker, &button_bandle);
         
         button_maker.widget.clip.w  = 72 * 2;
         button_maker.widget.clip.x  = SCUI_HOR_RES / 2 - button_maker.widget.clip.w / 2;
@@ -189,7 +189,7 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         button_maker.image[3] = scui_image_prj_image_src_repeat_card_07_r36_4bmp;
         button_maker.mode  = scui_button_mode_scale;
         button_maker.delta = -1;
-        scui_widget_create(&button_maker, &button_bandle, false);
+        scui_widget_create(&button_maker, &button_bandle);
         
         break;
     }

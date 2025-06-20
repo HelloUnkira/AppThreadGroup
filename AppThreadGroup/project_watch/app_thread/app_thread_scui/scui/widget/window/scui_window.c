@@ -11,9 +11,8 @@
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
+void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -23,7 +22,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_window_maker_t *window_maker = widget_maker;
     
     /* 构造基础控件实例 */
-    scui_widget_make(widget, widget_maker, handle, layout);
+    scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_window));
     SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
     /* 注意:要求只能是根控件才可以创建窗口 */

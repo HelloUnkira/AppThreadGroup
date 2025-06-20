@@ -271,22 +271,22 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             string_maker.widget.clip.y              = 30;
             string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 20;
-            scui_widget_create(&string_maker, &monitor_refr, false);
+            scui_widget_create(&string_maker, &monitor_refr);
             string_maker.widget.clip.x              = 10;
             string_maker.widget.clip.y              = 50;
             string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 20;
-            scui_widget_create(&string_maker, &monitor_mem1, false);
+            scui_widget_create(&string_maker, &monitor_mem1);
             string_maker.widget.clip.x              = 10;
             string_maker.widget.clip.y              = 70;
             string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 20;
-            scui_widget_create(&string_maker, &monitor_mem2, false);
+            scui_widget_create(&string_maker, &monitor_mem2);
             string_maker.widget.clip.x              = 10;
             string_maker.widget.clip.y              = 90;
             string_maker.widget.clip.w              = SCUI_HOR_RES;
             string_maker.widget.clip.h              = 20;
-            scui_widget_create(&string_maker, &monitor_cache, false);
+            scui_widget_create(&string_maker, &monitor_cache);
             
             scui_string_update_str(monitor_refr,  "refr");
             scui_string_update_str(monitor_mem1,  "mem");

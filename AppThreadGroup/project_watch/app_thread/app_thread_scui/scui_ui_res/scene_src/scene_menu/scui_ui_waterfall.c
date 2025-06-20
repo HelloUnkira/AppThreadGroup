@@ -183,7 +183,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         custom_maker.widget.clip.y = 0;
         custom_maker.widget.clip.w = scroll_w;
         custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.event_cb        = scui_ui_scene_waterfall_icon_event_proc;
@@ -193,7 +193,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
             if (scui_ui_scene_list_num % 3 == 1 &&
                 idx == scui_ui_scene_list_num - 1) {
                 custom_maker.widget.clip = clip_m;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_m.y += clip_m.h + SCUI_UI_WATERFALL_LINE_SPACE;
                 continue;
             }
@@ -201,31 +201,31 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
             if (scui_ui_scene_list_num % 3 == 2 &&
                 idx == scui_ui_scene_list_num - 2) {
                 custom_maker.widget.clip = clip_l;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_l.y += clip_l.h + SCUI_UI_WATERFALL_LINE_SPACE;
                 continue;
             }
             if (scui_ui_scene_list_num % 3 == 2 &&
                 idx == scui_ui_scene_list_num - 1) {
                 custom_maker.widget.clip = clip_r;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_r.y += clip_r.h + SCUI_UI_WATERFALL_LINE_SPACE;
                 continue;
             }
             // 按顺序填充三列
             if (idx % 3 == 0) {
                 custom_maker.widget.clip = clip_l;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_l.y += clip_l.h + SCUI_UI_WATERFALL_LINE_SPACE;
             }
             if (idx % 3 == 1) {
                 custom_maker.widget.clip = clip_m;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_m.y += clip_m.h + SCUI_UI_WATERFALL_LINE_SPACE;
             }
             if (idx % 3 == 2) {
                 custom_maker.widget.clip = clip_r;
-                scui_widget_create(&custom_maker, &custom_handle, false);
+                scui_widget_create(&custom_maker, &custom_handle);
                 clip_r.y += clip_r.h + SCUI_UI_WATERFALL_LINE_SPACE;
             }
         }
@@ -241,7 +241,7 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         custom_maker.widget.clip.y = scui_max(clip_m.y, scui_max(clip_l.y, clip_r.y));
         custom_maker.widget.clip.w = scroll_w;
         custom_maker.widget.clip.h = (scroll_h - icon_h) / 2;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         scui_ui_res_local->bar_arc.bar_handle = SCUI_UI_SCENE_WATERFALL_BAR_ARC;
         break;

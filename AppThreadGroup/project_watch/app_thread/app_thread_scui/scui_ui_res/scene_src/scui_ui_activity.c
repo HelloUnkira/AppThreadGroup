@@ -144,7 +144,7 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         custom_maker.widget.clip.w      = SCUI_HOR_RES;
         custom_maker.widget.clip.h      = SCUI_VER_RES;
         custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         scui_ui_res_local->big_3_slave = custom_handle;
         
         // 创建画布,用于绘制
@@ -213,7 +213,7 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         string_maker.args.color.filter          = true;
         string_maker.text                       = SCUI_MULTI_LANG_0X0017;
         string_maker.font_idx                   = SCUI_FONT_IDX_36;
-        scui_widget_create(&string_maker, &string_handle, false);
+        scui_widget_create(&string_maker, &string_handle);
         break;
     }
     default:
@@ -390,7 +390,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         chart_maker.histogram.height    = 86;
         chart_maker.histogram.space     = 4;
         chart_maker.histogram.color.color.full = 0xFFF9104F;
-        scui_widget_create(&chart_maker, &chart_handle, false);
+        scui_widget_create(&chart_maker, &chart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
@@ -552,7 +552,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         chart_maker.histogram.height    = 86;
         chart_maker.histogram.space     = 4;
         chart_maker.histogram.color.color.full = 0xFFE1CC00;
-        scui_widget_create(&chart_maker, &chart_handle, false);
+        scui_widget_create(&chart_maker, &chart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
@@ -714,7 +714,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         chart_maker.histogram.height    = 86;
         chart_maker.histogram.space     = 4;
         chart_maker.histogram.color.color.full = 0xFF00B7FF;
-        scui_widget_create(&chart_maker, &chart_handle, false);
+        scui_widget_create(&chart_maker, &chart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);

@@ -11,31 +11,36 @@
 
 /*@brief 控件构造器
  *@param widget 控件实例
- *@param maker  控件实例构造参数
+ *@param maker  控件构造实例
  *@param handle 控件句柄
- *@param layout 通过布局
  */
-void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
-                      scui_handle_t *handle, bool layout)
+void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
 {
-    SCUI_ASSERT(widget != NULL && maker != NULL && handle != NULL);
-    SCUI_ASSERT(maker->clip.w != 0);
-    SCUI_ASSERT(maker->clip.h != 0);
+    scui_widget_maker_t *widget_maker = maker;
+    SCUI_ASSERT(widget != NULL && widget_maker != NULL && handle != NULL);
+    SCUI_ASSERT(widget_maker->clip.w != 0);
+    SCUI_ASSERT(widget_maker->clip.h != 0);
     
-    /* 非布局则句柄为动态创建 */
-    *handle = layout ? maker->myself : scui_handle_find();
+    /* 构造器携带了句柄, 应该与目标句柄一致 */
+    if (widget_maker->myself != SCUI_HANDLE_INVALID)
+        SCUI_ASSERT(widget_maker->myself == *handle);
+    
+    /* 构造器句柄有效, 使用构造器句柄 */
+    /* 构造器句柄无效, 使用动态句柄 */
+    if (widget_maker->myself == SCUI_HANDLE_INVALID)
+        *handle = scui_handle_find();
     
     /* 为句柄设置映射 */
     scui_handle_linker(*handle, widget);
     
     /* 控件使用maker构造 */
-    if (maker->parent != SCUI_HANDLE_INVALID)
-        SCUI_ASSERT(scui_handle_remap(maker->parent));
+    if (widget_maker->parent != SCUI_HANDLE_INVALID)
+        SCUI_ASSERT(scui_handle_remap(widget_maker->parent));
     
-    widget->type   = maker->type;
-    widget->style  = maker->style;
-    widget->clip   = maker->clip;
-    widget->parent = maker->parent;
+    widget->type   = widget_maker->type;
+    widget->style  = widget_maker->style;
+    widget->clip   = widget_maker->clip;
+    widget->parent = widget_maker->parent;
     widget->myself = *handle;
     
     /* 控件初始默认为隐藏(无响应) */
@@ -44,8 +49,8 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);
     scui_event_cb_node_t cb_node = {0};
-    cb_node.event_cb = maker->event_cb;
-    if (maker->event_cb == NULL) {
+    cb_node.event_cb = widget_maker->event_cb;
+    if (widget_maker->event_cb == NULL) {
         scui_widget_map_t *widget_map = NULL;
         scui_widget_map_find(widget->type, &widget_map);
         cb_node.event_cb = widget_map->invoke;
@@ -75,7 +80,7 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     }
     
     /* 构建孩子列表 */
-    widget->child_num = maker->child_num;
+    widget->child_num = widget_maker->child_num;
     widget->child_list = NULL;
     if (widget->child_num != 0) {
         scui_handle_t list_size = widget->child_num * sizeof(scui_handle_t);
@@ -111,8 +116,8 @@ void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
     
     /* 默认控件透明度为全覆盖 */
     widget->alpha = scui_alpha_cover;
-    widget->image = maker->image;
-    widget->color = maker->color;
+    widget->image = widget_maker->image;
+    widget->color = widget_maker->color;
     
     SCUI_LOG_INFO("widget %u",              widget->myself);
     SCUI_LOG_INFO("widget type %u",         widget->type);

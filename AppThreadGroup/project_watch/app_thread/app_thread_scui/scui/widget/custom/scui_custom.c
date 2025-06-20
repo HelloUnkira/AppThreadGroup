@@ -11,9 +11,8 @@
  *@param inst       控件实例
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
- *@param layout     通过布局创建
  */
-void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle, bool layout)
+void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
@@ -23,7 +22,7 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle, bool 
     scui_custom_maker_t *custom_maker = widget_maker;
     
     /* 构造基础控件实例 */
-    scui_widget_make(widget, widget_maker, handle, layout);
+    scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_custom));
     // 自定义控件既可以是根控件(子画布控件树),也可以是非根控件
 }

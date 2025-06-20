@@ -938,14 +938,14 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         custom_maker.widget.style.indev_ptr     = false;
         custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
         custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         // list的各个子控件
         custom_maker.widget.style.indev_ptr     = true;
         custom_maker.widget.clip.h              = 180;
         custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
             scui_linear_item_t linear_item = {.draw_idx = idx,};
             scui_linear_item_gets(event->object, &linear_item);
             linear_item.handle_m = custom_handle;
@@ -956,7 +956,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         custom_maker.widget.style.indev_ptr     = false;
         custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
         custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle, false);
+        scui_widget_create(&custom_maker, &custom_handle);
         
         // list的各个子控件树
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
@@ -969,7 +969,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             custom_maker.widget.clip.h      = 180;
             custom_maker.widget.child_num   = 5;
             custom_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
-            scui_widget_create(&custom_maker, &custom_handle, false);
+            scui_widget_create(&custom_maker, &custom_handle);
             scui_linear_item_t linear_item = {.draw_idx = idx,};
             scui_linear_item_gets(event->object, &linear_item);
             linear_item.handle_s = custom_handle;
@@ -1002,7 +1002,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                 string_t_maker.text = SCUI_MULTI_LANG_0X0176;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_ui_res_local->title_music = string_handle;
                 break;
             }
@@ -1033,12 +1033,12 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.text = SCUI_MULTI_LANG_0X0049;
                 }
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 string_t_maker.widget.clip.y = 69;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 
                 if (type == scui_ui_scene_mini_card_type_hr)
@@ -1051,7 +1051,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.widget.clip.y = 129;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 
                 if (type == scui_ui_scene_mini_card_type_hr)
@@ -1075,19 +1075,19 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFF06AEFF;
                 string_t_maker.text = SCUI_MULTI_LANG_0X0092;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 string_t_maker.widget.clip.y = 69;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_weather_cur = string_handle;
                 
                 string_t_maker.widget.clip.y = 129;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_weather_lim = string_handle;
                 
@@ -1105,14 +1105,14 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFFDE8926;
                 string_t_maker.text = SCUI_MULTI_LANG_0X00e6;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 if (scui_presenter.alarm_none()) {
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     string_t_maker.text = SCUI_MULTI_LANG_0X00f0;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     
                     #if 1
                     scui_handle_t image = scui_image_prj_image_src_repeat_arrow_01_backbmp;
@@ -1122,20 +1122,20 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     string_t_maker.text = SCUI_MULTI_LANG_0X00e7;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     #endif
                 } else {
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_alarm = string_handle;
                     
                     string_t_maker.widget.clip.y = 129;
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_alarm_date = string_handle;
                     
@@ -1155,7 +1155,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFF06E2ED;
                 string_t_maker.text = SCUI_MULTI_LANG_0X004f;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 if (scui_presenter.sleep_none()) {
                     
@@ -1163,14 +1163,14 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     string_t_maker.text = SCUI_MULTI_LANG_0X0051;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     
                 } else {
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_sleep = string_handle;
                     
@@ -1190,7 +1190,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFFF83600;
                 string_t_maker.text = SCUI_MULTI_LANG_0X01c5;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 if (scui_presenter.sport_record_none()) {
                     
@@ -1198,21 +1198,21 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     
                 } else {
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_sport_record = string_handle;
                     
                     string_t_maker.widget.clip.y = 129;
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_sport_record_time = string_handle;
                     
@@ -1232,7 +1232,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFFD83371;
                 string_t_maker.text = SCUI_MULTI_LANG_0X0110;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 if (scui_presenter.women_health_none()) {
                     
@@ -1240,21 +1240,21 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     string_t_maker.text = SCUI_MULTI_LANG_0X01c4;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     
                 } else {
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_women_health = string_handle;
                     
                     string_t_maker.widget.clip.y = 129;
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_women_health_time = string_handle;
                     
@@ -1274,14 +1274,14 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFFFD2627;
                 string_t_maker.text = SCUI_MULTI_LANG_0X011c;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 if (scui_presenter.compass_invalid()) {
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "--");
                     
                     #if 1
@@ -1292,21 +1292,21 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
                     string_t_maker.text = SCUI_MULTI_LANG_0X00f6;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     #endif
                 } else {
                     
                     string_t_maker.widget.clip.y = 69;
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_compass = string_handle;
                     
                     string_t_maker.widget.clip.y = 129;
                     string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                     string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_compass_info = string_handle;
                     
@@ -1326,7 +1326,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFF98FF02;
                 string_t_maker.text = SCUI_MULTI_LANG_0X012a;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 string_t_maker.widget.clip.x = 36;
                 string_t_maker.widget.clip.y = 77;
@@ -1335,7 +1335,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_altimeter_info1 = string_handle;
                 
@@ -1346,7 +1346,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_altimeter_info2 = string_handle;
                 
@@ -1358,7 +1358,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.text = SCUI_MULTI_LANG_0X0127;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 string_t_maker.widget.clip.x = 410 / 2 + 36;
                 string_t_maker.widget.clip.y = 127;
@@ -1368,7 +1368,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.text = SCUI_MULTI_LANG_0X0126;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 break;
             }
@@ -1384,7 +1384,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFF00E85E;
                 string_t_maker.text = SCUI_MULTI_LANG_0X013f;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 
                 
@@ -1402,7 +1402,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFFDF7331;
                 string_t_maker.text = SCUI_MULTI_LANG_0X0139;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 #if 1
                 scui_handle_t image = scui_image_prj_image_src_19_widget_timer_01_bgbmp;
@@ -1420,7 +1420,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                     string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                     string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
                     string_t_maker.font_idx = 0;
-                    scui_widget_create(&string_t_maker, &string_handle, false);
+                    scui_widget_create(&string_t_maker, &string_handle);
                     scui_string_update_str(string_handle, "");
                     scui_ui_res_local->data_countdown[idx] = string_handle;
                 }
@@ -1441,7 +1441,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.color.color_e.full = 0xFF1977FF;
                 string_t_maker.text = SCUI_MULTI_LANG_0X0140;
                 
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 
                 string_t_maker.widget.clip.x = 36;
                 string_t_maker.widget.clip.y = 77;
@@ -1450,7 +1450,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_world_time1_time = string_handle;
                 
@@ -1461,7 +1461,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFFFFFFFF;
                 string_t_maker.args.color.color_e.full = 0xFFFFFFFF;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_world_time2_time = string_handle;
                 
@@ -1472,7 +1472,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_world_time1_unit = string_handle;
                 
@@ -1483,7 +1483,7 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
                 string_t_maker.args.align_hor = 2;
                 string_t_maker.args.color.color_s.full = 0xFF4D4D4D;
                 string_t_maker.args.color.color_e.full = 0xFF4D4D4D;
-                scui_widget_create(&string_t_maker, &string_handle, false);
+                scui_widget_create(&string_t_maker, &string_handle);
                 scui_string_update_str(string_handle, "");
                 scui_ui_res_local->data_world_time2_unit = string_handle;
                 
@@ -1567,7 +1567,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
         linear_maker.scroll.springback = 70;
         linear_maker.list_num = scui_ui_scene_mini_card_num;
-        scui_widget_create(&linear_maker, &linear_handle, false);
+        scui_widget_create(&linear_maker, &linear_handle);
         
         break;
     }

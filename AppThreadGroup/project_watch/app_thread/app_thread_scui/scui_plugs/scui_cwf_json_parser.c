@@ -235,7 +235,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     custom_maker.widget.clip        = scui_widget_clip(parent);
     custom_maker.widget.parent      = parent;
     custom_maker.widget.child_num   = parser->list_num;
-    scui_widget_create(&custom_maker, &parser->parent, false);
+    scui_widget_create(&custom_maker, &parser->parent);
     
     // 按索引顺序一个个解析, 然后添加到parser中去
     for (uint32_t idx = 0; idx < parser->list_num; idx++) {

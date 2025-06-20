@@ -85,7 +85,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart1_maker.histogram.height    = chart1_maker.widget.clip.h - 10;
         chart1_maker.histogram.space     = 4;
         chart1_maker.histogram.color.color.full = 0xFFFF0000;
-        scui_widget_create(&chart1_maker, &chart1_handle, false);
+        scui_widget_create(&chart1_maker, &chart1_handle);
         scui_chart_histogram_data(chart1_handle, vlist_min, vlist_max);
         
         // chart line
@@ -112,7 +112,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart2_maker.line.height    = chart2_maker.widget.clip.h - 10;
         chart2_maker.line.space     = 10;
         chart2_maker.line.color.color.full = 0xFFFF0000;
-        scui_widget_create(&chart2_maker, &chart2_handle, false);
+        scui_widget_create(&chart2_maker, &chart2_handle);
         
         for (uint8_t idx = 0; idx < chart2_maker.line.number; idx++) {
             int32_t angle = scui_map(idx, 0, chart2_maker.line.number, 0, 360);
@@ -153,7 +153,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         roller_maker.linear.list_num = 24;
         roller_maker.type = scui_roller_type_spin;
         roller_maker.grad = true;
-        scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1, false);
+        scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1);
         
         for (uint8_t idx = 0; idx < 24; idx++) {
             uint8_t str_utf8[10] = {0};
@@ -167,7 +167,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         roller_maker.linear.list_num = 12;
         roller_maker.type = scui_roller_type_scale;
         roller_maker.grad = true;
-        scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2, false);
+        scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2);
         
         const char *str_utf8_month[] = {
             "January", "February", "March", "April", "May\n", "June", "July",

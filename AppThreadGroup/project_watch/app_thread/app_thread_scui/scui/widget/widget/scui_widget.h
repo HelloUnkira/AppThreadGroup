@@ -45,7 +45,7 @@ typedef struct {
  *@brief 控件析构回调
  *@brief 控件事件回调
  */
-typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle, bool layout);
+typedef void (*scui_widget_cb_make_t)(void *inst, void *inst_maker, scui_handle_t *handle);
 typedef void (*scui_widget_cb_burn_t)(scui_handle_t handle);
 typedef scui_event_cb_t scui_widget_cb_invoke_t;
 
@@ -108,12 +108,10 @@ typedef struct {
 
 /*@brief 控件构造器
  *@param widget 控件实例
- *@param maker  控件实例构造参数
+ *@param maker  控件构造实例
  *@param handle 控件句柄
- *@param layout 通过布局
  */
-void scui_widget_make(scui_widget_t *widget, scui_widget_maker_t *maker,
-                      scui_handle_t *handle, bool layout);
+void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle);
 
 /*@brief 控件析构器
  *@param widget 控件实例
@@ -267,6 +265,11 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type);
  *@param widget_map 控件映射表
  */
 void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_map);
+
+/*@brief 创建控件树(句柄映射表)
+ *@param handle 根控件句柄
+ */
+void scui_widget_create_layout_tree(scui_handle_t handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/
