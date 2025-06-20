@@ -9,7 +9,8 @@
 
 #include "app_ext_lib.h"
 #include "app_sys_lib.h"
-#include "app_dev_lib.h"    // 未解耦:备注
+#include "app_dev_lib.h"
+// 未解耦:备注
 
 static app_mutex_t app_sys_ext_mem_mutex = {0};
 

@@ -243,7 +243,7 @@ static void scui_roller_m_event(scui_event_t *event)
         SCUI_LOG_INFO("click idx:%d", index);
         
         // 聚焦它到中心
-        scui_scroll_center_target(handle_p, event->object);
+        scui_scroll_center(handle_p, event->object);
         break;
     }
     default:
@@ -336,7 +336,7 @@ void scui_roller_event(scui_event_t *event)
     case scui_event_widget_scroll_keep:
     case scui_event_widget_scroll_layout: {
         scui_handle_t center = NULL;
-        scui_scroll_center_target_get(widget->myself, &center);
+        scui_scroll_center_get(widget->myself, &center);
         for (scui_handle_t idx = 0; idx < roller->linear.list_num; idx++)
             if (center == roller->linear.list_widget_m[idx]) {
                 scui_handle_t handle_s = roller->linear.list_widget_s[idx];

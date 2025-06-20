@@ -807,9 +807,9 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         
         // 不是点击到中心子控件, 聚焦它
         scui_handle_t target = SCUI_HANDLE_INVALID;
-        scui_scroll_center_target_get(parent, &target);
+        scui_scroll_center_get(parent, &target);
         if (target != event->object) {
-            scui_scroll_center_target(parent, event->object);
+            scui_scroll_center(parent, event->object);
             return;
         }
         

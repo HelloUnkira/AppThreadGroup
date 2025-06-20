@@ -50,7 +50,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         #if 0
         scui_handle_t handle_scroll = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_rcd = SCUI_HANDLE_INVALID;
-        scui_scroll_center_target_get(scui_ui_res_local->scroll, &handle_scroll);
+        scui_scroll_center_get(scui_ui_res_local->scroll, &handle_scroll);
         if (handle_scroll_rcd != handle_scroll) {
             handle_scroll_rcd  = handle_scroll;
             if (handle_scroll != SCUI_HANDLE_INVALID)
