@@ -24,7 +24,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_1 = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_1_rcd = SCUI_HANDLE_INVALID;
-        scui_roller_center_target_get(scui_ui_res_local->roller_1, &handle_scroll_1);
+        scui_roller_center_get(scui_ui_res_local->roller_1, &handle_scroll_1);
         if (handle_scroll_1_rcd != handle_scroll_1) {
             handle_scroll_1_rcd  = handle_scroll_1;
             if (handle_scroll_1 != SCUI_HANDLE_INVALID) {
@@ -37,7 +37,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         /* 滚动中心子控件 */
         scui_handle_t handle_scroll_2 = SCUI_HANDLE_INVALID;
         static scui_handle_t handle_scroll_2_rcd = SCUI_HANDLE_INVALID;
-        scui_roller_center_target_get(scui_ui_res_local->roller_2, &handle_scroll_2);
+        scui_roller_center_get(scui_ui_res_local->roller_2, &handle_scroll_2);
         if (handle_scroll_2_rcd != handle_scroll_2) {
             handle_scroll_2_rcd  = handle_scroll_2;
             if (handle_scroll_2 != SCUI_HANDLE_INVALID) {

@@ -5,7 +5,7 @@
  *@param handle 滚轮控件句柄
  *@param target 中心对齐子控件
  */
-void scui_roller_center_target_get(scui_handle_t handle, scui_handle_t *target);
+void scui_roller_center_get(scui_handle_t handle, scui_handle_t *target);
 
 /*@brief 滚轮控件设置字符串
  *@param handle   滚轮控件句柄

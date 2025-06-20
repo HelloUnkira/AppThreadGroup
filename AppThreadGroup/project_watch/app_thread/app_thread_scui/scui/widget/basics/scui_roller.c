@@ -312,7 +312,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
  *@param handle 滚轮控件句柄
  *@param target 中心对齐子控件
  */
-void scui_roller_center_target_get(scui_handle_t handle, scui_handle_t *target)
+void scui_roller_center_get(scui_handle_t handle, scui_handle_t *target)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_roller));
     scui_widget_t *widget = scui_handle_source_check(handle);
