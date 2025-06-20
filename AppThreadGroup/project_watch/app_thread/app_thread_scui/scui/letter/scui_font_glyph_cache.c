@@ -215,6 +215,10 @@ void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
     if (unit != NULL)
     if (unit->lock != 0)
         unit->lock--;
+    #else
+    
+    /* 卸载文字资源 */
+    scui_font_glyph_unload(&glyph_unit->glyph);
     #endif
 }
 
@@ -320,5 +324,16 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
     }
+    #else
+    
+    /* 加载文字资源 */
+    scui_font_unit_t font_unit = {0};
+    font_unit.size = glyph_unit->size;
+    font_unit.name = glyph_unit->name;
+    scui_font_cache_load(&font_unit);
+    glyph_unit->font = font_unit.font;
+    glyph_unit->glyph.handle = font_unit.font;
+    scui_font_glyph_load(&glyph_unit->glyph);
+    scui_font_cache_unload(&font_unit);
     #endif
 }

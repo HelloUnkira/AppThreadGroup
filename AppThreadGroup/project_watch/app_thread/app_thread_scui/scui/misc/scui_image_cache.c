@@ -263,7 +263,7 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
         return;
     }
     
-    // 内存图片直达即可(不走缓存管理)
+    // 内存图片直达(不走缓存管理)
     if (image_unit->image->type == scui_image_type_mem)
         return;
     
@@ -275,6 +275,13 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
     if (unit != NULL)
     if (unit->lock != 0)
         unit->lock--;
+    #else
+    
+    // 内存图片直达(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem)
+        return;
+    /* 卸载图像资源 */
+    SCUI_MEM_FREE(image_unit->data);
     #endif
 }
 
@@ -290,7 +297,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         return;
     }
     
-    // 内存图片直达即可(不走缓存管理)
+    // 内存图片直达(不走缓存管理)
     if (image_unit->image->type == scui_image_type_mem) {
         image_unit->data = image_unit->image->pixel.data_bin;
         return;
@@ -383,5 +390,16 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
     }
+    #else
+    
+    // 内存图片直达(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem) {
+        image_unit->data = image_unit->image->pixel.data_bin;
+        return;
+    }
+    /* 加载图片资源 */
+    uintptr_t image_size = scui_image_size(image_unit->image);
+    image_unit->data = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);
+    scui_image_src_read(image_unit->image, image_unit->data);
     #endif
 }

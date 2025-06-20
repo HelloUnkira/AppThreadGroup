@@ -213,6 +213,10 @@ void scui_font_cache_unload(scui_font_unit_t *font_unit)
     if (unit != NULL)
     if (unit->lock != 0)
         unit->lock--;
+    #else
+    
+    /* 卸载字库资源 */
+    scui_font_unload(font_unit->font);
     #endif
 }
 
@@ -312,5 +316,11 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
         scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
     }
+    #else
+    
+    /* 加载字库资源 */
+    char *name = scui_handle_source_check(font_unit->name);
+    scui_font_load(name, font_unit->size, &font_unit->font);
+    SCUI_ASSERT(scui_handle_source(font_unit->font) != NULL);
     #endif
 }
