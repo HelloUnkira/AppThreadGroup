@@ -180,7 +180,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         
         float mem_used_f[CACHE_NUM] = {0};
         mem_used_f[0] = (float)mem_used[0] / 1024;
-        mem_used_f[1] = (float)mem_used[1] / 1024 / 1024;
+        mem_used_f[1] = (float)mem_used[1] / 1024;
         mem_used_f[2] = (float)mem_used[2] / 1024 / 1024;
         
         uint32_t pct_args[CACHE_NUM] = {0};
@@ -197,7 +197,7 @@ void scui_ui_scene_monitor_anima_expired(void *instance)
         #else
         uint8_t str_cache[100] = {0};
         snprintf(str_cache, sizeof(str_cache) - 1,
-            "Font:#-%u,%.02fK-# Glyph:#-%d,%.02fM-# Graph:#-%d,%.02fM-#",
+            "Font:#-%u,%.02fK-# Glyph:#-%d,%.02fK-# Graph:#-%d,%.02fM-#",
                  cache_rcd[1], mem_used_f[0],
                  cache_rcd[3], mem_used_f[1],
                  cache_rcd[5], mem_used_f[2]);

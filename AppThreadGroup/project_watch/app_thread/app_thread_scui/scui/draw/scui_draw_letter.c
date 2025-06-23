@@ -209,6 +209,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     .glyph.unicode_letter = src_args->unicode[idx],
                 };
                 scui_font_glyph_cache_load(&glyph_unit);
+                scui_font_glyph_cache_unload(&glyph_unit);
                 
                 SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
                 SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
@@ -272,8 +273,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 }
                 
                 scui_draw_ctx_string_offset(src_args, &glyph_unit.glyph, &offset_line);
-                
-                scui_font_glyph_cache_unload(&glyph_unit);
             }
             
             /* 下划线和删除线 */
@@ -349,6 +348,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 .glyph.unicode_letter = src_args->unicode[idx],
             };
             scui_font_glyph_cache_load(&glyph_unit);
+            scui_font_glyph_cache_unload(&glyph_unit);
             
             SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
             SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
@@ -411,8 +411,6 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             }
             
             scui_draw_ctx_string_offset(src_args, &glyph_unit.glyph, &offset);
-            
-            scui_font_glyph_cache_unload(&glyph_unit);
         }
         
         /* 下划线和删除线 */

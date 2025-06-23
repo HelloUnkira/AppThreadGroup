@@ -180,12 +180,8 @@ void scui_image_cache_clear(void)
     scui_image_unit_t  *unit  =  NULL;
     
     SCUI_LOG_WARN("nodes:%u, usage:%u", cache->nodes, cache->usage);
-    uint32_t cnt_hit = cache->cnt_hit;
-    uint32_t cnt_unhit = cache->cnt_unhit;
-    SCUI_LOG_WARN("hit:%u unhit:%u pct:%.02f",
-        cnt_hit, cnt_unhit, 1.0f * cnt_hit / (cnt_hit + cnt_unhit));
-    cache->cnt_hit = 0;
-    cache->cnt_unhit = 0;
+    SCUI_LOG_WARN("hit:%u unhit:%u pct:%.02f", cache->cnt_hit, cache->cnt_unhit,
+        1.0f * cache->cnt_hit / (cache->cnt_hit + cache->cnt_unhit));
     
     /* 所有已解锁资源全部回收 */
     while (true) {
@@ -210,6 +206,10 @@ void scui_image_cache_clear(void)
         unit = NULL;
     }
     #endif
+    
+    cache->cnt_hit = 0;
+    cache->cnt_unhit = 0;
+    SCUI_LOG_WARN("nodes:%u, usage:%u", cache->nodes, cache->usage);
 }
 
 /*@brief 图片资源缓存无效化(指定目标)
