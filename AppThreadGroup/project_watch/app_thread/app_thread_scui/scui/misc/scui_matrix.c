@@ -363,8 +363,8 @@ void scui_matrix_perspective(scui_matrix_t *matrix, scui_point2_t *view)
  */
 void scui_matrix_skew(scui_matrix_t *matrix, scui_point2_t *skew)
 {
-    scui_coord3_t tan_x = scui_tan(scui_radian_by_angle(skew->x));
-    scui_coord3_t tan_y = scui_tan(scui_radian_by_angle(skew->y));
+    scui_coord3_t tan_x = scui_tan(SCUI_RAD_BY_A(skew->x));
+    scui_coord3_t tan_y = scui_tan(SCUI_RAD_BY_A(skew->y));
     
     scui_matrix_t matrix_t = {
         .meta = {

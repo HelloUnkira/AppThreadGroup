@@ -22,4 +22,11 @@
 #define scui_mutex_take         app_mutex_take
 #define scui_mutex_give         app_mutex_give
 
+// system util:
+// 三角函数(sin, cos, tan)
+// 备注: 数学库的三角函数有高精度
+#define scui_sin    sin
+#define scui_cos    cos
+#define scui_tan    tan
+
 #endif

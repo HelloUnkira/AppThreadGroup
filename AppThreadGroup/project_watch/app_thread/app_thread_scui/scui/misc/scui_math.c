@@ -7,51 +7,6 @@
 
 #include "scui.h"
 
-/*@brief 弧度角度转换
- *@param angle 角度
- *@retval 弧度
- */
-double scui_radian_by_angle(double angle)
-{
-    return angle * 3.141592654f / 180.0f;
-}
-
-/*@brief 弧度角度转换
- *@param radian 弧度
- *@retval 角度
- */
-double scui_radian_to_angle(double radian)
-{
-    return radian * 180.0f / 3.141592654f;
-}
-
-/*@brief 三角函数(sin)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_sin(double radian)
-{
-    return sin(radian);
-}
-
-/*@brief 三角函数(cos)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_cos(double radian)
-{
-    return cos(radian);
-}
-
-/*@brief 三角函数(tan)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_tan(double radian)
-{
-    return tan(radian);
-}
-
 /*@brief 指数函数
  *@param x 数字
  *@param e 指数

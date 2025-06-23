@@ -5,35 +5,9 @@
 #define SCUI_DIV_U255(x)    (((x) * 0x8081U) >> 0x17)
 #define SCUI_DIV_0xFF(x)    (((x) * 0x8081U) >> 0x17)
 
-/*@brief 弧度角度转换
- *@param angle 角度
- *@retval 弧度
- */
-double scui_radian_by_angle(double angle);
-
-/*@brief 弧度角度转换
- *@param radian 弧度
- *@retval 角度
- */
-double scui_radian_to_angle(double radian);
-
-/*@brief 三角函数(sin)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_sin(double radian);
-
-/*@brief 三角函数(cos)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_cos(double radian);
-
-/*@brief 三角函数(tan)
- *@param angle 弧度
- *@retval 三角函数值
- */
-double scui_tan(double radian);
+// 弧度角度转换
+#define SCUI_RAD_BY_A(angle)    ((angle) * 3.141592654f / 180.0f)
+#define SCUI_RAD_TO_A(radian)   ((radian) * 180.0f / 3.141592654f)
 
 /*@brief 指数函数
  *@param x 数字

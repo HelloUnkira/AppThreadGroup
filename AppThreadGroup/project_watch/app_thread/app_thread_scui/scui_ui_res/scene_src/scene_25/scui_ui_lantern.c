@@ -112,7 +112,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         if (scui_event_check_prepare(event)) {
             SCUI_ASSERT(scui_ui_res_local != NULL);
             
-            float tan_a = scui_tan(scui_radian_by_angle(scui_ui_res_local->angle_a / 2.0f));
+            float tan_a = scui_tan(SCUI_RAD_BY_A(scui_ui_res_local->angle_a / 2.0f));
             scui_coord3_t scale  = scui_ui_res_local->scale_c / 1024.0f;
             scui_coord3_t x_span = scui_ui_res_local->x_span;
             scui_coord3_t w_res  = scui_ui_res_local->w_res;

@@ -65,9 +65,9 @@ void scui_ui_scene_soccer_event_proc(scui_event_t *event)
         /* 要求:背景图是的水平距离是正六边形的水平宽度 */
         scui_ui_res_local->sub_size = image_bg_w / 2;
         scui_ui_res_local->sub_hor_res = image_bg_w;
-        scui_ui_res_local->sub_ver_res = image_bg_w * scui_cos(scui_radian_by_angle(30));
+        scui_ui_res_local->sub_ver_res = image_bg_w * scui_cos(SCUI_RAD_BY_A(30));
         scui_ui_res_local->offset_bg.x = (0) / 2;
-        scui_ui_res_local->offset_bg.y = (image_bg_h - scui_cos(scui_radian_by_angle(30)) * image_bg_w) / 2;
+        scui_ui_res_local->offset_bg.y = (image_bg_h - scui_cos(SCUI_RAD_BY_A(30)) * image_bg_w) / 2;
         scui_ui_res_local->offset_fg.x = (image_bg_w - image_fg_w) / 2;
         scui_ui_res_local->offset_fg.y = (image_bg_h - image_fg_h) / 2;
         break;
@@ -121,11 +121,11 @@ void scui_ui_scene_soccer_custom_event_proc(scui_event_t *event)
             scui_point2_t offset_bg  = scui_ui_res_local->offset_bg;
             scui_point2_t offset_fg  = scui_ui_res_local->offset_fg;
             
-            scui_coord3_t dist_5 = scui_tan(scui_radian_by_angle(36.0f)) * sub_size;
-            scui_coord3_t sin_56 = scui_sin(scui_radian_by_angle(angle_56));
-            scui_coord3_t cos_56 = scui_cos(scui_radian_by_angle(angle_56));
-            scui_coord3_t sin_66 = scui_sin(scui_radian_by_angle(angle_66));
-            scui_coord3_t cos_66 = scui_cos(scui_radian_by_angle(angle_66));
+            scui_coord3_t dist_5 = scui_tan(SCUI_RAD_BY_A(36.0f)) * sub_size;
+            scui_coord3_t sin_56 = scui_sin(SCUI_RAD_BY_A(angle_56));
+            scui_coord3_t cos_56 = scui_cos(SCUI_RAD_BY_A(angle_56));
+            scui_coord3_t sin_66 = scui_sin(SCUI_RAD_BY_A(angle_66));
+            scui_coord3_t cos_66 = scui_cos(SCUI_RAD_BY_A(angle_66));
             
             scui_area_t clip = scui_widget_clip(event->object);
             /* 居中偏移 */
