@@ -232,6 +232,15 @@ app_sys_queue_dlpn_t * app_sys_queue_dlpq_dequeue(app_sys_queue_dlpq_t *queue);
 void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_t *node,
                                bool (*compare)(app_sys_queue_dlpn_t *node1, app_sys_queue_dlpn_t *node2));
 
+/*@brief 队列节点移动
+ *@param queue   队列实例
+ *@param node    队列节点实例
+ *@param way     true:向前移动; false:向后移动;
+ *@param compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+ */
+void app_sys_queue_dlpq_adjust(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_t *node, bool way,
+                               bool (*compare)(app_sys_queue_dlpn_t *node1, app_sys_queue_dlpn_t *node2));
+
 /*
  *链表容器复用:通用栈(Stack)
  *因为它是完全意义上的复用,但不应该不受限制的使用

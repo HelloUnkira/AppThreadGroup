@@ -387,6 +387,58 @@ void app_sys_queue_dlpq_enqueue(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_
     app_sys_list_dll_ainsert(queue, NULL, node);
 }
 
+/*@brief 队列节点移动
+ *@param queue   队列实例
+ *@param node    队列节点实例
+ *@param way     true:向前移动; false:向后移动;
+ *@param compare 队列节点入队规则(希望node1排在node2之前返回true,否则false)
+ */
+void app_sys_queue_dlpq_adjust(app_sys_queue_dlpq_t *queue, app_sys_queue_dlpn_t *node, bool way,
+                               bool (*compare)(app_sys_queue_dlpn_t *node1, app_sys_queue_dlpn_t *node2))
+{
+    if (compare != NULL) {
+        /* 获得节点的前后节点 */
+        app_sys_queue_dlpn_t *prev = app_sys_list_dln_prev(node);
+        app_sys_queue_dlpn_t *next = app_sys_list_dln_next(node);
+        
+        /* 前向节点存在, 且尝试向前移动 */
+        if (prev != NULL && way) {
+            app_sys_list_dll_remove(queue, node);
+            
+            for (app_sys_list_dln_t *curr = app_sys_list_dln_next(prev);
+                curr != NULL; curr = app_sys_list_dln_prev(curr)) {
+                
+                if (compare(node, curr)) {
+                    app_sys_list_dll_ainsert(queue, prev, node);
+                    return;
+                }
+                prev = curr;
+            }
+            
+            app_sys_list_dll_pinsert(queue, NULL, node);
+            return;
+        }
+        
+        /* 后向节点存在, 且尝试后向移动 */
+        if (next != NULL && !way) {
+            app_sys_list_dll_remove(queue, node);
+            
+            for (app_sys_list_dln_t *curr = app_sys_list_dln_prev(next);
+                curr != NULL; curr = app_sys_list_dln_next(curr)) {
+                
+                if (compare(node, curr)) {
+                    app_sys_list_dll_ainsert(queue, prev, node);
+                    return;
+                }
+                prev = curr;
+            }
+            
+            app_sys_list_dll_ainsert(queue, NULL, node);
+            return;
+        }
+    }
+}
+
 /*
  *链表容器复用:通用栈(Stack)
  *因为它是完全意义上的复用,但不应该不受限制的使用

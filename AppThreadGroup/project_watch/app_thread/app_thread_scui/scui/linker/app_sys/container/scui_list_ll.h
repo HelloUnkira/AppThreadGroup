@@ -48,6 +48,7 @@
 #define scui_queue_slpq_enqueue     app_sys_queue_slpq_enqueue
 #define scui_queue_dlpq_dequeue     app_sys_queue_dlpq_dequeue
 #define scui_queue_dlpq_enqueue     app_sys_queue_dlpq_enqueue
+#define scui_queue_dlpq_adjust      app_sys_queue_dlpq_adjust
 
 #define scui_stack_sls_t            app_sys_stack_sls_t
 #define scui_stack_sln_t            app_sys_stack_sln_t

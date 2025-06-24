@@ -59,8 +59,8 @@
 
 /* 缓存散列值(必要使用) */
 #define SCUI_CACHE_HASH_FONT                        (5)
-#define SCUI_CACHE_HASH_FONT_GLYPH                  (47)
-#define SCUI_CACHE_HASH_IMAGE                       (37)
+#define SCUI_CACHE_HASH_FONT_GLYPH                  (53)
+#define SCUI_CACHE_HASH_IMAGE                       (61)
 /* 缓存最大限制 */
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_FONT  * 20 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)

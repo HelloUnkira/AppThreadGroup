@@ -241,14 +241,15 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
     if (unit != NULL) {
         /* 上锁 */
         unit->lock++;
-        if (unit->lock > 0x7A)
-            SCUI_LOG_INFO("lock num will be overflow");
+        /* 正常情况下缓存锁不可能嵌套太多 */
+        SCUI_ASSERT(unit->lock < 0x64);
         /* 命中缓存资源计数加 */
-        if (unit->count != 0 && unit->count < 100) {
+        if (unit->count != 0 && unit->count < 0x64) {
             unit->count++;
             /* 重新带计数优先级加入 */
-            scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
-            scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_font_cache_sort);
+            // scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
+            // scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_font_cache_sort);
+            scui_queue_dlpq_adjust(&cache->dl_list, &unit->dl_node, true, scui_font_cache_sort);
         }
         cache->cnt_hit++;
         *font_unit = *unit;
@@ -259,7 +260,7 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
     if ((node = scui_list_dll_tail(&cache->dl_list)) != NULL) {
          unit = scui_own_ofs(scui_font_unit_t, dl_node, node);
          uint8_t count = unit->count;
-         if (count > 3) {
+         if (count > 0x07) {
              // scui_list_dll_ftra(&cache->dl_list, curr)
                 scui_list_dll_btra(&cache->dl_list, curr) {
                 unit = scui_own_ofs(scui_font_unit_t, dl_node, curr);
@@ -312,6 +313,7 @@ void scui_font_cache_load(scui_font_unit_t *font_unit)
         /* 带计数优先级加入 */
         scui_list_dln_reset(&unit->dl_node);
         scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_font_cache_sort);
+        /* 哈希表保存查询记录 */
         scui_table_dln_reset(&unit->ht_node);
         scui_table_dlt_insert(&cache->ht_table, &unit->ht_node);
         cache->cnt_unhit++;
