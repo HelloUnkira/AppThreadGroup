@@ -217,18 +217,16 @@ void scui_image_cache_clear(void)
  */
 void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
 {
-    #if SCUI_CACHE_HASH_IMAGE != 0
-    scui_image_cache_t *cache = &scui_image_cache;
-    scui_image_unit_t  *unit  =  NULL;
-    
-    if (image_unit == NULL) {
-        SCUI_LOG_WARN("image unit is empty");
+    SCUI_ASSERT(image_unit != NULL);
+    // 内存图片直达(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem) {
+        image_unit->data = image_unit->image->pixel.data_bin;
         return;
     }
     
-    // 内存图片直达即可(不走缓存管理)
-    if (image_unit->image->type == scui_image_type_mem)
-        return;
+    #if SCUI_CACHE_HASH_IMAGE != 0
+    scui_image_cache_t *cache = &scui_image_cache;
+    scui_image_unit_t  *unit  =  NULL;
     
     scui_table_dln_t *unit_node = NULL;
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
@@ -238,6 +236,7 @@ void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
     if (unit != NULL) {
         scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
         scui_table_dlt_remove(&cache->ht_table, &unit->ht_node);
+        SCUI_ASSERT(unit->lock == 0);
         
         /* 约减使用率 */
         cache->usage -= scui_image_size(unit->image);
@@ -254,18 +253,16 @@ void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
  */
 void scui_image_cache_unload(scui_image_unit_t *image_unit)
 {
-    #if SCUI_CACHE_HASH_IMAGE != 0
-    scui_image_cache_t *cache = &scui_image_cache;
-    scui_image_unit_t  *unit  =  NULL;
-    
-    if (image_unit == NULL) {
-        SCUI_LOG_WARN("image unit is empty");
+    SCUI_ASSERT(image_unit != NULL);
+    // 内存图片直达(不走缓存管理)
+    if (image_unit->image->type == scui_image_type_mem) {
+        image_unit->data = image_unit->image->pixel.data_bin;
         return;
     }
     
-    // 内存图片直达(不走缓存管理)
-    if (image_unit->image->type == scui_image_type_mem)
-        return;
+    #if SCUI_CACHE_HASH_IMAGE != 0
+    scui_image_cache_t *cache = &scui_image_cache;
+    scui_image_unit_t  *unit  =  NULL;
     
     scui_table_dln_t *unit_node = NULL;
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
@@ -277,9 +274,6 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
         unit->lock--;
     #else
     
-    // 内存图片直达(不走缓存管理)
-    if (image_unit->image->type == scui_image_type_mem)
-        return;
     /* 卸载图像资源 */
     SCUI_MEM_FREE(image_unit->data);
     #endif
@@ -289,23 +283,18 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
  */
 void scui_image_cache_load(scui_image_unit_t *image_unit)
 {
-    #if SCUI_CACHE_HASH_IMAGE != 0
-    scui_image_cache_t *cache = &scui_image_cache;
-    
-    if (image_unit == NULL) {
-        SCUI_LOG_WARN("image info is empty");
-        return;
-    }
-    
+    SCUI_ASSERT(image_unit != NULL);
     // 内存图片直达(不走缓存管理)
     if (image_unit->image->type == scui_image_type_mem) {
         image_unit->data = image_unit->image->pixel.data_bin;
         return;
     }
     
-    scui_image_unit_t *unit = NULL;
-    scui_table_dln_t *unit_node = NULL;
+    #if SCUI_CACHE_HASH_IMAGE != 0
+    scui_image_cache_t *cache = &scui_image_cache;
+    scui_image_unit_t  *unit  =  NULL;
     
+    scui_table_dln_t *unit_node = NULL;
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &image_unit->ht_node)) != NULL)
         unit = scui_own_ofs(scui_image_unit_t, ht_node, unit_node);
     
@@ -394,11 +383,6 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     }
     #else
     
-    // 内存图片直达(不走缓存管理)
-    if (image_unit->image->type == scui_image_type_mem) {
-        image_unit->data = image_unit->image->pixel.data_bin;
-        return;
-    }
     /* 加载图片资源 */
     uintptr_t image_size = scui_image_size(image_unit->image);
     image_unit->data = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);

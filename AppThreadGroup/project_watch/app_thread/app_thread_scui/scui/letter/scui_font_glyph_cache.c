@@ -198,14 +198,11 @@ void scui_font_glyph_cache_clear(void)
  */
 void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
 {
+    SCUI_ASSERT(glyph_unit != NULL);
+    
     #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
     scui_font_glyph_unit_t  *unit  =  NULL;
-    
-    if (glyph_unit == NULL) {
-        SCUI_LOG_WARN("font unit is empty");
-        return;
-    }
     
     scui_table_dln_t *unit_node = NULL;
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &glyph_unit->ht_node)) != NULL)
@@ -226,14 +223,11 @@ void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *glyph_unit)
  */
 void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
 {
+    SCUI_ASSERT(glyph_unit != NULL);
+    
     #if SCUI_CACHE_HASH_FONT_GLYPH != 0
     scui_font_glyph_cache_t *cache = &scui_font_glyph_cache;
     scui_font_glyph_unit_t  *unit  =  NULL;
-    
-    if (glyph_unit == NULL) {
-        SCUI_LOG_WARN("font info is empty");
-        return;
-    }
     
     scui_table_dln_t *unit_node = NULL;
     if ((unit_node = scui_table_dlt_search(&cache->ht_table, &glyph_unit->ht_node)) != NULL)
