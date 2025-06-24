@@ -27,14 +27,14 @@ static struct {
 
 /*@brief monkey test动画回调
  */
-static void scui_monkey_anim_prepare(void *instance)
+static void scui_monkey_anim_ready(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief monkey test动画回调
  */
-static void scui_monkey_anim_execute(void *instance)
+static void scui_monkey_anim_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     
@@ -160,7 +160,7 @@ static void scui_monkey_anim_finish(void *instance)
  */
 static void app_scui_monkey_timer_handler(void *timer)
 {
-    scui_monkey_anim_execute(NULL);
+    scui_monkey_anim_expire(NULL);
 }
 
 /*@brief monkey test
@@ -174,11 +174,11 @@ void scui_monkey_test(void)
     
     #if 1
     scui_anima_t anima = {0};
-    anima.prepare = scui_monkey_anim_prepare;
-    anima.expired = scui_monkey_anim_execute;
-    anima.finish  = scui_monkey_anim_finish;
-    anima.reload  = SCUI_ANIMA_INFINITE;
-    anima.period  = SCUI_ANIMA_TICK;
+    anima.ready  = scui_monkey_anim_ready;
+    anima.expire = scui_monkey_anim_expire;
+    anima.finish = scui_monkey_anim_finish;
+    anima.reload = SCUI_ANIMA_INFINITE;
+    anima.period = SCUI_ANIMA_TICK;
     
     scui_handle_t scui_monkey_test_anima = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &scui_monkey_test_anima);
@@ -186,7 +186,7 @@ void scui_monkey_test(void)
     #else
     
     static app_sys_timer_t app_scui_monkey_timer = {0};
-    app_scui_monkey_timer.expired = app_scui_monkey_timer_handler;
+    app_scui_monkey_timer.expire = app_scui_monkey_timer_handler;
     app_scui_monkey_timer.peroid  = 1000 / 60;
     app_scui_monkey_timer.reload  = true;
     app_sys_timer_start(&app_scui_monkey_timer);

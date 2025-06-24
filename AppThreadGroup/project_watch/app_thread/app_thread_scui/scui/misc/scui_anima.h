@@ -7,17 +7,15 @@
 
 /*@brief 动画回调:准备,过期,完成
  */
-typedef void (*scui_anima_prepare_t)(void *anima);
-typedef void (*scui_anima_expired_t)(void *anima);
-typedef void (*scui_anima_finish_t)(void *anima);
+typedef void (*scui_anima_cb_t)(void *anima);
 
 /*@brief 动画
  */
 typedef struct {
-    scui_map_cb_t        path;      /* 动画行程回调 */
-    scui_anima_prepare_t prepare;   /* 动画准备回调(第一次执行之前) */
-    scui_anima_expired_t expired;   /* 动画过期回调 */
-    scui_anima_finish_t  finish;    /* 动画完成回调(最后一次执行完之后) */
+    scui_map_cb_t       path;       /* 动画行程回调 */
+    scui_anima_cb_t     ready;      /* 动画准备回调(第一次执行之前) */
+    scui_anima_cb_t     expire;     /* 动画过期回调 */
+    scui_anima_cb_t     finish;     /* 动画完成回调(最后一次执行完之后) */
     int32_t delay;                  /* 起始迟延(周期) */
     int32_t period;                 /* 回调周期 */
     int32_t reload;                 /* 重载次数(0==1,常循环:SCUI_ANIMA_INFINITE) */

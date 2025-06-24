@@ -524,14 +524,14 @@ static void scui_scroll_point_record(scui_handle_t handle, bool record)
 
 /*@brief 滚动控件动画回调
  */
-static void scui_scroll_anima_prepare(void *instance)
+static void scui_scroll_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 滚动控件动画回调
  */
-static void scui_scroll_anima_expired(void *instance)
+static void scui_scroll_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
@@ -826,8 +826,8 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     scui_scroll_t *scroll = (void *)widget;
     
     scui_anima_t anima = {0};
-    anima.prepare = scui_scroll_anima_prepare;
-    anima.expired = scui_scroll_anima_expired;
+    anima.ready   = scui_scroll_anima_ready;
+    anima.expire  = scui_scroll_anima_expire;
     anima.finish  = scui_scroll_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
@@ -855,8 +855,8 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_scroll_anima_prepare(&anima);
-        scui_scroll_anima_expired(&anima);
+        scui_scroll_anima_ready(&anima);
+        scui_scroll_anima_expire(&anima);
         scui_scroll_anima_finish(&anima);
         return;
     }

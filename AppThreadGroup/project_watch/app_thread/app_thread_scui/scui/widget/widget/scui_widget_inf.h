@@ -36,7 +36,7 @@ scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t ind
 /*@brief 指定位置子控件
  *@param handle 控件句柄
  *@param index  子控件句柄
- *@retval 子控件句柄
+ *@retval 子控件位置(映射点)
  */
 scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
 

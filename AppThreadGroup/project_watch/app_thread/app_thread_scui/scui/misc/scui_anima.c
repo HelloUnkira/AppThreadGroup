@@ -61,9 +61,9 @@ void scui_anima_update(scui_handle_t handle)
              continue;
         
         /* 起始调 */
-        if (anima->first && anima->prepare) {
+        if (anima->first && anima->ready) {
             anima->first = false;
-            anima->prepare(anima);
+            anima->ready(anima);
         }
         /* 回调中销毁了动画实例 */
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
@@ -91,8 +91,8 @@ void scui_anima_update(scui_handle_t handle)
         if (anima->value_c != value_c) {
             anima->value_c  = value_c;
             /* 过渡调 */
-            if (anima->expired)
-                anima->expired(anima);
+            if (anima->expire)
+                anima->expire(anima);
             /* 回调中销毁了动画实例 */
             if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
                 continue;
@@ -212,8 +212,8 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID) {
             anima = scui_handle_source(scui_anima_list.list[idx]);
-            SCUI_LOG_ERROR("expired:%p, period:%u, reload:%u",
-                              anima->expired, anima->period, anima->reload);
+            SCUI_LOG_ERROR("expire:%p, period:%u, reload:%u",
+                              anima->expire, anima->period, anima->reload);
         }
 }
 

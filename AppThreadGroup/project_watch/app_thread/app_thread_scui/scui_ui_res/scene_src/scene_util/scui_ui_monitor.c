@@ -15,7 +15,7 @@ scui_handle_t monitor_cache = SCUI_HANDLE_INVALID;
 
 /*@brief scui 监控器常驻动画响应回调
  */
-void scui_ui_scene_monitor_anima_expired(void *instance)
+void scui_ui_scene_monitor_anima_expire(void *instance)
 {
     bool redraw_tag = false;
     
@@ -244,9 +244,9 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
         
         if (monitor_anima == SCUI_HANDLE_INVALID) {
             scui_anima_t anima = {0};
-            anima.expired = scui_ui_scene_monitor_anima_expired;
-            anima.period  = SCUI_ANIMA_TICK * 5;
-            anima.reload  = SCUI_ANIMA_INFINITE;
+            anima.expire = scui_ui_scene_monitor_anima_expire;
+            anima.period = SCUI_ANIMA_TICK * 5;
+            anima.reload = SCUI_ANIMA_INFINITE;
             scui_anima_create(&anima, &monitor_anima);
             scui_anima_start(monitor_anima);
             

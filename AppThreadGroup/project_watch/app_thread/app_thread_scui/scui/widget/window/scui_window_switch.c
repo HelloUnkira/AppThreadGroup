@@ -83,14 +83,14 @@ static void scui_window_switch_anima_cfg(scui_anima_t *anima)
 
 /*@brief 窗口跳转动画回调
  */
-static void scui_window_jump_anima_prepare(void *instance)
+static void scui_window_jump_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 窗口跳转动画回调
  */
-static void scui_window_jump_anima_expired(void *instance)
+static void scui_window_jump_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
@@ -293,14 +293,14 @@ static void scui_window_move_anima_tag(uint8_t tag)
 
 /*@brief 窗口移动动画回调
  */
-static void scui_window_move_anima_prepare(void *instance)
+static void scui_window_move_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief 窗口移动动画回调
  */
-static void scui_window_move_anima_expired(void *instance)
+static void scui_window_move_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t *anima = instance;
@@ -390,8 +390,8 @@ static void scui_window_move_anima_finish(void *instance)
 static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_t value_all, uint32_t period)
 {
     scui_anima_t anima = {0};
-    anima.prepare = scui_window_move_anima_prepare;
-    anima.expired = scui_window_move_anima_expired;
+    anima.ready   = scui_window_move_anima_ready;
+    anima.expire  = scui_window_move_anima_expire;
     anima.finish  = scui_window_move_anima_finish;
     anima.value_s = value_s;
     anima.value_e = value_e;
@@ -419,8 +419,8 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
     }
     if (value_s == value_e) {
         anima.value_c = value_s = value_e;
-        scui_window_move_anima_prepare(&anima);
-        scui_window_move_anima_expired(&anima);
+        scui_window_move_anima_ready(&anima);
+        scui_window_move_anima_expire(&anima);
         scui_window_move_anima_finish(&anima);
         return;
     }
@@ -806,9 +806,9 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         }
         scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
         
-        anima.prepare = scui_window_jump_anima_prepare;
-        anima.expired = scui_window_jump_anima_expired;
-        anima.finish  = scui_window_jump_anima_finish;
+        anima.ready  = scui_window_jump_anima_ready;
+        anima.expire = scui_window_jump_anima_expire;
+        anima.finish = scui_window_jump_anima_finish;
         scui_anima_create(&anima, &scui_window_mgr.switch_args.anima);
         scui_anima_start(scui_window_mgr.switch_args.anima);
     }
