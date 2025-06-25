@@ -29,7 +29,6 @@ typedef struct {
     uintptr_t           level:6;            /* 窗口所在层级(数字越大越高) */
     uintptr_t           buffer:1;           /* 窗口是否使用独立画布 */
     uintptr_t           resident:1;         /* 窗口常驻标记(特殊使用) */
-    uintptr_t           hang_only:1;        /* 窗口悬挂标记(特殊使用) */
     scui_pixel_cf_t     format;             /* 窗口独立画布基础像素格式 */
 } scui_window_maker_t;
 #pragma pack(pop)

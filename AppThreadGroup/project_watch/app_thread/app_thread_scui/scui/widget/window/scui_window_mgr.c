@@ -345,7 +345,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(scui_handle_remap(handle));
         
         /* 当前窗口独立于管理之外时,直接渲染 */
-        if (scui_widget_surface_only(widget) && window->hang_only) {
+        if (scui_widget_surface_only(widget) && window->resident) {
             scui_surface_t *dst_surface = scui_frame_buffer_draw();
             scui_surface_t *src_surface = widget->surface;
             scui_area_t dst_clip = scui_surface_area(dst_surface);
@@ -435,7 +435,7 @@ static void scui_window_surface_ready(void)
         SCUI_ASSERT(scui_handle_remap(handle));
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
-        if (scui_widget_surface_only(widget) && !window->hang_only)
+        if (scui_widget_surface_only(widget) && !window->resident)
             scui_window_mgr.list_0[scui_window_mgr.list_0_num++] = widget;
         else
             scui_window_mgr.list_1[scui_window_mgr.list_1_num++] = widget;

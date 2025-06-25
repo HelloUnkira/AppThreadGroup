@@ -637,7 +637,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
 	.level                          = 10,
 	.buffer                         = true,
 	.resident                       = true,
-	.hang_only                      = true,
 	.format                         = SCUI_PIXEL_CF_DEF_A,
 	.widget.child_num               = 10,
 };
@@ -655,7 +654,6 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.level                          = 10,
 	.buffer                         = true,
 	.resident                       = true,
-	.hang_only                      = true,
 	.format                         = SCUI_PIXEL_CF_DEF_A,
 	.widget.child_num               = 6,
 };

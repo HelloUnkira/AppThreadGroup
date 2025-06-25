@@ -41,6 +41,20 @@ void scui_ui_scene_2_scroll_event(scui_event_t *event)
 /*@brief 控件事件响应回调
  *@param event 事件
  */
+void scui_ui_scene_2_custom_event(scui_event_t *event)
+{
+    switch (event->type) {
+    case scui_event_ptr_click:
+        // 滚动控件还有问题, 不能自动对齐
+        // scui_widget_anima_fade_out(event->object, 500, 100);
+        // scui_widget_anima_zoom_out_h(event->object, 500, 100);
+        break;
+    }
+}
+
+/*@brief 控件事件响应回调
+ *@param event 事件
+ */
 void scui_ui_scene_2_event_proc(scui_event_t *event)
 {
     switch (event->type) {
@@ -110,6 +124,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.type   = scui_widget_type_custom;
+        custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.clip.w = SCUI_HOR_RES / 8;
         custom_maker.widget.clip.h = SCUI_VER_RES / 8;
         custom_maker.widget.parent = scroll_handle;
@@ -121,6 +136,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.event_cb = scui_ui_scene_2_custom_event;
             scui_widget_create(&custom_maker, &custom_handle);
         }
         #else
@@ -133,10 +149,12 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
             custom_maker.widget.clip.x = scui_map(idx % 5, 0, 5, - custom_w, scroll_w + custom_w);
             custom_maker.widget.clip.y = scui_map(idx / 5, 0, 5, - custom_h, scroll_h + custom_h);
             SCUI_LOG_DEBUG("<x:%d,y:%d>", custom_maker.widget.clip.x, custom_maker.widget.clip.y);
+            
             custom_maker.widget.color.color.ch.a = 0xFF;
             custom_maker.widget.color.color.ch.r = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.g = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
             custom_maker.widget.color.color.ch.b = scui_rand(10) % 2 == 0 ? 0 : 0xFF;
+            custom_maker.widget.event_cb = scui_ui_scene_2_custom_event;
             scui_widget_create(&custom_maker, &custom_handle);
         }
         #endif

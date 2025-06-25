@@ -16,6 +16,7 @@ typedef struct {
     scui_anima_cb_t ready;      /* 动画准备回调(第一次执行之前) */
     scui_anima_cb_t expire;     /* 动画过期回调 */
     scui_anima_cb_t finish;     /* 动画完成回调(最后一次执行完之后) */
+    scui_handle_t   handle;     /* 动画实例句柄 */
     scui_handle_t   object;     /* 动画目标对象 */
     int32_t delay;              /* 起始迟延(周期) */
     int32_t period;             /* 回调周期 */
@@ -91,7 +92,7 @@ bool scui_anima_running(scui_handle_t handle);
  *@param anima  动画实例
  *@retval 动画实例有效性
  */
-bool scui_anima_backup(scui_handle_t handle, scui_anima_t **anima);
+bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima);
 
 /*@brief 动画周期计算
  *@param speed_ms 速度(dist/ms)

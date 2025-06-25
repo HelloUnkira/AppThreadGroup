@@ -228,6 +228,42 @@ void scui_widget_event_shift(scui_event_t *event);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 控件动画透明渐入
+ *@param handle 控件句柄
+ *@param time   持续时间
+ *@param delay  等待时间
+ *@retval 动画句柄
+ */
+scui_handle_t scui_widget_anima_fade_in(scui_handle_t handle, int32_t time, int32_t delay);
+
+/*@brief 控件动画透明渐出
+ *@param handle 控件句柄
+ *@param time   持续时间
+ *@param delay  等待时间
+ *@retval 动画句柄
+ */
+scui_handle_t scui_widget_anima_fade_out(scui_handle_t handle, int32_t time, int32_t delay);
+
+/*@brief 控件动画缩小宽度
+ *@param handle 控件句柄
+ *@param time   持续时间
+ *@param delay  等待时间
+ *@retval 动画句柄
+ */
+scui_handle_t scui_widget_anima_zoom_out_w(scui_handle_t handle, int32_t time, int32_t delay);
+
+/*@brief 控件动画缩小高度
+ *@param handle 控件句柄
+ *@param time   持续时间
+ *@param delay  等待时间
+ *@retval 动画句柄
+ */
+scui_handle_t scui_widget_anima_zoom_out_h(scui_handle_t handle, int32_t time, int32_t delay);
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 typedef enum {
     scui_widget_draw_type_none = 0,
     scui_widget_draw_type_string,

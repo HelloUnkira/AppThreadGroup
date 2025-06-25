@@ -217,11 +217,13 @@ void scui_anima_create(scui_anima_t *maker, scui_handle_t *handle)
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
         
-        anima = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_anima_t));
         scui_anima_list.list[idx] = scui_handle_find();
+        anima = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_anima_t));
         scui_handle_linker(scui_anima_list.list[idx], anima);
-       *handle = scui_anima_list.list[idx];
-       *anima = *maker;
+        *handle = scui_anima_list.list[idx];
+        *anima = *maker;
+        
+        anima->handle   = scui_anima_list.list[idx];
         anima->reduce   = -anima->delay;
         anima->running  = false;
         anima->playback = false;
@@ -345,7 +347,7 @@ bool scui_anima_running(scui_handle_t handle)
  *@param anima  动画实例
  *@retval 动画实例有效性
  */
-bool scui_anima_backup(scui_handle_t handle, scui_anima_t **anima)
+bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima)
 {
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID && anima != NULL);
     *anima = NULL;

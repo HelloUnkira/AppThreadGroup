@@ -46,7 +46,6 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     window->level       = window_maker->level;
     window->buffer      = window_maker->buffer;
     window->resident    = window_maker->resident;
-    window->hang_only   = window_maker->hang_only;
     window->format      = window_maker->format;
     
     // 初始化默认切换类型为自适应

@@ -15,7 +15,6 @@
             "level":                        "10",
             "buffer":                       "true",
             "resident":                     "true",
-            "hang_only":                    "true",
             "format":                       "SCUI_PIXEL_CF_DEF_A"
         },
         {
