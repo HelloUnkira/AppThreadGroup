@@ -47,10 +47,11 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 void scui_ui_scene_popup_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
+    case scui_event_anima_elapse: {
         
         SCUI_ASSERT(scale_tar_w != 0);
         SCUI_ASSERT(scale_tar_h != 0);
+        int32_t tick = SCUI_ANIMA_TICK *event->tick;
         
         // 工步1,3:
         if (scale_way == +1 || scale_way == -1) {
@@ -83,7 +84,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
                 
                 scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
                 
-                popup_anima += SCUI_ANIMA_TICK;
+                popup_anima += tick;
             }
             
             // 工步1结束到达工步2:
@@ -102,7 +103,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         // 工步2:
         if (scale_way == 0) {
             if (popup_anima <= SCUI_UI_POPUP_WAIT_TIME)
-                popup_anima += SCUI_ANIMA_TICK;
+                popup_anima += tick;
             
             // 工步2结束到达工步3:
             if (popup_anima >= SCUI_UI_POPUP_WAIT_TIME &&
@@ -116,6 +117,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             }
         }
         break;
+    }
     case scui_event_create:
         break;
     case scui_event_destroy:

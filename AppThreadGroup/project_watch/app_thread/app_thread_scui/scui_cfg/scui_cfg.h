@@ -112,7 +112,7 @@
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK                             (1000 / 100)
-#define SCUI_ANIMA_LIMIT                            (10)
+#define SCUI_ANIMA_LIMIT                            (10 + 20    /* system + widget */)
 
 /* 主事件调度最长占用 */
 #define SCUI_EVENT_OCCUPY_LIMIT                     (300 * 1000)
@@ -165,8 +165,8 @@
 #define SCUI_WIDGET_STRING_GAP_ITEM                 (0)
 #define SCUI_WIDGET_STRING_GAP_NONE                 (8)
 /* string:文本滚动时间与距离 */
-#define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK * 2)
-#define SCUI_WIDGET_STRING_UNIT_DX                  (3)
+#define SCUI_WIDGET_STRING_UNIT_MS                  (SCUI_ANIMA_TICK)
+#define SCUI_WIDGET_STRING_UNIT_DX                  (2)
 /* string:文本滚动空余间隙 */
 #define SCUI_WIDGET_STRING_SCROLL_ITEM              (75)
 #define SCUI_WIDGET_STRING_SCROLL_LINE              (50)

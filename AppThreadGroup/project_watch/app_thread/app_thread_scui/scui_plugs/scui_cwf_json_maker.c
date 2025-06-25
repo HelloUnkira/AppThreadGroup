@@ -53,7 +53,7 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
 /*@brief 事件处理回调
  *@param event 事件
  */
-static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
+static void scui_cwf_json_custom_dial_ptr_event(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_anima_elapse: {
@@ -112,7 +112,7 @@ static void scui_cwf_json_custom_dial_ptr_event_cb(scui_event_t *event)
 /*@brief 事件处理回调
  *@param event 事件
  */
-static void scui_cwf_json_custom_event_cb(scui_event_t *event)
+static void scui_cwf_json_custom_event(scui_event_t *event)
 {
     switch (event->type) {
     case scui_event_draw: {
@@ -446,7 +446,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             
             custom_maker.widget.style.trans = true;
             custom_maker.widget.style.sched_anima = true;
-            custom_maker.widget.event_cb = scui_cwf_json_custom_dial_ptr_event_cb;
+            custom_maker.widget.event_cb = scui_cwf_json_custom_dial_ptr_event;
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             scui_custom_draw_dsc_t *draw_dsc = NULL;
             scui_custom_draw_dsc(parser->list_child[idx], &draw_dsc);
@@ -490,7 +490,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.parent = parser->parent;
             
             custom_maker.widget.style.trans = true;
-            custom_maker.widget.event_cb = scui_cwf_json_custom_event_cb;
+            custom_maker.widget.event_cb = scui_cwf_json_custom_event;
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }

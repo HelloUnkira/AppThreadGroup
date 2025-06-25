@@ -56,20 +56,20 @@ static uint32_t scui_cwf_json_u32(uint8_t byte4[4])
 
 /*@brief 更新cwf
  *@param inst 实例
+ *@param tick 流失ms
  */
-void scui_cwf_json_anim(void **inst)
+void scui_cwf_json_anim(void **inst, int32_t tick)
 {
     SCUI_ASSERT(inst != NULL);
     scui_cwf_json_parser_t *parser = *inst;
     
     /* 做个缓速 */
-    static uint32_t span_fps = 7;
-    static uint32_t tick_cnt = 0;
-    tick_cnt += SCUI_ANIMA_TICK;
-    if (tick_cnt >= 1000 / span_fps)
+    static int32_t span_fps = 7;
+    static int32_t tick_cnt = 0;
+    tick_cnt += tick;
+    
+    if (tick_cnt <  1000 / span_fps) return;
         tick_cnt -= 1000 / span_fps;
-    else
-        return;
     
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);

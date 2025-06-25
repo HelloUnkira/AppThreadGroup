@@ -167,7 +167,7 @@ static void scui_event_respond(scui_event_t *event)
         return;
     case scui_event_anima_elapse:
         if (event->object == SCUI_HANDLE_SYSTEM) {
-            scui_anima_update(SCUI_HANDLE_INVALID);
+            scui_anima_update();
             
             /* 全局滚动检查 */
             #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL

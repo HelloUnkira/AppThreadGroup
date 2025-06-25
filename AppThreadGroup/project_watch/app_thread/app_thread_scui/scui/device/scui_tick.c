@@ -35,7 +35,7 @@ void scui_tick_elapse(uint64_t ms)
     scui_tick_cnt_elapse += ms;
     /* 更新动画即可,动画更新了自己会产生事件调度 */
     if (scui_engine_execute_status_get())
-        scui_anima_elapse(ms);
+        scui_anima_elapse_new(ms);
 }
 
 /*@brief 滴答器计算时间

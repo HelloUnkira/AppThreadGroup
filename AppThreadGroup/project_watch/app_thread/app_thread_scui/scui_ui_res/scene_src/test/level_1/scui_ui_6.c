@@ -261,7 +261,7 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
-        cnt++;
+        cnt += event->tick;
         if (cnt >  tick) {
             cnt -= tick;
             rnd ++;
@@ -321,7 +321,7 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
-        cnt++;
+        cnt += event->tick;
         if (cnt >  tick) {
             cnt -= tick;
             rnd ++;

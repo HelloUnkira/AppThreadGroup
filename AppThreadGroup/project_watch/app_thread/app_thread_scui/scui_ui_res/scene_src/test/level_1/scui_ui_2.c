@@ -175,7 +175,7 @@ void scui_ui_scene_2_ring_event_proc(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse:
         
-        spinner_cnt++;
+        spinner_cnt += event->tick;
         if (spinner_cnt >  spinner_tick)
             spinner_cnt -= spinner_tick;
         

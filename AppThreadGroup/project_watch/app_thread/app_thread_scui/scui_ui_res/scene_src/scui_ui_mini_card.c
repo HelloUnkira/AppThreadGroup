@@ -1526,19 +1526,20 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
 void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
-        
+    case scui_event_anima_elapse: {
         /* 做个缓速 */
         static uint32_t span_fps = 7;
         static uint32_t tick_cnt = 0;
-        tick_cnt += SCUI_ANIMA_TICK;
-        if (tick_cnt >= 1000 / span_fps)
-            tick_cnt -= 1000 / span_fps;
-        else
-            return;
+        
+        int32_t tick = SCUI_ANIMA_TICK * event->tick;
+        tick_cnt += tick;
+        
+        if (tick_cnt < 1000 / span_fps) return;
+        else tick_cnt -= 1000 / span_fps;
         
         scui_widget_draw(event->object, NULL, false);
         break;
+    }
     case scui_event_create: {
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);

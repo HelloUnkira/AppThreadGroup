@@ -31,15 +31,16 @@ void scui_ui_bar_arc_reset(scui_ui_bar_arc_t *bar_arc)
 void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse:
+    case scui_event_anima_elapse: {
         
+        int32_t tick = SCUI_ANIMA_TICK * event->tick;
         if (bar_arc->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
-            bar_arc->bar_wait += SCUI_ANIMA_TICK;
+            bar_arc->bar_wait += tick;
         else
         if (bar_arc->bar_alpha > 0) {
-            scui_alpha_t tick = scui_alpha_cover / (SCUI_UI_SCROLL_BAR_FADE_TIME / SCUI_ANIMA_TICK);
-            if (bar_arc->bar_alpha  > tick)
-                bar_arc->bar_alpha -= tick;
+            scui_alpha_t alpha = scui_alpha_cover / (SCUI_UI_SCROLL_BAR_FADE_TIME / tick);
+            if (bar_arc->bar_alpha  > alpha)
+                bar_arc->bar_alpha -= alpha;
             else
                 bar_arc->bar_alpha  = 0;
             
@@ -47,6 +48,7 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
             scui_widget_draw(event->object, NULL, false);
         }
         break;
+    }
     case scui_event_draw: {
         if (!scui_event_check_execute(event))
              break;

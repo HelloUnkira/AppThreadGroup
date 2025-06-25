@@ -535,7 +535,7 @@ static void scui_scroll_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
-    scui_widget_t *widget = scui_handle_source_check(anima->handle);
+    scui_widget_t *widget = scui_handle_source_check(anima->object);
     scui_scroll_t *scroll = (void *)widget;
     
     int32_t value_s = anima->value_s;
@@ -703,10 +703,10 @@ static void scui_scroll_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
     scui_anima_t  *anima  = instance;
-    scui_widget_t *widget = scui_handle_source_check(anima->handle);
+    scui_widget_t *widget = scui_handle_source_check(anima->object);
     scui_scroll_t *scroll = (void *)widget;
     
-    scui_event_t event = {.object = anima->handle};
+    scui_event_t event = {.object = anima->object};
     
     /* 这里需要考虑回弹效果,包括回弹点,边界对齐 */
     
@@ -829,10 +829,10 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     anima.ready   = scui_scroll_anima_ready;
     anima.expire  = scui_scroll_anima_expire;
     anima.finish  = scui_scroll_anima_finish;
+    anima.object  = handle;
     anima.value_s = value_s;
     anima.value_e = value_e;
     anima.period  = period != 0 ? period : scui_dist(anima.value_s, anima.value_e);
-    anima.handle  = handle;
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     

@@ -1,6 +1,4 @@
 /*实现目标:
- *    控件
- *    控件组织
  *    控件基础操作
  */
 
@@ -152,11 +150,15 @@ void scui_widget_burn(scui_widget_t *widget)
     if (widget->user_data != SCUI_HANDLE_INVALID)
         scui_handle_clear(widget->user_data);
     
+    /* 回收对象动画 */
+    scui_anima_object_recycle(widget->myself);
+    
     /* 画布剪切域清除 */
     scui_clip_clear(&widget->clip_set);
     
     /* 清空事件列表 */
     scui_widget_event_clear(widget->myself);
+    
     /* 清空事件队列所有事件 */
     scui_event_t event = {.object = widget->myself};
     while (scui_event_dequeue(&event, true, true));

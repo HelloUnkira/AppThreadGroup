@@ -39,8 +39,9 @@ typedef struct {
 
 /*@brief 更新cwf
  *@param inst 实例
+ *@param tick 流失ms
  */
-void scui_cwf_json_anim(void **inst);
+void scui_cwf_json_anim(void **inst, int32_t tick);
 
 /*@brief 销毁cwf
  *@param inst 实例地址

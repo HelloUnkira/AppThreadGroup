@@ -22,10 +22,19 @@ static bool scui_event_anima_elapse_absorb(void *evt_old, void *evt_new)
     return true;
 }
 
+/*@brief 距离上次动画嘀嗒数
+ *       响应事件回调使用:scui_event_anima_elapse
+ *@param tick 嘀嗒数
+ */
+uint32_t scui_anima_elapse_last(void)
+{
+    return scui_anima_list.elapse;
+}
+
 /*@brief 更新动画迭代数
  *@param elapse 过渡tick
  */
-void scui_anima_elapse(uint32_t elapse)
+void scui_anima_elapse_new(uint32_t elapse)
 {
     scui_anima_list.elapse += elapse;
     
@@ -41,19 +50,15 @@ void scui_anima_elapse(uint32_t elapse)
 }
 
 /*@brief 更新动画
- *@param handle 动画句柄
  */
-void scui_anima_update(scui_handle_t handle)
+void scui_anima_update(void)
 {
+    scui_anima_t *anima = NULL;
     for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
-        /* 如果指定动画句柄则只调度目标动画,否则调度所有动画 */
-        if (scui_anima_list.list[idx] != handle &&
-            handle != SCUI_HANDLE_INVALID)
-            continue;
         
-        scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
+        anima = scui_handle_source(scui_anima_list.list[idx]);
         scui_anima_list.refr_sched = false;
         
         /* 动画未运行 */
@@ -84,8 +89,8 @@ void scui_anima_update(scui_handle_t handle)
         if (anima->reduce > anima->period)
             anima->reduce = anima->period;
         
-        int32_t value_c = anima->path(anima->reduce, 0, anima->period,
-                                      anima->value_s,   anima->value_e);
+        int32_t value_c = anima->path(anima->reduce,
+            0, anima->period, anima->value_s, anima->value_e);
         
         /* 更新value */
         if (anima->value_c != value_c) {
@@ -160,30 +165,63 @@ void scui_anima_update(scui_handle_t handle)
     }
     
     /* 当次流逝已处理完毕,归零 */
-    if (handle == SCUI_HANDLE_INVALID)
-        scui_anima_list.elapse = 0;
+    scui_anima_list.elapse = 0;
 }
 
-/*@brief 创建动画
- *@param anima  动画实例
+/*@brief 销毁动画
  *@param handle 动画句柄
  */
-void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
+void scui_anima_destroy(scui_handle_t handle)
 {
-    if (anima == NULL || handle == NULL) {
-        SCUI_LOG_ERROR("invalid args");
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    scui_anima_t *anima = NULL;
+    
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] != handle)
+            continue;
+        
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        scui_handle_clear(scui_anima_list.list[idx]);
+        scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
+        scui_anima_list.refr_sched = true;
+        SCUI_MEM_FREE(anima);
         return;
     }
     
-    scui_anima_t *item = anima;
+    /* 句柄实例错误 */
+    SCUI_ASSERT(false);
+}
+
+/*@brief 创建动画
+ *@param maker  动画构造器
+ *@param handle 动画句柄
+ */
+void scui_anima_create(scui_anima_t *maker, scui_handle_t *handle)
+{
+    SCUI_ASSERT(maker != NULL && handle != NULL);
+    scui_anima_t *anima = NULL;
+    
+    /* 重复性检查(销毁重复的旧动画) */
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        if (anima->object == maker->object &&
+            anima->expire == maker->expire) {
+            scui_anima_destroy(scui_anima_list.list[idx]);
+        }
+    }
+    
     for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
-        scui_anima_list.list[idx] = scui_handle_find();
+        
         anima = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_anima_t));
+        scui_anima_list.list[idx] = scui_handle_find();
         scui_handle_linker(scui_anima_list.list[idx], anima);
        *handle = scui_anima_list.list[idx];
-       *anima = *item;
+       *anima = *maker;
         anima->reduce   = -anima->delay;
         anima->running  = false;
         anima->playback = false;
@@ -209,37 +247,14 @@ void scui_anima_create(scui_anima_t *anima, scui_handle_t *handle)
     
     /* 动画实例过多 */
     SCUI_LOG_ERROR("anima too much:");
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID) {
-            anima = scui_handle_source(scui_anima_list.list[idx]);
-            SCUI_LOG_ERROR("expire:%p, period:%u, reload:%u",
-                              anima->expire, anima->period, anima->reload);
-        }
-}
-
-/*@brief 创建动画
- *@param handle 动画句柄
- */
-void scui_anima_destroy(scui_handle_t handle)
-{
-    if (handle == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_ERROR("invalid args");
-        return;
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        SCUI_LOG_ERROR("expire:%p, object:%u, period:%u, reload:%u",
+            anima->expire, anima->object, anima->period, anima->reload);
     }
-    
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] == handle) {
-            scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
-            scui_handle_clear(scui_anima_list.list[idx]);
-            scui_anima_list.list[idx] = SCUI_HANDLE_INVALID;
-            scui_anima_list.refr_sched = true;
-            SCUI_MEM_FREE(anima);
-            
-            return;
-        }
-    
-    /* 句柄实例错误 */
-    SCUI_ASSERT(false);
 }
 
 /*@brief 开始动画
@@ -247,19 +262,18 @@ void scui_anima_destroy(scui_handle_t handle)
  */
 void scui_anima_start(scui_handle_t handle)
 {
-    if (handle == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_ERROR("invalid args");
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    scui_anima_t *anima = NULL;
+    
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] != handle)
+            continue;
+            
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        anima->running = true;
+        anima->first   = true;
         return;
     }
-    
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] == handle) {
-            scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
-            anima->running = true;
-            anima->first   = true;
-            return;
-        }
-    
     /* 句柄实例错误 */
     SCUI_ASSERT(false);
 }
@@ -269,18 +283,59 @@ void scui_anima_start(scui_handle_t handle)
  */
 void scui_anima_stop(scui_handle_t handle)
 {
-    if (handle == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_ERROR("invalid args");
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    scui_anima_t *anima = NULL;
+    
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] != handle)
+            continue;
+        
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        anima->running = false;
         return;
     }
+    /* 句柄实例错误 */
+    SCUI_ASSERT(false);
+}
+
+/*@brief 回收对象动画
+ *@param handle 对象句柄
+ */
+void scui_anima_object_recycle(scui_handle_t handle)
+{
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] == handle) {
-            scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
-            anima->running = false;
-            return;
-        }
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        /* 跳过非目标对象动画 */
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        if (anima->object != handle)
+            continue;
+        
+        /* 销毁该动画 */
+        scui_anima_destroy(scui_anima_list.list[idx]);
+    }
+}
+
+/*@brief 动画是否运行
+ *@param handle 动画句柄
+ *@retval 动画运行状态
+ */
+bool scui_anima_running(scui_handle_t handle)
+{
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
+    scui_anima_t *anima = NULL;
     
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] != handle)
+            continue;
+        
+        anima = scui_handle_source(scui_anima_list.list[idx]);
+        return anima->running;
+    }
     /* 句柄实例错误 */
     SCUI_ASSERT(false);
 }
@@ -290,43 +345,20 @@ void scui_anima_stop(scui_handle_t handle)
  *@param anima  动画实例
  *@retval 动画实例有效性
  */
-bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima)
+bool scui_anima_backup(scui_handle_t handle, scui_anima_t **anima)
 {
-    if (handle == SCUI_HANDLE_INVALID || anima == NULL) {
-        SCUI_LOG_ERROR("invalid args");
-        return false;
-    }
-    
+    SCUI_ASSERT(handle != SCUI_HANDLE_INVALID && anima != NULL);
     *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] == handle) {
-            *anima = scui_handle_source(scui_anima_list.list[idx]);
-            return true;
-        }
-    
-    return false;
-}
-
-/*@brief 动画是否运行
- *@param handle 动画句柄
- *@retval 动画运行状态
- */
-bool scui_anima_running(scui_handle_t handle)
-{
-    if (handle == SCUI_HANDLE_INVALID) {
-        SCUI_LOG_ERROR("invalid args");
-        return false;
+    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+        if (scui_anima_list.list[idx] != handle)
+            continue;
+        
+        *anima = scui_handle_source(scui_anima_list.list[idx]);
+        return true;
     }
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++)
-        if (scui_anima_list.list[idx] == handle) {
-            scui_anima_t *anima = scui_handle_source(scui_anima_list.list[idx]);
-            return anima->running;
-        }
-    
-    /* 句柄实例错误 */
-    SCUI_ASSERT(false);
+    return false;
 }
 
 /*@brief 动画周期计算
@@ -335,19 +367,10 @@ bool scui_anima_running(scui_handle_t handle)
  *@param dist_e   结束距离
  *@retval 周期
  */
-uint32_t scui_anima_peroid_calc(uint32_t speed_ms, int32_t dist_s, int32_t dist_e)
+int32_t scui_anima_peroid_calc(int32_t speed_ms, int32_t dist_s, int32_t dist_e)
 {
-    uint32_t dist = scui_dist(dist_s, dist_e);
-    uint32_t period = dist * 1000 / speed_ms;
+    int32_t dist = scui_dist(dist_s, dist_e);
+    int32_t period = dist * 1000 / speed_ms;
     
     return period;
-}
-
-/*@brief 距离上次动画嘀嗒数
- *       响应事件回调使用:scui_event_anima_elapse
- *@param tick 嘀嗒数
- */
-uint32_t scui_anima_passby_tick(void)
-{
-    return scui_anima_list.elapse;
 }

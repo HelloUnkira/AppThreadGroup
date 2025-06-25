@@ -423,10 +423,11 @@ void scui_string_invoke(scui_event_t *event)
             break;
         }
         
-        string->rcd_ms += SCUI_ANIMA_TICK;
-        if (string->rcd_ms < string->unit_ms)
-            break;
-        string->rcd_ms -= string->unit_ms;
+        int32_t tick = SCUI_ANIMA_TICK * event->tick;
+        string->rcd_ms += tick;
+        
+        if (string->rcd_ms < string->unit_ms) break;
+        else string->rcd_ms -= string->unit_ms;
         
         scui_string_args_process(&string->args);
         string->args.offset -= string->unit_dx * string->unit_way;
