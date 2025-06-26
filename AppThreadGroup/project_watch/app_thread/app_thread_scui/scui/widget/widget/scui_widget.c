@@ -112,6 +112,10 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     scui_clip_ready(&widget->clip_set);
     scui_widget_surface_refr(widget->myself, false);
     
+    /* 构建控件动画 */
+    if (widget_maker->anima_num != 0)
+        scui_widget_anima_create(widget->myself, widget_maker->anima_num);
+    
     /* 默认控件透明度为全覆盖 */
     widget->alpha = scui_alpha_cover;
     widget->image = widget_maker->image;
@@ -149,6 +153,9 @@ void scui_widget_burn(scui_widget_t *widget)
     /* 回收用户资源句柄 */
     if (widget->user_data != SCUI_HANDLE_INVALID)
         scui_handle_clear(widget->user_data);
+    
+    /* 回收控件动画 */
+    scui_widget_anima_destroy(widget->myself);
     
     /* 回收对象动画 */
     scui_anima_object_recycle(widget->myself);

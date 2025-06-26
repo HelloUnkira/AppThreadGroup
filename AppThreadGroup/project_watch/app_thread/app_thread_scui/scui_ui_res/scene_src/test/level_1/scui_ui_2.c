@@ -44,11 +44,22 @@ void scui_ui_scene_2_scroll_event(scui_event_t *event)
 void scui_ui_scene_2_custom_event(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_ptr_click:
+    case scui_event_ptr_click: {
+        scui_event_mask_over(event);
         // 滚动控件还有问题, 不能自动对齐
-        // scui_widget_anima_fade_out(event->object, 500, 100);
-        // scui_widget_anima_zoom_out_h(event->object, 500, 100);
+        #if 1
+        scui_handle_t anima1 = SCUI_HANDLE_INVALID;
+        scui_handle_t anima2 = SCUI_HANDLE_INVALID;
+        anima1 = scui_widget_anima_fade_out(event->object, 500, 100);
+        anima2 = scui_widget_anima_zoom_out_h(event->object, 500, 100);
+        
+        scui_widget_anima_create(event->object, 2);
+        scui_widget_anima_submit(event->object, anima1, 1); // 第一步
+        scui_widget_anima_submit(event->object, anima2, 2); // 第二步
+        scui_widget_anima_start(event->object);
+        #endif
         break;
+    }
     }
 }
 

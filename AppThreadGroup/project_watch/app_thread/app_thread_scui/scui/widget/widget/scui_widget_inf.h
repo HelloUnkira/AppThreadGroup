@@ -228,35 +228,54 @@ void scui_widget_event_shift(scui_event_t *event);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-/*@brief 控件动画透明渐入
- *@param handle 控件句柄
- *@param time   持续时间
- *@param delay  等待时间
- *@retval 动画句柄
+/*@brief 对象动画停止
+ *@param handle 对象句柄
+ */
+void scui_widget_anima_stop(scui_handle_t handle);
+
+/*@brief 对象动画启动
+ *@param handle 对象句柄
+ */
+void scui_widget_anima_start(scui_handle_t handle);
+
+/*@brief 对象动画清理
+ *@param handle 对象句柄
+ */
+void scui_widget_anima_clear(scui_handle_t handle);
+
+/*@brief 对象动画销毁
+ *@param handle 对象句柄
+ */
+void scui_widget_anima_destroy(scui_handle_t handle);
+
+/*@brief 对象动画创建
+ *@param handle 对象句柄
+ *@param number 动画数量
+ */
+void scui_widget_anima_create(scui_handle_t handle, scui_handle_t number);
+
+/*@brief 对象动画提交
+ *@param handle 对象句柄
+ *@param anima  动画句柄
+ *@param step   动画工步(范围:[1, 100])
+ */
+void scui_widget_anima_submit(scui_handle_t handle, scui_handle_t anima, scui_handle_t step);
+
+/*************************************************************************************************/
+
+/*@brief 控件动画透明渐入(包装器)
  */
 scui_handle_t scui_widget_anima_fade_in(scui_handle_t handle, int32_t time, int32_t delay);
 
-/*@brief 控件动画透明渐出
- *@param handle 控件句柄
- *@param time   持续时间
- *@param delay  等待时间
- *@retval 动画句柄
+/*@brief 控件动画透明渐出(包装器)
  */
 scui_handle_t scui_widget_anima_fade_out(scui_handle_t handle, int32_t time, int32_t delay);
 
-/*@brief 控件动画缩小宽度
- *@param handle 控件句柄
- *@param time   持续时间
- *@param delay  等待时间
- *@retval 动画句柄
+/*@brief 控件动画回调(缩小宽度)
  */
 scui_handle_t scui_widget_anima_zoom_out_w(scui_handle_t handle, int32_t time, int32_t delay);
 
-/*@brief 控件动画缩小高度
- *@param handle 控件句柄
- *@param time   持续时间
- *@param delay  等待时间
- *@retval 动画句柄
+/*@brief 控件动画回调(缩小高度)
  */
 scui_handle_t scui_widget_anima_zoom_out_h(scui_handle_t handle, int32_t time, int32_t delay);
 

@@ -41,6 +41,18 @@ typedef struct {
     uintptr_t indev_key:1;          /* 输入事件响应标记:key */
 } scui_widget_style_t;
 
+/*@brief 控件动画
+ */
+typedef struct {
+    scui_handle_t  handle;          /* 监听动画 */
+    scui_handle_t  object;          /* 动画对象 */
+    scui_handle_t  number;          /* 动画数量 */
+    scui_handle_t *list;            /* 动画列表 */
+    scui_handle_t *step;            /* 工步序列 */
+    scui_handle_t  step_lim;        /* 工步极限 */
+    scui_handle_t  iter;            /* 当前工步 */
+} scui_widget_anima_t;
+
 /*@brief 控件构造回调
  *@brief 控件析构回调
  *@brief 控件事件回调
@@ -67,7 +79,8 @@ typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
     scui_event_cb_list_t    list;           /* 控件事件回调列表 */
-    scui_area_t             clip;           /* 控件所在父控件区域 */
+    scui_area_t             clip;           /* 控件有效区域 */
+    scui_handle_t           anima;          /* 控件动画集合 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
@@ -86,11 +99,12 @@ typedef struct {
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
     scui_widget_style_t     style;          /* 控件状态风格 */
-    scui_event_cb_t         event_cb;       /* 事件响应回调(通用事件:可选字段,非控件自身字段) */
-    scui_area_t             clip;           /* 控件所在父控件区域 */
+    scui_event_cb_t         event_cb;       /* 事件响应回调 */
+    scui_area_t             clip;           /* 控件有效区域 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
+    scui_handle_t           anima_num;      /* 控件动画数量:最大限制 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
 } scui_widget_maker_t;

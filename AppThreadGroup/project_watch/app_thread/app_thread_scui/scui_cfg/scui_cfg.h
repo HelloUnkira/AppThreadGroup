@@ -112,7 +112,7 @@
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK                             (1000 / 100)
-#define SCUI_ANIMA_LIMIT                            (10 + 20    /* system + widget */)
+#define SCUI_ANIMA_LIMIT                            (10 + 20)   /* system + widget */
 
 /* 主事件调度最长占用 */
 #define SCUI_EVENT_OCCUPY_LIMIT                     (300 * 1000)
