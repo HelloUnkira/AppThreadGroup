@@ -81,14 +81,13 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             scui_widget_create(&group_maker, &group_handle);
             
             scui_custom_maker_t icon_maker = {0};
-            scui_handle_t icon_handle   = SCUI_HANDLE_INVALID;
-            icon_maker.widget.type      = scui_widget_type_custom;
-            icon_maker.widget.clip.w    = scui_image_w(icon_maker.widget.image);
-            icon_maker.widget.clip.h    = group_maker.widget.clip.h;
-            icon_maker.widget.parent    = group_handle;
-            
-            icon_maker.widget.style.cover_bg = true;
-            icon_maker.widget.image = scui_ui_scene_list_image[idx] + 4;
+            scui_handle_t icon_handle           = SCUI_HANDLE_INVALID;
+            icon_maker.widget.type              = scui_widget_type_custom;
+            icon_maker.widget.style.cover_bg    = true;
+            icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
+            icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
+            icon_maker.widget.clip.h            = group_maker.widget.clip.h;
+            icon_maker.widget.parent            = group_handle;
             scui_widget_create(&icon_maker, &icon_handle);
             
             scui_string_maker_t string_maker = {0};

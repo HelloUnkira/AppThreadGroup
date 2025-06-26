@@ -32,6 +32,14 @@ void scui_ui_mask_all_event_proc(scui_event_t *event)
         clip.x = (SCUI_HOR_RES - clip.w) / 2;
         clip.y = (SCUI_VER_RES - clip.h);
         // scui_widget_draw_image(event->object, &clip, image_mask_d, NULL, SCUI_COLOR_UNUSED);
+        
+        scui_handle_t image_mask_a = scui_image_prj_image_src_repeat_mask_12_all_maskpng;
+        clip.w = scui_image_w(image_mask_a);
+        clip.h = scui_image_h(image_mask_a);
+        clip.x = (SCUI_HOR_RES - clip.w) / 2;
+        clip.y = (SCUI_VER_RES - clip.h) / 2;
+        // scui_widget_draw_image(event->object, &clip, image_mask_a, NULL, SCUI_COLOR_UNUSED);
+        
         break;
     }
     default:
