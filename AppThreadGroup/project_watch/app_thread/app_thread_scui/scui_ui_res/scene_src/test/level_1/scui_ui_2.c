@@ -129,12 +129,15 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scroll_maker.dir = scui_opt_dir_none;
         #endif
         scroll_maker.skip = scui_opt_pos_all;
+        
+        scroll_maker.widget.style.cover_bg = true;
         scui_widget_create(&scroll_maker, &scroll_handle);
         scui_ui_res_local->scroll = scroll_handle;
         
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
         custom_maker.widget.type   = scui_widget_type_custom;
+        custom_maker.widget.style.cover_bg  = true;
         custom_maker.widget.style.indev_ptr = true;
         custom_maker.widget.clip.w = SCUI_HOR_RES / 8;
         custom_maker.widget.clip.h = SCUI_VER_RES / 8;

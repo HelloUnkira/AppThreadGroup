@@ -3,6 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
+            "widget.style.cover_bg":        "true",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
@@ -15,6 +16,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.cover_bg":        "true",
             "widget.clip.x":                "SCUI_HOR_RES / 4",
             "widget.clip.y":                "SCUI_VER_RES * 1 / 8",
             "widget.clip.w":                "SCUI_HOR_RES / 2",
@@ -26,6 +28,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
+            "widget.style.cover_bg":        "true",
             "widget.clip.x":                "15",
             "widget.clip.y":                "SCUI_VER_RES * 11 / 16",
             "widget.clip.w":                "SCUI_HOR_RES - 30",

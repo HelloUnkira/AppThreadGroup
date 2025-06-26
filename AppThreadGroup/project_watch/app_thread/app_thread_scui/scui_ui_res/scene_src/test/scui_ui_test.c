@@ -32,7 +32,6 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         #if 1 /* test string widget */
         scui_string_maker_t string_maker = {0};
         string_maker.widget.type                = scui_widget_type_string;
-        // string_maker.widget.style.trans         = true;
         string_maker.widget.parent              = SCUI_UI_SCENE_TEST;
         string_maker.args.line_width            = 2;
         string_maker.args.mode_scroll           = 1;

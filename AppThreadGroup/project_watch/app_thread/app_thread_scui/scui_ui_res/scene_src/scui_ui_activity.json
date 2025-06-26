@@ -4,6 +4,7 @@
         {
             "annotation":                   "每日活动界面",
             "widget.type":                  "scui_widget_type_window",
+            "widget.style.cover_bg":        "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_ACTIVITY",
@@ -33,7 +34,6 @@
         {
             "annotation":                   "每日活动界面-侧边滚动条",
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",

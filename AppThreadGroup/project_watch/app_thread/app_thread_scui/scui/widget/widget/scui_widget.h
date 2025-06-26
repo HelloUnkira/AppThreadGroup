@@ -29,9 +29,9 @@ typedef enum {
  */
 typedef struct {
     uintptr_t state:1;              /* 控件隐藏:0;控件显示:1; */
-    uintptr_t trans:1;              /* 背景显示:0;背景透明:1; */
-    uintptr_t cover:1;              /* 未知覆盖:0;完全覆盖:1; */
     uintptr_t fixed:1;              /* 控件移动禁止(悬浮) */
+    uintptr_t cover_bg:1;           /* 背景覆盖:1;背景透明:0; */
+    uintptr_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
     uintptr_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     uintptr_t sched_anima:1;        /* 控件调度帧动画标记 */
     uintptr_t sched_widget:1;       /* 控件专属事件响应标记 */

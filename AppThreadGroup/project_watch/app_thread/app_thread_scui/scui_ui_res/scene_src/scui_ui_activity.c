@@ -140,7 +140,6 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
         custom_maker.widget.type        = scui_widget_type_custom;
-        custom_maker.widget.style.trans = true;
         custom_maker.widget.clip.w      = SCUI_HOR_RES;
         custom_maker.widget.clip.h      = SCUI_VER_RES;
         custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
@@ -200,7 +199,6 @@ void scui_ui_scene_activity_scroll_ditail_title_event_proc(scui_event_t *event)
         scui_string_maker_t string_maker = {0};
         scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
         string_maker.widget.type                = scui_widget_type_string;
-        string_maker.widget.style.trans         = true;
         string_maker.widget.parent              = event->object;
         string_maker.widget.clip.w              = SCUI_HOR_RES;
         string_maker.widget.clip.h              = 40;
@@ -375,7 +373,6 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         scui_chart_maker_t chart_maker = {0};
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         chart_maker.widget.type = scui_widget_type_chart;
-        chart_maker.widget.style.trans = true;
         chart_maker.widget.clip.x = 0;
         chart_maker.widget.clip.y = 100;
         chart_maker.widget.clip.w = SCUI_HOR_RES;
@@ -537,7 +534,6 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         scui_chart_maker_t chart_maker = {0};
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         chart_maker.widget.type = scui_widget_type_chart;
-        chart_maker.widget.style.trans = true;
         chart_maker.widget.clip.x = 0;
         chart_maker.widget.clip.y = 100;
         chart_maker.widget.clip.w = SCUI_HOR_RES;
@@ -699,7 +695,6 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         scui_chart_maker_t chart_maker = {0};
         scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
         chart_maker.widget.type = scui_widget_type_chart;
-        chart_maker.widget.style.trans = true;
         chart_maker.widget.clip.x = 0;
         chart_maker.widget.clip.y = 100;
         chart_maker.widget.clip.w = SCUI_HOR_RES;

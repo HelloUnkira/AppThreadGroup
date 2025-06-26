@@ -168,7 +168,6 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
         custom_maker.widget.type                = scui_widget_type_custom;
-        custom_maker.widget.style.trans         = true;
         custom_maker.widget.style.sched_anima   = true;
         custom_maker.widget.clip.w              = SCUI_HOR_RES;
         custom_maker.widget.parent              = event->object;
@@ -203,7 +202,6 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
             custom_maker.widget.type        = scui_widget_type_custom;
-            custom_maker.widget.style.trans = true;
             custom_maker.widget.clip.w      = 410;
             custom_maker.widget.clip.h      = 180;
             custom_maker.widget.child_num   = 5;
@@ -300,7 +298,6 @@ void scui_ui_scene_quick_card_event_proc(scui_event_t *event)
         scui_linear_maker_t linear_maker = {0};
         scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
         linear_maker.widget.type = scui_widget_type_linear;
-        linear_maker.widget.style.trans        = true;
         linear_maker.widget.style.order_draw   = true;
         linear_maker.widget.style.sched_widget = true;
         linear_maker.widget.style.indev_ptr    = true;

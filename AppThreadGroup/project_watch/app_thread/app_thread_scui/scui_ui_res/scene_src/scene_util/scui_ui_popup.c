@@ -151,7 +151,6 @@ void scui_ui_scene_popup_bg_event_proc(scui_event_t *event)
         
         scui_string_maker_t string_maker = {0};
         string_maker.widget.type                = scui_widget_type_string;
-        string_maker.widget.style.trans         = true;
         string_maker.widget.parent              = SCUI_UI_SCENE_POPUP_BG;
         string_maker.widget.clip.x              = 20;
         string_maker.widget.clip.y              = 30;

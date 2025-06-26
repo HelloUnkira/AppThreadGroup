@@ -253,7 +253,6 @@ void scui_ui_scene_monitor_event_proc(scui_event_t *event)
             /* 创建显示信息文本,都是英文 */
             scui_string_maker_t string_maker = {0};
             string_maker.widget.type                = scui_widget_type_string;
-            string_maker.widget.style.trans         = true;
             string_maker.widget.parent              = SCUI_UI_SCENE_MONITOR;
             string_maker.args.recolor               = true;
             string_maker.args.align_hor             = 0;

@@ -362,15 +362,14 @@ static void scui_widget_event_process(scui_event_t *event)
         if (scui_event_check_execute(event)) {
             
             /* 控件背景透明则不绘制 */
-            if (widget->style.trans)
-                break;
-            
-            /* 绘制图片背景(有背景图片) */
-            /* 绘制纯色背景(没有背景图片) */
-            if (widget->image != SCUI_HANDLE_INVALID)
-                scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
-            else
-                scui_widget_draw_color(event->object, NULL, widget->color);
+            if (widget->style.cover_bg) {
+                /* 绘制图片背景(有背景图片) */
+                /* 绘制纯色背景(没有背景图片) */
+                if (widget->image != SCUI_HANDLE_INVALID)
+                    scui_widget_draw_image(event->object, NULL, widget->image, NULL, widget->color);
+                else
+                    scui_widget_draw_color(event->object, NULL, widget->color);
+            }
         }
         break;
     }
@@ -404,6 +403,7 @@ static void scui_widget_event_process(scui_event_t *event)
             
             /* 控件指针移动跟随标记 */
             if (widget->style.indev_ptr_move) {
+                scui_event_mask_over(event);
                 
                 scui_point_t offset = {0};
                 offset.x = event->ptr_e.x - event->ptr_s.x;

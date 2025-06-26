@@ -140,7 +140,6 @@ void scui_ui_scene_float_3_btn_event_proc(scui_event_t *event)
         scui_button_maker_t button_maker = {0};
         scui_handle_t button_bandle     = SCUI_HANDLE_INVALID;
         button_maker.widget.type        = scui_widget_type_button;
-        button_maker.widget.style.trans = true;
         button_maker.widget.parent      = event->object;
         button_maker.widget.event_cb    = scui_ui_scene_float_3_button_event;
         button_maker.color.color.full   = 0xFF282828;

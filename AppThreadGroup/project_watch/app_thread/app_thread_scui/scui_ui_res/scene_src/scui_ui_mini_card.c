@@ -929,7 +929,6 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
         custom_maker.widget.type                = scui_widget_type_custom;
-        custom_maker.widget.style.trans         = true;
         custom_maker.widget.style.sched_anima   = true;
         custom_maker.widget.clip.w              = SCUI_HOR_RES;
         custom_maker.widget.parent              = event->object;
@@ -964,7 +963,6 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             scui_custom_maker_t custom_maker = {0};
             scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
             custom_maker.widget.type        = scui_widget_type_custom;
-            custom_maker.widget.style.trans = true;
             custom_maker.widget.clip.w      = 410;
             custom_maker.widget.clip.h      = 180;
             custom_maker.widget.child_num   = 5;
@@ -981,7 +979,6 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             scui_string_maker_t string_maker = {0};
             scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
             string_maker.widget.type        = scui_widget_type_string;
-            string_maker.widget.style.trans = true;
             string_maker.widget.parent      = custom_handle;
             string_maker.widget.clip.w      = custom_maker.widget.clip.w;
             string_maker.widget.clip.h      = custom_maker.widget.clip.h;

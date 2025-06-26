@@ -117,21 +117,24 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
 {
     /* 控件需要显示 */
     if (scui_widget_is_show(widget->myself)) {
-        /* 控件不透明 */
-        if (widget->alpha == scui_alpha_cover &&
-           !scui_pixel_have_alpha(widget->surface->format)) {
-            /* 控件标记完全覆盖 */
-            if (widget->style.cover)
+        /* 控件有透明度, 不是全覆盖 */
+        if (widget->alpha != scui_alpha_cover)
+            return false;
+        /* 画布有透明度, 不是全覆盖 */
+        if (scui_pixel_have_alpha(widget->surface->format))
+            return false;
+        
+        /* 控件标记完全覆盖 */
+        if (widget->style.cover_fg)
+            return true;
+        /* 控件背景不透明且全覆盖 */
+        if (widget->style.cover_bg) {
+            /* 纯色背景,全覆盖 */
+            if (widget->image == SCUI_HANDLE_INVALID)
                 return true;
-            /* 控件背景不透明且全覆盖 */
-            if (!widget->style.trans) {
-                /* 纯色背景,全覆盖 */
-                if (widget->image == SCUI_HANDLE_INVALID)
-                    return true;
-                /* 图片背景,看是否自带透明度 */
-                if (!scui_pixel_have_alpha(scui_image_cf(widget->image)))
-                    return true;
-            }
+            /* 图片背景,看是否自带透明度 */
+            if (!scui_pixel_have_alpha(scui_image_cf(widget->image)))
+                return true;
         }
     }
     

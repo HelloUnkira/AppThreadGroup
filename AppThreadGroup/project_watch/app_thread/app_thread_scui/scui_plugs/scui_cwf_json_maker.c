@@ -433,7 +433,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip.h = res->img_h;
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
+            custom_maker.widget.style.cover_bg = true;
+            custom_maker.widget.image = parser->image_hit[res->img_ofs[0]];
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }
@@ -444,7 +445,6 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip   = scui_widget_clip(parser->parent);
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.style.trans = true;
             custom_maker.widget.style.sched_anima = true;
             custom_maker.widget.event_cb = scui_cwf_json_custom_dial_ptr_event;
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
@@ -489,7 +489,6 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip.h = res->img_h;
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.style.trans = true;
             custom_maker.widget.event_cb = scui_cwf_json_custom_event;
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
@@ -519,7 +518,8 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip.h = scui_image_h(parser->image_hit[res->img_ofs[0]]);
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.image  = parser->image_hit[res->img_ofs[0]];
+            custom_maker.widget.style.cover_bg = true;
+            custom_maker.widget.image = parser->image_hit[res->img_ofs[0]];
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
         }
@@ -546,7 +546,6 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         scui_string_maker_t string_maker = {0};
         scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
         string_maker.widget.type                = scui_widget_type_string;
-        string_maker.widget.style.trans         = true;
         string_maker.widget.clip.x              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "x")) + 0.1;
         string_maker.widget.clip.y              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "y")) + 0.1;
         string_maker.widget.clip.w              = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "w")) + 0.1;

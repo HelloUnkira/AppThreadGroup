@@ -3,7 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.style.trans":           "true",
+            "widget.style.cover_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.style.indev_key":       "true",
             "widget.clip.w":                "SCUI_HOR_RES",
@@ -16,7 +16,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
@@ -26,7 +25,6 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.trans":           "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_LIST_SCALE_MASK",

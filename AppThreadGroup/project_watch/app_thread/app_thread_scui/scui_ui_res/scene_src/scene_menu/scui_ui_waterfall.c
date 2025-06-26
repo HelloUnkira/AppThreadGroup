@@ -173,7 +173,6 @@ void scui_ui_scene_waterfall_scroll_event(scui_event_t *event)
         scui_custom_maker_t custom_maker = {0};
         scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
         custom_maker.widget.type        = scui_widget_type_custom;
-        custom_maker.widget.style.trans = true;
         custom_maker.widget.parent      = event->object;
         
         /* 上半部分空白 */

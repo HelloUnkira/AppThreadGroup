@@ -230,11 +230,13 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     
     // 构建一个父容器,用于承载cwf
     scui_custom_maker_t custom_maker = {0};
-    custom_maker.widget.type        = scui_widget_type_custom;
-    custom_maker.widget.style.cover = true;
-    custom_maker.widget.clip        = scui_widget_clip(parent);
-    custom_maker.widget.parent      = parent;
-    custom_maker.widget.child_num   = parser->list_num;
+    custom_maker.widget.type      = scui_widget_type_custom;
+    custom_maker.widget.clip      = scui_widget_clip(parent);
+    custom_maker.widget.parent    = parent;
+    custom_maker.widget.child_num = parser->list_num;
+    
+    custom_maker.widget.style.cover_bg = true;
+    custom_maker.widget.style.cover_fg = true;
     scui_widget_create(&custom_maker, &parser->parent);
     
     // 按索引顺序一个个解析, 然后添加到parser中去
