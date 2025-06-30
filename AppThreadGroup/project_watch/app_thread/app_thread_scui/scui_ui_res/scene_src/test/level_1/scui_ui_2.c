@@ -50,8 +50,8 @@ void scui_ui_scene_2_custom_event(scui_event_t *event)
         #if 1
         scui_handle_t anima1 = SCUI_HANDLE_INVALID;
         scui_handle_t anima2 = SCUI_HANDLE_INVALID;
-        anima1 = scui_widget_anima_fade_out(event->object, 500, 100);
-        anima2 = scui_widget_anima_zoom_out_h(event->object, 500, 100);
+        anima1 = scui_widget_anima_fade_out(event->object, 300, 0);
+        anima2 = scui_widget_anima_zoom_out_h(event->object, 200, 50);
         
         scui_widget_anima_create(event->object, 2);
         scui_widget_anima_submit(event->object, anima1, 1); // 第一步
@@ -106,7 +106,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scroll_maker.widget.color.color.full = 0xFF4F4F4F;
         scroll_maker.widget.event_cb = scui_ui_scene_2_scroll_event;
         scroll_maker.springback = 70;
-        scroll_maker.space = 50;
+        scroll_maker.space = 10;
         // scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
         scroll_maker.route_enc = 117;
@@ -139,8 +139,8 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         custom_maker.widget.type   = scui_widget_type_custom;
         custom_maker.widget.style.cover_bg  = true;
         custom_maker.widget.style.indev_ptr = true;
-        custom_maker.widget.clip.w = SCUI_HOR_RES / 8;
-        custom_maker.widget.clip.h = SCUI_VER_RES / 8;
+        custom_maker.widget.clip.w = SCUI_HOR_RES / 6;
+        custom_maker.widget.clip.h = SCUI_VER_RES / 6;
         custom_maker.widget.parent = scroll_handle;
         
         #if SCUI_SCROLL_LAYOUT_AUTO
