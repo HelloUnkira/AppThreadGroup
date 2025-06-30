@@ -314,7 +314,7 @@ scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t ind
 
 /*@brief 指定位置子控件
  *@param handle 控件句柄
- *@param index  子控件句柄
+ *@param child  子控件句柄
  *@retval 子控件位置(映射点)
  */
 scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child)
@@ -327,6 +327,55 @@ scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t chi
     
     SCUI_ASSERT(false);
     return -1;
+}
+
+/*@brief 移动到指定位置子控件
+ *@param handle 控件句柄
+ *@param child  子控件句柄
+ *@param index  子控件位置(映射点)
+ */
+void scui_widget_child_move_index(scui_handle_t handle, scui_handle_t child, scui_handle_t index)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_handle_t index_c = scui_widget_child_to_index(handle, child);
+    if (index_c == index)
+        return;
+    
+    if (index_c < index) {
+        for (int64_t idx = index_c; idx + 1 <= index; idx++)
+            widget->child_list[idx] = widget->child_list[idx + 1];
+        widget->child_list[index] = child;
+        return;
+    }
+    
+    if (index_c > index) {
+        for (int64_t idx = index_c; idx - 1 >= index; idx--)
+            widget->child_list[idx] = widget->child_list[idx - 1];
+        widget->child_list[index] = child;
+        return;
+    }
+}
+
+/*@brief 移动子控件到最前面
+ *@param handle 控件句柄
+ *@param child  子控件句柄
+ */
+void scui_widget_child_move_foreground(scui_handle_t handle, scui_handle_t child)
+{
+    scui_handle_t target = scui_widget_child_offset(handle, 0, 1);
+    scui_handle_t index_t = scui_widget_child_to_index(handle, target);
+    scui_widget_child_move_index(handle, child, index_t);
+}
+
+/*@brief 移动子控件到最后面
+ *@param handle 控件句柄
+ *@param child  子控件句柄
+ */
+void scui_widget_child_move_background(scui_handle_t handle, scui_handle_t child)
+{
+    scui_handle_t target = scui_widget_child_offset(handle, 0, 0);
+    scui_handle_t index_t = scui_widget_child_to_index(handle, target);
+    scui_widget_child_move_index(handle, child, index_t);
 }
 
 /*@brief 控件类型
