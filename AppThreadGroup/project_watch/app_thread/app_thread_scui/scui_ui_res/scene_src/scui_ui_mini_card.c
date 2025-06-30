@@ -809,7 +809,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_handle_t target = SCUI_HANDLE_INVALID;
         scui_scroll_center_get(parent, &target);
         if (target != event->object) {
-            scui_scroll_center(parent, event->object);
+            scui_scroll_center(parent, event->object, true);
             return;
         }
         

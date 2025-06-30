@@ -259,8 +259,9 @@ void scui_scroll_offset_get(scui_handle_t handle, scui_coord_t *offset)
 /*@brief 滚动控件设置偏移量
  *@param handle 滚动控件句柄
  *@param offset 偏移量
+ *@param anima  动画模式
  */
-void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
+void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -278,12 +279,15 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset)
     
     /* 复用动画即可 */
     scui_event_t event = {0};
-    event.object = handle;
-    event.type = scui_event_ptr_move;
+    event.object  = handle;
+    event.type    = scui_event_ptr_move;
     event.ptr_e.x = offset->x;
     event.ptr_e.y = offset->y;
     
-    uint8_t type = scroll->freedom ? 0x10 : 0x00;
+    uint8_t type = 0;
+    if (anima) type = scroll->freedom ? 0x10 : 0x00;
+    else type = scroll->freedom ? 0x1A : 0x0A;
+    
     scui_scroll_event_auto(&event, type);
 }
 
@@ -311,8 +315,9 @@ void scui_scroll_center_get(scui_handle_t handle, scui_handle_t *target)
 /*@brief 滚动控件中心对齐子控件
  *@param handle 滚动控件句柄
  *@param target 中心对齐子控件
+ *@param anima  动画模式
  */
-void scui_scroll_center(scui_handle_t handle, scui_handle_t target)
+void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
 {
     SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_scroll));
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -353,7 +358,7 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target)
     };
     SCUI_LOG_INFO("offset:<%d, %d>", offset.x, offset.y);
     scui_scroll_anima_tag(handle, 0);
-    scui_scroll_offset(handle, &offset);
+    scui_scroll_offset(handle, &offset, anima);
 }
 
 /*@brief 滚动控件边距(自由布局)
@@ -383,9 +388,13 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
     scui_scroll_t *scroll = (void *)widget;
     
     scui_area_t clip_w = widget->clip;
-    scui_area_m_to_s(&clip_w,  &clip_w);
+    scui_area_m_to_s(&clip_w, &clip_w);
     
-    // 上边界和左边界:计算第一个子控件与控件相对偏移值
+    /* 不处理循环模式 */
+    if (scroll->loop)
+        return false;
+    
+    /* 上边界和左边界:计算第一个子控件与控件相对偏移值 */
     if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u) ||
         scui_opt_bits_check(scroll->skip, scui_opt_pos_l)) {
         scui_handle_t  handle_c = scui_widget_child_offset(handle, 0, false);
@@ -393,18 +402,18 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
         scui_area_t clip_c = widget_c->clip;
         scui_area_m_to_s(&clip_c, &clip_c);
         
-        if (dir == scui_opt_dir_to_d)
+        if (scui_opt_bits_check(dir, scui_opt_dir_to_d))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u))
         if (clip_w.y1 == clip_c.y1)
             return true;
         
-        if (dir == scui_opt_dir_to_r)
+        if (scui_opt_bits_check(dir, scui_opt_dir_to_r))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_l))
         if (clip_w.x1 == clip_c.x1)
             return true;
     }
     
-    // 下边界和右边界:计算最后一个子控件与控件相对偏移值
+    /* 下边界和右边界:计算最后一个子控件与控件相对偏移值 */
     if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d) ||
         scui_opt_bits_check(scroll->skip, scui_opt_pos_r)) {
         scui_handle_t  handle_c = scui_widget_child_offset(handle, 0, true);
@@ -412,12 +421,12 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
         scui_area_t clip_c = widget_c->clip;
         scui_area_m_to_s(&clip_c, &clip_c);
         
-        if (dir == scui_opt_dir_to_u)
+        if (scui_opt_bits_check(dir, scui_opt_dir_to_u))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d))
         if (clip_w.y2 == clip_c.y2)
             return true;
         
-        if (dir == scui_opt_dir_to_l)
+        if (scui_opt_bits_check(dir, scui_opt_dir_to_l))
         if (scui_opt_bits_check(scroll->skip, scui_opt_pos_r))
         if (clip_w.x2 == clip_c.x2)
             return true;
@@ -873,6 +882,8 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
  *             0x10 动画打断事件(自由布局)
  *             0x11 动画重置事件(自由布局)
  *             0x12 动画重置事件(自由布局)
+ *             0x0A 直接到达事件(自动布局, 非循环, 循环)
+ *             0x1A 直接到达事件(自由布局)
  *             0xAA 动画回弹事件(自动布局, 自由布局, 非循环, 循环)
  */
 static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
@@ -882,6 +893,7 @@ static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
     scui_scroll_t *scroll = (void *)widget;
     
     switch (type) {
+    case 0x0A:
     case 0x00: {
         scui_coord_t track = 0;
         scui_coord_t delta_x = event->ptr_e.x - event->ptr_s.x;
@@ -916,16 +928,20 @@ static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
         }
         
         if (scroll->dir == scui_opt_dir_hor) {
-            track += scroll->point_ofs.x - scroll->point_cur.x;
-            scroll->point_cur.x = 0;
-            scroll->point_ofs.x = delta_x + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_x + track, 0);
+            track += scroll->point_ofs.x - scroll->point_cur.x + delta_x;
+            scroll->point_ofs.x = scroll->point_cur.x = 0;
+            scroll->point_ofs.y = scroll->point_cur.y = 0;
+            scroll->point_ofs.x = track;
+            int32_t value_e = track, value_s = type == 0x00 ? 0 : track;
+            scui_scroll_anima_auto(widget->myself, value_s, value_e, 0);
         }
         if (scroll->dir == scui_opt_dir_ver) {
-            track += scroll->point_ofs.y - scroll->point_cur.y;
-            scroll->point_cur.y = 0;
-            scroll->point_ofs.y = delta_y + track;
-            scui_scroll_anima_auto(widget->myself, 0, delta_y + track, 0);
+            track += scroll->point_ofs.y - scroll->point_cur.y + delta_y;
+            scroll->point_ofs.x = scroll->point_cur.x = 0;
+            scroll->point_ofs.y = scroll->point_cur.y = 0;
+            scroll->point_ofs.y = track;
+            int32_t value_e = track, value_s = type == 0x00 ? 0 : track;
+            scui_scroll_anima_auto(widget->myself, value_s, value_e, 0);
         }
         break;
     }
@@ -965,6 +981,7 @@ static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
         scroll->point_ofs = (scui_point_t){0};
         break;
     }
+    case 0x1A:
     case 0x10: {
         scui_point_t track = {0};
         scui_coord_t delta_x = event->ptr_e.x - event->ptr_s.x;
@@ -1029,7 +1046,9 @@ static void scui_scroll_event_auto(scui_event_t *event, uint8_t type)
         
         int32_t sqrt_i = 0, sqrt_f = 0;
         scui_sqrt(dist, &sqrt_i, &sqrt_f, 0x800);
-        scui_scroll_anima_auto(widget->myself, 0, sqrt_i, 0);
+        
+        int32_t value_e = sqrt_i, value_s = type == 0x10 ? 0 : sqrt_i;
+        scui_scroll_anima_auto(widget->myself, value_s, value_e, 0);
         break;
     }
     case 0x11:
@@ -1375,9 +1394,21 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_event_notify(&event);
         break;
     }
-    case scui_event_layout:
+    case scui_event_layout: {
+        bool layout = scroll->layout;
+        scui_coord_t offset_t = 0; scui_point_t offset = {0};
+        if (layout) scui_scroll_offset_get(event->object, &offset_t);
+        
         scui_scroll_event_layout(event);
+        
+        if (offset_t != 0) {volatile int breakpoint = 0;
+            breakpoint++;};
+        if (scroll->dir == scui_opt_dir_hor) offset.x = -offset_t;
+        if (scroll->dir == scui_opt_dir_ver) offset.y = -offset_t;
+        if (layout) scui_scroll_offset(event->object, &offset, false);
+        // if (layout) SCUI_LOG_WARN("<%04d>", offset_t);
         break;
+    }
     case scui_event_ptr_down:
         break;
     case scui_event_ptr_move:
@@ -1424,6 +1455,23 @@ void scui_scroll_invoke(scui_event_t *event)
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
         
+        scui_coord_t way = 0;
+        scui_opt_dir_t dir = scui_opt_dir_none;
+        if (event->type == scui_event_enc_clockwise) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_r;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_d;
+            way = +1;
+        }
+        if (event->type == scui_event_enc_clockwise_anti) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_l;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_u;
+            way = -1;
+        }
+        
+        // 忽略的方向不支持
+        if (scui_scroll_edge_skip(event->object, dir))
+            break;
+        
         if (scroll->dir != scui_opt_dir_hor &&
             scroll->dir != scui_opt_dir_ver) {
             SCUI_LOG_ERROR("scroll way is unsupport");
@@ -1434,12 +1482,6 @@ void scui_scroll_invoke(scui_event_t *event)
             break;
         }
         
-        scui_coord_t way = 0;
-        if (event->type == scui_event_enc_clockwise)
-            way = +1;
-        if (event->type == scui_event_enc_clockwise_anti)
-            way = -1;
-        
         scui_point_t offset = {0};
         if (scroll->dir == scui_opt_dir_hor)
             offset.x = way * scroll->route_enc * event->enc_diff;
@@ -1447,11 +1489,32 @@ void scui_scroll_invoke(scui_event_t *event)
             offset.y = way * scroll->route_enc * event->enc_diff;
         
         scui_scroll_anima_tag(event->object, 1);
-        scui_scroll_offset(event->object, &offset);
+        scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
         break;
     }
     case scui_event_key_click: {
+        
+        if (event->key_id != scroll->keyid_fdir &&
+            event->key_id != scroll->keyid_bdir)
+            break;
+        
+        scui_coord_t way = 0;
+        scui_opt_dir_t dir = scui_opt_dir_none;
+        if (event->key_id == scroll->keyid_fdir) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_r;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_d;
+            way = +1;
+        }
+        if (event->key_id == scroll->keyid_bdir) {
+            if (scroll->dir == scui_opt_dir_hor) dir = scui_opt_dir_to_l;
+            if (scroll->dir == scui_opt_dir_ver) dir = scui_opt_dir_to_u;
+            way = -1;
+        }
+        
+        // 忽略的方向不支持
+        if (scui_scroll_edge_skip(event->object, dir))
+            break;
         
         if (scroll->dir != scui_opt_dir_hor &&
             scroll->dir != scui_opt_dir_ver) {
@@ -1463,16 +1526,6 @@ void scui_scroll_invoke(scui_event_t *event)
             break;
         }
         
-        if (event->key_id != scroll->keyid_fdir &&
-            event->key_id != scroll->keyid_bdir)
-            break;
-        
-        scui_coord_t way = 0;
-        if (event->key_id == scroll->keyid_fdir)
-            way = +1;
-        if (event->key_id == scroll->keyid_bdir)
-            way = -1;
-        
         scui_point_t offset = {0};
         if (scroll->dir == scui_opt_dir_hor)
             offset.x = way * scroll->route_key;
@@ -1480,7 +1533,7 @@ void scui_scroll_invoke(scui_event_t *event)
             offset.y = way * scroll->route_key;
         
         scui_scroll_anima_tag(event->object, 2);
-        scui_scroll_offset(event->object, &offset);
+        scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
         break;
     }

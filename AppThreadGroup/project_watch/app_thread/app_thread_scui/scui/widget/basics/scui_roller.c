@@ -242,7 +242,7 @@ static void scui_roller_m_event(scui_event_t *event)
         SCUI_LOG_INFO("click idx:%d", index);
         
         // 聚焦它到中心
-        scui_scroll_center(handle_p, event->object);
+        scui_scroll_center(handle_p, event->object, true);
         break;
     }
     default:
