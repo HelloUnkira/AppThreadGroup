@@ -1,6 +1,12 @@
 #ifndef SCUI_WIDGET_INF_H
 #define SCUI_WIDGET_INF_H
 
+/*@brief 控件类型
+ *@param handle 控件句柄
+ *@retval 控件类型
+ */
+scui_widget_type_t scui_widget_type(scui_handle_t handle);
+
 /*@brief 控件树的根控件
  *@param handle 控件句柄
  *@retval 根控件句柄
@@ -59,17 +65,31 @@ void scui_widget_child_move_foreground(scui_handle_t handle, scui_handle_t child
  */
 void scui_widget_child_move_background(scui_handle_t handle, scui_handle_t child);
 
-/*@brief 控件类型
- *@param handle 控件句柄
- *@retval 控件类型
- */
-scui_widget_type_t scui_widget_type(scui_handle_t handle);
-
 /*@brief 控件剪切域
  *@param handle 控件句柄
  *@retval 控件剪切域
  */
 scui_area_t scui_widget_clip(scui_handle_t handle);
+
+/*@brief 控件画布
+ *@param handle 控件句柄
+ *@retval 控件画布
+ */
+scui_surface_t * scui_widget_surface(scui_handle_t handle);
+
+/*@brief 控件画布创建
+ *@param handle  控件句柄
+ *@param format  画布格式
+ *@param hor_res 画布水平尺寸
+ *@param ver_res 画布垂直尺寸
+ */
+void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
+                                scui_coord_t  hor_res, scui_coord_t    ver_res);
+
+/*@brief 控件画布销毁
+ *@param handle 控件句柄
+ */
+void scui_widget_surface_destroy(scui_handle_t handle);
 
 /*@brief 控件显示状态获取
  *@param handle 控件句柄

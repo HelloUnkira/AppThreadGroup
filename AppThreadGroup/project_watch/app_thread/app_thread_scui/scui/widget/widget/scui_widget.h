@@ -132,6 +132,10 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
  */
 void scui_widget_burn(scui_widget_t *widget);
 
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
+
 /*@brief 控件添加子控件
  *@param widget 控件实例
  *@param child  控件子控件句柄
@@ -178,26 +182,6 @@ bool scui_widget_clip_cover(scui_widget_t *widget);
  *@param widget 控件实例
  */
 void scui_widget_clip_update(scui_widget_t *widget);
-
-/*@brief 控件画布
- *@param handle 控件句柄
- *@retval 控件画布
- */
-scui_surface_t * scui_widget_surface(scui_handle_t handle);
-
-/*@brief 控件画布创建
- *@param handle  控件句柄
- *@param format  画布格式
- *@param hor_res 画布水平尺寸
- *@param ver_res 画布垂直尺寸
- */
-void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
-                                scui_coord_t  hor_res, scui_coord_t    ver_res);
-
-/*@brief 控件画布销毁
- *@param handle 控件句柄
- */
-void scui_widget_surface_destroy(scui_handle_t handle);
 
 /*@brief 控件画布重映射
  *@param handle  控件句柄
