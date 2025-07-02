@@ -365,3 +365,15 @@ bool scui_area_line(scui_area_t *area, scui_area_t *line)
     
     return false;
 }
+
+/*@brief 区域中心坐标
+ *@param area 区域
+ *@retval 中心坐标
+ */
+scui_point_t scui_area_center(scui_area_t *area)
+{
+    return (scui_point_t){
+        .x = area->x + area->w / 2,
+        .y = area->y + area->h / 2,
+    };
+}

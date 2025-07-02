@@ -9,7 +9,7 @@ typedef int16_t scui_coord_t;
 #define scui_coord_min  (0x8000)
 
 /*@brief 坐标点运算量
- *       坐标点运算可能产生溢出
+ *       坐标点运算可能产生溢出
  */
 typedef int32_t scui_multi_t;
 #define scui_multi_max  (0x7fffffff)
@@ -168,5 +168,11 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point);
  *@retval 包含true,不包含false
  */
 bool scui_area_line(scui_area_t *area, scui_area_t *line);
+
+/*@brief 区域中心坐标
+ *@param area 区域
+ *@retval 中心坐标
+ */
+scui_point_t scui_area_center(scui_area_t *area);
 
 #endif
