@@ -67,13 +67,10 @@
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */
 /* widget: */
-#include "scui_objbtn.h"            /* 控件(对象按钮) */
-#include "scui_objbtn_inf.h"        /* 控件(对象按钮)API */
-/* widget: */
-#include "scui_button.h"
-#include "scui_button_inf.h"
-#include "scui_chart.h"
-#include "scui_chart_inf.h"
+#include "scui_button.h"            /* 控件(按钮) */
+#include "scui_button_inf.h"        /* 控件(按钮)API */
+#include "scui_chart.h"             /* 控件(图表) */
+#include "scui_chart_inf.h"         /* 控件(图表)API */
 
 /* linker: */
 #include "scui_image_frame.h"       /* 图像帧资源加载卸载 */

@@ -92,15 +92,6 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
         },
         
         /* 扩展控件 */
-        [scui_widget_type_objbtn] = {
-            .size   = sizeof(scui_objbtn_t),
-            .maker  = sizeof(scui_objbtn_maker_t),
-            .base   = scui_widget_type_objbtn,
-            .make   = scui_objbtn_make,
-            .burn   = scui_objbtn_burn,
-            .invoke = scui_objbtn_invoke,
-        },
-        /* 扩展控件 */
         [scui_widget_type_button] = {
             .size   = sizeof(scui_button_t),
             .maker  = sizeof(scui_button_maker_t),

@@ -23,7 +23,6 @@ static void scui_evaluate(void)
     SCUI_LOG_INFO("scui_linear_t:%d, scui_linear_maker_t:%d", sizeof(scui_linear_t), sizeof(scui_linear_maker_t));
     SCUI_LOG_INFO("scui_roller_t:%d, scui_roller_maker_t:%d", sizeof(scui_roller_t), sizeof(scui_roller_maker_t));
     
-    SCUI_LOG_INFO("scui_objbtn_t:%d, scui_objbtn_maker_t:%d", sizeof(scui_objbtn_t), sizeof(scui_objbtn_maker_t));
     SCUI_LOG_INFO("scui_button_t:%d, scui_button_maker_t:%d", sizeof(scui_button_t), sizeof(scui_button_maker_t));
     SCUI_LOG_INFO("scui_chart_t:%d,  scui_chart_maker_t:%d",  sizeof(scui_chart_t),  sizeof(scui_chart_maker_t));
     

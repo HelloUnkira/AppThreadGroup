@@ -31,19 +31,37 @@ void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_button));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
-    button->mode        = button_maker->mode;
-    button->image[0]    = button_maker->image[0];
-    button->image[1]    = button_maker->image[1];
-    button->image[2]    = button_maker->image[2];
-    button->image[3]    = button_maker->image[3];
-    button->color       = button_maker->color;
-    button->delta       = button_maker->delta;
+    button->type = button_maker->type;
+    button->mode = button_maker->mode;
+    
+    switch (button->type) {
+    case scui_button_type_image: {
+        button->image.image[0]  = button_maker->image.image[0];
+        button->image.image[1]  = button_maker->image.image[1];
+        button->image.image[2]  = button_maker->image.image[2];
+        button->image.image[3]  = button_maker->image.image[3];
+        button->image.color     = button_maker->image.color;
+        button->image.delta     = button_maker->image.delta;
+        break;
+    }
+    case scui_button_type_pixel: {
+        for (scui_handle_t idx = 0; idx < 4; idx++) {
+            button->pixel.color[idx] = button_maker->pixel.color[idx];
+            button->pixel.alpha[idx] = button_maker->pixel.alpha[idx];
+            button->pixel.width[idx] = button_maker->pixel.width[idx];
+        }
+        button->pixel.radius = button_maker->pixel.radius;
+        break;
+    }
+    default:
+        SCUI_ASSERT(false);
+        break;
+    }
     
     if (button->mode == scui_button_mode_scale) {
-        button->btn1_lim  = SCUI_WIDGET_BUTTON_BTN1_PCT;
-        button->btn1_way  = -1;
-        button->btn1_pct  = SCUI_WIDGET_BUTTON_BTN1_PCT;
-        button->btn1_hold = false;
+        button->btn1_lim = SCUI_WIDGET_BUTTON_BTN1_PCT;
+        button->btn1_pct = SCUI_WIDGET_BUTTON_BTN1_PCT;
+        button->btn1_way = -1;
     }
 }
 
@@ -72,9 +90,13 @@ void scui_button_invoke(scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        if (button->mode == scui_button_mode_scale) {
+        switch (button->mode) {
+        case scui_button_mode_static: {
+            break;
+        }
+        case scui_button_mode_scale: {
             if (!(button->btn1_pct <= button->btn1_lim && button->btn1_way == -1)) {
-                if (!button->btn1_hold && (button->btn1_pct == 100 || button->btn1_pct == button->btn1_lim))
+                if (!button->btn_hold && (button->btn1_pct == 100 || button->btn1_pct == button->btn1_lim))
                      button->btn1_way  = -button->btn1_way;
                 if ((button->btn1_pct  < 100 && button->btn1_pct > button->btn1_lim) ||
                     (button->btn1_pct == 100 && button->btn1_way == -1) ||
@@ -94,6 +116,10 @@ void scui_button_invoke(scui_event_t *event)
                     scui_event_notify(&event);
                 }
             }
+            break;
+        }
+        default:
+            break;
         }
         
         break;
@@ -102,22 +128,101 @@ void scui_button_invoke(scui_event_t *event)
         if (!scui_event_check_execute(event))
              return;
         
-        if (button->mode == scui_button_mode_static) {
-            scui_custom_draw_image_crect4(event, &widget->clip, button->image, button->color, button->delta);
-            break;
+        if (button->type == scui_button_type_image) {
+            switch (button->mode) {
+            case scui_button_mode_static: {
+                scui_custom_draw_image_crect4(event, &widget->clip,
+                    button->image.image, button->image.color, button->image.delta);
+                break;
+            }
+            case scui_button_mode_scale: {
+                SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
+                scui_area_t  scale_clip = widget->clip;
+                scui_multi_t scale_x = scale_clip.w * (100 - button->btn1_pct) / 100 / 2;
+                scui_multi_t scale_y = scale_clip.h * (100 - button->btn1_pct) / 100 / 2;
+                scale_clip.x += scale_x;
+                scale_clip.y += scale_y;
+                scale_clip.w -= scale_x * 2;
+                scale_clip.h -= scale_y * 2;
+                scui_custom_draw_image_crect4(event, &scale_clip,
+                    button->image.image, button->image.color, button->image.delta);
+                break;
+            }
+            default:
+                break;
+            }
         }
-        if (button->mode == scui_button_mode_scale) {
-            SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
-            scui_area_t  scale_clip = widget->clip;
-            scui_multi_t scale_x = scale_clip.w * (100 - button->btn1_pct) / 100 / 2;
-            scui_multi_t scale_y = scale_clip.h * (100 - button->btn1_pct) / 100 / 2;
-            scale_clip.x += scale_x;
-            scale_clip.y += scale_y;
-            scale_clip.w -= scale_x * 2;
-            scale_clip.h -= scale_y * 2;
-            scui_custom_draw_image_crect4(event, &scale_clip, button->image, button->color, button->delta);
-            break;
+        
+        if (button->type == scui_button_type_pixel) {
+            switch (button->mode) {
+            case scui_button_mode_static: {
+                SCUI_ASSERT(false);
+                break;
+            }
+            case scui_button_mode_scale: {
+                
+                scui_area_t dst_clip[4] = {0};
+                dst_clip[3] = button->widget.clip;
+                
+                SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
+                scui_multi_t scale_x = dst_clip[3].w * (100 - button->btn1_pct) / 100 / 2;
+                scui_multi_t scale_y = dst_clip[3].h * (100 - button->btn1_pct) / 100 / 2;
+                dst_clip[3].x += scale_x;
+                dst_clip[3].y += scale_y;
+                dst_clip[3].w -= scale_x * 2;
+                dst_clip[3].h -= scale_y * 2;
+                /* 生成各个部件剪切域 */
+                for (scui_coord_t idx = 3; idx - 1 >= 0; idx--) {
+                    dst_clip[idx - 1] = dst_clip[idx];
+                    dst_clip[idx - 1].x += button->pixel.width[idx];
+                    dst_clip[idx - 1].y += button->pixel.width[idx];
+                    dst_clip[idx - 1].w -= button->pixel.width[idx] * 2;
+                    dst_clip[idx - 1].h -= button->pixel.width[idx] * 2;
+                }
+                
+                scui_color_t src_color[4] = {0};
+                scui_coord_t src_radius[4] = {0};
+                src_radius[0] = button->pixel.radius;
+                for (scui_coord_t idx = 0; idx + 1 < 4; idx++) {
+                    src_radius[idx + 1] = src_radius[idx] + button->pixel.width[idx + 1];
+                }
+                for (scui_coord_t idx = 0; idx < 4; idx++) {
+                    
+                    scui_color32_t color_s = button->pixel.color[idx].color_s;
+                    scui_color32_t color_e = button->pixel.color[idx].color_e;
+                    src_color[idx].color.ch.b = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.b, color_s.ch.b);
+                    src_color[idx].color.ch.g = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.g, color_s.ch.g);
+                    src_color[idx].color.ch.r = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.r, color_s.ch.r);
+                    src_color[idx].color.ch.a = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.a, color_s.ch.a);
+                }
+                
+                for (scui_coord_t idx = 3; idx >= 0; idx--) {
+                    
+                    scui_draw_graph_dsc_t draw_graph = {0};
+                    draw_graph.dst_surface = widget->surface;
+                    draw_graph.dst_clip  = &dst_clip[idx];
+                    draw_graph.src_alpha = button->pixel.alpha[idx];
+                    draw_graph.src_color = src_color[idx];
+                    
+                    if (idx != 3) {
+                        draw_graph.type = scui_draw_graph_type_crect;
+                        draw_graph.crect.src_width  = button->pixel.width[idx];
+                        draw_graph.crect.src_radius = src_radius[idx];
+                    } else {
+                        draw_graph.type = scui_draw_graph_type_crect_shadow;
+                        draw_graph.crect_shadow.src_width  = button->pixel.width[idx];
+                        draw_graph.crect_shadow.src_radius = src_radius[idx];
+                    }
+                    scui_draw_graph_ctx(&draw_graph);
+                }
+                
+                break;
+            }
+            default:
+                break;
+            }
         }
+        
         break;
     }
     case scui_event_ptr_down: {
@@ -133,28 +238,45 @@ void scui_button_invoke(scui_event_t *event)
         if (!scui_area_point(&clip, &event->ptr_c))
              break;
         
-        if (button->mode == scui_button_mode_scale) {
+        switch (button->mode) {
+        case scui_button_mode_static: {
+            break;
+        }
+        case scui_button_mode_scale: {
             SCUI_LOG_INFO("");
-            button->btn1_hold = true;
+            button->btn_hold = true;
             button->btn1_pct  = button->btn1_lim;
             button->btn1_way  = +1;
             break;
         }
+        default:
+            break;
+        }
+        
         break;
     }
     case scui_event_ptr_move:
     case scui_event_ptr_up: {
         
-        if (button->mode == scui_button_mode_scale) {
-            SCUI_LOG_INFO("");
-            button->btn1_hold = false;
+        switch (button->mode) {
+        case scui_button_mode_static: {
             break;
         }
+        case scui_button_mode_scale: {
+            SCUI_LOG_INFO("");
+            button->btn_hold = false;
+            break;
+        }
+        default:
+            break;
+        }
+        
         break;
     }
     case scui_event_ptr_click: {
         
-        if (button->mode == scui_button_mode_static) {
+        switch (button->mode) {
+        case scui_button_mode_static: {
             scui_event_t event = {
                 .object     = widget->myself,
                 .style.sync = true,
@@ -163,11 +285,14 @@ void scui_button_invoke(scui_event_t *event)
             scui_event_notify(&event);
             break;
         }
-        if (button->mode == scui_button_mode_scale) {
+        case scui_button_mode_scale: {
             scui_event_mask_over(event);
             SCUI_LOG_INFO("");
-            button->btn1_hold = true;
+            button->btn_hold = true;
             button->btn_click = true;
+            break;
+        }
+        default:
             break;
         }
         
