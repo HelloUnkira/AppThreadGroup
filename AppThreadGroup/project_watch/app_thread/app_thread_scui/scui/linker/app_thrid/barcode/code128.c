@@ -27,24 +27,24 @@
 #include "code128.h"
 #include <string.h>
 
-void * lv_malloc(size_t size)
+static inline void * local_malloc(size_t size)
 {
     return SCUI_MEM_ALLOC(scui_mem_type_mix, size);
 }
 
-void * lv_realloc(void *ptr, size_t size)
+static inline void * local_realloc(void *ptr, size_t size)
 {
     SCUI_ASSERT(false);
 }
 
-void lv_free(void *ptr)
+static inline void local_free(void *ptr)
 {
     SCUI_MEM_FREE(ptr);
 }
 
-#define CODE128_MALLOC      lv_malloc
-#define CODE128_REALLOC     lv_realloc
-#define CODE128_FREE        lv_free
+#define CODE128_MALLOC      local_malloc
+#define CODE128_REALLOC     local_realloc
+#define CODE128_FREE        local_free
 #define CODE128_MEMSET      memset
 #define CODE128_STRLEN      strlen
 #define CODE128_ASSERT      SCUI_ASSERT

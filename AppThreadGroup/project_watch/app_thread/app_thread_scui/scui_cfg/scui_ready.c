@@ -85,8 +85,7 @@ void scui_ready(void)
     table.source = scui_widget_parser_table;
     table.number = scui_arr_len(scui_widget_parser_table);
     scui_multi_t remap_size = table.number * sizeof(void *);
-    table.source_remap = SCUI_MEM_ALLOC(scui_mem_type_mix, remap_size);
-    memset(table.source_remap, 0, remap_size);
+    table.source_remap = SCUI_MEM_ZALLOC(scui_mem_type_mix, remap_size);
     scui_handle_table_register(&table);
     table.source_remap = NULL;
     /* 句柄表(image) */

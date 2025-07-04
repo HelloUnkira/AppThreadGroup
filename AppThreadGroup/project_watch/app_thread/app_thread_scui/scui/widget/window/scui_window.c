@@ -154,6 +154,5 @@ void scui_window_local_res_set(scui_handle_t handle, scui_handle_t size)
     scui_window_t *window = (void *)widget;
     
     SCUI_MEM_FREE(window->local_res);
-    window->local_res = SCUI_MEM_ALLOC(scui_mem_type_user, size);
-    memset(window->local_res, 0, size);
+    window->local_res = SCUI_MEM_ZALLOC(scui_mem_type_user, size);
 }

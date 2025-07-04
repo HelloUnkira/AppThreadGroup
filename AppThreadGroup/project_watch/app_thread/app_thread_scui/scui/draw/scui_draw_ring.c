@@ -491,9 +491,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         src_surface->format == scui_pixel_cf_alpha8) {
         /* 调色板数组(为空时计算,有时直接取): */
         scui_multi_t grey_len = 1 << src_bits;
-        scui_color_wt_t *grey_table = SCUI_MEM_ALLOC(scui_mem_type_graph, sizeof(scui_color_wt_t) * grey_len);
+        scui_color_wt_t *grey_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, sizeof(scui_color_wt_t) * grey_len);
         scui_color_wt_t filter = 0;
-        memset(grey_table, 0, grey_len * sizeof(scui_color_wt_t));
         /* 起始色调和结束色调固定 */
         scui_pixel_by_color(dst_surface->format, &grey_table[0], src_color.color_e);
         scui_pixel_by_color(dst_surface->format, &grey_table[grey_len - 1], src_color.color_s);

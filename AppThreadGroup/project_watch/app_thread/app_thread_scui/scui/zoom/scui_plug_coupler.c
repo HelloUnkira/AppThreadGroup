@@ -16,25 +16,17 @@
 void scui_plug_coupler_create(scui_plug_coupler_t **coupler, scui_handle_t list_num)
 {
     SCUI_ASSERT(list_num != 0);
-    *coupler = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_plug_coupler_t));
-    memset(*coupler, 0, sizeof(scui_plug_coupler_t));
+    *coupler = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_plug_coupler_t));
     
     (*coupler)->list_widget_m_cb = NULL;
-    (*coupler)->list_surface_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t *) * list_num);
-    (*coupler)->list_widget_s  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * list_num);
-    (*coupler)->list_widget_m  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * list_num);
-    (*coupler)->list_draw_clip = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_area_t) * list_num);
+    (*coupler)->list_surface_s = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_surface_t *) * list_num);
+    (*coupler)->list_widget_s  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * list_num);
+    (*coupler)->list_widget_m  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * list_num);
+    (*coupler)->list_draw_clip = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_area_t) * list_num);
     (*coupler)->list_draw_idx = -1;
     (*coupler)->list_num = list_num;
-    (*coupler)->list_draw = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
-    (*coupler)->list_refr = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
-    
-    memset((*coupler)->list_surface_s, 0, sizeof(scui_surface_t *) * list_num);
-    memset((*coupler)->list_widget_s,  0, sizeof(scui_handle_t) * list_num);
-    memset((*coupler)->list_widget_m,  0, sizeof(scui_handle_t) * list_num);
-    memset((*coupler)->list_draw_clip, 0, sizeof(scui_area_t) * list_num);
-    memset((*coupler)->list_draw, 0, sizeof(bool) * list_num);
-    memset((*coupler)->list_refr, 0, sizeof(bool) * list_num);
+    (*coupler)->list_draw = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
+    (*coupler)->list_refr = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
 }
 
 /*@brief 插件:连接器:销毁

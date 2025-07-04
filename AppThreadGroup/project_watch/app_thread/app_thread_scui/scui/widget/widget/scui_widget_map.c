@@ -157,8 +157,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     void *local_maker = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->maker);
     memcpy(local_maker, widget_maker, widget_map->maker);
     /* 创建控件实例 */
-    scui_widget_t *widget = SCUI_MEM_ALLOC(scui_mem_type_mix, widget_map->size);
-    memset(widget, 0, widget_map->size);
+    scui_widget_t *widget = SCUI_MEM_ZALLOC(scui_mem_type_mix, widget_map->size);
     /* 构造流程 */
     widget_maker = local_maker;
     /* 备注:动态构造器是不知道句柄的 */

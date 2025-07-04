@@ -167,12 +167,9 @@ void scui_widget_anima_create(scui_handle_t handle, scui_handle_t number)
         scui_widget_anima_destroy(handle);
     
     SCUI_ASSERT(number != 0);
-    widget_anima = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_widget_anima_t));
-    memset(widget_anima, 0, sizeof(scui_widget_anima_t));
-    widget_anima->list = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * number);
-    widget_anima->step = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * number);
-    memset(widget_anima->list, 0, sizeof(scui_handle_t) * number);
-    memset(widget_anima->step, 0, sizeof(scui_handle_t) * number);
+    widget_anima = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_widget_anima_t));
+    widget_anima->list = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * number);
+    widget_anima->step = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t) * number);
     widget_anima->number = number;
     widget_anima->object = handle;
     

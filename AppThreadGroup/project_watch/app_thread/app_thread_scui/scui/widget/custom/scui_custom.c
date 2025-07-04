@@ -80,10 +80,8 @@ void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc)
     scui_custom_t *custom = (void *)widget;
     
     SCUI_ASSERT(draw_dsc != NULL);
-    if (custom->draw_dsc == NULL) {
-        custom->draw_dsc  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_custom_draw_dsc_t));
-        memset(custom->draw_dsc, 0, sizeof(scui_custom_draw_dsc_t));
-    }
+    if (custom->draw_dsc == NULL)
+        custom->draw_dsc  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_custom_draw_dsc_t));
     
     SCUI_ASSERT(custom->draw_dsc != NULL);
     *draw_dsc = custom->draw_dsc;

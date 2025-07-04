@@ -168,8 +168,7 @@ static void app_scui_monkey_timer_handler(void *timer)
 void scui_monkey_test(void)
 {
     SCUI_ASSERT(scui_ui_res_local == NULL);
-    scui_ui_res_local = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
-    memset(scui_ui_res_local, 0, sizeof(*scui_ui_res_local));
+    scui_ui_res_local = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
     scui_ui_res_local->idle = true;
     
     #if 1

@@ -258,8 +258,7 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
     
     /* 进行utf-8字符串转为unicode编码, 以此确认unicode编码下的index */
     scui_coord_t num_unicode = scui_utf8_str_num(str_utf8);
-    uint32_t *str_unicode = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (num_unicode + 1));
-    memset(str_unicode, 0, 4 * (num_unicode + 1));
+    uint32_t *str_unicode = SCUI_MEM_ZALLOC(scui_mem_type_font, 4 * (num_unicode + 1));
     scui_utf8_str_to_unicode(str_utf8, num_unicode, str_unicode);
     
     scui_coord_t idx_colors = 0, key_chars = 0;
@@ -289,8 +288,7 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
     
     scui_coord_t idx_utf8_raw = 0;
     scui_coord_t num_utf8_raw = strlen(str_utf8);
-    uint8_t *str_utf8_raw = SCUI_MEM_ALLOC(scui_mem_type_font, num_utf8_raw + 1);
-    memset(str_utf8_raw, 0, num_utf8_raw + 1);
+    uint8_t *str_utf8_raw = SCUI_MEM_ZALLOC(scui_mem_type_font, num_utf8_raw + 1);
     for (scui_coord_t idx = 0; idx + 1 < num_utf8_raw; idx++) {
         /* 匹配到颜色起始点:#- */
         /* 匹配到颜色结束点:-# */

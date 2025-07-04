@@ -149,9 +149,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         SCUI_LOG_ERROR("unmatched cwf version");
     
     scui_cwf_json_parser_t *parser = NULL;
-    parser = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_cwf_json_parser_t));
-    memset(parser, 0, sizeof(scui_cwf_json_parser_t));
-    *inst = parser;
+    *inst = parser = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(scui_cwf_json_parser_t));
     
     uint8_t *json_file = SCUI_MEM_ALLOC(scui_mem_type_graph, json_size + 1);
     scui_image_bin_read(file, json_ofs, json_size, json_file);
@@ -213,9 +211,9 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON *json_object = cJSON_Parse(json_file);
     cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
     parser->list_num   = cJSON_GetArraySize(json_layout);
-    parser->list_child = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(scui_handle_t));
-    parser->list_type  = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
-    parser->list_src   = SCUI_MEM_ALLOC(scui_mem_type_user, parser->list_num * sizeof(void *));
+    parser->list_child = SCUI_MEM_ZALLOC(scui_mem_type_user, parser->list_num * sizeof(scui_handle_t));
+    parser->list_type  = SCUI_MEM_ZALLOC(scui_mem_type_user, parser->list_num * sizeof(uint8_t));
+    parser->list_src   = SCUI_MEM_ZALLOC(scui_mem_type_user, parser->list_num * sizeof(void *));
     
     #if 0   /* 检查JSON */
     char *json_format = cJSON_Print(json_object);
@@ -223,10 +221,6 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     SCUI_LOG_INFO("\n%s\n", json_format);
     cJSON_free(json_format);
     #endif
-    
-    memset(parser->list_child, 0, parser->list_num * sizeof(scui_handle_t));
-    memset(parser->list_type,  0, parser->list_num * sizeof(uint8_t));
-    memset(parser->list_src,   0, parser->list_num * sizeof(void *));
     
     // 构建一个父容器,用于承载cwf
     scui_custom_maker_t custom_maker = {0};
@@ -329,8 +323,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             
             uint8_t image_info[18] = {0};
             scui_image_bin_read(file, image_iofs + img_ofs * 18, 18, image_info);
-            scui_image_t *image_src = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_image_t));
-            memset(image_src, 0, sizeof(scui_image_t));
+            scui_image_t *image_src = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(scui_image_t));
             
             uint8_t  format = image_info[18 * 0 + 0];
             uint8_t  type   = image_info[18 * 0 + 1];

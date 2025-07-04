@@ -106,8 +106,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
     SCUI_ASSERT(image_frame != NULL);
     SCUI_ASSERT(image_frame->local == NULL);
     scui_image_frame_local_t *local = NULL;
-    local = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_frame_local_t));
-    memset(local, 0, sizeof(scui_image_frame_local_t));
+    local = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_image_frame_local_t));
     image_frame->local = local;
     
     switch (image_frame->type) {

@@ -363,7 +363,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         }
         /* 为数据区申请新资源 */
         unit          = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_image_unit_t));
-        unit->data    = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);
+        unit->data    = SCUI_MEM_RALLOC(scui_mem_type_graph, image_size);
         unit->image   = image_unit->image;
         unit->count   = 1;
         unit->lock    = 1;
@@ -385,7 +385,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
     
     /* 加载图片资源 */
     uintptr_t image_size = scui_image_size(image_unit->image);
-    image_unit->data = SCUI_MEM_ALLOC_WAY(scui_mem_type_graph, image_size);
+    image_unit->data = SCUI_MEM_RALLOC(scui_mem_type_graph, image_size);
     scui_image_src_read(image_unit->image, image_unit->data);
     #endif
 }

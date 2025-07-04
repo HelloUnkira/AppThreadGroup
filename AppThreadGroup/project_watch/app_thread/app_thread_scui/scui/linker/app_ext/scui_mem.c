@@ -343,6 +343,10 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     if (size == 0)
         return NULL;
     
+    #if SCUI_MEM_FEAT_MINI
+    type = scui_mem_type_mix;
+    #endif
+    
     #if SCUI_MEM_SENTRY_CHECK
     /* [size][sentry][monitoring data][sentry] */
     size += sizeof(uint32_t) * 3;

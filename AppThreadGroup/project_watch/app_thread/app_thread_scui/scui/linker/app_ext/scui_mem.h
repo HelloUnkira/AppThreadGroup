@@ -85,17 +85,6 @@ typedef struct {
     #endif
 } scui_mem_t;
 
-/* 宏转接,外部使用接口 */
-#if SCUI_MEM_FEAT_MINI
-#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, scui_mem_type_mix, size, true)
-#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, scui_mem_type_mix, size, false)
-#define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
-#else
-#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
-#define SCUI_MEM_ALLOC_WAY(type, size)  scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
-#define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
-#endif
-
 /*@brief 内存分配(外部不直接调用)
  *@param file 内存分配点(文件名)
  *@param line 内存分配点(文件行数)
@@ -153,5 +142,16 @@ void scui_mem_check(scui_mem_type_t type);
 /*@brief 内存模组就绪
  */
 void scui_mem_ready(void);
+
+/* 宏转接,外部使用接口 */
+#define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)
+#define SCUI_MEM_RALLOC(type, size)     scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, false)
+#define SCUI_MEM_FREE(ptr)              scui_mem_free( __FILE__, __func__, __LINE__, ptr)
+
+/* 包装两个Clean的内联宏转接 */
+static inline void * SCUI_MEM_ZALLOC(scui_mem_type_t type, uint32_t size)
+{void *ptr = SCUI_MEM_ALLOC(type, size); memset(ptr, 0, size); return ptr;}
+static inline void * SCUI_MEM_RZALLOC(scui_mem_type_t type, uint32_t size)
+{void *ptr = SCUI_MEM_RALLOC(type, size); memset(ptr, 0, size); return ptr;}
 
 #endif

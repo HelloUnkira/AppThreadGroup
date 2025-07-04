@@ -383,8 +383,7 @@ void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx)
  */
 void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON *dict)
 {
-    scui_csf_json_item__res_t *res = SCUI_MEM_ALLOC(scui_mem_type_user, sizeof(scui_csf_json_item__res_t));
-    memset(res, 0, sizeof(scui_csf_json_item__res_t));
+    scui_csf_json_item__res_t *res = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(scui_csf_json_item__res_t));
     parser->list_src[idx] = res;
     
     // 按协议解析字段 (进行一级解析)

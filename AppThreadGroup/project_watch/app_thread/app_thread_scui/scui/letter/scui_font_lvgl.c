@@ -780,9 +780,8 @@ static uint32_t load_cmaps(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_ds
     SCUI_ASSERT(cmaps_subtables_count > 0);
     
     uint32_t cmaps_subtables_size = cmaps_subtables_count * sizeof(lv_font_fmt_txt_cmap_t);
-    lv_font_fmt_txt_cmap_t * cmaps = SCUI_MEM_ALLOC(scui_mem_type_font, cmaps_subtables_size);
+    lv_font_fmt_txt_cmap_t * cmaps = SCUI_MEM_ZALLOC(scui_mem_type_font, cmaps_subtables_size);
     font->size += cmaps_subtables_size;
-    memset(cmaps, 0, cmaps_subtables_size);
     
     font_dsc->cmaps = cmaps;
     font_dsc->cmap_num = cmaps_subtables_count;
@@ -862,9 +861,8 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
     scui_font_src_read(&font->font_src, &padding, 3);
     
     if(0 == kern_format_type) { /*sorted pairs*/
-        lv_font_fmt_txt_kern_pair_t * kern_pair = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_pair_t));
+        lv_font_fmt_txt_kern_pair_t * kern_pair = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_pair_t));
         font->size += sizeof(lv_font_fmt_txt_kern_pair_t);
-        memset(kern_pair, 0, sizeof(lv_font_fmt_txt_kern_pair_t));
         
         font_dsc->kern_dsc = kern_pair;
         font_dsc->kern_classes = 0;
@@ -891,9 +889,8 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
         scui_font_src_read(&font->font_src, values, glyph_entries);
     }
     else if(3 == kern_format_type) { /*array M*N of classes*/
-        lv_font_fmt_txt_kern_classes_t * kern_classes = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_classes_t));
+        lv_font_fmt_txt_kern_classes_t * kern_classes = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_kern_classes_t));
         font->size += sizeof(lv_font_fmt_txt_kern_classes_t);
-        memset(kern_classes, 0, sizeof(lv_font_fmt_txt_kern_classes_t));
         
         font_dsc->kern_dsc = kern_classes;
         font_dsc->kern_classes = 1;
@@ -945,16 +942,14 @@ static uint32_t load_kern(lv_font_t *font, uintptr_t offset, lv_font_fmt_txt_dsc
 
 static lv_font_t * lv_font_load(char *name)
 {
-    lv_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_t));
-    memset(font, 0, sizeof(lv_font_t));
+    lv_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_t));
     font->size += sizeof(lv_font_t);
     
     strcpy(font->name, name);
     scui_font_src_open(&font->font_src, font->name);
     
-    lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
+    lv_font_fmt_txt_dsc_t *font_dsc = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_fmt_txt_dsc_t));
     font->size += sizeof(lv_font_fmt_txt_dsc_t);
-    memset(font_dsc, 0, sizeof(lv_font_fmt_txt_dsc_t));
     font->dsc = font_dsc;
     
     /* bin[head] */
@@ -1341,8 +1336,7 @@ typedef struct {
 
 static void * lv_font_ttf_tiny_load(char *name, uint32_t size)
 {
-    lv_font_ttf_tiny_t *font = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(lv_font_ttf_tiny_t));
-    memset(font, 0, sizeof(lv_font_ttf_tiny_t));
+    lv_font_ttf_tiny_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(lv_font_ttf_tiny_t));
     font->size += sizeof(lv_font_ttf_tiny_t);
     
     strcpy(font->name, name);
@@ -1430,8 +1424,7 @@ static void lv_font_ttf_tiny_glpyh_load(lv_font_ttf_tiny_t *font, scui_font_glyp
  */
 void scui_font_load(char *name, uint32_t size, scui_handle_t *handle)
 {
-    scui_font_t *font = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_font_t));
-    memset(font, 0, sizeof(scui_font_t));
+    scui_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_font_t));
     *handle = scui_handle_find();
     scui_handle_linker(*handle, font);
     font->size = size;

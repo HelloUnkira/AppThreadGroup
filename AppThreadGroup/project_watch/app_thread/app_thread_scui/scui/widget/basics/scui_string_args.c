@@ -90,8 +90,7 @@ static void scui_string_args_prepare(scui_string_args_t *args)
     
     /* 统计字符数量 */
     args->number  = scui_utf8_str_num(args->utf8);
-    args->unicode = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (args->number + 1));
-    memset(args->unicode, 0, 4 * (args->number + 1));
+    args->unicode = SCUI_MEM_ZALLOC(scui_mem_type_font, 4 * (args->number + 1));
     /* 将utf8转为unicode */
     scui_utf8_str_to_unicode(args->utf8, args->number, args->unicode);
 }

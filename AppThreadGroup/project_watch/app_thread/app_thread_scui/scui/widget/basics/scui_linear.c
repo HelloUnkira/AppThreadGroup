@@ -44,20 +44,13 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_handle_t list_num = linear->list_num;
     
     /* 创建缓存资源 */
-    linear->list_surface_s = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t *) * list_num);
-    linear->list_widget_s  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t)    * list_num);
-    linear->list_widget_m  = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_handle_t)    * list_num);
-    linear->list_draw_clip = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_area_t)      * list_num);
+    linear->list_surface_s = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_surface_t *) * list_num);
+    linear->list_widget_s  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t)    * list_num);
+    linear->list_widget_m  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_handle_t)    * list_num);
+    linear->list_draw_clip = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_area_t)      * list_num);
     linear->list_draw_idx  = -1;
-    linear->list_draw      = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
-    linear->list_refr      = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
-    
-    memset(linear->list_surface_s, 0, sizeof(scui_surface_t *) * list_num);
-    memset(linear->list_widget_s,  0, sizeof(scui_handle_t)    * list_num);
-    memset(linear->list_widget_m,  0, sizeof(scui_handle_t)    * list_num);
-    memset(linear->list_draw_clip, 0, sizeof(scui_area_t)      * list_num);
-    memset(linear->list_draw,      0, sizeof(bool)             * list_num);
-    memset(linear->list_refr,      0, sizeof(bool)             * list_num);
+    linear->list_draw      = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
+    linear->list_refr      = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
 }
 
 /*@brief 控件析构
