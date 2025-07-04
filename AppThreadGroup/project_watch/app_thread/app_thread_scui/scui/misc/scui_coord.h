@@ -154,12 +154,43 @@ bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1
  */
 bool scui_area_inside(scui_area_t *area1, scui_area_t *area2);
 
+/*@brief 检查区域包含区域(area1包含area2, 限制圆角)
+ *@param area1  区域
+ *@param area2  区域
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_inside_cric(scui_area_t *area1, scui_area_t *area2, scui_coord_t radius);
+
+/*@brief 检查区域包含区域(area1不包含area2, 限制圆角)
+ *@param area1  区域
+ *@param area2  区域
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_outside_cric(scui_area_t *area1, scui_area_t *area2, scui_coord_t radius);
+
 /*@brief 检查区域包含坐标(area包含point)
  *@param area  区域
  *@param point 坐标
  *@retval 包含true,不包含false
  */
 bool scui_area_point(scui_area_t *area, scui_point_t *point);
+
+/*@brief 检查区域包含坐标(水平圆)
+ *@param area  区域
+ *@param point 坐标
+ *@retval 包含true,不包含false
+ */
+bool scui_area_point_circ_in(scui_area_t *area, scui_point_t *point);
+
+/*@brief 检查区域包含坐标(圆角区域)
+ *@param area   区域
+ *@param point  坐标
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_point_circ(scui_area_t *area, scui_point_t *point, scui_coord_t radius);
 
 /*@brief 检查区域包含线(area包含line)
  *@param area   区域

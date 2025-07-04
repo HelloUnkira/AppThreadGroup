@@ -322,6 +322,63 @@ bool scui_area_inside(scui_area_t *area1, scui_area_t *area2)
     return false;
 }
 
+/*@brief 检查区域包含区域(area1包含area2, 限制圆角)
+ *@param area1  区域
+ *@param area2  区域
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_inside_cric(scui_area_t *area1, scui_area_t *area2, scui_coord_t radius)
+{
+    if (scui_area_inside(area1, area2)) {
+        if (radius <= 0) return true;
+        
+        scui_area_t area_t = {0};
+        scui_area_m_to_s(&area_t, area2);
+        
+        scui_point_t point_11 = {area_t.x1, area_t.y1,};
+        scui_point_t point_12 = {area_t.x1, area_t.y2,};
+        scui_point_t point_21 = {area_t.x2, area_t.y1,};
+        scui_point_t point_22 = {area_t.x2, area_t.y2,};
+        if (!scui_area_point_circ(area1, &point_11, radius)) return false;
+        if (!scui_area_point_circ(area1, &point_12, radius)) return false;
+        if (!scui_area_point_circ(area1, &point_21, radius)) return false;
+        if (!scui_area_point_circ(area1, &point_22, radius)) return false;
+        
+        return true;
+    }
+    
+    return false;
+}
+
+/*@brief 检查区域包含区域(area1不包含area2, 限制圆角)
+ *@param area1  区域
+ *@param area2  区域
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_outside_cric(scui_area_t *area1, scui_area_t *area2, scui_coord_t radius)
+{
+    if (scui_area_inside(area1, area2))
+        return false;
+    
+    if (radius <= 0) return false;
+    
+    scui_area_t area_t = {0};
+    scui_area_m_to_s(&area_t, area2);
+    
+    scui_point_t point_11 = {area_t.x1, area_t.y1,};
+    scui_point_t point_12 = {area_t.x1, area_t.y2,};
+    scui_point_t point_21 = {area_t.x2, area_t.y1,};
+    scui_point_t point_22 = {area_t.x2, area_t.y2,};
+    if (scui_area_point_circ(area1, &point_11, radius)) return false;
+    if (scui_area_point_circ(area1, &point_12, radius)) return false;
+    if (scui_area_point_circ(area1, &point_21, radius)) return false;
+    if (scui_area_point_circ(area1, &point_22, radius)) return false;
+    
+    return true;
+}
+
 /*@brief 检查区域包含坐标(area包含point)
  *@param area  区域
  *@param point 坐标
@@ -335,6 +392,80 @@ bool scui_area_point(scui_area_t *area, scui_point_t *point)
     
     return false;
 }
+
+/*@brief 检查区域包含坐标(水平圆)
+ *@param area  区域
+ *@param point 坐标
+ *@retval 包含true,不包含false
+ */
+bool scui_area_point_circ_in(scui_area_t *area, scui_point_t *point)
+{
+    scui_coord_t rad = area->w / 2;
+    scui_coord_t cx  = area->x + rad;
+    scui_coord_t cy  = area->y + rad;
+    scui_coord_t px  = point->x - cx;
+    scui_coord_t py  = point->x - cy;
+    scui_multi_t r_s = rad * rad;
+    scui_multi_t p_s = px * px + py * py;
+    
+    return (p_s < r_s);
+}
+
+/*@brief 检查区域包含坐标(圆角区域)
+ *@param area   区域
+ *@param point  坐标
+ *@param radius 半径
+ *@retval 包含true,不包含false
+ */
+bool scui_area_point_circ(scui_area_t *area, scui_point_t *point, scui_coord_t radius)
+{
+    if (scui_area_point(area, point)) {
+        if (radius <= 0) return true;
+        scui_coord_t edge = scui_min(area->w, area->h);
+        if (radius > edge) radius = edge;
+        
+        scui_area_t area_in = {0};
+        
+        /* top left */
+        area_in.x = area->x; area_in.w = radius + 1;
+        area_in.y = area->y; area_in.h = radius + 1;
+        if (scui_area_point(&area_in, point)) {
+            area_in.w += radius; area_in.h += radius;
+            return scui_area_point_circ_in(&area_in, point);
+        }
+        
+        /* bottom left */
+        area_in.h = radius + 1;
+        area_in.y = area->y + area->h - area_in.h;
+        if (scui_area_point(&area_in, point)) {
+            area_in.w += radius; area_in.y -= radius;
+            return scui_area_point_circ_in(&area_in, point);
+        }
+        
+        /* bottom right */
+        area_in.w = radius + 1;
+        area_in.x = area->x + area->w - area_in.w;
+        if (scui_area_point(&area_in, point)) {
+            area_in.x -= radius; area_in.y -= radius;
+            return scui_area_point_circ_in(&area_in, point);
+        }
+        
+        /* top right */
+        area_in.y = area->y;
+        area_in.h = radius + 1;
+        if (scui_area_point(&area_in, point)) {
+            area_in.x -= radius; area_in.h += radius;
+            return scui_area_point_circ_in(&area_in, point);
+        }
+        
+        return true;
+    }
+    
+    return false;
+}
+
+
+
 
 /*@brief 检查区域包含线(area包含line)
  *@param area 区域
