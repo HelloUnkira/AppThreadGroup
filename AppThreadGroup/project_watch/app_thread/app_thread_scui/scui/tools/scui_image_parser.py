@@ -5,6 +5,7 @@ import sys
 import PIL.Image
 import lz4.block
 import lz4.frame
+import numpy
 
 # 支持的压缩目标
 scui_image_pkg_use_lz4 = True
@@ -53,13 +54,54 @@ def scui_image_lz4_decompress(pixel_bytes_in) -> bytearray:
     return pixel_bytes_out
 
 
+# 对常规数据流进行dither处理(未完成, 未测试)
+def scui_image_pixel_dither(image, dither):
+    pixel_matrix = image.load()
+    if not dither:
+        return pixel_matrix
+    # 提取RGBA数据到NumPy数组
+    width, height = image.size
+    pixel_rgba = numpy.zeros((height, width, 4), dtype=numpy.float32)
+    for y in range(height):
+        for x in range(width):
+            r, g, b, a = pixel_matrix[x, y]
+            pixel_rgba[y, x] = [r, g, b, a]
+    # 对RGB通道进行dither(Alpha通道保持不变)
+    pixel_a = pixel_rgba[:, :, 3].copy()
+    pixel_rgb = pixel_rgba[:, :, :3].copy()
+    pixel_rgb = pixel_rgb.copy().astype(numpy.float32) # 使用float存储误差
+    height, width, channels = pixel_rgb.shape
+    for y in range(height):
+        for x in range(width):
+            for c in range(channels):  # R, G, B
+                # 随机抖动
+                channel_old = pixel_rgb[y, x, c]
+                channel_new = channel_old + numpy.random.uniform(-15, 15)
+                channel_new = numpy.clip(channel_new, 0, 255)
+                pixel_rgb[y, x, c] = channel_new
+                # 计算误差并扩散
+                spread_error = channel_old - channel_new
+                if x + 1 < width: pixel_rgb[y, x + 1, c] += spread_error * 7 / 16
+                if y + 1 < height: pixel_rgb[y + 1, x, c] += spread_error * 5 / 16
+                if y + 1 < height and x > 0: pixel_rgb[y + 1, x - 1, c] += spread_error * 3 / 16
+                if y + 1 < height and x + 1 < width: pixel_rgb[y + 1, x + 1, c] += spread_error * 1 / 16
+                # 扩散后的值不溢出
+                pixel_rgb[:, :, c] = numpy.clip(pixel_rgb[:, :, c], 0, 255)
+    # 整理所有的通道值, 然后替换RGB通道值
+    pixel_matrix = numpy.zeros((height, width, 4), dtype=numpy.uint8)
+    pixel_matrix[:, :, :3] = pixel_rgb.clip(0, 255).astype(numpy.uint8)
+    pixel_matrix[:, :, 3] = pixel_a.astype(numpy.uint8)
+    return PIL.Image.fromarray(pixel_matrix, 'RGBA').load()
+
+
 # 生成常规数据流
-def scui_image_pixel_stream(image_raw, image_std) -> ():
+def scui_image_pixel_stream(image_raw, image_std, dither) -> ():
     # ...
     # 现在我们将剩下的图片都转为RGBA格式的了:image_std
     # 我们需要根据原格式提取目标数据存储到缓存中
     # 这一步骤不进行本地持久化的操作
-    pixel_matrix = image_std.load()
+    # 针对被标记为dither的image进行处理
+    pixel_matrix = scui_image_pixel_dither(image_std, dither)
     pixel_stream = []
     # 迭代每一个像素点
     if image_raw.mode == 'P':
@@ -138,6 +180,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
     # 对目标图片集合进行流式处理,提取数据内容
     for file in file_path_list:
         # 每一个迭代都有一个默认的起始状态
+        scui_image_tag_dither = str(file).find(".dither") != -1
         scui_image_tag_frame = False
         scui_image_pkg_over = False
         scui_image_tag = (project_name + file).replace('.', '').replace('\\', '_')
@@ -232,7 +275,7 @@ def scui_image_parser_all(file_path_list, scui_image_parser_list, project_name):
                     print('png:' + scui_image_tag)
         # 自定义打包格式
         if not scui_image_pkg_over:
-            pixel_stream, scui_pixel_cf = scui_image_pixel_stream(image_raw, image_std)
+            pixel_stream, scui_pixel_cf = scui_image_pixel_stream(image_raw, image_std, scui_image_tag_dither)
             # 不可解析的数据流
             if not pixel_stream:
                 print('can\'t parse data stream')

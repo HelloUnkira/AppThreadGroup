@@ -155,14 +155,6 @@ static void scui_monkey_anim_finish(void *instance)
 {
     SCUI_LOG_INFO("");
 }
-
-/*@brief monkey test动画回调
- */
-static void app_scui_monkey_timer_handler(void *timer)
-{
-    scui_monkey_anim_expire(NULL);
-}
-
 /*@brief monkey test
  */
 void scui_monkey_test(void)
@@ -171,7 +163,6 @@ void scui_monkey_test(void)
     scui_ui_res_local = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(*scui_ui_res_local));
     scui_ui_res_local->idle = true;
     
-    #if 1
     scui_anima_t anima = {0};
     anima.ready  = scui_monkey_anim_ready;
     anima.expire = scui_monkey_anim_expire;
@@ -182,13 +173,4 @@ void scui_monkey_test(void)
     scui_handle_t scui_monkey_test_anima = SCUI_HANDLE_INVALID;
     scui_anima_create(&anima, &scui_monkey_test_anima);
     scui_anima_start(scui_monkey_test_anima);
-    #else
-    
-    static app_sys_timer_t app_scui_monkey_timer = {0};
-    app_scui_monkey_timer.expire = app_scui_monkey_timer_handler;
-    app_scui_monkey_timer.peroid  = 1000 / 60;
-    app_scui_monkey_timer.reload  = true;
-    app_sys_timer_start(&app_scui_monkey_timer);
-    
-    #endif
 }

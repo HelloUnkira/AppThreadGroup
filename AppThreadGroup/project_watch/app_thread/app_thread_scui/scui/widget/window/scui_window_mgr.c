@@ -394,6 +394,22 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     #endif
 }
 
+/*@brief 窗口列表事件通知
+ *@param event 事件
+ */
+void scui_window_list_event_notify(scui_event_t *event)
+{
+    scui_handle_t handle = event->object;
+    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+            continue;
+        
+        event->object = scui_window_mgr.list[idx];
+        scui_event_notify(event);
+        event->object = handle;
+    }
+}
+
 /*@brief 窗口管理器混合画布模式检查
  *@param state  状态(0x00:设置标记;0x01:清除标记;0x02:检查标记;)
  *@param widget 控件实例地址

@@ -142,6 +142,11 @@ void scui_window_list_add(scui_handle_t handle);
  */
 void scui_window_list_del(scui_handle_t handle);
 
+/*@brief 窗口列表事件通知
+ *@param event 事件
+ */
+void scui_window_list_event_notify(scui_event_t *event);
+
 /*@brief 窗口刷新(仅调度使用)
  */
 void scui_window_refresh(void);
