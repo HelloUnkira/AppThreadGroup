@@ -41,8 +41,7 @@ typedef struct {
     void (*absorb)(void *evt_old, void *evt_new);
     /* 扩展字段 */
     union {
-        /* 动画嘀嗒次数 */
-        /* 输入设备数据<ptr> */
+        /* 输入事件数据<ptr> */
         struct {
             scui_point_t ptr_c;
             scui_coord_t ptr_cnt;
@@ -52,34 +51,35 @@ typedef struct {
             scui_point_t ptr_s;
             scui_point_t ptr_e;
         };
-        /* 输入设备数据<enc> */
+        /* 输入事件数据<enc> */
         struct {
             scui_coord_t enc_diff;
         };
-        /* 输入设备数据<key> */
+        /* 输入事件数据<key> */
         struct {
             scui_coord_t key_id;
             scui_coord_t key_val;
             scui_coord_t key_cnt;
             scui_coord_t key_tick;
         };
-        /* scui定制化事件数据: */
-        scui_area_t  area;
-        scui_point_t point;
-        scui_coord_t coord;
-        scui_coord_t tick;
-        /* scui定制调度事件数据: */
+        /* scui迟延调度事件信息: */
         struct {
             void (*sched)(scui_handle_t handle);
             scui_handle_t handle;
         };
-        /* 通用结构信息(数据量不定,支持任意类型和种类的数据): */
+        /* scui动画事件嘀嗒次数 */
+        scui_coord_t tick;
+        /* scui其余事件信息: */
+        // scui_area_t  area;
+        // scui_point_t point;
+        // scui_coord_t coord;
+        
+        /* 通用结构信息(协议数据流): */
         struct {
-            uint64_t dynamic:1;     /* 协议数据流是动态生成,使用完毕要回收 */
-            uint64_t size:24;       /* 协议数据流大小(16M) */
-            void    *data;          /* 协议数据流(浅拷贝) */
+            uint64_t size;  /* 协议数据流大小 */
+            void    *data;  /* 协议数据流 */
         };
-        /* 扩展迷你信息(数据量极少,通常表示状态类数据): */
+        /* 扩展迷你信息(状态类数据): */
         uintptr_t byte_align;
         uint64_t  byte_fixed;
     };

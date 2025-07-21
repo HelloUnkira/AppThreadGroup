@@ -30,10 +30,9 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     string->font_idx    = string_maker->font_idx;
-    string->lang_type   = string_maker->lang_type;
     string->args        = string_maker->args;
-    string->unit_ms     = string_maker->unit_ms != 0 ? string_maker->unit_ms : SCUI_WIDGET_STRING_UNIT_MS;
-    string->unit_dx     = string_maker->unit_dx != 0 ? string_maker->unit_dx : SCUI_WIDGET_STRING_UNIT_DX;
+    string->unit_ms     = string_maker->unit_ms;
+    string->unit_dx     = string_maker->unit_dx;
     string->unit_s      = string_maker->unit_s;
     string->draw_cache  = string_maker->draw_cache;
     string->unit_anima  = true;
@@ -48,9 +47,13 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     if (string->args.gap_none == 0)
         string->args.gap_none  = SCUI_WIDGET_STRING_GAP_NONE;
     
-    string->args.lang = string->lang_type;
     if (string->args.lang == SCUI_HANDLE_INVALID)
         scui_multi_lang_get(&string->args.lang);
+    
+    if (string->unit_ms == 0)
+        string->unit_ms  = SCUI_WIDGET_STRING_UNIT_MS;
+    if (string->unit_dx == 0)
+        string->unit_dx  = SCUI_WIDGET_STRING_UNIT_DX;
     
     string->args.size = scui_font_size_match(string->font_idx, string->args.size);
     string->args.name = scui_font_name_match(string->font_idx, string->args.lang);
@@ -167,6 +170,8 @@ void scui_string_update_text(scui_handle_t handle, scui_handle_t text)
     }
     
     if (string->text != SCUI_HANDLE_INVALID) {
+        if (string->args.lang == SCUI_HANDLE_INVALID)
+            scui_multi_lang_get(&string->args.lang);
         uint8_t *str_utf8 = scui_multi_lang_str(string->text, string->args.lang);
         scui_coord_t str_bytes = scui_utf8_str_bytes(str_utf8);
         string->str_utf8 = SCUI_MEM_ALLOC(scui_mem_type_mix, str_bytes + 7);

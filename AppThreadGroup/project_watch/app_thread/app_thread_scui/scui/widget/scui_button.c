@@ -131,6 +131,7 @@ void scui_button_invoke(scui_event_t *event)
         if (button->type == scui_button_type_image) {
             switch (button->mode) {
             case scui_button_mode_static: {
+                
                 scui_custom_draw_image_crect4(event, &widget->clip,
                     button->image.image, button->image.color, button->image.delta);
                 break;
@@ -144,6 +145,7 @@ void scui_button_invoke(scui_event_t *event)
                 scale_clip.y += scale_y;
                 scale_clip.w -= scale_x * 2;
                 scale_clip.h -= scale_y * 2;
+                
                 scui_custom_draw_image_crect4(event, &scale_clip,
                     button->image.image, button->image.color, button->image.delta);
                 break;
@@ -160,18 +162,17 @@ void scui_button_invoke(scui_event_t *event)
                 break;
             }
             case scui_button_mode_scale: {
-                
-                scui_area_t dst_clip[4] = {0};
-                dst_clip[3] = button->widget.clip;
-                
                 SCUI_ASSERT(button->btn1_pct >= button->btn1_lim && button->btn1_pct <= 100);
-                scui_multi_t scale_x = dst_clip[3].w * (100 - button->btn1_pct) / 100 / 2;
-                scui_multi_t scale_y = dst_clip[3].h * (100 - button->btn1_pct) / 100 / 2;
-                dst_clip[3].x += scale_x;
-                dst_clip[3].y += scale_y;
-                dst_clip[3].w -= scale_x * 2;
-                dst_clip[3].h -= scale_y * 2;
+                scui_area_t  scale_clip = widget->clip;
+                scui_multi_t scale_x = scale_clip.w * (100 - button->btn1_pct) / 100 / 2;
+                scui_multi_t scale_y = scale_clip.h * (100 - button->btn1_pct) / 100 / 2;
+                scale_clip.x += scale_x;
+                scale_clip.y += scale_y;
+                scale_clip.w -= scale_x * 2;
+                scale_clip.h -= scale_y * 2;
+                
                 /* 生成各个部件剪切域 */
+                scui_area_t dst_clip[4] = {[3] = scale_clip,};
                 for (scui_coord_t idx = 3; idx - 1 >= 0; idx--) {
                     dst_clip[idx - 1] = dst_clip[idx];
                     dst_clip[idx - 1].x += button->pixel.width[idx];
@@ -180,29 +181,27 @@ void scui_button_invoke(scui_event_t *event)
                     dst_clip[idx - 1].h -= button->pixel.width[idx] * 2;
                 }
                 
-                scui_color_t src_color[4] = {0};
-                scui_coord_t src_radius[4] = {0};
-                src_radius[0] = button->pixel.radius;
+                scui_coord_t src_radius[4] = {[0] = button->pixel.radius,};
                 for (scui_coord_t idx = 0; idx + 1 < 4; idx++) {
-                    src_radius[idx + 1] = src_radius[idx] + button->pixel.width[idx + 1];
-                }
-                for (scui_coord_t idx = 0; idx < 4; idx++) {
-                    
-                    scui_color32_t color_s = button->pixel.color[idx].color_s;
-                    scui_color32_t color_e = button->pixel.color[idx].color_e;
-                    src_color[idx].color.ch.b = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.b, color_s.ch.b);
-                    src_color[idx].color.ch.g = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.g, color_s.ch.g);
-                    src_color[idx].color.ch.r = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.r, color_s.ch.r);
-                    src_color[idx].color.ch.a = scui_map(button->btn1_pct, 100, button->btn1_lim, color_e.ch.a, color_s.ch.a);
+                    src_radius[idx + 1]  = src_radius[idx];
+                    src_radius[idx + 1] += button->pixel.width[idx + 1];
                 }
                 
+                scui_coord_t pct_c = button->btn1_pct;
+                scui_coord_t pct_s = button->btn1_lim;
                 for (scui_coord_t idx = 3; idx >= 0; idx--) {
+                    scui_color_t src_color = {0};
+                    scui_color32_t color_s = button->pixel.color[idx].color_s;
+                    scui_color32_t color_e = button->pixel.color[idx].color_e;
+                    src_color.color.ch.r = scui_map(pct_c, 100, pct_s, color_e.ch.r, color_s.ch.r);
+                    src_color.color.ch.g = scui_map(pct_c, 100, pct_s, color_e.ch.g, color_s.ch.g);
+                    src_color.color.ch.b = scui_map(pct_c, 100, pct_s, color_e.ch.b, color_s.ch.b);
                     
                     scui_draw_graph_dsc_t draw_graph = {0};
                     draw_graph.dst_surface = widget->surface;
                     draw_graph.dst_clip  = &dst_clip[idx];
+                    draw_graph.src_color = src_color;
                     draw_graph.src_alpha = button->pixel.alpha[idx];
-                    draw_graph.src_color = src_color[idx];
                     
                     if (idx != 3) {
                         draw_graph.type = scui_draw_graph_type_crect;

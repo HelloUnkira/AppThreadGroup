@@ -16,7 +16,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_roller_type_t  type;
-    uintptr_t           grad:1;
+    scui_sbitfd_t       grad:1;
     /* 内部域: */
     scui_handle_t center;
 } scui_roller_t;
@@ -31,7 +31,7 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     scui_roller_type_t  type;
-    uintptr_t           grad:1;
+    scui_sbitfd_t       grad:1;
 } scui_roller_maker_t;
 #pragma pack(pop)
 

@@ -42,7 +42,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.draw_cache                 = true;
         
         string_maker.font_idx                   = SCUI_FONT_IDX_MZ;
-        string_maker.lang_type                  = SCUI_MULTI_LANG_TYPE_MZ;
+        string_maker.args.lang                  = SCUI_MULTI_LANG_TYPE_MZ;
         string_maker.args.size                  = font_size;
         
         /* test:全文本渐变 */
@@ -125,7 +125,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
     case scui_event_ptr_hold:
         if (event->ptr_tick > 3000) {
             if (!ptr_long_jump) SCUI_LOG_WARN("ptr long hold");
-            ptr_long_jump = true;
+            ptr_long_jump = true;
         }
         break;
     case scui_event_ptr_up:

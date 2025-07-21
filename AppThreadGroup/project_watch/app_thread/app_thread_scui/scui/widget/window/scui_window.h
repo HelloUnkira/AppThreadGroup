@@ -7,16 +7,16 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    uintptr_t           level:6;            /* 窗口所在层级(数字越大越高) */
-    uintptr_t           buffer:1;           /* 窗口是否使用独立画布 */
-    uintptr_t           resident:1;         /* 窗口常驻标记(特殊使用) */
-    uintptr_t           hang_only:1;        /* 窗口悬挂标记(特殊使用) */
+    scui_sbitfd_t       level:6;            /* 窗口所在层级(数字越大越高) */
+    scui_sbitfd_t       buffer:1;           /* 窗口是否使用独立画布 */
+    scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
+    scui_sbitfd_t       hang_only:1;        /* 窗口悬挂标记(特殊使用) */
     scui_pixel_cf_t     format;             /* 窗口独立画布基础像素格式 */
     /* 内部域: */
     scui_handle_t       sibling[4];         /* 临近界面句柄:0:上;1:下;2:左;3:右; */
     scui_handle_t       switch_type[4];     /* 临近界面交互风格 */
     void               *local_res;          /* 窗口资源实例 */
-    uintptr_t           draw_lock;          /* 窗口绘制锁 */
+    scui_sbitfd_t       draw_lock:1;        /* 窗口绘制锁 */
 } scui_window_t;
 
 #pragma pack(push, 1)
@@ -26,9 +26,9 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    uintptr_t           level:6;            /* 窗口所在层级(数字越大越高) */
-    uintptr_t           buffer:1;           /* 窗口是否使用独立画布 */
-    uintptr_t           resident:1;         /* 窗口常驻标记(特殊使用) */
+    scui_sbitfd_t       level:6;            /* 窗口所在层级(数字越大越高) */
+    scui_sbitfd_t       buffer:1;           /* 窗口是否使用独立画布 */
+    scui_sbitfd_t       resident:1;         /* 窗口常驻标记(特殊使用) */
     scui_pixel_cf_t     format;             /* 窗口独立画布基础像素格式 */
 } scui_window_maker_t;
 #pragma pack(pop)

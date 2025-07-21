@@ -27,7 +27,11 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type)
         if (widget_map == NULL || widget_type == widget_map->base)
             break;
         
+        // 检查父控件的可继承属性
         widget_type = widget_map->base;
+        scui_widget_map_find(widget_type, &widget_map);
+        if (!widget_map->inherit)
+             break;
     }
     
     return false;
@@ -43,70 +47,78 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
     static const scui_widget_map_t scui_widget_map[scui_widget_type_num] = {
         /* 基础控件 */
         [scui_widget_type_window] = {
-            .size   = sizeof(scui_window_t),
-            .maker  = sizeof(scui_window_maker_t),
-            .base   = scui_widget_type_window,
-            .make   = scui_window_make,
-            .burn   = scui_window_burn,
-            .invoke = NULL,
+            .size    = sizeof(scui_window_t),
+            .maker   = sizeof(scui_window_maker_t),
+            .base    = scui_widget_type_window,
+            .make    = scui_window_make,
+            .burn    = scui_window_burn,
+            .invoke  = NULL,
+            .inherit = false,
         },
         [scui_widget_type_custom] = {
-            .size   = sizeof(scui_custom_t),
-            .maker  = sizeof(scui_custom_maker_t),
-            .base   = scui_widget_type_custom,
-            .make   = scui_custom_make,
-            .burn   = scui_custom_burn,
-            .invoke = NULL,
+            .size    = sizeof(scui_custom_t),
+            .maker   = sizeof(scui_custom_maker_t),
+            .base    = scui_widget_type_custom,
+            .make    = scui_custom_make,
+            .burn    = scui_custom_burn,
+            .invoke  = NULL,
+            .inherit = false,
         },
         [scui_widget_type_scroll] = {
-            .size   = sizeof(scui_scroll_t),
-            .maker  = sizeof(scui_scroll_maker_t),
-            .base   = scui_widget_type_scroll,
-            .make   = scui_scroll_make,
-            .burn   = scui_scroll_burn,
-            .invoke = scui_scroll_invoke,
+            .size    = sizeof(scui_scroll_t),
+            .maker   = sizeof(scui_scroll_maker_t),
+            .base    = scui_widget_type_scroll,
+            .make    = scui_scroll_make,
+            .burn    = scui_scroll_burn,
+            .invoke  = scui_scroll_invoke,
+            .inherit = true,
         },
         [scui_widget_type_string] = {
-            .size   = sizeof(scui_string_t),
-            .maker  = sizeof(scui_string_maker_t),
-            .base   = scui_widget_type_string,
-            .make   = scui_string_make,
-            .burn   = scui_string_burn,
-            .invoke = scui_string_invoke,
+            .size    = sizeof(scui_string_t),
+            .maker   = sizeof(scui_string_maker_t),
+            .base    = scui_widget_type_string,
+            .make    = scui_string_make,
+            .burn    = scui_string_burn,
+            .invoke  = scui_string_invoke,
+            .inherit = false,
         },
         [scui_widget_type_linear] = {
-            .size   = sizeof(scui_linear_t),
-            .maker  = sizeof(scui_linear_maker_t),
-            .base   = scui_widget_type_scroll,
-            .make   = scui_linear_make,
-            .burn   = scui_linear_burn,
-            .invoke = scui_linear_invoke,
+            .size    = sizeof(scui_linear_t),
+            .maker   = sizeof(scui_linear_maker_t),
+            .base    = scui_widget_type_scroll,
+            .make    = scui_linear_make,
+            .burn    = scui_linear_burn,
+            .invoke  = scui_linear_invoke,
+            .inherit = true,
         },
         [scui_widget_type_roller] = {
-            .size   = sizeof(scui_roller_t),
-            .maker  = sizeof(scui_roller_maker_t),
-            .base   = scui_widget_type_linear,
-            .make   = scui_roller_make,
-            .burn   = scui_roller_burn,
-            .invoke = scui_roller_invoke,
+            .size    = sizeof(scui_roller_t),
+            .maker   = sizeof(scui_roller_maker_t),
+            .base    = scui_widget_type_linear,
+            .make    = scui_roller_make,
+            .burn    = scui_roller_burn,
+            .invoke  = scui_roller_invoke,
+            .inherit = true,
         },
         
         /* 扩展控件 */
         [scui_widget_type_button] = {
-            .size   = sizeof(scui_button_t),
-            .maker  = sizeof(scui_button_maker_t),
-            .base   = scui_widget_type_button,
-            .make   = scui_button_make,
-            .burn   = scui_button_burn,
-            .invoke = scui_button_invoke,
+            .size    = sizeof(scui_button_t),
+            .maker   = sizeof(scui_button_maker_t),
+            .base    = scui_widget_type_button,
+            .make    = scui_button_make,
+            .burn    = scui_button_burn,
+            .invoke  = scui_button_invoke,
+            .inherit = false,
         },
         [scui_widget_type_chart] = {
-            .size   = sizeof(scui_chart_t),
-            .maker  = sizeof(scui_chart_maker_t),
-            .base   = scui_widget_type_chart,
-            .make   = scui_chart_make,
-            .burn   = scui_chart_burn,
-            .invoke = scui_chart_invoke,
+            .size    = sizeof(scui_chart_t),
+            .maker   = sizeof(scui_chart_maker_t),
+            .base    = scui_widget_type_chart,
+            .make    = scui_chart_make,
+            .burn    = scui_chart_burn,
+            .invoke  = scui_chart_invoke,
+            .inherit = false,
         },
     };
     

@@ -15,7 +15,7 @@ static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
     scui_event_t *event_new = evt_new;
     
     /* 将enc值转移到它上面: */
-    event_old->coord += event_new->coord;
+    event_old->enc_diff += event_new->enc_diff;
     return true;
 }
 
@@ -41,8 +41,8 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
         .object = SCUI_HANDLE_SYSTEM,
         .type   = type,
         .absorb = scui_event_enc_absorb,
-        .coord  = scui_abs(data->enc.enc_diff),
     };
+    event.enc_diff = scui_abs(data->enc.enc_diff);
     scui_event_notify(&event);
 }
 

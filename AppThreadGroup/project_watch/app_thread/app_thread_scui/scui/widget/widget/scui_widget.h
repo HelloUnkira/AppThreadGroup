@@ -26,17 +26,17 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    uintptr_t state:1;              /* 控件隐藏:0;控件显示:1; */
-    uintptr_t fixed:1;              /* 控件移动禁止(悬浮) */
-    uintptr_t cover_bg:1;           /* 背景覆盖:1;背景透明:0; */
-    uintptr_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
-    uintptr_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
-    uintptr_t sched_anima:1;        /* 控件调度帧动画标记 */
-    uintptr_t sched_widget:1;       /* 控件专属事件响应标记 */
-    uintptr_t indev_ptr:1;          /* 输入事件响应标记:ptr */
-    uintptr_t indev_ptr_move:1;     /* 输入事件响应标记:ptr move 自动跟随 */
-    uintptr_t indev_enc:1;          /* 输入事件响应标记:enc */
-    uintptr_t indev_key:1;          /* 输入事件响应标记:key */
+    scui_sbitfd_t state:1;              /* 控件隐藏:0;控件显示:1; */
+    scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
+    scui_sbitfd_t cover_bg:1;           /* 背景覆盖:1;背景透明:0; */
+    scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
+    scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
+    scui_sbitfd_t sched_anima:1;        /* 控件调度帧动画标记 */
+    scui_sbitfd_t sched_widget:1;       /* 控件专属事件响应标记 */
+    scui_sbitfd_t indev_ptr:1;          /* 输入事件响应标记:ptr */
+    scui_sbitfd_t indev_ptr_move:1;     /* 输入事件响应标记:ptr move 自动跟随 */
+    scui_sbitfd_t indev_enc:1;          /* 输入事件响应标记:enc */
+    scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */
 } scui_widget_style_t;
 
 /*@brief 控件动画
@@ -62,12 +62,13 @@ typedef scui_event_cb_t scui_widget_cb_invoke_t;
 /*@brief 控件处理映射表
  */
 typedef struct {
-    scui_handle_t           size;   // 控件实例大小
-    scui_handle_t           maker;  // 控件构造器大小
-    scui_widget_type_t      base;   // 控件基类
-    scui_widget_cb_make_t   make;   // 控件构造
-    scui_widget_cb_burn_t   burn;   // 控件析构
-    scui_widget_cb_invoke_t invoke; // 控件调用
+    scui_handle_t           size;       // 控件实例大小
+    scui_handle_t           maker;      // 控件构造器大小
+    scui_sbitfd_t           inherit:1;  // 控件可继承标记
+    scui_widget_type_t      base;       // 控件基类
+    scui_widget_cb_make_t   make;       // 控件构造
+    scui_widget_cb_burn_t   burn;       // 控件析构
+    scui_widget_cb_invoke_t invoke;     // 控件调用
 } scui_widget_map_t;
 
 /*@brief 控件基础信息:

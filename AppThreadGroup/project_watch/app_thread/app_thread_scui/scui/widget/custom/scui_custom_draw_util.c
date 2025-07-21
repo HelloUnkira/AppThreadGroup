@@ -193,18 +193,16 @@ void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc)
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, focus, NULL, color_focus);
-            if (way)
-                offset.y += scui_image_h(focus) + span;
-            else
-                offset.x += scui_image_w(focus) + span;
+            
+            if (way) offset.y += scui_image_h(focus) + span;
+            else offset.x += scui_image_w(focus) + span;
         } else {
             scui_area_t dst_clip = *clip;
             if (scui_area_limit_offset(&dst_clip, &offset))
                 scui_widget_draw_image(event->object, &dst_clip, wait, NULL, color_wait);
-            if (way)
-                offset.y += scui_image_h(wait) + span;
-            else
-                offset.x += scui_image_w(wait) + span;
+            
+            if (way) offset.y += scui_image_h(wait) + span;
+            else offset.x += scui_image_w(wait) + span;
         }
     }
 }
@@ -265,10 +263,8 @@ void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc)
         if (scui_area_limit_offset(&dst_clip, &offset))
             scui_widget_draw_image(event->object, &dst_clip, image[idx], NULL, color);
         
-        if (way)
-            offset.y += span + scui_image_h(image[idx]);
-        else
-            offset.x += span + scui_image_w(image[idx]);
+        if (way) offset.y += span + scui_image_h(image[idx]);
+        else offset.x += span + scui_image_w(image[idx]);
     }
 }
 
@@ -359,53 +355,30 @@ void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
     /* 无图片 */
     if (image_clip.w == -1 || image_clip.h == -1)
         return;
-    /* 画一个角 */
-    clip_a.x = clip->x;
-    clip_a.y = clip->y;
-    if (image[0] == SCUI_HANDLE_INVALID) {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_color(event->object, &dst_clip, color);
-    } else {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_image(event->object, &dst_clip, image[0], NULL, color);
+    
+    /* 画四个角(最多) */
+    scui_point_t dst_point[4] = {0};
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        dst_point[idx].x = clip->x;
+        dst_point[idx].y = clip->y;
     }
-    /* 画一个角 */
-    clip_a.x = clip->x + clip->w - clip_a.w;
-    clip_a.y = clip->y;
-    if (image[1] == SCUI_HANDLE_INVALID) {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_color(event->object, &dst_clip, color);
-    } else {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_image(event->object, &dst_clip, image[1], NULL, color);
-    }
-    /* 画一个角 */
-    clip_a.x = clip->x;
-    clip_a.y = clip->y + clip->h - clip_a.h;
-    if (image[2] == SCUI_HANDLE_INVALID) {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_color(event->object, &dst_clip, color);
-    } else {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_image(event->object, &dst_clip, image[2], NULL, color);
-    }
-    /* 画一个角 */
-    clip_a.x = clip->x + clip->w - clip_a.w;
-    clip_a.y = clip->y + clip->h - clip_a.h;
-    if (image[3] == SCUI_HANDLE_INVALID) {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_color(event->object, &dst_clip, color);
-    } else {
-        scui_area_t dst_clip = {0};
-        if (scui_area_inter(&dst_clip, clip, &clip_a))
-            scui_widget_draw_image(event->object, &dst_clip, image[3], NULL, color);
+    dst_point[1].x = clip->x + clip->w - clip_a.w;
+    dst_point[2].y = clip->y + clip->h - clip_a.h;
+    dst_point[3].x = dst_point[1].x;
+    dst_point[3].y = dst_point[2].y;
+    
+    scui_area_t dst_clip = {0};
+    for (scui_coord_t idx = 0; idx < 4; idx++) {
+        clip_a.x = dst_point[idx].x;
+        clip_a.y = dst_point[idx].y;
+        
+        if (image[idx] == SCUI_HANDLE_INVALID) {
+            if (scui_area_inter(&dst_clip, clip, &clip_a))
+                scui_widget_draw_color(event->object, &dst_clip, color);
+        } else {
+            if (scui_area_inter(&dst_clip, clip, &clip_a))
+                scui_widget_draw_image(event->object, &dst_clip, image[idx], NULL, color);
+        }
     }
     /* ... */
 }
