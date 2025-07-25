@@ -280,7 +280,10 @@ void AppMathTest_MD5(uint8_t *Text, uint32_t Size)
     APP_SYS_LOG_INFO_RAW(app_sys_log_line());
 }
 
-
+void AppMathTest_Cflint(void)
+{
+    Test_CflintFunc();
+}
 
 void AppMathTest(void)
 {
@@ -309,8 +312,6 @@ void AppMathTest(void)
     // MD5:     073D95EEB81C057BE515CE4AC4F62A7B    32位大
     #endif
     
-    
-    
-    
+    AppMathTest_Cflint();
     
 }

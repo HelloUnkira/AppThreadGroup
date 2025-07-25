@@ -12,4 +12,6 @@
 #include "SHA256.h"
 #include "MD5.h"
 
+#include "CflintTest.h"
+
 #endif
