@@ -13,6 +13,11 @@
  */
 static void app_thread_math_routine_ready_cb(void)
 {
+    app_thread_package_t package = {
+        .thread = app_thread_id_math,
+        .module = app_thread_math_test,
+    };
+    app_thread_package_notify(&package);
 }
 
 /*@brief 子线程服务例程处理部
@@ -20,7 +25,8 @@ static void app_thread_math_routine_ready_cb(void)
 static bool app_thread_math_routine_package_cb(app_thread_package_t *package, bool *record)
 {
     switch (package->module) {
-    case app_thread_math_sched:
+    case app_thread_math_test:
+        AppMathTest();
         return true;
     default:
         break;
