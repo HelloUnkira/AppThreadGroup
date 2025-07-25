@@ -1,0 +1,17 @@
+{
+    "type"  : "mix_chunk_large",
+    "brief" : "mix_chunk_large: suggest：user_data and chunk user_size",
+    "data_group" :
+    [
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "512 * 1"
+        },
+        {
+            "data_brief" : "unknown",
+            "data_name"  : "unknown",
+            "data_size"  : "512 * 1"
+        }
+    ]
+}
