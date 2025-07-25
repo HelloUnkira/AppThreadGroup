@@ -50,18 +50,18 @@ void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflin
 /* 要求:Op < Module且互素 */
 void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Module, Cflint_Type *Temp[4], uint32_t Len);
 
-/* 带符号与运算:Ret * (*ResultFlag) = Op_1 * (Operand1_Flag) + */
-/*                                       Op_2 * (Operand2_Flag)   */
+/* 带符号与运算:Ret * (*RetFlag) = Op_1 * (Op1_Flag) + */
+/*                                       Op_2 * (Op2_Flag)   */
 /* 备注:大数运算本身是无符号语义运算,这里是为某些数学运算额外扩展 */
-Cflint_Type Cflint_FlagSum(Cflint_Type *Ret,  Cflint_Type *ResultFlag,
-                           Cflint_Type *Op_1, Cflint_Type  Operand1_Flag,
-                           Cflint_Type *Op_2, Cflint_Type  Operand2_Flag,
+Cflint_Type Cflint_FlagSum(Cflint_Type *Ret,  Cflint_Type *RetFlag,
+                           Cflint_Type *Op_1, Cflint_Type  Op1_Flag,
+                           Cflint_Type *Op_2, Cflint_Type  Op2_Flag,
                               uint32_t  Len);
 
-/* 带符号模运算:Ret = Op_1 * (Operand1_Flag) % Op_2 */
+/* 带符号模运算:Ret = Op_1 * (Op1_Flag) % Op_2 */
 /* 备注:大数运算本身是无符号语义运算,这里是为某些数学运算额外扩展 */
 void Cflint_FlagMod(Cflint_Type *Ret,   Cflint_Type *Op_1,
-                       Cflint_Type *Op_2, Cflint_Type  Operand1_Flag,
+                       Cflint_Type *Op_2, Cflint_Type  Op1_Flag,
                           uint32_t  Len);
 
 #endif

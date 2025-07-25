@@ -61,7 +61,7 @@ void Cflint_ShiftLN(Cflint_Type *Op, uint32_t Len, uint32_t BitsN);
 /* 右移位运算:Op >>= BitsN(N进制位) */
 void Cflint_ShiftRN(Cflint_Type *Op, uint32_t Len, uint32_t BitsN);
 
-/* 数分解运算Operand1==(2**Ret)*Op_2 */
+/* 数分解运算Op1==(2**Ret)*Op_2 */
 int64_t Cflint_Factor2(Cflint_Type *Op_1, Cflint_Type *Op_2, uint32_t Len);
 
 /* 掩码运算:Op &= ((2**K - 1) == ((1 << Bits2) - 1)) */
@@ -81,10 +81,10 @@ void Cflint_BytesToNative8(uint8_t *Bytes, uint64_t *Native, uint32_t Len);
 void Cflint_OpRev(Cflint_Type *Op, uint32_t Len);
 
 /* 操作数转化为NativeX(X==Type) */
-void Cflint_OperandToNative(Cflint_Type *Op, uint32_t Len, uint8_t Type);
+void Cflint_OpToNative(Cflint_Type *Op, uint32_t Len, uint8_t Type);
 
 /* NativeX转化为操作数(X==Type) */
-void Cflint_NativeToOperand(Cflint_Type *Op, uint32_t Len, uint8_t Type);
+void Cflint_NativeToOp(Cflint_Type *Op, uint32_t Len, uint8_t Type);
 
 /* Native Num数组转为逆Native Hex数组(Bytes) */
 /* 可作为十进制数组生成操作数的前置接口 */

@@ -95,7 +95,7 @@ bool Cflint_Root2Check(Cflint_Type *Ret, Cflint_Type *Op,
         Cflint_AddBit(Ret, Len, 1);
         return true;
     }
-    /* 1.计算Operand % 64 == Op[0] & 63 */
+    /* 1.计算Op % 64 == Op[0] & 63 */
     if (!Q64[Op[0] & 63])
         ;//return false;
     /* 2.计算Temp = Op % (65 * 63 * 11) */
@@ -147,10 +147,10 @@ int8_t Cflint_JacobiFlag(Cflint_Type *Op_1, Cflint_Type *Op_2,
     if (Cflint_IsZero(B, Len)) {
         Cflint_SetValue(T, Len, 0);
         Cflint_AddBit(T, Len, 1);
-        bool EqualResult = Cflint_Equal(A, T, Len);
-        if ( EqualResult)
+        bool EqualRet = Cflint_Equal(A, T, Len);
+        if ( EqualRet)
             return 1;
-        if (!EqualResult)
+        if (!EqualRet)
             return 0;
     }
     /* 第二步:如果A % 2 == B % 2 == 0 */
@@ -169,10 +169,10 @@ int8_t Cflint_JacobiFlag(Cflint_Type *Op_1, Cflint_Type *Op_2,
         if (Cflint_IsZero(A, Len)) {
             Cflint_SetValue(T, Len, 0);
             Cflint_AddBit(T, Len, 1);
-            int8_t CompareResult = Cflint_Compare(B, T, Len);
-            if (CompareResult == 1)
+            int8_t CompareRet = Cflint_Compare(B, T, Len);
+            if (CompareRet == 1)
                 return 0;
-            if (CompareResult != 1)
+            if (CompareRet != 1)
                 return K;
         }
         /* 第三步:如果A % 2 == 0,分解A */
@@ -319,15 +319,15 @@ bool Cflint_ModuloPkRoot2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     }
 }
 
-/* 二次剩余计算:((Ret**2) % (Op_2 * Operand3) ==  */
-/*               (Op_1)  % (Op_2 * Operand3))    */
+/* 二次剩余计算:((Ret**2) % (Op_2 * Op3) ==  */
+/*               (Op_1)  % (Op_2 * Op3))    */
 bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
-                         Cflint_Type *Operand3,  Cflint_Type *Ret,
+                         Cflint_Type *Op3,  Cflint_Type *Ret,
                          Cflint_Type *Temp[13],     uint32_t  Len)
 {
     Cflint_Type  *A  = Op_1;
     Cflint_Type  *P  = Op_2;
-    Cflint_Type  *Q  = Operand3;
+    Cflint_Type  *Q  = Op3;
     Cflint_Type  *X  = Ret;
     Cflint_Type  *T  = Temp[0];
     Cflint_Type  *XP = Temp[1];
@@ -401,19 +401,19 @@ bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     Cflint_Type *X_Min0 = NULL;
     Cflint_Type *X_Min1 = NULL;
     Cflint_Type *X_Min2 = NULL;
-    int8_t CompareResult1 = Cflint_Compare(X0, X1, Len * 2);
-    int8_t CompareResult2 = Cflint_Compare(X2, X3, Len * 2);
-    X_Min1 = (CompareResult1 == -1) ? X0 : X1;
-    X_Min2 = (CompareResult1 == -1) ? X2 : X3;
-    int8_t CompareResult0 = Cflint_Compare(X_Min1, X_Min2, Len * 2);
-    X_Min0 = (CompareResult1 == -1) ? X_Min1 : X_Min2;
+    int8_t CompareRet1 = Cflint_Compare(X0, X1, Len * 2);
+    int8_t CompareRet2 = Cflint_Compare(X2, X3, Len * 2);
+    X_Min1 = (CompareRet1 == -1) ? X0 : X1;
+    X_Min2 = (CompareRet1 == -1) ? X2 : X3;
+    int8_t CompareRet0 = Cflint_Compare(X_Min1, X_Min2, Len * 2);
+    X_Min0 = (CompareRet1 == -1) ? X_Min1 : X_Min2;
     /* 返回最小的根 */
     Cflint_Copy(X, X_Min0, Len * 2);
     return true;
 }
 
 /* 线性同余方程组计算:X == Ai % Mi,当i != j时, GCD(Mi, Mj) == 1 */
-int8_t Cflint_LCE(Cflint_Type **Operands, Cflint_Type *Ret,   uint64_t Number,
+int8_t Cflint_LCE(Cflint_Type **Ops, Cflint_Type *Ret,   uint64_t Number,
                   Cflint_Type  *Temps[5], Cflint_Type *Temp[10], uint32_t Len,
                      uint32_t   LengthMax)
 {
@@ -438,13 +438,13 @@ int8_t Cflint_LCE(Cflint_Type **Operands, Cflint_Type *Ret,   uint64_t Number,
         return true;
     /* 第一步:载入第一个同余方程 */
     L_MX = Len;
-    Cflint_Copy(X, Operands[0 * 2 + 0], Len);
-    Cflint_Copy(M, Operands[0 * 2 + 1], Len);
+    Cflint_Copy(X, Ops[0 * 2 + 0], Len);
+    Cflint_Copy(M, Ops[0 * 2 + 1], Len);
     /* 第二步:循环解算同余方程 */
     for (uint32_t Idx = 1; Idx < Number; Idx++) {
         /* 载入其余同余方程 */
-        Cflint_Type *Ai = Operands[Idx * 2 + 0];
-        Cflint_Type *Mi = Operands[Idx * 2 + 1];
+        Cflint_Type *Ai = Ops[Idx * 2 + 0];
+        Cflint_Type *Mi = Ops[Idx * 2 + 1];
         /* GCD(M, Mi) = GCD(M % Mi, Mi),这里将M化为Length长度 */
         if (LengthMax < L_MX * 2)
             return -2;

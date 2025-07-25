@@ -257,7 +257,7 @@ void Cflint_ShiftRN(Cflint_Type *Op, uint32_t Len, uint32_t BitsN)
 /* 数分解运算 */
 int64_t Cflint_Factor2(Cflint_Type *Op_1, Cflint_Type *Op_2, uint32_t Len)
 {
-    /* 初始化Operand2=Op_1 */
+    /* 初始化Op2=Op_1 */
     if (Op_2 != Op_1)
         Cflint_Copy(Op_2, Op_1, Len);
     /* 初始化Bits2=0 */
@@ -382,7 +382,7 @@ void Cflint_BytesToNative8(uint8_t *Bytes, uint64_t *Native, uint32_t Len)
 }
 
 /* 操作数转化为NativeX(X==Type) */
-void Cflint_OperandToNative(Cflint_Type *Op, uint32_t Len, uint8_t Type)
+void Cflint_OpToNative(Cflint_Type *Op, uint32_t Len, uint8_t Type)
 {
     if (Type != 1 && Type != 2 && Type != 4 && Type != 8)
         return;
@@ -481,7 +481,7 @@ void Cflint_OperandToNative(Cflint_Type *Op, uint32_t Len, uint8_t Type)
 }
 
 /* NativeX转化为操作数(X==Type) */
-void Cflint_NativeToOperand(Cflint_Type *Op, uint32_t Len, uint8_t Type)
+void Cflint_NativeToOp(Cflint_Type *Op, uint32_t Len, uint8_t Type)
 {
     if (Type != 1 && Type != 2 && Type != 4 && Type != 8)
         return;

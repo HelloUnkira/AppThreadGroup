@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 
 /*Cflint(Abbr):
@@ -22,6 +23,10 @@
 #define Cflint_Byte         4               /* 字节数 */
 #define Cflint_Type         uint32_t        /* 字节类型 */
 #define Cflint_Type2        uint64_t        /* 关键字优化 */
+
+/* 资源申请释放:malloc和free */
+#define Cflint_Alloc        malloc
+#define Cflint_Free         free
 
 /* 运算相关接口 */
 #include "CflintFuncSet1.h"         /* 简介:辅助功能,位运算功能 */
