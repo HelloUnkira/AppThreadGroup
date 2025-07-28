@@ -15,26 +15,26 @@ void Cflint_Root2Integer(Cflint_Type *Ret, Cflint_Type *Op,
     /* 固有开销 */
     Cflint_Type *X = Temp[0];
     Cflint_Type *Y = Temp[1];
-    Cflint_Type *Quotient = Temp[2];
-    Cflint_Type *Module   = Temp[3];
+    Cflint_Type *Quo = Temp[2];
+    Cflint_Type *Mod   = Temp[3];
     /* 计算E = [log2(Op)] */
     int64_t Numbers2 = Cflint_Nums2(Op, Len);
     /* 生成Y = [2**(E + 2) / 2] */
-    Cflint_SetValue(Y, Len, 0);
-    Cflint_SetValue(Y, Len, 0);
+    Cflint_ValSet(Y, Len, 0);
+    Cflint_ValSet(Y, Len, 0);
     Cflint_AddBit(Y, Len, 1);
     Cflint_ShiftL2(Y, Len, ((Numbers2 + 2) >> 1));
     do {
         /* X = Y */
         Cflint_Copy(X, Y, Len);
-        /* Quotient = N / X */
-        Cflint_Devide(Quotient, Module, Op, X, Len);
-        /* Y = X + Quotient */
-        Cflint_Add(Y, X, Quotient, Len);
+        /* Quo = N / X */
+        Cflint_Devide(Quo, Mod, Op, X, Len);
+        /* Y = X + Quo */
+        Cflint_Add(Y, X, Quo, Len);
         /* Y /= 2 */
         Cflint_ShiftR2(Y, Len, 1);
         /* Y < X */
-    } while (Cflint_Compare(Y, X, Len) == -1);
+    } while (Cflint_Cmp(Y, X, Len) == -1);
     /* Ret = X */
     Cflint_Copy(Ret, X, Len);
 }
@@ -91,7 +91,7 @@ bool Cflint_Root2Check(Cflint_Type *Ret, Cflint_Type *Op,
     uint16_t TT = 0;
     /* 特殊:为0检查 */
     if (Cflint_IsZero(Op, Len)) {
-        Cflint_SetValue(Ret, Len, 0);
+        Cflint_ValSet(Ret, Len, 0);
         Cflint_AddBit(Ret, Len, 1);
         return true;
     }
@@ -99,7 +99,7 @@ bool Cflint_Root2Check(Cflint_Type *Ret, Cflint_Type *Op,
     if (!Q64[Op[0] & 63])
         ;//return false;
     /* 2.计算Temp = Op % (65 * 63 * 11) */
-    Cflint_SetValue(Temp[0], Len, 0);
+    Cflint_ValSet(Temp[0], Len, 0);
     Temp[0][0] = (65 * 63 * 11) >> 0;
     Temp[0][1] = (65 * 63 * 11) >> Cflint_Bits;
     Cflint_Mod(Temp[1], Op, Temp[0], Len);
@@ -145,7 +145,7 @@ int8_t Cflint_JacobiFlag(Cflint_Type *Op_1, Cflint_Type *Op_2,
     Cflint_Copy(B, Op_2, Len);
     /* 第一步:如果B == 0,(当A == 1,K = 1)(当A != 1,K = 0) */
     if (Cflint_IsZero(B, Len)) {
-        Cflint_SetValue(T, Len, 0);
+        Cflint_ValSet(T, Len, 0);
         Cflint_AddBit(T, Len, 1);
         bool EqualRet = Cflint_Equal(A, T, Len);
         if ( EqualRet)
@@ -167,12 +167,12 @@ int8_t Cflint_JacobiFlag(Cflint_Type *Op_1, Cflint_Type *Op_2,
     do {
         /* 第三步:如果A == 0,(当B > 1,K = 0)(当B <= 1, K = K) */
         if (Cflint_IsZero(A, Len)) {
-            Cflint_SetValue(T, Len, 0);
+            Cflint_ValSet(T, Len, 0);
             Cflint_AddBit(T, Len, 1);
-            int8_t CompareRet = Cflint_Compare(B, T, Len);
-            if (CompareRet == 1)
+            int8_t CmpRet = Cflint_Cmp(B, T, Len);
+            if (CmpRet == 1)
                 return 0;
-            if (CompareRet != 1)
+            if (CmpRet != 1)
                 return K;
         }
         /* 第三步:如果A % 2 == 0,分解A */
@@ -216,7 +216,7 @@ bool Cflint_ModuloP1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
         return false;
     /* 性质:A == 0 */
     if (Cflint_IsZero(A, Len)) {
-        Cflint_SetValue(X, Len, 0);
+        Cflint_ValSet(X, Len, 0);
         return true;
     }
     /* 第一步:找到一个二次非剩余 */
@@ -225,27 +225,27 @@ bool Cflint_ModuloP1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     /* 第一步:(2**R) * Q = P - 1 */
     R = Cflint_Factor2(Q, Q, Len);
     /* 第一步:寻找一个随机数Z = N, 满足Jacobi(N/P) == -1 */
-    Cflint_SetValue(Z, Len, 0);
+    Cflint_ValSet(Z, Len, 0);
     Cflint_AddBit(Z, Len, 2);
     while (Cflint_JacobiFlag(Z, P, TT, Len) == 1)
         Cflint_AddBit(Z, Len, 1);
     /* 第二步:计算Z = (N**Q) % P */
-    Cflint_ModExp(Z, P, Z, Q, TT, Len);
+    Cflint_ModExp(Z, P, Z, Q, Len);
     /* 第二步:获得Y = Z = (N**Q) % P */
     Cflint_Copy(Y, Z, Len);
     /* 第二步:计算Q = (Q - 1) / 2 */
     Cflint_SubBit(Q, Len, 1);
     Cflint_ShiftR2(Q, Len, 1);
     /* 第二步:计算X = A ** ((P - 1) / 2) % P = A ** Q % P */
-    Cflint_ModExp(X, P, A, Q, TT, Len);
+    Cflint_ModExp(X, P, A, Q, Len);
     /* 第二步:计算B = A * (B = X ** 2) % P */
-    Cflint_ModSquare(B, P, X, TT, Len);
-    Cflint_ModMult(B, P, A, B, TT, Len);
+    Cflint_ModSquare(B, P, X, Len);
+    Cflint_ModMult(B, P, A, B, Len);
     /* 第二步:计算X = A * X % P */
-    Cflint_ModMult(X, P, A, X, TT, Len);
+    Cflint_ModMult(X, P, A, X, Len);
     /* 第二步:计算Q = B, Z = 1 */
     Cflint_Copy(Q, B, Len);
-    Cflint_SetValue(Z, Len, 0);
+    Cflint_ValSet(Z, Len, 0);
     Cflint_AddBit(Z, Len, 1);
     /* 第三步:寻找Z**(2**M) % P === 1的最小M或结束 */
     while (!Cflint_Equal(B, Z, Len))
@@ -253,24 +253,24 @@ bool Cflint_ModuloP1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
         bool LoopStatus = true;
         for (M = 0; LoopStatus; M++) {
             /* 计算:Q = Q**2 % P */
-            Cflint_ModSquare(Q, P, Q, TT, Len);
+            Cflint_ModSquare(Q, P, Q, Len);
             /* 检查 */
             if (!Cflint_Equal(B, Z, Len))
                 LoopStatus = false;
         }
         if (M != R) {
             /* 计算:T1 = 2**(R - M - 1) */
-            Cflint_SetValue(T1, Len, 0);
+            Cflint_ValSet(T1, Len, 0);
             Cflint_AddBit(T1, Len, 1);
             Cflint_ShiftL2(T1, Len, R - M - 1);
             /* 计算:T = Y**T1 % P */
-            Cflint_ModExp(T, P, Y, T1, TT, Len);
+            Cflint_ModExp(T, P, Y, T1, Len);
             /* 计算:Y = T**2 % P */
-            Cflint_ModSquare(Y, P, T, TT, Len);
+            Cflint_ModSquare(Y, P, T, Len);
             /* 计算:X = X * T % P */
-            Cflint_ModMult(X, P, X, T, TT, Len);
+            Cflint_ModMult(X, P, X, T, Len);
             /* 计算:B = B * Y % P */
-            Cflint_ModMult(B, P, B, Y, TT, Len);
+            Cflint_ModMult(B, P, B, Y, Len);
             /* 计算:Q = B, R = M */
             Cflint_Copy(Q, B, Len);
             R = M;
@@ -308,12 +308,12 @@ bool Cflint_ModuloPkRoot2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     /* 逆向递归 */
     for (uint32_t K = 0; K < Exponent; K++) {
         /* 计算:T1 = (X(K - 1)**2) % P */
-        Cflint_ModSquare(T1, X, P, TX, Len);
+        Cflint_ModSquare(T1, X, P, Len);
         /* 计算:T1 = ((A - (X(K - 1)**2)) % P) */
-        Cflint_ModSub(T1, P, A, T1, TX, Len);
+        Cflint_ModSub(T1, P, A, T1, Len);
         /* 计算:T2 = X(K - 1) % P */
         Cflint_Mod(T2, X, P ,Len);
-        /* 计算:Quotient = T1 / T2 */
+        /* 计算:Quo = T1 / T2 */
         Cflint_Devide(T3, T4, T1, T2, Len);
         Cflint_Mod(X, T3, P, Len);
     }
@@ -346,11 +346,11 @@ bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     Cflint_Type  *T2 = Temp[12]; //Len * 4
     /* 查验:A == 0 */
     if (Cflint_IsZero(A, Len * 2)) {
-        Cflint_SetValue(X, Len * 2, 0);
+        Cflint_ValSet(X, Len * 2, 0);
         return true;
     }
     /* 计算:T = A % P */
-    Cflint_SetValue(T0, Len * 2, 0);
+    Cflint_ValSet(T0, Len * 2, 0);
     Cflint_Copy(T0, P, Len);
     Cflint_Mod(T1, A, T0, Len * 2);
     Cflint_Copy(T, T1, Len);
@@ -358,7 +358,7 @@ bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     if (!Cflint_ModuloP1Root2(T, P, XP, TT, Len))
         return false;
     /* 计算:T = A % Q */
-    Cflint_SetValue(T0, Len * 2, 0);
+    Cflint_ValSet(T0, Len * 2, 0);
     Cflint_Copy(T0, Q, Len);
     Cflint_Mod(T1, A, T0, Len * 2);
     Cflint_Copy(T, T1, Len);
@@ -366,12 +366,12 @@ bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     if (!Cflint_ModuloP1Root2(T, Q, XQ, TT, Len))
         return false;
     /* 解算:P * U + Q * V = GCD(P, Q) */
-    Cflint_GCDExtend(P, Q, N, U, &U_Flag, V, &V_Flag, TX, Len);
+    Cflint_ExtGCD(P, Q, N, U, &U_Flag, V, &V_Flag, Len);
     /* 计算:N = P * Q */
     N[Len * 2 + 0] = 0;
     N[Len * 2 + 1] = 0;
     Cflint_Mult(N, P, Q, Len);
-    Cflint_SetValue(T2, Len * 4, 0);
+    Cflint_ValSet(T2, Len * 4, 0);
     Cflint_Copy(T2, N, Len * 2);
     /* 计算:U = P * XQ * U % N */
     Cflint_Mod(U, U, N, (Len + 1) * 2);
@@ -401,11 +401,11 @@ bool Cflint_Modulo1Root2(Cflint_Type *Op_1,  Cflint_Type *Op_2,
     Cflint_Type *X_Min0 = NULL;
     Cflint_Type *X_Min1 = NULL;
     Cflint_Type *X_Min2 = NULL;
-    int8_t CompareRet1 = Cflint_Compare(X0, X1, Len * 2);
-    int8_t CompareRet2 = Cflint_Compare(X2, X3, Len * 2);
+    int8_t CompareRet1 = Cflint_Cmp(X0, X1, Len * 2);
+    int8_t CompareRet2 = Cflint_Cmp(X2, X3, Len * 2);
     X_Min1 = (CompareRet1 == -1) ? X0 : X1;
     X_Min2 = (CompareRet1 == -1) ? X2 : X3;
-    int8_t CompareRet0 = Cflint_Compare(X_Min1, X_Min2, Len * 2);
+    int8_t CompareRet0 = Cflint_Cmp(X_Min1, X_Min2, Len * 2);
     X_Min0 = (CompareRet1 == -1) ? X_Min1 : X_Min2;
     /* 返回最小的根 */
     Cflint_Copy(X, X_Min0, Len * 2);
@@ -448,11 +448,11 @@ int8_t Cflint_LCE(Cflint_Type **Ops, Cflint_Type *Ret,   uint64_t Number,
         /* GCD(M, Mi) = GCD(M % Mi, Mi),这里将M化为Length长度 */
         if (LengthMax < L_MX * 2)
             return -2;
-        Cflint_SetValue(TL1, L_MX, 0);
+        Cflint_ValSet(TL1, L_MX, 0);
         Cflint_Copy(TL1, Mi, Len);
         Cflint_Mod(TL0, M, TL1, L_MX);
         /* 解算扩展欧几里得方程 */
-        Cflint_GCDExtend(TL0, Mi, GCD, U, &U_Flag, V, &V_Flag, TT, Len);
+        Cflint_ExtGCD(TL0, Mi, GCD, U, &U_Flag, V, &V_Flag, Len);
         /* 非素检查:GCD == 1 */
         if (Cflint_SubBit(GCD, Len, 1) != 0)
             return -1;
@@ -460,12 +460,12 @@ int8_t Cflint_LCE(Cflint_Type **Ops, Cflint_Type *Ret,   uint64_t Number,
             return -1;
         /* 计算U = U * Ai, U的长度为理论最大值(Len + 1) * 4 */
         Cflint_Copy(T0, U, (Len + 1) * 2);
-        Cflint_SetValue(T1, (Len + 1) * 2, 0);
+        Cflint_ValSet(T1, (Len + 1) * 2, 0);
         Cflint_Copy(T1, Ai, Len);
         Cflint_Mult(U, T0, T1, (Len + 1) * 2);
         /* 计算V = V * Mi, V的长度为理论最大值(Len + 1) * 4 */
         Cflint_Copy(T0, V, (Len + 1) * 2);
-        Cflint_SetValue(T1, (Len + 1) * 2, 0);
+        Cflint_ValSet(T1, (Len + 1) * 2, 0);
         Cflint_Copy(T1, Mi, Len);
         Cflint_Mult(V, T0, T1, (Len + 1) * 2);
         /* 计算最大范围: */
@@ -473,28 +473,28 @@ int8_t Cflint_LCE(Cflint_Type **Ops, Cflint_Type *Ret,   uint64_t Number,
         if (LengthMax <= L_UV + 1)
             return -2;
         /* 计算变长乘:UL = U * M */
-        Cflint_SetValue(T0, L_UV, 0);
-        Cflint_SetValue(T1, L_UV, 0);
+        Cflint_ValSet(T0, L_UV, 0);
+        Cflint_ValSet(T1, L_UV, 0);
         Cflint_Copy(T0, U, (Len + 1) * 4);
         Cflint_Copy(T0, M, L_MX);
         Cflint_Mult(UL, T0, T1, L_MX);
         /* 计算变长乘:VL = V * X */
-        Cflint_SetValue(T0, L_UV, 0);
-        Cflint_SetValue(T1, L_UV, 0);
+        Cflint_ValSet(T0, L_UV, 0);
+        Cflint_ValSet(T1, L_UV, 0);
         Cflint_Copy(T0, V, (Len + 1) * 4);
         Cflint_Copy(T0, X, L_MX);
         Cflint_Mult(VL, T0, T1, L_MX);
         /* 计算和:X * X_Flag = U * Ai * M * U_Flag + V * Mi * X * V_Flag */
         X[L_UV] = Cflint_FlagSum(X, &X_Flag, UL, U_Flag, VL, V_Flag, L_UV);
         /* 计算乘:M *= Mi,这里需要对其归化 */
-        Cflint_SetValue(T1, L_MX, 0);
+        Cflint_ValSet(T1, L_MX, 0);
         Cflint_Copy(T1, Mi, Len);
         Cflint_Mult(T0, M, T1, L_MX);
         L_MX = (Cflint_Nums2(T0, L_MX * 2) + 1) / Cflint_Bits;
         /* 计算模:X*X_Flag %= M */
         uint32_t L_MXUV = L_MX > (L_UV + 1) ? L_MX : (L_UV + 1);
-        Cflint_SetValue(T0, L_MXUV, 0);
-        Cflint_SetValue(T1, L_MXUV, 0);
+        Cflint_ValSet(T0, L_MXUV, 0);
+        Cflint_ValSet(T1, L_MXUV, 0);
         Cflint_Copy(T0, X, L_UV + 1);
         Cflint_Copy(T1, M, L_MX);
         Cflint_FlagMod(X, T0, T1, X_Flag, L_MXUV);

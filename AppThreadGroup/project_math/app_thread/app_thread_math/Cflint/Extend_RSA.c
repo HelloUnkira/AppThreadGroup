@@ -18,9 +18,9 @@ void RSA_Make(Cflint_Type *P, Cflint_Type *Q, Cflint_Type *N,
     Cflint_Copy(E, R, Len * 2);
     do {
         Cflint_SubBit(E, Len * 2, 1);
-    } while (Cflint_GCDCheck(R, E, Temp, Len * 2) == false);
+    } while (Cflint_GCDCheck(R, E, Len * 2) == false);
     /* 计算乘法逆:D = (1 / E) % R */
-    Cflint_GCDInverse(E, N, D, Temp[0], Temp + 1, Len * 2);
+    Cflint_InvGCD(E, N, D, Temp[0], Temp + 1, Len * 2);
 }
 
 void RSA_Encrypt(Cflint_Type *N, Cflint_Type *E, Cflint_Type *I, Cflint_Type *O,

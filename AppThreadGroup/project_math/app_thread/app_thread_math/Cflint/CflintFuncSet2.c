@@ -288,11 +288,11 @@ void Cflint_Square(Cflint_Type *Ret, Cflint_Type *Op, uint32_t Len)
 }
 
 /* 带余除运算 */
-void Cflint_Devide(Cflint_Type *Quotient, Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
+void Cflint_Devide(Cflint_Type *Quo, Cflint_Type *Mod, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
     /* 初始化时模为被除数,商为0 */
-    Cflint_Copy(Module, Op_0, Len);
-    Cflint_SetValue(Quotient, Len, 0);
+    Cflint_Copy(Mod, Op_0, Len);
+    Cflint_ValSet(Quo, Len, 0);
     Cflint_Type *Op = Op_1;
     /* 特例:除数为0检查 */
     if (Cflint_IsZero(Op, Len))
@@ -302,39 +302,39 @@ void Cflint_Devide(Cflint_Type *Quotient, Cflint_Type *Module, Cflint_Type *Op_0
     /* 主迭代运行 */
     do {
         /* 比较被除数和除数 */
-        int8_t CompareRet = Cflint_Compare(Module, Op, Len);
+        int8_t CmpRet = Cflint_Cmp(Mod, Op, Len);
         /* 被除数等于除数,恰好被整除时 */
-        if (CompareRet == 0) {
+        if (CmpRet == 0) {
             /* 商累加1个单元 */
-            Cflint_AddBit(Quotient, Len, 1);
+            Cflint_AddBit(Quo, Len, 1);
             if (MovedBits2 != 0) {
                 /* 商进所有位,除数回退所有位 */
-                Cflint_ShiftL2(Quotient, Len, MovedBits2);
+                Cflint_ShiftL2(Quo, Len, MovedBits2);
                 Cflint_ShiftR2(Op, Len, MovedBits2);
             }
-            Cflint_SetValue(Module, Len, 0);
+            Cflint_ValSet(Mod, Len, 0);
             return;
         }
         /* 被除数小于除数 */
-        if (CompareRet == -1) {
+        if (CmpRet == -1) {
             if (MovedBits2 != 0) {
-                int64_t Numbers0 = Cflint_Nums2(Module, Len);
+                int64_t Numbers0 = Cflint_Nums2(Mod, Len);
                 int64_t Numbers1 = Cflint_Nums2(Op, Len);
                 /* 在同一水位线时,,商进1个位,除数回退1个位 */
                 if (Numbers0 == Numbers1) {
-                    Cflint_ShiftL2(Quotient, Len, 1);
+                    Cflint_ShiftL2(Quo, Len, 1);
                     Cflint_ShiftR2(Op, Len, 1);
                     MovedBits2 -= 1;
                 }
                 /* 不在同一水位线时,缺少退位时,商进N个位,除数回退N个位 */
                 if (Numbers0 != Numbers1 && Numbers1 - Numbers0 > MovedBits2) {
-                    Cflint_ShiftL2(Quotient, Len, MovedBits2);
+                    Cflint_ShiftL2(Quo, Len, MovedBits2);
                     Cflint_ShiftR2(Op, Len, MovedBits2);
                     MovedBits2 = 0;
                 }
                 /* 不在同一水位线时,冗余退位时,商进N个位,除数回退N个位 */
                 if (Numbers0 != Numbers1 && Numbers1 - Numbers0 <= MovedBits2) {
-                    Cflint_ShiftL2(Quotient, Len, Numbers1 - Numbers0);
+                    Cflint_ShiftL2(Quo, Len, Numbers1 - Numbers0);
                     Cflint_ShiftR2(Op, Len, Numbers1 - Numbers0);
                     MovedBits2 -= Numbers1 - Numbers0;
                 }
@@ -343,9 +343,9 @@ void Cflint_Devide(Cflint_Type *Quotient, Cflint_Type *Module, Cflint_Type *Op_0
             return;
         }
         /* 被除数大于除数 */
-        if (CompareRet == 1) {
+        if (CmpRet == 1) {
             /* 计算被除数和除数有效2进制位数 */
-            int64_t Numbers0 = Cflint_Nums2(Module, Len);
+            int64_t Numbers0 = Cflint_Nums2(Mod, Len);
             int64_t Numbers1 = Cflint_Nums2(Op, Len);
             /* 如果它们未处在同一级别,除数放大且小于被除数 */
             if (Numbers0 > Numbers1 + 1) {
@@ -354,20 +354,20 @@ void Cflint_Devide(Cflint_Type *Quotient, Cflint_Type *Module, Cflint_Type *Op_0
                 continue;
             }
             /* 现在被除数和除数至少处于同一级别, 执行约减 */
-            Cflint_Sub(Module, Module, Op, Len);
+            Cflint_Sub(Mod, Mod, Op, Len);
             /* 商累加1个单元 */
-            Cflint_AddBit(Quotient, Len, 1);
+            Cflint_AddBit(Quo, Len, 1);
             continue;
         }
     } while (1);
 }
 
 /* 基础模运算 */
-void Cflint_Mod(Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
+void Cflint_Mod(Cflint_Type *Mod, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
     /* 初始化时模为被除数,商为0 */
-    if (Module != Op_0)
-        Cflint_Copy(Module, Op_0, Len);
+    if (Mod != Op_0)
+        Cflint_Copy(Mod, Op_0, Len);
     Cflint_Type *Op = Op_1;
     /* 特例:除数为0检查 */
     if (Cflint_IsZero(Op, Len))
@@ -377,20 +377,20 @@ void Cflint_Mod(Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, uint3
     /* 主迭代运行 */
     do {
         /* 比较被除数和除数 */
-        int8_t CompareRet = Cflint_Compare(Module, Op, Len);
+        int8_t CmpRet = Cflint_Cmp(Mod, Op, Len);
         /* 被除数等于除数,恰好被整除时 */
-        if (CompareRet == 0) {
+        if (CmpRet == 0) {
             if (MovedBits2 != 0) {
                 /* 除数回退所有位 */
                 Cflint_ShiftR2(Op, Len, MovedBits2);
             }
-            Cflint_SetValue(Module, Len, 0);
+            Cflint_ValSet(Mod, Len, 0);
             return;
         }
         /* 被除数小于除数 */
-        if (CompareRet == -1) {
+        if (CmpRet == -1) {
             if (MovedBits2 != 0) {
-                int64_t Numbers0 = Cflint_Nums2(Module, Len);
+                int64_t Numbers0 = Cflint_Nums2(Mod, Len);
                 int64_t Numbers1 = Cflint_Nums2(Op, Len);
                 /* 在同一水位线时,后退一个单元 */
                 if (Numbers0 == Numbers1) {
@@ -412,9 +412,9 @@ void Cflint_Mod(Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, uint3
             return;
         }
         /* 被除数大于除数 */
-        if (CompareRet == 1) {
+        if (CmpRet == 1) {
             /* 计算被除数和除数有效2进制位数 */
-            int64_t Numbers0 = Cflint_Nums2(Module, Len);
+            int64_t Numbers0 = Cflint_Nums2(Mod, Len);
             int64_t Numbers1 = Cflint_Nums2(Op, Len);
             /* 如果它们未处在同一级别,除数放大且小于被除数 */
             if (Numbers0 > Numbers1 + 1) {
@@ -423,92 +423,117 @@ void Cflint_Mod(Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, uint3
                 continue;
             }
             /* 现在被除数和除数至少处于同一级别, 执行约减 */
-            Cflint_Sub(Module, Module, Op, Len);
+            Cflint_Sub(Mod, Mod, Op, Len);
             continue;
         }
     } while (1);
 }
 
 /* 模和运算 */
-void Cflint_ModAdd(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, Cflint_Type *Temp[2], uint32_t Len)
+void Cflint_ModAdd(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
-    Cflint_Mod(Temp[0], Op_0, Module, Len);
-    Cflint_Mod(Temp[1], Op_1, Module, Len);
+    Cflint_Type *T_0 = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *T_1 = Cflint_Alloc(Cflint_Byte * Len);
     
-    if (Cflint_Add(Temp[0], Temp[0], Temp[1], Len) != 0 ||
-        Cflint_Compare(Temp[0], Module, Len) != -1)
-        Cflint_Sub(Temp[0], Temp[0], Module, Len);
-    Cflint_Copy(Ret, Temp[0], Len);
+    Cflint_Mod(T_0, Op_0, Mod, Len);
+    Cflint_Mod(T_1, Op_1, Mod, Len);
+    
+    if (Cflint_Add(T_0, T_0, T_1, Len) != 0 || Cflint_Cmp(T_0, Mod, Len) != -1)
+        Cflint_Sub(T_0, T_0, Mod, Len);
+    
+    Cflint_Copy(Ret, T_0, Len);
+    
+    Cflint_Free(T_0);
+    Cflint_Free(T_1);
 }
 
 /* 模差运算 */
-void Cflint_ModSub(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, Cflint_Type *Temp[2], uint32_t Len)
+void Cflint_ModSub(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
-    Cflint_Mod(Temp[0], Op_0, Module, Len);
-    Cflint_Mod(Temp[1], Op_1, Module, Len);
+    Cflint_Type *T_0 = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *T_1 = Cflint_Alloc(Cflint_Byte * Len);
     
-    if (Cflint_Sub(Temp[0], Temp[0], Temp[1], Len) != 0)
-        Cflint_Add(Temp[0], Temp[0], Module, Len);
-    Cflint_Copy(Ret, Temp[0], Len);
+    Cflint_Mod(T_0, Op_0, Mod, Len);
+    Cflint_Mod(T_1, Op_1, Mod, Len);
+    
+    if (Cflint_Sub(T_0, T_0, T_1, Len) != 0)
+        Cflint_Add(T_0, T_0, Mod, Len);
+    
+    Cflint_Copy(Ret, T_0, Len);
+    
+    Cflint_Free(T_0);
+    Cflint_Free(T_1);
 }
 
 /* 模乘运算 */
-void Cflint_ModMult(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op_0, Cflint_Type *Op_1, Cflint_Type *Temp[2], uint32_t Len)
+void Cflint_ModMult(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
-    Cflint_Mult(Temp[0], Op_0, Op_1, Len);
-    Cflint_SetValue(Temp[1], Len * 2, 0);
-    Cflint_Copy(Temp[1], Module, Len);
-    Cflint_Mod(Temp[0], Temp[0], Temp[1], Len * 2);
-    Cflint_Copy(Ret, Temp[0], Len);
+    Cflint_Type *T_0 = Cflint_Alloc(Cflint_Byte * (Len * 2));
+    Cflint_Type *T_1 = Cflint_Alloc(Cflint_Byte * (Len * 2));
+    
+    Cflint_Mult(T_0, Op_0, Op_1, Len);
+    Cflint_ValSet(T_1, Len * 2, 0);
+    Cflint_Copy(T_1, Mod, Len);
+    Cflint_Mod(T_0, T_0, T_1, Len * 2);
+    Cflint_Copy(Ret, T_0, Len);
+    
+    Cflint_Free(T_0);
+    Cflint_Free(T_1);
 }
 
 /* 模方运算 */
-void Cflint_ModSquare(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflint_Type *Temp[2], uint32_t Len)
+void Cflint_ModSquare(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op, uint32_t Len)
 {
-    Cflint_Square(Temp[0], Op, Len);
-    Cflint_SetValue(Temp[1], Len * 2, 0);
-    Cflint_Copy(Temp[1], Module, Len);
-    Cflint_Mod(Temp[0], Temp[0], Temp[1], Len * 2);
-    Cflint_Copy(Ret, Temp[0], Len);
+    Cflint_Type *T_0 = Cflint_Alloc(Cflint_Byte * (Len * 2));
+    Cflint_Type *T_1 = Cflint_Alloc(Cflint_Byte * (Len * 2));
+    
+    Cflint_Square(T_0, Op, Len);
+    Cflint_ValSet(T_1, Len * 2, 0);
+    Cflint_Copy(T_1, Mod, Len);
+    Cflint_Mod(T_0, T_0, T_1, Len * 2);
+    Cflint_Copy(Ret, T_0, Len);
+    
+    Cflint_Free(T_0);
+    Cflint_Free(T_1);
 }
 
 /* 模幂运算 */
-void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflint_Type *Exponent, Cflint_Type *Temp[4], uint32_t Len)
+void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op, Cflint_Type *Exp, uint32_t Len)
 {
     /* 固有开销 */
-    Cflint_Type *X = Temp[0];  //保留Ret
-    Cflint_Type *Y = Temp[1];  //保留Module
-    Cflint_Type *A = Temp[2];  //保留Op
-    Cflint_Type *B = Temp[3];  //保留Op
+    Cflint_Type *X = Cflint_Alloc(Cflint_Byte * (Len * 2));  //保留Ret
+    Cflint_Type *Y = Cflint_Alloc(Cflint_Byte * (Len * 2));  //保留Mod
+    Cflint_Type *A = Cflint_Alloc(Cflint_Byte * (Len * 2));  //保留Op
+    Cflint_Type *B = Cflint_Alloc(Cflint_Byte * (Len * 2));  //保留Op
     
     /* 特例:除数为0检查 */
-    if (Cflint_IsZero(Module, Len))
-        return;
-    /* 初始化:X == 1, Y == Module */
-    Cflint_SetValue(X, Len * 2, 0);
+    if (Cflint_IsZero(Mod, Len))
+        goto over;
+    /* 初始化:X == 1, Y == Mod */
+    Cflint_ValSet(X, Len * 2, 0);
     Cflint_AddBit(X, Len * 2, 1);
-    Cflint_SetValue(Y, Len * 2, 0);
-    Cflint_Copy(Y, Module, Len);
-    /* 初始化:A == Op % Module, B == 0 */
-    Cflint_SetValue(A, Len * 2, 0);
-    Cflint_Mod(A, Op, Module, Len);
-    Cflint_SetValue(B, Len * 2, 0);
+    Cflint_ValSet(Y, Len * 2, 0);
+    Cflint_Copy(Y, Mod, Len);
+    /* 初始化:A == Op % Mod, B == 0 */
+    Cflint_ValSet(A, Len * 2, 0);
+    Cflint_Mod(A, Op, Mod, Len);
+    Cflint_ValSet(B, Len * 2, 0);
     /* 计算:2**Numbers <= Exponent < 2**(Numbers + 1) */
-    int64_t Numbers = Cflint_Nums2(Exponent, Len);
+    int64_t Numbers = Cflint_Nums2(Exp, Len);
     /* 检查:2**K == Exponent */
-    bool NumbersOnlyOne = Cflint_IsExp2(Exponent, Len);
+    bool NumbersOnlyOne = Cflint_IsExp2(Exp, Len);
     /* 特殊优化场景:指数为2的幂 */
     if ( NumbersOnlyOne) {
         /* 一个数的0次幂为1 */
         if (Numbers == -1) {
             Cflint_Copy(Ret, X, Len);
-            return;
+            goto over;
         }
         /* 一个数的1次幂为本身 */
         if (Numbers == 0) {
             Cflint_Mod(X, A, Y, Len * 2);
             Cflint_Copy(Ret, X, Len);
-            return;
+            goto over;
         }
         /* 顺向迭代 */
         for (int64_t Bits2 = 1; Bits2 <= Numbers; Bits2++) {
@@ -518,7 +543,7 @@ void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflin
             Cflint_Mod(X, A, Y, Len * 2);
         }
         Cflint_Copy(Ret, X, Len);
-        return;
+        goto over;
     }
     /* 普通场景 */
     if (!NumbersOnlyOne) {
@@ -527,7 +552,7 @@ void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflin
             uint32_t BitN = Bits2 / Cflint_Bits;
             uint32_t Bit2 = Bits2 % Cflint_Bits;
             /* 逆向迭代 */
-            if ((Exponent[BitN] & (1 << Bit2)) != 0) {
+            if ((Exp[BitN] & (1 << Bit2)) != 0) {
                 /* 计算:X = X * A % Y */
                 Cflint_Mult(B, X, A, Len);
                 Cflint_Mod(X, B, Y, Len * 2);
@@ -537,35 +562,41 @@ void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Module, Cflint_Type *Op, Cflin
             Cflint_Mod(A, B, Y, Len * 2);
         }
         Cflint_Copy(Ret, X, Len);
-        return;
+        goto over;
     }
+    
+    over:
+    Cflint_Free(X);
+    Cflint_Free(Y);
+    Cflint_Free(A);
+    Cflint_Free(B);
 }
 
 /* 模逆运算 */
-void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Module, Cflint_Type *Temp[4], uint32_t Len)
+void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Mod, uint32_t Len)
 {
     /* 固有额外空间开销 */
-    Cflint_Type *A = Temp[0];
-    Cflint_Type *B = Temp[1];
-    Cflint_Type *U = Temp[2];
-    Cflint_Type *V = Temp[3];
+    Cflint_Type *A = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *B = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *U = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *V = Cflint_Alloc(Cflint_Byte * Len);
 
     /* 1.除数为0检查 */
     if (Cflint_IsZero(Op, Len)) {
-        Cflint_SetValue(Ret, Len, 0);
-        return;
+        Cflint_ValSet(Ret, Len, 0);
+        goto over;
     }
-    /* 2.初始化:A = Op,B = Module */
+    /* 2.初始化:A = Op,B = Mod */
     Cflint_Copy(A, Op, Len);
-    Cflint_Copy(B, Module,  Len);
+    Cflint_Copy(B, Mod,  Len);
     /* 3.初始化:V = 0,U = 1 */
-    Cflint_SetValue(V, Len, 0);
-    Cflint_SetValue(U, Len, 0);
+    Cflint_ValSet(V, Len, 0);
+    Cflint_ValSet(U, Len, 0);
     Cflint_AddBit(U, Len, 1);
     /* 4.准备状态量 */
-    int8_t CompareRet = 0;
+    int8_t CmpRet = 0;
     /* 5.开始主流程 */
-    while ((CompareRet = Cflint_Compare(A, B, Len)) != 0) {
+    while ((CmpRet = Cflint_Cmp(A, B, Len)) != 0) {
         if ((A[0] & 1) == 0 || (B[0] & 1) == 0) {
             /* 场景1:A最低位为0,或,B最低位为0 */
             Cflint_Type *AB = NULL, *UV = NULL;
@@ -574,10 +605,10 @@ void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Module, Cflin
             if ((A[0] & 1) == 0) { AB = A; UV = U;}
             /* AB >>= 1 */
             Cflint_ShiftR2(AB, Len, 1);
-            /* UV最低位不为0:UV += Module */
+            /* UV最低位不为0:UV += Mod */
             Cflint_Type Ow = 0;
             if ((UV[0] & 1) != 0)
-                Ow = Cflint_Add(UV, UV, Module, Len);
+                Ow = Cflint_Add(UV, UV, Mod, Len);
             /* UV >>= 1 */
             Cflint_ShiftR2(UV, Len, 1);
             /* 溢出检查 */
@@ -590,25 +621,25 @@ void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Module, Cflin
             Cflint_Type *AB_Max = NULL, *UV_Max = NULL;
             Cflint_Type *AB_Min = NULL, *UV_Min = NULL;
             /* 合并场景 */
-            if (CompareRet == 1) {
+            if (CmpRet == 1) {
                 AB_Max = A; UV_Max = U;
                 AB_Min = B; UV_Min = V;
             }
-            if (CompareRet != 1) {
+            if (CmpRet != 1) {
                 AB_Max = B; UV_Max = V;
                 AB_Min = A; UV_Min = U;
             }
             /* AB_Max -= AB_Min, AB_Max >>= 1 */
             Cflint_Sub(AB_Max, AB_Max, AB_Min, Len);
             Cflint_ShiftR2(AB_Max, Len, 1);
-            /* 对UV进行蒙哥马利约减:(UV_Max - UV_Min) % Module */
-            if (Cflint_Compare(UV_Max, UV_Min, Len) == -1)
-                Cflint_Add(UV_Max, UV_Max, Module, Len);
+            /* 对UV进行蒙哥马利约减:(UV_Max - UV_Min) % Mod */
+            if (Cflint_Cmp(UV_Max, UV_Min, Len) == -1)
+                Cflint_Add(UV_Max, UV_Max, Mod, Len);
             Cflint_Sub(UV_Max, UV_Max, UV_Min, Len);
-            /* Max1最低位不为0:UV_Max += Module */
+            /* Max1最低位不为0:UV_Max += Mod */
             Cflint_Type Ow = 0;
             if ((UV_Max[0] & 1) != 0)
-                Ow = Cflint_Add(UV_Max, UV_Max, Module, Len);
+                Ow = Cflint_Add(UV_Max, UV_Max, Mod, Len);
             /* UV_Max >>= 1 */
             Cflint_ShiftR2(UV_Max, Len, 1);
             /* 溢出检查 */
@@ -619,63 +650,10 @@ void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Module, Cflin
     }
     /* 拷贝数据结果 */
     Cflint_Copy(Ret, U, Len);
+    
+    over:
+    Cflint_Free(A);
+    Cflint_Free(B);
+    Cflint_Free(U);
+    Cflint_Free(V);
 }
-
-/* 带符号与运算:Ret * (*RetFlag) = Op_1 * (Op1_Flag) + */
-/*                                       Op_2 * (Op2_Flag)   */
-/* 备注:大数运算本身是无符号语义运算,这里是为某些数学运算额外扩展 */
-Cflint_Type Cflint_FlagSum(Cflint_Type *Ret,  Cflint_Type *RetFlag,
-                           Cflint_Type *Op_1, Cflint_Type  Op1_Flag,
-                           Cflint_Type *Op_2, Cflint_Type  Op2_Flag,
-                              uint32_t  Len)
-{
-    if (Op1_Flag == 0 && Op2_Flag == 0) {
-        *RetFlag = 0;
-        return Cflint_Add(Ret, Op_1, Op_2, Len);
-    }
-    if (Op1_Flag == 1 && Op2_Flag == 1) {
-        *RetFlag = 1;
-        return Cflint_Add(Ret, Op_1, Op_2, Len);
-    }
-    int8_t CompareRet = 0;
-    if (Op1_Flag == 0 && Op2_Flag == 1) {
-        CompareRet = Cflint_Compare(Op_1, Op_2, Len);
-        if (CompareRet != -1) {
-            *RetFlag = 0;
-            return Cflint_Sub(Ret, Op_1, Op_2, Len);
-        }
-        if (CompareRet == -1) {
-            *RetFlag = 1;
-            return Cflint_Sub(Ret, Op_2, Op_1, Len);
-        }
-    }
-    if (Op1_Flag == 1 && Op2_Flag == 0) {
-        CompareRet = Cflint_Compare(Op_2, Op_1, Len);
-        if (CompareRet != -1) {
-            *RetFlag = 0;
-            return Cflint_Sub(Ret, Op_2, Op_1, Len);
-        }
-        if (CompareRet == -1) {
-            *RetFlag = 1;
-            return Cflint_Sub(Ret, Op_1, Op_2, Len);
-        }
-    }
-}
-
-/* 带符号模运算:Ret = Op_1 * (Op1_Flag) % Op_2 */
-/* 备注:大数运算本身是无符号语义运算,这里是为某些数学运算额外扩展 */
-void Cflint_FlagMod(Cflint_Type *Ret,   Cflint_Type *Op_1,
-                       Cflint_Type *Op_2, Cflint_Type  Op1_Flag,
-                          uint32_t  Len)
-{
-    if (Op1_Flag == 0) {
-        Cflint_Mod(Ret, Op_1, Op_2, Len);
-        return;
-    }
-    if (Op1_Flag == 1) {
-        Cflint_Mod(Ret, Op_1, Op_2, Len);
-        Cflint_Sub(Ret, Op_1, Ret, Len);
-        return;
-    }
-}
-

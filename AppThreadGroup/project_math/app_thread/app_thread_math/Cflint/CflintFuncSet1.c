@@ -19,7 +19,7 @@ void Cflint_Copy(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 }
 
 /* 比较:((>:1);(==:0);(<:-1)) */
-int8_t Cflint_Compare(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
+int8_t Cflint_Cmp(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len)
 {
     for (int64_t Idx = (int64_t)Len - 1; Idx >= 0; Idx--)
         if (Op_0[Idx] != Op_1[Idx]) {
@@ -48,7 +48,7 @@ bool Cflint_IsZero(Cflint_Type *Op, uint32_t Len)
 }
 
 /* 设值:类似memset */
-void Cflint_SetValue(Cflint_Type *Op, uint32_t Len, Cflint_Type Val)
+void Cflint_ValSet(Cflint_Type *Op, uint32_t Len, Cflint_Type Val)
 {
     for (uint32_t Idx = 0; Idx < Len; Idx++)
         Op[Idx] = Val;
@@ -229,7 +229,7 @@ void Cflint_ShiftLN(Cflint_Type *Op, uint32_t Len, uint32_t BitsN)
 {
     /* 超出限制时,直接清空 */
     if (BitsN >= Len) {
-        Cflint_SetValue(Op, Len, 0);
+        Cflint_ValSet(Op, Len, 0);
         return;
     }
     
@@ -244,7 +244,7 @@ void Cflint_ShiftRN(Cflint_Type *Op, uint32_t Len, uint32_t BitsN)
 {
     /* 超出移位限制时,直接清空 */
     if (BitsN >= Len) {
-        Cflint_SetValue(Op, Len, 0);
+        Cflint_ValSet(Op, Len, 0);
         return;
     }
     
@@ -578,18 +578,18 @@ void Cflint_NativeToOp(Cflint_Type *Op, uint32_t Len, uint8_t Type)
     Cflint_OpRev(Op, Len);
 }
 
-void Cflint_NumToHex(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[2], uint32_t Len)
+void Cflint_NumToHex(uint8_t *Hex, uint8_t *Num, uint32_t Len)
 {
     uint32_t NumLen1 = 0;
     uint32_t NumLen2 = 0;
     uint8_t *Swap = NULL;
-    uint8_t *Buffer1 = Temp[0]; //被除数
-    uint8_t *Buffer2 = Temp[1]; //商
-    /* 清零缓冲区数据,初始化Buffer1,Buffer2 */
+    uint8_t *Buf1 = Cflint_Alloc(Cflint_Byte * Len);
+    uint8_t *Buf2 = Cflint_Alloc(Cflint_Byte * Len);
+    /* 清零缓冲区数据,初始化Buffer1,Buf2 */
     for (uint32_t Idx = 0; Idx < Len; Idx++) {
         Hex[Idx] = 0;
-        Buffer1[Idx] = 0;
-        Buffer2[Idx] = 0;
+        Buf1[Idx] = 0;
+        Buf2[Idx] = 0;
     }
     /* 拷贝十进制数据到Buffer1 */
     for (uint32_t Idx = 0; Idx < Len; Idx++) {
@@ -598,93 +598,96 @@ void Cflint_NumToHex(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[2], uint32_t Len)
             break;
         if (Num[Idx] <= '0' && Num[Idx] >= '9')
             return;
-        Buffer1[Idx] = Num[Idx] - '0';
+        Buf1[Idx] = Num[Idx] - '0';
         NumLen1 = Idx + 1;
     }
-    /* 进行迭代循环 Module = Buffer1 % 255 */
+    /* 进行迭代循环 Mod = Buf1 % 255 */
     uint32_t Index0 = 0;
     while (1) {
         /* 前缀0滤除锁 */
         uint32_t PrefixLock = 0;
         /* 进行迭代循环 */
         uint32_t Idx1 = 0;
-        uint16_t Module = 0;
-        /* Buffer2 = Buffer1 / 255 */
-        /* Module  = Buffer1 % 255 */
+        uint16_t Mod = 0;
+        /* Buf2 = Buf1 / 255 */
+        /* Mod  = Buf1 % 255 */
         do {
             /* 数据不够移动到下一个位 */
             if (Idx1 < NumLen1)
-                Module  = Module * 10 + Buffer1[Idx1++];
+                Mod  = Mod * 10 + Buf1[Idx1++];
             /* 数据不够除时,商补0 */
             /* 数据足够除时,计算商 */
-            if (Module >> 8 != 0)
+            if (Mod >> 8 != 0)
                 PrefixLock  = 1;
             /* 前缀0滤除锁(这是必备的,它会限制商以期靠近0) */
             if (PrefixLock != 0)
-                Buffer2[NumLen2++] = Module >> 8;
-            Module &= 0xFF;
+                Buf2[NumLen2++] = Mod >> 8;
+            Mod &= 0xFF;
         } while (Idx1 < NumLen1);
         /* 保存当次最后除余 */
-        Hex[Index0++] = Module;
+        Hex[Index0++] = Mod;
         /* 辗转迭代直到商为0 */
         if (NumLen2 == 0)
             break;
         /* 商更新成被除数(交换指针即可) */
-        Swap    = Buffer1;
-        Buffer1 = Buffer2;
-        Buffer2 = Swap;
+        Swap = Buf1;
+        Buf1 = Buf2;
+        Buf2 = Swap;
         NumLen1 = NumLen2;
         NumLen2 = 0;
         /* 开始下一次迭代循环 */
     }
+    
+    Cflint_Free(Buf1);
+    Cflint_Free(Buf2);
 }
 
-void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[3], uint32_t Len)
+void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint32_t Len)
 {
     uint32_t NumLen1 = 0;
     uint32_t NumLen2 = 0;
     uint8_t *Swap = NULL;
-    uint8_t *Buffer1 = Temp[0]; //被除数
-    uint8_t *Buffer2 = Temp[1]; //商
-    uint8_t *Buffer3 = Temp[2]; //累增除数
-    /* 清零缓冲区数据,初始化Buffer1,Buffer2 */
+    uint8_t *Buf1 = Cflint_Alloc(Cflint_Byte * Len); //被除数
+    uint8_t *Buf2 = Cflint_Alloc(Cflint_Byte * Len); //商
+    uint8_t *Buf3 = Cflint_Alloc(Cflint_Byte * Len); //累增除数
+    /* 清零缓冲区数据,初始化Buffer1,Buf2 */
     for (uint32_t Idx = 0; Idx < Len; Idx++) {
         Num[Idx] = 0;
-        Buffer1[Idx] = 0;
-        Buffer2[Idx] = 0;
-        Buffer3[Idx] = 0;
+        Buf1[Idx] = 0;
+        Buf2[Idx] = 0;
+        Buf3[Idx] = 0;
     }
     /* 拷贝十进制数据到Buffer1 */
     for (uint32_t Idx = 0; Idx < Len; Idx++) {
-        Buffer1[Idx] = Hex[Idx];
+        Buf1[Idx] = Hex[Idx];
         if (Hex[Idx] != 0)
             NumLen1 = Idx + 1;
     }
-    /* 进行迭代循环 Module = Buffer1 % 10 */
+    /* 进行迭代循环 Mod = Buf1 % 10 */
     uint32_t Index0 = 0;
     while (1) {
         /* 进行迭代循环 */
         uint32_t Idx1 = 0;
-        uint16_t Module = 0;
+        uint16_t Mod = 0;
         /* 退出条件 */
         if (NumLen1 == 0)
             break;
         /* 注意:这里只能使用原始的除转减(计算机不支持跨进制除法) */
         /* 生成一个累赠除数,该除数恰好小于被除数偏移1位 */
         for (uint32_t Idx = 0; Idx < Len; Idx++)
-            Buffer3[Idx] = 0;
-        Buffer3[0] = 10;
+            Buf3[Idx] = 0;
+        Buf3[0] = 10;
         /* 这个累赠除数数学表示为10 * 2 ** k */
         int64_t Offset = 0;
         while (1) {
             /* 比较Buffer1和Buffer3(必须大于才可以是true) */
             int8_t Compare = 0;
             for (int64_t Idx = NumLen1 - 1; Idx >= 0; Idx--) {
-                if (Buffer1[Idx] > Buffer3[Idx]) {
+                if (Buf1[Idx] > Buf3[Idx]) {
                     Compare = +1;
                     break;
                 }
-                if (Buffer1[Idx] < Buffer3[Idx]) {
+                if (Buf1[Idx] < Buf3[Idx]) {
                     Compare = -1;
                     break;
                 }
@@ -698,8 +701,8 @@ void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[3], uint32_t Len)
                     break;
                 uint8_t Ow = 0;
                 for (uint32_t Idx = 0; Idx < NumLen1; Idx++) {
-                    uint8_t Val  = Buffer3[Idx];
-                    Buffer3[Idx] = ((Val & 0x7F) << 1) | Ow;
+                    uint8_t Val  = Buf3[Idx];
+                    Buf3[Idx] = ((Val & 0x7F) << 1) | Ow;
                     Ow = (Val & 0x80) >> 7;
                 }
                 Offset++;
@@ -708,8 +711,8 @@ void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[3], uint32_t Len)
             if (Compare == -1) {
                 uint8_t Ow = 0;
                 for (int64_t Idx = NumLen1 - 1; Idx >= 0; Idx--) {
-                    uint8_t Val  = Buffer3[Idx];
-                    Buffer3[Idx] = ((Val & 0xFE) >> 1) | Ow;
+                    uint8_t Val  = Buf3[Idx];
+                    Buf3[Idx] = ((Val & 0xFE) >> 1) | Ow;
                     Ow = (Val & 0x01) << 7;
                 }
                 Offset--;
@@ -718,53 +721,53 @@ void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[3], uint32_t Len)
         }
         /* 如果第一次小于比较都不通过(踩空了) */
         if (Offset == -1) {
-            Num[Index0++] = Buffer1[0];
-            /* Buffer1 = Buffer2 */
+            Num[Index0++] = Buf1[0];
+            /* Buf1 = Buf2 */
             for (uint32_t Idx = 0; Idx < Len; Idx++)
-                Buffer1[Idx] = Buffer2[Idx];
+                Buf1[Idx] = Buf2[Idx];
             NumLen1 = NumLen2;
-            /* Buffer2 = 0 */
+            /* Buf2 = 0 */
             for (uint32_t Idx = 0; Idx < Len; Idx++)
-                Buffer2[Idx] = 0;
+                Buf2[Idx] = 0;
             NumLen2 = 0;
             continue;
         }
         /* 现在的Buffer3 <= Buffer1了 */
-        /* Buffer1 -= Buffer3 */
-        /* Buffer2 += Buffer3 / 10 */
+        /* Buf1 -= Buf3 */
+        /* Buf2 += Buf3 / 10 */
         {
             uint8_t Ow = 0;
-            /* Buffer1 -= Buffer3 */
+            /* Buf1 -= Buf3 */
             for (uint32_t Idx = 0; Idx < NumLen1; Idx++) {
                 /* 计算差结果 */
-                uint8_t Val = Buffer1[Idx] - Buffer3[Idx] - Ow;
+                uint8_t Val = Buf1[Idx] - Buf3[Idx] - Ow;
                 /* 检查借位溢出 */
-                if (Val > Buffer1[Idx])
+                if (Val > Buf1[Idx])
                     Ow = 1;
                 else
                     Ow = 0;
                 /* 保存运算结果 */
-                Buffer1[Idx] = Val;
+                Buf1[Idx] = Val;
             }
             /* 关键: */
-            /* Buffer3 == 10  * 2 ** K(K == Offset) */
-            /* Buffer3 /= 10 == 2 ** K(K == Offset) */
+            /* Buf3 == 10  * 2 ** K(K == Offset) */
+            /* Buf3 /= 10 == 2 ** K(K == Offset) */
             for (uint32_t Idx = 0; Idx < Len; Idx++)
-                Buffer3[Idx] = 0;
-            Buffer3[Offset / 8] = 1 << (Offset % 8);
+                Buf3[Idx] = 0;
+            Buf3[Offset / 8] = 1 << (Offset % 8);
             Ow = 0;
-            /* Buffer2 += Buffer3 */
+            /* Buf2 += Buf3 */
             for (uint32_t Idx = 0; Idx < Len; Idx++) {
                 /* 计算和结果 */
-                uint8_t Val = Buffer2[Idx] + Buffer3[Idx] + Ow;
+                uint8_t Val = Buf2[Idx] + Buf3[Idx] + Ow;
                 /* 检查进位溢出 */
-                if (Val < Buffer2[Idx] || Val < Buffer3[Idx])
+                if (Val < Buf2[Idx] || Val < Buf3[Idx])
                     Ow = 1;
-                if (Val > Buffer2[Idx] && Val > Buffer3[Idx])
+                if (Val > Buf2[Idx] && Val > Buf3[Idx])
                     Ow = 0;
                 /* 保存运算结果 */
-                Buffer2[Idx] = Val;
-                if (Buffer2[Idx] != 0)
+                Buf2[Idx] = Val;
+                if (Buf2[Idx] != 0)
                     NumLen2 = Idx + 1;
             }
         }
@@ -784,5 +787,9 @@ void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[3], uint32_t Len)
         Num[Idx2] ^= Num[Idx1];
         Num[Idx1] ^= Num[Idx2];
     }
+    
+    Cflint_Free(Buf1);
+    Cflint_Free(Buf2);
+    Cflint_Free(Buf3);
 }
 

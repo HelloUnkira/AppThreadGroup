@@ -227,18 +227,14 @@ void Test_CflintFuncSet1(void)
     printf("Cflint_NumToHex:\n");
     printf("Cflint_HexToNum:\n");
     {
-        uint8_t  Temp0[20] = {0};
-        uint8_t  Temp1[20] = {0};
-        uint8_t  Temp2[20] = {0};
-        uint8_t *Temp[3] = {Temp0, Temp1, Temp2};
         uint8_t  Hex[20] = {0};
         uint8_t  Num[20] = "1910019100";
-        Cflint_NumToHex(Hex, Num, Temp, Len);
+        Cflint_NumToHex(Hex, Num, Len);
         printf("\nHex:");
         for (Idx = 0; Idx < 20; Idx++)
             printf("%x ", Hex[Idx]);
         
-        Cflint_HexToNum(Hex, Num, Temp, Len);
+        Cflint_HexToNum(Hex, Num, Len);
         printf("\nNum:");
         for (Idx = 0; Idx < 20; Idx++)
             printf("%c", Num[Idx]);
@@ -320,8 +316,8 @@ void Test_CflintFuncSet3(void)
     uint32_t Idx = 0;
     #define TEST_FUNCTIONSET3_LENGTH    10
     Cflint_Type Ret  [TEST_FUNCTIONSET3_LENGTH * 2] = {0};
-    Cflint_Type Quotient[TEST_FUNCTIONSET3_LENGTH * 2] = {0};
-    Cflint_Type Module  [TEST_FUNCTIONSET3_LENGTH * 2] = {0};
+    Cflint_Type Quo[TEST_FUNCTIONSET3_LENGTH * 2] = {0};
+    Cflint_Type Mod  [TEST_FUNCTIONSET3_LENGTH * 2] = {0};
     Cflint_Type Op_1[TEST_FUNCTIONSET3_LENGTH * 2] = {0};
     Cflint_Type Op_2[TEST_FUNCTIONSET3_LENGTH * 2] = {0};
     Cflint_Type Ow = 0;
@@ -332,19 +328,19 @@ void Test_CflintFuncSet3(void)
         if (Idx < TEST_FUNCTIONSET3_LENGTH) {
             Op_1[Idx] = Idx;
             Op_2[Idx] = TEST_FUNCTIONSET3_LENGTH - Idx;
-            Module[Idx]   = TEST_FUNCTIONSET3_LENGTH - Idx - 1;
+            Mod[Idx]   = TEST_FUNCTIONSET3_LENGTH - Idx - 1;
         } else {
             Op_1[Idx] = 0;
             Op_2[Idx] = 0;
-            Module  [Idx] = 0;
+            Mod  [Idx] = 0;
         }
     }
     /* 先用乘法运算计算一下值 */
     Cflint_Mult(Ret, Op_1, Op_2, TEST_FUNCTIONSET3_LENGTH);
     /* 为其添加一个余数(这里不让其溢出) */
-    Cflint_Add(Ret, Ret, Module, TEST_FUNCTIONSET3_LENGTH * 2);
+    Cflint_Add(Ret, Ret, Mod, TEST_FUNCTIONSET3_LENGTH * 2);
     /* 再计算除数结果 */
-    Cflint_Devide(Quotient, Module, Ret, Op_1,
+    Cflint_Devide(Quo, Mod, Ret, Op_1,
                   TEST_FUNCTIONSET3_LENGTH * 2);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_Devide:::");
@@ -360,10 +356,10 @@ void Test_CflintFuncSet3(void)
         printf("%llx ", Op_2[Idx]);
     printf("\nQuotient:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET3_LENGTH * 2; Idx++)
-        printf("%llx ", Quotient[Idx]);
+        printf("%llx ", Quo[Idx]);
     printf("\nModule:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET3_LENGTH * 2; Idx++)
-        printf("%llx ", Module[Idx]);
+        printf("%llx ", Mod[Idx]);
     printf("\n-------------------------------------------------------------\n");
     /*************************************************************************/
     
@@ -373,19 +369,19 @@ void Test_CflintFuncSet3(void)
         if (Idx < TEST_FUNCTIONSET3_LENGTH) {
             Op_1[Idx] = Idx;
             Op_2[Idx] = TEST_FUNCTIONSET3_LENGTH - Idx;
-            Module  [Idx] = TEST_FUNCTIONSET3_LENGTH - Idx - 1;
+            Mod  [Idx] = TEST_FUNCTIONSET3_LENGTH - Idx - 1;
         } else {
             Op_1[Idx] = 0;
             Op_2[Idx] = 0;
-            Module  [Idx] = 0;
+            Mod  [Idx] = 0;
         }
     }
     /* 先用乘法运算计算一下值 */
     Cflint_Mult(Ret, Op_1, Op_2, TEST_FUNCTIONSET3_LENGTH);
     /* 为其添加一个余数(这里不让其溢出) */
-    Cflint_Add(Ret, Ret, Module, TEST_FUNCTIONSET3_LENGTH * 2);
+    Cflint_Add(Ret, Ret, Mod, TEST_FUNCTIONSET3_LENGTH * 2);
     /* 再计算模结果 */
-    Cflint_Mod(Module, Ret, Op_1, TEST_FUNCTIONSET3_LENGTH * 2);
+    Cflint_Mod(Mod, Ret, Op_1, TEST_FUNCTIONSET3_LENGTH * 2);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_Mod:::");
     printf("\n---------------------------------------------------------------");
@@ -400,7 +396,7 @@ void Test_CflintFuncSet3(void)
         printf("%llx ", Op_2[Idx]);
     printf("\nModule:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET3_LENGTH * 2; Idx++)
-        printf("%llx ", Module[Idx]);
+        printf("%llx ", Mod[Idx]);
     printf("\n-------------------------------------------------------------\n");
     /*************************************************************************/
 }
@@ -409,29 +405,20 @@ void Test_CflintFuncSet4(void)
 {
     uint32_t Idx = 0;
     #define TEST_FUNCTIONSET4_LENGTH    3
-    Cflint_Type Ret  [TEST_FUNCTIONSET4_LENGTH] = {0};
+    Cflint_Type Ret[TEST_FUNCTIONSET4_LENGTH] = {0};
     Cflint_Type Op [TEST_FUNCTIONSET4_LENGTH] = {0};
-    Cflint_Type Exponent[TEST_FUNCTIONSET4_LENGTH] = {0};
-    Cflint_Type Module  [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
+    Cflint_Type Exp[TEST_FUNCTIONSET4_LENGTH] = {0};
+    Cflint_Type Mod[TEST_FUNCTIONSET4_LENGTH * 2] = {0};
     /* 模幂运算 */
     /*************************************************************************/
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++) {
         Op[Idx] = TEST_FUNCTIONSET4_LENGTH - Idx;
-        Module[Idx]  = TEST_FUNCTIONSET4_LENGTH - Idx;
+        Mod[Idx]  = TEST_FUNCTIONSET4_LENGTH - Idx;
     }
-    Module[0]   = 0; 
-    Exponent[0] = 5;
+    Mod[0] = 0; 
+    Exp[0] = 5;
     /* 模幂运算 */
-    {
-        Cflint_Type  Temp1 [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
-        Cflint_Type  Temp2 [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
-        Cflint_Type  Temp3 [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
-        Cflint_Type  Temp4 [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
-        Cflint_Type *Temp[4] = {Temp1, Temp2, Temp3, Temp4};
-        /* 模幂运算 */
-        Cflint_ModExp(Ret, Module, Op, Exponent,
-                              Temp, TEST_FUNCTIONSET4_LENGTH);
-    }
+    Cflint_ModExp(Ret, Mod, Op, Exp, TEST_FUNCTIONSET4_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_ModExp:::");
     printf("\n---------------------------------------------------------------");
@@ -440,7 +427,7 @@ void Test_CflintFuncSet4(void)
         printf("%u ", Op[Idx]);
     printf("\nModule:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++)
-        printf("%u ", Module[Idx]);
+        printf("%u ", Mod[Idx]);
     printf("\nRet:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++)
         printf("%u ", Ret[Idx]);
@@ -449,22 +436,14 @@ void Test_CflintFuncSet4(void)
     
     /* 模逆运算 */
     /*************************************************************************/
-    Cflint_SetValue(Module, TEST_FUNCTIONSET4_LENGTH * 2, 0);
+    Cflint_ValSet(Mod, TEST_FUNCTIONSET4_LENGTH * 2, 0);
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++) {
         Op[Idx] = TEST_FUNCTIONSET4_LENGTH - Idx;
-        Module[Idx]  = TEST_FUNCTIONSET4_LENGTH - Idx;
+        Mod[Idx]  = TEST_FUNCTIONSET4_LENGTH - Idx;
     }
-    Module[0] = 1;
+    Mod[0] = 1;
     /* 模逆运算 */
-    {
-        Cflint_Type  Temp1 [TEST_FUNCTIONSET4_LENGTH] = {0};
-        Cflint_Type  Temp2 [TEST_FUNCTIONSET4_LENGTH] = {0};
-        Cflint_Type  Temp3 [TEST_FUNCTIONSET4_LENGTH] = {0};
-        Cflint_Type  Temp4 [TEST_FUNCTIONSET4_LENGTH] = {0};
-        Cflint_Type *Temp[4] = {Temp1, Temp2, Temp3, Temp4};
-        Cflint_ModInv(Ret, Op, Module,
-                             Temp, TEST_FUNCTIONSET4_LENGTH);
-    }
+    Cflint_ModInv(Ret, Op, Mod, TEST_FUNCTIONSET4_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_ModInv:::");
     printf("\n---------------------------------------------------------------");
@@ -473,16 +452,16 @@ void Test_CflintFuncSet4(void)
         printf("%u ", Op[Idx]);
     printf("\nModule:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++)
-        printf("%u ", Module[Idx]);
+        printf("%u ", Mod[Idx]);
     printf("\nRet:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++)
         printf("%u ", Ret[Idx]);
     printf("\n-------------------------------------------------------------\n");
     /* 注:Module和Op如果不互素,模逆不存在 */
-    printf("(Ret * Op) % Module:::Ret:\n");
+    printf("(Ret * Op) % Mod:::Ret:\n");
     Cflint_Type Temp1 [TEST_FUNCTIONSET4_LENGTH * 2] = {0};
     Cflint_Mult(Temp1, Ret, Op, TEST_FUNCTIONSET4_LENGTH);
-    Cflint_Mod(Temp1, Temp1, Module, TEST_FUNCTIONSET4_LENGTH * 2);
+    Cflint_Mod(Temp1, Temp1, Mod, TEST_FUNCTIONSET4_LENGTH * 2);
     Cflint_Copy(Ret, Temp1, TEST_FUNCTIONSET4_LENGTH);
     for (Idx = 0; Idx < TEST_FUNCTIONSET4_LENGTH; Idx++)
         printf("%u ", Ret[Idx]);
@@ -546,13 +525,7 @@ void Test_CflintFuncSet5(void)
     
     /* 欧几里得互素检查运算 */
     /*************************************************************************/
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        Check = Cflint_GCDCheck(A, B, Temp, TEST_FUNCTIONSET5_LENGTH);
-    }
+    Check = Cflint_GCDCheck(A, B, TEST_FUNCTIONSET5_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_GCDCheck:::");
     printf("\n---------------------------------------------------------------");
@@ -575,30 +548,18 @@ void Test_CflintFuncSet5(void)
     B[0] = 1;
     /*************************************************************************/
     /* 扩展欧几里得运算 */
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp4[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp5[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp6[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp7[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type *Temp[7] = {Temp1, Temp2, Temp3, Temp4,
-                                Temp5, Temp6, Temp7};
-        Cflint_GCDExtend(A, B, Ret, X, &X_Flag, Y, &Y_Flag,
-                         Temp, TEST_FUNCTIONSET5_LENGTH);
-    }
+    Cflint_ExtGCD(A, B, Ret, X, &X_Flag, Y, &Y_Flag, TEST_FUNCTIONSET5_LENGTH);
     /*************************************************************************/
-    Cflint_SetValue(Temp5, (TEST_FUNCTIONSET5_LENGTH + 1) * 2, 0);
-    Cflint_SetValue(Temp6, (TEST_FUNCTIONSET5_LENGTH + 1) * 2, 0);
-    Cflint_SetValue(Temp7, (TEST_FUNCTIONSET5_LENGTH + 1) * 4, 0);
-    Cflint_SetValue(Temp8, (TEST_FUNCTIONSET5_LENGTH + 1) * 4, 0);
+    Cflint_ValSet(Temp5, (TEST_FUNCTIONSET5_LENGTH + 1) * 2, 0);
+    Cflint_ValSet(Temp6, (TEST_FUNCTIONSET5_LENGTH + 1) * 2, 0);
+    Cflint_ValSet(Temp7, (TEST_FUNCTIONSET5_LENGTH + 1) * 4, 0);
+    Cflint_ValSet(Temp8, (TEST_FUNCTIONSET5_LENGTH + 1) * 4, 0);
     Cflint_Copy(Temp5, A, TEST_FUNCTIONSET5_LENGTH);
     Cflint_Copy(Temp6, B, TEST_FUNCTIONSET5_LENGTH);
     Cflint_Mult(Temp7, Temp5, X, (TEST_FUNCTIONSET5_LENGTH + 1) * 2);
     Cflint_Mult(Temp8, Temp6, Y, (TEST_FUNCTIONSET5_LENGTH + 1) * 2);
     printf("\n-------------------------------------------------------------\n");
-    printf("Cflint_GCDExtend:::");
+    printf("Cflint_ExtGCD:::");
     printf("\n---------------------------------------------------------------");
     printf("\nA:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET5_LENGTH; Idx++)
@@ -626,22 +587,9 @@ void Test_CflintFuncSet5(void)
     
     /* 欧几里得乘法逆 */
     /*************************************************************************/
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp4[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp5[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp6[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp7[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp8[(TEST_FUNCTIONSET5_LENGTH + 1) * 2] = {0};
-        Cflint_Type *Temp[8] = {Temp1, Temp2, Temp3, Temp4,
-                                Temp5, Temp6, Temp7, Temp8};
-        Cflint_GCDInverse(A, B, Ret, Ret1,
-                          Temp, TEST_FUNCTIONSET5_LENGTH);
-    }
+    Cflint_InvGCD(A, B, Ret, Ret1, TEST_FUNCTIONSET5_LENGTH);
     printf("\n-------------------------------------------------------------\n");
-    printf("Cflint_GCDInverse:::");
+    printf("Cflint_InvGCD:::");
     printf("\n---------------------------------------------------------------");
     printf("\nA:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET5_LENGTH; Idx++)
@@ -659,7 +607,7 @@ void Test_CflintFuncSet5(void)
     /* 注:Module和Op如果不互素,模逆不存在 */
     printf("(Ret * A) % B:::Ret:\n");
     Cflint_Mult(Temp5, Ret, A, TEST_FUNCTIONSET5_LENGTH);
-    Cflint_SetValue(Temp6, TEST_FUNCTIONSET5_LENGTH * 2, 0);
+    Cflint_ValSet(Temp6, TEST_FUNCTIONSET5_LENGTH * 2, 0);
     Cflint_Copy(Temp6, B, TEST_FUNCTIONSET5_LENGTH);
     Cflint_Mod(Temp5, Temp5, Temp6, TEST_FUNCTIONSET5_LENGTH * 2);
     Cflint_Copy(Ret, Temp5, TEST_FUNCTIONSET5_LENGTH);
@@ -756,7 +704,7 @@ void Test_CflintFuncSet7(void)
     uint32_t Idx = 0;
     #define TEST_FUNCTIONSET7_LENGTH     3
     Cflint_Type Ret[TEST_FUNCTIONSET7_LENGTH] = {0};
-    Cflint_Type Module[TEST_FUNCTIONSET7_LENGTH] = {0};
+    Cflint_Type Mod[TEST_FUNCTIONSET7_LENGTH] = {0};
     Cflint_Type Op[TEST_FUNCTIONSET7_LENGTH] = {0};
     /* 开辟出来的用于解算结果正确性的空间,本身无用 */
     Cflint_Type Temp1[(TEST_FUNCTIONSET7_LENGTH + 1) * 2] = {0};
@@ -766,15 +714,15 @@ void Test_CflintFuncSet7(void)
     /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
     /*************************************************************************/
     for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
-        Module[Idx] = 1;
+        Mod[Idx] = 1;
     for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
         Op[Idx] = 0;
-    Module[1] = 0;
+    Mod[1] = 0;
     /*************************************************************************/
     while (1) {
         Cflint_AddBit(Op, TEST_FUNCTIONSET7_LENGTH, 1);
         /*********************************************************************/
-        if (Cflint_Compare(Op, Module, TEST_FUNCTIONSET7_LENGTH) == 1)
+        if (Cflint_Cmp(Op, Mod, TEST_FUNCTIONSET7_LENGTH) == 1)
             break;
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
@@ -792,7 +740,7 @@ void Test_CflintFuncSet7(void)
             Cflint_Type *Temp[10] = {Temp1, Temp2, Temp3, Temp4, Temp5,
                                      Temp6, Temp7, Temp8, Temp9, Temp10};
             /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-            Ret1 = Cflint_ModuloP1Root2(Op, Module, Ret,
+            Ret1 = Cflint_ModuloP1Root2(Op, Mod, Ret,
                                            Temp, TEST_FUNCTIONSET7_LENGTH);
             if (Ret1 == 0)
                 continue;
@@ -802,7 +750,7 @@ void Test_CflintFuncSet7(void)
         printf("\n-----------------------------------------------------------");
         printf("\nModule:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
-            printf("%u ", Module[Idx]);
+            printf("%u ", Mod[Idx]);
         printf("\nRet:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Ret[Idx]);
@@ -811,15 +759,15 @@ void Test_CflintFuncSet7(void)
             printf("%u ", Op[Idx]);
         /*********************************************************************/
         Cflint_Square(Temp1, Ret, TEST_FUNCTIONSET7_LENGTH);
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET7_LENGTH * 2, 0);
-        Cflint_Copy(Temp2, Module, TEST_FUNCTIONSET7_LENGTH);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET7_LENGTH * 2, 0);
+        Cflint_Copy(Temp2, Mod, TEST_FUNCTIONSET7_LENGTH);
         Cflint_Mod(Temp1, Temp1, Temp2, TEST_FUNCTIONSET7_LENGTH * 2);
-        printf("\n(Ret**2)(Mod)Module:");
+        printf("\n(Ret**2)(Mod)Mod:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Temp1[Idx]);
         /*********************************************************************/
-        Cflint_Mod(Temp1, Op, Module, TEST_FUNCTIONSET7_LENGTH);
-        printf("\n(Op)(Mod)Module:");
+        Cflint_Mod(Temp1, Op, Mod, TEST_FUNCTIONSET7_LENGTH);
+        printf("\n(Op)(Mod)Mod:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Temp1[Idx]);
         printf("\n---------------------------------------------------------\n");
@@ -830,15 +778,15 @@ void Test_CflintFuncSet7(void)
     /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
     /*************************************************************************/
     for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
-        Module[Idx] = 1;
+        Mod[Idx] = 1;
     for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
         Op[Idx] = 0;
-    // Module[0] = 7;
+    // Mod[0] = 7;
     /*************************************************************************/
     while (1) {
         Cflint_AddBit(Op, TEST_FUNCTIONSET7_LENGTH, 1);
         /*********************************************************************/
-        if (Cflint_Compare(Op, Module, TEST_FUNCTIONSET7_LENGTH) == 1)
+        if (Cflint_Cmp(Op, Mod, TEST_FUNCTIONSET7_LENGTH) == 1)
             break;
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
@@ -856,7 +804,7 @@ void Test_CflintFuncSet7(void)
             Cflint_Type *Temp[10] = {Temp1, Temp2, Temp3, Temp4, Temp5,
                                      Temp6, Temp7, Temp8, Temp9, Temp10};
             /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-            Ret1 = Cflint_ModuloP1Root2(Op, Module, Ret,
+            Ret1 = Cflint_ModuloP1Root2(Op, Mod, Ret,
                                            Temp, TEST_FUNCTIONSET7_LENGTH);
             if (Ret1 == 0)
                 continue;
@@ -866,7 +814,7 @@ void Test_CflintFuncSet7(void)
         printf("\n-----------------------------------------------------------");
         printf("\nModule:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
-            printf("%u ", Module[Idx]);
+            printf("%u ", Mod[Idx]);
         printf("\nRet:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Ret[Idx]);
@@ -875,15 +823,15 @@ void Test_CflintFuncSet7(void)
             printf("%u ", Op[Idx]);
         /*********************************************************************/
         Cflint_Square(Temp1, Ret, TEST_FUNCTIONSET7_LENGTH);
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET7_LENGTH * 2, 0);
-        Cflint_Copy(Temp2, Module, TEST_FUNCTIONSET7_LENGTH);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET7_LENGTH * 2, 0);
+        Cflint_Copy(Temp2, Mod, TEST_FUNCTIONSET7_LENGTH);
         Cflint_Mod(Temp1, Temp1, Temp2, TEST_FUNCTIONSET7_LENGTH * 2);
-        printf("\n(Ret**2)(Mod)Module:");
+        printf("\n(Ret**2)(Mod)Mod:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Temp1[Idx]);
         /*********************************************************************/
-        Cflint_Mod(Temp1, Op, Module, TEST_FUNCTIONSET7_LENGTH);
-        printf("\n(Op)(Mod)Module:");
+        Cflint_Mod(Temp1, Op, Mod, TEST_FUNCTIONSET7_LENGTH);
+        printf("\n(Op)(Mod)Mod:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
             printf("%u ", Temp1[Idx]);
         printf("\n---------------------------------------------------------\n");
@@ -898,8 +846,8 @@ void Test_CflintFuncSet8(void)
     #define TEST_FUNCTIONSET8_LENGTH     2
     Cflint_Type Op[TEST_FUNCTIONSET8_LENGTH * 2] = {0};
     Cflint_Type Ret[TEST_FUNCTIONSET8_LENGTH * 2] = {0};
-    Cflint_Type Module1[TEST_FUNCTIONSET8_LENGTH] = {0};
-    Cflint_Type Module2[TEST_FUNCTIONSET8_LENGTH] = {0};
+    Cflint_Type Mod1[TEST_FUNCTIONSET8_LENGTH] = {0};
+    Cflint_Type Mod2[TEST_FUNCTIONSET8_LENGTH] = {0};
     /* 开辟出来的用于解算结果正确性的空间,本身无用 */
     Cflint_Type Temp0[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
     Cflint_Type Temp1[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
@@ -911,27 +859,19 @@ void Test_CflintFuncSet8(void)
     /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
     /*************************************************************************/
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-        Module1[Idx] = 1;
-    //Module1[1] = 0;
+        Mod1[Idx] = 1;
+    //Mod1[1] = 0;
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-        Module2[Idx] = 1;
-    Module2[0] = 7;
+        Mod2[Idx] = 1;
+    Mod2[0] = 7;
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         Op[Idx] = 0;
     /*************************************************************************/
-    Cflint_Mult(Temp0, Module1, Module2, TEST_FUNCTIONSET8_LENGTH);
+    Cflint_Mult(Temp0, Mod1, Mod2, TEST_FUNCTIONSET8_LENGTH);
     /*************************************************************************/
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        bool Ret = Cflint_GCDCheck(Module1, Module2, Temp,
-                                      TEST_FUNCTIONSET8_LENGTH);
-        printf("\n---------------------------------------------------------\n");
-        printf("Cflint_GCDCheck:::%d", Ret);
-        printf("\n-----------------------------------------------------------");
-    }
+    printf("\n---------------------------------------------------------\n");
+    printf("Cflint_GCDCheck:::%d", Cflint_GCDCheck(Mod1, Mod2, TEST_FUNCTIONSET8_LENGTH));
+    printf("\n-----------------------------------------------------------");
     /*************************************************************************/
 #if 0
     /*************************************************************************/
@@ -959,7 +899,7 @@ void Test_CflintFuncSet8(void)
                                  Temp11, Temp12, Temp13};
         /* 二次剩余计算:((Ret**2) % (Op_2 * Op3) ==  */
         /*               (Op_1)  % (Op_2 * Op3))    */
-        Ret1 = Cflint_Modulo1Root2(Op, Module1, Module2, Ret,
+        Ret1 = Cflint_Modulo1Root2(Op, Mod1, Mod2, Ret,
                                       Temp, TEST_FUNCTIONSET8_LENGTH);
     }
     printf("\n-------------------------------------------------------------\n");
@@ -968,11 +908,11 @@ void Test_CflintFuncSet8(void)
     printf("\nRet:%d", Ret1);
     printf("\nModule1:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-        printf("%u ", Module1[Idx]);
+        printf("%u ", Mod1[Idx]);
     printf("\nModule2:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-        printf("%u ", Module2[Idx]);
-    printf("\nModule1*Module2:");
+        printf("%u ", Mod2[Idx]);
+    printf("\nModule1*Mod2:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Temp0[Idx]);
     printf("\nRet:");
@@ -982,32 +922,32 @@ void Test_CflintFuncSet8(void)
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Op[Idx]);
     /*************************************************************************/
-    Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
-    Cflint_Copy(Temp2, Module1, TEST_FUNCTIONSET8_LENGTH);
+    Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
+    Cflint_Copy(Temp2, Mod1, TEST_FUNCTIONSET8_LENGTH);
     Cflint_Mod(Temp1, Op, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-    printf("\n(Op)(Mod)(Module1):");
+    printf("\n(Op)(Mod)(Mod1):");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Temp1[Idx]);
     /*************************************************************************/
-    Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
-    Cflint_Copy(Temp2, Module2, TEST_FUNCTIONSET8_LENGTH);
+    Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
+    Cflint_Copy(Temp2, Mod2, TEST_FUNCTIONSET8_LENGTH);
     Cflint_Mod(Temp1, Op, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-    printf("\n(Op)(Mod)(Module2):");
+    printf("\n(Op)(Mod)(Mod2):");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Temp1[Idx]);
     /*************************************************************************/
     Cflint_Square(Temp1, Ret, TEST_FUNCTIONSET8_LENGTH * 2);
-    Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
+    Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
     Cflint_Copy(Temp2, Temp0, TEST_FUNCTIONSET8_LENGTH * 2);
     Cflint_Mod(Temp1, Temp1, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-    printf("\n(Ret**2)(Mod)(Module1 * Module2):");
+    printf("\n(Ret**2)(Mod)(Mod1 * Mod2):");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Temp1[Idx]);
     /*************************************************************************/
-    Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
+    Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
     Cflint_Copy(Temp2, Op, TEST_FUNCTIONSET8_LENGTH);
     Cflint_Mod(Temp1, Temp2, Temp0, TEST_FUNCTIONSET8_LENGTH * 2);
-    printf("\n(Op)(Mod)(Module1 * Module2):");
+    printf("\n(Op)(Mod)(Mod1 * Mod2):");
     for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
         printf("%u ", Temp1[Idx]);
     printf("\n---------------------------------------------------------\n");
@@ -1017,7 +957,7 @@ void Test_CflintFuncSet8(void)
     while (1) {
         Cflint_AddBit(Op, TEST_FUNCTIONSET8_LENGTH * 2, 1);
         /*********************************************************************/
-        if (Cflint_Compare(Op, Temp0, TEST_FUNCTIONSET8_LENGTH * 2) == 1)
+        if (Cflint_Cmp(Op, Temp0, TEST_FUNCTIONSET8_LENGTH * 2) == 1)
             break;
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
@@ -1040,7 +980,7 @@ void Test_CflintFuncSet8(void)
                                      Temp11, Temp12, Temp13};
             /* 二次剩余计算:((Ret**2) % (Op_2 * Op3) ==  */
             /*               (Op_1)  % (Op_2 * Op3))    */
-            Ret1 = Cflint_Modulo1Root2(Op, Module1, Module2, Ret,
+            Ret1 = Cflint_Modulo1Root2(Op, Mod1, Mod2, Ret,
                                           Temp, TEST_FUNCTIONSET8_LENGTH);
             {
                 static uint32_t count = 0;
@@ -1062,11 +1002,11 @@ void Test_CflintFuncSet8(void)
         printf("\n-----------------------------------------------------------");
         printf("\nModule1:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-            printf("%u ", Module1[Idx]);
+            printf("%u ", Mod1[Idx]);
         printf("\nModule2:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
-            printf("%u ", Module2[Idx]);
-        printf("\nModule1*Module2:");
+            printf("%u ", Mod2[Idx]);
+        printf("\nModule1*Mod2:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Temp0[Idx]);
         printf("\nRet:");
@@ -1076,32 +1016,32 @@ void Test_CflintFuncSet8(void)
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Op[Idx]);
         /*********************************************************************/
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
-        Cflint_Copy(Temp2, Module1, TEST_FUNCTIONSET8_LENGTH);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
+        Cflint_Copy(Temp2, Mod1, TEST_FUNCTIONSET8_LENGTH);
         Cflint_Mod(Temp1, Op, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-        printf("\n(Op)(Mod)(Module1):");
+        printf("\n(Op)(Mod)(Mod1):");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Temp1[Idx]);
         /*********************************************************************/
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
-        Cflint_Copy(Temp2, Module2, TEST_FUNCTIONSET8_LENGTH);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 2, 0);
+        Cflint_Copy(Temp2, Mod2, TEST_FUNCTIONSET8_LENGTH);
         Cflint_Mod(Temp1, Op, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-        printf("\n(Op)(Mod)(Module2):");
+        printf("\n(Op)(Mod)(Mod2):");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Temp1[Idx]);
         /*********************************************************************/
         Cflint_Square(Temp1, Ret, TEST_FUNCTIONSET8_LENGTH * 2);
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
         Cflint_Copy(Temp2, Temp0, TEST_FUNCTIONSET8_LENGTH * 2);
         Cflint_Mod(Temp1, Temp1, Temp2, TEST_FUNCTIONSET8_LENGTH * 2);
-        printf("\n(Ret**2)(Mod)(Module1 * Module2):");
+        printf("\n(Ret**2)(Mod)(Mod1 * Mod2):");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Temp1[Idx]);
         /*********************************************************************/
-        Cflint_SetValue(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
+        Cflint_ValSet(Temp2, TEST_FUNCTIONSET8_LENGTH * 4, 0);
         Cflint_Copy(Temp2, Op, TEST_FUNCTIONSET8_LENGTH * 2);
         Cflint_Mod(Temp1, Temp2, Temp0, TEST_FUNCTIONSET8_LENGTH * 2);
-        printf("\n(Op)(Mod)(Module1 * Module2):");
+        printf("\n(Op)(Mod)(Mod1 * Mod2):");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH * 2; Idx++)
             printf("%u ", Temp1[Idx]);
         printf("\n---------------------------------------------------------\n");
@@ -1198,25 +1138,25 @@ void Test_Mentgomery(void)
     /*************************************************************************/
     /* 特例:除数为0检查 */
     if (Cflint_IsZero(N, TEST_MENTGOMERY_LENGTH) == true) {
-        Cflint_SetValue(Ret, TEST_MENTGOMERY_LENGTH, 0);
+        Cflint_ValSet(Ret, TEST_MENTGOMERY_LENGTH, 0);
         return;
     }
     /* 计算R_Index */
     int64_t R_Index = Cflint_Nums2(N, TEST_MENTGOMERY_LENGTH) + 1;
     /* 一个数的0次幂为1 */
     if (R_Index == 0) {
-        Cflint_SetValue(Ret, TEST_MENTGOMERY_LENGTH, 0);
+        Cflint_ValSet(Ret, TEST_MENTGOMERY_LENGTH, 0);
         Cflint_AddBit(Ret, TEST_MENTGOMERY_LENGTH, 1);
         return;
     }
     /* 生成R */
-    Cflint_SetValue(R, TEST_MENTGOMERY_LENGTH * 2, 0);
+    Cflint_ValSet(R, TEST_MENTGOMERY_LENGTH * 2, 0);
     Cflint_AddBit(R, TEST_MENTGOMERY_LENGTH * 2, 1);
     Cflint_ShiftL2(R, TEST_MENTGOMERY_LENGTH * 2, R_Index);
     /* 检查GCD(R,N) == 1 */
     if (Cflint_GCDCheck(R, N, Temp1, Temp2, Temp3,
                         TEST_MENTGOMERY_LENGTH * 2) == false) {
-        Cflint_SetValue(Ret, TEST_MENTGOMERY_LENGTH, 0);
+        Cflint_ValSet(Ret, TEST_MENTGOMERY_LENGTH, 0);
         return;
     }
     /* 4.计算RR' + NN' = GCD(R,N) == 1 */
@@ -1233,7 +1173,7 @@ void Test_Mentgomery(void)
     Cflint_Mod(RR_N, Temp2, N, TEST_MENTGOMERY_LENGTH * 2);
     /* 验算预先量 */
     /*************************************************************************/
-    Cflint_SetValue(Temp1, (TEST_MENTGOMERY_LENGTH + 1) * 2, 0);
+    Cflint_ValSet(Temp1, (TEST_MENTGOMERY_LENGTH + 1) * 2, 0);
     Cflint_Copy(Temp1, R, TEST_MENTGOMERY_LENGTH);
     Cflint_Mult(Temp2, Temp1, RP, (TEST_MENTGOMERY_LENGTH + 1) * 2);
     Cflint_Copy(Temp1, N, TEST_MENTGOMERY_LENGTH);
@@ -1268,7 +1208,7 @@ void Test_Mentgomery(void)
     /* 蒙哥马利约减X%N = REDC((X*R)%N) */
     /*************************************************************************/
     Cflint_Mult(Temp1, X, R, TEST_MENTGOMERY_LENGTH);
-    Cflint_SetValue(Temp2, TEST_MENTGOMERY_LENGTH * 2, 0);
+    Cflint_ValSet(Temp2, TEST_MENTGOMERY_LENGTH * 2, 0);
     Cflint_Mod(Temp1, Temp1, N, TEST_MENTGOMERY_LENGTH * 2);
     Cflint_M_ModuloReduction(Ret, TEST_MENTGOMERY_LENGTH, R_Index,
                              Temp1, N, NP, Temp2, Temp3);
@@ -1313,6 +1253,7 @@ void Test_Mentgomery(void)
 }
 
 /* 测试椭圆曲线(未完成,测试未通过) */
+#if 0
 void Test_ECC(void)
 {
     Cflint_Type RNGTest[Ecc_Curve_Size1];
@@ -1344,6 +1285,7 @@ void Test_ECC(void)
     printf("\n-------------------------------------------------------------\n");
     /*************************************************************************/
 }
+#endif
 
 void Test_CflintFunc(void)
 {

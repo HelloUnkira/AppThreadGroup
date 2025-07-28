@@ -1,6 +1,8 @@
 
 #include "Cflint.h"
 
+#if 0
+
 #define Ecc_NativeToBytes(Bytes, Natives, Len) \
         Cflint_Native4ToBytes((uint8_t *)(Bytes), (Natives), (Len))
 #define Ecc_BytesToNative(Bytes, Natives, Len) \
@@ -174,7 +176,7 @@ static void EccPoint_DoubleInit(Cflint_Type *X1, Cflint_Type *Y1,
     if (Zi != NULL)
         Cflint_Copy(Z, Zi, Ecc_Curve_Size1);
     if (Zi == NULL) {
-        Cflint_SetValue(Z, Ecc_Curve_Size1, 0);
+        Cflint_ValSet(Z, Ecc_Curve_Size1, 0);
         Cflint_AddBit(Z, Ecc_Curve_Size1, 1);
     }
     /* (X2, Y2) = (X1, Y1) */
@@ -387,7 +389,7 @@ static bool Ecc_ComputeKey(EccPoint *Public, Cflint_Type *Private)
     Cflint_Type  Ow = 0;
     uint32_t     Len = Cflint_Bits * Ecc_Curve_Size1 + 1;
     
-    if (Cflint_Compare(Curve_N, Private, Ecc_Curve_Size1) != 1)
+    if (Cflint_Cmp(Curve_N, Private, Ecc_Curve_Size1) != 1)
         return false;
     
     Ow = 
@@ -474,9 +476,9 @@ bool Ecc_ValidKey(Cflint_Type PublicKey[Ecc_Curve_Size1 * 2])
     
     if (EccPoint_IsZero(&Public) == true)
         return false;
-    if (Cflint_Compare(Curve_P, Public.X, Ecc_Curve_Size1) != 1)
+    if (Cflint_Cmp(Curve_P, Public.X, Ecc_Curve_Size1) != 1)
         return false;
-    if (Cflint_Compare(Curve_P, Public.Y, Ecc_Curve_Size1) != 1)
+    if (Cflint_Cmp(Curve_P, Public.Y, Ecc_Curve_Size1) != 1)
         return false;
     
     Cflint_ModSquare(Temp_1, Curve_P, Public.Y, TT, Ecc_Curve_Size1);
@@ -485,3 +487,4 @@ bool Ecc_ValidKey(Cflint_Type PublicKey[Ecc_Curve_Size1 * 2])
     return Cflint_Equal(Temp_1, Temp2, Ecc_Curve_Size1);
 }
 
+#endif

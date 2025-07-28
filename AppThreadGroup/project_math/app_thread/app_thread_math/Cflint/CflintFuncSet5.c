@@ -32,7 +32,7 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
             181, 191, 193, 197, 199, 211, 223, 227, 229, 233,
         };
         for (uint32_t Idx = 0; Idx < SizerLength; Idx++) {
-            Cflint_SetValue(A, Len, 0);
+            Cflint_ValSet(A, Len, 0);
             /* 设置除数 */
 #if 0
 #elif Cflint_Byte == 1
@@ -76,7 +76,7 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
             Bit2_K++;
         }
         /* 初始测试:R = A ^ D Mod X */
-        Cflint_ModExp(R, X, A, E, TT, Len);
+        Cflint_ModExp(R, X, A, E, Len);
         /* 检查模是否为 X - 1 */
         Cflint_AddBit(R, Len, 1);
         if (Cflint_Equal(R, X, Len))
@@ -90,7 +90,7 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
         /* 循环测试:R = R ^ 2 Mod X */
         for (uint32_t Idx1 = 0; Idx1 < Bit2_K; Idx1++) {
             Cflint_Copy(A, R, Len);
-            Cflint_ModSquare(R, X, A, TT, Len);
+            Cflint_ModSquare(R, X, A, Len);
             /* 检查模是否为 X - 1 */
             Cflint_AddBit(R, Len, 1);
             if (Cflint_Equal(R, X, Len)) {
@@ -126,9 +126,9 @@ uint32_t Cflint_RandomPrime(Cflint_Type *X, Cflint_Type *Temp[7],
             Cflint_Add(X, Min, Temp[1], Len);
             if (Cflint_IsEven(X, Len))
                 Cflint_AddBit(X, Len, 1);
-            if (Cflint_Compare(X, Max, Len) == +1)
+            if (Cflint_Cmp(X, Max, Len) == +1)
                 Cflint_SubBit(X, Len, 2);
-            if (Cflint_Compare(X, Min, Len) == -1)
+            if (Cflint_Cmp(X, Min, Len) == -1)
                 return 0;
         }
         
@@ -142,29 +142,29 @@ uint32_t Cflint_RandomPrime(Cflint_Type *X, Cflint_Type *Temp[7],
 bool Cflint_IsPrime1(Cflint_Type *X, Cflint_Type *Temp[3], uint32_t Len)
 {
     /* 固有开销 */
-    Cflint_Type *Module   = Temp[1];
+    Cflint_Type *Mod   = Temp[1];
     Cflint_Type *Divisor  = Temp[2];
     /* 单独检查:2, 3 */
-    Cflint_SetValue(Module, Len, 0);
+    Cflint_ValSet(Mod, Len, 0);
     /* 单独检查:生成2,匹配2 */
-    Module[0] = 2;
-    if(Cflint_Equal(X, Module, Len))
+    Mod[0] = 2;
+    if(Cflint_Equal(X, Mod, Len))
         return true;
     /* 单独检查:生成3,匹配3 */
-    Module[0] = 3;
-    if(Cflint_Equal(X, Module, Len))
+    Mod[0] = 3;
+    if(Cflint_Equal(X, Mod, Len))
         return true;
-    /* 解算:Module = X % 6 */
-    Cflint_SetValue(Divisor, Len, 0);
+    /* 解算:Mod = X % 6 */
+    Cflint_ValSet(Divisor, Len, 0);
     Divisor[0] = 6;
-    Cflint_Mod(Module, X, Divisor, Len);
+    Cflint_Mod(Mod, X, Divisor, Len);
     /* 验证是否为孪生素数1:(6 * N - 1) % 6 = 5 */
     Divisor[0] = 5;
-    if(Cflint_Equal(Divisor, Module, Len))
+    if(Cflint_Equal(Divisor, Mod, Len))
         return true;
     /* 验证是否为孪生素数2:(6 * N + 1) % 6 = 1 */
     Divisor[0] = 1;
-    if(Cflint_Equal(Divisor, Module, Len))
+    if(Cflint_Equal(Divisor, Mod, Len))
         return true;
     return false;
 }

@@ -8,7 +8,7 @@ void Cflint_Swap(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
 void Cflint_Copy(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
 
 /* 比较:((>:1);(==:0);(<:-1)) */
-int8_t Cflint_Compare(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
+int8_t Cflint_Cmp(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
 
 /* 相等判断:((==:1);(!=:0)) */
 bool Cflint_Equal(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
@@ -17,7 +17,7 @@ bool Cflint_Equal(Cflint_Type *Op_0, Cflint_Type *Op_1, uint32_t Len);
 bool Cflint_IsZero(Cflint_Type *Op, uint32_t Len);
 
 /* 设值:类似memset */
-void Cflint_SetValue(Cflint_Type *Op, uint32_t Len, Cflint_Type Val);
+void Cflint_ValSet(Cflint_Type *Op, uint32_t Len, Cflint_Type Val);
 
 /* 检查一个数是否为2的幂次方 */
 bool Cflint_IsExp2(Cflint_Type *Op, uint32_t Len);
@@ -88,9 +88,9 @@ void Cflint_NativeToOp(Cflint_Type *Op, uint32_t Len, uint8_t Type);
 
 /* Native Num数组转为逆Native Hex数组(Bytes) */
 /* 可作为十进制数组生成操作数的前置接口 */
-void Cflint_NumToHex(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[2], uint32_t Len);
+void Cflint_NumToHex(uint8_t *Hex, uint8_t *Num, uint32_t Len);
 
 /* 待定 */
-void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint8_t *Temp[2], uint32_t Len);
+void Cflint_HexToNum(uint8_t *Hex, uint8_t *Num, uint32_t Len);
 
 #endif

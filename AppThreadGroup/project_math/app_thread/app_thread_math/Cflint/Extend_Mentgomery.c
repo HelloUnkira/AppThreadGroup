@@ -17,7 +17,7 @@ void Mentgomery_ModuloReduction(Cflint_Type *Ret, uint32_t Len, int64_t R,
     Cflint_Add(Temp1, X, Temp2, Len * 2);
     Cflint_ShiftR2(Temp1, Len * 2, R);
     /* 3.y > N, y -= N */
-    if (Cflint_Compare(Temp1, N, Len) == 1)
+    if (Cflint_Cmp(Temp1, N, Len) == 1)
         Cflint_Sub(Temp1, Temp1, N, Len);
     /* 4.拷贝结果即可 */
     Cflint_Copy(Ret, Temp1, Len);

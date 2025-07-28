@@ -15,6 +15,13 @@
 /* 大数数组数据布局: */
 /* [Low][......][High] */
 
+typedef enum {
+    Cflint_FPos = 0,
+    Cflint_FNeg,
+} Cflint_Flag;
+
+#define Cflint_FInv(Flag)   ((Flag) == Cflint_FNeg ? Cflint_FPos : Cflint_FNeg)
+
 /* 数据类型相关的部分 */
 #define CFLINT_ByteLH       0x0000FFFF      /* 平台字:低半字0,高半字1 */
 #define CFLINT_ByteH1       0x80000000      /* 平台字:最高位为1 */
