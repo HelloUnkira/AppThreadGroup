@@ -497,27 +497,15 @@ void Test_CflintFuncSet5(void)
     
     /*************************************************************************/
     /* 素数判别检查 */
-    {
-        Cflint_Type Ret[TEST_FUNCTIONSET5_LENGTH] = {1, 0, 1};
-        Cflint_Type  Temp1[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        Check = Cflint_IsPrime1(Ret, Temp, TEST_FUNCTIONSET5_LENGTH);
-    }
+    Cflint_Type Val_1[TEST_FUNCTIONSET5_LENGTH] = {1, 0, 1};
+    Check = Cflint_IsPrime1(Val_1, TEST_FUNCTIONSET5_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_IsPrime1:::%d", Check);
     printf("\n---------------------------------------------------------------");
     /*************************************************************************/
     /* 素数判别检查 */
-    {
-        Cflint_Type Ret[TEST_FUNCTIONSET5_LENGTH] = {1, 1, 1};
-        Cflint_Type  Temp1[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET5_LENGTH] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        Check = Cflint_IsPrime1(Ret, Temp, TEST_FUNCTIONSET5_LENGTH);
-    }
+    Cflint_Type Val_2[TEST_FUNCTIONSET5_LENGTH] = {1, 1, 1};
+    Check = Cflint_IsPrime1(Val_2, TEST_FUNCTIONSET5_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_IsPrime1:::%d", Check);
     printf("\n---------------------------------------------------------------");
@@ -631,16 +619,9 @@ void Test_CflintFuncSet6(void)
         Op[Idx] = TEST_FUNCTIONSET6_LENGTH - Idx;
     /*************************************************************************/
     /* 2次方根整数部运算 */
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp4[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type *Temp[4] = {Temp1, Temp2, Temp3, Temp4};
-        Cflint_Root2Integer(Ret, Op, Temp, TEST_FUNCTIONSET6_LENGTH);
-    }
+    Cflint_Root2Int(Ret, Op, TEST_FUNCTIONSET6_LENGTH);
     printf("\n-------------------------------------------------------------\n");
-    printf("Cflint_Root2Integer:::");
+    printf("Cflint_Root2Int:::");
     printf("\n---------------------------------------------------------------");
     printf("\nRet:");
     for (Idx = 0; Idx < TEST_FUNCTIONSET6_LENGTH; Idx++)
@@ -658,15 +639,7 @@ void Test_CflintFuncSet6(void)
     Op[0] = 1;
     Op[1] = 2;
     /*************************************************************************/
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET6_LENGTH * 2] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp4[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type *Temp[4] = {Temp1, Temp2, Temp3, Temp4};
-        Ret1 = Cflint_Root2Check(Ret, Op, Temp,
-                                    TEST_FUNCTIONSET6_LENGTH);
-    }
+    Ret1 = Cflint_Root2Check(Ret, Op, TEST_FUNCTIONSET6_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_Root2Check:::");
     printf("\n---------------------------------------------------------------");
@@ -682,17 +655,11 @@ void Test_CflintFuncSet6(void)
     
     /* 符号Jacobi(Op_1/Op_2)计算 */
     /*************************************************************************/
-    Ret[0]  = 2;
+    Ret[0] = 2;
     Op[0] = 7;
     /*************************************************************************/
     /* 符号Jacobi(Op_1/Op_2)计算 */
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET6_LENGTH] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        Ret1 = Cflint_JacobiFlag(Ret, Op, Temp, 1);
-    }
+    Ret1 = Cflint_JacobiFlag(Ret, Op, 1);
     printf("\n-------------------------------------------------------------\n");
     printf("Jacobi(%d/%d):Ret:%d",Ret[0], Op[0], Ret1);
     printf("\n-------------------------------------------------------------\n");
@@ -726,27 +693,11 @@ void Test_CflintFuncSet7(void)
             break;
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-        {
-            Cflint_Type  Temp1[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp2[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp3[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp4[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp5[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp6[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp7[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp8[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp9[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp10[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type *Temp[10] = {Temp1, Temp2, Temp3, Temp4, Temp5,
-                                     Temp6, Temp7, Temp8, Temp9, Temp10};
-            /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-            Ret1 = Cflint_ModuloP1Root2(Op, Mod, Ret,
-                                           Temp, TEST_FUNCTIONSET7_LENGTH);
-            if (Ret1 == 0)
-                continue;
-        }
+        Ret1 = Cflint_ModP1Root2(Op, Mod, Ret, TEST_FUNCTIONSET7_LENGTH);
+        if (Ret1 == 0)
+            continue;
         printf("\n---------------------------------------------------------\n");
-        printf("Cflint_ModuloP1Root2:::");
+        printf("Cflint_ModP1Root2:::");
         printf("\n-----------------------------------------------------------");
         printf("\nModule:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
@@ -790,27 +741,11 @@ void Test_CflintFuncSet7(void)
             break;
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-        {
-            Cflint_Type  Temp1[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp2[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp3[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp4[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp5[TEST_FUNCTIONSET7_LENGTH] = {0};
-            Cflint_Type  Temp6[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp7[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp8[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp9[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type  Temp10[TEST_FUNCTIONSET7_LENGTH * 2] = {0};
-            Cflint_Type *Temp[10] = {Temp1, Temp2, Temp3, Temp4, Temp5,
-                                     Temp6, Temp7, Temp8, Temp9, Temp10};
-            /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-            Ret1 = Cflint_ModuloP1Root2(Op, Mod, Ret,
-                                           Temp, TEST_FUNCTIONSET7_LENGTH);
-            if (Ret1 == 0)
-                continue;
-        }
+        Ret1 = Cflint_ModP1Root2(Op, Mod, Ret, TEST_FUNCTIONSET7_LENGTH);
+        if (Ret1 == 0)
+            continue;
         printf("\n---------------------------------------------------------\n");
-        printf("Cflint_ModuloP1Root2:::");
+        printf("Cflint_ModP1Root2:::");
         printf("\n-----------------------------------------------------------");
         printf("\nModule:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET7_LENGTH; Idx++)
@@ -879,31 +814,10 @@ void Test_CflintFuncSet8(void)
         Op[0] = 1;Op[1] = 1;Op[2] = 1;Op[3] = 1;
     }
     /*************************************************************************/
-    /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
-    {
-        Cflint_Type  Temp1[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET8_LENGTH] = {0};
-        Cflint_Type  Temp4[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp5[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp6[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp7[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp8[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp9[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp10[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp11[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-        Cflint_Type  Temp12[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
-        Cflint_Type  Temp13[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
-        Cflint_Type *Temp[13] = {Temp1,  Temp2,  Temp3, Temp4, Temp5,
-                                 Temp6,  Temp7,  Temp8, Temp9, Temp10,
-                                 Temp11, Temp12, Temp13};
-        /* 二次剩余计算:((Ret**2) % (Op_2 * Op3) ==  */
-        /*               (Op_1)  % (Op_2 * Op3))    */
-        Ret1 = Cflint_Modulo1Root2(Op, Mod1, Mod2, Ret,
-                                      Temp, TEST_FUNCTIONSET8_LENGTH);
-    }
+    /* 二次剩余计算:((Root**2) % (Op_2 * Op3) ==  (Op_1)  % (Op_2 * Op3))    */
+    Ret1 = Cflint_Mod1Root2(Op, Mod1, Mod2, Ret, TEST_FUNCTIONSET8_LENGTH);
     printf("\n-------------------------------------------------------------\n");
-    printf("Cflint_Modulo1Root2:::");
+    printf("Cflint_Mod1Root2:::");
     printf("\n---------------------------------------------------------------");
     printf("\nRet:%d", Ret1);
     printf("\nModule1:");
@@ -962,26 +876,8 @@ void Test_CflintFuncSet8(void)
         /*********************************************************************/
         /* 二次剩余计算:((Ret**2) % Op_2 == Op_1 % Op_2) */
         {
-            Cflint_Type  Temp1[TEST_FUNCTIONSET8_LENGTH] = {0};
-            Cflint_Type  Temp2[TEST_FUNCTIONSET8_LENGTH] = {0};
-            Cflint_Type  Temp3[TEST_FUNCTIONSET8_LENGTH] = {0};
-            Cflint_Type  Temp4[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp5[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp6[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp7[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp8[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp9[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp10[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp11[(TEST_FUNCTIONSET8_LENGTH + 1) * 2] = {0};
-            Cflint_Type  Temp12[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
-            Cflint_Type  Temp13[TEST_FUNCTIONSET8_LENGTH * 4] = {0};
-            Cflint_Type *Temp[13] = {Temp1,  Temp2,  Temp3, Temp4, Temp5,
-                                     Temp6,  Temp7,  Temp8, Temp9, Temp10,
-                                     Temp11, Temp12, Temp13};
-            /* 二次剩余计算:((Ret**2) % (Op_2 * Op3) ==  */
-            /*               (Op_1)  % (Op_2 * Op3))    */
-            Ret1 = Cflint_Modulo1Root2(Op, Mod1, Mod2, Ret,
-                                          Temp, TEST_FUNCTIONSET8_LENGTH);
+            /* 二次剩余计算:((Root**2) % (Op_2 * Op3) == (Op_1) % (Op_2 * Op3)) */
+            Ret1 = Cflint_Mod1Root2(Op, Mod1, Mod2, Ret, TEST_FUNCTIONSET8_LENGTH);
             {
                 static uint32_t count = 0;
                 /* 事实上很难找 */
@@ -998,7 +894,7 @@ void Test_CflintFuncSet8(void)
                 continue;
         }
         printf("\n---------------------------------------------------------\n");
-        printf("Cflint_Modulo1Root2:::");
+        printf("Cflint_Mod1Root2:::");
         printf("\n-----------------------------------------------------------");
         printf("\nModule1:");
         for (Idx = 0; Idx < TEST_FUNCTIONSET8_LENGTH; Idx++)
@@ -1063,12 +959,8 @@ void Test_CflintFuncSet9(void)
     {
         Cflint_Type Ret1[3] = {1, 0, 1};
         Cflint_Type Ret2[3] = {7, 1, 1};
-        Cflint_Type  Temp1[3] = {0};
-        Cflint_Type  Temp2[3] = {0};
-        Cflint_Type  Temp3[3] = {0};
-        Cflint_Type *Temp[3] = {Temp1, Temp2, Temp3};
-        bool Check1 = Cflint_IsPrime1(Ret1, Temp, 3);
-        bool Check2 = Cflint_IsPrime1(Ret2, Temp, 3);
+        bool Check1 = Cflint_IsPrime1(Ret1, 3);
+        bool Check2 = Cflint_IsPrime1(Ret2, 3);
         printf("\n---------------------------------------------------------\n");
         printf("Cflint_IsPrime1:::%d\n", Check1);
         printf("Cflint_IsPrime1:::%d\n", Check2);
@@ -1080,18 +972,8 @@ void Test_CflintFuncSet9(void)
         //!当前素数查找算法效率低下
         //!问题1:随机数不够随机,不适用素数生成
         //!问题2:内部基础算法速度过慢
-        Cflint_Type  Temp1[TEST_FUNCTIONSET9_LENGTH] = {0};
-        Cflint_Type  Temp2[TEST_FUNCTIONSET9_LENGTH] = {0};
-        Cflint_Type  Temp3[TEST_FUNCTIONSET9_LENGTH] = {0};
-        Cflint_Type  Temp4[TEST_FUNCTIONSET9_LENGTH * 2] = {0};
-        Cflint_Type  Temp5[TEST_FUNCTIONSET9_LENGTH * 2] = {0};
-        Cflint_Type  Temp6[TEST_FUNCTIONSET9_LENGTH * 2] = {0};
-        Cflint_Type  Temp7[TEST_FUNCTIONSET9_LENGTH * 2] = {0};
-        Cflint_Type *Temp[7] = {Temp1, Temp2, Temp3, Temp4,
-                                Temp5, Temp6, Temp7,};
         uint32_t Check = 0;
-        Check = Cflint_RandomPrime(Ret, Temp, Min, Max,
-                                   TEST_FUNCTIONSET9_LENGTH,
+        Check = Cflint_RandomPrime(Ret, Min, Max, TEST_FUNCTIONSET9_LENGTH,
                                    Test_MakeRandom, ~0);
         printf("\n---------------------------------------------------------\n");
         printf("Cflint_RandomPrime:::%u\n", Check);
@@ -1210,8 +1092,7 @@ void Test_Mentgomery(void)
     Cflint_Mult(Temp1, X, R, TEST_MENTGOMERY_LENGTH);
     Cflint_ValSet(Temp2, TEST_MENTGOMERY_LENGTH * 2, 0);
     Cflint_Mod(Temp1, Temp1, N, TEST_MENTGOMERY_LENGTH * 2);
-    Cflint_M_ModuloReduction(Ret, TEST_MENTGOMERY_LENGTH, R_Index,
-                             Temp1, N, NP, Temp2, Temp3);
+    Cflint_M_ModuloReduction(Ret, TEST_MENTGOMERY_LENGTH, R_Index, N, NP);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_M_ModuloReduction:::");
     printf("\n---------------------------------------------------------------");
@@ -1229,9 +1110,7 @@ void Test_Mentgomery(void)
     
     /* 蒙哥马利模乘 */
     /*************************************************************************/
-    Cflint_M_ModuloMultiply(Ret, X, Y, N, NP, RR_N,
-                            Temp1, Temp2, Temp3, Temp4,
-                            R_Index, TEST_MENTGOMERY_LENGTH);
+    Cflint_M_ModuloMultiply(Ret, X, Y, N, NP, RR_N, R_Index, TEST_MENTGOMERY_LENGTH);
     printf("\n-------------------------------------------------------------\n");
     printf("Cflint_M_ModuloMultiply:::");
     printf("\n---------------------------------------------------------------");

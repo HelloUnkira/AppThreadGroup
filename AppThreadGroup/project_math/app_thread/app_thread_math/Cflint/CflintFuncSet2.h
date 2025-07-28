@@ -40,7 +40,7 @@ void Cflint_ModMult(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op_0, Cflin
 /* 模方运算:Ret = (Op * Op) % Mod */
 void Cflint_ModSquare(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op, uint32_t Len);
 
-/* 模幂运算:Ret = (Op**Exponent) % Mod */
+/* 模幂运算:Ret = (Op**Exp) % Mod */
 void Cflint_ModExp(Cflint_Type *Ret, Cflint_Type *Mod, Cflint_Type *Op, Cflint_Type *Exp, uint32_t Len);
 
 /* 模逆运算: Ret = (1 / Op) % Mod */

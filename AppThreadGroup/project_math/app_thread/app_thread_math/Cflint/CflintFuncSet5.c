@@ -1,9 +1,8 @@
 
 #include "Cflint.h"
 
-/* 大随机数生成 */
-void Cflint_Random(Cflint_Type  *Op, uint32_t Len,
-                   Cflint_Type (*Random)(void))
+/* 大随机数生成(注意初始化回调的随机状态情况) */
+void Cflint_Random(Cflint_Type *Op, uint32_t Len, Cflint_Type (*Random)(void))
 {
     /* 这里直接以最简单的方式生成即可,但要逆向生成 */
     /* 因为随机数的目标是每一个bit位都随机 */
@@ -13,13 +12,13 @@ void Cflint_Random(Cflint_Type  *Op, uint32_t Len,
 }
 
 /* 强素数判别检查(Miller_Rabin测试) */
-bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
-                    Cflint_Type (*Random)(void), bool Weak)
+bool Cflint_IsPrime(Cflint_Type *X, uint32_t Len, Cflint_Type (*Random)(void), bool Weak)
 {
-    Cflint_Type  *A  = Temp[0];
-    Cflint_Type  *R  = Temp[1];
-    Cflint_Type  *E  = Temp[2];
-    Cflint_Type **TT = Temp + 3;   //Temp[3~6]:Len * 2
+    Cflint_Type *A = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *R = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *E = Cflint_Alloc(Cflint_Byte * Len);
+    
+    bool Ret = true;
     /* 小素数筛查 */
     if (Weak) {
         /* 数据量决定了当次小筛选的强度 */
@@ -48,8 +47,10 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
 #endif
             /* 计算模,如果能被整除则未通过当次素性测试 */
             Cflint_Mod(R, X, A, Len);
-            if (Cflint_IsZero(R, Len))
-                return false;
+            if (Cflint_IsZero(R, Len)) {
+                Ret = false;
+                goto over;
+            }
         }
     }
     /* 素数筛查(Miller_Rabin测试) */
@@ -86,7 +87,7 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
         if (Cflint_IsZero(R, Len))
             continue;
         Cflint_AddBit(R, Len, 1);
-        bool BreakLoop = false;
+        bool Loop = false;
         /* 循环测试:R = R ^ 2 Mod X */
         for (uint32_t Idx1 = 0; Idx1 < Bit2_K; Idx1++) {
             Cflint_Copy(A, R, Len);
@@ -94,77 +95,107 @@ bool Cflint_IsPrime(Cflint_Type *X, Cflint_Type *Temp[7], uint32_t Len,
             /* 检查模是否为 X - 1 */
             Cflint_AddBit(R, Len, 1);
             if (Cflint_Equal(R, X, Len)) {
-                BreakLoop = true;
+                Loop = true;
                 break;
             }
             /* 检查模是否为 1 */
             Cflint_SubBit(R, Len, 2);
-            if (Cflint_IsZero(R, Len))
-                return false;
+            if (Cflint_IsZero(R, Len)) {
+                Ret = false;
+                goto over;
+            }
             Cflint_AddBit(R, Len, 1);
         }
-        if (BreakLoop)
+        if (Loop)
             continue;
-        return false;
+        
+        Ret = false;
+        goto over;
     }
-    return true;
+    
+    over:
+    Cflint_Free(A);
+    Cflint_Free(R);
+    Cflint_Free(E);
+    
+    return Ret;
+}
+
+/* 孪生素数判别检查 */
+bool Cflint_IsPrime1(Cflint_Type *X, uint32_t Len)
+{
+    /* 固有开销 */
+    Cflint_Type *Mod = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *Y   = Cflint_Alloc(Cflint_Byte * Len);
+    bool Ret = false;
+    /* 单独检查:2, 3 */
+    Cflint_ValSet(Mod, Len, 0);
+    /* 单独检查:生成2,匹配2 */
+    Mod[0] = 2;
+    if (Cflint_Equal(X, Mod, Len)) {
+        Ret = true; goto over;
+    }
+    /* 单独检查:生成3,匹配3 */
+    Mod[0] = 3;
+    if (Cflint_Equal(X, Mod, Len)) {
+        Ret = true; goto over;
+    }
+    /* 解算:Mod = X % 6 */
+    Cflint_ValSet(Y, Len, 0);
+    Y[0] = 6;
+    Cflint_Mod(Mod, X, Y, Len);
+    /* 验证是否为孪生素数1:(6 * N - 1) % 6 = 5 */
+    Y[0] = 5;
+    if (Cflint_Equal(Y, Mod, Len)) {
+        Ret = true; goto over;
+    }
+    /* 验证是否为孪生素数2:(6 * N + 1) % 6 = 1 */
+    Y[0] = 1;
+    if (Cflint_Equal(Y, Mod, Len)) {
+        Ret = true; goto over;
+    }
+    
+    over:
+    Cflint_Free(Mod);
+    Cflint_Free(Y);
+    
+    return Ret;
 }
 
 /* 指定查找次数,尝试找到一个强素数(Min和Max同时为空则取值范围在全域内) */
-uint32_t Cflint_RandomPrime(Cflint_Type *X, Cflint_Type *Temp[7],
-                            Cflint_Type *Min, Cflint_Type *Max, uint32_t Len,
-                            Cflint_Type (*Random)(void), uint32_t CountMax)
+uint32_t Cflint_RandomPrime(Cflint_Type *X, Cflint_Type *Min, Cflint_Type *Max, uint32_t Len,
+                            Cflint_Type (*Random)(void), uint32_t CntMax)
 {
-    for (uint32_t Count = 0; Count < CountMax; Count++) {
+    Cflint_Type *T_0 = Cflint_Alloc(Cflint_Byte * Len);
+    Cflint_Type *T_1 = Cflint_Alloc(Cflint_Byte * Len);
+    
+    uint32_t CntAll = CntMax;
+    for (uint32_t Cnt = 0; Cnt < CntMax; Cnt++) {
         /* 生成随机数 */
         Cflint_Random(X, Len, Random);
         if (Cflint_IsEven(X, Len))
             Cflint_AddBit(X, Len, 1);
         if (Min != NULL && Max != NULL) {
-            Cflint_Sub(Temp[0], Max, Min, Len);
-            Cflint_Mod(Temp[1], X, Temp[0], Len);
-            Cflint_Add(X, Min, Temp[1], Len);
+            Cflint_Sub(T_0, Max, Min, Len);
+            Cflint_Mod(T_1, X, T_0, Len);
+            Cflint_Add(X, Min, T_1, Len);
             if (Cflint_IsEven(X, Len))
                 Cflint_AddBit(X, Len, 1);
             if (Cflint_Cmp(X, Max, Len) == +1)
                 Cflint_SubBit(X, Len, 2);
-            if (Cflint_Cmp(X, Min, Len) == -1)
-                return 0;
+            if (Cflint_Cmp(X, Min, Len) == -1) {
+                CntAll = 0; goto over;
+            }
         }
         
-        if (Cflint_IsPrime(X, Temp, Len, Random, false))
-            return Count;
+        if (Cflint_IsPrime(X, Len, Random, false)) {
+            CntAll = Cnt; goto over;
+        }
     }
-    return CountMax;
-}
-
-/* 孪生素数判别检查 */
-bool Cflint_IsPrime1(Cflint_Type *X, Cflint_Type *Temp[3], uint32_t Len)
-{
-    /* 固有开销 */
-    Cflint_Type *Mod   = Temp[1];
-    Cflint_Type *Divisor  = Temp[2];
-    /* 单独检查:2, 3 */
-    Cflint_ValSet(Mod, Len, 0);
-    /* 单独检查:生成2,匹配2 */
-    Mod[0] = 2;
-    if(Cflint_Equal(X, Mod, Len))
-        return true;
-    /* 单独检查:生成3,匹配3 */
-    Mod[0] = 3;
-    if(Cflint_Equal(X, Mod, Len))
-        return true;
-    /* 解算:Mod = X % 6 */
-    Cflint_ValSet(Divisor, Len, 0);
-    Divisor[0] = 6;
-    Cflint_Mod(Mod, X, Divisor, Len);
-    /* 验证是否为孪生素数1:(6 * N - 1) % 6 = 5 */
-    Divisor[0] = 5;
-    if(Cflint_Equal(Divisor, Mod, Len))
-        return true;
-    /* 验证是否为孪生素数2:(6 * N + 1) % 6 = 1 */
-    Divisor[0] = 1;
-    if(Cflint_Equal(Divisor, Mod, Len))
-        return true;
-    return false;
+    
+    over:
+    Cflint_Free(T_0);
+    Cflint_Free(T_1);
+    
+    return CntAll;
 }

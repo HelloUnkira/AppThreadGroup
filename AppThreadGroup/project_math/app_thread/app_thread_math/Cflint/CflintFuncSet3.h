@@ -29,7 +29,7 @@ void Cflint_ExtGCD(Cflint_Type *A, Cflint_Type *B, Cflint_Type *GCD,
                    Cflint_Type *Y, Cflint_Flag *Y_Flag,
                    uint32_t Len);
 
-/* 欧几里得乘法逆: Inverse = (1 / A) % N, GCD = GCD(A, N) */
+/* 欧几里得乘法逆: Inv = (1 / A) % N, GCD = GCD(A, N) */
 void Cflint_InvGCD(Cflint_Type *A, Cflint_Type *N, Cflint_Type *Inv, Cflint_Type *GCD, uint32_t Len);
 
 #endif

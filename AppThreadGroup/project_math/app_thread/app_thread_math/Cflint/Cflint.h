@@ -43,8 +43,8 @@ typedef enum {
 #include "CflintFuncSet5.h"         /* 简介:大随机数,素性相关,未完善 */
 
 /* 扩展相关接口 */
-#include "Extend_RSA.h"              /* 这里只提供流程,未提供完全实现 */
+#include "Extend_RSA.h"             /* 这里只提供流程,未提供完全实现 */
 #include "Extend_ECC.h"
-#include "Extend_Mentgomery.h"       /* 蒙哥马利运算相关接口 */
+#include "Cflint_ExtMent.h"         /* 蒙哥马利运算相关接口 */
 
 #endif

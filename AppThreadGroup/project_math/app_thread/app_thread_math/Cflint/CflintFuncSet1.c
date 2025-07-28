@@ -44,6 +44,7 @@ bool Cflint_IsZero(Cflint_Type *Op, uint32_t Len)
     for (uint32_t Idx = 0; Idx < Len; Idx++)
         if (Op[Idx] != 0)
             return false;
+    
     return true;
 }
 
@@ -58,17 +59,15 @@ void Cflint_ValSet(Cflint_Type *Op, uint32_t Len, Cflint_Type Val)
 bool Cflint_IsExp2(Cflint_Type *Op, uint32_t Len)
 {
     uint32_t UnZeroWord = 0;
-    /* 1.每一个字都满足2的幂次方;2.只有一个非0字 */
+    /* 1.每一个字都满足2的幂次方; 2.只有一个非0字 */
     for (uint32_t Idx = 0; Idx < Len; Idx++) {
-        if ((Op[Idx] == 0))
-            continue;
-        if ((Op[Idx] & (Op[Idx] - 1)) != 0)
-            return false;
-        if (UnZeroWord++ != 0)
-            return false;
+        if ((Op[Idx] == 0)) continue;
+        if ((Op[Idx] & (Op[Idx] - 1)) != 0) return false;
+        if (UnZeroWord++ != 0) return false;
     }
     if (UnZeroWord == 1)
         return true;
+    
     return false;
 }
 
@@ -94,29 +93,25 @@ int64_t Cflint_Nums2(Cflint_Type *Op, uint32_t Len)
 /* 位或运算 */
 void Cflint_OR(Cflint_Type *Ret, Cflint_Type *Op_1, Cflint_Type *Op_2, uint32_t Len)
 {
-    for (uint32_t Idx = 0; Idx < Len; Idx++)
-        Ret[Idx] = Op_1[Idx] | Op_2[Idx];
+    for (uint32_t Idx = 0; Idx < Len; Ret[Idx] = Op_1[Idx] | Op_2[Idx], Idx++);
 }
 
 /* 位与运算 */
 void Cflint_AND(Cflint_Type *Ret, Cflint_Type *Op_1, Cflint_Type *Op_2, uint32_t Len)
 {
-    for (uint32_t Idx = 0; Idx < Len; Idx++)
-        Ret[Idx] = Op_1[Idx] & Op_2[Idx];
+    for (uint32_t Idx = 0; Idx < Len; Ret[Idx] = Op_1[Idx] & Op_2[Idx], Idx++);
 }
 
 /* 位异或运算 */
 void Cflint_XOR(Cflint_Type *Ret, Cflint_Type *Op_1, Cflint_Type *Op_2, uint32_t Len)
 {
-    for (uint32_t Idx = 0; Idx < Len; Idx++)
-        Ret[Idx] = Op_1[Idx] ^ Op_2[Idx];
+    for (uint32_t Idx = 0; Idx < Len; Ret[Idx] = Op_1[Idx] ^ Op_2[Idx], Idx++);
 }
 
 /* 位反运算 */
 void Cflint_NOT(Cflint_Type *Op, uint32_t Len)
 {
-    for (uint32_t Idx = 0; Idx < Len; Idx++)
-        Op[Idx] = ~Op[Idx];
+    for (uint32_t Idx = 0; Idx < Len; Op[Idx] = ~Op[Idx], Idx++);
 }
 
 /* 位检查 */
@@ -134,8 +129,7 @@ void Cflint_Bit2Set(Cflint_Type *Op, uint32_t Len, int64_t Bits2)
     int64_t Bits_N = Bits2 / Cflint_Bits;
     int64_t Bits_2 = Bits2 % Cflint_Bits;
     
-    if (Bits_N < Len)
-        Op[Bits_N] |= (1 << Bits_2);
+    if (Bits_N < Len) Op[Bits_N] |= (1 << Bits_2);
 }
 
 /* 位清除 */
@@ -144,8 +138,7 @@ void Cflint_Bit2Reset(Cflint_Type *Op, uint32_t Len, int64_t Bits2)
     int64_t Bits_N = Bits2 / Cflint_Bits;
     int64_t Bits_2 = Bits2 % Cflint_Bits;
     
-    if (Bits_N < Len)
-        Op[Bits_N] &= ~(1 << Bits_2);
+    if (Bits_N < Len) Op[Bits_N] &= ~(1 << Bits_2);
 }
 
 /* 偶数判断 */
