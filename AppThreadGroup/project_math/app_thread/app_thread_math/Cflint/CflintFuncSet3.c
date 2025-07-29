@@ -27,7 +27,7 @@ Cflint_Type Cflint_FlagSum(Cflint_Type *Ret,  Cflint_Flag *RetFlag,
             return Cflint_Sub(Ret, Op_2, Op_1, Len);
         }
     }
-    if (Op1Flag == 1 && Op2Flag == Cflint_FPos) {
+    if (Op1Flag == Cflint_FNeg && Op2Flag == Cflint_FPos) {
         int8_t CmpRet = Cflint_Cmp(Op_2, Op_1, Len);
         if (CmpRet != -1) {
             *RetFlag = Cflint_FPos;
@@ -199,14 +199,14 @@ void Cflint_ExtGCD(Cflint_Type *A, Cflint_Type *B, Cflint_Type *GCD,
     /* 2.初始化:OpX = A, OpY = B, VV = 0 */
     Cflint_ValSet(VV, (Len + 1) * 2, 0);
     Cflint_Copy(OpX, A, Len);
-    Cflint_Copy(OpY,  B, Len);
+    Cflint_Copy(OpY, B, Len);
     /* 3.初始化除数为0检查 */
     if (Cflint_IsZero(OpY, Len))
         goto over;
     /* 开始主循环直到除数为0 */
     while (!Cflint_IsZero(OpY, Len)) {
         /* Quo = OpX / OpY */
-        /* Mod   = OpX % OpY */
+        /* Mod = OpX % OpY */
         Cflint_Devide(Quo, Mod, OpX, OpY, Len);
         /* TT = X - Quo * VV */
         Cflint_Mult(T1, Quo, VV, Len);
@@ -280,16 +280,16 @@ void Cflint_InvGCD(Cflint_Type *A, Cflint_Type *N, Cflint_Type *Inv, Cflint_Type
         Cflint_Mult(T2, Quo, VV, Len);
         Cflint_Mod(T2, T2, T1, Len * 2);
         /* 蒙哥马利模减 */
-        Cflint_Type Ow = Cflint_Sub(TT, Inv, T2, Len);
-        if (Ow != 0) Cflint_Add(TT, TT, T1, Len);
+        if (Cflint_Sub(TT, Inv, T2, Len) != 0)
+            Cflint_Add(TT, TT, T1, Len);
         /* Inv = VV */
         Cflint_Copy(Inv, VV, Len);
         /* VV = TT */
         Cflint_Copy(VV, TT, Len);
         /* OpX = OpY */
-        /* OpY  = Mod  */
+        /* OpY = Mod  */
         Cflint_Copy(OpX, OpY, Len);
-        Cflint_Copy(OpY,  Mod,  Len);
+        Cflint_Copy(OpY, Mod, Len);
     }
     /* GCD=OpX */
     Cflint_Copy(GCD, OpX, Len);

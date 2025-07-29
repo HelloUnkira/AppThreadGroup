@@ -545,7 +545,7 @@ void Cflint_ModInv(Cflint_Type *Ret, Cflint_Type *Op, Cflint_Type *Mod, uint32_t
     }
     /* 2.初始化:A = Op,B = Mod */
     Cflint_Copy(A, Op, Len);
-    Cflint_Copy(B, Mod,  Len);
+    Cflint_Copy(B, Mod, Len);
     /* 3.初始化:V = 0,U = 1 */
     Cflint_ValSet(V, Len, 0);
     Cflint_ValSet(U, Len, 0);
