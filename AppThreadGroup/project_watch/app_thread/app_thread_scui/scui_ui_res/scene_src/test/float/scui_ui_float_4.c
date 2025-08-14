@@ -53,10 +53,10 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         
-        scui_coord_t vlist[20] = {0};
-        scui_coord_t vlist_min[20] = {0};
-        scui_coord_t vlist_max[20] = {0};
-        for (uint32_t idx = 0; idx < 20; idx++) {
+        scui_coord_t vlist[100] = {0};
+        scui_coord_t vlist_min[100] = {0};
+        scui_coord_t vlist_max[100] = {0};
+        for (uint32_t idx = 0; idx < 100; idx++) {
             vlist_min[idx] =  60 + (uint32_t)scui_rand(0xFF) % 40;   //统一底点就是柱状图,否则为股价图
             vlist_max[idx] = 220 - (uint32_t)scui_rand(0xFF) % 40;
             vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60) / 3);
@@ -110,9 +110,9 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart2_maker.line.value_max = 220;
         chart2_maker.line.offset.x  = 5;
         chart2_maker.line.offset.y  = 0;
-        chart2_maker.line.number    = 20;
+        chart2_maker.line.number    = 100;
         chart2_maker.line.height    = chart2_maker.widget.clip.h - 10;
-        chart2_maker.line.space     = 10;
+        chart2_maker.line.space     = 2;
         
         chart2_maker.widget.style.cover_bg = true;
         chart2_maker.line.color.color.full = 0xFFFF0000;
@@ -122,7 +122,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             int32_t angle = scui_map(idx, 0, chart2_maker.line.number, 0, 360);
             scui_coord_t base = chart2_maker.line.value_min;
             scui_coord_t offset = (chart2_maker.line.value_max - base) / 2;
-            vlist[idx] = base + offset + ((scui_sin4096(angle) * offset) >> 12);
+            vlist[idx] = base + offset + (scui_rand(100) * offset / 100);
         }
         scui_chart_line_data(chart2_handle, vlist);
         

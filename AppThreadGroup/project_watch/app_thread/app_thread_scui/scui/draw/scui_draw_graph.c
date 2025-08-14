@@ -352,13 +352,13 @@ void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coo
 void scui_draw_graph_ctx(scui_draw_graph_dsc_t *draw_graph)
 {
     #if SCUI_DRAW_GRAPH_USE_LVGL
-    scui_draw_graph_LVGL(draw_graph);
-    return;
+    if (scui_draw_graph_LVGL(draw_graph))
+        return;
     #endif
     
     #if SCUI_DRAW_GRAPH_USE_EGUI
-    scui_draw_graph_EGUI(draw_graph);
-    return;
+    if (scui_draw_graph_EGUI(draw_graph))
+        return;
     #endif
     
     switch (draw_graph->type) {

@@ -175,27 +175,30 @@ static void scui_draw_arc(scui_draw_graph_dsc_t *draw_graph)
 
 /*@brief 基础图元绘制(抗锯齿)
  *@param draw_graph 绘制描述符实例
+ *@retval 支持度(true:支持;false:不支持;)
  */
-void scui_draw_graph_LVGL(scui_draw_graph_dsc_t *draw_graph)
+bool scui_draw_graph_LVGL(scui_draw_graph_dsc_t *draw_graph)
 {
     #if SCUI_DRAW_GRAPH_USE_EGUI
     switch (draw_graph->type) {
     case scui_draw_graph_type_line:
         scui_draw_line(draw_graph);
-        break;
+        return false;
     case scui_draw_graph_type_circle:
         scui_draw_circle(draw_graph);
-        break;
+        return false;
     case scui_draw_graph_type_crect:
         scui_draw_crect(draw_graph);
-        break;
+        return false;
     case scui_draw_graph_type_arc:
         scui_draw_arc(draw_graph);
-        break;
+        return false;
     /* 继续补充,剩下的不移植了, 一般用不上了 */
     default:
         SCUI_LOG_ERROR("unknown type:%d", draw_graph->type);
-        break;
+        return false;
     }
     #endif
+    
+    return false;
 }
