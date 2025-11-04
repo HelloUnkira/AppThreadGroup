@@ -1,0 +1,37 @@
+{
+    "type"  : "app_sys_ext_mem_table",
+    "brief" : "app_sys_ext_mem_table: chunk_offset field will be adjusted automatically",
+    "app_sys_ext_mem_table" :
+    [
+        {
+            "chunk_brief" : "static memory(reserve): suitable thermal data",
+            "chunk_name"  : "static_memory",
+            "chunk_base"  : "0x02000000",
+            "chunk_size"  : "1024 * 64"
+        },
+        {
+            "chunk_brief" : "flash memory: large mix data chunk",
+            "chunk_name"  : "mix_chunk_large",
+            "chunk_base"  : "0x08000000",
+            "chunk_size"  : "1024 * 200"
+        },
+        {
+            "chunk_brief" : "flash memory: small mix data chunk",
+            "chunk_name"  : "mix_chunk_small",
+            "chunk_base"  : "0x08000000",
+            "chunk_size"  : "1024 * 40"
+        },
+        {
+            "chunk_brief" : "flash memory(reserve): suitable permanently data",
+            "chunk_name"  : "flash_memory",
+            "chunk_base"  : "0x08000000",
+            "chunk_size"  : "1024 * 1024 * 8 - 1024 * 200 - 1024 * 40"
+        },
+        {
+            "chunk_brief" : "secure digital memory card(reserve): suitable permanently data",
+            "chunk_name"  : "secure_digital_memory_card",
+            "chunk_base"  : "0x10000000",
+            "chunk_size"  : "1024 * 1024 * 64"
+        }
+    ]
+}
