@@ -27,14 +27,14 @@ static struct {
 
 /*@brief monkey test动画回调
  */
-static void scui_monkey_anim_ready(void *instance)
+static void scui_monkey_anima_ready(void *instance)
 {
     SCUI_LOG_INFO("");
 }
 
 /*@brief monkey test动画回调
  */
-static void scui_monkey_anim_expire(void *instance)
+static void scui_monkey_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     
@@ -151,7 +151,7 @@ static void scui_monkey_anim_expire(void *instance)
 
 /*@brief monkey test动画回调
  */
-static void scui_monkey_anim_finish(void *instance)
+static void scui_monkey_anima_finish(void *instance)
 {
     SCUI_LOG_INFO("");
 }
@@ -164,9 +164,9 @@ void scui_monkey_test(void)
     scui_ui_res_local->idle = true;
     
     scui_anima_t anima = {0};
-    anima.ready  = scui_monkey_anim_ready;
-    anima.expire = scui_monkey_anim_expire;
-    anima.finish = scui_monkey_anim_finish;
+    anima.ready  = scui_monkey_anima_ready;
+    anima.expire = scui_monkey_anima_expire;
+    anima.finish = scui_monkey_anima_finish;
     anima.reload = SCUI_ANIMA_INFINITE;
     anima.period = SCUI_ANIMA_TICK;
     

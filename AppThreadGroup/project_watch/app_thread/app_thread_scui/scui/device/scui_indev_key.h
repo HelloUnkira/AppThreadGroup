@@ -8,8 +8,16 @@ typedef struct {
         scui_coord_t key_val;
         scui_coord_t key_cnt;
         uint64_t cnt_tick;
+        
+        // merge click
+        uint64_t event_click_tick;
+        scui_event_t event_click;
     } item[SCUI_INDEV_KEY_LIMIT];
 } scui_indev_key_t;
+
+/*@brief 输入设备事件合并
+ */
+void scui_indev_key_event_merge(void);
 
 /*@brief 输入设备数据通报
  *@param data 数据

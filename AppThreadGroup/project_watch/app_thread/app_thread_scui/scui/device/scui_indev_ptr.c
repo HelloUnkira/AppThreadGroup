@@ -33,6 +33,44 @@ static bool scui_event_ptr_move_absorb(void *evt_old, void *evt_new)
     return true;
 }
 
+/*@brief 输入设备事件检查
+ *@param event 输入设备事件
+ */
+static void scui_indev_ptr_event_check(scui_event_t *event)
+{
+    #if SCUI_INDEV_EVENT_MERGE
+    switch (event->type) {
+    case scui_event_ptr_click:
+        scui_coord_t ptr_cnt = scui_indev_ptr.event_click.ptr_cnt;
+        scui_indev_ptr.event_click = *event;
+        scui_indev_ptr.event_click.ptr_cnt = ptr_cnt + 1;
+        scui_indev_ptr.event_click_tick = scui_tick_cnt();
+        break;
+    default:
+        // 常规事件不做额外的合并处理
+        scui_event_notify(event);
+        break;
+    }
+    
+    #else
+    scui_event_notify(event);
+    #endif
+}
+
+/*@brief 输入设备事件合并
+ */
+void scui_indev_ptr_event_merge(void)
+{
+    #if SCUI_INDEV_EVENT_MERGE
+    uint64_t click_tick = scui_indev_ptr.event_click_tick;
+    if (click_tick != 0 && scui_tick_cnt() - click_tick > SCUI_INDEV_PTR_CLICK_SPAN) {
+        scui_event_notify(&scui_indev_ptr.event_click);
+        scui_indev_ptr.event_click.ptr_cnt = 0;
+        scui_indev_ptr.event_click_tick = 0;
+    }
+    #endif
+}
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -63,8 +101,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
         /* 上一状态为press */
         if (scui_indev_ptr.state == scui_indev_state_press) {
             scui_indev_ptr.state  = data->state;
-            scui_indev_ptr.ptr_cnt++;
-            scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
+            uint64_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
             scui_coord_t last_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
             scui_coord_t last_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t last_r = scui_max(scui_abs(last_x), scui_abs(last_y));
@@ -73,12 +110,14 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             if (last_r > SCUI_INDEV_PTR_CLICK_RANGE)
                 scui_indev_ptr.move_tag = true;
             /* 检查事件是否是点击 */
-            if (elapse < SCUI_INDEV_PTR_CLICK && !scui_indev_ptr.move_tag) {
+            if (elapse < SCUI_INDEV_PTR_CLICK_TIME && !scui_indev_ptr.move_tag) {
+                scui_indev_ptr.ptr_cnt++;
+                
                 event.type    = scui_event_ptr_click;
                 event.ptr_cnt = scui_indev_ptr.ptr_cnt;
                 event.ptr_c   = point;
                 SCUI_LOG_INFO("scui_event_ptr_click:%d", event.ptr_cnt);
-                scui_event_notify(&event);
+                scui_indev_ptr_event_check(&event);
             } else
             /* 检查事件是否是fling */
             if (last_v >= SCUI_INDEV_PTR_FLING_RATE &&
@@ -87,7 +126,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.ptr_s = scui_indev_ptr.ptr_last;
                 event.ptr_e = point;
                 SCUI_LOG_INFO("scui_event_ptr_fling:(dist:%d, rate:%d)", last_r, last_v);
-                scui_event_notify(&event);
+                scui_indev_ptr_event_check(&event);
             } else
             /* 事件是move */
             if (scui_indev_ptr.ptr_last.x != point.x ||
@@ -97,7 +136,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                 event.ptr_s  = scui_indev_ptr.ptr_last;
                 event.ptr_e  = point;
                 SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
-                scui_event_notify(&event);
+                scui_indev_ptr_event_check(&event);
             }
             scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 发送抬起事件 */
@@ -105,7 +144,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             event.ptr_cnt = scui_indev_ptr.ptr_cnt;
             event.ptr_c   = point;
             SCUI_LOG_INFO("scui_event_ptr_up:%d", event.ptr_cnt);
-            scui_event_notify(&event);
+            scui_indev_ptr_event_check(&event);
             return;
         }
     }
@@ -118,23 +157,23 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             scui_indev_ptr.ptr_near = point;
             scui_indev_ptr.move_cnt = 0;
             scui_indev_ptr.move_tag = false;
-            scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
-            scui_indev_ptr.cnt_tick = scui_tick_cnt();
             /* 检查点击是否连续 */
-            if (elapse > SCUI_INDEV_PTR_CLICK_SPAN)
+            uint64_t cnt_tick = scui_indev_ptr.cnt_tick;
+            scui_indev_ptr.cnt_tick = scui_tick_cnt();
+            if (scui_indev_ptr.cnt_tick - cnt_tick > SCUI_INDEV_PTR_CLICK_SPAN)
                 scui_indev_ptr.ptr_cnt = 0;
             /* 发送按下事件 */
             event.type     = scui_event_ptr_down;
+            event.ptr_tick = scui_indev_ptr.cnt_tick - cnt_tick;
             event.ptr_c    = point;
-            event.ptr_tick = elapse;
             SCUI_LOG_INFO("scui_event_ptr_down:%d", event.ptr_tick);
-            scui_event_notify(&event);
+            scui_indev_ptr_event_check(&event);
             return;
         }
         /* 上一状态为press */
         if (scui_indev_ptr.state == scui_indev_state_press) {
             scui_indev_ptr.state  = data->state;
-            scui_coord_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
+            uint64_t elapse = scui_tick_cnt() - scui_indev_ptr.cnt_tick;
             scui_coord_t last_x = scui_dist(scui_indev_ptr.ptr_last.x, point.x);
             scui_coord_t last_y = scui_dist(scui_indev_ptr.ptr_last.y, point.y);
             scui_coord_t near_x = scui_dist(scui_indev_ptr.ptr_near.x, point.x);
@@ -159,7 +198,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     event.ptr_e  = point;
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", last_r, last_v);
                     SCUI_LOG_INFO("scui_event_ptr_move:(dist:%d, rate:%d)", near_v, near_v);
-                    scui_event_notify(&event);
+                    scui_indev_ptr_event_check(&event);
                     scui_indev_ptr.ptr_last = point;
                     scui_indev_ptr.move_tag = true;
                 }
@@ -173,7 +212,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
             event.ptr_c    = point;
             event.ptr_tick = elapse;
             SCUI_LOG_INFO("scui_event_ptr_hold:%d", event.ptr_tick);
-            scui_event_notify(&event);
+            scui_indev_ptr_event_check(&event);
             return;
         }
         return;

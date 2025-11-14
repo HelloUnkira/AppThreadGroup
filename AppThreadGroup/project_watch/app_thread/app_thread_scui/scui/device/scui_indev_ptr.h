@@ -9,7 +9,15 @@ typedef struct {
     uint64_t cnt_tick;
     uint32_t move_cnt:20;
     uint32_t move_tag:1;
+    
+    // merge click
+    uint64_t event_click_tick;
+    scui_event_t event_click;
 } scui_indev_ptr_t;
+
+/*@brief 输入设备事件合并
+ */
+void scui_indev_ptr_event_merge(void);
 
 /*@brief 输入设备数据通报
  *@param data 数据

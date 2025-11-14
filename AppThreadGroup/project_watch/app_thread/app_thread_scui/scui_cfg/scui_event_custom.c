@@ -136,6 +136,17 @@ void scui_event_custom_access(scui_event_t *event)
     default:
         break;
     }
+    
+    switch (event->type) {
+    case scui_event_ptr_click:
+        SCUI_LOG_WARN("event ptr click:%d", event->ptr_cnt);
+        break;
+    case scui_event_key_click:
+        SCUI_LOG_WARN("event key click:%d", event->key_cnt);
+        break;
+    default:
+        break;
+    }
 }
 
 /*@brief 事件响应(custom)
@@ -237,6 +248,7 @@ void scui_event_custom_myself(scui_event_t *event)
 void scui_event_custom_finish(scui_event_t *event)
 {
     SCUI_LOG_INFO("event widget %u", event->object);
+    
     switch (event->type) {
     case scui_event_ptr_fling:
         // 全局的右滑响应事件

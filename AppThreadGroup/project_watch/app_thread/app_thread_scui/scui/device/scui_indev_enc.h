@@ -1,6 +1,10 @@
 #ifndef SCUI_INDEV_ENC_H
 #define SCUI_INDEV_ENC_H
 
+/*@brief 输入设备事件合并
+ */
+void scui_indev_enc_event_merge(void);
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */

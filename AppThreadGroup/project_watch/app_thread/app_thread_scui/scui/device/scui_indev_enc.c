@@ -19,6 +19,25 @@ static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
     return true;
 }
 
+/*@brief 输入设备事件检查
+ *@param event 输入设备事件
+ */
+static void scui_indev_enc_event_check(scui_event_t *event)
+{
+    #if SCUI_INDEV_EVENT_MERGE
+    #else
+    scui_event_notify(event);
+    #endif
+}
+
+/*@brief 输入设备事件合并
+ */
+void scui_indev_enc_event_merge(void)
+{
+    #if SCUI_INDEV_EVENT_MERGE
+    #endif
+}
+
 /*@brief 输入设备数据通报
  *@param data 数据
  */
@@ -43,7 +62,7 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
         .absorb = scui_event_enc_absorb,
     };
     event.enc_diff = scui_abs(data->enc.enc_diff);
-    scui_event_notify(&event);
+    scui_indev_enc_event_check(&event);
 }
 
 /*@brief 输入设备初始化
