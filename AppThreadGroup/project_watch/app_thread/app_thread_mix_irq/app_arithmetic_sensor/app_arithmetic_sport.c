@@ -60,13 +60,13 @@ void app_arithmetic_sport_proc(app_arithmetic_sport_t *sport, int32_t frame[][3]
      *走路模式共用计步算法
      */
     if (0) ;
-    else if (sport->type.type == app_module_data_center_sport_mix_null ||
-             sport->type.type == app_module_data_center_sport_mix_walk) {
+    else if (sport->type.type == app_module_config_sport_mix_null ||
+             sport->type.type == app_module_config_sport_mix_walk) {
         if (0) ;
         /* 单向检测:正常计步模式 */
         else if (sport->dir.axis_dir == 0) {
             /* 跑步算法未关闭,关闭它 */
-            if (sport->type.mode == app_module_data_center_sport_run)
+            if (sport->type.mode == app_module_config_sport_run)
                 app_arithmetic_sport_run_stop(sport);
             /* 现在更新为计步算法 */
             app_arithmetic_sport_step_proc(sport, frame, length);
@@ -74,7 +74,7 @@ void app_arithmetic_sport_proc(app_arithmetic_sport_t *sport, int32_t frame[][3]
         /* 双向检测:跑步模式 */
         else if (sport->dir.axis_dir == 1) {
             /* 计步算法未关闭,关闭它 */
-            if (sport->type.mode == app_module_data_center_sport_walk)
+            if (sport->type.mode == app_module_config_sport_walk)
                 app_arithmetic_sport_step_stop(sport);
             /* 现在更新为跑步算法 */
             app_arithmetic_sport_run_proc(sport, frame, length);
@@ -83,10 +83,10 @@ void app_arithmetic_sport_proc(app_arithmetic_sport_t *sport, int32_t frame[][3]
         else ;
     }
     // 继续补充其他模式算法
-    // else if (sport->type.type == app_module_data_center_sport_mix_null)
+    // else if (sport->type.type == app_module_config_sport_mix_null)
     else {
         /* 跑步算法未关闭,关闭它 */
-        if (sport->type.mode == app_module_data_center_sport_walk)
+        if (sport->type.mode == app_module_config_sport_walk)
             app_arithmetic_sport_step_stop(sport);
         /* 现在更新为计步算法 */
         app_arithmetic_sport_run_proc(sport, frame, length);
@@ -118,8 +118,8 @@ typedef struct {
     } axis_info;
     /* 算法: 运动数据类型 */
     struct {
-        app_module_data_center_sport_mode_t         type;
-        app_module_data_center_sport_mix_type_t     sport_type;
+        app_module_config_sport_mode_t         type;
+        app_module_config_sport_mix_type_t     sport_type;
     } sport_type;
     /* 算法: 运动数据 */
     struct {
@@ -193,11 +193,11 @@ void app_arithmetic_data_update_step_sport_info(app_arithmetic_data_t *data, uin
         distance = distance / 100;
         calories = calories * 0.8214 / 100;
         break;
-    case app_module_data_center_sport_run:
+    case app_module_config_sport_run:
         distance = distance * 115 / 100 / 100;
         calories = calories * 1.0360 / 100;
         break;
-    case app_module_data_center_sport_walk:
+    case app_module_config_sport_walk:
         distance = distance / 100;
         calories = calories * 0.8214 / 100;
         break;

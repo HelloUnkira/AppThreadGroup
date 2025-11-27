@@ -8,7 +8,6 @@ typedef enum {  /* 线程模组 */
 } app_thread_mix_custom_module_t;
 
 /* 子线程模组 */
-#include "app_module_data_center_type.h"
 #include "app_module_data_center_src.h"
 #include "app_module_data_center.h"
 #include "app_module_data_load.h"

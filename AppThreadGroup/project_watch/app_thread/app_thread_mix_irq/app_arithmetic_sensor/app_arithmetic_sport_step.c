@@ -182,7 +182,7 @@ void app_arithmetic_sport_step_proc(app_arithmetic_sport_t *sport, int32_t frame
     static int32_t max_y = 0;
     static int32_t min_y = 0;
     
-    sport->type.mode = app_module_data_center_sport_walk;
+    sport->type.mode = app_module_config_sport_walk;
     
     if (sport->step.dal_num == 0)
         max_y = min_y = frame[0][1];

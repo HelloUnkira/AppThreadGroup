@@ -87,7 +87,7 @@ void app_module_system_mode_set(uint8_t mode)
     /* 更新系统工作模式 */
     app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_system_profile);
     #if APP_ARCH_IS_PC
-    data_center_src->system_profile.system_mode = app_module_data_center_system_mode_normal;
+    data_center_src->system_profile.system_mode = app_module_config_system_mode_normal;
     #else
     data_center_src->system_profile.system_mode = mode;
     #endif
@@ -117,17 +117,17 @@ void app_module_system_ctrl_check(app_module_clock_t clock[1])
     bool system_is_working = false;
     app_mutex_process(&app_module_system_mutex, app_mutex_take);
     switch (app_module_system.mode) {
-    case app_module_data_center_system_mode_normal: {
+    case app_module_config_system_mode_normal: {
         system_is_working = app_module_system_mode_normal_ctrl(clock, &app_module_system);
         break;
     }
-    case app_module_data_center_system_mode_shutdown: {
+    case app_module_config_system_mode_shutdown: {
         system_is_working = app_module_system_mode_shutdown_ctrl(clock, &app_module_system);
         break;
     }
     default:
-        app_module_system.mode     = app_module_data_center_system_mode_normal;
-        app_module_system.mode_bak = app_module_data_center_system_mode_normal;
+        app_module_system.mode     = app_module_config_system_mode_normal;
+        app_module_system.mode_bak = app_module_config_system_mode_normal;
         break;
     }
     app_mutex_process(&app_module_system_mutex, app_mutex_give);
@@ -154,8 +154,8 @@ void app_module_system_ready(void)
     app_module_data_center_src_t *data_center_src = app_module_data_center_take(app_module_data_center_src_system_profile);
     app_module_system.mode = data_center_src->system_profile.system_mode;
     APP_SYS_LOG_WARN("system mode:%u", app_module_system.mode);
-    if (app_module_system.mode >= app_module_data_center_system_mode_num) {
-        app_module_system.mode  = app_module_data_center_system_mode_normal;
+    if (app_module_system.mode >= app_module_config_system_mode_num) {
+        app_module_system.mode  = app_module_config_system_mode_normal;
         data_center_src->system_profile.system_mode = app_module_system.mode;
     }
     app_module_data_center_give();

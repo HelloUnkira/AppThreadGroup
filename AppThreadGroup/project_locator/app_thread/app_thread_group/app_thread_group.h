@@ -41,6 +41,8 @@ void app_thread_master_schedule(void);
 void app_thread_slave_prepare(void);
 void app_thread_slave_schedule(void);
 
+/* 自定义模组 */
+#include "app_module_config.h"
 /* 自定义子线程 */
 #include "app_thread_mix_irq.h"
 #include "app_thread_mix_custom.h"

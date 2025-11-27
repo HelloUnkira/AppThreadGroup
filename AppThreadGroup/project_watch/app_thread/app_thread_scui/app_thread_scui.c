@@ -200,8 +200,8 @@ static bool app_thread_scui_routine_package_cb(app_thread_package_t *package, bo
                     APP_SYS_LOG_WARN("");
                     app_module_system_dlps_set(false);
                     app_module_system_valid_set(false);
-                    if (app_module_system_mode_get() != app_module_data_center_system_mode_shutdown)
-                        app_module_system_mode_set(app_module_data_center_system_mode_shutdown);
+                    if (app_module_system_mode_get() != app_module_config_system_mode_shutdown)
+                        app_module_system_mode_set(app_module_config_system_mode_shutdown);
                     else
                         app_arch_reset();
                 }

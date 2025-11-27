@@ -10,8 +10,8 @@ typedef struct {
     } dir;
     /* 多运动类型数据统计 */
     struct {
-        app_module_data_center_sport_mode_t     mode;   /* 算法运动模式 */
-        app_module_data_center_sport_mix_type_t type;   /* 多运动类型 */
+        app_module_config_sport_mode_t     mode;    /* 算法运动模式 */
+        app_module_config_sport_mix_type_t type;    /* 多运动类型 */
         union {
             uint8_t buffer[0];
             int32_t data;

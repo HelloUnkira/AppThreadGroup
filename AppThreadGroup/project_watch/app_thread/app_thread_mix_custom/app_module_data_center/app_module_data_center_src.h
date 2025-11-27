@@ -263,11 +263,11 @@ typedef struct {
             struct {
                 uint8_t  usage_type;
                 /* use count:(use type is enum re) */
-                uint16_t usage_count[app_module_data_center_usage_num];
+                uint16_t usage_count[app_module_config_usage_num];
                 uint16_t usage_queue[3];        // [0:curr;1:prev;2:prev 1]
                 uint16_t sports_list_queue[3];  // [0:curr;1:prev;2:prev 1]
-                uint16_t sports_list_count[app_module_data_center_usage_sports_list];
-                uint16_t sports_list_type[app_module_data_center_usage_sports_list];
+                uint16_t sports_list_count[app_module_config_usage_sports_list];
+                uint16_t sports_list_type[app_module_config_usage_sports_list];
             } func_usage;
             /* keep adding */
         } user_data;

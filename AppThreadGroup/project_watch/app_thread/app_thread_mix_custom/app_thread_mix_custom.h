@@ -63,7 +63,6 @@ typedef enum {
 #include "app_module_remind_sedentary.h"
 #include "app_module_do_not_disturb.h"
 /* 子线程模组 */
-#include "app_module_data_center_type.h"
 #include "app_module_data_center_src.h"
 #include "app_module_data_center.h"
 #include "app_module_data_load.h"
