@@ -131,7 +131,7 @@ typedef struct {
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
         scui_color_t    src_color;      // 图像源色调
-        scui_point_t    src_scale;      // 图形缩放比例(SCUI_SCALE_COF为放大系数)
+        scui_point_t    src_scale;      // 图形缩放比例
         scui_point_t    dst_offset;     // 缩放锚点
         scui_point_t    src_offset;     // 缩放锚点
     } image_scale;
@@ -142,7 +142,7 @@ typedef struct {
         scui_area_t    *src_clip;       // 图像源绘制区域
         scui_alpha_t    src_alpha;      // 图像透明度
         scui_color_t    src_color;      // 图像源色调
-        scui_coord_t    src_angle;      // 图形旋转角度(顺时针:+,逆时针:-)
+        scui_multi_t    src_angle;      // 图形旋转角度(顺时针:+,逆时针:-)
         scui_point_t   *src_anchor;     // 图像旋转轴心
         scui_point_t   *src_center;     // 图像旋转中心
     } image_rotate;

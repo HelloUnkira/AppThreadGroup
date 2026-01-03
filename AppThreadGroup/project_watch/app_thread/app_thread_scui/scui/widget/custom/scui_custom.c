@@ -117,24 +117,24 @@ void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc)
     scui_string_args_process(args);
 }
 
+/*@brief 自定义控件:插件:上下文绘制(帧动画调度)
+ *@param draw_graph 绘制参数实例
+ */
+void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_ring_edge(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc);
+void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc);
+
 /*@brief 自定义控件:插件:上下文绘制
  *@param draw_graph 绘制参数实例
  */
 void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
 {
-    /* basic draw type */
-    void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc);
-    /* custom draw type */
-    void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_ring_edge(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc);
-    void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc);
-    
-    
-    
     typedef void (*scui_custom_draw_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
     static const scui_custom_draw_ctx_cb_t scui_custom_draw_ctx_cb[scui_custom_draw_type_num] = {
         /* basic draw type */
@@ -159,10 +159,6 @@ void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
  */
 void scui_custom_draw_anim_ctx(scui_custom_draw_dsc_t *draw_dsc)
 {
-    void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc);
-    
-    
-    
     typedef void (*scui_custom_draw_anim_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
     static const scui_custom_draw_anim_ctx_cb_t scui_custom_draw_anim_ctx_cb[scui_custom_draw_type_num] = {
         [scui_custom_draw_type_dial_ptr] =          scui_custom_draw_anim_ctx_dial_ptr,

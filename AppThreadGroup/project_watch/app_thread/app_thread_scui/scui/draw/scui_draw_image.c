@@ -79,11 +79,15 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
         .ver_res = src_image->pixel.height,
         .alpha   = src_alpha,
     };
+    scui_point2_t src_scale2 = {
+        .x = (scui_coord3_t)src_scale.x / SCUI_SCALE_COF,
+        .y = (scui_coord3_t)src_scale.y / SCUI_SCALE_COF,
+    };
     
     scui_matrix_t src_matrix = {0};
     scui_matrix_identity(&src_matrix);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +dst_offset.x, .y = +dst_offset.y,});
-    scui_matrix_scale(&src_matrix, &(scui_point2_t){.x = src_scale.x / 1024.0f, .y = src_scale.y / 1024.0f,});
+    scui_matrix_scale(&src_matrix, &src_scale2);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_offset.x, .y = -src_offset.y,});
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
@@ -106,7 +110,7 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_area_t    *src_clip    = draw_dsc->image_rotate.src_clip;
     scui_alpha_t    src_alpha   = draw_dsc->image_rotate.src_alpha;
     scui_color_t    src_color   = draw_dsc->image_rotate.src_color;
-    scui_coord_t    src_angle   = draw_dsc->image_rotate.src_angle;
+    scui_multi_t    src_angle   = draw_dsc->image_rotate.src_angle;
     scui_point_t   *src_anchor  = draw_dsc->image_rotate.src_anchor;
     scui_point_t   *src_center  = draw_dsc->image_rotate.src_center;
     /* draw dsc args<e> */
@@ -132,7 +136,7 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t src_matrix = {0};
     scui_matrix_identity(&src_matrix);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +src_anchor->x, .y = +src_anchor->y,});
-    scui_matrix_rotate_a(&src_matrix, (float)src_angle, 0x00);
+    scui_matrix_rotate_a(&src_matrix, (scui_coord3_t)src_angle / SCUI_SCALE_COF, 0x00);
     scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_center->x, .y = -src_center->y,});
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);

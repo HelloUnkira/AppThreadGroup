@@ -280,7 +280,7 @@ void scui_ui_scene_float_2_4_event_proc(scui_event_t *event)
 {
     static scui_coord_t spinner_pct  = 0;
     static scui_coord_t spinner_cnt  = 0;
-    static scui_coord_t spinner_tick = 750 / SCUI_ANIMA_TICK;
+    static scui_coord_t spinner_tick = 750;
     
     switch (event->type) {
     case scui_event_anima_elapse: {

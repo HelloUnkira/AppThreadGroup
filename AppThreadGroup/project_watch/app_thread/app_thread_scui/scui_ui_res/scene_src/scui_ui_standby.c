@@ -24,12 +24,6 @@ static struct {
 void scui_ui_scene_standby_event_proc(scui_event_t *event)
 {
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        //cwf json 测试
-        int32_t tick = SCUI_ANIMA_TICK * event->tick;
-        scui_cwf_json_anim(&scui_ui_res_local->cwf_json_inst, tick);
-        break;
-    }
     case scui_event_create:
         scui_window_local_res_set(event->object, sizeof(*scui_ui_res_local));
         scui_window_local_res_get(event->object, &scui_ui_res_local);

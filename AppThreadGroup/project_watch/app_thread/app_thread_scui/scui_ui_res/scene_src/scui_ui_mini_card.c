@@ -544,7 +544,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
                     .y = clip.y + 100 + center.y,
                 };
                 scui_widget_draw_image_rotate(event->object, NULL, image, NULL,
-                    anchor, center, scui_presenter.compass_angle());
+                    anchor, center, scui_presenter.compass_angle() * SCUI_SCALE_COF);
                 
                 char data_unit[50] = {0};
                 snprintf(data_unit, sizeof(data_unit), "%d %%",
@@ -1529,9 +1529,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         static uint32_t span_fps = 7;
         static uint32_t tick_cnt = 0;
         
-        int32_t tick = SCUI_ANIMA_TICK * event->tick;
-        tick_cnt += tick;
-        
+        tick_cnt += event->tick;
         if (tick_cnt < 1000 / span_fps) return;
         else tick_cnt -= 1000 / span_fps;
         

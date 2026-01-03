@@ -67,8 +67,8 @@ typedef struct {
             void (*sched)(scui_handle_t handle);
             scui_handle_t handle;
         };
-        /* scui动画事件嘀嗒次数 */
-        scui_coord_t tick;
+        /* scui动画事件流逝数(ms) */
+        uint32_t tick;
         /* scui其余事件信息: */
         // scui_area_t  area;
         // scui_point_t point;

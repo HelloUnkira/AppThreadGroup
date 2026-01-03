@@ -33,12 +33,11 @@ void scui_ui_bar_arc_event_proc(scui_ui_bar_arc_t *bar_arc, scui_event_t *event)
     switch (event->type) {
     case scui_event_anima_elapse: {
         
-        int32_t tick = SCUI_ANIMA_TICK * event->tick;
         if (bar_arc->bar_wait  < SCUI_UI_SCROLL_BAR_STOP_TIME)
-            bar_arc->bar_wait += tick;
+            bar_arc->bar_wait += event->tick;
         else
         if (bar_arc->bar_alpha > 0) {
-            scui_alpha_t alpha = scui_alpha_cover / (SCUI_UI_SCROLL_BAR_FADE_TIME / tick);
+            scui_alpha_t alpha = scui_alpha_cover / (SCUI_UI_SCROLL_BAR_FADE_TIME / event->tick);
             if (bar_arc->bar_alpha  > alpha)
                 bar_arc->bar_alpha -= alpha;
             else

@@ -254,7 +254,7 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
 {
     static uint16_t cnt = 0;
     static uint16_t rnd = 1;
-    static uint16_t tick = 1000 / SCUI_ANIMA_TICK;
+    static uint16_t tick = 1000;
     static scui_coord_t src_angle_s = 0;
     static scui_coord_t src_angle_e = 30;
     
@@ -314,7 +314,7 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
 {
     static uint16_t cnt = 0;
     static uint16_t rnd = 1;
-    static uint16_t tick = 1000 / SCUI_ANIMA_TICK;
+    static uint16_t tick = 1000;
     static scui_coord_t src_angle_s = 0;
     static scui_coord_t src_angle_e = 30;
     

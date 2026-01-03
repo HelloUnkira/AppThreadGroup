@@ -373,7 +373,7 @@ typedef struct {
     struct {
         scui_handle_t  image;                   // 图像句柄
         scui_area_t   *clip;                    // 图像源绘制区域
-        scui_point_t   scale;                   // 图形缩放比例(1024为放大系数)
+        scui_point_t   scale;                   // 图形缩放比例
         scui_opt_pos_t pos;                     // 缩放锚点
     } image_scale;
     struct {
@@ -381,7 +381,7 @@ typedef struct {
         scui_area_t  *clip;                     // 图像源绘制区域
         scui_point_t  anchor;                   // 图像旋转轴心
         scui_point_t  center;                   // 图像旋转中心
-        scui_coord_t  angle;                    // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
+        scui_multi_t  angle;                    // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
     } image_rotate;
     struct {
         scui_handle_t  image;                   // 图像句柄

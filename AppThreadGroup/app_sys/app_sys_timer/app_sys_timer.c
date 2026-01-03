@@ -109,40 +109,45 @@ bool app_sys_timer_start(app_sys_timer_t *timer)
  */
 void app_sys_timer_reduce(void)
 {
-    bool loop = true;
-    while (loop) {
-        loop = false;
-        app_sys_timer_t *timer = NULL;
-        app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
-        /* 约减首项等待者 */
-        if (app_sys_timer_list.number != 0) {
-            app_sys_list_sln_t *node = app_sys_list_sll_head(&app_sys_timer_list.sl_list);
-            timer = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
-            if (timer->reduce != 0)
-                timer->reduce--;
-            /* 约减命中 */
-            if (timer->reduce != 0)
-                timer = NULL;
-            else {
-                app_sys_list_sll_remove(&app_sys_timer_list.sl_list, NULL, node);
-                app_sys_timer_list.number--;
-                /* 如果还能继续约减 */
-                if ((node = app_sys_list_sln_buddy(node)) != NULL) {
-                    app_sys_timer_t *timer_zero = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
-                    if (timer_zero->reduce == 0)
-                        loop = true;
-                }
-            }
-        }
-        app_mutex_process(&app_sys_timer_list.mutex, app_mutex_give);
-        /* 处理该约减者 */
-        if (timer != NULL) {
-            /* 检查是否需要重加载 */
-            if (timer->reload)
-                app_sys_timer_start(timer);
-            /* 执行过期回调 */
-            timer->expired(timer);
-        }
+    /* 清空执行序列,收集执行目标(它无需被保护) */
+    app_sys_list_sll_reset(&app_sys_timer_list.sl_list_e);
+    app_sys_timer_list.number_e = 0;
+    
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_take);
+    /* 约减首项等待者,查询执行目标 */
+    if (app_sys_timer_list.number != 0) {
+        app_sys_list_sln_t *node = app_sys_list_sll_head(&app_sys_timer_list.sl_list);
+        app_sys_timer_t *timer = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+        if (timer->reduce != 0)
+            timer->reduce--;
+    }
+    
+    /* 循环检查每个首项,检查是否约减命中 */
+    while (app_sys_timer_list.number != 0) {
+        app_sys_list_sln_t *node = app_sys_list_sll_head(&app_sys_timer_list.sl_list);
+        app_sys_timer_t *timer = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+        if (timer->reduce != 0)
+            break;
+        /* 将节点取出,存放至执行队列 */
+        app_sys_list_sll_remove(&app_sys_timer_list.sl_list, NULL, node);
+        app_sys_list_sll_ainsert(&app_sys_timer_list.sl_list_e, node);
+        app_sys_timer_list.number--;
+        app_sys_timer_list.number_e++;
+    }
+    app_mutex_process(&app_sys_timer_list.mutex, app_mutex_give);
+    
+    /* 循环执行每个首项,直到清空队列 */
+    while (app_sys_timer_list.number_e != 0) {
+        app_sys_list_sln_t *node = app_sys_list_sll_head(&app_sys_timer_list.sl_list_e);
+        app_sys_timer_t *timer = app_sys_own_ofs(app_sys_timer_t, sl_node, node);
+        /* 先将执行节点从执行队列取出 */
+        app_sys_list_sll_remove(&app_sys_timer_list.sl_list_e, NULL, node);
+        app_sys_timer_list.number_e--;
+        /* 检查是否需要重加载 */
+        if (timer->reload)
+            app_sys_timer_start(timer);
+        /* 执行过期回调 */
+        timer->expired(timer);
     }
 }
 

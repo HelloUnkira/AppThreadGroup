@@ -463,8 +463,8 @@ void scui_matrix_rotate_c(scui_matrix_t *matrix, scui_point2_t *chord, uint8_t a
  */
 void scui_matrix_rotate_a(scui_matrix_t *matrix, scui_coord3_t angle, uint8_t axis)
 {
-    scui_coord3_t sin_a = scui_sin4096((int32_t)angle) / 4096.0f;
-    scui_coord3_t cos_a = scui_cos4096((int32_t)angle) / 4096.0f;
+    scui_coord3_t sin_a = scui_sin(SCUI_RAD_BY_A(angle));
+    scui_coord3_t cos_a = scui_cos(SCUI_RAD_BY_A(angle));
     scui_point2_t chord = {.y = sin_a, .x = cos_a,};
     scui_matrix_rotate_c(matrix, &chord, axis);
 }
@@ -569,12 +569,12 @@ void scui_matrix_rotate_c3(scui_matrix_t *matrix, scui_point2_t chord[3], uint8_
 void scui_matrix_rotate_a3(scui_matrix_t *matrix, scui_point3_t *angle, uint8_t axis)
 {
     scui_point2_t chord[3] = {0};
-    chord[0].y = scui_sin4096(angle->x) / 4096.0f;
-    chord[0].x = scui_cos4096(angle->x) / 4096.0f;
-    chord[1].y = scui_sin4096(angle->y) / 4096.0f;
-    chord[1].x = scui_cos4096(angle->y) / 4096.0f;
-    chord[2].y = scui_sin4096(angle->z) / 4096.0f;
-    chord[2].x = scui_cos4096(angle->z) / 4096.0f;
+    chord[0].y = scui_sin(SCUI_RAD_BY_A(angle->x));
+    chord[0].x = scui_cos(SCUI_RAD_BY_A(angle->x));
+    chord[1].y = scui_sin(SCUI_RAD_BY_A(angle->y));
+    chord[1].x = scui_cos(SCUI_RAD_BY_A(angle->y));
+    chord[2].y = scui_sin(SCUI_RAD_BY_A(angle->z));
+    chord[2].x = scui_cos(SCUI_RAD_BY_A(angle->z));
     scui_matrix_rotate_c3(matrix, chord, axis);
 }
 

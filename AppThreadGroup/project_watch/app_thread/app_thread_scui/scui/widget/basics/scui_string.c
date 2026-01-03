@@ -426,9 +426,7 @@ void scui_string_invoke(scui_event_t *event)
             break;
         }
         
-        int32_t tick = SCUI_ANIMA_TICK * event->tick;
-        string->rcd_ms += tick;
-        
+        string->rcd_ms += event->tick;
         if (string->rcd_ms < string->unit_ms) break;
         else string->rcd_ms -= string->unit_ms;
         

@@ -13,7 +13,9 @@ typedef struct {
 typedef struct {
     app_mutex_t mutex;
     app_sys_list_sll_t sl_list;
+    app_sys_list_sll_t sl_list_e;
     uint32_t number;
+    uint32_t number_e;
 } app_sys_timer_list_t;
 
 /*@brief 停止,中止,终止软件定时器(中断环境下不可调用)

@@ -24,17 +24,18 @@ void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("");
     
-    uint64_t tick_ms = tick_curr;
-    uint64_t time_ms = tick_ms % 1000; tick_ms /= 1000;
-    uint64_t dtime_s = tick_ms % 60;   tick_ms /= 60;
-    uint64_t dtime_m = tick_ms % 60;   tick_ms /= 60;
-    uint64_t dtime_h = tick_ms % 60;   tick_ms /= 60;
-    SCUI_ASSERT(tick_ms == 0 && dtime_h <= 24);
+    float tick_ms = tick_curr;
+    float time_ms = fmod(tick_ms, 1000.0f); tick_ms /= 1000.0f;
+    float dtime_s = fmod(tick_ms, 60.0f);   tick_ms /= 60.0f;
+    float dtime_m = fmod(tick_ms, 60.0f);   tick_ms /= 60.0f;
+    float dtime_h = fmod(tick_ms, 60.0f);   tick_ms /= 60.0f;
+    dtime_h = fmod(dtime_h, 12.0f);
     
-    time_ms = tick_mode ? time_ms : 0;
-    scui_coord_t angle_h = dtime_h * (360 / 24) + dtime_m * (360 / 60) * 6 / 360;
-    scui_coord_t angle_m = dtime_m * (360 / 60) + dtime_s * (360 / 60) * 6 / 360;
-    scui_coord_t angle_s = dtime_s * (360 / 60) + time_ms * 6 / 1000;
+    dtime_s = tick_mode ? dtime_s : (int)dtime_s;
+    scui_coord3_t angle_h = dtime_h * 30;
+    scui_coord3_t angle_m = dtime_m * 6;
+    scui_coord3_t angle_s = dtime_s * 6;
+    SCUI_LOG_INFO("angle<h:%f;m:%f;s:%f;>", angle_h, angle_m, angle_s);
     
     scui_point_t anchor_c = {0}, center_c = {0};
     scui_area_t widget_clip = scui_widget_clip(event->object);
@@ -43,19 +44,19 @@ void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
         anchor_c.x = widget_clip.x + anchor[0].x;
         anchor_c.y = widget_clip.y + anchor[0].y;
         scui_widget_draw_image_rotate(event->object, NULL,
-            image[0], NULL, anchor_c, center[0], angle_h);
+            image[0], NULL, anchor_c, center[0], angle_h * SCUI_SCALE_COF);
     }
     if (image[1] != SCUI_HANDLE_INVALID) {  // minute
         anchor_c.x = widget_clip.x + anchor[1].x;
         anchor_c.y = widget_clip.y + anchor[1].y;
         scui_widget_draw_image_rotate(event->object, NULL,
-            image[1], NULL, anchor_c, center[1], angle_m);
+            image[1], NULL, anchor_c, center[1], angle_m * SCUI_SCALE_COF);
     }
     if (image[2] != SCUI_HANDLE_INVALID) {  // second
         anchor_c.x = widget_clip.x + anchor[2].x;
         anchor_c.y = widget_clip.y + anchor[2].y;
         scui_widget_draw_image_rotate(event->object, NULL,
-            image[2], NULL, anchor_c, center[2], angle_s);
+            image[2], NULL, anchor_c, center[2], angle_s * SCUI_SCALE_COF);
     }
 }
 
@@ -77,17 +78,20 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("");
     bool tick_draw = false;
     
-    if (tick_last / 1000 != tick_curr / 1000) {
+    /* 一帧一跳时 */
+    if (tick_mode == 2) {
         tick_last = tick_curr;
         tick_draw = true;
-    } else {
-        if (tick_mode) {
-            /* 一度一跳时 */
-            if (scui_dist(tick_last, tick_curr) >= (1000 / 6)) {
-                tick_last = tick_curr;
-                tick_draw = true;
-            }
-        }
+    }
+    /* 一度一跳时 */
+    if (tick_mode == 1 && scui_dist(tick_last, tick_curr) >= (1000 / 6)) {
+        tick_last = tick_curr;
+        tick_draw = true;
+    }
+    /* 一秒一跳时 */
+    if (tick_mode == 0 && tick_last / 1000 != tick_curr / 1000) {
+        tick_last = tick_curr;
+        tick_draw = true;
     }
     SCUI_LOG_INFO("c_s:%u, c_ms:%u", tick_curr, tick_last);
     
@@ -99,24 +103,25 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
         
         #if 1
         /* <curr> <last> */
-        uint64_t tick_ms[2] = {0};
+        float tick_ms[2] = {0};
         tick_ms[0] = tick_curr;
         tick_ms[1] = tick_last;
         
         SCUI_LOG_INFO("draw ready");
         for (scui_handle_t idx_tick_ms = 0; idx_tick_ms < scui_arr_len(tick_ms); idx_tick_ms++) {
             
-            uint8_t time_ms = tick_ms[idx_tick_ms] % 1000; tick_ms[idx_tick_ms] /= 1000;
-            uint8_t dtime_s = tick_ms[idx_tick_ms] % 60;   tick_ms[idx_tick_ms] /= 60;
-            uint8_t dtime_m = tick_ms[idx_tick_ms] % 60;   tick_ms[idx_tick_ms] /= 60;
-            uint8_t dtime_h = tick_ms[idx_tick_ms] % 60;   tick_ms[idx_tick_ms] /= 60;
-            SCUI_ASSERT(tick_ms[idx_tick_ms] == 0 && dtime_h <= 24);
+            float time_ms = fmod(tick_ms[idx_tick_ms], 1000.0f); tick_ms[idx_tick_ms] /= 1000.0f;
+            float dtime_s = fmod(tick_ms[idx_tick_ms], 60.0f);   tick_ms[idx_tick_ms] /= 60.0f;
+            float dtime_m = fmod(tick_ms[idx_tick_ms], 60.0f);   tick_ms[idx_tick_ms] /= 60.0f;
+            float dtime_h = fmod(tick_ms[idx_tick_ms], 60.0f);   tick_ms[idx_tick_ms] /= 60.0f;
+            dtime_h = fmod(dtime_h, 12.0f);
             
-            time_ms = tick_mode ? time_ms : 0;
-            scui_coord_t angle_h = dtime_h * (360 / 24) + dtime_m * (360 / 60) * 6 / 360;
-            scui_coord_t angle_m = dtime_m * (360 / 60) + dtime_s * (360 / 60) * 6 / 360;
-            scui_coord_t angle_s = dtime_s * (360 / 60) + time_ms * 6 / 1000;
-            scui_coord_t angle[3] = {angle_h, angle_m, angle_s};
+            dtime_s = tick_mode ? dtime_s : (int)dtime_s;
+            scui_coord3_t angle_h = dtime_h * 30;
+            scui_coord3_t angle_m = dtime_m * 6;
+            scui_coord3_t angle_s = dtime_s * 6;
+            scui_coord3_t angle[3] = {angle_h, angle_m, angle_s};
+            SCUI_LOG_INFO("angle<h:%f;m:%f;s:%f;>", angle_h, angle_m, angle_s);
             
             for (scui_handle_t idx_angle = 0; idx_angle < scui_arr_len(angle); idx_angle++) {
                 
@@ -126,7 +131,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_matrix_t matrix = {0};
                 scui_matrix_identity(&matrix);
                 scui_matrix_translate(&matrix, &anchor2);
-                scui_matrix_rotate_a(&matrix, (float)angle[idx_angle], 0x00);
+                scui_matrix_rotate_a(&matrix, angle[idx_angle], 0x00);
                 scui_matrix_translate(&matrix, &center2);
                 
                 scui_area_t image_clip = {

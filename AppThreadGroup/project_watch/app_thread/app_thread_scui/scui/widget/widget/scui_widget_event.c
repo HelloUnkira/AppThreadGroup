@@ -637,8 +637,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
         return;
     case scui_event_focus_lost:
     case scui_event_focus_get:
-        scui_widget_event_process(event);
-        scui_event_mask_over(event);
+        scui_widget_event_bubble(event, NULL, false, true);
         return;
     case scui_event_show:
     case scui_event_hide:

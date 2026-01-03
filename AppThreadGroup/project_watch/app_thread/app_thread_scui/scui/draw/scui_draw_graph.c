@@ -15,34 +15,35 @@
  *    此外,基础图象绘制的效果没有想象中的优秀
  *    它在使用过程中,限制较大
  */
+    
+/*@brief 绘制上下文
+ *@param draw_dsc 绘制描述符实例
+ */
+void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
 
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  */
 void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
 {
-    void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
-    void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
-    
-    
-    
     typedef void (*scui_draw_ctx_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_cb_t scui_draw_ctx_cb[scui_draw_type_num] = {
         [scui_draw_type_byte_copy] =                scui_draw_ctx_byte_copy,

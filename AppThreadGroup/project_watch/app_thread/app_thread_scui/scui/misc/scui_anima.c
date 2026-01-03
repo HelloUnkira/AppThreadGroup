@@ -37,13 +37,18 @@ uint32_t scui_anima_elapse_last(void)
 void scui_anima_elapse_new(uint32_t elapse)
 {
     scui_anima_list.elapse += elapse;
+    scui_anima_list.elapse_r += elapse;
     
-    if (scui_anima_list.elapse >= SCUI_ANIMA_TICK) {
+    uint32_t elapse_r = scui_anima_list.elapse_r;
+    uint32_t elapse_l = scui_anima_list.elapse_l;
+    if (elapse_r - elapse_l >= SCUI_ANIMA_TICK) {
+        scui_anima_list.elapse_l = scui_anima_list.elapse_r;
+        
         scui_event_t event = {
             .object = SCUI_HANDLE_SYSTEM,
             .type   = scui_event_anima_elapse,
             .absorb = scui_event_anima_elapse_absorb,
-            .tick   = 1,
+            .tick   = elapse_r - elapse_l,
         };
         scui_event_notify(&event);
     }

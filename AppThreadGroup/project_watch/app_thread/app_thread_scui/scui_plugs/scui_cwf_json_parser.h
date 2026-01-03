@@ -37,12 +37,6 @@ typedef struct {
     void         **list_src;
 } scui_cwf_json_parser_t;
 
-/*@brief 更新cwf
- *@param inst 实例
- *@param tick 流失ms
- */
-void scui_cwf_json_anim(void **inst, int32_t tick);
-
 /*@brief 销毁cwf
  *@param inst 实例地址
  */

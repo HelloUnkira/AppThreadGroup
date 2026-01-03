@@ -22,25 +22,6 @@ void scui_cwf_json_parser_free(void *ptr)
 }
 #endif
 
-/*@brief 解析器指定项更新
- *@param parser 解析器
- *@param idx    指定项
- */
-void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx);
-
-/*@brief 解析器指定项销毁
- *@param parser 解析器
- *@param idx    指定项
- */
-void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx);
-
-/*@brief 解析器指定项构造
- *@param parser 解析器
- *@param idx    指定项
- *@param dict   构造参数
- */
-void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON *dict);
-
 /*@brief 生成u32字段
  *@param byte4 小端序4字节
  *@retval u32字段
@@ -54,28 +35,42 @@ static uint32_t scui_cwf_json_u32(uint8_t byte4[4])
     return data32;
 }
 
+/*@brief 解析器指定项更新
+ *@param parser 解析器
+ *@param idx    指定项
+ */
+void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx);
+void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx);
+void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON *dict);
+
 /*@brief 更新cwf
  *@param inst 实例
  *@param tick 流失ms
  */
-void scui_cwf_json_anim(void **inst, int32_t tick)
+static void scui_cwf_json_custom_event(scui_event_t *event)
 {
-    SCUI_ASSERT(inst != NULL);
-    scui_cwf_json_parser_t *parser = *inst;
-    
-    /* 做个缓速 */
-    static int32_t span_fps = 7;
-    static int32_t tick_cnt = 0;
-    tick_cnt += tick;
-    
-    if (tick_cnt <  1000 / span_fps) return;
-        tick_cnt -= 1000 / span_fps;
-    
-    for (uint32_t idx = 0; idx < parser->list_num; idx++)
-        scui_cwf_json_anim_item(parser, idx);
-    
-    // 控件自行更新, 不做全局刷新
-    // scui_widget_draw(parser->parent, NULL, false);
+    switch (event->type) {
+    case scui_event_anima_elapse: {
+        void **inst = NULL;
+        scui_widget_user_data_get(event->object, (void **)&inst);
+        
+        scui_cwf_json_parser_t *parser = *inst;
+        
+        /* 做个缓速 */
+        static int32_t span_fps = 7;
+        static int32_t tick_cnt = 0;
+        tick_cnt += event->tick;
+        
+        if (tick_cnt <  1000 / span_fps) return;
+            tick_cnt -= 1000 / span_fps;
+        
+        for (uint32_t idx = 0; idx < parser->list_num; idx++)
+            scui_cwf_json_anim_item(parser, idx);
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 /*@brief 销毁cwf
@@ -229,9 +224,14 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;
     
+    // 给这个父容器悬挂帧动画更新
+    custom_maker.widget.style.sched_anima = true;
+    custom_maker.widget.event_cb = scui_cwf_json_custom_event;
+    
     custom_maker.widget.style.fully_bg = true;
     custom_maker.widget.style.cover_fg = true;
     scui_widget_create(&custom_maker, &parser->parent);
+    scui_widget_user_data_set(parser->parent, (void *)inst);
     
     // 按索引顺序一个个解析, 然后添加到parser中去
     for (uint32_t idx = 0; idx < parser->list_num; idx++) {

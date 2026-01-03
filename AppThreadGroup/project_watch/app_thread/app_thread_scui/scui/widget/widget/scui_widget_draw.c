@@ -180,47 +180,6 @@ static bool scui_widget_draw_clip_seg(scui_area_t *dst_clip, scui_point_t *dst_o
 }
 #endif
 
-/*@brief 控件绘制上下文
- *@param draw_graph 绘制参数实例
- */
-void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
-{
-    void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc);
-    void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc);
-    
-    
-    
-    typedef void (*scui_widget_draw_cb_t)(scui_widget_draw_dsc_t *draw_dsc);
-    static const scui_widget_draw_cb_t scui_widget_draw_cb[scui_widget_draw_type_num] = {
-        [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
-        [scui_widget_draw_type_color] =             scui_widget_draw_ctx_color,
-        [scui_widget_draw_type_color_grad] =        scui_widget_draw_ctx_color_grad,
-        [scui_widget_draw_type_blur] =              scui_widget_draw_ctx_blur,
-        [scui_widget_draw_type_image] =             scui_widget_draw_ctx_image,
-        [scui_widget_draw_type_image_scale] =       scui_widget_draw_ctx_image_scale,
-        [scui_widget_draw_type_image_rotate] =      scui_widget_draw_ctx_image_rotate,
-        [scui_widget_draw_type_image_matrix] =      scui_widget_draw_ctx_image_matrix,
-        [scui_widget_draw_type_ring] =              scui_widget_draw_ctx_ring,
-        [scui_widget_draw_type_qrcode] =            scui_widget_draw_ctx_qrcode,
-        [scui_widget_draw_type_barcode] =           scui_widget_draw_ctx_barcode,
-        [scui_widget_draw_type_graph] =             scui_widget_draw_ctx_graph,
-    };
-    
-    SCUI_ASSERT(draw_dsc->type > scui_widget_draw_type_none);
-    SCUI_ASSERT(draw_dsc->type < scui_widget_draw_type_num);
-    scui_widget_draw_cb[draw_dsc->type](draw_dsc);
-}
-
 /*@brief 控件在画布绘制字符串
  *@param draw_graph 绘制参数实例
  */
@@ -564,7 +523,7 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
     scui_area_t  *clip   = draw_dsc->image_rotate.clip;
     scui_point_t  anchor = draw_dsc->image_rotate.anchor;
     scui_point_t  center = draw_dsc->image_rotate.center;
-    scui_coord_t  angle  = draw_dsc->image_rotate.angle;
+    scui_multi_t  angle  = draw_dsc->image_rotate.angle;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -882,4 +841,30 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
         graph_dsc->src_alpha   = widget->alpha;
         scui_draw_graph_ctx(graph_dsc);
     }
+}
+
+/*@brief 控件绘制上下文
+ *@param draw_graph 绘制参数实例
+ */
+void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc)
+{
+    typedef void (*scui_widget_draw_cb_t)(scui_widget_draw_dsc_t *draw_dsc);
+    static const scui_widget_draw_cb_t scui_widget_draw_cb[scui_widget_draw_type_num] = {
+        [scui_widget_draw_type_string] =            scui_widget_draw_ctx_string,
+        [scui_widget_draw_type_color] =             scui_widget_draw_ctx_color,
+        [scui_widget_draw_type_color_grad] =        scui_widget_draw_ctx_color_grad,
+        [scui_widget_draw_type_blur] =              scui_widget_draw_ctx_blur,
+        [scui_widget_draw_type_image] =             scui_widget_draw_ctx_image,
+        [scui_widget_draw_type_image_scale] =       scui_widget_draw_ctx_image_scale,
+        [scui_widget_draw_type_image_rotate] =      scui_widget_draw_ctx_image_rotate,
+        [scui_widget_draw_type_image_matrix] =      scui_widget_draw_ctx_image_matrix,
+        [scui_widget_draw_type_ring] =              scui_widget_draw_ctx_ring,
+        [scui_widget_draw_type_qrcode] =            scui_widget_draw_ctx_qrcode,
+        [scui_widget_draw_type_barcode] =           scui_widget_draw_ctx_barcode,
+        [scui_widget_draw_type_graph] =             scui_widget_draw_ctx_graph,
+    };
+    
+    SCUI_ASSERT(draw_dsc->type > scui_widget_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_widget_draw_type_num);
+    scui_widget_draw_cb[draw_dsc->type](draw_dsc);
 }

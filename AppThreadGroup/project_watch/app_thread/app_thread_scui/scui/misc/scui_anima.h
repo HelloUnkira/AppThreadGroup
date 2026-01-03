@@ -37,6 +37,8 @@ typedef struct {
     bool refr_sched;
     bool run_status;
     uint32_t elapse;
+    uint64_t elapse_r;
+    uint64_t elapse_l;
     scui_handle_t list[SCUI_ANIMA_LIMIT];
 } scui_anima_list_t;
 
