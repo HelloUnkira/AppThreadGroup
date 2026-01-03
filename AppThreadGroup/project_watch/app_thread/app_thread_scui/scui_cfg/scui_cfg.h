@@ -73,7 +73,7 @@
 /* indev: */
 
 /* 事件合并:多次点击等等 */
-#define SCUI_INDEV_EVENT_MERGE                      (1)
+#define SCUI_INDEV_EVENT_MERGE                      (0)
 
 /* 输入设备:ptr */
 #define SCUI_INDEV_PTR_CLICK_TIME                   (200)   /* click: 点击时间 */

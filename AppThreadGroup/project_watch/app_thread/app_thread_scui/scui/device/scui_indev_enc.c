@@ -25,6 +25,7 @@ static bool scui_event_enc_absorb(void *evt_old, void *evt_new)
 static void scui_indev_enc_event_check(scui_event_t *event)
 {
     #if SCUI_INDEV_EVENT_MERGE
+    scui_event_notify(event);
     #else
     scui_event_notify(event);
     #endif

@@ -165,26 +165,34 @@ void scui_widget_clip_update(scui_widget_t *widget)
     
     /* 从父控件的当前位置开始,迭代到后面的兄弟控件,清除自己的剪切域 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        bool not_match = true;
+        scui_handle_t  widget_i = SCUI_HANDLE_INVALID - 1;
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
         for (scui_handle_t idx = 0; idx < widget_p->child_num; idx++) {
-            if (widget_p->child_list[idx] != SCUI_HANDLE_INVALID &&
-                widget_p->child_list[idx] != widget->myself) {
-                if (not_match)
-                    continue;
-                scui_handle_t  handle_s = widget_p->child_list[idx];
-                scui_widget_t *widget_s = scui_handle_source_check(handle_s);
-                /* 控件隐藏则跳过 */
-                if (scui_widget_is_hide(handle_s))
-                    continue;
-                /* 控件满足完全覆盖的条件 */
-                if (scui_widget_clip_cover(widget_s))
-                    scui_clip_del(&widget->clip_set, &widget_s->clip_set.clip);
-            }
-            if (widget_p->child_list[idx] == widget->myself)
-                not_match = false;
+            if (widget_p->child_list[idx] != widget->myself)
+                continue;
+            
+            widget_i = idx;
+            break;
         }
-        SCUI_ASSERT(!not_match);
+        SCUI_ASSERT(widget_i < widget_p->child_num);
+        
+        // 逆向绘制要顺向裁剪
+        scui_handle_t widget_s = widget_p->style.order_draw ? 0 : widget_i;
+        scui_handle_t widget_e = widget_p->style.order_draw ? widget_i : widget_p->child_num - 1;
+        
+        for (scui_handle_t idx = widget_s; idx <= widget_e; idx++) {
+            if (widget_p->child_list[idx] == SCUI_HANDLE_INVALID || idx == widget_i)
+                continue;
+            
+            scui_handle_t  handle_s = widget_p->child_list[idx];
+            scui_widget_t *widget_s = scui_handle_source_check(handle_s);
+            /* 控件隐藏则跳过 */
+            if (scui_widget_is_hide(handle_s))
+                continue;
+            /* 控件满足完全覆盖的条件 */
+            if (scui_widget_clip_cover(widget_s))
+                scui_clip_del(&widget->clip_set, &widget_s->clip_set.clip);
+        }
     }
 }
 

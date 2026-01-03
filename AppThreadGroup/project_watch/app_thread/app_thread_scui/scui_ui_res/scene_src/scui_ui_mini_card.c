@@ -742,13 +742,13 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_handle_t image = scui_handle_find();
         scui_handle_linker(image, &img_inst);
         
-        
-        
-        scui_point_t offset  = {0};
-        scui_multi_t percent = 100;
         // 计算当前控件中心到父控件中心距离
         scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
         scui_area_t clip_w = scui_widget_clip(event->object);
+        
+        #if 1
+        scui_point_t offset  = {0};
+        scui_multi_t percent = 100;
         offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
         offset.y = scui_dist(clip_p.y + clip_p.h / 2, clip_w.y + clip_w.h / 2);
         
@@ -774,17 +774,18 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_widget_alpha_set(event->object, alpha, true);
         #endif
         
-        
-        
         scui_point_t img_scale = {0};
         scui_opt_pos_t img_pos = scui_opt_pos_c;
         img_scale.x = 1024 * (scui_multi_t)percent / 100;
         img_scale.y = 1024 * (scui_multi_t)percent / 100;
+        
         scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
-        
-        
-        
         scui_widget_alpha_set(event->object, alpha_raw, true);
+        #else
+        clip_w.x += (clip_p.w - src_clip.w) / 2;
+        scui_widget_draw_image(event->object, &clip_w, image, NULL, SCUI_COLOR_UNUSED);
+        #endif
+        
         scui_handle_clear(image);
         break;
     }
