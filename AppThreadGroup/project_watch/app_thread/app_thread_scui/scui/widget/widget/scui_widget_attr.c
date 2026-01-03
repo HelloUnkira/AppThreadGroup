@@ -49,6 +49,7 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child)
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == SCUI_HANDLE_INVALID) {
             widget->child_list[idx]  = child;
+            widget->child_now++;
             
             /* 子控件列表更新通知 */
             scui_event_t event = {
@@ -73,6 +74,7 @@ void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child)
     for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
         if (widget->child_list[idx] == child) {
             widget->child_list[idx]  = SCUI_HANDLE_INVALID;
+            widget->child_now--;
             
             /* 子控件列表更新通知 */
             scui_event_t event = {
@@ -94,6 +96,16 @@ scui_handle_t scui_widget_child_num(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     return widget->child_num;
+}
+
+/*@brief 子控件当前数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_now(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    return widget->child_now;
 }
 
 /*@brief 指定偏移子控件

@@ -78,7 +78,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     }
     
     /* 构建孩子列表 */
-    widget->child_num = widget_maker->child_num;
+    widget->child_now  = 0;
+    widget->child_num  = widget_maker->child_num;
     widget->child_list = NULL;
     if (widget->child_num != 0) {
         scui_handle_t list_size = widget->child_num * sizeof(scui_handle_t);

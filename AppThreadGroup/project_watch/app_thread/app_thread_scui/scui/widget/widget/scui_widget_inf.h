@@ -25,6 +25,12 @@ scui_handle_t scui_widget_parent(scui_handle_t handle);
  */
 scui_handle_t scui_widget_child_num(scui_handle_t handle);
 
+/*@brief 子控件当前数量
+ *@param handle 控件句柄
+ *@retval 子控件数量
+ */
+scui_handle_t scui_widget_child_now(scui_handle_t handle);
+
 /*@brief 指定偏移子控件
  *@param handle 控件句柄
  *@param offset 偏移值

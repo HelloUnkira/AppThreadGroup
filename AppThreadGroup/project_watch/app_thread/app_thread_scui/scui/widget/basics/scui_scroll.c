@@ -1250,9 +1250,6 @@ static void scui_scroll_event_layout(scui_event_t *event)
     else
         return;
     
-    if (widget->child_num == 0)
-        return;
-    
     SCUI_LOG_INFO("widget: %u", widget->myself);
     
     // 状态量还原
@@ -1376,6 +1373,10 @@ void scui_scroll_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
+    
+    // 无子控件不响应事件
+    if (widget->child_now == 0)
+        return;
     
     switch (event->type) {
     case scui_event_show:

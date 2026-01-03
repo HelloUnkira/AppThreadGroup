@@ -84,7 +84,8 @@ typedef struct {
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
     scui_handle_t          *child_list;     /* 控件关联属性:子控件列表 */
-    scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
+    scui_handle_t           child_num;      /* 控件关联属性:子控件最大数量 */
+    scui_handle_t           child_now;      /* 控件关联属性:子控件当前数量 */
     scui_surface_t         *surface;        /* 控件画布(图形上下文):画布实例 */
     scui_clip_set_t         clip_set;       /* 控件画布(图形上下文):画布剪切域集合 */
     scui_handle_t           user_data;      /* 扩展字段:用户资源句柄 */
@@ -103,7 +104,7 @@ typedef struct {
     scui_area_t             clip;           /* 控件有效区域 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
     scui_handle_t           parent;         /* 控件关联属性:父控件 */
-    scui_handle_t           child_num;      /* 控件关联属性:子控件数量 */
+    scui_handle_t           child_num;      /* 控件关联属性:子控件最大数量 */
     scui_handle_t           anima_num;      /* 控件动画数量:最大限制 */
     scui_handle_t           image;          /* 背景图片(如果有背景图片,优先绘制) */
     scui_color_t            color;          /* 纯色背景(如果没背景图片,颜色绘制) */
