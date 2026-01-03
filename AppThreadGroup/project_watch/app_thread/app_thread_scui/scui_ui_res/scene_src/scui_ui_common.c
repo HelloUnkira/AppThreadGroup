@@ -567,7 +567,7 @@ void scui_ui_scene_return(void)
     
     if (stack_nest > 1) {
         // 返回上一层
-        scui_window_stack_del();
+        scui_window_stack_del(SCUI_HANDLE_INVALID);
         return;
     } else {
         // 回到主界面

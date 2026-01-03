@@ -15,6 +15,11 @@ typedef int32_t scui_multi_t;
 #define scui_multi_max  (0x7fffffff)
 #define scui_multi_min  (0x80000000)
 
+/*@brief 绝对缩放比例
+ */
+#define SCUI_HOR_PCT(pct)   ((pct) * 100 / (SCUI_HOR_RES))
+#define SCUI_VER_PCT(pct)   ((pct) * 100 / (SCUI_VER_RES))
+
 /*@brief 坐标
  */
 typedef union {

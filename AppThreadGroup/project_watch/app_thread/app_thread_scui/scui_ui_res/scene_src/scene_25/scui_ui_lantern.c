@@ -251,7 +251,7 @@ void scui_ui_scene_lantern_custom_event_proc(scui_event_t *event)
         scui_window_switch_cfg_type(&cfg_type);
         scui_window_switch_type_t type = *cfg_type;
         *cfg_type = scui_window_switch_circle;
-        scui_window_stack_del();
+        scui_window_stack_del(SCUI_UI_SCENE_LANTERN);
         *cfg_type = type;
         
         break;

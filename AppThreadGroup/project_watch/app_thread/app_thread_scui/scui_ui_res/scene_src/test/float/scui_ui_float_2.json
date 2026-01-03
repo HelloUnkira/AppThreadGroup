@@ -3,7 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",
@@ -16,7 +16,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
@@ -26,7 +26,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_HOR_RES * 1 / 13",
             "widget.clip.y":                "SCUI_VER_RES * 1 / 13",
@@ -39,7 +39,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_HOR_RES * 5 / 13",
             "widget.clip.y":                "SCUI_VER_RES * 1 / 13",
@@ -52,7 +52,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_HOR_RES * 9 / 13",
             "widget.clip.y":                "SCUI_VER_RES * 1 / 13",
@@ -65,7 +65,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_HOR_RES * 1 / 13",
             "widget.clip.y":                "SCUI_VER_RES * 5 / 13",
@@ -78,7 +78,7 @@
         },
         {
             "widget.type":                  "scui_widget_type_custom",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.sched_anima":     "true",
             "widget.clip.x":                "SCUI_HOR_RES * 7 / 13",
             "widget.clip.y":                "SCUI_VER_RES * 5 / 13",

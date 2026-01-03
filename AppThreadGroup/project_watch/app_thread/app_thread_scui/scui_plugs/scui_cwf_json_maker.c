@@ -432,7 +432,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip.h = res->img_h;
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.style.cover_bg = true;
+            custom_maker.widget.style.fully_bg = true;
             custom_maker.widget.image = parser->image_hit[res->img_ofs[0]];
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;
@@ -517,7 +517,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
             custom_maker.widget.clip.h = scui_image_h(parser->image_hit[res->img_ofs[0]]);
             custom_maker.widget.parent = parser->parent;
             
-            custom_maker.widget.style.cover_bg = true;
+            custom_maker.widget.style.fully_bg = true;
             custom_maker.widget.image = parser->image_hit[res->img_ofs[0]];
             scui_widget_create(&custom_maker, &parser->list_child[idx]);
             break;

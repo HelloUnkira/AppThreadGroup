@@ -85,7 +85,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart1_maker.histogram.height    = chart1_maker.widget.clip.h - 10;
         chart1_maker.histogram.space     = 4;
         
-        chart1_maker.widget.style.cover_bg = true;
+        chart1_maker.widget.style.fully_bg = true;
         chart1_maker.histogram.color.color.full = 0xFFFF0000;
         scui_widget_create(&chart1_maker, &chart1_handle);
         scui_chart_histogram_data(chart1_handle, vlist_min, vlist_max);
@@ -114,7 +114,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart2_maker.line.height    = chart2_maker.widget.clip.h - 10;
         chart2_maker.line.space     = 2;
         
-        chart2_maker.widget.style.cover_bg = true;
+        chart2_maker.widget.style.fully_bg = true;
         chart2_maker.line.color.color.full = 0xFFFF0000;
         scui_widget_create(&chart2_maker, &chart2_handle);
         

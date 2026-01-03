@@ -38,6 +38,10 @@
 #include "scui_indev_key.h"     /* 输入设备:key */
 #include "scui_tick.h"          /* 滴答器 */
 #include "scui_disp.h"          /* 显示器 */
+/* linker */
+#include "scui_image_frame.h"   /* 图像帧资源加载卸载 */
+#include "scui_image_src.h"     /* 图像资源加载卸载 */
+#include "scui_font_src.h"      /* 字体资源获取 */
 /* font */
 #include "scui_font.h"
 #include "scui_font_cache.h"
@@ -66,15 +70,12 @@
 #include "scui_linear_inf.h"        /* 控件(列表)API */
 #include "scui_roller.h"            /* 控件(滚轮) */
 #include "scui_roller_inf.h"        /* 控件(滚轮)API */
+#include "scui_xvedio.h"            /* 控件(图帧) */
+#include "scui_xvedio_inf.h"        /* 控件(图帧)API */
 /* widget: */
 #include "scui_button.h"            /* 控件(按钮) */
 #include "scui_button_inf.h"        /* 控件(按钮)API */
 #include "scui_chart.h"             /* 控件(图表) */
 #include "scui_chart_inf.h"         /* 控件(图表)API */
-
-/* linker: */
-#include "scui_image_frame.h"       /* 图像帧资源加载卸载 */
-#include "scui_image_src.h"         /* 图像资源加载卸载 */
-#include "scui_font_src.h"          /* 字体资源获取 */
 
 #endif

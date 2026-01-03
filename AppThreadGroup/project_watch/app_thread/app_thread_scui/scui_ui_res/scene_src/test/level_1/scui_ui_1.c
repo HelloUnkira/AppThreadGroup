@@ -56,88 +56,49 @@ void scui_ui_scene_1_event_proc(scui_event_t *event)
  */
 void scui_ui_scene_1_vedio_event_proc(scui_event_t *event)
 {
-    static scui_image_frame_t image_frame_gif = {0};
-    
-    static scui_image_frame_t image_frame_lottie_1 = {0};
-    static scui_image_frame_t image_frame_lottie_2 = {0};
-    
     switch (event->type) {
     case scui_event_anima_elapse: {
-        
-        static uint8_t cnt = 0;
-        cnt++;
-        
-        if (cnt % 1 == 0) {
-            // 更新一个图像帧
-            scui_widget_draw(event->object, NULL, false);
-        }
         break;
     }
     case scui_event_create: {
         
-        // 构建一个图像帧
-        image_frame_gif.type = scui_image_type_gif;
-        image_frame_gif.handle = scui_image_prj_image_src_vedio_bulbgif;
-        image_frame_gif.gif.loop = 100;
-        scui_image_frame_make(&image_frame_gif);
+        scui_xvedio_maker_t xvedio_maker = {0};
+        scui_handle_t xvedio_handle = SCUI_HANDLE_INVALID;
+        xvedio_maker.widget.type    = scui_widget_type_xvedio;
+        xvedio_maker.widget.parent  = event->object;
         
-        // 构建一个图像帧
-        image_frame_lottie_1.type = scui_image_type_lottie;
-        image_frame_lottie_1.handle = scui_image_prj_image_src_vedio_comfirmlottiejson;
-        scui_image_frame_make(&image_frame_lottie_1);
-        image_frame_lottie_2.type = scui_image_type_lottie;
-        image_frame_lottie_2.handle = scui_image_prj_image_src_vedio_musiclottiejson;
-        scui_image_frame_make(&image_frame_lottie_2);
+        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6;
+        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 80 / 2;
+        xvedio_maker.widget.clip.w   = 80;
+        xvedio_maker.widget.clip.h   = 80;
+        xvedio_maker.iframe.type     = scui_image_type_gif;
+        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_bulbgif;
+        xvedio_maker.iframe.gif.loop = 100;
+        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        
+        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6 + 120;
+        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 100 / 2;
+        xvedio_maker.widget.clip.w   = 100;
+        xvedio_maker.widget.clip.h   = 100;
+        xvedio_maker.iframe.type     = scui_image_type_lottie;
+        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_comfirmlottiejson;
+        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        
+        xvedio_maker.widget.clip.x   = SCUI_VER_RES / 6 + 120 + 120;
+        xvedio_maker.widget.clip.y   = SCUI_VER_RES / 5 - 100 / 2;
+        xvedio_maker.widget.clip.w   = 100;
+        xvedio_maker.widget.clip.h   = 100;
+        xvedio_maker.iframe.type     = scui_image_type_lottie;
+        xvedio_maker.iframe.handle   = scui_image_prj_image_src_vedio_musiclottiejson;
+        scui_widget_create(&xvedio_maker, &xvedio_handle);
+        
         break;
     }
     case scui_event_destroy: {
-        
-        // 销毁一个图像帧
-        scui_image_frame_burn(&image_frame_gif);
-        
-        // 销毁一个图像帧
-        scui_image_frame_burn(&image_frame_lottie_1);
-        scui_image_frame_burn(&image_frame_lottie_2);
         break;
     }
     case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
         
-        scui_image_frame_data(&image_frame_gif); {
-            
-            scui_handle_t image = image_frame_gif.frame;
-            scui_area_t clip = scui_widget_clip(event->object);
-            clip.x += SCUI_VER_RES / 6;
-            clip.y += SCUI_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
-        }
-        
-        scui_image_frame_data(&image_frame_lottie_1); {
-            
-            image_frame_lottie_1.lottie.index++;
-            if (image_frame_lottie_1.lottie.index >= image_frame_lottie_1.lottie.frame)
-                image_frame_lottie_1.lottie.index  = 0;
-            
-            scui_handle_t image = image_frame_lottie_1.frame;
-            scui_area_t clip = scui_widget_clip(event->object);
-            clip.x += SCUI_VER_RES / 6 + 120;
-            clip.y += SCUI_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
-        }
-        
-        scui_image_frame_data(&image_frame_lottie_2); {
-            
-            image_frame_lottie_2.lottie.index++;
-            if (image_frame_lottie_2.lottie.index >= image_frame_lottie_2.lottie.frame)
-                image_frame_lottie_2.lottie.index  = 0;
-            
-            scui_handle_t image = image_frame_lottie_2.frame;
-            scui_area_t clip = scui_widget_clip(event->object);
-            clip.x += SCUI_VER_RES / 6 + 120 + 120;
-            clip.y += SCUI_VER_RES / 5 - scui_image_h(image) / 2;
-            scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
-        }
         break;
     }
     default:

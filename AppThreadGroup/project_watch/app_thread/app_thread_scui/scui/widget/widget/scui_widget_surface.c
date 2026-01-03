@@ -128,7 +128,7 @@ bool scui_widget_clip_cover(scui_widget_t *widget)
         if (widget->style.cover_fg)
             return true;
         /* 控件背景不透明且全覆盖 */
-        if (widget->style.cover_bg) {
+        if (widget->style.fully_bg) {
             /* 纯色背景,全覆盖 */
             if (widget->image == SCUI_HANDLE_INVALID)
                 return true;

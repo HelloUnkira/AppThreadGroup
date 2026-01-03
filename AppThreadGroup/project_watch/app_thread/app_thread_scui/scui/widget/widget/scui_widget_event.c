@@ -362,7 +362,7 @@ static void scui_widget_event_process(scui_event_t *event)
         if (scui_event_check_execute(event)) {
             
             /* 控件背景透明则不绘制 */
-            if (widget->style.cover_bg) {
+            if (widget->style.fully_bg) {
                 /* 绘制图片背景(有背景图片) */
                 /* 绘制纯色背景(没有背景图片) */
                 if (widget->image != SCUI_HANDLE_INVALID)

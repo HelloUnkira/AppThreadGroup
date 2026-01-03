@@ -270,7 +270,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     custom_maker.widget.parent  = SCUI_HANDLE_INVALID;
     
     // 创建子控件(继承父控件部分参数)
-    custom_maker.widget.style.cover_bg  = false;
+    custom_maker.widget.style.fully_bg  = false;
     custom_maker.widget.style.indev_ptr = true;
     custom_maker.widget.parent          = widget->myself;
     custom_maker.widget.event_cb        = scui_roller_m_event;
@@ -282,7 +282,7 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     linear_item.handle_m = custom_handle;
     
     // 创建子控件树
-    custom_maker.widget.style.cover_bg  = true;
+    custom_maker.widget.style.fully_bg  = true;
     custom_maker.widget.style.indev_ptr = false;
     custom_maker.widget.parent          = SCUI_HANDLE_INVALID;
     custom_maker.widget.event_cb        = scui_roller_s_event;

@@ -3,7 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.clip.w":                "SCUI_HOR_RES",
             "widget.clip.h":                "SCUI_VER_RES",
             "widget.myself":                "SCUI_UI_SCENE_SPREAD",

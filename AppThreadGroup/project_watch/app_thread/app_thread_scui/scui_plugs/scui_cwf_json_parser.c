@@ -229,7 +229,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;
     
-    custom_maker.widget.style.cover_bg = true;
+    custom_maker.widget.style.fully_bg = true;
     custom_maker.widget.style.cover_fg = true;
     scui_widget_create(&custom_maker, &parser->parent);
     

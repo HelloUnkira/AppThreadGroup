@@ -11,6 +11,7 @@ typedef enum {
     scui_widget_type_string,    /* 字符串控件 */
     scui_widget_type_linear,    /* 列表控件 */
     scui_widget_type_roller,    /* 滚动控件 */
+    scui_widget_type_xvedio,	/* 图帧控件 */
     /* 扩展控件(按需补充) */
     scui_widget_type_button,    /* 纯色按钮 */
     scui_widget_type_chart,     /* 图表控件 */
@@ -28,7 +29,7 @@ typedef enum {
 typedef struct {
     scui_sbitfd_t state:1;              /* 控件隐藏:0;控件显示:1; */
     scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
-    scui_sbitfd_t cover_bg:1;           /* 背景覆盖:1;背景透明:0; */
+    scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
     scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
     scui_sbitfd_t order_draw:1;         /* 控件绘制顺序(0:顺向;1:逆向;) */
     scui_sbitfd_t sched_anima:1;        /* 控件调度帧动画标记 */

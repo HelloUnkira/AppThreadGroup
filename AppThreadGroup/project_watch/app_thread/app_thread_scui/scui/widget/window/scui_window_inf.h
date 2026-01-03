@@ -108,8 +108,9 @@ void scui_window_stack_cover(scui_handle_t handle);
 void scui_window_stack_add(scui_handle_t handle, bool reserve);
 
 /*@brief 窗口栈移除
+ *@param handle 目标窗口
  */
-void scui_window_stack_del(void);
+void scui_window_stack_del(scui_handle_t handle);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

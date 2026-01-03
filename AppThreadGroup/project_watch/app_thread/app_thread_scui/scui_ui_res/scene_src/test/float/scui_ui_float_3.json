@@ -3,7 +3,7 @@
     "widget": [
         {
             "widget.type":                  "scui_widget_type_window",
-            "widget.style.cover_bg":        "true",
+            "widget.style.fully_bg":        "true",
             "widget.style.indev_ptr":       "true",
             "widget.style.indev_enc":       "true",
             "widget.style.indev_key":       "true",

@@ -302,7 +302,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         scui_linear_maker_t linear_maker = {0};
         scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
         linear_maker.widget.type = scui_widget_type_linear;
-        linear_maker.widget.style.cover_bg  = true;
+        linear_maker.widget.style.fully_bg  = true;
         linear_maker.widget.style.indev_enc = true;
         linear_maker.widget.style.indev_key = true;
         linear_maker.widget.clip.w = SCUI_HOR_RES;
@@ -337,7 +337,7 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         scui_plug_coupler_recycle(scui_ui_res_local->coupler, true);
         scui_window_switch_type_t type = scui_window_switch_type_cfg_get();
         scui_window_switch_type_cfg_set(scui_window_switch_none);
-        scui_window_stack_del();
+        scui_window_stack_del(SCUI_UI_SCENE_LIST);
         scui_window_switch_type_cfg_set(type);
         scui_event_mask_over(event);
         #endif

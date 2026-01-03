@@ -232,7 +232,7 @@ void scui_event_custom_myself(scui_event_t *event)
             scui_window_switch_cfg_type(&cfg_type);
             scui_window_switch_type_t type = *cfg_type;
             *cfg_type = scui_window_switch_none;
-            scui_window_stack_del();
+            scui_window_stack_del(SCUI_UI_SCENE_STANDBY);
             *cfg_type = type;
         }
         break;

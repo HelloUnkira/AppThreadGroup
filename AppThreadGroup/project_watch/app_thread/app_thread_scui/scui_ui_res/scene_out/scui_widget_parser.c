@@ -305,7 +305,7 @@ extern void scui_ui_scene_test_event_proc(scui_event_t *event);
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_BUTTERFLY,
@@ -330,7 +330,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_BUTTERFLY_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_CUBE = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_CUBE,
@@ -355,7 +355,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_CUBE_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LANTERN = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_LANTERN,
@@ -380,7 +380,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LANTERN_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SOCCER = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_SOCCER,
@@ -405,7 +405,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SOCCER_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_key         = true,
 	.widget.style.indev_enc         = true,
@@ -436,7 +436,7 @@ static const scui_scroll_maker_t scui_widget_SCUI_UI_SCENE_HONEYCOMB_SCROLL = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
@@ -489,7 +489,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_ARC_MASK = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
@@ -522,7 +522,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_LIST_SCALE_MASK = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_SPREAD = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_SPREAD,
@@ -550,7 +550,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_SPREAD_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_THUMBWHEEL,
@@ -578,7 +578,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_THUMBWHEEL_CUSTOM = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_WATERFALL = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_key         = true,
 	.widget.style.indev_enc         = true,
@@ -639,7 +639,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MONITOR = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_POPUP = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = 58,
 	.widget.clip.y                  = 60,
@@ -675,7 +675,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_POPUP_BG = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY,
@@ -783,7 +783,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_BLANK
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
@@ -799,7 +799,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_HOME = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_key         = true,
@@ -833,7 +833,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_MINI_CARD_MASK = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_NONE,
@@ -843,7 +843,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NONE = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_NOTIFY,
@@ -855,7 +855,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_NOTIFY = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_QUICK_CARD,
@@ -867,7 +867,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_QUICK_CARD = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
@@ -883,7 +883,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_STANDBY = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
@@ -898,7 +898,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.x                  = SCUI_HOR_RES / 4,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 8,
 	.widget.clip.w                  = SCUI_HOR_RES / 2,
@@ -911,7 +911,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.x                  = 15,
 	.widget.clip.y                  = SCUI_VER_RES * 11 / 16,
 	.widget.clip.w                  = SCUI_HOR_RES - 30,
@@ -924,7 +924,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_1_2 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
@@ -939,7 +939,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
@@ -950,7 +950,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_C = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -964,7 +964,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_2 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -978,7 +978,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_3 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -992,7 +992,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_3 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_4 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 5 / 13,
@@ -1006,7 +1006,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_4 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_5 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 7 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 5 / 13,
@@ -1021,7 +1021,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_2_5 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
 	.widget.style.indev_key         = true,
@@ -1057,7 +1057,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_3_BTN = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,
@@ -1073,7 +1073,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_FLOAT_4 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_1 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
@@ -1093,11 +1093,12 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_1_VEDIO = {
 	.widget.myself                  = SCUI_UI_SCENE_1_VEDIO,
 	.widget.parent                  = SCUI_UI_SCENE_1,
 	.widget.event_cb                = scui_ui_scene_1_vedio_event_proc,
+	.widget.child_num               = 5,
 };
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_2 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
@@ -1132,7 +1133,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_2_RING = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.indev_key         = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
@@ -1145,7 +1146,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_3 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_6,
@@ -1158,7 +1159,7 @@ static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_6 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_1 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -1172,7 +1173,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_1 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_2 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -1186,7 +1187,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_2 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_3 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 1 / 13,
@@ -1200,7 +1201,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_3 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_4 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 5 / 13,
@@ -1214,7 +1215,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_4 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_5 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 5 / 13,
@@ -1228,7 +1229,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_5 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_6 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 9 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 5 / 13,
@@ -1242,7 +1243,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_6 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_7 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 1 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 9 / 13,
@@ -1256,7 +1257,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_7 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_8 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.clip.x                  = SCUI_HOR_RES * 5 / 13,
 	.widget.clip.y                  = SCUI_VER_RES * 9 / 13,
@@ -1270,7 +1271,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_8 = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 	.widget.type                    = scui_widget_type_custom,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_ptr_move    = true,
@@ -1286,7 +1287,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_6_9 = {
 
 static const scui_window_maker_t scui_widget_SCUI_UI_SCENE_TEST = {
 	.widget.type                    = scui_widget_type_window,
-	.widget.style.cover_bg          = true,
+	.widget.style.fully_bg          = true,
 	.widget.style.sched_anima       = true,
 	.widget.style.indev_ptr         = true,
 	.widget.style.indev_enc         = true,

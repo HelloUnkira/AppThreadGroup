@@ -1549,7 +1549,7 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         scui_linear_maker_t linear_maker = {0};
         scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
         linear_maker.widget.type = scui_widget_type_linear;
-        linear_maker.widget.style.cover_bg  = true;
+        linear_maker.widget.style.fully_bg  = true;
         linear_maker.widget.style.indev_enc = true;
         linear_maker.widget.style.indev_key = true;
         linear_maker.widget.clip.w = SCUI_HOR_RES;

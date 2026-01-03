@@ -160,17 +160,38 @@ void scui_window_stack_add(scui_handle_t handle, bool reserve)
 }
 
 /*@brief 窗口栈移除
+ *@param handle 目标窗口
  */
-void scui_window_stack_del(void)
+void scui_window_stack_del(scui_handle_t handle)
 {
     SCUI_ASSERT(scui_window_mgr.stack_args.top > 1);
-    scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 2];
-    scui_handle_t target_top = handle_top;
+    scui_handle_t handle_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 1];
+    scui_handle_t target_top = scui_window_mgr.stack_args.stack[scui_window_mgr.stack_args.top - 2];
+    
+    // 仅仅移除记录, 不涉及窗口调度
+    if (handle != SCUI_HANDLE_INVALID && handle_top != handle) {
+        
+        bool handle_unhit = true;
+        for (scui_handle_t idx = 0; idx < scui_window_mgr.stack_args.top; idx++) {
+            if (scui_window_mgr.stack_args.stack[idx] != handle)
+                continue;
+            // 后面的窗口覆盖前面的窗口
+            for (idx = idx; idx + 1 < scui_window_mgr.stack_args.top; idx++)
+                scui_window_mgr.stack_args.stack[idx] = scui_window_mgr.stack_args.stack[idx + 1];
+            
+            handle_unhit = false;
+            break;
+        }
+        if (handle_unhit)
+            return;
+        
+        target_top = handle_top;
+    }
+    
     if (!scui_window_jump(target_top, scui_window_switch_auto, scui_opt_dir_none)) {
          SCUI_LOG_INFO("jump false");
          return;
     }
-    
     scui_window_mgr.stack_args.top--;
     scui_window_stack_check();
 }

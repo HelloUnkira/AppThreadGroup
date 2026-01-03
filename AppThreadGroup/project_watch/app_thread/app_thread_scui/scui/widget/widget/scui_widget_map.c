@@ -100,6 +100,15 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .invoke  = scui_roller_invoke,
             .inherit = true,
         },
+        [scui_widget_type_xvedio] = {
+            .size    = sizeof(scui_xvedio_t),
+            .maker   = sizeof(scui_xvedio_maker_t),
+            .base    = scui_widget_type_xvedio,
+            .make    = scui_xvedio_make,
+            .burn    = scui_xvedio_burn,
+            .invoke  = scui_xvedio_invoke,
+            .inherit = false,
+        },
         
         /* 扩展控件 */
         [scui_widget_type_button] = {
