@@ -139,10 +139,10 @@ void scui_event_custom_access(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_click:
-        SCUI_LOG_WARN("event ptr click:%d", event->ptr_cnt);
+        SCUI_LOG_INFO("event ptr click:%d", event->ptr_cnt);
         break;
     case scui_event_key_click:
-        SCUI_LOG_WARN("event key click:%d", event->key_cnt);
+        SCUI_LOG_INFO("event key click:%d", event->key_cnt);
         break;
     default:
         break;

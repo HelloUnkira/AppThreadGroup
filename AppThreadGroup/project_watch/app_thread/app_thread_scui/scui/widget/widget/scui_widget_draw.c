@@ -188,7 +188,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_string_args_t *args = draw_dsc->string.args;
+    scui_string_args_t *args = draw_dsc->string_args;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -243,7 +243,7 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color.color;
+    scui_color_t  color  = draw_dsc->color;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -277,8 +277,8 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->color_grad.color;
-    scui_coord_t  way    = draw_dsc->color_grad.way;
+    scui_color_t  color  = draw_dsc->color;
+    scui_coord_t  way    = draw_dsc->way;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -346,9 +346,9 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_handle_t image  = draw_dsc->image.image;
-    scui_area_t  *clip   = draw_dsc->image.clip;
-    scui_color_t  color  = draw_dsc->image.color;
+    scui_handle_t image  = draw_dsc->image;
+    scui_area_t  *clip   = draw_dsc->clip;
+    scui_color_t  color  = draw_dsc->color;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -444,10 +444,10 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_handle_t image  = draw_dsc->image_scale.image;
-    scui_area_t   *clip  = draw_dsc->image_scale.clip;
-    scui_point_t  scale  = draw_dsc->image_scale.scale;
-    scui_opt_pos_t pos   = draw_dsc->image_scale.pos;
+    scui_handle_t image  = draw_dsc->image;
+    scui_area_t   *clip  = draw_dsc->clip;
+    scui_point_t  scale  = draw_dsc->scale;
+    scui_opt_pos_t pos   = draw_dsc->pos;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -519,11 +519,11 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_handle_t image  = draw_dsc->image_rotate.image;
-    scui_area_t  *clip   = draw_dsc->image_rotate.clip;
-    scui_point_t  anchor = draw_dsc->image_rotate.anchor;
-    scui_point_t  center = draw_dsc->image_rotate.center;
-    scui_multi_t  angle  = draw_dsc->image_rotate.angle;
+    scui_handle_t image  = draw_dsc->image;
+    scui_area_t  *clip   = draw_dsc->clip;
+    scui_point_t  anchor = draw_dsc->anchor;
+    scui_point_t  center = draw_dsc->center;
+    scui_multi_t  angle  = draw_dsc->angle;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -579,9 +579,9 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle  = draw_dsc->handle;
     scui_area_t  *target  = draw_dsc->target;
-    scui_handle_t  image  = draw_dsc->image_matrix.image;
-    scui_area_t   *clip   = draw_dsc->image_matrix.clip;
-    scui_matrix_t *matrix = draw_dsc->image_matrix.matrix;
+    scui_handle_t  image  = draw_dsc->image;
+    scui_area_t   *clip   = draw_dsc->clip;
+    scui_matrix_t *matrix = draw_dsc->matrix;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -633,9 +633,9 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->qrcode.color;
-    scui_multi_t  size   = draw_dsc->qrcode.size;
-    uint8_t      *data   = draw_dsc->qrcode.data;
+    scui_color_t  color  = draw_dsc->color;
+    scui_multi_t  size   = draw_dsc->size;
+    uint8_t      *data   = draw_dsc->data;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -680,9 +680,9 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_color_t  color  = draw_dsc->qrcode.color;
-    scui_multi_t  size   = draw_dsc->qrcode.size;
-    uint8_t      *data   = draw_dsc->qrcode.data;
+    scui_color_t  color  = draw_dsc->color;
+    scui_multi_t  size   = draw_dsc->size;
+    uint8_t      *data   = draw_dsc->data;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -725,13 +725,13 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle  = draw_dsc->handle;
     scui_area_t  *target  = draw_dsc->target;
-    scui_handle_t image   = draw_dsc->ring.image;
-    scui_area_t  *clip    = draw_dsc->ring.clip;
-    scui_color_t  color   = draw_dsc->ring.color;
-    scui_coord_t  angle_s = draw_dsc->ring.angle_s;
-    scui_coord_t  angle_e = draw_dsc->ring.angle_e;
-    scui_coord_t  percent = draw_dsc->ring.percent;
-    scui_handle_t image_e = draw_dsc->ring.image_e;
+    scui_handle_t image   = draw_dsc->image;
+    scui_area_t  *clip    = draw_dsc->clip;
+    scui_color_t  color   = draw_dsc->color;
+    scui_coord_t  angle_s = draw_dsc->angle_s;
+    scui_coord_t  angle_e = draw_dsc->angle_e;
+    scui_coord_t  percent = draw_dsc->percent;
+    scui_handle_t image_e = draw_dsc->image_e;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -814,7 +814,7 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_draw_dsc_t *graph_dsc = draw_dsc->graph.graph_dsc;
+    scui_draw_dsc_t *graph_dsc = draw_dsc->graph_dsc;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);

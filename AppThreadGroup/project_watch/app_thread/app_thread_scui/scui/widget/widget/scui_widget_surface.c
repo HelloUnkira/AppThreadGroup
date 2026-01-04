@@ -208,20 +208,17 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle)
 
 /*@brief 控件画布创建
  *@param handle  控件句柄
- *@param format  画布格式
- *@param hor_res 画布水平尺寸
- *@param ver_res 画布垂直尺寸
+ *@param surface 画布参数(.format;.hor_res;.ver_res;)
  */
-void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
-                                scui_coord_t  hor_res, scui_coord_t    ver_res)
+void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    SCUI_ASSERT(widget->surface == NULL && hor_res > 0 && ver_res > 0);
+    SCUI_ASSERT(widget->surface == NULL && surface->hor_res > 0 && surface->ver_res > 0);
     widget->surface = SCUI_MEM_ALLOC(scui_mem_type_mix, sizeof(scui_surface_t));
     
-    widget->surface->format  = format;
-    widget->surface->hor_res = hor_res;
-    widget->surface->ver_res = ver_res;
+    widget->surface->format  = surface->format;
+    widget->surface->hor_res = surface->hor_res;
+    widget->surface->ver_res = surface->ver_res;
     widget->surface->alpha   = scui_alpha_cover;
     
     if (widget->surface->format == scui_pixel_cf_def)
@@ -229,7 +226,7 @@ void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
     
     scui_coord_t res_byte = scui_pixel_bits(widget->surface->format) / 8;
     scui_coord_t res_rem  = sizeof(scui_color_wt_t) - res_byte;
-    scui_multi_t res_size = hor_res * ver_res * res_byte + res_rem;
+    scui_multi_t res_size = surface->hor_res * surface->ver_res * res_byte + res_rem;
     widget->surface->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, res_size);
 }
 

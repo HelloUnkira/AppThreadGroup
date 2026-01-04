@@ -199,7 +199,12 @@ void scui_plug_coupler_widget_m_event_proc(scui_plug_coupler_t *coupler, scui_ev
             // 创建一个独立的子画布,将目标绘制到一个独立子画布中
             if (surface_s == NULL) {
                 scui_area_t clip = scui_widget_clip(target_s);
-                scui_widget_surface_create(target_s, SCUI_PIXEL_CF_DEF_A, clip.w, clip.h);
+                scui_surface_t surface = {
+                    .format  = SCUI_PIXEL_CF_DEF_A,
+                    .hor_res = clip.w,
+                    .ver_res = clip.h,
+                };
+                scui_widget_surface_create(target_s, &surface);
                 surface_s = coupler->list_surface_s[idx] = scui_widget_surface(target_s);
                 coupler->list_draw_clip[idx] = scui_widget_clip(target_s);
                 coupler->list_refr[idx] = true;

@@ -34,12 +34,14 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 创建surface */
     if (window_maker->buffer) {
+        scui_surface_t surface = {
+            .format  = window_maker->format, // SCUI_PIXEL_CF_DEF_A;
+            .hor_res = widget->clip.w,
+            .ver_res = widget->clip.h,
+        };
         
-        scui_pixel_cf_t p_cf = window_maker->format; // SCUI_PIXEL_CF_DEF_A;
-        scui_coord_t hor_res = widget->clip.w;
-        scui_coord_t ver_res = widget->clip.h;
         scui_widget_clip_clear(widget, true);
-        scui_widget_surface_create(*handle, p_cf, hor_res, ver_res);
+        scui_widget_surface_create(*handle, &surface);
         scui_widget_surface_refr(*handle, true);
     }
     

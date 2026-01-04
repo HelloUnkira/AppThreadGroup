@@ -85,12 +85,9 @@ scui_surface_t * scui_widget_surface(scui_handle_t handle);
 
 /*@brief 控件画布创建
  *@param handle  控件句柄
- *@param format  画布格式
- *@param hor_res 画布水平尺寸
- *@param ver_res 画布垂直尺寸
+ *@param surface 画布参数(.format;.hor_res;.ver_res;)
  */
-void scui_widget_surface_create(scui_handle_t handle,  scui_pixel_cf_t format,
-                                scui_coord_t  hor_res, scui_coord_t    ver_res);
+void scui_widget_surface_create(scui_handle_t handle, scui_surface_t *surface);
 
 /*@brief 控件画布销毁
  *@param handle 控件句柄
@@ -352,72 +349,36 @@ typedef enum {
 
 typedef struct {
     scui_widget_draw_type_t type;
-    /*************************************************************************/
-    scui_handle_t handle;                       // 控件句柄
-    scui_area_t  *target;                       // 控件绘制区域
-    union {
-    /*************************************************************************/
-    struct {
-        void *args;                             // 字符串绘制参数(scui_string_args_t)
-    } string;
-    struct {
-        scui_color_t color;                     // 源色调
-    } color;
-    struct {
-        scui_color_t color;                     // 源色调
-        scui_coord_t way;                       // 渐变方向(0:hor;1:ver;)
-    } color_grad;
-    struct {
-        void *occupy;                           // 无效字段(占用)
-    } blur;
-    struct {
-        scui_handle_t image;                    // 图像句柄
-        scui_area_t  *clip;                     // 图像源绘制区域
-        scui_color_t  color;                    // 图像源色调(alpha图)
-    } image;
-    struct {
-        scui_handle_t  image;                   // 图像句柄
-        scui_area_t   *clip;                    // 图像源绘制区域
-        scui_point_t   scale;                   // 图形缩放比例
-        scui_opt_pos_t pos;                     // 缩放锚点
-    } image_scale;
-    struct {
-        scui_handle_t image;                    // 图像句柄
-        scui_area_t  *clip;                     // 图像源绘制区域
-        scui_point_t  anchor;                   // 图像旋转轴心
-        scui_point_t  center;                   // 图像旋转中心
-        scui_multi_t  angle;                    // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
-    } image_rotate;
-    struct {
-        scui_handle_t  image;                   // 图像句柄
-        scui_area_t   *clip;                    // 图像源绘制区域
-        scui_matrix_t *matrix;                  // 变换矩阵(逆矩阵)
-    } image_matrix;
-    struct {
-        scui_color_t color;                     // 图像源色调
-        scui_multi_t size;                      // 字符串长度
-        uint8_t     *data;                      // url网址链接字符串
-    } qrcode;
-    struct {
-        scui_color_t color;                     // 图像源色调
-        scui_multi_t size;                      // 字符串长度
-        uint8_t     *data;                      // url网址链接字符串
-    } barcode;
-    struct {
-        scui_handle_t image;                    // 图像句柄
-        scui_area_t  *clip;                     // 图像源绘制区域
-        scui_color_t  color;                    // 源色调(alpha图)
-        scui_coord_t  angle_s;                  // 起始角度
-        scui_coord_t  angle_e;                  // 结束角度
-        scui_coord_t  percent;                  // 圆环进度(百分比)
-        scui_handle_t image_e;                  // 控件句柄
-    } ring;
-    struct {
-        void *graph_dsc;                        // 绘制描述符实例(scui_draw_dsc_t)
-    } graph;
-    /*************************************************************************/
-    };
+    
+    scui_handle_t   handle;                     // 控件句柄
+    scui_area_t    *target;                     // 控件绘制域
+    
+    void           *string_args;                // 字符串绘制参数(scui_string_args_t)
+    
+    scui_color_t    color;                      // 像素,图像源色调
+    scui_coord_t    way;                        // 渐变方向(0:hor;1:ver;)
+    
+    scui_handle_t   image;                      // 图像句柄
+    scui_area_t    *clip;                       // 图像剪切域
+    scui_point_t    scale;                      // 图形缩放比例
+    scui_opt_pos_t  pos;                        // 缩放锚点
+    scui_point_t    anchor;                     // 图像旋转轴心
+    scui_point_t    center;                     // 图像旋转中心
+    scui_multi_t    angle;                      // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
+    scui_matrix_t  *matrix;                     // 变换矩阵(逆矩阵)
+    
+    scui_coord_t    angle_s;                    // 起始角度
+    scui_coord_t    angle_e;                    // 结束角度
+    scui_coord_t    percent;                    // 圆环进度(百分比)
+    scui_handle_t   image_e;                    // 控件句柄
+    
+    scui_multi_t    size;                       // 字符串长度
+    uint8_t        *data;                       // url网址链接字符串
+    
+    void           *graph_dsc;                  // 绘制描述符实例(scui_draw_dsc_t)
+    
 } scui_widget_draw_dsc_t;
+
 
 /*@brief 控件剪切域为空(绘制)
  *@param handle 控件句柄
@@ -442,13 +403,13 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc);
  */
 
 /* scui_widget_draw_type_string */
-#define scui_widget_draw_string(handle_v, target_v, args_v)                 \
+#define scui_widget_draw_string(handle_v, target_v, string_args_v)          \
 do {                                                                        \
     scui_widget_draw_dsc_t draw_dsc = {                                     \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_string,                               \
-        .string.args = args_v,                                              \
+        .string_args = string_args_v,                                       \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -460,7 +421,7 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_color,                                \
-        .color.color = color_v,                                             \
+        .color = color_v,                                                   \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -472,8 +433,8 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_color_grad,                           \
-        .color_grad.color = color_v,                                        \
-        .color_grad.way   = way_v,                                          \
+        .color = color_v,                                                   \
+        .way   = way_v,                                                     \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -497,9 +458,9 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image,                                \
-        .image.image = image_v,                                             \
-        .image.clip  = clip_v,                                              \
-        .image.color = color_v,                                             \
+        .image = image_v,                                                   \
+        .clip  = clip_v,                                                    \
+        .color = color_v,                                                   \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -512,10 +473,10 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_scale,                          \
-        .image_scale.image = image_v,                                       \
-        .image_scale.clip  = clip_v,                                        \
-        .image_scale.scale = scale_v,                                       \
-        .image_scale.pos   = pos_v,                                         \
+        .image = image_v,                                                   \
+        .clip  = clip_v,                                                    \
+        .scale = scale_v,                                                   \
+        .pos   = pos_v,                                                     \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -528,11 +489,11 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_rotate,                         \
-        .image_rotate.image  = image_v,                                     \
-        .image_rotate.clip   = clip_v,                                      \
-        .image_rotate.anchor = anchor_v,                                    \
-        .image_rotate.center = center_v,                                    \
-        .image_rotate.angle  = angle_v,                                     \
+        .image  = image_v,                                                  \
+        .clip   = clip_v,                                                   \
+        .anchor = anchor_v,                                                 \
+        .center = center_v,                                                 \
+        .angle  = angle_v,                                                  \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -545,9 +506,9 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_matrix,                         \
-        .image_matrix.image  = image_v,                                     \
-        .image_matrix.clip   = clip_v,                                      \
-        .image_matrix.matrix = matrix_v,                                    \
+        .image  = image_v,                                                  \
+        .clip   = clip_v,                                                   \
+        .matrix = matrix_v,                                                 \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -560,9 +521,9 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_qrcode,                               \
-        .qrcode.color = color_v,                                            \
-        .qrcode.size  = size_v,                                             \
-        .qrcode.data  = data_v,                                             \
+        .color = color_v,                                                   \
+        .size  = size_v,                                                    \
+        .data  = data_v,                                                    \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -575,9 +536,9 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_barcode,                              \
-        .barcode.color = color_v,                                           \
-        .barcode.size  = size_v,                                            \
-        .barcode.data  = data_v,                                            \
+        .color = color_v,                                                   \
+        .size  = size_v,                                                    \
+        .data  = data_v,                                                    \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -590,13 +551,13 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_ring,                                 \
-        .ring.image   = image_v,                                            \
-        .ring.clip    = clip_v,                                             \
-        .ring.color   = color_v,                                            \
-        .ring.angle_s = angle_s_v,                                          \
-        .ring.angle_e = angle_e_v,                                          \
-        .ring.percent = percent_v,                                          \
-        .ring.image_e = image_e_v,                                          \
+        .image   = image_v,                                                 \
+        .clip    = clip_v,                                                  \
+        .color   = color_v,                                                 \
+        .angle_s = angle_s_v,                                               \
+        .angle_e = angle_e_v,                                               \
+        .percent = percent_v,                                               \
+        .image_e = image_e_v,                                               \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
@@ -608,7 +569,7 @@ do {                                                                        \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_graph,                                \
-        .graph.graph_dsc = graph_dsc_v,                                     \
+        .graph_dsc = graph_dsc_v,                                           \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \

@@ -147,10 +147,12 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         scui_ui_res_local->big_3_slave = custom_handle;
         
         // 创建画布,用于绘制
-        scui_pixel_cf_t p_cf = SCUI_PIXEL_CF_DEF;
-        scui_coord_t hor_res = custom_maker.widget.clip.w;
-        scui_coord_t ver_res = custom_maker.widget.clip.h;
-        scui_widget_surface_create(scui_ui_res_local->big_3_slave, p_cf, hor_res, ver_res);
+        scui_surface_t surface = {
+            .format  = SCUI_PIXEL_CF_DEF,
+            .hor_res = custom_maker.widget.clip.w,
+            .ver_res = custom_maker.widget.clip.h,
+        };
+        scui_widget_surface_create(scui_ui_res_local->big_3_slave, &surface);
         scui_widget_surface_refr(scui_ui_res_local->big_3_slave, true);
         
         scui_widget_show(scui_ui_res_local->big_3_slave, false);

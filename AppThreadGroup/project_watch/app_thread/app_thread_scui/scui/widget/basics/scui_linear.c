@@ -252,7 +252,12 @@ void scui_linear_m_event(scui_event_t *event)
             // 创建一个独立的子画布,将目标绘制到一个独立子画布中
             if (surface_s == NULL) {
                 scui_area_t clip = scui_widget_clip(target_s);
-                scui_widget_surface_create(target_s, SCUI_PIXEL_CF_DEF_A, clip.w, clip.h);
+                scui_surface_t surface = {
+                    .format  = SCUI_PIXEL_CF_DEF_A,
+                    .hor_res = clip.w,
+                    .ver_res = clip.h,
+                };
+                scui_widget_surface_create(target_s, &surface);
                 surface_s = linear->list_surface_s[idx] = scui_widget_surface(target_s);
                 linear->list_draw_clip[idx] = scui_widget_clip(target_s);
                 linear->list_refr[idx] = true;
