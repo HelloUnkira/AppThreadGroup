@@ -13,12 +13,12 @@
 void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->image.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->image.dst_clip;
-    scui_image_t   *src_image   = draw_dsc->image.src_image;
-    scui_area_t    *src_clip    = draw_dsc->image.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->image.src_alpha;
-    scui_color_t    src_color   = draw_dsc->image.src_color;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_image_t   *src_image   = draw_dsc->src_image;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -51,15 +51,15 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->image_scale.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->image_scale.dst_clip;
-    scui_image_t   *src_image   = draw_dsc->image_scale.src_image;
-    scui_area_t    *src_clip    = draw_dsc->image_scale.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->image_scale.src_alpha;
-    scui_color_t    src_color   = draw_dsc->image_scale.src_color;
-    scui_point_t    src_scale   = draw_dsc->image_scale.src_scale;
-    scui_point_t    dst_offset  = draw_dsc->image_scale.dst_offset;
-    scui_point_t    src_offset  = draw_dsc->image_scale.src_offset;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_image_t   *src_image   = draw_dsc->src_image;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_point_t    src_scale   = draw_dsc->src_scale;
+    scui_point_t    dst_offset  = draw_dsc->dst_offset;
+    scui_point_t    src_offset  = draw_dsc->src_offset;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -104,15 +104,15 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->image_rotate.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->image_rotate.dst_clip;
-    scui_image_t   *src_image   = draw_dsc->image_rotate.src_image;
-    scui_area_t    *src_clip    = draw_dsc->image_rotate.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->image_rotate.src_alpha;
-    scui_color_t    src_color   = draw_dsc->image_rotate.src_color;
-    scui_multi_t    src_angle   = draw_dsc->image_rotate.src_angle;
-    scui_point_t   *src_anchor  = draw_dsc->image_rotate.src_anchor;
-    scui_point_t   *src_center  = draw_dsc->image_rotate.src_center;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_image_t   *src_image   = draw_dsc->src_image;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_multi_t    src_angle   = draw_dsc->src_angle;
+    scui_point_t    src_anchor  = draw_dsc->src_anchor;
+    scui_point_t    src_center  = draw_dsc->src_center;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -135,9 +135,9 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     
     scui_matrix_t src_matrix = {0};
     scui_matrix_identity(&src_matrix);
-    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +src_anchor->x, .y = +src_anchor->y,});
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = +src_anchor.x, .y = +src_anchor.y,});
     scui_matrix_rotate_a(&src_matrix, (scui_coord3_t)src_angle / SCUI_SCALE_COF, 0x00);
-    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_center->x, .y = -src_center->y,});
+    scui_matrix_translate(&src_matrix, &(scui_point2_t){.x = -src_center.x, .y = -src_center.y,});
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
@@ -153,14 +153,14 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->image_matrix_blend.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->image_matrix_blend.dst_clip;
-    scui_image_t   *src_image   = draw_dsc->image_matrix_blend.src_image;
-    scui_area_t    *src_clip    = draw_dsc->image_matrix_blend.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->image_matrix_blend.src_alpha;
-    scui_color_t    src_color   = draw_dsc->image_matrix_blend.src_color;
-    scui_matrix_t  *inv_matrix  = draw_dsc->image_matrix_blend.inv_matrix;
-    scui_matrix_t  *src_matrix  = draw_dsc->image_matrix_blend.src_matrix;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_image_t   *src_image   = draw_dsc->src_image;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_matrix_t  *inv_matrix  = draw_dsc->inv_matrix;
+    scui_matrix_t  *src_matrix  = draw_dsc->src_matrix;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);

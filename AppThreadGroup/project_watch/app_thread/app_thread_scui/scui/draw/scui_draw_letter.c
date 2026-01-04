@@ -13,12 +13,12 @@
 void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t    *dst_surface = draw_dsc->letter.dst_surface;
-    scui_area_t       *dst_clip    = draw_dsc->letter.dst_clip;
-    scui_area_t       *src_clip    = draw_dsc->letter.src_clip;
-    scui_alpha_t       src_alpha   = draw_dsc->letter.src_alpha;
-    scui_color_t       src_color   = draw_dsc->letter.src_color;
-    scui_font_glyph_t *src_glyph   = draw_dsc->letter.src_glyph;
+    scui_surface_t    *dst_surface = draw_dsc->dst_surface;
+    scui_area_t       *dst_clip    = draw_dsc->dst_clip;
+    scui_area_t       *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t       src_alpha   = draw_dsc->src_alpha;
+    scui_color_t       src_color   = draw_dsc->src_color;
+    scui_font_glyph_t *src_glyph   = draw_dsc->src_glyph;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_clip != NULL);
@@ -108,11 +108,11 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t     *dst_surface = draw_dsc->string.dst_surface;
-    scui_area_t        *dst_clip    = draw_dsc->string.dst_clip;
-    scui_area_t        *src_clip    = draw_dsc->string.src_clip;
-    scui_alpha_t        src_alpha   = draw_dsc->string.src_alpha;
-    scui_string_args_t *src_args    = draw_dsc->string.src_args;
+    scui_surface_t     *dst_surface = draw_dsc->dst_surface;
+    scui_area_t        *dst_clip    = draw_dsc->dst_clip;
+    scui_area_t        *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t        src_alpha   = draw_dsc->src_alpha;
+    scui_string_args_t *src_args    = draw_dsc->src_args;
     /* draw dsc args<e> */
     //
     /* 从字库中提取一些信息 */
@@ -262,33 +262,33 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 line_point_s.y += dst_clip->y;
                 line_point_e.x += dst_clip->x;
                 line_point_e.y += dst_clip->y;
-                scui_draw_graph_dsc_t draw_graph = {
-                    .type           = scui_draw_graph_type_line,
-                    .dst_surface    = dst_surface,
-                    .dst_clip       = dst_clip,
-                    .src_alpha      = src_alpha,
-                    .src_color      = src_args->color,
-                    .line.src_width = src_args->line_width,
+                scui_draw_dsc_t draw_graph = {
+                    .type        = scui_draw_type_pixel_line,
+                    .dst_surface = dst_surface,
+                    .dst_clip    = dst_clip,
+                    .src_alpha   = src_alpha,
+                    .src_color   = src_args->color,
+                    .src_width   = src_args->line_width,
                 };
                 scui_coord_t offset_line_delete = (line_height - src_args->line_width) / 2;
                 scui_coord_t offset_line_under  = (line_height - base_line - underline);
                 if (src_args->line_delete) {
-                    draw_graph.line.src_pos_1 = line_point_s;
-                    draw_graph.line.src_pos_2 = line_point_e;
-                    draw_graph.line.src_pos_1.y += offset_line_delete;
-                    draw_graph.line.src_pos_2.y += offset_line_delete;
-                    draw_graph.line.src_pos_1.y += src_args->offset;
-                    draw_graph.line.src_pos_2.y += src_args->offset;
-                    scui_draw_graph_ctx(&draw_graph);
+                    draw_graph.src_pos_1 = line_point_s;
+                    draw_graph.src_pos_2 = line_point_e;
+                    draw_graph.src_pos_1.y += offset_line_delete;
+                    draw_graph.src_pos_2.y += offset_line_delete;
+                    draw_graph.src_pos_1.y += src_args->offset;
+                    draw_graph.src_pos_2.y += src_args->offset;
+                    scui_draw_ctx(&draw_graph);
                 }
                 if (src_args->line_under) {
-                    draw_graph.line.src_pos_1 = line_point_s;
-                    draw_graph.line.src_pos_2 = line_point_e;
-                    draw_graph.line.src_pos_1.y += offset_line_under;
-                    draw_graph.line.src_pos_2.y += offset_line_under;
-                    draw_graph.line.src_pos_1.y += src_args->offset;
-                    draw_graph.line.src_pos_2.y += src_args->offset;
-                    scui_draw_graph_ctx(&draw_graph);
+                    draw_graph.src_pos_1 = line_point_s;
+                    draw_graph.src_pos_2 = line_point_e;
+                    draw_graph.src_pos_1.y += offset_line_under;
+                    draw_graph.src_pos_2.y += offset_line_under;
+                    draw_graph.src_pos_1.y += src_args->offset;
+                    draw_graph.src_pos_2.y += src_args->offset;
+                    scui_draw_ctx(&draw_graph);
                 }
             }
         }
@@ -397,31 +397,31 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             line_point_s.y += dst_clip->y;
             line_point_e.x += dst_clip->x;
             line_point_e.y += dst_clip->y;
-            scui_draw_graph_dsc_t draw_graph = {
-                .type           = scui_draw_graph_type_line,
-                .dst_surface    = dst_surface,
-                .dst_clip       = dst_clip,
-                .src_alpha      = src_alpha,
-                .src_color      = src_args->color,
-                .line.src_width = src_args->line_width,
+            scui_draw_dsc_t draw_graph = {
+                .type        = scui_draw_type_pixel_line,
+                .dst_surface = dst_surface,
+                .dst_clip    = dst_clip,
+                .src_alpha   = src_alpha,
+                .src_color   = src_args->color,
+                .src_width   = src_args->line_width,
             };
             if (src_args->line_delete) {
-                draw_graph.line.src_pos_1 = line_point_s;
-                draw_graph.line.src_pos_2 = line_point_e;
-                draw_graph.line.src_pos_1.y += (line_height - src_args->line_width) / 2;
-                draw_graph.line.src_pos_2.y += (line_height - src_args->line_width) / 2;
-                draw_graph.line.src_pos_1.x += src_args->offset;
-                draw_graph.line.src_pos_2.x += src_args->offset;
-                scui_draw_graph_ctx(&draw_graph);
+                draw_graph.src_pos_1 = line_point_s;
+                draw_graph.src_pos_2 = line_point_e;
+                draw_graph.src_pos_1.y += (line_height - src_args->line_width) / 2;
+                draw_graph.src_pos_2.y += (line_height - src_args->line_width) / 2;
+                draw_graph.src_pos_1.x += src_args->offset;
+                draw_graph.src_pos_2.x += src_args->offset;
+                scui_draw_ctx(&draw_graph);
             }
             if (src_args->line_under) {
-                draw_graph.line.src_pos_1 = line_point_s;
-                draw_graph.line.src_pos_2 = line_point_e;
-                draw_graph.line.src_pos_1.y += (line_height - base_line - underline);
-                draw_graph.line.src_pos_2.y += (line_height - base_line - underline);
-                draw_graph.line.src_pos_1.x += src_args->offset;
-                draw_graph.line.src_pos_2.x += src_args->offset;
-                scui_draw_graph_ctx(&draw_graph);
+                draw_graph.src_pos_1 = line_point_s;
+                draw_graph.src_pos_2 = line_point_e;
+                draw_graph.src_pos_1.y += (line_height - base_line - underline);
+                draw_graph.src_pos_2.y += (line_height - base_line - underline);
+                draw_graph.src_pos_1.x += src_args->offset;
+                draw_graph.src_pos_2.x += src_args->offset;
+                scui_draw_ctx(&draw_graph);
             }
         }
     }

@@ -162,6 +162,11 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 清空控件
+ *@param handle 控件句柄
+ */
+void scui_widget_clean(scui_handle_t handle);
+
 /*@brief 销毁控件
  *@param handle 控件句柄
  */
@@ -408,7 +413,7 @@ typedef struct {
         scui_handle_t image_e;                  // 控件句柄
     } ring;
     struct {
-        void *graph_dsc;                        // 绘制描述符实例(scui_draw_graph_dsc_t)
+        void *graph_dsc;                        // 绘制描述符实例(scui_draw_dsc_t)
     } graph;
     /*************************************************************************/
     };

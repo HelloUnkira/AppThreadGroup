@@ -324,8 +324,8 @@ static void scui_widget_event_process(scui_event_t *event)
         #if SCUI_WIDGET_BORDER_TAG
         /* 控件绘制流程在完结步(最前) */
         if (scui_event_check_finish(event)) {
-            scui_draw_graph_dsc_t graph_dsc = {
-                .type = scui_draw_graph_type_line,
+            scui_draw_dsc_t graph_dsc = {
+                .type = scui_draw_type_pixel_line,
                 .src_color.color.ch.a = 0xFF,
                 .src_color.color.ch.r = scui_rand(0xFF),
                 .src_color.color.ch.g = scui_rand(0xFF),

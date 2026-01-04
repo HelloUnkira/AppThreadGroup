@@ -344,14 +344,14 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
         clip_line.h =   2; clip_line.y += 243 - 90;
         scui_area_m_to_s(&clip_line, &clip_line);
         
-        scui_draw_graph_dsc_t draw_graph = {0};
-        draw_graph.type = scui_draw_graph_type_line;
+        scui_draw_dsc_t draw_graph = {0};
+        draw_graph.type = scui_draw_type_pixel_line;
         draw_graph.src_color.color.full = 0xFF333333;
-        draw_graph.line.src_width = 2;
-        draw_graph.line.src_pos_1.x = clip_line.x1;
-        draw_graph.line.src_pos_1.y = clip_line.y1;
-        draw_graph.line.src_pos_2.x = clip_line.x2;
-        draw_graph.line.src_pos_2.y = clip_line.y1;
+        draw_graph.src_width = 2;
+        draw_graph.src_pos_1.x = clip_line.x1;
+        draw_graph.src_pos_1.y = clip_line.y1;
+        draw_graph.src_pos_2.x = clip_line.x2;
+        draw_graph.src_pos_2.y = clip_line.y1;
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;
@@ -461,14 +461,14 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
                 
-                scui_draw_graph_dsc_t draw_graph = {0};
-                draw_graph.type = scui_draw_graph_type_line;
+                scui_draw_dsc_t draw_graph = {0};
+                draw_graph.type = scui_draw_type_pixel_line;
                 draw_graph.src_color.color.full = 0xFF333333;
-                draw_graph.line.src_width = 2;
-                draw_graph.line.src_pos_1.x = clip_line.x1;
-                draw_graph.line.src_pos_1.y = clip_line.y1;
-                draw_graph.line.src_pos_2.x = clip_line.x1;
-                draw_graph.line.src_pos_2.y = clip_line.y2;
+                draw_graph.src_width = 2;
+                draw_graph.src_pos_1.x = clip_line.x1;
+                draw_graph.src_pos_1.y = clip_line.y1;
+                draw_graph.src_pos_2.x = clip_line.x1;
+                draw_graph.src_pos_2.y = clip_line.y2;
                 scui_widget_draw_graph(event->object, NULL, &draw_graph);
             }
             
@@ -505,14 +505,14 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);
         
-        scui_draw_graph_dsc_t draw_graph = {0};
-        draw_graph.type = scui_draw_graph_type_line;
+        scui_draw_dsc_t draw_graph = {0};
+        draw_graph.type = scui_draw_type_pixel_line;
         draw_graph.src_color.color.full = 0xFF333333;
-        draw_graph.line.src_width = 2;
-        draw_graph.line.src_pos_1.x = clip_line.x1;
-        draw_graph.line.src_pos_1.y = clip_line.y1;
-        draw_graph.line.src_pos_2.x = clip_line.x2;
-        draw_graph.line.src_pos_2.y = clip_line.y1;
+        draw_graph.src_width = 2;
+        draw_graph.src_pos_1.x = clip_line.x1;
+        draw_graph.src_pos_1.y = clip_line.y1;
+        draw_graph.src_pos_2.x = clip_line.x2;
+        draw_graph.src_pos_2.y = clip_line.y1;
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;
@@ -622,14 +622,14 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
                 
-                scui_draw_graph_dsc_t draw_graph = {0};
-                draw_graph.type = scui_draw_graph_type_line;
+                scui_draw_dsc_t draw_graph = {0};
+                draw_graph.type = scui_draw_type_pixel_line;
                 draw_graph.src_color.color.full = 0xFF333333;
-                draw_graph.line.src_width = 2;
-                draw_graph.line.src_pos_1.x = clip_line.x1;
-                draw_graph.line.src_pos_1.y = clip_line.y1;
-                draw_graph.line.src_pos_2.x = clip_line.x1;
-                draw_graph.line.src_pos_2.y = clip_line.y2;
+                draw_graph.src_width = 2;
+                draw_graph.src_pos_1.x = clip_line.x1;
+                draw_graph.src_pos_1.y = clip_line.y1;
+                draw_graph.src_pos_2.x = clip_line.x1;
+                draw_graph.src_pos_2.y = clip_line.y2;
                 scui_widget_draw_graph(event->object, NULL, &draw_graph);
             }
             
@@ -666,14 +666,14 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);
         
-        scui_draw_graph_dsc_t draw_graph = {0};
-        draw_graph.type = scui_draw_graph_type_line;
+        scui_draw_dsc_t draw_graph = {0};
+        draw_graph.type = scui_draw_type_pixel_line;
         draw_graph.src_color.color.full = 0xFF333333;
-        draw_graph.line.src_width = 2;
-        draw_graph.line.src_pos_1.x = clip_line.x1;
-        draw_graph.line.src_pos_1.y = clip_line.y1;
-        draw_graph.line.src_pos_2.x = clip_line.x2;
-        draw_graph.line.src_pos_2.y = clip_line.y1;
+        draw_graph.src_width = 2;
+        draw_graph.src_pos_1.x = clip_line.x1;
+        draw_graph.src_pos_1.y = clip_line.y1;
+        draw_graph.src_pos_2.x = clip_line.x2;
+        draw_graph.src_pos_2.y = clip_line.y1;
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;
@@ -783,14 +783,14 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 clip_line.h = 110; clip_line.y += 113;
                 scui_area_m_to_s(&clip_line, &clip_line);
                 
-                scui_draw_graph_dsc_t draw_graph = {0};
-                draw_graph.type = scui_draw_graph_type_line;
+                scui_draw_dsc_t draw_graph = {0};
+                draw_graph.type = scui_draw_type_pixel_line;
                 draw_graph.src_color.color.full = 0xFF333333;
-                draw_graph.line.src_width = 2;
-                draw_graph.line.src_pos_1.x = clip_line.x1;
-                draw_graph.line.src_pos_1.y = clip_line.y1;
-                draw_graph.line.src_pos_2.x = clip_line.x1;
-                draw_graph.line.src_pos_2.y = clip_line.y2;
+                draw_graph.src_width = 2;
+                draw_graph.src_pos_1.x = clip_line.x1;
+                draw_graph.src_pos_1.y = clip_line.y1;
+                draw_graph.src_pos_2.x = clip_line.x1;
+                draw_graph.src_pos_2.y = clip_line.y2;
                 scui_widget_draw_graph(event->object, NULL, &draw_graph);
             }
             
@@ -827,14 +827,14 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         clip_line.h =   2; clip_line.y += 248;
         scui_area_m_to_s(&clip_line, &clip_line);
         
-        scui_draw_graph_dsc_t draw_graph = {0};
-        draw_graph.type = scui_draw_graph_type_line;
+        scui_draw_dsc_t draw_graph = {0};
+        draw_graph.type = scui_draw_type_pixel_line;
         draw_graph.src_color.color.full = 0xFF333333;
-        draw_graph.line.src_width = 2;
-        draw_graph.line.src_pos_1.x = clip_line.x1;
-        draw_graph.line.src_pos_1.y = clip_line.y1;
-        draw_graph.line.src_pos_2.x = clip_line.x2;
-        draw_graph.line.src_pos_2.y = clip_line.y1;
+        draw_graph.src_width = 2;
+        draw_graph.src_pos_1.x = clip_line.x1;
+        draw_graph.src_pos_1.y = clip_line.y1;
+        draw_graph.src_pos_2.x = clip_line.x2;
+        draw_graph.src_pos_2.y = clip_line.y1;
         scui_widget_draw_graph(event->object, NULL, &draw_graph);
         
         break;

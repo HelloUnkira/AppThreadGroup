@@ -213,6 +213,11 @@ void scui_event_custom_myself(scui_event_t *event)
         
         // 如果本来是在待机界面时
         if (handle_top != SCUI_UI_SCENE_STANDBY) {
+            // 息屏时清理一下碎片
+            scui_image_cache_clear();
+            scui_font_cache_clear();
+            scui_font_glyph_cache_clear();
+            
             scui_window_switch_type_t *cfg_type = NULL;
             scui_window_switch_cfg_type(&cfg_type);
             scui_window_switch_type_t type = *cfg_type;

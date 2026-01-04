@@ -54,6 +54,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_window_burn,
             .invoke  = NULL,
             .inherit = false,
+            .name    = "window",
         },
         [scui_widget_type_custom] = {
             .size    = sizeof(scui_custom_t),
@@ -63,6 +64,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_custom_burn,
             .invoke  = NULL,
             .inherit = false,
+            .name    = "custom",
         },
         [scui_widget_type_scroll] = {
             .size    = sizeof(scui_scroll_t),
@@ -72,6 +74,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_scroll_burn,
             .invoke  = scui_scroll_invoke,
             .inherit = true,
+            .name    = "scroll",
         },
         [scui_widget_type_string] = {
             .size    = sizeof(scui_string_t),
@@ -81,6 +84,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_string_burn,
             .invoke  = scui_string_invoke,
             .inherit = false,
+            .name    = "string",
         },
         [scui_widget_type_linear] = {
             .size    = sizeof(scui_linear_t),
@@ -90,6 +94,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_linear_burn,
             .invoke  = scui_linear_invoke,
             .inherit = true,
+            .name    = "linear",
         },
         [scui_widget_type_roller] = {
             .size    = sizeof(scui_roller_t),
@@ -99,6 +104,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_roller_burn,
             .invoke  = scui_roller_invoke,
             .inherit = true,
+            .name    = "roller",
         },
         [scui_widget_type_xvedio] = {
             .size    = sizeof(scui_xvedio_t),
@@ -108,6 +114,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_xvedio_burn,
             .invoke  = scui_xvedio_invoke,
             .inherit = false,
+            .name    = "xvedio",
         },
         
         /* 扩展控件 */
@@ -119,6 +126,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_button_burn,
             .invoke  = scui_button_invoke,
             .inherit = false,
+            .name    = "button",
         },
         [scui_widget_type_chart] = {
             .size    = sizeof(scui_chart_t),
@@ -128,11 +136,28 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_chart_burn,
             .invoke  = scui_chart_invoke,
             .inherit = false,
+            .name    = "chart",
         },
     };
     
     SCUI_ASSERT(type < scui_widget_type_num);
     *widget_map = &scui_widget_map[type];
+}
+
+/*@brief 清空控件
+ *@param handle 控件句柄
+ */
+void scui_widget_clean(scui_handle_t handle)
+{
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    scui_widget_child_list_btra(widget, idx) {
+        scui_handle_t handle_c = widget->child_list[idx];
+        scui_widget_destroy(handle_c);
+        
+        // 调用结束后, 它应该已经被清理了
+        SCUI_ASSERT(widget->child_list[idx] == SCUI_HANDLE_INVALID);
+    }
 }
 
 /*@brief 销毁控件

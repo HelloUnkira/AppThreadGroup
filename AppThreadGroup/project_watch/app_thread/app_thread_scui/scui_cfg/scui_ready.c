@@ -7,24 +7,25 @@
 
 #include "scui.h"
 
-static void scui_evaluate(void)
+/*@brief 统计基础信息
+ */
+static void scui_stat_info(void)
 {
-    SCUI_LOG_INFO("");
-    float graph_occupy = scui_mem_size_used(scui_mem_type_graph) / 1024.0f / 1024.0f;
-    SCUI_LOG_INFO("scui graph occupy: %.2fM", graph_occupy);
+    SCUI_LOG_INFO("scui evaluate:");
     
     SCUI_LOG_INFO("");
-    SCUI_LOG_INFO("scui widget evaluate:");
-    SCUI_LOG_INFO("scui_widget_t:%d, scui_widget_maker_t:%d", sizeof(scui_widget_t), sizeof(scui_widget_maker_t));
-    SCUI_LOG_INFO("scui_window_t:%d, scui_window_maker_t:%d", sizeof(scui_window_t), sizeof(scui_window_maker_t));
-    SCUI_LOG_INFO("scui_custom_t:%d, scui_custom_maker_t:%d", sizeof(scui_custom_t), sizeof(scui_custom_maker_t));
-    SCUI_LOG_INFO("scui_scroll_t:%d, scui_scroll_maker_t:%d", sizeof(scui_scroll_t), sizeof(scui_scroll_maker_t));
-    SCUI_LOG_INFO("scui_string_t:%d, scui_string_maker_t:%d", sizeof(scui_string_t), sizeof(scui_string_maker_t));
-    SCUI_LOG_INFO("scui_linear_t:%d, scui_linear_maker_t:%d", sizeof(scui_linear_t), sizeof(scui_linear_maker_t));
-    SCUI_LOG_INFO("scui_roller_t:%d, scui_roller_maker_t:%d", sizeof(scui_roller_t), sizeof(scui_roller_maker_t));
+    float graph_used = scui_mem_size_used(scui_mem_type_graph);
+    SCUI_LOG_INFO("scui graph occupy: %.2fM", graph_used / 1024.0f / 1024.0f);
     
-    SCUI_LOG_INFO("scui_button_t:%d, scui_button_maker_t:%d", sizeof(scui_button_t), sizeof(scui_button_maker_t));
-    SCUI_LOG_INFO("scui_chart_t:%d,  scui_chart_maker_t:%d",  sizeof(scui_chart_t),  sizeof(scui_chart_maker_t));
+    SCUI_LOG_INFO("");
+    SCUI_LOG_INFO("scui widget occupy:");
+    for (scui_widget_type_t type = 1; type < scui_widget_type_num; type++) {
+        
+        scui_widget_map_t *widget_map = NULL;
+        scui_widget_map_find(type, &widget_map);
+        SCUI_LOG_INFO("widget[%s]\t size(inst):%4d, size(maker):%4d",
+            widget_map->name, widget_map->size, widget_map->maker);
+    }
     
     SCUI_LOG_INFO("");
 }
@@ -122,6 +123,9 @@ void scui_ready(void)
     /* 窗口交互参数 */
     cfg_args->shadow = scui_image_prj_image_src_00_3d_Trans_Lightpng;
     
+    /* 统计基础信息 */
+    scui_stat_info();
+    
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
     scui_engine_execute_status_set(true);
@@ -134,7 +138,4 @@ void scui_ready(void)
     #if SCUI_MONKEY_TEST
     scui_monkey_test();
     #endif
-    
-    // 输出一些基础信息
-    scui_evaluate();
 }

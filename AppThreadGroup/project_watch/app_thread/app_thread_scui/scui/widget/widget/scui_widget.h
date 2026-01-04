@@ -70,6 +70,7 @@ typedef struct {
     scui_widget_cb_make_t   make;       // 控件构造
     scui_widget_cb_burn_t   burn;       // 控件析构
     scui_widget_cb_invoke_t invoke;     // 控件调用
+    const char             *name;       // 控件名称
 } scui_widget_map_t;
 
 /*@brief 控件基础信息:

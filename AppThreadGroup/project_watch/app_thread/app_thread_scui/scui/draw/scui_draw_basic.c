@@ -13,9 +13,9 @@
 void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    void *dst_addr = draw_dsc->byte_copy.dst_addr;
-    void *src_addr = draw_dsc->byte_copy.src_addr;
-    uint32_t   len = draw_dsc->byte_copy.len;
+    void *dst_addr = draw_dsc->dst_addr;
+    void *src_addr = draw_dsc->src_addr;
+    uint32_t   len = draw_dsc->len;
     /* draw dsc args<e> */
     //
     
@@ -28,8 +28,8 @@ void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_blur.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_blur.dst_clip;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -157,10 +157,10 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_fill.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_fill.dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->area_fill.src_alpha;
-    scui_color_t    src_color   = draw_dsc->area_fill.src_color;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -208,12 +208,12 @@ void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_fill_grad.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_fill_grad.dst_clip;
-    scui_color_t    src_color   = draw_dsc->area_fill_grad.src_color;
-    scui_area_t    *src_clip    = draw_dsc->area_fill_grad.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->area_fill_grad.src_alpha;
-    scui_coord_t    src_way     = draw_dsc->area_fill_grad.src_way;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_coord_t    src_way     = draw_dsc->src_way;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -271,13 +271,13 @@ void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_fill_grads.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_fill_grads.dst_clip;
-    scui_color_t   *src_grad_s  = draw_dsc->area_fill_grads.src_grad_s;
-    scui_coord_t    src_grad_n  = draw_dsc->area_fill_grads.src_grad_n;
-    scui_color_t    src_filter  = draw_dsc->area_fill_grads.src_filter;
-    scui_alpha_t    src_alpha   = draw_dsc->area_fill_grads.src_alpha;
-    scui_coord_t    src_way     = draw_dsc->area_fill_grads.src_way;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_color_t   *src_grad_s  = draw_dsc->src_grad_s;
+    scui_coord_t    src_grad_n  = draw_dsc->src_grad_n;
+    scui_color_t    src_filter  = draw_dsc->src_filter;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_coord_t    src_way     = draw_dsc->src_way;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -350,10 +350,10 @@ void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_copy.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_copy.dst_clip;
-    scui_surface_t *src_surface = draw_dsc->area_copy.src_surface;
-    scui_area_t    *src_clip    = draw_dsc->area_copy.src_clip;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_surface_t *src_surface = draw_dsc->src_surface;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -407,11 +407,11 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_blend.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_blend.dst_clip;
-    scui_surface_t *src_surface = draw_dsc->area_blend.src_surface;
-    scui_area_t    *src_clip    = draw_dsc->area_blend.src_clip;
-    scui_color_t    src_color   = draw_dsc->area_blend.src_color;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_surface_t *src_surface = draw_dsc->src_surface;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_color_t    src_color   = draw_dsc->src_color;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -553,10 +553,10 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_alpha_filter.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_alpha_filter.dst_clip;
-    scui_surface_t *src_surface = draw_dsc->area_alpha_filter.src_surface;
-    scui_area_t    *src_clip    = draw_dsc->area_alpha_filter.src_clip;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_surface_t *src_surface = draw_dsc->src_surface;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -638,13 +638,13 @@ void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_matrix_fill.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_matrix_fill.dst_clip;
-    scui_area_t    *src_clip    = draw_dsc->area_matrix_fill.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->area_matrix_fill.src_alpha;
-    scui_color_t    src_color   = draw_dsc->area_matrix_fill.src_color;
-    scui_matrix_t  *inv_matrix  = draw_dsc->area_matrix_fill.inv_matrix;
-    scui_matrix_t  *src_matrix  = draw_dsc->area_matrix_fill.src_matrix;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_matrix_t  *inv_matrix  = draw_dsc->inv_matrix;
+    scui_matrix_t  *src_matrix  = draw_dsc->src_matrix;
     /* draw dsc args<e> */
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -742,13 +742,13 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
 void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->area_matrix_blend.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->area_matrix_blend.dst_clip;
-    scui_surface_t *src_surface = draw_dsc->area_matrix_blend.src_surface;
-    scui_area_t    *src_clip    = draw_dsc->area_matrix_blend.src_clip;
-    scui_color_t    src_color   = draw_dsc->area_matrix_blend.src_color;
-    scui_matrix_t  *inv_matrix  = draw_dsc->area_matrix_blend.inv_matrix;
-    scui_matrix_t  *src_matrix  = draw_dsc->area_matrix_blend.src_matrix;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_surface_t *src_surface = draw_dsc->src_surface;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_matrix_t  *inv_matrix  = draw_dsc->inv_matrix;
+    scui_matrix_t  *src_matrix  = draw_dsc->src_matrix;
     /* draw dsc args<e> */
     
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);

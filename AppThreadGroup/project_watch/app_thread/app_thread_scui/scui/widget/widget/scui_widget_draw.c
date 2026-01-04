@@ -562,7 +562,7 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
         #endif
         
         scui_draw_image_rotate(widget->surface, &dst_clip,
-            image_inst, clip, widget->alpha, angle, &anchor, &center);
+            image_inst, clip, widget->alpha, angle, anchor, center);
     }
 }
 
@@ -814,7 +814,7 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_draw_graph_dsc_t *graph_dsc = draw_dsc->graph.graph_dsc;
+    scui_draw_dsc_t *graph_dsc = draw_dsc->graph.graph_dsc;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -839,7 +839,7 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
         graph_dsc->dst_surface = widget->surface;
         graph_dsc->dst_clip    = &dst_clip;
         graph_dsc->src_alpha   = widget->alpha;
-        scui_draw_graph_ctx(graph_dsc);
+        scui_draw_ctx(graph_dsc);
     }
 }
 

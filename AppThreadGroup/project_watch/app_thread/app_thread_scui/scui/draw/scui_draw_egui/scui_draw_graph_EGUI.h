@@ -1,12 +1,6 @@
 #ifndef SCUI_DRAW_GRAPH_EGUI_H
 #define SCUI_DRAW_GRAPH_EGUI_H
 
-/*@brief 基础图元绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
- *@retval 支持度(true:支持;false:不支持;)
- */
-bool scui_draw_graph_EGUI(scui_draw_graph_dsc_t *draw_graph);
-
 /* EmbeddedGUI: */
 /*****************************************************************************/
 /*****************************************************************************/

@@ -7,13 +7,13 @@
 do {                                                                            \
     scui_draw_dsc_t draw_dsc = {                                                \
         .type = scui_draw_type_qrcode,                                          \
-        .qrcode.dst_surface = dst_surface_v,                                    \
-        .qrcode.dst_clip    = dst_clip_v,                                       \
-        .qrcode.src_clip    = src_clip_v,                                       \
-        .qrcode.src_alpha   = src_alpha_v,                                      \
-        .qrcode.src_color   = src_color_v,                                      \
-        .qrcode.src_size    = src_size_v,                                       \
-        .qrcode.src_data    = src_data_v,                                       \
+        .dst_surface = dst_surface_v,                                           \
+        .dst_clip    = dst_clip_v,                                              \
+        .src_clip    = src_clip_v,                                              \
+        .src_alpha   = src_alpha_v,                                             \
+        .src_color   = src_color_v,                                             \
+        .src_size    = src_size_v,                                              \
+        .src_data    = src_data_v,                                              \
     };                                                                          \
     scui_draw_ctx(&draw_dsc);                                                   \
 } while (0)                                                                     \
@@ -24,13 +24,13 @@ do {                                                                            
 do {                                                                            \
     scui_draw_dsc_t draw_dsc = {                                                \
         .type = scui_draw_type_barcode,                                         \
-        .qrcode.dst_surface = dst_surface_v,                                    \
-        .qrcode.dst_clip    = dst_clip_v,                                       \
-        .qrcode.src_clip    = src_clip_v,                                       \
-        .qrcode.src_alpha   = src_alpha_v,                                      \
-        .qrcode.src_color   = src_color_v,                                      \
-        .qrcode.src_size    = src_size_v,                                       \
-        .qrcode.src_data    = src_data_v,                                       \
+        .dst_surface = dst_surface_v,                                           \
+        .dst_clip    = dst_clip_v,                                              \
+        .src_clip    = src_clip_v,                                              \
+        .src_alpha   = src_alpha_v,                                             \
+        .src_color   = src_color_v,                                             \
+        .src_size    = src_size_v,                                              \
+        .src_data    = src_data_v,                                              \
     };                                                                          \
     scui_draw_ctx(&draw_dsc);                                                   \
 } while (0)                                                                     \

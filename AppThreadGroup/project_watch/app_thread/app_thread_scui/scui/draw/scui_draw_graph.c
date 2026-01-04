@@ -38,6 +38,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
 void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
 void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
 void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc);
 
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
@@ -65,6 +66,12 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_qrcode] =                   scui_draw_ctx_qrcode,
         [scui_draw_type_barcode] =                  scui_draw_ctx_barcode,
         [scui_draw_type_ring] =                     scui_draw_ctx_ring,
+        
+        [scui_draw_type_pixel_line] =               scui_draw_ctx_graph,
+        [scui_draw_type_pixel_circle] =             scui_draw_ctx_graph,
+        [scui_draw_type_pixel_crect] =              scui_draw_ctx_graph,
+        [scui_draw_type_pixel_shadow] =             scui_draw_ctx_graph,
+        [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,
     };
     
     SCUI_ASSERT(draw_dsc->type > scui_draw_type_none);
@@ -73,18 +80,18 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
 }
 
 /*@brief 线条绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_aline(scui_draw_graph_dsc_t *draw_graph)
+static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->line.src_width;
-    scui_point_t    src_pos_1   = draw_graph->line.src_pos_1;
-    scui_point_t    src_pos_2   = draw_graph->line.src_pos_2;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_point_t    src_pos_1   = draw_dsc->src_pos_1;
+    scui_point_t    src_pos_2   = draw_dsc->src_pos_2;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -251,18 +258,18 @@ static void scui_draw_aline(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 线条绘制
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_sline(scui_draw_graph_dsc_t *draw_graph)
+void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->line.src_width;
-    scui_point_t    src_pos_1   = draw_graph->line.src_pos_1;
-    scui_point_t    src_pos_2   = draw_graph->line.src_pos_2;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_point_t    src_pos_1   = draw_dsc->src_pos_1;
+    scui_point_t    src_pos_2   = draw_dsc->src_pos_2;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -319,53 +326,56 @@ void scui_draw_sline(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 水平线绘制
- *@param draw_graph    绘制描述符实例
+ *@param draw_dsc      绘制描述符实例
  *@param x,y,len,width 坐标点,坐标点,线长,线宽
  */
-void scui_draw_hline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
+void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
 {
-    draw_graph->type = scui_draw_graph_type_line;
-    draw_graph->line.src_width   = width;
-    draw_graph->line.src_pos_1.x = x;
-    draw_graph->line.src_pos_1.y = y;
-    draw_graph->line.src_pos_2.x = x + len - 1;
-    draw_graph->line.src_pos_2.y = y;
-    scui_draw_sline(draw_graph);
+    draw_dsc->type = scui_draw_type_pixel_line;
+    draw_dsc->src_width   = width;
+    draw_dsc->src_pos_1.x = x;
+    draw_dsc->src_pos_1.y = y;
+    draw_dsc->src_pos_2.x = x + len - 1;
+    draw_dsc->src_pos_2.y = y;
+    scui_draw_sline(draw_dsc);
 }
 
 /*@brief 垂直线绘制
- *@param draw_graph    绘制描述符实例
+ *@param draw_dsc      绘制描述符实例
  *@param x,y,len,width 坐标点,坐标点,线长,线宽
  */
-void scui_draw_vline(scui_draw_graph_dsc_t *draw_graph, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
+void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width)
 {
-    draw_graph->line.src_width   = width;
-    draw_graph->line.src_pos_1.x = x;
-    draw_graph->line.src_pos_1.y = y;
-    draw_graph->line.src_pos_2.x = x;
-    draw_graph->line.src_pos_2.y = y + len - 1;
-    scui_draw_sline(draw_graph);
+    draw_dsc->type = scui_draw_type_pixel_line;
+    draw_dsc->src_width   = width;
+    draw_dsc->src_pos_1.x = x;
+    draw_dsc->src_pos_1.y = y;
+    draw_dsc->src_pos_2.x = x;
+    draw_dsc->src_pos_2.y = y + len - 1;
+    scui_draw_sline(draw_dsc);
 }
 
 /*@brief 基础图元绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_graph_ctx(scui_draw_graph_dsc_t *draw_graph)
+void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc)
 {
     #if SCUI_DRAW_GRAPH_USE_LVGL
-    if (scui_draw_graph_LVGL(draw_graph))
+    bool scui_draw_graph_LVGL(scui_draw_dsc_t *draw_dsc);
+    if (scui_draw_graph_LVGL(draw_dsc))
         return;
     #endif
     
     #if SCUI_DRAW_GRAPH_USE_EGUI
-    if (scui_draw_graph_EGUI(draw_graph))
+    bool scui_draw_graph_EGUI(scui_draw_dsc_t *draw_dsc);
+    if (scui_draw_graph_EGUI(draw_dsc))
         return;
     #endif
     
-    switch (draw_graph->type) {
-    case scui_draw_graph_type_line:
-        scui_draw_sline(draw_graph);
-        scui_draw_aline(draw_graph);
+    switch (draw_dsc->type) {
+    case scui_draw_type_pixel_line:
+        scui_draw_sline(draw_dsc);
+        scui_draw_aline(draw_dsc);
         break;
     default:
         break;

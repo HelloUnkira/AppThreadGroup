@@ -19,13 +19,13 @@
 void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->qrcode.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->qrcode.dst_clip;
-    scui_area_t    *src_clip    = draw_dsc->qrcode.src_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->qrcode.src_alpha;
-    scui_color_t    src_color   = draw_dsc->qrcode.src_color;
-    scui_multi_t    src_size    = draw_dsc->qrcode.src_size;
-    uint8_t        *src_data    = draw_dsc->qrcode.src_data;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_multi_t    src_size    = draw_dsc->src_size;
+    uint8_t        *src_data    = draw_dsc->src_data;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -117,13 +117,13 @@ over:
 void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->barcode.dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->barcode.dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->barcode.src_alpha;
-    scui_area_t    *src_clip    = draw_dsc->barcode.src_clip;
-    scui_color_t    src_color   = draw_dsc->barcode.src_color;
-    scui_multi_t    src_size    = draw_dsc->barcode.src_size;
-    uint8_t        *src_data    = draw_dsc->barcode.src_data;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_area_t    *src_clip    = draw_dsc->src_clip;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_multi_t    src_size    = draw_dsc->src_size;
+    uint8_t        *src_data    = draw_dsc->src_data;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);

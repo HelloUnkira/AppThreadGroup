@@ -284,12 +284,12 @@ void scui_chart_invoke(scui_event_t *event)
                     scui_widget_draw_image(widget->myself, &dst_clip, image, NULL, color_edge);
                 }
                 
-                scui_draw_graph_dsc_t draw_graph = {
-                    .type = scui_draw_graph_type_line,
+                scui_draw_dsc_t draw_graph = {
+                    .type = scui_draw_type_pixel_line,
                     .src_color = color,
-                    .line.src_width = width,
-                    .line.src_pos_1 = offset_1,
-                    .line.src_pos_2 = offset_2,
+                    .src_width = width,
+                    .src_pos_1 = offset_1,
+                    .src_pos_2 = offset_2,
                 };
                 scui_widget_draw_graph(widget->myself, NULL, &draw_graph);
                 offset.x += space;

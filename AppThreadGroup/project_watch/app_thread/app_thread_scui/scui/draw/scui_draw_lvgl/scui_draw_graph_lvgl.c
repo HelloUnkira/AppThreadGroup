@@ -17,18 +17,18 @@
 // 以及lv_draw_系列的基础图形绘制函数
 
 /*@brief 线条绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
+static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->line.src_width;
-    scui_point_t    src_pos_1   = draw_graph->line.src_pos_1;
-    scui_point_t    src_pos_2   = draw_graph->line.src_pos_2;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_point_t    src_pos_1   = draw_dsc->src_pos_1;
+    scui_point_t    src_pos_2   = draw_dsc->src_pos_2;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -53,7 +53,7 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
     /* 变成了一个点, 变成了一个区域, 直接填色 */
     if ((src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) ||
         (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
-         scui_draw_sline(draw_graph);
+         scui_draw_sline(draw_dsc);
          return;
     }
     
@@ -62,18 +62,18 @@ static void scui_draw_line(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 圆绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_circle(scui_draw_graph_dsc_t *draw_graph)
+static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->circle.src_width;
-    scui_coord_t    src_radius  = draw_graph->circle.src_radius;
-    scui_point_t    src_center  = draw_graph->circle.src_center;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_coord_t    src_radius  = draw_dsc->src_radius;
+    scui_point_t    src_center  = draw_dsc->src_center;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -90,17 +90,17 @@ static void scui_draw_circle(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 圆角矩形绘制
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
+static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->crect.src_width;
-    scui_coord_t    src_radius  = draw_graph->crect.src_radius;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_coord_t    src_radius  = draw_dsc->src_radius;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -117,20 +117,20 @@ static void scui_draw_crect(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 弧绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  */
-static void scui_draw_arc(scui_draw_graph_dsc_t *draw_graph)
+static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_graph->dst_surface;
-    scui_area_t    *dst_clip    = draw_graph->dst_clip;
-    scui_alpha_t    src_alpha   = draw_graph->src_alpha;
-    scui_color_t    src_color   = draw_graph->src_color;
-    scui_coord_t    src_width   = draw_graph->arc.src_width;
-    scui_coord_t    src_radius  = draw_graph->arc.src_radius;
-    scui_point_t    src_center  = draw_graph->arc.src_center;
-    scui_coord_t    src_angle_s = draw_graph->arc.src_angle_s;
-    scui_coord_t    src_angle_e = draw_graph->arc.src_angle_e;
+    scui_surface_t *dst_surface = draw_dsc->dst_surface;
+    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
+    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
+    scui_color_t    src_color   = draw_dsc->src_color;
+    scui_coord_t    src_width   = draw_dsc->src_width;
+    scui_coord_t    src_radius  = draw_dsc->src_radius;
+    scui_point_t    src_center  = draw_dsc->src_center;
+    scui_coord_t    src_angle_s = draw_dsc->src_angle_s;
+    scui_coord_t    src_angle_e = draw_dsc->src_angle_e;
     /* draw dsc args<e> */
     //
     SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
@@ -174,28 +174,28 @@ static void scui_draw_arc(scui_draw_graph_dsc_t *draw_graph)
 }
 
 /*@brief 基础图元绘制(抗锯齿)
- *@param draw_graph 绘制描述符实例
+ *@param draw_dsc 绘制描述符实例
  *@retval 支持度(true:支持;false:不支持;)
  */
-bool scui_draw_graph_LVGL(scui_draw_graph_dsc_t *draw_graph)
+bool scui_draw_graph_LVGL(scui_draw_dsc_t *draw_dsc)
 {
     #if SCUI_DRAW_GRAPH_USE_EGUI
-    switch (draw_graph->type) {
-    case scui_draw_graph_type_line:
-        scui_draw_line(draw_graph);
+    switch (draw_dsc->type) {
+    case scui_draw_type_pixel_line:
+        scui_draw_line(draw_dsc);
         return false;
-    case scui_draw_graph_type_circle:
-        scui_draw_circle(draw_graph);
+    case scui_draw_type_pixel_circle:
+        scui_draw_circle(draw_dsc);
         return false;
-    case scui_draw_graph_type_crect:
-        scui_draw_crect(draw_graph);
+    case scui_draw_type_pixel_crect:
+        scui_draw_crect(draw_dsc);
         return false;
-    case scui_draw_graph_type_arc:
-        scui_draw_arc(draw_graph);
+    case scui_draw_type_pixel_arc:
+        scui_draw_arc(draw_dsc);
         return false;
     /* 继续补充,剩下的不移植了, 一般用不上了 */
     default:
-        SCUI_LOG_ERROR("unknown type:%d", draw_graph->type);
+        SCUI_LOG_ERROR("unknown type:%d", draw_dsc->type);
         return false;
     }
     #endif
