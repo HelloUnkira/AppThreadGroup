@@ -30,6 +30,7 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 构造派生控件实例 */
     scui_scroll_make(scroll, scroll_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     #if SCUI_MEM_FEAT_MINI
     /* 禁用子控件树, 画布缓存块渲染 */
@@ -51,6 +52,55 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle)
     linear->list_draw_idx  = -1;
     linear->list_draw      = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
     linear->list_refr      = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(bool) * list_num);
+}
+
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ */
+void scui_linear_m_make(void *inst, void *inst_maker, scui_handle_t *handle)
+{
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_linear_m_t *linear_m = widget;
+    scui_linear_m_maker_t *linear_m_maker = widget_maker;
+    
+    /* 必须标记anima事件 */
+    widget_maker->style.sched_anima = true;
+    //备注:这个控件自身并不需要anima事件,但是如果子控件树有需求,
+    //     它必须要被标记激活以驱动子控件树更新
+    
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear_m));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
+}
+
+/*@brief 控件构造
+ *@param inst       控件实例
+ *@param inst_maker 控件实例构造器
+ *@param handle     控件句柄
+ */
+void scui_linear_s_make(void *inst, void *inst_maker, scui_handle_t *handle)
+{
+    /* 基类对象 */
+    scui_widget_t *widget = inst;
+    scui_widget_maker_t *widget_maker = inst_maker;
+    /* 本类对象 */
+    scui_linear_s_t *linear_s = widget;
+    scui_linear_s_maker_t *linear_s_maker = widget_maker;
+    
+    /* 构造基础控件实例 */
+    scui_widget_make(widget, widget_maker, handle);
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear_s));
+    SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
+    // 子控件树控件一定是根控件(子画布控件树)
+    
+    linear_s->handle_m = linear_s_maker->handle_m;
+    SCUI_ASSERT(linear_s->handle_m != SCUI_HANDLE_INVALID);
 }
 
 /*@brief 控件析构
@@ -78,6 +128,32 @@ void scui_linear_burn(scui_handle_t handle)
     
     /* 析构派生控件实例 */
     scui_scroll_burn(widget->myself);
+}
+
+/*@brief 控件析构
+ *@param handle 控件句柄
+ */
+void scui_linear_m_burn(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear_m));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_linear_m_t *linear_m = (void *)widget;
+    
+    /* 析构基础控件实例 */
+    scui_widget_burn(widget);
+}
+
+/*@brief 控件析构
+ *@param handle 控件句柄
+ */
+void scui_linear_s_burn(scui_handle_t handle)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear_s));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_linear_s_t *linear_s = (void *)widget;
+    
+    /* 析构基础控件实例 */
+    scui_widget_burn(widget);
 }
 
 /*@brief 列表控件缓存资源回收
@@ -163,51 +239,50 @@ void scui_linear_item_sets(scui_handle_t handle, scui_linear_item_t *item)
     linear->list_widget_s[item->draw_idx] = item->handle_s;
 }
 
-/*@brief 列表子控件事件响应回调(从)
+/*@brief 事件处理回调
  *@param event 事件
  */
-void scui_linear_s_event(scui_event_t *event)
+void scui_linear_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_custom_t *custom = (void *)widget;
+    scui_linear_t *linear = (void *)widget;
     
     switch (event->type) {
-        case scui_event_draw_empty: {
-            // 子控件树会逆向链接到列表控件
-            SCUI_ASSERT(custom->handle_m != SCUI_HANDLE_INVALID);
-            scui_handle_t  handle = scui_widget_parent(custom->handle_m);
-            scui_linear_t *linear = scui_handle_source_check(handle);
-            
-            // 这是一个特殊事件
-            // 子控件树没有绘制画布时
-            // 发送此事件激活子控件绘制流程
-            SCUI_ASSERT(scui_widget_surface(event->object) == NULL);
-            
-            scui_handle_t handle_r = scui_widget_root(event->object);
-            for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
-                if (linear->list_widget_s[idx] != handle_r)
-                    continue;
-                // scui_widget_clip_check(scui_widget_root(handle), true);
-                scui_widget_draw(linear->list_widget_m[idx], NULL, false);
-                // scui_widget_clip_check(scui_widget_root(handle), true);
-                SCUI_LOG_INFO("widget idx:%u", idx);
-                linear->list_refr[idx] = true;
-            }
-            break;
+    case scui_event_anima_elapse: {
+        // 给子控件树派发事件调度
+        for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
+             scui_handle_t handle = event->object;
+             event->object = linear->list_widget_s[idx];
+             scui_widget_event_dispatch(event);
+             event->object = handle;
         }
+        break;
     }
+    case scui_event_draw: {
+        
+        // 从控件树绘制结束,回收部分不使用的画布
+        if (scui_event_check_finish(event)) {
+            scui_linear_recycle(event->object, false);
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    
+    scui_scroll_invoke(event);
 }
 
 /*@brief 列表子控件事件响应回调(主)
  *@param event 事件
  */
-void scui_linear_m_event(scui_event_t *event)
+void scui_linear_m_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget_w = scui_handle_source_check(event->object);
     scui_widget_t *widget_p = scui_handle_source_check(widget_w->parent);
-    scui_custom_t *custom = (void *)widget_w;
+    scui_linear_m_t *linear_m = (void *)widget_w;
     scui_linear_t *linear = (void *)widget_p;
     // 列表控件是当前控件的父控件
     
@@ -216,12 +291,17 @@ void scui_linear_m_event(scui_event_t *event)
         break;
     case scui_event_draw: {
         
-        // 寻找到绘制目标, 并且更新绘制索引
+        // 寻找到绘制目标,并且更新绘制索引
+        linear->list_draw_idx = -1;
         for (scui_handle_t idx = 0; idx < linear->list_num; idx++)
             if (linear->list_widget_m[idx] == event->object) {
                 linear->list_draw_idx = idx;
                 break;
             }
+        
+        // 不被管理的子控件,忽略它的请求
+        if (linear->list_draw_idx >= linear->list_num)
+            break;
         
         scui_handle_t   idx       = linear->list_draw_idx;
         scui_handle_t   target_s  = linear->list_widget_s[idx];
@@ -232,7 +312,7 @@ void scui_linear_m_event(scui_event_t *event)
         
         // 步调:prepare
         if (scui_event_check_prepare(event)) {
-            // 处理子控件树画布, 重绘子控件树
+            // 处理子控件树画布,重绘子控件树
             
             /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
             if (scui_widget_draw_empty(target_m)) {
@@ -294,37 +374,38 @@ void scui_linear_m_event(scui_event_t *event)
     }
 }
 
-/*@brief 事件处理回调
+/*@brief 列表子控件事件响应回调(从)
  *@param event 事件
  */
-void scui_linear_invoke(scui_event_t *event)
+void scui_linear_s_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_linear_t *linear = (void *)widget;
+    scui_linear_s_t *linear_s = (void *)widget;
     
     switch (event->type) {
-    case scui_event_anima_elapse: {
-        // 给子控件树派发事件调度
-        for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
-             scui_handle_t handle = event->object;
-             event->object = linear->list_widget_s[idx];
-             scui_widget_event_dispatch(event);
-             event->object = handle;
+        case scui_event_draw_empty: {
+            // 子控件树会逆向链接到列表控件
+            SCUI_ASSERT(linear_s->handle_m != SCUI_HANDLE_INVALID);
+            scui_handle_t  handle_m = scui_widget_parent(linear_s->handle_m);
+            scui_linear_t *linear = scui_handle_source_check(handle_m);
+            
+            // 这是一个特殊事件
+            // 子控件树没有绘制画布时
+            // 发送此事件激活子控件绘制流程
+            SCUI_ASSERT(scui_widget_surface(event->object) == NULL);
+            
+            scui_handle_t handle_r = scui_widget_root(event->object);
+            for (scui_handle_t idx = 0; idx < linear->list_num; idx++) {
+                if (linear->list_widget_s[idx] != handle_r)
+                    continue;
+                // scui_widget_clip_check(scui_widget_root(handle), true);
+                scui_widget_draw(linear->list_widget_m[idx], NULL, false);
+                // scui_widget_clip_check(scui_widget_root(handle), true);
+                SCUI_LOG_INFO("widget idx:%u", idx);
+                linear->list_refr[idx] = true;
+            }
+            break;
         }
-        break;
     }
-    case scui_event_draw: {
-        
-        // 从控件树绘制结束,回收部分不使用的画布
-        if (scui_event_check_finish(event)) {
-            scui_linear_recycle(event->object, false);
-        }
-        break;
-    }
-    default:
-        break;
-    }
-    
-    scui_scroll_invoke(event);
 }

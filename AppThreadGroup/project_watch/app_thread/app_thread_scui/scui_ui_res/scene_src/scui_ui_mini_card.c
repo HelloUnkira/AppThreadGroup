@@ -75,7 +75,7 @@ void scui_ui_scene_mini_card_bar_arc_event(scui_event_t *event)
 static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 {
     // 特殊的固定调用
-    scui_linear_s_event(event);
+    scui_widget_event_shift(event);
     
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -718,7 +718,7 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
 static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
 {
     // 特殊的固定调用
-    scui_linear_m_event(event);
+    scui_widget_event_shift(event);
     
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -927,56 +927,49 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
     switch (event->type) {
     case scui_event_create: {
         
-        scui_custom_maker_t custom_maker = {0};
-        scui_handle_t custom_handle             = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type                = scui_widget_type_custom;
-        custom_maker.widget.style.sched_anima   = true;
-        custom_maker.widget.clip.w              = SCUI_HOR_RES;
-        custom_maker.widget.parent              = event->object;
+        scui_linear_m_maker_t linear_m_maker = {0};
+        scui_linear_s_maker_t linear_s_maker = {0};
+        scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
+        scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
+        
+        // 通用属性配置
+        linear_m_maker.widget.type      = scui_widget_type_linear_m;
+        linear_m_maker.widget.clip.w    = SCUI_HOR_RES;
+        linear_m_maker.widget.parent    = event->object;
+        linear_s_maker.widget.type      = scui_widget_type_linear_s;
+        linear_s_maker.widget.clip.w    = 410;
+        linear_s_maker.widget.clip.h    = 180;
+        linear_s_maker.widget.child_num = 5;
+        linear_s_maker.widget.event_cb  = scui_ui_scene_item_s_event_proc;
         
         // 上半部分留白占用
-        custom_maker.widget.style.indev_ptr     = false;
-        custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
-        custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle);
+        linear_m_maker.widget.style.indev_ptr = false;
+        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
+        linear_m_maker.widget.event_cb        = NULL;
+        scui_widget_create(&linear_m_maker, &linear_m_handle);
         
         // list的各个子控件
-        custom_maker.widget.style.indev_ptr     = true;
-        custom_maker.widget.clip.h              = 180;
-        custom_maker.widget.event_cb            = scui_ui_scene_item_m_event_proc;
-        
-        // 创建子控件(主)
-        scui_custom_maker_t custom_m_maker = custom_maker;
-        scui_handle_t custom_m_handle = SCUI_HANDLE_INVALID;
-        // 创建子控件(从)
-        scui_custom_maker_t custom_s_maker = {0};
-        scui_handle_t custom_s_handle = SCUI_HANDLE_INVALID;
-        custom_s_maker.widget.type        = scui_widget_type_custom;
-        custom_s_maker.widget.clip.w      = 410;
-        custom_s_maker.widget.clip.h      = 180;
-        custom_s_maker.widget.child_num   = 5;
-        custom_s_maker.widget.event_cb    = scui_ui_scene_item_s_event_proc;
+        linear_m_maker.widget.style.indev_ptr = true;
+        linear_m_maker.widget.clip.h          = 180;
+        linear_m_maker.widget.event_cb        = scui_ui_scene_item_m_event_proc;
         
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
             // 创建子控件(主)(从)
-            scui_widget_create(&custom_m_maker, &custom_m_handle);
-            scui_widget_create(&custom_s_maker, &custom_s_handle);
+            scui_widget_create(&linear_m_maker, &linear_m_handle);
+            linear_s_maker.handle_m = linear_m_handle;
+            scui_widget_create(&linear_s_maker, &linear_s_handle);
             // 绑定子控件(主)(从)
             scui_linear_item_t linear_item = {.draw_idx = idx,};
-            linear_item.handle_m = custom_m_handle;
-            linear_item.handle_s = custom_s_handle;
+            linear_item.handle_m = linear_m_handle;
+            linear_item.handle_s = linear_s_handle;
             scui_linear_item_sets(event->object, &linear_item);
-            // 绑定子控件(从)
-            scui_handle_t *handle_m = NULL;
-            scui_custom_handle_m(custom_s_handle, &handle_m);
-            *handle_m = linear_item.handle_m;
         }
         
         // 下半部分留白占用
-        custom_maker.widget.style.indev_ptr     = false;
-        custom_maker.widget.clip.h              = SCUI_VER_RES / 2 - 10 - 180 / 2;
-        custom_maker.widget.event_cb            = NULL;
-        scui_widget_create(&custom_maker, &custom_handle);
+        linear_m_maker.widget.style.indev_ptr = false;
+        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
+        linear_m_maker.widget.event_cb        = NULL;
+        scui_widget_create(&linear_m_maker, &linear_m_handle);
         
         
         
@@ -984,21 +977,21 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
             scui_linear_item_t linear_item = {.draw_idx = idx,};
             scui_linear_item_gets(event->object, &linear_item);
-            custom_handle = linear_item.handle_s;
+            linear_s_handle = linear_item.handle_s;
             
             
             
             scui_string_maker_t string_maker = {0};
-            scui_handle_t string_handle     = SCUI_HANDLE_INVALID;
-            string_maker.widget.type        = scui_widget_type_string;
-            string_maker.widget.parent      = custom_handle;
-            string_maker.widget.clip.w      = custom_maker.widget.clip.w;
-            string_maker.widget.clip.h      = custom_maker.widget.clip.h;
-            string_maker.args.align_hor     = 2;
-            string_maker.args.align_ver     = 2;
-            string_maker.args.color.filter  = true;
-            // string_maker.draw_cache         = true;
-            string_maker.font_idx           = SCUI_FONT_IDX_32;
+            scui_handle_t string_handle = SCUI_HANDLE_INVALID;
+            string_maker.widget.type       = scui_widget_type_string;
+            string_maker.widget.parent     = linear_s_handle;
+            string_maker.widget.clip.w     = linear_s_maker.widget.clip.w;
+            string_maker.widget.clip.h     = linear_s_maker.widget.clip.h;
+            string_maker.args.align_hor    = 2;
+            string_maker.args.align_ver    = 2;
+            string_maker.args.color.filter = true;
+            // string_maker.draw_cache        = true;
+            string_maker.font_idx          = SCUI_FONT_IDX_32;
             
             // 特定卡片给自己添加额外控件
             scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
@@ -1555,7 +1548,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         scui_image_cache_clear();
         scui_ui_scene_mini_card_cfg();
         
-        // 销毁该占用控件, 为list控件留出位置
         scui_linear_maker_t linear_maker = {0};
         scui_handle_t linear_handle = SCUI_HANDLE_INVALID;
         linear_maker.widget.type = scui_widget_type_linear;

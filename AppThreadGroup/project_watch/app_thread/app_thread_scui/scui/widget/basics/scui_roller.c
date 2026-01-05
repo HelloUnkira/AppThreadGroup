@@ -41,6 +41,7 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 构造派生控件实例 */
     scui_linear_make(linear, linear_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_roller));
+    SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     /* 状态初始化 */
     roller->type   = roller_maker->type;
@@ -67,7 +68,7 @@ void scui_roller_burn(scui_handle_t handle)
 static void scui_roller_s_event(scui_event_t *event)
 {
     // 特殊的固定调用
-    scui_linear_s_event(event);
+    scui_widget_event_shift(event);
     
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -96,7 +97,7 @@ static void scui_roller_s_event(scui_event_t *event)
 static void scui_roller_m_event(scui_event_t *event)
 {
     // 特殊的固定调用
-    scui_linear_m_event(event);
+    scui_widget_event_shift(event);
     
     switch (event->type) {
     case scui_event_anima_elapse:
@@ -262,44 +263,41 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_roller_t *roller = (void *)widget;
     
-    // 基类对象同步
-    scui_custom_maker_t custom_maker = {0};
-    scui_handle_t custom_handle = SCUI_HANDLE_INVALID;
-    custom_maker.widget         = maker->widget;
-    custom_maker.widget.type    = scui_widget_type_custom;
-    custom_maker.widget.parent  = SCUI_HANDLE_INVALID;
+    // 基类对象同步(同步外界给的部分状态)
+    scui_linear_m_maker_t linear_m_maker = {.widget = maker->widget,};
+    scui_linear_s_maker_t linear_s_maker = {.widget = maker->widget,};
+    scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
+    scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
     
-    // 创建子控件(继承父控件部分参数)
-    custom_maker.widget.style.fully_bg  = false;
-    custom_maker.widget.style.indev_ptr = true;
-    custom_maker.widget.parent          = widget->myself;
-    custom_maker.widget.event_cb        = scui_roller_m_event;
-    scui_widget_create(&custom_maker, &custom_handle);
-    scui_handle_t idx = scui_widget_child_to_index(widget->myself, custom_handle);
+    // 子控件(主)创建
+    linear_m_maker.widget.type            = scui_widget_type_linear_m;
+    linear_m_maker.widget.style.fully_bg  = false;
+    linear_m_maker.widget.style.indev_ptr = true;
+    linear_m_maker.widget.parent          = widget->myself;
+    linear_m_maker.widget.event_cb        = scui_roller_m_event;
+    scui_widget_create(&linear_m_maker, &linear_m_handle);
     
+    // 子控件树(从)创建
+    linear_s_maker.widget.type            = scui_widget_type_linear_s;
+    linear_s_maker.widget.style.fully_bg  = true;
+    linear_s_maker.widget.style.indev_ptr = false;
+    linear_m_maker.widget.parent          = SCUI_HANDLE_INVALID;
+    linear_s_maker.widget.event_cb        = scui_roller_s_event;
+    linear_s_maker.widget.child_num       = 1;
+    linear_s_maker.handle_m               = linear_m_handle;
+    scui_widget_create(&linear_s_maker, &linear_s_handle);
+    
+    // 绑定子控件(主)(从)
+    scui_handle_t idx = scui_widget_child_to_index(widget->myself, linear_m_handle);
     scui_linear_item_t linear_item = {.draw_idx = idx,};
-    scui_linear_item_gets(widget->myself, &linear_item);
-    linear_item.handle_m = custom_handle;
-    
-    // 创建子控件树
-    custom_maker.widget.style.fully_bg  = true;
-    custom_maker.widget.style.indev_ptr = false;
-    custom_maker.widget.parent          = SCUI_HANDLE_INVALID;
-    custom_maker.widget.event_cb        = scui_roller_s_event;
-    custom_maker.widget.child_num       = 1;
-    scui_widget_create(&custom_maker, &custom_handle);
-    
-    linear_item.handle_s = custom_handle;
+    linear_item.handle_m = linear_m_handle;
+    linear_item.handle_s = linear_s_handle;
     scui_linear_item_sets(widget->myself, &linear_item);
-    
-    scui_handle_t *handle_m = NULL;
-    scui_custom_handle_m(linear_item.handle_s, &handle_m);
-    *handle_m = linear_item.handle_m;
     
     // 使用预制的构造器构造对象
     scui_string_maker_t string_maker = *maker;
     scui_handle_t string_handle = SCUI_HANDLE_INVALID;
-    string_maker.widget.parent  = custom_handle;
+    string_maker.widget.parent  = linear_s_handle;
     scui_widget_create(&string_maker, &string_handle);
     scui_string_update_str(string_handle, str_utf8);
     

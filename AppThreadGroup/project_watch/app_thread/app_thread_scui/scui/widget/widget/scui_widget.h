@@ -10,6 +10,8 @@ typedef enum {
     scui_widget_type_scroll,    /* 滚动控件 */
     scui_widget_type_string,    /* 字符串控件 */
     scui_widget_type_linear,    /* 列表控件 */
+    scui_widget_type_linear_m,  /* 列表控件(子, 主) */
+    scui_widget_type_linear_s,  /* 列表控件(子, 从) */
     scui_widget_type_roller,    /* 滚动控件 */
     scui_widget_type_xvedio,	/* 图帧控件 */
     /* 扩展控件(按需补充) */
