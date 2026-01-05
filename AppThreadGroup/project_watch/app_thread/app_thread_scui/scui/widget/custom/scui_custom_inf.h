@@ -1,18 +1,6 @@
 #ifndef SCUI_CUSTOM_INF_H
 #define SCUI_CUSTOM_INF_H
 
-/*@brief 自定义控件子控件(可选)
- *@param handle   自定义控件句柄
- *@param handle_s 控件句柄地址
- */
-void scui_custom_handle_m(scui_handle_t handle, scui_handle_t **handle_m);
-
-/*@brief 自定义控件子控件树(可选)
- *@param handle   自定义控件句柄
- *@param handle_s 控件句柄地址
- */
-void scui_custom_handle_s(scui_handle_t handle, scui_handle_t **handle_s);
-
 /*@brief 自定义控件绘制描述符(全局,唯一)
  *@param handle   自定义控件句柄
  *@param draw_dsc 绘制描述符

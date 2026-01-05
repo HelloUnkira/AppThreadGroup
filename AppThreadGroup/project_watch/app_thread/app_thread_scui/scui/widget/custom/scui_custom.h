@@ -8,8 +8,6 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_handle_t handle_m;     /* 子控件(可选) */
-    scui_handle_t handle_s;     /* 子控件树(可选) */
     void         *draw_dsc;     /* 绘制描述符(可选,全局,唯一) */
 } scui_custom_t;
 
