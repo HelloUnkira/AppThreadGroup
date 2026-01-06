@@ -133,15 +133,6 @@ void scui_area_merge2(scui_area_t *area, scui_area_t *area1);
  */
 bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2);
 
-/*@brief 剪切域偏移调整
- *       先调整剪切域偏移
- *       后与原剪切域交集运算
- *@param clip   剪切域
- *@param offset 偏移量
- *@retval 为空false,不为空true
- */
-bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
-
 /*@brief 求区域求差(area = area1 - area2)
  *       求差要求:必须存在交集,area2是area1的子集
  *@param area  区域
@@ -151,6 +142,25 @@ bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
  *@retval 不为空
  */
 bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2);
+
+/*@brief 求区域交差(area = area2 - (area1 & area2))
+ *       求差要求:必须存在交集,一个或俩个相邻顶点
+ *@param area  区域
+ *@param num   区域数量
+ *@param area1 区域
+ *@param area2 区域
+ *@retval 失败或者非相交
+ */
+bool scui_area_differ2(scui_area_t area[2], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2);
+
+/*@brief 剪切域偏移调整
+ *       先调整剪切域偏移
+ *       后与原剪切域交集运算
+ *@param clip   剪切域
+ *@param offset 偏移量
+ *@retval 为空false,不为空true
+ */
+bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset);
 
 /*@brief 检查区域包含区域(area1包含area2)
  *@param area1 区域
@@ -210,5 +220,11 @@ bool scui_area_line(scui_area_t *area, scui_area_t *line);
  *@retval 中心坐标
  */
 scui_point_t scui_area_center(scui_area_t *area);
+
+/*@brief 区域大小
+ *@param area 区域
+ *@retval 区域大小
+ */
+scui_multi_t scui_area_size(scui_area_t *area);
 
 #endif

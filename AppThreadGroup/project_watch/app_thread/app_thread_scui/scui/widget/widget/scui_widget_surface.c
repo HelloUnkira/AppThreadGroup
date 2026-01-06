@@ -24,13 +24,7 @@ scui_area_t scui_widget_clip(scui_handle_t handle)
 void scui_widget_clip_sizes(scui_handle_t handle, scui_multi_t *size)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    
-    scui_multi_t size_c = 0;
-    scui_clip_btra(widget->clip_set, node) {
-        scui_clip_unit_t *unit = scui_clip_unit(node);
-        size_c += unit->clip.w * unit->clip.h;
-    }
-    *size += size_c;
+    *size += widget->clip_set.size;
     
     scui_widget_child_list_btra(widget, idx)
     scui_widget_clip_sizes(widget->child_list[idx], size);
@@ -156,9 +150,15 @@ void scui_widget_clip_update(scui_widget_t *widget)
         /* 控件隐藏则跳过 */
         if (scui_widget_is_hide(handle_c))
             continue;
+        
         /* 控件满足完全覆盖的条件 */
-        if (scui_widget_clip_cover(widget_c))
-            scui_clip_del(&widget->clip_set, &widget_c->clip_set.clip);
+        scui_area_t clip_inter = {0};
+        if (scui_widget_clip_cover(widget_c)) {
+            scui_area_t clip_inter = widget_c->clip_set.clip;
+            if (scui_area_inter2(&clip_inter, &widget->clip_set.clip))
+                scui_clip_del(&widget->clip_set, &clip_inter);
+        }
+        
         /* 迭代到子控件 */
         scui_widget_clip_update(widget_c);
     }
@@ -189,9 +189,13 @@ void scui_widget_clip_update(scui_widget_t *widget)
             /* 控件隐藏则跳过 */
             if (scui_widget_is_hide(handle_s))
                 continue;
+            
             /* 控件满足完全覆盖的条件 */
-            if (scui_widget_clip_cover(widget_s))
-                scui_clip_del(&widget->clip_set, &widget_s->clip_set.clip);
+            if (scui_widget_clip_cover(widget_s)) {
+                scui_area_t clip_inter = widget_s->clip_set.clip;
+                if (scui_area_inter2(&clip_inter, &widget->clip_set.clip))
+                    scui_clip_del(&widget->clip_set, &clip_inter);
+            }
         }
     }
 }

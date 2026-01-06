@@ -226,31 +226,6 @@ bool scui_area_union(scui_area_t *area, scui_area_t *area1, scui_area_t *area2)
     return result;
 }
 
-
-/*@brief 剪切域偏移调整
- *       先调整剪切域偏移
- *       后与原剪切域交集运算
- *@param clip   剪切域
- *@param offset 偏移量
- *@retval 为空false,不为空true
- */
-bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset)
-{
-    if (offset->x == 0 && offset->y == 0)
-        return true;
-    
-    scui_area_t clip_offset = *clip;
-    clip_offset.x += offset->x;
-    clip_offset.y += offset->y;
-    
-    scui_area_t clip_inter = {0};
-    if (scui_area_inter(&clip_inter, clip, &clip_offset)) {
-       *clip = clip_inter;
-        return true;
-    }
-    return false;
-}
-
 /*@brief 求区域求差(area = area1 - area2)
  *       求差要求:必须存在交集,area2是area1的子集
  *@param area  区域
@@ -304,6 +279,62 @@ bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1
         scui_area_m_by_s(&area[idx], &area[idx]);
     
     return *num != 0;
+}
+
+/*@brief 求区域交差(area = area2 - (area1 & area2))
+ *       求差要求:必须存在交集,一个或俩个相邻顶点
+ *@param area  区域
+ *@param num   区域数量
+ *@param area1 区域
+ *@param area2 区域
+ *@retval 失败或者非相交
+ */
+bool scui_area_differ2(scui_area_t area[2], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2)
+{
+    // 这里只考虑俩种情况,无论哪俩种情况,算法都很统一
+    // 第一种:一个矩形的唯一顶点在另一个矩形中间
+    // 第二种:一个矩形的俩邻顶点在另一个矩形中间
+    // 计算交集区域,然后让area2减去它即可
+    
+    scui_area_t area_inter = {0};
+    if (scui_area_inter(&area_inter, area1, area2)) {
+        
+        scui_area_t area4[4] = {0};
+        if (scui_area_differ(area4, num, area2, &area_inter)) {
+            SCUI_ASSERT(*num == 1 || *num == 2 || *num == 3);
+            // 多种空间拓扑, 最终会有几种可能性
+            
+            for (scui_coord_t idx = 0; idx < *num; idx++)
+                area[idx] = area4[idx];
+            return true;
+        }
+    }
+    
+    return false;
+}
+
+/*@brief 剪切域偏移调整
+ *       先调整剪切域偏移
+ *       后与原剪切域交集运算
+ *@param clip   剪切域
+ *@param offset 偏移量
+ *@retval 为空false,不为空true
+ */
+bool scui_area_limit_offset(scui_area_t *clip, scui_point_t *offset)
+{
+    if (offset->x == 0 && offset->y == 0)
+        return true;
+    
+    scui_area_t clip_offset = *clip;
+    clip_offset.x += offset->x;
+    clip_offset.y += offset->y;
+    
+    scui_area_t clip_inter = {0};
+    if (scui_area_inter(&clip_inter, clip, &clip_offset)) {
+       *clip = clip_inter;
+        return true;
+    }
+    return false;
 }
 
 /*@brief 检查区域包含区域(area1包含area2)
@@ -507,4 +538,14 @@ scui_point_t scui_area_center(scui_area_t *area)
         .x = area->x + area->w / 2,
         .y = area->y + area->h / 2,
     };
+}
+
+/*@brief 区域大小
+ *@param area 区域
+ *@retval 区域大小
+ */
+scui_multi_t scui_area_size(scui_area_t *area)
+{
+    SCUI_ASSERT(area->w >= 0 && area->h >= 0);
+    return area->w * area->h;
 }

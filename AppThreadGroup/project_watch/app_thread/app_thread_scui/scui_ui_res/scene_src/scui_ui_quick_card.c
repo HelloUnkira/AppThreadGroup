@@ -183,13 +183,13 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         
         // 上半部分留白占用
         linear_m_maker.widget.style.indev_ptr = false;
-        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 72 / 2;
+        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
         linear_m_maker.widget.event_cb        = NULL;
         scui_widget_create(&linear_m_maker, &linear_m_handle);
         
         // list的各个子控件
         linear_m_maker.widget.style.indev_ptr = true;
-        linear_m_maker.widget.clip.h          = 72;
+        linear_m_maker.widget.clip.h          = 180;
         linear_m_maker.widget.event_cb        = scui_ui_scene_item_m_event_proc;
         
         for (uint8_t idx = 0; idx < scui_ui_res_local->list_num; idx++) {
@@ -206,7 +206,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         
         // 下半部分留白占用
         linear_m_maker.widget.style.indev_ptr = false;
-        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 72 / 2;
+        linear_m_maker.widget.clip.h          = SCUI_VER_RES / 2 - 10 - 180 / 2;
         linear_m_maker.widget.event_cb        = NULL;
         scui_widget_create(&linear_m_maker, &linear_m_handle);
         

@@ -589,28 +589,24 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 // scui_widget_clip_check(handle_r, true);
                 scui_widget_clip_reset(widget, &widget->clip, true);
                 #else
-                scui_clip_set_t clip_set = {0};
-                scui_clip_ready(&clip_set);
-                clip_set.clip = widget->clip_set.clip;
                 /* 为所有控件及其子控件添加根控件剪切域 */
                 scui_clip_btra(widget->clip_set, node) {
                     scui_clip_unit_t *unit = scui_clip_unit(node);
-                    scui_clip_add(&clip_set, &unit->clip);
+                    scui_widget_child_list_btra(widget, idx) {
+                        scui_handle_t  handle_c = widget->child_list[idx];
+                        scui_widget_t *widget_c = scui_handle_source_check(handle_c);
+                        scui_widget_clip_reset(widget_c, &unit->clip, true);
+                    }
                 }
-                scui_clip_btra(clip_set, node) {
-                    scui_clip_unit_t *unit = scui_clip_unit(node);
-                    scui_widget_clip_reset(widget, &unit->clip, true);
-                }
-                scui_clip_clear(&clip_set);
                 #endif
                 
                 scui_multi_t size_old = 0, size_new = 0;
-                // scui_widget_clip_sizes(widget->myself, &size_old);
+                scui_widget_clip_sizes(widget->myself, &size_old);
                 // scui_widget_clip_check(widget->myself, true);
                 scui_widget_clip_update(widget);
                 // scui_widget_clip_check(widget->myself, true);
-                // scui_widget_clip_sizes(widget->myself, &size_new);
-                SCUI_LOG_DEBUG("size_old: %d, size_new:%d", size_old, size_new);
+                scui_widget_clip_sizes(widget->myself, &size_new);
+                SCUI_LOG_DEBUG("size_old:%d, size_new:%d", size_old, size_new);
             }
             /* 去除surface剪切域, 因为已经绘制完毕 */
             if (scui_event_check_finish(event))

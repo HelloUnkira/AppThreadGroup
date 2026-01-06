@@ -9,6 +9,8 @@ typedef struct {
 typedef struct {
     scui_list_dll_t dl_list;
     scui_area_t     clip;       /* 全局剪切域 */
+    scui_coord_t    num;        /* 剪切域数量 */
+    scui_multi_t    size;       /* 统计尺寸 */
 } scui_clip_set_t;
 
 /*@brief 剪切域为空
@@ -28,12 +30,14 @@ void scui_clip_ready(scui_clip_set_t *clip_set);
 void scui_clip_clear(scui_clip_set_t *clip_set);
 
 /*@brief 添加剪切域
+ *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
  */
 bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip);
 
 /*@brief 移除剪切域
+ *       调用者:检查剪切域有效性
  *@param clip_set 剪切域集合
  *@param clip     剪切域
  */
