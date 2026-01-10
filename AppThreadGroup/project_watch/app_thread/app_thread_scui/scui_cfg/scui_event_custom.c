@@ -68,8 +68,7 @@ const char * scui_event_type_misc_stringify(scui_event_type_t type)
         return event_sys_str[type];
     }
     
-    if (type >= scui_event_custom_s &&
-        type <= scui_event_custom_e) {
+    if (scui_event_type_custom(type)) {
         
         static const char * event_custom_str[scui_event_custom_num - scui_event_sys_num] = {
             [scui_event_ui_none_goto                - scui_event_sys_num] = scui_stringify(scui_event_ui_none_goto),

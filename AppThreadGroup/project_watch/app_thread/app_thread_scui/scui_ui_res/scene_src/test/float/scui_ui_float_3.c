@@ -13,10 +13,9 @@
 void scui_ui_scene_float_3_button_event(scui_event_t *event)
 {
     // 转移至控件调度
-    if (event->type < scui_event_widget_s ||
-        event->type > scui_event_widget_e) {
-        scui_widget_event_shift(event);
-        return;
+    if (!scui_event_type_widget(event->type)) {
+         scui_widget_event_shift(event);
+         return;
     }
     
     SCUI_LOG_WARN("event %u widget %u", event->type, event->object);

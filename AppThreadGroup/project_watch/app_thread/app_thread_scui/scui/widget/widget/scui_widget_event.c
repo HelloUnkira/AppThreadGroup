@@ -284,28 +284,22 @@ static void scui_widget_event_process(scui_event_t *event)
     scui_event_mask_keep(event);
     
     /* 默认控件事件处理(ptr) */
-    if (event->type >= scui_event_ptr_s &&
-        event->type <= scui_event_ptr_e)
-        if (!widget->style.indev_ptr)
-             return;
+    if (scui_event_type_ptr(event->type) && !widget->style.indev_ptr)
+        return;
     /* 默认控件事件处理(enc) */
-    if (event->type >= scui_event_enc_s &&
-        event->type <= scui_event_enc_e)
-        if (!widget->style.indev_enc)
-             return;
+    if (scui_event_type_enc(event->type) && !widget->style.indev_enc)
+        return;
     /* 默认控件事件处理(key) */
-    if (event->type >= scui_event_key_s &&
-        event->type <= scui_event_key_e)
-        if (!widget->style.indev_key)
-             return;
+    if (scui_event_type_key(event->type) && !widget->style.indev_key)
+        return;
     
     /* 默认控件事件处理 */
     switch (event->type) {
     case scui_event_anima_elapse: {
-        
         // 仅仅被标记的控件才可响应该事件
         if (!widget->style.sched_anima)
              return;
+        
         break;
     }
     case scui_event_draw: {
@@ -533,24 +527,23 @@ void scui_widget_event_dispatch(scui_event_t *event)
     SCUI_LOG_DEBUG("event %u", event->type);
     
     /* 输入事件ptr:回溯递归 */
-    /* 输入事件enc:顺向递归 */
-    /* 输入事件key:顺向递归 */
-    if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e) {
+    if (scui_event_type_ptr(event->type)) {
         scui_widget_event_bubble(event, NULL, true, false);
         return;
     }
-    if (event->type >= scui_event_enc_s && event->type <= scui_event_enc_e) {
+    /* 输入事件enc:顺向递归 */
+    if (scui_event_type_enc(event->type)) {
         scui_widget_event_bubble(event, NULL, false, true);
         return;
     }
-    if (event->type >= scui_event_key_s && event->type <= scui_event_key_e) {
+    /* 输入事件key:顺向递归 */
+    if (scui_event_type_key(event->type)) {
         scui_widget_event_bubble(event, NULL, false, true);
         return;
     }
     
     /* 控件事件widget:单次派发 */
-    if (event->type >= scui_event_widget_s &&
-        event->type <= scui_event_widget_e) {
+    if (scui_event_type_widget(event->type)) {
         scui_widget_event_process(event);
         scui_event_mask_over(event);
         return;

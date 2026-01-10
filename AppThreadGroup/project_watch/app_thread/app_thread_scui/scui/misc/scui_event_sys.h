@@ -77,4 +77,40 @@ typedef enum {
     scui_event_sys_num,
 } scui_event_sys_t;
 
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_sched(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_widget(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_ptr(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_enc(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_key(scui_event_type_t event_type);
+
+/*@brief 事件类型检查
+ *@param event_type 事件类型
+ *@retval 类型匹配
+ */
+bool scui_event_type_custom(scui_event_type_t event_type);
+
 #endif

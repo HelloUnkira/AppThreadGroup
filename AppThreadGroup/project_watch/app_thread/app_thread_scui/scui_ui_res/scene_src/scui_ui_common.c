@@ -485,7 +485,9 @@ void scui_ui_scene_link_cfg(scui_event_t *event)
         break;
     case SCUI_UI_SCENE_QUICK_CARD:
         window_sibling[0] = SCUI_UI_SCENE_HOME;
+        window_sibling[1] = SCUI_UI_SCENE_LIST_SCALE;
         switch_type[0] = scui_window_switch_cover_out;
+        switch_type[1] = scui_window_switch_move;
         break;
     }
     

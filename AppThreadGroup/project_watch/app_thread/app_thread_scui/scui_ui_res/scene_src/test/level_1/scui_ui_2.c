@@ -26,10 +26,9 @@ void scui_ui_scene_2_bar_arc_event_proc(scui_event_t *event)
 void scui_ui_scene_2_scroll_event(scui_event_t *event)
 {
     // 转移至控件调度
-    if (event->type < scui_event_widget_s ||
-        event->type > scui_event_widget_e) {
-        scui_widget_event_shift(event);
-        return;
+    if (!scui_event_type_widget(event->type)) {
+         scui_widget_event_shift(event);
+         return;
     }
     
     scui_coord_t scroll_pct = 0;

@@ -13,10 +13,9 @@
 void scui_ui_scene_2_button_event_proc(scui_event_t *event)
 {
     // 转移至控件调度
-    if (event->type < scui_event_widget_s ||
-        event->type > scui_event_widget_e) {
-        scui_widget_event_shift(event);
-        return;
+    if (!scui_event_type_widget(event->type)) {
+         scui_widget_event_shift(event);
+         return;
     }
     
     SCUI_LOG_WARN("event %u widget %u", event->type, event->object);
@@ -43,9 +42,9 @@ void scui_ui_scene_float_2_event_proc(scui_event_t *event)
         break;
     default:
         #if 0   // discard, we don't need this
-        if (event->type >= scui_event_ptr_s && event->type <= scui_event_ptr_e)
+        if (scui_event_type_ptr(event->type))
             scui_window_float_event_grasp_ptr(event);
-        if (event->type >= scui_event_key_s && event->type <= scui_event_key_e)
+        if (scui_event_type_key(event->type))
             scui_window_float_event_grasp_key(event);
         #endif
         break;

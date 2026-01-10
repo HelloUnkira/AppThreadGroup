@@ -231,38 +231,32 @@ void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_
         
         if (cb_node_unmatch)    // 序列通配回调:sched
         if (cb_node_inner->event == scui_event_sched_all &&
-            cb_node->event >= scui_event_sched_s &&
-            cb_node->event <= scui_event_sched_e)
+            scui_event_type_sched(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)    // 序列通配回调:widget
         if (cb_node_inner->event == scui_event_widget_all &&
-            cb_node->event >= scui_event_widget_s &&
-            cb_node->event <= scui_event_widget_e)
+            scui_event_type_widget(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)    // 序列通配回调:ptr
         if (cb_node_inner->event == scui_event_ptr_all &&
-            cb_node->event >= scui_event_ptr_s &&
-            cb_node->event <= scui_event_ptr_e)
+            scui_event_type_ptr(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)    // 序列通配回调:enc
         if (cb_node_inner->event == scui_event_enc_all &&
-            cb_node->event >= scui_event_enc_s &&
-            cb_node->event <= scui_event_enc_e)
+            scui_event_type_enc(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)    // 序列通配回调:key
         if (cb_node_inner->event == scui_event_key_all &&
-            cb_node->event >= scui_event_key_s &&
-            cb_node->event <= scui_event_key_e)
+            scui_event_type_key(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)    // 序列通配回调:custom
         if (cb_node_inner->event == scui_event_custom_all &&
-            cb_node->event >= scui_event_custom_s &&
-            cb_node->event <= scui_event_custom_e)
+            scui_event_type_custom(cb_node->event))
             cb_node_unmatch = false;
         
         if (cb_node_unmatch)
