@@ -41,8 +41,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->parent = widget_maker->parent;
     widget->myself = *handle;
     
-    /* 控件初始默认为隐藏(无响应) */
-    widget->style.state = false;
+    /* 控件初始默认为显示 */
+    widget->style.state = true;
     
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);

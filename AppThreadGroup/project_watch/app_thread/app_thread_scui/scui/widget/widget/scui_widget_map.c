@@ -239,9 +239,6 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
         .type       = scui_event_create,
     };
     scui_event_notify(&event);
-    
-    /* 控件默认设置为显示 */
-    scui_widget_state_show(widget->myself, false);
 }
 
 /*@brief 创建控件树(句柄映射表)

@@ -353,7 +353,7 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
         return false;
     
     scui_handle_t handle_t = SCUI_HANDLE_INVALID;
-    scui_multi_t  dist_t_a = scui_coord_max;
+    scui_multi_t  dist_t_a = scui_multi_max;
     scui_coord_t  dist_t_x = 0;
     scui_coord_t  dist_t_y = 0;
     
@@ -443,6 +443,9 @@ bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key)
         *key = scroll_flag.key;
         return true;
     case 0x01:
+        // 上锁失败,无需解锁
+        if (*key == SCUI_HANDLE_INVALID)
+            return false;
         // 释放锁,此时应该为目标句柄
         if (scroll_flag.lock && scroll_flag.key != *key) {
             SCUI_LOG_ERROR("unknown target");

@@ -335,8 +335,8 @@ void scui_roller_invoke(scui_event_t *event)
         scui_handle_t center = NULL;
         scui_scroll_center_get(widget->myself, &center);
         for (scui_handle_t idx = 0; idx < roller->linear.list_num; idx++)
-            if (center == roller->linear.list_widget_m[idx]) {
-                scui_handle_t handle_s = roller->linear.list_widget_s[idx];
+            if (center == roller->linear.list_handle_m[idx]) {
+                scui_handle_t handle_s = roller->linear.list_handle_s[idx];
                 roller->center = scui_widget_child_by_index(handle_s, 0);
                 break;
             }

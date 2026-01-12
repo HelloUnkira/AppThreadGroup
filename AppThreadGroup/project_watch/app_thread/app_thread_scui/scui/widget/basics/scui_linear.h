@@ -10,11 +10,9 @@ typedef struct {
     /* 外部域: */
     scui_handle_t       list_num;           // 列表数量
     /* 内部域: */
-    scui_event_cb_t    *event_cb_list_m;    // 列表子控件响应回调(主)
-    scui_event_cb_t    *event_cb_list_s;    // 列表子控件树响应回调(从)
     scui_surface_t    **list_surface_s;     // 从控件树画布列表(slave)
-    scui_handle_t      *list_widget_s;      // 从控件树列表(slave)
-    scui_handle_t      *list_widget_m;      // 主控件列表(master)
+    scui_handle_t      *list_handle_s;      // 从控件树列表(slave)
+    scui_handle_t      *list_handle_m;      // 主控件列表(master)
     scui_area_t        *list_draw_clip;     // 绘制目标剪切域
     scui_handle_t       list_draw_idx;      // 绘制目标
     bool               *list_draw;          // 绘制标记
@@ -25,25 +23,6 @@ typedef struct {
     uintptr_t           remain_num;
     uintptr_t           remain_byte;
 } scui_linear_t;
-
-typedef struct {
-    /* 继承域: */
-    SCUI_EXTEND_FIELD_S
-    scui_widget_t widget;
-    SCUI_EXTEND_FIELD_E
-    /* 外部域: */
-    /* 内部域: */
-} scui_linear_m_t;
-
-typedef struct {
-    /* 继承域: */
-    SCUI_EXTEND_FIELD_S
-    scui_widget_t widget;
-    SCUI_EXTEND_FIELD_E
-    /* 外部域: */
-    /* 内部域: */
-    scui_handle_t       handle_m;
-} scui_linear_s_t;
 
 #pragma pack(push, 1)
 typedef struct {
@@ -57,6 +36,15 @@ typedef struct {
 } scui_linear_maker_t;
 #pragma pack(pop)
 
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
+    /* 外部域: */
+    /* 内部域: */
+} scui_linear_m_t;
+
 // 子控件:需要重定向事件响应
 #pragma pack(push, 1)
 typedef struct {
@@ -67,6 +55,16 @@ typedef struct {
     /* 外部域: */
 } scui_linear_m_maker_t;
 #pragma pack(pop)
+
+typedef struct {
+    /* 继承域: */
+    SCUI_EXTEND_FIELD_S
+    scui_widget_t widget;
+    SCUI_EXTEND_FIELD_E
+    /* 外部域: */
+    /* 内部域: */
+    scui_handle_t       handle_m;
+} scui_linear_s_t;
 
 // 子控件:需要重定向事件响应
 #pragma pack(push, 1)

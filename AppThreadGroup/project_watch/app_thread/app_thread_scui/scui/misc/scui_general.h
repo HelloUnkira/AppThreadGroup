@@ -89,7 +89,7 @@ static inline scui_color_t SCUI_COLOR_MAKE32_LD(bool filter, uint32_t color_f, u
 /* scui_color_t组合宏(这里用内联函数表出): */
 static inline scui_color32_t SCUI_COLOR32_MAKE8(uint8_t a8, uint8_t r8, uint8_t g8, uint8_t b8)
 {return (scui_color32_t){.ch.a = a8, .ch.r = r8, .ch.g = g8, .ch.b = b8,};}
-static inline scui_color32_t SCUI_COLOR32_MAKE32(uint8_t color)
+static inline scui_color32_t SCUI_COLOR32_MAKE32(uint32_t color)
 {return (scui_color32_t){.full = color};}
 
 /* scui_color_t常用值: */
