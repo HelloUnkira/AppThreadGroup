@@ -113,10 +113,10 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_linear_t *linear = (void *)widget;
         scui_roller_t *roller = (void *)widget;
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(widget->myself, &linear_item);
+        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(event->object, &handle_s);
         
-        scui_handle_t  custom = linear_item.handle_s;
+        scui_handle_t  custom = handle_s;
         scui_area_t  src_clip = scui_widget_clip(custom);
         scui_image_t img_inst = {
             .type           = scui_image_type_mem,
@@ -236,10 +236,11 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_handle_t handle_p = scui_widget_parent(event->object);
         scui_handle_t index = scui_widget_child_to_index(handle_p, event->object);
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(handle_p, &linear_item);
+        scui_handle_t handle_m = event->object;
+        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(handle_m, &handle_s);
         
-        scui_handle_t custom = linear_item.handle_m;
+        scui_handle_t custom = handle_m;
         SCUI_LOG_INFO("click idx:%d", index);
         
         // 聚焦它到中心
@@ -269,30 +270,23 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
     scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
     
-    // 子控件(主)创建
+    // 子控件(主)子控件树(从)创建
     linear_m_maker.widget.type            = scui_widget_type_linear_m;
     linear_m_maker.widget.style.fully_bg  = false;
     linear_m_maker.widget.style.indev_ptr = true;
     linear_m_maker.widget.parent          = widget->myself;
     linear_m_maker.widget.event_cb        = scui_roller_m_event;
-    scui_widget_create(&linear_m_maker, &linear_m_handle);
-    
-    // 子控件树(从)创建
     linear_s_maker.widget.type            = scui_widget_type_linear_s;
     linear_s_maker.widget.style.fully_bg  = true;
     linear_s_maker.widget.style.indev_ptr = false;
-    linear_m_maker.widget.parent          = SCUI_HANDLE_INVALID;
+    linear_s_maker.widget.parent          = SCUI_HANDLE_INVALID;
     linear_s_maker.widget.event_cb        = scui_roller_s_event;
     linear_s_maker.widget.child_num       = 1;
-    linear_s_maker.handle_m               = linear_m_handle;
-    scui_widget_create(&linear_s_maker, &linear_s_handle);
     
-    // 绑定子控件(主)(从)
-    scui_handle_t idx = scui_widget_child_to_index(widget->myself, linear_m_handle);
-    scui_linear_item_t linear_item = {.draw_idx = idx,};
-    linear_item.handle_m = linear_m_handle;
-    linear_item.handle_s = linear_s_handle;
-    scui_linear_item_sets(widget->myself, &linear_item);
+    scui_widget_create(&linear_m_maker, &linear_m_handle);
+    scui_widget_create(&linear_s_maker, &linear_s_handle);
+    scui_linear_m_set(linear_m_handle, &linear_s_handle);
+    scui_linear_s_set(linear_s_handle, &linear_m_handle);
     
     // 使用预制的构造器构造对象
     scui_string_maker_t string_maker = *maker;
@@ -332,14 +326,12 @@ void scui_roller_invoke(scui_event_t *event)
     case scui_event_widget_scroll_over:
     case scui_event_widget_scroll_keep:
     case scui_event_widget_scroll_layout: {
-        scui_handle_t center = NULL;
-        scui_scroll_center_get(widget->myself, &center);
-        for (scui_handle_t idx = 0; idx < roller->linear.list_num; idx++)
-            if (center == roller->linear.list_handle_m[idx]) {
-                scui_handle_t handle_s = roller->linear.list_handle_s[idx];
-                roller->center = scui_widget_child_by_index(handle_s, 0);
-                break;
-            }
+        scui_handle_t handle_m = NULL;
+        scui_handle_t handle_s = NULL;
+        scui_scroll_center_get(widget->myself, &handle_m);
+        scui_linear_m_get(handle_m, &handle_s);
+        
+        roller->center = scui_widget_child_by_index(handle_s, 0);
         break;
     }
     default:

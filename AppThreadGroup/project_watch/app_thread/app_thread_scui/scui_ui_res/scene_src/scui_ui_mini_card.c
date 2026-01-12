@@ -9,6 +9,8 @@
 
 static struct {
     scui_handle_t     linear;
+    scui_handle_t     linear_m[50];
+    scui_handle_t     linear_s[50];
     scui_ui_bar_arc_t bar_arc;
     // 结构相关数据
     scui_handle_t title_music;
@@ -88,10 +90,16 @@ static void scui_ui_scene_item_s_event_proc(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+        scui_handle_t match_idx = -1;
+        scui_handle_t handle_m  = SCUI_HANDLE_INVALID;
+        scui_linear_s_get(event->object, &handle_m);
+        for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++)
+            if (scui_ui_res_local->linear_m[idx] == handle_m) {
+                match_idx = idx;
+                continue;
+            }
         
-        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[linear_item.draw_idx];
+        scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[match_idx];
         scui_area_t clip = scui_widget_clip(event->object);
         
         /* 先绘制背景 */
@@ -727,10 +735,10 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(event->object, &handle_s);
         
-        scui_handle_t  custom = linear_item.handle_s;
+        scui_handle_t  custom = handle_s;
         scui_area_t  src_clip = scui_widget_clip(custom);
         scui_image_t img_inst = {
             .type           = scui_image_type_mem,
@@ -800,10 +808,11 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         scui_handle_t parent = scui_widget_parent(event->object);
         scui_handle_t index  = scui_widget_child_to_index(parent, event->object) - 1;
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_linear_item_gets(scui_ui_res_local->linear, &linear_item);
+        scui_handle_t handle_m = event->object;
+        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(handle_m, &handle_s);
         
-        scui_handle_t  custom = linear_item.handle_m;
+        scui_handle_t  custom = handle_m;
         SCUI_LOG_WARN("click idx:%d", index);
         
         // 不是点击到中心子控件, 聚焦它
@@ -954,15 +963,14 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         linear_m_maker.widget.event_cb        = scui_ui_scene_item_m_event_proc;
         
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-            // 创建子控件(主)(从)
+            // 创建并绑定子控件(主)(从)
             scui_widget_create(&linear_m_maker, &linear_m_handle);
-            linear_s_maker.handle_m = linear_m_handle;
             scui_widget_create(&linear_s_maker, &linear_s_handle);
-            // 绑定子控件(主)(从)
-            scui_linear_item_t linear_item = {.draw_idx = idx,};
-            linear_item.handle_m = linear_m_handle;
-            linear_item.handle_s = linear_s_handle;
-            scui_linear_item_sets(event->object, &linear_item);
+            scui_linear_m_set(linear_m_handle, &linear_s_handle);
+            scui_linear_s_set(linear_s_handle, &linear_m_handle);
+            
+            scui_ui_res_local->linear_m[idx] = linear_m_handle;
+            scui_ui_res_local->linear_s[idx] = linear_s_handle;
         }
         
         // 下半部分留白占用
@@ -975,9 +983,9 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
         
         // list的各个子控件树
         for (uint8_t idx = 0; idx < scui_ui_scene_mini_card_num; idx++) {
-            scui_linear_item_t linear_item = {.draw_idx = idx,};
-            scui_linear_item_gets(event->object, &linear_item);
-            linear_s_handle = linear_item.handle_s;
+            linear_s_handle = scui_ui_res_local->linear_s[idx];
+            scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
+            // 特定卡片给自己添加额外控件
             
             
             
@@ -993,8 +1001,6 @@ void scui_ui_scene_mini_card_scroll_event(scui_event_t *event)
             // string_maker.draw_cache        = true;
             string_maker.font_idx          = SCUI_FONT_IDX_32;
             
-            // 特定卡片给自己添加额外控件
-            scui_ui_scene_mini_card_type_t type = scui_ui_scene_mini_card_type[idx];
             switch (type) {
             case scui_ui_scene_mini_card_type_music_control: {
                 
@@ -1567,7 +1573,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         linear_maker.scroll.keyid_fdir = SCUI_WIDGET_SCROLL_KEY_FDIR;
         linear_maker.scroll.keyid_bdir = SCUI_WIDGET_SCROLL_KEY_BDIR;
         linear_maker.scroll.springback = 70;
-        linear_maker.list_num = scui_ui_scene_mini_card_num;
         scui_widget_create(&linear_maker, &linear_handle);
         break;
     }

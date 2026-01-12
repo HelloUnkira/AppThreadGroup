@@ -58,8 +58,6 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
     scui_coord3_t dst_x[4] = {face2_dst->point2[0].x, face2_dst->point2[1].x, face2_dst->point2[2].x, face2_dst->point2[3].x,};
     scui_coord3_t dst_y[4] = {face2_dst->point2[0].y, face2_dst->point2[1].y, face2_dst->point2[2].y, face2_dst->point2[3].y,};
     
-    const scui_coord3_t eps = 1.1920929e-7f;
-    
     const uint8_t M = 8;
     const uint8_t N = 1;
     
@@ -93,7 +91,7 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
                 scui_abs(matrix_a[k][i]))
                 k = j;
         /* 只要遇到主元为0, 终止并退出 */
-        if (scui_abs(matrix_a[k][i]) < eps) {
+        if (scui_abs(matrix_a[k][i]) < SCUI_ZERO_VAL_F) {
             // 将矩阵清空, 此时已无用
             for (uint8_t idx_i = 0; idx_i < 3; idx_i++)
             for (uint8_t idx_j = 0; idx_j < 3; idx_j++)
@@ -219,7 +217,6 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
 {
     #if 0
     /* 摘抄自lv_matrix:::. */
-    const scui_coord3_t eps = 1.1920929e-7f;
     
     float det00 = matrix->meta[1][1] * matrix->meta[2][2] - matrix->meta[2][1] * matrix->meta[1][2];
     float det01 = matrix->meta[2][0] * matrix->meta[1][2] - matrix->meta[1][0] * matrix->meta[2][2];
@@ -227,7 +224,7 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
     
     float delta = matrix->meta[0][0] * det00 + matrix->meta[0][1] * det01 + matrix->meta[0][2] * det02;
     // 这里有一个返回值的,这里改成断言
-    SCUI_ASSERT(scui_dist(delta, 0.0f) > eps);
+    SCUI_ASSERT(scui_abs(delta) > SCUI_ZERO_VAL_F);
     delta = 1.0f / delta;
     
     scui_matrix_t matrix_t;
@@ -238,9 +235,9 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
     matrix_t.meta[1][1] = delta * (matrix->meta[0][0] * matrix->meta[2][2] - matrix->meta[2][0] * matrix->meta[0][2]);
     matrix_t.meta[1][2] = delta * (matrix->meta[1][0] * matrix->meta[0][2] - matrix->meta[0][0] * matrix->meta[1][2]);
     
-    if (scui_dist(matrix->meta[2][0], 0.0f) <= eps &&
-        scui_dist(matrix->meta[2][1], 0.0f) <= eps &&
-        scui_dist(matrix->meta[2][2], 1.0f) <= eps) {
+    if (scui_dist(matrix->meta[2][0], 0.0f) <= SCUI_ZERO_VAL_F &&
+        scui_dist(matrix->meta[2][1], 0.0f) <= SCUI_ZERO_VAL_F &&
+        scui_dist(matrix->meta[2][2], 1.0f) <= SCUI_ZERO_VAL_F) {
     matrix_t.meta[2][0] = 0.0f;
     matrix_t.meta[2][1] = 0.0f;
     matrix_t.meta[2][2] = 1.0f;

@@ -44,11 +44,8 @@ void scui_ui_scene_float_s_event_proc(scui_event_t * event)
         if (!scui_event_check_execute(event))
              break;
         
-        scui_handle_t handle_m = SCUI_HANDLE_INVALID;
-        scui_linear_s_gets(event->object, &handle_m);
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_handle_t linear_handle = scui_widget_parent(handle_m);
-        scui_linear_item_gets(linear_handle, &linear_item);
+        scui_handle_t handle_m  = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(event->object, &handle_m);
         
         scui_widget_draw_color(event->object, NULL, SCUI_COLOR32_WHITE);
         break;
@@ -75,11 +72,10 @@ void scui_ui_scene_float_m_event_proc(scui_event_t * event)
         if (!scui_event_check_execute(event))
              break;
         
-        scui_linear_item_t linear_item = {.draw_idx = -1,};
-        scui_handle_t linear_handle = scui_widget_parent(event->object);
-        scui_linear_item_gets(linear_handle, &linear_item);
+        scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_linear_m_get(event->object, &handle_s);
         
-        scui_handle_t  custom = linear_item.handle_s;
+        scui_handle_t  custom = handle_s;
         scui_area_t  src_clip = scui_widget_clip(custom);
         scui_image_t img_inst = {
             .type           = scui_image_type_mem,
@@ -112,8 +108,6 @@ void scui_ui_scene_float_event_proc(scui_event_t * event)
     case scui_event_destroy:
         break;
     }
-    
-    
     
     // 转移至控件调度
     scui_widget_event_shift(event);

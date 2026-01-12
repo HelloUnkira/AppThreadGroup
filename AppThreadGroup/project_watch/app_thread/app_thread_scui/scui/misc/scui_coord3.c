@@ -277,28 +277,26 @@ void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z)
  */
 bool scui_area3_parallel(scui_area3_t *area3, uint8_t axis)
 {
-    const scui_coord3_t eps = 1.1920929e-7f;
-    
     switch (axis) {
     case 0x00:  // 平行XY平面
-        if (scui_dist(area3->point3[0].z, area3->point3[0].z) < eps &&
-            scui_dist(area3->point3[0].z, area3->point3[1].z) < eps &&
-            scui_dist(area3->point3[0].z, area3->point3[2].z) < eps)
+        if (scui_dist(area3->point3[0].z, area3->point3[0].z) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].z, area3->point3[1].z) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].z, area3->point3[2].z) < SCUI_ZERO_VAL_F)
             return true;
         
         return false;
     case 0x01:  // 平行YZ平面
         
-        if (scui_dist(area3->point3[0].x, area3->point3[0].x) < eps &&
-            scui_dist(area3->point3[0].x, area3->point3[1].x) < eps &&
-            scui_dist(area3->point3[0].x, area3->point3[2].x) < eps)
+        if (scui_dist(area3->point3[0].x, area3->point3[0].x) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].x, area3->point3[1].x) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].x, area3->point3[2].x) < SCUI_ZERO_VAL_F)
             return true;
         
         return false;
     case 0x02:  // 平行XZ平面
-        if (scui_dist(area3->point3[0].y, area3->point3[0].y) < eps &&
-            scui_dist(area3->point3[0].y, area3->point3[1].y) < eps &&
-            scui_dist(area3->point3[0].y, area3->point3[2].y) < eps)
+        if (scui_dist(area3->point3[0].y, area3->point3[0].y) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].y, area3->point3[1].y) < SCUI_ZERO_VAL_F &&
+            scui_dist(area3->point3[0].y, area3->point3[2].y) < SCUI_ZERO_VAL_F)
             return true;
         
         return false;

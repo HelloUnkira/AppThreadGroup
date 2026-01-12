@@ -8,20 +8,11 @@ typedef struct {
     scui_scroll_t scroll;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_handle_t       list_num;           // 列表数量
     /* 内部域: */
-    scui_surface_t    **list_surface_s;     // 从控件树画布列表(slave)
-    scui_handle_t      *list_handle_s;      // 从控件树列表(slave)
-    scui_handle_t      *list_handle_m;      // 主控件列表(master)
-    scui_area_t        *list_draw_clip;     // 绘制目标剪切域
-    scui_handle_t       list_draw_idx;      // 绘制目标
-    bool               *list_draw;          // 绘制标记
-    bool               *list_refr;          // 刷新标记
-    /* 内部域: */
-    uintptr_t           clear_num;
-    uintptr_t           clear_byte;
-    uintptr_t           remain_num;
-    uintptr_t           remain_byte;
+    scui_multi_t        clear_num;
+    scui_multi_t        clear_byte;
+    scui_multi_t        remain_num;
+    scui_multi_t        remain_byte;
 } scui_linear_t;
 
 #pragma pack(push, 1)
@@ -32,7 +23,6 @@ typedef struct {
     scui_scroll_maker_t scroll;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_handle_t       list_num;           // 列表数量
 } scui_linear_maker_t;
 #pragma pack(pop)
 
@@ -43,6 +33,9 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
+    scui_handle_t       handle_s;       // 从控件树(slave)
+    scui_sbitfd_t       draw:1;         // 绘制标记
+    scui_sbitfd_t       refr:1;         // 刷新标记
 } scui_linear_m_t;
 
 // 子控件:需要重定向事件响应
@@ -63,7 +56,8 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_handle_t       handle_m;
+    scui_surface_t     *surface_s;      // 子控件树画布
+    scui_handle_t       handle_m;       // 主控件(master)
 } scui_linear_s_t;
 
 // 子控件:需要重定向事件响应
@@ -74,7 +68,6 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_handle_t       handle_m;
 } scui_linear_s_maker_t;
 #pragma pack(pop)
 
@@ -100,11 +93,5 @@ void scui_linear_s_burn(scui_handle_t handle);
 void scui_linear_invoke(scui_event_t *event);
 void scui_linear_m_invoke(scui_event_t *event);
 void scui_linear_s_invoke(scui_event_t *event);
-
-/*@brief 列表控件缓存资源回收
- *@param handle 列表控件句柄
- *@param any    回收所有
- */
-void scui_linear_recycle(scui_handle_t handle, bool any);
 
 #endif

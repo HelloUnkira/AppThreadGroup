@@ -27,7 +27,6 @@ void scui_ui_scene_float_event(scui_event_t *event, scui_opt_pos_t pos, scui_eve
     linear_maker.widget.child_num   = 5;
     linear_maker.scroll.space       = 0;
     linear_maker.scroll.springback  = 0;
-    linear_maker.list_num = 2;
     
     if (scui_opt_bits_check(pos, scui_opt_pos_hor)) {
         linear_maker.scroll.pos  = pos;
@@ -68,16 +67,12 @@ void scui_ui_scene_float_event(scui_event_t *event, scui_opt_pos_t pos, scui_eve
             linear_m_maker.widget.clip.h = SCUI_VER_RES / 2;
             linear_s_maker.widget.clip.h = SCUI_VER_RES / 2;
         }
-        // 创建子控件(主)(从)
+        // 创建并绑定子控件(主)(从)
         linear_m_maker.widget.event_cb = event_cb[1];
         scui_widget_create(&linear_m_maker, &linear_m_handle);
-        linear_s_maker.handle_m = linear_m_handle;
         scui_widget_create(&linear_s_maker, &linear_s_handle);
-        // 绑定子控件(主)(从)
-        scui_linear_item_t linear_item = {.draw_idx = 0,};
-        linear_item.handle_m = linear_m_handle;
-        linear_item.handle_s = linear_s_handle;
-        scui_linear_item_sets(linear_handle, &linear_item);
+        scui_linear_m_set(linear_m_handle, &linear_s_handle);
+        scui_linear_s_set(linear_s_handle, &linear_m_handle);
         // 中部留白备用
         linear_m_maker.widget.clip.w   = SCUI_HOR_RES;
         linear_m_maker.widget.clip.h   = SCUI_VER_RES;
@@ -105,16 +100,12 @@ void scui_ui_scene_float_event(scui_event_t *event, scui_opt_pos_t pos, scui_eve
             linear_m_maker.widget.clip.h = SCUI_VER_RES / 2;
             linear_s_maker.widget.clip.h = SCUI_VER_RES / 2;
         }
-        // 创建子控件(主)(从)
+        // 创建并绑定子控件(主)(从)
         linear_m_maker.widget.event_cb = event_cb[1];
         scui_widget_create(&linear_m_maker, &linear_m_handle);
-        linear_s_maker.handle_m = linear_m_handle;
         scui_widget_create(&linear_s_maker, &linear_s_handle);
-        // 绑定子控件(主)(从)
-        scui_linear_item_t linear_item = {.draw_idx = 0,};
-        linear_item.handle_m = linear_m_handle;
-        linear_item.handle_s = linear_s_handle;
-        scui_linear_item_sets(linear_handle, &linear_item);
+        scui_linear_m_set(linear_m_handle, &linear_s_handle);
+        scui_linear_s_set(linear_s_handle, &linear_m_handle);
     }
     
     

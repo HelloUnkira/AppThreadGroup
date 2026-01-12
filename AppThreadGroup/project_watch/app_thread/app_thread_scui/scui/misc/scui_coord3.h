@@ -50,13 +50,20 @@ typedef struct {
     scui_coord3_t meta[3][3];
 } scui_matrix_t;
 
-typedef scui_point2_t scui_size2_t;     // 尺寸
-typedef scui_point3_t scui_axis3_t;     // 轴
-typedef scui_point3_t scui_view3_t;     // 视点
-typedef scui_point3_t scui_normal3_t;   // 法线
-typedef scui_point3_t scui_vertex3_t;   // 向量
-typedef scui_area2_t  scui_face2_t;     // 面
-typedef scui_area3_t  scui_face3_t;     // 面
+/*@brief 尺寸,轴线,视点,法线,向量,二维面,三维面
+ */
+typedef scui_point2_t scui_size2_t;
+typedef scui_point3_t scui_axis3_t;
+typedef scui_point3_t scui_view3_t;
+typedef scui_point3_t scui_normal3_t;
+typedef scui_point3_t scui_vertex3_t;
+typedef scui_area2_t  scui_face2_t;
+typedef scui_area3_t  scui_face3_t;
+
+/*@brief 零点值检查
+ */
+#define SCUI_ZERO_VAL_F                 (1.1920929e-7f)
+#define SCUI_IS_ZERO_VAL_F(value)       ((value) > -SCUI_ZERO_VAL_F && (value) < +SCUI_ZERO_VAL_F)
 
 /*@brief 矩阵计算旋转法线z轴
  *@param normal3  法线

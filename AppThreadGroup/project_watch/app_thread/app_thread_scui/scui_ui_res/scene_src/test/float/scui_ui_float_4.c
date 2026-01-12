@@ -153,7 +153,6 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         // 24
         roller_maker.widget.clip.x   = SCUI_HOR_RES *  1 / 25;
         roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
-        roller_maker.linear.list_num = 24;
         roller_maker.type = scui_roller_type_spin;
         roller_maker.grad = true;
         scui_widget_create(&roller_maker, &scui_ui_res_local->roller_1);
@@ -167,7 +166,6 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         // month
         roller_maker.widget.clip.x   = SCUI_HOR_RES * 13 / 25;
         roller_maker.widget.clip.y   = SCUI_VER_RES * 13 / 25;
-        roller_maker.linear.list_num = 12;
         roller_maker.type = scui_roller_type_scale;
         roller_maker.grad = true;
         scui_widget_create(&roller_maker, &scui_ui_res_local->roller_2);
