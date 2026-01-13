@@ -1,6 +1,10 @@
 #ifndef SCUI_EVENT_MGR_H
 #define SCUI_EVENT_MGR_H
 
+/* 常用事件配置组合 */
+#define scui_event_define(event_v, object_v, sync_v, type_v, absorb_v)  \
+scui_event_t event_v = {.object = object_v, .style.sync = sync_v,.type = type_v, .absorb = absorb_v,};
+
 /* 事件类型转标号字符串回调(可选支持,可能浪费空间占用) */
 typedef const char * (*scui_event_cb_type_stringify_t)(scui_event_type_t type);
 

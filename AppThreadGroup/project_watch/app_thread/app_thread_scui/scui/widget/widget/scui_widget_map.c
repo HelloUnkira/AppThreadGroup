@@ -189,15 +189,11 @@ void scui_widget_destroy(scui_handle_t handle)
     if (scui_handle_unmap(handle))
         return;
     
-    /* 控件默认设置为隐藏 */
-    scui_widget_state_show(handle, false);
+    /* 设置控件状态为隐藏 */
+    scui_widget_state_view(handle, false, false);
     
     /* 控件销毁前:控件销毁事件 */
-    scui_event_t event = {
-        .object     = handle,
-        .style.sync = true,
-        .type       = scui_event_destroy,
-    };
+    scui_event_define(event, handle, true, scui_event_destroy, NULL);
     scui_event_notify(&event);
     
     /* 得到控件实例 */
@@ -233,12 +229,11 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     SCUI_MEM_FREE(widget_maker);
     
     /* 控件构建后:控件构建事件 */
-    scui_event_t event = {
-        .object     = widget->myself,
-        .style.sync = true,
-        .type       = scui_event_create,
-    };
+    scui_event_define(event, widget->myself, true, scui_event_create, NULL);
     scui_event_notify(&event);
+    
+    /* 设置控件状态为显示 */
+    scui_widget_state_view(widget->myself, true, false);
 }
 
 /*@brief 创建控件树(句柄映射表)

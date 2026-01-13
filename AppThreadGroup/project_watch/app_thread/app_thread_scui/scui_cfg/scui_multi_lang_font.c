@@ -102,11 +102,7 @@ void scui_multi_lang_set(scui_handle_t *type)
     SCUI_ASSERT(type != NULL);
     scui_multi_lang_type = *type;
     
-    scui_event_t event = {
-        .object = SCUI_HANDLE_SYSTEM,
-        .type   = scui_event_lang_change,
-        .absorb = scui_event_absorb_none,
-    };
+    scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_lang_change, scui_event_absorb_none);
     scui_event_notify(&event);
 }
 

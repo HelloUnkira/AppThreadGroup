@@ -37,12 +37,7 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     /* 如果控件没有画布, 将事件转义给根控件 */
     if (widget_r->type != scui_widget_type_window)
     if (widget->surface == NULL) {
-        scui_event_t event = {
-            .object     = handle_r,
-            .style.sync = true,
-            .type       = scui_event_draw_empty,
-            .absorb     = scui_event_absorb_none,
-        };
+        scui_event_define(event, handle_r, true, scui_event_draw_empty, NULL);
         scui_event_notify(&event);
         #if SCUI_MEM_FEAT_MINI
         SCUI_ASSERT(false);
@@ -72,21 +67,14 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     #endif
     #endif
     
-    scui_event_t event = {
-        .object     = handle_r,
-        .style.sync = sync,
-        .type       = scui_event_draw,
-        .absorb     = scui_event_absorb_none,
-    };
+    scui_event_define(event, handle_r, sync, scui_event_draw, scui_event_absorb_none);
     scui_event_notify(&event);
     
     // 同步绘制后移除调度队列中
     // 可能存在的异步绘制
     if (sync) {
-        scui_event_t event = {0};
-        event.object = handle_r;
-        event.type   = scui_event_draw;
         // 移除跟主窗口相关所有绘制事件
+        scui_event_define(event, handle_r, false, scui_event_draw, NULL);
         while (scui_event_dequeue(&event, true, false));
     }
 }
@@ -99,12 +87,7 @@ void scui_widget_refr(scui_handle_t handle, bool sync)
 {
     SCUI_LOG_INFO("%u", handle);
     
-    scui_event_t event = {
-        .object     = SCUI_HANDLE_SYSTEM,
-        .style.sync = sync,
-        .type       = scui_event_refr,
-        .absorb     = scui_event_absorb_none,
-    };
+    scui_event_define(event, SCUI_HANDLE_SYSTEM, sync, scui_event_refr, scui_event_absorb_none);
     scui_event_notify(&event);
 }
 
@@ -117,18 +100,14 @@ static void scui_widget_show_delay(scui_handle_t handle)
         scui_widget_create_layout_tree(handle);
     
     /* 设置控件状态为显示 */
-    scui_widget_state_show(handle, false);
+    scui_widget_state_view(handle, true, false);
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_LOG_INFO("widget :%u", handle);
     
     /* 根控件手动布局一次 */
     if (widget->parent == SCUI_HANDLE_INVALID) {
-        scui_event_t event = {
-            .object       = handle,
-            .style.sync   = true,
-            .style.bubble = true,
-            .type         = scui_event_layout,
-        };
+        scui_event_define(event, handle, true, scui_event_layout, NULL);
+        event.style.bubble = true;
         scui_event_notify(&event);
     }
     
@@ -150,7 +129,7 @@ static void scui_widget_hide_delay(scui_handle_t handle)
         return;
     
     /* 设置控件状态为隐藏 */
-    scui_widget_state_hide(handle, false);
+    scui_widget_state_view(handle, false, false);
     scui_widget_t *widget = scui_handle_source_check(handle);
     SCUI_LOG_INFO("widget :%u", handle);
     
@@ -178,13 +157,10 @@ static void scui_widget_hide_delay(scui_handle_t handle)
 void scui_widget_show(scui_handle_t handle, bool delay)
 {
     if (delay) {
-        scui_event_t event = {
-            .object      = SCUI_HANDLE_SYSTEM,
-            .style.prior = scui_event_prior_real,
-            .type        = scui_event_sched_delay,
-            .sched       = scui_widget_show_delay,
-            .handle      = handle,
-        };
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
+        event.style.prior = scui_event_prior_real;
+        event.sched       = scui_widget_show_delay;
+        event.handle      = handle;
         scui_event_notify(&event);
         return;
     }
@@ -198,13 +174,10 @@ void scui_widget_show(scui_handle_t handle, bool delay)
 void scui_widget_hide(scui_handle_t handle, bool delay)
 {
     if (delay) {
-        scui_event_t event = {
-            .object      = SCUI_HANDLE_SYSTEM,
-            .style.prior = scui_event_prior_real,
-            .type        = scui_event_sched_delay,
-            .sched       = scui_widget_hide_delay,
-            .handle      = handle,
-        };
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, true, scui_event_sched_delay, NULL);
+        event.style.prior = scui_event_prior_real;
+        event.sched       = scui_widget_hide_delay;
+        event.handle      = handle;
         scui_event_notify(&event);
         return;
     }
@@ -370,6 +343,9 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_ptr_click:
     case scui_event_ptr_fling:
     case scui_event_ptr_move: {
+        /* 存在该控件持有当前敏感事件 */
+        if (widget->state.indev_ptr_hold)
+            break;
         /* 计算ptr的点是否坠落在此剪切域中,如果没有则放弃 */
         scui_handle_t handle = scui_widget_root(widget->myself);
         scui_widget_t  *root = scui_handle_source_check(handle);
@@ -385,12 +361,13 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget is hide");
             return;
         }
+        bool area_unhit = true;
         /* 不产生交集,事件不能被响应,无需发送 */
-        if (!(widget->parent == SCUI_HANDLE_INVALID ||
-              scui_area_point(&clip, &event->ptr_c) ||
-             (scui_area_point(&clip, &event->ptr_s) &&
-              scui_area_point(&clip, &event->ptr_e))))
-              return;
+        if (area_unhit && widget->parent == SCUI_HANDLE_INVALID) area_unhit = false;
+        if (area_unhit && scui_area_point(&clip, &event->ptr_c)) area_unhit = false;
+        if (area_unhit && scui_area_point(&clip, &event->ptr_s)) area_unhit = false;
+        if (area_unhit && scui_area_point(&clip, &event->ptr_e)) area_unhit = false;
+        if (area_unhit) return;
         
         /* 基础控件拖动效果 */
         if (event->type == scui_event_ptr_move) {
@@ -407,15 +384,24 @@ static void scui_widget_event_process(scui_event_t *event)
         }
         break;
     }
+    case scui_event_enc_clockwise:
+    case scui_event_enc_clockwise_anti: {
+        /* 存在该控件持有当前敏感事件 */
+        if (widget->state.indev_enc_hold)
+            break;
+        break;
+    }
+    case scui_event_key_click: {
+        /* 存在该控件持有当前敏感事件 */
+        if (widget->state.indev_key_hold)
+            break;
+        break;
+    }
     
     case scui_event_size_adjust: {
         if (widget->parent != SCUI_HANDLE_INVALID) {
             /* 子控件更新,父控件布局更新 */
-            scui_event_t event = {
-                .object = widget->parent,
-                .type   = scui_event_layout,
-                .absorb = scui_event_absorb_none,
-            };
+            scui_event_define(event, widget->parent, false, scui_event_layout, scui_event_absorb_none);
             scui_event_notify(&event);
         }
     }

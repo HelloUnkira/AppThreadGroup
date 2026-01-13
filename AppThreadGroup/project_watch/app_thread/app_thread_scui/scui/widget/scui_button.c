@@ -108,11 +108,8 @@ void scui_button_invoke(scui_event_t *event)
             } else {
                 if (button->btn_click) {
                     button->btn_click = false;
-                    scui_event_t event = {
-                        .object     = widget->myself,
-                        .style.sync = true,
-                        .type       = scui_event_widget_button_click,
-                    };
+                    
+                    scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
                     scui_event_notify(&event);
                 }
             }
@@ -276,11 +273,8 @@ void scui_button_invoke(scui_event_t *event)
         
         switch (button->mode) {
         case scui_button_mode_static: {
-            scui_event_t event = {
-                .object     = widget->myself,
-                .style.sync = true,
-                .type       = scui_event_widget_button_click,
-            };
+            
+            scui_event_define(event, widget->myself, true, scui_event_widget_button_click, NULL);
             scui_event_notify(&event);
             break;
         }

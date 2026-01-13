@@ -414,7 +414,6 @@ void scui_event_notify(scui_event_t *event)
 {
     /* 同步事件就地响应 */
     if (event->style.sync) {
-        
         scui_tick_calc(0x10, NULL, NULL, NULL);
         scui_event_respond(event);
         scui_tick_calc(0x11, NULL, NULL, NULL);

@@ -41,8 +41,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->parent = widget_maker->parent;
     widget->myself = *handle;
     
-    /* 控件初始默认为显示 */
-    widget->style.state = true;
+    /* 控件初始默认为隐藏 */
+    widget->state.view = false;
     
     /* 配置控件事件响应 */
     scui_event_cb_ready(&widget->list);
@@ -141,10 +141,6 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
  */
 void scui_widget_burn(scui_widget_t *widget)
 {
-    if (scui_handle_unmap(widget->myself)) {
-        SCUI_LOG_INFO("widget %u not load", widget->myself);
-        return;
-    }
     SCUI_LOG_INFO("widget %u", widget->myself);
     
     /* 先递归销毁自己的孩子 */

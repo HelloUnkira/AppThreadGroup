@@ -351,10 +351,9 @@ void scui_linear_m_invoke(scui_event_t *event)
             // 刷新该画布
             if (linear_m->refr) {
                 linear_m->refr = false;
-                scui_event_t event = {0};
-                event.object = handle_s;
-                event.type = scui_event_draw;
+                
                 // 移除跟子控件树相关所有绘制事件
+                scui_event_define(event, handle_s, false, scui_event_draw, NULL);
                 while (scui_event_dequeue(&event, true, false));
                 
                 scui_widget_show(handle_s, false);

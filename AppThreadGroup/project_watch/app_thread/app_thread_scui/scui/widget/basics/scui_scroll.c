@@ -271,8 +271,8 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
         return;
     
     /* 全局滚动锁定 */
-    if (!scui_widget_global_scroll_flag(0x00, &scroll->key) && anima)
-         return;
+    // if (!scui_widget_global_scroll_flag(0x00, &scroll->key) && anima)
+    //      return;
     scroll->lock_move = true;
     scroll->hold_move = false;
     scroll->mask_springback = false;
@@ -337,8 +337,8 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
         return;
     }
     
-    if (scui_widget_global_scroll_flag(0x02, NULL) && anima)
-        return;
+    // if (scui_widget_global_scroll_flag(0x02, NULL) && anima)
+    //     return;
     
     // 如果已经是中心子控件, 跳过目标
     scui_handle_t handle_c = SCUI_HANDLE_INVALID;
@@ -347,12 +347,7 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
         return;
     
     // 主动布局一次
-    scui_event_t event = {
-        .style.sync = true,
-        .object     = handle,
-        .type       = scui_event_layout,
-        .absorb     = scui_event_absorb_none,
-    };
+    scui_event_define(event, handle, true, scui_event_layout, NULL);
     scui_event_notify(&event);
     
     scui_area_t  clip_t   = scui_widget_clip(target);
@@ -467,11 +462,7 @@ static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type)
         scroll->over_scroll = false;
         
         /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_start,
-        };
+        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_start, NULL);
         scui_event_notify(&event);
         break;
     }
@@ -480,31 +471,18 @@ static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type)
         scroll->over_scroll = true;
         
         /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_over,
-        };
+        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_over, NULL);
         scui_event_notify(&event);
         break;
     }
     case 0x02: {
         /* scroll event: */
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_keep,
-            .absorb     = scui_event_absorb_none,
-        };
+        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_keep, NULL);
         scui_event_notify(&event);
         break;
     }
     case 0xAA: {
-        scui_event_t event = {
-            .object     = widget->myself,
-            .style.sync = true,
-            .type       = scui_event_widget_scroll_layout,
-        };
+        scui_event_define(event, widget->myself, true, scui_event_widget_scroll_layout, NULL);
         scui_event_notify(&event);
         break;
     }
@@ -817,7 +795,7 @@ static void scui_scroll_anima_finish(void *instance)
          
         // 仅仅当anima完全结束后,解锁scroll标记
         if (scroll->anima == SCUI_HANDLE_INVALID || !scui_anima_running(scroll->anima))
-            scui_widget_global_scroll_flag(0x01, &scroll->key);
+            ;// scui_widget_global_scroll_flag(0x01, &scroll->key);
         
         if (scroll->anima != SCUI_HANDLE_INVALID && !scui_anima_running(scroll->anima)) {
             
@@ -1396,11 +1374,7 @@ void scui_scroll_invoke(scui_event_t *event)
     case scui_event_child_size: {
         scroll->layout = true;
         /* 额外补充一个布局事件 */
-        scui_event_t event = {
-            .object = widget->myself,
-            .type   = scui_event_layout,
-            .absorb = scui_event_absorb_none,
-        };
+        scui_event_define(event, widget->myself, false, scui_event_layout, scui_event_absorb_none);
         scui_event_notify(&event);
         break;
     }
@@ -1427,22 +1401,26 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
         SCUI_LOG_INFO("dir:%u", event_dir);
         
-        // 不匹配的方向不支持
-        if (!scui_opt_bits_check(event_dir, scroll->dir))
-            break;
-        
-        // 忽略的方向不支持
+        /* 忽略的方向不支持 */
         if (scui_scroll_edge_skip(event->object, event_dir))
             break;
         
         if (!scroll->lock_move) {
+            
+            /* 不匹配的方向不支持 */
+            if (!scui_opt_bits_check(event_dir, scroll->dir))
+                break;
+            
             /* 全局滚动锁定 */
-            if (!scui_widget_global_scroll_flag(0x00, &scroll->key))
-                 break;
+            // if (!scui_widget_global_scroll_flag(0x00, &scroll->key))
+            //      break;
             
             scroll->lock_move = true;
             scroll->hold_move = true;
             scui_scroll_anima_tag(event->object, 0);
+            widget->state.indev_ptr_hold = true;
+            widget->state.indev_enc_hold = true;
+            widget->state.indev_key_hold = true;
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
@@ -1460,10 +1438,15 @@ void scui_scroll_invoke(scui_event_t *event)
             scui_scroll_event_auto(event, type);
             
             scui_scroll_anima_tag(event->object, -1);
+            widget->state.indev_ptr_hold = false;
+            widget->state.indev_enc_hold = false;
+            widget->state.indev_key_hold = false;
         }
         break;
     case scui_event_enc_clockwise:
     case scui_event_enc_clockwise_anti: {
+        if (widget->state.indev_enc_hold)
+            scui_event_mask_over(event);
         
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
@@ -1504,6 +1487,8 @@ void scui_scroll_invoke(scui_event_t *event)
         break;
     }
     case scui_event_key_click: {
+        if (widget->state.indev_key_hold)
+            scui_event_mask_over(event);
         
         if (event->key_id != scroll->keyid_fdir &&
             event->key_id != scroll->keyid_bdir)

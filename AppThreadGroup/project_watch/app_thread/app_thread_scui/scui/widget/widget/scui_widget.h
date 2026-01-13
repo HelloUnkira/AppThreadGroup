@@ -29,7 +29,6 @@ typedef enum {
 /*@brief 控件状态风格
  */
 typedef struct {
-    scui_sbitfd_t state:1;              /* 控件隐藏:0;控件显示:1; */
     scui_sbitfd_t fixed:1;              /* 控件移动禁止(悬浮) */
     scui_sbitfd_t fully_bg:1;           /* 背景覆盖:1;背景透明:0; */
     scui_sbitfd_t cover_fg:1;           /* 前景覆盖:1;前景透明:0; */
@@ -41,6 +40,15 @@ typedef struct {
     scui_sbitfd_t indev_enc:1;          /* 输入事件响应标记:enc */
     scui_sbitfd_t indev_key:1;          /* 输入事件响应标记:key */
 } scui_widget_style_t;
+
+/*@brief 控件状态
+ */
+typedef struct {
+    scui_sbitfd_t view:1;               /* 控件隐藏:0;控件显示:1; */
+    scui_sbitfd_t indev_ptr_hold:1;     /* 输入事件响应维持:ptr */
+    scui_sbitfd_t indev_enc_hold:1;     /* 输入事件响应维持:enc */
+    scui_sbitfd_t indev_key_hold:1;     /* 输入事件响应维持:key */
+} scui_widget_state_t;
 
 /*@brief 控件动画
  */
@@ -80,7 +88,8 @@ typedef struct {
  */
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
-    scui_widget_style_t     style;          /* 控件状态风格 */
+    scui_widget_style_t     style;          /* 控件风格 */
+    scui_widget_state_t     state;          /* 控件状态 */
     scui_event_cb_list_t    list;           /* 控件事件回调列表 */
     scui_area_t             clip;           /* 控件有效区域 */
     scui_handle_t           anima;          /* 控件动画集合 */
@@ -102,7 +111,7 @@ typedef struct {
 #pragma pack(push, 1)
 typedef struct {
     scui_widget_type_t      type;           /* 控件类型 */
-    scui_widget_style_t     style;          /* 控件状态风格 */
+    scui_widget_style_t     style;          /* 控件风格 */
     scui_event_cb_t         event_cb;       /* 事件响应回调 */
     scui_area_t             clip;           /* 控件有效区域 */
     scui_handle_t           myself;         /* 控件关联属性:自己 */
@@ -218,15 +227,10 @@ void scui_widget_surface_sync(scui_widget_t *widget, scui_surface_t *surface);
 
 /*@brief 控件显示状态更新
  *@param handle  控件句柄
+ *@param view    状态更新
  *@param recurse 递归处理
  */
-void scui_widget_state_show(scui_handle_t handle, bool recurse);
-
-/*@brief 控件隐藏状态更新
- *@param handle  控件句柄
- *@param recurse 递归处理
- */
-void scui_widget_state_hide(scui_handle_t handle, bool recurse);
+void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse);
 
 /*@brief 控件透明度设置撤销
  *@param handle  控件句柄

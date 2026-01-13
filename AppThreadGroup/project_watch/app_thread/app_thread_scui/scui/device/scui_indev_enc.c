@@ -57,11 +57,7 @@ void scui_indev_enc_notify(scui_indev_data_t *data)
         SCUI_LOG_INFO("scui_event_enc_clockwise_anti:%d", scui_abs(data->enc.enc_diff));
     }
     /* 直接作为系统事件发送给管理器即可 */
-    scui_event_t event = {
-        .object = SCUI_HANDLE_SYSTEM,
-        .type   = type,
-        .absorb = scui_event_enc_absorb,
-    };
+    scui_event_define(event, SCUI_HANDLE_SYSTEM, false, type, scui_event_enc_absorb);
     event.enc_diff = scui_abs(data->enc.enc_diff);
     scui_indev_enc_event_check(&event);
 }

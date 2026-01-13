@@ -55,15 +55,9 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
     
     scui_widget_draw(widget->myself, NULL, false);
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        
-        /* 父控件信息更新 */ {
-            scui_event_t event = {
-                .object     = widget->parent,
-                .type       = scui_event_child_pos,
-                .absorb     = scui_event_absorb_none,
-            };
-            scui_event_notify(&event);
-        }
+        /* 父控件信息更新 */
+        scui_event_define(event, widget->parent, false, scui_event_child_pos, scui_event_absorb_none);
+        scui_event_notify(&event);
         
         // 重绘父控件
         scui_widget_draw(widget->parent, NULL, false);
@@ -192,13 +186,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         return;
     
     if (width <= 0 || height <= 0) {
-        
-        scui_event_t event = {
-            .object     = handle,
-            .style.sync = true,
-            .type       = scui_event_size_auto,
-            .absorb     = scui_event_absorb_none,
-        };
+        scui_event_define(event, handle, true, scui_event_size_auto, NULL);
         scui_event_notify(&event);
         return;
     }
@@ -208,23 +196,13 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
     
     scui_widget_draw(widget->myself, NULL, false);
     if (widget->parent != SCUI_HANDLE_INVALID) {
-        /* 子控件更新 */ {
-            scui_event_t event = {
-                .object = widget->myself,
-                .type   = scui_event_size_adjust,
-                .absorb = scui_event_absorb_none,
-            };
-            scui_event_notify(&event);
-        }
+        /* 子控件更新 */
+        scui_event_define(event_c, widget->myself, false, scui_event_size_adjust, scui_event_absorb_none);
+        scui_event_notify(&event_c);
         
-        /* 父控件信息更新 */ {
-            scui_event_t event = {
-                .object = widget->parent,
-                .type   = scui_event_child_size,
-                .absorb = scui_event_absorb_none,
-            };
-            scui_event_notify(&event);
-        }
+        /* 父控件信息更新 */
+        scui_event_define(event_p, widget->parent, false, scui_event_child_size, scui_event_absorb_none);
+        scui_event_notify(&event_p);
         
         // 重绘父控件
         scui_widget_draw(widget->parent, NULL, false);

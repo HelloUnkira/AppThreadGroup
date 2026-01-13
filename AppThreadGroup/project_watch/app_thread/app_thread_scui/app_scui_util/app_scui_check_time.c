@@ -63,10 +63,7 @@ void app_scui_check_time_update(void)
                     app_scui_check_time.back = false;
                     
                     APP_SYS_LOG_WARN("ui idle back home");
-                    scui_event_t event_ui = {
-                        .object = SCUI_HANDLE_SYSTEM,
-                        .type   = scui_event_ui_home_goto,
-                    };
+                    scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_ui_home_goto, NULL);
                     scui_event_notify(&event_ui);
                 }
             }

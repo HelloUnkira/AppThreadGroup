@@ -586,23 +586,22 @@ void scui_window_active(scui_handle_t handle)
         return;
     }
     
-    scui_event_t event = {.style.sync = true,};
     scui_window_mgr.active_last = scui_window_mgr.active_curr;
     scui_window_mgr.active_curr = handle;
     
     /* 先失活旧的焦点窗口 */
     if (scui_handle_remap(scui_window_mgr.active_last)) {
-        event.type   = scui_event_focus_lost;
-        event.object = scui_window_mgr.active_last;
+        scui_event_define(event, scui_window_mgr.active_last, true, scui_event_focus_lost, NULL);
         SCUI_LOG_INFO("window %u focus lost", event.object);
         scui_event_notify(&event);
     }
     
     /* 后激活新的焦点窗口 */
-    event.type   = scui_event_focus_get;
-    event.object = scui_window_mgr.active_curr;
-    SCUI_LOG_INFO("window %u focus get", event.object);
-    scui_event_notify(&event);
+    if (scui_handle_remap(scui_window_mgr.active_curr)) {
+        scui_event_define(event, scui_window_mgr.active_curr, true, scui_event_focus_get, NULL);
+        SCUI_LOG_INFO("window %u focus get", event.object);
+        scui_event_notify(&event);
+    }
 }
 
 /*@brief 获得活跃窗口句柄

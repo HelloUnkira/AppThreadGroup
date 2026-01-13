@@ -44,12 +44,8 @@ void scui_anima_elapse_new(uint32_t elapse)
     if (elapse_r - elapse_l >= SCUI_ANIMA_TICK) {
         scui_anima_list.elapse_l = scui_anima_list.elapse_r;
         
-        scui_event_t event = {
-            .object = SCUI_HANDLE_SYSTEM,
-            .type   = scui_event_anima_elapse,
-            .absorb = scui_event_anima_elapse_absorb,
-            .tick   = elapse_r - elapse_l,
-        };
+        scui_event_define(event, SCUI_HANDLE_SYSTEM, false, scui_event_anima_elapse, scui_event_anima_elapse_absorb);
+        event.tick = elapse_r - elapse_l;
         scui_event_notify(&event);
     }
 }
