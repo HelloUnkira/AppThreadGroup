@@ -50,11 +50,11 @@
 #else
 /* 大内存方案: */
 // 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other
-// 8M PSRAM (空闲1M):     MIX:192K; FONT:256K; USER:64K; GRAPH:7.5M - other
+// 8M PSRAM (空闲1M):     MIX:128K; FONT:256K; USER:64K; GRAPH:7.5M - other
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (0x30000)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (0x20000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0x40000)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x80000)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x70000)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0x10000)
 
 /* 缓存散列值(必要使用) */
@@ -67,6 +67,8 @@
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
 #endif
 
+// 存在一些结构化的碎片, 这些内存不要使用graph
+#define SCUI_MEM_MIX_FRAG_SIZE_LIMIT                (1024 * 1)
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

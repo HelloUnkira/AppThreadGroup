@@ -29,7 +29,8 @@
 
 static inline void * local_malloc(size_t size)
 {
-    return SCUI_MEM_ALLOC(scui_mem_type_mix, size);
+    scui_mem_type_t mem_type = size > SCUI_MEM_MIX_FRAG_SIZE_LIMIT ? scui_mem_type_graph : scui_mem_type_mix;
+    return SCUI_MEM_ALLOC(mem_type, size);
 }
 
 static inline void * local_realloc(void *ptr, size_t size)

@@ -269,6 +269,10 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     if (offset->x == 0 && offset->y == 0)
         return;
     
+    /* 控件已经滚动中了 */
+    if (scui_widget_scroll_state(0x02))
+        return;
+    
     scroll->lock_move = false;
     scroll->mask_springback = false;
     
@@ -287,8 +291,8 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     event_t.ptr_e.y = offset->y;
     
     uint8_t type = 0;
-    if (anima) type = scroll->freedom ? 0x10 : 0x00;
-    else type = scroll->freedom ? 0x1A : 0x0A;
+    if (anima) type = scroll->freedom ? 0x1A : 0x0A;
+    else type = scroll->freedom ? 0x10 : 0x00;
     
     scui_scroll_event_auto(&event_t, type);
 }

@@ -501,11 +501,11 @@ void scui_window_event_dispatch(scui_event_t *event)
                 break;
             
             if (scui_window_mgr.switch_args.lock_jump) {
-                SCUI_LOG_WARN("window switching");
+                SCUI_LOG_INFO("window switching");
                 break;
             }
             if (scui_widget_scroll_state(0x02)) {
-                SCUI_LOG_WARN("window switching");
+                SCUI_LOG_INFO("window switching");
                 break;
             }
             
@@ -620,15 +620,15 @@ void scui_window_event_dispatch(scui_event_t *event)
             break;
         
         if (scui_window_mgr.switch_args.lock_jump) {
-            SCUI_LOG_WARN("window switching");
+            SCUI_LOG_INFO("window switching");
             break;
         }
         if (scui_window_mgr.switch_args.lock_move) {
-            SCUI_LOG_WARN("window switching");
+            SCUI_LOG_INFO("window switching");
             break;
         }
         if (scui_widget_scroll_state(0x02)) {
-            SCUI_LOG_WARN("window switching");
+            SCUI_LOG_INFO("window switching");
             break;
         }
         
@@ -709,15 +709,15 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     if (scui_window_mgr.switch_args.lock_jump) {
-        SCUI_LOG_WARN("window switching");
+        SCUI_LOG_INFO("window switching");
         return false;
     }
     if (scui_window_mgr.switch_args.lock_move) {
-        SCUI_LOG_WARN("window switching");
+        SCUI_LOG_INFO("window switching");
         return false;
     }
     if (scui_widget_scroll_state(0x02)) {
-        SCUI_LOG_WARN("window switching");
+        SCUI_LOG_INFO("window switching");
         return false;
     }
     

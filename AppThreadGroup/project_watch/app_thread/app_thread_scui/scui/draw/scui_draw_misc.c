@@ -57,8 +57,9 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
         qr_version = scui_min(qr_version + extend, qrcodegen_VERSION_MAX);
     
     scui_multi_t qr_version_len = qrcodegen_BUFFER_LEN_FOR_VERSION(qr_version);
-    uint8_t *qrcode = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
-    uint8_t *data_t = SCUI_MEM_ALLOC(scui_mem_type_mix, qr_version_len);
+    scui_mem_type_t mem_type = qr_version_len > SCUI_MEM_MIX_FRAG_SIZE_LIMIT ? scui_mem_type_graph : scui_mem_type_mix;
+    uint8_t *qrcode = SCUI_MEM_ALLOC(mem_type, qr_version_len);
+    uint8_t *data_t = SCUI_MEM_ALLOC(mem_type, qr_version_len);
     memcpy(data_t, src_data, src_size);
     
     enum qrcodegen_Ecc  ecc  = qrcodegen_Ecc_MEDIUM;
