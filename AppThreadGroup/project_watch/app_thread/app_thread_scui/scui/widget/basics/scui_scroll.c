@@ -1405,6 +1405,10 @@ void scui_scroll_invoke(scui_event_t *event)
             if (!scui_opt_bits_check(event_dir, scroll->dir))
                 break;
             
+            /* 控件已经滚动中了 */
+            if (scui_widget_scroll_state(0x02))
+                break;
+            
             scroll->lock_move = true;
             scui_scroll_anima_tag(event->object, 0);
             widget->state.indev_ptr_hold = true;

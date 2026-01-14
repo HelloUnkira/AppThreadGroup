@@ -497,10 +497,18 @@ void scui_window_event_dispatch(scui_event_t *event)
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_d)
                 scui_window_move_anima_auto(point.y, event->ptr_e.y - SCUI_VER_RES, SCUI_VER_RES, 0);
         } else {
-            if (scui_window_mgr.switch_args.lock_jump)
-                break;
             if (scui_window_mgr.switch_args.pos == scui_opt_pos_none)
                 break;
+            
+            if (scui_window_mgr.switch_args.lock_jump) {
+                SCUI_LOG_WARN("window switching");
+                break;
+            }
+            if (scui_widget_scroll_state(0x02)) {
+                SCUI_LOG_WARN("window switching");
+                break;
+            }
+            
             scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
             scui_window_switch_type_t switch_type = scui_window_switch_auto;
             scui_handle_t target = SCUI_HANDLE_INVALID;
@@ -619,7 +627,7 @@ void scui_window_event_dispatch(scui_event_t *event)
             SCUI_LOG_WARN("window switching");
             break;
         }
-        if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+        if (scui_widget_scroll_state(0x02)) {
             SCUI_LOG_WARN("window switching");
             break;
         }
@@ -708,7 +716,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         SCUI_LOG_WARN("window switching");
         return false;
     }
-    if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+    if (scui_widget_scroll_state(0x02)) {
         SCUI_LOG_WARN("window switching");
         return false;
     }
