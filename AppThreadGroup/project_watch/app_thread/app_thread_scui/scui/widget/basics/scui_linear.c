@@ -24,9 +24,6 @@ void scui_linear_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_linear_t *linear = widget;
     scui_linear_maker_t *linear_maker = widget_maker;
     
-    /* 必须标记anima事件 */
-    widget_maker->style.sched_anima = true;
-    
     /* 构造派生控件实例 */
     scui_scroll_make(scroll, scroll_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear));
@@ -266,27 +263,8 @@ void scui_linear_invoke(scui_event_t *event)
         }
         break;
     }
-    default: {
-        // 给子控件树派发事件调度
-        
-        // 遍历子控件列表
-        scui_widget_child_list_btra(widget, idx) {
-            // 取出子控件(主)的相关信息
-            scui_handle_t    handle_m = widget->child_list[idx];
-            scui_widget_t   *widget_m = scui_handle_source_assert(handle_m);
-            scui_linear_m_t *linear_m = (void *)widget_m;
-            
-            // 不是所有子控件(主)都有子控件树(从)
-            if (linear_m->handle_s == SCUI_HANDLE_INVALID)
-                continue;
-            
-            event->object = linear_m->handle_s;
-            scui_widget_event_dispatch(event);
-            event->object = widget->myself;
-        }
-    
+    default:
         break;
-    }
     }
     
     scui_scroll_invoke(event);
@@ -301,8 +279,6 @@ void scui_linear_m_invoke(scui_event_t *event)
     // 列表控件是当前控件的父控件
     
     switch (event->type) {
-    case scui_event_anima_elapse:
-        break;
     case scui_event_draw: {
         scui_handle_t    handle_m = event->object;
         scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
@@ -370,8 +346,25 @@ void scui_linear_m_invoke(scui_event_t *event)
         }
         break;
     }
-    default:
+    default: {
+        // 给子控件树派发事件调度
+        scui_handle_t    handle_m = event->object;
+        scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
+        scui_linear_m_t *linear_m = (void *)widget_m;
+        
+        // 不是所有子控件(主)都有子控件树(从)
+        if (linear_m->handle_s == SCUI_HANDLE_INVALID)
+            break;
+        
+        scui_handle_t    handle_s = linear_m->handle_s;
+        scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
+        scui_linear_s_t *linear_s = (void *)widget_s;
+        
+        event->object = linear_m->handle_s;
+        scui_widget_event_dispatch(event);
+        event->object = handle_m;
         break;
+    }
     }
 }
 
