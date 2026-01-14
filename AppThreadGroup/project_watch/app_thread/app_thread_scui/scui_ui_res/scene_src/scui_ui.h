@@ -135,11 +135,11 @@ void scui_ui_scene_link_cfg(scui_event_t *event);
 //
 /*****************************************************************************/
 /*@brief 控件事件响应构建
- *@param event    事件
- *@param pos      位置
- *@param event_cb 事件回调(主,子主,子从)
+ *@param event      事件
+ *@param pos        位置
+ *@param event_cb_s 事件回调(子控件树)
  */
-void scui_ui_scene_float_event(scui_event_t *event, scui_opt_pos_t pos, scui_event_cb_t event_cb[3]);
+void scui_ui_scene_xfloat_create(scui_event_t *event, scui_opt_pos_t pos, scui_event_cb_t event_cb_s);
 /*****************************************************************************/
 //
 //

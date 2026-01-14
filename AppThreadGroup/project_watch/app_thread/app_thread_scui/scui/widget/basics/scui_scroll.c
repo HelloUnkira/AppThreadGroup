@@ -51,13 +51,12 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scroll->keyid_bdir  = scroll_maker->keyid_bdir;
     scroll->freedom     = scroll_maker->freedom;
     scroll->loop        = scroll_maker->loop;
+    
+    scroll->point_rcd   = SCUI_MEM_ZALLOC(scui_mem_type_mix, widget->child_num * sizeof(scui_point_t));
     scroll->layout      = true;
     scroll->over_scroll = true;
     
     /* 偏移点记录 */
-    scroll->point_rcd = SCUI_MEM_ALLOC(scui_mem_type_mix, widget->child_num * sizeof(scui_point_t));
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-        scroll->point_rcd[idx] = (scui_point_t){0};
     
     /* 设置动画轨迹, 动画速度 */
     scui_map_cb_t anima_path[4] = {0};
@@ -270,25 +269,25 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     if (offset->x == 0 && offset->y == 0)
         return;
     
-    /* 全局滚动锁定 */
-    // if (!scui_widget_global_scroll_flag(0x00, &scroll->key) && anima)
-    //      return;
-    scroll->lock_move = true;
-    scroll->hold_move = false;
+    scroll->lock_move = false;
     scroll->mask_springback = false;
     
+    /* 进行一次布局更新 */
+    scui_event_define(event, handle, true, scui_event_layout, NULL);
+    scui_event_notify(&event);
+    
     /* 复用动画即可 */
-    scui_event_t event = {0};
-    event.object  = handle;
-    event.type    = scui_event_ptr_move;
-    event.ptr_e.x = offset->x;
-    event.ptr_e.y = offset->y;
+    scui_event_t event_t = {0};
+    event_t.object  = handle;
+    event_t.type    = scui_event_ptr_move;
+    event_t.ptr_e.x = offset->x;
+    event_t.ptr_e.y = offset->y;
     
     uint8_t type = 0;
     if (anima) type = scroll->freedom ? 0x10 : 0x00;
     else type = scroll->freedom ? 0x1A : 0x0A;
     
-    scui_scroll_event_auto(&event, type);
+    scui_scroll_event_auto(&event_t, type);
 }
 
 /*@brief 滚动控件中心对齐子控件
@@ -301,12 +300,8 @@ void scui_scroll_center_get(scui_handle_t handle, scui_handle_t *target)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    // SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
     SCUI_ASSERT(target != NULL);
     *target = SCUI_HANDLE_INVALID;
-    
-    // if (scui_widget_global_scroll_flag(0x02, NULL))
-    //     return;
     
     scui_point_t offset = {0};
     scui_widget_align_pos_calc(handle, target, &offset, scui_opt_pos_c);
@@ -323,7 +318,7 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    // SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
+    SCUI_ASSERT(scroll->pos == scui_opt_pos_c);
     SCUI_ASSERT(target != SCUI_HANDLE_INVALID);
     
     bool child_not_find = true;
@@ -336,9 +331,6 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
         SCUI_LOG_WARN("child not find");
         return;
     }
-    
-    // if (scui_widget_global_scroll_flag(0x02, NULL) && anima)
-    //     return;
     
     // 如果已经是中心子控件, 跳过目标
     scui_handle_t handle_c = SCUI_HANDLE_INVALID;
@@ -716,7 +708,7 @@ static void scui_scroll_anima_finish(void *instance)
         
         SCUI_ASSERT(!scroll->loop);
         
-        if (!scroll->hold_move) {
+        if (!scroll->lock_move) {
             
             /* 到达回弹点,则开始回弹 */
             if (scroll->ofs_cur.x > -scroll->ofs_min.x ||
@@ -761,7 +753,7 @@ static void scui_scroll_anima_finish(void *instance)
         SCUI_LOG_DEBUG("dis_sum:%d", scroll->dis_sum);
         scui_scroll_event_auto(&event, 0x01);
         
-        if (!scroll->hold_move) {
+        if (!scroll->lock_move) {
             
             if (!scroll->loop) {
                 
@@ -790,12 +782,7 @@ static void scui_scroll_anima_finish(void *instance)
     }
     over:
     
-    if (!scroll->hold_move) {
-         scroll->lock_move = false;
-         
-        // 仅仅当anima完全结束后,解锁scroll标记
-        if (scroll->anima == SCUI_HANDLE_INVALID || !scui_anima_running(scroll->anima))
-            ;// scui_widget_global_scroll_flag(0x01, &scroll->key);
+    if (!scroll->lock_move) {
         
         if (scroll->anima != SCUI_HANDLE_INVALID && !scui_anima_running(scroll->anima)) {
             
@@ -1267,7 +1254,6 @@ static void scui_scroll_event_layout(scui_event_t *event)
         
         // 保存子控件的坐标记录
         scui_scroll_point_record(event->object, true);
-        scui_scroll_notify_alone(event->object, 0xAA);
         
         // 状态量还原
         scroll->ofs_cur = (scui_point_t){0};
@@ -1306,7 +1292,6 @@ static void scui_scroll_event_layout(scui_event_t *event)
     }
     // 保存子控件的坐标记录
     scui_scroll_point_record(event->object, true);
-    scui_scroll_notify_alone(event->object, 0xAA);
     
     // 状态量还原
     scroll->dis_sum = 0;
@@ -1384,6 +1369,7 @@ void scui_scroll_invoke(scui_event_t *event)
         if (layout) scui_scroll_offset_get(event->object, &offset_t);
         
         scui_scroll_event_layout(event);
+        if (layout) scui_scroll_notify_alone(event->object, 0xAA);
         
         if (offset_t != 0) {volatile int breakpoint = 0;
             breakpoint++;};
@@ -1394,6 +1380,10 @@ void scui_scroll_invoke(scui_event_t *event)
         break;
     }
     case scui_event_ptr_down:
+        break;
+    case scui_event_ptr_hold:
+        if (widget->state.indev_ptr_hold)
+            scui_event_mask_over(event);
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
@@ -1411,12 +1401,7 @@ void scui_scroll_invoke(scui_event_t *event)
             if (!scui_opt_bits_check(event_dir, scroll->dir))
                 break;
             
-            /* 全局滚动锁定 */
-            // if (!scui_widget_global_scroll_flag(0x00, &scroll->key))
-            //      break;
-            
             scroll->lock_move = true;
-            scroll->hold_move = true;
             scui_scroll_anima_tag(event->object, 0);
             widget->state.indev_ptr_hold = true;
             widget->state.indev_enc_hold = true;
@@ -1430,8 +1415,8 @@ void scui_scroll_invoke(scui_event_t *event)
     }
     case scui_event_ptr_up:
         
-        if (scroll->hold_move) {
-            scroll->hold_move = false;
+        if (scroll->lock_move) {
+            scroll->lock_move = false;
             scroll->mask_springback = false;
             
             uint8_t type = scroll->freedom ? 0x12 : 0x02;
@@ -1486,6 +1471,10 @@ void scui_scroll_invoke(scui_event_t *event)
         scui_event_mask_over(event);
         break;
     }
+    case scui_event_key_hold:
+        if (widget->state.indev_key_hold)
+            scui_event_mask_over(event);
+        break;
     case scui_event_key_click: {
         if (widget->state.indev_key_hold)
             scui_event_mask_over(event);

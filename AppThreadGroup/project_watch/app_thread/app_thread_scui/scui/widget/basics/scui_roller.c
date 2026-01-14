@@ -322,10 +322,10 @@ void scui_roller_invoke(scui_event_t *event)
     scui_roller_t *roller = (void *)widget;
     
     switch (event->type) {
+    case scui_event_widget_scroll_layout:
     case scui_event_widget_scroll_start:
     case scui_event_widget_scroll_over:
-    case scui_event_widget_scroll_keep:
-    case scui_event_widget_scroll_layout: {
+    case scui_event_widget_scroll_keep: {
         scui_handle_t handle_m = NULL;
         scui_handle_t handle_s = NULL;
         scui_scroll_center_get(widget->myself, &handle_m);

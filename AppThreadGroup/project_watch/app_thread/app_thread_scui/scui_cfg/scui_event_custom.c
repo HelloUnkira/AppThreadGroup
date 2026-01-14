@@ -116,8 +116,10 @@ void scui_event_custom_access(scui_event_t *event)
     
     // 此处退出休眠
     switch (event->type) {
-    case scui_event_ptr_hold:
-    case scui_event_key_hold:
+    case scui_event_ptr_down:
+    case scui_event_ptr_up:
+    case scui_event_key_down:
+    case scui_event_key_up:
         
         if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
             

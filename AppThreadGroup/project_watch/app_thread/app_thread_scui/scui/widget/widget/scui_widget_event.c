@@ -291,37 +291,11 @@ static void scui_widget_event_process(scui_event_t *event)
         #if SCUI_WIDGET_BORDER_TAG
         /* 控件绘制流程在完结步(最前) */
         if (scui_event_check_finish(event)) {
-            scui_draw_dsc_t graph_dsc = {
-                .type = scui_draw_type_pixel_line,
-                .src_color.color.ch.a = 0xFF,
-                .src_color.color.ch.r = scui_rand(0xFF),
-                .src_color.color.ch.g = scui_rand(0xFF),
-                .src_color.color.ch.b = scui_rand(0xFF),
-                .line.src_width = 1,
-            };
             
-            scui_area_t clip = widget->clip;
-            scui_area_m_to_s(&clip, &clip);
-            
-            graph_dsc.line.src_pos_1.x = clip.x1;
-            graph_dsc.line.src_pos_2.x = clip.x2;
-            
-            graph_dsc.line.src_pos_1.y = clip.y1;
-            graph_dsc.line.src_pos_2.y = clip.y1;
-            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
-            graph_dsc.line.src_pos_1.y = clip.y2;
-            graph_dsc.line.src_pos_2.y = clip.y2;
-            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
-            
-            graph_dsc.line.src_pos_1.y = clip.y1;
-            graph_dsc.line.src_pos_2.y = clip.y2;
-            
-            graph_dsc.line.src_pos_1.x = clip.x1;
-            graph_dsc.line.src_pos_2.x = clip.x1;
-            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
-            graph_dsc.line.src_pos_1.x = clip.x2;
-            graph_dsc.line.src_pos_2.x = clip.x2;
-            scui_widget_draw_graph(event->object, NULL, &graph_dsc);
+            scui_handle_t  image4[4] = {0};
+            scui_color32_t color32 = SCUI_COLOR32_MAKE8(0xFF, scui_rand(0xFF), scui_rand(0xFF), scui_rand(0xFF));
+            scui_color_t   color   = SCUI_COLOR_MAKE32(false, 0x00000000, color32.full);
+            scui_custom_draw_image_crect4(event, &widget->clip, image4, color, 1);
         }
         #endif
         
@@ -342,7 +316,8 @@ static void scui_widget_event_process(scui_event_t *event)
     }
     case scui_event_ptr_click:
     case scui_event_ptr_fling:
-    case scui_event_ptr_move: {
+    case scui_event_ptr_move:
+    case scui_event_ptr_hold: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_ptr_hold)
             break;
@@ -391,7 +366,8 @@ static void scui_widget_event_process(scui_event_t *event)
             break;
         break;
     }
-    case scui_event_key_click: {
+    case scui_event_key_click:
+    case scui_event_key_hold: {
         /* 存在该控件持有当前敏感事件 */
         if (widget->state.indev_key_hold)
             break;
@@ -431,10 +407,8 @@ static void scui_widget_event_process(scui_event_t *event)
     case scui_event_create:
     case scui_event_destroy:
     case scui_event_ptr_down:
-    case scui_event_ptr_hold:
     case scui_event_ptr_up:
     case scui_event_key_down:
-    case scui_event_key_hold:
     case scui_event_key_up:
         /* 有些事件不允许被吸收 */
         /* 它涉及到系统状态维护 */
@@ -512,19 +486,11 @@ void scui_widget_event_dispatch(scui_event_t *event)
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
     
-    /* 输入事件ptr:回溯递归 */
-    if (scui_event_type_ptr(event->type)) {
+    /* 输入事件ptr,enc,key:回溯递归 */
+    if (scui_event_type_ptr(event->type) ||
+        scui_event_type_enc(event->type) ||
+        scui_event_type_key(event->type)) {
         scui_widget_event_bubble(event, NULL, true, false);
-        return;
-    }
-    /* 输入事件enc:顺向递归 */
-    if (scui_event_type_enc(event->type)) {
-        scui_widget_event_bubble(event, NULL, false, true);
-        return;
-    }
-    /* 输入事件key:顺向递归 */
-    if (scui_event_type_key(event->type)) {
-        scui_widget_event_bubble(event, NULL, false, true);
         return;
     }
     

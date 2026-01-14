@@ -29,15 +29,13 @@ typedef struct {
     scui_sbitfd_t   loop:1;             /* 滚动循环(自动布局,与回弹效果互斥) */
     /* 内部域: */
     scui_handle_t   anima;              /* 移动动画 */
-    scui_handle_t   key;                /* 全局滚动锁定 */
     scui_point_t   *point_rcd;          /* 子控件移动记录 */
     scui_point_t    point_cur;          /* 移动动画当前 */
     scui_point_t    point_ofs;          /* 移动动画总计 */
     bool            anima_tag[4];       /* 动画标记[ptr,enc,key,auto] */
     scui_sbitfd_t   layout:1;           /* 布局更新标记 */
-    scui_sbitfd_t   over_scroll:1;      /* 滚动迭代状态 */
     scui_sbitfd_t   lock_move:1;        /* 滚动长留锁 */
-    scui_sbitfd_t   hold_move:1;        /* 滚动长留锁 */
+    scui_sbitfd_t   over_scroll:1;      /* 滚动迭代状态 */
     scui_sbitfd_t   mask_springback:1;  /* 回弹暂留锁 */
     /* 内部域(模式): */
     union {

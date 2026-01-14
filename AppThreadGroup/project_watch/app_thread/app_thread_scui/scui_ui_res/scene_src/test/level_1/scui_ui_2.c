@@ -106,7 +106,7 @@ void scui_ui_scene_2_event_proc(scui_event_t *event)
         scroll_maker.widget.event_cb = scui_ui_scene_2_scroll_event;
         scroll_maker.springback = 70;
         scroll_maker.space = 10;
-        // scroll_maker.loop = true;
+        scroll_maker.loop = true;
         scroll_maker.fling_page = 5;
         scroll_maker.route_enc = 117;
         scroll_maker.route_key = 117;

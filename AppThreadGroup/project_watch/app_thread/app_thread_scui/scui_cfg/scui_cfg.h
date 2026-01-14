@@ -34,7 +34,7 @@
 // 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐)
 // 子控件树, 静态画布真缩放, 窗口转场变换
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (1024 * 512 + /* 临时缓存: */ 1024 * 1024 * 4)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (0x80000 + /* 临时缓存: */ 0x400000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
 #define SCUI_MEM_TYPE_SIZE_GRAPH                    (0)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0)
@@ -50,11 +50,11 @@
 #else
 /* 大内存方案: */
 // 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other
-// 8M PSRAM (空闲1M):     MIX:128K; FONT:256K; USER:64K; GRAPH:7.5M - other
+// 8M PSRAM (空闲1M):     MIX:192K; FONT:256K; USER:64K; GRAPH:7.5M - other
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (0x20000)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (0x30000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0x40000)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x70000)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x80000)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0x10000)
 
 /* 缓存散列值(必要使用) */

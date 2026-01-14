@@ -232,11 +232,11 @@ void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse)
     /* 设置控件状态为显示隐藏 */
     widget->state.view = view;
     
-    /* 同步生成控件显示事件 */
+    /* 同步生成控件显示隐藏事件 */
     scui_event_define(event, handle, true, view ? scui_event_show : scui_event_hide, NULL);
     scui_event_notify(&event);
     
-    /* 非根控件更新父控件布局 */
+    /* 更新父控件布局 */
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_event_define(event, widget->parent, false, scui_event_layout, scui_event_absorb_none);
         scui_event_notify(&event);
