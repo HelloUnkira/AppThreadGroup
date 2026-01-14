@@ -227,7 +227,7 @@ static void scui_event_respond(scui_event_t *event)
             
             /* 全局滚动检查 */
             #if SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL
-            if (scui_widget_global_scroll_flag(0x02, NULL))
+            if (scui_widget_scroll_state(0x02))
                 return;
             #endif
             

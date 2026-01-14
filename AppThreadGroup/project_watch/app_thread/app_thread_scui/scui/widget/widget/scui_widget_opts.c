@@ -391,64 +391,13 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
 
 /*@prief 事件滚动状态检查更新
  *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@param key  锁定标记句柄(浮动校验密钥)
+ *@retval state:0x02时是否滚动
  */
-bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key)
+bool scui_widget_scroll_state(uint8_t state)
 {
-    static struct {
-        bool lock;
-        scui_handle_t key;
-        scui_handle_t key_t;
-    } scroll_flag = {0};
-    
-    if (key == NULL)
-        key = &scroll_flag.key_t;
-    
-    switch (state) {
-    case 0x00:
-        if (scroll_flag.lock && scroll_flag.key != *key)
-            return false;
-        if (scroll_flag.lock && scroll_flag.key == *key)
-            return true;
-        
-        // 未得锁,此时应该为无效句柄
-        SCUI_ASSERT(scroll_flag.key == SCUI_HANDLE_INVALID);
-        SCUI_ASSERT(*key == SCUI_HANDLE_INVALID);
-        
-        SCUI_LOG_INFO("scroll lock");
-        scroll_flag.key  = scui_handle_find();
-        scroll_flag.lock = true;
-        *key = scroll_flag.key;
-        return true;
-    case 0x01:
-        // 上锁失败,无需解锁
-        if (*key == SCUI_HANDLE_INVALID)
-            return false;
-        // 释放锁,此时应该为目标句柄
-        if (scroll_flag.lock && scroll_flag.key != *key) {
-            SCUI_LOG_ERROR("unknown target");
-            SCUI_ASSERT(false);
-        }
-        if (scroll_flag.lock && scroll_flag.key == *key) {
-            SCUI_ASSERT(*key != SCUI_HANDLE_INVALID);
-            
-            SCUI_LOG_INFO("scroll unlock");
-            scui_handle_clear(scroll_flag.key);
-            scroll_flag.key  = SCUI_HANDLE_INVALID;
-            scroll_flag.lock = false;
-            *key = scroll_flag.key;
-            return true;
-        }
-        
-        SCUI_LOG_ERROR("unknown target");
-        SCUI_ASSERT(false);
-        return false;
-    case 0x02:
-        if (scroll_flag.lock && scroll_flag.key == *key)
-            return false;
-        return scroll_flag.lock;
-    default:
-        SCUI_LOG_ERROR("unknown state");
-        return false;
-    }
+    static scui_handle_t scroll_tick = 0;
+    if (state == 0x00) {scroll_tick++;}
+    if (state == 0x01) {SCUI_ASSERT(scroll_tick != 0); scroll_tick--;}
+    if (state == 0x02) {return scroll_tick != 0;}
+    return false;
 }

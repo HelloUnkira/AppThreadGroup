@@ -176,7 +176,7 @@ static void scui_window_jump_anima_finish(void *instance)
     }
     
     scui_window_mgr.switch_args.lock_jump = false;
-    scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    scui_widget_scroll_state(0x01);
 }
 
 /*@brief 移动动画事件
@@ -359,7 +359,7 @@ static void scui_window_move_anima_finish(void *instance)
     }
     
     // 仅最后的动画帧才进行资源回收
-    if (scui_window_mgr.switch_args.hold_move)
+    if (scui_window_mgr.switch_args.lock_move)
         return;
     
     scui_window_move_anima_state(0x01);
@@ -378,7 +378,7 @@ static void scui_window_move_anima_finish(void *instance)
     }
     
     scui_window_mgr.switch_args.lock_move = false;
-    scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
+    scui_widget_scroll_state(0x01);
 }
 
 /*@brief 窗口移动动画自动化
@@ -460,13 +460,15 @@ static void scui_window_move_anima_inout(scui_handle_t handle, bool inout)
 /*@brief 窗口切换事件处理回调
  *@param event 事件
  */
-static void scui_window_event_switch(scui_event_t *event)
+void scui_window_event_dispatch(scui_event_t *event)
 {
-    scui_point_t point = scui_window_mgr.switch_args.point;
+    /* 不同的事件处理流程有不同的递归冒泡规则 */
+    SCUI_LOG_DEBUG("event %u", event->type);
     
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_window_t *window = widget;
-    SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+    scui_window_t *window = (void *)widget;
+    scui_point_t   point  = scui_window_mgr.switch_args.point;
+    SCUI_ASSERT(widget->type == scui_widget_type_window);
     
     switch (event->type) {
     case scui_event_ptr_down:
@@ -523,12 +525,11 @@ static void scui_window_event_switch(scui_event_t *event)
             /* 抓获到运动的目标 */
             if (target != SCUI_HANDLE_INVALID) {
                 /* 全局滚动锁定 */
-                if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
-                     break;
+                scui_widget_scroll_state(0x00);
                 
                 scui_window_move_anima_tag(0);
                 scui_window_mgr.switch_args.lock_move = true;
-                scui_window_mgr.switch_args.hold_move = true;
+                scui_window_mgr.switch_args.lock_move = true;
                 scui_window_mgr.switch_args.mask_fling = event->type == scui_event_ptr_fling;
                 scui_window_mgr.switch_args.dir = event_dir;
                 scui_window_mgr.switch_args.pos = event_dir;
@@ -565,7 +566,7 @@ static void scui_window_event_switch(scui_event_t *event)
     case scui_event_ptr_up:
         scui_event_mask_keep(event);
         if (scui_window_mgr.switch_args.lock_move) {
-            scui_window_mgr.switch_args.hold_move = false;
+            scui_window_mgr.switch_args.lock_move = false;
             scui_window_move_anima_tag(-1);
             
             if (scui_window_mgr.switch_args.mask_fling) {
@@ -610,10 +611,18 @@ static void scui_window_event_switch(scui_event_t *event)
             event->key_id != SCUI_WINDOW_SWITCH_KEY_TO_R)
             break;
         
-        if (scui_window_mgr.switch_args.lock_jump)
+        if (scui_window_mgr.switch_args.lock_jump) {
+            SCUI_LOG_WARN("window switching");
             break;
-        if (scui_window_mgr.switch_args.lock_move)
+        }
+        if (scui_window_mgr.switch_args.lock_move) {
+            SCUI_LOG_WARN("window switching");
             break;
+        }
+        if (scui_window_mgr.switch_args.anima != SCUI_HANDLE_INVALID) {
+            SCUI_LOG_WARN("window switching");
+            break;
+        }
         
         scui_handle_t target = SCUI_HANDLE_INVALID;
         scui_window_switch_type_t switch_type = scui_window_switch_auto;
@@ -639,12 +648,10 @@ static void scui_window_event_switch(scui_event_t *event)
         /* 抓获到运动的目标 */
         if (target != SCUI_HANDLE_INVALID && event_dir != scui_opt_dir_none) {
             /* 全局滚动锁定 */
-            if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key))
-                 break;
+            scui_widget_scroll_state(0x00);
             
             scui_window_move_anima_tag(1);
-            scui_window_mgr.switch_args.lock_move  = true;
-            scui_window_mgr.switch_args.hold_move  = false;
+            scui_window_mgr.switch_args.lock_move  = false;
             scui_window_mgr.switch_args.mask_fling = true;
             scui_window_mgr.switch_args.dir = event_dir;
             scui_window_mgr.switch_args.pos = event_dir;
@@ -706,12 +713,6 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         return false;
     }
     
-    /* 先上锁 */
-    if (!scui_widget_global_scroll_flag(0x00, &scui_window_mgr.switch_args.key)) {
-         SCUI_LOG_WARN("window switching: %u", scui_window_mgr.switch_args.key);
-         return false;
-    }
-    
     /* 先上锁(标记) */
     scui_window_mgr.switch_args.lock_jump = true;
     
@@ -741,7 +742,6 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
         return true;
     }
     
@@ -750,7 +750,6 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
         return true;
     }
     
@@ -780,8 +779,10 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
-        scui_widget_global_scroll_flag(0x01, &scui_window_mgr.switch_args.key);
     } else {
+        /* 全局滚动锁定 */
+        scui_widget_scroll_state(0x00);
+        
         scui_window_mgr.switch_args.pct = 0;
         scui_window_mgr.switch_args.ofs = 0;
         scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
@@ -813,15 +814,4 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_anima_start(scui_window_mgr.switch_args.anima);
     }
     return true;
-}
-
-/*@brief 控件默认事件处理回调
- *@param event 事件
- */
-void scui_window_event_dispatch(scui_event_t *event)
-{
-    SCUI_LOG_DEBUG("event %u", event->type);
-    
-    /* 不同的事件处理流程有不同的递归冒泡规则 */
-    scui_window_event_switch(event);
 }

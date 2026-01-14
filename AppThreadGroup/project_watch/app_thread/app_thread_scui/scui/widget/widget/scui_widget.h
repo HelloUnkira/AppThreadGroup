@@ -306,9 +306,9 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
 
 /*@prief 事件滚动状态检查更新
  *@param type 0x00:锁定; 0x01:解锁; 0x02:检查
- *@param key  锁定标记句柄(浮动校验密钥)
+ *@retval state:0x02时是否滚动
  */
-bool scui_widget_global_scroll_flag(uint8_t state, scui_handle_t *key);
+bool scui_widget_scroll_state(uint8_t state);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

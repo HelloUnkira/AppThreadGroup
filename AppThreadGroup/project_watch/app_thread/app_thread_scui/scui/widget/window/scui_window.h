@@ -91,7 +91,6 @@ typedef struct {
     scui_opt_dir_t              cfg_dir;            /* 窗口切换方向(配置) */
     scui_opt_dir_t              dir;                /* 窗口切换方向(当前) */
     scui_opt_pos_t              pos;                /* 窗口切换位置(当前) */
-    scui_handle_t               key;                /* 窗口切换全局锁 */
     scui_handle_t               anima;              /* 窗口切换动画 */
     scui_map_cb_t               anima_path[4];      /* 动画轨迹[ptr,enc,key,auto] */
     scui_coord_t                anima_speed[4];     /* 动画速度[ptr,enc,key,auto](像素点/1s) */
@@ -99,10 +98,9 @@ typedef struct {
     scui_coord_t                pct;                /* 窗口切换进度(百分比) */
     scui_coord_t                ofs;                /* 窗口切换偏移(像素点) */
     bool                        anima_tag[4];       /* 动画标记[ptr,enc,key,auto] */
-    uintptr_t                   lock_jump:1;        /* 窗口切换锁 */
-    uintptr_t                   lock_move:1;        /* 窗口切换锁 */
-    uintptr_t                   mask_fling:1;       /* 窗口切换锁 */
-    uintptr_t                   hold_move:1;        /* 窗口使用锁 */
+    scui_sbitfd_t               lock_jump:1;        /* 窗口切换锁 */
+    scui_sbitfd_t               lock_move:1;        /* 窗口切换锁 */
+    scui_sbitfd_t               mask_fling:1;       /* 窗口切换锁 */
 } scui_window_switch_t;
 
 typedef struct {

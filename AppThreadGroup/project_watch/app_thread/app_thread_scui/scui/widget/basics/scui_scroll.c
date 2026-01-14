@@ -272,6 +272,9 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     scroll->lock_move = false;
     scroll->mask_springback = false;
     
+    if (scroll->anima == SCUI_HANDLE_INVALID)
+        scui_widget_scroll_state(0x00);
+    
     /* 进行一次布局更新 */
     scui_event_define(event, handle, true, scui_event_layout, NULL);
     scui_event_notify(&event);
@@ -786,6 +789,7 @@ static void scui_scroll_anima_finish(void *instance)
         
         if (scroll->anima != SCUI_HANDLE_INVALID && !scui_anima_running(scroll->anima)) {
             
+            scui_widget_scroll_state(0x01);
             scui_scroll_notify_alone(widget->myself, 0x01);
             
             if (scroll->anima != SCUI_HANDLE_INVALID) {
@@ -1406,6 +1410,9 @@ void scui_scroll_invoke(scui_event_t *event)
             widget->state.indev_ptr_hold = true;
             widget->state.indev_enc_hold = true;
             widget->state.indev_key_hold = true;
+            
+            if (scroll->anima == SCUI_HANDLE_INVALID)
+                scui_widget_scroll_state(0x00);
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;
