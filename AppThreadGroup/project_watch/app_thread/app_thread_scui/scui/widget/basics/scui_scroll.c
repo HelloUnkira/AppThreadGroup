@@ -7,7 +7,8 @@
 
 #include "scui.h"
 
-/* 内部交叉引用<auto>: */
+/* 内部交叉引用<something>: */
+static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type);
 static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_t value_e, uint32_t period);
 static void scui_scroll_event_auto(scui_event_t *event,  uint8_t type);
 /* 内部交叉引用: */
@@ -270,7 +271,7 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
         return;
     
     /* 控件已经滚动中了 */
-    if (scui_widget_scroll_state(0x02))
+    if (scui_widget_scroll_state(0x02) && anima)
         return;
     
     scroll->lock_move = false;
@@ -287,8 +288,10 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     event_t.ptr_e.x = offset->x;
     event_t.ptr_e.y = offset->y;
     
-    if (scroll->anima == SCUI_HANDLE_INVALID)
+    if (scroll->anima == SCUI_HANDLE_INVALID) {
+        scui_scroll_notify_alone(handle, 0x00);
         scui_widget_scroll_state(0x00);
+    }
     
     uint8_t type = 0;
     if (anima) type = scroll->freedom ? 0x10 : 0x00;
@@ -441,11 +444,7 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
 
 /*@brief 滚动控件事件处理回调
  *@param handle 滚动控件句柄
- *@param type   事件类型
- *       0x00   滚动开始事件
- *       0x01   滚动结束事件
- *       0x02   滚动进行事件
- *       0xAA   滚动布局更新事件
+ *@param type   滚动事件类型(0x00   :开始;0x01:结束;0x02:进行;0xAA:布局更新;)
  */
 static void scui_scroll_notify_alone(scui_handle_t handle, uint8_t type)
 {
@@ -792,14 +791,13 @@ static void scui_scroll_anima_finish(void *instance)
         
         if (scroll->anima != SCUI_HANDLE_INVALID && !scui_anima_running(scroll->anima)) {
             
-            scui_widget_scroll_state(0x01);
+            scui_anima_stop(scroll->anima);
+            scui_anima_destroy(scroll->anima);
+            scroll->anima = SCUI_HANDLE_INVALID;
+        }
+        if (scroll->anima == SCUI_HANDLE_INVALID) {
             scui_scroll_notify_alone(widget->myself, 0x01);
-            
-            if (scroll->anima != SCUI_HANDLE_INVALID) {
-                scui_anima_stop(scroll->anima);
-                scui_anima_destroy(scroll->anima);
-                scroll->anima = SCUI_HANDLE_INVALID;
-            }
+            scui_widget_scroll_state(0x01);
         }
     }
 }
@@ -834,9 +832,6 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
             anima.period = anima.period * 1000 / scroll->anima_speed[idx];
             break;
         }
-    
-    if (scroll->anima == SCUI_HANDLE_INVALID)
-        scui_scroll_notify_alone(handle, 0x00);
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
         scui_anima_stop(scroll->anima);
@@ -1418,8 +1413,10 @@ void scui_scroll_invoke(scui_event_t *event)
             widget->state.indev_enc_hold = true;
             widget->state.indev_key_hold = true;
             
-            if (scroll->anima == SCUI_HANDLE_INVALID)
+            if (scroll->anima == SCUI_HANDLE_INVALID) {
+                scui_scroll_notify_alone(event->object, 0x00);
                 scui_widget_scroll_state(0x00);
+            }
         }
         
         uint8_t type = scroll->freedom ? 0x10 : 0x00;

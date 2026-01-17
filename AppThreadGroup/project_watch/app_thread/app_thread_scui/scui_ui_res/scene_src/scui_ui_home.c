@@ -73,8 +73,11 @@ void scui_ui_scene_home_event_proc(scui_event_t *event)
         
         
         // xfloat 构造测试
-        // 常用于华强北风格手表, 表盘界面右拉出快捷栏
+        // 常用于华强北风格手表, 表盘界面右拉出快捷栏(属于插件,并非控件,一次只能使用一个)
         // scui_ui_scene_xfloat_create(event, scui_opt_pos_l, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event, scui_opt_pos_r, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event, scui_opt_pos_u, scui_ui_scene_float_s_event_proc);
+        // scui_ui_scene_xfloat_create(event, scui_opt_pos_d, scui_ui_scene_float_s_event_proc);
         break;
     case scui_event_destroy:
         // cwf json 测试
