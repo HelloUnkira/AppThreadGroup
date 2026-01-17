@@ -276,9 +276,6 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     scroll->lock_move = false;
     scroll->mask_springback = false;
     
-    if (scroll->anima == SCUI_HANDLE_INVALID)
-        scui_widget_scroll_state(0x00);
-    
     /* 进行一次布局更新 */
     scui_event_define(event, handle, true, scui_event_layout, NULL);
     scui_event_notify(&event);
@@ -290,10 +287,12 @@ void scui_scroll_offset(scui_handle_t handle, scui_point_t *offset, bool anima)
     event_t.ptr_e.x = offset->x;
     event_t.ptr_e.y = offset->y;
     
-    uint8_t type = 0;
-    if (anima) type = scroll->freedom ? 0x1A : 0x0A;
-    else type = scroll->freedom ? 0x10 : 0x00;
+    if (scroll->anima == SCUI_HANDLE_INVALID)
+        scui_widget_scroll_state(0x00);
     
+    uint8_t type = 0;
+    if (anima) type = scroll->freedom ? 0x10 : 0x00;
+    else type = scroll->freedom ? 0x1A : 0x0A;
     scui_scroll_event_auto(&event_t, type);
 }
 

@@ -41,8 +41,7 @@ static void scui_monkey_anima_expire(void *instance)
     // 在空闲态选择一个输入设备
     if (scui_ui_res_local->idle) {
         scui_ui_res_local->idle = false;
-        scui_ui_res_local->type = scui_rand(9) < 7 ? 0 : scui_rand(9) < 5 ? 1 : 2;
-        scui_ui_res_local->type += 1;
+        scui_ui_res_local->type = 1 + (scui_rand(9) < 7 ? 0 : scui_rand(9) < 5 ? 1 : 2);
     } else {
         scui_indev_data_t indev_data = {0};
         indev_data.type = scui_ui_res_local->type;
@@ -112,17 +111,17 @@ static void scui_monkey_anima_expire(void *instance)
             
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
-                //
-                static const uint32_t key_id[] = {
-                    scui_event_key_val_enter,
-                    scui_event_key_val_up,
-                    scui_event_key_val_down,
-                    scui_event_key_val_left,
-                    scui_event_key_val_right,
-                    scui_event_key_val_back,
-                };
+                //只取一些特殊值并且调整权重
+                uint32_t key_id = scui_event_key_val_enter;
+                uint32_t key_id_rand = scui_rand(100);
+                if (scui_betw_lr(key_id_rand,  0,  30)) key_id = scui_event_key_val_enter;
+                if (scui_betw_lr(key_id_rand, 30,  60)) key_id = scui_event_key_val_back;
+                if (scui_betw_lr(key_id_rand, 60,  70)) key_id = scui_event_key_val_up;
+                if (scui_betw_lr(key_id_rand, 70,  80)) key_id = scui_event_key_val_down;
+                if (scui_betw_lr(key_id_rand, 80,  90)) key_id = scui_event_key_val_left;
+                if (scui_betw_lr(key_id_rand, 90, 100)) key_id = scui_event_key_val_right;
                 
-                scui_ui_res_local->key_id  = key_id[scui_rand(scui_arr_len(key_id) - 1)];
+                scui_ui_res_local->key_id  = key_id;
                 scui_ui_res_local->key_val = 0;
                 scui_ui_res_local->tick = scui_rand(10) + 2;
                 scui_ui_res_local->count = 0;

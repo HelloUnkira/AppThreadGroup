@@ -551,8 +551,7 @@ void scui_window_event_dispatch(scui_event_t *event)
                 scui_widget_show(scui_window_mgr.switch_args.list[1], false);
                 scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
                 /* 额外做一次校正,应该没意义 */
-                point = (scui_point_t){0};
-                scui_window_mgr.switch_args.point = point;
+                scui_window_mgr.switch_args.point = point = (scui_point_t){0};
                 scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
                 /* 初始默认启动一次,等待动画被打断 */
                 if (event->type == scui_event_ptr_fling)
@@ -673,8 +672,7 @@ void scui_window_event_dispatch(scui_event_t *event)
             scui_widget_show(scui_window_mgr.switch_args.list[1], false);
             scui_widget_move_pos(scui_window_mgr.switch_args.list[1], &point);
             /* 额外做一次校正,应该没意义 */
-            point = (scui_point_t){0};
-            scui_window_mgr.switch_args.point = point;
+            scui_window_mgr.switch_args.point = point = (scui_point_t){0};
             scui_widget_move_pos(scui_window_mgr.switch_args.list[0], &point);
             /* 初始默认启动一次,等待动画被打断 */
             scui_window_move_anima_inout(scui_window_mgr.switch_args.list[0], false);
