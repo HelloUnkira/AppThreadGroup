@@ -116,19 +116,14 @@ void scui_event_custom_access(scui_event_t *event)
     
     // 此处退出休眠
     switch (event->type) {
-    case scui_event_ptr_down:
-    case scui_event_ptr_up:
-    case scui_event_key_down:
-    case scui_event_key_up:
+    case scui_event_ptr_click:
+    case scui_event_key_click:
         
         if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
             
-            scui_event_t event_ui = {
-                .object = SCUI_HANDLE_SYSTEM,
-                .type   = scui_event_ui_standy_exit,
-                .absorb = scui_event_absorb_none,
-            };
+            scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_ui_standy_exit, NULL);
             scui_event_notify(&event_ui);
+            
             app_module_system_dlps_set(false);
         } else {
             
@@ -257,6 +252,9 @@ void scui_event_custom_finish(scui_event_t *event)
     
     switch (event->type) {
     case scui_event_ptr_fling:
+        if (app_module_system_dlps_get())
+            break;
+        
         // 全局的右滑响应事件
         if (scui_indev_ptr_dir(event) == scui_opt_dir_to_r) {
             
@@ -265,6 +263,9 @@ void scui_event_custom_finish(scui_event_t *event)
         }
         break;
     case scui_event_key_click:
+        if (app_module_system_dlps_get())
+            break;
+        
         // 全局的按键响应事件
         scui_event_mask_over(event);
         scui_ui_scene_return();

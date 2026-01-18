@@ -150,7 +150,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         
         scui_event_mask_over(event);
         scui_handle_t parent = scui_widget_parent(event->object);
-        scui_handle_t index  = scui_widget_child_to_index(parent, event->object) - 1;
+        scui_handle_t index  = scui_widget_child_to_index(event->object) - 1;
         
         scui_handle_t handle_m = event->object;
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
@@ -232,7 +232,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
     case scui_event_widget_scroll_over: {
         
         scui_area_t   clip_p = scui_widget_clip(event->object);
-        scui_handle_t list_m = scui_widget_child_num(event->object);
+        scui_handle_t list_m = scui_widget_child_now(event->object);
         scui_handle_t handle_t = SCUI_HANDLE_INVALID;
         
         #if 0
@@ -260,7 +260,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         scui_handle_t span  = 25;
         scui_handle_t num_c = 2;
         scui_handle_t idx_c = 0;
-        scui_handle_t index = scui_widget_child_to_index(event->object, handle_t);
+        scui_handle_t index = scui_widget_child_to_index(handle_t);
         for (scui_handle_t idx = index + 1; idx < list_m; idx++) {
             scui_handle_t handle_c = scui_widget_child_by_index(event->object, idx);
             if (handle_c == SCUI_HANDLE_INVALID)

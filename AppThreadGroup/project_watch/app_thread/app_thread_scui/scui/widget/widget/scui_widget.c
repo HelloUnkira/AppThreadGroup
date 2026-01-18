@@ -82,10 +82,8 @@ void scui_widget_make(scui_widget_t *widget, void *maker, scui_handle_t *handle)
     widget->child_num  = widget_maker->child_num;
     widget->child_list = NULL;
     if (widget->child_num != 0) {
-        scui_handle_t list_size = widget->child_num * sizeof(scui_handle_t);
-        widget->child_list = SCUI_MEM_ALLOC(scui_mem_type_mix, list_size);
-        for (scui_handle_t idx = 0; idx < widget->child_num; idx++)
-            widget->child_list[idx] = SCUI_HANDLE_INVALID;
+        scui_handle_t child_size = widget->child_num * sizeof(scui_handle_t);
+        widget->child_list = SCUI_MEM_ZALLOC(scui_mem_type_mix, child_size);
     }
     
     /* 构建父子关联 */
@@ -143,9 +141,8 @@ void scui_widget_burn(scui_widget_t *widget)
 {
     SCUI_LOG_INFO("widget %u", widget->myself);
     
-    /* 先递归销毁自己的孩子 */
-    scui_widget_child_list_btra(widget, idx)
-    scui_widget_destroy(widget->child_list[idx]);
+    /* 递归销毁所有子控件 */
+    scui_widget_clean(widget->myself);
     
     /* 回收用户资源句柄 */
     if (widget->user_data != SCUI_HANDLE_INVALID)

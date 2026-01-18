@@ -25,7 +25,7 @@ static void scui_ui_scene_waterfall_icon_event_proc(scui_event_t *event)
              break;
         
         scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object) - 1;
+        scui_handle_t  index  = scui_widget_child_to_index(event->object) - 1;
         
         uint8_t type = 1;   //l:0;m:1;r:2;
         

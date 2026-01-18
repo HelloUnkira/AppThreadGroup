@@ -150,16 +150,16 @@ void scui_widget_burn(scui_widget_t *widget);
 /*************************************************************************************************/
 
 /*@brief 控件添加子控件
- *@param widget 控件实例
- *@param child  控件子控件句柄
+ *@param widget   控件实例
+ *@param handle_c 控件子控件句柄
  */
-void scui_widget_child_add(scui_widget_t *widget, scui_handle_t child);
+void scui_widget_child_add(scui_widget_t *widget, scui_handle_t handle_c);
 
 /*@brief 控件移除子控件
- *@param widget 控件实例
- *@param child  控件子控件句柄
+ *@param widget   控件实例
+ *@param handle_c 控件子控件句柄
  */
-void scui_widget_child_del(scui_widget_t *widget, scui_handle_t child);
+void scui_widget_child_del(scui_widget_t *widget, scui_handle_t handle_c);
 
 /*@brief 控件统计剪切域大小
  *@param handle 控件句柄
@@ -309,6 +309,7 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
  *@retval state:0x02时是否滚动
  */
 bool scui_widget_scroll_state(uint8_t state);
+// #define scui_widget_scroll_state(state) ((state != 0x02 ? (SCUI_LOG_WARN("scui_widget_scroll_state:%d", state), 0) : 0), scui_widget_scroll_state_(state))
 
 /*************************************************************************************************/
 /*************************************************************************************************/

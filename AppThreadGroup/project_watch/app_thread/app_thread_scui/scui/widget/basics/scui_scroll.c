@@ -400,11 +400,11 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
     /* 上边界和左边界:计算第一个子控件与控件相对偏移值 */
     if (scui_opt_bits_check(scroll->skip, scui_opt_pos_u) ||
         scui_opt_bits_check(scroll->skip, scui_opt_pos_l)) {
-        scui_handle_t handle_c = scui_widget_child_offset(handle, 0, false);
-        scui_handle_t  index_c = scui_widget_child_to_index(handle, handle_c);
-        scui_area_t clip_c = scui_widget_clip(handle_c);
-        clip_c.x = scroll->point_rcd[index_c].x;
-        clip_c.y = scroll->point_rcd[index_c].y;
+        scui_handle_t  index_h = 0;
+        scui_handle_t handle_h = scui_widget_child_by_index(handle, index_h);
+        scui_area_t clip_c = scui_widget_clip(handle_h);
+        clip_c.x = scroll->point_rcd[index_h].x;
+        clip_c.y = scroll->point_rcd[index_h].y;
         scui_area_m_to_s(&clip_c, &clip_c);
         
         if (scui_opt_bits_check(dir, scui_opt_dir_to_d))
@@ -421,11 +421,11 @@ static bool scui_scroll_edge_skip(scui_handle_t handle, scui_opt_dir_t dir)
     /* 下边界和右边界:计算最后一个子控件与控件相对偏移值 */
     if (scui_opt_bits_check(scroll->skip, scui_opt_pos_d) ||
         scui_opt_bits_check(scroll->skip, scui_opt_pos_r)) {
-        scui_handle_t handle_c = scui_widget_child_offset(handle, 0, true);
-        scui_handle_t  index_c = scui_widget_child_to_index(handle, handle_c);
-        scui_area_t clip_c = scui_widget_clip(handle_c);
-        clip_c.x = scroll->point_rcd[index_c].x;
-        clip_c.y = scroll->point_rcd[index_c].y;
+        scui_handle_t  index_t = scui_widget_child_now(handle) - 1;
+        scui_handle_t handle_t = scui_widget_child_by_index(handle, index_t);
+        scui_area_t clip_c = scui_widget_clip(handle_t);
+        clip_c.x = scroll->point_rcd[index_t].x;
+        clip_c.y = scroll->point_rcd[index_t].y;
         scui_area_m_to_s(&clip_c, &clip_c);
         
         if (scui_opt_bits_check(dir, scui_opt_dir_to_u))

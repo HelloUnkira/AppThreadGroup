@@ -25,10 +25,9 @@ static void scui_ui_scene_item_arc_event_proc(scui_event_t *event)
             break;
         
         scui_event_mask_over(event);
-        scui_handle_t parent   = scui_widget_parent(event->object);
-        scui_handle_t ancestor = scui_widget_parent(parent);
-        scui_handle_t index    = scui_widget_child_to_index(ancestor, parent) - 1;
-        scui_handle_t custom   = event->object;
+        scui_handle_t parent = scui_widget_parent(event->object);
+        scui_handle_t index  = scui_widget_child_to_index(parent) - 1;
+        scui_handle_t custom = event->object;
         SCUI_LOG_WARN("click idx:%d", index);
         break;
     }
@@ -124,15 +123,13 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
         scui_coord_t  scroll_cx = scroll_c.x + scroll_c.w / 2;
         scui_coord_t  scroll_cy = scroll_c.y + scroll_c.h / 2;
         
-        for (uint8_t idx = 0; idx < scui_widget_child_num(scroll); idx++) {
+        for (uint8_t idx = 0; idx < scui_widget_child_now(scroll); idx++) {
             
             scui_handle_t child = scui_widget_child_by_index(scroll, idx);
-            if (child == SCUI_HANDLE_INVALID || scui_widget_child_num(child) == 0)
+            if (scui_widget_child_now(child) == 0)
                 continue;
             
             scui_handle_t group = scui_widget_child_by_index(child, 0);
-            if (group == SCUI_HANDLE_INVALID)
-                continue;
             
             scui_area_t   group_c  = scui_widget_clip(group);
             scui_coord_t  group_cx = group_c.x + group_c.w / 2;

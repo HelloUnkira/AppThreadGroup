@@ -31,45 +31,34 @@ scui_handle_t scui_widget_child_num(scui_handle_t handle);
  */
 scui_handle_t scui_widget_child_now(scui_handle_t handle);
 
-/*@brief 指定偏移子控件
+/*@brief 控件指定索引子控件
  *@param handle 控件句柄
- *@param offset 偏移值
- *@param way    偏移方向(0:顺向;1:逆向;)
- */
-scui_handle_t scui_widget_child_offset(scui_handle_t handle, scui_handle_t offset, bool way);
-
-/*@brief 指定位置子控件
- *@param handle 控件句柄
- *@param index  子控件位置(映射点)
+ *@param index  控件指定索引([0:child_now): 映射点)
  *@retval 子控件句柄
  */
 scui_handle_t scui_widget_child_by_index(scui_handle_t handle, scui_handle_t index);
 
-/*@brief 指定位置子控件
+/*@brief 控件在父控件中索引
  *@param handle 控件句柄
- *@param child  子控件句柄
- *@retval 子控件位置(映射点)
+ *@retval 父控件指定索引([0:child_now): 映射点)
  */
-scui_handle_t scui_widget_child_to_index(scui_handle_t handle, scui_handle_t child);
+scui_handle_t scui_widget_child_to_index(scui_handle_t handle);
 
-/*@brief 移动到指定位置子控件
+/*@brief 控件移动到父控件指定索引
  *@param handle 控件句柄
- *@param child  子控件句柄
- *@param index  子控件位置(映射点)
+ *@param index  父控件指定索引([0:child_now): 映射点)
  */
-void scui_widget_child_move_index(scui_handle_t handle, scui_handle_t child, scui_handle_t index);
+void scui_widget_child_move_index(scui_handle_t handle, scui_handle_t index);
 
-/*@brief 移动子控件到最前面
+/*@brief 控件移动到父控件索引最前面
  *@param handle 控件句柄
- *@param child  子控件句柄
  */
-void scui_widget_child_move_foreground(scui_handle_t handle, scui_handle_t child);
+void scui_widget_child_move_foreground(scui_handle_t handle);
 
-/*@brief 移动子控件到最后面
+/*@brief 控件移动到父控件索引最后面
  *@param handle 控件句柄
- *@param child  子控件句柄
  */
-void scui_widget_child_move_background(scui_handle_t handle, scui_handle_t child);
+void scui_widget_child_move_background(scui_handle_t handle);
 
 /*@brief 控件剪切域
  *@param handle 控件句柄
@@ -159,7 +148,7 @@ void scui_widget_color_set(scui_handle_t handle, scui_color_t color);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-/*@brief 清空控件
+/*@brief 销毁所有子控件
  *@param handle 控件句柄
  */
 void scui_widget_clean(scui_handle_t handle);

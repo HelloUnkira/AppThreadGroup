@@ -164,19 +164,17 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
     *widget_map = &scui_widget_map[type];
 }
 
-/*@brief 清空控件
+/*@brief 销毁所有子控件
  *@param handle 控件句柄
  */
 void scui_widget_clean(scui_handle_t handle)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    scui_widget_child_list_btra(widget, idx) {
-        scui_handle_t handle_c = widget->child_list[idx];
+    /* 递归销毁自己的孩子(一直销毁第一个即可) */
+    while (widget->child_now != 0) {
+        scui_handle_t handle_c = widget->child_list[0];
         scui_widget_destroy(handle_c);
-        
-        // 调用结束后, 它应该已经被清理了
-        SCUI_ASSERT(widget->child_list[idx] == SCUI_HANDLE_INVALID);
     }
 }
 

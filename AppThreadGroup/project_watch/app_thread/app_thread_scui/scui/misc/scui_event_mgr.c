@@ -448,11 +448,7 @@ void scui_event_dispatch(void)
             // 如果还有事件未处理
             // 通过一个空的事件去补充通知
             if (scui_event_num() != 0) {
-                scui_event_t event_ui = {
-                    .object = SCUI_HANDLE_SYSTEM,
-                    .type   = scui_event_sched_none,
-                    .absorb = scui_event_absorb_none,
-                };
+                scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_sched_none, NULL);
                 scui_event_notify(&event_ui);
             }
             SCUI_LOG_WARN("occupy cpu too long");

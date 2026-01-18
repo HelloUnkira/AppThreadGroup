@@ -165,7 +165,7 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         
         scui_event_mask_over(event);
         scui_handle_t parent = scui_widget_parent(event->object);
-        scui_handle_t index  = scui_widget_child_to_index(parent, event->object) - 1;
+        scui_handle_t index  = scui_widget_child_to_index(event->object) - 1;
         
         scui_handle_t handle_m = event->object;
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;

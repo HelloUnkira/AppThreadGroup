@@ -234,14 +234,14 @@ static void scui_roller_m_event(scui_event_t *event)
     case scui_event_ptr_click: {
         scui_event_mask_over(event);
         scui_handle_t handle_p = scui_widget_parent(event->object);
-        scui_handle_t index = scui_widget_child_to_index(handle_p, event->object);
+        scui_handle_t index_c = scui_widget_child_to_index(event->object);
         
         scui_handle_t handle_m = event->object;
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
         scui_linear_m_get(handle_m, &handle_s);
         
         scui_handle_t custom = handle_m;
-        SCUI_LOG_INFO("click idx:%d", index);
+        SCUI_LOG_INFO("click idx:%d", index_c);
         
         // 聚焦它到中心
         scui_scroll_center(handle_p, event->object, true);

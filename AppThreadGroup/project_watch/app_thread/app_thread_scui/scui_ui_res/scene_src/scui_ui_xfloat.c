@@ -75,7 +75,7 @@ void scui_ui_scene_xfloat_event_proc(scui_event_t * event)
     case scui_event_widget_scroll_layout:
     case scui_event_key_click: {
         // 布局结束后将目标控件移动到中心
-        for(scui_handle_t idx = 0;  idx < scui_widget_child_num(event->object); idx++) {
+        for(scui_handle_t idx = 0;  idx < scui_widget_child_now(event->object); idx++) {
             scui_handle_t handle_m = scui_widget_child_by_index(event->object, idx);
             scui_handle_t handle_s = SCUI_HANDLE_INVALID;
             if (handle_m == SCUI_HANDLE_INVALID)

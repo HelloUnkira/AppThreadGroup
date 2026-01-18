@@ -78,9 +78,9 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
              break;
         
         scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
+        scui_handle_t  index  = scui_widget_child_to_index(event->object);
         
-        scui_handle_t image   = scui_ui_scene_list_image[index];
+        scui_handle_t image = scui_ui_scene_list_image[index];
         scui_handle_t scale_ofs = scui_ui_res_local->scale_ofs;
         
         scui_area_t edge_clip = scui_widget_clip(parent);
@@ -222,7 +222,7 @@ static void scui_ui_scene_honeycomb_icon_event_proc(scui_event_t *event)
         
         scui_event_mask_over(event);
         scui_handle_t  parent = scui_widget_parent(event->object);
-        scui_handle_t  index  = scui_widget_child_to_index(parent, event->object);
+        scui_handle_t  index  = scui_widget_child_to_index(event->object);
         SCUI_LOG_WARN("click idx:%d", index);
         
         break;
@@ -359,13 +359,11 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_point_t *list_layout = SCUI_MEM_ALLOC(scui_mem_type_user, layout_size);
             scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
             
-            scui_handle_t child_num = scui_widget_child_num(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
-            for (scui_handle_t idx = 0; idx < child_num; idx++) {
+            scui_handle_t child_now = scui_widget_child_now(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
+            for (scui_handle_t idx = 0; idx < child_now; idx++) {
                 scui_handle_t child = scui_widget_child_by_index(SCUI_UI_SCENE_HONEYCOMB_SCROLL, idx);
-                if (child != SCUI_HANDLE_INVALID) {
-                    scui_widget_adjust_size(child, icon_w, icon_h);
-                    scui_widget_move_pos(child, &list_layout[idx]);
-                }
+                scui_widget_adjust_size(child, icon_w, icon_h);
+                scui_widget_move_pos(child, &list_layout[idx]);
             }
             
             SCUI_MEM_FREE(list_layout);
