@@ -1389,6 +1389,9 @@ void scui_scroll_invoke(scui_event_t *event)
         break;
     case scui_event_ptr_move:
     case scui_event_ptr_fling: {
+        if (widget->state.indev_enc_hold ||
+            widget->state.indev_key_hold)
+            break;
         
         scui_opt_dir_t event_dir = scui_indev_ptr_dir(event);
         SCUI_LOG_INFO("dir:%u", event_dir);
@@ -1410,8 +1413,8 @@ void scui_scroll_invoke(scui_event_t *event)
             scroll->lock_move = true;
             scui_scroll_anima_tag(event->object, 0);
             widget->state.indev_ptr_hold = true;
-            widget->state.indev_enc_hold = true;
-            widget->state.indev_key_hold = true;
+            widget->state.indev_enc_hold = false;
+            widget->state.indev_key_hold = false;
             
             if (scroll->anima == SCUI_HANDLE_INVALID) {
                 scui_scroll_notify_alone(event->object, 0x00);
@@ -1443,6 +1446,9 @@ void scui_scroll_invoke(scui_event_t *event)
     case scui_event_enc_clockwise_anti: {
         if (widget->state.indev_enc_hold)
             scui_event_mask_over(event);
+        if (widget->state.indev_ptr_hold ||
+            widget->state.indev_key_hold)
+            break;
         
         scui_coord_t way = 0;
         scui_opt_dir_t dir = scui_opt_dir_none;
@@ -1477,6 +1483,13 @@ void scui_scroll_invoke(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_enc * event->enc_diff;
         
+        if (scroll->anima != SCUI_HANDLE_INVALID) {
+            scui_anima_stop(scroll->anima);
+            scui_anima_destroy(scroll->anima);
+            scroll->anima = SCUI_HANDLE_INVALID;
+            
+            scui_widget_scroll_state(0x01);
+        }
         scui_scroll_anima_tag(event->object, 1);
         scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
@@ -1489,6 +1502,9 @@ void scui_scroll_invoke(scui_event_t *event)
     case scui_event_key_click: {
         if (widget->state.indev_key_hold)
             scui_event_mask_over(event);
+        if (widget->state.indev_ptr_hold ||
+            widget->state.indev_enc_hold)
+            break;
         
         if (event->key_id != scroll->keyid_fdir &&
             event->key_id != scroll->keyid_bdir)
@@ -1527,6 +1543,13 @@ void scui_scroll_invoke(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             offset.y = way * scroll->route_key;
         
+        if (scroll->anima != SCUI_HANDLE_INVALID) {
+            scui_anima_stop(scroll->anima);
+            scui_anima_destroy(scroll->anima);
+            scroll->anima = SCUI_HANDLE_INVALID;
+            
+            scui_widget_scroll_state(0x01);
+        }
         scui_scroll_anima_tag(event->object, 2);
         scui_scroll_offset(event->object, &offset, true);
         scui_event_mask_over(event);
