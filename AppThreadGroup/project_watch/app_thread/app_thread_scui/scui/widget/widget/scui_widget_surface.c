@@ -167,7 +167,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
     if (widget->parent != SCUI_HANDLE_INVALID) {
         scui_handle_t  widget_i = SCUI_HANDLE_INVALID - 1;
         scui_widget_t *widget_p = scui_handle_source_check(widget->parent);
-        for (scui_handle_t idx = 0; idx < widget_p->child_num; idx++) {
+        for (scui_multi_t idx = 0; idx < widget_p->child_num; idx++) {
             if (widget_p->child_list[idx] != widget->myself)
                 continue;
             
@@ -180,7 +180,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
         scui_handle_t widget_s = widget_p->style.order_draw ? 0 : widget_i;
         scui_handle_t widget_e = widget_p->style.order_draw ? widget_i : widget_p->child_num - 1;
         
-        for (scui_handle_t idx = widget_s; idx <= widget_e; idx++) {
+        for (scui_multi_t idx = widget_s; idx <= widget_e; idx++) {
             if (widget_p->child_list[idx] == SCUI_HANDLE_INVALID || idx == widget_i)
                 continue;
             

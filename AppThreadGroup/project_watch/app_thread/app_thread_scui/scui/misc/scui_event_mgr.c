@@ -95,7 +95,7 @@ static bool scui_event_cb_check(scui_event_t *event)
         scui_event_widget_scroll_keep,
     };
     
-    for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)
+    for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)
         if (event->type == event_table[idx])
             return true;
     
@@ -119,7 +119,7 @@ static bool scui_event_order_check(scui_event_t *event)
         scui_event_draw,
     };
     
-    for (scui_handle_t idx = 0; idx < scui_arr_len(event_table); idx++)
+    for (scui_multi_t idx = 0; idx < scui_arr_len(event_table); idx++)
         if (event->type == event_table[idx])
             return true;
     
@@ -257,7 +257,7 @@ static void scui_event_respond(scui_event_t *event)
     
     /* 系统事件发给活跃场景 */
     if (event->object == SCUI_HANDLE_SYSTEM)
-        event->object  = scui_window_active_curr();
+        event->object  = scui_window_active_last(0);
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {

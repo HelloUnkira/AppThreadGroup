@@ -16,7 +16,7 @@ static void * scui_handle_table_share[SCUI_HANDLE_SHARE_LIMIT] = {NULL};
  */
 scui_handle_table_t * scui_handle_table_find(scui_handle_t handle)
 {
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
         scui_handle_t betw_l = scui_handle_table[ofs].offset;
@@ -39,7 +39,7 @@ void scui_handle_table_register(scui_handle_table_t *table)
     SCUI_ASSERT(table->offset != 0);
     
     /* 检查offset是否有重复 */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
         if (scui_handle_table[ofs].source != NULL) {
             if (scui_handle_table[ofs].offset == table->offset) {
                 SCUI_LOG_ERROR("duplicate list");
@@ -60,7 +60,7 @@ void scui_handle_table_register(scui_handle_table_t *table)
           SCUI_ASSERT(false);
     }
     /* 注册句柄: */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++)
         if (scui_handle_table[ofs].source == NULL) {
             scui_handle_table[ofs] = *table;
             break;
@@ -87,7 +87,7 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
     if (scui_betw_lx(handle, betw_l, betw_r))
         return SCUI_HANDLE_SHARE_OFFSET;
     /* 检查是否是静态句柄表中的句柄 */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
         scui_handle_t betw_l = scui_handle_table[ofs].offset;
@@ -105,7 +105,7 @@ scui_handle_t scui_handle_check(scui_handle_t handle)
  */
 scui_handle_t scui_handle_find(void)
 {
-    for (scui_handle_t idx = 0; idx < SCUI_HANDLE_SHARE_LIMIT; idx++)
+    for (scui_multi_t idx = 0; idx < SCUI_HANDLE_SHARE_LIMIT; idx++)
         if (scui_handle_table_share[idx] == NULL) {
             scui_handle_table_share[idx]  = (void *)(~(uintptr_t)NULL);
             return SCUI_HANDLE_SHARE_OFFSET + idx;
@@ -134,7 +134,7 @@ void * scui_handle_get(scui_handle_t handle)
             return NULL;
     }
     /* 检查是否是静态句柄表中的句柄 */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
         scui_handle_t betw_l = scui_handle_table[ofs].offset;
@@ -173,7 +173,7 @@ bool scui_handle_set(scui_handle_t handle, void *source)
         return true;
     }
     /* 检查是否是静态句柄表中的句柄 */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
         scui_handle_t betw_l = scui_handle_table[ofs].offset;
@@ -201,7 +201,7 @@ bool scui_handle_remap(scui_handle_t handle)
     if (handle == SCUI_HANDLE_INVALID)
         return false;
     /* 检查是否是静态句柄表中的句柄 */
-    for (scui_handle_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
+    for (scui_multi_t ofs = 0; ofs < SCUI_HANDLE_TABLE_LIMIT; ofs++) {
         if (scui_handle_table[ofs].source == NULL)
             continue;
         scui_handle_t betw_l = scui_handle_table[ofs].offset;

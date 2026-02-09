@@ -46,7 +46,7 @@ void scui_widget_child_add(scui_widget_t *widget, scui_handle_t handle_c)
 {
     SCUI_LOG_INFO("widget %u add child %u", widget->myself, handle_c);
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
+    for (scui_multi_t idx = 0; idx < widget->child_num; idx++) {
         if (widget->child_list[idx] != SCUI_HANDLE_INVALID)
             continue;
         
@@ -69,7 +69,7 @@ void scui_widget_child_del(scui_widget_t *widget, scui_handle_t handle_c)
 {
     SCUI_LOG_INFO("widget %u del child %u", widget->myself, handle_c);
     
-    for (scui_handle_t idx = 0; idx < widget->child_num; idx++) {
+    for (scui_multi_t idx = 0; idx < widget->child_num; idx++) {
         if (widget->child_list[idx] != handle_c)
             continue;
         
@@ -228,8 +228,11 @@ void scui_widget_state_view(scui_handle_t handle, bool view, bool recurse)
  */
 bool scui_widget_is_show(scui_handle_t handle)
 {
-    scui_widget_t *widget = scui_handle_source_check(handle);
+    /* 控件不存在实例意味着隐藏 */
+    if (scui_handle_unmap(handle))
+        return false;
     
+    scui_widget_t *widget = scui_handle_source_check(handle);
     /* 如果它的父容器隐藏则它也隐藏(这是递归语义) */
     if (widget->parent != SCUI_HANDLE_INVALID)
     if (!scui_widget_is_show(widget->parent))

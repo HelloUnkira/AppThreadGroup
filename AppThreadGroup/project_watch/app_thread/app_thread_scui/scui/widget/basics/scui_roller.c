@@ -33,7 +33,7 @@ void scui_roller_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 使用滚轮的默认滚动速度 */
     scui_coord_t anima_speed[4] = SCUI_WIDGET_ROLLER_SPD_ANIM;
-    for (scui_handle_t idx = 0; idx < 4; idx++) {
+    for (scui_multi_t idx = 0; idx < 4; idx++) {
         if (scroll_maker->anima_speed[idx] == 0)
             scroll_maker->anima_speed[idx]  = anima_speed[idx];
     }

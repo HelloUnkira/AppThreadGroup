@@ -124,14 +124,14 @@ typedef struct {
 #pragma pack(pop)
 
 /* 控件孩子列表宏迭代器(略过无效控件)(backward traverse) */
-#define scui_widget_child_list_btra(widget, idx)                            \
-    for (int64_t idx = 0; idx < (int64_t)widget->child_num; idx++)          \
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
+#define scui_widget_child_list_btra(widget, idx)                                        \
+    for (scui_multi_t idx = 0; idx < (scui_multi_t)widget->child_num; idx++)            \
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                             \
 
 /* 控件孩子列表宏迭代器(略过无效控件)(forward traverse) */
-#define scui_widget_child_list_ftra(widget, idx)                            \
-    for (int64_t idx = (int64_t)widget->child_num - 1; idx >= 0; idx--)     \
-        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                 \
+#define scui_widget_child_list_ftra(widget, idx)                                        \
+    for (scui_multi_t idx = (scui_multi_t)widget->child_num - 1; idx >= 0; idx--)       \
+        if (widget->child_list[idx] != SCUI_HANDLE_INVALID)                             \
 
 /*@brief 控件构造器
  *@param widget 控件实例

@@ -45,7 +45,7 @@ void scui_button_make(void *inst, void *inst_maker, scui_handle_t *handle)
         break;
     }
     case scui_button_type_pixel: {
-        for (scui_handle_t idx = 0; idx < 4; idx++) {
+        for (scui_multi_t idx = 0; idx < 4; idx++) {
             button->pixel.color[idx] = button_maker->pixel.color[idx];
             button->pixel.alpha[idx] = button_maker->pixel.alpha[idx];
             button->pixel.width[idx] = button_maker->pixel.width[idx];

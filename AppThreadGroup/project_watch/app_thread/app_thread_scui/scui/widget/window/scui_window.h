@@ -84,6 +84,12 @@ typedef struct {
 } scui_window_switch_args_t;
 
 typedef struct {
+    scui_handle_t curr_num;                         /* 窗口列表数量(当前存在) */
+    scui_handle_t curr[SCUI_WINDOW_LIST_LIMIT];     /* 窗口管理列表(当前存在) */
+    scui_handle_t acts[SCUI_WINDOW_LIST_LIMIT];     /* 窗口活跃序列(历史活跃记录) */
+} scui_window_list_t;
+
+typedef struct {
     scui_handle_t               list[SCUI_WINDOW_LIST_LIMIT];
     scui_window_switch_type_t   type;               /* 窗口切换风格(当前) */
     scui_window_switch_type_t   cfg_type;           /* 窗口切换风格(配置) */
@@ -104,31 +110,25 @@ typedef struct {
 } scui_window_switch_t;
 
 typedef struct {
+    scui_widget_t *list_0[SCUI_WINDOW_LIST_LIMIT];  /* 窗口管理列表(有独立画布) */
+    scui_widget_t *list_1[SCUI_WINDOW_LIST_LIMIT];  /* 窗口管理列表(无独立画布) */
+    scui_handle_t  list_0_num;                      /* 窗口列表数量(有独立画布) */
+    scui_handle_t  list_1_num;                      /* 窗口列表数量(无独立画布) */
+} scui_window_blend_t;
+
+typedef struct {
     scui_handle_t stack[SCUI_WINDOW_STACK_NEST];
     scui_handle_t top;
 } scui_window_stack_t;
 
 typedef struct {
-    scui_handle_t           list_num;                           /* 窗口列表数量 */
-    scui_handle_t           list[SCUI_WINDOW_LIST_LIMIT];        /* 窗口管理列表 */
-    scui_window_stack_t     stack_args;                         /* 窗口栈式记录 */
-    scui_window_switch_t    switch_args;                        /* 窗口切换信息 */
-    scui_handle_t           active_curr;                        /* 当前活跃窗口 */
-    scui_handle_t           active_last;                        /* 上一活跃窗口 */
-    scui_widget_t          *refr_widget;                        /* 窗口送显模式控件实例地址 */
-    uintptr_t               refr_switch:1;                      /* 窗口送显模式标记 */
-    /* 窗口混合信息: */
-    scui_widget_t          *list_0[SCUI_WINDOW_LIST_LIMIT];      /* 窗口管理列表(有独立画布) */
-    scui_widget_t          *list_1[SCUI_WINDOW_LIST_LIMIT];      /* 窗口管理列表(无独立画布) */
-    scui_handle_t           list_0_num;                         /* 窗口列表数量(有独立画布) */
-    scui_handle_t           list_1_num;                         /* 窗口列表数量(无独立画布) */
-    /*  */
+    scui_window_list_t      list_args;              /* 窗口列表信息 */
+    scui_window_stack_t     stack_args;             /* 窗口栈式记录 */
+    scui_window_blend_t     blend_args;             /* 窗口混合信息 */
+    scui_window_switch_t    switch_args;            /* 窗口切换信息 */
+    scui_widget_t          *refr_widget;            /* 窗口送显模式控件实例地址 */
+    scui_sbitfd_t           refr_switch:1;          /* 窗口送显模式标记 */
 } scui_window_mgr_t;
-
-/*@brief 窗口管理器根控件列表
- *@param list 根控件列表
- */
-void scui_window_list(scui_handle_t **list);
 
 /*@brief 窗口列表添加窗口
  *@param handle 窗口句柄

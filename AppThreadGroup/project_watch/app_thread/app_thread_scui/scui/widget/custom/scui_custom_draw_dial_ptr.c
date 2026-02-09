@@ -108,7 +108,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
         tick_ms[1] = tick_last;
         
         SCUI_LOG_INFO("draw ready");
-        for (scui_handle_t idx_tick_ms = 0; idx_tick_ms < scui_arr_len(tick_ms); idx_tick_ms++) {
+        for (scui_multi_t idx_tick_ms = 0; idx_tick_ms < scui_arr_len(tick_ms); idx_tick_ms++) {
             
             float time_ms = fmod(tick_ms[idx_tick_ms], 1000.0f); tick_ms[idx_tick_ms] /= 1000.0f;
             float dtime_s = fmod(tick_ms[idx_tick_ms], 60.0f);   tick_ms[idx_tick_ms] /= 60.0f;
@@ -123,7 +123,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
             scui_coord3_t angle[3] = {angle_h, angle_m, angle_s};
             SCUI_LOG_INFO("angle<h:%f;m:%f;s:%f;>", angle_h, angle_m, angle_s);
             
-            for (scui_handle_t idx_angle = 0; idx_angle < scui_arr_len(angle); idx_angle++) {
+            for (scui_multi_t idx_angle = 0; idx_angle < scui_arr_len(angle); idx_angle++) {
                 
                 scui_point2_t anchor2 = {.x = +anchor[idx_angle].x, .y = +anchor[idx_angle].y,};
                 scui_point2_t center2 = {.x = -center[idx_angle].x, .y = -center[idx_angle].y,};

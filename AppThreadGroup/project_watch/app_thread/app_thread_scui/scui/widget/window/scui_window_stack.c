@@ -19,11 +19,11 @@ static void scui_window_stack_check(void)
     
     uint8_t stack_top = 0;
     uint8_t stack_str[10 * SCUI_WINDOW_STACK_NEST] = {0};
-    for (scui_handle_t top = 0; top < scui_window_mgr.stack_args.top; top++)
+    for (scui_multi_t top = 0; top < scui_window_mgr.stack_args.top; top++)
         stack_top += snprintf(stack_str + stack_top, sizeof(stack_str) - stack_top,
-        "0x%x ", scui_window_mgr.stack_args.stack[top]);
+        "%u ", scui_window_mgr.stack_args.stack[top]);
     
-    SCUI_LOG_INFO("window stack: %s", stack_str);
+    SCUI_LOG_WARN("window stack: %s", stack_str);
 }
 
 /*@brief 窗口栈更新栈顶窗口(内部接口)
@@ -172,7 +172,7 @@ void scui_window_stack_del(scui_handle_t handle)
     if (handle != SCUI_HANDLE_INVALID && handle_top != handle) {
         
         bool handle_unhit = true;
-        for (scui_handle_t idx = 0; idx < scui_window_mgr.stack_args.top; idx++) {
+        for (scui_multi_t idx = 0; idx < scui_window_mgr.stack_args.top; idx++) {
             if (scui_window_mgr.stack_args.stack[idx] != handle)
                 continue;
             // 后面的窗口覆盖前面的窗口

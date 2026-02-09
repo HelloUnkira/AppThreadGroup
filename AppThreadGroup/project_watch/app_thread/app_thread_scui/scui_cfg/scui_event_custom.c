@@ -119,7 +119,7 @@ void scui_event_custom_access(scui_event_t *event)
     case scui_event_ptr_click:
     case scui_event_key_click:
         
-        if (scui_window_active_curr() == SCUI_UI_SCENE_STANDBY) {
+        if (scui_window_active_last(0) == SCUI_UI_SCENE_STANDBY) {
             
             scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_ui_standy_exit, NULL);
             scui_event_notify(&event_ui);

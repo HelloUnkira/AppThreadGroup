@@ -55,7 +55,7 @@ void scui_anima_elapse_new(uint32_t elapse)
 void scui_anima_update(void)
 {
     scui_anima_t *anima = NULL;
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         
@@ -177,7 +177,7 @@ void scui_anima_destroy(scui_handle_t handle)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != handle)
             continue;
         
@@ -203,7 +203,7 @@ void scui_anima_create(scui_anima_t *maker, scui_handle_t *handle)
     scui_anima_t *anima = NULL;
     
     /* 重复性检查(销毁重复的旧动画) */
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         
@@ -214,7 +214,7 @@ void scui_anima_create(scui_anima_t *maker, scui_handle_t *handle)
         }
     }
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != SCUI_HANDLE_INVALID)
             continue;
         
@@ -250,7 +250,7 @@ void scui_anima_create(scui_anima_t *maker, scui_handle_t *handle)
     
     /* 动画实例过多 */
     SCUI_LOG_ERROR("anima too much:");
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         
@@ -268,7 +268,7 @@ void scui_anima_start(scui_handle_t handle)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != handle)
             continue;
             
@@ -289,7 +289,7 @@ void scui_anima_stop(scui_handle_t handle)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != handle)
             continue;
         
@@ -309,7 +309,7 @@ void scui_anima_object_recycle(scui_handle_t handle)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] == SCUI_HANDLE_INVALID)
             continue;
         
@@ -332,7 +332,7 @@ bool scui_anima_running(scui_handle_t handle)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID);
     scui_anima_t *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != handle)
             continue;
         
@@ -353,7 +353,7 @@ bool scui_anima_inst(scui_handle_t handle, scui_anima_t **anima)
     SCUI_ASSERT(handle != SCUI_HANDLE_INVALID && anima != NULL);
     *anima = NULL;
     
-    for (scui_handle_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_ANIMA_LIMIT; idx++) {
         if (scui_anima_list.list[idx] != handle)
             continue;
         

@@ -28,7 +28,7 @@ static void scui_widget_anima_expire(void *instance)
     /* 监听当前工步下, 所有动画是否执行完毕 */
     bool scui_work_step_busy = false;
     bool scui_work_step_over = true;
-    for (scui_handle_t idx = 0; idx < widget_anima->number; idx++) {
+    for (scui_multi_t idx = 0; idx < widget_anima->number; idx++) {
         if (widget_anima->list[idx] == SCUI_HANDLE_INVALID)
             continue;
         
@@ -60,7 +60,7 @@ static void scui_widget_anima_expire(void *instance)
         widget_anima->iter++;
         SCUI_ASSERT(widget_anima->iter <= widget_anima->step_lim);
         /* 检查当前工步是否存在动画 */
-        for (scui_handle_t idx = 0; idx < widget_anima->number; idx++) {
+        for (scui_multi_t idx = 0; idx < widget_anima->number; idx++) {
             if (widget_anima->list[idx] == SCUI_HANDLE_INVALID)
                 continue;
             if (widget_anima->step[idx] != widget_anima->iter)
@@ -72,7 +72,7 @@ static void scui_widget_anima_expire(void *instance)
     }
     
     /* 全部执行完毕后, 启动下一个工步的所有动画 */
-    for (scui_handle_t idx = 0; idx < widget_anima->number; idx++)
+    for (scui_multi_t idx = 0; idx < widget_anima->number; idx++)
         if (widget_anima->list[idx] != SCUI_HANDLE_INVALID)
         if (widget_anima->step[idx] == widget_anima->iter)
             scui_anima_start(widget_anima->list[idx]);
@@ -118,7 +118,7 @@ void scui_widget_anima_clear(scui_handle_t handle)
     scui_widget_anima_t *widget_anima = NULL;
     widget_anima = scui_handle_source_check(widget->anima);
     
-    for (scui_handle_t idx = 0; idx < widget_anima->number; idx++)
+    for (scui_multi_t idx = 0; idx < widget_anima->number; idx++)
         if (widget_anima->list[idx] != SCUI_HANDLE_INVALID) {
             scui_anima_destroy(widget_anima->list[idx]);
             widget_anima->list[idx] = SCUI_HANDLE_INVALID;
@@ -140,7 +140,7 @@ void scui_widget_anima_destroy(scui_handle_t handle)
     
     // 销毁所有动画
     scui_anima_destroy(widget_anima->handle);
-    for (scui_handle_t idx = 0; idx < widget_anima->number; idx++)
+    for (scui_multi_t idx = 0; idx < widget_anima->number; idx++)
         if (widget_anima->list[idx] != SCUI_HANDLE_INVALID)
             scui_anima_destroy(widget_anima->list[idx]);
     
@@ -197,7 +197,7 @@ void scui_widget_anima_submit(scui_handle_t handle, scui_handle_t anima, scui_ha
     widget_anima = scui_handle_source_check(widget->anima);
     
     SCUI_ASSERT(step > 0 && step < 100);
-    for (scui_handle_t idx = 0; idx < widget_anima->number; idx++) {
+    for (scui_multi_t idx = 0; idx < widget_anima->number; idx++) {
         if (widget_anima->list[idx] != SCUI_HANDLE_INVALID)
             continue;
         

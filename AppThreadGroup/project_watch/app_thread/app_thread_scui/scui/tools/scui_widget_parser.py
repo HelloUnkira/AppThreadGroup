@@ -25,8 +25,8 @@ def scui_widget_parser_scene_list(scene_list, scui_widget_parser_list, scui_widg
         for widget in scene['widget']:
             try:
                 scui_widget_parser_handle_num += 1
-                scui_widget_parser_handle_ofs = hex(eval(offset_value) + scui_widget_parser_handle_num)
-                scui_widget_parser_h.write('\t%s, // %s\n' % (widget['widget.myself'], scui_widget_parser_handle_ofs))
+                scui_widget_parser_handle_ofs = eval(offset_value) + scui_widget_parser_handle_num
+                scui_widget_parser_h.write('\t%s, // %s, %s\n' % (widget['widget.myself'], scui_widget_parser_handle_ofs, hex(scui_widget_parser_handle_ofs)))
             except Exception as e:
                 print(widget)
                 print(e)

@@ -237,7 +237,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         
         #if 0
         // 寻找到的最后一个完全可显示控件
-        for (scui_handle_t idx = 0; idx < list_m; idx++) {
+        for (scui_multi_t idx = 0; idx < list_m; idx++) {
             scui_handle_t handle_c = scui_widget_child_by_index(event->object, idx);
             if (handle_c == SCUI_HANDLE_INVALID)
                 continue;
@@ -261,7 +261,7 @@ void scui_ui_scene_quick_card_scroll_event(scui_event_t *event)
         scui_handle_t num_c = 2;
         scui_handle_t idx_c = 0;
         scui_handle_t index = scui_widget_child_to_index(handle_t);
-        for (scui_handle_t idx = index + 1; idx < list_m; idx++) {
+        for (scui_multi_t idx = index + 1; idx < list_m; idx++) {
             scui_handle_t handle_c = scui_widget_child_by_index(event->object, idx);
             if (handle_c == SCUI_HANDLE_INVALID)
                 continue;

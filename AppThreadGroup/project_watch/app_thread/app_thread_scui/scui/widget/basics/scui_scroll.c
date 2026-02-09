@@ -70,7 +70,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     anima_path[3] = scui_map_ease_in_out;
     
     /* 动画轨迹, 动画速度 */
-    for (scui_handle_t idx = 0; idx < 4; idx++) {
+    for (scui_multi_t idx = 0; idx < 4; idx++) {
         scroll->anima_tag[idx]   = false;
         scroll->anima_path[idx]  = scroll_maker->anima_path[idx];
         scroll->anima_speed[idx] = scroll_maker->anima_speed[idx];
@@ -144,7 +144,7 @@ static void scui_scroll_anima_tag(scui_handle_t handle, uint8_t tag)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    for (scui_handle_t idx = 0; idx < 4; idx++)
+    for (scui_multi_t idx = 0; idx < 4; idx++)
         scroll->anima_tag[idx] = false;
     
     if (tag < 4)
@@ -826,7 +826,7 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     
     // 确定当前动画的路径
     // 计算当前动画的周期
-    for (scui_handle_t idx = 0; idx < 4; idx++)
+    for (scui_multi_t idx = 0; idx < 4; idx++)
         if (scroll->anima_tag[idx]) {
             anima.path = scroll->anima_path[idx];
             anima.period = anima.period * 1000 / scroll->anima_speed[idx];

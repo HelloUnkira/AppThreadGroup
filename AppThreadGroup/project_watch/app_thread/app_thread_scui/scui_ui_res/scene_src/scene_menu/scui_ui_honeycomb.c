@@ -360,7 +360,7 @@ void scui_ui_scene_honeycomb_event_proc(scui_event_t *event)
             scui_ui_honeycomb_list_layout(list_layout, scui_ui_res_local->scale_ofs);
             
             scui_handle_t child_now = scui_widget_child_now(SCUI_UI_SCENE_HONEYCOMB_SCROLL);
-            for (scui_handle_t idx = 0; idx < child_now; idx++) {
+            for (scui_multi_t idx = 0; idx < child_now; idx++) {
                 scui_handle_t child = scui_widget_child_by_index(SCUI_UI_SCENE_HONEYCOMB_SCROLL, idx);
                 scui_widget_adjust_size(child, icon_w, icon_h);
                 scui_widget_move_pos(child, &list_layout[idx]);

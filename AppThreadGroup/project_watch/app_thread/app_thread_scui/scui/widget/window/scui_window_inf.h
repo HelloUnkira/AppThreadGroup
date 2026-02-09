@@ -62,14 +62,10 @@ void scui_window_switch_cfg_dir(scui_opt_dir_t **cfg_dir);
 void scui_window_active(scui_handle_t handle);
 
 /*@brief 获得活跃窗口句柄
+ *@param index 0:当前活跃;1:上一活跃;2~n以此类推
  *@retval 窗口句柄
  */
-scui_handle_t scui_window_active_last(void);
-
-/*@brief 获得活跃窗口句柄
- *@retval 窗口句柄
- */
-scui_handle_t scui_window_active_curr(void);
+scui_handle_t scui_window_active_last(scui_handle_t index);
 
 /*************************************************************************************************/
 /*************************************************************************************************/

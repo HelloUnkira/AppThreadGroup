@@ -53,7 +53,7 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
         SCUI_ASSERT(360 % scui_ui_res_local->num == 0);
         
         //cwf json 测试:  读取云表盘预览图
-        for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++) {
+        for (scui_multi_t idx = 0; idx < scui_ui_res_local->num; idx++) {
             scui_ui_res_local->image[idx] = SCUI_HANDLE_INVALID;
             scui_cwf_json_make_pv(&scui_ui_res_local->image[idx], cwf_json_bin[idx]);
         }
@@ -68,7 +68,7 @@ void scui_ui_scene_lantern_event_proc(scui_event_t *event)
     case scui_event_destroy: {
         
         //cwf json 测试: 释放云表盘预览图
-        for (scui_handle_t idx = 0; idx < scui_ui_res_local->num; idx++)
+        for (scui_multi_t idx = 0; idx < scui_ui_res_local->num; idx++)
             scui_cwf_json_burn_pv(&scui_ui_res_local->image[idx]);
         
         break;

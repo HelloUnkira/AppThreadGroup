@@ -24,8 +24,10 @@ static scui_handle_t popup_string = SCUI_HANDLE_INVALID;
 void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
 {
     #if 1   // 有俩种选择,一种是打断以前的,另一种是不打断
-    if (scui_widget_is_show(SCUI_UI_SCENE_POPUP))
+    if (scui_widget_is_show(SCUI_UI_SCENE_POPUP)) {
+        scui_window_active(scui_window_active_last(1));
         scui_widget_hide(SCUI_UI_SCENE_POPUP, false);
+    }
     #else
     if (scui_widget_is_show(SCUI_UI_SCENE_POPUP))
         return;
@@ -34,6 +36,7 @@ void scui_ui_scene_popup_exec(scui_handle_t text, uint8_t *string)
     // 显示界面,重绘它
     scui_widget_show(SCUI_UI_SCENE_POPUP, false);
     scui_widget_draw(SCUI_UI_SCENE_POPUP, NULL, false);
+    scui_window_active(SCUI_UI_SCENE_POPUP);
     
     if (text != SCUI_HANDLE_INVALID)
         scui_string_update_text(popup_string, text);
@@ -94,6 +97,7 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
             }
             // 工步3结束:
             if (scale_way == -1 && popup_anima >= SCUI_UI_POPUP_ANIM_TIME) {
+                scui_window_active(scui_window_active_last(1));
                 scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
                 scale_way = 0xFF;
             }
@@ -135,6 +139,11 @@ void scui_ui_scene_popup_event_proc(scui_event_t *event)
         #endif
         break;
     }
+    case scui_event_ptr_click:
+        scui_event_mask_over(event);
+        scui_window_active(scui_window_active_last(1));
+        scui_widget_hide(SCUI_UI_SCENE_POPUP, true);
+        break;
     default:
         break;
     }

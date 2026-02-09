@@ -189,7 +189,7 @@ void scui_font_cache_clear(void)
     
     cache->cnt_hit = 0;
     cache->cnt_unhit = 0;
-    SCUI_LOG_WARN("nodes:%u, usage:%u", cache->nodes, cache->usage);
+    SCUI_LOG_INFO("nodes:%u, usage:%u", cache->nodes, cache->usage);
 }
 
 /*@brief 字库资源卸载

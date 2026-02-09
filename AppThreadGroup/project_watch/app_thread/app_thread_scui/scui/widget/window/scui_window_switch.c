@@ -34,14 +34,14 @@ static void scui_window_switch_hide_without(scui_handle_t handle, bool any)
 {
     SCUI_LOG_INFO("");
     
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
-        if (scui_window_mgr.list[idx] != SCUI_HANDLE_INVALID &&
-            scui_window_mgr.list[idx] != handle) {
-            scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++)
+        if (scui_window_mgr.list_args.curr[idx] != SCUI_HANDLE_INVALID &&
+            scui_window_mgr.list_args.curr[idx] != handle) {
+            scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list_args.curr[idx]);
             scui_window_t *window = (void *)widget;
             SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
             if (any || (scui_widget_surface_only(widget) && !window->resident))
-                scui_widget_hide(scui_window_mgr.list[idx], false);
+                scui_widget_hide(scui_window_mgr.list_args.curr[idx], false);
         }
 }
 
@@ -230,10 +230,10 @@ static void scui_window_move_anima_state(uint8_t type)
                 handle_t = scui_window_mgr.switch_args.list[1];
             
             // 窗口绘制解锁(解锁所有窗口即可)
-            for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
-                if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+            for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+                if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
                     continue;
-                scui_handle_t  handle = scui_window_mgr.list[idx];
+                scui_handle_t  handle = scui_window_mgr.list_args.curr[idx];
                 scui_widget_t *widget = scui_handle_source_assert(handle);
                 scui_window_t *window = (void *)widget;
                 window->draw_lock = false;
@@ -264,7 +264,7 @@ static void scui_window_move_anima_cfg(void)
     anima_path[2] = scui_map_linear;
     anima_path[3] = scui_map_ease_in_out;
     
-    for (scui_handle_t idx = 0; idx < 4; idx++) {
+    for (scui_multi_t idx = 0; idx < 4; idx++) {
         if (scui_window_mgr.switch_args.anima_path[idx]  == NULL)
             scui_window_mgr.switch_args.anima_path[idx]   = anima_path[idx];
         if (scui_window_mgr.switch_args.anima_speed[idx] == 0)
@@ -283,7 +283,7 @@ static void scui_window_move_anima_cfg(void)
  */
 static void scui_window_move_anima_tag(uint8_t tag)
 {
-    for (scui_handle_t idx = 0; idx < 4; idx++)
+    for (scui_multi_t idx = 0; idx < 4; idx++)
         scui_window_mgr.switch_args.anima_tag[idx] = false;
     
     if (tag < 4)
@@ -400,7 +400,7 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
     // 确定当前动画的路径
     // 计算当前动画的周期
     scui_window_move_anima_cfg();
-    for (scui_handle_t idx = 0; idx < 4; idx++)
+    for (scui_multi_t idx = 0; idx < 4; idx++)
         if (scui_window_mgr.switch_args.anima_tag[idx]) {
             anima.path = scui_window_mgr.switch_args.anima_path[idx];
             anima.period = anima.period * 1000 / scui_window_mgr.switch_args.anima_speed[idx];
@@ -464,6 +464,15 @@ void scui_window_event_dispatch(scui_event_t *event)
 {
     /* 不同的事件处理流程有不同的递归冒泡规则 */
     SCUI_LOG_DEBUG("event %u", event->type);
+    
+    /* 只有常规窗口才支持事件响应 */
+    if (scui_window_mgr.list_args.acts[0] != SCUI_HANDLE_INVALID) {
+        scui_handle_t  handle_a = scui_window_mgr.list_args.acts[0];
+        scui_widget_t *widget_a = scui_handle_source_check(handle_a);
+        scui_window_t *window_a = (void *)widget_a;
+        if (window_a->resident || window_a->hang_only)
+            return;
+    }
     
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_window_t *window = (void *)widget;
@@ -719,6 +728,15 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         return false;
     }
     
+    /* 只有常规窗口才支持跳转 */
+    if (scui_window_mgr.list_args.acts[0] != SCUI_HANDLE_INVALID) {
+        scui_handle_t  handle_a = scui_window_mgr.list_args.acts[0];
+        scui_widget_t *widget_a = scui_handle_source_check(handle_a);
+        scui_window_t *window_a = (void *)widget_a;
+        if (window_a->resident || window_a->hang_only)
+            return false;
+    }
+    
     /* 先上锁(标记) */
     scui_window_mgr.switch_args.lock_jump = true;
     
@@ -728,23 +746,23 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     dir  = scui_window_mgr.switch_args.dir;
     
     /* 清除切换窗口列表,回收除去焦点以外所有其他旧窗口 */
-    for (scui_handle_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
+    for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
         scui_window_mgr.switch_args.list[idx] = SCUI_HANDLE_INVALID;
-        if (scui_window_mgr.list[idx] == SCUI_HANDLE_INVALID)
+        if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
             continue;
-        if (scui_window_mgr.list[idx] == scui_window_mgr.active_curr ||
-            scui_window_mgr.list[idx] == handle)
+        if (scui_window_mgr.list_args.curr[idx] == scui_window_mgr.list_args.acts[0] ||
+            scui_window_mgr.list_args.curr[idx] == handle)
             continue;
-        scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list[idx]);
+        scui_widget_t *widget = scui_handle_source_check(scui_window_mgr.list_args.curr[idx]);
         scui_window_t *window = (void *)widget;
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         
         if (scui_widget_surface_only(widget) && !window->resident)
-            scui_widget_hide(scui_window_mgr.list[idx], false);
+            scui_widget_hide(scui_window_mgr.list_args.curr[idx], false);
     }
     
     /* 如果没有焦点窗口 */
-    if (scui_window_mgr.active_curr == SCUI_HANDLE_INVALID) {
+    if (scui_window_mgr.list_args.acts[0] == SCUI_HANDLE_INVALID) {
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
@@ -752,7 +770,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     /* 新窗口已经是焦点窗口 */
-    if (scui_window_mgr.active_curr == handle) {
+    if (scui_window_mgr.list_args.acts[0] == handle) {
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
@@ -763,9 +781,9 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     // 窗口交互风格自适应
     // 如果目标和当前窗口是临近窗口且指定交互类型
     // 此时的窗口将自适应为到达目标窗口的交互类型
-    scui_widget_t *widget_curr = scui_handle_source_check(scui_window_mgr.active_curr);
+    scui_widget_t *widget_curr = scui_handle_source_check(scui_window_mgr.list_args.acts[0]);
     scui_window_t *window_curr = (void *)widget_curr;
-    for (scui_handle_t idx = 0; idx < 4; idx++)
+    for (scui_multi_t idx = 0; idx < 4; idx++)
         if (window_curr->sibling[idx] == handle) {
             type = window_curr->switch_type[idx];
             // 判断方向
@@ -781,7 +799,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     
     /* 无切换效果 */
     if (scui_window_mgr.switch_args.type == scui_window_switch_none) {
-        scui_widget_hide(scui_window_mgr.active_curr, false);
+        scui_widget_hide(scui_window_mgr.list_args.acts[0], false);
         scui_widget_show(handle, false);
         scui_window_active(handle);
         scui_window_mgr.switch_args.lock_jump = false;
@@ -791,9 +809,9 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         
         scui_window_mgr.switch_args.pct = 0;
         scui_window_mgr.switch_args.ofs = 0;
-        scui_window_mgr.switch_args.list[0] = scui_window_mgr.active_curr;
+        scui_window_mgr.switch_args.list[0] = scui_window_mgr.list_args.acts[0];
         scui_window_mgr.switch_args.list[1] = handle;
-        scui_widget_show(scui_window_mgr.active_curr, false);
+        scui_widget_show(scui_window_mgr.list_args.acts[0], false);
         scui_widget_show(handle, false);
         
         /* 其他切换效果都需要动画完成 */
