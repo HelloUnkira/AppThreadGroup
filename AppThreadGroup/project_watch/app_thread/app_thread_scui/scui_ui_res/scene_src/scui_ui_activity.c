@@ -372,24 +372,24 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist
-        scui_xchart_maker_t chart_maker = {0};
-        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-        chart_maker.widget.type = scui_widget_type_xchart;
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
-        chart_maker.widget.parent = event->object;
-        chart_maker.type = scui_xchart_type_hist;
-        chart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-        chart_maker.hist.value_min = 0;
-        chart_maker.hist.value_max = 100;
-        chart_maker.hist.number    = 24;
-        chart_maker.hist.offset.x  = 42;
-        chart_maker.hist.height    = 86;
-        chart_maker.hist.space     = 4;
-        chart_maker.hist.color.color.full = 0xFFF9104F;
-        scui_widget_create(&chart_maker, &chart_handle);
+        scui_xchart_maker_t xchart_maker = {0};
+        scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
+        xchart_maker.widget.type = scui_widget_type_xchart;
+        xchart_maker.widget.clip.x = 0;
+        xchart_maker.widget.clip.y = 100;
+        xchart_maker.widget.clip.w = SCUI_HOR_RES;
+        xchart_maker.widget.clip.h = 86;
+        xchart_maker.widget.parent = event->object;
+        xchart_maker.type = scui_xchart_type_hist;
+        xchart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        xchart_maker.hist.value_min = 0;
+        xchart_maker.hist.value_max = 100;
+        xchart_maker.hist.number    = 24;
+        xchart_maker.hist.offset.x  = 42;
+        xchart_maker.hist.height    = 86;
+        xchart_maker.hist.space     = 4;
+        xchart_maker.hist.color.color.full = 0xFFF9104F;
+        scui_widget_create(&xchart_maker, &xchart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_kcal_day7_24(scui_presenter.get_week(), day7_24);
@@ -400,7 +400,7 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_kcal_min(), scui_presenter.get_kcal_max(), 0, 100);
         }
-        scui_xchart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:
@@ -533,24 +533,24 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist
-        scui_xchart_maker_t chart_maker = {0};
-        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-        chart_maker.widget.type = scui_widget_type_xchart;
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
-        chart_maker.widget.parent = event->object;
-        chart_maker.type = scui_xchart_type_hist;
-        chart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-        chart_maker.hist.value_min = 0;
-        chart_maker.hist.value_max = 100;
-        chart_maker.hist.number    = 24;
-        chart_maker.hist.offset.x  = 42;
-        chart_maker.hist.height    = 86;
-        chart_maker.hist.space     = 4;
-        chart_maker.hist.color.color.full = 0xFFE1CC00;
-        scui_widget_create(&chart_maker, &chart_handle);
+        scui_xchart_maker_t xchart_maker = {0};
+        scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
+        xchart_maker.widget.type = scui_widget_type_xchart;
+        xchart_maker.widget.clip.x = 0;
+        xchart_maker.widget.clip.y = 100;
+        xchart_maker.widget.clip.w = SCUI_HOR_RES;
+        xchart_maker.widget.clip.h = 86;
+        xchart_maker.widget.parent = event->object;
+        xchart_maker.type = scui_xchart_type_hist;
+        xchart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        xchart_maker.hist.value_min = 0;
+        xchart_maker.hist.value_max = 100;
+        xchart_maker.hist.number    = 24;
+        xchart_maker.hist.offset.x  = 42;
+        xchart_maker.hist.height    = 86;
+        xchart_maker.hist.space     = 4;
+        xchart_maker.hist.color.color.full = 0xFFE1CC00;
+        scui_widget_create(&xchart_maker, &xchart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_step_day7_24(scui_presenter.get_week(), day7_24);
@@ -561,7 +561,7 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_step_min(), scui_presenter.get_step_max(), 0, 100);
         }
-        scui_xchart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:
@@ -694,24 +694,24 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // chart hist
-        scui_xchart_maker_t chart_maker = {0};
-        scui_handle_t chart_handle = SCUI_HANDLE_INVALID;
-        chart_maker.widget.type = scui_widget_type_xchart;
-        chart_maker.widget.clip.x = 0;
-        chart_maker.widget.clip.y = 100;
-        chart_maker.widget.clip.w = SCUI_HOR_RES;
-        chart_maker.widget.clip.h = 86;
-        chart_maker.widget.parent = event->object;
-        chart_maker.type = scui_xchart_type_hist;
-        chart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
-        chart_maker.hist.value_min = 0;
-        chart_maker.hist.value_max = 100;
-        chart_maker.hist.number    = 24;
-        chart_maker.hist.offset.x  = 42;
-        chart_maker.hist.height    = 86;
-        chart_maker.hist.space     = 4;
-        chart_maker.hist.color.color.full = 0xFF00B7FF;
-        scui_widget_create(&chart_maker, &chart_handle);
+        scui_xchart_maker_t xchart_maker = {0};
+        scui_handle_t xchart_handle = SCUI_HANDLE_INVALID;
+        xchart_maker.widget.type = scui_widget_type_xchart;
+        xchart_maker.widget.clip.x = 0;
+        xchart_maker.widget.clip.y = 100;
+        xchart_maker.widget.clip.w = SCUI_HOR_RES;
+        xchart_maker.widget.clip.h = 86;
+        xchart_maker.widget.parent = event->object;
+        xchart_maker.type = scui_xchart_type_hist;
+        xchart_maker.hist.edge = scui_image_prj_image_src_repeat_06_dotbmp;
+        xchart_maker.hist.value_min = 0;
+        xchart_maker.hist.value_max = 100;
+        xchart_maker.hist.number    = 24;
+        xchart_maker.hist.offset.x  = 42;
+        xchart_maker.hist.height    = 86;
+        xchart_maker.hist.space     = 4;
+        xchart_maker.hist.color.color.full = 0xFF00B7FF;
+        scui_widget_create(&xchart_maker, &xchart_handle);
         
         uint32_t day7_24[24] = {0};
         scui_presenter.get_dist_day7_24(scui_presenter.get_week(), day7_24);
@@ -722,7 +722,7 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
             vlist_min[idx] = 0;
             vlist_max[idx] = scui_map(day7_24[idx], scui_presenter.get_dist_min(), scui_presenter.get_dist_max(), 0, 100);
         }
-        scui_xchart_hist_data(chart_handle, vlist_min, vlist_max);
+        scui_xchart_hist_data(xchart_handle, vlist_min, vlist_max);
         break;
     }
     case scui_event_lang_change:

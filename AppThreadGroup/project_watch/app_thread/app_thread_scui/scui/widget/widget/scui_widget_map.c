@@ -156,7 +156,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .burn    = scui_xchart_burn,
             .invoke  = scui_xchart_invoke,
             .inherit = false,
-            .name    = "chart",
+            .name    = "xchart",
         },
     };
     
