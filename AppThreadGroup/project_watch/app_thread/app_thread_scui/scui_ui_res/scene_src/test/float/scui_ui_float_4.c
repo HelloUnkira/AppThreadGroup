@@ -62,10 +62,10 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             vlist[idx] = 60 + (uint32_t)scui_rand(0xFF) % ((220 - 60) / 3);
         }
         
-        // chart histogram
-        scui_chart_maker_t chart1_maker = {0};
+        // chart hist
+        scui_xchart_maker_t chart1_maker = {0};
         scui_handle_t chart1_handle = SCUI_HANDLE_INVALID;
-        chart1_maker.widget.type = scui_widget_type_chart;
+        chart1_maker.widget.type = scui_widget_type_xchart;
         chart1_maker.widget.style.indev_ptr = true;
         chart1_maker.widget.style.indev_enc = true;
         chart1_maker.widget.style.indev_key = true;
@@ -75,25 +75,25 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart1_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
         chart1_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
         chart1_maker.widget.color.color.full = 0xFF4F4F4F;
-        chart1_maker.type = scui_chart_type_histogram;
-        chart1_maker.histogram.edge = scui_image_prj_image_src_repeat_05_dotbmp;
-        chart1_maker.histogram.value_min = 60;
-        chart1_maker.histogram.value_max = 220;
-        chart1_maker.histogram.offset.x  = 5;
-        chart1_maker.histogram.offset.y  = 0;
-        chart1_maker.histogram.number    = 20;
-        chart1_maker.histogram.height    = chart1_maker.widget.clip.h - 10;
-        chart1_maker.histogram.space     = 4;
+        chart1_maker.type = scui_xchart_type_hist;
+        chart1_maker.hist.edge = scui_image_prj_image_src_repeat_05_dotbmp;
+        chart1_maker.hist.value_min = 60;
+        chart1_maker.hist.value_max = 220;
+        chart1_maker.hist.offset.x  = 5;
+        chart1_maker.hist.offset.y  = 0;
+        chart1_maker.hist.number    = 20;
+        chart1_maker.hist.height    = chart1_maker.widget.clip.h - 10;
+        chart1_maker.hist.space     = 4;
         
         chart1_maker.widget.style.fully_bg = true;
-        chart1_maker.histogram.color.color.full = 0xFFFF0000;
+        chart1_maker.hist.color.color.full = 0xFFFF0000;
         scui_widget_create(&chart1_maker, &chart1_handle);
-        scui_chart_histogram_data(chart1_handle, vlist_min, vlist_max);
+        scui_xchart_hist_data(chart1_handle, vlist_min, vlist_max);
         
         // chart line
-        scui_chart_maker_t chart2_maker = {0};
+        scui_xchart_maker_t chart2_maker = {0};
         scui_handle_t chart2_handle = SCUI_HANDLE_INVALID;
-        chart2_maker.widget.type = scui_widget_type_chart;
+        chart2_maker.widget.type = scui_widget_type_xchart;
         chart2_maker.widget.style.indev_ptr = true;
         chart2_maker.widget.style.indev_enc = true;
         chart2_maker.widget.style.indev_key = true;
@@ -103,7 +103,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
         chart2_maker.widget.clip.h = SCUI_VER_RES * 11 / 25;
         chart2_maker.widget.parent = SCUI_UI_SCENE_FLOAT_4;
         chart2_maker.widget.color.color.full = 0xFF4F4F4F;
-        chart2_maker.type = scui_chart_type_line;
+        chart2_maker.type = scui_xchart_type_line;
         chart2_maker.line.edge = scui_image_prj_image_src_repeat_05_dotbmp;
         chart2_maker.line.width     = 2;
         chart2_maker.line.value_min = 60;
@@ -124,7 +124,7 @@ void scui_ui_scene_float_4_event_proc(scui_event_t *event)
             scui_coord_t offset = (chart2_maker.line.value_max - base) / 2;
             vlist[idx] = base + offset + (scui_rand(100) * offset / 100);
         }
-        scui_chart_line_data(chart2_handle, vlist);
+        scui_xchart_line_data(chart2_handle, vlist);
         
         #if SCUI_MEM_FEAT_MINI == 0
         // digit picker == scroll + string * num

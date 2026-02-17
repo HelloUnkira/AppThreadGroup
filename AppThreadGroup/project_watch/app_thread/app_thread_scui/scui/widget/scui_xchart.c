@@ -12,48 +12,48 @@
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
+void scui_xchart_make(void *inst, void *inst_maker, scui_handle_t *handle)
 {
     /* 基类对象 */
     scui_widget_t *widget = inst;
     scui_widget_maker_t *widget_maker = inst_maker;
     /* 本类对象 */
-    scui_chart_t *chart = widget;
-    scui_chart_maker_t *chart_maker = widget_maker;
+    scui_xchart_t *chart = widget;
+    scui_xchart_maker_t *chart_maker = widget_maker;
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
-    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_chart));
+    SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_xchart));
     SCUI_ASSERT(widget_maker->parent != SCUI_HANDLE_INVALID);
     
     chart->type = chart_maker->type;
     
     switch (chart->type) {
-    case scui_chart_type_histogram: {
-        chart->histogram = chart_maker->histogram;
+    case scui_xchart_type_hist: {
+        chart->hist = chart_maker->hist;
         /* 这里加点断言判断参数的有效性 */
-        SCUI_ASSERT(chart->histogram.number != 0);
-        SCUI_ASSERT(chart->histogram.height != 0);
-        SCUI_ASSERT(chart->histogram.value_min <
-                    chart->histogram.value_max);
+        SCUI_ASSERT(chart->hist.number != 0);
+        SCUI_ASSERT(chart->hist.height != 0);
+        SCUI_ASSERT(chart->hist.value_min <
+                    chart->hist.value_max);
         /* 限制 */
-        if (chart->histogram.space <= 0)
-            chart->histogram.space  = 1;
+        if (chart->hist.space <= 0)
+            chart->hist.space  = 1;
         /* 限制 */
         scui_coord_t height = chart->widget.clip.h;
-        if (chart->histogram.height > height + chart->histogram.offset.y)
-            chart->histogram.height = height - chart->histogram.offset.y;
+        if (chart->hist.height > height + chart->hist.offset.y)
+            chart->hist.height = height - chart->hist.offset.y;
         /* 创建数据存储空间 */
-        uint32_t data_size = chart->histogram.number * sizeof(scui_coord_t);
-        chart->histogram_data.vlist_min = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
-        chart->histogram_data.vlist_max = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
-        for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
-            chart->histogram_data.vlist_min[idx] = chart->histogram.value_min;
-            chart->histogram_data.vlist_max[idx] = chart->histogram.value_min;
+        uint32_t data_size = chart->hist.number * sizeof(scui_coord_t);
+        chart->hist_data.vlist_min = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        chart->hist_data.vlist_max = SCUI_MEM_ALLOC(scui_mem_type_mix, data_size);
+        for (scui_coord_t idx = 0; idx < chart->hist.number; idx++) {
+            chart->hist_data.vlist_min[idx] = chart->hist.value_min;
+            chart->hist_data.vlist_max[idx] = chart->hist.value_min;
         }
         break;
     }
-    case scui_chart_type_line : {
+    case scui_xchart_type_line : {
         chart->line = chart_maker->line;
         /* 这里加点断言判断参数的有效性 */
         SCUI_ASSERT(chart->line.number != 0);
@@ -85,19 +85,19 @@ void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle)
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_chart_burn(scui_handle_t handle)
+void scui_xchart_burn(scui_handle_t handle)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_xchart));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_chart_t  *chart  = (void *)widget;
+    scui_xchart_t  *chart  = (void *)widget;
     
     switch (chart->type) {
-    case scui_chart_type_histogram: {
-        SCUI_MEM_FREE(chart->histogram_data.vlist_min);
-        SCUI_MEM_FREE(chart->histogram_data.vlist_max);
+    case scui_xchart_type_hist: {
+        SCUI_MEM_FREE(chart->hist_data.vlist_min);
+        SCUI_MEM_FREE(chart->hist_data.vlist_max);
         break;
     }
-    case scui_chart_type_line: {
+    case scui_xchart_type_line: {
         SCUI_MEM_FREE(chart->line_data.vlist);
         break;
     }
@@ -115,20 +115,20 @@ void scui_chart_burn(scui_handle_t handle)
  *@param vlist_min 数据列表
  *@param vlist_max 数据列表
  */
-void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
+void scui_xchart_hist_data(scui_handle_t handle, scui_coord_t *vlist_min, scui_coord_t *vlist_max)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_xchart));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_chart_t  *chart  = (void *)widget;
+    scui_xchart_t  *chart  = (void *)widget;
     
-    if (chart->type != scui_chart_type_histogram) {
+    if (chart->type != scui_xchart_type_hist) {
         SCUI_LOG_ERROR("chart type unmatch");
         return;
     }
     
-    scui_coord_t value_min = chart->histogram.value_min;
-    scui_coord_t value_max = chart->histogram.value_max;
-    for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
+    scui_coord_t value_min = chart->hist.value_min;
+    scui_coord_t value_max = chart->hist.value_max;
+    for (scui_coord_t idx = 0; idx < chart->hist.number; idx++) {
         scui_coord_t min = scui_min(value_max, scui_max(value_min, vlist_min[idx]));
         scui_coord_t max = scui_max(value_min, scui_min(value_max, vlist_max[idx]));
         if (min > max) {
@@ -137,8 +137,8 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
             min = max;
             max = tmp;
         }
-        chart->histogram_data.vlist_min[idx] = min;
-        chart->histogram_data.vlist_max[idx] = max;
+        chart->hist_data.vlist_min[idx] = min;
+        chart->hist_data.vlist_max[idx] = max;
     }
 }
 
@@ -146,13 +146,13 @@ void scui_chart_histogram_data(scui_handle_t handle, scui_coord_t *vlist_min, sc
  *@param handle 图表控件句柄
  *@param vlist  数据列表
  */
-void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
+void scui_xchart_line_data(scui_handle_t handle, scui_coord_t *vlist)
 {
-    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_chart));
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_xchart));
     scui_widget_t *widget = scui_handle_source_check(handle);
-    scui_chart_t  *chart  = (void *)widget;
+    scui_xchart_t  *chart  = (void *)widget;
     
-    if (chart->type != scui_chart_type_line) {
+    if (chart->type != scui_xchart_type_line) {
         SCUI_LOG_ERROR("chart type unmatch");
         return;
     }
@@ -168,11 +168,11 @@ void scui_chart_line_data(scui_handle_t handle, scui_coord_t *vlist)
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_chart_invoke(scui_event_t *event)
+void scui_xchart_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     scui_widget_t *widget = scui_handle_source_check(event->object);
-    scui_chart_t   *chart = (void *)widget;
+    scui_xchart_t   *chart = (void *)widget;
     
     switch (event->type) {
     case scui_event_draw: {
@@ -180,16 +180,16 @@ void scui_chart_invoke(scui_event_t *event)
              break;
         
         switch (chart->type) {
-        case scui_chart_type_histogram: {
-            scui_color_t  color     = chart->histogram.color;
-            scui_coord_t  space     = chart->histogram.space;
-            scui_point_t  offset    = chart->histogram.offset;
-            scui_coord_t  height    = chart->histogram.height;
-            scui_coord_t  value_min = chart->histogram.value_min;
-            scui_coord_t  value_max = chart->histogram.value_max;
-            scui_coord_t *vlist_min = chart->histogram_data.vlist_min;
-            scui_coord_t *vlist_max = chart->histogram_data.vlist_max;
-            scui_handle_t image     = chart->histogram.edge;
+        case scui_xchart_type_hist: {
+            scui_color_t  color     = chart->hist.color;
+            scui_coord_t  space     = chart->hist.space;
+            scui_point_t  offset    = chart->hist.offset;
+            scui_coord_t  height    = chart->hist.height;
+            scui_coord_t  value_min = chart->hist.value_min;
+            scui_coord_t  value_max = chart->hist.value_max;
+            scui_coord_t *vlist_min = chart->hist_data.vlist_min;
+            scui_coord_t *vlist_max = chart->hist_data.vlist_max;
+            scui_handle_t image     = chart->hist.edge;
             
             scui_area_t dst_clip = {0};
             scui_area_t src_clip = {
@@ -202,7 +202,7 @@ void scui_chart_invoke(scui_event_t *event)
             color_edge.color_f.full  = 0xFF000000;
             color_edge.filter        = true;
             
-            for (scui_coord_t idx = 0; idx < chart->histogram.number; idx++) {
+            for (scui_coord_t idx = 0; idx < chart->hist.number; idx++) {
                 scui_coord_t offset_1y = scui_map(vlist_min[idx], value_min, value_max, height, 0);
                 scui_coord_t offset_2y = scui_map(vlist_max[idx], value_min, value_max, height, 0);
                 
@@ -241,7 +241,7 @@ void scui_chart_invoke(scui_event_t *event)
             
             break;
         }
-        case scui_chart_type_line: {
+        case scui_xchart_type_line: {
             scui_color_t  color     = chart->line.color;
             scui_coord_t  space     = chart->line.space;
             scui_coord_t  width     = chart->line.width;
@@ -250,7 +250,7 @@ void scui_chart_invoke(scui_event_t *event)
             scui_coord_t  value_min = chart->line.value_min;
             scui_coord_t  value_max = chart->line.value_max;
             scui_coord_t *vlist     = chart->line_data.vlist;
-            scui_handle_t image     = chart->histogram.edge;
+            scui_handle_t image     = chart->hist.edge;
             
             scui_area_t src_clip = {
                 .w = scui_image_w(image) / 2,

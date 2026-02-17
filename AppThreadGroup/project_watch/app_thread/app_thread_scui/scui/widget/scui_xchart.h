@@ -1,10 +1,10 @@
-#ifndef SCUI_CHART_H
-#define SCUI_CHART_H
+#ifndef SCUI_XCHART_H
+#define SCUI_XCHART_H
 
 typedef enum {
-    scui_chart_type_histogram,      /* 柱状图,股价图; */
-    scui_chart_type_line,           /* 折线图 */
-} scui_chart_type_t;
+    scui_xchart_type_hist,          /* 柱状图(histogram),股价图; */
+    scui_xchart_type_line,          /* 折线图 */
+} scui_xchart_type_t;
 
 typedef struct {                    /* 柱状图,股价图 */
     scui_handle_t   edge;           /* 边界点 */
@@ -15,12 +15,12 @@ typedef struct {                    /* 柱状图,股价图 */
     scui_coord_t    height;         /* 条目高度(条目宽度与edge一致) */
     scui_coord_t    space;          /* 条目间隙 */
     scui_color_t    color;          /* 颜色 */
-} scui_chart_histogram_t;
+} scui_xchart_hist_t;
 
 typedef struct {
     scui_coord_t   *vlist_min;
     scui_coord_t   *vlist_max;
-} scui_chart_histogram_data_t;
+} scui_xchart_hist_data_t;
 
 typedef struct {                    /* 折线图 */
     scui_handle_t   edge;           /* 边界点 */
@@ -32,11 +32,11 @@ typedef struct {                    /* 折线图 */
     scui_coord_t    space;          /* 点水平间隙 */
     scui_coord_t    width;          /* 线宽 */
     scui_color_t    color;          /* 颜色 */
-} scui_chart_line_t;
+} scui_xchart_line_t;
 
 typedef struct {
     scui_coord_t   *vlist;
-} scui_chart_line_data_t;
+} scui_xchart_line_data_t;
 
 typedef struct {
     /* 继承域: */
@@ -44,20 +44,20 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_chart_type_t type;
+    scui_xchart_type_t type;
     /* 图表类型对应数据域: */
     union {
-    scui_chart_histogram_t histogram;
-    scui_chart_line_t      line;
+    scui_xchart_hist_t hist;
+    scui_xchart_line_t line;
     /* 继续补充... */
     };
     /* 内部域: */
     union {
-    scui_chart_histogram_data_t histogram_data;
-    scui_chart_line_data_t      line_data;
+    scui_xchart_hist_data_t hist_data;
+    scui_xchart_line_data_t line_data;
     /* 继续补充... */
     };
-} scui_chart_t;
+} scui_xchart_t;
 
 #pragma pack(push, 1)
 typedef struct {
@@ -66,14 +66,14 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
-    scui_chart_type_t type;
+    scui_xchart_type_t type;
     /* 图表类型对应数据域: */
     union {
-    scui_chart_histogram_t histogram;
-    scui_chart_line_t      line;
+    scui_xchart_hist_t hist;
+    scui_xchart_line_t line;
     /* 继续补充... */
     };
-} scui_chart_maker_t;
+} scui_xchart_maker_t;
 #pragma pack(pop)
 
 /*@brief 控件构造
@@ -81,16 +81,16 @@ typedef struct {
  *@param inst_maker 控件实例构造器
  *@param handle     控件句柄
  */
-void scui_chart_make(void *inst, void *inst_maker, scui_handle_t *handle);
+void scui_xchart_make(void *inst, void *inst_maker, scui_handle_t *handle);
 
 /*@brief 控件析构
  *@param handle 控件句柄
  */
-void scui_chart_burn(scui_handle_t handle);
+void scui_xchart_burn(scui_handle_t handle);
 
 /*@brief 事件处理回调
  *@param event 事件
  */
-void scui_chart_invoke(scui_event_t *event);
+void scui_xchart_invoke(scui_event_t *event);
 
 #endif
