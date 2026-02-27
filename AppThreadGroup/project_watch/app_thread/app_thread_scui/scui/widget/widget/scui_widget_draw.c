@@ -839,7 +839,11 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
         graph_dsc->dst_surface = widget->surface;
         graph_dsc->dst_clip    = &dst_clip;
         graph_dsc->src_alpha   = widget->alpha;
-        scui_draw_ctx(graph_dsc);
+        
+        scui_draw_dsc_t *draw_dsc = NULL;
+        scui_draw_dsc_ready(&draw_dsc);
+        *draw_dsc = *graph_dsc;
+        scui_draw_ctx_sched(draw_dsc);
     }
 }
 

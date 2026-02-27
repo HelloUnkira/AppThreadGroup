@@ -15,7 +15,7 @@
  *    此外,基础图象绘制的效果没有想象中的优秀
  *    它在使用过程中,限制较大
  */
-    
+
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  */
@@ -40,10 +40,37 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
 void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
 void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc);
 
+// 使用slab分配器加速快速获取绘制描述符实例
+static void * scui_draw_dsc_slab_mem = NULL;
+
+/*@brief 绘制资源就绪
+ */
+void scui_draw_ready(void)
+{
+    // 绘制描述符资源就绪
+    uintptr_t mem_slab_size = sizeof(scui_draw_dsc_t) * SCUI_CACHE_DRAW_DSC_NUM + sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t) * 4;
+    scui_draw_dsc_slab_mem  = SCUI_MEM_ALLOC(scui_mem_type_graph, mem_slab_size);
+    uintptr_t mem_slab_src  = (uintptr_t)scui_draw_dsc_slab_mem + sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t);
+    app_sys_mem_slab_ready(scui_draw_dsc_slab_mem, mem_slab_src, mem_slab_size, sizeof(scui_draw_dsc_t));
+}
+
+/*@brief 绘制描述符实例申请
+ *@param draw_dsc 绘制描述符实例地址
+ */
+void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc)
+{
+    SCUI_ASSERT(draw_dsc != NULL);
+    *draw_dsc = app_sys_mem_slab_alloc(scui_draw_dsc_slab_mem);
+    SCUI_ASSERT(*draw_dsc != NULL);
+    
+    // 此处不使用memset, 使用者需要给定完整参数集, 未给定参数为未知值
+    // memset(*draw_dsc, 0, sizeof(scui_draw_dsc_t));
+}
+
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
+void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
 {
     typedef void (*scui_draw_ctx_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_cb_t scui_draw_ctx_cb[scui_draw_type_num] = {
@@ -77,6 +104,8 @@ void scui_draw_ctx(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->type > scui_draw_type_none);
     SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
     scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
+    
+    app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
 }
 
 /*@brief 线条绘制(抗锯齿)

@@ -209,7 +209,11 @@ void scui_button_invoke(scui_event_t *event)
                         draw_graph.src_width  = button->pixel.width[idx];
                         draw_graph.src_radius = src_radius[idx];
                     }
-                    scui_draw_ctx(&draw_graph);
+                    
+                    scui_draw_dsc_t *draw_dsc = NULL;
+                    scui_draw_dsc_ready(&draw_dsc);
+                    *draw_dsc =  draw_graph;
+                    scui_draw_ctx_sched(draw_dsc);
                 }
                 
                 break;

@@ -107,10 +107,19 @@ typedef struct {
     
 } scui_draw_dsc_t;
 
+/*@brief 绘制资源就绪
+ */
+void scui_draw_ready(void);
+
+/*@brief 绘制描述符实例申请
+ *@param draw_dsc 绘制描述符实例地址
+ */
+void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc);
+
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  */
-void scui_draw_ctx(scui_draw_dsc_t *draw_dsc);
+void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc);
 
 /*@brief 线条绘制(简易绘制)
  *@param draw_dsc 绘制描述符实例

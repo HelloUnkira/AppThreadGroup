@@ -47,6 +47,7 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
+#define SCUI_CACHE_DRAW_DSC_NUM                     (10)
 #else
 /* 大内存方案: */
 // 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other
@@ -65,6 +66,7 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_FONT  * 20 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
+#define SCUI_CACHE_DRAW_DSC_NUM                     (100)
 #endif
 
 // 存在一些结构化的碎片, 这些内存不要使用graph
@@ -125,6 +127,9 @@
 /* 帧缓冲异步(同步:1块;异步:2块;) */
 #define SCUI_FRAME_BUFFER_ASYNC                     (2)
 #define SCUI_FRAME_BUFFER_SEG                       (95 /* 95 SCUI_VER_RES / 3 */)
+
+/* 绘制任务序列 */
+#define SCUI_DRAW_SEQ_TASK                          (1 && !SCUI_MEM_FEAT_MINI)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

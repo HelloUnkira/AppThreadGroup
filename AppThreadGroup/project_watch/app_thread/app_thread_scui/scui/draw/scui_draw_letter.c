@@ -262,33 +262,43 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 line_point_s.y += dst_clip->y;
                 line_point_e.x += dst_clip->x;
                 line_point_e.y += dst_clip->y;
-                scui_draw_dsc_t draw_graph = {
-                    .type        = scui_draw_type_pixel_line,
-                    .dst_surface = dst_surface,
-                    .dst_clip    = dst_clip,
-                    .src_alpha   = src_alpha,
-                    .src_color   = src_args->color,
-                    .src_width   = src_args->line_width,
-                };
                 scui_coord_t offset_line_delete = (line_height - src_args->line_width) / 2;
                 scui_coord_t offset_line_under  = (line_height - base_line - underline);
                 if (src_args->line_delete) {
-                    draw_graph.src_pos_1 = line_point_s;
-                    draw_graph.src_pos_2 = line_point_e;
-                    draw_graph.src_pos_1.y += offset_line_delete;
-                    draw_graph.src_pos_2.y += offset_line_delete;
-                    draw_graph.src_pos_1.y += src_args->offset;
-                    draw_graph.src_pos_2.y += src_args->offset;
-                    scui_draw_ctx(&draw_graph);
+                    scui_draw_dsc_t *draw_dsc = NULL;
+                    scui_draw_dsc_ready(&draw_dsc);
+                    draw_dsc->type        = scui_draw_type_pixel_line;
+                    draw_dsc->dst_surface = dst_surface;
+                    draw_dsc->dst_clip    = dst_clip;
+                    draw_dsc->src_alpha   = src_alpha;
+                    draw_dsc->src_color   = src_args->color;
+                    draw_dsc->src_width   = src_args->line_width;
+                    
+                    draw_dsc->src_pos_1 = line_point_s;
+                    draw_dsc->src_pos_2 = line_point_e;
+                    draw_dsc->src_pos_1.y += offset_line_delete;
+                    draw_dsc->src_pos_2.y += offset_line_delete;
+                    draw_dsc->src_pos_1.y += src_args->offset;
+                    draw_dsc->src_pos_2.y += src_args->offset;
+                    scui_draw_ctx_sched(draw_dsc);
                 }
                 if (src_args->line_under) {
-                    draw_graph.src_pos_1 = line_point_s;
-                    draw_graph.src_pos_2 = line_point_e;
-                    draw_graph.src_pos_1.y += offset_line_under;
-                    draw_graph.src_pos_2.y += offset_line_under;
-                    draw_graph.src_pos_1.y += src_args->offset;
-                    draw_graph.src_pos_2.y += src_args->offset;
-                    scui_draw_ctx(&draw_graph);
+                    scui_draw_dsc_t *draw_dsc = NULL;
+                    scui_draw_dsc_ready(&draw_dsc);
+                    draw_dsc->type        = scui_draw_type_pixel_line;
+                    draw_dsc->dst_surface = dst_surface;
+                    draw_dsc->dst_clip    = dst_clip;
+                    draw_dsc->src_alpha   = src_alpha;
+                    draw_dsc->src_color   = src_args->color;
+                    draw_dsc->src_width   = src_args->line_width;
+                    
+                    draw_dsc->src_pos_1 = line_point_s;
+                    draw_dsc->src_pos_2 = line_point_e;
+                    draw_dsc->src_pos_1.y += offset_line_under;
+                    draw_dsc->src_pos_2.y += offset_line_under;
+                    draw_dsc->src_pos_1.y += src_args->offset;
+                    draw_dsc->src_pos_2.y += src_args->offset;
+                    scui_draw_ctx_sched(draw_dsc);
                 }
             }
         }
@@ -397,31 +407,41 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             line_point_s.y += dst_clip->y;
             line_point_e.x += dst_clip->x;
             line_point_e.y += dst_clip->y;
-            scui_draw_dsc_t draw_graph = {
-                .type        = scui_draw_type_pixel_line,
-                .dst_surface = dst_surface,
-                .dst_clip    = dst_clip,
-                .src_alpha   = src_alpha,
-                .src_color   = src_args->color,
-                .src_width   = src_args->line_width,
-            };
             if (src_args->line_delete) {
-                draw_graph.src_pos_1 = line_point_s;
-                draw_graph.src_pos_2 = line_point_e;
-                draw_graph.src_pos_1.y += (line_height - src_args->line_width) / 2;
-                draw_graph.src_pos_2.y += (line_height - src_args->line_width) / 2;
-                draw_graph.src_pos_1.x += src_args->offset;
-                draw_graph.src_pos_2.x += src_args->offset;
-                scui_draw_ctx(&draw_graph);
+                scui_draw_dsc_t *draw_dsc = NULL;
+                scui_draw_dsc_ready(&draw_dsc);
+                draw_dsc->type        = scui_draw_type_pixel_line;
+                draw_dsc->dst_surface = dst_surface;
+                draw_dsc->dst_clip    = dst_clip;
+                draw_dsc->src_alpha   = src_alpha;
+                draw_dsc->src_color   = src_args->color;
+                draw_dsc->src_width   = src_args->line_width;
+                
+                draw_dsc->src_pos_1 = line_point_s;
+                draw_dsc->src_pos_2 = line_point_e;
+                draw_dsc->src_pos_1.y += (line_height - src_args->line_width) / 2;
+                draw_dsc->src_pos_2.y += (line_height - src_args->line_width) / 2;
+                draw_dsc->src_pos_1.x += src_args->offset;
+                draw_dsc->src_pos_2.x += src_args->offset;
+                scui_draw_ctx_sched(draw_dsc);
             }
             if (src_args->line_under) {
-                draw_graph.src_pos_1 = line_point_s;
-                draw_graph.src_pos_2 = line_point_e;
-                draw_graph.src_pos_1.y += (line_height - base_line - underline);
-                draw_graph.src_pos_2.y += (line_height - base_line - underline);
-                draw_graph.src_pos_1.x += src_args->offset;
-                draw_graph.src_pos_2.x += src_args->offset;
-                scui_draw_ctx(&draw_graph);
+                scui_draw_dsc_t *draw_dsc = NULL;
+                scui_draw_dsc_ready(&draw_dsc);
+                draw_dsc->type        = scui_draw_type_pixel_line;
+                draw_dsc->dst_surface = dst_surface;
+                draw_dsc->dst_clip    = dst_clip;
+                draw_dsc->src_alpha   = src_alpha;
+                draw_dsc->src_color   = src_args->color;
+                draw_dsc->src_width   = src_args->line_width;
+                
+                draw_dsc->src_pos_1 = line_point_s;
+                draw_dsc->src_pos_2 = line_point_e;
+                draw_dsc->src_pos_1.y += (line_height - base_line - underline);
+                draw_dsc->src_pos_2.y += (line_height - base_line - underline);
+                draw_dsc->src_pos_1.x += src_args->offset;
+                draw_dsc->src_pos_2.x += src_args->offset;
+                scui_draw_ctx_sched(draw_dsc);
             }
         }
     }
