@@ -21,38 +21,28 @@
  */
 static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
-    scui_color_t    src_color   = draw_dsc->src_color;
-    scui_coord_t    src_width   = draw_dsc->src_width;
-    scui_point_t    src_pos_1   = draw_dsc->src_pos_1;
-    scui_point_t    src_pos_2   = draw_dsc->src_pos_2;
-    /* draw dsc args<e> */
-    //
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     
-    if (src_alpha == scui_alpha_trans)
+    if (draw_dsc->src_alpha == scui_alpha_trans)
         return;
     
-    if (src_width <= 0)
-        src_width  = 1;
+    if (draw_dsc->src_width <= 0)
+        draw_dsc->src_width  = 1;
     
     scui_area_t draw_area = {0};
-    scui_area_t dst_area = scui_surface_area(dst_surface);
-    if (!scui_area_inter(&draw_area, &dst_area, dst_clip))
+    scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
+    if (!scui_area_inter(&draw_area, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_coord_t dst_byte = scui_pixel_bits(dst_surface->format) / 8;
-    scui_multi_t dst_line = dst_surface->hor_res * dst_byte;
-    uint8_t *dst_addr = dst_surface->pixel;
+    scui_coord_t dst_byte = scui_pixel_bits(draw_dsc->dst_surface->format) / 8;
+    scui_multi_t dst_line = draw_dsc->dst_surface->hor_res * dst_byte;
+    uint8_t *dst_addr = draw_dsc->dst_surface->pixel;
     scui_color_wt_t src_pixel = 0;
-    scui_pixel_by_color(dst_surface->format, &src_pixel, src_color.color);
+    scui_pixel_by_color(draw_dsc->dst_surface->format, &src_pixel, draw_dsc->src_color.color);
     
     /* 变成了一个点, 变成了一个区域, 直接填色 */
-    if ((src_pos_1.x == src_pos_2.x && src_pos_1.y == src_pos_2.y) ||
-        (src_pos_1.x == src_pos_2.x || src_pos_1.y == src_pos_2.y)) {
+    if ((draw_dsc->src_pos_1.x == draw_dsc->src_pos_2.x && draw_dsc->src_pos_1.y == draw_dsc->src_pos_2.y) ||
+        (draw_dsc->src_pos_1.x == draw_dsc->src_pos_2.x || draw_dsc->src_pos_1.y == draw_dsc->src_pos_2.y)) {
          scui_draw_sline(draw_dsc);
          return;
     }
@@ -66,26 +56,16 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
  */
 static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
-    scui_color_t    src_color   = draw_dsc->src_color;
-    scui_coord_t    src_width   = draw_dsc->src_width;
-    scui_coord_t    src_radius  = draw_dsc->src_radius;
-    scui_point_t    src_center  = draw_dsc->src_center;
-    /* draw dsc args<e> */
-    //
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     
-    if (src_alpha == scui_alpha_trans)
+    if (draw_dsc->src_alpha == scui_alpha_trans)
         return;
     
-    if (src_radius <= 0)
-        src_radius  = 1;
+    if (draw_dsc->src_radius <= 0)
+        draw_dsc->src_radius  = 1;
     
     #if 1
-    (void)src_center;(void)src_color;
+    (void)draw_dsc->src_center;(void)draw_dsc->src_color;
     #endif
 }
 
@@ -94,25 +74,16 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
  */
 static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
-    scui_color_t    src_color   = draw_dsc->src_color;
-    scui_coord_t    src_width   = draw_dsc->src_width;
-    scui_coord_t    src_radius  = draw_dsc->src_radius;
-    /* draw dsc args<e> */
-    //
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     
-    if (src_alpha == scui_alpha_trans)
+    if (draw_dsc->src_alpha == scui_alpha_trans)
         return;
     
-    if (src_radius <= 0)
-        src_radius  = 1;
+    if (draw_dsc->src_radius <= 0)
+        draw_dsc->src_radius  = 1;
     
     #if 1
-    (void)src_color;
+    (void)draw_dsc->src_color;
     #endif
 }
 
@@ -121,55 +92,43 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
  */
 static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
 {
-    /* draw dsc args<s> */
-    scui_surface_t *dst_surface = draw_dsc->dst_surface;
-    scui_area_t    *dst_clip    = draw_dsc->dst_clip;
-    scui_alpha_t    src_alpha   = draw_dsc->src_alpha;
-    scui_color_t    src_color   = draw_dsc->src_color;
-    scui_coord_t    src_width   = draw_dsc->src_width;
-    scui_coord_t    src_radius  = draw_dsc->src_radius;
-    scui_point_t    src_center  = draw_dsc->src_center;
-    scui_coord_t    src_angle_s = draw_dsc->src_angle_s;
-    scui_coord_t    src_angle_e = draw_dsc->src_angle_e;
-    /* draw dsc args<e> */
-    //
-    SCUI_ASSERT(dst_surface != NULL && dst_surface->pixel != NULL && dst_clip != NULL);
+    SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     
-    if (src_alpha == scui_alpha_trans)
+    if (draw_dsc->src_alpha == scui_alpha_trans)
         return;
     
-    if (src_radius <= 0)
-        src_radius  = 1;
+    if (draw_dsc->src_radius <= 0)
+        draw_dsc->src_radius  = 1;
     
     /* 角度交换(保证s < e) */
     /* 这将限制角度以顺时针旋转绘制为目标 */
-    if (src_angle_s > src_angle_e) {
+    if (draw_dsc->src_angle_s > draw_dsc->src_angle_e) {
         /*  */
         scui_coord_t  src_angle_t = 0;
-        src_angle_t = src_angle_e;
-        src_angle_e = src_angle_s;
-        src_angle_s = src_angle_t;
+        src_angle_t = draw_dsc->src_angle_e;
+        draw_dsc->src_angle_e = draw_dsc->src_angle_s;
+        draw_dsc->src_angle_s = src_angle_t;
     }
     /* 保证两个角度之间的间隙不超过360度 */
-    while (src_angle_e - src_angle_s >= 360)
-           src_angle_s += 360;
+    while (draw_dsc->src_angle_e - draw_dsc->src_angle_s >= 360)
+           draw_dsc->src_angle_s += 360;
     
     /* 角度限制(-360, +360): */
-    while (src_angle_e >  360) {
-           src_angle_e -= 360;
-           src_angle_s -= 360;
+    while (draw_dsc->src_angle_e >  360) {
+           draw_dsc->src_angle_e -= 360;
+           draw_dsc->src_angle_s -= 360;
     }
-    while (src_angle_s <    0) {
-           src_angle_s += 360;
-           src_angle_e += 360;
+    while (draw_dsc->src_angle_s <    0) {
+           draw_dsc->src_angle_s += 360;
+           draw_dsc->src_angle_e += 360;
     }
     
     /* 不存在0度弧度 */
-    if (src_angle_s == src_angle_e)
+    if (draw_dsc->src_angle_s == draw_dsc->src_angle_e)
         return;
     
     #if 1
-    (void)src_center;(void)src_color;
+    (void)draw_dsc->src_center;(void)draw_dsc->src_color;
     #endif
 }
 

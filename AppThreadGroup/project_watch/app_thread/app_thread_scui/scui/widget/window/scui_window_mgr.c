@@ -212,7 +212,7 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     scui_color_t dst_pixel = {0};
     scui_surface_t *dst_surface = scui_frame_buffer_draw();
     scui_area_t dst_clip = scui_surface_area(dst_surface);
-    scui_draw_area_fill(dst_surface, &dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
+    scui_draw_area_fill(dst_surface, dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
     
     /* 内部唯一引用::: */
     void scui_window_transform_move(scui_widget_t **list, scui_handle_t num);
@@ -351,7 +351,7 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
                 dst_clip.y = widget->clip.y;
             }
             scui_tick_calc(0x20, NULL, NULL, NULL);
-            scui_draw_area_blend(dst_surface, &dst_clip, src_surface, &src_clip, SCUI_COLOR_UNUSED);
+            scui_draw_area_blend(dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
             scui_tick_calc(0x21, NULL, NULL, NULL);
             continue;
         }

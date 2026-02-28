@@ -48,17 +48,17 @@ typedef struct {
     /* 绘制上文所有信息 */
     /* 目标:收集到一个栈帧 */
     
-    void *dst_addr; // 目标地址
-    void *src_addr; // 源初地址
-    uint32_t   len; // 数据字节长度
+    void    *dst_addr; // 目标地址
+    void    *src_addr; // 源初地址
+    uint32_t src_len;  // 数据字节长度
     
     // source(part surface)
     scui_surface_t *dst_surface;    // 画布实例
-    scui_area_t    *dst_clip;       // 画布绘制域
+    scui_area_t     dst_clip;       // 画布绘制域
     
     // source(part surface)
     scui_surface_t *src_surface;    // 画布实例
-    scui_area_t    *src_clip;       // 画布剪切域
+    scui_area_t     src_clip;       // 画布剪切域
     
     // source(part pixel)
     scui_alpha_t    src_alpha;      // 像素点,字符透明度
@@ -74,14 +74,14 @@ typedef struct {
     scui_point_t    src_center;     // 图像旋转中心
     
     // source(part image ring)
-    scui_point_t   *dst_center;     // 图像旋转点
     scui_image_t   *src_image_e;    // 图像(边界点)
     scui_coord_t    src_angle_s;    // 起始角度
     scui_coord_t    src_angle_e;    // 结束角度
+    scui_point_t    dst_center;     // 图像旋转点
     
     // source(part transform)
-    scui_matrix_t  *src_matrix;     // 源变换矩阵
-    scui_matrix_t  *inv_matrix;     // 逆变换矩阵
+    scui_matrix_t   src_matrix;     // 源变换矩阵
+    scui_matrix_t   inv_matrix;     // 逆变换矩阵
     
     // source(part letter & string)
     void           *src_glyph;      // 字符信息(scui_font_glyph_t)
@@ -128,6 +128,8 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc);
 void scui_draw_sline(scui_draw_dsc_t *draw_dsc);
 void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
+
+
 
 /*****************************************************************************/
 /*基础图元绘制:

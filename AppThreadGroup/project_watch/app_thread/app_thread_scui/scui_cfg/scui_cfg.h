@@ -47,6 +47,7 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
+/* 绘制描述符缓存数量 */
 #define SCUI_CACHE_DRAW_DSC_NUM                     (10)
 #else
 /* 大内存方案: */
@@ -66,6 +67,7 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_FONT  * 20 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
+/* 绘制描述符缓存数量 */
 #define SCUI_CACHE_DRAW_DSC_NUM                     (100)
 #endif
 

@@ -196,7 +196,7 @@ void scui_button_invoke(scui_event_t *event)
                     
                     scui_draw_dsc_t draw_graph = {0};
                     draw_graph.dst_surface = widget->surface;
-                    draw_graph.dst_clip  = &dst_clip[idx];
+                    draw_graph.dst_clip  = dst_clip[idx];
                     draw_graph.src_color = src_color;
                     draw_graph.src_alpha = button->pixel.alpha[idx];
                     

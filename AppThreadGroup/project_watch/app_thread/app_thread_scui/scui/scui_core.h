@@ -48,11 +48,7 @@
 #include "scui_font_glyph_cache.h"
 /* draw */
 #include "scui_draw_graph.h"
-#include "scui_draw_basic.h"
-#include "scui_draw_image.h"
-#include "scui_draw_letter.h"
-#include "scui_draw_misc.h"
-#include "scui_draw_ring.h"
+#include "scui_draw_graph_inf.h"
 
 /* widget: */
 #include "scui_widget.h"
