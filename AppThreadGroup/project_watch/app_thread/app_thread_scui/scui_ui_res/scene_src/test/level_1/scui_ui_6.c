@@ -59,12 +59,13 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         scui_point_t pos_e = {0};
         scui_area_m_to_s(&clip, &clip);
         
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,
         };
         scui_draw_dsc_t draw_graph = {
             .type      = scui_draw_type_pixel_line,
-            .src_color = color_mix,
             .src_width = 2,
         };
         
@@ -74,14 +75,14 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         pos_e.y = clip.y2 - 10;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y2 - 10;
         pos_e.x = clip.x2 - 10;
         pos_e.y = clip.y1 + 5;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
@@ -89,14 +90,14 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         pos_e.y = clip.y2 - 10;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
         pos_e.y = pos_s.y;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
@@ -104,28 +105,28 @@ void scui_ui_scene_6_1_event_proc(scui_event_t *event)
         pos_e.y = clip.y2 - 10;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         pos_s.x = clip.x2 - 10;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x1 + 5 + del_x / 2;
         pos_e.y = clip.y2 - 10;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y2 - 10;
         pos_e.x = clip.x2 - 10;
         pos_e.y = clip.y1 + 5 + del_y / 2;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         pos_s.x = clip.x1 + 5;
         pos_s.y = clip.y1 + 5;
         pos_e.x = clip.x2 - 10;
         pos_e.y = clip.y1 + 5 + del_y / 2;
         draw_graph.src_pos_1 = pos_s;
         draw_graph.src_pos_2 = pos_e;
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         
         break;
     }
@@ -155,19 +156,20 @@ void scui_ui_scene_6_2_event_proc(scui_event_t *event)
         clip.h -= 10 * 2;
         scui_widget_draw_color(event->object, &clip, color_black);
         
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,
         };
         scui_draw_dsc_t draw_graph = {
             .type         = scui_draw_type_pixel_circle,
-            .src_color    = color_mix,
             .src_width    = clip.w / 2 - 5,
             .src_radius   = clip.w / 2 - 5,
             .src_center.x = clip.x + clip.w / 2,
             .src_center.y = clip.y + clip.h / 2,
         };
         
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         
         break;
     }
@@ -197,18 +199,19 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
         clip.h -= 10 * 2;
         scui_widget_draw_color(event->object, &clip, color_black);
         
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,
         };
         scui_draw_dsc_t draw_graph = {
             .type         = scui_draw_type_pixel_circle,
-            .src_color    = color_mix,
             .src_width    = 2,
             .src_radius   = clip.w / 2 - 5,
             .src_center.x = clip.x + clip.w / 2,
             .src_center.y = clip.y + clip.h / 2,
         };
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         
         scui_area_t widget_clip = clip;
         widget_clip = clip;
@@ -220,25 +223,25 @@ void scui_ui_scene_6_3_event_proc(scui_event_t *event)
         draw_graph.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
         widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
         widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_graph);
         
         draw_graph.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
         draw_graph.src_center.y = clip.y + clip.h / 2 - clip.h / 8;
         widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
         widget_clip.y = clip.y + clip.h / 2 - clip.h / 8 - clip.h / 4;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_graph);
         
         draw_graph.src_center.x = clip.x + clip.w / 2 - clip.w / 8;
         draw_graph.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
         widget_clip.x = clip.x + clip.w / 2 - clip.w / 8 - clip.w / 4;
         widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_graph);
         
         draw_graph.src_center.x = clip.x + clip.w / 2 + clip.w / 8;
         draw_graph.src_center.y = clip.y + clip.h / 2 + clip.h / 8;
         widget_clip.x = clip.x + clip.w / 2 + clip.w / 8;
         widget_clip.y = clip.y + clip.h / 2 + clip.h / 8;
-        scui_widget_draw_graph(event->object, &widget_clip, &draw_graph);
+        scui_widget_draw_graph(event->object, &widget_clip, alpha, color_mix, &draw_graph);
         
         break;
     }
@@ -285,12 +288,13 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
         clip.h -= 10 * 2;
         scui_widget_draw_color(event->object, &clip, color_black);
         
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,
         };
         scui_draw_dsc_t draw_graph = {
             .type         = scui_draw_type_pixel_arc,
-            .src_color    = color_mix,
             .src_width    = clip.w / 2 - 10,
             .src_radius   = clip.w / 2 - 10,
             .src_center.x = clip.x + clip.w / 2,
@@ -298,7 +302,7 @@ void scui_ui_scene_6_4_event_proc(scui_event_t *event)
             .src_angle_s  = src_angle_s,
             .src_angle_e  = src_angle_e,
         };
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         break;
     }
@@ -345,12 +349,13 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
         clip.h -= 10 * 2;
         scui_widget_draw_color(event->object, &clip, color_black);
         
+        scui_alpha_t alpha = scui_alpha_cover;
+        scui_widget_alpha_get(event->object, &alpha);
         scui_color_t color_mix = {
             .color.full = 0xFF00FF00,
         };
         scui_draw_dsc_t draw_graph = {
             .type         = scui_draw_type_pixel_arc,
-            .src_color    = color_mix,
             .src_width    = 2,
             .src_radius   = clip.w / 2 - 10,
             .src_center.x = clip.x + clip.w / 2,
@@ -358,7 +363,7 @@ void scui_ui_scene_6_5_event_proc(scui_event_t *event)
             .src_angle_s  = src_angle_s,
             .src_angle_e  = src_angle_e,
         };
-        scui_widget_draw_graph(event->object, NULL, &draw_graph);
+        scui_widget_draw_graph(event->object, NULL, alpha, color_mix, &draw_graph);
         SCUI_LOG_INFO("angle:<%3d, %3d>", src_angle_s, src_angle_e);
         break;
     }

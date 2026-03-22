@@ -14,10 +14,12 @@ static bool scui_engine_execute_status = false;
 void scui_engine_ready(void)
 {
     scui_mem_ready();
-    scui_draw_ready();
     scui_disp_ready();
     scui_indev_ready();
     scui_event_ready();
+    
+    scui_draw_ready();
+    scui_draw_task_ready();
     
     scui_font_cache_ready();
     scui_font_glyph_cache_ready();

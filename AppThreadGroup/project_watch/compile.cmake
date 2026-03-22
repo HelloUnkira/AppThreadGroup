@@ -7,15 +7,18 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_DISABLE_PRECOMPILE_HEADERS OFF)
 # 禁用编译优化
 # 多核编译加速
+# 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
 if (MSVC)
+set(CMAKE_HAVE_LIBC_PTHREAD 0)
+set(THREADS_PREFER_PTHREAD_FLAG OFF)
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 add_compile_options(/Od)
 add_compile_options(/MP)
+link_libraries(-lm -lSDL2)
 else()
-# 链接平台的系统库(数学库, linux:(多线程库, SDL2库))
-link_libraries(-lm -lpthread -lSDL2)
 add_compile_options(/Od)
 add_compile_options(-j8)
+link_libraries(-lm -lpthread -lSDL2)
 endif()
 
 # 编译器禁用警告

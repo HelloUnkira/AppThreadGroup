@@ -557,7 +557,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
             if (scui_event_check_finish(event))
                 scui_widget_clip_clear(widget, false);
             
-            
+            /* 执行绘制任务序列调度 */
+            if (scui_event_check_finish(event))
+                scui_draw_task_dispatch();
             
             // 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘
             if (widget->type == scui_widget_type_window && surface_only) {

@@ -131,7 +131,8 @@
 #define SCUI_FRAME_BUFFER_SEG                       (95 /* 95 SCUI_VER_RES / 3 */)
 
 /* 绘制任务序列 */
-#define SCUI_DRAW_SEQ_TASK                          (1 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_DRAW_TASK_SEQ                          (0 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_DRAW_TASK_NUM                          (3)
 
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -286,12 +286,11 @@ void scui_xchart_invoke(scui_event_t *event)
                 
                 scui_draw_dsc_t draw_graph = {
                     .type = scui_draw_type_pixel_line,
-                    .src_color = color,
                     .src_width = width,
                     .src_pos_1 = offset_1,
                     .src_pos_2 = offset_2,
                 };
-                scui_widget_draw_graph(widget->myself, NULL, &draw_graph);
+                scui_widget_draw_graph(widget->myself, NULL, widget->alpha, color, &draw_graph);
                 offset.x += space;
             }
             

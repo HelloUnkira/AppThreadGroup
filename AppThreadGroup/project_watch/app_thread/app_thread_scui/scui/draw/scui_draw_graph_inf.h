@@ -340,6 +340,27 @@ do {                                                                            
     scui_draw_ctx_sched(draw_dsc_inst);                                              \
 } while (0)                                                                     \
 
-
+/* scui_draw_type_graph */
+#define scui_draw_graph(sync_v, dst_surface_v, dst_clip_v,                              \
+    src_alpha_v, src_color_v, draw_dsc_v)                                           \
+do {                                                                            \
+    scui_draw_dsc_t *draw_dsc_inst = NULL;                                           \
+    scui_draw_dsc_ready(&draw_dsc_inst);                                             \
+    draw_dsc_inst->type = (draw_dsc_v)->type;                                        \
+    draw_dsc_inst->sync = sync_v;                                                    \
+    draw_dsc_inst->dst_surface = dst_surface_v;                                      \
+    draw_dsc_inst->dst_clip    = dst_clip_v;                                         \
+    draw_dsc_inst->src_alpha   = src_alpha_v;                                        \
+    draw_dsc_inst->src_color   = src_color_v;                                        \
+                                                                                     \
+    draw_dsc_inst->src_center  = (draw_dsc_v)->src_center;                           \
+    draw_dsc_inst->src_angle_s = (draw_dsc_v)->src_angle_s;                          \
+    draw_dsc_inst->src_angle_e = (draw_dsc_v)->src_angle_e;                          \
+    draw_dsc_inst->src_width   = (draw_dsc_v)->src_width;                            \
+    draw_dsc_inst->src_pos_1   = (draw_dsc_v)->src_pos_1;                            \
+    draw_dsc_inst->src_pos_2   = (draw_dsc_v)->src_pos_2;                            \
+    draw_dsc_inst->src_radius  = (draw_dsc_v)->src_radius;                           \
+    scui_draw_ctx_sched(draw_dsc_inst);                                              \
+} while (0)                                                                     \
 
 #endif

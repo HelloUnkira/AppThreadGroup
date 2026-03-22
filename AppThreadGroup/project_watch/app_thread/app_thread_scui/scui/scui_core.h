@@ -49,6 +49,7 @@
 /* draw */
 #include "scui_draw_graph.h"
 #include "scui_draw_graph_inf.h"
+#include "scui_draw_task.h"
 
 /* widget: */
 #include "scui_widget.h"

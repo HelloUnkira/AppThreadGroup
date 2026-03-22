@@ -814,7 +814,8 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_draw_dsc_t *graph_dsc = draw_dsc->graph_dsc;
+    scui_alpha_t  alpha  = draw_dsc->alpha;
+    scui_color_t  color  = draw_dsc->color;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -836,14 +837,9 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        graph_dsc->dst_surface = widget->surface;
-        graph_dsc->dst_clip    = dst_clip;
-        graph_dsc->src_alpha   = widget->alpha;
-        
-        scui_draw_dsc_t *draw_dsc = NULL;
-        scui_draw_dsc_ready(&draw_dsc);
-        *draw_dsc = *graph_dsc;
-        scui_draw_ctx_sched(draw_dsc);
+        scui_draw_dsc_t *graph_dsc = draw_dsc->graph_dsc;
+        scui_draw_graph(true, widget->surface, dst_clip,
+            alpha, color, graph_dsc);
     }
 }
 

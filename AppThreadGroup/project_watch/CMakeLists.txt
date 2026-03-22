@@ -3,6 +3,7 @@ cmake_minimum_required (VERSION 3.14)
 cmake_policy(VERSION 3.14)
 cmake_policy(SET CMP0048 NEW)
 cmake_policy(SET CMP0079 NEW)
+cmake_policy(SET CMP0194 NEW)
 # 创建项目
 project(app_thread_group C CXX)
 # 编译参数设置,导入文件搜索路径

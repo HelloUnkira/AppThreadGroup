@@ -195,9 +195,6 @@ void scui_button_invoke(scui_event_t *event)
                     src_color.color.ch.b = scui_map(pct_c, 100, pct_s, color_e.ch.b, color_s.ch.b);
                     
                     scui_draw_dsc_t draw_graph = {0};
-                    draw_graph.dst_surface = widget->surface;
-                    draw_graph.dst_clip  = dst_clip[idx];
-                    draw_graph.src_color = src_color;
                     draw_graph.src_alpha = button->pixel.alpha[idx];
                     
                     if (idx != 3) {
@@ -210,10 +207,8 @@ void scui_button_invoke(scui_event_t *event)
                         draw_graph.src_radius = src_radius[idx];
                     }
                     
-                    scui_draw_dsc_t *draw_dsc = NULL;
-                    scui_draw_dsc_ready(&draw_dsc);
-                    *draw_dsc =  draw_graph;
-                    scui_draw_ctx_sched(draw_dsc);
+                    scui_widget_draw_graph(widget->myself, &dst_clip[idx],
+                        button->pixel.alpha[idx], src_color, &draw_graph);
                 }
                 
                 break;

@@ -105,14 +105,23 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,
     };
     
+    #if SCUI_DRAW_TASK_SEQ
     if (draw_dsc->sync) {
+        // 就地响应目标
         scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
         app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
     } else {
         // 加入到乱序流水线中
-        scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
-        app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
+        scui_draw_task_notify(draw_dsc);
+        
+        static uint32_t cnt = 0; cnt++;
+        if (cnt % 10 == 0) SCUI_LOG_WARN("draw_task: %d", cnt);
     }
+    #else
+    // 就地响应目标
+    scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
+    app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
+    #endif
 }
 
 /*@brief 线条绘制(抗锯齿)

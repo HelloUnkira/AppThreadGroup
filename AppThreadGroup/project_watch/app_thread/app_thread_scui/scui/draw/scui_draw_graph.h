@@ -48,6 +48,7 @@ typedef struct {
     
     /* 绘制上文所有信息 */
     /* 目标:收集到一个栈帧 */
+    /* 注意:资源必须以控件树为生命周期 */
     
     void    *dst_addr; // 目标地址
     void    *src_addr; // 源初地址

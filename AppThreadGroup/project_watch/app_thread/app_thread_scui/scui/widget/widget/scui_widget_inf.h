@@ -344,6 +344,7 @@ typedef struct {
     
     void           *string_args;                // 字符串绘制参数(scui_string_args_t)
     
+    scui_alpha_t    alpha;                      // 像素,图像透明度
     scui_color_t    color;                      // 像素,图像源色调
     scui_coord_t    way;                        // 渐变方向(0:hor;1:ver;)
     
@@ -552,12 +553,15 @@ do {                                                                        \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_graph */
-#define scui_widget_draw_graph(handle_v, target_v, graph_dsc_v)             \
+#define scui_widget_draw_graph(handle_v, target_v,                          \
+    alpha_v, color_v, graph_dsc_v)                                          \
 do {                                                                        \
     scui_widget_draw_dsc_t draw_dsc = {                                     \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_graph,                                \
+        .alpha = alpha_v,                                                   \
+        .color = color_v,                                                   \
         .graph_dsc = graph_dsc_v,                                           \
     };                                                                      \
     scui_widget_draw_ctx(&draw_dsc);                                        \
