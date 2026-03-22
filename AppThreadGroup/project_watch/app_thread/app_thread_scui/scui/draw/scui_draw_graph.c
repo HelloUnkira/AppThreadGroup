@@ -16,30 +16,6 @@
  *    它在使用过程中,限制较大
  */
 
-/*@brief 绘制上下文
- *@param draw_dsc 绘制描述符实例
- */
-void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
-void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc);
-
 // 使用slab分配器加速快速获取绘制描述符实例
 static void * scui_draw_dsc_slab_mem = NULL;
 
@@ -72,6 +48,34 @@ void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc)
  */
 void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
 {
+    /*@brief 绘制上下文
+     *@param draw_dsc 绘制描述符实例
+     */
+    void scui_draw_ctx_byte_copy(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_fill_grads(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_ring(scui_draw_dsc_t *draw_dsc);
+    void scui_draw_ctx_graph(scui_draw_dsc_t *draw_dsc);
+    
+    
+    
+    SCUI_ASSERT(draw_dsc->type > scui_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
     typedef void (*scui_draw_ctx_cb_t)(scui_draw_dsc_t *draw_dsc);
     static const scui_draw_ctx_cb_t scui_draw_ctx_cb[scui_draw_type_num] = {
         [scui_draw_type_byte_copy] =                scui_draw_ctx_byte_copy,
@@ -101,11 +105,14 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
         [scui_draw_type_pixel_arc] =                scui_draw_ctx_graph,
     };
     
-    SCUI_ASSERT(draw_dsc->type > scui_draw_type_none);
-    SCUI_ASSERT(draw_dsc->type < scui_draw_type_num);
-    scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
-    
-    app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
+    if (draw_dsc->sync) {
+        scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
+        app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
+    } else {
+        // 加入到乱序流水线中
+        scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
+        app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
+    }
 }
 
 /*@brief 线条绘制(抗锯齿)
@@ -326,7 +333,7 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_area, &draw_area, &src_clip))
              return;
         
-        scui_draw_area_fill(draw_dsc->dst_surface, dst_area, draw_dsc->src_alpha, draw_dsc->src_color);
+        scui_draw_area_fill(true, draw_dsc->dst_surface, dst_area, draw_dsc->src_alpha, draw_dsc->src_color);
         return;
     }
 }

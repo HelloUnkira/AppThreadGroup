@@ -44,6 +44,7 @@ typedef enum {
 
 typedef struct {
     scui_draw_type_t type;
+    scui_sbitfd_t    sync:1;
     
     /* 绘制上文所有信息 */
     /* 目标:收集到一个栈帧 */

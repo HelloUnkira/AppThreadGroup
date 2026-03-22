@@ -165,7 +165,7 @@ void scui_draw_ctx_area_fill(scui_draw_dsc_t *draw_dsc)
             scui_pixel_by_cf(draw_dsc->dst_surface->format, dst_addr + idx * dst_byte, &src_pixel);
         /* 后使用第一行像素点填充其他行像素点 */
         for (scui_multi_t idx = 1; idx < draw_area.h; idx++)
-            scui_draw_byte_copy(dst_addr + idx * dst_line, dst_addr, dis_line);
+            scui_draw_byte_copy(true, dst_addr + idx * dst_line, dst_addr, dis_line);
     } else {
         /* 注意区域对齐坐标 */
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
@@ -335,7 +335,7 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
     uint8_t *src_addr = draw_dsc->src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     /* 注意区域对齐坐标 */
     for (scui_multi_t idx = 0; idx < draw_area.h; idx++)
-        scui_draw_byte_copy(dst_addr + idx * dst_line, src_addr + idx * src_line, dis_line);
+        scui_draw_byte_copy(true, dst_addr + idx * dst_line, src_addr + idx * src_line, dis_line);
 }
 
 /*@brief 区域混合(可以使用DMA2D-blend加速优化)
@@ -354,7 +354,7 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
         draw_dsc->src_surface->alpha  == scui_alpha_cover &&
         draw_dsc->dst_surface->format == draw_dsc->src_surface->format &&
        !scui_pixel_have_alpha(draw_dsc->src_surface->format) && !draw_dsc->src_color.filter) {
-        scui_draw_area_copy(draw_dsc->dst_surface, draw_dsc->dst_clip, draw_dsc->src_surface, draw_dsc->src_clip);
+        scui_draw_area_copy(true, draw_dsc->dst_surface, draw_dsc->dst_clip, draw_dsc->src_surface, draw_dsc->src_clip);
         return;
     }
     

@@ -164,7 +164,8 @@
 
 /* 文字多行排版限制,可被分隔的字符 */
 #define SCUI_STRING_LIMIT_LINE                      (64)
-#define SCUI_STRING_BREAK_CHAR                      " ,.;:-_"
+#define SCUI_STRING_BREAK_CHAR                      " \n.:,;-_"
+#define SCUI_STRING_SPACE_CHAR                      " \n"
 
 /* scroll:按键, 动画速度[ptr, enc, key, auto] */
 #define SCUI_WIDGET_SCROLL_SPD_ANIM                 {1200, 900, 900, 900}

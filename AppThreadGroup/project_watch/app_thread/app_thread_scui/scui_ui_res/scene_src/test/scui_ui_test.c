@@ -92,7 +92,7 @@ void scui_ui_scene_test_event_proc(scui_event_t *event)
         string_maker.args.color.color_e.full = 0xFF0000FF;
         string_maker.args.line_multi = true;
         scui_widget_create(&string_maker, &handle_string[2]);
-        scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, true);
+        scui_string_upgrade_grads(handle_string[2], grad_s, grad_n, false);
         
         y_offset += string_maker.widget.clip.h + 10;
         string_maker.widget.clip.x = SCUI_HOR_RES / 4;

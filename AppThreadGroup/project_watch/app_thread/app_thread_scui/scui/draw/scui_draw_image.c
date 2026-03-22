@@ -30,7 +30,7 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
         .alpha   = draw_dsc->src_alpha,
     };
     
-    scui_draw_area_blend(draw_dsc->dst_surface, draw_dsc->dst_clip,
+    scui_draw_area_blend(true, draw_dsc->dst_surface, draw_dsc->dst_clip,
         &image_surface, draw_dsc->src_clip, draw_dsc->src_color);
     
     scui_image_cache_unload(&image);
@@ -71,7 +71,7 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    scui_draw_area_matrix_blend(draw_dsc->dst_surface, draw_dsc->dst_clip,
+    scui_draw_area_matrix_blend(true, draw_dsc->dst_surface, draw_dsc->dst_clip,
         &image_surface, draw_dsc->src_clip, draw_dsc->src_color, inv_matrix, src_matrix);
     
     scui_image_cache_unload(&image);
@@ -108,7 +108,7 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_matrix_t inv_matrix = src_matrix;
     scui_matrix_inverse(&inv_matrix);
     
-    scui_draw_area_matrix_blend(draw_dsc->dst_surface, draw_dsc->dst_clip,
+    scui_draw_area_matrix_blend(true, draw_dsc->dst_surface, draw_dsc->dst_clip,
         &image_surface, draw_dsc->src_clip, draw_dsc->src_color, inv_matrix, src_matrix);
     
     scui_image_cache_unload(&image);
@@ -137,7 +137,7 @@ void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
         .alpha   = draw_dsc->src_alpha,
     };
     
-    scui_draw_area_matrix_blend(draw_dsc->dst_surface, draw_dsc->dst_clip,
+    scui_draw_area_matrix_blend(true, draw_dsc->dst_surface, draw_dsc->dst_clip,
         &image_surface, draw_dsc->src_clip, draw_dsc->src_color, draw_dsc->inv_matrix, draw_dsc->src_matrix);
     
     scui_image_cache_unload(&image);

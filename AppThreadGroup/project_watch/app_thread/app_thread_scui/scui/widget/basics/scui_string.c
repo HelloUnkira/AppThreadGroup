@@ -513,7 +513,7 @@ void scui_string_invoke(scui_event_t *event)
                 
                 /* 先填充透明背景 */
                 scui_area_t draw_clip = scui_surface_area(string->draw_surface);
-                scui_draw_area_fill(string->draw_surface, draw_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
+                scui_draw_area_fill(true, string->draw_surface, draw_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
                 /* 如果全局渐变 */
                 if (string->args.regrad) {
                     /* 回收旧颜色值表 */
@@ -535,12 +535,12 @@ void scui_string_invoke(scui_event_t *event)
                 string->args.clip = draw_clip;
                 scui_area_t string_clip = draw_clip;
                 
-                scui_draw_string(string->draw_surface, draw_clip,
+                scui_draw_string(true, string->draw_surface, draw_clip,
                     &string->args, string_clip, scui_alpha_cover);
                 
                 if (string->args.regrad) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */
-                    scui_draw_area_fill_grads(string->draw_surface, draw_clip,
+                    scui_draw_area_fill_grads(true, string->draw_surface, draw_clip,
                         string->args.grads->grad_s, string->args.grads->grad_n,
                         string->args.grads->grad_w, SCUI_COLOR_FILTER_TRANS,
                         scui_alpha_cover);

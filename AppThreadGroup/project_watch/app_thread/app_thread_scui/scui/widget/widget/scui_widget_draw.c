@@ -230,7 +230,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.y -= dst_offset.y;
         #endif
         
-        scui_draw_string(widget->surface, dst_clip,
+        scui_draw_string(true, widget->surface, dst_clip,
             args, src_clip, widget->alpha);
     }
 }
@@ -265,7 +265,7 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_area_fill(widget->surface, dst_clip, widget->alpha, color);
+        scui_draw_area_fill(true, widget->surface, dst_clip, widget->alpha, color);
     }
 }
 
@@ -300,7 +300,7 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_area_fill_grad(widget->surface, dst_clip,
+        scui_draw_area_fill_grad(true, widget->surface, dst_clip,
             color, *target, widget->alpha, way);
     }
 }
@@ -334,7 +334,7 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_area_blur(widget->surface, dst_clip);
+        scui_draw_area_blur(true, widget->surface, dst_clip);
     }
 }
 
@@ -431,7 +431,7 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_image(widget->surface, dst_clip,
+        scui_draw_image(true, widget->surface, dst_clip,
             image_inst, src_clip, widget->alpha, color);
     }
 }
@@ -505,7 +505,7 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
         dst_offset.y -= seg_offset.y;
         #endif
         
-        scui_draw_image_scale(widget->surface, dst_clip,
+        scui_draw_image_scale(true, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, scale,
             dst_offset, src_offset);
     }
@@ -561,7 +561,7 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
         anchor.y -= seg_offset.y;
         #endif
         
-        scui_draw_image_rotate(widget->surface, dst_clip,
+        scui_draw_image_rotate(true, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, angle, anchor, center);
     }
 }
@@ -615,7 +615,7 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_image_matrix_blend(widget->surface, dst_clip,
+        scui_draw_image_matrix_blend(true, widget->surface, dst_clip,
             image_inst, *clip, widget->alpha, SCUI_COLOR_UNUSED,
             *matrix, reb_matrix);
     }
@@ -663,7 +663,7 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.y = dst_offset.y;
         #endif
         
-        scui_draw_qrcode(widget->surface, dst_clip,
+        scui_draw_qrcode(true, widget->surface, dst_clip,
             src_clip, widget->alpha, color, size, data);
     }
 }
@@ -708,7 +708,7 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.y = dst_offset.y; src_clip.h -= src_clip.y;
         #endif
         
-        scui_draw_barcode(widget->surface, dst_clip,
+        scui_draw_barcode(true, widget->surface, dst_clip,
             src_clip, widget->alpha, color, size, data);
     }
 }
@@ -796,7 +796,7 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
         dst_center.y -= seg_offset.y;
         #endif
         
-        scui_draw_ring(widget->surface, dst_clip,
+        scui_draw_ring(true, widget->surface, dst_clip,
             dst_center, image_e_inst, image_inst, src_clip,
             angle_as, widget->alpha, angle_ae, color);
     }

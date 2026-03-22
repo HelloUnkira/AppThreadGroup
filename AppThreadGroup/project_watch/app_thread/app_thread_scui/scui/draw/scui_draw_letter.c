@@ -128,14 +128,12 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             if (src_args->align_ver == 2) offset.y += -src_args->limit / 2;
         }
         
-        uint32_t line_ofs = 0;
         // 绘制每一个行
         for (uint32_t idx_line = 0; idx_line < src_args->typo->line_mum; idx_line++) {
-             uint32_t line_s = line_ofs;
-             uint32_t line_e = src_args->typo->line_ofs[idx_line];
+             uint32_t line_s = src_args->typo->line_ofs_s[idx_line];
+             uint32_t line_e = src_args->typo->line_ofs_e[idx_line];
              uint32_t line_w = src_args->typo->line_width[idx_line];
              SCUI_LOG_INFO("line:<%d, %d> <%d>", line_s, line_e, line_w);
-             line_ofs = line_e + 1;
              
              scui_point_t offset_line = offset;
              if (src_args->align_hor == 0);
@@ -143,9 +141,9 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
              if (src_args->align_hor == 2) offset_line.x += (src_clip_v.w - line_w) / 2;
              offset_line.y += (line_height + src_args->gap_line) * idx_line;
              
-            /* 下划线和删除线 */
-            scui_point_t line_point_s = offset_line;
-            scui_point_t line_point_e = offset_line;
+             /* 下划线和删除线 */
+             scui_point_t line_point_s = offset_line;
+             scui_point_t line_point_e = offset_line;
             
              // 行绘制
              for (uint32_t idx = line_s; idx <= line_e; idx++) {
@@ -222,16 +220,16 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                         break;
                     }
                     
-                    scui_draw_letter(draw_dsc->dst_surface, letter_clip,
+                    scui_draw_letter(true, draw_dsc->dst_surface, letter_clip,
                         &glyph_unit.glyph, glyph_clip, draw_dsc->src_alpha, glyph_color);
                 }
                 
-                offset_line.x += (glyph_unit.glyph.bitmap == 0 ? src_args->gap_none :
+                offset_line.x += (glyph_unit.glyph.bitmap == NULL ? src_args->gap_none :
                     (glyph_unit.glyph.ofs_x + glyph_unit.glyph.box_w)) + src_args->gap_item;
             }
             
             /* 下划线和删除线 */
-            line_point_e = offset_line;
+            line_point_e.x += line_w - src_args->gap_item;
             if (src_args->line_delete || src_args->line_under) {
                 line_point_s.x += draw_dsc->dst_clip.x;
                 line_point_s.y += draw_dsc->dst_clip.y;
@@ -367,7 +365,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                     break;
                 }
                 
-                scui_draw_letter(draw_dsc->dst_surface, letter_clip,
+                scui_draw_letter(true, draw_dsc->dst_surface, letter_clip,
                     &glyph_unit.glyph, glyph_clip, draw_dsc->src_alpha, glyph_color);
             }
             
