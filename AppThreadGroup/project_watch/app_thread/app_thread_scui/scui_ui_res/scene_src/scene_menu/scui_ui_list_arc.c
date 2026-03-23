@@ -8,6 +8,7 @@
 #include "scui.h"
 
 static struct {
+    scui_coord_t string_width;
     scui_ui_bar_arc_t bar_arc;
 } * scui_ui_res_local = NULL;
 
@@ -81,13 +82,16 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             
             scui_custom_maker_t icon_maker = {0};
             scui_handle_t icon_handle           = SCUI_HANDLE_INVALID;
-            icon_maker.widget.type              = scui_widget_type_custom;
             icon_maker.widget.style.fully_bg    = true;
+            icon_maker.widget.type              = scui_widget_type_custom;
             icon_maker.widget.image             = scui_ui_scene_list_image[idx] + 4;
             icon_maker.widget.clip.w            = scui_image_w(icon_maker.widget.image);
             icon_maker.widget.clip.h            = group_maker.widget.clip.h;
             icon_maker.widget.parent            = group_handle;
             scui_widget_create(&icon_maker, &icon_handle);
+            
+            // 去一个就行了, image的size是固定一样的
+            scui_ui_res_local->string_width = group_maker.widget.clip.w - (icon_maker.widget.clip.w + 8 * 2);
             
             scui_string_maker_t string_maker = {0};
             scui_handle_t string_handle             = SCUI_HANDLE_INVALID;
@@ -97,7 +101,7 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             string_maker.args.color.color_e.full    = 0xFFFFFFFF;
             string_maker.args.color.filter          = true;
             string_maker.widget.clip.x              = icon_maker.widget.clip.w + 8;
-            string_maker.widget.clip.w              = group_maker.widget.clip.w - (icon_maker.widget.clip.w + 8 * 2);
+            string_maker.widget.clip.w              = scui_ui_res_local->string_width;
             string_maker.widget.clip.h              = group_maker.widget.clip.h;
             string_maker.args.align_hor             = 0;
             string_maker.args.align_ver             = 2;
@@ -159,6 +163,12 @@ void scui_ui_scene_list_arc_scroll_event(scui_event_t *event)
             
             scui_point_t point = {.x = dist_x,.y = group_c.y,};
             scui_alpha_t alpha = scui_map(dist_y, 0, rad_rr, scui_alpha_pct100, scui_alpha_pct0);
+            
+            scui_handle_t string = scui_widget_child_by_index(group, 1);
+            SCUI_ASSERT(scui_widget_type_check(string, scui_widget_type_string));
+            scui_coord_t height = scui_widget_clip(string).h;
+            scui_coord_t width  = scui_ui_res_local->string_width - dist_x * 2;
+            scui_widget_adjust_size(string, width, height);
             
             scui_widget_move_pos(group, &point);
             scui_widget_alpha_set(group, alpha, true);

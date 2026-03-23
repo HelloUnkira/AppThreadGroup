@@ -34,15 +34,16 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     scui_widget_t *widget_r = scui_handle_source_check(handle_r);
     
     /* 非窗口控件树兼容 */
-    /* 如果控件没有画布, 将事件转义给根控件 */
-    if (widget_r->type != scui_widget_type_window)
-    if (widget->surface == NULL) {
-        scui_event_define(event, handle_r, true, scui_event_draw_empty, NULL);
-        scui_event_notify(&event);
-        #if SCUI_MEM_FEAT_MINI
-        SCUI_ASSERT(false);
-        #endif
-        return;
+    if (widget_r->type != scui_widget_type_window) {
+        /* 如果控件没有画布, 将事件转义给根控件 */
+        if (widget->surface == NULL) {
+            scui_event_define(event, handle_r, true, scui_event_draw_empty, NULL);
+            scui_event_notify(&event);
+            #if SCUI_MEM_FEAT_MINI
+            SCUI_ASSERT(false);
+            #endif
+            return;
+        }
     }
     
     scui_area_t clip_w = widget->clip;
@@ -266,7 +267,7 @@ static void scui_widget_event_process(scui_event_t *event)
     if (scui_event_type_key(event->type) && !widget->style.indev_key)
         return;
     
-    /* 默认控件事件处理 */
+    /* 默认控件事件处理(before) */
     switch (event->type) {
     case scui_event_anima_elapse: {
         // 仅仅被标记的控件才可响应该事件
@@ -287,17 +288,6 @@ static void scui_widget_event_process(scui_event_t *event)
             SCUI_LOG_INFO("widget clip is empty");
             return;
         }
-        
-        #if SCUI_WIDGET_BORDER_TAG
-        /* 控件绘制流程在完结步(最前) */
-        if (scui_event_check_finish(event)) {
-            
-            scui_handle_t  image4[4] = {0};
-            scui_color32_t color32 = SCUI_COLOR32_MAKE8(0xFF, scui_rand(0xFF), scui_rand(0xFF), scui_rand(0xFF));
-            scui_color_t   color   = SCUI_COLOR_MAKE32(false, 0x00000000, color32.full);
-            scui_custom_draw_image_crect4(event, &widget->clip, image4, color, 1);
-        }
-        #endif
         
         /* 控件绘制流程在执行步 */
         if (scui_event_check_execute(event)) {
@@ -393,6 +383,27 @@ static void scui_widget_event_process(scui_event_t *event)
     scui_widget_event_find(event->object, &cb_node);
     if (cb_node.event_cb != NULL)
         cb_node.event_cb(event);
+    
+    
+    
+    /* 默认控件事件处理(after) */
+    switch (event->type) {
+    case scui_event_draw: {
+        
+        #if SCUI_WIDGET_BORDER_TAG
+        /* 控件绘制流程在执行步(最后) */
+        if (scui_event_check_execute(event)) {
+            
+            scui_handle_t  image4[4] = {0};
+            scui_color32_t color32 = SCUI_COLOR32_MAKE8(0xFF, scui_rand(0xFF), scui_rand(0xFF), scui_rand(0xFF));
+            scui_color_t   color   = SCUI_COLOR_MAKE32(false, 0x00000000, color32.full);
+            scui_custom_draw_image_crect4(event, &widget->clip, image4, color, 1);
+        }
+        #endif
+    }
+    default:
+        break;
+    }
     
     
     
@@ -555,7 +566,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             }
             /* 去除surface剪切域, 因为已经绘制完毕 */
             if (scui_event_check_finish(event))
-                scui_widget_clip_clear(widget, false);
+                scui_widget_clip_clear(widget, true);
             
             /* 执行绘制任务序列调度 */
             if (scui_event_check_finish(event))

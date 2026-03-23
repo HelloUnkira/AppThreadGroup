@@ -376,6 +376,19 @@ void scui_linear_s_invoke(scui_event_t *event)
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
     
     switch (event->type) {
+        case scui_event_draw: {
+            scui_handle_t    handle_s = event->object;
+            scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
+            scui_linear_s_t *linear_s = (void *)widget_s;
+            
+            scui_handle_t    handle_m = linear_s->handle_m;
+            scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
+            scui_linear_m_t *linear_m = (void *)widget_m;
+            
+            // 子控件树重绘时, 通知主控件
+            scui_widget_draw(handle_m, NULL, false);
+            break;
+        }
         case scui_event_draw_empty: {
             scui_handle_t    handle_s = event->object;
             scui_widget_t   *widget_s = scui_handle_source_check(handle_s);

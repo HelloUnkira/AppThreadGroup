@@ -634,6 +634,13 @@ void scui_string_invoke(scui_event_t *event)
     case scui_event_size_adjust: {
         string->args.update = true;
         scui_widget_draw(widget->myself, NULL, false);
+    
+        /* 回收绘制缓存块 */
+        if (string->draw_surface != NULL) {
+            SCUI_MEM_FREE(string->draw_surface->pixel);
+            SCUI_MEM_FREE(string->draw_surface);
+            string->draw_surface = NULL;
+        }
         break;
     }
     case scui_event_lang_change: {
