@@ -414,8 +414,8 @@ static bool scui_ui_func_local_alarm_near_state(void)
  */
 static uint16_t scui_ui_func_local_alarm_near_date(void)
 {
-    // 0x1000: 今天; 0x2000: 明天; 0x8000: 单次
-    // 低七位: 0-6 标记[日,一,二,三,四,五,六]
+    /* 0x1000: 今天; 0x2000: 明天; 0x8000: 单次 */
+    /* 低七位: 0-6 标记[日,一,二,三,四,五,六] */
     
     return 0b1111110;
 }

@@ -79,7 +79,7 @@ typedef enum {
 } scui_window_switch_type_t;
 
 typedef struct {
-    // 这部分参数未定, 暂保留自由度
+    /* 这部分参数未定, 暂保留自由度 */
     scui_handle_t shadow;
 } scui_window_switch_args_t;
 

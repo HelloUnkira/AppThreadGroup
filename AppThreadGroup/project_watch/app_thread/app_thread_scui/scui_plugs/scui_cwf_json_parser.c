@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-// JSON解析库
+/* JSON解析库 */
 #include "cJSON.h"
 
 #define SCUI_CWF_JSON_PARSER_HOOK   1
@@ -85,35 +85,35 @@ void scui_cwf_json_burn(void **inst)
     if (parser == NULL)
         return;
     
-    // 批量销毁所有条目资源
+    /* 批量销毁所有条目资源 */
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_burn_item(parser, idx);
-    // 销毁整个子控件树
+    /* 销毁整个子控件树 */
     scui_widget_destroy(parser->parent);
-    // 回收内部维护资源
+    /* 回收内部维护资源 */
     SCUI_MEM_FREE(parser->list_child);
     SCUI_MEM_FREE(parser->list_type);
     SCUI_MEM_FREE(parser->list_src);
-    // 图片资源缓存无效化
+    /* 图片资源缓存无效化 */
     for (uint32_t idx = 0; idx < parser->image_num; idx++) {
         scui_image_unit_t image_unit = {0};
         image_unit.image = &parser->image_src[idx];
         scui_image_cache_invalidate(&image_unit);
     }
-    // 批量回收所有图片句柄
+    /* 批量回收所有图片句柄 */
     for (uint32_t idx = 0; idx < parser->image_num; idx++)
         if (parser->image_hit[idx] != SCUI_HANDLE_INVALID)
             scui_handle_clear(parser->image_hit[idx]);
-    // 回收内部维护资源
+    /* 回收内部维护资源 */
     SCUI_MEM_FREE(parser->image_hit);
     SCUI_MEM_FREE(parser->image_src);
-    // 回收名字和对应句柄
+    /* 回收名字和对应句柄 */
     const char *name = scui_handle_source(parser->name);
     scui_handle_clear(parser->name);
-    // 回收内部维护资源
+    /* 回收内部维护资源 */
     SCUI_MEM_FREE(name);
     
-    // 销毁解析器
+    /* 销毁解析器 */
     SCUI_MEM_FREE(parser);
 }
 
@@ -125,12 +125,12 @@ void scui_cwf_json_burn(void **inst)
 void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
 {
     SCUI_ASSERT(inst != NULL);
-    // 在构建时尝试销毁上一次cwf
+    /* 在构建时尝试销毁上一次cwf */
     scui_cwf_json_burn(inst);
     
     uint8_t head[28] = {0};
     scui_image_bin_read(file, 0, sizeof(head), head);
-    // 先提取头部信息
+    /* 先提取头部信息 */
     uint8_t  fw_ver[4]   = SCUI_CWF_JSON_VER;
     uint8_t  cwf_ver[4]  = {head[0],head[1],head[2],head[3],};
     uint32_t json_ofs    = scui_cwf_json_u32(&head[4 * 1]);
@@ -139,7 +139,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     uint32_t image_isize = scui_cwf_json_u32(&head[4 * 4]);
     uint32_t image_dofs  = scui_cwf_json_u32(&head[4 * 5]);
     uint32_t image_dsize = scui_cwf_json_u32(&head[4 * 6]);
-    // 进行版本校验
+    /* 进行版本校验 */
     if (memcmp(fw_ver, cwf_ver, 4) != 0)
         SCUI_LOG_ERROR("unmatched cwf version");
     
@@ -150,7 +150,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     scui_image_bin_read(file, json_ofs, json_size, json_file);
     json_file[json_size] = '\0';
     
-    // 构建parser资源
+    /* 构建parser资源 */
     uint8_t *name = SCUI_MEM_ALLOC(scui_mem_type_user, strlen(file) + 1);
     strncpy(name, file, strlen(file));
     name[strlen(file)] = '\0';
@@ -188,7 +188,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         parser->image_src[idx].pixel.data_bin = (uintptr_t)data;
         parser->image_src[idx].from = parser->name;
         
-        // 资源关联绑定 handle <---> image
+        /* 资源关联绑定 handle <---> image */
         parser->image_hit[idx] = scui_handle_find();
         scui_handle_linker(parser->image_hit[idx], &parser->image_src[idx]);
     }
@@ -202,7 +202,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON_InitHooks(&cjson_hooks);
     #endif
     
-    // 提取json文件,对顶层解析,继续构建资源
+    /* 提取json文件,对顶层解析,继续构建资源 */
     cJSON *json_object = cJSON_Parse(json_file);
     cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
     parser->list_num   = cJSON_GetArraySize(json_layout);
@@ -217,14 +217,14 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON_free(json_format);
     #endif
     
-    // 构建一个父容器,用于承载cwf
+    /* 构建一个父容器,用于承载cwf */
     scui_custom_maker_t custom_maker = {0};
     custom_maker.widget.type      = scui_widget_type_custom;
     custom_maker.widget.clip      = scui_widget_clip(parent);
     custom_maker.widget.parent    = parent;
     custom_maker.widget.child_num = parser->list_num;
     
-    // 给这个父容器悬挂帧动画更新
+    /* 给这个父容器悬挂帧动画更新 */
     custom_maker.widget.style.sched_anima = true;
     custom_maker.widget.event_cb = scui_cwf_json_custom_event;
     
@@ -233,7 +233,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     scui_widget_create(&custom_maker, &parser->parent);
     scui_widget_user_data_set(parser->parent, (void *)inst);
     
-    // 按索引顺序一个个解析, 然后添加到parser中去
+    /* 按索引顺序一个个解析, 然后添加到parser中去 */
     for (uint32_t idx = 0; idx < parser->list_num; idx++) {
         cJSON *json_dict = cJSON_GetArrayItem(json_layout, idx);
         scui_cwf_json_make_item(parser, idx, json_dict);
@@ -243,7 +243,7 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
     cJSON_Delete(json_object);
     SCUI_MEM_FREE(json_file);
     
-    // 在结束的时候,进行一次anim更新
+    /* 在结束的时候,进行一次anim更新 */
     for (uint32_t idx = 0; idx < parser->list_num; idx++)
         scui_cwf_json_anim_item(parser, idx);
 }
@@ -262,7 +262,7 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
     
     scui_image_t *image_src = scui_handle_source_check(image_hit);
     
-    // 记得要清理缓存
+    /* 记得要清理缓存 */
     scui_image_unit_t image_unit = {.image = image_src,};
     scui_image_cache_invalidate(&image_unit);
     
@@ -281,12 +281,12 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
 void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
 {
     SCUI_ASSERT(preview != NULL);
-    // 在构建时尝试销毁上一次cwf
+    /* 在构建时尝试销毁上一次cwf */
     scui_cwf_json_burn_pv(preview);
     
     uint8_t head[28] = {0};
     scui_image_bin_read(file, 0, sizeof(head), head);
-    // 先提取头部信息
+    /* 先提取头部信息 */
     uint8_t  fw_ver[4]   = SCUI_CWF_JSON_VER;
     uint8_t  cwf_ver[4]  = {head[0],head[1],head[2],head[3],};
     uint32_t json_ofs    = scui_cwf_json_u32(&head[4 * 1]);
@@ -295,7 +295,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
     uint32_t image_isize = scui_cwf_json_u32(&head[4 * 4]);
     uint32_t image_dofs  = scui_cwf_json_u32(&head[4 * 5]);
     uint32_t image_dsize = scui_cwf_json_u32(&head[4 * 6]);
-    // 进行版本校验
+    /* 进行版本校验 */
     if (memcmp(fw_ver, cwf_ver, 4) != 0)
         SCUI_LOG_ERROR("unmatched cwf version");
     
@@ -303,7 +303,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
     scui_image_bin_read(file, json_ofs, json_size, json_file);
     json_file[json_size] = '\0';
     
-    // 提取json文件,对顶层解析,继续构建资源
+    /* 提取json文件,对顶层解析,继续构建资源 */
     cJSON *json_object = cJSON_Parse(json_file);
     cJSON *json_layout = cJSON_GetObjectItem(json_object, "layout");
     
@@ -312,8 +312,8 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
         
         uint8_t type = cJSON_GetNumberValue(cJSON_GetObjectItem(json_dict, "type")) + 0.1;
         
-        // 预览图被记录在:
-        // scui_cwf_json_type_img_preview
+        /* 预览图被记录在: */
+        /* scui_cwf_json_type_img_preview */
         if (type == scui_cwf_json_type_img_preview) {
             cJSON *json_src = cJSON_GetObjectItem(json_dict, "image_src");
             cJSON *json_num = cJSON_GetObjectItem(json_dict, "image_num");
@@ -353,7 +353,7 @@ void scui_cwf_json_make_pv(scui_handle_t *preview, const char *file)
             image_src->from = scui_handle_find();
             scui_handle_linker(image_src->from, name);
             
-            // 资源关联绑定 handle <---> image
+            /* 资源关联绑定 handle <---> image */
             scui_handle_t image_hit = scui_handle_find();
             scui_handle_linker(image_hit, image_src);
             *preview = image_hit;

@@ -36,13 +36,13 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
     uint32_t blur_sum = 0;
     uint32_t blur_cof[BLUR_SCALA][BLUR_SCALA] = {
         #if 0
-        #elif 0 // 平滑模糊核
+        #elif 0 /* 平滑模糊核 */
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1},
         {1, 1, 1, 1, 1},
-        #elif 1 // dither模糊核
+        #elif 1 /* dither模糊核 */
         { 0, 48, 12, 60,  3, 51, 15, 63},
         {32, 16, 44, 28, 35, 19, 47, 31},
         { 8, 56,  4, 52, 11, 59,  7, 55},
@@ -51,7 +51,7 @@ void scui_draw_ctx_area_blur(scui_draw_dsc_t *draw_dsc)
         {34, 18, 46, 30, 33, 17, 45, 29},
         {10, 58,  6, 54,  9, 57,  5, 53},
         {42, 26, 38, 22, 41, 25, 37, 21},
-        #elif 1 // 高斯模糊核
+        #elif 1 /* 高斯模糊核 */
         {1,  4,  7,  4, 1},
         {4, 16, 26, 16, 4},
         {7, 26, 41, 26, 7},
@@ -300,8 +300,8 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     SCUI_ASSERT(draw_dsc->src_surface != NULL && draw_dsc->src_surface->pixel != NULL);
     
-    // 需要加这个条件吗??? 带透明度的画布不允许copy吗???
-    // scui_pixel_have_alpha(draw_dsc->dst_surface->format)
+    /* 需要加这个条件吗??? 带透明度的画布不允许copy吗??? */
+    /* scui_pixel_have_alpha(draw_dsc->dst_surface->format) */
     if (draw_dsc->dst_surface->alpha  != scui_alpha_cover ||
         draw_dsc->src_surface->alpha  != scui_alpha_cover ||
         draw_dsc->dst_surface->format != draw_dsc->src_surface->format) {
@@ -309,12 +309,12 @@ void scui_draw_ctx_area_copy(scui_draw_dsc_t *draw_dsc)
         return;
     }
     
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = scui_surface_area(draw_dsc->src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
@@ -359,12 +359,12 @@ void scui_draw_ctx_area_blend(scui_draw_dsc_t *draw_dsc)
     }
     
     /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = scui_surface_area(draw_dsc->src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
@@ -485,12 +485,12 @@ void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
         return;
     
     /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = scui_surface_area(draw_dsc->src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
@@ -511,7 +511,7 @@ void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
     uint8_t *dst_addr = draw_dsc->dst_surface->pixel + dst_clip_v.y * dst_line + dst_clip_v.x * dst_byte;
     uint8_t *src_addr = draw_dsc->src_surface->pixel + src_clip_v.y * src_line + src_clip_v.x * src_byte;
     
-    // draw_dsc->src_surface必须是alpha类型
+    /* draw_dsc->src_surface必须是alpha类型 */
     if (draw_dsc->src_surface->format == scui_pixel_cf_alpha4 ||
         draw_dsc->src_surface->format == scui_pixel_cf_alpha8) {
         
@@ -523,7 +523,7 @@ void scui_draw_ctx_area_alpha_filter(scui_draw_dsc_t *draw_dsc)
         scui_multi_t  alpha_len = 1 << src_bits;
         scui_alpha_t *alpha_table = SCUI_MEM_ZALLOC(scui_mem_type_graph, sizeof(scui_alpha_t) * alpha_len);
         
-        // 将draw_dsc->src_surface中的alpha值作用到dst_surface上
+        /* 将draw_dsc->src_surface中的alpha值作用到dst_surface上 */
         for (scui_multi_t idx_line = 0; idx_line < draw_area.h; idx_line++)
         for (scui_multi_t idx_item = 0; idx_item < draw_area.w; idx_item++) {
             uint8_t *dst_ofs = dst_addr + (idx_line * draw_dsc->dst_surface->hor_res + idx_item) * dst_byte;
@@ -556,12 +556,12 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     
     /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = draw_dsc->src_clip;
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
@@ -569,11 +569,11 @@ void scui_draw_ctx_area_matrix_fill(scui_draw_dsc_t *draw_dsc)
     if (draw_dsc->src_alpha == scui_alpha_trans)
         return;
     
-    // 如果逆矩阵是无效矩阵, 则不做使用
+    /* 如果逆矩阵是无效矩阵, 则不做使用 */
     if (scui_matrix_invalid(&draw_dsc->inv_matrix))
         return;
     
-    // 利用原图进行一次源初变换,以修饰限制目标区域
+    /* 利用原图进行一次源初变换,以修饰限制目标区域 */
     if (!scui_matrix_invalid(&draw_dsc->src_matrix)) {
         
         scui_face2_t face2 = {0};
@@ -650,17 +650,17 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->src_surface != NULL && draw_dsc->src_surface->pixel != NULL);
     
     /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = scui_surface_area(draw_dsc->src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
     
-    // 利用原图进行一次源初变换,以修饰限制目标区域
+    /* 利用原图进行一次源初变换,以修饰限制目标区域 */
     if (!scui_matrix_invalid(&draw_dsc->src_matrix)) {
         
         scui_face2_t face2 = {0};
@@ -723,7 +723,7 @@ void scui_draw_ctx_area_matrix_blend(scui_draw_dsc_t *draw_dsc)
             point.x = (scui_coord_t)point2.x;
             
             #if 1
-            // 这里使用双线性插值求平均
+            /* 这里使用双线性插值求平均 */
             scui_coord_t dy = (point2.y < point.y ? 0 : point2.y - point.y) * SCUI_SCALE_COF;
             scui_coord_t dx = (point2.x < point.x ? 0 : point2.x - point.x) * SCUI_SCALE_COF;
             scui_point_t pos4[4] = {

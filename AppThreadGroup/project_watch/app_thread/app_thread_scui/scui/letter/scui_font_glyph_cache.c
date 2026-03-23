@@ -243,8 +243,8 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
         if (unit->count != 0 && unit->count < 0x64) {
             unit->count++;
             /* 重新带计数优先级加入 */
-            // scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
-            // scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_font_glyph_cache_sort);
+            /* scui_list_dll_remove(&cache->dl_list, &unit->dl_node); */
+            /* scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_font_glyph_cache_sort); */
             scui_queue_dlpq_adjust(&cache->dl_list, &unit->dl_node, true, scui_font_glyph_cache_sort);
         }
         cache->cnt_hit++;
@@ -257,7 +257,7 @@ void scui_font_glyph_cache_load(scui_font_glyph_unit_t *glyph_unit)
          unit = scui_own_ofs(scui_font_glyph_unit_t, dl_node, node);
          uint8_t count = unit->count;
          if (count > 0x07) {
-             // scui_list_dll_ftra(&cache->dl_list, curr)
+             /* scui_list_dll_ftra(&cache->dl_list, curr) */
                 scui_list_dll_btra(&cache->dl_list, curr) {
                 unit = scui_own_ofs(scui_font_glyph_unit_t, dl_node, curr);
                 unit->count -= count;

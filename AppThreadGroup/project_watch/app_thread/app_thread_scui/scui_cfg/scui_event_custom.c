@@ -99,7 +99,7 @@ void scui_event_custom_access(scui_event_t *event)
         break;
     }
     
-    // 当我们遇到认为不能休眠的事件时,重置时间
+    /* 当我们遇到认为不能休眠的事件时,重置时间 */
     switch (event->type) {
     case scui_event_ptr_hold:
     case scui_event_key_hold:
@@ -114,7 +114,7 @@ void scui_event_custom_access(scui_event_t *event)
         break;
     }
     
-    // 此处退出休眠
+    /* 此处退出休眠 */
     switch (event->type) {
     case scui_event_ptr_click:
     case scui_event_key_click:
@@ -150,7 +150,7 @@ void scui_event_custom_access(scui_event_t *event)
  */
 void scui_event_custom_myself(scui_event_t *event)
 {
-    // 当前在待机场景时
+    /* 当前在待机场景时 */
     scui_handle_t handle_top = SCUI_HANDLE_INVALID;
     scui_window_stack_top(&handle_top);
     
@@ -160,7 +160,7 @@ void scui_event_custom_myself(scui_event_t *event)
     switch (event->type) {
     case scui_event_ui_tick_frame: {
         scui_event_mask_over(event);
-        // 如果要是用时序调度, 通过该事件控制
+        /* 如果要是用时序调度, 通过该事件控制 */
         scui_widget_refr(SCUI_HANDLE_INVALID, false);
         break;
     }
@@ -191,7 +191,7 @@ void scui_event_custom_myself(scui_event_t *event)
             *cfg_type = type;
         }
         
-        // 如果本来是在待机界面时
+        /* 如果本来是在待机界面时 */
         if (handle_top == SCUI_UI_SCENE_STANDBY) {
             scui_window_switch_type_t *cfg_type = NULL;
             scui_window_switch_cfg_type(&cfg_type);
@@ -207,9 +207,9 @@ void scui_event_custom_myself(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        // 如果本来是在待机界面时
+        /* 如果本来是在待机界面时 */
         if (handle_top != SCUI_UI_SCENE_STANDBY) {
-            // 息屏时清理一下碎片
+            /* 息屏时清理一下碎片 */
             scui_image_cache_clear();
             scui_font_cache_clear();
             scui_font_glyph_cache_clear();
@@ -255,7 +255,7 @@ void scui_event_custom_finish(scui_event_t *event)
         if (app_module_system_dlps_get())
             break;
         
-        // 全局的右滑响应事件
+        /* 全局的右滑响应事件 */
         if (scui_indev_ptr_dir(event) == scui_opt_dir_to_r) {
             
             scui_event_mask_over(event);
@@ -266,7 +266,7 @@ void scui_event_custom_finish(scui_event_t *event)
         if (app_module_system_dlps_get())
             break;
         
-        // 全局的按键响应事件
+        /* 全局的按键响应事件 */
         scui_event_mask_over(event);
         scui_ui_scene_return();
         break;

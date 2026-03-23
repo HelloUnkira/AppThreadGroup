@@ -30,7 +30,7 @@ static void scui_indev_anima_expire(void *instance)
     SCUI_LOG_INFO("");
     scui_anima_t *anima = instance;
     
-    // 合并一些事件, 如多次点击合并成一个
+    /* 合并一些事件, 如多次点击合并成一个 */
     scui_mutex_process(&scui_indev_mutex, scui_mutex_take);
     scui_indev_ptr_event_merge();
     scui_indev_enc_event_merge();

@@ -73,7 +73,7 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
         0.0f, 0.0f, 0.0f, src_x[3], src_y[3], 1.0f, -src_x[3] * dst_y[3], -src_y[3] * dst_y[3],
     };
     
-    scui_coord3_t matrix_b[9] = {    // 齐次矩阵
+    scui_coord3_t matrix_b[9] = {    /* 齐次矩阵 */
         dst_x[0], dst_x[1], dst_x[2], dst_x[3],
         dst_y[0], dst_y[1], dst_y[2], dst_y[3],
     };
@@ -92,12 +92,12 @@ bool scui_matrix_by_face2(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
                 k = j;
         /* 只要遇到主元为0, 终止并退出 */
         if (scui_abs(matrix_a[k][i]) < SCUI_ZERO_VAL_F) {
-            // 将矩阵清空, 此时已无用
+            /* 将矩阵清空, 此时已无用 */
             for (uint8_t idx_i = 0; idx_i < 3; idx_i++)
             for (uint8_t idx_j = 0; idx_j < 3; idx_j++)
                 matrix->meta[idx_i][idx_j] = 0.0f;
-            // 这里不必打印, 存在计算不出矩阵的可能性
-            // SCUI_LOG_ERROR("gauss transform failure");
+            /* 这里不必打印, 存在计算不出矩阵的可能性 */
+            /* SCUI_LOG_ERROR("gauss transform failure"); */
             return false;
         }
         
@@ -191,7 +191,7 @@ bool scui_matrix_by_face3(scui_matrix_t *matrix, scui_face2_t *face2_src, scui_f
  */
 bool scui_matrix_invalid(scui_matrix_t *matrix)
 {
-    // 计算矩阵的行列式, 奇异矩阵的行列式值为0
+    /* 计算矩阵的行列式, 奇异矩阵的行列式值为0 */
     
     scui_coord3_t det00 = matrix->meta[1][1] * matrix->meta[2][2] -
                   matrix->meta[2][1] * matrix->meta[1][2];
@@ -223,7 +223,7 @@ void scui_matrix_inverse(scui_matrix_t *matrix)
     float det02 = matrix->meta[1][0] * matrix->meta[2][1] - matrix->meta[2][0] * matrix->meta[1][1];
     
     float delta = matrix->meta[0][0] * det00 + matrix->meta[0][1] * det01 + matrix->meta[0][2] * det02;
-    // 这里有一个返回值的,这里改成断言
+    /* 这里有一个返回值的,这里改成断言 */
     SCUI_ASSERT(scui_abs(delta) > SCUI_ZERO_VAL_F);
     delta = 1.0f / delta;
     
@@ -324,9 +324,9 @@ void scui_matrix_identity(scui_matrix_t *matrix)
  */
 void scui_matrix_translate(scui_matrix_t *matrix, scui_point2_t *offset)
 {
-    // 平移是非线性变换
-    // 3D空间下平移:不支持
-    // 2D平面上平移:支持
+    /* 平移是非线性变换 */
+    /* 3D空间下平移:不支持 */
+    /* 2D平面上平移:支持 */
     
     scui_matrix_t matrix_t = {
         .meta = {
@@ -396,8 +396,8 @@ void scui_matrix_scale(scui_matrix_t *matrix, scui_point2_t *scale)
  */
 void scui_matrix_rotate_c(scui_matrix_t *matrix, scui_point2_t *chord, uint8_t axis)
 {
-    scui_coord3_t sin_a = chord->y;     // y: sin(angle)
-    scui_coord3_t cos_a = chord->x;     // x: cos(angle)
+    scui_coord3_t sin_a = chord->y;     /* y: sin(angle) */
+    scui_coord3_t cos_a = chord->x;     /* x: cos(angle) */
     scui_matrix_t matrix_t = {0};
     
     /*X轴向:

@@ -4,33 +4,33 @@
 /*@brief 图片状态
  */
 typedef enum {
-    scui_image_type_bmp = 0,    // 默认图片(无压缩)
-    scui_image_type_lz4,        // 压缩图片(lz4,只压缩bitmap)
-    scui_image_type_jpg,        // JPG压缩图片(原图)
-    scui_image_type_png,        // PNG压缩图片(原图)
-    scui_image_type_gif,        // GIF压缩序列图片(原图)
-    scui_image_type_lottie,     // Lottie压缩序列图片(原图)
-    scui_image_type_mp4,        // MP4压缩序列图片(原图)
-    scui_image_type_mem,        // 内存图片(bmp)
+    scui_image_type_bmp = 0,    /* 默认图片(无压缩) */
+    scui_image_type_lz4,        /* 压缩图片(lz4,只压缩bitmap) */
+    scui_image_type_jpg,        /* JPG压缩图片(原图) */
+    scui_image_type_png,        /* PNG压缩图片(原图) */
+    scui_image_type_gif,        /* GIF压缩序列图片(原图) */
+    scui_image_type_lottie,     /* Lottie压缩序列图片(原图) */
+    scui_image_type_mp4,        /* MP4压缩序列图片(原图) */
+    scui_image_type_mem,        /* 内存图片(bmp) */
     scui_image_type_num,
 } scui_image_type_t;
 
 /*@brief 图片像素数据
  */
 typedef struct {
-    uintptr_t width;        // 图片宽
-    uintptr_t height;       // 图片高
-    uintptr_t data_bin;     // 图片数据源(外存源数据流偏移)
-    uintptr_t size_bin;     // 图片数据源(外存源大小)
+    uintptr_t width;        /* 图片宽 */
+    uintptr_t height;       /* 图片高 */
+    uintptr_t data_bin;     /* 图片数据源(外存源数据流偏移) */
+    uintptr_t size_bin;     /* 图片数据源(外存源大小) */
 } scui_image_pixel_t;
 
 /*@brief 图片数据
  */
 typedef struct {
-    scui_pixel_cf_t     format;     // 图片格式
-    scui_image_type_t   type;       // 图片类型
-    scui_image_pixel_t  pixel;      // 图片色彩数据
-    scui_handle_t       from;       // 图库来源
+    scui_pixel_cf_t     format;     /* 图片格式 */
+    scui_image_type_t   type;       /* 图片类型 */
+    scui_image_pixel_t  pixel;      /* 图片色彩数据 */
+    scui_handle_t       from;       /* 图库来源 */
 } scui_image_t;
 
 /*@brief 图像格式

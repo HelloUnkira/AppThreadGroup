@@ -47,7 +47,7 @@ static void scui_indev_ptr_event_check(scui_event_t *event)
         scui_indev_ptr.event_click_tick = scui_tick_cnt();
         break;
     default:
-        // 常规事件不做额外的合并处理
+        /* 常规事件不做额外的合并处理 */
         scui_event_notify(event);
         break;
     }
@@ -203,7 +203,7 @@ void scui_indev_ptr_notify(scui_indev_data_t *data)
                     scui_indev_ptr.move_tag = true;
                 }
             } else {
-                // 清除移动计数器
+                /* 清除移动计数器 */
                 scui_indev_ptr.move_cnt = 0;
             }
             /* 发送按下事件 */

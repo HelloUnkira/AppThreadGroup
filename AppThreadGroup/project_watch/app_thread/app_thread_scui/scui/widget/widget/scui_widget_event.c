@@ -58,12 +58,12 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     
     #if 0
     /* 为所有控件及其子控件添加指定剪切域 */
-    // scui_widget_clip_check(handle_r, true);
+    /* scui_widget_clip_check(handle_r, true); */
     scui_widget_clip_reset(widget_r, &clip_w, true);
     #else
     /* 为根控件添加指定剪切域 */
     /* 非根控件的剪切域在绘制开始前补充 */
-    // scui_widget_clip_check(handle_r, true);
+    /* scui_widget_clip_check(handle_r, true); */
     scui_widget_clip_reset(widget_r, &clip_w, false);
     #endif
     #endif
@@ -71,10 +71,10 @@ void scui_widget_draw(scui_handle_t handle, scui_area_t *clip, bool sync)
     scui_event_define(event, handle_r, sync, scui_event_draw, scui_event_absorb_none);
     scui_event_notify(&event);
     
-    // 同步绘制后移除调度队列中
-    // 可能存在的异步绘制
+    /* 同步绘制后移除调度队列中 */
+    /* 可能存在的异步绘制 */
     if (sync) {
-        // 移除跟主窗口相关所有绘制事件
+        /* 移除跟主窗口相关所有绘制事件 */
         scui_event_define(event, handle_r, false, scui_event_draw, NULL);
         while (scui_event_dequeue(&event, true, false));
     }
@@ -270,7 +270,7 @@ static void scui_widget_event_process(scui_event_t *event)
     /* 默认控件事件处理(before) */
     switch (event->type) {
     case scui_event_anima_elapse: {
-        // 仅仅被标记的控件才可响应该事件
+        /* 仅仅被标记的控件才可响应该事件 */
         if (!widget->style.sched_anima)
              return;
         
@@ -442,7 +442,7 @@ static void scui_widget_event_bubble(scui_event_t *event, scui_event_cb_t event_
 {
     scui_widget_t *widget = scui_handle_source_check(event->object);
     
-    // 进行一次冒泡重定向
+    /* 进行一次冒泡重定向 */
     bool suborder_w = suborder;
     switch (event->type) {
     case scui_event_draw:
@@ -542,7 +542,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 
                 #if SCUI_MEM_FEAT_MINI
                 /* 为所有控件及其子控件添加全局剪切域 */
-                // scui_widget_clip_check(handle_r, true);
+                /* scui_widget_clip_check(handle_r, true); */
                 scui_widget_clip_reset(widget, &widget->clip, true);
                 #else
                 /* 为所有控件及其子控件添加根控件剪切域 */
@@ -558,9 +558,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 
                 scui_multi_t size_old = 0, size_new = 0;
                 scui_widget_clip_sizes(widget->myself, &size_old);
-                // scui_widget_clip_check(widget->myself, true);
+                /* scui_widget_clip_check(widget->myself, true); */
                 scui_widget_clip_update(widget);
-                // scui_widget_clip_check(widget->myself, true);
+                /* scui_widget_clip_check(widget->myself, true); */
                 scui_widget_clip_sizes(widget->myself, &size_new);
                 SCUI_LOG_DEBUG("size_old:%d, size_new:%d", size_old, size_new);
             }
@@ -572,7 +572,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             if (scui_event_check_finish(event))
                 scui_draw_task_dispatch();
             
-            // 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘
+            /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */
             if (widget->type == scui_widget_type_window && surface_only) {
                 scui_window_t *window = (void *)widget;
                 if (window->draw_lock)
@@ -580,7 +580,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             }
         }
         
-        // 启用集成事件冒泡流程
+        /* 启用集成事件冒泡流程 */
         scui_tick_calc(0x20, NULL, NULL, NULL);
         scui_widget_event_bubble(event, NULL, false, true);
         scui_tick_calc(0x21, NULL, NULL, NULL);
@@ -609,7 +609,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
             scui_event_mask_over(event);
         }
         
-        // 孩子信息更变, 更新画布剪切域
+        /* 孩子信息更变, 更新画布剪切域 */
         scui_widget_t *widget = scui_handle_source_check(event->object);
         scui_widget_surface_refr(widget->myself, true);
         if (widget->parent != SCUI_HANDLE_INVALID &&

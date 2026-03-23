@@ -87,7 +87,7 @@ scui_handle_t scui_font_name_match(scui_handle_t font_idx, scui_handle_t lang_ty
  */
 scui_handle_t scui_font_size_match(scui_handle_t font_idx, scui_handle_t font_size)
 {
-    // 这里无需转换, 做一个检查即可
+    /* 这里无需转换, 做一个检查即可 */
     if (font_idx == SCUI_FONT_IDX_MZ)
         SCUI_ASSERT(font_size != 0);
     

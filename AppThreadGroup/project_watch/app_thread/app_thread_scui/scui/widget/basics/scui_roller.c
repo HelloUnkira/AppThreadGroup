@@ -67,7 +67,7 @@ void scui_roller_burn(scui_handle_t handle)
  */
 static void scui_roller_s_event(scui_event_t *event)
 {
-    // 特殊的固定调用
+    /* 特殊的固定调用 */
     scui_widget_event_shift(event);
     
     switch (event->type) {
@@ -96,7 +96,7 @@ static void scui_roller_s_event(scui_event_t *event)
  */
 static void scui_roller_m_event(scui_event_t *event)
 {
-    // 特殊的固定调用
+    /* 特殊的固定调用 */
     scui_widget_event_shift(event);
     
     switch (event->type) {
@@ -106,7 +106,7 @@ static void scui_roller_m_event(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        // 列表控件是当前控件的父控件
+        /* 列表控件是当前控件的父控件 */
         SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
         scui_handle_t  handle = scui_widget_parent(event->object);
         scui_widget_t *widget = scui_handle_source_check(handle);
@@ -132,7 +132,7 @@ static void scui_roller_m_event(scui_event_t *event)
         
         scui_point_t offset  = {0};
         scui_multi_t percent = 100;
-        // 计算当前控件中心到父控件中心距离
+        /* 计算当前控件中心到父控件中心距离 */
         scui_area_t clip_p = scui_widget_clip(handle);
         scui_area_t clip_w = scui_widget_clip(event->object);
         offset.x = scui_dist(clip_p.x + clip_p.w / 2, clip_w.x + clip_w.w / 2);
@@ -155,9 +155,9 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_alpha_t alpha_c = scui_alpha_cover;
         scui_widget_alpha_get(widget->myself, &alpha_w);
         scui_widget_alpha_get(event->object, &alpha_c);
-        // 更新alpha通道
+        /* 更新alpha通道 */
         if (roller->grad) {
-            // 更新alpha通道
+            /* 更新alpha通道 */
             scui_alpha_t alpha = scui_alpha_pct(percent);
             scui_widget_alpha_set(widget->myself, alpha, false);
             scui_widget_alpha_set(event->object, alpha, false);
@@ -215,8 +215,8 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_matrix_perspective_view_blit(&matrix, &size2, &face3, &view3);
             scui_matrix_inverse(&matrix);
             
-            // 这里暂时不分为三个步调, 都在execute执行完毕
-            // 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制
+            /* 这里暂时不分为三个步调, 都在execute执行完毕 */
+            /* 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制 */
             scui_widget_draw_image_matrix(widget->myself, NULL, image, NULL, &matrix);
             break;
         }
@@ -243,7 +243,7 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_handle_t custom = handle_m;
         SCUI_LOG_INFO("click idx:%d", index_c);
         
-        // 聚焦它到中心
+        /* 聚焦它到中心 */
         scui_scroll_center(handle_p, event->object, true);
         break;
     }
@@ -264,13 +264,13 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_roller_t *roller = (void *)widget;
     
-    // 基类对象同步(同步外界给的部分状态)
+    /* 基类对象同步(同步外界给的部分状态) */
     scui_linear_m_maker_t linear_m_maker = {.widget = maker->widget,};
     scui_linear_s_maker_t linear_s_maker = {.widget = maker->widget,};
     scui_handle_t linear_m_handle = SCUI_HANDLE_INVALID;
     scui_handle_t linear_s_handle = SCUI_HANDLE_INVALID;
     
-    // 子控件(主)子控件树(从)创建
+    /* 子控件(主)子控件树(从)创建 */
     linear_m_maker.widget.type            = scui_widget_type_linear_m;
     linear_m_maker.widget.style.fully_bg  = false;
     linear_m_maker.widget.style.indev_ptr = true;
@@ -288,14 +288,14 @@ void scui_roller_string_str(scui_handle_t handle, scui_string_maker_t *maker, ui
     scui_linear_m_set(linear_m_handle, &linear_s_handle);
     scui_linear_s_set(linear_s_handle, &linear_m_handle);
     
-    // 使用预制的构造器构造对象
+    /* 使用预制的构造器构造对象 */
     scui_string_maker_t string_maker = *maker;
     scui_handle_t string_handle = SCUI_HANDLE_INVALID;
     string_maker.widget.parent  = linear_s_handle;
     scui_widget_create(&string_maker, &string_handle);
     scui_string_update_str(string_handle, str_utf8);
     
-    // 添加控件重绘
+    /* 添加控件重绘 */
     scui_widget_draw(handle, NULL, false);
 }
 

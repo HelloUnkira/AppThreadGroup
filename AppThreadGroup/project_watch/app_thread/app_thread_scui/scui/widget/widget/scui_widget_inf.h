@@ -339,33 +339,33 @@ typedef enum {
 typedef struct {
     scui_widget_draw_type_t type;
     
-    scui_handle_t   handle;                     // 控件句柄
-    scui_area_t    *target;                     // 控件绘制域
+    scui_handle_t   handle;                     /* 控件句柄 */
+    scui_area_t    *target;                     /* 控件绘制域 */
     
-    void           *string_args;                // 字符串绘制参数(scui_string_args_t)
+    void           *string_args;                /* 字符串绘制参数(scui_string_args_t) */
     
-    scui_alpha_t    alpha;                      // 像素,图像透明度
-    scui_color_t    color;                      // 像素,图像源色调
-    scui_coord_t    way;                        // 渐变方向(0:hor;1:ver;)
+    scui_alpha_t    alpha;                      /* 像素,图像透明度 */
+    scui_color_t    color;                      /* 像素,图像源色调 */
+    scui_coord_t    way;                        /* 渐变方向(0:hor;1:ver;) */
     
-    scui_handle_t   image;                      // 图像句柄
-    scui_area_t    *clip;                       // 图像剪切域
-    scui_point_t    scale;                      // 图形缩放比例
-    scui_opt_pos_t  pos;                        // 缩放锚点
-    scui_point_t    anchor;                     // 图像旋转轴心
-    scui_point_t    center;                     // 图像旋转中心
-    scui_multi_t    angle;                      // 图像旋转角度(顺时针旋转:+,逆时针旋转:-)
-    scui_matrix_t  *matrix;                     // 变换矩阵(逆矩阵)
+    scui_handle_t   image;                      /* 图像句柄 */
+    scui_area_t    *clip;                       /* 图像剪切域 */
+    scui_point_t    scale;                      /* 图形缩放比例 */
+    scui_opt_pos_t  pos;                        /* 缩放锚点 */
+    scui_point_t    anchor;                     /* 图像旋转轴心 */
+    scui_point_t    center;                     /* 图像旋转中心 */
+    scui_multi_t    angle;                      /* 图像旋转角度(顺时针旋转:+,逆时针旋转:-) */
+    scui_matrix_t  *matrix;                     /* 变换矩阵(逆矩阵) */
     
-    scui_coord_t    angle_s;                    // 起始角度
-    scui_coord_t    angle_e;                    // 结束角度
-    scui_coord_t    percent;                    // 圆环进度(百分比)
-    scui_handle_t   image_e;                    // 控件句柄
+    scui_coord_t    angle_s;                    /* 起始角度 */
+    scui_coord_t    angle_e;                    /* 结束角度 */
+    scui_coord_t    percent;                    /* 圆环进度(百分比) */
+    scui_handle_t   image_e;                    /* 控件句柄 */
     
-    scui_multi_t    size;                       // 字符串长度
-    uint8_t        *data;                       // url网址链接字符串
+    scui_multi_t    size;                       /* 字符串长度 */
+    uint8_t        *data;                       /* url网址链接字符串 */
     
-    void           *graph_dsc;                  // 绘制描述符实例(scui_draw_dsc_t)
+    void           *graph_dsc;                  /* 绘制描述符实例(scui_draw_dsc_t) */
     
 } scui_widget_draw_dsc_t;
 

@@ -6,13 +6,13 @@
 typedef struct {
     scui_list_dln_t   dl_node;
     scui_table_dln_t  ht_node;
-    uint16_t          count:7;  // 衰减计数器
-    uint16_t          lock:7;   // 嵌套锁计数器
+    uint16_t          count:7;  /* 衰减计数器 */
+    uint16_t          lock:7;   /* 嵌套锁计数器 */
     /* LRU缓存数据: */
-    uint16_t          size;     // 字库尺寸信息
-    scui_handle_t     name;     // 字库名字句柄
-    scui_handle_t     font;     // 字库信息句柄
-    scui_font_glyph_t glyph;    // 文字数据
+    uint16_t          size;     /* 字库尺寸信息 */
+    scui_handle_t     name;     /* 字库名字句柄 */
+    scui_handle_t     font;     /* 字库信息句柄 */
+    scui_font_glyph_t glyph;    /* 文字数据 */
 } scui_font_glyph_unit_t;
 
 /*@brief 内存文字节点信息表

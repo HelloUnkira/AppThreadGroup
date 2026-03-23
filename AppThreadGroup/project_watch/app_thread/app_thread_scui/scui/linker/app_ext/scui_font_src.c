@@ -13,7 +13,7 @@
  */
 void scui_font_src_open(scui_font_src_t *src, char *name)
 {
-    // 字库文件共用一个文件夹
+    /* 字库文件共用一个文件夹 */
     const char *path = ".";
     
     char path_name[128] = {0};

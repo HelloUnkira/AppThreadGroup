@@ -40,19 +40,19 @@ void scui_custom_draw_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     scui_point_t anchor_c = {0}, center_c = {0};
     scui_area_t widget_clip = scui_widget_clip(event->object);
     
-    if (image[0] != SCUI_HANDLE_INVALID) {  // hour
+    if (image[0] != SCUI_HANDLE_INVALID) {  /* hour */
         anchor_c.x = widget_clip.x + anchor[0].x;
         anchor_c.y = widget_clip.y + anchor[0].y;
         scui_widget_draw_image_rotate(event->object, NULL,
             image[0], NULL, anchor_c, center[0], angle_h * SCUI_SCALE_COF);
     }
-    if (image[1] != SCUI_HANDLE_INVALID) {  // minute
+    if (image[1] != SCUI_HANDLE_INVALID) {  /* minute */
         anchor_c.x = widget_clip.x + anchor[1].x;
         anchor_c.y = widget_clip.y + anchor[1].y;
         scui_widget_draw_image_rotate(event->object, NULL,
             image[1], NULL, anchor_c, center[1], angle_m * SCUI_SCALE_COF);
     }
-    if (image[2] != SCUI_HANDLE_INVALID) {  // second
+    if (image[2] != SCUI_HANDLE_INVALID) {  /* second */
         anchor_c.x = widget_clip.x + anchor[2].x;
         anchor_c.y = widget_clip.y + anchor[2].y;
         scui_widget_draw_image_rotate(event->object, NULL,
@@ -95,7 +95,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
     }
     SCUI_LOG_INFO("c_s:%u, c_ms:%u", tick_curr, tick_last);
     
-    // 同步时间迭代数
+    /* 同步时间迭代数 */
     draw_dsc->dial_ptr.tick_last = tick_last;
     draw_dsc->dial_ptr.tick_curr = tick_curr;
     
@@ -148,14 +148,14 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_area2_to_area(&image2_clip, &image_clip);
                 
                 #if 0
-                // 是整体区域剪除
-                // 从控件区域缩小到图片完全绘制区域
+                /* 是整体区域剪除 */
+                /* 从控件区域缩小到图片完全绘制区域 */
                 scui_area_t draw_clip = image_clip;
                 scui_widget_draw(event->object, &draw_clip, false);
                 #else
                 scui_area_t clip_widget = scui_widget_clip(event->object);
-                // if (!scui_area_inter2(&clip_widget, &image_clip))
-                //      break;
+                /* if (!scui_area_inter2(&clip_widget, &image_clip)) */
+                /*      break; */
                 
                 scui_multi_t sumpox = 0, vofs = 0;
                 scui_multi_t vfrag = clip_widget.h / 10;
@@ -169,7 +169,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                         break;
                     
                     scui_area_t draw_clip = clip_frag;
-                    // 这里脏矩阵计算重绘区域还有问题(?)
+                    /* 这里脏矩阵计算重绘区域还有问题(?) */
                     if (scui_widget_draw_frag(&draw_clip, &clip_frag, &image2_clip)) {
                         
                         #if 0

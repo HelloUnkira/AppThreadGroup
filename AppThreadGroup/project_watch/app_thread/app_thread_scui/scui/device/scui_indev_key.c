@@ -40,7 +40,7 @@ static void scui_indev_key_event_check(scui_event_t *event)
             }
         break;
     default:
-        // 常规事件不做额外的合并处理
+        /* 常规事件不做额外的合并处理 */
         scui_event_notify(event);
         break;
     }

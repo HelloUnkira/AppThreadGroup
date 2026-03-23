@@ -86,7 +86,7 @@ void scui_frame_buffer_ready(void)
     
     /* 让draw流程变得可触发,之后循环互锁 */
     scui_sem_process(&scui_frame_buffer.sem_draw, scui_sem_give);
-    // scui_sem_process(&scui_frame_buffer.sem_refr, scui_sem_give);
+    /* scui_sem_process(&scui_frame_buffer.sem_refr, scui_sem_give); */
 }
 
 /*@brief 绘制忙碌等待

@@ -78,7 +78,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
                 return true;
             /* 剪切域是否真包含(去除旧有的,重新检查) */
             if (scui_area_inside(&clip_valid, &unit->clip)) {
-                // 将旧有的节点回收, 总和剪切域更新到clip_valid
+                /* 将旧有的节点回收, 总和剪切域更新到clip_valid */
                 scui_list_dll_remove(&clip_set->dl_list, &unit->dl_node);
                 clip_set->size -= scui_area_size(&unit->clip);
                 clip_set->num--;
@@ -89,7 +89,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
             scui_area_t clip_union = {0};
             if (scui_area_union(&clip_union, &unit->clip, &clip_valid)) {
                 clip_valid = clip_union;
-                // 将旧有的节点回收,总和剪切域更新到clip_valid
+                /* 将旧有的节点回收,总和剪切域更新到clip_valid */
                 scui_list_dll_remove(&clip_set->dl_list, &unit->dl_node);
                 clip_set->size -= scui_area_size(&unit->clip);
                 clip_set->num--;
@@ -100,7 +100,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
             scui_area_t  clip2[3] = {0};
             scui_coord_t clip2_num = 0; bool result = true;
             if (scui_area_differ2(clip2, &clip2_num, &unit->clip, &clip_valid)) {
-                // 现在clip_valid被拆成更小的了(重走流程)
+                /* 现在clip_valid被拆成更小的了(重走流程) */
                 for (scui_coord_t idx = 0; idx < clip2_num; idx++)
                     result |= scui_clip_add(clip_set, &clip2[idx]);
                 return result;
@@ -109,7 +109,7 @@ bool scui_clip_add(scui_clip_set_t *clip_set, scui_area_t *clip)
             unit = NULL;
         }
         
-        // 循环一次未命中
+        /* 循环一次未命中 */
         if (unit == NULL)
             break;
     }
@@ -151,7 +151,7 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
                 scui_area_t  clip4[4] = {0};
                 scui_coord_t clip4_num = 0;
                 if (scui_area_differ(clip4, &clip4_num, &unit->clip, &clip_inter)) {
-                    // 将多余的重新加回去, 当前循环就此终止
+                    /* 将多余的重新加回去, 当前循环就此终止 */
                     for (scui_coord_t idx = 0; idx < clip4_num; idx++)
                         scui_clip_add(clip_set, &clip4[idx]);
                 }
@@ -163,7 +163,7 @@ bool scui_clip_del(scui_clip_set_t *clip_set, scui_area_t *clip)
             unit = NULL;
         }
         
-        // 循环一次未命中
+        /* 循环一次未命中 */
         if (unit == NULL)
             break;
     }

@@ -62,14 +62,14 @@ void scui_ready(void)
     surface_size = surface.ver_res * surface_line + surface_rem;
     #endif
     
-    // 为绘制画布配置参数信息并且开辟资源
+    /* 为绘制画布配置参数信息并且开辟资源 */
     surface_fb = scui_frame_buffer_draw(); *surface_fb = surface;
     surface_fb->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
     SCUI_ASSERT(surface_fb->pixel != NULL);
     scui_draw_area_fill(true, surface_fb, clip, surface_fb->alpha, SCUI_COLOR_ZEROED);
     
     #if SCUI_FRAME_BUFFER_ASYNC
-    // 为送显画布配置参数信息并且开辟资源
+    /* 为送显画布配置参数信息并且开辟资源 */
     surface_fb = scui_frame_buffer_refr(); *surface_fb = surface;
     surface_fb->pixel = SCUI_MEM_ALLOC(scui_mem_type_graph, surface_size);
     SCUI_ASSERT(surface_fb->pixel != NULL);

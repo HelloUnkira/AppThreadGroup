@@ -1,8 +1,8 @@
 #ifndef SCUI_CWF_JSON_MAKER_H
 #define SCUI_CWF_JSON_MAKER_H
 
-// 使用一个通用结构去描述所有item
-// 如果谁缺字段可自行额外补充即可
+/* 使用一个通用结构去描述所有item */
+/* 如果谁缺字段可自行额外补充即可 */
 typedef struct {
     /* linker */
     scui_cwf_json_parser_t *parser;

@@ -19,20 +19,20 @@
 #define SCUI_MEM_RECORD_ITEM_USER                   (1024)
 /* 内存使用记录监控(子类型): */
 #define SCUI_MEM_RECORD_CHECK_MIX                   (0)
-#define SCUI_MEM_RECORD_CHECK_FONT                  (0) // SCUI_MEM_FEAT_MINI: 不支持, 必须为0
-#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0) // SCUI_MEM_FEAT_MINI: 不支持, 必须为0
-#define SCUI_MEM_RECORD_CHECK_USER                  (0) // SCUI_MEM_FEAT_MINI: 不支持, 必须为0
+#define SCUI_MEM_RECORD_CHECK_FONT                  (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
+#define SCUI_MEM_RECORD_CHECK_GRAPH                 (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
+#define SCUI_MEM_RECORD_CHECK_USER                  (0) /* SCUI_MEM_FEAT_MINI: 不支持, 必须为0 */
 /* 内存哨兵监控(内存边界追查) */
 #define SCUI_MEM_SENTRY_CHECK                       (1)
 
 #if SCUI_MEM_FEAT_MINI
 /* 小内存方案(开发中......) */
-// 分块双Buffer + 缓存(可选)
+/* 分块双Buffer + 缓存(可选) */
 
-// 不支持特性(不推荐, 缺内存):
-// SCUI_MEM_FEAT_MINI == true:
-// 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐)
-// 子控件树, 静态画布真缩放, 窗口转场变换
+/* 不支持特性(不推荐, 缺内存): */
+/* SCUI_MEM_FEAT_MINI == true: */
+/* 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐) */
+/* 子控件树, 静态画布真缩放, 窗口转场变换 */
 
 #define SCUI_MEM_TYPE_SIZE_MIX                      (0x80000 + /* 临时缓存: */ 0x400000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
@@ -51,8 +51,8 @@
 #define SCUI_CACHE_DRAW_DSC_NUM                     (10)
 #else
 /* 大内存方案: */
-// 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other
-// 8M PSRAM (空闲1M):     MIX:192K; FONT:256K; USER:64K; GRAPH:7.5M - other
+/* 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other */
+/* 8M PSRAM (空闲1M):     MIX:192K; FONT:256K; USER:64K; GRAPH:7.5M - other */
 
 #define SCUI_MEM_TYPE_SIZE_MIX                      (0x30000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0x40000)
@@ -71,7 +71,7 @@
 #define SCUI_CACHE_DRAW_DSC_NUM                     (100)
 #endif
 
-// 存在一些结构化的碎片, 这些内存不要使用graph
+/* 存在一些结构化的碎片, 这些内存不要使用graph */
 #define SCUI_MEM_MIX_FRAG_SIZE_LIMIT                (1024 * 1)
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -26,7 +26,7 @@ const char * scui_event_type_stringify(scui_event_type_t type)
     if (scui_event_cb_type_stringify != NULL)
         type_stringify = scui_event_cb_type_stringify(type);
     
-    // 不支持的和未识别的直接返回本身的数字字符串
+    /* 不支持的和未识别的直接返回本身的数字字符串 */
     if (type_stringify == NULL) {
         static uint16_t stringify[10] = {0};
         snprintf(stringify, sizeof(stringify), "%d", type);
@@ -198,10 +198,10 @@ static void scui_event_respond(scui_event_t *event)
     #if SCUI_MEM_RECORD_CHECK
     if (event->type == scui_event_draw) {
         #if SCUI_MEM_RECORD_STATISTIC
-        // scui_mem_record_statistic(false);
+        /* scui_mem_record_statistic(false); */
         #endif
         #if SCUI_MEM_RECORD_ANALYSIS
-        // scui_mem_record_analysis(false);
+        /* scui_mem_record_analysis(false); */
         #endif
         
         #if SCUI_MEM_SENTRY_CHECK
@@ -261,9 +261,9 @@ static void scui_event_respond(scui_event_t *event)
     
     /* 本事件无活跃场景接收 */
     if (scui_handle_unmap(event->object)) {
-        // 存在控件树已经被回收的情况
-        // 但是事件调度队列还存在控件树的事件未响应
-        // 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响
+        /* 存在控件树已经被回收的情况 */
+        /* 但是事件调度队列还存在控件树的事件未响应 */
+        /* 直接丢弃这个事件即可, 因为它还未来得及生效已经失效了, 无额外影响 */
         const char *type_stringify = scui_event_type_stringify(event->type);
         SCUI_LOG_ERROR("error widget %u %s", event->object, type_stringify);
         return;
@@ -298,23 +298,23 @@ static void scui_event_respond(scui_event_t *event)
         event_filter = event_filter || event->type == scui_event_key_hold;
         event_filter = event_filter || event->type == scui_event_key_click;
         
-        // 系统事件调度工步:prepare
+        /* 系统事件调度工步:prepare */
         if (scui_event_order_check(event)) {
             scui_event_mask_prepare(event);
             scui_widget_event_dispatch(event);
         }
-        // 系统事件调度工步:execute
+        /* 系统事件调度工步:execute */
         if (true/* must execute */) {
             scui_event_mask_execute(event);
             scui_widget_event_dispatch(event);
         }
-        // 系统事件调度工步:finish
+        /* 系统事件调度工步:finish */
         if (scui_event_order_check(event)) {
             scui_event_mask_finish(event);
             scui_widget_event_dispatch(event);
         }
         
-        // 控件树调度结束, 检查事件是否处理完毕
+        /* 控件树调度结束, 检查事件是否处理完毕 */
         if (scui_event_check_over(event) && event_filter)
             return;
         
@@ -328,17 +328,17 @@ static void scui_event_respond(scui_event_t *event)
         
         if (event_filter) {
             
-            // 系统事件调度工步:prepare
+            /* 系统事件调度工步:prepare */
             if (scui_event_order_check(event)) {
                 scui_event_mask_prepare(event);
                 scui_window_event_dispatch(event);
             }
-            // 系统事件调度工步:execute
+            /* 系统事件调度工步:execute */
             if (true/* must execute */) {
                 scui_event_mask_execute(event);
                 scui_window_event_dispatch(event);
             }
-            // 系统事件调度工步:finish
+            /* 系统事件调度工步:finish */
             if (scui_event_order_check(event)) {
                 scui_event_mask_finish(event);
                 scui_window_event_dispatch(event);
@@ -352,17 +352,17 @@ static void scui_event_respond(scui_event_t *event)
     /* 自定义事件响应<custom> */
     if (scui_event_type_custom(event->type)) {
         
-        // 系统事件调度工步:prepare
+        /* 系统事件调度工步:prepare */
         if (scui_event_order_check(event)) {
             scui_event_mask_prepare(event);
             scui_event_cb_custom(event);
         }
-        // 系统事件调度工步:execute
+        /* 系统事件调度工步:execute */
         if (scui_event_order_check(event)) {
             scui_event_mask_execute(event);
             scui_event_cb_custom(event);
         }
-        // 系统事件调度工步:finish
+        /* 系统事件调度工步:finish */
         if (scui_event_order_check(event)) {
             scui_event_mask_finish(event);
             scui_event_cb_custom(event);
@@ -442,11 +442,11 @@ void scui_event_dispatch(void)
         scui_event_respond(&event);
         scui_tick_calc(0x11, NULL, NULL, NULL);
         
-        // 不要让此调度, 长期的占用CPU资源
+        /* 不要让此调度, 长期的占用CPU资源 */
         uint64_t tick_us_now = scui_tick_us();
         if (tick_us_now - tick_us > SCUI_EVENT_OCCUPY_LIMIT) {
-            // 如果还有事件未处理
-            // 通过一个空的事件去补充通知
+            /* 如果还有事件未处理 */
+            /* 通过一个空的事件去补充通知 */
             if (scui_event_num() != 0) {
                 scui_event_define(event_ui, SCUI_HANDLE_SYSTEM, false, scui_event_sched_none, NULL);
                 scui_event_notify(&event_ui);

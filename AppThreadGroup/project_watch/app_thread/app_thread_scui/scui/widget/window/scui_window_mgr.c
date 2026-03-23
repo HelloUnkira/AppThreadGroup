@@ -139,7 +139,7 @@ static void scui_window_list_sort(scui_widget_t **list, scui_handle_t num)
         }
     }
     
-    // 输出排序好的窗口信息
+    /* 输出排序好的窗口信息 */
     if (num != 0)
         SCUI_LOG_INFO("window list:");
     
@@ -205,7 +205,7 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     /* 3.仅窗口切换时应用特效渲染 */
     mode_simple = mode_simple || !scui_widget_scroll_state(0x02);
     
-    // 直接渲染复用常规窗口移动变换(此时相当于不移动)
+    /* 直接渲染复用常规窗口移动变换(此时相当于不移动) */
     if (mode_simple) switch_type = scui_window_switch_move;
     
     /* 底图清空 */
@@ -308,20 +308,20 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         widget_cur = list[0];
         widget_tar = list[1];
         scui_widget_move_pos(widget_cur->myself, &point);
-        // alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
-        // alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct);
-        // scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true);
-        // scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true);
+        /* alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct); */
+        /* alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct); */
+        /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */
+        /* scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true); */
         break;
     }
     case scui_window_switch_cover_out: {
         widget_cur = list[1];
         widget_tar = list[0];
         scui_widget_move_pos(widget_tar->myself, &point);
-        // alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct);
-        // alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct);
-        // scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true);
-        // scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true);
+        /* alpha_cur = scui_alpha_pct(100 - scui_window_mgr.switch_args.pct); */
+        /* alpha_tar = scui_alpha_pct(scui_window_mgr.switch_args.pct); */
+        /* scui_widget_alpha_mix(widget_cur->myself, alpha_cur, true); */
+        /* scui_widget_alpha_mix(widget_tar->myself, alpha_tar, true); */
         break;
     }
     }
@@ -371,15 +371,15 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
     case scui_window_switch_cover_in: {
         SCUI_ASSERT(widget_cur->clip.w == SCUI_HOR_RES);
         SCUI_ASSERT(widget_cur->clip.h == SCUI_VER_RES);
-        // scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
-        // scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
+        /* scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true); */
+        /* scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true); */
         break;
     }
     case scui_window_switch_cover_out: {
         SCUI_ASSERT(widget_tar->clip.w == SCUI_HOR_RES);
         SCUI_ASSERT(widget_tar->clip.h == SCUI_VER_RES);
-        // scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true);
-        // scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true);
+        /* scui_widget_alpha_undo(widget_cur->myself, alpha_cur, true); */
+        /* scui_widget_alpha_undo(widget_tar->myself, alpha_tar, true); */
         break;
     }
     }
@@ -491,7 +491,7 @@ static void scui_window_surface_blend(void)
         scui_surface_t *surface_fb = scui_frame_buffer_draw();
         SCUI_ASSERT(surface_fb->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(surface_fb->hor_res == SCUI_VER_RES);
-        // 类型必须匹配才可交换
+        /* 类型必须匹配才可交换 */
         if (widget_only->surface->format  == surface_fb->format  &&
             widget_only->surface->hor_res == surface_fb->hor_res &&
             widget_only->surface->ver_res == surface_fb->ver_res) {
@@ -580,7 +580,7 @@ void scui_window_active(scui_handle_t handle)
     }
     #endif
     
-    // 清除当前活跃窗口, 后记录新的窗口
+    /* 清除当前活跃窗口, 后记录新的窗口 */
     for (scui_multi_t idx = SCUI_WINDOW_LIST_LIMIT - 1; idx > 0; idx--)
         scui_window_mgr.list_args.acts[idx] = scui_window_mgr.list_args.acts[idx - 1];
         scui_window_mgr.list_args.acts[0] = handle;
@@ -607,6 +607,6 @@ void scui_window_active(scui_handle_t handle)
 scui_handle_t scui_window_active_last(scui_handle_t index)
 {
     SCUI_ASSERT(index < SCUI_WINDOW_LIST_LIMIT);
-    // SCUI_ASSERT(scui_handle_remap(scui_window_mgr.list_args.acts[index]));
+    /* SCUI_ASSERT(scui_handle_remap(scui_window_mgr.list_args.acts[index])); */
     return scui_window_mgr.list_args.acts[index];
 }

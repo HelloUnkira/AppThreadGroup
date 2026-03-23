@@ -208,12 +208,12 @@ void scui_pixel_mix_with(scui_pixel_cf_t cf_1, void *pixel_1, scui_alpha_t alpha
         }
         
         #if 1
-        // 这是一种加速像素点混合的方式
-        // Alpha converted from [0..255] to [0..31]
-        // Converts  0000000000000000rrrrrggggggbbbbb
-        //     into  00000gggggg00000rrrrr000000bbbbb
-        // with mask 00000111111000001111100000011111
-        // This is useful because it makes space for a parallel fixed-point multiply
+        /* 这是一种加速像素点混合的方式 */
+        /* Alpha converted from [0..255] to [0..31] */
+        /* Converts  0000000000000000rrrrrggggggbbbbb */
+        /*     into  00000gggggg00000rrrrr000000bbbbb */
+        /* with mask 00000111111000001111100000011111 */
+        /* This is useful because it makes space for a parallel fixed-point multiply */
         uint8_t a1 = alpha_1 >> 3; uint32_t p1 = c_1->full;
         uint8_t a2 = alpha_2 >> 3; uint32_t p2 = c_2->full;
         p1 = ((p1 | (p1 << 16)) & 0x07e0f81f);
@@ -302,7 +302,7 @@ uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel)
         uint16_t g8 = (pc->ch.g << 2) + 0b11;
         uint16_t b8 = (pc->ch.b << 3) + 0b111;
         
-        // Gray * 1024 = R * 306 + G * 601 + B * 117
+        /* Gray * 1024 = R * 306 + G * 601 + B * 117 */
         uint8_t grey = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
         return grey;
     }
@@ -318,7 +318,7 @@ uint8_t scui_grey_by_pixel(scui_pixel_cf_t cf, void *pixel)
         uint16_t g8 = (c565.ch.g << 2) + 0b11;
         uint16_t b8 = (c565.ch.b << 3) + 0b111;
         
-        // Gray * 1024 = R * 306 + G * 601 + B * 117
+        /* Gray * 1024 = R * 306 + G * 601 + B * 117 */
         uint8_t grey = (r8 * 306 + g8 * 601 + b8 * 117) >> 10;
         return grey;
     }
@@ -352,7 +352,7 @@ uint8_t scui_grey_bpp_x(uint8_t bitmap, uint8_t bpp, uint8_t bpp_x)
         return ((bitmap & (mask_2 << ofs)) >> ofs) * 0xFF / mask_2;
     case 4: ofs = 4 - bpp_x * 4;
         return ((bitmap & (mask_4 << ofs)) >> ofs) * 0xFF / mask_4;
-    case 8: ofs = 0;    // 0 - bpp_x * 8;   // 这个应该永远都是0
+    case 8: ofs = 0;    /* 0 - bpp_x * 8;   // 这个应该永远都是0 */
         return ((bitmap & (mask_8 << ofs)) >> ofs) * 0xFF / mask_8;
     default:
         SCUI_ASSERT(false);

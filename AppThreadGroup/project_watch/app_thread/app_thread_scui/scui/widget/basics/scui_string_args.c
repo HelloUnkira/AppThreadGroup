@@ -43,17 +43,17 @@ static void scui_string_args_match_word(scui_string_args_t *args, uint32_t *idx_
         }
         *width += glyph_width;
         
-        // 找可以明确分割单词的字符
+        /* 找可以明确分割单词的字符 */
         bool break_char = false;
         
-        // 被标记的字符都可以分割单词
+        /* 被标记的字符都可以分割单词 */
         for (uint8_t idx_k = 0; !break_char && SCUI_STRING_BREAK_CHAR[idx_k] != '\0'; idx_k++)
             if (args->unicode[idx] == SCUI_STRING_BREAK_CHAR[idx_k])
                 break_char = true;
         
-        // 中文字符都可单独为一个单词
+        /* 中文字符都可单独为一个单词 */
         if (args->unicode[idx] >= 0x4E00 &&
-            args->unicode[idx] <= 0x9FA5)   // 0x4E00
+            args->unicode[idx] <= 0x9FA5)   /* 0x4E00 */
             break_char = true;
         
         if (break_char) {
@@ -137,7 +137,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
     
     args->width  = 0;
     args->height = 0;
-    // 最大行宽为绘制区域的宽度
+    /* 最大行宽为绘制区域的宽度 */
     scui_area_t  src_clip_v = args->clip;
     scui_point_t src_offset = {0};
     /* 从字库中提取一些信息 */
@@ -153,7 +153,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
         /* 文字排版是在虚拟区域内进行的 */
         /* 也即当已知最大绘制宽度的情况下, 进行多行的排布 */
         
-        // 先做统计,将信息填入到临时开辟的空间之中
+        /* 先做统计,将信息填入到临时开辟的空间之中 */
         uint32_t line_w_list[SCUI_STRING_LIMIT_LINE] = {0};
         uint32_t line_s_list[SCUI_STRING_LIMIT_LINE] = {0};
         uint32_t line_e_list[SCUI_STRING_LIMIT_LINE] = {0};
@@ -166,11 +166,11 @@ static void scui_string_args_typography(scui_string_args_t *args)
             else
                 SCUI_LOG_DEBUG("letter:%x", args->unicode[idx]);
             
-            // 先拿一个单词,尝试填满
+            /* 先拿一个单词,尝试填满 */
             uint32_t word_s = idx, word_e = 0, word_w = 0;
             scui_string_args_match_word(args, &word_s, &word_e, &word_w, NULL);
             
-            // 本行还能接受一个单词,接受它
+            /* 本行还能接受一个单词,接受它 */
             if (line_w_list[line_n - 1] +  word_w < src_clip_v.w) {
                 line_w_list[line_n - 1] += word_w;
                 line_e_list[line_n - 1]  = word_e;
@@ -178,7 +178,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
                 continue;
             }
             
-            // 一个单词填不满,且不是单字符,限制填充
+            /* 一个单词填不满,且不是单字符,限制填充 */
             if (line_w_list[line_n - 1] == 0 && word_e - word_s > 0) {
                 uint32_t word_s = idx;
                 uint32_t word_e = 0;
@@ -193,7 +193,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
                 }
             }
             
-            // 换行,退格重填
+            /* 换行,退格重填 */
             SCUI_ASSERT(line_w_list[line_n - 1] <= src_clip_v.w);
             line_w_list[line_n - 1] -= args->gap_item;
             line_s_list[line_n + 0]  = idx;
@@ -201,10 +201,10 @@ static void scui_string_args_typography(scui_string_args_t *args)
             idx--;
         }
         
-        // 是否到达最后一个字符
+        /* 是否到达最后一个字符 */
         SCUI_ASSERT(line_e_list[line_n - 1] == args->number - 1);
         
-        // 去除俩端的空白字符
+        /* 去除俩端的空白字符 */
         for (uint32_t line_i = 0; line_i < line_n; line_i++) {
              uint32_t line_s = line_s_list[line_i];
              uint32_t line_e = line_e_list[line_i];
@@ -261,7 +261,7 @@ static void scui_string_args_typography(scui_string_args_t *args)
             line_e_list[line_i] = line_e = word_t;
         }
         
-        // 生成排版
+        /* 生成排版 */
         args->typo = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(scui_string_typo_t));
         args->typo->line_mum   = line_n;
         args->typo->line_ofs_s = SCUI_MEM_ALLOC(scui_mem_type_font, sizeof(uint32_t) * line_n);
@@ -316,10 +316,10 @@ static void scui_string_args_typography(scui_string_args_t *args)
 void scui_string_args_process(scui_string_args_t *args)
 {
     SCUI_ASSERT(args != NULL);
-    // 无需更新时不处理文字
+    /* 无需更新时不处理文字 */
     if (!args->update)
          return;
-    // 更新参数初始状态
+    /* 更新参数初始状态 */
     args->update = false;
     args->width  = 0;
     args->height = 0;
@@ -395,21 +395,21 @@ uint32_t scui_utf8_to_unicode(uint8_t *utf8, uint32_t *unicode)
  */
 uint32_t scui_utf8_bytes(uint8_t utf8)
 {
-    if (utf8 <= 0x7F)                   // ASCII 占用1个字节
+    if (utf8 <= 0x7F)                   /* ASCII 占用1个字节 */
         return 1;
-    if (utf8 >= 0xC0 && utf8 <= 0xDF)   // UTF-8 占用2个字节
+    if (utf8 >= 0xC0 && utf8 <= 0xDF)   /* UTF-8 占用2个字节 */
         return 2;
-    if (utf8 >= 0xE0 && utf8 <= 0xEF)   // UTF-8 占用3个字节
+    if (utf8 >= 0xE0 && utf8 <= 0xEF)   /* UTF-8 占用3个字节 */
         return 3;
-    if (utf8 >= 0xF0 && utf8 <= 0xF7)   // UTF-8 占用4个字节
+    if (utf8 >= 0xF0 && utf8 <= 0xF7)   /* UTF-8 占用4个字节 */
         return 4;
-    if (utf8 >= 0xF8 && utf8 <= 0xFB)   // UTF-8 占用5个字节
+    if (utf8 >= 0xF8 && utf8 <= 0xFB)   /* UTF-8 占用5个字节 */
         return 5;
-    if (utf8 >= 0xFC && utf8 <= 0xFD)   // UTF-8 占用6个字节
+    if (utf8 >= 0xFC && utf8 <= 0xFD)   /* UTF-8 占用6个字节 */
         return 6;
     
     #if 1
-    // 我不知道为什么代码会走到此处
+    /* 我不知道为什么代码会走到此处 */
     SCUI_LOG_DEBUG("here ?");
     uint8_t offset = 1;
     
@@ -426,7 +426,7 @@ uint32_t scui_utf8_bytes(uint8_t utf8)
     #endif
     
     /* 新标准只支持utf8映射到unicode的字符集(1~4字节) */
-    // UTF-8 非首字节
+    /* UTF-8 非首字节 */
     SCUI_ASSERT(false);
     return 0;
 }

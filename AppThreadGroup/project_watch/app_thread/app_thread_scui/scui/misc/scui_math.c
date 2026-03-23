@@ -97,7 +97,7 @@ int32_t scui_tan4096(int32_t angle)
  */
 uint16_t scui_atan2(int32_t x, int32_t y)
 {
-    // 见lv_atan2(仅做过一点整理)
+    /* 见lv_atan2(仅做过一点整理) */
     SCUI_ASSERT(x > -1456 && x < +1456);
     SCUI_ASSERT(y > -1456 && y < +1456);
     
@@ -167,7 +167,7 @@ void scui_sqrt(int32_t x, int32_t *q_i, int32_t *q_f, int32_t mask)
     
     int32_t root = 0;
     int32_t trial;
-    // http://ww1.microchip.com/...en/AppNotes/91040a.pdf
+    /* http://ww1.microchip.com/...en/AppNotes/91040a.pdf */
     
     do {
         trial = root + mask;

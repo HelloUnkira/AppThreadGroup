@@ -7,10 +7,10 @@
 
 #include "scui.h"
 
-// GIF
+/* GIF */
 #include "gifdec.h"
 
-// rlottie
+/* rlottie */
 #include "rlottie_capi.h"
 
 /*@brief 本地内部数据
@@ -55,7 +55,7 @@ void scui_image_frame_burn(scui_image_frame_t *image_frame)
     switch (image_frame->type) {
     case scui_image_type_gif: {
         
-        // 销毁GIF的管理器
+        /* 销毁GIF的管理器 */
         if (local != NULL && local->gif != NULL)
             gd_close_gif(local->gif);
         
@@ -74,7 +74,7 @@ void scui_image_frame_burn(scui_image_frame_t *image_frame)
     }
     case scui_image_type_lottie: {
         
-        // 销毁Lottie的管理器
+        /* 销毁Lottie的管理器 */
         if (local != NULL && local->rlottie.Animation != NULL)
             lottie_animation_destroy(local->rlottie.Animation);
         
@@ -120,10 +120,10 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->data = SCUI_MEM_ALLOC(scui_mem_type_graph, image_frame->size);
         scui_image_src_read(image, image_frame->data);
         
-        // 生成GIF的管理器
+        /* 生成GIF的管理器 */
         local->gif = gd_open_gif_data(image_frame->data);
         SCUI_ASSERT(local->gif->width != 0 && local->gif->height != 0);
-        // 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用)
+        /* 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用) */
         uintptr_t size_bin = 4 * local->gif->width * local->gif->height;
         uintptr_t data_bin = SCUI_MEM_ALLOC(scui_mem_type_graph, size_bin);
         image_frame->image.type = scui_image_type_mem;
@@ -135,7 +135,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->frame = scui_handle_find();
         scui_handle_linker(image_frame->frame, &image_frame->image);
         
-        // 更新基础参数
+        /* 更新基础参数 */
         local->gif->loop_count = image_frame->gif.loop;
         break;
     }
@@ -150,10 +150,10 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         scui_image_src_read(image, image_frame->data);
         image_frame->data[image_frame->size - 1] = '\0';
         
-        // 生成Lottie的管理器
+        /* 生成Lottie的管理器 */
         local->rlottie.Animation = lottie_animation_from_data(image_frame->data, image_frame->data, "");
         
-        // 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用)
+        /* 为GIF的帧图像开辟资源(注意:解出资源为ARGB8888, 要做一次本地转换到设备使用) */
         size_t rlottie_width = 0, rlottie_height = 0;
         lottie_animation_get_size(local->rlottie.Animation, &rlottie_width, &rlottie_height);
         SCUI_ASSERT(rlottie_width != 0 && rlottie_height != 0);
@@ -169,7 +169,7 @@ void scui_image_frame_make(scui_image_frame_t *image_frame)
         image_frame->frame = scui_handle_find();
         scui_handle_linker(image_frame->frame, &image_frame->image);
         
-        // 更新基础参数
+        /* 更新基础参数 */
         image_frame->lottie.frame = lottie_animation_get_totalframe(local->rlottie.Animation);
         image_frame->lottie.rate  = lottie_animation_get_framerate(local->rlottie.Animation);
         image_frame->lottie.index = 0;
@@ -194,22 +194,22 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
     switch (image_frame->type) {
     case scui_image_type_gif: {
         
-        // 获得一个帧, 到达末尾退出
+        /* 获得一个帧, 到达末尾退出 */
         int frame_get = gd_get_frame(local->gif);
         SCUI_ASSERT(frame_get != -1);
         
-        // 获得一个帧数据
+        /* 获得一个帧数据 */
         gd_render_frame(local->gif, local->gif->canvas);
         
         if (frame_get == 0)
             return false;
         
-        // 这里不可以直接将canvas使用, 因为GIF帧会依赖之前的帧
+        /* 这里不可以直接将canvas使用, 因为GIF帧会依赖之前的帧 */
         uintptr_t size_bin = image_frame->image.pixel.size_bin;
         uintptr_t data_bin = image_frame->image.pixel.data_bin;
         memcpy((void *)data_bin, local->gif->canvas, size_bin);
         
-        // 帧数据转为本地设备格式
+        /* 帧数据转为本地设备格式 */
         uint32_t pixel_cnt = local->gif->width * local->gif->height;
         scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
         
@@ -226,7 +226,7 @@ bool scui_image_frame_data(scui_image_frame_t *image_frame)
         lottie_animation_render(local->rlottie.Animation, image_frame->lottie.index,
             (void *)data_bin, rlottie_width, rlottie_height, rlottie_width * 4);
         
-        // 帧数据转为本地设备格式
+        /* 帧数据转为本地设备格式 */
         uint32_t pixel_cnt = rlottie_width * rlottie_height;
         scui_image_frame_ARGB32_cvt_cf((void *)data_bin, pixel_cnt);
         

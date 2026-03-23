@@ -18,7 +18,7 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type)
     scui_widget_type_t widget_type = widget->type;
     
     while (true) {
-        // 控件类型相等
+        /* 控件类型相等 */
         if (widget_type == type)
             return true;
         
@@ -27,7 +27,7 @@ bool scui_widget_type_check(scui_handle_t handle, scui_widget_type_t type)
         if (widget_map == NULL || widget_type == widget_map->base)
             break;
         
-        // 检查父控件的可继承属性
+        /* 检查父控件的可继承属性 */
         widget_type = widget_map->base;
         scui_widget_map_find(widget_type, &widget_map);
         if (!widget_map->inherit)
@@ -222,7 +222,7 @@ void scui_widget_create(void *maker, scui_handle_t *handle)
     widget_maker = local_maker;
     /* 备注:动态构造器是不知道句柄的 */
     /* 所以动态构造器需要填入非法句柄 */
-    // widget_maker->myself = SCUI_HANDLE_INVALID;
+    /* widget_maker->myself = SCUI_HANDLE_INVALID; */
     widget_map->make(widget, widget_maker, handle);
     SCUI_MEM_FREE(widget_maker);
     

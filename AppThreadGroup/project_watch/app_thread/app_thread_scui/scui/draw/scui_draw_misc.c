@@ -7,10 +7,10 @@
 
 #include "scui.h"
 
-// 二维码生成器库(qrcode):
+/* 二维码生成器库(qrcode): */
 #include "qrcodegen.h"
 
-// 条形码生成器库(barcode):
+/* 条形码生成器库(barcode): */
 #include "code128.h"
 
 /*@brief 区域二维码绘制

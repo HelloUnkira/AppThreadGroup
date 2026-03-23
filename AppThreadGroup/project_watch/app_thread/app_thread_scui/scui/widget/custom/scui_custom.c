@@ -24,7 +24,7 @@ void scui_custom_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_custom));
-    // 自定义控件既可以是根控件(子画布控件树),也可以是非根控件
+    /* 自定义控件既可以是根控件(子画布控件树),也可以是非根控件 */
 }
 
 /*@brief 控件析构
@@ -36,7 +36,7 @@ void scui_custom_burn(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_custom_t *custom = (void *)widget;
     
-    // 回收绘制描述符(全局)
+    /* 回收绘制描述符(全局) */
     SCUI_MEM_FREE(custom->draw_dsc);
     
     /* 析构基础控件实例 */
@@ -84,7 +84,7 @@ void scui_custom_draw_ctx_text(scui_custom_draw_dsc_t *draw_dsc)
     scui_string_args_process(args);
     scui_widget_draw_string(handle, target, args);
     
-    // 绘制完就地回收
+    /* 绘制完就地回收 */
     args->update = true;
     args->name = SCUI_HANDLE_INVALID;
     args->utf8 = NULL;

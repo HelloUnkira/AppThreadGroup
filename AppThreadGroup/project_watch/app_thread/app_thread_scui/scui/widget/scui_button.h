@@ -7,8 +7,8 @@ typedef enum {
 } scui_button_type_t;
 
 typedef enum {
-    scui_button_mode_static = 0,    // 静态按钮
-    scui_button_mode_scale,         // 缩放按钮
+    scui_button_mode_static = 0,    /* 静态按钮 */
+    scui_button_mode_scale,         /* 缩放按钮 */
 } scui_button_mode_t;
 
 typedef struct {

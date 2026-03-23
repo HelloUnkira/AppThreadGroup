@@ -16,14 +16,14 @@
  *    它在使用过程中,限制较大
  */
 
-// 使用slab分配器加速快速获取绘制描述符实例
+/* 使用slab分配器加速快速获取绘制描述符实例 */
 static void * scui_draw_dsc_slab_mem = NULL;
 
 /*@brief 绘制资源就绪
  */
 void scui_draw_ready(void)
 {
-    // 绘制描述符资源就绪
+    /* 绘制描述符资源就绪 */
     uintptr_t mem_slab_size = sizeof(scui_draw_dsc_t) * SCUI_CACHE_DRAW_DSC_NUM + sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t) * 4;
     scui_draw_dsc_slab_mem  = SCUI_MEM_ALLOC(scui_mem_type_graph, mem_slab_size);
     uintptr_t mem_slab_src  = (uintptr_t)scui_draw_dsc_slab_mem + sizeof(app_sys_mem_slab_t) + sizeof(uintptr_t);
@@ -39,8 +39,8 @@ void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc)
     *draw_dsc = app_sys_mem_slab_alloc(scui_draw_dsc_slab_mem);
     SCUI_ASSERT(*draw_dsc != NULL);
     
-    // 此处不使用memset, 使用者需要给定完整参数集, 未给定参数为未知值
-    // memset(*draw_dsc, 0, sizeof(scui_draw_dsc_t));
+    /* 此处不使用memset, 使用者需要给定完整参数集, 未给定参数为未知值 */
+    /* memset(*draw_dsc, 0, sizeof(scui_draw_dsc_t)); */
 }
 
 /*@brief 绘制上下文
@@ -107,18 +107,18 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
     
     #if SCUI_DRAW_TASK_SEQ
     if (draw_dsc->sync) {
-        // 就地响应目标
+        /* 就地响应目标 */
         scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
         app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
     } else {
-        // 加入到乱序流水线中
+        /* 加入到乱序流水线中 */
         scui_draw_task_notify(draw_dsc);
         
         static uint32_t cnt = 0; cnt++;
         if (cnt % 10 == 0) SCUI_LOG_WARN("draw_task: %d", cnt);
     }
     #else
-    // 就地响应目标
+    /* 就地响应目标 */
     scui_draw_ctx_cb[draw_dsc->type](draw_dsc);
     app_sys_mem_slab_free(scui_draw_dsc_slab_mem, draw_dsc);
     #endif
@@ -137,7 +137,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
     if (draw_dsc->src_width <= 0)
         draw_dsc->src_width  = 1;
     
-    // 基础线不使用此接口绘制
+    /* 基础线不使用此接口绘制 */
     if (draw_dsc->src_pos_1.x == draw_dsc->src_pos_2.x ||
         draw_dsc->src_pos_1.y == draw_dsc->src_pos_2.y)
         return;
@@ -189,7 +189,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
             clip_d.w = dt - clip_d.x;
             clip_d.y = pos_s.y + idx_j - draw_dsc->src_width / 2;
             
-            // 上下两边渐变补偿颜色打点
+            /* 上下两边渐变补偿颜色打点 */
             for (scui_multi_t idx_i = 0; idx_i < clip_d.w; idx_i++) {
                 
                 scui_alpha_t alpha = 0;
@@ -247,7 +247,7 @@ static void scui_draw_aline(scui_draw_dsc_t *draw_dsc)
             clip_d.h = pos_s.y + idx_i * dy / dx - clip_d.y;
             clip_d.x = pos_s.x + idx_i * df - draw_dsc->src_width / 2;
             
-            // 上下两边渐变补偿颜色打点
+            /* 上下两边渐变补偿颜色打点 */
             for (scui_multi_t idx_j = 0; idx_j < clip_d.h; idx_j++) {
                 
                 scui_alpha_t alpha = 0;

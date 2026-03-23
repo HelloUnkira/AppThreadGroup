@@ -7,7 +7,7 @@
 
 #include "scui.h"
 
-// JSON解析库
+/* JSON解析库 */
 #include "cJSON.h"
 
 /*@brief 内部函数:将hex16字符转为16进制数字
@@ -42,11 +42,11 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
     for (uint16_t idx = 0; idx < res->idx_num; idx++) {
         res->idx_ofs[idx] -= '0';
         
-        // assert check
+        /* assert check */
         SCUI_ASSERT(res->idx_ofs[idx] <= parser->image_num);
     }
     
-    // 修改之后更新本控件
+    /* 修改之后更新本控件 */
     scui_widget_draw(handle, NULL, false);
 }
 
@@ -65,8 +65,8 @@ static void scui_cwf_json_custom_dial_ptr_event(scui_event_t *event)
         draw_dsc->clip  = &clip;
         
         #if 1
-        // 如果外界时钟可信, 那么可以一直使用
-        // 不要频繁的在它工作时同步, 会有严重的跳秒现象
+        /* 如果外界时钟可信, 那么可以一直使用 */
+        /* 不要频繁的在它工作时同步, 会有严重的跳秒现象 */
         uint8_t  hour = scui_presenter.get_hour();
         uint8_t  min  = scui_presenter.get_min();
         uint8_t  sec  = scui_presenter.get_sec();
@@ -94,12 +94,12 @@ static void scui_cwf_json_custom_dial_ptr_event(scui_event_t *event)
         if (!scui_event_check_execute(event))
              return;
         
-        // 固定资源绑定到res, 构建时将widget与固定的res绑定
+        /* 固定资源绑定到res, 构建时将widget与固定的res绑定 */
         scui_csf_json_item__res_t *res = NULL;
         scui_widget_user_data_get(event->object, &res);
         SCUI_ASSERT(res != NULL);
         
-        // 从res中逆向获取解析器目标
+        /* 从res中逆向获取解析器目标 */
         scui_cwf_json_parser_t *parser = res->parser;
         uint16_t list_idx = res->list_idx;
         
@@ -109,7 +109,7 @@ static void scui_cwf_json_custom_dial_ptr_event(scui_event_t *event)
         draw_dsc->event = event;
         draw_dsc->clip  = &clip;
         
-        // 绘制前同步一次
+        /* 绘制前同步一次 */
         if (draw_dsc->dial_ptr.tick_sync) {
             draw_dsc->dial_ptr.tick_sync = false;
             uint8_t  hour = scui_presenter.get_hour();
@@ -140,16 +140,16 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
         if (!scui_event_check_execute(event))
              return;
         
-        // 固定资源绑定到res, 构建时将widget与固定的res绑定
+        /* 固定资源绑定到res, 构建时将widget与固定的res绑定 */
         scui_csf_json_item__res_t *res = NULL;
         scui_widget_user_data_get(event->object, &res);
         SCUI_ASSERT(res != NULL);
         
-        // 从res中逆向获取解析器目标
+        /* 从res中逆向获取解析器目标 */
         scui_cwf_json_parser_t *parser = res->parser;
         uint16_t list_idx = res->list_idx;
         
-        // 没有信息则不绘制
+        /* 没有信息则不绘制 */
         if (res->idx_ofs == NULL)
             break;
         
@@ -160,13 +160,13 @@ static void scui_cwf_json_custom_event(scui_event_t *event)
             SCUI_ASSERT(img_ofs < parser->image_num);
             
             
-            // 要么全部绘制图片, 要么只绘制指定位置的图片
+            /* 要么全部绘制图片, 要么只绘制指定位置的图片 */
             if (res->img_bits == 0 || res->img_bits - 1 == idx) {
                 clip.w = scui_image_w(image);
                 clip.h = scui_image_h(image);
                 scui_widget_draw_image(event->object, &clip, image, NULL, SCUI_COLOR_UNUSED);
             }
-            // 迭代到下一个绘制目标
+            /* 迭代到下一个绘制目标 */
             clip.x += clip.w + res->img_span;
         }
         break;
@@ -190,11 +190,11 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
     scui_handle_t handle = parser->list_child[res->list_idx];
     uint16_t list_idx = res->list_idx;
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
         parser->list_type[idx] < scui_cwf_json_type_img_e) {
         
-        // 为type进行构建
+        /* 为type进行构建 */
         switch (parser->list_type[idx]) {
         case scui_cwf_json_type_img_preview:
         case scui_cwf_json_type_img_simple:
@@ -362,10 +362,10 @@ void scui_cwf_json_anim_item(scui_cwf_json_parser_t *parser, uint32_t idx)
         }
     }
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
         parser->list_type[idx] < scui_cwf_json_type_txt_e) {
-        // keep adding
+        /* keep adding */
     }
 }
 
@@ -378,20 +378,20 @@ void scui_cwf_json_burn_item(scui_cwf_json_parser_t *parser, uint32_t idx)
     scui_csf_json_item__res_t *res = parser->list_src[idx];
     parser->list_src[idx] = NULL;
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
         parser->list_type[idx] < scui_cwf_json_type_img_e) {
         
-        // 回收动态生成的子资源
+        /* 回收动态生成的子资源 */
         SCUI_MEM_FREE(res->idx_ofs);
-        // 回收动态生成的子资源
+        /* 回收动态生成的子资源 */
         SCUI_MEM_FREE(res->img_ofs);
     }
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
         parser->list_type[idx] < scui_cwf_json_type_txt_e) {
-        // keep adding
+        /* keep adding */
     }
     
     SCUI_MEM_FREE(res);
@@ -407,11 +407,11 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
     scui_csf_json_item__res_t *res = SCUI_MEM_ZALLOC(scui_mem_type_user, sizeof(scui_csf_json_item__res_t));
     parser->list_src[idx] = res;
     
-    // 按协议解析字段 (进行一级解析)
-    // 按协议解析字段 (进行二级解析)
+    /* 按协议解析字段 (进行一级解析) */
+    /* 按协议解析字段 (进行二级解析) */
     parser->list_type[idx] = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "type")) + 0.1;
     
-    // 类型检查
+    /* 类型检查 */
     bool type_unmatch = true;
     if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
         parser->list_type[idx] < scui_cwf_json_type_img_e) type_unmatch = false;
@@ -420,16 +420,16 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
     if (type_unmatch)
         SCUI_LOG_ERROR("unknown type_sub:%d", parser->list_type[idx]);
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_img_s &&
         parser->list_type[idx] < scui_cwf_json_type_img_e) {
-        // 每一个该type都有类似的资源表, 直接构建即可
+        /* 每一个该type都有类似的资源表, 直接构建即可 */
         cJSON *json_src = cJSON_GetObjectItem(dict, "image_src");
         cJSON *json_num = cJSON_GetObjectItem(dict, "image_num");
         res->img_num = cJSON_GetNumberValue(json_num) + 0.1;
         res->img_ofs = SCUI_MEM_ALLOC(scui_mem_type_user, res->img_num * sizeof(uint16_t));
         SCUI_ASSERT(res->img_num != 0);
-        // 继续构建资源索引, 以便将来快速访问image_hit
+        /* 继续构建资源索引, 以便将来快速访问image_hit */
         for (uint32_t idx = 0; idx < res->img_num; idx++) {
              uint32_t ofs = cJSON_GetNumberValue(cJSON_GetArrayItem(json_src, idx)) + 0.1;
              SCUI_ASSERT(ofs < parser->image_num);
@@ -438,7 +438,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         res->img_w = scui_image_w(parser->image_hit[res->img_ofs[0]]);
         res->img_h = scui_image_h(parser->image_hit[res->img_ofs[0]]);
         
-        // 为type进行构建
+        /* 为type进行构建 */
         switch (parser->list_type[idx]) {
         case scui_cwf_json_type_img_preview:
             /* skip... */
@@ -500,7 +500,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         case scui_cwf_json_type_img_batt:
         case scui_cwf_json_type_img_dist:
         case scui_cwf_json_type_img_temp: {
-            // 数字类固定都是10个
+            /* 数字类固定都是10个 */
             SCUI_ASSERT(res->img_num == 10);
             scui_custom_maker_t custom_maker = {0};
             custom_maker.widget.type   = scui_widget_type_custom;
@@ -550,10 +550,10 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         }
     }
     
-    // 目前还未为type开发太多效果
+    /* 目前还未为type开发太多效果 */
     if (parser->list_type[idx] > scui_cwf_json_type_txt_s &&
         parser->list_type[idx] < scui_cwf_json_type_txt_e) {
-        // 每一个该type都有类似的资源表, 直接构建即可
+        /* 每一个该type都有类似的资源表, 直接构建即可 */
         char  *str_color = cJSON_GetStringValue(cJSON_GetObjectItem(dict, "color"));
         uint8_t  color_r = scui_cwf_json_chex16(str_color[2]) * 16 + scui_cwf_json_chex16(str_color[3]);
         uint8_t  color_g = scui_cwf_json_chex16(str_color[4]) * 16 + scui_cwf_json_chex16(str_color[5]);
@@ -577,7 +577,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         string_maker.font_idx                   = SCUI_FONT_IDX_32;
         scui_widget_create(&string_maker, &parser->list_child[idx]);
         
-        // 为type进行构建
+        /* 为type进行构建 */
         switch (parser->list_type[idx]) {
         case scui_cwf_json_type_txt_week:
         case scui_cwf_json_type_txt_ampm:
@@ -596,7 +596,7 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         }
     }
     
-    // 关联逆向索引, 资源绑定到目标
+    /* 关联逆向索引, 资源绑定到目标 */
     if (parser->list_child[idx] != SCUI_HANDLE_INVALID) {
         scui_widget_user_data_set(parser->list_child[idx], res);
         res->parser = parser;

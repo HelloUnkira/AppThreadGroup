@@ -6,24 +6,24 @@
  *    固件必须与json中版本号一并对应, 版本不匹配的云表盘不支持使用
  */
 
-// 头部信息
-// uint8_t  version[4];        // cwf版本号
-// uint32_t json_ofs;          // json文件偏移
-// uint32_t json_size;         // json文件大小
-// uint32_t image_iofs;        // image info偏移
-// uint32_t image_isize;       // image info大小
-// uint32_t image_dofs;        // image data偏移
-// uint32_t image_dsize;       // image data大小
-// 总计: 28字节
+/* 头部信息 */
+/* uint8_t  version[4];        // cwf版本号 */
+/* uint32_t json_ofs;          // json文件偏移 */
+/* uint32_t json_size;         // json文件大小 */
+/* uint32_t image_iofs;        // image info偏移 */
+/* uint32_t image_isize;       // image info大小 */
+/* uint32_t image_dofs;        // image data偏移 */
+/* uint32_t image_dsize;       // image data大小 */
+/* 总计: 28字节 */
 
-// 单个 image info 约定
-// uint8_t  format;  --> scui_cwf_json_image_cf_t 转译成 scui_pixel_cf_t 类型
-// uint8_t  type;    --> scui_image_type_t
-// uint32_t height;  --> 转译成uintptr_t
-// uint32_t width;   --> 转译成uintptr_t
-// uint32_t size;    --> 转译成uintptr_t
-// uint32_t data;    --> 转译成uintptr_t
-// 总计: 18字节
+/* 单个 image info 约定 */
+/* uint8_t  format;  --> scui_cwf_json_image_cf_t 转译成 scui_pixel_cf_t 类型 */
+/* uint8_t  type;    --> scui_image_type_t */
+/* uint32_t height;  --> 转译成uintptr_t */
+/* uint32_t width;   --> 转译成uintptr_t */
+/* uint32_t size;    --> 转译成uintptr_t */
+/* uint32_t data;    --> 转译成uintptr_t */
+/* 总计: 18字节 */
 
 typedef struct {
     scui_handle_t  name;

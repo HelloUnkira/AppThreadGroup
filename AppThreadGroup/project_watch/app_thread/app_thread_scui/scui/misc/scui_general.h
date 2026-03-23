@@ -63,17 +63,17 @@ typedef scui_color8888_t scui_color32_t;
 #pragma pack(push, 1)
 typedef struct {
     union {
-        scui_color32_t color;       // 主色调
-        scui_color32_t color_s;     // 始色调
-        scui_color32_t color_l;     // 亮色调
+        scui_color32_t color;       /* 主色调 */
+        scui_color32_t color_s;     /* 始色调 */
+        scui_color32_t color_l;     /* 亮色调 */
     };
     union {
-        scui_color32_t color_e;     // 终色调
-        scui_color32_t color_d;     // 暗色调
+        scui_color32_t color_e;     /* 终色调 */
+        scui_color32_t color_d;     /* 暗色调 */
     };
     struct {
-        scui_color32_t color_f;     // 滤色调
-        uint8_t        filter:1;    // 标记
+        scui_color32_t color_f;     /* 滤色调 */
+        uint8_t        filter:1;    /* 标记 */
     };
 } scui_color_t;
 #pragma pack(pop)
@@ -165,12 +165,12 @@ typedef enum {
     scui_pixel_cf_bits_mask = 0x00FF,
     
     scui_pixel_cf_none      = 0,
-    scui_pixel_cf_alpha4    = 0x0100 + 1 * 8 / 2,   // alpha
-    scui_pixel_cf_alpha8    = 0x0100 + 1 * 8,       // alpha
-    scui_pixel_cf_bmp565    = 0x0200 + 2 * 8,       // bitmap
-    scui_pixel_cf_bmp888    = 0x0200 + 3 * 8,       // bitmap
-    scui_pixel_cf_bmp8565   = 0x0300 + 3 * 8,       // bitmap
-    scui_pixel_cf_bmp8888   = 0x0300 + 4 * 8,       // bitmap
+    scui_pixel_cf_alpha4    = 0x0100 + 1 * 8 / 2,   /* alpha */
+    scui_pixel_cf_alpha8    = 0x0100 + 1 * 8,       /* alpha */
+    scui_pixel_cf_bmp565    = 0x0200 + 2 * 8,       /* bitmap */
+    scui_pixel_cf_bmp888    = 0x0200 + 3 * 8,       /* bitmap */
+    scui_pixel_cf_bmp8565   = 0x0300 + 3 * 8,       /* bitmap */
+    scui_pixel_cf_bmp8888   = 0x0300 + 4 * 8,       /* bitmap */
     scui_pixel_cf_all,
 } scui_pixel_cf_t;
 
@@ -178,21 +178,21 @@ typedef enum {
  *       画布是块独立缓冲区或共享绘制画布的缓冲区
  */
 typedef struct {
-    uint8_t        *pixel;      // 画布像素流地址
-    scui_pixel_cf_t format;     // 画布像素流类型
-    scui_coord_t    hor_res;    // 画布像素流宽度
-    scui_coord_t    ver_res;    // 画布像素流高度
-    scui_alpha_t    alpha;      // 画布全局透明度
+    uint8_t        *pixel;      /* 画布像素流地址 */
+    scui_pixel_cf_t format;     /* 画布像素流类型 */
+    scui_coord_t    hor_res;    /* 画布像素流宽度 */
+    scui_coord_t    ver_res;    /* 画布像素流高度 */
+    scui_alpha_t    alpha;      /* 画布全局透明度 */
 } scui_surface_t;
 
 /*@brief 操作方向(与操作位置透明切换)
  */
 typedef enum {
     scui_opt_dir_none = (0),
-    scui_opt_dir_to_u = (1 << 0),   // 向up
-    scui_opt_dir_to_d = (1 << 1),   // 向down
-    scui_opt_dir_to_l = (1 << 2),   // 向left
-    scui_opt_dir_to_r = (1 << 3),   // 向right
+    scui_opt_dir_to_u = (1 << 0),   /* 向up */
+    scui_opt_dir_to_d = (1 << 1),   /* 向down */
+    scui_opt_dir_to_l = (1 << 2),   /* 向left */
+    scui_opt_dir_to_r = (1 << 3),   /* 向right */
     scui_opt_dir_ver  = (scui_opt_dir_to_u | scui_opt_dir_to_d),
     scui_opt_dir_hor  = (scui_opt_dir_to_l | scui_opt_dir_to_r),
     scui_opt_dir_all  = (scui_opt_dir_ver  | scui_opt_dir_hor ),
@@ -213,7 +213,7 @@ typedef enum {
 } scui_opt_pos_t;
 
 typedef enum {
-    // 0x yy xx
+    /* 0x yy xx */
     scui_opt_align_mask_ixl = 0x0001,
     scui_opt_align_mask_ixm = 0x0002,
     scui_opt_align_mask_ixr = 0x0004,
@@ -226,29 +226,29 @@ typedef enum {
     scui_opt_align_mask_oyt = 0x1000,
     scui_opt_align_mask_oyb = 0x2000,
     
-    scui_opt_align_itl = 0x0101,    // in top left
-    scui_opt_align_itm = 0x0102,    // in top middle
-    scui_opt_align_itr = 0x0104,    // in top right
-    scui_opt_align_ibl = 0x0401,    // in bottom left
-    scui_opt_align_ibm = 0x0402,    // in bottom middle
-    scui_opt_align_ibr = 0x0404,    // in bottom right
-    scui_opt_align_ilm = 0x0201,    // in left middle
-    scui_opt_align_irm = 0x0204,    // in right middle
-    scui_opt_align_icc = 0x0202,    // in center center
+    scui_opt_align_itl = 0x0101,    /* in top left */
+    scui_opt_align_itm = 0x0102,    /* in top middle */
+    scui_opt_align_itr = 0x0104,    /* in top right */
+    scui_opt_align_ibl = 0x0401,    /* in bottom left */
+    scui_opt_align_ibm = 0x0402,    /* in bottom middle */
+    scui_opt_align_ibr = 0x0404,    /* in bottom right */
+    scui_opt_align_ilm = 0x0201,    /* in left middle */
+    scui_opt_align_irm = 0x0204,    /* in right middle */
+    scui_opt_align_icc = 0x0202,    /* in center center */
     
-    scui_opt_align_otl = 0x1001,    // out top left
-    scui_opt_align_otm = 0x1002,    // out top middle
-    scui_opt_align_otr = 0x1004,    // out top right
-    scui_opt_align_obl = 0x2001,    // out bottom left
-    scui_opt_align_obm = 0x2002,    // out bottom middle
-    scui_opt_align_obr = 0x2004,    // out bottom right
+    scui_opt_align_otl = 0x1001,    /* out top left */
+    scui_opt_align_otm = 0x1002,    /* out top middle */
+    scui_opt_align_otr = 0x1004,    /* out top right */
+    scui_opt_align_obl = 0x2001,    /* out bottom left */
+    scui_opt_align_obm = 0x2002,    /* out bottom middle */
+    scui_opt_align_obr = 0x2004,    /* out bottom right */
     
-    scui_opt_align_olt = 0x0110,    // out left top
-    scui_opt_align_olm = 0x0210,    // out left middle
-    scui_opt_align_olb = 0x0410,    // out left bottom
-    scui_opt_align_ort = 0x0120,    // out right top
-    scui_opt_align_orm = 0x0220,    // out right middle
-    scui_opt_align_orb = 0x0420,    // out right bottom
+    scui_opt_align_olt = 0x0110,    /* out left top */
+    scui_opt_align_olm = 0x0210,    /* out left middle */
+    scui_opt_align_olb = 0x0410,    /* out left bottom */
+    scui_opt_align_ort = 0x0120,    /* out right top */
+    scui_opt_align_orm = 0x0220,    /* out right middle */
+    scui_opt_align_orb = 0x0420,    /* out right bottom */
     
 } scui_opt_align_t;
 

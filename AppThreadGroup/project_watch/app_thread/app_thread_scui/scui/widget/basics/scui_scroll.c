@@ -63,7 +63,7 @@ void scui_scroll_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_map_cb_t anima_path[4] = {0};
     scui_coord_t anima_speed[4] = SCUI_WIDGET_SCROLL_SPD_ANIM;
     
-    // 怪怪的感觉，有区别又没有区别
+    /* 怪怪的感觉，有区别又没有区别 */
     anima_path[0] = scui_map_ease_in_out;
     anima_path[1] = scui_map_ease_in_out;
     anima_path[2] = scui_map_ease_in_out;
@@ -122,7 +122,7 @@ void scui_scroll_burn(scui_handle_t handle)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_scroll_t *scroll = (void *)widget;
     
-    // 回收记录点列表
+    /* 回收记录点列表 */
     SCUI_MEM_FREE(scroll->point_rcd);
     
     if (scroll->anima != SCUI_HANDLE_INVALID) {
@@ -341,13 +341,13 @@ void scui_scroll_center(scui_handle_t handle, scui_handle_t target, bool anima)
         return;
     }
     
-    // 如果已经是中心子控件, 跳过目标
+    /* 如果已经是中心子控件, 跳过目标 */
     scui_handle_t handle_c = SCUI_HANDLE_INVALID;
     scui_scroll_center_get(handle, &handle_c);
     if (handle_c == target)
         return;
     
-    // 主动布局一次
+    /* 主动布局一次 */
     scui_event_define(event, handle, true, scui_event_layout, NULL);
     scui_event_notify(&event);
     
@@ -503,8 +503,8 @@ static void scui_scroll_point_record(scui_handle_t handle, bool record)
         scui_widget_t *widget_c = scui_handle_source(handle_c);
         
         if (record) {
-            // 此处计算相对偏移量
-            // 保存的是子控件相对父控件的偏移量
+            /* 此处计算相对偏移量 */
+            /* 保存的是子控件相对父控件的偏移量 */
             scroll->point_rcd[idx].x = widget_c->clip.x - widget->clip.x;
             scroll->point_rcd[idx].y = widget_c->clip.y - widget->clip.y;
         } else {
@@ -824,8 +824,8 @@ static void scui_scroll_anima_auto(scui_handle_t handle, int32_t value_s, int32_
     
     SCUI_LOG_INFO("<%d, %d>", value_s, value_e);
     
-    // 确定当前动画的路径
-    // 计算当前动画的周期
+    /* 确定当前动画的路径 */
+    /* 计算当前动画的周期 */
     for (scui_multi_t idx = 0; idx < 4; idx++)
         if (scroll->anima_tag[idx]) {
             anima.path = scroll->anima_path[idx];
@@ -1226,7 +1226,7 @@ static void scui_scroll_event_layout(scui_event_t *event)
     
     SCUI_LOG_INFO("widget: %u", widget->myself);
     
-    // 状态量还原
+    /* 状态量还原 */
     scroll->point_cur = (scui_point_t){0};
     scroll->point_ofs = (scui_point_t){0};
     
@@ -1254,18 +1254,18 @@ static void scui_scroll_event_layout(scui_event_t *event)
         SCUI_LOG_DEBUG("ofs_min:<0, %d>", scroll->ofs_min.x, scroll->ofs_min.y);
         SCUI_LOG_DEBUG("ofs_max:<0, %d>", scroll->ofs_max.x, scroll->ofs_max.y);
         
-        // 保存子控件的坐标记录
+        /* 保存子控件的坐标记录 */
         scui_scroll_point_record(event->object, true);
         
-        // 状态量还原
+        /* 状态量还原 */
         scroll->ofs_cur = (scui_point_t){0};
         scroll->ofs_sum = (scui_point_t){0};
         scui_widget_draw(widget->myself, NULL, false);
         return;
     }
     
-    // 水平自动布局会调整所有子控件的(x,y,h)
-    // 垂直自动布局会调整所有子控件的(x,y,w)
+    /* 水平自动布局会调整所有子控件的(x,y,h) */
+    /* 垂直自动布局会调整所有子控件的(x,y,w) */
     scui_point_t pos = {
         .x = widget->clip.x,
         .y = widget->clip.y,
@@ -1292,10 +1292,10 @@ static void scui_scroll_event_layout(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_ver)
             pos.y += widget_c->clip.h + scroll->space;
     }
-    // 保存子控件的坐标记录
+    /* 保存子控件的坐标记录 */
     scui_scroll_point_record(event->object, true);
     
-    // 状态量还原
+    /* 状态量还原 */
     scroll->dis_sum = 0;
     scroll->dis_ofs = 0;
     scroll->dis_lim = 0;
@@ -1346,7 +1346,7 @@ void scui_scroll_invoke(scui_event_t *event)
     scui_widget_t *widget = scui_handle_source_check(event->object);
     scui_scroll_t *scroll = (void *)widget;
     
-    // 无子控件不响应事件
+    /* 无子控件不响应事件 */
     if (widget->child_now == 0)
         return;
     
@@ -1378,7 +1378,7 @@ void scui_scroll_invoke(scui_event_t *event)
         if (scroll->dir == scui_opt_dir_hor) offset.x = -offset_t;
         if (scroll->dir == scui_opt_dir_ver) offset.y = -offset_t;
         if (layout) scui_scroll_offset(event->object, &offset, false);
-        // if (layout) SCUI_LOG_WARN("<%04d>", offset_t);
+        /* if (layout) SCUI_LOG_WARN("<%04d>", offset_t); */
         break;
     }
     case scui_event_ptr_down:
@@ -1463,7 +1463,7 @@ void scui_scroll_invoke(scui_event_t *event)
             way = -1;
         }
         
-        // 忽略的方向不支持
+        /* 忽略的方向不支持 */
         if (scui_scroll_edge_skip(event->object, dir))
             break;
         
@@ -1523,7 +1523,7 @@ void scui_scroll_invoke(scui_event_t *event)
             way = -1;
         }
         
-        // 忽略的方向不支持
+        /* 忽略的方向不支持 */
         if (scui_scroll_edge_skip(event->object, dir))
             break;
         

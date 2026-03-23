@@ -128,7 +128,7 @@ bool scui_event_dequeue(scui_event_t *event, bool hit, bool any)
     if (scui_event_queue.list_num != 0) {
         /* 需要命中指定资源包 */
         if (hit) {
-            // 额外定制的类型补充, 命中指定对象
+            /* 额外定制的类型补充, 命中指定对象 */
             if (any) {
                 scui_event_t *event_tar = NULL;
                 scui_list_dll_btra(&scui_event_queue.dl_list, node) {
@@ -229,32 +229,32 @@ void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_
         cb_node_inner = scui_own_ofs(scui_event_cb_node_t, dl_node, node);
         bool cb_node_unmatch = true;
         
-        if (cb_node_unmatch)    // 序列通配回调:sched
+        if (cb_node_unmatch)    /* 序列通配回调:sched */
         if (cb_node_inner->event == scui_event_sched_all &&
             scui_event_type_sched(cb_node->event))
             cb_node_unmatch = false;
         
-        if (cb_node_unmatch)    // 序列通配回调:widget
+        if (cb_node_unmatch)    /* 序列通配回调:widget */
         if (cb_node_inner->event == scui_event_widget_all &&
             scui_event_type_widget(cb_node->event))
             cb_node_unmatch = false;
         
-        if (cb_node_unmatch)    // 序列通配回调:ptr
+        if (cb_node_unmatch)    /* 序列通配回调:ptr */
         if (cb_node_inner->event == scui_event_ptr_all &&
             scui_event_type_ptr(cb_node->event))
             cb_node_unmatch = false;
         
-        if (cb_node_unmatch)    // 序列通配回调:enc
+        if (cb_node_unmatch)    /* 序列通配回调:enc */
         if (cb_node_inner->event == scui_event_enc_all &&
             scui_event_type_enc(cb_node->event))
             cb_node_unmatch = false;
         
-        if (cb_node_unmatch)    // 序列通配回调:key
+        if (cb_node_unmatch)    /* 序列通配回调:key */
         if (cb_node_inner->event == scui_event_key_all &&
             scui_event_type_key(cb_node->event))
             cb_node_unmatch = false;
         
-        if (cb_node_unmatch)    // 序列通配回调:custom
+        if (cb_node_unmatch)    /* 序列通配回调:custom */
         if (cb_node_inner->event == scui_event_custom_all &&
             scui_event_type_custom(cb_node->event))
             cb_node_unmatch = false;
@@ -262,7 +262,7 @@ void scui_event_cb_find(scui_event_cb_list_t *cb_list, scui_event_cb_node_t *cb_
         if (cb_node_unmatch)
             continue;
         
-        // 匹配到了
+        /* 匹配到了 */
         cb_node->event_cb = cb_node_inner->event_cb;
         return;
     }

@@ -206,7 +206,7 @@ void scui_xchart_invoke(scui_event_t *event)
                 scui_coord_t offset_1y = scui_map(vlist_min[idx], value_min, value_max, height, 0);
                 scui_coord_t offset_2y = scui_map(vlist_max[idx], value_min, value_max, height, 0);
                 
-                // 值为0, 不进行绘制
+                /* 值为0, 不进行绘制 */
                 if (offset_1y - offset_2y < src_clip.h * 2) {
                     offset.x += scui_image_w(image) + space;
                     continue;

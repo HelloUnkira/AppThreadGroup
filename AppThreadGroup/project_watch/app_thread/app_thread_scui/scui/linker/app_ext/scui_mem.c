@@ -167,7 +167,7 @@ static void scui_mem_sentry_check_invoke(void *ptr, bool used)
     if (used) {
         
         /* [size][sentry][monitoring data][sentry] */
-        // ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2;
+        /* ptr = (uint8_t *)ptr - sizeof(uint32_t) * 2; */
         uint32_t size_raw = *(uint32_t *)((uint8_t *)ptr + 0);
         uint32_t sentry_s = scui_crc32((uint8_t *)&size_raw, sizeof(uint32_t));
         uint32_t sentry_h = *(uint32_t *)((uint8_t *)ptr + 4);
@@ -245,33 +245,33 @@ static uint32_t scui_mem_size_raw(scui_mem_type_t type, void *ptr)
  */
 static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool way, void *ptr)
 {
-    // 分配成功无需通知
+    /* 分配成功无需通知 */
     if (ptr != NULL)
         return ptr;
     
-    // 这里暂时写作就地调用.后续整理
-    // 如果内存不够用,尝试清除缓存器后继续请求
-    // 实际上,这里应该产生事件调度,到达缓存器处理
+    /* 这里暂时写作就地调用.后续整理 */
+    /* 如果内存不够用,尝试清除缓存器后继续请求 */
+    /* 实际上,这里应该产生事件调度,到达缓存器处理 */
     
     #if SCUI_MEM_FEAT_MINI
     /* 此时回收所有缓存 */ {
         SCUI_LOG_WARN("memory deficit was caught");
         scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
         
-        // 图片缓存:
-        // scui_image_cache_visit();
+        /* 图片缓存: */
+        /* scui_image_cache_visit(); */
         scui_image_cache_clear();
-        // scui_image_cache_visit();
+        /* scui_image_cache_visit(); */
         
-        // 字库缓存:
-        // scui_font_cache_visit();
+        /* 字库缓存: */
+        /* scui_font_cache_visit(); */
         scui_font_cache_clear();
-        // scui_font_cache_visit();
+        /* scui_font_cache_visit(); */
         
-        // 文字缓存:
-        // scui_font_glyph_cache_visit();
+        /* 文字缓存: */
+        /* scui_font_glyph_cache_visit(); */
         scui_font_glyph_cache_clear();
-        // scui_font_glyph_cache_visit();
+        /* scui_font_glyph_cache_visit(); */
         
         scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
         ptr = scui_mem_alloc_raw(type, size, way);
@@ -285,15 +285,15 @@ static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool wa
     return ptr;
     #endif
     
-    // scui_mem_type_graph
+    /* scui_mem_type_graph */
     if (type == scui_mem_type_graph) {
         SCUI_LOG_WARN("memory graph deficit was caught");
         scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
         
-        // 图片缓存:
-        // scui_image_cache_visit();
+        /* 图片缓存: */
+        /* scui_image_cache_visit(); */
         scui_image_cache_clear();
-        // scui_image_cache_visit();
+        /* scui_image_cache_visit(); */
         
         scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
         ptr = scui_mem_alloc_raw(type, size, way);
@@ -301,21 +301,21 @@ static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool wa
         if (ptr == NULL)
             scui_image_cache_visit();
     }
-    // scui_mem_type_font
+    /* scui_mem_type_font */
     if (type == scui_mem_type_font) {
         SCUI_LOG_WARN("memory font deficit was caught");
         scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
         
-        // 字库缓存:
-        // 这里只回收文字即可, 不回收字库
-        // scui_font_cache_visit();
-        // scui_font_cache_clear();
-        // scui_font_cache_visit();
+        /* 字库缓存: */
+        /* 这里只回收文字即可, 不回收字库 */
+        /* scui_font_cache_visit(); */
+        /* scui_font_cache_clear(); */
+        /* scui_font_cache_visit(); */
         
-        // 文字缓存:
-        // scui_font_glyph_cache_visit();
+        /* 文字缓存: */
+        /* scui_font_glyph_cache_visit(); */
         scui_font_glyph_cache_clear();
-        // scui_font_glyph_cache_visit();
+        /* scui_font_glyph_cache_visit(); */
         
         scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
         ptr = scui_mem_alloc_raw(type, size, way);
@@ -373,7 +373,7 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
         .type = type, .ptr  = ptr,  .size = size,})) {
         
         SCUI_LOG_WARN("[%d] record queue is full, item will be discard", type);
-        // scui_mem_check(type);
+        /* scui_mem_check(type); */
         
         #if SCUI_MEM_RECORD_STATISTIC
         scui_mem_record_statistic_type(type);
@@ -465,7 +465,7 @@ void scui_mem_type(void *ptr, scui_mem_type_t *type)
         }
     }
     
-    // 检查一下匹配情况
+    /* 检查一下匹配情况 */
     SCUI_ASSERT(*type > scui_mem_type_none && *type < scui_mem_type_num);
 }
 
@@ -563,7 +563,7 @@ void scui_mem_ready(void)
     
     scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
     scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_olsf;
-    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     // 图形使用双向内存堆分配器
+    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     /* 图形使用双向内存堆分配器 */
     scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_olsf;
     
     #if SCUI_MEM_FEAT_MINI
@@ -573,7 +573,7 @@ void scui_mem_ready(void)
     scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_none;
     #endif
     
-    // 内存分配器oslf
+    /* 内存分配器oslf */
     if (scui_mem.mem_mgr_type[scui_mem_type_mix  ] == scui_mem_mgr_type_olsf)
         scui_mem.mem_olsf[scui_mem_type_mix  ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     if (scui_mem.mem_mgr_type[scui_mem_type_font ] == scui_mem_mgr_type_olsf)
@@ -583,7 +583,7 @@ void scui_mem_ready(void)
     if (scui_mem.mem_mgr_type[scui_mem_type_user ] == scui_mem_mgr_type_olsf)
         scui_mem.mem_olsf[scui_mem_type_user ] = app_sys_mem_olsf_ready((void *)mem_olsf_buffer_user,  SCUI_MEM_TYPE_SIZE_USER);
     
-    // 内存分配器dir
+    /* 内存分配器dir */
     if (scui_mem.mem_mgr_type[scui_mem_type_mix  ] == scui_mem_mgr_type_dir)
         app_sys_mem_dir_ready(&scui_mem.mem_dir[scui_mem_type_mix],   (uintptr_t)mem_olsf_buffer_mix,   SCUI_MEM_TYPE_SIZE_MIX);
     if (scui_mem.mem_mgr_type[scui_mem_type_font ] == scui_mem_mgr_type_dir)
@@ -603,7 +603,7 @@ void scui_mem_ready(void)
         scui_mem.record[scui_mem_type_mix].item    = item;
         scui_mem.record[scui_mem_type_mix].num     = SCUI_MEM_RECORD_ITEM_MIX;
         scui_mem.record[scui_mem_type_mix].size    = SCUI_MEM_TYPE_SIZE_MIX;
-        // scui_mem_check(scui_mem_type_mix);
+        /* scui_mem_check(scui_mem_type_mix); */
     }
     #endif
     #if SCUI_MEM_RECORD_CHECK_FONT
@@ -614,7 +614,7 @@ void scui_mem_ready(void)
         scui_mem.record[scui_mem_type_font].item   = item;
         scui_mem.record[scui_mem_type_font].num    = SCUI_MEM_RECORD_ITEM_FONT;
         scui_mem.record[scui_mem_type_font].size   = SCUI_MEM_TYPE_SIZE_FONT;
-        // scui_mem_check(scui_mem_type_font);
+        /* scui_mem_check(scui_mem_type_font); */
     }
     #endif
     #if SCUI_MEM_RECORD_CHECK_GRAPH
@@ -625,7 +625,7 @@ void scui_mem_ready(void)
         scui_mem.record[scui_mem_type_graph].item  = item;
         scui_mem.record[scui_mem_type_graph].num   = SCUI_MEM_RECORD_ITEM_GRAPH;
         scui_mem.record[scui_mem_type_graph].size  = SCUI_MEM_TYPE_SIZE_GRAPH;
-        // scui_mem_check(scui_mem_type_graph);
+        /* scui_mem_check(scui_mem_type_graph); */
     }
     #endif
     #if SCUI_MEM_RECORD_CHECK_USER
@@ -636,7 +636,7 @@ void scui_mem_ready(void)
         scui_mem.record[scui_mem_type_user].item   = item;
         scui_mem.record[scui_mem_type_user].num    = SCUI_MEM_RECORD_ITEM_USER;
         scui_mem.record[scui_mem_type_user].size   = SCUI_MEM_TYPE_SIZE_USER;
-        // scui_mem_check(scui_mem_type_user);
+        /* scui_mem_check(scui_mem_type_user); */
     }
     #endif
     

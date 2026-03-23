@@ -73,14 +73,14 @@ typedef scui_event_cb_t scui_widget_cb_invoke_t;
 /*@brief 控件处理映射表
  */
 typedef struct {
-    scui_handle_t           size;       // 控件实例大小
-    scui_handle_t           maker;      // 控件构造器大小
-    scui_sbitfd_t           inherit:1;  // 控件可继承标记
-    scui_widget_type_t      base;       // 控件基类
-    scui_widget_cb_make_t   make;       // 控件构造
-    scui_widget_cb_burn_t   burn;       // 控件析构
-    scui_widget_cb_invoke_t invoke;     // 控件调用
-    const char             *name;       // 控件名称
+    scui_handle_t           size;       /* 控件实例大小 */
+    scui_handle_t           maker;      /* 控件构造器大小 */
+    scui_sbitfd_t           inherit:1;  /* 控件可继承标记 */
+    scui_widget_type_t      base;       /* 控件基类 */
+    scui_widget_cb_make_t   make;       /* 控件构造 */
+    scui_widget_cb_burn_t   burn;       /* 控件析构 */
+    scui_widget_cb_invoke_t invoke;     /* 控件调用 */
+    const char             *name;       /* 控件名称 */
 } scui_widget_map_t;
 
 /*@brief 控件基础信息:
@@ -309,7 +309,7 @@ bool scui_widget_align_pos_calc(scui_handle_t handle, scui_handle_t *target, scu
  *@retval state:0x02时是否滚动
  */
 bool scui_widget_scroll_state(uint8_t state);
-// #define scui_widget_scroll_state(state) ((state != 0x02 ? (SCUI_LOG_WARN("scui_widget_scroll_state:%d", state), 0) : 0), scui_widget_scroll_state_(state))
+/* #define scui_widget_scroll_state(state) ((state != 0x02 ? (SCUI_LOG_WARN("scui_widget_scroll_state:%d", state), 0) : 0), scui_widget_scroll_state_(state)) */
 
 /*************************************************************************************************/
 /*************************************************************************************************/

@@ -1,11 +1,11 @@
 #ifndef SCUI_MATH_H
 #define SCUI_MATH_H
 
-// 快除 0xFF
+/* 快除 0xFF */
 #define SCUI_DIV_U255(x)    (((x) * 0x8081U) >> 0x17)
 #define SCUI_DIV_0xFF(x)    (((x) * 0x8081U) >> 0x17)
 
-// 弧度角度转换
+/* 弧度角度转换 */
 #define SCUI_RAD_BY_A(angle)    ((angle) * 3.141592654f / 180.0f)
 #define SCUI_RAD_TO_A(radian)   ((radian) * 180.0f / 3.141592654f)
 

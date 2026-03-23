@@ -9,7 +9,7 @@ typedef struct {
         scui_coord_t key_cnt;
         uint64_t cnt_tick;
         
-        // merge click
+        /* merge click */
         uint64_t event_click_tick;
         scui_event_t event_click;
     } item[SCUI_INDEV_KEY_LIMIT];

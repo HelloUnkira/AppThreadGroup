@@ -39,7 +39,7 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     }
     
     #if 1
-    // EmbeddedGUI移植: egui_canvas_draw_line
+    /* EmbeddedGUI移植: egui_canvas_draw_line */
     scui_coord_t x1 = draw_dsc->src_pos_1.x;
     scui_coord_t y1 = draw_dsc->src_pos_1.y;
     scui_coord_t x2 = draw_dsc->src_pos_2.x;
@@ -76,7 +76,7 @@ static void scui_draw_line(scui_draw_dsc_t *draw_dsc)
     
     scui_coord_t y = y1;
     for (scui_coord_t x = x1; x <= x2; x++) {
-        // 为了简化代码, 我和并了流程, 为了性能是可以拆分出的
+        /* 为了简化代码, 我和并了流程, 为了性能是可以拆分出的 */
         if (( steep && (x >= y_s && x < y_e && y < x_e && y + draw_dsc->src_width >= x_s)) ||
             (!steep && (x >= x_s && x < x_e && y < y_e && y + draw_dsc->src_width >= y_s))) {
             
@@ -149,10 +149,10 @@ static const float scui_draw_graph_tan_table[91] = {
 };
 /* EmbeddedGUI移植 */
 typedef enum {
-    scui_draw_circle_type_lt,       // left  top
-    scui_draw_circle_type_lb,       // left  bottom
-    scui_draw_circle_type_rt,       // right top
-    scui_draw_circle_type_rb,       // right bottm
+    scui_draw_circle_type_lt,       /* left  top */
+    scui_draw_circle_type_lb,       /* left  bottom */
+    scui_draw_circle_type_rt,       /* right top */
+    scui_draw_circle_type_rb,       /* right bottm */
 } scui_draw_circle_type_t;
 
 /* EmbeddedGUI移植 */
@@ -195,7 +195,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
     if (!scui_area_inter(&draw_area, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    // 获得corner剪切域
+    /* 获得corner剪切域 */
     scui_area_t src_clip = {0};
     src_clip.w = draw_dsc->src_radius;
     src_clip.h = draw_dsc->src_radius;
@@ -239,12 +239,12 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
     };
     
     #if 1
-    // EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner
+    /* EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner */
     extern scui_draw_circle_info_t scui_draw_circle2c_EGUI_array[];
     scui_draw_circle_info_t *info = &scui_draw_circle2c_EGUI_array[draw_dsc->src_radius - 1];
     SCUI_ASSERT(info->radius == draw_dsc->src_radius);
     
-    // 完全填充
+    /* 完全填充 */
     if (draw_dsc->src_width == 0 || draw_dsc->src_width >= draw_dsc->src_radius) {
         
         for (scui_coord_t idx_info = 0; idx_info < info->count; idx_info++) {
@@ -273,7 +273,7 @@ static void scui_draw_circle_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_
                                         draw_dsc->dst_surface->format, &src_pixel, mix_a);
                 }
                 
-                // 跳过对角线的两次绘制
+                /* 跳过对角线的两次绘制 */
                 if (sel_x == sel_y)
                     continue;
                 
@@ -485,7 +485,7 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
     if (!scui_area_inter(&draw_area, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    // 获得corner剪切域
+    /* 获得corner剪切域 */
     scui_area_t src_clip = {0};
     src_clip.w = draw_dsc->src_radius;
     src_clip.h = draw_dsc->src_radius;
@@ -521,7 +521,7 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
     scui_pixel_by_color(draw_dsc->dst_surface->format, &src_pixel, draw_dsc->src_color.color);
     
     #if 1
-    // EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner
+    /* EmbeddedGUI移植: egui_canvas_draw_circle_corner_fill, egui_canvas_draw_circle_corner */
     extern scui_draw_circle_info_t scui_draw_circle2c_EGUI_array[];
     scui_draw_circle_info_t *info = &scui_draw_circle2c_EGUI_array[draw_dsc->src_radius - 1];
     SCUI_ASSERT(info->radius == draw_dsc->src_radius);
@@ -626,7 +626,7 @@ static void scui_draw_arc_corner(scui_draw_dsc_t *draw_dsc, scui_draw_circle_typ
             
             mix_a = scui_alpha_mix(cir_a, draw_dsc->src_alpha);
             
-            // 局部填充
+            /* 局部填充 */
             if (!(draw_dsc->src_width == 0 || draw_dsc->src_width >= draw_dsc->src_radius)) {
                 if (idx_row >= draw_dsc->src_width && idx_col >= draw_dsc->src_width) {
                     inn_a = scui_draw_circle_corner_val(idx_row - draw_dsc->src_width, idx_col - draw_dsc->src_width, info_in);
@@ -697,7 +697,7 @@ static void scui_draw_circle(scui_draw_dsc_t *draw_dsc)
     scui_coord_t y = 0;
     scui_coord_t l = 0;
     
-    // 完全填充
+    /* 完全填充 */
     if (draw_dsc->src_width == 0 || draw_dsc->src_width >= draw_dsc->src_radius) {
         x = draw_dsc->src_center.x - draw_dsc->src_radius;
         y = draw_dsc->src_center.y;
@@ -760,7 +760,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
         .src_width   = draw_dsc->src_width,
         .src_radius  = draw_dsc->src_radius,
     };
-    //
+    /* */
     dst_area.x = draw_dsc->dst_clip.x + 0;
     dst_area.y = draw_dsc->dst_clip.y + 0;
     draw_graph_circle.dst_clip = dst_area;
@@ -786,7 +786,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     draw_graph_circle.src_center.y = dst_area.y + draw_dsc->src_radius;
     scui_draw_circle_corner(&draw_graph_circle, scui_draw_circle_type_rb);
     
-    // 色块填充
+    /* 色块填充 */
     scui_draw_dsc_t draw_graph_line = {
         .type = scui_draw_type_pixel_line,
         .dst_surface = draw_dsc->dst_surface,
@@ -799,7 +799,7 @@ static void scui_draw_crect(scui_draw_dsc_t *draw_dsc)
     scui_coord_t l = 0;
     scui_coord_t w = 0;
     
-    // 完全填充
+    /* 完全填充 */
     if (draw_dsc->src_width == 0 || draw_dsc->src_width >= draw_dsc->src_radius) {
         /* 绘制中间水平矩形 */
         x = draw_dsc->dst_clip.x + draw_dsc->src_radius;
@@ -855,8 +855,8 @@ static void scui_draw_shadow(scui_draw_dsc_t *draw_dsc)
         draw_dsc->src_radius  = 1;
     
     #if 1
-    // 通过绘制空心圆一点点向内部渐变
-    // 注意: 这是一个投机取巧的办法, 不是优秀的实现逻辑
+    /* 通过绘制空心圆一点点向内部渐变 */
+    /* 注意: 这是一个投机取巧的办法, 不是优秀的实现逻辑 */
     
     /* 绘制四个象限的圆或圆环 */
     scui_area_t  dst_area = {0};
@@ -871,7 +871,7 @@ static void scui_draw_shadow(scui_draw_dsc_t *draw_dsc)
         .src_width   = draw_dsc->src_width,
         .src_radius  = draw_dsc->src_radius,
     };
-    //
+    /* */
     scui_coord_t lvl_width = draw_dsc->src_width * SCUI_SCALE_COF / draw_dsc->src_alpha;
     lvl_width = lvl_width >> SCUI_SCALE_OFS;
     if (lvl_width < 1)
@@ -911,7 +911,7 @@ static void scui_draw_shadow(scui_draw_dsc_t *draw_dsc)
         
     }
     
-    // 色块填充
+    /* 色块填充 */
     scui_draw_dsc_t draw_graph_line = {
         .type = scui_draw_type_pixel_line,
         .dst_surface = draw_dsc->dst_surface,
@@ -1046,7 +1046,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
             draw_graph_arc.src_angle_s = 90 - (draw_dsc->src_angle_e - 270);
             scui_draw_arc_corner(&draw_graph_arc, scui_draw_circle_type_rt);
         }
-        // 补线
+        /* 补线 */
         if (draw_dsc->src_angle_s <= 0 && draw_dsc->src_angle_e >= 0) {
             scui_coord_t x = draw_dsc->src_center.x + draw_dsc->src_radius - draw_dsc->src_width + 1;
             scui_coord_t y = draw_dsc->src_center.y;
@@ -1082,7 +1082,7 @@ static void scui_draw_arc(scui_draw_dsc_t *draw_dsc)
         
     } while (draw_dsc->src_angle_e > 0);
 
-    // 完全填充
+    /* 完全填充 */
     if (draw_dsc->src_width == 0 || draw_dsc->src_width >= draw_dsc->src_radius) {
         if (center_point) {
             scui_coord_t x = draw_dsc->src_center.x;
@@ -1102,8 +1102,8 @@ bool scui_draw_graph_EGUI(scui_draw_dsc_t *draw_dsc)
     #if SCUI_DRAW_GRAPH_USE_EGUI
     switch (draw_dsc->type) {
     case scui_draw_type_pixel_line:
-        // scui_draw_line(draw_dsc);
-        return false; // return true;
+        /* scui_draw_line(draw_dsc); */
+        return false; /* return true; */
     case scui_draw_type_pixel_circle:
         scui_draw_circle(draw_dsc);
         return true;

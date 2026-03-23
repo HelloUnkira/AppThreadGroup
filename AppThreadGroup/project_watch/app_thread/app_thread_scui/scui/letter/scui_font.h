@@ -14,8 +14,8 @@
 typedef struct {
     
     uint16_t size;
-    // size == 0: 使用固定字号字体
-    // size != 0: 使用ttf_tiny字体
+    /* size == 0: 使用固定字号字体 */
+    /* size != 0: 使用ttf_tiny字体 */
     union {
     void *bmp_fixed;
     void *ttf_tiny;

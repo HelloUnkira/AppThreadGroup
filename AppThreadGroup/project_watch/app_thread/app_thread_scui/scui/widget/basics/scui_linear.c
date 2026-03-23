@@ -52,8 +52,8 @@ void scui_linear_m_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     /* 必须标记anima事件 */
     widget_maker->style.sched_anima = true;
-    //备注:这个控件自身并不需要anima事件,但是如果子控件树有需求,
-    //     它必须要被标记激活以驱动子控件树更新
+    /*备注:这个控件自身并不需要anima事件,但是如果子控件树有需求, */
+    /*     它必须要被标记激活以驱动子控件树更新 */
     
     /* 构造基础控件实例 */
     scui_widget_make(widget, widget_maker, handle);
@@ -83,7 +83,7 @@ void scui_linear_s_make(void *inst, void *inst_maker, scui_handle_t *handle)
     scui_widget_make(widget, widget_maker, handle);
     SCUI_ASSERT(scui_widget_type_check(*handle, scui_widget_type_linear_s));
     SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
-    // 子控件树控件一定是根控件(子画布控件树)
+    /* 子控件树控件一定是根控件(子画布控件树) */
     
     linear_s->surface_s = NULL;
     linear_s->handle_m  = SCUI_HANDLE_INVALID;
@@ -111,7 +111,7 @@ void scui_linear_m_burn(scui_handle_t handle)
     scui_widget_t   *widget   = scui_handle_source_check(handle);
     scui_linear_m_t *linear_m = (void *)widget;
     
-    // 连带销毁关联绑定的子控件
+    /* 连带销毁关联绑定的子控件 */
     if (linear_m->handle_s != SCUI_HANDLE_INVALID)
         scui_widget_hide(linear_m->handle_s, false);
     
@@ -128,7 +128,7 @@ void scui_linear_s_burn(scui_handle_t handle)
     scui_widget_t   *widget   = scui_handle_source_check(handle);
     scui_linear_s_t *linear_s = (void *)widget;
     
-    // 子控件树回收画布
+    /* 子控件树回收画布 */
     if (linear_s->surface_s != NULL) {
         scui_widget_surface_remap(handle, linear_s->surface_s);
         scui_widget_surface_destroy(handle);
@@ -203,7 +203,7 @@ void scui_linear_invoke(scui_event_t *event)
     switch (event->type) {
     case scui_event_draw: {
         
-        // 从控件树绘制结束,回收部分不使用的画布
+        /* 从控件树绘制结束,回收部分不使用的画布 */
         if (scui_event_check_finish(event)) {
             
             /* 更新回收记录 */
@@ -212,18 +212,18 @@ void scui_linear_invoke(scui_event_t *event)
             linear->remain_num  = 0;
             linear->remain_byte = 0;
             
-            // 遍历子控件列表
+            /* 遍历子控件列表 */
             scui_widget_child_list_btra(widget, idx) {
-                // 取出子控件(主)的相关信息
+                /* 取出子控件(主)的相关信息 */
                 scui_handle_t    handle_m = widget->child_list[idx];
                 scui_widget_t   *widget_m = scui_handle_source_assert(handle_m);
                 scui_linear_m_t *linear_m = (void *)widget_m;
                 
-                // 不是所有子控件(主)都有子控件树(从)
+                /* 不是所有子控件(主)都有子控件树(从) */
                 if (linear_m->handle_s == SCUI_HANDLE_INVALID)
                     continue;
                 
-                // 取出子控件树(从)的相关信息
+                /* 取出子控件树(从)的相关信息 */
                 scui_handle_t    handle_s = linear_m->handle_s;
                 scui_widget_t   *widget_s = scui_handle_source_assert(handle_s);
                 scui_linear_s_t *linear_s = (void *)widget_s;
@@ -231,7 +231,7 @@ void scui_linear_invoke(scui_event_t *event)
                 SCUI_LOG_DEBUG("surface index:%x", idx);
                 scui_multi_t surface_size = 0;
                 
-                // 从子控件树无需清理
+                /* 从子控件树无需清理 */
                 if (linear_s->surface_s == NULL)
                     continue;
                 if (linear_s->surface_s != NULL) {
@@ -276,7 +276,7 @@ void scui_linear_invoke(scui_event_t *event)
 void scui_linear_m_invoke(scui_event_t *event)
 {
     SCUI_LOG_INFO("event %u widget %u", event->type, event->object);
-    // 列表控件是当前控件的父控件
+    /* 列表控件是当前控件的父控件 */
     
     switch (event->type) {
     case scui_event_draw: {
@@ -284,7 +284,7 @@ void scui_linear_m_invoke(scui_event_t *event)
         scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
         scui_linear_m_t *linear_m = (void *)widget_m;
         
-        // 不是所有子控件(主)都有子控件树(从)
+        /* 不是所有子控件(主)都有子控件树(从) */
         if (linear_m->handle_s == SCUI_HANDLE_INVALID)
             break;
         
@@ -292,15 +292,15 @@ void scui_linear_m_invoke(scui_event_t *event)
         scui_widget_t   *widget_s = scui_handle_source_check(handle_s);
         scui_linear_s_t *linear_s = (void *)widget_s;
         
-        // 步调:prepare
+        /* 步调:prepare */
         if (scui_event_check_prepare(event)) {
-            // 处理子控件树画布,重绘子控件树
+            /* 处理子控件树画布,重绘子控件树 */
             
             /* 没有剪切域,忽略该绘制,避免假绘制爆内存 */
             if (scui_widget_draw_empty(handle_m)) {
                 linear_m->draw = false;
                 
-                // 主目标不能绘制,清空从目标画布
+                /* 主目标不能绘制,清空从目标画布 */
                 if (linear_s->surface_s != NULL) {
                     scui_widget_surface_remap(handle_s, linear_s->surface_s);
                     scui_widget_surface_destroy(handle_s);
@@ -310,7 +310,7 @@ void scui_linear_m_invoke(scui_event_t *event)
                 return;
             }
             
-            // 创建一个独立的子画布,将目标绘制到一个独立子画布中
+            /* 创建一个独立的子画布,将目标绘制到一个独立子画布中 */
             if (linear_s->surface_s == NULL) {
                 scui_area_t clip = scui_widget_clip(handle_s);
                 scui_surface_t surface = {
@@ -324,35 +324,35 @@ void scui_linear_m_invoke(scui_event_t *event)
             }
             scui_widget_surface_remap(handle_s, linear_s->surface_s);
             
-            // 刷新该画布
+            /* 刷新该画布 */
             if (linear_m->refr) {
                 linear_m->refr = false;
                 
-                // 移除跟子控件树相关所有绘制事件
+                /* 移除跟子控件树相关所有绘制事件 */
                 scui_event_define(event, handle_s, false, scui_event_draw, NULL);
                 while (scui_event_dequeue(&event, true, false));
                 
                 scui_widget_show(handle_s, false);
             }
             
-            // 流程到此,画布已经是新的了,标记进行绘制
+            /* 流程到此,画布已经是新的了,标记进行绘制 */
             linear_m->draw = true;
         }
         
-        // 步调finish:
+        /* 步调finish: */
         if (scui_event_check_finish(event)) {
-            // 去除画布绑定
+            /* 去除画布绑定 */
             scui_widget_surface_remap(handle_s, NULL);
         }
         break;
     }
     default: {
-        // 给子控件树派发事件调度
+        /* 给子控件树派发事件调度 */
         scui_handle_t    handle_m = event->object;
         scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
         scui_linear_m_t *linear_m = (void *)widget_m;
         
-        // 不是所有子控件(主)都有子控件树(从)
+        /* 不是所有子控件(主)都有子控件树(从) */
         if (linear_m->handle_s == SCUI_HANDLE_INVALID)
             break;
         
@@ -385,7 +385,7 @@ void scui_linear_s_invoke(scui_event_t *event)
             scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
             scui_linear_m_t *linear_m = (void *)widget_m;
             
-            // 子控件树重绘时, 通知主控件
+            /* 子控件树重绘时, 通知主控件 */
             scui_widget_draw(handle_m, NULL, false);
             break;
         }
@@ -398,16 +398,16 @@ void scui_linear_s_invoke(scui_event_t *event)
             scui_widget_t   *widget_m = scui_handle_source_check(handle_m);
             scui_linear_m_t *linear_m = (void *)widget_m;
             
-            // 这是一个特殊事件
-            // 子控件树没有绘制画布时
-            // 发送此事件激活子控件绘制流程
-            // 子控件树会逆向链接到列表控件
+            /* 这是一个特殊事件 */
+            /* 子控件树没有绘制画布时 */
+            /* 发送此事件激活子控件绘制流程 */
+            /* 子控件树会逆向链接到列表控件 */
             SCUI_ASSERT(scui_widget_surface(handle_s) == NULL);
             SCUI_ASSERT(handle_m != SCUI_HANDLE_INVALID);
             
-            // scui_widget_clip_check(scui_widget_root(handle_m), true);
+            /* scui_widget_clip_check(scui_widget_root(handle_m), true); */
             scui_widget_draw(handle_m, NULL, false);
-            // scui_widget_clip_check(scui_widget_root(handle_m), true);
+            /* scui_widget_clip_check(scui_widget_root(handle_m), true); */
             linear_m->refr = true;
             break;
         }

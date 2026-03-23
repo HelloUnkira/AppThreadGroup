@@ -75,7 +75,7 @@ typedef struct {
     uintptr_t size_total[scui_mem_type_num];
     uintptr_t size_used[scui_mem_type_num];
     
-    // 这里尝试多种内存管理方案
+    /* 这里尝试多种内存管理方案 */
     scui_mem_mgr_type_t mem_mgr_type[scui_mem_type_num];
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
     app_sys_mem_dir_t   mem_dir[scui_mem_type_num];

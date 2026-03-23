@@ -7,15 +7,15 @@
 
 #include "scui.h"
 
-// 整个字库都是移植的lvgl字库
-// 因为这部分没有覆写的意义和必要
+/* 整个字库都是移植的lvgl字库 */
+/* 因为这部分没有覆写的意义和必要 */
 
 #if 1
 #if defined(LVGL_VERSION_MAJOR) || defined(LVGL_VERSION_MINOR) || defined(LVGL_VERSION_PATCH)
 #error "do not import any lvgl header files"
 #endif
 
-#if 1 // bin field
+#if 1 /* bin field */
 
 #pragma pack(push, 1)
 typedef struct font_header_bin {
@@ -96,7 +96,7 @@ typedef uint8_t lv_font_fmt_txt_cmap_type_t;
 /**
  * Map codepoints to a `glyph_dsc`s
  * Several formats are supported to optimize memory usage
- * See https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
+ * See https:/*github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
  */
 typedef struct {
     /** First Unicode character for this range*/
@@ -111,7 +111,7 @@ typedef struct {
 
     /*
     According the specification there are 4 formats:
-        https://github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
+        https:/*github.com/lvgl/lv_font_conv/blob/master/doc/font_spec.md
 
     For simplicity introduce "relative code point":
         rcp = codepoint - range_start
@@ -289,7 +289,7 @@ typedef struct _lv_font_t {
     uintptr_t bin_loca_offset;
     uint32_t  loca_length;
     uint32_t  loca_count;
-    // uint32_t *glyph_offset;
+    /* uint32_t *glyph_offset; */
     
     /* font fs扩展字段 */
     scui_font_src_t font_src;
@@ -298,7 +298,7 @@ typedef struct _lv_font_t {
     
 } lv_font_t;
 
-#if 1   // iter
+#if 1   /* iter */
 
 typedef struct {
     lv_font_t *font;
@@ -349,7 +349,7 @@ static int read_bits_signed(bit_iterator_t * it, int n_bits)
 
 #endif
 
-#if 1   // bsearch compare cb
+#if 1   /* bsearch compare cb */
 
 static int32_t unicode_list_compare(const void * ref, const void * element)
 {
@@ -962,8 +962,8 @@ static lv_font_t * lv_font_load(char *name)
     font->base_line = -font_header.descent;
     font->line_height = font_header.ascent - font_header.descent;
     /* @等待适配 */
-    // font->get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt;
-    // font->get_glyph_bitmap = lv_font_get_bitmap_fmt_txt;
+    /* font->get_glyph_dsc = lv_font_get_glyph_dsc_fmt_txt; */
+    /* font->get_glyph_bitmap = lv_font_get_bitmap_fmt_txt; */
     font->subpx = font_header.subpixels_mode;
     font->underline_position = font_header.underline_position;
     font->underline_thickness = font_header.underline_thickness;
@@ -984,7 +984,7 @@ static lv_font_t * lv_font_load(char *name)
     scui_font_src_seek(&font->font_src, loca_offset + 8);
     scui_font_src_read(&font->font_src, &loca_count, 4);
     
-    #if 0   // 不需要使用此字段信息
+    #if 0   /* 不需要使用此字段信息 */
     uint32_t *glyph_offset = SCUI_MEM_ALLOC(scui_mem_type_font, 4 * (loca_count + 1));
     
     if (font_header.index_to_loc_format == 0) {
@@ -1004,20 +1004,20 @@ static lv_font_t * lv_font_load(char *name)
     /* bin[glyph](外部扩充,该字段不加载,保存需要加载该字段的所有参数信息,转为动态加载) */
     uint32_t bin_glyph_offset = loca_offset + loca_length;
     uint32_t bin_glyph_langth = read_label(font, bin_glyph_offset, "glyf");
-    // font->dsc.glyph_bitmap
-    // font->dsc.glyph_src
+    /* font->dsc.glyph_bitmap */
+    /* font->dsc.glyph_src */
     
     font->bin_head = font_header;
     font->bin_glyph_offset = bin_glyph_offset;
     font->bin_loca_offset = loca_offset;
     font->loca_length = loca_length;
     font->loca_count = loca_count;
-    // font->glyph_offset = glyph_offset;
+    /* font->glyph_offset = glyph_offset; */
     
     /* bin[kern] */
     if(font_header.tables_count >= 4) {
         
-        #if 0   // 不需要使用此字段信息
+        #if 0   /* 不需要使用此字段信息 */
         uint32_t kern_offset = bin_glyph_offset + bin_glyph_langth;
         uint32_t kern_length = load_kern(font, kern_offset, font_dsc, font_header.glyph_id_format);
         #endif
@@ -1031,7 +1031,7 @@ static void lv_font_free(lv_font_t * font)
 {
     if(NULL != font) {
         
-        #if 0   // 不需要使用此字段信息
+        #if 0   /* 不需要使用此字段信息 */
         if (font->glyph_offset != NULL)
             SCUI_MEM_FREE(font->glyph_offset);
         #endif
@@ -1116,9 +1116,9 @@ static void lv_font_util_shift_left2(uint8_t *operand, uint32_t length, uint64_t
     }
 }
 
-// lv_font_get_bitmap_fmt_txt
-// lv_font_get_glyph_dsc_fmt_txt
-// 原型改造,修订到可以直接动态获取字形和字体信息
+/* lv_font_get_bitmap_fmt_txt */
+/* lv_font_get_glyph_dsc_fmt_txt */
+/* 原型改造,修订到可以直接动态获取字形和字体信息 */
 
 static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 {
@@ -1143,7 +1143,7 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
         }
     }
     
-    #if 1   // glyph_offset不存在,这里动态加载指定letter的偏移量
+    #if 1   /* glyph_offset不存在,这里动态加载指定letter的偏移量 */
     
     font_header_bin_t *font_header = &font->bin_head;
     uintptr_t glyph_offset = font->bin_glyph_offset;
@@ -1206,7 +1206,7 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
         glyph->ofs_y = 0;
     }
     
-    //空格字符是合法字符
+    /*空格字符是合法字符 */
     if (glyph->box_w != 0 && glyph->box_h != 0) {
         
         /* 生成内存并加载bitmap */
@@ -1223,14 +1223,14 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
             bit_it = init_bit_iterator(font, 0);
             read_bits(&bit_it, nbits % 8);
             /* 偏移到目标字符处 */
-            // 这里不能直接读前一段,因为数据源不是byte对齐的地址,且双方的对齐无法同步
+            /* 这里不能直接读前一段,因为数据源不是byte对齐的地址,且双方的对齐无法同步 */
             for (uint32_t k = 0; k < bitmap_size - 1; k++)
                  glyph->bitmap[k] = read_bits(&bit_it, 8);
             glyph->bitmap[bitmap_size - 1] = read_bits(&bit_it, 8 - nbits % 8);
             /* The last fragment should be on the MSB but read_bits() will place it to the LSB */
             glyph->bitmap[bitmap_size - 1] = glyph->bitmap[bitmap_size - 1] << (nbits % 8);
             #else
-            // 是否考虑先批量读完,然后再移位丢弃掉前面多余的部分
+            /* 是否考虑先批量读完,然后再移位丢弃掉前面多余的部分 */
             uint8_t *bitmap_plus = SCUI_MEM_ALLOC(scui_mem_type_font, bitmap_size + 1);
             scui_font_src_read(&font->font_src, bitmap_plus, bitmap_size + 1);
             lv_font_util_shift_left2(bitmap_plus, bitmap_size + 1, nbits % 8);
@@ -1287,9 +1287,9 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 #endif
 
 #if 1
-// 适配层(这部分是从lv_tiny_ttf中适配过来)
+/* 适配层(这部分是从lv_tiny_ttf中适配过来) */
 
-// ttf tiny 库的宏配置选项
+/* ttf tiny 库的宏配置选项 */
 #define STB_RECT_PACK_IMPLEMENTATION
 #define STBRP_STATIC
 #define STBTT_STATIC
@@ -1298,30 +1298,30 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 #define STBTT_HEAP_FACTOR_SIZE_128      20
 #define STBTT_HEAP_FACTOR_SIZE_DEFAULT  10
 
-// ttf tiny 库的内存管理钩子
+/* ttf tiny 库的内存管理钩子 */
 #define STBTT_malloc(x, u)  ((void)(u), SCUI_MEM_ALLOC(scui_mem_type_font, x))
 #define STBTT_free(x, u)    ((void)(u), SCUI_MEM_FREE(x))
 
-// ttf tiny 库的断言钩子
+/* ttf tiny 库的断言钩子 */
 #define STBTT_assert(x)     SCUI_ASSERT(x)
 
-// ttf tiny 库的文件读写钩子
+/* ttf tiny 库的文件读写钩子 */
 #define STBTT_STREAM_TYPE           scui_font_src_t *
 #define STBTT_STREAM_SEEK(s, x)     scui_font_src_seek(s, x);
 #define STBTT_STREAM_READ(s, x, y)  scui_font_src_read(s, x, y);
 
-// ttf tiny 库
+/* ttf tiny 库 */
 #include "stb_rect_pack.h"
 #include "stb_truetype_htcw.h"
 
 typedef struct {
-    // ttf tiny
+    /* ttf tiny */
     stbtt_fontinfo info;
     float scale;
     int ascent;
     int descent;
     
-    // lvgl font field
+    /* lvgl font field */
     scui_coord_t line_height;
     scui_coord_t base_line;
     
@@ -1342,24 +1342,24 @@ static void * lv_font_ttf_tiny_load(char *name, uint32_t size)
     strcpy(font->name, name);
     scui_font_src_open(&font->font_src, font->name);
     
-    // 加载ttf_tiny实例
+    /* 加载ttf_tiny实例 */
     int index0 = stbtt_GetFontOffsetForIndex(&font->font_src, 0);
     int retval = stbtt_InitFont(&font->info, &font->font_src, index0);
     SCUI_ASSERT(retval != 0);
     
     SCUI_ASSERT(size > 0);
-    // 设置ttf_tiny字号, 获得缩放比例值
+    /* 设置ttf_tiny字号, 获得缩放比例值 */
     font->scale = stbtt_ScaleForMappingEmToPixels(&font->info, size);
     
     int line_gap = 0;
-    // 读取字库的上沿和下沿以及行间距
+    /* 读取字库的上沿和下沿以及行间距 */
     stbtt_GetFontVMetrics(&font->info, &font->ascent, &font->descent, &line_gap);
     
-    // 计算行高和基线
+    /* 计算行高和基线 */
     font->line_height = (int32_t)(font->scale * (font->ascent - font->descent + line_gap));
     font->base_line = (int32_t)(font->scale * (line_gap - font->descent));
     
-    // 下划线有什么办法计算出么
+    /* 下划线有什么办法计算出么 */
     font->underline_position = (int8_t)(font->scale * (line_gap));
     
     return font;
@@ -1396,14 +1396,14 @@ static void lv_font_ttf_tiny_glpyh_load(lv_font_ttf_tiny_t *font, scui_font_glyp
     glyph->box_h = (y2 - y1 + 1);
     glyph->ofs_x = x1;
     glyph->ofs_y = -y2;
-    glyph->bpp   = 8;   // 默认都加载的是1字节字符
+    glyph->bpp   = 8;   /* 默认都加载的是1字节字符 */
     
     int w, h;
     w = x2 - x1 + 1;
     h = y2 - y1 + 1;
     uint32_t bitmap_size = w * h + 4;
     
-    //空格字符是合法字符
+    /*空格字符是合法字符 */
     if (glyph->box_w != 0 && glyph->box_h != 0) {
         
         /* 生成内存并加载bitmap */
@@ -1556,9 +1556,9 @@ void scui_font_glyph_load(scui_font_glyph_t *glyph)
         scui_font_src_close(&lv_font->font_src);
     } else {
         lv_font_ttf_tiny_t *ttf_tiny = font->ttf_tiny;
-        // scui_font_src_open(&ttf_tiny->font_src, ttf_tiny->name);
+        /* scui_font_src_open(&ttf_tiny->font_src, ttf_tiny->name); */
         lv_font_ttf_tiny_glpyh_load(ttf_tiny, glyph);
-        // scui_font_src_close(&ttf_tiny->font_src);
+        /* scui_font_src_close(&ttf_tiny->font_src); */
     }
     
     if (glyph->bitmap == NULL) {

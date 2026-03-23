@@ -7,17 +7,17 @@
 
 #include "scui.h"
 
-// LZ4
+/* LZ4 */
 #include "lz4.h"
 #include "lz4frame_static.h"
 #include "lz4frame.h"
 
-// PNG
-// 备注:这个组件对瞬时内存的消耗量较大
-// 并且它有realloc这个操作,导致峰值内存更多
+/* PNG */
+/* 备注:这个组件对瞬时内存的消耗量较大 */
+/* 并且它有realloc这个操作,导致峰值内存更多 */
 #include "lodepng.h"
 
-// JPG
+/* JPG */
 #include "tjpgd.h"
 
 /*************************************************************************************************/
@@ -112,7 +112,7 @@ static void scui_lodepng_cvt_cf(void *png_dec, uint32_t pixel_cnt)
 /*************************************************************************************************/
 /*************************************************************************************************/
 
-// 这个库的API设计的挺有意思的,巧妙
+/* 这个库的API设计的挺有意思的,巧妙 */
 uintptr_t     scui_tjpgd_ptr_ofs = 0;
 uint8_t      *scui_tjpgd_dat_out = NULL;
 uint8_t      *scui_tjpgd_dat_in  = NULL;
@@ -139,7 +139,7 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
 {
     SCUI_ASSERT(scui_tjpgd_image != NULL);
     
-    // JPG输出格式:
+    /* JPG输出格式: */
     uint8_t  jpg_bytes  = scui_pixel_bits(scui_pixel_cf_bmp565) / 8;
     uint32_t jpg_data_w = scui_tjpgd_image->pixel.width;
     uint32_t jpg_rect_w = rect->right - rect->left + 1;
@@ -169,7 +169,7 @@ int scui_tjpgd_out_func_cb(JDEC *jd, void *bitmap, JRECT *rect)
  */
 void scui_image_src_read(scui_image_t *image, void *data)
 {
-    // 使用image生成==>data
+    /* 使用image生成==>data */
     const char *image_bin = "scui_image_parser.bin";
     const char *image_src = image_bin;
     if (image->from != SCUI_HANDLE_INVALID)
@@ -182,7 +182,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
     image_type_raw = image_type_raw || image->type == scui_image_type_gif;
     image_type_raw = image_type_raw || image->type == scui_image_type_lottie;
     
-    // 原始内存数据,直接使用的
+    /* 原始内存数据,直接使用的 */
     if (image_type_raw) {
         size_t retval = -1;
         FILE *file = fopen(image_src, "rb+");
@@ -268,7 +268,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
             SCUI_LOG_WARN("png occupy top:%d", scui_lodepng_size_top);
         }
         
-        // 检查空间是否释放完毕
+        /* 检查空间是否释放完毕 */
         SCUI_ASSERT(scui_lodepng_size_cur == 0);
         return;
     }
@@ -312,7 +312,7 @@ void scui_image_src_read(scui_image_t *image, void *data)
             SCUI_LOG_WARN("lz4 occupy top:%d", scui_LZ4F_size_top);
         }
         
-        // 检查空间是否释放完毕
+        /* 检查空间是否释放完毕 */
         SCUI_ASSERT(scui_LZ4F_size_cur == 0);
         return;
     }

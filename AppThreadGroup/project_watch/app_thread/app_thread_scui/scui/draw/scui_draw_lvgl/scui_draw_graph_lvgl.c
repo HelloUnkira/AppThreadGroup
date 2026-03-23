@@ -11,10 +11,10 @@
 #error "do not import any lvgl header files"
 #endif
 
-// 这里只写一个思路
-// 需要从lvgl迁移以下的文件的内容
-// lv_draw_mask.c.h
-// 以及lv_draw_系列的基础图形绘制函数
+/* 这里只写一个思路 */
+/* 需要从lvgl迁移以下的文件的内容 */
+/* lv_draw_mask.c.h */
+/* 以及lv_draw_系列的基础图形绘制函数 */
 
 /*@brief 线条绘制(抗锯齿)
  *@param draw_dsc 绘制描述符实例

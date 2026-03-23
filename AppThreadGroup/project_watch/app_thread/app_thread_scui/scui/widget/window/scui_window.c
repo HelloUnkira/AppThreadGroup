@@ -35,7 +35,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     /* 创建surface */
     if (window_maker->buffer) {
         scui_surface_t surface = {
-            .format  = window_maker->format, // SCUI_PIXEL_CF_DEF_A;
+            .format  = window_maker->format, /* SCUI_PIXEL_CF_DEF_A; */
             .hor_res = widget->clip.w,
             .ver_res = widget->clip.h,
         };
@@ -50,7 +50,7 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     window->resident    = window_maker->resident;
     window->format      = window_maker->format;
     
-    // 初始化默认切换类型为自适应
+    /* 初始化默认切换类型为自适应 */
     for(scui_handle_t idx = 0; idx < 4; idx++)
         window->switch_type[idx] = scui_window_switch_auto;
 }

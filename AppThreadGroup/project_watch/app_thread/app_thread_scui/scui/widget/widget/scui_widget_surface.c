@@ -176,7 +176,7 @@ void scui_widget_clip_update(scui_widget_t *widget)
         }
         SCUI_ASSERT(widget_i < widget_p->child_num);
         
-        // 逆向绘制要顺向裁剪
+        /* 逆向绘制要顺向裁剪 */
         scui_handle_t widget_s = widget_p->style.order_draw ? 0 : widget_i;
         scui_handle_t widget_e = widget_p->style.order_draw ? widget_i : widget_p->child_num - 1;
         

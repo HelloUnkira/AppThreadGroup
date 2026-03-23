@@ -51,7 +51,7 @@ static bool scui_image_cache_fc_t(scui_table_dln_t *node1, scui_table_dln_t *nod
 {
     scui_image_unit_t *unit1 = scui_own_ofs(scui_image_unit_t, ht_node, node1);
     scui_image_unit_t *unit2 = scui_own_ofs(scui_image_unit_t, ht_node, node2);
-    // 来源和地址同步匹配才可确认资源一致性
+    /* 来源和地址同步匹配才可确认资源一致性 */
     bool cond_bin = false;
     bool cond_tar = false;
     
@@ -218,7 +218,7 @@ void scui_image_cache_clear(void)
 void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
 {
     SCUI_ASSERT(image_unit != NULL);
-    // 内存图片直达(不走缓存管理)
+    /* 内存图片直达(不走缓存管理) */
     if (image_unit->image->type == scui_image_type_mem) {
         image_unit->data = image_unit->image->pixel.data_bin;
         return;
@@ -254,7 +254,7 @@ void scui_image_cache_invalidate(scui_image_unit_t *image_unit)
 void scui_image_cache_unload(scui_image_unit_t *image_unit)
 {
     SCUI_ASSERT(image_unit != NULL);
-    // 内存图片直达(不走缓存管理)
+    /* 内存图片直达(不走缓存管理) */
     if (image_unit->image->type == scui_image_type_mem) {
         image_unit->data = image_unit->image->pixel.data_bin;
         return;
@@ -284,7 +284,7 @@ void scui_image_cache_unload(scui_image_unit_t *image_unit)
 void scui_image_cache_load(scui_image_unit_t *image_unit)
 {
     SCUI_ASSERT(image_unit != NULL);
-    // 内存图片直达(不走缓存管理)
+    /* 内存图片直达(不走缓存管理) */
     if (image_unit->image->type == scui_image_type_mem) {
         image_unit->data = image_unit->image->pixel.data_bin;
         return;
@@ -308,8 +308,8 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
         if (unit->count != 0 && unit->count < 0x64) {
             unit->count++;
             /* 重新带计数优先级加入 */
-            // scui_list_dll_remove(&cache->dl_list, &unit->dl_node);
-            // scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_image_cache_sort);
+            /* scui_list_dll_remove(&cache->dl_list, &unit->dl_node); */
+            /* scui_queue_dlpq_enqueue(&cache->dl_list, &unit->dl_node, scui_image_cache_sort); */
             scui_queue_dlpq_adjust(&cache->dl_list, &unit->dl_node, true, scui_image_cache_sort);
         }
         cache->cnt_hit++;
@@ -322,7 +322,7 @@ void scui_image_cache_load(scui_image_unit_t *image_unit)
          unit = scui_own_ofs(scui_image_unit_t, dl_node, node);
          uint8_t count = unit->count;
          if (count > 0x07) {
-             // scui_list_dll_ftra(&cache->dl_list, curr)
+             /* scui_list_dll_ftra(&cache->dl_list, curr) */
                 scui_list_dll_btra(&cache->dl_list, curr) {
                 unit = scui_own_ofs(scui_image_unit_t, dl_node, curr);
                 unit->count -= count;

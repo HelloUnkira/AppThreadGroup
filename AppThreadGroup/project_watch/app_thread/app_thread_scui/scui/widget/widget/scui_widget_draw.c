@@ -133,7 +133,7 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
  */
 static bool scui_widget_draw_target(scui_widget_t *widget, scui_area_t **target)
 {
-    // 这里挂个内部的全局量,用于给外部提供使用
+    /* 这里挂个内部的全局量,用于给外部提供使用 */
     static scui_area_t widget_clip = {0};
     
     if (scui_area_empty(&widget->clip_set.clip))
@@ -197,7 +197,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(widget->type == scui_widget_type_string ||
                 widget->type == scui_widget_type_custom);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -216,7 +216,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         };
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
-        // src_clip特殊调整
+        /* src_clip特殊调整 */
         src_clip.x = -(args->clip.w - src_clip.w);
         src_clip.y = -(args->clip.h - src_clip.h);
         src_clip.w =  (args->clip.w);
@@ -248,7 +248,7 @@ void scui_widget_draw_ctx_color(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -283,7 +283,7 @@ void scui_widget_draw_ctx_color_grad(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -317,7 +317,7 @@ void scui_widget_draw_ctx_blur(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -353,7 +353,7 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -390,15 +390,15 @@ void scui_widget_draw_ctx_image(scui_widget_draw_dsc_t *draw_dsc)
             scui_widget_t *widget_r = scui_handle_source_check(handle_r);
             
             scui_multi_t size_old = 0, size_new = 0;
-            // scui_widget_clip_sizes(widget_r->myself, &size_old);
+            /* scui_widget_clip_sizes(widget_r->myself, &size_old); */
             /* 上面默认使用的全局剪切域 */
             /* 所以可能存在覆盖,为所有控件补充剪切域 */
             scui_widget_clip_reset(widget_r, target, true);
             
-            // scui_widget_clip_check(widget_r->myself, true);
+            /* scui_widget_clip_check(widget_r->myself, true); */
             scui_widget_clip_update(widget_r);
-            // scui_widget_clip_check(widget_r->myself, true);
-            // scui_widget_clip_sizes(widget_r->myself, &size_new);
+            /* scui_widget_clip_check(widget_r->myself, true); */
+            /* scui_widget_clip_sizes(widget_r->myself, &size_new); */
             SCUI_LOG_DEBUG("size_ofs:%d", size_new - size_old);
             return;
             #endif
@@ -452,7 +452,7 @@ void scui_widget_draw_ctx_image_scale(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -528,7 +528,7 @@ void scui_widget_draw_ctx_image_rotate(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -586,7 +586,7 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -598,7 +598,7 @@ void scui_widget_draw_ctx_image_matrix(scui_widget_draw_dsc_t *draw_dsc)
     clip = &image_clip;
     /* step:image<e> */
     
-    // 给进来的就是逆矩阵, 这个接口现在不完善, 待定中
+    /* 给进来的就是逆矩阵, 这个接口现在不完善, 待定中 */
     scui_matrix_t reb_matrix = *matrix;
     scui_matrix_inverse(&reb_matrix);
     
@@ -640,7 +640,7 @@ void scui_widget_draw_ctx_qrcode(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -687,7 +687,7 @@ void scui_widget_draw_ctx_barcode(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -736,7 +736,7 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     
@@ -766,8 +766,8 @@ void scui_widget_draw_ctx_ring(scui_widget_draw_dsc_t *draw_dsc)
     /* step:image<e> */
     
     scui_point_t dst_center = {
-        // .x = target->x - widget->clip.x + image_inst->pixel.width  / 2,
-        // .y = target->y - widget->clip.y + image_inst->pixel.height / 2,
+        /* .x = target->x - widget->clip.x + image_inst->pixel.width  / 2, */
+        /* .y = target->y - widget->clip.y + image_inst->pixel.height / 2, */
         .x = target->x + image_inst->pixel.width  / 2,
         .y = target->y + image_inst->pixel.height / 2,
     };
@@ -820,7 +820,7 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 绘制目标重定向
+    /* 绘制目标重定向 */
     if (!scui_widget_draw_target(widget, &target))
          return;
     

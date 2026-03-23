@@ -291,10 +291,10 @@ bool scui_area_differ(scui_area_t area[4], scui_coord_t *num, scui_area_t *area1
  */
 bool scui_area_differ2(scui_area_t area[2], scui_coord_t *num, scui_area_t *area1, scui_area_t *area2)
 {
-    // 这里只考虑俩种情况,无论哪俩种情况,算法都很统一
-    // 第一种:一个矩形的唯一顶点在另一个矩形中间
-    // 第二种:一个矩形的俩邻顶点在另一个矩形中间
-    // 计算交集区域,然后让area2减去它即可
+    /* 这里只考虑俩种情况,无论哪俩种情况,算法都很统一 */
+    /* 第一种:一个矩形的唯一顶点在另一个矩形中间 */
+    /* 第二种:一个矩形的俩邻顶点在另一个矩形中间 */
+    /* 计算交集区域,然后让area2减去它即可 */
     
     scui_area_t area_inter = {0};
     if (scui_area_inter(&area_inter, area1, area2)) {
@@ -302,7 +302,7 @@ bool scui_area_differ2(scui_area_t area[2], scui_coord_t *num, scui_area_t *area
         scui_area_t area4[4] = {0};
         if (scui_area_differ(area4, num, area2, &area_inter)) {
             SCUI_ASSERT(*num == 1 || *num == 2 || *num == 3);
-            // 多种空间拓扑, 最终会有几种可能性
+            /* 多种空间拓扑, 最终会有几种可能性 */
             
             for (scui_coord_t idx = 0; idx < *num; idx++)
                 area[idx] = area4[idx];

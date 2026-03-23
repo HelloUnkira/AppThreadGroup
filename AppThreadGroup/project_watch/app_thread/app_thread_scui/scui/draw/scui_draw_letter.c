@@ -23,12 +23,12 @@ void scui_draw_ctx_letter(scui_draw_dsc_t *draw_dsc)
     };
     scui_surface_t *src_surface = &glyph_surface;
     
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     if (!scui_area_inter(&dst_clip_v, &dst_area, &draw_dsc->dst_clip))
          return;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     scui_area_t src_area = scui_surface_area(src_surface);
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))
          return;
@@ -97,7 +97,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     SCUI_ASSERT(draw_dsc->dst_surface != NULL && draw_dsc->dst_surface->pixel != NULL);
     SCUI_ASSERT(draw_dsc->src_args != NULL);
     scui_string_args_t *src_args = draw_dsc->src_args;
-    //
+    /* */
     /* 从字库中提取一些信息 */
     scui_font_unit_t font_unit = {0};
     font_unit.name = src_args->name;
@@ -108,8 +108,8 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     scui_coord_t underline   = scui_font_underline(font_unit.font);
     scui_font_cache_unload(&font_unit);
     
-    scui_area_t dst_clip_v = draw_dsc->dst_clip;   // v:vaild
-    scui_area_t src_clip_v = draw_dsc->src_clip;   // v:vaild
+    scui_area_t dst_clip_v = draw_dsc->dst_clip;   /* v:vaild */
+    scui_area_t src_clip_v = draw_dsc->src_clip;   /* v:vaild */
     
     scui_area_t draw_area = {0};
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
@@ -128,7 +128,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             if (src_args->align_ver == 2) offset.y += -src_args->limit / 2;
         }
         
-        // 绘制每一个行
+        /* 绘制每一个行 */
         for (uint32_t idx_line = 0; idx_line < src_args->typo->line_mum; idx_line++) {
              uint32_t line_s = src_args->typo->line_ofs_s[idx_line];
              uint32_t line_e = src_args->typo->line_ofs_e[idx_line];
@@ -145,7 +145,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
              scui_point_t line_point_s = offset_line;
              scui_point_t line_point_e = offset_line;
             
-             // 行绘制
+             /* 行绘制 */
              for (uint32_t idx = line_s; idx <= line_e; idx++) {
                   SCUI_ASSERT(idx >= 0 && idx < src_args->number);
                 
@@ -168,7 +168,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
                 SCUI_LOG_DEBUG("ofs_y:%d", glyph_unit.glyph.ofs_y);
                 
-                // 抄录自:lv_draw_sw_letter
+                /* 抄录自:lv_draw_sw_letter */
                 scui_point_t letter_offset = offset_line;
                 letter_offset.x += glyph_unit.glyph.ofs_x;
                 letter_offset.y += src_args->offset;
@@ -306,7 +306,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             SCUI_LOG_DEBUG("ofs_x:%d", glyph_unit.glyph.ofs_x);
             SCUI_LOG_DEBUG("ofs_y:%d", glyph_unit.glyph.ofs_y);
             
-            // 抄录自:lv_draw_sw_letter
+            /* 抄录自:lv_draw_sw_letter */
             scui_point_t letter_offset = offset;
             letter_offset.x += src_args->offset + glyph_unit.glyph.ofs_x;
             letter_offset.y += (line_height - base_line) - glyph_unit.glyph.box_h - glyph_unit.glyph.ofs_y;

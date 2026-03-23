@@ -59,7 +59,7 @@ void scui_widget_move_pos(scui_handle_t handle, scui_point_t *point)
         scui_event_define(event, widget->parent, false, scui_event_child_pos, scui_event_absorb_none);
         scui_event_notify(&event);
         
-        // 重绘父控件
+        /* 重绘父控件 */
         scui_widget_draw(widget->parent, NULL, false);
     }
 }
@@ -94,7 +94,7 @@ void scui_widget_move_ofs(scui_handle_t handle, scui_point_t *offset)
 void scui_widget_align_pos(scui_handle_t handle, scui_handle_t target, scui_opt_align_t align, scui_point_t *offset)
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
-    // 需要找到有效的对齐目标
+    /* 需要找到有效的对齐目标 */
     if (target == SCUI_HANDLE_INVALID && widget->parent == SCUI_HANDLE_INVALID)
         return;
     
@@ -174,8 +174,8 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
 {
     scui_widget_t *widget = scui_handle_source_check(handle);
     
-    // 禁止根控件修改自己尺寸
-    // 因为这会影响到画布资源
+    /* 禁止根控件修改自己尺寸 */
+    /* 因为这会影响到画布资源 */
     if (widget->parent == SCUI_HANDLE_INVALID) {
         SCUI_LOG_ERROR("unsupport");
         return;
@@ -204,7 +204,7 @@ void scui_widget_adjust_size(scui_handle_t handle, scui_coord_t width, scui_coor
         scui_event_define(event_p, widget->parent, false, scui_event_child_size, scui_event_absorb_none);
         scui_event_notify(&event_p);
         
-        // 重绘父控件
+        /* 重绘父控件 */
         scui_widget_draw(widget->parent, NULL, false);
     }
 }

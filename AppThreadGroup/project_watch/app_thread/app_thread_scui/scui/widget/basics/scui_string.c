@@ -193,7 +193,7 @@ void scui_string_update_str(scui_handle_t handle, uint8_t *str_utf8)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_string_t *string = (void *)widget;
     
-    // 重复的字符串, 跳过绘制
+    /* 重复的字符串, 跳过绘制 */
     if (string->str_utf8 != NULL && str_utf8 != NULL &&
         strcmp(string->str_utf8, str_utf8) == 0)
         return;
@@ -396,7 +396,7 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
     
     string->args.size = scui_font_size_match(string->font_idx, size);
     
-    // 这里是需要重刷新
+    /* 这里是需要重刷新 */
     string->args.update = true;
     scui_widget_draw(widget->myself, NULL, false);
 }
@@ -474,7 +474,7 @@ void scui_string_invoke(scui_event_t *event)
         if (!scui_event_check_execute(event))
              break;
         
-        // 无绘制目标
+        /* 无绘制目标 */
         if (string->str_utf8 == NULL)
             break;
         
@@ -602,9 +602,9 @@ void scui_string_invoke(scui_event_t *event)
             break;
         }
         
-        // 无缓存块的绘制下
+        /* 无缓存块的绘制下 */
         scui_widget_draw_string(widget->myself, NULL, &string->args);
-        //
+        /* */
         if (string->args.mode_scroll == 1 && string->args.limit > 0) {
             scui_coord_t offset = string->args.offset;
             scui_coord_t limit_all = string->args.line_multi ? widget->clip.h : widget->clip.w;

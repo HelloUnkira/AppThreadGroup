@@ -30,81 +30,81 @@ typedef struct {
     bool custom_draw_anim;
     scui_custom_draw_type_t type;
     /*************************************************************************/
-    scui_event_t *event;            // 绘制事件
-    scui_area_t  *clip;             // 绘制区域
+    scui_event_t *event;            /* 绘制事件 */
+    scui_area_t  *clip;             /* 绘制区域 */
     union {
     /* basic draw type */
     /*************************************************************************/
     struct {
-        scui_handle_t       handle; // 绘制对象
-        scui_area_t        *target; // 绘制区域
-        scui_string_args_t *args;   // 字符串绘制参数
-        scui_handle_t       text;   // 文本句柄
+        scui_handle_t       handle; /* 绘制对象 */
+        scui_area_t        *target; /* 绘制区域 */
+        scui_string_args_t *args;   /* 字符串绘制参数 */
+        scui_handle_t       text;   /* 文本句柄 */
     } text;
     /* custom draw type */
     /*************************************************************************/
     struct {
-        scui_handle_t image[3];     // 图片句柄(hour,minute,second)
-        scui_point_t  anchor[3];    // 图片围绕轴心(hour,minute,second)
-        scui_point_t  center[3];    // 图片旋转中心(hour,minute,second)
+        scui_handle_t image[3];     /* 图片句柄(hour,minute,second) */
+        scui_point_t  anchor[3];    /* 图片围绕轴心(hour,minute,second) */
+        scui_point_t  center[3];    /* 图片旋转中心(hour,minute,second) */
         /* frame anim sched: */
-        uint64_t tick_mode:2;       // 2:一帧一跳;1:一度一跳;0:一秒一跳;
-        uint64_t tick_curr:30;      // 当前时刻:时.分.秒.毫秒
-        uint64_t tick_last:30;      // 前一时刻:时.分.秒.毫秒
-        uint64_t tick_sync:1;       // 必要时同步
+        uint64_t tick_mode:2;       /* 2:一帧一跳;1:一度一跳;0:一秒一跳; */
+        uint64_t tick_curr:30;      /* 当前时刻:时.分.秒.毫秒 */
+        uint64_t tick_last:30;      /* 前一时刻:时.分.秒.毫秒 */
+        uint64_t tick_sync:1;       /* 必要时同步 */
     } dial_ptr;
     struct {
-        scui_handle_t spinner;      // 图像句柄(alpha图:环)
-        scui_handle_t edge;         // 图像句柄(alpha图:边界点)
-        scui_color_t  color;        // 图像源色调(.color_l,.color_d,.color_f, .filter,)
-        scui_coord_t  percent;      // 旋转百分比(0~100)
-        scui_coord_t  angle_s;      // 旋转参考点(参考值270度)
-        scui_coord_t  angle_l;      // 旋转参考点(参考值270度)
-        scui_coord_t  way;          // 旋转方向(顺时针:+1;逆时针:-1;)
+        scui_handle_t spinner;      /* 图像句柄(alpha图:环) */
+        scui_handle_t edge;         /* 图像句柄(alpha图:边界点) */
+        scui_color_t  color;        /* 图像源色调(.color_l,.color_d,.color_f, .filter,) */
+        scui_coord_t  percent;      /* 旋转百分比(0~100) */
+        scui_coord_t  angle_s;      /* 旋转参考点(参考值270度) */
+        scui_coord_t  angle_l;      /* 旋转参考点(参考值270度) */
+        scui_coord_t  way;          /* 旋转方向(顺时针:+1;逆时针:-1;) */
     } spinner;
     struct {
-        scui_handle_t bar;          // 图像句柄(背景图)
-        scui_handle_t edge;         // 图像句柄(边界点)
-        scui_color_t  color_bar;    // 图像源色调(alpha图使用)
-        scui_color_t  color_edge;   // 图像源色调(alpha图使用)
-        scui_coord_t  vmin;         // 最小值(默认可为百分比:0)
-        scui_coord_t  vmax;         // 最大值(默认可为百分比:100)
-        scui_coord_t  cmin;         // 当前最小值
-        scui_coord_t  cmax;         // 当前最大值
-        scui_handle_t dist;         // 宽度或高度
-        bool          way;          // 方向(0:水平方向;1:垂直方向)
+        scui_handle_t bar;          /* 图像句柄(背景图) */
+        scui_handle_t edge;         /* 图像句柄(边界点) */
+        scui_color_t  color_bar;    /* 图像源色调(alpha图使用) */
+        scui_color_t  color_edge;   /* 图像源色调(alpha图使用) */
+        scui_coord_t  vmin;         /* 最小值(默认可为百分比:0) */
+        scui_coord_t  vmax;         /* 最大值(默认可为百分比:100) */
+        scui_coord_t  cmin;         /* 当前最小值 */
+        scui_coord_t  cmax;         /* 当前最大值 */
+        scui_handle_t dist;         /* 宽度或高度 */
+        bool          way;          /* 方向(0:水平方向;1:垂直方向) */
     } slider;
     struct {
-        scui_handle_t wait;         // 图像句柄(未选中)
-        scui_handle_t focus;        // 图像句柄(选中)
-        scui_color_t  color_wait;   // 图像源色调(alpha图使用)
-        scui_color_t  color_focus;  // 图像源色调(alpha图使用)
-        scui_handle_t count;        // 导航点数量
-        scui_handle_t index;        // 目标索引(选中)
-        scui_handle_t span;         // 间隙
-        bool          way;          // 方向(0:水平方向;1:垂直方向)
+        scui_handle_t wait;         /* 图像句柄(未选中) */
+        scui_handle_t focus;        /* 图像句柄(选中) */
+        scui_color_t  color_wait;   /* 图像源色调(alpha图使用) */
+        scui_color_t  color_focus;  /* 图像源色调(alpha图使用) */
+        scui_handle_t count;        /* 导航点数量 */
+        scui_handle_t index;        /* 目标索引(选中) */
+        scui_handle_t span;         /* 间隙 */
+        bool          way;          /* 方向(0:水平方向;1:垂直方向) */
     } indicator;
     struct {
-        scui_handle_t image;        // 图像句柄
-        scui_color_t  color;        // 图像源色调(alpha图使用)
-        scui_point_t *center;       // 旋转中心
-        scui_coord_t  radius;       // 旋转半径
-        scui_coord_t  angle;        // 旋转角度(顺时针旋转:+,逆时针旋转:-)
+        scui_handle_t image;        /* 图像句柄 */
+        scui_color_t  color;        /* 图像源色调(alpha图使用) */
+        scui_point_t *center;       /* 旋转中心 */
+        scui_coord_t  radius;       /* 旋转半径 */
+        scui_coord_t  angle;        /* 旋转角度(顺时针旋转:+,逆时针旋转:-) */
     } ring_edge;
     struct {
-        scui_handle_t *image;       // 图像句柄
-        scui_color_t   color;       // 图像源色调(alpha图使用)
-        scui_coord_t   span;        // 图像间隙
-        scui_coord_t   num;         // 图像数量
-        bool           way;         // 方向(0:水平方向;1:垂直方向)
+        scui_handle_t *image;       /* 图像句柄 */
+        scui_color_t   color;       /* 图像源色调(alpha图使用) */
+        scui_coord_t   span;        /* 图像间隙 */
+        scui_coord_t   num;         /* 图像数量 */
+        bool           way;         /* 方向(0:水平方向;1:垂直方向) */
     } image_text;
     struct {
-        scui_handle_t image[4];     // 图像句柄(左上角,右上角,左下角,右下角)
-        scui_color_t  color;        // 图像源色调(alpha图使用)
-        scui_coord_t  delta;        // 边界填充线:
-                                    //   0:忽略(复杂图像集成)
-                                    //  -1:完全填充(全填充圆角矩形)
-                                    //  其他:边界填充(空心圆角矩形)
+        scui_handle_t image[4];     /* 图像句柄(左上角,右上角,左下角,右下角) */
+        scui_color_t  color;        /* 图像源色调(alpha图使用) */
+        scui_coord_t  delta;        /* 边界填充线: */
+                                    /*   0:忽略(复杂图像集成) */
+                                    /*  -1:完全填充(全填充圆角矩形) */
+                                    /*  其他:边界填充(空心圆角矩形) */
     } image_crect4;
     /*************************************************************************/
     };

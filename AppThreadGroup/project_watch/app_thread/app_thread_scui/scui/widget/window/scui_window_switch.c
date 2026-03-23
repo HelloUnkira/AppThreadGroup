@@ -67,10 +67,10 @@ static void scui_window_switch_anima_cfg(scui_anima_t *anima)
     case scui_window_switch_zoom2:
     case scui_window_switch_zoom1:
     case scui_window_switch_move:
-        // 非叠加类型的移动可适合超调效果
+        /* 非叠加类型的移动可适合超调效果 */
         anima->path = scui_map_overshoot;
         anima->period = anima->period * 3 / 2;
-        // 非叠加类型的移动可适合重力回弹效果
+        /* 非叠加类型的移动可适合重力回弹效果 */
         anima->path = scui_map_bounce;
         anima->period = anima->period * 3 / 2;
         break;
@@ -193,7 +193,7 @@ static void scui_window_move_anima_state(uint8_t type)
         if (!over_switch) break;
         over_switch = false;
         
-        // 背景窗口虚化
+        /* 背景窗口虚化 */
         if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in ||
             scui_window_mgr.switch_args.type == scui_window_switch_cover_out) {
             scui_handle_t handle_t = SCUI_HANDLE_INVALID;
@@ -203,8 +203,8 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
                 handle_t = scui_window_mgr.switch_args.list[1];
             
-            // 问题:存在之后的窗口重绘失效当前虚化
-            // 暂定:锁定窗口绘制, 禁止绘制该控件树
+            /* 问题:存在之后的窗口重绘失效当前虚化 */
+            /* 暂定:锁定窗口绘制, 禁止绘制该控件树 */
             scui_widget_t *widget = scui_handle_source_assert(handle_t);
             scui_window_t *window = (void *)widget;
             window->draw_lock = true;
@@ -229,7 +229,7 @@ static void scui_window_move_anima_state(uint8_t type)
             if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out)
                 handle_t = scui_window_mgr.switch_args.list[1];
             
-            // 窗口绘制解锁(解锁所有窗口即可)
+            /* 窗口绘制解锁(解锁所有窗口即可) */
             for (scui_multi_t idx = 0; idx < SCUI_WINDOW_LIST_LIMIT; idx++) {
                 if (scui_window_mgr.list_args.curr[idx] == SCUI_HANDLE_INVALID)
                     continue;
@@ -358,7 +358,7 @@ static void scui_window_move_anima_finish(void *instance)
         scui_window_mgr.switch_args.anima = SCUI_HANDLE_INVALID;
     }
     
-    // 仅最后的动画帧才进行资源回收
+    /* 仅最后的动画帧才进行资源回收 */
     if (scui_window_mgr.switch_args.lock_move)
         return;
     
@@ -397,8 +397,8 @@ static void scui_window_move_anima_auto(int32_t value_s, int32_t value_e, int32_
     anima.value_e = value_e;
     anima.period  = period != 0 ? period : scui_abs(anima.value_e - anima.value_s);
     
-    // 确定当前动画的路径
-    // 计算当前动画的周期
+    /* 确定当前动画的路径 */
+    /* 计算当前动画的周期 */
     scui_window_move_anima_cfg();
     for (scui_multi_t idx = 0; idx < 4; idx++)
         if (scui_window_mgr.switch_args.anima_tag[idx]) {
@@ -674,7 +674,7 @@ void scui_window_event_dispatch(scui_event_t *event)
             scui_window_mgr.switch_args.pct = 0;
             scui_window_mgr.switch_args.list[0] = widget->myself;
             scui_window_mgr.switch_args.list[1] = target;
-            // 更新交互方向
+            /* 更新交互方向 */
             scui_window_switch_type_update(switch_type, event_dir);
             /* 先释放其他窗口资源 */
             scui_window_switch_hide_without(scui_window_mgr.switch_args.list[0], false);
@@ -778,15 +778,15 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
     }
     
     #if 1
-    // 窗口交互风格自适应
-    // 如果目标和当前窗口是临近窗口且指定交互类型
-    // 此时的窗口将自适应为到达目标窗口的交互类型
+    /* 窗口交互风格自适应 */
+    /* 如果目标和当前窗口是临近窗口且指定交互类型 */
+    /* 此时的窗口将自适应为到达目标窗口的交互类型 */
     scui_widget_t *widget_curr = scui_handle_source_check(scui_window_mgr.list_args.acts[0]);
     scui_window_t *window_curr = (void *)widget_curr;
     for (scui_multi_t idx = 0; idx < 4; idx++)
         if (window_curr->sibling[idx] == handle) {
             type = window_curr->switch_type[idx];
-            // 判断方向
+            /* 判断方向 */
             if (idx == 0) dir = scui_opt_dir_to_d;
             if (idx == 1) dir = scui_opt_dir_to_u;
             if (idx == 2) dir = scui_opt_dir_to_r;

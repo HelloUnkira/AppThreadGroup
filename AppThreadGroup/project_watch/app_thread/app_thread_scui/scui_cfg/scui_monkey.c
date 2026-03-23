@@ -38,23 +38,23 @@ static void scui_monkey_anima_expire(void *instance)
 {
     SCUI_LOG_INFO("");
     
-    // 在空闲态选择一个输入设备
+    /* 在空闲态选择一个输入设备 */
     if (scui_ui_res_local->idle) {
         scui_ui_res_local->idle = false;
         scui_ui_res_local->type = 1 + (scui_rand(9) < 7 ? 0 : scui_rand(9) < 5 ? 1 : 2);
     } else {
         scui_indev_data_t indev_data = {0};
         indev_data.type = scui_ui_res_local->type;
-        // 根据输入设备类型, 伪造数据
+        /* 根据输入设备类型, 伪造数据 */
         switch (scui_ui_res_local->type) {
         case scui_indev_type_ptr: {
             
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
-                //
+                /* */
                 scui_ui_res_local->tick = scui_rand(10) + 5;
                 scui_ui_res_local->count = 0;
-                //
+                /* */
                 scui_ui_res_local->ptr_pos.x = SCUI_HOR_RES / 2;
                 scui_ui_res_local->ptr_pos.y = SCUI_VER_RES / 2;
                 scui_ui_res_local->ptr_move_step = scui_rand(20) + 20;
@@ -102,7 +102,7 @@ static void scui_monkey_anima_expire(void *instance)
         case scui_indev_type_enc: {
             indev_data.state = scui_indev_state_release;
             indev_data.enc.enc_diff = scui_rand(1) ? -1 : +1;
-            // 编码器是瞬时事件
+            /* 编码器是瞬时事件 */
             scui_ui_res_local->idle = true;
             scui_ui_res_local->state = scui_indev_state_release;
             break;
@@ -111,7 +111,7 @@ static void scui_monkey_anima_expire(void *instance)
             
             if (scui_ui_res_local->state == scui_indev_state_release) {
                 scui_ui_res_local->state  = scui_indev_state_press;
-                //只取一些特殊值并且调整权重
+                /*只取一些特殊值并且调整权重 */
                 uint32_t key_id = scui_event_key_val_enter;
                 uint32_t key_id_rand = scui_rand(100);
                 if (scui_betw_lr(key_id_rand,  0,  30)) key_id = scui_event_key_val_enter;

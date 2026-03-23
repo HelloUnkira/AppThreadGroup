@@ -33,12 +33,12 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_handle_t       handle_s;       // 从控件树(slave)
-    scui_sbitfd_t       draw:1;         // 绘制标记
-    scui_sbitfd_t       refr:1;         // 刷新标记
+    scui_handle_t       handle_s;       /* 从控件树(slave) */
+    scui_sbitfd_t       draw:1;         /* 绘制标记 */
+    scui_sbitfd_t       refr:1;         /* 刷新标记 */
 } scui_linear_m_t;
 
-// 子控件:需要重定向事件响应
+/* 子控件:需要重定向事件响应 */
 #pragma pack(push, 1)
 typedef struct {
     /* 继承域: */
@@ -56,11 +56,11 @@ typedef struct {
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
     /* 内部域: */
-    scui_surface_t     *surface_s;      // 子控件树画布
-    scui_handle_t       handle_m;       // 主控件(master)
+    scui_surface_t     *surface_s;      /* 子控件树画布 */
+    scui_handle_t       handle_m;       /* 主控件(master) */
 } scui_linear_s_t;
 
-// 子控件:需要重定向事件响应
+/* 子控件:需要重定向事件响应 */
 #pragma pack(push, 1)
 typedef struct {
     /* 继承域: */

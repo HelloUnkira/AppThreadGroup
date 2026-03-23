@@ -96,7 +96,7 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(src_surface->hor_res == SCUI_HOR_RES);
         SCUI_ASSERT(src_surface->ver_res == SCUI_VER_RES);
         
-        // 该部分效果相对于,浮动窗口进入时的样子
+        /* 该部分效果相对于,浮动窗口进入时的样子 */
         if (scui_window_mgr.switch_args.type == scui_window_switch_cover_in) {
             
             if (list[idx]->myself == scui_window_mgr.list_args.acts[0]) {
@@ -121,7 +121,7 @@ void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num)
             }
         }
         
-        // 该部分效果相对于,浮动窗口退出时的样子
+        /* 该部分效果相对于,浮动窗口退出时的样子 */
         if (scui_window_mgr.switch_args.type == scui_window_switch_cover_out) {
             
             if (list[idx]->myself != scui_window_mgr.list_args.acts[0]) {
@@ -187,7 +187,7 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
         
-        #if 1 // 扩充源区域的取点范围,保证到达边界
+        #if 1 /* 扩充源区域的取点范围,保证到达边界 */
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor)) {
             scui_coord_t delta = (scui_multi_t)src_clip.w * SCUI_SCALE_COF / (scale_d * SCUI_SCALE_COF) - src_clip.w;
             src_clip.w = scui_min(src_surface->hor_res, src_clip.w + delta);
@@ -208,8 +208,8 @@ void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num)
         }
         #endif
         
-        // scui_matrix_check(&inv_matrix);
-        // scui_matrix_t matrix = inv_matrix;
+        /* scui_matrix_check(&inv_matrix); */
+        /* scui_matrix_t matrix = inv_matrix; */
         scui_matrix_inverse(&inv_matrix);
         
         scui_coord_t pct = 0;
@@ -280,7 +280,7 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
         scui_matrix_scale(&inv_matrix, &(scui_point2_t){.x = scale_d,.y = scale_d,});
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
@@ -309,7 +309,7 @@ void scui_window_transform_center(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
 {
-    // 这是特殊的变换, 只有水平变换, 没有垂直变换
+    /* 这是特殊的变换, 只有水平变换, 没有垂直变换 */
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver)) {
         scui_window_transform_move(list, num);
         return;
@@ -347,7 +347,7 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +dst_clip.w / 2,.y = +dst_clip.h / 2,});
         scui_matrix_rotate_a(&inv_matrix, angle, 0x00);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
@@ -365,7 +365,7 @@ void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
 {
-    // 这是特殊的变换, 只有水平变换, 没有垂直变换
+    /* 这是特殊的变换, 只有水平变换, 没有垂直变换 */
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver)) {
         scui_window_transform_move(list, num);
         return;
@@ -407,7 +407,7 @@ void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = +point_x,.y = +point_y,});
         scui_matrix_rotate_a(&inv_matrix, angle - 270, 0x00);
         scui_matrix_translate(&inv_matrix, &(scui_point2_t){.x = -src_clip.w / 2,.y = -src_clip.h / 2,});
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
@@ -625,11 +625,11 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
         if (angle > 90)
             continue;
         
-        // 移动到轴心, 然后再旋转
+        /* 移动到轴心, 然后再旋转 */
         scui_point2_t offset1 = {.x = +offset.x, .y = +offset.y,};
         scui_point2_t offset2 = {.x = -offset.x, .y = -offset.y,};
         
-        // scui_matrix_check(&r_matrix);
+        /* scui_matrix_check(&r_matrix); */
         scui_area3_offset_xy(&face3, &offset1);
         scui_area3_transform_by_matrix(&face3, &r_matrix);
         scui_area3_offset_xy(&face3, &offset2);
@@ -640,7 +640,7 @@ void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t inv_matrix = {0};
         scui_size2_t size2 = {.w = src_clip.w,.h = src_clip.h,};
         scui_matrix_affine_blit(&inv_matrix, &size2, &face3);
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
@@ -684,10 +684,10 @@ void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num)
         scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
     }
     
-    // flip2 在 flip1 的基础上扩展生成
+    /* flip2 在 flip1 的基础上扩展生成 */
     scui_window_transform_flip1(list, num);
     
-    // 这里投机取巧,在上面变换完之后,把不显示的那部分还原的给盖住
+    /* 这里投机取巧,在上面变换完之后,把不显示的那部分还原的给盖住 */
     for (scui_multi_t idx = 0; idx < num; idx++) {
         /* 场景切换满足全局目标 */
         scui_surface_t *dst_surface = scui_frame_buffer_draw();
@@ -730,7 +730,7 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
     
-    // active, inactive
+    /* active, inactive */
     scui_handle_t  window_a = scui_window_active_last(0);
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
@@ -758,7 +758,7 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     scui_coord3_t s_cen = scui_dist(scui_window_mgr.switch_args.pct, 50);
     scale = scui_map(s_cen, 0, 50, 0.707f, 1.0f);
     
-    // 数字用于调整视角保证边界平稳过度
+    /* 数字用于调整视角保证边界平稳过度 */
     scui_coord3_t s_res = scale * 0.95;
     scui_coord3_t x_res = s_res * dst_surface->hor_res / 2;
     scui_coord3_t y_res = s_res * dst_surface->ver_res / 2;
@@ -775,7 +775,7 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_rotate_a(&r_matrix, angle, 0x02);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
         scui_matrix_rotate_a(&r_matrix, angle, 0x01);
-    // scui_matrix_check(&r_matrix);
+    /* scui_matrix_check(&r_matrix); */
     
     /* 3D空间建模(8个顶点) */
     scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
@@ -789,12 +789,12 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     
     /* 3D空间建模(6个面) */
     scui_face3_t face3[6] = {
-        {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, // 0321
-        {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, // 4567
-        {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, // 5126
-        {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, // 0473
-        {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, // 7623
-        {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, // 0154
+        {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, /* 0321 */
+        {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, /* 4567 */
+        {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, /* 5126 */
+        {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, /* 0473 */
+        {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, /* 7623 */
+        {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, /* 0154 */
     };
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor)) {
         face3[0] = (scui_face3_t){.point3 = {vertex3_1, vertex3_0, vertex3_3, vertex3_2,},};
@@ -850,11 +850,11 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < 6; idx++) {
         scui_area_t dst_clip = scui_surface_area(dst_surface);
         
-        // 跳过被覆盖的面
+        /* 跳过被覆盖的面 */
         if (center_z[idx] < 0.0f)
             continue;
         
-        // 跳过上下俩个平行面(因为它们不显示)
+        /* 跳过上下俩个平行面(因为它们不显示) */
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
             if (scui_area3_parallel(&face3[idx], 0x02))
                 continue;
@@ -865,20 +865,20 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t inv_matrix = {0};
         scui_size2_t size2 = {.w = dst_clip.w,.h = dst_clip.h,};
         scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-        // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_affine_blit(&inv_matrix, &size2, &face); */
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
         if (face_idx[idx] == 0 || face_idx[idx] == 1) {
-            // 绘制俩个窗口面
+            /* 绘制俩个窗口面 */
             scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
             scui_area_t src_clip = scui_surface_area(src_surface);
             scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
                 SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
         } else {
             #if 1
-            // 没有窗口面, 则填背景灰色
+            /* 没有窗口面, 则填背景灰色 */
             scui_area_t  src_clip  = dst_clip;
             scui_color_t src_color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF1F1F1F);
             scui_draw_area_matrix_fill(true, dst_surface, dst_clip, src_clip,
@@ -888,15 +888,15 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
         
         
         
-        #if 1   // 光影特效
+        #if 1   /* 光影特效 */
         do {
             scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
             scui_image_t *shadow = scui_handle_source_check(handle);
             size2.w = scui_image_w(handle) / 2;
             size2.h = scui_image_h(handle);
             scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-            // scui_matrix_check(&inv_matrix);
+            /* scui_matrix_affine_blit(&inv_matrix, &size2, &face); */
+            /* scui_matrix_check(&inv_matrix); */
             src_matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
             
@@ -917,7 +917,7 @@ void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num)
  */
 void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
 {
-    // 这是特殊的变换, 只有水平变换, 没有垂直变换
+    /* 这是特殊的变换, 只有水平变换, 没有垂直变换 */
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver)) {
         scui_window_transform_move(list, num);
         return;
@@ -925,7 +925,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
     
     SCUI_ASSERT(num == 2);
     
-    // active, inactive
+    /* active, inactive */
     scui_handle_t  window_a = scui_window_active_last(0);
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
@@ -952,7 +952,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
         angle *= flag;
         SCUI_LOG_INFO("flag:%f, angle:%f", flag, angle);
         
-        // 数字用于调整视角保证边界平稳过度
+        /* 数字用于调整视角保证边界平稳过度 */
         scui_coord3_t s_res = 1.0;
         scui_coord3_t x_res = s_res * (dst_surface->hor_res) / 2;
         scui_coord3_t y_res = s_res * (dst_surface->ver_res / seg_num) / 2 / s_res;
@@ -969,7 +969,7 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
             scui_matrix_rotate_a(&r_matrix, angle, 0x02);
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
             scui_matrix_rotate_a(&r_matrix, angle, 0x01);
-        // scui_matrix_check(&r_matrix);
+        /* scui_matrix_check(&r_matrix); */
         
         /* 3D空间建模(8个顶点) */
         scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
@@ -983,12 +983,12 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
         
         /* 3D空间建模(6个面) */
         scui_face3_t face3[6] = {
-            {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, // 0321
-            {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, // 4567
-            {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, // 5126
-            {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, // 0473
-            {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, // 7623
-            {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, // 0154
+            {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, /* 0321 */
+            {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, /* 4567 */
+            {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, /* 5126 */
+            {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, /* 0473 */
+            {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, /* 7623 */
+            {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, /* 0154 */
         };
         face3[0] = (scui_face3_t){.point3 = {vertex3_1, vertex3_0, vertex3_3, vertex3_2,},};
         
@@ -1040,24 +1040,24 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
         for (scui_multi_t idx = 0; idx < 6; idx++) {
             scui_area_t dst_clip = scui_surface_area(dst_surface);
             
-            // 跳过被覆盖的面
+            /* 跳过被覆盖的面 */
             if (center_z[idx] < 0.0f)
                 continue;
             
-            // 跳过上下俩个平行面(因为它们不显示)
+            /* 跳过上下俩个平行面(因为它们不显示) */
             if (scui_area3_parallel(&face3[idx], 0x02))
                 continue;
             
             scui_matrix_t inv_matrix = {0};
             scui_size2_t size2 = {.w = dst_clip.w,.h = dst_clip.h / seg_num,};
             scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-            // scui_matrix_check(&inv_matrix);
+            /* scui_matrix_affine_blit(&inv_matrix, &size2, &face); */
+            /* scui_matrix_check(&inv_matrix); */
             scui_matrix_t src_matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
             
             if (face_idx[idx] == 0 || face_idx[idx] == 1) {
-                // 绘制俩个窗口面
+                /* 绘制俩个窗口面 */
                 scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
                 scui_area_t src_clip = scui_surface_area(src_surface);
                 src_clip.h  = src_clip.h / seg_num;
@@ -1066,10 +1066,10 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
                     SCUI_COLOR_UNUSED, inv_matrix, src_matrix);
             } else {
                 #if 1
-                // 没有窗口面, 则填背景灰色
+                /* 没有窗口面, 则填背景灰色 */
                 scui_area_t src_clip = dst_clip;
                 src_clip.h  = src_clip.h / seg_num;
-                // src_clip.y += src_clip.h * seg_idx;
+                /* src_clip.y += src_clip.h * seg_idx; */
                 scui_color_t src_color = SCUI_COLOR_MAKE32(false, 0x0, 0xFF1F1F1F);
                 scui_draw_area_matrix_fill(true, dst_surface, dst_clip, src_clip,
                     scui_alpha_cover, src_color, inv_matrix, src_matrix);
@@ -1078,15 +1078,15 @@ void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num)
             
             
             
-            #if 1   // 光影特效
+            #if 1   /* 光影特效 */
             do {
                 scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
                 scui_image_t *shadow = scui_handle_source_check(handle);
                 size2.w = scui_image_w(handle) / 2;
                 size2.h = scui_image_h(handle) / seg_num;
                 scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-                // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-                // scui_matrix_check(&inv_matrix);
+                /* scui_matrix_affine_blit(&inv_matrix, &size2, &face); */
+                /* scui_matrix_check(&inv_matrix); */
                 src_matrix = inv_matrix;
                 scui_matrix_inverse(&inv_matrix);
                 
@@ -1111,7 +1111,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
 {
     SCUI_ASSERT(num == 2);
     
-    // active, inactive
+    /* active, inactive */
     scui_handle_t  window_a = scui_window_active_last(0);
     scui_widget_t *widget_a = list[0]->myself == window_a ? list[0] : list[1];
     scui_widget_t *widget_i = list[0]->myself != window_a ? list[0] : list[1];
@@ -1139,7 +1139,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     scui_coord3_t s_cen = scui_dist(scui_window_mgr.switch_args.pct, 50);
     scale = scui_map(s_cen, 0, 50, 0.707f, 1.0f);
     
-    // 数字用于调整视角保证边界平稳过度
+    /* 数字用于调整视角保证边界平稳过度 */
     scui_coord3_t s_res = scale * 0.78;
     scui_coord3_t x_res = s_res * dst_surface->hor_res / 2;
     scui_coord3_t y_res = s_res * dst_surface->ver_res / 2;
@@ -1156,7 +1156,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         scui_matrix_rotate_a(&r_matrix, angle, 0x02);
     if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_ver))
         scui_matrix_rotate_a(&r_matrix, angle, 0x01);
-    // scui_matrix_check(&r_matrix);
+    /* scui_matrix_check(&r_matrix); */
     
     /* 3D空间建模(8个顶点) */
     scui_vertex3_t vertex3_0 = {-1.0f * x_res, -1.0f * y_res, -1.0f * z_res,};
@@ -1170,12 +1170,12 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     
     /* 3D空间建模(6个面) */
     scui_face3_t face3[6] = {
-        {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, // 0321
-        {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, // 4567
-        {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, // 5126
-        {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, // 0473
-        {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, // 7623
-        {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, // 0154
+        {.point3 = {vertex3_0, vertex3_3, vertex3_2, vertex3_1,},}, /* 0321 */
+        {.point3 = {vertex3_4, vertex3_5, vertex3_6, vertex3_7,},}, /* 4567 */
+        {.point3 = {vertex3_5, vertex3_1, vertex3_2, vertex3_6,},}, /* 5126 */
+        {.point3 = {vertex3_0, vertex3_4, vertex3_7, vertex3_3,},}, /* 0473 */
+        {.point3 = {vertex3_7, vertex3_6, vertex3_2, vertex3_3,},}, /* 7623 */
+        {.point3 = {vertex3_0, vertex3_1, vertex3_5, vertex3_4,},}, /* 0154 */
     };
     face3[0] = (scui_face3_t){.point3 = {vertex3_0, vertex3_1, vertex3_2, vertex3_3,},};
     
@@ -1226,11 +1226,11 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
     for (scui_multi_t idx = 0; idx < 6; idx++) {
         scui_area_t dst_clip = scui_surface_area(dst_surface);
         
-        // 跳过被覆盖的面
+        /* 跳过被覆盖的面 */
         if (center_z[idx] < 0.0f)
             continue;
         
-        // 跳过上下俩个平行面(因为它们不显示)
+        /* 跳过上下俩个平行面(因为它们不显示) */
         if (scui_opt_bits_check(scui_window_mgr.switch_args.dir, scui_opt_dir_hor))
             if (scui_area3_parallel(&face3[idx], 0x02))
                 continue;
@@ -1239,7 +1239,7 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
                 continue;
         
         bool cover_check = true;
-        if (face_idx[idx] == 1 || // 移动方向不同会导致选择的绘制面不一样
+        if (face_idx[idx] == 1 || /* 移动方向不同会导致选择的绘制面不一样 */
            (face_idx[idx] == 2 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_l) ||
            (face_idx[idx] == 3 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_r) ||
            (face_idx[idx] == 4 && scui_window_mgr.switch_args.dir == scui_opt_dir_to_u) ||
@@ -1251,12 +1251,12 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         scui_matrix_t inv_matrix = {0};
         scui_size2_t size2 = {.w = dst_clip.w,.h = dst_clip.h,};
         scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-        // scui_matrix_affine_blit(&inv_matrix, &size2, &face3[idx]);
-        // scui_matrix_check(&inv_matrix);
+        /* scui_matrix_affine_blit(&inv_matrix, &size2, &face3[idx]); */
+        /* scui_matrix_check(&inv_matrix); */
         scui_matrix_t src_matrix = inv_matrix;
         scui_matrix_inverse(&inv_matrix);
         
-        // 绘制俩个窗口面
+        /* 绘制俩个窗口面 */
         scui_surface_t *src_surface = face_idx[idx] == 1 ? src_surface_a : src_surface_i;
         scui_area_t src_clip = scui_surface_area(src_surface);
         scui_draw_area_matrix_blend(true, dst_surface, dst_clip, src_surface, src_clip,
@@ -1264,15 +1264,15 @@ void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num)
         
         
         
-        #if 1   // 光影特效
+        #if 1   /* 光影特效 */
         do {
             scui_handle_t handle = scui_window_mgr.switch_args.cfg_args.shadow;
             scui_image_t *shadow = scui_handle_source_check(handle);
             size2.w = scui_image_w(handle) / 2;
             size2.h = scui_image_h(handle);
             scui_matrix_perspective_view_blit(&inv_matrix, &size2, &face3[idx], &view);
-            // scui_matrix_affine_blit(&inv_matrix, &size2, &face);
-            // scui_matrix_check(&inv_matrix);
+            /* scui_matrix_affine_blit(&inv_matrix, &size2, &face); */
+            /* scui_matrix_check(&inv_matrix); */
             src_matrix = inv_matrix;
             scui_matrix_inverse(&inv_matrix);
             

@@ -33,7 +33,7 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     edge_clip_e.x = draw_dsc->dst_center.x + center_e_ex - edge_clip.w / 2;
     edge_clip_e.y = draw_dsc->dst_center.y + center_e_ey - edge_clip.h / 2;
     
-    // 缓存一下图片
+    /* 缓存一下图片 */
     scui_image_unit_t image = {.image = draw_dsc->src_image,};
     scui_image_unit_t image_e = {.image = draw_dsc->src_image_e,};
     scui_image_cache_load(&image);
@@ -62,7 +62,7 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
         draw_dsc->src_image->format != scui_pixel_cf_alpha8) {
         scui_coord_t hor_res = draw_dsc->src_image_e->pixel.width;
         scui_coord_t ver_res = draw_dsc->src_image_e->pixel.height;
-        // 开辟一个底图画布
+        /* 开辟一个底图画布 */
         scui_coord_t surface_byte   = scui_pixel_bits(draw_dsc->src_image->format) / 8;
         scui_coord_t surface_remain = sizeof(scui_color_wt_t) - surface_byte;
         scui_multi_t surface_size   = hor_res * ver_res * surface_byte + surface_remain;
@@ -367,8 +367,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     };
     
     /* 按俩个画布的透明度进行像素点混合 */
-    scui_area_t dst_area_v = {0};   // v:vaild
-    scui_area_t dst_clip_v = {0};   // v:vaild
+    scui_area_t dst_area_v = {0};   /* v:vaild */
+    scui_area_t dst_clip_v = {0};   /* v:vaild */
     scui_area_t dst_area = scui_surface_area(draw_dsc->dst_surface);
     /* 在此处将quadrant_offset融合进去(dst同步src的偏移) */
     scui_area_t dst_area_s = quadrant_clip;
@@ -379,7 +379,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     if (!scui_area_inter(&dst_clip_v, &draw_dsc->dst_clip, &dst_area_v))
          goto over;
     
-    scui_area_t src_clip_v = {0};   // v:vaild
+    scui_area_t src_clip_v = {0};   /* v:vaild */
     /* 在此处将quadrant_clip融合进去(它一定是src_surface的子剪切域) */
     scui_area_t src_area = quadrant_clip;
     if (!scui_area_inter(&src_clip_v, &src_area, &draw_dsc->src_clip))

@@ -35,7 +35,7 @@ void scui_point3_transform_by_matrix(scui_point3_t *point3, scui_matrix_t *matri
         scui_coord3_t m_dz = matrix->meta[row][2] * point3->z;
         
         point3_t.meta[row] = m_dx + m_dy + m_dz;
-        // point3_t.meta[row] = roundf(point3_t.meta[row]);
+        /* point3_t.meta[row] = roundf(point3_t.meta[row]); */
     }
     
     *point3 = point3_t;
@@ -70,7 +70,7 @@ void scui_point3_perspective(scui_point3_t *point3, scui_view3_t *view3)
     
     point3->x = view3->x - (view3->x - point3->x) * perspective;
     point3->y = view3->y - (view3->y - point3->y) * perspective;
-    point3->z = 1.0; // point3->z *= perspective;
+    point3->z = 1.0; /* point3->z *= perspective; */
     #endif
 }
 
@@ -100,8 +100,8 @@ void scui_point3_to_point2(scui_point3_t *point3, scui_point2_t *point2)
     } else {
         point2->x = point3->x / point3->z;
         point2->y = point3->y / point3->z;
-        // point2->x = roundf(point2->x);
-        // point2->y = roundf(point2->y);
+        /* point2->x = roundf(point2->x); */
+        /* point2->y = roundf(point2->y); */
     }
 }
 
@@ -155,7 +155,7 @@ void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
 {
     for (scui_coord_t idx = 0; idx < 4; idx++) {
         scui_point3_by_point2(&area3->point3[idx], &area2->point2[idx]);
-        // xy平面构建出的空间面, 应该落在xy平面内
+        /* xy平面构建出的空间面, 应该落在xy平面内 */
         area3->point3[idx].z = 0.0f;
     }
 }
@@ -278,14 +278,14 @@ void scui_area3_center_z(scui_area3_t *area3, scui_coord3_t *point3_z)
 bool scui_area3_parallel(scui_area3_t *area3, uint8_t axis)
 {
     switch (axis) {
-    case 0x00:  // 平行XY平面
+    case 0x00:  /* 平行XY平面 */
         if (scui_dist(area3->point3[0].z, area3->point3[0].z) < SCUI_ZERO_VAL_F &&
             scui_dist(area3->point3[0].z, area3->point3[1].z) < SCUI_ZERO_VAL_F &&
             scui_dist(area3->point3[0].z, area3->point3[2].z) < SCUI_ZERO_VAL_F)
             return true;
         
         return false;
-    case 0x01:  // 平行YZ平面
+    case 0x01:  /* 平行YZ平面 */
         
         if (scui_dist(area3->point3[0].x, area3->point3[0].x) < SCUI_ZERO_VAL_F &&
             scui_dist(area3->point3[0].x, area3->point3[1].x) < SCUI_ZERO_VAL_F &&
@@ -293,7 +293,7 @@ bool scui_area3_parallel(scui_area3_t *area3, uint8_t axis)
             return true;
         
         return false;
-    case 0x02:  // 平行XZ平面
+    case 0x02:  /* 平行XZ平面 */
         if (scui_dist(area3->point3[0].y, area3->point3[0].y) < SCUI_ZERO_VAL_F &&
             scui_dist(area3->point3[0].y, area3->point3[1].y) < SCUI_ZERO_VAL_F &&
             scui_dist(area3->point3[0].y, area3->point3[2].y) < SCUI_ZERO_VAL_F)

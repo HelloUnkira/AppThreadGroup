@@ -138,7 +138,7 @@ void scui_widget_anima_destroy(scui_handle_t handle)
         return;
     widget_anima = scui_handle_source_check(widget->anima);
     
-    // 销毁所有动画
+    /* 销毁所有动画 */
     scui_anima_destroy(widget_anima->handle);
     for (scui_multi_t idx = 0; idx < widget_anima->number; idx++)
         if (widget_anima->list[idx] != SCUI_HANDLE_INVALID)
@@ -162,7 +162,7 @@ void scui_widget_anima_create(scui_handle_t handle, scui_handle_t number)
     scui_widget_t *widget = scui_handle_source_check(handle);
     scui_widget_anima_t *widget_anima = NULL;
     
-    // 只允许存在一个动画
+    /* 只允许存在一个动画 */
     if (widget->anima != SCUI_HANDLE_INVALID)
         scui_widget_anima_destroy(handle);
     
@@ -204,11 +204,11 @@ void scui_widget_anima_submit(scui_handle_t handle, scui_handle_t anima, scui_ha
         widget_anima->list[idx] = anima;
         widget_anima->step[idx] = step;
         
-        // 重新刷新一下step极限
+        /* 重新刷新一下step极限 */
         if (widget_anima->step_lim < widget_anima->step[idx])
             widget_anima->step_lim = widget_anima->step[idx];
         
-        // 此处检查一下动画是否是本控件动画
+        /* 此处检查一下动画是否是本控件动画 */
         scui_anima_t *anima_inst = scui_handle_source_assert(anima);
         SCUI_ASSERT(anima_inst->object == handle);
         return;
@@ -318,7 +318,7 @@ scui_handle_t scui_widget_anima_zoom_out_w(scui_handle_t handle, int32_t time, i
     anima.period  = time;
     anima.delay   = delay;
     anima.value_s = clip.w;
-    anima.value_e = 1; // 不应该到0
+    anima.value_e = 1; /* 不应该到0 */
     scui_anima_create(&anima, &handle);
     return handle;
 }
@@ -336,7 +336,7 @@ scui_handle_t scui_widget_anima_zoom_out_h(scui_handle_t handle, int32_t time, i
     anima.period  = time;
     anima.delay   = delay;
     anima.value_s = clip.h;
-    anima.value_e = 1; // 不应该到0
+    anima.value_e = 1; /* 不应该到0 */
     scui_anima_create(&anima, &handle);
     return handle;
 }

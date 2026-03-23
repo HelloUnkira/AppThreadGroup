@@ -70,9 +70,9 @@ typedef struct {
         /* scui动画事件流逝数(ms) */
         uint32_t tick;
         /* scui其余事件信息: */
-        // scui_area_t  area;
-        // scui_point_t point;
-        // scui_coord_t coord;
+        /* scui_area_t  area; */
+        /* scui_point_t point; */
+        /* scui_coord_t coord; */
         
         /* 通用结构信息(协议数据流): */
         struct {
