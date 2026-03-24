@@ -134,10 +134,9 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_matrix_rotate_a(&matrix, angle[idx_angle], 0x00);
                 scui_matrix_translate(&matrix, &center2);
                 
-                scui_area_t image_clip = {
-                    .w = scui_image_w(image[idx_angle]),
-                    .h = scui_image_h(image[idx_angle]),
-                };
+                scui_coord_t image_w = scui_image_w(image[idx_angle]);
+                scui_coord_t image_h = scui_image_h(image[idx_angle]);
+                scui_area_t  image_clip = {.w = image_w, .h = image_h,};
                 
                 scui_face2_t image2_clip = {0};
                 scui_face3_t image3_clip = {0};
@@ -147,26 +146,53 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_area3_to_area2(&image3_clip, &image2_clip);
                 scui_area2_to_area(&image2_clip, &image_clip);
                 
+                float clip_val_1 = 0;
+                float clip_val_2 = 0;
+                
+                clip_val_1 = scui_min(image2_clip.point2[0].x, image2_clip.point2[2].x);
+                clip_val_2 = scui_min(image2_clip.point2[1].x, image2_clip.point2[3].x);
+                image_clip.x1 = (scui_min(clip_val_1, clip_val_2) - 0.5);
+                clip_val_1 = scui_max(image2_clip.point2[0].x, image2_clip.point2[2].x);
+                clip_val_2 = scui_max(image2_clip.point2[1].x, image2_clip.point2[3].x);
+                image_clip.x2 = (scui_max(clip_val_1, clip_val_2) + 0.5);
+                clip_val_1 = scui_min(image2_clip.point2[0].y, image2_clip.point2[2].y);
+                clip_val_2 = scui_min(image2_clip.point2[1].y, image2_clip.point2[3].y);
+                image_clip.y1 = (scui_min(clip_val_1, clip_val_2) - 0.5);
+                clip_val_1 = scui_max(image2_clip.point2[0].y, image2_clip.point2[2].y);
+                clip_val_2 = scui_max(image2_clip.point2[1].y, image2_clip.point2[3].y);
+                image_clip.y2 = (scui_max(clip_val_1, clip_val_2) + 0.5);
+                
+                scui_area_m_by_s(&image_clip, &image_clip);
+                scui_area_t clip_widget = scui_widget_clip(event->object);
+                if (!scui_area_inter2(&clip_widget, &image_clip))
+                     break;
+                
                 #if 0
                 /* 是整体区域剪除 */
                 /* 从控件区域缩小到图片完全绘制区域 */
-                scui_area_t draw_clip = image_clip;
-                scui_widget_draw(event->object, &draw_clip, false);
+                scui_widget_draw(event->object, &image_clip, false);
                 #else
-                scui_area_t clip_widget = scui_widget_clip(event->object);
-                /* if (!scui_area_inter2(&clip_widget, &image_clip)) */
-                /*      break; */
+                /* 如果接近水平或者垂直, 此时无需分段 */
+                if (image_w * image_h * 1.2f > image_clip.w * image_clip.h) {
+                    scui_widget_draw(event->object, &image_clip, false);
+                    continue;
+                }
                 
-                scui_multi_t sumpox = 0, vofs = 0;
-                scui_multi_t vfrag = clip_widget.h / 10;
-                scui_area_t  clip_frag = clip_widget;
+                /* 进行最小分段扫描 */
+                const scui_multi_t scan_seg = 10; // 分段限制
+                scui_multi_t vmin  = scui_min(image_w, image_h); // 最小高度
+                scui_multi_t vfrag = scui_max(vmin, clip_widget.h / scan_seg);
+                scui_multi_t sumpox = 0;
+                scui_area_t  clip_frag = {
+                    .x = clip_widget.x,
+                    .w = clip_widget.w,
+                };
                 
-                while (true) {
-                    
+                clip_frag.h = vfrag; /* 通过初始检测 */
+                for (scui_multi_t vofs = 0; vofs < clip_widget.h; vofs += clip_frag.h) {
+                    /* 重定向扫描区域 */
                     clip_frag.y = clip_widget.y + vofs;
                     clip_frag.h = clip_widget.h - vofs < vfrag ? clip_widget.h - vofs : vfrag;
-                    if (clip_frag.h <= 0)
-                        break;
                     
                     scui_area_t draw_clip = clip_frag;
                     /* 这里脏矩阵计算重绘区域还有问题(?) */
@@ -194,11 +220,12 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                         #endif
                         
                         scui_widget_draw(event->object, &draw_clip, false);
-                        sumpox += draw_clip.w * draw_clip.h;
+                        sumpox += scui_area_size(&draw_clip);
                     }
-                    vofs += clip_frag.h;
                 }
-                SCUI_LOG_INFO("draw clip:%d", sumpox);
+                SCUI_LOG_WARN("draw sumpox:%d, draw pct:%.1f%%", sumpox,
+                    (float)sumpox / (float)scui_area_size(&clip_widget));
+                
                 #endif
             }
         }

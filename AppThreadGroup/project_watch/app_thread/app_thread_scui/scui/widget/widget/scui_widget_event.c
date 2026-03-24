@@ -524,23 +524,27 @@ void scui_widget_event_dispatch(scui_event_t *event)
         /* 在调度的最开始, 需要根据实际情况做调整 */
         if (widget->parent == SCUI_HANDLE_INVALID) {
             bool surface_only = scui_widget_surface_only(widget);
-            /* cond 1: 无独立画布,异步绘制 --> 传递到refr前绘制 */
-            if (!surface_only && !event->style.sync) {
-                scui_widget_refr(widget->myself, true);
-                return;
-            }
-            /* cond 2: 无独立画布,同步绘制 --> 就地直达绘制画布 */
-            if (!surface_only && event->style.sync) {
-                scui_surface_t *surface_fb = scui_frame_buffer_draw();
-                scui_widget_surface_remap(widget->myself, surface_fb);
-            }
-            /* cond 3: 有独立画布,绘制结束 --> 产生一次异步刷新 */
-            if (surface_only && scui_event_check_finish(event))
-                scui_widget_refr(widget->myself, false);
             
-            /* 更新surface剪切域, 因为绘制即将开始 */
+            /* 工步调度:prepare */
             if (scui_event_check_prepare(event)) {
+                /* 无独立画布, 异步绘制(此处忽略) */
+                if (!surface_only && !event->style.sync) return;
                 
+                /* 无独立画布, 同步绘制 --> 就地直达绘制画布 */
+                if (!surface_only && event->style.sync) {
+                    scui_surface_t *surface_fb = scui_frame_buffer_draw();
+                    scui_widget_surface_remap(widget->myself, surface_fb);
+                }
+                
+            }
+            
+            /* 工步调度:execute */
+            if (scui_event_check_execute(event)) {
+                /* 无独立画布, 异步绘制 --> 传递到refr前绘制 */
+                if (!surface_only && !event->style.sync)
+                    scui_widget_refr(widget->myself, true);
+                
+                /* 绘制起始, 更新surface剪切域 */
                 #if SCUI_MEM_FEAT_MINI
                 /* 为所有控件及其子控件添加全局剪切域 */
                 /* scui_widget_clip_check(handle_r, true); */
@@ -563,15 +567,21 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_update(widget);
                 /* scui_widget_clip_check(widget->myself, true); */
                 scui_widget_clip_sizes(widget->myself, &size_new);
-                SCUI_LOG_DEBUG("size_old:%d, size_new:%d", size_old, size_new);
+                SCUI_LOG_WARN("size_old:%d, size_new:%d", size_old, size_new);
             }
-            /* 去除surface剪切域, 因为已经绘制完毕 */
-            if (scui_event_check_finish(event))
-                scui_widget_clip_clear(widget, true);
             
-            /* 执行绘制任务序列调度 */
-            if (scui_event_check_finish(event))
+            /* 工步调度:finish */
+            if (scui_event_check_finish(event)) {
+                /* 无独立画布, 异步绘制(此处忽略) */
+                if (!surface_only && !event->style.sync) return;
+                
+                /* 绘制结束, 产生一次异步刷新 */
+                scui_widget_refr(widget->myself, false);    
+                /* 绘制结束, 去除surface剪切域 */
+                scui_widget_clip_clear(widget, true);
+                /* 执行绘制任务序列调度 */
                 scui_draw_task_dispatch();
+            }
             
             /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */
             if (widget->type == scui_widget_type_window && surface_only) {
