@@ -30,6 +30,11 @@ bool scui_widget_draw_empty(scui_handle_t handle)
  */
 bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *face)
 {
+    /*随感:这部分逻辑我之前写了八分像,但始终未能解决所有缺陷
+     *     后来这部分代码只有上帝看得懂了,我尝试性的用ai进行纠错
+     *     豆包在看到我的错误日志信息后,帮我修订验证后,我再进行整理的结果
+     */
+    
     bool area_frag = false;
     scui_area_t frag_t = *frag;
     
@@ -37,44 +42,39 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
     scui_coord_t y_max = scui_coord_min;
     scui_coord_t x_min_a = scui_coord_max;
     scui_coord_t x_max_a = scui_coord_min;
-    scui_coord_t y_min_idx = -1;
-    scui_coord_t y_max_idx = -1;
+    
     /* 上下边界,共计8次线相交 */
     scui_coord_t y_edge[2] = {frag_t.y, frag_t.y + frag_t.h - 1,};
     
-    const uint8_t idx_line[4][2] = {{0,1},{1,2},{2,3},{3,1}};
+    const uint8_t idx_line[4][2] = {{0,1},{1,2},{2,3},{3,0}};
     /* 如果线段与frag上边界相交,最多可能有四个焦点,求最小值和最大值 */
     /* 如果线段与frag下边界相交,最多可能有四个焦点,求最小值和最大值 */
+    
     for (scui_multi_t idx_i = 0; idx_i < 4; idx_i++) {
-        
-        /* 先计算上下线 */
+        /* 先计算上下线: 每条边分别和frag的上下边界求交 */
         for (scui_multi_t idx_c = 0; idx_c < 2; idx_c++) {
-            
-            scui_coord_t x_min = 0;
-            scui_coord_t x_max = 0;
             float x1 = face->point2[idx_line[idx_i][0]].x;
             float y1 = face->point2[idx_line[idx_i][0]].y;
             float x2 = face->point2[idx_line[idx_i][1]].x;
             float y2 = face->point2[idx_line[idx_i][1]].y;
-            /* 三角形相似性原理(浮点计算,所以有俩个值): */
-            bool inter = false;
-            if ((y1 <= y_edge[idx_c] && y_edge[idx_c] <= y2) ||
-                (y2 <= y_edge[idx_c] && y_edge[idx_c] <= y1)) {
-                float dst_x = scui_dist(x1, x2);
-                float dst_y = scui_dist(y1, y2);
-                float dst_l = scui_dist(scui_min(y1, y2), y_edge[idx_c]);
-                float x = dst_x * dst_l / dst_y;
-                x_min = x - 0.5;
-                x_max = x + 0.5;
-                inter = true;
-            }
-            if (inter) {
+            float yt = y_edge[idx_c];
+            
+            /* 判断线段是否跨越当前扫描线yt */
+            if ((y1 <= yt && yt <= y2) || (y2 <= yt && yt <= y1)) {
+                /* 正确的线段交点公式 */
+                float x = x1 + (x2 - x1) * ((yt - y1) / (y2 - y1));
+                /* 浮点转像素, 扩展半个像素防止丢失 */
+                scui_coord_t px = (scui_coord_t)x;
+                scui_coord_t x_min = px - 0.5f;
+                scui_coord_t x_max = px + 0.5f;
+                
+                /* 更新最小最大 */
                 x_min_a = scui_min(x_min_a, x_min);
                 x_max_a = scui_max(x_max_a, x_max);
                 area_frag = true;
             }
         }
-        /* 任意点 */
+        /* 记录当前顶点是否在frag内部并更新范围 */
         scui_point_t vertex = {
             .x = face->point2[idx_i].x,
             .y = face->point2[idx_i].y,
@@ -84,46 +84,27 @@ bool scui_widget_draw_frag(scui_area_t *clip, scui_area_t *frag, scui_face2_t *f
             x_max_a = scui_max(x_max_a, vertex.x);
             area_frag = true;
         }
-        /* y上下边界 */
-        if (y_min > face->point2[idx_i].y) {
+        /* 遍历所有顶点求出整个四边形的 Y 范围 */
+        if (y_min > face->point2[idx_i].y)
             y_min = face->point2[idx_i].y;
-            y_min_idx = idx_i;
-        }
-        if (y_max < face->point2[idx_i].y) {
+        if (y_max < face->point2[idx_i].y)
             y_max = face->point2[idx_i].y;
-            y_max_idx = idx_i;
-        }
     }
-    /* y上下边界点 */
-    scui_point_t vertex_max = {
-        .x = face->point2[y_max_idx].x,
-        .y = face->point2[y_max_idx].y,
-    };
-    if (scui_area_point(&frag_t, &vertex_max)) {
-        x_min_a = scui_min(x_min_a, face->point2[y_max_idx].x);
-        x_max_a = scui_max(x_max_a, face->point2[y_max_idx].x);
-        frag_t.h = face->point2[y_max_idx].y - frag_t.y + 1;
-        area_frag = true;
-    }
-    /* y上下边界点 */
-    scui_point_t vertex_min = {
-        .x = face->point2[y_min_idx].x,
-        .y = face->point2[y_min_idx].y,
-    };
-    if (scui_area_point(&frag_t, &vertex_min)) {
-        x_min_a = scui_min(x_min_a, face->point2[y_min_idx].x);
-        x_max_a = scui_max(x_max_a, face->point2[y_min_idx].x);
-        frag_t.y = face->point2[y_min_idx].y;
-        area_frag = true;
-    }
-    /* 区域交集检查 */
-    if (frag->x < x_max_a && x_max_a < frag->x + frag->w - 1)
-        frag_t.w = x_max_a - frag_t.x + 1;
-    if (frag->x < x_min_a && x_min_a < frag->x + frag->w - 1)
-        frag_t.x = x_min_a;
     
+    /* y方向裁剪:必须限制在frag内部 */
+    scui_coord_t clip_y1 = scui_max(y_min, frag->y);
+    scui_coord_t clip_y2 = scui_min(y_max, frag->y + frag->h - 1);
+    
+    /* 更新裁剪后的 Y 起始位置和高度 */
+    frag_t.y = clip_y1;
+    frag_t.h = clip_y2 - clip_y1 + 1;
+    /* x方向裁剪 */
+    if (x_min_a != scui_coord_max) frag_t.x = x_min_a;
+    if (x_max_a != scui_coord_min) frag_t.w = x_max_a - frag_t.x + 1;
+    /* 输出最终裁剪区域 */
     *clip = frag_t;
     
+    /* 判断：有交集+区域在内部+区域非空 */
     bool area_inside = scui_area_inside(frag, clip);
     bool area_empty = scui_area_empty(clip);
     return area_frag && area_inside && !area_empty;

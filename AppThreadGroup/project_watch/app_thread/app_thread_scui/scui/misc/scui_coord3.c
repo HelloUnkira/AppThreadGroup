@@ -156,7 +156,8 @@ void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
     for (scui_coord_t idx = 0; idx < 4; idx++) {
         scui_point3_by_point2(&area3->point3[idx], &area2->point2[idx]);
         /* xy平面构建出的空间面, 应该落在xy平面内 */
-        area3->point3[idx].z = 0.0f;
+        /* 这里必须是单位值, 否则平移无效 */
+        /* area3->point3[idx].z = 0.0f; */
     }
 }
 

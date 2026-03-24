@@ -143,7 +143,7 @@
 #define SCUI_WIDGET_ANIMA_ABORT_BY_SCROLL           (1 && !SCUI_MEM_FEAT_MINI)
 
 /* 图片外存直达画布(节约峰值内存, 但会加重绘制时间) */
-#define SCUI_WIDGET_IMAGE_DIRECT                    (1 && !SCUI_MEM_FEAT_MINI)
+#define SCUI_WIDGET_IMAGE_DIRECT                    (0 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_WIDGET_IMAGE_DIRECT_LIMIT              (SCUI_HOR_RES * SCUI_VER_RES / 3)
 
 /* 窗口管理器参数配置 */
