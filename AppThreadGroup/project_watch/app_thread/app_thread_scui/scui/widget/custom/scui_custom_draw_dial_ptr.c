@@ -146,23 +146,6 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_area3_to_area2(&image3_clip, &image2_clip);
                 scui_area2_to_area(&image2_clip, &image_clip);
                 
-                float clip_val_1 = 0;
-                float clip_val_2 = 0;
-                
-                clip_val_1 = scui_min(image2_clip.point2[0].x, image2_clip.point2[2].x);
-                clip_val_2 = scui_min(image2_clip.point2[1].x, image2_clip.point2[3].x);
-                image_clip.x1 = (scui_min(clip_val_1, clip_val_2) - 0.5);
-                clip_val_1 = scui_max(image2_clip.point2[0].x, image2_clip.point2[2].x);
-                clip_val_2 = scui_max(image2_clip.point2[1].x, image2_clip.point2[3].x);
-                image_clip.x2 = (scui_max(clip_val_1, clip_val_2) + 0.5);
-                clip_val_1 = scui_min(image2_clip.point2[0].y, image2_clip.point2[2].y);
-                clip_val_2 = scui_min(image2_clip.point2[1].y, image2_clip.point2[3].y);
-                image_clip.y1 = (scui_min(clip_val_1, clip_val_2) - 0.5);
-                clip_val_1 = scui_max(image2_clip.point2[0].y, image2_clip.point2[2].y);
-                clip_val_2 = scui_max(image2_clip.point2[1].y, image2_clip.point2[3].y);
-                image_clip.y2 = (scui_max(clip_val_1, clip_val_2) + 0.5);
-                
-                scui_area_m_by_s(&image_clip, &image_clip);
                 scui_area_t clip_widget = scui_widget_clip(event->object);
                 if (!scui_area_inter2(&clip_widget, &image_clip))
                      break;
@@ -173,7 +156,11 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                 scui_widget_draw(event->object, &image_clip, false);
                 #else
                 /* 如果接近水平或者垂直, 此时无需分段 */
-                if (image_w * image_h * 1.2f > image_clip.w * image_clip.h) {
+                scui_multi_t angle_near = angle[idx_angle];
+                angle_near = scui_mabs(angle_near, 90);
+                angle_near = scui_min(angle_near, 90 - angle_near);
+                /* 计算与xy轴线最小夹角小于制定值即可(一个单元格6度,选定单元格) */
+                if (angle_near < 6) {
                     scui_widget_draw(event->object, &image_clip, false);
                     continue;
                 }
@@ -223,7 +210,7 @@ void scui_custom_draw_anim_ctx_dial_ptr(scui_custom_draw_dsc_t *draw_dsc)
                         sumpox += scui_area_size(&draw_clip);
                     }
                 }
-                SCUI_LOG_WARN("draw sumpox:%d, draw pct:%.1f%%", sumpox,
+                SCUI_LOG_INFO("draw idx:%d sumpox:%d, pct:%.1f%%", idx_angle, sumpox,
                     (float)sumpox / (float)scui_area_size(&clip_widget));
                 
                 #endif

@@ -168,6 +168,8 @@ void scui_area3_by_area2(scui_area3_t *area3, scui_area2_t *area2)
 void scui_area2_to_area(scui_area2_t *area2, scui_area_t *area)
 {
     scui_area_t area_s = {0};
+    
+    #if 0
     area_s.x1 = area2->point2[0].x;
     area_s.y1 = area2->point2[0].y;
     area_s.x2 = area2->point2[1].x;
@@ -176,6 +178,25 @@ void scui_area2_to_area(scui_area2_t *area2, scui_area_t *area)
     area_s.y2 = area2->point2[2].y;
     area_s.x1 = area2->point2[3].x;
     area_s.y2 = area2->point2[3].y;
+    #else
+    /* area2是矩形(凸)变形后的值, 可能是四边形 */
+    scui_coord3_t coord_xt1 = 0;
+    scui_coord3_t coord_xt2 = 0;
+    
+    coord_xt1 = scui_min(area2->point2[0].x, area2->point2[2].x);
+    coord_xt2 = scui_min(area2->point2[1].x, area2->point2[3].x);
+    area_s.x1 = scui_min(coord_xt1, coord_xt2) - 0.5;
+    coord_xt1 = scui_max(area2->point2[0].x, area2->point2[2].x);
+    coord_xt2 = scui_max(area2->point2[1].x, area2->point2[3].x);
+    area_s.x2 = scui_max(coord_xt1, coord_xt2) + 0.5;
+    coord_xt1 = scui_min(area2->point2[0].y, area2->point2[2].y);
+    coord_xt2 = scui_min(area2->point2[1].y, area2->point2[3].y);
+    area_s.y1 = scui_min(coord_xt1, coord_xt2) - 0.5;
+    coord_xt1 = scui_max(area2->point2[0].y, area2->point2[2].y);
+    coord_xt2 = scui_max(area2->point2[1].y, area2->point2[3].y);
+    area_s.y2 = scui_max(coord_xt1, coord_xt2) + 0.5;
+    #endif
+    
     scui_area_m_by_s(area, &area_s);
 }
 
