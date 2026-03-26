@@ -46,10 +46,6 @@
 #include "scui_font.h"
 #include "scui_font_cache.h"
 #include "scui_font_glyph_cache.h"
-/* draw */
-#include "scui_draw_graph.h"
-#include "scui_draw_graph_inf.h"
-#include "scui_draw_task.h"
 
 /* widget: */
 #include "scui_widget.h"
@@ -74,5 +70,10 @@
 #include "scui_button_inf.h"        /* 控件(按钮)API */
 #include "scui_xchart.h"            /* 控件(图表) */
 #include "scui_xchart_inf.h"        /* 控件(图表)API */
+
+/* draw */
+#include "scui_draw_graph.h"
+#include "scui_draw_graph_inf.h"
+#include "scui_draw_task.h"
 
 #endif

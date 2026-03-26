@@ -536,14 +536,6 @@ void scui_widget_event_dispatch(scui_event_t *event)
                     scui_widget_surface_remap(widget->myself, surface_fb);
                 }
                 
-            }
-            
-            /* 工步调度:execute */
-            if (scui_event_check_execute(event)) {
-                /* 无独立画布, 异步绘制 --> 传递到refr前绘制 */
-                if (!surface_only && !event->style.sync)
-                    scui_widget_refr(widget->myself, true);
-                
                 /* 绘制起始, 更新surface剪切域 */
                 #if SCUI_MEM_FEAT_MINI
                 /* 为所有控件及其子控件添加全局剪切域 */
@@ -569,6 +561,14 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_sizes(widget->myself, &size_new);
                 /* scui_widget_tree_check(widget->myself); */
                 SCUI_LOG_INFO("size_old:%d, size_new:%d", size_old, size_new);
+            }
+            
+            /* 工步调度:execute */
+            if (scui_event_check_execute(event)) {
+                /* 无独立画布, 异步绘制 --> 传递到refr前绘制 */
+                if (!surface_only && !event->style.sync)
+                    scui_widget_refr(widget->myself, true);
+                
             }
             
             /* 工步调度:finish */
