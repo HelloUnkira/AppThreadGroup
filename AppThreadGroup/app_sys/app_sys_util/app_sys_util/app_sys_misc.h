@@ -34,6 +34,50 @@ void app_sys_mem_rev_b8(void *addr);
 #define app_sys_bit_ext_set(addr, pos, type) app_sys_bit_set((&(addr)[(pos) / type]), (pos) % type, type)
 #define app_sys_bit_ext_rst(addr, pos, type) app_sys_bit_rst((&(addr)[(pos) / type]), (pos) % type, type)
 
+/*@brief bit位操作:连续赋值
+ */
+#define app_sys_bits_ext_set(addr, pos_s, pos_e, type)                                                          \
+do {                                                                                                            \
+    if (pos_s > pos_e) break;                                                                                   \
+    uint32_t idx_s = pos_s / type, bit_s = pos_s % type;                                                        \
+    uint32_t idx_e = pos_e / type, bit_e = pos_e % type;                                                        \
+                                                                                                                \
+    if (idx_s == idx_e) {                                                                                       \
+        uint##type##_t mask =  ((((uint##type##_t)1 << (bit_e - bit_s + 1)) - 1) << bit_s);                     \
+        app_sys_mem_w(&addr[idx_s], app_sys_mem_r(&addr[idx_s], uint##type##_t) | mask, uint##type##_t);        \
+    } else {                                                                                                    \
+        uint##type##_t mask_h =  (~((uint##type##_t)0) << bit_s);                                               \
+        uint##type##_t mask_t =  (~((uint##type##_t)0) >> (type - bit_e - 1));                                  \
+        app_sys_mem_w(&addr[idx_s], app_sys_mem_r(&addr[idx_s], uint##type##_t) | mask_h, uint##type##_t);      \
+        app_sys_mem_w(&addr[idx_e], app_sys_mem_r(&addr[idx_e], uint##type##_t) | mask_t, uint##type##_t);      \
+                                                                                                                \
+        for (uint32_t idx = idx_s + 1; idx < idx_e; idx++)                                                      \
+            app_sys_mem_w(&addr[idx], ~((uint##type##_t)0), uint##type##_t);                                    \
+    }                                                                                                           \
+} while(0)                                                                                                      \
+
+/*@brief bit位操作:连续清除
+ */
+#define app_sys_bits_ext_rst(addr, pos_s, pos_e, type)                                                          \
+do {                                                                                                            \
+    if (pos_s > pos_e) break;                                                                                   \
+    uint32_t idx_s = pos_s / type, bit_s = pos_s % type;                                                        \
+    uint32_t idx_e = pos_e / type, bit_e = pos_e % type;                                                        \
+                                                                                                                \
+    if (idx_s == idx_e) {                                                                                       \
+        uint##type##_t mask = ~((((uint##type##_t)1 << (bit_e - bit_s + 1)) - 1) << bit_s);                     \
+        app_sys_mem_w(&addr[idx_s], app_sys_mem_r(&addr[idx_s], uint##type##_t) & mask, uint##type##_t);        \
+    } else {                                                                                                    \
+        uint##type##_t mask_h = ~(~((uint##type##_t)0) << bit_s);                                               \
+        uint##type##_t mask_t = ~(~((uint##type##_t)0) >> (type - bit_e - 1));                                  \
+        app_sys_mem_w(&addr[idx_s], app_sys_mem_r(&addr[idx_s], uint##type##_t) & mask_h, uint##type##_t);      \
+        app_sys_mem_w(&addr[idx_e], app_sys_mem_r(&addr[idx_e], uint##type##_t) & mask_t, uint##type##_t);      \
+                                                                                                                \
+        for (uint32_t idx = idx_s + 1; idx < idx_e; idx++)                                                      \
+            app_sys_mem_w(&addr[idx],  ((uint##type##_t)0), uint##type##_t);                                    \
+    }                                                                                                           \
+} while(0)                                                                                                      \
+
 /*@brief 字节对齐
  */
 void * app_sys_align_low(void *addr,   uintptr_t align);

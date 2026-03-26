@@ -259,6 +259,11 @@ void scui_widget_event_dispatch(scui_event_t *event);
 /*************************************************************************************************/
 /*************************************************************************************************/
 
+/*@brief 控件树检查
+ *@param handle 控件句柄
+ */
+void scui_widget_tree_check(scui_handle_t handle);
+
 /*@brief 控件类型检查
  *@param handle 控件句柄
  *@param type   控件类型

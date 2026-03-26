@@ -113,9 +113,6 @@ void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc)
     } else {
         /* 加入到乱序流水线中 */
         scui_draw_task_notify(draw_dsc);
-        
-        static uint32_t cnt = 0; cnt++;
-        if (cnt % 10 == 0) SCUI_LOG_WARN("draw_task: %d", cnt);
     }
     #else
     /* 就地响应目标 */

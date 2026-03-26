@@ -133,6 +133,13 @@
 /* 绘制任务序列 */
 #define SCUI_DRAW_TASK_SEQ                          (0 && !SCUI_MEM_FEAT_MINI)
 #define SCUI_DRAW_TASK_NUM                          (3)
+#define SCUI_DRAW_TASK_HASH_HBIT                    (8 * 2)
+#define SCUI_DRAW_TASK_HASH_VBIT                    (8 * 2)
+/* 使用任务序列需增大该目标 */
+#if     SCUI_DRAW_TASK_SEQ
+#undef  SCUI_CACHE_DRAW_DSC_NUM
+#define SCUI_CACHE_DRAW_DSC_NUM                     (300)
+#endif
 
 /*************************************************************************************************/
 /*************************************************************************************************/

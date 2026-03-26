@@ -30,6 +30,8 @@ static void scui_stat_info(void)
         SCUI_LOG_INFO("widget[%s]\t size(inst):%4d, size(maker):%4d",
             widget_map->name, widget_map->size, widget_map->maker);
     }
+    SCUI_LOG_INFO("");
+    SCUI_LOG_INFO("scui string args size:%4d", sizeof(scui_string_args_t));
     
     SCUI_LOG_INFO("");
 }

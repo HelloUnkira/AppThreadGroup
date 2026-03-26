@@ -567,6 +567,7 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 scui_widget_clip_update(widget);
                 /* scui_widget_clip_check(widget->myself, true); */
                 scui_widget_clip_sizes(widget->myself, &size_new);
+                /* scui_widget_tree_check(widget->myself); */
                 SCUI_LOG_INFO("size_old:%d, size_new:%d", size_old, size_new);
             }
             

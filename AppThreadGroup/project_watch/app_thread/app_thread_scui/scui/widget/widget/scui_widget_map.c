@@ -7,6 +7,19 @@
 
 #include "scui.h"
 
+/*@brief 控件树检查
+ *@param handle 控件句柄
+ */
+void scui_widget_tree_check(scui_handle_t handle)
+{
+    SCUI_LOG_INFO("widget %u", handle);
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    
+    /* 必须递归设置控件透明度,迭代它的孩子列表 */
+    scui_widget_child_list_btra(widget, idx)
+    scui_widget_tree_check(widget->child_list[idx]);
+}
+
 /*@brief 控件类型检查
  *@param handle 控件句柄
  *@param type   控件类型
