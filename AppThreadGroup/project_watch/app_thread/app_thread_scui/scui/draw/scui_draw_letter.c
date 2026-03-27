@@ -108,7 +108,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     scui_area_t        *dst_clip    = &draw_dsc->string.dst_clip;
     scui_area_t        *src_clip    = &draw_dsc->string.src_clip;
     scui_alpha_t        src_alpha   =  draw_dsc->string.src_alpha;
-    scui_string_args_t *src_args    =  draw_dsc->string.src_args;
+    scui_string_args_t *src_args    = &draw_dsc->string.src_args;
     /* draw dsc args<e> */
     /* */
     /* 从字库中提取一些信息 */

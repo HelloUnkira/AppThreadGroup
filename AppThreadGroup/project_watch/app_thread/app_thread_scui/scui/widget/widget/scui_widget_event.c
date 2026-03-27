@@ -581,7 +581,9 @@ void scui_widget_event_dispatch(scui_event_t *event)
                 /* 绘制结束, 去除surface剪切域 */
                 scui_widget_clip_clear(widget, true);
                 /* 执行绘制任务序列调度 */
+                scui_tick_calc(0x20, NULL, NULL, NULL);
                 scui_draw_task_dispatch();
+                scui_tick_calc(0x21, NULL, NULL, NULL);
             }
             
             /* 窗口绘制锁, 锁定绘制时, 禁止当前界面重绘 */

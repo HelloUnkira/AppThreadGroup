@@ -87,6 +87,10 @@ void scui_linear_s_make(void *inst, void *inst_maker, scui_handle_t *handle)
     
     linear_s->surface_s = NULL;
     linear_s->handle_m  = SCUI_HANDLE_INVALID;
+    
+    /* 让内存画布绑定到句柄 */
+    linear_s->image = scui_handle_find();
+    scui_handle_linker(linear_s->image, &linear_s->image_src);
 }
 
 /*@brief 控件析构
@@ -135,11 +139,14 @@ void scui_linear_s_burn(scui_handle_t handle)
         scui_widget_surface_remap(handle, NULL);
     }
     
+    /* 句柄回收 */
+    scui_handle_clear(linear_s->image);
+    
     /* 析构基础控件实例 */
     scui_widget_burn(widget);
 }
 
-/*@brief 列表子控件事件响应回调(主)
+/*@brief 列表主子控件获取从子控件树句柄
  *@param handle   控件
  *@param handle_s 控件
  */
@@ -152,7 +159,7 @@ void scui_linear_m_get(scui_handle_t handle, scui_handle_t *handle_s)
     *handle_s = linear_m->handle_s;
 }
 
-/*@brief 列表子控件事件响应回调(主)
+/*@brief 列表主子控件设置从子控件树句柄
  *@param handle   控件
  *@param handle_s 控件
  */
@@ -165,7 +172,7 @@ void scui_linear_m_set(scui_handle_t handle, scui_handle_t *handle_s)
     linear_m->handle_s = *handle_s;
 }
 
-/*@brief 列表子控件事件响应回调(从)
+/*@brief 列表从子控件树获取主子控件句柄
  *@param handle   控件
  *@param handle_m 控件
  */
@@ -178,7 +185,7 @@ void scui_linear_s_get(scui_handle_t handle, scui_handle_t *handle_m)
     *handle_m = linear_s->handle_m;
 }
 
-/*@brief 列表子控件事件响应回调(从)
+/*@brief 列表从子控件树设置主子控件句柄
  *@param handle   控件
  *@param handle_m 控件
  */
@@ -189,6 +196,19 @@ void scui_linear_s_set(scui_handle_t handle, scui_handle_t *handle_m)
     scui_linear_s_t *linear_s = (void *)widget;
     
     linear_s->handle_m = *handle_m;
+}
+
+/*@brief 列表从子控件树获得内存画布图
+ *@param handle 控件
+ *@param image  内存画布图
+ */
+void scui_linear_s_image(scui_handle_t handle, scui_handle_t *image)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_linear_s));
+    scui_widget_t   *widget   = scui_handle_source_check(handle);
+    scui_linear_s_t *linear_s = (void *)widget;
+    
+    *image = linear_s->image;
 }
 
 /*@brief 事件处理回调
@@ -321,6 +341,12 @@ void scui_linear_m_invoke(scui_event_t *event)
                 scui_widget_surface_create(handle_s, &surface);
                 linear_s->surface_s = scui_widget_surface(handle_s);
                 linear_m->refr = true;
+                /* 更新此画布目标,重配画布图资源 */
+                linear_s->image_src.type           = scui_image_type_mem;
+                linear_s->image_src.format         = linear_s->surface_s->format;
+                linear_s->image_src.pixel.width    = linear_s->surface_s->hor_res;
+                linear_s->image_src.pixel.height   = linear_s->surface_s->ver_res;
+                linear_s->image_src.pixel.data_bin = linear_s->surface_s->pixel;
             }
             scui_widget_surface_remap(handle_s, linear_s->surface_s);
             

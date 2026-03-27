@@ -69,6 +69,8 @@ typedef struct {
     scui_sbitfd_t       draw_cache:1;   /* 绘制缓存块使能 */
     /* 内部域: */
     scui_surface_t     *draw_surface;   /* 绘制缓存块 */
+    scui_handle_t       draw_handle;    /* 绘制缓存块句柄 */
+    scui_image_t        draw_image;     /* 绘制缓存块资源 */
     scui_sbitfd_t       unit_anima:1;   /* 滚动动画标记 */
     scui_sbitfd_t       unit_abort:1;   /* 滚动中止标记 */
     scui_sbitfd_t       unit_over:1;    /* 滚动结束标记 */

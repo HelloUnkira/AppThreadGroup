@@ -61,166 +61,166 @@ typedef struct {
         uint32_t src_len;   /* 数据字节长度 */
     } byte_copy;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
     } area_blur;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 像素点透明度 */
-        scui_color_t    src_color;      /* 像素点协议色 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t        src_color;      /* 像素点协议色 */
     } area_fill;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 像素点透明度 */
-        scui_area_t     src_clip;       /* 源剪切域 */
-        scui_color_t    src_color;      /* 像素点协议色 */
-        scui_coord_t    src_way;        /* 渐变方向(0:hor;1:ver;) */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 源剪切域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t        src_color;      /* 像素点协议色 */
+        scui_coord_t        src_way;        /* 渐变方向(0:hor;1:ver;) */
     } area_fill_grad;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 像素点透明度 */
-        scui_color_t   *src_grad_s;     /* 源渐变列表 */
-        scui_coord_t    src_grad_n;     /* 源渐变列表数量 */
-        scui_color_t    src_filter;     /* 源渐变滤色 */
-        scui_coord_t    src_way;        /* 源渐变方向(0:hor;1:ver;) */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t       *src_grad_s;     /* 源渐变列表 */
+        scui_coord_t        src_grad_n;     /* 源渐变列表数量 */
+        scui_color_t        src_filter;     /* 源渐变滤色 */
+        scui_coord_t        src_way;        /* 源渐变方向(0:hor;1:ver;) */
     } area_fill_grads;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_surface_t *src_surface;    /* 画布实例 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
     } area_copy;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_surface_t *src_surface;    /* 画布实例 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
-        scui_color_t    src_color;      /* 画布协议色 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_color_t        src_color;      /* 画布协议色 */
     } area_blend;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_surface_t *src_surface;    /* 画布实例 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
     } area_alpha_filter;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 像素点透明度 */
-        scui_color_t    src_color;      /* 画布协议色 */
-        scui_matrix_t   inv_matrix;     /* 逆变换矩阵 */
-        scui_matrix_t   src_matrix;     /* 源变换矩阵 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 像素点透明度 */
+        scui_color_t        src_color;      /* 画布协议色 */
+        scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
+        scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } area_matrix_fill;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_surface_t *src_surface;    /* 画布实例 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
-        scui_color_t    src_color;      /* 画布协议色 */
-        scui_matrix_t   inv_matrix;     /* 逆变换矩阵 */
-        scui_matrix_t   src_matrix;     /* 源变换矩阵 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_surface_t     *src_surface;    /* 画布实例 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_color_t        src_color;      /* 画布协议色 */
+        scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
+        scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } area_matrix_blend;
     /**************************************************************************
      * draw image:
      */
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_image_t   *src_image;      /* 图像源 */
-        scui_area_t     src_clip;       /* 图像源绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_image_t       *src_image;      /* 图像源 */
+        scui_area_t         src_clip;       /* 图像源绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
     } image;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_image_t   *src_image;      /* 图像源 */
-        scui_area_t     src_clip;       /* 图像源绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
-        scui_point_t    src_scale;      /* 图形缩放比例 */
-        scui_point_t    dst_offset;     /* 缩放锚点 */
-        scui_point_t    src_offset;     /* 缩放锚点 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_image_t       *src_image;      /* 图像源 */
+        scui_area_t         src_clip;       /* 图像源绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
+        scui_point_t        src_scale;      /* 图形缩放比例 */
+        scui_point_t        dst_offset;     /* 缩放锚点 */
+        scui_point_t        src_offset;     /* 缩放锚点 */
     } image_scale;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_image_t   *src_image;      /* 图像源 */
-        scui_area_t     src_clip;       /* 图像源绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
-        scui_multi_t    src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
-        scui_point_t    src_anchor;     /* 图像旋转轴心 */
-        scui_point_t    src_center;     /* 图像旋转中心 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_image_t       *src_image;      /* 图像源 */
+        scui_area_t         src_clip;       /* 图像源绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
+        scui_multi_t        src_angle;      /* 图形旋转角度(顺时针:+,逆时针:-) */
+        scui_point_t        src_anchor;     /* 图像旋转轴心 */
+        scui_point_t        src_center;     /* 图像旋转中心 */
     } image_rotate;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_image_t   *src_image;      /* 图像源 */
-        scui_area_t     src_clip;       /* 图像源绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
-        scui_matrix_t   inv_matrix;     /* 逆变换矩阵 */
-        scui_matrix_t   src_matrix;     /* 源变换矩阵 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_image_t       *src_image;      /* 图像源 */
+        scui_area_t         src_clip;       /* 图像源绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
+        scui_matrix_t       inv_matrix;     /* 逆变换矩阵 */
+        scui_matrix_t       src_matrix;     /* 源变换矩阵 */
     } image_matrix_blend;
     /**************************************************************************
      * draw letter & string:
      */
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_area_t     src_clip;       /* 字符绘制区域 */
-        scui_alpha_t    src_alpha;      /* 字符透明度 */
-        scui_color_t    src_color;      /* 字符色调 */
-        void           *src_glyph;      /* 字符信息(scui_font_glyph_t) */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 字符绘制区域 */
+        scui_alpha_t        src_alpha;      /* 字符透明度 */
+        scui_color_t        src_color;      /* 字符色调 */
+        scui_font_glyph_t  *src_glyph;      /* 字符信息 */
     } letter;
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_area_t     src_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 字符透明度 */
-        void           *src_args;       /* 字符串绘制参数(scui_string_args_t) */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 字符透明度 */
+        scui_string_args_t  src_args;       /* 字符串绘制参数 */
     } string;
     /**************************************************************************
      * draw ring:
      */
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_point_t    dst_center;     /* 图像旋转点 */
-        scui_image_t   *src_image_e;    /* 图像源(边界点) */
-        scui_image_t   *src_image;      /* 图像源 */
-        scui_area_t     src_clip;       /* 图像源绘制区域 */
-        scui_coord_t    src_angle_s;    /* 起始角度 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_coord_t    src_angle_e;    /* 结束角度 */
-        scui_color_t    src_color;      /* 图像源色调 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_point_t        dst_center;     /* 图像旋转点 */
+        scui_image_t       *src_image_e;    /* 图像源(边界点) */
+        scui_image_t       *src_image;      /* 图像源 */
+        scui_area_t         src_clip;       /* 图像源绘制区域 */
+        scui_coord_t        src_angle_s;    /* 起始角度 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_coord_t        src_angle_e;    /* 结束角度 */
+        scui_color_t        src_color;      /* 图像源色调 */
     } ring;
     /**************************************************************************
      * draw qrcode:
      * draw barcode:
      */
      struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_area_t     src_clip;       /* 图像绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
-        scui_multi_t    src_size;       /* 字符串长度 */
-        uint8_t        *src_data;       /* url网址链接字符串 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 图像绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
+        scui_multi_t        src_size;       /* 字符串长度 */
+        uint8_t            *src_data;       /* url网址链接字符串 */
      } qrcode;
      struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_area_t     src_clip;       /* 图像绘制区域 */
-        scui_alpha_t    src_alpha;      /* 图像透明度 */
-        scui_color_t    src_color;      /* 图像源色调 */
-        scui_multi_t    src_size;       /* 字符串长度 */
-        uint8_t        *src_data;       /* url网址链接字符串 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_area_t         src_clip;       /* 图像绘制区域 */
+        scui_alpha_t        src_alpha;      /* 图像透明度 */
+        scui_color_t        src_color;      /* 图像源色调 */
+        scui_multi_t        src_size;       /* 字符串长度 */
+        uint8_t            *src_data;       /* url网址链接字符串 */
      } barcode;
     /**************************************************************************
      * keep adding...
@@ -234,18 +234,18 @@ typedef struct {
      * draw graph:
      */
     struct {
-        scui_surface_t *dst_surface;    /* 画布实例 */
-        scui_area_t     dst_clip;       /* 画布绘制区域 */
-        scui_alpha_t    src_alpha;      /* 透明度 */
-        scui_color_t    src_color;      /* 源色调 */
+        scui_surface_t     *dst_surface;    /* 画布实例 */
+        scui_area_t         dst_clip;       /* 画布绘制区域 */
+        scui_alpha_t        src_alpha;      /* 透明度 */
+        scui_color_t        src_color;      /* 源色调 */
         
-        scui_point_t    src_center;     /* 旋转中心 */
-        scui_coord_t    src_angle_s;    /* 起始角度 */
-        scui_coord_t    src_angle_e;    /* 结束角度 */
-        scui_coord_t    src_width;      /* 线宽, 环宽, 边界宽 */
-        scui_point_t    src_pos_1;      /* 坐标点 */
-        scui_point_t    src_pos_2;      /* 坐标点 */
-        scui_coord_t    src_radius;     /* 弧, 圆半径 */
+        scui_point_t        src_center;     /* 旋转中心 */
+        scui_coord_t        src_angle_s;    /* 起始角度 */
+        scui_coord_t        src_angle_e;    /* 结束角度 */
+        scui_coord_t        src_width;      /* 线宽, 环宽, 边界宽 */
+        scui_point_t        src_pos_1;      /* 坐标点 */
+        scui_point_t        src_pos_2;      /* 坐标点 */
+        scui_coord_t        src_radius;     /* 弧, 圆半径 */
     } graph;
     /**************************************************************************
      * keep adding...

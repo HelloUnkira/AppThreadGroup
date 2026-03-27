@@ -7,6 +7,18 @@
  */
 void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc);
 
+/*@brief 自定义控件画布图资源(全局,唯一)
+ *@param handle    自定义控件句柄
+ *@param image_src 画布图资源
+ */
+void scui_custom_image_dsc(scui_handle_t handle, void **image_src);
+
+/*@brief 自定义控件画布图句柄(全局,唯一)
+ *@param handle 自定义控件句柄
+ *@param image  画布图资源
+ */
+void scui_custom_image(scui_handle_t handle, scui_handle_t *image);
+
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

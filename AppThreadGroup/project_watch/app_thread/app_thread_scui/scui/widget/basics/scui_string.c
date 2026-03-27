@@ -68,6 +68,10 @@ void scui_string_make(void *inst, void *inst_maker, scui_handle_t *handle)
     string->args.regrad = false;
     #endif
     
+    /* 让内存画布绑定到句柄 */
+    string->draw_handle = scui_handle_find();
+    scui_handle_linker(string->draw_handle, &string->draw_image);
+    
     /* 更新一次字符串绘制参数 */
     string->args.update = true;
     string->args.utf8   = string->str_utf8;
@@ -112,6 +116,9 @@ void scui_string_burn(scui_handle_t handle)
         SCUI_MEM_FREE(string->draw_surface);
         string->draw_surface = NULL;
     }
+    
+    /* 句柄回收 */
+    scui_handle_clear(string->draw_handle);
     
     /* 析构基础控件实例 */
     scui_widget_burn(widget);
@@ -536,7 +543,7 @@ void scui_string_invoke(scui_event_t *event)
                 scui_area_t string_clip = draw_clip;
                 
                 scui_draw_string(true, string->draw_surface, draw_clip,
-                    &string->args, string_clip, scui_alpha_cover);
+                    string_clip, scui_alpha_cover, string->args);
                 
                 if (string->args.regrad) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */
@@ -545,20 +552,17 @@ void scui_string_invoke(scui_event_t *event)
                         string->args.grads->grad_w, SCUI_COLOR_FILTER_TRANS,
                         scui_alpha_cover);
                 }
+                
+                /* 更新此画布目标,重配画布图资源 */
+                string->draw_image.type           = scui_image_type_mem;
+                string->draw_image.format         = string->draw_surface->format;
+                string->draw_image.pixel.width    = string->draw_surface->hor_res;
+                string->draw_image.pixel.height   = string->draw_surface->ver_res;
+                string->draw_image.pixel.data_bin = string->draw_surface->pixel;
             }
             
-            scui_image_t image_inst = {
-                .type           = scui_image_type_mem,
-                .format         = string->draw_surface->format,
-                .pixel.width    = string->draw_surface->hor_res,
-                .pixel.height   = string->draw_surface->ver_res,
-                .pixel.data_bin = string->draw_surface->pixel,
-            };
-            scui_handle_t image = scui_handle_find();
-            scui_handle_linker(image, &image_inst);
-            
             if (string->args.limit <= 0)
-                scui_widget_draw_image(widget->myself, NULL, image, NULL, SCUI_COLOR_UNUSED);
+                scui_widget_draw_image(widget->myself, NULL, string->draw_handle, NULL, SCUI_COLOR_UNUSED);
             else {
                 if (string->args.line_multi)
                     SCUI_LOG_DEBUG("offset y:%d", string->args.offset);
@@ -569,7 +573,7 @@ void scui_string_invoke(scui_event_t *event)
                     scui_area_t image_clip = scui_surface_area(string->draw_surface);
                     image_clip.x = string->args.line_multi ? 0 : -string->args.offset;
                     image_clip.y = string->args.line_multi ? -string->args.offset : 0;
-                    scui_widget_draw_image(widget->myself, NULL, image, &image_clip, SCUI_COLOR_UNUSED);
+                    scui_widget_draw_image(widget->myself, NULL, string->draw_handle, &image_clip, SCUI_COLOR_UNUSED);
                 }
                 
                 if (string->args.mode_scroll == 1) {
@@ -582,7 +586,7 @@ void scui_string_invoke(scui_event_t *event)
                         draw_clip.x += string->args.line_multi ? 0 : string->args.offset;
                         draw_clip.y += string->args.line_multi ? string->args.offset : 0;
                     }
-                    scui_widget_draw_image(widget->myself, &draw_clip, image, &image_clip, SCUI_COLOR_UNUSED);
+                    scui_widget_draw_image(widget->myself, &draw_clip, string->draw_handle, &image_clip, SCUI_COLOR_UNUSED);
                 }
                 if (string->args.mode_scroll == 1 && string->args.limit > 0) {
                     scui_coord_t offset    = string->args.offset;
@@ -594,11 +598,10 @@ void scui_string_invoke(scui_event_t *event)
                     scui_area_t draw_clip = widget->clip;
                     draw_clip.x += string->args.line_multi ? 0 : offset;
                     draw_clip.y += string->args.line_multi ? offset : 0;
-                    scui_widget_draw_image(widget->myself, &draw_clip, image, NULL, SCUI_COLOR_UNUSED);
+                    scui_widget_draw_image(widget->myself, &draw_clip, string->draw_handle, NULL, SCUI_COLOR_UNUSED);
                 }
             }
             
-            scui_handle_clear(image);
             break;
         }
         

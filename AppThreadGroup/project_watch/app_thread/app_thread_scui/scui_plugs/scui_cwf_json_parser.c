@@ -102,8 +102,7 @@ void scui_cwf_json_burn(void **inst)
     }
     /* 批量回收所有图片句柄 */
     for (uint32_t idx = 0; idx < parser->image_num; idx++)
-        if (parser->image_hit[idx] != SCUI_HANDLE_INVALID)
-            scui_handle_clear(parser->image_hit[idx]);
+        scui_handle_clear(parser->image_hit[idx]);
     /* 回收内部维护资源 */
     SCUI_MEM_FREE(parser->image_hit);
     SCUI_MEM_FREE(parser->image_src);
@@ -173,8 +172,8 @@ void scui_cwf_json_make(void **inst, const char *file, scui_handle_t parent)
         uint32_t data   = scui_cwf_json_u32(&image_info[18 * idx + 2 + 4 * 3]);
         
         switch (format) {
-        case scui_cwf_json_image_cf_alpha4: parser->image_src[idx].format = scui_pixel_cf_alpha4; break;
-        case scui_cwf_json_image_cf_alpha8: parser->image_src[idx].format = scui_pixel_cf_alpha8; break;
+        case scui_cwf_json_image_cf_alpha4:   parser->image_src[idx].format = scui_pixel_cf_alpha4; break;
+        case scui_cwf_json_image_cf_alpha8:   parser->image_src[idx].format = scui_pixel_cf_alpha8; break;
         case scui_cwf_json_image_cf_bmp565:   parser->image_src[idx].format = scui_pixel_cf_bmp565;   break;
         case scui_cwf_json_image_cf_bmp888:   parser->image_src[idx].format = scui_pixel_cf_bmp888;   break;
         case scui_cwf_json_image_cf_bmp8565:  parser->image_src[idx].format = scui_pixel_cf_bmp8565;  break;

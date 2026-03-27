@@ -138,11 +138,11 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         // 清空图像资源缓存
         scui_image_cache_clear();
         scui_custom_maker_t custom_maker = {0};
-        scui_handle_t custom_handle     = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type        = scui_widget_type_custom;
-        custom_maker.widget.clip.w      = SCUI_HOR_RES;
-        custom_maker.widget.clip.h      = SCUI_VER_RES;
-        custom_maker.widget.event_cb    = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
+        scui_handle_t custom_handle  = SCUI_HANDLE_INVALID;
+        custom_maker.widget.type     = scui_widget_type_custom;
+        custom_maker.widget.clip.w   = SCUI_HOR_RES;
+        custom_maker.widget.clip.h   = SCUI_VER_RES;
+        custom_maker.widget.event_cb = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
         scui_widget_create(&custom_maker, &custom_handle);
         scui_ui_res_local->big_3_slave = custom_handle;
         
@@ -157,6 +157,20 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         
         scui_widget_show(scui_ui_res_local->big_3_slave, false);
         scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, true);
+        scui_handle_t custom = scui_ui_res_local->big_3_slave;
+        
+        scui_image_t *image_src = NULL;
+        scui_handle_t image = SCUI_HANDLE_INVALID;
+        scui_custom_image_dsc(event->object, &image_src);
+        scui_custom_image(event->object, &image);
+        
+        image_src->type           = scui_image_type_mem,
+        image_src->format         = scui_widget_surface(custom)->format,
+        image_src->pixel.width    = scui_widget_clip(custom).w,
+        image_src->pixel.height   = scui_widget_clip(custom).h,
+        image_src->pixel.data_bin = scui_widget_surface(custom)->pixel,
+        
+        scui_widget_image_set(event->object, image);
         break;
     }
     case scui_event_destroy: {
@@ -164,25 +178,6 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         scui_widget_surface_destroy(scui_ui_res_local->big_3_slave);
         scui_widget_hide(scui_ui_res_local->big_3_slave, false);
         scui_ui_res_local->big_3_slave = SCUI_HANDLE_INVALID;
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             break;
-        
-        scui_handle_t  custom = scui_ui_res_local->big_3_slave;
-        scui_image_t img_inst = {
-            .type           = scui_image_type_mem,
-            .format         = scui_widget_surface(custom)->format,
-            .pixel.width    = scui_widget_clip(custom).w,
-            .pixel.height   = scui_widget_clip(custom).h,
-            .pixel.data_bin = scui_widget_surface(custom)->pixel,
-        };
-        
-        scui_handle_t image = scui_handle_find();
-        scui_handle_linker(image, &img_inst);
-        scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
-        scui_handle_clear(image);
         break;
     }
     default:

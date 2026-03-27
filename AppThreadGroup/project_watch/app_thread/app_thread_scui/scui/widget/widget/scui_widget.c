@@ -145,8 +145,7 @@ void scui_widget_burn(scui_widget_t *widget)
     scui_widget_clean(widget->myself);
     
     /* 回收用户资源句柄 */
-    if (widget->user_data != SCUI_HANDLE_INVALID)
-        scui_handle_clear(widget->user_data);
+    scui_handle_clear(widget->user_data);
     
     /* 回收控件动画 */
     scui_widget_anima_destroy(widget->myself);

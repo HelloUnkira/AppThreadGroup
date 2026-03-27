@@ -48,7 +48,7 @@ do {                                                                            
 
 /* scui_draw_type_area_fill_grad */
 #define scui_draw_area_fill_grad(sync_v, dst_surface_v, dst_clip_v,                 \
-    src_color_v, src_clip_v, src_alpha_v, src_way_v)                                \
+    src_clip_v, src_color_v, src_alpha_v, src_way_v)                                \
 do {                                                                                \
     scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
     scui_draw_dsc_ready(&draw_dsc_inst);                                            \
@@ -56,8 +56,8 @@ do {                                                                            
     draw_dsc_inst->sync = sync_v;                                                   \
     draw_dsc_inst->area_fill_grad.dst_surface = dst_surface_v,                      \
     draw_dsc_inst->area_fill_grad.dst_clip    = dst_clip_v,                         \
-    draw_dsc_inst->area_fill_grad.src_color   = src_color_v,                        \
     draw_dsc_inst->area_fill_grad.src_clip    = src_clip_v,                         \
+    draw_dsc_inst->area_fill_grad.src_color   = src_color_v,                        \
     draw_dsc_inst->area_fill_grad.src_alpha   = src_alpha_v,                        \
     draw_dsc_inst->area_fill_grad.src_way     = src_way_v,                          \
     scui_draw_ctx_sched(draw_dsc_inst);                                             \
@@ -288,7 +288,7 @@ do {                                                                            
 
 /* scui_draw_type_string */
 #define scui_draw_string(sync_v, dst_surface_v, dst_clip_v,                         \
-    src_args_v, src_clip_v, src_alpha_v)                                            \
+    src_clip_v, src_alpha_v, src_args_v)                                            \
 do {                                                                                \
     scui_draw_dsc_t *draw_dsc_inst = NULL;                                          \
     scui_draw_dsc_ready(&draw_dsc_inst);                                            \
@@ -296,9 +296,9 @@ do {                                                                            
     draw_dsc_inst->sync = sync_v;                                                   \
     draw_dsc_inst->string.dst_surface = dst_surface_v,                              \
     draw_dsc_inst->string.dst_clip    = dst_clip_v,                                 \
-    draw_dsc_inst->string.src_args    = src_args_v,                                 \
     draw_dsc_inst->string.src_clip    = src_clip_v,                                 \
     draw_dsc_inst->string.src_alpha   = src_alpha_v,                                \
+    draw_dsc_inst->string.src_args    = src_args_v,                                 \
     scui_draw_ctx_sched(draw_dsc_inst);                                             \
 } while (0)                                                                         \
 

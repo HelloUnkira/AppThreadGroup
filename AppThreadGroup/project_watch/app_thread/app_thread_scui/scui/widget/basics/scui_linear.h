@@ -58,6 +58,8 @@ typedef struct {
     /* 内部域: */
     scui_surface_t     *surface_s;      /* 子控件树画布 */
     scui_handle_t       handle_m;       /* 主控件(master) */
+    scui_handle_t       image;          /* 画布图 */
+    scui_image_t        image_src;      /* 画布图资源 */
 } scui_linear_s_t;
 
 /* 子控件:需要重定向事件响应 */

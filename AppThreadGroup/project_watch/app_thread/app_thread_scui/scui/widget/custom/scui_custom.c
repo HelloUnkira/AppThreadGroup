@@ -39,6 +39,12 @@ void scui_custom_burn(scui_handle_t handle)
     /* 回收绘制描述符(全局) */
     SCUI_MEM_FREE(custom->draw_dsc);
     
+    /* 回收画布图资源(全局) */
+    SCUI_MEM_FREE(custom->image_src);
+    
+    /* 回收画布图句柄 */
+    scui_handle_clear(custom->image);
+    
     /* 析构基础控件实例 */
     scui_widget_burn(widget);
 }
@@ -61,6 +67,42 @@ void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc)
     *draw_dsc = custom->draw_dsc;
 }
 
+/*@brief 自定义控件画布图资源(全局,唯一)
+ *@param handle    自定义控件句柄
+ *@param image_src 画布图资源
+ */
+void scui_custom_image_dsc(scui_handle_t handle, void **image_src)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_custom_t *custom = (void *)widget;
+    
+    SCUI_ASSERT(image_src != NULL);
+    if (custom->image_src == NULL)
+        custom->image_src  = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_image_t));
+    
+    SCUI_ASSERT(custom->image_src != NULL);
+    *image_src = custom->image_src;
+}
+
+/*@brief 自定义控件画布图句柄(全局,唯一)
+ *@param handle 自定义控件句柄
+ *@param image  画布图资源
+ */
+void scui_custom_image(scui_handle_t handle, scui_handle_t *image)
+{
+    SCUI_ASSERT(scui_widget_type_check(handle, scui_widget_type_custom));
+    scui_widget_t *widget = scui_handle_source_check(handle);
+    scui_custom_t *custom = (void *)widget;
+    
+    SCUI_ASSERT(image != NULL);
+    if (custom->image == SCUI_HANDLE_INVALID)
+        custom->image  = scui_handle_find();
+    
+    scui_handle_linker(custom->image, custom->image_src);
+    SCUI_ASSERT(custom->image != SCUI_HANDLE_INVALID);
+    *image = custom->image;
+}
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/

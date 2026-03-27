@@ -736,19 +736,12 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
              break;
         
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_handle_t  image_s = SCUI_HANDLE_INVALID;
         scui_linear_m_get(event->object, &handle_s);
+        scui_linear_s_image(handle_s, &image_s);
+        scui_handle_t custom = handle_s;
         
-        scui_handle_t  custom = handle_s;
-        scui_area_t  src_clip = scui_widget_clip(custom);
-        scui_image_t img_inst = {
-            .type           = scui_image_type_mem,
-            .format         = scui_widget_surface(custom)->format,
-            .pixel.width    = src_clip.w,
-            .pixel.height   = src_clip.h,
-            .pixel.data_bin = scui_widget_surface(custom)->pixel,
-        };
-        scui_handle_t image = scui_handle_find();
-        scui_handle_linker(image, &img_inst);
+        
         
         // 计算当前控件中心到父控件中心距离
         scui_area_t clip_p = scui_widget_clip(scui_widget_parent(event->object));
@@ -787,14 +780,13 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         img_scale.x = 1024 * (scui_multi_t)percent / 100;
         img_scale.y = 1024 * (scui_multi_t)percent / 100;
         
-        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
+        scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
         scui_widget_alpha_set(event->object, alpha_raw, true);
         #else
         clip_w.x += (clip_p.w - src_clip.w) / 2;
         scui_widget_draw_image(event->object, &clip_w, image, NULL, SCUI_COLOR_UNUSED);
         #endif
         
-        scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {

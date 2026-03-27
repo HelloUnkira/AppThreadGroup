@@ -9,6 +9,8 @@ typedef struct {
     /* 外部域: */
     /* 内部域: */
     void         *draw_dsc;     /* 绘制描述符(可选,全局,唯一) */
+    void         *image_src;    /* 画布图资源 */
+    scui_handle_t image;        /* 画布图句柄 */
 } scui_custom_t;
 
 #pragma pack(push, 1)

@@ -71,19 +71,10 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
              break;
         
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_handle_t  image_s = SCUI_HANDLE_INVALID;
         scui_linear_m_get(event->object, &handle_s);
-        
-        scui_handle_t  custom = handle_s;
-        scui_area_t  src_clip = scui_widget_clip(custom);
-        scui_image_t img_inst = {
-            .type           = scui_image_type_mem,
-            .format         = scui_widget_surface(custom)->format,
-            .pixel.width    = src_clip.w,
-            .pixel.height   = src_clip.h,
-            .pixel.data_bin = scui_widget_surface(custom)->pixel,
-        };
-        scui_handle_t image = scui_handle_find();
-        scui_handle_linker(image, &img_inst);
+        scui_linear_s_image(handle_s, &image_s);
+        scui_handle_t custom = handle_s;
         
         
         
@@ -138,12 +129,11 @@ static void scui_ui_scene_item_m_event_proc(scui_event_t *event)
         btn_clip.x += btn_scale_x / 2;
         btn_clip.w -= btn_scale_x;
         scui_custom_draw_image_crect4(event, &btn_clip, btn_image_full, btn_color_full, -1);
-        scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
+        scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
         
         
         
         scui_widget_alpha_set(event->object, alpha_raw, true);
-        scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {

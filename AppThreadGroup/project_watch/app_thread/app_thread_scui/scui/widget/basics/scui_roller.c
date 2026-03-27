@@ -114,19 +114,10 @@ static void scui_roller_m_event(scui_event_t *event)
         scui_roller_t *roller = (void *)widget;
         
         scui_handle_t handle_s = SCUI_HANDLE_INVALID;
+        scui_handle_t  image_s = SCUI_HANDLE_INVALID;
         scui_linear_m_get(event->object, &handle_s);
-        
-        scui_handle_t  custom = handle_s;
-        scui_area_t  src_clip = scui_widget_clip(custom);
-        scui_image_t img_inst = {
-            .type           = scui_image_type_mem,
-            .format         = scui_widget_surface(custom)->format,
-            .pixel.width    = src_clip.w,
-            .pixel.height   = src_clip.h,
-            .pixel.data_bin = scui_widget_surface(custom)->pixel,
-        };
-        scui_handle_t image = scui_handle_find();
-        scui_handle_linker(image, &img_inst);
+        scui_linear_s_image(handle_s, &image_s);
+        scui_handle_t custom = handle_s;
         
         
         
@@ -169,7 +160,7 @@ static void scui_roller_m_event(scui_event_t *event)
         
         switch (roller->type) {
         case scui_roller_type_simple: {
-            scui_widget_draw_image(event->object, NULL, image, NULL, SCUI_COLOR_UNUSED);
+            scui_widget_draw_image(event->object, NULL, image_s, NULL, SCUI_COLOR_UNUSED);
             break;
         }
         case scui_roller_type_scale: {
@@ -177,7 +168,7 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_opt_pos_t img_pos = scui_opt_pos_c;
             img_scale.x = 1024 * (scui_multi_t)percent / 100;
             img_scale.y = 1024 * (scui_multi_t)percent / 100;
-            scui_widget_draw_image_scale(event->object, NULL, image, NULL, img_scale, img_pos);
+            scui_widget_draw_image_scale(event->object, NULL, image_s, NULL, img_scale, img_pos);
             break;
         }
         case scui_roller_type_spin: {
@@ -211,13 +202,13 @@ static void scui_roller_m_event(scui_event_t *event)
             scui_area3_offset(&face3, &offset3);
             
             scui_matrix_t matrix = {0};
-            scui_size2_t size2 = {.w = scui_image_w(image),.h = scui_image_h(image),};
+            scui_size2_t size2 = {.w = scui_image_w(image_s),.h = scui_image_h(image_s),};
             scui_matrix_perspective_view_blit(&matrix, &size2, &face3, &view3);
             scui_matrix_inverse(&matrix);
             
             /* 这里暂时不分为三个步调, 都在execute执行完毕 */
             /* 此外, 这里仅仅替父控件计算绘制的实际内容, 子控件本身不做额外绘制 */
-            scui_widget_draw_image_matrix(widget->myself, NULL, image, NULL, &matrix);
+            scui_widget_draw_image_matrix(widget->myself, NULL, image_s, NULL, &matrix);
             break;
         }
         default:
@@ -228,7 +219,6 @@ static void scui_roller_m_event(scui_event_t *event)
         
         scui_widget_alpha_set(widget->myself, alpha_w, false);
         scui_widget_alpha_set(event->object, alpha_c, false);
-        scui_handle_clear(image);
         break;
     }
     case scui_event_ptr_click: {

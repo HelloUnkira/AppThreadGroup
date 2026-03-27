@@ -720,6 +720,7 @@ static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_BAR_ARC = {
 
 static const scui_custom_maker_t scui_widget_SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3 = {
 	.widget.type                    = scui_widget_type_custom,
+	.widget.style.fully_bg          = true,
 	.widget.clip.w                  = SCUI_HOR_RES,
 	.widget.clip.h                  = SCUI_VER_RES,
 	.widget.myself                  = SCUI_UI_SCENE_ACTIVITY_SCROLL_RING_BIG_3,

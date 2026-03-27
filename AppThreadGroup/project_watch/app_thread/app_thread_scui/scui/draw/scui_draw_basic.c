@@ -204,8 +204,8 @@ void scui_draw_ctx_area_fill_grad(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_surface_t *dst_surface =  draw_dsc->area_fill_grad.dst_surface;
     scui_area_t    *dst_clip    = &draw_dsc->area_fill_grad.dst_clip;
-    scui_color_t    src_color   =  draw_dsc->area_fill_grad.src_color;
     scui_area_t    *src_clip    = &draw_dsc->area_fill_grad.src_clip;
+    scui_color_t    src_color   =  draw_dsc->area_fill_grad.src_color;
     scui_alpha_t    src_alpha   =  draw_dsc->area_fill_grad.src_alpha;
     scui_coord_t    src_way     =  draw_dsc->area_fill_grad.src_way;
     /* draw dsc args<e> */
