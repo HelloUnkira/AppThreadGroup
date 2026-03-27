@@ -194,21 +194,21 @@ void scui_button_invoke(scui_event_t *event)
                     src_color.color.ch.g = scui_map(pct_c, 100, pct_s, color_e.ch.g, color_s.ch.g);
                     src_color.color.ch.b = scui_map(pct_c, 100, pct_s, color_e.ch.b, color_s.ch.b);
                     
-                    scui_draw_dsc_t draw_graph = {0};
-                    draw_graph.src_alpha = button->pixel.alpha[idx];
+                    scui_draw_dsc_t draw_dsc = {0};
+                    draw_dsc.graph.src_alpha = button->pixel.alpha[idx];
                     
                     if (idx != 3) {
-                        draw_graph.type = scui_draw_type_pixel_crect;
-                        draw_graph.src_width  = button->pixel.width[idx];
-                        draw_graph.src_radius = src_radius[idx];
+                        draw_dsc.type = scui_draw_type_pixel_crect;
+                        draw_dsc.graph.src_width  = button->pixel.width[idx];
+                        draw_dsc.graph.src_radius = src_radius[idx];
                     } else {
-                        draw_graph.type = scui_draw_type_pixel_shadow;
-                        draw_graph.src_width  = button->pixel.width[idx];
-                        draw_graph.src_radius = src_radius[idx];
+                        draw_dsc.type = scui_draw_type_pixel_shadow;
+                        draw_dsc.graph.src_width  = button->pixel.width[idx];
+                        draw_dsc.graph.src_radius = src_radius[idx];
                     }
                     
                     scui_widget_draw_graph(widget->myself, &dst_clip[idx],
-                        button->pixel.alpha[idx], src_color, &draw_graph);
+                        button->pixel.alpha[idx], src_color, &draw_dsc);
                 }
                 
                 break;

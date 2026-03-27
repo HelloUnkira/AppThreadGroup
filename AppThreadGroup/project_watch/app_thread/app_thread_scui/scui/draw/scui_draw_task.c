@@ -15,9 +15,9 @@ static scui_draw_task_list_t scui_draw_task_list = {0};
 static void scui_draw_task_node_hash(scui_draw_task_node_t *task_node)
 {
     #if SCUI_DRAW_TASK_SEQ
-    // 将dst_surface作为目标分割成网格
-    // 计算绘制区域在网格计算其散列位图
-    // 虽不精确但足以快速筛选节点的散列
+    /* 将dst_surface作为目标分割成网格 */
+    /* 计算绘制区域在网格计算其散列位图 */
+    /* 虽不精确但足以快速筛选节点的散列 */
     
     
     #endif
@@ -48,7 +48,7 @@ void scui_draw_task_ready(void)
     scui_coord_t hash_size = 1;
     hash_size *= SCUI_DRAW_TASK_HASH_HBIT / 8;
     hash_size *= SCUI_DRAW_TASK_HASH_VBIT / 8;
-    hash_size += 1; // 多余加1
+    hash_size += 1; /* 多余加1 */
     
     /* 绘制任务序列就绪 */
     scui_sem_process(&task_list->sem, scui_sem_static);

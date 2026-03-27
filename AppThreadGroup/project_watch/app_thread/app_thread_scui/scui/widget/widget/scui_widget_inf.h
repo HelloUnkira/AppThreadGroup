@@ -395,56 +395,56 @@ void scui_widget_draw_ctx(scui_widget_draw_dsc_t *draw_dsc);
 /* scui_widget_draw_type_string */
 #define scui_widget_draw_string(handle_v, target_v, string_args_v)          \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_string,                               \
         .string_args = string_args_v,                                       \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_color */
 #define scui_widget_draw_color(handle_v, target_v, color_v)                 \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_color,                                \
         .color = color_v,                                                   \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_color_grad */
 #define scui_widget_draw_color_grad(handle_v, target_v, color_v, way_v)     \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_color_grad,                           \
         .color = color_v,                                                   \
         .way   = way_v,                                                     \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_blur */
 #define scui_widget_draw_blur(handle_v, target_v)                           \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_blur,                                 \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_image */
 #define scui_widget_draw_image(handle_v, target_v,                          \
     image_v, clip_v, color_v)                                               \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image,                                \
@@ -452,14 +452,14 @@ do {                                                                        \
         .clip  = clip_v,                                                    \
         .color = color_v,                                                   \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_image_scale */
 #define scui_widget_draw_image_scale(handle_v, target_v,                    \
     image_v, clip_v, scale_v, pos_v)                                        \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_scale,                          \
@@ -468,14 +468,14 @@ do {                                                                        \
         .scale = scale_v,                                                   \
         .pos   = pos_v,                                                     \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_image_rotate */
 #define scui_widget_draw_image_rotate(handle_v, target_v,                   \
     image_v, clip_v, anchor_v, center_v, angle_v)                           \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_rotate,                         \
@@ -485,14 +485,14 @@ do {                                                                        \
         .center = center_v,                                                 \
         .angle  = angle_v,                                                  \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_image_matrix */
 #define scui_widget_draw_image_matrix(handle_v, target_v,                   \
     image_v, clip_v, matrix_v)                                              \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_image_matrix,                         \
@@ -500,14 +500,14 @@ do {                                                                        \
         .clip   = clip_v,                                                   \
         .matrix = matrix_v,                                                 \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_qrcode */
 #define scui_widget_draw_qrcode(handle_v, target_v,                         \
     color_v, size_v, data_v)                                                \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_qrcode,                               \
@@ -515,14 +515,14 @@ do {                                                                        \
         .size  = size_v,                                                    \
         .data  = data_v,                                                    \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_barcode */
 #define scui_widget_draw_barcode(handle_v, target_v,                        \
     color_v, size_v, data_v)                                                \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_barcode,                              \
@@ -530,14 +530,14 @@ do {                                                                        \
         .size  = size_v,                                                    \
         .data  = data_v,                                                    \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_ring */
 #define scui_widget_draw_ring(handle_v, target_v,                           \
     image_v, clip_v, angle_s_v, color_v, angle_e_v, percent_v, image_e_v);  \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_ring,                                 \
@@ -549,14 +549,14 @@ do {                                                                        \
         .percent = percent_v,                                               \
         .image_e = image_e_v,                                               \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /* scui_widget_draw_type_graph */
 #define scui_widget_draw_graph(handle_v, target_v,                          \
     alpha_v, color_v, graph_dsc_v)                                          \
 do {                                                                        \
-    scui_widget_draw_dsc_t draw_dsc = {                                     \
+    scui_widget_draw_dsc_t draw_dsc_inst = {                                \
         .handle = handle_v,                                                 \
         .target = target_v,                                                 \
         .type = scui_widget_draw_type_graph,                                \
@@ -564,7 +564,7 @@ do {                                                                        \
         .color = color_v,                                                   \
         .graph_dsc = graph_dsc_v,                                           \
     };                                                                      \
-    scui_widget_draw_ctx(&draw_dsc);                                        \
+    scui_widget_draw_ctx(&draw_dsc_inst);                                   \
 } while (0)                                                                 \
 
 /*************************************************************************************************/

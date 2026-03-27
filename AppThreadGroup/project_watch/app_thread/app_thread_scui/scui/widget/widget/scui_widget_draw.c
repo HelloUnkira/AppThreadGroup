@@ -818,9 +818,9 @@ void scui_widget_draw_ctx_graph(scui_widget_draw_dsc_t *draw_dsc)
              continue;
         #endif
         
-        scui_draw_dsc_t *graph_dsc = draw_dsc->graph_dsc;
+        scui_draw_dsc_t *draw_dsc_graph = draw_dsc->graph_dsc;
         scui_draw_graph(false, widget->surface, dst_clip,
-            alpha, color, graph_dsc);
+            alpha, color, draw_dsc_graph);
     }
 }
 
