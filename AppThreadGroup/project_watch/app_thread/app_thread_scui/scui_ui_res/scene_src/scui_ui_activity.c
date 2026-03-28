@@ -137,45 +137,23 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
         
         // 清空图像资源缓存
         scui_image_cache_clear();
-        scui_custom_maker_t custom_maker = {0};
-        scui_handle_t custom_handle  = SCUI_HANDLE_INVALID;
-        custom_maker.widget.type     = scui_widget_type_custom;
-        custom_maker.widget.clip.w   = SCUI_HOR_RES;
-        custom_maker.widget.clip.h   = SCUI_VER_RES;
-        custom_maker.widget.event_cb = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
-        scui_widget_create(&custom_maker, &custom_handle);
-        scui_ui_res_local->big_3_slave = custom_handle;
+        scui_canvas_maker_t canvas_maker = {0};
+        scui_handle_t canvas_handle  = SCUI_HANDLE_INVALID;
+        canvas_maker.widget.type     = scui_widget_type_canvas;
+        canvas_maker.widget.clip.w   = SCUI_HOR_RES;
+        canvas_maker.widget.clip.h   = SCUI_VER_RES;
+        canvas_maker.widget.event_cb = scui_ui_scene_activity_scroll_ring_big_3_slave_event_proc;
+        scui_widget_create(&canvas_maker, &canvas_handle);
+        scui_ui_res_local->big_3_slave = canvas_handle;
+        scui_widget_show(canvas_handle, false);
         
-        // 创建画布,用于绘制
-        scui_surface_t surface = {
-            .format  = SCUI_PIXEL_CF_DEF,
-            .hor_res = custom_maker.widget.clip.w,
-            .ver_res = custom_maker.widget.clip.h,
-        };
-        scui_widget_surface_create(scui_ui_res_local->big_3_slave, &surface);
-        scui_widget_surface_refr(scui_ui_res_local->big_3_slave, true);
-        
-        scui_widget_show(scui_ui_res_local->big_3_slave, false);
-        scui_widget_draw(scui_ui_res_local->big_3_slave, NULL, true);
-        scui_handle_t custom = scui_ui_res_local->big_3_slave;
-        
-        scui_image_t *image_src = NULL;
         scui_handle_t image = SCUI_HANDLE_INVALID;
-        scui_custom_image_dsc(event->object, &image_src);
-        scui_custom_image(event->object, &image);
-        
-        image_src->type           = scui_image_type_mem,
-        image_src->format         = scui_widget_surface(custom)->format,
-        image_src->pixel.width    = scui_widget_clip(custom).w,
-        image_src->pixel.height   = scui_widget_clip(custom).h,
-        image_src->pixel.data_bin = scui_widget_surface(custom)->pixel,
-        
+        scui_canvas_image(canvas_handle, &image);
         scui_widget_image_set(event->object, image);
         break;
     }
     case scui_event_destroy: {
         
-        scui_widget_surface_destroy(scui_ui_res_local->big_3_slave);
         scui_widget_hide(scui_ui_res_local->big_3_slave, false);
         scui_ui_res_local->big_3_slave = SCUI_HANDLE_INVALID;
         break;
@@ -269,10 +247,10 @@ void scui_ui_scene_activity_scroll_ditail_sum_event_proc(scui_event_t *event)
             args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
             args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
             
-            scui_area_t clip_str = clip;
-            clip_str.w = 44; clip_str.x += 36 + idx * (44 + 12);
-            clip_str.h = 44; clip_str.y += 113 - 90;
-            scui_custom_draw_text(event->object, &clip_str, &args, text_week[idx]);
+            args.clip = clip;
+            args.clip.w = 44; args.clip.x += 36 + idx * (44 + 12);
+            args.clip.h = 44; args.clip.y += 113 - 90;
+            scui_custom_draw_text(event->object, &args, text_week[idx]);
         }
         
         uint32_t day7_kcal[7] = {0};
@@ -422,10 +400,10 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_str = clip;
-        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
-        clip_str.h = 40; clip_str.y += 25 - 16;
-        scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000a);
+        args.clip = clip;
+        args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
+        args.clip.h = 40; args.clip.y += 25 - 16;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000a);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -446,10 +424,10 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_unit = clip;
-        clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000d);
+        args.clip = clip;
+        args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
+        args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000d);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -490,10 +468,10 @@ void scui_ui_scene_activity_scroll_ditail_kcal_event_proc(scui_event_t *event)
                 args.name = SCUI_FONT_TYPE_24_ASCII;
                 args.utf8 = digit_str;
                 
-                scui_area_t clip_unit = clip;
-                clip_unit.y += 206 - 8; clip_unit.x += 42 + idx * (12 + 4) + 2;
-                clip_unit.h  = 40; clip_unit.w = 80;
-                scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_HANDLE_INVALID);
+                args.clip = clip;
+                args.clip.y += 206 - 8; args.clip.x += 42 + idx * (12 + 4) + 2;
+                args.clip.h  = 40; args.clip.w = 80;
+                scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
             
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_02_dot_caloriesbmp;
@@ -588,10 +566,10 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_str = clip;
-        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
-        clip_str.h = 40; clip_str.y += 25 - 16;
-        scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000c);
+        args.clip = clip;
+        args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
+        args.clip.h = 40; args.clip.y += 25 - 16;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000c);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -612,10 +590,10 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_unit = clip;
-        clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000f);
+        args.clip = clip;
+        args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
+        args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000f);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -656,10 +634,10 @@ void scui_ui_scene_activity_scroll_ditail_step_event_proc(scui_event_t *event)
                 args.name = SCUI_FONT_TYPE_24_ASCII;
                 args.utf8 = digit_str;
                 
-                scui_area_t clip_unit = clip;
-                clip_unit.y += 206 - 8; clip_unit.x += 42 + idx * (12 + 4) + 2;
-                clip_unit.h  = 40; clip_unit.w = 80;
-                scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_HANDLE_INVALID);
+                args.clip = clip;
+                args.clip.y += 206 - 8; args.clip.x += 42 + idx * (12 + 4) + 2;
+                args.clip.h  = 40; args.clip.w = 80;
+                scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
             
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_04_dot_stepsbmp;
@@ -755,10 +733,10 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_str = clip;
-        clip_str.w = SCUI_HOR_RES - 40 * 2; clip_str.x += 40;
-        clip_str.h = 40; clip_str.y += 25 - 16;
-        scui_custom_draw_text(event->object, &clip_str, &args, SCUI_MULTI_LANG_0X000b);
+        args.clip = clip;
+        args.clip.w = SCUI_HOR_RES - 40 * 2; args.clip.x += 40;
+        args.clip.h = 40; args.clip.y += 25 - 16;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000b);
         
         scui_handle_t image_digit = scui_image_prj_image_src_num_44_white_24x34_04_03png;
         uint8_t char_digit[10] = {0};
@@ -779,10 +757,10 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
         args.size = scui_font_size_match(SCUI_FONT_IDX_32, 0);
         args.name = scui_font_name_match(SCUI_FONT_IDX_32, args.lang);
         
-        scui_area_t clip_unit = clip;
-        clip_unit.y += 52; clip_unit.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
-        clip_unit.h  = 40; clip_unit.w = SCUI_HOR_RES - (clip_unit.x - clip.x) - 40;
-        scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_MULTI_LANG_0X000e);
+        args.clip = clip;
+        args.clip.y += 52; args.clip.x += 40 + (scui_image_w(image_digit) + 3) * digit_num;
+        args.clip.h  = 40; args.clip.w = SCUI_HOR_RES - (args.clip.x - clip.x) - 40;
+        scui_custom_draw_text(event->object, &args, SCUI_MULTI_LANG_0X000e);
         
         for (int16_t idx = 0; idx <= 24; idx++) {
             
@@ -823,10 +801,10 @@ void scui_ui_scene_activity_scroll_ditail_dist_event_proc(scui_event_t *event)
                 args.name = SCUI_FONT_TYPE_24_ASCII;
                 args.utf8 = digit_str;
                 
-                scui_area_t clip_unit = clip;
-                clip_unit.y += 206 - 8; clip_unit.x += 42 + idx * (12 + 4) + 2;
-                clip_unit.h  = 40; clip_unit.w = 80;
-                scui_custom_draw_text(event->object, &clip_unit, &args, SCUI_HANDLE_INVALID);
+                args.clip = clip;
+                args.clip.y += 206 - 8; args.clip.x += 42 + idx * (12 + 4) + 2;
+                args.clip.h  = 40; args.clip.w = 80;
+                scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
             }
             
             scui_handle_t  image = scui_image_prj_image_src_03_activity_bar_03_dot_distancebmp;

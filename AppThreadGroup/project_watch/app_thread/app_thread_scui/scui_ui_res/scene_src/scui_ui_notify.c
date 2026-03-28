@@ -32,7 +32,8 @@ void scui_ui_scene_notify_none_event(scui_event_t *event)
         args.name = SCUI_FONT_TYPE_32_ASCII;
         args.utf8 = "Wait-Adaptor";
         
-        scui_custom_draw_text(event->object, NULL, &args, SCUI_HANDLE_INVALID);
+        args.clip = scui_widget_clip(event->object);
+        scui_custom_draw_text(event->object, &args, SCUI_HANDLE_INVALID);
         
         break;
     }

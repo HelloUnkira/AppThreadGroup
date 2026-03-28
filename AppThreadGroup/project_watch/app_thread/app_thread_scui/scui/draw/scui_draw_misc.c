@@ -107,7 +107,7 @@ void scui_draw_ctx_qrcode(scui_draw_dsc_t *draw_dsc)
         SCUI_ASSERT(dst_ofs < dst_surface->pixel + dst_line * dst_surface->ver_res);
     }
     
-over:
+    over:
     SCUI_MEM_FREE(data_t);
     SCUI_MEM_FREE(qrcode);
 }
@@ -188,6 +188,6 @@ void scui_draw_ctx_barcode(scui_draw_dsc_t *draw_dsc)
                             dst_surface->format, bit ? &pixel_l : &pixel_d, src_alpha);
     }
     
-over:
+    over:
     SCUI_MEM_FREE(out_buf);
 }

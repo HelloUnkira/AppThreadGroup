@@ -85,6 +85,10 @@ void scui_linear_s_make(void *inst, void *inst_maker, scui_handle_t *handle)
     SCUI_ASSERT(widget_maker->parent == SCUI_HANDLE_INVALID);
     /* 子控件树控件一定是根控件(子画布控件树) */
     
+    linear_s->format = linear_s_maker->format;
+    if (linear_s->format == scui_pixel_cf_def)
+        linear_s->format  = SCUI_PIXEL_CF_DEF_A;
+    
     linear_s->surface_s = NULL;
     linear_s->handle_m  = SCUI_HANDLE_INVALID;
     
@@ -332,11 +336,10 @@ void scui_linear_m_invoke(scui_event_t *event)
             
             /* 创建一个独立的子画布,将目标绘制到一个独立子画布中 */
             if (linear_s->surface_s == NULL) {
-                scui_area_t clip = scui_widget_clip(handle_s);
                 scui_surface_t surface = {
-                    .format  = SCUI_PIXEL_CF_DEF_A,
-                    .hor_res = clip.w,
-                    .ver_res = clip.h,
+                    .format  = linear_s->format,
+                    .hor_res = widget_s->clip.w,
+                    .ver_res = widget_s->clip.h,
                 };
                 scui_widget_surface_create(handle_s, &surface);
                 linear_s->surface_s = scui_widget_surface(handle_s);

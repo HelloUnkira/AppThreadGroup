@@ -183,7 +183,7 @@ typedef struct {
         scui_area_t         dst_clip;       /* 画布绘制区域 */
         scui_area_t         src_clip;       /* 画布绘制区域 */
         scui_alpha_t        src_alpha;      /* 字符透明度 */
-        scui_string_args_t  src_args;       /* 字符串绘制参数 */
+        scui_string_args_t *src_args;       /* 字符串绘制参数 */
     } string;
     /**************************************************************************
      * draw ring:

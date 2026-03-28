@@ -1,5 +1,5 @@
 /*实现目标:
- *    自定义插件
+ *    自定义控件(图形上下文(Graphic Context))
  */
 
 #define SCUI_LOG_LOCAL_STATUS       1
@@ -10,7 +10,7 @@
 /*@brief 自定义控件:插件:加载圆环
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event     = draw_dsc->event;
@@ -58,7 +58,7 @@ void scui_custom_draw_ctx_spinner(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:进度条,滚动条
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -170,7 +170,7 @@ void scui_custom_draw_ctx_slider(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:导航点
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -210,7 +210,7 @@ void scui_custom_draw_ctx_indicator(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 自定义控件:插件:绕圆旋转图像
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t *event         = draw_dsc->event;
@@ -239,7 +239,7 @@ void scui_custom_draw_ctx_ring_edge(scui_custom_draw_dsc_t *draw_dsc)
  *       一般主要用于绘制连续数字符号图片
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t  *event        = draw_dsc->event;
@@ -271,7 +271,7 @@ void scui_custom_draw_ctx_image_text(scui_custom_draw_dsc_t *draw_dsc)
 /*@brief 按钮控件绘制(四个角使用图像绘制)
  *@param draw_dsc 绘制参数实例
  */
-void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
+static void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
 {
     /* draw dsc args<s> */
     scui_event_t  *event        = draw_dsc->event;
@@ -381,5 +381,25 @@ void scui_custom_draw_ctx_image_crect4(scui_custom_draw_dsc_t *draw_dsc)
         }
     }
     /* ... */
+}
+
+/*@brief 自定义控件:插件:上下文绘制
+ *@param draw_graph 绘制参数实例
+ */
+void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc)
+{
+    typedef void (*scui_custom_draw_ctx_cb_t)(scui_custom_draw_dsc_t *draw_dsc);
+    static const scui_custom_draw_ctx_cb_t scui_custom_draw_ctx_cb[scui_custom_draw_type_num] = {
+        [scui_custom_draw_type_spinner] =           scui_custom_draw_ctx_spinner,
+        [scui_custom_draw_type_slider] =            scui_custom_draw_ctx_slider,
+        [scui_custom_draw_type_indicator] =         scui_custom_draw_ctx_indicator,
+        [scui_custom_draw_type_ring_edge] =         scui_custom_draw_ctx_ring_edge,
+        [scui_custom_draw_type_image_text] =        scui_custom_draw_ctx_image_text,
+        [scui_custom_draw_type_image_crect4] =      scui_custom_draw_ctx_image_crect4,
+    };
+    
+    SCUI_ASSERT(draw_dsc->type > scui_custom_draw_type_none);
+    SCUI_ASSERT(draw_dsc->type < scui_custom_draw_type_num);
+    scui_custom_draw_ctx_cb[draw_dsc->type](draw_dsc);
 }
 

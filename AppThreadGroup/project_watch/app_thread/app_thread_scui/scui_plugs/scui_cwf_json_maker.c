@@ -53,86 +53,6 @@ static void scui_cwf_json_val_to_idx_ofs(scui_cwf_json_parser_t *parser, uint32_
 /*@brief 事件处理回调
  *@param event 事件
  */
-static void scui_cwf_json_custom_dial_ptr_event(scui_event_t *event)
-{
-    switch (event->type) {
-    case scui_event_anima_elapse: {
-        
-        scui_area_t clip = scui_widget_clip(event->object);
-        scui_custom_draw_dsc_t *draw_dsc = NULL;
-        scui_custom_draw_dsc(event->object, &draw_dsc);
-        draw_dsc->event = event;
-        draw_dsc->clip  = &clip;
-        
-        #if 1
-        /* 如果外界时钟可信, 那么可以一直使用 */
-        /* 不要频繁的在它工作时同步, 会有严重的跳秒现象 */
-        uint8_t  hour = scui_presenter.get_hour();
-        uint8_t  min  = scui_presenter.get_min();
-        uint8_t  sec  = scui_presenter.get_sec();
-        uint64_t tick = (((hour * 60) + min) * 60 + sec) * 1000;
-        if (scui_dist(draw_dsc->dial_ptr.tick_curr, tick) > 1000 * 60)
-            draw_dsc->dial_ptr.tick_curr = tick;
-        #endif
-        
-        draw_dsc->dial_ptr.tick_curr += event->tick;
-        scui_custom_draw_anim_ctx(draw_dsc);
-        break;
-    }
-    case scui_event_focus_get: {
-        
-        scui_area_t clip = scui_widget_clip(event->object);
-        scui_custom_draw_dsc_t *draw_dsc = NULL;
-        scui_custom_draw_dsc(event->object, &draw_dsc);
-        draw_dsc->event = event;
-        draw_dsc->clip  = &clip;
-        
-        draw_dsc->dial_ptr.tick_sync = true;
-        break;
-    }
-    case scui_event_draw: {
-        if (!scui_event_check_execute(event))
-             return;
-        
-        /* 固定资源绑定到res, 构建时将widget与固定的res绑定 */
-        scui_csf_json_item__res_t *res = NULL;
-        scui_widget_user_data_get(event->object, &res);
-        SCUI_ASSERT(res != NULL);
-        
-        /* 从res中逆向获取解析器目标 */
-        scui_cwf_json_parser_t *parser = res->parser;
-        uint16_t list_idx = res->list_idx;
-        
-        scui_area_t clip = scui_widget_clip(event->object);
-        scui_custom_draw_dsc_t *draw_dsc = NULL;
-        scui_custom_draw_dsc(event->object, &draw_dsc);
-        draw_dsc->event = event;
-        draw_dsc->clip  = &clip;
-        
-        /* 绘制前同步一次 */
-        if (draw_dsc->dial_ptr.tick_sync) {
-            draw_dsc->dial_ptr.tick_sync = false;
-            uint8_t  hour = scui_presenter.get_hour();
-            uint8_t  min  = scui_presenter.get_min();
-            uint8_t  sec  = scui_presenter.get_sec();
-            uint64_t tick = (((hour * 60) + min) * 60 + sec) * 1000;
-            draw_dsc->dial_ptr.tick_curr = tick;
-            scui_custom_draw_anim_ctx(draw_dsc);
-        }
-        scui_custom_draw_ctx(draw_dsc);
-        break;
-    }
-    default:
-        SCUI_LOG_DEBUG("event %u widget %u", event->type, event->object);
-        break;
-    }
-    
-    
-}
-
-/*@brief 事件处理回调
- *@param event 事件
- */
 static void scui_cwf_json_custom_event(scui_event_t *event)
 {
     switch (event->type) {
@@ -460,34 +380,31 @@ void scui_cwf_json_make_item(scui_cwf_json_parser_t *parser, uint32_t idx, cJSON
         }
         case scui_cwf_json_type_img_watch: {
             SCUI_ASSERT(res->img_num == 3);
-            scui_custom_maker_t custom_maker = {0};
-            custom_maker.widget.type   = scui_widget_type_custom;
-            custom_maker.widget.clip   = scui_widget_clip(parser->parent);
-            custom_maker.widget.parent = parser->parent;
-            
-            custom_maker.widget.style.sched_anima = true;
-            custom_maker.widget.event_cb = scui_cwf_json_custom_dial_ptr_event;
-            scui_widget_create(&custom_maker, &parser->list_child[idx]);
-            scui_custom_draw_dsc_t *draw_dsc = NULL;
-            scui_custom_draw_dsc(parser->list_child[idx], &draw_dsc);
-            draw_dsc->type = scui_custom_draw_type_dial_ptr;
-            draw_dsc->dial_ptr.image[0] = parser->image_hit[res->img_ofs[0]];
-            draw_dsc->dial_ptr.image[1] = parser->image_hit[res->img_ofs[1]];
-            draw_dsc->dial_ptr.image[2] = parser->image_hit[res->img_ofs[2]];
-            draw_dsc->dial_ptr.anchor[0].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hx")) + 0.1;
-            draw_dsc->dial_ptr.anchor[0].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hy")) + 0.1;
-            draw_dsc->dial_ptr.anchor[1].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "mx")) + 0.1;
-            draw_dsc->dial_ptr.anchor[1].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "my")) + 0.1;
-            draw_dsc->dial_ptr.anchor[2].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sx")) + 0.1;
-            draw_dsc->dial_ptr.anchor[2].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sy")) + 0.1;
-            draw_dsc->dial_ptr.center[0].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "h_cy")) + 0.1;
-            draw_dsc->dial_ptr.center[1].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "m_cy")) + 0.1;
-            draw_dsc->dial_ptr.center[2].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "s_cy")) + 0.1;
-            draw_dsc->dial_ptr.center[0].x = scui_image_w(parser->image_hit[res->img_ofs[0]]) / 2;
-            draw_dsc->dial_ptr.center[1].x = scui_image_w(parser->image_hit[res->img_ofs[1]]) / 2;
-            draw_dsc->dial_ptr.center[2].x = scui_image_w(parser->image_hit[res->img_ofs[2]]) / 2;
-            draw_dsc->dial_ptr.tick_mode = 2;
-            draw_dsc->dial_ptr.tick_sync = true;
+            scui_xwatch_maker_t xwatch_maker = {0};
+            xwatch_maker.widget.type   = scui_widget_type_xwatch;
+            xwatch_maker.widget.clip   = scui_widget_clip(parser->parent);
+            xwatch_maker.widget.parent = parser->parent;
+            xwatch_maker.image[0] = parser->image_hit[res->img_ofs[0]];
+            xwatch_maker.image[1] = parser->image_hit[res->img_ofs[1]];
+            xwatch_maker.image[2] = parser->image_hit[res->img_ofs[2]];
+            xwatch_maker.anchor[0].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hx")) + 0.1;
+            xwatch_maker.anchor[0].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "hy")) + 0.1;
+            xwatch_maker.anchor[1].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "mx")) + 0.1;
+            xwatch_maker.anchor[1].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "my")) + 0.1;
+            xwatch_maker.anchor[2].x = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sx")) + 0.1;
+            xwatch_maker.anchor[2].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "sy")) + 0.1;
+            xwatch_maker.center[0].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "h_cy")) + 0.1;
+            xwatch_maker.center[1].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "m_cy")) + 0.1;
+            xwatch_maker.center[2].y = cJSON_GetNumberValue(cJSON_GetObjectItem(dict, "s_cy")) + 0.1;
+            xwatch_maker.center[0].x = scui_image_w(parser->image_hit[res->img_ofs[0]]) / 2;
+            xwatch_maker.center[1].x = scui_image_w(parser->image_hit[res->img_ofs[1]]) / 2;
+            xwatch_maker.center[2].x = scui_image_w(parser->image_hit[res->img_ofs[2]]) / 2;
+            xwatch_maker.tick_mode = 2;
+            xwatch_maker.get_h  = scui_presenter.get_hour;
+            xwatch_maker.get_m  = scui_presenter.get_min;
+            xwatch_maker.get_s  = scui_presenter.get_sec;
+            xwatch_maker.get_ms = scui_presenter.get_msec;
+            scui_widget_create(&xwatch_maker, &parser->list_child[idx]);
             break;
         }
         case scui_cwf_json_type_img_day:

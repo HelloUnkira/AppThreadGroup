@@ -1,34 +1,16 @@
-#ifndef SCUI_CUSTOM_INF_H
-#define SCUI_CUSTOM_INF_H
+#ifndef SCUI_CUSTOM_DRAW_H
+#define SCUI_CUSTOM_DRAW_H
 
-/*@brief 自定义控件绘制描述符(全局,唯一)
- *@param handle   自定义控件句柄
- *@param draw_dsc 绘制描述符
+
+
+/*备注:
+ *    这是在控件基础绘制基础上
+ *    封装的一些集成化自定义绘制
+ *    它的层级仅低于控件基础绘制
  */
-void scui_custom_draw_dsc(scui_handle_t handle, void **draw_dsc);
-
-/*@brief 自定义控件画布图资源(全局,唯一)
- *@param handle    自定义控件句柄
- *@param image_src 画布图资源
- */
-void scui_custom_image_dsc(scui_handle_t handle, void **image_src);
-
-/*@brief 自定义控件画布图句柄(全局,唯一)
- *@param handle 自定义控件句柄
- *@param image  画布图资源
- */
-void scui_custom_image(scui_handle_t handle, scui_handle_t *image);
-
-/*************************************************************************************************/
-/*************************************************************************************************/
-/*************************************************************************************************/
 
 typedef enum {
     scui_custom_draw_type_none = 0,
-    /* basic draw type */
-    scui_custom_draw_type_text,
-    /* custom draw type */
-    scui_custom_draw_type_dial_ptr,
     scui_custom_draw_type_spinner,
     scui_custom_draw_type_slider,
     scui_custom_draw_type_indicator,
@@ -39,32 +21,12 @@ typedef enum {
 } scui_custom_draw_type_t;
 
 typedef struct {
-    bool custom_draw_anim;
     scui_custom_draw_type_t type;
     /*************************************************************************/
     scui_event_t *event;            /* 绘制事件 */
     scui_area_t  *clip;             /* 绘制区域 */
     union {
-    /* basic draw type */
     /*************************************************************************/
-    struct {
-        scui_handle_t       handle; /* 绘制对象 */
-        scui_area_t        *target; /* 绘制区域 */
-        scui_string_args_t *args;   /* 字符串绘制参数 */
-        scui_handle_t       text;   /* 文本句柄 */
-    } text;
-    /* custom draw type */
-    /*************************************************************************/
-    struct {
-        scui_handle_t image[3];     /* 图片句柄(hour,minute,second) */
-        scui_point_t  anchor[3];    /* 图片围绕轴心(hour,minute,second) */
-        scui_point_t  center[3];    /* 图片旋转中心(hour,minute,second) */
-        /* frame anim sched: */
-        uint64_t tick_mode:2;       /* 2:一帧一跳;1:一度一跳;0:一秒一跳; */
-        uint64_t tick_curr:30;      /* 当前时刻:时.分.秒.毫秒 */
-        uint64_t tick_last:30;      /* 前一时刻:时.分.秒.毫秒 */
-        uint64_t tick_sync:1;       /* 必要时同步 */
-    } dial_ptr;
     struct {
         scui_handle_t spinner;      /* 图像句柄(alpha图:环) */
         scui_handle_t edge;         /* 图像句柄(alpha图:边界点) */
@@ -127,51 +89,9 @@ typedef struct {
  */
 void scui_custom_draw_ctx(scui_custom_draw_dsc_t *draw_dsc);
 
-/*@brief 自定义控件:插件:上下文绘制(帧动画调度)
- *@param draw_graph 绘制参数实例
- */
-void scui_custom_draw_anim_ctx(scui_custom_draw_dsc_t *draw_dsc);
-
 /*****************************************************************************/
 /*@brief 简化转义的宏api
  */
-
-/* scui_custom_draw_type_text */
-#define scui_custom_draw_text(handle_v, target_v, args_v, text_v)           \
-do {                                                                        \
-    scui_custom_draw_dsc_t draw_dsc = {                                     \
-        .type = scui_custom_draw_type_text,                                 \
-        .text.handle = handle_v,                                            \
-        .text.target = target_v,                                            \
-        .text.args   = args_v,                                              \
-        .text.text   = text_v,                                              \
-    };                                                                      \
-    scui_custom_draw_ctx(&draw_dsc);                                        \
-} while (0)                                                                 \
-
-/*****************************************************************************/
-/*@brief 简化转义的宏api
- */
-
-/* scui_custom_draw_type_dial_ptr */
-#define scui_custom_draw_dial_ptr(event_v, clip_v,                          \
-    image_v, anchor_v, center_v, tick_ms_v)                                 \
-do {                                                                        \
-    scui_custom_draw_dsc_t draw_dsc = { .event = event_v, .clip = clip_v,   \
-        .type = scui_custom_draw_type_dial_ptr,                             \
-        .dial_ptr.image[0]  = image_v[0],                                   \
-        .dial_ptr.image[1]  = image_v[1],                                   \
-        .dial_ptr.image[2]  = image_v[2],                                   \
-        .dial_ptr.anchor[0] = anchor_v[0],                                  \
-        .dial_ptr.anchor[1] = anchor_v[1],                                  \
-        .dial_ptr.anchor[2] = anchor_v[2],                                  \
-        .dial_ptr.center[0] = center_v[0],                                  \
-        .dial_ptr.center[1] = center_v[1],                                  \
-        .dial_ptr.center[2] = center_v[2],                                  \
-        .dial_ptr.tick_ms_c = tick_ms_v,                                    \
-    };                                                                      \
-    scui_custom_draw_ctx(&draw_dsc);                                        \
-} while (0)                                                                 \
 
 /* scui_custom_draw_type_spinner */
 #define scui_custom_draw_spinner(event_v, clip_v,                           \
@@ -276,9 +196,5 @@ do {                                                                        \
     };                                                                      \
     scui_custom_draw_ctx(&draw_dsc);                                        \
 } while (0)                                                                 \
-
-/*************************************************************************************************/
-/*************************************************************************************************/
-/*************************************************************************************************/
 
 #endif

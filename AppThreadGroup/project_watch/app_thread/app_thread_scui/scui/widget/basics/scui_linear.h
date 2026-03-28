@@ -55,6 +55,7 @@ typedef struct {
     scui_widget_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_pixel_cf_t     format;         /* 画布基础像素格式 */
     /* 内部域: */
     scui_surface_t     *surface_s;      /* 子控件树画布 */
     scui_handle_t       handle_m;       /* 主控件(master) */
@@ -70,6 +71,7 @@ typedef struct {
     scui_widget_maker_t widget;
     SCUI_EXTEND_FIELD_E
     /* 外部域: */
+    scui_pixel_cf_t     format;         /* 画布基础像素格式 */
 } scui_linear_s_maker_t;
 #pragma pack(pop)
 

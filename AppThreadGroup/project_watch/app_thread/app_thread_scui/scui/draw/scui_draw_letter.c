@@ -108,9 +108,9 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     scui_area_t        *dst_clip    = &draw_dsc->string.dst_clip;
     scui_area_t        *src_clip    = &draw_dsc->string.src_clip;
     scui_alpha_t        src_alpha   =  draw_dsc->string.src_alpha;
-    scui_string_args_t *src_args    = &draw_dsc->string.src_args;
+    scui_string_args_t *src_args    =  draw_dsc->string.src_args;
     /* draw dsc args<e> */
-    /* */
+    
     /* 从字库中提取一些信息 */
     scui_font_unit_t font_unit = {0};
     font_unit.name = src_args->name;
@@ -128,7 +128,7 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     draw_area.w = scui_min(dst_clip_v.w, src_clip_v.w);
     draw_area.h = scui_min(dst_clip_v.h, src_clip_v.h);
     if (scui_area_empty(&draw_area))
-        return;
+        goto over;
     
     scui_point_t offset = {.x = src_clip_v.x,.y = src_clip_v.y,};
     
@@ -415,4 +415,13 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             }
         }
     }
+    
+    /* 如果是本地布局 */
+    if (src_args->local)
+        src_args->nest--;
+    
+    over:
+    /* 如果是本地布局 */
+    if (src_args->nest == 0)
+        src_args->local = false;
 }

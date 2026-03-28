@@ -48,15 +48,19 @@
 #include "scui_font_glyph_cache.h"
 
 /* widget: */
-#include "scui_widget.h"
-#include "scui_widget_inf.h"
+#include "scui_widget.h"            /* 控件(基础) */
+#include "scui_widget_inf.h"        /* 控件(基础)API */
+#include "scui_widget_draw.h"       /* 控件(绘制上下文)API */
+#include "scui_custom_draw.h"       /* 控件(绘制上下文)API */
 #include "scui_window.h"            /* 控件(窗口) */
 #include "scui_window_inf.h"        /* 控件(窗口)API */
 /* widget: */
-#include "scui_string.h"            /* 控件(字符串) */
-#include "scui_string_inf.h"        /* 控件(字符串)API */
+#include "scui_canvas.h"            /* 控件(画布) */
+#include "scui_canvas_inf.h"        /* 控件(画布)API */
 #include "scui_custom.h"            /* 控件(自定义) */
 #include "scui_custom_inf.h"        /* 控件(自定义)API */
+#include "scui_string.h"            /* 控件(字符串) */
+#include "scui_string_inf.h"        /* 控件(字符串)API */
 #include "scui_scroll.h"            /* 控件(滚动) */
 #include "scui_scroll_inf.h"        /* 控件(滚动)API */
 #include "scui_linear.h"            /* 控件(列表) */
@@ -70,6 +74,8 @@
 #include "scui_button_inf.h"        /* 控件(按钮)API */
 #include "scui_xchart.h"            /* 控件(图表) */
 #include "scui_xchart_inf.h"        /* 控件(图表)API */
+#include "scui_xwatch.h"            /* 控件(指针) */
+#include "scui_xwatch_inf.h"        /* 控件(指针)API */
 
 /* draw */
 #include "scui_draw_graph.h"

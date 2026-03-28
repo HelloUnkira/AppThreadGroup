@@ -543,7 +543,7 @@ void scui_string_invoke(scui_event_t *event)
                 scui_area_t string_clip = draw_clip;
                 
                 scui_draw_string(true, string->draw_surface, draw_clip,
-                    string_clip, scui_alpha_cover, string->args);
+                    string_clip, scui_alpha_cover, &string->args);
                 
                 if (string->args.regrad) {
                     /* 如果需要全局渐变,对绘制画布进行渐变 */

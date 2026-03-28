@@ -234,7 +234,7 @@ static void scui_widget_anima_expire_fade(void *instance)
     scui_widget_draw(anima->object, NULL, false);
 }
 
-/*@brief 控件动画透明渐入(包装器)
+/*@brief 控件动画回调(透明渐入)
  */
 scui_handle_t scui_widget_anima_fade_in(scui_handle_t handle, int32_t time, int32_t delay)
 {
@@ -249,7 +249,7 @@ scui_handle_t scui_widget_anima_fade_in(scui_handle_t handle, int32_t time, int3
     return handle;
 }
 
-/*@brief 控件动画透明渐出(包装器)
+/*@brief 控件动画回调(透明渐出)
  */
 scui_handle_t scui_widget_anima_fade_out(scui_handle_t handle, int32_t time, int32_t delay)
 {

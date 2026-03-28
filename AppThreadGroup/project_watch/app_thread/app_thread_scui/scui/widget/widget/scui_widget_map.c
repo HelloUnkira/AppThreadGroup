@@ -69,6 +69,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .inherit = false,
             .name    = "window",
         },
+        [scui_widget_type_canvas] = {
+            .size    = sizeof(scui_canvas_t),
+            .maker   = sizeof(scui_canvas_maker_t),
+            .base    = scui_widget_type_canvas,
+            .make    = scui_canvas_make,
+            .burn    = scui_canvas_burn,
+            .invoke  = NULL,
+            .inherit = true,
+            .name    = "canvas",
+        },
         [scui_widget_type_custom] = {
             .size    = sizeof(scui_custom_t),
             .maker   = sizeof(scui_custom_maker_t),
@@ -76,7 +86,7 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .make    = scui_custom_make,
             .burn    = scui_custom_burn,
             .invoke  = NULL,
-            .inherit = false,
+            .inherit = true,
             .name    = "custom",
         },
         [scui_widget_type_scroll] = {
@@ -170,6 +180,16 @@ void scui_widget_map_find(scui_widget_type_t type, scui_widget_map_t **widget_ma
             .invoke  = scui_xchart_invoke,
             .inherit = false,
             .name    = "xchart",
+        },
+        [scui_widget_type_xwatch] = {
+            .size    = sizeof(scui_xwatch_t),
+            .maker   = sizeof(scui_xwatch_maker_t),
+            .base    = scui_widget_type_xwatch,
+            .make    = scui_xwatch_make,
+            .burn    = scui_xwatch_burn,
+            .invoke  = scui_xwatch_invoke,
+            .inherit = false,
+            .name    = "xwatch",
         },
     };
     

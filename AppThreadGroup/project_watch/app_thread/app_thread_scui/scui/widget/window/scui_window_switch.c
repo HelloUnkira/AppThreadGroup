@@ -470,7 +470,7 @@ void scui_window_event_dispatch(scui_event_t *event)
         scui_handle_t  handle_a = scui_window_mgr.list_args.acts[0];
         scui_widget_t *widget_a = scui_handle_source_check(handle_a);
         scui_window_t *window_a = (void *)widget_a;
-        if (window_a->resident || window_a->hang_only)
+        if (window_a->resident)
             return;
     }
     
@@ -733,7 +733,7 @@ bool scui_window_jump(scui_handle_t handle, scui_window_switch_type_t type, scui
         scui_handle_t  handle_a = scui_window_mgr.list_args.acts[0];
         scui_widget_t *widget_a = scui_handle_source_check(handle_a);
         scui_window_t *window_a = (void *)widget_a;
-        if (window_a->resident || window_a->hang_only)
+        if (window_a->resident)
             return false;
     }
     

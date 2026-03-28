@@ -398,7 +398,6 @@ static void scui_widget_event_process(scui_event_t *event)
             scui_color32_t color32 = SCUI_COLOR32_MAKE8(0xFF, scui_rand(0xFF), scui_rand(0xFF), scui_rand(0xFF));
             scui_color_t   color   = SCUI_COLOR_MAKE32(false, 0x00000000, color32.full);
             scui_custom_draw_image_crect4(event, &widget->clip, image4, color, 1);
-            /* 备注:这里偷了懒了, 怎么可以调用控件封装的自定义接口呢 */
         }
         #endif
     }

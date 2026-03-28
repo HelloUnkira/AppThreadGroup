@@ -32,23 +32,25 @@ void scui_window_make(void *inst, void *inst_maker, scui_handle_t *handle)
     window_maker->buffer = false;
     #endif
     
+    window->level    = window_maker->level;
+    window->buffer   = window_maker->buffer;
+    window->resident = window_maker->resident;
+    window->format   = window_maker->format;
+    if (window->format == scui_pixel_cf_def)
+        window->format  = SCUI_PIXEL_CF_DEF;
+    
     /* 创建surface */
-    if (window_maker->buffer) {
+    if (window->buffer) {
         scui_surface_t surface = {
-            .format  = window_maker->format, /* SCUI_PIXEL_CF_DEF_A; */
+            .format  = window->format,
             .hor_res = widget->clip.w,
             .ver_res = widget->clip.h,
         };
         
         scui_widget_clip_clear(widget, true);
-        scui_widget_surface_create(*handle, &surface);
-        scui_widget_surface_refr(*handle, true);
+        scui_widget_surface_create(widget->myself, &surface);
+        scui_widget_surface_refr(widget->myself, true);
     }
-    
-    window->level       = window_maker->level;
-    window->buffer      = window_maker->buffer;
-    window->resident    = window_maker->resident;
-    window->format      = window_maker->format;
     
     /* 初始化默认切换类型为自适应 */
     for(scui_handle_t idx = 0; idx < 4; idx++)

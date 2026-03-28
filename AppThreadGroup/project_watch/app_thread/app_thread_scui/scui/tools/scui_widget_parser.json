@@ -16,6 +16,10 @@
             "maker": "scui_window_maker_t"
         },
         {
+            "class": "scui_widget_type_canvas",
+            "maker": "scui_canvas_maker_t"
+        },
+        {
             "class": "scui_widget_type_custom",
             "maker": "scui_custom_maker_t"
         },

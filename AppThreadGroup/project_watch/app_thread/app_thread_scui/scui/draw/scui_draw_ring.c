@@ -543,7 +543,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
         SCUI_MEM_FREE(grey_table);
     }
     
-over:
+    over:
     scui_image_cache_unload(&image);
 }
 

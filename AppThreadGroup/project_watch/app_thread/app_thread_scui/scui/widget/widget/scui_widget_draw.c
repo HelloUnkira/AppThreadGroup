@@ -169,7 +169,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
     /* draw dsc args<s> */
     scui_handle_t handle = draw_dsc->handle;
     scui_area_t  *target = draw_dsc->target;
-    scui_string_args_t *args = draw_dsc->string_args;
+    scui_string_args_t *str_args = draw_dsc->str_args;
     /* draw dsc args<e> */
     SCUI_LOG_DEBUG("widget %u", handle);
     scui_widget_t *widget = scui_handle_source_check(handle);
@@ -190,7 +190,7 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_inter(&dst_clip, &unit->clip, target))
              continue;
         /* 子剪切域要相对同步偏移 */
-        scui_area_t  src_clip   = args->clip;
+        scui_area_t  src_clip   = str_args->clip;
         scui_point_t src_offset = {
             .x = dst_clip.x - target->x,
             .y = dst_clip.y - target->y,
@@ -198,10 +198,10 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         if (!scui_area_limit_offset(&src_clip, &src_offset))
              continue;
         /* src_clip特殊调整 */
-        src_clip.x = -(args->clip.w - src_clip.w);
-        src_clip.y = -(args->clip.h - src_clip.h);
-        src_clip.w =  (args->clip.w);
-        src_clip.h =  (args->clip.h);
+        src_clip.x = -(str_args->clip.w - src_clip.w);
+        src_clip.y = -(str_args->clip.h - src_clip.h);
+        src_clip.w =  (str_args->clip.w);
+        src_clip.h =  (str_args->clip.h);
         
         #if SCUI_MEM_FEAT_MINI
         scui_point_t dst_offset = {0};
@@ -211,8 +211,10 @@ void scui_widget_draw_ctx_string(scui_widget_draw_dsc_t *draw_dsc)
         src_clip.y -= dst_offset.y;
         #endif
         
+        /* 如果是本地布局 */
+        if (str_args->local) str_args->nest++;
         scui_draw_string(false, widget->surface, dst_clip,
-            src_clip, widget->alpha, *args);
+            src_clip, widget->alpha, str_args);
     }
 }
 
