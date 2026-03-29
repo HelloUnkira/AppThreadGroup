@@ -18,7 +18,6 @@ void scui_engine_ready(void)
     scui_indev_ready();
     scui_event_ready();
     
-    scui_draw_ready();
     scui_draw_task_ready();
     
     scui_font_cache_ready();

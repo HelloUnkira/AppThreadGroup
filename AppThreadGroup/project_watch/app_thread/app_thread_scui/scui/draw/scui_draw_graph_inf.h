@@ -16,7 +16,7 @@ do {                                                                            
     draw_dsc_inst->byte_copy.dst_addr = dst_addr_v,                                 \
     draw_dsc_inst->byte_copy.src_addr = src_addr_v,                                 \
     draw_dsc_inst->byte_copy.src_len  = src_len_v,                                  \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_blur */
@@ -28,7 +28,7 @@ do {                                                                            
     draw_dsc_inst->sync = sync_v;                                                   \
     draw_dsc_inst->area_blur.dst_surface = dst_surface_v,                           \
     draw_dsc_inst->area_blur.dst_clip    = dst_clip_v,                              \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_fill */
@@ -43,7 +43,7 @@ do {                                                                            
     draw_dsc_inst->area_fill.dst_clip    = dst_clip_v,                              \
     draw_dsc_inst->area_fill.src_alpha   = src_alpha_v,                             \
     draw_dsc_inst->area_fill.src_color   = src_color_v,                             \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_fill_grad */
@@ -60,7 +60,7 @@ do {                                                                            
     draw_dsc_inst->area_fill_grad.src_color   = src_color_v,                        \
     draw_dsc_inst->area_fill_grad.src_alpha   = src_alpha_v,                        \
     draw_dsc_inst->area_fill_grad.src_way     = src_way_v,                          \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_fill_grads */
@@ -78,7 +78,7 @@ do {                                                                            
     draw_dsc_inst->area_fill_grads.src_filter  = src_filter_v,                      \
     draw_dsc_inst->area_fill_grads.src_alpha   = src_alpha_v,                       \
     draw_dsc_inst->area_fill_grads.src_way     = src_way_v,                         \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_copy */
@@ -93,7 +93,7 @@ do {                                                                            
     draw_dsc_inst->area_copy.dst_clip    = dst_clip_v,                              \
     draw_dsc_inst->area_copy.src_surface = src_surface_v,                           \
     draw_dsc_inst->area_copy.src_clip    = src_clip_v,                              \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_blend */
@@ -109,7 +109,7 @@ do {                                                                            
     draw_dsc_inst->area_blend.src_surface = src_surface_v,                          \
     draw_dsc_inst->area_blend.src_clip    = src_clip_v,                             \
     draw_dsc_inst->area_blend.src_color   = src_color_v,                            \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_alpha_filter */
@@ -124,7 +124,7 @@ do {                                                                            
     draw_dsc_inst->area_alpha_filter.dst_clip    = dst_clip_v,                      \
     draw_dsc_inst->area_alpha_filter.src_surface = src_surface_v,                   \
     draw_dsc_inst->area_alpha_filter.src_clip    = src_clip_v,                      \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_matrix_fill */
@@ -142,7 +142,7 @@ do {                                                                            
     draw_dsc_inst->area_matrix_fill.src_color   = src_color_v,                      \
     draw_dsc_inst->area_matrix_fill.inv_matrix  = inv_matrix_v,                     \
     draw_dsc_inst->area_matrix_fill.src_matrix  = src_matrix_v,                     \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_area_matrix_blend */
@@ -160,7 +160,7 @@ do {                                                                            
     draw_dsc_inst->area_matrix_blend.src_color   = src_color_v,                     \
     draw_dsc_inst->area_matrix_blend.inv_matrix  = inv_matrix_v,                    \
     draw_dsc_inst->area_matrix_blend.src_matrix  = src_matrix_v,                    \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 
@@ -180,7 +180,7 @@ do {                                                                            
     draw_dsc_inst->image.src_clip    = src_clip_v,                                  \
     draw_dsc_inst->image.src_alpha   = src_alpha_v,                                 \
     draw_dsc_inst->image.src_color   = src_color_v,                                 \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_image_scale */
@@ -200,7 +200,7 @@ do {                                                                            
     draw_dsc_inst->image_scale.src_scale   = src_scale_v,                           \
     draw_dsc_inst->image_scale.dst_offset  = dst_offset_v,                          \
     draw_dsc_inst->image_scale.src_offset  = src_offset_v,                          \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_image_rotate */
@@ -220,7 +220,7 @@ do {                                                                            
     draw_dsc_inst->image_rotate.src_angle   = src_angle_v,                          \
     draw_dsc_inst->image_rotate.src_anchor  = src_anchor_v,                         \
     draw_dsc_inst->image_rotate.src_center  = src_center_v,                         \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_image_matrix_blend */
@@ -240,7 +240,7 @@ do {                                                                            
     draw_dsc_inst->image_matrix_blend.src_color   = src_color_v,                    \
     draw_dsc_inst->image_matrix_blend.inv_matrix  = inv_matrix_v,                   \
     draw_dsc_inst->image_matrix_blend.src_matrix  = src_matrix_v,                   \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 
@@ -264,7 +264,7 @@ do {                                                                            
     draw_dsc_inst->ring.src_alpha   = src_alpha_v,                                  \
     draw_dsc_inst->ring.src_angle_e = src_angle_e_v,                                \
     draw_dsc_inst->ring.src_color   = src_color_v,                                  \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 
@@ -283,7 +283,7 @@ do {                                                                            
     draw_dsc_inst->letter.src_clip    = src_clip_v,                                 \
     draw_dsc_inst->letter.src_alpha   = src_alpha_v,                                \
     draw_dsc_inst->letter.src_color   = src_color_v,                                \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_string */
@@ -299,7 +299,7 @@ do {                                                                            
     draw_dsc_inst->string.src_clip    = src_clip_v,                                 \
     draw_dsc_inst->string.src_alpha   = src_alpha_v,                                \
     draw_dsc_inst->string.src_args    = src_args_v,                                 \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 
@@ -319,7 +319,7 @@ do {                                                                            
     draw_dsc_inst->qrcode.src_color   = src_color_v,                                \
     draw_dsc_inst->qrcode.src_size    = src_size_v,                                 \
     draw_dsc_inst->qrcode.src_data    = src_data_v,                                 \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_barcode */
@@ -337,7 +337,7 @@ do {                                                                            
     draw_dsc_inst->qrcode.src_color   = src_color_v,                                \
     draw_dsc_inst->qrcode.src_size    = src_size_v,                                 \
     draw_dsc_inst->qrcode.src_data    = src_data_v,                                 \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 /* scui_draw_type_graph */
@@ -360,7 +360,7 @@ do {                                                                            
     draw_dsc_inst->graph.src_pos_1   = (draw_dsc_v)->graph.src_pos_1;               \
     draw_dsc_inst->graph.src_pos_2   = (draw_dsc_v)->graph.src_pos_2;               \
     draw_dsc_inst->graph.src_radius  = (draw_dsc_v)->graph.src_radius;              \
-    scui_draw_ctx_sched(draw_dsc_inst);                                             \
+    scui_draw_dsc_task(draw_dsc_inst);                                              \
 } while (0)                                                                         \
 
 #endif

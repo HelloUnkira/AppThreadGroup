@@ -53,6 +53,13 @@ typedef struct {
     /*************************************************************************/
     union {
     /**************************************************************************
+     * 绘制目标(备注:该结构要与下面的结构首部对齐)
+     */
+    struct {
+        scui_surface_t     *surface;        /* 画布实例 */
+        scui_area_t         clip;           /* 画布绘制区域 */
+    } task_src;
+    /**************************************************************************
      * draw basic(HW ACC Perhaps):
      */
     struct {
@@ -254,19 +261,60 @@ typedef struct {
     };
 } scui_draw_dsc_t;
 
-/*@brief 绘制资源就绪
+typedef struct {
+    scui_list_dln_t  dl_node;       /* 任务序列节点 */
+    scui_draw_dsc_t *draw_dsc;      /* 绘制描述符 */
+    scui_coord_t     draw_idx;      /* 绘制序列索引 */
+    uint8_t          draw_clip[0];  /* 绘制区域哈希(柔性数组) */
+} scui_draw_task_node_t;
+
+typedef struct {
+    scui_sem_t sem;
+    scui_list_dll_t dl_list;        /* 任务序列列表 */
+    uintptr_t     hash_size;        /* 绘制区域哈希数组大小 */
+    uintptr_t     node_total;       /* 节点数量(总计) */
+    uintptr_t     node_frame;       /* 节点数量(当前) */
+    void         *slab_mem;         /* 绘制描述符实例资源 */
+} scui_draw_task_list_t;
+
+/*@brief 就绪绘制任务序列
  */
-void scui_draw_ready(void);
+void scui_draw_task_ready(void);
+
+/*@brief 派发绘制任务序列
+ */
+void scui_draw_task_dispatch(void);
 
 /*@brief 绘制描述符实例申请
  *@param draw_dsc 绘制描述符实例地址
  */
 void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc);
 
+/*@brief 绘制任务序列准入
+ *@param draw_dsc 绘制描述符
+ */
+void scui_draw_dsc_task(scui_draw_dsc_t *draw_dsc);
+
+/*****************************************************************************/
+
 /*@brief 绘制上下文
  *@param draw_dsc 绘制描述符实例
  */
 void scui_draw_ctx_sched(scui_draw_dsc_t *draw_dsc);
+
+/*@brief 绘制上下文加速
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
+bool scui_draw_ctx_acc_sched(scui_draw_dsc_t *draw_dsc);
+
+/*@brief 绘制上下文加速检查
+ *@param draw_dsc 绘制描述符实例
+ *@retval 支持:true;不支持:false;
+ */
+bool scui_draw_ctx_acc_check(scui_draw_dsc_t *draw_dsc);
+
+/*****************************************************************************/
 
 /*@brief 线条绘制(简易绘制)
  *@param draw_dsc 绘制描述符实例
@@ -276,12 +324,16 @@ void scui_draw_sline(scui_draw_dsc_t *draw_dsc);
 void scui_draw_hline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
 void scui_draw_vline(scui_draw_dsc_t *draw_dsc, scui_coord_t x, scui_coord_t y, scui_coord_t len, scui_coord_t width);
 
-
-
 /*****************************************************************************/
 /*基础图元绘制:
  *    可以自己写(反正就是堆工作量)
- *    可以移植第三方的gui中的内容
+ *    可以移植第三方的gui中内容
+ *    其实在面向效果的Gui框架中
+ *    基础图形的绘制显得不是那么重要
+ *    因为随着实验效果表示,再好显示的抗锯齿基础图形
+ *    它的显示效果是不如图像进行图形变换得来的要好
+ *    此外,基础图象绘制的效果没有想象中的优秀
+ *    它在使用过程中,限制较大
  */
 #define   SCUI_DRAW_GRAPH_USE_LVGL      0
 #define   SCUI_DRAW_GRAPH_USE_EGUI      1
