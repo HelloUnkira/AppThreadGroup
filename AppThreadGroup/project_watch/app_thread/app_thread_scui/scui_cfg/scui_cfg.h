@@ -4,6 +4,17 @@
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
+/* thread */
+/* 多线程任务调度优先级(数字越小优先级越高) */
+/* 输出设备送显任务优先级(0) */
+/* 输入设备监听任务优先级(1) */
+/* 事件派发调度任务优先级(2) */
+/* 硬件绘制调度任务优先级(3) */
+/* 软件绘制调度任务优先级(4) */
+
+/*************************************************************************************************/
+/*************************************************************************************************/
+/*************************************************************************************************/
 /* mem: */
 
 /* 内存特性选择 */
@@ -47,8 +58,6 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
-/* 绘制描述符缓存数量 */
-#define SCUI_CACHE_DRAW_DSC_NUM                     (10)
 #else
 /* 大内存方案: */
 /* 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other */
@@ -67,8 +76,6 @@
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_FONT  * 20 / 100)
 #define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
-/* 绘制描述符缓存数量 */
-#define SCUI_CACHE_DRAW_DSC_NUM                     (100)
 #endif
 
 /* 存在一些结构化的碎片, 这些内存不要使用graph */
@@ -132,13 +139,16 @@
 
 /* 绘制任务序列 */
 #define SCUI_DRAW_TASK_SEQ                          (0 && !SCUI_MEM_FEAT_MINI)
-#define SCUI_DRAW_TASK_NUM                          (3)
+#if     SCUI_DRAW_TASK_SEQ
 #define SCUI_DRAW_TASK_HASH_HBIT                    (8 * 2)
 #define SCUI_DRAW_TASK_HASH_VBIT                    (8 * 2)
+#define SCUI_DRAW_TASK_HWACC_NUM                    (2) /* 硬件加速器单例数量 */
+#define SCUI_DRAW_TASK_ASYNC_NUM                    (1 + SCUI_DRAW_TASK_HWACC_NUM)
+#define SCUI_DRAW_TASK_DSC_NUM                      (300)
 /* 使用任务序列需增大该目标 */
-#if     SCUI_DRAW_TASK_SEQ
-#undef  SCUI_CACHE_DRAW_DSC_NUM
-#define SCUI_CACHE_DRAW_DSC_NUM                     (300)
+#else
+#define SCUI_DRAW_TASK_ASYNC_NUM                    (1)
+#define SCUI_DRAW_TASK_DSC_NUM                      (SCUI_MEM_FEAT_MINI ? 10 : 20)
 #endif
 
 /*************************************************************************************************/

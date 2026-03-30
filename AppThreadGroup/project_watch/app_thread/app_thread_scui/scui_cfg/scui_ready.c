@@ -19,7 +19,7 @@ static void scui_stat_info(void)
     
     SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui draw dsc size:%4d",   sizeof(scui_draw_dsc_t));
-    SCUI_LOG_INFO("scui draw dsc occupy:%4d", sizeof(scui_draw_dsc_t) * SCUI_CACHE_DRAW_DSC_NUM);
+    SCUI_LOG_INFO("scui draw dsc occupy:%4d", sizeof(scui_draw_dsc_t) * SCUI_DRAW_TASK_DSC_NUM);
     
     SCUI_LOG_INFO("");
     SCUI_LOG_INFO("scui widget occupy:");
@@ -131,7 +131,12 @@ void scui_ready(void)
     
     /* 统计基础信息 */
     scui_stat_info();
-    
+}
+
+/*@brief 初始窗口
+ */
+void scui_ready_show(void)
+{
     /* 初始窗口 */
     scui_window_stack_reset(SCUI_UI_SCENE_NONE, false);
     scui_engine_execute_status_set(true);

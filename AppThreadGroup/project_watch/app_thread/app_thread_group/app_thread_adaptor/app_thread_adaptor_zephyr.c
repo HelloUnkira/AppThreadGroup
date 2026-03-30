@@ -32,6 +32,14 @@ static  K_THREAD_STACK_DEFINE(app_thread_lvgl_stack, APP_THREAD_LVGL_STACK_SIZE)
 #elif APP_DEV_GUI_IS_SCUI
 #define APP_THREAD_SCUI_STACK_SIZE  (1024)
 static  K_THREAD_STACK_DEFINE(app_thread_scui_stack, APP_THREAD_SCUI_STACK_SIZE);
+#define APP_THREAD_SCUI_REFR_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_scui_refr_stack, APP_THREAD_SCUI_REFR_STACK_SIZE);
+#define APP_THREAD_SCUI_DRAW_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_scui_draw_stack, APP_THREAD_SCUI_DRAW_STACK_SIZE);
+#define APP_THREAD_SCUI_DRAW_SW_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_scui_draw_sw_stack, APP_THREAD_SCUI_DRAW_SW_STACK_SIZE);
+#define APP_THREAD_SCUI_DRAW_HW_STACK_SIZE  (1024)
+static  K_THREAD_STACK_DEFINE(app_thread_scui_draw_hw_stack, APP_THREAD_SCUI_DRAW_HW_STACK_SIZE);
 #else
 #endif
 
@@ -79,6 +87,30 @@ app_thread_t app_thread_lvgl = {
 app_thread_t app_thread_scui = {
     .stack      = app_thread_scui_stack,
     .stack_size = APP_THREAD_SCUI_STACK_SIZE,
+    .priority   = 4,
+    .entry      = app_thread_scui_routine,
+};
+app_thread_t app_thread_scui_refr = {
+    .stack      = app_thread_scui_refr_stack,
+    .stack_size = APP_THREAD_SCUI_REFR_STACK_SIZE,
+    .priority   = 4,
+    .entry      = app_thread_scui_routine,
+};
+app_thread_t app_thread_scui_draw = {
+    .stack      = app_thread_scui_draw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_STACK_SIZE,
+    .priority   = 4,
+    .entry      = app_thread_scui_routine,
+};
+app_thread_t app_thread_scui_draw_sw = {
+    .stack      = app_thread_scui_draw_sw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_SW_STACK_SIZE,
+    .priority   = 4,
+    .entry      = app_thread_scui_routine,
+};
+app_thread_t app_thread_scui_draw_hw = {
+    .stack      = app_thread_scui_draw_hw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_HW_STACK_SIZE,
     .priority   = 4,
     .entry      = app_thread_scui_routine,
 };

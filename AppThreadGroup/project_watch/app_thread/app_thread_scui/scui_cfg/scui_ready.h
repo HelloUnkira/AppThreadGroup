@@ -5,4 +5,8 @@
  */
 void scui_ready(void);
 
+/*@brief 初始窗口
+ */
+void scui_ready_show(void);
+
 #endif

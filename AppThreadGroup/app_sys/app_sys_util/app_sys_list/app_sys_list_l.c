@@ -146,7 +146,7 @@ void app_sys_list_dll_remove(app_sys_list_dll_t *list, app_sys_list_dln_t *node)
         list->head  = node->next;
     if (node->next == NULL)
         list->tail  = node->prev;
-    /* 接触关联索引 */
+    /* 解除关联索引 */
     if (node->prev != NULL)
         node->prev->next = node->next;
     if (node->next != NULL)

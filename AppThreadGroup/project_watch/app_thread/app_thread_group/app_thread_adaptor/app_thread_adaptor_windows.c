@@ -50,6 +50,26 @@ app_thread_t app_thread_scui = {
   .routine  = app_thread_scui_routine,
   .args     = NULL,
 };
+app_thread_t app_thread_scui_refr = {
+  .priority = THREAD_PRIORITY_HIGHEST,
+  .routine  = app_thread_scui_routine,
+  .args     = NULL,
+};
+app_thread_t app_thread_scui_draw = {
+  .priority = THREAD_PRIORITY_ABOVE_NORMAL,
+  .routine  = app_thread_scui_routine,
+  .args     = NULL,
+};
+app_thread_t app_thread_scui_draw_sw = {
+  .priority = THREAD_PRIORITY_BELOW_NORMAL,
+  .routine  = app_thread_scui_routine,
+  .args     = NULL,
+};
+app_thread_t app_thread_scui_draw_hw = {
+  .priority = THREAD_PRIORITY_NORMAL,
+  .routine  = app_thread_scui_routine,
+  .args     = NULL,
+};
 #else
 #endif
 

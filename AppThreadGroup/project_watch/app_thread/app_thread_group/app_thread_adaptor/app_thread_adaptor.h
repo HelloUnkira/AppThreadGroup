@@ -55,6 +55,10 @@ extern app_thread_t app_thread_mix_custom;
 extern app_thread_t app_thread_manage;
 extern app_thread_t app_thread_lvgl;
 extern app_thread_t app_thread_scui;
+extern app_thread_t app_thread_scui_refr;
+extern app_thread_t app_thread_scui_draw;
+extern app_thread_t app_thread_scui_draw_sw;
+extern app_thread_t app_thread_scui_draw_hw;
 
 /*@brief 生成新的线程信息通过旧的线程信息
  *       旧线程的基本信息全部被新线程基础,除去执行回调

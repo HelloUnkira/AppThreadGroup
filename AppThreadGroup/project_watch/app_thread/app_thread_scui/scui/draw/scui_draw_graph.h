@@ -269,17 +269,34 @@ typedef struct {
 } scui_draw_task_node_t;
 
 typedef struct {
-    scui_sem_t sem;
-    scui_list_dll_t dl_list;        /* 任务序列列表 */
-    uintptr_t     hash_size;        /* 绘制区域哈希数组大小 */
-    uintptr_t     node_total;       /* 节点数量(总计) */
-    uintptr_t     node_frame;       /* 节点数量(当前) */
-    void         *slab_mem;         /* 绘制描述符实例资源 */
+    /* 多绘制任务异步: */
+    scui_list_dll_t  dl_list;
+    scui_mutex_t     sched_mutex;
+    scui_sem_t       sched_sem;
+    scui_sem_t       async_sem[SCUI_DRAW_TASK_ASYNC_NUM];
+    uint8_t          async_busy[SCUI_DRAW_TASK_ASYNC_NUM];
+    void            *task_node[SCUI_DRAW_TASK_ASYNC_NUM];
+    
+    scui_coord_t     task_idx;
+    scui_coord_t     hash_size;     /* 绘制区域哈希数组大小 */
+    uintptr_t        node_total;    /* 节点数量(总计) */
+    uintptr_t        node_frame;    /* 节点数量(当前) */
+    void            *slab_mem;      /* 绘制描述符缓存资源 */
 } scui_draw_task_list_t;
 
 /*@brief 就绪绘制任务序列
  */
 void scui_draw_task_ready(void);
+
+/*@brief 软件绘制子任务调度
+ *       优先级<硬件
+ */
+void scui_draw_task_sched_sw(void);
+
+/*@brief 硬件绘制子任务调度
+ *       优先级<系统
+ */
+void scui_draw_task_sched_hw(void);
 
 /*@brief 派发绘制任务序列
  */

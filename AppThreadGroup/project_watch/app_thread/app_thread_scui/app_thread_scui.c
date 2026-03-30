@@ -13,6 +13,14 @@
 
 #if 0   /* draw 测试 */
 
+/*备注:gui常规配置一共有三个线程
+ *     输入设备线程, 输出设备线程, 调度线程
+ *     其中输入设备线程和输出设备线程可以用系统调用(工作队列等)
+ *     多任务并发可以为每一个硬件加速器额外增加一个线程
+ *     这样子理论上可以使得CPU和硬件加速器并发工作
+ *     以尽可能是的硬件加速器高并发执行
+ */
+
 static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
 {
     #if 0
@@ -130,6 +138,23 @@ static APP_THREAD_GROUP_HANDLER(app_thread_scui_draw_routine)
     }
 }
 
+#if SCUI_DRAW_TASK_SEQ
+
+/*@brief scui draw sw子线程
+ */
+static APP_THREAD_GROUP_HANDLER(app_thread_scui_draw_sw_routine)
+{
+    scui_draw_task_sched_sw();
+}
+
+/*@brief scui draw hw子线程
+ */
+static APP_THREAD_GROUP_HANDLER(app_thread_scui_draw_hw_routine)
+{
+    scui_draw_task_sched_hw();
+}
+#endif
+
 /*@brief 子线程服务例程就绪部
  */
 static void app_thread_scui_routine_ready_cb(void)
@@ -148,13 +173,28 @@ static void app_thread_scui_routine_ready_cb(void)
     /* 初始化启动scui调度定时器 */
     app_scui_timer_start();
     /* 创建refr子线程 */
-    static app_thread_t app_thread_scui_refr = {0};
-    app_thread_group_create(&app_thread_scui, &app_thread_scui_refr, app_thread_scui_refr_routine);
-    app_thread_process(&app_thread_scui_refr, app_thread_static);
+    static app_thread_t app_thread_scui_refr_local = {0};
+    app_thread_group_create(&app_thread_scui_refr, &app_thread_scui_refr_local, app_thread_scui_refr_routine);
+    app_thread_process(&app_thread_scui_refr_local, app_thread_static);
     /* 创建draw子线程(模拟器下不使用事件调度) */
-    static app_thread_t app_thread_scui_draw = {0};
-    app_thread_group_create(&app_thread_scui, &app_thread_scui_draw, app_thread_scui_draw_routine);
-    app_thread_process(&app_thread_scui_draw, app_thread_static);
+    static app_thread_t app_thread_scui_draw_local = {0};
+    app_thread_group_create(&app_thread_scui_draw, &app_thread_scui_draw_local, app_thread_scui_draw_routine);
+    app_thread_process(&app_thread_scui_draw_local, app_thread_static);
+    /* 创建draw_sw,draw_hw子线程 */
+    #if SCUI_DRAW_TASK_SEQ
+    static app_thread_t app_thread_scui_draw_task[SCUI_DRAW_TASK_ASYNC_NUM] = {0};
+    for (scui_coord_t idx = 0; idx < SCUI_DRAW_TASK_ASYNC_NUM; idx++) {
+        if (idx == 0) {
+            app_thread_group_create(&app_thread_scui_draw_sw, &app_thread_scui_draw_task[idx], app_thread_scui_draw_sw_routine);
+            app_thread_process(&app_thread_scui_draw_task[idx], app_thread_static);
+        } else {
+            app_thread_group_create(&app_thread_scui_draw_hw, &app_thread_scui_draw_task[idx], app_thread_scui_draw_hw_routine);
+            app_thread_process(&app_thread_scui_draw_task[idx], app_thread_static);
+        }
+    }
+    #endif
+    /* 初始窗口 */
+    scui_ready_show();
 }
 
 /*@brief 子线程服务例程处理部

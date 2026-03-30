@@ -32,6 +32,14 @@ static  StackType_t app_thread_lvgl_stack[APP_THREAD_LVGL_STACK_SIZE];
 #elif APP_DEV_GUI_IS_SCUI
 #define APP_THREAD_SCUI_STACK_SIZE  (1024)
 static  StackType_t app_thread_scui_stack[APP_THREAD_SCUI_STACK_SIZE];
+#define APP_THREAD_SCUI_REFR_STACK_SIZE (1024)
+static  StackType_t app_thread_scui_refr_stack[APP_THREAD_SCUI_REFR_STACK_SIZE];
+#define APP_THREAD_SCUI_DRAW_STACK_SIZE (1024)
+static  StackType_t app_thread_scui_draw_stack[APP_THREAD_SCUI_DRAW_STACK_SIZE];
+#define APP_THREAD_SCUI_DRAW_SW_STACK_SIZE  (1024)
+static  StackType_t app_thread_scui_draw_sw_stack[APP_THREAD_SCUI_DRAW_SW_STACK_SIZE];
+#define APP_THREAD_SCUI_DRAW_HW_STACK_SIZE  (1024)
+static  StackType_t app_thread_scui_draw_hw_stack[APP_THREAD_SCUI_DRAW_HW_STACK_SIZE];
 #else
 #endif
 
@@ -87,6 +95,34 @@ app_thread_t app_thread_scui = {
     .priority   = 4,
     .task       = app_thread_scui_routine,
     .name       = "app_thread_scui",
+};
+app_thread_t app_thread_scui_refr = {
+    .stack      = app_thread_scui_refr_stack,
+    .stack_size = APP_THREAD_SCUI_REFR_STACK_SIZE,
+    .priority   = 4,
+    .task       = app_thread_scui_routine,
+    .name       = "app_thread_scui_refr",
+};
+app_thread_t app_thread_scui_draw = {
+    .stack      = app_thread_scui_draw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_STACK_SIZE,
+    .priority   = 4,
+    .task       = app_thread_scui_routine,
+    .name       = "app_thread_scui_draw",
+};
+app_thread_t app_thread_scui_draw_sw = {
+    .stack      = app_thread_scui_draw_sw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_SW_STACK_SIZE,
+    .priority   = 4,
+    .task       = app_thread_scui_routine,
+    .name       = "app_thread_scui_draw_sw",
+};
+app_thread_t app_thread_scui_draw_hw = {
+    .stack      = app_thread_scui_draw_hw_stack,
+    .stack_size = APP_THREAD_SCUI_DRAW_HW_STACK_SIZE,
+    .priority   = 4,
+    .task       = app_thread_scui_routine,
+    .name       = "app_thread_scui_draw_hw",
 };
 #else
 #endif
