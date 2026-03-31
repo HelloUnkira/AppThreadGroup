@@ -43,7 +43,7 @@
 /* 不支持特性(不推荐, 缺内存): */
 /* SCUI_MEM_FEAT_MINI == true: */
 /* 字符串ttf字库, 字符串色彩级联, 字符串绘制缓存块(不推荐) */
-/* 子控件树, 静态画布真缩放, 窗口转场变换 */
+/* 子控件树, 静态画布真缩放, 窗口转场变换, 多任务调度 */
 
 #define SCUI_MEM_TYPE_SIZE_MIX                      (0x80000 + /* 临时缓存: */ 0x400000)
 #define SCUI_MEM_TYPE_SIZE_FONT                     (0)
@@ -125,6 +125,9 @@
 /* 设备像素格式(默认) */
 #define SCUI_PIXEL_CF_DEF                           (scui_pixel_cf_bmp565)
 #define SCUI_PIXEL_CF_DEF_A                         (scui_pixel_cf_bmp8565)
+
+/* LRU缓存器最大散列限制 */
+#define SCUI_CACHE_LRU_HASH_LIMIT                   (101)
 
 /* 动画更新频率,动画最大数量 */
 #define SCUI_ANIMA_TICK                             (1000 / 60)

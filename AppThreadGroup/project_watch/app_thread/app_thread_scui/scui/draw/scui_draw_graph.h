@@ -271,6 +271,7 @@ typedef struct {
 typedef struct {
     /* 多绘制任务异步: */
     scui_list_dll_t  dl_list;
+    scui_mutex_t     dsc_mutex;
     scui_mutex_t     sched_mutex;
     scui_sem_t       sched_sem;
     scui_sem_t       async_sem[SCUI_DRAW_TASK_ASYNC_NUM];

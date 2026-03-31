@@ -172,25 +172,25 @@ static void scui_draw_task_sched(scui_coord_t task_idx)
     
     #if SCUI_DRAW_TASK_SEQ
     while (true) {
-        /* 等待调度派发子任务 */
+        /* 等待调度派发子任务, 标记当前任务忙碌 */
         scui_sem_process(&task_list->async_sem[task_idx], scui_sem_take);
-        /* 标记当前任务忙碌 */
         scui_bit_ext_set(task_list->async_busy, task_idx, 8);
         
-        /* 从调度实例取得该任务,然后执行 */
+        /* 从调度实例取得该任务, 然后执行 */
+        /* scui_draw_dsc_task目前无法完全可重入, 此处的锁需要优化 */
         scui_draw_task_node_t *task_node = task_list->task_node[task_idx];
         if (task_node != NULL && task_node->draw_dsc != NULL) {
             scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
             task_node->draw_dsc->sync = true;
             scui_draw_dsc_task(task_node->draw_dsc);
-            task_node->draw_dsc == NULL;
             scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
+            task_node->draw_dsc == NULL;
+            
             SCUI_LOG_WARN("task %d node:%d over", task_idx, task_node->draw_idx);
         }
         
-        /* 标记当前任务空闲 */
+        /* 通知调度任务已完成, 标记当前任务空闲 */
         scui_bit_ext_rst(task_list->async_busy, task_idx, 8);
-        /* 通知调度任务已完成 */
         scui_sem_process(&task_list->sched_sem, scui_sem_give);
     }
     #else
@@ -203,6 +203,9 @@ static void scui_draw_task_sched(scui_coord_t task_idx)
 void scui_draw_task_ready(void)
 {
     scui_draw_task_list_t *task_list = &scui_draw_task_list;
+    
+    /* 绘制描述符资源锁(单任务无效化) */
+    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_static);
     
     /* 绘制描述符资源就绪 */
     uintptr_t size_mem = sizeof(scui_draw_dsc_t) * SCUI_DRAW_TASK_DSC_NUM;
@@ -290,7 +293,7 @@ void scui_draw_task_dispatch(void)
         list_node = scui_list_dll_head(&task_list->dl_list);
         if (list_node == NULL) break;
         
-        /* 取出这个实例,处理节点 */
+        /* 取出这个实例, 处理节点 */
         scui_list_dll_remove(&task_list->dl_list, list_node);
         list_node_cnt += 1;
         
@@ -309,40 +312,40 @@ void scui_draw_task_dispatch(void)
     while (true) {
         /* 如果任务派发队列为空 */
         if (scui_list_dll_head(&task_list->dl_list) == NULL) {
-            /* 如果子任务都空闲, 调度流程结束 */
-            for (scui_coord_t task_idx = 0; task_idx < SCUI_DRAW_TASK_ASYNC_NUM; task_idx++) {
-                /* 获取当前任务忙碌状态, 存在子任务忙碌, 等待空闲 */
-                bool busy = scui_bit_ext_get(task_list->async_busy, task_idx, 8);
+            /* 获取当前任务忙碌状态, 存在子任务忙碌, 等待空闲 */
+            for (scui_coord_t idx = 0; idx < SCUI_DRAW_TASK_ASYNC_NUM; idx++) {
+                bool busy = scui_bit_ext_get(task_list->async_busy, idx, 8);
                 if (busy) goto wait;
                 
                 /* 回收之前旧的资源 */
-                scui_draw_task_node_t *task_node = task_list->task_node[task_idx];
-                task_list->task_node[task_idx] = NULL;
+                scui_draw_task_node_t *task_node = task_list->task_node[idx];
+                task_list->task_node[idx] = NULL;
                 SCUI_MEM_FREE(task_node);
             }
+            
+            /* 如果子任务都空闲, 调度流程结束 */
             break;
         }
         
         /* 先找到一个空闲的子任务铭牌 */
-        for (scui_coord_t task_idx = 0; task_idx < SCUI_DRAW_TASK_ASYNC_NUM; task_idx++) {
+        for (scui_coord_t idx = 0; idx < SCUI_DRAW_TASK_ASYNC_NUM; idx++) {
             /* 获取当前任务忙碌状态, 存在子任务空闲, 尝试派发 */
-            bool busy = scui_bit_ext_get(task_list->async_busy, task_idx, 8);
+            bool busy = scui_bit_ext_get(task_list->async_busy, idx, 8);
             if (busy) continue;
             
             /* 回收之前旧的资源 */
-            scui_draw_task_node_t *task_node = task_list->task_node[task_idx];
-            task_list->task_node[task_idx] = NULL;
-            SCUI_MEM_FREE(task_node);
+            scui_draw_task_node_t *task_node = task_list->task_node[idx];
+            SCUI_MEM_FREE(task_node); task_list->task_node[idx] = NULL;
             
             task_node = NULL;
             /* 对该子任务尝试寻找一个绘制节点 */
-            if (scui_draw_task_node_find(&task_node, task_idx)) {
+            if (scui_draw_task_node_find(&task_node, idx)) {
                 scui_list_dll_remove(&task_list->dl_list, &task_node->dl_node);
                 list_node_cnt += 1;
                 /* 更新到最新的任务 */
-                task_list->task_node[task_idx] = task_node;
+                task_list->task_node[idx] = task_node;
                 /* 为子任务提交一个工作信号 */
-                scui_sem_process(&task_list->async_sem[task_idx], scui_sem_give);
+                scui_sem_process(&task_list->async_sem[idx], scui_sem_give);
             }
         }
         
@@ -350,7 +353,7 @@ void scui_draw_task_dispatch(void)
         /* 等待任意一个子任务结束 */
         scui_sem_process(&task_list->sched_sem, scui_sem_take);
     }
-    /* 这里额外补一个信号,防止调度结束后少信号(冗余) */
+    /* 这里额外补一个信号, 防止调度结束后少信号(冗余) */
     /* scui_sem_process(&task_list->sched_sem, scui_sem_give); */
     #endif
     
@@ -367,18 +370,13 @@ void scui_draw_dsc_ready(scui_draw_dsc_t **draw_dsc)
 {
     scui_draw_task_list_t *task_list = &scui_draw_task_list;
     
-    SCUI_ASSERT(draw_dsc != NULL);
-    
-    #if SCUI_DRAW_TASK_SEQ
-    scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
-    #endif
     /* 全局唯一绘制描述符申请 */
+    SCUI_ASSERT(draw_dsc != NULL);
+    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_take);
     *draw_dsc = app_sys_mem_slab_alloc(task_list->slab_mem);
-    #if SCUI_DRAW_TASK_SEQ
-    scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
-    #endif
-    
+    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_give);
     SCUI_ASSERT(*draw_dsc != NULL);
+    
     /* 此处不使用memset, 使用者需要给定完整参数集, 未给定参数为未知值 */
     /* memset(*draw_dsc, 0, sizeof(scui_draw_dsc_t)); */
 }
@@ -408,22 +406,15 @@ void scui_draw_dsc_task(scui_draw_dsc_t *draw_dsc)
         task_list->node_frame++;
         return;
     }
-    #else
-    
-    #endif
-    
-    #if SCUI_DRAW_TASK_SEQ
-    scui_mutex_process(&task_list->sched_mutex, scui_mutex_take);
     #endif
     
     /* 单任务及同步绘制节点执行就地调度 */
     /* 优先使用硬件加速适配, 其次使用软件执行 */
     bool unsupport = !scui_draw_ctx_acc_sched(draw_dsc);
     if (unsupport) scui_draw_ctx_sched(draw_dsc);
-    /* 全局唯一绘制描述符释放 */
-    app_sys_mem_slab_free(task_list->slab_mem, draw_dsc);
     
-    #if SCUI_DRAW_TASK_SEQ
-    scui_mutex_process(&task_list->sched_mutex, scui_mutex_give);
-    #endif
+    /* 全局唯一绘制描述符释放 */
+    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_take);
+    app_sys_mem_slab_free(task_list->slab_mem, draw_dsc);
+    scui_mutex_process(&task_list->dsc_mutex, scui_mutex_give);
 }

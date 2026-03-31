@@ -4,64 +4,83 @@
 /*@brief 内存字库节点信息项
  */
 typedef struct {
-    scui_list_dln_t  dl_node;
-    scui_table_dln_t ht_node;
-    uint16_t         count:7;  /* 衰减计数器 */
-    uint16_t         lock:7;   /* 嵌套锁计数器 */
+    scui_cache_lru_unit_t lru_unit;
+    
     /* LRU缓存数据: */
     uint16_t         size;     /* 字库尺寸信息 */
     scui_handle_t    name;     /* 字库名字句柄 */
     scui_handle_t    font;     /* 字库信息句柄 */
 } scui_font_unit_t;
 
+/*@brief 内存文字节点信息项
+ */
+typedef struct {
+    scui_cache_lru_unit_t lru_unit;
+    
+    /* LRU缓存数据: */
+    uint16_t          size;     /* 字库尺寸信息 */
+    scui_handle_t     name;     /* 字库名字句柄 */
+    scui_handle_t     font;     /* 字库信息句柄 */
+    scui_font_glyph_t glyph;    /* 文字数据 */
+} scui_font_glyph_unit_t;
+
 /*@brief 内存字库节点信息表
  */
 typedef struct {
-    scui_list_dll_t  dl_list;
-    scui_table_dll_t ht_list[SCUI_CACHE_HASH_FONT + 1];
-    scui_table_dlt_t ht_table;
-    uint32_t nodes;     /* 缓存单位数量 */
-    uint32_t usage;     /* 缓存对内存资源占用情况 */
-    uint32_t total;     /* 缓存对内存资源占用总门限 */
-    uint32_t cnt_hit;   /* 命中次数 */
-    uint32_t cnt_unhit; /* 非命中次数 */
+    scui_cache_lru_table_t lru_table;
+    
 } scui_font_cache_t;
 
-/*@brief 字库资源缓存初始化
+/*@brief 内存文字节点信息表
+ */
+typedef struct {
+    scui_cache_lru_table_t lru_table;
+    
+} scui_font_glyph_cache_t;
+
+/*@brief 字库文字资源缓存初始化
  */
 void scui_font_cache_ready(void);
+void scui_font_glyph_cache_ready(void);
 
-/*@brief 字库资源重校正
+/*@brief 字库文字资源重校正
  *       将计数器重衰减到0以刷新权重
  */
 void scui_font_cache_rectify(void);
+void scui_font_glyph_cache_rectify(void);
 
-/*@brief 字库资源检查
+/*@brief 字库文字资源检查
  */
 void scui_font_cache_visit(void);
+void scui_font_glyph_cache_visit(void);
 
-/*@brief 字库资源使用
- *@param usage 字库资源使用
+/*@brief 字库文字资源使用
+ *@param usage 字库文字资源使用
  */
 void scui_font_cache_usage(uint32_t *usage);
+void scui_font_glyph_cache_usage(uint32_t *usage);
 
-/*@brief 字库资源数量
- *@param nodes 字库资源数量
+/*@brief 字库文字资源数量
+ *@param nodes 字库文字资源数量
  */
 void scui_font_cache_nodes(uint32_t *nodes);
+void scui_font_glyph_cache_nodes(uint32_t *nodes);
 
-/*@brief 字库资源缓存清除
+/*@brief 字库文字资源缓存清除
  */
 void scui_font_cache_clear(void);
+void scui_font_glyph_cache_clear(void);
 
-/*@brief 字库资源缓存卸载
- *@brief font_unit 字库资源缓存节点
+/*@brief 字库文字资源缓存卸载
+ *@brief font_unit 字库文字资源缓存节点
  */
 void scui_font_cache_unload(scui_font_unit_t *font_unit);
+void scui_font_glyph_cache_unload(scui_font_glyph_unit_t *font_unit);
 
-/*@brief 字库资源缓存加载
- *@brief font_unit 字库资源缓存节点
+/*@brief 字库文字资源缓存加载
+ *@brief font_unit 字库文字资源缓存节点
  */
 void scui_font_cache_load(scui_font_unit_t *font_unit);
+void scui_font_glyph_cache_load(scui_font_glyph_unit_t *font_unit);
 
 #endif
