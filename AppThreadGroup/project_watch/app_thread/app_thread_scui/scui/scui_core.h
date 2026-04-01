@@ -31,8 +31,9 @@
 #include "scui_event_mgr.h"         /* 事件管理器 */
 #include "scui_frame_buffer.h"      /* 帧缓冲 */
 #include "scui_cache_lru.h"         /* 缓存管理器 */
-#include "scui_image_cache.h"       /* 图像缓存 */
-#include "scui_font_cache.h"        /* 字库文字缓存 */
+#include "scui_cache_image.h"       /* 图像缓存 */
+#include "scui_cache_font.h"        /* 字库缓存 */
+#include "scui_cache_glyph.h"       /* 文字缓存 */
 /* linker */
 #include "scui_image_frame.h"       /* 图像帧资源加载卸载 */
 #include "scui_image_src.h"         /* 图像资源加载卸载 */

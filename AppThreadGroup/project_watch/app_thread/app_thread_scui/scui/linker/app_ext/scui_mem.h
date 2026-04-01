@@ -75,6 +75,10 @@ typedef struct {
     uintptr_t size_total[scui_mem_type_num];
     uintptr_t size_used[scui_mem_type_num];
     
+    /* out of memory: */
+    /* invalid:该OOM无法处理, 在崩溃前做最后日志输出 */
+    void (*oom_hit)(scui_mem_type_t type, bool invalid);
+    
     /* 这里尝试多种内存管理方案 */
     scui_mem_mgr_type_t mem_mgr_type[scui_mem_type_num];
     app_sys_mem_olsf_t *mem_olsf[scui_mem_type_num];
@@ -140,8 +144,9 @@ uint32_t scui_mem_size_total(scui_mem_type_t type);
 void scui_mem_check(scui_mem_type_t type);
 
 /*@brief 内存模组就绪
+ *@param oom_hit OOM命中回调
  */
-void scui_mem_ready(void);
+void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool invalid));
 
 /* 宏转接,外部使用接口 */
 #define SCUI_MEM_ALLOC(type, size)      scui_mem_alloc(__FILE__, __func__, __LINE__, type, size, true)

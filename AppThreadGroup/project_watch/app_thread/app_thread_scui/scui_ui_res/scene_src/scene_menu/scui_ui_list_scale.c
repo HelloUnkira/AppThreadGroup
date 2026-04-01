@@ -292,7 +292,6 @@ void scui_ui_scene_list_scale_event_proc(scui_event_t *event)
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         
         // 清空图像资源缓存
-        scui_image_cache_clear();
         scui_ui_scene_list_cfg(scui_ui_scene_list_type_list_scale);
         
         scui_linear_maker_t linear_maker = {0};

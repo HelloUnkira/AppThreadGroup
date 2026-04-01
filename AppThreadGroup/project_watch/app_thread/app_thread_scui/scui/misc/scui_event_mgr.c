@@ -243,6 +243,9 @@ static void scui_event_respond(scui_event_t *event)
         return;
     case scui_event_lang_change: {
         if (event->object == SCUI_HANDLE_SYSTEM) {
+            /* 清扫一遍cache以让旧资源快速回收 */
+            scui_cache_font_rectify();
+            scui_cache_glyph_rectify();
             
             /* 系统事件发给所有场景(同步) */
             event->style.sync = true;

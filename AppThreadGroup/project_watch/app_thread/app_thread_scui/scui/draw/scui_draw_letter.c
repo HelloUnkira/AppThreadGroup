@@ -112,14 +112,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
     /* draw dsc args<e> */
     
     /* 从字库中提取一些信息 */
-    scui_font_unit_t font_unit = {0};
+    scui_cache_font_unit_t font_unit = {0};
     font_unit.name = src_args->name;
     font_unit.size = src_args->size;
-    scui_font_cache_load(&font_unit);
+    scui_cache_font_load(&font_unit);
     scui_coord_t base_line   = scui_font_base_line(font_unit.font);
     scui_coord_t line_height = scui_font_line_height(font_unit.font);
     scui_coord_t underline   = scui_font_underline(font_unit.font);
-    scui_font_cache_unload(&font_unit);
+    scui_cache_font_unload(&font_unit);
     
     scui_area_t dst_clip_v = *dst_clip;   /* v:vaild */
     scui_area_t src_clip_v = *src_clip;   /* v:vaild */
@@ -167,14 +167,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
                 else
                     SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
                 
-                scui_font_glyph_unit_t glyph_unit = {
+                scui_cache_glyph_unit_t glyph_unit = {
                     .size = src_args->size,
                     .name = src_args->name,
                     .glyph.space_width = src_args->gap_none,
                     .glyph.unicode_letter = src_args->unicode[idx],
                 };
-                scui_font_glyph_cache_load(&glyph_unit);
-                scui_font_glyph_cache_unload(&glyph_unit);
+                scui_cache_glyph_load(&glyph_unit);
+                scui_cache_glyph_unload(&glyph_unit);
                 
                 SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
                 SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);
@@ -305,14 +305,14 @@ void scui_draw_ctx_string(scui_draw_dsc_t *draw_dsc)
             else
                 SCUI_LOG_DEBUG("letter:%x", src_args->unicode[idx]);
             
-            scui_font_glyph_unit_t glyph_unit = {
+            scui_cache_glyph_unit_t glyph_unit = {
                 .size = src_args->size,
                 .name = src_args->name,
                 .glyph.space_width = src_args->gap_none,
                 .glyph.unicode_letter = src_args->unicode[idx],
             };
-            scui_font_glyph_cache_load(&glyph_unit);
-            scui_font_glyph_cache_unload(&glyph_unit);
+            scui_cache_glyph_load(&glyph_unit);
+            scui_cache_glyph_unload(&glyph_unit);
             
             SCUI_LOG_DEBUG("box_w:%d", glyph_unit.glyph.box_w);
             SCUI_LOG_DEBUG("box_h:%d", glyph_unit.glyph.box_h);

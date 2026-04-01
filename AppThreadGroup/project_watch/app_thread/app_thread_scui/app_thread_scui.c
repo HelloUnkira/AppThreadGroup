@@ -44,7 +44,7 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     
     static uint8_t count = 0;
     
-    scui_image_unit_t image_unit = {0};
+    scui_cache_image_unit_t image_unit = {0};
     scui_handle_t handle = scui_image_prj_image_src_00_theme_02_ringbmp;
     image_unit.image = scui_handle_source(handle);
     scui_area_t src_clip = {
@@ -64,9 +64,9 @@ static void app_thread_scui_draw_test_routine(scui_surface_t *surface)
     scui_color_t pixel = {.full = 0xFFFFFFFF};
     scui_draw_area_fill(true, surface, &surface->clip, &pixel, surface->alpha);
     
-    scui_image_cache_load(&image_unit);
+    scui_cache_image_load(&image_unit);
     scui_draw_image(true, surface, &dst_clip, &image_unit, &src_clip, color, alpha);
-    scui_image_cache_unload(&image_unit);
+    scui_cache_image_unload(&image_unit);
     
     #endif
 }

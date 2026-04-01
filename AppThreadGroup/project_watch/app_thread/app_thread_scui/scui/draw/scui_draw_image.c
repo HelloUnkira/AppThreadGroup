@@ -27,8 +27,8 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_cache_load(&image);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -42,7 +42,7 @@ void scui_draw_ctx_image(scui_draw_dsc_t *draw_dsc)
     scui_draw_area_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color);
     
-    scui_image_cache_unload(&image);
+    scui_cache_image_unload(&image);
 }
 
 /*@brief 区域图像缩放
@@ -68,8 +68,8 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_cache_load(&image);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -95,7 +95,7 @@ void scui_draw_ctx_image_scale(scui_draw_dsc_t *draw_dsc)
     scui_draw_area_matrix_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, inv_matrix, src_matrix);
     
-    scui_image_cache_unload(&image);
+    scui_cache_image_unload(&image);
 }
 
 /*@brief 区域图像旋转
@@ -121,8 +121,8 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_cache_load(&image);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -144,7 +144,7 @@ void scui_draw_ctx_image_rotate(scui_draw_dsc_t *draw_dsc)
     scui_draw_area_matrix_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, inv_matrix, src_matrix);
     
-    scui_image_cache_unload(&image);
+    scui_cache_image_unload(&image);
 }
 
 /*@brief 区域图像变换
@@ -169,8 +169,8 @@ void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
     if (src_alpha == scui_alpha_trans)
         return;
     
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_cache_load(&image);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -184,5 +184,5 @@ void scui_draw_ctx_image_matrix_blend(scui_draw_dsc_t *draw_dsc)
     scui_draw_area_matrix_blend(true, dst_surface, *dst_clip,
         &image_surface, *src_clip, src_color, *inv_matrix, *src_matrix);
     
-    scui_image_cache_unload(&image);
+    scui_cache_image_unload(&image);
 }

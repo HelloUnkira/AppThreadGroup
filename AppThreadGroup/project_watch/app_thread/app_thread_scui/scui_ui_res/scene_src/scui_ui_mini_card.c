@@ -1543,7 +1543,6 @@ void scui_ui_scene_mini_card_event_proc(scui_event_t *event)
         scui_window_local_res_get(event->object, &scui_ui_res_local);
         
         // 清空图像资源缓存
-        scui_image_cache_clear();
         scui_ui_scene_mini_card_cfg();
         
         scui_linear_maker_t linear_maker = {0};

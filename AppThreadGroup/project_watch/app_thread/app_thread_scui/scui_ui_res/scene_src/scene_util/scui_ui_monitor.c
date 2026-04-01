@@ -157,16 +157,16 @@ void scui_ui_scene_monitor_anima_expire(void *instance)
     #define CACHE_NUM   3
     if (redraw_tag) {
         uint32_t cache_rcd[CACHE_NUM * 2] = {0};
-        scui_font_cache_usage(&cache_rcd[0]);
-        scui_font_cache_nodes(&cache_rcd[1]);
-        scui_font_glyph_cache_usage(&cache_rcd[2]);
-        scui_font_glyph_cache_nodes(&cache_rcd[3]);
-        scui_image_cache_usage(&cache_rcd[4]);
-        scui_image_cache_nodes(&cache_rcd[5]);
+        scui_cache_font_usage(&cache_rcd[0]);
+        scui_cache_font_nodes(&cache_rcd[1]);
+        scui_cache_glyph_usage(&cache_rcd[2]);
+        scui_cache_glyph_nodes(&cache_rcd[3]);
+        scui_cache_image_usage(&cache_rcd[4]);
+        scui_cache_image_nodes(&cache_rcd[5]);
         
         uintptr_t mem_total[CACHE_NUM] = {
             SCUI_CACHE_TOTAL_FONT,
-            SCUI_CACHE_TOTAL_FONT_GLYPH,
+            SCUI_CACHE_TOTAL_GLYPH,
             SCUI_CACHE_TOTAL_IMAGE,
         };
         uintptr_t mem_used[CACHE_NUM] = {

@@ -236,99 +236,6 @@ static uint32_t scui_mem_size_raw(scui_mem_type_t type, void *ptr)
         return app_sys_mem_dir_size(&scui_mem.mem_dir[type], ptr);
 }
 
-/*@brief 内存分配失败通知
- *@param type 内存分配类型
- *@param size 内存大小
- *@param way  内存分配方向
- *@param ptr  内存地址
- *@retval 内存地址
- */
-static void * scui_mem_alloc_notify(scui_mem_type_t type, uint32_t size, bool way, void *ptr)
-{
-    /* 分配成功无需通知 */
-    if (ptr != NULL)
-        return ptr;
-    
-    /* 这里暂时写作就地调用.后续整理 */
-    /* 如果内存不够用,尝试清除缓存器后继续请求 */
-    /* 实际上,这里应该产生事件调度,到达缓存器处理 */
-    
-    #if SCUI_MEM_FEAT_MINI
-    /* 此时回收所有缓存 */ {
-        SCUI_LOG_WARN("memory deficit was caught");
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
-        
-        /* 图片缓存: */
-        /* scui_image_cache_visit(); */
-        scui_image_cache_clear();
-        /* scui_image_cache_visit(); */
-        
-        /* 字库缓存: */
-        /* scui_font_cache_visit(); */
-        scui_font_cache_clear();
-        /* scui_font_cache_visit(); */
-        
-        /* 文字缓存: */
-        /* scui_font_glyph_cache_visit(); */
-        scui_font_glyph_cache_clear();
-        /* scui_font_glyph_cache_visit(); */
-        
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-        ptr = scui_mem_alloc_raw(type, size, way);
-        
-        if (ptr == NULL) {
-            scui_font_cache_visit();
-            scui_font_glyph_cache_visit();
-            scui_image_cache_visit();
-        }
-    }
-    return ptr;
-    #endif
-    
-    /* scui_mem_type_graph */
-    if (type == scui_mem_type_graph) {
-        SCUI_LOG_WARN("memory graph deficit was caught");
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
-        
-        /* 图片缓存: */
-        /* scui_image_cache_visit(); */
-        scui_image_cache_clear();
-        /* scui_image_cache_visit(); */
-        
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-        ptr = scui_mem_alloc_raw(type, size, way);
-        
-        if (ptr == NULL)
-            scui_image_cache_visit();
-    }
-    /* scui_mem_type_font */
-    if (type == scui_mem_type_font) {
-        SCUI_LOG_WARN("memory font deficit was caught");
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
-        
-        /* 字库缓存: */
-        /* 这里只回收文字即可, 不回收字库 */
-        /* scui_font_cache_visit(); */
-        /* scui_font_cache_clear(); */
-        /* scui_font_cache_visit(); */
-        
-        /* 文字缓存: */
-        /* scui_font_glyph_cache_visit(); */
-        scui_font_glyph_cache_clear();
-        /* scui_font_glyph_cache_visit(); */
-        
-        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
-        ptr = scui_mem_alloc_raw(type, size, way);
-        
-        if (ptr == NULL) {
-            scui_font_cache_visit();
-            scui_font_glyph_cache_visit();
-        }
-    }
-    
-    return ptr;
-}
-
 /*@brief 内存分配(外部不直接调用)
  *@param file 内存分配点(文件名)
  *@param line 内存分配点(文件行数)
@@ -354,10 +261,19 @@ void * scui_mem_alloc(const char *file, const char *func, uint32_t line, scui_me
     
     scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
     void *ptr = scui_mem_alloc_raw(type, size, way);
-    ptr = scui_mem_alloc_notify(type, size, way, ptr);
-    
-    if (ptr == NULL)
+    scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+    if (ptr == NULL) {
+        scui_mem.oom_hit(type, false);
+        /* OOM命中之后, 再进行一次内存申请尝试 */
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_take);
+        ptr = scui_mem_alloc_raw(type, size, way);
+        scui_mutex_process(&scui_mem.mutex, scui_mutex_give);
+    }
+    if (ptr == NULL) {
+        /* 俩次都失败, OOM无法处理 */
+        scui_mem.oom_hit(type, true);
         scui_mem_check(type);
+    }
     
     #if SCUI_MEM_RECORD_CHECK
     if (ptr == NULL) {
@@ -545,8 +461,9 @@ uint32_t scui_mem_size_total(scui_mem_type_t type)
 }
 
 /*@brief 内存模组就绪
+ *@param oom_hit OOM命中回调
  */
-void scui_mem_ready(void)
+void scui_mem_ready(void (*oom_hit)(scui_mem_type_t type, bool unsupport))
 {
     scui_mutex_process(&scui_mem.mutex, scui_mutex_static);
     
@@ -555,6 +472,10 @@ void scui_mem_ready(void)
     scui_mem.size_total[scui_mem_type_graph] = SCUI_MEM_TYPE_SIZE_GRAPH;
     scui_mem.size_total[scui_mem_type_user ] = SCUI_MEM_TYPE_SIZE_USER;
     
+    /* OOM命中回调 */
+    scui_mem.oom_hit = oom_hit;
+    SCUI_ASSERT(scui_mem.oom_hit != NULL);
+    
     /* 这里使用自定义内存分配器, 用于查内存越界问题 */
     static uint8_t mem_olsf_buffer_mix[  SCUI_MEM_TYPE_SIZE_MIX   + 1] = {0};
     static uint8_t mem_olsf_buffer_font[ SCUI_MEM_TYPE_SIZE_FONT  + 1] = {0};
@@ -562,8 +483,8 @@ void scui_mem_ready(void)
     static uint8_t mem_olsf_buffer_user[ SCUI_MEM_TYPE_SIZE_USER  + 1] = {0};
     
     scui_mem.mem_mgr_type[scui_mem_type_mix  ] = scui_mem_mgr_type_olsf;
-    scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_olsf;
-    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     /* 图形使用双向内存堆分配器 */
+    scui_mem.mem_mgr_type[scui_mem_type_font ] = scui_mem_mgr_type_dir;     /* 字库文字使用双向内存堆分配器 */
+    scui_mem.mem_mgr_type[scui_mem_type_graph] = scui_mem_mgr_type_dir;     /* 图形图像使用双向内存堆分配器 */
     scui_mem.mem_mgr_type[scui_mem_type_user ] = scui_mem_mgr_type_olsf;
     
     #if SCUI_MEM_FEAT_MINI

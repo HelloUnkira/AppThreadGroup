@@ -96,9 +96,9 @@ void scui_cwf_json_burn(void **inst)
     SCUI_MEM_FREE(parser->list_src);
     /* 图片资源缓存无效化 */
     for (uint32_t idx = 0; idx < parser->image_num; idx++) {
-        scui_image_unit_t image_unit = {0};
+        scui_cache_image_unit_t image_unit = {0};
         image_unit.image = &parser->image_src[idx];
-        scui_image_cache_invalidate(&image_unit);
+        scui_cache_image_invalidate(&image_unit);
     }
     /* 批量回收所有图片句柄 */
     for (uint32_t idx = 0; idx < parser->image_num; idx++)
@@ -262,8 +262,8 @@ void scui_cwf_json_burn_pv(scui_handle_t *preview)
     scui_image_t *image_src = scui_handle_source_check(image_hit);
     
     /* 记得要清理缓存 */
-    scui_image_unit_t image_unit = {.image = image_src,};
-    scui_image_cache_invalidate(&image_unit);
+    scui_cache_image_unit_t image_unit = {.image = image_src,};
+    scui_cache_image_invalidate(&image_unit);
     
     char *name = scui_handle_source(image_src->from);
     scui_handle_clear(image_src->from);

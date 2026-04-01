@@ -47,10 +47,10 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     edge_clip_e.y = dst_center->y + center_e_ey - edge_clip.h / 2;
     
     /* 缓存一下图片 */
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_unit_t image_e = {.image = src_image_e,};
-    scui_image_cache_load(&image);
-    scui_image_cache_load(&image_e);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_unit_t image_e = {.image = src_image_e,};
+    scui_cache_image_load(&image);
+    scui_cache_image_load(&image_e);
     SCUI_ASSERT(image.data != NULL);
     SCUI_ASSERT(image_e.data != NULL);
     
@@ -152,8 +152,8 @@ static void scui_draw_ctx_ring_edge(scui_draw_dsc_t *draw_dsc)
     
     SCUI_MEM_FREE(edge_surface.pixel);
     
-    scui_image_cache_unload(&image);
-    scui_image_cache_unload(&image_e);
+    scui_cache_image_unload(&image);
+    scui_cache_image_unload(&image_e);
 }
 
 /*@brief 区域图像绘制(内部接口)
@@ -386,8 +386,8 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     };
     #endif
     
-    scui_image_unit_t image = {.image = src_image,};
-    scui_image_cache_load(&image);
+    scui_cache_image_unit_t image = {.image = src_image,};
+    scui_cache_image_load(&image);
     SCUI_ASSERT(image.data != NULL);
     
     scui_surface_t image_surface = {
@@ -544,7 +544,7 @@ static void scui_draw_ctx_ring_quadrant_1(scui_draw_dsc_t *draw_dsc)
     }
     
     over:
-    scui_image_cache_unload(&image);
+    scui_cache_image_unload(&image);
 }
 
 /*@brief 区域图像绘制

@@ -136,7 +136,6 @@ void scui_ui_scene_activity_scroll_ring_big_3_event_proc(scui_event_t *event)
     case scui_event_create: {
         
         // 清空图像资源缓存
-        scui_image_cache_clear();
         scui_canvas_maker_t canvas_maker = {0};
         scui_handle_t canvas_handle  = SCUI_HANDLE_INVALID;
         canvas_maker.widget.type     = scui_widget_type_canvas;

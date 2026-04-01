@@ -30,8 +30,7 @@ static size_t scui_LZ4F_size_rcd = 0;
 
 static void * scui_LZ4F_AllocFunction(void* opaqueState, size_t size)
 {
-    scui_mem_type_t mem_type = size > SCUI_MEM_MIX_FRAG_SIZE_LIMIT ? scui_mem_type_graph : scui_mem_type_mix;
-    void *ptr = SCUI_MEM_ALLOC(mem_type, size);
+    void *ptr = SCUI_MEM_ALLOC(scui_mem_type_graph, size);
     
     scui_LZ4F_size_cur += scui_mem_size_ptr(ptr);
     if (scui_LZ4F_size_top < scui_LZ4F_size_cur)
@@ -68,8 +67,7 @@ static size_t scui_lodepng_size_rcd = 0;
 
 void *lodepng_malloc(size_t size)
 {
-    scui_mem_type_t mem_type = size > SCUI_MEM_MIX_FRAG_SIZE_LIMIT ? scui_mem_type_graph : scui_mem_type_mix;
-    void *ptr = SCUI_MEM_ALLOC(mem_type, size + sizeof(uintptr_t) * 2);
+    void *ptr = SCUI_MEM_ALLOC(scui_mem_type_graph, size + sizeof(uintptr_t) * 2);
     
     scui_lodepng_size_cur += scui_mem_size_ptr(ptr);
     if (scui_lodepng_size_top < scui_lodepng_size_cur)

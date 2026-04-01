@@ -270,7 +270,7 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
     
     /* 进行utf-8字符串转为unicode编码, 以此确认unicode编码下的index */
     scui_coord_t num_unicode = scui_utf8_str_num(str_utf8);
-    uint32_t *str_unicode = SCUI_MEM_ZALLOC(scui_mem_type_font, 4 * (num_unicode + 1));
+    uint32_t *str_unicode = SCUI_MEM_ZALLOC(scui_mem_type_mix, 4 * (num_unicode + 1));
     scui_utf8_str_to_unicode(str_utf8, num_unicode, str_unicode);
     
     scui_coord_t idx_colors = 0, key_chars = 0;
@@ -300,7 +300,7 @@ void scui_string_update_str_rec(scui_handle_t handle, uint8_t *str_utf8, scui_co
     
     scui_coord_t idx_utf8_raw = 0;
     scui_coord_t num_utf8_raw = strlen(str_utf8);
-    uint8_t *str_utf8_raw = SCUI_MEM_ZALLOC(scui_mem_type_font, num_utf8_raw + 1);
+    uint8_t *str_utf8_raw = SCUI_MEM_ZALLOC(scui_mem_type_mix, num_utf8_raw + 1);
     for (scui_coord_t idx = 0; idx + 1 < num_utf8_raw; idx++) {
         /* 匹配到颜色起始点:#- */
         /* 匹配到颜色结束点:-# */
@@ -402,6 +402,10 @@ void scui_string_adjust_size(scui_handle_t handle, scui_coord_t size)
         return;
     
     string->args.size = scui_font_size_match(string->font_idx, size);
+    
+    /* 清扫一遍cache以让旧资源快速回收 */
+    scui_cache_font_rectify();
+    scui_cache_glyph_rectify();
     
     /* 这里是需要重刷新 */
     string->args.update = true;
@@ -622,13 +626,13 @@ void scui_string_invoke(scui_event_t *event)
     }
     case scui_event_size_auto: {
         /* 从字库中提取一些信息 */
-        scui_font_unit_t font_unit = {0};
+        scui_cache_font_unit_t font_unit = {0};
         font_unit.name = string->args.name;
         font_unit.size = string->args.size;
-        scui_font_cache_load(&font_unit);
+        scui_cache_font_load(&font_unit);
         scui_coord_t base_line   = scui_font_base_line(font_unit.font);
         scui_coord_t line_height = scui_font_line_height(font_unit.font);
-        scui_font_cache_unload(&font_unit);
+        scui_cache_font_unload(&font_unit);
         
         if (line_height > widget->clip.h)
             scui_widget_adjust_size(event->object, widget->clip.w, line_height);

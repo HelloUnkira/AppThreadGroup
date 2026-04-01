@@ -597,6 +597,10 @@ void scui_window_active(scui_handle_t handle)
         scui_event_define(event, scui_window_mgr.list_args.acts[0], true, scui_event_focus_get, NULL);
         SCUI_LOG_WARN("window %u focus get", event.object);
         scui_event_notify(&event);
+        
+        /* 切到新界面时 */
+        /* 快速刷新权重淘汰旧资源 */
+        scui_cache_image_rectify();
     }
 }
 

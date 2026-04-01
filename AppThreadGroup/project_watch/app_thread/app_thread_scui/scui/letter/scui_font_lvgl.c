@@ -582,11 +582,11 @@ static void decompress(const uint8_t * in, uint8_t * out, scui_coord_t w, scui_c
 
     rle_init(in, bpp);
 
-    uint8_t * line_buf1 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+    uint8_t * line_buf1 = SCUI_MEM_RZALLOC(scui_mem_type_font, w);
     uint8_t * line_buf2 = NULL;
 
     if(prefilter) {
-        line_buf2 = SCUI_MEM_ALLOC(scui_mem_type_font, w);
+        line_buf2 = SCUI_MEM_RZALLOC(scui_mem_type_font, w);
     }
 
     decompress_line(line_buf1, w);
@@ -1299,7 +1299,7 @@ static void lv_font_glpyh_load(lv_font_t *font, scui_font_glyph_t *glyph)
 #define STBTT_HEAP_FACTOR_SIZE_DEFAULT  10
 
 /* ttf tiny 库的内存管理钩子 */
-#define STBTT_malloc(x, u)  ((void)(u), SCUI_MEM_ALLOC(scui_mem_type_font, x))
+#define STBTT_malloc(x, u)  ((void)(u), SCUI_MEM_RALLOC(scui_mem_type_font, x))
 #define STBTT_free(x, u)    ((void)(u), SCUI_MEM_FREE(x))
 
 /* ttf tiny 库的断言钩子 */
@@ -1424,7 +1424,7 @@ static void lv_font_ttf_tiny_glpyh_load(lv_font_ttf_tiny_t *font, scui_font_glyp
  */
 void scui_font_load(char *name, uint32_t size, scui_handle_t *handle)
 {
-    scui_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_mix, sizeof(scui_font_t));
+    scui_font_t *font = SCUI_MEM_ZALLOC(scui_mem_type_font, sizeof(scui_font_t));
     *handle = scui_handle_find();
     scui_handle_linker(*handle, font);
     font->size = size;

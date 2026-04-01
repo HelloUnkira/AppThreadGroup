@@ -52,34 +52,31 @@
 
 /* 缓存散列值(可选:不使用为0) */
 #define SCUI_CACHE_HASH_FONT                        (3)
-#define SCUI_CACHE_HASH_FONT_GLYPH                  (23)
+#define SCUI_CACHE_HASH_GLYPH                       (23)
 #define SCUI_CACHE_HASH_IMAGE                       (17)
 /* 缓存最大限制 */
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
-#define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
+#define SCUI_CACHE_TOTAL_GLYPH                      (SCUI_MEM_TYPE_SIZE_MIX * 10 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_MIX * 30 / 100)
 #else
-/* 大内存方案: */
-/* 4M PSRAM (空闲1M):     MIX:128K; FONT:128K; USER:64K; GRAPH:3.5M - other */
-/* 8M PSRAM (空闲1M):     MIX:192K; FONT:256K; USER:64K; GRAPH:7.5M - other */
+/* 大内存方案(完整效果丰盈线: 6M左右): */
+/* MIX:128K; FONT:192K; USER:64K; GRAPH:7.5M - other */
 
-#define SCUI_MEM_TYPE_SIZE_MIX                      (0x30000)
-#define SCUI_MEM_TYPE_SIZE_FONT                     (0x40000)
-#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x80000)
+#define SCUI_MEM_TYPE_SIZE_MIX                      (0x20000)
+#define SCUI_MEM_TYPE_SIZE_FONT                     (0x30000)
+#define SCUI_MEM_TYPE_SIZE_GRAPH                    (0x780000 - 0x60000)
 #define SCUI_MEM_TYPE_SIZE_USER                     (0x10000)
 
 /* 缓存散列值(必要使用) */
 #define SCUI_CACHE_HASH_FONT                        (5)
-#define SCUI_CACHE_HASH_FONT_GLYPH                  (53)
+#define SCUI_CACHE_HASH_GLYPH                       (53)
 #define SCUI_CACHE_HASH_IMAGE                       (61)
 /* 缓存最大限制 */
 #define SCUI_CACHE_TOTAL_FONT                       (SCUI_MEM_TYPE_SIZE_FONT  * 20 / 100)
-#define SCUI_CACHE_TOTAL_FONT_GLYPH                 (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)
+#define SCUI_CACHE_TOTAL_GLYPH                      (SCUI_MEM_TYPE_SIZE_FONT  * 50 / 100)
 #define SCUI_CACHE_TOTAL_IMAGE                      (SCUI_MEM_TYPE_SIZE_GRAPH * 60 / 100)
 #endif
 
-/* 存在一些结构化的碎片, 这些内存不要使用graph */
-#define SCUI_MEM_MIX_FRAG_SIZE_LIMIT                (1024 * 1)
 /*************************************************************************************************/
 /*************************************************************************************************/
 /*************************************************************************************************/
