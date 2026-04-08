@@ -214,20 +214,26 @@ static void scui_window_list_blend(scui_widget_t **list, scui_handle_t num)
     scui_area_t dst_clip = scui_surface_area(dst_surface);
     scui_draw_area_fill(true, dst_surface, dst_clip, scui_alpha_cover, SCUI_COLOR_ZEROED);
     
-    /* 内部唯一引用::: */
-    void scui_window_transform_move(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_cover(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_zoom(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_center(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_rotate(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_rotate1(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_circle(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_grid(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flip1(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flip2(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flap1(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_flap2(scui_widget_t **list, scui_handle_t num);
-    void scui_window_transform_cube(scui_widget_t **list, scui_handle_t num);
+    /* 目前所有的画布混合都只有俩个, move除外 */
+    if (switch_type >= scui_window_switch_single_s &&
+        switch_type <= scui_window_switch_single_e &&
+        switch_type != scui_window_switch_move)
+        SCUI_ASSERT(num == 2);
+    
+    /* 窗口特效变换钩子 */
+    void scui_window_transform_move(    scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_cover(   scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_zoom(    scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_center(  scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_rotate(  scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_rotate1( scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_circle(  scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_grid(    scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flip1(   scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flip2(   scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flap1(   scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_flap2(   scui_widget_t **list, scui_handle_t num);
+    void scui_window_transform_cube(    scui_widget_t **list, scui_handle_t num);
     
     /* 多画布混合变换 */
     switch (switch_type) {
@@ -336,20 +342,19 @@ static void scui_window_list_render(scui_widget_t **list, scui_handle_t num)
         SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
         SCUI_ASSERT(scui_handle_remap(handle));
         
-        /* 当前窗口独立于管理之外时,直接渲染 */
+        /* 当前窗口独立于管理之外时, 直接渲染 */
         if (scui_widget_surface_only(widget) && window->resident) {
             scui_surface_t *dst_surface = scui_frame_buffer_draw();
             scui_surface_t *src_surface = widget->surface;
             scui_area_t dst_clip = scui_surface_area(dst_surface);
             scui_area_t src_clip = scui_surface_area(src_surface);
             /* 独立画布将窗口偏移补充到画布上 */
-            if (scui_widget_surface_only(widget)) {
-                SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
-                SCUI_ASSERT(widget->clip_set.clip.x == 0);
-                SCUI_ASSERT(widget->clip_set.clip.y == 0);
-                dst_clip.x = widget->clip.x;
-                dst_clip.y = widget->clip.y;
-            }
+            SCUI_ASSERT(widget->parent == SCUI_HANDLE_INVALID);
+            SCUI_ASSERT(widget->clip_set.clip.x == 0);
+            SCUI_ASSERT(widget->clip_set.clip.y == 0);
+            dst_clip.x = widget->clip.x;
+            dst_clip.y = widget->clip.y;
+            
             scui_tick_calc(0x20, NULL, NULL, NULL);
             scui_draw_area_blend(true, dst_surface, dst_clip, src_surface, src_clip, SCUI_COLOR_UNUSED);
             scui_tick_calc(0x21, NULL, NULL, NULL);

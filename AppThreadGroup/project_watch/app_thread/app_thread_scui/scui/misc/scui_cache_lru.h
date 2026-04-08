@@ -13,6 +13,7 @@ typedef struct {
 /*@brief 节点信息表
  */
 typedef struct {
+    scui_mutex_t     mutex;
     scui_list_dll_t  dl_list;
     scui_table_dll_t ht_list[SCUI_CACHE_LRU_HASH_LIMIT];
     scui_table_dlt_t ht_table;

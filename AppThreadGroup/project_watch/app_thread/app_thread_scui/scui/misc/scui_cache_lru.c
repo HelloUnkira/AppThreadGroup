@@ -52,6 +52,7 @@ void scui_cache_lru_ready(scui_cache_lru_table_t *lru_table)
     SCUI_ASSERT(lru_table->ht_list_num != 0);
     SCUI_ASSERT(lru_table->ht_list_num <= SCUI_CACHE_LRU_HASH_LIMIT);
     
+    scui_mutex_process(&lru_table->mutex, scui_mutex_static);
     scui_list_dll_reset(&lru_table->dl_list);
     scui_table_dll_reset(lru_table->ht_list, lru_table->ht_list_num);
     scui_table_dlt_reset(&lru_table->ht_table, lru_table->dlt_fd, lru_table->dlt_fc,
@@ -68,6 +69,7 @@ void scui_cache_lru_ready(scui_cache_lru_table_t *lru_table)
  */
 void scui_cache_lru_rectify(scui_cache_lru_table_t *lru_table)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     
     /* 所有资源全部重衰减 */
@@ -76,6 +78,7 @@ void scui_cache_lru_rectify(scui_cache_lru_table_t *lru_table)
         lru_unit_t = scui_own_ofs(scui_cache_lru_unit_t, dl_node, curr);
         lru_unit_t->count = 0;
     }
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源检查
@@ -83,10 +86,12 @@ void scui_cache_lru_rectify(scui_cache_lru_table_t *lru_table)
  */
 void scui_cache_lru_visit(scui_cache_lru_table_t *lru_table)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     
     SCUI_LOG_WARN("nodes:%u, usage:%u", lru_table->nodes, lru_table->usage);
     scui_table_dlt_visit(&lru_table->ht_table);
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源使用
@@ -95,10 +100,12 @@ void scui_cache_lru_visit(scui_cache_lru_table_t *lru_table)
  */
 void scui_cache_lru_usage(scui_cache_lru_table_t *lru_table, uint32_t *usage)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(usage != NULL);
     
     *usage = lru_table->usage;
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源数量
@@ -107,10 +114,12 @@ void scui_cache_lru_usage(scui_cache_lru_table_t *lru_table, uint32_t *usage)
  */
 void scui_cache_lru_nodes(scui_cache_lru_table_t *lru_table, uint32_t *nodes)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(nodes != NULL);
     
     *nodes = lru_table->nodes;
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源缓存清除
@@ -119,6 +128,7 @@ void scui_cache_lru_nodes(scui_cache_lru_table_t *lru_table, uint32_t *nodes)
  */
 void scui_cache_lru_clear(scui_cache_lru_table_t *lru_table, bool force)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     
     SCUI_LOG_WARN("nodes:%u, usage:%u", lru_table->nodes, lru_table->usage);
@@ -151,6 +161,7 @@ void scui_cache_lru_clear(scui_cache_lru_table_t *lru_table, bool force)
     lru_table->cnt_hit = 0;
     lru_table->cnt_unhit = 0;
     SCUI_LOG_INFO("nodes:%u, usage:%u", lru_table->nodes, lru_table->usage);
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源缓存无效化(指定目标)
@@ -159,6 +170,7 @@ void scui_cache_lru_clear(scui_cache_lru_table_t *lru_table, bool force)
  */
 void scui_cache_lru_invalidate(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_t *lru_unit)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
@@ -180,6 +192,7 @@ void scui_cache_lru_invalidate(scui_cache_lru_table_t *lru_table, scui_cache_lru
         lru_table->del_node(lru_unit_t);
         lru_unit_t = NULL;
     }
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源缓存卸载
@@ -188,6 +201,7 @@ void scui_cache_lru_invalidate(scui_cache_lru_table_t *lru_table, scui_cache_lru
  */
 void scui_cache_lru_unload(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_t *lru_unit)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
@@ -200,6 +214,7 @@ void scui_cache_lru_unload(scui_cache_lru_table_t *lru_table, scui_cache_lru_uni
     if (lru_unit_t != NULL)
     if (lru_unit_t->lock != 0)
         lru_unit_t->lock--;
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }
 
 /*@brief 资源缓存加载
@@ -208,6 +223,7 @@ void scui_cache_lru_unload(scui_cache_lru_table_t *lru_table, scui_cache_lru_uni
  */
 void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_t *lru_unit)
 {
+    scui_mutex_process(&lru_table->mutex, scui_mutex_take);
     SCUI_ASSERT(lru_table != NULL);
     SCUI_ASSERT(lru_unit != NULL);
     
@@ -233,7 +249,7 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
         
         lru_table->cpy_node(lru_unit, lru_unit_t);
         lru_table->cnt_hit++;
-        return;
+        goto over;
     }
     
     /* 对缓存计数器进行一次重衰减(rewind),老化它 */
@@ -299,4 +315,6 @@ void scui_cache_lru_load(scui_cache_lru_table_t *lru_table, scui_cache_lru_unit_
         scui_table_dln_reset(&lru_unit_t->ht_node);
         scui_table_dlt_insert(&lru_table->ht_table, &lru_unit_t->ht_node);
     }
+    over:
+    scui_mutex_process(&lru_table->mutex, scui_mutex_give);
 }

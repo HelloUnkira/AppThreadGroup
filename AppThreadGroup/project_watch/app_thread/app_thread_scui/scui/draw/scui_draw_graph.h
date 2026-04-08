@@ -265,6 +265,7 @@ typedef struct {
     scui_list_dln_t  dl_node;       /* 任务序列节点 */
     scui_draw_dsc_t *draw_dsc;      /* 绘制描述符 */
     scui_coord_t     draw_idx;      /* 绘制序列索引 */
+    scui_surface_t  *draw_surface;  /* 绘制画布(仅目标匹配使用) */
     uint8_t          draw_clip[0];  /* 绘制区域哈希(柔性数组) */
 } scui_draw_task_node_t;
 
