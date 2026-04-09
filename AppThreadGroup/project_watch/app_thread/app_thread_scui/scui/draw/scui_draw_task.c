@@ -316,6 +316,9 @@ void scui_draw_task_dispatch(void)
     SCUI_LOG_WARN("draw task total node:%d", task_list->node_total);
     SCUI_LOG_WARN("draw task frame node:%d", task_list->node_frame);
     
+    /* unsupport yet */
+    SCUI_ASSERT(false);
+    
     #if 0
     /* 测试:就地响应目标,仅同步测试任务序列完备性 */
     for (scui_list_dln_t *list_node = NULL; true; true) {

@@ -3,8 +3,13 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_self       ${CMAKE_CURRENT_SOUR
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_fatfs      ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_fatfs)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_nanopb     ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_nanopb)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_json       ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_json)
+
+# 载入第三方库(scui库)
+if (app_thread_group_use_scui)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_lz4        ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lz4)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_thorvg     ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lib_thorvg)
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib_rlottie    ${CMAKE_CURRENT_SOURCE_DIR}/../app_!cmake/project_third_lib_rlottie)
+endif()
 
 # 载入第三方库(lvgl库)
 if (app_thread_group_use_lvgl)

@@ -30,7 +30,6 @@ extern const app_dev_t app_dev_temp;
 #include "app_dev_rtc.h"            /* rtc */
 #include "app_dev_wdt.h"            /* watchdog */
 /* 设备抽象动作接口(gui) */
-#include "app_dev_gui.h"            /* gui */
 #include "app_dev_gui_drv.h"        /* driver */
 #include "app_dev_gui_disp.h"       /* display */
 #include "app_dev_gui_ptr.h"        /* pointer */
